@@ -1,0 +1,33 @@
+LAPACK timing, COMPLEX*16 square matrices
+6                                Number of values of M
+50 100 200 300 400 500           Values of M (row dimension)
+6                                Number of values of N
+50 100 200 300 400 500           Values of N (column dimension)
+4                                Number of values of K
+1 2 16 100                       Values of K
+5                                Number of values of NB
+1 16  32  48  64                 Values of NB (blocksize)
+0 48 128 128 128                 Values of NX (crossover point)
+1                                Number of values of LDA
+513                              Values of LDA (leading dimension)
+0.0                              Minimum time in seconds
+ZGE    T T T
+ZGT    T T T
+ZPO    T T T
+ZPP    T T T
+ZPT    T T T
+ZHE    T T T
+ZHP    T T T
+ZSY    T T T
+ZSP    T T T
+ZTR    T T
+ZTP    T T
+ZQR    T T T
+ZLQ    T T T
+ZQL    T T T
+ZRQ    T T T
+ZQP    T
+ZHR    T T T T
+ZTD    T T T T
+ZBR    T T T
+ZLS    T T T T T T

@@ -1,0 +1,13 @@
+GEP:  Data file for timing Generalized Nonsymmetric Eigenvalue Problem 
+4                               Number of values of N
+50 100 150 200                  Values of N (dimension)
+4                               Number of parameter values
+10  10  10  10                  Values of NB (blocksize)
+2   2   4   4                   Values of NS (no. of shifts)
+200 2   4   4                   Values of MAXB (multishift crossover pt)
+200 200 200 10                  Values of MINNB (minimum blocksize)
+200 200 200 10                  Values of MINBLK (minimum blocksize)
+201 201 201 201                 Values of LDA (leading dimension)
+0.0                             Minimum time in seconds
+5                               Number of matrix types
+DHG   T T T T T T T T T T T T T T T T T T

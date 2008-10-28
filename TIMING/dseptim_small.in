@@ -1,0 +1,9 @@
+SEP:  Data file for timing Symmetric Eigenvalue Problem routines
+5                               Number of values of N
+10 20 40 60 80                  Values of N (dimension)
+2                               Number of values of parameters
+1  16                           Values of NB (blocksize)
+81 81                           Values of LDA (leading dimension)
+0.05                            Minimum time in seconds
+4                               Number of matrix types
+DST    T T T T T T T T T T T T T T T T T T T T T T T

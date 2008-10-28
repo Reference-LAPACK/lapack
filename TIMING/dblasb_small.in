@@ -1,0 +1,17 @@
+BLAS timing, DOUBLE PRECISION data, M small
+2                          Number of values of M
+2 16                       Values of M
+5                          Number of values of N
+10 20 40 60 80             Values of N
+5                          Number of values of K
+10 20 40 60 80             Values of K
+1                          Number of values of INCX
+1                          Values of INCX
+1                          Number of values of LDA
+81                         Values of LDA
+0.05                       Minimum time in seconds
+none                       Do not time the sample BLAS
+DGEMM
+DSYMM
+DTRMM
+DTRSM
