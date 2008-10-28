@@ -1,0 +1,11 @@
+SPMV uses some experimental type-casting macros in an effort to remove
+endless ifelse clauses for the mixed and extended cases..  It is based
+on the code in iskandar's do_test_dot prototypes.  These routines
+appear to work OK, and streamlined SPMV's writing.  They will also
+appear in HPMV, which is derived from SPMV.
+
+The macro invocations are fairly self-contained, and SPMV can be
+switched back to the normal form without undue difficulty.
+
+There is no change in the resulting C code between this form and the
+canonical form.

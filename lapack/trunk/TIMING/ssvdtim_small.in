@@ -1,0 +1,11 @@
+SVD:  Data file for timing Singular Value Decomposition routines
+7                               Number of values of M and N
+10 10 20 20 20 40 40            Values of M (row dimension)
+10 20 10 20 40 20 40            Values of N (column dimension)
+1                               Number of values of parameters
+1                               Values of NB (blocksize)
+81                              Values of LDA (leading dimension)
+0.05                            Minimum time in seconds
+4                               Number of matrix types
+1 2 3 4
+SBD    T T T T T T T T T T T T T T T T T T 

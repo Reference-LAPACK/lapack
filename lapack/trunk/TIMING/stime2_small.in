@@ -1,0 +1,20 @@
+LAPACK timing, REAL rectangular matrices
+7                                Number of values of M
+20 40 20 40 80 40 80             Values of M (row dimension)
+7                                Number of values of N
+20 20 40 40 40 80 80             Values of N (column dimension)
+2                                Number of values of K
+20 80                            Values of K
+2                                Number of values of NB
+1  8                             Values of NB (blocksize)
+0  8                             Values of NX (crossover point)
+1                                Number of values of LDA
+81                               Values of LDA (leading dimension)
+0.05                             Minimum time in seconds
+none
+SQR    T T T
+SLQ    T T T
+SQL    T T T
+SRQ    T T T
+SQP    T
+SBR    T T F

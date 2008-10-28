@@ -1,0 +1,29 @@
+LAPACK timing, DOUBLE PRECISION square matrices
+5                                Number of values of M
+10 20 40 60 80                   Values of M (row dimension)
+5                                Number of values of N
+10 20 40 60 80                   Values of N (column dimension)
+2                                Number of values of K
+20 80                            Values of K
+2                                Number of values of NB
+1  8                             Values of NB (blocksize)
+0  8                             Values of NX (crossover point)
+1                                Number of values of LDA
+81                               Values of LDA (leading dimension)
+0.05                             Minimum time in seconds
+DGE    T T T
+DPO    T T T
+DPP    T T T
+DSY    T T T
+DSP    T T T
+DTR    T T
+DTP    T T
+DQR    T T T
+DLQ    T T T
+DQL    T T T
+DRQ    T T T
+DQP    T
+DHR    T T T T
+DTD    T T T T
+DBR    T T T
+DLS    T T T T T T

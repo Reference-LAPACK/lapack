@@ -1,0 +1,13 @@
+The following ge_sum_mv routines are not fully tested in certain cases:
+
+  BLAS_zge_sum_mv_d_z
+  BLAS_zge_sum_mv_d_d
+  BLAS_cge_sum_mv_s_c
+  BLAS_cge_sum_mv_s_s
+
+Since the output y is complex and the matrices A and B are real, 
+cases where alpha=1.0+0i, beta!=1.0+0i, beta!=0.0+0i, (or similarly,
+where beta=1.0+0i, alpha!=1.0+0i, alpha!=0.0+0i), are not fully tested.
+Please do not rely on this testing to adequately test the internal
+precision of the routines mentioned in these cases.
+

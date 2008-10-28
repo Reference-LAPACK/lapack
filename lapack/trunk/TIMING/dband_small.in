@@ -1,0 +1,17 @@
+LAPACK timing, DOUBLE PRECISION band matrices
+1                                Number of values of M
+200                              Values of M (row dimension)
+5                                Number of values of K
+10 20 30 40 50                   Values of K (bandwidth)
+4                                Number of values of NRHS
+1 2 4 8                          Values of NRHS
+2                                Number of values of NB
+1  8                             Values of NB (blocksize)
+0  8                             Values of NX (crossover point)
+1                                Number of values of LDA
+152                              Values of LDA (leading dimension)
+0.05                             Minimum time in seconds
+BAND                             Time sample banded BLAS
+DGB
+DPB
+DTB

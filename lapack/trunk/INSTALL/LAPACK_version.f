@@ -1,0 +1,12 @@
+
+      PROGRAM LAPACK_VERSION
+*
+*
+*
+      INTEGER MAJOR, MINOR, PATCH
+*
+      CALL ILAVER ( MAJOR,MINOR, PATCH )
+
+          WRITE(*,*) "LAPACK ",MAJOR,".",MINOR,".",PATCH
+*
+      END
