@@ -107,10 +107,9 @@ testgen_BLAS_sdot2(int n, int n_fix2, int n_mix, int norm,
   *r = xrand(seed);
 
   /* Pick the free X(i)'s at random. */
-  s = power(2, -BITS_S);
   for (i = n_fix2 + n_mix; i < n; ++i) {
       head_x[i] = xrand(seed);
-      tail_x[i] = xrand(seed) * s; 
+      tail_x[i] = xrand(seed) * power(2, -BITS_S);
   }
 
   if (alpha_flag == 1 && *alpha == 0.0) {
