@@ -310,7 +310,7 @@ testgen_BLAS_zdot2(int n, int n_fix2, int n_mix, int norm,
 	      } else {  /* x[k] fixed, x[k+1] free or fixed. */
 		  y_i[k] = xrand(seed);
 		  y_i[k + 1] = xrand(seed);
-		  gen_y_to_cancel(k+1, n, conj, alpha, head_x, tail_x, y);
+		  gen_y_to_cancel(n_fix2 + 1, n, conj, alpha, head_x, tail_x, y);
 	      }
 	      break;
 	  default:                 /* y_free >= 3 */
