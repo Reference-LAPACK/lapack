@@ -263,6 +263,7 @@ double do_test_daxpby_s(int n, int ntests, int *seed, double thresh,
 	      /* setting incx */
 	      incx = incx_val;
 
+
 	      scopy_vector(x_gen, n, 1, x, incx_val);
 
 	      /* varying incy */
@@ -685,6 +686,7 @@ double do_test_caxpby_s(int n, int ntests, int *seed, double thresh,
 
 	      /* setting incx */
 	      incx = incx_val;
+
 
 	      scopy_vector(x_gen, n, 1, x, incx_val);
 
@@ -1109,6 +1111,7 @@ double do_test_zaxpby_c(int n, int ntests, int *seed, double thresh,
 
 	      /* setting incx */
 	      incx = incx_val;
+	      incx *= 2;
 
 	      ccopy_vector(x_gen, n, 1, x, incx_val);
 
@@ -1532,6 +1535,7 @@ double do_test_zaxpby_d(int n, int ntests, int *seed, double thresh,
 
 	      /* setting incx */
 	      incx = incx_val;
+
 
 	      dcopy_vector(x_gen, n, 1, x, incx_val);
 
@@ -1972,6 +1976,7 @@ double do_test_saxpby_x(int n, int ntests, int *seed, double thresh,
 		/* setting incx */
 		incx = incx_val;
 
+
 		scopy_vector(x_gen, n, 1, x, incx_val);
 
 		/* varying incy */
@@ -2410,6 +2415,7 @@ double do_test_daxpby_x(int n, int ntests, int *seed, double thresh,
 
 		/* setting incx */
 		incx = incx_val;
+
 
 		dcopy_vector(x_gen, n, 1, x, incx_val);
 
@@ -2853,6 +2859,7 @@ double do_test_caxpby_x(int n, int ntests, int *seed, double thresh,
 
 		/* setting incx */
 		incx = incx_val;
+		incx *= 2;
 
 		ccopy_vector(x_gen, n, 1, x, incx_val);
 
@@ -3296,6 +3303,7 @@ double do_test_zaxpby_x(int n, int ntests, int *seed, double thresh,
 
 		/* setting incx */
 		incx = incx_val;
+		incx *= 2;
 
 		zcopy_vector(x_gen, n, 1, x, incx_val);
 
@@ -3737,6 +3745,7 @@ double do_test_daxpby_s_x(int n, int ntests, int *seed, double thresh,
 
 		/* setting incx */
 		incx = incx_val;
+
 
 		scopy_vector(x_gen, n, 1, x, incx_val);
 
@@ -4183,6 +4192,7 @@ double do_test_zaxpby_c_x(int n, int ntests, int *seed, double thresh,
 
 		/* setting incx */
 		incx = incx_val;
+		incx *= 2;
 
 		ccopy_vector(x_gen, n, 1, x, incx_val);
 
@@ -4630,6 +4640,7 @@ double do_test_caxpby_s_x(int n, int ntests, int *seed, double thresh,
 		/* setting incx */
 		incx = incx_val;
 
+
 		scopy_vector(x_gen, n, 1, x, incx_val);
 
 		/* varying incy */
@@ -5075,6 +5086,7 @@ double do_test_zaxpby_d_x(int n, int ntests, int *seed, double thresh,
 
 		/* setting incx */
 		incx = incx_val;
+
 
 		dcopy_vector(x_gen, n, 1, x, incx_val);
 
