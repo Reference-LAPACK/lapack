@@ -1911,6 +1911,63 @@ void BLAS_zsymv2_d_d_x(enum blas_order_type order, enum blas_uplo_type uplo,
 		       enum blas_prec_type prec);
 
 
+void BLAS_zhemv2_z_c(enum blas_order_type order, enum blas_uplo_type uplo,
+		     int n, const void *alpha, const void *a, int lda,
+		     const void *x_head, const void *x_tail, int incx,
+		     const void *beta, const void *y, int incy);
+void BLAS_zhemv2_c_z(enum blas_order_type order, enum blas_uplo_type uplo,
+		     int n, const void *alpha, const void *a, int lda,
+		     const void *x_head, const void *x_tail, int incx,
+		     const void *beta, const void *y, int incy);
+void BLAS_zhemv2_c_c(enum blas_order_type order, enum blas_uplo_type uplo,
+		     int n, const void *alpha, const void *a, int lda,
+		     const void *x_head, const void *x_tail, int incx,
+		     const void *beta, const void *y, int incy);
+void BLAS_chemv2_c_s(enum blas_order_type order, enum blas_uplo_type uplo,
+		     int n, const void *alpha, const void *a, int lda,
+		     const float *x_head, const float *x_tail, int incx,
+		     const void *beta, const float *y, int incy);
+void BLAS_zhemv2_z_d(enum blas_order_type order, enum blas_uplo_type uplo,
+		     int n, const void *alpha, const void *a, int lda,
+		     const double *x_head, const double *x_tail, int incx,
+		     const void *beta, const double *y, int incy);
+void BLAS_chemv2_x(enum blas_order_type order, enum blas_uplo_type uplo,
+		   int n, const void *alpha, const void *a, int lda,
+		   const void *x_head, const void *x_tail, int incx,
+		   const void *beta, const void *y, int incy,
+		   enum blas_prec_type prec);
+void BLAS_zhemv2_x(enum blas_order_type order, enum blas_uplo_type uplo,
+		   int n, const void *alpha, const void *a, int lda,
+		   const void *x_head, const void *x_tail, int incx,
+		   const void *beta, const void *y, int incy,
+		   enum blas_prec_type prec);
+void BLAS_zhemv2_z_c_x(enum blas_order_type order, enum blas_uplo_type uplo,
+		       int n, const void *alpha, const void *a, int lda,
+		       const void *x_head, const void *x_tail, int incx,
+		       const void *beta, const void *y, int incy,
+		       enum blas_prec_type prec);
+void BLAS_zhemv2_c_z_x(enum blas_order_type order, enum blas_uplo_type uplo,
+		       int n, const void *alpha, const void *a, int lda,
+		       const void *x_head, const void *x_tail, int incx,
+		       const void *beta, const void *y, int incy,
+		       enum blas_prec_type prec);
+void BLAS_zhemv2_c_c_x(enum blas_order_type order, enum blas_uplo_type uplo,
+		       int n, const void *alpha, const void *a, int lda,
+		       const void *x_head, const void *x_tail, int incx,
+		       const void *beta, const void *y, int incy,
+		       enum blas_prec_type prec);
+void BLAS_chemv2_c_s_x(enum blas_order_type order, enum blas_uplo_type uplo,
+		       int n, const void *alpha, const void *a, int lda,
+		       const float *x_head, const float *x_tail, int incx,
+		       const void *beta, const float *y, int incy,
+		       enum blas_prec_type prec);
+void BLAS_zhemv2_z_d_x(enum blas_order_type order, enum blas_uplo_type uplo,
+		       int n, const void *alpha, const void *a, int lda,
+		       const double *x_head, const double *x_tail, int incx,
+		       const void *beta, const double *y, int incy,
+		       enum blas_prec_type prec);
+
+
 
 int BLAS_fpinfo_x(enum blas_cmach_type cmach, enum blas_prec_type prec);
 void BLAS_error(const char *rname, int iflag, int ival, char *form, ...);

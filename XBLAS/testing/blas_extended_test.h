@@ -1003,6 +1003,74 @@ void BLAS_zsymv2_z_c_testgen(int norm, enum blas_order_type order,
 			     void *tail_x, void *beta, int beta_flag, void *y,
 			     int *seed, double *r_true_l, double *r_true_t);
 
+
+void BLAS_sskmv2_testgen(int norm, enum blas_order_type order,
+			 enum blas_uplo_type uplo, int n, float *alpha,
+			 float *beta, float *a, int lda, float *x_head,
+			 float *x_tail, float *y, int *seed,
+			 double *head_r_true, double *tail_r_true);
+void BLAS_dskmv2_testgen(int norm, enum blas_order_type order,
+			 enum blas_uplo_type uplo, int n, double *alpha,
+			 double *beta, double *a, int lda, double *x_head,
+			 double *x_tail, double *y, int *seed,
+			 double *head_r_true, double *tail_r_true);
+void BLAS_dskmv2_testgen_d_s(int norm, enum blas_order_type order,
+			     enum blas_uplo_type uplo, int n, double *alpha,
+			     double *beta, double *a, int lda, float *x_head,
+			     float *x_tail, double *y, int *seed,
+			     double *head_r_true, double *tail_r_true);
+void BLAS_dskmv2_testgen_s_d(int norm, enum blas_order_type order,
+			     enum blas_uplo_type uplo, int n, double *alpha,
+			     double *beta, float *a, int lda, double *x_head,
+			     double *x_tail, double *y, int *seed,
+			     double *head_r_true, double *tail_r_true);
+void BLAS_dskmv2_testgen_s_s(int norm, enum blas_order_type order,
+			     enum blas_uplo_type uplo, int n, double *alpha,
+			     double *beta, float *a, int lda, float *x_head,
+			     float *x_tail, double *y, int *seed,
+			     double *head_r_true, double *tail_r_true);
+
+void BLAS_chemv2_testgen(int norm, enum blas_order_type order,
+			 enum blas_uplo_type uplo, int n, void *alpha,
+			 int alpha_flag, void *beta, int beta_flag, void *a,
+			 int lda, void *x_head, void *x_tail, void *y,
+			 int *seed, double *head_r_true, double *tail_r_true);
+void BLAS_zhemv2_testgen(int norm, enum blas_order_type order,
+			 enum blas_uplo_type uplo, int n, void *alpha,
+			 int alpha_flag, void *beta, int beta_flag, void *a,
+			 int lda, void *x_head, void *x_tail, void *y,
+			 int *seed, double *head_r_true, double *tail_r_true);
+void BLAS_zhemv2_c_z_testgen(int norm, enum blas_order_type order,
+			     enum blas_uplo_type uplo, int n, void *alpha,
+			     int alpha_flag, void *beta, int beta_flag,
+			     void *a, int lda, void *x_head, void *x_tail,
+			     void *y, int *seed, double *head_r_true,
+			     double *tail_r_true);
+void BLAS_zhemv2_z_c_testgen(int norm, enum blas_order_type order,
+			     enum blas_uplo_type uplo, int n, void *alpha,
+			     int alpha_flag, void *beta, int beta_flag,
+			     void *a, int lda, void *x_head, void *x_tail,
+			     void *y, int *seed, double *head_r_true,
+			     double *tail_r_true);
+void BLAS_zhemv2_c_c_testgen(int norm, enum blas_order_type order,
+			     enum blas_uplo_type uplo, int n, void *alpha,
+			     int alpha_flag, void *beta, int beta_flag,
+			     void *a, int lda, void *x_head, void *x_tail,
+			     void *y, int *seed, double *head_r_true,
+			     double *tail_r_true);
+void BLAS_zhemv2_z_d_testgen(int norm, enum blas_order_type order,
+			     enum blas_uplo_type uplo, int n, void *alpha,
+			     int alpha_flag, void *beta, int beta_flag,
+			     void *a, int lda, double *x_head, double *x_tail,
+			     void *y, int *seed, double *head_r_true,
+			     double *tail_r_true);
+void BLAS_chemv2_c_s_testgen(int norm, enum blas_order_type order,
+			     enum blas_uplo_type uplo, int n, void *alpha,
+			     int alpha_flag, void *beta, int beta_flag,
+			     void *a, int lda, float *x_head, float *x_tail,
+			     void *y, int *seed, double *head_r_true,
+			     double *tail_r_true);
+
 void BLAS_sge_sum_mv_testgen(int norm, enum blas_order_type order,
 			     int m, int n, int randomize,
 			     float *alpha, int alpha_flag, float *beta,
