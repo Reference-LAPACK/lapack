@@ -133,10 +133,7 @@ void BLAS_cgbmv_c_s_x(enum blas_order_type order, enum blas_trans_type trans,
 	  (m < 0) || (n < 0) ||
 	  (kl < 0) || (kl >= m) ||
 	  (ku < 0) || (ku >= n) ||
-	  (lda < (kl + ku + 1)) ||
-	  (incx == 0) || (incy == 0) ||
-	  (order == blas_rowmajor && lda < n) ||
-	  (order == blas_colmajor && lda < m)) {
+	  (lda < (kl + ku + 1)) || (incx == 0) || (incy == 0)) {
 	BLAS_error(routine_name, 0, 0, NULL);
       }
 
@@ -308,10 +305,7 @@ void BLAS_cgbmv_c_s_x(enum blas_order_type order, enum blas_trans_type trans,
 	  (m < 0) || (n < 0) ||
 	  (kl < 0) || (kl >= m) ||
 	  (ku < 0) || (ku >= n) ||
-	  (lda < (kl + ku + 1)) ||
-	  (incx == 0) || (incy == 0) ||
-	  (order == blas_rowmajor && lda < n) ||
-	  (order == blas_colmajor && lda < m)) {
+	  (lda < (kl + ku + 1)) || (incx == 0) || (incy == 0)) {
 	BLAS_error(routine_name, 0, 0, NULL);
       }
 
@@ -483,10 +477,7 @@ void BLAS_cgbmv_c_s_x(enum blas_order_type order, enum blas_trans_type trans,
 	  (m < 0) || (n < 0) ||
 	  (kl < 0) || (kl >= m) ||
 	  (ku < 0) || (ku >= n) ||
-	  (lda < (kl + ku + 1)) ||
-	  (incx == 0) || (incy == 0) ||
-	  (order == blas_rowmajor && lda < n) ||
-	  (order == blas_colmajor && lda < m)) {
+	  (lda < (kl + ku + 1)) || (incx == 0) || (incy == 0)) {
 	BLAS_error(routine_name, 0, 0, NULL);
       }
 
