@@ -110,7 +110,6 @@ void do_test_dsymv_d_s
   float *x;
   double *y;
   double *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -167,10 +166,6 @@ void do_test_dsymv_d_s
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double));
@@ -457,7 +452,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -519,7 +513,6 @@ void do_test_dsymv_s_d
   double *x;
   double *y;
   float *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -576,10 +569,6 @@ void do_test_dsymv_s_d
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double));
@@ -866,7 +855,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -928,7 +916,6 @@ void do_test_dsymv_s_s
   float *x;
   double *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -985,10 +972,6 @@ void do_test_dsymv_s_s
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double));
@@ -1275,7 +1258,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -1337,7 +1319,6 @@ void do_test_zsymv_z_c
   float *x;
   double *y;
   double *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -1395,10 +1376,6 @@ void do_test_zsymv_z_c
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -1693,7 +1670,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -1755,7 +1731,6 @@ void do_test_zsymv_c_z
   double *x;
   double *y;
   float *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -1813,10 +1788,6 @@ void do_test_zsymv_c_z
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -2111,7 +2082,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -2173,7 +2143,6 @@ void do_test_zsymv_c_c
   float *x;
   double *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -2231,10 +2200,6 @@ void do_test_zsymv_c_c
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -2529,7 +2494,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -2591,7 +2555,6 @@ void do_test_csymv_c_s
   float *x;
   float *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   float *y_gen;
@@ -2649,10 +2612,6 @@ void do_test_csymv_c_s
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -2947,7 +2906,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -3009,7 +2967,6 @@ void do_test_csymv_s_c
   float *x;
   float *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   float *y_gen;
@@ -3067,10 +3024,6 @@ void do_test_csymv_s_c
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -3365,7 +3318,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -3427,7 +3379,6 @@ void do_test_csymv_s_s
   float *x;
   float *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   float *y_gen;
@@ -3485,10 +3436,6 @@ void do_test_csymv_s_s
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -3783,7 +3730,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -3845,7 +3791,6 @@ void do_test_zsymv_z_d
   double *x;
   double *y;
   double *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -3903,10 +3848,6 @@ void do_test_zsymv_z_d
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -4201,7 +4142,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -4263,7 +4203,6 @@ void do_test_zsymv_d_z
   double *x;
   double *y;
   double *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -4321,10 +4260,6 @@ void do_test_zsymv_d_z
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -4619,7 +4554,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -4681,7 +4615,6 @@ void do_test_zsymv_d_d
   double *x;
   double *y;
   double *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -4739,10 +4672,6 @@ void do_test_zsymv_d_d
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -5037,7 +4966,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -5099,7 +5027,6 @@ void do_test_ssymv_x
   float *x;
   float *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   float *y_gen;
@@ -5156,10 +5083,6 @@ void do_test_ssymv_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double));
@@ -5467,7 +5390,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -5529,7 +5451,6 @@ void do_test_dsymv_x
   double *x;
   double *y;
   double *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -5586,10 +5507,6 @@ void do_test_dsymv_x
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double));
@@ -5897,7 +5814,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -5959,7 +5875,6 @@ void do_test_csymv_x
   float *x;
   float *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   float *y_gen;
@@ -6017,10 +5932,6 @@ void do_test_csymv_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -6336,7 +6247,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -6398,7 +6308,6 @@ void do_test_zsymv_x
   double *x;
   double *y;
   double *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -6456,10 +6365,6 @@ void do_test_zsymv_x
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -6775,7 +6680,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -6837,7 +6741,6 @@ void do_test_dsymv_d_s_x
   float *x;
   double *y;
   double *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -6894,10 +6797,6 @@ void do_test_dsymv_d_s_x
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double));
@@ -7206,7 +7105,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -7268,7 +7166,6 @@ void do_test_dsymv_s_d_x
   double *x;
   double *y;
   float *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -7325,10 +7222,6 @@ void do_test_dsymv_s_d_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double));
@@ -7637,7 +7530,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -7699,7 +7591,6 @@ void do_test_dsymv_s_s_x
   float *x;
   double *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -7756,10 +7647,6 @@ void do_test_dsymv_s_s_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double));
@@ -8068,7 +7955,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -8130,7 +8016,6 @@ void do_test_zsymv_z_c_x
   float *x;
   double *y;
   double *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -8188,10 +8073,6 @@ void do_test_zsymv_z_c_x
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -8508,7 +8389,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -8570,7 +8450,6 @@ void do_test_zsymv_c_z_x
   double *x;
   double *y;
   float *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -8628,10 +8507,6 @@ void do_test_zsymv_c_z_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -8948,7 +8823,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -9010,7 +8884,6 @@ void do_test_zsymv_c_c_x
   float *x;
   double *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -9068,10 +8941,6 @@ void do_test_zsymv_c_c_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -9388,7 +9257,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -9450,7 +9318,6 @@ void do_test_csymv_c_s_x
   float *x;
   float *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   float *y_gen;
@@ -9508,10 +9375,6 @@ void do_test_csymv_c_s_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -9828,7 +9691,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -9890,7 +9752,6 @@ void do_test_csymv_s_c_x
   float *x;
   float *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   float *y_gen;
@@ -9948,10 +9809,6 @@ void do_test_csymv_s_c_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -10268,7 +10125,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -10330,7 +10186,6 @@ void do_test_csymv_s_s_x
   float *x;
   float *y;
   float *a_vec;
-  float *x_vec;
 
   /* generated test values for c */
   float *y_gen;
@@ -10388,10 +10243,6 @@ void do_test_csymv_s_s_x
   }
   a_vec = (float *) blas_malloc(n_i * sizeof(float));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (float *) blas_malloc(n_i * sizeof(float));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -10708,7 +10559,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -10770,7 +10620,6 @@ void do_test_zsymv_z_d_x
   double *x;
   double *y;
   double *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -10828,10 +10677,6 @@ void do_test_zsymv_z_d_x
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -11148,7 +10993,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -11210,7 +11054,6 @@ void do_test_zsymv_d_z_x
   double *x;
   double *y;
   double *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -11268,10 +11111,6 @@ void do_test_zsymv_d_z_x
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double) * 2);
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -11588,7 +11427,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
@@ -11650,7 +11488,6 @@ void do_test_zsymv_d_d_x
   double *x;
   double *y;
   double *a_vec;
-  double *x_vec;
 
   /* generated test values for c */
   double *y_gen;
@@ -11708,10 +11545,6 @@ void do_test_zsymv_d_d_x
   }
   a_vec = (double *) blas_malloc(n_i * sizeof(double));
   if (n_i > 0 && a_vec == NULL) {
-    BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
-  }
-  x_vec = (double *) blas_malloc(n_i * sizeof(double));
-  if (n_i > 0 && x_vec == NULL) {
     BLAS_error("blas_malloc", 0, 0, "malloc failed.\n");
   }
   head_r_true = (double *) blas_malloc(n_i * sizeof(double) * 2);
@@ -12028,7 +11861,6 @@ end:
   blas_free(tail_r_true);
   blas_free(ratios);
   blas_free(a_vec);
-  blas_free(x_vec);
 
   *max_ratio = ratio_max;
   *min_ratio = ratio_min;
