@@ -127,15 +127,26 @@ void BLAS_cgbmv_s_s_x(enum blas_order_type order, enum blas_trans_type trans,
       float y_elem[2];
 
 
-      if (((trans != blas_no_trans) &&
-	   (trans != blas_trans) &&
-	   (trans != blas_conj_trans)) ||
-	  (m < 0) || (n < 0) ||
-	  (kl < 0) || (kl >= m) ||
-	  (ku < 0) || (ku >= n) ||
-	  (lda < (kl + ku + 1)) || (incx == 0) || (incy == 0)) {
-	BLAS_error(routine_name, 0, 0, NULL);
+      if (order != blas_colmajor && order != blas_rowmajor)
+	BLAS_error(routine_name, -1, order, NULL);
+      if (trans != blas_no_trans &&
+	  trans != blas_trans && trans != blas_conj_trans) {
+	BLAS_error(routine_name, -2, trans, NULL);
       }
+      if (m < 0)
+	BLAS_error(routine_name, -3, m, NULL);
+      if (n < 0)
+	BLAS_error(routine_name, -4, n, NULL);
+      if (kl < 0 || kl >= m)
+	BLAS_error(routine_name, -5, kl, NULL);
+      if (ku < 0 || ku >= n)
+	BLAS_error(routine_name, -6, ku, NULL);
+      if (lda < kl + ku + 1)
+	BLAS_error(routine_name, -9, lda, NULL);
+      if (incx == 0)
+	BLAS_error(routine_name, -11, incx, NULL);
+      if (incy == 0)
+	BLAS_error(routine_name, -14, incy, NULL);
 
       if ((m == 0) || (n == 0) ||
 	  (((alpha_i[0] == 0.0 && alpha_i[1] == 0.0)
@@ -277,15 +288,26 @@ void BLAS_cgbmv_s_s_x(enum blas_order_type order, enum blas_trans_type trans,
       float y_elem[2];
 
 
-      if (((trans != blas_no_trans) &&
-	   (trans != blas_trans) &&
-	   (trans != blas_conj_trans)) ||
-	  (m < 0) || (n < 0) ||
-	  (kl < 0) || (kl >= m) ||
-	  (ku < 0) || (ku >= n) ||
-	  (lda < (kl + ku + 1)) || (incx == 0) || (incy == 0)) {
-	BLAS_error(routine_name, 0, 0, NULL);
+      if (order != blas_colmajor && order != blas_rowmajor)
+	BLAS_error(routine_name, -1, order, NULL);
+      if (trans != blas_no_trans &&
+	  trans != blas_trans && trans != blas_conj_trans) {
+	BLAS_error(routine_name, -2, trans, NULL);
       }
+      if (m < 0)
+	BLAS_error(routine_name, -3, m, NULL);
+      if (n < 0)
+	BLAS_error(routine_name, -4, n, NULL);
+      if (kl < 0 || kl >= m)
+	BLAS_error(routine_name, -5, kl, NULL);
+      if (ku < 0 || ku >= n)
+	BLAS_error(routine_name, -6, ku, NULL);
+      if (lda < kl + ku + 1)
+	BLAS_error(routine_name, -9, lda, NULL);
+      if (incx == 0)
+	BLAS_error(routine_name, -11, incx, NULL);
+      if (incy == 0)
+	BLAS_error(routine_name, -14, incy, NULL);
 
       if ((m == 0) || (n == 0) ||
 	  (((alpha_i[0] == 0.0 && alpha_i[1] == 0.0)
@@ -426,15 +448,26 @@ void BLAS_cgbmv_s_s_x(enum blas_order_type order, enum blas_trans_type trans,
       float y_elem[2];
       FPU_FIX_DECL;
 
-      if (((trans != blas_no_trans) &&
-	   (trans != blas_trans) &&
-	   (trans != blas_conj_trans)) ||
-	  (m < 0) || (n < 0) ||
-	  (kl < 0) || (kl >= m) ||
-	  (ku < 0) || (ku >= n) ||
-	  (lda < (kl + ku + 1)) || (incx == 0) || (incy == 0)) {
-	BLAS_error(routine_name, 0, 0, NULL);
+      if (order != blas_colmajor && order != blas_rowmajor)
+	BLAS_error(routine_name, -1, order, NULL);
+      if (trans != blas_no_trans &&
+	  trans != blas_trans && trans != blas_conj_trans) {
+	BLAS_error(routine_name, -2, trans, NULL);
       }
+      if (m < 0)
+	BLAS_error(routine_name, -3, m, NULL);
+      if (n < 0)
+	BLAS_error(routine_name, -4, n, NULL);
+      if (kl < 0 || kl >= m)
+	BLAS_error(routine_name, -5, kl, NULL);
+      if (ku < 0 || ku >= n)
+	BLAS_error(routine_name, -6, ku, NULL);
+      if (lda < kl + ku + 1)
+	BLAS_error(routine_name, -9, lda, NULL);
+      if (incx == 0)
+	BLAS_error(routine_name, -11, incx, NULL);
+      if (incy == 0)
+	BLAS_error(routine_name, -14, incy, NULL);
 
       if ((m == 0) || (n == 0) ||
 	  (((alpha_i[0] == 0.0 && alpha_i[1] == 0.0)
