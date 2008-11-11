@@ -111,7 +111,8 @@ void BLAS_cgemv_s_s_x(enum blas_order_type order, enum blas_trans_type trans,
 	incai = lda;
 	incaij = 1;
       }
-      if (lda < leny)
+      if ((order == blas_colmajor && lda < m) ||
+	  (order == blas_rowmajor && lda < n))
 	BLAS_error(routine_name, -7, lda, NULL);
 
 
@@ -305,7 +306,8 @@ void BLAS_cgemv_s_s_x(enum blas_order_type order, enum blas_trans_type trans,
 	incai = lda;
 	incaij = 1;
       }
-      if (lda < leny)
+      if ((order == blas_colmajor && lda < m) ||
+	  (order == blas_rowmajor && lda < n))
 	BLAS_error(routine_name, -7, lda, NULL);
 
 
@@ -504,7 +506,8 @@ void BLAS_cgemv_s_s_x(enum blas_order_type order, enum blas_trans_type trans,
 	incai = lda;
 	incaij = 1;
       }
-      if (lda < leny)
+      if ((order == blas_colmajor && lda < m) ||
+	  (order == blas_rowmajor && lda < n))
 	BLAS_error(routine_name, -7, lda, NULL);
 
       FPU_FIX_START;
