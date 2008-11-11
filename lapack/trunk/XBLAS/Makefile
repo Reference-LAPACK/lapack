@@ -11,10 +11,10 @@
 include make.conf
 include $(MAKEINC)
 
-LIB = dot-lib sum-lib axpby-lib waxpby-lib gemv-lib ge_sum_mv-lib gbmv-lib symv-lib spmv-lib sbmv-lib hemv-lib hpmv-lib hbmv-lib trmv-lib tpmv-lib trsv-lib tbsv-lib gemm-lib symm-lib hemm-lib gemv2-lib
-TESTS = dot-test sum-test axpby-test waxpby-test gemv-test ge_sum_mv-test gbmv-test symv-test spmv-test sbmv-test hemv-test hpmv-test hbmv-test trmv-test tpmv-test trsv-test tbsv-test gemm-test symm-test hemm-test gemv2-test
-TEST_LIB = dot-test-lib sum-test-lib axpby-test-lib waxpby-test-lib gemv-test-lib ge_sum_mv-test-lib gbmv-test-lib symv-test-lib spmv-test-lib sbmv-test-lib hemv-test-lib hpmv-test-lib hbmv-test-lib trmv-test-lib tpmv-test-lib trsv-test-lib tbsv-test-lib gemm-test-lib symm-test-lib hemm-test-lib gemv2-test-lib
-CLEAN = dot-clean sum-clean axpby-clean waxpby-clean gemv-clean ge_sum_mv-clean gbmv-clean symv-clean spmv-clean sbmv-clean hemv-clean hpmv-clean hbmv-clean trmv-clean tpmv-clean trsv-clean tbsv-clean gemm-clean symm-clean hemm-clean gemv2-clean dot2-clean
+LIB = dot-lib sum-lib axpby-lib waxpby-lib gemv-lib ge_sum_mv-lib gbmv-lib symv-lib spmv-lib sbmv-lib hemv-lib hpmv-lib hbmv-lib trmv-lib tpmv-lib trsv-lib tbsv-lib gemm-lib symm-lib hemm-lib gemv2-lib symv2-lib
+TESTS = dot-test sum-test axpby-test waxpby-test gemv-test ge_sum_mv-test gbmv-test symv-test spmv-test sbmv-test hemv-test hpmv-test hbmv-test trmv-test tpmv-test trsv-test tbsv-test gemm-test symm-test hemm-test gemv2-test symv2-test
+TEST_LIB = dot-test-lib sum-test-lib axpby-test-lib waxpby-test-lib gemv-test-lib ge_sum_mv-test-lib gbmv-test-lib symv-test-lib spmv-test-lib sbmv-test-lib hemv-test-lib hpmv-test-lib hbmv-test-lib trmv-test-lib tpmv-test-lib trsv-test-lib tbsv-test-lib gemm-test-lib symm-test-lib hemm-test-lib gemv2-test-lib symv2-test-lib
+CLEAN = dot-clean sum-clean axpby-clean waxpby-clean gemv-clean ge_sum_mv-clean gbmv-clean symv-clean spmv-clean sbmv-clean hemv-clean hpmv-clean hbmv-clean trmv-clean tpmv-clean trsv-clean tbsv-clean gemm-clean symm-clean hemm-clean gemv2-clean symv2-clean dot2-clean
 
 SRC_DIR = src
 TEST_DIR = testing
@@ -50,6 +50,7 @@ tests: test-lib $(TESTS)
 	cat $(TEST_DIR)/test-symm/symm.results >> testall.result
 	cat $(TEST_DIR)/test-hemm/hemm.results >> testall.result
 	cat $(TEST_DIR)/test-gemv2/gemv2.results >> testall.result
+	cat $(TEST_DIR)/test-symv2/symv2.results >> testall.result
 	grep 'FAIL/TOTAL' testall.result >testall.summary
 	cat testall.summary
 
@@ -82,6 +83,7 @@ lib: $(LIB)
 	cd $(SRC_DIR)/symm && $(MAKE) lib
 	cd $(SRC_DIR)/hemm && $(MAKE) lib
 	cd $(SRC_DIR)/gemv2 && $(MAKE) lib
+	cd $(SRC_DIR)/symv2 && $(MAKE) lib
 
 # custom test-dot2 stuff
 
@@ -492,6 +494,25 @@ gemv2-test: gemv2-test-lib
 gemv2-clean:
 	cd $(SRC_DIR)/gemv2 && $(MAKE) clean
 	cd $(TEST_DIR)/test-gemv2 && $(MAKE) clean
+
+
+# symv2 stuff
+
+symv2: symv2-test
+
+
+symv2-lib: common-lib
+	cd $(SRC_DIR)/symv2 && $(MAKE)
+
+symv2-test-lib: lib common-test-lib
+	cd $(TEST_DIR)/test-symv2 && $(MAKE) do_test_symv2 
+
+symv2-test: symv2-test-lib
+	cd $(TEST_DIR)/test-symv2 && $(MAKE)
+
+symv2-clean:
+	cd $(SRC_DIR)/symv2 && $(MAKE) clean
+	cd $(TEST_DIR)/test-symv2 && $(MAKE) clean
 
 
 
