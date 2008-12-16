@@ -2,7 +2,7 @@
      $           PIVMIN, GAPTOL, Z, WANTNC, NEGCNT, ZTZ, MINGMA,
      $           R, ISUPPZ, NRMINV, RESID, RQCORR, WORK )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

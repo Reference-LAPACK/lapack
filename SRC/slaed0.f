@@ -1,7 +1,7 @@
       SUBROUTINE SLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
      $                   WORK, IWORK, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

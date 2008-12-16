@@ -1,12 +1,11 @@
-      FUNCTION SISNAN( SIN )
-      LOGICAL SISNAN
+      LOGICAL FUNCTION SISNAN(SIN)
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
-      REAL             SIN
+      REAL SIN
 *     ..
 *
 *  Purpose
@@ -29,5 +28,6 @@
       EXTERNAL SLAISNAN
 *  ..
 *  .. Executable Statements ..
-      SISNAN = SLAISNAN( SIN, SIN )
-      END FUNCTION
+      SISNAN = SLAISNAN(SIN,SIN)
+      RETURN
+      END

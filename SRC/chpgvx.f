@@ -2,7 +2,7 @@
      $                   IL, IU, ABSTOL, M, W, Z, LDZ, WORK, RWORK,
      $                   IWORK, IFAIL, INFO )
 *
-*  -- LAPACK driver routine (version 3.1) --
+*  -- LAPACK driver routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

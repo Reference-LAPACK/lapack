@@ -7,7 +7,7 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
-      CHARACTER*(*)       SUBNAM
+      CHARACTER*( * )    SUBNAM
       CHARACTER*( * )    OPTS
       INTEGER            IMAT, INFO, INFOE, KL, KU, M, N, N5, NERRS,
      $                   NFAIL, NOUT
@@ -87,10 +87,11 @@
       CHARACTER*3        C3
 *     ..
 *     .. External Functions ..
-      INTEGER ILA_LEN_TRIM
-      EXTERNAL ILA_LEN_TRIM
       LOGICAL            LSAME, LSAMEN
       EXTERNAL           LSAME, LSAMEN
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          LEN_TRIM
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAHD
@@ -123,11 +124,11 @@
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9988 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, M, N, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, M, N, N5,
      $            IMAT
             ELSE
                WRITE( NOUT, FMT = 9975 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, N5, IMAT
             END IF
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
@@ -136,57 +137,57 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9984 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, N, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, N, N5,
      $            IMAT
             ELSE
                WRITE( NOUT, FMT = 9970 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9992 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE,
      $            OPTS( 1: 1 ), OPTS( 2: 2 ), N, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9997 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
 *
             WRITE( NOUT, FMT = 9971 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
 *
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
 *
             WRITE( NOUT, FMT = 9978 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
 *
          ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9969 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M,
      $         IMAT
 *
          ELSE IF( LSAMEN( 3, C3, 'LS ' ) ) THEN
 *
             WRITE( NOUT, FMT = 9965 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N,
      $         KL, N5, IMAT
 *
          ELSE IF( LSAMEN( 3, C3, 'LSX' ) .OR. LSAMEN( 3, C3, 'LSS' ) )
      $             THEN
 *
             WRITE( NOUT, FMT = 9974 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
 *
          ELSE
 *
             WRITE( NOUT, FMT = 9963 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N5,
      $         IMAT
          END IF
 *
@@ -197,11 +198,11 @@
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9989 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, M, N, KL,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, M, N, KL,
      $            KU, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9976 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, KL, KU, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, KU, N5,
      $            IMAT
             END IF
             IF( INFO.NE.0 )
@@ -211,11 +212,11 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9986 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, N, KL, KU,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, N, KL, KU,
      $            N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9972 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, N, KL, KU, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, KL, KU, N5,
      $            IMAT
             END IF
 *
@@ -223,29 +224,29 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9993 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE,
      $            OPTS( 1: 1 ), OPTS( 2: 2 ), N, KL, KU, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9998 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $            OPTS( 2: 2 ), N, KL, KU, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
 *
             WRITE( NOUT, FMT = 9977 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, KL, KU, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, KU, IMAT
 *
          ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9968 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, KL,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, KL,
      $         KU, IMAT
 *
          ELSE
 *
             WRITE( NOUT, FMT = 9964 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, KL,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, KL,
      $         KU, N5, IMAT
          END IF
 *
@@ -256,10 +257,10 @@
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9987 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, N, IMAT
             ELSE
                WRITE( NOUT, FMT = 9973 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, IMAT
             END IF
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
@@ -268,35 +269,35 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9984 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, N, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, N, N5,
      $            IMAT
             ELSE
                WRITE( NOUT, FMT = 9970 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9992 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE,
      $            OPTS( 1: 1 ), OPTS( 2: 2 ), N, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9997 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9969 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M,
      $         IMAT
 *
          ELSE
 *
             WRITE( NOUT, FMT = 9963 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N5,
      $         IMAT
          END IF
 *
@@ -308,11 +309,11 @@
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9980 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
      $            N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9956 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
             END IF
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
@@ -321,40 +322,88 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9979 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, N,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, N,
      $            N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9955 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9990 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE,
      $            OPTS( 1: 1 ), OPTS( 2: 2 ), N, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9995 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
 *
             WRITE( NOUT, FMT = 9956 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
 *
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) .OR.
      $            LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9960 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
 *
          ELSE
 *
             WRITE( NOUT, FMT = 9955 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
+         END IF
+*
+      ELSE IF( LSAMEN( 2, P2, 'PS' ) ) THEN
+*
+*        xPS:  Symmetric or Hermitian positive semi-definite matrices
+*
+         UPLO = OPTS( 1: 1 )
+         IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
+            IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
+               WRITE( NOUT, FMT = 9980 )SUBNAM, INFO, INFOE, UPLO, M,
+     $            N5, IMAT
+            ELSE
+               WRITE( NOUT, FMT = 9956 )SUBNAM, INFO, UPLO, M, N5, IMAT
+            END IF
+            IF( INFO.NE.0 )
+     $         WRITE( NOUT, FMT = 9949 )
+*
+         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+*
+            IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
+               WRITE( NOUT, FMT = 9979 )SUBNAM, INFO, INFOE, UPLO, N,
+     $            N5, IMAT
+            ELSE
+               WRITE( NOUT, FMT = 9955 )SUBNAM, INFO, UPLO, N, N5, IMAT
+            END IF
+*
+         ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
+*
+            IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
+               WRITE( NOUT, FMT = 9990 )SUBNAM, INFO, INFOE,
+     $            OPTS( 1: 1 ), OPTS( 2: 2 ), N, N5, IMAT
+            ELSE
+               WRITE( NOUT, FMT = 9995 )SUBNAM, INFO, OPTS( 1: 1 ),
+     $            OPTS( 2: 2 ), N, N5, IMAT
+            END IF
+*
+         ELSE IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
+*
+            WRITE( NOUT, FMT = 9956 )SUBNAM, INFO, UPLO, M, N5, IMAT
+*
+         ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMT' ) .OR.
+     $            LSAMEN( 3, C3, 'CON' ) ) THEN
+*
+            WRITE( NOUT, FMT = 9960 )SUBNAM, INFO, UPLO, M, IMAT
+*
+         ELSE
+*
+            WRITE( NOUT, FMT = 9955 )SUBNAM, INFO, UPLO, M, N5, IMAT
          END IF
 *
       ELSE IF( LSAMEN( 2, P2, 'SY' ) .OR. LSAMEN( 2, P2, 'HE' ) ) THEN
@@ -365,11 +414,11 @@
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9980 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
      $            N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9956 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
             END IF
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
@@ -378,22 +427,22 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9979 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, N,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, N,
      $            N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9955 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9990 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE,
      $            OPTS( 1: 1 ), OPTS( 2: 2 ), N, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9995 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
@@ -402,12 +451,12 @@
      $             THEN
 *
             WRITE( NOUT, FMT = 9960 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
 *
          ELSE
 *
             WRITE( NOUT, FMT = 9955 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
          END IF
 *
       ELSE IF( LSAMEN( 2, P2, 'PP' ) .OR. LSAMEN( 2, P2, 'SP' ) .OR.
@@ -419,11 +468,11 @@
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9983 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
      $            IMAT
             ELSE
                WRITE( NOUT, FMT = 9960 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
             END IF
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
@@ -432,22 +481,22 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9979 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, N,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, N,
      $            N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9955 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9990 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE,
      $            OPTS( 1: 1 ), OPTS( 2: 2 ), N, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9995 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $            OPTS( 2: 2 ), N, N5, IMAT
             END IF
 *
@@ -456,12 +505,12 @@
      $             THEN
 *
             WRITE( NOUT, FMT = 9960 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, IMAT
 *
          ELSE
 *
             WRITE( NOUT, FMT = 9955 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, N5, IMAT
          END IF
 *
       ELSE IF( LSAMEN( 2, P2, 'PB' ) ) THEN
@@ -472,11 +521,11 @@
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9982 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, M,
      $            KL, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9958 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, KL, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, KL, N5,
      $            IMAT
             END IF
             IF( INFO.NE.0 )
@@ -486,11 +535,11 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9981 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, N,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, UPLO, N,
      $            KL, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9957 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, N, KL, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, N, KL, N5,
      $            IMAT
             END IF
 *
@@ -498,11 +547,11 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9991 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE,
      $            OPTS( 1: 1 ), OPTS( 2: 2 ), N, KL, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9996 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $            OPTS( 2: 2 ), N, KL, N5, IMAT
             END IF
 *
@@ -510,12 +559,12 @@
      $            LSAMEN( 3, C3, 'CON' ) ) THEN
 *
             WRITE( NOUT, FMT = 9959 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, KL, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, KL, IMAT
 *
          ELSE
 *
             WRITE( NOUT, FMT = 9957 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, UPLO, M, KL, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, UPLO, M, KL, N5,
      $         IMAT
          END IF
 *
@@ -526,10 +575,10 @@
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9987 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, N, IMAT
             ELSE
                WRITE( NOUT, FMT = 9973 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, IMAT
             END IF
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
@@ -538,22 +587,22 @@
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9984 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, N, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, N, N5,
      $            IMAT
             ELSE
                WRITE( NOUT, FMT = 9970 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, N, N5, IMAT
             END IF
 *
          ELSE IF( LSAMEN( 3, C3, 'SVX' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9994 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE,
      $            OPTS( 1: 1 ), N, N5, IMAT
             ELSE
                WRITE( NOUT, FMT = 9999 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), N,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), N,
      $            N5, IMAT
             END IF
 *
@@ -562,17 +611,17 @@
             IF( LSAME( SUBNAM( 1: 1 ), 'S' ) .OR.
      $          LSAME( SUBNAM( 1: 1 ), 'D' ) ) THEN
                WRITE( NOUT, FMT = 9973 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, IMAT
             ELSE
                WRITE( NOUT, FMT = 9969 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M,
      $            IMAT
             END IF
 *
          ELSE
 *
             WRITE( NOUT, FMT = 9963 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ), M, N5,
      $         IMAT
          END IF
 *
@@ -582,19 +631,19 @@
 *
          IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
             WRITE( NOUT, FMT = 9961 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), M, N5, IMAT
          ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
             WRITE( NOUT, FMT = 9967 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, IMAT
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATRS' ) ) THEN
             WRITE( NOUT, FMT = 9952 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), OPTS( 4: 4 ), M, IMAT
          ELSE
             WRITE( NOUT, FMT = 9953 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, N5, IMAT
          END IF
 *
@@ -604,19 +653,19 @@
 *
          IF( LSAMEN( 3, C3, 'TRI' ) ) THEN
             WRITE( NOUT, FMT = 9962 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), M, IMAT
          ELSE IF( LSAMEN( 3, C3, 'CON' ) ) THEN
             WRITE( NOUT, FMT = 9967 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, IMAT
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATPS' ) ) THEN
             WRITE( NOUT, FMT = 9952 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), OPTS( 4: 4 ), M, IMAT
          ELSE
             WRITE( NOUT, FMT = 9953 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, N5, IMAT
          END IF
 *
@@ -626,15 +675,15 @@
 *
          IF( LSAMEN( 3, C3, 'CON' ) ) THEN
             WRITE( NOUT, FMT = 9966 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, KL, IMAT
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATBS' ) ) THEN
             WRITE( NOUT, FMT = 9951 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), OPTS( 4: 4 ), M, KL, IMAT
          ELSE
             WRITE( NOUT, FMT = 9954 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, OPTS( 1: 1 ),
      $         OPTS( 2: 2 ), OPTS( 3: 3 ), M, KL, N5, IMAT
          END IF
 *
@@ -644,10 +693,10 @@
 *
          IF( LSAMEN( 3, C3, 'QRS' ) ) THEN
             WRITE( NOUT, FMT = 9974 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
             WRITE( NOUT, FMT = 9978 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
          END IF
 *
       ELSE IF( LSAMEN( 2, P2, 'LQ' ) ) THEN
@@ -656,10 +705,10 @@
 *
          IF( LSAMEN( 3, C3, 'LQS' ) ) THEN
             WRITE( NOUT, FMT = 9974 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
             WRITE( NOUT, FMT = 9978 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
          END IF
 *
       ELSE IF( LSAMEN( 2, P2, 'QL' ) ) THEN
@@ -668,10 +717,10 @@
 *
          IF( LSAMEN( 3, C3, 'QLS' ) ) THEN
             WRITE( NOUT, FMT = 9974 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
             WRITE( NOUT, FMT = 9978 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
          END IF
 *
       ELSE IF( LSAMEN( 2, P2, 'RQ' ) ) THEN
@@ -680,31 +729,31 @@
 *
          IF( LSAMEN( 3, C3, 'RQS' ) ) THEN
             WRITE( NOUT, FMT = 9974 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, KL, N5, IMAT
          ELSE IF( LSAMEN( 5, SUBNAM( 2: 6 ), 'LATMS' ) ) THEN
             WRITE( NOUT, FMT = 9978 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, IMAT
          END IF
 *
       ELSE IF( LSAMEN( 2, P2, 'LU' ) ) THEN
 *
          IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
             WRITE( NOUT, FMT = 9988 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, M, N, N5,
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, M, N, N5,
      $         IMAT
          ELSE
             WRITE( NOUT, FMT = 9975 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N, N5, IMAT
          END IF
 *
       ELSE IF( LSAMEN( 2, P2, 'CH' ) ) THEN
 *
          IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
             WRITE( NOUT, FMT = 9985 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, INFOE, M, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, INFOE, M, N5, IMAT
          ELSE
             WRITE( NOUT, FMT = 9971 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO, M, N5, IMAT
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO, M, N5, IMAT
          END IF
 *
       ELSE
@@ -712,7 +761,7 @@
 *        Print a generic message if the path is unknown.
 *
          WRITE( NOUT, FMT = 9950 )
-     $     SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), INFO
+     $     SUBNAM(1:LEN_TRIM( SUBNAM )), INFO
       END IF
 *
 *     Description of error message (alphabetical, left to right)

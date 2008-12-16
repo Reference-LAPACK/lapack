@@ -35,23 +35,23 @@ include ../../make.inc
  
 SCATGEN = slatm1.o slaran.o slarnd.o
 
-SMATGEN = slatms.o slatme.o slatmr.o \
+SMATGEN = slatms.o slatme.o slatmr.o slatmt.o \
    slagge.o slagsy.o slakf2.o slarge.o slaror.o slarot.o slatm2.o \
-   slatm3.o slatm5.o slatm6.o
+   slatm3.o slatm5.o slatm6.o slatm7.o slahilb.o
 
-CMATGEN = clatms.o clatme.o clatmr.o \
+CMATGEN = clatms.o clatme.o clatmr.o clatmt.o \
    clagge.o claghe.o clagsy.o clakf2.o clarge.o claror.o clarot.o \
-   clatm1.o clarnd.o clatm2.o clatm3.o clatm5.o clatm6.o
+   clatm1.o clarnd.o clatm2.o clatm3.o clatm5.o clatm6.o clahilb.o
 
 DZATGEN = dlatm1.o dlaran.o dlarnd.o
 
-DMATGEN = dlatms.o dlatme.o dlatmr.o \
+DMATGEN = dlatms.o dlatme.o dlatmr.o dlatmt.o \
    dlagge.o dlagsy.o dlakf2.o dlarge.o dlaror.o dlarot.o dlatm2.o \
-   dlatm3.o dlatm5.o dlatm6.o
+   dlatm3.o dlatm5.o dlatm6.o dlatm7.o dlahilb.o
 
-ZMATGEN = zlatms.o zlatme.o zlatmr.o \
+ZMATGEN = zlatms.o zlatme.o zlatmr.o zlatmt.o \
    zlagge.o zlaghe.o zlagsy.o zlakf2.o zlarge.o zlaror.o zlarot.o \
-   zlatm1.o zlarnd.o zlatm2.o zlatm3.o zlatm5.o zlatm6.o
+   zlatm1.o zlarnd.o zlatm2.o zlatm3.o zlatm5.o zlatm6.o zlahilb.o
 
 all:	../../$(TMGLIB)
 

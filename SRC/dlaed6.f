@@ -1,6 +1,6 @@
       SUBROUTINE DLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )
 *
-*  -- LAPACK routine (version 3.1.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     February 2007
 *

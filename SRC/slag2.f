@@ -1,7 +1,7 @@
       SUBROUTINE SLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1,
      $                  WR2, WI )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

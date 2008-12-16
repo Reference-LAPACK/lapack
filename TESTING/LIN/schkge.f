@@ -134,7 +134,7 @@
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NUNIT
 *     ..
 *     .. Common blocks ..
@@ -406,7 +406,7 @@
                         CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 5 ) )
                         CALL SGET07( TRANS, N, NRHS, A, LDA, B, LDA, X,
-     $                               LDA, XACT, LDA, RWORK,
+     $                               LDA, XACT, LDA, RWORK, .TRUE.,
      $                               RWORK( NRHS+1 ), RESULT( 6 ) )
 *
 *                       Print information about the tests that did not

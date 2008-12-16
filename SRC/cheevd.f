@@ -1,7 +1,7 @@
       SUBROUTINE CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
      $                   LRWORK, IWORK, LIWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.1) --
+*  -- LAPACK driver routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

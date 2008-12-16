@@ -2,7 +2,7 @@
      $                   VL, LDVL, VR, LDVR, ILO, IHI, SCALE, ABNRM,
      $                   RCONDE, RCONDV, WORK, LWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.1) --
+*  -- LAPACK driver routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

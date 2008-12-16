@@ -1,7 +1,7 @@
       INTEGER FUNCTION ILACLC(M, N, A, LDA)
       IMPLICIT NONE
 !
-!  -- LAPACK auxiliary routine (version 3.1) --
+!  -- LAPACK auxiliary routine (version 3.2) --
 !     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 !     December 2007
 !
@@ -39,7 +39,7 @@
       PARAMETER ( ZERO = (0.0E+0, 0.0E+0) )
 !     ..
 !     .. Local Scalars ..
-      INTEGER I, J
+      INTEGER I
 !     ..
 !     .. Executable Statements ..
 !

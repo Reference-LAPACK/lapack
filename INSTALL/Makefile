@@ -24,7 +24,7 @@ testieee: tstiee.o
 	$(LOADER) $(LOADOPTS) -o testieee tstiee.o
 
 testversion: ilaver.o LAPACK_version.o
-	$(LOADER) $(LOADOPTS) -o testversion ilaver.o LAPACK_version.o
+	    $(LOADER) $(LOADOPTS) -o testversion ilaver.o LAPACK_version.o
 
 clean:
 	rm -f *.o

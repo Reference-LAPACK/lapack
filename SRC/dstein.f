@@ -1,7 +1,7 @@
       SUBROUTINE DSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
      $                   IWORK, IFAIL, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

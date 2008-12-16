@@ -26,6 +26,8 @@
 *  5                      Number of values of NB
 *  1 3 3 3 20             Values of NB (the blocksize)
 *  1 0 5 9 1              Values of NX (crossover point)
+*  3                      Number of values of RANK
+*  30 50 90               Values of rank (as a % of N)
 *  30.0                   Threshold value of test ratio
 *  T                      Put T to test the LAPACK routines
 *  T                      Put T to test the driver routines
@@ -33,6 +35,7 @@
 *  CGE   11               List types on next line if 0 < NTYPES < 11
 *  CGB    8               List types on next line if 0 < NTYPES <  8
 *  CGT   12               List types on next line if 0 < NTYPES < 12
+*  CPO    9               List types on next line if 0 < NTYPES <  9
 *  CPO    9               List types on next line if 0 < NTYPES <  9
 *  CPP    9               List types on next line if 0 < NTYPES <  9
 *  CPB    8               List types on next line if 0 < NTYPES <  8
@@ -96,15 +99,16 @@
       CHARACTER*10       INTSTR
       CHARACTER*72       ALINE
       INTEGER            I, IC, J, K, LA, LAFAC, LDA, NB, NM, NMATS, NN,
-     $                   NNB, NNB2, NNS, NRHS, NTYPES,VERS_MAJOR,
-     $                   VERS_MINOR, VERS_PATCH
+     $                   NNB, NNB2, NNS, NRHS, NTYPES, NRANK,
+     $                   VERS_MAJOR, VERS_MINOR, VERS_PATCH
       REAL               EPS, S1, S2, THREQ, THRESH
 *     ..
 *     .. Local Arrays ..
       LOGICAL            DOTYPE( MATMAX )
       INTEGER            IWORK( 25*NMAX ), MVAL( MAXIN ),
      $                   NBVAL( MAXIN ), NBVAL2( MAXIN ),
-     $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN )
+     $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN ),
+     $                   RANKVAL( MAXIN ), PIV( NMAX )
       REAL               RWORK( 150*NMAX+2*MAXRHS ), S( 2*NMAX )
       COMPLEX            A( ( KDMAX+1 )*NMAX, 7 ), B( NMAX*MAXRHS, 4 ),
      $                   WORK( NMAX, NMAX+MAXRHS+10 )
@@ -116,15 +120,16 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, CCHKEQ, CCHKGB, CCHKGE, CCHKGT, CCHKHE,
-     $                   CCHKHP, CCHKLQ, CCHKPB, CCHKPO, CCHKPP, CCHKPT,
-     $                   CCHKQ3, CCHKQL, CCHKQP, CCHKQR, CCHKRQ, CCHKSP,
-     $                   CCHKSY, CCHKTB, CCHKTP, CCHKTR, CCHKTZ, CDRVGB,
-     $                   CDRVGE, CDRVGT, CDRVHE, CDRVHP, CDRVLS, CDRVPB,
-     $                   CDRVPO, CDRVPP, CDRVPT, CDRVSP, CDRVSY, ILAVER
+     $                   CCHKHP, CCHKLQ, CCHKPB, CCHKPO, CCHKPS, CCHKPP,
+     $                   CCHKPT, CCHKQ3, CCHKQL, CCHKQP, CCHKQR, CCHKRQ,
+     $                   CCHKSP, CCHKSY, CCHKTB, CCHKTP, CCHKTR, CCHKTZ,
+     $                   CDRVGB, CDRVGE, CDRVGT, CDRVHE, CDRVHP, CDRVLS,
+     $                   CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP, CDRVSY,
+     $                   ILAVER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NUNIT
 *     ..
 *     .. Arrays in Common ..
@@ -274,6 +279,32 @@
    70 CONTINUE
       IF( NNB.GT.0 )
      $   WRITE( NOUT, FMT = 9993 )'NX  ', ( NXVAL( I ), I = 1, NNB )
+*
+*     Read the values of RANKVAL
+*
+      READ( NIN, FMT = * )NRANK
+      IF( NN.LT.1 ) THEN
+         WRITE( NOUT, FMT = 9996 )' NRANK ', NRANK, 1
+         NRANK = 0
+         FATAL = .TRUE.
+      ELSE IF( NN.GT.MAXIN ) THEN
+         WRITE( NOUT, FMT = 9995 )' NRANK ', NRANK, MAXIN
+         NRANK = 0
+         FATAL = .TRUE.
+      END IF
+      READ( NIN, FMT = * )( RANKVAL( I ), I = 1, NRANK )
+      DO I = 1, NRANK
+         IF( RANKVAL( I ).LT.0 ) THEN
+            WRITE( NOUT, FMT = 9996 )' RANK  ', RANKVAL( I ), 0
+            FATAL = .TRUE.
+         ELSE IF( RANKVAL( I ).GT.100 ) THEN
+            WRITE( NOUT, FMT = 9995 )' RANK  ', RANKVAL( I ), 100
+            FATAL = .TRUE.
+         END IF
+      END DO
+      IF( NRANK.GT.0 )
+     $   WRITE( NOUT, FMT = 9993 )'RANK % OF N',
+     $   ( RANKVAL( I ), I = 1, NRANK )
 *
 *     Read the threshold value for the test ratios.
 *
@@ -451,6 +482,23 @@
      $                   RWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'PS' ) ) THEN
+*
+*        PS:  positive semi-definite matrices
+*
+         NTYPES = 9
+*
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKPS( DOTYPE, NN, NVAL, NNB2, NBVAL2, NRANK,
+     $                   RANKVAL, THRESH, TSTERR, LDA, A( 1, 1 ),
+     $                   A( 1, 2 ), A( 1, 3 ), PIV, WORK, RWORK,
+     $                   NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
       ELSE IF( LSAMEN( 2, C2, 'PP' ) ) THEN

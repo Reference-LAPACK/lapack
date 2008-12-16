@@ -2,8 +2,8 @@
      $                   IHIZ, Z, LDZ, NS, ND, SR, SI, V, LDV, NH, T,
      $                   LDT, NV, WV, LDWV, WORK, LWORK )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK auxiliary routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
@@ -78,7 +78,7 @@
 *          Specify the rows of Z to which transformations must be
 *          applied if WANTZ is .TRUE.. 1 .LE. ILOZ .LE. IHIZ .LE. N.
 *
-*     Z       (input/output) DOUBLE PRECISION array, dimension (LDZ,IHI)
+*     Z       (input/output) DOUBLE PRECISION array, dimension (LDZ,N)
 *          IF WANTZ is .TRUE., then on output, the orthogonal
 *          similarity transformation mentioned above has been
 *          accumulated into Z(ILOZ:IHIZ,ILO:IHI) from the right.
@@ -153,7 +153,7 @@
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ==================================================================
+*     ================================================================
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0d0, ONE = 1.0d0 )
@@ -173,7 +173,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEHRD, DGEMM, DLABAD, DLACPY, DLAHQR,
-     $                   DLANV2, DLAQR4, DLARF, DLARFG, DLASET, DORGHR,
+     $                   DLANV2, DLAQR4, DLARF, DLARFG, DLASET, DORMHR,
      $                   DTREXC
 *     ..
 *     .. Intrinsic Functions ..
@@ -193,9 +193,10 @@
          CALL DGEHRD( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
          LWK1 = INT( WORK( 1 ) )
 *
-*        ==== Workspace query call to DORGHR ====
+*        ==== Workspace query call to DORMHR ====
 *
-         CALL DORGHR( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
+         CALL DORMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
+     $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
 *        ==== Workspace query call to DLAQR4 ====
@@ -220,6 +221,7 @@
 *     ... for an empty active block ... ====
       NS = 0
       ND = 0
+      WORK( 1 ) = ONE
       IF( KTOP.GT.KBOT )
      $   RETURN
 *     ... nor for an empty deflation window. ====
@@ -259,6 +261,7 @@
             IF( KWTOP.GT.KTOP )
      $         H( KWTOP, KWTOP-1 ) = ZERO
          END IF
+         WORK( 1 ) = ONE
          RETURN
       END IF
 *
@@ -342,7 +345,7 @@
                NS = NS - 2
             ELSE
 *
-*              ==== Undflatable. Move them up out of the way.
+*              ==== Undeflatable. Move them up out of the way.
 *              .    Fortunately, DTREXC does the right thing with
 *              .    ILST in case of a rare exchange failure. ====
 *
@@ -488,18 +491,11 @@
      $               LDH+1 )
 *
 *        ==== Accumulate orthogonal matrix in order update
-*        .    H and Z, if requested.  (A modified version
-*        .    of  DORGHR that accumulates block Householder
-*        .    transformations into V directly might be
-*        .    marginally more efficient than the following.) ====
+*        .    H and Z, if requested.  ====
 *
-         IF( NS.GT.1 .AND. S.NE.ZERO ) THEN
-            CALL DORGHR( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
-     $                   LWORK-JW, INFO )
-            CALL DGEMM( 'N', 'N', JW, NS, NS, ONE, V, LDV, T, LDT, ZERO,
-     $                  WV, LDWV )
-            CALL DLACPY( 'A', JW, NS, WV, LDWV, V, LDV )
-         END IF
+         IF( NS.GT.1 .AND. S.NE.ZERO )
+     $      CALL DORMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
+     $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
 *

@@ -1,7 +1,7 @@
       SUBROUTINE CBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,
      $                   LDU, C, LDC, RWORK, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

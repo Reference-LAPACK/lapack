@@ -1,8 +1,8 @@
       SUBROUTINE CLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
      $                   IHIZ, Z, LDZ, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK auxiliary routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
@@ -110,11 +110,10 @@
 *
 *     12-04 Further modifications by
 *     Ralph Byers, University of Kansas, USA
-*
-*       This is a modified version of CLAHQR from LAPACK version 3.0.
-*       It is (1) more robust against overflow and underflow and
-*       (2) adopts the more conservative Ahues & Tisseur stopping
-*       criterion (LAWN 122, 1997).
+*     This is a modified version of CLAHQR from LAPACK version 3.0.
+*     It is (1) more robust against overflow and underflow and
+*     (2) adopts the more conservative Ahues & Tisseur stopping
+*     criterion (LAWN 122, 1997).
 *
 *     =========================================================
 *
@@ -177,6 +176,13 @@
       IF( ILO.LE.IHI-2 )
      $   H( IHI, IHI-2 ) = ZERO
 *     ==== ensure that subdiagonal entries are real ====
+      IF( WANTT ) THEN
+         JLO = 1
+         JHI = N
+      ELSE
+         JLO = ILO
+         JHI = IHI
+      END IF
       DO 20 I = ILO + 1, IHI
          IF( AIMAG( H( I, I-1 ) ).NE.RZERO ) THEN
 *           ==== The following redundant normalization
@@ -185,13 +191,6 @@
             SC = H( I, I-1 ) / CABS1( H( I, I-1 ) )
             SC = CONJG( SC ) / ABS( SC )
             H( I, I-1 ) = ABS( H( I, I-1 ) )
-            IF( WANTT ) THEN
-               JLO = 1
-               JHI = N
-            ELSE
-               JLO = ILO
-               JHI = IHI
-            END IF
             CALL CSCAL( JHI-I+1, SC, H( I, I ), LDH )
             CALL CSCAL( MIN( JHI, I+1 )-JLO+1, CONJG( SC ), H( JLO, I ),
      $                  1 )
@@ -289,7 +288,13 @@
             I2 = I
          END IF
 *
-         IF( ITS.EQ.10 .OR. ITS.EQ.20 ) THEN
+         IF( ITS.EQ.10 ) THEN
+*
+*           Exceptional shift.
+*
+            S = DAT1*ABS( REAL( H( L+1, L ) ) )
+            T = S + H( L, L )
+         ELSE IF( ITS.EQ.20 ) THEN
 *
 *           Exceptional shift.
 *
@@ -326,13 +331,13 @@
             H11 = H( M, M )
             H22 = H( M+1, M+1 )
             H11S = H11 - T
-            H21 = H( M+1, M )
+            H21 = REAL( H( M+1, M ) )
             S = CABS1( H11S ) + ABS( H21 )
             H11S = H11S / S
             H21 = H21 / S
             V( 1 ) = H11S
             V( 2 ) = H21
-            H10 = H( M, M-1 )
+            H10 = REAL( H( M, M-1 ) )
             IF( ABS( H10 )*ABS( H21 ).LE.ULP*
      $          ( CABS1( H11S )*( CABS1( H11 )+CABS1( H22 ) ) ) )
      $          GO TO 70
@@ -340,7 +345,7 @@
          H11 = H( L, L )
          H22 = H( L+1, L+1 )
          H11S = H11 - T
-         H21 = H( L+1, L )
+         H21 = REAL( H( L+1, L ) )
          S = CABS1( H11S ) + ABS( H21 )
          H11S = H11S / S
          H21 = H21 / S

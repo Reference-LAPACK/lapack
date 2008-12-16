@@ -1,8 +1,8 @@
       SUBROUTINE ZLAQR4( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
      $                   IHIZ, Z, LDZ, WORK, LWORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK auxiliary routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
@@ -163,20 +163,23 @@
 *     ==== Matrices of order NTINY or smaller must be processed by
 *     .    ZLAHQR because of insufficient subdiagonal scratch space.
 *     .    (This is a hard limit.) ====
+      INTEGER            NTINY
+      PARAMETER          ( NTINY = 11 )
 *
 *     ==== Exceptional deflation windows:  try to cure rare
-*     .    slow convergence by increasing the size of the
-*     .    deflation window after KEXNW iterations. =====
+*     .    slow convergence by varying the size of the
+*     .    deflation window after KEXNW iterations. ====
+      INTEGER            KEXNW
+      PARAMETER          ( KEXNW = 5 )
 *
 *     ==== Exceptional shifts: try to cure rare slow convergence
 *     .    with ad-hoc exceptional shifts every KEXSH iterations.
-*     .    The constants WILK1 and WILK2 are used to form the
-*     .    exceptional shifts. ====
+*     .    ====
+      INTEGER            KEXSH
+      PARAMETER          ( KEXSH = 6 )
 *
-      INTEGER            NTINY
-      PARAMETER          ( NTINY = 11 )
-      INTEGER            KEXNW, KEXSH
-      PARAMETER          ( KEXNW = 5, KEXSH = 6 )
+*     ==== The constant WILK1 is used to form the exceptional
+*     .    shifts. ====
       DOUBLE PRECISION   WILK1
       PARAMETER          ( WILK1 = 0.75d0 )
       COMPLEX*16         ZERO, ONE
@@ -190,9 +193,9 @@
       DOUBLE PRECISION   S
       INTEGER            I, INF, IT, ITMAX, K, KACC22, KBOT, KDU, KS,
      $                   KT, KTOP, KU, KV, KWH, KWTOP, KWV, LD, LS,
-     $                   LWKOPT, NDFL, NH, NHO, NIBBLE, NMIN, NS, NSMAX,
-     $                   NSR, NVE, NW, NWMAX, NWR
-      LOGICAL            NWINC, SORTED
+     $                   LWKOPT, NDEC, NDFL, NH, NHO, NIBBLE, NMIN, NS,
+     $                   NSMAX, NSR, NVE, NW, NWMAX, NWR, NWUPBD
+      LOGICAL            SORTED
       CHARACTER          JBCMPZ*2
 *     ..
 *     .. External Functions ..
@@ -225,24 +228,9 @@
          RETURN
       END IF
 *
-*     ==== Set up job flags for ILAENV. ====
-*
-      IF( WANTT ) THEN
-         JBCMPZ( 1: 1 ) = 'S'
-      ELSE
-         JBCMPZ( 1: 1 ) = 'E'
-      END IF
-      IF( WANTZ ) THEN
-         JBCMPZ( 2: 2 ) = 'V'
-      ELSE
-         JBCMPZ( 2: 2 ) = 'N'
-      END IF
-*
-*     ==== Tiny matrices must use ZLAHQR. ====
-*
       IF( N.LE.NTINY ) THEN
 *
-*        ==== Estimate optimal workspace. ====
+*        ==== Tiny matrices must use ZLAHQR. ====
 *
          LWKOPT = 1
          IF( LWORK.NE.-1 )
@@ -257,6 +245,19 @@
 *
          INFO = 0
 *
+*        ==== Set up job flags for ILAENV. ====
+*
+         IF( WANTT ) THEN
+            JBCMPZ( 1: 1 ) = 'S'
+         ELSE
+            JBCMPZ( 1: 1 ) = 'E'
+         END IF
+         IF( WANTZ ) THEN
+            JBCMPZ( 2: 2 ) = 'V'
+         ELSE
+            JBCMPZ( 2: 2 ) = 'N'
+         END IF
+*
 *        ==== NWR = recommended deflation window size.  At this
 *        .    point,  N .GT. NTINY = 11, so there is enough
 *        .    subdiagonal workspace for NWR.GE.2 as required.
@@ -266,7 +267,6 @@
          NWR = ILAENV( 13, 'ZLAQR4', JBCMPZ, N, ILO, IHI, LWORK )
          NWR = MAX( 2, NWR )
          NWR = MIN( IHI-ILO+1, ( N-1 ) / 3, NWR )
-         NW = NWR
 *
 *        ==== NSR = recommended number of simultaneous shifts.
 *        .    At this point N .GT. NTINY = 11, so there is at
@@ -317,6 +317,7 @@
 *        .    which there is sufficient workspace. ====
 *
          NWMAX = MIN( ( N-1 ) / 3, LWORK / 2 )
+         NW = NWMAX
 *
 *        ==== NSMAX = the Largest number of simultaneous shifts
 *        .    for which there is sufficient workspace. ====
@@ -355,49 +356,45 @@
    20       CONTINUE
             KTOP = K
 *
-*           ==== Select deflation window size ====
+*           ==== Select deflation window size:
+*           .    Typical Case:
+*           .      If possible and advisable, nibble the entire
+*           .      active block.  If not, use size MIN(NWR,NWMAX)
+*           .      or MIN(NWR+1,NWMAX) depending upon which has
+*           .      the smaller corresponding subdiagonal entry
+*           .      (a heuristic).
+*           .
+*           .    Exceptional Case:
+*           .      If there have been no deflations in KEXNW or
+*           .      more iterations, then vary the deflation window
+*           .      size.   At first, because, larger windows are,
+*           .      in general, more powerful than smaller ones,
+*           .      rapidly increase the window to the maximum possible.
+*           .      Then, gradually reduce the window size. ====
 *
             NH = KBOT - KTOP + 1
-            IF( NDFL.LT.KEXNW .OR. NH.LT.NW ) THEN
-*
-*              ==== Typical deflation window.  If possible and
-*              .    advisable, nibble the entire active block.
-*              .    If not, use size NWR or NWR+1 depending upon
-*              .    which has the smaller corresponding subdiagonal
-*              .    entry (a heuristic). ====
-*
-               NWINC = .TRUE.
-               IF( NH.LE.MIN( NMIN, NWMAX ) ) THEN
+            NWUPBD = MIN( NH, NWMAX )
+            IF( NDFL.LT.KEXNW ) THEN
+               NW = MIN( NWUPBD, NWR )
+            ELSE
+               NW = MIN( NWUPBD, 2*NW )
+            END IF
+            IF( NW.LT.NWMAX ) THEN
+               IF( NW.GE.NH-1 ) THEN
                   NW = NH
                ELSE
-                  NW = MIN( NWR, NH, NWMAX )
-                  IF( NW.LT.NWMAX ) THEN
-                     IF( NW.GE.NH-1 ) THEN
-                        NW = NH
-                     ELSE
-                        KWTOP = KBOT - NW + 1
-                        IF( CABS1( H( KWTOP, KWTOP-1 ) ).GT.
-     $                      CABS1( H( KWTOP-1, KWTOP-2 ) ) )NW = NW + 1
-                     END IF
-                  END IF
+                  KWTOP = KBOT - NW + 1
+                  IF( CABS1( H( KWTOP, KWTOP-1 ) ).GT.
+     $                CABS1( H( KWTOP-1, KWTOP-2 ) ) )NW = NW + 1
                END IF
-            ELSE
-*
-*              ==== Exceptional deflation window.  If there have
-*              .    been no deflations in KEXNW or more iterations,
-*              .    then vary the deflation window size.   At first,
-*              .    because, larger windows are, in general, more
-*              .    powerful than smaller ones, rapidly increase the
-*              .    window up to the maximum reasonable and possible.
-*              .    Then maybe try a slightly smaller window.  ====
-*
-               IF( NWINC .AND. NW.LT.MIN( NWMAX, NH ) ) THEN
-                  NW = MIN( NWMAX, NH, 2*NW )
-               ELSE
-                  NWINC = .FALSE.
-                  IF( NW.EQ.NH .AND. NH.GT.2 )
-     $               NW = NH - 1
-               END IF
+            END IF
+            IF( NDFL.LT.KEXNW ) THEN
+               NDEC = -1
+            ELSE IF( NDEC.GE.0 .OR. NW.GE.NWUPBD ) THEN
+               NDEC = NDEC + 1
+               IF( NW-NDEC.LT.2 )
+     $            NDEC = 0
+               NW = NW - NDEC
             END IF
 *
 *           ==== Aggressive early deflation:

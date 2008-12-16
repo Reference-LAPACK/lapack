@@ -1,21 +1,16 @@
-      SUBROUTINE DLAG2S( M, N, A, LDA, SA, LDSA, INFO)
+      SUBROUTINE DLAG2S( M, N, A, LDA, SA, LDSA, INFO )
 *
-*  -- LAPACK PROTOTYPE auxiliary routine (version 3.1.1) --
+*  -- LAPACK PROTOTYPE auxiliary routine (version 3.1.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     January 2007
+*     August 2007
 *
 *     ..
-*     .. WARNING: PROTOTYPE ..
-*     This is an LAPACK PROTOTYPE routine which means that the
-*     interface of this routine is likely to be changed in the future
-*     based on community feedback.
-*
 *     .. Scalar Arguments ..
-      INTEGER INFO,LDA,LDSA,M,N
+      INTEGER            INFO, LDA, LDSA, M, N
 *     ..
 *     .. Array Arguments ..
-      REAL SA(LDSA,*)
-      DOUBLE PRECISION A(LDA,*)
+      REAL               SA( LDSA, * )
+      DOUBLE PRECISION   A( LDA, * )
 *     ..
 *
 *  Purpose
@@ -28,7 +23,7 @@
 *  DLAG2S checks that all the entries of A are between -RMAX and
 *  RMAX. If not the convertion is aborted and a flag is raised.
 *
-*  This is a helper routine so there is no argument checking.
+*  This is an auxiliary routine so there is no argument checking.
 *
 *  Arguments
 *  =========
@@ -46,40 +41,42 @@
 *          The leading dimension of the array A.  LDA >= max(1,M).
 *
 *  SA      (output) REAL array, dimension (LDSA,N)
-*          On exit, if INFO=0, the M-by-N coefficient matrix SA.
+*          On exit, if INFO=0, the M-by-N coefficient matrix SA; if
+*          INFO>0, the content of SA is unspecified.
 *
 *  LDSA    (input) INTEGER
 *          The leading dimension of the array SA.  LDSA >= max(1,M).
 *
 *  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          > 0:  if INFO = k, the (i,j) entry of the matrix A has
-*                overflowed when moving from DOUBLE PRECISION to SINGLE
-*                k is given by k = (i-1)*LDA+j
+*          = 0:  successful exit.
+*          = 1:  an entry of the matrix A is greater than the SINGLE
+*                PRECISION overflow threshold, in this case, the content
+*                of SA in exit is unspecified.
 *
 *  =========
 *
 *     .. Local Scalars ..
-      INTEGER I,J
-      DOUBLE PRECISION RMAX
+      INTEGER            I, J
+      DOUBLE PRECISION   RMAX
 *     ..
 *     .. External Functions ..
-      REAL SLAMCH
-      EXTERNAL SLAMCH
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Executable Statements ..
 *
-      RMAX = SLAMCH('O')
-      DO 20 J = 1,N
-          DO 30 I = 1,M
-              IF ((A(I,J).LT.-RMAX) .OR. (A(I,J).GT.RMAX)) THEN
-                  INFO = (I-1)*LDA + J
-                  GO TO 10
-              END IF
-              SA(I,J) = A(I,J)
-   30     CONTINUE
+      RMAX = SLAMCH( 'O' )
+      DO 20 J = 1, N
+         DO 10 I = 1, M
+            IF( ( A( I, J ).LT.-RMAX ) .OR. ( A( I, J ).GT.RMAX ) ) THEN
+               INFO = 1
+               GO TO 30
+            END IF
+            SA( I, J ) = A( I, J )
+   10    CONTINUE
    20 CONTINUE
-   10 CONTINUE
+      INFO = 0
+   30 CONTINUE
       RETURN
 *
 *     End of DLAG2S

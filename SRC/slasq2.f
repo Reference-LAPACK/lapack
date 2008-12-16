@@ -1,10 +1,14 @@
       SUBROUTINE SLASQ2( N, Z, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK routine (version 3.2)                                    --
 *
-*     Modified to call SLAZQ3 in place of SLASQ3, 13 Feb 03, SJH.
+*  -- Contributed by Osni Marques of the Lawrence Berkeley National   --
+*  -- Laboratory and Beresford Parlett of the Univ. of California at  --
+*  -- Berkeley                                                        --
+*  -- November 2008                                                   --
+*
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, N
@@ -30,7 +34,7 @@
 *  Note : SLASQ2 defines a logical variable, IEEE, which is true
 *  on machines which follow ieee-754 floating-point standard in their
 *  handling of infinities and NaNs, and false otherwise. This variable
-*  is passed to SLAZQ3.
+*  is passed to SLASQ3.
 *
 *  Arguments
 *  =========
@@ -38,7 +42,7 @@
 *  N     (input) INTEGER
 *        The number of rows and columns in the matrix. N >= 0.
 *
-*  Z     (workspace) REAL array, dimension (4*N)
+*  Z     (input/output) REAL array, dimension ( 4*N )
 *        On entry Z holds the qd array. On exit, entries 1 to N hold
 *        the eigenvalues in decreasing order, Z( 2*N+1 ) holds the
 *        trace, and Z( 2*N+2 ) holds the sum of the eigenvalues. If
@@ -76,14 +80,15 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            IEEE
-      INTEGER            I0, I4, IINFO, IPN4, ITER, IWHILA, IWHILB, K, 
-     $                   N0, NBIG, NDIV, NFAIL, PP, SPLT, TTYPE
-      REAL               D, DESIG, DMIN, DMIN1, DMIN2, DN, DN1, DN2, E,
-     $                   EMAX, EMIN, EPS, OLDEMN, QMAX, QMIN, S, SAFMIN,
-     $                   SIGMA, T, TAU, TEMP, TOL, TOL2, TRACE, ZMAX
+      INTEGER            I0, I4, IINFO, IPN4, ITER, IWHILA, IWHILB, K,
+     $                   KMIN, N0, NBIG, NDIV, NFAIL, PP, SPLT, TTYPE
+      REAL               D, DEE, DEEMIN, DESIG, DMIN, DMIN1, DMIN2, DN,
+     $                   DN1, DN2, E, EMAX, EMIN, EPS, G, OLDEMN, QMAX,
+     $                   QMIN, S, SAFMIN, SIGMA, T, TAU, TEMP, TOL,
+     $                   TOL2, TRACE, ZMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLAZQ3, SLASRT, XERBLA
+      EXTERNAL           SLASQ3, SLASRT, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -206,8 +211,13 @@
 *         
 *     Check whether the machine is IEEE conformable.
 *         
-      IEEE = ILAENV( 10, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 .AND.
-     $       ILAENV( 11, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1      
+*     IEEE = ILAENV( 10, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1 .AND.
+*    $       ILAENV( 11, 'SLASQ2', 'N', 1, 2, 3, 4 ).EQ.1      
+*
+*     [11/15/2008] The case IEEE=.TRUE. has a problem in single precision with
+*     some the test matrices of type 16. The double precision code is fine.
+*
+      IEEE = .FALSE.
 *         
 *     Rearrange data for locality: Z=(q1,qq1,e1,ee1,q2,qq2,e2,ee2,...).
 *
@@ -287,7 +297,7 @@
          PP = 1 - PP
    80 CONTINUE
 *
-*     Initialise variables to pass to SLAZQ3
+*     Initialise variables to pass to SLASQ3.
 *
       TTYPE = 0
       DMIN1 = ZERO
@@ -295,15 +305,16 @@
       DN    = ZERO
       DN1   = ZERO
       DN2   = ZERO
+      G     = ZERO
       TAU   = ZERO
 *
       ITER = 2
       NFAIL = 0
       NDIV = 2*( N0-I0 )
 *
-      DO 140 IWHILA = 1, N + 1
+      DO 160 IWHILA = 1, N + 1
          IF( N0.LT.1 ) 
-     $      GO TO 150
+     $      GO TO 170
 *
 *        While array unfinished do 
 *
@@ -346,29 +357,60 @@
 *
   100    CONTINUE
          I0 = I4 / 4
+         PP = 0
 *
-*        Store EMIN for passing to SLAZQ3.
-*
-         Z( 4*N0-1 ) = EMIN
+         IF( N0-I0.GT.1 ) THEN
+            DEE = Z( 4*I0-3 )
+            DEEMIN = DEE
+            KMIN = I0
+            DO 110 I4 = 4*I0+1, 4*N0-3, 4
+               DEE = Z( I4 )*( DEE /( DEE+Z( I4-2 ) ) )
+               IF( DEE.LE.DEEMIN ) THEN
+                  DEEMIN = DEE
+                  KMIN = ( I4+3 )/4
+               END IF
+  110       CONTINUE
+            IF( (KMIN-I0)*2.LT.N0-KMIN .AND. 
+     $         DEEMIN.LE.HALF*Z(4*N0-3) ) THEN
+               IPN4 = 4*( I0+N0 )
+               PP = 2
+               DO 120 I4 = 4*I0, 2*( I0+N0-1 ), 4
+                  TEMP = Z( I4-3 )
+                  Z( I4-3 ) = Z( IPN4-I4-3 )
+                  Z( IPN4-I4-3 ) = TEMP
+                  TEMP = Z( I4-2 )
+                  Z( I4-2 ) = Z( IPN4-I4-2 )
+                  Z( IPN4-I4-2 ) = TEMP
+                  TEMP = Z( I4-1 )
+                  Z( I4-1 ) = Z( IPN4-I4-5 )
+                  Z( IPN4-I4-5 ) = TEMP
+                  TEMP = Z( I4 )
+                  Z( I4 ) = Z( IPN4-I4-4 )
+                  Z( IPN4-I4-4 ) = TEMP
+  120          CONTINUE
+            END IF
+         END IF
 *
 *        Put -(initial shift) into DMIN.
 *
          DMIN = -MAX( ZERO, QMIN-TWO*SQRT( QMIN )*SQRT( EMAX ) )
 *
-*        Now I0:N0 is unreduced. PP = 0 for ping, PP = 1 for pong.
-*
-         PP = 0 
+*        Now I0:N0 is unreduced. 
+*        PP = 0 for ping, PP = 1 for pong.
+*        PP = 2 indicates that flipping was applied to the Z array and
+*               and that the tests for deflation upon entry in SLASQ3 
+*               should not be performed.
 *
          NBIG = 30*( N0-I0+1 )
-         DO 120 IWHILB = 1, NBIG
+         DO 140 IWHILB = 1, NBIG
             IF( I0.GT.N0 ) 
-     $         GO TO 130
+     $         GO TO 150
 *
 *           While submatrix unfinished take a good dqds step.
 *
-            CALL SLAZQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
+            CALL SLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
      $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
-     $                   DN2, TAU )
+     $                   DN2, G, TAU )
 *
             PP = 1 - PP
 *
@@ -381,7 +423,7 @@
                   QMAX = Z( 4*I0-3 )
                   EMIN = Z( 4*I0-1 )
                   OLDEMN = Z( 4*I0 )
-                  DO 110 I4 = 4*I0, 4*( N0-3 ), 4
+                  DO 130 I4 = 4*I0, 4*( N0-3 ), 4
                      IF( Z( I4 ).LE.TOL2*Z( I4-3 ) .OR.
      $                   Z( I4-1 ).LE.TOL2*SIGMA ) THEN
                         Z( I4-1 ) = -SIGMA
@@ -394,45 +436,45 @@
                         EMIN = MIN( EMIN, Z( I4-1 ) )
                         OLDEMN = MIN( OLDEMN, Z( I4 ) )
                      END IF
-  110             CONTINUE
+  130             CONTINUE
                   Z( 4*N0-1 ) = EMIN
                   Z( 4*N0 ) = OLDEMN
                   I0 = SPLT + 1
                END IF
             END IF
 *
-  120    CONTINUE
+  140    CONTINUE
 *
          INFO = 2
          RETURN
 *
 *        end IWHILB
 *
-  130    CONTINUE
+  150    CONTINUE
 *
-  140 CONTINUE
+  160 CONTINUE
 *
       INFO = 3
       RETURN
 *
 *     end IWHILA   
 *
-  150 CONTINUE
+  170 CONTINUE
 *      
 *     Move q's to the front.
 *      
-      DO 160 K = 2, N
+      DO 180 K = 2, N
          Z( K ) = Z( 4*K-3 )
-  160 CONTINUE
+  180 CONTINUE
 *      
 *     Sort and compute sum of eigenvalues.
 *
       CALL SLASRT( 'D', N, Z, IINFO )
 *
       E = ZERO
-      DO 170 K = N, 1, -1
+      DO 190 K = N, 1, -1
          E = E + Z( K )
-  170 CONTINUE
+  190 CONTINUE
 *
 *     Store trace, sum(eigenvalues) and information on performance.
 *

@@ -1,6 +1,6 @@
       SUBROUTINE ZPOTF2( UPLO, N, A, LDA, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -73,9 +73,9 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       COMPLEX*16         ZDOTC
-      EXTERNAL           LSAME, ZDOTC
+      EXTERNAL           LSAME, ZDOTC, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZDSCAL, ZGEMV, ZLACGV
@@ -116,7 +116,7 @@
 *
             AJJ = DBLE( A( J, J ) ) - ZDOTC( J-1, A( 1, J ), 1,
      $            A( 1, J ), 1 )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF
@@ -143,7 +143,7 @@
 *
             AJJ = DBLE( A( J, J ) ) - ZDOTC( J-1, A( J, 1 ), LDA,
      $            A( J, 1 ), LDA )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF

@@ -60,10 +60,11 @@
      $                   ZGESVD
 *     ..
 *     .. External Functions ..
-      INTEGER ILA_LEN_TRIM
-      EXTERNAL ILA_LEN_TRIM
       LOGICAL            LSAMEN, ZSLECT
       EXTERNAL           LSAMEN, ZSLECT
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          LEN_TRIM
 *     ..
 *     .. Arrays in Common ..
       LOGICAL            SELVAL( 20 )
@@ -71,7 +72,7 @@
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NOUT, SELDIM, SELOPT
 *     ..
 *     .. Common blocks ..
@@ -285,7 +286,8 @@
          CALL CHKXER( 'ZGESVD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
          IF( OK ) THEN
-            WRITE( NOUT, FMT = 9999 )SRNAMT(1:ILA_LEN_TRIM(SRNAMT)), NT
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
          ELSE
             WRITE( NOUT, FMT = 9998 )
          END IF
@@ -319,7 +321,8 @@
          CALL CHKXER( 'ZGESDD', INFOT, NOUT, LERR, OK )
          NT = NT - 2
          IF( OK ) THEN
-            WRITE( NOUT, FMT = 9999 )SRNAMT(1:ILA_LEN_TRIM(SRNAMT)), NT
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
          ELSE
             WRITE( NOUT, FMT = 9998 )
          END IF
@@ -329,7 +332,8 @@
 *
       IF( .NOT.LSAMEN( 2, C2, 'BD' ) ) THEN
          IF( OK ) THEN
-            WRITE( NOUT, FMT = 9999 )SRNAMT(1:ILA_LEN_TRIM(SRNAMT)), NT
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
          ELSE
             WRITE( NOUT, FMT = 9998 )
          END IF

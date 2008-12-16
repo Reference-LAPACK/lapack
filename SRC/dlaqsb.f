@@ -1,6 +1,6 @@
       SUBROUTINE DLAQSB( UPLO, N, KD, AB, LDAB, S, SCOND, AMAX, EQUED )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

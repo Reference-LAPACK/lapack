@@ -1,6 +1,6 @@
       SUBROUTINE DPOTF2( UPLO, N, A, LDA, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -71,9 +71,9 @@
       DOUBLE PRECISION   AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       DOUBLE PRECISION   DDOT
-      EXTERNAL           LSAME, DDOT
+      EXTERNAL           LSAME, DDOT, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMV, DSCAL, XERBLA
@@ -113,7 +113,7 @@
 *           Compute U(J,J) and test for non-positive-definiteness.
 *
             AJJ = A( J, J ) - DDOT( J-1, A( 1, J ), 1, A( 1, J ), 1 )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF
@@ -138,7 +138,7 @@
 *
             AJJ = A( J, J ) - DDOT( J-1, A( J, 1 ), LDA, A( J, 1 ),
      $            LDA )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
                A( J, J ) = AJJ
                GO TO 30
             END IF

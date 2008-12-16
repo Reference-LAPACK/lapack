@@ -2,8 +2,8 @@
      $                   IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
      $                   NV, WV, LDWV, WORK, LWORK )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK auxiliary routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
@@ -81,7 +81,7 @@
 *          Specify the rows of Z to which transformations must be
 *          applied if WANTZ is .TRUE.. 1 .LE. ILOZ .LE. IHIZ .LE. N.
 *
-*     Z       (input/output) COMPLEX array, dimension (LDZ,IHI)
+*     Z       (input/output) COMPLEX array, dimension (LDZ,N)
 *          IF WANTZ is .TRUE., then on output, the unitary
 *          similarity transformation mentioned above has been
 *          accumulated into Z(ILOZ:IHIZ,ILO:IHI) from the right.
@@ -152,7 +152,7 @@
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ==================================================================
+*     ================================================================
 *     .. Parameters ..
       COMPLEX            ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0e0, 0.0e0 ),
@@ -172,7 +172,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CCOPY, CGEHRD, CGEMM, CLACPY, CLAHQR, CLARF,
-     $                   CLARFG, CLASET, CTREXC, CUNGHR, SLABAD
+     $                   CLARFG, CLASET, CTREXC, CUNMHR, SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CMPLX, CONJG, INT, MAX, MIN, REAL
@@ -197,9 +197,10 @@
          CALL CGEHRD( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
          LWK1 = INT( WORK( 1 ) )
 *
-*        ==== Workspace query call to CUNGHR ====
+*        ==== Workspace query call to CUNMHR ====
 *
-         CALL CUNGHR( JW, 1, JW-1, T, LDT, WORK, WORK, -1, INFO )
+         CALL CUNMHR( 'R', 'N', JW, JW, 1, JW-1, T, LDT, WORK, V, LDV,
+     $                WORK, -1, INFO )
          LWK2 = INT( WORK( 1 ) )
 *
 *        ==== Optimal workspace ====
@@ -218,6 +219,7 @@
 *     ... for an empty active block ... ====
       NS = 0
       ND = 0
+      WORK( 1 ) = ONE
       IF( KTOP.GT.KBOT )
      $   RETURN
 *     ... nor for an empty deflation window. ====
@@ -251,12 +253,12 @@
          ND = 0
          IF( CABS1( S ).LE.MAX( SMLNUM, ULP*CABS1( H( KWTOP,
      $       KWTOP ) ) ) ) THEN
-
             NS = 0
             ND = 1
             IF( KWTOP.GT.KTOP )
      $         H( KWTOP, KWTOP-1 ) = ZERO
          END IF
+         WORK( 1 ) = ONE
          RETURN
       END IF
 *
@@ -292,7 +294,7 @@
             NS = NS - 1
          ELSE
 *
-*           ==== One undflatable eigenvalue.  Move it up out of the
+*           ==== One undeflatable eigenvalue.  Move it up out of the
 *           .    way.   (CTREXC can not fail in this case.) ====
 *
             IFST = NS
@@ -365,18 +367,11 @@
      $               LDH+1 )
 *
 *        ==== Accumulate orthogonal matrix in order update
-*        .    H and Z, if requested.  (A modified version
-*        .    of  CUNGHR that accumulates block Householder
-*        .    transformations into V directly might be
-*        .    marginally more efficient than the following.) ====
+*        .    H and Z, if requested.  ====
 *
-         IF( NS.GT.1 .AND. S.NE.ZERO ) THEN
-            CALL CUNGHR( JW, 1, NS, T, LDT, WORK, WORK( JW+1 ),
-     $                   LWORK-JW, INFO )
-            CALL CGEMM( 'N', 'N', JW, NS, NS, ONE, V, LDV, T, LDT, ZERO,
-     $                  WV, LDWV )
-            CALL CLACPY( 'A', JW, NS, WV, LDWV, V, LDV )
-         END IF
+         IF( NS.GT.1 .AND. S.NE.ZERO )
+     $      CALL CUNMHR( 'R', 'N', JW, NS, 1, NS, T, LDT, WORK, V, LDV,
+     $                   WORK( JW+1 ), LWORK-JW, INFO )
 *
 *        ==== Update vertical slab in H ====
 *

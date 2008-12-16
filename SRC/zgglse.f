@@ -1,7 +1,7 @@
       SUBROUTINE ZGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
      $                   INFO )
 *
-*  -- LAPACK driver routine (version 3.1.1) --
+*  -- LAPACK driver routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     February 2007
 *

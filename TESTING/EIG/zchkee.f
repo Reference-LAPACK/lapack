@@ -985,7 +985,7 @@
      $                   ZGG, ZHB
       CHARACTER          C1
       CHARACTER*3        C3, PATH
-      CHARACTER(32)      VNAME
+      CHARACTER*32       VNAME
       CHARACTER*10       INTSTR
       CHARACTER*80       LINE
       INTEGER            I, I1, IC, INFO, ITMP, K, LENP, MAXTYP, NEWSD,
@@ -1027,7 +1027,7 @@
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, MAXB, NPROC, NSHIFT, NUNIT, SELDIM,
      $                   SELOPT
 *     ..

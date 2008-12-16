@@ -1,6 +1,6 @@
       SUBROUTINE DLASD5( I, D, Z, DELTA, RHO, DSIGMA, WORK )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

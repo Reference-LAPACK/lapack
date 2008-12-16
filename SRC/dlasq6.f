@@ -1,9 +1,15 @@
       SUBROUTINE DLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN,
      $                   DNM1, DNM2 )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK routine (version 3.2)                                    --
+*
+*  -- Contributed by Osni Marques of the Lawrence Berkeley National   --
+*  -- Laboratory and Beresford Parlett of the Univ. of California at  --
+*  -- Berkeley                                                        --
+*  -- November 2008                                                   --
+*
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
       INTEGER            I0, N0, PP

@@ -1,6 +1,6 @@
       PROGRAM MAIN
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -61,7 +61,7 @@
       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
      $                 N4 )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -604,7 +604,7 @@
       END
       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE ) 
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

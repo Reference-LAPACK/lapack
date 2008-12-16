@@ -93,7 +93,7 @@
       INTRINSIC          DBLE, MAX
 *     ..
 *     .. Scalars in Common ..
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
 *     ..
 *     .. Common blocks ..
       COMMON             / SRNAMC / SRNAMT

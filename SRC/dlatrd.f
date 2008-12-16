@@ -1,6 +1,6 @@
       SUBROUTINE DLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

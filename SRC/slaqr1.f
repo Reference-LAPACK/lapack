@@ -1,7 +1,7 @@
       SUBROUTINE SLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK auxiliary routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..

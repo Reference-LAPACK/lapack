@@ -1,7 +1,7 @@
       SUBROUTINE DGEES( JOBVS, SORT, SELECT, N, A, LDA, SDIM, WR, WI,
      $                  VS, LDVS, WORK, LWORK, BWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.1) --
+*  -- LAPACK driver routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

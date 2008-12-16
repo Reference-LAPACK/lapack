@@ -1,6 +1,6 @@
       SUBROUTINE DGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO )
 *
-*  -- LAPACK deprecated driver routine (version 3.1) --
+*  -- LAPACK deprecated driver routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

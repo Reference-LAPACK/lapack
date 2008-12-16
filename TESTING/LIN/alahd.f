@@ -28,6 +28,7 @@
 *             _GB:  General band
 *             _GT:  General Tridiagonal
 *             _PO:  Symmetric or Hermitian positive definite
+*             _PS:  Symmetric or Hermitian positive semi-definite
 *             _PP:  Symmetric or Hermitian positive definite packed
 *             _PB:  Symmetric or Hermitian positive definite band
 *             _PT:  Symmetric or Hermitian positive definite tridiagonal
@@ -57,14 +58,16 @@
       LOGICAL            CORZ, SORD
       CHARACTER          C1, C3
       CHARACTER*2        P2
-      CHARACTER(32)      SUBNAM
+      CHARACTER*4        EIGCNM
+      CHARACTER*32       SUBNAM
       CHARACTER*9        SYM
 *     ..
 *     .. External Functions ..
-      INTEGER ILA_LEN_TRIM
-      EXTERNAL ILA_LEN_TRIM
       LOGICAL            LSAME, LSAMEN
       EXTERNAL           LSAME, LSAMEN
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          LEN_TRIM
 *     ..
 *     .. Executable Statements ..
 *
@@ -157,6 +160,28 @@
          WRITE( IOUNIT, FMT = 9955 )8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
+      ELSE IF( LSAMEN( 2, P2, 'PS' ) ) THEN
+*
+*        PS: Positive semi-definite full
+*
+         IF( SORD ) THEN
+            SYM = 'Symmetric'
+         ELSE
+            SYM = 'Hermitian'
+         END IF
+         IF( LSAME( C1, 'S' ) .OR. LSAME( C1, 'C' ) ) THEN
+            EIGCNM = '1E04'
+         ELSE
+            EIGCNM = '1D12'
+         END IF
+         WRITE( IOUNIT, FMT = 9995 )PATH, SYM
+         WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
+         WRITE( IOUNIT, FMT = 8973 )EIGCNM, EIGCNM, EIGCNM
+         WRITE( IOUNIT, FMT = '( '' Difference:'' )' )
+         WRITE( IOUNIT, FMT = 8972 )C1
+         WRITE( IOUNIT, FMT = '( '' Test ratio:'' )' )
+         WRITE( IOUNIT, FMT = 8950 )
+         WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
       ELSE IF( LSAMEN( 2, P2, 'PB' ) ) THEN
 *
 *        PB: Positive definite band
@@ -261,7 +286,7 @@
             SUBNAM = PATH( 1: 1 ) // 'LATPS'
          END IF
          WRITE( IOUNIT, FMT = 9966 )PATH
-         WRITE( IOUNIT, FMT = 9965 )SUBNAM(1:ILA_LEN_TRIM( SUBNAM ))
+         WRITE( IOUNIT, FMT = 9965 )SUBNAM(1:LEN_TRIM( SUBNAM ))
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
          WRITE( IOUNIT, FMT = 9961 )1
          WRITE( IOUNIT, FMT = 9960 )2
@@ -270,7 +295,7 @@
          WRITE( IOUNIT, FMT = 9957 )5
          WRITE( IOUNIT, FMT = 9956 )6
          WRITE( IOUNIT, FMT = 9955 )7
-         WRITE( IOUNIT, FMT = 9951 )SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), 8
+         WRITE( IOUNIT, FMT = 9951 )SUBNAM(1:LEN_TRIM( SUBNAM )), 8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
       ELSE IF( LSAMEN( 2, P2, 'TB' ) ) THEN
@@ -280,7 +305,7 @@
          WRITE( IOUNIT, FMT = 9988 )PATH
          SUBNAM = PATH( 1: 1 ) // 'LATBS'
          WRITE( IOUNIT, FMT = 9964 )PATH
-         WRITE( IOUNIT, FMT = 9963 )SUBNAM(1:ILA_LEN_TRIM( SUBNAM ))
+         WRITE( IOUNIT, FMT = 9963 )SUBNAM(1:LEN_TRIM( SUBNAM ))
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
          WRITE( IOUNIT, FMT = 9960 )1
          WRITE( IOUNIT, FMT = 9959 )2
@@ -288,7 +313,7 @@
          WRITE( IOUNIT, FMT = 9957 )4
          WRITE( IOUNIT, FMT = 9956 )5
          WRITE( IOUNIT, FMT = 9955 )6
-         WRITE( IOUNIT, FMT = 9951 )SUBNAM(1:ILA_LEN_TRIM( SUBNAM )), 7
+         WRITE( IOUNIT, FMT = 9951 )SUBNAM(1:LEN_TRIM( SUBNAM )), 7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
       ELSE IF( LSAMEN( 2, P2, 'QR' ) ) THEN
@@ -539,6 +564,21 @@
      $      '*5. Middle row and column zero', / 3X,
      $      '(* - tests error exits, no test ratios are computed)' )
 *
+*     PS matrix types
+*
+ 8973 FORMAT( 4X, '1. Diagonal', / 4X, '2. Random, CNDNUM = 2', 14X,
+     $      / 3X, '*3. Nonzero eigenvalues of: D(1:RANK-1)=1 and ',
+     $      'D(RANK) = 1.0/', A4, / 3X,
+     $      '*4. Nonzero eigenvalues of: D(1)=1 and ',
+     $      ' D(2:RANK) = 1.0/', A4, / 3X,
+     $      '*5. Nonzero eigenvalues of: D(I) = ', A4,
+     $      '**(-(I-1)/(RANK-1)) ', ' I=1:RANK', / 4X,
+     $      '6. Random, CNDNUM = sqrt(0.1/EPS)', / 4X,
+     $      '7. Random, CNDNUM = 0.1/EPS', / 4X,
+     $      '8. Scaled near underflow', / 4X, '9. Scaled near overflow',
+     $      / 3X, '(* - Semi-definite tests )' )
+ 8972 FORMAT( 3X, 'RANK minus computed rank, returned by ', A, 'PSTRF' )
+*
 *     PB matrix types
 *
  9973 FORMAT( 4X, '1. Random, CNDNUM = 2', 14X,
@@ -673,6 +713,10 @@
  9954 FORMAT( 3X, I2, ': norm( U'' * U - A ) / ( N * norm(A) * EPS )',
      $      ', or', / 7X, 'norm( L * L'' - A ) / ( N * norm(A) * EPS )'
      $       )
+ 8950 FORMAT( 3X,
+     $      'norm( P * U'' * U * P'' - A ) / ( N * norm(A) * EPS )',
+     $      ', or', / 3X,
+     $      'norm( P * L * L'' * P'' - A ) / ( N * norm(A) * EPS )' )
  9953 FORMAT( 3X, I2, ': norm( U*D*U'' - A ) / ( N * norm(A) * EPS )',
      $      ', or', / 7X, 'norm( L*D*L'' - A ) / ( N * norm(A) * EPS )'
      $       )

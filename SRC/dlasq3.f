@@ -1,14 +1,22 @@
       SUBROUTINE DLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
-     $                   ITER, NDIV, IEEE )
+     $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
+     $                   DN2, G, TAU )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK routine (version 3.2)                                    --
+*
+*  -- Contributed by Osni Marques of the Lawrence Berkeley National   --
+*  -- Laboratory and Beresford Parlett of the Univ. of California at  --
+*  -- Berkeley                                                        --
+*  -- November 2008                                                   --
+*
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
 *     .. Scalar Arguments ..
       LOGICAL            IEEE
       INTEGER            I0, ITER, N0, NDIV, NFAIL, PP
-      DOUBLE PRECISION   DESIG, DMIN, QMAX, SIGMA
+      DOUBLE PRECISION   DESIG, DMIN, DMIN1, DMIN2, DN, DN1, DN2, G,
+     $                   QMAX, SIGMA, TAU
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION   Z( * )
@@ -33,8 +41,11 @@
 *  Z      (input) DOUBLE PRECISION array, dimension ( 4*N )
 *         Z holds the qd array.
 *
-*  PP     (input) INTEGER
+*  PP     (input/output) INTEGER
 *         PP=0 for ping, PP=1 for pong.
+*         PP=2 indicates that flipping was applied to the Z array   
+*         and that the initial tests for deflation should not be 
+*         performed.
 *
 *  DMIN   (output) DOUBLE PRECISION
 *         Minimum value of d.
@@ -57,11 +68,15 @@
 *  NDIV   (output) INTEGER
 *         Number of divisions.
 *
-*  TTYPE  (output) INTEGER
-*         Shift type.
-*
 *  IEEE   (input) LOGICAL
 *         Flag for IEEE or non IEEE arithmetic (passed to DLASQ5).
+*
+*  TTYPE  (input/output) INTEGER
+*         Shift type.
+*
+*  DMIN1, DMIN2, DN, DN1, DN2, G, TAU (input/output) DOUBLE PRECISION
+*         These are passed as arguments in order to save their values
+*         between calls to DLASQ3.
 *
 *  =====================================================================
 *
@@ -74,33 +89,23 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            IPN4, J4, N0IN, NN, TTYPE
-      DOUBLE PRECISION   DMIN1, DMIN2, DN, DN1, DN2, EPS, S, SAFMIN, T,
-     $                   TAU, TEMP, TOL, TOL2
+      DOUBLE PRECISION   EPS, S, T, TEMP, TOL, TOL2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASQ4, DLASQ5, DLASQ6
 *     ..
 *     .. External Function ..
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DLAMCH
+      LOGICAL            DISNAN
+      EXTERNAL           DISNAN, DLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
-*     ..
-*     .. Save statement ..
-      SAVE               TTYPE
-      SAVE               DMIN1, DMIN2, DN, DN1, DN2, TAU
-*     ..
-*     .. Data statement ..
-      DATA               TTYPE / 0 /
-      DATA               DMIN1 / ZERO /, DMIN2 / ZERO /, DN / ZERO /,
-     $                   DN1 / ZERO /, DN2 / ZERO /, TAU / ZERO /
 *     ..
 *     .. Executable Statements ..
 *
       N0IN = N0
       EPS = DLAMCH( 'Precision' )
-      SAFMIN = DLAMCH( 'Safe minimum' )
       TOL = EPS*HUNDRD
       TOL2 = TOL**2
 *
@@ -162,6 +167,8 @@
       GO TO 10
 *
    50 CONTINUE
+      IF( PP.EQ.2 ) 
+     $   PP = 0
 *
 *     Reverse the qd-array, if warranted.
 *
@@ -196,88 +203,88 @@
          END IF
       END IF
 *
-      IF( DMIN.LT.ZERO .OR. SAFMIN*QMAX.LT.MIN( Z( 4*N0+PP-1 ),
-     $    Z( 4*N0+PP-9 ), DMIN2+Z( 4*N0-PP ) ) ) THEN
+*     Choose a shift.
 *
-*        Choose a shift.
+      CALL DLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN, DN1,
+     $             DN2, TAU, TTYPE, G )
 *
-         CALL DLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN, DN1,
-     $                DN2, TAU, TTYPE )
+*     Call dqds until DMIN > 0.
 *
-*        Call dqds until DMIN > 0.
+   70 CONTINUE
 *
-   80    CONTINUE
+      CALL DLASQ5( I0, N0, Z, PP, TAU, DMIN, DMIN1, DMIN2, DN,
+     $             DN1, DN2, IEEE )
 *
-         CALL DLASQ5( I0, N0, Z, PP, TAU, DMIN, DMIN1, DMIN2, DN,
-     $                DN1, DN2, IEEE )
+      NDIV = NDIV + ( N0-I0+2 )
+      ITER = ITER + 1
 *
-         NDIV = NDIV + ( N0-I0+2 )
-         ITER = ITER + 1
+*     Check status.
 *
-*        Check status.
+      IF( DMIN.GE.ZERO .AND. DMIN1.GT.ZERO ) THEN
 *
-         IF( DMIN.GE.ZERO .AND. DMIN1.GT.ZERO ) THEN
+*        Success.
 *
-*           Success.
+         GO TO 90
 *
-            GO TO 100
+      ELSE IF( DMIN.LT.ZERO .AND. DMIN1.GT.ZERO .AND. 
+     $         Z( 4*( N0-1 )-PP ).LT.TOL*( SIGMA+DN1 ) .AND.
+     $         ABS( DN ).LT.TOL*SIGMA ) THEN
 *
-         ELSE IF( DMIN.LT.ZERO .AND. DMIN1.GT.ZERO .AND.
-     $            Z( 4*( N0-1 )-PP ).LT.TOL*( SIGMA+DN1 ) .AND.
-     $            ABS( DN ).LT.TOL*SIGMA ) THEN
+*        Convergence hidden by negative DN.
 *
-*           Convergence hidden by negative DN.
+         Z( 4*( N0-1 )-PP+2 ) = ZERO
+         DMIN = ZERO
+         GO TO 90
+      ELSE IF( DMIN.LT.ZERO ) THEN
 *
-            Z( 4*( N0-1 )-PP+2 ) = ZERO
-            DMIN = ZERO
-            GO TO 100
-         ELSE IF( DMIN.LT.ZERO ) THEN
+*        TAU too big. Select new TAU and try again.
 *
-*           TAU too big. Select new TAU and try again.
+         NFAIL = NFAIL + 1
+         IF( TTYPE.LT.-22 ) THEN
 *
-            NFAIL = NFAIL + 1
-            IF( TTYPE.LT.-22 ) THEN
-*
-*              Failed twice. Play it safe.
-*
-               TAU = ZERO
-            ELSE IF( DMIN1.GT.ZERO ) THEN
-*
-*              Late failure. Gives excellent shift.
-*
-               TAU = ( TAU+DMIN )*( ONE-TWO*EPS )
-               TTYPE = TTYPE - 11
-            ELSE
-*
-*              Early failure. Divide by 4.
-*
-               TAU = QURTR*TAU
-               TTYPE = TTYPE - 12
-            END IF
-            GO TO 80
-         ELSE IF( DMIN.NE.DMIN ) THEN
-*
-*           NaN.
+*           Failed twice. Play it safe.
 *
             TAU = ZERO
-            GO TO 80
+         ELSE IF( DMIN1.GT.ZERO ) THEN
+*
+*           Late failure. Gives excellent shift.
+*
+            TAU = ( TAU+DMIN )*( ONE-TWO*EPS )
+            TTYPE = TTYPE - 11
          ELSE
 *
-*           Possible underflow. Play it safe.
+*           Early failure. Divide by 4.
 *
-            GO TO 90
+            TAU = QURTR*TAU
+            TTYPE = TTYPE - 12
          END IF
+         GO TO 70
+      ELSE IF( DISNAN( DMIN ) ) THEN
+*
+*        NaN.
+*
+         IF( TAU.EQ.ZERO ) THEN
+            GO TO 80
+         ELSE
+            TAU = ZERO
+            GO TO 70
+         END IF
+      ELSE
+*            
+*        Possible underflow. Play it safe.
+*
+         GO TO 80
       END IF
 *
 *     Risk of underflow.
 *
-   90 CONTINUE
+   80 CONTINUE
       CALL DLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN, DN1, DN2 )
       NDIV = NDIV + ( N0-I0+2 )
       ITER = ITER + 1
       TAU = ZERO
 *
-  100 CONTINUE
+   90 CONTINUE
       IF( TAU.LT.SIGMA ) THEN
          DESIG = DESIG + TAU
          T = SIGMA + DESIG

@@ -5,7 +5,7 @@
 *     November 2006
 *
 *     .. Scalar Arguments ..
-      CHARACTER*(*)       SRNAME
+      CHARACTER*(*)      SRNAME
       INTEGER            INFO
 *     ..
 *
@@ -44,12 +44,11 @@
 *
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NOUT
 *     ..
-*     .. External Functions ..
-      INTEGER ILA_LEN_TRIM
-      EXTERNAL ILA_LEN_TRIM
+*     .. Intrinsic Functions ..
+      INTRINSIC          LEN_TRIM
 *     ..
 *     .. Common blocks ..
       COMMON             / INFOC / INFOT, NOUT, OK, LERR
@@ -61,17 +60,17 @@
       IF( INFO.NE.INFOT ) THEN
          IF( INFOT.NE.0 ) THEN
             WRITE( NOUT, FMT = 9999 )
-     $     SRNAMT(1:ILA_LEN_TRIM(SRNAMT)), INFO, INFOT
+     $     SRNAMT( 1:LEN_TRIM( SRNAMT ) ), INFO, INFOT
          ELSE
             WRITE( NOUT, FMT = 9997 )
-     $     SRNAME(1:ILA_LEN_TRIM(SRNAME)), INFO
+     $     SRNAME( 1:LEN_TRIM( SRNAME ) ), INFO
          END IF
          OK = .FALSE.
       END IF
       IF( SRNAME.NE.SRNAMT ) THEN
          WRITE( NOUT, FMT = 9998 )
-     $     SRNAME(1:ILA_LEN_TRIM(SRNAME)),
-     $     SRNAMT(1:ILA_LEN_TRIM(SRNAMT))
+     $     SRNAME( 1:LEN_TRIM( SRNAME ) ),
+     $     SRNAMT( 1:LEN_TRIM( SRNAMT ) )
          OK = .FALSE.
       END IF
       RETURN

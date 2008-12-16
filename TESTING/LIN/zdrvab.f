@@ -113,7 +113,7 @@
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER*6        SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NUNIT
 *     ..
 *     .. Common blocks ..
@@ -223,7 +223,7 @@
                CALL ZLACPY( 'Full', M, N, A, LDA, AFAC, LDA )
 *
                CALL ZCGESV( N, NRHS, A, LDA, IWORK, B, LDA, X, LDA,
-     $                      WORK, SWORK, ITER, INFO)
+     $                      WORK, SWORK, RWORK, ITER, INFO)
 *
                IF (ITER.LT.0) THEN
                    CALL ZLACPY( 'Full', M, N, AFAC, LDA, A, LDA )

@@ -124,7 +124,7 @@
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NUNIT
 *     ..
 *     .. Common blocks ..
@@ -514,7 +514,7 @@
 *                       refinement.
 *
                         CALL SGET07( TRANS, N, NRHS, ASAV, LDA, B, LDA,
-     $                               X, LDA, XACT, LDA, RWORK,
+     $                               X, LDA, XACT, LDA, RWORK, .TRUE.,
      $                               RWORK( NRHS+1 ), RESULT( 4 ) )
                      ELSE
                         TRFCON = .TRUE.

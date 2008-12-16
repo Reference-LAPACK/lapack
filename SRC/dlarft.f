@@ -1,7 +1,7 @@
       SUBROUTINE DLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
       IMPLICIT NONE
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -234,13 +234,13 @@
 *
                   CALL DTRMV( 'Lower', 'No transpose', 'Non-unit', K-I,
      $                        T( I+1, I+1 ), LDT, T( I+1, I ), 1 )
+                  IF( I.GT.1 ) THEN
+                     PREVLASTV = MIN( PREVLASTV, LASTV )
+                  ELSE
+                     PREVLASTV = LASTV
+                  END IF
                END IF
                T( I, I ) = TAU( I )
-               IF( I.GT.1 ) THEN
-                  PREVLASTV = MIN( PREVLASTV, LASTV )
-               ELSE
-                  PREVLASTV = LASTV
-               END IF
             END IF
    40    CONTINUE
       END IF

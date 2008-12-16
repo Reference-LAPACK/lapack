@@ -23,7 +23,8 @@
 *  =======
 *
 *  SDRVBD checks the singular value decomposition (SVD) drivers
-*  SGESVD and SGESDD.
+*  SGESVD, SGESDD, SGESVJ, and SGEJSV.
+*
 *  Both SGESVD and SGESDD factor A = U diag(S) VT, where U and VT are
 *  orthogonal and diag(S) is diagonal with the entries of the array S
 *  on its diagonal. The entries of S are the singular values,
@@ -79,6 +80,28 @@
 *
 *  (14)   | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
 *         vector of singular values from the partial SVD
+*
+*  Test for SGESVJ:
+*
+*  (15)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*
+*  (16)    | I - U'U | / ( M ulp )
+*
+*  (17)   | I - VT VT' | / ( N ulp )
+*
+*  (18)   S contains MNMIN nonnegative values in decreasing order.
+*         (Return 0 if true, 1/ULP if false.)
+*
+*  Test for SGEJSV:
+*
+*  (19)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*
+*  (20)    | I - U'U | / ( M ulp )
+*
+*  (21)   | I - VT VT' | / ( N ulp )
+*
+*  (22)   S contains MNMIN nonnegative values in decreasing order.
+*         (Return 0 if true, 1/ULP if false.)
 *
 *  The "sizes" are specified by the arrays MM(1:NSIZES) and
 *  NN(1:NSIZES); the value of each element pair (MM(j),NN(j))
@@ -217,7 +240,7 @@
 *     .. Local Arrays ..
       CHARACTER          CJOB( 4 )
       INTEGER            IOLDSD( 4 )
-      REAL               RESULT( 14 )
+      REAL               RESULT( 22 )
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
@@ -225,14 +248,15 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SBDT01, SGESDD, SGESVD, SLABAD, SLACPY,
-     $                   SLASET, SLATMS, SORT01, SORT03, XERBLA
+     $                   SLASET, SLATMS, SORT01, SORT03, XERBLA, SGESVJ,
+     $                   SGEJSV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NUNIT
 *     ..
 *     .. Common blocks ..
@@ -598,9 +622,129 @@
                   RESULT( 14 ) = MAX( RESULT( 14 ), DIF )
   110          CONTINUE
 *
+*              Test SGESVJ: Factorize A
+*              Note: SGESVJ does not work for M < N
+*
+               RESULT( 15 ) = ZERO
+               RESULT( 16 ) = ZERO
+               RESULT( 17 ) = ZERO
+               RESULT( 18 ) = ZERO
+*
+               IF( M.GE.N ) THEN
+                  IWTMP = 5*MNMIN*MNMIN + 9*MNMIN + MAX( M, N )
+                  LSWORK = IWTMP + ( IWS-1 )*( LWORK-IWTMP ) / 3
+                  LSWORK = MIN( LSWORK, LWORK )
+                  LSWORK = MAX( LSWORK, 1 )
+                  IF( IWS.EQ.4 )
+     $               LSWORK = LWORK
+*
+                  CALL SLACPY( 'F', M, N, ASAV, LDA, USAV, LDA )
+                  SRNAMT = 'SGESVJ'
+                  CALL SGESVJ( 'G', 'U', 'V', M, N, USAV, LDA, SSAV,
+     &                        0, A, LDVT, WORK, LWORK, INFO )
+*
+*                 SGESVJ retuns V not VT, so we transpose to use the same
+*                 test suite.
+*
+                  DO J=1,N
+                     DO I=1,N
+                        VTSAV(J,I) = A(I,J)
+                     END DO
+                  END DO
+*
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUT, FMT = 9995 )'GESVJ', IINFO, M, N,
+     $               JTYPE, LSWORK, IOLDSD
+                     INFO = ABS( IINFO )
+                     RETURN
+                  END IF
+*
+*                 Do tests 15--18
+*
+                  CALL SBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+     $                         VTSAV, LDVT, WORK, RESULT( 15 ) )
+                  IF( M.NE.0 .AND. N.NE.0 ) THEN
+                     CALL SORT01( 'Columns', M, M, USAV, LDU, WORK,
+     $                            LWORK, RESULT( 16 ) )
+                     CALL SORT01( 'Rows', N, N, VTSAV, LDVT, WORK,
+     $                            LWORK, RESULT( 17 ) )
+                  END IF
+                  RESULT( 18 ) = ZERO
+                  DO 200 I = 1, MNMIN - 1
+                     IF( SSAV( I ).LT.SSAV( I+1 ) )
+     $                  RESULT( 18 ) = ULPINV
+                     IF( SSAV( I ).LT.ZERO )
+     $                  RESULT( 18 ) = ULPINV
+  200             CONTINUE
+                  IF( MNMIN.GE.1 ) THEN
+                     IF( SSAV( MNMIN ).LT.ZERO )
+     $                  RESULT( 18 ) = ULPINV
+                  END IF
+               END IF
+*
+*              Test SGEJSV: Factorize A
+*              Note: SGEJSV does not work for M < N
+*
+               RESULT( 19 ) = ZERO
+               RESULT( 20 ) = ZERO
+               RESULT( 21 ) = ZERO
+               RESULT( 22 ) = ZERO
+               IF( M.GE.N ) THEN
+                  IWTMP = 5*MNMIN*MNMIN + 9*MNMIN + MAX( M, N )
+                  LSWORK = IWTMP + ( IWS-1 )*( LWORK-IWTMP ) / 3
+                  LSWORK = MIN( LSWORK, LWORK )
+                  LSWORK = MAX( LSWORK, 1 )
+                  IF( IWS.EQ.4 )
+     $               LSWORK = LWORK
+*
+                  CALL SLACPY( 'F', M, N, ASAV, LDA, VTSAV, LDA )
+                  SRNAMT = 'SGEJSV'
+                  CALL SGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     &                   M, N, VTSAV, LDA, SSAV, USAV, LDU, A, LDVT,
+     &                   WORK, LWORK, IWORK, INFO )
+*
+*                 SGEJSV retuns V not VT, so we transpose to use the same
+*                 test suite.
+*
+                  DO J=1,N
+                     DO I=1,N
+                        VTSAV(J,I) = A(I,J)
+                     END DO
+                  END DO
+*
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUT, FMT = 9995 )'GESVJ', IINFO, M, N,
+     $               JTYPE, LSWORK, IOLDSD
+                     INFO = ABS( IINFO )
+                     RETURN
+                  END IF
+*
+*                 Do tests 19--22
+*
+                  CALL SBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+     $                         VTSAV, LDVT, WORK, RESULT( 19 ) )
+                  IF( M.NE.0 .AND. N.NE.0 ) THEN
+                     CALL SORT01( 'Columns', M, M, USAV, LDU, WORK,
+     $                            LWORK, RESULT( 20 ) )
+                     CALL SORT01( 'Rows', N, N, VTSAV, LDVT, WORK,
+     $                            LWORK, RESULT( 21 ) )
+                  END IF
+                  RESULT( 22 ) = ZERO
+                  DO 300 I = 1, MNMIN - 1
+                     IF( SSAV( I ).LT.SSAV( I+1 ) )
+     $                  RESULT( 22 ) = ULPINV
+                     IF( SSAV( I ).LT.ZERO )
+     $                  RESULT( 22 ) = ULPINV
+  300             CONTINUE
+                  IF( MNMIN.GE.1 ) THEN
+                     IF( SSAV( MNMIN ).LT.ZERO )
+     $                  RESULT( 22 ) = ULPINV
+                  END IF
+               END IF
+*
 *              End of Loop -- Check for RESULT(j) > THRESH
 *
-               DO 120 J = 1, 14
+               DO 120 J = 1, 22
                   IF( RESULT( J ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 ) THEN
                         WRITE( NOUT, FMT = 9999 )
@@ -611,7 +755,7 @@
                      NFAIL = NFAIL + 1
                   END IF
   120          CONTINUE
-               NTEST = NTEST + 14
+               NTEST = NTEST + 22
 *
   130       CONTINUE
   140    CONTINUE
@@ -645,7 +789,15 @@
      $      ' decreasing order, else 1/ulp',
      $      / '12 = | U - Upartial | / ( M ulp )',
      $      / '13 = | VT - VTpartial | / ( N ulp )',
-     $      / '14 = | S - Spartial | / ( min(M,N) ulp |S| )', / / )
+     $      / '14 = | S - Spartial | / ( min(M,N) ulp |S| )',
+     $      / '15 = | A - U diag(S) VT | / ( |A| max(M,N) ulp ) ',
+     $      / '16 = | I - U**T U | / ( M ulp ) ',
+     $      / '17 = | I - VT VT**T | / ( N ulp ) ',
+     $      / '18 = 0 if S contains min(M,N) nonnegative values in',
+     $      ' decreasing order, else 1/ulp',
+     $      / '19 = | U - Upartial | / ( M ulp )',
+     $      / '20 = | VT - VTpartial | / ( N ulp )',
+     $      / '21 = | S - Spartial | / ( min(M,N) ulp |S| )', / / )
  9997 FORMAT( ' M=', I5, ', N=', I5, ', type ', I1, ', IWS=', I1,
      $      ', seed=', 4( I4, ',' ), ' test(', I2, ')=', G11.4 )
  9996 FORMAT( ' SDRVBD: ', A, ' returned INFO=', I6, '.', / 9X, 'M=',

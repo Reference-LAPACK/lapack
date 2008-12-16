@@ -1,6 +1,6 @@
       SUBROUTINE CLASWP( N, A, LDA, K1, K2, IPIV, INCX )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

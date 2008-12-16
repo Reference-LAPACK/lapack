@@ -2,7 +2,7 @@
      $                   Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

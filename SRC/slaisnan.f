@@ -1,12 +1,11 @@
-      FUNCTION SLAISNAN( SIN1, SIN2 )
-      LOGICAL SLAISNAN
+      LOGICAL FUNCTION SLAISNAN(SIN1,SIN2)
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
-      REAL             SIN1, SIN2
+      REAL SIN1,SIN2
 *     ..
 *
 *  Purpose
@@ -37,4 +36,5 @@
 *
 *  .. Executable Statements ..
       SLAISNAN = (SIN1.NE.SIN2)
-      END FUNCTION
+      RETURN
+      END

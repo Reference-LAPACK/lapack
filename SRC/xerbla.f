@@ -1,11 +1,11 @@
       SUBROUTINE XERBLA( SRNAME, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
-      CHARACTER*(*)       SRNAME
+      CHARACTER*(*)      SRNAME
       INTEGER            INFO
 *     ..
 *
@@ -31,13 +31,12 @@
 *
 * =====================================================================
 *
-*     .. External Functions ..
-      INTEGER ILA_LEN_TRIM
-      EXTERNAL ILA_LEN_TRIM
+*     .. Intrinsic Functions ..
+      INTRINSIC          LEN_TRIM
 *     ..
 *     .. Executable Statements ..
 *
-      WRITE( *, FMT = 9999 )SRNAME(1:ILA_LEN_TRIM(SRNAME)), INFO
+      WRITE( *, FMT = 9999 )SRNAME( 1:LEN_TRIM( SRNAME ) ), INFO
 *
       STOP
 *

@@ -1,7 +1,7 @@
       SUBROUTINE XERBLA_ARRAY(SRNAME_ARRAY, SRNAME_LEN, INFO)
 !
-!  -- LAPACK auxiliary routine (version 3.1) --
-!     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+!  -- LAPACK auxiliary routine (version 3.0) --
+!     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
 !     September 19, 2006
 !
       IMPLICIT NONE
@@ -54,7 +54,7 @@
       INTEGER I
 !     ..
 !     .. Local Arrays ..
-      CHARACTER(32) SRNAME
+      CHARACTER*32 SRNAME
 !     ..
 !     .. Intrinsic Functions ..
       INTRINSIC MIN, LEN
@@ -64,11 +64,11 @@
 !     ..
 !     .. Executable Statements ..
       SRNAME = ''
-      DO I = 1, MIN(SRNAME_LEN, LEN(SRNAME))
-         SRNAME(I:I) = SRNAME_ARRAY(I)
+      DO I = 1, MIN( SRNAME_LEN, LEN( SRNAME ) )
+         SRNAME( I:I ) = SRNAME_ARRAY( I )
       END DO
 
-      CALL XERBLA(SRNAME, INFO)
+      CALL XERBLA( SRNAME, INFO )
 
       RETURN
       END

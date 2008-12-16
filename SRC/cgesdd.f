@@ -1,7 +1,7 @@
       SUBROUTINE CGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT,
      $                   WORK, LWORK, RWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.1) --
+*  -- LAPACK driver routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *     8-15-00:  Improve consistency of WS calculations (eca)

@@ -1,7 +1,6 @@
-      FUNCTION DISNAN( DIN )
-      LOGICAL DISNAN
+      LOGICAL FUNCTION DISNAN(DIN)
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -29,5 +28,6 @@
       EXTERNAL DLAISNAN
 *  ..
 *  .. Executable Statements ..
-      DISNAN = DLAISNAN( DIN, DIN )
-      END FUNCTION
+      DISNAN = DLAISNAN(DIN,DIN)
+      RETURN
+      END

@@ -1,12 +1,11 @@
-      FUNCTION DLAISNAN( DIN1, DIN2 )
-      LOGICAL DLAISNAN
+      LOGICAL FUNCTION DLAISNAN(DIN1,DIN2)
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
-      DOUBLE PRECISION DIN1, DIN2
+      DOUBLE PRECISION DIN1,DIN2
 *     ..
 *
 *  Purpose
@@ -37,4 +36,5 @@
 *
 *  .. Executable Statements ..
       DLAISNAN = (DIN1.NE.DIN2)
-      END FUNCTION
+      RETURN
+      END

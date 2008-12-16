@@ -2,7 +2,7 @@
      $                   LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
      $                   INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

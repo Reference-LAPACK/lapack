@@ -28,6 +28,7 @@
 *             _GB:  General band
 *             _GT:  General Tridiagonal
 *             _PO:  Symmetric or Hermitian positive definite
+*             _PS:  Symmetric or Hermitian positive semi-definite
 *             _PP:  Symmetric or Hermitian positive definite packed
 *             _PB:  Symmetric or Hermitian positive definite band
 *             _PT:  Symmetric or Hermitian positive definite tridiagonal
@@ -109,9 +110,11 @@
          WRITE( IOUNIT, FMT = 9976 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'PO' ) .OR. LSAMEN( 2, P2, 'PP' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'PO' ) .OR. LSAMEN( 2, P2, 'PP' )
+     $         .OR. LSAMEN( 2, P2, 'PS' ) ) THEN
 *
 *        PO: Positive definite full
+*        PS: Positive definite full
 *        PP: Positive definite packed
 *
          IF( SORD ) THEN

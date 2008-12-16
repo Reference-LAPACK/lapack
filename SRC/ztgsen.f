@@ -2,7 +2,7 @@
      $                   ALPHA, BETA, Q, LDQ, Z, LDZ, M, PL, PR, DIF,
      $                   WORK, LWORK, IWORK, LIWORK, INFO )
 *
-*  -- LAPACK routine (version 3.1.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     January 2007
 *

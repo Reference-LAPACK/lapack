@@ -2,7 +2,7 @@
      $                   ABSTOL, M, W, Z, LDZ, WORK, IWORK, IFAIL,
      $                   INFO )
 *
-*  -- LAPACK driver routine (version 3.1) --
+*  -- LAPACK driver routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -329,7 +329,7 @@
 *        form to eigenvectors returned by DSTEIN.
 *
          CALL DOPMTR( 'L', UPLO, 'N', N, M, AP, WORK( INDTAU ), Z, LDZ,
-     $                WORK( INDWRK ), INFO )
+     $                WORK( INDWRK ), IINFO )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.

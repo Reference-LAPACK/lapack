@@ -1,6 +1,6 @@
       SUBROUTINE DLAEV2( A, B, C, RT1, RT2, CS1, SN1 )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

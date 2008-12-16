@@ -37,7 +37,7 @@
 
 include ../make.inc
 
-all:     single complex double complex16 doubleproto complex16proto
+all:     single complex double complex16 singleproto doubleproto complexproto complex16proto
 
 SEIGTST= snep.out \
          ssep.out \
@@ -118,20 +118,26 @@ ZEIGTST= znep.out \
 
 SLINTST= stest.out
 
+SLINTSTPROTO= stest_rfp.out
+
 CLINTST= ctest.out
+
+CLINTSTPROTO= ctest_rfp.out
 
 DLINTST= dtest.out
 
-DLINTSTPROTO= dstest.out
+DLINTSTPROTO= dstest.out dtest_rfp.out
 
 ZLINTST= ztest.out
 
-ZLINTSTPROTO= zctest.out
+ZLINTSTPROTO= zctest.out ztest_rfp.out
 
 single:         $(SLINTST) $(SEIGTST)
 complex:        $(CLINTST) $(CEIGTST)
 double:         $(DLINTST) $(DEIGTST)
 complex16:      $(ZLINTST) $(ZEIGTST)
+singleproto:    $(SLINTSTPROTO)
+complexproto:   $(CLINTSTPROTO)
 doubleproto:    $(DLINTSTPROTO)
 complex16proto: $(ZLINTSTPROTO)
 
@@ -171,6 +177,30 @@ dstest.out: dstest.in xlintstds
 zctest.out: zctest.in xlintstzc
 	@echo Testing COMPLEX-COMPLEX16 LAPACK protoype linear equation routines
 	./xlintstzc < zctest.in > $@ 2>&1
+#
+# ======== SINGLE RFP LIN TESTS ========================
+
+stest_rfp.out: stest_rfp.in xlintstrfs
+	@echo Testing REAL LAPACK RFP protoype linear equation routines
+	./xlintstrfs < stest_rfp.in > $@ 2>&1
+#
+# ======== COMPLEX16 RFP LIN TESTS ========================
+
+dtest_rfp.out: dtest_rfp.in xlintstrfd
+	@echo Testing DOUBLE PRECISION LAPACK RFP protoype linear equation routines
+	./xlintstrfd < dtest_rfp.in > $@ 2>&1
+#
+# ======== COMPLEX16 RFP LIN TESTS ========================
+
+ctest_rfp.out: ctest_rfp.in xlintstrfc
+	@echo Testing COMPLEX LAPACK RFP protoype linear equation routines
+	./xlintstrfc < ctest_rfp.in > $@ 2>&1
+#
+# ======== COMPLEX16 RFP LIN TESTS ========================
+
+ztest_rfp.out: ztest_rfp.in xlintstrfz
+	@echo Testing COMPLEX16 LAPACK RFP protoype linear equation routines
+	./xlintstrfz < ztest_rfp.in > $@ 2>&1
 #
 #
 # ======== SINGLE EIG TESTS ===========================
@@ -471,34 +501,46 @@ zlse.out: lse.in xeigtstz
 	./xeigtstz < lse.in > $@ 2>&1
 # ==============================================================================
 
-xlintsts:
+xlintsts:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) single
 
-xlintstc:
+xlintstc:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) complex
 
-xlintstd:
+xlintstd:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) double
 
-xlintstz:
+xlintstz:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) complex16
 
-xlintstds:
+xlintstrfs:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+	cd LIN ; $(MAKE) proto-single
+
+xlintstrfc:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+	cd LIN ; $(MAKE) proto-complex
+
+xlintstrfd:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) proto-double
 
-xlintstzc:
+xlintstrfz:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) proto-complex16
 
-xeigtsts:
+xlintstds:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+	cd LIN ; $(MAKE) proto-double
+
+xlintstzc:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+	cd LIN ; $(MAKE) proto-complex16
+
+xeigtsts:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
 	cd EIG ; $(MAKE) single
 
-xeigtstc:
+xeigtstc:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
 	cd EIG ; $(MAKE) complex
 
-xeigtstd:
+xeigtstd:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
 	cd EIG ; $(MAKE) double
 
-xeigtstz:
+xeigtstz:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
 	cd EIG ; $(MAKE) complex16
 
 clean:
@@ -506,3 +548,12 @@ clean:
 
 cleanup:
 	rm -f x* *.out core
+
+FRCLIN:
+	@FRCLIN=$(FRCLIN)
+
+FRCEIG:
+	@FRCEIG=$(FRCEIG)
+
+FRC:
+	@FRC=$(FRC)

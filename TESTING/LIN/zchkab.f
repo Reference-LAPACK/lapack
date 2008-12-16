@@ -9,7 +9,7 @@
 *  =======
 *
 *  ZCHKAB is the test program for the COMPLEX*16 LAPACK
-*  ZCGESV routine
+*  ZCGESV/ZCPOSV routine
 *
 *  The program must be driven by a short data file. The first 5 records
 *  specify problem dimensions and program options using list-directed
@@ -23,9 +23,10 @@
 *  1                      Number of values of NRHS
 *  2                      Values of NRHS (number of right hand sides)
 *  20.0                   Threshold value of test ratio
-*  T                      Put T to test the ZCGESV routine
-*  T                      Put T to test the error exits for ZCGESV
-*  11                     List types on next line if 0 < NTYPES < 11
+*  T                      Put T to test the LAPACK routine
+*  T                      Put T to test the error exits
+*  DGE    11              List types on next line if 0 < NTYPES < 11
+*  DPO    9               List types on next line if 0 < NTYPES <  9
 *
 *  Internal Parameters
 *  ===================
@@ -64,7 +65,12 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            FATAL, TSTDRV, TSTERR
-      INTEGER            I, LDA, NM, NMATS,
+      CHARACTER          C1
+      CHARACTER*2        C2
+      CHARACTER*3        PATH
+      CHARACTER*10       INTSTR
+      CHARACTER*72       ALINE
+      INTEGER            I, IC, K, LDA, NM, NMATS,
      $                   NNS, NRHS, NTYPES,
      $                   VERS_MAJOR, VERS_MINOR, VERS_PATCH
       DOUBLE PRECISION   EPS, S1, S2, THRESH
@@ -80,20 +86,24 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DSECND
+      LOGICAL            LSAME, LSAMEN
       REAL               SLAMCH
-      EXTERNAL           DLAMCH, DSECND, SLAMCH
+      EXTERNAL           DLAMCH, DSECND, LSAME, LSAMEN, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, ZERRAB, ILAVER
+      EXTERNAL           ALAREQ, ZERRGX, ZERRPX, ILAVER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER*6        SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NUNIT
 *     ..
 *     .. Common blocks ..
       COMMON             / INFOC / INFOT, NUNIT, OK, LERR
       COMMON             / SRNAMC / SRNAMT
+*
+*     .. Data statements ..
+      DATA               INTSTR / '0123456789' /
 *     ..
 *     .. Executable Statements ..
 *
@@ -196,34 +206,106 @@
       WRITE( NOUT, FMT = 9991 )'(double precision) precision', EPS
       WRITE( NOUT, FMT = * )
 *
-      NRHS = NSVAL( 1 )
-      READ( NIN, FMT = * ) NMATS
+   80 CONTINUE
 *
-      IF( NMATS.LE.0 ) THEN
+*     Read a test path and the number of matrix types to use.
+*
+      READ( NIN, FMT = '(A72)', END = 140 )ALINE
+      PATH = ALINE( 1: 3 )
+      NMATS = MATMAX
+      I = 3
+   90 CONTINUE
+      I = I + 1
+      IF( I.GT.72 ) THEN
+         NMATS = MATMAX
+         GO TO 130
+      END IF
+      IF( ALINE( I: I ).EQ.' ' )
+     $   GO TO 90
+      NMATS = 0
+  100 CONTINUE
+      C1 = ALINE( I: I )
+      DO 110 K = 1, 10
+         IF( C1.EQ.INTSTR( K: K ) ) THEN
+            IC = K - 1
+            GO TO 120
+         END IF
+  110 CONTINUE
+      GO TO 130
+  120 CONTINUE
+      NMATS = NMATS*10 + IC
+      I = I + 1
+      IF( I.GT.72 )
+     $   GO TO 130
+      GO TO 100
+  130 CONTINUE
+      C1 = PATH( 1: 1 )
+      C2 = PATH( 2: 3 )
+      NRHS = NSVAL( 1 )
+      NRHS = NSVAL( 1 )
+*
+*     Check first character for correct precision.
+*
+      IF( .NOT.LSAME( C1, 'Zomplex precision' ) ) THEN
+            WRITE( NOUT, FMT = 9990 )PATH
+*
+      ELSE IF( NMATS.LE.0 ) THEN
 *
 *        Check for a positive number of tests requested.
 *
          WRITE( NOUT, FMT = 9990 )'ZCGESV'
          GO TO 140
 *
-      END IF 
+      ELSE IF( LSAMEN( 2, C2, 'GE' ) ) THEN
+*
+*        GE:  general matrices
 *
       NTYPES = 11
       CALL ALAREQ( 'ZGE', NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
-*     Test the error exits
+*        Test the error exits
 *
-      IF( TSTERR )
-     $   CALL ZERRAB( NOUT )
+         IF( TSTERR )
+     $     CALL ZERRAB( NOUT )
 *
-      IF( TSTDRV ) THEN
-         CALL ZDRVAB( DOTYPE, NM, MVAL, NNS,
-     $                NSVAL, THRESH, LDA, A( 1, 1 ),
-     $                A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
-     $                WORK, RWORK, SWORK, IWORK, NOUT )
+         IF( TSTDRV ) THEN
+            CALL ZDRVAB( DOTYPE, NM, MVAL, NNS,
+     $                   NSVAL, THRESH, LDA, A( 1, 1 ),
+     $                   A( 1, 2 ), B( 1, 1 ), B( 1, 2 ),
+     $                   WORK, RWORK, SWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )'ZCGESV'
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'PO' ) ) THEN
+*
+*        PO:  positive definite matrices
+*
+         NTYPES = 9
+         CALL ALAREQ( 'DPO', NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTERR )
+     $      CALL ZERRAC( NOUT )
+*
+*
+         IF( TSTDRV ) THEN
+            CALL ZDRVAC( DOTYPE, NM, MVAL, NNS, NSVAL,
+     $                   THRESH, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                   B( 1, 1 ), B( 1, 2 ),
+     $                   WORK, RWORK, SWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )'ZCPOSV'
+         END IF
+*
       ELSE
-         WRITE( NOUT, FMT = 9989 )'ZCGESV'
+*
       END IF
+*
+*     Go back to get another input line.
+*
+      GO TO 80
+*
+*     Branch to this line when the last record is read.
 *
   140 CONTINUE
       CLOSE ( NIN )
@@ -238,7 +320,7 @@
      $      I6 )
  9995 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
- 9994 FORMAT( ' Tests of the COMPLEX*16 LAPACK ZCGESV routines ',
+ 9994 FORMAT( ' Tests of the COMPLEX*16 LAPACK ZCGESV/ZCPOSV routines ',
      $      / ' LAPACK VERSION ', I1, '.', I1, '.', I1,
      $      / / ' The following parameter values will be used:' )
  9993 FORMAT( 4X, A4, ':  ', 10I6, / 11X, 10I6 )
@@ -247,6 +329,7 @@
  9991 FORMAT( ' Relative machine ', A, ' is taken to be', D16.6 )
  9990 FORMAT( / 1X, A6, ' routines were not tested' )
  9989 FORMAT( / 1X, A6, ' driver routines were not tested' )
+ 9988 FORMAT( / 1X, A3, ':  Unrecognized path name' )
 *
 *     End of ZCHKAB
 *

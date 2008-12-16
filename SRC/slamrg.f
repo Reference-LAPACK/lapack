@@ -1,6 +1,6 @@
       SUBROUTINE SLAMRG( N1, N2, A, STRD1, STRD2, INDEX )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

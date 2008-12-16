@@ -1,7 +1,7 @@
       SUBROUTINE ZLAQR1( N, H, LDH, S1, S2, V )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK auxiliary routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
@@ -54,8 +54,8 @@
       PARAMETER          ( RZERO = 0.0d0 )
 *     ..
 *     .. Local Scalars ..
-      COMPLEX*16         CDUM
-      DOUBLE PRECISION   H21S, H31S, S
+      COMPLEX*16         CDUM, H21S, H31S
+      DOUBLE PRECISION   S
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG

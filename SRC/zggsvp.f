@@ -2,7 +2,7 @@
      $                   TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
      $                   IWORK, RWORK, TAU, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -110,7 +110,7 @@
 *          The leading dimension of the array U. LDU >= max(1,M) if
 *          JOBU = 'U'; LDU >= 1 otherwise.
 *
-*  V       (output) COMPLEX*16 array, dimension (LDV,M)
+*  V       (output) COMPLEX*16 array, dimension (LDV,P)
 *          If JOBV = 'V', V contains the unitary matrix V.
 *          If JOBV = 'N', V is not referenced.
 *

@@ -1,7 +1,7 @@
       SUBROUTINE CLAQR1( N, H, LDH, S1, S2, V )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK auxiliary routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
@@ -54,8 +54,8 @@
       PARAMETER          ( RZERO = 0.0e0 )
 *     ..
 *     .. Local Scalars ..
-      COMPLEX            CDUM
-      REAL               H21S, H31S, S
+      COMPLEX            CDUM, H21S, H31S
+      REAL               S
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, REAL

@@ -19,7 +19,6 @@
 *
 *     SLAROT applies a (Givens) rotation to two adjacent rows or
 *     columns, where one element of the first and/or last column/row
-*     November 2006
 *     for use on matrices stored in some format other than GE, so
 *     that elements of the matrix may be used or modified for which
 *     no array element is provided.

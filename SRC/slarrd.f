@@ -3,7 +3,7 @@
      $                    M, W, WERR, WL, WU, IBLOCK, INDEXW,
      $                    WORK, IWORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

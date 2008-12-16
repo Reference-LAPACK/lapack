@@ -1,5 +1,5 @@
       SUBROUTINE CGET07( TRANS, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
-     $                   LDXACT, FERR, BERR, RESLTS )
+     $                   LDXACT, FERR, CHKFERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -7,6 +7,7 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
+      LOGICAL            CHKFERR
       INTEGER            LDA, LDB, LDX, LDXACT, N, NRHS
 *     ..
 *     .. Array Arguments ..
@@ -79,6 +80,11 @@
 *          of the largest entry in (X - XTRUE) divided by the magnitude
 *          of the largest entry in X.
 *
+*  CHKFERR (input) LOGICAL
+*          Set to .TRUE. to check FERR, .FALSE. not to check FERR.
+*          When the test system is ill-conditioned, the "true"
+*          solution in XACT may be incorrect.
+*
 *  BERR    (input) REAL array, dimension (NRHS)
 *          The componentwise relative backward error of each solution
 *          vector (i.e., the smallest relative change in any entry of A
@@ -136,30 +142,32 @@
 *     over all the vectors X and XACT using the infinity-norm.
 *
       ERRBND = ZERO
-      DO 30 J = 1, NRHS
-         IMAX = ICAMAX( N, X( 1, J ), 1 )
-         XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
-         DIFF = ZERO
-         DO 10 I = 1, N
-            DIFF = MAX( DIFF, CABS1( X( I, J )-XACT( I, J ) ) )
-   10    CONTINUE
+      IF( CHKFERR ) THEN
+         DO 30 J = 1, NRHS
+            IMAX = ICAMAX( N, X( 1, J ), 1 )
+            XNORM = MAX( CABS1( X( IMAX, J ) ), UNFL )
+            DIFF = ZERO
+            DO 10 I = 1, N
+               DIFF = MAX( DIFF, CABS1( X( I, J )-XACT( I, J ) ) )
+ 10         CONTINUE
 *
-         IF( XNORM.GT.ONE ) THEN
-            GO TO 20
-         ELSE IF( DIFF.LE.OVFL*XNORM ) THEN
-            GO TO 20
-         ELSE
-            ERRBND = ONE / EPS
-            GO TO 30
-         END IF
+            IF( XNORM.GT.ONE ) THEN
+               GO TO 20
+            ELSE IF( DIFF.LE.OVFL*XNORM ) THEN
+               GO TO 20
+            ELSE
+               ERRBND = ONE / EPS
+               GO TO 30
+            END IF
 *
-   20    CONTINUE
-         IF( DIFF / XNORM.LE.FERR( J ) ) THEN
-            ERRBND = MAX( ERRBND, ( DIFF / XNORM ) / FERR( J ) )
-         ELSE
-            ERRBND = ONE / EPS
-         END IF
-   30 CONTINUE
+ 20         CONTINUE
+            IF( DIFF / XNORM.LE.FERR( J ) ) THEN
+               ERRBND = MAX( ERRBND, ( DIFF / XNORM ) / FERR( J ) )
+            ELSE
+               ERRBND = ONE / EPS
+            END IF
+ 30      CONTINUE
+      END IF
       RESLTS( 1 ) = ERRBND
 *
 *     Test 2:  Compute the maximum of BERR / ( (n+1)*EPS + (*) ), where

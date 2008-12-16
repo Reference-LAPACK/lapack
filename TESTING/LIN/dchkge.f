@@ -127,14 +127,14 @@
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRGE, DGECON, DGERFS,
      $                   DGET01, DGET02, DGET03, DGET04, DGET07, DGETRF,
      $                   DGETRI, DGETRS, DLACPY, DLARHS, DLASET, DLATB4,
-     $                   DLATMS, XLAENV
+     $                   DLATMS, DERRGEX, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
-      CHARACTER(32)      SRNAMT
+      CHARACTER*32       SRNAMT
       INTEGER            INFOT, NUNIT
 *     ..
 *     .. Common blocks ..
@@ -406,7 +406,7 @@
                         CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                               RESULT( 5 ) )
                         CALL DGET07( TRANS, N, NRHS, A, LDA, B, LDA, X,
-     $                               LDA, XACT, LDA, RWORK,
+     $                               LDA, XACT, LDA, RWORK, .TRUE.,
      $                               RWORK( NRHS+1 ), RESULT( 6 ) )
 *
 *                       Print information about the tests that did not

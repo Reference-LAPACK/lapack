@@ -70,7 +70,7 @@ CBLAS1 = scabs1.o scasum.o scnrm2.o icamax.o caxpy.o ccopy.o \
 $(CBLAS1): $(FRC)
 
 DBLAS1 = idamax.o dasum.o daxpy.o dcopy.o ddot.o dnrm2.o \
-	drot.o drotg.o dscal.o dswap.o drotmg.o drotm.o
+	drot.o drotg.o dscal.o dsdot.o dswap.o drotmg.o drotm.o
 $(DBLAS1): $(FRC)
 
 ZBLAS1 = dcabs1.o dzasum.o dznrm2.o izamax.o zaxpy.o zcopy.o \
@@ -88,7 +88,7 @@ $(ZB1AUX): $(FRC)
 #  Level 2 and Level 3 BLAS.  Comment it out only if you already have
 #  both the Level 2 and 3 BLAS.
 #---------------------------------------------------------------------
-ALLBLAS  = lsame.o xerbla.o xerbla_array.o ila_len_trim.o
+ALLBLAS  = lsame.o xerbla.o xerbla_array.o
 $(ALLBLAS) : $(FRC)
 
 #---------------------------------------------------------
@@ -134,7 +134,7 @@ ZBLAS3 = zgemm.o zsymm.o zsyrk.o zsyr2k.o ztrmm.o ztrsm.o \
 $(ZBLAS3): $(FRC)
 
 ALLOBJ=$(SBLAS1) $(SBLAS2) $(SBLAS3) $(DBLAS1) $(DBLAS2) $(DBLAS3)	\
-	$(CBLAS1) $(CB1AUX) $(CBLAS2) $(CBLAS3) $(ZBLAS1) $(ZB1AUX)	\
+	$(CBLAS1) $(CBLAS2) $(CBLAS3) $(ZBLAS1) \
 	$(ZBLAS2) $(ZBLAS3) $(ALLBLAS)
 
 $(BLASLIB): $(ALLOBJ)

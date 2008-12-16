@@ -1,8 +1,8 @@
       SUBROUTINE CHSEQR( JOB, COMPZ, N, ILO, IHI, H, LDH, W, Z, LDZ,
      $                   WORK, LWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK driver routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
@@ -95,9 +95,11 @@
 *
 *     LWORK (input) INTEGER
 *           The dimension of the array WORK.  LWORK .GE. max(1,N)
-*           is sufficient, but LWORK typically as large as 6*N may
-*           be required for optimal performance.  A workspace query
-*           to determine the optimal workspace size is recommended.
+*           is sufficient and delivers very good and sometimes
+*           optimal performance.  However, LWORK as large as 11*N
+*           may be required for optimal performance.  A workspace
+*           query is recommended to determine the optimal workspace
+*           size.
 *
 *           If LWORK = -1, then CHSEQR does a workspace query.
 *           In this case, CHSEQR checks the input parameters and
@@ -152,46 +154,50 @@
 *             to attain best performance in each particular
 *             computational environment.
 *
-*            ISPEC=1:  The CLAHQR vs CLAQR0 crossover point.
+*            ISPEC=12: The CLAHQR vs CLAQR0 crossover point.
 *                      Default: 75. (Must be at least 11.)
 *
-*            ISPEC=2:  Recommended deflation window size.
+*            ISPEC=13: Recommended deflation window size.
 *                      This depends on ILO, IHI and NS.  NS is the
 *                      number of simultaneous shifts returned
-*                      by ILAENV(ISPEC=4).  (See ISPEC=4 below.)
+*                      by ILAENV(ISPEC=15).  (See ISPEC=15 below.)
 *                      The default for (IHI-ILO+1).LE.500 is NS.
 *                      The default for (IHI-ILO+1).GT.500 is 3*NS/2.
 *
-*            ISPEC=3:  Nibble crossover point. (See ILAENV for
+*            ISPEC=14: Nibble crossover point. (See IPARMQ for
 *                      details.)  Default: 14% of deflation window
 *                      size.
 *
-*            ISPEC=4:  Number of simultaneous shifts, NS, in
-*                      a multi-shift QR iteration.
+*            ISPEC=15: Number of simultaneous shifts in a multishift
+*                      QR iteration.
 *
 *                      If IHI-ILO+1 is ...
 *
 *                      greater than      ...but less    ... the
 *                      or equal to ...      than        default is
 *
-*                           1               30          NS -   2(+)
-*                          30               60          NS -   4(+)
+*                           1               30          NS =   2(+)
+*                          30               60          NS =   4(+)
 *                          60              150          NS =  10(+)
 *                         150              590          NS =  **
 *                         590             3000          NS =  64
 *                        3000             6000          NS = 128
 *                        6000             infinity      NS = 256
 *
-*                  (+)  By default some or all matrices of this order 
+*                  (+)  By default some or all matrices of this order
 *                       are passed to the implicit double shift routine
-*                       CLAHQR and NS is ignored.  See ISPEC=1 above 
-*                       and comments in IPARM for details.
+*                       CLAHQR and this parameter is ignored.  See
+*                       ISPEC=12 above and comments in IPARMQ for
+*                       details.
 *
-*                       The asterisks (**) indicate an ad-hoc
+*                 (**)  The asterisks (**) indicate an ad-hoc
 *                       function of N increasing from 10 to 64.
 *
-*            ISPEC=5:  Select structured matrix multiply.
-*                      (See ILAENV for details.) Default: 3.
+*            ISPEC=16: Select structured matrix multiply.
+*                      If the number of simultaneous shifts (specified
+*                      by ISPEC=15) is less than 14, then the default
+*                      for ISPEC=16 is 0.  Otherwise the default for
+*                      ISPEC=16 is 2.
 *
 *     ================================================================
 *     Based on contributions by
@@ -215,16 +221,15 @@
 *     ==== Matrices of order NTINY or smaller must be processed by
 *     .    CLAHQR because of insufficient subdiagonal scratch space.
 *     .    (This is a hard limit.) ====
+      INTEGER            NTINY
+      PARAMETER          ( NTINY = 11 )
 *
 *     ==== NL allocates some local workspace to help small matrices
 *     .    through a rare CLAHQR failure.  NL .GT. NTINY = 11 is
-*     .    required and NL .LE. NMIN = ILAENV(ISPEC=1,...) is recom-
+*     .    required and NL .LE. NMIN = ILAENV(ISPEC=12,...) is recom-
 *     .    mended.  (The default value of NMIN is 75.)  Using NL = 49
 *     .    allows up to six simultaneous shifts and a 16-by-16
 *     .    deflation window.  ====
-*
-      INTEGER            NTINY
-      PARAMETER          ( NTINY = 11 )
       INTEGER            NL
       PARAMETER          ( NL = 49 )
       COMPLEX            ZERO, ONE
@@ -328,8 +333,8 @@
 *
 *        ==== CLAHQR/CLAQR0 crossover point ====
 *
-         NMIN = ILAENV( 1, 'CHSEQR', JOB( : 1 ) // COMPZ( : 1 ), N, ILO,
-     $          IHI, LWORK )
+         NMIN = ILAENV( 12, 'CHSEQR', JOB( : 1 ) // COMPZ( : 1 ), N,
+     $          ILO, IHI, LWORK )
          NMIN = MAX( NTINY, NMIN )
 *
 *        ==== CLAQR0 for big matrices; CLAHQR for small ones ====

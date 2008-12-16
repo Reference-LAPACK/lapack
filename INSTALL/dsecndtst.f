@@ -1,6 +1,6 @@
       PROGRAM TEST5
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

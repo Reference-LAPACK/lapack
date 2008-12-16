@@ -1,8 +1,8 @@
       SUBROUTINE DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
      $                   ILOZ, IHIZ, Z, LDZ, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK auxiliary routine (version 3.2) --
+*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *
 *     .. Scalar Arguments ..
@@ -118,11 +118,10 @@
 *
 *     12-04 Further modifications by
 *     Ralph Byers, University of Kansas, USA
-*
-*       This is a modified version of DLAHQR from LAPACK version 3.0.
-*       It is (1) more robust against overflow and underflow and
-*       (2) adopts the more conservative Ahues & Tisseur stopping
-*       criterion (LAWN 122, 1997).
+*     This is a modified version of DLAHQR from LAPACK version 3.0.
+*     It is (1) more robust against overflow and underflow and
+*     (2) adopts the more conservative Ahues & Tisseur stopping
+*     criterion (LAWN 122, 1997).
 *
 *     =========================================================
 *
@@ -265,10 +264,20 @@
             I2 = I
          END IF
 *
-         IF( ITS.EQ.10 .OR. ITS.EQ.20 ) THEN
+         IF( ITS.EQ.10 ) THEN
 *
 *           Exceptional shift.
 *
+            S = ABS( H( L+1, L ) ) + ABS( H( L+2, L+1 ) )
+            H11 = DAT1*S + H( L, L )
+            H12 = DAT2*S
+            H21 = S
+            H22 = H11
+         ELSE IF( ITS.EQ.20 ) THEN
+*
+*           Exceptional shift.
+*
+            S = ABS( H( I, I-1 ) ) + ABS( H( I-1, I-2 ) )
             H11 = DAT1*S + H( I, I )
             H12 = DAT2*S
             H21 = S
@@ -373,7 +382,11 @@
                IF( K.LT.I-1 )
      $            H( K+2, K-1 ) = ZERO
             ELSE IF( M.GT.L ) THEN
-               H( K, K-1 ) = -H( K, K-1 )
+*               ==== Use the following instead of
+*               .    H( K, K-1 ) = -H( K, K-1 ) to
+*               .    avoid a bug when v(2) and v(3)
+*               .    underflow. ====
+               H( K, K-1 ) = H( K, K-1 )*( ONE-T1 )
             END IF
             V2 = V( 2 )
             T2 = T1*V2

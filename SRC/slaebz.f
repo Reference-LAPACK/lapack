@@ -2,7 +2,7 @@
      $                   RELTOL, PIVMIN, D, E, E2, NVAL, AB, C, MOUT,
      $                   NAB, WORK, IWORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

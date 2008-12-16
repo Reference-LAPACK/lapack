@@ -1,6 +1,6 @@
       SUBROUTINE CHETF2( UPLO, N, A, LDA, IPIV, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
+*  -- LAPACK routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *

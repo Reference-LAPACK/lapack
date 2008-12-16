@@ -12,8 +12,9 @@ VERSION 3.0 + update :  October 31, 1999
 VERSION 3.0 + update :  May 31, 2000
 VERSION 3.1  : November 2006
 VERSION 3.1.1  : February 2007
+VERSION 3.2  : November 2008
 
-LAPACK is a library of Fortran 77 subroutines for solving
+LAPACK is a library of Fortran 90 with  subroutines for solving
 the most commonly occurring problems in numerical linear algebra.
 It is freely-available software, and is copyrighted.
 

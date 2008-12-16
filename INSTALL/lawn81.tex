@@ -19,22 +19,24 @@
 \begin{center}
 %  Edward Anderson\footnote{Current address:  Cray Research Inc.,
 %                           655F Lone Oak Drive, Eagan, MN  55121},
-  Authors and Jack Dongarra\\
+  The LAPACK Authors\\
   Department of Computer Science \\
   University of Tennessee \\
   Knoxville, Tennessee  37996-1301 \\
 \end{center}
 \begin{center}
-  REVISED:  VERSION 3.1.1, February 2007
+  REVISED:  VERSION 3.1.1, February 2007 \\
+  REVISED:  VERSION 3.2.0, November 2008
 \end{center}
 
 \begin{center}
 Abstract
 \end{center}
-This working note describes how to install, and test version 3.1.1
+This working note describes how to install, and test version 3.2.0
 of LAPACK, a linear algebra package for high-performance
 computers, on a Unix System.  The timing routines are not actually included in
-release 3.1.1, and that part of the LAWN refers to release 3.0. 
+release 3.2.0, and that part of the LAWN refers to release 3.0.  Also,
+version 3.2.0 contains many prototype routines needing user feedback.
 Non-Unix installation instructions and
 further details of the testing and timing suites are only contained in
 LAPACK Working Note 41, and not in this abbreviated version.
@@ -53,7 +55,7 @@ LAPACK Working Note 41, and not in this abbreviated version.
 
 LAPACK is a linear algebra library for high-performance
 computers.
-The library includes Fortran 77 subroutines for 
+The library includes Fortran subroutines for 
 the analysis and solution of systems of simultaneous linear algebraic
 equations, linear least-squares problems, and matrix eigenvalue
 problems.
@@ -123,8 +125,9 @@ version 2.0 on September 30, 1994, coincided with the release of the
 Second Edition of the LAPACK Users' Guide; 
 version 3.0 on June 30, 1999 coincided with the release of the Third Edition of
 the LAPACK Users' Guide; 
-version 3.1 was released on November, 2006.
-and finally version 3.1.1 was released on November, 2007.
+version 3.1 was released on November, 2006;
+version 3.1.1 was released on November, 2007;
+and version 3.2.0 was released on November, 2008.
 
 All LAPACK routines reflect the current version number with the date
 on the routine indicating when it was last modified.
@@ -200,9 +203,10 @@ entire installation procedure.
 Most routines in LAPACK occur in four versions: REAL,
 DOUBLE PRECISION, COMPLEX, and COMPLEX*16.
 The first three versions (REAL, DOUBLE PRECISION, and COMPLEX)
-are written in standard Fortran 77 and are completely portable;
+are written in standard Fortran and are completely portable;
 the COMPLEX*16 version is provided for
-those compilers which allow this data type.  
+those compilers which allow this data type.
+Some routines use features of Fortran 90.
 For convenience, we often refer to routines by their single precision
 names; the leading `S' can be replaced by a `D' for double precision,
 a `C' for complex, or a `Z' for complex*16.  
@@ -288,6 +292,21 @@ employ the standard tricks for optimizing Fortran code.
 The formal definitions of the Level 1, 2, and 3 BLAS
 are in \cite{BLAS1}, \cite{BLAS2}, and \cite{BLAS3}. 
 The BLAS Quick Reference card is available on netlib.
+
+\subsection{Mixed- and Extended-Precision BLAS: XBLAS}
+
+The XBLAS extend the BLAS to work with mixed input and output
+precisions as well as using extra precision internally.  The XBLAS are
+used in the prototype extra-precise iterative refinement codes.
+
+The current release of the XBLAS is available through
+Netlib\footnote{Development versions may be available through
+  \url{http://www.cs.berkeley.edu/~yozo/} or
+  \url{http://www.nersc.gov/~xiaoye/XBLAS/}.}  at
+\begin{quote}
+  \url{http://www.netlib.org/xblas}
+\end{quote}
+Their formal definition is in \cite{XBLAS}.
 
 \subsection{LAPACK Test Routines}
 
@@ -456,7 +475,13 @@ computers running HP-UX, or SUN SPARCstations running Solaris), set
 modify the \texttt{BLASLIB} definition to specify the BLAS library to which
 you will be linking.  If an optimized version of the BLAS is available
 on your machine, you are highly recommended to link to that library.
-Otherwise, by default, \texttt{BLASLIB} is set to the Fortran 77 version.  \\
+Otherwise, by default, \texttt{BLASLIB} is set to the Fortran~77 version.
+
+If you want to enable the XBLAS, define the variable \texttt{USEXBLAS}
+to some value, for example \texttt{USEXBLAS = Yes}.  Then set the
+variable \texttt{XBLASLIB} to point at the XBLAS library.  Note that
+the prototype iterative refinement routines and their testers will not
+be built unless \texttt{USEXBLAS} is defined.
 
 \textbf{NOTE:}  Example \texttt{make.inc} include files are contained in the
 \texttt{LAPACK/INSTALL} directory.  Please refer to
@@ -1427,7 +1452,7 @@ directory rather than in the default temporary directory /tmp.
 
 If you suspect a BLAS-related problem and you are linking
 with an optimized version of the BLAS, we would strongly suggest
-as a first step that you link to the Fortran 77 version of
+as a first step that you link to the Fortran~77 version of
 the suspected BLAS routine and see if the error has disappeared.
 
 We have included test programs for the Level 1 BLAS.
@@ -1547,7 +1572,7 @@ converge should not be regarded with alarm.
 
 In the eigensystem timing program, we have equivalenced some work
 arrays and then passed them to a subroutine, where both arrays are
-modified.  This is a violation of the Fortran 77 standard, which
+modified.  This is a violation of the Fortran~77 standard, which
 says ``if a subprogram reference causes a dummy argument in the
 referenced subprogram to become associated with another dummy
 argument in the referenced subprogram, neither dummy argument may
@@ -1621,6 +1646,13 @@ Z. Bai, J. Demmel, and A. McKenney,
 \textit{LAPACK Working Note \#13: On the Conditioning of the Nonsymmetric
 Eigenvalue Problem:  Theory and Software}, 
 University of Tennessee, CS-89-86, October 1989.
+
+\bibitem{XBLAS}
+X. S. Li, J. W. Demmel, D. H. Bailey, G. Henry, Y. Hida, J. Iskandar,
+W. Kahan, S. Y. Kang, A. Kapur, M. C. Martin, B. J. Thompson, T. Tung,
+and D. J. Yoo, \textit{Design, implementation and testing of extended
+  and mixed precision BLAS},
+\textit{ACM Trans. Math. Soft.}, 28, 2:152--205, June 2002.
  
 \bibitem{BLAS3}
 J. Dongarra, J. Du Croz, I. Duff, and S. Hammarling,
