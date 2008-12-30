@@ -21,12 +21,25 @@
       INTEGER            IPIV( * )
       COMPLEX            AB( LDAB, * ), AFB( LDAFB, * ), WORK( * )
       REAL               C( * ), RWORK( * )
+*     ..
+*
+*  Purpose
+*  =======
 *
 *     CLA_GBRCOND_C Computes the infinity norm condition number of
 *     op(A) * inv(diag(C)) where C is a REAL vector.
-*     WORK is a COMPLEX workspace of size 2*N, and
-*     RWORK is a REAL workspace of size 3*N.
-*     ..
+*
+*  Arguments
+*  =========
+*
+*  C       REAL vector.
+*
+*  WORK    COMPLEX workspace of size 2*N.
+*
+*  RWORK   REAL workspace of size 3*N.
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       LOGICAL            NOTRANS
       INTEGER            KASE, I, J

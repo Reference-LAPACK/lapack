@@ -29,6 +29,9 @@
       DOUBLE PRECISION   C( * ), AYB(*), RCOND, BERR_OUT( * ),
      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       CHARACTER          TRANS
       INTEGER            CNT, I, J, M, X_STATE, Z_STATE, Y_PREC_STATE

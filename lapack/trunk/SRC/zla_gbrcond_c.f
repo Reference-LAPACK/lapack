@@ -22,11 +22,24 @@
       COMPLEX*16         AB( LDAB, * ), AFB( LDAFB, * ), WORK( * )
       DOUBLE PRECISION   C( * ), RWORK( * )
 *
+*
+*  Purpose
+*  =======
+*
 *     ZLA_GBRCOND_C Computes the infinity norm condition number of
 *     op(A) * inv(diag(C)) where C is a DOUBLE PRECISION vector.
-*     WORK is a COMPLEX*16 workspace of size 2*N, and
-*     RWORK is a DOUBLE PRECISION workspace of size 3*N.
-*     ..
+*
+*  Arguments
+*  =========
+*
+*   C      DOUBLE PRECISION vector.
+*
+*   WORK   COMPLEX*16 workspace of size 2*N.
+*
+*   RWORK  DOUBLE PRECISION workspace of size 3*N.
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       LOGICAL            NOTRANS
       INTEGER            KASE, I, J

@@ -20,6 +20,9 @@
       REAL               WORK( * )
       INTEGER            IPIV( * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            NCOLS, I, J, K, KP
       REAL               AMAX, UMAX, RPVGRW, TMP

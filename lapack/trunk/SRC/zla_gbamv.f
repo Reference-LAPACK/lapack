@@ -40,7 +40,7 @@
 *  entry is considered "symbolic" if all multiplications involved
 *  in computing that entry have at least one zero multiplicand.
 *
-*  Parameters
+*  Arguments
 *  ==========
 *
 *  TRANS  - INTEGER
@@ -118,7 +118,9 @@
 *
 *  Level 2 Blas routine.
 *
-*     ..
+*
+*  =====================================================================
+*
 *     .. Parameters ..
       COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )

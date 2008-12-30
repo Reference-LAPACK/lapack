@@ -19,6 +19,9 @@
       COMPLEX*16         A( LDA, * ), AF( LDAF, * )
       DOUBLE PRECISION   WORK( * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            I, J
       DOUBLE PRECISION   AMAX, UMAX, RPVGRW

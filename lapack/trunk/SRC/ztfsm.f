@@ -126,8 +126,8 @@
 *           max( 1, m ).
 *           Unchanged on exit.
 *
-*  Notes:
-*  ======
+*  Further Details
+*  ===============
 *
 *  We first consider Standard Packed Format when N is even.
 *  We give an example where N = 6.

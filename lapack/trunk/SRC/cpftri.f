@@ -58,8 +58,8 @@
 *          > 0:  if INFO = i, the (i,i) element of the factor U or L is
 *                zero, and the inverse could not be computed.
 *
-*  Note:
-*  =====
+*  Further Details
+*  ===============
 *
 *  We first consider Standard Packed Format when N is even.
 *  We give an example where N = 6.

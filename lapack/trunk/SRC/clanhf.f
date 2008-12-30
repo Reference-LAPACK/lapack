@@ -90,8 +90,8 @@
 *            where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
 *            WORK is not referenced.
 *
-*  Note:
-*  =====
+*  Further Details
+*  ===============
 *
 *  We first consider Standard Packed Format when N is even.
 *  We give an example where N = 6.

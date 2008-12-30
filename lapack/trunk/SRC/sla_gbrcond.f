@@ -19,6 +19,10 @@
       INTEGER            IWORK( * ), IPIV( * )
       REAL               AB( LDAB, * ), AFB( LDAFB, * ), WORK( * ),
      $                   C( * )
+*    ..
+*
+*  Purpose
+*  =======
 *
 *     SLA_GERCOND Estimates the Skeel condition number of  op(A) * op2(C)
 *     where op2 is determined by CMODE as follows
@@ -29,9 +33,16 @@
 *     is computed by computing scaling factors R such that
 *     diag(R)*A*op2(C) is row equilibrated and computing the standard
 *     infinity-norm condition number.
-*     WORK is a real workspace of size 5*N, and
-*     IWORK is an integer workspace of size N.
-*     ..
+*
+*  Arguments
+*  ==========
+*
+*  WORK     real workspace of size 5*N.
+*
+*  IWORK    integer workspace of size N.
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       LOGICAL            NOTRANS
       INTEGER            KASE, I, J, KD

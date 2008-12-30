@@ -36,7 +36,9 @@
 *
 *     W      (input) DOUBLE PRECISION array, length N
 *            The vector to be added.
-*     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       DOUBLE PRECISION   S
       INTEGER            I
