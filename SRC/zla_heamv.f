@@ -39,7 +39,7 @@
 *  entry is considered "symbolic" if all multiplications involved
 *  in computing that entry have at least one zero multiplicand.
 *
-*  Parameters
+*  Arguments
 *  ==========
 *
 *  UPLO   - INTEGER
@@ -102,6 +102,8 @@
 *           Y. INCY must not be zero.
 *           Unchanged on exit.
 *
+*  Further Details
+*  ===============
 *
 *  Level 2 Blas routine.
 *
@@ -113,7 +115,8 @@
 *  -- Modified for the absolute-value product, April 2006
 *     Jason Riedy, UC Berkeley
 *
-*     ..
+*  =====================================================================
+*
 *     .. Parameters ..
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )

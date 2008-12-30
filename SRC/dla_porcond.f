@@ -19,6 +19,10 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
+*     ..
+*
+*  Purpose
+*  =======
 *
 *     DLA_PORCOND Estimates the Skeel condition number of  op(A) * op2(C)
 *     where op2 is determined by CMODE as follows
@@ -29,9 +33,16 @@
 *     is computed by computing scaling factors R such that
 *     diag(R)*A*op2(C) is row equilibrated and computing the standard
 *     infinity-norm condition number.
-*     WORK is a double precision workspace of size 3*N, and
-*     IWORK is an integer workspace of size N.
-*     ..
+*
+*  Arguments
+*  ==========
+*
+*  WORK    double precision workspace of size 3*N.
+*
+*  IWORK   integer workspace of size N.
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            KASE, I, J
       DOUBLE PRECISION   AINVNM, TMP

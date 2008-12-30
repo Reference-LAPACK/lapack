@@ -29,6 +29,9 @@
       DOUBLE PRECISION   C( * ), AYB( * ), RCOND, BERR_OUT( * ),
      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            UPLO2, CNT, I, J, X_STATE, Z_STATE
       DOUBLE PRECISION   YK, DYK, YMIN, NORMY, NORMX, NORMDX, DXRAT,

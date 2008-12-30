@@ -19,12 +19,25 @@
 *     .. Array Arguments ..
       COMPLEX*16         A( LDA, * ), AF( LDAF, * ), WORK( * )
       DOUBLE PRECISION   C( * ), RWORK( * )
+*     ..
+*
+*  Purpose
+*  =======
 *
 *     DLA_PORCOND_C Computes the infinity norm condition number of
 *     op(A) * inv(diag(C)) where C is a DOUBLE PRECISION vector
-*     WORK is a COMPLEX*16 workspace of size 2*N, and
-*     RWORK is a DOUBLE PRECISION workspace of size 3*N.
-*     ..
+*
+*  Arguments
+*  =========
+*
+*  C     DOUBLE PRECISION  vector.
+*
+*  WORK  COMPLEX*16 workspace of size 2*N.
+*
+*  RWORK DOUBLE PRECISION workspace of size 3*N.
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            KASE
       DOUBLE PRECISION   AINVNM, ANORM, TMP

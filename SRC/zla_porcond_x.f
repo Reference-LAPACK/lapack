@@ -18,12 +18,25 @@
 *     .. Array Arguments ..
       COMPLEX*16         A( LDA, * ), AF( LDAF, * ), WORK( * ), X( * )
       DOUBLE PRECISION   RWORK( * )
+*     ..
+*
+*  Purpose
+*  =======
 *
 *     ZLA_PORCOND_X Computes the infinity norm condition number of
 *     op(A) * diag(X) where X is a COMPLEX*16 vector.
-*     WORK is a COMPLEX*16 workspace of size 2*N, and
-*     RWORK is a DOUBLE PRECISION workspace of size 3*N.
-*     ..
+*
+*  Arguments
+*  =========
+*
+*  C     COMPLEX*16 vector.
+*
+*  WORK  COMPLEX*16 workspace of size 2*N.
+*
+*  RWORK DOUBLE PRECISION workspace of size 3*N.
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            KASE, I, J
       DOUBLE PRECISION   AINVNM, ANORM, TMP

@@ -36,7 +36,9 @@
 *
 *     W      (input) REAL array, length N
 *            The vector to be added.
-*     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       REAL               S
       INTEGER            I

@@ -20,6 +20,9 @@
       DOUBLE PRECISION   WORK( * )
       INTEGER            IPIV( * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            NCOLS, I, J, K, KP
       DOUBLE PRECISION   AMAX, UMAX, RPVGRW, TMP

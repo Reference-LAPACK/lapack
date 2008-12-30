@@ -36,7 +36,9 @@
 *
 *     W      (input) COMPLEX array, length N
 *            The vector to be added.
-*     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       COMPLEX            S
       INTEGER            I

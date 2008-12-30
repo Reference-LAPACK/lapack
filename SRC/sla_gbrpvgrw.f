@@ -17,6 +17,9 @@
 *     .. Array Arguments ..
       REAL               AB( LDAB, * ), AFB( LDAFB, * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            I, J, KD
       REAL               AMAX, UMAX, RPVGRW

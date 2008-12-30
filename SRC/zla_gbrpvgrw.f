@@ -17,6 +17,9 @@
 *     .. Array Arguments ..
       COMPLEX*16         AB( LDAB, * ), AFB( LDAFB, * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            I, J, KD
       DOUBLE PRECISION   AMAX, UMAX, RPVGRW

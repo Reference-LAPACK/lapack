@@ -16,13 +16,19 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   AYB( N, NRHS ), BERR( NRHS )
       COMPLEX*16         RES( N, NRHS )
+*     ..
+*
+*  Purpose
+*  =======
 *
 *     ZLA_LIN_BERR computes componentwise relative backward error from
 *     the formula
 *         max(i) ( abs(R(i)) / ( abs(op(A_s))*abs(Y) + abs(B_s) )(i) )
 *     where abs(Z) is the componentwise absolute value of the matrix
 *     or vector Z.
-*     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       DOUBLE PRECISION   TMP
       INTEGER            I, J

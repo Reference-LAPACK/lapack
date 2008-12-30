@@ -19,12 +19,18 @@
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * ), AF( LDAF, * ), WORK( * )
       REAL               C( * ), RWORK( * )
+*     ..
+*
+*  Purpose
+*  =======
 *
 *     SLA_PORCOND_C Computes the infinity norm condition number of
 *     op(A) * inv(diag(C)) where C is a REAL vector
 *     WORK is a COMPLEX workspace of size 2*N, and
 *     RWORK is a REAL workspace of size 3*N.
-*     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            KASE
       REAL               AINVNM, ANORM, TMP

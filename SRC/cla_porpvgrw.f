@@ -18,6 +18,9 @@
       COMPLEX            A( LDA, * ), AF( LDAF, * )
       REAL               WORK( * )
 *     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            I, J
       REAL               AMAX, UMAX, RPVGRW

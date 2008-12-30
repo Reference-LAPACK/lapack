@@ -65,8 +65,8 @@
 *          > 0: if INFO = i, A(i,i) is exactly zero.  The triangular
 *               matrix is singular and its inverse can not be computed.
 *
-*  Notes
-*  =====
+*  Further Details
+*  ===============
 *
 *  We first consider Rectangular Full Packed (RFP) Format when N is
 *  even. We give an example where N = 6.

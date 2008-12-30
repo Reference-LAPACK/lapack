@@ -66,8 +66,8 @@
 *                positive definite, and the factorization could not be
 *                completed.
 *
-*  Notes
-*  =====
+*  Further Details
+*  ===============
 *
 *  We first consider Rectangular Full Packed (RFP) Format when N is
 *  even. We give an example where N = 6.

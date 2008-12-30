@@ -19,12 +19,25 @@
       INTEGER            IPIV( * )
       COMPLEX            A( LDA, * ), AF( LDAF, * ), WORK( * ), X( * )
       REAL               RWORK( * )
+*     ..
 *
+*  Purpose
+*  =======
+* 
 *     CLA_GERCOND_X computes the infinity norm condition number of
 *     op(A) * diag(X) where X is a COMPLEX vector.
-*     WORK is a COMPLEX workspace of size 2*N, and
-*     RWORK is a REAL workspace of size 3*N.
-*     ..
+*
+*  Arguments
+*  =========
+*
+*  X       COMPLEX vector.
+*
+*  WORK    COMPLEX workspace of size 2*N.
+*
+*  RWORK   REAL workspace of size 3*N.
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       LOGICAL            NOTRANS
       INTEGER            KASE

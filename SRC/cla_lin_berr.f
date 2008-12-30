@@ -16,13 +16,19 @@
 *     .. Array Arguments ..
       REAL               AYB( N, NRHS ), BERR( NRHS )
       COMPLEX            RES( N, NRHS )
+*     ..
 *
-*     CLA_LIN_BERR computes componentwise relative backward error from
+*  Purpose
+*  =======
+*
+*     CLA_LIN_BERR computes component-wise relative backward error from
 *     the formula
 *         max(i) ( abs(R(i)) / ( abs(op(A_s))*abs(Y) + abs(B_s) )(i) )
-*     where abs(Z) is the componentwise absolute value of the matrix
+*     where abs(Z) is the component-wise absolute value of the matrix
 *     or vector Z.
-*     ..
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       REAL               TMP
       INTEGER            I, J
