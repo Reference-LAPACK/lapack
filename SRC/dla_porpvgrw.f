@@ -19,6 +19,14 @@
       DOUBLE PRECISION   A( LDA, * ), AF( LDAF, * ), WORK( * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  DLA_PORPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

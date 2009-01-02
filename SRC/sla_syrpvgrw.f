@@ -20,6 +20,14 @@
       REAL               A( LDA, * ), AF( LDAF, * ), WORK( * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  SLA_SYRPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

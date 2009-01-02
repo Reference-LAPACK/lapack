@@ -17,6 +17,8 @@
 *     jack dongarra, 3/11/78.
 *     modified 12/3/93, array(1) declarations changed to array(*)
 *
+*  =====================================================================
+*
 *     .. Local Scalars ..
       DOUBLE COMPLEX ZTEMP
       INTEGER I,IX,IY

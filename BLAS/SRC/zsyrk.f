@@ -104,6 +104,8 @@
 *           max( 1, n ).
 *           Unchanged on exit.
 *
+*  Further Details
+*  ===============
 *
 *  Level 3 Blas routine.
 *
@@ -113,6 +115,7 @@
 *     Jeremy Du Croz, Numerical Algorithms Group Ltd.
 *     Sven Hammarling, Numerical Algorithms Group Ltd.
 *
+*  =====================================================================
 *
 *     .. External Functions ..
       LOGICAL LSAME

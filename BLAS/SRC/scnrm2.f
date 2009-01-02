@@ -14,12 +14,14 @@
 *
 *     SCNRM2 := sqrt( conjg( x' )*x )
 *
-*
+*  Further Details
+*  ===============
 *
 *  -- This version written on 25-October-1982.
 *     Modified on 14-October-1993 to inline the call to CLASSQ.
 *     Sven Hammarling, Nag Ltd.
 *
+*  =====================================================================
 *
 *     .. Parameters ..
       REAL ONE,ZERO

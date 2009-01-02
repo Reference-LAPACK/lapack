@@ -47,8 +47,10 @@
 *  SDSDOT (output) REAL
 *         single precision dot product (SB if N .LE. 0)
 *
+*  Further Details
+*  ===============
+*
 *  REFERENCES
-*  ==========
 *
 *  C. L. Lawson, R. J. Hanson, D. R. Kincaid and F. T.
 *  Krogh, Basic linear algebra subprograms for Fortran
@@ -56,7 +58,6 @@
 *  Software 5, 3 (September 1979), pp. 308-323.
 *
 *  REVISION HISTORY  (YYMMDD)
-*  ==========================
 *      
 *  791001  DATE WRITTEN
 *  890531  Changed all specific intrinsics to generic.  (WRB)

@@ -36,7 +36,7 @@
 *  (stopping criterion). Few tunning parameters (marked by [TP]) are
 *  available for the implementer.
 *
-*  Further details
+*  Further Details
 *  ~~~~~~~~~~~~~~~
 *  DGSVJ1 applies few sweeps of Jacobi rotations in the column space of
 *  the input M-by-N matrix A. The pivot pairs are taken from the (1,2)

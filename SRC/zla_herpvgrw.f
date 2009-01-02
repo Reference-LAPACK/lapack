@@ -21,6 +21,14 @@
       DOUBLE PRECISION   WORK( * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  ZLA_HERPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

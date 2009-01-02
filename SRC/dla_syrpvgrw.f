@@ -20,6 +20,14 @@
       DOUBLE PRECISION   A( LDA, * ), AF( LDAF, * ), WORK( * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  DLA_SYRPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

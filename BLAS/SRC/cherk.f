@@ -107,6 +107,8 @@
 *           max( 1, n ).
 *           Unchanged on exit.
 *
+*  Further Details
+*  ===============
 *
 *  Level 3 Blas routine.
 *
@@ -119,6 +121,7 @@
 *  -- Modified 8-Nov-93 to set C(J,J) to REAL( C(J,J) ) when BETA = 1.
 *     Ed Anderson, Cray Research Inc.
 *
+*  =====================================================================
 *
 *     .. External Functions ..
       LOGICAL LSAME

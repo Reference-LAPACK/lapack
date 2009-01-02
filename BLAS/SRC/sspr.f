@@ -71,6 +71,8 @@
 *           AP is overwritten by the lower triangular part of the
 *           updated matrix.
 *
+*  Further Details
+*  ===============
 *
 *  Level 2 Blas routine.
 *
@@ -80,6 +82,7 @@
 *     Sven Hammarling, Nag Central Office.
 *     Richard Hanson, Sandia National Labs.
 *
+*  =====================================================================
 *
 *     .. Parameters ..
       REAL ZERO

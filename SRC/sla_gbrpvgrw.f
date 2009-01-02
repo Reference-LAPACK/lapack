@@ -18,6 +18,14 @@
       REAL               AB( LDAB, * ), AFB( LDAFB, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  SLA_GBRPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

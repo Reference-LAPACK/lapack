@@ -8,6 +8,8 @@
 *
 *  SCABS1 computes absolute value of a complex number
 *
+*  =====================================================================
+*
 *     .. Intrinsic Functions ..
       INTRINSIC ABS,AIMAG,REAL
 *     ..

@@ -18,6 +18,14 @@
       COMPLEX*16         AB( LDAB, * ), AFB( LDAFB, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  ZLA_GBRPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

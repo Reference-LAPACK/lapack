@@ -6,9 +6,14 @@
 *  Purpose
 *  =======
 *
-*     construct givens plane rotation.
+*     SROTG construct givens plane rotation.
+*
+*  Further Details
+*  ===============
+*
 *     jack dongarra, linpack, 3/11/78.
 *
+*  =====================================================================
 *
 *     .. Local Scalars ..
       REAL R,ROE,SCALE,Z

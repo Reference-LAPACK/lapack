@@ -20,6 +20,14 @@
       DOUBLE PRECISION   WORK( * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  ZLA_PORPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

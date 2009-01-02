@@ -14,11 +14,14 @@
 *
 *     DNRM2 := sqrt( x'*x )
 *
+*  Further Details
+*  ===============
 *
 *  -- This version written on 25-October-1982.
 *     Modified on 14-October-1993 to inline the call to DLASSQ.
 *     Sven Hammarling, Nag Ltd.
 *
+*  =====================================================================
 *
 *     .. Parameters ..
       DOUBLE PRECISION ONE,ZERO

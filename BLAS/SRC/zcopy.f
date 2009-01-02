@@ -9,10 +9,15 @@
 *  Purpose
 *  =======
 *
-*     copies a vector, x, to a vector, y.
+*     ZCOPY copies a vector, x, to a vector, y.
+*
+*  Further Details
+*  ===============
+*
 *     jack dongarra, linpack, 4/11/78.
 *     modified 12/3/93, array(1) declarations changed to array(*)
 *
+*  =====================================================================
 *
 *     .. Local Scalars ..
       INTEGER I,IX,IY

@@ -9,13 +9,17 @@
 *  Purpose
 *  =======
 *
-*     forms the dot product of two vectors.
+*     SDOT forms the dot product of two vectors.
 *     uses unrolled loops for increments equal to one.
+*
+*  Further Details
+*  ===============
+*
 *     jack dongarra, linpack, 3/11/78.
 *     modified 12/3/93, array(1) declarations changed to array(*)
 *
+*  =====================================================================
 *
-
 *     .. Local Scalars ..
       REAL STEMP
       INTEGER I,IX,IY,M,MP1
