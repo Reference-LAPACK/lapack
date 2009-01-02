@@ -9,10 +9,15 @@
 *  Purpose
 *  =======
 *
-*     interchanges two vectors.
+*    CSWAP interchanges two vectors.
+*
+*  Further Details
+*  ===============
+*
 *     jack dongarra, linpack, 3/11/78.
 *     modified 12/3/93, array(1) declarations changed to array(*)
 *
+*  =====================================================================
 *
 *     .. Local Scalars ..
       COMPLEX CTEMP

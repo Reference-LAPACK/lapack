@@ -18,6 +18,14 @@
       REAL               A( LDA, * ), AF( LDAF, * ), WORK( * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  SLA_PORPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

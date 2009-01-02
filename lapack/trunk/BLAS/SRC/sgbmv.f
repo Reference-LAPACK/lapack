@@ -115,6 +115,8 @@
 *           Y. INCY must not be zero.
 *           Unchanged on exit.
 *
+*  Further Details
+*  ===============
 *
 *  Level 2 Blas routine.
 *
@@ -123,6 +125,8 @@
 *     Jeremy Du Croz, Nag Central Office.
 *     Sven Hammarling, Nag Central Office.
 *     Richard Hanson, Sandia National Labs.
+*
+*  =====================================================================
 *
 *     .. Parameters ..
       REAL ONE,ZERO

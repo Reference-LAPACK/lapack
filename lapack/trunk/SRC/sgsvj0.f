@@ -35,7 +35,7 @@
 *  it does not check convergence (stopping criterion). Few tuning
 *  parameters (marked by [TP]) are available for the implementer.
 *
-*  Further details
+*  Further Details
 *  ~~~~~~~~~~~~~~~
 *  SGSVJ0 is used just to enable SGESVJ to call a simplified version of
 *  itself to work on a submatrix of the original matrix.

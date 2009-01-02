@@ -143,7 +143,7 @@
 *          K and L specify the subblocks in the input matrices A and B:
 *          A23 = A(K+1:MIN(K+L,M),N-L+1:N) and B13 = B(1:L,N-L+1:N)
 *          of A and B, whose GSVD is going to be computed by DTGSJA.
-*          See Further details.
+*          See Further Details.
 *
 *  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
 *          On entry, the M-by-N matrix A.

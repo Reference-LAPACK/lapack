@@ -16,12 +16,12 @@
 * computation of SVD, PSVD, QSVD, (H,K)-SVD, and for solution of the
 * eigenvalue problems Hx = lambda M x, H M x = lambda x with H, M > 0.
 *
-*     -#- Scalar Arguments -#-
+*     .. Scalar Arguments ..
 *
       IMPLICIT    NONE
       INTEGER     INFO, LDA, LDU, LDV, LWORK, M, N
 *
-*     -#- Array Arguments -#-
+*     .. Array Arguments ..
 *
       REAL        A( LDA, * ), SVA( N ), U( LDU, * ), V( LDV, * ),
      &            WORK( LWORK )
@@ -30,7 +30,7 @@
 *     ..
 *
 *  Purpose
-*  ~~~~~~~
+*  =======
 *  SGEJSV computes the singular value decomposition (SVD) of a real M-by-N
 *  matrix [A], where M >= N. The SVD of [A] is written as
 *
@@ -44,181 +44,114 @@
 *  are computed and stored in the arrays U and V, respectively. The diagonal
 *  of [SIGMA] is computed and stored in the array SVA.
 *
-*  Further details
-*  ~~~~~~~~~~~~~~~
-*  SGEJSV implements a preconditioned Jacobi SVD algorithm. It uses SGEQP3,
-*  SGEQRF, and SGELQF as preprocessors and preconditioners. Optionally, an
-*  additional row pivoting can be used as a preprocessor, which in some
-*  cases results in much higher accuracy. An example is matrix A with the
-*  structure A = D1 * C * D2, where D1, D2 are arbitrarily ill-conditioned
-*  diagonal matrices and C is well-conditioned matrix. In that case, complete
-*  pivoting in the first QR factorizations provides accuracy dependent on the
-*  condition number of C, and independent of D1, D2. Such higher accuracy is
-*  not completely understood theoretically, but it works well in practice.
-*  Further, if A can be written as A = B*D, with well-conditioned B and some
-*  diagonal D, then the high accuracy is guaranteed, both theoretically and
-*  in software, independent of D. For more details see [1], [2].
-*     The computational range for the singular values can be the full range
-*  ( UNDERFLOW,OVERFLOW ), provided that the machine arithmetic and the BLAS
-*  & LAPACK routines called by SGEJSV are implemented to work in that range.
-*  If that is not the case, then the restriction for safe computation with
-*  the singular values in the range of normalized IEEE numbers is that the
-*  spectral condition number kappa(A)=sigma_max(A)/sigma_min(A) does not
-*  overflow. This code (SGEJSV) is best used in this restricted range,
-*  meaning that singular values of magnitude below ||A||_2 / SLAMCH('O') are
-*  returned as zeros. See JOBR for details on this.
-*     Further, this implementation is somewhat slower than the one described
-*  in [1,2] due to replacement of some non-LAPACK components, and because
-*  the choice of some tuning parameters in the iterative part (SGESVJ) is
-*  left to the implementer on a particular machine.
-*     The rank revealing QR factorization (in this code: SGEQP3) should be
-*  implemented as in [3]. We have a new version of SGEQP3 under development
-*  that is more robust than the current one in LAPACK, with a cleaner cut in
-*  rank defficient cases. It will be available in the SIGMA library [4].
-*  If M is much larger than N, it is obvious that the inital QRF with
-*  column pivoting can be preprocessed by the QRF without pivoting. That
-*  well known trick is not used in SGEJSV because in some cases heavy row
-*  weighting can be treated with complete pivoting. The overhead in cases
-*  M much larger than N is then only due to pivoting, but the benefits in
-*  terms of accuracy have prevailed. The implementer/user can incorporate
-*  this extra QRF step easily. The implementer can also improve data movement
-*  (matrix transpose, matrix copy, matrix transposed copy) - this
-*  implementation of SGEJSV uses only the simplest, naive data movement.
-*
-*  Contributors
-*  ~~~~~~~~~~~~
-*  Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
-*
-*  References
-*  ~~~~~~~~~~
-* [1] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm I.
-*     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1322-1342.
-*     LAPACK Working note 169.
-* [2] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm II.
-*     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1343-1362.
-*     LAPACK Working note 170.
-* [3] Z. Drmac and Z. Bujanovic: On the failure of rank-revealing QR
-*     factorization software - a case study.
-*     ACM Trans. math. Softw. Vol. 35, No 2 (2008), pp. 1-28.
-*     LAPACK Working note 176.
-* [4] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
-*     QSVD, (H,K)-SVD computations.
-*     Department of Mathematics, University of Zagreb, 2008.
-*
-*  Bugs, examples and comments
-*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*  Please report all bugs and send interesting examples and/or comments to
-*  drmac@math.hr. Thank you.
-*
 *  Arguments
-*  ~~~~~~~~~
-*............................................................................
-*. JOBA   (input) CHARACTER*1
-*.        Specifies the level of accuracy:
-*.      = 'C': This option works well (high relative accuracy) if A = B * D,
-*.             with well-conditioned B and arbitrary diagonal matrix D.
-*.             The accuracy cannot be spoiled by COLUMN scaling. The
-*.             accuracy of the computed output depends on the condition of
-*.             B, and the procedure aims at the best theoretical accuracy.
-*.             The relative error max_{i=1:N}|d sigma_i| / sigma_i is
-*.             bounded by f(M,N)*epsilon* cond(B), independent of D.
-*.             The input matrix is preprocessed with the QRF with column
-*.             pivoting. This initial preprocessing and preconditioning by
-*.             a rank revealing QR factorization is common for all values of
-*.             JOBA. Additional actions are specified as follows:
-*.      = 'E': Computation as with 'C' with an additional estimate of the
-*.             condition number of B. It provides a realistic error bound.
-*.      = 'F': If A = D1 * C * D2 with ill-conditioned diagonal scalings
-*.             D1, D2, and well-conditioned matrix C, this option gives
-*.             higher accuracy than the 'C' option. If the structure of the
-*.             input matrix is not known, and relative accuracy is
-*.             desirable, then this option is advisable. The input matrix A
-*.             is preprocessed with QR factorization with FULL (row and
-*.             column) pivoting.
-*.      = 'G'  Computation as with 'F' with an additional estimate of the
-*.             condition number of B, where A=D*B. If A has heavily weighted
-*.             rows, then using this condition number gives too pessimistic
-*.             error bound.
-*.      = 'A': Small singular values are the noise and the matrix is treated
-*.             as numerically rank defficient. The error in the computed
-*.             singular values is bounded by f(m,n)*epsilon*||A||.
-*.             The computed SVD A = U * S * V^t restores A up to
-*.             f(m,n)*epsilon*||A||.
-*.             This gives the procedure the licence to discard (set to zero)
-*.             all singular values below N*epsilon*||A||.
-*.      = 'R': Similar as in 'A'. Rank revealing property of the initial
-*.             QR factorization is used do reveal (using triangular factor)
-*.             a gap sigma_{r+1} < epsilon * sigma_r in which case the
-*.             numerical RANK is declared to be r. The SVD is computed with
-*.             absolute error bounds, but more accurately than with 'A'.
-*.
-*. JOBU   (input) CHARACTER*1
-*.        Specifies whether to compute the columns of U:
-*.      = 'U': N columns of U are returned in the array U.
-*.      = 'F': full set of M left sing. vectors is returned in the array U.
-*.      = 'W': U may be used as workspace of length M*N. See the description
-*.             of U.
-*.      = 'N': U is not computed.
-*.
-*. JOBV   (input) CHARACTER*1
-*.        Specifies whether to compute the matrix V:
-*.      = 'V': N columns of V are returned in the array V; Jacobi rotations
-*.             are not explicitly accumulated.
-*.      = 'J': N columns of V are returned in the array V, but they are
-*.             computed as the product of Jacobi rotations. This option is
-*.             allowed only if JOBU .NE. 'N', i.e. in computing the full SVD.
-*.      = 'W': V may be used as workspace of length N*N. See the description
-*.             of V.
-*.      = 'N': V is not computed.
-*.
-*. JOBR   (input) CHARACTER*1
-*.        Specifies the RANGE for the singular values. Issues the licence to
-*.        set to zero small positive singular values if they are outside
-*.        specified range. If A .NE. 0 is scaled so that the largest singular
-*.        value of c*A is around SQRT(BIG), BIG=SLAMCH('O'), then JOBR issues
-*.        the licence to kill columns of A whose norm in c*A is less than
-*.        SQRT(SFMIN) (for JOBR.EQ.'R'), or less than SMALL=SFMIN/EPSLN,
-*.        where SFMIN=SLAMCH('S'), EPSLN=SLAMCH('E').
-*.      = 'N': Do not kill small columns of c*A. This option assumes that
-*.             BLAS and QR factorizations and triangular solvers are
-*.             implemented to work in that range. If the condition of A
-*.             is greater than BIG, use SGESVJ.
-*.      = 'R': RESTRICTED range for sigma(c*A) is [SQRT(SFMIN), SQRT(BIG)]
-*.             (roughly, as described above). This option is recommended.
-*.                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*.        For computing the singular values in the FULL range [SFMIN,BIG]
-*.        use SGESVJ.
-*.
-*. JOBT   (input) CHARACTER*1
-*.        If the matrix is square then the procedure may determine to use
-*.        transposed A if A^t seems to be better with respect to convergence.
-*.        If the matrix is not square, JOBT is ignored. This is subject to
-*.        changes in the future.
-*.        The decision is based on two values of entropy over the adjoint
-*.        orbit of A^t * A. See the descriptions of WORK(6) and WORK(7).
-*.      = 'T': transpose if entropy test indicates possibly faster
-*.        convergence of Jacobi process if A^t is taken as input. If A is
-*.        replaced with A^t, then the row pivoting is included automatically.
-*.      = 'N': do not speculate.
-*.        This option can be used to compute only the singular values, or the
-*.        full SVD (U, SIGMA and V). For only one set of singular vectors
-*.        (U or V), the caller should provide both U and V, as one of the
-*.        matrices is used as workspace if the matrix A is transposed.
-*.        The implementer can easily remove this constraint and make the
-*.        code more complicated. See the descriptions of U and V.
-*.
-*. JOBP   (input) CHARACTER*1
-*.        Issues the licence to introduce structured perturbations to drown
-*.        denormalized numbers. This licence should be active if the
-*.        denormals are poorly implemented, causing slow computation,
-*.        especially in cases of fast convergence (!). For details see [1,2].
-*.        For the sake of simplicity, this perturbations are included only
-*.        when the full SVD or only the singular values are requested. The
-*.        implementer/user can easily add the perturbation for the cases of
-*.        computing one set of singular vectors.
-*.      = 'P': introduce perturbation
-*.      = 'N': do not perturb
-*............................................................................
+*  =========
+*
+*  JOBA   (input) CHARACTER*1
+*         Specifies the level of accuracy:
+*       = 'C': This option works well (high relative accuracy) if A = B * D,
+*              with well-conditioned B and arbitrary diagonal matrix D.
+*              The accuracy cannot be spoiled by COLUMN scaling. The
+*              accuracy of the computed output depends on the condition of
+*              B, and the procedure aims at the best theoretical accuracy.
+*              The relative error max_{i=1:N}|d sigma_i| / sigma_i is
+*              bounded by f(M,N)*epsilon* cond(B), independent of D.
+*              The input matrix is preprocessed with the QRF with column
+*              pivoting. This initial preprocessing and preconditioning by
+*              a rank revealing QR factorization is common for all values of
+*              JOBA. Additional actions are specified as follows:
+*       = 'E': Computation as with 'C' with an additional estimate of the
+*              condition number of B. It provides a realistic error bound.
+*       = 'F': If A = D1 * C * D2 with ill-conditioned diagonal scalings
+*              D1, D2, and well-conditioned matrix C, this option gives
+*              higher accuracy than the 'C' option. If the structure of the
+*              input matrix is not known, and relative accuracy is
+*              desirable, then this option is advisable. The input matrix A
+*              is preprocessed with QR factorization with FULL (row and
+*              column) pivoting.
+*       = 'G'  Computation as with 'F' with an additional estimate of the
+*              condition number of B, where A=D*B. If A has heavily weighted
+*              rows, then using this condition number gives too pessimistic
+*              error bound.
+*       = 'A': Small singular values are the noise and the matrix is treated
+*              as numerically rank defficient. The error in the computed
+*              singular values is bounded by f(m,n)*epsilon*||A||.
+*              The computed SVD A = U * S * V^t restores A up to
+*              f(m,n)*epsilon*||A||.
+*              This gives the procedure the licence to discard (set to zero)
+*              all singular values below N*epsilon*||A||.
+*       = 'R': Similar as in 'A'. Rank revealing property of the initial
+*              QR factorization is used do reveal (using triangular factor)
+*              a gap sigma_{r+1} < epsilon * sigma_r in which case the
+*              numerical RANK is declared to be r. The SVD is computed with
+*              absolute error bounds, but more accurately than with 'A'.
+* 
+*  JOBU   (input) CHARACTER*1
+*         Specifies whether to compute the columns of U:
+*       = 'U': N columns of U are returned in the array U.
+*       = 'F': full set of M left sing. vectors is returned in the array U.
+*       = 'W': U may be used as workspace of length M*N. See the description
+*              of U.
+*       = 'N': U is not computed.
+* 
+*  JOBV   (input) CHARACTER*1
+*         Specifies whether to compute the matrix V:
+*       = 'V': N columns of V are returned in the array V; Jacobi rotations
+*              are not explicitly accumulated.
+*       = 'J': N columns of V are returned in the array V, but they are
+*              computed as the product of Jacobi rotations. This option is
+*              allowed only if JOBU .NE. 'N', i.e. in computing the full SVD.
+*       = 'W': V may be used as workspace of length N*N. See the description
+*              of V.
+*       = 'N': V is not computed.
+* 
+*  JOBR   (input) CHARACTER*1
+*         Specifies the RANGE for the singular values. Issues the licence to
+*         set to zero small positive singular values if they are outside
+*         specified range. If A .NE. 0 is scaled so that the largest singular
+*         value of c*A is around SQRT(BIG), BIG=SLAMCH('O'), then JOBR issues
+*         the licence to kill columns of A whose norm in c*A is less than
+*         SQRT(SFMIN) (for JOBR.EQ.'R'), or less than SMALL=SFMIN/EPSLN,
+*         where SFMIN=SLAMCH('S'), EPSLN=SLAMCH('E').
+*       = 'N': Do not kill small columns of c*A. This option assumes that
+*              BLAS and QR factorizations and triangular solvers are
+*              implemented to work in that range. If the condition of A
+*              is greater than BIG, use SGESVJ.
+*       = 'R': RESTRICTED range for sigma(c*A) is [SQRT(SFMIN), SQRT(BIG)]
+*              (roughly, as described above). This option is recommended.
+*                                             ===========================
+*         For computing the singular values in the FULL range [SFMIN,BIG]
+*         use SGESVJ.
+* 
+*  JOBT   (input) CHARACTER*1
+*         If the matrix is square then the procedure may determine to use
+*         transposed A if A^t seems to be better with respect to convergence.
+*         If the matrix is not square, JOBT is ignored. This is subject to
+*         changes in the future.
+*         The decision is based on two values of entropy over the adjoint
+*         orbit of A^t * A. See the descriptions of WORK(6) and WORK(7).
+*       = 'T': transpose if entropy test indicates possibly faster
+*         convergence of Jacobi process if A^t is taken as input. If A is
+*         replaced with A^t, then the row pivoting is included automatically.
+*       = 'N': do not speculate.
+*         This option can be used to compute only the singular values, or the
+*         full SVD (U, SIGMA and V). For only one set of singular vectors
+*         (U or V), the caller should provide both U and V, as one of the
+*         matrices is used as workspace if the matrix A is transposed.
+*         The implementer can easily remove this constraint and make the
+*         code more complicated. See the descriptions of U and V.
+* 
+*  JOBP   (input) CHARACTER*1
+*         Issues the licence to introduce structured perturbations to drown
+*         denormalized numbers. This licence should be active if the
+*         denormals are poorly implemented, causing slow computation,
+*         especially in cases of fast convergence (!). For details see [1,2].
+*         For the sake of simplicity, this perturbations are included only
+*         when the full SVD or only the singular values are requested. The
+*         implementer/user can easily add the perturbation for the cases of
+*         computing one set of singular vectors.
+*       = 'P': introduce perturbation
+*       = 'N': do not perturb
 *
 *  M      (input) INTEGER
 *         The number of rows of the input matrix A.  M >= 0.
@@ -365,15 +298,80 @@
 *           > 0 :  SGEJSV  did not converge in the maximal allowed number
 *                  of sweeps. The computed values may be inaccurate.
 *
-*............................................................................
+*  Further Details
+*  ===============
 *
-*     Local Parameters:
+*  SGEJSV implements a preconditioned Jacobi SVD algorithm. It uses SGEQP3,
+*  SGEQRF, and SGELQF as preprocessors and preconditioners. Optionally, an
+*  additional row pivoting can be used as a preprocessor, which in some
+*  cases results in much higher accuracy. An example is matrix A with the
+*  structure A = D1 * C * D2, where D1, D2 are arbitrarily ill-conditioned
+*  diagonal matrices and C is well-conditioned matrix. In that case, complete
+*  pivoting in the first QR factorizations provides accuracy dependent on the
+*  condition number of C, and independent of D1, D2. Such higher accuracy is
+*  not completely understood theoretically, but it works well in practice.
+*  Further, if A can be written as A = B*D, with well-conditioned B and some
+*  diagonal D, then the high accuracy is guaranteed, both theoretically and
+*  in software, independent of D. For more details see [1], [2].
+*     The computational range for the singular values can be the full range
+*  ( UNDERFLOW,OVERFLOW ), provided that the machine arithmetic and the BLAS
+*  & LAPACK routines called by SGEJSV are implemented to work in that range.
+*  If that is not the case, then the restriction for safe computation with
+*  the singular values in the range of normalized IEEE numbers is that the
+*  spectral condition number kappa(A)=sigma_max(A)/sigma_min(A) does not
+*  overflow. This code (SGEJSV) is best used in this restricted range,
+*  meaning that singular values of magnitude below ||A||_2 / SLAMCH('O') are
+*  returned as zeros. See JOBR for details on this.
+*     Further, this implementation is somewhat slower than the one described
+*  in [1,2] due to replacement of some non-LAPACK components, and because
+*  the choice of some tuning parameters in the iterative part (SGESVJ) is
+*  left to the implementer on a particular machine.
+*     The rank revealing QR factorization (in this code: SGEQP3) should be
+*  implemented as in [3]. We have a new version of SGEQP3 under development
+*  that is more robust than the current one in LAPACK, with a cleaner cut in
+*  rank defficient cases. It will be available in the SIGMA library [4].
+*  If M is much larger than N, it is obvious that the inital QRF with
+*  column pivoting can be preprocessed by the QRF without pivoting. That
+*  well known trick is not used in SGEJSV because in some cases heavy row
+*  weighting can be treated with complete pivoting. The overhead in cases
+*  M much larger than N is then only due to pivoting, but the benefits in
+*  terms of accuracy have prevailed. The implementer/user can incorporate
+*  this extra QRF step easily. The implementer can also improve data movement
+*  (matrix transpose, matrix copy, matrix transposed copy) - this
+*  implementation of SGEJSV uses only the simplest, naive data movement.
 *
+*  Contributors
+*
+*  Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
+*
+*  References
+*
+* [1] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm I.
+*     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1322-1342.
+*     LAPACK Working note 169.
+* [2] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm II.
+*     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1343-1362.
+*     LAPACK Working note 170.
+* [3] Z. Drmac and Z. Bujanovic: On the failure of rank-revealing QR
+*     factorization software - a case study.
+*     ACM Trans. math. Softw. Vol. 35, No 2 (2008), pp. 1-28.
+*     LAPACK Working note 176.
+* [4] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
+*     QSVD, (H,K)-SVD computations.
+*     Department of Mathematics, University of Zagreb, 2008.
+*
+*  Bugs, examples and comments
+*
+*  Please report all bugs and send interesting examples and/or comments to
+*  drmac@math.hr. Thank you.
+*
+*  ===========================================================================
+*
+*     .. Local Parameters ..
       REAL        ZERO,         ONE
       PARAMETER ( ZERO = 0.0E0, ONE = 1.0E0 )
-*
-*     Local Scalars:
-*
+*     ..
+*     .. Local Scalars ..
       REAL    AAPP,   AAQQ,   AATMAX, AATMIN, BIG,    BIG1,   COND_OK,
      &        CONDR1, CONDR2, ENTRA,  ENTRAT, EPSLN,  MAXPRJ, SCALEM,
      &        SCONDA, SFMIN,  SMALL,  TEMP1,  USCAL1, USCAL2, XSC
@@ -381,28 +379,24 @@
       LOGICAL ALMORT, DEFR,   ERREST, GOSCAL, JRACC,  KILL,   LSVEC,
      &        L2ABER, L2KILL, L2PERT, L2RANK, L2TRAN,
      &        NOSCAL, ROWPIV, RSVEC,  TRANSP
-*
-*     Intrinsic Functions:
-*
+*     ..
+*     .. Intrinsic Functions ..
       INTRINSIC ABS,  ALOG, AMAX1, AMIN1, FLOAT,
      &          MAX0, MIN0, NINT,  SIGN,  SQRT
-*
-*     External Functions:
-*
+*     ..
+*     .. External Functions ..
       REAL      SLAMCH, SNRM2
       INTEGER   ISAMAX
       LOGICAL   LSAME
       EXTERNAL  ISAMAX, LSAME, SLAMCH, SNRM2
-*
-*     External Subroutines ( BLAS, LAPACK ):
-*
+*     ..
+*     .. External Subroutines ..
       EXTERNAL  SCOPY,  SGELQF, SGEQP3, SGEQRF, SLACPY, SLASCL,
      &          SLASET, SLASSQ, SLASWP, SORGQR, SORMLQ,
      &          SORMQR, SPOCON, SSCAL,  SSWAP,  STRSM,  XERBLA
 *
       EXTERNAL  SGESVJ
-*
-*............................................................................
+*     ..
 *
 *     Test the input arguments
 *
@@ -1058,7 +1052,7 @@
 *
       ELSE IF ( LSVEC .AND. ( .NOT. RSVEC ) ) THEN
 *
-*        -#- Singular Values and Left Singular Vectors                 -#-
+*        .. Singular Values and Left Singular Vectors                 ..
 *
 *        .. second preconditioning step to avoid need to accumulate
 *        Jacobi rotations in the Jacobi iterations.
@@ -1105,7 +1099,7 @@
 *
       ELSE
 *
-*        -#- Full SVD -#-
+*        .. Full SVD ..
 *
          IF ( .NOT. JRACC ) THEN
 *

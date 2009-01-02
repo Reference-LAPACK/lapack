@@ -10,11 +10,16 @@
 *  Purpose
 *  =======
 *
-*     scales a vector by a constant.
+*     ZSCAL scales a vector by a constant.
+*
+*  Further Details
+*  ===============
+*
 *     jack dongarra, 3/11/78.
 *     modified 3/93 to return if incx .le. 0.
 *     modified 12/3/93, array(1) declarations changed to array(*)
 *
+*  =====================================================================
 *
 *     .. Local Scalars ..
       INTEGER I,IX

@@ -29,6 +29,15 @@
      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  ZLA_PORFSX_EXTENDED computes ... .
+*
+*  Arguments
+*  =========
+*
+
 *  =====================================================================
 *
 *     .. Local Scalars ..

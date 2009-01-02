@@ -29,6 +29,14 @@
      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  DLA_GERFSX_EXTENDED computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

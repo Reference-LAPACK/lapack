@@ -30,6 +30,14 @@
      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  ZLA_HERFSX_EXTENDED computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

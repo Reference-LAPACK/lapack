@@ -229,7 +229,7 @@
 *                      be caused due to scaling.
 *                =N+3: reordering failed in STGSEN.
 *
-*  Further details
+*  Further Details
 *  ===============
 *
 *  An approximate (asymptotic) bound on the average absolute error of

@@ -17,6 +17,14 @@
       COMPLEX            A( LDA, * ), AF( LDAF, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  CLA_RPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

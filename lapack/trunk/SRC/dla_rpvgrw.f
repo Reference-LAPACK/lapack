@@ -17,6 +17,14 @@
       DOUBLE PRECISION   A( LDA, * ), AF( LDAF, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  DLA_RPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

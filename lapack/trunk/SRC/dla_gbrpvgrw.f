@@ -18,6 +18,14 @@
       DOUBLE PRECISION   AB( LDAB, * ), AFB( LDAFB, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  DLA_GBRPVGRW computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

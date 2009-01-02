@@ -30,6 +30,14 @@
      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  SLA_GBRFSX_EXTENDED computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

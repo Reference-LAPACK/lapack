@@ -85,6 +85,8 @@
 *           not be set, they are assumed to be zero, and on exit they
 *           are set to zero.
 *
+*  Further Details
+*  ===============
 *
 *  Level 2 Blas routine.
 *
@@ -94,6 +96,7 @@
 *     Sven Hammarling, Nag Central Office.
 *     Richard Hanson, Sandia National Labs.
 *
+*  =====================================================================
 *
 *     .. Parameters ..
       DOUBLE COMPLEX ZERO

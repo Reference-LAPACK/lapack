@@ -7,7 +7,9 @@
 *  Purpose
 *  =======
 *
-*     determines a double complex Givens rotation.
+*     ZROTG determines a double complex Givens rotation.
+*
+*  =====================================================================
 *
 *     .. Local Scalars ..
       DOUBLE COMPLEX ALPHA

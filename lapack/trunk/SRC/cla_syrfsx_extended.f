@@ -30,6 +30,14 @@
      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *     ..
 *
+*  Purpose
+*  =======
+* 
+*  CLA_SYRFSX_EXTENDED computes ... .
+*
+*  Arguments
+*  =========
+*
 *  =====================================================================
 *
 *     .. Local Scalars ..

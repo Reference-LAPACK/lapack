@@ -1,4 +1,4 @@
-      SUBROUTINE CLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, KL, KU,
+      SUBROUTINE CLA_GBRFSX_EXTENDED ( PREC_TYPE, TRANS_TYPE, N, KL, KU,
      $                                NRHS, AB, LDAB, AFB, LDAFB, IPIV,
      $                                COLEQU, C, B, LDB, Y, LDY,
      $                                BERR_OUT, N_NORMS, ERRS_N, ERRS_C,
@@ -29,6 +29,14 @@
       REAL               C( * ), AYB(*), RCOND, BERR_OUT( * ),
      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *     ..
+*
+*  Purpose
+*  =======
+* 
+*  CLA_GBRFSX_EXTENDED computes ... .
+*
+*  Arguments
+*  =========
 *
 *  =====================================================================
 *

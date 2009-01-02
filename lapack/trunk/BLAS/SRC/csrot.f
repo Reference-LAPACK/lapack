@@ -11,7 +11,7 @@
 *  Purpose
 *  =======
 *
-*  Applies a plane rotation, where the cos and sin (c and s) are real
+*  CSROT applies a plane rotation, where the cos and sin (c and s) are real
 *  and the vectors cx and cy are complex.
 *  jack dongarra, linpack, 3/11/78.
 *
