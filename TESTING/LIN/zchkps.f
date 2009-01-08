@@ -2,7 +2,7 @@
      $                   THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
      $                   RWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2.1) --
 *     Craig Lucas, University of Manchester / NAG Ltd.
 *     October, 2008
 *
@@ -97,7 +97,7 @@
       CHARACTER          UPLOS( 2 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRPS, ZLACPY
+      EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRPS, ZLACPY,
      $                   ZLATB5, ZLATMT, ZPST01, ZPSTRF
 *     ..
 *     .. Scalars in Common ..

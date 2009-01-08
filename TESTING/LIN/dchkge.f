@@ -2,7 +2,7 @@
      $                   NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
      $                   X, XACT, WORK, RWORK, IWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.1.1) --
+*  -- LAPACK test routine (version 3.2.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     January 2007
 *
@@ -127,7 +127,7 @@
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRGE, DGECON, DGERFS,
      $                   DGET01, DGET02, DGET03, DGET04, DGET07, DGETRF,
      $                   DGETRI, DGETRS, DLACPY, DLARHS, DLASET, DLATB4,
-     $                   DLATMS, DERRGEX, XLAENV
+     $                   DLATMS, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

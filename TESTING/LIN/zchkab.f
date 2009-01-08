@@ -1,7 +1,7 @@
       PROGRAM ZCHKAB
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.1.1) --
+*  -- LAPACK test routine (version 3.2.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     January 2007
 *
@@ -91,7 +91,8 @@
       EXTERNAL           DLAMCH, DSECND, LSAME, LSAMEN, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, ZERRGX, ZERRPX, ILAVER
+      EXTERNAL           ALAREQ, ZDRVAB, ZDRVAC, ZERRAB, ZERRAC,
+     $                   ILAVER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
