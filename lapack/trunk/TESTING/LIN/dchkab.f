@@ -1,7 +1,7 @@
       PROGRAM DCHKAB
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.1.1) --
+*  -- LAPACK test routine (version 3.2.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     January 2007
 *
@@ -90,7 +90,8 @@
       EXTERNAL           LSAME, LSAMEN, DLAMCH, DSECND, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAREQ, DERRGX, DERRPX,  ILAVER
+      EXTERNAL           ALAREQ, DDRVAB, DDRVAC, DERRAB, DERRAC,
+     $                   ILAVER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
