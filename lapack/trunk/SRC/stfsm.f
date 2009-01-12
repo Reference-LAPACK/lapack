@@ -322,24 +322,34 @@
 *                    SIDE  ='L', N is odd, TRANSR = 'N', UPLO = 'L', and
 *                    TRANS = 'N'
 *
-                     CALL STRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
-     +                           A( 0 ), M, B, LDB )
-                     CALL SGEMM( 'N', 'N', M2, N, M1, -ONE, A( M1 ), M,
-     +                           B, LDB, ALPHA, B( M1, 0 ), LDB )
-                     CALL STRSM( 'L', 'U', 'T', DIAG, M2, N, ONE,
-     +                           A( M ), M, B( M1, 0 ), LDB )
+                     IF( M.EQ.1 ) THEN
+                        CALL STRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
+     +                              A, M, B, LDB )
+                     ELSE
+                        CALL STRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
+     +                              A( 0 ), M, B, LDB )
+                        CALL SGEMM( 'N', 'N', M2, N, M1, -ONE, A( M1 ),
+     +                              M, B, LDB, ALPHA, B( M1, 0 ), LDB )
+                        CALL STRSM( 'L', 'U', 'T', DIAG, M2, N, ONE,
+     +                              A( M ), M, B( M1, 0 ), LDB )
+                     END IF
 *
                   ELSE
 *
 *                    SIDE  ='L', N is odd, TRANSR = 'N', UPLO = 'L', and
 *                    TRANS = 'T'
 *
-                     CALL STRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
-     +                           A( M ), M, B( M1, 0 ), LDB )
-                     CALL SGEMM( 'T', 'N', M1, N, M2, -ONE, A( M1 ), M,
-     +                           B( M1, 0 ), LDB, ALPHA, B, LDB )
-                     CALL STRSM( 'L', 'L', 'T', DIAG, M1, N, ONE,
-     +                           A( 0 ), M, B, LDB )
+                     IF( M.EQ.1 ) THEN
+                        CALL STRSM( 'L', 'L', 'T', DIAG, M1, N, ALPHA,
+     +                              A( 0 ), M, B, LDB )
+                     ELSE
+                        CALL STRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
+     +                              A( M ), M, B( M1, 0 ), LDB )
+                        CALL SGEMM( 'T', 'N', M1, N, M2, -ONE, A( M1 ), M,
+     +                              M, B( M1, 0 ), LDB, ALPHA, B, LDB )
+                        CALL STRSM( 'L', 'L', 'T', DIAG, M1, N, ONE,
+     +                              A( 0 ), M, B, LDB )
+                     END IF
 *
                   END IF
 *
@@ -388,24 +398,36 @@
 *                    SIDE  ='L', N is odd, TRANSR = 'T', UPLO = 'L', and
 *                    TRANS = 'N'
 *
-                     CALL STRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
-     +                           A( 0 ), M1, B, LDB )
-                     CALL SGEMM( 'T', 'N', M2, N, M1, -ONE, A( M1*M1 ),
-     +                           M1, B, LDB, ALPHA, B( M1, 0 ), LDB )
-                     CALL STRSM( 'L', 'L', 'N', DIAG, M2, N, ONE,
-     +                           A( 1 ), M1, B( M1, 0 ), LDB )
+                     IF( M.EQ.1 ) THEN
+                        CALL STRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
+     +                              A( 0 ), M1, B, LDB )
+                     ELSE
+                        CALL STRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
+     +                              A( 0 ), M1, B, LDB )
+                        CALL SGEMM( 'T', 'N', M2, N, M1, -ONE,
+     +                              A( M1*M1 ), M1, B, LDB, ALPHA,
+     +                              B( M1, 0 ), LDB )
+                        CALL STRSM( 'L', 'L', 'N', DIAG, M2, N, ONE,
+     +                              A( 1 ), M1, B( M1, 0 ), LDB )
+                     END IF
 *
                   ELSE
 *
 *                    SIDE  ='L', N is odd, TRANSR = 'T', UPLO = 'L', and
 *                    TRANS = 'T'
 *
-                     CALL STRSM( 'L', 'L', 'T', DIAG, M2, N, ALPHA,
-     +                           A( 1 ), M1, B( M1, 0 ), LDB )
-                     CALL SGEMM( 'N', 'N', M1, N, M2, -ONE, A( M1*M1 ),
-     +                           M1, B( M1, 0 ), LDB, ALPHA, B, LDB )
-                     CALL STRSM( 'L', 'U', 'N', DIAG, M1, N, ONE,
-     +                           A( 0 ), M1, B, LDB )
+                     IF( M.EQ.1 ) THEN
+                        CALL STRSM( 'L', 'U', 'N', DIAG, M1, N, ALPHA,
+     +                              A( 0 ), M1, B, LDB )
+                     ELSE
+                        CALL STRSM( 'L', 'L', 'T', DIAG, M2, N, ALPHA,
+     +                              A( 1 ), M1, B( M1, 0 ), LDB )
+                        CALL SGEMM( 'N', 'N', M1, N, M2, -ONE,
+     +                              A( M1*M1 ), M1, B( M1, 0 ), LDB,
+     +                              ALPHA, B, LDB )
+                        CALL STRSM( 'L', 'U', 'N', DIAG, M1, N, ONE,
+     +                              A( 0 ), M1, B, LDB )
+                     END IF
 *
                   END IF
 *
