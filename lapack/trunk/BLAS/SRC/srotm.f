@@ -3,7 +3,7 @@
       INTEGER INCX,INCY,N
 *     ..
 *     .. Array Arguments ..
-      REAL SPARAM(5),SX(1),SY(1)
+      REAL SPARAM(5),SX(*),SY(*)
 *     ..
 *
 *  Purpose
@@ -33,7 +33,7 @@
 *         number of elements in input vector(s)
 *
 *  SX     (input/output) REAL array, dimension N
-*         double precision vector with 5 elements
+*         double precision vector with N elements
 *
 *  INCX   (input) INTEGER
 *         storage spacing between elements of SX

@@ -3,7 +3,7 @@
       INTEGER INCX,INCY,N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION DPARAM(5),DX(1),DY(1)
+      DOUBLE PRECISION DPARAM(5),DX(*),DY(*)
 *     ..
 *
 *  Purpose
@@ -32,7 +32,7 @@
 *         number of elements in input vector(s)
 *
 *  DX     (input/output) DOUBLE PRECISION array, dimension N
-*         double precision vector with 5 elements
+*         double precision vector with N elements
 *
 *  INCX   (input) INTEGER
 *         storage spacing between elements of DX
