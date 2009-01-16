@@ -1,8 +1,8 @@
       DOUBLE PRECISION FUNCTION DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
-     $                            AFB, LDAFB, IPIV, CMODE, C, INFO, 
+     $                            AFB, LDAFB, IPIV, CMODE, C, INFO,
      $     WORK, IWORK )
 *
-*     -- LAPACK routine (version 3.2)                                 --
+*     -- LAPACK routine (version 3.2.1)                               --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
 *     -- November 2008                                                --
@@ -46,7 +46,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            NOTRANS
-      INTEGER            KASE, I, J, KD
+      INTEGER            KASE, I, J, KD, KE
       DOUBLE PRECISION   AINVNM, TMP
 *     ..
 *     .. Local Arrays ..
@@ -73,9 +73,9 @@
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
-      ELSE IF( KL.LT.0 ) THEN
+      ELSE IF( KL.LT.0 .OR. KL.GT.N-1 ) THEN
          INFO = -4
-      ELSE IF( KU.LT.0 ) THEN
+      ELSE IF( KU.LT.0 .OR. KU.GT.N-1 ) THEN
          INFO = -5
       ELSE IF( LDAB.LT.KL+KU+1 ) THEN
          INFO = -8
@@ -95,29 +95,21 @@
 *     inv(R)*A*C has unit 1-norm.
 *
       KD = KU + 1
+      KE = KL + 1
       IF ( NOTRANS ) THEN
          DO I = 1, N
             TMP = 0.0D+0
                IF ( CMODE .EQ. 1 ) THEN
-                  DO J = 1, N
-                     IF ( I.GE.MAX( 1, J-KU )
-     $                    .AND. I.LE.MIN( N, J+KL ) ) THEN
-                        TMP = TMP + ABS( AB( KD+I-J, J ) * C( J ) )
-                     END IF
+                  DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                     TMP = TMP + ABS( AB( KD+I-J, J ) * C( J ) )
                   END DO
                ELSE IF ( CMODE .EQ. 0 ) THEN
-                  DO J = 1, N
-                     IF ( I.GE.MAX( 1, J-KU )
-     $                    .AND. I.LE.MIN( N, J+KL ) ) THEN
-                        TMP = TMP + ABS( AB( KD+I-J, J ) )
-                     END IF
+                  DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                     TMP = TMP + ABS( AB( KD+I-J, J ) )
                   END DO
                ELSE
-                  DO J = 1, N
-                     IF ( I.GE.MAX( 1, J-KU )
-     $                    .AND. I.LE.MIN( N, J+KL ) ) THEN
-                        TMP = TMP + ABS( AB( KD+I-J, J ) / C( J ) )
-                     END IF
+                  DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                     TMP = TMP + ABS( AB( KD+I-J, J ) / C( J ) )
                   END DO
                END IF
             WORK( 2*N+I ) = TMP
@@ -126,25 +118,16 @@
          DO I = 1, N
             TMP = 0.0D+0
             IF ( CMODE .EQ. 1 ) THEN
-               DO J = 1, N
-                  IF ( I.GE.MAX( 1, J-KU )
-     $                 .AND. I.LE.MIN( N, J+KL ) ) THEN
-                     TMP = TMP + ABS( AB( J, KD+I-J ) * C( J ) )
-                  END IF
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                  TMP = TMP + ABS( AB( KE-I+J, I ) * C( J ) )
                END DO
             ELSE IF ( CMODE .EQ. 0 ) THEN
-               DO J = 1, N
-                  IF ( I.GE.MAX( 1, J-KU )
-     $                 .AND. I.LE.MIN( N, J+KL ) ) THEN
-                     TMP = TMP + ABS(AB(J,KD+I-J))
-                  END IF
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                  TMP = TMP + ABS( AB( KE-I+J, I ) )
                END DO
             ELSE
-               DO J = 1, N
-                  IF ( I.GE.MAX( 1, J-KU )
-     $                 .AND. I.LE.MIN( N, J+KL ) ) THEN
-                     TMP = TMP + ABS( AB( J, KD+I-J ) / C( J ) )
-                  END IF
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                  TMP = TMP + ABS( AB( KE-I+J, I ) / C( J ) )
                END DO
             END IF
             WORK( 2*N+I ) = TMP

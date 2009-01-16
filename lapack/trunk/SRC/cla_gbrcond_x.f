@@ -1,7 +1,7 @@
       REAL FUNCTION CLA_GBRCOND_X( TRANS, N, KL, KU, AB, LDAB, AFB,
      $                             LDAFB, IPIV, X, INFO, WORK, RWORK )
 *
-*     -- LAPACK routine (version 3.2)                                 --
+*     -- LAPACK routine (version 3.2.1)                               --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
 *     -- November 2008                                                --
@@ -13,7 +13,7 @@
 *     ..
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
-      INTEGER            N, KL, KU, KD, LDAB, LDAFB, INFO
+      INTEGER            N, KL, KU, KD, KE, LDAB, LDAFB, INFO
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
@@ -75,6 +75,14 @@
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
+      ELSE IF( KL.LT.0 .OR. KL.GT.N-1 ) THEN
+         INFO = -4
+      ELSE IF( KU.LT.0 .OR. KU.GT.N-1 ) THEN
+         INFO = -5
+      ELSE IF( LDAB.LT.KL+KU+1 ) THEN
+         INFO = -8
+      ELSE IF( LDAFB.LT.2*KL+KU+1 ) THEN
+         INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'CLA_GBRCOND_X', -INFO )
@@ -84,14 +92,13 @@
 *     Compute norm of op(A)*op2(C).
 *
       KD = KU + 1
+      KE = KL + 1
       ANORM = 0.0
       IF ( NOTRANS ) THEN
          DO I = 1, N
             TMP = 0.0E+0
-            DO J = 1, N
-               IF ( I.GE.MAX( 1, J-KU ) .AND. I.LE.MIN( N, J+KL ) ) THEN
-                  TMP = TMP + CABS1( AB( KD+I-J, J) * X( J ) )
-               END IF
+            DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+               TMP = TMP + CABS1( AB( KD+I-J, J) * X( J ) )
             END DO
             RWORK( 2*N+I ) = TMP
             ANORM = MAX( ANORM, TMP )
@@ -99,10 +106,8 @@
       ELSE
          DO I = 1, N
             TMP = 0.0E+0
-            DO J = 1, N
-               IF ( I.GE.MAX( 1, J-KU ) .AND. I.LE.MIN( N, J+KL ) ) THEN
-                  TMP = TMP + CABS1( AB( J, KD+I-J ) * X( J ) )
-               END IF
+            DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+               TMP = TMP + CABS1( AB( KE-I+J, I ) * X( J ) )
             END DO
             RWORK( 2*N+I ) = TMP
             ANORM = MAX( ANORM, TMP )

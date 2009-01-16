@@ -2,7 +2,7 @@
      $                             LDAFB, IPIV, C, CAPPLY, INFO, WORK,
      $                             RWORK )
 *
-*     -- LAPACK routine (version 3.2)                                 --
+*     -- LAPACK routine (version 3.2.1)                               --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
 *     -- November 2008                                                --
@@ -15,7 +15,7 @@
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
       LOGICAL            CAPPLY
-      INTEGER            N, KL, KU, KD, LDAB, LDAFB, INFO
+      INTEGER            N, KL, KU, KD, KE, LDAB, LDAFB, INFO
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
@@ -74,6 +74,14 @@
      $     LSAME( TRANS, 'C' ) ) THEN
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
+      ELSE IF( KL.LT.0 .OR. KL.GT.N-1 ) THEN
+         INFO = -4
+      ELSE IF( KU.LT.0 .OR. KU.GT.N-1 ) THEN
+         INFO = -5
+      ELSE IF( LDAB.LT.KL+KU+1 ) THEN
+         INFO = -8
+      ELSE IF( LDAFB.LT.2*KL+KU+1 ) THEN
+         INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'CLA_GBRCOND_C', -INFO )
@@ -84,22 +92,17 @@
 *
       ANORM = 0.0E+0
       KD = KU + 1
+      KE = KL + 1
       IF ( NOTRANS ) THEN
          DO I = 1, N
             TMP = 0.0E+0
             IF ( CAPPLY ) THEN
-               DO J = 1, N
-                  IF ( I.GE.MAX( 1, J-KU )
-     $                 .AND. I.LE.MIN( N, J+KL ) ) THEN
-                     TMP = TMP + CABS1(AB( KD+I-J, J ) ) / C( J )
-                  END IF
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                  TMP = TMP + CABS1( AB( KD+I-J, J ) ) / C( J )
                END DO
             ELSE
-               DO J = 1, N
-                  IF ( I.GE.MAX( 1, J-KU )
-     $                 .AND. I.LE.MIN( N, J+KL ) ) THEN
-                     TMP = TMP + CABS1( AB( KD+I-J, J ) )
-                  END IF
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                  TMP = TMP + CABS1( AB( KD+I-J, J ) )
                END DO
             END IF
             RWORK( 2*N+I ) = TMP
@@ -109,18 +112,12 @@
          DO I = 1, N
             TMP = 0.0E+0
             IF ( CAPPLY ) THEN
-               DO J = 1, N
-                  IF ( I.GE.MAX( 1, J-KU )
-     $                 .AND. I.LE.MIN( N, J+KL ) ) THEN
-                     TMP = TMP + CABS1( AB( J, KD+I-J ) ) / C( J )
-                  END IF
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                  TMP = TMP + CABS1( AB( KE-I+J, I ) ) / C( J )
                END DO
             ELSE
-               DO J = 1, N
-                  IF ( I.GE.MAX( 1, J-KU )
-     $                 .AND. I.LE.MIN( N, J+KL ) ) THEN
-                     TMP = TMP + CABS1( AB( J, KD+I-J ) )
-                  END IF
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
+                  TMP = TMP + CABS1( AB( KE-I+J, I ) )
                END DO
             END IF
             RWORK( 2*N+I ) = TMP
