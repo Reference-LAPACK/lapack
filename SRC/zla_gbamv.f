@@ -1,7 +1,7 @@
       SUBROUTINE ZLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
      $                      INCX, BETA, Y, INCY )
 *
-*     -- LAPACK routine (version 3.2)                                 --
+*     -- LAPACK routine (version 3.2.1)                               --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
 *     -- November 2008                                                --
@@ -23,7 +23,7 @@
 *  Purpose
 *  =======
 *
-*  DLA_GEAMV  performs one of the matrix-vector operations
+*  DLA_GBAMV  performs one of the matrix-vector operations
 *
 *          y := alpha*abs(A)*abs(x) + beta*abs(y),
 *     or   y := alpha*abs(A)'*abs(x) + beta*abs(y),
@@ -128,7 +128,7 @@
 *     .. Local Scalars ..
       LOGICAL            SYMB_ZERO
       DOUBLE PRECISION   TEMP, SAFE1
-      INTEGER            I, INFO, IY, J, JX, KX, KY, LENX, LENY, KD
+      INTEGER            I, INFO, IY, J, JX, KX, KY, LENX, LENY, KD, KE
       COMPLEX*16         CDUM
 *     ..
 *     .. External Subroutines ..
@@ -161,9 +161,9 @@
          INFO = 2
       ELSE IF( N.LT.0 )THEN
          INFO = 3
-      ELSE IF( KL.LT.0 ) THEN
+      ELSE IF( KL.LT.0 .OR. KL.GT.M-1 ) THEN
          INFO = 4
-      ELSE IF( KU.LT.0 ) THEN
+      ELSE IF( KU.LT.0 .OR. KU.GT.N-1 ) THEN
          INFO = 5
       ELSE IF( LDAB.LT.KL+KU+1 )THEN
          INFO = 6
@@ -217,6 +217,7 @@
 *     to per-column.
 *
       KD = KU + 1
+      KE = KL + 1
       IY = KY
       IF ( INCX.EQ.1 ) THEN
          DO I = 1, LENY
@@ -230,11 +231,12 @@
                Y( IY ) = BETA * ABS( Y( IY ) )
             END IF
             IF ( ALPHA .NE. 0.0D+0 ) THEN
-               DO J = MAX( I-KU, 1 ), MIN( I+KL, LENX )
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, LENX )
+              
                   IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
                      TEMP = CABS1( AB( KD+I-J, J ) )
                   ELSE
-                     TEMP = CABS1( AB( J, KD+I-J ) )
+                     TEMP = CABS1( AB( KE-I+J, I ) )
                   END IF
 
                   SYMB_ZERO = SYMB_ZERO .AND.
@@ -262,12 +264,12 @@
             END IF
             IF ( ALPHA .NE. 0.0D+0 ) THEN
                JX = KX
-               DO J = MAX( I-KU, 1 ), MIN( I+KL, LENX )
+               DO J = MAX( I-KL, 1 ), MIN( I+KU, LENX )
 
                   IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
                      TEMP = CABS1( AB( KD+I-J, J ) )
                   ELSE
-                     TEMP = CABS1( AB( J, KD+I-J ) )
+                     TEMP = CABS1( AB( KE-I+J, I ) )
                   END IF
 
                   SYMB_ZERO = SYMB_ZERO .AND.
