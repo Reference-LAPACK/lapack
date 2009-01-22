@@ -799,7 +799,7 @@
 *        SSYSVXX
 *
          N_ERR_BNDS = 3
-         N_PARAMS = 0
+         NPARAMS = 0
          SRNAMT = 'SSYSVXX'
          INFOT = 1
          EQ = 'N'
@@ -809,7 +809,7 @@
          CALL CHKXER( 'SSYSVXX', INFOT, NOUT, LERR, OK )
          INFOT = 2
          CALL SSYSVXX( 'N', '/', 0, 0, A, 1, AF, 1, IP, EQ, R, B, 1, X,
-     $        1, RCOND, RPVGRW, BERR, B_ERR_BNDS, ERR_BNDS_N,
+     $        1, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
      $        ERR_BNDS_C, NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'SSYSVXX', INFOT, NOUT, LERR, OK )
          INFOT = 3

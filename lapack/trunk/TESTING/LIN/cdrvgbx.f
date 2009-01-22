@@ -739,11 +739,11 @@ c                     write(*,*) 'begin cgbsvxx testing'
 *                    and error bounds using CGBSVXX.
 *
                      SRNAMT = 'CGBSVXX'
-                     n_err_bnds = 3
+                     N_ERR_BNDS = 3
                      CALL CGBSVXX( FACT, TRANS, N, KL, KU, NRHS, A, LDA,
      $                    AFB, LDAFB, IWORK, EQUED, S, S( N+1 ), B, LDB,
-     $                    X, LDB, rcond, rpvgrw_svxx, berr, n_err_bnds,
-     $                    errbnds_n, errbnds_c, 0, ZERO, WORK,
+     $                    X, LDB, RCOND, RPVGRW_SVXX, BERR, N_ERR_BNDS,
+     $                    ERRBNDS_N, ERRBNDS_C, 0, ZERO, WORK,
      $                    RWORK, INFO )
 *
 *                    Check the error code from CGBSVXX.

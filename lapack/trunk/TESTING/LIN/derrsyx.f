@@ -206,7 +206,7 @@
          EQ = 'N'
          INFOT = 3
          CALL DSYRFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERRR_BNDS_C, NPARAMS,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
          CALL CHKXER( 'DSYRFSX', INFOT, NOUT, LERR, OK )
          INFOT = 4
