@@ -95,7 +95,8 @@
       CHARACTER*3        PATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
      $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
-     $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
+     $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT,
+     $                   N_ERR_BNDS
       DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC,
      $                   RPVGRW_SVXX
 *     ..

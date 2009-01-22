@@ -528,10 +528,11 @@
 *                    and error bounds using CPOSVXX.
 *
                      SRNAMT = 'CPOSVXX'
+                     N_ERR_BNDS = 3
                     CALL CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AFAC,
      $                    LDA, EQUED, S, B, LDA, X,
-     $                    LDA, rcond, rpvgrw_svxx, berr, n_err_bnds,
-     $                    errbnds_n, errbnds_c, 0, ZERO, WORK,
+     $                    LDA, RCOND, RPVGRW_SVXX, BERR, N_ERR_BNDS,
+     $                    ERRBNDS_N, ERRBNDS_C, 0, ZERO, WORK,
      $                    RWORK( 2*NRHS+1 ), INFO )
 *
 *                    Check the error code from CPOSVXX.

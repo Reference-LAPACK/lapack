@@ -522,11 +522,11 @@
 *                    and error bounds using SPOSVXX.
 *
                      SRNAMT = 'SPOSVXX'
-                     n_err_bnds = 3
+                     N_ERR_BNDS = 3
                      CALL SPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AFAC,
      $                    LDA, EQUED, S, B, LDA, X,
-     $                    LDA, rcond, rpvgrw_svxx, berr, n_err_bnds,
-     $                    errbnds_n, errbnds_c, 0, ZERO, WORK,
+     $                    LDA, RCOND, RPVGRW_SVXX, BERR, N_ERR_BNDS,
+     $                    ERRBNDS_N, ERRBNDS_C, 0, ZERO, WORK,
      $                    IWORK, INFO )
 *
 *                    Check the error code from SPOSVXX.
