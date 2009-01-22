@@ -2,7 +2,7 @@
      $                   AFB, LAFB, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -22,7 +22,10 @@
 *  Purpose
 *  =======
 *
-*  SDRVGB tests the driver routines SGBSV and -SVX.
+*  SDRVGB tests the driver routines SGBSV, -SVX, and -SVXX.
+*
+*  Note that this file is used only when the XBLAS are available,
+*  otherwise sdrvgb.f defines this subroutine.
 *
 *  Arguments
 *  =========
@@ -463,14 +466,11 @@
 *
 *                             Check error code from SGBSV .
 *
-                              IF( INFO.EQ.N+1 ) GOTO 90
-                              IF( INFO.NE.IZERO ) THEN
-                                 CALL ALAERH( PATH, 'SGBSV ', INFO,
+                              IF( INFO.NE.IZERO )
+     $                           CALL ALAERH( PATH, 'SGBSV ', INFO,
      $                                        IZERO, ' ', N, N, KL, KU,
      $                                        NRHS, IMAT, NFAIL, NERRS,
      $                                        NOUT )
-                                 GOTO 90
-                              END IF
 *
 *                             Reconstruct matrix from factors and
 *                             compute residual.
@@ -542,14 +542,11 @@
 *
 *                          Check the error code from SGBSVX.
 *
-                           IF( INFO.EQ.N+1 ) GOTO 90
-                           IF( INFO.NE.IZERO ) THEN
-                              CALL ALAERH( PATH, 'SGBSVX', INFO, IZERO,
+                           IF( INFO.NE.IZERO )
+     $                        CALL ALAERH( PATH, 'SGBSVX', INFO, IZERO,
      $                                     FACT // TRANS, N, N, KL, KU,
      $                                     NRHS, IMAT, NFAIL, NERRS,
      $                                     NOUT )
-                              GOTO 90
-                           END IF
 *
 *                          Compare WORK(1) from SGBSVX with the computed
 *                          reciprocal pivot growth factor RPVGRW

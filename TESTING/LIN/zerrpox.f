@@ -1,6 +1,6 @@
       SUBROUTINE ZERRPO( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -14,6 +14,9 @@
 *
 *  ZERRPO tests the error exits for the COMPLEX*16 routines
 *  for Hermitian positive definite matrices.
+*
+*  Note that this file is used only when the XBLAS are available,
+*  otherwise zerrpo.f defines this subroutine.
 *
 *  Arguments
 *  =========
@@ -39,7 +42,7 @@
 *     .. Local Arrays ..
       DOUBLE PRECISION   S( NMAX ), R( NMAX ), R1( NMAX ), R2( NMAX ),
      $                   ERR_BNDS_N( NMAX, 3 ), ERR_BNDS_C( NMAX, 3 ),
-     $                   PARAMS 
+     $                   PARAMS( 1 )
       COMPLEX*16         A( NMAX, NMAX ), AF( NMAX, NMAX ), B( NMAX ),
      $                   W( 2*NMAX ), X( NMAX )
 *     ..
@@ -187,49 +190,49 @@
 *
 *        ZPORFSX
 *
-         n_err_bnds = 3
-         nparams = 0
+         N_ERR_BNDS = 3
+         NPARAMS = 0
          SRNAMT = 'ZPORFSX'
          INFOT = 1
-         CALL ZPORFSX( '/', EQ, 0, 0, A, 1, AF, 1, S, B, 1, X, 1, 
-     $        RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c, nparams,
-     $        params, W, R, INFO )
+         CALL ZPORFSX( '/', EQ, 0, 0, A, 1, AF, 1, S, B, 1, X, 1,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
          CALL CHKXER( 'ZPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 2
          CALL ZPORFSX( 'U', EQ, -1, 0, A, 1, AF, 1, S, B, 1, X, 1,
-     $        RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c, nparams,
-     $        params, W, R, INFO )
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
          CALL CHKXER( 'ZPORFSX', INFOT, NOUT, LERR, OK )
          EQ = 'N'
          INFOT = 3
          CALL ZPORFSX( 'U', EQ, -1, 0, A, 1, AF, 1, S, B, 1, X, 1,
-     $        RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c, nparams,
-     $        params, W, R, INFO )
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
          CALL CHKXER( 'ZPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL ZPORFSX( 'U', EQ, 0, -1, A, 1, AF, 1, S, B, 1, X, 1, 
-     $        RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c, nparams,
-     $        params, W, R, INFO )
+         CALL ZPORFSX( 'U', EQ, 0, -1, A, 1, AF, 1, S, B, 1, X, 1,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
          CALL CHKXER( 'ZPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL ZPORFSX( 'U', EQ, 2, 1, A, 1, AF, 2, S, B, 2, X, 2, 
-     $        RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c, nparams,
-     $        params, W, R, INFO )
+         CALL ZPORFSX( 'U', EQ, 2, 1, A, 1, AF, 2, S, B, 2, X, 2,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
          CALL CHKXER( 'ZPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL ZPORFSX( 'U', EQ, 2, 1, A, 2, AF, 1, S, B, 2, X, 2, 
-     $        RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c, nparams,
-     $        params, W, R, INFO )
+         CALL ZPORFSX( 'U', EQ, 2, 1, A, 2, AF, 1, S, B, 2, X, 2,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
          CALL CHKXER( 'ZPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL ZPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 1, X, 2, 
-     $        RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c, nparams,
-     $        params, W, R, INFO )
+         CALL ZPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 1, X, 2,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
          CALL CHKXER( 'ZPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL ZPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 2, X, 1, 
-     $        RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c, nparams,
-     $        params, W, R, INFO )
+         CALL ZPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 2, X, 1,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
          CALL CHKXER( 'ZPORFSX', INFOT, NOUT, LERR, OK )
 *
 *        ZPOCON
