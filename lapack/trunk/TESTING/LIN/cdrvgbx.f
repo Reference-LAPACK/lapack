@@ -2,7 +2,7 @@
      $                   AFB, LAFB, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -22,7 +22,10 @@
 *  Purpose
 *  =======
 *
-*  CDRVGB tests the driver routines CGBSV and -SVX.
+*  CDRVGB tests the driver routines CGBSV, -SVX, and -SVXX.
+*
+*  Note that this file is used only when the XBLAS are available,
+*  otherwise cdrvgb.f defines this subroutine.
 *
 *  Arguments
 *  =========
@@ -463,14 +466,11 @@
 *
 *                             Check error code from CGBSV .
 *
-                              IF( INFO.EQ.N+1 ) GOTO 90
-                              IF( INFO.NE.IZERO ) THEN
-                                 CALL ALAERH( PATH, 'CGBSV ', INFO,
+                              IF( INFO.NE.IZERO )
+     $                           CALL ALAERH( PATH, 'CGBSV ', INFO,
      $                                        IZERO, ' ', N, N, KL, KU,
      $                                        NRHS, IMAT, NFAIL, NERRS,
      $                                        NOUT )
-                                 GOTO 90
-                              END IF
 *
 *                             Reconstruct matrix from factors and
 *                             compute residual.
@@ -543,14 +543,12 @@
 *
 *                          Check the error code from CGBSVX.
 *
-                           IF( INFO.EQ.N+1 ) GOTO 90
-                           IF( INFO.NE.IZERO ) THEN
-                              CALL ALAERH( PATH, 'CGBSVX', INFO, IZERO,
+                           IF( INFO.NE.IZERO )
+     $                        CALL ALAERH( PATH, 'CGBSVX', INFO, IZERO,
      $                                     FACT // TRANS, N, N, KL, KU,
      $                                     NRHS, IMAT, NFAIL, NERRS,
      $                                     NOUT )
-                              GOTO 90
-                           END IF
+*
 *                          Compare RWORK(2*NRHS+1) from CGBSVX with the
 *                          computed reciprocal pivot growth RPVGRW
 *

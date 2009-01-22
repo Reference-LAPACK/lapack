@@ -2,7 +2,7 @@
      $                   A, AFAC, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -337,9 +337,6 @@
                   END IF
 *
                   DO 50 ITRAN = 1, NTRAN
-                     DO I = 1, NTESTS
-                        RESULT (I) = ZERO
-                     END DO
 *
 *                    Do for each value of TRANS.
 *
@@ -379,12 +376,10 @@
 *
 *                       Check error code from DGESV .
 *
-                        IF( INFO.NE.IZERO ) THEN
-                           CALL ALAERH( PATH, 'DGESV ', INFO, IZERO,
+                        IF( INFO.NE.IZERO )
+     $                     CALL ALAERH( PATH, 'DGESV ', INFO, IZERO,
      $                                  ' ', N, N, -1, -1, NRHS, IMAT,
      $                                  NFAIL, NERRS, NOUT )
-                           GOTO 50
-                        END IF
 *
 *                       Reconstruct matrix from factors and compute
 *                       residual.
@@ -451,13 +446,10 @@
 *
 *                    Check the error code from DGESVX.
 *
-                     IF( INFO.EQ.N+1 ) GOTO 50
-                     IF( INFO.NE.IZERO ) THEN
-                        CALL ALAERH( PATH, 'DGESVX', INFO, IZERO,
+                     IF( INFO.NE.IZERO )
+     $                  CALL ALAERH( PATH, 'DGESVX', INFO, IZERO,
      $                               FACT // TRANS, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
-                        GOTO 50
-                     END IF
 *
 *                    Compare WORK(1) from DGESVX with the computed
 *                    reciprocal pivot growth factor RPVGRW

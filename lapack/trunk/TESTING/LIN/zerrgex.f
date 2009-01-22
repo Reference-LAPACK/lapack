@@ -1,6 +1,6 @@
       SUBROUTINE ZERRGE( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -36,16 +36,16 @@
 *     .. Local Scalars ..
       CHARACTER          EQ
       CHARACTER*2        C2
-      INTEGER            I, INFO, J, n_err_bnds, nparams
-      DOUBLE PRECISION   ANRM, CCOND, RCOND, berr
+      INTEGER            I, INFO, J, N_ERR_BNDS, NPARAMS
+      DOUBLE PRECISION   ANRM, CCOND, RCOND, BERR
 *     ..
 *     .. Local Arrays ..
       INTEGER            IP( NMAX )
       DOUBLE PRECISION   R( NMAX ), R1( NMAX ), R2( NMAX ), CS( NMAX ),
      $                   RS( NMAX )
       COMPLEX*16         A( NMAX, NMAX ), AF( NMAX, NMAX ), B( NMAX ),
-     $                   W( 2*NMAX ), X( NMAX ), err_bnds_n( NMAX, 3 ),
-     $                   err_bnds_c( NMAX, 3 ), params
+     $                   W( 2*NMAX ), X( NMAX ), ERR_BNDS_N( NMAX, 3 ),
+     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN

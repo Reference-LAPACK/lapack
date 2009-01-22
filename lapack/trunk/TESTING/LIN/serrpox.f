@@ -1,6 +1,6 @@
       SUBROUTINE SERRPO( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -14,6 +14,9 @@
 *
 *  SERRPO tests the error exits for the REAL routines
 *  for symmetric positive definite matrices.
+*
+*  Note that this file is used only when the XBLAS are available,
+*  otherwise serrpo.f defines this subroutine.
 *
 *  Arguments
 *  =========
@@ -41,7 +44,7 @@
       REAL               A( NMAX, NMAX ), AF( NMAX, NMAX ), B( NMAX ),
      $                   R1( NMAX ), R2( NMAX ), W( 3*NMAX ), X( NMAX ),
      $                   S( NMAX ), ERR_BNDS_N( NMAX, 3 ),
-     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS
+     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS( 1 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
@@ -189,7 +192,7 @@
          NPARAMS = 0
          SRNAMT = 'SPORFSX'
          INFOT = 1
-         CALL SPORFSX( '/', EQ, 0, 0, A, 1, AF, 1, S, B, 1, X, 1, 
+         CALL SPORFSX( '/', EQ, 0, 0, A, 1, AF, 1, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
          CALL CHKXER( 'SPORFSX', INFOT, NOUT, LERR, OK )
@@ -205,27 +208,27 @@
      $        PARAMS, W, IW, INFO )
          CALL CHKXER( 'SPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL SPORFSX( 'U', EQ, 0, -1, A, 1, AF, 1, S, B, 1, X, 1, 
+         CALL SPORFSX( 'U', EQ, 0, -1, A, 1, AF, 1, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
          CALL CHKXER( 'SPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 6
-         CALL SPORFSX( 'U', EQ, 2, 1, A, 1, AF, 2, S, B, 2, X, 2, 
+         CALL SPORFSX( 'U', EQ, 2, 1, A, 1, AF, 2, S, B, 2, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
          CALL CHKXER( 'SPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL SPORFSX( 'U', EQ, 2, 1, A, 2, AF, 1, S, B, 2, X, 2, 
+         CALL SPORFSX( 'U', EQ, 2, 1, A, 2, AF, 1, S, B, 2, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
          CALL CHKXER( 'SPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 11
-         CALL SPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 1, X, 2, 
+         CALL SPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 1, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
          CALL CHKXER( 'SPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 13
-         CALL SPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 2, X, 1, 
+         CALL SPORFSX( 'U', EQ, 2, 1, A, 2, AF, 2, S, B, 2, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, IW, INFO )
          CALL CHKXER( 'SPORFSX', INFOT, NOUT, LERR, OK )

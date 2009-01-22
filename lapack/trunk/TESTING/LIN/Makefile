@@ -49,10 +49,10 @@ SLINTST = schkaa.o \
    schksp.o schksy.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
-   sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy.o \
+   sdrvpp.o sdrvpt.o sdrvsp.o \
    serrgt.o serrlq.o serrls.o \
-   serrpo.o serrps.o serrql.o serrqp.o serrqr.o \
-   serrrq.o serrsy.o serrtr.o serrtz.o serrvx.o \
+   serrps.o serrql.o serrqp.o serrqr.o \
+   serrrq.o serrtr.o serrtz.o \
    sgbt01.o sgbt02.o sgbt05.o sgelqs.o sgeqls.o sgeqrs.o \
    sgerqs.o sget01.o sget02.o \
    sget03.o sget04.o sget06.o sget07.o sgtt01.o sgtt02.o \
@@ -72,9 +72,11 @@ SLINTST = schkaa.o \
    stzt01.o stzt02.o sgennd.o
 
 ifdef USEXBLAS
-SLINTST += sdrvgex.o serrgex.o sdrvgbx.o sdrvpox.o sebchvxx.o
+SLINTST += serrvxx.o sdrvgex.o sdrvsyx.o serrgex.o sdrvgbx.o sdrvpox.o \
+	sebchvxx.o serrsyx.o serrpox.o
 else
-SLINTST += sdrvge.o serrge.o sdrvgb.o sdrvpo.o
+SLINTST += serrvx.o sdrvge.o sdrvsy.o serrge.o sdrvgb.o sdrvpo.o \
+	serrsy.o serrpo.o
 endif
 
 CLINTST = cchkaa.o \
@@ -83,13 +85,12 @@ CLINTST = cchkaa.o \
    cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o cchkqp.o \
    cchkqr.o cchkrq.o cchksp.o cchksy.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
-   cdrvgt.o cdrvhe.o cdrvhp.o \
+   cdrvgt.o cdrvhp.o \
    cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o \
-   cdrvsp.o cdrvsy.o \
-   cerrgt.o cerrhe.o cerrlq.o \
+   cdrvsp.o \
+   cerrgt.o cerrlq.o \
    cerrls.o cerrps.o cerrql.o cerrqp.o \
-   cerrqr.o cerrrq.o cerrsy.o cerrtr.o cerrtz.o \
-   cerrvx.o \
+   cerrqr.o cerrrq.o cerrtr.o cerrtz.o \
    cgbt01.o cgbt02.o cgbt05.o cgelqs.o cgeqls.o cgeqrs.o \
    cgerqs.o cget01.o cget02.o \
    cget03.o cget04.o cget07.o cgtt01.o cgtt02.o \
@@ -111,9 +112,11 @@ CLINTST = cchkaa.o \
    ctzt01.o ctzt02.o sget06.o cgennd.o
 
 ifdef USEXBLAS
-CLINTST += cdrvgex.o cdrvgbx.o cerrgex.o cdrvpox.o cerrpox.o cebchvxx.o
+CLINTST += cerrvxx.o cdrvgex.o cdrvsyx.o cdrvgbx.o cerrgex.o cdrvpox.o cdrvhex.o \
+	cerrpox.o cebchvxx.o cerrsyx.o cerrhex.o
 else
-CLINTST += cdrvge.o cdrvgb.o cerrge.o cdrvpo.o cerrpo.o
+CLINTST += cerrvx.o cdrvge.o cdrvsy.o cdrvgb.o cerrge.o cdrvpo.o cdrvhe.o \
+	cerrpo.o cerrsy.o cerrhe.o
 endif
 
 DLINTST = dchkaa.o \
@@ -123,10 +126,10 @@ DLINTST = dchkaa.o \
    dchksp.o dchksy.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
-   ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy.o \
+   ddrvpp.o ddrvpt.o ddrvsp.o \
    derrgt.o derrlq.o derrls.o \
    derrps.o derrql.o derrqp.o derrqr.o \
-   derrrq.o derrsy.o derrtr.o derrtz.o derrvx.o \
+   derrrq.o derrtr.o derrtz.o \
    dgbt01.o dgbt02.o dgbt05.o dgelqs.o dgeqls.o dgeqrs.o \
    dgerqs.o dget01.o dget02.o \
    dget03.o dget04.o dget06.o dget07.o dgtt01.o dgtt02.o \
@@ -146,9 +149,11 @@ DLINTST = dchkaa.o \
    dtzt01.o dtzt02.o dgennd.o
 
 ifdef USEXBLAS
-DLINTST += ddrvgex.o ddrvgbx.o derrgex.o ddrvpox.o derrpox.o debchvxx.o
+DLINTST += derrvxx.o ddrvgex.o ddrvsyx.o ddrvgbx.o derrgex.o ddrvpox.o derrpox.o \
+	debchvxx.o derrsyx.o
 else
-DLINTST += ddrvge.o ddrvgb.o derrge.o ddrvpo.o derrpo.o
+DLINTST += derrvx.o ddrvge.o ddrvsy.o ddrvgb.o derrge.o ddrvpo.o derrpo.o \
+	derrsy.o
 endif
 
 ZLINTST = zchkaa.o \
@@ -157,13 +162,12 @@ ZLINTST = zchkaa.o \
    zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkql.o zchkqp.o \
    zchkqr.o zchkrq.o zchksp.o zchksy.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
-   zdrvgt.o zdrvhe.o zdrvhp.o \
+   zdrvgt.o zdrvhp.o \
    zdrvls.o zdrvpb.o zdrvpp.o zdrvpt.o \
-   zdrvsp.o zdrvsy.o \
-   zerrgt.o zerrhe.o zerrlq.o \
+   zdrvsp.o \
+   zerrgt.o zerrlq.o \
    zerrls.o zerrps.o zerrql.o zerrqp.o \
-   zerrqr.o zerrrq.o zerrsy.o zerrtr.o zerrtz.o \
-   zerrvx.o \
+   zerrqr.o zerrrq.o zerrtr.o zerrtz.o \
    zgbt01.o zgbt02.o zgbt05.o zgelqs.o zgeqls.o zgeqrs.o \
    zgerqs.o zget01.o zget02.o \
    zget03.o zget04.o zget07.o zgtt01.o zgtt02.o \
@@ -185,9 +189,11 @@ ZLINTST = zchkaa.o \
    ztzt01.o ztzt02.o dget06.o zgennd.o
 
 ifdef USEXBLAS
-ZLINTST += zdrvgex.o zdrvgbx.o zerrgex.o zdrvpox.o zerrpox.o zebchvxx.o
+ZLINTST += zerrvxx.o zdrvgex.o zdrvsyx.o zdrvgbx.o zerrgex.o zdrvpox.o zdrvhex.o \
+	zerrpox.o zebchvxx.o zerrsyx.o zerrhex.o
 else
-ZLINTST += zdrvge.o zdrvgb.o zerrge.o zdrvpo.o zerrpo.o
+ZLINTST += zerrvx.o zdrvge.o zdrvsy.o zdrvgb.o zerrge.o zdrvpo.o zdrvhe.o \
+	zerrpo.o zerrsy.o zerrhe.o
 endif
 
 DSLINTST = dchkab.o \

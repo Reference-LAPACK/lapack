@@ -1,6 +1,6 @@
       SUBROUTINE CERRGE( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -39,7 +39,7 @@
       INTEGER            I, INFO, J, N_ERR_BNDS, NPARAMS
       REAL               ANRM, CCOND, RCOND, BERR
 *     ..
-*     .. LOCAL ARRAYS ..
+*     .. Local Arrays ..
       INTEGER            IP( NMAX )
       REAL               R( NMAX ), R1( NMAX ), R2( NMAX ), CS( NMAX ),
      $                   RS( NMAX )
@@ -195,46 +195,46 @@
          SRNAMT = 'CGERFSX'
          INFOT = 1
          CALL CGERFSX( '/', EQ, 0, 0, A, 1, AF, 1, IP, RS, CS, B, 1, X,
-     $                1, RCOND, berr, n_err_bnds, err_bnds_n,
-     $                err_bnds_c, nparams, params, W, R, INFO )
+     $                1, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $                ERR_BNDS_C, NPARAMS, PARAMS, W, R, INFO )
          CALL CHKXER( 'CGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 2
          EQ = '/'
          CALL CGERFSX( 'N', EQ, 2, 1, A, 1, AF, 2, IP, RS, CS, B, 2, X,
-     $                2, RCOND, berr, n_err_bnds, err_bnds_n,
-     $                err_bnds_c, nparams, params, W, R, INFO )
+     $                2, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $                ERR_BNDS_C, NPARAMS, PARAMS, W, R, INFO )
          CALL CHKXER( 'CGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 3
          EQ = 'R'
          CALL CGERFSX( 'N', EQ, -1, 0, A, 1, AF, 1, IP, RS, CS, B, 1, X,
-     $                1, RCOND, berr, n_err_bnds, err_bnds_n,
-     $                err_bnds_c, nparams, params, W, R, INFO )
+     $                1, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $                ERR_BNDS_C, NPARAMS, PARAMS, W, R, INFO )
          CALL CHKXER( 'CGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 4
          CALL CGERFSX( 'N', EQ, 0, -1, A, 1, AF, 1, IP, RS, CS, B, 1, X,
-     $                1, RCOND, berr, n_err_bnds, err_bnds_n,
-     $                err_bnds_c, nparams, params, W, R, INFO )
+     $                1, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $                ERR_BNDS_C, NPARAMS, PARAMS, W, R, INFO )
          CALL CHKXER( 'CGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 6
          CALL CGERFSX( 'N', EQ, 2, 1, A, 1, AF, 2, IP, RS, CS, B, 2, X,
-     $                2, RCOND, berr, n_err_bnds, err_bnds_n,
-     $                err_bnds_c, nparams, params, W, R, INFO )
+     $                2, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $                ERR_BNDS_C, NPARAMS, PARAMS, W, R, INFO )
          CALL CHKXER( 'CGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 8
          CALL CGERFSX( 'N', EQ, 2, 1, A, 2, AF, 1, IP, RS, CS, B, 2, X,
-     $                2, RCOND, berr, n_err_bnds, err_bnds_n,
-     $                err_bnds_c, nparams, params, W, R, INFO )
+     $                2, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $                ERR_BNDS_C, NPARAMS, PARAMS, W, R, INFO )
          CALL CHKXER( 'CGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 13
          EQ = 'C'
          CALL CGERFSX( 'N', EQ, 2, 1, A, 2, AF, 2, IP, RS, CS, B, 1, X,
-     $                2, RCOND, berr, n_err_bnds, err_bnds_n,
-     $                err_bnds_c, nparams, params, W, R, INFO )
+     $                2, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $                ERR_BNDS_C, NPARAMS, PARAMS, W, R, INFO )
          CALL CHKXER( 'CGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 15
          CALL CGERFSX( 'N', EQ, 2, 1, A, 2, AF, 2, IP, RS, CS, B, 2, X,
-     $                1, RCOND, berr, n_err_bnds, err_bnds_n,
-     $                err_bnds_c, nparams, params, W, R, INFO )
+     $                1, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $                ERR_BNDS_C, NPARAMS, PARAMS, W, R, INFO )
          CALL CHKXER( 'CGERFSX', INFOT, NOUT, LERR, OK )
 *
 *        CGECON

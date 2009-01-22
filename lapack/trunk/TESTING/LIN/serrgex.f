@@ -1,6 +1,6 @@
       SUBROUTINE SERRGE( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
@@ -187,51 +187,51 @@
 *
 *        SGERFSX
 *
-         n_err_bnds = 3
-         nparams = 0
+         N_ERR_BNDS = 3
+         NPARAMS = 0
          SRNAMT = 'SGERFSX'
          INFOT = 1
          CALL SGERFSX( '/', EQ, 0, 0, A, 1, AF, 1, IP, R, C, B, 1, X,
-     $        1, RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c,
-     $        nparams, params,  W, IW, INFO )
+     $        1, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C,
+     $        NPARAMS, PARAMS,  W, IW, INFO )
          CALL CHKXER( 'SGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 2
          EQ = '/'
          CALL SGERFSX( 'N', EQ, 2, 1, A, 1, AF, 2, IP, R, C, B, 2, X,
-     $        2, RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c,
-     $        nparams, params, W, IW, INFO )
+     $        2, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C,
+     $        NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'SGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 3
          EQ = 'R'
          CALL SGERFSX( 'N', EQ, -1, 0, A, 1, AF, 1, IP, R, C, B, 1, X,
-     $        1, RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c,
-     $        nparams, params, W, IW, INFO )
+     $        1, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C,
+     $        NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'SGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 4
          CALL SGERFSX( 'N', EQ, 0, -1, A, 1, AF, 1, IP, R, C, B, 1, X,
-     $        1, RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c,
-     $        nparams, params, W, IW, INFO )
+     $        1, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C,
+     $        NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'SGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 6
          CALL SGERFSX( 'N', EQ, 2, 1, A, 1, AF, 2, IP, R, C, B, 2, X,
-     $        2, RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c,
-     $        nparams, params, W, IW, INFO )
+     $        2, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C,
+     $        NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'SGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 8
          CALL SGERFSX( 'N', EQ, 2, 1, A, 2, AF, 1, IP, R, C, B, 2, X,
-     $        2, RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c,
-     $        nparams, params, W, IW, INFO )
+     $        2, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C,
+     $        NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'SGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 13
          EQ = 'C'
          CALL SGERFSX( 'N', EQ, 2, 1, A, 2, AF, 2, IP, R, C, B, 1, X,
-     $        2, RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c,
-     $        nparams, params, W, IW, INFO )
+     $        2, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C,
+     $        NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'SGERFSX', INFOT, NOUT, LERR, OK )
          INFOT = 15
          CALL SGERFSX( 'N', EQ, 2, 1, A, 2, AF, 2, IP, R, C, B, 2, X,
-     $        1, RCOND, berr, n_err_bnds, err_bnds_n, err_bnds_c,
-     $        nparams, params, W, IW, INFO )
+     $        1, RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C,
+     $        NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'SGERFSX', INFOT, NOUT, LERR, OK )
 *
 *        SGECON
