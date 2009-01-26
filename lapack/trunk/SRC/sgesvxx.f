@@ -428,7 +428,7 @@
 *
 *     .. Parameters ..
       REAL               ZERO, ONE
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       INTEGER            FINAL_NRM_ERR_I, FINAL_CMP_ERR_I, BERR_I
       INTEGER            RCOND_I, NRM_RCOND_I, NRM_ERR_I, CMP_RCOND_I
       INTEGER            CMP_ERR_I, PIV_GROWTH_I

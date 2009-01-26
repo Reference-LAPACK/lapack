@@ -333,7 +333,7 @@
       DOUBLE PRECISION   COMPONENTWISE_DEFAULT, RTHRESH_DEFAULT
       DOUBLE PRECISION   DZTHRESH_DEFAULT
       PARAMETER          ( ITREF_DEFAULT = 1.0D+0 )
-      PARAMETER          ( ITHRESH_DEFAULT = 100.0D+0 )
+      PARAMETER          ( ITHRESH_DEFAULT = 10.0D+0 )
       PARAMETER          ( COMPONENTWISE_DEFAULT = 1.0D+0 )
       PARAMETER          ( RTHRESH_DEFAULT = 0.5D+0 )
       PARAMETER          ( DZTHRESH_DEFAULT = 0.25D+0 )
@@ -346,8 +346,6 @@
      $                   LA_LINRX_RCOND_I
       PARAMETER          ( LA_LINRX_TRUST_I = 1, LA_LINRX_ERR_I = 2 )
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
-      INTEGER            LA_LINRX_MAX_N_ERRS
-      PARAMETER          ( LA_LINRX_MAX_N_ERRS = 3 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER(1)       NORM
