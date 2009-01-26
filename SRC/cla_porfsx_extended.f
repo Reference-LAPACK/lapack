@@ -74,8 +74,6 @@
      $                   LA_LINRX_RCOND_I
       PARAMETER          ( LA_LINRX_TRUST_I = 1, LA_LINRX_ERR_I = 2 )
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
-      INTEGER            LA_LINRX_MAX_N_ERRS
-      PARAMETER          ( LA_LINRX_MAX_N_ERRS = 3 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

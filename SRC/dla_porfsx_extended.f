@@ -31,7 +31,7 @@
 *
 *  Purpose
 *  =======
-* 
+*
 *  DLA_PORFSX_EXTENDED computes ... .
 *
 *  Arguments
@@ -72,8 +72,6 @@
      $                   LA_LINRX_RCOND_I
       PARAMETER          ( LA_LINRX_TRUST_I = 1, LA_LINRX_ERR_I = 2 )
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
-      INTEGER            LA_LINRX_MAX_N_ERRS
-      PARAMETER          ( LA_LINRX_MAX_N_ERRS = 3 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -287,7 +285,7 @@
 *            op(A) = A, A**T, or A**H depending on TRANS (and type).
 *
          CALL DCOPY( N, B( 1, J ), 1, RES, 1 )
-         CALL DSYMV( UPLO, N, -1.0D+0, A, LDA, Y(1,J), 1, 1.0D+0, RES, 
+         CALL DSYMV( UPLO, N, -1.0D+0, A, LDA, Y(1,J), 1, 1.0D+0, RES,
      $     1 )
 
          DO I = 1, N

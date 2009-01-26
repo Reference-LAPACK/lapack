@@ -75,8 +75,6 @@
      $                   LA_LINRX_RCOND_I
       PARAMETER          ( LA_LINRX_TRUST_I = 1, LA_LINRX_ERR_I = 2 )
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
-      INTEGER            LA_LINRX_MAX_N_ERRS
-      PARAMETER          ( LA_LINRX_MAX_N_ERRS = 3 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZCOPY, ZGBTRS, ZGBMV, BLAS_ZGBMV_X,
@@ -108,7 +106,7 @@
 
       DO J = 1, NRHS
          Y_PREC_STATE = EXTRA_RESIDUAL
-         IF ( Y_PREC_STATE .EQ. EXTRA_Y ) then
+         IF ( Y_PREC_STATE .EQ. EXTRA_Y ) THEN
             DO I = 1, N
                Y_TAIL( I ) = 0.0D+0
             END DO

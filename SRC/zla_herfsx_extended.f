@@ -32,7 +32,7 @@
 *
 *  Purpose
 *  =======
-* 
+*
 *  ZLA_HERFSX_EXTENDED computes ... .
 *
 *  Arguments
@@ -75,8 +75,6 @@
      $                   LA_LINRX_RCOND_I
       PARAMETER          ( LA_LINRX_TRUST_I = 1, LA_LINRX_ERR_I = 2 )
       PARAMETER          ( LA_LINRX_RCOND_I = 3 )
-      INTEGER            LA_LINRX_MAX_N_ERRS
-      PARAMETER          ( LA_LINRX_MAX_N_ERRS = 3 )      
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -144,14 +142,14 @@
 *
             CALL ZCOPY( N, B( 1, J ), 1, RES, 1 )
             IF ( Y_PREC_STATE .EQ. BASE_RESIDUAL ) THEN
-               CALL ZHEMV( UPLO, N, DCMPLX(-1.0D+0), A, LDA, Y( 1, J ), 
+               CALL ZHEMV( UPLO, N, DCMPLX(-1.0D+0), A, LDA, Y( 1, J ),
      $              1, DCMPLX(1.0D+0), RES, 1 )
             ELSE IF ( Y_PREC_STATE .EQ. EXTRA_RESIDUAL ) THEN
                CALL BLAS_ZHEMV_X( UPLO2, N, DCMPLX(-1.0D+0), A, LDA,
      $              Y( 1, J ), 1, DCMPLX(1.0D+0), RES, 1, PREC_TYPE)
             ELSE
                CALL BLAS_ZHEMV2_X(UPLO2, N, DCMPLX(-1.0D+0), A, LDA,
-     $              Y(1, J), Y_TAIL, 1, DCMPLX(1.0D+0), RES, 1, 
+     $              Y(1, J), Y_TAIL, 1, DCMPLX(1.0D+0), RES, 1,
      $     PREC_TYPE)
             END IF
 
