@@ -515,7 +515,7 @@
      $           INFO )
          ELSE
             CALL CLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
-     $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, ROWEQU, C, B,
+     $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(1), RWORK, RCOND,
      $           ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
