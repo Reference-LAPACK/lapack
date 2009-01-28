@@ -519,7 +519,7 @@
      $           IGNORE_CWISE, INFO )
          ELSE
             CALL DLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
-     $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, ROWEQU, C, B,
+     $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
      $           ERR_BNDS_COMP, WORK( N+1 ), WORK( 1 ), WORK( 2*N+1 ),
      $           WORK( 1 ), RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH,
