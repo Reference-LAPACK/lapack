@@ -777,7 +777,7 @@
 *
             IF( ILAST.LT.ILASTM )
      $         CALL SROT( ILASTM-ILAST, T( ILAST-1, ILAST+1 ), LDT,
-     $                    T( ILAST, ILAST+1 ), LDH, CL, SL )
+     $                    T( ILAST, ILAST+1 ), LDT, CL, SL )
             IF( IFRSTM.LT.ILAST-1 )
      $         CALL SROT( IFIRST-IFRSTM, T( IFRSTM, ILAST-1 ), 1,
      $                    T( IFRSTM, ILAST ), 1, CR, SR )
