@@ -211,7 +211,7 @@
 *
 *     Compute some constants.
 *
-      ANRM = ZLANHE( 'I', UPLO, N, A, LDA, WORK )
+      ANRM = ZLANHE( 'I', UPLO, N, A, LDA, RWORK )
       EPS = DLAMCH( 'Epsilon' )
       CTE = ANRM*EPS*SQRT( DBLE( N ) )*BWDMAX
 *
