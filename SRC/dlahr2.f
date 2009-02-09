@@ -100,11 +100,18 @@
 *  modified element of the upper Hessenberg matrix H, and vi denotes an
 *  element of the vector defining H(i).
 *
-*  This file is a slight modification of LAPACK-3.0's DLAHRD
+*  This subroutine is a slight modification of LAPACK-3.0's DLAHRD
 *  incorporating improvements proposed by Quintana-Orti and Van de
 *  Gejin. Note that the entries of A(1:K,2:NB) differ from those
-*  returned by the original LAPACK routine. This function is
-*  not backward compatible with LAPACK3.0.
+*  returned by the original LAPACK-3.0's DLAHRD routine. (This
+*  subroutine is not backward compatible with LAPACK-3.0's DLAHRD.)
+*
+*  References
+*  ==========
+*
+*  Gregorio Quintana-Orti and Robert van de Geijn, "Improving the
+*  performance of reduction to Hessenberg form," ACM Transactions on
+*  Mathematical Software, 32(2):180-194, June 2006.
 *
 *  =====================================================================
 *
