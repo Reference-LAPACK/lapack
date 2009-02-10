@@ -393,7 +393,7 @@
 *            is true, 0.0 is false.
 *         Default: 1.0 (attempt componentwise convergence)
 *
-*     WORK    (workspace) COMPLEX*16 array, dimension (2*N)
+*     WORK    (workspace) COMPLEX*16 array, dimension (3*N)
 *
 *     RWORK   (workspace) DOUBLE PRECISION array, dimension (3*N)
 *
