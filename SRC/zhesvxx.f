@@ -522,7 +522,7 @@
 *
             IF( N.GT.0 )
      $           RPVGRW = ZLA_HERPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF,
-     $           IPIV, WORK )
+     $           IPIV, RWORK )
             RETURN
          END IF
       END IF
@@ -531,7 +531,7 @@
 *
       IF( N.GT.0 )
      $     RPVGRW = ZLA_HERPVGRW( UPLO, N, INFO, A, LDA, AF, LDAF, IPIV,
-     $     WORK )
+     $     RWORK )
 *
 *     Compute the solution matrix X.
 *

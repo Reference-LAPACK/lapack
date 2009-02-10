@@ -459,7 +459,7 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = ZLANSY( NORM, UPLO, N, A, LDA, WORK )
+      ANORM = ZLANSY( NORM, UPLO, N, A, LDA, RWORK )
       CALL ZSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
      $     INFO )
 *

@@ -496,7 +496,7 @@
       ELSE
          NORM = '1'
       END IF
-      ANORM = ZLANGB( NORM, N, KL, KU, AB, LDAB, WORK )
+      ANORM = ZLANGB( NORM, N, KL, KU, AB, LDAB, RWORK )
       CALL ZGBCON( NORM, N, KL, KU, AFB, LDAFB, IPIV, ANORM, RCOND,
      $     WORK, RWORK, INFO )
 *
@@ -510,15 +510,15 @@
             CALL ZLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
      $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, COLEQU, C, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
-     $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(1), RWORK, RCOND,
-     $           ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
+     $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(2*N+1), WORK(1),
+     $           RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
      $           INFO )
          ELSE
             CALL ZLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N, KL, KU,
      $           NRHS, AB, LDAB, AFB, LDAFB, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
-     $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(1), RWORK, RCOND,
-     $           ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
+     $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(2*N+1), WORK(1),
+     $           RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
      $           INFO )
          END IF
       END IF
