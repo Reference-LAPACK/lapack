@@ -396,7 +396,7 @@
 *            is true, 0.0 is false.
 *         Default: 1.0 (attempt componentwise convergence)
 *
-*     WORK    (workspace) COMPLEX array, dimension (2*N)
+*     WORK    (workspace) COMPLEX array, dimension (3*N)
 *
 *     RWORK   (workspace) REAL array, dimension (3*N)
 *
