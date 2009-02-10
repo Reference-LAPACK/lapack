@@ -517,14 +517,14 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = CLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, WORK )
+            RPVGRW = CLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, RWORK )
             RETURN
          END IF
       END IF
 *
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
-      RPVGRW = CLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, WORK )
+      RPVGRW = CLA_PORPVGRW( UPLO, N, A, LDA, AF, LDAF, RWORK )
 *
 *     Compute the solution matrix X.
 *

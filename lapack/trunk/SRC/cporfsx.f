@@ -452,7 +452,7 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = CLANHE( NORM, UPLO, N, A, LDA, WORK )
+      ANORM = CLANHE( NORM, UPLO, N, A, LDA, RWORK )
       CALL CPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, RWORK,
      $     INFO )
 *

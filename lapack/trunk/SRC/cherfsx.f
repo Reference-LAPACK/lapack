@@ -458,7 +458,7 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = CLANHE( NORM, UPLO, N, A, LDA, WORK )
+      ANORM = CLANHE( NORM, UPLO, N, A, LDA, RWORK )
       CALL CHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
      $     INFO )
 *

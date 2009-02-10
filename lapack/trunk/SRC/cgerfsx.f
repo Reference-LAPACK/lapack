@@ -482,7 +482,7 @@
       ELSE
          NORM = '1'
       END IF
-      ANORM = CLANGE( NORM, N, N, A, LDA, WORK )
+      ANORM = CLANGE( NORM, N, N, A, LDA, RWORK )
       CALL CGECON( NORM, N, AF, LDAF, ANORM, RCOND, WORK, RWORK, INFO )
 *
 *     Perform refinement on each right-hand side
@@ -495,15 +495,15 @@
             CALL CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
      $           NRHS, A, LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
-     $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(1), RWORK, RCOND,
-     $           ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
+     $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(2*N+1), WORK(1),
+     $           RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
      $           INFO )
          ELSE
             CALL CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE,  N,
      $           NRHS, A, LDA, AF, LDAF, IPIV, ROWEQU, R, B,
      $           LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM,
-     $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(1), RWORK, RCOND,
-     $           ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
+     $           ERR_BNDS_COMP, WORK(N+1), RWORK, WORK(2*N+1), WORK(1),
+     $           RCOND, ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
      $           INFO )
          END IF
       END IF

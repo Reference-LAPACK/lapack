@@ -452,7 +452,7 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = ZLANHE( NORM, UPLO, N, A, LDA, WORK )
+      ANORM = ZLANHE( NORM, UPLO, N, A, LDA, RWORK )
       CALL ZPOCON( UPLO, N, AF, LDAF, ANORM, RCOND, WORK, RWORK,
      $     INFO )
 *

@@ -459,7 +459,7 @@
 *     number of A.
 *
       NORM = 'I'
-      ANORM = CLANSY( NORM, UPLO, N, A, LDA, WORK )
+      ANORM = CLANSY( NORM, UPLO, N, A, LDA, RWORK )
       CALL CSYCON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
      $     INFO )
 *
