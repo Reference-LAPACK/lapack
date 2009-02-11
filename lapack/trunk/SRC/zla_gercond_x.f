@@ -90,7 +90,7 @@
             DO J = 1, N
                TMP = TMP + CABS1( A( I, J ) * X( J ) )
             END DO
-            RWORK( 2*N+I ) = TMP
+            RWORK( I ) = TMP
             ANORM = MAX( ANORM, TMP )
          END DO
       ELSE
@@ -99,7 +99,7 @@
             DO J = 1, N
                TMP = TMP + CABS1( A( J, I ) * X( J ) )
             END DO
-            RWORK( 2*N+I ) = TMP
+            RWORK( I ) = TMP
             ANORM = MAX( ANORM, TMP )
          END DO
       END IF
@@ -124,7 +124,7 @@
          IF( KASE.EQ.2 ) THEN
 *           Multiply by R.
             DO I = 1, N
-               WORK( I ) = WORK( I ) * RWORK( 2*N+I )
+               WORK( I ) = WORK( I ) * RWORK( I )
             END DO
 *
             IF ( NOTRANS ) THEN
@@ -159,7 +159,7 @@
 *           Multiply by R.
 *
             DO I = 1, N
-               WORK( I ) = WORK( I ) * RWORK( 2*N+I )
+               WORK( I ) = WORK( I ) * RWORK( I )
             END DO
          END IF
          GO TO 10

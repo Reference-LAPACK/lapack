@@ -361,7 +361,7 @@
 *
 *     WORK    (workspace) COMPLEX*16 array, dimension (2*N)
 *
-*     RWORK   (workspace) DOUBLE PRECISION array, dimension (3*N)
+*     RWORK   (workspace) DOUBLE PRECISION array, dimension (2*N)
 *
 *     INFO    (output) INTEGER
 *       = 0:  Successful exit. The solution to every right-hand side is

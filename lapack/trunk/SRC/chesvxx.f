@@ -364,7 +364,7 @@
 *
 *     WORK    (workspace) COMPLEX array, dimension (2*N)
 *
-*     RWORK   (workspace) REAL array, dimension (3*N)
+*     RWORK   (workspace) REAL array, dimension (2*N)
 *
 *     INFO    (output) INTEGER
 *       = 0:  Successful exit. The solution to every right-hand side is

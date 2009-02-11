@@ -36,7 +36,7 @@
 *
 *  WORK  COMPLEX*16 workspace of size 2*N.
 *
-*  RWORK DOUBLE PRECISION workspace of size 3*N.
+*  RWORK DOUBLE PRECISION workspace of size N.
 *
 *  =====================================================================
 *
@@ -103,7 +103,7 @@
                   END IF
                END DO
             END IF
-            RWORK( 2*N+I ) = TMP
+            RWORK( I ) = TMP
             ANORM = MAX( ANORM, TMP )
          END DO
       ELSE
@@ -126,7 +126,7 @@
                   END IF
                END DO
             END IF
-            RWORK( 2*N+I ) = TMP
+            RWORK( I ) = TMP
             ANORM = MAX( ANORM, TMP )
          END DO
       END IF
@@ -153,7 +153,7 @@
 *           Multiply by R.
 *
             DO I = 1, N
-               WORK( I ) = WORK( I ) * RWORK( 2*N+I )
+               WORK( I ) = WORK( I ) * RWORK( I )
             END DO
 *
             IF ( UP ) THEN
@@ -192,7 +192,7 @@
 *           Multiply by R.
 *
             DO I = 1, N
-               WORK( I ) = WORK( I ) * RWORK( 2*N+I )
+               WORK( I ) = WORK( I ) * RWORK( I )
             END DO
          END IF
          GO TO 10
