@@ -82,7 +82,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CAXPY, CCOPY, CPOTRS, CHEMV, BLAS_CHEMV_X,
-     $                   BLAS_CHEMV2_X, CLA_SYAMV, CLA_WWADDW,
+     $                   BLAS_CHEMV2_X, CLA_HEAMV, CLA_WWADDW,
      $                   CLA_LIN_BERR, SLAMCH
       REAL               SLAMCH
 *     ..
@@ -302,7 +302,7 @@
 *
 *     Compute abs(op(A_s))*abs(Y) + abs(B_s).
 *
-         CALL CLA_SYAMV (UPLO2, N, 1.0,
+         CALL CLA_HEAMV (UPLO2, N, 1.0,
      $        A, LDA, Y(1, J), 1, 1.0, AYB, 1)
 
          CALL CLA_LIN_BERR (N, N, 1, RES, AYB, BERR_OUT(J))
