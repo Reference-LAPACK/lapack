@@ -268,9 +268,9 @@
 *            is true, 0.0 is false.
 *         Default: 1.0 (attempt componentwise convergence)
 *
-*     WORK    (workspace) DOUBLE PRECISION array, dimension (4*N)
+*     WORK    (workspace) COMPLEX*16 array, dimension (2*N)
 *
-*     IWORK   (workspace) INTEGER array, dimension (N)
+*     RWORK   (workspace) DOUBLE PRECISION array, dimension (2*N)
 *
 *     INFO    (output) INTEGER
 *       = 0:  Successful exit. The solution to every right-hand side is
@@ -334,7 +334,7 @@
       EXTERNAL           XERBLA, ZSYCON, ZLA_SYRFSX_EXTENDED
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, SQRT
+      INTRINSIC          MAX, SQRT, TRANSFER
 *     ..
 *     .. External Functions ..
       EXTERNAL           LSAME, BLAS_FPINFO_X, ILATRANS, ILAPREC
@@ -472,7 +472,8 @@
          CALL ZLA_SYRFSX_EXTENDED( PREC_TYPE, UPLO,  N,
      $        NRHS, A, LDA, AF, LDAF, IPIV, RCEQU, S, B,
      $        LDB, X, LDX, BERR, N_NORMS, ERR_BNDS_NORM, ERR_BNDS_COMP,
-     $        WORK(N+1), RWORK, WORK(2*N+1), WORK(1), RCOND,
+     $        WORK, RWORK, WORK(N+1),
+     $        TRANSFER (RWORK(1:2*N), (/ (ZERO, ZERO) /), N), RCOND,
      $        ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
      $        INFO )
       END IF

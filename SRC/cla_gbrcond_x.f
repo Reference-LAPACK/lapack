@@ -100,7 +100,7 @@
             DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
                TMP = TMP + CABS1( AB( KD+I-J, J) * X( J ) )
             END DO
-            RWORK( 2*N+I ) = TMP
+            RWORK( I ) = TMP
             ANORM = MAX( ANORM, TMP )
          END DO
       ELSE
@@ -109,7 +109,7 @@
             DO J = MAX( I-KL, 1 ), MIN( I+KU, N )
                TMP = TMP + CABS1( AB( KE-I+J, I ) * X( J ) )
             END DO
-            RWORK( 2*N+I ) = TMP
+            RWORK( I ) = TMP
             ANORM = MAX( ANORM, TMP )
          END DO
       END IF
@@ -136,7 +136,7 @@
 *           Multiply by R.
 *
             DO I = 1, N
-               WORK( I ) = WORK( I ) * RWORK( 2*N+I )
+               WORK( I ) = WORK( I ) * RWORK( I )
             END DO
 *
             IF ( NOTRANS ) THEN
@@ -171,7 +171,7 @@
 *           Multiply by R.
 *
             DO I = 1, N
-               WORK( I ) = WORK( I ) * RWORK( 2*N+I )
+               WORK( I ) = WORK( I ) * RWORK( I )
             END DO
          END IF
          GO TO 10

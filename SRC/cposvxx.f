@@ -356,9 +356,9 @@
 *            is true, 0.0 is false.
 *         Default: 1.0 (attempt componentwise convergence)
 *
-*     WORK    (workspace) REAL array, dimension (4*N)
+*     WORK    (workspace) COMPLEX array, dimension (2*N)
 *
-*     IWORK   (workspace) INTEGER array, dimension (N)
+*     RWORK   (workspace) REAL array, dimension (2*N)
 *
 *     INFO    (output) INTEGER
 *       = 0:  Successful exit. The solution to every right-hand side is
