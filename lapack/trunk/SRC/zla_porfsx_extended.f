@@ -83,7 +83,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZCOPY, ZPOTRS, ZHEMV, BLAS_ZHEMV_X,
-     $                   BLAS_ZHEMV2_X, ZLA_SYAMV, ZLA_WWADDW,
+     $                   BLAS_ZHEMV2_X, ZLA_HEAMV, ZLA_WWADDW,
      $                   ZLA_LIN_BERR, DLAMCH
       DOUBLE PRECISION   DLAMCH
 *     ..
@@ -304,7 +304,7 @@
 *
 *     Compute abs(op(A_s))*abs(Y) + abs(B_s).
 *
-         CALL ZLA_SYAMV (UPLO2, N, 1.0D+0,
+         CALL ZLA_HEAMV (UPLO2, N, 1.0D+0,
      $        A, LDA, Y(1, J), 1, 1.0D+0, AYB, 1)
 
          CALL ZLA_LIN_BERR (N, N, 1, RES, AYB, BERR_OUT(J))
