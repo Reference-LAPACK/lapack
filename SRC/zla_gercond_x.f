@@ -34,7 +34,7 @@
 *
 *  WORK  COMPLEX*16 workspace of size 2*N.
 *
-*  RWORK DOUBLE PRECISION workspace of size 3*N.
+*  RWORK DOUBLE PRECISION workspace of size N.
 *
 *  =====================================================================
 *

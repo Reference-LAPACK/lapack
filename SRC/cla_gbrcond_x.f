@@ -31,11 +31,11 @@
 *  Arguments
 *  =========
 *
-*  X       COMPLEX vector.
+*  X      COMPLEX vector.
 *
-*  WORK    COMPLEX workspace of size 2*N.
+*  WORK   COMPLEX workspace of size 2*N.
 *
-*  RWORK   REAL workspace of size 3*N.
+*  RWORK  REAL workspace of size N.
 *
 *  =====================================================================
 *

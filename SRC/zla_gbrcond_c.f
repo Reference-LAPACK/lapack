@@ -32,11 +32,11 @@
 *  Arguments
 *  =========
 *
-*   C      DOUBLE PRECISION vector.
+*  C      DOUBLE PRECISION vector.
 *
-*   WORK   COMPLEX*16 workspace of size 2*N.
+*  WORK   COMPLEX*16 workspace of size 2*N.
 *
-*   RWORK  DOUBLE PRECISION workspace of size N.
+*  RWORK  DOUBLE PRECISION workspace of size N.
 *
 *  =====================================================================
 *

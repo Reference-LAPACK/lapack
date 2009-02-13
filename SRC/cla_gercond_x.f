@@ -34,7 +34,7 @@
 *
 *  WORK    COMPLEX workspace of size 2*N.
 *
-*  RWORK   REAL workspace of size 3*N.
+*  RWORK   REAL workspace of size N.
 *
 *  =====================================================================
 *
