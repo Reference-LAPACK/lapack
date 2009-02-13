@@ -24,12 +24,17 @@
 *  Purpose
 *  =======
 *
-*     SLA_PORCOND_C Computes the infinity norm condition number of
-*     op(A) * inv(diag(C)) where C is a REAL vector
+*     CLA_PORCOND_C Computes the infinity norm condition number of
+*     op(A) * inv(diag(C)) where C is a DOUBLE PRECISION vector
 *
-*     WORK  COMPLEX workspace of size 2*N, and
+*  Arguments
+*  =========
 *
-*     RWORK REAL workspace of size 3*N.
+*  C     REAL vector.
+*
+*  WORK  COMPLEX workspace of size 2*N.
+*
+*  RWORK REAL workspace of size N.
 *
 *  =====================================================================
 *
@@ -81,20 +86,18 @@
          DO I = 1, N
             TMP = 0.0E+0
             IF ( CAPPLY ) THEN
-               DO J = 1, N
-                  IF ( I.GT.J ) THEN
-                     TMP = TMP + CABS1( A( J, I ) ) / C( J )
-                  ELSE
-                     TMP = TMP + CABS1( A( I, J ) ) / C( J )
-                  END IF
+               DO J = 1, I
+                  TMP = TMP + CABS1( A( J, I ) ) / C( J )
+               END DO
+               DO J = I+1, N
+                  TMP = TMP + CABS1( A( I, J ) ) / C( J )
                END DO
             ELSE
-               DO J = 1, N
-                  IF ( I.GT.J ) THEN
-                     TMP = TMP + CABS1( A( J, I ) )
-                  ELSE
-                     TMP = TMP + CABS1( A( I, J ) )
-                  END IF
+               DO J = 1, I
+                  TMP = TMP + CABS1( A( J, I ) )
+               END DO
+               DO J = I+1, N
+                  TMP = TMP + CABS1( A( I, J ) )
                END DO
             END IF
             RWORK( I ) = TMP
@@ -104,20 +107,18 @@
          DO I = 1, N
             TMP = 0.0E+0
             IF ( CAPPLY ) THEN
-               DO J = 1, N
-                  IF ( I.LT.J ) THEN
-                     TMP = TMP + CABS1( A( J, I ) ) / C( J )
-                  ELSE
-                     TMP = TMP + CABS1( A( I, J ) ) / C( J )
-                  END IF
+               DO J = 1, I
+                  TMP = TMP + CABS1( A( I, J ) ) / C( J )
+               END DO
+               DO J = I+1, N
+                  TMP = TMP + CABS1( A( J, I ) ) / C( J )
                END DO
             ELSE
-               DO J = 1, N
-                  IF ( I.LT.J ) THEN
-                     TMP = TMP + CABS1( A( J, I ) )
-                  ELSE
-                     TMP = TMP + CABS1( A( I, J ) )
-                  END IF
+               DO J = 1, I
+                  TMP = TMP + CABS1( A( I, J ) )
+               END DO
+               DO J = I+1, N
+                  TMP = TMP + CABS1( A( J, I ) )
                END DO
             END IF
             RWORK( I ) = TMP

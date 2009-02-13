@@ -32,11 +32,11 @@
 *  Arguments
 *  =========
 *
-*  X     COMPLEX*16 vector.
+*  X      COMPLEX*16 vector.
 *
-*  WORK  COMPLEX*16 workspace of size 2*N.
+*  WORK   COMPLEX*16 workspace of size 2*N.
 *
-*  RWORK DOUBLE PRECISION workspace of size 3*N.
+*  RWORK  DOUBLE PRECISION workspace of size N.
 *
 *  =====================================================================
 *

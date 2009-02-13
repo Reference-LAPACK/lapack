@@ -32,11 +32,11 @@
 *  Arguments
 *  =========
 *
-*  C       REAL vector.
+*  C      REAL vector.
 *
-*  WORK    COMPLEX workspace of size 2*N.
+*  WORK   COMPLEX workspace of size 2*N.
 *
-*   RWORK  REAL workspace of size N.
+*  RWORK  REAL workspace of size N.
 *
 *  =====================================================================
 *

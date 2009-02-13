@@ -1,7 +1,7 @@
       SUBROUTINE SLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
      $                      INCX, BETA, Y, INCY )
 *
-*     -- LAPACK routine (version 3.2.1)                               --
+*     -- LAPACK routine (version 3.2)                                 --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
 *     -- November 2008                                                --
@@ -118,7 +118,7 @@
 *  Level 2 Blas routine.
 *
 *  =====================================================================
-*
+
 *     .. Parameters ..
       REAL               ONE, ZERO
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
@@ -211,70 +211,116 @@
       KE = KL + 1
       IY = KY
       IF ( INCX.EQ.1 ) THEN
-         DO I = 1, LENY
-            IF ( BETA .EQ. ZERO ) THEN
-               SYMB_ZERO = .TRUE.
-               Y( IY ) = 0.0
-            ELSE IF ( Y( IY ) .EQ. ZERO ) THEN
-               SYMB_ZERO = .TRUE.
-            ELSE
-               SYMB_ZERO = .FALSE.
-               Y( IY ) = BETA * ABS( Y( IY ) )
-            END IF
-            IF ( ALPHA .NE. ZERO ) THEN
-               DO J = MAX( I-KL, 1 ), MIN( I+KU, LENX )
-                  IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
-
+         IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
+            DO I = 1, LENY
+               IF ( BETA .EQ. ZERO ) THEN
+                  SYMB_ZERO = .TRUE.
+                  Y( IY ) = 0.0
+               ELSE IF ( Y( IY ) .EQ. ZERO ) THEN
+                  SYMB_ZERO = .TRUE.
+               ELSE
+                  SYMB_ZERO = .FALSE.
+                  Y( IY ) = BETA * ABS( Y( IY ) )
+               END IF
+               IF ( ALPHA .NE. ZERO ) THEN
+                  DO J = MAX( I-KL, 1 ), MIN( I+KU, LENX )
                      TEMP = ABS( AB( KD+I-J, J ) )
-                  ELSE
+                     SYMB_ZERO = SYMB_ZERO .AND.
+     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+
+                     Y( IY ) = Y( IY ) + ALPHA*ABS( X( J ) )*TEMP
+                  END DO
+               END IF
+
+               IF ( .NOT.SYMB_ZERO )
+     $              Y( IY ) = Y( IY ) + SIGN( SAFE1, Y( IY ) )
+               IY = IY + INCY
+            END DO
+         ELSE
+            DO I = 1, LENY
+               IF ( BETA .EQ. ZERO ) THEN
+                  SYMB_ZERO = .TRUE.
+                  Y( IY ) = 0.0
+               ELSE IF ( Y( IY ) .EQ. ZERO ) THEN
+                  SYMB_ZERO = .TRUE.
+               ELSE
+                  SYMB_ZERO = .FALSE.
+                  Y( IY ) = BETA * ABS( Y( IY ) )
+               END IF
+               IF ( ALPHA .NE. ZERO ) THEN
+                  DO J = MAX( I-KL, 1 ), MIN( I+KU, LENX )
                      TEMP = ABS( AB( KE-I+J, I ) )
-                  END IF
+                     SYMB_ZERO = SYMB_ZERO .AND.
+     $                    ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
-                  SYMB_ZERO = SYMB_ZERO .AND.
-     $                 ( X( J ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+                     Y( IY ) = Y( IY ) + ALPHA*ABS( X( J ) )*TEMP
+                  END DO
+               END IF
 
-                  Y( IY ) = Y( IY ) + ALPHA*ABS( X( J ) )*TEMP
-               END DO
-            END IF
-
-            IF ( .NOT.SYMB_ZERO )
-     $           Y( IY ) = Y( IY ) + SIGN( SAFE1, Y( IY ) )
-            IY = IY + INCY
-         END DO
+               IF ( .NOT.SYMB_ZERO )
+     $              Y( IY ) = Y( IY ) + SIGN( SAFE1, Y( IY ) )
+               IY = IY + INCY
+            END DO
+         END IF
       ELSE
-         DO I = 1, LENY
-            IF ( BETA .EQ. ZERO ) THEN
-               SYMB_ZERO = .TRUE.
-               Y( IY ) = 0.0
-            ELSE IF ( Y( IY ) .EQ. ZERO ) THEN
-               SYMB_ZERO = .TRUE.
-            ELSE
-               SYMB_ZERO = .FALSE.
-               Y( IY ) = BETA * ABS( Y( IY ) )
-            END IF
-            IF ( ALPHA .NE. ZERO ) THEN
-               JX = KX
-               DO J = MAX( I-KL, 1 ), MIN( I+KU, LENX )
-
-                  IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
+         IF( TRANS.EQ.ILATRANS( 'N' ) )THEN
+            DO I = 1, LENY
+               IF ( BETA .EQ. ZERO ) THEN
+                  SYMB_ZERO = .TRUE.
+                  Y( IY ) = 0.0
+               ELSE IF ( Y( IY ) .EQ. ZERO ) THEN
+                  SYMB_ZERO = .TRUE.
+               ELSE
+                  SYMB_ZERO = .FALSE.
+                  Y( IY ) = BETA * ABS( Y( IY ) )
+               END IF
+               IF ( ALPHA .NE. ZERO ) THEN
+                  JX = KX
+                  DO J = MAX( I-KL, 1 ), MIN( I+KU, LENX )
                      TEMP = ABS( AB( KD+I-J, J ) )
-                  ELSE
-                     TEMP = ABS( AB( KE-I+J, I ) )
-                  END IF
+                     SYMB_ZERO = SYMB_ZERO .AND.
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
 
-                  SYMB_ZERO = SYMB_ZERO .AND.
-     $                 ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+                     Y( IY ) = Y( IY ) + ALPHA*ABS( X( JX ) )*TEMP
+                     JX = JX + INCX
+                  END DO
+               END IF
 
-                  Y( IY ) = Y( IY ) + ALPHA*ABS( X( JX ) )*TEMP
-                  JX = JX + INCX
-               END DO
-            END IF
-
-            IF ( .NOT.SYMB_ZERO )
+               IF ( .NOT.SYMB_ZERO )
      $           Y( IY ) = Y( IY ) + SIGN( SAFE1, Y( IY ) )
 
-            IY = IY + INCY
-         END DO
+               IY = IY + INCY
+            END DO
+         ELSE
+            DO I = 1, LENY
+               IF ( BETA .EQ. ZERO ) THEN
+                  SYMB_ZERO = .TRUE.
+                  Y( IY ) = 0.0
+               ELSE IF ( Y( IY ) .EQ. ZERO ) THEN
+                  SYMB_ZERO = .TRUE.
+               ELSE
+                  SYMB_ZERO = .FALSE.
+                  Y( IY ) = BETA * ABS( Y( IY ) )
+               END IF
+               IF ( ALPHA .NE. ZERO ) THEN
+                  JX = KX
+                  DO J = MAX( I-KL, 1 ), MIN( I+KU, LENX )
+                     TEMP = ABS( AB( KE-I+J, I ) )
+                     SYMB_ZERO = SYMB_ZERO .AND.
+     $                    ( X( JX ) .EQ. ZERO .OR. TEMP .EQ. ZERO )
+
+                     Y( IY ) = Y( IY ) + ALPHA*ABS( X( JX ) )*TEMP
+                     JX = JX + INCX
+                  END DO
+               END IF
+
+               IF ( .NOT.SYMB_ZERO )
+     $           Y( IY ) = Y( IY ) + SIGN( SAFE1, Y( IY ) )
+
+               IY = IY + INCY
+            END DO
+         END IF
+
       END IF
 *
       RETURN

@@ -34,7 +34,7 @@
 *
 *  WORK    COMPLEX workspace of size 2*N.
 *
-*  RWORK   REAL workspace of size 3*N.
+*  RWORK   REAL workspace of size N.
 *
 *  =====================================================================
 *
@@ -85,12 +85,11 @@
       IF ( UP ) THEN
          DO I = 1, N
             TMP = 0.0E+0
-            DO J = 1, N
-               IF ( I.GT.J ) THEN
-                  TMP = TMP + CABS1( A( J, I ) * X( J ) )
-               ELSE
-                  TMP = TMP + CABS1( A( I, J ) * X( J ) )
-               END IF
+            DO J = 1, I
+               TMP = TMP + CABS1( A( J, I ) * X( J ) )
+            END DO
+            DO J = I+1, N
+               TMP = TMP + CABS1( A( I, J ) * X( J ) )
             END DO
             RWORK( I ) = TMP
             ANORM = MAX( ANORM, TMP )
@@ -98,12 +97,11 @@
       ELSE
          DO I = 1, N
             TMP = 0.0E+0
-            DO J = 1, N
-               IF ( I.LT.J ) THEN
-                  TMP = TMP + CABS1( A( J, I ) * X( J ) )
-               ELSE
-                  TMP = TMP + CABS1( A( I, J ) * X( J ) )
-               END IF
+            DO J = 1, I
+               TMP = TMP + CABS1( A( I, J ) * X( J ) )
+            END DO
+            DO J = I+1, N
+               TMP = TMP + CABS1( A( J, I ) * X( J ) )
             END DO
             RWORK( I ) = TMP
             ANORM = MAX( ANORM, TMP )
