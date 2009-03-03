@@ -149,6 +149,7 @@
 *
 *     Quick return if possible
 *
+      SCALE = ONE
       IF( M.EQ.0 .OR. N.EQ.0 )
      $   RETURN
 *
@@ -164,7 +165,6 @@
       SMIN = MAX( SMLNUM, EPS*SLANGE( 'M', M, M, A, LDA, DUM ),
      $       EPS*SLANGE( 'M', N, N, B, LDB, DUM ) )
 *
-      SCALE = ONE
       SGN = ISGN
 *
       IF( NOTRNA .AND. NOTRNB ) THEN
