@@ -701,7 +701,7 @@
                   DO 70 I = 1, N
                      A( K, I ) = -A( K, I )
                      B( K, I ) = -B( K, I )
-                     Q( I, K ) = -Q( I, K )
+                     IF( WANTQ ) Q( I, K ) = -Q( I, K )
    70             CONTINUE
                END IF
 *
