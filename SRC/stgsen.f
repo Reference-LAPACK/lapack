@@ -700,7 +700,7 @@
                   DO 80 I = 1, N
                      A( K, I ) = -A( K, I )
                      B( K, I ) = -B( K, I )
-                     Q( I, K ) = -Q( I, K )
+                     IF( WANTQ ) Q( I, K ) = -Q( I, K )
    80             CONTINUE
                END IF
 *
