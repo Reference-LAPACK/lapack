@@ -97,7 +97,7 @@
       INTRINSIC          CONJG, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CCOPY, CGEMV, CGERC, CLACGV, CLARFG,
+      EXTERNAL           CAXPY, CCOPY, CGEMV, CGERC, CLACGV, CLARFP,
      $                   XERBLA
 *     ..
 *     .. Executable Statements ..
@@ -135,7 +135,7 @@
             A( K, K ) = CONJG( A( K, K ) )
             CALL CLACGV( N-M, A( K, M1 ), LDA )
             ALPHA = A( K, K )
-            CALL CLARFG( N-M+1, ALPHA, A( K, M1 ), LDA, TAU( K ) )
+            CALL CLARFP( N-M+1, ALPHA, A( K, M1 ), LDA, TAU( K ) )
             A( K, K ) = ALPHA
             TAU( K ) = CONJG( TAU( K ) )
 *
