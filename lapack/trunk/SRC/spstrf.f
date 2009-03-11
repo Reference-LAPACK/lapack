@@ -53,6 +53,9 @@
 *          On exit, if INFO = 0, the factor U or L from the Cholesky
 *          factorization as above.
 *
+*  LDA     (input) INTEGER
+*          The leading dimension of the array A.  LDA >= max(1,N).
+*
 *  PIV     (output) INTEGER array, dimension (N)
 *          PIV is such that the nonzero entries are P( PIV(K), K ) = 1.
 *
@@ -64,9 +67,6 @@
 *          User defined tolerance. If TOL < 0, then N*U*MAX( A(K,K) )
 *          will be used. The algorithm terminates at the (K-1)st step
 *          if the pivot <= TOL.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
 *
 *  WORK    REAL array, dimension (2*N)
 *          Work space.
