@@ -62,6 +62,14 @@
 *          < 0:  if INFO = -i, the i-th argument had an illegal value
 *          > 0:  if INFO = i, the i-th diagonal element is nonpositive.
 *
+*  Further Details
+*  ======= =======
+*
+*  Reference: Livne, O.E. and Golub, G.H., "Scaling by Binormalization",
+*  Numerical Algorithms, vol. 35, no. 1, pp. 97-120, January 2004.
+*  DOI 10.1023/B:NUMA.0000016606.32820.69
+*  Tech report version: http://ruready.utah.edu/archive/papers/bin.pdf
+*
 *  =====================================================================
 *
 *     .. Parameters ..
