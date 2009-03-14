@@ -88,7 +88,7 @@
       ALPHR = REAL( ALPHA )
       ALPHI = AIMAG( ALPHA )
 *
-      IF( XNORM.EQ.ZERO .AND. ALPHI.EQ.ZERO ) THEN
+      IF( XNORM.EQ.ZERO ) THEN
 *
 *        H  =  [1-alpha/abs(alpha) 0; 0 I], sign chosen so ALPHA >= 0.
 *
@@ -103,7 +103,7 @@
 !              zero checks when TAU.ne.ZERO, and we must clear X.
                TAU = TWO
                DO J = 1, N-1
-                  X( 1 + (J-1)*INCX ) = 0
+                  X( 1 + (J-1)*INCX ) = ZERO
                END DO
                ALPHA = -ALPHA
             END IF
@@ -112,7 +112,7 @@
             XNORM = SLAPY2( ALPHR, ALPHI )
             TAU = CMPLX( ONE - ALPHR / XNORM, -ALPHI / XNORM )
             DO J = 1, N-1
-               X( 1 + (J-1)*INCX ) = 0
+               X( 1 + (J-1)*INCX ) = ZERO
             END DO
             ALPHA = XNORM
          END IF
