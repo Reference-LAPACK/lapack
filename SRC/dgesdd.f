@@ -1,9 +1,9 @@
       SUBROUTINE DGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT, WORK,
      $                   LWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK driver routine (version 3.2.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*     March 2009
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ
@@ -117,10 +117,10 @@
 *          If JOBZ = 'N',
 *            LWORK >= 3*min(M,N) + max(max(M,N),7*min(M,N)).
 *          If JOBZ = 'O',
-*            LWORK >= 3*min(M,N)*min(M,N) + 
+*            LWORK >= 3*min(M,N) + 
 *                     max(max(M,N),5*min(M,N)*min(M,N)+4*min(M,N)).
 *          If JOBZ = 'S' or 'A'
-*            LWORK >= 3*min(M,N)*min(M,N) +
+*            LWORK >= 3*min(M,N) +
 *                     max(max(M,N),4*min(M,N)*min(M,N)+4*min(M,N)).
 *          For good performance, LWORK should generally be larger.
 *          If LWORK = -1 but other input arguments are legal, WORK(1)
