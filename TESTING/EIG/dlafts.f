@@ -94,11 +94,6 @@
                IF( IE.EQ.0 )
      $            CALL DLAHD2( IOUNIT, TYPE )
                IE = IE + 1
-***            WRITE( IOUNIT, 15 )' Matrix of order', N,
-***     $               ',  type ', IMAT,
-***     $               ',  test ', K,
-***     $               ',  ratio = ', RESULT( K )
-***   15       FORMAT( A16, I5, 2( A8, I2 ), A11, G13.6 )
                IF( RESULT( K ).LT.10000.0D0 ) THEN
                   WRITE( IOUNIT, FMT = 9999 )N, IMAT, ISEED, K,
      $               RESULT( K )
@@ -127,10 +122,6 @@
                IF( IE.EQ.0 )
      $            CALL DLAHD2( IOUNIT, TYPE )
                IE = IE + 1
-***              WRITE( IOUNIT, FMT = 9997 )' Matrix of size', M, ' x',
-***     $             N, ', type ', IMAT, ',  test ', K, ',  ratio = ',
-***     $             RESULT( K )
-*** 9997           FORMAT( A10, I5, A2, I5, A7, I2, A8, I2, A11, G13.6 )
                IF( RESULT( K ).LT.10000.0D0 ) THEN
                   WRITE( IOUNIT, FMT = 9997 )M, N, IMAT, ISEED, K,
      $               RESULT( K )
