@@ -1,6 +1,6 @@
-      DOUBLE PRECISION FUNCTION DLA_GERCOND ( TRANS, N, A, LDA, AF, 
-     $                            LDAF, IPIV, CMODE, C, INFO, WORK, 
-     $     IWORK )
+      DOUBLE PRECISION FUNCTION DLA_GERCOND ( TRANS, N, A, LDA, AF,
+     $                                        LDAF, IPIV, CMODE, C,
+     $                                        INFO, WORK, IWORK )
 *
 *     -- LAPACK routine (version 3.2)                                 --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
@@ -38,9 +38,52 @@
 *  Arguments
 *  ==========
 *
-*  WORK    DOUBLE PRECISION workspace of size 3*N, and
+*     TRANS   (input) CHARACTER*1
+*     Specifies the form of the system of equations:
+*       = 'N':  A * X = B     (No transpose)
+*       = 'T':  A**T * X = B  (Transpose)
+*       = 'C':  A**H * X = B  (Conjugate Transpose = Transpose)
 *
-*  IWORK   INTEGER workspace of size N.
+*     N       (input) INTEGER
+*     The number of linear equations, i.e., the order of the
+*     matrix A.  N >= 0.
+*
+*     A       (input) DOUBLE PRECISION array, dimension (LDA,N)
+*     On entry, the N-by-N matrix A.
+*
+*     LDA     (input) INTEGER
+*     The leading dimension of the array A.  LDA >= max(1,N).
+*
+*     AF      (input) DOUBLE PRECISION array, dimension (LDAF,N)
+*     The factors L and U from the factorization
+*     A = P*L*U as computed by DGETRF.
+*
+*     LDAF    (input) INTEGER
+*     The leading dimension of the array AF.  LDAF >= max(1,N).
+*
+*     IPIV    (input) INTEGER array, dimension (N)
+*     The pivot indices from the factorization A = P*L*U
+*     as computed by DGETRF; row i of the matrix was interchanged
+*     with row IPIV(i).
+*
+*     CMODE   (input) INTEGER
+*     Determines op2(C) in the formula op(A) * op2(C) as follows:
+*     CMODE =  1    op2(C) = C
+*     CMODE =  0    op2(C) = I
+*     CMODE = -1    op2(C) = inv(C)
+*
+*     C       (input) DOUBLE PRECISION array, dimension (N)
+*     The vector C in the formula op(A) * op2(C).
+*
+*     INFO    (output) INTEGER
+*       = 0:  Successful exit.
+*     i > 0:  The ith argument is invalid.
+*
+*     WORK    (input) DOUBLE PRECISION array, dimension (3*N).
+*     Workspace.
+*
+*     IWORK   (input) INTEGER array, dimension (N).
+*     Workspace.
 *
 *  =====================================================================
 *
@@ -73,6 +116,10 @@
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
+      ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
+         INFO = -4
+      ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
+         INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DLA_GERCOND', -INFO )

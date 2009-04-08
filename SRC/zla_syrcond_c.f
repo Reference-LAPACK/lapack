@@ -1,6 +1,6 @@
-      DOUBLE PRECISION FUNCTION ZLA_SYRCOND_C( UPLO, N, A, LDA, AF, 
-     $                             LDAF, IPIV, C, CAPPLY, INFO, WORK, 
-     $     RWORK )
+      DOUBLE PRECISION FUNCTION ZLA_SYRCOND_C( UPLO, N, A, LDA, AF,
+     $                                         LDAF, IPIV, C, CAPPLY,
+     $                                         INFO, WORK, RWORK )
 *
 *     -- LAPACK routine (version 3.2)                                 --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
@@ -32,11 +32,46 @@
 *  Arguments
 *  =========
 *
-*  C     DOUBLE PRECISION  vector.
+*     UPLO    (input) CHARACTER*1
+*       = 'U':  Upper triangle of A is stored;
+*       = 'L':  Lower triangle of A is stored.
 *
-*  WORK  COMPLEX*16 workspace of size 2*N.
+*     N       (input) INTEGER
+*     The number of linear equations, i.e., the order of the
+*     matrix A.  N >= 0.
 *
-*  RWORK DOUBLE PRECISION workspace of size N.
+*     A       (input) COMPLEX*16 array, dimension (LDA,N)
+*     On entry, the N-by-N matrix A
+*
+*     LDA     (input) INTEGER
+*     The leading dimension of the array A.  LDA >= max(1,N).
+*
+*     AF      (input) COMPLEX*16 array, dimension (LDAF,N)
+*     The block diagonal matrix D and the multipliers used to
+*     obtain the factor U or L as computed by ZSYTRF.
+*
+*     LDAF    (input) INTEGER
+*     The leading dimension of the array AF.  LDAF >= max(1,N).
+*
+*     IPIV    (input) INTEGER array, dimension (N)
+*     Details of the interchanges and the block structure of D
+*     as determined by ZSYTRF.
+*
+*     C       (input) DOUBLE PRECISION array, dimension (N)
+*     The vector C in the formula op(A) * inv(diag(C)).
+*
+*     CAPPLY  (input) LOGICAL
+*     If .TRUE. then access the vector C in the formula above.
+*
+*     INFO    (output) INTEGER
+*       = 0:  Successful exit.
+*     i > 0:  The ith argument is invalid.
+*
+*     WORK    (input) COMPLEX*16 array, dimension (2*N).
+*     Workspace.
+*
+*     RWORK   (input) DOUBLE PRECISION array, dimension (N).
+*     Workspace.
 *
 *  =====================================================================
 *

@@ -37,9 +37,45 @@
 *  Arguments
 *  ==========
 *
-*     WORK    real workspace of size 3*N, and
+*     UPLO    (input) CHARACTER*1
+*       = 'U':  Upper triangle of A is stored;
+*       = 'L':  Lower triangle of A is stored.
 *
-*     IWORK   integer workspace of size N.
+*     N       (input) INTEGER
+*     The number of linear equations, i.e., the order of the
+*     matrix A.  N >= 0.
+*
+*     A       (input) REAL array, dimension (LDA,N)
+*     On entry, the N-by-N matrix A.
+*
+*     LDA     (input) INTEGER
+*     The leading dimension of the array A.  LDA >= max(1,N).
+*
+*     AF      (input) REAL array, dimension (LDAF,N)
+*     The triangular factor U or L from the Cholesky factorization
+*     A = U**T*U or A = L*L**T, as computed by SPOTRF.
+*
+*     LDAF    (input) INTEGER
+*     The leading dimension of the array AF.  LDAF >= max(1,N).
+*
+*     CMODE   (input) INTEGER
+*     Determines op2(C) in the formula op(A) * op2(C) as follows:
+*     CMODE =  1    op2(C) = C
+*     CMODE =  0    op2(C) = I
+*     CMODE = -1    op2(C) = inv(C)
+*
+*     C       (input) REAL array, dimension (N)
+*     The vector C in the formula op(A) * op2(C).
+*
+*     INFO    (output) INTEGER
+*       = 0:  Successful exit.
+*     i > 0:  The ith argument is invalid.
+*
+*     WORK    (input) REAL array, dimension (3*N).
+*     Workspace.
+*
+*     IWORK   (input) INTEGER array, dimension (N).
+*     Workspace.
 *
 *  =====================================================================
 *

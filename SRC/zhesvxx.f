@@ -155,7 +155,7 @@
 *     IPIV    (input or output) INTEGER array, dimension (N)
 *     If FACT = 'F', then IPIV is an input argument and on entry
 *     contains details of the interchanges and the block
-*     structure of D, as determined by DSYTRF.  If IPIV(k) > 0,
+*     structure of D, as determined by ZHETRF.  If IPIV(k) > 0,
 *     then rows and columns k and IPIV(k) were interchanged and
 *     D(k,k) is a 1-by-1 diagonal block.  If UPLO = 'U' and
 *     IPIV(k) = IPIV(k-1) < 0, then rows and columns k-1 and
@@ -166,7 +166,7 @@
 *
 *     If FACT = 'N', then IPIV is an output argument and on exit
 *     contains details of the interchanges and the block
-*     structure of D, as determined by DSYTRF.
+*     structure of D, as determined by ZHETRF.
 *
 *     EQUED   (input or output) CHARACTER*1
 *     Specifies the form of equilibration that was done.

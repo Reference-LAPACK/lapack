@@ -115,6 +115,10 @@
 *       = 'E':  The matrix A will be equilibrated if necessary, then
 *               copied to AF and factored.
 *
+*     UPLO    (input) CHARACTER*1
+*       = 'U':  Upper triangle of A is stored;
+*       = 'L':  Lower triangle of A is stored.
+*
 *     N       (input) INTEGER
 *     The number of linear equations, i.e., the order of the
 *     matrix A.  N >= 0.

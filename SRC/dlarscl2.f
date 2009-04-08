@@ -24,22 +24,30 @@
 *    x <-- inv(D) * x
 *  where the diagonal matrix D is stored as a vector.
 *
-*  Eventually to be replaced by BLAS_sge_diag_scale in the new BLAS
+*  Eventually to be replaced by BLAS_dge_diag_scale in the new BLAS
 *  standard.
 *
 *  Arguments
 *  =========
 *
-*  N      (input) INTEGER
-*         The size of the vectors X and D.
+*     M       (input) INTEGER
+*     The number of rows of D and X. M >= 0.
 *
-*  D      (input) DOUBLE PRECISION array, length N
-*         Diagonal matrix D, stored as a vector of length N.
+*     N       (input) INTEGER
+*     The number of columns of D and X. N >= 0.
 *
-*  X      (input/output) DOUBLE PRECISION array, length N
-*         On entry, the vector X to be scaled by D.
-*         On exit, the scaled vector.
-*     ..
+*     D       (input) DOUBLE PRECISION array, length M
+*     Diagonal matrix D, stored as a vector of length M.
+*
+*     X       (input/output) DOUBLE PRECISION array, dimension (LDX,N)
+*     On entry, the vector X to be scaled by D.
+*     On exit, the scaled vector.
+*
+*     LDX     (input) INTEGER
+*     The leading dimension of the vector X. LDX >= 0.
+*
+*  =====================================================================
+*
 *     .. Local Scalars ..
       INTEGER            I, J
 *     ..
@@ -47,9 +55,9 @@
 *
       DO J = 1, N
          DO I = 1, M
-            X(I,J) = X(I,J) / D(I)
+            X( I, J ) = X( I, J ) / D( I )
          END DO
       END DO
-*
+
       RETURN
       END

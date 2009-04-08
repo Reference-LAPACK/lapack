@@ -19,11 +19,36 @@
 *
 *  Purpose
 *  =======
-* 
-*  SLA_RPVGRW computes ... .
+*
+*  SLA_RPVGRW computes the reciprocal pivot growth factor
+*  norm(A)/norm(U). The "max absolute element" norm is used. If this is
+*  much less than 1, the stability of the LU factorization of the
+*  (equilibrated) matrix A could be poor. This also means that the
+*  solution X, estimated condition numbers, and error bounds could be
+*  unreliable.
 *
 *  Arguments
 *  =========
+*
+*     N       (input) INTEGER
+*     The number of linear equations, i.e., the order of the
+*     matrix A.  N >= 0.
+*
+*     NCOLS   (input) INTEGER
+*     The number of columns of the matrix A. NCOLS >= 0.
+*
+*     A       (input) REAL array, dimension (LDA,N)
+*     On entry, the N-by-N matrix A.
+*
+*     LDA     (input) INTEGER
+*     The leading dimension of the array A.  LDA >= max(1,N).
+*
+*     AF      (input) REAL array, dimension (LDAF,N)
+*     The factors L and U from the factorization
+*     A = P*L*U as computed by SGETRF.
+*
+*     LDAF    (input) INTEGER
+*     The leading dimension of the array AF.  LDAF >= max(1,N).
 *
 *  =====================================================================
 *
@@ -37,7 +62,7 @@
 *     .. Executable Statements ..
 *
       RPVGRW = 1.0
-*
+
       DO J = 1, NCOLS
          AMAX = 0.0
          UMAX = 0.0
