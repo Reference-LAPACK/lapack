@@ -35,8 +35,8 @@
 *     equations and provides error bounds and backward error estimates
 *     for the solution.  In addition to normwise error bound, the code
 *     provides maximum componentwise error bound if possible.  See
-*     comments for ERR_BNDS_N and ERR_BNDS_C for details of the error
-*     bounds.
+*     comments for ERR_BNDS_NORM and ERR_BNDS_COMP for details of the
+*     error bounds.
 *
 *     The original system of linear equations may have been equilibrated
 *     before calling this routine, as described by arguments EQUED, R

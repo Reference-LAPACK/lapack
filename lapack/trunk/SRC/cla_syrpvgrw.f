@@ -24,10 +24,49 @@
 *  Purpose
 *  =======
 * 
-*  CLA_SYRPVGRW computes ... .
+*  CLA_SYRPVGRW computes the reciprocal pivot growth factor
+*  norm(A)/norm(U). The "max absolute element" norm is used. If this is
+*  much less than 1, the stability of the LU factorization of the
+*  (equilibrated) matrix A could be poor. This also means that the
+*  solution X, estimated condition numbers, and error bounds could be
+*  unreliable.
 *
 *  Arguments
 *  =========
+*
+*     UPLO    (input) CHARACTER*1
+*       = 'U':  Upper triangle of A is stored;
+*       = 'L':  Lower triangle of A is stored.
+*
+*     N       (input) INTEGER
+*     The number of linear equations, i.e., the order of the
+*     matrix A.  N >= 0.
+*
+*     INFO    (input) INTEGER
+*     The value of INFO returned from CSYTRF, .i.e., the pivot in
+*     column INFO is exactly 0.
+*
+*     NCOLS   (input) INTEGER
+*     The number of columns of the matrix A. NCOLS >= 0.
+*
+*     A       (input) COMPLEX array, dimension (LDA,N)
+*     On entry, the N-by-N matrix A.
+*
+*     LDA     (input) INTEGER
+*     The leading dimension of the array A.  LDA >= max(1,N).
+*
+*     AF      (input) COMPLEX array, dimension (LDAF,N)
+*     The block diagonal matrix D and the multipliers used to
+*     obtain the factor U or L as computed by CSYTRF.
+*
+*     LDAF    (input) INTEGER
+*     The leading dimension of the array AF.  LDAF >= max(1,N).
+*
+*     IPIV    (input) INTEGER array, dimension (N)
+*     Details of the interchanges and the block structure of D
+*     as determined by CSYTRF.
+*
+*     WORK    (input) COMPLEX array, dimension (2*N)
 *
 *  =====================================================================
 *

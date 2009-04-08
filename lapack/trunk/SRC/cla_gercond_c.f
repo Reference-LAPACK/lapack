@@ -31,11 +31,49 @@
 *  Arguments
 *  =========
 *
-*  C       REAL vector.
+*     TRANS   (input) CHARACTER*1
+*     Specifies the form of the system of equations:
+*       = 'N':  A * X = B     (No transpose)
+*       = 'T':  A**T * X = B  (Transpose)
+*       = 'C':  A**H * X = B  (Conjugate Transpose = Transpose)
 *
-*  WORK    COMPLEX workspace of size 2*N.
+*     N       (input) INTEGER
+*     The number of linear equations, i.e., the order of the
+*     matrix A.  N >= 0.
 *
-*  RWORK   REAL workspace of size N.
+*     A       (input) COMPLEX array, dimension (LDA,N)
+*     On entry, the N-by-N matrix A
+*
+*     LDA     (input) INTEGER
+*     The leading dimension of the array A.  LDA >= max(1,N).
+*
+*     AF      (input) COMPLEX array, dimension (LDAF,N)
+*     The factors L and U from the factorization
+*     A = P*L*U as computed by CGETRF.
+*
+*     LDAF    (input) INTEGER
+*     The leading dimension of the array AF.  LDAF >= max(1,N).
+*
+*     IPIV    (input) INTEGER array, dimension (N)
+*     The pivot indices from the factorization A = P*L*U
+*     as computed by CGETRF; row i of the matrix was interchanged
+*     with row IPIV(i).
+*
+*     C       (input) REAL array, dimension (N)
+*     The vector C in the formula op(A) * inv(diag(C)).
+*
+*     CAPPLY  (input) LOGICAL
+*     If .TRUE. then access the vector C in the formula above.
+*
+*     INFO    (output) INTEGER
+*       = 0:  Successful exit.
+*     i > 0:  The ith argument is invalid.
+*
+*     WORK    (input) COMPLEX array, dimension (2*N).
+*     Workspace.
+*
+*     RWORK   (input) REAL array, dimension (N).
+*     Workspace.
 *
 *  =====================================================================
 *

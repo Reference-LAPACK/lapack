@@ -1,6 +1,6 @@
       DOUBLE PRECISION FUNCTION DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
-     $                            AFB, LDAFB, IPIV, CMODE, C, INFO,
-     $     WORK, IWORK )
+     $                                       AFB, LDAFB, IPIV, CMODE, C,
+     $                                       INFO, WORK, IWORK )
 *
 *     -- LAPACK routine (version 3.2.1)                               --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
@@ -38,9 +38,64 @@
 *  Arguments
 *  =========
 *
-*  WORK    double precision workspace of size 5*N.
+*     TRANS   (input) CHARACTER*1
+*     Specifies the form of the system of equations:
+*       = 'N':  A * X = B     (No transpose)
+*       = 'T':  A**T * X = B  (Transpose)
+*       = 'C':  A**H * X = B  (Conjugate Transpose = Transpose)
 *
-*  IWORK   integer workspace of size N.
+*     N       (input) INTEGER
+*     The number of linear equations, i.e., the order of the
+*     matrix A.  N >= 0.
+*
+*     KL      (input) INTEGER
+*     The number of subdiagonals within the band of A.  KL >= 0.
+*
+*     KU      (input) INTEGER
+*     The number of superdiagonals within the band of A.  KU >= 0.
+*
+*     AB      (input) DOUBLE PRECISION array, dimension (LDAB,N)
+*     On entry, the matrix A in band storage, in rows 1 to KL+KU+1.
+*     The j-th column of A is stored in the j-th column of the
+*     array AB as follows:
+*     AB(KU+1+i-j,j) = A(i,j) for max(1,j-KU)<=i<=min(N,j+kl)
+*
+*     LDAB    (input) INTEGER
+*     The leading dimension of the array AB.  LDAB >= KL+KU+1.
+*
+*     AFB     (input) DOUBLE PRECISION array, dimension (LDAFB,N)
+*     Details of the LU factorization of the band matrix A, as
+*     computed by DGBTRF.  U is stored as an upper triangular
+*     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
+*     and the multipliers used during the factorization are stored
+*     in rows KL+KU+2 to 2*KL+KU+1.
+*
+*     LDAFB   (input) INTEGER
+*     The leading dimension of the array AFB.  LDAFB >= 2*KL+KU+1.
+*
+*     IPIV    (input) INTEGER array, dimension (N)
+*     The pivot indices from the factorization A = P*L*U
+*     as computed by DGBTRF; row i of the matrix was interchanged
+*     with row IPIV(i).
+*
+*     CMODE   (input) INTEGER
+*     Determines op2(C) in the formula op(A) * op2(C) as follows:
+*     CMODE =  1    op2(C) = C
+*     CMODE =  0    op2(C) = I
+*     CMODE = -1    op2(C) = inv(C)
+*
+*     C       (input) DOUBLE PRECISION array, dimension (N)
+*     The vector C in the formula op(A) * op2(C).
+*
+*     INFO    (output) INTEGER
+*       = 0:  Successful exit.
+*     i > 0:  The ith argument is invalid.
+*
+*     WORK    (input) DOUBLE PRECISION array, dimension (5*N).
+*     Workspace.
+*
+*     IWORK   (input) INTEGER array, dimension (N).
+*     Workspace.
 *
 *  =====================================================================
 *
@@ -74,13 +129,13 @@
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       ELSE IF( KL.LT.0 .OR. KL.GT.N-1 ) THEN
-         INFO = -4
+         INFO = -3
       ELSE IF( KU.LT.0 .OR. KU.GT.N-1 ) THEN
-         INFO = -5
+         INFO = -4
       ELSE IF( LDAB.LT.KL+KU+1 ) THEN
-         INFO = -8
+         INFO = -6
       ELSE IF( LDAFB.LT.2*KL+KU+1 ) THEN
-         INFO = -10
+         INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DLA_GBRCOND', -INFO )

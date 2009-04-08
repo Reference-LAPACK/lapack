@@ -1,4 +1,4 @@
-      Subroutine CPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
+      SUBROUTINE CPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
      $                    LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, RWORK, INFO )
@@ -35,7 +35,8 @@
 *     definite, and provides error bounds and backward error estimates
 *     for the solution.  In addition to normwise error bound, the code
 *     provides maximum componentwise error bound if possible.  See
-*     comments for ERR_BNDS for details of the error bounds.
+*     comments for ERR_BNDS_NORM and ERR_BNDS_COMP for details of the
+*     error bounds.
 *
 *     The original system of linear equations may have been equilibrated
 *     before calling this routine, as described by arguments EQUED and S

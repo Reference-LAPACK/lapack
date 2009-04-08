@@ -1,6 +1,6 @@
       DOUBLE PRECISION FUNCTION ZLA_GBRCOND_X( TRANS, N, KL, KU, AB,
-     $                             LDAB, AFB, LDAFB, IPIV, X, INFO,
-     $     WORK, RWORK )
+     $                                         LDAB, AFB, LDAFB, IPIV,
+     $                                         X, INFO, WORK, RWORK )
 *
 *     -- LAPACK routine (version 3.2.1)                               --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
@@ -32,11 +32,58 @@
 *  Arguments
 *  =========
 *
-*  X      COMPLEX*16 vector.
+*     TRANS   (input) CHARACTER*1
+*     Specifies the form of the system of equations:
+*       = 'N':  A * X = B     (No transpose)
+*       = 'T':  A**T * X = B  (Transpose)
+*       = 'C':  A**H * X = B  (Conjugate Transpose = Transpose)
 *
-*  WORK   COMPLEX*16 workspace of size 2*N.
+*     N       (input) INTEGER
+*     The number of linear equations, i.e., the order of the
+*     matrix A.  N >= 0.
 *
-*  RWORK  DOUBLE PRECISION workspace of size N.
+*     KL      (input) INTEGER
+*     The number of subdiagonals within the band of A.  KL >= 0.
+*
+*     KU      (input) INTEGER
+*     The number of superdiagonals within the band of A.  KU >= 0.
+*
+*     AB      (input) COMPLEX*16 array, dimension (LDAB,N)
+*     On entry, the matrix A in band storage, in rows 1 to KL+KU+1.
+*     The j-th column of A is stored in the j-th column of the
+*     array AB as follows:
+*     AB(KU+1+i-j,j) = A(i,j) for max(1,j-KU)<=i<=min(N,j+kl)
+*
+*     LDAB    (input) INTEGER
+*     The leading dimension of the array AB.  LDAB >= KL+KU+1.
+*
+*     AFB     (input) COMPLEX*16 array, dimension (LDAFB,N)
+*     Details of the LU factorization of the band matrix A, as
+*     computed by ZGBTRF.  U is stored as an upper triangular
+*     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
+*     and the multipliers used during the factorization are stored
+*     in rows KL+KU+2 to 2*KL+KU+1.
+*
+*     LDAFB   (input) INTEGER
+*     The leading dimension of the array AFB.  LDAFB >= 2*KL+KU+1.
+*
+*     IPIV    (input) INTEGER array, dimension (N)
+*     The pivot indices from the factorization A = P*L*U
+*     as computed by ZGBTRF; row i of the matrix was interchanged
+*     with row IPIV(i).
+*
+*     X       (input) COMPLEX*16 array, dimension (N)
+*     The vector X in the formula op(A) * diag(X).
+*
+*     INFO    (output) INTEGER
+*       = 0:  Successful exit.
+*     i > 0:  The ith argument is invalid.
+*
+*     WORK    (input) COMPLEX*16 array, dimension (2*N).
+*     Workspace.
+*
+*     RWORK   (input) DOUBLE PRECISION array, dimension (N).
+*     Workspace.
 *
 *  =====================================================================
 *
@@ -77,13 +124,13 @@
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       ELSE IF( KL.LT.0 .OR. KL.GT.N-1 ) THEN
-         INFO = -4
+         INFO = -3
       ELSE IF( KU.LT.0 .OR. KU.GT.N-1 ) THEN
-         INFO = -5
+         INFO = -4
       ELSE IF( LDAB.LT.KL+KU+1 ) THEN
-         INFO = -8
+         INFO = -6
       ELSE IF( LDAFB.LT.2*KL+KU+1 ) THEN
-         INFO = -10
+         INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'ZLA_GBRCOND_X', -INFO )
