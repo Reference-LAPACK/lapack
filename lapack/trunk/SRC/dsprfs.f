@@ -2,7 +2,8 @@
      $                   FERR, BERR, WORK, IWORK, INFO )
 *
 *  -- LAPACK routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
 *
 *     Modified to call DLACN2 in place of DLACON, 5 Feb 03, SJH.

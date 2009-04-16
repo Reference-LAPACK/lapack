@@ -2,9 +2,10 @@
      $                   LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
      $                   Q, LDQ, WORK, NCYCLE, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK routine (version 3.2.1)                                  --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*  -- April 2009                                                      --
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBQ, JOBU, JOBV

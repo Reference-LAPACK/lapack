@@ -3,7 +3,8 @@
      $                   WORK, LWORK, IWORK, LIWORK, INFO )
 *
 *  -- LAPACK routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     January 2007
 *
 *     Modified to call CLACN2 in place of CLACON, 10 Feb 03, SJH.

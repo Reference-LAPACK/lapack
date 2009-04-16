@@ -1,8 +1,11 @@
       SUBROUTINE ZPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
-*     Craig Lucas, University of Manchester / NAG Ltd.
-*     October, 2008
+*  -- LAPACK routine (version 3.2.1)                                  --
+*     
+*  -- Contributed by Craig Lucas, University of Manchester / NAG Ltd. --
+*  -- April 2009                                                      --
+*
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   TOL

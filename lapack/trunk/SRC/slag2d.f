@@ -1,7 +1,8 @@
       SUBROUTINE SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
 *
 *  -- LAPACK PROTOTYPE auxiliary routine (version 3.1.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     August 2007
 *
 *     ..

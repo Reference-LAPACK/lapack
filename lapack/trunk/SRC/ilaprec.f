@@ -1,8 +1,12 @@
       INTEGER FUNCTION ILAPREC( PREC )
 *
-*  -- LAPACK routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     October 2008
+*  -- LAPACK routine (version 3.2.1)                                    --
+*
+*  -- April 2009                                                      --
+*
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*
 *     .. Scalar Arguments ..
       CHARACTER          PREC
 *     ..

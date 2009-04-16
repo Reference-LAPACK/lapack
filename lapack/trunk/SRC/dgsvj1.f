@@ -1,11 +1,11 @@
       SUBROUTINE DGSVJ1( JOBV, M, N, N1, A, LDA, D, SVA, MV, V, LDV,
      +                   EPS, SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2)                                    --
+*  -- LAPACK routine (version 3.2.1)                                    --
 *
 *  -- Contributed by Zlatko Drmac of the University of Zagreb and     --
 *  -- Kresimir Veselic of the Fernuniversitaet Hagen                  --
-*  -- November 2008                                                   --
+*  -- April 2009                                                      --
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--

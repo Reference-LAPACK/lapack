@@ -4,7 +4,7 @@
 *
 *  -- Contributed by Fred Gustavson of the IBM Watson Research Center --
 *  --            and Julien Langou of the Univ. of Colorado Denver    --
-*  -- November 2008 --
+*  -- November 2008                                                   --
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--

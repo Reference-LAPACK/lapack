@@ -3,7 +3,8 @@
      $                   POLES, DIFL, DIFR, Z, K, C, S, RWORK, INFO )
 *
 *  -- LAPACK routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
 *
 *     .. Scalar Arguments ..

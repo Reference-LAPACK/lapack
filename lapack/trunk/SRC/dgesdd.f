@@ -1,8 +1,9 @@
       SUBROUTINE DGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT, WORK,
      $                   LWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK driver routine (version 3.2.1)                                  --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     March 2009
 *
 *     .. Scalar Arguments ..
