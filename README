@@ -2,19 +2,20 @@
 LAPACK README FILE
 ==================
 
-VERSION 1.0  :  February 29, 1992
-VERSION 1.0a :  June 30, 1992
-VERSION 1.0b :  October 31, 1992
-VERSION 1.1  :  March 31, 1993
-VERSION 2.0  :  September 30, 1994
-VERSION 3.0  :  June 30, 1999
+VERSION 1.0   :  February 29, 1992
+VERSION 1.0a  :  June 30, 1992
+VERSION 1.0b  :  October 31, 1992
+VERSION 1.1   :  March 31, 1993
+VERSION 2.0   :  September 30, 1994
+VERSION 3.0   :  June 30, 1999
 VERSION 3.0 + update :  October 31, 1999
 VERSION 3.0 + update :  May 31, 2000
-VERSION 3.1  : November 2006
-VERSION 3.1.1  : February 2007
-VERSION 3.2  : November 2008
+VERSION 3.1   : November 2006
+VERSION 3.1.1 : February 2007
+VERSION 3.2   : November 2008
+VERSION 3.2.1 : April 2009
 
-LAPACK is a library of Fortran 90 with  subroutines for solving
+LAPACK is a library of Fortran 90 with subroutines for solving
 the most commonly occurring problems in numerical linear algebra.
 It is freely-available software, and is copyrighted.
 

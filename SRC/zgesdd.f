@@ -2,7 +2,8 @@
      $                   LWORK, RWORK, IWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
 *     8-15-00:  Improve consistency of WS calculations (eca)
 *

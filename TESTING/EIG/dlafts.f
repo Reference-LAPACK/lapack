@@ -1,9 +1,9 @@
       SUBROUTINE DLAFTS( TYPE, M, N, IMAT, NTESTS, RESULT, ISEED,
      $                   THRESH, IOUNIT, IE )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
+*  -- LAPACK auxiliary test routine (version 3.1.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*     April 2009
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        TYPE

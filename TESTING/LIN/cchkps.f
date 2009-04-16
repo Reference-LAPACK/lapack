@@ -4,7 +4,7 @@
 *
 *  -- LAPACK test routine (version 3.2.1) --
 *     Craig Lucas, University of Manchester / NAG Ltd.
-*     October, 2008
+*     -- April 2009
 *
 *     .. Scalar Arguments ..
       REAL               THRESH

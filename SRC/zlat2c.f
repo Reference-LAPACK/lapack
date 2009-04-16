@@ -1,7 +1,8 @@
       SUBROUTINE ZLAT2C( UPLO, N, A, LDA, SA, LDSA, INFO )
 *
 *  -- LAPACK PROTOTYPE auxiliary routine (version 3.1.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     May 2007
 *
 *     .. Scalar Arguments ..

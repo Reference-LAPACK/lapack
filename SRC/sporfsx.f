@@ -3,13 +3,13 @@
      $                    ERR_BNDS_NORM, ERR_BNDS_COMP, NPARAMS, PARAMS,
      $                    WORK, IWORK, INFO )
 *
-*     -- LAPACK routine (version 3.2)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- November 2008                                                --
+*  -- LAPACK routine (version 3.2.1)                                  --
+*  -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and    --
+*  -- Jason Riedy of Univ. of California Berkeley.                    --
+*  -- April 2009                                                      --
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
       IMPLICIT NONE
 *     ..

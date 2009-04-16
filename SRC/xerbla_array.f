@@ -1,8 +1,11 @@
       SUBROUTINE XERBLA_ARRAY(SRNAME_ARRAY, SRNAME_LEN, INFO)
 *
-*  -- LAPACK auxiliary routine (version 3.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
-*     September 19, 2006
+*  -- LAPACK auxiliary routine (version 3.2.1)                        --
+*
+*  -- April 2009   
+*
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
       IMPLICIT NONE
 *     .. Scalar Arguments ..

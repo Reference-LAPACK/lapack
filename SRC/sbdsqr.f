@@ -2,7 +2,8 @@
      $                   LDU, C, LDC, WORK, INFO )
 *
 *  -- LAPACK routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     January 2007
 *
 *     .. Scalar Arguments ..
