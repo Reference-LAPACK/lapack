@@ -68,11 +68,11 @@
       COMPLEX            WORKAP( (NMAX*(NMAX+1))/2 )
       COMPLEX            WORKARFINV( (NMAX*(NMAX+1))/2 )
       COMPLEX            C_WORK_CLATMS( 3 * NMAX )
-      COMPLEX            C_WORK_CPOT01( NMAX )
       COMPLEX            C_WORK_CPOT02( NMAX, MAXRHS )
       COMPLEX            C_WORK_CPOT03( NMAX, NMAX )
       REAL               S_WORK_CLATMS( NMAX )
       REAL               S_WORK_CLANHE( NMAX )
+      REAL               S_WORK_CPOT01( NMAX )
       REAL               S_WORK_CPOT02( NMAX )
       REAL               S_WORK_CPOT03( NMAX )
 *     ..
@@ -213,9 +213,9 @@
       CALL CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
      $              WORKA, WORKASAV, WORKAFAC, WORKAINV, WORKB,
      $              WORKBSAV, WORKXACT, WORKX, WORKARF, WORKARFINV,
-     $              C_WORK_CLATMS, C_WORK_CPOT01, C_WORK_CPOT02,
+     $              C_WORK_CLATMS, C_WORK_CPOT02,
      $              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
-     $              S_WORK_CPOT02, S_WORK_CPOT03 )
+     $              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
 *
 *    Test the routine: clanhf
 *
@@ -232,7 +232,7 @@
 *
       CALL CDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
      +              WORKAINV, WORKAFAC, S_WORK_CLANHE,
-     +              C_WORK_CPOT03, C_WORK_CPOT01 )
+     +              C_WORK_CPOT03, C_WORK_CPOT02 )
 *
 *
 *    Test the routine: chfrk

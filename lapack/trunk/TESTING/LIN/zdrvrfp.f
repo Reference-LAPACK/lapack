@@ -1,9 +1,9 @@
       SUBROUTINE ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
-     +              Z_WORK_ZLATMS, Z_WORK_ZPOT01, Z_WORK_ZPOT02,
+     +              Z_WORK_ZLATMS, Z_WORK_ZPOT02,
      +              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
-     +              D_WORK_ZPOT02, D_WORK_ZPOT03 )
+     +              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
 *
       IMPLICIT NONE
 *
@@ -28,11 +28,11 @@
       COMPLEX*16         XACT( * )
       COMPLEX*16         X( * )
       COMPLEX*16         Z_WORK_ZLATMS( * )
-      COMPLEX*16         Z_WORK_ZPOT01( * )
       COMPLEX*16         Z_WORK_ZPOT02( * )
       COMPLEX*16         Z_WORK_ZPOT03( * )
       DOUBLE PRECISION   D_WORK_ZLATMS( * )
       DOUBLE PRECISION   D_WORK_ZLANHE( * )
+      DOUBLE PRECISION   D_WORK_ZPOT01( * )
       DOUBLE PRECISION   D_WORK_ZPOT02( * )
       DOUBLE PRECISION   D_WORK_ZPOT03( * )
 *     ..
@@ -124,8 +124,6 @@
 *
 *  Z_WORK_ZLATMS (workspace) COMPLEX*16 array, dimension ( 3*NMAX )
 *
-*  Z_WORK_ZPOT01 (workspace) COMPLEX*16 array, dimension ( NMAX )
-*
 *  Z_WORK_ZPOT02 (workspace) COMPLEX*16 array, dimension ( NMAX*MAXRHS )
 *
 *  Z_WORK_ZPOT03 (workspace) COMPLEX*16 array, dimension ( NMAX*NMAX )
@@ -133,6 +131,8 @@
 *  D_WORK_ZLATMS (workspace) DOUBLE PRECISION array, dimension ( NMAX )
 *
 *  D_WORK_ZLANHE (workspace) DOUBLE PRECISION array, dimension ( NMAX )
+*
+*  D_WORK_ZPOT01 (workspace) DOUBLE PRECISION array, dimension ( NMAX )
 *
 *  D_WORK_ZPOT02 (workspace) DOUBLE PRECISION array, dimension ( NMAX )
 *
@@ -376,7 +376,7 @@
 *
                      CALL ZLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
                      CALL ZPOT01( UPLO, N, A, LDA, AFAC, LDA,
-     +                             Z_WORK_ZPOT01, RESULT( 1 ) )
+     +                             D_WORK_ZPOT01, RESULT( 1 ) )
                      CALL ZLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
 *
 *                    Form the inverse and compute the residual.

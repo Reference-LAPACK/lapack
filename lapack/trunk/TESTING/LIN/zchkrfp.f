@@ -68,11 +68,11 @@
       COMPLEX*16         WORKAP( (NMAX*(NMAX+1))/2 )
       COMPLEX*16         WORKARFINV( (NMAX*(NMAX+1))/2 )
       COMPLEX*16         Z_WORK_ZLATMS( 3 * NMAX )
-      COMPLEX*16         Z_WORK_ZPOT01( NMAX )
       COMPLEX*16         Z_WORK_ZPOT02( NMAX, MAXRHS )
       COMPLEX*16         Z_WORK_ZPOT03( NMAX, NMAX )
       DOUBLE PRECISION   D_WORK_ZLATMS( NMAX )
       DOUBLE PRECISION   D_WORK_ZLANHE( NMAX )
+      DOUBLE PRECISION   D_WORK_ZPOT01( NMAX )
       DOUBLE PRECISION   D_WORK_ZPOT02( NMAX )
       DOUBLE PRECISION   D_WORK_ZPOT03( NMAX )
 *     ..
@@ -213,9 +213,9 @@
       CALL ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL, THRESH,
      $              WORKA, WORKASAV, WORKAFAC, WORKAINV, WORKB,
      $              WORKBSAV, WORKXACT, WORKX, WORKARF, WORKARFINV,
-     $              Z_WORK_ZLATMS, Z_WORK_ZPOT01, Z_WORK_ZPOT02,
+     $              Z_WORK_ZLATMS, Z_WORK_ZPOT02,
      $              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
-     $              D_WORK_ZPOT02, D_WORK_ZPOT03 )
+     $              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
 *
 *    Test the routine: zlanhf
 *
@@ -232,7 +232,7 @@
 *
       CALL ZDRVRF3( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
      +              WORKAINV, WORKAFAC, D_WORK_ZLANHE,
-     +              Z_WORK_ZPOT03, Z_WORK_ZPOT01 )
+     +              Z_WORK_ZPOT03, Z_WORK_ZPOT02 )
  
 *
 *    Test the routine: zhfrk

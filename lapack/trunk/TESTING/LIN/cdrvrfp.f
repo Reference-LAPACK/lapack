@@ -1,9 +1,9 @@
       SUBROUTINE CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
-     +              C_WORK_CLATMS, C_WORK_CPOT01, C_WORK_CPOT02,
+     +              C_WORK_CLATMS, C_WORK_CPOT02,
      +              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
-     +              S_WORK_CPOT02, S_WORK_CPOT03 )
+     +              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
 *
 *  -- LAPACK test routine (version 3.2.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -26,11 +26,11 @@
       COMPLEX            XACT( * )
       COMPLEX            X( * )
       COMPLEX            C_WORK_CLATMS( * )
-      COMPLEX            C_WORK_CPOT01( * )
       COMPLEX            C_WORK_CPOT02( * )
       COMPLEX            C_WORK_CPOT03( * )
       REAL               S_WORK_CLATMS( * )
       REAL               S_WORK_CLANHE( * )
+      REAL               S_WORK_CPOT01( * )
       REAL               S_WORK_CPOT02( * )
       REAL               S_WORK_CPOT03( * )
 *     ..
@@ -122,8 +122,6 @@
 *
 *  C_WORK_CLATMS (workspace) COMPLEX array, dimension ( 3*NMAX )
 *
-*  C_WORK_CPOT01 (workspace) COMPLEX array, dimension ( NMAX )
-*
 *  C_WORK_CPOT02 (workspace) COMPLEX array, dimension ( NMAX*MAXRHS )
 *
 *  C_WORK_CPOT03 (workspace) COMPLEX array, dimension ( NMAX*NMAX )
@@ -131,6 +129,8 @@
 *  S_WORK_CLATMS (workspace) REAL array, dimension ( NMAX )
 *
 *  S_WORK_CLANHE (workspace) REAL array, dimension ( NMAX )
+*
+*  S_WORK_CPOT01 (workspace) REAL array, dimension ( NMAX )
 *
 *  S_WORK_CPOT02 (workspace) REAL array, dimension ( NMAX )
 *
@@ -374,7 +374,7 @@
 *
                      CALL CLACPY( UPLO, N, N, AFAC, LDA, ASAV, LDA )
                      CALL CPOT01( UPLO, N, A, LDA, AFAC, LDA,
-     +                             C_WORK_CPOT01, RESULT( 1 ) )
+     +                             S_WORK_CPOT01, RESULT( 1 ) )
                      CALL CLACPY( UPLO, N, N, ASAV, LDA, AFAC, LDA )
 *
 *                    Form the inverse and compute the residual.
