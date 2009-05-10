@@ -169,8 +169,7 @@
 *          message related to LWORK is issued by XERBLA.
 *
 *  IWORK   (workspace/output) INTEGER array, dimension (MAX(1,LIWORK))
-*          IF IJOB = 0, IWORK is not referenced.  Otherwise,
-*          on exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.
+*          On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.
 *
 *  LIWORK  (input) INTEGER
 *          The dimension of the array IWORK. LIWORK >= 1.
