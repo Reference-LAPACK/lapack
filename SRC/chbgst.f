@@ -507,7 +507,7 @@
   230    CONTINUE
 *
          IF( KB.GT.1 ) THEN
-            DO 240 J = N - 1, I2 + KA, -1
+            DO 240 J = N - 1, J2 + KA, -1
                RWORK( J-M ) = RWORK( J-KA-M )
                WORK( J-M ) = WORK( J-KA-M )
   240       CONTINUE
@@ -770,7 +770,7 @@
   460    CONTINUE
 *
          IF( KB.GT.1 ) THEN
-            DO 470 J = N - 1, I2 + KA, -1
+            DO 470 J = N - 1, J2 + KA, -1
                RWORK( J-M ) = RWORK( J-KA-M )
                WORK( J-M ) = WORK( J-KA-M )
   470       CONTINUE
