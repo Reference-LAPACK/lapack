@@ -81,9 +81,13 @@
 *     .. External Functions ..
       REAL               SLAMCH
       LOGICAL            LSAME
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASSQ
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          ABS, AIMAG, INT, LOG, MAX, MIN, REAL, SQRT
 *     ..
 *     .. Statement Functions ..
       REAL               CABS1

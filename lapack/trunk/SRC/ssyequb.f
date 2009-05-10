@@ -87,9 +87,13 @@
 *     .. External Functions ..
       REAL               SLAMCH
       LOGICAL            LSAME
+      EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLASSQ
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          ABS, INT, LOG, MAX, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
 *

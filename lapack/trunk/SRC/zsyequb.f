@@ -89,9 +89,13 @@
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
       LOGICAL            LSAME
+      EXTERNAL           DLAMCH, LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZLASSQ
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          ABS, DBLE, DIMAG, INT, LOG, MAX, MIN, SQRT
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1
