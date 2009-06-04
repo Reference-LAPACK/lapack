@@ -37,6 +37,11 @@
 
 include ../make.inc
 
+ifneq ($(strip $(VARLIB)),)
+    LAPACKLIB :=  $(VARLIB) ../$(LAPACKLIB)
+endif
+
+
 all:     single complex double complex16 singleproto doubleproto complexproto complex16proto
 
 SEIGTST= snep.out \

@@ -34,6 +34,11 @@ include ../../make.inc
 #
 #######################################################################
 
+ifneq ($(strip $(VARLIB)),)
+    LAPACKLIB :=  $(VARLIB) ../../$(LAPACKLIB)
+endif
+
+
 ALINTST = \
    aladhd.o alaerh.o alaesm.o alahd.o alareq.o \
    alasum.o alasvm.o chkxer.o icopy.o ilaenv.o xlaenv.o xerbla.o
