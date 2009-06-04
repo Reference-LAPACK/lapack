@@ -33,17 +33,17 @@ lapack_testing:	lib
 	( cd TESTING ; $(MAKE) )
 
 variants_testing: lib
-	( cd TESTING ; rm -f xlintst* ; $(MAKE)  LAPACKLIB='SRC/VARIANTS/LIB/cholrl.a ../../$(LAPACKLIB)' ; \
+	( cd TESTING ; rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/cholrl.a' ; \
 	mv stest.out stest_cholrl.out ; mv dtest.out dtest_cholrl.out ; mv ctest.out ctest_cholrl.out ; mv ztest.out ztest_cholrl.out )
-	( cd TESTING ; rm -f xlintst* ; $(MAKE)  LAPACKLIB='SRC/VARIANTS/LIB/choltop.a ../../$(LAPACKLIB)' ; \
+	( cd TESTING ; rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/choltop.a' ; \
 	mv stest.out stest_choltop.out ; mv dtest.out dtest_choltop.out ; mv ctest.out ctest_choltop.out ; mv ztest.out ztest_choltop.out )
-	( cd TESTING ; rm -f xlintst* ; $(MAKE)  LAPACKLIB='SRC/VARIANTS/LIB/lucr.a ../../$(LAPACKLIB)' ; \
+	( cd TESTING ; rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/lucr.a' ; \
 	mv stest.out stest_lucr.out ; mv dtest.out dtest_lucr.out ; mv ctest.out ctest_lucr.out ; mv ztest.out ztest_lucr.out )
-	( cd TESTING ;  rm -f xlintst* ; $(MAKE)  LAPACKLIB='SRC/VARIANTS/LIB/lull.a ../../$(LAPACKLIB)' ; \
+	( cd TESTING ;  rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/lull.a' ; \
 	mv stest.out stest_lull.out ; mv dtest.out dtest_lull.out ; mv ctest.out ctest_lull.out ; mv ztest.out ztest_lull.out )
-	( cd TESTING ;  rm -f xlintst* ; $(MAKE)  LAPACKLIB='SRC/VARIANTS/LIB/lurec.a ../../$(LAPACKLIB)' ; \
+	( cd TESTING ;  rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/lurec.a' ; \
 	mv stest.out stest_lurec.out ; mv dtest.out dtest_lurec.out ; mv ctest.out ctest_lurec.out ; mv ztest.out ztest_lurec.out )
-	( cd TESTING ;  rm -f xlintst* ; $(MAKE)  LAPACKLIB='SRC/VARIANTS/LIB/qrll.a ../../$(LAPACKLIB)' ; \
+	( cd TESTING ;  rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/qrll.a' ; \
 	mv stest.out stest_qrll.out ; mv dtest.out dtest_qrll.out ; mv ctest.out ctest_qrll.out ; mv ztest.out ztest_qrll.out )
 		
 blas_testing:
