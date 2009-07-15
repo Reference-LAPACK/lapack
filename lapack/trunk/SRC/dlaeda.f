@@ -154,7 +154,7 @@
          Z( K ) = ZERO
    20 CONTINUE
 *
-*     Loop thru remaining levels 1 -> CURLVL applying the Givens
+*     Loop through remaining levels 1 -> CURLVL applying the Givens
 *     rotations and permutation and then multiplying the center matrices
 *     against the current Z.
 *

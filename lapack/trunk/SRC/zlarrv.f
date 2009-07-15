@@ -439,8 +439,8 @@
 *                 within the current block
                   P = INDEXW( WBEGIN-1+OLDFST )
                   Q = INDEXW( WBEGIN-1+OLDLST )
-*                 Offset for the arrays WORK, WGAP and WERR, i.e., th P-OFFSET
-*                 thru' Q-OFFSET elements of these arrays are to be used.
+*                 Offset for the arrays WORK, WGAP and WERR, i.e., the P-OFFSET
+*                 through the Q-OFFSET elements of these arrays are to be used.
 C                  OFFSET = P-OLDFST
                   OFFSET = INDEXW( WBEGIN ) - 1
 *                 perform limited bisection (if necessary) to get approximate
