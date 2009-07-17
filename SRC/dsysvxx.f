@@ -510,7 +510,7 @@
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
-*        Compute the LU factorization of A.
+*        Compute the LDL^T or UDU^T factorization of A.
 *
          CALL DLACPY( UPLO, N, N, A, LDA, AF, LDAF )
          CALL DSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, 5*MAX(1,N), INFO )

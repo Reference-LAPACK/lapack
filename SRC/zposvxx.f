@@ -501,7 +501,7 @@
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
-*        Compute the LU factorization of A.
+*        Compute the Cholesky factorization of A.
 *
          CALL ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
          CALL ZPOTRF( UPLO, N, AF, LDAF, INFO )
