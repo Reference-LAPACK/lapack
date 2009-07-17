@@ -460,10 +460,12 @@
             IF ( N_ERR_BNDS .GE. 1 ) THEN
                ERR_BNDS_NORM( J, LA_LINRX_TRUST_I ) = 1.0D+0
                ERR_BNDS_COMP( J, LA_LINRX_TRUST_I ) = 1.0D+0
-            ELSE IF ( N_ERR_BNDS .GE. 2 ) THEN
+            END IF
+            IF ( N_ERR_BNDS .GE. 2 ) THEN
                ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) = 0.0D+0
                ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) = 0.0D+0
-            ELSE IF ( N_ERR_BNDS .GE. 3 ) THEN
+            END IF
+            IF ( N_ERR_BNDS .GE. 3 ) THEN
                ERR_BNDS_NORM( J, LA_LINRX_RCOND_I ) = 1.0D+0
                ERR_BNDS_COMP( J, LA_LINRX_RCOND_I ) = 1.0D+0
             END IF
@@ -479,10 +481,12 @@
          IF ( N_ERR_BNDS .GE. 1 ) THEN
             ERR_BNDS_NORM( J, LA_LINRX_TRUST_I ) = 1.0D+0
             ERR_BNDS_COMP( J, LA_LINRX_TRUST_I ) = 1.0D+0
-         ELSE IF ( N_ERR_BNDS .GE. 2 ) THEN
+         END IF
+         IF ( N_ERR_BNDS .GE. 2 ) THEN
             ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) = 1.0D+0
             ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) = 1.0D+0
-         ELSE IF ( N_ERR_BNDS .GE. 3 ) THEN
+         END IF
+         IF ( N_ERR_BNDS .GE. 3 ) THEN
             ERR_BNDS_NORM( J, LA_LINRX_RCOND_I ) = 0.0D+0
             ERR_BNDS_COMP( J, LA_LINRX_RCOND_I ) = 0.0D+0
          END IF
