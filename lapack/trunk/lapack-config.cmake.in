@@ -1,0 +1,1 @@
+include("@LAPACK_BINARY_DIR@/lapack-targets.cmake")
