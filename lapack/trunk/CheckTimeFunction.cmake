@@ -7,21 +7,22 @@
 
 macro(CHECK_TIME_FUNCTION FUNCTION VARIABLE)
 
-    execute_process(COMMAND ${CMAKE_Fortran_COMPILER} -o secondtst second_${FUNCTION}.f secondtst.f
-    WORKING_DIRECTORY ${LAPACK_SOURCE_DIR}/INSTALL
-    RESULT_VARIABLE RES
-    OUTPUT_VARIABLE OUT
-    ERROR_VARIABLE  ERR
-    )
+    try_compile(${VARIABLE}
+    ${PROJECT_BINARY_DIR}/INSTALL
+    ${PROJECT_SOURCE_DIR}/INSTALL
+    TIMING secondtst_${FUNCTION}
+    OUTPUT_VARIABLE OUTPUT)
 
-    if(${RES} EQUAL 0)
+    if(${VARIABLE})
       set(${VARIABLE} ${FUNCTION} CACHE INTERNAL "Have Fortran function ${FUNCTION}")
       message(STATUS "Looking for Fortran ${FUNCTION} - found")
       file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log 
-        "Fortran ${FUNCTION} exists. ${OUT} \n\n")
-    else(${RES} EQUAL 0)
+        "Fortran ${FUNCTION} exists. ${OUTPUT} \n\n")
+    else(${VARIABLE})
       message(STATUS "Looking for Fortran ${FUNCTION} - not found")
       file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log 
-        "Fortran ${FUNCTION} does not exist. \n ${ERR} \n")
-    endif(${RES} EQUAL 0)
+        "Fortran ${FUNCTION} does not exist. \n ${OUTPUT} \n")
+    endif(${VARIABLE})
 endmacro(CHECK_TIME_FUNCTION)
+
+

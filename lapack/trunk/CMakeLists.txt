@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 2.6)
 project(LAPACK Fortran)
-set(SECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/second_INT_ETIME.f)
-set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_INT_ETIME.f)
+if ( "${CMAKE_Fortran_COMPILER}" MATCHES "ifort" )
+  set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
+endif ()
 enable_testing()
 include(CTest)
 enable_testing()
 set(CMAKE_MODULE_PATH ${LAPACK_SOURCE_DIR} ${CMAKE_MODULE_PATH})
 include(CheckTimeFunction)
 set(TIME_FUNC NONE ${TIME_FUNC})
+CHECK_TIME_FUNCTION(NONE TIME_FUNC)
 CHECK_TIME_FUNCTION(INT_CPU_TIME TIME_FUNC)
 CHECK_TIME_FUNCTION(EXT_ETIME TIME_FUNC)
 CHECK_TIME_FUNCTION(EXT_ETIME_ TIME_FUNC)
@@ -16,7 +18,6 @@ message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as 
 
 set(SECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
 set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
-
 
 add_subdirectory(BLAS)
 add_subdirectory(SRC)
