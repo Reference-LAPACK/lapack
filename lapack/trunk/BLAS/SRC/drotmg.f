@@ -33,9 +33,9 @@
 *
 *  DD1    (input/output) DOUBLE PRECISION
 *
-*  DD2    (input/output) DOUBLE PRECISION 
+*  DD2    (input/output) DOUBLE PRECISION
 *
-*  DX1    (input/output) DOUBLE PRECISION 
+*  DX1    (input/output) DOUBLE PRECISION
 *
 *  DY1    (input) DOUBLE PRECISION
 *
@@ -71,8 +71,8 @@
       IF (.NOT.DP2.EQ.ZERO) GO TO 20
       DFLAG = -TWO
       GO TO 260
-*     REGULAR-CASE..
    20 CONTINUE
+*     REGULAR-CASE..
       DP1 = DD1*DX1
       DQ2 = DP2*DY1
       DQ1 = DP1*DX1
@@ -108,8 +108,8 @@
       DX1 = DY1*DU
 *         GO SCALE-CHECK
       GO TO 100
-*     PROCEDURE..ZERO-H-D-AND-DX1..
    60 CONTINUE
+*     PROCEDURE..ZERO-H-D-AND-DX1..
       DFLAG = -ONE
       DH11 = ZERO
       DH12 = ZERO
@@ -121,8 +121,8 @@
       DX1 = ZERO
 *         RETURN..
       GO TO 220
-*     PROCEDURE..FIX-H..
    70 CONTINUE
+*     PROCEDURE..FIX-H..
       IF (.NOT.DFLAG.GE.ZERO) GO TO 90
 *
       IF (.NOT.DFLAG.EQ.ZERO) GO TO 80
@@ -135,13 +135,14 @@
       DH12 = ONE
       DFLAG = -ONE
    90 CONTINUE
-      GO TO IGO(120,150,180,210)
-*     PROCEDURE..SCALE-CHECK
+      GO TO (150,180,210) IGO
+      GO TO 120
   100 CONTINUE
+*     PROCEDURE..SCALE-CHECK
   110 CONTINUE
       IF (.NOT.DD1.LE.RGAMSQ) GO TO 130
       IF (DD1.EQ.ZERO) GO TO 160
-      ASSIGN 120 TO IGO
+      IGO = 0
 *              FIX-H..
       GO TO 70
   120 CONTINUE
@@ -153,7 +154,7 @@
   130 CONTINUE
   140 CONTINUE
       IF (.NOT.DD1.GE.GAMSQ) GO TO 160
-      ASSIGN 150 TO IGO
+      IGO = 1
 *              FIX-H..
       GO TO 70
   150 CONTINUE
@@ -166,7 +167,7 @@
   170 CONTINUE
       IF (.NOT.DABS(DD2).LE.RGAMSQ) GO TO 190
       IF (DD2.EQ.ZERO) GO TO 220
-      ASSIGN 180 TO IGO
+      IGO = 2
 *              FIX-H..
       GO TO 70
   180 CONTINUE
@@ -177,7 +178,7 @@
   190 CONTINUE
   200 CONTINUE
       IF (.NOT.DABS(DD2).GE.GAMSQ) GO TO 220
-      ASSIGN 210 TO IGO
+      IGO = 3
 *              FIX-H..
       GO TO 70
   210 CONTINUE
@@ -186,7 +187,13 @@
       DH22 = DH22*GAM
       GO TO 200
   220 CONTINUE
-      IF (DFLAG) 250,230,240
+      IF (DFLAG.LT.ZERO) THEN
+         GO TO 250
+      ELSE IF (DFLAG.EQ.ZERO) THEN
+         GO TO 230 
+      ELSE
+         GO TO 240
+      END IF
   230 CONTINUE
       DPARAM(3) = DH21
       DPARAM(4) = DH12
