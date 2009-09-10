@@ -65,7 +65,13 @@
       IF (.NOT. (INCX.EQ.INCY.AND.INCX.GT.0)) GO TO 70
 *
       NSTEPS = N*INCX
-      IF (DFLAG) 50,10,30
+      IF (DFLAG.LT.ZERO) THEN
+         GO TO 50
+      ELSE IF (DFLAG.EQ.ZERO) THEN
+         GO TO 10 
+      ELSE
+         GO TO 30
+      END IF
    10 CONTINUE
       DH12 = DPARAM(4)
       DH21 = DPARAM(3)
@@ -104,7 +110,13 @@
       IF (INCX.LT.0) KX = 1 + (1-N)*INCX
       IF (INCY.LT.0) KY = 1 + (1-N)*INCY
 *
-      IF (DFLAG) 120,80,100
+      IF (DFLAG.LT.ZERO) THEN
+         GO TO 120
+      ELSE IF (DFLAG.EQ.ZERO) THEN
+         GO TO 80 
+      ELSE
+         GO TO 100
+      END IF
    80 CONTINUE
       DH12 = DPARAM(4)
       DH21 = DPARAM(3)

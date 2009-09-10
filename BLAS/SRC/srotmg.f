@@ -73,8 +73,8 @@
       IF (.NOT.SP2.EQ.ZERO) GO TO 20
       SFLAG = -TWO
       GO TO 260
-*     REGULAR-CASE..
    20 CONTINUE
+*     REGULAR-CASE..
       SP1 = SD1*SX1
       SQ2 = SP2*SY1
       SQ1 = SP1*SX1
@@ -110,8 +110,8 @@
       SX1 = SY1*SU
 *         GO SCALE-CHECK
       GO TO 100
-*     PROCEDURE..ZERO-H-D-AND-SX1..
    60 CONTINUE
+*     PROCEDURE..ZERO-H-D-AND-SX1..
       SFLAG = -ONE
       SH11 = ZERO
       SH12 = ZERO
@@ -123,8 +123,8 @@
       SX1 = ZERO
 *         RETURN..
       GO TO 220
-*     PROCEDURE..FIX-H..
    70 CONTINUE
+*     PROCEDURE..FIX-H..
       IF (.NOT.SFLAG.GE.ZERO) GO TO 90
 *
       IF (.NOT.SFLAG.EQ.ZERO) GO TO 80
@@ -137,13 +137,14 @@
       SH12 = ONE
       SFLAG = -ONE
    90 CONTINUE
-      GO TO IGO(120,150,180,210)
-*     PROCEDURE..SCALE-CHECK
+      GO TO (150,180,210) IGO
+      GO TO 120
   100 CONTINUE
+*     PROCEDURE..SCALE-CHECK
   110 CONTINUE
       IF (.NOT.SD1.LE.RGAMSQ) GO TO 130
       IF (SD1.EQ.ZERO) GO TO 160
-      ASSIGN 120 TO IGO
+      IGO = 0
 *              FIX-H..
       GO TO 70
   120 CONTINUE
@@ -155,7 +156,7 @@
   130 CONTINUE
   140 CONTINUE
       IF (.NOT.SD1.GE.GAMSQ) GO TO 160
-      ASSIGN 150 TO IGO
+      IGO = 1
 *              FIX-H..
       GO TO 70
   150 CONTINUE
@@ -168,7 +169,7 @@
   170 CONTINUE
       IF (.NOT.ABS(SD2).LE.RGAMSQ) GO TO 190
       IF (SD2.EQ.ZERO) GO TO 220
-      ASSIGN 180 TO IGO
+      IGO = 2
 *              FIX-H..
       GO TO 70
   180 CONTINUE
@@ -179,7 +180,7 @@
   190 CONTINUE
   200 CONTINUE
       IF (.NOT.ABS(SD2).GE.GAMSQ) GO TO 220
-      ASSIGN 210 TO IGO
+      IGO = 3
 *              FIX-H..
       GO TO 70
   210 CONTINUE
@@ -188,7 +189,13 @@
       SH22 = SH22*GAM
       GO TO 200
   220 CONTINUE
-      IF (SFLAG) 250,230,240
+      IF (SFLAG.LT.ZERO) THEN
+         GO TO 250
+      ELSE IF (SFLAG.EQ.ZERO) THEN
+         GO TO 230
+      ELSE 
+         GO TO 240
+      END IF
   230 CONTINUE
       SPARAM(3) = SH21
       SPARAM(4) = SH12
