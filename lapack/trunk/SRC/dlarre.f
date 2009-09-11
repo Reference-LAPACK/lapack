@@ -91,7 +91,7 @@
 *           An interval [LEFT,RIGHT] has converged if
 *           RIGHT-LEFT.LT.MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
 *
-*  SPLTOL (input) DOUBLE PRECISION
+*  SPLTOL  (input) DOUBLE PRECISION
 *          The threshold for splitting.
 *
 *  NSPLIT  (output) INTEGER

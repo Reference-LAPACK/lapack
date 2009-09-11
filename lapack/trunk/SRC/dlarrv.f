@@ -51,7 +51,7 @@
 *          is stored the corresponding shift as given by DLARRE.
 *          On exit, L is overwritten.
 *
-*  PIVMIN  (in) DOUBLE PRECISION
+*  PIVMIN  (input) DOUBLE PRECISION
 *          The minimum pivot allowed in the Sturm sequence.
 *
 *  ISPLIT  (input) INTEGER array, dimension (N)

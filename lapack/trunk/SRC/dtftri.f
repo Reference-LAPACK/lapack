@@ -27,7 +27,7 @@
 *  Arguments
 *  =========
 *
-*  TRANSR    (input) CHARACTER
+*  TRANSR  (input) CHARACTER
 *          = 'N':  The Normal TRANSR of RFP A is stored;
 *          = 'T':  The Transpose TRANSR of RFP A is stored.
 *

@@ -68,7 +68,7 @@
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,N).
 *
-*  WORK    DOUBLE PRECISION array, dimension (2*N)
+*  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)
 *          Work space.
 *
 *  INFO    (output) INTEGER

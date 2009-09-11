@@ -46,7 +46,7 @@
 *     The number of linear equations, i.e., the order of the
 *     matrix A.  N >= 0.
 *
-*     A       (input) REAL array, dimension (LDA,N)
+*     A       (input) DOUBLE PRECISION array, dimension (LDA,N)
 *     On entry, the N-by-N matrix A.
 *
 *     LDA     (input) INTEGER

@@ -36,7 +36,7 @@
 *     N       (input) INTEGER
 *     The number of columns of D and X. N >= 0.
 *
-*     D       (input) DOUBLE PRECISION array, length M
+*     D       (input) DOUBLE PRECISION array, dimension (M)
 *     Diagonal matrix D, stored as a vector of length M.
 *
 *     X       (input/output) DOUBLE PRECISION array, dimension (LDX,N)

@@ -17,7 +17,7 @@
 *     .. Scalar Arguments ..
       CHARACTER          EQUED, FACT, TRANS
       INTEGER            INFO, LDAB, LDAFB, LDB, LDX, N, NRHS, NPARAMS,
-     $                   N_ERR_BNDS
+     $                   N_ERR_BNDS, KL, KU
       DOUBLE PRECISION   RCOND, RPVGRW
 *     ..
 *     .. Array Arguments ..
@@ -377,7 +377,7 @@
 *     Specifies the number of parameters set in PARAMS.  If .LE. 0, the
 *     PARAMS array is never referenced and default values are used.
 *
-*     PARAMS  (input / output) DOUBLE PRECISION array, dimension NPARAMS
+*     PARAMS  (input / output) DOUBLE PRECISION array, dimension (NPARAMS)
 *     Specifies algorithm parameters.  If an entry is .LT. 0.0, then
 *     that entry will be filled with default value used for that
 *     parameter.  Only positions up to NPARAMS are accessed; defaults

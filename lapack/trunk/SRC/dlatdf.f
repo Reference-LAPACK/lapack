@@ -49,7 +49,7 @@
 *  LDZ     (input) INTEGER
 *          The leading dimension of the array Z.  LDA >= max(1, N).
 *
-*  RHS     (input/output) DOUBLE PRECISION array, dimension N.
+*  RHS     (input/output) DOUBLE PRECISION array, dimension (N)
 *          On entry, RHS contains contributions from other subsystems.
 *          On exit, RHS contains the solution of the subsystem with
 *          entries acoording to the value of IJOB (see above).

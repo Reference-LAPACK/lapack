@@ -45,12 +45,12 @@
 *          On exit, the entries E2( ISPLIT( I ) ),
 *          1 <= I <= NSPLIT, have been set to zero
 *
-*  SPLTOL (input) DOUBLE PRECISION
+*  SPLTOL  (input) DOUBLE PRECISION
 *          The threshold for splitting. Two criteria can be used:
 *          SPLTOL<0 : criterion based on absolute off-diagonal value
 *          SPLTOL>0 : criterion that preserves relative accuracy
 *
-*  TNRM (input) DOUBLE PRECISION
+*  TNRM    (input) DOUBLE PRECISION
 *          The norm of the matrix.
 *
 *  NSPLIT  (output) INTEGER

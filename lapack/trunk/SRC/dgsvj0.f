@@ -69,7 +69,7 @@
 *          The number of columns of the input matrix A.
 *          M >= N >= 0.
 *
-*  A       (input/output) REAL array, dimension (LDA,N)
+*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
 *          On entry, M-by-N matrix A, such that A*diag(D) represents
 *          the input matrix.
 *          On exit,
@@ -82,7 +82,7 @@
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,M).
 *
-*  D       (input/workspace/output) REAL array, dimension (N)
+*  D       (input/workspace/output) DOUBLE PRECISION array, dimension (N)
 *          The array D accumulates the scaling factors from the fast scaled
 *          Jacobi rotations.
 *          On entry, A*diag(D) represents the input matrix.
@@ -92,7 +92,7 @@
 *          TOL and NSWEEP, respectively.
 *          (See the descriptions of A, TOL and NSWEEP.)
 *
-*  SVA     (input/workspace/output) REAL array, dimension (N)
+*  SVA     (input/workspace/output) DOUBLE PRECISION array, dimension (N)
 *          On entry, SVA contains the Euclidean norms of the columns of
 *          the matrix A*diag(D).
 *          On exit, SVA contains the Euclidean norms of the columns of
@@ -103,7 +103,7 @@
 *                           sequence of Jacobi rotations.
 *          If JOBV = 'N',   then MV is not referenced.
 *
-*  V       (input/output) REAL array, dimension (LDV,N)
+*  V       (input/output) DOUBLE PRECISION array, dimension (LDV,N)
 *          If JOBV .EQ. 'V' then N rows of V are post-multipled by a
 *                           sequence of Jacobi rotations.
 *          If JOBV .EQ. 'A' then MV rows of V are post-multipled by a
@@ -115,13 +115,13 @@
 *          If JOBV = 'V', LDV .GE. N.
 *          If JOBV = 'A', LDV .GE. MV.
 *
-*  EPS     (input) INTEGER
-*          EPS = SLAMCH('Epsilon')
+*  EPS     (input) DOUBLE PRECISION
+*          EPS = DLAMCH('Epsilon')
 *
-*  SFMIN   (input) INTEGER
-*          SFMIN = SLAMCH('Safe Minimum')
+*  SFMIN   (input) DOUBLE PRECISION
+*          SFMIN = DLAMCH('Safe Minimum')
 *
-*  TOL     (input) REAL
+*  TOL     (input) DOUBLE PRECISION
 *          TOL is the threshold for Jacobi rotations. For a pair
 *          A(:,p), A(:,q) of pivot columns, the Jacobi rotation is
 *          applied only if DABS(COS(angle(A(:,p),A(:,q)))) .GT. TOL.
@@ -130,7 +130,7 @@
 *          NSWEEP is the number of sweeps of Jacobi rotations to be
 *          performed.
 *
-*  WORK    (workspace) REAL array, dimension LWORK.
+*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
 *
 *  LWORK   (input) INTEGER
 *          LWORK is the dimension of WORK. LWORK .GE. M.

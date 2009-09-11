@@ -25,7 +25,7 @@
 *  Arguments
 *  =========
 *
-*  TRANSR   (input) CHARACTER
+*  TRANSR  (input) CHARACTER
 *          = 'N':  ARF in Normal form is wanted;
 *          = 'T':  ARF in Transpose form is wanted.
 *
