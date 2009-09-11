@@ -451,7 +451,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            COLEQU, EQUIL, NOFACT, NOTRAN, ROWEQU
-      INTEGER            INFEQU, I, J, KL, KU
+      INTEGER            INFEQU, I, J
       DOUBLE PRECISION   AMAX, BIGNUM, COLCND, RCMAX, RCMIN,
      $                   ROWCND, SMLNUM
 *     ..
