@@ -139,7 +139,7 @@
 *          The number of columns of the input matrix A.
 *          M >= N >= 0.
 *
-*  A       (input/output) REAL array, dimension (LDA,N)
+*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
 *          On entry, the M-by-N matrix A.
 *          On exit :
 *          If JOBU .EQ. 'U' .OR. JOBU .EQ. 'C' :
@@ -181,7 +181,7 @@
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,M).
 *
-*  SVA     (workspace/output) REAL array, dimension (N)
+*  SVA     (workspace/output) DOUBLE PRECISION array, dimension (N)
 *          On exit :
 *          If INFO .EQ. 0 :
 *          depending on the value SCALE = WORK(1), we have:
@@ -201,7 +201,7 @@
 *          If JOBV .EQ. 'A', then the product of Jacobi rotations in DGESVJ
 *          is applied to the first MV rows of V. See the description of JOBV.
 *
-*  V       (input/output) REAL array, dimension (LDV,N)
+*  V       (input/output) DOUBLE PRECISION array, dimension (LDV,N)
 *          If JOBV = 'V', then V contains on exit the N-by-N matrix of
 *                         the right singular vectors;
 *          If JOBV = 'A', then V contains the product of the computed right
@@ -214,7 +214,7 @@
 *          If JOBV .EQ. 'V', then LDV .GE. max(1,N).
 *          If JOBV .EQ. 'A', then LDV .GE. max(1,MV) .
 *
-*  WORK    (input/workspace/output) REAL array, dimension max(4,M+N).
+*  WORK    (input/workspace/output) DOUBLE PRECISION array, dimension max(4,M+N).
 *          On entry :
 *          If JOBU .EQ. 'C' :
 *          WORK(1) = CTOL, where CTOL defines the threshold for convergence.
@@ -241,7 +241,8 @@
 *                    Jacobi rotation angles in the last sweep. It can be
 *                    useful for a post festum analysis.
 *
-*  LWORK   length of WORK, WORK >= MAX(6,M+N)
+*  LWORK   (input) INTEGER
+*          length of WORK, WORK >= MAX(6,M+N)
 *
 *  INFO    (output) INTEGER
 *          = 0 : successful exit.

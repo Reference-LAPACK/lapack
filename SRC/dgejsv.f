@@ -46,9 +46,9 @@
 *  Arguments
 *  =========
 *
-* JOBA   (input) CHARACTER*1
+*  JOBA    (input) CHARACTER*1
 *        Specifies the level of accuracy:
-*      = 'C': This option works well (high relative accuracy) if A = B * D,
+*       = 'C': This option works well (high relative accuracy) if A = B * D,
 *             with well-conditioned B and arbitrary diagonal matrix D.
 *             The accuracy cannot be spoiled by COLUMN scaling. The
 *             accuracy of the computed output depends on the condition of
@@ -59,52 +59,52 @@
 *             pivoting. This initial preprocessing and preconditioning by
 *             a rank revealing QR factorization is common for all values of
 *             JOBA. Additional actions are specified as follows:
-*      = 'E': Computation as with 'C' with an additional estimate of the
+*       = 'E': Computation as with 'C' with an additional estimate of the
 *             condition number of B. It provides a realistic error bound.
-*      = 'F': If A = D1 * C * D2 with ill-conditioned diagonal scalings
+*       = 'F': If A = D1 * C * D2 with ill-conditioned diagonal scalings
 *             D1, D2, and well-conditioned matrix C, this option gives
 *             higher accuracy than the 'C' option. If the structure of the
 *             input matrix is not known, and relative accuracy is
 *             desirable, then this option is advisable. The input matrix A
 *             is preprocessed with QR factorization with FULL (row and
 *             column) pivoting.
-*      = 'G'  Computation as with 'F' with an additional estimate of the
+*       = 'G'  Computation as with 'F' with an additional estimate of the
 *             condition number of B, where A=D*B. If A has heavily weighted
 *             rows, then using this condition number gives too pessimistic
 *             error bound.
-*      = 'A': Small singular values are the noise and the matrix is treated
+*       = 'A': Small singular values are the noise and the matrix is treated
 *             as numerically rank defficient. The error in the computed
 *             singular values is bounded by f(m,n)*epsilon*||A||.
 *             The computed SVD A = U * S * V^t restores A up to
 *             f(m,n)*epsilon*||A||.
 *             This gives the procedure the licence to discard (set to zero)
 *             all singular values below N*epsilon*||A||.
-*      = 'R': Similar as in 'A'. Rank revealing property of the initial
+*       = 'R': Similar as in 'A'. Rank revealing property of the initial
 *             QR factorization is used do reveal (using triangular factor)
 *             a gap sigma_{r+1} < epsilon * sigma_r in which case the
 *             numerical RANK is declared to be r. The SVD is computed with
 *             absolute error bounds, but more accurately than with 'A'.
 *
-* JOBU   (input) CHARACTER*1
+*  JOBU    (input) CHARACTER*1
 *        Specifies whether to compute the columns of U:
-*      = 'U': N columns of U are returned in the array U.
-*      = 'F': full set of M left sing. vectors is returned in the array U.
-*      = 'W': U may be used as workspace of length M*N. See the description
+*       = 'U': N columns of U are returned in the array U.
+*       = 'F': full set of M left sing. vectors is returned in the array U.
+*       = 'W': U may be used as workspace of length M*N. See the description
 *             of U.
-*      = 'N': U is not computed.
+*       = 'N': U is not computed.
 *
-* JOBV   (input) CHARACTER*1
+*  JOBV    (input) CHARACTER*1
 *        Specifies whether to compute the matrix V:
-*      = 'V': N columns of V are returned in the array V; Jacobi rotations
+*       = 'V': N columns of V are returned in the array V; Jacobi rotations
 *             are not explicitly accumulated.
-*      = 'J': N columns of V are returned in the array V, but they are
+*       = 'J': N columns of V are returned in the array V, but they are
 *             computed as the product of Jacobi rotations. This option is
 *             allowed only if JOBU .NE. 'N', i.e. in computing the full SVD.
-*      = 'W': V may be used as workspace of length N*N. See the description
+*       = 'W': V may be used as workspace of length N*N. See the description
 *             of V.
-*      = 'N': V is not computed.
+*       = 'N': V is not computed.
 *
-* JOBR   (input) CHARACTER*1
+*  JOBR    (input) CHARACTER*1
 *        Specifies the RANGE for the singular values. Issues the licence to
 *        set to zero small positive singular values if they are outside
 *        specified range. If A .NE. 0 is scaled so that the largest singular
@@ -112,27 +112,27 @@
 *        the licence to kill columns of A whose norm in c*A is less than
 *        DSQRT(SFMIN) (for JOBR.EQ.'R'), or less than SMALL=SFMIN/EPSLN,
 *        where SFMIN=SLAMCH('S'), EPSLN=SLAMCH('E').
-*      = 'N': Do not kill small columns of c*A. This option assumes that
+*       = 'N': Do not kill small columns of c*A. This option assumes that
 *             BLAS and QR factorizations and triangular solvers are
 *             implemented to work in that range. If the condition of A
 *             is greater than BIG, use DGESVJ.
-*      = 'R': RESTRICTED range for sigma(c*A) is [DSQRT(SFMIN), DSQRT(BIG)]
+*       = 'R': RESTRICTED range for sigma(c*A) is [DSQRT(SFMIN), DSQRT(BIG)]
 *             (roughly, as described above). This option is recommended.
 *                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 *        For computing the singular values in the FULL range [SFMIN,BIG]
 *        use DGESVJ.
 *
-* JOBT   (input) CHARACTER*1
+*  JOBT    (input) CHARACTER*1
 *        If the matrix is square then the procedure may determine to use
 *        transposed A if A^t seems to be better with respect to convergence.
 *        If the matrix is not square, JOBT is ignored. This is subject to
 *        changes in the future.
 *        The decision is based on two values of entropy over the adjoint
 *        orbit of A^t * A. See the descriptions of WORK(6) and WORK(7).
-*      = 'T': transpose if entropy test indicates possibly faster
+*       = 'T': transpose if entropy test indicates possibly faster
 *        convergence of Jacobi process if A^t is taken as input. If A is
 *        replaced with A^t, then the row pivoting is included automatically.
-*      = 'N': do not speculate.
+*       = 'N': do not speculate.
 *        This option can be used to compute only the singular values, or the
 *        full SVD (U, SIGMA and V). For only one set of singular vectors
 *        (U or V), the caller should provide both U and V, as one of the
@@ -140,7 +140,7 @@
 *        The implementer can easily remove this constraint and make the
 *        code more complicated. See the descriptions of U and V.
 *
-* JOBP   (input) CHARACTER*1
+*  JOBP    (input) CHARACTER*1
 *        Issues the licence to introduce structured perturbations to drown
 *        denormalized numbers. This licence should be active if the
 *        denormals are poorly implemented, causing slow computation,
@@ -149,22 +149,22 @@
 *        when the full SVD or only the singular values are requested. The
 *        implementer/user can easily add the perturbation for the cases of
 *        computing one set of singular vectors.
-*      = 'P': introduce perturbation
-*      = 'N': do not perturb
+*       = 'P': introduce perturbation
+*       = 'N': do not perturb
 *
-*  M      (input) INTEGER
+*  M       (input) INTEGER
 *         The number of rows of the input matrix A.  M >= 0.
 *
-*  N      (input) INTEGER
+*  N       (input) INTEGER
 *         The number of columns of the input matrix A. M >= N >= 0.
 *
-*  A       (input/workspace) REAL array, dimension (LDA,N)
+*  A       (input/workspace) DOUBLE PRECISION array, dimension (LDA,N)
 *          On entry, the M-by-N matrix A.
 *
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,M).
 *
-*  SVA     (workspace/output) REAL array, dimension (N)
+*  SVA     (workspace/output) DOUBLE PRECISION array, dimension (N)
 *          On exit,
 *          - For WORK(1)/WORK(2) = ONE: The singular values of A. During the
 *            computation SVA contains Euclidean column norms of the
@@ -177,7 +177,7 @@
 *            as exact zeros obtained by "set to zero" because they are
 *            below the numerical rank threshold or are denormalized numbers.
 *
-*  U       (workspace/output) REAL array, dimension ( LDU, N )
+*  U       (workspace/output) DOUBLE PRECISION array, dimension ( LDU, N )
 *          If JOBU = 'U', then U contains on exit the M-by-N matrix of
 *                         the left singular vectors.
 *          If JOBU = 'F', then U contains on exit the M-by-M matrix of
@@ -196,7 +196,7 @@
 *          The leading dimension of the array U,  LDU >= 1.
 *          IF  JOBU = 'U' or 'F' or 'W',  then LDU >= M.
 *
-*  V       (workspace/output) REAL array, dimension ( LDV, N )
+*  V       (workspace/output) DOUBLE PRECISION array, dimension ( LDV, N )
 *          If JOBV = 'V', 'J' then V contains on exit the N-by-N matrix of
 *                         the right singular vectors;
 *          If JOBV = 'W', AND (JOBU.EQ.'U' AND JOBT.EQ.'T' AND M.EQ.N),
@@ -212,7 +212,7 @@
 *          The leading dimension of the array V,  LDV >= 1.
 *          If JOBV = 'V' or 'J' or 'W', then LDV >= N.
 *
-*  WORK    (workspace/output) REAL array, dimension at least LWORK.
+*  WORK    (workspace/output) DOUBLE PRECISION array, dimension at least LWORK.
 *          On exit,
 *          WORK(1) = SCALE = WORK(2) / WORK(1) is the scaling factor such
 *                    that SCALE*SVA(1:N) are the computed singular values

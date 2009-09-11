@@ -60,10 +60,12 @@
 *          WERR contain the semiwidth of the uncertainty
 *          interval of the corresponding eigenvalue APPROXIMATION in W
 *
-*  SPDIAM (input) estimate of the spectral diameter obtained from the
+*  SPDIAM  (input) estimate of the spectral diameter obtained from the
 *          Gerschgorin intervals
 *
-*  CLGAPL, CLGAPR (input) absolute gap on each end of the cluster.
+*  CLGAPL  (input) DOUBLE PRECISION
+*  CLGAPR  (input) DOUBLE PRECISION
+*          absolute gap on each end of the cluster.
 *          Set by the calling routine to protect against shifts too close
 *          to eigenvalues outside the cluster.
 *
@@ -82,6 +84,9 @@
 *
 *  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)
 *          Workspace.
+*
+*  INFO    (output) INTEGER
+*          Signals processing OK (=0) or failure (=1)
 *
 *  Further Details
 *  ===============

@@ -88,7 +88,7 @@
 *          The order in which the interchanges are made is N to IHI+1,
 *          then 1 to ILO-1.
 *
-*  WORK    (workspace) REAL array, dimension (lwork)
+*  WORK    (workspace) DOUBLE PRECISION array, dimension (lwork)
 *          lwork must be at least max(1,6*N) when JOB = 'S' or 'B', and
 *          at least 1 when JOB = 'N' or 'P'.
 *

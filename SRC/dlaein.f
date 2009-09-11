@@ -26,11 +26,11 @@
 *  Arguments
 *  =========
 *
-*  RIGHTV   (input) LOGICAL
+*  RIGHTV  (input) LOGICAL
 *          = .TRUE. : compute right eigenvector;
 *          = .FALSE.: compute left eigenvector.
 *
-*  NOINIT   (input) LOGICAL
+*  NOINIT  (input) LOGICAL
 *          = .TRUE. : no initial vector supplied in (VR,VI).
 *          = .FALSE.: initial vector supplied in (VR,VI).
 *
@@ -70,7 +70,7 @@
 *  LDB     (input) INTEGER
 *          The leading dimension of the array B.  LDB >= N+1.
 *
-*  WORK   (workspace) DOUBLE PRECISION array, dimension (N)
+*  WORK    (workspace) DOUBLE PRECISION array, dimension (N)
 *
 *  EPS3    (input) DOUBLE PRECISION
 *          A small machine-dependent value which is used to perturb

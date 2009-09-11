@@ -46,7 +46,7 @@
 *  ILAST   (input) INTEGER
 *          The index of the last eigenvalue to be computed.
 *
-*  RTOL   (input) DOUBLE PRECISION
+*  RTOL    (input) DOUBLE PRECISION
 *          Tolerance for the convergence of the bisection intervals.
 *          An interval [LEFT,RIGHT] has converged if
 *          RIGHT-LEFT.LT.RTOL*MAX(|LEFT|,|RIGHT|).

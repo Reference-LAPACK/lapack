@@ -68,7 +68,7 @@
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,N).
 *
-*  B       (input/output) DOUBLE PRECISION array, dimension (LDA, N)
+*  B       (input/output) DOUBLE PRECISION array, dimension (LDB, N)
 *          On entry, the symmetric matrix B.  If UPLO = 'U', the
 *          leading N-by-N upper triangular part of B contains the
 *          upper triangular part of the matrix B.  If UPLO = 'L',

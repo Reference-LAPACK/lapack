@@ -57,7 +57,7 @@
 *          On exit, the updated matrix A, again in generalized
 *          real Schur canonical form.
 *
-*  LDA     (input)  INTEGER
+*  LDA     (input) INTEGER
 *          The leading dimension of the array A. LDA >= max(1,N).
 *
 *  B       (input/output) DOUBLE PRECISION array, dimension (LDB,N)
@@ -66,10 +66,10 @@
 *          On exit, the updated matrix B, again in generalized
 *          real Schur canonical form (A,B).
 *
-*  LDB     (input)  INTEGER
+*  LDB     (input) INTEGER
 *          The leading dimension of the array B. LDB >= max(1,N).
 *
-*  Q       (input/output) DOUBLE PRECISION array, dimension (LDZ,N)
+*  Q       (input/output) DOUBLE PRECISION array, dimension (LDQ,N)
 *          On entry, if WANTQ = .TRUE., the orthogonal matrix Q.
 *          On exit, the updated matrix Q.
 *          If WANTQ = .FALSE., Q is not referenced.

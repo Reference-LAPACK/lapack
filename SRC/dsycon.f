@@ -61,7 +61,7 @@
 *
 *  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)
 *
-*  IWORK    (workspace) INTEGER array, dimension (N)
+*  IWORK   (workspace) INTEGER array, dimension (N)
 *
 *  INFO    (output) INTEGER
 *          = 0:  successful exit

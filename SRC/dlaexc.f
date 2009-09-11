@@ -41,7 +41,7 @@
 *          canonical form.
 *          On exit, the updated matrix T, again in Schur canonical form.
 *
-*  LDT     (input)  INTEGER
+*  LDT     (input) INTEGER
 *          The leading dimension of the array T. LDT >= max(1,N).
 *
 *  Q       (input/output) DOUBLE PRECISION array, dimension (LDQ,N)

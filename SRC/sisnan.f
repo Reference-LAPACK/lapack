@@ -19,7 +19,7 @@
 *  Arguments
 *  =========
 *
-*  SIN      (input) REAL
+*  SIN     (input) REAL
 *          Input to test for NaN.
 *
 *  =====================================================================

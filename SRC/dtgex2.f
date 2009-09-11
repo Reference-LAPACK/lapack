@@ -47,21 +47,21 @@
 *  N       (input) INTEGER
 *          The order of the matrices A and B. N >= 0.
 *
-*  A      (input/output) DOUBLE PRECISION arrays, dimensions (LDA,N)
+*  A       (input/output) DOUBLE PRECISION array, dimensions (LDA,N)
 *          On entry, the matrix A in the pair (A, B).
 *          On exit, the updated matrix A.
 *
-*  LDA     (input)  INTEGER
+*  LDA     (input) INTEGER
 *          The leading dimension of the array A. LDA >= max(1,N).
 *
-*  B      (input/output) DOUBLE PRECISION arrays, dimensions (LDB,N)
+*  B       (input/output) DOUBLE PRECISION array, dimensions (LDB,N)
 *          On entry, the matrix B in the pair (A, B).
 *          On exit, the updated matrix B.
 *
-*  LDB     (input)  INTEGER
+*  LDB     (input) INTEGER
 *          The leading dimension of the array B. LDB >= max(1,N).
 *
-*  Q       (input/output) DOUBLE PRECISION array, dimension (LDZ,N)
+*  Q       (input/output) DOUBLE PRECISION array, dimension (LDQ,N)
 *          On entry, if WANTQ = .TRUE., the orthogonal matrix Q.
 *          On exit, the updated matrix Q.
 *          Not referenced if WANTQ = .FALSE..

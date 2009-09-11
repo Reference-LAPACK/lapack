@@ -24,7 +24,7 @@
 *
 *  Arguments
 *  =========
-*  PREC   (input) CHARACTER*1
+*  PREC    (input) CHARACTER*1
 *          Specifies the form of the system of equations:
 *          = 'S':  Single
 *          = 'D':  Double

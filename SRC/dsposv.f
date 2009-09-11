@@ -98,7 +98,7 @@
 *  LDX     (input) INTEGER
 *          The leading dimension of the array X.  LDX >= max(1,N).
 *
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (N*NRHS)
+*  WORK    (workspace) DOUBLE PRECISION array, dimension (N,NRHS)
 *          This array is used to hold the residual vectors.
 *
 *  SWORK   (workspace) REAL array, dimension (N*(N+NRHS))

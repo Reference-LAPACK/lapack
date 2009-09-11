@@ -29,8 +29,8 @@
 *  Arguments
 *  =========
 *
-*  DIN1     (input) DOUBLE PRECISION
-*  DIN2     (input) DOUBLE PRECISION
+*  DIN1    (input) DOUBLE PRECISION
+*  DIN2    (input) DOUBLE PRECISION
 *          Two numbers to compare for inequality.
 *
 *  =====================================================================

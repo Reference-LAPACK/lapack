@@ -19,7 +19,7 @@
 *  Arguments
 *  =========
 *
-*  DIN      (input) DOUBLE PRECISION
+*  DIN     (input) DOUBLE PRECISION
 *          Input to test for NaN.
 *
 *  =====================================================================
