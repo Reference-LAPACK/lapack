@@ -6,7 +6,7 @@
 *
 *     .. Parameters ..
       INTEGER            NMAX, ITS
-      PARAMETER          ( NMAX = 100, ITS = 5000 )
+      PARAMETER          ( NMAX = 1000, ITS = 5000 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
@@ -33,7 +33,7 @@
    10 CONTINUE
       ALPHA = 0.315
 *
-*     Time 1,000,000 SAXPY operations
+*     Time 10,000,000 SAXPY operations
 *
       T1 = SECOND( )
       DO 30 J = 1, ITS
@@ -45,7 +45,7 @@
       T2 = SECOND( )
       WRITE( 6, 9999 )T2 - T1
       IF( T2-T1.GT.0.0 ) THEN
-         WRITE( 6, 9998 )1.0 / ( T2-T1 )
+         WRITE( 6, 9998 )10.0 / ( T2-T1 )
       ELSE
          WRITE( 6, 9994 )
       END IF
@@ -66,26 +66,23 @@
 *     to SECOND.
 *
       WRITE( 6, 9997 )T2 - T1
-      AVG = ( ( T2-T1 ) - TNOSEC ) * 1000./REAL( ITS )
-      WRITE( 6, 9996 )AVG
+      AVG = ( ( T2-T1 ) - TNOSEC ) * 1000.0E+00/REAL( ITS )
+      IF( AVG.GT.0.0)
+     $   WRITE( 6, 9996 )AVG
 *
 *     Compute the equivalent number of floating point operations used
 *     by an average call to SECOND.
 *
-      IF( TNOSEC.GT.0.0 )
+      IF(( AVG.GT.0.0 ).AND.( TNOSEC.GT.0.0 ))
      $   WRITE( 6, 9995 )1000.*AVG / TNOSEC
 *
- 9999 FORMAT( ' Time for 1,000,000 SAXPY ops  = ', G10.3, ' seconds' )
- 9998 FORMAT( ' SAXPY performance rate        = ', G10.3, ' mflops ' )
- 9997 FORMAT( ' Including SECOND, time        = ', G10.3, ' seconds' )
- 9996 FORMAT( ' Average time for SECOND       = ', G10.3,
+ 9999 FORMAT( ' Time for 10,000,000 SAXPY ops  = ', G10.3, ' seconds' )
+ 9998 FORMAT( ' SAXPY performance rate         = ', G10.3, ' mflops ' )
+ 9997 FORMAT( ' Including SECOND, time         = ', G10.3, ' seconds' )
+ 9996 FORMAT( ' Average time for SECOND        = ', G10.3,
      $      ' milliseconds' )
- 9995 FORMAT( ' Equivalent floating point ops = ', G10.3, ' ops' )
- 9994 FORMAT( ' *** Error:  Time for operations was zero' )
-      CALL MYSUB(NMAX,X,Y)
+ 9995 FORMAT( ' Equivalent floating point ops  = ', G10.3, ' ops' )
+ 9994 FORMAT( ' *** Warning:  Time for operations was less or equal',
+     $        ' than zero => timing in TESTING might be dubious' )
       END
-      SUBROUTINE MYSUB(N,X,Y)
-      INTEGER N
-      REAL X(N), Y(N)
-      RETURN
-      END
+
