@@ -827,11 +827,11 @@
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                           CALL ALADHD( NOUT, PATH )
                               IF( PREFAC ) THEN
-                                 WRITE( NOUT, FMT = 9997 )'SGBSVXX',
+                                 WRITE( NOUT, FMT = 9995 )'SGBSVXX',
      $                                FACT, TRANS, N, KL, KU, EQUED,
      $                                IMAT, K, RESULT( K )
                               ELSE
-                                 WRITE( NOUT, FMT = 9998 )'SGBSVXX',
+                                 WRITE( NOUT, FMT = 9996 )'SGBSVXX',
      $                                FACT, TRANS, N, KL, KU, IMAT, K,
      $                                RESULT( K )
                               END IF
@@ -845,11 +845,11 @@
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'SGBSVXX', FACT,
+                              WRITE( NOUT, FMT = 9995 )'SGBSVXX', FACT,
      $                             TRANS, N, KL, KU, EQUED, IMAT, 1,
      $                             RESULT( 1 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'SGBSVXX', FACT,
+                              WRITE( NOUT, FMT = 9996 )'SGBSVXX', FACT,
      $                             TRANS, N, KL, KU, IMAT, 1,
      $                             RESULT( 1 )
                            END IF
@@ -860,11 +860,11 @@
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'SGBSVXX', FACT,
+                              WRITE( NOUT, FMT = 9995 )'SGBSVXX', FACT,
      $                             TRANS, N, KL, KU, EQUED, IMAT, 6,
      $                             RESULT( 6 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'SGBSVXX', FACT,
+                              WRITE( NOUT, FMT = 9996 )'SGBSVXX', FACT,
      $                             TRANS, N, KL, KU, IMAT, 6,
      $                             RESULT( 6 )
                            END IF
@@ -875,11 +875,11 @@
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALADHD( NOUT, PATH )
                            IF( PREFAC ) THEN
-                              WRITE( NOUT, FMT = 9997 )'SGBSVXX', FACT,
+                              WRITE( NOUT, FMT = 9995 )'SGBSVXX', FACT,
      $                             TRANS, N, KL, KU, EQUED, IMAT, 7,
      $                             RESULT( 7 )
                            ELSE
-                              WRITE( NOUT, FMT = 9998 )'SGBSVXX', FACT,
+                              WRITE( NOUT, FMT = 9996 )'SGBSVXX', FACT,
      $                             TRANS, N, KL, KU, IMAT, 7,
      $                             RESULT( 7 )
                            END IF
