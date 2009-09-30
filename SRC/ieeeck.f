@@ -112,7 +112,7 @@
 *
       NAN5 = NEGINF*NEGZRO
 *
-      NAN6 = NAN5*0.0
+      NAN6 = NAN5*ZERO
 *
       IF( NAN1.EQ.NAN1 ) THEN
          IEEECK = 0
