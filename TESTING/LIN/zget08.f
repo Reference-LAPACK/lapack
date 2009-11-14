@@ -18,7 +18,7 @@
 *  Purpose
 *  =======
 *
-*  ZGET02 computes the residual for a solution of a system of linear
+*  ZGET08 computes the residual for a solution of a system of linear
 *  equations  A*x = b  or  A'*x = b:
 *     RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
 *  where EPS is the machine epsilon.
