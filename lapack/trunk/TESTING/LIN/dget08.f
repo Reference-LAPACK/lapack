@@ -18,7 +18,7 @@
 *  Purpose
 *  =======
 *
-*  DGET02 computes the residual for a solution of a system of linear
+*  DGET08 computes the residual for a solution of a system of linear
 *  equations  A*x = b  or  A'*x = b:
 *     RESID = norm(B - A*X,inf) / ( norm(A,inf) * norm(X,inf) * EPS ),
 *  where EPS is the machine epsilon.
