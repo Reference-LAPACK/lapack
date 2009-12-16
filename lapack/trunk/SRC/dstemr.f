@@ -391,10 +391,10 @@
                IF (SN.NE.ZERO) THEN
                   IF (CS.NE.ZERO) THEN
                      ISUPPZ(2*M-1) = 1
-                     ISUPPZ(2*M-1) = 2
+                     ISUPPZ(2*M) = 2
                   ELSE
                      ISUPPZ(2*M-1) = 1
-                     ISUPPZ(2*M-1) = 1
+                     ISUPPZ(2*M) = 1
                   END IF
                ELSE
                   ISUPPZ(2*M-1) = 2
@@ -415,10 +415,10 @@
                IF (SN.NE.ZERO) THEN
                   IF (CS.NE.ZERO) THEN
                      ISUPPZ(2*M-1) = 1
-                     ISUPPZ(2*M-1) = 2
+                     ISUPPZ(2*M) = 2
                   ELSE
                      ISUPPZ(2*M-1) = 1
-                     ISUPPZ(2*M-1) = 1
+                     ISUPPZ(2*M) = 1
                   END IF
                ELSE
                   ISUPPZ(2*M-1) = 2
