@@ -63,7 +63,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
-      DOUBLE PRECISION   BETA, BIGNUM, SMLNUM, XNORM
+      DOUBLE PRECISION   BETA, BIGNUM, SAVEALPHA, SMLNUM, XNORM
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DLAPY2, DNRM2
@@ -127,6 +127,7 @@
             XNORM = DNRM2( N-1, X, INCX )
             BETA = SIGN( DLAPY2( ALPHA, XNORM ), ALPHA )
          END IF
+         SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
          IF( BETA.LT.ZERO ) THEN
             BETA = -BETA
@@ -146,14 +147,14 @@
 *           (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.)
 *           (Thanks Pat. Thanks MathWorks.)
 *
-            IF( ALPHA.GE.ZERO ) THEN
+            IF( SAVEALPHA.GE.ZERO ) THEN
                TAU = ZERO
             ELSE
                TAU = TWO
                DO J = 1, N-1
                   X( 1 + (J-1)*INCX ) = 0
                END DO
-               ALPHA = -ALPHA
+               BETA = -SAVEALPHA
             END IF
 *
          ELSE 
