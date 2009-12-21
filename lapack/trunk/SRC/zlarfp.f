@@ -34,8 +34,6 @@
 *  If the elements of x are all zero and alpha is real, then tau = 0
 *  and H is taken to be the unit matrix.
 *
-*  Otherwise  1 <= real(tau) <= 2  and  abs(tau-1) <= 1 .
-*
 *  Arguments
 *  =========
 *
