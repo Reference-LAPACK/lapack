@@ -34,8 +34,6 @@
 *  If the elements of x are all zero, then tau = 0 and H is taken to be
 *  the unit matrix.
 *
-*  Otherwise  1 <= tau <= 2.
-*
 *  Arguments
 *  =========
 *
