@@ -63,7 +63,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
-      DOUBLE PRECISION   BETA, RSAFMN, SAFMIN, XNORM
+      DOUBLE PRECISION   BETA, BIGNUM, SMLNUM, XNORM
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DLAPY2, DNRM2
@@ -107,22 +107,22 @@
 *        general case
 *
          BETA = SIGN( DLAPY2( ALPHA, XNORM ), ALPHA )
-         SAFMIN = DLAMCH( 'S' ) / DLAMCH( 'E' )
+         SMLNUM = DLAMCH( 'S' ) / DLAMCH( 'E' )
          KNT = 0
-         IF( ABS( BETA ).LT.SAFMIN ) THEN
+         IF( ABS( BETA ).LT.SMLNUM ) THEN
 *
 *           XNORM, BETA may be inaccurate; scale X and recompute them
 *
-            RSAFMN = ONE / SAFMIN
+            BIGNUM = ONE / SMLNUM
    10       CONTINUE
             KNT = KNT + 1
-            CALL DSCAL( N-1, RSAFMN, X, INCX )
-            BETA = BETA*RSAFMN
-            ALPHA = ALPHA*RSAFMN
-            IF( ABS( BETA ).LT.SAFMIN )
+            CALL DSCAL( N-1, BIGNUM, X, INCX )
+            BETA = BETA*BIGNUM
+            ALPHA = ALPHA*BIGNUM
+            IF( ABS( BETA ).LT.SMLNUM )
      $         GO TO 10
 *
-*           New BETA is at most 1, at least SAFMIN
+*           New BETA is at most 1, at least SMLNUM
 *
             XNORM = DNRM2( N-1, X, INCX )
             BETA = SIGN( DLAPY2( ALPHA, XNORM ), ALPHA )
@@ -141,7 +141,7 @@
 *        If BETA is subnormal, it may lose relative accuracy
 *
          DO 20 J = 1, KNT
-            BETA = BETA*SAFMIN
+            BETA = BETA*SMLNUM
  20      CONTINUE
          ALPHA = BETA
       END IF

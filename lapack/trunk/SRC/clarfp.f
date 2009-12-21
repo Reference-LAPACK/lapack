@@ -63,7 +63,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, KNT
-      REAL               ALPHI, ALPHR, BETA, RSAFMN, SAFMIN, XNORM
+      REAL               ALPHI, ALPHR, BETA, BIGNUM, SMLNUM, XNORM
 *     ..
 *     .. External Functions ..
       REAL               SCNRM2, SLAMCH, SLAPY3, SLAPY2
@@ -120,24 +120,24 @@
 *        general case
 *
          BETA = SIGN( SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
-         SAFMIN = SLAMCH( 'S' ) / SLAMCH( 'E' )
-         RSAFMN = ONE / SAFMIN
+         SMLNUM = SLAMCH( 'S' ) / SLAMCH( 'E' )
+         BIGNUM = ONE / SMLNUM
 *
          KNT = 0
-         IF( ABS( BETA ).LT.SAFMIN ) THEN
+         IF( ABS( BETA ).LT.SMLNUM ) THEN
 *
 *           XNORM, BETA may be inaccurate; scale X and recompute them
 *
    10       CONTINUE
             KNT = KNT + 1
-            CALL CSSCAL( N-1, RSAFMN, X, INCX )
-            BETA = BETA*RSAFMN
-            ALPHI = ALPHI*RSAFMN
-            ALPHR = ALPHR*RSAFMN
-            IF( ABS( BETA ).LT.SAFMIN )
+            CALL CSSCAL( N-1, BIGNUM, X, INCX )
+            BETA = BETA*BIGNUM
+            ALPHI = ALPHI*BIGNUM
+            ALPHR = ALPHR*BIGNUM
+            IF( ABS( BETA ).LT.SMLNUM )
      $         GO TO 10
 *
-*           New BETA is at most 1, at least SAFMIN
+*           New BETA is at most 1, at least SMLNUM
 *
             XNORM = SCNRM2( N-1, X, INCX )
             ALPHA = CMPLX( ALPHR, ALPHI )
@@ -159,7 +159,7 @@
 *        If BETA is subnormal, it may lose relative accuracy
 *
          DO 20 J = 1, KNT
-            BETA = BETA*SAFMIN
+            BETA = BETA*SMLNUM
  20      CONTINUE
          ALPHA = BETA
       END IF
