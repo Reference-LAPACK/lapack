@@ -109,7 +109,7 @@
          ELSE
 *           Only "reflecting" the diagonal entry to be real and non-negative.
             XNORM = DLAPY2( ALPHR, ALPHI )
-            TAU = DCMPLX( ONE - ALPHR / XNORM, -ALPHI / XNORM )
+            TAU = DCMPLX( ONE - ALPHR / XNORM, ALPHI / XNORM )
             DO J = 1, N-1
                X( 1 + (J-1)*INCX ) = ZERO
             END DO
