@@ -91,13 +91,13 @@
 *        H  =  [+/-1, 0; I], sign chosen so ALPHA >= 0.
 *
          IF( ALPHA.GE.ZERO ) THEN
-!           When TAU.eq.ZERO, the vector is special-cased to be
-!           all zeros in the application routines.  We do not need
-!           to clear it.
+*           When TAU.eq.ZERO, the vector is special-cased to be
+*           all zeros in the application routines.  We do not need
+*           to clear it.
             TAU = ZERO
          ELSE
-!           However, the application routines rely on explicit
-!           zero checks when TAU.ne.ZERO, and we must clear X.
+*           However, the application routines rely on explicit
+*           zero checks when TAU.ne.ZERO, and we must clear X.
             TAU = TWO
             DO J = 1, N-1
                X( 1 + (J-1)*INCX ) = 0
