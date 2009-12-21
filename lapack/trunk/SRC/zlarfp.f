@@ -95,13 +95,13 @@
 *
          IF( ALPHI.EQ.ZERO ) THEN
             IF( ALPHR.GE.ZERO ) THEN
-!              When TAU.eq.ZERO, the vector is special-cased to be
-!              all zeros in the application routines.  We do not need
-!              to clear it.
+*              When TAU.eq.ZERO, the vector is special-cased to be
+*              all zeros in the application routines.  We do not need
+*              to clear it.
                TAU = ZERO
             ELSE
-!              However, the application routines rely on explicit
-!              zero checks when TAU.ne.ZERO, and we must clear X.
+*              However, the application routines rely on explicit
+*              zero checks when TAU.ne.ZERO, and we must clear X.
                TAU = TWO
                DO J = 1, N-1
                   X( 1 + (J-1)*INCX ) = ZERO
@@ -109,7 +109,7 @@
                ALPHA = -ALPHA
             END IF
          ELSE
-!           Only "reflecting" the diagonal entry to be real and non-negative.
+*           Only "reflecting" the diagonal entry to be real and non-negative.
             XNORM = DLAPY2( ALPHR, ALPHI )
             TAU = DCMPLX( ONE - ALPHR / XNORM, -ALPHI / XNORM )
             DO J = 1, N-1
