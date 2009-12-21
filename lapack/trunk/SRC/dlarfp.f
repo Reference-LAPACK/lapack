@@ -136,7 +136,33 @@
             TAU = ALPHA / BETA
             ALPHA = -ALPHA
          END IF
-         CALL DSCAL( N-1, ONE / ALPHA, X, INCX )
+*
+         IF ( ABS(TAU).LE.SMLNUM ) THEN
+*
+*           In the case where the computed TAU ends up being a denormalized number,
+*           it loses relative accuracy. This is a BIG problem. Solution: flush TAU 
+*           to ZERO. This explains the next IF statement.
+*
+*           (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.)
+*           (Thanks Pat. Thanks MathWorks.)
+*
+            IF( ALPHA.GE.ZERO ) THEN
+               TAU = ZERO
+            ELSE
+               TAU = TWO
+               DO J = 1, N-1
+                  X( 1 + (J-1)*INCX ) = 0
+               END DO
+               ALPHA = -ALPHA
+            END IF
+*
+         ELSE 
+*
+*           This is the general case.
+*
+            CALL DSCAL( N-1, ONE / ALPHA, X, INCX )
+*
+         END IF
 *
 *        If BETA is subnormal, it may lose relative accuracy
 *
