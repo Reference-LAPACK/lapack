@@ -64,6 +64,7 @@
 *     .. Local Scalars ..
       INTEGER            J, KNT
       DOUBLE PRECISION   ALPHI, ALPHR, BETA, BIGNUM, SMLNUM, XNORM
+      COMPLEX*16         SAVEALPHA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DLAPY3, DLAPY2, DZNRM2
@@ -143,6 +144,7 @@
             ALPHA = DCMPLX( ALPHR, ALPHI )
             BETA = SIGN( DLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
+         SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
          IF( BETA.LT.ZERO ) THEN
             BETA = -BETA
@@ -164,6 +166,8 @@
 *           (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.)
 *           (Thanks Pat. Thanks MathWorks.)
 *
+            ALPHR = DBLE( SAVEALPHA )
+            ALPHI = DIMAG( SAVEALPHA )
             IF( ALPHI.EQ.ZERO ) THEN
                IF( ALPHR.GE.ZERO ) THEN
                   TAU = ZERO
@@ -172,7 +176,7 @@
                   DO J = 1, N-1
                      X( 1 + (J-1)*INCX ) = ZERO
                   END DO
-                  ALPHA = -ALPHA
+                  BETA = -SAVEALPHA
                END IF
             ELSE
                XNORM = DLAPY2( ALPHR, ALPHI )
@@ -180,7 +184,7 @@
                DO J = 1, N-1
                   X( 1 + (J-1)*INCX ) = ZERO
                END DO
-               ALPHA = XNORM
+               BETA = XNORM
             END IF
 *
          ELSE 

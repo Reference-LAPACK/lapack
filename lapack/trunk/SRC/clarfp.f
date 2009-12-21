@@ -64,6 +64,7 @@
 *     .. Local Scalars ..
       INTEGER            J, KNT
       REAL               ALPHI, ALPHR, BETA, BIGNUM, SMLNUM, XNORM
+      COMPLEX            SAVEALPHA
 *     ..
 *     .. External Functions ..
       REAL               SCNRM2, SLAMCH, SLAPY3, SLAPY2
@@ -143,6 +144,7 @@
             ALPHA = CMPLX( ALPHR, ALPHI )
             BETA = SIGN( SLAPY3( ALPHR, ALPHI, XNORM ), ALPHR )
          END IF
+         SAVEALPHA = ALPHA
          ALPHA = ALPHA + BETA
          IF( BETA.LT.ZERO ) THEN
             BETA = -BETA
@@ -164,6 +166,8 @@
 *           (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.)
 *           (Thanks Pat. Thanks MathWorks.)
 *
+            ALPHR = REAL( SAVEALPHA )
+            ALPHI = AIMAG( SAVEALPHA )
             IF( ALPHI.EQ.ZERO ) THEN
                IF( ALPHR.GE.ZERO ) THEN
                   TAU = ZERO
@@ -172,7 +176,7 @@
                   DO J = 1, N-1
                      X( 1 + (J-1)*INCX ) = ZERO
                   END DO
-                  ALPHA = -ALPHA
+                  BETA = -SAVEALPHA
                END IF
             ELSE
                XNORM = SLAPY2( ALPHR, ALPHI )
@@ -180,7 +184,7 @@
                DO J = 1, N-1
                   X( 1 + (J-1)*INCX ) = ZERO
                END DO
-               ALPHA = XNORM
+               BETA = XNORM
             END IF
 *
          ELSE 
