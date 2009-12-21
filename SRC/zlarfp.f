@@ -154,7 +154,42 @@
             ALPHA = DCMPLX( -ALPHR, ALPHI )
          END IF
          ALPHA = ZLADIV( DCMPLX( ONE ), ALPHA )
-         CALL ZSCAL( N-1, ALPHA, X, INCX )
+*
+         IF ( ABS(TAU).LE.SMLNUM ) THEN
+*
+*           In the case where the computed TAU ends up being a denormalized number,
+*           it loses relative accuracy. This is a BIG problem. Solution: flush TAU 
+*           to ZERO (or TWO or whatever makes a nonnegative real number for BETA).
+*
+*           (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.)
+*           (Thanks Pat. Thanks MathWorks.)
+*
+            IF( ALPHI.EQ.ZERO ) THEN
+               IF( ALPHR.GE.ZERO ) THEN
+                  TAU = ZERO
+               ELSE
+                  TAU = TWO
+                  DO J = 1, N-1
+                     X( 1 + (J-1)*INCX ) = ZERO
+                  END DO
+                  ALPHA = -ALPHA
+               END IF
+            ELSE
+               XNORM = DLAPY2( ALPHR, ALPHI )
+               TAU = DCMPLX( ONE - ALPHR / XNORM, ALPHI / XNORM )
+               DO J = 1, N-1
+                  X( 1 + (J-1)*INCX ) = ZERO
+               END DO
+               ALPHA = XNORM
+            END IF
+*
+         ELSE 
+*
+*           This is the general case.
+*
+            CALL ZSCAL( N-1, ALPHA, X, INCX )
+*
+         END IF
 *
 *        If BETA is subnormal, it may lose relative accuracy
 *
