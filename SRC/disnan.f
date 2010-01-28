@@ -1,4 +1,4 @@
-      LOGICAL FUNCTION DISNAN(DIN)
+      LOGICAL FUNCTION DISNAN( DIN)
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -6,7 +6,7 @@
 *     November 2006
 *
 *     .. Scalar Arguments ..
-      DOUBLE PRECISION DIN
+      DOUBLE PRECISION   DIN
 *     ..
 *
 *  Purpose

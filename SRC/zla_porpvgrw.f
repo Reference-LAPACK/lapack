@@ -149,4 +149,4 @@
       END IF
 
       ZLA_PORPVGRW = RPVGRW
-      END FUNCTION
+      END

@@ -51,7 +51,7 @@
 *     the matrix abs(op(A_s))*abs(Y) + abs(B_s). The matrices A, Y, and B
 *     are from iterative refinement (see dla_gerfsx_extended.f).
 *     
-*     RES     (output) DOUBLE PRECISION array, dimension (NRHS)
+*     BERR    (output) DOUBLE PRECISION array, dimension (NRHS)
 *     The component-wise relative backward error from the formula above.
 *
 *  =====================================================================
@@ -90,4 +90,4 @@
 *
          END DO
       END DO
-      END SUBROUTINE
+      END

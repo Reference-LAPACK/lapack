@@ -42,7 +42,7 @@
 *  Arguments
 *  ==========
 *
-*  UPLO   - INTEGER
+*  UPLO    (input) INTEGER
 *           On entry, UPLO specifies whether the upper or lower
 *           triangular part of the array A is to be referenced as
 *           follows:
@@ -55,7 +55,7 @@
 *
 *           Unchanged on exit.
 *
-*  N      - INTEGER.
+*  N       (input) INTEGER
 *           On entry, N specifies the number of columns of the matrix A.
 *           N must be at least zero.
 *           Unchanged on exit.
@@ -69,7 +69,7 @@
 *           contain the matrix of coefficients.
 *           Unchanged on exit.
 *
-*  LDA    - INTEGER.
+*  LDA     (input) INTEGER
 *           On entry, LDA specifies the first dimension of A as declared
 *           in the calling (sub) program. LDA must be at least
 *           max( 1, n ).
@@ -81,7 +81,7 @@
 *           vector x.
 *           Unchanged on exit.
 *
-*  INCX   - INTEGER.
+*  INCX    (input) INTEGER
 *           On entry, INCX specifies the increment for the elements of
 *           X. INCX must not be zero.
 *           Unchanged on exit.
@@ -91,13 +91,13 @@
 *           supplied as zero then Y need not be set on input.
 *           Unchanged on exit.
 *
-*  Y      - DOUBLE PRECISION   array of DIMENSION at least
+*  Y       (input/output) DOUBLE PRECISION  array, dimension
 *           ( 1 + ( n - 1 )*abs( INCY ) )
 *           Before entry with BETA non-zero, the incremented array Y
 *           must contain the vector y. On exit, Y is overwritten by the
 *           updated vector y.
 *
-*  INCY   - INTEGER.
+*  INCY    (input) INTEGER
 *           On entry, INCY specifies the increment for the elements of
 *           Y. INCY must not be zero.
 *           Unchanged on exit.

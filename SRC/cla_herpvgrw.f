@@ -257,4 +257,4 @@
       END IF
 
       CLA_HERPVGRW = RPVGRW
-      END FUNCTION
+      END

@@ -141,4 +141,4 @@
       END IF
 
       SLA_PORPVGRW = RPVGRW
-      END FUNCTION
+      END

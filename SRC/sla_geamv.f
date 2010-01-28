@@ -42,7 +42,7 @@
 *  Arguments
 *  ==========
 *
-*  TRANS  - INTEGER
+*  TRANS   (input) INTEGER
 *           On entry, TRANS specifies the operation to be performed as
 *           follows:
 *
@@ -52,17 +52,17 @@
 *
 *           Unchanged on exit.
 *
-*  M      - INTEGER
+*  M       (input) INTEGER
 *           On entry, M specifies the number of rows of the matrix A.
 *           M must be at least zero.
 *           Unchanged on exit.
 *
-*  N      - INTEGER
+*  N       (input) INTEGER
 *           On entry, N specifies the number of columns of the matrix A.
 *           N must be at least zero.
 *           Unchanged on exit.
 *
-*  ALPHA  - REAL
+*  ALPHA   (input) REAL
 *           On entry, ALPHA specifies the scalar alpha.
 *           Unchanged on exit.
 *
@@ -71,13 +71,13 @@
 *           contain the matrix of coefficients.
 *           Unchanged on exit.
 *
-*  LDA    - INTEGER
+*  LDA     (input) INTEGER
 *           On entry, LDA specifies the first dimension of A as declared
 *           in the calling (sub) program. LDA must be at least
 *           max( 1, m ).
 *           Unchanged on exit.
 *
-*  X      - REAL             array of DIMENSION at least
+*  X       (input) REAL array, dimension
 *           ( 1 + ( n - 1 )*abs( INCX ) ) when TRANS = 'N' or 'n'
 *           and at least
 *           ( 1 + ( m - 1 )*abs( INCX ) ) otherwise.
@@ -85,12 +85,12 @@
 *           vector x.
 *           Unchanged on exit.
 *
-*  INCX   - INTEGER
+*  INCX    (input) INTEGER
 *           On entry, INCX specifies the increment for the elements of
 *           X. INCX must not be zero.
 *           Unchanged on exit.
 *
-*  BETA   - REAL
+*  BETA    (input) REAL
 *           On entry, BETA specifies the scalar beta. When BETA is
 *           supplied as zero then Y need not be set on input.
 *           Unchanged on exit.
@@ -104,7 +104,7 @@
 *           must contain the vector y. On exit, Y is overwritten by the
 *           updated vector y.
 *
-*  INCY   - INTEGER
+*  INCY    (input) INTEGER
 *           On entry, INCY specifies the increment for the elements of
 *           Y. INCY must not be zero.
 *           Unchanged on exit.

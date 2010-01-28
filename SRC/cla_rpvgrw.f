@@ -84,4 +84,4 @@
          END IF
       END DO
       CLA_RPVGRW = RPVGRW
-      END FUNCTION
+      END

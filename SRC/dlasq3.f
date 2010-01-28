@@ -74,7 +74,20 @@
 *  TTYPE  (input/output) INTEGER
 *         Shift type.
 *
-*  DMIN1, DMIN2, DN, DN1, DN2, G, TAU (input/output) DOUBLE PRECISION
+*  DMIN1  (input/output) DOUBLE PRECISION
+*
+*  DMIN2  (input/output) DOUBLE PRECISION
+*
+*  DN     (input/output) DOUBLE PRECISION
+*
+*  DN1    (input/output) DOUBLE PRECISION
+*
+*  DN2    (input/output) DOUBLE PRECISION
+*
+*  G      (input/output) DOUBLE PRECISION
+*
+*  TAU    (input/output) DOUBLE PRECISION
+*
 *         These are passed as arguments in order to save their values
 *         between calls to DLASQ3.
 *

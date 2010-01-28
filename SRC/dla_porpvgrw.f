@@ -142,4 +142,4 @@
       END IF
 
       DLA_PORPVGRW = RPVGRW
-      END FUNCTION
+      END

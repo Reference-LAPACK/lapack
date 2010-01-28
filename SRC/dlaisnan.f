@@ -1,4 +1,4 @@
-      LOGICAL FUNCTION DLAISNAN(DIN1,DIN2)
+      LOGICAL FUNCTION DLAISNAN( DIN1, DIN2)
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -6,7 +6,7 @@
 *     November 2006
 *
 *     .. Scalar Arguments ..
-      DOUBLE PRECISION DIN1,DIN2
+      DOUBLE PRECISION   DIN1, DIN2
 *     ..
 *
 *  Purpose
@@ -30,6 +30,7 @@
 *  =========
 *
 *  DIN1    (input) DOUBLE PRECISION
+*
 *  DIN2    (input) DOUBLE PRECISION
 *          Two numbers to compare for inequality.
 *

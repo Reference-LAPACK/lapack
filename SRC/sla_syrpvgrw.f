@@ -248,4 +248,4 @@
       END IF
 
       SLA_SYRPVGRW = RPVGRW
-      END FUNCTION
+      END

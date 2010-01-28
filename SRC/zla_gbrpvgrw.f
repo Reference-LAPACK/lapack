@@ -98,4 +98,4 @@
          END IF
       END DO
       ZLA_GBRPVGRW = RPVGRW
-      END FUNCTION
+      END

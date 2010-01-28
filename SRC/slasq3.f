@@ -74,7 +74,20 @@
 *  TTYPE  (input/output) INTEGER
 *         Shift type.
 *
-*  DMIN1, DMIN2, DN, DN1, DN2, G, TAU (input/output) REAL
+*  DMIN1  (input/output) REAL
+*
+*  DMIN2  (input/output) REAL
+*
+*  DN     (input/output) REAL
+*
+*  DN1    (input/output) REAL
+*
+*  DN2    (input/output) REAL
+*
+*  G      (input/output) REAL
+*
+*  TAU    (input/output) REAL
+*
 *         These are passed as arguments in order to save their values
 *         between calls to SLASQ3.
 *

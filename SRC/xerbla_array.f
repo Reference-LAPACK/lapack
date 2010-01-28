@@ -1,4 +1,4 @@
-      SUBROUTINE XERBLA_ARRAY(SRNAME_ARRAY, SRNAME_LEN, INFO)
+      SUBROUTINE XERBLA_ARRAY( SRNAME_ARRAY, SRNAME_LEN, INFO)
 *
 *  -- LAPACK auxiliary routine (version 3.2.1)                        --
 *

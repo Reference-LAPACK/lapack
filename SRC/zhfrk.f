@@ -39,11 +39,11 @@
 *  Arguments
 *  ==========
 *
-*  TRANSR    (input) CHARACTER.
+*  TRANSR  (input) CHARACTER
 *          = 'N':  The Normal Form of RFP A is stored;
 *          = 'C':  The Conjugate-transpose Form of RFP A is stored.
 *
-*  UPLO   - (input) CHARACTER.
+*  UPLO    (input) CHARACTER
 *           On  entry,   UPLO  specifies  whether  the  upper  or  lower
 *           triangular  part  of the  array  C  is to be  referenced  as
 *           follows:
@@ -56,7 +56,7 @@
 *
 *           Unchanged on exit.
 *
-*  TRANS  - (input) CHARACTER.
+*  TRANS   (input) CHARACTER
 *           On entry,  TRANS  specifies the operation to be performed as
 *           follows:
 *
@@ -66,41 +66,42 @@
 *
 *           Unchanged on exit.
 *
-*  N      - (input) INTEGER.
+*  N       (input) INTEGER
 *           On entry,  N specifies the order of the matrix C.  N must be
 *           at least zero.
 *           Unchanged on exit.
 *
-*  K      - (input) INTEGER.
+*  K       (input) INTEGER
 *           On entry with  TRANS = 'N' or 'n',  K  specifies  the number
 *           of  columns   of  the   matrix   A,   and  on   entry   with
 *           TRANS = 'C' or 'c',  K  specifies  the number of rows of the
 *           matrix A.  K must be at least zero.
 *           Unchanged on exit.
 *
-*  ALPHA  - (input) DOUBLE PRECISION.
+*  ALPHA   (input) DOUBLE PRECISION
 *           On entry, ALPHA specifies the scalar alpha.
 *           Unchanged on exit.
 *
-*  A      - (input) COMPLEX*16 array of DIMENSION ( LDA, ka ), where KA
+*  A       (input) COMPLEX*16 array of DIMENSION (LDA,ka)
+*           where KA
 *           is K  when TRANS = 'N' or 'n', and is N otherwise. Before
 *           entry with TRANS = 'N' or 'n', the leading N--by--K part of
 *           the array A must contain the matrix A, otherwise the leading
 *           K--by--N part of the array A must contain the matrix A.
 *           Unchanged on exit.
 *
-*  LDA    - (input) INTEGER.
+*  LDA     (input) INTEGER
 *           On entry, LDA specifies the first dimension of A as declared
 *           in  the  calling  (sub)  program.   When  TRANS = 'N' or 'n'
 *           then  LDA must be at least  max( 1, n ), otherwise  LDA must
 *           be at least  max( 1, k ).
 *           Unchanged on exit.
 *
-*  BETA   - (input) DOUBLE PRECISION.
+*  BETA    (input) DOUBLE PRECISION
 *           On entry, BETA specifies the scalar beta.
 *           Unchanged on exit.
 *
-*  C      - (input/output) COMPLEX*16 array, dimension ( N*(N+1)/2 ).
+*  C       (input/output) COMPLEX*16 array, dimension (N*(N+1)/2)
 *           On entry, the matrix A in RFP Format. RFP Format is
 *           described by TRANSR, UPLO and N. Note that the imaginary
 *           parts of the diagonal elements need not be set, they are

@@ -42,7 +42,7 @@
 *  Arguments
 *  ==========
 *
-*  TRANS  - INTEGER
+*  TRANS   (input) INTEGER
 *           On entry, TRANS specifies the operation to be performed as
 *           follows:
 *
@@ -52,12 +52,12 @@
 *
 *           Unchanged on exit.
 *
-*  M      - INTEGER
+*  M       (input) INTEGER
 *           On entry, M specifies the number of rows of the matrix A.
 *           M must be at least zero.
 *           Unchanged on exit.
 *
-*  N      - INTEGER
+*  N       (input) INTEGER
 *           On entry, N specifies the number of columns of the matrix A.
 *           N must be at least zero.
 *           Unchanged on exit.
@@ -71,13 +71,13 @@
 *           contain the matrix of coefficients.
 *           Unchanged on exit.
 *
-*  LDA    - INTEGER
+*  LDA     (input) INTEGER
 *           On entry, LDA specifies the first dimension of A as declared
 *           in the calling (sub) program. LDA must be at least
 *           max( 1, m ).
 *           Unchanged on exit.
 *
-*  X      - DOUBLE PRECISION   array of DIMENSION at least
+*  X       (input) DOUBLE PRECISION array, dimension
 *           ( 1 + ( n - 1 )*abs( INCX ) ) when TRANS = 'N' or 'n'
 *           and at least
 *           ( 1 + ( m - 1 )*abs( INCX ) ) otherwise.
@@ -85,7 +85,7 @@
 *           vector x.
 *           Unchanged on exit.
 *
-*  INCX   - INTEGER
+*  INCX    (input) INTEGER
 *           On entry, INCX specifies the increment for the elements of
 *           X. INCX must not be zero.
 *           Unchanged on exit.
@@ -104,7 +104,7 @@
 *           must contain the vector y. On exit, Y is overwritten by the
 *           updated vector y.
 *
-*  INCY   - INTEGER
+*  INCY    (input) INTEGER
 *           On entry, INCY specifies the increment for the elements of
 *           Y. INCY must not be zero.
 *           Unchanged on exit.

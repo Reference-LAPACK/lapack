@@ -257,4 +257,4 @@
       END IF
 
       ZLA_HERPVGRW = RPVGRW
-      END FUNCTION
+      END

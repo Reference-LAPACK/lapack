@@ -31,10 +31,13 @@
 *     N      (input) INTEGER
 *            The length of vectors X, Y, and W.
 *
-*     X, Y   (input/output) COMPLEX array, length N
-*            The doubled-single accumulation vector.
+*     X      (input/output) COMPLEX array, dimension (N)
+*            The first part of the doubled-single accumulation vector.
 *
-*     W      (input) COMPLEX array, length N
+*     Y      (input/output) COMPLEX array, dimension (N)
+*            The second part of the doubled-single accumulation vector.
+*
+*     W      (input) COMPLEX array, dimension (N)
 *            The vector to be added.
 *
 *  =====================================================================

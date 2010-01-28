@@ -32,14 +32,14 @@
 *  N       (input) INTEGER
 *          The order of the matrix (subblock, if the matrix splitted).
 *
-*  D       (input) REAL             array, dimension (N)
+*  D       (input) REAL array, dimension (N)
 *          The N diagonal elements of the diagonal matrix D.
 *
-*  L       (input) REAL             array, dimension (N-1)
+*  L       (input) REAL array, dimension (N-1)
 *          The (N-1) subdiagonal elements of the unit bidiagonal
 *          matrix L.
 *
-*  LD      (input) REAL             array, dimension (N-1)
+*  LD      (input) REAL array, dimension (N-1)
 *          The (N-1) elements L(i)*D(i).
 *
 *  CLSTRT  (input) INTEGER
@@ -48,22 +48,29 @@
 *  CLEND   (input) INTEGER
 *          The index of the last eigenvalue in the cluster.
 *
-*  W       (input) REAL             array, dimension >=  (CLEND-CLSTRT+1)
+*  W       (input) REAL array, dimension
+*          dimension is >=  (CLEND-CLSTRT+1)
 *          The eigenvalue APPROXIMATIONS of L D L^T in ascending order.
 *          W( CLSTRT ) through W( CLEND ) form the cluster of relatively
 *          close eigenalues.
 *
-*  WGAP    (input/output) REAL             array, dimension >=  (CLEND-CLSTRT+1)
+*  WGAP    (input/output) REAL array, dimension
+*          dimension is >=  (CLEND-CLSTRT+1)
 *          The separation from the right neighbor eigenvalue in W.
 *
-*  WERR    (input) REAL             array, dimension >=  (CLEND-CLSTRT+1)
+*  WERR    (input) REAL array, dimension
+*          dimension is >=  (CLEND-CLSTRT+1)
 *          WERR contain the semiwidth of the uncertainty
 *          interval of the corresponding eigenvalue APPROXIMATION in W
 *
-*  SPDIAM (input) estimate of the spectral diameter obtained from the
+*  SPDIAM  (input) REAL
+*          estimate of the spectral diameter obtained from the
 *          Gerschgorin intervals
 *
-*  CLGAPL, CLGAPR (input) absolute gap on each end of the cluster.
+*  CLGAPL  (input) REAL
+*
+*  CLGAPR  (input) REAL
+*          absolute gap on each end of the cluster.
 *          Set by the calling routine to protect against shifts too close
 *          to eigenvalues outside the cluster.
 *
@@ -80,7 +87,7 @@
 *          The first (N-1) elements of LPLUS contain the subdiagonal
 *          elements of the unit bidiagonal matrix L(+).
 *
-*  WORK    (workspace) REAL             array, dimension (2*N)
+*  WORK    (workspace) REAL array, dimension (2*N)
 *          Workspace.
 *
 *  Further Details
