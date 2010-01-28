@@ -258,4 +258,4 @@
       END IF
 
       CLA_SYRPVGRW = RPVGRW
-      END FUNCTION
+      END

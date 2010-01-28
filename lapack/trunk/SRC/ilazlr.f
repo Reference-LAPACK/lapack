@@ -1,4 +1,4 @@
-      INTEGER FUNCTION ILAZLR(M, N, A, LDA)
+      INTEGER FUNCTION ILAZLR( M, N, A, LDA )
       IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.2.1)                        --
@@ -62,4 +62,4 @@
          END DO
       END IF
       RETURN
-      END FUNCTION
+      END

@@ -48,7 +48,7 @@
 *     the matrix abs(op(A_s))*abs(Y) + abs(B_s). The matrices A, Y, and B
 *     are from iterative refinement (see zla_gerfsx_extended.f).
 *     
-*     RES    (output) COMPLEX*16 array, dimension (NRHS)
+*     BERR   (output) COMPLEX*16 array, dimension (NRHS)
 *     The componentwise relative backward error from the formula above.
 *
 *  =====================================================================
@@ -94,4 +94,4 @@
 *
          END DO
       END DO
-      END SUBROUTINE
+      END

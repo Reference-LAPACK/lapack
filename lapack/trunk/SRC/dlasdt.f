@@ -40,7 +40,7 @@
 *   NDIMR  (output) INTEGER array, dimension ( N )
 *          On exit, row dimensions of right children.
 *
-*   MSUB   (input) INTEGER.
+*   MSUB   (input) INTEGER
 *          On entry, the maximum row dimension each subproblem at the
 *          bottom of the tree can be of.
 *

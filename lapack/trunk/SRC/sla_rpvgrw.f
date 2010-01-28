@@ -77,4 +77,4 @@
          END IF
       END DO
       SLA_RPVGRW = RPVGRW
-      END FUNCTION
+      END

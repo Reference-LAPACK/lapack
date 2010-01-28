@@ -148,4 +148,4 @@
       END IF
 
       CLA_PORPVGRW = RPVGRW
-      END FUNCTION
+      END

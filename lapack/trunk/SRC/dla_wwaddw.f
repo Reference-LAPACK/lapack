@@ -31,10 +31,13 @@
 *     N      (input) INTEGER
 *            The length of vectors X, Y, and W.
 *
-*     X, Y   (input/output) DOUBLE PRECISION array, length N
-*            The doubled-single accumulation vector.
+*     X      (input/output) DOUBLE PRECISION array, dimension (N)
+*            The first part of the doubled-single accumulation vector.
 *
-*     W      (input) DOUBLE PRECISION array, length N
+*     Y      (input/output) DOUBLE PRECISION array, dimension (N)
+*            The second part of the doubled-single accumulation vector.
+*
+*     W      (input) DOUBLE PRECISION array, dimension (N)
 *            The vector to be added.
 *
 *  =====================================================================

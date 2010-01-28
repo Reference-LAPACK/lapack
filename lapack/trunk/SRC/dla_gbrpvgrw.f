@@ -91,4 +91,4 @@
          END IF
       END DO
       DLA_GBRPVGRW = RPVGRW
-      END FUNCTION
+      END

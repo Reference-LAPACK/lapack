@@ -40,11 +40,11 @@
 *  Arguments
 *  ==========
 *
-*  TRANSR - (input) CHARACTER
+*  TRANSR  (input) CHARACTER
 *          = 'N':  The Normal Form of RFP A is stored;
 *          = 'C':  The Conjugate-transpose Form of RFP A is stored.
 *
-*  SIDE   - (input) CHARACTER
+*  SIDE    (input) CHARACTER
 *           On entry, SIDE specifies whether op( A ) appears on the left
 *           or right of X as follows:
 *
@@ -54,7 +54,7 @@
 *
 *           Unchanged on exit.
 *
-*  UPLO   - (input) CHARACTER
+*  UPLO    (input) CHARACTER
 *           On entry, UPLO specifies whether the RFP matrix A came from
 *           an upper or lower triangular matrix as follows:
 *           UPLO = 'U' or 'u' RFP A came from an upper triangular matrix
@@ -62,7 +62,7 @@
 *
 *           Unchanged on exit.
 *
-*  TRANS  - (input) CHARACTER
+*  TRANS   (input) CHARACTER
 *           On entry, TRANS  specifies the form of op( A ) to be used
 *           in the matrix multiplication as follows:
 *
@@ -72,7 +72,7 @@
 *
 *           Unchanged on exit.
 *
-*  DIAG   - (input) CHARACTER
+*  DIAG    (input) CHARACTER
 *           On entry, DIAG specifies whether or not RFP A is unit
 *           triangular as follows:
 *
@@ -83,23 +83,23 @@
 *
 *           Unchanged on exit.
 *
-*  M      - (input) INTEGER.
+*  M       (input) INTEGER
 *           On entry, M specifies the number of rows of B. M must be at
 *           least zero.
 *           Unchanged on exit.
 *
-*  N      - (input) INTEGER.
+*  N       (input) INTEGER
 *           On entry, N specifies the number of columns of B.  N must be
 *           at least zero.
 *           Unchanged on exit.
 *
-*  ALPHA  - (input) COMPLEX*16.
+*  ALPHA   (input) COMPLEX*16
 *           On entry,  ALPHA specifies the scalar  alpha. When  alpha is
 *           zero then  A is not referenced and  B need not be set before
 *           entry.
 *           Unchanged on exit.
 *
-*  A      - (input) COMPLEX*16 array, dimension ( N*(N+1)/2 );
+*  A       (input) COMPLEX*16 array, dimension (N*(N+1)/2)
 *           NT = N*(N+1)/2. On entry, the matrix A in RFP Format.
 *           RFP Format is described by TRANSR, UPLO and N as follows:
 *           If TRANSR='N' then RFP A is (0:N,0:K-1) when N is even;
@@ -115,12 +115,12 @@
 *           even and is N when is odd.
 *           See the Note below for more details. Unchanged on exit.
 *
-*  B      - (input/ouptut) COMPLEX*16 array,  DIMENSION ( LDB, N)
+*  B       (input/output) COMPLEX*16 array, dimension (LDB,N)
 *           Before entry,  the leading  m by n part of the array  B must
 *           contain  the  right-hand  side  matrix  B,  and  on exit  is
 *           overwritten by the solution matrix  X.
 *
-*  LDB    - (input) INTEGER.
+*  LDB     (input) INTEGER
 *           On entry, LDB specifies the first dimension of B as declared
 *           in  the  calling  (sub)  program.   LDB  must  be  at  least
 *           max( 1, m ).
