@@ -142,6 +142,7 @@
          SNR = ZERO
          A( 2, 1 ) = ZERO
          B( 2, 1 ) = ZERO
+         WI = ZERO
 *
 *     Check if B is singular
 *
@@ -154,6 +155,7 @@
          A( 2, 1 ) = ZERO
          B( 1, 1 ) = ZERO
          B( 2, 1 ) = ZERO
+         WI = ZERO
 *
       ELSE IF( ABS( B( 2, 2 ) ).LE.ULP ) THEN
          CALL DLARTG( A( 2, 2 ), A( 2, 1 ), CSR, SNR, T )
@@ -165,6 +167,7 @@
          A( 2, 1 ) = ZERO
          B( 2, 1 ) = ZERO
          B( 2, 2 ) = ZERO
+         WI = ZERO
 *
       ELSE
 *
