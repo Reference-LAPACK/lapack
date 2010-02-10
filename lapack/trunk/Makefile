@@ -32,7 +32,7 @@ tmglib:
 lapack_testing:	lib
 	( cd TESTING ; $(MAKE) )
 
-variants_testing: lib
+variants_testing: lib variants
 	( cd TESTING ; rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/cholrl.a' ; \
 	mv stest.out stest_cholrl.out ; mv dtest.out dtest_cholrl.out ; mv ctest.out ctest_cholrl.out ; mv ztest.out ztest_cholrl.out )
 	( cd TESTING ; rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/choltop.a' ; \
