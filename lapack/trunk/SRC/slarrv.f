@@ -40,18 +40,18 @@
 *          eigenvalues. VL < VU. Needed to compute gaps on the left or right
 *          end of the extremal eigenvalues in the desired RANGE.
 *
-*  D       (input/output) REAL             array, dimension (N)
+*  D       (input/output) REAL array, dimension (N)
 *          On entry, the N diagonal elements of the diagonal matrix D.
 *          On exit, D may be overwritten.
 *
-*  L       (input/output) REAL             array, dimension (N)
+*  L       (input/output) REAL array, dimension (N)
 *          On entry, the (N-1) subdiagonal elements of the unit
 *          bidiagonal matrix L are in elements 1 to N-1 of L
 *          (if the matrix is not splitted.) At the end of each block
 *          is stored the corresponding shift as given by SLARRE.
 *          On exit, L is overwritten.
 *
-*  PIVMIN  (in) DOUBLE PRECISION
+*  PIVMIN  (input) REAL
 *          The minimum pivot allowed in the Sturm sequence.
 *
 *  ISPLIT  (input) INTEGER array, dimension (N)
@@ -92,11 +92,11 @@
 *          for their block. On exit, W holds the eigenvalues of the
 *          UNshifted matrix.
 *
-*  WERR    (input/output) REAL             array, dimension (N)
+*  WERR    (input/output) REAL array, dimension (N)
 *          The first M elements contain the semiwidth of the uncertainty
 *          interval of the corresponding eigenvalue in W
 *
-*  WGAP    (input/output) REAL             array, dimension (N)
+*  WGAP    (input/output) REAL array, dimension (N)
 *          The separation from the right neighbor eigenvalue in W.
 *
 *  IBLOCK  (input) INTEGER array, dimension (N)
@@ -110,12 +110,12 @@
 *          for example, INDEXW(i)= 10 and IBLOCK(i)=2 imply that the
 *          i-th eigenvalue W(i) is the 10-th eigenvalue in the second block.
 *
-*  GERS    (input) REAL             array, dimension (2*N)
+*  GERS    (input) REAL array, dimension (2*N)
 *          The N Gerschgorin intervals (the i-th Gerschgorin interval
 *          is (GERS(2*i-1), GERS(2*i)). The Gerschgorin intervals should
 *          be computed from the original UNshifted matrix.
 *
-*  Z       (output) REAL             array, dimension (LDZ, max(1,M) )
+*  Z       (output) REAL array, dimension (LDZ, max(1,M) )
 *          If INFO = 0, the first M columns of Z contain the
 *          orthonormal eigenvectors of the matrix T
 *          corresponding to the input eigenvalues, with the i-th
@@ -133,7 +133,7 @@
 *          is nonzero only in elements ISUPPZ( 2*I-1 ) through
 *          ISUPPZ( 2*I ).
 *
-*  WORK    (workspace) REAL             array, dimension (12*N)
+*  WORK    (workspace) REAL array, dimension (12*N)
 *
 *  IWORK   (workspace) INTEGER array, dimension (7*N)
 *

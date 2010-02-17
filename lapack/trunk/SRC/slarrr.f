@@ -29,7 +29,7 @@
 *  D       (input) REAL             array, dimension (N)
 *          The N diagonal elements of the tridiagonal matrix T.
 *
-*  E       (input/output) REAL             array, dimension (N)
+*  E       (input/output) REAL array, dimension (N)
 *          On entry, the first (N-1) entries contain the subdiagonal
 *          elements of the tridiagonal matrix T; E(N) is set to ZERO.
 *
