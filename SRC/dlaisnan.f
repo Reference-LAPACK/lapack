@@ -1,4 +1,4 @@
-      LOGICAL FUNCTION DLAISNAN( DIN1, DIN2)
+      LOGICAL FUNCTION DLAISNAN( DIN1, DIN2 )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

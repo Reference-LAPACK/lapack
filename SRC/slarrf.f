@@ -74,7 +74,7 @@
 *          Set by the calling routine to protect against shifts too close
 *          to eigenvalues outside the cluster.
 *
-*  PIVMIN  (input) DOUBLE PRECISION
+*  PIVMIN  (input) REAL
 *          The minimum pivot allowed in the Sturm sequence.
 *
 *  SIGMA   (output) REAL            

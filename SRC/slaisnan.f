@@ -1,4 +1,4 @@
-      LOGICAL FUNCTION SLAISNAN( SIN1, SIN2)
+      LOGICAL FUNCTION SLAISNAN( SIN1, SIN2 )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -44,7 +44,7 @@
 *          JOBT = 'T': The N-1 offdiagonal elements of the matrix T.
 *          JOBT = 'L': The N-1 offdiagonal elements of the matrix L.
 *
-*  PIVMIN  (input) DOUBLE PRECISION
+*  PIVMIN  (input) REAL
 *          The minimum pivot in the Sturm sequence for T.
 *
 *  EIGCNT  (output) INTEGER

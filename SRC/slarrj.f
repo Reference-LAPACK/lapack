@@ -72,10 +72,10 @@
 *  IWORK   (workspace) INTEGER array, dimension (2*N)
 *          Workspace.
 *
-*  PIVMIN  (input) DOUBLE PRECISION
+*  PIVMIN  (input) REAL
 *          The minimum pivot in the Sturm sequence for T.
 *
-*  SPDIAM  (input) DOUBLE PRECISION
+*  SPDIAM  (input) REAL
 *          The spectral diameter of T.
 *
 *  INFO    (output) INTEGER

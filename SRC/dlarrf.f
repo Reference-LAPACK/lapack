@@ -63,7 +63,8 @@
 *          WERR contain the semiwidth of the uncertainty
 *          interval of the corresponding eigenvalue APPROXIMATION in W
 *
-*  SPDIAM  (input) estimate of the spectral diameter obtained from the
+*  SPDIAM  (input) DOUBLE PRECISION
+*          estimate of the spectral diameter obtained from the
 *          Gerschgorin intervals
 *
 *  CLGAPL  (input) DOUBLE PRECISION
