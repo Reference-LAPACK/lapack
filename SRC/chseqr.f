@@ -1,7 +1,7 @@
       SUBROUTINE CHSEQR( JOB, COMPZ, N, ILO, IHI, H, LDH, W, Z, LDZ,
      $                   WORK, LWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *     November 2006
 *

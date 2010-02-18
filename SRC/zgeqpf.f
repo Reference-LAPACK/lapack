@@ -1,6 +1,6 @@
       SUBROUTINE ZGEQPF( M, N, A, LDA, JPVT, TAU, WORK, RWORK, INFO )
 *
-*  -- LAPACK deprecated driver routine (version 3.2) --
+*  -- LAPACK deprecated computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
