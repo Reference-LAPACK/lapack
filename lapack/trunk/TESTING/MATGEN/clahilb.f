@@ -155,7 +155,8 @@
       END DO
 
 !     Generate the scaled Hilbert matrix in A
-!     If we are testing SY routines, take D1_i = D2_i, else, D1_i = D2_i*
+!     If we are testing SY routines, take 
+!          D1_i = D2_i, else, D1_i = D2_i*
       IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
          DO J = 1, N
             DO I = 1, N
@@ -186,7 +187,8 @@
      $        * (N +J -1)
       END DO
       
-!     If we are testing SY routines, take D1_i = D2_i, else, D1_i = D2_i*
+!     If we are testing SY routines, 
+!            take D1_i = D2_i, else, D1_i = D2_i*
       IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
          DO J = 1, NRHS
             DO I = 1, N
