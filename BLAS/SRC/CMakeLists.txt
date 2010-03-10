@@ -78,7 +78,7 @@ set(ZB1AUX idamax.f dasum.f daxpy.f dcopy.f dnrm2.f dscal.f)
 #  Level 2 and Level 3 BLAS.  Comment it out only if you already have
 #  both the Level 2 and 3 BLAS.
 #---------------------------------------------------------------------
-set(ALLBLAS  lsame.f ) #xerbla.f xerbla_array.f)
+set(ALLBLAS  lsame.f xerbla.f xerbla_array.f)
 
 #---------------------------------------------------------
 #  Comment out the next 4 definitions if you already have
