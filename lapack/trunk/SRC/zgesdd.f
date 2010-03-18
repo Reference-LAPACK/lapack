@@ -127,7 +127,8 @@
 *
 *  RWORK   (workspace) DOUBLE PRECISION array, dimension (MAX(1,LRWORK))
 *          If JOBZ = 'N', LRWORK >= 5*min(M,N).
-*          Otherwise, LRWORK >= 5*min(M,N)*min(M,N) + 7*min(M,N)
+*          Otherwise,
+*          LRWORK >= min(M,N)*max(5*min(M,N)+7,2*max(M,N)+2*min(M,N)+1)
 *
 *  IWORK   (workspace) INTEGER array, dimension (8*min(M,N))
 *
