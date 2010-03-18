@@ -118,10 +118,10 @@
       COMPLEX            CDUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            SISNAN, LSAME
       INTEGER            ICAMAX
       REAL               SLAMCH
-      EXTERNAL           LSAME, ICAMAX, SLAMCH
+      EXTERNAL           SISNAN, LSAME, ICAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSSCAL, CSWAP, XERBLA
@@ -274,6 +274,14 @@
   160    CONTINUE
          IF( C.GE.G .OR. MAX( F, C, CA ).GE.SFMAX2 .OR.
      $       MIN( R, G, RA ).LE.SFMIN2 )GO TO 170
+ 	        IF( SISNAN( C+F+CA+R+G+RA ) ) THEN
+*
+*           Exit if NaN to avoid infinite loop
+*
+            INFO = -3
+            CALL XERBLA( 'CGEBAL', -INFO )
+            RETURN
+         END IF
          F = F*SCLFAC
          C = C*SCLFAC
          CA = CA*SCLFAC

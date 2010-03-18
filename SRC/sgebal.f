@@ -116,10 +116,10 @@
      $                   SFMIN2
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            SISNAN, LSAME
       INTEGER            ISAMAX
       REAL               SLAMCH
-      EXTERNAL           LSAME, ISAMAX, SLAMCH
+      EXTERNAL           SISNAN, LSAME, ISAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SSCAL, SSWAP, XERBLA
@@ -279,6 +279,14 @@
   180    CONTINUE
          IF( G.LT.R .OR. MAX( R, RA ).GE.SFMAX2 .OR.
      $       MIN( F, C, G, CA ).LE.SFMIN2 )GO TO 190
+            IF( SISNAN( C+F+CA+R+G+RA ) ) THEN
+*
+*           Exit if NaN to avoid infinite loop
+*
+            INFO = -3
+            CALL XERBLA( 'SGEBAL', -INFO )
+            RETURN
+         END IF
          F = F / SCLFAC
          C = C / SCLFAC
          G = G / SCLFAC
