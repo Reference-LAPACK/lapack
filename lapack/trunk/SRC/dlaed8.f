@@ -189,6 +189,13 @@
          RETURN
       END IF
 *
+*     Need to initialize GIVPTR to O here in case of quick exit
+*     to prevent an unspecified code behavior (usually sigfault) 
+*     when IWORK array on entry to *stedc is not zeroed 
+*     (or at least some IWORK entries which used in *laed7 for GIVPTR).
+*
+      GIVPTR = 0
+*
 *     Quick return if possible
 *
       IF( N.EQ.0 )
@@ -263,7 +270,6 @@
 *     components of Z are zero in this new basis.
 *
       K = 0
-      GIVPTR = 0
       K2 = N + 1
       DO 70 J = 1, N
          IF( RHO*ABS( Z( J ) ).LE.TOL ) THEN
