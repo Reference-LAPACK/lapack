@@ -345,7 +345,7 @@
                      ELSE
                         CALL STRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
      +                              A( M ), M, B( M1, 0 ), LDB )
-                        CALL SGEMM( 'T', 'N', M1, N, M2, -ONE, A( M1 ), M,
+                        CALL SGEMM( 'T', 'N', M1, N, M2, -ONE, A( M1 ),
      +                              M, B( M1, 0 ), LDB, ALPHA, B, LDB )
                         CALL STRSM( 'L', 'L', 'T', DIAG, M1, N, ONE,
      +                              A( 0 ), M, B, LDB )
