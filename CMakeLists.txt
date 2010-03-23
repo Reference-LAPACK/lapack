@@ -30,7 +30,7 @@ set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 2)
 set(CPACK_PACKAGE_VERSION_PATCH 1)
 include(CPack)
-export(TARGETS blas FILE lapack-targets.cmake)
+export(TARGETS blas lapack FILE lapack-targets.cmake)
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config.cmake.in
