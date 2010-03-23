@@ -62,7 +62,7 @@
 *          The number of right hand sides, i.e., the number of columns
 *          of the matrix B.  NRHS >= 0.
 *
-*  A       (input or input/ouptut) DOUBLE PRECISION array,
+*  A       (input/output) DOUBLE PRECISION array,
 *          dimension (LDA,N)
 *          On entry, the N-by-N coefficient matrix A.
 *          On exit, if iterative refinement has been successfully used

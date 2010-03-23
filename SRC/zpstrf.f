@@ -72,7 +72,7 @@
 *          will be used. The algorithm terminates at the (K-1)st step
 *          if the pivot <= TOL.
 *
-*  WORK    DOUBLE PRECISION array, dimension (2*N)
+*  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)
 *          Work space.
 *
 *  INFO    (output) INTEGER

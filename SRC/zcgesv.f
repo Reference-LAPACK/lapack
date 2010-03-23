@@ -63,7 +63,7 @@
 *          The number of right hand sides, i.e., the number of columns
 *          of the matrix B.  NRHS >= 0.
 *
-*  A       (input or input/ouptut) COMPLEX*16 array,
+*  A       (input/output) COMPLEX*16 array,
 *          dimension (LDA,N)
 *          On entry, the N-by-N coefficient matrix A.
 *          On exit, if iterative refinement has been successfully used

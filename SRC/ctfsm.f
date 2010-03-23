@@ -115,7 +115,7 @@
 *           even and is N when is odd.
 *           See the Note below for more details. Unchanged on exit.
 *
-*  B       (input/ouptut) COMPLEX array,  dimension (LDB,N)
+*  B       (input/output) COMPLEX array,  dimension (LDB,N)
 *           Before entry,  the leading  m by n part of the array  B must
 *           contain  the  right-hand  side  matrix  B,  and  on exit  is
 *           overwritten by the solution matrix  X.

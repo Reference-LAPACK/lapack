@@ -69,7 +69,7 @@
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,N).
 *
-*  WORK    REAL array, dimension (2*N)
+*  WORK    (workspace) REAL array, dimension (2*N)
 *          Work space.
 *
 *  INFO    (output) INTEGER
