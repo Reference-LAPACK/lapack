@@ -134,8 +134,8 @@
 *     .. Parameters ..
       REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
-      REAL               TEN
-      PARAMETER          ( TEN = 1.0E+01 )
+      REAL               TWENTY
+      PARAMETER          ( TWENTY = 2.0E+01 )
       INTEGER            LDST
       PARAMETER          ( LDST = 4 )
       LOGICAL            WANDS
@@ -205,7 +205,16 @@
       CALL SLACPY( 'Full', M, M, T, LDST, WORK, M )
       CALL SLASSQ( M*M, WORK, 1, DSCALE, DSUM )
       DNORM = DSCALE*SQRT( DSUM )
-      THRESH = MAX( TEN*EPS*DNORM, SMLNUM )
+*
+*     THRES has been changed from 
+*        THRESH = MAX( TEN*EPS*SA, SMLNUM )
+*     to
+*        THRESH = MAX( TWENTY*EPS*SA, SMLNUM )
+*     on 04/01/10.
+*     "Bug" reported by Ondra Kamenik, confirmed by Julie Langou, fixed by
+*     Jim Demmel and Guillaume Revy. See forum post 1783.
+*
+      THRESH = MAX( TWENTY*EPS*DNORM, SMLNUM )
 *
       IF( M.EQ.2 ) THEN
 *

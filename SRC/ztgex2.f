@@ -118,8 +118,8 @@
       COMPLEX*16         CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ),
      $                   CONE = ( 1.0D+0, 0.0D+0 ) )
-      DOUBLE PRECISION   TEN
-      PARAMETER          ( TEN = 10.0D+0 )
+      DOUBLE PRECISION   TWENTY
+      PARAMETER          ( TWENTY = 2.0D+1 )
       INTEGER            LDST
       PARAMETER          ( LDST = 2 )
       LOGICAL            WANDS
@@ -173,7 +173,16 @@
       CALL ZLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )
       CALL ZLASSQ( 2*M*M, WORK, 1, SCALE, SUM )
       SA = SCALE*SQRT( SUM )
-      THRESH = MAX( TEN*EPS*SA, SMLNUM )
+*
+*     THRES has been changed from 
+*        THRESH = MAX( TEN*EPS*SA, SMLNUM )
+*     to
+*        THRESH = MAX( TWENTY*EPS*SA, SMLNUM )
+*     on 04/01/10.
+*     "Bug" reported by Ondra Kamenik, confirmed by Julie Langou, fixed by
+*     Jim Demmel and Guillaume Revy. See forum post 1783.
+*
+      THRESH = MAX( TWENTY*EPS*SA, SMLNUM )
 *
 *     Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks
 *     using Givens rotations and perform the swap tentatively.
