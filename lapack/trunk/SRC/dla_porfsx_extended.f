@@ -379,7 +379,7 @@
 
 !         XXX: RES is no longer needed.
             CALL DCOPY( N, RES, 1, DY, 1 )
-            CALL DPOTRS( UPLO, N, NRHS, AF, LDAF, DY, N, INFO )
+            CALL DPOTRS( UPLO, N, 1, AF, LDAF, DY, N, INFO )
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.
 *

@@ -387,7 +387,7 @@
 
 !         XXX: RES is no longer needed.
             CALL CCOPY( N, RES, 1, DY, 1 )
-            CALL CPOTRS( UPLO, N, NRHS, AF, LDAF, DY, N, INFO)
+            CALL CPOTRS( UPLO, N, 1, AF, LDAF, DY, N, INFO)
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.
 *

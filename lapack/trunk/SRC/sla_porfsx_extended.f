@@ -376,7 +376,7 @@
 
 !         XXX: RES is no longer needed.
             CALL SCOPY( N, RES, 1, DY, 1 )
-            CALL SPOTRS( UPLO, N, NRHS, AF, LDAF, DY, N, INFO )
+            CALL SPOTRS( UPLO, N, 1, AF, LDAF, DY, N, INFO )
 *
 *         Calculate relative changes DX_X, DZ_Z and ratios DXRAT, DZRAT.
 *
