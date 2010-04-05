@@ -103,7 +103,7 @@
 
 *     .. External Subroutines ..
       EXTERNAL           CLAHILB, CGESVXX, CSYSVXX, CPOSVXX,
-     $                   CGBSVXX, SLACPY, LSAMEN
+     $                   CGBSVXX, CLACPY, LSAMEN
       LOGICAL            LSAMEN
 
 *     .. Intrinsic Functions ..
@@ -174,7 +174,7 @@
                ABCOPY( I, J ) = (0.0E+0,0.0E+0)
             END DO
          END DO
-         CALL DLACPY('ALL', KL+KU+1, N, AB, LDAB, ABCOPY, LDAB)
+         CALL CLACPY('ALL', KL+KU+1, N, AB, LDAB, ABCOPY, LDAB)
 
 *        Call C**SVXX with default PARAMS and N_ERR_BND = 3.
          IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
