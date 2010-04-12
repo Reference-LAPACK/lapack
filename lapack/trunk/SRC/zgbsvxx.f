@@ -136,7 +136,7 @@
 *     The number of right hand sides, i.e., the number of columns
 *     of the matrices B and X.  NRHS >= 0.
 *
-*     AB      (input/output) DOUBLE PRECISION array, dimension (LDAB,N)
+*     AB      (input/output) COMPLEX*16 array, dimension (LDAB,N)
 *     On entry, the matrix A in band storage, in rows 1 to KL+KU+1.
 *     The j-th column of A is stored in the j-th column of the
 *     array AB as follows:
@@ -155,7 +155,7 @@
 *     LDAB    (input) INTEGER
 *     The leading dimension of the array AB.  LDAB >= KL+KU+1.
 *
-*     AFB     (input or output) DOUBLE PRECISION array, dimension (LDAFB,N)
+*     AFB     (input or output) COMPLEX*16 array, dimension (LDAFB,N)
 *     If FACT = 'F', then AFB is an input argument and on entry
 *     contains details of the LU factorization of the band matrix
 *     A, as computed by ZGBTRF.  U is stored as an upper triangular
@@ -232,7 +232,7 @@
 *     input matrix, producing error estimates that may not be
 *     reliable.
 *
-*     B       (input/output) DOUBLE PRECISION array, dimension (LDB,NRHS)
+*     B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS)
 *     On entry, the N-by-NRHS right hand side matrix B.
 *     On exit,
 *     if EQUED = 'N', B is not modified;
@@ -244,7 +244,7 @@
 *     LDB     (input) INTEGER
 *     The leading dimension of the array B.  LDB >= max(1,N).
 *
-*     X       (output) DOUBLE PRECISION array, dimension (LDX,NRHS)
+*     X       (output) COMPLEX*16 array, dimension (LDX,NRHS)
 *     If INFO = 0, the N-by-NRHS solution matrix X to the original
 *     system of equations.  Note that A and B are modified on exit
 *     if EQUED .ne. 'N', and the solution to the equilibrated system is
