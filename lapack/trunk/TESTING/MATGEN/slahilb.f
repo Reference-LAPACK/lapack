@@ -1,4 +1,4 @@
-      SUBROUTINE SLAHILB(N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
+      SUBROUTINE SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
 !
 !  -- LAPACK auxiliary test routine (version 3.0) --
 !     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
@@ -45,7 +45,7 @@
 !  N       (input) INTEGER
 !          The dimension of the matrix A.
 !      
-!  NRHS    (input) NRHS
+!  NRHS    (input) INTEGER
 !          The requested number of right-hand sides.
 !
 !  A       (output) REAL array, dimension (LDA, N)

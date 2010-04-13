@@ -76,13 +76,13 @@
 *  Arguments
 *  =========
 *
-*  M      - INTEGER
+*  M        (input) INTEGER
 *           Number of rows of A. Not modified.
 *
-*  N      - INTEGER
+*  N        (input) INTEGER
 *           Number of columns of A. Not modified.
 *
-*  DIST   - CHARACTER*1
+*  DIST     (input) CHARACTER*1
 *           On entry, DIST specifies the type of distribution to be used
 *           to generate a random matrix .
 *           'U' => UNIFORM( 0, 1 )  ( 'U' for uniform )
@@ -90,7 +90,7 @@
 *           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
 *           Not modified.
 *
-*  ISEED  - INTEGER array, dimension (4)
+*  ISEED    (input/output) INTEGER array, dimension (4)
 *           On entry ISEED specifies the seed of the random number
 *           generator. They should lie between 0 and 4095 inclusive,
 *           and ISEED(4) should be odd. The random number generator
@@ -101,18 +101,18 @@
 *           to continue the same random number sequence.
 *           Changed on exit.
 *
-*  SYM    - CHARACTER*1
+*  SYM      (input) CHARACTER*1
 *           If SYM='S' or 'H', generated matrix is symmetric.
 *           If SYM='N', generated matrix is nonsymmetric.
 *           Not modified.
 *
-*  D      - REAL array, dimension (min(M,N))
+*  D        (input) REAL array, dimension (min(M,N))
 *           On entry this array specifies the diagonal entries
 *           of the diagonal of A.  D may either be specified
 *           on entry, or set according to MODE and COND as described
 *           below. May be changed on exit if MODE is nonzero.
 *
-*  MODE   - INTEGER
+*  MODE     (input) INTEGER
 *           On entry describes how D is to be used:
 *           MODE = 0 means use D as input
 *           MODE = 1 sets D(1)=1 and D(2:N)=1.0/COND
@@ -130,17 +130,17 @@
 *              1 to 1/COND, if negative, from 1/COND to 1,
 *           Not modified.
 *
-*  COND   - REAL
+*  COND     (input) REAL
 *           On entry, used as described under MODE above.
 *           If used, it must be >= 1. Not modified.
 *
-*  DMAX   - REAL
+*  DMAX     (input) REAL
 *           If MODE neither -6, 0 nor 6, the diagonal is scaled by
 *           DMAX / max(abs(D(i))), so that maximum absolute entry
 *           of diagonal is abs(DMAX). If DMAX is negative (or zero),
 *           diagonal will be scaled by a negative number (or zero).
 *
-*  RSIGN  - CHARACTER*1
+*  RSIGN    (input) CHARACTER*1
 *           If MODE neither -6, 0 nor 6, specifies sign of diagonal
 *           as follows:
 *           'T' => diagonal entries are multiplied by 1 or -1
@@ -148,7 +148,7 @@
 *           'F' => diagonal unchanged
 *           Not modified.
 *
-*  GRADE  - CHARACTER*1
+*  GRADE    (input) CHARACTER*1
 *           Specifies grading of matrix as follows:
 *           'N'  => no grading
 *           'L'  => matrix premultiplied by diag( DL )
@@ -168,7 +168,7 @@
 *                   Note: if GRADE='E', then M must equal N.
 *           Not modified.
 *
-*  DL     - REAL array, dimension (M)
+*  DL       (input/output) REAL array, dimension (M)
 *           If MODEL=0, then on entry this array specifies the diagonal
 *           entries of a diagonal matrix used as described under GRADE
 *           above. If MODEL is not zero, then DL will be set according
@@ -177,16 +177,16 @@
 *           If GRADE='E', then DL cannot have zero entries.
 *           Not referenced if GRADE = 'N' or 'R'. Changed on exit.
 *
-*  MODEL  - INTEGER
+*  MODEL    (input) INTEGER
 *           This specifies how the diagonal array DL is to be computed,
 *           just as MODE specifies how D is to be computed.
 *           Not modified.
 *
-*  CONDL  - REAL
+*  CONDL    (input) REAL
 *           When MODEL is not zero, this specifies the condition number
 *           of the computed DL.  Not modified.
 *
-*  DR     - REAL array, dimension (N)
+*  DR       (input/output) REAL array, dimension (N)
 *           If MODER=0, then on entry this array specifies the diagonal
 *           entries of a diagonal matrix used as described under GRADE
 *           above. If MODER is not zero, then DR will be set according
@@ -195,16 +195,16 @@
 *           Not referenced if GRADE = 'N', 'L', 'H', 'S' or 'E'.
 *           Changed on exit.
 *
-*  MODER  - INTEGER
+*  MODER    (input) INTEGER
 *           This specifies how the diagonal array DR is to be computed,
 *           just as MODE specifies how D is to be computed.
 *           Not modified.
 *
-*  CONDR  - REAL
+*  CONDR    (input) REAL
 *           When MODER is not zero, this specifies the condition number
 *           of the computed DR.  Not modified.
 *
-*  PIVTNG - CHARACTER*1
+*  PIVTNG   (input) CHARACTER*1
 *           On entry specifies pivoting permutations as follows:
 *           'N' or ' ' => none.
 *           'L' => left or row pivoting (matrix must be nonsymmetric).
@@ -220,7 +220,7 @@
 *           contain the same data. This consistency cannot be
 *           maintained with less than full bandwidth.
 *
-*  IPIVOT - INTEGER array, dimension (N or M)
+*  IPIVOT   (input) INTEGER array, dimension (N or M)
 *           This array specifies the permutation used.  After the
 *           basic matrix is generated, the rows, columns, or both
 *           are permuted.   If, say, row pivoting is selected, SLATMR
@@ -236,7 +236,7 @@
 *           result in a pivot vector identical to IPIVOT.
 *           Not referenced if PIVTNG = 'N'. Not modified.
 *
-*  SPARSE - REAL
+*  SPARSE   (input) REAL
 *           On entry specifies the sparsity of the matrix if a sparse
 *           matrix is to be generated. SPARSE should lie between
 *           0 and 1. To generate a sparse matrix, for each matrix entry
@@ -247,28 +247,28 @@
 *           entries will be set to zero.
 *           Not modified.
 *
-*  KL     - INTEGER
+*  KL       (input) INTEGER
 *           On entry specifies the lower bandwidth of the  matrix. For
 *           example, KL=0 implies upper triangular, KL=1 implies upper
 *           Hessenberg, and KL at least M-1 implies the matrix is not
 *           banded. Must equal KU if matrix is symmetric.
 *           Not modified.
 *
-*  KU     - INTEGER
+*  KU       (input) INTEGER
 *           On entry specifies the upper bandwidth of the  matrix. For
 *           example, KU=0 implies lower triangular, KU=1 implies lower
 *           Hessenberg, and KU at least N-1 implies the matrix is not
 *           banded. Must equal KL if matrix is symmetric.
 *           Not modified.
 *
-*  ANORM  - REAL
+*  ANORM    (input) REAL
 *           On entry specifies maximum entry of output matrix
 *           (output matrix will by multiplied by a constant so that
 *           its largest absolute entry equal ANORM)
 *           if ANORM is nonnegative. If ANORM is negative no scaling
 *           is done. Not modified.
 *
-*  PACK   - CHARACTER*1
+*  PACK     (input) CHARACTER*1
 *           On entry specifies packing of matrix as follows:
 *           'N' => no packing
 *           'U' => zero out all subdiagonal entries (if symmetric)
@@ -297,14 +297,14 @@
 *           they will generate mathematically equivalent matrices.
 *           Not modified.
 *
-*  A      - REAL array, dimension (LDA,N)
+*  A        (input/output) REAL array, dimension (LDA,N)
 *           On exit A is the desired test matrix. Only those
 *           entries of A which are significant on output
 *           will be referenced (even if A is in packed or band
 *           storage format). The 'unoccupied corners' of A in
 *           band format will be zeroed out.
 *
-*  LDA    - INTEGER
+*  LDA      (input) INTEGER
 *           on entry LDA specifies the first dimension of A as
 *           declared in the calling program.
 *           If PACK='N', 'U' or 'L', LDA must be at least max ( 1, M ).
@@ -314,10 +314,10 @@
 *           KUU = MIN ( KU, N-1 ) and KLL = MIN ( KL, N-1 )
 *           Not modified.
 *
-*  IWORK  - INTEGER array, dimension ( N or M)
+*  IWORK    (workspace) INTEGER array, dimension ( N or M)
 *           Workspace. Not referenced if PIVTNG = 'N'. Changed on exit.
 *
-*  INFO   - INTEGER
+*  INFO     (output) INTEGER
 *           Error parameter on exit:
 *             0 => normal return
 *            -1 => M negative or unequal to N and SYM='S' or 'H'

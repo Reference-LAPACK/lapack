@@ -26,7 +26,7 @@
 *  Arguments
 *  =========
 *
-*  SIDE   - CHARACTER*1
+*  SIDE     (input) CHARACTER*1
 *           SIDE specifies whether A is multiplied on the left or right
 *           by U.
 *       SIDE = 'L'   Multiply A on the left (premultiply) by U
@@ -35,7 +35,7 @@
 *       SIDE = 'T'   Multiply A on the left by U and the right by U'
 *           Not modified.
 *
-*  INIT   - CHARACTER*1
+*  INIT     (input) CHARACTER*1
 *           INIT specifies whether or not A should be initialized to
 *           the identity matrix.
 *              INIT = 'I'   Initialize A to (a section of) the
@@ -57,28 +57,28 @@
 *           columns will be orthogonal, the remaining columns being
 *           zero.
 *           For matrices where M > N, just use the previous
-*           explaination, interchanging 'L' and 'R' and "rows" and
+*           explanation, interchanging 'L' and 'R' and "rows" and
 *           "columns".
 *
 *           Not modified.
 *
-*  M      - INTEGER
+*  M        (input) INTEGER
 *           Number of rows of A. Not modified.
 *
-*  N      - INTEGER
+*  N        (input) INTEGER
 *           Number of columns of A. Not modified.
 *
-*  A      - COMPLEX*16 array, dimension ( LDA, N )
+*  A        COMPLEX*16 array, dimension ( LDA, N )
 *           Input and output array. Overwritten by U A ( if SIDE = 'L' )
 *           or by A U ( if SIDE = 'R' )
 *           or by U A U* ( if SIDE = 'C')
 *           or by U A U' ( if SIDE = 'T') on exit.
 *
-*  LDA    - INTEGER
+*  LDA      (input) INTEGER
 *           Leading dimension of A. Must be at least MAX ( 1, M ).
 *           Not modified.
 *
-*  ISEED  - INTEGER array, dimension ( 4 )
+*  ISEED    (input/output) INTEGER array, dimension ( 4 )
 *           On entry ISEED specifies the seed of the random number
 *           generator. The array elements should be between 0 and 4095;
 *           if not they will be reduced mod 4096.  Also, ISEED(4) must
@@ -90,14 +90,14 @@
 *           sequence.
 *           Modified.
 *
-*  X      - COMPLEX*16 array, dimension ( 3*MAX( M, N ) )
+*  X       (workspace) COMPLEX*16 array, dimension ( 3*MAX( M, N ) )
 *           Workspace. Of length:
 *               2*M + N if SIDE = 'L',
 *               2*N + M if SIDE = 'R',
 *               3*N     if SIDE = 'C' or 'T'.
 *           Modified.
 *
-*  INFO   - INTEGER
+*  INFO    (output) INTEGER
 *           An error flag.  It is set to:
 *            0  if no error.
 *            1  if ZLARND returned a bad random number (installation

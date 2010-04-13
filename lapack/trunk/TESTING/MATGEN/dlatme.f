@@ -1,5 +1,7 @@
-      SUBROUTINE DLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI, RSIGN,
-     $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM, A,
+      SUBROUTINE DLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI, 
+     $  RSIGN, 
+     $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM, 
+     $  A, 
      $                   LDA, WORK, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
@@ -56,10 +58,10 @@
 *  Arguments
 *  =========
 *
-*  N      - INTEGER
+*  N        (input) INTEGER
 *           The number of columns (or rows) of A. Not modified.
 *
-*  DIST   - CHARACTER*1
+*  DIST     (input) CHARACTER*1
 *           On entry, DIST specifies the type of distribution to be used
 *           to generate the random eigen-/singular values, and for the
 *           upper triangle (see UPPER).
@@ -68,7 +70,7 @@
 *           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
 *           Not modified.
 *
-*  ISEED  - INTEGER array, dimension ( 4 )
+*  ISEED    (input/output) INTEGER array, dimension ( 4 )
 *           On entry ISEED specifies the seed of the random number
 *           generator. They should lie between 0 and 4095 inclusive,
 *           and ISEED(4) should be odd. The random number generator
@@ -79,7 +81,7 @@
 *           to continue the same random number sequence.
 *           Changed on exit.
 *
-*  D      - DOUBLE PRECISION array, dimension ( N )
+*  D        (input/output) DOUBLE PRECISION array, dimension ( N )
 *           This array is used to specify the eigenvalues of A.  If
 *           MODE=0, then D is assumed to contain the eigenvalues (but
 *           see the description of EI), otherwise they will be
@@ -87,7 +89,7 @@
 *           placed in D.
 *           Modified if MODE is nonzero.
 *
-*  MODE   - INTEGER
+*  MODE     (input) INTEGER
 *           On entry this describes how the eigenvalues are to
 *           be specified:
 *           MODE = 0 means use D (with EI) as input
@@ -112,11 +114,11 @@
 *              ranging from 1/COND to 1,
 *           Not modified.
 *
-*  COND   - DOUBLE PRECISION
+*  COND     (input) DOUBLE PRECISION
 *           On entry, this is used as described under MODE above.
 *           If used, it must be >= 1. Not modified.
 *
-*  DMAX   - DOUBLE PRECISION
+*  DMAX     (input) DOUBLE PRECISION
 *           If MODE is neither -6, 0 nor 6, the contents of D, as
 *           computed according to MODE and COND, will be scaled by
 *           DMAX / max(abs(D(i))).  Note that DMAX need not be
@@ -124,7 +126,7 @@
 *           scaled by a negative number (or zero).
 *           Not modified.
 *
-*  EI     - CHARACTER*1 array, dimension ( N )
+*  EI       (input) CHARACTER*1 array, dimension ( N )
 *           If MODE is 0, and EI(1) is not ' ' (space character),
 *           this array specifies which elements of D (on input) are
 *           real eigenvalues and which are the real and imaginary parts
@@ -139,7 +141,7 @@
 *           EI(1)=' ', then the eigenvalues will all be real.
 *           Not modified.
 *
-*  RSIGN  - CHARACTER*1
+*  RSIGN    (input) CHARACTER*1
 *           If MODE is not 0, 6, or -6, and RSIGN='T', then the
 *           elements of D, as computed according to MODE and COND, will
 *           be multiplied by a random sign (+1 or -1).  If RSIGN='F',
@@ -147,7 +149,7 @@
 *           'F'.
 *           Not modified.
 *
-*  UPPER  - CHARACTER*1
+*  UPPER    (input) CHARACTER*1
 *           If UPPER='T', then the elements of A above the diagonal
 *           (and above the 2x2 diagonal blocks, if A has complex
 *           eigenvalues) will be set to random numbers out of DIST.
@@ -155,7 +157,7 @@
 *           values 'T' or 'F'.
 *           Not modified.
 *
-*  SIM    - CHARACTER*1
+*  SIM      (input) CHARACTER*1
 *           If SIM='T', then A will be operated on by a "similarity
 *           transform", i.e., multiplied on the left by a matrix X and
 *           on the right by X inverse.  X = U S V, where U and V are
@@ -164,27 +166,28 @@
 *           SIM='F', then A will not be transformed.
 *           Not modified.
 *
-*  DS     - DOUBLE PRECISION array, dimension ( N )
+*  DS       (input/output) DOUBLE PRECISION array, dimension ( N )
 *           This array is used to specify the singular values of X,
 *           in the same way that D specifies the eigenvalues of A.
 *           If MODE=0, the DS contains the singular values, which
 *           may not be zero.
 *           Modified if MODE is nonzero.
 *
-*  MODES  - INTEGER
-*  CONDS  - DOUBLE PRECISION
+*  MODES    (input) INTEGER
+*
+*  CONDS    (input) DOUBLE PRECISION
 *           Same as MODE and COND, but for specifying the diagonal
 *           of S.  MODES=-6 and +6 are not allowed (since they would
 *           result in randomly ill-conditioned eigenvalues.)
 *
-*  KL     - INTEGER
+*  KL       (input) INTEGER
 *           This specifies the lower bandwidth of the  matrix.  KL=1
 *           specifies upper Hessenberg form.  If KL is at least N-1,
 *           then A will have full lower bandwidth.  KL must be at
 *           least 1.
 *           Not modified.
 *
-*  KU     - INTEGER
+*  KU       (input) INTEGER
 *           This specifies the upper bandwidth of the  matrix.  KU=1
 *           specifies lower Hessenberg form.  If KU is at least N-1,
 *           then A will have full upper bandwidth; if KU and KL
@@ -192,26 +195,26 @@
 *           KU and KL may be less than N-1.  KU must be at least 1.
 *           Not modified.
 *
-*  ANORM  - DOUBLE PRECISION
+*  ANORM    (input) DOUBLE PRECISION
 *           If ANORM is not negative, then A will be scaled by a non-
 *           negative real number to make the maximum-element-norm of A
 *           to be ANORM.
 *           Not modified.
 *
-*  A      - DOUBLE PRECISION array, dimension ( LDA, N )
+*  A        (output) DOUBLE PRECISION array, dimension ( LDA, N )
 *           On exit A is the desired test matrix.
 *           Modified.
 *
-*  LDA    - INTEGER
+*  LDA      (input) INTEGER
 *           LDA specifies the first dimension of A as declared in the
 *           calling program.  LDA must be at least N.
 *           Not modified.
 *
-*  WORK   - DOUBLE PRECISION array, dimension ( 3*N )
+*  WORK     (workspace) DOUBLE PRECISION array, dimension ( 3*N )
 *           Workspace.
 *           Modified.
 *
-*  INFO   - INTEGER
+*  INFO     (output) INTEGER
 *           Error code.  On exit, INFO will be set to one of the
 *           following values:
 *             0 => normal return

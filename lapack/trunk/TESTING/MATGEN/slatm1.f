@@ -24,7 +24,7 @@
 *  Arguments
 *  =========
 *
-*  MODE   - INTEGER
+*  MODE     (input) INTEGER
 *           On entry describes how D is to be computed:
 *           MODE = 0 means do not change D.
 *           MODE = 1 sets D(1)=1 and D(2:N)=1.0/COND
@@ -42,17 +42,17 @@
 *              1 to 1/COND, if negative, from 1/COND to 1,
 *           Not modified.
 *
-*  COND   - REAL
+*  COND     (input) REAL
 *           On entry, used as described under MODE above.
 *           If used, it must be >= 1. Not modified.
 *
-*  IRSIGN - INTEGER
+*  IRSIGN   (input) INTEGER
 *           On entry, if MODE neither -6, 0 nor 6, determines sign of
 *           entries of D
 *           0 => leave entries of D unchanged
 *           1 => multiply each entry of D by 1 or -1 with probability .5
 *
-*  IDIST  - CHARACTER*1
+*  IDIST    (input) CHARACTER*1
 *           On entry, IDIST specifies the type of distribution to be
 *           used to generate a random matrix .
 *           1 => UNIFORM( 0, 1 )
@@ -60,7 +60,7 @@
 *           3 => NORMAL( 0, 1 )
 *           Not modified.
 *
-*  ISEED  - INTEGER array, dimension ( 4 )
+*  ISEED    (input/output) INTEGER array, dimension ( 4 )
 *           On entry ISEED specifies the seed of the random number
 *           generator. The random number generator uses a
 *           linear congruential sequence limited to small
@@ -70,14 +70,14 @@
 *           to continue the same random number sequence.
 *           Changed on exit.
 *
-*  D      - REAL array, dimension ( MIN( M , N ) )
+*  D        (input/output) REAL array, dimension ( MIN( M , N ) )
 *           Array to be computed according to MODE, COND and IRSIGN.
 *           May be changed on exit if MODE is nonzero.
 *
-*  N      - INTEGER
+*  N        (input) INTEGER
 *           Number of entries of D. Not modified.
 *
-*  INFO   - INTEGER
+*  INFO     (output) INTEGER
 *            0  => normal termination
 *           -1  => if MODE not in range -6 to 6
 *           -2  => if MODE neither -6, 0 nor 6, and
