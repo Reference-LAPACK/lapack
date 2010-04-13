@@ -65,31 +65,31 @@
 *  Arguments
 *  =========
 *
-*  M      - INTEGER
+*  M        (input) INTEGER
 *           Number of rows of matrix. Not modified.
 *
-*  N      - INTEGER
+*  N        (input) INTEGER
 *           Number of columns of matrix. Not modified.
 *
-*  I      - INTEGER
+*  I        (input) INTEGER
 *           Row of unpivoted entry to be returned. Not modified.
 *
-*  J      - INTEGER
+*  J        (input) INTEGER
 *           Column of unpivoted entry to be returned. Not modified.
 *
-*  ISUB   - INTEGER
+*  ISUB    (input/output) INTEGER
 *           Row of pivoted entry to be returned. Changed on exit.
 *
-*  JSUB   - INTEGER
+*  JSUB     (input/output) INTEGER
 *           Column of pivoted entry to be returned. Changed on exit.
 *
-*  KL     - INTEGER
+*  KL       (input) INTEGER
 *           Lower bandwidth. Not modified.
 *
-*  KU     - INTEGER
+*  KU       (input) INTEGER
 *           Upper bandwidth. Not modified.
 *
-*  IDIST  - INTEGER
+*  IDIST    (input) INTEGER
 *           On entry, IDIST specifies the type of distribution to be
 *           used to generate a random matrix .
 *           1 => real and imaginary parts each UNIFORM( 0, 1 )
@@ -98,14 +98,14 @@
 *           4 => complex number uniform in DISK( 0 , 1 )
 *           Not modified.
 *
-*  ISEED  - INTEGER            array of dimension ( 4 )
+*  ISEED    (input/output) INTEGER array of dimension ( 4 )
 *           Seed for random number generator.
 *           Changed on exit.
 *
-*  D      - COMPLEX            array of dimension ( MIN( I , J ) )
+*  D        (input) COMPLEX array of dimension ( MIN( I , J ) )
 *           Diagonal entries of matrix. Not modified.
 *
-*  IGRADE - INTEGER
+*  IGRADE   (input) INTEGER
 *           Specifies grading of matrix as follows:
 *           0  => no grading
 *           1  => matrix premultiplied by diag( DL )
@@ -120,13 +120,13 @@
 *                         postmultiplied by diag( DL )
 *           Not modified.
 *
-*  DL     - COMPLEX            array ( I or J, as appropriate )
+*  DL       (input) COMPLEX array ( I or J, as appropriate )
 *           Left scale factors for grading matrix.  Not modified.
 *
-*  DR     - COMPLEX            array ( I or J, as appropriate )
+*  DR       (input) COMPLEX array ( I or J, as appropriate )
 *           Right scale factors for grading matrix.  Not modified.
 *
-*  IPVTNG - INTEGER
+*  IPVTNG   (input) INTEGER
 *           On entry specifies pivoting permutations as follows:
 *           0 => none.
 *           1 => row pivoting.
@@ -134,13 +134,13 @@
 *           3 => full pivoting, i.e., on both sides.
 *           Not modified.
 *
-*  IWORK  - INTEGER            array ( I or J, as appropriate )
+*  IWORK    (input) INTEGER array ( I or J, as appropriate )
 *           This array specifies the permutation used. The
 *           row (or column) originally in position K is in
 *           position IWORK( K ) after pivoting.
 *           This differs from IWORK for CLATM2. Not modified.
 *
-*  SPARSE - REAL               between 0. and 1.
+*  SPARSE   (input) REAL between 0. and 1.
 *           On entry specifies the sparsity of the matrix
 *           if sparse matix is to be generated.
 *           SPARSE should lie between 0 and 1.

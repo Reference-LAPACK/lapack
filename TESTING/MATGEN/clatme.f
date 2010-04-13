@@ -1,5 +1,7 @@
-      SUBROUTINE CLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI, RSIGN,
-     $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM, A,
+      SUBROUTINE CLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI, 
+     $  RSIGN, 
+     $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM, 
+     $  A, 
      $                   LDA, WORK, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
@@ -51,10 +53,10 @@
 *  Arguments
 *  =========
 *
-*  N      - INTEGER
+*  N        (input) INTEGER
 *           The number of columns (or rows) of A. Not modified.
 *
-*  DIST   - CHARACTER*1
+*  DIST     (input) CHARACTER*1
 *           On entry, DIST specifies the type of distribution to be used
 *           to generate the random eigen-/singular values, and on the
 *           upper triangle (see UPPER).
@@ -64,7 +66,7 @@
 *           'D' => uniform on the complex disc |z| < 1.
 *           Not modified.
 *
-*  ISEED  - INTEGER array, dimension ( 4 )
+*  ISEED    (input/output) INTEGER array, dimension ( 4 )
 *           On entry ISEED specifies the seed of the random number
 *           generator. They should lie between 0 and 4095 inclusive,
 *           and ISEED(4) should be odd. The random number generator
@@ -75,14 +77,14 @@
 *           to continue the same random number sequence.
 *           Changed on exit.
 *
-*  D      - COMPLEX array, dimension ( N )
+*  D        (input/output) COMPLEX array, dimension ( N )
 *           This array is used to specify the eigenvalues of A.  If
 *           MODE=0, then D is assumed to contain the eigenvalues
 *           otherwise they will be computed according to MODE, COND,
 *           DMAX, and RSIGN and placed in D.
 *           Modified if MODE is nonzero.
 *
-*  MODE   - INTEGER
+*  MODE     (input) INTEGER
 *           On entry this describes how the eigenvalues are to
 *           be specified:
 *           MODE = 0 means use D as input
@@ -102,11 +104,11 @@
 *              ranging from 1/COND to 1,
 *           Not modified.
 *
-*  COND   - REAL
+*  COND     (input) REAL
 *           On entry, this is used as described under MODE above.
 *           If used, it must be >= 1. Not modified.
 *
-*  DMAX   - COMPLEX
+*  DMAX     (input) COMPLEX
 *           If MODE is neither -6, 0 nor 6, the contents of D, as
 *           computed according to MODE and COND, will be scaled by
 *           DMAX / max(abs(D(i))).  Note that DMAX need not be
@@ -116,10 +118,11 @@
 *           equal to DMAX.
 *           Not modified.
 *
-*  EI     - CHARACTER*1 (ignored)
+*  EI       (input) CHARACTER*1 array, dimension ( N )
+*           (ignored)
 *           Not modified.
 *
-*  RSIGN  - CHARACTER*1
+*  RSIGN    (input) CHARACTER*1
 *           If MODE is not 0, 6, or -6, and RSIGN='T', then the
 *           elements of D, as computed according to MODE and COND, will
 *           be multiplied by a random complex number from the unit
@@ -127,13 +130,13 @@
 *           only have the values 'T' or 'F'.
 *           Not modified.
 *
-*  UPPER  - CHARACTER*1
+*  UPPER    (input) CHARACTER*1
 *           If UPPER='T', then the elements of A above the diagonal
 *           will be set to random numbers out of DIST.  If UPPER='F',
 *           they will not.  UPPER may only have the values 'T' or 'F'.
 *           Not modified.
 *
-*  SIM    - CHARACTER*1
+*  SIM      (input) CHARACTER*1
 *           If SIM='T', then A will be operated on by a "similarity
 *           transform", i.e., multiplied on the left by a matrix X and
 *           on the right by X inverse.  X = U S V, where U and V are
@@ -142,26 +145,27 @@
 *           SIM='F', then A will not be transformed.
 *           Not modified.
 *
-*  DS     - REAL array, dimension ( N )
+*  DS       (input/output) REAL array, dimension ( N )
 *           This array is used to specify the singular values of X,
 *           in the same way that D specifies the eigenvalues of A.
 *           If MODE=0, the DS contains the singular values, which
 *           may not be zero.
 *           Modified if MODE is nonzero.
 *
-*  MODES  - INTEGER
-*  CONDS  - REAL
+*  MODES    (input) INTEGER
+*
+*  CONDS    (input) REAL
 *           Similar to MODE and COND, but for specifying the diagonal
 *           of S.  MODES=-6 and +6 are not allowed (since they would
 *           result in randomly ill-conditioned eigenvalues.)
 *
-*  KL     - INTEGER
+*  KL       (input) INTEGER
 *           This specifies the lower bandwidth of the  matrix.  KL=1
 *           specifies upper Hessenberg form.  If KL is at least N-1,
 *           then A will have full lower bandwidth.
 *           Not modified.
 *
-*  KU     - INTEGER
+*  KU       (input) INTEGER
 *           This specifies the upper bandwidth of the  matrix.  KU=1
 *           specifies lower Hessenberg form.  If KU is at least N-1,
 *           then A will have full upper bandwidth; if KU and KL
@@ -169,26 +173,26 @@
 *           KU and KL may be less than N-1.
 *           Not modified.
 *
-*  ANORM  - REAL
+*  ANORM    (input) REAL
 *           If ANORM is not negative, then A will be scaled by a non-
 *           negative real number to make the maximum-element-norm of A
 *           to be ANORM.
 *           Not modified.
 *
-*  A      - COMPLEX array, dimension ( LDA, N )
+*  A        (output) COMPLEX array, dimension ( LDA, N )
 *           On exit A is the desired test matrix.
 *           Modified.
 *
-*  LDA    - INTEGER
+*  LDA      (input) INTEGER
 *           LDA specifies the first dimension of A as declared in the
 *           calling program.  LDA must be at least M.
 *           Not modified.
 *
-*  WORK   - COMPLEX array, dimension ( 3*N )
+*  WORK     (workspace) COMPLEX array, dimension ( 3*N )
 *           Workspace.
 *           Modified.
 *
-*  INFO   - INTEGER
+*  INFO     (output) INTEGER
 *           Error code.  On exit, INFO will be set to one of the
 *           following values:
 *             0 => normal return

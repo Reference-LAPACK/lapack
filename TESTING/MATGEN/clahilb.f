@@ -1,4 +1,4 @@
-      SUBROUTINE CLAHILB(N, NRHS, A, LDA, X, LDX, B, LDB, WORK, 
+      SUBROUTINE CLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, 
      $     INFO, PATH)
 !
 !  -- LAPACK auxiliary test routine (version 3.0) --
@@ -48,7 +48,7 @@
 !  N       (input) INTEGER
 !          The dimension of the matrix A.
 !
-!  NRHS    (input) NRHS
+!  NRHS    (input) INTEGER
 !          The requested number of right-hand sides.
 !
 !  A       (output) COMPLEX array, dimension (LDA, N)

@@ -76,13 +76,13 @@
 *  Arguments
 *  =========
 *
-*  M      - INTEGER
+*  M        (input) INTEGER
 *           The number of rows of A. Not modified.
 *
-*  N      - INTEGER
+*  N        (input) INTEGER
 *           The number of columns of A. Not modified.
 *
-*  DIST   - CHARACTER*1
+*  DIST     (input) CHARACTER*1
 *           On entry, DIST specifies the type of distribution to be used
 *           to generate the random eigen-/singular values.
 *           'U' => UNIFORM( 0, 1 )  ( 'U' for uniform )
@@ -90,7 +90,7 @@
 *           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
 *           Not modified.
 *
-*  ISEED  - INTEGER array, dimension ( 4 )
+*  ISEED    (input/output) INTEGER array, dimension ( 4 )
 *           On entry ISEED specifies the seed of the random number
 *           generator. They should lie between 0 and 4095 inclusive,
 *           and ISEED(4) should be odd. The random number generator
@@ -101,7 +101,7 @@
 *           to continue the same random number sequence.
 *           Changed on exit.
 *
-*  SYM    - CHARACTER*1
+*  SYM      (input) CHARACTER*1
 *           If SYM='S' or 'H', the generated matrix is symmetric, with
 *             eigenvalues specified by D, COND, MODE, and DMAX; they
 *             may be positive, negative, or zero.
@@ -113,7 +113,7 @@
 *             they will not be negative.
 *           Not modified.
 *
-*  D      - DOUBLE PRECISION array, dimension ( MIN( M , N ) )
+*  D        (input/output) DOUBLE PRECISION array, dimension ( MIN( M , N ) )
 *           This array is used to specify the singular values or
 *           eigenvalues of A (see SYM, above.)  If MODE=0, then D is
 *           assumed to contain the singular/eigenvalues, otherwise
@@ -121,7 +121,7 @@
 *           and placed in D.
 *           Modified if MODE is nonzero.
 *
-*  MODE   - INTEGER
+*  MODE     (input) INTEGER
 *           On entry this describes how the singular/eigenvalues are to
 *           be specified:
 *           MODE = 0 means use D as input
@@ -145,11 +145,11 @@
 *              sign (i.e., +1 or -1.)
 *           Not modified.
 *
-*  COND   - DOUBLE PRECISION
+*  COND     (input) DOUBLE PRECISION
 *           On entry, this is used as described under MODE above.
 *           If used, it must be >= 1. Not modified.
 *
-*  DMAX   - DOUBLE PRECISION
+*  DMAX     (input) DOUBLE PRECISION
 *           If MODE is neither -6, 0 nor 6, the contents of D, as
 *           computed according to MODE and COND, will be scaled by
 *           DMAX / max(abs(D(i))); thus, the maximum absolute eigen- or
@@ -158,12 +158,12 @@
 *           (or zero), D will be scaled by a negative number (or zero).
 *           Not modified.
 *
-*  RANK   - INTEGER
+*  RANK     (input) INTEGER
 *           The rank of matrix to be generated for modes 1,2,3 only.
 *           D( RANK+1:N ) = 0.
 *           Not modified.
 *
-*  KL     - INTEGER
+*  KL       (input) INTEGER
 *           This specifies the lower bandwidth of the  matrix. For
 *           example, KL=0 implies upper triangular, KL=1 implies upper
 *           Hessenberg, and KL being at least M-1 means that the matrix
@@ -171,7 +171,7 @@
 *           is symmetric.
 *           Not modified.
 *
-*  KU     - INTEGER
+*  KU       (input) INTEGER
 *           This specifies the upper bandwidth of the  matrix. For
 *           example, KU=0 implies lower triangular, KU=1 implies lower
 *           Hessenberg, and KU being at least N-1 means that the matrix
@@ -179,7 +179,7 @@
 *           is symmetric.
 *           Not modified.
 *
-*  PACK   - CHARACTER*1
+*  PACK     (input) CHARACTER*1
 *           This specifies packing of matrix as follows:
 *           'N' => no packing
 *           'U' => zero out all subdiagonal entries (if symmetric)
@@ -207,7 +207,7 @@
 *           they will generate mathematically equivalent matrices.
 *           Not modified.
 *
-*  A      - DOUBLE PRECISION array, dimension ( LDA, N )
+*  A        (input/output) DOUBLE PRECISION array, dimension ( LDA, N )
 *           On exit A is the desired test matrix.  A is first generated
 *           in full (unpacked) form, and then packed, if so specified
 *           by PACK.  Thus, the first M elements of the first N
@@ -218,7 +218,7 @@
 *           matrix are set to zero.
 *           Modified.
 *
-*  LDA    - INTEGER
+*  LDA      (input) INTEGER
 *           LDA specifies the first dimension of A as declared in the
 *           calling program.  If PACK='N', 'U', 'L', 'C', or 'R', then
 *           LDA must be at least M.  If PACK='B' or 'Q', then LDA must
@@ -227,11 +227,11 @@
 *           array: MIN( KU, N-1) + MIN( KL, M-1) + 1.
 *           Not modified.
 *
-*  WORK   - DOUBLE PRECISION array, dimension ( 3*MAX( N , M ) )
+*  WORK     (workspace) DOUBLE PRECISION array, dimension ( 3*MAX( N , M ) )
 *           Workspace.
 *           Modified.
 *
-*  INFO   - INTEGER
+*  INFO     (output) INTEGER
 *           Error code.  On exit, INFO will be set to one of the
 *           following values:
 *             0 => normal return

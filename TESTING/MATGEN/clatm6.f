@@ -86,6 +86,7 @@
 *          The leading dimension of Y.
 *
 *  ALPHA   (input) COMPLEX
+*
 *  BETA    (input) COMPLEX
 *          Weighting constants for matrix A.
 *
