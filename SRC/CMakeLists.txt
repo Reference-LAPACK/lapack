@@ -48,7 +48,7 @@
 
 set(ALLAUX  ilaenv.f ieeeck.f lsamen.f  iparmq.f	
     ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f 
-    ../INSTALL/ilaver.f ../INSTALL/lsame.f) # xerbla.f xerbla_array.f
+    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f)
 
 set(ALLXAUX )
 
