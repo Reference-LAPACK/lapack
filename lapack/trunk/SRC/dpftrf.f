@@ -112,7 +112,7 @@
 *     05 15 25 35 45 55 22    53 54 55 22 32 42 52
 *
 *
-*  We first consider Rectangular Full Packed (RFP) Format when N is
+*  We then consider Rectangular Full Packed (RFP) Format when N is
 *  odd. We give an example where N = 5.
 *
 *     AP is Upper                 AP is Lower
