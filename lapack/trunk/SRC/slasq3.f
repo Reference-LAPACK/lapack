@@ -35,7 +35,7 @@
 *  I0     (input) INTEGER
 *         First index.
 *
-*  N0     (input) INTEGER
+*  N0     (input/output) INTEGER
 *         Last index.
 *
 *  Z      (input) REAL array, dimension ( 4*N )
