@@ -223,9 +223,35 @@
          WRITE( IOUNIT, FMT = 9955 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'SY' ) .OR. LSAMEN( 2, P2, 'SP' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'SY' )  ) THEN
 *
 *        SY: Symmetric indefinite full
+*
+         IF( LSAME( C3, 'Y' ) ) THEN
+            WRITE( IOUNIT, FMT = 9992 )PATH, 'Symmetric'
+         ELSE
+            WRITE( IOUNIT, FMT = 9991 )PATH, 'Symmetric'
+         END IF
+         WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
+         IF( SORD ) THEN
+            WRITE( IOUNIT, FMT = 9972 )
+         ELSE
+            WRITE( IOUNIT, FMT = 9971 )
+         END IF
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 9953 )1
+         WRITE( IOUNIT, FMT = 9961 )2
+         WRITE( IOUNIT, FMT = 9960 )3
+         WRITE( IOUNIT, FMT = 9960 )4
+         WRITE( IOUNIT, FMT = 9959 )5
+         WRITE( IOUNIT, FMT = 9958 )6
+         WRITE( IOUNIT, FMT = 9956 )7
+         WRITE( IOUNIT, FMT = 9957 )8
+         WRITE( IOUNIT, FMT = 9955 )9
+         WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
+*
+      ELSE IF( LSAMEN( 2, P2, 'SP' ) ) THEN
+*
 *        SP: Symmetric indefinite packed
 *
          IF( LSAME( C3, 'Y' ) ) THEN
