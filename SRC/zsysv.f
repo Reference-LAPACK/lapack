@@ -105,7 +105,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            LWKOPT, NB
+      INTEGER            LWKOPT, NB, IINFO
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -113,7 +113,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZSYTRF, ZSYTRS
+      EXTERNAL           ZSYCONV, XERBLA, ZSYTRF, ZSYTRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -123,6 +123,7 @@
 *     Test the input parameters.
 *
       INFO = 0
+      IINFO = 0
       LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
@@ -160,9 +161,17 @@
       CALL ZSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
+*        Convert A
+*
+         CALL ZSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
+*
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL ZSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+         CALL ZSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, INFO )
+*
+*        Revert A
+*
+         CALL ZSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       END IF
 *

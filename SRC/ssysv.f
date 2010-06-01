@@ -4,7 +4,7 @@
 *  -- LAPACK driver routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     May 2010
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -105,7 +105,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            LWKOPT, NB
+      INTEGER            LWKOPT, NB, IINFO
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -113,7 +113,7 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSYTRF, SSYTRS, XERBLA
+      EXTERNAL           SSYCONV, SSYTRF, SSYTRS2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -123,6 +123,7 @@
 *     Test the input parameters.
 *
       INFO = 0
+      IINFO = 0
       LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
@@ -160,9 +161,17 @@
       CALL SSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
+*        Convert A
+*
+         CALL SSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
+*
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL SSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+         CALL SSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, INFO )
+*
+*        Revert A
+*
+         CALL SSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       END IF
 *
