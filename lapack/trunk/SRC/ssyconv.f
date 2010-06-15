@@ -80,7 +80,7 @@
       EXTERNAL           XERBLA
 *     .. Local Scalars ..
       LOGICAL            UPPER, CONVERT
-      INTEGER            I, IP
+      INTEGER            I, IP, J
       REAL               TEMP
 *     ..
 *     .. Executable Statements ..
