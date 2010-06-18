@@ -103,7 +103,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 8 )
+      PARAMETER          ( NTESTS = 7 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 8 )
       DOUBLE PRECISION   ZERO
@@ -120,10 +120,6 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 ), KVAL( 4 )
       DOUBLE PRECISION   RESULT( NTESTS )
-*     ..
-*     .. External Functions ..
-      LOGICAL            DGENND
-      EXTERNAL           DGENND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRLQ, DGELQS, DGET02,
@@ -244,9 +240,6 @@
 *
                         CALL DLQT01( M, N, A, AF, AQ, AL, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
-                        IF( .NOT.DGENND( M, N, AF, LDA ) )
-     $                       RESULT( 8 ) = 2*THRESH
-                        NT = NT + 1
                      ELSE IF( M.LE.N ) THEN
 *
 *                       Test DORGLQ, using factorization

@@ -103,7 +103,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 8 )
+      PARAMETER          ( NTESTS = 7 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 8 )
       REAL               ZERO
@@ -120,10 +120,6 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 ), KVAL( 4 )
       REAL               RESULT( NTESTS )
-*     ..
-*     .. External Functions ..
-      LOGICAL            SGENND
-      EXTERNAL           SGENND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRQL, SGEQLS, SGET02,
@@ -244,16 +240,6 @@
 *
                         CALL SQLT01( M, N, A, AF, AQ, AL, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
-                        IF( M.GE.N ) THEN
-*                          Check the lower-left n-by-n corner
-                           IF( .NOT.SGENND(N, N, AF(M-N+1), LDA) )
-     $                          RESULT( 8 ) = 2*THRESH
-                        ELSE
-*                          Check the (n-m)th superdiagonal
-                           IF( .NOT.SGENND(M, M, AF(1+(N-M)*LDA), LDA) )
-     $                          RESULT( 8 ) = 2*THRESH
-                        ENDIF
-                        NT = NT + 1
                      ELSE IF( M.GE.N ) THEN
 *
 *                       Test SORGQL, using factorization

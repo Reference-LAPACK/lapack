@@ -76,7 +76,7 @@
       DOUBLE PRECISION   AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFP, XERBLA
+      EXTERNAL           DLARF, DLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -105,7 +105,7 @@
 *        Generate elementary reflector H(i) to annihilate
 *        A(m-k+i,1:n-k+i-1)
 *
-         CALL DLARFP( N-K+I, A( M-K+I, N-K+I ), A( M-K+I, 1 ), LDA,
+         CALL DLARFG( N-K+I, A( M-K+I, N-K+I ), A( M-K+I, 1 ), LDA,
      $                TAU( I ) )
 *
 *        Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right

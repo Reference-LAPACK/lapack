@@ -104,7 +104,7 @@
       REAL               AKK, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SGEMV, SLARFP, SSWAP
+      EXTERNAL           SGEMM, SGEMV, SLARFG, SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, NINT, REAL, SQRT
@@ -152,9 +152,9 @@
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL SLARFP( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
+            CALL SLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
          ELSE
-            CALL SLARFP( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
+            CALL SLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
 *
          AKK = A( RK, K )

@@ -103,7 +103,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 8 )
+      PARAMETER          ( NTESTS = 7 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 8 )
       REAL               ZERO
@@ -120,10 +120,6 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 ), KVAL( 4 )
       REAL               RESULT( NTESTS )
-*     ..
-*     .. External Functions ..
-      LOGICAL            SGENND
-      EXTERNAL           SGENND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRRQ, SGERQS, SGET02,
@@ -244,17 +240,6 @@
 *
                         CALL SRQT01( M, N, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
-                        IF( M.LE.N ) THEN
-*                          Check the upper-right m-by-m corner
-                           IF( .NOT.SGENND(M, M, AF(1+LDA*(N-M)), LDA) )
-     $                       RESULT( 8 ) = 2*THRESH
-                        ELSE
-*                          Check the (m-n)th subdiagonal
-                           I = M - N
-                           IF( .NOT.SGENND(N, N, AF(I+1), LDA) )
-     $                       RESULT( 8 ) = 2*THRESH
-                        END IF
-                        NT = NT + 1
                      ELSE IF( M.LE.N ) THEN
 *
 *                       Test SORGRQ, using factorization

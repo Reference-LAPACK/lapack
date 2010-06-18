@@ -88,7 +88,7 @@
       DOUBLE PRECISION   AII, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLARF, DLARFP, DSWAP
+      EXTERNAL           DLARF, DLARFG, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -125,10 +125,10 @@
 *        Generate elementary reflector H(i).
 *
          IF( OFFPI.LT.M ) THEN
-            CALL DLARFP( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1,
+            CALL DLARFG( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1,
      $                   TAU( I ) )
          ELSE
-            CALL DLARFP( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
+            CALL DLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
          END IF
 *
          IF( I.LE.N ) THEN

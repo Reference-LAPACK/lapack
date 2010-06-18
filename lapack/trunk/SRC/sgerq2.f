@@ -76,7 +76,7 @@
       REAL               AII
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFP, XERBLA
+      EXTERNAL           SLARF, SLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -105,7 +105,7 @@
 *        Generate elementary reflector H(i) to annihilate
 *        A(m-k+i,1:n-k+i-1)
 *
-         CALL SLARFP( N-K+I, A( M-K+I, N-K+I ), A( M-K+I, 1 ), LDA,
+         CALL SLARFG( N-K+I, A( M-K+I, N-K+I ), A( M-K+I, 1 ), LDA,
      $                TAU( I ) )
 *
 *        Apply H(i) to A(1:m-k+i-1,1:n-k+i) from the right

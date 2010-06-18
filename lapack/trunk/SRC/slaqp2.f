@@ -88,7 +88,7 @@
       REAL               AII, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLARF, SLARFP, SSWAP
+      EXTERNAL           SLARF, SLARFG, SSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -125,10 +125,10 @@
 *        Generate elementary reflector H(i).
 *
          IF( OFFPI.LT.M ) THEN
-            CALL SLARFP( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1,
+            CALL SLARFG( M-OFFPI+1, A( OFFPI, I ), A( OFFPI+1, I ), 1,
      $                   TAU( I ) )
          ELSE
-            CALL SLARFP( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
+            CALL SLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
          END IF
 *
          IF( I.LT.N ) THEN

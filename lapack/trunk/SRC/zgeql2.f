@@ -76,7 +76,7 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZLARF, ZLARFP
+      EXTERNAL           XERBLA, ZLARF, ZLARFG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG, MAX, MIN
@@ -106,7 +106,7 @@
 *        A(1:m-k+i-1,n-k+i)
 *
          ALPHA = A( M-K+I, N-K+I )
-         CALL ZLARFP( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
+         CALL ZLARFG( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
 *
 *        Apply H(i)' to A(1:m-k+i,1:n-k+i-1) from the left
 *

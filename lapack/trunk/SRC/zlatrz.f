@@ -91,7 +91,7 @@
       COMPLEX*16         ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLACGV, ZLARFP, ZLARZ
+      EXTERNAL           ZLACGV, ZLARFG, ZLARZ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DCONJG
@@ -116,7 +116,7 @@
 *
          CALL ZLACGV( L, A( I, N-L+1 ), LDA )
          ALPHA = DCONJG( A( I, I ) )
-         CALL ZLARFP( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
+         CALL ZLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
          TAU( I ) = DCONJG( TAU( I ) )
 *
 *        Apply H(i) to A(1:i-1,i:n) from the right

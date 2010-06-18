@@ -74,7 +74,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARF, CLARFP, XERBLA
+      EXTERNAL           CLACGV, CLARF, CLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -104,7 +104,7 @@
 *
          CALL CLACGV( N-I+1, A( I, I ), LDA )
          ALPHA = A( I, I )
-         CALL CLARFP( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
+         CALL CLARFG( N-I+1, ALPHA, A( I, MIN( I+1, N ) ), LDA,
      $                TAU( I ) )
          IF( I.LT.M ) THEN
 *
