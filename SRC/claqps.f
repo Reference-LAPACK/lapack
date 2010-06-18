@@ -108,7 +108,7 @@
       COMPLEX            AKK
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CGEMV, CLARFP, CSWAP
+      EXTERNAL           CGEMM, CGEMV, CLARFG, CSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, CONJG, MAX, MIN, NINT, REAL, SQRT
@@ -162,9 +162,9 @@
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL CLARFP( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
+            CALL CLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
          ELSE
-            CALL CLARFP( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
+            CALL CLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
 *
          AKK = A( RK, K )

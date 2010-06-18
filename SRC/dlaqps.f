@@ -104,7 +104,7 @@
       DOUBLE PRECISION   AKK, TEMP, TEMP2, TOL3Z
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DGEMV, DLARFP, DSWAP
+      EXTERNAL           DGEMM, DGEMV, DLARFG, DSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, NINT, SQRT
@@ -152,9 +152,9 @@
 *        Generate elementary reflector H(k).
 *
          IF( RK.LT.M ) THEN
-            CALL DLARFP( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
+            CALL DLARFG( M-RK+1, A( RK, K ), A( RK+1, K ), 1, TAU( K ) )
          ELSE
-            CALL DLARFP( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
+            CALL DLARFG( 1, A( RK, K ), A( RK, K ), 1, TAU( K ) )
          END IF
 *
          AKK = A( RK, K )

@@ -103,7 +103,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 8 )
+      PARAMETER          ( NTESTS = 7 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 8 )
       REAL               ZERO
@@ -120,10 +120,6 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 ), KVAL( 4 )
       REAL               RESULT( NTESTS )
-*     ..
-*     .. External Functions ..
-      LOGICAL            SGENND
-      EXTERNAL           SGENND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRQR, SGEQRS, SGET02,
@@ -244,9 +240,6 @@
 *
                         CALL SQRT01( M, N, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
-                        IF( .NOT.SGENND( M, N, AF, LDA ) )
-     $                       RESULT( 8 ) = 2*THRESH
-                        NT = NT + 1
                      ELSE IF( M.GE.N ) THEN
 *
 *                       Test SORGQR, using factorization

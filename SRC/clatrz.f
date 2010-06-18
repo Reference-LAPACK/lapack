@@ -91,7 +91,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACGV, CLARFP, CLARZ
+      EXTERNAL           CLACGV, CLARFG, CLARZ
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG
@@ -116,7 +116,7 @@
 *
          CALL CLACGV( L, A( I, N-L+1 ), LDA )
          ALPHA = CONJG( A( I, I ) )
-         CALL CLARFP( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
+         CALL CLARFG( L+1, ALPHA, A( I, N-L+1 ), LDA, TAU( I ) )
          TAU( I ) = CONJG( TAU( I ) )
 *
 *        Apply H(i) to A(1:i-1,i:n) from the right

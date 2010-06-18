@@ -76,7 +76,7 @@
       COMPLEX            ALPHA
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFP, XERBLA
+      EXTERNAL           CLARF, CLARFG, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, MIN
@@ -106,7 +106,7 @@
 *        A(1:m-k+i-1,n-k+i)
 *
          ALPHA = A( M-K+I, N-K+I )
-         CALL CLARFP( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
+         CALL CLARFG( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
 *
 *        Apply H(i)' to A(1:m-k+i,1:n-k+i-1) from the left
 *

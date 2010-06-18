@@ -357,7 +357,6 @@
          WRITE( IOUNIT, FMT = 9942 )5, 'M'
          WRITE( IOUNIT, FMT = 9941 )6, 'M'
          WRITE( IOUNIT, FMT = 9960 )7
-         WRITE( IOUNIT, FMT = 6660 )8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
       ELSE IF( LSAMEN( 2, P2, 'LQ' ) ) THEN
@@ -727,7 +726,6 @@
      $      '( N * norm(A) * norm(AINV) * EPS )' )
  9960 FORMAT( 3X, I2, ': norm( B - A * X )  / ',
      $      '( norm(A) * norm(X) * EPS )' )
- 6660 FORMAT( 3X, I2, ': diagonal is not non-negative')
  9959 FORMAT( 3X, I2, ': norm( X - XACT )   / ',
      $      '( norm(XACT) * CNDNUM * EPS )' )
  9958 FORMAT( 3X, I2, ': norm( X - XACT )   / ',
