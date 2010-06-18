@@ -38,8 +38,8 @@
      $                   W( NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, ZGEQR2, ZGEQRF, ZGEQRS, ZUNG2R,
-     $                   ZUNGQR, ZUNM2R, ZUNMQR
+      EXTERNAL           ALAESM, CHKXER, ZGEQR2, ZGEQR2P, ZGEQRF, ZGEQRFP, 
+     $                   ZGEQRS, ZUNG2R, UNGQR, ZUNM2R, ZUNMQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -91,6 +91,22 @@
       CALL ZGEQRF( 1, 2, A, 1, B, W, 1, INFO )
       CALL CHKXER( 'ZGEQRF', INFOT, NOUT, LERR, OK )
 *
+*     ZGEQRFP
+*
+      SRNAMT = 'ZGEQRFP'
+      INFOT = 1
+      CALL ZGEQRFP( -1, 0, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'ZGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL ZGEQRFP( 0, -1, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'ZGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL ZGEQRFP( 2, 1, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'ZGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL ZGEQRFP( 1, 2, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'ZGEQRFP', INFOT, NOUT, LERR, OK )
+*
 *     ZGEQR2
 *
       SRNAMT = 'ZGEQR2'
@@ -103,6 +119,19 @@
       INFOT = 4
       CALL ZGEQR2( 2, 1, A, 1, B, W, INFO )
       CALL CHKXER( 'ZGEQR2', INFOT, NOUT, LERR, OK )
+*
+*     ZGEQR2P
+*
+      SRNAMT = 'ZGEQR2P'
+      INFOT = 1
+      CALL ZGEQR2P( -1, 0, A, 1, B, W, INFO )
+      CALL CHKXER( 'ZGEQR2P', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL ZGEQR2P( 0, -1, A, 1, B, W, INFO )
+      CALL CHKXER( 'ZGEQR2P', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL ZGEQR2P( 2, 1, A, 1, B, W, INFO )
+      CALL CHKXER( 'ZGEQR2P', INFOT, NOUT, LERR, OK )
 *
 *     ZGEQRS
 *

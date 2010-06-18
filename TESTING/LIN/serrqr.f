@@ -38,8 +38,8 @@
      $                   W( NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, SGEQR2, SGEQRF, SGEQRS, SORG2R,
-     $                   SORGQR, SORM2R, SORMQR
+      EXTERNAL           ALAESM, CHKXER, SGEQR2, SGEQR2P, SGEQRF, SGEQRFP,
+     $                   SGEQRS, SORG2R, SORGQR, SORM2R, SORMQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -89,6 +89,22 @@
       CALL SGEQRF( 1, 2, A, 1, B, W, 1, INFO )
       CALL CHKXER( 'SGEQRF', INFOT, NOUT, LERR, OK )
 *
+*     SGEQRFP
+*
+      SRNAMT = 'SGEQRFP'
+      INFOT = 1
+      CALL SGEQRFP( -1, 0, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'SGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL SGEQRFP( 0, -1, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'SGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SGEQRFP( 2, 1, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'SGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL SGEQRFP( 1, 2, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'SGEQRFP', INFOT, NOUT, LERR, OK )
+*
 *     SGEQR2
 *
       SRNAMT = 'SGEQR2'
@@ -101,6 +117,19 @@
       INFOT = 4
       CALL SGEQR2( 2, 1, A, 1, B, W, INFO )
       CALL CHKXER( 'SGEQR2', INFOT, NOUT, LERR, OK )
+*
+*     SGEQR2P
+*
+      SRNAMT = 'SGEQR2P'
+      INFOT = 1
+      CALL SGEQR2P( -1, 0, A, 1, B, W, INFO )
+      CALL CHKXER( 'SGEQR2P', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL SGEQR2P( 0, -1, A, 1, B, W, INFO )
+      CALL CHKXER( 'SGEQR2P', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL SGEQR2P( 2, 1, A, 1, B, W, INFO )
+      CALL CHKXER( 'SGEQR2P', INFOT, NOUT, LERR, OK )
 *
 *     SGEQRS
 *

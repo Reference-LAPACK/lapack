@@ -38,8 +38,8 @@
      $                   W( NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CGEQR2, CGEQRF, CGEQRS, CHKXER, CUNG2R,
-     $                   CUNGQR, CUNM2R, CUNMQR
+      EXTERNAL           ALAESM, CGEQR2, CGEQR2P, CGEQRF, CGEQRFP, CGEQRS,
+     $                   CHKXER, CUNG2R, CUNGQR, CUNM2R, CUNMQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -89,6 +89,22 @@
       CALL CGEQRF( 1, 2, A, 1, B, W, 1, INFO )
       CALL CHKXER( 'CGEQRF', INFOT, NOUT, LERR, OK )
 *
+*     CGEQRFP
+*
+      SRNAMT = 'CGEQRFP'
+      INFOT = 1
+      CALL CGEQRFP( -1, 0, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'CGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL CGEQRFP( 0, -1, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'CGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEQRFP( 2, 1, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'CGEQRFP', INFOT, NOUT, LERR, OK )
+      INFOT = 7
+      CALL CGEQRFP( 1, 2, A, 1, B, W, 1, INFO )
+      CALL CHKXER( 'CGEQRFP', INFOT, NOUT, LERR, OK )
+*
 *     CGEQR2
 *
       SRNAMT = 'CGEQR2'
@@ -101,6 +117,19 @@
       INFOT = 4
       CALL CGEQR2( 2, 1, A, 1, B, W, INFO )
       CALL CHKXER( 'CGEQR2', INFOT, NOUT, LERR, OK )
+*
+*     CGEQR2P
+*
+      SRNAMT = 'CGEQR2P'
+      INFOT = 1
+      CALL CGEQR2P( -1, 0, A, 1, B, W, INFO )
+      CALL CHKXER( 'CGEQR2P', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL CGEQR2P( 0, -1, A, 1, B, W, INFO )
+      CALL CHKXER( 'CGEQR2P', INFOT, NOUT, LERR, OK )
+      INFOT = 4
+      CALL CGEQR2P( 2, 1, A, 1, B, W, INFO )
+      CALL CHKXER( 'CGEQR2P', INFOT, NOUT, LERR, OK )
 *
 *     CGEQRS
 *

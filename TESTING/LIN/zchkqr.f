@@ -103,7 +103,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 7 )
+      PARAMETER          ( NTESTS = 9 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 8 )
       DOUBLE PRECISION   ZERO
@@ -121,10 +121,14 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 ), KVAL( 4 )
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
+*     .. External Functions ..
+      LOGICAL            ZGENND
+      EXTERNAL           ZGENND
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRQR, ZGEQRS,
      $                   ZGET02, ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZQRT01,
-     $                   ZQRT02, ZQRT03
+     $                   ZQRT01P, ZQRT02, ZQRT03
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -240,6 +244,15 @@
 *
                         CALL ZQRT01( M, N, A, AF, AQ, AR, LDA, TAU,
      $                               WORK, LWORK, RWORK, RESULT( 1 ) )
+*
+*                       Test ZGEQRFP
+*
+                        CALL ZQRT01P( M, N, A, AF, AQ, AR, LDA, TAU,
+     $                               WORK, LWORK, RWORK, RESULT( 8 ) )
+
+                         IF( .NOT. ZGENND( M, N, AF, LDA ) )
+     $                       RESULT( 9 ) = 2*THRESH
+                        NT = NT + 1
                      ELSE IF( M.GE.N ) THEN
 *
 *                       Test ZUNGQR, using factorization

@@ -351,12 +351,14 @@
          WRITE( IOUNIT, FMT = 9970 )
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
          WRITE( IOUNIT, FMT = 9950 )1
+         WRITE( IOUNIT, FMT = 6950 )8
          WRITE( IOUNIT, FMT = 9946 )2
          WRITE( IOUNIT, FMT = 9944 )3, 'M'
          WRITE( IOUNIT, FMT = 9943 )4, 'M'
          WRITE( IOUNIT, FMT = 9942 )5, 'M'
          WRITE( IOUNIT, FMT = 9941 )6, 'M'
          WRITE( IOUNIT, FMT = 9960 )7
+         WRITE( IOUNIT, FMT = 6660 )9
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
       ELSE IF( LSAMEN( 2, P2, 'LQ' ) ) THEN
@@ -726,6 +728,7 @@
      $      '( N * norm(A) * norm(AINV) * EPS )' )
  9960 FORMAT( 3X, I2, ': norm( B - A * X )  / ',
      $      '( norm(A) * norm(X) * EPS )' )
+ 6660 FORMAT( 3X, I2, ': diagonal is not non-negative')
  9959 FORMAT( 3X, I2, ': norm( X - XACT )   / ',
      $      '( norm(XACT) * CNDNUM * EPS )' )
  9958 FORMAT( 3X, I2, ': norm( X - XACT )   / ',
@@ -750,6 +753,8 @@
  9951 FORMAT( ' Test ratio for ', A, ':', / 3X, I2,
      $      ': norm( s*b - A*x )  / ( norm(A) * norm(x) * EPS )' )
  9950 FORMAT( 3X, I2, ': norm( R - Q'' * A ) / ( M * norm(A) * EPS )' )
+ 6950 FORMAT( 3X, I2, ': norm( R - Q'' * A ) / ( M * norm(A) * EPS )
+     $       [RFPG]' )
  9949 FORMAT( 3X, I2, ': norm( L - A * Q'' ) / ( N * norm(A) * EPS )' )
  9948 FORMAT( 3X, I2, ': norm( L - Q'' * A ) / ( M * norm(A) * EPS )' )
  9947 FORMAT( 3X, I2, ': norm( R - A * Q'' ) / ( N * norm(A) * EPS )' )

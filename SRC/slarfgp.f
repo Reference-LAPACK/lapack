@@ -1,4 +1,4 @@
-      SUBROUTINE SLARFP( N, ALPHA, X, INCX, TAU )
+      SUBROUTINE SLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -16,7 +16,7 @@
 *  Purpose
 *  =======
 *
-*  SLARFP generates a real elementary reflector H of order n, such
+*  SLARFGP generates a real elementary reflector H of order n, such
 *  that
 *
 *        H * ( alpha ) = ( beta ),   H' * H = I.
@@ -175,6 +175,6 @@
 *
       RETURN
 *
-*     End of SLARFP
+*     End of SLARFGP
 *
       END
