@@ -87,7 +87,7 @@
 *  INFO    (output) INTEGER
 *          = 0:  successful exit.
 *          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if INFO = 1, an singular value did not converge
+*          > 0:  if INFO = 1, a singular value did not converge
 *
 *  Further Details
 *  ===============
