@@ -119,7 +119,7 @@
 *  INFO    (output) INTEGER
 *          = 0:  successful exit.
 *          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  The algorithm failed to compute an singular value.
+*          > 0:  The algorithm failed to compute a singular value.
 *                The update process of divide and conquer failed.
 *
 *  Further Details
