@@ -26,7 +26,7 @@ set(SLINTST  schkaa.f
    spot02.f spot03.f spot05.f spst01.f sppt01.f 
    sppt02.f sppt03.f sppt05.f sptt01.f sptt02.f 
    sptt05.f sqlt01.f sqlt02.f sqlt03.f sqpt01.f 
-   sqrt01.f sqrt02.f sqrt03.f sqrt11.f sqrt12.f 
+   sqrt01.f sqrt01p.f sqrt02.f sqrt03.f sqrt11.f sqrt12.f 
    sqrt13.f sqrt14.f sqrt15.f sqrt16.f sqrt17.f 
    srqt01.f srqt02.f srqt03.f srzt01.f srzt02.f 
    sspt01.f ssyt01.f 
@@ -64,7 +64,7 @@ set(CLINTST  cchkaa.f
    cpot01.f cpot02.f cpot03.f cpot05.f cpst01.f 
    cppt01.f cppt02.f cppt03.f cppt05.f cptt01.f 
    cptt02.f cptt05.f cqlt01.f cqlt02.f cqlt03.f 
-   cqpt01.f cqrt01.f cqrt02.f cqrt03.f cqrt11.f 
+   cqpt01.f cqrt01.f cqrt01p.f cqrt02.f cqrt03.f cqrt11.f 
    cqrt12.f cqrt13.f cqrt14.f cqrt15.f cqrt16.f 
    cqrt17.f crqt01.f crqt02.f crqt03.f crzt01.f crzt02.f 
    csbmv.f  cspt01.f 
@@ -101,7 +101,7 @@ set(DLINTST  dchkaa.f
    dpot02.f dpot03.f dpot05.f dpst01.f dppt01.f 
    dppt02.f dppt03.f dppt05.f dptt01.f dptt02.f 
    dptt05.f dqlt01.f dqlt02.f dqlt03.f dqpt01.f 
-   dqrt01.f dqrt02.f dqrt03.f dqrt11.f dqrt12.f 
+   dqrt01.f dqrt01p.f dqrt02.f dqrt03.f dqrt11.f dqrt12.f 
    dqrt13.f dqrt14.f dqrt15.f dqrt16.f dqrt17.f 
    drqt01.f drqt02.f drqt03.f drzt01.f drzt02.f 
    dspt01.f dsyt01.f 
@@ -141,7 +141,7 @@ set(ZLINTST  zchkaa.f
    zpot01.f zpot02.f zpot03.f zpot05.f zpst01.f 
    zppt01.f zppt02.f zppt03.f zppt05.f zptt01.f 
    zptt02.f zptt05.f zqlt01.f zqlt02.f zqlt03.f 
-   zqpt01.f zqrt01.f zqrt02.f zqrt03.f zqrt11.f 
+   zqpt01.f zqrt01.f zqrt01p.f zqrt02.f zqrt03.f zqrt11.f 
    zqrt12.f zqrt13.f zqrt14.f zqrt15.f zqrt16.f 
    zqrt17.f zrqt01.f zrqt02.f zrqt03.f zrzt01.f zrzt02.f 
    zsbmv.f  zspt01.f 
