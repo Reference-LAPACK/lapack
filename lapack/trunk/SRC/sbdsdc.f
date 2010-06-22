@@ -367,9 +367,9 @@
      $                      Q( START+( IC+QSTART-2 )*N ),
      $                      Q( START+( IS+QSTART-2 )*N ),
      $                      WORK( WSTART ), IWORK, INFO )
-               IF( INFO.NE.0 ) THEN
-                  RETURN
-               END IF
+            END IF
+            IF( INFO.NE.0 ) THEN
+               RETURN
             END IF
             START = I + 1
          END IF
