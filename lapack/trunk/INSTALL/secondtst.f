@@ -1,8 +1,8 @@
       PROGRAM TEST4
 *
-*  -- LAPACK test routine (version 3.2) --
+*  -- LAPACK test routine (version 3.2.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*     June 2010
 *
 *     .. Parameters ..
       INTEGER            NMAX, ITS

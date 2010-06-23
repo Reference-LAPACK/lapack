@@ -2,12 +2,12 @@
      $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
      $                   DN2, G, TAU )
 *
-*  -- LAPACK routine (version 3.2)                                    --
+*  -- LAPACK routine (version 3.2.2)                                    --
 *
 *  -- Contributed by Osni Marques of the Lawrence Berkeley National   --
 *  -- Laboratory and Beresford Parlett of the Univ. of California at  --
 *  -- Berkeley                                                        --
-*  -- November 2008                                                   --
+*  -- June 2010                                                       --
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--

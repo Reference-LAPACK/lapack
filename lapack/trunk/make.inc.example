@@ -1,8 +1,8 @@
 # -*- Makefile -*-
 ####################################################################
 #  LAPACK make include file.                                       #
-#  LAPACK, Version 3.2.1                                           #
-#  April 2009                                                      #
+#  LAPACK, Version 3.2.2                                           #
+#  June 2010                                                       #
 ####################################################################
 #
 # See the INSTALL/ directory for more examples.

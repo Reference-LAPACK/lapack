@@ -3,10 +3,10 @@
      $                   IWORK, LIWORK, INFO )
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.2.1)                                  --
+*  -- LAPACK computational routine (version 3.2.2)                                  --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2009                                                      --
+*  -- June 2010                                                       --
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE
