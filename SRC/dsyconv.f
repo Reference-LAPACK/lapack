@@ -1,6 +1,6 @@
       SUBROUTINE DSYCONV( UPLO, WAY, N, A, LDA, IPIV, WORK, INFO )
 *
-*  -- LAPACK PROTOTYPE routine (version 3.2) --
+*  -- LAPACK PROTOTYPE routine (version 3.2.2) --
 *
 *  -- Written by Julie Langou of the Univ. of TN    --
 *     May 2010

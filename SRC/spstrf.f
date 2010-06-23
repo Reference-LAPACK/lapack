@@ -1,6 +1,6 @@
       SUBROUTINE SPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK routine (version 3.2.2) --
 *     Craig Lucas, University of Manchester / NAG Ltd.
 *     October, 2008
 *

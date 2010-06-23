@@ -2,7 +2,7 @@
      $                   AFB, LAFB, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.2.1) --
+*  -- LAPACK test routine (version 3.2.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     April 2009
 *

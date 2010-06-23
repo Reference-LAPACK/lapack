@@ -1,6 +1,6 @@
       CHARACTER*1 FUNCTION CHLA_TRANSTYPE( TRANS )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     October 2008

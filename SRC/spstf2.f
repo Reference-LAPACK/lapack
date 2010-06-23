@@ -1,6 +1,6 @@
       SUBROUTINE SPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
-*  -- LAPACK PROTOTYPE routine (version 3.2) --
+*  -- LAPACK PROTOTYPE routine (version 3.2.2) --
 *     Craig Lucas, University of Manchester / NAG Ltd.
 *     October, 2008
 *

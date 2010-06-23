@@ -25,10 +25,10 @@ add_subdirectory(BLAS)
 add_subdirectory(SRC)
 add_subdirectory(TESTING)
 
-set(LAPACK_VERSION 3.2.1)
+set(LAPACK_VERSION 3.2.2)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 2)
-set(CPACK_PACKAGE_VERSION_PATCH 1)
+set(CPACK_PACKAGE_VERSION_PATCH 2)
 include(CPack)
 export(TARGETS blas lapack FILE lapack-targets.cmake)
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config-version.cmake.in

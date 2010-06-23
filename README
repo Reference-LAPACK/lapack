@@ -14,6 +14,7 @@ VERSION 3.1   : November 2006
 VERSION 3.1.1 : February 2007
 VERSION 3.2   : November 2008
 VERSION 3.2.1 : April 2009
+VERSION 3.2.2 : June 2010
 
 LAPACK is a library of Fortran 90 with subroutines for solving
 the most commonly occurring problems in numerical linear algebra.

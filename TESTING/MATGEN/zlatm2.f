@@ -3,7 +3,7 @@
 *
 *  -- LAPACK auxiliary test routine (version 3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*     June 2010
 *
 *     .. Scalar Arguments ..
 *

@@ -1,10 +1,10 @@
       SUBROUTINE CLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
      $                      INCX, BETA, Y, INCY )
 *
-*     -- LAPACK routine (version 3.2)                                 --
+*     -- LAPACK routine (version 3.2.2)                                 --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- April 2009                                                   --
+*     -- June 2010                                                    --
 *
 *     -- LAPACK is a software package provided by Univ. of Tennessee, --
 *     -- Univ. of California Berkeley and NAG Ltd.                    --
