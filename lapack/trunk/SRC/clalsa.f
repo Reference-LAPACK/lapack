@@ -137,7 +137,7 @@
 *         the right null space of the I-th subproblem.
 *
 *  RWORK  (workspace) REAL array, dimension at least
-*         max ( N, (SMLSZ+1)*NRHS*3 ).
+*         MAX( (SMLSZ+1)*NRHS*3, N*(1+NRHS) + 2*NRHS ).
 *
 *  IWORK  (workspace) INTEGER array.
 *         The dimension must be at least 3 * N

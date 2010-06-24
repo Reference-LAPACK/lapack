@@ -89,7 +89,8 @@
 *         (N * NRHS).
 *
 *  RWORK  (workspace) DOUBLE PRECISION array, dimension at least
-*         (9*N + 2*N*SMLSIZ + 8*N*NLVL + 3*SMLSIZ*NRHS + (SMLSIZ+1)**2),
+*         (9*N + 2*N*SMLSIZ + 8*N*NLVL + 3*SMLSIZ*NRHS +
+*         MAX( (SMLSIZ+1)**2, N*(1+NRHS) + 2*NRHS ),
 *         where
 *         NLVL = MAX( 0, INT( LOG_2( MIN( M,N )/(SMLSIZ+1) ) ) + 1 )
 *
