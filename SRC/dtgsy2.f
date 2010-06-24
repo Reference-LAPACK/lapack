@@ -638,7 +638,7 @@
 *
             IS = IWORK( I )
             ISP1 = IS + 1
-            IE = ( I+1 ) - 1
+            IE = IWORK ( I+1 ) - 1
             MB = IE - IS + 1
             DO 190 J = Q, P + 2, -1
 *
