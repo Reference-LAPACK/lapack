@@ -22,7 +22,7 @@ PLAT = _LINUX
 FORTRAN  = gfortran -fimplicit-none -g
 OPTS     =
 DRVOPTS  = $(OPTS)
-NOOPT    =
+NOOPT    = -g -O0
 LOADER   = gfortran -g
 LOADOPTS =
 #
