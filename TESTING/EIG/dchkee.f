@@ -1045,7 +1045,7 @@
       COMMON             / INFOC / INFOT, NUNIT, OK, LERR
       COMMON             / SRNAMC / SRNAMT
       COMMON             / SSLCT / SELOPT, SELDIM, SELVAL, SELWR, SELWI
-      COMMON             / ZLAENV / IPARMS
+      COMMON             / CLAENV / IPARMS
 *     ..
 *     .. Data statements ..
       DATA               INTSTR / '0123456789' /
