@@ -127,8 +127,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, CERRQR, CGEQRS, CGET02,
-     $                   CLACPY, CLARHS, CLATB4, CLATMS, CQRT01, CQRT01P,
-     $                   CQRT02, CQRT03, XLAENV
+     $                   CLACPY, CLARHS, CLATB4, CLATMS, CQRT01,
+     $                   CQRT01P, CQRT02, CQRT03, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
