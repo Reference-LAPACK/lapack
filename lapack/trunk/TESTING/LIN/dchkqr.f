@@ -127,8 +127,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRQR, DGEQRS, DGET02,
-     $                   DLACPY, DLARHS, DLATB4, DLATMS, DQRT01, DQRT01P,
-     $                   DQRT02, DQRT03, XLAENV
+     $                   DLACPY, DLARHS, DLATB4, DLATMS, DQRT01, 
+     $                   DQRT01P, DQRT02, DQRT03, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
