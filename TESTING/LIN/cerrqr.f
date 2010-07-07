@@ -38,8 +38,9 @@
      $                   W( NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CGEQR2, CGEQR2P, CGEQRF, CGEQRFP, CGEQRS,
-     $                   CHKXER, CUNG2R, CUNGQR, CUNM2R, CUNMQR
+      EXTERNAL           ALAESM, CGEQR2, CGEQR2P, CGEQRF, CGEQRFP,
+     $                   CGEQRS, CHKXER, CUNG2R, CUNGQR, CUNM2R,
+     $                   CUNMQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
