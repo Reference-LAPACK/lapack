@@ -50,7 +50,7 @@ include ../make.inc
 
 ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o iparmq.o	\
     ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
-    ../INSTALL/ilaver.o ../INSTALL/lsame.o
+    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
 ALLXAUX =
 
@@ -69,7 +69,7 @@ SCLAUX = \
    slaset.o slasq1.o slasq2.o slasq3.o slasq4.o slasq5.o slasq6.o \
    slasr.o  slasrt.o slassq.o slasv2.o spttrf.o sstebz.o sstedc.o \
    ssteqr.o ssterf.o slaisnan.o sisnan.o \
-   ../INSTALL/slamch.o ../INSTALL/second_$(TIMER).o
+    ../INSTALL/second_$(TIMER).o
 
 DZLAUX = \
    dbdsdc.o \
@@ -96,8 +96,8 @@ SLASRC = \
    sgels.o  sgelsd.o sgelss.o sgelsx.o sgelsy.o sgeql2.o sgeqlf.o \
    sgeqp3.o sgeqpf.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
    sgerq2.o sgerqf.o sgesc2.o sgesdd.o sgesv.o  sgesvd.o sgesvx.o \
-   sgetc2.o sgetf2.o sgetrf.o sgetri.o \
-   sgetrs.o sggbak.o sggbal.o sgges.o  sggesx.o sggev.o  sggevx.o \
+   sgetc2.o sgetf2.o sgetri.o \
+   sggbak.o sggbal.o sgges.o  sggesx.o sggev.o  sggevx.o \
    sggglm.o sgghrd.o sgglse.o sggqrf.o \
    sggrqf.o sggsvd.o sggsvp.o sgtcon.o sgtrfs.o sgtsv.o  \
    sgtsvx.o sgttrf.o sgttrs.o sgtts2.o shgeqz.o \
@@ -121,7 +121,7 @@ SLASRC = \
    sormr3.o sormrq.o sormrz.o sormtr.o spbcon.o spbequ.o spbrfs.o \
    spbstf.o spbsv.o  spbsvx.o \
    spbtf2.o spbtrf.o spbtrs.o spocon.o spoequ.o sporfs.o sposv.o  \
-   sposvx.o spotf2.o spotrf.o spotri.o spotrs.o spstrf.o spstf2.o \
+   sposvx.o spotf2.o spotrf.o spotri.o  spstrf.o spstf2.o \
    sppcon.o sppequ.o \
    spprfs.o sppsv.o  sppsvx.o spptrf.o spptri.o spptrs.o sptcon.o \
    spteqr.o sptrfs.o sptsv.o  sptsvx.o spttrs.o sptts2.o srscl.o  \
@@ -141,6 +141,8 @@ SLASRC = \
    stfttr.o stpttf.o stpttr.o strttf.o strttp.o \
    sgejsv.o  sgesvj.o  sgsvj0.o  sgsvj1.o \
    sgeequb.o ssyequb.o spoequb.o sgbequb.o
+
+DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o 
 
 SXLASRC = sgesvxx.o sgerfsx.o sla_gerfsx_extended.o sla_geamv.o		\
    sla_gercond.o sla_rpvgrw.o ssysvxx.o ssyrfsx.o			\
@@ -219,6 +221,8 @@ CXLASRC =    cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
    chesvxx.o cherfsx.o cla_herfsx_extended.o cla_heamv.o \
    cla_hercond_c.o cla_hercond_x.o cla_herpvgrw.o \
    cla_lin_berr.o clarscl2.o clascl2.o cla_wwaddw.o
+
+ZCLASRC = cpotrs.o cgetrs.o cpotrf.o cgetrf.o 
 
 DLASRC = \
    dgbbrd.o dgbcon.o dgbequ.o dgbrfs.o dgbsv.o  \
@@ -363,8 +367,8 @@ ifdef USEXBLAS
 ALLXOBJ=$(SXLASRC) $(DXLASRC) $(CXLASRC) $(ZXLASRC) $(ALLXAUX)
 endif
 
-ALLOBJ=$(SLASRC) $(DLASRC) $(CLASRC) $(ZLASRC) $(SCLAUX) $(DZLAUX)	\
-	$(ALLAUX)
+ALLOBJ=$(SLASRC) $(DLASRC) $(DSLASRC) $(CLASRC) $(ZLASRC) $(ZCLASRC) \
+	   $(SCLAUX) $(DZLAUX) $(ALLAUX)
 
 ../$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ)
 	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ)
@@ -372,22 +376,22 @@ ALLOBJ=$(SLASRC) $(DLASRC) $(CLASRC) $(ZLASRC) $(SCLAUX) $(DZLAUX)	\
 
 single: $(SLASRC) $(ALLAUX) $(SCLAUX) 
 	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(SLASRC) $(ALLAUX) \
-	$(SCLAUX)
+	$(SCLAUX) $(DSLASRC)
 	$(RANLIB) ../$(LAPACKLIB)
 
 complex: $(CLASRC) $(ALLAUX) $(SCLAUX)
 	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(CLASRC) $(ALLAUX) \
-	$(SCLAUX)
+	$(SCLAUX) $(ZCLASRC)
 	$(RANLIB) ../$(LAPACKLIB)
 
 double: $(DLASRC) $(ALLAUX) $(DZLAUX)
 	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(DLASRC) $(ALLAUX) \
-	$(DZLAUX)
+	$(DZLAUX) $(DSLASRC)
 	$(RANLIB) ../$(LAPACKLIB)
 
 complex16: $(ZLASRC) $(ALLAUX) $(DZLAUX)
 	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(ZLASRC) $(ALLAUX) \
-	$(DZLAUX)
+	$(DZLAUX) $(ZCLASRC)
 	$(RANLIB) ../$(LAPACKLIB)
 
 $(ALLAUX): $(FRC)
