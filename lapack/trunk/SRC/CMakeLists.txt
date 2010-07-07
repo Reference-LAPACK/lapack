@@ -48,7 +48,8 @@
 
 set(ALLAUX  ilaenv.f ieeeck.f lsamen.f  iparmq.f	
     ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f 
-    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f)
+    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
+    ../INSTALL/slamch.f)
 
 set(ALLXAUX )
 
@@ -67,7 +68,7 @@ set(SCLAUX
    slaset.f slasq1.f slasq2.f slasq3.f slasq4.f slasq5.f slasq6.f 
    slasr.f  slasrt.f slassq.f slasv2.f spttrf.f sstebz.f sstedc.f 
    ssteqr.f ssterf.f slaisnan.f sisnan.f 
-   ../INSTALL/slamch.f ${SECOND_SRC})
+    ${SECOND_SRC})
 
 set(DZLAUX  
    dbdsdc.f 
@@ -139,6 +140,8 @@ set(SLASRC
    stfttr.f stpttf.f stpttr.f strttf.f strttp.f 
    sgejsv.f  sgesvj.f  sgsvj0.f  sgsvj1.f 
    sgeequb.f ssyequb.f spoequb.f sgbequb.f)
+
+set(DSLASRC spotrs.f sgetrs.f spotrf.f sgetrf.f) 
 
 set(SXLASRC  sgesvxx.f sgerfsx.f sla_gerfsx_extended.f sla_geamv.f		
    sla_gercond.f sla_rpvgrw.f ssysvxx.f ssyrfsx.f			
@@ -217,6 +220,8 @@ set(CXLASRC     cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f
    chesvxx.f cherfsx.f cla_herfsx_extended.f cla_heamv.f 
    cla_hercond_c.f cla_hercond_x.f cla_herpvgrw.f 
    cla_lin_berr.f clarscl2.f clascl2.f cla_wwaddw.f)
+
+set(ZCLASRC cpotrs.f cgetrs.f cpotrf.f cgetrf.f) 
 
 set(DLASRC 
    dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f  
@@ -360,20 +365,19 @@ if( USEXBLAS)
   set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC} ${ALLXAUX})
 endif()
 
-set(ALLOBJ ${SLASRC} ${DLASRC} ${CLASRC} ${ZLASRC} ${SCLAUX} ${DZLAUX}	
+set(ALLOBJ ${SLASRC} ${DSLASRC} ${DLASRC} ${CLASRC} ${ZCLASRC} ${ZLASRC} ${SCLAUX} ${DZLAUX}	
 	${ALLAUX})
 if(BUILD_SINGLE)
-set(ALLOBJ  ${SLASRC} ${ALLAUX} 
-	${SCLAUX})
+set(ALLOBJ  ${SLASRC} ${ALLAUX}	${SCLAUX} ${DSLASRC} )
 endif()
 if(BUILD_DOUBLE)
-  set(ALLOBJ ${DLASRC} ${ALLAUX} ${DZLAUX})
+  set(ALLOBJ ${DLASRC} ${ALLAUX} ${DZLAUX} ${DSLASRC})
 endif()
 if(BUILD_COMPLEX)
-  set(ALLOBJ ${CLASRC} ${ALLAUX} ${SCLAUX})
+  set(ALLOBJ ${CLASRC} ${ALLAUX} ${SCLAUX} ${ZCLASRC} )
 endif()
 if(BUILD_COMPLEX16)
-  set(ALLOBJ  ${ZLASRC} ${ALLAUX} ${DZLAUX})
+  set(ALLOBJ  ${ZLASRC} ${ALLAUX} ${DZLAUX} ${ZCLASRC})
 endif()
 add_library(lapack ${ALLOBJ} ${ALLXOBJ})
 target_link_libraries(lapack blas)
