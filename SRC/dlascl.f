@@ -39,7 +39,7 @@
 *                  and upper bandwidth KU and with the only the upper
 *                  half stored.
 *          = 'Z':  A is a band matrix with lower bandwidth KL and upper
-*                  bandwidth KU.
+*                  bandwidth KU. See DGBTRF for storage details.
 *
 *  KL      (input) INTEGER
 *          The lower bandwidth of A.  Referenced only if TYPE = 'B',
