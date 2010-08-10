@@ -44,17 +44,17 @@
 *  Arguments
 *  =========
 *
-*  NORM    (input) CHARACTER
+*  NORM    (input) CHARACTER*1
 *          Specifies the value to be returned in SLANSF as described
 *          above.
 *
-*  TRANSR  (input) CHARACTER
+*  TRANSR  (input) CHARACTER*1
 *          Specifies whether the RFP format of A is normal or
 *          transposed format.
 *          = 'N':  RFP format is Normal;
 *          = 'T':  RFP format is Transpose.
 *
-*  UPLO    (input) CHARACTER
+*  UPLO    (input) CHARACTER*1
 *           On entry, UPLO specifies whether the RFP matrix A came from
 *           an upper or lower triangular matrix as follows:
 *           = 'U': RFP A came from an upper triangular matrix;

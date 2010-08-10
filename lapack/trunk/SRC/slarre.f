@@ -41,7 +41,7 @@
 *  Arguments
 *  =========
 *
-*  RANGE   (input) CHARACTER
+*  RANGE   (input) CHARACTER*1
 *          = 'A': ("All")   all eigenvalues will be found.
 *          = 'V': ("Value") all eigenvalues in the half-open interval
 *                           (VL, VU] will be found.

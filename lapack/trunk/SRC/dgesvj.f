@@ -93,7 +93,7 @@
 *  Arguments
 *  =========
 *
-*  JOBA    (input) CHARACTER* 1
+*  JOBA    (input) CHARACTER*1
 *          Specifies the structure of A.
 *          = 'L': The input matrix A is lower triangular;
 *          = 'U': The input matrix A is upper triangular;
