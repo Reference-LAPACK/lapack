@@ -27,15 +27,15 @@
 *  Arguments
 *  =========
 *
-*  TRANSR    (input) CHARACTER
+*  TRANSR    (input) CHARACTER*1
 *          = 'N':  The Normal TRANSR of RFP A is stored;
 *          = 'C':  The Conjugate-transpose TRANSR of RFP A is stored.
 *
-*  UPLO    (input) CHARACTER
+*  UPLO    (input) CHARACTER*1
 *          = 'U':  A is upper triangular;
 *          = 'L':  A is lower triangular.
 *
-*  DIAG    (input) CHARACTER
+*  DIAG    (input) CHARACTER*1
 *          = 'N':  A is non-unit triangular;
 *          = 'U':  A is unit triangular.
 *

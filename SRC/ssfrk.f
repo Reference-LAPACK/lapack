@@ -39,11 +39,11 @@
 *  Arguments
 *  ==========
 *
-*  TRANSR   (input) CHARACTER
+*  TRANSR   (input) CHARACTER*1
 *          = 'N':  The Normal Form of RFP A is stored;
 *          = 'T':  The Transpose Form of RFP A is stored.
 *
-*  UPLO     (input) CHARACTER
+*  UPLO     (input) CHARACTER*1
 *           On  entry, UPLO specifies whether the upper or lower
 *           triangular part of the array C is to be referenced as
 *           follows:
@@ -56,7 +56,7 @@
 *
 *           Unchanged on exit.
 *
-*  TRANS    (input) CHARACTER
+*  TRANS    (input) CHARACTER*1
 *           On entry, TRANS specifies the operation to be performed as
 *           follows:
 *

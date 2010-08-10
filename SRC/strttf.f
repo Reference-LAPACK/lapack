@@ -25,11 +25,11 @@
 *  Arguments
 *  =========
 *
-*  TRANSR   (input) CHARACTER
+*  TRANSR   (input) CHARACTER*1
 *          = 'N':  ARF in Normal form is wanted;
 *          = 'T':  ARF in Transpose form is wanted.
 *
-*  UPLO    (input) CHARACTER
+*  UPLO    (input) CHARACTER*1
 *          = 'U':  Upper triangle of A is stored;
 *          = 'L':  Lower triangle of A is stored.
 *

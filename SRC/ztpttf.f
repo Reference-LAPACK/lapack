@@ -25,11 +25,11 @@
 *  Arguments
 *  =========
 *
-*  TRANSR   (input) CHARACTER
+*  TRANSR   (input) CHARACTER*1
 *          = 'N':  ARF in Normal format is wanted;
 *          = 'C':  ARF in Conjugate-transpose format is wanted.
 *
-*  UPLO    (input) CHARACTER
+*  UPLO    (input) CHARACTER*1
 *          = 'U':  A is upper triangular;
 *          = 'L':  A is lower triangular.
 *

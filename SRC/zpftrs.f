@@ -26,11 +26,11 @@
 *  Arguments
 *  =========
 *
-*  TRANSR    (input) CHARACTER
+*  TRANSR    (input) CHARACTER*1
 *          = 'N':  The Normal TRANSR of RFP A is stored;
 *          = 'C':  The Conjugate-transpose TRANSR of RFP A is stored.
 *
-*  UPLO    (input) CHARACTER
+*  UPLO    (input) CHARACTER*1
 *          = 'U':  Upper triangle of RFP A is stored;
 *          = 'L':  Lower triangle of RFP A is stored.
 *
