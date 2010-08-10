@@ -6,6 +6,14 @@ if (UNIX)
    endif ()
 endif ()
 
+macro(lapack_install_library lib)
+  install(TARGETS ${lib} EXPORT lapack-targets
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+    )
+endmacro()
+
 # --------------------------------------------------
 # Testing
 
@@ -78,3 +86,13 @@ configure_file(${LAPACK_SOURCE_DIR}/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
+
+configure_file(${LAPACK_SOURCE_DIR}/lapack-config-install.cmake.in
+  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
+install(FILES
+  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake
+  ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
+  DESTINATION lib/cmake/lapack-${LAPACK_VERSION}
+  )
+install(EXPORT lapack-targets
+  DESTINATION lib/cmake/lapack-${LAPACK_VERSION})
