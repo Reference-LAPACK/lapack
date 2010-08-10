@@ -381,4 +381,4 @@ if(BUILD_COMPLEX16)
 endif()
 add_library(lapack ${ALLOBJ} ${ALLXOBJ})
 target_link_libraries(lapack blas)
-
+lapack_install_library(lapack)
