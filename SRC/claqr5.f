@@ -441,32 +441,34 @@
 *           ==== Special case: 2-by-2 reflection (if needed) ====
 *
             K = KRCOL + 3*( M22-1 )
-            IF( BMP22 .AND. ( V( 1, M22 ).NE.ZERO ) ) THEN
-               DO 90 J = JTOP, MIN( KBOT, K+3 )
-                  REFSUM = V( 1, M22 )*( H( J, K+1 )+V( 2, M22 )*
-     $                     H( J, K+2 ) )
-                  H( J, K+1 ) = H( J, K+1 ) - REFSUM
-                  H( J, K+2 ) = H( J, K+2 ) -
-     $                          REFSUM*CONJG( V( 2, M22 ) )
-   90          CONTINUE
-*
-               IF( ACCUM ) THEN
-                  KMS = K - INCOL
-                  DO 100 J = MAX( 1, KTOP-INCOL ), KDU
-                     REFSUM = V( 1, M22 )*( U( J, KMS+1 )+V( 2, M22 )*
-     $                        U( J, KMS+2 ) )
-                     U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
-                     U( J, KMS+2 ) = U( J, KMS+2 ) -
-     $                               REFSUM*CONJG( V( 2, M22 ) )
-  100             CONTINUE
-               ELSE IF( WANTZ ) THEN
-                  DO 110 J = ILOZ, IHIZ
-                     REFSUM = V( 1, M22 )*( Z( J, K+1 )+V( 2, M22 )*
-     $                        Z( J, K+2 ) )
-                     Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
-                     Z( J, K+2 ) = Z( J, K+2 ) -
+            IF( BMP22 ) THEN
+               IF ( V( 1, M22 ).NE.ZERO ) THEN
+                  DO 90 J = JTOP, MIN( KBOT, K+3 )
+                     REFSUM = V( 1, M22 )*( H( J, K+1 )+V( 2, M22 )*
+     $                        H( J, K+2 ) )
+                     H( J, K+1 ) = H( J, K+1 ) - REFSUM
+                     H( J, K+2 ) = H( J, K+2 ) -
      $                             REFSUM*CONJG( V( 2, M22 ) )
-  110             CONTINUE
+   90             CONTINUE
+*
+                  IF( ACCUM ) THEN
+                     KMS = K - INCOL
+                     DO 100 J = MAX( 1, KTOP-INCOL ), KDU
+                        REFSUM = V( 1, M22 )*( U( J, KMS+1 )+
+     $                           V( 2, M22 )*U( J, KMS+2 ) )
+                        U( J, KMS+1 ) = U( J, KMS+1 ) - REFSUM
+                        U( J, KMS+2 ) = U( J, KMS+2 ) -
+     $                                  REFSUM*CONJG( V( 2, M22 ) )
+  100                CONTINUE
+                  ELSE IF( WANTZ ) THEN
+                     DO 110 J = ILOZ, IHIZ
+                        REFSUM = V( 1, M22 )*( Z( J, K+1 )+V( 2, M22 )*
+     $                           Z( J, K+2 ) )
+                        Z( J, K+1 ) = Z( J, K+1 ) - REFSUM
+                        Z( J, K+2 ) = Z( J, K+2 ) -
+     $                                REFSUM*CONJG( V( 2, M22 ) )
+  110                CONTINUE
+                  END IF
                END IF
             END IF
 *
