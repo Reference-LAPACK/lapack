@@ -186,9 +186,10 @@
          INFO = -3
       ELSE IF( LDA.LT.M ) THEN
          INFO = -5
-      ELSE IF( MV.LT.0 ) THEN
+      ELSE IF( ( RSVEC.OR.APPLV ) .AND. ( MV.LT.0 ) ) THEN
          INFO = -8
-      ELSE IF( LDV.LT.M ) THEN
+      ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR. 
+     &         ( APPLV.AND.( LDV.LT.MV ) ) ) THEN
          INFO = -10
       ELSE IF( TOL.LE.EPS ) THEN
          INFO = -13
@@ -310,7 +311,7 @@
                         SVA( p ) = SNRM2( M, A( 1, p ), 1 )*D( p )
                      ELSE
                         TEMP1 = ZERO
-                        AAPP = ZERO
+                        AAPP = ONE
                         CALL SLASSQ( M, A( 1, p ), 1, TEMP1, AAPP )
                         SVA( p ) = TEMP1*SQRT( AAPP )*D( p )
                      END IF
@@ -393,7 +394,8 @@
      +                                              FASTR )
                                     SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
      +                                         ONE+T*APOAQ*AAPQ ) )
-                                    AAPP = AAPP*SQRT( ONE-T*AQOAP*AAPQ )
+                                    AAPP = AAPP*SQRT( AMAX1( ZERO, 
+     +                                         ONE-T*AQOAP*AAPQ ) )
                                     MXSINJ = AMAX1( MXSINJ, ABS( T ) )
 *
                                  ELSE
@@ -536,7 +538,7 @@
      +                                         D( q )
                                  ELSE
                                     T = ZERO
-                                    AAQQ = ZERO
+                                    AAQQ = ONE
                                     CALL SLASSQ( M, A( 1, q ), 1, T,
      +                                           AAQQ )
                                     SVA( q ) = T*SQRT( AAQQ )*D( q )
@@ -549,7 +551,7 @@
      +                                     D( p )
                                  ELSE
                                     T = ZERO
-                                    AAPP = ZERO
+                                    AAPP = ONE
                                     CALL SLASSQ( M, A( 1, p ), 1, T,
      +                                           AAPP )
                                     AAPP = T*SQRT( AAPP )*D( p )
@@ -707,7 +709,8 @@
                                     MXSINJ = AMAX1( MXSINJ, ABS( SN ) )
                                     SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
      +                                         ONE+T*APOAQ*AAPQ ) )
-                                    AAPP = AAPP*SQRT( ONE-T*AQOAP*AAPQ )
+                                    AAPP = AAPP*SQRT( AMAX1( ZERO, 
+     +                                         ONE-T*AQOAP*AAPQ ) )
 *
                                     APOAQ = D( p ) / D( q )
                                     AQOAP = D( q ) / D( p )
@@ -855,7 +858,7 @@
      +                                         D( q )
                                  ELSE
                                     T = ZERO
-                                    AAQQ = ZERO
+                                    AAQQ = ONE
                                     CALL SLASSQ( M, A( 1, q ), 1, T,
      +                                           AAQQ )
                                     SVA( q ) = T*SQRT( AAQQ )*D( q )
@@ -868,7 +871,7 @@
      +                                     D( p )
                                  ELSE
                                     T = ZERO
-                                    AAPP = ZERO
+                                    AAPP = ONE
                                     CALL SLASSQ( M, A( 1, p ), 1, T,
      +                                           AAPP )
                                     AAPP = T*SQRT( AAPP )*D( p )
@@ -931,7 +934,7 @@
             SVA( N ) = SNRM2( M, A( 1, N ), 1 )*D( N )
          ELSE
             T = ZERO
-            AAPP = ZERO
+            AAPP = ONE
             CALL SLASSQ( M, A( 1, N ), 1, T, AAPP )
             SVA( N ) = T*SQRT( AAPP )*D( N )
          END IF

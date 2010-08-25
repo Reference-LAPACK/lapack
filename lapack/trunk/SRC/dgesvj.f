@@ -93,7 +93,7 @@
 *  Arguments
 *  =========
 *
-*  JOBA    (input) CHARACTER*1
+*  JOBA    (input) CHARACTER* 1
 *          Specifies the structure of A.
 *          = 'L': The input matrix A is lower triangular;
 *          = 'U': The input matrix A is upper triangular;
@@ -222,7 +222,7 @@
 *                    orthogonal up to CTOL*EPS, EPS=DLAMCH('E').
 *                    It is required that CTOL >= ONE, i.e. it is not
 *                    allowed to force the routine to obtain orthogonality
-*                    below EPSILON.
+*                    below EPS.
 *          On exit :
 *          WORK(1) = SCALE is the scaling factor such that SCALE*SVA(1:N)
 *                    are the computed singular values of A.
@@ -262,9 +262,9 @@
 *     ..
 *     .. Local Scalars ..
       DOUBLE PRECISION   AAPP, AAPP0, AAPQ, AAQQ, APOAQ, AQOAP, BIG,
-     +                   BIGTHETA, CS, CTOL, EPSILON, LARGE, MXAAPQ,
+     +                   BIGTHETA, CS, CTOL, EPSLN, LARGE, MXAAPQ,
      +                   MXSINJ, ROOTBIG, ROOTEPS, ROOTSFMIN, ROOTTOL,
-     +                   SCALE, SFMIN, SMALL, SN, T, TEMP1, THETA,
+     +                   SKL, SFMIN, SMALL, SN, T, TEMP1, THETA,
      +                   THSIGN, TOL
       INTEGER            BLSKIP, EMPTSW, i, ibr, IERR, igl, IJBLSK, ir1,
      +                   ISWROT, jbc, jgl, KBL, LKAHEAD, MVL, N2, N34,
@@ -368,21 +368,21 @@
 *     ... and the machine dependent parameters are
 *[!]  (Make sure that DLAMCH() works properly on the target machine.)
 *
-      EPSILON = DLAMCH( 'Epsilon' )
-      ROOTEPS = DSQRT( EPSILON )
+      EPSLN = DLAMCH( 'Epsilon' )
+      ROOTEPS = DSQRT( EPSLN )
       SFMIN = DLAMCH( 'SafeMinimum' )
       ROOTSFMIN = DSQRT( SFMIN )
-      SMALL = SFMIN / EPSILON
+      SMALL = SFMIN / EPSLN
       BIG = DLAMCH( 'Overflow' )
 *     BIG         = ONE    / SFMIN
       ROOTBIG = ONE / ROOTSFMIN
       LARGE = BIG / DSQRT( DBLE( M*N ) )
       BIGTHETA = ONE / ROOTEPS
 *
-      TOL = CTOL*EPSILON
+      TOL = CTOL*EPSLN
       ROOTTOL = DSQRT( TOL )
 *
-      IF( DBLE( M )*EPSILON.GE.ONE ) THEN
+      IF( DBLE( M )*EPSLN.GE.ONE ) THEN
          INFO = -5
          CALL XERBLA( 'DGESVJ', -INFO )
          RETURN
@@ -407,7 +407,7 @@
 *     DSQRT(N)*max_i SVA(i) does not overflow. If INFinite entries
 *     in A are detected, the procedure returns with INFO=-6.
 *
-      SCALE = ONE / DSQRT( DBLE( M )*DBLE( N ) )
+      SKL= ONE / DSQRT( DBLE( M )*DBLE( N ) )
       NOSCALE = .TRUE.
       GOSCALE = .TRUE.
 *
@@ -415,7 +415,7 @@
 *        the input matrix is M-by-N lower triangular (trapezoidal)
          DO 1874 p = 1, N
             AAPP = ZERO
-            AAQQ = ZERO
+            AAQQ = ONE
             CALL DLASSQ( M-p+1, A( p, p ), 1, AAPP, AAQQ )
             IF( AAPP.GT.BIG ) THEN
                INFO = -6
@@ -427,11 +427,11 @@
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
-               SVA( p ) = AAPP*( AAQQ*SCALE )
+               SVA( p ) = AAPP*( AAQQ*SKL)
                IF( GOSCALE ) THEN
                   GOSCALE = .FALSE.
                   DO 1873 q = 1, p - 1
-                     SVA( q ) = SVA( q )*SCALE
+                     SVA( q ) = SVA( q )*SKL
  1873             CONTINUE
                END IF
             END IF
@@ -440,7 +440,7 @@
 *        the input matrix is M-by-N upper triangular (trapezoidal)
          DO 2874 p = 1, N
             AAPP = ZERO
-            AAQQ = ZERO
+            AAQQ = ONE
             CALL DLASSQ( p, A( 1, p ), 1, AAPP, AAQQ )
             IF( AAPP.GT.BIG ) THEN
                INFO = -6
@@ -452,11 +452,11 @@
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
-               SVA( p ) = AAPP*( AAQQ*SCALE )
+               SVA( p ) = AAPP*( AAQQ*SKL)
                IF( GOSCALE ) THEN
                   GOSCALE = .FALSE.
                   DO 2873 q = 1, p - 1
-                     SVA( q ) = SVA( q )*SCALE
+                     SVA( q ) = SVA( q )*SKL
  2873             CONTINUE
                END IF
             END IF
@@ -465,7 +465,7 @@
 *        the input matrix is M-by-N general dense
          DO 3874 p = 1, N
             AAPP = ZERO
-            AAQQ = ZERO
+            AAQQ = ONE
             CALL DLASSQ( M, A( 1, p ), 1, AAPP, AAQQ )
             IF( AAPP.GT.BIG ) THEN
                INFO = -6
@@ -477,18 +477,18 @@
                SVA( p ) = AAPP*AAQQ
             ELSE
                NOSCALE = .FALSE.
-               SVA( p ) = AAPP*( AAQQ*SCALE )
+               SVA( p ) = AAPP*( AAQQ*SKL)
                IF( GOSCALE ) THEN
                   GOSCALE = .FALSE.
                   DO 3873 q = 1, p - 1
-                     SVA( q ) = SVA( q )*SCALE
+                     SVA( q ) = SVA( q )*SKL
  3873             CONTINUE
                END IF
             END IF
  3874    CONTINUE
       END IF
 *
-      IF( NOSCALE )SCALE = ONE
+      IF( NOSCALE )SKL= ONE
 *
 *     Move the smaller part of the spectrum from the underflow threshold
 *(!)  Start by determining the position of the nonzero entries of the
@@ -517,9 +517,9 @@
 * #:) Quick return for one-column matrix
 *
       IF( N.EQ.1 ) THEN
-         IF( LSVEC )CALL DLASCL( 'G', 0, 0, SVA( 1 ), SCALE, M, 1,
+         IF( LSVEC )CALL DLASCL( 'G', 0, 0, SVA( 1 ), SKL, M, 1,
      +                           A( 1, 1 ), LDA, IERR )
-         WORK( 1 ) = ONE / SCALE
+         WORK( 1 ) = ONE / SKL
          IF( SVA( 1 ).GE.SFMIN ) THEN
             WORK( 2 ) = ONE
          ELSE
@@ -535,7 +535,7 @@
 *     Protect small singular values from underflow, and try to
 *     avoid underflows/overflows in computing Jacobi rotations.
 *
-      SN = DSQRT( SFMIN / EPSILON )
+      SN = DSQRT( SFMIN / EPSLN )
       TEMP1 = DSQRT( BIG / DBLE( N ) )
       IF( ( AAPP.LE.SN ) .OR. ( AAQQ.GE.TEMP1 ) .OR.
      +    ( ( SN.LE.AAQQ ) .AND. ( AAPP.LE.TEMP1 ) ) ) THEN
@@ -563,10 +563,10 @@
       IF( TEMP1.NE.ONE ) THEN
          CALL DLASCL( 'G', 0, 0, ONE, TEMP1, N, 1, SVA, N, IERR )
       END IF
-      SCALE = TEMP1*SCALE
-      IF( SCALE.NE.ONE ) THEN
-         CALL DLASCL( JOBA, 0, 0, ONE, SCALE, M, N, A, LDA, IERR )
-         SCALE = ONE / SCALE
+      SKL= TEMP1*SKL
+      IF( SKL.NE.ONE ) THEN
+         CALL DLASCL( JOBA, 0, 0, ONE, SKL, M, N, A, LDA, IERR )
+         SKL= ONE / SKL
       END IF
 *
 *     Row-cyclic Jacobi SVD algorithm with column pivoting
@@ -639,30 +639,30 @@
 *
             CALL DGSVJ0( JOBV, M-N34, N-N34, A( N34+1, N34+1 ), LDA,
      +                   WORK( N34+1 ), SVA( N34+1 ), MVL,
-     +                   V( N34*q+1, N34+1 ), LDV, EPSILON, SFMIN, TOL,
+     +                   V( N34*q+1, N34+1 ), LDV, EPSLN, SFMIN, TOL,
      +                   2, WORK( N+1 ), LWORK-N, IERR )
 *
             CALL DGSVJ0( JOBV, M-N2, N34-N2, A( N2+1, N2+1 ), LDA,
      +                   WORK( N2+1 ), SVA( N2+1 ), MVL,
-     +                   V( N2*q+1, N2+1 ), LDV, EPSILON, SFMIN, TOL, 2,
+     +                   V( N2*q+1, N2+1 ), LDV, EPSLN, SFMIN, TOL, 2,
      +                   WORK( N+1 ), LWORK-N, IERR )
 *
             CALL DGSVJ1( JOBV, M-N2, N-N2, N4, A( N2+1, N2+1 ), LDA,
      +                   WORK( N2+1 ), SVA( N2+1 ), MVL,
-     +                   V( N2*q+1, N2+1 ), LDV, EPSILON, SFMIN, TOL, 1,
+     +                   V( N2*q+1, N2+1 ), LDV, EPSLN, SFMIN, TOL, 1,
      +                   WORK( N+1 ), LWORK-N, IERR )
 *
             CALL DGSVJ0( JOBV, M-N4, N2-N4, A( N4+1, N4+1 ), LDA,
      +                   WORK( N4+1 ), SVA( N4+1 ), MVL,
-     +                   V( N4*q+1, N4+1 ), LDV, EPSILON, SFMIN, TOL, 1,
+     +                   V( N4*q+1, N4+1 ), LDV, EPSLN, SFMIN, TOL, 1,
      +                   WORK( N+1 ), LWORK-N, IERR )
 *
             CALL DGSVJ0( JOBV, M, N4, A, LDA, WORK, SVA, MVL, V, LDV,
-     +                   EPSILON, SFMIN, TOL, 1, WORK( N+1 ), LWORK-N,
+     +                   EPSLN, SFMIN, TOL, 1, WORK( N+1 ), LWORK-N,
      +                   IERR )
 *
             CALL DGSVJ1( JOBV, M, N2, N4, A, LDA, WORK, SVA, MVL, V,
-     +                   LDV, EPSILON, SFMIN, TOL, 1, WORK( N+1 ),
+     +                   LDV, EPSLN, SFMIN, TOL, 1, WORK( N+1 ),
      +                   LWORK-N, IERR )
 *
 *
@@ -670,21 +670,21 @@
 *
 *
             CALL DGSVJ0( JOBV, N4, N4, A, LDA, WORK, SVA, MVL, V, LDV,
-     +                   EPSILON, SFMIN, TOL, 2, WORK( N+1 ), LWORK-N,
+     +                   EPSLN, SFMIN, TOL, 2, WORK( N+1 ), LWORK-N,
      +                   IERR )
 *
             CALL DGSVJ0( JOBV, N2, N4, A( 1, N4+1 ), LDA, WORK( N4+1 ),
      +                   SVA( N4+1 ), MVL, V( N4*q+1, N4+1 ), LDV,
-     +                   EPSILON, SFMIN, TOL, 1, WORK( N+1 ), LWORK-N,
+     +                   EPSLN, SFMIN, TOL, 1, WORK( N+1 ), LWORK-N,
      +                   IERR )
 *
             CALL DGSVJ1( JOBV, N2, N2, N4, A, LDA, WORK, SVA, MVL, V,
-     +                   LDV, EPSILON, SFMIN, TOL, 1, WORK( N+1 ),
+     +                   LDV, EPSLN, SFMIN, TOL, 1, WORK( N+1 ),
      +                   LWORK-N, IERR )
 *
             CALL DGSVJ0( JOBV, N2+N4, N4, A( 1, N2+1 ), LDA,
      +                   WORK( N2+1 ), SVA( N2+1 ), MVL,
-     +                   V( N2*q+1, N2+1 ), LDV, EPSILON, SFMIN, TOL, 1,
+     +                   V( N2*q+1, N2+1 ), LDV, EPSLN, SFMIN, TOL, 1,
      +                   WORK( N+1 ), LWORK-N, IERR )
 
          END IF
@@ -753,7 +753,7 @@
                         SVA( p ) = DNRM2( M, A( 1, p ), 1 )*WORK( p )
                      ELSE
                         TEMP1 = ZERO
-                        AAPP = ZERO
+                        AAPP = ONE
                         CALL DLASSQ( M, A( 1, p ), 1, TEMP1, AAPP )
                         SVA( p ) = TEMP1*DSQRT( AAPP )*WORK( p )
                      END IF
@@ -841,8 +841,8 @@
      +                                              FASTR )
                                     SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      +                                         ONE+T*APOAQ*AAPQ ) )
-                                    AAPP = AAPP*DSQRT( ONE-T*AQOAP*
-     +                                     AAPQ )
+                                    AAPP = AAPP*DSQRT( DMAX1( ZERO,
+     +                                     ONE-T*AQOAP*AAPQ ) )
                                     MXSINJ = DMAX1( MXSINJ, DABS( T ) )
 *
                                  ELSE
@@ -989,7 +989,7 @@
      +                                         WORK( q )
                                  ELSE
                                     T = ZERO
-                                    AAQQ = ZERO
+                                    AAQQ = ONE
                                     CALL DLASSQ( M, A( 1, q ), 1, T,
      +                                           AAQQ )
                                     SVA( q ) = T*DSQRT( AAQQ )*WORK( q )
@@ -1002,7 +1002,7 @@
      +                                     WORK( p )
                                  ELSE
                                     T = ZERO
-                                    AAPP = ZERO
+                                    AAPP = ONE
                                     CALL DLASSQ( M, A( 1, p ), 1, T,
      +                                           AAPP )
                                     AAPP = T*DSQRT( AAPP )*WORK( p )
@@ -1164,8 +1164,8 @@
                                     MXSINJ = DMAX1( MXSINJ, DABS( SN ) )
                                     SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      +                                         ONE+T*APOAQ*AAPQ ) )
-                                    AAPP = AAPP*DSQRT( ONE-T*AQOAP*
-     +                                     AAPQ )
+                                    AAPP = AAPP*DSQRT( DMAX1( ZERO, 
+     +                                     ONE-T*AQOAP*AAPQ ) )
 *
                                     APOAQ = WORK( p ) / WORK( q )
                                     AQOAP = WORK( q ) / WORK( p )
@@ -1316,7 +1316,7 @@
      +                                         WORK( q )
                                  ELSE
                                     T = ZERO
-                                    AAQQ = ZERO
+                                    AAQQ = ONE
                                     CALL DLASSQ( M, A( 1, q ), 1, T,
      +                                           AAQQ )
                                     SVA( q ) = T*DSQRT( AAQQ )*WORK( q )
@@ -1329,7 +1329,7 @@
      +                                     WORK( p )
                                  ELSE
                                     T = ZERO
-                                    AAPP = ZERO
+                                    AAPP = ONE
                                     CALL DLASSQ( M, A( 1, p ), 1, T,
      +                                           AAPP )
                                     AAPP = T*DSQRT( AAPP )*WORK( p )
@@ -1395,7 +1395,7 @@
             SVA( N ) = DNRM2( M, A( 1, N ), 1 )*WORK( N )
          ELSE
             T = ZERO
-            AAPP = ZERO
+            AAPP = ONE
             CALL DLASSQ( M, A( 1, N ), 1, T, AAPP )
             SVA( N ) = T*DSQRT( AAPP )*WORK( N )
          END IF
@@ -1446,12 +1446,12 @@
          END IF
          IF( SVA( p ).NE.ZERO ) THEN
             N4 = N4 + 1
-            IF( SVA( p )*SCALE.GT.SFMIN )N2 = N2 + 1
+            IF( SVA( p )*SKL.GT.SFMIN )N2 = N2 + 1
          END IF
  5991 CONTINUE
       IF( SVA( N ).NE.ZERO ) THEN
          N4 = N4 + 1
-         IF( SVA( N )*SCALE.GT.SFMIN )N2 = N2 + 1
+         IF( SVA( N )*SKL.GT.SFMIN )N2 = N2 + 1
       END IF
 *
 *     Normalize the left singular vectors.
@@ -1478,17 +1478,17 @@
       END IF
 *
 *     Undo scaling, if necessary (and possible).
-      IF( ( ( SCALE.GT.ONE ) .AND. ( SVA( 1 ).LT.( BIG /
-     +    SCALE ) ) ) .OR. ( ( SCALE.LT.ONE ) .AND. ( SVA( N2 ).GT.
-     +    ( SFMIN / SCALE ) ) ) ) THEN
+      IF( ( ( SKL.GT.ONE ) .AND. ( SVA( 1 ).LT.( BIG /
+     +    SKL) ) ) .OR. ( ( SKL.LT.ONE ) .AND. ( SVA( N2 ).GT.
+     +    ( SFMIN / SKL) ) ) ) THEN
          DO 2400 p = 1, N
-            SVA( p ) = SCALE*SVA( p )
+            SVA( p ) = SKL*SVA( p )
  2400    CONTINUE
-         SCALE = ONE
+         SKL= ONE
       END IF
 *
-      WORK( 1 ) = SCALE
-*     The singular values of A are SCALE*SVA(1:N). If SCALE.NE.ONE
+      WORK( 1 ) = SKL
+*     The singular values of A are SKL*SVA(1:N). If SKL.NE.ONE
 *     then some of the singular values may overflow or underflow and
 *     the spectrum is given in this factored representation.
 *
