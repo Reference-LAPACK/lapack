@@ -489,7 +489,7 @@
       GOSCAL  = .TRUE.
       DO 1874 p = 1, N
          AAPP = ZERO
-         AAQQ = ZERO
+         AAQQ = ONE
          CALL DLASSQ( M, A(1,p), 1, AAPP, AAQQ )
          IF ( AAPP .GT. BIG ) THEN
             INFO = - 9
@@ -612,7 +612,7 @@
          IF ( L2TRAN ) THEN
             DO 1950 p = 1, M
                XSC   = ZERO
-               TEMP1 = ZERO
+               TEMP1 = ONE
                CALL DLASSQ( N, A(p,1), LDA, XSC, TEMP1 )
 *              DLASSQ gets both the ell_2 and the ell_infinity norm
 *              in one pass through the vector
@@ -643,7 +643,7 @@
       IF ( L2TRAN ) THEN
 *
          XSC   = ZERO
-         TEMP1 = ZERO
+         TEMP1 = ONE
          CALL DLASSQ( N, SVA, 1, XSC, TEMP1 )
          TEMP1 = ONE / TEMP1
 *
@@ -697,6 +697,7 @@
             KILL   = LSVEC
             LSVEC  = RSVEC
             RSVEC  = KILL
+            IF ( LSVEC ) N1 = N
 *
             ROWPIV = .TRUE.
          END IF
@@ -1475,10 +1476,10 @@
 *           Assemble the left singular vector matrix U (M x N).
 *
             IF ( N .LT. M ) THEN
-               CALL DLASET( 'A',  M-N, N, ZERO, ZERO, U(NR+1,1), LDU )
+               CALL DLASET( 'A',  M-N, N, ZERO, ZERO, U(N+1,1), LDU )
                IF ( N .LT. N1 ) THEN
                   CALL DLASET( 'A',N,  N1-N, ZERO, ZERO,  U(1,N+1),LDU )
-                  CALL DLASET( 'A',M-N,N1-N, ZERO, ONE,U(NR+1,N+1),LDU )
+                  CALL DLASET( 'A',M-N,N1-N, ZERO, ONE,U(N+1,N+1),LDU )
                END IF
             END IF
             CALL DORMQR( 'Left', 'No Tr', M, N1, N, A, LDA, WORK, U,
@@ -1582,11 +1583,11 @@
 *           At this moment, V contains the right singular vectors of A.
 *           Next, assemble the left singular vector matrix U (M x N).
 *
-         IF ( N .LT. M ) THEN
-            CALL DLASET( 'A',  M-N, N, ZERO, ZERO, U(NR+1,1), LDU )
-            IF ( N .LT. N1 ) THEN
-               CALL DLASET( 'A',N,  N1-N, ZERO, ZERO,  U(1,N+1),LDU )
-               CALL DLASET( 'A',M-N,N1-N, ZERO, ONE,U(NR+1,N+1),LDU )
+         IF ( NR .LT. M ) THEN
+            CALL DLASET( 'A',  M-NR, NR, ZERO, ZERO, U(NR+1,1), LDU )
+            IF ( NR .LT. N1 ) THEN
+               CALL DLASET( 'A',NR,  N1-NR, ZERO, ZERO,  U(1,NR+1),LDU )
+               CALL DLASET( 'A',M-NR,N1-NR, ZERO, ONE,U(NR+1,NR+1),LDU )
             END IF
          END IF
 *

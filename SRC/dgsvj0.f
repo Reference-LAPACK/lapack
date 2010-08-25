@@ -183,9 +183,10 @@
          INFO = -3
       ELSE IF( LDA.LT.M ) THEN
          INFO = -5
-      ELSE IF( MV.LT.0 ) THEN
+      ELSE IF( ( RSVEC.OR.APPLV ) .AND. ( MV.LT.0 ) ) THEN
          INFO = -8
-      ELSE IF( LDV.LT.M ) THEN
+      ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR. 
+     &         ( APPLV.AND.( LDV.LT.MV ) ) ) THEN
          INFO = -10
       ELSE IF( TOL.LE.EPS ) THEN
          INFO = -13
@@ -307,7 +308,7 @@
                         SVA( p ) = DNRM2( M, A( 1, p ), 1 )*D( p )
                      ELSE
                         TEMP1 = ZERO
-                        AAPP = ZERO
+                        AAPP = ONE
                         CALL DLASSQ( M, A( 1, p ), 1, TEMP1, AAPP )
                         SVA( p ) = TEMP1*DSQRT( AAPP )*D( p )
                      END IF
@@ -391,8 +392,8 @@
      +                                              FASTR )
                                     SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      +                                         ONE+T*APOAQ*AAPQ ) )
-                                    AAPP = AAPP*DSQRT( ONE-T*AQOAP*
-     +                                     AAPQ )
+                                    AAPP = AAPP*DSQRT( DMAX1( ZERO, 
+     +                                     ONE-T*AQOAP*AAPQ ) )
                                     MXSINJ = DMAX1( MXSINJ, DABS( T ) )
 *
                                  ELSE
@@ -535,7 +536,7 @@
      +                                         D( q )
                                  ELSE
                                     T = ZERO
-                                    AAQQ = ZERO
+                                    AAQQ = ONE
                                     CALL DLASSQ( M, A( 1, q ), 1, T,
      +                                           AAQQ )
                                     SVA( q ) = T*DSQRT( AAQQ )*D( q )
@@ -548,7 +549,7 @@
      +                                     D( p )
                                  ELSE
                                     T = ZERO
-                                    AAPP = ZERO
+                                    AAPP = ONE
                                     CALL DLASSQ( M, A( 1, p ), 1, T,
      +                                           AAPP )
                                     AAPP = T*DSQRT( AAPP )*D( p )
@@ -707,8 +708,8 @@
                                     MXSINJ = DMAX1( MXSINJ, DABS( SN ) )
                                     SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      +                                         ONE+T*APOAQ*AAPQ ) )
-                                    AAPP = AAPP*DSQRT( ONE-T*AQOAP*
-     +                                     AAPQ )
+                                    AAPP = AAPP*DSQRT( DMAX1( ZERO, 
+     +                                     ONE-T*AQOAP*AAPQ ) )
 *
                                     APOAQ = D( p ) / D( q )
                                     AQOAP = D( q ) / D( p )
@@ -856,7 +857,7 @@
      +                                         D( q )
                                  ELSE
                                     T = ZERO
-                                    AAQQ = ZERO
+                                    AAQQ = ONE
                                     CALL DLASSQ( M, A( 1, q ), 1, T,
      +                                           AAQQ )
                                     SVA( q ) = T*DSQRT( AAQQ )*D( q )
@@ -869,7 +870,7 @@
      +                                     D( p )
                                  ELSE
                                     T = ZERO
-                                    AAPP = ZERO
+                                    AAPP = ONE
                                     CALL DLASSQ( M, A( 1, p ), 1, T,
      +                                           AAPP )
                                     AAPP = T*DSQRT( AAPP )*D( p )
@@ -932,7 +933,7 @@
             SVA( N ) = DNRM2( M, A( 1, N ), 1 )*D( N )
          ELSE
             T = ZERO
-            AAPP = ZERO
+            AAPP = ONE
             CALL DLASSQ( M, A( 1, N ), 1, T, AAPP )
             SVA( N ) = T*DSQRT( AAPP )*D( N )
          END IF
