@@ -105,7 +105,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            LWKOPT, NB
+      INTEGER            IINFO, LWKOPT, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -113,7 +113,7 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRF, CHETRS, XERBLA
+      EXTERNAL           CHETRF, CHETRS2, CSYCONV, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -160,9 +160,17 @@
       CALL CHETRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
+*        Convert A
+*
+         CALL CSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
+*
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL CHETRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+         CALL CHETRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, INFO )
+*
+*        Revert A
+*
+         CALL CSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       END IF
 *

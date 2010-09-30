@@ -169,7 +169,7 @@ CLASRC = \
    checon.o cheev.o  cheevd.o cheevr.o cheevx.o chegs2.o chegst.o \
    chegv.o  chegvd.o chegvx.o cherfs.o chesv.o  chesvx.o chetd2.o \
    chetf2.o chetrd.o \
-   chetrf.o chetri.o chetrs.o chgeqz.o chpcon.o chpev.o  chpevd.o \
+   chetrf.o chetri.o chetrs.o chetrs2.o chgeqz.o chpcon.o chpev.o  chpevd.o \
    chpevx.o chpgst.o chpgv.o  chpgvd.o chpgvx.o chprfs.o chpsv.o  \
    chpsvx.o \
    chptrd.o chptrf.o chptri.o chptrs.o chsein.o chseqr.o clabrd.o \
@@ -305,7 +305,7 @@ ZLASRC = \
    zhecon.o zheev.o  zheevd.o zheevr.o zheevx.o zhegs2.o zhegst.o \
    zhegv.o  zhegvd.o zhegvx.o zherfs.o zhesv.o  zhesvx.o zhetd2.o \
    zhetf2.o zhetrd.o \
-   zhetrf.o zhetri.o zhetrs.o zhgeqz.o zhpcon.o zhpev.o  zhpevd.o \
+   zhetrf.o zhetri.o zhetrs.o zhetrs2.o zhgeqz.o zhpcon.o zhpev.o  zhpevd.o \
    zhpevx.o zhpgst.o zhpgv.o  zhpgvd.o zhpgvx.o zhprfs.o zhpsv.o  \
    zhpsvx.o \
    zhptrd.o zhptrf.o zhptri.o zhptrs.o zhsein.o zhseqr.o zlabrd.o \

@@ -276,9 +276,35 @@
          WRITE( IOUNIT, FMT = 9955 )8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'HE' ) .OR. LSAMEN( 2, P2, 'HP' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'HE' )  ) THEN
 *
 *        HE: Hermitian indefinite full
+*
+         IF( LSAME( C3, 'E' ) ) THEN
+            WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
+         ELSE
+            WRITE( IOUNIT, FMT = 9991 )PATH, 'Hermitian'
+         END IF
+         WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
+         IF( SORD ) THEN
+            WRITE( IOUNIT, FMT = 9972 )
+         ELSE
+            WRITE( IOUNIT, FMT = 9971 )
+         END IF
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 9953 )1
+         WRITE( IOUNIT, FMT = 9961 )2
+         WRITE( IOUNIT, FMT = 9960 )3
+         WRITE( IOUNIT, FMT = 9960 )4
+         WRITE( IOUNIT, FMT = 9959 )5
+         WRITE( IOUNIT, FMT = 9958 )6
+         WRITE( IOUNIT, FMT = 9956 )7
+         WRITE( IOUNIT, FMT = 9957 )8
+         WRITE( IOUNIT, FMT = 9955 )9
+         WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
+*
+      ELSE IF( LSAMEN( 2, P2, 'HP' ) ) THEN
+*
 *        HP: Hermitian indefinite packed
 *
          IF( LSAME( C3, 'E' ) ) THEN
