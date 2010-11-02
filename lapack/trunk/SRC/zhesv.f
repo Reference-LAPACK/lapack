@@ -113,7 +113,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHETRF, ZHETRS2, ZSYCONV
+      EXTERNAL           XERBLA, ZHETRF, ZHETRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -160,17 +160,9 @@
       CALL ZHETRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
-*        Convert A
-*
-         CALL ZSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
-*
 *        Solve the system A*X = B, overwriting B with X.
 *
          CALL ZHETRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, INFO )
-*
-*        Revert A
-*
-         CALL ZSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       END IF
 *

@@ -73,7 +73,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, J, K, KP
+      INTEGER            I, IINFO, J, K, KP
       DOUBLE PRECISION   S
       DOUBLE COMPLEX     AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
@@ -82,7 +82,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLACGV, ZSCAL, ZSWAP, ZTRSM, XERBLA
+      EXTERNAL           ZLACGV, ZSCAL, ZSYCONV, ZSWAP, ZTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, DCONJG, MAX
@@ -111,6 +111,10 @@
 *
       IF( N.EQ.0 .OR. NRHS.EQ.0 )
      $   RETURN
+*
+*     Convert A
+*
+      CALL ZSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
 *
       IF( UPPER ) THEN
 *
@@ -267,6 +271,10 @@
         END DO
 *
       END IF
+*
+*     Revert A
+*
+      CALL ZSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       RETURN
 *

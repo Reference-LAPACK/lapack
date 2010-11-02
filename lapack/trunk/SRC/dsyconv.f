@@ -1,12 +1,11 @@
       SUBROUTINE DSYCONV( UPLO, WAY, N, A, LDA, IPIV, WORK, INFO )
 *
-*  -- LAPACK PROTOTYPE routine (version 3.2.2) --
-*
-*  -- Written by Julie Langou of the Univ. of TN    --
-*     May 2010
-*
+*  -- LAPACK PROTOTYPE routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2010
+*
+*  -- Written by Julie Langou of the Univ. of TN    --
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO, WAY

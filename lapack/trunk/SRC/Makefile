@@ -268,7 +268,8 @@ DLASRC = \
    dstevx.o dsycon.o dsyev.o  dsyevd.o dsyevr.o \
    dsyevx.o dsygs2.o dsygst.o dsygv.o  dsygvd.o dsygvx.o dsyrfs.o \
    dsysv.o  dsysvx.o \
-   dsytd2.o dsytf2.o dsytrd.o dsytrf.o dsytri.o dsytrs.o dsytrs2.o dsyconv.o dtbcon.o \
+   dsytd2.o dsytf2.o dsytrd.o dsytrf.o dsytri.o dsytri2.o dsytri2x.o \
+   dsyswapr.o dsytrs.o dsytrs2.o dsyconv.o dtbcon.o \
    dtbrfs.o dtbtrs.o dtgevc.o dtgex2.o dtgexc.o dtgsen.o \
    dtgsja.o dtgsna.o dtgsy2.o dtgsyl.o dtpcon.o dtprfs.o dtptri.o \
    dtptrs.o \

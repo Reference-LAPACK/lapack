@@ -73,7 +73,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, J, K, KP
+      INTEGER            I, IINFO, J, K, KP
       COMPLEX            AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
@@ -81,7 +81,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSCAL, CSWAP, CTRSM, XERBLA
+      EXTERNAL           CSCAL, CSYCONV, CSWAP, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -110,6 +110,10 @@
 *
       IF( N.EQ.0 .OR. NRHS.EQ.0 )
      $   RETURN
+*
+*     Convert A
+*
+      CALL CSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
 *
       IF( UPPER ) THEN
 *
@@ -264,6 +268,10 @@
         END DO
 *
       END IF
+*
+*     Revert A
+*
+      CALL CSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       RETURN
 *

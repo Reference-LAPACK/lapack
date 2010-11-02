@@ -405,12 +405,8 @@
                      CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'DSYTRS2'
-                     CALL SSYCONV( UPLO, 'C', N, AFAC, LDA, IWORK, WORK, 
-     $                            INFO )
                      CALL SSYTRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
-                     CALL SSYCONV( UPLO, 'R', N, AFAC, LDA, IWORK, WORK,
-     $                            INFO )
 *
 *                 Check error code from SSYTRS2.
 *

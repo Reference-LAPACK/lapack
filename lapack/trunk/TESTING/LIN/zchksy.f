@@ -415,12 +415,8 @@
                      CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'ZSYTRS2'
-                     CALL ZSYCONV( UPLO, 'C', N, AFAC, LDA, IWORK, WORK, 
-     $                            INFO )
                      CALL ZSYTRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
-                     CALL ZSYCONV( UPLO, 'R', N, AFAC, LDA, IWORK, WORK,
-     $                            INFO )
 *
 *                 Check error code from ZSYTRS.
 *
