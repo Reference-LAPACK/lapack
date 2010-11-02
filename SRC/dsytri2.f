@@ -1,0 +1,127 @@
+      SUBROUTINE DSYTRI2( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*
+*  -- LAPACK routine (version 3.3.0) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2010
+*
+*  -- Written by Julie Langou of the Univ. of TN    --
+*
+*     .. Scalar Arguments ..
+      CHARACTER          UPLO
+      INTEGER            INFO, LDA, LWORK, N
+*     ..
+*     .. Array Arguments ..
+      INTEGER            IPIV( * )
+      DOUBLE PRECISION   A( LDA, * ), WORK( * )
+*     ..
+*
+*  Purpose
+*  =======
+*
+*  DSYTRI2 computes the inverse of a real symmetric indefinite matrix
+*  A using the factorization A = U*D*U**T or A = L*D*L**T computed by
+*  DSYTRF. DSYTRI2 set the LEADING DIMENSION of the workspace
+*  before calling DSYTRI2X that actually compute the inverse.
+*
+*  Arguments
+*  =========
+*
+*  UPLO    (input) CHARACTER*1
+*          Specifies whether the details of the factorization are stored
+*          as an upper or lower triangular matrix.
+*          = 'U':  Upper triangular, form is A = U*D*U**T;
+*          = 'L':  Lower triangular, form is A = L*D*L**T.
+*
+*  N       (input) INTEGER
+*          The order of the matrix A.  N >= 0.
+*
+*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
+*          On entry, the NB diagonal matrix D and the multipliers
+*          used to obtain the factor U or L as computed by DSYTRF.
+*
+*          On exit, if INFO = 0, the (symmetric) inverse of the original
+*          matrix.  If UPLO = 'U', the upper triangular part of the
+*          inverse is formed and the part of A below the diagonal is not
+*          referenced; if UPLO = 'L' the lower triangular part of the
+*          inverse is formed and the part of A above the diagonal is
+*          not referenced.
+*
+*  LDA     (input) INTEGER
+*          The leading dimension of the array A.  LDA >= max(1,N).
+*
+*  IPIV    (input) INTEGER array, dimension (N)
+*          Details of the interchanges and the NB structure of D
+*          as determined by DSYTRF.
+*
+*  WORK    (workspace) DOUBLE PRECISION array, dimension (N+NB+1)*(NB+3)
+*
+*  LWORK   (input) INTEGER
+*          The dimension of the array WORK.
+*          WORK is size >= (N+NB+1)*(NB+3)
+*          If LDWORK = -1, then a workspace query is assumed; the routine
+*           calculates:
+*              - the optimal size of the WORK array, returns
+*          this value as the first entry of the WORK array,
+*              - and no error message related to LDWORK is issued by XERBLA.
+*
+*  INFO    (output) INTEGER
+*          = 0: successful exit
+*          < 0: if INFO = -i, the i-th argument had an illegal value
+*          > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
+*               inverse could not be computed.
+*
+*  =====================================================================
+*
+*     .. Local Scalars ..
+      LOGICAL            UPPER, LQUERY
+      INTEGER            MINSIZE, NBMAX
+*     ..
+*     .. External Functions ..
+      LOGICAL            LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL           DSYTRI2X
+*     ..
+*     .. Executable Statements ..
+*
+*     Test the input parameters.
+*
+      INFO = 0
+      UPPER = LSAME( UPLO, 'U' )
+      LQUERY = ( LWORK.EQ.-1 )
+*     Get blocksize
+      NBMAX = ILAENV( 1, 'DSYTRF', UPLO, N, -1, -1, -1 )
+      MINSIZE = (N+NBMAX+1)*(NBMAX+3)
+*
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+         INFO = -1
+      ELSE IF( N.LT.0 ) THEN
+         INFO = -2
+      ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
+         INFO = -4
+      ELSE IF (LWORK .LT. MINSIZE .AND. .NOT.LQUERY ) THEN
+         INFO = -7
+      END IF
+*
+*     Quick return if possible
+*
+*
+      IF( INFO.NE.0 ) THEN
+         CALL XERBLA( 'DSYTRI2', -INFO )
+         RETURN
+      ELSE IF( LQUERY ) THEN
+         WORK(1)=(N+NBMAX+1)*(NBMAX+3)
+         RETURN
+      END IF
+      IF( N.EQ.0 )
+     $   RETURN
+      
+      CALL DSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
+      RETURN
+*
+*     End of DSYTRI2
+*
+      END

@@ -21,7 +21,7 @@
 *  Purpose
 *  =======
 *
-*  DCHKSY tests DSYTRF, -TRI, -TRS, -TRS2, -RFS, and -CON.
+*  DCHKSY tests DSYTRF, -TRI2, -TRS, -TRS2, -RFS, and -CON.
 *
 *  Arguments
 *  =========
@@ -108,6 +108,7 @@
       CHARACTER          UPLOS( 2 )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       DOUBLE PRECISION   RESULT( NTESTS )
+      DOUBLE PRECISION   MYWORK( NTESTS )
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DGET06, DLANSY
@@ -116,8 +117,8 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DGET04, DLACPY,
      $                   DLARHS, DLATB4, DLATMS, DPOT02, DPOT03, DPOT05,
-     $                   DSYCON, DSYCONV, DSYRFS, DSYT01, DSYTRF, 
-     $                   DSYTRI, DSYTRS, DSYTRS2, XLAENV
+     $                   DSYCON, DSYRFS, DSYT01, DSYTRF, 
+     $                   DSYTRI2, DSYTRS, DSYTRS2, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -325,14 +326,15 @@
 *
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     SRNAMT = 'DSYTRI'
-                     CALL DSYTRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     SRNAMT = 'DSYTRI2'
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL DSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
 *
-*                 Check error code from DSYTRI.
+*                 Check error code from DSYTRI2.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'DSYTRI', INFO, -1, UPLO, N,
+     $                  CALL ALAERH( PATH, 'DSYTRI2', INFO, -1, UPLO, N,
      $                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
@@ -406,12 +408,8 @@
                      CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'DSYTRS2'
-                     CALL DSYCONV( UPLO, 'C', N, AFAC, LDA, IWORK, WORK, 
-     $                            INFO )
                      CALL DSYTRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
-                     CALL DSYCONV( UPLO, 'R', N, AFAC, LDA, IWORK, WORK,
-     $                            INFO )
 *
 *                 Check error code from DSYTRS2.
 *

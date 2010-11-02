@@ -1,13 +1,12 @@
       SUBROUTINE DSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, 
      $                    WORK, INFO )
 *
-*  -- LAPACK PROTOTYPE routine (version 3.2.2) --
-*
-*  -- Written by Julie Langou of the Univ. of TN    --
-*     May 2010
-*
+*  -- LAPACK PROTOTYPE routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2010
+*
+*  -- Written by Julie Langou of the Univ. of TN    --
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -73,7 +72,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
-      INTEGER            I, J, K, KP
+      INTEGER            I, IINFO, J, K, KP
       DOUBLE PRECISION   AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
@@ -81,7 +80,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, DSWAP, DTRSM, XERBLA
+      EXTERNAL           DSCAL, DSYCONV, DSWAP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -110,6 +109,10 @@
 *
       IF( N.EQ.0 .OR. NRHS.EQ.0 )
      $   RETURN
+*
+*     Convert A
+*
+      CALL DSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
 *
       IF( UPPER ) THEN
 *
@@ -264,6 +267,10 @@
         END DO
 *
       END IF
+*
+*     Revert A
+*
+      CALL DSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
 *
       RETURN
 *

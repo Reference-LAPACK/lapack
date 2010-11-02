@@ -105,7 +105,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            IINFO, LWKOPT, NB
+      INTEGER            LWKOPT, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -113,7 +113,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYCONV, DSYTRF, DSYTRS2, XERBLA
+      EXTERNAL           DSYTRF, DSYTRS2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -161,17 +161,9 @@
       CALL DSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
-*        Convert A
+*     Solve the system A*X = B, overwriting B with X.
 *
-         CALL DSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
-*
-*        Solve the system A*X = B, overwriting B with X.
-*
-         CALL DSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, INFO )
-*
-*        Revert A
-*
-         CALL DSYCONV( UPLO, 'R', N, A, LDA, IPIV, WORK, IINFO )
+      CALL DSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, INFO )
 *
       END IF
 *

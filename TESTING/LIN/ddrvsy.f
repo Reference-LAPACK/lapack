@@ -106,7 +106,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGET04, DLACPY,
      $                   DLARHS, DLASET, DLATB4, DLATMS, DPOT02, DPOT05,
-     $                   DSYSV, DSYSVX, DSYT01, DSYTRF, DSYTRI, XLAENV
+     $                   DSYSV, DSYSVX, DSYT01, DSYTRF, DSYTRI2, XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -294,8 +294,9 @@
 *                    Compute inv(A) and take its norm.
 *
                      CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     CALL DSYTRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL DSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
                      AINVNM = DLANSY( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.

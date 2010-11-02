@@ -415,12 +415,8 @@
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'CSYTRS2'
-                     CALL CSYCONV( UPLO, 'C', N, AFAC, LDA, IWORK, WORK, 
-     $                            INFO )
                      CALL CSYTRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
-                     CALL CSYCONV( UPLO, 'R', N, AFAC, LDA, IWORK, WORK,
-     $                            INFO )
 *
 *                 Check error code from CSYTRS2.
 *

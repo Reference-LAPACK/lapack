@@ -47,7 +47,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, DSPCON, DSPRFS, DSPTRF, DSPTRI,
      $                   DSPTRS, DSYCON, DSYRFS, DSYTF2, DSYTRF, DSYTRI,
-     $                   DSYTRS
+     $                   DSYTRI2, DSYTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -129,6 +129,19 @@
          INFOT = 4
          CALL DSYTRI( 'U', 2, A, 1, IP, W, INFO )
          CALL CHKXER( 'DSYTRI', INFOT, NOUT, LERR, OK )
+*
+*        DSYTRI2
+*
+         SRNAMT = 'DSYTRI2'
+         INFOT = 1
+         CALL DSYTRI2( '/', 0, A, 1, IP, W, IW, INFO )
+         CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DSYTRI2( 'U', -1, A, 1, IP, W, IW, INFO )
+         CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DSYTRI2( 'U', 2, A, 1, IP, W, IW, INFO )
+         CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
 *
 *        DSYTRS
 *

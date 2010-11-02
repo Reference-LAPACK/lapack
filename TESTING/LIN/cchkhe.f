@@ -409,12 +409,8 @@
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'CHETRS2'
-                     CALL CSYCONV( UPLO, 'C', N, AFAC, LDA, IWORK, WORK, 
-     $                            INFO )
                      CALL CHETRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
-                     CALL CSYCONV( UPLO, 'R', N, AFAC, LDA, IWORK, WORK,
-     $                            INFO )
 *
 *                 Check error code from CHETRS2.
 *
