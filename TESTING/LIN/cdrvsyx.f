@@ -113,7 +113,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, CERRVX, CGET04, CLACPY,
      $                   CLARHS, CLASET, CLATB4, CLATMS, CLATSY, CPOT05,
-     $                   CSYSV, CSYSVX, CSYT01, CSYT02, CSYTRF, CSYTRI,
+     $                   CSYSV, CSYSVX, CSYT01, CSYT02, CSYTRF, CSYTRI2,
      $                   XLAENV, CSYSVXX
 *     ..
 *     .. Scalars in Common ..
@@ -312,8 +312,9 @@
 *                    Compute inv(A) and take its norm.
 *
                      CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     CALL CSYTRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL CSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
                      AINVNM = CLANSY( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.

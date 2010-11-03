@@ -1,4 +1,4 @@
-      SUBROUTINE DSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
+      SUBROUTINE ZSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
 *
 *  -- LAPACK routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -13,15 +13,15 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * ), WORK( N+NB+1,* )
+      DOUBLE COMPLEX     A( LDA, * ), WORK( N+NB+1,* )
 *     ..
 *
 *  Purpose
 *  =======
 *
-*  DSYTRI2X computes the inverse of a real symmetric indefinite matrix
+*  ZSYTRI2X computes the inverse of a complex symmetric indefinite matrix
 *  A using the factorization A = U*D*U**T or A = L*D*L**T computed by
-*  DSYTRF.
+*  ZSYTRF.
 *
 *  Arguments
 *  =========
@@ -35,9 +35,9 @@
 *  N       (input) INTEGER
 *          The order of the matrix A.  N >= 0.
 *
-*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
+*  A       (input/output) DOUBLE COMPLEX array, dimension (LDA,N)
 *          On entry, the NNB diagonal matrix D and the multipliers
-*          used to obtain the factor U or L as computed by DSYTRF.
+*          used to obtain the factor U or L as computed by ZSYTRF.
 *
 *          On exit, if INFO = 0, the (symmetric) inverse of the original
 *          matrix.  If UPLO = 'U', the upper triangular part of the
@@ -51,9 +51,9 @@
 *
 *  IPIV    (input) INTEGER array, dimension (N)
 *          Details of the interchanges and the NNB structure of D
-*          as determined by DSYTRF.
+*          as determined by ZSYTRF.
 *
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (N+NNB+1,NNB+3)
+*  WORK    (workspace) DOUBLE COMPLEX array, dimension (N+NNB+1,NNB+3)
 *
 *  NB      (input) INTEGER
 *          Block size
@@ -67,8 +67,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
+      DOUBLE COMPLEX     ONE, ZERO
+      PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
+     $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
@@ -76,17 +77,17 @@
       INTEGER            COUNT
       INTEGER            J, U11, INVD
 
-      DOUBLE PRECISION   AK, AKKP1, AKP1, D, T
-      DOUBLE PRECISION   U01_I_J, U01_IP1_J
-      DOUBLE PRECISION   U11_I_J, U11_IP1_J
+      DOUBLE COMPLEX     AK, AKKP1, AKP1, D, T
+      DOUBLE COMPLEX     U01_I_J, U01_IP1_J
+      DOUBLE COMPLEX     U11_I_J, U11_IP1_J
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYSCONV, XERBLA, DTRTRI
-      EXTERNAL           DGEMM, DTRMM, DSYSWAPR
+      EXTERNAL           ZSYSCONV, XERBLA, ZTRTRI
+      EXTERNAL           ZGEMM, ZTRMM, ZSYSWAPR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -109,7 +110,7 @@
 *
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYTRI2X', -INFO )
+         CALL XERBLA( 'ZSYTRI2X', -INFO )
          RETURN
       END IF
       IF( N.EQ.0 )
@@ -118,7 +119,7 @@
 *     Convert A
 *     Workspace got Non-diag elements of D
 *
-      CALL DSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
+      CALL ZSYCONV( UPLO, 'C', N, A, LDA, IPIV, WORK, IINFO )
 *
 *     Check that the diagonal matrix D is nonsingular.
 *
@@ -155,7 +156,7 @@
 *
 *        invA = P * inv(U')*inv(D)*inv(U)*P'.
 *
-        CALL DTRTRI( UPLO, 'U', N, A, LDA, INFO )
+        CALL ZTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *       inv(D) and inv(D)*inv(U)
 * 
@@ -268,12 +269,12 @@
 *    
 *       U11T*invD1*U11->U11
 *
-        CALL DTRMM('L','U','T','U',NNB, NNB,
+        CALL ZTRMM('L','U','T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
 *
 *          U01'invD*U01->A(CUT+I,CUT+J)
 *
-         CALL DGEMM('T','N',NNB,NNB,CUT,ONE,A(1,CUT+1),LDA,
+         CALL ZGEMM('T','N',NNB,NNB,CUT,ONE,A(1,CUT+1),LDA,
      $              WORK,N+NB+1, ZERO, A(CUT+1,CUT+1), LDA)
 *
 *        U11 =  U11T*invD1*U11 + U01'invD*U01 (Prem + Deus)
@@ -286,7 +287,7 @@
 *
 *        U01 =  U00T*invD0*U01
 *
-         CALL DTRMM('L',UPLO,'T','U',CUT, NNB,
+         CALL ZTRMM('L',UPLO,'T','U',CUT, NNB,
      $             ONE,A,LDA,WORK,N+NB+1)
 
 *
@@ -306,15 +307,15 @@
             DO WHILE ( I .LE. N )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL DSYSWAPR( UPLO, N, A, I ,IP )
-                 IF (I .GT. IP) CALL DSYSWAPR( UPLO, N, A, IP ,I )
+                 IF (I .LT. IP) CALL ZSYSWAPR( UPLO, N, A, I ,IP )
+                 IF (I .GT. IP) CALL ZSYSWAPR( UPLO, N, A, IP ,I )
                ELSE
                  IP=-IPIV(I)
                  I=I+1
                  IF ( (I-1) .LT. IP) 
-     $                  CALL DSYSWAPR( UPLO, N, A, I-1 ,IP )
+     $                  CALL ZSYSWAPR( UPLO, N, A, I-1 ,IP )
                  IF ( (I-1) .GT. IP) 
-     $                  CALL DSYSWAPR( UPLO, N, A, IP ,I-1 )
+     $                  CALL ZSYSWAPR( UPLO, N, A, IP ,I-1 )
               ENDIF
                I=I+1
             END DO
@@ -330,7 +331,7 @@
 *
 *        invA = P * inv(U')*inv(D)*inv(U)*P'.
 *
-         CALL DTRTRI( UPLO, 'U', N, A, LDA, INFO )
+         CALL ZTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
 *       inv(D) and inv(D)*inv(U)
 * 
@@ -437,12 +438,12 @@
 *    
 *       U11T*invD1*U11->U11
 *
-        CALL DTRMM('L',UPLO,'T','U',NNB, NNB,
+        CALL ZTRMM('L',UPLO,'T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
 *
 *          L21T*invD2*L21->A(CUT+I,CUT+J)
 *
-         CALL DGEMM('T','N',NNB,NNB,N-NNB-CUT,ONE,A(CUT+NNB+1,CUT+1)
+         CALL ZGEMM('T','N',NNB,NNB,N-NNB-CUT,ONE,A(CUT+NNB+1,CUT+1)
      $             ,LDA,WORK,N+NB+1, ZERO, A(CUT+1,CUT+1), LDA)
        
 *
@@ -456,7 +457,7 @@
 *
 *        U01 =  L22T*invD2*L21
 *
-         CALL DTRMM('L',UPLO,'T','U', N-NNB-CUT, NNB,
+         CALL ZTRMM('L',UPLO,'T','U', N-NNB-CUT, NNB,
      $             ONE,A(CUT+NNB+1,CUT+NNB+1),LDA,WORK,N+NB+1)
 
 *      Update L21
@@ -475,12 +476,12 @@
             DO WHILE ( I .GE. 1 )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL DSYSWAPR( UPLO, N, A, I ,IP  )
-                 IF (I .GT. IP) CALL DSYSWAPR( UPLO, N, A, IP ,I )
+                 IF (I .LT. IP) CALL ZSYSWAPR( UPLO, N, A, I ,IP  )
+                 IF (I .GT. IP) CALL ZSYSWAPR( UPLO, N, A, IP ,I )
                ELSE
                  IP=-IPIV(I)
-                 IF ( I .LT. IP) CALL DSYSWAPR( UPLO, N, A, I ,IP )
-                 IF ( I .GT. IP) CALL DSYSWAPR(  UPLO, N, A, IP ,I )
+                 IF ( I .LT. IP) CALL ZSYSWAPR( UPLO, N, A, I ,IP )
+                 IF ( I .GT. IP) CALL ZSYSWAPR(  UPLO, N, A, IP ,I )
                  I=I-1
                ENDIF
                I=I-1
@@ -489,7 +490,7 @@
 *
       RETURN
 *
-*     End of DSYTRI2X
+*     End of ZSYTRI2X
 *
       END
 

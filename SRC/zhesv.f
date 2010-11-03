@@ -105,7 +105,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            IINFO, LWKOPT, NB
+      INTEGER            LWKOPT, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

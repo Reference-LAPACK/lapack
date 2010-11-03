@@ -21,7 +21,7 @@
 *  Purpose
 *  =======
 *
-*  SCHKSY tests SSYTRF, -TRI, -TRS, -TRS2, -RFS, and -CON.
+*  SCHKSY tests SSYTRF, -TRI2, -TRS, -TRS2, -RFS, and -CON.
 *
 *  Arguments
 *  =========
@@ -117,7 +117,7 @@
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRSY, SGET04, SLACPY,
      $                   SLARHS, SLATB4, SLATMS, SPOT02, SPOT03, SPOT05,
      $                   SSYCON, SSYCONV, SSYRFS, SSYT01, SSYTRF,
-     $                   SSYTRI, SSYTRS, SSYTRS2, XLAENV
+     $                   SSYTRI2, SSYTRS, SSYTRS2, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -325,14 +325,15 @@
 *
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     SRNAMT = 'SSYTRI'
-                     CALL SSYTRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     SRNAMT = 'SSYTRI2'
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL SSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
 *
-*                 Check error code from SSYTRI.
+*                 Check error code from SSYTRI2.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'SSYTRI', INFO, -1, UPLO, N,
+     $                  CALL ALAERH( PATH, 'SSYTRI2', INFO, -1, UPLO, N,
      $                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
