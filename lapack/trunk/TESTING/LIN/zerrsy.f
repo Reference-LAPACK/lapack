@@ -48,7 +48,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, ZSPCON, ZSPRFS, ZSPTRF, ZSPTRI,
      $                   ZSPTRS, ZSYCON, ZSYRFS, ZSYTF2, ZSYTRF, ZSYTRI,
-     $                   ZSYTRS
+     $                   ZSYTRI2, ZSYTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -130,6 +130,19 @@
          INFOT = 4
          CALL ZSYTRI( 'U', 2, A, 1, IP, W, INFO )
          CALL CHKXER( 'ZSYTRI', INFOT, NOUT, LERR, OK )
+*
+*        ZSYTRI2
+*
+         SRNAMT = 'ZSYTRI2'
+         INFOT = 1
+         CALL ZSYTRI2( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTRI2( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZSYTRI2( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRI2', INFOT, NOUT, LERR, OK )
 *
 *        ZSYTRS
 *

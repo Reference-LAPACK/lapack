@@ -112,7 +112,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, SERRVX, SGET04, SLACPY,
      $                   SLARHS, SLASET, SLATB4, SLATMS, SPOT02, SPOT05,
-     $                   SSYSV, SSYSVX, SSYT01, SSYTRF, SSYTRI, XLAENV,
+     $                   SSYSV, SSYSVX, SSYT01, SSYTRF, SSYTRI2, XLAENV,
      $                   SSYSVXX
 *     ..
 *     .. Scalars in Common ..
@@ -301,8 +301,9 @@
 *                    Compute inv(A) and take its norm.
 *
                      CALL SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     CALL SSYTRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL SSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
                      AINVNM = SLANSY( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.

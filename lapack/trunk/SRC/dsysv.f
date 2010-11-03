@@ -123,7 +123,6 @@
 *     Test the input parameters.
 *
       INFO = 0
-      IINFO = 0
       LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1

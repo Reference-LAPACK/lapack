@@ -22,7 +22,7 @@
 *  Purpose
 *  =======
 *
-*  CCHKSY tests CSYTRF, -TRI, -TRS, -TRS2, -RFS, and -CON.
+*  CCHKSY tests CSYTRF, -TRI2, -TRS, -TRS2, -RFS, and -CON.
 *
 *  Arguments
 *  =========
@@ -117,7 +117,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, CERRSY, CGET04, CLACPY,
      $                   CLARHS, CLATB4, CLATMS, CLATSY, CPOT05, CSYCON,
-     $                   CSYRFS, CSYT01, CSYT02, CSYT03, CSYTRF, CSYTRI,
+     $                   CSYRFS, CSYT01, CSYT02, CSYT03, CSYTRF, CSYTRI2,
      $                   CSYTRS, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
@@ -335,9 +335,10 @@
 *
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     SRNAMT = 'CSYTRI'
-                     CALL CSYTRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     SRNAMT = 'CSYTRI2'
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL CSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
 *
 *                 Check error code from CSYTRI.
 *

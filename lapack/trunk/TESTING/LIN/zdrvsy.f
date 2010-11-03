@@ -108,7 +108,7 @@
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
      $                   ZLACPY, ZLARHS, ZLASET, ZLATB4, ZLATMS, ZLATSY,
      $                   ZPOT05, ZSYSV, ZSYSVX, ZSYT01, ZSYT02, ZSYTRF,
-     $                   ZSYTRI
+     $                   ZSYTRI2
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -306,8 +306,9 @@
 *                    Compute inv(A) and take its norm.
 *
                      CALL ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     CALL ZSYTRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL ZSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
                      AINVNM = ZLANSY( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.

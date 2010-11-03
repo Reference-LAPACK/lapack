@@ -48,7 +48,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, CSPCON, CSPRFS, CSPTRF, CSPTRI,
      $                   CSPTRS, CSYCON, CSYRFS, CSYTF2, CSYTRF, CSYTRI,
-     $                   CSYTRS
+     $                   CSYTRI2, CSYTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -128,6 +128,19 @@
          INFOT = 4
          CALL CSYTRI( 'U', 2, A, 1, IP, W, INFO )
          CALL CHKXER( 'CSYTRI', INFOT, NOUT, LERR, OK )
+*
+*        CSYTRI2
+*
+         SRNAMT = 'CSYTRI2'
+         INFOT = 1
+         CALL CSYTRI2( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'CSYTRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CSYTRI2( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'CSYTRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL CSYTRI2( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'CSYTRI2', INFOT, NOUT, LERR, OK )
 *
 *        CSYTRS
 *

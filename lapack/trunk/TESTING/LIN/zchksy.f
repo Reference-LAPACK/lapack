@@ -22,7 +22,7 @@
 *  Purpose
 *  =======
 *
-*  ZCHKSY tests ZSYTRF, -TRI, -TRS, -TRS2,  -RFS, and -CON.
+*  ZCHKSY tests ZSYTRF, -TRI2, -TRS, -TRS2,  -RFS, and -CON.
 *
 *  Arguments
 *  =========
@@ -118,7 +118,7 @@
       EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRSY, ZGET04,
      $                   ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZLATSY, ZPOT05,
      $                   ZSYCON, ZSYRFS, ZSYT01, ZSYT02, ZSYT03, ZSYTRF,
-     $                   ZSYTRI, ZSYTRS, ZSYTRS2
+     $                   ZSYTRI2, ZSYTRS, ZSYTRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -335,14 +335,15 @@
 *
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     SRNAMT = 'ZSYTRI'
-                     CALL ZSYTRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     SRNAMT = 'ZSYTRI2'
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL ZSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
 *
-*                 Check error code from ZSYTRI.
+*                 Check error code from ZSYTRI2.
 *
                      IF( INFO.NE.0 )
-     $                  CALL ALAERH( PATH, 'ZSYTRI', INFO, 0, UPLO, N,
+     $                  CALL ALAERH( PATH, 'ZSYTRI2', INFO, 0, UPLO, N,
      $                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
