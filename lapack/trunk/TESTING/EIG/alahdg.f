@@ -29,6 +29,7 @@
 *             LSE:  LSE Problem
 *             GLM:  GLM Problem
 *             GSV:  Generalized Singular Value Decomposition
+*             CSD:  CS Decomposition
 *
 *  =====================================================================
 *
@@ -63,6 +64,9 @@
       ELSE IF( LSAMEN( 3, C2, 'GSV' ) ) THEN
          ITYPE = 5
          WRITE( IOUNIT, FMT = 9995 )PATH
+      ELSE IF( LSAMEN( 3, C2, 'CSD' ) ) THEN
+         ITYPE = 6
+         WRITE( IOUNIT, FMT = 9996 )PATH
       END IF
 *
 *     Matrix types
@@ -114,6 +118,10 @@
          WRITE( IOUNIT, FMT = 9957 )6
          WRITE( IOUNIT, FMT = 9959 )7
          WRITE( IOUNIT, FMT = 9960 )8
+      ELSE IF( ITYPE.EQ.6 )THEN
+         WRITE( IOUNIT, FMT = 9963 )1
+         WRITE( IOUNIT, FMT = 9964 )2
+         WRITE( IOUNIT, FMT = 9965 )3
       END IF
 *
 *     Tests performed
@@ -156,6 +164,18 @@
          WRITE( IOUNIT, FMT = 9942 )3
          WRITE( IOUNIT, FMT = 9943 )4
          WRITE( IOUNIT, FMT = 9944 )5
+      ELSE IF( ITYPE.EQ.6 ) THEN
+*
+*        CSD
+*
+         WRITE( IOUNIT, FMT = 9920 )1
+         WRITE( IOUNIT, FMT = 9921 )2
+         WRITE( IOUNIT, FMT = 9922 )3
+         WRITE( IOUNIT, FMT = 9923 )4
+         WRITE( IOUNIT, FMT = 9924 )5
+         WRITE( IOUNIT, FMT = 9925 )6
+         WRITE( IOUNIT, FMT = 9926 )7
+         WRITE( IOUNIT, FMT = 9927 )8
       END IF
 *
  9999 FORMAT( 1X, A )
@@ -164,6 +184,7 @@
  9993 FORMAT( / 1X, A3, ': LSE Problem' )
  9994 FORMAT( / 1X, A3, ': GLM Problem' )
  9995 FORMAT( / 1X, A3, ': Generalized Singular Value Decomposition' )
+ 9996 FORMAT( / 1X, A3, ': CS Decomposition' )
 *
  9950 FORMAT( 3X, I2, ': A-diagonal matrix  B-upper triangular' )
  9951 FORMAT( 3X, I2, ': A-diagonal matrix  B-lower triangular' )
@@ -184,6 +205,11 @@
 *
  9961 FORMAT( 3X, I2, ': Matrix scaled near underflow limit' )
  9962 FORMAT( 3X, I2, ': Matrix scaled near overflow limit' )
+ 9963 FORMAT( 3X, I2, ': Random orthogonal matrix (Haar measure)' )
+ 9964 FORMAT( 3X, I2, ': Nearly orthogonal matrix with uniformly ',
+     $      'distributed angles atan2( S, C ) in CS decomposition' )
+ 9965 FORMAT( 3X, I2, ': Random orthogonal matrix with clustered ',
+     $      'angles atan2( S, C ) in CS decomposition' )
 *
 *
 *     GQR test ratio
@@ -221,6 +247,21 @@
  9942 FORMAT( 3X, I2, ': norm( I - U''*U )   / ( M * EPS )' )
  9943 FORMAT( 3X, I2, ': norm( I - V''*V )   / ( P * EPS )' )
  9944 FORMAT( 3X, I2, ': norm( I - Q''*Q )   / ( N * EPS )' )
+*
+*     CSD test ratio
+*
+ 9920 FORMAT( 3X, I2, ': norm( U1'' * X11 * V1 - C ) / ( max(  P,  Q)',
+     $       ' * max(norm(I-X''*X),EPS) )' )
+ 9921 FORMAT( 3X, I2, ': norm( U1'' * X12 * V2-(-S)) / ( max(  P,',
+     $       'M-Q) * max(norm(I-X''*X),EPS) )' )
+ 9922 FORMAT( 3X, I2, ': norm( U2'' * X21 * V1 - S ) / ( max(M-P,',
+     $       '  Q) * max(norm(I-X''*X),EPS) )' )
+ 9923 FORMAT( 3X, I2, ': norm( U2'' * X22 * V2 - C ) / ( max(M-P,',
+     $       'M-Q) * max(norm(I-X''*X),EPS) )' )
+ 9924 FORMAT( 3X, I2, ': norm( I - U1''*U1 ) / (   P   * EPS )' )
+ 9925 FORMAT( 3X, I2, ': norm( I - U2''*U2 ) / ( (M-P) * EPS )' )
+ 9926 FORMAT( 3X, I2, ': norm( I - V1''*V1 ) / (   Q   * EPS )' )
+ 9927 FORMAT( 3X, I2, ': norm( I - V2''*V2 ) / ( (M-Q) * EPS )' )
       RETURN
 *
 *     End of ALAHDG
