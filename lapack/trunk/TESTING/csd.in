@@ -6,5 +6,4 @@ CSD:  Data file for testing CS decomposition routines
 10.0                                 Threshold value of test ratio
 T                                    Put T to test the error exits
 1                                    Code to interpret the seed
-CSD   3                              List types on next line if 0 < NTYPES < 4
-1 2 3
+CSD   3                              List types on next line if 0 < NTYPES < 3
