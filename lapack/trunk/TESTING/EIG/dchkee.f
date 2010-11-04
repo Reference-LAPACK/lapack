@@ -85,6 +85,9 @@
 *  GSV (Generalized Singular Value Decomposition):
 *      Tests DGGSVD, DGGSVP, DTGSJA, DLAGS2, DLAPLL, and DLAPMT
 *
+*  CSD (CS decomposition):
+*      Tests DORCSD
+*
 *  LSE (Constrained Linear Least Squares):
 *      Tests DGGLSE
 *
@@ -126,6 +129,7 @@
 *  GLM              8     DCKGLM
 *  GQR              8     DCKGQR
 *  GSV              8     DCKGSV
+*  CSD              3     DCKCSD
 *  LSE              8     DCKLSE
 *
 *-----------------------------------------------------------------------
@@ -916,6 +920,48 @@
 *
 *-----------------------------------------------------------------------
 *
+*  CSD data file:
+*
+*  line 1:  'CSD' in columns 1 to 3.
+*
+*  line 2:  NM, INTEGER
+*           Number of values of M, P, and N.
+*
+*  line 3:  MVAL, INTEGER array, dimension(NM)
+*           Values of M (row and column dimension of orthogonal matrix).
+*
+*  line 4:  PVAL, INTEGER array, dimension(NM)
+*           Values of P (row dimension of top-left block).
+*
+*  line 5:  NVAL, INTEGER array, dimension(NM)
+*           Values of N (column dimension of top-left block).
+*
+*  line 6:  THRESH, REAL
+*           Threshold value for the test ratios.  Information will be
+*           printed about each test for which the test ratio is greater
+*           than or equal to the threshold.
+*
+*  line 7:  TSTERR, LOGICAL
+*           Flag indicating whether or not to test the error exits for
+*           the LAPACK routines and driver routines.
+*
+*  line 8:  NEWSD, INTEGER
+*           A code indicating how to set the random number seed.
+*           = 0:  Set the seed to a default value before each run
+*           = 1:  Initialize the seed to a default value only before the
+*                 first run
+*           = 2:  Like 1, but use the seed values on the next line
+*
+*  If line 8 was 2:
+*
+*  line 9:  INTEGER array, dimension (4)
+*           Four integer values for the random number seed.
+*
+*  lines 9-EOF:  Lines specifying matrix types, as for NEP.
+*           The 3-character path name is 'CSD' for the CSD routine.
+*
+*-----------------------------------------------------------------------
+*
 *  LSE data file:
 *
 *  line 1:  'LSE' in columns 1 to 3.
@@ -985,9 +1031,9 @@
       PARAMETER          ( NIN = 5, NOUT = 6 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            DBB, DGG, DSB, FATAL, GLM, GQR, GSV, LSE, NEP,
-     $                   DBK, DBL, SEP, DES, DEV, DGK, DGL, DGS, DGV,
-     $                   DGX, DSX, SVD, DVX, DXV, TSTCHK, TSTDIF,
+      LOGICAL            CSD, DBB, DGG, DSB, FATAL, GLM, GQR, GSV, LSE,
+     $                   NEP, DBK, DBL, SEP, DES, DEV, DGK, DGL, DGS,
+     $                   DGV, DGX, DSX, SVD, DVX, DXV, TSTCHK, TSTDIF,
      $                   TSTDRV, TSTERR
       CHARACTER          C1
       CHARACTER*3        C3, PATH
@@ -1021,10 +1067,10 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, DCHKBB, DCHKBD, DCHKBK, DCHKBL, DCHKEC,
      $                   DCHKGG, DCHKGK, DCHKGL, DCHKHS, DCHKSB, DCHKST,
-     $                   DCKGLM, DCKGQR, DCKGSV, DCKLSE, DDRGES, DDRGEV,
-     $                   DDRGSX, DDRGVX, DDRVBD, DDRVES, DDRVEV, DDRVGG,
-     $                   DDRVSG, DDRVST, DDRVSX, DDRVVX, DERRBD, DERRED,
-     $                   DERRGG, DERRHS, DERRST, ILAVER, XLAENV
+     $                   DCKCSD, DCKGLM, DCKGQR, DCKGSV, DCKLSE, DDRGES,
+     $                   DDRGEV, DDRGSX, DDRGVX, DDRVBD, DDRVES, DDRVEV,
+     $                   DDRVGG, DDRVSG, DDRVST, DDRVSX, DDRVVX, DERRBD,
+     $                   DERRED, DERRGG, DERRHS, DERRST, ILAVER, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN, MIN
@@ -1083,6 +1129,7 @@
       GLM = LSAMEN( 3, PATH, 'GLM' )
       GQR = LSAMEN( 3, PATH, 'GQR' ) .OR. LSAMEN( 3, PATH, 'GRQ' )
       GSV = LSAMEN( 3, PATH, 'GSV' )
+      CSD = LSAMEN( 3, PATH, 'CSD' )
       LSE = LSAMEN( 3, PATH, 'LSE' )
       DBL = LSAMEN( 3, PATH, 'DBL' )
       DBK = LSAMEN( 3, PATH, 'DBK' )
@@ -1127,6 +1174,8 @@
          WRITE( NOUT, FMT = 9970 )
       ELSE IF( GSV ) THEN
          WRITE( NOUT, FMT = 9969 )
+      ELSE IF( CSD ) THEN
+         WRITE( NOUT, FMT = 9960 )
       ELSE IF( LSE ) THEN
          WRITE( NOUT, FMT = 9968 )
       ELSE IF( DBL ) THEN
@@ -1211,7 +1260,7 @@
 *
 *     Read the values of P
 *
-      IF( GLM .OR. GQR .OR. GSV .OR. LSE ) THEN
+      IF( GLM .OR. GQR .OR. GSV .OR. CSD .OR. LSE ) THEN
          READ( NIN, FMT = * )( PVAL( I ), I = 1, NN )
          DO 30 I = 1, NN
             IF( PVAL( I ).LT.0 ) THEN
@@ -1227,7 +1276,8 @@
 *
 *     Read the values of N
 *
-      IF( SVD .OR. DBB .OR. GLM .OR. GQR .OR. GSV .OR. LSE ) THEN
+      IF( SVD .OR. DBB .OR. GLM .OR. GQR .OR. GSV .OR. CSD .OR.
+     $    LSE ) THEN
          READ( NIN, FMT = * )( NVAL( I ), I = 1, NN )
          DO 40 I = 1, NN
             IF( NVAL( I ).LT.0 ) THEN
@@ -1350,7 +1400,7 @@
          WRITE( NOUT, FMT = 9983 )'MAXB: ', MXBVAL( 1 )
 *
       ELSE IF( .NOT.DSB .AND. .NOT.GLM .AND. .NOT.GQR .AND. .NOT.
-     $         GSV .AND. .NOT.LSE ) THEN
+     $         GSV .AND. .NOT.CSD .AND. .NOT.LSE ) THEN
 *
 *        For the other paths, the number of parameters can be varied
 *        from the input file.  Read the number of parameter values.
@@ -2260,6 +2310,21 @@
          IF( INFO.NE.0 )
      $      WRITE( NOUT, FMT = 9980 )'DCKGSV', INFO
 *
+      ELSE IF( LSAMEN( 3, C3, 'CSD' ) ) THEN
+*
+*        ----------------------------------------------
+*        CSD:  CS Decomposition
+*        ----------------------------------------------
+*
+         IF( TSTERR )
+     $      CALL DERRGG( 'CSD', NOUT )
+         CALL DCKCSD( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
+     $                A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), A( 1, 4 ),
+     $                A( 1, 5 ), A( 1, 6 ), A( 1, 7 ), IWORK, WORK,
+     $                D( 1, 1 ), NIN, NOUT, INFO )
+         IF( INFO.NE.0 )
+     $      WRITE( NOUT, FMT = 9980 )'DCKCSD', INFO
+*
       ELSE IF( LSAMEN( 3, C3, 'LSE' ) ) THEN
 *
 *        --------------------------------------
@@ -2351,6 +2416,7 @@
      $      ', INMIN=', I4, 
      $      ', INWIN =', I4, ', INIBL =', I4, ', ISHFTS =', I4,
      $      ', IACC22 =', I4)
+ 9960 FORMAT( / ' Tests of the CS Decomposition routines' )
 *
 *     End of DCHKEE
 *

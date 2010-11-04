@@ -8,7 +8,7 @@
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
 *
-*     Adapted to SCSDTS by Brian Sutton
+*     Adapted to SCSDTS
 *     July 2010
 *
 *     .. Scalar Arguments ..

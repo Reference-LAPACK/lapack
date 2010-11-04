@@ -69,6 +69,7 @@ SCLAUX = \
    slaset.o slasq1.o slasq2.o slasq3.o slasq4.o slasq5.o slasq6.o \
    slasr.o  slasrt.o slassq.o slasv2.o spttrf.o sstebz.o sstedc.o \
    ssteqr.o ssterf.o slaisnan.o sisnan.o \
+   slartgp.o slartgs.o \
     ../INSTALL/second_$(TIMER).o
 
 DZLAUX = \
@@ -86,6 +87,7 @@ DZLAUX = \
    dlaset.o dlasq1.o dlasq2.o dlasq3.o dlasq4.o dlasq5.o dlasq6.o \
    dlasr.o  dlasrt.o dlassq.o dlasv2.o dpttrf.o dstebz.o dstedc.o \
    dsteqr.o dsterf.o dlaisnan.o disnan.o \
+   dlartgp.o dlartgs.o \
    ../INSTALL/dlamch.o ../INSTALL/dsecnd_$(TIMER).o
 
 SLASRC = \
@@ -141,7 +143,8 @@ SLASRC = \
    slansf.o spftrf.o spftri.o spftrs.o ssfrk.o stfsm.o stftri.o stfttp.o \
    stfttr.o stpttf.o stpttr.o strttf.o strttp.o \
    sgejsv.o  sgesvj.o  sgsvj0.o  sgsvj1.o \
-   sgeequb.o ssyequb.o spoequb.o sgbequb.o
+   sgeequb.o ssyequb.o spoequb.o sgbequb.o \
+   sbbcsd.o slapmr.o sorbdb.o sorcsd.o
 
 DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o 
 
@@ -209,7 +212,8 @@ CLASRC = \
    cunmtr.o cupgtr.o cupmtr.o icmax1.o scsum1.o cstemr.o \
    chfrk.o ctfttp.o clanhf.o cpftrf.o cpftri.o cpftrs.o ctfsm.o ctftri.o \
    ctfttr.o ctpttf.o ctpttr.o ctrttf.o ctrttp.o \
-   cgeequb.o cgbequb.o csyequb.o cpoequb.o cheequb.o
+   cgeequb.o cgbequb.o csyequb.o cpoequb.o cheequb.o \
+   cbbcsd.o clapmr.o cunbdb.o cuncsd.o
 
 CXLASRC =    cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
    cla_gercond_c.o cla_gercond_x.o cla_rpvgrw.o \
@@ -280,7 +284,8 @@ DLASRC = \
    dlansf.o dpftrf.o dpftri.o dpftrs.o dsfrk.o dtfsm.o dtftri.o dtfttp.o \
    dtfttr.o dtpttf.o dtpttr.o dtrttf.o dtrttp.o \
    dgejsv.o  dgesvj.o  dgsvj0.o  dgsvj1.o \
-   dgeequb.o dsyequb.o dpoequb.o dgbequb.o
+   dgeequb.o dsyequb.o dpoequb.o dgbequb.o \
+   dbbcsd.o dlapmr.o dorbdb.o dorcsd.o
 
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o		\
    dla_gercond.o dla_rpvgrw.o dsysvxx.o dsyrfsx.o			\
@@ -351,7 +356,8 @@ ZLASRC = \
    zcgesv.o zcposv.o zlag2c.o clag2z.o zlat2c.o \
    zhfrk.o ztfttp.o zlanhf.o zpftrf.o zpftri.o zpftrs.o ztfsm.o ztftri.o \
    ztfttr.o ztpttf.o ztpttr.o ztrttf.o ztrttp.o \
-   zgeequb.o zgbequb.o zsyequb.o zpoequb.o zheequb.o
+   zgeequb.o zgbequb.o zsyequb.o zpoequb.o zheequb.o \
+   zbbcsd.o zlapmr.o zunbdb.o zuncsd.o
 
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o		\
    zla_gercond_c.o zla_gercond_x.o zla_rpvgrw.o zsysvxx.o zsyrfsx.o	\

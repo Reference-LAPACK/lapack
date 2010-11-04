@@ -52,7 +52,7 @@ SEIGTST = schkee.o \
    sbdt01.o sbdt02.o sbdt03.o \
    schkbb.o schkbd.o schkbk.o schkbl.o schkec.o \
    schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o \
-   sckglm.o sckgqr.o sckgsv.o scklse.o \
+   sckcsd.o sckglm.o sckgqr.o sckgsv.o scklse.o scsdts.o \
    sdrges.o sdrgev.o sdrgsx.o sdrgvx.o \
    sdrvbd.o sdrves.o sdrvev.o sdrvgg.o sdrvsg.o \
    sdrvst.o sdrvsx.o sdrvvx.o \
@@ -69,7 +69,7 @@ CEIGTST = cchkee.o \
    cbdt01.o cbdt02.o cbdt03.o \
    cchkbb.o cchkbd.o cchkbk.o cchkbl.o cchkec.o \
    cchkgg.o cchkgk.o cchkgl.o cchkhb.o cchkhs.o cchkst.o \
-   cckglm.o cckgqr.o cckgsv.o ccklse.o \
+   cckcsd.o cckglm.o cckgqr.o cckgsv.o ccklse.o ccsdts.o \
    cdrges.o cdrgev.o cdrgsx.o cdrgvx.o \
    cdrvbd.o cdrves.o cdrvev.o cdrvgg.o cdrvsg.o \
    cdrvst.o cdrvsx.o cdrvvx.o \
@@ -89,7 +89,7 @@ DEIGTST = dchkee.o \
    dbdt01.o dbdt02.o dbdt03.o \
    dchkbb.o dchkbd.o dchkbk.o dchkbl.o dchkec.o \
    dchkgg.o dchkgk.o dchkgl.o dchkhs.o dchksb.o dchkst.o \
-   dckglm.o dckgqr.o dckgsv.o dcklse.o \
+   dckcsd.o dckglm.o dckgqr.o dckgsv.o dcklse.o dcsdts.o \
    ddrges.o ddrgev.o ddrgsx.o ddrgvx.o \
    ddrvbd.o ddrves.o ddrvev.o ddrvgg.o ddrvsg.o \
    ddrvst.o ddrvsx.o ddrvvx.o \
@@ -106,7 +106,7 @@ ZEIGTST = zchkee.o \
    zbdt01.o zbdt02.o zbdt03.o \
    zchkbb.o zchkbd.o zchkbk.o zchkbl.o zchkec.o \
    zchkgg.o zchkgk.o zchkgl.o zchkhb.o zchkhs.o zchkst.o \
-   zckglm.o zckgqr.o zckgsv.o zcklse.o \
+   zckcsd.o zckglm.o zckgqr.o zckgsv.o zcklse.o zcsdts.o \
    zdrges.o zdrgev.o zdrgsx.o zdrgvx.o \
    zdrvbd.o zdrves.o zdrvev.o zdrvgg.o zdrvsg.o \
    zdrvst.o zdrvsx.o zdrvvx.o \
