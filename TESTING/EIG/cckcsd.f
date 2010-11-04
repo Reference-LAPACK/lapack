@@ -105,7 +105,7 @@
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 9 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 4 )
+      PARAMETER          ( NTYPES = 3 )
       REAL               GAPDIGIT, ORTH, PIOVER2, TEN
       PARAMETER          ( GAPDIGIT = 10.0E0, ORTH = 1.0E-4,
      $                     PIOVER2 = 1.57079632679489662E0,
@@ -186,7 +186,7 @@
      $                                ORTH*SLARND(2,ISEED)
                   END DO
                END DO
-            ELSE IF( IMAT.EQ.3 ) THEN
+            ELSE
                R = MIN( P, M-P, Q, M-Q )
                DO I = 1, R+1
                   THETA(I) = TEN**(-SLARND(1,ISEED)*GAPDIGIT)
@@ -198,7 +198,6 @@
                   THETA(I) = PIOVER2 * THETA(I) / THETA(R+1)
                END DO
                CALL CLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
-            ELSE
             END IF
 *
             NT = 9

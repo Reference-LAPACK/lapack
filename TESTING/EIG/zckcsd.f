@@ -105,7 +105,7 @@
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 9 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 4 )
+      PARAMETER          ( NTYPES = 3 )
       DOUBLE PRECISION   GAPDIGIT, ORTH, PIOVER2, TEN
       PARAMETER          ( GAPDIGIT = 18.0D0, ORTH = 1.0D-12,
      $                     PIOVER2 = 1.57079632679489662D0,
@@ -186,7 +186,7 @@
      $                                ORTH*DLARND(2,ISEED)
                   END DO
                END DO
-            ELSE IF( IMAT.EQ.3 ) THEN
+            ELSE
                R = MIN( P, M-P, Q, M-Q )
                DO I = 1, R+1
                   THETA(I) = TEN**(-DLARND(1,ISEED)*GAPDIGIT)
@@ -198,7 +198,6 @@
                   THETA(I) = PIOVER2 * THETA(I) / THETA(R+1)
                END DO
                CALL ZLACSG( M, P, Q, THETA, ISEED, X, LDX, WORK )
-            ELSE
             END IF
 *
             NT = 9
