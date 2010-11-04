@@ -7,7 +7,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
 *
-*     Adapted to CLAPMR by Brian Sutton
+*     Adapted to CLAPMR
 *     July 2010
 *
 *     .. Scalar Arguments ..

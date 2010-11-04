@@ -6,7 +6,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
 *
-*     Adapted to SLARTGP by Brian Sutton
+*     Adapted to SLARTGP
 *     July 2010
 *
 *     .. Scalar Arguments ..

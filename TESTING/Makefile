@@ -61,6 +61,7 @@ SEIGTST= snep.out \
          sglm.out \
          sgqr.out \
          sgsv.out \
+         scsd.out \
          slse.out
 
 CEIGTST= cnep.out \
@@ -80,6 +81,7 @@ CEIGTST= cnep.out \
          cglm.out \
          cgqr.out \
          cgsv.out \
+         ccsd.out \
          clse.out
 
 DEIGTST= dnep.out \
@@ -99,6 +101,7 @@ DEIGTST= dnep.out \
          dglm.out \
          dgqr.out \
          dgsv.out \
+         dcsd.out \
          dlse.out
 
 ZEIGTST= znep.out \
@@ -118,6 +121,7 @@ ZEIGTST= znep.out \
          zglm.out \
          zgqr.out \
          zgsv.out \
+         zcsd.out \
          zlse.out
 
 
@@ -279,6 +283,10 @@ sgsv.out: gsv.in xeigtsts
 	@echo GSV: Testing Generalized Singular Value Decomposition routines
 	./xeigtsts < gsv.in > $@ 2>&1
 
+scsd.out: csd.in xeigtsts
+	@echo CSD: Testing CS Decomposition routines
+	./xeigtsts < csd.in > $@ 2>&1
+
 slse.out: lse.in xeigtsts
 	@echo LSE: Testing Constrained Linear Least Squares routines
 	./xeigtsts < lse.in > $@ 2>&1
@@ -352,6 +360,10 @@ cgqr.out: gqr.in xeigtstc
 cgsv.out: gsv.in xeigtstc
 	@echo GSV: Testing Generalized Singular Value Decomposition routines
 	./xeigtstc < gsv.in > $@ 2>&1
+
+ccsd.out: csd.in xeigtstc
+	@echo CSD: Testing CS Decomposition routines
+	./xeigtstc < csd.in > $@ 2>&1
 
 clse.out: lse.in xeigtstc
 	@echo LSE: Testing Constrained Linear Least Squares routines
@@ -427,6 +439,10 @@ dgsv.out: gsv.in xeigtstd
 	@echo GSV: Testing Generalized Singular Value Decomposition routines
 	./xeigtstd < gsv.in > $@ 2>&1
 
+dcsd.out: csd.in xeigtstd
+	@echo CSD: Testing CS Decomposition routines
+	./xeigtstd < csd.in > $@ 2>&1
+
 dlse.out: lse.in xeigtstd
 	@echo LSE: Testing Constrained Linear Least Squares routines
 	./xeigtstd < lse.in > $@ 2>&1
@@ -500,6 +516,10 @@ zgqr.out: gqr.in xeigtstz
 zgsv.out: gsv.in xeigtstz
 	@echo GSV: Testing Generalized Singular Value Decomposition routines
 	./xeigtstz < gsv.in > $@ 2>&1
+
+zcsd.out: csd.in xeigtstz
+	@echo CSD: Testing CS Decomposition routines
+	./xeigtstz < csd.in > $@ 2>&1
 
 zlse.out: lse.in xeigtstz
 	@echo LSE: Testing Constrained Linear Least Squares routines
