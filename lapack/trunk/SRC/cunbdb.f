@@ -82,7 +82,7 @@
 *          The leading dimension of X11. If TRANS = 'N', then LDX11 >=
 *          P; else LDX11 >= Q.
 *
-*  X12     (input/output) COMPLEX array, dimension (LDX12,M-Q)
+*  X12     (input/output) CMPLX array, dimension (LDX12,M-Q)
 *          On entry, the top-right block of the unitary matrix to
 *          be reduced. On exit, the form depends on TRANS:
 *          If TRANS = 'N', then
@@ -208,7 +208,7 @@
 *     ..
 *     .. Intrinsic Functions
       INTRINSIC          ATAN2, COS, MAX, MIN, SIN
-      INTRINSIC          COMPLEX, CONJG
+      INTRINSIC          CMPLX, CONJG
 *     ..
 *     .. Executable Statements ..
 *
@@ -280,19 +280,19 @@
          DO I = 1, Q
 *
             IF( I .EQ. 1 ) THEN
-               CALL CSCAL( P-I+1, COMPLEX( Z1, 0.0E0 ), X11(I,I), 1 )
+               CALL CSCAL( P-I+1, CMPLX( Z1, 0.0E0 ), X11(I,I), 1 )
             ELSE
-               CALL CSCAL( P-I+1, COMPLEX( Z1*COS(PHI(I-1)), 0.0E0 ),
+               CALL CSCAL( P-I+1, CMPLX( Z1*COS(PHI(I-1)), 0.0E0 ),
      $                     X11(I,I), 1 )
-               CALL CAXPY( P-I+1, COMPLEX( -Z1*Z3*Z4*SIN(PHI(I-1)),
+               CALL CAXPY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)),
      $                     0.0E0 ), X12(I,I-1), 1, X11(I,I), 1 )
             END IF
             IF( I .EQ. 1 ) THEN
-               CALL CSCAL( M-P-I+1, COMPLEX( Z2, 0.0E0 ), X21(I,I), 1 )
+               CALL CSCAL( M-P-I+1, CMPLX( Z2, 0.0E0 ), X21(I,I), 1 )
             ELSE
-               CALL CSCAL( M-P-I+1, COMPLEX( Z2*COS(PHI(I-1)), 0.0E0 ),
+               CALL CSCAL( M-P-I+1, CMPLX( Z2*COS(PHI(I-1)), 0.0E0 ),
      $                     X21(I,I), 1 )
-               CALL CAXPY( M-P-I+1, COMPLEX( -Z2*Z3*Z4*SIN(PHI(I-1)),
+               CALL CAXPY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
      $                     0.0E0 ), X22(I,I-1), 1, X21(I,I), 1 )
             END IF
 *
@@ -314,14 +314,14 @@
      $                  CONJG(TAUP2(I)), X22(I,I), LDX22, WORK )
 *
             IF( I .LT. Q ) THEN
-               CALL CSCAL( Q-I, COMPLEX( -Z1*Z3*SIN(THETA(I)), 0.0E0 ),
+               CALL CSCAL( Q-I, CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0E0 ),
      $                     X11(I,I+1), LDX11 )
-               CALL CAXPY( Q-I, COMPLEX( Z2*Z3*COS(THETA(I)), 0.0E0 ),
+               CALL CAXPY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0E0 ),
      $                     X21(I,I+1), LDX21, X11(I,I+1), LDX11 )
             END IF
-            CALL CSCAL( M-Q-I+1, COMPLEX( -Z1*Z4*SIN(THETA(I)), 0.0E0 ),
+            CALL CSCAL( M-Q-I+1, CMPLX( -Z1*Z4*SIN(THETA(I)), 0.0E0 ),
      $                  X12(I,I), LDX12 )
-            CALL CAXPY( M-Q-I+1, COMPLEX( Z2*Z4*COS(THETA(I)), 0.0E0 ),
+            CALL CAXPY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)), 0.0E0 ),
      $                  X22(I,I), LDX22, X12(I,I), LDX12 )
 *
             IF( I .LT. Q )
@@ -360,7 +360,7 @@
 *
          DO I = Q + 1, P
 *
-            CALL CSCAL( M-Q-I+1, COMPLEX( -Z1*Z4, 0.0E0 ), X12(I,I),
+            CALL CSCAL( M-Q-I+1, CMPLX( -Z1*Z4, 0.0E0 ), X12(I,I),
      $                  LDX12 )
             CALL CLACGV( M-Q-I+1, X12(I,I), LDX12 )
             CALL CLARFGP( M-Q-I+1, X12(I,I), X12(I,I+1), LDX12,
@@ -381,7 +381,7 @@
 *
          DO I = 1, M - P - Q
 *
-            CALL CSCAL( M-P-Q-I+1, COMPLEX( Z2*Z4, 0.0E0 ),
+            CALL CSCAL( M-P-Q-I+1, CMPLX( Z2*Z4, 0.0E0 ),
      $                  X22(Q+I,P+I), LDX22 )
             CALL CLACGV( M-P-Q-I+1, X22(Q+I,P+I), LDX22 )
             CALL CLARFGP( M-P-Q-I+1, X22(Q+I,P+I), X22(Q+I,P+I+1),
@@ -401,21 +401,21 @@
          DO I = 1, Q
 *
             IF( I .EQ. 1 ) THEN
-               CALL CSCAL( P-I+1, COMPLEX( Z1, 0.0E0 ), X11(I,I),
+               CALL CSCAL( P-I+1, CMPLX( Z1, 0.0E0 ), X11(I,I),
      $                     LDX11 )
             ELSE
-               CALL CSCAL( P-I+1, COMPLEX( Z1*COS(PHI(I-1)), 0.0E0 ),
+               CALL CSCAL( P-I+1, CMPLX( Z1*COS(PHI(I-1)), 0.0E0 ),
      $                     X11(I,I), LDX11 )
-               CALL CAXPY( P-I+1, COMPLEX( -Z1*Z3*Z4*SIN(PHI(I-1)),
+               CALL CAXPY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)),
      $                     0.0E0 ), X12(I-1,I), LDX12, X11(I,I), LDX11 )
             END IF
             IF( I .EQ. 1 ) THEN
-               CALL CSCAL( M-P-I+1, COMPLEX( Z2, 0.0E0 ), X21(I,I),
+               CALL CSCAL( M-P-I+1, CMPLX( Z2, 0.0E0 ), X21(I,I),
      $                     LDX21 )
             ELSE
-               CALL CSCAL( M-P-I+1, COMPLEX( Z2*COS(PHI(I-1)), 0.0E0 ),
+               CALL CSCAL( M-P-I+1, CMPLX( Z2*COS(PHI(I-1)), 0.0E0 ),
      $                     X21(I,I), LDX21 )
-               CALL CAXPY( M-P-I+1, COMPLEX( -Z2*Z3*Z4*SIN(PHI(I-1)),
+               CALL CAXPY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
      $                     0.0E0 ), X22(I-1,I), LDX22, X21(I,I), LDX21 )
             END IF
 *
@@ -444,14 +444,14 @@
             CALL CLACGV( M-P-I+1, X21(I,I), LDX21 )
 *
             IF( I .LT. Q ) THEN
-               CALL CSCAL( Q-I, COMPLEX( -Z1*Z3*SIN(THETA(I)), 0.0E0 ),
+               CALL CSCAL( Q-I, CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0E0 ),
      $                     X11(I+1,I), 1 )
-               CALL CAXPY( Q-I, COMPLEX( Z2*Z3*COS(THETA(I)), 0.0E0 ),
+               CALL CAXPY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0E0 ),
      $                     X21(I+1,I), 1, X11(I+1,I), 1 )
             END IF
-            CALL CSCAL( M-Q-I+1, COMPLEX( -Z1*Z4*SIN(THETA(I)), 0.0E0 ),
+            CALL CSCAL( M-Q-I+1, CMPLX( -Z1*Z4*SIN(THETA(I)), 0.0E0 ),
      $                  X12(I,I), 1 )
-            CALL CAXPY( M-Q-I+1, COMPLEX( Z2*Z4*COS(THETA(I)), 0.0E0 ),
+            CALL CAXPY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)), 0.0E0 ),
      $                  X22(I,I), 1, X12(I,I), 1 )
 *
             IF( I .LT. Q )
@@ -482,7 +482,7 @@
 *
          DO I = Q + 1, P
 *
-            CALL CSCAL( M-Q-I+1, COMPLEX( -Z1*Z4, 0.0E0 ), X12(I,I), 1 )
+            CALL CSCAL( M-Q-I+1, CMPLX( -Z1*Z4, 0.0E0 ), X12(I,I), 1 )
             CALL CLARFGP( M-Q-I+1, X12(I,I), X12(I+1,I), 1, TAUQ2(I) )
             X12(I,I) = ONE
 *
@@ -498,7 +498,7 @@
 *
          DO I = 1, M - P - Q
 *
-            CALL CSCAL( M-P-Q-I+1, COMPLEX( Z2*Z4, 0.0E0 ),
+            CALL CSCAL( M-P-Q-I+1, CMPLX( Z2*Z4, 0.0E0 ),
      $                  X22(P+I,Q+I), 1 )
             CALL CLARFGP( M-P-Q-I+1, X22(P+I,Q+I), X22(P+I+1,Q+I), 1,
      $                    TAUQ2(P+I) )
