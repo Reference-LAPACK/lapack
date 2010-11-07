@@ -195,6 +195,7 @@
 *        If the root finder fails, the computation is terminated.
 *
          IF( INFO.NE.0 ) THEN
+            CALL XERBLA( 'DLASD4', -INFO )
             RETURN
          END IF
          WORK( IWK3I+J ) = WORK( IWK3I+J )*WORK( J )*WORK( IWK2I+J )
