@@ -260,28 +260,28 @@
          X(I,I) = ONE
       END DO
       DO I = 1, R
-         X(MIN(P,Q)-R+I,MIN(P,Q)-R+I) = COMPLEX( COS(THETA(I)), 0.0D0 )
+         X(MIN(P,Q)-R+I,MIN(P,Q)-R+I) = DCMPLX( COS(THETA(I)), 0.0D0 )
       END DO
       DO I = 1, MIN(P,M-Q)-R
          X(P-I+1,M-I+1) = -ONE
       END DO
       DO I = 1, R
          X(P-(MIN(P,M-Q)-R)+1-I,M-(MIN(P,M-Q)-R)+1-I) =
-     $      COMPLEX( -SIN(THETA(R-I+1)), 0.0D0 )
+     $      DCMPLX( -SIN(THETA(R-I+1)), 0.0D0 )
       END DO
       DO I = 1, MIN(M-P,Q)-R
          X(M-I+1,Q-I+1) = ONE
       END DO
       DO I = 1, R
          X(M-(MIN(M-P,Q)-R)+1-I,Q-(MIN(M-P,Q)-R)+1-I) =
-     $      COMPLEX( SIN(THETA(R-I+1)), 0.0D0 )
+     $      DCMPLX( SIN(THETA(R-I+1)), 0.0D0 )
       END DO
       DO I = 1, MIN(M-P,M-Q)-R
          X(P+I,Q+I) = ONE
       END DO
       DO I = 1, R
          X(P+(MIN(M-P,M-Q)-R)+I,Q+(MIN(M-P,M-Q)-R)+I) =
-     $      COMPLEX( COS(THETA(I)), 0.0D0 )
+     $      DCMPLX( COS(THETA(I)), 0.0D0 )
       END DO
       CALL ZLAROR( 'Left', 'No init', P, M, X, LDX, ISEED, WORK, INFO )
       CALL ZLAROR( 'Left', 'No init', M-P, M, X(P+1,1), LDX,
