@@ -180,7 +180,7 @@
       END DO
       DO I = 1, R
          X(MIN(P,Q)-R+I,MIN(P,Q)-R+I) =
-     $           X(MIN(P,Q)-R+I,MIN(P,Q)-R+I) - COMPLEX( COS(THETA(I)),
+     $           X(MIN(P,Q)-R+I,MIN(P,Q)-R+I) - CMPLX( COS(THETA(I)),
      $              0.0E0 )
       END DO
 *
@@ -196,7 +196,7 @@
       DO I = 1, R
          X(P-(MIN(P,M-Q)-R)+1-I,M-(MIN(P,M-Q)-R)+1-I) =
      $      X(P-(MIN(P,M-Q)-R)+1-I,M-(MIN(P,M-Q)-R)+1-I) +
-     $      COMPLEX( SIN(THETA(R-I+1)), 0.0E0 )
+     $      CMPLX( SIN(THETA(R-I+1)), 0.0E0 )
       END DO
 *
       CALL CGEMM( 'No transpose', 'Conjugate transpose', M-P, Q, Q, ONE,
@@ -211,7 +211,7 @@
       DO I = 1, R
          X(M-(MIN(M-P,Q)-R)+1-I,Q-(MIN(M-P,Q)-R)+1-I) =
      $             X(M-(MIN(M-P,Q)-R)+1-I,Q-(MIN(M-P,Q)-R)+1-I) -
-     $             COMPLEX( SIN(THETA(R-I+1)), 0.0E0 )
+     $             CMPLX( SIN(THETA(R-I+1)), 0.0E0 )
       END DO
 *
       CALL CGEMM( 'No transpose', 'Conjugate transpose', M-P, M-Q, M-Q,
@@ -226,7 +226,7 @@
       DO I = 1, R
          X(P+(MIN(M-P,M-Q)-R)+I,Q+(MIN(M-P,M-Q)-R)+I) =
      $      X(P+(MIN(M-P,M-Q)-R)+I,Q+(MIN(M-P,M-Q)-R)+I) -
-     $      COMPLEX( COS(THETA(I)), 0.0E0 )
+     $      CMPLX( COS(THETA(I)), 0.0E0 )
       END DO
 *
 *     Compute norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 ) .
