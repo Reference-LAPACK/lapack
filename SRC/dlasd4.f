@@ -95,7 +95,7 @@
 *
 *     .. Parameters ..
       INTEGER            MAXIT
-      PARAMETER          ( MAXIT = 20 )
+      PARAMETER          ( MAXIT = 200 )
       DOUBLE PRECISION   ZERO, ONE, TWO, THREE, FOUR, EIGHT, TEN
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TWO = 2.0D+0,
      $                   THREE = 3.0D+0, FOUR = 4.0D+0, EIGHT = 8.0D+0,

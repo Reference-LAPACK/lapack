@@ -282,6 +282,13 @@
       CALL SLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDGNUM,
      $             WORK( ISIGMA ), WORK( IW ), INFO )
 *
+*     Handle error returned
+*
+      IF( INFO.NE.0 ) THEN
+         CALL XERBLA( 'SLASD8', -INFO )
+         RETURN
+      END IF
+*
 *     Save the poles if ICOMPQ = 1.
 *
       IF( ICOMPQ.EQ.1 ) THEN
