@@ -1,8 +1,8 @@
       SUBROUTINE CERRQR( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.3.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     June 2010
+*     November 2010
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH

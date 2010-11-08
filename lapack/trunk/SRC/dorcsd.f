@@ -5,9 +5,13 @@
      $                             LDV2T, WORK, LWORK, IWORK, INFO )
       IMPLICIT NONE
 *
-*     Brian Sutton
-*     Randolph-Macon College
-*     July 2010
+*  -- LAPACK routine (version 3.3.0) --
+*
+*  -- Contributed by Brian Sutton of the Randolph-Macon College --
+*  -- November 2010
+*
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--     
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBU1, JOBU2, JOBV1T, JOBV2T, SIGNS, TRANS

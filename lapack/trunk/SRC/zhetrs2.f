@@ -1,10 +1,10 @@
       SUBROUTINE ZHETRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, 
      $                    WORK, INFO )
 *
-*  -- LAPACK PROTOTYPE routine (version 3.2.2) --
+*  -- LAPACK PROTOTYPE routine (version 3.3.0) --
 *
 *  -- Written by Julie Langou of the Univ. of TN    --
-*     May 2010
+*     November 2010
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
