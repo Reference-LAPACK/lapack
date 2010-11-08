@@ -1,9 +1,13 @@
       SUBROUTINE DLARTGS( X, Y, SIGMA, CS, SN )
       IMPLICIT NONE
 *
-*     Brian Sutton
-*     Randolph-Macon College
-*     July 2010
+*  -- LAPACK routine (version 3.3.0) --
+*
+*  -- Contributed by Brian Sutton of the Randolph-Macon College --
+*  -- November 2010
+*
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--     
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION        CS, SIGMA, SN, X, Y

@@ -4,9 +4,9 @@
       IMPLICIT NONE
 *
 *     Originally ZCKGSV
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.3.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*     November 2010
 *
 *     Adapted to ZCKCSD
 *     July 2010

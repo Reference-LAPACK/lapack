@@ -3,10 +3,10 @@
      $                    M, W, WERR, WL, WU, IBLOCK, INDEXW,
      $                    WORK, IWORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.2.1)                        --
+*  -- LAPACK auxiliary routine (version 3.3.0)                        --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2009                                                      --
+*     November 2010
 *
 *     .. Scalar Arguments ..
       CHARACTER          ORDER, RANGE

@@ -4,10 +4,10 @@
      $                    WORK, IWORK, INFO )
       IMPLICIT NONE
 *
-*  -- LAPACK auxiliary routine (version 3.2.2) --
+*  -- LAPACK auxiliary routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2010
 *
 *     .. Scalar Arguments ..
       CHARACTER          RANGE

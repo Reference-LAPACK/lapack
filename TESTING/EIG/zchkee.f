@@ -1,6 +1,6 @@
       PROGRAM ZCHKEE
 *
-*  -- LAPACK test routine (version 3.1.1) --
+*  -- LAPACK test routine (version 3.3.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     February 2007
 *
