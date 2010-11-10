@@ -93,7 +93,7 @@
 *          The leading dimension of the array V2T. LDV2T >=
 *          max(1,M-Q).
 *
-*  THETA   (output) DOUBLE PRECISION array, dimension MIN(P,M-P,Q,M-Q)
+*  THETA   (output) REAL array, dimension MIN(P,M-P,Q,M-Q)
 *          The CS values of X; the essentially diagonal matrices C and
 *          S are constructed from THETA; see subroutine SORCSD for
 *          details.

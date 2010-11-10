@@ -121,7 +121,7 @@
 *     ..
 *     .. Local Arrays ..
       LOGICAL            DOTYPE( NTYPES )
-      DOUBLE PRECISION   RESULT( NTESTS )
+      REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHDG, ALAREQ, ALASUM, SCSDTS, SLACSG, SLAROR,
