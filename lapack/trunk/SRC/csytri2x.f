@@ -277,7 +277,7 @@
          CALL CGEMM('T','N',NNB,NNB,CUT,ONE,A(1,CUT+1),LDA,
      $              WORK,N+NB+1, ZERO, A(CUT+1,CUT+1), LDA)
 *
-*        U11 =  U11T*invD1*U11 + U01'invD*U01 (Prem + Deus)
+*        U11 =  U11T*invD1*U11 + U01'invD*U01
 *
          DO I=1,NNB
             DO J=I,NNB
@@ -298,7 +298,9 @@
             A(I,CUT+J)=WORK(I,J)
            END DO
          END DO
-*    Next Block
+*
+*      Next Block
+*
        END DO
 *
 *        Apply PERMUTATIONS P and P': P * inv(U')*inv(D)*inv(U) *P'
@@ -319,12 +321,6 @@
               ENDIF
                I=I+1
             END DO
-
-        DO I=1,N
-          DO J=I+1,N
-            A(J,I)=A(I,J)
-          END DO
-        END DO
       ELSE
 *
 *        LOWER...
@@ -436,10 +432,12 @@
              END IF
            END DO
 *    
-*       U11T*invD1*U11->U11
+*       L11T*invD1*L11->L11
 *
         CALL CTRMM('L',UPLO,'T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
+
+        IF ( (CUT+NNB) .LT. N ) THEN
 *
 *          L21T*invD2*L21->A(CUT+I,CUT+J)
 *
@@ -447,7 +445,7 @@
      $             ,LDA,WORK,N+NB+1, ZERO, A(CUT+1,CUT+1), LDA)
        
 *
-*        L11 =  L11T*invD1*L11 + U01'invD*U01 (Prem + Deus)
+*        L11 =  L11T*invD1*L11 + U01'invD*U01
 *
          DO I=1,NNB
             DO J=1,I
@@ -455,7 +453,7 @@
             END DO
          END DO
 *
-*        U01 =  L22T*invD2*L21
+*        L01 =  L22T*invD2*L21
 *
          CALL CTRMM('L',UPLO,'T','U', N-NNB-CUT, NNB,
      $             ONE,A(CUT+NNB+1,CUT+NNB+1),LDA,WORK,N+NB+1)
@@ -466,7 +464,19 @@
               A(CUT+NNB+I,CUT+J)=WORK(I,J)
            END DO
          END DO
+       ELSE
+*
+*        L11 =  L11T*invD1*L11
+*
+         DO I=1,NNB
+            DO J=1,I
+              A(CUT+I,CUT+J)=WORK(U11+I,J)
+            END DO
+         END DO
+       END IF
+*
 *      Next Block
+*
            CUT=CUT+NNB
        END DO
 *
