@@ -300,8 +300,10 @@
          IF( THETA(I).LT.REALZERO .OR. THETA(I).GT.PIOVER2 ) THEN
             RESULT(9) = ULPINV
          END IF
-         IF( I.GT.1 .AND. THETA(I).LT.THETA(I-1) ) THEN
-            RESULT(9) = ULPINV
+         IF( I.GT.1) THEN
+            IF ( THETA(I).LT.THETA(I-1) ) THEN
+               RESULT(9) = ULPINV
+            END IF
          END IF
       END DO
 *
