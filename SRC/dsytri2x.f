@@ -163,7 +163,7 @@
         DO WHILE ( K .LE. N )
          IF( IPIV( K ).GT.0 ) THEN
 *           1 x 1 diagonal NNB
-             WORK(K,INVD) = 1/  A( K, K )
+             WORK(K,INVD) = ONE /  A( K, K )
              WORK(K,INVD+1) = 0
             K=K+1
          ELSE
@@ -276,7 +276,7 @@
          CALL DGEMM('T','N',NNB,NNB,CUT,ONE,A(1,CUT+1),LDA,
      $              WORK,N+NB+1, ZERO, A(CUT+1,CUT+1), LDA)
 *
-*        U11 =  U11T*invD1*U11 + U01'invD*U01 (Prem + Deus)
+*        U11 =  U11T*invD1*U11 + U01'invD*U01
 *
          DO I=1,NNB
             DO J=I,NNB
@@ -297,7 +297,9 @@
             A(I,CUT+J)=WORK(I,J)
            END DO
          END DO
-*    Next Block
+*
+*      Next Block
+*
        END DO
 *
 *        Apply PERMUTATIONS P and P': P * inv(U')*inv(D)*inv(U) *P'
@@ -318,12 +320,6 @@
               ENDIF
                I=I+1
             END DO
-
-        DO I=1,N
-          DO J=I+1,N
-            A(J,I)=A(I,J)
-          END DO
-        END DO
       ELSE
 *
 *        LOWER...
@@ -338,7 +334,7 @@
         DO WHILE ( K .GE. 1 )
          IF( IPIV( K ).GT.0 ) THEN
 *           1 x 1 diagonal NNB
-             WORK(K,INVD) = 1/  A( K, K )
+             WORK(K,INVD) = ONE /  A( K, K )
              WORK(K,INVD+1) = 0
             K=K-1
          ELSE
@@ -363,7 +359,7 @@
         CUT=0
         DO WHILE (CUT .LT. N)
            NNB=NB
-           IF (CUT + NNB .GE. N) THEN
+           IF (CUT + NNB .GT. N) THEN
               NNB=N-CUT
            ELSE
               COUNT = 0
@@ -374,7 +370,7 @@
 *             need a even number for a clear cut
               IF (MOD(COUNT,2) .EQ. 1) NNB=NNB+1
            END IF
-*      L21 Block
+*     L21 Block
            DO I=1,N-CUT-NNB
              DO J=1,NNB
               WORK(I,J)=A(CUT+NNB+I,CUT+J)
@@ -435,10 +431,12 @@
              END IF
            END DO
 *    
-*       U11T*invD1*U11->U11
+*       L11T*invD1*L11->L11
 *
         CALL DTRMM('L',UPLO,'T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
+
+        IF ( (CUT+NNB) .LT. N ) THEN
 *
 *          L21T*invD2*L21->A(CUT+I,CUT+J)
 *
@@ -446,7 +444,7 @@
      $             ,LDA,WORK,N+NB+1, ZERO, A(CUT+1,CUT+1), LDA)
        
 *
-*        L11 =  L11T*invD1*L11 + U01'invD*U01 (Prem + Deus)
+*        L11 =  L11T*invD1*L11 + U01'invD*U01
 *
          DO I=1,NNB
             DO J=1,I
@@ -454,18 +452,32 @@
             END DO
          END DO
 *
-*        U01 =  L22T*invD2*L21
+*        L01 =  L22T*invD2*L21
 *
          CALL DTRMM('L',UPLO,'T','U', N-NNB-CUT, NNB,
      $             ONE,A(CUT+NNB+1,CUT+NNB+1),LDA,WORK,N+NB+1)
-
+*
 *      Update L21
+*
          DO I=1,N-CUT-NNB
            DO J=1,NNB
               A(CUT+NNB+I,CUT+J)=WORK(I,J)
            END DO
          END DO
+
+       ELSE
+*
+*        L11 =  L11T*invD1*L11
+*
+         DO I=1,NNB
+            DO J=1,I
+              A(CUT+I,CUT+J)=WORK(U11+I,J)
+            END DO
+         END DO
+       END IF
+*
 *      Next Block
+*
            CUT=CUT+NNB
        END DO
 *
