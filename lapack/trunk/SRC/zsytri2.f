@@ -21,8 +21,8 @@
 *
 *  ZSYTRI2 computes the inverse of a complex symmetric indefinite matrix
 *  A using the factorization A = U*D*U**T or A = L*D*L**T computed by
-*  ZSYTRF. ZSYTRI2 set the LEADING DIMENSION of the workspace
-*  before calling ZSYTRI2X that actually compute the inverse.
+*  ZSYTRF. ZSYTRI2 sets the LEADING DIMENSION of the workspace
+*  before calling ZSYTRI2X that actually computes the inverse.
 *
 *  Arguments
 *  =========
