@@ -21,8 +21,8 @@
 *
 *  CSYTRI2 computes the inverse of a complex symmetric indefinite matrix
 *  A using the factorization A = U*D*U**T or A = L*D*L**T computed by
-*  CSYTRF. CSYTRI2 set the LEADING DIMENSION of the workspace
-*  before calling CSYTRI2X that actually compute the inverse.
+*  CSYTRF. CSYTRI2 sets the LEADING DIMENSION of the workspace
+*  before calling CSYTRI2X that actually computes the inverse.
 *
 *  Arguments
 *  =========

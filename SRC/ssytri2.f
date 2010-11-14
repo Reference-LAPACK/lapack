@@ -21,8 +21,8 @@
 *
 *  SSYTRI2 computes the inverse of a real symmetric indefinite matrix
 *  A using the factorization A = U*D*U**T or A = L*D*L**T computed by
-*  SSYTRF. SSYTRI2 set the LEADING DIMENSION of the workspace
-*  before calling SSYTRI2X that actually compute the inverse.
+*  SSYTRF. SSYTRI2 sets the LEADING DIMENSION of the workspace
+*  before calling SSYTRI2X that actually computes the inverse.
 *
 *  Arguments
 *  =========
