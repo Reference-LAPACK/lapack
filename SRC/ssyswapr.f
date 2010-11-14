@@ -1,6 +1,6 @@
       SUBROUTINE SSYSWAPR( UPLO, N, A, I1, I2)
 *
-*  -- LAPACK routine (version 3.3.0) --
+*  -- LAPACK auxiliary routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2010
@@ -15,7 +15,8 @@
 *  Purpose
 *  =======
 *
-*  SSYSWAPR swaps two rows of a lower or upper matrix
+*  SSYSWAPR applies an elementary permutation on the rows and the columns of
+*  a symmetric matrix.
 *
 *  Arguments
 *  =========
