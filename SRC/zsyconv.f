@@ -20,8 +20,8 @@
 *  Purpose
 *  =======
 *
-*  ZSYCONV convert A given by TRF into L and D and vice-versa.
-*  Get Non-diag elements of D (returned in workspace) and 
+*  ZSYCONV converts A given by ZHETRF into L and D or vice-versa.
+*  Get nondiagonal elements of D (returned in workspace) and 
 *  apply or reverse permutation done in TRF.
 *
 *  Arguments
@@ -110,13 +110,14 @@
 *
       IF( UPPER ) THEN
 *
-*      A is UPPER
-*
-*      Convert A (A is upper)
-*
-*        Convert VALUE
+*        A is UPPER
 *
          IF ( CONVERT ) THEN
+*
+*           Convert A (A is upper)
+*
+*           Convert VALUE
+*
             I=N
             WORK(1)=ZERO
             DO WHILE ( I .GT. 1 )
@@ -130,39 +131,38 @@
                I=I-1
             END DO
 *
-*        Convert PERMUTATIONS
+*           Convert PERMUTATIONS
 *  
-         I=N
-         DO WHILE ( I .GE. 1 )
-            IF( IPIV(I) .GT. 0) THEN
-               IP=IPIV(I)
-               IF( I .LT. N) THEN
-                  DO 12 J= I+1,N
-                    TEMP=A(IP,J)
-                    A(IP,J)=A(I,J)
-                    A(I,J)=TEMP
- 12            CONTINUE
+            I=N
+            DO WHILE ( I .GE. 1 )
+               IF( IPIV(I) .GT. 0) THEN
+                  IP=IPIV(I)
+                  IF( I .LT. N) THEN
+                     DO 12 J= I+1,N
+                       TEMP=A(IP,J)
+                       A(IP,J)=A(I,J)
+                       A(I,J)=TEMP
+ 12                  CONTINUE
+                  ENDIF
+               ELSE
+                  IP=-IPIV(I)
+                  IF( I .LT. N) THEN
+                     DO 13 J= I+1,N
+                        TEMP=A(IP,J)
+                        A(IP,J)=A(I-1,J)
+                        A(I-1,J)=TEMP
+ 13                  CONTINUE
+                  ENDIF
+                  I=I-1
                ENDIF
-            ELSE
-              IP=-IPIV(I)
-               IF( I .LT. N) THEN
-             DO 13 J= I+1,N
-                 TEMP=A(IP,J)
-                 A(IP,J)=A(I-1,J)
-                 A(I-1,J)=TEMP
- 13            CONTINUE
-                ENDIF
-                I=I-1
-           ENDIF
-           I=I-1
-        END DO
-
+               I=I-1
+            END DO
+*
          ELSE
 *
-*      Revert A (A is upper)
+*           Revert A (A is upper)
 *
-*
-*        Revert PERMUTATIONS
+*           Revert PERMUTATIONS
 *  
             I=1
             DO WHILE ( I .LE. N )
@@ -189,7 +189,7 @@
                I=I+1
             END DO
 *
-*        Revert VALUE
+*           Revert VALUE
 *
             I=N
             DO WHILE ( I .GT. 1 )
@@ -200,16 +200,16 @@
                I=I-1
             END DO
          END IF
+*
       ELSE
 *
-*      A is LOWER
+*        A is LOWER
 *
          IF ( CONVERT ) THEN
 *
-*      Convert A (A is lower)
+*           Convert A (A is lower)
 *
-*
-*        Convert VALUE
+*           Convert VALUE
 *
             I=1
             WORK(N)=ZERO
@@ -224,38 +224,38 @@
                I=I+1
             END DO
 *
-*        Convert PERMUTATIONS
+*           Convert PERMUTATIONS
 *
-         I=1
-         DO WHILE ( I .LE. N )
-            IF( IPIV(I) .GT. 0 ) THEN
-               IP=IPIV(I)
-               IF (I .GT. 1) THEN
-               DO 22 J= 1,I-1
-                 TEMP=A(IP,J)
-                 A(IP,J)=A(I,J)
-                 A(I,J)=TEMP
- 22            CONTINUE
+            I=1
+            DO WHILE ( I .LE. N )
+               IF( IPIV(I) .GT. 0 ) THEN
+                  IP=IPIV(I)
+                  IF (I .GT. 1) THEN
+                     DO 22 J= 1,I-1
+                        TEMP=A(IP,J)
+                        A(IP,J)=A(I,J)
+                        A(I,J)=TEMP
+ 22                  CONTINUE
+                  ENDIF
+               ELSE
+                  IP=-IPIV(I)
+                  IF (I .GT. 1) THEN
+                     DO 23 J= 1,I-1
+                        TEMP=A(IP,J)
+                        A(IP,J)=A(I+1,J)
+                        A(I+1,J)=TEMP
+ 23                  CONTINUE
+                  ENDIF
+                  I=I+1
                ENDIF
-            ELSE
-              IP=-IPIV(I)
-              IF (I .GT. 1) THEN
-              DO 23 J= 1,I-1
-                 TEMP=A(IP,J)
-                 A(IP,J)=A(I+1,J)
-                 A(I+1,J)=TEMP
- 23           CONTINUE
-              ENDIF
-              I=I+1
-           ENDIF
-           I=I+1
-        END DO
+               I=I+1
+            END DO
+*
          ELSE
 *
-*      Revert A (A is lower)
+*           Revert A (A is lower)
 *
-*
-*        Revert PERMUTATIONS
+*           Revert PERMUTATIONS
 *
             I=N
             DO WHILE ( I .GE. 1 )
@@ -282,7 +282,7 @@
                I=I-1
             END DO
 *
-*        Revert VALUE
+*           Revert VALUE
 *
             I=1
             DO WHILE ( I .LE. N-1 )
@@ -294,7 +294,7 @@
             END DO
          END IF
       END IF
-
+*
       RETURN
 *
 *     End of ZSYCONV
