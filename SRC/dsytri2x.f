@@ -85,7 +85,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYSCONV, XERBLA, DTRTRI
+      EXTERNAL           DSYCONV, XERBLA, DTRTRI
       EXTERNAL           DGEMM, DTRMM, DSYSWAPR
 *     ..
 *     .. Intrinsic Functions ..

@@ -86,7 +86,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZSYSCONV, XERBLA, ZTRTRI
+      EXTERNAL           ZSYCONV, XERBLA, ZTRTRI
       EXTERNAL           ZGEMM, ZTRMM, ZSYSWAPR
 *     ..
 *     .. Intrinsic Functions ..

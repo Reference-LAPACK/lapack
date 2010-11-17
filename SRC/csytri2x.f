@@ -86,7 +86,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSYSCONV, XERBLA, CTRTRI
+      EXTERNAL           CSYCONV, XERBLA, CTRTRI
       EXTERNAL           CGEMM, CTRMM, CSYSWAPR
 *     ..
 *     .. Intrinsic Functions ..

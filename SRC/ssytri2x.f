@@ -85,7 +85,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSYSCONV, XERBLA, STRTRI
+      EXTERNAL           SSYCONV, XERBLA, STRTRI
       EXTERNAL           SGEMM, STRMM, SSYSWAPR
 *     ..
 *     .. Intrinsic Functions ..
