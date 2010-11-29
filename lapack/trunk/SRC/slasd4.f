@@ -95,7 +95,7 @@
 *
 *     .. Parameters ..
       INTEGER            MAXIT
-      PARAMETER          ( MAXIT = 200 )
+      PARAMETER          ( MAXIT = 64 )
       REAL               ZERO, ONE, TWO, THREE, FOUR, EIGHT, TEN
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0, TWO = 2.0E+0,
      $                   THREE = 3.0E+0, FOUR = 4.0E+0, EIGHT = 8.0E+0,
