@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 project(LAPACK Fortran)
+
+# Add the CMake directory for custon CMake modules
+set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
+
 if (UNIX)
    if ( "${CMAKE_Fortran_COMPILER}" MATCHES "ifort" )
   set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
@@ -42,7 +46,16 @@ set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
 # --------------------------------------------------
 # Subdirectories that need to be processed
 
-add_subdirectory(BLAS)
+option(USE_SYSTEM_BLAS "Whether or not to use an external BLAS library or the
+included netlib BLAS" OFF)
+if( USE_SYSTEM_BLAS )
+  find_package( BLAS )
+endif(USE_SYSTEM_BLAS)
+if(NOT BLAS_FOUND)
+  add_subdirectory(BLAS)
+  set( BLAS_LIBRARIES blas )
+endif( NOT BLAS_FOUND )
+
 add_subdirectory(SRC)
 add_subdirectory(TESTING)
 
@@ -81,7 +94,11 @@ INCLUDE(CPack)
 OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF )
 #OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
 
-export(TARGETS blas lapack FILE lapack-targets.cmake)
+if( NOT BLAS_FOUND )
+  export(TARGETS blas lapack FILE lapack-targets.cmake)
+else( NOT BLAS_FOUND )
+  export(TARGETS lapack FILE lapack-targets.cmake)
+endif( NOT BLAS_FOUND )
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config.cmake.in
