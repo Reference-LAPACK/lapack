@@ -174,7 +174,7 @@ endmacro()
 
 # Loop through the BLAS vendors looking for specific libraries
 if( NOT BLAS_VENDORS )
-  set( BLAS_VENDORS AMD AMD_MP APPLE ATLAS GOTO HP HP_INT64 IBM INTEL32 INTEL64 INTEL64_INT64 NETLIB SGI SUN)
+  set( BLAS_VENDORS AMD AMD_MP ACCELERATE ATLAS GOTO VECLIB VECLIB8 IBM INTEL32 INTEL64 INTEL64_INT64 PRE-INSTALLED SGI SUN)
 endif()
 set( BLAS_VENDORS_FOUND )
 foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
@@ -202,7 +202,7 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml_mp" "" )
   
   # Apple Accelerate 
-  elseif( _BLAS_VENDOR STREQUAL "APPLE" )
+  elseif( _BLAS_VENDOR STREQUAL "ACCELERATE" )
     message( STATUS "FindBLAS: Searching for Apple Accelerate" )
     _BLAS_LOCATE_AND_TEST( 
       ${_BLAS_VENDOR} "Accelerate" "-framework Accelerate" 
@@ -218,14 +218,14 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
     message( STATUS "FindBLAS: Searching for GotoBLAS2" )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "goto2" "" )
   
-  # HP VECLIB
-  elseif( _BLAS_VENDOR STREQUAL "HP" )
-    message( STATUS "FindBLAS: Searching for HP VECLIB" )
+  # VECLIB
+  elseif( _BLAS_VENDOR STREQUAL "VECLIB" )
+    message( STATUS "FindBLAS: Searching for VECLIB" )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "veclib" "" )
   
-  # HP VECLIB8
-  elseif( _BLAS_VENDOR STREQUAL "HP_INT64" )
-    message( STATUS "FindBLAS: Searching for HP VECLIB8" )
+  # VECLIB8
+  elseif( _BLAS_VENDOR STREQUAL "VECLIB8" )
+    message( STATUS "FindBLAS: Searching for VECLIB8" )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "veclib8" "" )
   
   # IBM ESSL
@@ -289,9 +289,9 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
       )
     endif()
   
-  # Netlib reference
-  elseif( _BLAS_VENDOR STREQUAL "NETLIB" )
-    message( STATUS "FindBLAS: Searching for Netlib BLAS" )
+  # Pre-installed BLAS
+  elseif( _BLAS_VENDOR STREQUAL "PRE-INSTALLED" )
+    message( STATUS "FindBLAS: Searching for pre-installed BLAS" )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "blas" "" )
   
   # SGI
@@ -321,7 +321,7 @@ if( _BLAS_VENDORS_FOUND_LENGTH EQUAL 0 )
 endif()
 list( GET BLAS_VENDORS_FOUND 0 BLAS_VENDOR_FOUND )
 message( STATUS "FindBLAS: BLAS Vendor selected - ${BLAS_VENDOR_FOUND}" )
-set( BLAS_LIBRARIES ${BLAS_${BLAS_VENDOR_FOUND}_LIBRARIES} )
-set( BLAS_LINKER_FLAGS ${BLAS_${BLAS_VENDOR_FOUND}_LINKER_FLAGS} )
-set( BLAS_FOUND TRUE )
+set( BLAS_LIBRARIES ${BLAS_${BLAS_VENDOR_FOUND}_LIBRARIES} CACHE PATH "")
+set( BLAS_LINKER_FLAGS ${BLAS_${BLAS_VENDOR_FOUND}_LINKER_FLAGS} CACHE PATH "" )
+set( BLAS_FOUND TRUE CACHE OPTION "")
 
