@@ -146,10 +146,11 @@ macro( _BLAS_LOCATE_AND_TEST __BLAS_VENDOR __BLAS_LIBNAMES __BLAS_FLAGS )
     set( BLAS_${__BLAS_VENDOR}_LINKER_FLAGS "${__BLAS_FLAGS}" )
     if( _CHECK_FORTRAN )
       set( CMAKE_REQUIRED_LIBRARIES ${BLAS_${__BLAS_VENDOR}_LIBRARIES} )
-      set( CMAKE_REQUIRED_FLAGS "${BLAS_${__BLAS_VENDOR}_LINKER_FLAGS}" )
+      set( CMAKE_Fortran_FLAGS_ORIG "${CMAKE_Fortran_FLAGS}" )
+      set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${BLAS_${__BLAS_VENDOR}_LINKER_FLAGS}" )
       CHECK_FORTRAN_FUNCTION_EXISTS( "dgemm" BLAS_${__BLAS_VENDOR}_DGEMM )
+      set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS_ORIG}" )
       unset( CMAKE_REQUIRED_LIBRARIES )
-      unset( CMAKE_REQUIRED_FLAGS )
 
     # Check the library as C
     #else()
@@ -251,7 +252,7 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
       )
     else() #if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
       _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "gomp;mkl_core;mkl_gnu_thread;mkl_intel_ia32" "" 
+        ${_BLAS_VENDOR} "mkl_core;mkl_gnu_thread;mkl_intel_ia32" "-fopenmp" 
       )
     endif()
   
@@ -268,7 +269,7 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
       )
     else() #if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
       _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "gomp;mkl_core;mkl_gnu_thread;mkl_intel_lp64" "" 
+        ${_BLAS_VENDOR} "mkl_core;mkl_gnu_thread;mkl_intel_lp64" "-fopenmp" 
       )
     endif()
   
@@ -285,7 +286,7 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
       )
     else() #if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
       _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "gomp;mkl_core;mkl_gnu_thread;mkl_intel_ilp64" "" 
+        ${_BLAS_VENDOR} "mkl_core;mkl_gnu_thread;mkl_intel_ilp64" "-fopenmp" 
       )
     endif()
   
@@ -320,7 +321,7 @@ if( _BLAS_VENDORS_FOUND_LENGTH EQUAL 0 )
   return()
 endif()
 list( GET BLAS_VENDORS_FOUND 0 BLAS_VENDOR_FOUND )
-message( STATUS "FindBLAS: BLAS Vendor selected - ${BLAS_VENDOR_FOUND}" )
+message( STATUS "FindBLAS: BLAS vendor selected: ${BLAS_VENDOR_FOUND}" )
 set( BLAS_LIBRARIES ${BLAS_${BLAS_VENDOR_FOUND}_LIBRARIES} CACHE PATH "")
 set( BLAS_LINKER_FLAGS ${BLAS_${BLAS_VENDOR_FOUND}_LINKER_FLAGS} CACHE PATH "" )
 set( BLAS_FOUND TRUE CACHE OPTION "")

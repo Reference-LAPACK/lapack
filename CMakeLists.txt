@@ -53,6 +53,10 @@ endif(LOOK_FOR_OPTIMZED_BLAS)
 if(NOT BLAS_FOUND)
   add_subdirectory(BLAS)
   set( BLAS_LIBRARIES blas )
+else()
+  set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${BLAS_LINKER_FLAGS}" 
+    CACHE STRING "Flags for Fortran compiler" FORCE
+  )
 endif( NOT BLAS_FOUND )
 
 
