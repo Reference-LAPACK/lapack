@@ -46,15 +46,15 @@ set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
 # --------------------------------------------------
 # Subdirectories that need to be processed
 
-option(USE_SYSTEM_BLAS "Whether or not to use an external BLAS library or the
-included netlib BLAS" OFF)
-if( USE_SYSTEM_BLAS )
+option(LOOK_FOR_OPTIMZED_BLAS "Whether or not to use an optimized BLAS library or the included netlib BLAS" OFF)
+if( LOOK_FOR_OPTIMZED_BLAS )
   find_package( BLAS )
-endif(USE_SYSTEM_BLAS)
+endif(LOOK_FOR_OPTIMZED_BLAS)
 if(NOT BLAS_FOUND)
   add_subdirectory(BLAS)
   set( BLAS_LIBRARIES blas )
 endif( NOT BLAS_FOUND )
+
 
 add_subdirectory(SRC)
 add_subdirectory(TESTING)
