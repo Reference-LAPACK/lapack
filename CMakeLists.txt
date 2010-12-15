@@ -12,8 +12,8 @@ endif ()
 
 macro(lapack_install_library lib)
   install(TARGETS ${lib} EXPORT lapack-targets
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib${LIB_SUFFIX}
+    LIBRARY DESTINATION lib${LIB_SUFFIX}
     RUNTIME DESTINATION bin
     )
 endmacro()
@@ -42,26 +42,48 @@ message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as 
 
 set(SECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
 set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
+set(prefix ${CMAKE_INSTALL_PREFIX})
+set(libdir ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 
 # --------------------------------------------------
 # Subdirectories that need to be processed
 
 option(LOOK_FOR_OPTIMZED_BLAS "Whether or not to use an optimized BLAS library or the included netlib BLAS" OFF)
-if( LOOK_FOR_OPTIMZED_BLAS )
-  find_package( BLAS )
-endif(LOOK_FOR_OPTIMZED_BLAS)
+if (BLAS_LIBRAIRIES)
+     # User provided a BLAS Library
+     include(CheckFortranFunctionExists)
+     set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRAIRIES})
+     CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
+     unset( CMAKE_REQUIRED_LIBRARIES )
+     if (BLAS_FOUND)
+        message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRAIRIES}.")
+     else(BLAS_FOUND)
+        message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRAIRIES}.")
+        message(ERROR "-->     Will use REFERENCE BLAS (by default)")
+        message(ERROR "-->     Or Correct your BLAS_LIBRAIRIES entry ")
+        message(ERROR "-->     Or Consider checking LOOK_FOR_OPTIMZED_BLAS")
+     endif(BLAS_FOUND)
+else (BLAS_LIBRAIRIES)
+     # User did not provide a BLAS Library
+   if( LOOK_FOR_OPTIMZED_BLAS )
+       find_package( BLAS )
+   endif(LOOK_FOR_OPTIMZED_BLAS)
+endif (BLAS_LIBRAIRIES)
+
 if(NOT BLAS_FOUND)
-  add_subdirectory(BLAS)
-  set( BLAS_LIBRARIES blas )
+      add_subdirectory(BLAS)
+      set( BLAS_LIBRARIES blas )
 else()
   set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${BLAS_LINKER_FLAGS}" 
     CACHE STRING "Flags for Fortran compiler" FORCE
   )
 endif( NOT BLAS_FOUND )
-
-
+   
 add_subdirectory(SRC)
-add_subdirectory(TESTING)
+if(BUILD_TESTING)
+  add_subdirectory(TESTING)
+endif(BUILD_TESTING)
 
 # --------------------------------------------------
 # CPACK Packaging 
@@ -96,6 +118,7 @@ INCLUDE(CPack)
 # --------------------------------------------------
 # By default static library
 OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF )
+OPTION(BUILD_STATIC_LIBS "Build static libraries" ON )
 #OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
 
 if( NOT BLAS_FOUND )
@@ -105,8 +128,12 @@ else( NOT BLAS_FOUND )
 endif( NOT BLAS_FOUND )
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
-configure_file(${LAPACK_SOURCE_DIR}/lapack-config.cmake.in
-  ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc)
+ install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc
+  DESTINATION ${PKG_CONFIG_DIR}
+   )
 
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config-install.cmake.in
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
@@ -115,5 +142,6 @@ install(FILES
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
   DESTINATION lib/cmake/lapack-${LAPACK_VERSION}
   )
-install(EXPORT lapack-targets
-  DESTINATION lib/cmake/lapack-${LAPACK_VERSION})
+
+configure_file(${LAPACK_SOURCE_DIR}/lapack-config-install.cmake.in
+  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
