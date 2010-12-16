@@ -15,7 +15,7 @@ macro(lapack_install_library lib)
     ARCHIVE DESTINATION lib${LIB_SUFFIX}
     LIBRARY DESTINATION lib${LIB_SUFFIX}
     RUNTIME DESTINATION bin
-    )
+  )
 endmacro()
 
 # --------------------------------------------------
@@ -49,35 +49,42 @@ set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 # --------------------------------------------------
 # Subdirectories that need to be processed
 
-option(LOOK_FOR_OPTIMZED_BLAS "Whether or not to use an optimized BLAS library or the included netlib BLAS" OFF)
-if (BLAS_LIBRAIRIES)
-     # User provided a BLAS Library
-     include(CheckFortranFunctionExists)
-     set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRAIRIES})
-     CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
-     unset( CMAKE_REQUIRED_LIBRARIES )
-     if (BLAS_FOUND)
-        message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRAIRIES}.")
-     else(BLAS_FOUND)
-        message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRAIRIES}.")
-        message(ERROR "-->     Will use REFERENCE BLAS (by default)")
-        message(ERROR "-->     Or Correct your BLAS_LIBRAIRIES entry ")
-        message(ERROR "-->     Or Consider checking LOOK_FOR_OPTIMZED_BLAS")
-     endif(BLAS_FOUND)
-else (BLAS_LIBRAIRIES)
-     # User did not provide a BLAS Library
-   if( LOOK_FOR_OPTIMZED_BLAS )
-       find_package( BLAS )
-   endif(LOOK_FOR_OPTIMZED_BLAS)
+option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library instead of included netlib BLAS" OFF)
+
+# Check the usage of the user provided BLAS libraries
+if(BLAS_LIBRAIRIES)
+  include(CheckFortranFunctionExists)
+  set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRAIRIES})
+  CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
+  unset( CMAKE_REQUIRED_LIBRARIES )
+  if(BLAS_FOUND)
+    message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRAIRIES}.")
+  else(BLAS_FOUND)
+    message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRAIRIES}.")
+    message(ERROR "-->     Will use REFERENCE BLAS (by default)")
+    message(ERROR "-->     Or Correct your BLAS_LIBRAIRIES entry ")
+    message(ERROR "-->     Or Consider checking USE_OPTIMIZED_BLAS")
+  endif(BLAS_FOUND)
+
+# User did not provide a BLAS Library but specified to search for one
+elseif( USE_OPTIMIZED_BLAS )
+  find_package( BLAS )
 endif (BLAS_LIBRAIRIES)
 
+# Neither user specified or optimized BLAS libraries can be used
 if(NOT BLAS_FOUND)
-      add_subdirectory(BLAS)
-      set( BLAS_LIBRARIES blas )
+  add_subdirectory(BLAS)
+  set( BLAS_LIBRARIES blas )
 else()
-  set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${BLAS_LINKER_FLAGS}" 
-    CACHE STRING "Flags for Fortran compiler" FORCE
-  )
+  set( CMAKE_EXE_LINKER_FLAGS 
+    "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}" 
+    CACHE STRING "Linker flags for executables" FORCE)
+  set( CMAKE_MODULE_LINKER_FLAGS 
+    "${CMAKE_MODULE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}" 
+    CACHE STRING "Linker flags for modules" FORCE)
+  set( CMAKE_SHARED_LINKER_FLAGS 
+    "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}" 
+    CACHE STRING "Linker flags for shared libs" FORCE)
 endif( NOT BLAS_FOUND )
    
 add_subdirectory(SRC)
