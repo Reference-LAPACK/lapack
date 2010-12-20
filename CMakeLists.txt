@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 2.6)
 project(LAPACK Fortran)
 
+# Configure the warning and code coverage suppression file
+configure_file( 
+  "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
+  "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
+  COPYONLY
+)
+
 # Add the CMake directory for custon CMake modules
 set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
