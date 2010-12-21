@@ -45,6 +45,7 @@
 #   MKL_ILP64 - Intel Math Kernel Library (emt64/ia64 + int64)
 #             See http://software.intel.com/en-us/intel-mkl
 #   PERFLIB   - Oracle Performance Library (formerly Sun Performance Library)
+#   SUNPERF   - Oracle Performance Library (formerly Sun Performance Library)
 #             See http://www.oracle.com/technetwork/server-storage/solarisstudio
 #   SCCL      - SGI's Scientific Computing Software Library
 #             See http://www.sgi.com/products/software/irix/scsl.html
@@ -143,7 +144,7 @@ macro( _BLAS_LOCATE_AND_TEST __BLAS_VENDOR __BLAS_LIBNAMES __BLAS_FLAGS )
     )
   endforeach()
 
-  if( BLAS_${__BLAS_VENDOR}_LIBRARIES OR __BLAS_LIBNAMES STREQUAL "" )
+  if( BLAS_${__BLAS_VENDOR}_LIBRARIES OR ("${__BLAS_LIBNAMES}" STREQUAL "") )
 
     # Check the library as Fortran
     set( BLAS_${__BLAS_VENDOR}_LINKER_FLAGS "${__BLAS_FLAGS}" )
@@ -264,7 +265,7 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
       )
     endif()
   
-    # Intel MKL (emt64 / ia64)
+  # Intel MKL (emt64 / ia64)
   elseif( _BLAS_VENDOR STREQUAL "MKL_LP64" )
     message( STATUS "FindBLAS: Searching for Intel MKL (emt64/ia64)" )
     if( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
@@ -313,9 +314,10 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "sccl" "" )
   
   # Sun / Oracle PerfLib
-  elseif( (_BLAS_VENDOR STREQUAL "PERFLIB") )
+  elseif( (_BLAS_VENDOR STREQUAL "PERFLIB") OR 
+          (_BLAS_VENDOR STREQUAL "SUNPERF") )
     message( STATUS "FindBLAS: Searching for Sun PerfLib" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "perflib" "" )
+    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "" "-xlic_lib=sunperf" )
   
   else()
   endif()
