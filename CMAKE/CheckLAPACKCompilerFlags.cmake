@@ -3,6 +3,18 @@
 # 
 #  1.  If FPE traps are enabled either abort or disable them
 #  2.  Specify fixed form if needed
+#
+#=============================================================================
+# Author: Chuck Atkins
+# Copyright 2010 Kitware, Inc.
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
 
 macro( CheckLAPACKCompilerFlags )
 
@@ -33,7 +45,8 @@ elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "SunPro" )
   endif()
 
 # IBM XL Fortran
-elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" )
+elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
+        (CMAKE_Fortran_COMPILER_ID STREQUAL "XL" ) )          # CMake 2.8
   if( "${CMAKE_Fortran_FLAGS}" MATCHES "-qflttrap=[a-zA-Z:]:enable" )
     set( FPE_EXIT TRUE )
   endif()

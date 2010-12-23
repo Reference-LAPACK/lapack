@@ -33,9 +33,9 @@
 #   VECLIB8   - HP's Math Library: VECLIB8 (64 bit integers)
 #             See http://www.hp.com/go/mlib
 #   ESSL      - IBM's Engineering and Scientific Subroutine Library
-#   ESSL_6464 - IBM's Engineering and Scientific Subroutine Library (int64)
-#   ESSL_SMP  - IBM's Engineering and Scientific Subroutine Library (smp)
-#   ESSL_SMP_6464 - (smp + int64)
+#   ESSL6464  - IBM's Engineering and Scientific Subroutine Library (int64)
+#   ESSLSMP   - IBM's Engineering and Scientific Subroutine Library (smp)
+#   ESSLSMP6464 - (smp + int64)
 #             See http://www-03.ibm.com/systems/software/essl/
 #   MKL       - Intel Math Kernel Library (dynamic interface)
 #             Use MKL_THREADING_LAYER and MKL_INTERFACE_LAYER environment vars
@@ -224,20 +224,20 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
   # IBM ESSL
   elseif( _BLAS_VENDOR STREQUAL "ESSL" )
     message( STATUS "FindBLAS: Searching for IBM ESSL" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "essl" "" )
+    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "essl;blas" "" )
   
   # IBM ESSL (SMP Version)
-  elseif( _BLAS_VENDOR STREQUAL "ESSL_SMP" )
+  elseif( _BLAS_VENDOR STREQUAL "ESSLSMP" )
     message( STATUS "FindBLAS: Searching for IBM ESSL (SMP)" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "esslsmp" "" )
+    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "esslsmp;blas" "" )
   
   # IBM ESSL int64
-  elseif( _BLAS_VENDOR STREQUAL "ESSL_6464" )
+  elseif( _BLAS_VENDOR STREQUAL "ESSL6464" )
     message( STATUS "FindBLAS: Searching for IBM ESSL (int64)" )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "essl6464" "" )
   
   # IBM ESSL (SMP + int64)
-  elseif( _BLAS_VENDOR STREQUAL "ESSL_SMP_6464" )
+  elseif( _BLAS_VENDOR STREQUAL "ESSLSMP6464" )
     message( STATUS "FindBLAS: Searching for IBM ESSL (SMP + int64)" )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "esslsmp6464" "" )
   
