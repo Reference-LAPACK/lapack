@@ -36,6 +36,11 @@ enable_testing()
 set(CMAKE_MODULE_PATH ${LAPACK_SOURCE_DIR} ${CMAKE_MODULE_PATH})
 
 # --------------------------------------------------
+# Check for any necessary platform specific compiler flags
+include( CheckLAPACKCompilerFlags )
+CheckLAPACKCompilerFlags()
+
+# --------------------------------------------------
 # Check second function
 
 include(CheckTimeFunction)
