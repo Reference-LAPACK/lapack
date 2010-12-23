@@ -38,8 +38,8 @@ elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" )
     set( FPE_EXIT TRUE )
   endif()
 
-  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-ffixed-form") )
-    set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffixed_form"
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-qfixed") )
+    set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qfixed"
          CACHE STRING "Flags for Fortran compiler." FORCE )
   endif()
 
