@@ -36,11 +36,11 @@ elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
 # SunPro F95
 elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "SunPro" )
   if( ("${CMAKE_Fortran_FLAGS}" MATCHES "-ftrap=") AND
-          NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-ftrap=none") )
+      NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-ftrap=%none") )
     set( FPE_EXIT TRUE )
   elseif( NOT (CMAKE_Fortran_FLAGS MATCHES "-ftrap=") )
-    message( STATUS "Disabling FPE trap handlers with -ftrap=none" )
-    set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ftrap=none"
+    message( STATUS "Disabling FPE trap handlers with -ftrap=%none" )
+    set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ftrap=%none"
          CACHE STRING "Flags for Fortran compiler." FORCE )
   endif()
 
