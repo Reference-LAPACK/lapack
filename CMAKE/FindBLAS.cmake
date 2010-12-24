@@ -47,7 +47,7 @@
 #   PERFLIB   - Oracle Performance Library (formerly Sun Performance Library)
 #   SUNPERF   - Oracle Performance Library (formerly Sun Performance Library)
 #             See http://www.oracle.com/technetwork/server-storage/solarisstudio
-#   SCCL      - SGI's Scientific Computing Software Library
+#   SCSL      - SGI's Scientific Computing Software Library
 #             See http://www.sgi.com/products/software/irix/scsl.html
 #
 #   OTHER     - Any other unsupported BLAS library
@@ -167,7 +167,7 @@ if( NOT BLAS_VENDORS )
   # If not specified, we will search through the list of known suppliers
   # Note that for libs that contains both 4 and 8 byte int versions, only the
   # 4 byte versions are searched for.
-  set( BLAS_VENDORS ACML ACCELERATE ATLAS GOTO VECLIB ESSL MKL PERFLIB SCCL GENERIC)
+  set( BLAS_VENDORS ACML ACCELERATE ATLAS GOTO VECLIB ESSL MKL PERFLIB SCSL GENERIC)
 endif()
 set( BLAS_VENDORS_FOUND )
 foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
@@ -309,9 +309,9 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "blas" "" )
   
   # SGI
-  elseif( _BLAS_VENDOR STREQUAL "SCCL" )
-    message( STATUS "FindBLAS: Searching for SGI SCCL" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "sccl" "" )
+  elseif( _BLAS_VENDOR STREQUAL "SCSL" )
+    message( STATUS "FindBLAS: Searching for SGI SCSL" )
+    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "scsl" "" )
   
   # Sun / Oracle PerfLib
   elseif( (_BLAS_VENDOR STREQUAL "PERFLIB") OR 
