@@ -24,6 +24,13 @@ message("ARGS= ${ARGS}")
 execute_process(COMMAND "${TEST}" 
   ${ARGS}
   RESULT_VARIABLE RET)
+if(DEFINED OUTPUT)
+  file(READ "${OUTPUT}" TEST_OUTPUT)
+  file(READ "${OUTPUT}.err" TEST_ERROR)
+  message("Test OUTPUT:\n${TEST_OUTPUT}")
+  message("Test ERROR:\n${TEST_ERROR}")
+endif()
+
 # if the test does not return 0, then fail it
 if(NOT ${RET} EQUAL 0)
   message(FATAL_ERROR "Test ${TEST} returned ${RET}")
