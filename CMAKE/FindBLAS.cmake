@@ -18,7 +18,7 @@
 #  BLAS_${VENDOR}_LIB_DIRS - An additional library dir to search for:
 #                            Ex: 
 #                            BLAS_ACML_LIB_DIRS=/opt/acml4.4.0/gfortran64/lib
-#                            BLAS_MKL_LP64_LIB_DIRS=/opt/intel/mkl/lib/intel64
+#                            BLAS_MKL_LIB_DIRS=/opt/intel/mkl/lib/intel64
 ##########
 #
 # Valid values for the BLAS_VENDOR setting are:
@@ -250,7 +250,7 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
     if( _BLAS_VENDOR STREQUAL "ACML_MP" )
       message( STATUS "FindBLAS: Searching for AMD ACML MP" )
       foreach( BLAS_ACML_MP_LIB_DIRS ${_ACML_MP_LIB_DIRS} )
-        _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml_mp" "" )
+        _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml_mp;acml_mv" "" )
         if( BLAS_${_BLAS_VENDOR}_FOUND )
           break()
         endif()
@@ -258,7 +258,7 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
     else() #if( _BLAS_VENDOR STREQUAL "ACML" )
       message( STATUS "FindBLAS: Searching for AMD ACML" )
       foreach( BLAS_ACML_LIB_DIRS ${_ACML_LIB_DIRS} )
-        _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml" "" )
+        _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml;acml_mv" "" )
         if( BLAS_${_BLAS_VENDOR}_FOUND )
           break()
         endif()
