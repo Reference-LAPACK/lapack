@@ -6,14 +6,7 @@
 #
 #=============================================================================
 # Author: Chuck Atkins
-# Copyright 2010 Kitware, Inc.
-#
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
-#
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
+# Copyright 2010
 #=============================================================================
 
 macro( CheckLAPACKCompilerFlags )
@@ -28,15 +21,14 @@ if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
 
 # Intel Fortran
 elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
-  if( ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]fpe0") OR
-      ("${CMAKE_Fortran_FLAGS}" MATCHES "[-/]fpe-all=0") )
+  if( "${CMAKE_Fortran_FLAGS}" MATCHES "[-/]fpe(-all=|)0" )
     set( FPE_EXIT TRUE )
   endif()
 
 # SunPro F95
 elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "SunPro" )
   if( ("${CMAKE_Fortran_FLAGS}" MATCHES "-ftrap=") AND
-      NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-ftrap=%none") )
+      NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-ftrap=(%|)none") )
     set( FPE_EXIT TRUE )
   elseif( NOT (CMAKE_Fortran_FLAGS MATCHES "-ftrap=") )
     message( STATUS "Disabling FPE trap handlers with -ftrap=%none" )
@@ -52,6 +44,7 @@ elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
   endif()
 
   if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-qfixed") )
+    message( STATUS "Enabling fixed format F90/F95 with -qfixed" )
     set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qfixed"
          CACHE STRING "Flags for Fortran compiler." FORCE )
   endif()

@@ -13,40 +13,45 @@
 #  BLAS_VENDORS           - A list of specific vendors implemented BLAS to check
 #                           for, if not set, checks all known vendors.
 #  BLAS_VENDORS_FOUND     - A list of located BLAS vendors
-#  BLAS_${VENDOR}_LIB_DIR - An additional library dir to search for:
-#                           Ex: BLAS_ACML_LIB_DIR=/opt/acml4.4.0/gfortran64/lib
-#                               BLAS_MKL_LP64_LIB_DIR=/opt/intel/mkl/lib/intel64
+#
+# Also, if set, will use these to guide it's library search:
+#  BLAS_${VENDOR}_LIB_DIRS - An additional library dir to search for:
+#                            Ex: 
+#                            BLAS_ACML_LIB_DIRS=/opt/acml4.4.0/gfortran64/lib
+#                            BLAS_MKL_LP64_LIB_DIRS=/opt/intel/mkl/lib/intel64
 ##########
 #
 # Valid values for the BLAS_VENDOR setting are:
 #   ACML      - Single threaded version of the AMD Core Math Library
 #   ACML_MP   - Multithreaded version of the AMD Core Math Library using OpenMP
 #             See http://developer.amd.com/cpu/Libraries/acml
+#
 #   ACCELERATE - Apple's Accelerate library
 #              See http://developer.apple.com/performance/accelerateframework
+#
 #   ATLAS      - Automatically Tuned Linear Algebra Software
 #             See http://math-atlas.sourceforge.net/
+#
 #   GOTO      - Goto BLAS v2
 #             See http://www.tacc.utexas.edu/tacc-projects/gotoblas2
-#   GENERIC   - Search for a generic libblas
-#   VECLIB    - HP's Math Library: VECLIB
-#   VECLIB8   - HP's Math Library: VECLIB8 (64 bit integers)
-#             See http://www.hp.com/go/mlib
-#   ESSL      - IBM's Engineering and Scientific Subroutine Library
-#   ESSL6464  - IBM's Engineering and Scientific Subroutine Library (int64)
-#   ESSLSMP   - IBM's Engineering and Scientific Subroutine Library (smp)
-#   ESSLSMP6464 - (smp + int64)
-#             See http://www-03.ibm.com/systems/software/essl/
-#   MKL       - Intel Math Kernel Library (dynamic interface)
-#             Use MKL_THREADING_LAYER and MKL_INTERFACE_LAYER environment vars
 #
-#   MKL_IA32  - Intel Math Kernel Library x86
-#   MKL_LP64  - Intel Math Kernel Library emt64/ia64
-#   MKL_ILP64 - Intel Math Kernel Library (emt64/ia64 + int64)
+#   GENERIC   - Search for a generic libblas
+#
+#   VECLIB    - HP's Math Library: VECLIB
+#
+#   ESSL      - IBM's Engineering and Scientific Subroutine Library
+#   ESSLSMP   - IBM's Engineering and Scientific Subroutine Library (smp)
+#             See http://www-03.ibm.com/systems/software/essl/
+#
+#   MKL_RT    - Intel Math Kernel Library (dynamic runtime interface)
+#   MKL_SEQ   - Intel Math Kernel Library (sequential interface)
+#   MKL       - Intel Math Kernel Library (multi-threaded interface)
 #             See http://software.intel.com/en-us/intel-mkl
+#
 #   PERFLIB   - Oracle Performance Library (formerly Sun Performance Library)
 #   SUNPERF   - Oracle Performance Library (formerly Sun Performance Library)
 #             See http://www.oracle.com/technetwork/server-storage/solarisstudio
+#
 #   SCSL      - SGI's Scientific Computing Software Library
 #             See http://www.sgi.com/products/software/irix/scsl.html
 #
@@ -58,19 +63,12 @@
 #             Ex:
 #             set(BLAS_VENDORS OTHER)
 #             set(BLAS_OTHER_LIB_NAMES "my_blas;my_blas_support")
-#             set(BLAS_OTHER_LIB_DIR /home/chuck/lib)
+#             set(BLAS_OTHER_LIB_DIRS /home/chuck/lib)
 #             find_package(BLAS)
 #
 #=============================================================================
 # Author: Chuck Atkins
-# Copyright 2010 Kitware, Inc.
-#
-# Distributed under the OSI-approved BSD License (the "License");
-# see accompanying file Copyright.txt for details.
-#
-# This software is distributed WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the License for more information.
+# Copyright 2010
 #=============================================================================
 #
 
@@ -81,6 +79,7 @@ endif()
 
 include( CheckFortranFunctionExists )
 include( CheckLibraryExists )
+include( CheckFortranIntSize )
 
 # Check the language being used
 get_property( _LANGUAGES_ GLOBAL PROPERTY ENABLED_LANGUAGES )
@@ -124,6 +123,13 @@ else()
   string( REPLACE ":" ";" _BLAS_EXTRA_LIB_DIRS "$ENV{LD_LIBRARY_PATH}" )
 endif()
 
+# Determine the default integer size
+CHECK_FORTRAN_INT_SIZE()
+if( NOT SIZEOF_INTEGER )
+  message( WARNING "Unable to determine default integer size.  Assuming integer*4" )
+  set( SIZEOF_INTEGER 4 )
+endif()
+
 # Macro to locate a library and check for a specified symbol
 macro( _BLAS_LOCATE_AND_TEST __BLAS_VENDOR __BLAS_LIBNAMES __BLAS_FLAGS )
   set( BLAS_${__BLAS_VENDOR}_LIBRARIES )
@@ -131,7 +137,7 @@ macro( _BLAS_LOCATE_AND_TEST __BLAS_VENDOR __BLAS_LIBNAMES __BLAS_FLAGS )
     message( STATUS "FindBLAS: Searching for ${__BLAS_VENDOR} ${__BLAS_LIBNAME} - " )
     find_library( BLAS_${__BLAS_VENDOR}_${__BLAS_LIBNAME}_LIBRARY
       NAMES ${__BLAS_LIBNAME}
-      PATHS ${BLAS_${__BLAS_VENDOR}_LIB_DIR} ${_BLAS_EXTRA_LIB_DIRS}
+      PATHS ${BLAS_${__BLAS_VENDOR}_LIB_DIRS} ${_BLAS_EXTRA_LIB_DIRS}
     )
     message( STATUS "FindBLAS: Searching for ${__BLAS_VENDOR} ${__BLAS_LIBNAME} - ${BLAS_${__BLAS_VENDOR}_${__BLAS_LIBNAME}_LIBRARY}" )
     if( NOT BLAS_${__BLAS_VENDOR}_${__BLAS_LIBNAME}_LIBRARY )
@@ -157,7 +163,12 @@ macro( _BLAS_LOCATE_AND_TEST __BLAS_VENDOR __BLAS_LIBNAMES __BLAS_FLAGS )
     unset( CMAKE_REQUIRED_LIBRARIES )
 
     if( BLAS_${__BLAS_VENDOR}_DGEMM )
-      set( BLAS_${__BLAS_VENDOR}_FOUND TRUE )
+      set( BLAS_${__BLAS_VENDOR}_FOUND TRUE CACHE BOOL "Whether not the ${__BLAS_VENDOR} library was found and is usable" )
+    else()
+      unset( BLAS_${__BLAS_VENDOR}_DGEMM CACHE)
+      foreach( __BLAS_LIBNAME ${__BLAS_LIBNAMES} )
+        unset( BLAS_${__BLAS_VENDOR}_${__BLAS_LIBNAME}_LIBRARY CACHE)
+      endforeach()
     endif()
   endif()
 endmacro()
@@ -165,9 +176,7 @@ endmacro()
 # Loop through the BLAS vendors looking for specific libraries
 if( NOT BLAS_VENDORS )
   # If not specified, we will search through the list of known suppliers
-  # Note that for libs that contains both 4 and 8 byte int versions, only the
-  # 4 byte versions are searched for.
-  set( BLAS_VENDORS ACML ACCELERATE ATLAS GOTO VECLIB ESSL MKL PERFLIB SCSL GENERIC)
+  set( BLAS_VENDORS ACML ACCELERATE ATLAS GOTO VECLIB ESSL MKL_RT SUNPERF SCSL GENERIC)
 endif()
 set( BLAS_VENDORS_FOUND )
 foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
@@ -184,22 +193,86 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
       "${BLAS_${_BLAS_VENDOR}_FLAGS}"
     )
   
-  # Single threaded ACML
-  elseif( _BLAS_VENDOR STREQUAL "ACML" )
-    message( STATUS "FindBLAS: Searching for AMD ACML" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml" "" )
-  
-  # Multithreaded threaded ACML
-  elseif( _BLAS_VENDOR STREQUAL "ACML_MP" )
-    message( STATUS "FindBLAS: Searching for AMD ACML MP" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml_mp" "" )
-  
+  # AMD ACML
+  elseif( (_BLAS_VENDOR STREQUAL "ACML") OR (_BLAS_VENDOR STREQUAL "ACML_MP") )
+    if( ((_BLAS_VENDOR STREQUAL "ACML") AND (NOT BLAS_ACML_LIB_DIRS)) OR
+        ((_BLAS_VENDOR STREQUAL "ACML_MP") AND (NOT BLAS_ACML_MP_LIB_DIRS)) ) 
+      if( WIN32 )
+        file( GLOB _ACML_ROOT "C:/AMD/acml*/ACML-EULA.txt" )
+      else()
+        file( GLOB _ACML_ROOT "/opt/acml*/ACML-EULA.txt" )
+      endif()
+      if( _ACML_ROOT )
+        get_filename_component( _ACML_ROOT ${_ACML_ROOT} PATH )
+        if( SIZEOF_INTEGER EQUAL 8 )
+          set( _ACML_PATH_SUFFIX "_int64" )
+        else()
+          set( _ACML_PATH_SUFFIX "" )
+        endif()
+        if( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
+          set( _ACML_COMPILER32 "ifort32" )
+          set( _ACML_COMPILER64 "ifort64" )
+        elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "SunPro" )
+          set( _ACML_COMPILER32 "sun32" )
+          set( _ACML_COMPILER64 "sun64" )
+        elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "PGI" )
+          set( _ACML_COMPILER32 "pgi32" )
+          if( WIN32 )
+            set( _ACML_COMPILER64 "win64" )
+          else()
+            set( _ACML_COMPILER64 "pgi64" )
+          endif()
+        elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "Open64" )
+          # 32 bit builds not supported on Open64 but for code simplicity
+          # We'll just use the same directory twice
+          set( _ACML_COMPILER32 "open64_64" ) 
+          set( _ACML_COMPILER64 "open64_64" ) 
+        elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "NAG" )
+          set( _ACML_COMPILER32 "nag32" )
+          set( _ACML_COMPILER64 "nag64" )
+        else() #if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
+          set( _ACML_COMPILER32 "gfortran32" )
+          set( _ACML_COMPILER64 "gfortran64" )
+        endif()
+
+        if( _BLAS_VENDOR STREQUAL "ACML_MP" )
+          set( _ACML_MP_LIB_DIRS 
+            "${_ACML_ROOT}/${_ACML_COMPILER32}_mp${_ACML_PATH_SUFFIX}/lib"
+            "${_ACML_ROOT}/${_ACML_COMPILER64}_mp${_ACML_PATH_SUFFIX}/lib" )
+        else() #if( _BLAS_VENDOR STREQUAL "ACML" )
+          set( _ACML_LIB_DIRS 
+            "${_ACML_ROOT}/${_ACML_COMPILER32}${_ACML_PATH_SUFFIX}/lib"
+            "${_ACML_ROOT}/${_ACML_COMPILER64}${_ACML_PATH_SUFFIX}/lib" )
+        endif()
+      endif()
+    endif()
+
+    if( _BLAS_VENDOR STREQUAL "ACML_MP" )
+      message( STATUS "FindBLAS: Searching for AMD ACML MP" )
+      foreach( BLAS_ACML_MP_LIB_DIRS ${_ACML_MP_LIB_DIRS} )
+        _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml_mp" "" )
+        if( BLAS_${_BLAS_VENDOR}_FOUND )
+          break()
+        endif()
+      endforeach()
+    else() #if( _BLAS_VENDOR STREQUAL "ACML" )
+      message( STATUS "FindBLAS: Searching for AMD ACML" )
+      foreach( BLAS_ACML_LIB_DIRS ${_ACML_LIB_DIRS} )
+        _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "acml" "" )
+        if( BLAS_${_BLAS_VENDOR}_FOUND )
+          break()
+        endif()
+      endforeach()
+    endif()
+
   # Apple Accelerate 
   elseif( _BLAS_VENDOR STREQUAL "ACCELERATE" )
-    message( STATUS "FindBLAS: Searching for Apple Accelerate" )
-    _BLAS_LOCATE_AND_TEST( 
-      ${_BLAS_VENDOR} "Accelerate" "-framework Accelerate" 
-    )
+    if( APPLE )
+      message( STATUS "FindBLAS: Searching for Apple Accelerate" )
+      _BLAS_LOCATE_AND_TEST( 
+        ${_BLAS_VENDOR} "Accelerate" "-framework Accelerate" 
+      )
+    endif()
   
   # ATLAS
   elseif( _BLAS_VENDOR STREQUAL "ATLAS" )
@@ -213,96 +286,120 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
   
   # VECLIB
   elseif( _BLAS_VENDOR STREQUAL "VECLIB" )
-    message( STATUS "FindBLAS: Searching for VECLIB" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "veclib" "" )
-  
-  # VECLIB8
-  elseif( _BLAS_VENDOR STREQUAL "VECLIB8" )
-    message( STATUS "FindBLAS: Searching for VECLIB8" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "veclib8" "" )
+    if( NOT APPLE ) # Apple veclib is not what we're looking for here
+      if( SIZEOF_INTEGER EQUAL 4 )
+        message( STATUS "FindBLAS: Searching for VECLIB" )
+        _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "veclib" "" )
+      elseif( SIZEOF_INTEGER EQUAL 8 )
+        message( STATUS "FindBLAS: Searching for VECLIB (int64)" )
+        _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "veclib8" "" )
+      endif()
+    endif()
   
   # IBM ESSL
   elseif( _BLAS_VENDOR STREQUAL "ESSL" )
-    message( STATUS "FindBLAS: Searching for IBM ESSL" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "essl;blas" "" )
+    if( SIZEOF_INTEGER EQUAL 4 )
+      message( STATUS "FindBLAS: Searching for IBM ESSL" )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "essl;blas" "" )
+    elseif( SIZEOF_INTEGER EQUAL 8 )
+      message( STATUS "FindBLAS: Searching for IBM ESSL (int64)" )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "essl6464;blas" "" )
+    endif()
   
   # IBM ESSL (SMP Version)
   elseif( _BLAS_VENDOR STREQUAL "ESSLSMP" )
-    message( STATUS "FindBLAS: Searching for IBM ESSL (SMP)" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "esslsmp;blas" "" )
-  
-  # IBM ESSL int64
-  elseif( _BLAS_VENDOR STREQUAL "ESSL6464" )
-    message( STATUS "FindBLAS: Searching for IBM ESSL (int64)" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "essl6464" "" )
-  
-  # IBM ESSL (SMP + int64)
-  elseif( _BLAS_VENDOR STREQUAL "ESSLSMP6464" )
-    message( STATUS "FindBLAS: Searching for IBM ESSL (SMP + int64)" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "esslsmp6464" "" )
+    if( SIZEOF_INTEGER EQUAL 4 )
+      message( STATUS "FindBLAS: Searching for IBM ESSL (SMP)" )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "esslsmp;blas" "" )
+    elseif( SIZEOF_INTEGER EQUAL 8 )
+      message( STATUS "FindBLAS: Searching for IBM ESSL (SMP + int64)" )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "esslsmp6464;blas" "" )
+    endif()
   
   # Intel MKL (dynamic)
-  elseif( _BLAS_VENDOR STREQUAL "MKL" )
-    message( STATUS "FindBLAS: Searching for Intel MKL (dynamic)" )
+  elseif( _BLAS_VENDOR STREQUAL "MKL_RT" )
+    message( STATUS "FindBLAS: Searching for Intel MKL (dynamic runtime interface)" )
     _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "mkl_rt" "" )
   
-  # Intel MKL (x86)
-  elseif( _BLAS_VENDOR STREQUAL "MKL_IA32" )
-    message( STATUS "FindBLAS: Searching for Intel MKL (x86)" )
+  # Intel MKL (sequential)
+  elseif( _BLAS_VENDOR STREQUAL "MKL_SEQ" )
+    message( STATUS "FindBLAS: Searching for Intel MKL (sequential interface)" )
+
     if( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} 
-        "mkl_intel;mkl_intel_thread;mkl_core;iomp5;pthread" 
-        "" 
-      )
-    elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "PGI" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "mkl_intel_ia32;mkl_pgi_thread;mkl_core;pgmp" "" 
-      )
-    else() #if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "mkl_intel_ia32;mkl_gnu_thread;mkl_core" "-fopenmp" 
-      )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "" "-mkl=sequential" )
+
+    else()
+      if( SIZEOF_INTEGER EQUAL 4 )
+        set( _BLAS_MKL_64_SUFFIX "_lp64" )
+      elseif( SIZEOF_INTEGER EQUAL 8 )
+        set( _BLAS_MKL_64_SUFFIX "_ilp64" )
+      endif()
+
+      foreach( _BLAS_MKL_SUFFIX "" "${_BLAS_MKL_64_SUFFIX}" )
+        _BLAS_LOCATE_AND_TEST( 
+          ${_BLAS_VENDOR} 
+          "mkl_intel${_BLAS_MKL_SUFFIX};mkl_sequential;mkl_core"
+          "" 
+        )
+        if( BLAS_MKL_FOUND )
+          break()
+        endif()
+      endforeach()
     endif()
   
-  # Intel MKL (emt64 / ia64)
-  elseif( _BLAS_VENDOR STREQUAL "MKL_LP64" )
-    message( STATUS "FindBLAS: Searching for Intel MKL (emt64/ia64)" )
+  # Intel MKL
+  elseif( _BLAS_VENDOR STREQUAL "MKL" )
+    message( STATUS "FindBLAS: Searching for Intel MKL (multi-threaded interface)" )
+
     if( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} 
-        "mkl_intel_lp64;mkl_intel_thread;mkl_core;iomp5;pthread" 
-        "" 
-      )
-    elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "PGI" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "mkl_intel_lp64;mkl_pgi_thread;mkl_core;pgmp" "" 
-       )
-    else() #if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "mkl_intel_lp64;mkl_gnu_thread;mkl_core" "-fopenmp" 
-       )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "" "-mkl=parallel" )
+
+    else()
+      if( SIZEOF_INTEGER EQUAL 4 )
+        set( _BLAS_MKL_64_SUFFIX "_lp64" )
+      elseif( SIZEOF_INTEGER EQUAL 8 )
+        set( _BLAS_MKL_64_SUFFIX "_ilp64" )
+      endif()
+
+      if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
+        foreach( _BLAS_MKL_SUFFIX "" "${_BLAS_MKL_64_SUFFIX}" )
+          _BLAS_LOCATE_AND_TEST( 
+            ${_BLAS_VENDOR} 
+            "mkl_intel${_BLAS_MKL_SUFFIX};mkl_gnu_thread;mkl_core"
+            "-fopenmp" 
+          )
+          if( BLAS_MKL_FOUND )
+            break()
+          endif()
+        endforeach()
+
+      elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "PGI" )
+        foreach( _BLAS_MKL_SUFFIX "" "${_BLAS_MKL_64_SUFFIX}" )
+          _BLAS_LOCATE_AND_TEST( 
+            ${_BLAS_VENDOR} 
+            "mkl_intel${_BLAS_MKL_SUFFIX};mkl_pgi_thread;mkl_core" 
+            "-mp" 
+          )
+          if( BLAS_MKL_FOUND )
+            break()
+          endif()
+        endforeach()
+
+      # Use the intel thread library but explicitly search for the libraries
+      else() 
+        foreach( _BLAS_MKL_SUFFIX "" "${_BLAS_MKL_64_SUFFIX}" )
+          _BLAS_LOCATE_AND_TEST( 
+            ${_BLAS_VENDOR} 
+            "mkl_intel${_BLAS_MKL_SUFFIX};mkl_intel_thread;mkl_core;iomp5" 
+            "" 
+          )
+          if( BLAS_MKL_FOUND )
+            break()
+          endif()
+        endforeach()
+      endif()
     endif()
-  
-  # Intel MKL (emt64/ia64 + int64)
-  elseif( _BLAS_VENDOR STREQUAL "MKL_ILP64" )
-    message( STATUS "FindBLAS: Searching for Intel MKL (emt64/ia64 + int64)" )
-    if( CMAKE_Fortran_COMPILER_ID STREQUAL "Intel" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} 
-        "mkl_intel_ilp64;mkl_intel_thread;mkl_core;iomp5;pthread" 
-        "" 
-      )
-    elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "PGI" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "mkl_intel_ilp64;mkl_pgi_thread;mkl_core;pgmp" "" 
-       )
-    else() #if( CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" )
-      _BLAS_LOCATE_AND_TEST( 
-        ${_BLAS_VENDOR} "mkl_intel_ilp64;mkl_gnu_thread;mkl_core" "-fopenmp" 
-      )
-    endif()
-  
+
   # Generic BLAS
   elseif( _BLAS_VENDOR STREQUAL "GENERIC" )
     message( STATUS "FindBLAS: Searching for generic BLAS" )
@@ -310,14 +407,23 @@ foreach( _BLAS_VENDOR ${BLAS_VENDORS} )
   
   # SGI
   elseif( _BLAS_VENDOR STREQUAL "SCSL" )
-    message( STATUS "FindBLAS: Searching for SGI SCSL" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "scsl" "" )
+    if( SIZEOF_INTEGER EQUAL 4 )
+      message( STATUS "FindBLAS: Searching for SGI SCSL" )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "scs" "" )
+    elseif( SIZEOF_INTEGER EQUAL 8 )
+      message( STATUS "FindBLAS: Searching for SGI SCSL (int64)" )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "scs_i8" "" )
+    endif()
   
   # Sun / Oracle PerfLib
   elseif( (_BLAS_VENDOR STREQUAL "PERFLIB") OR 
           (_BLAS_VENDOR STREQUAL "SUNPERF") )
     message( STATUS "FindBLAS: Searching for Sun PerfLib" )
-    _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "" "-xlic_lib=sunperf" )
+    if( CMAKE_Fortran_COMPILER_ID STREQUAL "SunPro" )
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "" "-xlic_lib=sunperf" )
+    else()
+      _BLAS_LOCATE_AND_TEST( ${_BLAS_VENDOR} "sunperf;mtsk" "" )
+    endif()
   
   else()
   endif()
