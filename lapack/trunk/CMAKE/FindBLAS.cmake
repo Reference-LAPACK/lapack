@@ -79,7 +79,7 @@ endif()
 
 include( CheckFortranFunctionExists )
 include( CheckLibraryExists )
-include( CheckFortranIntSize )
+include( CheckFortranTypeSizes )
 
 # Check the language being used
 get_property( _LANGUAGES_ GLOBAL PROPERTY ENABLED_LANGUAGES )
@@ -124,7 +124,7 @@ else()
 endif()
 
 # Determine the default integer size
-CHECK_FORTRAN_INT_SIZE()
+CHECK_FORTRAN_TYPE_SIZES()
 if( NOT SIZEOF_INTEGER )
   message( WARNING "Unable to determine default integer size.  Assuming integer*4" )
   set( SIZEOF_INTEGER 4 )
@@ -142,6 +142,9 @@ macro( _BLAS_LOCATE_AND_TEST __BLAS_VENDOR __BLAS_LIBNAMES __BLAS_FLAGS )
     message( STATUS "FindBLAS: Searching for ${__BLAS_VENDOR} ${__BLAS_LIBNAME} - ${BLAS_${__BLAS_VENDOR}_${__BLAS_LIBNAME}_LIBRARY}" )
     if( NOT BLAS_${__BLAS_VENDOR}_${__BLAS_LIBNAME}_LIBRARY )
       unset( BLAS_${__BLAS_VENDOR}_LIBRARIES )
+      foreach( __BLAS_LIBNAME ${__BLAS_LIBNAMES} )
+        unset( BLAS_${__BLAS_VENDOR}_${__BLAS_LIBNAME}_LIBRARY CACHE)
+      endforeach()
       break()
     endif()
     set( BLAS_${__BLAS_VENDOR}_LIBRARIES
