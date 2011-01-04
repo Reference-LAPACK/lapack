@@ -84,12 +84,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT, LOG, INT, REAL, AIMAG
 *     ..
-*     .. Statement Functions ..
-      REAL               CABS1
-*     ..
-*     .. Statement Function Definitions ..
-      CABS1( ZDUM ) = ABS( REAL( ZDUM ) ) + ABS( AIMAG( ZDUM ) )
-*     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.

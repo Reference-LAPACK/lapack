@@ -891,10 +891,10 @@ c        MINWRK = MAX( 10*( NSIZE+1 ), 5*NSIZE*NSIZE / 2-2 )
      $      ' 10 = 1/ULP  if PLEST/PLTRU > THRESH or ',
      $      'PLTRU/PLEST > THRESH', /
      $      '    ( Test 10 is only for input examples )', / )
- 9991 FORMAT( ' Matrix order=', I2, ', type=', I2, ', a=', E10.4,
+ 9991 FORMAT( ' Matrix order=', I2, ', type=', I2, ', a=', E10.3,
      $      ', order(A_11)=', I2, ', result ', I2, ' is ', 0P, F8.2 )
- 9990 FORMAT( ' Matrix order=', I2, ', type=', I2, ', a=', E10.4,
-     $      ', order(A_11)=', I2, ', result ', I2, ' is ', 0P, E10.4 )
+ 9990 FORMAT( ' Matrix order=', I2, ', type=', I2, ', a=', E10.3,
+     $      ', order(A_11)=', I2, ', result ', I2, ' is ', 0P, E10.3 )
  9989 FORMAT( ' Input example #', I2, ', matrix order=', I4, ',',
      $      ' result ', I2, ' is', 0P, F8.2 )
  9988 FORMAT( ' Input example #', I2, ', matrix order=', I4, ',',
