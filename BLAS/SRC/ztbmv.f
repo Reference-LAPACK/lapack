@@ -129,6 +129,7 @@
 *  ===============
 *
 *  Level 2 Blas routine.
+*  The vector and matrix arguments are not referenced when N = 0, or M = 0
 *
 *  -- Written on 22-October-1986.
 *     Jack Dongarra, Argonne National Lab.
