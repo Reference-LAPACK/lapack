@@ -84,12 +84,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT, LOG, INT, REAL, DIMAG
 *     ..
-*     .. Statement Functions ..
-      DOUBLE PRECISION   CABS1
-*     ..
-*     .. Statement Function Definitions ..
-      CABS1( ZDUM ) = ABS( DBLE( ZDUM ) ) + ABS( DIMAG( ZDUM ) )
-*     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
