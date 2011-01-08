@@ -26,4 +26,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   # Common warning when linking ATLAS built with GNU Fortran 4.1 and building 
   # with GNU Fortran 4.4.  It can be safely ignored.
   "libgfortran.*may conflict with libgfortran"
+
+  # Harmless warning often seen on IRIX
+  "WARNING 84 : .*libm.* is not used for resolving any symbol"
 )
