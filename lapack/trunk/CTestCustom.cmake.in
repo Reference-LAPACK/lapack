@@ -29,4 +29,8 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
 
   # Harmless warning often seen on IRIX
   "WARNING 84 : .*libm.* is not used for resolving any symbol"
+
+  # Warnings caused by sun compilers when building code to only run on your 
+  # native platform
+  "xarch=native on this architecture implies -xarch=.*which generates code that does not run"
 )
