@@ -301,7 +301,6 @@
       WORK( N ) = ZERO
       PIVMIN = ONE
 *
-*DIR$ NOVECTOR
       DO 10 J = 2, N
          TMP1 = E( J-1 )**2
          IF( ABS( D( J )*D( J-1 ) )*ULP**2+SAFEMN.GT.TMP1 ) THEN

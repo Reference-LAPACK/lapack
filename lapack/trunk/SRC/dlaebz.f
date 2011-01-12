@@ -407,21 +407,6 @@
                   TMP2 = MIN( TMP2, -PIVMIN )
                END IF
 *
-*              A series of compiler directives to defeat vectorization
-*              for the next loop
-*
-*$PL$ CMCHAR=' '
-CDIR$          NEXTSCALAR
-C$DIR          SCALAR
-CDIR$          NEXT SCALAR
-CVD$L          NOVECTOR
-CDEC$          NOVECTOR
-CVD$           NOVECTOR
-*VDIR          NOVECTOR
-*VOCL          LOOP,SCALAR
-CIBM           PREFER SCALAR
-*$PL$ CMCHAR='*'
-*
                DO 90 J = 2, N
                   TMP2 = D( J ) - E2( J-1 ) / TMP2 - TMP1
                   IF( TMP2.LE.PIVMIN ) THEN
@@ -486,8 +471,6 @@ CIBM           PREFER SCALAR
                END IF
   100       CONTINUE
             KL = KLNEW
-*
-*           End of Serial Version of the loop
 *
          END IF
 *

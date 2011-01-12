@@ -631,35 +631,7 @@
 *              to underflow.  (E.g., less than SMALL.)
 *
 *
-*              A series of compiler directives to defeat vectorization
-*              for the next loop
-*
-*$PL$ CMCHAR=' '
-CDIR$          NEXTSCALAR
-C$DIR          SCALAR
-CDIR$          NEXT SCALAR
-CVD$L          NOVECTOR
-CDEC$          NOVECTOR
-CVD$           NOVECTOR
-*VDIR          NOVECTOR
-*VOCL          LOOP,SCALAR
-CIBM           PREFER SCALAR
-*$PL$ CMCHAR='*'
-*
                DO 120 JW = 1, NW
-*
-*$PL$ CMCHAR=' '
-CDIR$             NEXTSCALAR
-C$DIR             SCALAR
-CDIR$             NEXT SCALAR
-CVD$L             NOVECTOR
-CDEC$             NOVECTOR
-CVD$              NOVECTOR
-*VDIR             NOVECTOR
-*VOCL             LOOP,SCALAR
-CIBM              PREFER SCALAR
-*$PL$ CMCHAR='*'
-*
                   DO 110 JA = 1, NA
                      SUMS( JA, JW ) = ZERO
                      SUMP( JA, JW ) = ZERO
@@ -674,18 +646,6 @@ CIBM              PREFER SCALAR
   100                CONTINUE
   110             CONTINUE
   120          CONTINUE
-*
-*$PL$ CMCHAR=' '
-CDIR$          NEXTSCALAR
-C$DIR          SCALAR
-CDIR$          NEXT SCALAR
-CVD$L          NOVECTOR
-CDEC$          NOVECTOR
-CVD$           NOVECTOR
-*VDIR          NOVECTOR
-*VOCL          LOOP,SCALAR
-CIBM           PREFER SCALAR
-*$PL$ CMCHAR='*'
 *
                DO 130 JA = 1, NA
                   IF( ILCPLX ) THEN
