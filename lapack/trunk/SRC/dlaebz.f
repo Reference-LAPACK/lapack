@@ -251,7 +251,6 @@
 *        Compute the number of eigenvalues in the initial intervals.
 *
          MOUT = 0
-*DIR$ NOVECTOR
          DO 30 JI = 1, MINP
             DO 20 JP = 1, 2
                TMP1 = D( 1 ) - AB( JI, JP )
