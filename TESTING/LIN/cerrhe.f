@@ -48,8 +48,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHECON, CHERFS, CHETF2, CHETRF, CHETRI,
-     $                   CHETRS, CHKXER, CHPCON, CHPRFS, CHPTRF, CHPTRI,
-     $                   CHPTRS
+     $                   CHETRI2, CHETRS, CHKXER, CHPCON, CHPRFS, CHPTRF,
+     $                   CHPTRI, CHPTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -129,6 +129,19 @@
          INFOT = 4
          CALL CHETRI( 'U', 2, A, 1, IP, W, INFO )
          CALL CHKXER( 'CHETRI', INFOT, NOUT, LERR, OK )
+*
+*        CHETRI2
+*
+         SRNAMT = 'CHETRI2'
+         INFOT = 1
+         CALL CHETRI2( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'CHETRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CHETRI2( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'CHETRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL CHETRI2( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'CHETRI2', INFOT, NOUT, LERR, OK )
 *
 *        CHETRS
 *

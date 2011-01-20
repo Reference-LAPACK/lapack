@@ -172,7 +172,8 @@ set(CLASRC
    checon.f cheev.f  cheevd.f cheevr.f cheevx.f chegs2.f chegst.f 
    chegv.f  chegvd.f chegvx.f cherfs.f chesv.f  chesvx.f chetd2.f 
    chetf2.f chetrd.f 
-   chetrf.f chetri.f chetrs.f chetrs2.f chgeqz.f chpcon.f chpev.f  chpevd.f 
+   chetrf.f chetri.f chetri2.f  chetri2x.f cheswapr.f
+   chetrs.f chetrs2.f chgeqz.f chpcon.f chpev.f  chpevd.f 
    chpevx.f chpgst.f chpgv.f  chpgvd.f chpgvx.f chprfs.f chpsv.f  
    chpsvx.f 
    chptrd.f chptrf.f chptri.f chptrs.f chsein.f chseqr.f clabrd.f 
@@ -312,7 +313,8 @@ set(ZLASRC
    zhecon.f zheev.f  zheevd.f zheevr.f zheevx.f zhegs2.f zhegst.f 
    zhegv.f  zhegvd.f zhegvx.f zherfs.f zhesv.f  zhesvx.f zhetd2.f 
    zhetf2.f zhetrd.f 
-   zhetrf.f zhetri.f zhetrs.f zhetrs2.f zhgeqz.f zhpcon.f zhpev.f  zhpevd.f 
+   zhetrf.f zhetri.f zhetri2.f zhetri2x.f zheswapr.f
+   zhetrs.f zhetrs2.f zhgeqz.f zhpcon.f zhpev.f  zhpevd.f 
    zhpevx.f zhpgst.f zhpgv.f  zhpgvd.f zhpgvx.f zhprfs.f zhpsv.f  
    zhpsvx.f 
    zhptrd.f zhptrf.f zhptri.f zhptrs.f zhsein.f zhseqr.f zlabrd.f 
