@@ -54,8 +54,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, ZHECON, ZHERFS, ZHETF2, ZHETRF,
-     $                   ZHETRI, ZHETRS, ZHPCON, ZHPRFS, ZHPTRF, ZHPTRI,
-     $                   ZHPTRS, ZHERFSX
+     $                   ZHETRI, ZHETRI2, ZHETRS, ZHPCON, ZHPRFS, ZHPTRF,
+     $                   ZHPTRI, ZHPTRS, ZHERFSX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -138,6 +138,19 @@
          INFOT = 4
          CALL ZHETRI( 'U', 2, A, 1, IP, W, INFO )
          CALL CHKXER( 'ZHETRI', INFOT, NOUT, LERR, OK )
+*
+*        ZHETRI2
+*
+         SRNAMT = 'ZHETRI2'
+         INFOT = 1
+         CALL ZHETRI2( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZHETRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZHETRI2( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZHETRI2', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZHETRI2( 'U', 2, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZHETRI2', INFOT, NOUT, LERR, OK )
 *
 *        ZHETRS
 *

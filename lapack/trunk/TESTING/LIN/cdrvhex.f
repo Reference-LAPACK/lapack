@@ -112,7 +112,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, CERRVX, CGET04, CHESV,
-     $                   CHESVX, CHET01, CHETRF, CHETRI, CLACPY, CLAIPD,
+     $                   CHESVX, CHET01, CHETRF, CHETRI2, CLACPY, CLAIPD,
      $                   CLARHS, CLASET, CLATB4, CLATMS, CPOT02, CPOT05,
      $                   XLAENV, CHESVXX
 *     ..
@@ -306,8 +306,9 @@
 *                    Compute inv(A) and take its norm.
 *
                      CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     CALL CHETRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL CHETRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
                      AINVNM = CLANHE( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.

@@ -112,7 +112,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
-     $                   ZHESV, ZHESVX, ZHET01, ZHETRF, ZHETRI, ZLACPY,
+     $                   ZHESV, ZHESVX, ZHET01, ZHETRF, ZHETRI2, ZLACPY,
      $                   ZLAIPD, ZLARHS, ZLASET, ZLATB4, ZLATMS, ZPOT02,
      $                   ZPOT05, ZHESVXX
 *     ..
@@ -306,8 +306,9 @@
 *                    Compute inv(A) and take its norm.
 *
                      CALL ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     CALL ZHETRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL ZHETRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
                      AINVNM = ZLANHE( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.

@@ -22,7 +22,7 @@
 *  Purpose
 *  =======
 *
-*  ZCHKHE tests ZHETRF, -TRI, -TRS, -TRS2, -RFS, and -CON.
+*  ZCHKHE tests ZHETRF, -TRI2, -TRS, -TRS2, -RFS, and -CON.
 *
 *  Arguments
 *  =========
@@ -116,7 +116,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRHE, ZGET04,
-     $                   ZHECON, ZHERFS, ZHET01, ZHETRF, ZHETRI, ZHETRS,
+     $                   ZHECON, ZHERFS, ZHET01, ZHETRF, ZHETRI2, ZHETRS,
      $                   ZLACPY, ZLAIPD, ZLARHS, ZLATB4, ZLATMS, ZPOT02,
      $                   ZPOT03, ZPOT05
 *     ..
@@ -329,9 +329,10 @@
 *
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     SRNAMT = 'ZHETRI'
-                     CALL ZHETRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     SRNAMT = 'ZHETRI2'
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL ZHETRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
 *
 *                 Check error code from ZHETRI.
 *

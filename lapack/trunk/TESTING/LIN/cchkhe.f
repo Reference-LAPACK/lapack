@@ -22,7 +22,7 @@
 *  Purpose
 *  =======
 *
-*  CCHKHE tests CHETRF, -TRI, -TRS, -TRS2, -RFS, and -CON.
+*  CCHKHE tests CHETRF, -TRI2, -TRS, -TRS2, -RFS, and -CON.
 *
 *  Arguments
 *  =========
@@ -116,9 +116,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, CERRHE, CGET04, CHECON,
-     $                   CHERFS, CHET01, CHETRF, CHETRI, CHETRS, CLACPY,
-     $                   CLAIPD, CLARHS, CLATB4, CLATMS, CPOT02, CPOT03,
-     $                   CPOT05, XLAENV
+     $                   CHERFS, CHET01, CHETRF, CHETRI2, CHETRS, 
+     $                   CLACPY, CLAIPD, CLARHS, CLATB4, CLATMS, CPOT02,
+     $                   CPOT03, CPOT05, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -329,9 +329,10 @@
 *
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-                     SRNAMT = 'CHETRI'
-                     CALL CHETRI( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            INFO )
+                     SRNAMT = 'CHETRI2'
+                     LWORK = (N+NB+1)*(NB+3)
+                     CALL CHETRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+     $                            LWORK, INFO )
 *
 *                 Check error code from CHETRI.
 *
