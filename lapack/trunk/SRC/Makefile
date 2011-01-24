@@ -123,7 +123,7 @@ SLASRC = \
    sormr3.o sormrq.o sormrz.o sormtr.o spbcon.o spbequ.o spbrfs.o \
    spbstf.o spbsv.o  spbsvx.o \
    spbtf2.o spbtrf.o spbtrs.o spocon.o spoequ.o sporfs.o sposv.o  \
-   sposvx.o spotf2.o spotrf.o spotri.o  spstrf.o spstf2.o \
+   sposvx.o spotf2.o  spotri.o  spstrf.o spstf2.o \
    sppcon.o sppequ.o \
    spprfs.o sppsv.o  sppsvx.o spptrf.o spptri.o spptrs.o sptcon.o \
    spteqr.o sptrfs.o sptsv.o  sptsvx.o spttrs.o sptts2.o srscl.o  \
@@ -164,7 +164,7 @@ CLASRC = \
    cgels.o  cgelsd.o cgelss.o cgelsx.o cgelsy.o cgeql2.o cgeqlf.o cgeqp3.o \
    cgeqpf.o cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
    cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  \
-   cgesvx.o cgetc2.o cgetf2.o cgetrf.o cgetri.o cgetrs.o \
+   cgesvx.o cgetc2.o cgetf2.o cgetri.o \
    cggbak.o cggbal.o cgges.o  cggesx.o cggev.o  cggevx.o cggglm.o \
    cgghrd.o cgglse.o cggqrf.o cggrqf.o \
    cggsvd.o cggsvp.o \
@@ -195,7 +195,7 @@ CLASRC = \
    claswp.o clasyf.o clatbs.o clatdf.o clatps.o clatrd.o clatrs.o clatrz.o \
    clatzm.o clauu2.o clauum.o cpbcon.o cpbequ.o cpbrfs.o cpbstf.o cpbsv.o  \
    cpbsvx.o cpbtf2.o cpbtrf.o cpbtrs.o cpocon.o cpoequ.o cporfs.o \
-   cposv.o  cposvx.o cpotf2.o cpotrf.o cpotri.o cpotrs.o cpstrf.o cpstf2.o \
+   cposv.o  cposvx.o cpotf2.o cpotri.o cpotrs.o cpstrf.o cpstf2.o \
    cppcon.o cppequ.o cpprfs.o cppsv.o  cppsvx.o cpptrf.o cpptri.o cpptrs.o \
    cptcon.o cpteqr.o cptrfs.o cptsv.o  cptsvx.o cpttrf.o cpttrs.o cptts2.o \
    crot.o   cspcon.o cspmv.o  cspr.o   csprfs.o cspsv.o  \
