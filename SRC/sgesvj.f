@@ -1,11 +1,11 @@
       SUBROUTINE SGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, V,
      +                   LDV, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.0)                                    --
+*  -- LAPACK routine (version 3.3.1)                                  --
 *
 *  -- Contributed by Zlatko Drmac of the University of Zagreb and     --
 *  -- Kresimir Veselic of the Fernuniversitaet Hagen                  --
-*     November 2010
+*     January 2011
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
@@ -133,7 +133,7 @@
 *                  referenced
 *
 *  M       (input) INTEGER
-*          The number of rows of the input matrix A.  M >= 0.
+*          The number of rows of the input matrix A. 1/SLAMCH('E') > M >= 0.
 *
 *  N       (input) INTEGER
 *          The number of columns of the input matrix A.
@@ -241,7 +241,8 @@
 *                    Jacobi rotation angles in the last sweep. It can be
 *                    useful for a post festum analysis.
 *
-*  LWORK   length of WORK, WORK >= MAX(6,M+N)
+*  LWORK  (input) INTEGER 
+*         length of WORK, WORK >= MAX(6,M+N)
 *
 *  INFO    (output) INTEGER
 *          = 0 : successful exit.
@@ -249,6 +250,7 @@
 *          > 0 : SGESVJ did not converge in the maximal allowed number (30)
 *                of sweeps. The output may still be useful. See the
 *                description of WORK.
+*
 *  =====================================================================
 *
 *     .. Local Parameters ..
@@ -278,6 +280,7 @@
       INTRINSIC          ABS, AMAX1, AMIN1, FLOAT, MIN0, SIGN, SQRT
 *     ..
 *     .. External Functions ..
+*     ..
 *     from BLAS
       REAL               SDOT, SNRM2
       EXTERNAL           SDOT, SNRM2
@@ -290,6 +293,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
+*     ..
 *     from BLAS
       EXTERNAL           SAXPY, SCOPY, SROTM, SSCAL, SSWAP
 *     from LAPACK
@@ -370,6 +374,7 @@
       ROOTSFMIN = SQRT( SFMIN )
       SMALL = SFMIN / EPSLN
       BIG = SLAMCH( 'Overflow' )
+*     BIG         = ONE    / SFMIN
       ROOTBIG = ONE / ROOTSFMIN
       LARGE = BIG / SQRT( FLOAT( M*N ) )
       BIGTHETA = ONE / ROOTEPS
@@ -378,7 +383,7 @@
       ROOTTOL = SQRT( TOL )
 *
       IF( FLOAT( M )*EPSLN.GE.ONE ) THEN
-         INFO = -5
+         INFO = -4
          CALL XERBLA( 'SGESVJ', -INFO )
          RETURN
       END IF
@@ -689,6 +694,7 @@
 *     .. Row-cyclic pivot strategy with de Rijk's pivoting ..
 *
       DO 1993 i = 1, NSWEEP
+*
 *     .. go go go ...
 *
          MXAAPQ = ZERO

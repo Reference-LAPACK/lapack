@@ -1,11 +1,11 @@
       SUBROUTINE DGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, V,
      +                   LDV, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.0)                                    --
+*  -- LAPACK routine (version 3.3.1)                                  --
 *
 *  -- Contributed by Zlatko Drmac of the University of Zagreb and     --
 *  -- Kresimir Veselic of the Fernuniversitaet Hagen                  --
-*     November 2010
+*     January 2011
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
@@ -133,7 +133,7 @@
 *                  referenced
 *
 *  M       (input) INTEGER
-*          The number of rows of the input matrix A.  M >= 0.
+*          The number of rows of the input matrix A. 1/DLAMCH('E') > M >= 0.  
 *
 *  N       (input) INTEGER
 *          The number of columns of the input matrix A.
@@ -383,7 +383,7 @@
       ROOTTOL = DSQRT( TOL )
 *
       IF( DBLE( M )*EPSLN.GE.ONE ) THEN
-         INFO = -5
+         INFO = -4
          CALL XERBLA( 'DGESVJ', -INFO )
          RETURN
       END IF
@@ -824,8 +824,7 @@
 *
                                  AQOAP = AAQQ / AAPP
                                  APOAQ = AAPP / AAQQ
-                                 THETA = -HALF*DABS( AQOAP-APOAQ ) /
-     +                                   AAPQ
+                                 THETA = -HALF*DABS(AQOAP-APOAQ)/AAPQ
 *
                                  IF( DABS( THETA ).GT.BIGTHETA ) THEN
 *
@@ -1131,8 +1130,7 @@
 *
                                  AQOAP = AAQQ / AAPP
                                  APOAQ = AAPP / AAQQ
-                                 THETA = -HALF*DABS( AQOAP-APOAQ ) /
-     +                                   AAPQ
+                                 THETA = -HALF*DABS(AQOAP-APOAQ)/AAPQ
                                  IF( AAQQ.GT.AAPP0 )THETA = -THETA
 *
                                  IF( DABS( THETA ).GT.BIGTHETA ) THEN
