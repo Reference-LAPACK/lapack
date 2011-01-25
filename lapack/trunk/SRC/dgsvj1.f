@@ -1,11 +1,11 @@
       SUBROUTINE DGSVJ1( JOBV, M, N, N1, A, LDA, D, SVA, MV, V, LDV,
      +                   EPS, SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.0)                                    --
+*  -- LAPACK routine (version 3.3.1)                                  --
 *
 *  -- Contributed by Zlatko Drmac of the University of Zagreb and     --
 *  -- Kresimir Veselic of the Fernuniversitaet Hagen                  --
-*     November 2010
+*     January 2011
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
@@ -375,8 +375,7 @@
 *
                                  AQOAP = AAQQ / AAPP
                                  APOAQ = AAPP / AAQQ
-                                 THETA = -HALF*DABS( AQOAP-APOAQ ) /
-     +                                   AAPQ
+                                 THETA = -HALF*DABS(AQOAP-APOAQ) / AAPQ
                                  IF( AAQQ.GT.AAPP0 )THETA = -THETA
 
                                  IF( DABS( THETA ).GT.BIGTHETA ) THEN

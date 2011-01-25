@@ -2,11 +2,11 @@
      &                   M, N, A, LDA, SVA, U, LDU, V, LDV,
      &                   WORK, LWORK, IWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.0)                                    --
+*  -- LAPACK routine (version 3.3.1)                                  --
 *
 *  -- Contributed by Zlatko Drmac of the University of Zagreb and     --
 *  -- Kresimir Veselic of the Fernuniversitaet Hagen                  --
-*     November 2010
+*     January 2011
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
@@ -31,6 +31,7 @@
 *
 *  Purpose
 *  =======
+*
 *  SGEJSV computes the singular value decomposition (SVD) of a real M-by-N
 *  matrix [A], where M >= N. The SVD of [A] is written as
 *
@@ -253,33 +254,50 @@
 *          LWORK depends on the job:
 *
 *          If only SIGMA is needed ( JOBU.EQ.'N', JOBV.EQ.'N' ) and
-*            -> .. no scaled condition estimate required ( JOBE.EQ.'N'):
+*            -> .. no scaled condition estimate required (JOBE.EQ.'N'):
 *               LWORK >= max(2*M+N,4*N+1,7). This is the minimal requirement.
-*               For optimal performance (blocked code) the optimal value
+*               ->> For optimal performance (blocked code) the optimal value
 *               is LWORK >= max(2*M+N,3*N+(N+1)*NB,7). Here NB is the optimal
-*               block size for xGEQP3/xGEQRF.
+*               block size for DGEQP3 and DGEQRF.
+*               In general, optimal LWORK is computed as 
+*               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF), 7).        
 *            -> .. an estimate of the scaled condition number of A is
 *               required (JOBA='E', 'G'). In this case, LWORK is the maximum
-*               of the above and N*N+4*N, i.e. LWORK >= max(2*M+N,N*N+4N,7).
+*               of the above and N*N+4*N, i.e. LWORK >= max(2*M+N,N*N+4*N,7).
+*               ->> For optimal performance (blocked code) the optimal value 
+*               is LWORK >= max(2*M+N,3*N+(N+1)*NB, N*N+4*N, 7).
+*               In general, the optimal length LWORK is computed as
+*               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF), 
+*                                                     N+N*N+LWORK(DPOCON),7).
 *
 *          If SIGMA and the right singular vectors are needed (JOBV.EQ.'V'),
-*            -> the minimal requirement is LWORK >= max(2*N+M,7).
-*            -> For optimal performance, LWORK >= max(2*N+M,2*N+N*NB,7),
-*               where NB is the optimal block size.
+*            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
+*            -> For optimal performance, LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
+*               where NB is the optimal block size for DGEQP3, DGEQRF, DGELQ,
+*               DORMLQ. In general, the optimal length LWORK is computed as
+*               LWORK >= max(2*M+N,N+LWORK(DGEQP3), N+LWORK(DPOCON), 
+*                       N+LWORK(DGELQ), 2*N+LWORK(DGEQRF), N+LWORK(DORMLQ)).
 *
 *          If SIGMA and the left singular vectors are needed
-*            -> the minimal requirement is LWORK >= max(2*N+M,7).
-*            -> For optimal performance, LWORK >= max(2*N+M,2*N+N*NB,7),
-*               where NB is the optimal block size.
-*
-*          If full SVD is needed ( JOBU.EQ.'U' or 'F', JOBV.EQ.'V' ) and
-*            -> .. the singular vectors are computed without explicit
-*               accumulation of the Jacobi rotations, LWORK >= 6*N+2*N*N
-*            -> .. in the iterative part, the Jacobi rotations are
-*               explicitly accumulated (option, see the description of JOBV),
-*               then the minimal requirement is LWORK >= max(M+3*N+N*N,7).
-*               For better performance, if NB is the optimal block size,
-*               LWORK >= max(3*N+N*N+M,3*N+N*N+N*NB,7).
+*            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
+*            -> For optimal performance:
+*               if JOBU.EQ.'U' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
+*               if JOBU.EQ.'F' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,N+M*NB,7),
+*               where NB is the optimal block size for DGEQP3, DGEQRF, DORMQR.
+*               In general, the optimal length LWORK is computed as
+*               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DPOCON),
+*                        2*N+LWORK(DGEQRF), N+LWORK(DORMQR)). 
+*               Here LWORK(DORMQR) equals N*NB (for JOBU.EQ.'U') or 
+*               M*NB (for JOBU.EQ.'F').
+*               
+*          If the full SVD is needed: (JOBU.EQ.'U' or JOBU.EQ.'F') and 
+*            -> if JOBV.EQ.'V'  
+*               the minimal requirement is LWORK >= max(2*M+N,6*N+2*N*N). 
+*            -> if JOBV.EQ.'J' the minimal requirement is 
+*               LWORK >= max(2*M+N, 4*N+N*N,2*N+N*N+6).
+*            -> For optimal performance, LWORK should be additionally
+*               larger than N+M*NB, where NB is the optimal block size
+*               for DORMQR.
 *
 *  IWORK   (workspace/output) INTEGER array, dimension M+3*N.
 *          On exit,
@@ -439,12 +457,16 @@
          INFO = - 14
       ELSE IF ( (.NOT.(LSVEC .OR. RSVEC .OR. ERREST).AND.
      &                           (LWORK .LT. MAX0(7,4*N+1,2*M+N))) .OR.
-     & (.NOT.(LSVEC .OR. LSVEC) .AND. ERREST .AND.
+     & (.NOT.(LSVEC .OR. RSVEC) .AND. ERREST .AND.
      &                         (LWORK .LT. MAX0(7,4*N+N*N,2*M+N))) .OR.
-     & (LSVEC .AND. (.NOT.RSVEC) .AND. (LWORK .LT. MAX0(7,2*N+M))) .OR.
-     & (RSVEC .AND. (.NOT.LSVEC) .AND. (LWORK .LT. MAX0(7,2*N+M))) .OR.
-     & (LSVEC .AND. RSVEC .AND. .NOT.JRACC .AND. (LWORK.LT.6*N+2*N*N))
-     & .OR. (LSVEC.AND.RSVEC.AND.JRACC.AND.LWORK.LT.MAX0(7,M+3*N+N*N)))
+     & (LSVEC .AND. (.NOT.RSVEC) .AND. (LWORK .LT. MAX0(7,2*M+N,4*N+1)))
+     & .OR.
+     & (RSVEC .AND. (.NOT.LSVEC) .AND. (LWORK .LT. MAX0(7,2*M+N,4*N+1))) 
+     & .OR.
+     & (LSVEC .AND. RSVEC .AND. (.NOT.JRACC) .AND. 
+     &                          (LWORK.LT.MAX0(2*M+N,6*N+2*N*N)))
+     & .OR. (LSVEC .AND. RSVEC .AND. JRACC .AND.
+     &                          LWORK.LT.MAX0(2*M+N,4*N+N*N,2*N+N*N+6)))
      &   THEN
          INFO = - 17
       ELSE
@@ -455,6 +477,7 @@
       IF ( INFO .NE. 0 ) THEN
 *       #:(
          CALL XERBLA( 'SGEJSV', - INFO )
+         RETURN
       END IF
 *
 *     Quick return for void matrix (Y3K safe)
@@ -476,6 +499,7 @@
       SFMIN = SLAMCH('SafeMinimum')
       SMALL = SFMIN / EPSLN
       BIG   = SLAMCH('O')
+*     BIG   = ONE / SFMIN
 *
 *     Initialize SVA(1:N) = diag( ||A e_i||_2 )_1^N
 *
@@ -535,6 +559,7 @@
          END IF
          IWORK(1) = 0
          IWORK(2) = 0
+         IWORK(3) = 0
          RETURN
       END IF
 *
@@ -1028,7 +1053,7 @@
             CALL SLASET( 'Upper', NR-1, NR-1, ZERO, ZERO, V(1,2), LDV )
 *
             CALL SGESVJ( 'Lower', 'U','N', NR, NR, V,LDV, SVA, NR, U,
-     &                  LDU, WORK(N+1), LWORK, INFO )
+     &                  LDU, WORK(N+1), LWORK-N, INFO )
             SCALEM  = WORK(N+1)
             NUMRANK = NINT(WORK(N+2))
             IF ( NR .LT. N ) THEN

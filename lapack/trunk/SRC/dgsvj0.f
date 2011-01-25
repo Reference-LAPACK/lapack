@@ -1,11 +1,11 @@
       SUBROUTINE DGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
      +                   SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.0)                                    --
+*  -- LAPACK routine (version 3.3.1)                                  --
 *
 *  -- Contributed by Zlatko Drmac of the University of Zagreb and     --
 *  -- Kresimir Veselic of the Fernuniversitaet Hagen                  --
-*     November 2010
+*     January 2011
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
@@ -16,6 +16,7 @@
 * eigenvalue problems Hx = lambda M x, H M x = lambda x with H, M > 0.
 *
       IMPLICIT NONE
+*     ..
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, NSWEEP
       DOUBLE PRECISION   EPS, SFMIN, TOL
@@ -173,6 +174,8 @@
 *     ..
 *     .. Executable Statements ..
 *
+*     Test the input parameters.
+*
       APPLV = LSAME( JOBV, 'A' )
       RSVEC = LSAME( JOBV, 'V' )
       IF( .NOT.( RSVEC .OR. APPLV .OR. LSAME( JOBV, 'N' ) ) ) THEN
@@ -218,7 +221,6 @@
       ROOTBIG = ONE / ROOTSFMIN
       BIGTHETA = ONE / ROOTEPS
       ROOTTOL = DSQRT( TOL )
-*
 *
 *     -#- Row-cyclic Jacobi SVD algorithm with column pivoting -#-
 *
@@ -376,8 +378,7 @@
 *
                                  AQOAP = AAQQ / AAPP
                                  APOAQ = AAPP / AAQQ
-                                 THETA = -HALF*DABS( AQOAP-APOAQ ) /
-     +                                   AAPQ
+                                 THETA = -HALF*DABS( AQOAP-APOAQ )/AAPQ
 *
                                  IF( DABS( THETA ).GT.BIGTHETA ) THEN
 *
@@ -676,8 +677,7 @@
 *
                                  AQOAP = AAQQ / AAPP
                                  APOAQ = AAPP / AAQQ
-                                 THETA = -HALF*DABS( AQOAP-APOAQ ) /
-     +                                   AAPQ
+                                 THETA = -HALF*DABS( AQOAP-APOAQ )/AAPQ
                                  IF( AAQQ.GT.AAPP0 )THETA = -THETA
 *
                                  IF( DABS( THETA ).GT.BIGTHETA ) THEN
