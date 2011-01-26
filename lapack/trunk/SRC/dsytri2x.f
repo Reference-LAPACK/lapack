@@ -492,7 +492,7 @@
                ELSE
                  IP=-IPIV(I)
                  IF ( I .LT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, I ,IP )
-                 IF ( I .GT. IP) CALL DSYSWAPR(  UPLO, N, A, LDA, IP ,I )
+                 IF ( I .GT. IP) CALL DSYSWAPR( UPLO, N, A, LDA, IP, I )
                  I=I-1
                ENDIF
                I=I-1
