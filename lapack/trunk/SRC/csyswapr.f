@@ -1,4 +1,4 @@
-      SUBROUTINE CSYSWAPR( UPLO, N, A, I1, I2)
+      SUBROUTINE CSYSWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *  -- LAPACK auxiliary routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -7,10 +7,10 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER        UPLO
-      INTEGER          I1, I2, N
+      INTEGER          I1, I2, LDA, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX          A(N,N)
+      COMPLEX          A( LDA, N )
 *
 *  Purpose
 *  =======
@@ -40,6 +40,9 @@
 *          referenced; if UPLO = 'L' the lower triangular part of the
 *          inverse is formed and the part of A above the diagonal is
 *          not referenced.
+*
+*  LDA     (input) INTEGER
+*          The leading dimension of the array A.  LDA >= max(1,N).
 *
 *  I1      (input) INTEGER
 *          Index of the first row to swap
@@ -98,7 +101,7 @@
 *         LOWER
 *         first swap
 *          - swap row I1 and I2 from I1 to I1-1 
-         CALL CSWAP ( I1-1, A(I1,1), N, A(I2,1), N )
+         CALL CSWAP ( I1-1, A(I1,1), LDA, A(I2,1), LDA )
 *
 *         second swap :
 *          - swap A(I1,I1) and A(I2,I2)

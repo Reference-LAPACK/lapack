@@ -311,15 +311,15 @@
             DO WHILE ( I .LE. N )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, I ,IP )
-                 IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, IP ,I )
+                 IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,IP )
+                 IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,I )
                ELSE
                  IP=-IPIV(I)
                  I=I+1
                  IF ( (I-1) .LT. IP) 
-     $                  CALL ZHESWAPR( UPLO, N, A, I-1 ,IP )
+     $                  CALL ZHESWAPR( UPLO, N, A, LDA, I-1 ,IP )
                  IF ( (I-1) .GT. IP) 
-     $                  CALL ZHESWAPR( UPLO, N, A, IP ,I-1 )
+     $                  CALL ZHESWAPR( UPLO, N, A, LDA, IP ,I-1 )
               ENDIF
                I=I+1
             END DO
@@ -488,12 +488,12 @@
             DO WHILE ( I .GE. 1 )
                IF( IPIV(I) .GT. 0 ) THEN
                   IP=IPIV(I)
-                 IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, I ,IP  )
-                 IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, IP ,I )
+                 IF (I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,IP  )
+                 IF (I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,I )
                ELSE
                  IP=-IPIV(I)
-                 IF ( I .LT. IP) CALL ZHESWAPR( UPLO, N, A, I ,IP )
-                 IF ( I .GT. IP) CALL ZHESWAPR(  UPLO, N, A, IP ,I )
+                 IF ( I .LT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, I ,IP )
+                 IF ( I .GT. IP) CALL ZHESWAPR( UPLO, N, A, LDA, IP ,I )
                  I=I-1
                ENDIF
                I=I-1
