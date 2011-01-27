@@ -142,7 +142,7 @@
 *
 *  Compute (U \P' * B) -> B    [ (U \P' * B) ]
 *
-        CALL ZTRSM('L','U','N','U',N,NRHS,ONE,A,N,B,N)
+        CALL ZTRSM('L','U','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *  Compute D \ B -> B   [ D \ (U \P' * B) ]
 *       
@@ -171,7 +171,7 @@
 *
 *      Compute (U' \ B) -> B   [ U' \ (D \ (U \P' * B) ) ]
 *
-         CALL ZTRSM('L','U','C','U',N,NRHS,ONE,A,N,B,N)
+         CALL ZTRSM('L','U','C','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *       P * B  [ P * (U' \ (D \ (U \P' * B) )) ]
 *
@@ -220,7 +220,7 @@
 *
 *  Compute (L \P' * B) -> B    [ (L \P' * B) ]
 *
-        CALL ZTRSM('L','L','N','U',N,NRHS,ONE,A,N,B,N)
+        CALL ZTRSM('L','L','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *  Compute D \ B -> B   [ D \ (L \P' * B) ]
 *       
@@ -247,7 +247,7 @@
 *
 *  Compute (L' \ B) -> B   [ L' \ (D \ (L \P' * B) ) ]
 * 
-        CALL ZTRSM('L','L','C','U',N,NRHS,ONE,A,N,B,N)
+        CALL ZTRSM('L','L','C','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *       P * B  [ P * (L' \ (D \ (L \P' * B) )) ]
 *
