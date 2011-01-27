@@ -141,14 +141,14 @@
 *
 *  Compute (U \P' * B) -> B    [ (U \P' * B) ]
 *
-        CALL STRSM('L','U','N','U',N,NRHS,ONE,A,N,B,N)
+        CALL STRSM('L','U','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *  Compute D \ B -> B   [ D \ (U \P' * B) ]
 *       
          I=N
          DO WHILE ( I .GE. 1 )
             IF( IPIV(I) .GT. 0 ) THEN
-              CALL SSCAL( NRHS, ONE / A( I, I ), B( I, 1 ), N )
+              CALL SSCAL( NRHS, ONE / A( I, I ), B( I, 1 ), LDB )
             ELSEIF ( I .GT. 1) THEN
                IF ( IPIV(I-1) .EQ. IPIV(I) ) THEN
                   AKM1K = WORK(I)
@@ -169,7 +169,7 @@
 *
 *      Compute (U' \ B) -> B   [ U' \ (D \ (U \P' * B) ) ]
 *
-         CALL STRSM('L','U','T','U',N,NRHS,ONE,A,N,B,N)
+         CALL STRSM('L','U','T','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *       P * B  [ P * (U' \ (D \ (U \P' * B) )) ]
 *
@@ -218,14 +218,14 @@
 *
 *  Compute (L \P' * B) -> B    [ (L \P' * B) ]
 *
-        CALL STRSM('L','L','N','U',N,NRHS,ONE,A,N,B,N)
+        CALL STRSM('L','L','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *  Compute D \ B -> B   [ D \ (L \P' * B) ]
 *       
          I=1
          DO WHILE ( I .LE. N )
             IF( IPIV(I) .GT. 0 ) THEN
-              CALL SSCAL( NRHS, ONE / A( I, I ), B( I, 1 ), N )
+              CALL SSCAL( NRHS, ONE / A( I, I ), B( I, 1 ), LDB )
             ELSE
                   AKM1K = WORK(I)
                   AKM1 = A( I, I ) / AKM1K
@@ -244,7 +244,7 @@
 *
 *  Compute (L' \ B) -> B   [ L' \ (D \ (L \P' * B) ) ]
 * 
-        CALL STRSM('L','L','T','U',N,NRHS,ONE,A,N,B,N)
+        CALL STRSM('L','L','T','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
 *       P * B  [ P * (L' \ (D \ (L \P' * B) )) ]
 *
