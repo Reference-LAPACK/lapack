@@ -271,10 +271,17 @@
         CALL DTRMM('L','U','T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
 *
+         DO I=1,NNB
+            DO J=I,NNB
+              A(CUT+I,CUT+J)=WORK(U11+I,J)
+            END DO
+         END DO         
+*
 *          U01'invD*U01->A(CUT+I,CUT+J)
 *
          CALL DGEMM('T','N',NNB,NNB,CUT,ONE,A(1,CUT+1),LDA,
-     $              WORK,N+NB+1, ZERO, A(CUT+1,CUT+1), LDA)
+     $              WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
+        
 *
 *        U11 =  U11T*invD1*U11 + U01'invD*U01
 *
@@ -436,12 +443,19 @@
         CALL DTRMM('L',UPLO,'T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
 
+*
+         DO I=1,NNB
+            DO J=1,I
+              A(CUT+I,CUT+J)=WORK(U11+I,J)
+            END DO
+         END DO
+*
         IF ( (CUT+NNB) .LT. N ) THEN
 *
 *          L21T*invD2*L21->A(CUT+I,CUT+J)
 *
          CALL DGEMM('T','N',NNB,NNB,N-NNB-CUT,ONE,A(CUT+NNB+1,CUT+1)
-     $             ,LDA,WORK,N+NB+1, ZERO, A(CUT+1,CUT+1), LDA)
+     $             ,LDA,WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
        
 *
 *        L11 =  L11T*invD1*L11 + U01'invD*U01
