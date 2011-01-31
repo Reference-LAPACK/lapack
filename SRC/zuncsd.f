@@ -157,7 +157,7 @@
 *          this value as the first entry of the work array, and no error
 *          message related to LRWORK is issued by XERBLA.
 *
-*  IWORK   (workspace) INTEGER array, dimension (M-Q)
+*  IWORK   (workspace) INTEGER array, dimension (M-MIN(P, M-P, Q, M-Q))
 *
 *  INFO    (output) INTEGER
 *          = 0:  successful exit.
