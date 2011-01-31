@@ -536,6 +536,7 @@
 *           The initial SIGMA was to the outer end of the spectrum
 *           the matrix is definite and we need not retreat.
             TAU = SPDIAM*EPS*N + TWO*PIVMIN
+            TAU = MAX( TAU,TWO*EPS*ABS(SIGMA) )
          ELSE
             IF(MB.GT.1) THEN
                CLWDTH = W(WEND) + WERR(WEND) - W(WBEGIN) - WERR(WBEGIN)
