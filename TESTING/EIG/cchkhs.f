@@ -490,6 +490,8 @@
 *
       DO 260 JSIZE = 1, NSIZES
          N = NN( JSIZE )
+         IF( N.EQ.0 )
+     $      GO TO 260
          N1 = MAX( 1, N )
          ANINV = ONE / REAL( N1 )
 *
