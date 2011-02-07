@@ -147,8 +147,6 @@ else( NOT BLAS_FOUND )
 endif( NOT BLAS_FOUND )
 configure_file(${LAPACK_SOURCE_DIR}/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
-configure_file(${LAPACK_SOURCE_DIR}/lapack-config.cmake.in
-  ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc)
  install(FILES
@@ -163,5 +161,6 @@ install(FILES
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
   DESTINATION lib/cmake/lapack-${LAPACK_VERSION}
   )
-install(EXPORT lapack-targets
-  DESTINATION lib/cmake/lapack-${LAPACK_VERSION})
+
+configure_file(${LAPACK_SOURCE_DIR}/lapack-config-install.cmake.in
+  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
