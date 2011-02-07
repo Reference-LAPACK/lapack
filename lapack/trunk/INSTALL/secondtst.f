@@ -1,16 +1,16 @@
       PROGRAM TEST4
 *
-*  -- LAPACK test routine (version 3.2.2) --
+*  -- LAPACK test routine (version 3.3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     June 2010
+*     February 2010
 *
 *     .. Parameters ..
       INTEGER            NMAX, ITS
-      PARAMETER          ( NMAX = 1000, ITS = 5000 )
+      PARAMETER          ( NMAX = 1000, ITS = 50000 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      REAL               ALPHA, AVG, T1, T2, TNOSEC
+      REAL               ALPHA, AVG, T1, T2, TNOSEC, TOTAL
 *     ..
 *     .. Local Arrays ..
       REAL               X( NMAX ), Y( NMAX )
@@ -24,6 +24,8 @@
 *     ..
 *     .. Executable Statements ..
 *
+*    .. Figure TOTAL flops ..
+      TOTAL = REAL(NMAX) * REAL(ITS) * 2.0
 *
 *     Initialize X and Y
 *
@@ -33,7 +35,7 @@
    10 CONTINUE
       ALPHA = 0.315
 *
-*     Time 10,000,000 SAXPY operations
+*     Time TOTAL SAXPY operations
 *
       T1 = SECOND( )
       DO 30 J = 1, ITS
@@ -43,15 +45,15 @@
          ALPHA = -ALPHA
    30 CONTINUE
       T2 = SECOND( )
-      WRITE( 6, 9999 )T2 - T1
-      IF( T2-T1.GT.0.0 ) THEN
-         WRITE( 6, 9998 )10.0 / ( T2-T1 )
+      TNOSEC = T2 - T1
+      WRITE( 6, 9999 )TOTAL, TNOSEC
+      IF( TNOSEC.GT.0.0 ) THEN
+         WRITE( 6, 9998 )(TOTAL/1.0E6)/TNOSEC
       ELSE
          WRITE( 6, 9994 )
       END IF
-      TNOSEC = T2 - T1
 *
-*     Time 1,000,000 SAXPY operations with SECOND in the outer loop
+*     Time TOTAL SAXPY operations with SECOND in the outer loop
 *
       T1 = SECOND( )
       DO 50 J = 1, ITS
@@ -74,15 +76,20 @@
 *     by an average call to SECOND.
 *
       IF(( AVG.GT.0.0 ).AND.( TNOSEC.GT.0.0 ))
-     $   WRITE( 6, 9995 )1000.*AVG / TNOSEC
+     $   WRITE( 6, 9995 )(AVG/1000) * TOTAL / TNOSEC
 *
- 9999 FORMAT( ' Time for 10,000,000 SAXPY ops  = ', G10.3, ' seconds' )
- 9998 FORMAT( ' SAXPY performance rate         = ', G10.3, ' mflops ' )
- 9997 FORMAT( ' Including SECOND, time         = ', G10.3, ' seconds' )
- 9996 FORMAT( ' Average time for SECOND        = ', G10.3,
+ 9999 FORMAT( ' Time for ', G10.3,' SAXPY ops = ', G10.3, ' seconds' )
+ 9998 FORMAT( ' SAXPY performance rate        = ', G10.3, ' mflops ' )
+ 9997 FORMAT( ' Including SECOND, time        = ', G10.3, ' seconds' )
+ 9996 FORMAT( ' Average time for SECOND       = ', G10.3,
      $      ' milliseconds' )
- 9995 FORMAT( ' Equivalent floating point ops  = ', G10.3, ' ops' )
+ 9995 FORMAT( ' Equivalent floating point ops = ', G10.3, ' ops' )
  9994 FORMAT( ' *** Warning:  Time for operations was less or equal',
      $        ' than zero => timing in TESTING might be dubious' )
+      CALL MYSUB(NMAX,X,Y)
       END
-
+      SUBROUTINE MYSUB(N,X,Y)
+      INTEGER N
+      REAL X(N), Y(N)
+      RETURN
+      END
