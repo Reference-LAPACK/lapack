@@ -1,16 +1,16 @@
       PROGRAM TEST5
 *
-*  -- LAPACK test routine (version 3.2) --
+*  -- LAPACK test routine (version 3.3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*     February 2010
 *
 *     .. Parameters ..
       INTEGER            NMAX, ITS
-      PARAMETER          ( NMAX = 100, ITS = 5000 )
+      PARAMETER          ( NMAX = 1000, ITS = 50000 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      DOUBLE PRECISION   ALPHA, AVG, T1, T2, TNOSEC
+      DOUBLE PRECISION   ALPHA, AVG, T1, T2, TNOSEC, TOTAL
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   X( NMAX ), Y( NMAX )
@@ -24,6 +24,8 @@
 *     ..
 *     .. Executable Statements ..
 *
+*    .. Figure TOTAL flops ..
+      TOTAL = DBLE(NMAX) * DBLE(ITS) * 2.0
 *
 *     Initialize X and Y
 *
@@ -33,7 +35,7 @@
    10 CONTINUE
       ALPHA = 0.315D0
 *
-*     Time 1,000,000 DAXPY operations
+*     Time TOTAL SAXPY operations
 *
       T1 = DSECND( )
       DO 30 J = 1, ITS
@@ -43,15 +45,15 @@
          ALPHA = -ALPHA
    30 CONTINUE
       T2 = DSECND( )
-      WRITE( 6, 9999 )T2 - T1
-      IF( T2-T1.GT.0.0D0 ) THEN
-         WRITE( 6, 9998 )1.0D0 / ( T2-T1 )
+      TNOSEC = T2 - T1
+      WRITE( 6, 9999 )TOTAL, TNOSEC
+      IF( TNOSEC.GT.0.0 ) THEN
+         WRITE( 6, 9998 )(TOTAL/1.0D6)/TNOSEC
       ELSE
          WRITE( 6, 9994 )
       END IF
-      TNOSEC = T2 - T1
 *
-*     Time 1,000,000 DAXPY operations with DSECND in the outer loop
+*     Time TOTAL DAXPY operations with DSECND in the outer loop
 *
       T1 = DSECND( )
       DO 50 J = 1, ITS
@@ -62,26 +64,28 @@
          T2 = DSECND( )
    50 CONTINUE
 *
-*     Compute the time in milliseconds used by an average call
+*     Compute the time used in milliseconds used by an average call
 *     to DSECND.
 *
       WRITE( 6, 9997 )T2 - T1
-      AVG = ( ( T2-T1 )-TNOSEC )*1000.D0 / DBLE( ITS )
-      WRITE( 6, 9996 )AVG
+      AVG = ( ( T2-T1 ) - TNOSEC ) * 1000.0D+00/DBLE( ITS )
+      IF( AVG.GT.0.0)
+     $   WRITE( 6, 9996 )AVG
 *
 *     Compute the equivalent number of floating point operations used
 *     by an average call to DSECND.
 *
-      IF( TNOSEC.GT.0.0D0 )
-     $   WRITE( 6, 9995 )1000.D0*AVG / TNOSEC
+      IF(( AVG.GT.0.0 ).AND.( TNOSEC.GT.0.0 ))
+     $   WRITE( 6, 9995 )(AVG/1000) * TOTAL / TNOSEC
 *
- 9999 FORMAT( ' Time for 1,000,000 DAXPY ops  = ', G10.3, ' seconds' )
+ 9999 FORMAT( ' Time for ', G10.3,' DAXPY ops = ', G10.3, ' seconds' )
  9998 FORMAT( ' DAXPY performance rate        = ', G10.3, ' mflops ' )
  9997 FORMAT( ' Including DSECND, time        = ', G10.3, ' seconds' )
  9996 FORMAT( ' Average time for DSECND       = ', G10.3,
      $      ' milliseconds' )
  9995 FORMAT( ' Equivalent floating point ops = ', G10.3, ' ops' )
- 9994 FORMAT( ' *** Error:  Time for operations was zero' )
+ 9994 FORMAT( ' *** Warning:  Time for operations was less or equal',
+     $        ' than zero => timing in TESTING might be dubious' )
       CALL MYSUB(NMAX,X,Y)
       END
       SUBROUTINE MYSUB(N,X,Y)
