@@ -33,8 +33,6 @@ include(CTest)
 enable_testing()
 # --------------------------------------------------
 
-set(CMAKE_MODULE_PATH ${LAPACK_SOURCE_DIR} ${CMAKE_MODULE_PATH})
-
 # Organize output files.  On Windows this also keeps .dll files next
 # to the .exe files that need them, making tests easy to run.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/bin)
@@ -151,9 +149,9 @@ if( NOT BLAS_FOUND )
 else( NOT BLAS_FOUND )
   export(TARGETS lapack FILE lapack-targets.cmake)
 endif( NOT BLAS_FOUND )
-configure_file(${LAPACK_SOURCE_DIR}/lapack-config-version.cmake.in
+configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
-configure_file(${LAPACK_SOURCE_DIR}/lapack-config.cmake.in
+configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-build.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc)
@@ -162,7 +160,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_D
   DESTINATION ${PKG_CONFIG_DIR}
    )
 
-configure_file(${LAPACK_SOURCE_DIR}/lapack-config-install.cmake.in
+configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
 install(FILES
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake
