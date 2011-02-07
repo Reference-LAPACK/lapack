@@ -35,6 +35,12 @@ enable_testing()
 
 set(CMAKE_MODULE_PATH ${LAPACK_SOURCE_DIR} ${CMAKE_MODULE_PATH})
 
+# Organize output files.  On Windows this also keeps .dll files next
+# to the .exe files that need them, making tests easy to run.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
+
 # --------------------------------------------------
 # Check for any necessary platform specific compiler flags
 include( CheckLAPACKCompilerFlags )
