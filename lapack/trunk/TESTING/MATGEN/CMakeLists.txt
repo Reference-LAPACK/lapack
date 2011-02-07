@@ -66,4 +66,4 @@ if(BUILD_COMPLEX16)
   set(ALLOBJ $(ZMATGEN) $(DZATGEN))
 endif()
 add_library(tmglib ${ALLOBJ} )
-target_link_libraries(tmglib lapack)
+
