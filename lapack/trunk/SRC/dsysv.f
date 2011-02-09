@@ -1,10 +1,11 @@
       SUBROUTINE DSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                  LWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2.2) --
+*  -- LAPACK driver routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     May 2010
+*     February 2011
+* @generated d
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -88,6 +89,8 @@
 *          The length of WORK.  LWORK >= 1, and for best performance
 *          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
 *          DSYTRF.
+*          for LWORK < N, TRS will be done with Level BLAS 2
+*          for LWORK >= N, TRS will be done with Level BLAS 3
 *
 *          If LWORK = -1, then a workspace query is assumed; the routine
 *          only calculates the optimal size of the WORK array, returns
@@ -113,7 +116,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYTRF, DSYTRS2, XERBLA
+      EXTERNAL           XERBLA, DSYTRF, DSYTRS, DSYTRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -160,9 +163,21 @@
       CALL DSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
-*     Solve the system A*X = B, overwriting B with X.
+*        Solve the system A*X = B, overwriting B with X.
 *
-      CALL DSYTRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, INFO )
+         IF ( LWORK.LT.N ) THEN
+*
+*        Solve with TRS ( Use Level BLAS 2)
+*
+            CALL DSYTRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*
+         ELSE
+*
+*        Solve with TRS2 ( Use Level BLAS 3)
+*
+            CALL DSYTRS2( UPLO,N,NRHS,A,LDA,IPIV,B,LDB,WORK,INFO )
+*
+         END IF
 *
       END IF
 *
