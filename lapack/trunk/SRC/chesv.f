@@ -116,7 +116,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CHETRF, ZHETRS, CHETRS2
+      EXTERNAL           XERBLA, CHETRF, CHETRS, CHETRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -169,7 +169,7 @@
 *
 *        Solve with TRS ( Use Level BLAS 2)
 *
-            CALL ZHETRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+            CALL CHETRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 *
          ELSE
 *
