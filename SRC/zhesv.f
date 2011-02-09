@@ -4,7 +4,8 @@
 *  -- LAPACK driver routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2010
+*     February 2011
+* @precisions normal z -> c
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -88,6 +89,8 @@
 *          The length of WORK.  LWORK >= 1, and for best performance
 *          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
 *          ZHETRF.
+*          for LWORK < N, TRS will be done with Level BLAS 2
+*          for LWORK >= N, TRS will be done with Level BLAS 3
 *
 *          If LWORK = -1, then a workspace query is assumed; the routine
 *          only calculates the optimal size of the WORK array, returns
@@ -113,7 +116,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZHETRF, ZHETRS2
+      EXTERNAL           XERBLA, ZHETRF, ZHETRS, ZHETRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -162,7 +165,19 @@
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL ZHETRS2( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK, INFO )
+         IF ( LWORK.LT.N ) THEN
+*
+*        Solve with TRS ( Use Level BLAS 2)
+*
+            CALL ZHETRS( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+*
+         ELSE
+*
+*        Solve with TRS2 ( Use Level BLAS 3)
+*
+            CALL ZHETRS2( UPLO,N,NRHS,A,LDA,IPIV,B,LDB,WORK,INFO )
+*
+         END IF
 *
       END IF
 *
