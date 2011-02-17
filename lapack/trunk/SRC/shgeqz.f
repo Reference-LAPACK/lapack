@@ -109,10 +109,7 @@
 *  H       (input/output) REAL array, dimension (LDH, N)
 *          On entry, the N-by-N upper Hessenberg matrix H.
 *          On exit, if JOB = 'S', H contains the upper quasi-triangular
-*          matrix S from the generalized Schur factorization;
-*          2-by-2 diagonal blocks (corresponding to complex conjugate
-*          pairs of eigenvalues) are returned in standard form, with
-*          H(i,i) = H(i+1,i+1) and H(i+1,i)*H(i,i+1) < 0.
+*          matrix S from the generalized Schur factorization.
 *          If JOB = 'E', the diagonal blocks of H match those of S, but
 *          the rest of H is unspecified.
 *
