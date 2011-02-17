@@ -208,9 +208,6 @@
                KP = K
             ELSE
 *
-*              JMAX is the column-index of the largest off-diagonal
-*              element in row IMAX, and ROWMAX is its absolute value
-*
                ROWMAX = ZERO
                JMAX = IMAX
                KX = IMAX*( IMAX+1 ) / 2 + IMAX
