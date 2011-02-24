@@ -128,8 +128,10 @@
 *
 *     Scale submatrix in rows and columns L to LEND
 *
-      ANORM = SLANST( 'I', LEND-L+1, D( L ), E( L ) )
+      ANORM = SLANST( 'M', LEND-L+1, D( L ), E( L ) )
       ISCALE = 0
+      IF( ANORM.EQ.ZERO )
+     $   GO TO 10      
       IF( ANORM.GT.SSFMAX ) THEN
          ISCALE = 1
          CALL SLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), N,

@@ -195,7 +195,7 @@
 *
 *     Scale submatrix in rows and columns L to LEND
 *
-      ANORM = SLANST( 'I', LEND-L+1, D( L ), E( L ) )
+      ANORM = SLANST( 'M', LEND-L+1, D( L ), E( L ) )
       ISCALE = 0
       IF( ANORM.EQ.ZERO )
      $   GO TO 10
