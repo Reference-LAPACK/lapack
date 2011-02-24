@@ -54,7 +54,7 @@
      $                   NMAXIT
       DOUBLE PRECISION   ALPHA, ANORM, BB, C, EPS, EPS2, GAMMA, OLDC,
      $                   OLDGAM, P, R, RT1, RT2, RTE, S, SAFMAX, SAFMIN,
-     $                   SIGMA, SSFMAX, SSFMIN
+     $                   SIGMA, SSFMAX, SSFMIN, RMAX
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DLANST, DLAPY2
@@ -90,6 +90,7 @@
       SAFMAX = ONE / SAFMIN
       SSFMAX = SQRT( SAFMAX ) / THREE
       SSFMIN = SQRT( SAFMIN ) / EPS2
+      RMAX = DLAMCH( 'O' )
 *
 *     Compute the eigenvalues of the tridiagonal matrix.
 *
@@ -128,9 +129,11 @@
 *
 *     Scale submatrix in rows and columns L to LEND
 *
-      ANORM = DLANST( 'I', LEND-L+1, D( L ), E( L ) )
+      ANORM = DLANST( 'M', LEND-L+1, D( L ), E( L ) )
       ISCALE = 0
-      IF( ANORM.GT.SSFMAX ) THEN
+      IF( ANORM.EQ.ZERO )
+     $   GO TO 10      
+      IF( (ANORM.GT.SSFMAX) ) THEN
          ISCALE = 1
          CALL DLASCL( 'G', 0, 0, ANORM, SSFMAX, LEND-L+1, 1, D( L ), N,
      $                INFO )
