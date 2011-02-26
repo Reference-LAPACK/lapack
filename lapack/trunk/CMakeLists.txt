@@ -89,6 +89,7 @@ endif (BLAS_LIBRAIRIES)
 
 # Neither user specified or optimized BLAS libraries can be used
 if(NOT BLAS_FOUND)
+  message(STATUS "Using supplied NETLIB BLAS implementation")
   add_subdirectory(BLAS)
   set( BLAS_LIBRARIES blas )
 else()
