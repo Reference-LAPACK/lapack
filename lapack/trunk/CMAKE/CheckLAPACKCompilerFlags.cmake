@@ -3,10 +3,11 @@
 # 
 #  1.  If FPE traps are enabled either abort or disable them
 #  2.  Specify fixed form if needed
-#
+#  3.  Ensure that Release builds use O2 instead of O3
+# 
 #=============================================================================
 # Author: Chuck Atkins
-# Copyright 2010
+# Copyright 2011
 #=============================================================================
 
 macro( CheckLAPACKCompilerFlags )
@@ -51,6 +52,15 @@ elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
 
 else()
 endif()
+
+if( "${CMAKE_Fortran_FLAGS_RELEASE}" MATCHES "O[3-9]" )
+  message( STATUS "Reducing RELEASE optimization level from to O2" )
+  string( REGEX REPLACE "O[3-9]" "O2" CMAKE_Fortran_FLAGS_RELEASE 
+          "${CMAKE_Fortran_FLAGS_RELEASE}" )
+  set( CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE}"
+       CACHE STRING "Flags used by the compiler during release builds" FORCE )
+endif()
+
 
 if( FPE_EXIT )
   message( FATAL_ERROR "Floating Point Exception (FPE) trap handlers are currently explicitly enabled in the compiler flags.  LAPACK is designed to check for and handle these cases internally and enabling these traps will likely cause LAPACK to crash.  Please re-configure with floating point exception trapping disabled." )
