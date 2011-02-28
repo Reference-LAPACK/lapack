@@ -54,8 +54,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHECON, CHERFS, CHETF2, CHETRF, CHETRI,
-     $                   CHETRI2, CHETRS, CHKXER, CHPCON, CHPRFS, CHPTRF,
-     $                   CHPTRI, CHPTRS, CHERFSX
+     $                   CHETRI2, CHETRS, CHKXER, CHPCON, CHPRFS,
+     $                   CHPTRF, CHPTRI, CHPTRS, CHERFSX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

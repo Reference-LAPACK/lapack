@@ -54,8 +54,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, ZHECON, ZHERFS, ZHETF2, ZHETRF,
-     $                   ZHETRI, ZHETRI2, ZHETRS, ZHPCON, ZHPRFS, ZHPTRF,
-     $                   ZHPTRI, ZHPTRS, ZHERFSX
+     $                   ZHETRI, ZHETRI2, ZHETRS, ZHPCON, ZHPRFS,
+     $                   ZHPTRF, ZHPTRI, ZHPTRS, ZHERFSX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
