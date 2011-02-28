@@ -33,4 +33,8 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   # Warnings caused by sun compilers when building code to only run on your 
   # native platform
   "xarch=native on this architecture implies -xarch=.*which generates code that does not run"
+  
+  # Harmless warnings from the Intel compiler on Windows
+  "ipo: warning #11010: file format not recognized for .*\\.exe\\.embed\\.manifest\\.res"
+  "LINK : warning LNK4224: /INCREMENTAL:YES is no longer supported;  ignored"
 )
