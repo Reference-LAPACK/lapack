@@ -14,6 +14,8 @@
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--     
 *
+* @precisions normal z -> c
+*
 *     .. Scalar Arguments ..
       CHARACTER          JOBU1, JOBU2, JOBV1T, JOBV2T, SIGNS, TRANS
       INTEGER            INFO, LDU1, LDU2, LDV1T, LDV2T, LDX11, LDX12,
@@ -157,7 +159,7 @@
 *          this value as the first entry of the work array, and no error
 *          message related to LRWORK is issued by XERBLA.
 *
-*  IWORK   (workspace) INTEGER array, dimension (M-MIN(P, M-P, Q, M-Q))
+*  IWORK   (workspace) INTEGER array, dimension (M-MIN(P,M-P,Q,M-Q))
 *
 *  INFO    (output) INTEGER
 *          = 0:  successful exit.
@@ -327,7 +329,7 @@
      $              IORBDB + LORBDBWORKOPT ) - 1
          LWORKMIN = MAX( IORGQR + LORGQRWORKMIN, IORGLQ + LORGLQWORKMIN,
      $              IORBDB + LORBDBWORKMIN ) - 1
-         WORK(1) = LWORKOPT
+         WORK(1) = MAX(LWORKOPT,LWORKMIN)
 *
          IF( LWORK .LT. LWORKMIN
      $       .AND. .NOT. ( LQUERY .OR. LRQUERY ) ) THEN
