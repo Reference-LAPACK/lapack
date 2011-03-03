@@ -6,6 +6,7 @@
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
+* @precisions normal z -> c
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE, UPLO
@@ -236,7 +237,7 @@
             WORK( 1 ) = LWKOPT
          END IF
 *
-         IF( LWORK.LT.MAX( 1, 2*N ) .AND. .NOT.LQUERY )
+         IF( LWORK.LT.LWKMIN .AND. .NOT.LQUERY )
      $      INFO = -17
       END IF
 *
