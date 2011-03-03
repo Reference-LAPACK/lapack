@@ -55,9 +55,10 @@
 *     Scan up each column tracking the last zero row seen.
          ILASLR = 0
          DO J = 1, N
-            DO I = M, 1, -1
-               IF( A(I, J).NE.ZERO ) EXIT
-            END DO
+            I=M
+            DO WHILE ((A(I,J).NE.ZERO).AND.(I.GE.1))
+              I=I-1
+            ENDDO
             ILASLR = MAX( ILASLR, I )
          END DO
       END IF
