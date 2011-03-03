@@ -559,7 +559,7 @@
 *                       print a header to the data file.
 *
                         IF( NERRS.EQ.0 ) THEN
-                           WRITE( NOUT, FMT = 9996 )'CGX'
+                           WRITE( NOUT, FMT = 9996 )'ZGX'
 *
 *                          Matrix types
 *
@@ -744,7 +744,7 @@
 *           print a header to the data file.
 *
             IF( NERRS.EQ.0 ) THEN
-               WRITE( NOUT, FMT = 9996 )'CGX'
+               WRITE( NOUT, FMT = 9996 )'ZGX'
 *
 *              Matrix types
 *
@@ -774,7 +774,7 @@
 *
 *     Summary
 *
-      CALL ALASVM( 'CGX', NOUT, NERRS, NTESTT, 0 )
+      CALL ALASVM( 'ZGX', NOUT, NERRS, NTESTT, 0 )
 *
       WORK( 1 ) = MAXWRK
 *

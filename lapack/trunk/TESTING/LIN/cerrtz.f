@@ -98,7 +98,10 @@
          CALL CTZRZF( 2, 2, A, 1, TAU, W, 1, INFO )
          CALL CHKXER( 'CTZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL CTZRZF( 2, 2, A, 2, TAU, W, 1, INFO )
+         CALL CTZRZF( 2, 2, A, 2, TAU, W, 0, INFO )
+         CALL CHKXER( 'CTZRZF', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL CTZRZF( 2, 3, A, 2, TAU, W, 1, INFO )
          CALL CHKXER( 'CTZRZF', INFOT, NOUT, LERR, OK )
       END IF
 *

@@ -95,7 +95,10 @@
          CALL STZRZF( 2, 2, A, 1, TAU, W, 1, INFO )
          CALL CHKXER( 'STZRZF', INFOT, NOUT, LERR, OK )
          INFOT = 7
-         CALL STZRZF( 2, 2, A, 2, TAU, W, 1, INFO )
+         CALL STZRZF( 2, 2, A, 2, TAU, W, 0, INFO )
+         CALL CHKXER( 'STZRZF', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL STZRZF( 2, 3, A, 2, TAU, W, 1, INFO )
          CALL CHKXER( 'STZRZF', INFOT, NOUT, LERR, OK )
       END IF
 *
