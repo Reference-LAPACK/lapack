@@ -6,6 +6,7 @@
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
+* @precisions normal z -> c
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, UPLO
@@ -191,8 +192,8 @@
 *
       INFO = 0
       IF( N.LE.1 ) THEN
-         LWMIN = 1
-         LRWMIN = 1
+         LWMIN = 1+N
+         LRWMIN = 1+N
          LIWMIN = 1
       ELSE IF( WANTZ ) THEN
          LWMIN = 2*N**2

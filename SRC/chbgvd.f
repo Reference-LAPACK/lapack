@@ -6,6 +6,7 @@
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
+* @generated c
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, UPLO
@@ -79,7 +80,7 @@
 *          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
 *
 *          On exit, the factor S from the split Cholesky factorization
-*          B = S**H*S, as returned by CPBSTF.
+*          B = S**H*S, as returned by ZPBSTF.
 *
 *  LDBB    (input) INTEGER
 *          The leading dimension of the array BB.  LDBB >= KB+1.
@@ -149,7 +150,7 @@
 *             <= N:  the algorithm failed to converge:
 *                    i off-diagonal elements of an intermediate
 *                    tridiagonal form did not converge to zero;
-*             > N:   if INFO = N + i, for 1 <= i <= N, then CPBSTF
+*             > N:   if INFO = N + i, for 1 <= i <= N, then ZPBSTF
 *                    returned INFO = i: B is not positive definite.
 *                    The factorization of B could not be completed and
 *                    no eigenvalues or eigenvectors were computed.
@@ -178,8 +179,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHBGST, CHBTRD, CLACPY, CPBSTF, CSTEDC,
-     $                   SSTERF, XERBLA
+      EXTERNAL           SSTERF, XERBLA, CGEMM, ZHBGST, CHBTRD, CLACPY,
+     $                   ZPBSTF, CSTEDC
 *     ..
 *     .. Executable Statements ..
 *
@@ -191,8 +192,8 @@
 *
       INFO = 0
       IF( N.LE.1 ) THEN
-         LWMIN = 1
-         LRWMIN = 1
+         LWMIN = 1+N
+         LRWMIN = 1+N
          LIWMIN = 1
       ELSE IF( WANTZ ) THEN
          LWMIN = 2*N**2
@@ -249,7 +250,7 @@
 *
 *     Form a split Cholesky factorization of B.
 *
-      CALL CPBSTF( UPLO, N, KB, BB, LDBB, INFO )
+      CALL ZPBSTF( UPLO, N, KB, BB, LDBB, INFO )
       IF( INFO.NE.0 ) THEN
          INFO = N + INFO
          RETURN
@@ -262,7 +263,7 @@
       INDWK2 = 1 + N*N
       LLWK2 = LWORK - INDWK2 + 2
       LLRWK = LRWORK - INDWRK + 2
-      CALL CHBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
+      CALL ZHBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
      $             WORK, RWORK( INDWRK ), IINFO )
 *
 *     Reduce Hermitian band matrix to tridiagonal form.

@@ -6,6 +6,7 @@
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2006
+* @generated c
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE, UPLO
@@ -173,16 +174,16 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               CLANHE, SLAMCH
-      EXTERNAL           LSAME, ILAENV, CLANHE, SLAMCH
+      REAL               SLAMCH, CLANHE
+      EXTERNAL           LSAME, ILAENV, SLAMCH, CLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRD, CLACPY, CSSCAL, CSTEIN, CSTEQR, CSWAP,
-     $                   CUNGTR, CUNMTR, SCOPY, SSCAL, SSTEBZ, SSTERF,
-     $                   XERBLA
+      EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
+     $                   CHETRD, CLACPY, CSTEIN, CSTEQR, CSWAP, CUNGTR,
+     $                   CUNMTR
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN, REAL, SQRT
+      INTRINSIC          REAL, MAX, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
