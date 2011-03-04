@@ -7,19 +7,20 @@
 *
 *  -- Written by Julie Langou of the Univ. of TN    --
 *
+* @precisions normal z -> s d c
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
       INTEGER            INFO, LDA, LWORK, N
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE COMPLEX     A( LDA, * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), WORK( * )
 *     ..
 *
 *  Purpose
 *  =======
 *
-*  ZSYTRI2 computes the inverse of a complex symmetric indefinite matrix
+*  ZSYTRI2 computes the inverse of a COMPLEX*16 hermitian indefinite matrix
 *  A using the factorization A = U*D*U**T or A = L*D*L**T computed by
 *  ZSYTRF. ZSYTRI2 sets the LEADING DIMENSION of the workspace
 *  before calling ZSYTRI2X that actually computes the inverse.
@@ -36,7 +37,7 @@
 *  N       (input) INTEGER
 *          The order of the matrix A.  N >= 0.
 *
-*  A       (input/output) DOUBLE COMPLEX array, dimension (LDA,N)
+*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
 *          On entry, the NB diagonal matrix D and the multipliers
 *          used to obtain the factor U or L as computed by ZSYTRF.
 *
@@ -54,7 +55,7 @@
 *          Details of the interchanges and the NB structure of D
 *          as determined by ZSYTRF.
 *
-*  WORK    (workspace) DOUBLE COMPLEX array, dimension (N+NB+1)*(NB+3)
+*  WORK    (workspace) COMPLEX*16 array, dimension (N+NB+1)*(NB+3)
 *
 *  LWORK   (input) INTEGER
 *          The dimension of the array WORK.
@@ -94,7 +95,11 @@
       LQUERY = ( LWORK.EQ.-1 )
 *     Get blocksize
       NBMAX = ILAENV( 1, 'ZSYTRF', UPLO, N, -1, -1, -1 )
-      MINSIZE = (N+NBMAX+1)*(NBMAX+3)
+      IF ( NBMAX .GE. N ) THEN
+         MINSIZE = N
+      ELSE
+         MINSIZE = (N+NBMAX+1)*(NBMAX+3)
+      END IF
 *
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
@@ -113,13 +118,17 @@
          CALL XERBLA( 'ZSYTRI2', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         WORK(1)=(N+NBMAX+1)*(NBMAX+3)
+         WORK(1)=MINSIZE
          RETURN
       END IF
       IF( N.EQ.0 )
      $   RETURN
       
-      CALL ZSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
+      IF( NBMAX .GE. N ) THEN
+         CALL ZSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      ELSE
+         CALL ZSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
+      END IF
       RETURN
 *
 *     End of ZSYTRI2

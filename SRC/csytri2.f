@@ -7,6 +7,7 @@
 *
 *  -- Written by Julie Langou of the Univ. of TN    --
 *
+* @generated c
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
       INTEGER            INFO, LDA, LWORK, N
@@ -19,7 +20,7 @@
 *  Purpose
 *  =======
 *
-*  CSYTRI2 computes the inverse of a complex symmetric indefinite matrix
+*  CSYTRI2 computes the inverse of a COMPLEX hermitian indefinite matrix
 *  A using the factorization A = U*D*U**T or A = L*D*L**T computed by
 *  CSYTRF. CSYTRI2 sets the LEADING DIMENSION of the workspace
 *  before calling CSYTRI2X that actually computes the inverse.
@@ -94,7 +95,11 @@
       LQUERY = ( LWORK.EQ.-1 )
 *     Get blocksize
       NBMAX = ILAENV( 1, 'CSYTRF', UPLO, N, -1, -1, -1 )
-      MINSIZE = (N+NBMAX+1)*(NBMAX+3)
+      IF ( NBMAX .GE. N ) THEN
+         MINSIZE = N
+      ELSE
+         MINSIZE = (N+NBMAX+1)*(NBMAX+3)
+      END IF
 *
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
@@ -113,13 +118,17 @@
          CALL XERBLA( 'CSYTRI2', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         WORK(1)=(N+NBMAX+1)*(NBMAX+3)
+         WORK(1)=MINSIZE
          RETURN
       END IF
       IF( N.EQ.0 )
      $   RETURN
       
-      CALL CSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
+      IF( NBMAX .GE. N ) THEN
+         CALL CSYTRI( UPLO, N, A, LDA, IPIV, WORK, INFO )
+      ELSE
+         CALL CSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NBMAX, INFO )
+      END IF
       RETURN
 *
 *     End of CSYTRI2
