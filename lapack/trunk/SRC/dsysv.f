@@ -145,8 +145,8 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            NB = ILAENV( 1, 'DSYTRF', UPLO, N, -1, -1, -1 )
-            LWKOPT = N*NB
+            CALL DSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )            
+            LWKOPT = WORK(1)
          END IF
          WORK( 1 ) = LWKOPT
       END IF
