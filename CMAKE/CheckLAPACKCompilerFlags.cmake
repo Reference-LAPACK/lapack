@@ -50,6 +50,27 @@ elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
          CACHE STRING "Flags for Fortran compiler." FORCE )
   endif()
 
+# HP Fortran
+elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "HP" )
+  if( "${CMAKE_Fortran_FLAGS}" MATCHES "\\+fp_exception" )
+    set( FPE_EXIT TRUE )
+  endif()
+  
+  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "\\+fltconst_strict") )
+    message( STATUS "Enabling strict float conversion with +fltconst_strict" )
+    set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} +fltconst_strict"
+         CACHE STRING "Flags for Fortran compiler." FORCE )
+  endif() 
+
+  # Most versions of cmake don't have good default options for the HP compiler
+  set( CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -g"
+       CACHE STRING "Flags used by the compiler during debug builds" FORCE )
+  set( CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_MINSIZEREL} +Osize"
+       CACHE STRING "Flags used by the compiler during release minsize builds" FORCE )
+  set( CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_RELEASE} +O2"
+       CACHE STRING "Flags used by the compiler during release builds" FORCE )
+  set( CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_RELWITHDEBINFO} +O2 -g"
+       CACHE STRING "Flags used by the compiler during release with debug info builds" FORCE )
 else()
 endif()
 
