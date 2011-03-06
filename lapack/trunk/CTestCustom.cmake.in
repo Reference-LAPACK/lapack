@@ -37,4 +37,8 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   # Harmless warnings from the Intel compiler on Windows
   "ipo: warning #11010: file format not recognized for .*\\.exe\\.embed\\.manifest\\.res"
   "LINK : warning LNK4224: /INCREMENTAL:YES is no longer supported;  ignored"
+
+  # Warnings caused by string truncation in the test code.  The truncation is 
+  # intentional
+  "Character string truncated to length 1 on assignment"
 )
