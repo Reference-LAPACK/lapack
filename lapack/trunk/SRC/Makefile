@@ -195,7 +195,7 @@ CLASRC = \
    claswp.o clasyf.o clatbs.o clatdf.o clatps.o clatrd.o clatrs.o clatrz.o \
    clatzm.o clauu2.o clauum.o cpbcon.o cpbequ.o cpbrfs.o cpbstf.o cpbsv.o  \
    cpbsvx.o cpbtf2.o cpbtrf.o cpbtrs.o cpocon.o cpoequ.o cporfs.o \
-   cposv.o  cposvx.o cpotf2.o cpotri.o cpotrs.o cpstrf.o cpstf2.o \
+   cposv.o  cposvx.o cpotf2.o cpotri.o cpstrf.o cpstf2.o \
    cppcon.o cppequ.o cpprfs.o cppsv.o  cppsvx.o cpptrf.o cpptri.o cpptrs.o \
    cptcon.o cpteqr.o cptrfs.o cptsv.o  cptsvx.o cpttrf.o cpttrs.o cptts2.o \
    crot.o   cspcon.o cspmv.o  cspr.o   csprfs.o cspsv.o  \
