@@ -59,7 +59,7 @@
 *                                (LDV,K) if STOREV = 'C'
 *                                (LDV,M) if STOREV = 'R' and SIDE = 'L'
 *                                (LDV,N) if STOREV = 'R' and SIDE = 'R'
-*          The matrix V. See further details.
+*          The matrix V. See Further Details.
 *
 *  LDV     (input) INTEGER
 *          The leading dimension of the array V.
@@ -87,6 +87,31 @@
 *          The leading dimension of the array WORK.
 *          If SIDE = 'L', LDWORK >= max(1,N);
 *          if SIDE = 'R', LDWORK >= max(1,M).
+*
+*  Further Details
+*  ===============
+*
+*  The shape of the matrix V and the storage of the vectors which define
+*  the H(i) is best illustrated by the following example with n = 5 and
+*  k = 3. The elements equal to 1 are not stored; the corresponding
+*  array elements are modified but restored on exit. The rest of the
+*  array is not used.
+*
+*  DIRECT = 'F' and STOREV = 'C':         DIRECT = 'F' and STOREV = 'R':
+*
+*               V = (  1       )                 V = (  1 v1 v1 v1 v1 )
+*                   ( v1  1    )                     (     1 v2 v2 v2 )
+*                   ( v1 v2  1 )                     (        1 v3 v3 )
+*                   ( v1 v2 v3 )
+*                   ( v1 v2 v3 )
+*
+*  DIRECT = 'B' and STOREV = 'C':         DIRECT = 'B' and STOREV = 'R':
+*
+*               V = ( v1 v2 v3 )                 V = ( v1 v1  1       )
+*                   ( v1 v2 v3 )                     ( v2 v2 v2  1    )
+*                   (  1 v2 v3 )                     ( v3 v3 v3 v3  1 )
+*                   (     1 v3 )
+*                   (        1 )
 *
 *  =====================================================================
 *
