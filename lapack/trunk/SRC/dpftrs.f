@@ -186,20 +186,20 @@
 *     Quick return if possible
 *
       IF( N.EQ.0 .OR. NRHS.EQ.0 )
-     +   RETURN
+     $   RETURN
 *
 *     start execution: there are two triangular solves
 *
       IF( LOWER ) THEN
          CALL DTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
-     +               LDB )
+     $               LDB )
          CALL DTFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
-     +               LDB )
+     $               LDB )
       ELSE
          CALL DTFSM( TRANSR, 'L', UPLO, 'T', 'N', N, NRHS, ONE, A, B,
-     +               LDB )
+     $               LDB )
          CALL DTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, ONE, A, B,
-     +               LDB )
+     $               LDB )
       END IF
 *
       RETURN

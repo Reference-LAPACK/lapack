@@ -92,8 +92,8 @@
 *          = 'V': all eigenvalues in the half-open interval (VL,VU]
 *                 will be found.
 *          = 'I': the IL-th through IU-th eigenvalues will be found.
-********** For RANGE = 'V' or 'I' and IU - IL < N - 1, DSTEBZ and
-********** ZSTEIN are called
+*          For RANGE = 'V' or 'I' and IU - IL < N - 1, DSTEBZ and
+*          ZSTEIN are called
 *
 *  UPLO    (input) CHARACTER*1
 *          = 'U':  Upper triangle of A is stored;
@@ -183,7 +183,7 @@
 *          indicating the nonzero elements in Z. The i-th eigenvector
 *          is nonzero only in elements ISUPPZ( 2*i-1 ) through
 *          ISUPPZ( 2*i ).
-********** Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1
+*          Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1
 *
 *  WORK    (workspace/output) COMPLEX*16 array, dimension (MAX(1,LWORK))
 *          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
@@ -204,7 +204,7 @@
 *          On exit, if INFO = 0, RWORK(1) returns the optimal
 *          (and minimal) LRWORK.
 *
-* LRWORK   (input) INTEGER
+*  LRWORK   (input) INTEGER
 *          The length of the array RWORK.  LRWORK >= max(1,24*N).
 *
 *          If LRWORK = -1, then a workspace query is assumed; the
@@ -217,7 +217,7 @@
 *          On exit, if INFO = 0, IWORK(1) returns the optimal
 *          (and minimal) LIWORK.
 *
-* LIWORK   (input) INTEGER
+*  LIWORK   (input) INTEGER
 *          The dimension of the array IWORK.  LIWORK >= max(1,10*N).
 *
 *          If LIWORK = -1, then a workspace query is assumed; the
@@ -242,7 +242,7 @@
 *     Jason Riedy, Computer Science Division, University of
 *       California at Berkeley, USA
 *
-* =====================================================================
+*  =====================================================================
 *
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO, ONE, TWO

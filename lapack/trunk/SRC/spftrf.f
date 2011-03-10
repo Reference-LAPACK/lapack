@@ -192,7 +192,7 @@
 *     Quick return if possible
 *
       IF( N.EQ.0 )
-     +   RETURN
+     $   RETURN
 *
 *     If N is odd, set NISODD = .TRUE.
 *     If N is even, set K = N/2 and NISODD = .FALSE.
@@ -232,14 +232,14 @@
 *
                CALL SPOTRF( 'L', N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL STRSM( 'R', 'L', 'T', 'N', N2, N1, ONE, A( 0 ), N,
-     +                     A( N1 ), N )
+     $                     A( N1 ), N )
                CALL SSYRK( 'U', 'N', N2, N1, -ONE, A( N1 ), N, ONE,
-     +                     A( N ), N )
+     $                     A( N ), N )
                CALL SPOTRF( 'U', N2, A( N ), N, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + N1
+     $            INFO = INFO + N1
 *
             ELSE
 *
@@ -249,14 +249,14 @@
 *
                CALL SPOTRF( 'L', N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL STRSM( 'L', 'L', 'N', 'N', N1, N2, ONE, A( N2 ), N,
-     +                     A( 0 ), N )
+     $                     A( 0 ), N )
                CALL SSYRK( 'U', 'T', N2, N1, -ONE, A( 0 ), N, ONE,
-     +                     A( N1 ), N )
+     $                     A( N1 ), N )
                CALL SPOTRF( 'U', N2, A( N1 ), N, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + N1
+     $            INFO = INFO + N1
 *
             END IF
 *
@@ -272,14 +272,14 @@
 *
                CALL SPOTRF( 'U', N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL STRSM( 'L', 'U', 'T', 'N', N1, N2, ONE, A( 0 ), N1,
-     +                     A( N1*N1 ), N1 )
+     $                     A( N1*N1 ), N1 )
                CALL SSYRK( 'L', 'T', N2, N1, -ONE, A( N1*N1 ), N1, ONE,
-     +                     A( 1 ), N1 )
+     $                     A( 1 ), N1 )
                CALL SPOTRF( 'L', N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + N1
+     $            INFO = INFO + N1
 *
             ELSE
 *
@@ -289,14 +289,14 @@
 *
                CALL SPOTRF( 'U', N1, A( N2*N2 ), N2, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL STRSM( 'R', 'U', 'N', 'N', N2, N1, ONE, A( N2*N2 ),
-     +                     N2, A( 0 ), N2 )
+     $                     N2, A( 0 ), N2 )
                CALL SSYRK( 'L', 'N', N2, N1, -ONE, A( 0 ), N2, ONE,
-     +                     A( N1*N2 ), N2 )
+     $                     A( N1*N2 ), N2 )
                CALL SPOTRF( 'L', N2, A( N1*N2 ), N2, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + N1
+     $            INFO = INFO + N1
 *
             END IF
 *
@@ -318,14 +318,14 @@
 *
                CALL SPOTRF( 'L', K, A( 1 ), N+1, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL STRSM( 'R', 'L', 'T', 'N', K, K, ONE, A( 1 ), N+1,
-     +                     A( K+1 ), N+1 )
+     $                     A( K+1 ), N+1 )
                CALL SSYRK( 'U', 'N', K, K, -ONE, A( K+1 ), N+1, ONE,
-     +                     A( 0 ), N+1 )
+     $                     A( 0 ), N+1 )
                CALL SPOTRF( 'U', K, A( 0 ), N+1, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + K
+     $            INFO = INFO + K
 *
             ELSE
 *
@@ -335,14 +335,14 @@
 *
                CALL SPOTRF( 'L', K, A( K+1 ), N+1, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL STRSM( 'L', 'L', 'N', 'N', K, K, ONE, A( K+1 ),
-     +                     N+1, A( 0 ), N+1 )
+     $                     N+1, A( 0 ), N+1 )
                CALL SSYRK( 'U', 'T', K, K, -ONE, A( 0 ), N+1, ONE,
-     +                     A( K ), N+1 )
+     $                     A( K ), N+1 )
                CALL SPOTRF( 'U', K, A( K ), N+1, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + K
+     $            INFO = INFO + K
 *
             END IF
 *
@@ -358,14 +358,14 @@
 *
                CALL SPOTRF( 'U', K, A( 0+K ), K, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL STRSM( 'L', 'U', 'T', 'N', K, K, ONE, A( K ), N1,
-     +                     A( K*( K+1 ) ), K )
+     $                     A( K*( K+1 ) ), K )
                CALL SSYRK( 'L', 'T', K, K, -ONE, A( K*( K+1 ) ), K, ONE,
-     +                     A( 0 ), K )
+     $                     A( 0 ), K )
                CALL SPOTRF( 'L', K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + K
+     $            INFO = INFO + K
 *
             ELSE
 *
@@ -375,14 +375,14 @@
 *
                CALL SPOTRF( 'U', K, A( K*( K+1 ) ), K, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL STRSM( 'R', 'U', 'N', 'N', K, K, ONE,
-     +                     A( K*( K+1 ) ), K, A( 0 ), K )
+     $                     A( K*( K+1 ) ), K, A( 0 ), K )
                CALL SSYRK( 'L', 'N', K, K, -ONE, A( 0 ), K, ONE,
-     +                     A( K*K ), K )
+     $                     A( K*K ), K )
                CALL SPOTRF( 'L', K, A( K*K ), K, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + K
+     $            INFO = INFO + K
 *
             END IF
 *

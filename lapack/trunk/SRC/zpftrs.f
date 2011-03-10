@@ -207,20 +207,20 @@
 *     Quick return if possible
 *
       IF( N.EQ.0 .OR. NRHS.EQ.0 )
-     +   RETURN
+     $   RETURN
 *
 *     start execution: there are two triangular solves
 *
       IF( LOWER ) THEN
          CALL ZTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A, B,
-     +               LDB )
+     $               LDB )
          CALL ZTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A, B,
-     +               LDB )
+     $               LDB )
       ELSE
          CALL ZTFSM( TRANSR, 'L', UPLO, 'C', 'N', N, NRHS, CONE, A, B,
-     +               LDB )
+     $               LDB )
          CALL ZTFSM( TRANSR, 'L', UPLO, 'N', 'N', N, NRHS, CONE, A, B,
-     +               LDB )
+     $               LDB )
       END IF
 *
       RETURN

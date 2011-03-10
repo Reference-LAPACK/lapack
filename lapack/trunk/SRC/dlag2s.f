@@ -54,7 +54,7 @@
 *                PRECISION overflow threshold, in this case, the content
 *                of SA in exit is unspecified.
 *
-*  =========
+*  =====================================================================
 *
 *     .. Local Scalars ..
       INTEGER            I, J

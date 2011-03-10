@@ -235,11 +235,11 @@
          K = N / 2
          NISODD = .FALSE.
          IF( .NOT.LOWER )
-     +      NP1X2 = N + N + 2
+     $      NP1X2 = N + N + 2
       ELSE
          NISODD = .TRUE.
          IF( .NOT.LOWER )
-     +      NX2 = N + N
+     $      NX2 = N + N
       END IF
 *
       IF( NISODD ) THEN
