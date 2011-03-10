@@ -39,6 +39,8 @@
 *          = 0:  Arithmetic failed to produce the correct answers
 *          = 1:  Arithmetic produced the correct answers
 *
+*  =====================================================================
+*
 *     .. Local Scalars ..
       REAL               NAN1, NAN2, NAN3, NAN4, NAN5, NAN6, NEGINF,
      $                   NEGZRO, NEWZRO, POSINF

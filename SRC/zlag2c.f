@@ -53,7 +53,7 @@
 *                PRECISION overflow threshold, in this case, the content
 *                of SA in exit is unspecified.
 *
-*  =========
+*  =====================================================================
 *
 *     .. Local Scalars ..
       INTEGER            I, J
@@ -72,9 +72,9 @@
       DO 20 J = 1, N
          DO 10 I = 1, M
             IF( ( DBLE( A( I, J ) ).LT.-RMAX ) .OR.
-     +          ( DBLE( A( I, J ) ).GT.RMAX ) .OR.
-     +          ( DIMAG( A( I, J ) ).LT.-RMAX ) .OR.
-     +          ( DIMAG( A( I, J ) ).GT.RMAX ) ) THEN
+     $          ( DBLE( A( I, J ) ).GT.RMAX ) .OR.
+     $          ( DIMAG( A( I, J ) ).LT.-RMAX ) .OR.
+     $          ( DIMAG( A( I, J ) ).GT.RMAX ) ) THEN
                INFO = 1
                GO TO 30
             END IF

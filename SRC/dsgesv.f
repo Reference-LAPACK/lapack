@@ -1,5 +1,5 @@
       SUBROUTINE DSGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
-     +                   SWORK, ITER, INFO )
+     $                   SWORK, ITER, INFO )
 *
 *  -- LAPACK PROTOTYPE driver routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -14,7 +14,7 @@
       INTEGER            IPIV( * )
       REAL               SWORK( * )
       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( N, * ),
-     +                   X( LDX, * )
+     $                   X( LDX, * )
 *     ..
 *
 *  Purpose
@@ -122,7 +122,7 @@
 *                but the factor U is exactly singular, so the solution
 *                could not be computed.
 *
-*  =========
+*  =====================================================================
 *
 *     .. Parameters ..
       LOGICAL            DOITREF
@@ -143,7 +143,7 @@
 *
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DGEMM, DLACPY, DLAG2S, SLAG2D, SGETRF,
-     +                   SGETRS, XERBLA
+     $                   SGETRS, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
@@ -179,7 +179,7 @@
 *     Quick return if (N.EQ.0).
 *
       IF( N.EQ.0 )
-     +   RETURN
+     $   RETURN
 *
 *     Skip single precision iterative refinement if a priori slower
 *     than double precision factorization.
@@ -232,7 +232,7 @@
 *     Solve the system SA*SX = SB.
 *
       CALL SGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
-     +             SWORK( PTSX ), N, INFO )
+     $             SWORK( PTSX ), N, INFO )
 *
 *     Convert SX back to double precision
 *
@@ -243,7 +243,7 @@
       CALL DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
       CALL DGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE, A,
-     +            LDA, X, LDX, ONE, WORK, N )
+     $            LDA, X, LDX, ONE, WORK, N )
 *
 *     Check whether the NRHS normwise backward errors satisfy the
 *     stopping criterion. If yes, set ITER=0 and return.
@@ -252,7 +252,7 @@
          XNRM = ABS( X( IDAMAX( N, X( 1, I ), 1 ), I ) )
          RNRM = ABS( WORK( IDAMAX( N, WORK( 1, I ), 1 ), I ) )
          IF( RNRM.GT.XNRM*CTE )
-     +      GO TO 10
+     $      GO TO 10
       END DO
 *
 *     If we are here, the NRHS normwise backward errors satisfy the
@@ -278,7 +278,7 @@
 *        Solve the system SA*SX = SR.
 *
          CALL SGETRS( 'No transpose', N, NRHS, SWORK( PTSA ), N, IPIV,
-     +                SWORK( PTSX ), N, INFO )
+     $                SWORK( PTSX ), N, INFO )
 *
 *        Convert SX back to double precision and update the current
 *        iterate.
@@ -294,7 +294,7 @@
          CALL DLACPY( 'All', N, NRHS, B, LDB, WORK, N )
 *
          CALL DGEMM( 'No Transpose', 'No Transpose', N, NRHS, N, NEGONE,
-     +               A, LDA, X, LDX, ONE, WORK, N )
+     $               A, LDA, X, LDX, ONE, WORK, N )
 *
 *        Check whether the NRHS normwise backward errors satisfy the
 *        stopping criterion. If yes, set ITER=IITER>0 and return.
@@ -303,7 +303,7 @@
             XNRM = ABS( X( IDAMAX( N, X( 1, I ), 1 ), I ) )
             RNRM = ABS( WORK( IDAMAX( N, WORK( 1, I ), 1 ), I ) )
             IF( RNRM.GT.XNRM*CTE )
-     +         GO TO 20
+     $         GO TO 20
          END DO
 *
 *        If we are here, the NRHS normwise backward errors satisfy the
@@ -332,11 +332,11 @@
       CALL DGETRF( N, N, A, LDA, IPIV, INFO )
 *
       IF( INFO.NE.0 )
-     +   RETURN
+     $   RETURN
 *
       CALL DLACPY( 'All', N, NRHS, B, LDB, X, LDX )
       CALL DGETRS( 'No transpose', N, NRHS, A, LDA, IPIV, X, LDX,
-     +             INFO )
+     $             INFO )
 *
       RETURN
 *

@@ -1,5 +1,5 @@
       SUBROUTINE STFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
-     +                  B, LDB )
+     $                  B, LDB )
 *
 *  -- LAPACK routine (version 3.3.0)                                    --
 *
@@ -222,7 +222,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LOWER, LSIDE, MISODD, NISODD, NORMALTRANSR,
-     +                   NOTRANS
+     $                   NOTRANS
       INTEGER            M1, M2, N1, N2, K, INFO, I, J
 *     ..
 *     .. External Functions ..
@@ -253,7 +253,7 @@
       ELSE IF( .NOT.NOTRANS .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN
          INFO = -4
       ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
-     +         THEN
+     $         THEN
          INFO = -5
       ELSE IF( M.LT.0 ) THEN
          INFO = -6
@@ -270,7 +270,7 @@
 *     Quick return when ( (N.EQ.0).OR.(M.EQ.0) )
 *
       IF( ( M.EQ.0 ) .OR. ( N.EQ.0 ) )
-     +   RETURN
+     $   RETURN
 *
 *     Quick return when ALPHA.EQ.(0D+0)
 *
@@ -324,14 +324,14 @@
 *
                      IF( M.EQ.1 ) THEN
                         CALL STRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
-     +                              A, M, B, LDB )
+     $                              A, M, B, LDB )
                      ELSE
                         CALL STRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
-     +                              A( 0 ), M, B, LDB )
+     $                              A( 0 ), M, B, LDB )
                         CALL SGEMM( 'N', 'N', M2, N, M1, -ONE, A( M1 ),
-     +                              M, B, LDB, ALPHA, B( M1, 0 ), LDB )
+     $                              M, B, LDB, ALPHA, B( M1, 0 ), LDB )
                         CALL STRSM( 'L', 'U', 'T', DIAG, M2, N, ONE,
-     +                              A( M ), M, B( M1, 0 ), LDB )
+     $                              A( M ), M, B( M1, 0 ), LDB )
                      END IF
 *
                   ELSE
@@ -341,14 +341,14 @@
 *
                      IF( M.EQ.1 ) THEN
                         CALL STRSM( 'L', 'L', 'T', DIAG, M1, N, ALPHA,
-     +                              A( 0 ), M, B, LDB )
+     $                              A( 0 ), M, B, LDB )
                      ELSE
                         CALL STRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
-     +                              A( M ), M, B( M1, 0 ), LDB )
+     $                              A( M ), M, B( M1, 0 ), LDB )
                         CALL SGEMM( 'T', 'N', M1, N, M2, -ONE, A( M1 ),
-     +                              M, B( M1, 0 ), LDB, ALPHA, B, LDB )
+     $                              M, B( M1, 0 ), LDB, ALPHA, B, LDB )
                         CALL STRSM( 'L', 'L', 'T', DIAG, M1, N, ONE,
-     +                              A( 0 ), M, B, LDB )
+     $                              A( 0 ), M, B, LDB )
                      END IF
 *
                   END IF
@@ -363,11 +363,11 @@
 *                    TRANS = 'N'
 *
                      CALL STRSM( 'L', 'L', 'N', DIAG, M1, N, ALPHA,
-     +                           A( M2 ), M, B, LDB )
+     $                           A( M2 ), M, B, LDB )
                      CALL SGEMM( 'T', 'N', M2, N, M1, -ONE, A( 0 ), M,
-     +                           B, LDB, ALPHA, B( M1, 0 ), LDB )
+     $                           B, LDB, ALPHA, B( M1, 0 ), LDB )
                      CALL STRSM( 'L', 'U', 'T', DIAG, M2, N, ONE,
-     +                           A( M1 ), M, B( M1, 0 ), LDB )
+     $                           A( M1 ), M, B( M1, 0 ), LDB )
 *
                   ELSE
 *
@@ -375,11 +375,11 @@
 *                    TRANS = 'T'
 *
                      CALL STRSM( 'L', 'U', 'N', DIAG, M2, N, ALPHA,
-     +                           A( M1 ), M, B( M1, 0 ), LDB )
+     $                           A( M1 ), M, B( M1, 0 ), LDB )
                      CALL SGEMM( 'N', 'N', M1, N, M2, -ONE, A( 0 ), M,
-     +                           B( M1, 0 ), LDB, ALPHA, B, LDB )
+     $                           B( M1, 0 ), LDB, ALPHA, B, LDB )
                      CALL STRSM( 'L', 'L', 'T', DIAG, M1, N, ONE,
-     +                           A( M2 ), M, B, LDB )
+     $                           A( M2 ), M, B, LDB )
 *
                   END IF
 *
@@ -400,15 +400,15 @@
 *
                      IF( M.EQ.1 ) THEN
                         CALL STRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
-     +                              A( 0 ), M1, B, LDB )
+     $                              A( 0 ), M1, B, LDB )
                      ELSE
                         CALL STRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
-     +                              A( 0 ), M1, B, LDB )
+     $                              A( 0 ), M1, B, LDB )
                         CALL SGEMM( 'T', 'N', M2, N, M1, -ONE,
-     +                              A( M1*M1 ), M1, B, LDB, ALPHA,
-     +                              B( M1, 0 ), LDB )
+     $                              A( M1*M1 ), M1, B, LDB, ALPHA,
+     $                              B( M1, 0 ), LDB )
                         CALL STRSM( 'L', 'L', 'N', DIAG, M2, N, ONE,
-     +                              A( 1 ), M1, B( M1, 0 ), LDB )
+     $                              A( 1 ), M1, B( M1, 0 ), LDB )
                      END IF
 *
                   ELSE
@@ -418,15 +418,15 @@
 *
                      IF( M.EQ.1 ) THEN
                         CALL STRSM( 'L', 'U', 'N', DIAG, M1, N, ALPHA,
-     +                              A( 0 ), M1, B, LDB )
+     $                              A( 0 ), M1, B, LDB )
                      ELSE
                         CALL STRSM( 'L', 'L', 'T', DIAG, M2, N, ALPHA,
-     +                              A( 1 ), M1, B( M1, 0 ), LDB )
+     $                              A( 1 ), M1, B( M1, 0 ), LDB )
                         CALL SGEMM( 'N', 'N', M1, N, M2, -ONE,
-     +                              A( M1*M1 ), M1, B( M1, 0 ), LDB,
-     +                              ALPHA, B, LDB )
+     $                              A( M1*M1 ), M1, B( M1, 0 ), LDB,
+     $                              ALPHA, B, LDB )
                         CALL STRSM( 'L', 'U', 'N', DIAG, M1, N, ONE,
-     +                              A( 0 ), M1, B, LDB )
+     $                              A( 0 ), M1, B, LDB )
                      END IF
 *
                   END IF
@@ -441,11 +441,11 @@
 *                    TRANS = 'N'
 *
                      CALL STRSM( 'L', 'U', 'T', DIAG, M1, N, ALPHA,
-     +                           A( M2*M2 ), M2, B, LDB )
+     $                           A( M2*M2 ), M2, B, LDB )
                      CALL SGEMM( 'N', 'N', M2, N, M1, -ONE, A( 0 ), M2,
-     +                           B, LDB, ALPHA, B( M1, 0 ), LDB )
+     $                           B, LDB, ALPHA, B( M1, 0 ), LDB )
                      CALL STRSM( 'L', 'L', 'N', DIAG, M2, N, ONE,
-     +                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
+     $                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
 *
                   ELSE
 *
@@ -453,11 +453,11 @@
 *                    TRANS = 'T'
 *
                      CALL STRSM( 'L', 'L', 'T', DIAG, M2, N, ALPHA,
-     +                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
+     $                           A( M1*M2 ), M2, B( M1, 0 ), LDB )
                      CALL SGEMM( 'T', 'N', M1, N, M2, -ONE, A( 0 ), M2,
-     +                           B( M1, 0 ), LDB, ALPHA, B, LDB )
+     $                           B( M1, 0 ), LDB, ALPHA, B, LDB )
                      CALL STRSM( 'L', 'U', 'N', DIAG, M1, N, ONE,
-     +                           A( M2*M2 ), M2, B, LDB )
+     $                           A( M2*M2 ), M2, B, LDB )
 *
                   END IF
 *
@@ -483,11 +483,11 @@
 *                    and TRANS = 'N'
 *
                      CALL STRSM( 'L', 'L', 'N', DIAG, K, N, ALPHA,
-     +                           A( 1 ), M+1, B, LDB )
+     $                           A( 1 ), M+1, B, LDB )
                      CALL SGEMM( 'N', 'N', K, N, K, -ONE, A( K+1 ),
-     +                           M+1, B, LDB, ALPHA, B( K, 0 ), LDB )
+     $                           M+1, B, LDB, ALPHA, B( K, 0 ), LDB )
                      CALL STRSM( 'L', 'U', 'T', DIAG, K, N, ONE,
-     +                           A( 0 ), M+1, B( K, 0 ), LDB )
+     $                           A( 0 ), M+1, B( K, 0 ), LDB )
 *
                   ELSE
 *
@@ -495,11 +495,11 @@
 *                    and TRANS = 'T'
 *
                      CALL STRSM( 'L', 'U', 'N', DIAG, K, N, ALPHA,
-     +                           A( 0 ), M+1, B( K, 0 ), LDB )
+     $                           A( 0 ), M+1, B( K, 0 ), LDB )
                      CALL SGEMM( 'T', 'N', K, N, K, -ONE, A( K+1 ),
-     +                           M+1, B( K, 0 ), LDB, ALPHA, B, LDB )
+     $                           M+1, B( K, 0 ), LDB, ALPHA, B, LDB )
                      CALL STRSM( 'L', 'L', 'T', DIAG, K, N, ONE,
-     +                           A( 1 ), M+1, B, LDB )
+     $                           A( 1 ), M+1, B, LDB )
 *
                   END IF
 *
@@ -513,22 +513,22 @@
 *                    and TRANS = 'N'
 *
                      CALL STRSM( 'L', 'L', 'N', DIAG, K, N, ALPHA,
-     +                           A( K+1 ), M+1, B, LDB )
+     $                           A( K+1 ), M+1, B, LDB )
                      CALL SGEMM( 'T', 'N', K, N, K, -ONE, A( 0 ), M+1,
-     +                           B, LDB, ALPHA, B( K, 0 ), LDB )
+     $                           B, LDB, ALPHA, B( K, 0 ), LDB )
                      CALL STRSM( 'L', 'U', 'T', DIAG, K, N, ONE,
-     +                           A( K ), M+1, B( K, 0 ), LDB )
+     $                           A( K ), M+1, B( K, 0 ), LDB )
 *
                   ELSE
 *
 *                    SIDE  ='L', N is even, TRANSR = 'N', UPLO = 'U',
 *                    and TRANS = 'T'
                      CALL STRSM( 'L', 'U', 'N', DIAG, K, N, ALPHA,
-     +                           A( K ), M+1, B( K, 0 ), LDB )
+     $                           A( K ), M+1, B( K, 0 ), LDB )
                      CALL SGEMM( 'N', 'N', K, N, K, -ONE, A( 0 ), M+1,
-     +                           B( K, 0 ), LDB, ALPHA, B, LDB )
+     $                           B( K, 0 ), LDB, ALPHA, B, LDB )
                      CALL STRSM( 'L', 'L', 'T', DIAG, K, N, ONE,
-     +                           A( K+1 ), M+1, B, LDB )
+     $                           A( K+1 ), M+1, B, LDB )
 *
                   END IF
 *
@@ -548,12 +548,12 @@
 *                    and TRANS = 'N'
 *
                      CALL STRSM( 'L', 'U', 'T', DIAG, K, N, ALPHA,
-     +                           A( K ), K, B, LDB )
+     $                           A( K ), K, B, LDB )
                      CALL SGEMM( 'T', 'N', K, N, K, -ONE,
-     +                           A( K*( K+1 ) ), K, B, LDB, ALPHA,
-     +                           B( K, 0 ), LDB )
+     $                           A( K*( K+1 ) ), K, B, LDB, ALPHA,
+     $                           B( K, 0 ), LDB )
                      CALL STRSM( 'L', 'L', 'N', DIAG, K, N, ONE,
-     +                           A( 0 ), K, B( K, 0 ), LDB )
+     $                           A( 0 ), K, B( K, 0 ), LDB )
 *
                   ELSE
 *
@@ -561,12 +561,12 @@
 *                    and TRANS = 'T'
 *
                      CALL STRSM( 'L', 'L', 'T', DIAG, K, N, ALPHA,
-     +                           A( 0 ), K, B( K, 0 ), LDB )
+     $                           A( 0 ), K, B( K, 0 ), LDB )
                      CALL SGEMM( 'N', 'N', K, N, K, -ONE,
-     +                           A( K*( K+1 ) ), K, B( K, 0 ), LDB,
-     +                           ALPHA, B, LDB )
+     $                           A( K*( K+1 ) ), K, B( K, 0 ), LDB,
+     $                           ALPHA, B, LDB )
                      CALL STRSM( 'L', 'U', 'N', DIAG, K, N, ONE,
-     +                           A( K ), K, B, LDB )
+     $                           A( K ), K, B, LDB )
 *
                   END IF
 *
@@ -580,11 +580,11 @@
 *                    and TRANS = 'N'
 *
                      CALL STRSM( 'L', 'U', 'T', DIAG, K, N, ALPHA,
-     +                           A( K*( K+1 ) ), K, B, LDB )
+     $                           A( K*( K+1 ) ), K, B, LDB )
                      CALL SGEMM( 'N', 'N', K, N, K, -ONE, A( 0 ), K, B,
-     +                           LDB, ALPHA, B( K, 0 ), LDB )
+     $                           LDB, ALPHA, B( K, 0 ), LDB )
                      CALL STRSM( 'L', 'L', 'N', DIAG, K, N, ONE,
-     +                           A( K*K ), K, B( K, 0 ), LDB )
+     $                           A( K*K ), K, B( K, 0 ), LDB )
 *
                   ELSE
 *
@@ -592,11 +592,11 @@
 *                    and TRANS = 'T'
 *
                      CALL STRSM( 'L', 'L', 'T', DIAG, K, N, ALPHA,
-     +                           A( K*K ), K, B( K, 0 ), LDB )
+     $                           A( K*K ), K, B( K, 0 ), LDB )
                      CALL SGEMM( 'T', 'N', K, N, K, -ONE, A( 0 ), K,
-     +                           B( K, 0 ), LDB, ALPHA, B, LDB )
+     $                           B( K, 0 ), LDB, ALPHA, B, LDB )
                      CALL STRSM( 'L', 'U', 'N', DIAG, K, N, ONE,
-     +                           A( K*( K+1 ) ), K, B, LDB )
+     $                           A( K*( K+1 ) ), K, B, LDB )
 *
                   END IF
 *
@@ -646,12 +646,12 @@
 *                    TRANS = 'N'
 *
                      CALL STRSM( 'R', 'U', 'T', DIAG, M, N2, ALPHA,
-     +                           A( N ), N, B( 0, N1 ), LDB )
+     $                           A( N ), N, B( 0, N1 ), LDB )
                      CALL SGEMM( 'N', 'N', M, N1, N2, -ONE, B( 0, N1 ),
-     +                           LDB, A( N1 ), N, ALPHA, B( 0, 0 ),
-     +                           LDB )
+     $                           LDB, A( N1 ), N, ALPHA, B( 0, 0 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'L', 'N', DIAG, M, N1, ONE,
-     +                           A( 0 ), N, B( 0, 0 ), LDB )
+     $                           A( 0 ), N, B( 0, 0 ), LDB )
 *
                   ELSE
 *
@@ -659,12 +659,12 @@
 *                    TRANS = 'T'
 *
                      CALL STRSM( 'R', 'L', 'T', DIAG, M, N1, ALPHA,
-     +                           A( 0 ), N, B( 0, 0 ), LDB )
+     $                           A( 0 ), N, B( 0, 0 ), LDB )
                      CALL SGEMM( 'N', 'T', M, N2, N1, -ONE, B( 0, 0 ),
-     +                           LDB, A( N1 ), N, ALPHA, B( 0, N1 ),
-     +                           LDB )
+     $                           LDB, A( N1 ), N, ALPHA, B( 0, N1 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'U', 'N', DIAG, M, N2, ONE,
-     +                           A( N ), N, B( 0, N1 ), LDB )
+     $                           A( N ), N, B( 0, N1 ), LDB )
 *
                   END IF
 *
@@ -678,12 +678,12 @@
 *                    TRANS = 'N'
 *
                      CALL STRSM( 'R', 'L', 'T', DIAG, M, N1, ALPHA,
-     +                           A( N2 ), N, B( 0, 0 ), LDB )
+     $                           A( N2 ), N, B( 0, 0 ), LDB )
                      CALL SGEMM( 'N', 'N', M, N2, N1, -ONE, B( 0, 0 ),
-     +                           LDB, A( 0 ), N, ALPHA, B( 0, N1 ),
-     +                           LDB )
+     $                           LDB, A( 0 ), N, ALPHA, B( 0, N1 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'U', 'N', DIAG, M, N2, ONE,
-     +                           A( N1 ), N, B( 0, N1 ), LDB )
+     $                           A( N1 ), N, B( 0, N1 ), LDB )
 *
                   ELSE
 *
@@ -691,11 +691,11 @@
 *                    TRANS = 'T'
 *
                      CALL STRSM( 'R', 'U', 'T', DIAG, M, N2, ALPHA,
-     +                           A( N1 ), N, B( 0, N1 ), LDB )
+     $                           A( N1 ), N, B( 0, N1 ), LDB )
                      CALL SGEMM( 'N', 'T', M, N1, N2, -ONE, B( 0, N1 ),
-     +                           LDB, A( 0 ), N, ALPHA, B( 0, 0 ), LDB )
+     $                           LDB, A( 0 ), N, ALPHA, B( 0, 0 ), LDB )
                      CALL STRSM( 'R', 'L', 'N', DIAG, M, N1, ONE,
-     +                           A( N2 ), N, B( 0, 0 ), LDB )
+     $                           A( N2 ), N, B( 0, 0 ), LDB )
 *
                   END IF
 *
@@ -715,12 +715,12 @@
 *                    TRANS = 'N'
 *
                      CALL STRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
-     +                           A( 1 ), N1, B( 0, N1 ), LDB )
+     $                           A( 1 ), N1, B( 0, N1 ), LDB )
                      CALL SGEMM( 'N', 'T', M, N1, N2, -ONE, B( 0, N1 ),
-     +                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, 0 ),
-     +                           LDB )
+     $                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, 0 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'U', 'T', DIAG, M, N1, ONE,
-     +                           A( 0 ), N1, B( 0, 0 ), LDB )
+     $                           A( 0 ), N1, B( 0, 0 ), LDB )
 *
                   ELSE
 *
@@ -728,12 +728,12 @@
 *                    TRANS = 'T'
 *
                      CALL STRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
-     +                           A( 0 ), N1, B( 0, 0 ), LDB )
+     $                           A( 0 ), N1, B( 0, 0 ), LDB )
                      CALL SGEMM( 'N', 'N', M, N2, N1, -ONE, B( 0, 0 ),
-     +                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, N1 ),
-     +                           LDB )
+     $                           LDB, A( N1*N1 ), N1, ALPHA, B( 0, N1 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'L', 'T', DIAG, M, N2, ONE,
-     +                           A( 1 ), N1, B( 0, N1 ), LDB )
+     $                           A( 1 ), N1, B( 0, N1 ), LDB )
 *
                   END IF
 *
@@ -747,12 +747,12 @@
 *                    TRANS = 'N'
 *
                      CALL STRSM( 'R', 'U', 'N', DIAG, M, N1, ALPHA,
-     +                           A( N2*N2 ), N2, B( 0, 0 ), LDB )
+     $                           A( N2*N2 ), N2, B( 0, 0 ), LDB )
                      CALL SGEMM( 'N', 'T', M, N2, N1, -ONE, B( 0, 0 ),
-     +                           LDB, A( 0 ), N2, ALPHA, B( 0, N1 ),
-     +                           LDB )
+     $                           LDB, A( 0 ), N2, ALPHA, B( 0, N1 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'L', 'T', DIAG, M, N2, ONE,
-     +                           A( N1*N2 ), N2, B( 0, N1 ), LDB )
+     $                           A( N1*N2 ), N2, B( 0, N1 ), LDB )
 *
                   ELSE
 *
@@ -760,12 +760,12 @@
 *                    TRANS = 'T'
 *
                      CALL STRSM( 'R', 'L', 'N', DIAG, M, N2, ALPHA,
-     +                           A( N1*N2 ), N2, B( 0, N1 ), LDB )
+     $                           A( N1*N2 ), N2, B( 0, N1 ), LDB )
                      CALL SGEMM( 'N', 'N', M, N1, N2, -ONE, B( 0, N1 ),
-     +                           LDB, A( 0 ), N2, ALPHA, B( 0, 0 ),
-     +                           LDB )
+     $                           LDB, A( 0 ), N2, ALPHA, B( 0, 0 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'U', 'T', DIAG, M, N1, ONE,
-     +                           A( N2*N2 ), N2, B( 0, 0 ), LDB )
+     $                           A( N2*N2 ), N2, B( 0, 0 ), LDB )
 *
                   END IF
 *
@@ -791,12 +791,12 @@
 *                    and TRANS = 'N'
 *
                      CALL STRSM( 'R', 'U', 'T', DIAG, M, K, ALPHA,
-     +                           A( 0 ), N+1, B( 0, K ), LDB )
+     $                           A( 0 ), N+1, B( 0, K ), LDB )
                      CALL SGEMM( 'N', 'N', M, K, K, -ONE, B( 0, K ),
-     +                           LDB, A( K+1 ), N+1, ALPHA, B( 0, 0 ),
-     +                           LDB )
+     $                           LDB, A( K+1 ), N+1, ALPHA, B( 0, 0 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'L', 'N', DIAG, M, K, ONE,
-     +                           A( 1 ), N+1, B( 0, 0 ), LDB )
+     $                           A( 1 ), N+1, B( 0, 0 ), LDB )
 *
                   ELSE
 *
@@ -804,12 +804,12 @@
 *                    and TRANS = 'T'
 *
                      CALL STRSM( 'R', 'L', 'T', DIAG, M, K, ALPHA,
-     +                           A( 1 ), N+1, B( 0, 0 ), LDB )
+     $                           A( 1 ), N+1, B( 0, 0 ), LDB )
                      CALL SGEMM( 'N', 'T', M, K, K, -ONE, B( 0, 0 ),
-     +                           LDB, A( K+1 ), N+1, ALPHA, B( 0, K ),
-     +                           LDB )
+     $                           LDB, A( K+1 ), N+1, ALPHA, B( 0, K ),
+     $                           LDB )
                      CALL STRSM( 'R', 'U', 'N', DIAG, M, K, ONE,
-     +                           A( 0 ), N+1, B( 0, K ), LDB )
+     $                           A( 0 ), N+1, B( 0, K ), LDB )
 *
                   END IF
 *
@@ -823,12 +823,12 @@
 *                    and TRANS = 'N'
 *
                      CALL STRSM( 'R', 'L', 'T', DIAG, M, K, ALPHA,
-     +                           A( K+1 ), N+1, B( 0, 0 ), LDB )
+     $                           A( K+1 ), N+1, B( 0, 0 ), LDB )
                      CALL SGEMM( 'N', 'N', M, K, K, -ONE, B( 0, 0 ),
-     +                           LDB, A( 0 ), N+1, ALPHA, B( 0, K ),
-     +                           LDB )
+     $                           LDB, A( 0 ), N+1, ALPHA, B( 0, K ),
+     $                           LDB )
                      CALL STRSM( 'R', 'U', 'N', DIAG, M, K, ONE,
-     +                           A( K ), N+1, B( 0, K ), LDB )
+     $                           A( K ), N+1, B( 0, K ), LDB )
 *
                   ELSE
 *
@@ -836,12 +836,12 @@
 *                    and TRANS = 'T'
 *
                      CALL STRSM( 'R', 'U', 'T', DIAG, M, K, ALPHA,
-     +                           A( K ), N+1, B( 0, K ), LDB )
+     $                           A( K ), N+1, B( 0, K ), LDB )
                      CALL SGEMM( 'N', 'T', M, K, K, -ONE, B( 0, K ),
-     +                           LDB, A( 0 ), N+1, ALPHA, B( 0, 0 ),
-     +                           LDB )
+     $                           LDB, A( 0 ), N+1, ALPHA, B( 0, 0 ),
+     $                           LDB )
                      CALL STRSM( 'R', 'L', 'N', DIAG, M, K, ONE,
-     +                           A( K+1 ), N+1, B( 0, 0 ), LDB )
+     $                           A( K+1 ), N+1, B( 0, 0 ), LDB )
 *
                   END IF
 *
@@ -861,12 +861,12 @@
 *                    and TRANS = 'N'
 *
                      CALL STRSM( 'R', 'L', 'N', DIAG, M, K, ALPHA,
-     +                           A( 0 ), K, B( 0, K ), LDB )
+     $                           A( 0 ), K, B( 0, K ), LDB )
                      CALL SGEMM( 'N', 'T', M, K, K, -ONE, B( 0, K ),
-     +                           LDB, A( ( K+1 )*K ), K, ALPHA,
-     +                           B( 0, 0 ), LDB )
+     $                           LDB, A( ( K+1 )*K ), K, ALPHA,
+     $                           B( 0, 0 ), LDB )
                      CALL STRSM( 'R', 'U', 'T', DIAG, M, K, ONE,
-     +                           A( K ), K, B( 0, 0 ), LDB )
+     $                           A( K ), K, B( 0, 0 ), LDB )
 *
                   ELSE
 *
@@ -874,12 +874,12 @@
 *                    and TRANS = 'T'
 *
                      CALL STRSM( 'R', 'U', 'N', DIAG, M, K, ALPHA,
-     +                           A( K ), K, B( 0, 0 ), LDB )
+     $                           A( K ), K, B( 0, 0 ), LDB )
                      CALL SGEMM( 'N', 'N', M, K, K, -ONE, B( 0, 0 ),
-     +                           LDB, A( ( K+1 )*K ), K, ALPHA,
-     +                           B( 0, K ), LDB )
+     $                           LDB, A( ( K+1 )*K ), K, ALPHA,
+     $                           B( 0, K ), LDB )
                      CALL STRSM( 'R', 'L', 'T', DIAG, M, K, ONE,
-     +                           A( 0 ), K, B( 0, K ), LDB )
+     $                           A( 0 ), K, B( 0, K ), LDB )
 *
                   END IF
 *
@@ -893,11 +893,11 @@
 *                    and TRANS = 'N'
 *
                      CALL STRSM( 'R', 'U', 'N', DIAG, M, K, ALPHA,
-     +                           A( ( K+1 )*K ), K, B( 0, 0 ), LDB )
+     $                           A( ( K+1 )*K ), K, B( 0, 0 ), LDB )
                      CALL SGEMM( 'N', 'T', M, K, K, -ONE, B( 0, 0 ),
-     +                           LDB, A( 0 ), K, ALPHA, B( 0, K ), LDB )
+     $                           LDB, A( 0 ), K, ALPHA, B( 0, K ), LDB )
                      CALL STRSM( 'R', 'L', 'T', DIAG, M, K, ONE,
-     +                           A( K*K ), K, B( 0, K ), LDB )
+     $                           A( K*K ), K, B( 0, K ), LDB )
 *
                   ELSE
 *
@@ -905,11 +905,11 @@
 *                    and TRANS = 'T'
 *
                      CALL STRSM( 'R', 'L', 'N', DIAG, M, K, ALPHA,
-     +                           A( K*K ), K, B( 0, K ), LDB )
+     $                           A( K*K ), K, B( 0, K ), LDB )
                      CALL SGEMM( 'N', 'N', M, K, K, -ONE, B( 0, K ),
-     +                           LDB, A( 0 ), K, ALPHA, B( 0, 0 ), LDB )
+     $                           LDB, A( 0 ), K, ALPHA, B( 0, 0 ), LDB )
                      CALL STRSM( 'R', 'U', 'T', DIAG, M, K, ONE,
-     +                           A( ( K+1 )*K ), K, B( 0, 0 ), LDB )
+     $                           A( ( K+1 )*K ), K, B( 0, 0 ), LDB )
 *
                   END IF
 *

@@ -300,7 +300,7 @@
 *
 *     Quick return if possible
 *
-c     WORK( 1 ) = CMPLX( 1 )
+*     WORK( 1 ) = CMPLX( 1 )
       IF( N.LE.0 ) THEN
          WORK( 1 ) = CMPLX( 1 )
          RETURN

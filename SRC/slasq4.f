@@ -25,6 +25,9 @@
 *  SLASQ4 computes an approximation TAU to the smallest eigenvalue
 *  using values of d from the previous transform.
 *
+*  Arguments
+*  =========
+*
 *  I0    (input) INTEGER
 *        First index.
 *

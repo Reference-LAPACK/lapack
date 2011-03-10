@@ -201,7 +201,7 @@
 *     Quick return if possible
 *
       IF( N.EQ.0 )
-     +   RETURN
+     $   RETURN
 *
       IF( N.EQ.1 ) THEN
          IF( NORMALTRANSR ) THEN
@@ -244,7 +244,7 @@
 *     ARF^C has lda rows and n+1-noe cols
 *
       IF( .NOT.NORMALTRANSR )
-     +   LDA = ( N+1 ) / 2
+     $   LDA = ( N+1 ) / 2
 *
 *     start execution: there are eight cases
 *

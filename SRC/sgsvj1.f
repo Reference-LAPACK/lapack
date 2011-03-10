@@ -1,5 +1,5 @@
       SUBROUTINE SGSVJ1( JOBV, M, N, N1, A, LDA, D, SVA, MV, V, LDV,
-     +                   EPS, SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
+     $                   EPS, SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
 *
 *  -- LAPACK routine (version 3.3.0)                                    --
 *
@@ -24,7 +24,7 @@
 *     ..
 *     .. Array Arguments ..
       REAL               A( LDA, * ), D( N ), SVA( N ), V( LDV, * ),
-     +                   WORK( LWORK )
+     $                   WORK( LWORK )
 *     ..
 *
 *  Purpose
@@ -44,12 +44,12 @@
 *  block-entries (tiles) of the (1,2) off-diagonal block are marked by the
 *  [x]'s in the following scheme:
 *
-*     | *   *   * [x] [x] [x]|
-*     | *   *   * [x] [x] [x]|    Row-cycling in the nblr-by-nblc [x] blocks.
-*     | *   *   * [x] [x] [x]|    Row-cyclic pivoting inside each [x] block.
-*     |[x] [x] [x] *   *   * |
-*     |[x] [x] [x] *   *   * |
-*     |[x] [x] [x] *   *   * |
+*     | *   C   * [x] [x] [x]|
+*     | *   C   * [x] [x] [x]|    Row-cycling in the nblr-by-nblc [x] blocks.
+*     | *   C   * [x] [x] [x]|    Row-cyclic pivoting inside each [x] block.
+*     |[x] [x] [x] *   C   * |
+*     |[x] [x] [x] *   C   * |
+*     |[x] [x] [x] *   C   * |
 *
 *  In terms of the columns of A, the first N1 columns are rotated 'against'
 *  the remaining N-N1 columns, trying to increase the angle between the
@@ -162,16 +162,16 @@
 *     .. Local Parameters ..
       REAL               ZERO, HALF, ONE, TWO
       PARAMETER          ( ZERO = 0.0E0, HALF = 0.5E0, ONE = 1.0E0,
-     +                   TWO = 2.0E0 )
+     $                   TWO = 2.0E0 )
 *     ..
 *     .. Local Scalars ..
       REAL               AAPP, AAPP0, AAPQ, AAQQ, APOAQ, AQOAP, BIG,
-     +                   BIGTHETA, CS, LARGE, MXAAPQ, MXSINJ, ROOTBIG,
-     +                   ROOTEPS, ROOTSFMIN, ROOTTOL, SMALL, SN, T,
-     +                   TEMP1, THETA, THSIGN
+     $                   BIGTHETA, CS, LARGE, MXAAPQ, MXSINJ, ROOTBIG,
+     $                   ROOTEPS, ROOTSFMIN, ROOTTOL, SMALL, SN, T,
+     $                   TEMP1, THETA, THSIGN
       INTEGER            BLSKIP, EMPTSW, i, ibr, igl, IERR, IJBLSK,
-     +                   ISWROT, jbc, jgl, KBL, MVL, NOTROT, nblc, nblr,
-     +                   p, PSKIPPED, q, ROWSKIP, SWBAND
+     $                   ISWROT, jbc, jgl, KBL, MVL, NOTROT, nblc, nblr,
+     $                   p, PSKIPPED, q, ROWSKIP, SWBAND
       LOGICAL            APPLV, ROTOK, RSVEC
 *     ..
 *     .. Local Arrays ..
@@ -208,7 +208,7 @@
       ELSE IF( ( RSVEC.OR.APPLV ) .AND. ( MV.LT.0 ) ) THEN
          INFO = -9
       ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR. 
-     &         ( APPLV.AND.( LDV.LT.MV ) )  ) THEN
+     $         ( APPLV.AND.( LDV.LT.MV ) )  ) THEN
          INFO = -11
       ELSE IF( TOL.LE.EPS ) THEN
          INFO = -14
@@ -271,12 +271,12 @@
 *     Jacobi SVD algorithm SGESVJ.
 *
 *
-*     | *   *   * [x] [x] [x]|
-*     | *   *   * [x] [x] [x]|    Row-cycling in the nblr-by-nblc [x] blocks.
-*     | *   *   * [x] [x] [x]|    Row-cyclic pivoting inside each [x] block.
-*     |[x] [x] [x] *   *   * |
-*     |[x] [x] [x] *   *   * |
-*     |[x] [x] [x] *   *   * |
+*     | *   C   * [x] [x] [x]|
+*     | *   C   * [x] [x] [x]|    Row-cycling in the nblr-by-nblc [x] blocks.
+*     | *   C   * [x] [x] [x]|    Row-cyclic pivoting inside each [x] block.
+*     |[x] [x] [x] *   C   * |
+*     |[x] [x] [x] *   C   * |
+*     |[x] [x] [x] *   C   * |
 *
 *
       DO 1993 i = 1, NSWEEP
@@ -333,14 +333,14 @@
                               END IF
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
                                  AAPQ = ( SDOT( M, A( 1, p ), 1, A( 1,
-     +                                  q ), 1 )*D( p )*D( q ) / AAQQ )
-     +                                  / AAPP
+     $                                  q ), 1 )*D( p )*D( q ) / AAQQ )
+     $                                  / AAPP
                               ELSE
                                  CALL SCOPY( M, A( 1, p ), 1, WORK, 1 )
                                  CALL SLASCL( 'G', 0, 0, AAPP, D( p ),
-     +                                        M, 1, WORK, LDA, IERR )
+     $                                        M, 1, WORK, LDA, IERR )
                                  AAPQ = SDOT( M, WORK, 1, A( 1, q ),
-     +                                  1 )*D( q ) / AAQQ
+     $                                  1 )*D( q ) / AAQQ
                               END IF
                            ELSE
                               IF( AAPP.GE.AAQQ ) THEN
@@ -350,14 +350,14 @@
                               END IF
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
                                  AAPQ = ( SDOT( M, A( 1, p ), 1, A( 1,
-     +                                  q ), 1 )*D( p )*D( q ) / AAQQ )
-     +                                  / AAPP
+     $                                  q ), 1 )*D( p )*D( q ) / AAQQ )
+     $                                  / AAPP
                               ELSE
                                  CALL SCOPY( M, A( 1, q ), 1, WORK, 1 )
                                  CALL SLASCL( 'G', 0, 0, AAQQ, D( q ),
-     +                                        M, 1, WORK, LDA, IERR )
+     $                                        M, 1, WORK, LDA, IERR )
                                  AAPQ = SDOT( M, WORK, 1, A( 1, p ),
-     +                                  1 )*D( p ) / AAPP
+     $                                  1 )*D( p ) / AAPP
                               END IF
                            END IF
 
@@ -383,15 +383,15 @@
                                     FASTR( 3 ) = T*D( p ) / D( q )
                                     FASTR( 4 ) = -T*D( q ) / D( p )
                                     CALL SROTM( M, A( 1, p ), 1,
-     +                                          A( 1, q ), 1, FASTR )
+     $                                          A( 1, q ), 1, FASTR )
                                     IF( RSVEC )CALL SROTM( MVL,
-     +                                              V( 1, p ), 1,
-     +                                              V( 1, q ), 1,
-     +                                              FASTR )
+     $                                              V( 1, p ), 1,
+     $                                              V( 1, q ), 1,
+     $                                              FASTR )
                                     SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
-     +                                         ONE+T*APOAQ*AAPQ ) )
+     $                                         ONE+T*APOAQ*AAPQ ) )
                                     AAPP = AAPP*SQRT( AMAX1( ZERO,
-     +                                     ONE-T*AQOAP*AAPQ ) )
+     $                                     ONE-T*AQOAP*AAPQ ) )
                                     MXSINJ = AMAX1( MXSINJ, ABS( T ) )
                                  ELSE
 *
@@ -400,14 +400,14 @@
                                     THSIGN = -SIGN( ONE, AAPQ )
                                     IF( AAQQ.GT.AAPP0 )THSIGN = -THSIGN
                                     T = ONE / ( THETA+THSIGN*
-     +                                  SQRT( ONE+THETA*THETA ) )
+     $                                  SQRT( ONE+THETA*THETA ) )
                                     CS = SQRT( ONE / ( ONE+T*T ) )
                                     SN = T*CS
                                     MXSINJ = AMAX1( MXSINJ, ABS( SN ) )
                                     SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
-     +                                         ONE+T*APOAQ*AAPQ ) )
+     $                                         ONE+T*APOAQ*AAPQ ) )
                                     AAPP = AAPP*SQRT( AMAX1( ZERO, 
-     +                                         ONE-T*AQOAP*AAPQ ) )
+     $                                         ONE-T*AQOAP*AAPQ ) )
 
                                     APOAQ = D( p ) / D( q )
                                     AQOAP = D( q ) / D( p )
@@ -419,26 +419,26 @@
                                           D( p ) = D( p )*CS
                                           D( q ) = D( q )*CS
                                           CALL SROTM( M, A( 1, p ), 1,
-     +                                                A( 1, q ), 1,
-     +                                                FASTR )
+     $                                                A( 1, q ), 1,
+     $                                                FASTR )
                                           IF( RSVEC )CALL SROTM( MVL,
-     +                                        V( 1, p ), 1, V( 1, q ),
-     +                                        1, FASTR )
+     $                                        V( 1, p ), 1, V( 1, q ),
+     $                                        1, FASTR )
                                        ELSE
                                           CALL SAXPY( M, -T*AQOAP,
-     +                                                A( 1, q ), 1,
-     +                                                A( 1, p ), 1 )
+     $                                                A( 1, q ), 1,
+     $                                                A( 1, p ), 1 )
                                           CALL SAXPY( M, CS*SN*APOAQ,
-     +                                                A( 1, p ), 1,
-     +                                                A( 1, q ), 1 )
+     $                                                A( 1, p ), 1,
+     $                                                A( 1, q ), 1 )
                                           IF( RSVEC ) THEN
                                              CALL SAXPY( MVL, -T*AQOAP,
-     +                                                   V( 1, q ), 1,
-     +                                                   V( 1, p ), 1 )
+     $                                                   V( 1, q ), 1,
+     $                                                   V( 1, p ), 1 )
                                              CALL SAXPY( MVL,
-     +                                                   CS*SN*APOAQ,
-     +                                                   V( 1, p ), 1,
-     +                                                   V( 1, q ), 1 )
+     $                                                   CS*SN*APOAQ,
+     $                                                   V( 1, p ), 1,
+     $                                                   V( 1, q ), 1 )
                                           END IF
                                           D( p ) = D( p )*CS
                                           D( q ) = D( q ) / CS
@@ -446,60 +446,60 @@
                                     ELSE
                                        IF( D( q ).GE.ONE ) THEN
                                           CALL SAXPY( M, T*APOAQ,
-     +                                                A( 1, p ), 1,
-     +                                                A( 1, q ), 1 )
+     $                                                A( 1, p ), 1,
+     $                                                A( 1, q ), 1 )
                                           CALL SAXPY( M, -CS*SN*AQOAP,
-     +                                                A( 1, q ), 1,
-     +                                                A( 1, p ), 1 )
+     $                                                A( 1, q ), 1,
+     $                                                A( 1, p ), 1 )
                                           IF( RSVEC ) THEN
                                              CALL SAXPY( MVL, T*APOAQ,
-     +                                                   V( 1, p ), 1,
-     +                                                   V( 1, q ), 1 )
+     $                                                   V( 1, p ), 1,
+     $                                                   V( 1, q ), 1 )
                                              CALL SAXPY( MVL,
-     +                                                   -CS*SN*AQOAP,
-     +                                                   V( 1, q ), 1,
-     +                                                   V( 1, p ), 1 )
+     $                                                   -CS*SN*AQOAP,
+     $                                                   V( 1, q ), 1,
+     $                                                   V( 1, p ), 1 )
                                           END IF
                                           D( p ) = D( p ) / CS
                                           D( q ) = D( q )*CS
                                        ELSE
                                           IF( D( p ).GE.D( q ) ) THEN
                                              CALL SAXPY( M, -T*AQOAP,
-     +                                                   A( 1, q ), 1,
-     +                                                   A( 1, p ), 1 )
+     $                                                   A( 1, q ), 1,
+     $                                                   A( 1, p ), 1 )
                                              CALL SAXPY( M, CS*SN*APOAQ,
-     +                                                   A( 1, p ), 1,
-     +                                                   A( 1, q ), 1 )
+     $                                                   A( 1, p ), 1,
+     $                                                   A( 1, q ), 1 )
                                              D( p ) = D( p )*CS
                                              D( q ) = D( q ) / CS
                                              IF( RSVEC ) THEN
                                                 CALL SAXPY( MVL,
-     +                                               -T*AQOAP,
-     +                                               V( 1, q ), 1,
-     +                                               V( 1, p ), 1 )
+     $                                               -T*AQOAP,
+     $                                               V( 1, q ), 1,
+     $                                               V( 1, p ), 1 )
                                                 CALL SAXPY( MVL,
-     +                                               CS*SN*APOAQ,
-     +                                               V( 1, p ), 1,
-     +                                               V( 1, q ), 1 )
+     $                                               CS*SN*APOAQ,
+     $                                               V( 1, p ), 1,
+     $                                               V( 1, q ), 1 )
                                              END IF
                                           ELSE
                                              CALL SAXPY( M, T*APOAQ,
-     +                                                   A( 1, p ), 1,
-     +                                                   A( 1, q ), 1 )
+     $                                                   A( 1, p ), 1,
+     $                                                   A( 1, q ), 1 )
                                              CALL SAXPY( M,
-     +                                                   -CS*SN*AQOAP,
-     +                                                   A( 1, q ), 1,
-     +                                                   A( 1, p ), 1 )
+     $                                                   -CS*SN*AQOAP,
+     $                                                   A( 1, q ), 1,
+     $                                                   A( 1, p ), 1 )
                                              D( p ) = D( p ) / CS
                                              D( q ) = D( q )*CS
                                              IF( RSVEC ) THEN
                                                 CALL SAXPY( MVL,
-     +                                               T*APOAQ, V( 1, p ),
-     +                                               1, V( 1, q ), 1 )
+     $                                               T*APOAQ, V( 1, p ),
+     $                                               1, V( 1, q ), 1 )
                                                 CALL SAXPY( MVL,
-     +                                               -CS*SN*AQOAP,
-     +                                               V( 1, q ), 1,
-     +                                               V( 1, p ), 1 )
+     $                                               -CS*SN*AQOAP,
+     $                                               V( 1, q ), 1,
+     $                                               V( 1, p ), 1 )
                                              END IF
                                           END IF
                                        END IF
@@ -509,37 +509,37 @@
                               ELSE
                                  IF( AAPP.GT.AAQQ ) THEN
                                     CALL SCOPY( M, A( 1, p ), 1, WORK,
-     +                                          1 )
+     $                                          1 )
                                     CALL SLASCL( 'G', 0, 0, AAPP, ONE,
-     +                                           M, 1, WORK, LDA, IERR )
+     $                                           M, 1, WORK, LDA, IERR )
                                     CALL SLASCL( 'G', 0, 0, AAQQ, ONE,
-     +                                           M, 1, A( 1, q ), LDA,
-     +                                           IERR )
+     $                                           M, 1, A( 1, q ), LDA,
+     $                                           IERR )
                                     TEMP1 = -AAPQ*D( p ) / D( q )
                                     CALL SAXPY( M, TEMP1, WORK, 1,
-     +                                          A( 1, q ), 1 )
+     $                                          A( 1, q ), 1 )
                                     CALL SLASCL( 'G', 0, 0, ONE, AAQQ,
-     +                                           M, 1, A( 1, q ), LDA,
-     +                                           IERR )
+     $                                           M, 1, A( 1, q ), LDA,
+     $                                           IERR )
                                     SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
-     +                                         ONE-AAPQ*AAPQ ) )
+     $                                         ONE-AAPQ*AAPQ ) )
                                     MXSINJ = AMAX1( MXSINJ, SFMIN )
                                  ELSE
                                     CALL SCOPY( M, A( 1, q ), 1, WORK,
-     +                                          1 )
+     $                                          1 )
                                     CALL SLASCL( 'G', 0, 0, AAQQ, ONE,
-     +                                           M, 1, WORK, LDA, IERR )
+     $                                           M, 1, WORK, LDA, IERR )
                                     CALL SLASCL( 'G', 0, 0, AAPP, ONE,
-     +                                           M, 1, A( 1, p ), LDA,
-     +                                           IERR )
+     $                                           M, 1, A( 1, p ), LDA,
+     $                                           IERR )
                                     TEMP1 = -AAPQ*D( q ) / D( p )
                                     CALL SAXPY( M, TEMP1, WORK, 1,
-     +                                          A( 1, p ), 1 )
+     $                                          A( 1, p ), 1 )
                                     CALL SLASCL( 'G', 0, 0, ONE, AAPP,
-     +                                           M, 1, A( 1, p ), LDA,
-     +                                           IERR )
+     $                                           M, 1, A( 1, p ), LDA,
+     $                                           IERR )
                                     SVA( p ) = AAPP*SQRT( AMAX1( ZERO,
-     +                                         ONE-AAPQ*AAPQ ) )
+     $                                         ONE-AAPQ*AAPQ ) )
                                     MXSINJ = AMAX1( MXSINJ, SFMIN )
                                  END IF
                               END IF
@@ -548,29 +548,29 @@
 *           In the case of cancellation in updating SVA(q)
 *           .. recompute SVA(q)
                               IF( ( SVA( q ) / AAQQ )**2.LE.ROOTEPS )
-     +                            THEN
+     $                            THEN
                                  IF( ( AAQQ.LT.ROOTBIG ) .AND.
-     +                               ( AAQQ.GT.ROOTSFMIN ) ) THEN
+     $                               ( AAQQ.GT.ROOTSFMIN ) ) THEN
                                     SVA( q ) = SNRM2( M, A( 1, q ), 1 )*
-     +                                         D( q )
+     $                                         D( q )
                                  ELSE
                                     T = ZERO
                                     AAQQ = ONE
                                     CALL SLASSQ( M, A( 1, q ), 1, T,
-     +                                           AAQQ )
+     $                                           AAQQ )
                                     SVA( q ) = T*SQRT( AAQQ )*D( q )
                                  END IF
                               END IF
                               IF( ( AAPP / AAPP0 )**2.LE.ROOTEPS ) THEN
                                  IF( ( AAPP.LT.ROOTBIG ) .AND.
-     +                               ( AAPP.GT.ROOTSFMIN ) ) THEN
+     $                               ( AAPP.GT.ROOTSFMIN ) ) THEN
                                     AAPP = SNRM2( M, A( 1, p ), 1 )*
-     +                                     D( p )
+     $                                     D( p )
                                  ELSE
                                     T = ZERO
                                     AAPP = ONE
                                     CALL SLASSQ( M, A( 1, p ), 1, T,
-     +                                           AAPP )
+     $                                           AAPP )
                                     AAPP = T*SQRT( AAPP )*D( p )
                                  END IF
                                  SVA( p ) = AAPP
@@ -590,13 +590,13 @@
 
 *      IF ( NOTROT .GE. EMPTSW )  GO TO 2011
                         IF( ( i.LE.SWBAND ) .AND. ( IJBLSK.GE.BLSKIP ) )
-     +                      THEN
+     $                      THEN
                            SVA( p ) = AAPP
                            NOTROT = 0
                            GO TO 2011
                         END IF
                         IF( ( i.LE.SWBAND ) .AND.
-     +                      ( PSKIPPED.GT.ROWSKIP ) ) THEN
+     $                      ( PSKIPPED.GT.ROWSKIP ) ) THEN
                            AAPP = -AAPP
                            NOTROT = 0
                            GO TO 2203
@@ -611,7 +611,7 @@
 *
                   ELSE
                      IF( AAPP.EQ.ZERO )NOTROT = NOTROT +
-     +                   MIN0( jgl+KBL-1, N ) - jgl + 1
+     $                   MIN0( jgl+KBL-1, N ) - jgl + 1
                      IF( AAPP.LT.ZERO )NOTROT = 0
 ***      IF ( NOTROT .GE. EMPTSW )  GO TO 2011
                   END IF
@@ -631,7 +631,7 @@
 *
 *     .. update SVA(N)
          IF( ( SVA( N ).LT.ROOTBIG ) .AND. ( SVA( N ).GT.ROOTSFMIN ) )
-     +       THEN
+     $       THEN
             SVA( N ) = SNRM2( M, A( 1, N ), 1 )*D( N )
          ELSE
             T = ZERO
@@ -643,10 +643,10 @@
 *     Additional steering devices
 *
          IF( ( i.LT.SWBAND ) .AND. ( ( MXAAPQ.LE.ROOTTOL ) .OR.
-     +       ( ISWROT.LE.N ) ) )SWBAND = i
+     $       ( ISWROT.LE.N ) ) )SWBAND = i
 
          IF( ( i.GT.SWBAND+1 ) .AND. ( MXAAPQ.LT.FLOAT( N )*TOL ) .AND.
-     +       ( FLOAT( N )*MXAAPQ*MXSINJ.LT.TOL ) ) THEN
+     $       ( FLOAT( N )*MXAAPQ*MXSINJ.LT.TOL ) ) THEN
             GO TO 1994
          END IF
 

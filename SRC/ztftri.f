@@ -201,7 +201,7 @@
       ELSE IF( .NOT.LOWER .AND. .NOT.LSAME( UPLO, 'U' ) ) THEN
          INFO = -2
       ELSE IF( .NOT.LSAME( DIAG, 'N' ) .AND. .NOT.LSAME( DIAG, 'U' ) )
-     +         THEN
+     $         THEN
          INFO = -3
       ELSE IF( N.LT.0 ) THEN
          INFO = -4
@@ -214,7 +214,7 @@
 *     Quick return if possible
 *
       IF( N.EQ.0 )
-     +   RETURN
+     $   RETURN
 *
 *     If N is odd, set NISODD = .TRUE.
 *     If N is even, set K = N/2 and NISODD = .FALSE.
@@ -255,16 +255,16 @@
 *
                CALL ZTRTRI( 'L', DIAG, N1, A( 0 ), N, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'R', 'L', 'N', DIAG, N2, N1, -CONE, A( 0 ),
-     +                     N, A( N1 ), N )
+     $                     N, A( N1 ), N )
                CALL ZTRTRI( 'U', DIAG, N2, A( N ), N, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + N1
+     $            INFO = INFO + N1
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'L', 'U', 'C', DIAG, N2, N1, CONE, A( N ), N,
-     +                     A( N1 ), N )
+     $                     A( N1 ), N )
 *
             ELSE
 *
@@ -274,16 +274,16 @@
 *
                CALL ZTRTRI( 'L', DIAG, N1, A( N2 ), N, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'L', 'L', 'C', DIAG, N1, N2, -CONE, A( N2 ),
-     +                     N, A( 0 ), N )
+     $                     N, A( 0 ), N )
                CALL ZTRTRI( 'U', DIAG, N2, A( N1 ), N, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + N1
+     $            INFO = INFO + N1
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'R', 'U', 'N', DIAG, N1, N2, CONE, A( N1 ),
-     +                     N, A( 0 ), N )
+     $                     N, A( 0 ), N )
 *
             END IF
 *
@@ -298,16 +298,16 @@
 *
                CALL ZTRTRI( 'U', DIAG, N1, A( 0 ), N1, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'L', 'U', 'N', DIAG, N1, N2, -CONE, A( 0 ),
-     +                     N1, A( N1*N1 ), N1 )
+     $                     N1, A( N1*N1 ), N1 )
                CALL ZTRTRI( 'L', DIAG, N2, A( 1 ), N1, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + N1
+     $            INFO = INFO + N1
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'R', 'L', 'C', DIAG, N1, N2, CONE, A( 1 ),
-     +                     N1, A( N1*N1 ), N1 )
+     $                     N1, A( N1*N1 ), N1 )
 *
             ELSE
 *
@@ -316,16 +316,16 @@
 *
                CALL ZTRTRI( 'U', DIAG, N1, A( N2*N2 ), N2, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'R', 'U', 'C', DIAG, N2, N1, -CONE,
-     +                     A( N2*N2 ), N2, A( 0 ), N2 )
+     $                     A( N2*N2 ), N2, A( 0 ), N2 )
                CALL ZTRTRI( 'L', DIAG, N2, A( N1*N2 ), N2, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + N1
+     $            INFO = INFO + N1
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'L', 'L', 'N', DIAG, N2, N1, CONE,
-     +                     A( N1*N2 ), N2, A( 0 ), N2 )
+     $                     A( N1*N2 ), N2, A( 0 ), N2 )
             END IF
 *
          END IF
@@ -346,16 +346,16 @@
 *
                CALL ZTRTRI( 'L', DIAG, K, A( 1 ), N+1, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'R', 'L', 'N', DIAG, K, K, -CONE, A( 1 ),
-     +                     N+1, A( K+1 ), N+1 )
+     $                     N+1, A( K+1 ), N+1 )
                CALL ZTRTRI( 'U', DIAG, K, A( 0 ), N+1, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + K
+     $            INFO = INFO + K
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'L', 'U', 'C', DIAG, K, K, CONE, A( 0 ), N+1,
-     +                     A( K+1 ), N+1 )
+     $                     A( K+1 ), N+1 )
 *
             ELSE
 *
@@ -365,16 +365,16 @@
 *
                CALL ZTRTRI( 'L', DIAG, K, A( K+1 ), N+1, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'L', 'L', 'C', DIAG, K, K, -CONE, A( K+1 ),
-     +                     N+1, A( 0 ), N+1 )
+     $                     N+1, A( 0 ), N+1 )
                CALL ZTRTRI( 'U', DIAG, K, A( K ), N+1, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + K
+     $            INFO = INFO + K
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'R', 'U', 'N', DIAG, K, K, CONE, A( K ), N+1,
-     +                     A( 0 ), N+1 )
+     $                     A( 0 ), N+1 )
             END IF
          ELSE
 *
@@ -388,16 +388,16 @@
 *
                CALL ZTRTRI( 'U', DIAG, K, A( K ), K, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'L', 'U', 'N', DIAG, K, K, -CONE, A( K ), K,
-     +                     A( K*( K+1 ) ), K )
+     $                     A( K*( K+1 ) ), K )
                CALL ZTRTRI( 'L', DIAG, K, A( 0 ), K, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + K
+     $            INFO = INFO + K
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'R', 'L', 'C', DIAG, K, K, CONE, A( 0 ), K,
-     +                     A( K*( K+1 ) ), K )
+     $                     A( K*( K+1 ) ), K )
             ELSE
 *
 *              SRPA for UPPER, TRANSPOSE and N is even (see paper)
@@ -406,16 +406,16 @@
 *
                CALL ZTRTRI( 'U', DIAG, K, A( K*( K+1 ) ), K, INFO )
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'R', 'U', 'C', DIAG, K, K, -CONE,
-     +                     A( K*( K+1 ) ), K, A( 0 ), K )
+     $                     A( K*( K+1 ) ), K, A( 0 ), K )
                CALL ZTRTRI( 'L', DIAG, K, A( K*K ), K, INFO )
                IF( INFO.GT.0 )
-     +            INFO = INFO + K
+     $            INFO = INFO + K
                IF( INFO.GT.0 )
-     +            RETURN
+     $            RETURN
                CALL ZTRMM( 'L', 'L', 'N', DIAG, K, K, CONE, A( K*K ), K,
-     +                     A( 0 ), K )
+     $                     A( 0 ), K )
             END IF
          END IF
       END IF

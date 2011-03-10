@@ -48,7 +48,8 @@
 *
 *  INFO    (output) INTEGER
 *          = 0:  successful exit
-*  =========
+*
+*  =====================================================================
 *
 *     .. Local Scalars ..
       INTEGER            I, J
