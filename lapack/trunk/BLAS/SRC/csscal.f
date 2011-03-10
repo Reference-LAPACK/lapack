@@ -28,20 +28,21 @@
       INTRINSIC AIMAG,CMPLX,REAL
 *     ..
       IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) GO TO 20
-*
-*        code for increment not equal to 1
-*
-      NINCX = N*INCX
-      DO 10 I = 1,NINCX,INCX
-          CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
-   10 CONTINUE
-      RETURN
+      IF (INCX.EQ.1) THEN
 *
 *        code for increment equal to 1
 *
-   20 DO 30 I = 1,N
-          CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
-   30 CONTINUE
+         DO I = 1,N
+            CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
+         END DO
+      ELSE
+*
+*        code for increment not equal to 1
+*
+         NINCX = N*INCX
+         DO I = 1,NINCX,INCX
+            CX(I) = CMPLX(SA*REAL(CX(I)),SA*AIMAG(CX(I)))
+         END DO
+      END IF
       RETURN
       END

@@ -26,28 +26,28 @@
       CTEMP = (0.0,0.0)
       CDOTU = (0.0,0.0)
       IF (N.LE.0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) GO TO 20
+      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
+*
+*        code for both increments equal to 1
+*
+         DO I = 1,N
+            CTEMP = CTEMP + CX(I)*CY(I)
+         END DO
+      ELSE
 *
 *        code for unequal increments or equal increments
 *          not equal to 1
 *
-      IX = 1
-      IY = 1
-      IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-      IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-      DO 10 I = 1,N
-          CTEMP = CTEMP + CX(IX)*CY(IY)
-          IX = IX + INCX
-          IY = IY + INCY
-   10 CONTINUE
-      CDOTU = CTEMP
-      RETURN
-*
-*        code for both increments equal to 1
-*
-   20 DO 30 I = 1,N
-          CTEMP = CTEMP + CX(I)*CY(I)
-   30 CONTINUE
+         IX = 1
+         IY = 1
+         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
+         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
+         DO I = 1,N
+            CTEMP = CTEMP + CX(IX)*CY(IY)
+            IX = IX + INCX
+            IY = IY + INCY
+         END DO
+      END IF
       CDOTU = CTEMP
       RETURN
       END

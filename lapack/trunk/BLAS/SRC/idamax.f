@@ -31,28 +31,31 @@
       IF (N.LT.1 .OR. INCX.LE.0) RETURN
       IDAMAX = 1
       IF (N.EQ.1) RETURN
-      IF (INCX.EQ.1) GO TO 20
-*
-*        code for increment not equal to 1
-*
-      IX = 1
-      DMAX = DABS(DX(1))
-      IX = IX + INCX
-      DO 10 I = 2,N
-          IF (DABS(DX(IX)).LE.DMAX) GO TO 5
-          IDAMAX = I
-          DMAX = DABS(DX(IX))
-    5     IX = IX + INCX
-   10 CONTINUE
-      RETURN
+      IF (INCX.EQ.1) THEN
 *
 *        code for increment equal to 1
 *
-   20 DMAX = DABS(DX(1))
-      DO 30 I = 2,N
-          IF (DABS(DX(I)).LE.DMAX) GO TO 30
-          IDAMAX = I
-          DMAX = DABS(DX(I))
-   30 CONTINUE
+         DMAX = DABS(DX(1))
+         DO I = 2,N
+            IF (DABS(DX(I)).GT.DMAX) THEN
+               IDAMAX = I
+               DMAX = DABS(DX(I))
+            END IF
+         END DO
+      ELSE
+*
+*        code for increment not equal to 1
+*
+         IX = 1
+         DMAX = DABS(DX(1))
+         IX = IX + INCX
+         DO I = 2,N
+            IF (DABS(DX(IX)).GT.DMAX) THEN
+               IDAMAX = I
+               DMAX = DABS(DX(IX))
+            END IF
+            IX = IX + INCX
+         END DO
+      END IF
       RETURN
       END

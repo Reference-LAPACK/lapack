@@ -31,22 +31,22 @@
       SCASUM = 0.0e0
       STEMP = 0.0e0
       IF (N.LE.0 .OR. INCX.LE.0) RETURN
-      IF (INCX.EQ.1) GO TO 20
-*
-*        code for increment not equal to 1
-*
-      NINCX = N*INCX
-      DO 10 I = 1,NINCX,INCX
-          STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
-   10 CONTINUE
-      SCASUM = STEMP
-      RETURN
+      IF (INCX.EQ.1) THEN
 *
 *        code for increment equal to 1
 *
-   20 DO 30 I = 1,N
-          STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
-   30 CONTINUE
+         DO I = 1,N
+            STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
+         END DO
+      ELSE
+*
+*        code for increment not equal to 1
+*
+         NINCX = N*INCX
+         DO I = 1,NINCX,INCX
+            STEMP = STEMP + ABS(REAL(CX(I))) + ABS(AIMAG(CX(I)))
+         END DO
+      END IF
       SCASUM = STEMP
       RETURN
       END
