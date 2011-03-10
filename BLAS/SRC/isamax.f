@@ -31,28 +31,31 @@
       IF (N.LT.1 .OR. INCX.LE.0) RETURN
       ISAMAX = 1
       IF (N.EQ.1) RETURN
-      IF (INCX.EQ.1) GO TO 20
-*
-*        code for increment not equal to 1
-*
-      IX = 1
-      SMAX = ABS(SX(1))
-      IX = IX + INCX
-      DO 10 I = 2,N
-          IF (ABS(SX(IX)).LE.SMAX) GO TO 5
-          ISAMAX = I
-          SMAX = ABS(SX(IX))
-    5     IX = IX + INCX
-   10 CONTINUE
-      RETURN
+      IF (INCX.EQ.1) THEN
 *
 *        code for increment equal to 1
 *
-   20 SMAX = ABS(SX(1))
-      DO 30 I = 2,N
-          IF (ABS(SX(I)).LE.SMAX) GO TO 30
-          ISAMAX = I
-          SMAX = ABS(SX(I))
-   30 CONTINUE
+         SMAX = ABS(SX(1))
+         DO I = 2,N
+            IF (ABS(SX(I)).GT.SMAX) THEN
+               ISAMAX = I
+               SMAX = ABS(SX(I))
+            END IF
+         END DO
+      ELSE
+*
+*        code for increment not equal to 1
+*
+         IX = 1
+         SMAX = ABS(SX(1))
+         IX = IX + INCX
+         DO I = 2,N
+            IF (ABS(SX(IX)).GT.SMAX) THEN
+               ISAMAX = I
+               SMAX = ABS(SX(IX))
+            END IF
+            IX = IX + INCX
+         END DO
+      END IF
       RETURN
       END

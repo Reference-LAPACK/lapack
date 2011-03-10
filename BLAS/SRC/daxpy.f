@@ -29,39 +29,41 @@
 *     ..
       IF (N.LE.0) RETURN
       IF (DA.EQ.0.0d0) RETURN
-      IF (INCX.EQ.1 .AND. INCY.EQ.1) GO TO 20
-*
-*        code for unequal increments or equal increments
-*          not equal to 1
-*
-      IX = 1
-      IY = 1
-      IF (INCX.LT.0) IX = (-N+1)*INCX + 1
-      IF (INCY.LT.0) IY = (-N+1)*INCY + 1
-      DO 10 I = 1,N
-          DY(IY) = DY(IY) + DA*DX(IX)
-          IX = IX + INCX
-          IY = IY + INCY
-   10 CONTINUE
-      RETURN
+      IF (INCX.EQ.1 .AND. INCY.EQ.1) THEN
 *
 *        code for both increments equal to 1
 *
 *
 *        clean-up loop
 *
-   20 M = MOD(N,4)
-      IF (M.EQ.0) GO TO 40
-      DO 30 I = 1,M
-          DY(I) = DY(I) + DA*DX(I)
-   30 CONTINUE
-      IF (N.LT.4) RETURN
-   40 MP1 = M + 1
-      DO 50 I = MP1,N,4
-          DY(I) = DY(I) + DA*DX(I)
-          DY(I+1) = DY(I+1) + DA*DX(I+1)
-          DY(I+2) = DY(I+2) + DA*DX(I+2)
-          DY(I+3) = DY(I+3) + DA*DX(I+3)
-   50 CONTINUE
+         M = MOD(N,4)
+         IF (M.NE.0) THEN
+            DO I = 1,M
+               DY(I) = DY(I) + DA*DX(I)
+            END DO
+         END IF
+         IF (N.LT.4) RETURN
+         MP1 = M + 1
+         DO I = MP1,N,4
+            DY(I) = DY(I) + DA*DX(I)
+            DY(I+1) = DY(I+1) + DA*DX(I+1)
+            DY(I+2) = DY(I+2) + DA*DX(I+2)
+            DY(I+3) = DY(I+3) + DA*DX(I+3)
+         END DO
+      ELSE
+*
+*        code for unequal increments or equal increments
+*          not equal to 1
+*
+         IX = 1
+         IY = 1
+         IF (INCX.LT.0) IX = (-N+1)*INCX + 1
+         IF (INCY.LT.0) IY = (-N+1)*INCY + 1
+         DO I = 1,N
+          DY(IY) = DY(IY) + DA*DX(IX)
+          IX = IX + INCX
+          IY = IY + INCY
+         END DO
+      END IF
       RETURN
       END
