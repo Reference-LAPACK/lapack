@@ -52,8 +52,7 @@
 *
 *     .. Local Scalars ..
       REAL GAM,GAMSQ,ONE,RGAMSQ,SFLAG,SH11,SH12,SH21,SH22,SP1,SP2,SQ1,
-     +     SQ2,STEMP,SU,TWO,ZERO
-      INTEGER IGO
+     $     SQ2,STEMP,SU,TWO,ZERO
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC ABS
@@ -64,152 +63,136 @@
       DATA GAM,GAMSQ,RGAMSQ/4096.E0,1.67772E7,5.96046E-8/
 *     ..
 
-      IF (.NOT.SD1.LT.ZERO) GO TO 10
-*       GO ZERO-H-D-AND-SX1..
-      GO TO 60
-   10 CONTINUE
-*     CASE-SD1-NONNEGATIVE
-      SP2 = SD2*SY1
-      IF (.NOT.SP2.EQ.ZERO) GO TO 20
-      SFLAG = -TWO
-      GO TO 260
-   20 CONTINUE
-*     REGULAR-CASE..
-      SP1 = SD1*SX1
-      SQ2 = SP2*SY1
-      SQ1 = SP1*SX1
+      IF (SD1.LT.ZERO) THEN
+*        GO ZERO-H-D-AND-SX1..
+         SFLAG = -ONE
+         SH11 = ZERO
+         SH12 = ZERO
+         SH21 = ZERO
+         SH22 = ZERO
 *
-      IF (.NOT.ABS(SQ1).GT.ABS(SQ2)) GO TO 40
-      SH21 = -SY1/SX1
-      SH12 = SP2/SP1
+         SD1 = ZERO
+         SD2 = ZERO
+         SX1 = ZERO
+      ELSE
+*        CASE-SD1-NONNEGATIVE
+         SP2 = SD2*SY1
+         IF (SP2.EQ.ZERO) THEN
+            SFLAG = -TWO
+            SPARAM(1) = SFLAG
+            RETURN
+         END IF 
+*        REGULAR-CASE..
+         SP1 = SD1*SX1
+         SQ2 = SP2*SY1
+         SQ1 = SP1*SX1
 *
-      SU = ONE - SH12*SH21
+         IF (ABS(SQ1).GT.ABS(SQ2)) THEN
+            SH21 = -SY1/SX1
+            SH12 = SP2/SP1
 *
-      IF (.NOT.SU.LE.ZERO) GO TO 30
-*         GO ZERO-H-D-AND-SX1..
-      GO TO 60
-   30 CONTINUE
-      SFLAG = ZERO
-      SD1 = SD1/SU
-      SD2 = SD2/SU
-      SX1 = SX1*SU
-*         GO SCALE-CHECK..
-      GO TO 100
-   40 CONTINUE
-      IF (.NOT.SQ2.LT.ZERO) GO TO 50
-*         GO ZERO-H-D-AND-SX1..
-      GO TO 60
-   50 CONTINUE
-      SFLAG = ONE
-      SH11 = SP1/SP2
-      SH22 = SX1/SY1
-      SU = ONE + SH11*SH22
-      STEMP = SD2/SU
-      SD2 = SD1/SU
-      SD1 = STEMP
-      SX1 = SY1*SU
-*         GO SCALE-CHECK
-      GO TO 100
-   60 CONTINUE
-*     PROCEDURE..ZERO-H-D-AND-SX1..
-      SFLAG = -ONE
-      SH11 = ZERO
-      SH12 = ZERO
-      SH21 = ZERO
-      SH22 = ZERO
+            SU = ONE - SH12*SH21
 *
-      SD1 = ZERO
-      SD2 = ZERO
-      SX1 = ZERO
-*         RETURN..
-      GO TO 220
-   70 CONTINUE
-*     PROCEDURE..FIX-H..
-      IF (.NOT.SFLAG.GE.ZERO) GO TO 90
+           IF (SU.GT.ZERO) THEN
+             SFLAG = ZERO
+             SD1 = SD1/SU
+             SD2 = SD2/SU
+             SX1 = SX1*SU
+           END IF
+         ELSE
+
+            IF (SQ2.LT.ZERO) THEN
+*              GO ZERO-H-D-AND-SX1..
+               SFLAG = -ONE
+               SH11 = ZERO
+               SH12 = ZERO
+               SH21 = ZERO
+               SH22 = ZERO
 *
-      IF (.NOT.SFLAG.EQ.ZERO) GO TO 80
-      SH11 = ONE
-      SH22 = ONE
-      SFLAG = -ONE
-      GO TO 90
-   80 CONTINUE
-      SH21 = -ONE
-      SH12 = ONE
-      SFLAG = -ONE
-   90 CONTINUE
-      GO TO (150,180,210) IGO
-      GO TO 120
-  100 CONTINUE
-*     PROCEDURE..SCALE-CHECK
-  110 CONTINUE
-      IF (.NOT.SD1.LE.RGAMSQ) GO TO 130
-      IF (SD1.EQ.ZERO) GO TO 160
-      IGO = 0
-*              FIX-H..
-      GO TO 70
-  120 CONTINUE
-      SD1 = SD1*GAM**2
-      SX1 = SX1/GAM
-      SH11 = SH11/GAM
-      SH12 = SH12/GAM
-      GO TO 110
-  130 CONTINUE
-  140 CONTINUE
-      IF (.NOT.SD1.GE.GAMSQ) GO TO 160
-      IGO = 1
-*              FIX-H..
-      GO TO 70
-  150 CONTINUE
-      SD1 = SD1/GAM**2
-      SX1 = SX1*GAM
-      SH11 = SH11*GAM
-      SH12 = SH12*GAM
-      GO TO 140
-  160 CONTINUE
-  170 CONTINUE
-      IF (.NOT.ABS(SD2).LE.RGAMSQ) GO TO 190
-      IF (SD2.EQ.ZERO) GO TO 220
-      IGO = 2
-*              FIX-H..
-      GO TO 70
-  180 CONTINUE
-      SD2 = SD2*GAM**2
-      SH21 = SH21/GAM
-      SH22 = SH22/GAM
-      GO TO 170
-  190 CONTINUE
-  200 CONTINUE
-      IF (.NOT.ABS(SD2).GE.GAMSQ) GO TO 220
-      IGO = 3
-*              FIX-H..
-      GO TO 70
-  210 CONTINUE
-      SD2 = SD2/GAM**2
-      SH21 = SH21*GAM
-      SH22 = SH22*GAM
-      GO TO 200
-  220 CONTINUE
-      IF (SFLAG.LT.ZERO) THEN
-         GO TO 250
-      ELSE IF (SFLAG.EQ.ZERO) THEN
-         GO TO 230
-      ELSE 
-         GO TO 240
+               SD1 = ZERO
+               SD2 = ZERO
+               SX1 = ZERO
+            ELSE
+               SFLAG = ONE
+               SH11 = SP1/SP2
+               SH22 = SX1/SY1
+               SU = ONE + SH11*SH22
+               STEMP = SD2/SU
+               SD2 = SD1/SU
+               SD1 = STEMP
+               SX1 = SY1*SU
+            END IF
+         END IF
+
+*     PROCESURE..SCALE-CHECK
+         IF (SD1.NE.ZERO) THEN
+            DO WHILE ((SD1.LE.RGAMSQ) .OR. (SD1.GE.GAMSQ))
+               IF (SFLAG.EQ.ZERO) THEN
+                  SH11 = ONE
+                  SH22 = ONE
+                  SFLAG = -ONE
+               ELSE
+                  SH21 = -ONE
+                  SH12 = ONE
+                  SFLAG = -ONE
+               END IF
+               IF (SD1.LE.RGAMSQ) THEN
+                  SD1 = SD1*GAM**2
+                  SX1 = SX1/GAM
+                  SH11 = SH11/GAM
+                  SH12 = SH12/GAM
+               ELSE
+                  SD1 = SD1/GAM**2
+                  SX1 = SX1*GAM
+                  SH11 = SH11*GAM
+                  SH12 = SH12*GAM
+               END IF
+            ENDDO
+         END IF
+  
+         IF (SD2.NE.ZERO) THEN
+            DO WHILE ( (ABS(SD2).LE.RGAMSQ) .OR. (ABS(SD2).GE.GAMSQ) )
+               IF (SFLAG.EQ.ZERO) THEN
+                  SH11 = ONE
+                  SH22 = ONE
+                  SFLAG = -ONE
+               ELSE
+                  SH21 = -ONE
+                  SH12 = ONE
+                  SFLAG = -ONE
+               END IF
+               IF (ABS(SD2).LE.RGAMSQ) THEN
+                  SD2 = SD2*GAM**2
+                  SH21 = SH21/GAM
+                  SH22 = SH22/GAM
+               ELSE
+                  SD2 = SD2/GAM**2
+                  SH21 = SH21*GAM
+                  SH22 = SH22*GAM
+               END IF      
+            END DO
+         END IF
+     
       END IF
-  230 CONTINUE
-      SPARAM(3) = SH21
-      SPARAM(4) = SH12
-      GO TO 260
-  240 CONTINUE
-      SPARAM(2) = SH11
-      SPARAM(5) = SH22
-      GO TO 260
-  250 CONTINUE
-      SPARAM(2) = SH11
-      SPARAM(3) = SH21
-      SPARAM(4) = SH12
-      SPARAM(5) = SH22
+
+      IF (SFLAG.LT.ZERO) THEN
+         SPARAM(2) = SH11
+         SPARAM(3) = SH21
+         SPARAM(4) = SH12
+         SPARAM(5) = SH22
+      ELSE IF (SFLAG.EQ.ZERO) THEN
+         SPARAM(3) = SH21
+         SPARAM(4) = SH12 
+      ELSE
+         SPARAM(2) = SH11
+         SPARAM(5) = SH22
+      END IF
+
   260 CONTINUE
       SPARAM(1) = SFLAG
       RETURN
       END
+      
+     
+     
+     
