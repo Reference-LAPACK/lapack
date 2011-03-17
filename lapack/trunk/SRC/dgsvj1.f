@@ -44,12 +44,12 @@
 *  block-entries (tiles) of the (1,2) off-diagonal block are marked by the
 *  [x]'s in the following scheme:
 *
-*     | *   C   * [x] [x] [x]|
-*     | *   C   * [x] [x] [x]|    Row-cycling in the nblr-by-nblc [x] blocks.
-*     | *   C   * [x] [x] [x]|    Row-cyclic pivoting inside each [x] block.
-*     |[x] [x] [x] *   C   * |
-*     |[x] [x] [x] *   C   * |
-*     |[x] [x] [x] *   C   * |
+*     | *   *   * [x] [x] [x]|
+*     | *   *   * [x] [x] [x]|    Row-cycling in the nblr-by-nblc [x] blocks.
+*     | *   *   * [x] [x] [x]|    Row-cyclic pivoting inside each [x] block.
+*     |[x] [x] [x] *   *   * |
+*     |[x] [x] [x] *   *   * |
+*     |[x] [x] [x] *   *   * |
 *
 *  In terms of the columns of A, the first N1 columns are rotated 'against'
 *  the remaining N-N1 columns, trying to increase the angle between the
@@ -271,12 +271,12 @@
 *     Jacobi SVD algorithm SGESVJ.
 *
 *
-*     | *   C   * [x] [x] [x]|
-*     | *   C   * [x] [x] [x]|    Row-cycling in the nblr-by-nblc [x] blocks.
-*     | *   C   * [x] [x] [x]|    Row-cyclic pivoting inside each [x] block.
-*     |[x] [x] [x] *   C   * |
-*     |[x] [x] [x] *   C   * |
-*     |[x] [x] [x] *   C   * |
+*     | *   *   * [x] [x] [x]|
+*     | *   *   * [x] [x] [x]|    Row-cycling in the nblr-by-nblc [x] blocks.
+*     | *   *   * [x] [x] [x]|    Row-cyclic pivoting inside each [x] block.
+*     |[x] [x] [x] *   *   * |
+*     |[x] [x] [x] *   *   * |
+*     |[x] [x] [x] *   *   * |
 *
 *
       DO 1993 i = 1, NSWEEP

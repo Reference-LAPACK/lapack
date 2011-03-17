@@ -213,7 +213,7 @@
 *          If JOBV = 'V' or 'J' or 'W', then LDV >= N.
 *
 *  WORK    (workspace/output) DOUBLE PRECISION array, dimension at least LWORK.
-*          On exit,
+*          On exit, if N.GT.0 .AND. M.GT.0 (else not referenced), 
 *          WORK(1) = SCALE = WORK(2) / WORK(1) is the scaling factor such
 *                    that SCALE*SVA(1:N) are the computed singular values
 *                    of A. (See the description of SVA().)
@@ -252,33 +252,50 @@
 *          LWORK depends on the job:
 *
 *          If only SIGMA is needed ( JOBU.EQ.'N', JOBV.EQ.'N' ) and
-*            -> .. no scaled condition estimate required ( JOBE.EQ.'N'):
+*            -> .. no scaled condition estimate required (JOBE.EQ.'N'):
 *               LWORK >= max(2*M+N,4*N+1,7). This is the minimal requirement.
-*               For optimal performance (blocked code) the optimal value
+*               ->> For optimal performance (blocked code) the optimal value
 *               is LWORK >= max(2*M+N,3*N+(N+1)*NB,7). Here NB is the optimal
-*               block size for xGEQP3/xGEQRF.
+*               block size for DGEQP3 and DGEQRF.
+*               In general, optimal LWORK is computed as 
+*               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF), 7).        
 *            -> .. an estimate of the scaled condition number of A is
 *               required (JOBA='E', 'G'). In this case, LWORK is the maximum
-*               of the above and N*N+4*N, i.e. LWORK >= max(2*M+N,N*N+4N,7).
+*               of the above and N*N+4*N, i.e. LWORK >= max(2*M+N,N*N+4*N,7).
+*               ->> For optimal performance (blocked code) the optimal value 
+*               is LWORK >= max(2*M+N,3*N+(N+1)*NB, N*N+4*N, 7).
+*               In general, the optimal length LWORK is computed as
+*               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF), 
+*                                                     N+N*N+LWORK(DPOCON),7).
 *
 *          If SIGMA and the right singular vectors are needed (JOBV.EQ.'V'),
-*            -> the minimal requirement is LWORK >= max(2*N+M,7).
-*            -> For optimal performance, LWORK >= max(2*N+M,2*N+N*NB,7),
-*               where NB is the optimal block size.
+*            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
+*            -> For optimal performance, LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
+*               where NB is the optimal block size for DGEQP3, DGEQRF, DGELQ,
+*               DORMLQ. In general, the optimal length LWORK is computed as
+*               LWORK >= max(2*M+N,N+LWORK(DGEQP3), N+LWORK(DPOCON), 
+*                       N+LWORK(DGELQ), 2*N+LWORK(DGEQRF), N+LWORK(DORMLQ)).
 *
 *          If SIGMA and the left singular vectors are needed
-*            -> the minimal requirement is LWORK >= max(2*N+M,7).
-*            -> For optimal performance, LWORK >= max(2*N+M,2*N+N*NB,7),
-*               where NB is the optimal block size.
-*
-*          If full SVD is needed ( JOBU.EQ.'U' or 'F', JOBV.EQ.'V' ) and
-*            -> .. the singular vectors are computed without explicit
-*               accumulation of the Jacobi rotations, LWORK >= 6*N+2*N*N
-*            -> .. in the iterative part, the Jacobi rotations are
-*               explicitly accumulated (option, see the description of JOBV),
-*               then the minimal requirement is LWORK >= max(M+3*N+N*N,7).
-*               For better performance, if NB is the optimal block size,
-*               LWORK >= max(3*N+N*N+M,3*N+N*N+N*NB,7).
+*            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
+*            -> For optimal performance:
+*               if JOBU.EQ.'U' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
+*               if JOBU.EQ.'F' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,N+M*NB,7),
+*               where NB is the optimal block size for DGEQP3, DGEQRF, DORMQR.
+*               In general, the optimal length LWORK is computed as
+*               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DPOCON),
+*                        2*N+LWORK(DGEQRF), N+LWORK(DORMQR)). 
+*               Here LWORK(DORMQR) equals N*NB (for JOBU.EQ.'U') or 
+*               M*NB (for JOBU.EQ.'F').
+*               
+*          If the full SVD is needed: (JOBU.EQ.'U' or JOBU.EQ.'F') and 
+*            -> if JOBV.EQ.'V'  
+*               the minimal requirement is LWORK >= max(2*M+N,6*N+2*N*N). 
+*            -> if JOBV.EQ.'J' the minimal requirement is 
+*               LWORK >= max(2*M+N, 4*N+N*N,2*N+N*N+6).
+*            -> For optimal performance, LWORK should be additionally
+*               larger than N+M*NB, where NB is the optimal block size
+*               for DORMQR.
 *
 *  IWORK   (workspace/output) INTEGER array, dimension M+3*N.
 *          On exit,
@@ -300,8 +317,8 @@
 *  Further Details
 *  ===============
 *
-*  DGEJSV implements a preconditioned Jacobi SVD algorithm. It uses SGEQP3,
-*  SGEQRF, and SGELQF as preprocessors and preconditioners. Optionally, an
+*  DGEJSV implements a preconditioned Jacobi SVD algorithm. It uses DGEQP3,
+*  DGEQRF, and DGELQF as preprocessors and preconditioners. Optionally, an
 *  additional row pivoting can be used as a preprocessor, which in some
 *  cases results in much higher accuracy. An example is matrix A with the
 *  structure A = D1 * C * D2, where D1, D2 are arbitrarily ill-conditioned
@@ -319,14 +336,14 @@
 *  the singular values in the range of normalized IEEE numbers is that the
 *  spectral condition number kappa(A)=sigma_max(A)/sigma_min(A) does not
 *  overflow. This code (DGEJSV) is best used in this restricted range,
-*  meaning that singular values of magnitude below ||A||_2 / SLAMCH('O') are
+*  meaning that singular values of magnitude below ||A||_2 / DLAMCH('O') are
 *  returned as zeros. See JOBR for details on this.
 *     Further, this implementation is somewhat slower than the one described
 *  in [1,2] due to replacement of some non-LAPACK components, and because
 *  the choice of some tuning parameters in the iterative part (DGESVJ) is
 *  left to the implementer on a particular machine.
-*     The rank revealing QR factorization (in this code: SGEQP3) should be
-*  implemented as in [3]. We have a new version of SGEQP3 under development
+*     The rank revealing QR factorization (in this code: DGEQP3) should be
+*  implemented as in [3]. We have a new version of DGEQP3 under development
 *  that is more robust than the current one in LAPACK, with a cleaner cut in
 *  rank defficient cases. It will be available in the SIGMA library [4].
 *  If M is much larger than N, it is obvious that the inital QRF with
@@ -437,14 +454,18 @@
       ELSE IF ( RSVEC .AND. ( LDV .LT. N ) ) THEN
          INFO = - 14
       ELSE IF ( (.NOT.(LSVEC .OR. RSVEC .OR. ERREST).AND.
-     $                           (LWORK .LT. MAX0(7,4*N+1,2*M+N))) .OR.
-     $ (.NOT.(LSVEC .OR. LSVEC) .AND. ERREST .AND.
-     $                         (LWORK .LT. MAX0(7,4*N+N*N,2*M+N))) .OR.
-     $ (LSVEC .AND. (.NOT.RSVEC) .AND. (LWORK .LT. MAX0(7,2*N+M))) .OR.
-     $ (RSVEC .AND. (.NOT.LSVEC) .AND. (LWORK .LT. MAX0(7,2*N+M))) .OR.
-     $ (LSVEC .AND. RSVEC .AND. .NOT.JRACC .AND. (LWORK.LT.6*N+2*N*N))
-     $ .OR. (LSVEC.AND.RSVEC.AND.JRACC.AND.LWORK.LT.MAX0(7,M+3*N+N*N)))
-     $   THEN
+     &                           (LWORK .LT. MAX0(7,4*N+1,2*M+N))) .OR.
+     & (.NOT.(LSVEC .OR. RSVEC) .AND. ERREST .AND.
+     &                         (LWORK .LT. MAX0(7,4*N+N*N,2*M+N))) .OR.
+     & (LSVEC .AND. (.NOT.RSVEC) .AND. (LWORK .LT. MAX0(7,2*M+N,4*N+1)))
+     & .OR.
+     & (RSVEC .AND. (.NOT.LSVEC) .AND. (LWORK .LT. MAX0(7,2*M+N,4*N+1)))
+     & .OR.
+     & (LSVEC .AND. RSVEC .AND. (.NOT.JRACC) .AND. 
+     &                          (LWORK.LT.MAX0(2*M+N,6*N+2*N*N)))
+     & .OR. (LSVEC .AND. RSVEC .AND. JRACC .AND.
+     &                          LWORK.LT.MAX0(2*M+N,4*N+N*N,2*N+N*N+6)))
+     &   THEN
          INFO = - 17
       ELSE
 *        #:)
@@ -454,6 +475,7 @@
       IF ( INFO .NE. 0 ) THEN
 *       #:(
          CALL XERBLA( 'DGEJSV', - INFO )
+         RETURN
       END IF
 *
 *     Quick return for void matrix (Y3K safe)
@@ -471,7 +493,6 @@
 *
 *!    NOTE: Make sure DLAMCH() does not fail on the target architecture.
 *
-
       EPSLN = DLAMCH('Epsilon')
       SFMIN = DLAMCH('SafeMinimum')
       SMALL = SFMIN / EPSLN
@@ -536,6 +557,7 @@
          END IF
          IWORK(1) = 0
          IWORK(2) = 0
+         IWORK(3) = 0
          RETURN
       END IF
 *
@@ -916,7 +938,6 @@
 *
 *     Phase 3:
 *
-
       IF ( .NOT. ( RSVEC .OR. LSVEC ) ) THEN
 *
 *         Singular Values only
