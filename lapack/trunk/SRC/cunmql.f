@@ -238,17 +238,17 @@
      $                   A( 1, I ), LDA, TAU( I ), T, LDT )
             IF( LEFT ) THEN
 *
-*              H or H' is applied to C(1:m-k+i+ib-1,1:n)
+*              H or H**H is applied to C(1:m-k+i+ib-1,1:n)
 *
                MI = M - K + I + IB - 1
             ELSE
 *
-*              H or H' is applied to C(1:m,1:n-k+i+ib-1)
+*              H or H**H is applied to C(1:m,1:n-k+i+ib-1)
 *
                NI = N - K + I + IB - 1
             END IF
 *
-*           Apply H or H'
+*           Apply H or H**H
 *
             CALL CLARFB( SIDE, TRANS, 'Backward', 'Columnwise', MI, NI,
      $                   IB, A( 1, I ), LDA, T, LDT, C, LDC, WORK,

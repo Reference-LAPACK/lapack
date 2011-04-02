@@ -24,7 +24,7 @@
 *  STGSNA estimates reciprocal condition numbers for specified
 *  eigenvalues and/or eigenvectors of a matrix pair (A, B) in
 *  generalized real Schur canonical form (or of any matrix pair
-*  (Q*A*Z', Q*B*Z') with orthogonal matrices Q and Z, where
+*  (Q*A*Z**T, Q*B*Z**T) with orthogonal matrices Q and Z, where
 *  Z' denotes the transpose of Z.
 *
 *  (A, B) must be in generalized real Schur form (as returned by SGGES),
@@ -150,12 +150,12 @@
 *  The reciprocal of the condition number of a generalized eigenvalue
 *  w = (a, b) is defined as
 *
-*       S(w) = (|u'Av|**2 + |u'Bv|**2)**(1/2) / (norm(u)*norm(v))
+*       S(w) = (|u**TAv|**2 + |u**TBv|**2)**(1/2) / (norm(u)*norm(v))
 *
 *  where u and v are the left and right eigenvectors of (A, B)
 *  corresponding to w; |z| denotes the absolute value of the complex
 *  number, and norm(u) denotes the 2-norm of the vector u.
-*  The pair (a, b) corresponds to an eigenvalue w = a/b (= u'Av/u'Bv)
+*  The pair (a, b) corresponds to an eigenvalue w = a/b (= u**TAv/u**TBv)
 *  of the matrix pair (A, B). If both a and b equal zero, then (A B) is
 *  singular and S(I) = -1 is returned.
 *
@@ -175,7 +175,7 @@
 *
 *     Suppose U and V are orthogonal transformations such that
 *
-*                U'*(A, B)*V  = (S, T) = ( a   *  ) ( b  *  )  1
+*              U**T*(A, B)*V  = (S, T) = ( a   *  ) ( b  *  )  1
 *                                        ( 0  S22 ),( 0 T22 )  n-1
 *                                          1  n-1     1 n-1
 *
@@ -201,7 +201,7 @@
 *
 *     Suppose U and V are orthogonal transformations such that
 *
-*                U'*(A, B)*V = (S, T) = ( S11  *   ) ( T11  *  )  2
+*              U**T*(A, B)*V = (S, T) = ( S11  *   ) ( T11  *  )  2
 *                                       ( 0    S22 ),( 0    T22) n-2
 *                                         2    n-2     2    n-2
 *
@@ -209,7 +209,7 @@
 *     pair (w, conjg(w)). There exist unitary matrices U1 and V1 such
 *     that
 *
-*         U1'*S11*V1 = ( s11 s12 )   and U1'*T11*V1 = ( t11 t12 )
+*       U1**T*S11*V1 = ( s11 s12 ) and U1**T*T11*V1 = ( t11 t12 )
 *                      (  0  s22 )                    (  0  t22 )
 *
 *     where the generalized eigenvalues w = s11/t11 and
@@ -226,8 +226,8 @@
 *                    [ t11  -t22 ],
 *
 *     This is done by computing (using real arithmetic) the
-*     roots of the characteristical polynomial det(Z1' * Z1 - lambda I),
-*     where Z1' denotes the conjugate transpose of Z1 and det(X) denotes
+*     roots of the characteristical polynomial det(Z1**T * Z1 - lambda I),
+*     where Z1**T denotes the transpose of Z1 and det(X) denotes
 *     the determinant of X.
 *
 *     and d2 is an upper bound on Difl((S11, T11), (S22, T22)), i.e. an

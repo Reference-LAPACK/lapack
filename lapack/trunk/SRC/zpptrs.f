@@ -18,7 +18,7 @@
 *
 *  ZPPTRS solves a system of linear equations A*X = B with a Hermitian
 *  positive definite matrix A in packed storage using the Cholesky
-*  factorization A = U**H*U or A = L*L**H computed by ZPPTRF.
+*  factorization A = U**H * U or A = L * L**H computed by ZPPTRF.
 *
 *  Arguments
 *  =========
@@ -36,7 +36,7 @@
 *
 *  AP      (input) COMPLEX*16 array, dimension (N*(N+1)/2)
 *          The triangular factor U or L from the Cholesky factorization
-*          A = U**H*U or A = L*L**H, packed columnwise in a linear
+*          A = U**H * U or A = L * L**H, packed columnwise in a linear
 *          array.  The j-th column of U or L is stored in the array AP
 *          as follows:
 *          if UPLO = 'U', AP(i + (j-1)*j/2) = U(i,j) for 1<=i<=j;
@@ -96,11 +96,11 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B where A = U'*U.
+*        Solve A*X = B where A = U**H * U.
 *
          DO 10 I = 1, NRHS
 *
-*           Solve U'*X = B, overwriting B with X.
+*           Solve U**H *X = B, overwriting B with X.
 *
             CALL ZTPSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
      $                  AP, B( 1, I ), 1 )
@@ -112,7 +112,7 @@
    10    CONTINUE
       ELSE
 *
-*        Solve A*X = B where A = L*L'.
+*        Solve A*X = B where A = L * L**H.
 *
          DO 20 I = 1, NRHS
 *
@@ -121,7 +121,7 @@
             CALL ZTPSV( 'Lower', 'No transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
 *
-*           Solve L'*X = Y, overwriting B with X.
+*           Solve L**H *X = Y, overwriting B with X.
 *
             CALL ZTPSV( 'Lower', 'Conjugate transpose', 'Non-unit', N,
      $                  AP, B( 1, I ), 1 )

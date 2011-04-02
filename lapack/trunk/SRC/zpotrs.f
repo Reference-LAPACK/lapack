@@ -18,7 +18,7 @@
 *
 *  ZPOTRS solves a system of linear equations A*X = B with a Hermitian
 *  positive definite matrix A using the Cholesky factorization
-*  A = U**H*U or A = L*L**H computed by ZPOTRF.
+*  A = U**H * U or A = L * L**H computed by ZPOTRF.
 *
 *  Arguments
 *  =========
@@ -36,7 +36,7 @@
 *
 *  A       (input) COMPLEX*16 array, dimension (LDA,N)
 *          The triangular factor U or L from the Cholesky factorization
-*          A = U**H*U or A = L*L**H, as computed by ZPOTRF.
+*          A = U**H * U or A = L * L**H, as computed by ZPOTRF.
 *
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,N).
@@ -100,9 +100,9 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B where A = U'*U.
+*        Solve A*X = B where A = U**H *U.
 *
-*        Solve U'*X = B, overwriting B with X.
+*        Solve U**H *X = B, overwriting B with X.
 *
          CALL ZTRSM( 'Left', 'Upper', 'Conjugate transpose', 'Non-unit',
      $               N, NRHS, ONE, A, LDA, B, LDB )
@@ -113,14 +113,14 @@
      $               NRHS, ONE, A, LDA, B, LDB )
       ELSE
 *
-*        Solve A*X = B where A = L*L'.
+*        Solve A*X = B where A = L*L**H.
 *
 *        Solve L*X = B, overwriting B with X.
 *
          CALL ZTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
 *
-*        Solve L'*X = B, overwriting B with X.
+*        Solve L**H *X = B, overwriting B with X.
 *
          CALL ZTRSM( 'Left', 'Lower', 'Conjugate transpose', 'Non-unit',
      $               N, NRHS, ONE, A, LDA, B, LDB )

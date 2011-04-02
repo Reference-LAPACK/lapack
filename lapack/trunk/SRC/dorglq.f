@@ -185,7 +185,7 @@
                CALL DLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
-*              Apply H' to A(i+ib:m,i:n) from the right
+*              Apply H**T to A(i+ib:m,i:n) from the right
 *
                CALL DLARFB( 'Right', 'Transpose', 'Forward', 'Rowwise',
      $                      M-I-IB+1, N-I+1, IB, A( I, I ), LDA, WORK,
@@ -193,7 +193,7 @@
      $                      LDWORK )
             END IF
 *
-*           Apply H' to columns i:n of current block
+*           Apply H**T to columns i:n of current block
 *
             CALL DORGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ), WORK,
      $                   IINFO )

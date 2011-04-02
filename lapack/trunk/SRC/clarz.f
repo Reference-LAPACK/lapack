@@ -21,13 +21,13 @@
 *  M-by-N matrix C, from either the left or the right. H is represented
 *  in the form
 *
-*        H = I - tau * v * v'
+*        H = I - tau * v * v**H
 *
 *  where tau is a complex scalar and v is a complex vector.
 *
 *  If tau = 0, then H is taken to be the unit matrix.
 *
-*  To apply H' (the conjugate transpose of H), supply conjg(tau) instead
+*  To apply H**H (the conjugate transpose of H), supply conjg(tau) instead
 *  tau.
 *
 *  H is a product of k elementary reflectors as returned by CTZRZF.
@@ -105,7 +105,7 @@
             CALL CCOPY( N, C, LDC, WORK, 1 )
             CALL CLACGV( N, WORK, 1 )
 *
-*           w( 1:n ) = conjg( w( 1:n ) + C( m-l+1:m, 1:n )' * v( 1:l ) )
+*           w( 1:n ) = conjg( w( 1:n ) + C( m-l+1:m, 1:n )**H * v( 1:l ) )
 *
             CALL CGEMV( 'Conjugate transpose', L, N, ONE, C( M-L+1, 1 ),
      $                  LDC, V, INCV, ONE, WORK, 1 )
@@ -116,7 +116,7 @@
             CALL CAXPY( N, -TAU, WORK, 1, C, LDC )
 *
 *           C( m-l+1:m, 1:n ) = C( m-l+1:m, 1:n ) - ...
-*                               tau * v( 1:l ) * conjg( w( 1:n )' )
+*                               tau * v( 1:l ) * w( 1:n )**H
 *
             CALL CGERU( L, N, -TAU, V, INCV, WORK, 1, C( M-L+1, 1 ),
      $                  LDC )
@@ -142,7 +142,7 @@
             CALL CAXPY( M, -TAU, WORK, 1, C, 1 )
 *
 *           C( 1:m, n-l+1:n ) = C( 1:m, n-l+1:n ) - ...
-*                               tau * w( 1:m ) * v( 1:l )'
+*                               tau * w( 1:m ) * v( 1:l )**H
 *
             CALL CGERC( M, L, -TAU, WORK, 1, V, INCV, C( 1, N-L+1 ),
      $                  LDC )

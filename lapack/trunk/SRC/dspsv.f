@@ -132,7 +132,7 @@
          RETURN
       END IF
 *
-*     Compute the factorization A = U*D*U' or A = L*D*L'.
+*     Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
       CALL DSPTRF( UPLO, N, AP, IPIV, INFO )
       IF( INFO.EQ.0 ) THEN

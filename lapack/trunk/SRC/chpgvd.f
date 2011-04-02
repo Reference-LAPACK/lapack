@@ -203,10 +203,10 @@
                LIWMIN = 1
             END IF
          END IF
+*
          WORK( 1 ) = LWMIN
          RWORK( 1 ) = LRWMIN
          IWORK( 1 ) = LIWMIN
-*
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
             INFO = -11
          ELSE IF( LRWORK.LT.LRWMIN .AND. .NOT.LQUERY ) THEN
@@ -255,7 +255,7 @@
          IF( ITYPE.EQ.1 .OR. ITYPE.EQ.2 ) THEN
 *
 *           For A*x=(lambda)*B*x and A*B*x=(lambda)*x;
-*           backtransform eigenvectors: x = inv(L)'*y or inv(U)*y
+*           backtransform eigenvectors: x = inv(L)**H *y or inv(U)*y
 *
             IF( UPPER ) THEN
                TRANS = 'N'
@@ -271,7 +271,7 @@
          ELSE IF( ITYPE.EQ.3 ) THEN
 *
 *           For B*A*x=(lambda)*x;
-*           backtransform eigenvectors: x = L*y or U'*y
+*           backtransform eigenvectors: x = L*y or U**H *y
 *
             IF( UPPER ) THEN
                TRANS = 'C'

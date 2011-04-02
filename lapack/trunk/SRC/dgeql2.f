@@ -59,7 +59,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(m-k+i+1:m) = 0 and v(m-k+i) = 1; v(1:m-k+i-1) is stored on exit in

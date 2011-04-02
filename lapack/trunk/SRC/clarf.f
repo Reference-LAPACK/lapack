@@ -22,13 +22,13 @@
 *  matrix C, from either the left or the right. H is represented in the
 *  form
 *
-*        H = I - tau * v * v'
+*        H = I - tau * v * v**H
 *
 *  where tau is a complex scalar and v is a complex vector.
 *
 *  If tau = 0, then H is taken to be the unit matrix.
 *
-*  To apply H' (the conjugate transpose of H), supply conjg(tau) instead
+*  To apply H**H (the conjugate transpose of H), supply conjg(tau) instead
 *  tau.
 *
 *  Arguments
@@ -126,12 +126,12 @@
 *
          IF( LASTV.GT.0 ) THEN
 *
-*           w(1:lastc,1) := C(1:lastv,1:lastc)' * v(1:lastv,1)
+*           w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1)
 *
             CALL CGEMV( 'Conjugate transpose', LASTV, LASTC, ONE,
      $           C, LDC, V, INCV, ZERO, WORK, 1 )
 *
-*           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)'
+*           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H
 *
             CALL CGERC( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
          END IF
@@ -146,7 +146,7 @@
             CALL CGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
      $           V, INCV, ZERO, WORK, 1 )
 *
-*           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)'
+*           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H
 *
             CALL CGERC( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
          END IF

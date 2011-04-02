@@ -21,11 +21,11 @@
 *  using the Bunch-Kaufman diagonal pivoting method. The partial
 *  factorization has the form:
 *
-*  A  =  ( I  U12 ) ( A11  0  ) (  I    0   )  if UPLO = 'U', or:
-*        ( 0  U22 ) (  0   D  ) ( U12' U22' )
+*  A  =  ( I  U12 ) ( A11  0  ) (  I       0    )  if UPLO = 'U', or:
+*        ( 0  U22 ) (  0   D  ) ( U12**T U22**T )
 *
-*  A  =  ( L11  0 ) (  D   0  ) ( L11' L21' )  if UPLO = 'L'
-*        ( L21  I ) (  0  A22 ) (  0    I   )
+*  A  =  ( L11  0 ) (  D   0  ) ( L11**T L21**T )  if UPLO = 'L'
+*        ( L21  I ) (  0  A22 ) (  0       I    )
 *
 *  where the order of D is at most NB. The actual order is returned in
 *  the argument KB, and is either NB or NB-1, or N if N <= NB.
@@ -313,7 +313,7 @@
 *
 *        Update the upper triangle of A11 (= A(1:k,1:k)) as
 *
-*        A11 := A11 - U12*D*U12' = A11 - U12*W'
+*        A11 := A11 - U12*D*U12**T = A11 - U12*W**T
 *
 *        computing blocks of NB columns at a time
 *
@@ -536,7 +536,7 @@
 *
 *        Update the lower triangle of A22 (= A(k:n,k:n)) as
 *
-*        A22 := A22 - L21*D*L21' = A22 - L21*W'
+*        A22 := A22 - L21*D*L21**T = A22 - L21*W**T
 *
 *        computing blocks of NB columns at a time
 *

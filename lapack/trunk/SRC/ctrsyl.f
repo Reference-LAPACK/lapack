@@ -209,17 +209,17 @@
 *
       ELSE IF( .NOT.NOTRNA .AND. NOTRNB ) THEN
 *
-*        Solve    A' *X + ISGN*X*B = scale*C.
+*        Solve    A**H *X + ISGN*X*B = scale*C.
 *
 *        The (K,L)th block of X is determined starting from
 *        upper-left corner column by column by
 *
-*            A'(K,K)*X(K,L) + ISGN*X(K,L)*B(L,L) = C(K,L) - R(K,L)
+*            A**H(K,K)*X(K,L) + ISGN*X(K,L)*B(L,L) = C(K,L) - R(K,L)
 *
 *        Where
-*                   K-1                         L-1
-*          R(K,L) = SUM [A'(I,K)*X(I,L)] + ISGN*SUM [X(K,J)*B(J,L)]
-*                   I=1                         J=1
+*                   K-1                           L-1
+*          R(K,L) = SUM [A**H(I,K)*X(I,L)] + ISGN*SUM [X(K,J)*B(J,L)]
+*                   I=1                           J=1
 *
          DO 60 L = 1, N
             DO 50 K = 1, M
@@ -257,19 +257,19 @@
 *
       ELSE IF( .NOT.NOTRNA .AND. .NOT.NOTRNB ) THEN
 *
-*        Solve    A'*X + ISGN*X*B' = C.
+*        Solve    A**H*X + ISGN*X*B**H = C.
 *
 *        The (K,L)th block of X is determined starting from
 *        upper-right corner column by column by
 *
-*            A'(K,K)*X(K,L) + ISGN*X(K,L)*B'(L,L) = C(K,L) - R(K,L)
+*            A**H(K,K)*X(K,L) + ISGN*X(K,L)*B**H(L,L) = C(K,L) - R(K,L)
 *
 *        Where
 *                    K-1
-*           R(K,L) = SUM [A'(I,K)*X(I,L)] +
+*           R(K,L) = SUM [A**H(I,K)*X(I,L)] +
 *                    I=1
 *                           N
-*                     ISGN*SUM [X(K,J)*B'(L,J)].
+*                     ISGN*SUM [X(K,J)*B**H(L,J)].
 *                          J=L+1
 *
          DO 90 L = N, 1, -1
@@ -309,16 +309,16 @@
 *
       ELSE IF( NOTRNA .AND. .NOT.NOTRNB ) THEN
 *
-*        Solve    A*X + ISGN*X*B' = C.
+*        Solve    A*X + ISGN*X*B**H = C.
 *
 *        The (K,L)th block of X is determined starting from
 *        bottom-left corner column by column by
 *
-*           A(K,K)*X(K,L) + ISGN*X(K,L)*B'(L,L) = C(K,L) - R(K,L)
+*           A(K,K)*X(K,L) + ISGN*X(K,L)*B**H(L,L) = C(K,L) - R(K,L)
 *
 *        Where
 *                    M                          N
-*          R(K,L) = SUM [A(K,I)*X(I,L)] + ISGN*SUM [X(K,J)*B'(L,J)]
+*          R(K,L) = SUM [A(K,I)*X(I,L)] + ISGN*SUM [X(K,J)*B**H(L,J)]
 *                  I=K+1                      J=L+1
 *
          DO 120 L = N, 1, -1

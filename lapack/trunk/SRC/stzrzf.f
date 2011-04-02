@@ -81,7 +81,7 @@
 *
 *  where
 *
-*     T( k ) = I - tau*u( k )*u( k )',   u( k ) = (   1    ),
+*     T( k ) = I - tau*u( k )*u( k )**T,   u( k ) = (   1    ),
 *                                                 (   0    )
 *                                                 ( z( k ) )
 *

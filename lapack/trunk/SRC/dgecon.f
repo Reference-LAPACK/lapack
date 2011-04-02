@@ -149,12 +149,12 @@
      $                   A, LDA, WORK, SU, WORK( 3*N+1 ), INFO )
          ELSE
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**T).
 *
             CALL DLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N, A,
      $                   LDA, WORK, SU, WORK( 3*N+1 ), INFO )
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**T).
 *
             CALL DLATRS( 'Lower', 'Transpose', 'Unit', NORMIN, N, A,
      $                   LDA, WORK, SL, WORK( 2*N+1 ), INFO )

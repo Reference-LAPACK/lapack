@@ -243,7 +243,7 @@
          END IF
 *
 *        In the real version, B is passed to SLASDQ and multiplied
-*        internally by Q'. Here B is complex and that product is
+*        internally by Q**H. Here B is complex and that product is
 *        computed below in two steps (real and imaginary parts).
 *
          J = IRWB - 1
@@ -427,7 +427,7 @@
                END IF
 *
 *              In the real version, B is passed to SLASDQ and multiplied
-*              internally by Q'. Here B is complex and that product is
+*              internally by Q**H. Here B is complex and that product is
 *              computed below in two steps (real and imaginary parts).
 *
                J = IRWB - 1

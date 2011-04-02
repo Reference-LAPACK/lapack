@@ -338,7 +338,7 @@
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
-*              Multiply by diag(W)*inv(op(A)').
+*              Multiply by diag(W)*inv(op(A)**T).
 *
                CALL DTRSV( UPLO, TRANST, DIAG, N, A, LDA, WORK( N+1 ),
      $                     1 )

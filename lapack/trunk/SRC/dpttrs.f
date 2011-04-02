@@ -17,7 +17,7 @@
 *
 *  DPTTRS solves a tridiagonal system of the form
 *     A * X = B
-*  using the L*D*L' factorization of A computed by DPTTRF.  D is a
+*  using the L*D*L**T factorization of A computed by DPTTRF.  D is a
 *  diagonal matrix specified in the vector D, L is a unit bidiagonal
 *  matrix whose subdiagonal is specified in the vector E, and X and B
 *  are N by NRHS matrices.
@@ -34,13 +34,13 @@
 *
 *  D       (input) DOUBLE PRECISION array, dimension (N)
 *          The n diagonal elements of the diagonal matrix D from the
-*          L*D*L' factorization of A.
+*          L*D*L**T factorization of A.
 *
 *  E       (input) DOUBLE PRECISION array, dimension (N-1)
 *          The (n-1) subdiagonal elements of the unit bidiagonal factor
-*          L from the L*D*L' factorization of A.  E can also be regarded
+*          L from the L*D*L**T factorization of A.  E can also be regarded
 *          as the superdiagonal of the unit bidiagonal factor U from the
-*          factorization A = U'*D*U.
+*          factorization A = U**T*D*U.
 *
 *  B       (input/output) DOUBLE PRECISION array, dimension (LDB,NRHS)
 *          On entry, the right hand side vectors B for the system of

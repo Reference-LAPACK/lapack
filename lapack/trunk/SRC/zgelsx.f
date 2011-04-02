@@ -45,8 +45,8 @@
 *     A * P = Q * [ T11 0 ] * Z
 *                 [  0  0 ]
 *  The minimum-norm solution is then
-*     X = P * Z' [ inv(T11)*Q1'*B ]
-*                [        0       ]
+*     X = P * Z**H [ inv(T11)*Q1**H*B ]
+*                  [        0         ]
 *  where Q1 consists of the first RANK columns of Q.
 *
 *  Arguments
@@ -275,7 +275,7 @@
 *
 *     Details of Householder rotations stored in WORK(MN+1:2*MN)
 *
-*     B(1:M,1:NRHS) := Q' * B(1:M,1:NRHS)
+*     B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS)
 *
       CALL ZUNM2R( 'Left', 'Conjugate transpose', M, NRHS, MN, A, LDA,
      $             WORK( 1 ), B, LDB, WORK( 2*MN+1 ), INFO )
@@ -293,7 +293,7 @@
    30    CONTINUE
    40 CONTINUE
 *
-*     B(1:N,1:NRHS) := Y' * B(1:N,1:NRHS)
+*     B(1:N,1:NRHS) := Y**H * B(1:N,1:NRHS)
 *
       IF( RANK.LT.N ) THEN
          DO 50 I = 1, RANK

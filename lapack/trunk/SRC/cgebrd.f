@@ -100,7 +100,7 @@
 *
 *  Each H(i) and G(i) has the form:
 *
-*     H(i) = I - tauq * v * v'  and G(i) = I - taup * u * u'
+*     H(i) = I - tauq * v * v**H  and G(i) = I - taup * u * u**H
 *
 *  where tauq and taup are complex scalars, and v and u are complex
 *  vectors; v(1:i-1) = 0, v(i) = 1, and v(i+1:m) is stored on exit in
@@ -113,7 +113,7 @@
 *
 *  Each H(i) and G(i) has the form:
 *
-*     H(i) = I - tauq * v * v'  and G(i) = I - taup * u * u'
+*     H(i) = I - tauq * v * v**H  and G(i) = I - taup * u * u**H
 *
 *  where tauq and taup are complex scalars, and v and u are complex
 *  vectors; v(1:i) = 0, v(i+1) = 1, and v(i+2:m) is stored on exit in
@@ -233,7 +233,7 @@
      $                WORK( LDWRKX*NB+1 ), LDWRKY )
 *
 *        Update the trailing submatrix A(i+ib:m,i+ib:n), using
-*        an update of the form  A := A - V*Y' - X*U'
+*        an update of the form  A := A - V*Y**H - X*U**H
 *
          CALL CGEMM( 'No transpose', 'Conjugate transpose', M-I-NB+1,
      $               N-I-NB+1, NB, -ONE, A( I+NB, I ), LDA,

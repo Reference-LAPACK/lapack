@@ -136,7 +136,7 @@
 *
          IF( I.LT.N ) THEN
 *
-*           Apply H(i)' to A(offset+i:m,i+1:n) from the left.
+*           Apply H(i)**H to A(offset+i:m,i+1:n) from the left.
 *
             AII = A( OFFPI, I )
             A( OFFPI, I ) = CONE

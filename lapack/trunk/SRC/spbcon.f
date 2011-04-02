@@ -139,7 +139,7 @@
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**T).
 *
             CALL SLATBS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
      $                   KD, AB, LDAB, WORK, SCALEL, WORK( 2*N+1 ),
@@ -160,7 +160,7 @@
      $                   INFO )
             NORMIN = 'Y'
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**T).
 *
             CALL SLATBS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
      $                   KD, AB, LDAB, WORK, SCALEU, WORK( 2*N+1 ),

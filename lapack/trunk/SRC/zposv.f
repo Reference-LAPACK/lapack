@@ -53,7 +53,7 @@
 *          triangular part of A is not referenced.
 *
 *          On exit, if INFO = 0, the factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H.
+*          factorization A = U**H *U or A = L*L**H.
 *
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,N).
@@ -105,7 +105,7 @@
          RETURN
       END IF
 *
-*     Compute the Cholesky factorization A = U'*U or A = L*L'.
+*     Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
       CALL ZPOTRF( UPLO, N, A, LDA, INFO )
       IF( INFO.EQ.0 ) THEN

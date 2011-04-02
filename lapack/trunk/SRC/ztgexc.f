@@ -29,8 +29,8 @@
 *  Optionally, the matrices Q and Z of generalized Schur vectors are
 *  updated.
 *
-*         Q(in) * A(in) * Z(in)' = Q(out) * A(out) * Z(out)'
-*         Q(in) * B(in) * Z(in)' = Q(out) * B(out) * Z(out)'
+*         Q(in) * A(in) * Z(in)**H = Q(out) * A(out) * Z(out)**H
+*         Q(in) * B(in) * Z(in)**H = Q(out) * B(out) * Z(out)**H
 *
 *  Arguments
 *  =========

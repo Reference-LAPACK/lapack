@@ -320,7 +320,7 @@
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
-*        Compute the Cholesky factorization A = U'*U or A = L*L'.
+*        Compute the Cholesky factorization A = U**T *U or A = L*L**T.
 *
          CALL SLACPY( UPLO, N, N, A, LDA, AF, LDAF )
          CALL SPOTRF( UPLO, N, AF, LDAF, INFO )

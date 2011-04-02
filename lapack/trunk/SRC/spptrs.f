@@ -96,11 +96,11 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B where A = U'*U.
+*        Solve A*X = B where A = U**T * U.
 *
          DO 10 I = 1, NRHS
 *
-*           Solve U'*X = B, overwriting B with X.
+*           Solve U**T *X = B, overwriting B with X.
 *
             CALL STPSV( 'Upper', 'Transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
@@ -112,7 +112,7 @@
    10    CONTINUE
       ELSE
 *
-*        Solve A*X = B where A = L*L'.
+*        Solve A*X = B where A = L * L**T.
 *
          DO 20 I = 1, NRHS
 *
@@ -121,7 +121,7 @@
             CALL STPSV( 'Lower', 'No transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )
 *
-*           Solve L'*X = Y, overwriting B with X.
+*           Solve L**T *X = Y, overwriting B with X.
 *
             CALL STPSV( 'Lower', 'Transpose', 'Non-unit', N, AP,
      $                  B( 1, I ), 1 )

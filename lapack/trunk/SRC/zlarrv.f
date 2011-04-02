@@ -25,7 +25,7 @@
 *  =======
 *
 *  ZLARRV computes the eigenvectors of the tridiagonal matrix
-*  T = L D L^T given L, D and APPROXIMATIONS to the eigenvalues of L D L^T.
+*  T = L D L**T given L, D and APPROXIMATIONS to the eigenvalues of L D L**T.
 *  The input eigenvalues should have been computed by DLARRE.
 *
 *  Arguments

@@ -19,7 +19,7 @@
 *  which is defined as the last M rows of a product of K elementary
 *  reflectors of order N
 *
-*        Q  =  H(1)' H(2)' . . . H(k)'
+*        Q  =  H(1)**H H(2)**H . . . H(k)**H
 *
 *  as returned by CGERQF.
 *
@@ -193,7 +193,7 @@
                CALL CLARFT( 'Backward', 'Rowwise', N-K+I+IB-1, IB,
      $                      A( II, 1 ), LDA, TAU( I ), WORK, LDWORK )
 *
-*              Apply H' to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
+*              Apply H**H to A(1:m-k+i-1,1:n-k+i+ib-1) from the right
 *
                CALL CLARFB( 'Right', 'Conjugate transpose', 'Backward',
      $                      'Rowwise', II-1, N-K+I+IB-1, IB, A( II, 1 ),
@@ -201,7 +201,7 @@
      $                      LDWORK )
             END IF
 *
-*           Apply H' to columns 1:n-k+i+ib-1 of current block
+*           Apply H**H to columns 1:n-k+i+ib-1 of current block
 *
             CALL CUNGR2( IB, N-K+I+IB-1, IB, A( II, 1 ), LDA, TAU( I ),
      $                   WORK, IINFO )

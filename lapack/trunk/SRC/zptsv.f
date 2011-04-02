@@ -45,7 +45,7 @@
 *          A.  E can also be regarded as the superdiagonal of the unit
 *          bidiagonal factor U from the U**H*D*U factorization of A.
 *
-*  B       (input/output) COMPLEX*16 array, dimension (LDB,N)
+*  B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS)
 *          On entry, the N-by-NRHS right hand side matrix B.
 *          On exit, if INFO = 0, the N-by-NRHS solution matrix X.
 *
@@ -85,7 +85,7 @@
          RETURN
       END IF
 *
-*     Compute the L*D*L' (or U'*D*U) factorization of A.
+*     Compute the L*D*L**H (or U**H*D*U) factorization of A.
 *
       CALL ZPTTRF( N, D, E, INFO )
       IF( INFO.EQ.0 ) THEN

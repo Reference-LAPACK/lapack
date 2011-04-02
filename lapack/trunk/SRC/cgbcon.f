@@ -187,13 +187,13 @@
      $                   KL+KU, AB, LDAB, WORK, SCALE, RWORK, INFO )
          ELSE
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**H).
 *
             CALL CLATBS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, KL+KU, AB, LDAB, WORK, SCALE, RWORK,
      $                   INFO )
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**H).
 *
             IF( LNOTI ) THEN
                DO 30 J = N - 1, 1, -1

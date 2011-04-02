@@ -19,7 +19,7 @@
 *  which is defined as the first m rows of a product of k elementary
 *  reflectors of order n
 *
-*        Q  =  H(k)' . . . H(2)' H(1)'
+*        Q  =  H(k)**H . . . H(2)**H H(1)**H
 *
 *  as returned by CGELQF.
 *
@@ -110,7 +110,7 @@
 *
       DO 40 I = K, 1, -1
 *
-*        Apply H(i)' to A(i:m,i:n) from the right
+*        Apply H(i)**H to A(i:m,i:n) from the right
 *
          IF( I.LT.N ) THEN
             CALL CLACGV( N-I, A( I, I+1 ), LDA )

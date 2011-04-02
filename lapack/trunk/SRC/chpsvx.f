@@ -234,7 +234,7 @@
 *
       IF( NOFACT ) THEN
 *
-*        Compute the factorization A = U*D*U' or A = L*D*L'.
+*        Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
          CALL CCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
          CALL CHPTRF( UPLO, N, AFP, IPIV, INFO )

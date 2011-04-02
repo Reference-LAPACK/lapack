@@ -58,7 +58,7 @@
 *          See below for further details.
 *
 *          On exit, if INFO = 0, the triangular factor U or L from the
-*          Cholesky factorization A = U**H*U or A = L*L**H of the band
+*          Cholesky factorization A = U**H *U or A = L*L**H of the band
 *          matrix A, in the same storage format as A.
 *
 *  LDAB    (input) INTEGER
@@ -135,7 +135,7 @@
          RETURN
       END IF
 *
-*     Compute the Cholesky factorization A = U'*U or A = L*L'.
+*     Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
       CALL ZPBTRF( UPLO, N, KD, AB, LDAB, INFO )
       IF( INFO.EQ.0 ) THEN

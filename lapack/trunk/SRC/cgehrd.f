@@ -16,7 +16,7 @@
 *  =======
 *
 *  CGEHRD reduces a complex general matrix A to upper Hessenberg form H by
-*  an unitary similarity transformation:  Q' * A * Q = H .
+*  an unitary similarity transformation:  Q**H * A * Q = H .
 *
 *  Arguments
 *  =========
@@ -75,7 +75,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(1:i) = 0, v(i+1) = 1 and v(ihi+1:n) = 0; v(i+2:ihi) is stored on
@@ -223,14 +223,14 @@
             IB = MIN( NB, IHI-I )
 *
 *           Reduce columns i:i+ib-1 to Hessenberg form, returning the
-*           matrices V and T of the block reflector H = I - V*T*V'
+*           matrices V and T of the block reflector H = I - V*T*V**H
 *           which performs the reduction, and also the matrix Y = A*V*T
 *
             CALL CLAHR2( IHI, I, IB, A( 1, I ), LDA, TAU( I ), T, LDT,
      $                   WORK, LDWORK )
 *
 *           Apply the block reflector H to A(1:ihi,i+ib:ihi) from the
-*           right, computing  A := A - Y * V'. V(i+ib,ib-1) must be set
+*           right, computing  A := A - Y * V**H. V(i+ib,ib-1) must be set
 *           to 1
 *
             EI = A( I+IB, I+IB-1 )

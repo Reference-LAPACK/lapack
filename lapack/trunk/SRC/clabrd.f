@@ -20,7 +20,7 @@
 *
 *  CLABRD reduces the first NB rows and columns of a complex general
 *  m by n matrix A to upper or lower real bidiagonal form by a unitary
-*  transformation Q' * A * P, and returns the matrices X and Y which
+*  transformation Q**H * A * P, and returns the matrices X and Y which
 *  are needed to apply the transformation to the unreduced part of A.
 *
 *  If m >= n, A is reduced to upper bidiagonal form; if m < n, to lower
@@ -101,7 +101,7 @@
 *
 *  Each H(i) and G(i) has the form:
 *
-*     H(i) = I - tauq * v * v'  and G(i) = I - taup * u * u'
+*     H(i) = I - tauq * v * v**H  and G(i) = I - taup * u * u**H
 *
 *  where tauq and taup are complex scalars, and v and u are complex
 *  vectors.
@@ -115,9 +115,9 @@
 *  A(i,i+1:n); tauq is stored in TAUQ(i) and taup in TAUP(i).
 *
 *  The elements of the vectors v and u together form the m-by-nb matrix
-*  V and the nb-by-n matrix U' which are needed, with X and Y, to apply
+*  V and the nb-by-n matrix U**H which are needed, with X and Y, to apply
 *  the transformation to the unreduced part of the matrix, using a block
-*  update of the form:  A := A - V*Y' - X*U'.
+*  update of the form:  A := A - V*Y**H - X*U**H.
 *
 *  The contents of A on exit are illustrated by the following examples
 *  with nb = 2:

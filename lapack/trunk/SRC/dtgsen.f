@@ -28,7 +28,7 @@
 *
 *  DTGSEN reorders the generalized real Schur decomposition of a real
 *  matrix pair (A, B) (in terms of an orthonormal equivalence trans-
-*  formation Q' * (A, B) * Z), so that a selected cluster of eigenvalues
+*  formation Q**T * (A, B) * Z), so that a selected cluster of eigenvalues
 *  appears in the leading diagonal blocks of the upper quasi-triangular
 *  matrix A and the upper triangular B. The leading columns of Q and
 *  Z form orthonormal bases of the corresponding left and right eigen-
@@ -208,7 +208,7 @@
 *  In other words, the selected eigenvalues are the eigenvalues of
 *  (A11, B11) in:
 *
-*                U'*(A, B)*W = (A11 A12) (B11 B12) n1
+*              U**T*(A, B)*W = (A11 A12) (B11 B12) n1
 *                              ( 0  A22),( 0  B22) n2
 *                                n1  n2    n1  n2
 *
@@ -217,10 +217,10 @@
 *  (deflating subspaces) of (A, B).
 *
 *  If (A, B) has been obtained from the generalized real Schur
-*  decomposition of a matrix pair (C, D) = Q*(A, B)*Z', then the
+*  decomposition of a matrix pair (C, D) = Q*(A, B)*Z**T, then the
 *  reordered generalized real Schur form of (C, D) is given by
 *
-*           (C, D) = (Q*U)*(U'*(A, B)*W)*(Z*W)',
+*           (C, D) = (Q*U)*(U**T*(A, B)*W)*(Z*W)**T,
 *
 *  and the first n1 columns of Q*U and Z*W span the corresponding
 *  deflating subspaces of (C, D) (Q and Z store Q*U and Z*W, resp.).
@@ -242,10 +242,10 @@
 *  where sigma-min(Zu) is the smallest singular value of the
 *  (2*n1*n2)-by-(2*n1*n2) matrix
 *
-*       Zu = [ kron(In2, A11)  -kron(A22', In1) ]
-*            [ kron(In2, B11)  -kron(B22', In1) ].
+*       Zu = [ kron(In2, A11)  -kron(A22**T, In1) ]
+*            [ kron(In2, B11)  -kron(B22**T, In1) ].
 *
-*  Here, Inx is the identity matrix of size nx and A22' is the
+*  Here, Inx is the identity matrix of size nx and A22**T is the
 *  transpose of A22. kron(X, Y) is the Kronecker product between
 *  the matrices X and Y.
 *

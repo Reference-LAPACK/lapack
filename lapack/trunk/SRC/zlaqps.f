@@ -76,7 +76,7 @@
 *          Auxiliar vector.
 *
 *  F       (input/output) COMPLEX*16 array, dimension (LDF,NB)
-*          Matrix F' = L*Y'*A.
+*          Matrix F**H = L * Y**H * A.
 *
 *  LDF     (input) INTEGER
 *          The leading dimension of the array F. LDF >= max(1,N).
@@ -88,6 +88,11 @@
 *    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain
 *    X. Sun, Computer Science Dept., Duke University, USA
 *
+*  Partial column norm updating strategy modified by
+*    Z. Drmac and Z. Bujanovic, Dept. of Mathematics,
+*    University of Zagreb, Croatia.
+*     June 2010
+*  For more details see LAPACK Working Note 176.
 *  =====================================================================
 *
 *     .. Parameters ..
@@ -141,7 +146,7 @@
          END IF
 *
 *        Apply previous Householder reflectors to column K:
-*        A(RK:M,K) := A(RK:M,K) - A(RK:M,1:K-1)*F(K,1:K-1)'.
+*        A(RK:M,K) := A(RK:M,K) - A(RK:M,1:K-1)*F(K,1:K-1)**H.
 *
          IF( K.GT.1 ) THEN
             DO 20 J = 1, K - 1
@@ -167,7 +172,7 @@
 *
 *        Compute Kth column of F:
 *
-*        Compute  F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)'*A(RK:M,K).
+*        Compute  F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)**H*A(RK:M,K).
 *
          IF( K.LT.N ) THEN
             CALL ZGEMV( 'Conjugate transpose', M-RK+1, N-K, TAU( K ),
@@ -182,7 +187,7 @@
    40    CONTINUE
 *
 *        Incremental updating of F:
-*        F(1:N,K) := F(1:N,K) - tau(K)*F(1:N,1:K-1)*A(RK:M,1:K-1)'
+*        F(1:N,K) := F(1:N,K) - tau(K)*F(1:N,1:K-1)*A(RK:M,1:K-1)**H
 *                    *A(RK:M,K).
 *
          IF( K.GT.1 ) THEN
@@ -195,7 +200,7 @@
          END IF
 *
 *        Update the current row of A:
-*        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)'.
+*        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**H.
 *
          IF( K.LT.N ) THEN
             CALL ZGEMM( 'No transpose', 'Conjugate transpose', 1, N-K,
@@ -236,7 +241,7 @@
 *
 *     Apply the block reflector to the rest of the matrix:
 *     A(OFFSET+KB+1:M,KB+1:N) := A(OFFSET+KB+1:M,KB+1:N) -
-*                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)'.
+*                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)**H.
 *
       IF( KB.LT.MIN( N, M-OFFSET ) ) THEN
          CALL ZGEMM( 'No transpose', 'Conjugate transpose', M-RK, N-KB,

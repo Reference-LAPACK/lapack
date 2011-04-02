@@ -351,7 +351,7 @@
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
-*        Compute the Cholesky factorization A = U'*U or A = L*L'.
+*        Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
          IF( UPPER ) THEN
             DO 40 J = 1, N

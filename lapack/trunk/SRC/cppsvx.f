@@ -43,8 +43,8 @@
 *
 *  2. If FACT = 'N' or 'E', the Cholesky decomposition is used to
 *     factor the matrix A (after equilibration if FACT = 'E') as
-*        A = U'* U ,  if UPLO = 'U', or
-*        A = L * L',  if UPLO = 'L',
+*        A = U**H * U ,  if UPLO = 'U', or
+*        A = L * L**H,  if UPLO = 'L',
 *     where U is an upper triangular matrix, L is a lower triangular
 *     matrix, and ' indicates conjugate transpose.
 *
@@ -117,7 +117,7 @@
 *
 *          If FACT = 'N', then AFP is an output argument and on exit
 *          returns the triangular factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H of the original
+*          factorization A = U**H * U or A = L * L**H of the original
 *          matrix A.
 *
 *          If FACT = 'E', then AFP is an output argument and on exit
@@ -324,7 +324,7 @@
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
-*        Compute the Cholesky factorization A = U'*U or A = L*L'.
+*        Compute the Cholesky factorization A = U**H * U or A = L * L**H.
 *
          CALL CCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
          CALL CPPTRF( UPLO, N, AFP, INFO )

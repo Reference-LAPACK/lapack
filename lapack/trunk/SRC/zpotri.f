@@ -86,7 +86,7 @@
       IF( INFO.GT.0 )
      $   RETURN
 *
-*     Form inv(U)*inv(U)' or inv(L)'*inv(L).
+*     Form inv(U) * inv(U)**H or inv(L)**H * inv(L).
 *
       CALL ZLAUUM( UPLO, N, A, LDA, INFO )
 *

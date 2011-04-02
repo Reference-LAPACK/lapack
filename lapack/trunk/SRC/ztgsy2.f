@@ -298,7 +298,7 @@
       ELSE
 *
 *        Solve transposed (I, J) - system:
-*           A(I, I)' * R(I, J) + D(I, I)' * L(J, J) = C(I, J)
+*           A(I, I)**H * R(I, J) + D(I, I)**H * L(J, J) = C(I, J)
 *           R(I, I) * B(J, J) + L(I, J) * E(J, J)   = -F(I, J)
 *        for I = 1, 2, ..., M, J = N, N - 1, ..., 1
 *

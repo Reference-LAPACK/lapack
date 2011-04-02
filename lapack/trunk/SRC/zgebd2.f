@@ -17,7 +17,7 @@
 *  =======
 *
 *  ZGEBD2 reduces a complex general m by n matrix A to upper or lower
-*  real bidiagonal form B by a unitary transformation: Q' * A * P = B.
+*  real bidiagonal form B by a unitary transformation: Q**H * A * P = B.
 *
 *  If m >= n, B is upper bidiagonal; if m < n, B is lower bidiagonal.
 *
@@ -87,7 +87,7 @@
 *
 *  Each H(i) and G(i) has the form:
 *
-*     H(i) = I - tauq * v * v'  and G(i) = I - taup * u * u'
+*     H(i) = I - tauq * v * v**H  and G(i) = I - taup * u * u**H
 *
 *  where tauq and taup are complex scalars, and v and u are complex
 *  vectors; v(1:i-1) = 0, v(i) = 1, and v(i+1:m) is stored on exit in
@@ -100,7 +100,7 @@
 *
 *  Each H(i) and G(i) has the form:
 *
-*     H(i) = I - tauq * v * v'  and G(i) = I - taup * u * u'
+*     H(i) = I - tauq * v * v**H  and G(i) = I - taup * u * u**H
 *
 *  where tauq and taup are complex scalars, v and u are complex vectors;
 *  v(1:i) = 0, v(i+1) = 1, and v(i+2:m) is stored on exit in A(i+2:m,i);
@@ -170,7 +170,7 @@
             D( I ) = ALPHA
             A( I, I ) = ONE
 *
-*           Apply H(i)' to A(i:m,i+1:n) from the left
+*           Apply H(i)**H to A(i:m,i+1:n) from the left
 *
             IF( I.LT.N )
      $         CALL ZLARF( 'Left', M-I+1, N-I, A( I, I ), 1,
@@ -233,7 +233,7 @@
                E( I ) = ALPHA
                A( I+1, I ) = ONE
 *
-*              Apply H(i)' to A(i+1:m,i+1:n) from the left
+*              Apply H(i)**H to A(i+1:m,i+1:n) from the left
 *
                CALL ZLARF( 'Left', M-I, N-I, A( I+1, I ), 1,
      $                     DCONJG( TAUQ( I ) ), A( I+1, I+1 ), LDA,

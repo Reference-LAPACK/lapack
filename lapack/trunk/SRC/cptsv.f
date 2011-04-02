@@ -85,7 +85,7 @@
          RETURN
       END IF
 *
-*     Compute the L*D*L' (or U'*D*U) factorization of A.
+*     Compute the L*D*L**H (or U**H*D*U) factorization of A.
 *
       CALL CPTTRF( N, D, E, INFO )
       IF( INFO.EQ.0 ) THEN

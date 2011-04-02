@@ -46,11 +46,11 @@
 *  transpose of X. Kron(X, Y) is the Kronecker product between the
 *  matrices X and Y.
 *
-*  If TRANS = 'C', y in the conjugate transposed system Z'*y = scale*b
+*  If TRANS = 'C', y in the conjugate transposed system Z**H *y = scale*b
 *  is solved for, which is equivalent to solve for R and L in
 *
-*              A' * R + D' * L = scale * C           (3)
-*              R * B' + L * E' = scale * -F
+*              A**H * R + D**H * L = scale * C           (3)
+*              R * B**H + L * E**H = scale * -F
 *
 *  This case (TRANS = 'C') is used to compute an one-norm-based estimate
 *  of Dif[(A,D), (B,E)], the separation between the matrix pairs (A,D)
@@ -490,7 +490,7 @@
       ELSE
 *
 *        Solve transposed (I, J)-subsystem
-*            A(I, I)' * R(I, J) + D(I, I)' * L(I, J) = C(I, J)
+*            A(I, I)**H * R(I, J) + D(I, I)**H * L(I, J) = C(I, J)
 *            R(I, J) * B(J, J)  + L(I, J) * E(J, J) = -F(I, J)
 *        for I = 1,2,..., P; J = Q, Q-1,..., 1
 *

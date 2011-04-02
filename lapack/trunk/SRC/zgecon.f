@@ -156,13 +156,13 @@
      $                   A, LDA, WORK, SU, RWORK( N+1 ), INFO )
          ELSE
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**H).
 *
             CALL ZLATRS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, A, LDA, WORK, SU, RWORK( N+1 ),
      $                   INFO )
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**H).
 *
             CALL ZLATRS( 'Lower', 'Conjugate transpose', 'Unit', NORMIN,
      $                   N, A, LDA, WORK, SL, RWORK, INFO )

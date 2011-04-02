@@ -179,13 +179,13 @@
      $                   INFO )
          ELSE
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**T).
 *
             CALL SLATBS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
      $                   KL+KU, AB, LDAB, WORK, SCALE, WORK( 2*N+1 ),
      $                   INFO )
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**T).
 *
             IF( LNOTI ) THEN
                DO 30 J = N - 1, 1, -1

@@ -20,19 +20,19 @@
 *  eigenproblem to standard form.
 *
 *  If ITYPE = 1, the problem is A*x = lambda*B*x,
-*  and A is overwritten by inv(U')*A*inv(U) or inv(L)*A*inv(L')
+*  and A is overwritten by inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H)
 *
 *  If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
-*  B*A*x = lambda*x, and A is overwritten by U*A*U` or L'*A*L.
+*  B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H *A*L.
 *
-*  B must have been previously factorized as U'*U or L*L' by ZPOTRF.
+*  B must have been previously factorized as U**H *U or L*L**H by ZPOTRF.
 *
 *  Arguments
 *  =========
 *
 *  ITYPE   (input) INTEGER
-*          = 1: compute inv(U')*A*inv(U) or inv(L)*A*inv(L');
-*          = 2 or 3: compute U*A*U' or L'*A*L.
+*          = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H);
+*          = 2 or 3: compute U*A*U**H or L**H *A*L.
 *
 *  UPLO    (input) CHARACTER*1
 *          Specifies whether the upper or lower triangular part of the
@@ -119,7 +119,7 @@
       IF( ITYPE.EQ.1 ) THEN
          IF( UPPER ) THEN
 *
-*           Compute inv(U')*A*inv(U)
+*           Compute inv(U**H)*A*inv(U)
 *
             DO 10 K = 1, N
 *
@@ -149,7 +149,7 @@
    10       CONTINUE
          ELSE
 *
-*           Compute inv(L)*A*inv(L')
+*           Compute inv(L)*A*inv(L**H)
 *
             DO 20 K = 1, N
 *
@@ -174,7 +174,7 @@
       ELSE
          IF( UPPER ) THEN
 *
-*           Compute U*A*U'
+*           Compute U*A*U**H
 *
             DO 30 K = 1, N
 *
@@ -194,7 +194,7 @@
    30       CONTINUE
          ELSE
 *
-*           Compute L'*A*L
+*           Compute L**H *A*L
 *
             DO 40 K = 1, N
 *

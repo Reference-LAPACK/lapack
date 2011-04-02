@@ -19,7 +19,7 @@
 *  which is defined as the first M rows of a product of K elementary
 *  reflectors of order N
 *
-*        Q  =  H(k)' . . . H(2)' H(1)'
+*        Q  =  H(k)**H . . . H(2)**H H(1)**H
 *
 *  as returned by ZGELQF.
 *
@@ -185,7 +185,7 @@
                CALL ZLARFT( 'Forward', 'Rowwise', N-I+1, IB, A( I, I ),
      $                      LDA, TAU( I ), WORK, LDWORK )
 *
-*              Apply H' to A(i+ib:m,i:n) from the right
+*              Apply H**H to A(i+ib:m,i:n) from the right
 *
                CALL ZLARFB( 'Right', 'Conjugate transpose', 'Forward',
      $                      'Rowwise', M-I-IB+1, N-I+1, IB, A( I, I ),
@@ -193,7 +193,7 @@
      $                      WORK( IB+1 ), LDWORK )
             END IF
 *
-*           Apply H' to columns i:n of current block
+*           Apply H**H to columns i:n of current block
 *
             CALL ZUNGL2( IB, N-I+1, IB, A( I, I ), LDA, TAU( I ), WORK,
      $                   IINFO )

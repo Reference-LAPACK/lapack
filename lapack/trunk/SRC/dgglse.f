@@ -183,9 +183,9 @@
 *
 *     Compute the GRQ factorization of matrices B and A:
 *
-*            B*Q' = (  0  T12 ) P   Z'*A*Q' = ( R11 R12 ) N-P
-*                     N-P  P                  (  0  R22 ) M+P-N
-*                                               N-P  P
+*            B*Q**T = (  0  T12 ) P   Z**T*A*Q**T = ( R11 R12 ) N-P
+*                        N-P  P                     (  0  R22 ) M+P-N
+*                                                      N-P  P
 *
 *     where T12 and R11 are upper triangular, and Q and Z are
 *     orthogonal.
@@ -194,8 +194,8 @@
      $             WORK( P+MN+1 ), LWORK-P-MN, INFO )
       LOPT = WORK( P+MN+1 )
 *
-*     Update c = Z'*c = ( c1 ) N-P
-*                       ( c2 ) M+P-N
+*     Update c = Z**T *c = ( c1 ) N-P
+*                          ( c2 ) M+P-N
 *
       CALL DORMQR( 'Left', 'Transpose', M, 1, MN, A, LDA, WORK( P+1 ),
      $             C, MAX( 1, M ), WORK( P+MN+1 ), LWORK-P-MN, INFO )
@@ -254,7 +254,7 @@
          CALL DAXPY( NR, -ONE, D, 1, C( N-P+1 ), 1 )
       END IF
 *
-*     Backward transformation x = Q'*x
+*     Backward transformation x = Q**T*x
 *
       CALL DORMRQ( 'Left', 'Transpose', N, 1, P, B, LDB, WORK( 1 ), X,
      $             N, WORK( P+MN+1 ), LWORK-P-MN, INFO )

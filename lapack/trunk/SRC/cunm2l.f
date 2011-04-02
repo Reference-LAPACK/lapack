@@ -21,11 +21,11 @@
 *
 *        Q * C  if SIDE = 'L' and TRANS = 'N', or
 *
-*        Q'* C  if SIDE = 'L' and TRANS = 'C', or
+*        Q**H* C  if SIDE = 'L' and TRANS = 'C', or
 *
 *        C * Q  if SIDE = 'R' and TRANS = 'N', or
 *
-*        C * Q' if SIDE = 'R' and TRANS = 'C',
+*        C * Q**H if SIDE = 'R' and TRANS = 'C',
 *
 *  where Q is a complex unitary matrix defined as the product of k
 *  elementary reflectors
@@ -39,12 +39,12 @@
 *  =========
 *
 *  SIDE    (input) CHARACTER*1
-*          = 'L': apply Q or Q' from the Left
-*          = 'R': apply Q or Q' from the Right
+*          = 'L': apply Q or Q**H from the Left
+*          = 'R': apply Q or Q**H from the Right
 *
 *  TRANS   (input) CHARACTER*1
 *          = 'N': apply Q  (No transpose)
-*          = 'C': apply Q' (Conjugate transpose)
+*          = 'C': apply Q**H (Conjugate transpose)
 *
 *  M       (input) INTEGER
 *          The number of rows of the matrix C. M >= 0.
@@ -75,7 +75,7 @@
 *
 *  C       (input/output) COMPLEX array, dimension (LDC,N)
 *          On entry, the m-by-n matrix C.
-*          On exit, C is overwritten by Q*C or Q'*C or C*Q' or C*Q.
+*          On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q.
 *
 *  LDC     (input) INTEGER
 *          The leading dimension of the array C. LDC >= max(1,M).
@@ -168,17 +168,17 @@
       DO 10 I = I1, I2, I3
          IF( LEFT ) THEN
 *
-*           H(i) or H(i)' is applied to C(1:m-k+i,1:n)
+*           H(i) or H(i)**H is applied to C(1:m-k+i,1:n)
 *
             MI = M - K + I
          ELSE
 *
-*           H(i) or H(i)' is applied to C(1:m,1:n-k+i)
+*           H(i) or H(i)**H is applied to C(1:m,1:n-k+i)
 *
             NI = N - K + I
          END IF
 *
-*        Apply H(i) or H(i)'
+*        Apply H(i) or H(i)**H
 *
          IF( NOTRAN ) THEN
             TAUI = TAU( I )

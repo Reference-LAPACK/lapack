@@ -158,7 +158,7 @@
          RETURN
       END IF
 *
-*     Compute the factorization A = U*D*U' or A = L*D*L'.
+*     Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
       CALL SSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN

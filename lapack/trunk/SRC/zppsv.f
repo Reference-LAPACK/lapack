@@ -22,7 +22,7 @@
 *  packed format and X and B are N-by-NRHS matrices.
 *
 *  The Cholesky decomposition is used to factor A as
-*     A = U**H* U,  if UPLO = 'U', or
+*     A = U**H * U,  if UPLO = 'U', or
 *     A = L * L**H,  if UPLO = 'L',
 *  where U is an upper triangular matrix and L is a lower triangular
 *  matrix.  The factored form of A is then used to solve the system of
@@ -117,7 +117,7 @@
          RETURN
       END IF
 *
-*     Compute the Cholesky factorization A = U'*U or A = L*L'.
+*     Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
       CALL ZPPTRF( UPLO, N, AP, INFO )
       IF( INFO.EQ.0 ) THEN

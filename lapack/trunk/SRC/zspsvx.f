@@ -234,7 +234,7 @@
 *
       IF( NOFACT ) THEN
 *
-*        Compute the factorization A = U*D*U' or A = L*D*L'.
+*        Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
          CALL ZCOPY( N*( N+1 ) / 2, AP, 1, AFP, 1 )
          CALL ZSPTRF( UPLO, N, AFP, IPIV, INFO )

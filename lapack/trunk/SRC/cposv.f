@@ -105,7 +105,7 @@
          RETURN
       END IF
 *
-*     Compute the Cholesky factorization A = U'*U or A = L*L'.
+*     Compute the Cholesky factorization A = U**H*U or A = L*L**H.
 *
       CALL CPOTRF( UPLO, N, A, LDA, INFO )
       IF( INFO.EQ.0 ) THEN

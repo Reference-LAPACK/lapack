@@ -27,7 +27,7 @@
 *  CLA_GEAMV  performs one of the matrix-vector operations
 *
 *          y := alpha*abs(A)*abs(x) + beta*abs(y),
-*     or   y := alpha*abs(A)'*abs(x) + beta*abs(y),
+*     or   y := alpha*abs(A)**T*abs(x) + beta*abs(y),
 *
 *  where alpha and beta are scalars, x and y are vectors and A is an
 *  m by n matrix.
@@ -49,37 +49,37 @@
 *           follows:
 *
 *             BLAS_NO_TRANS      y := alpha*abs(A)*abs(x) + beta*abs(y)
-*             BLAS_TRANS         y := alpha*abs(A')*abs(x) + beta*abs(y)
-*             BLAS_CONJ_TRANS    y := alpha*abs(A')*abs(x) + beta*abs(y)
+*             BLAS_TRANS         y := alpha*abs(A**T)*abs(x) + beta*abs(y)
+*             BLAS_CONJ_TRANS    y := alpha*abs(A**T)*abs(x) + beta*abs(y)
 *
 *           Unchanged on exit.
 *
-*  M       (input) INTEGER
+*  M        (input) INTEGER
 *           On entry, M specifies the number of rows of the matrix A.
 *           M must be at least zero.
 *           Unchanged on exit.
 *
-*  N       (input) INTEGER
+*  N        (input) INTEGER
 *           On entry, N specifies the number of columns of the matrix A.
 *           N must be at least zero.
 *           Unchanged on exit.
 *
-*  ALPHA   (input) REAL
+*  ALPHA    (input) REAL
 *           On entry, ALPHA specifies the scalar alpha.
 *           Unchanged on exit.
 *
-*  A       (input) COMPLEX array, dimension (LDA,n)
+*  A        (input) COMPLEX array, dimension (LDA,n)
 *           Before entry, the leading m by n part of the array A must
 *           contain the matrix of coefficients.
 *           Unchanged on exit.
 *
-*  LDA     (input) INTEGER
+*  LDA      (input) INTEGER
 *           On entry, LDA specifies the first dimension of A as declared
 *           in the calling (sub) program. LDA must be at least
 *           max( 1, m ).
 *           Unchanged on exit.
 *
-*  X       (input) COMPLEX array, dimension
+*  X        (input) COMPLEX array, dimension
 *           ( 1 + ( n - 1 )*abs( INCX ) ) when TRANS = 'N' or 'n'
 *           and at least
 *           ( 1 + ( m - 1 )*abs( INCX ) ) otherwise.
@@ -87,17 +87,17 @@
 *           vector x.
 *           Unchanged on exit.
 *
-*  INCX    (input) INTEGER
+*  INCX     (input) INTEGER
 *           On entry, INCX specifies the increment for the elements of
 *           X. INCX must not be zero.
 *           Unchanged on exit.
 *
-*  BETA    (input) REAL
+*  BETA     (input) REAL
 *           On entry, BETA specifies the scalar beta. When BETA is
 *           supplied as zero then Y need not be set on input.
 *           Unchanged on exit.
 *
-*  Y       (input/output) REAL array, dimension
+*  Y        (input/output) REAL array, dimension
 *           ( 1 + ( m - 1 )*abs( INCY ) ) when TRANS = 'N' or 'n'
 *           and at least
 *           ( 1 + ( n - 1 )*abs( INCY ) ) otherwise.
@@ -105,7 +105,7 @@
 *           must contain the vector y. On exit, Y is overwritten by the
 *           updated vector y.
 *
-*  INCY    (input) INTEGER
+*  INCY     (input) INTEGER
 *           On entry, INCY specifies the increment for the elements of
 *           Y. INCY must not be zero.
 *           Unchanged on exit.

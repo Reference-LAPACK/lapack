@@ -128,7 +128,7 @@
    60       CONTINUE
          ELSE
 *
-*           Compute B := B + A'*X
+*           Compute B := B + A**T*X
 *
             DO 80 J = 1, NRHS
                IF( N.EQ.1 ) THEN
@@ -166,7 +166,7 @@
   100       CONTINUE
          ELSE
 *
-*           Compute B := B - A'*X
+*           Compute B := B - A**T*X
 *
             DO 120 J = 1, NRHS
                IF( N.EQ.1 ) THEN

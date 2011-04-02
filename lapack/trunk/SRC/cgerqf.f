@@ -67,11 +67,11 @@
 *
 *  The matrix Q is represented as a product of elementary reflectors
 *
-*     Q = H(1)' H(2)' . . . H(k)', where k = min(m,n).
+*     Q = H(1)**H H(2)**H . . . H(k)**H, where k = min(m,n).
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(n-k+i+1:n) = 0 and v(n-k+i) = 1; conjg(v(1:n-k+i-1)) is stored on

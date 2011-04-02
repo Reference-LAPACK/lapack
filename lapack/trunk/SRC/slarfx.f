@@ -21,7 +21,7 @@
 *  matrix C, from either the left or the right. H is represented in the
 *  form
 *
-*        H = I - tau * v * v'
+*        H = I - tau * v * v**T
 *
 *  where tau is a real scalar and v is a real vector.
 *

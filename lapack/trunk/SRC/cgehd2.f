@@ -16,7 +16,7 @@
 *  =======
 *
 *  CGEHD2 reduces a complex general matrix A to upper Hessenberg form H
-*  by a unitary similarity transformation:  Q' * A * Q = H .
+*  by a unitary similarity transformation:  Q**H * A * Q = H .
 *
 *  Arguments
 *  =========
@@ -63,7 +63,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(1:i) = 0, v(i+1) = 1 and v(ihi+1:n) = 0; v(i+2:ihi) is stored on
@@ -134,7 +134,7 @@
          CALL CLARF( 'Right', IHI, IHI-I, A( I+1, I ), 1, TAU( I ),
      $               A( 1, I+1 ), LDA, WORK )
 *
-*        Apply H(i)' to A(i+1:ihi,i+1:n) from the left
+*        Apply H(i)**H to A(i+1:ihi,i+1:n) from the left
 *
          CALL CLARF( 'Left', IHI-I, N-I, A( I+1, I ), 1,
      $               CONJG( TAU( I ) ), A( I+1, I+1 ), LDA, WORK )

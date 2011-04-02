@@ -18,7 +18,7 @@
 *
 *  CPTTS2 solves a tridiagonal system of the form
 *     A * X = B
-*  using the factorization A = U'*D*U or A = L*D*L' computed by CPTTRF.
+*  using the factorization A = U**H*D*U or A = L*D*L**H computed by CPTTRF.
 *  D is a diagonal matrix specified in the vector D, U (or L) is a unit
 *  bidiagonal matrix whose superdiagonal (subdiagonal) is specified in
 *  the vector E, and X and B are N by NRHS matrices.
@@ -30,8 +30,8 @@
 *          Specifies the form of the factorization and whether the
 *          vector E is the superdiagonal of the upper bidiagonal factor
 *          U or the subdiagonal of the lower bidiagonal factor L.
-*          = 1:  A = U'*D*U, E is the superdiagonal of U
-*          = 0:  A = L*D*L', E is the subdiagonal of L
+*          = 1:  A = U**H *D*U, E is the superdiagonal of U
+*          = 0:  A = L*D*L**H, E is the subdiagonal of L
 *
 *  N       (input) INTEGER
 *          The order of the tridiagonal matrix A.  N >= 0.
@@ -42,13 +42,13 @@
 *
 *  D       (input) REAL array, dimension (N)
 *          The n diagonal elements of the diagonal matrix D from the
-*          factorization A = U'*D*U or A = L*D*L'.
+*          factorization A = U**H *D*U or A = L*D*L**H.
 *
 *  E       (input) COMPLEX array, dimension (N-1)
 *          If IUPLO = 1, the (n-1) superdiagonal elements of the unit
-*          bidiagonal factor U from the factorization A = U'*D*U.
+*          bidiagonal factor U from the factorization A = U**H*D*U.
 *          If IUPLO = 0, the (n-1) subdiagonal elements of the unit
-*          bidiagonal factor L from the factorization A = L*D*L'.
+*          bidiagonal factor L from the factorization A = L*D*L**H.
 *
 *  B       (input/output) REAL array, dimension (LDB,NRHS)
 *          On entry, the right hand side vectors B for the system of
@@ -81,14 +81,14 @@
 *
       IF( IUPLO.EQ.1 ) THEN
 *
-*        Solve A * X = B using the factorization A = U'*D*U,
+*        Solve A * X = B using the factorization A = U**H *D*U,
 *        overwriting each right hand side vector with its solution.
 *
          IF( NRHS.LE.2 ) THEN
             J = 1
     5       CONTINUE
 *
-*           Solve U' * x = b.
+*           Solve U**H * x = b.
 *
             DO 10 I = 2, N
                B( I, J ) = B( I, J ) - B( I-1, J )*CONJG( E( I-1 ) )
@@ -109,7 +109,7 @@
          ELSE
             DO 60 J = 1, NRHS
 *
-*              Solve U' * x = b.
+*              Solve U**H * x = b.
 *
                DO 40 I = 2, N
                   B( I, J ) = B( I, J ) - B( I-1, J )*CONJG( E( I-1 ) )
@@ -125,7 +125,7 @@
          END IF
       ELSE
 *
-*        Solve A * X = B using the factorization A = L*D*L',
+*        Solve A * X = B using the factorization A = L*D*L**H,
 *        overwriting each right hand side vector with its solution.
 *
          IF( NRHS.LE.2 ) THEN
@@ -138,7 +138,7 @@
                B( I, J ) = B( I, J ) - B( I-1, J )*E( I-1 )
    70       CONTINUE
 *
-*           Solve D * L' * x = b.
+*           Solve D * L**H * x = b.
 *
             DO 80 I = 1, N
                B( I, J ) = B( I, J ) / D( I )
@@ -159,7 +159,7 @@
                   B( I, J ) = B( I, J ) - B( I-1, J )*E( I-1 )
   100          CONTINUE
 *
-*              Solve D * L' * x = b.
+*              Solve D * L**H * x = b.
 *
                B( N, J ) = B( N, J ) / D( N )
                DO 110 I = N - 1, 1, -1

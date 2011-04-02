@@ -98,8 +98,8 @@
 *
 *  VT     (input/output) DOUBLE PRECISION array, dimension(LDVT,M)
 *         where M = N + SQRE.
-*         On entry VT(1:NL+1, 1:NL+1)' contains the right singular
-*         vectors of the upper block; VT(NL+2:M, NL+2:M)' contains
+*         On entry VT(1:NL+1, 1:NL+1)**T contains the right singular
+*         vectors of the upper block; VT(NL+2:M, NL+2:M)**T contains
 *         the right singular vectors of the lower block. On exit
 *         VT' contains the right singular vectors of the
 *         bidiagonal matrix.

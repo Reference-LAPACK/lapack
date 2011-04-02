@@ -170,17 +170,17 @@
          DO 10 I = I1, I2, I3
             IF( LEFT ) THEN
 *
-*              H(i) or H(i)' is applied to C(1:i,1:n)
+*              H(i) or H(i)**H is applied to C(1:i,1:n)
 *
                MI = I
             ELSE
 *
-*              H(i) or H(i)' is applied to C(1:m,1:i)
+*              H(i) or H(i)**H is applied to C(1:m,1:i)
 *
                NI = I
             END IF
 *
-*           Apply H(i) or H(i)'
+*           Apply H(i) or H(i)**H
 *
             IF( NOTRAN ) THEN
                TAUI = TAU( I )
@@ -231,19 +231,19 @@
             AP( II ) = ONE
             IF( LEFT ) THEN
 *
-*              H(i) or H(i)' is applied to C(i+1:m,1:n)
+*              H(i) or H(i)**H is applied to C(i+1:m,1:n)
 *
                MI = M - I
                IC = I + 1
             ELSE
 *
-*              H(i) or H(i)' is applied to C(1:m,i+1:n)
+*              H(i) or H(i)**H is applied to C(1:m,i+1:n)
 *
                NI = N - I
                JC = I + 1
             END IF
 *
-*           Apply H(i) or H(i)'
+*           Apply H(i) or H(i)**H
 *
             IF( NOTRAN ) THEN
                TAUI = TAU( I )

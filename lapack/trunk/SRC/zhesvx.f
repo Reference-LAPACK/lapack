@@ -255,7 +255,7 @@
 *
       IF( NOFACT ) THEN
 *
-*        Compute the factorization A = U*D*U' or A = L*D*L'.
+*        Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
          CALL ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
          CALL ZHETRF( UPLO, N, AF, LDAF, IPIV, WORK, LWORK, INFO )

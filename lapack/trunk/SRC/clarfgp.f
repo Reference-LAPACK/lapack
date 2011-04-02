@@ -19,13 +19,13 @@
 *  CLARFGP generates a complex elementary reflector H of order n, such
 *  that
 *
-*        H' * ( alpha ) = ( beta ),   H' * H = I.
-*             (   x   )   (   0  )
+*        H**H * ( alpha ) = ( beta ),   H**H * H = I.
+*               (   x   )   (   0  )
 *
 *  where alpha and beta are scalars, beta is real and non-negative, and
 *  x is an (n-1)-element complex vector.  H is represented in the form
 *
-*        H = I - tau * ( 1 ) * ( 1 v' ) ,
+*        H = I - tau * ( 1 ) * ( 1 v**H ) ,
 *                      ( v )
 *
 *  where tau is a complex scalar and v is a complex (n-1)-element

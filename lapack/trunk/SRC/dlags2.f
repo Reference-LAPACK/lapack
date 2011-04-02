@@ -18,19 +18,19 @@
 *  DLAGS2 computes 2-by-2 orthogonal matrices U, V and Q, such
 *  that if ( UPPER ) then
 *
-*            U'*A*Q = U'*( A1 A2 )*Q = ( x  0  )
-*                        ( 0  A3 )     ( x  x  )
+*            U**T *A*Q = U**T *( A1 A2 )*Q = ( x  0  )
+*                              ( 0  A3 )     ( x  x  )
 *  and
-*            V'*B*Q = V'*( B1 B2 )*Q = ( x  0  )
-*                        ( 0  B3 )     ( x  x  )
+*            V**T*B*Q = V**T *( B1 B2 )*Q = ( x  0  )
+*                             ( 0  B3 )     ( x  x  )
 *
 *  or if ( .NOT.UPPER ) then
 *
-*            U'*A*Q = U'*( A1 0  )*Q = ( x  x  )
-*                        ( A2 A3 )     ( 0  x  )
+*            U**T *A*Q = U**T *( A1 0  )*Q = ( x  x  )
+*                              ( A2 A3 )     ( 0  x  )
 *  and
-*            V'*B*Q = V'*( B1 0  )*Q = ( x  x  )
-*                        ( B2 B3 )     ( 0  x  )
+*            V**T*B*Q = V**T*( B1 0  )*Q = ( x  x  )
+*                            ( B2 B3 )     ( 0  x  )
 *
 *  The rows of the transformed A and B are parallel, where
 *
@@ -112,8 +112,8 @@
          IF( ABS( CSL ).GE.ABS( SNL ) .OR. ABS( CSR ).GE.ABS( SNR ) )
      $        THEN
 *
-*           Compute the (1,1) and (1,2) elements of U'*A and V'*B,
-*           and (1,2) element of |U|'*|A| and |V|'*|B|.
+*           Compute the (1,1) and (1,2) elements of U**T *A and V**T *B,
+*           and (1,2) element of |U|**T *|A| and |V|**T *|B|.
 *
             UA11R = CSL*A1
             UA12 = CSL*A2 + SNL*A3
@@ -124,7 +124,7 @@
             AUA12 = ABS( CSL )*ABS( A2 ) + ABS( SNL )*ABS( A3 )
             AVB12 = ABS( CSR )*ABS( B2 ) + ABS( SNR )*ABS( B3 )
 *
-*           zero (1,2) elements of U'*A and V'*B
+*           zero (1,2) elements of U**T *A and V**T *B
 *
             IF( ( ABS( UA11R )+ABS( UA12 ) ).NE.ZERO ) THEN
                IF( AUA12 / ( ABS( UA11R )+ABS( UA12 ) ).LE.AVB12 /
@@ -144,8 +144,8 @@
 *
          ELSE
 *
-*           Compute the (2,1) and (2,2) elements of U'*A and V'*B,
-*           and (2,2) element of |U|'*|A| and |V|'*|B|.
+*           Compute the (2,1) and (2,2) elements of U**T *A and V**T *B,
+*           and (2,2) element of |U|**T *|A| and |V|**T *|B|.
 *
             UA21 = -SNL*A1
             UA22 = -SNL*A2 + CSL*A3
@@ -156,7 +156,7 @@
             AUA22 = ABS( SNL )*ABS( A2 ) + ABS( CSL )*ABS( A3 )
             AVB22 = ABS( SNR )*ABS( B2 ) + ABS( CSR )*ABS( B3 )
 *
-*           zero (2,2) elements of U'*A and V'*B, and then swap.
+*           zero (2,2) elements of U**T*A and V**T*B, and then swap.
 *
             IF( ( ABS( UA21 )+ABS( UA22 ) ).NE.ZERO ) THEN
                IF( AUA22 / ( ABS( UA21 )+ABS( UA22 ) ).LE.AVB22 /
@@ -197,8 +197,8 @@
          IF( ABS( CSR ).GE.ABS( SNR ) .OR. ABS( CSL ).GE.ABS( SNL ) )
      $        THEN
 *
-*           Compute the (2,1) and (2,2) elements of U'*A and V'*B,
-*           and (2,1) element of |U|'*|A| and |V|'*|B|.
+*           Compute the (2,1) and (2,2) elements of U**T *A and V**T *B,
+*           and (2,1) element of |U|**T *|A| and |V|**T *|B|.
 *
             UA21 = -SNR*A1 + CSR*A2
             UA22R = CSR*A3
@@ -209,7 +209,7 @@
             AUA21 = ABS( SNR )*ABS( A1 ) + ABS( CSR )*ABS( A2 )
             AVB21 = ABS( SNL )*ABS( B1 ) + ABS( CSL )*ABS( B2 )
 *
-*           zero (2,1) elements of U'*A and V'*B.
+*           zero (2,1) elements of U**T *A and V**T *B.
 *
             IF( ( ABS( UA21 )+ABS( UA22R ) ).NE.ZERO ) THEN
                IF( AUA21 / ( ABS( UA21 )+ABS( UA22R ) ).LE.AVB21 /
@@ -229,8 +229,8 @@
 *
          ELSE
 *
-*           Compute the (1,1) and (1,2) elements of U'*A and V'*B,
-*           and (1,1) element of |U|'*|A| and |V|'*|B|.
+*           Compute the (1,1) and (1,2) elements of U**T *A and V**T *B,
+*           and (1,1) element of |U|**T *|A| and |V|**T *|B|.
 *
             UA11 = CSR*A1 + SNR*A2
             UA12 = SNR*A3
@@ -241,7 +241,7 @@
             AUA11 = ABS( CSR )*ABS( A1 ) + ABS( SNR )*ABS( A2 )
             AVB11 = ABS( CSL )*ABS( B1 ) + ABS( SNL )*ABS( B2 )
 *
-*           zero (1,1) elements of U'*A and V'*B, and then swap.
+*           zero (1,1) elements of U**T*A and V**T*B, and then swap.
 *
             IF( ( ABS( UA11 )+ABS( UA12 ) ).NE.ZERO ) THEN
                IF( AUA11 / ( ABS( UA11 )+ABS( UA12 ) ).LE.AVB11 /

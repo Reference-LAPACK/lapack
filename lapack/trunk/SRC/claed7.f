@@ -29,9 +29,9 @@
 *  eigenvalues and optionally eigenvectors of a dense or banded
 *  Hermitian matrix that has been reduced to tridiagonal form.
 *
-*    T = Q(in) ( D(in) + RHO * Z*Z' ) Q'(in) = Q(out) * D(out) * Q'(out)
+*    T = Q(in) ( D(in) + RHO * Z*Z**H ) Q**H(in) = Q(out) * D(out) * Q**H(out)
 *
-*    where Z = Q'u, u is a vector of length N with ones in the
+*    where Z = Q**Hu, u is a vector of length N with ones in the
 *    CUTPNT and CUTPNT + 1 th elements and zeros elsewhere.
 *
 *     The eigenvectors of the original matrix are stored in Q, and the

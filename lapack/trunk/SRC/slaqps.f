@@ -142,7 +142,7 @@
          END IF
 *
 *        Apply previous Householder reflectors to column K:
-*        A(RK:M,K) := A(RK:M,K) - A(RK:M,1:K-1)*F(K,1:K-1)'.
+*        A(RK:M,K) := A(RK:M,K) - A(RK:M,1:K-1)*F(K,1:K-1)**T.
 *
          IF( K.GT.1 ) THEN
             CALL SGEMV( 'No transpose', M-RK+1, K-1, -ONE, A( RK, 1 ),
@@ -162,7 +162,7 @@
 *
 *        Compute Kth column of F:
 *
-*        Compute  F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)'*A(RK:M,K).
+*        Compute  F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)**T*A(RK:M,K).
 *
          IF( K.LT.N ) THEN
             CALL SGEMV( 'Transpose', M-RK+1, N-K, TAU( K ),
@@ -177,7 +177,7 @@
    20    CONTINUE
 *
 *        Incremental updating of F:
-*        F(1:N,K) := F(1:N,K) - tau(K)*F(1:N,1:K-1)*A(RK:M,1:K-1)'
+*        F(1:N,K) := F(1:N,K) - tau(K)*F(1:N,1:K-1)*A(RK:M,1:K-1)**T
 *                    *A(RK:M,K).
 *
          IF( K.GT.1 ) THEN
@@ -189,7 +189,7 @@
          END IF
 *
 *        Update the current row of A:
-*        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)'.
+*        A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**T.
 *
          IF( K.LT.N ) THEN
             CALL SGEMV( 'No transpose', N-K, K, -ONE, F( K+1, 1 ), LDF,
@@ -229,7 +229,7 @@
 *
 *     Apply the block reflector to the rest of the matrix:
 *     A(OFFSET+KB+1:M,KB+1:N) := A(OFFSET+KB+1:M,KB+1:N) -
-*                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)'.
+*                         A(OFFSET+KB+1:M,1:KB)*F(KB+1:N,1:KB)**T.
 *
       IF( KB.LT.MIN( N, M-OFFSET ) ) THEN
          CALL SGEMM( 'No transpose', 'Transpose', M-RK, N-KB, KB, -ONE,

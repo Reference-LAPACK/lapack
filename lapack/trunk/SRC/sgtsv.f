@@ -22,7 +22,7 @@
 *  where A is an n by n tridiagonal matrix, by Gaussian elimination with
 *  partial pivoting.
 *
-*  Note that the equation  A'*X = B  may be solved by interchanging the
+*  Note that the equation  A**T*X = B  may be solved by interchanging the
 *  order of the arguments DU and DL.
 *
 *  Arguments

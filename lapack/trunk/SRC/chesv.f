@@ -158,7 +158,7 @@
          RETURN
       END IF
 *
-*     Compute the factorization A = U*D*U' or A = L*D*L'.
+*     Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
       CALL CHETRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN

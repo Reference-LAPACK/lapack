@@ -103,7 +103,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B, where A = U*D*U'.
+*        Solve A*X = B, where A = U*D*U**T.
 *
 *        First solve U*D*X = B, overwriting B with X.
 *
@@ -177,7 +177,7 @@
          GO TO 10
    30    CONTINUE
 *
-*        Next solve U'*X = B, overwriting B with X.
+*        Next solve U**T*X = B, overwriting B with X.
 *
 *        K is the main loop index, increasing from 1 to N in steps of
 *        1 or 2, depending on the size of the diagonal blocks.
@@ -195,7 +195,7 @@
 *
 *           1 x 1 diagonal block
 *
-*           Multiply by inv(U'(K)), where U(K) is the transformation
+*           Multiply by inv(U**T(K)), where U(K) is the transformation
 *           stored in column K of A.
 *
             CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, AP( KC ),
@@ -212,7 +212,7 @@
 *
 *           2 x 2 diagonal block
 *
-*           Multiply by inv(U'(K+1)), where U(K+1) is the transformation
+*           Multiply by inv(U**T(K+1)), where U(K+1) is the transformation
 *           stored in columns K and K+1 of A.
 *
             CALL DGEMV( 'Transpose', K-1, NRHS, -ONE, B, LDB, AP( KC ),
@@ -234,7 +234,7 @@
 *
       ELSE
 *
-*        Solve A*X = B, where A = L*D*L'.
+*        Solve A*X = B, where A = L*D*L**T.
 *
 *        First solve L*D*X = B, overwriting B with X.
 *
@@ -311,7 +311,7 @@
          GO TO 60
    80    CONTINUE
 *
-*        Next solve L'*X = B, overwriting B with X.
+*        Next solve L**T*X = B, overwriting B with X.
 *
 *        K is the main loop index, decreasing from N to 1 in steps of
 *        1 or 2, depending on the size of the diagonal blocks.
@@ -330,7 +330,7 @@
 *
 *           1 x 1 diagonal block
 *
-*           Multiply by inv(L'(K)), where L(K) is the transformation
+*           Multiply by inv(L**T(K)), where L(K) is the transformation
 *           stored in column K of A.
 *
             IF( K.LT.N )
@@ -347,7 +347,7 @@
 *
 *           2 x 2 diagonal block
 *
-*           Multiply by inv(L'(K-1)), where L(K-1) is the transformation
+*           Multiply by inv(L**T(K-1)), where L(K-1) is the transformation
 *           stored in columns K-1 and K of A.
 *
             IF( K.LT.N ) THEN

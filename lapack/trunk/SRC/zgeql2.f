@@ -59,7 +59,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(m-k+i+1:m) = 0 and v(m-k+i) = 1; v(1:m-k+i-1) is stored on exit in
@@ -108,7 +108,7 @@
          ALPHA = A( M-K+I, N-K+I )
          CALL ZLARFG( M-K+I, ALPHA, A( 1, N-K+I ), 1, TAU( I ) )
 *
-*        Apply H(i)' to A(1:m-k+i,1:n-k+i-1) from the left
+*        Apply H(i)**H to A(1:m-k+i,1:n-k+i-1) from the left
 *
          A( M-K+I, N-K+I ) = ONE
          CALL ZLARF( 'Left', M-K+I, N-K+I-1, A( 1, N-K+I ), 1,

@@ -164,7 +164,7 @@
 *
             IF( I.LT.K ) THEN
 *
-*              T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)'
+*              T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**H
 *
                CALL CLACGV( N, V( I, 1 ), LDV )
                CALL CGEMV( 'No transpose', K-I, N, -TAU( I ),
