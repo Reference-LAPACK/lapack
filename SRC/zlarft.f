@@ -26,12 +26,12 @@
 *  If STOREV = 'C', the vector which defines the elementary reflector
 *  H(i) is stored in the i-th column of the array V, and
 *
-*     H  =  I - V * T * V'
+*     H  =  I - V * T * V**H
 *
 *  If STOREV = 'R', the vector which defines the elementary reflector
 *  H(i) is stored in the i-th row of the array V, and
 *
-*     H  =  I - V' * T * V
+*     H  =  I - V**H * T * V
 *
 *  Arguments
 *  =========
@@ -150,7 +150,7 @@
                   END DO
                   J = MIN( LASTV, PREVLASTV )
 *
-*                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)' * V(i:j,i)
+*                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**H * V(i:j,i)
 *
                   CALL ZGEMV( 'Conjugate transpose', J-I+1, I-1,
      $                        -TAU( I ), V( I, 1 ), LDV, V( I, I ), 1,
@@ -162,7 +162,7 @@
                   END DO
                   J = MIN( LASTV, PREVLASTV )
 *
-*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)'
+*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**H
 *
                   IF( I.LT.J )
      $               CALL ZLACGV( J-I, V( I, I+1 ), LDV )
@@ -211,7 +211,7 @@
                      J = MAX( LASTV, PREVLASTV )
 *
 *                    T(i+1:k,i) :=
-*                            - tau(i) * V(j:n-k+i,i+1:k)' * V(j:n-k+i,i)
+*                            - tau(i) * V(j:n-k+i,i+1:k)**H * V(j:n-k+i,i)
 *
                      CALL ZGEMV( 'Conjugate transpose', N-K+I-J+1, K-I,
      $                           -TAU( I ), V( J, I+1 ), LDV, V( J, I ),
@@ -227,7 +227,7 @@
                      J = MAX( LASTV, PREVLASTV )
 *
 *                    T(i+1:k,i) :=
-*                            - tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)'
+*                            - tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**H
 *
                      CALL ZLACGV( N-K+I-1-J+1, V( I, J ), LDV )
                      CALL ZGEMV( 'No transpose', K-I, N-K+I-J+1,

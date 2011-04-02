@@ -16,7 +16,7 @@
 *  Purpose
 *  =======
 *
-*  ZLAUUM computes the product U * U' or L' * L, where the triangular
+*  ZLAUUM computes the product U * U**H or L**H * L, where the triangular
 *  factor U or L is stored in the upper or lower triangular part of
 *  the array A.
 *
@@ -42,9 +42,9 @@
 *  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
 *          On entry, the triangular factor U or L.
 *          On exit, if UPLO = 'U', the upper triangle of A is
-*          overwritten with the upper triangle of the product U * U';
+*          overwritten with the upper triangle of the product U * U**H;
 *          if UPLO = 'L', the lower triangle of A is overwritten with
-*          the lower triangle of the product L' * L.
+*          the lower triangle of the product L**H * L.
 *
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,N).
@@ -114,7 +114,7 @@
 *
          IF( UPPER ) THEN
 *
-*           Compute the product U * U'.
+*           Compute the product U * U**H.
 *
             DO 10 I = 1, N, NB
                IB = MIN( NB, N-I+1 )
@@ -134,7 +134,7 @@
    10       CONTINUE
          ELSE
 *
-*           Compute the product L' * L.
+*           Compute the product L**H * L.
 *
             DO 20 I = 1, N, NB
                IB = MIN( NB, N-I+1 )

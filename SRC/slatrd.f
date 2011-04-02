@@ -18,7 +18,7 @@
 *
 *  SLATRD reduces NB rows and columns of a real symmetric matrix A to
 *  symmetric tridiagonal form by an orthogonal similarity
-*  transformation Q' * A * Q, and returns the matrices V and W which are
+*  transformation Q**T * A * Q, and returns the matrices V and W which are
 *  needed to apply the transformation to the unreduced part of A.
 *
 *  If UPLO = 'U', SLATRD reduces the last NB rows and columns of a
@@ -95,7 +95,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(i:n) = 0 and v(i-1) = 1; v(1:i-1) is stored on exit in A(1:i-1,i),
@@ -108,7 +108,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(1:i) = 0 and v(i+1) = 1; v(i+1:n) is stored on exit in A(i+1:n,i),
@@ -117,7 +117,7 @@
 *  The elements of the vectors v together form the n-by-nb matrix V
 *  which is needed, with W, to apply the transformation to the unreduced
 *  part of the matrix, using a symmetric rank-2k update of the form:
-*  A := A - V*W' - W*V'.
+*  A := A - V*W**T - W*V**T.
 *
 *  The contents of A on exit are illustrated by the following examples
 *  with n = 5 and nb = 2:

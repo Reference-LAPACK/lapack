@@ -146,7 +146,7 @@
       CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
-*        Multiply by inv(L*D*L') or inv(U*D*U').
+*        Multiply by inv(L*D*L**H) or inv(U*D*U**H).
 *
          CALL CHETRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
          GO TO 30

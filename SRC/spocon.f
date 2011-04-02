@@ -129,7 +129,7 @@
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**T).
 *
             CALL SLATRS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N, A,
      $                   LDA, WORK, SCALEL, WORK( 2*N+1 ), INFO )
@@ -147,7 +147,7 @@
      $                   A, LDA, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**T).
 *
             CALL SLATRS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N, A,
      $                   LDA, WORK, SCALEU, WORK( 2*N+1 ), INFO )

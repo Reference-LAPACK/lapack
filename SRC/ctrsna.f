@@ -124,10 +124,10 @@
 *  The reciprocal of the condition number of an eigenvalue lambda is
 *  defined as
 *
-*          S(lambda) = |v'*u| / (norm(u)*norm(v))
+*          S(lambda) = |v**H*u| / (norm(u)*norm(v))
 *
 *  where u and v are the right and left eigenvectors of T corresponding
-*  to lambda; v' denotes the conjugate transpose of v, and norm(u)
+*  to lambda; v**H denotes the conjugate transpose of v, and norm(u)
 *  denotes the Euclidean norm. These reciprocal condition numbers always
 *  lie between zero (very badly conditioned) and one (very well
 *  conditioned). If n = 1, S(lambda) is defined to be 1.
@@ -303,7 +303,7 @@
                WORK( I, I ) = WORK( I, I ) - WORK( 1, 1 )
    20       CONTINUE
 *
-*           Estimate a lower bound for the 1-norm of inv(C'). The 1st
+*           Estimate a lower bound for the 1-norm of inv(C**H). The 1st
 *           and (N+1)th columns of WORK are used to store work vectors.
 *
             SEP( KS ) = ZERO
@@ -316,7 +316,7 @@
             IF( KASE.NE.0 ) THEN
                IF( KASE.EQ.1 ) THEN
 *
-*                 Solve C'*x = scale*b
+*                 Solve C**H*x = scale*b
 *
                   CALL CLATRS( 'Upper', 'Conjugate transpose',
      $                         'Nonunit', NORMIN, N-1, WORK( 2, 2 ),

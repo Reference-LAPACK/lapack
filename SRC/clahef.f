@@ -21,15 +21,15 @@
 *  matrix A using the Bunch-Kaufman diagonal pivoting method. The
 *  partial factorization has the form:
 *
-*  A  =  ( I  U12 ) ( A11  0  ) (  I    0   )  if UPLO = 'U', or:
-*        ( 0  U22 ) (  0   D  ) ( U12' U22' )
+*  A  =  ( I  U12 ) ( A11  0  ) (  I      0     )  if UPLO = 'U', or:
+*        ( 0  U22 ) (  0   D  ) ( U12**H U22**H )
 *
-*  A  =  ( L11  0 ) (  D   0  ) ( L11' L21' )  if UPLO = 'L'
-*        ( L21  I ) (  0  A22 ) (  0    I   )
+*  A  =  ( L11  0 ) (  D   0  ) ( L11**H L21**H )  if UPLO = 'L'
+*        ( L21  I ) (  0  A22 ) (  0      I     )
 *
 *  where the order of D is at most NB. The actual order is returned in
 *  the argument KB, and is either NB or NB-1, or N if N <= NB.
-*  Note that U' denotes the conjugate transpose of U.
+*  Note that U**H denotes the conjugate transpose of U.
 *
 *  CLAHEF is an auxiliary routine called by CHETRF. It uses blocked code
 *  (calling Level 3 BLAS) to update the submatrix A11 (if UPLO = 'U') or
@@ -344,7 +344,7 @@
 *
 *        Update the upper triangle of A11 (= A(1:k,1:k)) as
 *
-*        A11 := A11 - U12*D*U12' = A11 - U12*W'
+*        A11 := A11 - U12*D*U12**H = A11 - U12*W**H
 *
 *        computing blocks of NB columns at a time (note that conjg(W) is
 *        actually stored)
@@ -593,7 +593,7 @@
 *
 *        Update the lower triangle of A22 (= A(k:n,k:n)) as
 *
-*        A22 := A22 - L21*D*L21' = A22 - L21*W'
+*        A22 := A22 - L21*D*L21**H = A22 - L21*W**H
 *
 *        computing blocks of NB columns at a time (note that conjg(W) is
 *        actually stored)

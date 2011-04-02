@@ -71,7 +71,7 @@
 *  5-96 - Based on modifications by J. Lewis, Boeing Computer Services
 *         Company
 *
-*  If UPLO = 'U', then A = U*D*U', where
+*  If UPLO = 'U', then A = U*D*U**T, where
 *     U = P(n)*U(n)* ... *P(k)U(k)* ...,
 *  i.e., U is a product of terms P(k)*U(k), where k decreases from n to
 *  1 in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1
@@ -88,7 +88,7 @@
 *  If s = 2, the upper triangle of D(k) overwrites A(k-1,k-1), A(k-1,k),
 *  and A(k,k), and v overwrites A(1:k-2,k-1:k).
 *
-*  If UPLO = 'L', then A = L*D*L', where
+*  If UPLO = 'L', then A = L*D*L**T, where
 *     L = P(1)*L(1)* ... *P(k)*L(k)* ...,
 *  i.e., L is a product of terms P(k)*L(k), where k increases from 1 to
 *  n in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1
@@ -153,7 +153,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Factorize A as U*D*U' using the upper triangle of A
+*        Factorize A as U*D*U**T using the upper triangle of A
 *
 *        K is the main loop index, decreasing from N to 1 in steps of
 *        1 or 2
@@ -274,7 +274,7 @@
 *
 *              Perform a rank-1 update of A(1:k-1,1:k-1) as
 *
-*              A := A - U(k)*D(k)*U(k)' = A - W(k)*1/D(k)*W(k)'
+*              A := A - U(k)*D(k)*U(k)**T = A - W(k)*1/D(k)*W(k)**T
 *
                R1 = ONE / AP( KC+K-1 )
                CALL DSPR( UPLO, K-1, -R1, AP( KC ), 1, AP )
@@ -293,8 +293,8 @@
 *
 *              Perform a rank-2 update of A(1:k-2,1:k-2) as
 *
-*              A := A - ( U(k-1) U(k) )*D(k)*( U(k-1) U(k) )'
-*                 = A - ( W(k-1) W(k) )*inv(D(k))*( W(k-1) W(k) )'
+*              A := A - ( U(k-1) U(k) )*D(k)*( U(k-1) U(k) )**T
+*                 = A - ( W(k-1) W(k) )*inv(D(k))*( W(k-1) W(k) )**T
 *
                IF( K.GT.2 ) THEN
 *
@@ -340,7 +340,7 @@
 *
       ELSE
 *
-*        Factorize A as L*D*L' using the lower triangle of A
+*        Factorize A as L*D*L**T using the lower triangle of A
 *
 *        K is the main loop index, increasing from 1 to N in steps of
 *        1 or 2
@@ -468,7 +468,7 @@
 *
 *                 Perform a rank-1 update of A(k+1:n,k+1:n) as
 *
-*                 A := A - L(k)*D(k)*L(k)' = A - W(k)*(1/D(k))*W(k)'
+*                 A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T
 *
                   R1 = ONE / AP( KC )
                   CALL DSPR( UPLO, N-K, -R1, AP( KC+1 ), 1,
@@ -491,8 +491,11 @@
 *
 *                 Perform a rank-2 update of A(k+2:n,k+2:n) as
 *
-*                 A := A - ( L(k) L(k+1) )*D(k)*( L(k) L(k+1) )'
-*                    = A - ( W(k) W(k+1) )*inv(D(k))*( W(k) W(k+1) )'
+*                 A := A - ( L(k) L(k+1) )*D(k)*( L(k) L(k+1) )**T
+*                    = A - ( W(k) W(k+1) )*inv(D(k))*( W(k) W(k+1) )**T
+*
+*                 where L(k) and L(k+1) are the k-th and (k+1)-th
+*                 columns of L
 *
                   D21 = AP( K+1+( K-1 )*( 2*N-K ) / 2 )
                   D11 = AP( K+1+K*( 2*N-K-1 ) / 2 ) / D21

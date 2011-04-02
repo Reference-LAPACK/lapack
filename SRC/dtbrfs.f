@@ -348,7 +348,7 @@
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
-*              Multiply by diag(W)*inv(op(A)').
+*              Multiply by diag(W)*inv(op(A)**T).
 *
                CALL DTBSV( UPLO, TRANST, DIAG, N, KD, AB, LDAB,
      $                     WORK( N+1 ), 1 )

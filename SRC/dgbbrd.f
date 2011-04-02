@@ -19,20 +19,20 @@
 *  =======
 *
 *  DGBBRD reduces a real general m-by-n band matrix A to upper
-*  bidiagonal form B by an orthogonal transformation: Q' * A * P = B.
+*  bidiagonal form B by an orthogonal transformation: Q**T * A * P = B.
 *
-*  The routine computes B, and optionally forms Q or P', or computes
-*  Q'*C for a given matrix C.
+*  The routine computes B, and optionally forms Q or P**T, or computes
+*  Q**T*C for a given matrix C.
 *
 *  Arguments
 *  =========
 *
 *  VECT    (input) CHARACTER*1
-*          Specifies whether or not the matrices Q and P' are to be
+*          Specifies whether or not the matrices Q and P**T are to be
 *          formed.
-*          = 'N': do not form Q or P';
+*          = 'N': do not form Q or P**T;
 *          = 'Q': form Q only;
-*          = 'P': form P' only;
+*          = 'P': form P**T only;
 *          = 'B': form both.
 *
 *  M       (input) INTEGER
@@ -85,7 +85,7 @@
 *
 *  C       (input/output) DOUBLE PRECISION array, dimension (LDC,NCC)
 *          On entry, an m-by-ncc matrix C.
-*          On exit, C is overwritten by Q'*C.
+*          On exit, C is overwritten by Q**T*C.
 *          C is not referenced if NCC = 0.
 *
 *  LDC     (input) INTEGER
@@ -157,7 +157,7 @@
          RETURN
       END IF
 *
-*     Initialize Q and P' to the unit matrix, if needed
+*     Initialize Q and P**T to the unit matrix, if needed
 *
       IF( WANTQ )
      $   CALL DLASET( 'Full', M, M, ZERO, ONE, Q, LDQ )
@@ -334,7 +334,7 @@
 *
                IF( WANTPT ) THEN
 *
-*                 accumulate product of plane rotations in P'
+*                 accumulate product of plane rotations in P**T
 *
                   DO 60 J = J1, J2, KB1
                      CALL DROT( N, PT( J+KUN-1, 1 ), LDPT,

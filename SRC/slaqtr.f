@@ -51,7 +51,7 @@
 *  LTRAN   (input) LOGICAL
 *          On entry, LTRAN specifies the option of conjugate transpose:
 *             = .FALSE.,    op(T+i*B) = T+i*B,
-*             = .TRUE.,     op(T+i*B) = (T+i*B)'.
+*             = .TRUE.,     op(T+i*B) = (T+i*B)**T.
 *
 *  LREAL   (input) LOGICAL
 *          On entry, LREAL specifies the input matrix structure:
@@ -532,7 +532,7 @@
 *
          ELSE
 *
-*           Solve (T + iB)'*(p+iq) = c+id
+*           Solve (T + iB)**T*(p+iq) = c+id
 *
             JNEXT = 1
             DO 80 J = 1, N

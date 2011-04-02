@@ -20,8 +20,8 @@
 *  positive definite matrix A.
 *
 *  The factorization has the form
-*     A = U' * U ,  if UPLO = 'U', or
-*     A = L  * L',  if UPLO = 'L',
+*     A = U**T * U ,  if UPLO = 'U', or
+*     A = L  * L**T,  if UPLO = 'L',
 *  where U is an upper triangular matrix and L is lower triangular.
 *
 *  This is the unblocked version of the algorithm, calling Level 2 BLAS.
@@ -48,7 +48,7 @@
 *          triangular part of A is not referenced.
 *
 *          On exit, if INFO = 0, the factor U or L from the Cholesky
-*          factorization A = U'*U  or A = L*L'.
+*          factorization A = U**T *U  or A = L*L**T.
 *
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,N).
@@ -107,7 +107,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Compute the Cholesky factorization A = U'*U.
+*        Compute the Cholesky factorization A = U**T *U.
 *
          DO 10 J = 1, N
 *
@@ -131,7 +131,7 @@
    10    CONTINUE
       ELSE
 *
-*        Compute the Cholesky factorization A = L*L'.
+*        Compute the Cholesky factorization A = L*L**T.
 *
          DO 20 J = 1, N
 *

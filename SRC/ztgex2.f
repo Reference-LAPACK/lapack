@@ -28,8 +28,8 @@
 *  Optionally, the matrices Q and Z of generalized Schur vectors are
 *  updated.
 *
-*         Q(in) * A(in) * Z(in)' = Q(out) * A(out) * Z(out)'
-*         Q(in) * B(in) * Z(in)' = Q(out) * B(out) * Z(out)'
+*         Q(in) * A(in) * Z(in)**H = Q(out) * A(out) * Z(out)**H
+*         Q(in) * B(in) * Z(in)**H = Q(out) * B(out) * Z(out)**H
 *
 *
 *  Arguments
@@ -213,7 +213,7 @@
       IF( WANDS ) THEN
 *
 *        Strong stability test:
-*           F-norm((A-QL'*S*QR, B-QL'*T*QR)) <= O(EPS*F-norm((A, B)))
+*           F-norm((A-QL**H*S*QR, B-QL**H*T*QR)) <= O(EPS*F-norm((A, B)))
 *
          CALL ZLACPY( 'Full', M, M, S, LDST, WORK, M )
          CALL ZLACPY( 'Full', M, M, T, LDST, WORK( M*M+1 ), M )

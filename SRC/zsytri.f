@@ -128,7 +128,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Compute inv(A) from the factorization A = U*D*U'.
+*        Compute inv(A) from the factorization A = U*D*U**T.
 *
 *        K is the main loop index, increasing from 1 to N in steps of
 *        1 or 2, depending on the size of the diagonal blocks.
@@ -217,7 +217,7 @@
 *
       ELSE
 *
-*        Compute inv(A) from the factorization A = L*D*L'.
+*        Compute inv(A) from the factorization A = L*D*L**T.
 *
 *        K is the main loop index, increasing from 1 to N in steps of
 *        1 or 2, depending on the size of the diagonal blocks.

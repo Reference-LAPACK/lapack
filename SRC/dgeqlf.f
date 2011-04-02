@@ -71,7 +71,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(m-k+i+1:m) = 0 and v(m-k+i) = 1; v(1:m-k+i-1) is stored on exit in
@@ -186,7 +186,7 @@
                CALL DLARFT( 'Backward', 'Columnwise', M-K+I+IB-1, IB,
      $                      A( 1, N-K+I ), LDA, TAU( I ), WORK, LDWORK )
 *
-*              Apply H' to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
+*              Apply H**T to A(1:m-k+i+ib-1,1:n-k+i-1) from the left
 *
                CALL DLARFB( 'Left', 'Transpose', 'Backward',
      $                      'Columnwise', M-K+I+IB-1, N-K+I-1, IB,

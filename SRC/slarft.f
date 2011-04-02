@@ -27,12 +27,12 @@
 *  If STOREV = 'C', the vector which defines the elementary reflector
 *  H(i) is stored in the i-th column of the array V, and
 *
-*     H  =  I - V * T * V'
+*     H  =  I - V * T * V**T
 *
 *  If STOREV = 'R', the vector which defines the elementary reflector
 *  H(i) is stored in the i-th row of the array V, and
 *
-*     H  =  I - V' * T * V
+*     H  =  I - V**T * T * V
 *
 *  Arguments
 *  =========
@@ -150,7 +150,7 @@
                   END DO
                   J = MIN( LASTV, PREVLASTV )
 *
-*                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)' * V(i:j,i)
+*                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**T * V(i:j,i)
 *
                   CALL SGEMV( 'Transpose', J-I+1, I-1, -TAU( I ),
      $                        V( I, 1 ), LDV, V( I, I ), 1, ZERO,
@@ -162,7 +162,7 @@
                   END DO
                   J = MIN( LASTV, PREVLASTV )
 *
-*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)'
+*                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**T
 *
                   CALL SGEMV( 'No transpose', I-1, J-I+1, -TAU( I ),
      $                        V( 1, I ), LDV, V( I, I ), LDV, ZERO,
@@ -207,7 +207,7 @@
                      J = MAX( LASTV, PREVLASTV )
 *
 *                    T(i+1:k,i) :=
-*                            - tau(i) * V(j:n-k+i,i+1:k)' * V(j:n-k+i,i)
+*                            - tau(i) * V(j:n-k+i,i+1:k)**T * V(j:n-k+i,i)
 *
                      CALL SGEMV( 'Transpose', N-K+I-J+1, K-I, -TAU( I ),
      $                           V( J, I+1 ), LDV, V( J, I ), 1, ZERO,
@@ -223,7 +223,7 @@
                      J = MAX( LASTV, PREVLASTV )
 *
 *                    T(i+1:k,i) :=
-*                            - tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)'
+*                            - tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**T
 *
                      CALL SGEMV( 'No transpose', K-I, N-K+I-J+1,
      $                    -TAU( I ), V( I+1, J ), LDV, V( I, J ), LDV,

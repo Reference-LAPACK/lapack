@@ -74,7 +74,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(i+1:n) = 0 and v(i) = 1; v(1:i-1) is stored on exit in AP,
@@ -87,7 +87,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in AP,
@@ -147,7 +147,7 @@
          AP( I1+N-1 ) = DBLE( AP( I1+N-1 ) )
          DO 10 I = N - 1, 1, -1
 *
-*           Generate elementary reflector H(i) = I - tau * v * v'
+*           Generate elementary reflector H(i) = I - tau * v * v**H
 *           to annihilate A(1:i-1,i+1)
 *
             ALPHA = AP( I1+I-1 )
@@ -165,13 +165,13 @@
                CALL ZHPMV( UPLO, I, TAUI, AP, AP( I1 ), 1, ZERO, TAU,
      $                     1 )
 *
-*              Compute  w := y - 1/2 * tau * (y'*v) * v
+*              Compute  w := y - 1/2 * tau * (y**H *v) * v
 *
                ALPHA = -HALF*TAUI*ZDOTC( I, TAU, 1, AP( I1 ), 1 )
                CALL ZAXPY( I, ALPHA, AP( I1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v'
+*                 A := A - v * w**H - w * v**H
 *
                CALL ZHPR2( UPLO, I, -ONE, AP( I1 ), 1, TAU, 1, AP )
 *
@@ -192,7 +192,7 @@
          DO 20 I = 1, N - 1
             I1I1 = II + N - I + 1
 *
-*           Generate elementary reflector H(i) = I - tau * v * v'
+*           Generate elementary reflector H(i) = I - tau * v * v**H
 *           to annihilate A(i+2:n,i)
 *
             ALPHA = AP( II+1 )
@@ -210,14 +210,14 @@
                CALL ZHPMV( UPLO, N-I, TAUI, AP( I1I1 ), AP( II+1 ), 1,
      $                     ZERO, TAU( I ), 1 )
 *
-*              Compute  w := y - 1/2 * tau * (y'*v) * v
+*              Compute  w := y - 1/2 * tau * (y**H *v) * v
 *
                ALPHA = -HALF*TAUI*ZDOTC( N-I, TAU( I ), 1, AP( II+1 ),
      $                 1 )
                CALL ZAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v'
+*                 A := A - v * w' - w * v**H
 *
                CALL ZHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 1,
      $                     AP( I1I1 ) )

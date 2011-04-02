@@ -21,11 +21,11 @@
 *
 *        Q * C  if SIDE = 'L' and TRANS = 'N', or
 *
-*        Q'* C  if SIDE = 'L' and TRANS = 'T', or
+*        Q**T* C  if SIDE = 'L' and TRANS = 'C', or
 *
 *        C * Q  if SIDE = 'R' and TRANS = 'N', or
 *
-*        C * Q' if SIDE = 'R' and TRANS = 'T',
+*        C * Q**T if SIDE = 'R' and TRANS = 'C',
 *
 *  where Q is a real orthogonal matrix defined as the product of k
 *  elementary reflectors
@@ -39,12 +39,12 @@
 *  =========
 *
 *  SIDE    (input) CHARACTER*1
-*          = 'L': apply Q or Q' from the Left
-*          = 'R': apply Q or Q' from the Right
+*          = 'L': apply Q or Q**T from the Left
+*          = 'R': apply Q or Q**T from the Right
 *
 *  TRANS   (input) CHARACTER*1
 *          = 'N': apply Q  (No transpose)
-*          = 'T': apply Q' (Transpose)
+*          = 'T': apply Q**T (Transpose)
 *
 *  M       (input) INTEGER
 *          The number of rows of the matrix C. M >= 0.
@@ -80,7 +80,7 @@
 *
 *  C       (input/output) REAL array, dimension (LDC,N)
 *          On entry, the m-by-n matrix C.
-*          On exit, C is overwritten by Q*C or Q'*C or C*Q' or C*Q.
+*          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
 *
 *  LDC     (input) INTEGER
 *          The leading dimension of the array C. LDC >= max(1,M).
@@ -181,19 +181,19 @@
       DO 10 I = I1, I2, I3
          IF( LEFT ) THEN
 *
-*           H(i) or H(i)' is applied to C(i:m,1:n)
+*           H(i) or H(i)**T is applied to C(i:m,1:n)
 *
             MI = M - I + 1
             IC = I
          ELSE
 *
-*           H(i) or H(i)' is applied to C(1:m,i:n)
+*           H(i) or H(i)**T is applied to C(1:m,i:n)
 *
             NI = N - I + 1
             JC = I
          END IF
 *
-*        Apply H(i) or H(i)'
+*        Apply H(i) or H(i)**T
 *
          CALL SLARZ( SIDE, MI, NI, L, A( I, JA ), LDA, TAU( I ),
      $               C( IC, JC ), LDC, WORK )

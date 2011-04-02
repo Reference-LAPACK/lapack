@@ -87,7 +87,7 @@
 *
 *  Each H(i) and G(i) has the form:
 *
-*     H(i) = I - tauq * v * v'  and G(i) = I - taup * u * u'
+*     H(i) = I - tauq * v * v**T  and G(i) = I - taup * u * u**T
 *
 *  where tauq and taup are real scalars, and v and u are real vectors;
 *  v(1:i-1) = 0, v(i) = 1, and v(i+1:m) is stored on exit in A(i+1:m,i);
@@ -100,7 +100,7 @@
 *
 *  Each H(i) and G(i) has the form:
 *
-*     H(i) = I - tauq * v * v'  and G(i) = I - taup * u * u'
+*     H(i) = I - tauq * v * v**T  and G(i) = I - taup * u * u**T
 *
 *  where tauq and taup are real scalars, and v and u are real vectors;
 *  v(1:i) = 0, v(i+1) = 1, and v(i+2:m) is stored on exit in A(i+2:m,i);

@@ -40,7 +40,7 @@
 *  In particular, if B is square and nonsingular, the GQR factorization
 *  of A and B implicitly gives the QR factorization of inv(B)*A:
 *
-*               inv(B)*A = Z'*(inv(T)*R)
+*               inv(B)*A = Z**H * (inv(T)*R)
 *
 *  where inv(B) denotes the inverse of the matrix B, and Z' denotes the
 *  conjugate transpose of matrix Z.
@@ -119,7 +119,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - taua * v * v'
+*     H(i) = I - taua * v * v**H
 *
 *  where taua is a complex scalar, and v is a complex vector with
 *  v(1:i-1) = 0 and v(i) = 1; v(i+1:n) is stored on exit in A(i+1:n,i),
@@ -133,7 +133,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - taub * v * v'
+*     H(i) = I - taub * v * v**H
 *
 *  where taub is a complex scalar, and v is a complex vector with
 *  v(p-k+i+1:p) = 0 and v(p-k+i) = 1; v(1:p-k+i-1) is stored on exit in
@@ -194,7 +194,7 @@
       CALL CGEQRF( N, M, A, LDA, TAUA, WORK, LWORK, INFO )
       LOPT = WORK( 1 )
 *
-*     Update B := Q'*B.
+*     Update B := Q**H*B.
 *
       CALL CUNMQR( 'Left', 'Conjugate Transpose', N, P, MIN( N, M ), A,
      $             LDA, TAUA, B, LDB, WORK, LWORK, INFO )

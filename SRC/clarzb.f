@@ -27,12 +27,12 @@
 *  =========
 *
 *  SIDE    (input) CHARACTER*1
-*          = 'L': apply H or H' from the Left
-*          = 'R': apply H or H' from the Right
+*          = 'L': apply H or H**H from the Left
+*          = 'R': apply H or H**H from the Right
 *
 *  TRANS   (input) CHARACTER*1
 *          = 'N': apply H (No transpose)
-*          = 'C': apply H' (Conjugate transpose)
+*          = 'C': apply H**H (Conjugate transpose)
 *
 *  DIRECT  (input) CHARACTER*1
 *          Indicates how H is formed from a product of elementary
@@ -77,7 +77,7 @@
 *
 *  C       (input/output) COMPLEX array, dimension (LDC,N)
 *          On entry, the M-by-N matrix C.
-*          On exit, C is overwritten by H*C or H'*C or C*H or C*H'.
+*          On exit, C is overwritten by H*C or H**H*C or C*H or C*H**H.
 *
 *  LDC     (input) INTEGER
 *          The leading dimension of the array C. LDC >= max(1,M).
@@ -140,28 +140,28 @@
 *
       IF( LSAME( SIDE, 'L' ) ) THEN
 *
-*        Form  H * C  or  H' * C
+*        Form  H * C  or  H**H * C
 *
-*        W( 1:n, 1:k ) = conjg( C( 1:k, 1:n )' )
+*        W( 1:n, 1:k ) = C( 1:k, 1:n )**H
 *
          DO 10 J = 1, K
             CALL CCOPY( N, C( J, 1 ), LDC, WORK( 1, J ), 1 )
    10    CONTINUE
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) + ...
-*                        conjg( C( m-l+1:m, 1:n )' ) * V( 1:k, 1:l )'
+*                        C( m-l+1:m, 1:n )**H * V( 1:k, 1:l )**T
 *
          IF( L.GT.0 )
      $      CALL CGEMM( 'Transpose', 'Conjugate transpose', N, K, L,
      $                  ONE, C( M-L+1, 1 ), LDC, V, LDV, ONE, WORK,
      $                  LDWORK )
 *
-*        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T'  or  W( 1:m, 1:k ) * T
+*        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T  or  W( 1:m, 1:k ) * T
 *
          CALL CTRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE, T,
      $               LDT, WORK, LDWORK )
 *
-*        C( 1:k, 1:n ) = C( 1:k, 1:n ) - conjg( W( 1:n, 1:k )' )
+*        C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**H
 *
          DO 30 J = 1, N
             DO 20 I = 1, K
@@ -170,7 +170,7 @@
    30    CONTINUE
 *
 *        C( m-l+1:m, 1:n ) = C( m-l+1:m, 1:n ) - ...
-*                    conjg( V( 1:k, 1:l )' ) * conjg( W( 1:n, 1:k )' )
+*                            V( 1:k, 1:l )**H * W( 1:n, 1:k )**H
 *
          IF( L.GT.0 )
      $      CALL CGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, LDV,
@@ -178,7 +178,7 @@
 *
       ELSE IF( LSAME( SIDE, 'R' ) ) THEN
 *
-*        Form  C * H  or  C * H'
+*        Form  C * H  or  C * H**H
 *
 *        W( 1:m, 1:k ) = C( 1:m, 1:k )
 *
@@ -187,14 +187,14 @@
    40    CONTINUE
 *
 *        W( 1:m, 1:k ) = W( 1:m, 1:k ) + ...
-*                        C( 1:m, n-l+1:n ) * conjg( V( 1:k, 1:l )' )
+*                        C( 1:m, n-l+1:n ) * V( 1:k, 1:l )**H
 *
          IF( L.GT.0 )
      $      CALL CGEMM( 'No transpose', 'Transpose', M, K, L, ONE,
      $                  C( 1, N-L+1 ), LDC, V, LDV, ONE, WORK, LDWORK )
 *
 *        W( 1:m, 1:k ) = W( 1:m, 1:k ) * conjg( T )  or
-*                        W( 1:m, 1:k ) * conjg( T' )
+*                        W( 1:m, 1:k ) * T**H
 *
          DO 50 J = 1, K
             CALL CLACGV( K-J+1, T( J, J ), 1 )

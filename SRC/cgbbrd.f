@@ -20,20 +20,20 @@
 *  =======
 *
 *  CGBBRD reduces a complex general m-by-n band matrix A to real upper
-*  bidiagonal form B by a unitary transformation: Q' * A * P = B.
+*  bidiagonal form B by a unitary transformation: Q**H * A * P = B.
 *
-*  The routine computes B, and optionally forms Q or P', or computes
-*  Q'*C for a given matrix C.
+*  The routine computes B, and optionally forms Q or P**H, or computes
+*  Q**H*C for a given matrix C.
 *
 *  Arguments
 *  =========
 *
 *  VECT    (input) CHARACTER*1
-*          Specifies whether or not the matrices Q and P' are to be
+*          Specifies whether or not the matrices Q and P**H are to be
 *          formed.
-*          = 'N': do not form Q or P';
+*          = 'N': do not form Q or P**H;
 *          = 'Q': form Q only;
-*          = 'P': form P' only;
+*          = 'P': form P**H only;
 *          = 'B': form both.
 *
 *  M       (input) INTEGER
@@ -86,7 +86,7 @@
 *
 *  C       (input/output) COMPLEX array, dimension (LDC,NCC)
 *          On entry, an m-by-ncc matrix C.
-*          On exit, C is overwritten by Q'*C.
+*          On exit, C is overwritten by Q**H*C.
 *          C is not referenced if NCC = 0.
 *
 *  LDC     (input) INTEGER
@@ -165,7 +165,7 @@
          RETURN
       END IF
 *
-*     Initialize Q and P' to the unit matrix, if needed
+*     Initialize Q and P**H to the unit matrix, if needed
 *
       IF( WANTQ )
      $   CALL CLASET( 'Full', M, M, CZERO, CONE, Q, LDQ )
@@ -338,7 +338,7 @@
 *
                IF( WANTPT ) THEN
 *
-*                 accumulate product of plane rotations in P'
+*                 accumulate product of plane rotations in P**H
 *
                   DO 60 J = J1, J2, KB1
                      CALL CROT( N, PT( J+KUN-1, 1 ), LDPT,

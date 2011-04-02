@@ -128,7 +128,7 @@
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**T).
 *
             CALL DLATPS( 'Upper', 'Transpose', 'Non-unit', NORMIN, N,
      $                   AP, WORK, SCALEL, WORK( 2*N+1 ), INFO )
@@ -146,7 +146,7 @@
      $                   AP, WORK, SCALEL, WORK( 2*N+1 ), INFO )
             NORMIN = 'Y'
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**T).
 *
             CALL DLATPS( 'Lower', 'Transpose', 'Non-unit', NORMIN, N,
      $                   AP, WORK, SCALEU, WORK( 2*N+1 ), INFO )

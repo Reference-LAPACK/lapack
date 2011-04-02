@@ -107,11 +107,11 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B where A = U'*U.
+*        Solve A*X = B where A = U**T *U.
 *
          DO 10 J = 1, NRHS
 *
-*           Solve U'*X = B, overwriting B with X.
+*           Solve U**T *X = B, overwriting B with X.
 *
             CALL DTBSV( 'Upper', 'Transpose', 'Non-unit', N, KD, AB,
      $                  LDAB, B( 1, J ), 1 )
@@ -123,7 +123,7 @@
    10    CONTINUE
       ELSE
 *
-*        Solve A*X = B where A = L*L'.
+*        Solve A*X = B where A = L*L**T.
 *
          DO 20 J = 1, NRHS
 *
@@ -132,7 +132,7 @@
             CALL DTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, AB,
      $                  LDAB, B( 1, J ), 1 )
 *
-*           Solve L'*X = B, overwriting B with X.
+*           Solve L**T *X = B, overwriting B with X.
 *
             CALL DTBSV( 'Lower', 'Transpose', 'Non-unit', N, KD, AB,
      $                  LDAB, B( 1, J ), 1 )

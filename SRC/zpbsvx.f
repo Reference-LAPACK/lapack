@@ -118,17 +118,17 @@
 *  AFB     (input or output) COMPLEX*16 array, dimension (LDAFB,N)
 *          If FACT = 'F', then AFB is an input argument and on entry
 *          contains the triangular factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H of the band matrix
+*          factorization A = U**H *U or A = L*L**H of the band matrix
 *          A, in the same storage format as A (see AB).  If EQUED = 'Y',
 *          then AFB is the factored form of the equilibrated matrix A.
 *
 *          If FACT = 'N', then AFB is an output argument and on exit
 *          returns the triangular factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H.
+*          factorization A = U**H *U or A = L*L**H.
 *
 *          If FACT = 'E', then AFB is an output argument and on exit
 *          returns the triangular factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H of the equilibrated
+*          factorization A = U**H *U or A = L*L**H of the equilibrated
 *          matrix A (see the description of A for the form of the
 *          equilibrated matrix).
 *
@@ -351,7 +351,7 @@
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
-*        Compute the Cholesky factorization A = U'*U or A = L*L'.
+*        Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
          IF( UPPER ) THEN
             DO 40 J = 1, N

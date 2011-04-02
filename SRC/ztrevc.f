@@ -332,7 +332,7 @@
    90       CONTINUE
 *
 *           Solve the triangular system:
-*              (T(KI+1:N,KI+1:N) - T(KI,KI))'*X = SCALE*WORK.
+*              (T(KI+1:N,KI+1:N) - T(KI,KI))**H * X = SCALE*WORK.
 *
             DO 100 K = KI + 1, N
                T( K, K ) = T( K, K ) - T( KI, KI )

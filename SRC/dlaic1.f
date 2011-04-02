@@ -40,7 +40,7 @@
 *      diag(sest*sest, 0) + [alpha  gamma] * [ alpha ]
 *                                            [ gamma ]
 *
-*  where  alpha =  x'*w.
+*  where  alpha =  x**T*w.
 *
 *  Arguments
 *  =========

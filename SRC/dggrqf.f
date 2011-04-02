@@ -40,9 +40,9 @@
 *  In particular, if B is square and nonsingular, the GRQ factorization
 *  of A and B implicitly gives the RQ factorization of A*inv(B):
 *
-*               A*inv(B) = (R*inv(T))*Z'
+*               A*inv(B) = (R*inv(T))*Z**T
 *
-*  where inv(B) denotes the inverse of the matrix B, and Z' denotes the
+*  where inv(B) denotes the inverse of the matrix B, and Z**T denotes the
 *  transpose of the matrix Z.
 *
 *  Arguments
@@ -118,7 +118,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - taua * v * v'
+*     H(i) = I - taua * v * v**T
 *
 *  where taua is a real scalar, and v is a real vector with
 *  v(n-k+i+1:n) = 0 and v(n-k+i) = 1; v(1:n-k+i-1) is stored on exit in
@@ -132,7 +132,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - taub * v * v'
+*     H(i) = I - taub * v * v**T
 *
 *  where taub is a real scalar, and v is a real vector with
 *  v(1:i-1) = 0 and v(i) = 1; v(i+1:p) is stored on exit in B(i+1:p,i),
@@ -193,7 +193,7 @@
       CALL DGERQF( M, N, A, LDA, TAUA, WORK, LWORK, INFO )
       LOPT = WORK( 1 )
 *
-*     Update B := B*Q'
+*     Update B := B*Q**T
 *
       CALL DORMRQ( 'Right', 'Transpose', P, N, MIN( M, N ),
      $             A( MAX( 1, M-N+1 ), 1 ), LDA, TAUA, B, LDB, WORK,

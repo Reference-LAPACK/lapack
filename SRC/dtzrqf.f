@@ -66,9 +66,9 @@
 *
 *  where
 *
-*     T( k ) = I - tau*u( k )*u( k )',   u( k ) = (   1    ),
-*                                                 (   0    )
-*                                                 ( z( k ) )
+*     T( k ) = I - tau*u( k )*u( k )**T,   u( k ) = (   1    ),
+*                                                   (   0    )
+*                                                   ( z( k ) )
 *
 *  tau is a scalar and z( k ) is an ( n - m ) element vector.
 *  tau and z( k ) are chosen to annihilate the elements of the kth row
@@ -149,7 +149,7 @@
      $                     LDA, A( K, M1 ), LDA, ONE, TAU, 1 )
 *
 *              Now form  a( k ) := a( k ) - tau*w
-*              and       B      := B      - tau*w*z( k )'.
+*              and       B      := B      - tau*w*z( k )**T.
 *
                CALL DAXPY( K-1, -TAU( K ), TAU, 1, A( 1, K ), 1 )
                CALL DGER( K-1, N-M, -TAU( K ), TAU, 1, A( K, M1 ), LDA,

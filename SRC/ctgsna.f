@@ -132,12 +132,12 @@
 *  The reciprocal of the condition number of the i-th generalized
 *  eigenvalue w = (a, b) is defined as
 *
-*          S(I) = (|v'Au|**2 + |v'Bu|**2)**(1/2) / (norm(u)*norm(v))
+*          S(I) = (|v**HAu|**2 + |v**HBu|**2)**(1/2) / (norm(u)*norm(v))
 *
 *  where u and v are the right and left eigenvectors of (A, B)
 *  corresponding to w; |z| denotes the absolute value of the complex
 *  number, and norm(u) denotes the 2-norm of the vector u. The pair
-*  (a, b) corresponds to an eigenvalue w = a/b (= v'Au/v'Bu) of the
+*  (a, b) corresponds to an eigenvalue w = a/b (= v**HAu/v**HBu) of the
 *  matrix pair (A, B). If both a and b equal zero, then (A,B) is
 *  singular and S(I) = -1 is returned.
 *
@@ -166,7 +166,7 @@
 *         Zl = [ kron(a, In-1) -kron(1, A22) ]
 *              [ kron(b, In-1) -kron(1, B22) ].
 *
-*  Here In-1 is the identity matrix of size n-1 and X' is the conjugate
+*  Here In-1 is the identity matrix of size n-1 and X**H is the conjugate
 *  transpose of X. kron(X, Y) is the Kronecker product between the
 *  matrices X and Y.
 *

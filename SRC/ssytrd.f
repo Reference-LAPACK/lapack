@@ -92,7 +92,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(i+1:n) = 0 and v(i) = 1; v(1:i-1) is stored on exit in
@@ -105,7 +105,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in A(i+2:n,i),
@@ -235,7 +235,7 @@
      $                   LDWORK )
 *
 *           Update the unreduced submatrix A(1:i-1,1:i-1), using an
-*           update of the form:  A := A - V*W' - W*V'
+*           update of the form:  A := A - V*W' - W*V**T
 *
             CALL SSYR2K( UPLO, 'No transpose', I-1, NB, -ONE, A( 1, I ),
      $                   LDA, WORK, LDWORK, ONE, A, LDA )
@@ -266,7 +266,7 @@
      $                   TAU( I ), WORK, LDWORK )
 *
 *           Update the unreduced submatrix A(i+ib:n,i+ib:n), using
-*           an update of the form:  A := A - V*W' - W*V'
+*           an update of the form:  A := A - V*W' - W*V**T
 *
             CALL SSYR2K( UPLO, 'No transpose', N-I-NB+1, NB, -ONE,
      $                   A( I+NB, I ), LDA, WORK( NB+1 ), LDWORK, ONE,

@@ -164,7 +164,7 @@
 *
             IF( I.LT.K ) THEN
 *
-*              T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)'
+*              T(i+1:k,i) = - tau(i) * V(i+1:k,1:n) * V(i,1:n)**T
 *
                CALL DGEMV( 'No transpose', K-I, N, -TAU( I ),
      $                     V( I+1, 1 ), LDV, V( I, 1 ), LDV, ZERO,

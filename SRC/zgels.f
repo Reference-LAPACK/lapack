@@ -278,7 +278,7 @@
 *
 *           Least-Squares Problem min || A * X - B ||
 *
-*           B(1:M,1:NRHS) := Q' * B(1:M,1:NRHS)
+*           B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS)
 *
             CALL ZUNMQR( 'Left', 'Conjugate transpose', M, NRHS, N, A,
      $                   LDA, WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,
@@ -360,7 +360,7 @@
    30          CONTINUE
    40       CONTINUE
 *
-*           B(1:N,1:NRHS) := Q(1:N,:)' * B(1:M,1:NRHS)
+*           B(1:N,1:NRHS) := Q(1:N,:)**H * B(1:M,1:NRHS)
 *
             CALL ZUNMLQ( 'Left', 'Conjugate transpose', N, NRHS, M, A,
      $                   LDA, WORK( 1 ), B, LDB, WORK( MN+1 ), LWORK-MN,

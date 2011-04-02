@@ -16,9 +16,9 @@
 *  Purpose
 *  =======
 *
-*  ZPTTRF computes the L*D*L' factorization of a complex Hermitian
+*  ZPTTRF computes the L*D*L**H factorization of a complex Hermitian
 *  positive definite tridiagonal matrix A.  The factorization may also
-*  be regarded as having the form A = U'*D*U.
+*  be regarded as having the form A = U**H *D*U.
 *
 *  Arguments
 *  =========
@@ -29,14 +29,14 @@
 *  D       (input/output) DOUBLE PRECISION array, dimension (N)
 *          On entry, the n diagonal elements of the tridiagonal matrix
 *          A.  On exit, the n diagonal elements of the diagonal matrix
-*          D from the L*D*L' factorization of A.
+*          D from the L*D*L**H factorization of A.
 *
 *  E       (input/output) COMPLEX*16 array, dimension (N-1)
 *          On entry, the (n-1) subdiagonal elements of the tridiagonal
 *          matrix A.  On exit, the (n-1) subdiagonal elements of the
-*          unit bidiagonal factor L from the L*D*L' factorization of A.
+*          unit bidiagonal factor L from the L*D*L**H factorization of A.
 *          E can also be regarded as the superdiagonal of the unit
-*          bidiagonal factor U from the U'*D*U factorization of A.
+*          bidiagonal factor U from the U**H *D*U factorization of A.
 *
 *  INFO    (output) INTEGER
 *          = 0: successful exit
@@ -78,7 +78,7 @@
       IF( N.EQ.0 )
      $   RETURN
 *
-*     Compute the L*D*L' (or U'*D*U) factorization of A.
+*     Compute the L*D*L**H (or U**H *D*U) factorization of A.
 *
       I4 = MOD( N-1, 4 )
       DO 10 I = 1, I4

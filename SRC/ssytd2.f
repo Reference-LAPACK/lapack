@@ -17,7 +17,7 @@
 *  =======
 *
 *  SSYTD2 reduces a real symmetric matrix A to symmetric tridiagonal
-*  form T by an orthogonal similarity transformation: Q' * A * Q = T.
+*  form T by an orthogonal similarity transformation: Q**T * A * Q = T.
 *
 *  Arguments
 *  =========
@@ -79,7 +79,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(i+1:n) = 0 and v(i) = 1; v(1:i-1) is stored on exit in
@@ -92,7 +92,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in A(i+2:n,i),
@@ -163,7 +163,7 @@
 *
          DO 10 I = N - 1, 1, -1
 *
-*           Generate elementary reflector H(i) = I - tau * v * v'
+*           Generate elementary reflector H(i) = I - tau * v * v**T
 *           to annihilate A(1:i-1,i+1)
 *
             CALL SLARFG( I, A( I, I+1 ), A( 1, I+1 ), 1, TAUI )
@@ -180,13 +180,13 @@
                CALL SSYMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZERO,
      $                     TAU, 1 )
 *
-*              Compute  w := x - 1/2 * tau * (x'*v) * v
+*              Compute  w := x - 1/2 * tau * (x**T * v) * v
 *
                ALPHA = -HALF*TAUI*SDOT( I, TAU, 1, A( 1, I+1 ), 1 )
                CALL SAXPY( I, ALPHA, A( 1, I+1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v'
+*                 A := A - v * w**T - w * v**T
 *
                CALL SSYR2( UPLO, I, -ONE, A( 1, I+1 ), 1, TAU, 1, A,
      $                     LDA )
@@ -203,7 +203,7 @@
 *
          DO 20 I = 1, N - 1
 *
-*           Generate elementary reflector H(i) = I - tau * v * v'
+*           Generate elementary reflector H(i) = I - tau * v * v**T
 *           to annihilate A(i+2:n,i)
 *
             CALL SLARFG( N-I, A( I+1, I ), A( MIN( I+2, N ), I ), 1,
@@ -221,14 +221,14 @@
                CALL SSYMV( UPLO, N-I, TAUI, A( I+1, I+1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, TAU( I ), 1 )
 *
-*              Compute  w := x - 1/2 * tau * (x'*v) * v
+*              Compute  w := x - 1/2 * tau * (x**T * v) * v
 *
                ALPHA = -HALF*TAUI*SDOT( N-I, TAU( I ), 1, A( I+1, I ),
      $                 1 )
                CALL SAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v'
+*                 A := A - v * w' - w * v**T
 *
                CALL SSYR2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
      $                     A( I+1, I+1 ), LDA )

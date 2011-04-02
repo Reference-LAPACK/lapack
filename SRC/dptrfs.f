@@ -263,7 +263,7 @@
 *           m(i,j) =  abs(A(i,j)), i = j,
 *           m(i,j) = -abs(A(i,j)), i .ne. j,
 *
-*        and e = [ 1, 1, ..., 1 ]'.  Note M(A) = M(L)*D*M(L)'.
+*        and e = [ 1, 1, ..., 1 ]'.  Note M(A) = M(L)*D*M(L)**T.
 *
 *        Solve M(L) * x = e.
 *
@@ -272,7 +272,7 @@
             WORK( I ) = ONE + WORK( I-1 )*ABS( EF( I-1 ) )
    60    CONTINUE
 *
-*        Solve D * M(L)' * x = b.
+*        Solve D * M(L)**T * x = b.
 *
          WORK( N ) = WORK( N ) / DF( N )
          DO 70 I = N - 1, 1, -1

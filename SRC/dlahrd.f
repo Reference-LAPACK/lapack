@@ -19,8 +19,8 @@
 *  DLAHRD reduces the first NB columns of a real general n-by-(n-k+1)
 *  matrix A so that elements below the k-th subdiagonal are zero. The
 *  reduction is performed by an orthogonal similarity transformation
-*  Q' * A * Q. The routine returns the matrices V and T which determine
-*  Q as a block reflector I - V*T*V', and also the matrix Y = A * V * T.
+*  Q**T * A * Q. The routine returns the matrices V and T which determine
+*  Q as a block reflector I - V*T*V**T, and also the matrix Y = A * V * T.
 *
 *  This is an OBSOLETE auxiliary routine. 
 *  This routine will be 'deprecated' in a  future release.
@@ -76,7 +76,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real scalar, and v is a real vector with
 *  v(1:i+k-1) = 0, v(i+k) = 1; v(i+k+1:n) is stored on exit in
@@ -85,7 +85,7 @@
 *  The elements of the vectors v together form the (n-k+1)-by-nb matrix
 *  V which is needed, with T and Y, to apply the transformation to the
 *  unreduced part of the matrix, using an update of the form:
-*  A := (I - V*T*V') * (A - Y*V').
+*  A := (I - V*T*V**T) * (A - Y*V**T).
 *
 *  The contents of A on exit are illustrated by the following example
 *  with n = 7, k = 3 and nb = 2:
@@ -130,12 +130,12 @@
 *
 *           Update A(1:n,i)
 *
-*           Compute i-th column of A - Y * V'
+*           Compute i-th column of A - Y * V**T
 *
             CALL DGEMV( 'No transpose', N, I-1, -ONE, Y, LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( 1, I ), 1 )
 *
-*           Apply I - V * T' * V' to this column (call it b) from the
+*           Apply I - V * T**T * V**T to this column (call it b) from the
 *           left, using the last column of T as workspace
 *
 *           Let  V = ( V1 )   and   b = ( b1 )   (first I-1 rows)
@@ -143,18 +143,18 @@
 *
 *           where V1 is unit lower triangular
 *
-*           w := V1' * b1
+*           w := V1**T * b1
 *
             CALL DCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
             CALL DTRMV( 'Lower', 'Transpose', 'Unit', I-1, A( K+1, 1 ),
      $                  LDA, T( 1, NB ), 1 )
 *
-*           w := w + V2'*b2
+*           w := w + V2**T *b2
 *
             CALL DGEMV( 'Transpose', N-K-I+1, I-1, ONE, A( K+I, 1 ),
      $                  LDA, A( K+I, I ), 1, ONE, T( 1, NB ), 1 )
 *
-*           w := T'*w
+*           w := T**T *w
 *
             CALL DTRMV( 'Upper', 'Transpose', 'Non-unit', I-1, T, LDT,
      $                  T( 1, NB ), 1 )

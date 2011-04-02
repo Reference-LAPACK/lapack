@@ -189,7 +189,7 @@
   120       CONTINUE
          ELSE IF( LSAME( TRANS, 'T' ) ) THEN
 *
-*           Compute B := B - A'*X
+*           Compute B := B - A**T*X
 *
             DO 140 J = 1, NRHS
                IF( N.EQ.1 ) THEN
@@ -207,7 +207,7 @@
   140       CONTINUE
          ELSE IF( LSAME( TRANS, 'C' ) ) THEN
 *
-*           Compute B := B - A'*X
+*           Compute B := B - A**H*X
 *
             DO 160 J = 1, NRHS
                IF( N.EQ.1 ) THEN

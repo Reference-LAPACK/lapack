@@ -95,7 +95,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Compute the product inv(U) * inv(U)'.
+*        Compute the product inv(U) * inv(U)**T.
 *
          JJ = 0
          DO 10 J = 1, N
@@ -109,7 +109,7 @@
 *
       ELSE
 *
-*        Compute the product inv(L)' * inv(L).
+*        Compute the product inv(L)**T * inv(L).
 *
          JJ = 1
          DO 20 J = 1, N

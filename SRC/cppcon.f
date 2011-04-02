@@ -135,7 +135,7 @@
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**H).
 *
             CALL CLATPS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, AP, WORK, SCALEL, RWORK, INFO )
@@ -153,7 +153,7 @@
      $                   AP, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**H).
 *
             CALL CLATPS( 'Lower', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, AP, WORK, SCALEU, RWORK, INFO )

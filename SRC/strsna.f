@@ -140,10 +140,10 @@
 *  The reciprocal of the condition number of an eigenvalue lambda is
 *  defined as
 *
-*          S(lambda) = |v'*u| / (norm(u)*norm(v))
+*          S(lambda) = |v**T*u| / (norm(u)*norm(v))
 *
 *  where u and v are the right and left eigenvectors of T corresponding
-*  to lambda; v' denotes the conjugate-transpose of v, and norm(u)
+*  to lambda; v**T denotes the transpose of v, and norm(u)
 *  denotes the Euclidean norm. These reciprocal condition numbers always
 *  lie between zero (very badly conditioned) and one (very well
 *  conditioned). If n = 1, S(lambda) is defined to be 1.
@@ -403,12 +403,12 @@
 *
 *                 Form
 *
-*                 C' = WORK(2:N,2:N) + i*[rwork(1) ..... rwork(n-1) ]
-*                                        [   mu                     ]
-*                                        [         ..               ]
-*                                        [             ..           ]
-*                                        [                  mu      ]
-*                 where C' is conjugate transpose of complex matrix C,
+*                 C**T = WORK(2:N,2:N) + i*[rwork(1) ..... rwork(n-1) ]
+*                                          [   mu                     ]
+*                                          [         ..               ]
+*                                          [             ..           ]
+*                                          [                  mu      ]
+*                 where C**T is transpose of matrix C,
 *                 and RWORK is stored starting in the N+1-st column of
 *                 WORK.
 *
@@ -426,7 +426,7 @@
                   NN = 2*( N-1 )
                END IF
 *
-*              Estimate norm(inv(C'))
+*              Estimate norm(inv(C**T))
 *
                EST = ZERO
                KASE = 0
@@ -437,7 +437,7 @@
                   IF( KASE.EQ.1 ) THEN
                      IF( N2.EQ.1 ) THEN
 *
-*                       Real eigenvalue: solve C'*x = scale*c.
+*                       Real eigenvalue: solve C**T*x = scale*c.
 *
                         CALL SLAQTR( .TRUE., .TRUE., N-1, WORK( 2, 2 ),
      $                               LDWORK, DUMMY, DUMM, SCALE,
@@ -446,7 +446,7 @@
                      ELSE
 *
 *                       Complex eigenvalue: solve
-*                       C'*(p+iq) = scale*(c+id) in real arithmetic.
+*                       C**T*(p+iq) = scale*(c+id) in real arithmetic.
 *
                         CALL SLAQTR( .TRUE., .FALSE., N-1, WORK( 2, 2 ),
      $                               LDWORK, WORK( 1, N+1 ), MU, SCALE,

@@ -223,7 +223,7 @@
       DO 110 ITS = 1, N
 *
 *        Solve U*x = scale*v for a right eigenvector
-*          or U'*x = scale*v for a left eigenvector,
+*          or U**H *x = scale*v for a left eigenvector,
 *        overwriting x on v.
 *
          CALL CLATRS( 'Upper', TRANS, 'Nonunit', NORMIN, N, B, LDB, V,

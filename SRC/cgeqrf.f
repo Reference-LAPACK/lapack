@@ -69,7 +69,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
@@ -171,7 +171,7 @@
                CALL CLARFT( 'Forward', 'Columnwise', M-I+1, IB,
      $                      A( I, I ), LDA, TAU( I ), WORK, LDWORK )
 *
-*              Apply H' to A(i:m,i+ib:n) from the left
+*              Apply H**H to A(i:m,i+ib:n) from the left
 *
                CALL CLARFB( 'Left', 'Conjugate transpose', 'Forward',
      $                      'Columnwise', M-I+1, N-I-IB+1, IB,

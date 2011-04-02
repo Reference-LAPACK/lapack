@@ -19,7 +19,7 @@
 *
 *  CHETD2 reduces a complex Hermitian matrix A to real symmetric
 *  tridiagonal form T by a unitary similarity transformation:
-*  Q' * A * Q = T.
+*  Q**H * A * Q = T.
 *
 *  Arguments
 *  =========
@@ -81,7 +81,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(i+1:n) = 0 and v(i) = 1; v(1:i-1) is stored on exit in
@@ -94,7 +94,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**H
 *
 *  where tau is a complex scalar, and v is a complex vector with
 *  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in A(i+2:n,i),
@@ -168,7 +168,7 @@
          A( N, N ) = REAL( A( N, N ) )
          DO 10 I = N - 1, 1, -1
 *
-*           Generate elementary reflector H(i) = I - tau * v * v'
+*           Generate elementary reflector H(i) = I - tau * v * v**H
 *           to annihilate A(1:i-1,i+1)
 *
             ALPHA = A( I, I+1 )
@@ -186,13 +186,13 @@
                CALL CHEMV( UPLO, I, TAUI, A, LDA, A( 1, I+1 ), 1, ZERO,
      $                     TAU, 1 )
 *
-*              Compute  w := x - 1/2 * tau * (x'*v) * v
+*              Compute  w := x - 1/2 * tau * (x**H * v) * v
 *
                ALPHA = -HALF*TAUI*CDOTC( I, TAU, 1, A( 1, I+1 ), 1 )
                CALL CAXPY( I, ALPHA, A( 1, I+1 ), 1, TAU, 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v'
+*                 A := A - v * w**H - w * v**H
 *
                CALL CHER2( UPLO, I, -ONE, A( 1, I+1 ), 1, TAU, 1, A,
      $                     LDA )
@@ -212,7 +212,7 @@
          A( 1, 1 ) = REAL( A( 1, 1 ) )
          DO 20 I = 1, N - 1
 *
-*           Generate elementary reflector H(i) = I - tau * v * v'
+*           Generate elementary reflector H(i) = I - tau * v * v**H
 *           to annihilate A(i+2:n,i)
 *
             ALPHA = A( I+1, I )
@@ -230,14 +230,14 @@
                CALL CHEMV( UPLO, N-I, TAUI, A( I+1, I+1 ), LDA,
      $                     A( I+1, I ), 1, ZERO, TAU( I ), 1 )
 *
-*              Compute  w := x - 1/2 * tau * (x'*v) * v
+*              Compute  w := x - 1/2 * tau * (x**H * v) * v
 *
                ALPHA = -HALF*TAUI*CDOTC( N-I, TAU( I ), 1, A( I+1, I ),
      $                 1 )
                CALL CAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v'
+*                 A := A - v * w' - w * v**H
 *
                CALL CHER2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
      $                     A( I+1, I+1 ), LDA )

@@ -48,10 +48,10 @@
 *
 *  On exit,
 *
-*              U'*A*Q = D1*( 0 R ),    V'*B*Q = D2*( 0 R ),
+*         U**T *A*Q = D1*( 0 R ),    V**T *B*Q = D2*( 0 R ),
 *
-*  where U, V and Q are orthogonal matrices, Z' denotes the transpose
-*  of Z, R is a nonsingular upper triangular matrix, and D1 and D2 are
+*  where U, V and Q are orthogonal matrices.
+*  R is a nonsingular upper triangular matrix, and D1 and D2 are
 *  ``diagonal'' matrices, which are of the following structures:
 *
 *  If M-K-L >= 0,
@@ -247,7 +247,7 @@
 *  min(L,M-K)-by-L triangular (or trapezoidal) matrix A23 and L-by-L
 *  matrix B13 to the form:
 *
-*           U1'*A13*Q1 = C1*R1; V1'*B13*Q1 = S1*R1,
+*           U1**T *A13*Q1 = C1*R1; V1**T *B13*Q1 = S1*R1,
 *
 *  where U1, V1 and Q1 are orthogonal matrix, and Z' is the transpose
 *  of Z.  C1 and S1 are diagonal matrices satisfying
@@ -367,13 +367,13 @@
                CALL DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
      $                      CSV, SNV, CSQ, SNQ )
 *
-*              Update (K+I)-th and (K+J)-th rows of matrix A: U'*A
+*              Update (K+I)-th and (K+J)-th rows of matrix A: U**T *A
 *
                IF( K+J.LE.M )
      $            CALL DROT( L, A( K+J, N-L+1 ), LDA, A( K+I, N-L+1 ),
      $                       LDA, CSU, SNU )
 *
-*              Update I-th and J-th rows of matrix B: V'*B
+*              Update I-th and J-th rows of matrix B: V**T *B
 *
                CALL DROT( L, B( J, N-L+1 ), LDB, B( I, N-L+1 ), LDB,
      $                    CSV, SNV )

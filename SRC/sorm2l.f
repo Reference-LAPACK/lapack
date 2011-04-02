@@ -21,11 +21,11 @@
 *
 *        Q * C  if SIDE = 'L' and TRANS = 'N', or
 *
-*        Q'* C  if SIDE = 'L' and TRANS = 'T', or
+*        Q**T * C  if SIDE = 'L' and TRANS = 'T', or
 *
 *        C * Q  if SIDE = 'R' and TRANS = 'N', or
 *
-*        C * Q' if SIDE = 'R' and TRANS = 'T',
+*        C * Q**T if SIDE = 'R' and TRANS = 'T',
 *
 *  where Q is a real orthogonal matrix defined as the product of k
 *  elementary reflectors
@@ -39,12 +39,12 @@
 *  =========
 *
 *  SIDE    (input) CHARACTER*1
-*          = 'L': apply Q or Q' from the Left
-*          = 'R': apply Q or Q' from the Right
+*          = 'L': apply Q or Q**T from the Left
+*          = 'R': apply Q or Q**T from the Right
 *
 *  TRANS   (input) CHARACTER*1
 *          = 'N': apply Q  (No transpose)
-*          = 'T': apply Q' (Transpose)
+*          = 'T': apply Q**T (Transpose)
 *
 *  M       (input) INTEGER
 *          The number of rows of the matrix C. M >= 0.
@@ -75,7 +75,7 @@
 *
 *  C       (input/output) REAL array, dimension (LDC,N)
 *          On entry, the m by n matrix C.
-*          On exit, C is overwritten by Q*C or Q'*C or C*Q' or C*Q.
+*          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
 *
 *  LDC     (input) INTEGER
 *          The leading dimension of the array C. LDC >= max(1,M).

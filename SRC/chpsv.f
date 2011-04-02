@@ -132,7 +132,7 @@
          RETURN
       END IF
 *
-*     Compute the factorization A = U*D*U' or A = L*D*L'.
+*     Compute the factorization A = U*D*U**H or A = L*D*L**H.
 *
       CALL CHPTRF( UPLO, N, AP, IPIV, INFO )
       IF( INFO.EQ.0 ) THEN

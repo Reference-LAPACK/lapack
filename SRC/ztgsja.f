@@ -48,10 +48,10 @@
 *
 *  On exit,
 *
-*         U'*A*Q = D1*( 0 R ),    V'*B*Q = D2*( 0 R ),
+*         U**H *A*Q = D1*( 0 R ),    V**H *B*Q = D2*( 0 R ),
 *
-*  where U, V and Q are unitary matrices, Z' denotes the conjugate
-*  transpose of Z, R is a nonsingular upper triangular matrix, and D1
+*  where U, V and Q are unitary matrices.
+*  R is a nonsingular upper triangular matrix, and D1
 *  and D2 are ``diagonal'' matrices, which are of the following
 *  structures:
 *
@@ -184,7 +184,7 @@
 *            ALPHA(K+1:M)= C, ALPHA(M+1:K+L)= 0
 *            BETA(K+1:M) = S, BETA(M+1:K+L) = 1.
 *          Furthermore, if K+L < N,
-*            ALPHA(K+L+1:N) = 0
+*            ALPHA(K+L+1:N) = 0 and
 *            BETA(K+L+1:N)  = 0.
 *
 *  U       (input/output) COMPLEX*16 array, dimension (LDU,M)
@@ -248,10 +248,10 @@
 *  min(L,M-K)-by-L triangular (or trapezoidal) matrix A23 and L-by-L
 *  matrix B13 to the form:
 *
-*           U1'*A13*Q1 = C1*R1; V1'*B13*Q1 = S1*R1,
+*           U1**H *A13*Q1 = C1*R1; V1**H *B13*Q1 = S1*R1,
 *
-*  where U1, V1 and Q1 are unitary matrix, and Z' is the conjugate
-*  transpose of Z.  C1 and S1 are diagonal matrices satisfying
+*  where U1, V1 and Q1 are unitary matrix.
+*  C1 and S1 are diagonal matrices satisfying
 *
 *                C1**2 + S1**2 = I,
 *
@@ -372,13 +372,13 @@
                CALL ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU,
      $                      CSV, SNV, CSQ, SNQ )
 *
-*              Update (K+I)-th and (K+J)-th rows of matrix A: U'*A
+*              Update (K+I)-th and (K+J)-th rows of matrix A: U**H *A
 *
                IF( K+J.LE.M )
      $            CALL ZROT( L, A( K+J, N-L+1 ), LDA, A( K+I, N-L+1 ),
      $                       LDA, CSU, DCONJG( SNU ) )
 *
-*              Update I-th and J-th rows of matrix B: V'*B
+*              Update I-th and J-th rows of matrix B: V**H *B
 *
                CALL ZROT( L, B( J, N-L+1 ), LDB, B( I, N-L+1 ), LDB,
      $                    CSV, DCONJG( SNV ) )
@@ -495,6 +495,7 @@
             END IF
 *
          ELSE
+*
             ALPHA( K+I ) = ZERO
             BETA( K+I ) = ONE
             CALL ZCOPY( L-I+1, B( I, N-L+I ), LDB, A( K+I, N-L+I ),

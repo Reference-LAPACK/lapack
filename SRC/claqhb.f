@@ -46,7 +46,7 @@
 *          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
 *
 *          On exit, if INFO = 0, the triangular factor U or L from the
-*          Cholesky factorization A = U'*U or A = L*L' of the band
+*          Cholesky factorization A = U**H *U or A = L*L**H of the band
 *          matrix A, in the same storage format as A.
 *
 *  LDAB    (input) INTEGER

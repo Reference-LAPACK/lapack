@@ -27,9 +27,9 @@
 *  The right eigenvector x and the left eigenvector y of T corresponding
 *  to an eigenvalue w are defined by:
 *  
-*     T*x = w*x,     (y**H)*T = w*(y**H)
+*     T*x = w*x,     (y**T)*T = w*(y**T)
 *  
-*  where y**H denotes the conjugate transpose of y.
+*  where y**T denotes the transpose of y.
 *  The eigenvalues are not input to this routine, but are read directly
 *  from the diagonal blocks of T.
 *  
@@ -651,7 +651,7 @@
   160          CONTINUE
 *
 *              Solve the quasi-triangular system:
-*                 (T(KI+1:N,KI+1:N) - WR)'*X = SCALE*WORK
+*                 (T(KI+1:N,KI+1:N) - WR)**T*X = SCALE*WORK
 *
                VMAX = ONE
                VCRIT = BIGNUM
@@ -688,7 +688,7 @@
      $                             DDOT( J-KI-1, T( KI+1, J ), 1,
      $                             WORK( KI+1+N ), 1 )
 *
-*                    Solve (T(J,J)-WR)'*X = WORK
+*                    Solve (T(J,J)-WR)**T*X = WORK
 *
                      CALL DLALN2( .FALSE., 1, 1, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+N ), N, WR,
@@ -778,7 +778,7 @@
 *              Complex left eigenvector.
 *
 *               Initial solve:
-*                 ((T(KI,KI)    T(KI,KI+1) )' - (WR - I* WI))*X = 0.
+*                 ((T(KI,KI)    T(KI,KI+1) )**T - (WR - I* WI))*X = 0.
 *                 ((T(KI+1,KI) T(KI+1,KI+1))                )
 *
                IF( ABS( T( KI, KI+1 ) ).GE.ABS( T( KI+1, KI ) ) ) THEN

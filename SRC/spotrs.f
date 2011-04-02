@@ -100,9 +100,9 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B where A = U'*U.
+*        Solve A*X = B where A = U**T *U.
 *
-*        Solve U'*X = B, overwriting B with X.
+*        Solve U**T *X = B, overwriting B with X.
 *
          CALL STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', N, NRHS,
      $               ONE, A, LDA, B, LDB )
@@ -113,14 +113,14 @@
      $               NRHS, ONE, A, LDA, B, LDB )
       ELSE
 *
-*        Solve A*X = B where A = L*L'.
+*        Solve A*X = B where A = L*L**T.
 *
 *        Solve L*X = B, overwriting B with X.
 *
          CALL STRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
 *
-*        Solve L'*X = B, overwriting B with X.
+*        Solve L**T *X = B, overwriting B with X.
 *
          CALL STRSM( 'Left', 'Lower', 'Transpose', 'Non-unit', N, NRHS,
      $               ONE, A, LDA, B, LDB )

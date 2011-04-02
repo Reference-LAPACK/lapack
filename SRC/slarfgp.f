@@ -19,13 +19,13 @@
 *  SLARFGP generates a real elementary reflector H of order n, such
 *  that
 *
-*        H * ( alpha ) = ( beta ),   H' * H = I.
+*        H * ( alpha ) = ( beta ),   H**T * H = I.
 *            (   x   )   (   0  )
 *
 *  where alpha and beta are scalars, beta is non-negative, and x is
 *  an (n-1)-element real vector.  H is represented in the form
 *
-*        H = I - tau * ( 1 ) * ( 1 v' ) ,
+*        H = I - tau * ( 1 ) * ( 1 v**T ) ,
 *                      ( v )
 *
 *  where tau is a real scalar and v is a real (n-1)-element

@@ -18,7 +18,7 @@
 *
 *  ZPBTRS solves a system of linear equations A*X = B with a Hermitian
 *  positive definite band matrix A using the Cholesky factorization
-*  A = U**H*U or A = L*L**H computed by ZPBTRF.
+*  A = U**H *U or A = L*L**H computed by ZPBTRF.
 *
 *  Arguments
 *  =========
@@ -40,7 +40,7 @@
 *
 *  AB      (input) COMPLEX*16 array, dimension (LDAB,N)
 *          The triangular factor U or L from the Cholesky factorization
-*          A = U**H*U or A = L*L**H of the band matrix A, stored in the
+*          A = U**H *U or A = L*L**H of the band matrix A, stored in the
 *          first KD+1 rows of the array.  The j-th column of U or L is
 *          stored in the j-th column of the array AB as follows:
 *          if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for max(1,j-kd)<=i<=j;
@@ -107,11 +107,11 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B where A = U'*U.
+*        Solve A*X = B where A = U**H *U.
 *
          DO 10 J = 1, NRHS
 *
-*           Solve U'*X = B, overwriting B with X.
+*           Solve U**H *X = B, overwriting B with X.
 *
             CALL ZTBSV( 'Upper', 'Conjugate transpose', 'Non-unit', N,
      $                  KD, AB, LDAB, B( 1, J ), 1 )
@@ -123,7 +123,7 @@
    10    CONTINUE
       ELSE
 *
-*        Solve A*X = B where A = L*L'.
+*        Solve A*X = B where A = L*L**H.
 *
          DO 20 J = 1, NRHS
 *
@@ -132,7 +132,7 @@
             CALL ZTBSV( 'Lower', 'No transpose', 'Non-unit', N, KD, AB,
      $                  LDAB, B( 1, J ), 1 )
 *
-*           Solve L'*X = B, overwriting B with X.
+*           Solve L**H *X = B, overwriting B with X.
 *
             CALL ZTBSV( 'Lower', 'Conjugate transpose', 'Non-unit', N,
      $                  KD, AB, LDAB, B( 1, J ), 1 )

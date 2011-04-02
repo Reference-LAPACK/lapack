@@ -117,9 +117,9 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B, where A = U*D*U'.
+*        Solve A*X = B, where A = U*D*U**T.
 *
-*       P' * B  
+*       P**T * B  
         K=N
         DO WHILE ( K .GE. 1 )
          IF( IPIV( K ).GT.0 ) THEN
@@ -139,11 +139,11 @@
          END IF
         END DO
 *
-*  Compute (U \P' * B) -> B    [ (U \P' * B) ]
+*  Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
         CALL CTRSM('L','U','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
-*  Compute D \ B -> B   [ D \ (U \P' * B) ]
+*  Compute D \ B -> B   [ D \ (U \P**T * B) ]
 *       
          I=N
          DO WHILE ( I .GE. 1 )
@@ -167,11 +167,11 @@
             I = I - 1
          END DO
 *
-*      Compute (U' \ B) -> B   [ U' \ (D \ (U \P' * B) ) ]
+*      Compute (U**T \ B) -> B   [ U**T \ (D \ (U \P**T * B) ) ]
 *
          CALL CTRSM('L','U','T','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
-*       P * B  [ P * (U' \ (D \ (U \P' * B) )) ]
+*       P * B  [ P * (U**T \ (D \ (U \P**T * B) )) ]
 *
         K=1
         DO WHILE ( K .LE. N )
@@ -194,9 +194,9 @@
 *
       ELSE
 *
-*        Solve A*X = B, where A = L*D*L'.
+*        Solve A*X = B, where A = L*D*L**T.
 *
-*       P' * B  
+*       P**T * B  
         K=1
         DO WHILE ( K .LE. N )
          IF( IPIV( K ).GT.0 ) THEN
@@ -216,11 +216,11 @@
          ENDIF
         END DO
 *
-*  Compute (L \P' * B) -> B    [ (L \P' * B) ]
+*  Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
         CALL CTRSM('L','L','N','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
-*  Compute D \ B -> B   [ D \ (L \P' * B) ]
+*  Compute D \ B -> B   [ D \ (L \P**T * B) ]
 *       
          I=1
          DO WHILE ( I .LE. N )
@@ -242,11 +242,11 @@
             I = I + 1
          END DO
 *
-*  Compute (L' \ B) -> B   [ L' \ (D \ (L \P' * B) ) ]
+*  Compute (L**T \ B) -> B   [ L**T \ (D \ (L \P**T * B) ) ]
 * 
         CALL CTRSM('L','L','T','U',N,NRHS,ONE,A,LDA,B,LDB)
 *
-*       P * B  [ P * (L' \ (D \ (L \P' * B) )) ]
+*       P * B  [ P * (L**T \ (D \ (L \P**T * B) )) ]
 *
         K=N
         DO WHILE ( K .GE. 1 )

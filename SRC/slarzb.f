@@ -27,12 +27,12 @@
 *  =========
 *
 *  SIDE    (input) CHARACTER*1
-*          = 'L': apply H or H' from the Left
-*          = 'R': apply H or H' from the Right
+*          = 'L': apply H or H**T from the Left
+*          = 'R': apply H or H**T from the Right
 *
 *  TRANS   (input) CHARACTER*1
 *          = 'N': apply H (No transpose)
-*          = 'C': apply H' (Transpose)
+*          = 'C': apply H**T (Transpose)
 *
 *  DIRECT  (input) CHARACTER*1
 *          Indicates how H is formed from a product of elementary
@@ -77,7 +77,7 @@
 *
 *  C       (input/output) REAL array, dimension (LDC,N)
 *          On entry, the M-by-N matrix C.
-*          On exit, C is overwritten by H*C or H'*C or C*H or C*H'.
+*          On exit, C is overwritten by H*C or H**T*C or C*H or C*H**T.
 *
 *  LDC     (input) INTEGER
 *          The leading dimension of the array C. LDC >= max(1,M).
@@ -140,16 +140,16 @@
 *
       IF( LSAME( SIDE, 'L' ) ) THEN
 *
-*        Form  H * C  or  H' * C
+*        Form  H * C  or  H**T * C
 *
-*        W( 1:n, 1:k ) = C( 1:k, 1:n )'
+*        W( 1:n, 1:k ) = C( 1:k, 1:n )**T
 *
          DO 10 J = 1, K
             CALL SCOPY( N, C( J, 1 ), LDC, WORK( 1, J ), 1 )
    10    CONTINUE
 *
 *        W( 1:n, 1:k ) = W( 1:n, 1:k ) + ...
-*                        C( m-l+1:m, 1:n )' * V( 1:k, 1:l )'
+*                        C( m-l+1:m, 1:n )**T * V( 1:k, 1:l )**T
 *
          IF( L.GT.0 )
      $      CALL SGEMM( 'Transpose', 'Transpose', N, K, L, ONE,
@@ -160,7 +160,7 @@
          CALL STRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE, T,
      $               LDT, WORK, LDWORK )
 *
-*        C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )'
+*        C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**T
 *
          DO 30 J = 1, N
             DO 20 I = 1, K
@@ -169,7 +169,7 @@
    30    CONTINUE
 *
 *        C( m-l+1:m, 1:n ) = C( m-l+1:m, 1:n ) - ...
-*                            V( 1:k, 1:l )' * W( 1:n, 1:k )'
+*                            V( 1:k, 1:l )**T * W( 1:n, 1:k )**T
 *
          IF( L.GT.0 )
      $      CALL SGEMM( 'Transpose', 'Transpose', L, N, K, -ONE, V, LDV,
@@ -177,7 +177,7 @@
 *
       ELSE IF( LSAME( SIDE, 'R' ) ) THEN
 *
-*        Form  C * H  or  C * H'
+*        Form  C * H  or  C * H**T
 *
 *        W( 1:m, 1:k ) = C( 1:m, 1:k )
 *
@@ -186,13 +186,13 @@
    40    CONTINUE
 *
 *        W( 1:m, 1:k ) = W( 1:m, 1:k ) + ...
-*                        C( 1:m, n-l+1:n ) * V( 1:k, 1:l )'
+*                        C( 1:m, n-l+1:n ) * V( 1:k, 1:l )**T
 *
          IF( L.GT.0 )
      $      CALL SGEMM( 'No transpose', 'Transpose', M, K, L, ONE,
      $                  C( 1, N-L+1 ), LDC, V, LDV, ONE, WORK, LDWORK )
 *
-*        W( 1:m, 1:k ) = W( 1:m, 1:k ) * T  or  W( 1:m, 1:k ) * T'
+*        W( 1:m, 1:k ) = W( 1:m, 1:k ) * T  or  W( 1:m, 1:k ) * T**T
 *
          CALL STRMM( 'Right', 'Lower', TRANS, 'Non-unit', M, K, ONE, T,
      $               LDT, WORK, LDWORK )

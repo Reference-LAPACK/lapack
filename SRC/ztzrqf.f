@@ -66,9 +66,9 @@
 *
 *  where
 *
-*     T( k ) = I - tau*u( k )*u( k )',   u( k ) = (   1    ),
-*                                                 (   0    )
-*                                                 ( z( k ) )
+*     T( k ) = I - tau*u( k )*u( k )**H,   u( k ) = (   1    ),
+*                                                   (   0    )
+*                                                   ( z( k ) )
 *
 *  tau is a scalar and z( k ) is an ( n - m ) element vector.
 *  tau and z( k ) are chosen to annihilate the elements of the kth row
@@ -142,7 +142,7 @@
 *
             IF( TAU( K ).NE.CZERO .AND. K.GT.1 ) THEN
 *
-*              We now perform the operation  A := A*P( k )'.
+*              We now perform the operation  A := A*P( k )**H.
 *
 *              Use the first ( k - 1 ) elements of TAU to store  a( k ),
 *              where  a( k ) consists of the first ( k - 1 ) elements of
@@ -157,7 +157,7 @@
      $                     LDA, A( K, M1 ), LDA, CONE, TAU, 1 )
 *
 *              Now form  a( k ) := a( k ) - conjg(tau)*w
-*              and       B      := B      - conjg(tau)*w*z( k )'.
+*              and       B      := B      - conjg(tau)*w*z( k )**H.
 *
                CALL ZAXPY( K-1, -DCONJG( TAU( K ) ), TAU, 1, A( 1, K ),
      $                     1 )

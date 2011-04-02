@@ -116,7 +116,7 @@
 *
          IF( UPPER ) THEN
 *
-*           Compute the Cholesky factorization A = U'*U.
+*           Compute the Cholesky factorization A = U**T*U.
 *
             DO 10 J = 1, N, NB
 *
@@ -144,7 +144,7 @@
 *
          ELSE
 *
-*           Compute the Cholesky factorization A = L*L'.
+*           Compute the Cholesky factorization A = L*L**T.
 *
             DO 20 J = 1, N, NB
 *

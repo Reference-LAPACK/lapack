@@ -20,9 +20,9 @@
 *  positive definite band matrix A.
 *
 *  The factorization has the form
-*     A = U' * U ,  if UPLO = 'U', or
-*     A = L  * L',  if UPLO = 'L',
-*  where U is an upper triangular matrix, U' is the transpose of U, and
+*     A = U**T * U ,  if UPLO = 'U', or
+*     A = L  * L**T,  if UPLO = 'L',
+*  where U is an upper triangular matrix, U**T is the transpose of U, and
 *  L is lower triangular.
 *
 *  This is the unblocked version of the algorithm, calling Level 2 BLAS.
@@ -52,7 +52,7 @@
 *          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
 *
 *          On exit, if INFO = 0, the triangular factor U or L from the
-*          Cholesky factorization A = U'*U or A = L*L' of the band
+*          Cholesky factorization A = U**T*U or A = L*L**T of the band
 *          matrix A, in the same storage format as A.
 *
 *  LDAB    (input) INTEGER
@@ -137,7 +137,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Compute the Cholesky factorization A = U'*U.
+*        Compute the Cholesky factorization A = U**T*U.
 *
          DO 10 J = 1, N
 *
@@ -161,7 +161,7 @@
    10    CONTINUE
       ELSE
 *
-*        Compute the Cholesky factorization A = L*L'.
+*        Compute the Cholesky factorization A = L*L**T.
 *
          DO 20 J = 1, N
 *

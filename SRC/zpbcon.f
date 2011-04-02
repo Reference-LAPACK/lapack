@@ -147,7 +147,7 @@
       IF( KASE.NE.0 ) THEN
          IF( UPPER ) THEN
 *
-*           Multiply by inv(U').
+*           Multiply by inv(U**H).
 *
             CALL ZLATBS( 'Upper', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, KD, AB, LDAB, WORK, SCALEL, RWORK,
@@ -166,7 +166,7 @@
      $                   KD, AB, LDAB, WORK, SCALEL, RWORK, INFO )
             NORMIN = 'Y'
 *
-*           Multiply by inv(L').
+*           Multiply by inv(L**H).
 *
             CALL ZLATBS( 'Lower', 'Conjugate transpose', 'Non-unit',
      $                   NORMIN, N, KD, AB, LDAB, WORK, SCALEU, RWORK,

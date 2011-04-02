@@ -186,9 +186,9 @@
 *
 *     Compute the GQR factorization of matrices A and B:
 *
-*            Q'*A = ( R11 ) M,    Q'*B*Z' = ( T11   T12 ) M
-*                   (  0  ) N-M             (  0    T22 ) N-M
-*                      M                     M+P-N  N-M
+*          Q**T*A = ( R11 ) M,    Q**T*B*Z**T = ( T11   T12 ) M
+*                   (  0  ) N-M                 (  0    T22 ) N-M
+*                      M                         M+P-N  N-M
 *
 *     where R11 and T22 are upper triangular, and Q and Z are
 *     orthogonal.
@@ -197,8 +197,8 @@
      $             WORK( M+NP+1 ), LWORK-M-NP, INFO )
       LOPT = WORK( M+NP+1 )
 *
-*     Update left-hand-side vector d = Q'*d = ( d1 ) M
-*                                             ( d2 ) N-M
+*     Update left-hand-side vector d = Q**T*d = ( d1 ) M
+*                                               ( d2 ) N-M
 *
       CALL SORMQR( 'Left', 'Transpose', N, 1, M, A, LDA, WORK, D,
      $             MAX( 1, N ), WORK( M+NP+1 ), LWORK-M-NP, INFO )
@@ -245,7 +245,7 @@
          CALL SCOPY( M, D, 1, X, 1 )
       END IF
 *
-*     Backward transformation y = Z'*y
+*     Backward transformation y = Z**T *y
 *
       CALL SORMRQ( 'Left', 'Transpose', P, 1, NP,
      $             B( MAX( 1, N-P+1 ), 1 ), LDB, WORK( M+1 ), Y,

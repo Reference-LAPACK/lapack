@@ -241,19 +241,19 @@
      $                   LDA, TAU( I ), T, LDT )
             IF( LEFT ) THEN
 *
-*              H or H' is applied to C(i:m,1:n)
+*              H or H**T is applied to C(i:m,1:n)
 *
                MI = M - I + 1
                IC = I
             ELSE
 *
-*              H or H' is applied to C(1:m,i:n)
+*              H or H**T is applied to C(1:m,i:n)
 *
                NI = N - I + 1
                JC = I
             END IF
 *
-*           Apply H or H'
+*           Apply H or H**T
 *
             CALL DLARFB( SIDE, TRANST, 'Forward', 'Rowwise', MI, NI, IB,
      $                   A( I, I ), LDA, T, LDT, C( IC, JC ), LDC, WORK,

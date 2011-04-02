@@ -152,7 +152,7 @@
      $                   WORK, N, INFO )
          ELSE
 *
-*           Multiply by inv(L')*inv(U').
+*           Multiply by inv(L**H)*inv(U**H).
 *
             CALL CGTTRS( 'Conjugate transpose', N, 1, DL, D, DU, DU2,
      $                   IPIV, WORK, N, INFO )

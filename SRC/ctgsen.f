@@ -28,7 +28,7 @@
 *
 *  CTGSEN reorders the generalized Schur decomposition of a complex
 *  matrix pair (A, B) (in terms of an unitary equivalence trans-
-*  formation Q' * (A, B) * Z), so that a selected cluster of eigenvalues
+*  formation Q**H * (A, B) * Z), so that a selected cluster of eigenvalues
 *  appears in the leading diagonal blocks of the pair (A,B). The leading
 *  columns of Q and Z form unitary bases of the corresponding left and
 *  right eigenspaces (deflating subspaces). (A, B) must be in
@@ -197,11 +197,11 @@
 *  U and W that move them to the top left corner of (A, B). In other
 *  words, the selected eigenvalues are the eigenvalues of (A11, B11) in
 *
-*                U'*(A, B)*W = (A11 A12) (B11 B12) n1
+*              U**H*(A, B)*W = (A11 A12) (B11 B12) n1
 *                              ( 0  A22),( 0  B22) n2
 *                                n1  n2    n1  n2
 *
-*  where N = n1+n2 and U' means the conjugate transpose of U. The first
+*  where N = n1+n2 and U**H means the conjugate transpose of U. The first
 *  n1 columns of U and W span the specified pair of left and right
 *  eigenspaces (deflating subspaces) of (A, B).
 *
@@ -209,7 +209,7 @@
 *  decomposition of a matrix pair (C, D) = Q*(A, B)*Z', then the
 *  reordered generalized Schur form of (C, D) is given by
 *
-*           (C, D) = (Q*U)*(U'*(A, B)*W)*(Z*W)',
+*           (C, D) = (Q*U)*(U**H *(A, B)*W)*(Z*W)**H,
 *
 *  and the first n1 columns of Q*U and Z*W span the corresponding
 *  deflating subspaces of (C, D) (Q and Z store Q*U and Z*W, resp.).

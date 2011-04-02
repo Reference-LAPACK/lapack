@@ -29,8 +29,8 @@
 *  Optionally, the matrices Q and Z of generalized Schur vectors are
 *  updated.
 *
-*         Q(in) * A(in) * Z(in)' = Q(out) * A(out) * Z(out)'
-*         Q(in) * B(in) * Z(in)' = Q(out) * B(out) * Z(out)'
+*         Q(in) * A(in) * Z(in)**T = Q(out) * A(out) * Z(out)**T
+*         Q(in) * B(in) * Z(in)**T = Q(out) * B(out) * Z(out)**T
 *
 *
 *  Arguments
@@ -259,7 +259,7 @@
          IF( WANDS ) THEN
 *
 *           Strong stability test:
-*             F-norm((A-QL'*S*QR, B-QL'*T*QR)) <= O(EPS*F-norm((A,B)))
+*             F-norm((A-QL**T*S*QR, B-QL**T*T*QR)) <= O(EPS*F-norm((A,B)))
 *
             CALL DLACPY( 'Full', M, M, A( J1, J1 ), LDA, WORK( M*M+1 ),
      $                   M )
@@ -334,8 +334,8 @@
 *
 *        Compute orthogonal matrix QL:
 *
-*                    QL' * LI = [ TL ]
-*                               [ 0  ]
+*                    QL**T * LI = [ TL ]
+*                                 [ 0  ]
 *        where
 *                    LI =  [      -L              ]
 *                          [ SCALE * identity(N2) ]
@@ -353,7 +353,7 @@
 *
 *        Compute orthogonal matrix RQ:
 *
-*                    IR * RQ' =   [ 0  TR],
+*                    IR * RQ**T =   [ 0  TR],
 *
 *         where IR = [ SCALE * identity(N1), R ]
 *
@@ -448,7 +448,7 @@
          IF( WANDS ) THEN
 *
 *           Strong stability test:
-*              F-norm((A-QL*S*QR', B-QL*T*QR')) <= O(EPS*F-norm((A,B)))
+*              F-norm((A-QL*S*QR**T, B-QL*T*QR**T)) <= O(EPS*F-norm((A,B)))
 *
             CALL DLACPY( 'Full', M, M, A( J1, J1 ), LDA, WORK( M*M+1 ),
      $                   M )

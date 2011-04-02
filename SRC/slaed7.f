@@ -31,9 +31,9 @@
 *  the case in which all eigenvalues and eigenvectors of a symmetric
 *  tridiagonal matrix are desired.
 *
-*    T = Q(in) ( D(in) + RHO * Z*Z' ) Q'(in) = Q(out) * D(out) * Q'(out)
+*    T = Q(in) ( D(in) + RHO * Z*Z**T ) Q**T(in) = Q(out) * D(out) * Q**T(out)
 *
-*     where Z = Q'u, u is a vector of length N with ones in the
+*     where Z = Q**Tu, u is a vector of length N with ones in the
 *     CUTPNT and CUTPNT + 1 th elements and zeros elsewhere.
 *
 *     The eigenvectors of the original matrix are stored in Q, and the

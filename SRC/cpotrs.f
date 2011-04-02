@@ -100,9 +100,9 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B where A = U'*U.
+*        Solve A*X = B where A = U**H *U.
 *
-*        Solve U'*X = B, overwriting B with X.
+*        Solve U**H *X = B, overwriting B with X.
 *
          CALL CTRSM( 'Left', 'Upper', 'Conjugate transpose', 'Non-unit',
      $               N, NRHS, ONE, A, LDA, B, LDB )
@@ -113,14 +113,14 @@
      $               NRHS, ONE, A, LDA, B, LDB )
       ELSE
 *
-*        Solve A*X = B where A = L*L'.
+*        Solve A*X = B where A = L*L**H.
 *
 *        Solve L*X = B, overwriting B with X.
 *
          CALL CTRSM( 'Left', 'Lower', 'No transpose', 'Non-unit', N,
      $               NRHS, ONE, A, LDA, B, LDB )
 *
-*        Solve L'*X = B, overwriting B with X.
+*        Solve L**H *X = B, overwriting B with X.
 *
          CALL CTRSM( 'Left', 'Lower', 'Conjugate transpose', 'Non-unit',
      $               N, NRHS, ONE, A, LDA, B, LDB )

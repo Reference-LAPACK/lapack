@@ -116,18 +116,18 @@
 *  AF      (input or output) COMPLEX*16 array, dimension (LDAF,N)
 *          If FACT = 'F', then AF is an input argument and on entry
 *          contains the triangular factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H, in the same storage
+*          factorization A = U**H *U or A = L*L**H, in the same storage
 *          format as A.  If EQUED .ne. 'N', then AF is the factored form
 *          of the equilibrated matrix diag(S)*A*diag(S).
 *
 *          If FACT = 'N', then AF is an output argument and on exit
 *          returns the triangular factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H of the original
+*          factorization A = U**H *U or A = L*L**H of the original
 *          matrix A.
 *
 *          If FACT = 'E', then AF is an output argument and on exit
 *          returns the triangular factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H of the equilibrated
+*          factorization A = U**H *U or A = L*L**H of the equilibrated
 *          matrix A (see the description of A for the form of the
 *          equilibrated matrix).
 *
@@ -319,7 +319,7 @@
 *
       IF( NOFACT .OR. EQUIL ) THEN
 *
-*        Compute the Cholesky factorization A = U'*U or A = L*L'.
+*        Compute the Cholesky factorization A = U**H *U or A = L*L**H.
 *
          CALL ZLACPY( UPLO, N, N, A, LDA, AF, LDAF )
          CALL ZPOTRF( UPLO, N, AF, LDAF, INFO )

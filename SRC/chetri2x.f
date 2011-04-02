@@ -156,7 +156,7 @@
 
       IF( UPPER ) THEN
 *
-*        invA = P * inv(U')*inv(D)*inv(U)*P'.
+*        invA = P * inv(U**H)*inv(D)*inv(U)*P'.
 *
         CALL CTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
@@ -184,9 +184,9 @@
          END IF
         END DO
 *
-*       inv(U') = (inv(U))'
+*       inv(U**H) = (inv(U))**H
 *
-*       inv(U')*inv(D)*inv(U)
+*       inv(U**H)*inv(D)*inv(U)
 *
         CUT=N
         DO WHILE (CUT .GT. 0)
@@ -311,7 +311,7 @@
 *
        END DO
 *
-*        Apply PERMUTATIONS P and P': P * inv(U')*inv(D)*inv(U) *P'
+*        Apply PERMUTATIONS P and P': P * inv(U**H)*inv(D)*inv(U) *P'
 *  
             I=1
             DO WHILE ( I .LE. N )
@@ -333,7 +333,7 @@
 *
 *        LOWER...
 *
-*        invA = P * inv(U')*inv(D)*inv(U)*P'.
+*        invA = P * inv(U**H)*inv(D)*inv(U)*P'.
 *
          CALL CTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
@@ -361,9 +361,9 @@
          END IF
         END DO
 *
-*       inv(U') = (inv(U))'
+*       inv(U**H) = (inv(U))**H
 *
-*       inv(U')*inv(D)*inv(U)
+*       inv(U**H)*inv(D)*inv(U)
 *
         CUT=0
         DO WHILE (CUT .LT. N)
@@ -494,7 +494,7 @@
            CUT=CUT+NNB
        END DO
 *
-*        Apply PERMUTATIONS P and P': P * inv(U')*inv(D)*inv(U) *P'
+*        Apply PERMUTATIONS P and P': P * inv(U**H)*inv(D)*inv(U) *P'
 * 
             I=N
             DO WHILE ( I .GE. 1 )

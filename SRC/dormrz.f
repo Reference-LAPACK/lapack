@@ -264,19 +264,19 @@
 *
             IF( LEFT ) THEN
 *
-*              H or H' is applied to C(i:m,1:n)
+*              H or H**T is applied to C(i:m,1:n)
 *
                MI = M - I + 1
                IC = I
             ELSE
 *
-*              H or H' is applied to C(1:m,i:n)
+*              H or H**T is applied to C(1:m,i:n)
 *
                NI = N - I + 1
                JC = I
             END IF
 *
-*           Apply H or H'
+*           Apply H or H**T
 *
             CALL DLARZB( SIDE, TRANST, 'Backward', 'Rowwise', MI, NI,
      $                   IB, L, A( I, JA ), LDA, T, LDT, C( IC, JC ),

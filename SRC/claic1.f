@@ -41,7 +41,7 @@
 *      diag(sest*sest, 0) + [alpha  gamma] * [ conjg(alpha) ]
 *                                            [ conjg(gamma) ]
 *
-*  where  alpha =  conjg(x)'*w.
+*  where  alpha =  x**H*w.
 *
 *  Arguments
 *  =========

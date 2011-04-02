@@ -254,7 +254,7 @@
 *
       IF( NOFACT ) THEN
 *
-*        Compute the factorization A = U*D*U' or A = L*D*L'.
+*        Compute the factorization A = U*D*U**T or A = L*D*L**T.
 *
          CALL DLACPY( UPLO, N, N, A, LDA, AF, LDAF )
          CALL DSYTRF( UPLO, N, AF, LDAF, IPIV, WORK, LWORK, INFO )

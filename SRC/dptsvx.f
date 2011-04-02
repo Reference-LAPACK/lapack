@@ -188,7 +188,7 @@
 *
       IF( NOFACT ) THEN
 *
-*        Compute the L*D*L' (or U'*D*U) factorization of A.
+*        Compute the L*D*L**T (or U**T*D*U) factorization of A.
 *
          CALL DCOPY( N, D, 1, DF, 1 )
          IF( N.GT.1 )

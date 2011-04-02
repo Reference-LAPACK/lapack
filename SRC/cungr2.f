@@ -19,7 +19,7 @@
 *  which is defined as the last m rows of a product of k elementary
 *  reflectors of order n
 *
-*        Q  =  H(1)' H(2)' . . . H(k)'
+*        Q  =  H(1)**H H(2)**H . . . H(k)**H
 *
 *  as returned by CGERQF.
 *
@@ -112,7 +112,7 @@
       DO 40 I = 1, K
          II = M - K + I
 *
-*        Apply H(i)' to A(1:m-k+i,1:n-k+i) from the right
+*        Apply H(i)**H to A(1:m-k+i,1:n-k+i) from the right
 *
          CALL CLACGV( N-M+II-1, A( II, 1 ), LDA )
          A( II, N-M+II ) = ONE

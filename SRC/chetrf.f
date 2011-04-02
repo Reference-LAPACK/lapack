@@ -82,7 +82,7 @@
 *  Further Details
 *  ===============
 *
-*  If UPLO = 'U', then A = U*D*U', where
+*  If UPLO = 'U', then A = U*D*U**H, where
 *     U = P(n)*U(n)* ... *P(k)U(k)* ...,
 *  i.e., U is a product of terms P(k)*U(k), where k decreases from n to
 *  1 in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1
@@ -99,7 +99,7 @@
 *  If s = 2, the upper triangle of D(k) overwrites A(k-1,k-1), A(k-1,k),
 *  and A(k,k), and v overwrites A(1:k-2,k-1:k).
 *
-*  If UPLO = 'L', then A = L*D*L', where
+*  If UPLO = 'L', then A = L*D*L**H, where
 *     L = P(1)*L(1)* ... *P(k)*L(k)* ...,
 *  i.e., L is a product of terms P(k)*L(k), where k increases from 1 to
 *  n in steps of 1 or 2, and D is a block diagonal matrix with 1-by-1
@@ -182,7 +182,7 @@
 *
       IF( UPPER ) THEN
 *
-*        Factorize A as U*D*U' using the upper triangle of A
+*        Factorize A as U*D*U**H using the upper triangle of A
 *
 *        K is the main loop index, decreasing from N to 1 in steps of
 *        KB, where KB is the number of columns factorized by CLAHEF;
@@ -222,7 +222,7 @@
 *
       ELSE
 *
-*        Factorize A as L*D*L' using the lower triangle of A
+*        Factorize A as L*D*L**H using the lower triangle of A
 *
 *        K is the main loop index, increasing from 1 to N in steps of
 *        KB, where KB is the number of columns factorized by CLAHEF;

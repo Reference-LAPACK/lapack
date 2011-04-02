@@ -75,7 +75,7 @@
 *
 *  Each H(i) has the form
 *
-*     H(i) = I - tau * v * v'
+*     H(i) = I - tau * v * v**T
 *
 *  where tau is a real/complex scalar, and v is a real/complex vector
 *  with v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in

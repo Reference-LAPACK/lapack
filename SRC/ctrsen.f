@@ -119,16 +119,16 @@
 *  transformation Z to move them to the top left corner of T. In other
 *  words, the selected eigenvalues are the eigenvalues of T11 in:
 *
-*                Z'*T*Z = ( T11 T12 ) n1
+*          Z**H * T * Z = ( T11 T12 ) n1
 *                         (  0  T22 ) n2
 *                            n1  n2
 *
-*  where N = n1+n2 and Z' means the conjugate transpose of Z. The first
+*  where N = n1+n2. The first
 *  n1 columns of Z span the specified invariant subspace of T.
 *
 *  If T has been obtained from the Schur factorization of a matrix
-*  A = Q*T*Q', then the reordered Schur factorization of A is given by
-*  A = (Q*Z)*(Z'*T*Z)*(Q*Z)', and the first n1 columns of Q*Z span the
+*  A = Q*T*Q**H, then the reordered Schur factorization of A is given by
+*  A = (Q*Z)*(Z**H*T*Z)*(Q*Z)**H, and the first n1 columns of Q*Z span the
 *  corresponding invariant subspace of A.
 *
 *  The reciprocal condition number of the average of the eigenvalues of
@@ -331,7 +331,7 @@
      $                      IERR )
             ELSE
 *
-*              Solve T11'*R - R*T22' = scale*X.
+*              Solve T11**H*R - R*T22**H = scale*X.
 *
                CALL CTRSYL( 'C', 'C', -1, N1, N2, T, LDT,
      $                      T( N1+1, N1+1 ), LDT, WORK, N1, SCALE,

@@ -21,7 +21,7 @@
 *  DLARF applies a real elementary reflector H to a real m by n matrix
 *  C, from either the left or the right. H is represented in the form
 *
-*        H = I - tau * v * v'
+*        H = I - tau * v * v**T
 *
 *  where tau is a real scalar and v is a real vector.
 *
@@ -121,12 +121,12 @@
 *
          IF( LASTV.GT.0 ) THEN
 *
-*           w(1:lastc,1) := C(1:lastv,1:lastc)' * v(1:lastv,1)
+*           w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1)
 *
             CALL DGEMV( 'Transpose', LASTV, LASTC, ONE, C, LDC, V, INCV,
      $           ZERO, WORK, 1 )
 *
-*           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)'
+*           C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T
 *
             CALL DGER( LASTV, LASTC, -TAU, V, INCV, WORK, 1, C, LDC )
          END IF
@@ -141,7 +141,7 @@
             CALL DGEMV( 'No transpose', LASTC, LASTV, ONE, C, LDC,
      $           V, INCV, ZERO, WORK, 1 )
 *
-*           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)'
+*           C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T
 *
             CALL DGER( LASTC, LASTV, -TAU, WORK, 1, V, INCV, C, LDC )
          END IF

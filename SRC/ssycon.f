@@ -148,7 +148,7 @@
       CALL SLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
-*        Multiply by inv(L*D*L') or inv(U*D*U').
+*        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
 *
          CALL SSYTRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
          GO TO 30

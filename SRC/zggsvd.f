@@ -24,11 +24,11 @@
 *  ZGGSVD computes the generalized singular value decomposition (GSVD)
 *  of an M-by-N complex matrix A and P-by-N complex matrix B:
 *
-*        U'*A*Q = D1*( 0 R ),    V'*B*Q = D2*( 0 R )
+*        U**H*A*Q = D1*( 0 R ),    V**H*B*Q = D2*( 0 R )
 *
-*  where U, V and Q are unitary matrices, and Z' means the conjugate
-*  transpose of Z.  Let K+L = the effective numerical rank of the
-*  matrix (A',B')', then R is a (K+L)-by-(K+L) nonsingular upper
+*  where U, V and Q are unitary matrices.
+*  Let K+L = the effective numerical rank of the
+*  matrix (A**H,B**H)**H, then R is a (K+L)-by-(K+L) nonsingular upper
 *  triangular matrix, D1 and D2 are M-by-(K+L) and P-by-(K+L) "diagonal"
 *  matrices and of the following structures, respectively:
 *
@@ -85,13 +85,13 @@
 *
 *  In particular, if B is an N-by-N nonsingular matrix, then the GSVD of
 *  A and B implicitly gives the SVD of A*inv(B):
-*                       A*inv(B) = U*(D1*inv(D2))*V'.
-*  If ( A',B')' has orthnormal columns, then the GSVD of A and B is also
+*                       A*inv(B) = U*(D1*inv(D2))*V**H.
+*  If ( A**H,B**H)**H has orthnormal columns, then the GSVD of A and B is also
 *  equal to the CS decomposition of A and B. Furthermore, the GSVD can
 *  be used to derive the solution of the eigenvalue problem:
-*                       A'*A x = lambda* B'*B x.
+*                       A**H*A x = lambda* B**H*B x.
 *  In some literature, the GSVD of A and B is presented in the form
-*                   U'*A*X = ( 0 D1 ),   V'*B*X = ( 0 D2 )
+*                   U**H*A*X = ( 0 D1 ),   V**H*B*X = ( 0 D2 )
 *  where U and V are orthogonal and X is nonsingular, and D1 and D2 are
 *  ``diagonal''.  The former GSVD form can be converted to the latter
 *  form by taking the nonsingular matrix X as
@@ -127,7 +127,7 @@
 *  L       (output) INTEGER
 *          On exit, K and L specify the dimension of the subblocks
 *          described in Purpose.
-*          K + L = effective numerical rank of (A',B')'.
+*          K + L = effective numerical rank of (A**H,B**H)**H.
 *
 *  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
 *          On entry, the M-by-N matrix A.
@@ -209,7 +209,7 @@
 *  TOLA    DOUBLE PRECISION
 *  TOLB    DOUBLE PRECISION
 *          TOLA and TOLB are the thresholds to determine the effective
-*          rank of (A',B')'. Generally, they are set to
+*          rank of (A**H,B**H)**H. Generally, they are set to
 *                   TOLA = MAX(M,N)*norm(A)*MAZHEPS,
 *                   TOLB = MAX(P,N)*norm(B)*MAZHEPS.
 *          The size of TOLA and TOLB may affect the size of backward
