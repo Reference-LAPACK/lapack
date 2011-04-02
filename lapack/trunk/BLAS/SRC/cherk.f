@@ -13,11 +13,11 @@
 *
 *  CHERK  performs one of the hermitian rank k operations
 *
-*     C := alpha*A*conjg( A' ) + beta*C,
+*     C := alpha*A*A**H + beta*C,
 *
 *  or
 *
-*     C := alpha*conjg( A' )*A + beta*C,
+*     C := alpha*A**H*A + beta*C,
 *
 *  where  alpha and beta  are  real scalars,  C is an  n by n  hermitian
 *  matrix and  A  is an  n by k  matrix in the  first case and a  k by n
@@ -43,9 +43,9 @@
 *           On entry,  TRANS  specifies the operation to be performed as
 *           follows:
 *
-*              TRANS = 'N' or 'n'   C := alpha*A*conjg( A' ) + beta*C.
+*              TRANS = 'N' or 'n'   C := alpha*A*A**H + beta*C.
 *
-*              TRANS = 'C' or 'c'   C := alpha*conjg( A' )*A + beta*C.
+*              TRANS = 'C' or 'c'   C := alpha*A**H*A + beta*C.
 *
 *           Unchanged on exit.
 *
@@ -219,7 +219,7 @@
 *
       IF (LSAME(TRANS,'N')) THEN
 *
-*        Form  C := alpha*A*conjg( A' ) + beta*C.
+*        Form  C := alpha*A*A**H + beta*C.
 *
           IF (UPPER) THEN
               DO 130 J = 1,N
@@ -272,7 +272,7 @@
           END IF
       ELSE
 *
-*        Form  C := alpha*conjg( A' )*A + beta*C.
+*        Form  C := alpha*A**H*A + beta*C.
 *
           IF (UPPER) THEN
               DO 220 J = 1,N

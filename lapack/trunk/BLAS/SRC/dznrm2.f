@@ -12,7 +12,7 @@
 *  DZNRM2 returns the euclidean norm of a vector via the function
 *  name, so that
 *
-*     DZNRM2 := sqrt( conjg( x' )*x )
+*     DZNRM2 := sqrt( x**H*x )
 *
 *  Further Details
 *  ===============

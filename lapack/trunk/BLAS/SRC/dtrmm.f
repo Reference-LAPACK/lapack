@@ -18,7 +18,7 @@
 *  where  alpha  is a scalar,  B  is an m by n matrix,  A  is a unit, or
 *  non-unit,  upper or lower triangular matrix  and  op( A )  is one  of
 *
-*     op( A ) = A   or   op( A ) = A'.
+*     op( A ) = A   or   op( A ) = A**T.
 *
 *  Arguments
 *  ==========
@@ -49,9 +49,9 @@
 *
 *              TRANSA = 'N' or 'n'   op( A ) = A.
 *
-*              TRANSA = 'T' or 't'   op( A ) = A'.
+*              TRANSA = 'T' or 't'   op( A ) = A**T.
 *
-*              TRANSA = 'C' or 'c'   op( A ) = A'.
+*              TRANSA = 'C' or 'c'   op( A ) = A**T.
 *
 *           Unchanged on exit.
 *
@@ -234,7 +234,7 @@
               END IF
           ELSE
 *
-*           Form  B := alpha*A'*B.
+*           Form  B := alpha*A**T*B.
 *
               IF (UPPER) THEN
                   DO 110 J = 1,N
@@ -300,7 +300,7 @@
               END IF
           ELSE
 *
-*           Form  B := alpha*B*A'.
+*           Form  B := alpha*B*A**T.
 *
               IF (UPPER) THEN
                   DO 260 K = 1,N

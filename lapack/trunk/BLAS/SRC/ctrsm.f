@@ -18,7 +18,7 @@
 *  where alpha is a scalar, X and B are m by n matrices, A is a unit, or
 *  non-unit,  upper or lower triangular matrix  and  op( A )  is one  of
 *
-*     op( A ) = A   or   op( A ) = A'   or   op( A ) = conjg( A' ).
+*     op( A ) = A   or   op( A ) = A**T   or   op( A ) = A**H.
 *
 *  The matrix X is overwritten on B.
 *
@@ -51,9 +51,9 @@
 *
 *              TRANSA = 'N' or 'n'   op( A ) = A.
 *
-*              TRANSA = 'T' or 't'   op( A ) = A'.
+*              TRANSA = 'T' or 't'   op( A ) = A**T.
 *
-*              TRANSA = 'C' or 'c'   op( A ) = conjg( A' ).
+*              TRANSA = 'C' or 'c'   op( A ) = A**H.
 *
 *           Unchanged on exit.
 *
@@ -245,8 +245,8 @@
               END IF
           ELSE
 *
-*           Form  B := alpha*inv( A' )*B
-*           or    B := alpha*inv( conjg( A' ) )*B.
+*           Form  B := alpha*inv( A**T )*B
+*           or    B := alpha*inv( A**H )*B.
 *
               IF (UPPER) THEN
                   DO 140 J = 1,N
@@ -336,8 +336,8 @@
               END IF
           ELSE
 *
-*           Form  B := alpha*B*inv( A' )
-*           or    B := alpha*B*inv( conjg( A' ) ).
+*           Form  B := alpha*B*inv( A**T )
+*           or    B := alpha*B*inv( A**H ).
 *
               IF (UPPER) THEN
                   DO 330 K = N,1,-1

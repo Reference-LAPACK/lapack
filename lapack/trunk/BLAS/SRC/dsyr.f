@@ -13,7 +13,7 @@
 *
 *  DSYR   performs the symmetric rank 1 operation
 *
-*     A := alpha*x*x' + A,
+*     A := alpha*x*x**T + A,
 *
 *  where alpha is a real scalar, x is an n element vector and A is an
 *  n by n symmetric matrix.

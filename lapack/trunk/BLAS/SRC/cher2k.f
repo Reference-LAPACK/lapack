@@ -14,11 +14,11 @@
 *
 *  CHER2K  performs one of the hermitian rank 2k operations
 *
-*     C := alpha*A*conjg( B' ) + conjg( alpha )*B*conjg( A' ) + beta*C,
+*     C := alpha*A*B**H + conjg( alpha )*B*A**H + beta*C,
 *
 *  or
 *
-*     C := alpha*conjg( A' )*B + conjg( alpha )*conjg( B' )*A + beta*C,
+*     C := alpha*A**H*B + conjg( alpha )*B**H*A + beta*C,
 *
 *  where  alpha and beta  are scalars with  beta  real,  C is an  n by n
 *  hermitian matrix and  A and B  are  n by k matrices in the first case
@@ -44,12 +44,12 @@
 *           On entry,  TRANS  specifies the operation to be performed as
 *           follows:
 *
-*              TRANS = 'N' or 'n'    C := alpha*A*conjg( B' )          +
-*                                         conjg( alpha )*B*conjg( A' ) +
+*              TRANS = 'N' or 'n'    C := alpha*A*B**H          +
+*                                         conjg( alpha )*B*A**H +
 *                                         beta*C.
 *
-*              TRANS = 'C' or 'c'    C := alpha*conjg( A' )*B          +
-*                                         conjg( alpha )*conjg( B' )*A +
+*              TRANS = 'C' or 'c'    C := alpha*A**H*B          +
+*                                         conjg( alpha )*B**H*A +
 *                                         beta*C.
 *
 *           Unchanged on exit.
@@ -242,7 +242,7 @@
 *
       IF (LSAME(TRANS,'N')) THEN
 *
-*        Form  C := alpha*A*conjg( B' ) + conjg( alpha )*B*conjg( A' ) +
+*        Form  C := alpha*A*B**H + conjg( alpha )*B*A**H +
 *                   C.
 *
           IF (UPPER) THEN
@@ -302,7 +302,7 @@
           END IF
       ELSE
 *
-*        Form  C := alpha*conjg( A' )*B + conjg( alpha )*conjg( B' )*A +
+*        Form  C := alpha*A**H*B + conjg( alpha )*B**H*A +
 *                   C.
 *
           IF (UPPER) THEN

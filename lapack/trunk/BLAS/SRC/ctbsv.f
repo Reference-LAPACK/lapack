@@ -12,7 +12,7 @@
 *
 *  CTBSV  solves one of the systems of equations
 *
-*     A*x = b,   or   A'*x = b,   or   conjg( A' )*x = b,
+*     A*x = b,   or   A**T*x = b,   or   A**H*x = b,
 *
 *  where b and x are n element vectors and A is an n by n unit, or
 *  non-unit, upper or lower triangular band matrix, with ( k + 1 )
@@ -40,9 +40,9 @@
 *
 *              TRANS = 'N' or 'n'   A*x = b.
 *
-*              TRANS = 'T' or 't'   A'*x = b.
+*              TRANS = 'T' or 't'   A**T*x = b.
 *
-*              TRANS = 'C' or 'c'   conjg( A' )*x = b.
+*              TRANS = 'C' or 'c'   A**H*x = b.
 *
 *           Unchanged on exit.
 *
@@ -272,7 +272,7 @@
           END IF
       ELSE
 *
-*        Form  x := inv( A' )*x  or  x := inv( conjg( A') )*x.
+*        Form  x := inv( A**T )*x  or  x := inv( A**H )*x.
 *
           IF (LSAME(UPLO,'U')) THEN
               KPLUS1 = K + 1

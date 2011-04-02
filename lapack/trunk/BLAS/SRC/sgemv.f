@@ -13,7 +13,7 @@
 *
 *  SGEMV  performs one of the matrix-vector operations
 *
-*     y := alpha*A*x + beta*y,   or   y := alpha*A'*x + beta*y,
+*     y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
 *
 *  where alpha and beta are scalars, x and y are vectors and A is an
 *  m by n matrix.
@@ -27,9 +27,9 @@
 *
 *              TRANS = 'N' or 'n'   y := alpha*A*x + beta*y.
 *
-*              TRANS = 'T' or 't'   y := alpha*A'*x + beta*y.
+*              TRANS = 'T' or 't'   y := alpha*A**T*x + beta*y.
 *
-*              TRANS = 'C' or 'c'   y := alpha*A'*x + beta*y.
+*              TRANS = 'C' or 'c'   y := alpha*A**T*x + beta*y.
 *
 *           Unchanged on exit.
 *
@@ -232,7 +232,7 @@
           END IF
       ELSE
 *
-*        Form  y := alpha*A'*x + y.
+*        Form  y := alpha*A**T*x + y.
 *
           JY = KY
           IF (INCX.EQ.1) THEN

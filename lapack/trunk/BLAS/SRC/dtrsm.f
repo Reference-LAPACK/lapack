@@ -18,7 +18,7 @@
 *  where alpha is a scalar, X and B are m by n matrices, A is a unit, or
 *  non-unit,  upper or lower triangular matrix  and  op( A )  is one  of
 *
-*     op( A ) = A   or   op( A ) = A'.
+*     op( A ) = A   or   op( A ) = A**T.
 *
 *  The matrix X is overwritten on B.
 *
@@ -51,9 +51,9 @@
 *
 *              TRANSA = 'N' or 'n'   op( A ) = A.
 *
-*              TRANSA = 'T' or 't'   op( A ) = A'.
+*              TRANSA = 'T' or 't'   op( A ) = A**T.
 *
-*              TRANSA = 'C' or 'c'   op( A ) = A'.
+*              TRANSA = 'C' or 'c'   op( A ) = A**T.
 *
 *           Unchanged on exit.
 *
@@ -243,7 +243,7 @@
               END IF
           ELSE
 *
-*           Form  B := alpha*inv( A' )*B.
+*           Form  B := alpha*inv( A**T )*B.
 *
               IF (UPPER) THEN
                   DO 130 J = 1,N
@@ -319,7 +319,7 @@
               END IF
           ELSE
 *
-*           Form  B := alpha*B*inv( A' ).
+*           Form  B := alpha*B*inv( A**T ).
 *
               IF (UPPER) THEN
                   DO 310 K = N,1,-1
