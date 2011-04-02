@@ -13,7 +13,7 @@
 *
 *  ZHPR    performs the hermitian rank 1 operation
 *
-*     A := alpha*x*conjg( x' ) + A,
+*     A := alpha*x*x**H + A,
 *
 *  where alpha is a real scalar, x is an n element vector and A is an
 *  n by n hermitian matrix, supplied in packed form.

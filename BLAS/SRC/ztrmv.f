@@ -12,7 +12,7 @@
 *
 *  ZTRMV  performs one of the matrix-vector operations
 *
-*     x := A*x,   or   x := A'*x,   or   x := conjg( A' )*x,
+*     x := A*x,   or   x := A**T*x,   or   x := A**H*x,
 *
 *  where x is an n element vector and  A is an n by n unit, or non-unit,
 *  upper or lower triangular matrix.
@@ -36,9 +36,9 @@
 *
 *              TRANS = 'N' or 'n'   x := A*x.
 *
-*              TRANS = 'T' or 't'   x := A'*x.
+*              TRANS = 'T' or 't'   x := A**T*x.
 *
-*              TRANS = 'C' or 'c'   x := conjg( A' )*x.
+*              TRANS = 'C' or 'c'   x := A**H*x.
 *
 *           Unchanged on exit.
 *
@@ -223,7 +223,7 @@
           END IF
       ELSE
 *
-*        Form  x := A'*x  or  x := conjg( A' )*x.
+*        Form  x := A**T*x  or  x := A**H*x.
 *
           IF (LSAME(UPLO,'U')) THEN
               IF (INCX.EQ.1) THEN

@@ -17,7 +17,7 @@
 *
 *  where  op( X ) is one of
 *
-*     op( X ) = X   or   op( X ) = X'   or   op( X ) = conjg( X' ),
+*     op( X ) = X   or   op( X ) = X**T   or   op( X ) = X**H,
 *
 *  alpha and beta are scalars, and A, B and C are matrices, with op( A )
 *  an m by k matrix,  op( B )  a  k by n matrix and  C an m by n matrix.
@@ -31,9 +31,9 @@
 *
 *              TRANSA = 'N' or 'n',  op( A ) = A.
 *
-*              TRANSA = 'T' or 't',  op( A ) = A'.
+*              TRANSA = 'T' or 't',  op( A ) = A**T.
 *
-*              TRANSA = 'C' or 'c',  op( A ) = conjg( A' ).
+*              TRANSA = 'C' or 'c',  op( A ) = A**H.
 *
 *           Unchanged on exit.
 *
@@ -43,9 +43,9 @@
 *
 *              TRANSB = 'N' or 'n',  op( B ) = B.
 *
-*              TRANSB = 'T' or 't',  op( B ) = B'.
+*              TRANSB = 'T' or 't',  op( B ) = B**T.
 *
-*              TRANSB = 'C' or 'c',  op( B ) = conjg( B' ).
+*              TRANSB = 'C' or 'c',  op( B ) = B**H.
 *
 *           Unchanged on exit.
 *
@@ -255,7 +255,7 @@
    90         CONTINUE
           ELSE IF (CONJA) THEN
 *
-*           Form  C := alpha*conjg( A' )*B + beta*C.
+*           Form  C := alpha*A**H*B + beta*C.
 *
               DO 120 J = 1,N
                   DO 110 I = 1,M
@@ -272,7 +272,7 @@
   120         CONTINUE
           ELSE
 *
-*           Form  C := alpha*A'*B + beta*C
+*           Form  C := alpha*A**T*B + beta*C
 *
               DO 150 J = 1,N
                   DO 140 I = 1,M
@@ -291,7 +291,7 @@
       ELSE IF (NOTA) THEN
           IF (CONJB) THEN
 *
-*           Form  C := alpha*A*conjg( B' ) + beta*C.
+*           Form  C := alpha*A*B**H + beta*C.
 *
               DO 200 J = 1,N
                   IF (BETA.EQ.ZERO) THEN
@@ -314,7 +314,7 @@
   200         CONTINUE
           ELSE
 *
-*           Form  C := alpha*A*B'          + beta*C
+*           Form  C := alpha*A*B**T          + beta*C
 *
               DO 250 J = 1,N
                   IF (BETA.EQ.ZERO) THEN
@@ -339,7 +339,7 @@
       ELSE IF (CONJA) THEN
           IF (CONJB) THEN
 *
-*           Form  C := alpha*conjg( A' )*conjg( B' ) + beta*C.
+*           Form  C := alpha*A**H*B**H + beta*C.
 *
               DO 280 J = 1,N
                   DO 270 I = 1,M
@@ -356,7 +356,7 @@
   280         CONTINUE
           ELSE
 *
-*           Form  C := alpha*conjg( A' )*B' + beta*C
+*           Form  C := alpha*A**H*B**T + beta*C
 *
               DO 310 J = 1,N
                   DO 300 I = 1,M
@@ -375,7 +375,7 @@
       ELSE
           IF (CONJB) THEN
 *
-*           Form  C := alpha*A'*conjg( B' ) + beta*C
+*           Form  C := alpha*A**T*B**H + beta*C
 *
               DO 340 J = 1,N
                   DO 330 I = 1,M
@@ -392,7 +392,7 @@
   340         CONTINUE
           ELSE
 *
-*           Form  C := alpha*A'*B' + beta*C
+*           Form  C := alpha*A**T*B**T + beta*C
 *
               DO 370 J = 1,N
                   DO 360 I = 1,M

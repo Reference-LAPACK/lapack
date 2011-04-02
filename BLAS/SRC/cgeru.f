@@ -12,7 +12,7 @@
 *
 *  CGERU  performs the rank 1 operation
 *
-*     A := alpha*x*y' + A,
+*     A := alpha*x*y**T + A,
 *
 *  where alpha is a scalar, x is an m element vector, y is an n element
 *  vector and A is an m by n matrix.

@@ -13,7 +13,7 @@
 *
 *  ZHPR2  performs the hermitian rank 2 operation
 *
-*     A := alpha*x*conjg( y' ) + conjg( alpha )*y*conjg( x' ) + A,
+*     A := alpha*x*y**H + conjg( alpha )*y*x**H + A,
 *
 *  where alpha is a scalar, x and y are n element vectors and A is an
 *  n by n hermitian matrix, supplied in packed form.

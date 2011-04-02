@@ -12,7 +12,7 @@
 *  SCNRM2 returns the euclidean norm of a vector via the function
 *  name, so that
 *
-*     SCNRM2 := sqrt( conjg( x' )*x )
+*     SCNRM2 := sqrt( x**H*x )
 *
 *  Further Details
 *  ===============

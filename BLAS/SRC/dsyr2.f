@@ -13,7 +13,7 @@
 *
 *  DSYR2  performs the symmetric rank 2 operation
 *
-*     A := alpha*x*y' + alpha*y*x' + A,
+*     A := alpha*x*y**T + alpha*y*x**T + A,
 *
 *  where alpha is a scalar, x and y are n element vectors and A is an n
 *  by n symmetric matrix.

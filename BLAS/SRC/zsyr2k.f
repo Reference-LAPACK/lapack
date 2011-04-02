@@ -13,11 +13,11 @@
 *
 *  ZSYR2K  performs one of the symmetric rank 2k operations
 *
-*     C := alpha*A*B' + alpha*B*A' + beta*C,
+*     C := alpha*A*B**T + alpha*B*A**T + beta*C,
 *
 *  or
 *
-*     C := alpha*A'*B + alpha*B'*A + beta*C,
+*     C := alpha*A**T*B + alpha*B**T*A + beta*C,
 *
 *  where  alpha and beta  are scalars,  C is an  n by n symmetric matrix
 *  and  A and B  are  n by k  matrices  in the  first  case  and  k by n
@@ -43,10 +43,10 @@
 *           On entry,  TRANS  specifies the operation to be performed as
 *           follows:
 *
-*              TRANS = 'N' or 'n'    C := alpha*A*B' + alpha*B*A' +
+*              TRANS = 'N' or 'n'    C := alpha*A*B**T + alpha*B*A**T +
 *                                         beta*C.
 *
-*              TRANS = 'T' or 't'    C := alpha*A'*B + alpha*B'*A +
+*              TRANS = 'T' or 't'    C := alpha*A**T*B + alpha*B**T*A +
 *                                         beta*C.
 *
 *           Unchanged on exit.
@@ -231,7 +231,7 @@
 *
       IF (LSAME(TRANS,'N')) THEN
 *
-*        Form  C := alpha*A*B' + alpha*B*A' + C.
+*        Form  C := alpha*A*B**T + alpha*B*A**T + C.
 *
           IF (UPPER) THEN
               DO 130 J = 1,N
@@ -280,7 +280,7 @@
           END IF
       ELSE
 *
-*        Form  C := alpha*A'*B + alpha*B'*A + C.
+*        Form  C := alpha*A**T*B + alpha*B**T*A + C.
 *
           IF (UPPER) THEN
               DO 210 J = 1,N

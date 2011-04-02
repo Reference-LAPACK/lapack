@@ -13,9 +13,9 @@
 *
 *  ZGBMV  performs one of the matrix-vector operations
 *
-*     y := alpha*A*x + beta*y,   or   y := alpha*A'*x + beta*y,   or
+*     y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,   or
 *
-*     y := alpha*conjg( A' )*x + beta*y,
+*     y := alpha*A**H*x + beta*y,
 *
 *  where alpha and beta are scalars, x and y are vectors and A is an
 *  m by n band matrix, with kl sub-diagonals and ku super-diagonals.
@@ -29,9 +29,9 @@
 *
 *              TRANS = 'N' or 'n'   y := alpha*A*x + beta*y.
 *
-*              TRANS = 'T' or 't'   y := alpha*A'*x + beta*y.
+*              TRANS = 'T' or 't'   y := alpha*A**T*x + beta*y.
 *
-*              TRANS = 'C' or 'c'   y := alpha*conjg( A' )*x + beta*y.
+*              TRANS = 'C' or 'c'   y := alpha*A**H*x + beta*y.
 *
 *           Unchanged on exit.
 *
@@ -274,7 +274,7 @@
           END IF
       ELSE
 *
-*        Form  y := alpha*A'*x + y  or  y := alpha*conjg( A' )*x + y.
+*        Form  y := alpha*A**T*x + y  or  y := alpha*A**H*x + y.
 *
           JY = KY
           IF (INCX.EQ.1) THEN

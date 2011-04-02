@@ -13,11 +13,11 @@
 *
 *  DSYRK  performs one of the symmetric rank k operations
 *
-*     C := alpha*A*A' + beta*C,
+*     C := alpha*A*A**T + beta*C,
 *
 *  or
 *
-*     C := alpha*A'*A + beta*C,
+*     C := alpha*A**T*A + beta*C,
 *
 *  where  alpha and beta  are scalars, C is an  n by n  symmetric matrix
 *  and  A  is an  n by k  matrix in the first case and a  k by n  matrix
@@ -43,11 +43,11 @@
 *           On entry,  TRANS  specifies the operation to be performed as
 *           follows:
 *
-*              TRANS = 'N' or 'n'   C := alpha*A*A' + beta*C.
+*              TRANS = 'N' or 'n'   C := alpha*A*A**T + beta*C.
 *
-*              TRANS = 'T' or 't'   C := alpha*A'*A + beta*C.
+*              TRANS = 'T' or 't'   C := alpha*A**T*A + beta*C.
 *
-*              TRANS = 'C' or 'c'   C := alpha*A'*A + beta*C.
+*              TRANS = 'C' or 'c'   C := alpha*A**T*A + beta*C.
 *
 *           Unchanged on exit.
 *
@@ -213,7 +213,7 @@
 *
       IF (LSAME(TRANS,'N')) THEN
 *
-*        Form  C := alpha*A*A' + beta*C.
+*        Form  C := alpha*A*A**T + beta*C.
 *
           IF (UPPER) THEN
               DO 130 J = 1,N
@@ -258,7 +258,7 @@
           END IF
       ELSE
 *
-*        Form  C := alpha*A'*A + beta*C.
+*        Form  C := alpha*A**T*A + beta*C.
 *
           IF (UPPER) THEN
               DO 210 J = 1,N
