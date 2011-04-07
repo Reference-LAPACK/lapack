@@ -25,7 +25,7 @@
 *  eigenvalues and/or eigenvectors of a matrix pair (A, B) in
 *  generalized real Schur canonical form (or of any matrix pair
 *  (Q*A*Z**T, Q*B*Z**T) with orthogonal matrices Q and Z, where
-*  Z' denotes the transpose of Z.
+*  Z**T denotes the transpose of Z.
 *
 *  (A, B) must be in generalized real Schur form (as returned by DGGES),
 *  i.e. A is block upper triangular with 1-by-1 and 2-by-2 diagonal
@@ -233,8 +233,8 @@
 *     and d2 is an upper bound on Difl((S11, T11), (S22, T22)), i.e. an
 *     upper bound on sigma-min(Z2), where Z2 is (2n-2)-by-(2n-2)
 *
-*              Z2 = [ kron(S11', In-2)  -kron(I2, S22) ]
-*                   [ kron(T11', In-2)  -kron(I2, T22) ]
+*              Z2 = [ kron(S11**T, In-2)  -kron(I2, S22) ]
+*                   [ kron(T11**T, In-2)  -kron(I2, T22) ]
 *
 *     Note that if the default method for computing DIF is wanted (see
 *     DLATDF), then the parameter DIFDRI (see below) should be changed

@@ -19,8 +19,8 @@
 *  =======
 *
 *  DLALN2 solves a system of the form  (ca A - w D ) X = s B
-*  or (ca A' - w D) X = s B   with possible scaling ("s") and
-*  perturbation of A.  (A' means A-transpose.)
+*  or (ca A**T - w D) X = s B   with possible scaling ("s") and
+*  perturbation of A.  (A**T means A-transpose.)
 *
 *  A is an NA x NA real matrix, ca is a real scalar, D is an NA x NA
 *  real diagonal matrix, w is a real or complex value, and X and B are
@@ -257,7 +257,7 @@
 *
 *        2x2 System
 *
-*        Compute the real part of  C = ca A - w D  (or  ca A' - w D )
+*        Compute the real part of  C = ca A - w D  (or  ca A**T - w D )
 *
          CR( 1, 1 ) = CA*A( 1, 1 ) - WR*D1
          CR( 2, 2 ) = CA*A( 2, 2 ) - WR*D2

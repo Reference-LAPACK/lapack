@@ -249,7 +249,7 @@
 *
 *           U1**T *A13*Q1 = C1*R1; V1**T *B13*Q1 = S1*R1,
 *
-*  where U1, V1 and Q1 are orthogonal matrix, and Z' is the transpose
+*  where U1, V1 and Q1 are orthogonal matrix, and Z**T is the transpose
 *  of Z.  C1 and S1 are diagonal matrices satisfying
 *
 *                C1**2 + S1**2 = I,

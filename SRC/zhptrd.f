@@ -217,7 +217,7 @@
                CALL ZAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v**H
+*                 A := A - v * w**H - w * v**H
 *
                CALL ZHPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 1,
      $                     AP( I1I1 ) )

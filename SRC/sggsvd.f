@@ -128,7 +128,7 @@
 *  L       (output) INTEGER
 *          On exit, K and L specify the dimension of the subblocks
 *          described in the Purpose section.
-*          K + L = effective numerical rank of (A',B')**T.
+*          K + L = effective numerical rank of (A**T,B**T)**T.
 *
 *  A       (input/output) REAL array, dimension (LDA,N)
 *          On entry, the M-by-N matrix A.
@@ -209,7 +209,7 @@
 *  TOLA    REAL
 *  TOLB    REAL
 *          TOLA and TOLB are the thresholds to determine the effective
-*          rank of (A',B')**T. Generally, they are set to
+*          rank of (A**T,B**T)**T. Generally, they are set to
 *                   TOLA = MAX(M,N)*norm(A)*MACHEPS,
 *                   TOLB = MAX(P,N)*norm(B)*MACHEPS.
 *          The size of TOLA and TOLB may affect the size of backward

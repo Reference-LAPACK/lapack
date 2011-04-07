@@ -427,7 +427,7 @@
             VCRIT = BIGNUM
 *
 *           Solve U*(xr,xi) = scale*(vr,vi) for a right eigenvector,
-*             or U'*(xr,xi) = scale*(vr,vi) for a left eigenvector,
+*             or U**T*(xr,xi) = scale*(vr,vi) for a left eigenvector,
 *           overwriting (xr,xi) on (vr,vi).
 *
             DO 250 I = I1, I2, I3

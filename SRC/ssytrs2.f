@@ -118,7 +118,7 @@
 *
 *        Solve A*X = B, where A = U*D*U**T.
 *
-*       P' * B  
+*       P**T * B  
         K=N
         DO WHILE ( K .GE. 1 )
          IF( IPIV( K ).GT.0 ) THEN
@@ -195,7 +195,7 @@
 *
 *        Solve A*X = B, where A = L*D*L**T.
 *
-*       P' * B  
+*       P**T * B  
         K=1
         DO WHILE ( K .LE. N )
          IF( IPIV( K ).GT.0 ) THEN

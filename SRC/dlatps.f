@@ -20,10 +20,10 @@
 *
 *  DLATPS solves one of the triangular systems
 *
-*     A *x = s*b  or  A'*x = s*b
+*     A *x = s*b  or  A**T*x = s*b
 *
 *  with scaling to prevent overflow, where A is an upper or lower
-*  triangular matrix stored in packed form.  Here A' denotes the
+*  triangular matrix stored in packed form.  Here A**T denotes the
 *  transpose of A, x and b are n-element vectors, and s is a scaling
 *  factor, usually less than or equal to 1, chosen so that the
 *  components of x will be less than the overflow threshold.  If the
@@ -42,8 +42,8 @@
 *  TRANS   (input) CHARACTER*1
 *          Specifies the operation applied to A.
 *          = 'N':  Solve A * x = s*b  (No transpose)
-*          = 'T':  Solve A'* x = s*b  (Transpose)
-*          = 'C':  Solve A'* x = s*b  (Conjugate transpose = Transpose)
+*          = 'T':  Solve A**T* x = s*b  (Transpose)
+*          = 'C':  Solve A**T* x = s*b  (Conjugate transpose = Transpose)
 *
 *  DIAG    (input) CHARACTER*1
 *          Specifies whether or not the matrix A is unit triangular.
@@ -72,7 +72,7 @@
 *
 *  SCALE   (output) DOUBLE PRECISION
 *          The scaling factor s for the triangular system
-*             A * x = s*b  or  A'* x = s*b.
+*             A * x = s*b  or  A**T* x = s*b.
 *          If SCALE = 0, the matrix A is singular or badly scaled, and
 *          the vector x is an exact or approximate solution to A*x = 0.
 *
@@ -138,15 +138,15 @@
 *  prevent overflow, but if the bound overflows, x is set to 0, x(j) to
 *  1, and scale to 0, and a non-trivial solution to A*x = 0 is found.
 *
-*  Similarly, a row-wise scheme is used to solve A'*x = b.  The basic
+*  Similarly, a row-wise scheme is used to solve A**T*x = b.  The basic
 *  algorithm for A upper triangular is
 *
 *       for j = 1, ..., n
-*            x(j) := ( b(j) - A[1:j-1,j]' * x[1:j-1] ) / A(j,j)
+*            x(j) := ( b(j) - A[1:j-1,j]**T * x[1:j-1] ) / A(j,j)
 *       end
 *
 *  We simultaneously compute two bounds
-*       G(j) = bound on ( b(i) - A[1:i-1,i]' * x[1:i-1] ), 1<=i<=j
+*       G(j) = bound on ( b(i) - A[1:i-1,i]**T * x[1:i-1] ), 1<=i<=j
 *       M(j) = bound on x(i), 1<=i<=j
 *
 *  The initial values are G(0) = 0, M(0) = max{b(i), i=1,..,n}, and we
@@ -346,7 +346,7 @@
 *
       ELSE
 *
-*        Compute the growth in A' * x = b.
+*        Compute the growth in A**T * x = b.
 *
          IF( UPPER ) THEN
             JFIRST = 1
@@ -561,7 +561,7 @@
 *
          ELSE
 *
-*           Solve A' * x = b
+*           Solve A**T * x = b
 *
             IP = JFIRST*( JFIRST+1 ) / 2
             JLEN = 1
@@ -675,7 +675,7 @@
                   ELSE
 *
 *                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and
-*                       scale = 0, and compute a solution to A'*x = 0.
+*                       scale = 0, and compute a solution to A**T*x = 0.
 *
                      DO 140 I = 1, N
                         X( I ) = ZERO

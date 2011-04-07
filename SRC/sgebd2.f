@@ -17,7 +17,7 @@
 *  =======
 *
 *  SGEBD2 reduces a real general m by n matrix A to upper or lower
-*  bidiagonal form B by an orthogonal transformation: Q' * A * P = B.
+*  bidiagonal form B by an orthogonal transformation: Q**T * A * P = B.
 *
 *  If m >= n, B is upper bidiagonal; if m < n, B is lower bidiagonal.
 *

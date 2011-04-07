@@ -76,7 +76,7 @@
 *          Auxiliar vector.
 *
 *  F       (input/output) DOUBLE PRECISION array, dimension (LDF,NB)
-*          Matrix F' = L*Y'*A.
+*          Matrix F**T = L*Y**T*A.
 *
 *  LDF     (input) INTEGER
 *          The leading dimension of the array F. LDF >= max(1,N).

@@ -208,7 +208,7 @@
             END IF
          ELSE
 *
-*           Multiply by inv(C').
+*           Multiply by inv(C**T).
 *
             IF ( CMODE .EQ. 1 ) THEN
                DO I = 1, N

@@ -55,7 +55,7 @@
 *         On entry, leading dimension of U.
 *
 *  VT     (output) REAL array, dimension at least (LDVT, M)
-*         On exit, VT' contains the right singular vectors.
+*         On exit, VT**T contains the right singular vectors.
 *
 *  LDVT   (input) INTEGER
 *         On entry, leading dimension of VT.

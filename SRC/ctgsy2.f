@@ -36,17 +36,17 @@
 *  In matrix notation solving equation (1) corresponds to solve
 *  Zx = scale * b, where Z is defined as
 *
-*         Z = [ kron(In, A)  -kron(B', Im) ]             (2)
-*             [ kron(In, D)  -kron(E', Im) ],
+*         Z = [ kron(In, A)  -kron(B**H, Im) ]             (2)
+*             [ kron(In, D)  -kron(E**H, Im) ],
 *
-*  Ik is the identity matrix of size k and X' is the transpose of X.
+*  Ik is the identity matrix of size k and X**H is the transpose of X.
 *  kron(X, Y) is the Kronecker product between the matrices X and Y.
 *
-*  If TRANS = 'C', y in the conjugate transposed system Z'y = scale*b
+*  If TRANS = 'C', y in the conjugate transposed system Z**H*y = scale*b
 *  is solved for, which is equivalent to solve for R and L in
 *
-*              A' * R  + D' * L   = scale *  C           (3)
-*              R  * B' + L  * E'  = scale * -F
+*              A**H * R  + D**H * L   = scale *  C           (3)
+*              R  * B**H + L  * E**H  = scale * -F
 *
 *  This case is used to compute an estimate of Dif[(A, D), (B, E)] =
 *  = sigma_min(Z) using reverse communicaton with CLACON.
@@ -307,7 +307,7 @@
          DO 80 I = 1, M
             DO 70 J = N, 1, -1
 *
-*              Build 2 by 2 system Z'
+*              Build 2 by 2 system Z**H
 *
                Z( 1, 1 ) = CONJG( A( I, I ) )
                Z( 2, 1 ) = -CONJG( B( J, J ) )
@@ -320,7 +320,7 @@
                RHS( 1 ) = C( I, J )
                RHS( 2 ) = F( I, J )
 *
-*              Solve Z' * x = RHS
+*              Solve Z**H * x = RHS
 *
                CALL CGETC2( LDZ, Z, LDZ, IPIV, JPIV, IERR )
                IF( IERR.GT.0 )

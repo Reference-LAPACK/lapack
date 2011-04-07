@@ -231,11 +231,11 @@
 *  where sigma-min(Zu) is the smallest singular value of the
 *  (2*n1*n2)-by-(2*n1*n2) matrix
 *
-*       Zu = [ kron(In2, A11)  -kron(A22', In1) ]
-*            [ kron(In2, B11)  -kron(B22', In1) ].
+*       Zu = [ kron(In2, A11)  -kron(A22**H, In1) ]
+*            [ kron(In2, B11)  -kron(B22**H, In1) ].
 *
-*  Here, Inx is the identity matrix of size nx and A22' is the
-*  transpose of A22. kron(X, Y) is the Kronecker product between
+*  Here, Inx is the identity matrix of size nx and A22**H is the
+*  conjuguate transpose of A22. kron(X, Y) is the Kronecker product between
 *  the matrices X and Y.
 *
 *  When DIF(2) is small, small changes in (A, B) can cause large changes

@@ -19,7 +19,7 @@
 *
 *  CSYR   performs the symmetric rank 1 operation
 *
-*     A := alpha*x*( x' ) + A,
+*     A := alpha*x*x**H + A,
 *
 *  where alpha is a complex scalar, x is an n element vector and A is an
 *  n by n symmetric matrix.

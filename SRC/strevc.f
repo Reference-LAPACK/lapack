@@ -727,8 +727,8 @@
      $                               WORK( KI+1+N ), 1 )
 *
 *                    Solve
-*                      [T(J,J)-WR   T(J,J+1)     ]'* X = SCALE*( WORK1 )
-*                      [T(J+1,J)    T(J+1,J+1)-WR]             ( WORK2 )
+*                      [T(J,J)-WR   T(J,J+1)     ]**T* X = SCALE*( WORK1 )
+*                      [T(J+1,J)    T(J+1,J+1)-WR]               ( WORK2 )
 *
                      CALL SLALN2( .TRUE., 2, 1, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+N ), N, WR,
@@ -892,8 +892,8 @@
      $                                WORK( KI+2+N2 ), 1 )
 *
 *                    Solve 2-by-2 complex linear equation
-*                      ([T(j,j)   T(j,j+1)  ]'-(wr-i*wi)*I)*X = SCALE*B
-*                      ([T(j+1,j) T(j+1,j+1)]             )
+*                      ([T(j,j)   T(j,j+1)  ]**T-(wr-i*wi)*I)*X = SCALE*B
+*                      ([T(j+1,j) T(j+1,j+1)]               )
 *
                      CALL SLALN2( .TRUE., 2, 2, SMIN, ONE, T( J, J ),
      $                            LDT, ONE, ONE, WORK( J+N ), N, WR,

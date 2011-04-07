@@ -170,7 +170,7 @@
      $                      AB, LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )
             ELSE
 *
-*              Multiply by inv(A').
+*              Multiply by inv(A**T).
 *
                CALL DLATBS( UPLO, 'Transpose', DIAG, NORMIN, N, KD, AB,
      $                      LDAB, WORK, SCALE, WORK( 2*N+1 ), INFO )

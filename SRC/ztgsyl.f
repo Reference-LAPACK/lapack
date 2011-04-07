@@ -39,10 +39,10 @@
 *  In matrix notation (1) is equivalent to solve Zx = scale*b, where Z
 *  is defined as
 *
-*         Z = [ kron(In, A)  -kron(B', Im) ]        (2)
-*             [ kron(In, D)  -kron(E', Im) ],
+*         Z = [ kron(In, A)  -kron(B**H, Im) ]        (2)
+*             [ kron(In, D)  -kron(E**H, Im) ],
 *
-*  Here Ix is the identity matrix of size x and X' is the conjugate
+*  Here Ix is the identity matrix of size x and X**H is the conjugate
 *  transpose of X. Kron(X, Y) is the Kronecker product between the
 *  matrices X and Y.
 *

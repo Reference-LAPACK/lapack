@@ -22,12 +22,12 @@
 *  (upper or lower) bidiagonal matrix with diagonal D and offdiagonal
 *  E, accumulating the transformations if desired. Letting B denote
 *  the input bidiagonal matrix, the algorithm computes orthogonal
-*  matrices Q and P such that B = Q * S * P' (P' denotes the transpose
+*  matrices Q and P such that B = Q * S * P**T (P**T denotes the transpose
 *  of P). The singular values S are overwritten on D.
 *
 *  The input matrix U  is changed to U  * Q  if desired.
-*  The input matrix VT is changed to P' * VT if desired.
-*  The input matrix C  is changed to Q' * C  if desired.
+*  The input matrix VT is changed to P**T * VT if desired.
+*  The input matrix C  is changed to Q**T * C  if desired.
 *
 *  See "Computing  Small Singular Values of Bidiagonal Matrices With
 *  Guaranteed High Relative Accuracy," by J. Demmel and W. Kahan,
@@ -84,7 +84,7 @@
 *
 *  VT    (input/output) DOUBLE PRECISION array, dimension (LDVT, NCVT)
 *        On entry, contains a matrix which on exit has been
-*        premultiplied by P', dimension N-by-NCVT if SQRE = 0
+*        premultiplied by P**T, dimension N-by-NCVT if SQRE = 0
 *        and (N+1)-by-NCVT if SQRE = 1 (not referenced if NCVT=0).
 *
 *  LDVT  (input) INTEGER
@@ -104,7 +104,7 @@
 *
 *  C     (input/output) DOUBLE PRECISION array, dimension (LDC, NCC)
 *        On entry, contains an N-by-NCC matrix which on exit
-*        has been premultiplied by Q'  dimension N-by-NCC if SQRE = 0
+*        has been premultiplied by Q**T  dimension N-by-NCC if SQRE = 0
 *        and (N+1)-by-NCC if SQRE = 1 (not referenced if NCC=0).
 *
 *  LDC   (input) INTEGER

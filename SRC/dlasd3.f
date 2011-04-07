@@ -84,14 +84,14 @@
 *         The leading dimension of the array U2.  LDU2 >= N.
 *
 *  VT     (output) DOUBLE PRECISION array, dimension (LDVT, M)
-*         The last M - K columns of VT' contain the deflated
+*         The last M - K columns of VT**T contain the deflated
 *         right singular vectors.
 *
 *  LDVT   (input) INTEGER
 *         The leading dimension of the array VT.  LDVT >= N.
 *
 *  VT2    (input/output) DOUBLE PRECISION array, dimension (LDVT2, N)
-*         The first K columns of VT2' contain the non-deflated
+*         The first K columns of VT2**T contain the non-deflated
 *         right singular vectors for the split problem.
 *
 *  LDVT2  (input) INTEGER

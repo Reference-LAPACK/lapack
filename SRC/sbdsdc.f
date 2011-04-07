@@ -77,7 +77,7 @@
 *
 *  VT      (output) REAL array, dimension (LDVT,N)
 *          If  COMPQ = 'I', then:
-*             On exit, if INFO = 0, VT' contains the right singular
+*             On exit, if INFO = 0, VT**T contains the right singular
 *             vectors of the bidiagonal matrix.
 *          For other values of COMPQ, VT is not referenced.
 *

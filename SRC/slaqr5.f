@@ -642,14 +642,14 @@
                   CALL SLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL ),
      $                         LDH, WH( KZS+1, 1 ), LDWH )
 *
-*                 ==== Multiply by U21' ====
+*                 ==== Multiply by U21**T ====
 *
                   CALL SLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH )
                   CALL STRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
      $                        U( J2+1, 1+KZS ), LDU, WH( KZS+1, 1 ),
      $                        LDWH )
 *
-*                 ==== Multiply top of H by U11' ====
+*                 ==== Multiply top of H by U11**T ====
 *
                   CALL SGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
      $                        H( INCOL+1, JCOL ), LDH, ONE, WH, LDWH )
@@ -659,7 +659,7 @@
                   CALL SLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), LDH,
      $                         WH( I2+1, 1 ), LDWH )
 *
-*                 ==== Multiply by U21' ====
+*                 ==== Multiply by U21**T ====
 *
                   CALL STRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
      $                        U( 1, I2+1 ), LDU, WH( I2+1, 1 ), LDWH )

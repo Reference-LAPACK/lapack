@@ -24,7 +24,7 @@
 *     A * x = s*b,  A**T * x = s*b,  or  A**H * x = s*b,
 *
 *  with scaling to prevent overflow, where A is an upper or lower
-*  triangular band matrix.  Here A' denotes the transpose of A, x and b
+*  triangular band matrix.  Here A**T denotes the transpose of A, x and b
 *  are n-element vectors, and s is a scaling factor, usually less than
 *  or equal to 1, chosen so that the components of x will be less than
 *  the overflow threshold.  If the unscaled problem will not cause

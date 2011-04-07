@@ -272,7 +272,7 @@
          END IF
       ELSE IF( LSAME( SIDE, 'R' ) ) THEN
 *
-*        Form A * P'
+*        Form A * P**T
 *
          IF( LSAME( PIVOT, 'V' ) ) THEN
             IF( LSAME( DIRECT, 'F' ) ) THEN

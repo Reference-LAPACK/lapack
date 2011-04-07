@@ -26,11 +26,11 @@
 *
 *  DSFRK performs one of the symmetric rank--k operations
 *
-*     C := alpha*A*A' + beta*C,
+*     C := alpha*A*A**T + beta*C,
 *
 *  or
 *
-*     C := alpha*A'*A + beta*C,
+*     C := alpha*A**T*A + beta*C,
 *
 *  where alpha and beta are real scalars, C is an n--by--n symmetric
 *  matrix and A is an n--by--k matrix in the first case and a k--by--n
@@ -60,9 +60,9 @@
 *           On entry, TRANS specifies the operation to be performed as
 *           follows:
 *
-*              TRANS = 'N' or 'n'   C := alpha*A*A' + beta*C.
+*              TRANS = 'N' or 'n'   C := alpha*A*A**T + beta*C.
 *
-*              TRANS = 'T' or 't'   C := alpha*A'*A + beta*C.
+*              TRANS = 'T' or 't'   C := alpha*A**T*A + beta*C.
 *
 *           Unchanged on exit.
 *

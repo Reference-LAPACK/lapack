@@ -286,7 +286,7 @@
                LASTV = MAX( K, ILASLR( M, K, V, LDV ) )
                LASTC = ILASLC( LASTV, N, C, LDC )
 *
-*              W := C' * V  =  (C1**T * V1 + C2**T * V2)  (stored in WORK)
+*              W := C**T * V  =  (C1**T * V1 + C2**T * V2)  (stored in WORK)
 *
 *              W := C2**T
 *
@@ -373,7 +373,7 @@
                CALL STRMM( 'Right', 'Lower', TRANS, 'Non-unit',
      $              LASTC, K, ONE, T, LDT, WORK, LDWORK )
 *
-*              C := C - W * V'
+*              C := C - W * V**T
 *
                IF( LASTV.GT.K ) THEN
 *

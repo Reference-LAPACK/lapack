@@ -21,8 +21,8 @@
 *  pivoting of a real symmetric positive semidefinite matrix A.
 *
 *  The factorization has the form
-*     P' * A * P = U' * U ,  if UPLO = 'U',
-*     P' * A * P = L  * L',  if UPLO = 'L',
+*     P**T * A * P = U**T * U ,  if UPLO = 'U',
+*     P**T * A * P = L  * L**T,  if UPLO = 'L',
 *  where U is an upper triangular matrix and L is lower triangular, and
 *  P is stored as vector PIV.
 *
@@ -170,7 +170,7 @@
 *
          IF( UPPER ) THEN
 *
-*           Compute the Cholesky factorization P' * A * P = U' * U
+*           Compute the Cholesky factorization P**T * A * P = U**T * U
 *
             DO 140 K = 1, N, NB
 *
@@ -257,7 +257,7 @@
 *
          ELSE
 *
-*        Compute the Cholesky factorization P' * A * P = L * L'
+*        Compute the Cholesky factorization P**T * A * P = L * L**T
 *
             DO 180 K = 1, N, NB
 *

@@ -17,7 +17,7 @@
 *  =======
 *
 *  DGTTS2 solves one of the systems of equations
-*     A*X = B  or  A'*X = B,
+*     A*X = B  or  A**T*X = B,
 *  with a tridiagonal matrix A using the LU factorization computed
 *  by DGTTRF.
 *
@@ -27,8 +27,8 @@
 *  ITRANS  (input) INTEGER
 *          Specifies the form of the system of equations.
 *          = 0:  A * X = B  (No transpose)
-*          = 1:  A'* X = B  (Transpose)
-*          = 2:  A'* X = B  (Conjugate transpose = Transpose)
+*          = 1:  A**T* X = B  (Transpose)
+*          = 2:  A**T* X = B  (Conjugate transpose = Transpose)
 *
 *  N       (input) INTEGER
 *          The order of the matrix A.
@@ -138,11 +138,11 @@
          END IF
       ELSE
 *
-*        Solve A' * X = B.
+*        Solve A**T * X = B.
 *
          IF( NRHS.LE.1 ) THEN
 *
-*           Solve U'*x = b.
+*           Solve U**T*x = b.
 *
             J = 1
    70       CONTINUE
@@ -154,7 +154,7 @@
      $                     B( I-2, J ) ) / D( I )
    80       CONTINUE
 *
-*           Solve L'*x = b.
+*           Solve L**T*x = b.
 *
             DO 90 I = N - 1, 1, -1
                IP = IPIV( I )
@@ -170,7 +170,7 @@
          ELSE
             DO 120 J = 1, NRHS
 *
-*              Solve U'*x = b.
+*              Solve U**T*x = b.
 *
                B( 1, J ) = B( 1, J ) / D( 1 )
                IF( N.GT.1 )

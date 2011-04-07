@@ -61,7 +61,7 @@
 *
       THRESH = SLAMCH('E')
 *
-*     Compute the first column of B'*B - SIGMA^2*I, up to a scale
+*     Compute the first column of B**T*B - SIGMA^2*I, up to a scale
 *     factor.
 *
       IF( (SIGMA .EQ. ZERO .AND. ABS(X) .LT. THRESH) .OR.

@@ -36,7 +36,7 @@
 *                     [              .     ]
 *                     [                 w  ]
 *
-*  op(A) = A or A', A' denotes the conjugate transpose of
+*  op(A) = A or A**T, A**T denotes the transpose of
 *  matrix A.
 *
 *  On input, X = [ c ].  On output, X = [ p ].
@@ -290,7 +290,7 @@
 *
          ELSE
 *
-*           Solve T'*p = scale*c
+*           Solve T**T*p = scale*c
 *
             JNEXT = 1
             DO 40 J = 1, N

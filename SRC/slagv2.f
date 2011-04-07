@@ -242,7 +242,7 @@
             CALL SLASV2( B( 1, 1 ), B( 1, 2 ), B( 2, 2 ), R, T, SNR,
      $                   CSR, SNL, CSL )
 *
-*           Form (A,B) := Q(A,B)Z' where Q is left rotation matrix and
+*           Form (A,B) := Q(A,B)Z**T where Q is left rotation matrix and
 *           Z is right rotation matrix computed from SLASV2
 *
             CALL SROT( 2, A( 1, 1 ), LDA, A( 2, 1 ), LDA, CSL, SNL )

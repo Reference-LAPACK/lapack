@@ -298,9 +298,9 @@
 *
          ELSE
 *
-*           Overdetermined system of equations A' * X = B
+*           Overdetermined system of equations A**T * X = B
 *
-*           B(1:N,1:NRHS) := inv(R') * B(1:N,1:NRHS)
+*           B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS)
 *
             CALL DTRTRS( 'Upper', 'Transpose', 'Non-unit', N, NRHS,
      $                   A, LDA, B, LDB, INFO )
@@ -371,7 +371,7 @@
 *
          ELSE
 *
-*           overdetermined system min || A' * X - B ||
+*           overdetermined system min || A**T * X - B ||
 *
 *           B(1:N,1:NRHS) := Q * B(1:N,1:NRHS)
 *
@@ -381,7 +381,7 @@
 *
 *           workspace at least NRHS, optimally NRHS*NB
 *
-*           B(1:M,1:NRHS) := inv(L') * B(1:M,1:NRHS)
+*           B(1:M,1:NRHS) := inv(L**T) * B(1:M,1:NRHS)
 *
             CALL DTRTRS( 'Lower', 'Transpose', 'Non-unit', M, NRHS,
      $                   A, LDA, B, LDB, INFO )

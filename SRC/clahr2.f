@@ -151,7 +151,7 @@
      $                  A( K+I-1, 1 ), LDA, ONE, A( K+1, I ), 1 )
             CALL CLACGV( I-1, A( K+I-1, 1 ), LDA ) 
 *
-*           Apply I - V * T' * V**H to this column (call it b) from the
+*           Apply I - V * T**H * V**H to this column (call it b) from the
 *           left, using the last column of T as workspace
 *
 *           Let  V = ( V1 )   and   b = ( b1 )   (first I-1 rows)
@@ -159,7 +159,7 @@
 *
 *           where V1 is unit lower triangular
 *
-*           w := V1' * b1
+*           w := V1**H * b1
 *
             CALL CCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
             CALL CTRMV( 'Lower', 'Conjugate transpose', 'UNIT', 

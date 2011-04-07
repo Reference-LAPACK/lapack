@@ -83,20 +83,21 @@
 *
 *  on entry:                          on exit:
 *
-*   *    *   a13  a24  a35  a46  a57   *    *   s13  s24  s53' s64' s75'
-*   *   a12  a23  a34  a45  a56  a67   *   s12  s23  s34  s54' s65' s76'
-*  a11  a22  a33  a44  a55  a66  a77  s11  s22  s33  s44  s55  s66  s77
+*   *    *   a13  a24  a35  a46  a57   *    *   s13  s24  s53**H s64**H s75**H
+*   *   a12  a23  a34  a45  a56  a67   *   s12  s23  s34  s54**H s65**H s76**H
+*  a11  a22  a33  a44  a55  a66  a77  s11  s22  s33  s44  s55    s66    s77
 *
 *  If UPLO = 'L', the array AB holds:
 *
 *  on entry:                          on exit:
 *
-*  a11  a22  a33  a44  a55  a66  a77  s11  s22  s33  s44  s55  s66  s77
-*  a21  a32  a43  a54  a65  a76   *   s12' s23' s34' s54  s65  s76   *
-*  a31  a42  a53  a64  a64   *    *   s13' s24' s53  s64  s75   *    *
+*  a11  a22  a33  a44  a55  a66  a77  s11    s22    s33    s44  s55  s66  s77
+*  a21  a32  a43  a54  a65  a76   *   s12**H s23**H s34**H s54  s65  s76   *
+*  a31  a42  a53  a64  a64   *    *   s13**H s24**H s53    s64  s75   *    *
 *
-*  Array elements marked * are not used by the routine; s12' denotes
+*  Array elements marked * are not used by the routine; s12**H denotes
 *  conjg(s12); the diagonal elements of S are real.
+
 *
 *  =====================================================================
 *

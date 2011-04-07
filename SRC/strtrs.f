@@ -136,7 +136,7 @@
       END IF
       INFO = 0
 *
-*     Solve A * x = b  or  A' * x = b.
+*     Solve A * x = b  or  A**T * x = b.
 *
       CALL STRSM( 'Left', UPLO, TRANS, DIAG, N, NRHS, ONE, A, LDA, B,
      $            LDB )
