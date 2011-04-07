@@ -27,12 +27,12 @@
 *  If STOREV = 'C', the vector which defines the elementary reflector
 *  H(i) is stored in the i-th column of the array V, and
 *
-*     H  =  I - V * T * V'
+*     H  =  I - V * T * V**T
 *
 *  If STOREV = 'R', the vector which defines the elementary reflector
 *  H(i) is stored in the i-th row of the array V, and
 *
-*     H  =  I - V' * T * V
+*     H  =  I - V**T * T * V
 *
 *  Currently, only STOREV = 'R' and DIRECT = 'B' are supported.
 *

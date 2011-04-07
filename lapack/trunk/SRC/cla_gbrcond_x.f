@@ -201,7 +201,7 @@
             END DO
          ELSE
 *
-*           Multiply by inv(X').
+*           Multiply by inv(X**H).
 *
             DO I = 1, N
                WORK( I ) = WORK( I ) / X( I )

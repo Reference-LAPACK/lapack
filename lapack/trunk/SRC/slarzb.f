@@ -155,7 +155,7 @@
      $      CALL SGEMM( 'Transpose', 'Transpose', N, K, L, ONE,
      $                  C( M-L+1, 1 ), LDC, V, LDV, ONE, WORK, LDWORK )
 *
-*        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T'  or  W( 1:m, 1:k ) * T
+*        W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T  or  W( 1:m, 1:k ) * T
 *
          CALL STRMM( 'Right', 'Lower', TRANST, 'Non-unit', N, K, ONE, T,
      $               LDT, WORK, LDWORK )

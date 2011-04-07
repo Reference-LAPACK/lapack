@@ -149,7 +149,7 @@
             CALL SGEMV( 'NO TRANSPOSE', N-K, I-1, -ONE, Y(K+1,1), LDY,
      $                  A( K+I-1, 1 ), LDA, ONE, A( K+1, I ), 1 )
 *
-*           Apply I - V * T' * V**T to this column (call it b) from the
+*           Apply I - V * T**T * V**T to this column (call it b) from the
 *           left, using the last column of T as workspace
 *
 *           Let  V = ( V1 )   and   b = ( b1 )   (first I-1 rows)
@@ -157,7 +157,7 @@
 *
 *           where V1 is unit lower triangular
 *
-*           w := V1' * b1
+*           w := V1**T * b1
 *
             CALL SCOPY( I-1, A( K+1, I ), 1, T( 1, NB ), 1 )
             CALL STRMV( 'Lower', 'Transpose', 'UNIT', 

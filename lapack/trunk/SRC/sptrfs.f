@@ -263,7 +263,7 @@
 *           m(i,j) =  abs(A(i,j)), i = j,
 *           m(i,j) = -abs(A(i,j)), i .ne. j,
 *
-*        and e = [ 1, 1, ..., 1 ]'.  Note M(A) = M(L)*D*M(L)**T.
+*        and e = [ 1, 1, ..., 1 ]**T.  Note M(A) = M(L)*D*M(L)**T.
 *
 *        Solve M(L) * x = e.
 *

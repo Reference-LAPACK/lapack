@@ -128,7 +128,7 @@
 *  L       (output) INTEGER
 *          On exit, K and L specify the dimension of the subblocks
 *          described in the Purpose section.
-*          K + L = effective numerical rank of (A',B')**T.
+*          K + L = effective numerical rank of (A**T,B**T)**T.
 *
 *  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
 *          On entry, the M-by-N matrix A.

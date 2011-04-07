@@ -32,8 +32,8 @@
 *  X      (input/output) COMPLEX array, dimension (N)
 *         On an intermediate return, X should be overwritten by
 *               A * X,   if KASE=1,
-*               A' * X,  if KASE=2,
-*         where A' is the conjugate transpose of A, and CLACON must be
+*               A**H * X,  if KASE=2,
+*         where A**H is the conjugate transpose of A, and CLACON must be
 *         re-called with all the other parameters unchanged.
 *
 *  EST    (input/output) REAL
@@ -44,7 +44,7 @@
 *  KASE   (input/output) INTEGER
 *         On the initial call to CLACON, KASE should be 0.
 *         On an intermediate return, KASE will be 1 or 2, indicating
-*         whether X should be overwritten by A * X  or A' * X.
+*         whether X should be overwritten by A * X  or A**H * X.
 *         On the final return from CLACON, KASE will again be 0.
 *
 *  Further Details

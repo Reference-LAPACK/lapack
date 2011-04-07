@@ -165,7 +165,7 @@
      $                      LDA, WORK, SCALE, WORK( 2*N+1 ), INFO )
             ELSE
 *
-*              Multiply by inv(A').
+*              Multiply by inv(A**T).
 *
                CALL SLATRS( UPLO, 'Transpose', DIAG, NORMIN, N, A, LDA,
      $                      WORK, SCALE, WORK( 2*N+1 ), INFO )

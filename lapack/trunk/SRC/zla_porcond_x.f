@@ -46,7 +46,7 @@
 *
 *     AF      (input) COMPLEX*16 array, dimension (LDAF,N)
 *     The triangular factor U or L from the Cholesky factorization
-*     A = U**T*U or A = L*L**T, as computed by ZPOTRF.
+*     A = U**H*U or A = L*L**H, as computed by ZPOTRF.
 *
 *     LDAF    (input) INTEGER
 *     The leading dimension of the array AF.  LDAF >= max(1,N).
@@ -175,7 +175,7 @@
             END DO
          ELSE
 *
-*           Multiply by inv(X').
+*           Multiply by inv(X**H).
 *
             DO I = 1, N
                WORK( I ) = WORK( I ) / X( I )

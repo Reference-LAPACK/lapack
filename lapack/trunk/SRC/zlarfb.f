@@ -289,7 +289,7 @@
                LASTV = MAX( K, ILAZLR( M, K, V, LDV ) )
                LASTC = ILAZLC( LASTV, N, C, LDC )
 *
-*              W := C' * V  =  (C1**H * V1 + C2**H * V2)  (stored in WORK)
+*              W := C**H * V  =  (C1**H * V1 + C2**H * V2)  (stored in WORK)
 *
 *              W := C2**H
 *

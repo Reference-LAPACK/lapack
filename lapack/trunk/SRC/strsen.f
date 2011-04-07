@@ -162,7 +162,7 @@
 *                         (  0  T22 ) n2
 *                            n1  n2
 *
-*  where N = n1+n2 and Z' means the transpose of Z. The first n1 columns
+*  where N = n1+n2 and Z**T means the transpose of Z. The first n1 columns
 *  of Z span the specified invariant subspace of T.
 *
 *  If T has been obtained from the real Schur factorization of a matrix

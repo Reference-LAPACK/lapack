@@ -43,8 +43,8 @@
 *     A * P = Q * [ T11 0 ] * Z
 *                 [  0  0 ]
 *  The minimum-norm solution is then
-*     X = P * Z' [ inv(T11)*Q1'*B ]
-*                [        0       ]
+*     X = P * Z**H [ inv(T11)*Q1**H*B ]
+*                  [        0         ]
 *  where Q1 consists of the first RANK columns of Q.
 *
 *  This routine is basically identical to the original xGELSX except

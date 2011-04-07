@@ -38,19 +38,19 @@
 *  In matrix notation solving equation (1) corresponds to solve
 *  Z*x = scale*b, where Z is defined as
 *
-*         Z = [ kron(In, A)  -kron(B', Im) ]             (2)
-*             [ kron(In, D)  -kron(E', Im) ],
+*         Z = [ kron(In, A)  -kron(B**T, Im) ]             (2)
+*             [ kron(In, D)  -kron(E**T, Im) ],
 *
-*  Ik is the identity matrix of size k and X' is the transpose of X.
+*  Ik is the identity matrix of size k and X**T is the transpose of X.
 *  kron(X, Y) is the Kronecker product between the matrices X and Y.
 *  In the process of solving (1), we solve a number of such systems
 *  where Dim(In), Dim(In) = 1 or 2.
 *
-*  If TRANS = 'T', solve the transposed system Z'*y = scale*b for y,
+*  If TRANS = 'T', solve the transposed system Z**T*y = scale*b for y,
 *  which is equivalent to solve for R and L in
 *
-*              A' * R  + D' * L   = scale *  C           (3)
-*              R  * B' + L  * E'  = scale * -F
+*              A**T * R  + D**T * L   = scale *  C           (3)
+*              R  * B**T + L  * E**T  = scale * -F
 *
 *  This case is used to compute an estimate of Dif[(A, D), (B, E)] =
 *  sigma_min(Z) using reverse communicaton with SLACON.
@@ -649,7 +649,7 @@
                ZDIM = MB*NB*2
                IF( ( MB.EQ.1 ) .AND. ( NB.EQ.1 ) ) THEN
 *
-*                 Build a 2-by-2 system Z' * x = RHS
+*                 Build a 2-by-2 system Z**T * x = RHS
 *
                   Z( 1, 1 ) = A( IS, IS )
                   Z( 2, 1 ) = -B( JS, JS )
@@ -661,7 +661,7 @@
                   RHS( 1 ) = C( IS, JS )
                   RHS( 2 ) = F( IS, JS )
 *
-*                 Solve Z' * x = RHS
+*                 Solve Z**T * x = RHS
 *
                   CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
@@ -703,7 +703,7 @@
 *
                ELSE IF( ( MB.EQ.1 ) .AND. ( NB.EQ.2 ) ) THEN
 *
-*                 Build a 4-by-4 system Z' * x = RHS
+*                 Build a 4-by-4 system Z**T * x = RHS
 *
                   Z( 1, 1 ) = A( IS, IS )
                   Z( 2, 1 ) = ZERO
@@ -732,7 +732,7 @@
                   RHS( 3 ) = F( IS, JS )
                   RHS( 4 ) = F( IS, JSP1 )
 *
-*                 Solve Z' * x = RHS
+*                 Solve Z**T * x = RHS
 *
                   CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
@@ -775,7 +775,7 @@
 *
                ELSE IF( ( MB.EQ.2 ) .AND. ( NB.EQ.1 ) ) THEN
 *
-*                 Build a 4-by-4 system Z' * x = RHS
+*                 Build a 4-by-4 system Z**T * x = RHS
 *
                   Z( 1, 1 ) = A( IS, IS )
                   Z( 2, 1 ) = A( IS, ISP1 )
@@ -804,7 +804,7 @@
                   RHS( 3 ) = F( IS, JS )
                   RHS( 4 ) = F( ISP1, JS )
 *
-*                 Solve Z' * x = RHS
+*                 Solve Z**T * x = RHS
 *
                   CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )
@@ -846,7 +846,7 @@
 *
                ELSE IF( ( MB.EQ.2 ) .AND. ( NB.EQ.2 ) ) THEN
 *
-*                 Build an 8-by-8 system Z' * x = RHS
+*                 Build an 8-by-8 system Z**T * x = RHS
 *
                   CALL SLASET( 'F', LDZ, LDZ, ZERO, ZERO, Z, LDZ )
 *
@@ -898,7 +898,7 @@
   160             CONTINUE
 *
 *
-*                 Solve Z' * x = RHS
+*                 Solve Z**T * x = RHS
 *
                   CALL SGETC2( ZDIM, Z, LDZ, IPIV, JPIV, IERR )
                   IF( IERR.GT.0 )

@@ -165,7 +165,7 @@
 *
 *              W := C**H * V  =  (C1**H * V1 + C2**H * V2)  (stored in WORK)
 *
-*              W := C1'
+*              W := C1**H
 *
                DO 10 J = 1, K
                   CALL CCOPY( LASTC, C( J, 1 ), LDC, WORK( 1, J ), 1 )

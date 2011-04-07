@@ -311,7 +311,7 @@
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
-*              Multiply by diag(W)*inv(A').
+*              Multiply by diag(W)*inv(A**H).
 *
                CALL ZPBTRS( UPLO, N, KD, 1, AFB, LDAFB, WORK, N, INFO )
                DO 110 I = 1, N

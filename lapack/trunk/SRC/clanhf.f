@@ -1026,7 +1026,7 @@
             ELSE
 *              A is xpose & A is k by n
                IF( ILU.EQ.0 ) THEN
-*                 A' is upper
+*                 A**H is upper
                   DO J = 1, K - 2
                      CALL CLASSQ( J, A( 0+( K+J )*LDA ), 1, SCALE, S )
 *                    U at A(0,k)
@@ -1080,7 +1080,7 @@
                      L = L + LDA + 1
                   END DO
                ELSE
-*                 A' is lower
+*                 A**H is lower
                   DO J = 1, K - 1
                      CALL CLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
 *                    U at A(0,0)
@@ -1215,7 +1215,7 @@
             ELSE
 *              A is xpose
                IF( ILU.EQ.0 ) THEN
-*                 A' is upper
+*                 A**H is upper
                   DO J = 1, K - 1
                      CALL CLASSQ( J, A( 0+( K+1+J )*LDA ), 1, SCALE, S )
 *                 U at A(0,k+1)
@@ -1281,7 +1281,7 @@
                      END IF
                   END IF
                ELSE
-*                 A' is lower
+*                 A**H is lower
                   DO J = 1, K - 1
                      CALL CLASSQ( J, A( 0+( J+1 )*LDA ), 1, SCALE, S )
 *                 U at A(0,1)

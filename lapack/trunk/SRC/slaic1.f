@@ -27,15 +27,15 @@
 *                  [ s*x ]
 *           xhat = [  c  ]
 *  is an approximate singular vector of
-*                  [ L     0  ]
-*           Lhat = [ w' gamma ]
+*                  [ L      0  ]
+*           Lhat = [ w**T gamma ]
 *  in the sense that
 *           twonorm(Lhat*xhat) = sestpr.
 *
 *  Depending on JOB, an estimate for the largest or smallest singular
 *  value is computed.
 *
-*  Note that [s c]' and sestpr**2 is an eigenpair of the system
+*  Note that [s c]**T and sestpr**2 is an eigenpair of the system
 *
 *      diag(sest*sest, 0) + [alpha  gamma] * [ alpha ]
 *                                            [ gamma ]

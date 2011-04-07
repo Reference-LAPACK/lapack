@@ -75,7 +75,7 @@
 *
 *  VT     (output) REAL array,
 *         dimension ( LDU, SMLSIZ+1 ) if ICOMPQ = 1, and not referenced
-*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, VT' contains the right
+*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, VT**T contains the right
 *         singular vector matrices of all subproblems at the bottom
 *         level.
 *

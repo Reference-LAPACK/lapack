@@ -141,7 +141,7 @@
       END IF
       INFO = 0
 *
-*     Solve A * x = b  or  A' * x = b.
+*     Solve A * x = b  or  A**T * x = b.
 *
       DO 30 J = 1, NRHS
          CALL STPSV( UPLO, TRANS, DIAG, N, AP, B( 1, J ), 1 )

@@ -290,7 +290,7 @@
 *
 *        Since B is complex, the following call to DGEMM is performed
 *        in two steps (real and imaginary parts). That is for V * B
-*        (in the real version of the code V' is stored in WORK).
+*        (in the real version of the code V**H is stored in WORK).
 *
 *        CALL DGEMM( 'T', 'N', N, NRHS, N, ONE, WORK, N, B, LDB, ZERO,
 *    $               WORK( NWORK ), N )

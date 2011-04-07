@@ -210,7 +210,7 @@
 *  TOLA    REAL
 *  TOLB    REAL
 *          TOLA and TOLB are the thresholds to determine the effective
-*          rank of (A',B')**H. Generally, they are set to
+*          rank of (A**H,B**H)**H. Generally, they are set to
 *                   TOLA = MAX(M,N)*norm(A)*MACHEPS,
 *                   TOLB = MAX(P,N)*norm(B)*MACHEPS.
 *          The size of TOLA and TOLB may affect the size of backward

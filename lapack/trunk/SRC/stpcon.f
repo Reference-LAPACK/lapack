@@ -159,7 +159,7 @@
      $                      WORK, SCALE, WORK( 2*N+1 ), INFO )
             ELSE
 *
-*              Multiply by inv(A').
+*              Multiply by inv(A**T).
 *
                CALL SLATPS( UPLO, 'Transpose', DIAG, NORMIN, N, AP,
      $                      WORK, SCALE, WORK( 2*N+1 ), INFO )

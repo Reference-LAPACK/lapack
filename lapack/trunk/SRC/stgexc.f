@@ -21,7 +21,7 @@
 *  STGEXC reorders the generalized real Schur decomposition of a real
 *  matrix pair (A,B) using an orthogonal equivalence transformation
 *
-*                 (A, B) = Q * (A, B) * Z',
+*                 (A, B) = Q * (A, B) * Z**T,
 *
 *  so that the diagonal block of (A, B) with row index IFST is moved
 *  to row ILST.

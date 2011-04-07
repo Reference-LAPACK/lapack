@@ -237,7 +237,7 @@
      $                   LDWORK )
 *
 *           Update the unreduced submatrix A(1:i-1,1:i-1), using an
-*           update of the form:  A := A - V*W' - W*V**H
+*           update of the form:  A := A - V*W**H - W*V**H
 *
             CALL ZHER2K( UPLO, 'No transpose', I-1, NB, -CONE,
      $                   A( 1, I ), LDA, WORK, LDWORK, ONE, A, LDA )
@@ -268,7 +268,7 @@
      $                   TAU( I ), WORK, LDWORK )
 *
 *           Update the unreduced submatrix A(i+nb:n,i+nb:n), using
-*           an update of the form:  A := A - V*W' - W*V**H
+*           an update of the form:  A := A - V*W**H - W*V**H
 *
             CALL ZHER2K( UPLO, 'No transpose', N-I-NB+1, NB, -CONE,
      $                   A( I+NB, I ), LDA, WORK( NB+1 ), LDWORK, ONE,

@@ -201,7 +201,7 @@
          END IF
       ELSE
 *
-*        Form P', determined by a call to SGEBRD to reduce a k-by-n
+*        Form P**T, determined by a call to SGEBRD to reduce a k-by-n
 *        matrix
 *
          IF( K.LT.N ) THEN
@@ -215,7 +215,7 @@
 *           If k >= n, assume m = n
 *
 *           Shift the vectors which define the elementary reflectors one
-*           row downward, and set the first row and column of P' to
+*           row downward, and set the first row and column of P**T to
 *           those of the unit matrix
 *
             A( 1, 1 ) = ONE
@@ -230,7 +230,7 @@
    60       CONTINUE
             IF( N.GT.1 ) THEN
 *
-*              Form P'(2:n,2:n)
+*              Form P**T(2:n,2:n)
 *
                CALL SORGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
      $                      LWORK, IINFO )

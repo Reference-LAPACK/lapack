@@ -725,7 +725,7 @@
             ELSE
 *              A is xpose
                IF( ILU.EQ.0 ) THEN
-*                 A' is upper
+*                 A**T is upper
                   DO J = 1, K - 2
                      CALL SLASSQ( J, A( 0+( K+J )*LDA ), 1, SCALE, S )
 *                    U at A(0,k)
@@ -746,7 +746,7 @@
                   CALL SLASSQ( K, A( 0+( K-1 )*LDA ), LDA+1, SCALE, S )
 *                 tri L at A(0,k-1)
                ELSE
-*                 A' is lower
+*                 A**T is lower
                   DO J = 1, K - 1
                      CALL SLASSQ( J, A( 0+J*LDA ), 1, SCALE, S )
 *                    U at A(0,0)
@@ -807,7 +807,7 @@
             ELSE
 *              A is xpose
                IF( ILU.EQ.0 ) THEN
-*                 A' is upper
+*                 A**T is upper
                   DO J = 1, K - 1
                      CALL SLASSQ( J, A( 0+( K+1+J )*LDA ), 1, SCALE, S )
 *                    U at A(0,k+1)
@@ -828,7 +828,7 @@
                   CALL SLASSQ( K, A( 0+K*LDA ), LDA+1, SCALE, S )
 *                 tri L at A(0,k)
                ELSE
-*                 A' is lower
+*                 A**T is lower
                   DO J = 1, K - 1
                      CALL SLASSQ( J, A( 0+( J+1 )*LDA ), 1, SCALE, S )
 *                    U at A(0,1)

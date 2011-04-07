@@ -81,7 +81,7 @@
 *         POLES, GIVNUM, and Z.
 *
 *  VT     (input) REAL array, dimension ( LDU, SMLSIZ+1 ).
-*         On entry, VT' contains the right singular vector matrices of
+*         On entry, VT**T contains the right singular vector matrices of
 *         all subproblems at the bottom level.
 *
 *  K      (input) INTEGER array, dimension ( N ).

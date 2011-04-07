@@ -33,7 +33,7 @@
 *  X      (input/output) REAL array, dimension (N)
 *         On an intermediate return, X should be overwritten by
 *               A * X,   if KASE=1,
-*               A' * X,  if KASE=2,
+*               A**T * X,  if KASE=2,
 *         and SLACN2 must be re-called with all the other parameters
 *         unchanged.
 *
@@ -47,7 +47,7 @@
 *  KASE   (input/output) INTEGER
 *         On the initial call to SLACN2, KASE should be 0.
 *         On an intermediate return, KASE will be 1 or 2, indicating
-*         whether X should be overwritten by A * X  or A' * X.
+*         whether X should be overwritten by A * X  or A**T * X.
 *         On the final return from SLACN2, KASE will again be 0.
 *
 *  ISAVE  (input/output) INTEGER array, dimension (3)

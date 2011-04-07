@@ -154,7 +154,7 @@
 
       IF( UPPER ) THEN
 *
-*        invA = P * inv(U**T)*inv(D)*inv(U)*P'.
+*        invA = P * inv(U**T)*inv(D)*inv(U)*P**T.
 *
         CALL CTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
@@ -267,7 +267,7 @@
              END IF
            END DO
 *    
-*       U11T*invD1*U11->U11
+*       U11**T*invD1*U11->U11
 *
         CALL CTRMM('L','U','T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
@@ -278,12 +278,12 @@
             END DO
          END DO
 *
-*          U01'invD*U01->A(CUT+I,CUT+J)
+*          U01**T*invD*U01->A(CUT+I,CUT+J)
 *
          CALL CGEMM('T','N',NNB,NNB,CUT,ONE,A(1,CUT+1),LDA,
      $              WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
 *
-*        U11 =  U11T*invD1*U11 + U01'invD*U01
+*        U11 =  U11**T*invD1*U11 + U01**T*invD*U01
 *
          DO I=1,NNB
             DO J=I,NNB
@@ -291,7 +291,7 @@
             END DO
          END DO
 *
-*        U01 =  U00T*invD0*U01
+*        U01 =  U00**T*invD0*U01
 *
          CALL CTRMM('L',UPLO,'T','U',CUT, NNB,
      $             ONE,A,LDA,WORK,N+NB+1)
@@ -309,7 +309,7 @@
 *
        END DO
 *
-*        Apply PERMUTATIONS P and P': P * inv(U**T)*inv(D)*inv(U) *P'
+*        Apply PERMUTATIONS P and P**T: P * inv(U**T)*inv(D)*inv(U) *P**T
 *  
             I=1
             DO WHILE ( I .LE. N )
@@ -331,7 +331,7 @@
 *
 *        LOWER...
 *
-*        invA = P * inv(U**T)*inv(D)*inv(U)*P'.
+*        invA = P * inv(U**T)*inv(D)*inv(U)*P**T.
 *
          CALL CTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
@@ -438,7 +438,7 @@
              END IF
            END DO
 *    
-*       L11T*invD1*L11->L11
+*       L11**T*invD1*L11->L11
 *
         CALL CTRMM('L',UPLO,'T','U',NNB, NNB,
      $             ONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
@@ -451,13 +451,13 @@
 *
         IF ( (CUT+NNB) .LT. N ) THEN
 *
-*          L21T*invD2*L21->A(CUT+I,CUT+J)
+*          L21**T*invD2*L21->A(CUT+I,CUT+J)
 *
          CALL CGEMM('T','N',NNB,NNB,N-NNB-CUT,ONE,A(CUT+NNB+1,CUT+1)
      $             ,LDA,WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
        
 *
-*        L11 =  L11T*invD1*L11 + U01'invD*U01
+*        L11 =  L11**T*invD1*L11 + U01**T*invD*U01
 *
          DO I=1,NNB
             DO J=1,I
@@ -465,7 +465,7 @@
             END DO
          END DO
 *
-*        L01 =  L22T*invD2*L21
+*        L01 =  L22**T*invD2*L21
 *
          CALL CTRMM('L',UPLO,'T','U', N-NNB-CUT, NNB,
      $             ONE,A(CUT+NNB+1,CUT+NNB+1),LDA,WORK,N+NB+1)
@@ -478,7 +478,7 @@
          END DO
        ELSE
 *
-*        L11 =  L11T*invD1*L11
+*        L11 =  L11**T*invD1*L11
 *
          DO I=1,NNB
             DO J=1,I
@@ -492,7 +492,7 @@
            CUT=CUT+NNB
        END DO
 *
-*        Apply PERMUTATIONS P and P': P * inv(U**T)*inv(D)*inv(U) *P'
+*        Apply PERMUTATIONS P and P**T: P * inv(U**T)*inv(D)*inv(U) *P**T
 * 
             I=N
             DO WHILE ( I .GE. 1 )

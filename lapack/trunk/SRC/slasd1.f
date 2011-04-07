@@ -26,13 +26,13 @@
 *
 *  SLASD1 computes the SVD as follows:
 *
-*                ( D1(in)  0    0     0 )
-*    B = U(in) * (   Z1'   a   Z2'    b ) * VT(in)
-*                (   0     0   D2(in) 0 )
+*                ( D1(in)    0    0       0 )
+*    B = U(in) * (   Z1**T   a   Z2**T    b ) * VT(in)
+*                (   0       0   D2(in)   0 )
 *
 *      = U(out) * ( D(out) 0) * VT(out)
 *
-*  where Z' = (Z1' a Z2' b) = u' VT', and u is a vector of dimension M
+*  where Z**T = (Z1**T a Z2**T b) = u**T VT**T, and u is a vector of dimension M
 *  with ALPHA and BETA in the NL+1 and NL+2 th entries and zeros
 *  elsewhere; and the entry b is empty if SQRE = 0.
 *
@@ -101,7 +101,7 @@
 *         On entry VT(1:NL+1, 1:NL+1)**T contains the right singular
 *         vectors of the upper block; VT(NL+2:M, NL+2:M)**T contains
 *         the right singular vectors of the lower block. On exit
-*         VT' contains the right singular vectors of the
+*         VT**T contains the right singular vectors of the
 *         bidiagonal matrix.
 *
 *  LDVT   (input) INTEGER

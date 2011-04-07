@@ -166,7 +166,7 @@
      $                      WORK, SCALE, RWORK, INFO )
             ELSE
 *
-*              Multiply by inv(A').
+*              Multiply by inv(A**H).
 *
                CALL CLATPS( UPLO, 'Conjugate transpose', DIAG, NORMIN,
      $                      N, AP, WORK, SCALE, RWORK, INFO )

@@ -19,7 +19,7 @@
 *  =======
 *
 *  DGTTRS solves one of the systems of equations
-*     A*X = B  or  A'*X = B,
+*     A*X = B  or  A**T*X = B,
 *  with a tridiagonal matrix A using the LU factorization computed
 *  by DGTTRF.
 *
@@ -29,8 +29,8 @@
 *  TRANS   (input) CHARACTER*1
 *          Specifies the form of the system of equations.
 *          = 'N':  A * X = B  (No transpose)
-*          = 'T':  A'* X = B  (Transpose)
-*          = 'C':  A'* X = B  (Conjugate transpose = Transpose)
+*          = 'T':  A**T* X = B  (Transpose)
+*          = 'C':  A**T* X = B  (Conjugate transpose = Transpose)
 *
 *  N       (input) INTEGER
 *          The order of the matrix A.

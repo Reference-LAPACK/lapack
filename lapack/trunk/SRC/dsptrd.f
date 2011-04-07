@@ -208,7 +208,7 @@
                CALL DAXPY( N-I, ALPHA, AP( II+1 ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v**T
+*                 A := A - v * w**T - w * v**T
 *
                CALL DSPR2( UPLO, N-I, -ONE, AP( II+1 ), 1, TAU( I ), 1,
      $                     AP( I1I1 ) )

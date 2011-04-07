@@ -212,7 +212,7 @@
 *                              ( 0  A22),( 0  B22) n2
 *                                n1  n2    n1  n2
 *
-*  where N = n1+n2 and U' means the transpose of U. The first n1 columns
+*  where N = n1+n2 and U**T means the transpose of U. The first n1 columns
 *  of U and W span the specified pair of left and right eigenspaces
 *  (deflating subspaces) of (A, B).
 *

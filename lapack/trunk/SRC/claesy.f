@@ -127,7 +127,7 @@
 *
 *        Choose CS1 = 1 and SN1 to satisfy the first equation, then
 *        scale the components of this eigenvector so that the matrix
-*        of eigenvectors X satisfies  X * X' = I .  (No scaling is
+*        of eigenvectors X satisfies  X * X**T = I .  (No scaling is
 *        done if the norm of the eigenvalue matrix is less than THRESH.)
 *
          SN1 = ( RT1-A ) / B

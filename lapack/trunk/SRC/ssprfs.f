@@ -298,7 +298,7 @@
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
-*              Multiply by diag(W)*inv(A').
+*              Multiply by diag(W)*inv(A**T).
 *
                CALL SSPTRS( UPLO, N, 1, AFP, IPIV, WORK( N+1 ), N,
      $                      INFO )

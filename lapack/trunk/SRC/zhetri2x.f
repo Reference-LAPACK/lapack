@@ -156,7 +156,7 @@
 
       IF( UPPER ) THEN
 *
-*        invA = P * inv(U**H)*inv(D)*inv(U)*P'.
+*        invA = P * inv(U**H)*inv(D)*inv(U)*P**H.
 *
         CALL ZTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
@@ -269,7 +269,7 @@
              END IF
            END DO
 *    
-*       U11T*invD1*U11->U11
+*       U11**H*invD1*U11->U11
 *
         CALL ZTRMM('L','U','C','U',NNB, NNB,
      $             CONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
@@ -280,12 +280,12 @@
             END DO
          END DO
 *
-*          U01'invD*U01->A(CUT+I,CUT+J)
+*          U01**H*invD*U01->A(CUT+I,CUT+J)
 *
          CALL ZGEMM('C','N',NNB,NNB,CUT,CONE,A(1,CUT+1),LDA,
      $              WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
 *
-*        U11 =  U11T*invD1*U11 + U01'invD*U01
+*        U11 =  U11**H*invD1*U11 + U01**H*invD*U01
 *
          DO I=1,NNB
             DO J=I,NNB
@@ -293,7 +293,7 @@
             END DO
          END DO
 *
-*        U01 =  U00T*invD0*U01
+*        U01 =  U00**H*invD0*U01
 *
          CALL ZTRMM('L',UPLO,'C','U',CUT, NNB,
      $             CONE,A,LDA,WORK,N+NB+1)
@@ -311,7 +311,7 @@
 *
        END DO
 *
-*        Apply PERMUTATIONS P and P': P * inv(U**H)*inv(D)*inv(U) *P'
+*        Apply PERMUTATIONS P and P**H: P * inv(U**H)*inv(D)*inv(U) *P**H
 *  
             I=1
             DO WHILE ( I .LE. N )
@@ -333,7 +333,7 @@
 *
 *        LOWER...
 *
-*        invA = P * inv(U**H)*inv(D)*inv(U)*P'.
+*        invA = P * inv(U**H)*inv(D)*inv(U)*P**H.
 *
          CALL ZTRTRI( UPLO, 'U', N, A, LDA, INFO )
 *
@@ -440,7 +440,7 @@
              END IF
            END DO
 *    
-*       L11T*invD1*L11->L11
+*       L11**H*invD1*L11->L11
 *
         CALL ZTRMM('L',UPLO,'C','U',NNB, NNB,
      $             CONE,A(CUT+1,CUT+1),LDA,WORK(U11+1,1),N+NB+1)
@@ -453,13 +453,13 @@
 *
         IF ( (CUT+NNB) .LT. N ) THEN
 *
-*          L21T*invD2*L21->A(CUT+I,CUT+J)
+*          L21**H*invD2*L21->A(CUT+I,CUT+J)
 *
          CALL ZGEMM('C','N',NNB,NNB,N-NNB-CUT,CONE,A(CUT+NNB+1,CUT+1)
      $             ,LDA,WORK,N+NB+1, ZERO, WORK(U11+1,1), N+NB+1)
        
 *
-*        L11 =  L11T*invD1*L11 + U01'invD*U01
+*        L11 =  L11**H*invD1*L11 + U01**H*invD*U01
 *
          DO I=1,NNB
             DO J=1,I
@@ -467,7 +467,7 @@
             END DO
          END DO
 *
-*        L01 =  L22T*invD2*L21
+*        L01 =  L22**H*invD2*L21
 *
          CALL ZTRMM('L',UPLO,'C','U', N-NNB-CUT, NNB,
      $             CONE,A(CUT+NNB+1,CUT+NNB+1),LDA,WORK,N+NB+1)
@@ -480,7 +480,7 @@
          END DO
        ELSE
 *
-*        L11 =  L11T*invD1*L11
+*        L11 =  L11**H*invD1*L11
 *
          DO I=1,NNB
             DO J=1,I
@@ -494,7 +494,7 @@
            CUT=CUT+NNB
        END DO
 *
-*        Apply PERMUTATIONS P and P': P * inv(U**H)*inv(D)*inv(U) *P'
+*        Apply PERMUTATIONS P and P**H: P * inv(U**H)*inv(D)*inv(U) *P**H
 * 
             I=N
             DO WHILE ( I .GE. 1 )

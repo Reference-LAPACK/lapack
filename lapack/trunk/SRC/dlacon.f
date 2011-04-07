@@ -33,7 +33,7 @@
 *  X      (input/output) DOUBLE PRECISION array, dimension (N)
 *         On an intermediate return, X should be overwritten by
 *               A * X,   if KASE=1,
-*               A' * X,  if KASE=2,
+*               A**T * X,  if KASE=2,
 *         and DLACON must be re-called with all the other parameters
 *         unchanged.
 *
@@ -47,7 +47,7 @@
 *  KASE   (input/output) INTEGER
 *         On the initial call to DLACON, KASE should be 0.
 *         On an intermediate return, KASE will be 1 or 2, indicating
-*         whether X should be overwritten by A * X  or A' * X.
+*         whether X should be overwritten by A * X  or A**T * X.
 *         On the final return from DLACON, KASE will again be 0.
 *
 *  Further Details

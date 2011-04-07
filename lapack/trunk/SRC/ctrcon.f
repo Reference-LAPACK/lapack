@@ -172,7 +172,7 @@
      $                      LDA, WORK, SCALE, RWORK, INFO )
             ELSE
 *
-*              Multiply by inv(A').
+*              Multiply by inv(A**H).
 *
                CALL CLATRS( UPLO, 'Conjugate transpose', DIAG, NORMIN,
      $                      N, A, LDA, WORK, SCALE, RWORK, INFO )

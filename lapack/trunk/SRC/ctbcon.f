@@ -148,7 +148,7 @@
       RCOND = ZERO
       SMLNUM = SLAMCH( 'Safe minimum' )*REAL( MAX( N, 1 ) )
 *
-*     Compute the 1-norm of the triangular matrix A or A'.
+*     Compute the 1-norm of the triangular matrix A or A**H.
 *
       ANORM = CLANTB( NORM, UPLO, DIAG, N, KD, AB, LDAB, RWORK )
 *
@@ -177,7 +177,7 @@
      $                      AB, LDAB, WORK, SCALE, RWORK, INFO )
             ELSE
 *
-*              Multiply by inv(A').
+*              Multiply by inv(A**H).
 *
                CALL CLATBS( UPLO, 'Conjugate transpose', DIAG, NORMIN,
      $                      N, KD, AB, LDAB, WORK, SCALE, RWORK, INFO )

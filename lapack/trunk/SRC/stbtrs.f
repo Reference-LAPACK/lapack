@@ -150,7 +150,7 @@
       END IF
       INFO = 0
 *
-*     Solve A * X = B  or  A' * X = B.
+*     Solve A * X = B  or  A**T * X = B.
 *
       DO 30 J = 1, NRHS
          CALL STBSV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, B( 1, J ), 1 )

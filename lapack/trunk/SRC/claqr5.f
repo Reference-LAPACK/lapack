@@ -634,14 +634,14 @@
                   CALL CLACPY( 'ALL', KNZ, JLEN, H( INCOL+1+J2, JCOL ),
      $                         LDH, WH( KZS+1, 1 ), LDWH )
 *
-*                 ==== Multiply by U21' ====
+*                 ==== Multiply by U21**H ====
 *
                   CALL CLASET( 'ALL', KZS, JLEN, ZERO, ZERO, WH, LDWH )
                   CALL CTRMM( 'L', 'U', 'C', 'N', KNZ, JLEN, ONE,
      $                        U( J2+1, 1+KZS ), LDU, WH( KZS+1, 1 ),
      $                        LDWH )
 *
-*                 ==== Multiply top of H by U11' ====
+*                 ==== Multiply top of H by U11**H ====
 *
                   CALL CGEMM( 'C', 'N', I2, JLEN, J2, ONE, U, LDU,
      $                        H( INCOL+1, JCOL ), LDH, ONE, WH, LDWH )
@@ -651,7 +651,7 @@
                   CALL CLACPY( 'ALL', J2, JLEN, H( INCOL+1, JCOL ), LDH,
      $                         WH( I2+1, 1 ), LDWH )
 *
-*                 ==== Multiply by U21' ====
+*                 ==== Multiply by U21**H ====
 *
                   CALL CTRMM( 'L', 'L', 'C', 'N', J2, JLEN, ONE,
      $                        U( 1, I2+1 ), LDU, WH( I2+1, 1 ), LDWH )

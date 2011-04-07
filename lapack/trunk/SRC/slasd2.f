@@ -79,10 +79,10 @@
 *         The leading dimension of the array U.  LDU >= N.
 *
 *  VT     (input/output) REAL array, dimension (LDVT,M)
-*         On entry VT' contains the right singular vectors of two
+*         On entry VT**T contains the right singular vectors of two
 *         submatrices in the two square blocks with corners at (1,1),
 *         (NL+1, NL+1), and (NL+2, NL+2), (M,M).
-*         On exit VT' contains the trailing (N-K) updated right singular
+*         On exit VT**T contains the trailing (N-K) updated right singular
 *         vectors (those which were deflated) in its last N-K columns.
 *         In case SQRE =1, the last row of VT spans the right null
 *         space.
@@ -107,7 +107,7 @@
 *         The leading dimension of the array U2.  LDU2 >= N.
 *
 *  VT2    (output) REAL array, dimension (LDVT2,N)
-*         VT2' contains a copy of the first K right singular vectors
+*         VT2**T contains a copy of the first K right singular vectors
 *         which will be used by SLASD3 in a matrix multiply (SGEMM) to
 *         solve for the new right singular vectors. VT2 is arranged into
 *         three blocks. The first block contains a row that corresponds

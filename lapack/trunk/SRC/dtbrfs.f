@@ -195,7 +195,7 @@
       DO 250 J = 1, NRHS
 *
 *        Compute residual R = B - op(A) * X,
-*        where op(A) = A or A', depending on TRANS.
+*        where op(A) = A or A**T, depending on TRANS.
 *
          CALL DCOPY( N, X( 1, J ), 1, WORK( N+1 ), 1 )
          CALL DTBMV( UPLO, TRANS, DIAG, N, KD, AB, LDAB, WORK( N+1 ),
@@ -258,7 +258,7 @@
             END IF
          ELSE
 *
-*           Compute abs(A')*abs(X) + abs(B).
+*           Compute abs(A**T)*abs(X) + abs(B).
 *
             IF( UPPER ) THEN
                IF( NOUNIT ) THEN

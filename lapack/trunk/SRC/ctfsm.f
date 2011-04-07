@@ -31,7 +31,7 @@
 *  where alpha is a scalar, X and B are m by n matrices, A is a unit, or
 *  non-unit,  upper or lower triangular matrix  and  op( A )  is one  of
 *
-*     op( A ) = A   or   op( A ) = conjg( A' ).
+*     op( A ) = A   or   op( A ) = A**H.
 *
 *  A is in Rectangular Full Packed (RFP) Format.
 *

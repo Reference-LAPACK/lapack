@@ -228,7 +228,7 @@
                CALL SAXPY( N-I, ALPHA, A( I+1, I ), 1, TAU( I ), 1 )
 *
 *              Apply the transformation as a rank-2 update:
-*                 A := A - v * w' - w * v**T
+*                 A := A - v * w**T - w * v**T
 *
                CALL SSYR2( UPLO, N-I, -ONE, A( I+1, I ), 1, TAU( I ), 1,
      $                     A( I+1, I+1 ), LDA )

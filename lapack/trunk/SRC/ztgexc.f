@@ -20,7 +20,7 @@
 *
 *  ZTGEXC reorders the generalized Schur decomposition of a complex
 *  matrix pair (A,B), using an unitary equivalence transformation
-*  (A, B) := Q * (A, B) * Z', so that the diagonal block of (A, B) with
+*  (A, B) := Q * (A, B) * Z**H, so that the diagonal block of (A, B) with
 *  row index IFST is moved to row ILST.
 *
 *  (A, B) must be in generalized Schur canonical form, that is, A and

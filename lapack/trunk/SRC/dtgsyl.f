@@ -40,10 +40,10 @@
 *  In matrix notation (1) is equivalent to solve  Zx = scale b, where
 *  Z is defined as
 *
-*             Z = [ kron(In, A)  -kron(B', Im) ]         (2)
-*                 [ kron(In, D)  -kron(E', Im) ].
+*             Z = [ kron(In, A)  -kron(B**T, Im) ]         (2)
+*                 [ kron(In, D)  -kron(E**T, Im) ].
 *
-*  Here Ik is the identity matrix of size k and X' is the transpose of
+*  Here Ik is the identity matrix of size k and X**T is the transpose of
 *  X. kron(X, Y) is the Kronecker product between the matrices X and Y.
 *
 *  If TRANS = 'T', DTGSYL solves the transposed system Z**T*y = scale*b,

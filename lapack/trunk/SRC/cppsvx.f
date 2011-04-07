@@ -46,7 +46,7 @@
 *        A = U**H * U ,  if UPLO = 'U', or
 *        A = L * L**H,  if UPLO = 'L',
 *     where U is an upper triangular matrix, L is a lower triangular
-*     matrix, and ' indicates conjugate transpose.
+*     matrix, and **H indicates conjugate transpose.
 *
 *  3. If the leading i-by-i principal minor is not positive definite,
 *     then the routine returns with INFO = i. Otherwise, the factored

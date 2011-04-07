@@ -296,7 +296,7 @@
          IF( KASE.NE.0 ) THEN
             IF( KASE.EQ.1 ) THEN
 *
-*              Multiply by diag(W)*inv(A').
+*              Multiply by diag(W)*inv(A**T).
 *
                CALL DPOTRS( UPLO, N, 1, AF, LDAF, WORK( N+1 ), N, INFO )
                DO 110 I = 1, N

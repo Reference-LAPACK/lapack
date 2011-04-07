@@ -37,7 +37,7 @@
 *    U = (  CSU  SNU ), V = (  CSV SNV ), Q = (  CSQ   SNQ )
 *        ( -SNU  CSU )      ( -SNV CSV )      ( -SNQ   CSQ )
 *
-*  Z' denotes the transpose of Z.
+*  Z**T denotes the transpose of Z.
 *
 *
 *  Arguments
