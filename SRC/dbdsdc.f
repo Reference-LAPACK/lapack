@@ -287,7 +287,7 @@
       CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, N, 1, D, N, IERR )
       CALL DLASCL( 'G', 0, 0, ORGNRM, ONE, NM1, 1, E, NM1, IERR )
 *
-      EPS = DLAMCH( 'Epsilon' )
+      EPS = (0.9D+0)*DLAMCH( 'Epsilon' )
 *
       MLVL = INT( LOG( DBLE( N ) / DBLE( SMLSIZ+1 ) ) / LOG( TWO ) ) + 1
       SMLSZP = SMLSIZ + 1
