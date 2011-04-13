@@ -1,9 +1,9 @@
       SUBROUTINE DSPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
      $                   SWORK, ITER, INFO )
 *
-*  -- LAPACK PROTOTYPE driver routine (version 3.3.0) --
+*  -- LAPACK PROTOTYPE driver routine (version 3.3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*     November 2010
+*  -- April 2011                                                      --
 *
 *     ..
 *     .. Scalar Arguments ..

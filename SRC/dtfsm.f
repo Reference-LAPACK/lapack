@@ -1,10 +1,10 @@
       SUBROUTINE DTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
      $                  B, LDB )
 *
-*  -- LAPACK routine (version 3.3.0)                                    --
+*  -- LAPACK routine (version 3.3.1)                                    --
 *
 *  -- Contributed by Fred Gustavson of the IBM Watson Research Center --
-*     November 2010
+*  -- April 2011                                                      --
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--

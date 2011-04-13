@@ -1,10 +1,10 @@
       SUBROUTINE DSPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, IWORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.2.2) --
+*  -- LAPACK routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*  -- April 2011                                                      --
 *
 *     Modified to call DLACN2 in place of DLACON, 5 Feb 03, SJH.
 *

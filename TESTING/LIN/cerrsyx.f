@@ -1,8 +1,8 @@
       SUBROUTINE CERRSY( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.2) --
+*  -- LAPACK test routine (version 3.3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH

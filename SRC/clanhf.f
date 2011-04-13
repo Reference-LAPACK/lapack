@@ -1,6 +1,6 @@
       REAL FUNCTION CLANHF( NORM, TRANSR, UPLO, N, A, WORK )
 *
-*  -- LAPACK routine (version 3.2.1)                                    --
+*  -- LAPACK routine (version 3.3.1)                                    --
 *
 *  -- Contributed by Fred Gustavson of the IBM Watson Research Center --
 *  -- April 2009                                                      --

@@ -2,9 +2,9 @@
      $                   THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
      $                   XACT, WORK, RWORK, IWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.3.0) --
+*  -- LAPACK test routine (version 3.3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2010
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR

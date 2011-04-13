@@ -1,10 +1,10 @@
       SUBROUTINE DSGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
      $                   SWORK, ITER, INFO )
 *
-*  -- LAPACK PROTOTYPE driver routine (version 3.2.2) --
+*  -- LAPACK PROTOTYPE driver routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     February 2007
+*  -- April 2011                                                      --
 *
 *     ..
 *     .. Scalar Arguments ..

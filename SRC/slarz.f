@@ -1,9 +1,9 @@
       SUBROUTINE SLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       CHARACTER          SIDE

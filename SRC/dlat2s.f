@@ -1,9 +1,9 @@
       SUBROUTINE DLAT2S( UPLO, N, A, LDA, SA, LDSA, INFO )
 *
-*  -- LAPACK PROTOTYPE auxiliary routine (version 3.1.2) --
+*  -- LAPACK PROTOTYPE auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     May 2007
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO

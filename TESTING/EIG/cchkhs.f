@@ -4,9 +4,9 @@
      $                   WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
      $                   INFO )
 *
-*  -- LAPACK test routine (version 3.1.1) --
+*  -- LAPACK test routine (version 3.3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     February 2007
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, NOUNIT, NSIZES, NTYPES, NWORK

@@ -1,9 +1,9 @@
       SUBROUTINE ZHPCON( UPLO, N, AP, IPIV, ANORM, RCOND, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*  -- April 2011                                                      --
 *
 *     Modified to call ZLACN2 in place of ZLACON, 10 Feb 03, SJH.
 *

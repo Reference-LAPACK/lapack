@@ -1,9 +1,9 @@
       SUBROUTINE ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
      $                   SWORK, RWORK, ITER, INFO )
 *
-*  -- LAPACK PROTOTYPE driver routine (version 3.3.0)                 --
+*  -- LAPACK PROTOTYPE driver routine (version 3.3.1)                 --
 *
-*     November 2010
+*  -- April 2011                                                      --
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
