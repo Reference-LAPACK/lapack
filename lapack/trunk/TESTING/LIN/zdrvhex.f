@@ -2,9 +2,9 @@
      $                   A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
 *
-*  -- LAPACK test routine (version 3.2.1) --
+*  -- LAPACK test routine (version 3.3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     April 2009
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR

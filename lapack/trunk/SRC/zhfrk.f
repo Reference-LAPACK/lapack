@@ -1,10 +1,10 @@
       SUBROUTINE ZHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
      $                  C )
 *
-*  -- LAPACK routine (version 3.3.0)                                    --
+*  -- LAPACK routine (version 3.3.1)                                    --
 *
 *  -- Contributed by Julien Langou of the Univ. of Colorado Denver    --
-*     November 2010
+*  -- April 2011                                                      --
 *
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--

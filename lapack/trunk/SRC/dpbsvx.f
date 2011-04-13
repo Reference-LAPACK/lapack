@@ -2,10 +2,10 @@
      $                   EQUED, S, B, LDB, X, LDX, RCOND, FERR, BERR,
      $                   WORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK driver routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       CHARACTER          EQUED, FACT, UPLO

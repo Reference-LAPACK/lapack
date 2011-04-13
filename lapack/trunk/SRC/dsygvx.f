@@ -2,10 +2,10 @@
      $                   VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
      $                   LWORK, IWORK, IFAIL, INFO )
 *
-*  -- LAPACK driver routine (version 3.2.2) --
+*  -- LAPACK driver routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE, UPLO

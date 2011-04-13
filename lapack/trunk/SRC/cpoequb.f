@@ -1,6 +1,6 @@
       SUBROUTINE CPOEQUB( N, A, LDA, S, SCOND, AMAX, INFO )
 *
-*     -- LAPACK routine (version 3.2)                                 --
+*     -- LAPACK routine (version 3.3.1)                                 --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
 *     -- November 2008                                                --

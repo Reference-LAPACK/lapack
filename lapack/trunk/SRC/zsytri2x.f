@@ -1,9 +1,9 @@
       SUBROUTINE ZSYTRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
 *
-*  -- LAPACK routine (version 3.3.0) --
+*  -- LAPACK routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2010
+*  -- April 2011                                                      --
 *
 *  -- Written by Julie Langou of the Univ. of TN    --
 *

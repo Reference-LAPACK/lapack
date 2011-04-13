@@ -1,7 +1,7 @@
       SUBROUTINE DLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN,
      $                   DN1, DN2, TAU, TTYPE, G )
 *
-*  -- LAPACK routine (version 3.2)                                    --
+*  -- LAPACK routine (version 3.3.1)                                    --
 *
 *  -- Contributed by Osni Marques of the Lawrence Berkeley National   --
 *  -- Laboratory and Beresford Parlett of the Univ. of California at  --

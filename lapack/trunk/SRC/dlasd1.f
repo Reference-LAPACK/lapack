@@ -1,10 +1,10 @@
       SUBROUTINE DLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
      $                   IDXQ, IWORK, WORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.2.2) --
+*  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDU, LDVT, NL, NR, SQRE

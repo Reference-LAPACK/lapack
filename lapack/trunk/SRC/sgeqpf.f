@@ -1,9 +1,9 @@
       SUBROUTINE SGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO )
 *
-*  -- LAPACK deprecated computational routine (version 3.2.2) --
+*  -- LAPACK deprecated computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N
@@ -78,7 +78,7 @@
 *  Partial column norm updating strategy modified by
 *    Z. Drmac and Z. Bujanovic, Dept. of Mathematics,
 *    University of Zagreb, Croatia.
-*     June 2010
+*  -- April 2011                                                      --
 *  For more details see LAPACK Working Note 176.
 *
 *  =====================================================================

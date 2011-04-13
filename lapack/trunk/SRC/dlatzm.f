@@ -1,9 +1,9 @@
       SUBROUTINE DLATZM( SIDE, M, N, V, INCV, TAU, C1, C2, LDC, WORK )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*  -- April 2011                                                      --
 *
 *     .. Scalar Arguments ..
       CHARACTER          SIDE

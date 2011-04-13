@@ -6,7 +6,7 @@
      $                             IWORK, INFO )
       IMPLICIT NONE
 *
-*  -- LAPACK routine (version 3.3.0) --
+*  -- LAPACK routine (version 3.3.1) --
 *
 *  -- Contributed by Brian Sutton of the Randolph-Macon College --
 *  -- November 2010

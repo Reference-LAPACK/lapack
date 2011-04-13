@@ -1,7 +1,7 @@
       SUBROUTINE SLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
      $                      INCX, BETA, Y, INCY )
 *
-*     -- LAPACK routine (version 3.2.2)                                 --
+*     -- LAPACK routine (version 3.3.1)                                 --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
 *     -- June 2010                                                    --
