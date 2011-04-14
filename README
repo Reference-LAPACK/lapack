@@ -16,6 +16,7 @@ VERSION 3.2   : November 2008
 VERSION 3.2.1 : April 2009
 VERSION 3.2.2 : June 2010
 VERSION 3.3.0 : November 2010
+VERSION 3.3.1 : April 2011
 
 LAPACK is a library of Fortran 90 with subroutines for solving
 the most commonly occurring problems in numerical linear algebra.
@@ -34,6 +35,47 @@ intended for use only if there is no other implementation of the BLAS
 already available on your machine; the efficiency of LAPACK depends
 very much on the efficiency of the BLAS.
 
+=================
+LAPACK INSTALLATION:
+ - LAPACK can be installed with make. Configuration haev to be set in the
+ make.inc file. A make.inc.example for a Linux mahcine running GNU compilers
+ is given in the main directory. Some specific make.inc are also available in
+ the INSTALL directory
+ - LAPACK includes also the CMAKE build. You will need to have CMAKE installed
+ on your machine (CMAKE is available at http://www.cmake.org/). CMAKE will allow
+ an easy installation on a Windows Machine
+ - Specific information to run LAPACK under Windows are available at 
+ http://icl.cs.utk.edu/lapack-for-windows/lapack/
+ 
+ For further information on LAPACK please read our FAQ at
+ http://www.netlib.org/lapack/#_faq
+ A User forum is also available to help you with the LAPACK library at
+ http://icl.cs.utk.edu/lapack-forum/
+================
+ 
+ 
+================
+LAPACK User Support
+ 
+LAPACK has been thoroughly tested, on many different
+types of computers.  The LAPACK project supports the package in the
+sense that reports of errors or poor performance will gain immediate
+attention from the developers. Such reports, descriptions 
+of interesting applications, and other comments should be sent by
+electronic mail to lapack@cs.utk.edu.
+
+A list of known problems, bugs, and compiler errors for LAPACK is
+maintained on netlib.
+  http://www.netlib.org/lapack/release_notes.html
+  
+A User forum is also available to help you with the LAPACK library at
+ http://icl.cs.utk.edu/lapack-forum/
+You can also contact directly the LAPACK team at lapack@cs.utk.edu  
+================
+  
+  
+================
+LAPACK TESTING
 The complete package, including test code in four
 different Fortran data types (real, complex, double precision, double
 complex), contains some 805,000 lines of Fortran source and comments.
@@ -50,7 +92,11 @@ Guide for further details on installing the package and on what is contained
 in each subdirectory.  For complete information on the LAPACK Testing
 please consult LAPACK Working Note 41 "Installation
 Guide for LAPACK".
+================
 
+
+================
+LAPACK USER GUIDE
 It is highly recommended that you obtain a copy of the Third Edition of
 the LAPACK Users' Guide published by SIAM in Winter, 1999.  This Users'
 Guide gives a detailed description of the philosophy behind LAPACK as well
@@ -66,6 +112,16 @@ price for SIAM members is $31.20; the cost for nonmembers is $39.00.
 To view an HTML version of the Users' Guide please refer to the URL
 
   http://www.netlib.org/lapack/lug/lapack_lug.html.
+================
+
+
+================
+RELATED LAPACK PROJECTS
+
+**NEW** LAPACKE: Standard C language APIs for LAPACK
+http://www.netlib.org/lapack/#_standard_c_language_apis_for_lapack
+collaboration LAPACK and INTEL Math Kernel Library
+
 
 The Fortran95 interface to LAPACK is available, as well as an f2c'ed
 version of LAPACK, and a C++ version of a subset of LAPACK routines.
@@ -80,17 +136,11 @@ Or, for more information on the distributed-memory version of LAPACK,
 consult the ScaLAPACK index on netlib:
 
   http://www.netlib.org/scalapack/
+================
 
-LAPACK has been thoroughly tested, on many different
-types of computers.  The LAPACK project supports the package in the
-sense that reports of errors or poor performance will gain immediate
-attention from the developers. Such reports, descriptions 
-of interesting applications, and other comments should be sent by
-electronic mail to lapack@cs.utk.edu.
 
-A list of known problems, bugs, and compiler errors for LAPACK is
-maintained on netlib.
-  http://www.netlib.org/lapack/release_notes.html
+================
+LAPACK WORKING NOTES
 
 A number of technical reports were written during the development of
 LAPACK and published as LAPACK Working Notes, initially by Argonne
@@ -109,3 +159,4 @@ University of Tennessee
 Knoxville, Tennessee 37996-1301
 USA
 Email: lapack@cs.utk.edu
+================
