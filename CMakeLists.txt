@@ -67,25 +67,26 @@ set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 
 option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library instead of included netlib BLAS" OFF)
 
+
 # Check the usage of the user provided BLAS libraries
-if(BLAS_LIBRAIRIES)
+if(BLAS_LIBRARIES)
   include(CheckFortranFunctionExists)
-  set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRAIRIES})
+  set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
   CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
   unset( CMAKE_REQUIRED_LIBRARIES )
   if(BLAS_FOUND)
-    message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRAIRIES}.")
+    message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
   else(BLAS_FOUND)
-    message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRAIRIES}.")
+    message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRARIES}.")
     message(ERROR "-->     Will use REFERENCE BLAS (by default)")
-    message(ERROR "-->     Or Correct your BLAS_LIBRAIRIES entry ")
+    message(ERROR "-->     Or Correct your BLAS_LIBRARIES entry ")
     message(ERROR "-->     Or Consider checking USE_OPTIMIZED_BLAS")
   endif(BLAS_FOUND)
 
 # User did not provide a BLAS Library but specified to search for one
 elseif( USE_OPTIMIZED_BLAS )
   find_package( BLAS )
-endif (BLAS_LIBRAIRIES)
+endif (BLAS_LIBRARIES)
 
 # Neither user specified or optimized BLAS libraries can be used
 if(NOT BLAS_FOUND)
@@ -103,6 +104,11 @@ else()
     "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}" 
     CACHE STRING "Linker flags for shared libs" FORCE)
 endif( NOT BLAS_FOUND )
+
+option(USE_XBLAS "Build extended precision (needs XBLAS)" OFF)
+if (USE_XBLAS)
+  find_library(XBLAS_LIBRARY NAMES xblas)
+endif(USE_XBLAS)
    
 add_subdirectory(SRC)
 if(BUILD_TESTING)

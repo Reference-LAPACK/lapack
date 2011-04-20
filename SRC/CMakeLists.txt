@@ -373,7 +373,7 @@ set(ZXLASRC  zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_lin_berr.f zlarscl2.f zlascl2.f zla_wwaddw.f)
 
 
-if( USEXBLAS)
+if( USE_XBLAS)
   set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC} ${ALLXAUX})
 endif()
 
@@ -392,5 +392,5 @@ if(BUILD_COMPLEX16)
   set(ALLOBJ  ${ZLASRC} ${ALLAUX} ${DZLAUX} ${ZCLASRC})
 endif()
 add_library(lapack ${ALLOBJ} ${ALLXOBJ})
-target_link_libraries(lapack ${BLAS_LIBRARIES})
+target_link_libraries(lapack ${BLAS_LIBRARIES} ${XBLAS_LIBRARY})
 lapack_install_library(lapack)
