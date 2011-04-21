@@ -53,9 +53,12 @@
          ILAZLR = 0
          DO J = 1, N
             I=M
-            DO WHILE ((A(I,J).NE.ZERO).AND.(I.GE.1))
-              I=I-1
-            ENDDO         
+            DO WHILE ((A(I,J).EQ.ZERO).AND.(I.GT.1))
+               I=I-1
+            ENDDO
+            IF( (I.EQ.1).AND.(A(1,J).EQ.ZERO) ) THEN
+               I = 0
+            END IF         
             ILAZLR = MAX( ILAZLR, I )
          END DO
       END IF
