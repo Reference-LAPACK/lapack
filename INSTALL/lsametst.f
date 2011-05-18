@@ -29,13 +29,13 @@
 *
 *     Test LSAME.
 *
-      IF( .NOT.LSAME( 'A', 'A' ) )
+      IF( .NOT. LSAME( 'A', 'A' ) )
      $   WRITE( *, 9999 )'A', 'A'
-      IF( .NOT.LSAME( 'A', 'a' ) )
+      IF( .NOT. LSAME( 'A', 'a' ) )
      $   WRITE( *, 9999 )'A', 'a'
-      IF( .NOT.LSAME( 'a', 'A' ) )
+      IF( .NOT. LSAME( 'a', 'A' ) )
      $   WRITE( *, 9999 )'a', 'A'
-      IF( .NOT.LSAME( 'a', 'a' ) )
+      IF( .NOT. LSAME( 'a', 'a' ) )
      $   WRITE( *, 9999 )'a', 'a'
       IF( LSAME( 'A', 'B' ) )
      $   WRITE( *, 9998 )'A', 'B'
