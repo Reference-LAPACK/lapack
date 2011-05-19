@@ -106,8 +106,7 @@
 *          The leading dimension of the array C.
 *          LDC >= max(1,N) if NCC > 0; LDC >=1 if NCC = 0.
 *
-*  RWORK   (workspace) REAL array, dimension (2*N) 
-*          if NCVT = NRU = NCC = 0, (max(1, 4*N-4)) otherwise
+*  RWORK   (workspace) REAL array, dimension (4*N) 
 *
 *  INFO    (output) INTEGER
 *          = 0:  successful exit
