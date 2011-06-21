@@ -418,8 +418,11 @@
 *     The deflated eigenvalues and their corresponding vectors go back
 *     into the last N - K slots of D and Q respectively.
 *
-      CALL SLACPY( 'A', N, CTOT( 4 ), Q2( IQ1 ), N, Q( 1, K+1 ), LDQ )
-      CALL SCOPY( N-K, Z( K+1 ), 1, D( K+1 ), 1 )
+      IF( K.LT.N ) THEN
+         CALL SLACPY( 'A', N, CTOT( 4 ), Q2( IQ1 ), N, 
+     $                Q( 1, K+1 ), LDQ )
+         CALL SCOPY( N-K, Z( K+1 ), 1, D( K+1 ), 1 )
+      END IF
 *
 *     Copy CTOT into COLTYP for referencing in SLAED3.
 *
