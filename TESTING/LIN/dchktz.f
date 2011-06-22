@@ -1,5 +1,5 @@
       SUBROUTINE DCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
-     $                   COPYA, S, COPYS, TAU, WORK, NOUT )
+     $                   COPYA, S, TAU, WORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -13,7 +13,7 @@
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            MVAL( * ), NVAL( * )
-      DOUBLE PRECISION   A( * ), COPYA( * ), COPYS( * ), S( * ),
+      DOUBLE PRECISION   A( * ), COPYA( * ), S( * ),
      $                   TAU( * ), WORK( * )
 *     ..
 *
@@ -57,9 +57,6 @@
 *  COPYA   (workspace) DOUBLE PRECISION array, dimension (MMAX*NMAX)
 *
 *  S       (workspace) DOUBLE PRECISION array, dimension
-*                      (min(MMAX,NMAX))
-*
-*  COPYS   (workspace) DOUBLE PRECISION array, dimension
 *                      (min(MMAX,NMAX))
 *
 *  TAU     (workspace) DOUBLE PRECISION array, dimension (MMAX)
@@ -168,18 +165,18 @@
                   IF( MODE.EQ.0 ) THEN
                      CALL DLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
                      DO 20 I = 1, MNMIN
-                        COPYS( I ) = ZERO
+                        S( I ) = ZERO
    20                CONTINUE
                   ELSE
                      CALL DLATMS( M, N, 'Uniform', ISEED,
-     $                            'Nonsymmetric', COPYS, IMODE,
+     $                            'Nonsymmetric', S, IMODE,
      $                            ONE / EPS, ONE, M, N, 'No packing', A,
      $                            LDA, WORK, INFO )
                      CALL DGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+1 ),
      $                            INFO )
                      CALL DLASET( 'Lower', M-1, N, ZERO, ZERO, A( 2 ),
      $                            LDA )
-                     CALL DLAORD( 'Decreasing', MNMIN, COPYS, 1 )
+                     CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
                   END IF
 *
 *                 Save A and its singular values
@@ -194,7 +191,7 @@
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = DQRT12( M, M, A, LDA, COPYS, WORK,
+                  RESULT( 1 ) = DQRT12( M, M, A, LDA, S, WORK,
      $                          LWORK )
 *
 *                 Compute norm( A - R*Q )
@@ -214,18 +211,18 @@
                   IF( MODE.EQ.0 ) THEN
                      CALL DLASET( 'Full', M, N, ZERO, ZERO, A, LDA )
                      DO 30 I = 1, MNMIN
-                        COPYS( I ) = ZERO
+                        S( I ) = ZERO
    30                CONTINUE
                   ELSE
                      CALL DLATMS( M, N, 'Uniform', ISEED,
-     $                            'Nonsymmetric', COPYS, IMODE,
+     $                            'Nonsymmetric', S, IMODE,
      $                            ONE / EPS, ONE, M, N, 'No packing', A,
      $                            LDA, WORK, INFO )
                      CALL DGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+1 ),
      $                            INFO )
                      CALL DLASET( 'Lower', M-1, N, ZERO, ZERO, A( 2 ),
      $                            LDA )
-                     CALL DLAORD( 'Decreasing', MNMIN, COPYS, 1 )
+                     CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
                   END IF
 *
 *                 Save A and its singular values
@@ -240,7 +237,7 @@
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 4 ) = DQRT12( M, M, A, LDA, COPYS, WORK,
+                  RESULT( 4 ) = DQRT12( M, M, A, LDA, S, WORK,
      $                          LWORK )
 *
 *                 Compute norm( A - R*Q )

@@ -72,7 +72,6 @@
 *     .. Local Scalars ..
       INTEGER            I
       DOUBLE PRECISION   SMIN, BASE, TMP
-      COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH

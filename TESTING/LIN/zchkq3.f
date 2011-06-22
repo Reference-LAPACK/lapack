@@ -1,5 +1,5 @@
       SUBROUTINE ZCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
-     $                   THRESH, A, COPYA, S, COPYS, TAU, WORK, RWORK,
+     $                   THRESH, A, COPYA, S, TAU, WORK, RWORK,
      $                   IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
@@ -14,7 +14,7 @@
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NVAL( * ),
      $                   NXVAL( * )
-      DOUBLE PRECISION   COPYS( * ), RWORK( * ), S( * )
+      DOUBLE PRECISION   S( * ), RWORK( * )
       COMPLEX*16         A( * ), COPYA( * ), TAU( * ), WORK( * )
 *     ..
 *
@@ -66,9 +66,6 @@
 *  COPYA   (workspace) COMPLEX*16 array, dimension (MMAX*NMAX)
 *
 *  S       (workspace) DOUBLE PRECISION array, dimension
-*                      (min(MMAX,NMAX))
-*
-*  COPYS   (workspace) DOUBLE PRECISION array, dimension
 *                      (min(MMAX,NMAX))
 *
 *  TAU     (workspace) COMPLEX*16 array, dimension (MMAX)
@@ -184,10 +181,10 @@
                IF( IMODE.EQ.1 ) THEN
                   CALL ZLASET( 'Full', M, N, CZERO, CZERO, COPYA, LDA )
                   DO 30 I = 1, MNMIN
-                     COPYS( I ) = ZERO
+                     S( I ) = ZERO
    30             CONTINUE
                ELSE
-                  CALL ZLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', COPYS,
+                  CALL ZLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
      $                         MODE, ONE / EPS, ONE, M, N, 'No packing',
      $                         COPYA, LDA, WORK, INFO )
                   IF( IMODE.GE.4 ) THEN
@@ -208,7 +205,7 @@
                         IWORK( I ) = 1
    40                CONTINUE
                   END IF
-                  CALL DLAORD( 'Decreasing', MNMIN, COPYS, 1 )
+                  CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
                END IF
 *
                DO 60 INB = 1, NNB
@@ -236,7 +233,7 @@
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = ZQRT12( M, N, A, LDA, COPYS, WORK,
+                  RESULT( 1 ) = ZQRT12( M, N, A, LDA, S, WORK,
      $                          LWORK, RWORK )
 *
 *                 Compute norm( A*P - Q*R )

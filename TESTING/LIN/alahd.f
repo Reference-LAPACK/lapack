@@ -801,8 +801,6 @@
  9938 FORMAT( 3X, I2, ': norm( I - Q''*Q )      / ( M * EPS )' )
  9937 FORMAT( 3X, I2, ': norm( A - R*Q )       / ( M * norm(A) * EPS )'
      $       )
- 9936 FORMAT( ' Test ratios (1-2: ', A1, 'GELS, 3-6: ', A1,
-     $      'GELSS, 7-10: ', A1, 'GELSX):' )
  9935 FORMAT( 3X, I2, ': norm( B - A * X )   / ',
      $      '( max(M,N) * norm(A) * norm(X) * EPS )' )
  9934 FORMAT( 3X, I2, ': norm( (A*X-B)'' *A ) / ',
@@ -816,7 +814,6 @@
      $      'otherwise', / 7X,
      $      'check if X is in the row space of A or A'' ',
      $      '(overdetermined case)' )
- 9930 FORMAT( 3X, ' 7-10: same as 3-6' )
  9929 FORMAT( ' Test ratios (1-3: ', A1, 'TZRQF, 4-6: ', A1,
      $      'TZRZF):' )
  9920 FORMAT( 3X, ' 7-10: same as 3-6', 3X, ' 11-14: same as 3-6',

@@ -368,7 +368,7 @@
      $                               LDA )
                         CALL ZGTT02( TRANS, N, NRHS, A, A( M+1 ),
      $                               A( N+M+1 ), X, LDA, WORK, LDA,
-     $                               RWORK, RESULT( 2 ) )
+     $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *
@@ -442,7 +442,7 @@
 *
                      CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
                      CALL ZGTT02( TRANS, N, NRHS, A, A( M+1 ),
-     $                            A( N+M+1 ), X, LDA, WORK, LDA, RWORK,
+     $                            A( N+M+1 ), X, LDA, WORK, LDA,
      $                            RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.

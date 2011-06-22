@@ -1,5 +1,5 @@
       SUBROUTINE CCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
-     $                   COPYA, S, COPYS, TAU, WORK, RWORK, NOUT )
+     $                   COPYA, S, TAU, WORK, RWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -13,7 +13,7 @@
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            MVAL( * ), NVAL( * )
-      REAL               COPYS( * ), RWORK( * ), S( * )
+      REAL               S( * ), RWORK( * )
       COMPLEX            A( * ), COPYA( * ), TAU( * ), WORK( * )
 *     ..
 *
@@ -57,9 +57,6 @@
 *  COPYA   (workspace) COMPLEX array, dimension (MMAX*NMAX)
 *
 *  S       (workspace) REAL array, dimension
-*                      (min(MMAX,NMAX))
-*
-*  COPYS   (workspace) REAL array, dimension
 *                      (min(MMAX,NMAX))
 *
 *  TAU     (workspace) COMPLEX array, dimension (MMAX)
@@ -152,6 +149,8 @@
 *
             IF( M.LE.N ) THEN
                DO 50 IMODE = 1, NTYPES
+                  IF( .NOT.DOTYPE( IMODE ) )
+     $               GO TO 50
 *
 *                 Do for each type of singular value distribution.
 *                    0:  zero matrix
@@ -169,18 +168,18 @@
                      CALL CLASET( 'Full', M, N, CMPLX( ZERO ),
      $                            CMPLX( ZERO ), A, LDA )
                      DO 20 I = 1, MNMIN
-                        COPYS( I ) = ZERO
+                        S( I ) = ZERO
    20                CONTINUE
                   ELSE
                      CALL CLATMS( M, N, 'Uniform', ISEED,
-     $                            'Nonsymmetric', COPYS, IMODE,
+     $                            'Nonsymmetric', S, IMODE,
      $                            ONE / EPS, ONE, M, N, 'No packing', A,
      $                            LDA, WORK, INFO )
                      CALL CGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+1 ),
      $                            INFO )
                      CALL CLASET( 'Lower', M-1, N, CMPLX( ZERO ),
      $                            CMPLX( ZERO ), A( 2 ), LDA )
-                     CALL SLAORD( 'Decreasing', MNMIN, COPYS, 1 )
+                     CALL SLAORD( 'Decreasing', MNMIN, S, 1 )
                   END IF
 *
 *                 Save A and its singular values
@@ -195,7 +194,7 @@
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 1 ) = CQRT12( M, M, A, LDA, COPYS, WORK,
+                  RESULT( 1 ) = CQRT12( M, M, A, LDA, S, WORK,
      $                          LWORK, RWORK )
 *
 *                 Compute norm( A - R*Q )
@@ -216,18 +215,18 @@
                      CALL CLASET( 'Full', M, N, CMPLX( ZERO ),
      $                            CMPLX( ZERO ), A, LDA )
                      DO 30 I = 1, MNMIN
-                        COPYS( I ) = ZERO
+                        S( I ) = ZERO
    30                CONTINUE
                   ELSE
                      CALL CLATMS( M, N, 'Uniform', ISEED,
-     $                            'Nonsymmetric', COPYS, IMODE,
+     $                            'Nonsymmetric', S, IMODE,
      $                            ONE / EPS, ONE, M, N, 'No packing', A,
      $                            LDA, WORK, INFO )
                      CALL CGEQR2( M, N, A, LDA, WORK, WORK( MNMIN+1 ),
      $                            INFO )
                      CALL CLASET( 'Lower', M-1, N, CMPLX( ZERO ),
      $                            CMPLX( ZERO ), A( 2 ), LDA )
-                     CALL SLAORD( 'Decreasing', MNMIN, COPYS, 1 )
+                     CALL SLAORD( 'Decreasing', MNMIN, S, 1 )
                   END IF
 *
 *                 Save A and its singular values
@@ -242,7 +241,7 @@
 *
 *                 Compute norm(svd(a) - svd(r))
 *
-                  RESULT( 4 ) = CQRT12( M, M, A, LDA, COPYS, WORK,
+                  RESULT( 4 ) = CQRT12( M, M, A, LDA, S, WORK,
      $                          LWORK, RWORK )
 *
 *                 Compute norm( A - R*Q )

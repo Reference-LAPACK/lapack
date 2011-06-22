@@ -2986,7 +2986,6 @@
    50    CONTINUE
       END IF
 *
-   60 CONTINUE
       LDERES = .TRUE.
       GO TO 80
    70 CONTINUE

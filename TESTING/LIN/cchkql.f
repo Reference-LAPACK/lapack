@@ -1,6 +1,6 @@
       SUBROUTINE CCHKQL( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   NRHS, THRESH, TSTERR, NMAX, A, AF, AQ, AL, AC,
-     $                   B, X, XACT, TAU, WORK, RWORK, IWORK, NOUT )
+     $                   B, X, XACT, TAU, WORK, RWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -13,7 +13,7 @@
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
-      INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NVAL( * ),
+      INTEGER            MVAL( * ), NBVAL( * ), NVAL( * ),
      $                   NXVAL( * )
       REAL               RWORK( * )
       COMPLEX            A( * ), AC( * ), AF( * ), AL( * ), AQ( * ),
@@ -93,8 +93,6 @@
 *  WORK    (workspace) COMPLEX array, dimension (NMAX*NMAX)
 *
 *  RWORK   (workspace) REAL array, dimension (NMAX)
-*
-*  IWORK   (workspace) INTEGER array, dimension (NMAX)
 *
 *  NOUT    (input) INTEGER
 *          The unit number for output.

@@ -1,5 +1,5 @@
       SUBROUTINE CCHKQP( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
-     $                   COPYA, S, COPYS, TAU, WORK, RWORK, IWORK,
+     $                   COPYA, S, TAU, WORK, RWORK, IWORK,
      $                   NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
@@ -14,7 +14,7 @@
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), MVAL( * ), NVAL( * )
-      REAL               COPYS( * ), RWORK( * ), S( * )
+      REAL               S( * ), RWORK( * )
       COMPLEX            A( * ), COPYA( * ), TAU( * ), WORK( * )
 *     ..
 *
@@ -58,9 +58,6 @@
 *  COPYA   (workspace) COMPLEX array, dimension (MMAX*NMAX)
 *
 *  S       (workspace) REAL array, dimension
-*                      (min(MMAX,NMAX))
-*
-*  COPYS   (workspace) REAL array, dimension
 *                      (min(MMAX,NMAX))
 *
 *  TAU     (workspace) COMPLEX array, dimension (MMAX)
@@ -180,10 +177,10 @@
                   CALL CLASET( 'Full', M, N, CMPLX( ZERO ),
      $                         CMPLX( ZERO ), COPYA, LDA )
                   DO 30 I = 1, MNMIN
-                     COPYS( I ) = ZERO
+                     S( I ) = ZERO
    30             CONTINUE
                ELSE
-                  CALL CLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', COPYS,
+                  CALL CLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
      $                         MODE, ONE / EPS, ONE, M, N, 'No packing',
      $                         COPYA, LDA, WORK, INFO )
                   IF( IMODE.GE.4 ) THEN
@@ -204,7 +201,7 @@
                         IWORK( I ) = 1
    40                CONTINUE
                   END IF
-                  CALL SLAORD( 'Decreasing', MNMIN, COPYS, 1 )
+                  CALL SLAORD( 'Decreasing', MNMIN, S, 1 )
                END IF
 *
 *              Save A and its singular values
@@ -219,7 +216,7 @@
 *
 *              Compute norm(svd(a) - svd(r))
 *
-               RESULT( 1 ) = CQRT12( M, N, A, LDA, COPYS, WORK, LWORK,
+               RESULT( 1 ) = CQRT12( M, N, A, LDA, S, WORK, LWORK,
      $                       RWORK )
 *
 *              Compute norm( A*P - Q*R )

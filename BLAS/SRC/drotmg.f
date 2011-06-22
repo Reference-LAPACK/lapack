@@ -186,7 +186,6 @@
          DPARAM(5) = DH22
       END IF
 
-  260 CONTINUE
       DPARAM(1) = DFLAG
       RETURN
       END

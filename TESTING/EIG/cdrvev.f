@@ -525,7 +525,7 @@
                END IF
 *
                CALL CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
-     $                      ' ', 'T', 'T', 'T', RWORK, 4, CONDS, N, N,
+     $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N,
      $                      ANORM, A, LDA, WORK( 2*N+1 ), IINFO )
 *
             ELSE IF( ITYPE.EQ.7 ) THEN

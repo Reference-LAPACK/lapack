@@ -108,7 +108,6 @@
       CHARACTER          UPLOS( 2 )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       DOUBLE PRECISION   RESULT( NTESTS )
-      DOUBLE PRECISION   MYWORK( NTESTS )
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DGET06, DLANSY
