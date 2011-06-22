@@ -766,10 +766,11 @@
      $                   NRHS, THRESH, TSTERR, NMAX, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), B( 1, 4 ),
-     $                   WORK, RWORK, IWORK, NOUT )
+     $                   WORK, RWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
+
 *
       ELSE IF( LSAMEN( 2, C2, 'RQ' ) ) THEN
 *
@@ -808,7 +809,7 @@
 *
          IF( TSTCHK ) THEN
             CALL CCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR,
-     $                   A( 1, 1 ), A( 1, 2 ), S( 1 ), S( NMAX+1 ),
+     $                   A( 1, 1 ), A( 1, 2 ), S( 1 ),
      $                   B( 1, 1 ), WORK, RWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -823,15 +824,15 @@
 *
          IF( TSTCHK ) THEN
             CALL CCHKQP( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR,
-     $                   A( 1, 1 ), A( 1, 2 ), S( 1 ), S( NMAX+1 ),
+     $                   A( 1, 1 ), A( 1, 2 ), S( 1 ),
      $                   B( 1, 1 ), WORK, RWORK, IWORK, NOUT )
             CALL CCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   THRESH, A( 1, 1 ), A( 1, 2 ), S( 1 ),
-     $                   S( NMAX+1 ), B( 1, 1 ), WORK, RWORK, IWORK,
-     $                   NOUT )
+     $                   B( 1, 1 ), WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
+
 *
       ELSE IF( LSAMEN( 2, C2, 'LS' ) ) THEN
 *
@@ -854,6 +855,7 @@
 *
          WRITE( NOUT, FMT = 9990 )PATH
       END IF
+
 *
 *     Go back to get another input line.
 *

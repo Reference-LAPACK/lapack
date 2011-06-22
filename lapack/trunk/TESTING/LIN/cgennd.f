@@ -39,7 +39,6 @@
       PARAMETER          ( ZERO = 0.0E0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL OUT
       INTEGER I, K
       COMPLEX AII
 *     ..

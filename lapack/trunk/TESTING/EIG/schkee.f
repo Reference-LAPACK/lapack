@@ -2353,8 +2353,6 @@
       WRITE( NOUT, FMT = 9993 )S2 - S1
 *
  9999 FORMAT( / ' Execution not attempted due to input errors' )
- 9998 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NX =', I4,
-     $      ', NS =', I4, ', MAXB =', I4 )
  9997 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NX =', I4 )
  9996 FORMAT( / / 1X, A3, ':  NB =', I4, ', NBMIN =', I4, ', NS =', I4,
      $      ', MAXB =', I4, ', NBCOL =', I4 )

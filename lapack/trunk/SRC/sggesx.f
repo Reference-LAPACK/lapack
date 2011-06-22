@@ -579,7 +579,7 @@
          DO 20 I = 1, N  
             IF( ALPHAI( I ).NE.ZERO ) THEN
                IF( ( ALPHAR( I ) / SAFMAX ).GT.( ANRMTO / ANRM ) .OR.
-     $             ( SAFMIN / ALPHAR( I ) ).GT.( ANRM / ANRMTO ) )        
+     $             ( SAFMIN / ALPHAR( I ) ).GT.( ANRM / ANRMTO ) )  
      $            THEN
                   WORK( 1 ) = ABS( A( I, I ) / ALPHAR( I ) )
                   BETA( I ) = BETA( I )*WORK( 1 )

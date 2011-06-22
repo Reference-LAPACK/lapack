@@ -274,7 +274,7 @@
   160    CONTINUE
          IF( C.GE.G .OR. MAX( F, C, CA ).GE.SFMAX2 .OR.
      $       MIN( R, G, RA ).LE.SFMIN2 )GO TO 170
- 	        IF( SISNAN( C+F+CA+R+G+RA ) ) THEN
+            IF( SISNAN( C+F+CA+R+G+RA ) ) THEN
 *
 *           Exit if NaN to avoid infinite loop
 *

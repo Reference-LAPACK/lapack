@@ -1794,40 +1794,6 @@
      $      / ' 21=Diagonally dominant tridiagonal, geometrically',
      $      ' spaced eigenvalues' )
 *
- 9993 FORMAT( / ' Tests performed:   ',
-     $      '(S is Tridiag, D is diagonal, U and Z are ', A, ',', / 20X,
-     $      A, ', W is a diagonal matrix of eigenvalues,', / 20X,
-     $      ' V is U represented by Householder vectors, and', / 20X,
-     $      ' Y is a matrix of eigenvectors of S.)',
-     $      / ' ZHETRD, UPLO=''U'':', / '  1= | A - V S V', A1,
-     $      ' | / ( |A| n ulp )     ', '  2= | I - U V', A1,
-     $      ' | / ( n ulp )', / ' ZHETRD, UPLO=''L'':',
-     $      / '  3= | A - V S V', A1, ' | / ( |A| n ulp )     ',
-     $      '  4= | I - U V', A1, ' | / ( n ulp )' )
- 9992 FORMAT( ' ZHPTRD, UPLO=''U'':', / '  5= | A - V S V', A1,
-     $      ' | / ( |A| n ulp )     ', '  6= | I - U V', A1,
-     $      ' | / ( n ulp )', / ' ZHPTRD, UPLO=''L'':',
-     $      / '  7= | A - V S V', A1, ' | / ( |A| n ulp )     ',
-     $      '  8= | I - U V', A1, ' | / ( n ulp )',
-     $      / '  9= | S - Z D Z', A1, ' | / ( |S| n ulp )     ',
-     $      ' 10= | I - Z Z', A1, ' | / ( n ulp )',
-     $      / ' 11= |D(with Z) - D(w/o Z)| / (|D| ulp) ',
-     $      ' 12= | D(PWK) - D(QR) | / (|D| ulp)',
-     $      / ' 13=   Sturm sequence test on W         ' )
- 9991 FORMAT( ' 14= | S - Z4 D4 Z4', A1, ' | / (|S| n ulp)',
-     $      / ' 15= | I - Z4 Z4', A1, ' | / (n ulp ) ',
-     $      ' 16= | D4 - D5 | / ( 100 |D4| ulp ) ',
-     $      / ' 17= max | D4(i) - WR(i) | / ( |D4(i)| (2n-1) ulp )',
-     $      / ' 18= | WA1 - D3 | / ( |D3| ulp )',
-     $      / ' 19= max | WA2(i) - WA3(ii) | / ( |D3| ulp )',
-     $      / ' 20= | S - Y WA1 Y', A1, ' | / ( |S| n ulp )',
-     $      / ' 21= | I - Y Y', A1, ' | / ( n ulp )' )
- 9990 FORMAT( ' 22= | S - Z D Z', A1,
-     $      ' | / ( |S| n ulp ) for ZSTEDC(I)', / ' 23= | I - Z Z', A1,
-     $      ' | / ( n ulp )       for ZSTEDC(I)', / ' 24= | S - Z D Z',
-     $      A1, ' | / ( |S| n ulp ) for ZSTEDC(V)', / ' 25= | I - Z Z',
-     $      A1, ' | / ( n ulp )       for ZSTEDC(V)',
-     $      / ' 26= | D1(ZSTEDC(V)) - D2(CSTEDC(N)) | / ( |D1| ulp )' )
  9989 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I3, ' is', 0P, F8.2 )
  9988 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',

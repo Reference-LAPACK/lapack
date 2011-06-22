@@ -1,5 +1,5 @@
       SUBROUTINE DGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
-     $                   RWORK, RESID )
+     $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -12,7 +12,7 @@
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION   B( LDB, * ), D( * ), DL( * ), DU( * ),
-     $                   RWORK( * ), X( LDX, * )
+     $                   X( LDX, * )
 *     ..
 *
 *  Purpose
@@ -61,8 +61,6 @@
 *
 *  LDB     (input) INTEGER
 *          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
 *
 *  RESID   (output) DOUBLE PRECISION
 *          norm(B - op(A)*X) / (norm(A) * norm(X) * EPS)

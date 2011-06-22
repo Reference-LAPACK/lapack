@@ -1,5 +1,5 @@
       SUBROUTINE CGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
-     $                   RWORK, RESID )
+     $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -11,7 +11,6 @@
       REAL               RESID
 *     ..
 *     .. Array Arguments ..
-      REAL               RWORK( * )
       COMPLEX            B( LDB, * ), D( * ), DL( * ), DU( * ),
      $                   X( LDX, * )
 *     ..
@@ -62,8 +61,6 @@
 *
 *  LDB     (input) INTEGER
 *          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  RWORK   (workspace) REAL array, dimension (N)
 *
 *  RESID   (output) REAL
 *          norm(B - op(A)*X) / (norm(A) * norm(X) * EPS)

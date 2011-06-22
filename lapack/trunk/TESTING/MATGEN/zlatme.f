@@ -1,4 +1,4 @@
-      SUBROUTINE ZLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI, 
+      SUBROUTINE ZLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
      $  RSIGN, 
      $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM, 
      $  A, 
@@ -9,7 +9,7 @@
 *     June 2010
 *
 *     .. Scalar Arguments ..
-      CHARACTER          DIST, EI, RSIGN, SIM, UPPER
+      CHARACTER          DIST, RSIGN, SIM, UPPER
       INTEGER            INFO, KL, KU, LDA, MODE, MODES, N
       DOUBLE PRECISION   ANORM, COND, CONDS
       COMPLEX*16         DMAX
@@ -116,10 +116,6 @@
 *           D will be scaled by a negative or complex number (or zero).
 *           If RSIGN='F' then the largest (absolute) eigenvalue will be
 *           equal to DMAX.
-*           Not modified.
-*
-*  EI       (input) CHARACTER*1 array, dimension ( N )
-*           (ignored)
 *           Not modified.
 *
 *  RSIGN    (input) CHARACTER*1

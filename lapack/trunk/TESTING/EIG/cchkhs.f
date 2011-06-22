@@ -616,7 +616,7 @@
                   CONDS = ZERO
                END IF
 *
-               CALL CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE, ' ',
+               CALL CLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
      $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N, ANORM,
      $                      A, LDA, WORK( N+1 ), IINFO )
 *

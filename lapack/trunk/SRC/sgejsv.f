@@ -459,7 +459,7 @@
      $                         (LWORK .LT. MAX0(7,4*N+N*N,2*M+N))) .OR.
      $ (LSVEC .AND. (.NOT.RSVEC) .AND. (LWORK .LT. MAX0(7,2*M+N,4*N+1)))
      $ .OR.
-     $ (RSVEC .AND. (.NOT.LSVEC) .AND. (LWORK .LT. MAX0(7,2*M+N,4*N+1))) 
+     $ (RSVEC .AND. (.NOT.LSVEC) .AND. (LWORK .LT. MAX0(7,2*M+N,4*N+1)))
      $ .OR.
      $ (LSVEC .AND. RSVEC .AND. (.NOT.JRACC) .AND. 
      $                          (LWORK.LT.MAX0(2*M+N,6*N+2*N*N)))

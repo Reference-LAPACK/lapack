@@ -577,7 +577,7 @@
                   CONDS = ZERO
                END IF
 *
-               CALL ZLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE, ' ',
+               CALL ZLATME( N, 'D', ISEED, WORK, IMODE, COND, CONE,
      $                      'T', 'T', 'T', RWORK, 4, CONDS, N, N, ANORM,
      $                      A, LDA, WORK( 2*N+1 ), IINFO )
 *

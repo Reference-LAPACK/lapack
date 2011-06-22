@@ -319,8 +319,6 @@
   110    CONTINUE
   120 CONTINUE
 *
-  130 CONTINUE
-*
 *     Print a summary of the results.
 *
       IF( NFAIL.GT.0 ) THEN

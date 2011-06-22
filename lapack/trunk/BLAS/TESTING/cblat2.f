@@ -3083,7 +3083,6 @@
    50    CONTINUE
       END IF
 *
-   60 CONTINUE
       LCERES = .TRUE.
       GO TO 80
    70 CONTINUE

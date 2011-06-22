@@ -1,5 +1,5 @@
       SUBROUTINE DCHKQP( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
-     $                   COPYA, S, COPYS, TAU, WORK, IWORK, NOUT )
+     $                   COPYA, S, TAU, WORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -13,7 +13,7 @@
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), MVAL( * ), NVAL( * )
-      DOUBLE PRECISION   A( * ), COPYA( * ), COPYS( * ), S( * ),
+      DOUBLE PRECISION   A( * ), COPYA( * ), S( * ),
      $                   TAU( * ), WORK( * )
 *     ..
 *
@@ -57,9 +57,6 @@
 *  COPYA   (workspace) DOUBLE PRECISION array, dimension (MMAX*NMAX)
 *
 *  S       (workspace) DOUBLE PRECISION array, dimension
-*                      (min(MMAX,NMAX))
-*
-*  COPYS   (workspace) DOUBLE PRECISION array, dimension
 *                      (min(MMAX,NMAX))
 *
 *  TAU     (workspace) DOUBLE PRECISION array, dimension (MMAX)
@@ -177,10 +174,10 @@
                IF( IMODE.EQ.1 ) THEN
                   CALL DLASET( 'Full', M, N, ZERO, ZERO, COPYA, LDA )
                   DO 30 I = 1, MNMIN
-                     COPYS( I ) = ZERO
+                     S( I ) = ZERO
    30             CONTINUE
                ELSE
-                  CALL DLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', COPYS,
+                  CALL DLATMS( M, N, 'Uniform', ISEED, 'Nonsymm', S,
      $                         MODE, ONE / EPS, ONE, M, N, 'No packing',
      $                         COPYA, LDA, WORK, INFO )
                   IF( IMODE.GE.4 ) THEN
@@ -201,7 +198,7 @@
                         IWORK( I ) = 1
    40                CONTINUE
                   END IF
-                  CALL DLAORD( 'Decreasing', MNMIN, COPYS, 1 )
+                  CALL DLAORD( 'Decreasing', MNMIN, S, 1 )
                END IF
 *
 *              Save A and its singular values
@@ -215,7 +212,7 @@
 *
 *              Compute norm(svd(a) - svd(r))
 *
-               RESULT( 1 ) = DQRT12( M, N, A, LDA, COPYS, WORK, LWORK )
+               RESULT( 1 ) = DQRT12( M, N, A, LDA, S, WORK, LWORK )
 *
 *              Compute norm( A*P - Q*R )
 *

@@ -2676,7 +2676,6 @@
    50    CONTINUE
       END IF
 *
-   60 CONTINUE
       LSERES = .TRUE.
       GO TO 80
    70 CONTINUE

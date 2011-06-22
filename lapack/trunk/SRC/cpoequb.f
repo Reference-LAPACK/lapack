@@ -72,7 +72,6 @@
 *     .. Local Scalars ..
       INTEGER            I
       REAL               SMIN, BASE, TMP
-      COMPLEX            ZDUM
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH

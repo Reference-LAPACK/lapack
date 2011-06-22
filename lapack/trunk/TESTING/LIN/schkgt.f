@@ -398,7 +398,7 @@
 *
                   CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
                   CALL SGTT02( TRANS, N, NRHS, A, A( M+1 ), A( N+M+1 ),
-     $                         X, LDA, WORK, LDA, RWORK, RESULT( 2 ) )
+     $                         X, LDA, WORK, LDA, RESULT( 2 ) )
 *
 *+    TEST 3
 *                 Check solution from generated exact solution.
