@@ -73,7 +73,7 @@
 *          The dimension of the array WORK.
 *          If COMPZ = 'N' or N <= 1 then LWORK must be at least 1.
 *          If COMPZ = 'V' and N > 1 then LWORK must be at least
-*                         ( 1 + 3*N + 2*N*lg N + 3*N**2 ),
+*                         ( 1 + 3*N + 2*N*lg N + 4*N**2 ),
 *                         where lg( N ) = smallest integer k such
 *                         that 2**k >= N.
 *          If COMPZ = 'I' and N > 1 then LWORK must be at least
@@ -189,7 +189,7 @@
             IF( 2**LGN.LT.N )
      $         LGN = LGN + 1
             IF( ICOMPZ.EQ.1 ) THEN
-               LWMIN = 1 + 3*N + 2*N*LGN + 3*N**2
+               LWMIN = 1 + 3*N + 2*N*LGN + 4*N**2
                LIWMIN = 6 + 6*N + 5*N*LGN
             ELSE IF( ICOMPZ.EQ.2 ) THEN
                LWMIN = 1 + 4*N + N**2
