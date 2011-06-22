@@ -561,8 +561,8 @@
      $         LGN = LGN + 1
             IF( 2**LGN.LT.N )
      $         LGN = LGN + 1
-            LWEDC = 1 + 4*N + 2*N*LGN + 3*N**2
-            LRWEDC = 1 + 3*N + 2*N*LGN + 3*N**2
+            LWEDC = 1 + 4*N + 2*N*LGN + 4*N**2
+            LRWEDC = 1 + 3*N + 2*N*LGN + 4*N**2
             LIWEDC = 6 + 6*N + 5*N*LGN
          ELSE
             LWEDC = 8
