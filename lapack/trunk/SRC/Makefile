@@ -149,7 +149,7 @@ SLASRC = \
 DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o 
 
 SXLASRC = sgesvxx.o sgerfsx.o sla_gerfsx_extended.o sla_geamv.o		\
-   sla_gercond.o sla_rpvgrw.o ssysvxx.o ssyrfsx.o			\
+   sla_gercond.o sla_gerpvgrw.o ssysvxx.o ssyrfsx.o			\
    sla_syrfsx_extended.o sla_syamv.o sla_syrcond.o sla_syrpvgrw.o	\
    sposvxx.o sporfsx.o sla_porfsx_extended.o sla_porcond.o		\
    sla_porpvgrw.o sgbsvxx.o sgbrfsx.o sla_gbrfsx_extended.o		\
@@ -217,7 +217,7 @@ CLASRC = \
    cbbcsd.o clapmr.o cunbdb.o cuncsd.o
 
 CXLASRC =    cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
-   cla_gercond_c.o cla_gercond_x.o cla_rpvgrw.o \
+   cla_gercond_c.o cla_gercond_x.o cla_gerpvgrw.o \
    csysvxx.o csyrfsx.o cla_syrfsx_extended.o cla_syamv.o \
    cla_syrcond_c.o cla_syrcond_x.o cla_syrpvgrw.o \
    cposvxx.o cporfsx.o cla_porfsx_extended.o \
@@ -289,7 +289,7 @@ DLASRC = \
    dbbcsd.o dlapmr.o dorbdb.o dorcsd.o
 
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o		\
-   dla_gercond.o dla_rpvgrw.o dsysvxx.o dsyrfsx.o			\
+   dla_gercond.o dla_gerpvgrw.o dsysvxx.o dsyrfsx.o			\
    dla_syrfsx_extended.o dla_syamv.o dla_syrcond.o dla_syrpvgrw.o	\
    dposvxx.o dporfsx.o dla_porfsx_extended.o dla_porcond.o		\
    dla_porpvgrw.o dgbsvxx.o dgbrfsx.o dla_gbrfsx_extended.o		\
@@ -362,7 +362,7 @@ ZLASRC = \
    zbbcsd.o zlapmr.o zunbdb.o zuncsd.o
 
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o		\
-   zla_gercond_c.o zla_gercond_x.o zla_rpvgrw.o zsysvxx.o zsyrfsx.o	\
+   zla_gercond_c.o zla_gercond_x.o zla_gerpvgrw.o zsysvxx.o zsyrfsx.o	\
    zla_syrfsx_extended.o zla_syamv.o zla_syrcond_c.o zla_syrcond_x.o	\
    zla_syrpvgrw.o zposvxx.o zporfsx.o zla_porfsx_extended.o		\
    zla_porcond_c.o zla_porcond_x.o zla_porpvgrw.o zgbsvxx.o zgbrfsx.o	\
