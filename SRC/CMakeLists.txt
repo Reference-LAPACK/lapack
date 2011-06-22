@@ -148,7 +148,7 @@ set(SLASRC
 set(DSLASRC spotrs.f sgetrs.f spotrf.f sgetrf.f) 
 
 set(SXLASRC  sgesvxx.f sgerfsx.f sla_gerfsx_extended.f sla_geamv.f		
-   sla_gercond.f sla_rpvgrw.f ssysvxx.f ssyrfsx.f			
+   sla_gercond.f sla_gerpvgrw.f ssysvxx.f ssyrfsx.f			
    sla_syrfsx_extended.f sla_syamv.f sla_syrcond.f sla_syrpvgrw.f	
    sposvxx.f sporfsx.f sla_porfsx_extended.f sla_porcond.f		
    sla_porpvgrw.f sgbsvxx.f sgbrfsx.f sla_gbrfsx_extended.f		
@@ -217,7 +217,7 @@ set(CLASRC
    cbbcsd.f clapmr.f cunbdb.f cuncsd.f )
 
 set(CXLASRC     cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f 
-   cla_gercond_c.f cla_gercond_x.f cla_rpvgrw.f 
+   cla_gercond_c.f cla_gercond_x.f cla_gerpvgrw.f 
    csysvxx.f csyrfsx.f cla_syrfsx_extended.f cla_syamv.f 
    cla_syrcond_c.f cla_syrcond_x.f cla_syrpvgrw.f 
    cposvxx.f cporfsx.f cla_porfsx_extended.f 
@@ -289,7 +289,7 @@ set(DLASRC
    dbbcsd.f dlapmr.f dorbdb.f dorcsd.f )
 
 set(DXLASRC dgesvxx.f dgerfsx.f dla_gerfsx_extended.f dla_geamv.f		
-   dla_gercond.f dla_rpvgrw.f dsysvxx.f dsyrfsx.f			
+   dla_gercond.f dla_gerpvgrw.f dsysvxx.f dsyrfsx.f			
    dla_syrfsx_extended.f dla_syamv.f dla_syrcond.f dla_syrpvgrw.f	
    dposvxx.f dporfsx.f dla_porfsx_extended.f dla_porcond.f		
    dla_porpvgrw.f dgbsvxx.f dgbrfsx.f dla_gbrfsx_extended.f		
@@ -363,7 +363,7 @@ set(ZLASRC
    zbbcsd.f zlapmr.f zunbdb.f zuncsd.f )
 
 set(ZXLASRC  zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f		
-   zla_gercond_c.f zla_gercond_x.f zla_rpvgrw.f zsysvxx.f zsyrfsx.f	
+   zla_gercond_c.f zla_gercond_x.f zla_gerpvgrw.f zsysvxx.f zsyrfsx.f	
    zla_syrfsx_extended.f zla_syamv.f zla_syrcond_c.f zla_syrcond_x.f	
    zla_syrpvgrw.f zposvxx.f zporfsx.f zla_porfsx_extended.f		
    zla_porcond_c.f zla_porcond_x.f zla_porpvgrw.f zgbsvxx.f zgbrfsx.f	
