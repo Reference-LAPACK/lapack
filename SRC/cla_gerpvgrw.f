@@ -1,6 +1,6 @@
-      REAL FUNCTION CLA_RPVGRW( N, NCOLS, A, LDA, AF, LDAF )
+      REAL FUNCTION CLA_GERPVGRW( N, NCOLS, A, LDA, AF, LDAF )
 *
-*     -- LAPACK routine (version 3.2.2)                                 --
+*     -- LAPACK routine (version 3.2.2)                               --
 *     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
 *     -- Jason Riedy of Univ. of California Berkeley.                 --
 *     -- June 2010                                                    --
@@ -20,7 +20,7 @@
 *  Purpose
 *  =======
 * 
-*  CLA_RPVGRW computes the reciprocal pivot growth factor
+*  CLA_GERPVGRW computes the reciprocal pivot growth factor
 *  norm(A)/norm(U). The "max absolute element" norm is used. If this is
 *  much less than 1, the stability of the LU factorization of the
 *  (equilibrated) matrix A could be poor. This also means that the
@@ -83,5 +83,5 @@
             RPVGRW = MIN( AMAX / UMAX, RPVGRW )
          END IF
       END DO
-      CLA_RPVGRW = RPVGRW
+      CLA_GERPVGRW = RPVGRW
       END
