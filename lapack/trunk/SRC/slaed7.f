@@ -142,7 +142,7 @@
 *         Each number indicates the S value to be used in the
 *         corresponding Givens rotation.
 *
-*  WORK   (workspace) REAL array, dimension (3*N+QSIZ*N)
+*  WORK   (workspace) REAL array, dimension (3*N+2*QSIZ*N)
 *
 *  IWORK  (workspace) INTEGER array, dimension (4*N)
 *

@@ -74,7 +74,7 @@
 *
 *  WORK   (workspace) REAL array,
 *         If ICOMPQ = 0 or 1, the dimension of WORK must be at least
-*                     1 + 3*N + 2*N*lg N + 2*N**2
+*                     1 + 3*N + 2*N*lg N + 3*N**2
 *                     ( lg( N ) = smallest integer k
 *                                 such that 2^k >= N )
 *         If ICOMPQ = 2, the dimension of WORK must be at least

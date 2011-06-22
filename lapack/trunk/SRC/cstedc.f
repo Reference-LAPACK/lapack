@@ -90,7 +90,7 @@
 *          The dimension of the array RWORK.
 *          If COMPZ = 'N' or N <= 1, LRWORK must be at least 1.
 *          If COMPZ = 'V' and N > 1, LRWORK must be at least
-*                         1 + 3*N + 2*N*lg N + 3*N**2 ,
+*                         1 + 3*N + 2*N*lg N + 4*N**2 ,
 *                         where lg( N ) = smallest integer k such
 *                         that 2**k >= N.
 *          If COMPZ = 'I' and N > 1, LRWORK must be at least
@@ -209,7 +209,7 @@
             IF( 2**LGN.LT.N )
      $         LGN = LGN + 1
             LWMIN = N*N
-            LRWMIN = 1 + 3*N + 2*N*LGN + 3*N**2
+            LRWMIN = 1 + 3*N + 2*N*LGN + 4*N**2
             LIWMIN = 6 + 6*N + 5*N*LGN
          ELSE IF( ICOMPZ.EQ.2 ) THEN
             LWMIN = 1
