@@ -37,7 +37,7 @@ for o, a in opts:
       print "     - s is to print a short summary"
       print "     - n is to print the numbers of failing tests (turn on summary mode)"
       print " SECLECTION OF TESTS:"
-      print "     - p [s/c/d/z] is to indicate the PRECISION to run:"
+      print "     - p [s/c/d/z/x] is to indicate the PRECISION to run:"
       print "            s=single"
       print "            d=double"
       print "            c=complex"
@@ -75,7 +75,7 @@ for o, a in opts:
 
 # process options
 execution=1
-summary="SUMMARY\n";
+summary="SUMMARY             \tnum_err\tinfo_err  \n";
 nb_of_test=0
 
 # Add current directory to the path for subshells of this shell
