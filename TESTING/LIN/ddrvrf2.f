@@ -190,9 +190,9 @@
      +         ' routines ***')
  9998 FORMAT( 1X, '     Error in RFP,convertion routines N=',I5,
      +        ' UPLO=''', A1, ''', FORM =''',A1,'''')
- 9997 FORMAT( 1X, 'All tests for the RFP convertion routines passed (', 
+ 9997 FORMAT( 1X, 'All tests for the RFP convertion routines passed ( ',
      +        I5,' tests run)')
- 9996 FORMAT( 1X, 'RFP convertion routines:',I5,' out of ',I5,
+ 9996 FORMAT( 1X, 'RFP convertion routines: ',I5,' out of ',I5,
      +        ' error message recorded') 
 *
       RETURN

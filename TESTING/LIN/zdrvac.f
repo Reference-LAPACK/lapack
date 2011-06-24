@@ -340,7 +340,7 @@
  9996 FORMAT( 1X, A6, ': ', I6, ' out of ', I6,
      $      ' tests failed to pass the threshold' )
  9995 FORMAT( /1X, 'All tests for ', A6,
-     $      ' routines passed the threshold (', I6, ' tests run)' )
+     $      ' routines passed the threshold ( ', I6, ' tests run)' )
  9994 FORMAT( 6X, I6, ' error messages recorded' )
 *
 *     SUBNAM, INFO, INFOE, N, IMAT

@@ -204,8 +204,8 @@
  9997 FORMAT( 1X, '     Failure in ',A6,' N=',I5,' TYPE=',I5,' UPLO=''',
      +        A1, ''', FORM =''',A1,''', NORM=''',A1,''', test=',G12.5)
  9996 FORMAT( 1X, 'All tests for ',A6,' auxiliary routine passed the ',
-     +        'threshold (',I5,' tests run)')
- 9995 FORMAT( 1X, A6, ' auxiliary routine:',I5,' out of ',I5,
+     +        'threshold ( ',I5,' tests run)')
+ 9995 FORMAT( 1X, A6, ' auxiliary routine: ',I5,' out of ',I5,
      +        ' tests failed to pass the threshold')
  9994 FORMAT( 26X, I5,' error message recorded (',A6,')')
 *

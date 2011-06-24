@@ -299,8 +299,8 @@
      + ' SIDE=''',A1,''',',' UPLO=''',A1,''',',' TRANS=''',A1,''',',
      + ' DIAG=''',A1,''',',' M=',I3,', N =', I3,', test=',G12.5)
  9996 FORMAT( 1X, 'All tests for ',A5,' auxiliary routine passed the ',
-     +        'threshold (',I5,' tests run)')
- 9995 FORMAT( 1X, A6, ' auxiliary routine:',I5,' out of ',I5,
+     +        'threshold ( ',I5,' tests run)')
+ 9995 FORMAT( 1X, A6, ' auxiliary routine: ',I5,' out of ',I5,
      +        ' tests failed to pass the threshold')
 *
       RETURN

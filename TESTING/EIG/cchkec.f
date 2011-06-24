@@ -116,7 +116,7 @@
  9996 FORMAT( ' Error in CTRSEN: RMAX =', 3E12.3, / ' LMAX = ',
      $      3I8, ' NINFO=', 3I8, ' KNT=', I8 )
  9995 FORMAT( / 1X, 'All tests for ', A3,
-     $      ' routines passed the threshold (', I6, ' tests run)' )
+     $      ' routines passed the threshold ( ', I6, ' tests run)' )
  9994 FORMAT( ' Tests of the Nonsymmetric eigenproblem condition',
      $      ' estimation routines', / ' CTRSYL, CTREXC, CTRSNA, CTRSEN',
      $      / )
