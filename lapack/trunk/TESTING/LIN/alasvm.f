@@ -49,7 +49,7 @@
  9999 FORMAT( 1X, A3, ' drivers: ', I6, ' out of ', I6,
      $      ' tests failed to pass the threshold' )
  9998 FORMAT( /1X, 'All tests for ', A3, ' drivers  passed the ',
-     $      'threshold (', I6, ' tests run)' )
+     $      'threshold ( ', I6, ' tests run)' )
  9997 FORMAT( 14X, I6, ' error messages recorded' )
       RETURN
 *

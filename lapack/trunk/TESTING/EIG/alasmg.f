@@ -49,7 +49,7 @@
  9999 FORMAT( 1X, A3, ': ', I6, ' out of ', I6,
      $      ' tests failed to pass the threshold' )
  9998 FORMAT( /1X, 'All tests for ', A3,
-     $      ' routines passed the threshold (', I6, ' tests run)' )
+     $      ' routines passed the threshold ( ', I6, ' tests run)' )
  9997 FORMAT( 6X, I6, ' error messages recorded' )
       RETURN
 *

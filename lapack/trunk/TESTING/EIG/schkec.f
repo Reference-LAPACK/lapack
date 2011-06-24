@@ -167,7 +167,7 @@
  9991 FORMAT( ' Error in SLAQTR: RMAX =', E12.3, / ' LMAX = ', I8, ' N',
      $      'INFO=', I8, ' KNT=', I8 )
  9990 FORMAT( / 1X, 'All tests for ', A3, ' routines passed the thresh',
-     $      'old (', I6, ' tests run)' )
+     $      'old ( ', I6, ' tests run)' )
  9989 FORMAT( ' Tests of the Nonsymmetric eigenproblem condition estim',
      $      'ation routines', / ' SLALN2, SLASY2, SLANV2, SLAEXC, STRS',
      $      'YL, STREXC, STRSNA, STRSEN, SLAQTR', / )
