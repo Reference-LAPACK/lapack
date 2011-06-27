@@ -75,7 +75,8 @@ for o, a in opts:
 
 # process options
 execution=1
-summary="SUMMARY             \tnum_err\tinfo_err  \n";
+summary="SUMMARY             \tnumerical error   \tother error  \n";
+summary+="================    \t=================\t================  \n";
 nb_of_test=0
 
 # Add current directory to the path for subshells of this shell
@@ -130,7 +131,7 @@ def run_summary_test( f, cmdline, short_summary):
         	if (line.find("illegal")!=-1):
         	   if (short_summary==0):print line,
         	   nb_test_illegal+=1
-        	if (line.find("INFO")!=-1):
+        	if (line.find(" INFO")!=-1):
         	   if (short_summary==0):print line,
         	   nb_test_info+=1
         	if (with_file==1):
@@ -270,7 +271,9 @@ for dtype in range_prec:
 #        print dtests[2][dtest]+".out \t"+str(nb_test[1])+"\t"+str(nb_test[2])+"\t"+str(nb_test[3])
         
      sys.stdout.flush()
-  summary+=name+"\t"+str(list_results[1][dtype])+"\t"+str(list_results[2][dtype])+"\t"+str(list_results[3][dtype])+"\n"
+  percent_num_error=float(list_results[1][dtype])/float(list_results[0][dtype])*100
+  percent_error=float(list_results[2][dtype]+list_results[3][dtype])/float(list_results[0][dtype])*100
+  summary+=name+"\t"+str(list_results[1][dtype])+"\t("+"%.3f" % percent_num_error+"%)\t"+str(list_results[2][dtype]+list_results[3][dtype])+"\t("+"%.3f" % percent_error+"%)\t""\n"
   list_results[0][4]+=list_results[0][dtype]
   list_results[1][4]+=list_results[1][dtype]
   list_results[2][4]+=list_results[2][dtype]
@@ -280,7 +283,9 @@ if only_numbers==1:
    print str(list_results[1][4])+"\n"+str(list_results[2][4])+"\n"+str(list_results[3][4])
 else:
    print summary
-   print "--> ALL PRECISION   \t"+str(list_results[1][4])+"\t"+str(list_results[2][4])+"\t"+str(list_results[3][4])
+   percent_num_error=float(list_results[1][4])/float(list_results[0][4])*100
+   percent_error=float(list_results[2][4]+list_results[3][4])/float(list_results[0][4])*100
+   print "--> ALL PRECISIONS   \t"+str(list_results[1][4])+"\t("+"%.3f" % percent_num_error+"%)\t"+str(list_results[2][4]+list_results[3][4])+"\t("+"%.3f" % percent_error+"%)\t""\n"
 
 
 
