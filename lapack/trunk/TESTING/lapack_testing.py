@@ -280,7 +280,7 @@ for dtype in range_prec:
   list_results[3][4]+=list_results[3][dtype]
   
 if only_numbers==1:
-   print str(list_results[1][4])+"\n"+str(list_results[2][4])+"\n"+str(list_results[3][4])
+   print str(list_results[1][4])+"\n"+str(list_results[2][4]+list_results[3][4])
 else:
    print summary
    percent_num_error=float(list_results[1][4])/float(list_results[0][4])*100
