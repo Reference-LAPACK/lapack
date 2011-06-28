@@ -12,8 +12,8 @@ import os, sys, math
 import getopt
 # Arguments
 try:
-   opts, args = getopt.getopt(sys.argv[1:], "hsfep:t:n", 
-                              ["help", "short", "file", "error","prec=","test=","number"])
+   opts, args = getopt.getopt(sys.argv[1:], "hd:srep:t:n", 
+                              ["help", "dir", "short", "run", "error","prec=","test=","number"])
    
 except getopt.error, msg:
    print msg
@@ -21,16 +21,18 @@ except getopt.error, msg:
    sys.exit(2)
 
 short_summary=0
-with_file=0
+with_file=1
 just_errors = 0
 prec='x'
 test='all'
 only_numbers=0
+dir="TESTING"
 for o, a in opts:
    if o in ("-h", "--help"):
-      print sys.argv[0]+" [-h|--help] [-s |--short] [-f |--file] [-e |--error] [-p p |--prec p] [-t test |--test test] [-n | --number]"
+      print sys.argv[0]+" [-h|--help] [-d dir |--dir dir] [-s |--short] [-r |--run] [-e |--error] [-p p |--prec p] [-t test |--test test] [-n | --number]"
       print "     - h is to print this message"
-      print "     - f is to use directly the output of the LAPACK testing (.out files). By default, the script will run all the LAPACK tests"
+      print "     - r is to use to run the LAPACK tests then analyse the output (.out files). By default, the script will not run all the LAPACK tests"
+      print "     - d [dir] is to indicate where is the LAPACK testing directory (.out files). By default, the script will use ."
       print " LEVEL OF OUTPUT"
       print "     - x is to print a detailed summary"
       print "     - e is to print only the error summary"
@@ -50,23 +52,25 @@ for o, a in opts:
       print "            rfp=rfp format"
       print "            all=all tests [DEFAULT]"
       print " EXAMPLES:"
-      print "     ./lapack_testing.py -n -f"
+      print "     ./lapack_testing.py -n"
       print "            Will return the numbers of failed tests by analyzing the LAPACK output"
-      print "     ./lapack_testing.py -n -f -p s"
-      print "            Will return the numbers of failed tests in REAL precision by analyzing the LAPACK output"
-      print "     ./lapack_testing.py -n -f -p s -t eig "
+      print "     ./lapack_testing.py -n -r -p s"
+      print "            Will return the numbers of failed tests in REAL precision by running the LAPACK Tests then analyzing the output"
+      print "     ./lapack_testing.py -n -p s -t eig "
       print "            Will return the numbers of failed tests in REAL precision by analyzing only the LAPACK output of EIGEN testings"
       print "Written by Julie Langou (June 2011) "
       sys.exit(0)
    else:
       if o in ("-s", "--short"):
          short_summary = 1
-      if o in ("-f", "--file"):
-         with_file = 1
+      if o in ("-r", "--run"):
+         with_file = 0
       if o in ("-e", "--error"):
          just_errors = 1
       if o in ( '-p', '--prec' ):
          prec = a
+      if o in ( '-d', '--dir' ):
+         dir = a
       if o in ( '-t', '--test' ):
          test = a
       if o in ( '-n', '--number' ):
@@ -74,6 +78,7 @@ for o, a in opts:
          short_summary = 1
 
 # process options
+os.chdir(dir)
 execution=1
 summary="SUMMARY             \tnumerical error   \tother error  \n";
 summary+="================    \t=================\t================  \n";

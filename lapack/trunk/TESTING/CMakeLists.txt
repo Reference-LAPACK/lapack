@@ -306,3 +306,4 @@ add_lapack_test(zlse.out lse.in xeigtstz)
 
 # ==============================================================================
 
+file(COPY ${LAPACK_SOURCE_DIR}/lapack_testing.py DESTINATION ${LAPACK_BINARY_DIR})
