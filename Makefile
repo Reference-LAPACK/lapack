@@ -6,7 +6,7 @@
 
 include make.inc
 
-all: lapack_install lib lapack_testing blas_testing
+all: lapack_install lib blas_testing lapack_testing 
 
 lib: lapacklib tmglib
 #lib: blaslib variants lapacklib tmglib
@@ -31,6 +31,7 @@ tmglib:
 
 lapack_testing:	lib
 	( cd TESTING ; $(MAKE) )
+	./lapack_testing.py
 
 variants_testing: lib variants
 	( cd TESTING ; rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/cholrl.a' ; \
