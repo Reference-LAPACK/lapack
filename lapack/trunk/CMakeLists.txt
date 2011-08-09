@@ -17,12 +17,29 @@ if (UNIX)
    endif ()
 endif ()
 
+
+# --------------------------------------------------
+
+# On Windows-GNU builds try to provide MS import libraries too.
+if(BUILD_SHARED_LIBS)
+  include(GNUtoMS)
+endif()
+
+if(GNUtoMS)
+  set(LAPACK_GNUtoMS_IMPORT ${LAPACK_SOURCE_DIR}/CMAKE/lapack-GNUtoMS.cmake)
+  set(LAPACK_GNUtoMS_INSTALL "include(\${_SELF_DIR}/lapack-GNUtoMS.cmake)")
+  set(LAPACK_GNUtoMS_BUILD "include(\"${LAPACK_GNUtoMS_IMPORT}\")")
+endif()
+
 macro(lapack_install_library lib)
   install(TARGETS ${lib} EXPORT lapack-targets
     ARCHIVE DESTINATION lib${LIB_SUFFIX}
     LIBRARY DESTINATION lib${LIB_SUFFIX}
     RUNTIME DESTINATION bin
   )
+  if(GNUtoMS)
+    install(FILES ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/lib${lib}.lib DESTINATION lib)
+  endif()
 endmacro()
 
 # --------------------------------------------------
@@ -170,6 +187,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_D
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
 install(FILES
+  ${LAPACK_GNUtoMS_IMPORT}
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
   DESTINATION lib/cmake/lapack-${LAPACK_VERSION}
