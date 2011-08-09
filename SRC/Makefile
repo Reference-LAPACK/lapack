@@ -144,7 +144,9 @@ SLASRC = \
    stfttr.o stpttf.o stpttr.o strttf.o strttp.o \
    sgejsv.o  sgesvj.o  sgsvj0.o  sgsvj1.o \
    sgeequb.o ssyequb.o spoequb.o sgbequb.o \
-   sbbcsd.o slapmr.o sorbdb.o sorcsd.o
+   sbbcsd.o slapmr.o sorbdb.o sorcsd.o \
+   sgeqrt.o sgeqrt2.o sgeqrt3.o sgemqrt.o \
+   stpqrt.o stpqrt2.o stpmqrt.o stprfb.o
 
 DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o 
 
@@ -214,7 +216,9 @@ CLASRC = \
    chfrk.o ctfttp.o clanhf.o cpftrf.o cpftri.o cpftrs.o ctfsm.o ctftri.o \
    ctfttr.o ctpttf.o ctpttr.o ctrttf.o ctrttp.o \
    cgeequb.o cgbequb.o csyequb.o cpoequb.o cheequb.o \
-   cbbcsd.o clapmr.o cunbdb.o cuncsd.o
+   cbbcsd.o clapmr.o cunbdb.o cuncsd.o \
+   cgeqrt.o cgeqrt2.o cgeqrt3.o cgemqrt.o \
+   ctpqrt.o ctpqrt2.o ctpmqrt.o ctprfb.o
 
 CXLASRC =    cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
    cla_gercond_c.o cla_gercond_x.o cla_gerpvgrw.o \
@@ -286,7 +290,10 @@ DLASRC = \
    dtfttr.o dtpttf.o dtpttr.o dtrttf.o dtrttp.o \
    dgejsv.o  dgesvj.o  dgsvj0.o  dgsvj1.o \
    dgeequb.o dsyequb.o dpoequb.o dgbequb.o \
-   dbbcsd.o dlapmr.o dorbdb.o dorcsd.o
+   dbbcsd.o dlapmr.o dorbdb.o dorcsd.o \
+   dgeqrt.o dgeqrt2.o dgeqrt3.o dgemqrt.o \
+   dtpqrt.o dtpqrt2.o dtpmqrt.o dtprfb.o
+
 
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o		\
    dla_gercond.o dla_gerpvgrw.o dsysvxx.o dsyrfsx.o			\
@@ -359,7 +366,10 @@ ZLASRC = \
    zhfrk.o ztfttp.o zlanhf.o zpftrf.o zpftri.o zpftrs.o ztfsm.o ztftri.o \
    ztfttr.o ztpttf.o ztpttr.o ztrttf.o ztrttp.o \
    zgeequb.o zgbequb.o zsyequb.o zpoequb.o zheequb.o \
-   zbbcsd.o zlapmr.o zunbdb.o zuncsd.o
+   zbbcsd.o zlapmr.o zunbdb.o zuncsd.o \
+   zgeqrt.o zgeqrt2.o zgeqrt3.o zgemqrt.o \
+   ztpqrt.o ztpqrt2.o ztpmqrt.o ztprfb.o
+
 
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o		\
    zla_gercond_c.o zla_gercond_x.o zla_gerpvgrw.o zsysvxx.o zsyrfsx.o	\
