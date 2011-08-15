@@ -1,4 +1,4 @@
-      DOUBLE COMPLEX   FUNCTION ZLATM2( M, N, I, J, KL, KU, IDIST,
+      COMPLEX*16   FUNCTION ZLATM2( M, N, I, J, KL, KU, IDIST,
      $                 ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
 *
 *  -- LAPACK auxiliary test routine (version 3.1) --

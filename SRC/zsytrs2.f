@@ -15,7 +15,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE COMPLEX   A( LDA, * ), B( LDB, * ), WORK( * )
+      COMPLEX*16       A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
 *
 *  Purpose
@@ -41,7 +41,7 @@
 *          The number of right hand sides, i.e., the number of columns
 *          of the matrix B.  NRHS >= 0.
 *
-*  A       (input) DOUBLE COMPLEX array, dimension (LDA,N)
+*  A       (input) COMPLEX*16 array, dimension (LDA,N)
 *          The block diagonal matrix D and the multipliers used to
 *          obtain the factor U or L as computed by ZSYTRF.
 *
@@ -52,7 +52,7 @@
 *          Details of the interchanges and the block structure of D
 *          as determined by ZSYTRF.
 *
-*  B       (input/output) DOUBLE COMPLEX array, dimension (LDB,NRHS)
+*  B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS)
 *          On entry, the right hand side matrix B.
 *          On exit, the solution matrix X.
 *
@@ -68,13 +68,13 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE COMPLEX     ONE
+      COMPLEX*16         ONE
       PARAMETER          ( ONE = (1.0D+0,0.0D+0) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER
       INTEGER            I, IINFO, J, K, KP
-      DOUBLE COMPLEX     AK, AKM1, AKM1K, BK, BKM1, DENOM
+      COMPLEX*16         AK, AKM1, AKM1K, BK, BKM1, DENOM
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

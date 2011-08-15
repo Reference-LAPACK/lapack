@@ -4,7 +4,7 @@
       CHARACTER DIAG,TRANS,UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX AP(*),X(*)
+      COMPLEX*16 AP(*),X(*)
 *     ..
 *
 *  Purpose
@@ -102,11 +102,11 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE COMPLEX ZERO
+      COMPLEX*16 ZERO
       PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP
+      COMPLEX*16 TEMP
       INTEGER I,INFO,IX,J,JX,K,KK,KX
       LOGICAL NOCONJ,NOUNIT
 *     ..

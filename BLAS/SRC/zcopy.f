@@ -3,7 +3,7 @@
       INTEGER INCX,INCY,N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX ZX(*),ZY(*)
+      COMPLEX*16 ZX(*),ZY(*)
 *     ..
 *
 *  Purpose

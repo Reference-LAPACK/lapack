@@ -14,7 +14,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE COMPLEX     A( LDA, * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), WORK( * )
 *     ..
 *
 *  Purpose
@@ -40,7 +40,7 @@
 *  N       (input) INTEGER
 *          The order of the matrix A.  N >= 0.
 *
-*  A       (input) DOUBLE COMPLEX array, dimension (LDA,N)
+*  A       (input) COMPLEX*16 array, dimension (LDA,N)
 *          The block diagonal matrix D and the multipliers used to
 *          obtain the factor U or L as computed by ZSYTRF.
 *
@@ -51,7 +51,7 @@
 *          Details of the interchanges and the block structure of D
 *          as determined by ZSYTRF.
 *
-* WORK     (workspace) DOUBLE COMPLEX array, dimension (N)
+* WORK     (workspace) COMPLEX*16 array, dimension (N)
 *
 * LWORK    (input) INTEGER
 *          The length of WORK.  LWORK >=1. 
@@ -69,7 +69,7 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE COMPLEX     ZERO
+      COMPLEX*16         ZERO
       PARAMETER          ( ZERO = (0.0D+0,0.0D+0) )
 *     ..
 *     .. External Functions ..
@@ -81,7 +81,7 @@
 *     .. Local Scalars ..
       LOGICAL            UPPER, CONVERT
       INTEGER            I, IP, J
-      DOUBLE COMPLEX     TEMP
+      COMPLEX*16         TEMP
 *     ..
 *     .. Executable Statements ..
 *

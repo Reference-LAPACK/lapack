@@ -1,11 +1,11 @@
       SUBROUTINE ZHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ALPHA,BETA
+      COMPLEX*16 ALPHA,BETA
       INTEGER INCX,INCY,K,LDA,N
       CHARACTER UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX A(LDA,*),X(*),Y(*)
+      COMPLEX*16 A(LDA,*),X(*),Y(*)
 *     ..
 *
 *  Purpose
@@ -135,13 +135,13 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE COMPLEX ONE
+      COMPLEX*16 ONE
       PARAMETER (ONE= (1.0D+0,0.0D+0))
-      DOUBLE COMPLEX ZERO
+      COMPLEX*16 ZERO
       PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP1,TEMP2
+      COMPLEX*16 TEMP1,TEMP2
       INTEGER I,INFO,IX,IY,J,JX,JY,KPLUS1,KX,KY,L
 *     ..
 *     .. External Functions ..

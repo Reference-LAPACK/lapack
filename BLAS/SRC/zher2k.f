@@ -1,12 +1,12 @@
       SUBROUTINE ZHER2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ALPHA
+      COMPLEX*16 ALPHA
       DOUBLE PRECISION BETA
       INTEGER K,LDA,LDB,LDC,N
       CHARACTER TRANS,UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX A(LDA,*),B(LDB,*),C(LDC,*)
+      COMPLEX*16 A(LDA,*),B(LDB,*),C(LDC,*)
 *     ..
 *
 *  Purpose
@@ -154,14 +154,14 @@
       INTRINSIC DBLE,DCONJG,MAX
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP1,TEMP2
+      COMPLEX*16 TEMP1,TEMP2
       INTEGER I,INFO,J,L,NROWA
       LOGICAL UPPER
 *     ..
 *     .. Parameters ..
       DOUBLE PRECISION ONE
       PARAMETER (ONE=1.0D+0)
-      DOUBLE COMPLEX ZERO
+      COMPLEX*16 ZERO
       PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *

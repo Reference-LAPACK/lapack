@@ -1,11 +1,11 @@
       SUBROUTINE ZGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ALPHA,BETA
+      COMPLEX*16 ALPHA,BETA
       INTEGER K,LDA,LDB,LDC,M,N
       CHARACTER TRANSA,TRANSB
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX A(LDA,*),B(LDB,*),C(LDC,*)
+      COMPLEX*16 A(LDA,*),B(LDB,*),C(LDC,*)
 *     ..
 *
 *  Purpose
@@ -142,14 +142,14 @@
       INTRINSIC DCONJG,MAX
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP
+      COMPLEX*16 TEMP
       INTEGER I,INFO,J,L,NCOLA,NROWA,NROWB
       LOGICAL CONJA,CONJB,NOTA,NOTB
 *     ..
 *     .. Parameters ..
-      DOUBLE COMPLEX ONE
+      COMPLEX*16 ONE
       PARAMETER (ONE= (1.0D+0,0.0D+0))
-      DOUBLE COMPLEX ZERO
+      COMPLEX*16 ZERO
       PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *

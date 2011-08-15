@@ -1,10 +1,10 @@
       SUBROUTINE ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ZA
+      COMPLEX*16 ZA
       INTEGER INCX,INCY,N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX ZX(*),ZY(*)
+      COMPLEX*16 ZX(*),ZY(*)
 *     ..
 *
 *  Purpose

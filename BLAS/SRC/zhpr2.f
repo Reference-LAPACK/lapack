@@ -1,11 +1,11 @@
       SUBROUTINE ZHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ALPHA
+      COMPLEX*16 ALPHA
       INTEGER INCX,INCY,N
       CHARACTER UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX AP(*),X(*),Y(*)
+      COMPLEX*16 AP(*),X(*),Y(*)
 *     ..
 *
 *  Purpose
@@ -99,11 +99,11 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE COMPLEX ZERO
+      COMPLEX*16 ZERO
       PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP1,TEMP2
+      COMPLEX*16 TEMP1,TEMP2
       INTEGER I,INFO,IX,IY,J,JX,JY,K,KK,KX,KY
 *     ..
 *     .. External Functions ..

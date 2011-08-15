@@ -13,7 +13,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE COMPLEX     A( LDA, * ), WORK( N+NB+1,* )
+      COMPLEX*16         A( LDA, * ), WORK( N+NB+1,* )
 *     ..
 *
 *  Purpose
@@ -35,7 +35,7 @@
 *  N       (input) INTEGER
 *          The order of the matrix A.  N >= 0.
 *
-*  A       (input/output) DOUBLE COMPLEX array, dimension (LDA,N)
+*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
 *          On entry, the NNB diagonal matrix D and the multipliers
 *          used to obtain the factor U or L as computed by ZSYTRF.
 *
@@ -53,7 +53,7 @@
 *          Details of the interchanges and the NNB structure of D
 *          as determined by ZSYTRF.
 *
-*  WORK    (workspace) DOUBLE COMPLEX array, dimension (N+NNB+1,NNB+3)
+*  WORK    (workspace) COMPLEX*16 array, dimension (N+NNB+1,NNB+3)
 *
 *  NB      (input) INTEGER
 *          Block size
@@ -67,7 +67,7 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE COMPLEX     ONE, ZERO
+      COMPLEX*16         ONE, ZERO
       PARAMETER          ( ONE = ( 1.0D+0, 0.0D+0 ),
      $                   ZERO = ( 0.0D+0, 0.0D+0 ) )
 *     ..
@@ -77,9 +77,9 @@
       INTEGER            COUNT
       INTEGER            J, U11, INVD
 
-      DOUBLE COMPLEX     AK, AKKP1, AKP1, D, T
-      DOUBLE COMPLEX     U01_I_J, U01_IP1_J
-      DOUBLE COMPLEX     U11_I_J, U11_IP1_J
+      COMPLEX*16         AK, AKKP1, AKP1, D, T
+      COMPLEX*16         U01_I_J, U01_IP1_J
+      COMPLEX*16         U11_I_J, U11_IP1_J
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

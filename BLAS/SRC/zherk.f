@@ -5,7 +5,7 @@
       CHARACTER TRANS,UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX A(LDA,*),C(LDC,*)
+      COMPLEX*16 A(LDA,*),C(LDC,*)
 *     ..
 *
 *  Purpose
@@ -134,7 +134,7 @@
       INTRINSIC DBLE,DCMPLX,DCONJG,MAX
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP
+      COMPLEX*16 TEMP
       DOUBLE PRECISION RTEMP
       INTEGER I,INFO,J,L,NROWA
       LOGICAL UPPER

@@ -10,7 +10,7 @@
       INTEGER          I1, I2, LDA, N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX   A( LDA, N )
+      COMPLEX*16       A( LDA, N )
 *
 *  Purpose
 *  =======
@@ -30,7 +30,7 @@
 *  N       (input) INTEGER
 *          The order of the matrix A.  N >= 0.
 *
-*  A       (input/output) DOUBLE COMPLEX array, dimension (LDA,N)
+*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
 *          On entry, the NB diagonal matrix D and the multipliers
 *          used to obtain the factor U or L as computed by ZSYTRF.
 *
@@ -56,7 +56,7 @@
 *     .. Local Scalars ..
       LOGICAL            UPPER
       INTEGER            I
-      DOUBLE COMPLEX     TMP
+      COMPLEX*16         TMP
 *
 *     .. External Functions ..
       LOGICAL            LSAME
