@@ -217,6 +217,53 @@
          CALL CHECON( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'CHECON', INFOT, NOUT, LERR, OK )
 *
+*        CHERFSX
+*
+         N_ERR_BNDS = 3
+         NPARAMS = 0
+         SRNAMT = 'CHERFSX'
+         INFOT = 1
+         CALL CHERFSX( '/', EQ, 0, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
+         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CHERFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
+         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         EQ = 'N'
+         INFOT = 3
+         CALL CHERFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
+         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL CHERFSX( 'U', EQ, 0, -1, A, 1, AF, 1, IP, S, B, 1, X, 1,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
+         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL CHERFSX( 'U', EQ, 2, 1, A, 1, AF, 2, IP, S, B, 2, X, 2,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
+         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 1, IP, S, B, 2, X, 2,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
+         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 1, X, 2,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
+         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+         INFOT = 13
+         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 2, X, 1,
+     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
+     $        PARAMS, W, R, INFO )
+         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
+*
 *     Test error exits of the routines that use the diagonal pivoting
 *     factorization of a Hermitian indefinite packed matrix.
 *
@@ -281,53 +328,6 @@
          CALL CHPRFS( 'U', 2, 1, A, AF, IP, B, 2, X, 1, R1, R2, W, R,
      $                INFO )
          CALL CHKXER( 'CHPRFS', INFOT, NOUT, LERR, OK )
-*
-*        CHERFSX
-*
-         N_ERR_BNDS = 3
-         NPARAMS = 0
-         SRNAMT = 'CHERFSX'
-         INFOT = 1
-         CALL CHERFSX( '/', EQ, 0, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
-     $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL CHERFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
-     $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         EQ = 'N'
-         INFOT = 3
-         CALL CHERFSX( 'U', EQ, -1, 0, A, 1, AF, 1, IP, S, B, 1, X, 1,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
-     $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL CHERFSX( 'U', EQ, 0, -1, A, 1, AF, 1, IP, S, B, 1, X, 1,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
-     $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         INFOT = 6
-         CALL CHERFSX( 'U', EQ, 2, 1, A, 1, AF, 2, IP, S, B, 2, X, 2,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
-     $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         INFOT = 8
-         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 1, IP, S, B, 2, X, 2,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
-     $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         INFOT = 11
-         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 1, X, 2,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
-     $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         INFOT = 13
-         CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 2, X, 1,
-     $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
-     $        PARAMS, W, R, INFO )
-         CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
 *
 *        CHPCON
 *
