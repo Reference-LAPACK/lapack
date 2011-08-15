@@ -1,6 +1,6 @@
       SUBROUTINE ZROTG(CA,CB,C,S)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX CA,CB,S
+      COMPLEX*16 CA,CB,S
       DOUBLE PRECISION C
 *     ..
 *
@@ -12,7 +12,7 @@
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      DOUBLE COMPLEX ALPHA
+      COMPLEX*16 ALPHA
       DOUBLE PRECISION NORM,SCALE
 *     ..
 *     .. Intrinsic Functions ..

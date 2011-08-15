@@ -1,11 +1,11 @@
       SUBROUTINE ZTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ALPHA
+      COMPLEX*16 ALPHA
       INTEGER LDA,LDB,M,N
       CHARACTER DIAG,SIDE,TRANSA,UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX A(LDA,*),B(LDB,*)
+      COMPLEX*16 A(LDA,*),B(LDB,*)
 *     ..
 *
 *  Purpose
@@ -140,14 +140,14 @@
       INTRINSIC DCONJG,MAX
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP
+      COMPLEX*16 TEMP
       INTEGER I,INFO,J,K,NROWA
       LOGICAL LSIDE,NOCONJ,NOUNIT,UPPER
 *     ..
 *     .. Parameters ..
-      DOUBLE COMPLEX ONE
+      COMPLEX*16 ONE
       PARAMETER (ONE= (1.0D+0,0.0D+0))
-      DOUBLE COMPLEX ZERO
+      COMPLEX*16 ZERO
       PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *

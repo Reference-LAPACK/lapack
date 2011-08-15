@@ -1,6 +1,6 @@
       DOUBLE PRECISION FUNCTION DCABS1(Z)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX Z
+      COMPLEX*16 Z
 *     ..
 *     ..
 *  Purpose

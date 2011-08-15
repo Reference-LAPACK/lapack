@@ -1,10 +1,10 @@
       SUBROUTINE ZSCAL(N,ZA,ZX,INCX)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ZA
+      COMPLEX*16 ZA
       INTEGER INCX,N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX ZX(*)
+      COMPLEX*16 ZX(*)
 *     ..
 *
 *  Purpose

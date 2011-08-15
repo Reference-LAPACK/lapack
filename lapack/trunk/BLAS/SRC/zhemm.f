@@ -1,11 +1,11 @@
       SUBROUTINE ZHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ALPHA,BETA
+      COMPLEX*16 ALPHA,BETA
       INTEGER LDA,LDB,LDC,M,N
       CHARACTER SIDE,UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX A(LDA,*),B(LDB,*),C(LDC,*)
+      COMPLEX*16 A(LDA,*),B(LDB,*),C(LDC,*)
 *     ..
 *
 *  Purpose
@@ -148,14 +148,14 @@
       INTRINSIC DBLE,DCONJG,MAX
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP1,TEMP2
+      COMPLEX*16 TEMP1,TEMP2
       INTEGER I,INFO,J,K,NROWA
       LOGICAL UPPER
 *     ..
 *     .. Parameters ..
-      DOUBLE COMPLEX ONE
+      COMPLEX*16 ONE
       PARAMETER (ONE= (1.0D+0,0.0D+0))
-      DOUBLE COMPLEX ZERO
+      COMPLEX*16 ZERO
       PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *

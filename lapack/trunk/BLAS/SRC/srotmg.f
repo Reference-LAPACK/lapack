@@ -188,7 +188,6 @@
          SPARAM(5) = SH22
       END IF
 
-  260 CONTINUE
       SPARAM(1) = SFLAG
       RETURN
       END

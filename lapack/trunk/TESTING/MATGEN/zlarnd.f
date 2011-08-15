@@ -1,4 +1,4 @@
-      DOUBLE COMPLEX   FUNCTION ZLARND( IDIST, ISEED )
+      COMPLEX*16   FUNCTION ZLARND( IDIST, ISEED )
 *
 *  -- LAPACK auxiliary routine (version 3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

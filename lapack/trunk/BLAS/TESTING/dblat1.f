@@ -625,8 +625,8 @@
                END DO
             ELSE IF (ICASE.EQ.13) THEN
 *              .. DSDOT ..
-            CALL TESTDSDOT(SNGL(DSDOT(N,SNGL(SX),INCX,SNGL(SY),INCY)),
-     $                 SNGL(DT7(KN,KI)),SNGL(SSIZE1(KN)), .3125E-1)
+            CALL TESTDSDOT(REAL(DSDOT(N,REAL(SX),INCX,REAL(SY),INCY)),
+     $                 REAL(DT7(KN,KI)),REAL(SSIZE1(KN)), .3125E-1)
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK2'
                STOP

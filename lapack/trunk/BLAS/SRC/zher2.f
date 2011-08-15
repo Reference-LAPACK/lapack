@@ -1,11 +1,11 @@
       SUBROUTINE ZHER2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 *     .. Scalar Arguments ..
-      DOUBLE COMPLEX ALPHA
+      COMPLEX*16 ALPHA
       INTEGER INCX,INCY,LDA,N
       CHARACTER UPLO
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX A(LDA,*),X(*),Y(*)
+      COMPLEX*16 A(LDA,*),X(*),Y(*)
 *     ..
 *
 *  Purpose
@@ -102,11 +102,11 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE COMPLEX ZERO
+      COMPLEX*16 ZERO
       PARAMETER (ZERO= (0.0D+0,0.0D+0))
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX TEMP1,TEMP2
+      COMPLEX*16 TEMP1,TEMP2
       INTEGER I,INFO,IX,IY,J,JX,JY,KX,KY
 *     ..
 *     .. External Functions ..

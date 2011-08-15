@@ -1,9 +1,9 @@
-      DOUBLE COMPLEX FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
+      COMPLEX*16 FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 *     .. Scalar Arguments ..
       INTEGER INCX,INCY,N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX ZX(*),ZY(*)
+      COMPLEX*16 ZX(*),ZY(*)
 *     ..
 *
 *  Purpose
@@ -20,7 +20,7 @@
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      DOUBLE COMPLEX ZTEMP
+      COMPLEX*16 ZTEMP
       INTEGER I,IX,IY
 *     ..
       ZTEMP = (0.0d0,0.0d0)

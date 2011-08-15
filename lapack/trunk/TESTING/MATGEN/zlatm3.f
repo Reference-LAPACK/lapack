@@ -1,4 +1,4 @@
-      DOUBLE COMPLEX   FUNCTION ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
+      COMPLEX*16   FUNCTION ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
      $                 IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
      $                 SPARSE )
 *
