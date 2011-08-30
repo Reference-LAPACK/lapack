@@ -693,63 +693,63 @@
          SRNAMT = 'CGGEVX'
          INFOT = 1
          CALL CGGEVX( '/', 'N', 'N', 'N', 1, A, 1, B, 1, ALPHA, BETA, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
          CALL CGGEVX( 'N', '/', 'N', 'N', 1, A, 1, B, 1, ALPHA, BETA, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
          CALL CGGEVX( 'N', 'N', '/', 'N', 1, A, 1, B, 1, ALPHA, BETA, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
          CALL CGGEVX( 'N', 'N', 'N', '/', 1, A, 1, B, 1, ALPHA, BETA, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 5
          CALL CGGEVX( 'N', 'N', 'N', 'N', -1, A, 1, B, 1, ALPHA, BETA,
-     $                Q, 1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W,
-     $                1, RW, IW, BW, INFO )
+     $                Q, 1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE,
+     $                RCV, W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
          CALL CGGEVX( 'N', 'N', 'N', 'N', 1, A, 0, B, 1, ALPHA, BETA, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
          CALL CGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 0, ALPHA, BETA, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
          CALL CGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 1, ALPHA, BETA, Q,
-     $                0, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                0, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 13
          CALL CGGEVX( 'N', 'V', 'N', 'N', 2, A, 2, B, 2, ALPHA, BETA, Q,
-     $                1, U, 2, 1, 2, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                1, U, 2, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 15
          CALL CGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 1, ALPHA, BETA, Q,
-     $                1, U, 0, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                1, U, 0, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 15
          CALL CGGEVX( 'N', 'N', 'V', 'N', 2, A, 2, B, 2, ALPHA, BETA, Q,
-     $                2, U, 1, 1, 2, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                RW, IW, BW, INFO )
+     $                2, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 25
          CALL CGGEVX( 'N', 'N', 'V', 'N', 2, A, 2, B, 2, ALPHA, BETA, Q,
-     $                2, U, 2, 1, 2, LS, RS, ANRM, BNRM, RCE, RCV, W, 0,
-     $                RW, IW, BW, INFO )
+     $                2, U, 2, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 0, RW, IW, BW, INFO )
          CALL CHKXER( 'CGGEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 12
 *

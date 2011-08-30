@@ -35,8 +35,8 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
-      INTEGER            DUMMYK, DUMMYL, I, IFST, ILST, INFO, J, M,
-     $                   NCYCLE, NT, SDIM
+      INTEGER            DUMMYK, DUMMYL, I, IFST, ILO, IHI, ILST, INFO,
+     $                   J, M, NCYCLE, NT, SDIM
       DOUBLE PRECISION   ANRM, BNRM, DIF, SCALE, TOLA, TOLB
 *     ..
 *     .. Local Arrays ..
@@ -676,63 +676,63 @@
          SRNAMT = 'DGGEVX'
          INFOT = 1
          CALL DGGEVX( '/', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 2
          CALL DGGEVX( 'N', '/', 'N', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 3
          CALL DGGEVX( 'N', 'N', '/', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 4
          CALL DGGEVX( 'N', 'N', 'N', '/', 1, A, 1, B, 1, R1, R2, R3, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 5
          CALL DGGEVX( 'N', 'N', 'N', 'N', -1, A, 1, B, 1, R1, R2, R3, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 7
          CALL DGGEVX( 'N', 'N', 'N', 'N', 1, A, 0, B, 1, R1, R2, R3, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 9
          CALL DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 0, R1, R2, R3, Q,
-     $                1, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
          CALL DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
-     $                0, U, 1, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                0, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 14
          CALL DGGEVX( 'N', 'V', 'N', 'N', 2, A, 2, B, 2, R1, R2, R3, Q,
-     $                1, U, 2, 1, 2, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 2, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 16
          CALL DGGEVX( 'N', 'N', 'N', 'N', 1, A, 1, B, 1, R1, R2, R3, Q,
-     $                1, U, 0, 1, 1, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                1, U, 0, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 16
          CALL DGGEVX( 'N', 'N', 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q,
-     $                2, U, 1, 1, 2, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                2, U, 1, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          INFOT = 26
          CALL DGGEVX( 'N', 'N', 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q,
-     $                2, U, 2, 1, 2, LS, RS, ANRM, BNRM, RCE, RCV, W, 1,
-     $                IW, BW, INFO )
+     $                2, U, 2, ILO, IHI, LS, RS, ANRM, BNRM, RCE, RCV,
+     $                W, 1, IW, BW, INFO )
          CALL CHKXER( 'DGGEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 12
 *

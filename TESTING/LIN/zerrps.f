@@ -31,7 +31,7 @@
       PARAMETER          ( NMAX = 4 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, INFO, J
+      INTEGER            I, INFO, J, RANK
 *     ..
 *     .. Local Arrays ..
       COMPLEX*16         A( NMAX, NMAX )
@@ -80,26 +80,26 @@
 *
       SRNAMT = 'ZPSTRF'
       INFOT = 1
-      CALL ZPSTRF( '/', 0, A, 1, PIV, 1, -1.D0, RWORK, INFO )
+      CALL ZPSTRF( '/', 0, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
       CALL CHKXER( 'ZPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZPSTRF( 'U', -1, A, 1, PIV, 1, -1.D0, RWORK, INFO )
+      CALL ZPSTRF( 'U', -1, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
       CALL CHKXER( 'ZPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZPSTRF( 'U', 2, A, 1, PIV, 1, -1.D0, RWORK, INFO )
+      CALL ZPSTRF( 'U', 2, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
       CALL CHKXER( 'ZPSTRF', INFOT, NOUT, LERR, OK )
 *
 *        ZPSTF2
 *
       SRNAMT = 'ZPSTF2'
       INFOT = 1
-      CALL ZPSTF2( '/', 0, A, 1, PIV, 1, -1.D0, RWORK, INFO )
+      CALL ZPSTF2( '/', 0, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
       CALL CHKXER( 'ZPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZPSTF2( 'U', -1, A, 1, PIV, 1, -1.D0, RWORK, INFO )
+      CALL ZPSTF2( 'U', -1, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
       CALL CHKXER( 'ZPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZPSTF2( 'U', 2, A, 1, PIV, 1, -1.D0, RWORK, INFO )
+      CALL ZPSTF2( 'U', 2, A, 1, PIV, RANK, -1.D0, RWORK, INFO )
       CALL CHKXER( 'ZPSTF2', INFOT, NOUT, LERR, OK )
 *
 *
