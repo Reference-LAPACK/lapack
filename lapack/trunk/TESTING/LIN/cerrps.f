@@ -31,7 +31,7 @@
       PARAMETER          ( NMAX = 4 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, INFO, J
+      INTEGER            I, INFO, J, RANK
 *     ..
 *     .. Local Arrays ..
       COMPLEX            A( NMAX, NMAX )
@@ -80,26 +80,26 @@
 *
       SRNAMT = 'CPSTRF'
       INFOT = 1
-      CALL CPSTRF( '/', 0, A, 1, PIV, 1, -1.0, RWORK, INFO )
+      CALL CPSTRF( '/', 0, A, 1, PIV, RANK, -1.0, RWORK, INFO )
       CALL CHKXER( 'CPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CPSTRF( 'U', -1, A, 1, PIV, 1, -1.0, RWORK, INFO )
+      CALL CPSTRF( 'U', -1, A, 1, PIV, RANK, -1.0, RWORK, INFO )
       CALL CHKXER( 'CPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CPSTRF( 'U', 2, A, 1, PIV, 1, -1.0, RWORK, INFO )
+      CALL CPSTRF( 'U', 2, A, 1, PIV, RANK, -1.0, RWORK, INFO )
       CALL CHKXER( 'CPSTRF', INFOT, NOUT, LERR, OK )
 *
 *        CPSTF2
 *
       SRNAMT = 'CPSTF2'
       INFOT = 1
-      CALL CPSTF2( '/', 0, A, 1, PIV, 1, -1.0, RWORK, INFO )
+      CALL CPSTF2( '/', 0, A, 1, PIV, RANK, -1.0, RWORK, INFO )
       CALL CHKXER( 'CPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL CPSTF2( 'U', -1, A, 1, PIV, 1, -1.0, RWORK, INFO )
+      CALL CPSTF2( 'U', -1, A, 1, PIV, RANK, -1.0, RWORK, INFO )
       CALL CHKXER( 'CPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL CPSTF2( 'U', 2, A, 1, PIV, 1, -1.0, RWORK, INFO )
+      CALL CPSTF2( 'U', 2, A, 1, PIV, RANK, -1.0, RWORK, INFO )
       CALL CHKXER( 'CPSTF2', INFOT, NOUT, LERR, OK )
 *
 *

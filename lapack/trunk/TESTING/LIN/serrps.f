@@ -31,7 +31,7 @@
       PARAMETER          ( NMAX = 4 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, INFO, J
+      INTEGER            I, INFO, J, RANK
 *     ..
 *     .. Local Arrays ..
       REAL               A( NMAX, NMAX ), WORK( 2*NMAX )
@@ -79,26 +79,26 @@
 *
       SRNAMT = 'SPSTRF'
       INFOT = 1
-      CALL SPSTRF( '/', 0, A, 1, PIV, 1, -1.0, WORK, INFO )
+      CALL SPSTRF( '/', 0, A, 1, PIV, RANK, -1.0, WORK, INFO )
       CALL CHKXER( 'SPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL SPSTRF( 'U', -1, A, 1, PIV, 1, -1.0, WORK, INFO )
+      CALL SPSTRF( 'U', -1, A, 1, PIV, RANK, -1.0, WORK, INFO )
       CALL CHKXER( 'SPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL SPSTRF( 'U', 2, A, 1, PIV, 1, -1.0, WORK, INFO )
+      CALL SPSTRF( 'U', 2, A, 1, PIV, RANK, -1.0, WORK, INFO )
       CALL CHKXER( 'SPSTRF', INFOT, NOUT, LERR, OK )
 *
 *        SPSTF2
 *
       SRNAMT = 'SPSTF2'
       INFOT = 1
-      CALL SPSTF2( '/', 0, A, 1, PIV, 1, -1.0, WORK, INFO )
+      CALL SPSTF2( '/', 0, A, 1, PIV, RANK, -1.0, WORK, INFO )
       CALL CHKXER( 'SPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL SPSTF2( 'U', -1, A, 1, PIV, 1, -1.0, WORK, INFO )
+      CALL SPSTF2( 'U', -1, A, 1, PIV, RANK, -1.0, WORK, INFO )
       CALL CHKXER( 'SPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL SPSTF2( 'U', 2, A, 1, PIV, 1, -1.0, WORK, INFO )
+      CALL SPSTF2( 'U', 2, A, 1, PIV, RANK, -1.0, WORK, INFO )
       CALL CHKXER( 'SPSTF2', INFOT, NOUT, LERR, OK )
 *
 *

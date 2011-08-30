@@ -31,7 +31,7 @@
       PARAMETER          ( NMAX = 4 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, INFO, J
+      INTEGER            I, INFO, J, RANK
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   A( NMAX, NMAX ), WORK( 2*NMAX )
@@ -79,26 +79,26 @@
 *
       SRNAMT = 'DPSTRF'
       INFOT = 1
-      CALL DPSTRF( '/', 0, A, 1, PIV, 1, -1.D0, WORK, INFO )
+      CALL DPSTRF( '/', 0, A, 1, PIV, RANK, -1.D0, WORK, INFO )
       CALL CHKXER( 'DPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DPSTRF( 'U', -1, A, 1, PIV, 1, -1.D0, WORK, INFO )
+      CALL DPSTRF( 'U', -1, A, 1, PIV, RANK, -1.D0, WORK, INFO )
       CALL CHKXER( 'DPSTRF', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DPSTRF( 'U', 2, A, 1, PIV, 1, -1.D0, WORK, INFO )
+      CALL DPSTRF( 'U', 2, A, 1, PIV, RANK, -1.D0, WORK, INFO )
       CALL CHKXER( 'DPSTRF', INFOT, NOUT, LERR, OK )
 *
 *        DPSTF2
 *
       SRNAMT = 'DPSTF2'
       INFOT = 1
-      CALL DPSTF2( '/', 0, A, 1, PIV, 1, -1.D0, WORK, INFO )
+      CALL DPSTF2( '/', 0, A, 1, PIV, RANK, -1.D0, WORK, INFO )
       CALL CHKXER( 'DPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL DPSTF2( 'U', -1, A, 1, PIV, 1, -1.D0, WORK, INFO )
+      CALL DPSTF2( 'U', -1, A, 1, PIV, RANK, -1.D0, WORK, INFO )
       CALL CHKXER( 'DPSTF2', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL DPSTF2( 'U', 2, A, 1, PIV, 1, -1.D0, WORK, INFO )
+      CALL DPSTF2( 'U', 2, A, 1, PIV, RANK, -1.D0, WORK, INFO )
       CALL CHKXER( 'DPSTF2', INFOT, NOUT, LERR, OK )
 *
 *
