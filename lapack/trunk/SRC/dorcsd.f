@@ -192,7 +192,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions
-      INTRINSIC          COS, INT, MAX, MIN, SIN
+      INTRINSIC          INT, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *

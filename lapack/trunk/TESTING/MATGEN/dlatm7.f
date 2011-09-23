@@ -184,7 +184,7 @@
 *
   160    CONTINUE
          D( 1 ) = ONE
-         IF( N.GT.1 ) THEN
+         IF( N.GT.1 .AND. RANK.GT.1 ) THEN
             ALPHA = COND**( -ONE / DBLE( RANK-1 ) )
             DO 170 I = 2, RANK
                D( I ) = ALPHA**( I-1 )

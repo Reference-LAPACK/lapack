@@ -80,10 +80,9 @@
       DOUBLE PRECISION   ANORM, BNORM, EPS, XNORM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
       INTEGER            IDAMAX
       DOUBLE PRECISION   DLAMCH, DLANSY
-      EXTERNAL           LSAME, IDAMAX, DLAMCH, DLANSY
+      EXTERNAL           IDAMAX, DLAMCH, DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSYMM

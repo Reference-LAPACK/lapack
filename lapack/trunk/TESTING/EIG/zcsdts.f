@@ -150,10 +150,14 @@
       ULP = DLAMCH( 'Precision' )
       ULPINV = REALONE / ULP
       CALL ZLASET( 'Full', M, M, ZERO, ONE, WORK, LDX )
-      CALL ZHERK( 'Upper', 'Conjugate transpose', M, M, -ONE, X, LDX,
-     $            ONE, WORK, LDX )
-      EPS2 = MAX( ULP, 
-     $            ZLANGE( '1', M, M, WORK, LDX, RWORK ) / REAL( M ) )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', M, M, -REALONE,
+     $            X, LDX, REALONE, WORK, LDX )
+      IF (M.GT.0) THEN
+         EPS2 = MAX( ULP, 
+     $               ZLANGE( '1', M, M, WORK, LDX, RWORK ) / DBLE( M ) )
+      ELSE
+         EPS2 = ULP
+      END IF
       R = MIN( P, M-P, Q, M-Q )
 *
 *     Copy the matrix X to the array XF.
@@ -252,8 +256,8 @@
 *     Compute I - U1'*U1
 *
       CALL ZLASET( 'Full', P, P, ZERO, ONE, WORK, LDU1 )
-      CALL ZHERK( 'Upper', 'Conjugate transpose', P, P, -ONE, U1, LDU1,
-     $            ONE, WORK, LDU1 )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', P, P, -REALONE,
+     $            U1, LDU1, REALONE, WORK, LDU1 )
 *
 *     Compute norm( I - U'*U ) / ( MAX(1,P) * ULP ) .
 *
@@ -263,8 +267,8 @@
 *     Compute I - U2'*U2
 *
       CALL ZLASET( 'Full', M-P, M-P, ZERO, ONE, WORK, LDU2 )
-      CALL ZHERK( 'Upper', 'Conjugate transpose', M-P, M-P, -ONE, U2,
-     $            LDU2, ONE, WORK, LDU2 )
+      CALL ZHERK( 'Upper', 'Conjugate transpose', M-P, M-P, -REALONE,
+     $            U2, LDU2, REALONE, WORK, LDU2 )
 *
 *     Compute norm( I - U2'*U2 ) / ( MAX(1,M-P) * ULP ) .
 *
@@ -274,8 +278,8 @@
 *     Compute I - V1T*V1T'
 *
       CALL ZLASET( 'Full', Q, Q, ZERO, ONE, WORK, LDV1T )
-      CALL ZHERK( 'Upper', 'No transpose', Q, Q, -ONE, V1T, LDV1T, ONE,
-     $            WORK, LDV1T )
+      CALL ZHERK( 'Upper', 'No transpose', Q, Q, -REALONE,
+     $            V1T, LDV1T, REALONE, WORK, LDV1T )
 *
 *     Compute norm( I - V1T*V1T' ) / ( MAX(1,Q) * ULP ) .
 *
@@ -285,8 +289,8 @@
 *     Compute I - V2T*V2T'
 *
       CALL ZLASET( 'Full', M-Q, M-Q, ZERO, ONE, WORK, LDV2T )
-      CALL ZHERK( 'Upper', 'No transpose', M-Q, M-Q, -ONE, V2T, LDV2T,
-     $            ONE, WORK, LDV2T )
+      CALL ZHERK( 'Upper', 'No transpose', M-Q, M-Q, -REALONE,
+     $            V2T, LDV2T, REALONE, WORK, LDV2T )
 *
 *     Compute norm( I - V2T*V2T' ) / ( MAX(1,M-Q) * ULP ) .
 *

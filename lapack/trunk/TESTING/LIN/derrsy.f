@@ -134,13 +134,13 @@
 *
          SRNAMT = 'DSYTRI2'
          INFOT = 1
-         CALL DSYTRI2( '/', 0, A, 1, IP, W, IW, INFO )
+         CALL DSYTRI2( '/', 0, A, 1, IP, W, IW(1), INFO )
          CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL DSYTRI2( 'U', -1, A, 1, IP, W, IW, INFO )
+         CALL DSYTRI2( 'U', -1, A, 1, IP, W, IW(1), INFO )
          CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
          INFOT = 4
-         CALL DSYTRI2( 'U', 2, A, 1, IP, W, IW, INFO )
+         CALL DSYTRI2( 'U', 2, A, 1, IP, W, IW(1), INFO )
          CALL CHKXER( 'DSYTRI2', INFOT, NOUT, LERR, OK )
 *
 *        DSYTRS

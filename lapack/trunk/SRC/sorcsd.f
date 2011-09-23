@@ -170,6 +170,9 @@
      $                     PIOVER2 = 1.57079632679489662E0,
      $                     ZERO = 0.0E+0 )
 *     ..
+*     .. Local Arrays ..
+      REAL               DUMMY(1)
+*     ..
 *     .. Local Scalars ..
       CHARACTER          TRANST, SIGNST
       INTEGER            CHILDINFO, I, IB11D, IB11E, IB12D, IB12E,
@@ -192,7 +195,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions
-      INTRINSIC          COS, INT, MAX, MIN, SIN
+      INTRINSIC          INT, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -271,19 +274,19 @@
          ITAUQ1 = ITAUP2 + MAX( 1, M - P )
          ITAUQ2 = ITAUQ1 + MAX( 1, Q )
          IORGQR = ITAUQ2 + MAX( 1, M - Q )
-         CALL SORGQR( M-Q, M-Q, M-Q, 0, MAX(1,M-Q), 0, WORK, -1,
+         CALL SORGQR( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK, -1,
      $                CHILDINFO )
          LORGQRWORKOPT = INT( WORK(1) )
          LORGQRWORKMIN = MAX( 1, M - Q )
          IORGLQ = ITAUQ2 + MAX( 1, M - Q )
-         CALL SORGLQ( M-Q, M-Q, M-Q, 0, MAX(1,M-Q), 0, WORK, -1,
+         CALL SORGLQ( M-Q, M-Q, M-Q, DUMMY, MAX(1,M-Q), DUMMY, WORK, -1,
      $                CHILDINFO )
          LORGLQWORKOPT = INT( WORK(1) )
          LORGLQWORKMIN = MAX( 1, M - Q )
          IORBDB = ITAUQ2 + MAX( 1, M - Q )
          CALL SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
-     $                X21, LDX21, X22, LDX22, 0, 0, 0, 0, 0, 0, WORK,
-     $                -1, CHILDINFO )
+     $        X21, LDX21, X22, LDX22, DUMMY, DUMMY, DUMMY, DUMMY, DUMMY,
+     $        DUMMY,WORK,-1,CHILDINFO )
          LORBDBWORKOPT = INT( WORK(1) )
          LORBDBWORKMIN = LORBDBWORKOPT
          IB11D = ITAUQ2 + MAX( 1, M - Q )
@@ -295,9 +298,10 @@
          IB22D = IB21E + MAX( 1, Q - 1 )
          IB22E = IB22D + MAX( 1, Q )
          IBBCSD = IB22E + MAX( 1, Q - 1 )
-         CALL SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q, 0,
-     $                0, U1, LDU1, U2, LDU2, V1T, LDV1T, V2T, LDV2T, 0,
-     $                0, 0, 0, 0, 0, 0, 0, WORK, -1, CHILDINFO )
+         CALL SBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+     $                DUMMY, DUMMY, U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
+     $                LDV2T, DUMMY, DUMMY, DUMMY, DUMMY, DUMMY, DUMMY,
+     $                DUMMY, DUMMY, WORK, -1, CHILDINFO )
          LBBCSDWORKOPT = INT( WORK(1) )
          LBBCSDWORKMIN = LBBCSDWORKOPT
          LWORKOPT = MAX( IORGQR + LORGQRWORKOPT, IORGLQ + LORGLQWORKOPT,

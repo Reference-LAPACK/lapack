@@ -30,7 +30,8 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO
-      COMPLEX*16         ALPHA, BETA
+      DOUBLE PRECISION   ALPHA, BETA
+      COMPLEX*16         CALPHA
 *     ..
 *     .. Local Arrays ..
       COMPLEX*16         A( 1, 1), B( 1, 1)
@@ -56,10 +57,11 @@
 *
       NOUT = NUNIT
       OK = .TRUE.
-      A( 1, 1 ) = DCMPLX( 1.D0 , 1.D0  )
-      B( 1, 1 ) = DCMPLX( 1.D0 , 1.D0  )
-      ALPHA     = DCMPLX( 1.D0 , 1.D0  )
-      BETA      = DCMPLX( 1.D0 , 1.D0  )
+      A( 1, 1 ) = DCMPLX( 1.0D0 , 1.0D0  )
+      B( 1, 1 ) = DCMPLX( 1.0D0 , 1.0D0  )
+      ALPHA     = 1.0D0
+      CALPHA    = DCMPLX( 1.0D0 , 1.0D0  )
+      BETA      = 1.0D0
 *
       SRNAMT = 'ZPFTRF'
       INFOT = 1
@@ -102,28 +104,28 @@
 *
       SRNAMT = 'ZTFSM '
       INFOT = 1
-      CALL ZTFSM( '/', 'L', 'U', 'C', 'U', 0, 0, ALPHA, A, B, 1 )
+      CALL ZTFSM( '/', 'L', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
       CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 2
-      CALL ZTFSM( 'N', '/', 'U', 'C', 'U', 0, 0, ALPHA, A, B, 1 )
+      CALL ZTFSM( 'N', '/', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
       CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 3
-      CALL ZTFSM( 'N', 'L', '/', 'C', 'U', 0, 0, ALPHA, A, B, 1 )
+      CALL ZTFSM( 'N', 'L', '/', 'C', 'U', 0, 0, CALPHA, A, B, 1 )
       CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 4
-      CALL ZTFSM( 'N', 'L', 'U', '/', 'U', 0, 0, ALPHA, A, B, 1 )
+      CALL ZTFSM( 'N', 'L', 'U', '/', 'U', 0, 0, CALPHA, A, B, 1 )
       CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 5
-      CALL ZTFSM( 'N', 'L', 'U', 'C', '/', 0, 0, ALPHA, A, B, 1 )
+      CALL ZTFSM( 'N', 'L', 'U', 'C', '/', 0, 0, CALPHA, A, B, 1 )
       CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 6
-      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', -1, 0, ALPHA, A, B, 1 )
+      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', -1, 0, CALPHA, A, B, 1 )
       CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 7
-      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', 0, -1, ALPHA, A, B, 1 )
+      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', 0, -1, CALPHA, A, B, 1 )
       CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', 0, 0, ALPHA, A, B, 0 )
+      CALL ZTFSM( 'N', 'L', 'U', 'C', 'U', 0, 0, CALPHA, A, B, 0 )
       CALL CHKXER( 'ZTFSM ', INFOT, NOUT, LERR, OK )
 *
       SRNAMT = 'ZTFTRI'

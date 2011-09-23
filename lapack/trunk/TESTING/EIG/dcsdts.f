@@ -152,8 +152,12 @@
       CALL DLASET( 'Full', M, M, ZERO, ONE, WORK, LDX )
       CALL DSYRK( 'Upper', 'Conjugate transpose', M, M, -ONE, X, LDX,
      $            ONE, WORK, LDX )
-      EPS2 = MAX( ULP, 
-     $            DLANGE( '1', M, M, WORK, LDX, RWORK ) / DBLE( M ) )
+      IF (M.GT.0) THEN
+         EPS2 = MAX( ULP, 
+     $               DLANGE( '1', M, M, WORK, LDX, RWORK ) / DBLE( M ) )
+      ELSE
+         EPS2 = ULP
+      END IF
       R = MIN( P, M-P, Q, M-Q )
 *
 *     Copy the matrix X to the array XF.

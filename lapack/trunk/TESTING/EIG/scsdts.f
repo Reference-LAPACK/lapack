@@ -152,8 +152,12 @@
       CALL SLASET( 'Full', M, M, ZERO, ONE, WORK, LDX )
       CALL SSYRK( 'Upper', 'Conjugate transpose', M, M, -ONE, X, LDX,
      $            ONE, WORK, LDX )
-      EPS2 = MAX( ULP, 
-     $            SLANGE( '1', M, M, WORK, LDX, RWORK ) / REAL( M ) )
+      IF (M.GT.0) THEN
+         EPS2 = MAX( ULP, 
+     $               SLANGE( '1', M, M, WORK, LDX, RWORK ) / REAL( M ) )
+      ELSE
+         EPS2 = ULP
+      END IF
       R = MIN( P, M-P, Q, M-Q )
 *
 *     Copy the matrix X to the array XF.
