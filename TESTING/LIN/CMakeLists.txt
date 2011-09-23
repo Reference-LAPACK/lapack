@@ -192,32 +192,30 @@ macro(add_lin_executable name )
   target_link_libraries(${name} tmglib lapack)
 endmacro(add_lin_executable)
 
-add_lin_executable(xlintsts ${ALINTST} ${SCLNTST} ${SLINTST} 
-  ${SECOND_SRC} )
+IF(BUILD_SINGLE)
+add_lin_executable(xlintsts ${ALINTST} ${SCLNTST} ${SLINTST} ${SECOND_SRC} )
+add_lin_executable(xlintstrfs ${SLINTSTRFP} ${SECOND_SRC})
+endif()
 
-add_lin_executable(xlintstc  ${ALINTST} ${CLINTST} ${SCLNTST}
-  ${SECOND_SRC} )
- 
-add_lin_executable(xlintstd  ${ALINTST} ${DLINTST} ${DZLNTST}
-  ${DSECOND_SRC})
-add_lin_executable(xlintstz  ${ALINTST} ${ZLINTST} ${DZLNTST}
-  ${DSECOND_SRC})
- 
-add_lin_executable(xlintstds ${DSLINTST}
-		${SECOND_SRC} 
-		${DSECOND_SRC} )
-add_lin_executable(xlintstzc ${ZCLINTST}
-		${SECOND_SRC} 
-		${DSECOND_SRC} )
- 
-add_lin_executable(xlintstrfs ${SLINTSTRFP}
-		${SECOND_SRC})
- 
-add_lin_executable(xlintstrfd ${DLINTSTRFP}
-  ${DSECOND_SRC})
- 
-add_lin_executable(xlintstrfc  ${CLINTSTRFP}
-  ${SECOND_SRC})
-add_lin_executable(xlintstrfz ${ZLINTSTRFP}
-  ${DSECOND_SRC})
+if(BUILD_DOUBLE)
+add_lin_executable(xlintstd  ${ALINTST} ${DLINTST} ${DZLNTST} ${DSECOND_SRC})
+add_lin_executable(xlintstrfd ${DLINTSTRFP} ${DSECOND_SRC})
+endif()
 
+IF(BUILD_SINGLE AND BUILD_DOUBLE)
+add_lin_executable(xlintstds ${DSLINTST} ${SECOND_SRC} ${DSECOND_SRC} )
+endif()
+
+if(BUILD_COMPLEX)
+add_lin_executable(xlintstc  ${ALINTST} ${CLINTST} ${SCLNTST} ${SECOND_SRC} )
+add_lin_executable(xlintstrfc  ${CLINTSTRFP} ${SECOND_SRC})
+endif()
+
+if(BUILD_COMPLEX16)
+add_lin_executable(xlintstz  ${ALINTST} ${ZLINTST} ${DZLNTST} ${DSECOND_SRC})
+add_lin_executable(xlintstrfz ${ZLINTSTRFP} ${DSECOND_SRC})
+endif()
+
+IF(BUILD_COMPLEX AND BUILD_COMPLEX16)
+add_lin_executable(xlintstzc ${ZCLINTST} ${SECOND_SRC} ${DSECOND_SRC} )
+endif()

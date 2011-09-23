@@ -42,8 +42,10 @@ for o, a in opts:
       print "     - p [s/c/d/z/x] is to indicate the PRECISION to run:"
       print "            s=single"
       print "            d=double"
+      print "            sd=single/double"
       print "            c=complex"
       print "            z=double complex"
+      print "            cz=complex/double complex"
       print "            x=all [DEFAULT]"
       print "     - t [lin/eig/mixed/rfp/all] is to indicate which TEST FAMILY to run:"
       print "            lin=Linear Equation"
@@ -80,8 +82,10 @@ for o, a in opts:
 # process options
 os.chdir(dir)
 execution=1
-summary="SUMMARY             \tnumerical error   \tother error  \n";
-summary+="================    \t=================\t================  \n";
+summary="\n\t\t\t-->   LAPACK TESTING SUMMARY  <--\n";
+if with_file: summary+= "\t\tProcessing LAPACK Testing output found in the "+dir+" direcory\n";
+summary+="SUMMARY             \tnb test run \tnumerical error   \tother error  \n";
+summary+="================   \t===========\t=================\t================  \n";
 nb_of_test=0
 
 # Add current directory to the path for subshells of this shell
@@ -94,10 +98,11 @@ def run_summary_test( f, cmdline, short_summary):
    nb_test_fail=0
    nb_test_illegal=0
    nb_test_info=0
-   if (with_file==1):
+   if (with_file):
       if not os.path.exists(cmdline):
         error_message=cmdline+" file not found"
         r=1
+        if short_summary: return [nb_test_run,nb_test_fail,nb_test_illegal,nb_test_info]
       else:
         pipe = open(cmdline,'r')
         r=0
@@ -114,13 +119,14 @@ def run_summary_test( f, cmdline, short_summary):
       pipe = open(outfile,'r')
       error_message=cmdline+" did not work"
 
-   if r != 0 and (with_file==0):
+   if r != 0 and not with_file:
        print "---- TESTING " + cmdline.split()[0] + "... FAILED(" + error_message +") !"
        for line in pipe.readlines():
           f.write(str(line))
-   elif r != 0 and (with_file==1):
-       print "---- ERROR: You used the option -f, please check that you have the LAPACK output!"
-       print "---- "+error_message
+   elif r != 0 and with_file and not short_summary:
+       print "---- WARNING: please check that you have the LAPACK output : "+cmdline+"!"
+       print "---- WARNING: with the option -r, we can run the LAPACK testing for you"
+      # print "---- "+error_message
    else:
          for line in pipe.readlines():
         	f.write(str(line))
@@ -169,11 +175,16 @@ if prec=='s':
    range_prec=[0]
 elif prec=='d':
    range_prec=[1]
+elif prec=='sd':
+   range_prec=[0,1]
 elif prec=='c':
    range_prec=[2]
 elif prec=='z':
    range_prec=[3]
-else:  
+elif prec=='cz':
+   range_prec=[2,3]
+else: 
+   prec='x';
    range_prec=range(4)
 
 if test=='lin':
@@ -248,7 +259,7 @@ for dtype in range_prec:
         else:
            # EIG TESTS
            cmdbase="xeigtst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
-     if (just_errors==0 and short_summary==0):
+     if (not just_errors and not short_summary):
         print "-->  Testing "+name+" "+dtests[1][dtest]+" [ "+cmdbase+" ]"
      # Run the process: either to read the file or run the LAPACK testing   
      nb_test = run_summary_test(f, cmdbase, short_summary)
@@ -258,7 +269,7 @@ for dtype in range_prec:
      list_results[3][dtype]+=nb_test[3]
      got_error=nb_test[1]+nb_test[2]+nb_test[3]
      
-     if (short_summary==0):
+     if (not short_summary):
         if (nb_test[0]>0 and just_errors==0):
            print "-->  Tests passed: "+str(nb_test[0])
         if (nb_test[1]>0):
@@ -276,9 +287,13 @@ for dtype in range_prec:
 #        print dtests[2][dtest]+".out \t"+str(nb_test[1])+"\t"+str(nb_test[2])+"\t"+str(nb_test[3])
         
      sys.stdout.flush()
-  percent_num_error=float(list_results[1][dtype])/float(list_results[0][dtype])*100
-  percent_error=float(list_results[2][dtype]+list_results[3][dtype])/float(list_results[0][dtype])*100
-  summary+=name+"\t"+str(list_results[1][dtype])+"\t("+"%.3f" % percent_num_error+"%)\t"+str(list_results[2][dtype]+list_results[3][dtype])+"\t("+"%.3f" % percent_error+"%)\t""\n"
+  if (list_results[0][dtype] > 0 ):
+     percent_num_error=float(list_results[1][dtype])/float(list_results[0][dtype])*100
+     percent_error=float(list_results[2][dtype]+list_results[3][dtype])/float(list_results[0][dtype])*100
+  else:
+     percent_num_error=0
+     percent_error=0
+  summary+=name+"\t"+str(list_results[0][dtype])+"\t\t"+str(list_results[1][dtype])+"\t("+"%.3f" % percent_num_error+"%)\t"+str(list_results[2][dtype]+list_results[3][dtype])+"\t("+"%.3f" % percent_error+"%)\t""\n"
   list_results[0][4]+=list_results[0][dtype]
   list_results[1][4]+=list_results[1][dtype]
   list_results[2][4]+=list_results[2][dtype]
@@ -288,11 +303,16 @@ if only_numbers==1:
    print str(list_results[1][4])+"\n"+str(list_results[2][4]+list_results[3][4])
 else:
    print summary
-   percent_num_error=float(list_results[1][4])/float(list_results[0][4])*100
-   percent_error=float(list_results[2][4]+list_results[3][4])/float(list_results[0][4])*100
-   print "--> ALL PRECISIONS   \t"+str(list_results[1][4])+"\t("+"%.3f" % percent_num_error+"%)\t"+str(list_results[2][4]+list_results[3][4])+"\t("+"%.3f" % percent_error+"%)\t""\n"
-
-
+   if (list_results[0][4] > 0 ):
+      percent_num_error=float(list_results[1][4])/float(list_results[0][4])*100
+      percent_error=float(list_results[2][4]+list_results[3][4])/float(list_results[0][4])*100
+   else:
+      percent_num_error=0
+      percent_error=0
+   if (prec=='x'):
+        print "--> ALL PRECISIONS\t"+str(list_results[0][4])+"\t\t"+str(list_results[1][4])+"\t("+"%.3f" % percent_num_error+"%)\t"+str(list_results[2][4]+list_results[3][4])+"\t("+"%.3f" % percent_error+"%)\t""\n"
+   if list_results[0][4] == 0:
+     print "NO TESTS WERE ANALYZED, please use the -r option to run the LAPACK TESTING"
 
 # This may close the sys.stdout stream, so make it the last statement
 f.close()

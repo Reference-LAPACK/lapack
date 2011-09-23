@@ -80,6 +80,14 @@ set(libdir ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
 set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 
 # --------------------------------------------------
+# Precision to build
+# By default all precisions are generated
+
+option(BUILD_SINGLE "Build LAPACK Single Precision" ON)
+option(BUILD_DOUBLE "Build LAPACK Double Precision" ON)
+option(BUILD_COMPLEX "Build LAPACK Complex Precision" ON)
+option(BUILD_COMPLEX16 "Build LAPACK Double Complex Precision" ON)
+# --------------------------------------------------
 # Subdirectories that need to be processed
 
 option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library instead of included netlib BLAS" OFF)
