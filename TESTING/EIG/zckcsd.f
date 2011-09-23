@@ -128,11 +128,11 @@
      $                   ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, COS, MIN, SIN
+      INTRINSIC          ABS, MIN
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   ZLANGE, DLARND
-      EXTERNAL           ZLANGE, DLARND
+      DOUBLE PRECISION   DLARND
+      EXTERNAL           DLARND
 *     ..
 *     .. Executable Statements ..
 *

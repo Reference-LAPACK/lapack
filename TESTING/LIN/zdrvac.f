@@ -100,10 +100,6 @@
 *     .. Local Variables ..
       INTEGER            ITER, KASE
 *     ..
-*     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
-*     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ZLACPY, ZLAIPD,
      $                   ZLARHS, ZLATB4, ZLATMS, 

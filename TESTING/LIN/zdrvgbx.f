@@ -723,9 +723,12 @@ c                     write(*,*) 'begin zgbsvxx testing'
                      CALL ZLACPY( 'Full', N, NRHS, BSAV, LDB, B, LDB )
 
                      IF( .NOT.PREFAC )
-     $                  CALL ZLASET( 'Full', 2*KL+KU+1, N, ZERO, ZERO,
-     $                    AFB, LDAFB )
-                     CALL ZLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDB )
+     $                  CALL ZLASET( 'Full', 2*KL+KU+1, N,
+     $                               DCMPLX( ZERO ), DCMPLX( ZERO ),
+     $                               AFB, LDAFB )
+                     CALL ZLASET( 'Full', N, NRHS,
+     $                            DCMPLX( ZERO ), DCMPLX( ZERO ),
+     $                            X, LDB )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT = 'F' and
@@ -778,7 +781,7 @@ c                     write(*,*) 'begin zgbsvxx testing'
 *                       residual.
 *
                         CALL ZGBT01( N, N, KL, KU, A, LDA, AFB, LDAFB,
-     $                       IWORK, RWORK( 2*NRHS+1 ), RESULT( 1 ) )
+     $                       IWORK, WORK( 2*NRHS+1 ), RESULT( 1 ) )
                         K1 = 1
                      ELSE
                         K1 = 2
@@ -792,8 +795,7 @@ c                     write(*,*) 'begin zgbsvxx testing'
                         CALL ZLACPY( 'Full', N, NRHS, BSAV, LDB, WORK,
      $                               LDB )
                         CALL ZGBT02( TRANS, N, N, KL, KU, NRHS, ASAV,
-     $                       LDA, X, LDB, WORK, LDB, RWORK( 2*NRHS+1 ),
-     $                               RESULT( 2 ) )
+     $                       LDA, X, LDB, WORK, LDB, RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *

@@ -1204,6 +1204,7 @@
 *
          READ( NIN, FMT = * )THRESH
          CALL XLAENV( 1, 1 )
+         CALL XLAENV( 12, 1 )
          TSTERR = .TRUE.
          CALL CCHKEC( THRESH, TSTERR, NIN, NOUT )
          GO TO 380
@@ -2314,7 +2315,7 @@
      $      CALL CERRGG( 'CSD', NOUT )
          CALL CCKCSD( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
      $                A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), A( 1, 4 ),
-     $                A( 1, 5 ), A( 1, 6 ), A( 1, 7 ), IWORK, WORK,
+     $                A( 1, 5 ), A( 1, 6 ), RWORK, IWORK, WORK,
      $                DR( 1, 1 ), NIN, NOUT, INFO )
          IF( INFO.NE.0 )
      $      WRITE( NOUT, FMT = 9980 )'CCKCSD', INFO

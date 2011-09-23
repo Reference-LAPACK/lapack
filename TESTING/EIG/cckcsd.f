@@ -128,11 +128,11 @@
      $                   CLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, COS, MIN, SIN
+      INTRINSIC          ABS, MIN
 *     ..
 *     .. External Functions ..
-      REAL               CLANGE, SLARND
-      EXTERNAL           CLANGE, SLARND
+      REAL               SLARND
+      EXTERNAL           SLARND
 *     ..
 *     .. Executable Statements ..
 *

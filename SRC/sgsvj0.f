@@ -161,7 +161,7 @@
       REAL               FASTR( 5 )
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, AMAX1, AMIN1, FLOAT, MIN0, SIGN, SQRT
+      INTRINSIC          ABS, AMAX1, FLOAT, MIN0, SIGN, SQRT
 *     ..
 *     .. External Functions ..
       REAL               SDOT, SNRM2

@@ -106,7 +106,7 @@
       EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, LOG, REAL, DIMAG
+      INTRINSIC          ABS, MAX, MIN, LOG, DBLE, DIMAG
 *     ..
 *     .. Statement Functions ..
       DOUBLE PRECISION   CABS1

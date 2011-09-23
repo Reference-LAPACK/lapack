@@ -723,9 +723,12 @@ c                     write(*,*) 'begin cgbsvxx testing'
                      CALL CLACPY( 'Full', N, NRHS, BSAV, LDB, B, LDB )
 
                      IF( .NOT.PREFAC )
-     $                  CALL CLASET( 'Full', 2*KL+KU+1, N, ZERO, ZERO,
-     $                    AFB, LDAFB )
-                     CALL CLASET( 'Full', N, NRHS, ZERO, ZERO, X, LDB )
+     $                  CALL CLASET( 'Full', 2*KL+KU+1, N,
+     $                               CMPLX( ZERO ), CMPLX( ZERO ),
+     $                               AFB, LDAFB )
+                     CALL CLASET( 'Full', N, NRHS,
+     $                            CMPLX( ZERO ), CMPLX( ZERO ),
+     $                               X, LDB )
                      IF( IEQUED.GT.1 .AND. N.GT.0 ) THEN
 *
 *                       Equilibrate the matrix if FACT = 'F' and
@@ -778,7 +781,7 @@ c                     write(*,*) 'begin cgbsvxx testing'
 *                       residual.
 *
                         CALL CGBT01( N, N, KL, KU, A, LDA, AFB, LDAFB,
-     $                       IWORK, RWORK( 2*NRHS+1 ), RESULT( 1 ) )
+     $                       IWORK, WORK( 2*NRHS+1 ), RESULT( 1 ) )
                         K1 = 1
                      ELSE
                         K1 = 2
@@ -792,8 +795,7 @@ c                     write(*,*) 'begin cgbsvxx testing'
                         CALL CLACPY( 'Full', N, NRHS, BSAV, LDB, WORK,
      $                               LDB )
                         CALL CGBT02( TRANS, N, N, KL, KU, NRHS, ASAV,
-     $                       LDA, X, LDB, WORK, LDB, RWORK( 2*NRHS+1 ),
-     $                               RESULT( 2 ) )
+     $                       LDA, X, LDB, WORK, LDB, RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *

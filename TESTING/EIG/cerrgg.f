@@ -35,8 +35,8 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
-      INTEGER            DUMMYK, DUMMYL, I, IFST, ILST, INFO, J, M,
-     $                   NCYCLE, NT, SDIM
+      INTEGER            DUMMYK, DUMMYL, I, IFST, IHI, ILO, ILST, INFO,
+     $                   J, M, NCYCLE, NT, SDIM
       REAL               ANRM, BNRM, DIF, SCALE, TOLA, TOLB
 *     ..
 *     .. Local Arrays ..

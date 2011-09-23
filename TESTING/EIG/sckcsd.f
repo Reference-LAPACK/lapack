@@ -128,11 +128,11 @@
      $                   SLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, COS, MIN, SIN
+      INTRINSIC          ABS, MIN
 *     ..
 *     .. External Functions ..
-      REAL               SLANGE, SLARND
-      EXTERNAL           SLANGE, SLARND
+      REAL               SLARND
+      EXTERNAL           SLARND
 *     ..
 *     .. Executable Statements ..
 *

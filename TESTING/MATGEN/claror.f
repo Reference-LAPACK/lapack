@@ -137,6 +137,7 @@
 *     ..
 *     .. Executable Statements ..
 *
+      INFO = 0
       IF( N.EQ.0 .OR. M.EQ.0 )
      $   RETURN
 *
@@ -153,7 +154,6 @@
 *
 *     Check for argument errors.
 *
-      INFO = 0
       IF( ITYPE.EQ.0 ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN

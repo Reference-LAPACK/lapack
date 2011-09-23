@@ -791,7 +791,7 @@
      $                               LDB )
                         CALL DGBT02( TRANS, N, N, KL, KU, NRHS, ASAV,
      $                               LDA, X, LDB, WORK, LDB,
-     $                               WORK, RESULT( 2 ) )
+     $                               RESULT( 2 ) )
 *
 *                       Check solution from generated exact solution.
 *

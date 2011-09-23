@@ -112,8 +112,7 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, SSYTRF, SSYTRS, SSYTRS2
@@ -145,7 +144,7 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            CALL SSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )  
+            CALL SSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
             LWKOPT = WORK(1)
          END IF
          WORK( 1 ) = LWKOPT
