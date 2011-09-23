@@ -43,4 +43,4 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "Character string truncated to length 1 on assignment"
 )
 
-SET(CTEST_CUSTOM_POST_TEST "./lapack_testing.py -s -d Testing")
+SET(CTEST_CUSTOM_POST_TEST "./lapack_testing.py -s -d TESTING")

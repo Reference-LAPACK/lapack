@@ -14,7 +14,7 @@ macro(add_lapack_test output input target)
   string(REPLACE "." "_" input_name ${input})
   set(testName "${target}_${input_name}")
   if(EXISTS "${TEST_INPUT}")
-    add_test(${testName} "${CMAKE_COMMAND}"
+    add_test(LAPACK-${testName} "${CMAKE_COMMAND}"
       -DTEST=${TEST_LOC}
       -DINPUT=${TEST_INPUT} 
       -DOUTPUT=${TEST_OUTPUT} 
@@ -23,49 +23,11 @@ macro(add_lapack_test output input target)
   endif()
 endmacro(add_lapack_test)
 
+if (BUILD_SINGLE)
 add_lapack_test(stest.out stest.in xlintsts)
-
-add_lapack_test(ctest.out ctest.in xlintstc)
-#
-# ======== DOUBLE LIN TESTS ===========================
-
-add_lapack_test(dtest.out dtest.in xlintstd)
-
-#
-# ======== COMPLEX16 LIN TESTS ========================
-
-add_lapack_test(ztest.out ztest.in xlintstz)
-
-#
-# ======== SINGLE-DOUBLE PROTO LIN TESTS ==============
-
-add_lapack_test(dstest.out dstest.in xlintstds)
-
-#
-# ======== COMPLEX-COMPLEX16 LIN TESTS ========================
-
-add_lapack_test(zctest.out zctest.in xlintstzc)
-
 #
 # ======== SINGLE RFP LIN TESTS ========================
-
 add_lapack_test(stest_rfp.out stest_rfp.in xlintstrfs)
-
-#
-# ======== COMPLEX16 RFP LIN TESTS ========================
-
-add_lapack_test(dtest_rfp.out dtest_rfp.in xlintstrfd)
-
-#
-# ======== COMPLEX16 RFP LIN TESTS ========================
-
-add_lapack_test(ctest_rfp.out ctest_rfp.in xlintstrfc)
-
-#
-# ======== COMPLEX16 RFP LIN TESTS ========================
-
-add_lapack_test(ztest_rfp.out ztest_rfp.in xlintstrfz)
-
 #
 #
 # ======== SINGLE EIG TESTS ===========================
@@ -126,66 +88,15 @@ add_lapack_test(scsd.out csd.in xeigtsts)
 
 
 add_lapack_test(slse.out lse.in xeigtsts)
+endif()
 
+if (BUILD_DOUBLE)
 #
-# ======== COMPLEX EIG TESTS ===========================
-
-add_lapack_test(cnep.out nep.in xeigtstc)
-
-
-add_lapack_test(csep.out sep.in xeigtstc)
-
-
-add_lapack_test(csvd.out svd.in xeigtstc)
-
-
-add_lapack_test(cec.out cec.in xeigtstc)
-
-
-add_lapack_test(ced.out ced.in xeigtstc)
-
-
-add_lapack_test(cgg.out cgg.in xeigtstc)
-
-
-add_lapack_test(cgd.out cgd.in xeigtstc)
-
-
-add_lapack_test(csb.out csb.in xeigtstc)
-
-
-add_lapack_test(csg.out csg.in xeigtstc)
-
-
-add_lapack_test(cbal.out cbal.in xeigtstc)
-
-
-add_lapack_test(cbak.out cbak.in xeigtstc)
-
-
-add_lapack_test(cgbal.out cgbal.in xeigtstc)
-
-
-add_lapack_test(cgbak.out cgbak.in xeigtstc)
-
-
-add_lapack_test(cbb.out cbb.in xeigtstc)
-
-
-add_lapack_test(cglm.out glm.in xeigtstc)
-
-
-add_lapack_test(cgqr.out gqr.in xeigtstc)
-
-
-add_lapack_test(cgsv.out gsv.in xeigtstc)
-
-
-add_lapack_test(ccsd.out csd.in xeigtstc)
-
-
-add_lapack_test(clse.out lse.in xeigtstc)
-
+# ======== DOUBLE LIN TESTS ===========================
+add_lapack_test(dtest.out dtest.in xlintstd)
+#
+# ======== DOUBLE RFP LIN TESTS ========================
+add_lapack_test(dtest_rfp.out dtest_rfp.in xlintstrfd)
 #
 # ======== DOUBLE EIG TESTS ===========================
 
@@ -244,7 +155,80 @@ add_lapack_test(dcsd.out csd.in xeigtstd)
 
 
 add_lapack_test(dlse.out lse.in xeigtstd)
+endif()
 
+if (BUILD_COMPLEX)
+add_lapack_test(ctest.out ctest.in xlintstc)
+#
+# ======== COMPLEX RFP LIN TESTS ========================
+add_lapack_test(ctest_rfp.out ctest_rfp.in xlintstrfc)
+#
+# ======== COMPLEX EIG TESTS ===========================
+
+add_lapack_test(cnep.out nep.in xeigtstc)
+
+
+add_lapack_test(csep.out sep.in xeigtstc)
+
+
+add_lapack_test(csvd.out svd.in xeigtstc)
+
+
+add_lapack_test(cec.out cec.in xeigtstc)
+
+
+add_lapack_test(ced.out ced.in xeigtstc)
+
+
+add_lapack_test(cgg.out cgg.in xeigtstc)
+
+
+add_lapack_test(cgd.out cgd.in xeigtstc)
+
+
+add_lapack_test(csb.out csb.in xeigtstc)
+
+
+add_lapack_test(csg.out csg.in xeigtstc)
+
+
+add_lapack_test(cbal.out cbal.in xeigtstc)
+
+
+add_lapack_test(cbak.out cbak.in xeigtstc)
+
+
+add_lapack_test(cgbal.out cgbal.in xeigtstc)
+
+
+add_lapack_test(cgbak.out cgbak.in xeigtstc)
+
+
+add_lapack_test(cbb.out cbb.in xeigtstc)
+
+
+add_lapack_test(cglm.out glm.in xeigtstc)
+
+
+add_lapack_test(cgqr.out gqr.in xeigtstc)
+
+
+add_lapack_test(cgsv.out gsv.in xeigtstc)
+
+
+add_lapack_test(ccsd.out csd.in xeigtstc)
+
+
+add_lapack_test(clse.out lse.in xeigtstc)
+endif()
+
+if (BUILD_COMPLEX16)
+#
+# ======== COMPLEX16 LIN TESTS ========================
+add_lapack_test(ztest.out ztest.in xlintstz)
+#
+# ======== COMPLEX16 RFP LIN TESTS ========================
+add_lapack_test(ztest_rfp.out ztest_rfp.in xlintstrfz)
 #
 # ======== COMPLEX16 EIG TESTS ===========================
 
@@ -303,6 +287,25 @@ add_lapack_test(zcsd.out csd.in xeigtstz)
 
 
 add_lapack_test(zlse.out lse.in xeigtstz)
+endif()
+
+
+if (BUILD_SIMPLE)
+    if (BUILD_DOUBLE)
+#
+# ======== SINGLE-DOUBLE PROTO LIN TESTS ==============
+        add_lapack_test(dstest.out dstest.in xlintstds)
+    endif()
+endif()
+
+
+if (BUILD_COMPLEX)
+    if (BUILD_COMPLEX16)
+#
+# ======== COMPLEX-COMPLEX16 LIN TESTS ========================
+        add_lapack_test(zctest.out zctest.in xlintstzc)
+    endif()
+endif()
 
 # ==============================================================================
 

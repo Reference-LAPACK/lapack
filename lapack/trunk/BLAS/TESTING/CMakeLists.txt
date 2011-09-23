@@ -33,31 +33,39 @@ macro(add_blas_test name src)
   get_target_property(TEST_LOC ${name} LOCATION)
   target_link_libraries(${name} blas)
   if(EXISTS "${TEST_INPUT}")
-    add_test(${name} "${CMAKE_COMMAND}"
+    add_test(BLAS-${name} "${CMAKE_COMMAND}"
       -DTEST=${TEST_LOC}
       -DINPUT=${TEST_INPUT}
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
     else()
-      add_test(${name} "${CMAKE_COMMAND}" 
+      add_test(BLAS-${name} "${CMAKE_COMMAND}" 
         -DTEST=${TEST_LOC}
         -DINTDIR=${CMAKE_CFG_INTDIR}
         -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
     endif()
 endmacro(add_blas_test)
 
-add_blas_test(xblat1s sblat1.f)
-add_blas_test(xblat1c cblat1.f)
-add_blas_test(xblat1d dblat1.f)
-add_blas_test(xblat1z zblat1.f)
+if(BUILD_SINGLE)
+  add_blas_test(xblat1s sblat1.f)
+  add_blas_test(xblat2s sblat2.f)
+  add_blas_test(xblat3s sblat3.f)
+endif()
 
-add_blas_test(xblat2s sblat2.f sblat2.in)
-add_blas_test(xblat2c cblat2.f )
-add_blas_test(xblat2d dblat2.f)
-add_blas_test(xblat2z zblat2.f)
+if(BUILD_DOUBLE)
+  add_blas_test(xblat1d dblat1.f)
+  add_blas_test(xblat2d dblat2.f)
+  add_blas_test(xblat3d dblat3.f)
+endif()
 
-add_blas_test(xblat3s sblat3.f)
-add_blas_test(xblat3c cblat3.f)
-add_blas_test(xblat3d dblat3.f)
-add_blas_test(xblat3z zblat3.f)
+if(BUILD_COMPLEX)
+  add_blas_test(xblat1c cblat1.f)
+  add_blas_test(xblat2c cblat2.f)
+  add_blas_test(xblat3c cblat3.f)
+endif()
 
+if(BUILD_COMPLEX16)
+  add_blas_test(xblat1z zblat1.f)
+  add_blas_test(xblat2z zblat2.f)
+  add_blas_test(xblat3z zblat3.f)
+endif()
