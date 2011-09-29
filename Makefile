@@ -71,6 +71,9 @@ cleanlib:
 	( cd SRC/VARIANTS; $(MAKE) clean )
 	( cd TESTING/MATGEN; $(MAKE) clean )
 
+cleanblaslib:
+	( cd BLAS/SRC; $(MAKE) clean )
+
 cleanblas_testing:	
 	( cd BLAS/TESTING; $(MAKE) -f Makeblat1 clean )
 	( cd BLAS/TESTING; $(MAKE) -f Makeblat2 clean )
@@ -82,6 +85,6 @@ cleantesting:
 	( cd TESTING/EIG; $(MAKE) clean )
 	( cd TESTING; rm -f xlin* xeig* )
 
-cleanall: cleanlib cleanblas_testing cleantesting 
-	rm -f *.a TESTING/*.out INSTALL/test*  BLAS/*.out
+cleanall: cleanlib cleanblaslib cleanblas_testing cleantesting 
+	rm -f *.a TESTING/*.out INSTALL/test*
 
