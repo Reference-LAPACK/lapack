@@ -12,6 +12,9 @@
       COMPLEX*16         H( LDH, * ), V( * )
 *     ..
 *
+*  Purpose
+*  =======
+*
 *       Given a 2-by-2 or 3-by-3 matrix H, ZLAQR1 sets v to a
 *       scalar multiple of the first column of the product
 *
@@ -22,6 +25,8 @@
 *       This is useful for starting double implicit shift bulges
 *       in the QR algorithm.
 *
+*  Arguments
+*  =========
 *
 *       N      (input) integer
 *              Order of the matrix H. N must be either 2 or 3.
@@ -40,12 +45,14 @@
 *              A scalar multiple of the first column of the
 *              matrix K in (*).
 *
-*     ================================================================
+*  Further Details
+*  ===============
+*
 *     Based on contributions by
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ================================================================
+*  ================================================================
 *
 *     .. Parameters ..
       COMPLEX*16         ZERO

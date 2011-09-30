@@ -118,6 +118,7 @@
 *          for which SELCTG is true.
 *
 *  ALPHA   (output) COMPLEX*16 array, dimension (N)
+*
 *  BETA    (output) COMPLEX*16 array, dimension (N)
 *          On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the
 *          generalized eigenvalues.  ALPHA(j) and BETA(j),j=1,...,N  are

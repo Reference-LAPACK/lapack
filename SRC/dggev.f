@@ -71,7 +71,9 @@
 *          The leading dimension of B.  LDB >= max(1,N).
 *
 *  ALPHAR  (output) DOUBLE PRECISION array, dimension (N)
+*
 *  ALPHAI  (output) DOUBLE PRECISION array, dimension (N)
+*
 *  BETA    (output) DOUBLE PRECISION array, dimension (N)
 *          On exit, (ALPHAR(j) + ALPHAI(j)*i)/BETA(j), j=1,...,N, will
 *          be the generalized eigenvalues.  If ALPHAI(j) is zero, then

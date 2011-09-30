@@ -48,8 +48,7 @@
 *
 *  are left eigenvectors of (A,B).
 *
-*  Note: this routine performs "full balancing" on A and B -- see
-*  "Further Details", below.
+*  Note: this routine performs "full balancing" on A and B
 *
 *  Arguments
 *  =========

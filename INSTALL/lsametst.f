@@ -1,4 +1,4 @@
-      PROGRAM TEST1
+      PROGRAM LSAMETST
 *
 *  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

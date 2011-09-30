@@ -130,6 +130,7 @@
 *          JOBVR = 'V', LDVR >= N.
 *
 *  ILO     (output) INTEGER
+*
 *  IHI     (output) INTEGER
 *          ILO and IHI are integer values determined when A was
 *          balanced.  The balanced A(i,j) = 0 if I > J and

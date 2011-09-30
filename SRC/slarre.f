@@ -52,6 +52,7 @@
 *          The order of the matrix. N > 0.
 *
 *  VL      (input/output) REAL            
+*
 *  VU      (input/output) REAL            
 *          If RANGE='V', the lower and upper bounds for the eigenvalues.
 *          Eigenvalues less than or equal to VL, or greater than VU,
@@ -60,25 +61,26 @@
 *          part of the spectrum.
 *
 *  IL      (input) INTEGER
+*
 *  IU      (input) INTEGER
 *          If RANGE='I', the indices (in ascending order) of the
 *          smallest and largest eigenvalues to be returned.
 *          1 <= IL <= IU <= N.
 *
-*  D       (input/output) REAL             array, dimension (N)
+*  D       (input/output) REAL array, dimension (N)
 *          On entry, the N diagonal elements of the tridiagonal
 *          matrix T.
 *          On exit, the N diagonal elements of the diagonal
 *          matrices D_i.
 *
-*  E       (input/output) REAL             array, dimension (N)
+*  E       (input/output) REAL array, dimension (N)
 *          On entry, the first (N-1) entries contain the subdiagonal
 *          elements of the tridiagonal matrix T; E(N) need not be set.
 *          On exit, E contains the subdiagonal elements of the unit
 *          bidiagonal matrices L_i. The entries E( ISPLIT( I ) ),
 *          1 <= I <= NSPLIT, contain the base points sigma_i on output.
 *
-*  E2      (input/output) REAL             array, dimension (N)
+*  E2      (input/output) REAL array, dimension (N)
 *          On entry, the first (N-1) entries contain the SQUARES of the
 *          subdiagonal elements of the tridiagonal matrix T;
 *          E2(N) need not be set.
@@ -86,6 +88,7 @@
 *          1 <= I <= NSPLIT, have been set to zero
 *
 *  RTOL1   (input) REAL            
+*
 *  RTOL2   (input) REAL            
 *           Parameters for bisection.
 *           An interval [LEFT,RIGHT] has converged if
@@ -108,16 +111,16 @@
 *          The total number of eigenvalues (of all L_i D_i L_i^T)
 *          found.
 *
-*  W       (output) REAL             array, dimension (N)
+*  W       (output) REAL array, dimension (N)
 *          The first M elements contain the eigenvalues. The
 *          eigenvalues of each of the blocks, L_i D_i L_i^T, are
 *          sorted in ascending order ( SLARRE may use the
 *          remaining N-M elements as workspace).
 *
-*  WERR    (output) REAL             array, dimension (N)
+*  WERR    (output) REAL array, dimension (N)
 *          The error bound on the corresponding eigenvalue in W.
 *
-*  WGAP    (output) REAL             array, dimension (N)
+*  WGAP    (output) REAL array, dimension (N)
 *          The separation from the right neighbor eigenvalue in W.
 *          The gap is only with respect to the eigenvalues of the same block
 *          as each block has its own representation tree.
@@ -134,14 +137,14 @@
 *          for example, INDEXW(i)= 10 and IBLOCK(i)=2 imply that the
 *          i-th eigenvalue W(i) is the 10-th eigenvalue in block 2
 *
-*  GERS    (output) REAL             array, dimension (2*N)
+*  GERS    (output) REAL array, dimension (2*N)
 *          The N Gerschgorin intervals (the i-th Gerschgorin interval
 *          is (GERS(2*i-1), GERS(2*i)).
 *
 *  PIVMIN  (output) REAL
 *          The minimum pivot in the Sturm sequence for T.
 *
-*  WORK    (workspace) REAL             array, dimension (6*N)
+*  WORK    (workspace) REAL array, dimension (6*N)
 *          Workspace.
 *
 *  IWORK   (workspace) INTEGER array, dimension (5*N)
@@ -165,10 +168,11 @@
 *          =-6:  Problem in SLASQ2.
 *
 *  Further Details
+*  ===============
+*
 *  The base representations are required to suffer very little
 *  element growth and consequently define all their eigenvalues to
 *  high relative accuracy.
-*  ===============
 *
 *  Based on contributions by
 *     Beresford Parlett, University of California, Berkeley, USA

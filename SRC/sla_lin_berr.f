@@ -28,7 +28,7 @@
 *     or vector Z.
 *
 *  Arguments
-*  ==========
+*  =========
 *
 *     N       (input) INTEGER
 *     The number of linear equations, i.e., the order of the

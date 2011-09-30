@@ -19,7 +19,9 @@
 *  =========
 *
 *  X       (input) DOUBLE PRECISION
+*
 *  Y       (input) DOUBLE PRECISION
+*
 *  Z       (input) DOUBLE PRECISION
 *          X, Y and Z specify the values x, y and z.
 *

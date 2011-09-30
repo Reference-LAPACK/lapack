@@ -77,8 +77,11 @@
 *          be specified as OPTS = 'UTN'.
 *
 *  N1      (input) INTEGER
+*
 *  N2      (input) INTEGER
+*
 *  N3      (input) INTEGER
+*
 *  N4      (input) INTEGER
 *          Problem dimensions for the subroutine NAME; these may not all
 *          be required.

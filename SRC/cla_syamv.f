@@ -65,7 +65,7 @@
 *           On entry, ALPHA specifies the scalar alpha.
 *           Unchanged on exit.
 *
-*  A      - COMPLEX             array of DIMENSION ( LDA, n ).
+*  A        (input) COMPLEX array of DIMENSION ( LDA, n ).
 *           Before entry, the leading m by n part of the array A must
 *           contain the matrix of coefficients.
 *           Unchanged on exit.

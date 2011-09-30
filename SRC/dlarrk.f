@@ -41,6 +41,7 @@
 *          The index of the eigenvalues to be returned.
 *
 *  GL      (input) DOUBLE PRECISION
+*
 *  GU      (input) DOUBLE PRECISION
 *          An upper and a lower bound on the eigenvalue.
 *

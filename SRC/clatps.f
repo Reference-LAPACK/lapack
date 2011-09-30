@@ -95,7 +95,7 @@
 *          < 0:  if INFO = -k, the k-th argument had an illegal value
 *
 *  Further Details
-*  ======= =======
+*  ===============
 *
 *  A rough bound on x is computed; if that is less than overflow, CTPSV
 *  is called, otherwise, specific code is used which checks for possible

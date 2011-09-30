@@ -130,7 +130,9 @@
 *          SELCTG is true for either eigenvalue count as 2.)
 *
 *  ALPHAR  (output) DOUBLE PRECISION array, dimension (N)
+*
 *  ALPHAI  (output) DOUBLE PRECISION array, dimension (N)
+*
 *  BETA    (output) DOUBLE PRECISION array, dimension (N)
 *          On exit, (ALPHAR(j) + ALPHAI(j)*i)/BETA(j), j=1,...,N, will
 *          be the generalized eigenvalues.  ALPHAR(j) + ALPHAI(j)*i

@@ -16,11 +16,12 @@
      $                   WORK( * ), WV( LDWV, * ), Z( LDZ, * )
 *     ..
 *
-*     This subroutine is identical to CLAQR3 except that it avoids
+*  Purpose
+*  =======
+*
+*     CLAQR2 is identical to CLAQR3 except that it avoids
 *     recursion by calling CLAHQR instead of CLAQR4.
 *
-*
-*     ******************************************************************
 *     Aggressive early deflation:
 *
 *     This subroutine accepts as input an upper Hessenberg matrix
@@ -32,7 +33,9 @@
 *     hoped that the final version of H has many zero subdiagonal
 *     entries.
 *
-*     ******************************************************************
+*  Arguments
+*  =========
+*
 *     WANTT   (input) LOGICAL
 *          If .TRUE., then the Hessenberg matrix H is fully updated
 *          so that the triangular Schur factor may be
@@ -77,6 +80,7 @@
 *          subroutine.  N .LE. LDH
 *
 *     ILOZ    (input) INTEGER
+*
 *     IHIZ    (input) INTEGER
 *          Specify the rows of Z to which transformations must be
 *          applied if WANTZ is .TRUE.. 1 .LE. ILOZ .LE. IHIZ .LE. N.
@@ -147,12 +151,15 @@
 *          in WORK(1).  No error message related to LWORK is issued
 *          by XERBLA.  Neither H nor Z are accessed.
 *
-*     ================================================================
+*  Further Details
+*  ===============
+*
 *     Based on contributions by
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ================================================================
+*  ================================================================
+*
 *     .. Parameters ..
       COMPLEX            ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0e0, 0.0e0 ),

@@ -24,6 +24,7 @@
 *
 *  Arguments
 *  =========
+*
 *  DIAG    (input) CHARACTER*1
 *          = 'N':  A is non-unit triangular;
 *          = 'U':  A is unit triangular.

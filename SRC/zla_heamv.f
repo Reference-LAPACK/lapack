@@ -60,11 +60,11 @@
 *           N must be at least zero.
 *           Unchanged on exit.
 *
-*  ALPHA  - DOUBLE PRECISION   .
+*  ALPHA    (input) DOUBLE PRECISION   .
 *           On entry, ALPHA specifies the scalar alpha.
 *           Unchanged on exit.
 *
-*  A      - COMPLEX*16         array of DIMENSION ( LDA, n ).
+*  A        (input) COMPLEX*16 array, DIMENSION ( LDA, n ).
 *           Before entry, the leading m by n part of the array A must
 *           contain the matrix of coefficients.
 *           Unchanged on exit.
@@ -75,7 +75,7 @@
 *           max( 1, n ).
 *           Unchanged on exit.
 *
-*  X      - COMPLEX*16         array of DIMENSION at least
+*  X        (input) COMPLEX*16 array, DIMENSION at least
 *           ( 1 + ( n - 1 )*abs( INCX ) )
 *           Before entry, the incremented array X must contain the
 *           vector x.
@@ -86,7 +86,7 @@
 *           X. INCX must not be zero.
 *           Unchanged on exit.
 *
-*  BETA   - DOUBLE PRECISION   .
+*  BETA     (input) DOUBLE PRECISION   .
 *           On entry, BETA specifies the scalar beta. When BETA is
 *           supplied as zero then Y need not be set on input.
 *           Unchanged on exit.

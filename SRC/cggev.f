@@ -71,6 +71,7 @@
 *          The leading dimension of B.  LDB >= max(1,N).
 *
 *  ALPHA   (output) COMPLEX array, dimension (N)
+*
 *  BETA    (output) COMPLEX array, dimension (N)
 *          On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the
 *          generalized eigenvalues.

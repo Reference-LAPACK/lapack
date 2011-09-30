@@ -53,6 +53,7 @@
 *          The leading dimension of the array A.  LDA >= max(1,N).
 *
 *  WR      (output) REAL array, dimension (N)
+*
 *  WI      (output) REAL array, dimension (N)
 *          WR and WI contain the real and imaginary parts,
 *          respectively, of the computed eigenvalues.  Complex

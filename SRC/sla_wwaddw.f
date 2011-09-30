@@ -17,7 +17,7 @@
       REAL               X( * ), Y( * ), W( * )
 *     ..
 *
-*     Purpose
+*  Purpose
 *     =======
 *
 *     SLA_WWADDW adds a vector W into a doubled-single vector (X, Y).
@@ -25,8 +25,8 @@
 *     This works for all extant IBM's hex and binary floating point
 *     arithmetics, but not for decimal.
 *
-*     Arguments
-*     =========
+*  Arguments
+*  =========
 *
 *     N      (input) INTEGER
 *            The length of vectors X, Y, and W.

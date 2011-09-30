@@ -48,26 +48,33 @@
 *          = .FALSE.: the input matrices A and B are lower triangular.
 *
 *  A1      (input) DOUBLE PRECISION
+*
 *  A2      (input) DOUBLE PRECISION
+*
 *  A3      (input) DOUBLE PRECISION
 *          On entry, A1, A2 and A3 are elements of the input 2-by-2
 *          upper (lower) triangular matrix A.
 *
 *  B1      (input) DOUBLE PRECISION
+*
 *  B2      (input) DOUBLE PRECISION
+*
 *  B3      (input) DOUBLE PRECISION
 *          On entry, B1, B2 and B3 are elements of the input 2-by-2
 *          upper (lower) triangular matrix B.
 *
 *  CSU     (output) DOUBLE PRECISION
+*
 *  SNU     (output) DOUBLE PRECISION
 *          The desired orthogonal matrix U.
 *
 *  CSV     (output) DOUBLE PRECISION
+*
 *  SNV     (output) DOUBLE PRECISION
 *          The desired orthogonal matrix V.
 *
 *  CSQ     (output) DOUBLE PRECISION
+*
 *  SNQ     (output) DOUBLE PRECISION
 *          The desired orthogonal matrix Q.
 *

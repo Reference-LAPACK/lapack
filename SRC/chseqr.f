@@ -12,7 +12,7 @@
 *     .. Array Arguments ..
       COMPLEX            H( LDH, * ), W( * ), WORK( * ), Z( LDZ, * )
 *     ..
-*     Purpose
+*  Purpose
 *     =======
 *
 *     CHSEQR computes the eigenvalues of a Hessenberg matrix H
@@ -25,8 +25,8 @@
 *     of a matrix A which has been reduced to the Hessenberg form H
 *     by the unitary matrix Q:  A = Q*H*Q**H = (QZ)*H*(QZ)**H.
 *
-*     Arguments
-*     =========
+*  Arguments
+*  =========
 *
 *     JOB   (input) CHARACTER*1
 *           = 'E':  compute eigenvalues only;
@@ -147,7 +147,7 @@
 *                If INFO .GT. 0 and COMPZ = 'N', then Z is not
 *                accessed.
 *
-*     ================================================================
+*  ================================================================
 *             Default values supplied by
 *             ILAENV(ISPEC,'CHSEQR',JOB(:1)//COMPZ(:1),N,ILO,IHI,LWORK).
 *             It is suggested that these defaults be adjusted in order
@@ -199,12 +199,12 @@
 *                      for ISPEC=16 is 0.  Otherwise the default for
 *                      ISPEC=16 is 2.
 *
-*     ================================================================
+*  ================================================================
 *     Based on contributions by
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ================================================================
+*  ================================================================
 *     References:
 *       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
 *       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
@@ -215,7 +215,7 @@
 *       Algorithm Part II: Aggressive Early Deflation, SIAM Journal
 *       of Matrix Analysis, volume 23, pages 948--973, 2002.
 *
-*     ================================================================
+*  ================================================================
 *     .. Parameters ..
 *
 *     ==== Matrices of order NTINY or smaller must be processed by

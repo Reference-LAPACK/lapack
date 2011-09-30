@@ -44,11 +44,13 @@
 *          The leading dimension of the array H.  LDH >= max(1,N).
 *
 *  WR      (input) DOUBLE PRECISION
+*
 *  WI      (input) DOUBLE PRECISION
 *          The real and imaginary parts of the eigenvalue of H whose
 *          corresponding right or left eigenvector is to be computed.
 *
 *  VR      (input/output) DOUBLE PRECISION array, dimension (N)
+*
 *  VI      (input/output) DOUBLE PRECISION array, dimension (N)
 *          On entry, if NOINIT = .FALSE. and WI = 0.0, VR must contain
 *          a real starting vector for inverse iteration using the real

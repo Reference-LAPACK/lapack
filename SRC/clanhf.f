@@ -69,7 +69,7 @@
 *            The order of the matrix A.  N >= 0.  When N = 0, CLANHF is
 *            set to zero.
 *
-*   A        (input) COMPLEX*16 array, dimension ( N*(N+1)/2 );
+*  A         (input) COMPLEX*16 array, dimension ( N*(N+1)/2 );
 *            On entry, the matrix A in RFP Format.
 *            RFP Format is described by TRANSR, UPLO and N as follows:
 *            If TRANSR='N' then RFP A is (0:N,0:K-1) when N is even;

@@ -1,4 +1,4 @@
-      REAL             FUNCTION SECOND( )
+      REAL FUNCTION SECOND( )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..

@@ -63,6 +63,7 @@
 *          The order of the tridiagonal matrix T.  N >= 0.
 *
 *  VL      (input) DOUBLE PRECISION
+*
 *  VU      (input) DOUBLE PRECISION
 *          If RANGE='V', the lower and upper bounds of the interval to
 *          be searched for eigenvalues.  Eigenvalues less than or equal
@@ -70,6 +71,7 @@
 *          Not referenced if RANGE = 'A' or 'I'.
 *
 *  IL      (input) INTEGER
+*
 *  IU      (input) INTEGER
 *          If RANGE='I', the indices (in ascending order) of the
 *          smallest and largest eigenvalues to be returned.
@@ -130,6 +132,7 @@
 *          in W.
 *
 *  WL      (output) DOUBLE PRECISION
+*
 *  WU      (output) DOUBLE PRECISION
 *          The interval (WL, WU] contains all the wanted eigenvalues.
 *          If RANGE='V', then WL=VL and WU=VU.

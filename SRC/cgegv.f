@@ -45,8 +45,7 @@
 *     u**H*A = lambda*u**H*B  or  mu*v**H*A = v**H*B
 *  are left eigenvectors of (A,B).
 *
-*  Note: this routine performs "full balancing" on A and B -- see
-*  "Further Details", below.
+*  Note: this routine performs "full balancing" on A and B
 *
 *  Arguments
 *  =========
@@ -100,7 +99,6 @@
 *          one of the forms lambda = alpha/beta or mu = beta/alpha.
 *          Since either lambda or mu may overflow, they should not,
 *          in general, be computed.
-
 *
 *  VL      (output) COMPLEX array, dimension (LDVL,N)
 *          If JOBVL = 'V', the left eigenvectors u(j) are stored

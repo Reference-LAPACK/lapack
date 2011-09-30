@@ -25,12 +25,16 @@
 *  =========
 *
 *  A       (input) DOUBLE PRECISION
+*
 *  B       (input) DOUBLE PRECISION
+*
 *  C       (input) DOUBLE PRECISION
+*
 *  D       (input) DOUBLE PRECISION
 *          The scalars a, b, c, and d in the above expression.
 *
 *  P       (output) DOUBLE PRECISION
+*
 *  Q       (output) DOUBLE PRECISION
 *          The scalars p and q in the above expression.
 *

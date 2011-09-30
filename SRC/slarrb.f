@@ -35,10 +35,10 @@
 *  N       (input) INTEGER
 *          The order of the matrix.
 *
-*  D       (input) REAL             array, dimension (N)
+*  D       (input) REAL array, dimension (N)
 *          The N diagonal elements of the diagonal matrix D.
 *
-*  LLD     (input) REAL             array, dimension (N-1)
+*  LLD     (input) REAL array, dimension (N-1)
 *          The (N-1) elements L(i)*L(i)*D(i).
 *
 *  IFIRST  (input) INTEGER
@@ -48,6 +48,7 @@
 *          The index of the last eigenvalue to be computed.
 *
 *  RTOL1   (input) REAL            
+*
 *  RTOL2   (input) REAL            
 *          Tolerance for the convergence of the bisection intervals.
 *          An interval [LEFT,RIGHT] has converged if
@@ -59,25 +60,25 @@
 *          Offset for the arrays W, WGAP and WERR, i.e., the IFIRST-OFFSET
 *          through ILAST-OFFSET elements of these arrays are to be used.
 *
-*  W       (input/output) REAL             array, dimension (N)
+*  W       (input/output) REAL array, dimension (N)
 *          On input, W( IFIRST-OFFSET ) through W( ILAST-OFFSET ) are
 *          estimates of the eigenvalues of L D L^T indexed IFIRST throug
 *          ILAST.
 *          On output, these estimates are refined.
 *
-*  WGAP    (input/output) REAL             array, dimension (N-1)
+*  WGAP    (input/output) REAL array, dimension (N-1)
 *          On input, the (estimated) gaps between consecutive
 *          eigenvalues of L D L^T, i.e., WGAP(I-OFFSET) is the gap between
 *          eigenvalues I and I+1. Note that if IFIRST.EQ.ILAST
 *          then WGAP(IFIRST-OFFSET) must be set to ZERO.
 *          On output, these gaps are refined.
 *
-*  WERR    (input/output) REAL             array, dimension (N)
+*  WERR    (input/output) REAL array, dimension (N)
 *          On input, WERR( IFIRST-OFFSET ) through WERR( ILAST-OFFSET ) are
 *          the errors in the estimates of the corresponding elements in W.
 *          On output, these errors are refined.
 *
-*  WORK    (workspace) REAL             array, dimension (2*N)
+*  WORK    (workspace) REAL array, dimension (2*N)
 *          Workspace.
 *
 *  IWORK   (workspace) INTEGER array, dimension (2*N)

@@ -42,11 +42,13 @@
 *          abs(SSMAX) is the larger singular value.
 *
 *  SNL     (output) DOUBLE PRECISION
+*
 *  CSL     (output) DOUBLE PRECISION
 *          The vector (CSL, SNL) is a unit left singular vector for the
 *          singular value abs(SSMAX).
 *
 *  SNR     (output) DOUBLE PRECISION
+*
 *  CSR     (output) DOUBLE PRECISION
 *          The vector (CSR, SNR) is a unit right singular vector for the
 *          singular value abs(SSMAX).

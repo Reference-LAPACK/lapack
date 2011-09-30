@@ -27,6 +27,9 @@
 *     where abs(Z) is the componentwise absolute value of the matrix
 *     or vector Z.
 *
+*  Arguments
+*  =========
+*
 *     N       (input) INTEGER
 *     The number of linear equations, i.e., the order of the
 *     matrix A.  N >= 0.

@@ -63,7 +63,6 @@
 *          etc., and the NSPLIT-th consists of rows/columns
 *          ISPLIT(NSPLIT-1)+1 through ISPLIT(NSPLIT)=N.
 *
-*
 *  INFO    (output) INTEGER
 *          = 0:  successful exit
 *

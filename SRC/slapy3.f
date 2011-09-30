@@ -19,7 +19,9 @@
 *  =========
 *
 *  X       (input) REAL
+*
 *  Y       (input) REAL
+*
 *  Z       (input) REAL
 *          X, Y and Z specify the values x, y and z.
 *

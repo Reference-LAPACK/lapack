@@ -105,7 +105,9 @@
 *          The leading dimension of B.  LDB >= max(1,N).
 *
 *  ALPHAR  (output) REAL array, dimension (N)
+*
 *  ALPHAI  (output) REAL array, dimension (N)
+*
 *  BETA    (output) REAL array, dimension (N)
 *          On exit, (ALPHAR(j) + ALPHAI(j)*i)/BETA(j), j=1,...,N, will
 *          be the generalized eigenvalues.  If ALPHAI(j) is zero, then
@@ -151,6 +153,7 @@
 *          if JOBVR = 'V', LDVR >= N.
 *
 *  ILO     (output) INTEGER
+*
 *  IHI     (output) INTEGER
 *          ILO and IHI are integer values such that on exit
 *          A(i,j) = 0 and B(i,j) = 0 if i > j and

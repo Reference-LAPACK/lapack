@@ -169,7 +169,7 @@
       NFXD = NFXD - 1
 *
 *     Factorize fixed columns
-*     =======================
+*  =======================
 *
 *     Compute the QR factorization of fixed columns and update
 *     remaining columns.
@@ -189,7 +189,7 @@
       END IF
 *
 *     Factorize free columns
-*     ======================
+*  ======================
 *
       IF( NFXD.LT.MINMN ) THEN
 *

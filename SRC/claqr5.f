@@ -16,8 +16,14 @@
      $                   WH( LDWH, * ), WV( LDWV, * ), Z( LDZ, * )
 *     ..
 *
-*     This auxiliary subroutine called by CLAQR0 performs a
+*  Purpose
+*  =======
+*
+*     CLAQR5 called by CLAQR0 performs a
 *     single small-bulge multi-shift QR sweep.
+*
+*  Arguments
+*  =========
 *
 *      WANTT  (input) logical scalar
 *             WANTT = .true. if the triangular Schur factor
@@ -45,6 +51,7 @@
 *             subroutine operates.
 *
 *      KTOP   (input) integer scalar
+*
 *      KBOT   (input) integer scalar
 *             These are the first and last rows and columns of an
 *             isolated diagonal block upon which the QR sweep is to be
@@ -72,6 +79,7 @@
 *             calling procedure.  LDH.GE.MAX(1,N).
 *
 *      ILOZ   (input) INTEGER
+*
 *      IHIZ   (input) INTEGER
 *             Specify the rows of Z to which transformations must be
 *             applied if WANTZ is .TRUE.. 1 .LE. ILOZ .LE. IHIZ .LE. N
@@ -120,12 +128,13 @@
 *             LDWV is the leading dimension of WV as declared in the
 *             in the calling subroutine.  LDWV.GE.NV.
 *
-*     ================================================================
+*  Further Details
+*  ===============
+*
 *     Based on contributions by
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ================================================================
 *     Reference:
 *
 *     K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
@@ -133,7 +142,7 @@
 *     Level 3 Performance, SIAM Journal of Matrix Analysis,
 *     volume 23, pages 929--947, 2002.
 *
-*     ================================================================
+*  ================================================================
 *     .. Parameters ..
       COMPLEX            ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0e0, 0.0e0 ),

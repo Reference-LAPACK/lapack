@@ -54,26 +54,33 @@
 *          = .FALSE.: the input matrices A and B are lower triangular.
 *
 *  A1      (input) REAL
+*
 *  A2      (input) COMPLEX
+*
 *  A3      (input) REAL
 *          On entry, A1, A2 and A3 are elements of the input 2-by-2
 *          upper (lower) triangular matrix A.
 *
 *  B1      (input) REAL
+*
 *  B2      (input) COMPLEX
+*
 *  B3      (input) REAL
 *          On entry, B1, B2 and B3 are elements of the input 2-by-2
 *          upper (lower) triangular matrix B.
 *
 *  CSU     (output) REAL
+*
 *  SNU     (output) COMPLEX
 *          The desired unitary matrix U.
 *
 *  CSV     (output) REAL
+*
 *  SNV     (output) COMPLEX
 *          The desired unitary matrix V.
 *
 *  CSQ     (output) REAL
+*
 *  SNQ     (output) COMPLEX
 *          The desired unitary matrix Q.
 *

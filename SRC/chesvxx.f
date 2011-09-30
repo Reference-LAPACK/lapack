@@ -28,8 +28,8 @@
      $                   ERR_BNDS_COMP( NRHS, * )
 *     ..
 *
-*     Purpose
-*     =======
+*  Purpose
+*  =======
 *
 *     CHESVXX uses the diagonal pivoting factorization to compute the
 *     solution to a complex system of linear equations A * X = B, where
@@ -51,8 +51,8 @@
 *     user-provided factorizations and equilibration factors if they
 *     differ from what CHESVXX would itself produce.
 *
-*     Description
-*     ===========
+*  Description
+*  ===========
 *
 *     The following steps are performed:
 *
@@ -94,8 +94,8 @@
 *     diag(R) so that it solves the original system before
 *     equilibration.
 *
-*     Arguments
-*     =========
+*  Arguments
+*  =========
 *
 *     Some optional parameters are bundled in the PARAMS array.  These
 *     settings determine how refinement is performed, but often the
@@ -390,7 +390,7 @@
 *         about all of the right-hand sides check ERR_BNDS_NORM or
 *         ERR_BNDS_COMP.
 *
-*     ==================================================================
+*  ==================================================================
 *
 *     .. Parameters ..
       REAL               ZERO, ONE

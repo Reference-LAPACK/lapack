@@ -27,7 +27,7 @@
      $                   ERR_BNDS_COMP( NRHS, * )
 *     ..
 *
-*     Purpose
+*  Purpose
 *     =======
 *
 *     CPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
@@ -50,8 +50,8 @@
 *     user-provided factorizations and equilibration factors if they
 *     differ from what CPOSVXX would itself produce.
 *
-*     Description
-*     ===========
+*  Description
+*  ===========
 *
 *     The following steps are performed:
 *
@@ -90,8 +90,8 @@
 *     diag(S) so that it solves the original system before
 *     equilibration.
 *
-*     Arguments
-*     =========
+*  Arguments
+*  =========
 *
 *     Some optional parameters are bundled in the PARAMS array.  These
 *     settings determine how refinement is performed, but often the
@@ -384,7 +384,7 @@
 *         about all of the right-hand sides check ERR_BNDS_NORM or
 *         ERR_BNDS_COMP.
 *
-*     ==================================================================
+*  ==================================================================
 *
 *     .. Parameters ..
       REAL               ZERO, ONE

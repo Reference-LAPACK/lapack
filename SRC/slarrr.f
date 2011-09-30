@@ -26,7 +26,7 @@
 *  N       (input) INTEGER
 *          The order of the matrix. N > 0.
 *
-*  D       (input) REAL             array, dimension (N)
+*  D       (input) REAL array, dimension (N)
 *          The N diagonal elements of the tridiagonal matrix T.
 *
 *  E       (input/output) REAL array, dimension (N)

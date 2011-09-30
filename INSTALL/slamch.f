@@ -1,91 +1,96 @@
+C> \brief \b SLAMCH
+C>\details
+C> \b Purpose:
+C>\verbatim
+C>
+C> SLAMCH determines single precision machine parameters.
+C>
+C>\endverbatim
+C> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
+C> \date November 2011
+C> \ingroup auxOTHERauxiliary
+C>
+C> \param[in] CMACH
+C> \verbatim
+C>          Specifies the value to be returned by SLAMCH:
+C>          = 'E' or 'e',   SLAMCH := eps
+C>          = 'S' or 's ,   SLAMCH := sfmin
+C>          = 'B' or 'b',   SLAMCH := base
+C>          = 'P' or 'p',   SLAMCH := eps*base
+C>          = 'N' or 'n',   SLAMCH := t
+C>          = 'R' or 'r',   SLAMCH := rnd
+C>          = 'M' or 'm',   SLAMCH := emin
+C>          = 'U' or 'u',   SLAMCH := rmin
+C>          = 'L' or 'l',   SLAMCH := emax
+C>          = 'O' or 'o',   SLAMCH := rmax
+C>          where
+C>          eps   = relative machine precision
+C>          sfmin = safe minimum, such that 1/sfmin does not overflow
+C>          base  = base of the machine
+C>          prec  = eps*base
+C>          t     = number of (base) digits in the mantissa
+C>          rnd   = 1.0 when rounding occurs in addition, 0.0 otherwise
+C>          emin  = minimum exponent before (gradual) underflow
+C>          rmin  = underflow threshold - base**(emin-1)
+C>          emax  = largest exponent before overflow
+C>          rmax  = overflow threshold  - (base**emax)*(1-eps)
+C> \endverbatim
+C>
       REAL             FUNCTION SLAMCH( CMACH )
-*
-*  -- LAPACK auxiliary routine (version 3.3.0) --
-*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     Based on LAPACK DLAMCH but with Fortran 95 query functions
-*     See: http://www.cs.utk.edu/~luszczek/lapack/lamch.html
-*     and  http://www.netlib.org/lapack-dev/lapack-coding/program-style.html#id2537289
-*     July 2010
-*
-*     .. Scalar Arguments ..
+C
+C  -- LAPACK auxiliary routine (version 3.3.0) --
+C  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+C  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+C     November 2011
+C
+C     .. Scalar Arguments ..
       CHARACTER          CMACH
-*     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAMCH determines single precision machine parameters.
-*
-*  Arguments
-*  =========
-*
-*  CMACH   (input) CHARACTER*1
-*          Specifies the value to be returned by SLAMCH:
-*          = 'E' or 'e',   SLAMCH := eps
-*          = 'S' or 's ,   SLAMCH := sfmin
-*          = 'B' or 'b',   SLAMCH := base
-*          = 'P' or 'p',   SLAMCH := eps*base
-*          = 'N' or 'n',   SLAMCH := t
-*          = 'R' or 'r',   SLAMCH := rnd
-*          = 'M' or 'm',   SLAMCH := emin
-*          = 'U' or 'u',   SLAMCH := rmin
-*          = 'L' or 'l',   SLAMCH := emax
-*          = 'O' or 'o',   SLAMCH := rmax
-*
-*          where
-*
-*          eps   = relative machine precision
-*          sfmin = safe minimum, such that 1/sfmin does not overflow
-*          base  = base of the machine
-*          prec  = eps*base
-*          t     = number of (base) digits in the mantissa
-*          rnd   = 1.0 when rounding occurs in addition, 0.0 otherwise
-*          emin  = minimum exponent before (gradual) underflow
-*          rmin  = underflow threshold - base**(emin-1)
-*          emax  = largest exponent before overflow
-*          rmax  = overflow threshold  - (base**emax)*(1-eps)
-*
-* =====================================================================
-*
-*     .. Parameters ..
+C     ..
+C
+C     .. Scalar Arguments ..
+      REAL               A, B
+C     ..
+C
+C =====================================================================
+C
+C     .. Parameters ..
       REAL               ONE, ZERO
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
-*     ..
-*     .. Local Scalars ..
+C     ..
+C     .. Local Scalars ..
       REAL               RND, EPS, SFMIN, SMALL, RMACH
-*     ..
-*     .. External Functions ..
+C     ..
+C     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
-*     ..
-*     .. Intrinsic Functions ..
+C     ..
+C     .. Intrinsic Functions ..
       INTRINSIC          DIGITS, EPSILON, HUGE, MAXEXPONENT,
      $                   MINEXPONENT, RADIX, TINY
-*     ..
-*     .. Executable Statements ..
-*
-*
-*     Assume rounding, not chopping. Always.
-*
+C     ..
+C     .. Executable Statements ..
+C
+C
+C     Assume rounding, not chopping. Always.
+C
       RND = ONE
-*
+C
       IF( ONE.EQ.RND ) THEN
          EPS = EPSILON(ZERO) * 0.5
       ELSE
          EPS = EPSILON(ZERO)
       END IF
-*
+C
       IF( LSAME( CMACH, 'E' ) ) THEN
          RMACH = EPS
       ELSE IF( LSAME( CMACH, 'S' ) ) THEN
          SFMIN = TINY(ZERO)
          SMALL = ONE / HUGE(ZERO)
          IF( SMALL.GE.SFMIN ) THEN
-*
-*           Use SMALL plus a bit, to avoid the possibility of rounding
-*           causing overflow when computing  1/sfmin.
-*
+C
+C           Use SMALL plus a bit, to avoid the possibility of rounding
+C           causing overflow when computing  1/sfmin.
+C
             SFMIN = SMALL*( ONE+EPS )
          END IF
          RMACH = SFMIN
@@ -108,49 +113,57 @@
       ELSE
          RMACH = ZERO
       END IF
-*
+C
       SLAMCH = RMACH
       RETURN
-*
-*     End of SLAMCH
-*
+C
+C     End of SLAMCH
+C
       END
-************************************************************************
-*
+C***********************************************************************
+C> \brief \b SLAMC3
+C>\details
+C> \b Purpose:
+C>\verbatim
+C>
+C> SLAMC3  is intended to force  A  and  B  to be stored prior to doing
+C> the addition of  A  and  B ,  for use in situations where optimizers
+C> might hold one of these in a register.
+C>
+C>\endverbatim
+C> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
+C> \date November 2011
+C> \ingroup auxOTHERauxiliary
+C>
+C> \param[in] A
+C> \verbatim
+C> \endverbatim
+C>
+C> \param[in] B
+C> \verbatim
+C>          The values A and B.
+C> \endverbatim
+C>
+C
       REAL             FUNCTION SLAMC3( A, B )
-*
-*  -- LAPACK auxiliary routine (version 3.3.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2010
-*
-*     .. Scalar Arguments ..
+C
+C  -- LAPACK auxiliary routine (version 3.3.0) --
+C     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
+C     November 2010
+C
+C     .. Scalar Arguments ..
       REAL               A, B
-*     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAMC3  is intended to force  A  and  B  to be stored prior to doing
-*  the addition of  A  and  B ,  for use in situations where optimizers
-*  might hold one of these in a register.
-*
-*  Arguments
-*  =========
-*
-*  A       (input) REAL
-*  B       (input) REAL
-*          The values A and B.
-*
-* =====================================================================
-*
-*     .. Executable Statements ..
-*
+C     ..
+C =====================================================================
+C
+C     .. Executable Statements ..
+C
       SLAMC3 = A + B
-*
+C
       RETURN
-*
-*     End of SLAMC3
-*
+C
+C     End of SLAMC3
+C
       END
-*
-************************************************************************
+C
+C***********************************************************************

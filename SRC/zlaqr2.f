@@ -16,14 +16,15 @@
      $                   WORK( * ), WV( LDWV, * ), Z( LDZ, * )
 *     ..
 *
-*     This subroutine is identical to ZLAQR3 except that it avoids
+*  Purpose
+*  =======
+*
+*     ZLAQR2 is identical to ZLAQR3 except that it avoids
 *     recursion by calling ZLAHQR instead of ZLAQR4.
 *
-*
-*     ******************************************************************
 *     Aggressive early deflation:
 *
-*     This subroutine accepts as input an upper Hessenberg matrix
+*     ZLAQR2 accepts as input an upper Hessenberg matrix
 *     H and performs an unitary similarity transformation
 *     designed to detect and deflate fully converged eigenvalues from
 *     a trailing principal submatrix.  On output H has been over-
@@ -32,7 +33,10 @@
 *     hoped that the final version of H has many zero subdiagonal
 *     entries.
 *
-*     ******************************************************************
+*
+*  Arguments
+*  =========
+*
 *     WANTT   (input) LOGICAL
 *          If .TRUE., then the Hessenberg matrix H is fully updated
 *          so that the triangular Schur factor may be
@@ -147,12 +151,15 @@
 *          in WORK(1).  No error message related to LWORK is issued
 *          by XERBLA.  Neither H nor Z are accessed.
 *
-*     ================================================================
+*  Further Details
+*  ===============
+*
 *     Based on contributions by
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ================================================================
+*  ================================================================
+*
 *     .. Parameters ..
       COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0d0, 0.0d0 ),

@@ -48,6 +48,7 @@
 *          The index of the last eigenvalue to be computed.
 *
 *  RTOL1   (input) DOUBLE PRECISION
+*
 *  RTOL2   (input) DOUBLE PRECISION
 *          Tolerance for the convergence of the bisection intervals.
 *          An interval [LEFT,RIGHT] has converged if

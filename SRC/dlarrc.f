@@ -33,6 +33,7 @@
 *          The order of the matrix. N > 0.
 *
 *  VL      (input) DOUBLE PRECISION
+*
 *  VU      (input) DOUBLE PRECISION
 *          The lower and upper bounds for the eigenvalues.
 *
@@ -52,6 +53,7 @@
 *          that are in the interval (VL,VU]
 *
 *  LCNT    (output) INTEGER
+*
 *  RCNT    (output) INTEGER
 *          The left and right negcounts of the interval.
 *

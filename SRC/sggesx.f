@@ -130,7 +130,9 @@
 *          SELCTG is true for either eigenvalue count as 2.)
 *
 *  ALPHAR  (output) REAL array, dimension (N)
+*
 *  ALPHAI  (output) REAL array, dimension (N)
+*
 *  BETA    (output) REAL array, dimension (N)
 *          On exit, (ALPHAR(j) + ALPHAI(j)*i)/BETA(j), j=1,...,N, will
 *          be the generalized eigenvalues.  ALPHAR(j) + ALPHAI(j)*i

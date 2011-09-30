@@ -34,10 +34,10 @@
 *  N       (input) INTEGER
 *          The order of the matrix.
 *
-*  D       (input) REAL             array, dimension (N)
+*  D       (input) REAL array, dimension (N)
 *          The N diagonal elements of T.
 *
-*  E2      (input) REAL             array, dimension (N-1)
+*  E2      (input) REAL array, dimension (N-1)
 *          The Squares of the (N-1) subdiagonal elements of T.
 *
 *  IFIRST  (input) INTEGER
@@ -55,18 +55,18 @@
 *          Offset for the arrays W and WERR, i.e., the IFIRST-OFFSET
 *          through ILAST-OFFSET elements of these arrays are to be used.
 *
-*  W       (input/output) REAL             array, dimension (N)
+*  W       (input/output) REAL array, dimension (N)
 *          On input, W( IFIRST-OFFSET ) through W( ILAST-OFFSET ) are
 *          estimates of the eigenvalues of L D L^T indexed IFIRST through
 *          ILAST.
 *          On output, these estimates are refined.
 *
-*  WERR    (input/output) REAL             array, dimension (N)
+*  WERR    (input/output) REAL array, dimension (N)
 *          On input, WERR( IFIRST-OFFSET ) through WERR( ILAST-OFFSET ) are
 *          the errors in the estimates of the corresponding elements in W.
 *          On output, these errors are refined.
 *
-*  WORK    (workspace) REAL             array, dimension (2*N)
+*  WORK    (workspace) REAL array, dimension (2*N)
 *          Workspace.
 *
 *  IWORK   (workspace) INTEGER array, dimension (2*N)

@@ -63,6 +63,7 @@
 *          The order of the tridiagonal matrix T.  N >= 0.
 *
 *  VL      (input) REAL            
+*
 *  VU      (input) REAL            
 *          If RANGE='V', the lower and upper bounds of the interval to
 *          be searched for eigenvalues.  Eigenvalues less than or equal
@@ -70,13 +71,14 @@
 *          Not referenced if RANGE = 'A' or 'I'.
 *
 *  IL      (input) INTEGER
+*
 *  IU      (input) INTEGER
 *          If RANGE='I', the indices (in ascending order) of the
 *          smallest and largest eigenvalues to be returned.
 *          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
 *          Not referenced if RANGE = 'A' or 'V'.
 *
-*  GERS    (input) REAL             array, dimension (2*N)
+*  GERS    (input) REAL array, dimension (2*N)
 *          The N Gerschgorin intervals (the i-th Gerschgorin interval
 *          is (GERS(2*i-1), GERS(2*i)).
 *
@@ -87,13 +89,13 @@
 *          sufficiently small, i.e., converged.  Note: this should
 *          always be at least radix*machine epsilon.
 *
-*  D       (input) REAL             array, dimension (N)
+*  D       (input) REAL array, dimension (N)
 *          The n diagonal elements of the tridiagonal matrix T.
 *
-*  E       (input) REAL             array, dimension (N-1)
+*  E       (input) REAL array, dimension (N-1)
 *          The (n-1) off-diagonal elements of the tridiagonal matrix T.
 *
-*  E2      (input) REAL             array, dimension (N-1)
+*  E2      (input) REAL array, dimension (N-1)
 *          The (n-1) squared off-diagonal elements of the tridiagonal matrix T.
 *
 *  PIVMIN  (input) REAL            
@@ -117,7 +119,7 @@
 *          The actual number of eigenvalues found. 0 <= M <= N.
 *          (See also the description of INFO=2,3.)
 *
-*  W       (output) REAL             array, dimension (N)
+*  W       (output) REAL array, dimension (N)
 *          On exit, the first M elements of W will contain the
 *          eigenvalue approximations. SLARRD computes an interval
 *          I_j = (a_j, b_j] that includes eigenvalue j. The eigenvalue
@@ -125,11 +127,12 @@
 *          W(j)= ( a_j + b_j)/2. The corresponding error is bounded by
 *          WERR(j) = abs( a_j - b_j)/2
 *
-*  WERR    (output) REAL             array, dimension (N)
+*  WERR    (output) REAL array, dimension (N)
 *          The error bound on the corresponding eigenvalue approximation
 *          in W.
 *
 *  WL      (output) REAL            
+*
 *  WU      (output) REAL            
 *          The interval (WL, WU] contains all the wanted eigenvalues.
 *          If RANGE='V', then WL=VL and WU=VU.
@@ -151,7 +154,7 @@
 *          for example, INDEXW(i)= j and IBLOCK(i)=k imply that the
 *          i-th eigenvalue W(i) is the j-th eigenvalue in block k.
 *
-*  WORK    (workspace) REAL             array, dimension (4*N)
+*  WORK    (workspace) REAL array, dimension (4*N)
 *
 *  IWORK   (workspace) INTEGER array, dimension (3*N)
 *

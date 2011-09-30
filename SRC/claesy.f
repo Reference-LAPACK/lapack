@@ -52,6 +52,7 @@
 *          value THRESH (set below).
 *
 *  CS1     (output) COMPLEX
+*
 *  SN1     (output) COMPLEX
 *          If EVSCAL .NE. 0,  ( CS1, SN1 ) is the unit right eigenvector
 *          for RT1.

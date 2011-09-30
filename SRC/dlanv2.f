@@ -27,21 +27,28 @@
 *  =========
 *
 *  A       (input/output) DOUBLE PRECISION
+*
 *  B       (input/output) DOUBLE PRECISION
+*
 *  C       (input/output) DOUBLE PRECISION
+*
 *  D       (input/output) DOUBLE PRECISION
 *          On entry, the elements of the input matrix.
 *          On exit, they are overwritten by the elements of the
 *          standardised Schur form.
 *
 *  RT1R    (output) DOUBLE PRECISION
+*
 *  RT1I    (output) DOUBLE PRECISION
+*
 *  RT2R    (output) DOUBLE PRECISION
+*
 *  RT2I    (output) DOUBLE PRECISION
 *          The real and imaginary parts of the eigenvalues. If the
 *          eigenvalues are a complex conjugate pair, RT1I > 0.
 *
 *  CS      (output) DOUBLE PRECISION
+*
 *  SN      (output) DOUBLE PRECISION
 *          Parameters of the rotation matrix.
 *

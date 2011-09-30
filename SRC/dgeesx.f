@@ -103,6 +103,7 @@
 *                         eigenvalue count as 2.)
 *
 *  WR      (output) DOUBLE PRECISION array, dimension (N)
+*
 *  WI      (output) DOUBLE PRECISION array, dimension (N)
 *          WR and WI contain the real and imaginary parts, respectively,
 *          of the computed eigenvalues, in the same order that they

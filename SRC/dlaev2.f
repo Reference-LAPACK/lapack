@@ -42,6 +42,7 @@
 *          The eigenvalue of smaller absolute value.
 *
 *  CS1     (output) DOUBLE PRECISION
+*
 *  SN1     (output) DOUBLE PRECISION
 *          The vector (CS1, SN1) is a unit right eigenvector for RT1.
 *
