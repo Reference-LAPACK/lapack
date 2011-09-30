@@ -55,11 +55,10 @@ ZMATGEN = zlatms.o zlatme.o zlatmr.o zlatmt.o \
 
 all:	../../$(TMGLIB)
 
-ALLOBJ=$(SMATGEN) $(CMATGEN) $(SCATGEN) $(DMATGEN) $(ZMATGEN)	\
+ALLOBJ = $(SMATGEN) $(CMATGEN) $(SCATGEN) $(DMATGEN) $(ZMATGEN)	\
 	$(DZATGEN)
 
-../../$(TMGLIB): $(SMATGEN) $(CMATGEN) $(SCATGEN) $(DMATGEN)	\
-		$(ZMATGEN) $(DZATGEN)
+../../$(TMGLIB): $(ALLOBJ)
 	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
 	$(RANLIB) $@
 
@@ -89,11 +88,11 @@ $(ZMATGEN): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
-clean: ; \
-        rm -f *.o
+clean:
+	rm -f *.o
 
-.f.o: ; $(FORTRAN) $(OPTS) -c $< -o $@
+.f.o:
+	$(FORTRAN) $(OPTS) -c $< -o $@
 
 slaran.o: slaran.f ; $(FORTRAN) $(NOOPT) -c $<
 dlaran.o: dlaran.f ; $(FORTRAN) $(NOOPT) -c $<
-
