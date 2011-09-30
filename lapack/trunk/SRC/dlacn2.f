@@ -54,7 +54,7 @@
 *         ISAVE is used to save variables between calls to DLACN2
 *
 *  Further Details
-*  ======= =======
+*  ===============
 *
 *  Contributed by Nick Higham, University of Manchester.
 *  Originally named SONEST, dated March 16, 1988.

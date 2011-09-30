@@ -24,6 +24,7 @@
 *
 *  Arguments
 *  =========
+*
 *  UPLO    (input) CHARACTER
 *          = 'U':  A is upper triangular;
 *          = 'L':  A is lower triangular.

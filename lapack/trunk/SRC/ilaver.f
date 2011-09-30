@@ -15,12 +15,16 @@
 *
 *  Arguments
 *  =========
+*
 *  VERS_MAJOR   (output) INTEGER
 *      return the lapack major version
+*
 *  VERS_MINOR   (output) INTEGER
 *      return the lapack minor version from the major version
+*
 *  VERS_PATCH   (output) INTEGER
 *      return the lapack patch version from the minor version
+*
 *  =====================================================================
 *
       INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH

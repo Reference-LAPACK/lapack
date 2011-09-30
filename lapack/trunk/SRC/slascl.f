@@ -50,6 +50,7 @@
 *          'Q' or 'Z'.
 *
 *  CFROM   (input) REAL
+*
 *  CTO     (input) REAL
 *          The matrix A is multiplied by CTO/CFROM. A(I,J) is computed
 *          without over/underflow if the final result CTO*A(I,J)/CFROM

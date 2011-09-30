@@ -26,6 +26,7 @@
 *          The number of characters in CA and CB to be compared.
 *
 *  CA      (input) CHARACTER*(*)
+*
 *  CB      (input) CHARACTER*(*)
 *          CA and CB specify two character strings of length at least N.
 *          Only the first N characters of each string will be accessed.

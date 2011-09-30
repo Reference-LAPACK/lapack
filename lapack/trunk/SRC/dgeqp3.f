@@ -110,7 +110,7 @@
 *     .. Executable Statements ..
 *
 *     Test input arguments
-*     ====================
+*  ====================
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
@@ -172,7 +172,7 @@
       NFXD = NFXD - 1
 *
 *     Factorize fixed columns
-*     =======================
+*  =======================
 *
 *     Compute the QR factorization of fixed columns and update
 *     remaining columns.
@@ -192,7 +192,7 @@
       END IF
 *
 *     Factorize free columns
-*     ======================
+*  ======================
 *
       IF( NFXD.LT.MINMN ) THEN
 *

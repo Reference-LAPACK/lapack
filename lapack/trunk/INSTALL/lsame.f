@@ -18,6 +18,7 @@
 *  =========
 *
 *  CA      (input) CHARACTER*1
+*
 *  CB      (input) CHARACTER*1
 *          CA and CB specify the single characters to be compared.
 *

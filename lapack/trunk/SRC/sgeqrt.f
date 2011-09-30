@@ -36,7 +36,7 @@
 *          On exit, the elements on and above the diagonal of the array
 *          contain the min(M,N)-by-N upper trapezoidal matrix R (R is
 *          upper triangular if M >= N); the elements below the diagonal
-*          are the columns of V.  See below for further details.
+*          are the columns of V.
 *
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,M).
@@ -45,7 +45,7 @@
 *          The upper triangular block reflectors stored in compact form
 *          as a sequence of upper triangular blocks.  See below
 *          for further details.
-*          
+*
 *  LDT     (input) INTEGER
 *          The leading dimension of the array T.  LDT >= NB.
 *

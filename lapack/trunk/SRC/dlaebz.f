@@ -110,8 +110,9 @@
 *
 *  PIVMIN  (input) DOUBLE PRECISION
 *          The minimum absolute value of a "pivot" in the Sturm
-*          sequence loop.  This *must* be at least  max |e(j)**2| *
-*          safe_min  and at least safe_min, where safe_min is at least
+*          sequence loop.
+*          This must be at least  max |e(j)**2|*safe_min  and at
+*          least safe_min, where safe_min is at least
 *          the smallest number that can divide one without overflow.
 *
 *  D       (input) DOUBLE PRECISION array, dimension (N)

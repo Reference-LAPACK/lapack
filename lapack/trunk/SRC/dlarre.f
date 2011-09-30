@@ -52,6 +52,7 @@
 *          The order of the matrix. N > 0.
 *
 *  VL      (input/output) DOUBLE PRECISION
+*
 *  VU      (input/output) DOUBLE PRECISION
 *          If RANGE='V', the lower and upper bounds for the eigenvalues.
 *          Eigenvalues less than or equal to VL, or greater than VU,
@@ -60,6 +61,7 @@
 *          part of the spectrum.
 *
 *  IL      (input) INTEGER
+*
 *  IU      (input) INTEGER
 *          If RANGE='I', the indices (in ascending order) of the
 *          smallest and largest eigenvalues to be returned.
@@ -86,6 +88,7 @@
 *          1 <= I <= NSPLIT, have been set to zero
 *
 *  RTOL1   (input) DOUBLE PRECISION
+*
 *  RTOL2   (input) DOUBLE PRECISION
 *           Parameters for bisection.
 *           An interval [LEFT,RIGHT] has converged if

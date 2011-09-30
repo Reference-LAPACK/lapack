@@ -24,6 +24,7 @@
 *  =========
 *
 *  N1     (input) INTEGER
+*
 *  N2     (input) INTEGER
 *         These arguements contain the respective lengths of the two
 *         sorted lists to be merged.
@@ -34,6 +35,7 @@
 *         for the final N2 elements.
 *
 *  STRD1  (input) INTEGER
+*
 *  STRD2  (input) INTEGER
 *         These are the strides to be taken through the array A.
 *         Allowable strides are 1 and -1.  They indicate whether a

@@ -42,10 +42,10 @@
 *  N       (input) INTEGER
 *          The order of the matrix.
 *
-*  D       (input) REAL             array, dimension (N)
+*  D       (input) REAL array, dimension (N)
 *          The N diagonal elements of the diagonal matrix D.
 *
-*  LLD     (input) REAL             array, dimension (N-1)
+*  LLD     (input) REAL array, dimension (N-1)
 *          The (N-1) elements L(i)*L(i)*D(i).
 *
 *  SIGMA   (input) REAL            

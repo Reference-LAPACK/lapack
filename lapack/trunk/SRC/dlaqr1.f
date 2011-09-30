@@ -12,6 +12,9 @@
       DOUBLE PRECISION   H( LDH, * ), V( * )
 *     ..
 *
+*  Purpose
+*  =======
+*
 *       Given a 2-by-2 or 3-by-3 matrix H, DLAQR1 sets v to a
 *       scalar multiple of the first column of the product
 *
@@ -27,6 +30,8 @@
 *       This is useful for starting double implicit shift bulges
 *       in the QR algorithm.
 *
+*  Arguments
+*  =========
 *
 *       N      (input) integer
 *              Order of the matrix H. N must be either 2 or 3.
@@ -39,20 +44,26 @@
 *              the calling procedure.  LDH.GE.N
 *
 *       SR1    (input) DOUBLE PRECISION
-*       SI1    The shifts in (*).
-*       SR2
-*       SI2
+*
+*       SI1    (input) DOUBLE PRECISION
+*
+*       SR2    (input) DOUBLE PRECISION
+*
+*       SI2    (input) DOUBLE PRECISION
+*              The shifts in (*).
 *
 *       V      (output) DOUBLE PRECISION array of dimension N
 *              A scalar multiple of the first column of the
 *              matrix K in (*).
 *
-*     ================================================================
+*  Further Details
+*  ===============
+*
 *     Based on contributions by
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ================================================================
+*  ================================================================
 *
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO

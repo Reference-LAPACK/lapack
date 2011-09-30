@@ -57,7 +57,7 @@
 *          The increment between elements of C. INCC > 0.
 *
 *  Further Details
-*  ======= =======
+*  ===============
 *
 *  6-6-96 - Modified with a new algorithm by W. Kahan and J. Demmel
 *

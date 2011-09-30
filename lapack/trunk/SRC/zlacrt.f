@@ -44,6 +44,7 @@
 *          The increment between successive values of CY.  INCY <> 0.
 *
 *  C       (input) COMPLEX*16
+*
 *  S       (input) COMPLEX*16
 *          C and S define the matrix
 *             [  C   S  ].

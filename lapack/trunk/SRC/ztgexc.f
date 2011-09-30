@@ -79,6 +79,7 @@
 *          If WANTZ = .TRUE., LDZ >= N.
 *
 *  IFST    (input) INTEGER
+*
 *  ILST    (input/output) INTEGER
 *          Specify the reordering of the diagonal blocks of (A, B).
 *          The block with row index IFST is moved to row ILST, by a

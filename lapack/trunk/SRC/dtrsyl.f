@@ -363,7 +363,7 @@
 *          A(K,K)**T*X(K,L) + ISGN*X(K,L)*B(L,L) = C(K,L) - R(K,L)
 *
 *        Where
-*                   K-1                          L-1
+*                   K-1        T                    L-1
 *          R(K,L) = SUM [A(I,K)**T*X(I,L)] +ISGN*SUM [X(K,J)*B(J,L)]
 *                   I=1                          J=1
 *

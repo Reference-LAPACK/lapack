@@ -42,6 +42,7 @@
 *          The number of rows of the matrix V.  N >= 0.
 *
 *  ILO     (input) INTEGER
+*
 *  IHI     (input) INTEGER
 *          The integers ILO and IHI determined by DGGBAL.
 *          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.

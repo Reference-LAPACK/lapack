@@ -31,7 +31,7 @@
 *          as an upper or lower triangular matrix.
 *          = 'U':  Upper triangular, form is A = U*D*U**T;
 *          = 'L':  Lower triangular, form is A = L*D*L**T.
-* 
+*
 *  WAY     (input) CHARACTER*1
 *          = 'C': Convert 
 *          = 'R': Revert

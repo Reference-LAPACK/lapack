@@ -100,6 +100,7 @@
 *          The order of the matrices H, T, Q, and Z.  N >= 0.
 *
 *  ILO     (input) INTEGER
+*
 *  IHI     (input) INTEGER
 *          ILO and IHI mark the rows and columns of H which are in
 *          Hessenberg form.  It is assumed that A is already upper

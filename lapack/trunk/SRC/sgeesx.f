@@ -103,6 +103,7 @@
 *                         eigenvalue count as 2.)
 *
 *  WR      (output) REAL array, dimension (N)
+*
 *  WI      (output) REAL array, dimension (N)
 *          WR and WI contain the real and imaginary parts, respectively,
 *          of the computed eigenvalues, in the same order that they

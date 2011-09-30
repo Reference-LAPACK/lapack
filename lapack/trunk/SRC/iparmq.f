@@ -83,6 +83,7 @@
 *               N is the order of the Hessenberg matrix H.
 *
 *       ILO     (input) INTEGER
+*
 *       IHI     (input) INTEGER
 *               It is assumed that H is already upper triangular
 *               in rows and columns 1:ILO-1 and IHI+1:N.
@@ -155,7 +156,7 @@
 *                        (See ISPEC=16 above for details.)
 *                        Default: 3.
 *
-*     ================================================================
+*  ================================================================
 *     .. Parameters ..
       INTEGER            INMIN, INWIN, INIBL, ISHFTS, IACC22
       PARAMETER          ( INMIN = 12, INWIN = 13, INIBL = 14,

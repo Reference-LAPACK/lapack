@@ -90,8 +90,8 @@
 *          = 'V': all eigenvalues in the half-open interval (VL,VU]
 *                 will be found.
 *          = 'I': the IL-th through IU-th eigenvalues will be found.
-********** For RANGE = 'V' or 'I' and IU - IL < N - 1, SSTEBZ and
-********** SSTEIN are called
+*          For RANGE = 'V' or 'I' and IU - IL < N - 1, SSTEBZ and
+*          SSTEIN are called
 *
 *  UPLO    (input) CHARACTER*1
 *          = 'U':  Upper triangle of A is stored;
@@ -114,12 +114,14 @@
 *          The leading dimension of the array A.  LDA >= max(1,N).
 *
 *  VL      (input) REAL
+*
 *  VU      (input) REAL
 *          If RANGE='V', the lower and upper bounds of the interval to
 *          be searched for eigenvalues. VL < VU.
 *          Not referenced if RANGE = 'A' or 'I'.
 *
 *  IL      (input) INTEGER
+*
 *  IU      (input) INTEGER
 *          If RANGE='I', the indices (in ascending order) of the
 *          smallest and largest eigenvalues to be returned.
@@ -182,7 +184,7 @@
 *          indicating the nonzero elements in Z. The i-th eigenvector
 *          is nonzero only in elements ISUPPZ( 2*i-1 ) through
 *          ISUPPZ( 2*i ).
-********** Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1
+*          Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1
 *
 *  WORK    (workspace/output) REAL array, dimension (MAX(1,LWORK))
 *          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.

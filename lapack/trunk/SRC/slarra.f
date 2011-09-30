@@ -28,17 +28,17 @@
 *  N       (input) INTEGER
 *          The order of the matrix. N > 0.
 *
-*  D       (input) REAL             array, dimension (N)
+*  D       (input) REAL array, dimension (N)
 *          On entry, the N diagonal elements of the tridiagonal
 *          matrix T.
 *
-*  E       (input/output) REAL             array, dimension (N)
+*  E       (input/output) REAL array, dimension (N)
 *          On entry, the first (N-1) entries contain the subdiagonal
 *          elements of the tridiagonal matrix T; E(N) need not be set.
 *          On exit, the entries E( ISPLIT( I ) ), 1 <= I <= NSPLIT,
 *          are set to zero, the other entries of E are untouched.
 *
-*  E2      (input/output) REAL             array, dimension (N)
+*  E2      (input/output) REAL array, dimension (N)
 *          On entry, the first (N-1) entries contain the SQUARES of the
 *          subdiagonal elements of the tridiagonal matrix T;
 *          E2(N) need not be set.

@@ -1,8 +1,10 @@
-      PROGRAM TEST3
+      PROGRAM DLAMCHTST
 *
 *  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
+*
+* =====================================================================
 *
 *     .. Local Scalars ..
       DOUBLE PRECISION   BASE, EMAX, EMIN, EPS, PREC, RMAX, RMIN, RND,

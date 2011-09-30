@@ -64,7 +64,9 @@
 *          THe leading dimension of the array B.  LDB >= 2.
 *
 *  ALPHAR  (output) REAL array, dimension (2)
+*
 *  ALPHAI  (output) REAL array, dimension (2)
+*
 *  BETA    (output) REAL array, dimension (2)
 *          (ALPHAR(k)+i*ALPHAI(k))/BETA(k) are the eigenvalues of the
 *          pencil (A,B), k=1,2, i = sqrt(-1).  Note that BETA(k) may

@@ -13,8 +13,8 @@
       COMPLEX*16         H( LDH, * ), W( * ), WORK( * ), Z( LDZ, * )
 *     ..
 *
-*     Purpose
-*     =======
+*  Purpose
+*  =======
 *
 *     ZLAQR0 computes the eigenvalues of a Hessenberg matrix H
 *     and, optionally, the matrices T and Z from the Schur decomposition
@@ -26,8 +26,8 @@
 *     of a matrix A which has been reduced to the Hessenberg form H
 *     by the unitary matrix Q:  A = Q*H*Q**H = (QZ)*H*(QZ)**H.
 *
-*     Arguments
-*     =========
+*  Arguments
+*  =========
 *
 *     WANTT   (input) LOGICAL
 *          = .TRUE. : the full Schur form T is required;
@@ -134,12 +134,13 @@
 *                If INFO .GT. 0 and WANTZ is .FALSE., then Z is not
 *                accessed.
 *
-*     ================================================================
+*  Further Details
+*  ===============
+*
 *     Based on contributions by
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ================================================================
 *     References:
 *       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
 *       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
@@ -150,7 +151,8 @@
 *       Algorithm Part II: Aggressive Early Deflation, SIAM Journal
 *       of Matrix Analysis, volume 23, pages 948--973, 2002.
 *
-*     ================================================================
+*  ================================================================
+*
 *     .. Parameters ..
 *
 *     ==== Matrices of order NTINY or smaller must be processed by

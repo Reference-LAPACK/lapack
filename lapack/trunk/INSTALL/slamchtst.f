@@ -1,8 +1,10 @@
-      PROGRAM TEST2
+      PROGRAM SLAMCHTST
 *
 *  -- LAPACK test routine (version 3.2) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2006
+*
+* =====================================================================
 *
 *     .. Local Scalars ..
       REAL               BASE, EMAX, EMIN, EPS, RMAX, RMIN, RND, SFMIN,

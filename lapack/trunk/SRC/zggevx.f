@@ -102,6 +102,7 @@
 *          The leading dimension of B.  LDB >= max(1,N).
 *
 *  ALPHA   (output) COMPLEX*16 array, dimension (N)
+*
 *  BETA    (output) COMPLEX*16 array, dimension (N)
 *          On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the generalized
 *          eigenvalues.
@@ -138,6 +139,7 @@
 *          if JOBVR = 'V', LDVR >= N.
 *
 *  ILO     (output) INTEGER
+*
 *  IHI     (output) INTEGER
 *          ILO and IHI are integer values such that on exit
 *          A(i,j) = 0 and B(i,j) = 0 if i > j and
@@ -244,6 +246,8 @@
 *
 *  For further explanation of the reciprocal condition numbers RCONDE
 *  and RCONDV, see section 4.11 of LAPACK User's Guide.
+*
+*  =====================================================================
 *
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO, ONE

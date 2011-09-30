@@ -45,8 +45,7 @@
 *     u**H*A = lambda*u**H*B  or  mu*v**H*A = v**H*B
 *  are left eigenvectors of (A,B).
 *
-*  Note: this routine performs "full balancing" on A and B -- see
-*  "Further Details", below.
+*  Note: this routine performs "full balancing" on A and B
 *
 *  Arguments
 *  =========

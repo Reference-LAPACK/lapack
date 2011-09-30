@@ -13,15 +13,15 @@
       COMPLEX*16         H( LDH, * ), W( * ), WORK( * ), Z( LDZ, * )
 *     ..
 *
-*     This subroutine implements one level of recursion for ZLAQR0.
+*  Purpose
+*  =======
+*
+*     ZLAQR4 implements one level of recursion for ZLAQR0.
 *     It is a complete implementation of the small bulge multi-shift
 *     QR algorithm.  It may be called by ZLAQR0 and, for large enough
 *     deflation window size, it may be called by ZLAQR3.  This
 *     subroutine is identical to ZLAQR0 except that it calls ZLAQR2
 *     instead of ZLAQR3.
-*
-*     Purpose
-*     =======
 *
 *     ZLAQR4 computes the eigenvalues of a Hessenberg matrix H
 *     and, optionally, the matrices T and Z from the Schur decomposition
@@ -33,8 +33,8 @@
 *     of a matrix A which has been reduced to the Hessenberg form H
 *     by the unitary matrix Q:  A = Q*H*Q**H = (QZ)*H*(QZ)**H.
 *
-*     Arguments
-*     =========
+*  Arguments
+*  =========
 *
 *     WANTT   (input) LOGICAL
 *          = .TRUE. : the full Schur form T is required;
@@ -48,6 +48,7 @@
 *           The order of the matrix H.  N .GE. 0.
 *
 *     ILO   (input) INTEGER
+*
 *     IHI   (input) INTEGER
 *           It is assumed that H is already upper triangular in rows
 *           and columns 1:ILO-1 and IHI+1:N and, if ILO.GT.1,
@@ -141,12 +142,13 @@
 *                If INFO .GT. 0 and WANTZ is .FALSE., then Z is not
 *                accessed.
 *
-*     ================================================================
+*  Further Details
+*  ===============
+*
 *     Based on contributions by
 *        Karen Braman and Ralph Byers, Department of Mathematics,
 *        University of Kansas, USA
 *
-*     ================================================================
 *     References:
 *       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
 *       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
@@ -157,7 +159,8 @@
 *       Algorithm Part II: Aggressive Early Deflation, SIAM Journal
 *       of Matrix Analysis, volume 23, pages 948--973, 2002.
 *
-*     ================================================================
+*  ================================================================
+*
 *     .. Parameters ..
 *
 *     ==== Matrices of order NTINY or smaller must be processed by

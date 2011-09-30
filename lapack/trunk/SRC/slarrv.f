@@ -35,6 +35,7 @@
 *          The order of the matrix.  N >= 0.
 *
 *  VL      (input) REAL            
+*
 *  VU      (input) REAL            
 *          Lower and upper bounds of the interval that contains the desired
 *          eigenvalues. VL < VU. Needed to compute gaps on the left or right
@@ -64,6 +65,7 @@
 *          The total number of input eigenvalues.  0 <= M <= N.
 *
 *  DOL     (input) INTEGER
+*
 *  DOU     (input) INTEGER
 *          If the user wants to compute only selected eigenvectors from all
 *          the eigenvalues supplied, he can specify an index range DOL:DOU.
@@ -77,12 +79,13 @@
 *  MINRGP  (input) REAL            
 *
 *  RTOL1   (input) REAL            
+*
 *  RTOL2   (input) REAL            
 *           Parameters for bisection.
 *           An interval [LEFT,RIGHT] has converged if
 *           RIGHT-LEFT.LT.MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
 *
-*  W       (input/output) REAL             array, dimension (N)
+*  W       (input/output) REAL array, dimension (N)
 *          The first M elements of W contain the APPROXIMATE eigenvalues for
 *          which eigenvectors are to be computed.  The eigenvalues
 *          should be grouped by split-off block and ordered from

@@ -43,6 +43,7 @@
 *         The eigenvalue of smaller absolute value.
 *
 *  CS1    (output) REAL
+*
 *  SN1    (output) COMPLEX
 *         The vector (CS1, SN1) is a unit right eigenvector for RT1.
 *

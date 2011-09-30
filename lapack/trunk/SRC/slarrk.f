@@ -41,13 +41,14 @@
 *          The index of the eigenvalues to be returned.
 *
 *  GL      (input) REAL            
+*
 *  GU      (input) REAL            
 *          An upper and a lower bound on the eigenvalue.
 *
-*  D       (input) REAL             array, dimension (N)
+*  D       (input) REAL array, dimension (N)
 *          The n diagonal elements of the tridiagonal matrix T.
 *
-*  E2      (input) REAL             array, dimension (N-1)
+*  E2      (input) REAL array, dimension (N-1)
 *          The (n-1) squared off-diagonal elements of the tridiagonal matrix T.
 *
 *  PIVMIN  (input) REAL            

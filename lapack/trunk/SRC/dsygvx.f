@@ -83,12 +83,14 @@
 *          The leading dimension of the array B.  LDB >= max(1,N).
 *
 *  VL      (input) DOUBLE PRECISION
+*
 *  VU      (input) DOUBLE PRECISION
 *          If RANGE='V', the lower and upper bounds of the interval to
 *          be searched for eigenvalues. VL < VU.
 *          Not referenced if RANGE = 'A' or 'I'.
 *
 *  IL      (input) INTEGER
+*
 *  IU      (input) INTEGER
 *          If RANGE='I', the indices (in ascending order) of the
 *          smallest and largest eigenvalues to be returned.

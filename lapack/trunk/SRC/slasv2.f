@@ -42,11 +42,13 @@
 *          abs(SSMAX) is the larger singular value.
 *
 *  SNL     (output) REAL
+*
 *  CSL     (output) REAL
 *          The vector (CSL, SNL) is a unit left singular vector for the
 *          singular value abs(SSMAX).
 *
 *  SNR     (output) REAL
+*
 *  CSR     (output) REAL
 *          The vector (CSR, SNR) is a unit right singular vector for the
 *          singular value abs(SSMAX).

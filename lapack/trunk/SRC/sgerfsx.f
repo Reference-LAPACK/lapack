@@ -28,7 +28,7 @@
      $                   ERR_BNDS_COMP( NRHS, * )
 *     ..
 *
-*     Purpose
+*  Purpose
 *     =======
 *
 *     SGERFSX improves the computed solution to a system of linear
@@ -43,8 +43,8 @@
 *     and C below. In this case, the solution and error bounds returned
 *     are for the original unequilibrated system.
 *
-*     Arguments
-*     =========
+*  Arguments
+*  =========
 *
 *     Some optional parameters are bundled in the PARAMS array.  These
 *     settings determine how refinement is performed, but often the
@@ -305,7 +305,7 @@
 *         about all of the right-hand sides check ERR_BNDS_NORM or
 *         ERR_BNDS_COMP.
 *
-*     ==================================================================
+*  ==================================================================
 *
 *     .. Parameters ..
       REAL               ZERO, ONE

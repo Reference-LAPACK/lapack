@@ -105,6 +105,7 @@
 *          The leading dimension of the array A.  LDA >= max(1,N).
 *
 *  WR      (output) REAL array, dimension (N)
+*
 *  WI      (output) REAL array, dimension (N)
 *          WR and WI contain the real and imaginary parts,
 *          respectively, of the computed eigenvalues.  Complex
@@ -143,6 +144,7 @@
 *          JOBVR = 'V', LDVR >= N.
 *
 *  ILO     (output) INTEGER
+*
 *  IHI     (output) INTEGER
 *          ILO and IHI are integer values determined when A was
 *          balanced.  The balanced A(i,j) = 0 if I > J and 

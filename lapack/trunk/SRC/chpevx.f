@@ -61,12 +61,14 @@
 *          corresponding elements of A.
 *
 *  VL      (input) REAL
+*
 *  VU      (input) REAL
 *          If RANGE='V', the lower and upper bounds of the interval to
 *          be searched for eigenvalues. VL < VU.
 *          Not referenced if RANGE = 'A' or 'I'.
 *
 *  IL      (input) INTEGER
+*
 *  IU      (input) INTEGER
 *          If RANGE='I', the indices (in ascending order) of the
 *          smallest and largest eigenvalues to be returned.

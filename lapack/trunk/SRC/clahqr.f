@@ -13,7 +13,7 @@
       COMPLEX            H( LDH, * ), W( * ), Z( LDZ, * )
 *     ..
 *
-*     Purpose
+*  Purpose
 *     =======
 *
 *     CLAHQR is an auxiliary routine called by CHSEQR to update the
@@ -21,8 +21,8 @@
 *     dealing with the Hessenberg submatrix in rows and columns ILO to
 *     IHI.
 *
-*     Arguments
-*     =========
+*  Arguments
+*  =========
 *
 *     WANTT   (input) LOGICAL
 *          = .TRUE. : the full Schur form T is required;
@@ -36,6 +36,7 @@
 *          The order of the matrix H.  N >= 0.
 *
 *     ILO     (input) INTEGER
+*
 *     IHI     (input) INTEGER
 *          It is assumed that H is already upper triangular in rows and
 *          columns IHI+1:N, and that H(ILO,ILO-1) = 0 (unless ILO = 1).
@@ -62,6 +63,7 @@
 *          of the Schur form returned in H, with W(i) = H(i,i).
 *
 *     ILOZ    (input) INTEGER
+*
 *     IHIZ    (input) INTEGER
 *          Specify the rows of Z to which transformations must be
 *          applied if WANTZ is .TRUE..
@@ -102,8 +104,8 @@
 *                  where U is the orthogonal matrix in (*)
 *                  (regardless of the value of WANTT.)
 *
-*     Further Details
-*     ===============
+*  Further Details
+*  ===============
 *
 *     02-96 Based on modifications by
 *     David Day, Sandia National Laboratory, USA
@@ -115,7 +117,7 @@
 *     (2) adopts the more conservative Ahues & Tisseur stopping
 *     criterion (LAWN 122, 1997).
 *
-*     =========================================================
+*  =========================================================
 *
 *     .. Parameters ..
       INTEGER            ITMAX

@@ -60,6 +60,7 @@
 *          The leading dimension of the array B. LDB >= max(1,N).
 *
 *  ILO     (output) INTEGER
+*
 *  IHI     (output) INTEGER
 *          ILO and IHI are set to integers such that on exit
 *          A(i,j) = 0 and B(i,j) = 0 if i > j and

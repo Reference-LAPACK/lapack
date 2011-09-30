@@ -1,7 +1,6 @@
       SUBROUTINE SSYCONV( UPLO, WAY, N, A, LDA, IPIV, WORK, INFO )
 *
 *  -- LAPACK PROTOTYPE routine (version 3.2.2) --
-*
 *  -- Written by Julie Langou of the Univ. of TN    --
 *     May 2010
 *
@@ -32,7 +31,7 @@
 *          as an upper or lower triangular matrix.
 *          = 'U':  Upper triangular, form is A = U*D*U**T;
 *          = 'L':  Lower triangular, form is A = L*D*L**T.
-* 
+*
 *  WAY     (input) CHARACTER*1
 *          = 'C': Convert 
 *          = 'R': Revert

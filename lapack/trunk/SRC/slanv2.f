@@ -27,21 +27,28 @@
 *  =========
 *
 *  A       (input/output) REAL            
+*
 *  B       (input/output) REAL            
+*
 *  C       (input/output) REAL            
+*
 *  D       (input/output) REAL            
 *          On entry, the elements of the input matrix.
 *          On exit, they are overwritten by the elements of the
 *          standardised Schur form.
 *
 *  RT1R    (output) REAL 
+*
 *  RT1I    (output) REAL            
+*
 *  RT2R    (output) REAL            
+*
 *  RT2I    (output) REAL            
 *          The real and imaginary parts of the eigenvalues. If the
 *          eigenvalues are a complex conjugate pair, RT1I > 0.
 *
 *  CS      (output) REAL            
+*
 *  SN      (output) REAL            
 *          Parameters of the rotation matrix.
 *

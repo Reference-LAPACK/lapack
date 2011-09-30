@@ -35,6 +35,7 @@
 *          The order of the matrix.  N >= 0.
 *
 *  VL      (input) DOUBLE PRECISION
+*
 *  VU      (input) DOUBLE PRECISION
 *          Lower and upper bounds of the interval that contains the desired
 *          eigenvalues. VL < VU. Needed to compute gaps on the left or right
@@ -64,6 +65,7 @@
 *          The total number of input eigenvalues.  0 <= M <= N.
 *
 *  DOL     (input) INTEGER
+*
 *  DOU     (input) INTEGER
 *          If the user wants to compute only selected eigenvectors from all
 *          the eigenvalues supplied, he can specify an index range DOL:DOU.
@@ -77,6 +79,7 @@
 *  MINRGP  (input) DOUBLE PRECISION
 *
 *  RTOL1   (input) DOUBLE PRECISION
+*
 *  RTOL2   (input) DOUBLE PRECISION
 *           Parameters for bisection.
 *           An interval [LEFT,RIGHT] has converged if

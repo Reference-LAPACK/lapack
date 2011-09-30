@@ -80,10 +80,10 @@
 *  SIGMA   (output) REAL            
 *          The shift used to form L(+) D(+) L(+)^T.
 *
-*  DPLUS   (output) REAL             array, dimension (N)
+*  DPLUS   (output) REAL array, dimension (N)
 *          The N diagonal elements of the diagonal matrix D(+).
 *
-*  LPLUS   (output) REAL             array, dimension (N-1)
+*  LPLUS   (output) REAL array, dimension (N-1)
 *          The first (N-1) elements of LPLUS contain the subdiagonal
 *          elements of the unit bidiagonal matrix L(+).
 *

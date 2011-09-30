@@ -25,12 +25,16 @@
 *  =========
 *
 *  A       (input) REAL
+*
 *  B       (input) REAL
+*
 *  C       (input) REAL
+*
 *  D       (input) REAL
 *          The scalars a, b, c, and d in the above expression.
 *
 *  P       (output) REAL
+*
 *  Q       (output) REAL
 *          The scalars p and q in the above expression.
 *

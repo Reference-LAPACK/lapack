@@ -31,6 +31,7 @@
 *          SLAED4.  K >= 0.
 *
 *  KSTART  (input) INTEGER
+*
 *  KSTOP   (input) INTEGER
 *          The updated eigenvalues Lambda(I), KSTART <= I <= KSTOP
 *          are to be computed.  1 <= KSTART <= KSTOP <= K.

@@ -48,7 +48,7 @@
 *         On the final return from ZLACON, KASE will again be 0.
 *
 *  Further Details
-*  ======= =======
+*  ===============
 *
 *  Contributed by Nick Higham, University of Manchester.
 *  Originally named CONEST, dated March 16, 1988.

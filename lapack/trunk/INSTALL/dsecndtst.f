@@ -1,8 +1,10 @@
-      PROGRAM TEST5
+      PROGRAM DSECNDTST
 *
 *  -- LAPACK test routine (version 3.3.1) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *  -- April 2011                                                      --
+*
+* =====================================================================
 *
 *     .. Parameters ..
       INTEGER            NMAX, ITS

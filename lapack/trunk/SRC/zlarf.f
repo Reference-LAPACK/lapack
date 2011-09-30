@@ -93,8 +93,8 @@
       LASTV = 0
       LASTC = 0
       IF( TAU.NE.ZERO ) THEN
-!     Set up variables for scanning V.  LASTV begins pointing to the end
-!     of V.
+*     Set up variables for scanning V.  LASTV begins pointing to the end
+*     of V.
          IF( APPLYLEFT ) THEN
             LASTV = M
          ELSE
@@ -105,21 +105,21 @@
          ELSE
             I = 1
          END IF
-!     Look for the last non-zero row in V.
+*     Look for the last non-zero row in V.
          DO WHILE( LASTV.GT.0 .AND. V( I ).EQ.ZERO )
             LASTV = LASTV - 1
             I = I - INCV
          END DO
          IF( APPLYLEFT ) THEN
-!     Scan for the last non-zero column in C(1:lastv,:).
+*     Scan for the last non-zero column in C(1:lastv,:).
             LASTC = ILAZLC(LASTV, N, C, LDC)
          ELSE
-!     Scan for the last non-zero row in C(:,1:lastv).
+*     Scan for the last non-zero row in C(:,1:lastv).
             LASTC = ILAZLR(M, LASTV, C, LDC)
          END IF
       END IF
-!     Note that lastc.eq.0 renders the BLAS operations null; no special
-!     case is needed at this level.
+*     Note that lastc.eq.0 renders the BLAS operations null; no special
+*     case is needed at this level.
       IF( APPLYLEFT ) THEN
 *
 *        Form  H * C
