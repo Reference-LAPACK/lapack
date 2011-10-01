@@ -24,12 +24,12 @@ testieee: tstiee.o
 	$(LOADER) $(LOADOPTS) -o testieee tstiee.o
 
 testversion: ilaver.o LAPACK_version.o
-	    $(LOADER) $(LOADOPTS) -o testversion ilaver.o LAPACK_version.o
+	$(LOADER) $(LOADOPTS) -o testversion ilaver.o LAPACK_version.o
 
 clean:
 	rm -f *.o
+.f.o: 
+	$(FORTRAN) $(OPTS) -c $< -o $@
 
 slamch.o: slamch.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
 dlamch.o: dlamch.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
-
-.f.o: ; $(FORTRAN) $(OPTS) -c $< -o $@
