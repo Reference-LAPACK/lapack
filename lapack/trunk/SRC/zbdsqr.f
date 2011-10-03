@@ -106,7 +106,8 @@
 *          The leading dimension of the array C.
 *          LDC >= max(1,N) if NCC > 0; LDC >=1 if NCC = 0.
 *
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (4*N)
+*  RWORK   (workspace) DOUBLE PRECISION array, dimension (2*N)
+*          if NCVT = NRU = NCC = 0, (max(1, 4*N-4)) otherwise
 *
 *  INFO    (output) INTEGER
 *          = 0:  successful exit
@@ -223,7 +224,11 @@
 *
       IF( .NOT.ROTATE ) THEN
          CALL DLASQ1( N, D, E, RWORK, INFO )
-         RETURN
+*
+*     If INFO equals 2, dqds didn't finish, try to finish
+*         
+         IF( INFO .NE. 2 ) RETURN
+         INFO = 0
       END IF
 *
       NM1 = N - 1
