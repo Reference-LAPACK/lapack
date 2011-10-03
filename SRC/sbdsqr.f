@@ -231,7 +231,11 @@
 *
       IF( .NOT.ROTATE ) THEN
          CALL SLASQ1( N, D, E, WORK, INFO )
-         RETURN
+*
+*     If INFO equals 2, dqds didn't finish, try to finish
+*         
+         IF( INFO .NE. 2 ) RETURN
+         INFO = 0
       END IF
 *
       NM1 = N - 1

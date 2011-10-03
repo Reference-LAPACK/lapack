@@ -56,8 +56,11 @@
 *        < 0: if INFO = -i, the i-th argument had an illegal value
 *        > 0: the algorithm failed
 *             = 1, a split was marked by a positive value in E
-*             = 2, current block of Z not diagonalized after 30*N
-*                  iterations (in inner while loop)
+*             = 2, current block of Z not diagonalized after 100*N
+*                  iterations (in inner while loop)  On exit D and E
+*                  represent a matrix with the same singular values
+*                  which the calling subroutine could use to finish the
+*                  computation, or even feed back into DLASQ1
 *             = 3, termination criterion of outer while loop not met 
 *                  (program created more than N unreduced blocks)
 *
@@ -145,6 +148,17 @@
             D( I ) = SQRT( WORK( I ) )
    40    CONTINUE
          CALL DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, D, N, IINFO )
+      ELSE IF( INFO.EQ.2 ) THEN
+*
+*     Maximum number of iterations exceeded.  Move data from WORK
+*     into D and E so the calling subroutine can try to finish
+*
+         DO I = 1, N
+            D( I ) = SQRT( WORK( 2*I-1 ) )
+            E( I ) = SQRT( WORK( 2*I ) )
+         END DO
+         CALL DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, D, N, IINFO )
+         CALL DLASCL( 'G', 0, 0, SCALE, SIGMX, N, 1, E, N, IINFO )
       END IF
 *
       RETURN

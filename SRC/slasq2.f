@@ -58,8 +58,9 @@
 *             INFO = -(i*100+j)
 *        > 0: the algorithm failed
 *              = 1, a split was marked by a positive value in E
-*              = 2, current block of Z not diagonalized after 30*N
-*                   iterations (in inner while loop)
+*              = 2, current block of Z not diagonalized after 100*N
+*                   iterations (in inner while loop).  On exit Z holds
+*                   a qd array with the same eigenvalues as the given Z.
 *              = 3, termination criterion of outer while loop not met 
 *                   (program created more than N unreduced blocks)
 *
@@ -81,11 +82,12 @@
 *     .. Local Scalars ..
       LOGICAL            IEEE
       INTEGER            I0, I4, IINFO, IPN4, ITER, IWHILA, IWHILB, K,
-     $                   KMIN, N0, NBIG, NDIV, NFAIL, PP, SPLT, TTYPE
+     $                   KMIN, N0, NBIG, NDIV, NFAIL, PP, SPLT, TTYPE,
+     $                   I1, N1
       REAL               D, DEE, DEEMIN, DESIG, DMIN, DMIN1, DMIN2, DN,
      $                   DN1, DN2, E, EMAX, EMIN, EPS, G, OLDEMN, QMAX,
      $                   QMIN, S, SAFMIN, SIGMA, T, TAU, TEMP, TOL,
-     $                   TOL2, TRACE, ZMAX
+     $                   TOL2, TRACE, ZMAX, TEMPE, TEMPQ
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLASQ3, SLASRT, XERBLA
@@ -401,7 +403,7 @@
 *               and that the tests for deflation upon entry in SLASQ3 
 *               should not be performed.
 *
-         NBIG = 30*( N0-I0+1 )
+         NBIG = 100*( N0-I0+1 )
          DO 140 IWHILB = 1, NBIG
             IF( I0.GT.N0 ) 
      $         GO TO 150
@@ -446,6 +448,49 @@
   140    CONTINUE
 *
          INFO = 2
+*       
+*        Maximum number of iterations exceeded, restore the shift 
+*        SIGMA and place the new d's and e's in a qd array.
+*        This might need to be done for several blocks
+*
+         I1 = I0
+         N1 = N0
+ 145     CONTINUE
+         TEMPQ = Z( 4*I0-3 )
+         Z( 4*I0-3 ) = Z( 4*I0-3 ) + SIGMA
+         DO K = I0+1, N0
+            TEMPE = Z( 4*K-5 )
+            Z( 4*K-5 ) = Z( 4*K-5 ) * (TEMPQ / Z( 4*K-7 ))
+            TEMPQ = Z( 4*K-3 )
+            Z( 4*K-3 ) = Z( 4*K-3 ) + SIGMA + TEMPE - Z( 4*K-5 )
+         END DO
+*
+*        Prepare to do this on the previous block if there is one
+*
+         IF( I1.GT.1 ) THEN
+            N1 = I1-1
+            DO WHILE( ( I1.GE.2 ) .AND. ( Z(4*I-5).GE.ZERO ) )
+               I1 = I1 - 1
+            END DO
+            IF( I1.GE.1 ) THEN
+               SIGMA = -Z(4*N1-1)
+               GO TO 145
+            END IF
+         END IF
+
+         DO K = 1, N
+            Z( 2*K-1 ) = Z( 4*K-3 )
+*
+*        Only the block 1..N0 is unfinished.  The rest of the e's
+*        must be essentially zero, although sometimes other data
+*        has been stored in them.
+*
+            IF( K.LT.N0 ) THEN
+               Z( 2*K ) = Z( 4*K-1 )
+            ELSE
+               Z( 2*K ) = 0
+            END IF
+         END DO
          RETURN
 *
 *        end IWHILB
