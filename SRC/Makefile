@@ -3,24 +3,30 @@ include ../make.inc
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
-#       ALLAUX -- Auxiliary routines called from all precisions
-#       ALLXAUX -- Auxiliary routines called from all precisions but
-#                  only from routines using extra precision.
-#       SCLAUX -- Auxiliary routines called from both REAL and COMPLEX
-#       DZLAUX -- Auxiliary routines called from both DOUBLE PRECISION
-#                 and COMPLEX*16
-#       SLASRC -- Single precision real LAPACK routines
+#       ALLAUX  -- Auxiliary routines called from all precisions
+#
+#       SCLAUX  -- Auxiliary routines called from both REAL and COMPLEX.
+#       DZLAUX  -- Auxiliary routines called from both DOUBLE and COMPLEX*16.
+#
+#       DSLASRC -- Double-single mixed precision real routines called from
+#                  single, single-extra and double precision real LAPACK
+#                  routines (i.e. from SLASRC, SXLASRC, DLASRC).
+#       ZCLASRC -- Double-single mixed precision complex routines called from
+#                  single, single-extra and double precision complex LAPACK
+#                  routines (i.e. from CLASRC, CXLASRC, ZLASRC).
+#
+#       SLASRC  -- Single precision real LAPACK routines
 #       SXLASRC -- Single precision real LAPACK routines using extra
 #                  precision.
-#       CLASRC -- Single precision complex LAPACK routines
+#       CLASRC  -- Single precision complex LAPACK routines
 #       CXLASRC -- Single precision complex LAPACK routines using extra
 #                  precision.
-#       DLASRC -- Double precision real LAPACK routines
+#       DLASRC  -- Double precision real LAPACK routines
 #       DXLASRC -- Double precision real LAPACK routines using extra
 #                  precision.
-#       ZLASRC -- Double precision complex LAPACK routines
+#       ZLASRC  -- Double precision complex LAPACK routines
 #       ZXLASRC -- Double precision complex LAPACK routines using extra
-#                  precision.
+#                  precision.   
 #
 #  The library can be set up to include routines for any combination
 #  of the four precisions.  To create or add to the library, enter make
@@ -51,8 +57,6 @@ include ../make.inc
 ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o iparmq.o	\
     ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
     ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
-
-ALLXAUX =
 
 SCLAUX = \
    sbdsdc.o \
@@ -150,6 +154,7 @@ SLASRC = \
 
 DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o 
 
+ifdef USEXBLAS
 SXLASRC = sgesvxx.o sgerfsx.o sla_gerfsx_extended.o sla_geamv.o		\
    sla_gercond.o sla_gerpvgrw.o ssysvxx.o ssyrfsx.o			\
    sla_syrfsx_extended.o sla_syamv.o sla_syrcond.o sla_syrpvgrw.o	\
@@ -157,6 +162,7 @@ SXLASRC = sgesvxx.o sgerfsx.o sla_gerfsx_extended.o sla_geamv.o		\
    sla_porpvgrw.o sgbsvxx.o sgbrfsx.o sla_gbrfsx_extended.o		\
    sla_gbamv.o sla_gbrcond.o sla_gbrpvgrw.o sla_lin_berr.o slarscl2.o	\
    slascl2.o sla_wwaddw.o
+endif
 
 CLASRC = \
    cbdsqr.o cgbbrd.o cgbcon.o cgbequ.o cgbrfs.o cgbsv.o  cgbsvx.o \
@@ -220,7 +226,8 @@ CLASRC = \
    cgeqrt.o cgeqrt2.o cgeqrt3.o cgemqrt.o \
    ctpqrt.o ctpqrt2.o ctpmqrt.o ctprfb.o
 
-CXLASRC =    cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
+ifdef USEXBLAS
+CXLASRC = cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
    cla_gercond_c.o cla_gercond_x.o cla_gerpvgrw.o \
    csysvxx.o csyrfsx.o cla_syrfsx_extended.o cla_syamv.o \
    cla_syrcond_c.o cla_syrcond_x.o cla_syrpvgrw.o \
@@ -231,6 +238,7 @@ CXLASRC =    cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
    chesvxx.o cherfsx.o cla_herfsx_extended.o cla_heamv.o \
    cla_hercond_c.o cla_hercond_x.o cla_herpvgrw.o \
    cla_lin_berr.o clarscl2.o clascl2.o cla_wwaddw.o
+endif
 
 ZCLASRC = cpotrs.o cgetrs.o cpotrf.o cgetrf.o 
 
@@ -294,7 +302,7 @@ DLASRC = \
    dgeqrt.o dgeqrt2.o dgeqrt3.o dgemqrt.o \
    dtpqrt.o dtpqrt2.o dtpmqrt.o dtprfb.o
 
-
+ifdef USEXBLAS
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o		\
    dla_gercond.o dla_gerpvgrw.o dsysvxx.o dsyrfsx.o			\
    dla_syrfsx_extended.o dla_syamv.o dla_syrcond.o dla_syrpvgrw.o	\
@@ -302,6 +310,7 @@ DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o		\
    dla_porpvgrw.o dgbsvxx.o dgbrfsx.o dla_gbrfsx_extended.o		\
    dla_gbamv.o dla_gbrcond.o dla_gbrpvgrw.o dla_lin_berr.o dlarscl2.o	\
    dlascl2.o dla_wwaddw.o
+endif
 
 ZLASRC = \
    zbdsqr.o zgbbrd.o zgbcon.o zgbequ.o zgbrfs.o zgbsv.o  zgbsvx.o \
@@ -370,7 +379,7 @@ ZLASRC = \
    zgeqrt.o zgeqrt2.o zgeqrt3.o zgemqrt.o \
    ztpqrt.o ztpqrt2.o ztpmqrt.o ztprfb.o
 
-
+ifdef USEXBLAS
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o		\
    zla_gercond_c.o zla_gercond_x.o zla_gerpvgrw.o zsysvxx.o zsyrfsx.o	\
    zla_syrfsx_extended.o zla_syamv.o zla_syrcond_c.o zla_syrcond_x.o	\
@@ -380,38 +389,39 @@ ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o		\
    zla_gbrpvgrw.o zhesvxx.o zherfsx.o zla_herfsx_extended.o		\
    zla_heamv.o zla_hercond_c.o zla_hercond_x.o zla_herpvgrw.o		\
    zla_lin_berr.o zlarscl2.o zlascl2.o zla_wwaddw.o
-
-all: ../$(LAPACKLIB)
-
-ifdef USEXBLAS
-ALLXOBJ=$(SXLASRC) $(DXLASRC) $(CXLASRC) $(ZXLASRC) $(ALLXAUX)
 endif
 
-ALLOBJ=$(SLASRC) $(DLASRC) $(DSLASRC) $(CLASRC) $(ZLASRC) $(ZCLASRC) \
-	   $(SCLAUX) $(DZLAUX) $(ALLAUX)
+ALLOBJ = $(SLASRC) $(DLASRC) $(DSLASRC) $(CLASRC) $(ZLASRC) $(ZCLASRC) \
+   $(SCLAUX) $(DZLAUX) $(ALLAUX)
+
+ifdef USEXBLAS
+ALLXOBJ = $(SXLASRC) $(DXLASRC) $(CXLASRC) $(ZXLASRC)
+endif
+
+all: ../$(LAPACKLIB)
 
 ../$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ)
 	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ)
 	$(RANLIB) $@
 
-single: $(SLASRC) $(ALLAUX) $(SCLAUX) 
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(SLASRC) $(ALLAUX) \
-	$(SCLAUX) $(DSLASRC)
+single: $(SLASRC) $(DSLASRC) $(SXLASRC) $(SCLAUX) $(ALLAUX)
+	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(SLASRC) $(DSLASRC) \
+	$(SXLASRC) $(SCLAUX) $(ALLAUX) $(ALLXAUX)
 	$(RANLIB) ../$(LAPACKLIB)
 
-complex: $(CLASRC) $(ALLAUX) $(SCLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(CLASRC) $(ALLAUX) \
-	$(SCLAUX) $(ZCLASRC)
+complex: $(CLASRC) $(ZCLASRC) $(CXLASRC) $(SCLAUX) $(ALLAUX)
+	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(CLASRC) $(ZCLASRC) \
+	$(CXLASRC) $(SCLAUX) $(ALLAUX) $(ALLXAUX)
 	$(RANLIB) ../$(LAPACKLIB)
 
-double: $(DLASRC) $(ALLAUX) $(DZLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(DLASRC) $(ALLAUX) \
-	$(DZLAUX) $(DSLASRC)
+double: $(DLASRC) $(DSLASRC) $(DXLASRC) $(DZLAUX) $(ALLAUX)
+	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(DLASRC) $(DSLASRC) \
+	$(DXLASRC) $(DZLAUX) $(ALLAUX) $(ALLXAUX)
 	$(RANLIB) ../$(LAPACKLIB)
 
-complex16: $(ZLASRC) $(ALLAUX) $(DZLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(ZLASRC) $(ALLAUX) \
-	$(DZLAUX) $(ZCLASRC)
+complex16: $(ZLASRC) $(ZCLASRC) $(ZXLASRC) $(DZLAUX) $(ALLAUX)
+	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(ZLASRC) $(ZCLASRC) \
+	$(ZXLASRC) $(DZLAUX) $(ALLAUX) $(ALLXAUX)
 	$(RANLIB) ../$(LAPACKLIB)
 
 $(ALLAUX): $(FRC)
@@ -421,8 +431,9 @@ $(SLASRC): $(FRC)
 $(CLASRC): $(FRC)
 $(DLASRC): $(FRC)
 $(ZLASRC): $(FRC)
+$(ZCLASRC): $(FRC)
+$(DSLASRC): $(FRC)
 ifdef USEXBLAS
-$(ALLXAUX): $(FRC)
 $(SXLASRC): $(FRC)
 $(CXLASRC): $(FRC)
 $(DXLASRC): $(FRC)
