@@ -1,9 +1,133 @@
+*> \brief \b CGEQLS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), B( LDB, * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Solve the least squares problem
+*>     min || A*X - B ||
+*> using the QL factorization
+*>     A = Q*L
+*> computed by CGEQLF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  M >= N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns of B.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          Details of the QL factorization of the original matrix A as
+*>          returned by CGEQLF.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= M.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is COMPLEX array, dimension (N)
+*>          Details of the orthogonal matrix Q.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          On entry, the m-by-nrhs right hand side matrix B.
+*>          On exit, the n-by-nrhs solution matrix X, stored in rows
+*>          m-n+1:m.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= M.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK must be at least NRHS,
+*>          and should be at least NRHS*NB, where NB is the block size
+*>          for this environment.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CGEQLS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
@@ -12,56 +136,6 @@
       COMPLEX            A( LDA, * ), B( LDB, * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Solve the least squares problem
-*      min || A*X - B ||
-*  using the QL factorization
-*      A = Q*L
-*  computed by CGEQLF.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  M >= N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns of B.  NRHS >= 0.
-*
-*  A       (input) COMPLEX array, dimension (LDA,N)
-*          Details of the QL factorization of the original matrix A as
-*          returned by CGEQLF.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= M.
-*
-*  TAU     (input) COMPLEX array, dimension (N)
-*          Details of the orthogonal matrix Q.
-*
-*  B       (input/output) COMPLEX array, dimension (LDB,NRHS)
-*          On entry, the m-by-nrhs right hand side matrix B.
-*          On exit, the n-by-nrhs solution matrix X, stored in rows
-*          m-n+1:m.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >= M.
-*
-*  WORK    (workspace) COMPLEX array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  LWORK must be at least NRHS,
-*          and should be at least NRHS*NB, where NB is the block size
-*          for this environment.
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

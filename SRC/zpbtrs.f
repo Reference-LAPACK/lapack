@@ -1,9 +1,122 @@
+*> \brief \b ZPBTRS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, KD, LDAB, LDB, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         AB( LDAB, * ), B( LDB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZPBTRS solves a system of linear equations A*X = B with a Hermitian
+*> positive definite band matrix A using the Cholesky factorization
+*> A = U**H *U or A = L*L**H computed by ZPBTRF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangular factor stored in AB;
+*>          = 'L':  Lower triangular factor stored in AB.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of superdiagonals of the matrix A if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrix B.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] AB
+*> \verbatim
+*>          AB is COMPLEX*16 array, dimension (LDAB,N)
+*>          The triangular factor U or L from the Cholesky factorization
+*>          A = U**H *U or A = L*L**H of the band matrix A, stored in the
+*>          first KD+1 rows of the array.  The j-th column of U or L is
+*>          stored in the j-th column of the array AB as follows:
+*>          if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for max(1,j-kd)<=i<=j;
+*>          if UPLO ='L', AB(1+i-j,j)    = L(i,j) for j<=i<=min(n,j+kd).
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD+1.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
+*>          On entry, the right hand side matrix B.
+*>          On exit, the solution matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE ZPBTRS( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,53 +125,6 @@
 *     .. Array Arguments ..
       COMPLEX*16         AB( LDAB, * ), B( LDB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZPBTRS solves a system of linear equations A*X = B with a Hermitian
-*  positive definite band matrix A using the Cholesky factorization
-*  A = U**H *U or A = L*L**H computed by ZPBTRF.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangular factor stored in AB;
-*          = 'L':  Lower triangular factor stored in AB.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  KD      (input) INTEGER
-*          The number of superdiagonals of the matrix A if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrix B.  NRHS >= 0.
-*
-*  AB      (input) COMPLEX*16 array, dimension (LDAB,N)
-*          The triangular factor U or L from the Cholesky factorization
-*          A = U**H *U or A = L*L**H of the band matrix A, stored in the
-*          first KD+1 rows of the array.  The j-th column of U or L is
-*          stored in the j-th column of the array AB as follows:
-*          if UPLO ='U', AB(kd+1+i-j,j) = U(i,j) for max(1,j-kd)<=i<=j;
-*          if UPLO ='L', AB(1+i-j,j)    = L(i,j) for j<=i<=min(n,j+kd).
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KD+1.
-*
-*  B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS)
-*          On entry, the right hand side matrix B.
-*          On exit, the solution matrix X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

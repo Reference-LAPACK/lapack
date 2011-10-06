@@ -1,9 +1,103 @@
+*> \brief \b ZROT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZROT( N, CX, INCX, CY, INCY, C, S )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCX, INCY, N
+*       DOUBLE PRECISION   C
+*       COMPLEX*16         S
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         CX( * ), CY( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZROT   applies a plane rotation, where the cos (C) is real and the
+*> sin (S) is complex, and the vectors CX and CY are complex.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of elements in the vectors CX and CY.
+*> \endverbatim
+*>
+*> \param[in,out] CX
+*> \verbatim
+*>          CX is COMPLEX*16 array, dimension (N)
+*>          On input, the vector X.
+*>          On output, CX is overwritten with C*X + S*Y.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The increment between successive values of CY.  INCX <> 0.
+*> \endverbatim
+*>
+*> \param[in,out] CY
+*> \verbatim
+*>          CY is COMPLEX*16 array, dimension (N)
+*>          On input, the vector Y.
+*>          On output, CY is overwritten with -CONJG(S)*X + C*Y.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>          The increment between successive values of CY.  INCX <> 0.
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is DOUBLE PRECISION
+*> \param[in] S
+*> \verbatim
+*>          S is COMPLEX*16
+*>          C and S define a rotation
+*>             [  C          S  ]
+*>             [ -conjg(S)   C  ]
+*>          where C*C + S*CONJG(S) = 1.0.
+*> \endverbatim
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE ZROT( N, CX, INCX, CY, INCY, C, S )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, INCY, N
@@ -13,39 +107,6 @@
 *     .. Array Arguments ..
       COMPLEX*16         CX( * ), CY( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZROT   applies a plane rotation, where the cos (C) is real and the
-*  sin (S) is complex, and the vectors CX and CY are complex.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The number of elements in the vectors CX and CY.
-*
-*  CX      (input/output) COMPLEX*16 array, dimension (N)
-*          On input, the vector X.
-*          On output, CX is overwritten with C*X + S*Y.
-*
-*  INCX    (input) INTEGER
-*          The increment between successive values of CY.  INCX <> 0.
-*
-*  CY      (input/output) COMPLEX*16 array, dimension (N)
-*          On input, the vector Y.
-*          On output, CY is overwritten with -CONJG(S)*X + C*Y.
-*
-*  INCY    (input) INTEGER
-*          The increment between successive values of CY.  INCX <> 0.
-*
-*  C       (input) DOUBLE PRECISION
-*  S       (input) COMPLEX*16
-*          C and S define a rotation
-*             [  C          S  ]
-*             [ -conjg(S)   C  ]
-*          where C*C + S*CONJG(S) = 1.0.
 *
 * =====================================================================
 *

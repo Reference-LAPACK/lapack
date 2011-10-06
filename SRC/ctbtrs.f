@@ -1,10 +1,147 @@
+*> \brief \b CTBTRS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CTBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
+*                          LDB, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, TRANS, UPLO
+*       INTEGER            INFO, KD, LDAB, LDB, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            AB( LDAB, * ), B( LDB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CTBTRS solves a triangular system of the form
+*>
+*>    A * X = B,  A**T * X = B,  or  A**H * X = B,
+*>
+*> where A is a triangular band matrix of order N, and B is an
+*> N-by-NRHS matrix.  A check is made to verify that A is nonsingular.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  A is upper triangular;
+*>          = 'L':  A is lower triangular.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies the form of the system of equations:
+*>          = 'N':  A * X = B     (No transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose)
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>          = 'N':  A is non-unit triangular;
+*>          = 'U':  A is unit triangular.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of superdiagonals or subdiagonals of the
+*>          triangular band matrix A.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrix B.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] AB
+*> \verbatim
+*>          AB is COMPLEX array, dimension (LDAB,N)
+*>          The upper or lower triangular band matrix A, stored in the
+*>          first kd+1 rows of AB.  The j-th column of A is stored
+*>          in the j-th column of the array AB as follows:
+*>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
+*>          If DIAG = 'U', the diagonal elements of A are not referenced
+*>          and are assumed to be 1.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD+1.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          On entry, the right hand side matrix B.
+*>          On exit, if INFO = 0, the solution matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, the i-th diagonal element of A is zero,
+*>                indicating that the matrix is singular and the
+*>                solutions X have not been computed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CTBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
      $                   LDB, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, TRANS, UPLO
@@ -13,70 +150,6 @@
 *     .. Array Arguments ..
       COMPLEX            AB( LDAB, * ), B( LDB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CTBTRS solves a triangular system of the form
-*
-*     A * X = B,  A**T * X = B,  or  A**H * X = B,
-*
-*  where A is a triangular band matrix of order N, and B is an
-*  N-by-NRHS matrix.  A check is made to verify that A is nonsingular.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  A is upper triangular;
-*          = 'L':  A is lower triangular.
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies the form of the system of equations:
-*          = 'N':  A * X = B     (No transpose)
-*          = 'T':  A**T * X = B  (Transpose)
-*          = 'C':  A**H * X = B  (Conjugate transpose)
-*
-*  DIAG    (input) CHARACTER*1
-*          = 'N':  A is non-unit triangular;
-*          = 'U':  A is unit triangular.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  KD      (input) INTEGER
-*          The number of superdiagonals or subdiagonals of the
-*          triangular band matrix A.  KD >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrix B.  NRHS >= 0.
-*
-*  AB      (input) COMPLEX array, dimension (LDAB,N)
-*          The upper or lower triangular band matrix A, stored in the
-*          first kd+1 rows of AB.  The j-th column of A is stored
-*          in the j-th column of the array AB as follows:
-*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*          If DIAG = 'U', the diagonal elements of A are not referenced
-*          and are assumed to be 1.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KD+1.
-*
-*  B       (input/output) COMPLEX array, dimension (LDB,NRHS)
-*          On entry, the right hand side matrix B.
-*          On exit, if INFO = 0, the solution matrix X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, the i-th diagonal element of A is zero,
-*                indicating that the matrix is singular and the
-*                solutions X have not been computed.
 *
 *  =====================================================================
 *

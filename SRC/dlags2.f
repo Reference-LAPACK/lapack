@@ -1,82 +1,159 @@
+*> \brief \b DLAGS2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+*                          SNV, CSQ, SNQ )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            UPPER
+*       DOUBLE PRECISION   A1, A2, A3, B1, B2, B3, CSQ, CSU, CSV, SNQ,
+*      $                   SNU, SNV
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAGS2 computes 2-by-2 orthogonal matrices U, V and Q, such
+*> that if ( UPPER ) then
+*>
+*>           U**T *A*Q = U**T *( A1 A2 )*Q = ( x  0  )
+*>                             ( 0  A3 )     ( x  x  )
+*> and
+*>           V**T*B*Q = V**T *( B1 B2 )*Q = ( x  0  )
+*>                            ( 0  B3 )     ( x  x  )
+*>
+*> or if ( .NOT.UPPER ) then
+*>
+*>           U**T *A*Q = U**T *( A1 0  )*Q = ( x  x  )
+*>                             ( A2 A3 )     ( 0  x  )
+*> and
+*>           V**T*B*Q = V**T*( B1 0  )*Q = ( x  x  )
+*>                           ( B2 B3 )     ( 0  x  )
+*>
+*> The rows of the transformed A and B are parallel, where
+*>
+*>   U = (  CSU  SNU ), V = (  CSV SNV ), Q = (  CSQ   SNQ )
+*>       ( -SNU  CSU )      ( -SNV CSV )      ( -SNQ   CSQ )
+*>
+*> Z**T denotes the transpose of Z.
+*>
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPPER
+*> \verbatim
+*>          UPPER is LOGICAL
+*>          = .TRUE.: the input matrices A and B are upper triangular.
+*>          = .FALSE.: the input matrices A and B are lower triangular.
+*> \endverbatim
+*>
+*> \param[in] A1
+*> \verbatim
+*>          A1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] A2
+*> \verbatim
+*>          A2 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] A3
+*> \verbatim
+*>          A3 is DOUBLE PRECISION
+*>          On entry, A1, A2 and A3 are elements of the input 2-by-2
+*>          upper (lower) triangular matrix A.
+*> \endverbatim
+*>
+*> \param[in] B1
+*> \verbatim
+*>          B1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] B2
+*> \verbatim
+*>          B2 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] B3
+*> \verbatim
+*>          B3 is DOUBLE PRECISION
+*>          On entry, B1, B2 and B3 are elements of the input 2-by-2
+*>          upper (lower) triangular matrix B.
+*> \endverbatim
+*>
+*> \param[out] CSU
+*> \verbatim
+*>          CSU is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] SNU
+*> \verbatim
+*>          SNU is DOUBLE PRECISION
+*>          The desired orthogonal matrix U.
+*> \endverbatim
+*>
+*> \param[out] CSV
+*> \verbatim
+*>          CSV is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] SNV
+*> \verbatim
+*>          SNV is DOUBLE PRECISION
+*>          The desired orthogonal matrix V.
+*> \endverbatim
+*>
+*> \param[out] CSQ
+*> \verbatim
+*>          CSQ is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] SNQ
+*> \verbatim
+*>          SNQ is DOUBLE PRECISION
+*>          The desired orthogonal matrix Q.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE DLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
      $                   SNV, CSQ, SNQ )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            UPPER
       DOUBLE PRECISION   A1, A2, A3, B1, B2, B3, CSQ, CSU, CSV, SNQ,
      $                   SNU, SNV
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAGS2 computes 2-by-2 orthogonal matrices U, V and Q, such
-*  that if ( UPPER ) then
-*
-*            U**T *A*Q = U**T *( A1 A2 )*Q = ( x  0  )
-*                              ( 0  A3 )     ( x  x  )
-*  and
-*            V**T*B*Q = V**T *( B1 B2 )*Q = ( x  0  )
-*                             ( 0  B3 )     ( x  x  )
-*
-*  or if ( .NOT.UPPER ) then
-*
-*            U**T *A*Q = U**T *( A1 0  )*Q = ( x  x  )
-*                              ( A2 A3 )     ( 0  x  )
-*  and
-*            V**T*B*Q = V**T*( B1 0  )*Q = ( x  x  )
-*                            ( B2 B3 )     ( 0  x  )
-*
-*  The rows of the transformed A and B are parallel, where
-*
-*    U = (  CSU  SNU ), V = (  CSV SNV ), Q = (  CSQ   SNQ )
-*        ( -SNU  CSU )      ( -SNV CSV )      ( -SNQ   CSQ )
-*
-*  Z**T denotes the transpose of Z.
-*
-*
-*  Arguments
-*  =========
-*
-*  UPPER   (input) LOGICAL
-*          = .TRUE.: the input matrices A and B are upper triangular.
-*          = .FALSE.: the input matrices A and B are lower triangular.
-*
-*  A1      (input) DOUBLE PRECISION
-*
-*  A2      (input) DOUBLE PRECISION
-*
-*  A3      (input) DOUBLE PRECISION
-*          On entry, A1, A2 and A3 are elements of the input 2-by-2
-*          upper (lower) triangular matrix A.
-*
-*  B1      (input) DOUBLE PRECISION
-*
-*  B2      (input) DOUBLE PRECISION
-*
-*  B3      (input) DOUBLE PRECISION
-*          On entry, B1, B2 and B3 are elements of the input 2-by-2
-*          upper (lower) triangular matrix B.
-*
-*  CSU     (output) DOUBLE PRECISION
-*
-*  SNU     (output) DOUBLE PRECISION
-*          The desired orthogonal matrix U.
-*
-*  CSV     (output) DOUBLE PRECISION
-*
-*  SNV     (output) DOUBLE PRECISION
-*          The desired orthogonal matrix V.
-*
-*  CSQ     (output) DOUBLE PRECISION
-*
-*  SNQ     (output) DOUBLE PRECISION
-*          The desired orthogonal matrix Q.
 *
 *  =====================================================================
 *

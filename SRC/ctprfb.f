@@ -1,11 +1,218 @@
+*> \brief \b CTPRFB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, 
+*                          V, LDV, T, LDT, A, LDA, B, LDB, WORK, LDWORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER DIRECT, SIDE, STOREV, TRANS
+*       INTEGER   K, L, LDA, LDB, LDT, LDV, LDWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX   A( LDA, * ), B( LDB, * ), T( LDT, * ), 
+*      $          V( LDV, * ), WORK( LDWORK, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CTPRFB applies a complex "triangular-pentagonal" block reflector H or its 
+*> conjugate transpose H**H to a complex matrix C, which is composed of two 
+*> blocks A and B, either from the left or right.
+*> 
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'L': apply H or H**H from the Left
+*>          = 'R': apply H or H**H from the Right
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          = 'N': apply H (No transpose)
+*>          = 'C': apply H**H (Conjugate transpose)
+*> \endverbatim
+*>
+*> \param[in] DIRECT
+*> \verbatim
+*>          DIRECT is CHARACTER*1
+*>          Indicates how H is formed from a product of elementary
+*>          reflectors
+*>          = 'F': H = H(1) H(2) . . . H(k) (Forward)
+*>          = 'B': H = H(k) . . . H(2) H(1) (Backward)
+*> \endverbatim
+*>
+*> \param[in] STOREV
+*> \verbatim
+*>          STOREV is CHARACTER*1
+*>          Indicates how the vectors which define the elementary
+*>          reflectors are stored:
+*>          = 'C': Columns
+*>          = 'R': Rows
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix B.  
+*>          M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix B.  
+*>          N >= 0.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The order of the matrix T, i.e. the number of elementary
+*>          reflectors whose product defines the block reflector.  
+*>          K >= 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*          K >= L >= 0.  See Further Details.
+*>
+*>  V       (input) COMPLEX array, dimension
+*>                                (LDV,K) if STOREV = 'C'
+*>                                (LDV,M) if STOREV = 'R' and SIDE = 'L'
+*>                                (LDV,N) if STOREV = 'R' and SIDE = 'R'
+*>          The pentagonal matrix V, which contains the elementary reflectors
+*>          H(1), H(2), ..., H(K).  See Further Details.
+*>
+*>  LDV     (input) INTEGER
+*>          The leading dimension of the array V.
+*>          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
+*>          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
+*>          if STOREV = 'R', LDV >= K.
+*>
+*>  T       (input) COMPLEX array, dimension (LDT,K)
+*>          The triangular K-by-K matrix T in the representation of the
+*>          block reflector.  
+*>
+*>  LDT     (input) INTEGER
+*>          The leading dimension of the array T. 
+*>          LDT >= K.
+*>
+*>  A       (input/output) COMPLEX array, dimension 
+*>          (LDA,N) if SIDE = 'L' or (LDA,K) if SIDE = 'R'
+*>          On entry, the K-by-N or M-by-K matrix A.
+*>          On exit, A is overwritten by the corresponding block of 
+*>          H*C or H**H*C or C*H or C*H**H.  See Futher Details.
+*>
+*>  LDA     (input) INTEGER
+*>          The leading dimension of the array A. 
+*>          If SIDE = 'L', LDC >= max(1,K);
+*>          If SIDE = 'R', LDC >= max(1,M). 
+*>
+*>  B       (input/output) COMPLEX array, dimension (LDB,N)
+*>          On entry, the M-by-N matrix B.
+*>          On exit, B is overwritten by the corresponding block of
+*>          H*C or H**H*C or C*H or C*H**H.  See Further Details.
+*>
+*>  LDB     (input) INTEGER
+*>          The leading dimension of the array B. 
+*>          LDB >= max(1,M).
+*>
+*>  WORK    (workspace) COMPLEX array, dimension 
+*>          (LDWORK,N) if SIDE = 'L',
+*>          (LDWORK,K) if SIDE = 'R'.
+*>
+*>  LDWORK  (input) INTEGER
+*>          The leading dimension of the array WORK.
+*>          If SIDE = 'L', LDWORK >= K; 
+*>          if SIDE = 'R', LDWORK >= M.
+*>
+*>
+*>  The matrix C is a composite matrix formed from blocks A and B.
+*>  The block B is of size M-by-N; if SIDE = 'R', A is of size M-by-K, 
+*>  and if SIDE = 'L', A is of size K-by-N.
+*>
+*>  If SIDE = 'R' and DIRECT = 'F', C = [A B].
+*>
+*>  If SIDE = 'L' and DIRECT = 'F', C = [A] 
+*>                                      [B].
+*>
+*>  If SIDE = 'R' and DIRECT = 'B', C = [B A].
+*>
+*>  If SIDE = 'L' and DIRECT = 'B', C = [B]
+*>                                      [A]. 
+*>
+*>  The pentagonal matrix V is composed of a rectangular block V1 and a 
+*>  trapezoidal block V2.  The size of the trapezoidal block is determined by 
+*>  the parameter L, where 0<=L<=K.  If L=K, the V2 block of V is triangular;
+*>  if L=0, there is no trapezoidal block, thus V = V1 is rectangular.
+*>
+*>  If DIRECT = 'F' and STOREV = 'C':  V = [V1]
+*>                                         [V2]
+*>     - V2 is upper trapezoidal (first L rows of K-by-K upper triangular)
+*>
+*>  If DIRECT = 'F' and STOREV = 'R':  V = [V1 V2]
+*>
+*>     - V2 is lower trapezoidal (first L columns of K-by-K lower triangular)
+*>
+*>  If DIRECT = 'B' and STOREV = 'C':  V = [V2]
+*>                                         [V1]
+*>     - V2 is lower trapezoidal (last L rows of K-by-K lower triangular)
+*>
+*>  If DIRECT = 'B' and STOREV = 'R':  V = [V2 V1]
+*>    
+*>     - V2 is upper trapezoidal (last L columns of K-by-K upper triangular)
+*>
+*>  If STOREV = 'C' and SIDE = 'L', V is M-by-K with V2 L-by-K.
+*>
+*>  If STOREV = 'C' and SIDE = 'R', V is N-by-K with V2 L-by-K.
+*>
+*>  If STOREV = 'R' and SIDE = 'L', V is K-by-M with V2 K-by-L.
+*>
+*>  If STOREV = 'R' and SIDE = 'R', V is K-by-N with V2 K-by-L.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CTPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, 
      $                   V, LDV, T, LDT, A, LDA, B, LDB, WORK, LDWORK )
-      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.x) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- July 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER DIRECT, SIDE, STOREV, TRANS
@@ -15,149 +222,6 @@
       COMPLEX   A( LDA, * ), B( LDB, * ), T( LDT, * ), 
      $          V( LDV, * ), WORK( LDWORK, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CTPRFB applies a complex "triangular-pentagonal" block reflector H or its 
-*  conjugate transpose H**H to a complex matrix C, which is composed of two 
-*  blocks A and B, either from the left or right.
-*  
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'L': apply H or H**H from the Left
-*          = 'R': apply H or H**H from the Right
-*
-*  TRANS   (input) CHARACTER*1
-*          = 'N': apply H (No transpose)
-*          = 'C': apply H**H (Conjugate transpose)
-*
-*  DIRECT  (input) CHARACTER*1
-*          Indicates how H is formed from a product of elementary
-*          reflectors
-*          = 'F': H = H(1) H(2) . . . H(k) (Forward)
-*          = 'B': H = H(k) . . . H(2) H(1) (Backward)
-*
-*  STOREV  (input) CHARACTER*1
-*          Indicates how the vectors which define the elementary
-*          reflectors are stored:
-*          = 'C': Columns
-*          = 'R': Rows
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix B.  
-*          M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix B.  
-*          N >= 0.
-*
-*  K       (input) INTEGER
-*          The order of the matrix T, i.e. the number of elementary
-*          reflectors whose product defines the block reflector.  
-*          K >= 0.
-*
-*  L       (input) INTEGER
-*          The order of the trapezoidal part of V.  
-*          K >= L >= 0.  See Further Details.
-*
-*  V       (input) COMPLEX array, dimension
-*                                (LDV,K) if STOREV = 'C'
-*                                (LDV,M) if STOREV = 'R' and SIDE = 'L'
-*                                (LDV,N) if STOREV = 'R' and SIDE = 'R'
-*          The pentagonal matrix V, which contains the elementary reflectors
-*          H(1), H(2), ..., H(K).  See Further Details.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of the array V.
-*          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
-*          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
-*          if STOREV = 'R', LDV >= K.
-*
-*  T       (input) COMPLEX array, dimension (LDT,K)
-*          The triangular K-by-K matrix T in the representation of the
-*          block reflector.  
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of the array T. 
-*          LDT >= K.
-*
-*  A       (input/output) COMPLEX array, dimension 
-*          (LDA,N) if SIDE = 'L' or (LDA,K) if SIDE = 'R'
-*          On entry, the K-by-N or M-by-K matrix A.
-*          On exit, A is overwritten by the corresponding block of 
-*          H*C or H**H*C or C*H or C*H**H.  See Futher Details.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. 
-*          If SIDE = 'L', LDC >= max(1,K);
-*          If SIDE = 'R', LDC >= max(1,M). 
-*
-*  B       (input/output) COMPLEX array, dimension (LDB,N)
-*          On entry, the M-by-N matrix B.
-*          On exit, B is overwritten by the corresponding block of
-*          H*C or H**H*C or C*H or C*H**H.  See Further Details.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. 
-*          LDB >= max(1,M).
-*
-*  WORK    (workspace) COMPLEX array, dimension 
-*          (LDWORK,N) if SIDE = 'L',
-*          (LDWORK,K) if SIDE = 'R'.
-*
-*  LDWORK  (input) INTEGER
-*          The leading dimension of the array WORK.
-*          If SIDE = 'L', LDWORK >= K; 
-*          if SIDE = 'R', LDWORK >= M.
-*
-*  Further Details
-*  ===============
-*
-*  The matrix C is a composite matrix formed from blocks A and B.
-*  The block B is of size M-by-N; if SIDE = 'R', A is of size M-by-K, 
-*  and if SIDE = 'L', A is of size K-by-N.
-*
-*  If SIDE = 'R' and DIRECT = 'F', C = [A B].
-*
-*  If SIDE = 'L' and DIRECT = 'F', C = [A] 
-*                                      [B].
-*
-*  If SIDE = 'R' and DIRECT = 'B', C = [B A].
-*
-*  If SIDE = 'L' and DIRECT = 'B', C = [B]
-*                                      [A]. 
-*
-*  The pentagonal matrix V is composed of a rectangular block V1 and a 
-*  trapezoidal block V2.  The size of the trapezoidal block is determined by 
-*  the parameter L, where 0<=L<=K.  If L=K, the V2 block of V is triangular;
-*  if L=0, there is no trapezoidal block, thus V = V1 is rectangular.
-*
-*  If DIRECT = 'F' and STOREV = 'C':  V = [V1]
-*                                         [V2]
-*     - V2 is upper trapezoidal (first L rows of K-by-K upper triangular)
-*
-*  If DIRECT = 'F' and STOREV = 'R':  V = [V1 V2]
-*
-*     - V2 is lower trapezoidal (first L columns of K-by-K lower triangular)
-*
-*  If DIRECT = 'B' and STOREV = 'C':  V = [V2]
-*                                         [V1]
-*     - V2 is lower trapezoidal (last L rows of K-by-K lower triangular)
-*
-*  If DIRECT = 'B' and STOREV = 'R':  V = [V2 V1]
-*    
-*     - V2 is upper trapezoidal (last L columns of K-by-K upper triangular)
-*
-*  If STOREV = 'C' and SIDE = 'L', V is M-by-K with V2 L-by-K.
-*
-*  If STOREV = 'C' and SIDE = 'R', V is N-by-K with V2 L-by-K.
-*
-*  If STOREV = 'R' and SIDE = 'L', V is K-by-M with V2 K-by-L.
-*
-*  If STOREV = 'R' and SIDE = 'R', V is K-by-N with V2 K-by-L.
 *
 *  ==========================================================================
 *

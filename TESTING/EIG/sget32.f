@@ -1,49 +1,98 @@
+*> \brief \b SGET32
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET32( RMAX, LMAX, NINFO, KNT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, LMAX, NINFO
+*       REAL               RMAX
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET32 tests SLASY2, a routine for solving
+*>
+*>         op(TL)*X + ISGN*X*op(TR) = SCALE*B
+*>
+*> where TL is N1 by N1, TR is N2 by N2, and N1,N2 =1 or 2 only.
+*> X and B are N1 by N2, op() is an optional transpose, an
+*> ISGN = 1 or -1. SCALE is chosen less than or equal to 1 to
+*> avoid overflow in X.
+*>
+*> The test condition is that the scaled residual
+*>
+*> norm( op(TL)*X + ISGN*X*op(TR) = SCALE*B )
+*>      / ( max( ulp*norm(TL), ulp*norm(TR)) * norm(X), SMLNUM )
+*>
+*> should be on the order of 1. Here, ulp is the machine precision.
+*> Also, it is verified that SCALE is less than or equal to 1, and
+*> that XNORM = infinity-norm(X).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is REAL
+*>          Value of the largest test ratio.
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER
+*>          Example number where largest test ratio achieved.
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER
+*>          Number of examples returned with INFO.NE.0.
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGET32( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, LMAX, NINFO
       REAL               RMAX
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET32 tests SLASY2, a routine for solving
-*
-*          op(TL)*X + ISGN*X*op(TR) = SCALE*B
-*
-*  where TL is N1 by N1, TR is N2 by N2, and N1,N2 =1 or 2 only.
-*  X and B are N1 by N2, op() is an optional transpose, an
-*  ISGN = 1 or -1. SCALE is chosen less than or equal to 1 to
-*  avoid overflow in X.
-*
-*  The test condition is that the scaled residual
-*
-*  norm( op(TL)*X + ISGN*X*op(TR) = SCALE*B )
-*       / ( max( ulp*norm(TL), ulp*norm(TR)) * norm(X), SMLNUM )
-*
-*  should be on the order of 1. Here, ulp is the machine precision.
-*  Also, it is verified that SCALE is less than or equal to 1, and
-*  that XNORM = infinity-norm(X).
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) REAL
-*          Value of the largest test ratio.
-*
-*  LMAX    (output) INTEGER
-*          Example number where largest test ratio achieved.
-*
-*  NINFO   (output) INTEGER
-*          Number of examples returned with INFO.NE.0.
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
 *
 *  =====================================================================
 *

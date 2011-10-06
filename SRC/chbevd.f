@@ -1,10 +1,220 @@
+*> \brief <b> CHBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+*                          LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBZ, UPLO
+*       INTEGER            INFO, KD, LDAB, LDZ, LIWORK, LRWORK, LWORK, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               RWORK( * ), W( * )
+*       COMPLEX            AB( LDAB, * ), WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CHBEVD computes all the eigenvalues and, optionally, eigenvectors of
+*> a complex Hermitian band matrix A.  If eigenvectors are desired, it
+*> uses a divide and conquer algorithm.
+*>
+*> The divide and conquer algorithm makes very mild assumptions about
+*> floating point arithmetic. It will work on machines with a guard
+*> digit in add/subtract, or on those binary machines without guard
+*> digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
+*> Cray-2. It could conceivably fail on hexadecimal or decimal machines
+*> without guard digits, but we know of none.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBZ
+*> \verbatim
+*>          JOBZ is CHARACTER*1
+*>          = 'N':  Compute eigenvalues only;
+*>          = 'V':  Compute eigenvalues and eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of superdiagonals of the matrix A if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AB
+*> \verbatim
+*>          AB is COMPLEX array, dimension (LDAB, N)
+*>          On entry, the upper or lower triangle of the Hermitian band
+*>          matrix A, stored in the first KD+1 rows of the array.  The
+*>          j-th column of A is stored in the j-th column of the array AB
+*>          as follows:
+*>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
+*> \endverbatim
+*> \verbatim
+*>          On exit, AB is overwritten by values generated during the
+*>          reduction to tridiagonal form.  If UPLO = 'U', the first
+*>          superdiagonal and the diagonal of the tridiagonal matrix T
+*>          are returned in rows KD and KD+1 of AB, and if UPLO = 'L',
+*>          the diagonal and first subdiagonal of T are returned in the
+*>          first two rows of AB.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD + 1.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is REAL array, dimension (N)
+*>          If INFO = 0, the eigenvalues in ascending order.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX array, dimension (LDZ, N)
+*>          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal
+*>          eigenvectors of the matrix A, with the i-th column of Z
+*>          holding the eigenvector associated with W(i).
+*>          If JOBZ = 'N', then Z is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1, and if
+*>          JOBZ = 'V', LDZ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>          If N <= 1,               LWORK must be at least 1.
+*>          If JOBZ = 'N' and N > 1, LWORK must be at least N.
+*>          If JOBZ = 'V' and N > 1, LWORK must be at least 2*N**2.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal sizes of the WORK, RWORK and
+*>          IWORK arrays, returns these values as the first entries of
+*>          the WORK, RWORK and IWORK arrays, and no error message
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array,
+*>                                         dimension (LRWORK)
+*>          On exit, if INFO = 0, RWORK(1) returns the optimal LRWORK.
+*> \endverbatim
+*>
+*> \param[in] LRWORK
+*> \verbatim
+*>          LRWORK is INTEGER
+*>          The dimension of array RWORK.
+*>          If N <= 1,               LRWORK must be at least 1.
+*>          If JOBZ = 'N' and N > 1, LRWORK must be at least N.
+*>          If JOBZ = 'V' and N > 1, LRWORK must be at least
+*>                        1 + 5*N + 2*N**2.
+*> \endverbatim
+*> \verbatim
+*>          If LRWORK = -1, then a workspace query is assumed; the
+*>          routine only calculates the optimal sizes of the WORK, RWORK
+*>          and IWORK arrays, returns these values as the first entries
+*>          of the WORK, RWORK and IWORK arrays, and no error message
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (MAX(1,LIWORK))
+*>          On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.
+*> \endverbatim
+*>
+*> \param[in] LIWORK
+*> \verbatim
+*>          LIWORK is INTEGER
+*>          The dimension of array IWORK.
+*>          If JOBZ = 'N' or N <= 1, LIWORK must be at least 1.
+*>          If JOBZ = 'V' and N > 1, LIWORK must be at least 3 + 5*N .
+*> \endverbatim
+*> \verbatim
+*>          If LIWORK = -1, then a workspace query is assumed; the
+*>          routine only calculates the optimal sizes of the WORK, RWORK
+*>          and IWORK arrays, returns these values as the first entries
+*>          of the WORK, RWORK and IWORK arrays, and no error message
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  if INFO = i, the algorithm failed to converge; i
+*>                off-diagonal elements of an intermediate tridiagonal
+*>                form did not converge to zero.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHEReigen
+*
+*  =====================================================================
       SUBROUTINE CHBEVD( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, UPLO
@@ -15,122 +225,6 @@
       REAL               RWORK( * ), W( * )
       COMPLEX            AB( LDAB, * ), WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CHBEVD computes all the eigenvalues and, optionally, eigenvectors of
-*  a complex Hermitian band matrix A.  If eigenvectors are desired, it
-*  uses a divide and conquer algorithm.
-*
-*  The divide and conquer algorithm makes very mild assumptions about
-*  floating point arithmetic. It will work on machines with a guard
-*  digit in add/subtract, or on those binary machines without guard
-*  digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
-*  Cray-2. It could conceivably fail on hexadecimal or decimal machines
-*  without guard digits, but we know of none.
-*
-*  Arguments
-*  =========
-*
-*  JOBZ    (input) CHARACTER*1
-*          = 'N':  Compute eigenvalues only;
-*          = 'V':  Compute eigenvalues and eigenvectors.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  KD      (input) INTEGER
-*          The number of superdiagonals of the matrix A if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
-*
-*  AB      (input/output) COMPLEX array, dimension (LDAB, N)
-*          On entry, the upper or lower triangle of the Hermitian band
-*          matrix A, stored in the first KD+1 rows of the array.  The
-*          j-th column of A is stored in the j-th column of the array AB
-*          as follows:
-*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*
-*          On exit, AB is overwritten by values generated during the
-*          reduction to tridiagonal form.  If UPLO = 'U', the first
-*          superdiagonal and the diagonal of the tridiagonal matrix T
-*          are returned in rows KD and KD+1 of AB, and if UPLO = 'L',
-*          the diagonal and first subdiagonal of T are returned in the
-*          first two rows of AB.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KD + 1.
-*
-*  W       (output) REAL array, dimension (N)
-*          If INFO = 0, the eigenvalues in ascending order.
-*
-*  Z       (output) COMPLEX array, dimension (LDZ, N)
-*          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal
-*          eigenvectors of the matrix A, with the i-th column of Z
-*          holding the eigenvector associated with W(i).
-*          If JOBZ = 'N', then Z is not referenced.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= 1, and if
-*          JOBZ = 'V', LDZ >= max(1,N).
-*
-*  WORK    (workspace/output) COMPLEX array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*          If N <= 1,               LWORK must be at least 1.
-*          If JOBZ = 'N' and N > 1, LWORK must be at least N.
-*          If JOBZ = 'V' and N > 1, LWORK must be at least 2*N**2.
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal sizes of the WORK, RWORK and
-*          IWORK arrays, returns these values as the first entries of
-*          the WORK, RWORK and IWORK arrays, and no error message
-*          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
-*
-*  RWORK   (workspace/output) REAL array,
-*                                         dimension (LRWORK)
-*          On exit, if INFO = 0, RWORK(1) returns the optimal LRWORK.
-*
-*  LRWORK  (input) INTEGER
-*          The dimension of array RWORK.
-*          If N <= 1,               LRWORK must be at least 1.
-*          If JOBZ = 'N' and N > 1, LRWORK must be at least N.
-*          If JOBZ = 'V' and N > 1, LRWORK must be at least
-*                        1 + 5*N + 2*N**2.
-*
-*          If LRWORK = -1, then a workspace query is assumed; the
-*          routine only calculates the optimal sizes of the WORK, RWORK
-*          and IWORK arrays, returns these values as the first entries
-*          of the WORK, RWORK and IWORK arrays, and no error message
-*          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
-*
-*  IWORK   (workspace/output) INTEGER array, dimension (MAX(1,LIWORK))
-*          On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.
-*
-*  LIWORK  (input) INTEGER
-*          The dimension of array IWORK.
-*          If JOBZ = 'N' or N <= 1, LIWORK must be at least 1.
-*          If JOBZ = 'V' and N > 1, LIWORK must be at least 3 + 5*N .
-*
-*          If LIWORK = -1, then a workspace query is assumed; the
-*          routine only calculates the optimal sizes of the WORK, RWORK
-*          and IWORK arrays, returns these values as the first entries
-*          of the WORK, RWORK and IWORK arrays, and no error message
-*          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if INFO = i, the algorithm failed to converge; i
-*                off-diagonal elements of an intermediate tridiagonal
-*                form did not converge to zero.
 *
 *  =====================================================================
 *

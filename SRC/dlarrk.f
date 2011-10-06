@@ -1,11 +1,146 @@
+*> \brief \b DLARRK
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLARRK( N, IW, GL, GU,
+*                           D, E2, PIVMIN, RELTOL, W, WERR, INFO)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER   INFO, IW, N
+*       DOUBLE PRECISION    PIVMIN, RELTOL, GL, GU, W, WERR
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), E2( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLARRK computes one eigenvalue of a symmetric tridiagonal
+*> matrix T to suitable accuracy. This is an auxiliary code to be
+*> called from DSTEMR.
+*>
+*> To avoid overflow, the matrix must be scaled so that its
+*> largest element is no greater than overflow**(1/2) * underflow**(1/4) in absolute value, and for greatest
+*> accuracy, it should not be much smaller than that.
+*>
+*> See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
+*> Matrix", Report CS41, Computer Science Dept., Stanford
+*> University, July 21, 1966.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the tridiagonal matrix T.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] IW
+*> \verbatim
+*>          IW is INTEGER
+*>          The index of the eigenvalues to be returned.
+*> \endverbatim
+*>
+*> \param[in] GL
+*> \verbatim
+*>          GL is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] GU
+*> \verbatim
+*>          GU is DOUBLE PRECISION
+*>          An upper and a lower bound on the eigenvalue.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The n diagonal elements of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] E2
+*> \verbatim
+*>          E2 is DOUBLE PRECISION array, dimension (N-1)
+*>          The (n-1) squared off-diagonal elements of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] PIVMIN
+*> \verbatim
+*>          PIVMIN is DOUBLE PRECISION
+*>          The minimum pivot allowed in the Sturm sequence for T.
+*> \endverbatim
+*>
+*> \param[in] RELTOL
+*> \verbatim
+*>          RELTOL is DOUBLE PRECISION
+*>          The minimum relative width of an interval.  When an interval
+*>          is narrower than RELTOL times the larger (in
+*>          magnitude) endpoint, then it is considered to be
+*>          sufficiently small, i.e., converged.  Note: this should
+*>          always be at least radix*machine epsilon.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] WERR
+*> \verbatim
+*>          WERR is DOUBLE PRECISION
+*>          The error bound on the corresponding eigenvalue approximation
+*>          in W.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:       Eigenvalue converged
+*>          = -1:      Eigenvalue did NOT converge
+*> \endverbatim
+*> \verbatim
+*>  Internal Parameters
+*>  ===================
+*> \endverbatim
+*> \verbatim
+*>  FUDGE   DOUBLE PRECISION, default = 2
+*>          A "fudge factor" to widen the Gershgorin intervals.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE DLARRK( N, IW, GL, GU,
      $                    D, E2, PIVMIN, RELTOL, W, WERR, INFO)
-      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER   INFO, IW, N
@@ -14,68 +149,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   D( * ), E2( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLARRK computes one eigenvalue of a symmetric tridiagonal
-*  matrix T to suitable accuracy. This is an auxiliary code to be
-*  called from DSTEMR.
-*
-*  To avoid overflow, the matrix must be scaled so that its
-*  largest element is no greater than overflow**(1/2) *
-*  underflow**(1/4) in absolute value, and for greatest
-*  accuracy, it should not be much smaller than that.
-*
-*  See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
-*  Matrix", Report CS41, Computer Science Dept., Stanford
-*  University, July 21, 1966.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the tridiagonal matrix T.  N >= 0.
-*
-*  IW      (input) INTEGER
-*          The index of the eigenvalues to be returned.
-*
-*  GL      (input) DOUBLE PRECISION
-*
-*  GU      (input) DOUBLE PRECISION
-*          An upper and a lower bound on the eigenvalue.
-*
-*  D       (input) DOUBLE PRECISION array, dimension (N)
-*          The n diagonal elements of the tridiagonal matrix T.
-*
-*  E2      (input) DOUBLE PRECISION array, dimension (N-1)
-*          The (n-1) squared off-diagonal elements of the tridiagonal matrix T.
-*
-*  PIVMIN  (input) DOUBLE PRECISION
-*          The minimum pivot allowed in the Sturm sequence for T.
-*
-*  RELTOL  (input) DOUBLE PRECISION
-*          The minimum relative width of an interval.  When an interval
-*          is narrower than RELTOL times the larger (in
-*          magnitude) endpoint, then it is considered to be
-*          sufficiently small, i.e., converged.  Note: this should
-*          always be at least radix*machine epsilon.
-*
-*  W       (output) DOUBLE PRECISION
-*
-*  WERR    (output) DOUBLE PRECISION
-*          The error bound on the corresponding eigenvalue approximation
-*          in W.
-*
-*  INFO    (output) INTEGER
-*          = 0:       Eigenvalue converged
-*          = -1:      Eigenvalue did NOT converge
-*
-*  Internal Parameters
-*  ===================
-*
-*  FUDGE   DOUBLE PRECISION, default = 2
-*          A "fudge factor" to widen the Gershgorin intervals.
 *
 *  =====================================================================
 *

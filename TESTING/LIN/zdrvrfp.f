@@ -1,3 +1,244 @@
+*> \brief \b ZDRVRFP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+*      +              THRESH, A, ASAV, AFAC, AINV, B,
+*      +              BSAV, XACT, X, ARF, ARFINV,
+*      +              Z_WORK_ZLATMS, Z_WORK_ZPOT02,
+*      +              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
+*      +              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NN, NNS, NNT, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NVAL( NN ), NSVAL( NNS ), NTVAL( NNT )
+*       COMPLEX*16         A( * )
+*       COMPLEX*16         AINV( * )
+*       COMPLEX*16         ASAV( * )
+*       COMPLEX*16         B( * )
+*       COMPLEX*16         BSAV( * )
+*       COMPLEX*16         AFAC( * )
+*       COMPLEX*16         ARF( * )
+*       COMPLEX*16         ARFINV( * )
+*       COMPLEX*16         XACT( * )
+*       COMPLEX*16         X( * )
+*       COMPLEX*16         Z_WORK_ZLATMS( * )
+*       COMPLEX*16         Z_WORK_ZPOT02( * )
+*       COMPLEX*16         Z_WORK_ZPOT03( * )
+*       DOUBLE PRECISION   D_WORK_ZLATMS( * )
+*       DOUBLE PRECISION   D_WORK_ZLANHE( * )
+*       DOUBLE PRECISION   D_WORK_ZPOT01( * )
+*       DOUBLE PRECISION   D_WORK_ZPOT02( * )
+*       DOUBLE PRECISION   D_WORK_ZPOT03( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZDRVRFP tests the LAPACK RFP routines:
+*>     ZPFTRF, ZPFTRS, and ZPFTRI.
+*>
+*> This testing routine follow the same tests as ZDRVPO (test for the full
+*> format Symmetric Positive Definite solver).
+*>
+*> The tests are performed in Full Format, convertion back and forth from
+*> full format to RFP format are performed using the routines ZTRTTF and
+*> ZTFTTR.
+*>
+*> First, a specific matrix A of size N is created. There is nine types of 
+*> different matrixes possible.
+*>  1. Diagonal                        6. Random, CNDNUM = sqrt(0.1/EPS)
+*>  2. Random, CNDNUM = 2              7. Random, CNDNUM = 0.1/EPS
+*> *3. First row and column zero       8. Scaled near underflow
+*> *4. Last row and column zero        9. Scaled near overflow
+*> *5. Middle row and column zero
+*> (* - tests error exits from ZPFTRF, no test ratios are computed)
+*> A solution XACT of size N-by-NRHS is created and the associated right
+*> hand side B as well. Then ZPFTRF is called to compute L (or U), the
+*> Cholesky factor of A. Then L (or U) is used to solve the linear system
+*> of equations AX = B. This gives X. Then L (or U) is used to compute the
+*> inverse of A, AINV. The following four tests are then performed:
+*> (1) norm( L*L' - A ) / ( N * norm(A) * EPS ) or
+*>     norm( U'*U - A ) / ( N * norm(A) * EPS ),
+*> (2) norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
+*> (3) norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
+*> (4) ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
+*> where EPS is the machine precision, RCOND the condition number of A, and
+*> norm( . ) the 1-norm for (1,2,3) and the inf-norm for (4).
+*> Errors occur when INFO parameter is not as expected. Failures occur when
+*> a test ratios is greater than THRES.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>                The unit number for output.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>                The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>                The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[in] NNS
+*> \verbatim
+*>          NNS is INTEGER
+*>                The number of values of NRHS contained in the vector NSVAL.
+*> \endverbatim
+*>
+*> \param[in] NSVAL
+*> \verbatim
+*>          NSVAL is INTEGER array, dimension (NNS)
+*>                The values of the number of right-hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] NNT
+*> \verbatim
+*>          NNT is INTEGER
+*>                The number of values of MATRIX TYPE contained in the vector NTVAL.
+*> \endverbatim
+*>
+*> \param[in] NTVAL
+*> \verbatim
+*>          NTVAL is INTEGER array, dimension (NNT)
+*>                The values of matrix type (between 0 and 9 for PO/PP/PF matrices).
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>                The threshold value for the test ratios.  A result is
+*>                included in the output file if RESULT >= THRESH.  To have
+*>                every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] ASAV
+*> \verbatim
+*>          ASAV is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AFAC
+*> \verbatim
+*>          AFAC is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AINV
+*> \verbatim
+*>          AINV is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] BSAV
+*> \verbatim
+*>          BSAV is COMPLEX*16 array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] XACT
+*> \verbatim
+*>          XACT is COMPLEX*16 array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] ARF
+*> \verbatim
+*>          ARF is COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2)
+*> \endverbatim
+*>
+*> \param[out] ARFINV
+*> \verbatim
+*>          ARFINV is COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2)
+*> \endverbatim
+*>
+*> \param[out] Z_WORK_ZLATMS
+*> \verbatim
+*>          Z_WORK_ZLATMS is COMPLEX*16 array, dimension ( 3*NMAX )
+*> \endverbatim
+*>
+*> \param[out] Z_WORK_ZPOT02
+*> \verbatim
+*>          Z_WORK_ZPOT02 is COMPLEX*16 array, dimension ( NMAX*MAXRHS )
+*> \endverbatim
+*>
+*> \param[out] Z_WORK_ZPOT03
+*> \verbatim
+*>          Z_WORK_ZPOT03 is COMPLEX*16 array, dimension ( NMAX*NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_ZLATMS
+*> \verbatim
+*>          D_WORK_ZLATMS is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_ZLANHE
+*> \verbatim
+*>          D_WORK_ZLANHE is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_ZPOT01
+*> \verbatim
+*>          D_WORK_ZPOT01 is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_ZPOT02
+*> \verbatim
+*>          D_WORK_ZPOT02 is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_ZPOT03
+*> \verbatim
+*>          D_WORK_ZPOT03 is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
@@ -5,11 +246,10 @@
      +              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
      +              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
 *
-      IMPLICIT NONE
-*
 *  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            NN, NNS, NNT, NOUT
@@ -36,107 +276,6 @@
       DOUBLE PRECISION   D_WORK_ZPOT02( * )
       DOUBLE PRECISION   D_WORK_ZPOT03( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZDRVRFP tests the LAPACK RFP routines:
-*      ZPFTRF, ZPFTRS, and ZPFTRI.
-*
-*  This testing routine follow the same tests as ZDRVPO (test for the full
-*  format Symmetric Positive Definite solver).
-*
-*  The tests are performed in Full Format, convertion back and forth from
-*  full format to RFP format are performed using the routines ZTRTTF and
-*  ZTFTTR.
-*
-*  First, a specific matrix A of size N is created. There is nine types of 
-*  different matrixes possible.
-*   1. Diagonal                        6. Random, CNDNUM = sqrt(0.1/EPS)
-*   2. Random, CNDNUM = 2              7. Random, CNDNUM = 0.1/EPS
-*  *3. First row and column zero       8. Scaled near underflow
-*  *4. Last row and column zero        9. Scaled near overflow
-*  *5. Middle row and column zero
-*  (* - tests error exits from ZPFTRF, no test ratios are computed)
-*  A solution XACT of size N-by-NRHS is created and the associated right
-*  hand side B as well. Then ZPFTRF is called to compute L (or U), the
-*  Cholesky factor of A. Then L (or U) is used to solve the linear system
-*  of equations AX = B. This gives X. Then L (or U) is used to compute the
-*  inverse of A, AINV. The following four tests are then performed:
-*  (1) norm( L*L' - A ) / ( N * norm(A) * EPS ) or
-*      norm( U'*U - A ) / ( N * norm(A) * EPS ),
-*  (2) norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
-*  (3) norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
-*  (4) ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
-*  where EPS is the machine precision, RCOND the condition number of A, and
-*  norm( . ) the 1-norm for (1,2,3) and the inf-norm for (4).
-*  Errors occur when INFO parameter is not as expected. Failures occur when
-*  a test ratios is greater than THRES.
-*
-*  Arguments
-*  =========
-*
-*  NOUT          (input) INTEGER
-*                The unit number for output.
-*
-*  NN            (input) INTEGER
-*                The number of values of N contained in the vector NVAL.
-*
-*  NVAL          (input) INTEGER array, dimension (NN)
-*                The values of the matrix dimension N.
-*
-*  NNS           (input) INTEGER
-*                The number of values of NRHS contained in the vector NSVAL.
-*
-*  NSVAL         (input) INTEGER array, dimension (NNS)
-*                The values of the number of right-hand sides NRHS.
-*
-*  NNT           (input) INTEGER
-*                The number of values of MATRIX TYPE contained in the vector NTVAL.
-*
-*  NTVAL         (input) INTEGER array, dimension (NNT)
-*                The values of matrix type (between 0 and 9 for PO/PP/PF matrices).
-*
-*  THRESH        (input) DOUBLE PRECISION
-*                The threshold value for the test ratios.  A result is
-*                included in the output file if RESULT >= THRESH.  To have
-*                every test ratio printed, use THRESH = 0.
-*
-*  A             (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  ASAV          (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  AFAC          (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  AINV          (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  B             (workspace) COMPLEX*16 array, dimension (NMAX*MAXRHS)
-*
-*  BSAV          (workspace) COMPLEX*16 array, dimension (NMAX*MAXRHS)
-*
-*  XACT          (workspace) COMPLEX*16 array, dimension (NMAX*MAXRHS)
-*
-*  X             (workspace) COMPLEX*16 array, dimension (NMAX*MAXRHS)
-*
-*  ARF           (workspace) COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2)
-*
-*  ARFINV        (workspace) COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2)
-*
-*  Z_WORK_ZLATMS (workspace) COMPLEX*16 array, dimension ( 3*NMAX )
-*
-*  Z_WORK_ZPOT02 (workspace) COMPLEX*16 array, dimension ( NMAX*MAXRHS )
-*
-*  Z_WORK_ZPOT03 (workspace) COMPLEX*16 array, dimension ( NMAX*NMAX )
-*
-*  D_WORK_ZLATMS (workspace) DOUBLE PRECISION array, dimension ( NMAX )
-*
-*  D_WORK_ZLANHE (workspace) DOUBLE PRECISION array, dimension ( NMAX )
-*
-*  D_WORK_ZPOT01 (workspace) DOUBLE PRECISION array, dimension ( NMAX )
-*
-*  D_WORK_ZPOT02 (workspace) DOUBLE PRECISION array, dimension ( NMAX )
-*
-*  D_WORK_ZPOT03 (workspace) DOUBLE PRECISION array, dimension ( NMAX )
 *
 *  =====================================================================
 *

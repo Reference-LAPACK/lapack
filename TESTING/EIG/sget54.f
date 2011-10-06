@@ -1,9 +1,167 @@
+*> \brief \b SGET54
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+*                          LDV, WORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, LDS, LDT, LDU, LDV, N
+*       REAL               RESULT
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), B( LDB, * ), S( LDS, * ),
+*      $                   T( LDT, * ), U( LDU, * ), V( LDV, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET54 checks a generalized decomposition of the form
+*>
+*>          A = U*S*V'  and B = U*T* V'
+*>
+*> where ' means transpose and U and V are orthogonal.
+*>
+*> Specifically,
+*>
+*>  RESULT = ||( A - U*S*V', B - U*T*V' )|| / (||( A, B )||*n*ulp )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The size of the matrix.  If it is zero, SGET54 does nothing.
+*>          It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA, N)
+*>          The original (unfactored) matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB, N)
+*>          The original (unfactored) matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is REAL array, dimension (LDS, N)
+*>          The factored matrix S.
+*> \endverbatim
+*>
+*> \param[in] LDS
+*> \verbatim
+*>          LDS is INTEGER
+*>          The leading dimension of S.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is REAL array, dimension (LDT, N)
+*>          The factored matrix T.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of T.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is REAL array, dimension (LDU, N)
+*>          The orthogonal matrix on the left-hand side in the
+*>          decomposition.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of U.  LDU must be at least N and
+*>          at least 1.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is REAL array, dimension (LDV, N)
+*>          The orthogonal matrix on the left-hand side in the
+*>          decomposition.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of V.  LDV must be at least N and
+*>          at least 1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (3*N**2)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL
+*>          The value RESULT, It is currently limited to 1/ulp, to
+*>          avoid overflow. Errors are flagged by RESULT=10/ulp.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
      $                   LDV, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, LDS, LDT, LDU, LDV, N
@@ -14,76 +172,6 @@
      $                   T( LDT, * ), U( LDU, * ), V( LDV, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET54 checks a generalized decomposition of the form
-*
-*           A = U*S*V'  and B = U*T* V'
-*
-*  where ' means transpose and U and V are orthogonal.
-*
-*  Specifically,
-*
-*   RESULT = ||( A - U*S*V', B - U*T*V' )|| / (||( A, B )||*n*ulp )
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The size of the matrix.  If it is zero, SGET54 does nothing.
-*          It must be at least zero.
-*
-*  A       (input) REAL array, dimension (LDA, N)
-*          The original (unfactored) matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  It must be at least 1
-*          and at least N.
-*
-*  B       (input) REAL array, dimension (LDB, N)
-*          The original (unfactored) matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.  It must be at least 1
-*          and at least N.
-*
-*  S       (input) REAL array, dimension (LDS, N)
-*          The factored matrix S.
-*
-*  LDS     (input) INTEGER
-*          The leading dimension of S.  It must be at least 1
-*          and at least N.
-*
-*  T       (input) REAL array, dimension (LDT, N)
-*          The factored matrix T.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of T.  It must be at least 1
-*          and at least N.
-*
-*  U       (input) REAL array, dimension (LDU, N)
-*          The orthogonal matrix on the left-hand side in the
-*          decomposition.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of U.  LDU must be at least N and
-*          at least 1.
-*
-*  V       (input) REAL array, dimension (LDV, N)
-*          The orthogonal matrix on the left-hand side in the
-*          decomposition.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of V.  LDV must be at least N and
-*          at least 1.
-*
-*  WORK    (workspace) REAL array, dimension (3*N**2)
-*
-*  RESULT  (output) REAL
-*          The value RESULT, It is currently limited to 1/ulp, to
-*          avoid overflow. Errors are flagged by RESULT=10/ulp.
 *
 *  =====================================================================
 *

@@ -1,38 +1,83 @@
+*> \brief \b SLAHD2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAHD2( IOUNIT, PATH )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*3        PATH
+*       INTEGER            IOUNIT
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAHD2 prints header information for the different test paths.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] IOUNIT
+*> \verbatim
+*>          IOUNIT is INTEGER.
+*>          On entry, IOUNIT specifies the unit number to which the
+*>          header information should be printed.
+*> \endverbatim
+*>
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3.
+*>          On entry, PATH contains the name of the path for which the
+*>          header information is to be printed.  Current paths are
+*> \endverbatim
+*> \verbatim
+*>             SHS, CHS:  Non-symmetric eigenproblem.
+*>             SST, CST:  Symmetric eigenproblem.
+*>             SSG, CSG:  Symmetric Generalized eigenproblem.
+*>             SBD, CBD:  Singular Value Decomposition (SVD)
+*>             SBB, CBB:  General Banded reduction to bidiagonal form
+*> \endverbatim
+*> \verbatim
+*>          These paths also are supplied in double precision (replace
+*>          leading S by D and leading C by Z in path names).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SLAHD2( IOUNIT, PATH )
 *
-*  -- LAPACK auxiliary test routine (version 2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 2.0) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
       INTEGER            IOUNIT
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAHD2 prints header information for the different test paths.
-*
-*  Arguments
-*  =========
-*
-*  IOUNIT  (input) INTEGER.
-*          On entry, IOUNIT specifies the unit number to which the
-*          header information should be printed.
-*
-*  PATH    (input) CHARACTER*3.
-*          On entry, PATH contains the name of the path for which the
-*          header information is to be printed.  Current paths are
-*
-*             SHS, CHS:  Non-symmetric eigenproblem.
-*             SST, CST:  Symmetric eigenproblem.
-*             SSG, CSG:  Symmetric Generalized eigenproblem.
-*             SBD, CBD:  Singular Value Decomposition (SVD)
-*             SBB, CBB:  General Banded reduction to bidiagonal form
-*
-*          These paths also are supplied in double precision (replace
-*          leading S by D and leading C by Z in path names).
 *
 *  =====================================================================
 *

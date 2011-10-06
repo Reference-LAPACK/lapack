@@ -1,3 +1,273 @@
+*> \brief \b DLASDA
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASDA( ICOMPQ, SMLSIZ, N, SQRE, D, E, U, LDU, VT, K,
+*                          DIFL, DIFR, Z, POLES, GIVPTR, GIVCOL, LDGCOL,
+*                          PERM, GIVNUM, C, S, WORK, IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            ICOMPQ, INFO, LDGCOL, LDU, N, SMLSIZ, SQRE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            GIVCOL( LDGCOL, * ), GIVPTR( * ), IWORK( * ),
+*      $                   K( * ), PERM( LDGCOL, * )
+*       DOUBLE PRECISION   C( * ), D( * ), DIFL( LDU, * ), DIFR( LDU, * ),
+*      $                   E( * ), GIVNUM( LDU, * ), POLES( LDU, * ),
+*      $                   S( * ), U( LDU, * ), VT( LDU, * ), WORK( * ),
+*      $                   Z( LDU, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Using a divide and conquer approach, DLASDA computes the singular
+*> value decomposition (SVD) of a real upper bidiagonal N-by-M matrix
+*> B with diagonal D and offdiagonal E, where M = N + SQRE. The
+*> algorithm computes the singular values in the SVD B = U * S * VT.
+*> The orthogonal matrices U and VT are optionally computed in
+*> compact form.
+*>
+*> A related subroutine, DLASD0, computes the singular values and
+*> the singular vectors in explicit form.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ICOMPQ
+*> \verbatim
+*>          ICOMPQ is INTEGER
+*>         Specifies whether singular vectors are to be computed
+*>         in compact form, as follows
+*>         = 0: Compute singular values only.
+*>         = 1: Compute singular vectors of upper bidiagonal
+*>              matrix in compact form.
+*> \endverbatim
+*>
+*> \param[in] SMLSIZ
+*> \verbatim
+*>          SMLSIZ is INTEGER
+*>         The maximum size of the subproblems at the bottom of the
+*>         computation tree.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The row dimension of the upper bidiagonal matrix. This is
+*>         also the dimension of the main diagonal array D.
+*> \endverbatim
+*>
+*> \param[in] SQRE
+*> \verbatim
+*>          SQRE is INTEGER
+*>         Specifies the column dimension of the bidiagonal matrix.
+*>         = 0: The bidiagonal matrix has column dimension M = N;
+*>         = 1: The bidiagonal matrix has column dimension M = N + 1.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension ( N )
+*>         On entry D contains the main diagonal of the bidiagonal
+*>         matrix. On exit D, if INFO = 0, contains its singular values.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension ( M-1 )
+*>         Contains the subdiagonal entries of the bidiagonal matrix.
+*>         On exit, E has been destroyed.
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is DOUBLE PRECISION array,
+*>         dimension ( LDU, SMLSIZ ) if ICOMPQ = 1, and not referenced
+*>         if ICOMPQ = 0. If ICOMPQ = 1, on exit, U contains the left
+*>         singular vector matrices of all subproblems at the bottom
+*>         level.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER, LDU = > N.
+*>         The leading dimension of arrays U, VT, DIFL, DIFR, POLES,
+*>         GIVNUM, and Z.
+*> \endverbatim
+*>
+*> \param[out] VT
+*> \verbatim
+*>          VT is DOUBLE PRECISION array,
+*>         dimension ( LDU, SMLSIZ+1 ) if ICOMPQ = 1, and not referenced
+*>         if ICOMPQ = 0. If ICOMPQ = 1, on exit, VT**T contains the right
+*>         singular vector matrices of all subproblems at the bottom
+*>         level.
+*> \endverbatim
+*>
+*> \param[out] K
+*> \verbatim
+*>          K is INTEGER array,
+*>         dimension ( N ) if ICOMPQ = 1 and dimension 1 if ICOMPQ = 0.
+*>         If ICOMPQ = 1, on exit, K(I) is the dimension of the I-th
+*>         secular equation on the computation tree.
+*> \endverbatim
+*>
+*> \param[out] DIFL
+*> \verbatim
+*>          DIFL is DOUBLE PRECISION array, dimension ( LDU, NLVL ),
+*>         where NLVL = floor(log_2 (N/SMLSIZ))).
+*> \endverbatim
+*>
+*> \param[out] DIFR
+*> \verbatim
+*>          DIFR is DOUBLE PRECISION array,
+*>                  dimension ( LDU, 2 * NLVL ) if ICOMPQ = 1 and
+*>                  dimension ( N ) if ICOMPQ = 0.
+*>         If ICOMPQ = 1, on exit, DIFL(1:N, I) and DIFR(1:N, 2 * I - 1)
+*>         record distances between singular values on the I-th
+*>         level and singular values on the (I -1)-th level, and
+*>         DIFR(1:N, 2 * I ) contains the normalizing factors for
+*>         the right singular vector matrix. See DLASD8 for details.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array,
+*>                  dimension ( LDU, NLVL ) if ICOMPQ = 1 and
+*>                  dimension ( N ) if ICOMPQ = 0.
+*>         The first K elements of Z(1, I) contain the components of
+*>         the deflation-adjusted updating row vector for subproblems
+*>         on the I-th level.
+*> \endverbatim
+*>
+*> \param[out] POLES
+*> \verbatim
+*>          POLES is DOUBLE PRECISION array,
+*>         dimension ( LDU, 2 * NLVL ) if ICOMPQ = 1, and not referenced
+*>         if ICOMPQ = 0. If ICOMPQ = 1, on exit, POLES(1, 2*I - 1) and
+*>         POLES(1, 2*I) contain  the new and old singular values
+*>         involved in the secular equations on the I-th level.
+*> \endverbatim
+*>
+*> \param[out] GIVPTR
+*> \verbatim
+*>          GIVPTR is INTEGER array,
+*>         dimension ( N ) if ICOMPQ = 1, and not referenced if
+*>         ICOMPQ = 0. If ICOMPQ = 1, on exit, GIVPTR( I ) records
+*>         the number of Givens rotations performed on the I-th
+*>         problem on the computation tree.
+*> \endverbatim
+*>
+*> \param[out] GIVCOL
+*> \verbatim
+*>          GIVCOL is INTEGER array,
+*>         dimension ( LDGCOL, 2 * NLVL ) if ICOMPQ = 1, and not
+*>         referenced if ICOMPQ = 0. If ICOMPQ = 1, on exit, for each I,
+*>         GIVCOL(1, 2 *I - 1) and GIVCOL(1, 2 *I) record the locations
+*>         of Givens rotations performed on the I-th level on the
+*>         computation tree.
+*> \endverbatim
+*>
+*> \param[in] LDGCOL
+*> \verbatim
+*>          LDGCOL is INTEGER, LDGCOL = > N.
+*>         The leading dimension of arrays GIVCOL and PERM.
+*> \endverbatim
+*>
+*> \param[out] PERM
+*> \verbatim
+*>          PERM is INTEGER array,
+*>         dimension ( LDGCOL, NLVL ) if ICOMPQ = 1, and not referenced
+*>         if ICOMPQ = 0. If ICOMPQ = 1, on exit, PERM(1, I) records
+*>         permutations done on the I-th level of the computation tree.
+*> \endverbatim
+*>
+*> \param[out] GIVNUM
+*> \verbatim
+*>          GIVNUM is DOUBLE PRECISION array,
+*>         dimension ( LDU,  2 * NLVL ) if ICOMPQ = 1, and not
+*>         referenced if ICOMPQ = 0. If ICOMPQ = 1, on exit, for each I,
+*>         GIVNUM(1, 2 *I - 1) and GIVNUM(1, 2 *I) record the C- and S-
+*>         values of Givens rotations performed on the I-th level on
+*>         the computation tree.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array,
+*>         dimension ( N ) if ICOMPQ = 1, and dimension 1 if ICOMPQ = 0.
+*>         If ICOMPQ = 1 and the I-th subproblem is not square, on exit,
+*>         C( I ) contains the C-value of a Givens rotation related to
+*>         the right null space of the I-th subproblem.
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension ( N ) if
+*>         ICOMPQ = 1, and dimension 1 if ICOMPQ = 0. If ICOMPQ = 1
+*>         and the I-th subproblem is not square, on exit, S( I )
+*>         contains the S-value of a Givens rotation related to
+*>         the right null space of the I-th subproblem.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension
+*>         (6 * N + (SMLSIZ + 1)*(SMLSIZ + 1)).
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array.
+*>         Dimension must be at least (7 * N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  if INFO = 1, a singular value did not converge
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Huan Ren, Computer Science Division, University of
+*>     California at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLASDA( ICOMPQ, SMLSIZ, N, SQRE, D, E, U, LDU, VT, K,
      $                   DIFL, DIFR, Z, POLES, GIVPTR, GIVCOL, LDGCOL,
      $                   PERM, GIVNUM, C, S, WORK, IWORK, INFO )
@@ -5,7 +275,7 @@
 *  -- LAPACK auxiliary routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            ICOMPQ, INFO, LDGCOL, LDU, N, SMLSIZ, SQRE
@@ -18,154 +288,6 @@
      $                   S( * ), U( LDU, * ), VT( LDU, * ), WORK( * ),
      $                   Z( LDU, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Using a divide and conquer approach, DLASDA computes the singular
-*  value decomposition (SVD) of a real upper bidiagonal N-by-M matrix
-*  B with diagonal D and offdiagonal E, where M = N + SQRE. The
-*  algorithm computes the singular values in the SVD B = U * S * VT.
-*  The orthogonal matrices U and VT are optionally computed in
-*  compact form.
-*
-*  A related subroutine, DLASD0, computes the singular values and
-*  the singular vectors in explicit form.
-*
-*  Arguments
-*  =========
-*
-*  ICOMPQ (input) INTEGER
-*         Specifies whether singular vectors are to be computed
-*         in compact form, as follows
-*         = 0: Compute singular values only.
-*         = 1: Compute singular vectors of upper bidiagonal
-*              matrix in compact form.
-*
-*  SMLSIZ (input) INTEGER
-*         The maximum size of the subproblems at the bottom of the
-*         computation tree.
-*
-*  N      (input) INTEGER
-*         The row dimension of the upper bidiagonal matrix. This is
-*         also the dimension of the main diagonal array D.
-*
-*  SQRE   (input) INTEGER
-*         Specifies the column dimension of the bidiagonal matrix.
-*         = 0: The bidiagonal matrix has column dimension M = N;
-*         = 1: The bidiagonal matrix has column dimension M = N + 1.
-*
-*  D      (input/output) DOUBLE PRECISION array, dimension ( N )
-*         On entry D contains the main diagonal of the bidiagonal
-*         matrix. On exit D, if INFO = 0, contains its singular values.
-*
-*  E      (input) DOUBLE PRECISION array, dimension ( M-1 )
-*         Contains the subdiagonal entries of the bidiagonal matrix.
-*         On exit, E has been destroyed.
-*
-*  U      (output) DOUBLE PRECISION array,
-*         dimension ( LDU, SMLSIZ ) if ICOMPQ = 1, and not referenced
-*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, U contains the left
-*         singular vector matrices of all subproblems at the bottom
-*         level.
-*
-*  LDU    (input) INTEGER, LDU = > N.
-*         The leading dimension of arrays U, VT, DIFL, DIFR, POLES,
-*         GIVNUM, and Z.
-*
-*  VT     (output) DOUBLE PRECISION array,
-*         dimension ( LDU, SMLSIZ+1 ) if ICOMPQ = 1, and not referenced
-*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, VT**T contains the right
-*         singular vector matrices of all subproblems at the bottom
-*         level.
-*
-*  K      (output) INTEGER array,
-*         dimension ( N ) if ICOMPQ = 1 and dimension 1 if ICOMPQ = 0.
-*         If ICOMPQ = 1, on exit, K(I) is the dimension of the I-th
-*         secular equation on the computation tree.
-*
-*  DIFL   (output) DOUBLE PRECISION array, dimension ( LDU, NLVL ),
-*         where NLVL = floor(log_2 (N/SMLSIZ))).
-*
-*  DIFR   (output) DOUBLE PRECISION array,
-*                  dimension ( LDU, 2 * NLVL ) if ICOMPQ = 1 and
-*                  dimension ( N ) if ICOMPQ = 0.
-*         If ICOMPQ = 1, on exit, DIFL(1:N, I) and DIFR(1:N, 2 * I - 1)
-*         record distances between singular values on the I-th
-*         level and singular values on the (I -1)-th level, and
-*         DIFR(1:N, 2 * I ) contains the normalizing factors for
-*         the right singular vector matrix. See DLASD8 for details.
-*
-*  Z      (output) DOUBLE PRECISION array,
-*                  dimension ( LDU, NLVL ) if ICOMPQ = 1 and
-*                  dimension ( N ) if ICOMPQ = 0.
-*         The first K elements of Z(1, I) contain the components of
-*         the deflation-adjusted updating row vector for subproblems
-*         on the I-th level.
-*
-*  POLES  (output) DOUBLE PRECISION array,
-*         dimension ( LDU, 2 * NLVL ) if ICOMPQ = 1, and not referenced
-*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, POLES(1, 2*I - 1) and
-*         POLES(1, 2*I) contain  the new and old singular values
-*         involved in the secular equations on the I-th level.
-*
-*  GIVPTR (output) INTEGER array,
-*         dimension ( N ) if ICOMPQ = 1, and not referenced if
-*         ICOMPQ = 0. If ICOMPQ = 1, on exit, GIVPTR( I ) records
-*         the number of Givens rotations performed on the I-th
-*         problem on the computation tree.
-*
-*  GIVCOL (output) INTEGER array,
-*         dimension ( LDGCOL, 2 * NLVL ) if ICOMPQ = 1, and not
-*         referenced if ICOMPQ = 0. If ICOMPQ = 1, on exit, for each I,
-*         GIVCOL(1, 2 *I - 1) and GIVCOL(1, 2 *I) record the locations
-*         of Givens rotations performed on the I-th level on the
-*         computation tree.
-*
-*  LDGCOL (input) INTEGER, LDGCOL = > N.
-*         The leading dimension of arrays GIVCOL and PERM.
-*
-*  PERM   (output) INTEGER array,
-*         dimension ( LDGCOL, NLVL ) if ICOMPQ = 1, and not referenced
-*         if ICOMPQ = 0. If ICOMPQ = 1, on exit, PERM(1, I) records
-*         permutations done on the I-th level of the computation tree.
-*
-*  GIVNUM (output) DOUBLE PRECISION array,
-*         dimension ( LDU,  2 * NLVL ) if ICOMPQ = 1, and not
-*         referenced if ICOMPQ = 0. If ICOMPQ = 1, on exit, for each I,
-*         GIVNUM(1, 2 *I - 1) and GIVNUM(1, 2 *I) record the C- and S-
-*         values of Givens rotations performed on the I-th level on
-*         the computation tree.
-*
-*  C      (output) DOUBLE PRECISION array,
-*         dimension ( N ) if ICOMPQ = 1, and dimension 1 if ICOMPQ = 0.
-*         If ICOMPQ = 1 and the I-th subproblem is not square, on exit,
-*         C( I ) contains the C-value of a Givens rotation related to
-*         the right null space of the I-th subproblem.
-*
-*  S      (output) DOUBLE PRECISION array, dimension ( N ) if
-*         ICOMPQ = 1, and dimension 1 if ICOMPQ = 0. If ICOMPQ = 1
-*         and the I-th subproblem is not square, on exit, S( I )
-*         contains the S-value of a Givens rotation related to
-*         the right null space of the I-th subproblem.
-*
-*  WORK   (workspace) DOUBLE PRECISION array, dimension
-*         (6 * N + (SMLSIZ + 1)*(SMLSIZ + 1)).
-*
-*  IWORK  (workspace) INTEGER array.
-*         Dimension must be at least (7 * N).
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if INFO = 1, a singular value did not converge
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Huan Ren, Computer Science Division, University of
-*     California at Berkeley, USA
 *
 *  =====================================================================
 *

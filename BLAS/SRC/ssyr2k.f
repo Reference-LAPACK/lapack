@@ -1,4 +1,211 @@
+*> \brief \b SSYR2K
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+* 
+*       .. Scalar Arguments ..
+*       REAL ALPHA,BETA
+*       INTEGER K,LDA,LDB,LDC,N
+*       CHARACTER TRANS,UPLO
+*       ..
+*       .. Array Arguments ..
+*       REAL A(LDA,*),B(LDB,*),C(LDC,*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SSYR2K  performs one of the symmetric rank 2k operations
+*>
+*>    C := alpha*A*B**T + alpha*B*A**T + beta*C,
+*>
+*> or
+*>
+*>    C := alpha*A**T*B + alpha*B**T*A + beta*C,
+*>
+*> where  alpha and beta  are scalars, C is an  n by n  symmetric matrix
+*> and  A and B  are  n by k  matrices  in the  first  case  and  k by n
+*> matrices in the second case.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>           On  entry,   UPLO  specifies  whether  the  upper  or  lower
+*>           triangular  part  of the  array  C  is to be  referenced  as
+*>           follows:
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'U' or 'u'   Only the  upper triangular part of  C
+*>                                  is to be referenced.
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'L' or 'l'   Only the  lower triangular part of  C
+*>                                  is to be referenced.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>           On entry,  TRANS  specifies the operation to be performed as
+*>           follows:
+*> \endverbatim
+*> \verbatim
+*>              TRANS = 'N' or 'n'   C := alpha*A*B**T + alpha*B*A**T +
+*>                                        beta*C.
+*> \endverbatim
+*> \verbatim
+*>              TRANS = 'T' or 't'   C := alpha*A**T*B + alpha*B**T*A +
+*>                                        beta*C.
+*> \endverbatim
+*> \verbatim
+*>              TRANS = 'C' or 'c'   C := alpha*A**T*B + alpha*B**T*A +
+*>                                        beta*C.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry,  N specifies the order of the matrix C.  N must be
+*>           at least zero.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>           On entry with  TRANS = 'N' or 'n',  K  specifies  the number
+*>           of  columns  of the  matrices  A and B,  and on  entry  with
+*>           TRANS = 'T' or 't' or 'C' or 'c',  K  specifies  the  number
+*>           of rows of the matrices  A and B.  K must be at least  zero.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is REAL
+*>           On entry, ALPHA specifies the scalar alpha.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array of DIMENSION ( LDA, ka ), where ka is
+*>           k  when  TRANS = 'N' or 'n',  and is  n  otherwise.
+*>           Before entry with  TRANS = 'N' or 'n',  the  leading  n by k
+*>           part of the array  A  must contain the matrix  A,  otherwise
+*>           the leading  k by n  part of the array  A  must contain  the
+*>           matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           On entry, LDA specifies the first dimension of A as declared
+*>           in  the  calling  (sub)  program.   When  TRANS = 'N' or 'n'
+*>           then  LDA must be at least  max( 1, n ), otherwise  LDA must
+*>           be at least  max( 1, k ).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL array of DIMENSION ( LDB, kb ), where kb is
+*>           k  when  TRANS = 'N' or 'n',  and is  n  otherwise.
+*>           Before entry with  TRANS = 'N' or 'n',  the  leading  n by k
+*>           part of the array  B  must contain the matrix  B,  otherwise
+*>           the leading  k by n  part of the array  B  must contain  the
+*>           matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>           On entry, LDB specifies the first dimension of B as declared
+*>           in  the  calling  (sub)  program.   When  TRANS = 'N' or 'n'
+*>           then  LDB must be at least  max( 1, n ), otherwise  LDB must
+*>           be at least  max( 1, k ).
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is REAL
+*>           On entry, BETA specifies the scalar beta.
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is REAL array of DIMENSION ( LDC, n ).
+*>           Before entry  with  UPLO = 'U' or 'u',  the leading  n by n
+*>           upper triangular part of the array C must contain the upper
+*>           triangular part  of the  symmetric matrix  and the strictly
+*>           lower triangular part of C is not referenced.  On exit, the
+*>           upper triangular part of the array  C is overwritten by the
+*>           upper triangular part of the updated matrix.
+*>           Before entry  with  UPLO = 'L' or 'l',  the leading  n by n
+*>           lower triangular part of the array C must contain the lower
+*>           triangular part  of the  symmetric matrix  and the strictly
+*>           upper triangular part of C is not referenced.  On exit, the
+*>           lower triangular part of the array  C is overwritten by the
+*>           lower triangular part of the updated matrix.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>           On entry, LDC specifies the first dimension of C as declared
+*>           in  the  calling  (sub)  program.   LDC  must  be  at  least
+*>           max( 1, n ).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_blas_level3
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Level 3 Blas routine.
+*>
+*>
+*>  -- Written on 8-February-1989.
+*>     Jack Dongarra, Argonne National Laboratory.
+*>     Iain Duff, AERE Harwell.
+*>     Jeremy Du Croz, Numerical Algorithms Group Ltd.
+*>     Sven Hammarling, Numerical Algorithms Group Ltd.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
+*
+*  -- Reference BLAS level3 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       REAL ALPHA,BETA
       INTEGER K,LDA,LDB,LDC,N
@@ -7,134 +214,6 @@
 *     .. Array Arguments ..
       REAL A(LDA,*),B(LDB,*),C(LDC,*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SSYR2K  performs one of the symmetric rank 2k operations
-*
-*     C := alpha*A*B**T + alpha*B*A**T + beta*C,
-*
-*  or
-*
-*     C := alpha*A**T*B + alpha*B**T*A + beta*C,
-*
-*  where  alpha and beta  are scalars, C is an  n by n  symmetric matrix
-*  and  A and B  are  n by k  matrices  in the  first  case  and  k by n
-*  matrices in the second case.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO   - CHARACTER*1.
-*           On  entry,   UPLO  specifies  whether  the  upper  or  lower
-*           triangular  part  of the  array  C  is to be  referenced  as
-*           follows:
-*
-*              UPLO = 'U' or 'u'   Only the  upper triangular part of  C
-*                                  is to be referenced.
-*
-*              UPLO = 'L' or 'l'   Only the  lower triangular part of  C
-*                                  is to be referenced.
-*
-*           Unchanged on exit.
-*
-*  TRANS  - CHARACTER*1.
-*           On entry,  TRANS  specifies the operation to be performed as
-*           follows:
-*
-*              TRANS = 'N' or 'n'   C := alpha*A*B**T + alpha*B*A**T +
-*                                        beta*C.
-*
-*              TRANS = 'T' or 't'   C := alpha*A**T*B + alpha*B**T*A +
-*                                        beta*C.
-*
-*              TRANS = 'C' or 'c'   C := alpha*A**T*B + alpha*B**T*A +
-*                                        beta*C.
-*
-*           Unchanged on exit.
-*
-*  N      - INTEGER.
-*           On entry,  N specifies the order of the matrix C.  N must be
-*           at least zero.
-*           Unchanged on exit.
-*
-*  K      - INTEGER.
-*           On entry with  TRANS = 'N' or 'n',  K  specifies  the number
-*           of  columns  of the  matrices  A and B,  and on  entry  with
-*           TRANS = 'T' or 't' or 'C' or 'c',  K  specifies  the  number
-*           of rows of the matrices  A and B.  K must be at least  zero.
-*           Unchanged on exit.
-*
-*  ALPHA  - REAL            .
-*           On entry, ALPHA specifies the scalar alpha.
-*           Unchanged on exit.
-*
-*  A      - REAL             array of DIMENSION ( LDA, ka ), where ka is
-*           k  when  TRANS = 'N' or 'n',  and is  n  otherwise.
-*           Before entry with  TRANS = 'N' or 'n',  the  leading  n by k
-*           part of the array  A  must contain the matrix  A,  otherwise
-*           the leading  k by n  part of the array  A  must contain  the
-*           matrix A.
-*           Unchanged on exit.
-*
-*  LDA    - INTEGER.
-*           On entry, LDA specifies the first dimension of A as declared
-*           in  the  calling  (sub)  program.   When  TRANS = 'N' or 'n'
-*           then  LDA must be at least  max( 1, n ), otherwise  LDA must
-*           be at least  max( 1, k ).
-*           Unchanged on exit.
-*
-*  B      - REAL             array of DIMENSION ( LDB, kb ), where kb is
-*           k  when  TRANS = 'N' or 'n',  and is  n  otherwise.
-*           Before entry with  TRANS = 'N' or 'n',  the  leading  n by k
-*           part of the array  B  must contain the matrix  B,  otherwise
-*           the leading  k by n  part of the array  B  must contain  the
-*           matrix B.
-*           Unchanged on exit.
-*
-*  LDB    - INTEGER.
-*           On entry, LDB specifies the first dimension of B as declared
-*           in  the  calling  (sub)  program.   When  TRANS = 'N' or 'n'
-*           then  LDB must be at least  max( 1, n ), otherwise  LDB must
-*           be at least  max( 1, k ).
-*           Unchanged on exit.
-*
-*  BETA   - REAL            .
-*           On entry, BETA specifies the scalar beta.
-*           Unchanged on exit.
-*
-*  C      - REAL             array of DIMENSION ( LDC, n ).
-*           Before entry  with  UPLO = 'U' or 'u',  the leading  n by n
-*           upper triangular part of the array C must contain the upper
-*           triangular part  of the  symmetric matrix  and the strictly
-*           lower triangular part of C is not referenced.  On exit, the
-*           upper triangular part of the array  C is overwritten by the
-*           upper triangular part of the updated matrix.
-*           Before entry  with  UPLO = 'L' or 'l',  the leading  n by n
-*           lower triangular part of the array C must contain the lower
-*           triangular part  of the  symmetric matrix  and the strictly
-*           upper triangular part of C is not referenced.  On exit, the
-*           lower triangular part of the array  C is overwritten by the
-*           lower triangular part of the updated matrix.
-*
-*  LDC    - INTEGER.
-*           On entry, LDC specifies the first dimension of C as declared
-*           in  the  calling  (sub)  program.   LDC  must  be  at  least
-*           max( 1, n ).
-*           Unchanged on exit.
-*
-*  Further Details
-*  ===============
-*
-*  Level 3 Blas routine.
-*
-*
-*  -- Written on 8-February-1989.
-*     Jack Dongarra, Argonne National Laboratory.
-*     Iain Duff, AERE Harwell.
-*     Jeremy Du Croz, Numerical Algorithms Group Ltd.
-*     Sven Hammarling, Numerical Algorithms Group Ltd.
 *
 *  =====================================================================
 *

@@ -1,12 +1,275 @@
+*> \brief \b ZLALSA
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+*                          LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
+*                          GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
+*                          IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            ICOMPQ, INFO, LDB, LDBX, LDGCOL, LDU, N, NRHS,
+*      $                   SMLSIZ
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            GIVCOL( LDGCOL, * ), GIVPTR( * ), IWORK( * ),
+*      $                   K( * ), PERM( LDGCOL, * )
+*       DOUBLE PRECISION   C( * ), DIFL( LDU, * ), DIFR( LDU, * ),
+*      $                   GIVNUM( LDU, * ), POLES( LDU, * ), RWORK( * ),
+*      $                   S( * ), U( LDU, * ), VT( LDU, * ), Z( LDU, * )
+*       COMPLEX*16         B( LDB, * ), BX( LDBX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLALSA is an itermediate step in solving the least squares problem
+*> by computing the SVD of the coefficient matrix in compact form (The
+*> singular vectors are computed as products of simple orthorgonal
+*> matrices.).
+*>
+*> If ICOMPQ = 0, ZLALSA applies the inverse of the left singular vector
+*> matrix of an upper bidiagonal matrix to the right hand side; and if
+*> ICOMPQ = 1, ZLALSA applies the right singular vector matrix to the
+*> right hand side. The singular vector matrices were generated in
+*> compact form by ZLALSA.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ICOMPQ
+*> \verbatim
+*>          ICOMPQ is INTEGER
+*>         Specifies whether the left or the right singular vector
+*>         matrix is involved.
+*>         = 0: Left singular vector matrix
+*>         = 1: Right singular vector matrix
+*> \endverbatim
+*>
+*> \param[in] SMLSIZ
+*> \verbatim
+*>          SMLSIZ is INTEGER
+*>         The maximum size of the subproblems at the bottom of the
+*>         computation tree.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The row and column dimensions of the upper bidiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>         The number of columns of B and BX. NRHS must be at least 1.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension ( LDB, NRHS )
+*>         On input, B contains the right hand sides of the least
+*>         squares problem in rows 1 through M.
+*>         On output, B contains the solution X in rows 1 through N.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>         The leading dimension of B in the calling subprogram.
+*>         LDB must be at least max(1,MAX( M, N ) ).
+*> \endverbatim
+*>
+*> \param[out] BX
+*> \verbatim
+*>          BX is COMPLEX*16 array, dimension ( LDBX, NRHS )
+*>         On exit, the result of applying the left or right singular
+*>         vector matrix to B.
+*> \endverbatim
+*>
+*> \param[in] LDBX
+*> \verbatim
+*>          LDBX is INTEGER
+*>         The leading dimension of BX.
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is DOUBLE PRECISION array, dimension ( LDU, SMLSIZ ).
+*>         On entry, U contains the left singular vector matrices of all
+*>         subproblems at the bottom level.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER, LDU = > N.
+*>         The leading dimension of arrays U, VT, DIFL, DIFR,
+*>         POLES, GIVNUM, and Z.
+*> \endverbatim
+*>
+*> \param[in] VT
+*> \verbatim
+*>          VT is DOUBLE PRECISION array, dimension ( LDU, SMLSIZ+1 ).
+*>         On entry, VT**H contains the right singular vector matrices of
+*>         all subproblems at the bottom level.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER array, dimension ( N ).
+*> \endverbatim
+*>
+*> \param[in] DIFL
+*> \verbatim
+*>          DIFL is DOUBLE PRECISION array, dimension ( LDU, NLVL ).
+*>         where NLVL = INT(log_2 (N/(SMLSIZ+1))) + 1.
+*> \endverbatim
+*>
+*> \param[in] DIFR
+*> \verbatim
+*>          DIFR is DOUBLE PRECISION array, dimension ( LDU, 2 * NLVL ).
+*>         On entry, DIFL(*, I) and DIFR(*, 2 * I -1) record
+*>         distances between singular values on the I-th level and
+*>         singular values on the (I -1)-th level, and DIFR(*, 2 * I)
+*>         record the normalizing factors of the right singular vectors
+*>         matrices of subproblems on I-th level.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension ( LDU, NLVL ).
+*>         On entry, Z(1, I) contains the components of the deflation-
+*>         adjusted updating row vector for subproblems on the I-th
+*>         level.
+*> \endverbatim
+*>
+*> \param[in] POLES
+*> \verbatim
+*>          POLES is DOUBLE PRECISION array, dimension ( LDU, 2 * NLVL ).
+*>         On entry, POLES(*, 2 * I -1: 2 * I) contains the new and old
+*>         singular values involved in the secular equations on the I-th
+*>         level.
+*> \endverbatim
+*>
+*> \param[in] GIVPTR
+*> \verbatim
+*>          GIVPTR is INTEGER array, dimension ( N ).
+*>         On entry, GIVPTR( I ) records the number of Givens
+*>         rotations performed on the I-th problem on the computation
+*>         tree.
+*> \endverbatim
+*>
+*> \param[in] GIVCOL
+*> \verbatim
+*>          GIVCOL is INTEGER array, dimension ( LDGCOL, 2 * NLVL ).
+*>         On entry, for each I, GIVCOL(*, 2 * I - 1: 2 * I) records the
+*>         locations of Givens rotations performed on the I-th level on
+*>         the computation tree.
+*> \endverbatim
+*>
+*> \param[in] LDGCOL
+*> \verbatim
+*>          LDGCOL is INTEGER, LDGCOL = > N.
+*>         The leading dimension of arrays GIVCOL and PERM.
+*> \endverbatim
+*>
+*> \param[in] PERM
+*> \verbatim
+*>          PERM is INTEGER array, dimension ( LDGCOL, NLVL ).
+*>         On entry, PERM(*, I) records permutations done on the I-th
+*>         level of the computation tree.
+*> \endverbatim
+*>
+*> \param[in] GIVNUM
+*> \verbatim
+*>          GIVNUM is DOUBLE PRECISION array, dimension ( LDU, 2 * NLVL ).
+*>         On entry, GIVNUM(*, 2 *I -1 : 2 * I) records the C- and S-
+*>         values of Givens rotations performed on the I-th level on the
+*>         computation tree.
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension ( N ).
+*>         On entry, if the I-th subproblem is not square,
+*>         C( I ) contains the C-value of a Givens rotation related to
+*>         the right null space of the I-th subproblem.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension ( N ).
+*>         On entry, if the I-th subproblem is not square,
+*>         S( I ) contains the S-value of a Givens rotation related to
+*>         the right null space of the I-th subproblem.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension at least
+*>         MAX( (SMLSZ+1)*NRHS*3, N*(1+NRHS) + 2*NRHS ).
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array.
+*>         The dimension must be at least 3 * N
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Ren-Cang Li, Computer Science Division, University of
+*>       California at Berkeley, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
      $                   IWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            ICOMPQ, INFO, LDB, LDBX, LDGCOL, LDU, N, NRHS,
@@ -20,139 +283,6 @@
      $                   S( * ), U( LDU, * ), VT( LDU, * ), Z( LDU, * )
       COMPLEX*16         B( LDB, * ), BX( LDBX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLALSA is an itermediate step in solving the least squares problem
-*  by computing the SVD of the coefficient matrix in compact form (The
-*  singular vectors are computed as products of simple orthorgonal
-*  matrices.).
-*
-*  If ICOMPQ = 0, ZLALSA applies the inverse of the left singular vector
-*  matrix of an upper bidiagonal matrix to the right hand side; and if
-*  ICOMPQ = 1, ZLALSA applies the right singular vector matrix to the
-*  right hand side. The singular vector matrices were generated in
-*  compact form by ZLALSA.
-*
-*  Arguments
-*  =========
-*
-*  ICOMPQ (input) INTEGER
-*         Specifies whether the left or the right singular vector
-*         matrix is involved.
-*         = 0: Left singular vector matrix
-*         = 1: Right singular vector matrix
-*
-*  SMLSIZ (input) INTEGER
-*         The maximum size of the subproblems at the bottom of the
-*         computation tree.
-*
-*  N      (input) INTEGER
-*         The row and column dimensions of the upper bidiagonal matrix.
-*
-*  NRHS   (input) INTEGER
-*         The number of columns of B and BX. NRHS must be at least 1.
-*
-*  B      (input/output) COMPLEX*16 array, dimension ( LDB, NRHS )
-*         On input, B contains the right hand sides of the least
-*         squares problem in rows 1 through M.
-*         On output, B contains the solution X in rows 1 through N.
-*
-*  LDB    (input) INTEGER
-*         The leading dimension of B in the calling subprogram.
-*         LDB must be at least max(1,MAX( M, N ) ).
-*
-*  BX     (output) COMPLEX*16 array, dimension ( LDBX, NRHS )
-*         On exit, the result of applying the left or right singular
-*         vector matrix to B.
-*
-*  LDBX   (input) INTEGER
-*         The leading dimension of BX.
-*
-*  U      (input) DOUBLE PRECISION array, dimension ( LDU, SMLSIZ ).
-*         On entry, U contains the left singular vector matrices of all
-*         subproblems at the bottom level.
-*
-*  LDU    (input) INTEGER, LDU = > N.
-*         The leading dimension of arrays U, VT, DIFL, DIFR,
-*         POLES, GIVNUM, and Z.
-*
-*  VT     (input) DOUBLE PRECISION array, dimension ( LDU, SMLSIZ+1 ).
-*         On entry, VT**H contains the right singular vector matrices of
-*         all subproblems at the bottom level.
-*
-*  K      (input) INTEGER array, dimension ( N ).
-*
-*  DIFL   (input) DOUBLE PRECISION array, dimension ( LDU, NLVL ).
-*         where NLVL = INT(log_2 (N/(SMLSIZ+1))) + 1.
-*
-*  DIFR   (input) DOUBLE PRECISION array, dimension ( LDU, 2 * NLVL ).
-*         On entry, DIFL(*, I) and DIFR(*, 2 * I -1) record
-*         distances between singular values on the I-th level and
-*         singular values on the (I -1)-th level, and DIFR(*, 2 * I)
-*         record the normalizing factors of the right singular vectors
-*         matrices of subproblems on I-th level.
-*
-*  Z      (input) DOUBLE PRECISION array, dimension ( LDU, NLVL ).
-*         On entry, Z(1, I) contains the components of the deflation-
-*         adjusted updating row vector for subproblems on the I-th
-*         level.
-*
-*  POLES  (input) DOUBLE PRECISION array, dimension ( LDU, 2 * NLVL ).
-*         On entry, POLES(*, 2 * I -1: 2 * I) contains the new and old
-*         singular values involved in the secular equations on the I-th
-*         level.
-*
-*  GIVPTR (input) INTEGER array, dimension ( N ).
-*         On entry, GIVPTR( I ) records the number of Givens
-*         rotations performed on the I-th problem on the computation
-*         tree.
-*
-*  GIVCOL (input) INTEGER array, dimension ( LDGCOL, 2 * NLVL ).
-*         On entry, for each I, GIVCOL(*, 2 * I - 1: 2 * I) records the
-*         locations of Givens rotations performed on the I-th level on
-*         the computation tree.
-*
-*  LDGCOL (input) INTEGER, LDGCOL = > N.
-*         The leading dimension of arrays GIVCOL and PERM.
-*
-*  PERM   (input) INTEGER array, dimension ( LDGCOL, NLVL ).
-*         On entry, PERM(*, I) records permutations done on the I-th
-*         level of the computation tree.
-*
-*  GIVNUM (input) DOUBLE PRECISION array, dimension ( LDU, 2 * NLVL ).
-*         On entry, GIVNUM(*, 2 *I -1 : 2 * I) records the C- and S-
-*         values of Givens rotations performed on the I-th level on the
-*         computation tree.
-*
-*  C      (input) DOUBLE PRECISION array, dimension ( N ).
-*         On entry, if the I-th subproblem is not square,
-*         C( I ) contains the C-value of a Givens rotation related to
-*         the right null space of the I-th subproblem.
-*
-*  S      (input) DOUBLE PRECISION array, dimension ( N ).
-*         On entry, if the I-th subproblem is not square,
-*         S( I ) contains the S-value of a Givens rotation related to
-*         the right null space of the I-th subproblem.
-*
-*  RWORK  (workspace) DOUBLE PRECISION array, dimension at least
-*         MAX( (SMLSZ+1)*NRHS*3, N*(1+NRHS) + 2*NRHS ).
-*
-*  IWORK  (workspace) INTEGER array.
-*         The dimension must be at least 3 * N
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Ren-Cang Li, Computer Science Division, University of
-*       California at Berkeley, USA
-*     Osni Marques, LBNL/NERSC, USA
 *
 *  =====================================================================
 *

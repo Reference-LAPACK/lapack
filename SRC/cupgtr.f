@@ -1,9 +1,115 @@
+*> \brief \b CUPGTR
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CUPGTR( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, LDQ, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            AP( * ), Q( LDQ, * ), TAU( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CUPGTR generates a complex unitary matrix Q which is defined as the
+*> product of n-1 elementary reflectors H(i) of order n, as returned by
+*> CHPTRD using packed storage:
+*>
+*> if UPLO = 'U', Q = H(n-1) . . . H(2) H(1),
+*>
+*> if UPLO = 'L', Q = H(1) H(2) . . . H(n-1).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U': Upper triangular packed storage used in previous
+*>                 call to CHPTRD;
+*>          = 'L': Lower triangular packed storage used in previous
+*>                 call to CHPTRD.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix Q. N >= 0.
+*> \endverbatim
+*>
+*> \param[in] AP
+*> \verbatim
+*>          AP is COMPLEX array, dimension (N*(N+1)/2)
+*>          The vectors which define the elementary reflectors, as
+*>          returned by CHPTRD.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is COMPLEX array, dimension (N-1)
+*>          TAU(i) must contain the scalar factor of the elementary
+*>          reflector H(i), as returned by CHPTRD.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDQ,N)
+*>          The N-by-N unitary matrix Q.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q. LDQ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (N-1)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CUPGTR( UPLO, N, AP, TAU, Q, LDQ, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,49 +118,6 @@
 *     .. Array Arguments ..
       COMPLEX            AP( * ), Q( LDQ, * ), TAU( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CUPGTR generates a complex unitary matrix Q which is defined as the
-*  product of n-1 elementary reflectors H(i) of order n, as returned by
-*  CHPTRD using packed storage:
-*
-*  if UPLO = 'U', Q = H(n-1) . . . H(2) H(1),
-*
-*  if UPLO = 'L', Q = H(1) H(2) . . . H(n-1).
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U': Upper triangular packed storage used in previous
-*                 call to CHPTRD;
-*          = 'L': Lower triangular packed storage used in previous
-*                 call to CHPTRD.
-*
-*  N       (input) INTEGER
-*          The order of the matrix Q. N >= 0.
-*
-*  AP      (input) COMPLEX array, dimension (N*(N+1)/2)
-*          The vectors which define the elementary reflectors, as
-*          returned by CHPTRD.
-*
-*  TAU     (input) COMPLEX array, dimension (N-1)
-*          TAU(i) must contain the scalar factor of the elementary
-*          reflector H(i), as returned by CHPTRD.
-*
-*  Q       (output) COMPLEX array, dimension (LDQ,N)
-*          The N-by-N unitary matrix Q.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q. LDQ >= max(1,N).
-*
-*  WORK    (workspace) COMPLEX array, dimension (N-1)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

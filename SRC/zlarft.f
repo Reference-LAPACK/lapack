@@ -1,9 +1,142 @@
+*> \brief \b ZLARFT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIRECT, STOREV
+*       INTEGER            K, LDT, LDV, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLARFT forms the triangular factor T of a complex block reflector H
+*> of order n, which is defined as a product of k elementary reflectors.
+*>
+*> If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
+*>
+*> If DIRECT = 'B', H = H(k) . . . H(2) H(1) and T is lower triangular.
+*>
+*> If STOREV = 'C', the vector which defines the elementary reflector
+*> H(i) is stored in the i-th column of the array V, and
+*>
+*>    H  =  I - V * T * V**H
+*>
+*> If STOREV = 'R', the vector which defines the elementary reflector
+*> H(i) is stored in the i-th row of the array V, and
+*>
+*>    H  =  I - V**H * T * V
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DIRECT
+*> \verbatim
+*>          DIRECT is CHARACTER*1
+*>          Specifies the order in which the elementary reflectors are
+*>          multiplied to form the block reflector:
+*>          = 'F': H = H(1) H(2) . . . H(k) (Forward)
+*>          = 'B': H = H(k) . . . H(2) H(1) (Backward)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*          reflectors are stored (see also Further Details):
+*>          = 'C': columnwise
+*>          = 'R': rowwise
+*>
+*>  N       (input) INTEGER
+*>          The order of the block reflector H. N >= 0.
+*>
+*>  K       (input) INTEGER
+*>          The order of the triangular factor T (= the number of
+*>          elementary reflectors). K >= 1.
+*>
+*>  V       (input/output) COMPLEX*16 array, dimension
+*>                               (LDV,K) if STOREV = 'C'
+*>                               (LDV,N) if STOREV = 'R'
+*>          The matrix V. See further details.
+*>
+*>  LDV     (input) INTEGER
+*>          The leading dimension of the array V.
+*>          If STOREV = 'C', LDV >= max(1,N); if STOREV = 'R', LDV >= K.
+*>
+*>  TAU     (input) COMPLEX*16 array, dimension (K)
+*>          TAU(i) must contain the scalar factor of the elementary
+*>          reflector H(i).
+*>
+*>  T       (output) COMPLEX*16 array, dimension (LDT,K)
+*>          The k by k triangular factor T of the block reflector.
+*>          If DIRECT = 'F', T is upper triangular; if DIRECT = 'B', T is
+*>          lower triangular. The rest of the array is not used.
+*>
+*>  LDT     (input) INTEGER
+*>          The leading dimension of the array T. LDT >= K.
+*>
+*>
+*>  The shape of the matrix V and the storage of the vectors which define
+*>  the H(i) is best illustrated by the following example with n = 5 and
+*>  k = 3. The elements equal to 1 are not stored; the corresponding
+*>  array elements are modified but restored on exit. The rest of the
+*>  array is not used.
+*>
+*>  DIRECT = 'F' and STOREV = 'C':         DIRECT = 'F' and STOREV = 'R':
+*>
+*>               V = (  1       )                 V = (  1 v1 v1 v1 v1 )
+*>                   ( v1  1    )                     (     1 v2 v2 v2 )
+*>                   ( v1 v2  1 )                     (        1 v3 v3 )
+*>                   ( v1 v2 v3 )
+*>                   ( v1 v2 v3 )
+*>
+*>  DIRECT = 'B' and STOREV = 'C':         DIRECT = 'B' and STOREV = 'R':
+*>
+*>               V = ( v1 v2 v3 )                 V = ( v1 v1  1       )
+*>                   ( v1 v2 v3 )                     ( v2 v2 v2  1    )
+*>                   (  1 v2 v3 )                     ( v3 v3 v3 v3  1 )
+*>                   (     1 v3 )
+*>                   (        1 )
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIRECT, STOREV
@@ -12,94 +145,6 @@
 *     .. Array Arguments ..
       COMPLEX*16         T( LDT, * ), TAU( * ), V( LDV, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLARFT forms the triangular factor T of a complex block reflector H
-*  of order n, which is defined as a product of k elementary reflectors.
-*
-*  If DIRECT = 'F', H = H(1) H(2) . . . H(k) and T is upper triangular;
-*
-*  If DIRECT = 'B', H = H(k) . . . H(2) H(1) and T is lower triangular.
-*
-*  If STOREV = 'C', the vector which defines the elementary reflector
-*  H(i) is stored in the i-th column of the array V, and
-*
-*     H  =  I - V * T * V**H
-*
-*  If STOREV = 'R', the vector which defines the elementary reflector
-*  H(i) is stored in the i-th row of the array V, and
-*
-*     H  =  I - V**H * T * V
-*
-*  Arguments
-*  =========
-*
-*  DIRECT  (input) CHARACTER*1
-*          Specifies the order in which the elementary reflectors are
-*          multiplied to form the block reflector:
-*          = 'F': H = H(1) H(2) . . . H(k) (Forward)
-*          = 'B': H = H(k) . . . H(2) H(1) (Backward)
-*
-*  STOREV  (input) CHARACTER*1
-*          Specifies how the vectors which define the elementary
-*          reflectors are stored (see also Further Details):
-*          = 'C': columnwise
-*          = 'R': rowwise
-*
-*  N       (input) INTEGER
-*          The order of the block reflector H. N >= 0.
-*
-*  K       (input) INTEGER
-*          The order of the triangular factor T (= the number of
-*          elementary reflectors). K >= 1.
-*
-*  V       (input/output) COMPLEX*16 array, dimension
-*                               (LDV,K) if STOREV = 'C'
-*                               (LDV,N) if STOREV = 'R'
-*          The matrix V. See further details.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of the array V.
-*          If STOREV = 'C', LDV >= max(1,N); if STOREV = 'R', LDV >= K.
-*
-*  TAU     (input) COMPLEX*16 array, dimension (K)
-*          TAU(i) must contain the scalar factor of the elementary
-*          reflector H(i).
-*
-*  T       (output) COMPLEX*16 array, dimension (LDT,K)
-*          The k by k triangular factor T of the block reflector.
-*          If DIRECT = 'F', T is upper triangular; if DIRECT = 'B', T is
-*          lower triangular. The rest of the array is not used.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of the array T. LDT >= K.
-*
-*  Further Details
-*  ===============
-*
-*  The shape of the matrix V and the storage of the vectors which define
-*  the H(i) is best illustrated by the following example with n = 5 and
-*  k = 3. The elements equal to 1 are not stored; the corresponding
-*  array elements are modified but restored on exit. The rest of the
-*  array is not used.
-*
-*  DIRECT = 'F' and STOREV = 'C':         DIRECT = 'F' and STOREV = 'R':
-*
-*               V = (  1       )                 V = (  1 v1 v1 v1 v1 )
-*                   ( v1  1    )                     (     1 v2 v2 v2 )
-*                   ( v1 v2  1 )                     (        1 v3 v3 )
-*                   ( v1 v2 v3 )
-*                   ( v1 v2 v3 )
-*
-*  DIRECT = 'B' and STOREV = 'C':         DIRECT = 'B' and STOREV = 'R':
-*
-*               V = ( v1 v2 v3 )                 V = ( v1 v1  1       )
-*                   ( v1 v2 v3 )                     ( v2 v2 v2  1    )
-*                   (  1 v2 v3 )                     ( v3 v3 v3 v3  1 )
-*                   (     1 v3 )
-*                   (        1 )
 *
 *  =====================================================================
 *

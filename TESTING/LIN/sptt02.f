@@ -1,8 +1,115 @@
+*> \brief \b SPTT02
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDB, LDX, N, NRHS
+*       REAL               RESID
+*       ..
+*       .. Array Arguments ..
+*       REAL               B( LDB, * ), D( * ), E( * ), X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SPTT02 computes the residual for the solution to a symmetric
+*> tridiagonal system of equations:
+*>    RESID = norm(B - A*X) / (norm(A) * norm(X) * EPS),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGTER
+*>          The order of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrices B and X.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The n diagonal elements of the tridiagonal matrix A.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is REAL array, dimension (N-1)
+*>          The (n-1) subdiagonal elements of the tridiagonal matrix A.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is REAL array, dimension (LDX,NRHS)
+*>          The n by nrhs matrix of solution vectors X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.  LDX >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB,NRHS)
+*>          On entry, the n by nrhs matrix of right hand side vectors B.
+*>          On exit, B is overwritten with the difference B - A*X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          norm(B - A*X) / (norm(A) * norm(X) * EPS)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDB, LDX, N, NRHS
@@ -11,46 +118,6 @@
 *     .. Array Arguments ..
       REAL               B( LDB, * ), D( * ), E( * ), X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SPTT02 computes the residual for the solution to a symmetric
-*  tridiagonal system of equations:
-*     RESID = norm(B - A*X) / (norm(A) * norm(X) * EPS),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGTER
-*          The order of the matrix A.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrices B and X.  NRHS >= 0.
-*
-*  D       (input) REAL array, dimension (N)
-*          The n diagonal elements of the tridiagonal matrix A.
-*
-*  E       (input) REAL array, dimension (N-1)
-*          The (n-1) subdiagonal elements of the tridiagonal matrix A.
-*
-*  X       (input) REAL array, dimension (LDX,NRHS)
-*          The n by nrhs matrix of solution vectors X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.  LDX >= max(1,N).
-*
-*  B       (input/output) REAL array, dimension (LDB,NRHS)
-*          On entry, the n by nrhs matrix of right hand side vectors B.
-*          On exit, B is overwritten with the difference B - A*X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  RESID   (output) REAL
-*          norm(B - A*X) / (norm(A) * norm(X) * EPS)
 *
 *  =====================================================================
 *

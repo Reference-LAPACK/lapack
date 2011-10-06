@@ -1,3 +1,448 @@
+*> \brief \b CCHKHS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
+*                          W3, EVECTL, EVECTR, EVECTY, EVECTX, UU, TAU,
+*                          WORK, NWORK, RWORK, IWORK, SELECT, RESULT,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDU, NOUNIT, NSIZES, NTYPES, NWORK
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * ), SELECT( * )
+*       INTEGER            ISEED( 4 ), IWORK( * ), NN( * )
+*       REAL               RESULT( 14 ), RWORK( * )
+*       COMPLEX            A( LDA, * ), EVECTL( LDU, * ),
+*      $                   EVECTR( LDU, * ), EVECTX( LDU, * ),
+*      $                   EVECTY( LDU, * ), H( LDA, * ), T1( LDA, * ),
+*      $                   T2( LDA, * ), TAU( * ), U( LDU, * ),
+*      $                   UU( LDU, * ), UZ( LDU, * ), W1( * ), W3( * ),
+*      $                   WORK( * ), Z( LDU, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    CCHKHS  checks the nonsymmetric eigenvalue problem routines.
+*>
+*>            CGEHRD factors A as  U H U' , where ' means conjugate
+*>            transpose, H is hessenberg, and U is unitary.
+*>
+*>            CUNGHR generates the unitary matrix U.
+*>
+*>            CUNMHR multiplies a matrix by the unitary matrix U.
+*>
+*>            CHSEQR factors H as  Z T Z' , where Z is unitary and T
+*>            is upper triangular.  It also computes the eigenvalues,
+*>            w(1), ..., w(n); we define a diagonal matrix W whose
+*>            (diagonal) entries are the eigenvalues.
+*>
+*>            CTREVC computes the left eigenvector matrix L and the
+*>            right eigenvector matrix R for the matrix T.  The
+*>            columns of L are the complex conjugates of the left
+*>            eigenvectors of T.  The columns of R are the right
+*>            eigenvectors of T.  L is lower triangular, and R is
+*>            upper triangular.
+*>
+*>            CHSEIN computes the left eigenvector matrix Y and the
+*>            right eigenvector matrix X for the matrix H.  The
+*>            columns of Y are the complex conjugates of the left
+*>            eigenvectors of H.  The columns of X are the right
+*>            eigenvectors of H.  Y is lower triangular, and X is
+*>            upper triangular.
+*>
+*>    When CCHKHS is called, a number of matrix "sizes" ("n's") and a
+*>    number of matrix "types" are specified.  For each size ("n")
+*>    and each type of matrix, one matrix will be generated and used
+*>    to test the nonsymmetric eigenroutines.  For each matrix, 14
+*>    tests will be performed:
+*>
+*>    (1)     | A - U H U**H | / ( |A| n ulp )
+*>
+*>    (2)     | I - UU**H | / ( n ulp )
+*>
+*>    (3)     | H - Z T Z**H | / ( |H| n ulp )
+*>
+*>    (4)     | I - ZZ**H | / ( n ulp )
+*>
+*>    (5)     | A - UZ H (UZ)**H | / ( |A| n ulp )
+*>
+*>    (6)     | I - UZ (UZ)**H | / ( n ulp )
+*>
+*>    (7)     | T(Z computed) - T(Z not computed) | / ( |T| ulp )
+*>
+*>    (8)     | W(Z computed) - W(Z not computed) | / ( |W| ulp )
+*>
+*>    (9)     | TR - RW | / ( |T| |R| ulp )
+*>
+*>    (10)    | L**H T - W**H L | / ( |T| |L| ulp )
+*>
+*>    (11)    | HX - XW | / ( |H| |X| ulp )
+*>
+*>    (12)    | Y**H H - W**H Y | / ( |H| |Y| ulp )
+*>
+*>    (13)    | AX - XW | / ( |A| |X| ulp )
+*>
+*>    (14)    | Y**H A - W**H Y | / ( |A| |Y| ulp )
+*>
+*>    The "sizes" are specified by an array NN(1:NSIZES); the value of
+*>    each element NN(j) specifies one size.
+*>    The "types" are specified by a logical array DOTYPE( 1:NTYPES );
+*>    if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*>    Currently, the list of possible types is:
+*>
+*>    (1)  The zero matrix.
+*>    (2)  The identity matrix.
+*>    (3)  A (transposed) Jordan block, with 1's on the diagonal.
+*>
+*>    (4)  A diagonal matrix with evenly spaced entries
+*>         1, ..., ULP  and random complex angles.
+*>         (ULP = (first number larger than 1) - 1 )
+*>    (5)  A diagonal matrix with geometrically spaced entries
+*>         1, ..., ULP  and random complex angles.
+*>    (6)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
+*>         and random complex angles.
+*>
+*>    (7)  Same as (4), but multiplied by SQRT( overflow threshold )
+*>    (8)  Same as (4), but multiplied by SQRT( underflow threshold )
+*>
+*>    (9)  A matrix of the form  U' T U, where U is unitary and
+*>         T has evenly spaced entries 1, ..., ULP with random complex
+*>         angles on the diagonal and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (10) A matrix of the form  U' T U, where U is unitary and
+*>         T has geometrically spaced entries 1, ..., ULP with random
+*>         complex angles on the diagonal and random O(1) entries in
+*>         the upper triangle.
+*>
+*>    (11) A matrix of the form  U' T U, where U is unitary and
+*>         T has "clustered" entries 1, ULP,..., ULP with random
+*>         complex angles on the diagonal and random O(1) entries in
+*>         the upper triangle.
+*>
+*>    (12) A matrix of the form  U' T U, where U is unitary and
+*>         T has complex eigenvalues randomly chosen from
+*>         ULP < |z| < 1   and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (13) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has evenly spaced entries 1, ..., ULP
+*>         with random complex angles on the diagonal and random O(1)
+*>         entries in the upper triangle.
+*>
+*>    (14) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has geometrically spaced entries
+*>         1, ..., ULP with random complex angles on the diagonal
+*>         and random O(1) entries in the upper triangle.
+*>
+*>    (15) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has "clustered" entries 1, ULP,..., ULP
+*>         with random complex angles on the diagonal and random O(1)
+*>         entries in the upper triangle.
+*>
+*>    (16) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has complex eigenvalues randomly chosen
+*>         from   ULP < |z| < 1   and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (17) Same as (16), but multiplied by SQRT( overflow threshold )
+*>    (18) Same as (16), but multiplied by SQRT( underflow threshold )
+*>
+*>    (19) Nonsymmetric matrix with random entries chosen from |z| < 1
+*>    (20) Same as (19), but multiplied by SQRT( overflow threshold )
+*>    (21) Same as (19), but multiplied by SQRT( underflow threshold )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \verbatim
+*>  NSIZES - INTEGER
+*>           The number of sizes of matrices to use.  If it is zero,
+*>           CCHKHS does nothing.  It must be at least zero.
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NN     - INTEGER array, dimension (NSIZES)
+*>           An array containing the sizes to be used for the matrices.
+*>           Zero values will be skipped.  The values must be at least
+*>           zero.
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NTYPES - INTEGER
+*>           The number of elements in DOTYPE.   If it is zero, CCHKHS
+*>           does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>           and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>           defined, which is to use whatever matrix is in A.  This
+*>           is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>           DOTYPE(MAXTYP+1) is .TRUE. .
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  DOTYPE - LOGICAL array, dimension (NTYPES)
+*>           If DOTYPE(j) is .TRUE., then for each size in NN a
+*>           matrix of that size and of type j will be generated.
+*>           If NTYPES is smaller than the maximum number of types
+*>           defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>           MAXTYP will not be generated.  If NTYPES is larger
+*>           than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>           will be ignored.
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  ISEED  - INTEGER array, dimension (4)
+*>           On entry ISEED specifies the seed of the random number
+*>           generator. The array elements should be between 0 and 4095;
+*>           if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>           be odd.  The random number generator uses a linear
+*>           congruential sequence limited to small integers, and so
+*>           should produce machine independent random numbers. The
+*>           values of ISEED are changed on exit, and can be used in the
+*>           next call to CCHKHS to continue the same random number
+*>           sequence.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  THRESH - REAL
+*>           A test will count as "failed" if the "error", computed as
+*>           described above, exceeds THRESH.  Note that the error
+*>           is scaled to be O(1), so THRESH should be a reasonably
+*>           small multiple of 1, e.g., 10 or 100.  In particular,
+*>           it should not depend on the precision (single vs. double)
+*>           or the size of the matrix.  It must be at least zero.
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NOUNIT - INTEGER
+*>           The FORTRAN unit number for printing out error messages
+*>           (e.g., if a routine returns IINFO not equal to 0.)
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  A      - COMPLEX array, dimension (LDA,max(NN))
+*>           Used to hold the matrix whose eigenvalues are to be
+*>           computed.  On exit, A contains the last matrix actually
+*>           used.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  LDA    - INTEGER
+*>           The leading dimension of A, H, T1 and T2.  It must be at
+*>           least 1 and at least max( NN ).
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  H      - COMPLEX array, dimension (LDA,max(NN))
+*>           The upper hessenberg matrix computed by CGEHRD.  On exit,
+*>           H contains the Hessenberg form of the matrix in A.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  T1     - COMPLEX array, dimension (LDA,max(NN))
+*>           The Schur (="quasi-triangular") matrix computed by CHSEQR
+*>           if Z is computed.  On exit, T1 contains the Schur form of
+*>           the matrix in A.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  T2     - COMPLEX array, dimension (LDA,max(NN))
+*>           The Schur matrix computed by CHSEQR when Z is not computed.
+*>           This should be identical to T1.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  LDU    - INTEGER
+*>           The leading dimension of U, Z, UZ and UU.  It must be at
+*>           least 1 and at least max( NN ).
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  U      - COMPLEX array, dimension (LDU,max(NN))
+*>           The unitary matrix computed by CGEHRD.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  Z      - COMPLEX array, dimension (LDU,max(NN))
+*>           The unitary matrix computed by CHSEQR.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  UZ     - COMPLEX array, dimension (LDU,max(NN))
+*>           The product of U times Z.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  W1     - COMPLEX array, dimension (max(NN))
+*>           The eigenvalues of A, as computed by a full Schur
+*>           decomposition H = Z T Z'.  On exit, W1 contains the
+*>           eigenvalues of the matrix in A.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  W3     - COMPLEX array, dimension (max(NN))
+*>           The eigenvalues of A, as computed by a partial Schur
+*>           decomposition (Z not computed, T only computed as much
+*>           as is necessary for determining eigenvalues).  On exit,
+*>           W3 contains the eigenvalues of the matrix in A, possibly
+*>           perturbed by CHSEIN.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  EVECTL - COMPLEX array, dimension (LDU,max(NN))
+*>           The conjugate transpose of the (upper triangular) left
+*>           eigenvector matrix for the matrix in T1.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  EVECTR - COMPLEX array, dimension (LDU,max(NN))
+*>           The (upper triangular) right eigenvector matrix for the
+*>           matrix in T1.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  EVECTY - COMPLEX array, dimension (LDU,max(NN))
+*>           The conjugate transpose of the left eigenvector matrix
+*>           for the matrix in H.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  EVECTX - COMPLEX array, dimension (LDU,max(NN))
+*>           The right eigenvector matrix for the matrix in H.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  UU     - COMPLEX array, dimension (LDU,max(NN))
+*>           Details of the unitary matrix computed by CGEHRD.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  TAU    - COMPLEX array, dimension (max(NN))
+*>           Further details of the unitary matrix computed by CGEHRD.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  WORK   - COMPLEX array, dimension (NWORK)
+*>           Workspace.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  NWORK  - INTEGER
+*>           The number of entries in WORK.  NWORK >= 4*NN(j)*NN(j) + 2.
+*> \endverbatim
+*> \verbatim
+*>  RWORK  - REAL array, dimension (max(NN))
+*>           Workspace.  Could be equivalenced to IWORK, but not SELECT.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  IWORK  - INTEGER array, dimension (max(NN))
+*>           Workspace.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  SELECT - LOGICAL array, dimension (max(NN))
+*>           Workspace.  Could be equivalenced to IWORK, but not RWORK.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  RESULT - REAL array, dimension (14)
+*>           The values computed by the fourteen tests described above.
+*>           The values are currently limited to 1/ulp, to avoid
+*>           overflow.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  INFO   - INTEGER
+*>           If 0, then everything ran OK.
+*>            -1: NSIZES < 0
+*>            -2: Some NN(j) < 0
+*>            -3: NTYPES < 0
+*>            -6: THRESH < 0
+*>            -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
+*>           -14: LDU < 1 or LDU < NMAX.
+*>           -26: NWORK too small.
+*>           If  CLATMR, CLATMS, or CLATME returns an error code, the
+*>               absolute value of it is returned.
+*>           If 1, then CHSEQR could not find all the shifts.
+*>           If 2, then the EISPACK code (for small blocks) failed.
+*>           If >2, then 30*N iterations were not enough to find an
+*>               eigenvalue or to decompose the problem.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>     Some Local Variables and Parameters:
+*>     ---- ----- --------- --- ----------
+*> \endverbatim
+*> \verbatim
+*>     ZERO, ONE       Real 0 and 1.
+*>     MAXTYP          The number of types defined.
+*>     MTEST           The number of tests defined: care must be taken
+*>                     that (1) the size of RESULT, (2) the number of
+*>                     tests actually performed, and (3) MTEST agree.
+*>     NTEST           The number of tests performed on this matrix
+*>                     so far.  This should be less than MTEST, and
+*>                     equal to it by the last test.  It will be less
+*>                     if any of the routines being tested indicates
+*>                     that it could not compute the matrices that
+*>                     would be tested.
+*>     NMAX            Largest value in NN.
+*>     NMATS           The number of matrices generated so far.
+*>     NERRS           The number of tests which have exceeded THRESH
+*>                     so far (computed by SLAFTS).
+*>     COND, CONDS,
+*>     IMODE           Values to be passed to the matrix generators.
+*>     ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>     OVFL, UNFL      Overflow and underflow thresholds.
+*>     ULP, ULPINV     Finest relative precision and its inverse.
+*>     RTOVFL, RTUNFL,
+*>     RTULP, RTULPI   Square roots of the previous 4 values.
+*> \endverbatim
+*> \verbatim
+*>             The following four arrays decode JTYPE:
+*>     KTYPE(j)        The general type (1-10) for type "j".
+*>     KMODE(j)        The MODE value to be passed to the matrix
+*>                     generator for type "j".
+*>     KMAGN(j)        The order of magnitude ( O(1),
+*>                     O(overflow^(1/2) ), O(underflow^(1/2) )
+*>     KCONDS(j)       Selects whether CONDS is to be 1 or
+*>                     1/sqrt(ulp).  (0 means irrelevant.)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
      $                   W3, EVECTL, EVECTR, EVECTY, EVECTX, UU, TAU,
@@ -5,8 +450,9 @@
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*  -- April 2011                                                      --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, NOUNIT, NSIZES, NTYPES, NWORK
@@ -23,363 +469,6 @@
      $                   UU( LDU, * ), UZ( LDU, * ), W1( * ), W3( * ),
      $                   WORK( * ), Z( LDU, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     CCHKHS  checks the nonsymmetric eigenvalue problem routines.
-*
-*             CGEHRD factors A as  U H U' , where ' means conjugate
-*             transpose, H is hessenberg, and U is unitary.
-*
-*             CUNGHR generates the unitary matrix U.
-*
-*             CUNMHR multiplies a matrix by the unitary matrix U.
-*
-*             CHSEQR factors H as  Z T Z' , where Z is unitary and T
-*             is upper triangular.  It also computes the eigenvalues,
-*             w(1), ..., w(n); we define a diagonal matrix W whose
-*             (diagonal) entries are the eigenvalues.
-*
-*             CTREVC computes the left eigenvector matrix L and the
-*             right eigenvector matrix R for the matrix T.  The
-*             columns of L are the complex conjugates of the left
-*             eigenvectors of T.  The columns of R are the right
-*             eigenvectors of T.  L is lower triangular, and R is
-*             upper triangular.
-*
-*             CHSEIN computes the left eigenvector matrix Y and the
-*             right eigenvector matrix X for the matrix H.  The
-*             columns of Y are the complex conjugates of the left
-*             eigenvectors of H.  The columns of X are the right
-*             eigenvectors of H.  Y is lower triangular, and X is
-*             upper triangular.
-*
-*     When CCHKHS is called, a number of matrix "sizes" ("n's") and a
-*     number of matrix "types" are specified.  For each size ("n")
-*     and each type of matrix, one matrix will be generated and used
-*     to test the nonsymmetric eigenroutines.  For each matrix, 14
-*     tests will be performed:
-*
-*     (1)     | A - U H U**H | / ( |A| n ulp )
-*
-*     (2)     | I - UU**H | / ( n ulp )
-*
-*     (3)     | H - Z T Z**H | / ( |H| n ulp )
-*
-*     (4)     | I - ZZ**H | / ( n ulp )
-*
-*     (5)     | A - UZ H (UZ)**H | / ( |A| n ulp )
-*
-*     (6)     | I - UZ (UZ)**H | / ( n ulp )
-*
-*     (7)     | T(Z computed) - T(Z not computed) | / ( |T| ulp )
-*
-*     (8)     | W(Z computed) - W(Z not computed) | / ( |W| ulp )
-*
-*     (9)     | TR - RW | / ( |T| |R| ulp )
-*
-*     (10)    | L**H T - W**H L | / ( |T| |L| ulp )
-*
-*     (11)    | HX - XW | / ( |H| |X| ulp )
-*
-*     (12)    | Y**H H - W**H Y | / ( |H| |Y| ulp )
-*
-*     (13)    | AX - XW | / ( |A| |X| ulp )
-*
-*     (14)    | Y**H A - W**H Y | / ( |A| |Y| ulp )
-*
-*     The "sizes" are specified by an array NN(1:NSIZES); the value of
-*     each element NN(j) specifies one size.
-*     The "types" are specified by a logical array DOTYPE( 1:NTYPES );
-*     if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*     Currently, the list of possible types is:
-*
-*     (1)  The zero matrix.
-*     (2)  The identity matrix.
-*     (3)  A (transposed) Jordan block, with 1's on the diagonal.
-*
-*     (4)  A diagonal matrix with evenly spaced entries
-*          1, ..., ULP  and random complex angles.
-*          (ULP = (first number larger than 1) - 1 )
-*     (5)  A diagonal matrix with geometrically spaced entries
-*          1, ..., ULP  and random complex angles.
-*     (6)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
-*          and random complex angles.
-*
-*     (7)  Same as (4), but multiplied by SQRT( overflow threshold )
-*     (8)  Same as (4), but multiplied by SQRT( underflow threshold )
-*
-*     (9)  A matrix of the form  U' T U, where U is unitary and
-*          T has evenly spaced entries 1, ..., ULP with random complex
-*          angles on the diagonal and random O(1) entries in the upper
-*          triangle.
-*
-*     (10) A matrix of the form  U' T U, where U is unitary and
-*          T has geometrically spaced entries 1, ..., ULP with random
-*          complex angles on the diagonal and random O(1) entries in
-*          the upper triangle.
-*
-*     (11) A matrix of the form  U' T U, where U is unitary and
-*          T has "clustered" entries 1, ULP,..., ULP with random
-*          complex angles on the diagonal and random O(1) entries in
-*          the upper triangle.
-*
-*     (12) A matrix of the form  U' T U, where U is unitary and
-*          T has complex eigenvalues randomly chosen from
-*          ULP < |z| < 1   and random O(1) entries in the upper
-*          triangle.
-*
-*     (13) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has evenly spaced entries 1, ..., ULP
-*          with random complex angles on the diagonal and random O(1)
-*          entries in the upper triangle.
-*
-*     (14) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has geometrically spaced entries
-*          1, ..., ULP with random complex angles on the diagonal
-*          and random O(1) entries in the upper triangle.
-*
-*     (15) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has "clustered" entries 1, ULP,..., ULP
-*          with random complex angles on the diagonal and random O(1)
-*          entries in the upper triangle.
-*
-*     (16) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has complex eigenvalues randomly chosen
-*          from   ULP < |z| < 1   and random O(1) entries in the upper
-*          triangle.
-*
-*     (17) Same as (16), but multiplied by SQRT( overflow threshold )
-*     (18) Same as (16), but multiplied by SQRT( underflow threshold )
-*
-*     (19) Nonsymmetric matrix with random entries chosen from |z| < 1
-*     (20) Same as (19), but multiplied by SQRT( overflow threshold )
-*     (21) Same as (19), but multiplied by SQRT( underflow threshold )
-*
-*  Arguments
-*  ==========
-*
-*  NSIZES - INTEGER
-*           The number of sizes of matrices to use.  If it is zero,
-*           CCHKHS does nothing.  It must be at least zero.
-*           Not modified.
-*
-*  NN     - INTEGER array, dimension (NSIZES)
-*           An array containing the sizes to be used for the matrices.
-*           Zero values will be skipped.  The values must be at least
-*           zero.
-*           Not modified.
-*
-*  NTYPES - INTEGER
-*           The number of elements in DOTYPE.   If it is zero, CCHKHS
-*           does nothing.  It must be at least zero.  If it is MAXTYP+1
-*           and NSIZES is 1, then an additional type, MAXTYP+1 is
-*           defined, which is to use whatever matrix is in A.  This
-*           is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*           DOTYPE(MAXTYP+1) is .TRUE. .
-*           Not modified.
-*
-*  DOTYPE - LOGICAL array, dimension (NTYPES)
-*           If DOTYPE(j) is .TRUE., then for each size in NN a
-*           matrix of that size and of type j will be generated.
-*           If NTYPES is smaller than the maximum number of types
-*           defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*           MAXTYP will not be generated.  If NTYPES is larger
-*           than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*           will be ignored.
-*           Not modified.
-*
-*  ISEED  - INTEGER array, dimension (4)
-*           On entry ISEED specifies the seed of the random number
-*           generator. The array elements should be between 0 and 4095;
-*           if not they will be reduced mod 4096.  Also, ISEED(4) must
-*           be odd.  The random number generator uses a linear
-*           congruential sequence limited to small integers, and so
-*           should produce machine independent random numbers. The
-*           values of ISEED are changed on exit, and can be used in the
-*           next call to CCHKHS to continue the same random number
-*           sequence.
-*           Modified.
-*
-*  THRESH - REAL
-*           A test will count as "failed" if the "error", computed as
-*           described above, exceeds THRESH.  Note that the error
-*           is scaled to be O(1), so THRESH should be a reasonably
-*           small multiple of 1, e.g., 10 or 100.  In particular,
-*           it should not depend on the precision (single vs. double)
-*           or the size of the matrix.  It must be at least zero.
-*           Not modified.
-*
-*  NOUNIT - INTEGER
-*           The FORTRAN unit number for printing out error messages
-*           (e.g., if a routine returns IINFO not equal to 0.)
-*           Not modified.
-*
-*  A      - COMPLEX array, dimension (LDA,max(NN))
-*           Used to hold the matrix whose eigenvalues are to be
-*           computed.  On exit, A contains the last matrix actually
-*           used.
-*           Modified.
-*
-*  LDA    - INTEGER
-*           The leading dimension of A, H, T1 and T2.  It must be at
-*           least 1 and at least max( NN ).
-*           Not modified.
-*
-*  H      - COMPLEX array, dimension (LDA,max(NN))
-*           The upper hessenberg matrix computed by CGEHRD.  On exit,
-*           H contains the Hessenberg form of the matrix in A.
-*           Modified.
-*
-*  T1     - COMPLEX array, dimension (LDA,max(NN))
-*           The Schur (="quasi-triangular") matrix computed by CHSEQR
-*           if Z is computed.  On exit, T1 contains the Schur form of
-*           the matrix in A.
-*           Modified.
-*
-*  T2     - COMPLEX array, dimension (LDA,max(NN))
-*           The Schur matrix computed by CHSEQR when Z is not computed.
-*           This should be identical to T1.
-*           Modified.
-*
-*  LDU    - INTEGER
-*           The leading dimension of U, Z, UZ and UU.  It must be at
-*           least 1 and at least max( NN ).
-*           Not modified.
-*
-*  U      - COMPLEX array, dimension (LDU,max(NN))
-*           The unitary matrix computed by CGEHRD.
-*           Modified.
-*
-*  Z      - COMPLEX array, dimension (LDU,max(NN))
-*           The unitary matrix computed by CHSEQR.
-*           Modified.
-*
-*  UZ     - COMPLEX array, dimension (LDU,max(NN))
-*           The product of U times Z.
-*           Modified.
-*
-*  W1     - COMPLEX array, dimension (max(NN))
-*           The eigenvalues of A, as computed by a full Schur
-*           decomposition H = Z T Z'.  On exit, W1 contains the
-*           eigenvalues of the matrix in A.
-*           Modified.
-*
-*  W3     - COMPLEX array, dimension (max(NN))
-*           The eigenvalues of A, as computed by a partial Schur
-*           decomposition (Z not computed, T only computed as much
-*           as is necessary for determining eigenvalues).  On exit,
-*           W3 contains the eigenvalues of the matrix in A, possibly
-*           perturbed by CHSEIN.
-*           Modified.
-*
-*  EVECTL - COMPLEX array, dimension (LDU,max(NN))
-*           The conjugate transpose of the (upper triangular) left
-*           eigenvector matrix for the matrix in T1.
-*           Modified.
-*
-*  EVECTR - COMPLEX array, dimension (LDU,max(NN))
-*           The (upper triangular) right eigenvector matrix for the
-*           matrix in T1.
-*           Modified.
-*
-*  EVECTY - COMPLEX array, dimension (LDU,max(NN))
-*           The conjugate transpose of the left eigenvector matrix
-*           for the matrix in H.
-*           Modified.
-*
-*  EVECTX - COMPLEX array, dimension (LDU,max(NN))
-*           The right eigenvector matrix for the matrix in H.
-*           Modified.
-*
-*  UU     - COMPLEX array, dimension (LDU,max(NN))
-*           Details of the unitary matrix computed by CGEHRD.
-*           Modified.
-*
-*  TAU    - COMPLEX array, dimension (max(NN))
-*           Further details of the unitary matrix computed by CGEHRD.
-*           Modified.
-*
-*  WORK   - COMPLEX array, dimension (NWORK)
-*           Workspace.
-*           Modified.
-*
-*  NWORK  - INTEGER
-*           The number of entries in WORK.  NWORK >= 4*NN(j)*NN(j) + 2.
-*
-*  RWORK  - REAL array, dimension (max(NN))
-*           Workspace.  Could be equivalenced to IWORK, but not SELECT.
-*           Modified.
-*
-*  IWORK  - INTEGER array, dimension (max(NN))
-*           Workspace.
-*           Modified.
-*
-*  SELECT - LOGICAL array, dimension (max(NN))
-*           Workspace.  Could be equivalenced to IWORK, but not RWORK.
-*           Modified.
-*
-*  RESULT - REAL array, dimension (14)
-*           The values computed by the fourteen tests described above.
-*           The values are currently limited to 1/ulp, to avoid
-*           overflow.
-*           Modified.
-*
-*  INFO   - INTEGER
-*           If 0, then everything ran OK.
-*            -1: NSIZES < 0
-*            -2: Some NN(j) < 0
-*            -3: NTYPES < 0
-*            -6: THRESH < 0
-*            -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
-*           -14: LDU < 1 or LDU < NMAX.
-*           -26: NWORK too small.
-*           If  CLATMR, CLATMS, or CLATME returns an error code, the
-*               absolute value of it is returned.
-*           If 1, then CHSEQR could not find all the shifts.
-*           If 2, then the EISPACK code (for small blocks) failed.
-*           If >2, then 30*N iterations were not enough to find an
-*               eigenvalue or to decompose the problem.
-*           Modified.
-*
-*-----------------------------------------------------------------------
-*
-*     Some Local Variables and Parameters:
-*     ---- ----- --------- --- ----------
-*
-*     ZERO, ONE       Real 0 and 1.
-*     MAXTYP          The number of types defined.
-*     MTEST           The number of tests defined: care must be taken
-*                     that (1) the size of RESULT, (2) the number of
-*                     tests actually performed, and (3) MTEST agree.
-*     NTEST           The number of tests performed on this matrix
-*                     so far.  This should be less than MTEST, and
-*                     equal to it by the last test.  It will be less
-*                     if any of the routines being tested indicates
-*                     that it could not compute the matrices that
-*                     would be tested.
-*     NMAX            Largest value in NN.
-*     NMATS           The number of matrices generated so far.
-*     NERRS           The number of tests which have exceeded THRESH
-*                     so far (computed by SLAFTS).
-*     COND, CONDS,
-*     IMODE           Values to be passed to the matrix generators.
-*     ANORM           Norm of A; passed to matrix generators.
-*
-*     OVFL, UNFL      Overflow and underflow thresholds.
-*     ULP, ULPINV     Finest relative precision and its inverse.
-*     RTOVFL, RTUNFL,
-*     RTULP, RTULPI   Square roots of the previous 4 values.
-*
-*             The following four arrays decode JTYPE:
-*     KTYPE(j)        The general type (1-10) for type "j".
-*     KMODE(j)        The MODE value to be passed to the matrix
-*                     generator for type "j".
-*     KMAGN(j)        The order of magnitude ( O(1),
-*                     O(overflow^(1/2) ), O(underflow^(1/2) )
-*     KCONDS(j)       Selects whether CONDS is to be 1 or
-*                     1/sqrt(ulp).  (0 means irrelevant.)
 *
 *  =====================================================================
 *

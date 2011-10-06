@@ -1,17 +1,144 @@
+*> \brief \b DLA_PORCOND
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
+*                                              CMODE, C, INFO, WORK,
+*                                              IWORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            N, LDA, LDAF, INFO, CMODE
+*       DOUBLE PRECISION   A( LDA, * ), AF( LDAF, * ), WORK( * ),
+*      $                   C( * )
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    DLA_PORCOND Estimates the Skeel condition number of  op(A) * op2(C)
+*>    where op2 is determined by CMODE as follows
+*>    CMODE =  1    op2(C) = C
+*>    CMODE =  0    op2(C) = I
+*>    CMODE = -1    op2(C) = inv(C)
+*>    The Skeel condition number  cond(A) = norminf( |inv(A)||A| )
+*>    is computed by computing scaling factors R such that
+*>    diag(R)*A*op2(C) is row equilibrated and computing the standard
+*>    infinity-norm condition number.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>       = 'U':  Upper triangle of A is stored;
+*>       = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>     The number of linear equations, i.e., the order of the
+*>     matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>     On entry, the N-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>     The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is DOUBLE PRECISION array, dimension (LDAF,N)
+*>     The triangular factor U or L from the Cholesky factorization
+*>     A = U**T*U or A = L*L**T, as computed by DPOTRF.
+*> \endverbatim
+*>
+*> \param[in] LDAF
+*> \verbatim
+*>          LDAF is INTEGER
+*>     The leading dimension of the array AF.  LDAF >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] CMODE
+*> \verbatim
+*>          CMODE is INTEGER
+*>     Determines op2(C) in the formula op(A) * op2(C) as follows:
+*>     CMODE =  1    op2(C) = C
+*>     CMODE =  0    op2(C) = I
+*>     CMODE = -1    op2(C) = inv(C)
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension (N)
+*>     The vector C in the formula op(A) * op2(C).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>       = 0:  Successful exit.
+*>     i > 0:  The ith argument is invalid.
+*> \endverbatim
+*>
+*> \param[in] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (3*N).
+*>     Workspace.
+*> \endverbatim
+*>
+*> \param[in] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (N).
+*>     Workspace.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doublePOcomputational
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
      $                                       CMODE, C, INFO, WORK,
      $                                       IWORK )
 *
-*     -- LAPACK routine (version 3.2.2)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- June 2010                                                    --
+*  -- LAPACK computational routine (version 3.2.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
       INTEGER            N, LDA, LDAF, INFO, CMODE
@@ -21,62 +148,6 @@
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     DLA_PORCOND Estimates the Skeel condition number of  op(A) * op2(C)
-*     where op2 is determined by CMODE as follows
-*     CMODE =  1    op2(C) = C
-*     CMODE =  0    op2(C) = I
-*     CMODE = -1    op2(C) = inv(C)
-*     The Skeel condition number  cond(A) = norminf( |inv(A)||A| )
-*     is computed by computing scaling factors R such that
-*     diag(R)*A*op2(C) is row equilibrated and computing the standard
-*     infinity-norm condition number.
-*
-*  Arguments
-*  ==========
-*
-*     UPLO    (input) CHARACTER*1
-*       = 'U':  Upper triangle of A is stored;
-*       = 'L':  Lower triangle of A is stored.
-*
-*     N       (input) INTEGER
-*     The number of linear equations, i.e., the order of the
-*     matrix A.  N >= 0.
-*
-*     A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*     On entry, the N-by-N matrix A.
-*
-*     LDA     (input) INTEGER
-*     The leading dimension of the array A.  LDA >= max(1,N).
-*
-*     AF      (input) DOUBLE PRECISION array, dimension (LDAF,N)
-*     The triangular factor U or L from the Cholesky factorization
-*     A = U**T*U or A = L*L**T, as computed by DPOTRF.
-*
-*     LDAF    (input) INTEGER
-*     The leading dimension of the array AF.  LDAF >= max(1,N).
-*
-*     CMODE   (input) INTEGER
-*     Determines op2(C) in the formula op(A) * op2(C) as follows:
-*     CMODE =  1    op2(C) = C
-*     CMODE =  0    op2(C) = I
-*     CMODE = -1    op2(C) = inv(C)
-*
-*     C       (input) DOUBLE PRECISION array, dimension (N)
-*     The vector C in the formula op(A) * op2(C).
-*
-*     INFO    (output) INTEGER
-*       = 0:  Successful exit.
-*     i > 0:  The ith argument is invalid.
-*
-*     WORK    (input) DOUBLE PRECISION array, dimension (3*N).
-*     Workspace.
-*
-*     IWORK   (input) INTEGER array, dimension (N).
-*     Workspace.
 *
 *  =====================================================================
 *

@@ -1,13 +1,549 @@
+*> \brief \b CCHKST
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CCHKST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          NOUNIT, A, LDA, AP, SD, SE, D1, D2, D3, D4, D5,
+*                          WA1, WA2, WA3, WR, U, LDU, V, VP, TAU, Z, WORK,
+*                          LWORK, RWORK, LRWORK, IWORK, LIWORK, RESULT,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDU, LIWORK, LRWORK, LWORK, NOUNIT,
+*      $                   NSIZES, NTYPES
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), IWORK( * ), NN( * )
+*       REAL               D1( * ), D2( * ), D3( * ), D4( * ), D5( * ),
+*      $                   RESULT( * ), RWORK( * ), SD( * ), SE( * ),
+*      $                   WA1( * ), WA2( * ), WA3( * ), WR( * )
+*       COMPLEX            A( LDA, * ), AP( * ), TAU( * ), U( LDU, * ),
+*      $                   V( LDU, * ), VP( * ), WORK( * ), Z( LDU, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CCHKST  checks the Hermitian eigenvalue problem routines.
+*>
+*>    CHETRD factors A as  U S U* , where * means conjugate transpose,
+*>    S is real symmetric tridiagonal, and U is unitary.
+*>    CHETRD can use either just the lower or just the upper triangle
+*>    of A; CCHKST checks both cases.
+*>    U is represented as a product of Householder
+*>    transformations, whose vectors are stored in the first
+*>    n-1 columns of V, and whose scale factors are in TAU.
+*>
+*>    CHPTRD does the same as CHETRD, except that A and V are stored
+*>    in "packed" format.
+*>
+*>    CUNGTR constructs the matrix U from the contents of V and TAU.
+*>
+*>    CUPGTR constructs the matrix U from the contents of VP and TAU.
+*>
+*>    CSTEQR factors S as  Z D1 Z* , where Z is the unitary
+*>    matrix of eigenvectors and D1 is a diagonal matrix with
+*>    the eigenvalues on the diagonal.  D2 is the matrix of
+*>    eigenvalues computed when Z is not computed.
+*>
+*>    SSTERF computes D3, the matrix of eigenvalues, by the
+*>    PWK method, which does not yield eigenvectors.
+*>
+*>    CPTEQR factors S as  Z4 D4 Z4* , for a
+*>    Hermitian positive definite tridiagonal matrix.
+*>    D5 is the matrix of eigenvalues computed when Z is not
+*>    computed.
+*>
+*>    SSTEBZ computes selected eigenvalues.  WA1, WA2, and
+*>    WA3 will denote eigenvalues computed to high
+*>    absolute accuracy, with different range options.
+*>    WR will denote eigenvalues computed to high relative
+*>    accuracy.
+*>
+*>    CSTEIN computes Y, the eigenvectors of S, given the
+*>    eigenvalues.
+*>
+*>    CSTEDC factors S as Z D1 Z* , where Z is the unitary
+*>    matrix of eigenvectors and D1 is a diagonal matrix with
+*>    the eigenvalues on the diagonal ('I' option). It may also
+*>    update an input unitary matrix, usually the output
+*>    from CHETRD/CUNGTR or CHPTRD/CUPGTR ('V' option). It may
+*>    also just compute eigenvalues ('N' option).
+*>
+*>    CSTEMR factors S as Z D1 Z* , where Z is the unitary
+*>    matrix of eigenvectors and D1 is a diagonal matrix with
+*>    the eigenvalues on the diagonal ('I' option).  CSTEMR
+*>    uses the Relatively Robust Representation whenever possible.
+*>
+*> When CCHKST is called, a number of matrix "sizes" ("n's") and a
+*> number of matrix "types" are specified.  For each size ("n")
+*> and each type of matrix, one matrix will be generated and used
+*> to test the Hermitian eigenroutines.  For each matrix, a number
+*> of tests will be performed:
+*>
+*> (1)     | A - V S V* | / ( |A| n ulp ) CHETRD( UPLO='U', ... )
+*>
+*> (2)     | I - UV* | / ( n ulp )        CUNGTR( UPLO='U', ... )
+*>
+*> (3)     | A - V S V* | / ( |A| n ulp ) CHETRD( UPLO='L', ... )
+*>
+*> (4)     | I - UV* | / ( n ulp )        CUNGTR( UPLO='L', ... )
+*>
+*> (5-8)   Same as 1-4, but for CHPTRD and CUPGTR.
+*>
+*> (9)     | S - Z D Z* | / ( |S| n ulp ) CSTEQR('V',...)
+*>
+*> (10)    | I - ZZ* | / ( n ulp )        CSTEQR('V',...)
+*>
+*> (11)    | D1 - D2 | / ( |D1| ulp )        CSTEQR('N',...)
+*>
+*> (12)    | D1 - D3 | / ( |D1| ulp )        SSTERF
+*>
+*> (13)    0 if the true eigenvalues (computed by sturm count)
+*>         of S are within THRESH of
+*>         those in D1.  2*THRESH if they are not.  (Tested using
+*>         SSTECH)
+*>
+*> For S positive definite,
+*>
+*> (14)    | S - Z4 D4 Z4* | / ( |S| n ulp ) CPTEQR('V',...)
+*>
+*> (15)    | I - Z4 Z4* | / ( n ulp )        CPTEQR('V',...)
+*>
+*> (16)    | D4 - D5 | / ( 100 |D4| ulp )       CPTEQR('N',...)
+*>
+*> When S is also diagonally dominant by the factor gamma < 1,
+*>
+*> (17)    max | D4(i) - WR(i) | / ( |D4(i)| omega ) ,
+*>          i
+*>         omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
+*>                                              SSTEBZ( 'A', 'E', ...)
+*>
+*> (18)    | WA1 - D3 | / ( |D3| ulp )          SSTEBZ( 'A', 'E', ...)
+*>
+*> (19)    ( max { min | WA2(i)-WA3(j) | } +
+*>            i     j
+*>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
+*>            i     j
+*>                                              SSTEBZ( 'I', 'E', ...)
+*>
+*> (20)    | S - Y WA1 Y* | / ( |S| n ulp )  SSTEBZ, CSTEIN
+*>
+*> (21)    | I - Y Y* | / ( n ulp )          SSTEBZ, CSTEIN
+*>
+*> (22)    | S - Z D Z* | / ( |S| n ulp )    CSTEDC('I')
+*>
+*> (23)    | I - ZZ* | / ( n ulp )           CSTEDC('I')
+*>
+*> (24)    | S - Z D Z* | / ( |S| n ulp )    CSTEDC('V')
+*>
+*> (25)    | I - ZZ* | / ( n ulp )           CSTEDC('V')
+*>
+*> (26)    | D1 - D2 | / ( |D1| ulp )           CSTEDC('V') and
+*>                                              CSTEDC('N')
+*>
+*> Test 27 is disabled at the moment because CSTEMR does not
+*> guarantee high relatvie accuracy.
+*>
+*> (27)    max | D6(i) - WR(i) | / ( |D6(i)| omega ) ,
+*>          i
+*>         omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
+*>                                              CSTEMR('V', 'A')
+*>
+*> (28)    max | D6(i) - WR(i) | / ( |D6(i)| omega ) ,
+*>          i
+*>         omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
+*>                                              CSTEMR('V', 'I')
+*>
+*> Tests 29 through 34 are disable at present because CSTEMR
+*> does not handle partial specturm requests.
+*>
+*> (29)    | S - Z D Z* | / ( |S| n ulp )    CSTEMR('V', 'I')
+*>
+*> (30)    | I - ZZ* | / ( n ulp )           CSTEMR('V', 'I')
+*>
+*> (31)    ( max { min | WA2(i)-WA3(j) | } +
+*>            i     j
+*>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
+*>            i     j
+*>         CSTEMR('N', 'I') vs. CSTEMR('V', 'I')
+*>
+*> (32)    | S - Z D Z* | / ( |S| n ulp )    CSTEMR('V', 'V')
+*>
+*> (33)    | I - ZZ* | / ( n ulp )           CSTEMR('V', 'V')
+*>
+*> (34)    ( max { min | WA2(i)-WA3(j) | } +
+*>            i     j
+*>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
+*>            i     j
+*>         CSTEMR('N', 'V') vs. CSTEMR('V', 'V')
+*>
+*> (35)    | S - Z D Z* | / ( |S| n ulp )    CSTEMR('V', 'A')
+*>
+*> (36)    | I - ZZ* | / ( n ulp )           CSTEMR('V', 'A')
+*>
+*> (37)    ( max { min | WA2(i)-WA3(j) | } +
+*>            i     j
+*>           max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
+*>            i     j
+*>         CSTEMR('N', 'A') vs. CSTEMR('V', 'A')
+*>
+*> The "sizes" are specified by an array NN(1:NSIZES); the value of
+*> each element NN(j) specifies one size.
+*> The "types" are specified by a logical array DOTYPE( 1:NTYPES );
+*> if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*> Currently, the list of possible types is:
+*>
+*> (1)  The zero matrix.
+*> (2)  The identity matrix.
+*>
+*> (3)  A diagonal matrix with evenly spaced entries
+*>      1, ..., ULP  and random signs.
+*>      (ULP = (first number larger than 1) - 1 )
+*> (4)  A diagonal matrix with geometrically spaced entries
+*>      1, ..., ULP  and random signs.
+*> (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
+*>      and random signs.
+*>
+*> (6)  Same as (4), but multiplied by SQRT( overflow threshold )
+*> (7)  Same as (4), but multiplied by SQRT( underflow threshold )
+*>
+*> (8)  A matrix of the form  U* D U, where U is unitary and
+*>      D has evenly spaced entries 1, ..., ULP with random signs
+*>      on the diagonal.
+*>
+*> (9)  A matrix of the form  U* D U, where U is unitary and
+*>      D has geometrically spaced entries 1, ..., ULP with random
+*>      signs on the diagonal.
+*>
+*> (10) A matrix of the form  U* D U, where U is unitary and
+*>      D has "clustered" entries 1, ULP,..., ULP with random
+*>      signs on the diagonal.
+*>
+*> (11) Same as (8), but multiplied by SQRT( overflow threshold )
+*> (12) Same as (8), but multiplied by SQRT( underflow threshold )
+*>
+*> (13) Hermitian matrix with random entries chosen from (-1,1).
+*> (14) Same as (13), but multiplied by SQRT( overflow threshold )
+*> (15) Same as (13), but multiplied by SQRT( underflow threshold )
+*> (16) Same as (8), but diagonal elements are all positive.
+*> (17) Same as (9), but diagonal elements are all positive.
+*> (18) Same as (10), but diagonal elements are all positive.
+*> (19) Same as (16), but multiplied by SQRT( overflow threshold )
+*> (20) Same as (16), but multiplied by SQRT( underflow threshold )
+*> (21) A diagonally dominant tridiagonal matrix with geometrically
+*>      spaced diagonal entries 1, ..., ULP.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of sizes of matrices to use.  If it is zero,
+*>          CCHKST does nothing.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER array, dimension (NSIZES)
+*>          An array containing the sizes to be used for the matrices.
+*>          Zero values will be skipped.  The values must be at least
+*>          zero.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, CCHKST
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrix is in A.  This
+*>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated.  If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to CCHKST to continue the same random number
+*>          sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array of
+*>                                  dimension ( LDA , max(NN) )
+*>          Used to hold the matrix whose eigenvalues are to be
+*>          computed.  On exit, A contains the last matrix actually
+*>          used.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  It must be at
+*>          least 1 and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] AP
+*> \verbatim
+*>          AP is COMPLEX array of
+*>                      dimension( max(NN)*max(NN+1)/2 )
+*>          The matrix A stored in packed format.
+*> \endverbatim
+*>
+*> \param[out] SD
+*> \verbatim
+*>          SD is REAL array of
+*>                             dimension( max(NN) )
+*>          The diagonal of the tridiagonal matrix computed by CHETRD.
+*>          On exit, SD and SE contain the tridiagonal form of the
+*>          matrix in A.
+*> \endverbatim
+*>
+*> \param[out] SE
+*> \verbatim
+*>          SE is REAL array of
+*>                             dimension( max(NN) )
+*>          The off-diagonal of the tridiagonal matrix computed by
+*>          CHETRD.  On exit, SD and SE contain the tridiagonal form of
+*>          the matrix in A.
+*> \endverbatim
+*>
+*> \param[out] D1
+*> \verbatim
+*>          D1 is REAL array of
+*>                             dimension( max(NN) )
+*>          The eigenvalues of A, as computed by CSTEQR simlutaneously
+*>          with Z.  On exit, the eigenvalues in D1 correspond with the
+*>          matrix in A.
+*> \endverbatim
+*>
+*> \param[out] D2
+*> \verbatim
+*>          D2 is REAL array of
+*>                             dimension( max(NN) )
+*>          The eigenvalues of A, as computed by CSTEQR if Z is not
+*>          computed.  On exit, the eigenvalues in D2 correspond with
+*>          the matrix in A.
+*> \endverbatim
+*>
+*> \param[out] D3
+*> \verbatim
+*>          D3 is REAL array of
+*>                             dimension( max(NN) )
+*>          The eigenvalues of A, as computed by SSTERF.  On exit, the
+*>          eigenvalues in D3 correspond with the matrix in A.
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is COMPLEX array of
+*>                             dimension( LDU, max(NN) ).
+*>          The unitary matrix computed by CHETRD + CUNGTR.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of U, Z, and V.  It must be at least 1
+*>          and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] V
+*> \verbatim
+*>          V is COMPLEX array of
+*>                             dimension( LDU, max(NN) ).
+*>          The Housholder vectors computed by CHETRD in reducing A to
+*>          tridiagonal form.  The vectors computed with UPLO='U' are
+*>          in the upper triangle, and the vectors computed with UPLO='L'
+*>          are in the lower triangle.  (As described in CHETRD, the
+*>          sub- and superdiagonal are not set to 1, although the
+*>          true Householder vector has a 1 in that position.  The
+*>          routines that use V, such as CUNGTR, set those entries to
+*>          1 before using them, and then restore them later.)
+*> \endverbatim
+*>
+*> \param[out] VP
+*> \verbatim
+*>          VP is COMPLEX array of
+*>                      dimension( max(NN)*max(NN+1)/2 )
+*>          The matrix V stored in packed format.
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is COMPLEX array of
+*>                             dimension( max(NN) )
+*>          The Householder factors computed by CHETRD in reducing A
+*>          to tridiagonal form.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX array of
+*>                             dimension( LDU, max(NN) ).
+*>          The unitary matrix of eigenvectors computed by CSTEQR,
+*>          CPTEQR, and CSTEIN.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array of
+*>                      dimension( LWORK )
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          1 + 4 * Nmax + 2 * Nmax * lg Nmax + 3 * Nmax**2
+*>          where Nmax = max( NN(j), 2 ) and lg = log base 2.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array,
+*>             dimension (6 + 6*Nmax + 5 * Nmax * lg Nmax )
+*>          where Nmax = max( NN(j), 2 ) and lg = log base 2.
+*>          Workspace.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array of
+*>                      dimension( ??? )
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (26)
+*>          The values computed by the tests described above.
+*>          The values are currently limited to 1/ulp, to avoid
+*>          overflow.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0, then everything ran OK.
+*>           -1: NSIZES < 0
+*>           -2: Some NN(j) < 0
+*>           -3: NTYPES < 0
+*>           -5: THRESH < 0
+*>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
+*>          -23: LDU < 1 or LDU < NMAX.
+*>          -29: LWORK too small.
+*>          If  CLATMR, CLATMS, CHETRD, CUNGTR, CSTEQR, SSTERF,
+*>              or CUNMC2 returns an error code, the
+*>              absolute value of it is returned.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>       Some Local Variables and Parameters:
+*>       ---- ----- --------- --- ----------
+*>       ZERO, ONE       Real 0 and 1.
+*>       MAXTYP          The number of types defined.
+*>       NTEST           The number of tests performed, or which can
+*>                       be performed so far, for the current matrix.
+*>       NTESTT          The total number of tests performed so far.
+*>       NBLOCK          Blocksize as returned by ENVIR.
+*>       NMAX            Largest value in NN.
+*>       NMATS           The number of matrices generated so far.
+*>       NERRS           The number of tests which have exceeded THRESH
+*>                       so far.
+*>       COND, IMODE     Values to be passed to the matrix generators.
+*>       ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>       OVFL, UNFL      Overflow and underflow thresholds.
+*>       ULP, ULPINV     Finest relative precision and its inverse.
+*>       RTOVFL, RTUNFL  Square roots of the previous 2 values.
+*>               The following four arrays decode JTYPE:
+*>       KTYPE(j)        The general type (1-10) for type "j".
+*>       KMODE(j)        The MODE value to be passed to the matrix
+*>                       generator for type "j".
+*>       KMAGN(j)        The order of magnitude ( O(1),
+*>                       O(overflow^(1/2) ), O(underflow^(1/2) )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CCHKST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, AP, SD, SE, D1, D2, D3, D4, D5,
      $                   WA1, WA2, WA3, WR, U, LDU, V, VP, TAU, Z, WORK,
      $                   LWORK, RWORK, LRWORK, IWORK, LIWORK, RESULT,
      $                   INFO )
-      IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LRWORK, LWORK, NOUNIT,
@@ -23,408 +559,6 @@
       COMPLEX            A( LDA, * ), AP( * ), TAU( * ), U( LDU, * ),
      $                   V( LDU, * ), VP( * ), WORK( * ), Z( LDU, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CCHKST  checks the Hermitian eigenvalue problem routines.
-*
-*     CHETRD factors A as  U S U* , where * means conjugate transpose,
-*     S is real symmetric tridiagonal, and U is unitary.
-*     CHETRD can use either just the lower or just the upper triangle
-*     of A; CCHKST checks both cases.
-*     U is represented as a product of Householder
-*     transformations, whose vectors are stored in the first
-*     n-1 columns of V, and whose scale factors are in TAU.
-*
-*     CHPTRD does the same as CHETRD, except that A and V are stored
-*     in "packed" format.
-*
-*     CUNGTR constructs the matrix U from the contents of V and TAU.
-*
-*     CUPGTR constructs the matrix U from the contents of VP and TAU.
-*
-*     CSTEQR factors S as  Z D1 Z* , where Z is the unitary
-*     matrix of eigenvectors and D1 is a diagonal matrix with
-*     the eigenvalues on the diagonal.  D2 is the matrix of
-*     eigenvalues computed when Z is not computed.
-*
-*     SSTERF computes D3, the matrix of eigenvalues, by the
-*     PWK method, which does not yield eigenvectors.
-*
-*     CPTEQR factors S as  Z4 D4 Z4* , for a
-*     Hermitian positive definite tridiagonal matrix.
-*     D5 is the matrix of eigenvalues computed when Z is not
-*     computed.
-*
-*     SSTEBZ computes selected eigenvalues.  WA1, WA2, and
-*     WA3 will denote eigenvalues computed to high
-*     absolute accuracy, with different range options.
-*     WR will denote eigenvalues computed to high relative
-*     accuracy.
-*
-*     CSTEIN computes Y, the eigenvectors of S, given the
-*     eigenvalues.
-*
-*     CSTEDC factors S as Z D1 Z* , where Z is the unitary
-*     matrix of eigenvectors and D1 is a diagonal matrix with
-*     the eigenvalues on the diagonal ('I' option). It may also
-*     update an input unitary matrix, usually the output
-*     from CHETRD/CUNGTR or CHPTRD/CUPGTR ('V' option). It may
-*     also just compute eigenvalues ('N' option).
-*
-*     CSTEMR factors S as Z D1 Z* , where Z is the unitary
-*     matrix of eigenvectors and D1 is a diagonal matrix with
-*     the eigenvalues on the diagonal ('I' option).  CSTEMR
-*     uses the Relatively Robust Representation whenever possible.
-*
-*  When CCHKST is called, a number of matrix "sizes" ("n's") and a
-*  number of matrix "types" are specified.  For each size ("n")
-*  and each type of matrix, one matrix will be generated and used
-*  to test the Hermitian eigenroutines.  For each matrix, a number
-*  of tests will be performed:
-*
-*  (1)     | A - V S V* | / ( |A| n ulp ) CHETRD( UPLO='U', ... )
-*
-*  (2)     | I - UV* | / ( n ulp )        CUNGTR( UPLO='U', ... )
-*
-*  (3)     | A - V S V* | / ( |A| n ulp ) CHETRD( UPLO='L', ... )
-*
-*  (4)     | I - UV* | / ( n ulp )        CUNGTR( UPLO='L', ... )
-*
-*  (5-8)   Same as 1-4, but for CHPTRD and CUPGTR.
-*
-*  (9)     | S - Z D Z* | / ( |S| n ulp ) CSTEQR('V',...)
-*
-*  (10)    | I - ZZ* | / ( n ulp )        CSTEQR('V',...)
-*
-*  (11)    | D1 - D2 | / ( |D1| ulp )        CSTEQR('N',...)
-*
-*  (12)    | D1 - D3 | / ( |D1| ulp )        SSTERF
-*
-*  (13)    0 if the true eigenvalues (computed by sturm count)
-*          of S are within THRESH of
-*          those in D1.  2*THRESH if they are not.  (Tested using
-*          SSTECH)
-*
-*  For S positive definite,
-*
-*  (14)    | S - Z4 D4 Z4* | / ( |S| n ulp ) CPTEQR('V',...)
-*
-*  (15)    | I - Z4 Z4* | / ( n ulp )        CPTEQR('V',...)
-*
-*  (16)    | D4 - D5 | / ( 100 |D4| ulp )       CPTEQR('N',...)
-*
-*  When S is also diagonally dominant by the factor gamma < 1,
-*
-*  (17)    max | D4(i) - WR(i) | / ( |D4(i)| omega ) ,
-*           i
-*          omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
-*                                               SSTEBZ( 'A', 'E', ...)
-*
-*  (18)    | WA1 - D3 | / ( |D3| ulp )          SSTEBZ( 'A', 'E', ...)
-*
-*  (19)    ( max { min | WA2(i)-WA3(j) | } +
-*             i     j
-*            max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
-*             i     j
-*                                               SSTEBZ( 'I', 'E', ...)
-*
-*  (20)    | S - Y WA1 Y* | / ( |S| n ulp )  SSTEBZ, CSTEIN
-*
-*  (21)    | I - Y Y* | / ( n ulp )          SSTEBZ, CSTEIN
-*
-*  (22)    | S - Z D Z* | / ( |S| n ulp )    CSTEDC('I')
-*
-*  (23)    | I - ZZ* | / ( n ulp )           CSTEDC('I')
-*
-*  (24)    | S - Z D Z* | / ( |S| n ulp )    CSTEDC('V')
-*
-*  (25)    | I - ZZ* | / ( n ulp )           CSTEDC('V')
-*
-*  (26)    | D1 - D2 | / ( |D1| ulp )           CSTEDC('V') and
-*                                               CSTEDC('N')
-*
-*  Test 27 is disabled at the moment because CSTEMR does not
-*  guarantee high relatvie accuracy.
-*
-*  (27)    max | D6(i) - WR(i) | / ( |D6(i)| omega ) ,
-*           i
-*          omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
-*                                               CSTEMR('V', 'A')
-*
-*  (28)    max | D6(i) - WR(i) | / ( |D6(i)| omega ) ,
-*           i
-*          omega = 2 (2n-1) ULP (1 + 8 gamma**2) / (1 - gamma)**4
-*                                               CSTEMR('V', 'I')
-*
-*  Tests 29 through 34 are disable at present because CSTEMR
-*  does not handle partial specturm requests.
-*
-*  (29)    | S - Z D Z* | / ( |S| n ulp )    CSTEMR('V', 'I')
-*
-*  (30)    | I - ZZ* | / ( n ulp )           CSTEMR('V', 'I')
-*
-*  (31)    ( max { min | WA2(i)-WA3(j) | } +
-*             i     j
-*            max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
-*             i     j
-*          CSTEMR('N', 'I') vs. CSTEMR('V', 'I')
-*
-*  (32)    | S - Z D Z* | / ( |S| n ulp )    CSTEMR('V', 'V')
-*
-*  (33)    | I - ZZ* | / ( n ulp )           CSTEMR('V', 'V')
-*
-*  (34)    ( max { min | WA2(i)-WA3(j) | } +
-*             i     j
-*            max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
-*             i     j
-*          CSTEMR('N', 'V') vs. CSTEMR('V', 'V')
-*
-*  (35)    | S - Z D Z* | / ( |S| n ulp )    CSTEMR('V', 'A')
-*
-*  (36)    | I - ZZ* | / ( n ulp )           CSTEMR('V', 'A')
-*
-*  (37)    ( max { min | WA2(i)-WA3(j) | } +
-*             i     j
-*            max { min | WA3(i)-WA2(j) | } ) / ( |D3| ulp )
-*             i     j
-*          CSTEMR('N', 'A') vs. CSTEMR('V', 'A')
-*
-*  The "sizes" are specified by an array NN(1:NSIZES); the value of
-*  each element NN(j) specifies one size.
-*  The "types" are specified by a logical array DOTYPE( 1:NTYPES );
-*  if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*  Currently, the list of possible types is:
-*
-*  (1)  The zero matrix.
-*  (2)  The identity matrix.
-*
-*  (3)  A diagonal matrix with evenly spaced entries
-*       1, ..., ULP  and random signs.
-*       (ULP = (first number larger than 1) - 1 )
-*  (4)  A diagonal matrix with geometrically spaced entries
-*       1, ..., ULP  and random signs.
-*  (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
-*       and random signs.
-*
-*  (6)  Same as (4), but multiplied by SQRT( overflow threshold )
-*  (7)  Same as (4), but multiplied by SQRT( underflow threshold )
-*
-*  (8)  A matrix of the form  U* D U, where U is unitary and
-*       D has evenly spaced entries 1, ..., ULP with random signs
-*       on the diagonal.
-*
-*  (9)  A matrix of the form  U* D U, where U is unitary and
-*       D has geometrically spaced entries 1, ..., ULP with random
-*       signs on the diagonal.
-*
-*  (10) A matrix of the form  U* D U, where U is unitary and
-*       D has "clustered" entries 1, ULP,..., ULP with random
-*       signs on the diagonal.
-*
-*  (11) Same as (8), but multiplied by SQRT( overflow threshold )
-*  (12) Same as (8), but multiplied by SQRT( underflow threshold )
-*
-*  (13) Hermitian matrix with random entries chosen from (-1,1).
-*  (14) Same as (13), but multiplied by SQRT( overflow threshold )
-*  (15) Same as (13), but multiplied by SQRT( underflow threshold )
-*  (16) Same as (8), but diagonal elements are all positive.
-*  (17) Same as (9), but diagonal elements are all positive.
-*  (18) Same as (10), but diagonal elements are all positive.
-*  (19) Same as (16), but multiplied by SQRT( overflow threshold )
-*  (20) Same as (16), but multiplied by SQRT( underflow threshold )
-*  (21) A diagonally dominant tridiagonal matrix with geometrically
-*       spaced diagonal entries 1, ..., ULP.
-*
-*  Arguments
-*  =========
-*
-*  NSIZES  (input) INTEGER
-*          The number of sizes of matrices to use.  If it is zero,
-*          CCHKST does nothing.  It must be at least zero.
-*
-*  NN      (input) INTEGER array, dimension (NSIZES)
-*          An array containing the sizes to be used for the matrices.
-*          Zero values will be skipped.  The values must be at least
-*          zero.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE.   If it is zero, CCHKST
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrix is in A.  This
-*          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated.  If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to CCHKST to continue the same random number
-*          sequence.
-*
-*  THRESH  (input) REAL
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IINFO not equal to 0.)
-*
-*  A       (input/workspace/output) COMPLEX array of
-*                                  dimension ( LDA , max(NN) )
-*          Used to hold the matrix whose eigenvalues are to be
-*          computed.  On exit, A contains the last matrix actually
-*          used.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  It must be at
-*          least 1 and at least max( NN ).
-*
-*  AP      (workspace) COMPLEX array of
-*                      dimension( max(NN)*max(NN+1)/2 )
-*          The matrix A stored in packed format.
-*
-*  SD      (workspace/output) REAL array of
-*                             dimension( max(NN) )
-*          The diagonal of the tridiagonal matrix computed by CHETRD.
-*          On exit, SD and SE contain the tridiagonal form of the
-*          matrix in A.
-*
-*  SE      (workspace/output) REAL array of
-*                             dimension( max(NN) )
-*          The off-diagonal of the tridiagonal matrix computed by
-*          CHETRD.  On exit, SD and SE contain the tridiagonal form of
-*          the matrix in A.
-*
-*  D1      (workspace/output) REAL array of
-*                             dimension( max(NN) )
-*          The eigenvalues of A, as computed by CSTEQR simlutaneously
-*          with Z.  On exit, the eigenvalues in D1 correspond with the
-*          matrix in A.
-*
-*  D2      (workspace/output) REAL array of
-*                             dimension( max(NN) )
-*          The eigenvalues of A, as computed by CSTEQR if Z is not
-*          computed.  On exit, the eigenvalues in D2 correspond with
-*          the matrix in A.
-*
-*  D3      (workspace/output) REAL array of
-*                             dimension( max(NN) )
-*          The eigenvalues of A, as computed by SSTERF.  On exit, the
-*          eigenvalues in D3 correspond with the matrix in A.
-*
-*  U       (workspace/output) COMPLEX array of
-*                             dimension( LDU, max(NN) ).
-*          The unitary matrix computed by CHETRD + CUNGTR.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of U, Z, and V.  It must be at least 1
-*          and at least max( NN ).
-*
-*  V       (workspace/output) COMPLEX array of
-*                             dimension( LDU, max(NN) ).
-*          The Housholder vectors computed by CHETRD in reducing A to
-*          tridiagonal form.  The vectors computed with UPLO='U' are
-*          in the upper triangle, and the vectors computed with UPLO='L'
-*          are in the lower triangle.  (As described in CHETRD, the
-*          sub- and superdiagonal are not set to 1, although the
-*          true Householder vector has a 1 in that position.  The
-*          routines that use V, such as CUNGTR, set those entries to
-*          1 before using them, and then restore them later.)
-*
-*  VP      (workspace) COMPLEX array of
-*                      dimension( max(NN)*max(NN+1)/2 )
-*          The matrix V stored in packed format.
-*
-*  TAU     (workspace/output) COMPLEX array of
-*                             dimension( max(NN) )
-*          The Householder factors computed by CHETRD in reducing A
-*          to tridiagonal form.
-*
-*  Z       (workspace/output) COMPLEX array of
-*                             dimension( LDU, max(NN) ).
-*          The unitary matrix of eigenvectors computed by CSTEQR,
-*          CPTEQR, and CSTEIN.
-*
-*  WORK    (workspace/output) COMPLEX array of
-*                      dimension( LWORK )
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          1 + 4 * Nmax + 2 * Nmax * lg Nmax + 3 * Nmax**2
-*          where Nmax = max( NN(j), 2 ) and lg = log base 2.
-*
-*  IWORK   (workspace/output) INTEGER array,
-*             dimension (6 + 6*Nmax + 5 * Nmax * lg Nmax )
-*          where Nmax = max( NN(j), 2 ) and lg = log base 2.
-*          Workspace.
-*
-*  RWORK   (workspace/output) REAL array of
-*                      dimension( ??? )
-*
-*  RESULT  (output) REAL array, dimension (26)
-*          The values computed by the tests described above.
-*          The values are currently limited to 1/ulp, to avoid
-*          overflow.
-*
-*  INFO    (output) INTEGER
-*          If 0, then everything ran OK.
-*           -1: NSIZES < 0
-*           -2: Some NN(j) < 0
-*           -3: NTYPES < 0
-*           -5: THRESH < 0
-*           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
-*          -23: LDU < 1 or LDU < NMAX.
-*          -29: LWORK too small.
-*          If  CLATMR, CLATMS, CHETRD, CUNGTR, CSTEQR, SSTERF,
-*              or CUNMC2 returns an error code, the
-*              absolute value of it is returned.
-*
-*-----------------------------------------------------------------------
-*
-*       Some Local Variables and Parameters:
-*       ---- ----- --------- --- ----------
-*       ZERO, ONE       Real 0 and 1.
-*       MAXTYP          The number of types defined.
-*       NTEST           The number of tests performed, or which can
-*                       be performed so far, for the current matrix.
-*       NTESTT          The total number of tests performed so far.
-*       NBLOCK          Blocksize as returned by ENVIR.
-*       NMAX            Largest value in NN.
-*       NMATS           The number of matrices generated so far.
-*       NERRS           The number of tests which have exceeded THRESH
-*                       so far.
-*       COND, IMODE     Values to be passed to the matrix generators.
-*       ANORM           Norm of A; passed to matrix generators.
-*
-*       OVFL, UNFL      Overflow and underflow thresholds.
-*       ULP, ULPINV     Finest relative precision and its inverse.
-*       RTOVFL, RTUNFL  Square roots of the previous 2 values.
-*               The following four arrays decode JTYPE:
-*       KTYPE(j)        The general type (1-10) for type "j".
-*       KMODE(j)        The MODE value to be passed to the matrix
-*                       generator for type "j".
-*       KMAGN(j)        The order of magnitude ( O(1),
-*                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *
 *  =====================================================================
 *

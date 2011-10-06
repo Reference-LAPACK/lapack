@@ -1,10 +1,164 @@
+*> \brief \b DDRVSY
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
+*                          NOUT )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTERR
+*       INTEGER            NMAX, NN, NOUT, NRHS
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            IWORK( * ), NVAL( * )
+*       DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DDRVSY tests the driver routines DSYSV and -SVX.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand side vectors to be generated for
+*>          each linear system.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[in] NMAX
+*> \verbatim
+*>          NMAX is INTEGER
+*>          The maximum value permitted for N, used in dimensioning the
+*>          work arrays.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AFAC
+*> \verbatim
+*>          AFAC is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AINV
+*> \verbatim
+*>          AINV is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (NMAX*NRHS)
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (NMAX*NRHS)
+*> \endverbatim
+*>
+*> \param[out] XACT
+*> \verbatim
+*>          XACT is DOUBLE PRECISION array, dimension (NMAX*NRHS)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension
+*>                      (NMAX*max(2,NRHS))
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (NMAX+2*NRHS)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (2*NMAX)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DDRVSY( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
      $                   A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -17,63 +171,6 @@
       DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DDRVSY tests the driver routines DSYSV and -SVX.
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*
-*  NN      (input) INTEGER
-*          The number of values of N contained in the vector NVAL.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix dimension N.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand side vectors to be generated for
-*          each linear system.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  NMAX    (input) INTEGER
-*          The maximum value permitted for N, used in dimensioning the
-*          work arrays.
-*
-*  A       (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  AFAC    (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  AINV    (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  B       (workspace) DOUBLE PRECISION array, dimension (NMAX*NRHS)
-*
-*  X       (workspace) DOUBLE PRECISION array, dimension (NMAX*NRHS)
-*
-*  XACT    (workspace) DOUBLE PRECISION array, dimension (NMAX*NRHS)
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension
-*                      (NMAX*max(2,NRHS))
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (NMAX+2*NRHS)
-*
-*  IWORK   (workspace) INTEGER array, dimension (2*NMAX)
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

@@ -1,12 +1,131 @@
+*> \brief \b CTPCON
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CTPCON( NORM, UPLO, DIAG, N, AP, RCOND, WORK, RWORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, NORM, UPLO
+*       INTEGER            INFO, N
+*       REAL               RCOND
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * )
+*       COMPLEX            AP( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CTPCON estimates the reciprocal of the condition number of a packed
+*> triangular matrix A, in either the 1-norm or the infinity-norm.
+*>
+*> The norm of A is computed and an estimate is obtained for
+*> norm(inv(A)), then the reciprocal of the condition number is
+*> computed as
+*>    RCOND = 1 / ( norm(A) * norm(inv(A)) ).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NORM
+*> \verbatim
+*>          NORM is CHARACTER*1
+*>          Specifies whether the 1-norm condition number or the
+*>          infinity-norm condition number is required:
+*>          = '1' or 'O':  1-norm;
+*>          = 'I':         Infinity-norm.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  A is upper triangular;
+*>          = 'L':  A is lower triangular.
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>          = 'N':  A is non-unit triangular;
+*>          = 'U':  A is unit triangular.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] AP
+*> \verbatim
+*>          AP is COMPLEX array, dimension (N*(N+1)/2)
+*>          The upper or lower triangular matrix A, packed columnwise in
+*>          a linear array.  The j-th column of A is stored in the array
+*>          AP as follows:
+*>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
+*>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
+*>          If DIAG = 'U', the diagonal elements of A are not referenced
+*>          and are assumed to be 1.
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The reciprocal of the condition number of the matrix A,
+*>          computed as RCOND = 1/(norm(A) * norm(inv(A))).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CTPCON( NORM, UPLO, DIAG, N, AP, RCOND, WORK, RWORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
-*
-*     Modified to call CLACN2 in place of CLACON, 10 Feb 03, SJH.
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, NORM, UPLO
@@ -17,58 +136,6 @@
       REAL               RWORK( * )
       COMPLEX            AP( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CTPCON estimates the reciprocal of the condition number of a packed
-*  triangular matrix A, in either the 1-norm or the infinity-norm.
-*
-*  The norm of A is computed and an estimate is obtained for
-*  norm(inv(A)), then the reciprocal of the condition number is
-*  computed as
-*     RCOND = 1 / ( norm(A) * norm(inv(A)) ).
-*
-*  Arguments
-*  =========
-*
-*  NORM    (input) CHARACTER*1
-*          Specifies whether the 1-norm condition number or the
-*          infinity-norm condition number is required:
-*          = '1' or 'O':  1-norm;
-*          = 'I':         Infinity-norm.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  A is upper triangular;
-*          = 'L':  A is lower triangular.
-*
-*  DIAG    (input) CHARACTER*1
-*          = 'N':  A is non-unit triangular;
-*          = 'U':  A is unit triangular.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  AP      (input) COMPLEX array, dimension (N*(N+1)/2)
-*          The upper or lower triangular matrix A, packed columnwise in
-*          a linear array.  The j-th column of A is stored in the array
-*          AP as follows:
-*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
-*          If DIAG = 'U', the diagonal elements of A are not referenced
-*          and are assumed to be 1.
-*
-*  RCOND   (output) REAL
-*          The reciprocal of the condition number of the matrix A,
-*          computed as RCOND = 1/(norm(A) * norm(inv(A))).
-*
-*  WORK    (workspace) COMPLEX array, dimension (2*N)
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

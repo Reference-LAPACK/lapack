@@ -1,26 +1,59 @@
-      SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
-*     
-*  -- LAPACK routine (version 3.3.1)                                  --
+*> \brief \b ILAVER returns the LAPACK version.
+**
+*  =========== DOCUMENTATION ===========
 *
-*     April 2011
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
-*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     ..
+*  Definition
+*  ==========
 *
+*     SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+*
+*     INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH
+*  
 *  Purpose
 *  =======
 *
-*  This subroutine return the Lapack version.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>  This subroutine returns the LAPACK version.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
-*  VERS_MAJOR   (output) INTEGER
-*      return the lapack major version
-*  VERS_MINOR   (output) INTEGER
-*      return the lapack minor version from the major version
-*  VERS_PATCH   (output) INTEGER
-*      return the lapack patch version from the minor version
+*
+*>  \param[out] VERS_MAJOR
+*>      return the lapack major version
+*>
+*>  \param[out] VERS_MINOR
+*>      return the lapack minor version from the major version
+*>
+*>  \param[out] VERS_PATCH
+*>      return the lapack patch version from the minor version
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
+      SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
+*
+*  -- LAPACK computational routine (version 3.3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *  =====================================================================
 *
       INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH

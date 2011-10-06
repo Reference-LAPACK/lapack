@@ -1,9 +1,121 @@
+*> \brief \b CSPT03
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
+*                          RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            LDW, N
+*       REAL               RCOND, RESID
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * )
+*       COMPLEX            A( * ), AINV( * ), WORK( LDW, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CSPT03 computes the residual for a complex symmetric packed matrix
+*> times its inverse:
+*>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          complex symmetric matrix A is stored:
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows and columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (N*(N+1)/2)
+*>          The original complex symmetric matrix A, stored as a packed
+*>          triangular matrix.
+*> \endverbatim
+*>
+*> \param[in] AINV
+*> \verbatim
+*>          AINV is COMPLEX array, dimension (N*(N+1)/2)
+*>          The (symmetric) inverse of the matrix A, stored as a packed
+*>          triangular matrix.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (LDWORK,N)
+*> \endverbatim
+*>
+*> \param[in] LDWORK
+*> \verbatim
+*>          LDWORK is INTEGER
+*>          The leading dimension of the array WORK.  LDWORK >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The reciprocal of the condition number of A, computed as
+*>          ( 1/norm(A) ) / norm(AINV).
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          norm(I - A*AINV) / ( N * norm(A) * norm(AINV) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CSPT03( UPLO, N, A, AINV, WORK, LDW, RWORK, RCOND,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -14,48 +126,6 @@
       REAL               RWORK( * )
       COMPLEX            A( * ), AINV( * ), WORK( LDW, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CSPT03 computes the residual for a complex symmetric packed matrix
-*  times its inverse:
-*     norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          complex symmetric matrix A is stored:
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The number of rows and columns of the matrix A.  N >= 0.
-*
-*  A       (input) COMPLEX array, dimension (N*(N+1)/2)
-*          The original complex symmetric matrix A, stored as a packed
-*          triangular matrix.
-*
-*  AINV    (input) COMPLEX array, dimension (N*(N+1)/2)
-*          The (symmetric) inverse of the matrix A, stored as a packed
-*          triangular matrix.
-*
-*  WORK    (workspace) COMPLEX array, dimension (LDWORK,N)
-*
-*  LDWORK  (input) INTEGER
-*          The leading dimension of the array WORK.  LDWORK >= max(1,N).
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  RCOND   (output) REAL
-*          The reciprocal of the condition number of A, computed as
-*          ( 1/norm(A) ) / norm(AINV).
-*
-*  RESID   (output) REAL
-*          norm(I - A*AINV) / ( N * norm(A) * norm(AINV) * EPS )
 *
 *  =====================================================================
 *

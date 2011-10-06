@@ -1,43 +1,92 @@
+*> \brief \b DGET33
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGET33( RMAX, LMAX, NINFO, KNT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, LMAX, NINFO
+*       DOUBLE PRECISION   RMAX
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGET33 tests DLANV2, a routine for putting 2 by 2 blocks into
+*> standard form.  In other words, it computes a two by two rotation
+*> [[C,S];[-S,C]] where in
+*>
+*>    [ C S ][T(1,1) T(1,2)][ C -S ] = [ T11 T12 ]
+*>    [-S C ][T(2,1) T(2,2)][ S  C ]   [ T21 T22 ]
+*>
+*> either
+*>    1) T21=0 (real eigenvalues), or
+*>    2) T11=T22 and T21*T12<0 (complex conjugate eigenvalues).
+*> We also  verify that the residual is small.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is DOUBLE PRECISION
+*>          Value of the largest test ratio.
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER
+*>          Example number where largest test ratio achieved.
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER
+*>          Number of examples returned with INFO .NE. 0.
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DGET33( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, LMAX, NINFO
       DOUBLE PRECISION   RMAX
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGET33 tests DLANV2, a routine for putting 2 by 2 blocks into
-*  standard form.  In other words, it computes a two by two rotation
-*  [[C,S];[-S,C]] where in
-*
-*     [ C S ][T(1,1) T(1,2)][ C -S ] = [ T11 T12 ]
-*     [-S C ][T(2,1) T(2,2)][ S  C ]   [ T21 T22 ]
-*
-*  either
-*     1) T21=0 (real eigenvalues), or
-*     2) T11=T22 and T21*T12<0 (complex conjugate eigenvalues).
-*  We also  verify that the residual is small.
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) DOUBLE PRECISION
-*          Value of the largest test ratio.
-*
-*  LMAX    (output) INTEGER
-*          Example number where largest test ratio achieved.
-*
-*  NINFO   (output) INTEGER
-*          Number of examples returned with INFO .NE. 0.
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
 *
 *  =====================================================================
 *

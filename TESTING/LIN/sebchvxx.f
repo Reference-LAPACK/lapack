@@ -1,76 +1,91 @@
-      SUBROUTINE SEBCHVXX( THRESH, PATH )
-      IMPLICIT NONE
-*     .. Scalar Arguments ..
-      REAL               THRESH
-      CHARACTER*3        PATH
+*> \brief \b SEBCHVXX
 *
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SEBCHVXX( THRESH, PATH )
+* 
+*       .. Scalar Arguments ..
+*       REAL               THRESH
+*       CHARACTER*3        PATH
+*  
 *  Purpose
-*  ======
+*  =======
 *
-*  SEBCHVXX will run S**SVXX on a series of Hilbert matrices and then
-*  compare the error bounds returned by SGESVXX to see if the returned
-*  answer indeed falls within those bounds.
-*
-*  Eight test ratios will be computed.  The tests will pass if they are .LT.
-*  THRESH.  There are two cases that are determined by 1 / (SQRT( N ) * EPS).
-*  If that value is .LE. to the component wise reciprocal condition number,
-*  it uses the guaranteed case, other wise it uses the unguaranteed case.
-*
-*  Test ratios:
-*     Let Xc be X_computed and Xt be X_truth.
-*     The norm used is the infinity norm.
+*>\details \b Purpose:
+*>\verbatim
+*> Purpose
+*> ======
+*>
+*> SEBCHVXX will run S**SVXX on a series of Hilbert matrices and then
+*> compare the error bounds returned by SGESVXX to see if the returned
+*> answer indeed falls within those bounds.
+*>
+*> Eight test ratios will be computed.  The tests will pass if they are .LT.
+*> THRESH.  There are two cases that are determined by 1 / (SQRT( N ) * EPS).
+*> If that value is .LE. to the component wise reciprocal condition number,
+*> it uses the guaranteed case, other wise it uses the unguaranteed case.
+*>
+*> Test ratios:
+*>    Let Xc be X_computed and Xt be X_truth.
+*>    The norm used is the infinity norm.
 
-*     Let A be the guaranteed case and B be the unguaranteed case.
-*
-*       1. Normwise guaranteed forward error bound.
-*       A: norm ( abs( Xc - Xt ) / norm ( Xt ) .LE. ERRBND( *, nwise_i, bnd_i ) and
-*          ERRBND( *, nwise_i, bnd_i ) .LE. MAX(SQRT(N),10) * EPS.
-*          If these conditions are met, the test ratio is set to be
-*          ERRBND( *, nwise_i, bnd_i ) / MAX(SQRT(N), 10).  Otherwise it is 1/EPS.
-*       B: For this case, SGESVXX should just return 1.  If it is less than
-*          one, treat it the same as in 1A.  Otherwise it fails. (Set test
-*          ratio to ERRBND( *, nwise_i, bnd_i ) * THRESH?)
-*
-*       2. Componentwise guaranteed forward error bound.
-*       A: norm ( abs( Xc(j) - Xt(j) ) ) / norm (Xt(j)) .LE. ERRBND( *, cwise_i, bnd_i )
-*          for all j .AND. ERRBND( *, cwise_i, bnd_i ) .LE. MAX(SQRT(N), 10) * EPS.
-*          If these conditions are met, the test ratio is set to be
-*          ERRBND( *, cwise_i, bnd_i ) / MAX(SQRT(N), 10).  Otherwise it is 1/EPS.
-*       B: Same as normwise test ratio.
-*
-*       3. Backwards error.
-*       A: The test ratio is set to BERR/EPS.
-*       B: Same test ratio.
-*
-*       4. Reciprocal condition number.
-*       A: A condition number is computed with Xt and compared with the one
-*          returned from SGESVXX.  Let RCONDc be the RCOND returned by SGESVXX
-*          and RCONDt be the RCOND from the truth value.  Test ratio is set to
-*          MAX(RCONDc/RCONDt, RCONDt/RCONDc).
-*       B: Test ratio is set to 1 / (EPS * RCONDc).
-*
-*       5. Reciprocal normwise condition number.
-*       A: The test ratio is set to
-*          MAX(ERRBND( *, nwise_i, cond_i ) / NCOND, NCOND / ERRBND( *, nwise_i, cond_i )).
-*       B: Test ratio is set to 1 / (EPS * ERRBND( *, nwise_i, cond_i )).
-*
-*       7. Reciprocal componentwise condition number.
-*       A: Test ratio is set to
-*          MAX(ERRBND( *, cwise_i, cond_i ) / CCOND, CCOND / ERRBND( *, cwise_i, cond_i )).
-*       B: Test ratio is set to 1 / (EPS * ERRBND( *, cwise_i, cond_i )).
-*
-*     .. Parameters ..
-*     NMAX is determined by the largest number in the inverse of the Hilbert
-*     matrix.  Precision is exhausted when the largest entry in it is greater
-*     than 2 to the power of the number of bits in the fraction of the data
-*     type used plus one, which is 24 for single precision.
-*     NMAX should be 6 for single and 11 for double.
+*>    Let A be the guaranteed case and B be the unguaranteed case.
+*>
+*>      1. Normwise guaranteed forward error bound.
+*>      A: norm ( abs( Xc - Xt ) / norm ( Xt ) .LE. ERRBND( *, nwise_i, bnd_i ) and
+*>         ERRBND( *, nwise_i, bnd_i ) .LE. MAX(SQRT(N),10) * EPS.
+*>         If these conditions are met, the test ratio is set to be
+*>         ERRBND( *, nwise_i, bnd_i ) / MAX(SQRT(N), 10).  Otherwise it is 1/EPS.
+*>      B: For this case, SGESVXX should just return 1.  If it is less than
+*>         one, treat it the same as in 1A.  Otherwise it fails. (Set test
+*>         ratio to ERRBND( *, nwise_i, bnd_i ) * THRESH?)
+*>
+*>      2. Componentwise guaranteed forward error bound.
+*>      A: norm ( abs( Xc(j) - Xt(j) ) ) / norm (Xt(j)) .LE. ERRBND( *, cwise_i, bnd_i )
+*>         for all j .AND. ERRBND( *, cwise_i, bnd_i ) .LE. MAX(SQRT(N), 10) * EPS.
+*>         If these conditions are met, the test ratio is set to be
+*>         ERRBND( *, cwise_i, bnd_i ) / MAX(SQRT(N), 10).  Otherwise it is 1/EPS.
+*>      B: Same as normwise test ratio.
+*>
+*>      3. Backwards error.
+*>      A: The test ratio is set to BERR/EPS.
+*>      B: Same test ratio.
+*>
+*>      4. Reciprocal condition number.
+*>      A: A condition number is computed with Xt and compared with the one
+*>         returned from SGESVXX.  Let RCONDc be the RCOND returned by SGESVXX
+*>         and RCONDt be the RCOND from the truth value.  Test ratio is set to
+*>         MAX(RCONDc/RCONDt, RCONDt/RCONDc).
+*>      B: Test ratio is set to 1 / (EPS * RCONDc).
+*>
+*>      5. Reciprocal normwise condition number.
+*>      A: The test ratio is set to
+*>         MAX(ERRBND( *, nwise_i, cond_i ) / NCOND, NCOND / ERRBND( *, nwise_i, cond_i )).
+*>      B: Test ratio is set to 1 / (EPS * ERRBND( *, nwise_i, cond_i )).
+*>
+*>      7. Reciprocal componentwise condition number.
+*>      A: Test ratio is set to
+*>         MAX(ERRBND( *, cwise_i, cond_i ) / CCOND, CCOND / ERRBND( *, cwise_i, cond_i )).
+*>      B: Test ratio is set to 1 / (EPS * ERRBND( *, cwise_i, cond_i )).
+*>
+*>    .. Parameters ..
+*>    NMAX is determined by the largest number in the inverse of the Hilbert
+*>    matrix.  Precision is exhausted when the largest entry in it is greater
+*>    than 2 to the power of the number of bits in the fraction of the data
+*>    type used plus one, which is 24 for single precision.
+*>    NMAX should be 6 for single and 11 for double.
 
       INTEGER            NMAX, NPARAMS, NERRBND, NTESTS, KL, KU
       PARAMETER          (NMAX = 6, NPARAMS = 2, NERRBND = 3,
      $                    NTESTS = 6)
 
-*     .. Local Scalars ..
+*>    .. Local Scalars ..
       INTEGER            N, NRHS, INFO, I ,J, k, NFAIL, LDA, LDAB,
      $                   LDAFB, N_AUX_TESTS
       CHARACTER          FACT, TRANS, UPLO, EQUED
@@ -84,7 +99,7 @@
      $                   CWISE_RCOND, NWISE_RCOND,
      $                   CONDTHRESH, ERRTHRESH
 
-*     .. Local Arrays ..
+*>    .. Local Arrays ..
       REAL               TSTRAT(NTESTS), RINV(NMAX), PARAMS(NPARAMS),
      $                   A(NMAX, NMAX), ACOPY(NMAX, NMAX),
      $                   INVHILB(NMAX, NMAX), R(NMAX), C(NMAX), S(NMAX),
@@ -96,24 +111,24 @@
      $                   ERRBND_N(NMAX*3), ERRBND_C(NMAX*3)
       INTEGER            IWORK(NMAX), IPIV(NMAX)
 
-*     .. External Functions ..
+*>    .. External Functions ..
       REAL               SLAMCH
 
-*     .. External Subroutines ..
+*>    .. External Subroutines ..
       EXTERNAL           SLAHILB, SGESVXX, SSYSVXX, SPOSVXX, SGBSVXX,
      $                   SLACPY, LSAMEN
       LOGICAL            LSAMEN
 
-*     .. Intrinsic Functions ..
+*>    .. Intrinsic Functions ..
       INTRINSIC          SQRT, MAX, ABS
 
-*     .. Parameters ..
+*>    .. Parameters ..
       INTEGER            NWISE_I, CWISE_I
       PARAMETER          (NWISE_I = 1, CWISE_I = 1)
       INTEGER            BND_I, COND_I
       PARAMETER          (BND_I = 2, COND_I = 3)
 
-*     Create the loop to test out the Hilbert matrices
+*>    Create the loop to test out the Hilbert matrices
 
       FACT = 'E'
       UPLO = 'U'
@@ -127,7 +142,7 @@
       LDAFB = 2*(NMAX-1)+(NMAX-1)+1
       C2 = PATH( 2: 3 )
 
-*     Main loop to test the different Hilbert Matrices.
+*>    Main loop to test the different Hilbert Matrices.
 
       printed_guide = .false.
 
@@ -140,14 +155,14 @@
          NRHS = n
          M = MAX(SQRT(REAL(N)), 10.0)
 
-*        Generate the Hilbert matrix, its inverse, and the
-*        right hand side, all scaled by the LCM(1,..,2N-1).
+*>       Generate the Hilbert matrix, its inverse, and the
+*>       right hand side, all scaled by the LCM(1,..,2N-1).
          CALL SLAHILB(N, N, A, LDA, INVHILB, LDA, B, LDA, WORK, INFO)
 
-*        Copy A into ACOPY.
+*>       Copy A into ACOPY.
          CALL SLACPY('ALL', N, N, A, NMAX, ACOPY, NMAX)
 
-*        Store A in band format for GB tests
+*>       Store A in band format for GB tests
          DO J = 1, N
             DO I = 1, KL+KU+1
                AB( I, J ) = 0.0E+0
@@ -159,7 +174,7 @@
             END DO
          END DO
 
-*        Copy AB into ABCOPY.
+*>       Copy AB into ABCOPY.
          DO J = 1, N
             DO I = 1, KL+KU+1
                ABCOPY( I, J ) = 0.0E+0
@@ -167,7 +182,7 @@
          END DO
          CALL SLACPY('ALL', KL+KU+1, N, AB, LDAB, ABCOPY, LDAB)
 
-*        Call S**SVXX with default PARAMS and N_ERR_BND = 3.
+*>       Call S**SVXX with default PARAMS and N_ERR_BND = 3.
          IF ( LSAMEN( 2, C2, 'SY' ) ) THEN
             CALL SSYSVXX(FACT, UPLO, N, NRHS, ACOPY, LDA, AF, LDA,
      $           IPIV, EQUED, S, B, LDA, X, LDA, ORCOND,
@@ -208,14 +223,14 @@
             END IF
          END IF
 
-*        Calculating the difference between S**SVXX's X and the true X.
+*>       Calculating the difference between S**SVXX's X and the true X.
          DO I = 1, N
             DO J = 1, NRHS
                DIFF( I, J ) = X( I, J ) - INVHILB( I, J )
             END DO
          END DO
 
-*        Calculating the RCOND
+*>       Calculating the RCOND
          RNORM = 0
          RINORM = 0
          IF ( LSAMEN( 2, C2, 'PO' ) .OR. LSAMEN( 2, C2, 'SY' ) ) THEN
@@ -246,7 +261,7 @@
          RNORM = RNORM / A(1, 1)
          RCOND = 1.0/(RNORM * RINORM)
 
-*        Calculating the R for normwise rcond.
+*>       Calculating the R for normwise rcond.
          DO I = 1, N
             RINV(I) = 0.0
          END DO
@@ -256,7 +271,7 @@
             END DO
          END DO
 
-*        Calculating the Normwise rcond.
+*>       Calculating the Normwise rcond.
          RINORM = 0.0
          DO I = 1, N
             SUMRI = 0.0
@@ -426,7 +441,7 @@ c$$$         WRITE(*,*) 'Reciprocal condition number: ',ERRBND(NRHS,cwise_i,cond
 c$$$         WRITE(*,*) 'Raw error estimate: ',ERRBND(NRHS,cwise_i,rawbnd_i)
 c$$$         print *, 'Info: ', info
 c$$$         WRITE(*,*)
-*         WRITE(*,*) 'TSTRAT: ',TSTRAT
+*>        WRITE(*,*) 'TSTRAT: ',TSTRAT
 
       END DO
 
@@ -442,7 +457,7 @@ c$$$         WRITE(*,*)
  9998 FORMAT( ' S', A2, 'SVXX: ', I6, ' out of ', I6,
      $     ' tests failed to pass the threshold' )
  9997 FORMAT( ' S', A2, 'SVXX passed the tests of error bounds' )
-*     Test ratios.
+*>    Test ratios.
  9996 FORMAT( 3X, I2, ': Normwise guaranteed forward error', / 5X,
      $     'Guaranteed case: if norm ( abs( Xc - Xt )',
      $     ' / norm ( Xt ) .LE. ERRBND( *, nwise_i, bnd_i ), then',
@@ -460,3 +475,33 @@ c$$$         WRITE(*,*)
      $     ', ORCOND = ', G12.5, ', real RCOND = ', G12.5 )
 
       END
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
+      SUBROUTINE SEBCHVXX( THRESH, PATH )
+*
+*  -- LAPACK test routine (input) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      REAL               THRESH
+      CHARACTER*3        PATH
+*

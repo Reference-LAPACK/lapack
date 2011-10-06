@@ -1,9 +1,137 @@
+*> \brief \b ZUNT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
+*                          RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          ROWCOL
+*       INTEGER            LDU, LWORK, M, N
+*       DOUBLE PRECISION   RESID
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         U( LDU, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZUNT01 checks that the matrix U is unitary by computing the ratio
+*>
+*>    RESID = norm( I - U*U' ) / ( n * EPS ), if ROWCOL = 'R',
+*> or
+*>    RESID = norm( I - U'*U ) / ( m * EPS ), if ROWCOL = 'C'.
+*>
+*> Alternatively, if there isn't sufficient workspace to form
+*> I - U*U' or I - U'*U, the ratio is computed as
+*>
+*>    RESID = abs( I - U*U' ) / ( n * EPS ), if ROWCOL = 'R',
+*> or
+*>    RESID = abs( I - U'*U ) / ( m * EPS ), if ROWCOL = 'C'.
+*>
+*> where EPS is the machine precision.  ROWCOL is used only if m = n;
+*> if m > n, ROWCOL is assumed to be 'C', and if m < n, ROWCOL is
+*> assumed to be 'R'.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ROWCOL
+*> \verbatim
+*>          ROWCOL is CHARACTER
+*>          Specifies whether the rows or columns of U should be checked
+*>          for orthogonality.  Used only if M = N.
+*>          = 'R':  Check for orthogonal rows of U
+*>          = 'C':  Check for orthogonal columns of U
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix U.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix U.
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is COMPLEX*16 array, dimension (LDU,N)
+*>          The unitary matrix U.  U is checked for orthogonal columns
+*>          if m > n or if m = n and ROWCOL = 'C'.  U is checked for
+*>          orthogonal rows if m < n or if m = n and ROWCOL = 'R'.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of the array U.  LDU >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  For best performance, LWORK
+*>          should be at least N*N if ROWCOL = 'C' or M*M if
+*>          ROWCOL = 'R', but the test will be done even if LWORK is 0.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (min(M,N))
+*>          Used only if LWORK is large enough to use the Level 3 BLAS
+*>          code.
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is DOUBLE PRECISION
+*>          RESID = norm( I - U * U' ) / ( n * EPS ), if ROWCOL = 'R', or
+*>          RESID = norm( I - U' * U ) / ( m * EPS ), if ROWCOL = 'C'.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZUNT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          ROWCOL
@@ -14,64 +142,6 @@
       DOUBLE PRECISION   RWORK( * )
       COMPLEX*16         U( LDU, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZUNT01 checks that the matrix U is unitary by computing the ratio
-*
-*     RESID = norm( I - U*U' ) / ( n * EPS ), if ROWCOL = 'R',
-*  or
-*     RESID = norm( I - U'*U ) / ( m * EPS ), if ROWCOL = 'C'.
-*
-*  Alternatively, if there isn't sufficient workspace to form
-*  I - U*U' or I - U'*U, the ratio is computed as
-*
-*     RESID = abs( I - U*U' ) / ( n * EPS ), if ROWCOL = 'R',
-*  or
-*     RESID = abs( I - U'*U ) / ( m * EPS ), if ROWCOL = 'C'.
-*
-*  where EPS is the machine precision.  ROWCOL is used only if m = n;
-*  if m > n, ROWCOL is assumed to be 'C', and if m < n, ROWCOL is
-*  assumed to be 'R'.
-*
-*  Arguments
-*  =========
-*
-*  ROWCOL  (input) CHARACTER
-*          Specifies whether the rows or columns of U should be checked
-*          for orthogonality.  Used only if M = N.
-*          = 'R':  Check for orthogonal rows of U
-*          = 'C':  Check for orthogonal columns of U
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix U.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix U.
-*
-*  U       (input) COMPLEX*16 array, dimension (LDU,N)
-*          The unitary matrix U.  U is checked for orthogonal columns
-*          if m > n or if m = n and ROWCOL = 'C'.  U is checked for
-*          orthogonal rows if m < n or if m = n and ROWCOL = 'R'.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of the array U.  LDU >= max(1,M).
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  For best performance, LWORK
-*          should be at least N*N if ROWCOL = 'C' or M*M if
-*          ROWCOL = 'R', but the test will be done even if LWORK is 0.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (min(M,N))
-*          Used only if LWORK is large enough to use the Level 3 BLAS
-*          code.
-*
-*  RESID   (output) DOUBLE PRECISION
-*          RESID = norm( I - U * U' ) / ( n * EPS ), if ROWCOL = 'R', or
-*          RESID = norm( I - U' * U ) / ( m * EPS ), if ROWCOL = 'C'.
 *
 *  =====================================================================
 *

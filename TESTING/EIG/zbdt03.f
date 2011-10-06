@@ -1,9 +1,146 @@
+*> \brief \b ZBDT03
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
+*                          RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            KD, LDU, LDVT, N
+*       DOUBLE PRECISION   RESID
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), E( * ), S( * )
+*       COMPLEX*16         U( LDU, * ), VT( LDVT, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZBDT03 reconstructs a bidiagonal matrix B from its SVD:
+*>    S = U' * B * V
+*> where U and V are orthogonal matrices and S is diagonal.
+*>
+*> The test ratio to test the singular value decomposition is
+*>    RESID = norm( B - U * S * VT ) / ( n * norm(B) * EPS )
+*> where VT = V' and EPS is the machine precision.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the matrix B is upper or lower bidiagonal.
+*>          = 'U':  Upper bidiagonal
+*>          = 'L':  Lower bidiagonal
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix B.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The bandwidth of the bidiagonal matrix B.  If KD = 1, the
+*>          matrix B is bidiagonal, and if KD = 0, B is diagonal and E is
+*>          not referenced.  If KD is greater than 1, it is assumed to be
+*>          1, and if KD is less than 0, it is assumed to be 0.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The n diagonal elements of the bidiagonal matrix B.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          The (n-1) superdiagonal elements of the bidiagonal matrix B
+*>          if UPLO = 'U', or the (n-1) subdiagonal elements of B if
+*>          UPLO = 'L'.
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is COMPLEX*16 array, dimension (LDU,N)
+*>          The n by n orthogonal matrix U in the reduction B = U'*A*P.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of the array U.  LDU >= max(1,N)
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension (N)
+*>          The singular values from the SVD of B, sorted in decreasing
+*>          order.
+*> \endverbatim
+*>
+*> \param[in] VT
+*> \verbatim
+*>          VT is COMPLEX*16 array, dimension (LDVT,N)
+*>          The n by n orthogonal matrix V' in the reduction
+*>          B = U * S * V'.
+*> \endverbatim
+*>
+*> \param[in] LDVT
+*> \verbatim
+*>          LDVT is INTEGER
+*>          The leading dimension of the array VT.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is DOUBLE PRECISION
+*>          The test ratio:  norm(B - U * S * V') / ( n * norm(A) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -14,64 +151,6 @@
       DOUBLE PRECISION   D( * ), E( * ), S( * )
       COMPLEX*16         U( LDU, * ), VT( LDVT, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZBDT03 reconstructs a bidiagonal matrix B from its SVD:
-*     S = U' * B * V
-*  where U and V are orthogonal matrices and S is diagonal.
-*
-*  The test ratio to test the singular value decomposition is
-*     RESID = norm( B - U * S * VT ) / ( n * norm(B) * EPS )
-*  where VT = V' and EPS is the machine precision.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the matrix B is upper or lower bidiagonal.
-*          = 'U':  Upper bidiagonal
-*          = 'L':  Lower bidiagonal
-*
-*  N       (input) INTEGER
-*          The order of the matrix B.
-*
-*  KD      (input) INTEGER
-*          The bandwidth of the bidiagonal matrix B.  If KD = 1, the
-*          matrix B is bidiagonal, and if KD = 0, B is diagonal and E is
-*          not referenced.  If KD is greater than 1, it is assumed to be
-*          1, and if KD is less than 0, it is assumed to be 0.
-*
-*  D       (input) DOUBLE PRECISION array, dimension (N)
-*          The n diagonal elements of the bidiagonal matrix B.
-*
-*  E       (input) DOUBLE PRECISION array, dimension (N-1)
-*          The (n-1) superdiagonal elements of the bidiagonal matrix B
-*          if UPLO = 'U', or the (n-1) subdiagonal elements of B if
-*          UPLO = 'L'.
-*
-*  U       (input) COMPLEX*16 array, dimension (LDU,N)
-*          The n by n orthogonal matrix U in the reduction B = U'*A*P.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of the array U.  LDU >= max(1,N)
-*
-*  S       (input) DOUBLE PRECISION array, dimension (N)
-*          The singular values from the SVD of B, sorted in decreasing
-*          order.
-*
-*  VT      (input) COMPLEX*16 array, dimension (LDVT,N)
-*          The n by n orthogonal matrix V' in the reduction
-*          B = U * S * V'.
-*
-*  LDVT    (input) INTEGER
-*          The leading dimension of the array VT.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (2*N)
-*
-*  RESID   (output) DOUBLE PRECISION
-*          The test ratio:  norm(B - U * S * V') / ( n * norm(A) * EPS )
 *
 * ======================================================================
 *

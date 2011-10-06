@@ -1,9 +1,147 @@
+*> \brief \b CRQT02
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+*                          RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            K, LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               RESULT( * ), RWORK( * )
+*       COMPLEX            A( LDA, * ), AF( LDA, * ), Q( LDA, * ),
+*      $                   R( LDA, * ), TAU( * ), WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CRQT02 tests CUNGRQ, which generates an m-by-n matrix Q with
+*> orthonornmal rows that is defined as the product of k elementary
+*> reflectors.
+*>
+*> Given the RQ factorization of an m-by-n matrix A, CRQT02 generates
+*> the orthogonal matrix Q defined by the factorization of the last k
+*> rows of A; it compares R(m-k+1:m,n-m+1:n) with
+*> A(m-k+1:m,1:n)*Q(n-m+1:n,1:n)', and checks that the rows of Q are
+*> orthonormal.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix Q to be generated.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix Q to be generated.
+*>          N >= M >= 0.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of elementary reflectors whose product defines the
+*>          matrix Q. M >= K >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          The m-by-n matrix A which was factorized by CRQT01.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is COMPLEX array, dimension (LDA,N)
+*>          Details of the RQ factorization of A, as returned by CGERQF.
+*>          See CGERQF for further details.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[out] R
+*> \verbatim
+*>          R is COMPLEX array, dimension (LDA,M)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A, AF, Q and L. LDA >= N.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is COMPLEX array, dimension (M)
+*>          The scalar factors of the elementary reflectors corresponding
+*>          to the RQ factorization in AF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (2)
+*>          The test ratios:
+*>          RESULT(1) = norm( R - A*Q' ) / ( N * norm(A) * EPS )
+*>          RESULT(2) = norm( I - Q*Q' ) / ( N * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            K, LDA, LWORK, M, N
@@ -13,63 +151,6 @@
       COMPLEX            A( LDA, * ), AF( LDA, * ), Q( LDA, * ),
      $                   R( LDA, * ), TAU( * ), WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CRQT02 tests CUNGRQ, which generates an m-by-n matrix Q with
-*  orthonornmal rows that is defined as the product of k elementary
-*  reflectors.
-*
-*  Given the RQ factorization of an m-by-n matrix A, CRQT02 generates
-*  the orthogonal matrix Q defined by the factorization of the last k
-*  rows of A; it compares R(m-k+1:m,n-m+1:n) with
-*  A(m-k+1:m,1:n)*Q(n-m+1:n,1:n)', and checks that the rows of Q are
-*  orthonormal.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix Q to be generated.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix Q to be generated.
-*          N >= M >= 0.
-*
-*  K       (input) INTEGER
-*          The number of elementary reflectors whose product defines the
-*          matrix Q. M >= K >= 0.
-*
-*  A       (input) COMPLEX array, dimension (LDA,N)
-*          The m-by-n matrix A which was factorized by CRQT01.
-*
-*  AF      (input) COMPLEX array, dimension (LDA,N)
-*          Details of the RQ factorization of A, as returned by CGERQF.
-*          See CGERQF for further details.
-*
-*  Q       (workspace) COMPLEX array, dimension (LDA,N)
-*
-*  R       (workspace) COMPLEX array, dimension (LDA,M)
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A, AF, Q and L. LDA >= N.
-*
-*  TAU     (input) COMPLEX array, dimension (M)
-*          The scalar factors of the elementary reflectors corresponding
-*          to the RQ factorization in AF.
-*
-*  WORK    (workspace) COMPLEX array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*
-*  RWORK   (workspace) REAL array, dimension (M)
-*
-*  RESULT  (output) REAL array, dimension (2)
-*          The test ratios:
-*          RESULT(1) = norm( R - A*Q' ) / ( N * norm(A) * EPS )
-*          RESULT(2) = norm( I - Q*Q' ) / ( N * EPS )
 *
 *  =====================================================================
 *

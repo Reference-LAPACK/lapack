@@ -1,9 +1,155 @@
+*> \brief \b SLAED4
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            I, INFO, N
+*       REAL               DLAM, RHO
+*       ..
+*       .. Array Arguments ..
+*       REAL               D( * ), DELTA( * ), Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This subroutine computes the I-th updated eigenvalue of a symmetric
+*> rank-one modification to a diagonal matrix whose elements are
+*> given in the array d, and that
+*>
+*>            D(i) < D(j)  for  i < j
+*>
+*> and that RHO > 0.  This is arranged by the calling routine, and is
+*> no loss in generality.  The rank-one modified system is thus
+*>
+*>            diag( D )  +  RHO * Z * Z_transpose.
+*>
+*> where we assume the Euclidean norm of Z is 1.
+*>
+*> The method consists of approximating the rational functions in the
+*> secular equation by simpler interpolating rational functions.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The length of all arrays.
+*> \endverbatim
+*>
+*> \param[in] I
+*> \verbatim
+*>          I is INTEGER
+*>         The index of the eigenvalue to be computed.  1 <= I <= N.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>         The original eigenvalues.  It is assumed that they are in
+*>         order, D(I) < D(J)  for I < J.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is REAL array, dimension (N)
+*>         The components of the updating vector.
+*> \endverbatim
+*>
+*> \param[out] DELTA
+*> \verbatim
+*>          DELTA is REAL array, dimension (N)
+*>         If N .GT. 2, DELTA contains (D(j) - lambda_I) in its  j-th
+*>         component.  If N = 1, then DELTA(1) = 1. If N = 2, see SLAED5
+*>         for detail. The vector DELTA contains the information necessary
+*>         to construct the eigenvectors by SLAED3 and SLAED9.
+*> \endverbatim
+*>
+*> \param[in] RHO
+*> \verbatim
+*>          RHO is REAL
+*>         The scalar in the symmetric updating formula.
+*> \endverbatim
+*>
+*> \param[out] DLAM
+*> \verbatim
+*>          DLAM is REAL
+*>         The computed lambda_I, the I-th updated eigenvalue.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>         = 0:  successful exit
+*>         > 0:  if INFO = 1, the updating process failed.
+*> \endverbatim
+*> \verbatim
+*>  Internal Parameters
+*>  ===================
+*> \endverbatim
+*> \verbatim
+*>  Logical variable ORGATI (origin-at-i?) is used for distinguishing
+*>  whether D(i) or D(i+1) is treated as the origin.
+*> \endverbatim
+*> \verbatim
+*>            ORGATI = .true.    origin at i
+*>            ORGATI = .false.   origin at i+1
+*> \endverbatim
+*> \verbatim
+*>   Logical variable SWTCH3 (switch-for-3-poles?) is for noting
+*>   if we are working with THREE poles!
+*> \endverbatim
+*> \verbatim
+*>   MAXIT is the maximum number of iterations allowed for each
+*>   eigenvalue.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ren-Cang Li, Computer Science Division, University of California
+*>     at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            I, INFO, N
@@ -12,79 +158,6 @@
 *     .. Array Arguments ..
       REAL               D( * ), DELTA( * ), Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  This subroutine computes the I-th updated eigenvalue of a symmetric
-*  rank-one modification to a diagonal matrix whose elements are
-*  given in the array d, and that
-*
-*             D(i) < D(j)  for  i < j
-*
-*  and that RHO > 0.  This is arranged by the calling routine, and is
-*  no loss in generality.  The rank-one modified system is thus
-*
-*             diag( D )  +  RHO *  Z * Z_transpose.
-*
-*  where we assume the Euclidean norm of Z is 1.
-*
-*  The method consists of approximating the rational functions in the
-*  secular equation by simpler interpolating rational functions.
-*
-*  Arguments
-*  =========
-*
-*  N      (input) INTEGER
-*         The length of all arrays.
-*
-*  I      (input) INTEGER
-*         The index of the eigenvalue to be computed.  1 <= I <= N.
-*
-*  D      (input) REAL array, dimension (N)
-*         The original eigenvalues.  It is assumed that they are in
-*         order, D(I) < D(J)  for I < J.
-*
-*  Z      (input) REAL array, dimension (N)
-*         The components of the updating vector.
-*
-*  DELTA  (output) REAL array, dimension (N)
-*         If N .GT. 2, DELTA contains (D(j) - lambda_I) in its  j-th
-*         component.  If N = 1, then DELTA(1) = 1. If N = 2, see SLAED5
-*         for detail. The vector DELTA contains the information necessary
-*         to construct the eigenvectors by SLAED3 and SLAED9.
-*
-*  RHO    (input) REAL
-*         The scalar in the symmetric updating formula.
-*
-*  DLAM   (output) REAL
-*         The computed lambda_I, the I-th updated eigenvalue.
-*
-*  INFO   (output) INTEGER
-*         = 0:  successful exit
-*         > 0:  if INFO = 1, the updating process failed.
-*
-*  Internal Parameters
-*  ===================
-*
-*  Logical variable ORGATI (origin-at-i?) is used for distinguishing
-*  whether D(i) or D(i+1) is treated as the origin.
-*
-*            ORGATI = .true.    origin at i
-*            ORGATI = .false.   origin at i+1
-*
-*   Logical variable SWTCH3 (switch-for-3-poles?) is for noting
-*   if we are working with THREE poles!
-*
-*   MAXIT is the maximum number of iterations allowed for each
-*   eigenvalue.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ren-Cang Li, Computer Science Division, University of California
-*     at Berkeley, USA
 *
 *  =====================================================================
 *

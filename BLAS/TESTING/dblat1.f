@@ -1,7 +1,50 @@
+*> \brief \b DBLAT1
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       PROGRAM DBLAT1
+* 
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    Test program for the DOUBLE PRECISION Level 1 BLAS.
+*>
+*>    Based upon the original BLAS test routine together with:
+*>    F06EAF Example Program Text
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_blas_testing
+*
+*  =====================================================================
       PROGRAM DBLAT1
-*     Test program for the DOUBLE PRECISION Level 1 BLAS.
-*     Based upon the original BLAS test routine together with:
-*     F06EAF Example Program Text
+*
+*  -- Reference BLAS test routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*  =====================================================================
+*
 *     .. Parameters ..
       INTEGER          NOUT
       PARAMETER        (NOUT=6)

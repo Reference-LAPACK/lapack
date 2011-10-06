@@ -1,3 +1,504 @@
+*> \brief \b ZCHKGG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          TSTDIF, THRSHN, NOUNIT, A, LDA, B, H, T, S1,
+*                          S2, P1, P2, U, LDU, V, Q, Z, ALPHA1, BETA1,
+*                          ALPHA3, BETA3, EVECTL, EVECTR, WORK, LWORK,
+*                          RWORK, LLWORK, RESULT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTDIF
+*       INTEGER            INFO, LDA, LDU, LWORK, NOUNIT, NSIZES, NTYPES
+*       DOUBLE PRECISION   THRESH, THRSHN
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * ), LLWORK( * )
+*       INTEGER            ISEED( 4 ), NN( * )
+*       DOUBLE PRECISION   RESULT( 15 ), RWORK( * )
+*       COMPLEX*16         A( LDA, * ), ALPHA1( * ), ALPHA3( * ),
+*      $                   B( LDA, * ), BETA1( * ), BETA3( * ),
+*      $                   EVECTL( LDU, * ), EVECTR( LDU, * ),
+*      $                   H( LDA, * ), P1( LDA, * ), P2( LDA, * ),
+*      $                   Q( LDU, * ), S1( LDA, * ), S2( LDA, * ),
+*      $                   T( LDA, * ), U( LDU, * ), V( LDU, * ),
+*      $                   WORK( * ), Z( LDU, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZCHKGG  checks the nonsymmetric generalized eigenvalue problem
+*> routines.
+*>                                H          H        H
+*> ZGGHRD factors A and B as U H V  and U T V , where   means conjugate
+*> transpose, H is hessenberg, T is triangular and U and V are unitary.
+*>
+*>                                 H          H
+*> ZHGEQZ factors H and T as  Q S Z  and Q P Z , where P and S are upper
+*> triangular and Q and Z are unitary.  It also computes the generalized
+*> eigenvalues (alpha(1),beta(1)),...,(alpha(n),beta(n)), where
+*> alpha(j)=S(j,j) and beta(j)=P(j,j) -- thus, w(j) = alpha(j)/beta(j)
+*> is a root of the generalized eigenvalue problem
+*>
+*>     det( A - w(j) B ) = 0
+*>
+*> and m(j) = beta(j)/alpha(j) is a root of the essentially equivalent
+*> problem
+*>
+*>     det( m(j) A - B ) = 0
+*>
+*> ZTGEVC computes the matrix L of left eigenvectors and the matrix R
+*> of right eigenvectors for the matrix pair ( S, P ).  In the
+*> description below,  l and r are left and right eigenvectors
+*> corresponding to the generalized eigenvalues (alpha,beta).
+*>
+*> When ZCHKGG is called, a number of matrix "sizes" ("n's") and a
+*> number of matrix "types" are specified.  For each size ("n")
+*> and each type of matrix, one matrix will be generated and used
+*> to test the nonsymmetric eigenroutines.  For each matrix, 13
+*> tests will be performed.  The first twelve "test ratios" should be
+*> small -- O(1).  They will be compared with the threshhold THRESH:
+*>
+*>                  H
+*> (1)   | A - U H V  | / ( |A| n ulp )
+*>
+*>                  H
+*> (2)   | B - U T V  | / ( |B| n ulp )
+*>
+*>               H
+*> (3)   | I - UU  | / ( n ulp )
+*>
+*>               H
+*> (4)   | I - VV  | / ( n ulp )
+*>
+*>                  H
+*> (5)   | H - Q S Z  | / ( |H| n ulp )
+*>
+*>                  H
+*> (6)   | T - Q P Z  | / ( |T| n ulp )
+*>
+*>               H
+*> (7)   | I - QQ  | / ( n ulp )
+*>
+*>               H
+*> (8)   | I - ZZ  | / ( n ulp )
+*>
+*> (9)   max over all left eigenvalue/-vector pairs (beta/alpha,l) of
+*>                           H
+*>       | (beta A - alpha B) l | / ( ulp max( |beta A|, |alpha B| ) )
+*>
+*> (10)  max over all left eigenvalue/-vector pairs (beta/alpha,l') of
+*>                           H
+*>       | (beta H - alpha T) l' | / ( ulp max( |beta H|, |alpha T| ) )
+*>
+*>       where the eigenvectors l' are the result of passing Q to
+*>       DTGEVC and back transforming (JOB='B').
+*>
+*> (11)  max over all right eigenvalue/-vector pairs (beta/alpha,r) of
+*>
+*>       | (beta A - alpha B) r | / ( ulp max( |beta A|, |alpha B| ) )
+*>
+*> (12)  max over all right eigenvalue/-vector pairs (beta/alpha,r') of
+*>
+*>       | (beta H - alpha T) r' | / ( ulp max( |beta H|, |alpha T| ) )
+*>
+*>       where the eigenvectors r' are the result of passing Z to
+*>       DTGEVC and back transforming (JOB='B').
+*>
+*> The last three test ratios will usually be small, but there is no
+*> mathematical requirement that they be so.  They are therefore
+*> compared with THRESH only if TSTDIF is .TRUE.
+*>
+*> (13)  | S(Q,Z computed) - S(Q,Z not computed) | / ( |S| ulp )
+*>
+*> (14)  | P(Q,Z computed) - P(Q,Z not computed) | / ( |P| ulp )
+*>
+*> (15)  max( |alpha(Q,Z computed) - alpha(Q,Z not computed)|/|S| ,
+*>            |beta(Q,Z computed) - beta(Q,Z not computed)|/|P| ) / ulp
+*>
+*> In addition, the normalization of L and R are checked, and compared
+*> with the threshhold THRSHN.
+*>
+*> Test Matrices
+*> ---- --------
+*>
+*> The sizes of the test matrices are specified by an array
+*> NN(1:NSIZES); the value of each element NN(j) specifies one size.
+*> The "types" are specified by a logical array DOTYPE( 1:NTYPES ); if
+*> DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*> Currently, the list of possible types is:
+*>
+*> (1)  ( 0, 0 )         (a pair of zero matrices)
+*>
+*> (2)  ( I, 0 )         (an identity and a zero matrix)
+*>
+*> (3)  ( 0, I )         (an identity and a zero matrix)
+*>
+*> (4)  ( I, I )         (a pair of identity matrices)
+*>
+*>         t   t
+*> (5)  ( J , J  )       (a pair of transposed Jordan blocks)
+*>
+*>                                     t                ( I   0  )
+*> (6)  ( X, Y )         where  X = ( J   0  )  and Y = (      t )
+*>                                  ( 0   I  )          ( 0   J  )
+*>                       and I is a k x k identity and J a (k+1)x(k+1)
+*>                       Jordan block; k=(N-1)/2
+*>
+*> (7)  ( D, I )         where D is P*D1, P is a random unitary diagonal
+*>                       matrix (i.e., with random magnitude 1 entries
+*>                       on the diagonal), and D1=diag( 0, 1,..., N-1 )
+*>                       (i.e., a diagonal matrix with D1(1,1)=0,
+*>                       D1(2,2)=1, ..., D1(N,N)=N-1.)
+*> (8)  ( I, D )
+*>
+*> (9)  ( big*D, small*I ) where "big" is near overflow and small=1/big
+*>
+*> (10) ( small*D, big*I )
+*>
+*> (11) ( big*I, small*D )
+*>
+*> (12) ( small*I, big*D )
+*>
+*> (13) ( big*D, big*I )
+*>
+*> (14) ( small*D, small*I )
+*>
+*> (15) ( D1, D2 )        where D1=P*diag( 0, 0, 1, ..., N-3, 0 ) and
+*>                        D2=Q*diag( 0, N-3, N-4,..., 1, 0, 0 ), and
+*>                        P and Q are random unitary diagonal matrices.
+*>           t   t
+*> (16) U ( J , J ) V     where U and V are random unitary matrices.
+*>
+*> (17) U ( T1, T2 ) V    where T1 and T2 are upper triangular matrices
+*>                        with random O(1) entries above the diagonal
+*>                        and diagonal entries diag(T1) =
+*>                        P*( 0, 0, 1, ..., N-3, 0 ) and diag(T2) =
+*>                        Q*( 0, N-3, N-4,..., 1, 0, 0 )
+*>
+*> (18) U ( T1, T2 ) V    diag(T1) = ( 0, 0, 1, 1, s, ..., s, 0 )
+*>                        diag(T2) = ( 0, 1, 0, 1,..., 1, 0 )
+*>                        s = machine precision.
+*>
+*> (19) U ( T1, T2 ) V    diag(T1)=( 0,0,1,1, 1-d, ..., 1-(N-5)*d=s, 0 )
+*>                        diag(T2) = ( 0, 1, 0, 1, ..., 1, 0 )
+*>
+*>                                                        N-5
+*> (20) U ( T1, T2 ) V    diag(T1)=( 0, 0, 1, 1, a, ..., a   =s, 0 )
+*>                        diag(T2) = ( 0, 1, 0, 1, ..., 1, 0, 0 )
+*>
+*> (21) U ( T1, T2 ) V    diag(T1)=( 0, 0, 1, r1, r2, ..., r(N-4), 0 )
+*>                        diag(T2) = ( 0, 1, 0, 1, ..., 1, 0, 0 )
+*>                        where r1,..., r(N-4) are random.
+*>
+*> (22) U ( big*T1, small*T2 ) V   diag(T1) = P*( 0, 0, 1, ..., N-3, 0 )
+*>                                 diag(T2) = ( 0, 1, ..., 1, 0, 0 )
+*>
+*> (23) U ( small*T1, big*T2 ) V   diag(T1) = P*( 0, 0, 1, ..., N-3, 0 )
+*>                                 diag(T2) = ( 0, 1, ..., 1, 0, 0 )
+*>
+*> (24) U ( small*T1, small*T2 ) V diag(T1) = P*( 0, 0, 1, ..., N-3, 0 )
+*>                                 diag(T2) = ( 0, 1, ..., 1, 0, 0 )
+*>
+*> (25) U ( big*T1, big*T2 ) V     diag(T1) = P*( 0, 0, 1, ..., N-3, 0 )
+*>                                 diag(T2) = ( 0, 1, ..., 1, 0, 0 )
+*>
+*> (26) U ( T1, T2 ) V     where T1 and T2 are random upper-triangular
+*>                         matrices.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of sizes of matrices to use.  If it is zero,
+*>          ZCHKGG does nothing.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER array, dimension (NSIZES)
+*>          An array containing the sizes to be used for the matrices.
+*>          Zero values will be skipped.  The values must be at least
+*>          zero.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, ZCHKGG
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrix is in A.  This
+*>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated.  If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to ZCHKGG to continue the same random number
+*>          sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] TSTDIF
+*> \verbatim
+*>          TSTDIF is LOGICAL
+*>          Specifies whether test ratios 13-15 will be computed and
+*>          compared with THRESH.
+*>          = .FALSE.: Only test ratios 1-12 will be computed and tested.
+*>                     Ratios 13-15 will be set to zero.
+*>          = .TRUE.:  All the test ratios 1-15 will be computed and
+*>                     tested.
+*> \endverbatim
+*>
+*> \param[in] THRSHN
+*> \verbatim
+*>          THRSHN is DOUBLE PRECISION
+*>          Threshhold for reporting eigenvector normalization error.
+*>          If the normalization of any eigenvector differs from 1 by
+*>          more than THRSHN*ulp, then a special error message will be
+*>          printed.  (This is handled separately from the other tests,
+*>          since only a compiler or programming error should cause an
+*>          error message, at least if THRSHN is at least 5--10.)
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA, max(NN))
+*>          Used to hold the original A matrix.  Used as input only
+*>          if NTYPES=MAXTYP+1, DOTYPE(1:MAXTYP)=.FALSE., and
+*>          DOTYPE(MAXTYP+1)=.TRUE.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A, B, H, T, S1, P1, S2, and P2.
+*>          It must be at least 1 and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDA, max(NN))
+*>          Used to hold the original B matrix.  Used as input only
+*>          if NTYPES=MAXTYP+1, DOTYPE(1:MAXTYP)=.FALSE., and
+*>          DOTYPE(MAXTYP+1)=.TRUE.
+*> \endverbatim
+*>
+*> \param[out] H
+*> \verbatim
+*>          H is COMPLEX*16 array, dimension (LDA, max(NN))
+*>          The upper Hessenberg matrix computed from A by ZGGHRD.
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          T is COMPLEX*16 array, dimension (LDA, max(NN))
+*>          The upper triangular matrix computed from B by ZGGHRD.
+*> \endverbatim
+*>
+*> \param[out] S1
+*> \verbatim
+*>          S1 is COMPLEX*16 array, dimension (LDA, max(NN))
+*>          The Schur (upper triangular) matrix computed from H by ZHGEQZ
+*>          when Q and Z are also computed.
+*> \endverbatim
+*>
+*> \param[out] S2
+*> \verbatim
+*>          S2 is COMPLEX*16 array, dimension (LDA, max(NN))
+*>          The Schur (upper triangular) matrix computed from H by ZHGEQZ
+*>          when Q and Z are not computed.
+*> \endverbatim
+*>
+*> \param[out] P1
+*> \verbatim
+*>          P1 is COMPLEX*16 array, dimension (LDA, max(NN))
+*>          The upper triangular matrix computed from T by ZHGEQZ
+*>          when Q and Z are also computed.
+*> \endverbatim
+*>
+*> \param[out] P2
+*> \verbatim
+*>          P2 is COMPLEX*16 array, dimension (LDA, max(NN))
+*>          The upper triangular matrix computed from T by ZHGEQZ
+*>          when Q and Z are not computed.
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is COMPLEX*16 array, dimension (LDU, max(NN))
+*>          The (left) unitary matrix computed by ZGGHRD.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of U, V, Q, Z, EVECTL, and EVEZTR.  It
+*>          must be at least 1 and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] V
+*> \verbatim
+*>          V is COMPLEX*16 array, dimension (LDU, max(NN))
+*>          The (right) unitary matrix computed by ZGGHRD.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX*16 array, dimension (LDU, max(NN))
+*>          The (left) unitary matrix computed by ZHGEQZ.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX*16 array, dimension (LDU, max(NN))
+*>          The (left) unitary matrix computed by ZHGEQZ.
+*> \endverbatim
+*>
+*> \param[out] ALPHA1
+*> \verbatim
+*>          ALPHA1 is COMPLEX*16 array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] BETA1
+*> \verbatim
+*>          BETA1 is COMPLEX*16 array, dimension (max(NN))
+*>          The generalized eigenvalues of (A,B) computed by ZHGEQZ
+*>          when Q, Z, and the full Schur matrices are computed.
+*> \endverbatim
+*>
+*> \param[out] ALPHA3
+*> \verbatim
+*>          ALPHA3 is COMPLEX*16 array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] BETA3
+*> \verbatim
+*>          BETA3 is COMPLEX*16 array, dimension (max(NN))
+*>          The generalized eigenvalues of (A,B) computed by ZHGEQZ
+*>          when neither Q, Z, nor the Schur matrices are computed.
+*> \endverbatim
+*>
+*> \param[out] EVECTL
+*> \verbatim
+*>          EVECTL is COMPLEX*16 array, dimension (LDU, max(NN))
+*>          The (lower triangular) left eigenvector matrix for the
+*>          matrices in S1 and P1.
+*> \endverbatim
+*>
+*> \param[out] EVEZTR
+*> \verbatim
+*>          EVEZTR is COMPLEX*16 array, dimension (LDU, max(NN))
+*>          The (upper triangular) right eigenvector matrix for the
+*>          matrices in S1 and P1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          max( 4*N, 2 * N**2, 1 ), for all N=NN(j).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (2*max(NN))
+*> \endverbatim
+*>
+*> \param[out] LLWORK
+*> \verbatim
+*>          LLWORK is LOGICAL array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (15)
+*>          The values computed by the tests described above.
+*>          The values are currently limited to 1/ulp, to avoid
+*>          overflow.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  A routine returned an error code.  INFO is the
+*>                absolute value of the INFO value returned.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZCHKGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   TSTDIF, THRSHN, NOUNIT, A, LDA, B, H, T, S1,
      $                   S2, P1, P2, U, LDU, V, Q, Z, ALPHA1, BETA1,
@@ -5,8 +506,9 @@
      $                   RWORK, LLWORK, RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTDIF
@@ -25,347 +527,6 @@
      $                   T( LDA, * ), U( LDU, * ), V( LDU, * ),
      $                   WORK( * ), Z( LDU, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZCHKGG  checks the nonsymmetric generalized eigenvalue problem
-*  routines.
-*                                 H          H        H
-*  ZGGHRD factors A and B as U H V  and U T V , where   means conjugate
-*  transpose, H is hessenberg, T is triangular and U and V are unitary.
-*
-*                                  H          H
-*  ZHGEQZ factors H and T as  Q S Z  and Q P Z , where P and S are upper
-*  triangular and Q and Z are unitary.  It also computes the generalized
-*  eigenvalues (alpha(1),beta(1)),...,(alpha(n),beta(n)), where
-*  alpha(j)=S(j,j) and beta(j)=P(j,j) -- thus, w(j) = alpha(j)/beta(j)
-*  is a root of the generalized eigenvalue problem
-*
-*      det( A - w(j) B ) = 0
-*
-*  and m(j) = beta(j)/alpha(j) is a root of the essentially equivalent
-*  problem
-*
-*      det( m(j) A - B ) = 0
-*
-*  ZTGEVC computes the matrix L of left eigenvectors and the matrix R
-*  of right eigenvectors for the matrix pair ( S, P ).  In the
-*  description below,  l and r are left and right eigenvectors
-*  corresponding to the generalized eigenvalues (alpha,beta).
-*
-*  When ZCHKGG is called, a number of matrix "sizes" ("n's") and a
-*  number of matrix "types" are specified.  For each size ("n")
-*  and each type of matrix, one matrix will be generated and used
-*  to test the nonsymmetric eigenroutines.  For each matrix, 13
-*  tests will be performed.  The first twelve "test ratios" should be
-*  small -- O(1).  They will be compared with the threshhold THRESH:
-*
-*                   H
-*  (1)   | A - U H V  | / ( |A| n ulp )
-*
-*                   H
-*  (2)   | B - U T V  | / ( |B| n ulp )
-*
-*                H
-*  (3)   | I - UU  | / ( n ulp )
-*
-*                H
-*  (4)   | I - VV  | / ( n ulp )
-*
-*                   H
-*  (5)   | H - Q S Z  | / ( |H| n ulp )
-*
-*                   H
-*  (6)   | T - Q P Z  | / ( |T| n ulp )
-*
-*                H
-*  (7)   | I - QQ  | / ( n ulp )
-*
-*                H
-*  (8)   | I - ZZ  | / ( n ulp )
-*
-*  (9)   max over all left eigenvalue/-vector pairs (beta/alpha,l) of
-*                            H
-*        | (beta A - alpha B) l | / ( ulp max( |beta A|, |alpha B| ) )
-*
-*  (10)  max over all left eigenvalue/-vector pairs (beta/alpha,l') of
-*                            H
-*        | (beta H - alpha T) l' | / ( ulp max( |beta H|, |alpha T| ) )
-*
-*        where the eigenvectors l' are the result of passing Q to
-*        DTGEVC and back transforming (JOB='B').
-*
-*  (11)  max over all right eigenvalue/-vector pairs (beta/alpha,r) of
-*
-*        | (beta A - alpha B) r | / ( ulp max( |beta A|, |alpha B| ) )
-*
-*  (12)  max over all right eigenvalue/-vector pairs (beta/alpha,r') of
-*
-*        | (beta H - alpha T) r' | / ( ulp max( |beta H|, |alpha T| ) )
-*
-*        where the eigenvectors r' are the result of passing Z to
-*        DTGEVC and back transforming (JOB='B').
-*
-*  The last three test ratios will usually be small, but there is no
-*  mathematical requirement that they be so.  They are therefore
-*  compared with THRESH only if TSTDIF is .TRUE.
-*
-*  (13)  | S(Q,Z computed) - S(Q,Z not computed) | / ( |S| ulp )
-*
-*  (14)  | P(Q,Z computed) - P(Q,Z not computed) | / ( |P| ulp )
-*
-*  (15)  max( |alpha(Q,Z computed) - alpha(Q,Z not computed)|/|S| ,
-*             |beta(Q,Z computed) - beta(Q,Z not computed)|/|P| ) / ulp
-*
-*  In addition, the normalization of L and R are checked, and compared
-*  with the threshhold THRSHN.
-*
-*  Test Matrices
-*  ---- --------
-*
-*  The sizes of the test matrices are specified by an array
-*  NN(1:NSIZES); the value of each element NN(j) specifies one size.
-*  The "types" are specified by a logical array DOTYPE( 1:NTYPES ); if
-*  DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*  Currently, the list of possible types is:
-*
-*  (1)  ( 0, 0 )         (a pair of zero matrices)
-*
-*  (2)  ( I, 0 )         (an identity and a zero matrix)
-*
-*  (3)  ( 0, I )         (an identity and a zero matrix)
-*
-*  (4)  ( I, I )         (a pair of identity matrices)
-*
-*          t   t
-*  (5)  ( J , J  )       (a pair of transposed Jordan blocks)
-*
-*                                      t                ( I   0  )
-*  (6)  ( X, Y )         where  X = ( J   0  )  and Y = (      t )
-*                                   ( 0   I  )          ( 0   J  )
-*                        and I is a k x k identity and J a (k+1)x(k+1)
-*                        Jordan block; k=(N-1)/2
-*
-*  (7)  ( D, I )         where D is P*D1, P is a random unitary diagonal
-*                        matrix (i.e., with random magnitude 1 entries
-*                        on the diagonal), and D1=diag( 0, 1,..., N-1 )
-*                        (i.e., a diagonal matrix with D1(1,1)=0,
-*                        D1(2,2)=1, ..., D1(N,N)=N-1.)
-*  (8)  ( I, D )
-*
-*  (9)  ( big*D, small*I ) where "big" is near overflow and small=1/big
-*
-*  (10) ( small*D, big*I )
-*
-*  (11) ( big*I, small*D )
-*
-*  (12) ( small*I, big*D )
-*
-*  (13) ( big*D, big*I )
-*
-*  (14) ( small*D, small*I )
-*
-*  (15) ( D1, D2 )        where D1=P*diag( 0, 0, 1, ..., N-3, 0 ) and
-*                         D2=Q*diag( 0, N-3, N-4,..., 1, 0, 0 ), and
-*                         P and Q are random unitary diagonal matrices.
-*            t   t
-*  (16) U ( J , J ) V     where U and V are random unitary matrices.
-*
-*  (17) U ( T1, T2 ) V    where T1 and T2 are upper triangular matrices
-*                         with random O(1) entries above the diagonal
-*                         and diagonal entries diag(T1) =
-*                         P*( 0, 0, 1, ..., N-3, 0 ) and diag(T2) =
-*                         Q*( 0, N-3, N-4,..., 1, 0, 0 )
-*
-*  (18) U ( T1, T2 ) V    diag(T1) = ( 0, 0, 1, 1, s, ..., s, 0 )
-*                         diag(T2) = ( 0, 1, 0, 1,..., 1, 0 )
-*                         s = machine precision.
-*
-*  (19) U ( T1, T2 ) V    diag(T1)=( 0,0,1,1, 1-d, ..., 1-(N-5)*d=s, 0 )
-*                         diag(T2) = ( 0, 1, 0, 1, ..., 1, 0 )
-*
-*                                                         N-5
-*  (20) U ( T1, T2 ) V    diag(T1)=( 0, 0, 1, 1, a, ..., a   =s, 0 )
-*                         diag(T2) = ( 0, 1, 0, 1, ..., 1, 0, 0 )
-*
-*  (21) U ( T1, T2 ) V    diag(T1)=( 0, 0, 1, r1, r2, ..., r(N-4), 0 )
-*                         diag(T2) = ( 0, 1, 0, 1, ..., 1, 0, 0 )
-*                         where r1,..., r(N-4) are random.
-*
-*  (22) U ( big*T1, small*T2 ) V   diag(T1) = P*( 0, 0, 1, ..., N-3, 0 )
-*                                  diag(T2) = ( 0, 1, ..., 1, 0, 0 )
-*
-*  (23) U ( small*T1, big*T2 ) V   diag(T1) = P*( 0, 0, 1, ..., N-3, 0 )
-*                                  diag(T2) = ( 0, 1, ..., 1, 0, 0 )
-*
-*  (24) U ( small*T1, small*T2 ) V diag(T1) = P*( 0, 0, 1, ..., N-3, 0 )
-*                                  diag(T2) = ( 0, 1, ..., 1, 0, 0 )
-*
-*  (25) U ( big*T1, big*T2 ) V     diag(T1) = P*( 0, 0, 1, ..., N-3, 0 )
-*                                  diag(T2) = ( 0, 1, ..., 1, 0, 0 )
-*
-*  (26) U ( T1, T2 ) V     where T1 and T2 are random upper-triangular
-*                          matrices.
-*
-*  Arguments
-*  =========
-*
-*  NSIZES  (input) INTEGER
-*          The number of sizes of matrices to use.  If it is zero,
-*          ZCHKGG does nothing.  It must be at least zero.
-*
-*  NN      (input) INTEGER array, dimension (NSIZES)
-*          An array containing the sizes to be used for the matrices.
-*          Zero values will be skipped.  The values must be at least
-*          zero.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE.   If it is zero, ZCHKGG
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrix is in A.  This
-*          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated.  If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to ZCHKGG to continue the same random number
-*          sequence.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*
-*  TSTDIF  (input) LOGICAL
-*          Specifies whether test ratios 13-15 will be computed and
-*          compared with THRESH.
-*          = .FALSE.: Only test ratios 1-12 will be computed and tested.
-*                     Ratios 13-15 will be set to zero.
-*          = .TRUE.:  All the test ratios 1-15 will be computed and
-*                     tested.
-*
-*  THRSHN  (input) DOUBLE PRECISION
-*          Threshhold for reporting eigenvector normalization error.
-*          If the normalization of any eigenvector differs from 1 by
-*          more than THRSHN*ulp, then a special error message will be
-*          printed.  (This is handled separately from the other tests,
-*          since only a compiler or programming error should cause an
-*          error message, at least if THRSHN is at least 5--10.)
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IINFO not equal to 0.)
-*
-*  A       (input/workspace) COMPLEX*16 array, dimension (LDA, max(NN))
-*          Used to hold the original A matrix.  Used as input only
-*          if NTYPES=MAXTYP+1, DOTYPE(1:MAXTYP)=.FALSE., and
-*          DOTYPE(MAXTYP+1)=.TRUE.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A, B, H, T, S1, P1, S2, and P2.
-*          It must be at least 1 and at least max( NN ).
-*
-*  B       (input/workspace) COMPLEX*16 array, dimension (LDA, max(NN))
-*          Used to hold the original B matrix.  Used as input only
-*          if NTYPES=MAXTYP+1, DOTYPE(1:MAXTYP)=.FALSE., and
-*          DOTYPE(MAXTYP+1)=.TRUE.
-*
-*  H       (workspace) COMPLEX*16 array, dimension (LDA, max(NN))
-*          The upper Hessenberg matrix computed from A by ZGGHRD.
-*
-*  T       (workspace) COMPLEX*16 array, dimension (LDA, max(NN))
-*          The upper triangular matrix computed from B by ZGGHRD.
-*
-*  S1      (workspace) COMPLEX*16 array, dimension (LDA, max(NN))
-*          The Schur (upper triangular) matrix computed from H by ZHGEQZ
-*          when Q and Z are also computed.
-*
-*  S2      (workspace) COMPLEX*16 array, dimension (LDA, max(NN))
-*          The Schur (upper triangular) matrix computed from H by ZHGEQZ
-*          when Q and Z are not computed.
-*
-*  P1      (workspace) COMPLEX*16 array, dimension (LDA, max(NN))
-*          The upper triangular matrix computed from T by ZHGEQZ
-*          when Q and Z are also computed.
-*
-*  P2      (workspace) COMPLEX*16 array, dimension (LDA, max(NN))
-*          The upper triangular matrix computed from T by ZHGEQZ
-*          when Q and Z are not computed.
-*
-*  U       (workspace) COMPLEX*16 array, dimension (LDU, max(NN))
-*          The (left) unitary matrix computed by ZGGHRD.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of U, V, Q, Z, EVECTL, and EVEZTR.  It
-*          must be at least 1 and at least max( NN ).
-*
-*  V       (workspace) COMPLEX*16 array, dimension (LDU, max(NN))
-*          The (right) unitary matrix computed by ZGGHRD.
-*
-*  Q       (workspace) COMPLEX*16 array, dimension (LDU, max(NN))
-*          The (left) unitary matrix computed by ZHGEQZ.
-*
-*  Z       (workspace) COMPLEX*16 array, dimension (LDU, max(NN))
-*          The (left) unitary matrix computed by ZHGEQZ.
-*
-*  ALPHA1  (workspace) COMPLEX*16 array, dimension (max(NN))
-*  BETA1   (workspace) COMPLEX*16 array, dimension (max(NN))
-*          The generalized eigenvalues of (A,B) computed by ZHGEQZ
-*          when Q, Z, and the full Schur matrices are computed.
-*
-*  ALPHA3  (workspace) COMPLEX*16 array, dimension (max(NN))
-*  BETA3   (workspace) COMPLEX*16 array, dimension (max(NN))
-*          The generalized eigenvalues of (A,B) computed by ZHGEQZ
-*          when neither Q, Z, nor the Schur matrices are computed.
-*
-*  EVECTL  (workspace) COMPLEX*16 array, dimension (LDU, max(NN))
-*          The (lower triangular) left eigenvector matrix for the
-*          matrices in S1 and P1.
-*
-*  EVEZTR  (workspace) COMPLEX*16 array, dimension (LDU, max(NN))
-*          The (upper triangular) right eigenvector matrix for the
-*          matrices in S1 and P1.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          max( 4*N, 2 * N**2, 1 ), for all N=NN(j).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (2*max(NN))
-*
-*  LLWORK  (workspace) LOGICAL array, dimension (max(NN))
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (15)
-*          The values computed by the tests described above.
-*          The values are currently limited to 1/ulp, to avoid
-*          overflow.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  A routine returned an error code.  INFO is the
-*                absolute value of the INFO value returned.
 *
 *  =====================================================================
 *

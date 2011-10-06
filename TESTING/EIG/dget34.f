@@ -1,8 +1,93 @@
+*> \brief \b DGET34
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGET34( RMAX, LMAX, NINFO, KNT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, LMAX
+*       DOUBLE PRECISION   RMAX
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NINFO( 2 )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGET34 tests DLAEXC, a routine for swapping adjacent blocks (either
+*> 1 by 1 or 2 by 2) on the diagonal of a matrix in real Schur form.
+*> Thus, DLAEXC computes an orthogonal matrix Q such that
+*>
+*>     Q' * [ A B ] * Q  = [ C1 B1 ]
+*>          [ 0 C ]        [ 0  A1 ]
+*>
+*> where C1 is similar to C and A1 is similar to A.  Both A and C are
+*> assumed to be in standard form (equal diagonal entries and
+*> offdiagonal with differing signs) and A1 and C1 are returned with the
+*> same properties.
+*>
+*> The test code verifies these last last assertions, as well as that
+*> the residual in the above equation is small.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is DOUBLE PRECISION
+*>          Value of the largest test ratio.
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER
+*>          Example number where largest test ratio achieved.
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER array, dimension (2)
+*>          NINFO(J) is the number of examples where INFO=J occurred.
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DGET34( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, LMAX
@@ -11,39 +96,6 @@
 *     .. Array Arguments ..
       INTEGER            NINFO( 2 )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGET34 tests DLAEXC, a routine for swapping adjacent blocks (either
-*  1 by 1 or 2 by 2) on the diagonal of a matrix in real Schur form.
-*  Thus, DLAEXC computes an orthogonal matrix Q such that
-*
-*      Q' * [ A B ] * Q  = [ C1 B1 ]
-*           [ 0 C ]        [ 0  A1 ]
-*
-*  where C1 is similar to C and A1 is similar to A.  Both A and C are
-*  assumed to be in standard form (equal diagonal entries and
-*  offdiagonal with differing signs) and A1 and C1 are returned with the
-*  same properties.
-*
-*  The test code verifies these last last assertions, as well as that
-*  the residual in the above equation is small.
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) DOUBLE PRECISION
-*          Value of the largest test ratio.
-*
-*  LMAX    (output) INTEGER
-*          Example number where largest test ratio achieved.
-*
-*  NINFO   (output) INTEGER array, dimension (2)
-*          NINFO(J) is the number of examples where INFO=J occurred.
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
 *
 *  =====================================================================
 *

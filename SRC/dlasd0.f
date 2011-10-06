@@ -1,10 +1,159 @@
+*> \brief \b DLASD0
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASD0( N, SQRE, D, E, U, LDU, VT, LDVT, SMLSIZ, IWORK,
+*                          WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDU, LDVT, N, SMLSIZ, SQRE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   D( * ), E( * ), U( LDU, * ), VT( LDVT, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Using a divide and conquer approach, DLASD0 computes the singular
+*> value decomposition (SVD) of a real upper bidiagonal N-by-M
+*> matrix B with diagonal D and offdiagonal E, where M = N + SQRE.
+*> The algorithm computes orthogonal matrices U and VT such that
+*> B = U * S * VT. The singular values S are overwritten on D.
+*>
+*> A related subroutine, DLASDA, computes only the singular values,
+*> and optionally, the singular vectors in compact form.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         On entry, the row dimension of the upper bidiagonal matrix.
+*>         This is also the dimension of the main diagonal array D.
+*> \endverbatim
+*>
+*> \param[in] SQRE
+*> \verbatim
+*>          SQRE is INTEGER
+*>         Specifies the column dimension of the bidiagonal matrix.
+*>         = 0: The bidiagonal matrix has column dimension M = N;
+*>         = 1: The bidiagonal matrix has column dimension M = N+1;
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>         On entry D contains the main diagonal of the bidiagonal
+*>         matrix.
+*>         On exit D, if INFO = 0, contains its singular values.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (M-1)
+*>         Contains the subdiagonal entries of the bidiagonal matrix.
+*>         On exit, E has been destroyed.
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is DOUBLE PRECISION array, dimension at least (LDQ, N)
+*>         On exit, U contains the left singular vectors.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>         On entry, leading dimension of U.
+*> \endverbatim
+*>
+*> \param[out] VT
+*> \verbatim
+*>          VT is DOUBLE PRECISION array, dimension at least (LDVT, M)
+*>         On exit, VT**T contains the right singular vectors.
+*> \endverbatim
+*>
+*> \param[in] LDVT
+*> \verbatim
+*>          LDVT is INTEGER
+*>         On entry, leading dimension of VT.
+*> \endverbatim
+*>
+*> \param[in] SMLSIZ
+*> \verbatim
+*>          SMLSIZ is INTEGER
+*>         On entry, maximum size of the subproblems at the
+*>         bottom of the computation tree.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER work array.
+*>         Dimension must be at least (8 * N)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION work array.
+*>         Dimension must be at least (3 * M**2 + 2 * M)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  if INFO = 1, a singular value did not converge
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Huan Ren, Computer Science Division, University of
+*>     California at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLASD0( N, SQRE, D, E, U, LDU, VT, LDVT, SMLSIZ, IWORK,
      $                   WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDU, LDVT, N, SMLSIZ, SQRE
@@ -14,73 +163,6 @@
       DOUBLE PRECISION   D( * ), E( * ), U( LDU, * ), VT( LDVT, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Using a divide and conquer approach, DLASD0 computes the singular
-*  value decomposition (SVD) of a real upper bidiagonal N-by-M
-*  matrix B with diagonal D and offdiagonal E, where M = N + SQRE.
-*  The algorithm computes orthogonal matrices U and VT such that
-*  B = U * S * VT. The singular values S are overwritten on D.
-*
-*  A related subroutine, DLASDA, computes only the singular values,
-*  and optionally, the singular vectors in compact form.
-*
-*  Arguments
-*  =========
-*
-*  N      (input) INTEGER
-*         On entry, the row dimension of the upper bidiagonal matrix.
-*         This is also the dimension of the main diagonal array D.
-*
-*  SQRE   (input) INTEGER
-*         Specifies the column dimension of the bidiagonal matrix.
-*         = 0: The bidiagonal matrix has column dimension M = N;
-*         = 1: The bidiagonal matrix has column dimension M = N+1;
-*
-*  D      (input/output) DOUBLE PRECISION array, dimension (N)
-*         On entry D contains the main diagonal of the bidiagonal
-*         matrix.
-*         On exit D, if INFO = 0, contains its singular values.
-*
-*  E      (input) DOUBLE PRECISION array, dimension (M-1)
-*         Contains the subdiagonal entries of the bidiagonal matrix.
-*         On exit, E has been destroyed.
-*
-*  U      (output) DOUBLE PRECISION array, dimension at least (LDQ, N)
-*         On exit, U contains the left singular vectors.
-*
-*  LDU    (input) INTEGER
-*         On entry, leading dimension of U.
-*
-*  VT     (output) DOUBLE PRECISION array, dimension at least (LDVT, M)
-*         On exit, VT**T contains the right singular vectors.
-*
-*  LDVT   (input) INTEGER
-*         On entry, leading dimension of VT.
-*
-*  SMLSIZ (input) INTEGER
-*         On entry, maximum size of the subproblems at the
-*         bottom of the computation tree.
-*
-*  IWORK  (workspace) INTEGER work array.
-*         Dimension must be at least (8 * N)
-*
-*  WORK   (workspace) DOUBLE PRECISION work array.
-*         Dimension must be at least (3 * M**2 + 2 * M)
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if INFO = 1, a singular value did not converge
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Huan Ren, Computer Science Division, University of
-*     California at Berkeley, USA
 *
 *  =====================================================================
 *

@@ -1,9 +1,108 @@
+*> \brief \b CQRT12
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION CQRT12( M, N, A, LDA, S, WORK, LWORK,
+*                        RWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * ), S( * )
+*       COMPLEX            A( LDA, * ), WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CQRT12 computes the singular values `svlues' of the upper trapezoid
+*> of A(1:M,1:N) and returns the ratio
+*>
+*>      || s - svlues||/(||svlues||*eps*max(M,N))
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          The M-by-N matrix A. Only the upper trapezoid is referenced.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is REAL array, dimension (min(M,N))
+*>          The singular values of the matrix A.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK. LWORK >= M*N + 2*min(M,N) +
+*>          max(M,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (4*min(M,N))
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       REAL             FUNCTION CQRT12( M, N, A, LDA, S, WORK, LWORK,
      $                 RWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LWORK, M, N
@@ -12,40 +111,6 @@
       REAL               RWORK( * ), S( * )
       COMPLEX            A( LDA, * ), WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CQRT12 computes the singular values `svlues' of the upper trapezoid
-*  of A(1:M,1:N) and returns the ratio
-*
-*       || s - svlues||/(||svlues||*eps*max(M,N))
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.
-*
-*  A       (input) COMPLEX array, dimension (LDA,N)
-*          The M-by-N matrix A. Only the upper trapezoid is referenced.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.
-*
-*  S       (input) REAL array, dimension (min(M,N))
-*          The singular values of the matrix A.
-*
-*  WORK    (workspace) COMPLEX array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK. LWORK >= M*N + 2*min(M,N) +
-*          max(M,N).
-*
-*  RWORK   (workspace) REAL array, dimension (4*min(M,N))
 *
 *  =====================================================================
 *

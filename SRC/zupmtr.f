@@ -1,10 +1,151 @@
+*> \brief \b ZUPMTR
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZUPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC, WORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          SIDE, TRANS, UPLO
+*       INTEGER            INFO, LDC, M, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         AP( * ), C( LDC, * ), TAU( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZUPMTR overwrites the general complex M-by-N matrix C with
+*>
+*>                 SIDE = 'L'     SIDE = 'R'
+*> TRANS = 'N':      Q * C          C * Q
+*> TRANS = 'C':      Q**H * C       C * Q**H
+*>
+*> where Q is a complex unitary matrix of order nq, with nq = m if
+*> SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of
+*> nq-1 elementary reflectors, as returned by ZHPTRD using packed
+*> storage:
+*>
+*> if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);
+*>
+*> if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'L': apply Q or Q**H from the Left;
+*>          = 'R': apply Q or Q**H from the Right.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U': Upper triangular packed storage used in previous
+*>                 call to ZHPTRD;
+*>          = 'L': Lower triangular packed storage used in previous
+*>                 call to ZHPTRD.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          = 'N':  No transpose, apply Q;
+*>          = 'C':  Conjugate transpose, apply Q**H.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix C. M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix C. N >= 0.
+*> \endverbatim
+*>
+*> \param[in] AP
+*> \verbatim
+*>          AP is COMPLEX*16 array, dimension
+*>                               (M*(M+1)/2) if SIDE = 'L'
+*>                               (N*(N+1)/2) if SIDE = 'R'
+*>          The vectors which define the elementary reflectors, as
+*>          returned by ZHPTRD.  AP is modified by the routine but
+*>          restored on exit.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is COMPLEX*16 array, dimension (M-1) if SIDE = 'L'
+*>                                     or (N-1) if SIDE = 'R'
+*>          TAU(i) must contain the scalar factor of the elementary
+*>          reflector H(i), as returned by ZHPTRD.
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is COMPLEX*16 array, dimension (LDC,N)
+*>          On entry, the M-by-N matrix C.
+*>          On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension
+*>                                   (N) if SIDE = 'L'
+*>                                   (M) if SIDE = 'R'
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE ZUPMTR( SIDE, UPLO, TRANS, M, N, AP, TAU, C, LDC, WORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          SIDE, TRANS, UPLO
@@ -13,74 +154,6 @@
 *     .. Array Arguments ..
       COMPLEX*16         AP( * ), C( LDC, * ), TAU( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZUPMTR overwrites the general complex M-by-N matrix C with
-*
-*                  SIDE = 'L'     SIDE = 'R'
-*  TRANS = 'N':      Q * C          C * Q
-*  TRANS = 'C':      Q**H * C       C * Q**H
-*
-*  where Q is a complex unitary matrix of order nq, with nq = m if
-*  SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of
-*  nq-1 elementary reflectors, as returned by ZHPTRD using packed
-*  storage:
-*
-*  if UPLO = 'U', Q = H(nq-1) . . . H(2) H(1);
-*
-*  if UPLO = 'L', Q = H(1) H(2) . . . H(nq-1).
-*
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'L': apply Q or Q**H from the Left;
-*          = 'R': apply Q or Q**H from the Right.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U': Upper triangular packed storage used in previous
-*                 call to ZHPTRD;
-*          = 'L': Lower triangular packed storage used in previous
-*                 call to ZHPTRD.
-*
-*  TRANS   (input) CHARACTER*1
-*          = 'N':  No transpose, apply Q;
-*          = 'C':  Conjugate transpose, apply Q**H.
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix C. M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix C. N >= 0.
-*
-*  AP      (input) COMPLEX*16 array, dimension
-*                               (M*(M+1)/2) if SIDE = 'L'
-*                               (N*(N+1)/2) if SIDE = 'R'
-*          The vectors which define the elementary reflectors, as
-*          returned by ZHPTRD.  AP is modified by the routine but
-*          restored on exit.
-*
-*  TAU     (input) COMPLEX*16 array, dimension (M-1) if SIDE = 'L'
-*                                     or (N-1) if SIDE = 'R'
-*          TAU(i) must contain the scalar factor of the elementary
-*          reflector H(i), as returned by ZHPTRD.
-*
-*  C       (input/output) COMPLEX*16 array, dimension (LDC,N)
-*          On entry, the M-by-N matrix C.
-*          On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C. LDC >= max(1,M).
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension
-*                                   (N) if SIDE = 'L'
-*                                   (M) if SIDE = 'R'
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

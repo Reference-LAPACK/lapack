@@ -1,9 +1,123 @@
+*> \brief \b DSPTRD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DSPTRD( UPLO, N, AP, D, E, TAU, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   AP( * ), D( * ), E( * ), TAU( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DSPTRD reduces a real symmetric matrix A stored in packed form to
+*> symmetric tridiagonal form T by an orthogonal similarity
+*> transformation: Q**T * A * Q = T.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*          of elementary reflectors. See Further Details.
+*>
+*>  D       (output) DOUBLE PRECISION array, dimension (N)
+*>          The diagonal elements of the tridiagonal matrix T:
+*>          D(i) = A(i,i).
+*>
+*>  E       (output) DOUBLE PRECISION array, dimension (N-1)
+*>          The off-diagonal elements of the tridiagonal matrix T:
+*>          E(i) = A(i,i+1) if UPLO = 'U', E(i) = A(i+1,i) if UPLO = 'L'.
+*>
+*>  TAU     (output) DOUBLE PRECISION array, dimension (N-1)
+*>          The scalar factors of the elementary reflectors (see Further
+*>          Details).
+*>
+*>  INFO    (output) INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>
+*>
+*>  If UPLO = 'U', the matrix Q is represented as a product of elementary
+*>  reflectors
+*>
+*>     Q = H(n-1) . . . H(2) H(1).
+*>
+*>  Each H(i) has the form
+*>
+*>     H(i) = I - tau * v * v**T
+*>
+*>  where tau is a real scalar, and v is a real vector with
+*>  v(i+1:n) = 0 and v(i) = 1; v(1:i-1) is stored on exit in AP,
+*>  overwriting A(1:i-1,i+1), and tau is stored in TAU(i).
+*>
+*>  If UPLO = 'L', the matrix Q is represented as a product of elementary
+*>  reflectors
+*>
+*>     Q = H(1) H(2) . . . H(n-1).
+*>
+*>  Each H(i) has the form
+*>
+*>     H(i) = I - tau * v * v**T
+*>
+*>  where tau is a real scalar, and v is a real vector with
+*>  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in AP,
+*>  overwriting A(i+2:n,i), and tau is stored in TAU(i).
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DSPTRD( UPLO, N, AP, D, E, TAU, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,85 +126,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   AP( * ), D( * ), E( * ), TAU( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DSPTRD reduces a real symmetric matrix A stored in packed form to
-*  symmetric tridiagonal form T by an orthogonal similarity
-*  transformation: Q**T * A * Q = T.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  AP      (input/output) DOUBLE PRECISION array, dimension (N*(N+1)/2)
-*          On entry, the upper or lower triangle of the symmetric matrix
-*          A, packed columnwise in a linear array.  The j-th column of A
-*          is stored in the array AP as follows:
-*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n.
-*          On exit, if UPLO = 'U', the diagonal and first superdiagonal
-*          of A are overwritten by the corresponding elements of the
-*          tridiagonal matrix T, and the elements above the first
-*          superdiagonal, with the array TAU, represent the orthogonal
-*          matrix Q as a product of elementary reflectors; if UPLO
-*          = 'L', the diagonal and first subdiagonal of A are over-
-*          written by the corresponding elements of the tridiagonal
-*          matrix T, and the elements below the first subdiagonal, with
-*          the array TAU, represent the orthogonal matrix Q as a product
-*          of elementary reflectors. See Further Details.
-*
-*  D       (output) DOUBLE PRECISION array, dimension (N)
-*          The diagonal elements of the tridiagonal matrix T:
-*          D(i) = A(i,i).
-*
-*  E       (output) DOUBLE PRECISION array, dimension (N-1)
-*          The off-diagonal elements of the tridiagonal matrix T:
-*          E(i) = A(i,i+1) if UPLO = 'U', E(i) = A(i+1,i) if UPLO = 'L'.
-*
-*  TAU     (output) DOUBLE PRECISION array, dimension (N-1)
-*          The scalar factors of the elementary reflectors (see Further
-*          Details).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  If UPLO = 'U', the matrix Q is represented as a product of elementary
-*  reflectors
-*
-*     Q = H(n-1) . . . H(2) H(1).
-*
-*  Each H(i) has the form
-*
-*     H(i) = I - tau * v * v**T
-*
-*  where tau is a real scalar, and v is a real vector with
-*  v(i+1:n) = 0 and v(i) = 1; v(1:i-1) is stored on exit in AP,
-*  overwriting A(1:i-1,i+1), and tau is stored in TAU(i).
-*
-*  If UPLO = 'L', the matrix Q is represented as a product of elementary
-*  reflectors
-*
-*     Q = H(1) H(2) . . . H(n-1).
-*
-*  Each H(i) has the form
-*
-*     H(i) = I - tau * v * v**T
-*
-*  where tau is a real scalar, and v is a real vector with
-*  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in AP,
-*  overwriting A(i+2:n,i), and tau is stored in TAU(i).
 *
 *  =====================================================================
 *

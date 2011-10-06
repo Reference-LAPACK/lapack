@@ -1,8 +1,93 @@
+*> \brief \b SSTECT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SSTECT( N, A, B, SHIFT, NUM )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            N, NUM
+*       REAL               SHIFT
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( * ), B( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    SSTECT counts the number NUM of eigenvalues of a tridiagonal
+*>    matrix T which are less than or equal to SHIFT. T has
+*>    diagonal entries A(1), ... , A(N), and offdiagonal entries
+*>    B(1), ..., B(N-1).
+*>    See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
+*>    Matrix", Report CS41, Computer Science Dept., Stanford
+*>    University, July 21, 1966
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The dimension of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (N)
+*>          The diagonal entries of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL array, dimension (N-1)
+*>          The offdiagonal entries of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] SHIFT
+*> \verbatim
+*>          SHIFT is REAL
+*>          The shift, used as described under Purpose.
+*> \endverbatim
+*>
+*> \param[out] NUM
+*> \verbatim
+*>          NUM is INTEGER
+*>          The number of eigenvalues of T less than or equal
+*>          to SHIFT.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SSTECT( N, A, B, SHIFT, NUM )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            N, NUM
@@ -11,36 +96,6 @@
 *     .. Array Arguments ..
       REAL               A( * ), B( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     SSTECT counts the number NUM of eigenvalues of a tridiagonal
-*     matrix T which are less than or equal to SHIFT. T has
-*     diagonal entries A(1), ... , A(N), and offdiagonal entries
-*     B(1), ..., B(N-1).
-*     See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
-*     Matrix", Report CS41, Computer Science Dept., Stanford
-*     University, July 21, 1966
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The dimension of the tridiagonal matrix T.
-*
-*  A       (input) REAL array, dimension (N)
-*          The diagonal entries of the tridiagonal matrix T.
-*
-*  B       (input) REAL array, dimension (N-1)
-*          The offdiagonal entries of the tridiagonal matrix T.
-*
-*  SHIFT   (input) REAL
-*          The shift, used as described under Purpose.
-*
-*  NUM     (output) INTEGER
-*          The number of eigenvalues of T less than or equal
-*          to SHIFT.
 *
 *  =====================================================================
 *

@@ -1,49 +1,101 @@
+*> \brief \b ZGET36
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGET36( RMAX, LMAX, NINFO, KNT, NIN )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, LMAX, NIN, NINFO
+*       DOUBLE PRECISION   RMAX
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZGET36 tests ZTREXC, a routine for reordering diagonal entries of a
+*> matrix in complex Schur form. Thus, ZLAEXC computes a unitary matrix
+*> Q such that
+*>
+*>    Q' * T1 * Q  = T2
+*>
+*> and where one of the diagonal blocks of T1 (the one at row IFST) has
+*> been moved to position ILST.
+*>
+*> The test code verifies that the residual Q'*T1*Q-T2 is small, that T2
+*> is in Schur form, and that the final position of the IFST block is
+*> ILST.
+*>
+*> The test matrices are read from a file with logical unit number NIN.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is DOUBLE PRECISION
+*>          Value of the largest test ratio.
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER
+*>          Example number where largest test ratio achieved.
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER
+*>          Number of examples where INFO is nonzero.
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          Input logical unit number.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, LMAX, NIN, NINFO
       DOUBLE PRECISION   RMAX
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZGET36 tests ZTREXC, a routine for reordering diagonal entries of a
-*  matrix in complex Schur form. Thus, ZLAEXC computes a unitary matrix
-*  Q such that
-*
-*     Q' * T1 * Q  = T2
-*
-*  and where one of the diagonal blocks of T1 (the one at row IFST) has
-*  been moved to position ILST.
-*
-*  The test code verifies that the residual Q'*T1*Q-T2 is small, that T2
-*  is in Schur form, and that the final position of the IFST block is
-*  ILST.
-*
-*  The test matrices are read from a file with logical unit number NIN.
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) DOUBLE PRECISION
-*          Value of the largest test ratio.
-*
-*  LMAX    (output) INTEGER
-*          Example number where largest test ratio achieved.
-*
-*  NINFO   (output) INTEGER
-*          Number of examples where INFO is nonzero.
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
-*
-*  NIN     (input) INTEGER
-*          Input logical unit number.
 *
 *  =====================================================================
 *

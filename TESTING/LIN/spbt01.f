@@ -1,9 +1,130 @@
+*> \brief \b SPBT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
+*                          RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            KD, LDA, LDAFAC, N
+*       REAL               RESID
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), AFAC( LDAFAC, * ), RWORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SPBT01 reconstructs a symmetric positive definite band matrix A from
+*> its L*L' or U'*U factorization and computes the residual
+*>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
+*>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
+*> where EPS is the machine epsilon, L' is the conjugate transpose of
+*> L, and U' is the conjugate transpose of U.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          symmetric matrix A is stored:
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows and columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of super-diagonals of the matrix A if UPLO = 'U',
+*>          or the number of sub-diagonals if UPLO = 'L'.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The original symmetric band matrix A.  If UPLO = 'U', the
+*>          upper triangular part of A is stored as a band matrix; if
+*>          UPLO = 'L', the lower triangular part of A is stored.  The
+*>          columns of the appropriate triangle are stored in the columns
+*>          of A and the diagonals of the triangle are stored in the rows
+*>          of A.  See SPBTRF for further details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER.
+*>          The leading dimension of the array A.  LDA >= max(1,KD+1).
+*> \endverbatim
+*>
+*> \param[in] AFAC
+*> \verbatim
+*>          AFAC is REAL array, dimension (LDAFAC,N)
+*>          The factored form of the matrix A.  AFAC contains the factor
+*>          L or U from the L*L' or U'*U factorization in band storage
+*>          format, as computed by SPBTRF.
+*> \endverbatim
+*>
+*> \param[in] LDAFAC
+*> \verbatim
+*>          LDAFAC is INTEGER
+*>          The leading dimension of the array AFAC.
+*>          LDAFAC >= max(1,KD+1).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          If UPLO = 'L', norm(L*L' - A) / ( N * norm(A) * EPS )
+*>          If UPLO = 'U', norm(U'*U - A) / ( N * norm(A) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -13,58 +134,6 @@
 *     .. Array Arguments ..
       REAL               A( LDA, * ), AFAC( LDAFAC, * ), RWORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SPBT01 reconstructs a symmetric positive definite band matrix A from
-*  its L*L' or U'*U factorization and computes the residual
-*     norm( L*L' - A ) / ( N * norm(A) * EPS ) or
-*     norm( U'*U - A ) / ( N * norm(A) * EPS ),
-*  where EPS is the machine epsilon, L' is the conjugate transpose of
-*  L, and U' is the conjugate transpose of U.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          symmetric matrix A is stored:
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The number of rows and columns of the matrix A.  N >= 0.
-*
-*  KD      (input) INTEGER
-*          The number of super-diagonals of the matrix A if UPLO = 'U',
-*          or the number of sub-diagonals if UPLO = 'L'.  KD >= 0.
-*
-*  A       (input) REAL array, dimension (LDA,N)
-*          The original symmetric band matrix A.  If UPLO = 'U', the
-*          upper triangular part of A is stored as a band matrix; if
-*          UPLO = 'L', the lower triangular part of A is stored.  The
-*          columns of the appropriate triangle are stored in the columns
-*          of A and the diagonals of the triangle are stored in the rows
-*          of A.  See SPBTRF for further details.
-*
-*  LDA     (input) INTEGER.
-*          The leading dimension of the array A.  LDA >= max(1,KD+1).
-*
-*  AFAC    (input) REAL array, dimension (LDAFAC,N)
-*          The factored form of the matrix A.  AFAC contains the factor
-*          L or U from the L*L' or U'*U factorization in band storage
-*          format, as computed by SPBTRF.
-*
-*  LDAFAC  (input) INTEGER
-*          The leading dimension of the array AFAC.
-*          LDAFAC >= max(1,KD+1).
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  RESID   (output) REAL
-*          If UPLO = 'L', norm(L*L' - A) / ( N * norm(A) * EPS )
-*          If UPLO = 'U', norm(U'*U - A) / ( N * norm(A) * EPS )
 *
 *  =====================================================================
 *

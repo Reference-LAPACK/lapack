@@ -1,9 +1,108 @@
+*> \brief \b DLANGT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DLANGT( NORM, N, DL, D, DU )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          NORM
+*       INTEGER            N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), DL( * ), DU( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLANGT  returns the value of the one norm,  or the Frobenius norm, or
+*> the  infinity norm,  or the  element of  largest absolute value  of a
+*> real tridiagonal matrix A.
+*>
+*> Description
+*> ===========
+*>
+*> DLANGT returns the value
+*>
+*>    DLANGT = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>             (
+*>             ( norm1(A),         NORM = '1', 'O' or 'o'
+*>             (
+*>             ( normI(A),         NORM = 'I' or 'i'
+*>             (
+*>             ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
+*>
+*> where  norm1  denotes the  one norm of a matrix (maximum column sum),
+*> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
+*> normF  denotes the  Frobenius norm of a matrix (square root of sum of
+*> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NORM
+*> \verbatim
+*>          NORM is CHARACTER*1
+*>          Specifies the value to be returned in DLANGT as described
+*>          above.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.  When N = 0, DLANGT is
+*>          set to zero.
+*> \endverbatim
+*>
+*> \param[in] DL
+*> \verbatim
+*>          DL is DOUBLE PRECISION array, dimension (N-1)
+*>          The (n-1) sub-diagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The diagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] DU
+*> \verbatim
+*>          DU is DOUBLE PRECISION array, dimension (N-1)
+*>          The (n-1) super-diagonal elements of A.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERauxiliary
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DLANGT( NORM, N, DL, D, DU )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          NORM
@@ -12,51 +111,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   D( * ), DL( * ), DU( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLANGT  returns the value of the one norm,  or the Frobenius norm, or
-*  the  infinity norm,  or the  element of  largest absolute value  of a
-*  real tridiagonal matrix A.
-*
-*  Description
-*  ===========
-*
-*  DLANGT returns the value
-*
-*     DLANGT = ( max(abs(A(i,j))), NORM = 'M' or 'm'
-*              (
-*              ( norm1(A),         NORM = '1', 'O' or 'o'
-*              (
-*              ( normI(A),         NORM = 'I' or 'i'
-*              (
-*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
-*
-*  where  norm1  denotes the  one norm of a matrix (maximum column sum),
-*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
-*  normF  denotes the  Frobenius norm of a matrix (square root of sum of
-*  squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*
-*  Arguments
-*  =========
-*
-*  NORM    (input) CHARACTER*1
-*          Specifies the value to be returned in DLANGT as described
-*          above.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.  When N = 0, DLANGT is
-*          set to zero.
-*
-*  DL      (input) DOUBLE PRECISION array, dimension (N-1)
-*          The (n-1) sub-diagonal elements of A.
-*
-*  D       (input) DOUBLE PRECISION array, dimension (N)
-*          The diagonal elements of A.
-*
-*  DU      (input) DOUBLE PRECISION array, dimension (N-1)
-*          The (n-1) super-diagonal elements of A.
 *
 *  =====================================================================
 *

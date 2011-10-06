@@ -1,11 +1,498 @@
+*> \brief \b DDRVST
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          NOUNIT, A, LDA, D1, D2, D3, D4, EVEIGS, WA1,
+*                          WA2, WA3, U, LDU, V, TAU, Z, WORK, LWORK,
+*                          IWORK, LIWORK, RESULT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDU, LIWORK, LWORK, NOUNIT, NSIZES,
+*      $                   NTYPES
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), IWORK( * ), NN( * )
+*       DOUBLE PRECISION   A( LDA, * ), D1( * ), D2( * ), D3( * ),
+*      $                   D4( * ), EVEIGS( * ), RESULT( * ), TAU( * ),
+*      $                   U( LDU, * ), V( LDU, * ), WA1( * ), WA2( * ),
+*      $                   WA3( * ), WORK( * ), Z( LDU, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>      DDRVST  checks the symmetric eigenvalue problem drivers.
+*>
+*>              DSTEV computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric tridiagonal matrix.
+*>
+*>              DSTEVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric tridiagonal matrix.
+*>
+*>              DSTEVR computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric tridiagonal matrix
+*>              using the Relatively Robust Representation where it can.
+*>
+*>              DSYEV computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric matrix.
+*>
+*>              DSYEVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric matrix.
+*>
+*>              DSYEVR computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric matrix
+*>              using the Relatively Robust Representation where it can.
+*>
+*>              DSPEV computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric matrix in packed
+*>              storage.
+*>
+*>              DSPEVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric matrix in packed
+*>              storage.
+*>
+*>              DSBEV computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric band matrix.
+*>
+*>              DSBEVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric band matrix.
+*>
+*>              DSYEVD computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric matrix using
+*>              a divide and conquer algorithm.
+*>
+*>              DSPEVD computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric matrix in packed
+*>              storage, using a divide and conquer algorithm.
+*>
+*>              DSBEVD computes all eigenvalues and, optionally,
+*>              eigenvectors of a real symmetric band matrix,
+*>              using a divide and conquer algorithm.
+*>
+*>      When DDRVST is called, a number of matrix "sizes" ("n's") and a
+*>      number of matrix "types" are specified.  For each size ("n")
+*>      and each type of matrix, one matrix will be generated and used
+*>      to test the appropriate drivers.  For each matrix and each
+*>      driver routine called, the following tests will be performed:
+*>
+*>      (1)     | A - Z D Z' | / ( |A| n ulp )
+*>
+*>      (2)     | I - Z Z' | / ( n ulp )
+*>
+*>      (3)     | D1 - D2 | / ( |D1| ulp )
+*>
+*>      where Z is the matrix of eigenvectors returned when the
+*>      eigenvector option is given and D1 and D2 are the eigenvalues
+*>      returned with and without the eigenvector option.
+*>
+*>      The "sizes" are specified by an array NN(1:NSIZES); the value of
+*>      each element NN(j) specifies one size.
+*>      The "types" are specified by a logical array DOTYPE( 1:NTYPES );
+*>      if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*>      Currently, the list of possible types is:
+*>
+*>      (1)  The zero matrix.
+*>      (2)  The identity matrix.
+*>
+*>      (3)  A diagonal matrix with evenly spaced eigenvalues
+*>           1, ..., ULP  and random signs.
+*>           (ULP = (first number larger than 1) - 1 )
+*>      (4)  A diagonal matrix with geometrically spaced eigenvalues
+*>           1, ..., ULP  and random signs.
+*>      (5)  A diagonal matrix with "clustered" eigenvalues
+*>           1, ULP, ..., ULP and random signs.
+*>
+*>      (6)  Same as (4), but multiplied by SQRT( overflow threshold )
+*>      (7)  Same as (4), but multiplied by SQRT( underflow threshold )
+*>
+*>      (8)  A matrix of the form  U' D U, where U is orthogonal and
+*>           D has evenly spaced entries 1, ..., ULP with random signs
+*>           on the diagonal.
+*>
+*>      (9)  A matrix of the form  U' D U, where U is orthogonal and
+*>           D has geometrically spaced entries 1, ..., ULP with random
+*>           signs on the diagonal.
+*>
+*>      (10) A matrix of the form  U' D U, where U is orthogonal and
+*>           D has "clustered" entries 1, ULP,..., ULP with random
+*>           signs on the diagonal.
+*>
+*>      (11) Same as (8), but multiplied by SQRT( overflow threshold )
+*>      (12) Same as (8), but multiplied by SQRT( underflow threshold )
+*>
+*>      (13) Symmetric matrix with random entries chosen from (-1,1).
+*>      (14) Same as (13), but multiplied by SQRT( overflow threshold )
+*>      (15) Same as (13), but multiplied by SQRT( underflow threshold )
+*>      (16) A band matrix with half bandwidth randomly chosen between
+*>           0 and N-1, with evenly spaced eigenvalues 1, ..., ULP
+*>           with random signs.
+*>      (17) Same as (16), but multiplied by SQRT( overflow threshold )
+*>      (18) Same as (16), but multiplied by SQRT( underflow threshold )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \verbatim
+*>  NSIZES  INTEGER
+*>          The number of sizes of matrices to use.  If it is zero,
+*>          DDRVST does nothing.  It must be at least zero.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NN      INTEGER array, dimension (NSIZES)
+*>          An array containing the sizes to be used for the matrices.
+*>          Zero values will be skipped.  The values must be at least
+*>          zero.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NTYPES  INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, DDRVST
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrix is in A.  This
+*>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  DOTYPE  LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated.  If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  ISEED   INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to DDRVST to continue the same random number
+*>          sequence.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  THRESH  DOUBLE PRECISION
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NOUNIT  INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  A       DOUBLE PRECISION array, dimension (LDA , max(NN))
+*>          Used to hold the matrix whose eigenvalues are to be
+*>          computed.  On exit, A contains the last matrix actually
+*>          used.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  LDA     INTEGER
+*>          The leading dimension of A.  It must be at
+*>          least 1 and at least max( NN ).
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  D1      DOUBLE PRECISION array, dimension (max(NN))
+*>          The eigenvalues of A, as computed by DSTEQR simlutaneously
+*>          with Z.  On exit, the eigenvalues in D1 correspond with the
+*>          matrix in A.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  D2      DOUBLE PRECISION array, dimension (max(NN))
+*>          The eigenvalues of A, as computed by DSTEQR if Z is not
+*>          computed.  On exit, the eigenvalues in D2 correspond with
+*>          the matrix in A.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  D3      DOUBLE PRECISION array, dimension (max(NN))
+*>          The eigenvalues of A, as computed by DSTERF.  On exit, the
+*>          eigenvalues in D3 correspond with the matrix in A.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  D4      DOUBLE PRECISION array, dimension
+*> \endverbatim
+*> \verbatim
+*>  EVEIGS  DOUBLE PRECISION array, dimension (max(NN))
+*>          The eigenvalues as computed by DSTEV('N', ... )
+*>          (I reserve the right to change this to the output of
+*>          whichever algorithm computes the most accurate eigenvalues).
+*> \endverbatim
+*> \verbatim
+*>  WA1     DOUBLE PRECISION array, dimension
+*> \endverbatim
+*> \verbatim
+*>  WA2     DOUBLE PRECISION array, dimension
+*> \endverbatim
+*> \verbatim
+*>  WA3     DOUBLE PRECISION array, dimension
+*> \endverbatim
+*> \verbatim
+*>  U       DOUBLE PRECISION array, dimension (LDU, max(NN))
+*>          The orthogonal matrix computed by DSYTRD + DORGTR.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  LDU     INTEGER
+*>          The leading dimension of U, Z, and V.  It must be at
+*>          least 1 and at least max( NN ).
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  V       DOUBLE PRECISION array, dimension (LDU, max(NN))
+*>          The Housholder vectors computed by DSYTRD in reducing A to
+*>          tridiagonal form.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  TAU     DOUBLE PRECISION array, dimension (max(NN))
+*>          The Householder factors computed by DSYTRD in reducing A
+*>          to tridiagonal form.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  Z       DOUBLE PRECISION array, dimension (LDU, max(NN))
+*>          The orthogonal matrix of eigenvectors computed by DSTEQR,
+*>          DPTEQR, and DSTEIN.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  WORK    DOUBLE PRECISION array, dimension (LWORK)
+*>          Workspace.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  LWORK   INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          1 + 4 * Nmax + 2 * Nmax * lg Nmax + 4 * Nmax**2
+*>          where Nmax = max( NN(j), 2 ) and lg = log base 2.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  IWORK   INTEGER array,
+*>             dimension (6 + 6*Nmax + 5 * Nmax * lg Nmax )
+*>          where Nmax = max( NN(j), 2 ) and lg = log base 2.
+*>          Workspace.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  RESULT  DOUBLE PRECISION array, dimension (105)
+*>          The values computed by the tests described above.
+*>          The values are currently limited to 1/ulp, to avoid
+*>          overflow.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  INFO    INTEGER
+*>          If 0, then everything ran OK.
+*>           -1: NSIZES < 0
+*>           -2: Some NN(j) < 0
+*>           -3: NTYPES < 0
+*>           -5: THRESH < 0
+*>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
+*>          -16: LDU < 1 or LDU < NMAX.
+*>          -21: LWORK too small.
+*>          If  DLATMR, DLATMS, DSYTRD, DORGTR, DSTEQR, DSTERF,
+*>              or DORMTR returns an error code, the
+*>              absolute value of it is returned.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>       Some Local Variables and Parameters:
+*>       ---- ----- --------- --- ----------
+*>       ZERO, ONE       Real 0 and 1.
+*>       MAXTYP          The number of types defined.
+*>       NTEST           The number of tests performed, or which can
+*>                       be performed so far, for the current matrix.
+*>       NTESTT          The total number of tests performed so far.
+*>       NMAX            Largest value in NN.
+*>       NMATS           The number of matrices generated so far.
+*>       NERRS           The number of tests which have exceeded THRESH
+*>                       so far (computed by DLAFTS).
+*>       COND, IMODE     Values to be passed to the matrix generators.
+*>       ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>       OVFL, UNFL      Overflow and underflow thresholds.
+*>       ULP, ULPINV     Finest relative precision and its inverse.
+*>       RTOVFL, RTUNFL  Square roots of the previous 2 values.
+*>               The following four arrays decode JTYPE:
+*>       KTYPE(j)        The general type (1-10) for type "j".
+*>       KMODE(j)        The MODE value to be passed to the matrix
+*>                       generator for type "j".
+*>       KMAGN(j)        The order of magnitude ( O(1),
+*>                       O(overflow^(1/2) ), O(underflow^(1/2) )
+*> \endverbatim
+*> \verbatim
+*>     The tests performed are:                 Routine tested
+*>    1= | A - U S U' | / ( |A| n ulp )         DSTEV('V', ... )
+*>    2= | I - U U' | / ( n ulp )               DSTEV('V', ... )
+*>    3= |D(with Z) - D(w/o Z)| / (|D| ulp)     DSTEV('N', ... )
+*>    4= | A - U S U' | / ( |A| n ulp )         DSTEVX('V','A', ... )
+*>    5= | I - U U' | / ( n ulp )               DSTEVX('V','A', ... )
+*>    6= |D(with Z) - EVEIGS| / (|D| ulp)       DSTEVX('N','A', ... )
+*>    7= | A - U S U' | / ( |A| n ulp )         DSTEVR('V','A', ... )
+*>    8= | I - U U' | / ( n ulp )               DSTEVR('V','A', ... )
+*>    9= |D(with Z) - EVEIGS| / (|D| ulp)       DSTEVR('N','A', ... )
+*>    10= | A - U S U' | / ( |A| n ulp )        DSTEVX('V','I', ... )
+*>    11= | I - U U' | / ( n ulp )              DSTEVX('V','I', ... )
+*>    12= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSTEVX('N','I', ... )
+*>    13= | A - U S U' | / ( |A| n ulp )        DSTEVX('V','V', ... )
+*>    14= | I - U U' | / ( n ulp )              DSTEVX('V','V', ... )
+*>    15= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSTEVX('N','V', ... )
+*>    16= | A - U S U' | / ( |A| n ulp )        DSTEVD('V', ... )
+*>    17= | I - U U' | / ( n ulp )              DSTEVD('V', ... )
+*>    18= |D(with Z) - EVEIGS| / (|D| ulp)      DSTEVD('N', ... )
+*>    19= | A - U S U' | / ( |A| n ulp )        DSTEVR('V','I', ... )
+*>    20= | I - U U' | / ( n ulp )              DSTEVR('V','I', ... )
+*>    21= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSTEVR('N','I', ... )
+*>    22= | A - U S U' | / ( |A| n ulp )        DSTEVR('V','V', ... )
+*>    23= | I - U U' | / ( n ulp )              DSTEVR('V','V', ... )
+*>    24= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSTEVR('N','V', ... )
+*> \endverbatim
+*> \verbatim
+*>    25= | A - U S U' | / ( |A| n ulp )        DSYEV('L','V', ... )
+*>    26= | I - U U' | / ( n ulp )              DSYEV('L','V', ... )
+*>    27= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEV('L','N', ... )
+*>    28= | A - U S U' | / ( |A| n ulp )        DSYEVX('L','V','A', ... )
+*>    29= | I - U U' | / ( n ulp )              DSYEVX('L','V','A', ... )
+*>    30= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVX('L','N','A', ... )
+*>    31= | A - U S U' | / ( |A| n ulp )        DSYEVX('L','V','I', ... )
+*>    32= | I - U U' | / ( n ulp )              DSYEVX('L','V','I', ... )
+*>    33= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVX('L','N','I', ... )
+*>    34= | A - U S U' | / ( |A| n ulp )        DSYEVX('L','V','V', ... )
+*>    35= | I - U U' | / ( n ulp )              DSYEVX('L','V','V', ... )
+*>    36= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVX('L','N','V', ... )
+*>    37= | A - U S U' | / ( |A| n ulp )        DSPEV('L','V', ... )
+*>    38= | I - U U' | / ( n ulp )              DSPEV('L','V', ... )
+*>    39= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEV('L','N', ... )
+*>    40= | A - U S U' | / ( |A| n ulp )        DSPEVX('L','V','A', ... )
+*>    41= | I - U U' | / ( n ulp )              DSPEVX('L','V','A', ... )
+*>    42= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVX('L','N','A', ... )
+*>    43= | A - U S U' | / ( |A| n ulp )        DSPEVX('L','V','I', ... )
+*>    44= | I - U U' | / ( n ulp )              DSPEVX('L','V','I', ... )
+*>    45= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVX('L','N','I', ... )
+*>    46= | A - U S U' | / ( |A| n ulp )        DSPEVX('L','V','V', ... )
+*>    47= | I - U U' | / ( n ulp )              DSPEVX('L','V','V', ... )
+*>    48= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVX('L','N','V', ... )
+*>    49= | A - U S U' | / ( |A| n ulp )        DSBEV('L','V', ... )
+*>    50= | I - U U' | / ( n ulp )              DSBEV('L','V', ... )
+*>    51= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEV('L','N', ... )
+*>    52= | A - U S U' | / ( |A| n ulp )        DSBEVX('L','V','A', ... )
+*>    53= | I - U U' | / ( n ulp )              DSBEVX('L','V','A', ... )
+*>    54= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVX('L','N','A', ... )
+*>    55= | A - U S U' | / ( |A| n ulp )        DSBEVX('L','V','I', ... )
+*>    56= | I - U U' | / ( n ulp )              DSBEVX('L','V','I', ... )
+*>    57= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVX('L','N','I', ... )
+*>    58= | A - U S U' | / ( |A| n ulp )        DSBEVX('L','V','V', ... )
+*>    59= | I - U U' | / ( n ulp )              DSBEVX('L','V','V', ... )
+*>    60= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVX('L','N','V', ... )
+*>    61= | A - U S U' | / ( |A| n ulp )        DSYEVD('L','V', ... )
+*>    62= | I - U U' | / ( n ulp )              DSYEVD('L','V', ... )
+*>    63= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVD('L','N', ... )
+*>    64= | A - U S U' | / ( |A| n ulp )        DSPEVD('L','V', ... )
+*>    65= | I - U U' | / ( n ulp )              DSPEVD('L','V', ... )
+*>    66= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVD('L','N', ... )
+*>    67= | A - U S U' | / ( |A| n ulp )        DSBEVD('L','V', ... )
+*>    68= | I - U U' | / ( n ulp )              DSBEVD('L','V', ... )
+*>    69= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVD('L','N', ... )
+*>    70= | A - U S U' | / ( |A| n ulp )        DSYEVR('L','V','A', ... )
+*>    71= | I - U U' | / ( n ulp )              DSYEVR('L','V','A', ... )
+*>    72= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVR('L','N','A', ... )
+*>    73= | A - U S U' | / ( |A| n ulp )        DSYEVR('L','V','I', ... )
+*>    74= | I - U U' | / ( n ulp )              DSYEVR('L','V','I', ... )
+*>    75= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVR('L','N','I', ... )
+*>    76= | A - U S U' | / ( |A| n ulp )        DSYEVR('L','V','V', ... )
+*>    77= | I - U U' | / ( n ulp )              DSYEVR('L','V','V', ... )
+*>    78= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVR('L','N','V', ... )
+*> \endverbatim
+*> \verbatim
+*>    Tests 25 through 78 are repeated (as tests 79 through 132)
+*>    with UPLO='U'
+*> \endverbatim
+*> \verbatim
+*>    To be added in 1999
+*> \endverbatim
+*> \verbatim
+*>    79= | A - U S U' | / ( |A| n ulp )        DSPEVR('L','V','A', ... )
+*>    80= | I - U U' | / ( n ulp )              DSPEVR('L','V','A', ... )
+*>    81= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVR('L','N','A', ... )
+*>    82= | A - U S U' | / ( |A| n ulp )        DSPEVR('L','V','I', ... )
+*>    83= | I - U U' | / ( n ulp )              DSPEVR('L','V','I', ... )
+*>    84= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVR('L','N','I', ... )
+*>    85= | A - U S U' | / ( |A| n ulp )        DSPEVR('L','V','V', ... )
+*>    86= | I - U U' | / ( n ulp )              DSPEVR('L','V','V', ... )
+*>    87= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVR('L','N','V', ... )
+*>    88= | A - U S U' | / ( |A| n ulp )        DSBEVR('L','V','A', ... )
+*>    89= | I - U U' | / ( n ulp )              DSBEVR('L','V','A', ... )
+*>    90= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVR('L','N','A', ... )
+*>    91= | A - U S U' | / ( |A| n ulp )        DSBEVR('L','V','I', ... )
+*>    92= | I - U U' | / ( n ulp )              DSBEVR('L','V','I', ... )
+*>    93= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVR('L','N','I', ... )
+*>    94= | A - U S U' | / ( |A| n ulp )        DSBEVR('L','V','V', ... )
+*>    95= | I - U U' | / ( n ulp )              DSBEVR('L','V','V', ... )
+*>    96= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVR('L','N','V', ... )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, D1, D2, D3, D4, EVEIGS, WA1,
      $                   WA2, WA3, U, LDU, V, TAU, Z, WORK, LWORK,
      $                   IWORK, LIWORK, RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LWORK, NOUNIT, NSIZES,
@@ -20,409 +507,6 @@
      $                   U( LDU, * ), V( LDU, * ), WA1( * ), WA2( * ),
      $                   WA3( * ), WORK( * ), Z( LDU, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*       DDRVST  checks the symmetric eigenvalue problem drivers.
-*
-*               DSTEV computes all eigenvalues and, optionally,
-*               eigenvectors of a real symmetric tridiagonal matrix.
-*
-*               DSTEVX computes selected eigenvalues and, optionally,
-*               eigenvectors of a real symmetric tridiagonal matrix.
-*
-*               DSTEVR computes selected eigenvalues and, optionally,
-*               eigenvectors of a real symmetric tridiagonal matrix
-*               using the Relatively Robust Representation where it can.
-*
-*               DSYEV computes all eigenvalues and, optionally,
-*               eigenvectors of a real symmetric matrix.
-*
-*               DSYEVX computes selected eigenvalues and, optionally,
-*               eigenvectors of a real symmetric matrix.
-*
-*               DSYEVR computes selected eigenvalues and, optionally,
-*               eigenvectors of a real symmetric matrix
-*               using the Relatively Robust Representation where it can.
-*
-*               DSPEV computes all eigenvalues and, optionally,
-*               eigenvectors of a real symmetric matrix in packed
-*               storage.
-*
-*               DSPEVX computes selected eigenvalues and, optionally,
-*               eigenvectors of a real symmetric matrix in packed
-*               storage.
-*
-*               DSBEV computes all eigenvalues and, optionally,
-*               eigenvectors of a real symmetric band matrix.
-*
-*               DSBEVX computes selected eigenvalues and, optionally,
-*               eigenvectors of a real symmetric band matrix.
-*
-*               DSYEVD computes all eigenvalues and, optionally,
-*               eigenvectors of a real symmetric matrix using
-*               a divide and conquer algorithm.
-*
-*               DSPEVD computes all eigenvalues and, optionally,
-*               eigenvectors of a real symmetric matrix in packed
-*               storage, using a divide and conquer algorithm.
-*
-*               DSBEVD computes all eigenvalues and, optionally,
-*               eigenvectors of a real symmetric band matrix,
-*               using a divide and conquer algorithm.
-*
-*       When DDRVST is called, a number of matrix "sizes" ("n's") and a
-*       number of matrix "types" are specified.  For each size ("n")
-*       and each type of matrix, one matrix will be generated and used
-*       to test the appropriate drivers.  For each matrix and each
-*       driver routine called, the following tests will be performed:
-*
-*       (1)     | A - Z D Z' | / ( |A| n ulp )
-*
-*       (2)     | I - Z Z' | / ( n ulp )
-*
-*       (3)     | D1 - D2 | / ( |D1| ulp )
-*
-*       where Z is the matrix of eigenvectors returned when the
-*       eigenvector option is given and D1 and D2 are the eigenvalues
-*       returned with and without the eigenvector option.
-*
-*       The "sizes" are specified by an array NN(1:NSIZES); the value of
-*       each element NN(j) specifies one size.
-*       The "types" are specified by a logical array DOTYPE( 1:NTYPES );
-*       if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*       Currently, the list of possible types is:
-*
-*       (1)  The zero matrix.
-*       (2)  The identity matrix.
-*
-*       (3)  A diagonal matrix with evenly spaced eigenvalues
-*            1, ..., ULP  and random signs.
-*            (ULP = (first number larger than 1) - 1 )
-*       (4)  A diagonal matrix with geometrically spaced eigenvalues
-*            1, ..., ULP  and random signs.
-*       (5)  A diagonal matrix with "clustered" eigenvalues
-*            1, ULP, ..., ULP and random signs.
-*
-*       (6)  Same as (4), but multiplied by SQRT( overflow threshold )
-*       (7)  Same as (4), but multiplied by SQRT( underflow threshold )
-*
-*       (8)  A matrix of the form  U' D U, where U is orthogonal and
-*            D has evenly spaced entries 1, ..., ULP with random signs
-*            on the diagonal.
-*
-*       (9)  A matrix of the form  U' D U, where U is orthogonal and
-*            D has geometrically spaced entries 1, ..., ULP with random
-*            signs on the diagonal.
-*
-*       (10) A matrix of the form  U' D U, where U is orthogonal and
-*            D has "clustered" entries 1, ULP,..., ULP with random
-*            signs on the diagonal.
-*
-*       (11) Same as (8), but multiplied by SQRT( overflow threshold )
-*       (12) Same as (8), but multiplied by SQRT( underflow threshold )
-*
-*       (13) Symmetric matrix with random entries chosen from (-1,1).
-*       (14) Same as (13), but multiplied by SQRT( overflow threshold )
-*       (15) Same as (13), but multiplied by SQRT( underflow threshold )
-*       (16) A band matrix with half bandwidth randomly chosen between
-*            0 and N-1, with evenly spaced eigenvalues 1, ..., ULP
-*            with random signs.
-*       (17) Same as (16), but multiplied by SQRT( overflow threshold )
-*       (18) Same as (16), but multiplied by SQRT( underflow threshold )
-*
-*  Arguments
-*  =========
-*
-*  NSIZES  INTEGER
-*          The number of sizes of matrices to use.  If it is zero,
-*          DDRVST does nothing.  It must be at least zero.
-*          Not modified.
-*
-*  NN      INTEGER array, dimension (NSIZES)
-*          An array containing the sizes to be used for the matrices.
-*          Zero values will be skipped.  The values must be at least
-*          zero.
-*          Not modified.
-*
-*  NTYPES  INTEGER
-*          The number of elements in DOTYPE.   If it is zero, DDRVST
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrix is in A.  This
-*          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*          Not modified.
-*
-*  DOTYPE  LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated.  If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*          Not modified.
-*
-*  ISEED   INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to DDRVST to continue the same random number
-*          sequence.
-*          Modified.
-*
-*  THRESH  DOUBLE PRECISION
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*          Not modified.
-*
-*  NOUNIT  INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IINFO not equal to 0.)
-*          Not modified.
-*
-*  A       DOUBLE PRECISION array, dimension (LDA , max(NN))
-*          Used to hold the matrix whose eigenvalues are to be
-*          computed.  On exit, A contains the last matrix actually
-*          used.
-*          Modified.
-*
-*  LDA     INTEGER
-*          The leading dimension of A.  It must be at
-*          least 1 and at least max( NN ).
-*          Not modified.
-*
-*  D1      DOUBLE PRECISION array, dimension (max(NN))
-*          The eigenvalues of A, as computed by DSTEQR simlutaneously
-*          with Z.  On exit, the eigenvalues in D1 correspond with the
-*          matrix in A.
-*          Modified.
-*
-*  D2      DOUBLE PRECISION array, dimension (max(NN))
-*          The eigenvalues of A, as computed by DSTEQR if Z is not
-*          computed.  On exit, the eigenvalues in D2 correspond with
-*          the matrix in A.
-*          Modified.
-*
-*  D3      DOUBLE PRECISION array, dimension (max(NN))
-*          The eigenvalues of A, as computed by DSTERF.  On exit, the
-*          eigenvalues in D3 correspond with the matrix in A.
-*          Modified.
-*
-*  D4      DOUBLE PRECISION array, dimension
-*
-*  EVEIGS  DOUBLE PRECISION array, dimension (max(NN))
-*          The eigenvalues as computed by DSTEV('N', ... )
-*          (I reserve the right to change this to the output of
-*          whichever algorithm computes the most accurate eigenvalues).
-*
-*  WA1     DOUBLE PRECISION array, dimension
-*
-*  WA2     DOUBLE PRECISION array, dimension
-*
-*  WA3     DOUBLE PRECISION array, dimension
-*
-*  U       DOUBLE PRECISION array, dimension (LDU, max(NN))
-*          The orthogonal matrix computed by DSYTRD + DORGTR.
-*          Modified.
-*
-*  LDU     INTEGER
-*          The leading dimension of U, Z, and V.  It must be at
-*          least 1 and at least max( NN ).
-*          Not modified.
-*
-*  V       DOUBLE PRECISION array, dimension (LDU, max(NN))
-*          The Housholder vectors computed by DSYTRD in reducing A to
-*          tridiagonal form.
-*          Modified.
-*
-*  TAU     DOUBLE PRECISION array, dimension (max(NN))
-*          The Householder factors computed by DSYTRD in reducing A
-*          to tridiagonal form.
-*          Modified.
-*
-*  Z       DOUBLE PRECISION array, dimension (LDU, max(NN))
-*          The orthogonal matrix of eigenvectors computed by DSTEQR,
-*          DPTEQR, and DSTEIN.
-*          Modified.
-*
-*  WORK    DOUBLE PRECISION array, dimension (LWORK)
-*          Workspace.
-*          Modified.
-*
-*  LWORK   INTEGER
-*          The number of entries in WORK.  This must be at least
-*          1 + 4 * Nmax + 2 * Nmax * lg Nmax + 4 * Nmax**2
-*          where Nmax = max( NN(j), 2 ) and lg = log base 2.
-*          Not modified.
-*
-*  IWORK   INTEGER array,
-*             dimension (6 + 6*Nmax + 5 * Nmax * lg Nmax )
-*          where Nmax = max( NN(j), 2 ) and lg = log base 2.
-*          Workspace.
-*          Modified.
-*
-*  RESULT  DOUBLE PRECISION array, dimension (105)
-*          The values computed by the tests described above.
-*          The values are currently limited to 1/ulp, to avoid
-*          overflow.
-*          Modified.
-*
-*  INFO    INTEGER
-*          If 0, then everything ran OK.
-*           -1: NSIZES < 0
-*           -2: Some NN(j) < 0
-*           -3: NTYPES < 0
-*           -5: THRESH < 0
-*           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
-*          -16: LDU < 1 or LDU < NMAX.
-*          -21: LWORK too small.
-*          If  DLATMR, DLATMS, DSYTRD, DORGTR, DSTEQR, DSTERF,
-*              or DORMTR returns an error code, the
-*              absolute value of it is returned.
-*          Modified.
-*
-*-----------------------------------------------------------------------
-*
-*       Some Local Variables and Parameters:
-*       ---- ----- --------- --- ----------
-*       ZERO, ONE       Real 0 and 1.
-*       MAXTYP          The number of types defined.
-*       NTEST           The number of tests performed, or which can
-*                       be performed so far, for the current matrix.
-*       NTESTT          The total number of tests performed so far.
-*       NMAX            Largest value in NN.
-*       NMATS           The number of matrices generated so far.
-*       NERRS           The number of tests which have exceeded THRESH
-*                       so far (computed by DLAFTS).
-*       COND, IMODE     Values to be passed to the matrix generators.
-*       ANORM           Norm of A; passed to matrix generators.
-*
-*       OVFL, UNFL      Overflow and underflow thresholds.
-*       ULP, ULPINV     Finest relative precision and its inverse.
-*       RTOVFL, RTUNFL  Square roots of the previous 2 values.
-*               The following four arrays decode JTYPE:
-*       KTYPE(j)        The general type (1-10) for type "j".
-*       KMODE(j)        The MODE value to be passed to the matrix
-*                       generator for type "j".
-*       KMAGN(j)        The order of magnitude ( O(1),
-*                       O(overflow^(1/2) ), O(underflow^(1/2) )
-*
-*     The tests performed are:                 Routine tested
-*    1= | A - U S U' | / ( |A| n ulp )         DSTEV('V', ... )
-*    2= | I - U U' | / ( n ulp )               DSTEV('V', ... )
-*    3= |D(with Z) - D(w/o Z)| / (|D| ulp)     DSTEV('N', ... )
-*    4= | A - U S U' | / ( |A| n ulp )         DSTEVX('V','A', ... )
-*    5= | I - U U' | / ( n ulp )               DSTEVX('V','A', ... )
-*    6= |D(with Z) - EVEIGS| / (|D| ulp)       DSTEVX('N','A', ... )
-*    7= | A - U S U' | / ( |A| n ulp )         DSTEVR('V','A', ... )
-*    8= | I - U U' | / ( n ulp )               DSTEVR('V','A', ... )
-*    9= |D(with Z) - EVEIGS| / (|D| ulp)       DSTEVR('N','A', ... )
-*    10= | A - U S U' | / ( |A| n ulp )        DSTEVX('V','I', ... )
-*    11= | I - U U' | / ( n ulp )              DSTEVX('V','I', ... )
-*    12= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSTEVX('N','I', ... )
-*    13= | A - U S U' | / ( |A| n ulp )        DSTEVX('V','V', ... )
-*    14= | I - U U' | / ( n ulp )              DSTEVX('V','V', ... )
-*    15= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSTEVX('N','V', ... )
-*    16= | A - U S U' | / ( |A| n ulp )        DSTEVD('V', ... )
-*    17= | I - U U' | / ( n ulp )              DSTEVD('V', ... )
-*    18= |D(with Z) - EVEIGS| / (|D| ulp)      DSTEVD('N', ... )
-*    19= | A - U S U' | / ( |A| n ulp )        DSTEVR('V','I', ... )
-*    20= | I - U U' | / ( n ulp )              DSTEVR('V','I', ... )
-*    21= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSTEVR('N','I', ... )
-*    22= | A - U S U' | / ( |A| n ulp )        DSTEVR('V','V', ... )
-*    23= | I - U U' | / ( n ulp )              DSTEVR('V','V', ... )
-*    24= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSTEVR('N','V', ... )
-*
-*    25= | A - U S U' | / ( |A| n ulp )        DSYEV('L','V', ... )
-*    26= | I - U U' | / ( n ulp )              DSYEV('L','V', ... )
-*    27= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEV('L','N', ... )
-*    28= | A - U S U' | / ( |A| n ulp )        DSYEVX('L','V','A', ... )
-*    29= | I - U U' | / ( n ulp )              DSYEVX('L','V','A', ... )
-*    30= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVX('L','N','A', ... )
-*    31= | A - U S U' | / ( |A| n ulp )        DSYEVX('L','V','I', ... )
-*    32= | I - U U' | / ( n ulp )              DSYEVX('L','V','I', ... )
-*    33= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVX('L','N','I', ... )
-*    34= | A - U S U' | / ( |A| n ulp )        DSYEVX('L','V','V', ... )
-*    35= | I - U U' | / ( n ulp )              DSYEVX('L','V','V', ... )
-*    36= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVX('L','N','V', ... )
-*    37= | A - U S U' | / ( |A| n ulp )        DSPEV('L','V', ... )
-*    38= | I - U U' | / ( n ulp )              DSPEV('L','V', ... )
-*    39= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEV('L','N', ... )
-*    40= | A - U S U' | / ( |A| n ulp )        DSPEVX('L','V','A', ... )
-*    41= | I - U U' | / ( n ulp )              DSPEVX('L','V','A', ... )
-*    42= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVX('L','N','A', ... )
-*    43= | A - U S U' | / ( |A| n ulp )        DSPEVX('L','V','I', ... )
-*    44= | I - U U' | / ( n ulp )              DSPEVX('L','V','I', ... )
-*    45= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVX('L','N','I', ... )
-*    46= | A - U S U' | / ( |A| n ulp )        DSPEVX('L','V','V', ... )
-*    47= | I - U U' | / ( n ulp )              DSPEVX('L','V','V', ... )
-*    48= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVX('L','N','V', ... )
-*    49= | A - U S U' | / ( |A| n ulp )        DSBEV('L','V', ... )
-*    50= | I - U U' | / ( n ulp )              DSBEV('L','V', ... )
-*    51= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEV('L','N', ... )
-*    52= | A - U S U' | / ( |A| n ulp )        DSBEVX('L','V','A', ... )
-*    53= | I - U U' | / ( n ulp )              DSBEVX('L','V','A', ... )
-*    54= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVX('L','N','A', ... )
-*    55= | A - U S U' | / ( |A| n ulp )        DSBEVX('L','V','I', ... )
-*    56= | I - U U' | / ( n ulp )              DSBEVX('L','V','I', ... )
-*    57= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVX('L','N','I', ... )
-*    58= | A - U S U' | / ( |A| n ulp )        DSBEVX('L','V','V', ... )
-*    59= | I - U U' | / ( n ulp )              DSBEVX('L','V','V', ... )
-*    60= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVX('L','N','V', ... )
-*    61= | A - U S U' | / ( |A| n ulp )        DSYEVD('L','V', ... )
-*    62= | I - U U' | / ( n ulp )              DSYEVD('L','V', ... )
-*    63= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVD('L','N', ... )
-*    64= | A - U S U' | / ( |A| n ulp )        DSPEVD('L','V', ... )
-*    65= | I - U U' | / ( n ulp )              DSPEVD('L','V', ... )
-*    66= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVD('L','N', ... )
-*    67= | A - U S U' | / ( |A| n ulp )        DSBEVD('L','V', ... )
-*    68= | I - U U' | / ( n ulp )              DSBEVD('L','V', ... )
-*    69= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVD('L','N', ... )
-*    70= | A - U S U' | / ( |A| n ulp )        DSYEVR('L','V','A', ... )
-*    71= | I - U U' | / ( n ulp )              DSYEVR('L','V','A', ... )
-*    72= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVR('L','N','A', ... )
-*    73= | A - U S U' | / ( |A| n ulp )        DSYEVR('L','V','I', ... )
-*    74= | I - U U' | / ( n ulp )              DSYEVR('L','V','I', ... )
-*    75= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVR('L','N','I', ... )
-*    76= | A - U S U' | / ( |A| n ulp )        DSYEVR('L','V','V', ... )
-*    77= | I - U U' | / ( n ulp )              DSYEVR('L','V','V', ... )
-*    78= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSYEVR('L','N','V', ... )
-*
-*    Tests 25 through 78 are repeated (as tests 79 through 132)
-*    with UPLO='U'
-*
-*    To be added in 1999
-*
-*    79= | A - U S U' | / ( |A| n ulp )        DSPEVR('L','V','A', ... )
-*    80= | I - U U' | / ( n ulp )              DSPEVR('L','V','A', ... )
-*    81= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVR('L','N','A', ... )
-*    82= | A - U S U' | / ( |A| n ulp )        DSPEVR('L','V','I', ... )
-*    83= | I - U U' | / ( n ulp )              DSPEVR('L','V','I', ... )
-*    84= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVR('L','N','I', ... )
-*    85= | A - U S U' | / ( |A| n ulp )        DSPEVR('L','V','V', ... )
-*    86= | I - U U' | / ( n ulp )              DSPEVR('L','V','V', ... )
-*    87= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSPEVR('L','N','V', ... )
-*    88= | A - U S U' | / ( |A| n ulp )        DSBEVR('L','V','A', ... )
-*    89= | I - U U' | / ( n ulp )              DSBEVR('L','V','A', ... )
-*    90= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVR('L','N','A', ... )
-*    91= | A - U S U' | / ( |A| n ulp )        DSBEVR('L','V','I', ... )
-*    92= | I - U U' | / ( n ulp )              DSBEVR('L','V','I', ... )
-*    93= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVR('L','N','I', ... )
-*    94= | A - U S U' | / ( |A| n ulp )        DSBEVR('L','V','V', ... )
-*    95= | I - U U' | / ( n ulp )              DSBEVR('L','V','V', ... )
-*    96= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVR('L','N','V', ... )
-*
 *
 *  =====================================================================
 *

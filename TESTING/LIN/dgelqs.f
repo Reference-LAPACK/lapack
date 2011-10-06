@@ -1,9 +1,132 @@
+*> \brief \b DGELQS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGELQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Compute a minimum-norm solution
+*>     min || A*X - B ||
+*> using the LQ factorization
+*>     A = L*Q
+*> computed by DGELQF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= M >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns of B.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          Details of the LQ factorization of the original matrix A as
+*>          returned by DGELQF.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= M.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (M)
+*>          Details of the orthogonal matrix Q.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*>          On entry, the m-by-nrhs right hand side matrix B.
+*>          On exit, the n-by-nrhs solution matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK must be at least NRHS,
+*>          and should be at least NRHS*NB, where NB is the block size
+*>          for this environment.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DGELQS( M, N, NRHS, A, LDA, TAU, B, LDB, WORK, LWORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
@@ -12,55 +135,6 @@
       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Compute a minimum-norm solution
-*      min || A*X - B ||
-*  using the LQ factorization
-*      A = L*Q
-*  computed by DGELQF.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= M >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns of B.  NRHS >= 0.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          Details of the LQ factorization of the original matrix A as
-*          returned by DGELQF.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= M.
-*
-*  TAU     (input) DOUBLE PRECISION array, dimension (M)
-*          Details of the orthogonal matrix Q.
-*
-*  B       (input/output) DOUBLE PRECISION array, dimension (LDB,NRHS)
-*          On entry, the m-by-nrhs right hand side matrix B.
-*          On exit, the n-by-nrhs solution matrix X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >= N.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  LWORK must be at least NRHS,
-*          and should be at least NRHS*NB, where NB is the block size
-*          for this environment.
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

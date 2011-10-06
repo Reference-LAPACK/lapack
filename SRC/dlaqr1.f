@@ -1,8 +1,128 @@
+*> \brief \b DLAQR1
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION   SI1, SI2, SR1, SR2
+*       INTEGER            LDH, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   H( LDH, * ), V( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>      Given a 2-by-2 or 3-by-3 matrix H, DLAQR1 sets v to a
+*>      scalar multiple of the first column of the product
+*>
+*>      (*)  K = (H - (sr1 + i*si1)*I)*(H - (sr2 + i*si2)*I)
+*>
+*>      scaling to avoid overflows and most underflows. It
+*>      is assumed that either
+*>
+*>              1) sr1 = sr2 and si1 = -si2
+*>          or
+*>              2) si1 = si2 = 0.
+*>
+*>      This is useful for starting double implicit shift bulges
+*>      in the QR algorithm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is integer
+*>              Order of the matrix H. N must be either 2 or 3.
+*> \endverbatim
+*>
+*> \param[in] H
+*> \verbatim
+*>          H is DOUBLE PRECISION array of dimension (LDH,N)
+*>              The 2-by-2 or 3-by-3 matrix H in (*).
+*> \endverbatim
+*>
+*> \param[in] LDH
+*> \verbatim
+*>          LDH is integer
+*>              The leading dimension of H as declared in
+*>              the calling procedure.  LDH.GE.N
+*> \endverbatim
+*>
+*> \param[in] SR1
+*> \verbatim
+*>          SR1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] SI1
+*> \verbatim
+*>          SI1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] SR2
+*> \verbatim
+*>          SR2 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] SI2
+*> \verbatim
+*>          SI2 is DOUBLE PRECISION
+*>              The shifts in (*).
+*> \endverbatim
+*>
+*> \param[out] V
+*> \verbatim
+*>          V is DOUBLE PRECISION array of dimension N
+*>              A scalar multiple of the first column of the
+*>              matrix K in (*).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>     Based on contributions by
+*>        Karen Braman and Ralph Byers, Department of Mathematics,
+*>        University of Kansas, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   SI1, SI2, SR1, SR2
@@ -11,57 +131,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   H( LDH, * ), V( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*       Given a 2-by-2 or 3-by-3 matrix H, DLAQR1 sets v to a
-*       scalar multiple of the first column of the product
-*
-*       (*)  K = (H - (sr1 + i*si1)*I)*(H - (sr2 + i*si2)*I)
-*
-*       scaling to avoid overflows and most underflows. It
-*       is assumed that either
-*
-*               1) sr1 = sr2 and si1 = -si2
-*           or
-*               2) si1 = si2 = 0.
-*
-*       This is useful for starting double implicit shift bulges
-*       in the QR algorithm.
-*
-*  Arguments
-*  =========
-*
-*       N      (input) integer
-*              Order of the matrix H. N must be either 2 or 3.
-*
-*       H      (input) DOUBLE PRECISION array of dimension (LDH,N)
-*              The 2-by-2 or 3-by-3 matrix H in (*).
-*
-*       LDH    (input) integer
-*              The leading dimension of H as declared in
-*              the calling procedure.  LDH.GE.N
-*
-*       SR1    (input) DOUBLE PRECISION
-*
-*       SI1    (input) DOUBLE PRECISION
-*
-*       SR2    (input) DOUBLE PRECISION
-*
-*       SI2    (input) DOUBLE PRECISION
-*              The shifts in (*).
-*
-*       V      (output) DOUBLE PRECISION array of dimension N
-*              A scalar multiple of the first column of the
-*              matrix K in (*).
-*
-*  Further Details
-*  ===============
-*
-*     Based on contributions by
-*        Karen Braman and Ralph Byers, Department of Mathematics,
-*        University of Kansas, USA
 *
 *  ================================================================
 *

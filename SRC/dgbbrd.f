@@ -1,10 +1,188 @@
+*> \brief \b DGBBRD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
+*                          LDQ, PT, LDPT, C, LDC, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          VECT
+*       INTEGER            INFO, KL, KU, LDAB, LDC, LDPT, LDQ, M, N, NCC
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   AB( LDAB, * ), C( LDC, * ), D( * ), E( * ),
+*      $                   PT( LDPT, * ), Q( LDQ, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGBBRD reduces a real general m-by-n band matrix A to upper
+*> bidiagonal form B by an orthogonal transformation: Q**T * A * P = B.
+*>
+*> The routine computes B, and optionally forms Q or P**T, or computes
+*> Q**T*C for a given matrix C.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] VECT
+*> \verbatim
+*>          VECT is CHARACTER*1
+*>          Specifies whether or not the matrices Q and P**T are to be
+*>          formed.
+*>          = 'N': do not form Q or P**T;
+*>          = 'Q': form Q only;
+*>          = 'P': form P**T only;
+*>          = 'B': form both.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NCC
+*> \verbatim
+*>          NCC is INTEGER
+*>          The number of columns of the matrix C.  NCC >= 0.
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>          The number of subdiagonals of the matrix A. KL >= 0.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>          The number of superdiagonals of the matrix A. KU >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AB
+*> \verbatim
+*>          AB is DOUBLE PRECISION array, dimension (LDAB,N)
+*>          On entry, the m-by-n band matrix A, stored in rows 1 to
+*>          KL+KU+1. The j-th column of A is stored in the j-th column of
+*>          the array AB as follows:
+*>          AB(ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl).
+*>          On exit, A is overwritten by values generated during the
+*>          reduction.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array A. LDAB >= KL+KU+1.
+*> \endverbatim
+*>
+*> \param[out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (min(M,N))
+*>          The diagonal elements of the bidiagonal matrix B.
+*> \endverbatim
+*>
+*> \param[out] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (min(M,N)-1)
+*>          The superdiagonal elements of the bidiagonal matrix B.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is DOUBLE PRECISION array, dimension (LDQ,M)
+*>          If VECT = 'Q' or 'B', the m-by-m orthogonal matrix Q.
+*>          If VECT = 'N' or 'P', the array Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q.
+*>          LDQ >= max(1,M) if VECT = 'Q' or 'B'; LDQ >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[out] PT
+*> \verbatim
+*>          PT is DOUBLE PRECISION array, dimension (LDPT,N)
+*>          If VECT = 'P' or 'B', the n-by-n orthogonal matrix P'.
+*>          If VECT = 'N' or 'Q', the array PT is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDPT
+*> \verbatim
+*>          LDPT is INTEGER
+*>          The leading dimension of the array PT.
+*>          LDPT >= max(1,N) if VECT = 'P' or 'B'; LDPT >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension (LDC,NCC)
+*>          On entry, an m-by-ncc matrix C.
+*>          On exit, C is overwritten by Q**T*C.
+*>          C is not referenced if NCC = 0.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C.
+*>          LDC >= max(1,M) if NCC > 0; LDC >= 1 if NCC = 0.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (2*max(M,N))
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleGBcomputational
+*
+*  =====================================================================
       SUBROUTINE DGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
      $                   LDQ, PT, LDPT, C, LDC, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          VECT
@@ -14,89 +192,6 @@
       DOUBLE PRECISION   AB( LDAB, * ), C( LDC, * ), D( * ), E( * ),
      $                   PT( LDPT, * ), Q( LDQ, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGBBRD reduces a real general m-by-n band matrix A to upper
-*  bidiagonal form B by an orthogonal transformation: Q**T * A * P = B.
-*
-*  The routine computes B, and optionally forms Q or P**T, or computes
-*  Q**T*C for a given matrix C.
-*
-*  Arguments
-*  =========
-*
-*  VECT    (input) CHARACTER*1
-*          Specifies whether or not the matrices Q and P**T are to be
-*          formed.
-*          = 'N': do not form Q or P**T;
-*          = 'Q': form Q only;
-*          = 'P': form P**T only;
-*          = 'B': form both.
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  NCC     (input) INTEGER
-*          The number of columns of the matrix C.  NCC >= 0.
-*
-*  KL      (input) INTEGER
-*          The number of subdiagonals of the matrix A. KL >= 0.
-*
-*  KU      (input) INTEGER
-*          The number of superdiagonals of the matrix A. KU >= 0.
-*
-*  AB      (input/output) DOUBLE PRECISION array, dimension (LDAB,N)
-*          On entry, the m-by-n band matrix A, stored in rows 1 to
-*          KL+KU+1. The j-th column of A is stored in the j-th column of
-*          the array AB as follows:
-*          AB(ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl).
-*          On exit, A is overwritten by values generated during the
-*          reduction.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array A. LDAB >= KL+KU+1.
-*
-*  D       (output) DOUBLE PRECISION array, dimension (min(M,N))
-*          The diagonal elements of the bidiagonal matrix B.
-*
-*  E       (output) DOUBLE PRECISION array, dimension (min(M,N)-1)
-*          The superdiagonal elements of the bidiagonal matrix B.
-*
-*  Q       (output) DOUBLE PRECISION array, dimension (LDQ,M)
-*          If VECT = 'Q' or 'B', the m-by-m orthogonal matrix Q.
-*          If VECT = 'N' or 'P', the array Q is not referenced.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q.
-*          LDQ >= max(1,M) if VECT = 'Q' or 'B'; LDQ >= 1 otherwise.
-*
-*  PT      (output) DOUBLE PRECISION array, dimension (LDPT,N)
-*          If VECT = 'P' or 'B', the n-by-n orthogonal matrix P'.
-*          If VECT = 'N' or 'Q', the array PT is not referenced.
-*
-*  LDPT    (input) INTEGER
-*          The leading dimension of the array PT.
-*          LDPT >= max(1,N) if VECT = 'P' or 'B'; LDPT >= 1 otherwise.
-*
-*  C       (input/output) DOUBLE PRECISION array, dimension (LDC,NCC)
-*          On entry, an m-by-ncc matrix C.
-*          On exit, C is overwritten by Q**T*C.
-*          C is not referenced if NCC = 0.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C.
-*          LDC >= max(1,M) if NCC > 0; LDC >= 1 if NCC = 0.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (2*max(M,N))
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *
 *  =====================================================================
 *

@@ -1,10 +1,154 @@
+*> \brief <b> ZHBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZHBEV( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
+*                         RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBZ, UPLO
+*       INTEGER            INFO, KD, LDAB, LDZ, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * ), W( * )
+*       COMPLEX*16         AB( LDAB, * ), WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZHBEV computes all the eigenvalues and, optionally, eigenvectors of
+*> a complex Hermitian band matrix A.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBZ
+*> \verbatim
+*>          JOBZ is CHARACTER*1
+*>          = 'N':  Compute eigenvalues only;
+*>          = 'V':  Compute eigenvalues and eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of superdiagonals of the matrix A if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AB
+*> \verbatim
+*>          AB is COMPLEX*16 array, dimension (LDAB, N)
+*>          On entry, the upper or lower triangle of the Hermitian band
+*>          matrix A, stored in the first KD+1 rows of the array.  The
+*>          j-th column of A is stored in the j-th column of the array AB
+*>          as follows:
+*>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
+*> \endverbatim
+*> \verbatim
+*>          On exit, AB is overwritten by values generated during the
+*>          reduction to tridiagonal form.  If UPLO = 'U', the first
+*>          superdiagonal and the diagonal of the tridiagonal matrix T
+*>          are returned in rows KD and KD+1 of AB, and if UPLO = 'L',
+*>          the diagonal and first subdiagonal of T are returned in the
+*>          first two rows of AB.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD + 1.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is DOUBLE PRECISION array, dimension (N)
+*>          If INFO = 0, the eigenvalues in ascending order.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX*16 array, dimension (LDZ, N)
+*>          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal
+*>          eigenvectors of the matrix A, with the i-th column of Z
+*>          holding the eigenvector associated with W(i).
+*>          If JOBZ = 'N', then Z is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1, and if
+*>          JOBZ = 'V', LDZ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (max(1,3*N-2))
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  if INFO = i, the algorithm failed to converge; i
+*>                off-diagonal elements of an intermediate tridiagonal
+*>                form did not converge to zero.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHEReigen
+*
+*  =====================================================================
       SUBROUTINE ZHBEV( JOBZ, UPLO, N, KD, AB, LDAB, W, Z, LDZ, WORK,
      $                  RWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, UPLO
@@ -14,72 +158,6 @@
       DOUBLE PRECISION   RWORK( * ), W( * )
       COMPLEX*16         AB( LDAB, * ), WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZHBEV computes all the eigenvalues and, optionally, eigenvectors of
-*  a complex Hermitian band matrix A.
-*
-*  Arguments
-*  =========
-*
-*  JOBZ    (input) CHARACTER*1
-*          = 'N':  Compute eigenvalues only;
-*          = 'V':  Compute eigenvalues and eigenvectors.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  KD      (input) INTEGER
-*          The number of superdiagonals of the matrix A if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
-*
-*  AB      (input/output) COMPLEX*16 array, dimension (LDAB, N)
-*          On entry, the upper or lower triangle of the Hermitian band
-*          matrix A, stored in the first KD+1 rows of the array.  The
-*          j-th column of A is stored in the j-th column of the array AB
-*          as follows:
-*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*
-*          On exit, AB is overwritten by values generated during the
-*          reduction to tridiagonal form.  If UPLO = 'U', the first
-*          superdiagonal and the diagonal of the tridiagonal matrix T
-*          are returned in rows KD and KD+1 of AB, and if UPLO = 'L',
-*          the diagonal and first subdiagonal of T are returned in the
-*          first two rows of AB.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KD + 1.
-*
-*  W       (output) DOUBLE PRECISION array, dimension (N)
-*          If INFO = 0, the eigenvalues in ascending order.
-*
-*  Z       (output) COMPLEX*16 array, dimension (LDZ, N)
-*          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal
-*          eigenvectors of the matrix A, with the i-th column of Z
-*          holding the eigenvector associated with W(i).
-*          If JOBZ = 'N', then Z is not referenced.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= 1, and if
-*          JOBZ = 'V', LDZ >= max(1,N).
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (N)
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (max(1,3*N-2))
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if INFO = i, the algorithm failed to converge; i
-*                off-diagonal elements of an intermediate tridiagonal
-*                form did not converge to zero.
 *
 *  =====================================================================
 *

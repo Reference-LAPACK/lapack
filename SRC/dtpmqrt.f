@@ -1,11 +1,181 @@
+*> \brief \b DTPMQRT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DTPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T, LDT,
+*                           A, LDA, B, LDB, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER SIDE, TRANS
+*       INTEGER   INFO, K, LDV, LDA, LDB, M, N, L, NB, LDT
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   V( LDV, * ), A( LDA, * ), B( LDB, * ), 
+*      $                   T( LDT, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DTPMQRT applies a real orthogonal matrix Q obtained from a 
+*> "triangular-pentagonal" real block reflector H to a general
+*> real matrix C, which consists of two blocks A and B.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'L': apply Q or Q**T from the Left;
+*>          = 'R': apply Q or Q**T from the Right.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          = 'N':  No transpose, apply Q;
+*>          = 'C':  Transpose, apply Q**T.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix B. M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix B. N >= 0.
+*> 
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of elementary reflectors whose product defines
+*>          the matrix Q.
+*> \endverbatim
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*          K >= L >= 0.  See Further Details.
+*>
+*>  NB      (input) INTEGER
+*>          The block size used for the storage of T.  K >= NB >= 1.
+*>          This must be the same value of NB used to generate T
+*>          in CTPQRT.
+*>
+*>  V       (input) DOUBLE PRECISION array, dimension (LDA,K)
+*>          The i-th column must contain the vector which defines the
+*>          elementary reflector H(i), for i = 1,2,...,k, as returned by
+*>          CTPQRT in B.  See Further Details.
+*>
+*>  LDA     (input) INTEGER
+*>          The leading dimension of the array A.
+*>          If SIDE = 'L', LDA >= max(1,M);
+*>          if SIDE = 'R', LDA >= max(1,N).
+*>
+*>  T       (input) DOUBLE PRECISION array, dimension (LDT,K)
+*>          The upper triangular factors of the block reflectors
+*>          as returned by CTPQRT, stored as a NB-by-K matrix.
+*>
+*>  LDT     (input) INTEGER
+*>          The leading dimension of the array T.  LDT >= NB.
+*>
+*>  A       (input/output) DOUBLE PRECISION array, dimension 
+*>          (LDA,N) if SIDE = 'L' or 
+*>          (LDA,K) if SIDE = 'R'
+*>          On entry, the K-by-N or M-by-K matrix A.
+*>          On exit, A is overwritten by the corresponding block of 
+*>          Q*C or Q**T*C or C*Q or C*Q**T.  See Further Details.
+*>
+*>  LDA     (input) INTEGER
+*>          The leading dimension of the array A. 
+*>          If SIDE = 'L', LDC >= max(1,K);
+*>          If SIDE = 'R', LDC >= max(1,M). 
+*>
+*>  B       (input/output) DOUBLE PRECISION array, dimension (LDB,N)
+*>          On entry, the M-by-N matrix B.
+*>          On exit, B is overwritten by the corresponding block of
+*>          Q*C or Q**T*C or C*Q or C*Q**T.  See Further Details.
+*>
+*>  LDB     (input) INTEGER
+*>          The leading dimension of the array B. 
+*>          LDB >= max(1,M).
+*>
+*>  WORK    (workspace/output) DOUBLE PRECISION array.  The dimension of WORK is
+*>           N*NB if SIDE = 'L', or  M*NB if SIDE = 'R'.
+*>
+*>  INFO    (output) INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>
+*>
+*>  The columns of the pentagonal matrix V contain the elementary reflectors
+*>  H(1), H(2), ..., H(K); V is composed of a rectangular block V1 and a 
+*>  trapezoidal block V2:
+*>
+*>        V = [V1]
+*>            [V2].
+*>
+*>  The size of the trapezoidal block V2 is determined by the parameter L, 
+*>  where 0 <= L <= K; V2 is upper trapezoidal, consisting of the first L
+*>  rows of a K-by-K upper triangular matrix.  If L=K, V2 is upper triangular;
+*>  if L=0, there is no trapezoidal block, hence V = V1 is rectangular.
+*>
+*>  If SIDE = 'L':  C = [A]  where A is K-by-N,  B is M-by-N and V is M-by-K. 
+*>                      [B]   
+*>  
+*>  If SIDE = 'R':  C = [A B]  where A is M-by-K, B is M-by-N and V is N-by-K.
+*>
+*>  The real orthogonal matrix Q is formed from V and T.
+*>
+*>  If TRANS='N' and SIDE='L', C is on exit replaced with Q * C.
+*>
+*>  If TRANS='T' and SIDE='L', C is on exit replaced with Q**T * C.
+*>
+*>  If TRANS='N' and SIDE='R', C is on exit replaced with C * Q.
+*>
+*>  If TRANS='T' and SIDE='R', C is on exit replaced with C * Q**T.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DTPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T, LDT,
      $                    A, LDA, B, LDB, WORK, INFO )
-      IMPLICIT NONE
 *
-*  -- LAPACK routine (version 3.?) --
-*  -- LAPACK is a software package provided by Univ. of Tennessee, --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
-*  -- July 2011 --
+*  -- LAPACK computational routine (version 3.?) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER SIDE, TRANS
@@ -15,118 +185,6 @@
       DOUBLE PRECISION   V( LDV, * ), A( LDA, * ), B( LDB, * ), 
      $                   T( LDT, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DTPMQRT applies a real orthogonal matrix Q obtained from a 
-*  "triangular-pentagonal" real block reflector H to a general
-*  real matrix C, which consists of two blocks A and B.
-*
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'L': apply Q or Q**T from the Left;
-*          = 'R': apply Q or Q**T from the Right.
-*
-*  TRANS   (input) CHARACTER*1
-*          = 'N':  No transpose, apply Q;
-*          = 'C':  Transpose, apply Q**T.
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix B. M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix B. N >= 0.
-* 
-*  K       (input) INTEGER
-*          The number of elementary reflectors whose product defines
-*          the matrix Q.
-*
-*  L       (input) INTEGER
-*          The order of the trapezoidal part of V.  
-*          K >= L >= 0.  See Further Details.
-*
-*  NB      (input) INTEGER
-*          The block size used for the storage of T.  K >= NB >= 1.
-*          This must be the same value of NB used to generate T
-*          in CTPQRT.
-*
-*  V       (input) DOUBLE PRECISION array, dimension (LDA,K)
-*          The i-th column must contain the vector which defines the
-*          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*          CTPQRT in B.  See Further Details.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.
-*          If SIDE = 'L', LDA >= max(1,M);
-*          if SIDE = 'R', LDA >= max(1,N).
-*
-*  T       (input) DOUBLE PRECISION array, dimension (LDT,K)
-*          The upper triangular factors of the block reflectors
-*          as returned by CTPQRT, stored as a NB-by-K matrix.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of the array T.  LDT >= NB.
-*
-*  A       (input/output) DOUBLE PRECISION array, dimension 
-*          (LDA,N) if SIDE = 'L' or 
-*          (LDA,K) if SIDE = 'R'
-*          On entry, the K-by-N or M-by-K matrix A.
-*          On exit, A is overwritten by the corresponding block of 
-*          Q*C or Q**T*C or C*Q or C*Q**T.  See Further Details.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. 
-*          If SIDE = 'L', LDC >= max(1,K);
-*          If SIDE = 'R', LDC >= max(1,M). 
-*
-*  B       (input/output) DOUBLE PRECISION array, dimension (LDB,N)
-*          On entry, the M-by-N matrix B.
-*          On exit, B is overwritten by the corresponding block of
-*          Q*C or Q**T*C or C*Q or C*Q**T.  See Further Details.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. 
-*          LDB >= max(1,M).
-*
-*  WORK    (workspace/output) DOUBLE PRECISION array.  The dimension of WORK is
-*           N*NB if SIDE = 'L', or  M*NB if SIDE = 'R'.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  The columns of the pentagonal matrix V contain the elementary reflectors
-*  H(1), H(2), ..., H(K); V is composed of a rectangular block V1 and a 
-*  trapezoidal block V2:
-*
-*        V = [V1]
-*            [V2].
-*
-*  The size of the trapezoidal block V2 is determined by the parameter L, 
-*  where 0 <= L <= K; V2 is upper trapezoidal, consisting of the first L
-*  rows of a K-by-K upper triangular matrix.  If L=K, V2 is upper triangular;
-*  if L=0, there is no trapezoidal block, hence V = V1 is rectangular.
-*
-*  If SIDE = 'L':  C = [A]  where A is K-by-N,  B is M-by-N and V is M-by-K. 
-*                      [B]   
-*  
-*  If SIDE = 'R':  C = [A B]  where A is M-by-K, B is M-by-N and V is N-by-K.
-*
-*  The real orthogonal matrix Q is formed from V and T.
-*
-*  If TRANS='N' and SIDE='L', C is on exit replaced with Q * C.
-*
-*  If TRANS='T' and SIDE='L', C is on exit replaced with Q**T * C.
-*
-*  If TRANS='N' and SIDE='R', C is on exit replaced with C * Q.
-*
-*  If TRANS='T' and SIDE='R', C is on exit replaced with C * Q**T.
 *
 *  =====================================================================
 *

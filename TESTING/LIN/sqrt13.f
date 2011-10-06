@@ -1,8 +1,102 @@
+*> \brief \b SQRT13
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, M, N, SCALE
+*       REAL               NORMA
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       REAL               A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SQRT13 generates a full-rank matrix that may be scaled to have large
+*> or small norm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SCALE
+*> \verbatim
+*>          SCALE is INTEGER
+*>          SCALE = 1: normally scaled matrix
+*>          SCALE = 2: matrix scaled up
+*>          SCALE = 3: matrix scaled down
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of A.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The M-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.
+*> \endverbatim
+*>
+*> \param[out] NORMA
+*> \verbatim
+*>          NORMA is REAL
+*>          The one-norm of A.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is integer array, dimension (4)
+*>          Seed for random number generator
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SQRT13( SCALE, M, N, A, LDA, NORMA, ISEED )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, M, N, SCALE
@@ -12,38 +106,6 @@
       INTEGER            ISEED( 4 )
       REAL               A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SQRT13 generates a full-rank matrix that may be scaled to have large
-*  or small norm.
-*
-*  Arguments
-*  =========
-*
-*  SCALE   (input) INTEGER
-*          SCALE = 1: normally scaled matrix
-*          SCALE = 2: matrix scaled up
-*          SCALE = 3: matrix scaled down
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.
-*
-*  N       (input) INTEGER
-*          The number of columns of A.
-*
-*  A       (output) REAL array, dimension (LDA,N)
-*          The M-by-N matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.
-*
-*  NORMA   (output) REAL
-*          The one-norm of A.
-*
-*  ISEED   (input/output) integer array, dimension (4)
-*          Seed for random number generator
 *
 *  =====================================================================
 *

@@ -1,11 +1,412 @@
+*> \brief \b CDRGEV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CDRGEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          NOUNIT, A, LDA, B, S, T, Q, LDQ, Z, QE, LDQE,
+*                          ALPHA, BETA, ALPHA1, BETA1, WORK, LWORK, RWORK,
+*                          RESULT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDQ, LDQE, LWORK, NOUNIT, NSIZES,
+*      $                   NTYPES
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), NN( * )
+*       REAL               RESULT( * ), RWORK( * )
+*       COMPLEX            A( LDA, * ), ALPHA( * ), ALPHA1( * ),
+*      $                   B( LDA, * ), BETA( * ), BETA1( * ),
+*      $                   Q( LDQ, * ), QE( LDQE, * ), S( LDA, * ),
+*      $                   T( LDA, * ), WORK( * ), Z( LDQ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CDRGEV checks the nonsymmetric generalized eigenvalue problem driver
+*> routine CGGEV.
+*>
+*> CGGEV computes for a pair of n-by-n nonsymmetric matrices (A,B) the
+*> generalized eigenvalues and, optionally, the left and right
+*> eigenvectors.
+*>
+*> A generalized eigenvalue for a pair of matrices (A,B) is a scalar w
+*> or a ratio  alpha/beta = w, such that A - w*B is singular.  It is
+*> usually represented as the pair (alpha,beta), as there is reasonalbe
+*> interpretation for beta=0, and even for both being zero.
+*>
+*> A right generalized eigenvector corresponding to a generalized
+*> eigenvalue  w  for a pair of matrices (A,B) is a vector r  such that
+*> (A - wB) * r = 0.  A left generalized eigenvector is a vector l such
+*> that l**H * (A - wB) = 0, where l**H is the conjugate-transpose of l.
+*>
+*> When CDRGEV is called, a number of matrix "sizes" ("n's") and a
+*> number of matrix "types" are specified.  For each size ("n")
+*> and each type of matrix, a pair of matrices (A, B) will be generated
+*> and used for testing.  For each matrix pair, the following tests
+*> will be performed and compared with the threshhold THRESH.
+*>
+*> Results from CGGEV:
+*>
+*> (1)  max over all left eigenvalue/-vector pairs (alpha/beta,l) of
+*>
+*>      | VL**H * (beta A - alpha B) |/( ulp max(|beta A|, |alpha B|) )
+*>
+*>      where VL**H is the conjugate-transpose of VL.
+*>
+*> (2)  | |VL(i)| - 1 | / ulp and whether largest component real
+*>
+*>      VL(i) denotes the i-th column of VL.
+*>
+*> (3)  max over all left eigenvalue/-vector pairs (alpha/beta,r) of
+*>
+*>      | (beta A - alpha B) * VR | / ( ulp max(|beta A|, |alpha B|) )
+*>
+*> (4)  | |VR(i)| - 1 | / ulp and whether largest component real
+*>
+*>      VR(i) denotes the i-th column of VR.
+*>
+*> (5)  W(full) = W(partial)
+*>      W(full) denotes the eigenvalues computed when both l and r
+*>      are also computed, and W(partial) denotes the eigenvalues
+*>      computed when only W, only W and r, or only W and l are
+*>      computed.
+*>
+*> (6)  VL(full) = VL(partial)
+*>      VL(full) denotes the left eigenvectors computed when both l
+*>      and r are computed, and VL(partial) denotes the result
+*>      when only l is computed.
+*>
+*> (7)  VR(full) = VR(partial)
+*>      VR(full) denotes the right eigenvectors computed when both l
+*>      and r are also computed, and VR(partial) denotes the result
+*>      when only l is computed.
+*>
+*>
+*> Test Matrices
+*> ---- --------
+*>
+*> The sizes of the test matrices are specified by an array
+*> NN(1:NSIZES); the value of each element NN(j) specifies one size.
+*> The "types" are specified by a logical array DOTYPE( 1:NTYPES ); if
+*> DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*> Currently, the list of possible types is:
+*>
+*> (1)  ( 0, 0 )         (a pair of zero matrices)
+*>
+*> (2)  ( I, 0 )         (an identity and a zero matrix)
+*>
+*> (3)  ( 0, I )         (an identity and a zero matrix)
+*>
+*> (4)  ( I, I )         (a pair of identity matrices)
+*>
+*>         t   t
+*> (5)  ( J , J  )       (a pair of transposed Jordan blocks)
+*>
+*>                                     t                ( I   0  )
+*> (6)  ( X, Y )         where  X = ( J   0  )  and Y = (      t )
+*>                                  ( 0   I  )          ( 0   J  )
+*>                       and I is a k x k identity and J a (k+1)x(k+1)
+*>                       Jordan block; k=(N-1)/2
+*>
+*> (7)  ( D, I )         where D is diag( 0, 1,..., N-1 ) (a diagonal
+*>                       matrix with those diagonal entries.)
+*> (8)  ( I, D )
+*>
+*> (9)  ( big*D, small*I ) where "big" is near overflow and small=1/big
+*>
+*> (10) ( small*D, big*I )
+*>
+*> (11) ( big*I, small*D )
+*>
+*> (12) ( small*I, big*D )
+*>
+*> (13) ( big*D, big*I )
+*>
+*> (14) ( small*D, small*I )
+*>
+*> (15) ( D1, D2 )        where D1 is diag( 0, 0, 1, ..., N-3, 0 ) and
+*>                        D2 is diag( 0, N-3, N-4,..., 1, 0, 0 )
+*>           t   t
+*> (16) Q ( J , J ) Z     where Q and Z are random orthogonal matrices.
+*>
+*> (17) Q ( T1, T2 ) Z    where T1 and T2 are upper triangular matrices
+*>                        with random O(1) entries above the diagonal
+*>                        and diagonal entries diag(T1) =
+*>                        ( 0, 0, 1, ..., N-3, 0 ) and diag(T2) =
+*>                        ( 0, N-3, N-4,..., 1, 0, 0 )
+*>
+*> (18) Q ( T1, T2 ) Z    diag(T1) = ( 0, 0, 1, 1, s, ..., s, 0 )
+*>                        diag(T2) = ( 0, 1, 0, 1,..., 1, 0 )
+*>                        s = machine precision.
+*>
+*> (19) Q ( T1, T2 ) Z    diag(T1)=( 0,0,1,1, 1-d, ..., 1-(N-5)*d=s, 0 )
+*>                        diag(T2) = ( 0, 1, 0, 1, ..., 1, 0 )
+*>
+*>                                                        N-5
+*> (20) Q ( T1, T2 ) Z    diag(T1)=( 0, 0, 1, 1, a, ..., a   =s, 0 )
+*>                        diag(T2) = ( 0, 1, 0, 1, ..., 1, 0, 0 )
+*>
+*> (21) Q ( T1, T2 ) Z    diag(T1)=( 0, 0, 1, r1, r2, ..., r(N-4), 0 )
+*>                        diag(T2) = ( 0, 1, 0, 1, ..., 1, 0, 0 )
+*>                        where r1,..., r(N-4) are random.
+*>
+*> (22) Q ( big*T1, small*T2 ) Z    diag(T1) = ( 0, 0, 1, ..., N-3, 0 )
+*>                                  diag(T2) = ( 0, 1, ..., 1, 0, 0 )
+*>
+*> (23) Q ( small*T1, big*T2 ) Z    diag(T1) = ( 0, 0, 1, ..., N-3, 0 )
+*>                                  diag(T2) = ( 0, 1, ..., 1, 0, 0 )
+*>
+*> (24) Q ( small*T1, small*T2 ) Z  diag(T1) = ( 0, 0, 1, ..., N-3, 0 )
+*>                                  diag(T2) = ( 0, 1, ..., 1, 0, 0 )
+*>
+*> (25) Q ( big*T1, big*T2 ) Z      diag(T1) = ( 0, 0, 1, ..., N-3, 0 )
+*>                                  diag(T2) = ( 0, 1, ..., 1, 0, 0 )
+*>
+*> (26) Q ( T1, T2 ) Z     where T1 and T2 are random upper-triangular
+*>                         matrices.
+*>
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of sizes of matrices to use.  If it is zero,
+*>          CDRGES does nothing.  NSIZES >= 0.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER array, dimension (NSIZES)
+*>          An array containing the sizes to be used for the matrices.
+*>          Zero values will be skipped.  NN >= 0.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, CDRGEV
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrix is in A.  This
+*>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated. If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096. Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to CDRGES to continue the same random number
+*>          sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error is
+*>          scaled to be O(1), so THRESH should be a reasonably small
+*>          multiple of 1, e.g., 10 or 100.  In particular, it should
+*>          not depend on the precision (single vs. double) or the size
+*>          of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IERR not equal to 0.)
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension(LDA, max(NN))
+*>          Used to hold the original A matrix.  Used as input only
+*>          if NTYPES=MAXTYP+1, DOTYPE(1:MAXTYP)=.FALSE., and
+*>          DOTYPE(MAXTYP+1)=.TRUE.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A, B, S, and T.
+*>          It must be at least 1 and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension(LDA, max(NN))
+*>          Used to hold the original B matrix.  Used as input only
+*>          if NTYPES=MAXTYP+1, DOTYPE(1:MAXTYP)=.FALSE., and
+*>          DOTYPE(MAXTYP+1)=.TRUE.
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is COMPLEX array, dimension (LDA, max(NN))
+*>          The Schur form matrix computed from A by CGGEV.  On exit, S
+*>          contains the Schur form matrix corresponding to the matrix
+*>          in A.
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          T is COMPLEX array, dimension (LDA, max(NN))
+*>          The upper triangular matrix computed from B by CGGEV.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDQ, max(NN))
+*>          The (left) eigenvectors matrix computed by CGGEV.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of Q and Z. It must
+*>          be at least 1 and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX array, dimension( LDQ, max(NN) )
+*>          The (right) orthogonal matrix computed by CGGEV.
+*> \endverbatim
+*>
+*> \param[out] QE
+*> \verbatim
+*>          QE is COMPLEX array, dimension( LDQ, max(NN) )
+*>          QE holds the computed right or left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDQE
+*> \verbatim
+*>          LDQE is INTEGER
+*>          The leading dimension of QE. LDQE >= max(1,max(NN)).
+*> \endverbatim
+*>
+*> \param[out] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is COMPLEX array, dimension (max(NN))
+*> \endverbatim
+*> \verbatim
+*>          The generalized eigenvalues of (A,B) computed by CGGEV.
+*>          ( ALPHAR(k)+ALPHAI(k)*i ) / BETA(k) is the k-th
+*>          generalized eigenvalue of A and B.
+*> \endverbatim
+*>
+*> \param[out] ALPHA1
+*> \verbatim
+*>          ALPHA1 is COMPLEX array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] BETA1
+*> \verbatim
+*>          BETA1 is COMPLEX array, dimension (max(NN))
+*> \endverbatim
+*> \verbatim
+*>          Like ALPHAR, ALPHAI, BETA, these arrays contain the
+*>          eigenvalues of A and B, but those computed when CGGEV only
+*>          computes a partial eigendecomposition, i.e. not the
+*>          eigenvalues and left and right eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK.  LWORK >= N*(N+1)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (8*N)
+*>          Real workspace.
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (2)
+*>          The values computed by the tests described above.
+*>          The values are currently limited to 1/ulp, to avoid overflow.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  A routine returned an error code.  INFO is the
+*>                absolute value of the INFO value returned.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CDRGEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, B, S, T, Q, LDQ, Z, QE, LDQE,
      $                   ALPHA, BETA, ALPHA1, BETA1, WORK, LWORK, RWORK,
      $                   RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.1.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     February 2007
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDQ, LDQE, LWORK, NOUNIT, NSIZES,
@@ -21,273 +422,6 @@
      $                   Q( LDQ, * ), QE( LDQE, * ), S( LDA, * ),
      $                   T( LDA, * ), WORK( * ), Z( LDQ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CDRGEV checks the nonsymmetric generalized eigenvalue problem driver
-*  routine CGGEV.
-*
-*  CGGEV computes for a pair of n-by-n nonsymmetric matrices (A,B) the
-*  generalized eigenvalues and, optionally, the left and right
-*  eigenvectors.
-*
-*  A generalized eigenvalue for a pair of matrices (A,B) is a scalar w
-*  or a ratio  alpha/beta = w, such that A - w*B is singular.  It is
-*  usually represented as the pair (alpha,beta), as there is reasonalbe
-*  interpretation for beta=0, and even for both being zero.
-*
-*  A right generalized eigenvector corresponding to a generalized
-*  eigenvalue  w  for a pair of matrices (A,B) is a vector r  such that
-*  (A - wB) * r = 0.  A left generalized eigenvector is a vector l such
-*  that l**H * (A - wB) = 0, where l**H is the conjugate-transpose of l.
-*
-*  When CDRGEV is called, a number of matrix "sizes" ("n's") and a
-*  number of matrix "types" are specified.  For each size ("n")
-*  and each type of matrix, a pair of matrices (A, B) will be generated
-*  and used for testing.  For each matrix pair, the following tests
-*  will be performed and compared with the threshhold THRESH.
-*
-*  Results from CGGEV:
-*
-*  (1)  max over all left eigenvalue/-vector pairs (alpha/beta,l) of
-*
-*       | VL**H * (beta A - alpha B) |/( ulp max(|beta A|, |alpha B|) )
-*
-*       where VL**H is the conjugate-transpose of VL.
-*
-*  (2)  | |VL(i)| - 1 | / ulp and whether largest component real
-*
-*       VL(i) denotes the i-th column of VL.
-*
-*  (3)  max over all left eigenvalue/-vector pairs (alpha/beta,r) of
-*
-*       | (beta A - alpha B) * VR | / ( ulp max(|beta A|, |alpha B|) )
-*
-*  (4)  | |VR(i)| - 1 | / ulp and whether largest component real
-*
-*       VR(i) denotes the i-th column of VR.
-*
-*  (5)  W(full) = W(partial)
-*       W(full) denotes the eigenvalues computed when both l and r
-*       are also computed, and W(partial) denotes the eigenvalues
-*       computed when only W, only W and r, or only W and l are
-*       computed.
-*
-*  (6)  VL(full) = VL(partial)
-*       VL(full) denotes the left eigenvectors computed when both l
-*       and r are computed, and VL(partial) denotes the result
-*       when only l is computed.
-*
-*  (7)  VR(full) = VR(partial)
-*       VR(full) denotes the right eigenvectors computed when both l
-*       and r are also computed, and VR(partial) denotes the result
-*       when only l is computed.
-*
-*
-*  Test Matrices
-*  ---- --------
-*
-*  The sizes of the test matrices are specified by an array
-*  NN(1:NSIZES); the value of each element NN(j) specifies one size.
-*  The "types" are specified by a logical array DOTYPE( 1:NTYPES ); if
-*  DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*  Currently, the list of possible types is:
-*
-*  (1)  ( 0, 0 )         (a pair of zero matrices)
-*
-*  (2)  ( I, 0 )         (an identity and a zero matrix)
-*
-*  (3)  ( 0, I )         (an identity and a zero matrix)
-*
-*  (4)  ( I, I )         (a pair of identity matrices)
-*
-*          t   t
-*  (5)  ( J , J  )       (a pair of transposed Jordan blocks)
-*
-*                                      t                ( I   0  )
-*  (6)  ( X, Y )         where  X = ( J   0  )  and Y = (      t )
-*                                   ( 0   I  )          ( 0   J  )
-*                        and I is a k x k identity and J a (k+1)x(k+1)
-*                        Jordan block; k=(N-1)/2
-*
-*  (7)  ( D, I )         where D is diag( 0, 1,..., N-1 ) (a diagonal
-*                        matrix with those diagonal entries.)
-*  (8)  ( I, D )
-*
-*  (9)  ( big*D, small*I ) where "big" is near overflow and small=1/big
-*
-*  (10) ( small*D, big*I )
-*
-*  (11) ( big*I, small*D )
-*
-*  (12) ( small*I, big*D )
-*
-*  (13) ( big*D, big*I )
-*
-*  (14) ( small*D, small*I )
-*
-*  (15) ( D1, D2 )        where D1 is diag( 0, 0, 1, ..., N-3, 0 ) and
-*                         D2 is diag( 0, N-3, N-4,..., 1, 0, 0 )
-*            t   t
-*  (16) Q ( J , J ) Z     where Q and Z are random orthogonal matrices.
-*
-*  (17) Q ( T1, T2 ) Z    where T1 and T2 are upper triangular matrices
-*                         with random O(1) entries above the diagonal
-*                         and diagonal entries diag(T1) =
-*                         ( 0, 0, 1, ..., N-3, 0 ) and diag(T2) =
-*                         ( 0, N-3, N-4,..., 1, 0, 0 )
-*
-*  (18) Q ( T1, T2 ) Z    diag(T1) = ( 0, 0, 1, 1, s, ..., s, 0 )
-*                         diag(T2) = ( 0, 1, 0, 1,..., 1, 0 )
-*                         s = machine precision.
-*
-*  (19) Q ( T1, T2 ) Z    diag(T1)=( 0,0,1,1, 1-d, ..., 1-(N-5)*d=s, 0 )
-*                         diag(T2) = ( 0, 1, 0, 1, ..., 1, 0 )
-*
-*                                                         N-5
-*  (20) Q ( T1, T2 ) Z    diag(T1)=( 0, 0, 1, 1, a, ..., a   =s, 0 )
-*                         diag(T2) = ( 0, 1, 0, 1, ..., 1, 0, 0 )
-*
-*  (21) Q ( T1, T2 ) Z    diag(T1)=( 0, 0, 1, r1, r2, ..., r(N-4), 0 )
-*                         diag(T2) = ( 0, 1, 0, 1, ..., 1, 0, 0 )
-*                         where r1,..., r(N-4) are random.
-*
-*  (22) Q ( big*T1, small*T2 ) Z    diag(T1) = ( 0, 0, 1, ..., N-3, 0 )
-*                                   diag(T2) = ( 0, 1, ..., 1, 0, 0 )
-*
-*  (23) Q ( small*T1, big*T2 ) Z    diag(T1) = ( 0, 0, 1, ..., N-3, 0 )
-*                                   diag(T2) = ( 0, 1, ..., 1, 0, 0 )
-*
-*  (24) Q ( small*T1, small*T2 ) Z  diag(T1) = ( 0, 0, 1, ..., N-3, 0 )
-*                                   diag(T2) = ( 0, 1, ..., 1, 0, 0 )
-*
-*  (25) Q ( big*T1, big*T2 ) Z      diag(T1) = ( 0, 0, 1, ..., N-3, 0 )
-*                                   diag(T2) = ( 0, 1, ..., 1, 0, 0 )
-*
-*  (26) Q ( T1, T2 ) Z     where T1 and T2 are random upper-triangular
-*                          matrices.
-*
-*
-*  Arguments
-*  =========
-*
-*  NSIZES  (input) INTEGER
-*          The number of sizes of matrices to use.  If it is zero,
-*          CDRGES does nothing.  NSIZES >= 0.
-*
-*  NN      (input) INTEGER array, dimension (NSIZES)
-*          An array containing the sizes to be used for the matrices.
-*          Zero values will be skipped.  NN >= 0.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE.   If it is zero, CDRGEV
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrix is in A.  This
-*          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated. If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096. Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to CDRGES to continue the same random number
-*          sequence.
-*
-*  THRESH  (input) REAL
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error is
-*          scaled to be O(1), so THRESH should be a reasonably small
-*          multiple of 1, e.g., 10 or 100.  In particular, it should
-*          not depend on the precision (single vs. double) or the size
-*          of the matrix.  It must be at least zero.
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IERR not equal to 0.)
-*
-*  A       (input/workspace) COMPLEX array, dimension(LDA, max(NN))
-*          Used to hold the original A matrix.  Used as input only
-*          if NTYPES=MAXTYP+1, DOTYPE(1:MAXTYP)=.FALSE., and
-*          DOTYPE(MAXTYP+1)=.TRUE.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A, B, S, and T.
-*          It must be at least 1 and at least max( NN ).
-*
-*  B       (input/workspace) COMPLEX array, dimension(LDA, max(NN))
-*          Used to hold the original B matrix.  Used as input only
-*          if NTYPES=MAXTYP+1, DOTYPE(1:MAXTYP)=.FALSE., and
-*          DOTYPE(MAXTYP+1)=.TRUE.
-*
-*  S       (workspace) COMPLEX array, dimension (LDA, max(NN))
-*          The Schur form matrix computed from A by CGGEV.  On exit, S
-*          contains the Schur form matrix corresponding to the matrix
-*          in A.
-*
-*  T       (workspace) COMPLEX array, dimension (LDA, max(NN))
-*          The upper triangular matrix computed from B by CGGEV.
-*
-*  Q      (workspace) COMPLEX array, dimension (LDQ, max(NN))
-*          The (left) eigenvectors matrix computed by CGGEV.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of Q and Z. It must
-*          be at least 1 and at least max( NN ).
-*
-*  Z       (workspace) COMPLEX array, dimension( LDQ, max(NN) )
-*          The (right) orthogonal matrix computed by CGGEV.
-*
-*  QE      (workspace) COMPLEX array, dimension( LDQ, max(NN) )
-*          QE holds the computed right or left eigenvectors.
-*
-*  LDQE    (input) INTEGER
-*          The leading dimension of QE. LDQE >= max(1,max(NN)).
-*
-*  ALPHA   (workspace) COMPLEX array, dimension (max(NN))
-*  BETA    (workspace) COMPLEX array, dimension (max(NN))
-*          The generalized eigenvalues of (A,B) computed by CGGEV.
-*          ( ALPHAR(k)+ALPHAI(k)*i ) / BETA(k) is the k-th
-*          generalized eigenvalue of A and B.
-*
-*  ALPHA1  (workspace) COMPLEX array, dimension (max(NN))
-*  BETA1   (workspace) COMPLEX array, dimension (max(NN))
-*          Like ALPHAR, ALPHAI, BETA, these arrays contain the
-*          eigenvalues of A and B, but those computed when CGGEV only
-*          computes a partial eigendecomposition, i.e. not the
-*          eigenvalues and left and right eigenvectors.
-*
-*  WORK    (workspace) COMPLEX array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK.  LWORK >= N*(N+1)
-*
-*  RWORK   (workspace) REAL array, dimension (8*N)
-*          Real workspace.
-*
-*  RESULT  (output) REAL array, dimension (2)
-*          The values computed by the tests described above.
-*          The values are currently limited to 1/ulp, to avoid overflow.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  A routine returned an error code.  INFO is the
-*                absolute value of the INFO value returned.
 *
 *  =====================================================================
 *

@@ -1,11 +1,274 @@
+*> \brief <b> CGGES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur vectors for GE matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
+*                         SDIM, ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK,
+*                         LWORK, RWORK, BWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBVSL, JOBVSR, SORT
+*       INTEGER            INFO, LDA, LDB, LDVSL, LDVSR, LWORK, N, SDIM
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            BWORK( * )
+*       REAL               RWORK( * )
+*       COMPLEX            A( LDA, * ), ALPHA( * ), B( LDB, * ),
+*      $                   BETA( * ), VSL( LDVSL, * ), VSR( LDVSR, * ),
+*      $                   WORK( * )
+*       ..
+*       .. Function Arguments ..
+*       LOGICAL            SELCTG
+*       EXTERNAL           SELCTG
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGGES computes for a pair of N-by-N complex nonsymmetric matrices
+*> (A,B), the generalized eigenvalues, the generalized complex Schur
+*> form (S, T), and optionally left and/or right Schur vectors (VSL
+*> and VSR). This gives the generalized Schur factorization
+*>
+*>         (A,B) = ( (VSL)*S*(VSR)**H, (VSL)*T*(VSR)**H )
+*>
+*> where (VSR)**H is the conjugate-transpose of VSR.
+*>
+*> Optionally, it also orders the eigenvalues so that a selected cluster
+*> of eigenvalues appears in the leading diagonal blocks of the upper
+*> triangular matrix S and the upper triangular matrix T. The leading
+*> columns of VSL and VSR then form an unitary basis for the
+*> corresponding left and right eigenspaces (deflating subspaces).
+*>
+*> (If only the generalized eigenvalues are needed, use the driver
+*> CGGEV instead, which is faster.)
+*>
+*> A generalized eigenvalue for a pair of matrices (A,B) is a scalar w
+*> or a ratio alpha/beta = w, such that  A - w*B is singular.  It is
+*> usually represented as the pair (alpha,beta), as there is a
+*> reasonable interpretation for beta=0, and even for both being zero.
+*>
+*> A pair of matrices (S,T) is in generalized complex Schur form if S
+*> and T are upper triangular and, in addition, the diagonal elements
+*> of T are non-negative real numbers.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBVSL
+*> \verbatim
+*>          JOBVSL is CHARACTER*1
+*>          = 'N':  do not compute the left Schur vectors;
+*>          = 'V':  compute the left Schur vectors.
+*> \endverbatim
+*>
+*> \param[in] JOBVSR
+*> \verbatim
+*>          JOBVSR is CHARACTER*1
+*>          = 'N':  do not compute the right Schur vectors;
+*>          = 'V':  compute the right Schur vectors.
+*> \endverbatim
+*>
+*> \param[in] SORT
+*> \verbatim
+*>          SORT is CHARACTER*1
+*>          Specifies whether or not to order the eigenvalues on the
+*>          diagonal of the generalized Schur form.
+*>          = 'N':  Eigenvalues are not ordered;
+*>          = 'S':  Eigenvalues are ordered (see SELCTG).
+*> \endverbatim
+*>
+*> \param[in] SELCTG
+*> \verbatim
+*>          SELCTG is procedure) LOGICAL FUNCTION of two COMPLEX arguments
+*>          SELCTG must be declared EXTERNAL in the calling subroutine.
+*>          If SORT = 'N', SELCTG is not referenced.
+*>          If SORT = 'S', SELCTG is used to select eigenvalues to sort
+*>          to the top left of the Schur form.
+*>          An eigenvalue ALPHA(j)/BETA(j) is selected if
+*>          SELCTG(ALPHA(j),BETA(j)) is true.
+*> \endverbatim
+*> \verbatim
+*>          Note that a selected complex eigenvalue may no longer satisfy
+*>          SELCTG(ALPHA(j),BETA(j)) = .TRUE. after ordering, since
+*>          ordering may change the value of complex eigenvalues
+*>          (especially if the eigenvalue is ill-conditioned), in this
+*>          case INFO is set to N+2 (See INFO below).
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A, B, VSL, and VSR.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA, N)
+*>          On entry, the first of the pair of matrices.
+*>          On exit, A has been overwritten by its generalized Schur
+*>          form S.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB, N)
+*>          On entry, the second of the pair of matrices.
+*>          On exit, B has been overwritten by its generalized Schur
+*>          form T.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] SDIM
+*> \verbatim
+*>          SDIM is INTEGER
+*>          If SORT = 'N', SDIM = 0.
+*>          If SORT = 'S', SDIM = number of eigenvalues (after sorting)
+*>          for which SELCTG is true.
+*> \endverbatim
+*>
+*> \param[out] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is COMPLEX array, dimension (N)
+*>          On exit,  ALPHA(j)/BETA(j), j=1,...,N, will be the
+*>          generalized eigenvalues.  ALPHA(j), j=1,...,N  and  BETA(j),
+*>          j=1,...,N  are the diagonals of the complex Schur form (A,B)
+*>          output by CGGES. The  BETA(j) will be non-negative real.
+*> \endverbatim
+*> \verbatim
+*>          Note: the quotients ALPHA(j)/BETA(j) may easily over- or
+*>          underflow, and BETA(j) may even be zero.  Thus, the user
+*>          should avoid naively computing the ratio alpha/beta.
+*>          However, ALPHA will be always less than and usually
+*>          comparable with norm(A) in magnitude, and BETA always less
+*>          than and usually comparable with norm(B).
+*> \endverbatim
+*>
+*> \param[out] VSL
+*> \verbatim
+*>          VSL is COMPLEX array, dimension (LDVSL,N)
+*>          If JOBVSL = 'V', VSL will contain the left Schur vectors.
+*>          Not referenced if JOBVSL = 'N'.
+*> \endverbatim
+*>
+*> \param[in] LDVSL
+*> \verbatim
+*>          LDVSL is INTEGER
+*>          The leading dimension of the matrix VSL. LDVSL >= 1, and
+*>          if JOBVSL = 'V', LDVSL >= N.
+*> \endverbatim
+*>
+*> \param[out] VSR
+*> \verbatim
+*>          VSR is COMPLEX array, dimension (LDVSR,N)
+*>          If JOBVSR = 'V', VSR will contain the right Schur vectors.
+*>          Not referenced if JOBVSR = 'N'.
+*> \endverbatim
+*>
+*> \param[in] LDVSR
+*> \verbatim
+*>          LDVSR is INTEGER
+*>          The leading dimension of the matrix VSR. LDVSR >= 1, and
+*>          if JOBVSR = 'V', LDVSR >= N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.  LWORK >= max(1,2*N).
+*>          For good performance, LWORK must generally be larger.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (8*N)
+*> \endverbatim
+*>
+*> \param[out] BWORK
+*> \verbatim
+*>          BWORK is LOGICAL array, dimension (N)
+*>          Not referenced if SORT = 'N'.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          =1,...,N:
+*>                The QZ iteration failed.  (A,B) are not in Schur
+*>                form, but ALPHA(j) and BETA(j) should be correct for
+*>                j=INFO+1,...,N.
+*>          > N:  =N+1: other than QZ iteration failed in CHGEQZ
+*>                =N+2: after reordering, roundoff changed values of
+*>                      some complex eigenvalues so that leading
+*>                      eigenvalues in the Generalized Schur form no
+*>                      longer satisfy SELCTG=.TRUE.  This could also
+*>                      be caused due to scaling.
+*>                =N+3: reordering falied in CTGSEN.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexGEeigen
+*
+*  =====================================================================
       SUBROUTINE CGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
      $                  SDIM, ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK,
      $                  LWORK, RWORK, BWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBVSL, JOBVSR, SORT
@@ -22,154 +285,6 @@
       LOGICAL            SELCTG
       EXTERNAL           SELCTG
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGGES computes for a pair of N-by-N complex nonsymmetric matrices
-*  (A,B), the generalized eigenvalues, the generalized complex Schur
-*  form (S, T), and optionally left and/or right Schur vectors (VSL
-*  and VSR). This gives the generalized Schur factorization
-*
-*          (A,B) = ( (VSL)*S*(VSR)**H, (VSL)*T*(VSR)**H )
-*
-*  where (VSR)**H is the conjugate-transpose of VSR.
-*
-*  Optionally, it also orders the eigenvalues so that a selected cluster
-*  of eigenvalues appears in the leading diagonal blocks of the upper
-*  triangular matrix S and the upper triangular matrix T. The leading
-*  columns of VSL and VSR then form an unitary basis for the
-*  corresponding left and right eigenspaces (deflating subspaces).
-*
-*  (If only the generalized eigenvalues are needed, use the driver
-*  CGGEV instead, which is faster.)
-*
-*  A generalized eigenvalue for a pair of matrices (A,B) is a scalar w
-*  or a ratio alpha/beta = w, such that  A - w*B is singular.  It is
-*  usually represented as the pair (alpha,beta), as there is a
-*  reasonable interpretation for beta=0, and even for both being zero.
-*
-*  A pair of matrices (S,T) is in generalized complex Schur form if S
-*  and T are upper triangular and, in addition, the diagonal elements
-*  of T are non-negative real numbers.
-*
-*  Arguments
-*  =========
-*
-*  JOBVSL  (input) CHARACTER*1
-*          = 'N':  do not compute the left Schur vectors;
-*          = 'V':  compute the left Schur vectors.
-*
-*  JOBVSR  (input) CHARACTER*1
-*          = 'N':  do not compute the right Schur vectors;
-*          = 'V':  compute the right Schur vectors.
-*
-*  SORT    (input) CHARACTER*1
-*          Specifies whether or not to order the eigenvalues on the
-*          diagonal of the generalized Schur form.
-*          = 'N':  Eigenvalues are not ordered;
-*          = 'S':  Eigenvalues are ordered (see SELCTG).
-*
-*  SELCTG  (external procedure) LOGICAL FUNCTION of two COMPLEX arguments
-*          SELCTG must be declared EXTERNAL in the calling subroutine.
-*          If SORT = 'N', SELCTG is not referenced.
-*          If SORT = 'S', SELCTG is used to select eigenvalues to sort
-*          to the top left of the Schur form.
-*          An eigenvalue ALPHA(j)/BETA(j) is selected if
-*          SELCTG(ALPHA(j),BETA(j)) is true.
-*
-*          Note that a selected complex eigenvalue may no longer satisfy
-*          SELCTG(ALPHA(j),BETA(j)) = .TRUE. after ordering, since
-*          ordering may change the value of complex eigenvalues
-*          (especially if the eigenvalue is ill-conditioned), in this
-*          case INFO is set to N+2 (See INFO below).
-*
-*  N       (input) INTEGER
-*          The order of the matrices A, B, VSL, and VSR.  N >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA, N)
-*          On entry, the first of the pair of matrices.
-*          On exit, A has been overwritten by its generalized Schur
-*          form S.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  LDA >= max(1,N).
-*
-*  B       (input/output) COMPLEX array, dimension (LDB, N)
-*          On entry, the second of the pair of matrices.
-*          On exit, B has been overwritten by its generalized Schur
-*          form T.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.  LDB >= max(1,N).
-*
-*  SDIM    (output) INTEGER
-*          If SORT = 'N', SDIM = 0.
-*          If SORT = 'S', SDIM = number of eigenvalues (after sorting)
-*          for which SELCTG is true.
-*
-*  ALPHA   (output) COMPLEX array, dimension (N)
-*
-*  BETA    (output) COMPLEX array, dimension (N)
-*          On exit,  ALPHA(j)/BETA(j), j=1,...,N, will be the
-*          generalized eigenvalues.  ALPHA(j), j=1,...,N  and  BETA(j),
-*          j=1,...,N  are the diagonals of the complex Schur form (A,B)
-*          output by CGGES. The  BETA(j) will be non-negative real.
-*
-*          Note: the quotients ALPHA(j)/BETA(j) may easily over- or
-*          underflow, and BETA(j) may even be zero.  Thus, the user
-*          should avoid naively computing the ratio alpha/beta.
-*          However, ALPHA will be always less than and usually
-*          comparable with norm(A) in magnitude, and BETA always less
-*          than and usually comparable with norm(B).
-*
-*  VSL     (output) COMPLEX array, dimension (LDVSL,N)
-*          If JOBVSL = 'V', VSL will contain the left Schur vectors.
-*          Not referenced if JOBVSL = 'N'.
-*
-*  LDVSL   (input) INTEGER
-*          The leading dimension of the matrix VSL. LDVSL >= 1, and
-*          if JOBVSL = 'V', LDVSL >= N.
-*
-*  VSR     (output) COMPLEX array, dimension (LDVSR,N)
-*          If JOBVSR = 'V', VSR will contain the right Schur vectors.
-*          Not referenced if JOBVSR = 'N'.
-*
-*  LDVSR   (input) INTEGER
-*          The leading dimension of the matrix VSR. LDVSR >= 1, and
-*          if JOBVSR = 'V', LDVSR >= N.
-*
-*  WORK    (workspace/output) COMPLEX array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.  LWORK >= max(1,2*N).
-*          For good performance, LWORK must generally be larger.
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  RWORK   (workspace) REAL array, dimension (8*N)
-*
-*  BWORK   (workspace) LOGICAL array, dimension (N)
-*          Not referenced if SORT = 'N'.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          =1,...,N:
-*                The QZ iteration failed.  (A,B) are not in Schur
-*                form, but ALPHA(j) and BETA(j) should be correct for
-*                j=INFO+1,...,N.
-*          > N:  =N+1: other than QZ iteration failed in CHGEQZ
-*                =N+2: after reordering, roundoff changed values of
-*                      some complex eigenvalues so that leading
-*                      eigenvalues in the Generalized Schur form no
-*                      longer satisfy SELCTG=.TRUE.  This could also
-*                      be caused due to scaling.
-*                =N+3: reordering falied in CTGSEN.
 *
 *  =====================================================================
 *

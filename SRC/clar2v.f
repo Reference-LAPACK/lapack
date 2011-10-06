@@ -1,9 +1,112 @@
+*> \brief \b CLAR2V
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLAR2V( N, X, Y, Z, INCX, C, S, INCC )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCC, INCX, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               C( * )
+*       COMPLEX            S( * ), X( * ), Y( * ), Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLAR2V applies a vector of complex plane rotations with real cosines
+*> from both sides to a sequence of 2-by-2 complex Hermitian matrices,
+*> defined by the elements of the vectors x, y and z. For i = 1,2,...,n
+*>
+*>    (       x(i)  z(i) ) :=
+*>    ( conjg(z(i)) y(i) )
+*>
+*>      (  c(i) conjg(s(i)) ) (       x(i)  z(i) ) ( c(i) -conjg(s(i)) )
+*>      ( -s(i)       c(i)  ) ( conjg(z(i)) y(i) ) ( s(i)        c(i)  )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of plane rotations to be applied.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (1+(N-1)*INCX)
+*>          The vector x; the elements of x are assumed to be real.
+*> \endverbatim
+*>
+*> \param[in,out] Y
+*> \verbatim
+*>          Y is COMPLEX array, dimension (1+(N-1)*INCX)
+*>          The vector y; the elements of y are assumed to be real.
+*> \endverbatim
+*>
+*> \param[in,out] Z
+*> \verbatim
+*>          Z is COMPLEX array, dimension (1+(N-1)*INCX)
+*>          The vector z.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The increment between elements of X, Y and Z. INCX > 0.
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is REAL array, dimension (1+(N-1)*INCC)
+*>          The cosines of the plane rotations.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is COMPLEX array, dimension (1+(N-1)*INCC)
+*>          The sines of the plane rotations.
+*> \endverbatim
+*>
+*> \param[in] INCC
+*> \verbatim
+*>          INCC is INTEGER
+*>          The increment between elements of C and S. INCC > 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE CLAR2V( N, X, Y, Z, INCX, C, S, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCC, INCX, N
@@ -12,46 +115,6 @@
       REAL               C( * )
       COMPLEX            S( * ), X( * ), Y( * ), Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLAR2V applies a vector of complex plane rotations with real cosines
-*  from both sides to a sequence of 2-by-2 complex Hermitian matrices,
-*  defined by the elements of the vectors x, y and z. For i = 1,2,...,n
-*
-*     (       x(i)  z(i) ) :=
-*     ( conjg(z(i)) y(i) )
-*
-*       (  c(i) conjg(s(i)) ) (       x(i)  z(i) ) ( c(i) -conjg(s(i)) )
-*       ( -s(i)       c(i)  ) ( conjg(z(i)) y(i) ) ( s(i)        c(i)  )
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The number of plane rotations to be applied.
-*
-*  X       (input/output) COMPLEX array, dimension (1+(N-1)*INCX)
-*          The vector x; the elements of x are assumed to be real.
-*
-*  Y       (input/output) COMPLEX array, dimension (1+(N-1)*INCX)
-*          The vector y; the elements of y are assumed to be real.
-*
-*  Z       (input/output) COMPLEX array, dimension (1+(N-1)*INCX)
-*          The vector z.
-*
-*  INCX    (input) INTEGER
-*          The increment between elements of X, Y and Z. INCX > 0.
-*
-*  C       (input) REAL array, dimension (1+(N-1)*INCC)
-*          The cosines of the plane rotations.
-*
-*  S       (input) COMPLEX array, dimension (1+(N-1)*INCC)
-*          The sines of the plane rotations.
-*
-*  INCC    (input) INTEGER
-*          The increment between elements of C and S. INCC > 0.
 *
 *  =====================================================================
 *

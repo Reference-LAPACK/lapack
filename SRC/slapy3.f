@@ -1,29 +1,73 @@
+*> \brief \b SLAPY3
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION SLAPY3( X, Y, Z )
+* 
+*       .. Scalar Arguments ..
+*       REAL               X, Y, Z
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAPY3 returns sqrt(x**2+y**2+z**2), taking care not to cause
+*> unnecessary overflow.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] X
+*> \verbatim
+*>          X is REAL
+*> \endverbatim
+*>
+*> \param[in] Y
+*> \verbatim
+*>          Y is REAL
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is REAL
+*>          X, Y and Z specify the values x, y and z.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
       REAL             FUNCTION SLAPY3( X, Y, Z )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       REAL               X, Y, Z
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAPY3 returns sqrt(x**2+y**2+z**2), taking care not to cause
-*  unnecessary overflow.
-*
-*  Arguments
-*  =========
-*
-*  X       (input) REAL
-*
-*  Y       (input) REAL
-*
-*  Z       (input) REAL
-*          X, Y and Z specify the values x, y and z.
 *
 *  =====================================================================
 *

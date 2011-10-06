@@ -1,8 +1,117 @@
+*> \brief \b SLAKF2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDZ, M, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), B( LDA, * ), D( LDA, * ),
+*      $                   E( LDA, * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Form the 2*M*N by 2*M*N matrix
+*>
+*>        Z = [ kron(In, A)  -kron(B', Im) ]
+*>            [ kron(In, D)  -kron(E', Im) ],
+*>
+*> where In is the identity matrix of size n and X' is the transpose
+*> of X. kron(X, Y) is the Kronecker product between the matrices X
+*> and Y.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          Size of matrix, must be >= 1.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          Size of matrix, must be >= 1.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL, dimension ( LDA, M )
+*>          The matrix A in the output matrix Z.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A, B, D, and E. ( LDA >= M+N )
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL, dimension ( LDA, N )
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL, dimension ( LDA, M )
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is REAL, dimension ( LDA, N )
+*> \endverbatim
+*> \verbatim
+*>          The matrices used in forming the output matrix Z.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is REAL, dimension ( LDZ, 2*M*N )
+*>          The resultant Kronecker M*N*2 by M*N*2 matrix (see above.)
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of Z. ( LDZ >= 2*M*N )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup real_matgen
+*
+*  =====================================================================
       SUBROUTINE SLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK computational routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDZ, M, N
@@ -11,44 +120,6 @@
       REAL               A( LDA, * ), B( LDA, * ), D( LDA, * ),
      $                   E( LDA, * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Form the 2*M*N by 2*M*N matrix
-*
-*         Z = [ kron(In, A)  -kron(B', Im) ]
-*             [ kron(In, D)  -kron(E', Im) ],
-*
-*  where In is the identity matrix of size n and X' is the transpose
-*  of X. kron(X, Y) is the Kronecker product between the matrices X
-*  and Y.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          Size of matrix, must be >= 1.
-*
-*  N       (input) INTEGER
-*          Size of matrix, must be >= 1.
-*
-*  A       (input) REAL, dimension ( LDA, M )
-*          The matrix A in the output matrix Z.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A, B, D, and E. ( LDA >= M+N )
-*
-*  B       (input) REAL, dimension ( LDA, N )
-*  D       (input) REAL, dimension ( LDA, M )
-*  E       (input) REAL, dimension ( LDA, N )
-*          The matrices used in forming the output matrix Z.
-*
-*  Z       (output) REAL, dimension ( LDZ, 2*M*N )
-*          The resultant Kronecker M*N*2 by M*N*2 matrix (see above.)
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of Z. ( LDZ >= 2*M*N )
 *
 *  ====================================================================
 *

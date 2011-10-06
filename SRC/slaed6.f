@@ -1,9 +1,141 @@
+*> \brief \b SLAED6
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            ORGATI
+*       INTEGER            INFO, KNITER
+*       REAL               FINIT, RHO, TAU
+*       ..
+*       .. Array Arguments ..
+*       REAL               D( 3 ), Z( 3 )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAED6 computes the positive or negative root (closest to the origin)
+*> of
+*>                  z(1)        z(2)        z(3)
+*> f(x) =   rho + --------- + ---------- + ---------
+*>                 d(1)-x      d(2)-x      d(3)-x
+*>
+*> It is assumed that
+*>
+*>       if ORGATI = .true. the root is between d(2) and d(3);
+*>       otherwise it is between d(1) and d(2)
+*>
+*> This routine will be called by SLAED4 when necessary. In most cases,
+*> the root sought is the smallest in magnitude, though it might not be
+*> in some extremely rare situations.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] KNITER
+*> \verbatim
+*>          KNITER is INTEGER
+*>               Refer to SLAED4 for its significance.
+*> \endverbatim
+*>
+*> \param[in] ORGATI
+*> \verbatim
+*>          ORGATI is LOGICAL
+*>               If ORGATI is true, the needed root is between d(2) and
+*>               d(3); otherwise it is between d(1) and d(2).  See
+*>               SLAED4 for further details.
+*> \endverbatim
+*>
+*> \param[in] RHO
+*> \verbatim
+*>          RHO is REAL
+*>               Refer to the equation f(x) above.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (3)
+*>               D satisfies d(1) < d(2) < d(3).
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is REAL array, dimension (3)
+*>               Each of the elements in z must be positive.
+*> \endverbatim
+*>
+*> \param[in] FINIT
+*> \verbatim
+*>          FINIT is REAL
+*>               The value of f at 0. It is more accurate than the one
+*>               evaluated inside this routine (if someone wants to do
+*>               so).
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is REAL
+*>               The root of the equation f(x).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>               = 0: successful exit
+*>               > 0: if INFO = 1, failure to converge
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  30/06/99: Based on contributions by
+*>     Ren-Cang Li, Computer Science Division, University of California
+*>     at Berkeley, USA
+*>
+*>  10/02/03: This version has a few statements commented out for thread safety
+*>     (machine parameters are computed on each entry). SJH.
+*>
+*>  05/10/06: Modified from a new version of Ren-Cang Li, use
+*>     Gragg-Thornton-Warner cubic convergent scheme for better stability.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     February 2007
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            ORGATI
@@ -13,69 +145,6 @@
 *     .. Array Arguments ..
       REAL               D( 3 ), Z( 3 )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAED6 computes the positive or negative root (closest to the origin)
-*  of
-*                   z(1)        z(2)        z(3)
-*  f(x) =   rho + --------- + ---------- + ---------
-*                  d(1)-x      d(2)-x      d(3)-x
-*
-*  It is assumed that
-*
-*        if ORGATI = .true. the root is between d(2) and d(3);
-*        otherwise it is between d(1) and d(2)
-*
-*  This routine will be called by SLAED4 when necessary. In most cases,
-*  the root sought is the smallest in magnitude, though it might not be
-*  in some extremely rare situations.
-*
-*  Arguments
-*  =========
-*
-*  KNITER       (input) INTEGER
-*               Refer to SLAED4 for its significance.
-*
-*  ORGATI       (input) LOGICAL
-*               If ORGATI is true, the needed root is between d(2) and
-*               d(3); otherwise it is between d(1) and d(2).  See
-*               SLAED4 for further details.
-*
-*  RHO          (input) REAL            
-*               Refer to the equation f(x) above.
-*
-*  D            (input) REAL array, dimension (3)
-*               D satisfies d(1) < d(2) < d(3).
-*
-*  Z            (input) REAL array, dimension (3)
-*               Each of the elements in z must be positive.
-*
-*  FINIT        (input) REAL            
-*               The value of f at 0. It is more accurate than the one
-*               evaluated inside this routine (if someone wants to do
-*               so).
-*
-*  TAU          (output) REAL            
-*               The root of the equation f(x).
-*
-*  INFO         (output) INTEGER
-*               = 0: successful exit
-*               > 0: if INFO = 1, failure to converge
-*
-*  Further Details
-*  ===============
-*
-*  30/06/99: Based on contributions by
-*     Ren-Cang Li, Computer Science Division, University of California
-*     at Berkeley, USA
-*
-*  10/02/03: This version has a few statements commented out for thread safety
-*     (machine parameters are computed on each entry). SJH.
-*
-*  05/10/06: Modified from a new version of Ren-Cang Li, use
-*     Gragg-Thornton-Warner cubic convergent scheme for better stability.
 *
 *  =====================================================================
 *

@@ -1,3 +1,517 @@
+*> \brief \b DDRVVX
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DDRVVX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          NIUNIT, NOUNIT, A, LDA, H, WR, WI, WR1, WI1,
+*                          VL, LDVL, VR, LDVR, LRE, LDLRE, RCONDV, RCNDV1,
+*                          RCDVIN, RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1,
+*                          RESULT, WORK, NWORK, IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDLRE, LDVL, LDVR, NIUNIT, NOUNIT,
+*      $                   NSIZES, NTYPES, NWORK
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), IWORK( * ), NN( * )
+*       DOUBLE PRECISION   A( LDA, * ), H( LDA, * ), LRE( LDLRE, * ),
+*      $                   RCDEIN( * ), RCDVIN( * ), RCNDE1( * ),
+*      $                   RCNDV1( * ), RCONDE( * ), RCONDV( * ),
+*      $                   RESULT( 11 ), SCALE( * ), SCALE1( * ),
+*      $                   VL( LDVL, * ), VR( LDVR, * ), WI( * ),
+*      $                   WI1( * ), WORK( * ), WR( * ), WR1( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    DDRVVX  checks the nonsymmetric eigenvalue problem expert driver
+*>    DGEEVX.
+*>
+*>    DDRVVX uses both test matrices generated randomly depending on
+*>    data supplied in the calling sequence, as well as on data
+*>    read from an input file and including precomputed condition
+*>    numbers to which it compares the ones it computes.
+*>
+*>    When DDRVVX is called, a number of matrix "sizes" ("n's") and a
+*>    number of matrix "types" are specified in the calling sequence.
+*>    For each size ("n") and each type of matrix, one matrix will be
+*>    generated and used to test the nonsymmetric eigenroutines.  For
+*>    each matrix, 9 tests will be performed:
+*>
+*>    (1)     | A * VR - VR * W | / ( n |A| ulp )
+*>
+*>      Here VR is the matrix of unit right eigenvectors.
+*>      W is a block diagonal matrix, with a 1x1 block for each
+*>      real eigenvalue and a 2x2 block for each complex conjugate
+*>      pair.  If eigenvalues j and j+1 are a complex conjugate pair,
+*>      so WR(j) = WR(j+1) = wr and WI(j) = - WI(j+1) = wi, then the
+*>      2 x 2 block corresponding to the pair will be:
+*>
+*>              (  wr  wi  )
+*>              ( -wi  wr  )
+*>
+*>      Such a block multiplying an n x 2 matrix  ( ur ui ) on the
+*>      right will be the same as multiplying  ur + i*ui  by  wr + i*wi.
+*>
+*>    (2)     | A**H * VL - VL * W**H | / ( n |A| ulp )
+*>
+*>      Here VL is the matrix of unit left eigenvectors, A**H is the
+*>      conjugate transpose of A, and W is as above.
+*>
+*>    (3)     | |VR(i)| - 1 | / ulp and largest component real
+*>
+*>      VR(i) denotes the i-th column of VR.
+*>
+*>    (4)     | |VL(i)| - 1 | / ulp and largest component real
+*>
+*>      VL(i) denotes the i-th column of VL.
+*>
+*>    (5)     W(full) = W(partial)
+*>
+*>      W(full) denotes the eigenvalues computed when VR, VL, RCONDV
+*>      and RCONDE are also computed, and W(partial) denotes the
+*>      eigenvalues computed when only some of VR, VL, RCONDV, and
+*>      RCONDE are computed.
+*>
+*>    (6)     VR(full) = VR(partial)
+*>
+*>      VR(full) denotes the right eigenvectors computed when VL, RCONDV
+*>      and RCONDE are computed, and VR(partial) denotes the result
+*>      when only some of VL and RCONDV are computed.
+*>
+*>    (7)     VL(full) = VL(partial)
+*>
+*>      VL(full) denotes the left eigenvectors computed when VR, RCONDV
+*>      and RCONDE are computed, and VL(partial) denotes the result
+*>      when only some of VR and RCONDV are computed.
+*>
+*>    (8)     0 if SCALE, ILO, IHI, ABNRM (full) =
+*>                 SCALE, ILO, IHI, ABNRM (partial)
+*>            1/ulp otherwise
+*>
+*>      SCALE, ILO, IHI and ABNRM describe how the matrix is balanced.
+*>      (full) is when VR, VL, RCONDE and RCONDV are also computed, and
+*>      (partial) is when some are not computed.
+*>
+*>    (9)     RCONDV(full) = RCONDV(partial)
+*>
+*>      RCONDV(full) denotes the reciprocal condition numbers of the
+*>      right eigenvectors computed when VR, VL and RCONDE are also
+*>      computed. RCONDV(partial) denotes the reciprocal condition
+*>      numbers when only some of VR, VL and RCONDE are computed.
+*>
+*>    The "sizes" are specified by an array NN(1:NSIZES); the value of
+*>    each element NN(j) specifies one size.
+*>    The "types" are specified by a logical array DOTYPE( 1:NTYPES );
+*>    if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*>    Currently, the list of possible types is:
+*>
+*>    (1)  The zero matrix.
+*>    (2)  The identity matrix.
+*>    (3)  A (transposed) Jordan block, with 1's on the diagonal.
+*>
+*>    (4)  A diagonal matrix with evenly spaced entries
+*>         1, ..., ULP  and random signs.
+*>         (ULP = (first number larger than 1) - 1 )
+*>    (5)  A diagonal matrix with geometrically spaced entries
+*>         1, ..., ULP  and random signs.
+*>    (6)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
+*>         and random signs.
+*>
+*>    (7)  Same as (4), but multiplied by a constant near
+*>         the overflow threshold
+*>    (8)  Same as (4), but multiplied by a constant near
+*>         the underflow threshold
+*>
+*>    (9)  A matrix of the form  U' T U, where U is orthogonal and
+*>         T has evenly spaced entries 1, ..., ULP with random signs
+*>         on the diagonal and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (10) A matrix of the form  U' T U, where U is orthogonal and
+*>         T has geometrically spaced entries 1, ..., ULP with random
+*>         signs on the diagonal and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (11) A matrix of the form  U' T U, where U is orthogonal and
+*>         T has "clustered" entries 1, ULP,..., ULP with random
+*>         signs on the diagonal and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (12) A matrix of the form  U' T U, where U is orthogonal and
+*>         T has real or complex conjugate paired eigenvalues randomly
+*>         chosen from ( ULP, 1 ) and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (13) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has evenly spaced entries 1, ..., ULP
+*>         with random signs on the diagonal and random O(1) entries
+*>         in the upper triangle.
+*>
+*>    (14) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has geometrically spaced entries
+*>         1, ..., ULP with random signs on the diagonal and random
+*>         O(1) entries in the upper triangle.
+*>
+*>    (15) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has "clustered" entries 1, ULP,..., ULP
+*>         with random signs on the diagonal and random O(1) entries
+*>         in the upper triangle.
+*>
+*>    (16) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has real or complex conjugate paired
+*>         eigenvalues randomly chosen from ( ULP, 1 ) and random
+*>         O(1) entries in the upper triangle.
+*>
+*>    (17) Same as (16), but multiplied by a constant
+*>         near the overflow threshold
+*>    (18) Same as (16), but multiplied by a constant
+*>         near the underflow threshold
+*>
+*>    (19) Nonsymmetric matrix with random entries chosen from (-1,1).
+*>         If N is at least 4, all entries in first two rows and last
+*>         row, and first column and last two columns are zero.
+*>    (20) Same as (19), but multiplied by a constant
+*>         near the overflow threshold
+*>    (21) Same as (19), but multiplied by a constant
+*>         near the underflow threshold
+*>
+*>    In addition, an input file will be read from logical unit number
+*>    NIUNIT. The file contains matrices along with precomputed
+*>    eigenvalues and reciprocal condition numbers for the eigenvalues
+*>    and right eigenvectors. For these matrices, in addition to tests
+*>    (1) to (9) we will compute the following two tests:
+*>
+*>   (10)  |RCONDV - RCDVIN| / cond(RCONDV)
+*>
+*>      RCONDV is the reciprocal right eigenvector condition number
+*>      computed by DGEEVX and RCDVIN (the precomputed true value)
+*>      is supplied as input. cond(RCONDV) is the condition number of
+*>      RCONDV, and takes errors in computing RCONDV into account, so
+*>      that the resulting quantity should be O(ULP). cond(RCONDV) is
+*>      essentially given by norm(A)/RCONDE.
+*>
+*>   (11)  |RCONDE - RCDEIN| / cond(RCONDE)
+*>
+*>      RCONDE is the reciprocal eigenvalue condition number
+*>      computed by DGEEVX and RCDEIN (the precomputed true value)
+*>      is supplied as input.  cond(RCONDE) is the condition number
+*>      of RCONDE, and takes errors in computing RCONDE into account,
+*>      so that the resulting quantity should be O(ULP). cond(RCONDE)
+*>      is essentially given by norm(A)/RCONDV.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of sizes of matrices to use.  NSIZES must be at
+*>          least zero. If it is zero, no randomly generated matrices
+*>          are tested, but any test matrices read from NIUNIT will be
+*>          tested.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER array, dimension (NSIZES)
+*>          An array containing the sizes to be used for the matrices.
+*>          Zero values will be skipped.  The values must be at least
+*>          zero.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE. NTYPES must be at least
+*>          zero. If it is zero, no randomly generated test matrices
+*>          are tested, but and test matrices read from NIUNIT will be
+*>          tested. If it is MAXTYP+1 and NSIZES is 1, then an
+*>          additional type, MAXTYP+1 is defined, which is to use
+*>          whatever matrix is in A.  This is only useful if
+*>          DOTYPE(1:MAXTYP) is .FALSE. and DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated.  If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to DDRVVX to continue the same random number
+*>          sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NIUNIT
+*> \verbatim
+*>          NIUNIT is INTEGER
+*>          The FORTRAN unit number for reading in the data file of
+*>          problems to solve.
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns INFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension
+*>                      (LDA, max(NN,12))
+*>          Used to hold the matrix whose eigenvalues are to be
+*>          computed.  On exit, A contains the last matrix actually used.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A and H.
+*>          LDA >= max(NN,12), since 12 is the dimension of the largest
+*>          matrix in the precomputed input file.
+*> \endverbatim
+*>
+*> \param[out] H
+*> \verbatim
+*>          H is DOUBLE PRECISION array, dimension
+*>                      (LDA, max(NN,12))
+*>          Another copy of the test matrix A, modified by DGEEVX.
+*> \endverbatim
+*>
+*> \param[out] WR
+*> \verbatim
+*>          WR is DOUBLE PRECISION array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] WI
+*> \verbatim
+*>          WI is DOUBLE PRECISION array, dimension (max(NN))
+*> \endverbatim
+*> \verbatim
+*>          The real and imaginary parts of the eigenvalues of A.
+*>          On exit, WR + WI*i are the eigenvalues of the matrix in A.
+*> \endverbatim
+*>
+*> \param[out] WR1
+*> \verbatim
+*>          WR1 is DOUBLE PRECISION array, dimension (max(NN,12))
+*> \endverbatim
+*>
+*> \param[out] WI1
+*> \verbatim
+*>          WI1 is DOUBLE PRECISION array, dimension (max(NN,12))
+*> \endverbatim
+*> \verbatim
+*>          Like WR, WI, these arrays contain the eigenvalues of A,
+*>          but those computed when DGEEVX only computes a partial
+*>          eigendecomposition, i.e. not the eigenvalues and left
+*>          and right eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] VL
+*> \verbatim
+*>          VL is DOUBLE PRECISION array, dimension
+*>                      (LDVL, max(NN,12))
+*>          VL holds the computed left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDVL
+*> \verbatim
+*>          LDVL is INTEGER
+*>          Leading dimension of VL. Must be at least max(1,max(NN,12)).
+*> \endverbatim
+*>
+*> \param[out] VR
+*> \verbatim
+*>          VR is DOUBLE PRECISION array, dimension
+*>                      (LDVR, max(NN,12))
+*>          VR holds the computed right eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDVR
+*> \verbatim
+*>          LDVR is INTEGER
+*>          Leading dimension of VR. Must be at least max(1,max(NN,12)).
+*> \endverbatim
+*>
+*> \param[out] LRE
+*> \verbatim
+*>          LRE is DOUBLE PRECISION array, dimension
+*>                      (LDLRE, max(NN,12))
+*>          LRE holds the computed right or left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDLRE
+*> \verbatim
+*>          LDLRE is INTEGER
+*>          Leading dimension of LRE. Must be at least max(1,max(NN,12))
+*> \endverbatim
+*>
+*> \param[out] RCONDV
+*> \verbatim
+*>          RCONDV is DOUBLE PRECISION array, dimension (N)
+*>          RCONDV holds the computed reciprocal condition numbers
+*>          for eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] RCNDV1
+*> \verbatim
+*>          RCNDV1 is DOUBLE PRECISION array, dimension (N)
+*>          RCNDV1 holds more computed reciprocal condition numbers
+*>          for eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] RCDVIN
+*> \verbatim
+*>          RCDVIN is DOUBLE PRECISION array, dimension (N)
+*>          When COMP = .TRUE. RCDVIN holds the precomputed reciprocal
+*>          condition numbers for eigenvectors to be compared with
+*>          RCONDV.
+*> \endverbatim
+*>
+*> \param[out] RCONDE
+*> \verbatim
+*>          RCONDE is DOUBLE PRECISION array, dimension (N)
+*>          RCONDE holds the computed reciprocal condition numbers
+*>          for eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] RCNDE1
+*> \verbatim
+*>          RCNDE1 is DOUBLE PRECISION array, dimension (N)
+*>          RCNDE1 holds more computed reciprocal condition numbers
+*>          for eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] RCDEIN
+*> \verbatim
+*>          RCDEIN is DOUBLE PRECISION array, dimension (N)
+*>          When COMP = .TRUE. RCDEIN holds the precomputed reciprocal
+*>          condition numbers for eigenvalues to be compared with
+*>          RCONDE.
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (11)
+*>          The values computed by the seven tests described above.
+*>          The values are currently limited to 1/ulp, to avoid overflow.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (NWORK)
+*> \endverbatim
+*>
+*> \param[in] NWORK
+*> \verbatim
+*>          NWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          max(6*12+2*12**2,6*NN(j)+2*NN(j)**2) =
+*>          max(    360     ,6*NN(j)+2*NN(j)**2)    for all j.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (2*max(NN,12))
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0,  then successful exit.
+*>          If <0, then input paramter -INFO is incorrect.
+*>          If >0, DLATMR, SLATMS, SLATME or DGET23 returned an error
+*>                 code, and INFO is its absolute value.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>     Some Local Variables and Parameters:
+*>     ---- ----- --------- --- ----------
+*> \endverbatim
+*> \verbatim
+*>     ZERO, ONE       Real 0 and 1.
+*>     MAXTYP          The number of types defined.
+*>     NMAX            Largest value in NN or 12.
+*>     NERRS           The number of tests which have exceeded THRESH
+*>     COND, CONDS,
+*>     IMODE           Values to be passed to the matrix generators.
+*>     ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>     OVFL, UNFL      Overflow and underflow thresholds.
+*>     ULP, ULPINV     Finest relative precision and its inverse.
+*>     RTULP, RTULPI   Square roots of the previous 4 values.
+*> \endverbatim
+*> \verbatim
+*>             The following four arrays decode JTYPE:
+*>     KTYPE(j)        The general type (1-10) for type "j".
+*>     KMODE(j)        The MODE value to be passed to the matrix
+*>                     generator for type "j".
+*>     KMAGN(j)        The order of magnitude ( O(1),
+*>                     O(overflow^(1/2) ), O(underflow^(1/2) )
+*>     KCONDS(j)       Selectw whether CONDS is to be 1 or
+*>                     1/sqrt(ulp).  (0 means irrelevant.)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DDRVVX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NIUNIT, NOUNIT, A, LDA, H, WR, WI, WR1, WI1,
      $                   VL, LDVL, VR, LDVR, LRE, LDLRE, RCONDV, RCNDV1,
@@ -5,8 +519,9 @@
      $                   RESULT, WORK, NWORK, IWORK, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDLRE, LDVL, LDVR, NIUNIT, NOUNIT,
@@ -23,362 +538,6 @@
      $                   VL( LDVL, * ), VR( LDVR, * ), WI( * ),
      $                   WI1( * ), WORK( * ), WR( * ), WR1( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     DDRVVX  checks the nonsymmetric eigenvalue problem expert driver
-*     DGEEVX.
-*
-*     DDRVVX uses both test matrices generated randomly depending on
-*     data supplied in the calling sequence, as well as on data
-*     read from an input file and including precomputed condition
-*     numbers to which it compares the ones it computes.
-*
-*     When DDRVVX is called, a number of matrix "sizes" ("n's") and a
-*     number of matrix "types" are specified in the calling sequence.
-*     For each size ("n") and each type of matrix, one matrix will be
-*     generated and used to test the nonsymmetric eigenroutines.  For
-*     each matrix, 9 tests will be performed:
-*
-*     (1)     | A * VR - VR * W | / ( n |A| ulp )
-*
-*       Here VR is the matrix of unit right eigenvectors.
-*       W is a block diagonal matrix, with a 1x1 block for each
-*       real eigenvalue and a 2x2 block for each complex conjugate
-*       pair.  If eigenvalues j and j+1 are a complex conjugate pair,
-*       so WR(j) = WR(j+1) = wr and WI(j) = - WI(j+1) = wi, then the
-*       2 x 2 block corresponding to the pair will be:
-*
-*               (  wr  wi  )
-*               ( -wi  wr  )
-*
-*       Such a block multiplying an n x 2 matrix  ( ur ui ) on the
-*       right will be the same as multiplying  ur + i*ui  by  wr + i*wi.
-*
-*     (2)     | A**H * VL - VL * W**H | / ( n |A| ulp )
-*
-*       Here VL is the matrix of unit left eigenvectors, A**H is the
-*       conjugate transpose of A, and W is as above.
-*
-*     (3)     | |VR(i)| - 1 | / ulp and largest component real
-*
-*       VR(i) denotes the i-th column of VR.
-*
-*     (4)     | |VL(i)| - 1 | / ulp and largest component real
-*
-*       VL(i) denotes the i-th column of VL.
-*
-*     (5)     W(full) = W(partial)
-*
-*       W(full) denotes the eigenvalues computed when VR, VL, RCONDV
-*       and RCONDE are also computed, and W(partial) denotes the
-*       eigenvalues computed when only some of VR, VL, RCONDV, and
-*       RCONDE are computed.
-*
-*     (6)     VR(full) = VR(partial)
-*
-*       VR(full) denotes the right eigenvectors computed when VL, RCONDV
-*       and RCONDE are computed, and VR(partial) denotes the result
-*       when only some of VL and RCONDV are computed.
-*
-*     (7)     VL(full) = VL(partial)
-*
-*       VL(full) denotes the left eigenvectors computed when VR, RCONDV
-*       and RCONDE are computed, and VL(partial) denotes the result
-*       when only some of VR and RCONDV are computed.
-*
-*     (8)     0 if SCALE, ILO, IHI, ABNRM (full) =
-*                  SCALE, ILO, IHI, ABNRM (partial)
-*             1/ulp otherwise
-*
-*       SCALE, ILO, IHI and ABNRM describe how the matrix is balanced.
-*       (full) is when VR, VL, RCONDE and RCONDV are also computed, and
-*       (partial) is when some are not computed.
-*
-*     (9)     RCONDV(full) = RCONDV(partial)
-*
-*       RCONDV(full) denotes the reciprocal condition numbers of the
-*       right eigenvectors computed when VR, VL and RCONDE are also
-*       computed. RCONDV(partial) denotes the reciprocal condition
-*       numbers when only some of VR, VL and RCONDE are computed.
-*
-*     The "sizes" are specified by an array NN(1:NSIZES); the value of
-*     each element NN(j) specifies one size.
-*     The "types" are specified by a logical array DOTYPE( 1:NTYPES );
-*     if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*     Currently, the list of possible types is:
-*
-*     (1)  The zero matrix.
-*     (2)  The identity matrix.
-*     (3)  A (transposed) Jordan block, with 1's on the diagonal.
-*
-*     (4)  A diagonal matrix with evenly spaced entries
-*          1, ..., ULP  and random signs.
-*          (ULP = (first number larger than 1) - 1 )
-*     (5)  A diagonal matrix with geometrically spaced entries
-*          1, ..., ULP  and random signs.
-*     (6)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
-*          and random signs.
-*
-*     (7)  Same as (4), but multiplied by a constant near
-*          the overflow threshold
-*     (8)  Same as (4), but multiplied by a constant near
-*          the underflow threshold
-*
-*     (9)  A matrix of the form  U' T U, where U is orthogonal and
-*          T has evenly spaced entries 1, ..., ULP with random signs
-*          on the diagonal and random O(1) entries in the upper
-*          triangle.
-*
-*     (10) A matrix of the form  U' T U, where U is orthogonal and
-*          T has geometrically spaced entries 1, ..., ULP with random
-*          signs on the diagonal and random O(1) entries in the upper
-*          triangle.
-*
-*     (11) A matrix of the form  U' T U, where U is orthogonal and
-*          T has "clustered" entries 1, ULP,..., ULP with random
-*          signs on the diagonal and random O(1) entries in the upper
-*          triangle.
-*
-*     (12) A matrix of the form  U' T U, where U is orthogonal and
-*          T has real or complex conjugate paired eigenvalues randomly
-*          chosen from ( ULP, 1 ) and random O(1) entries in the upper
-*          triangle.
-*
-*     (13) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has evenly spaced entries 1, ..., ULP
-*          with random signs on the diagonal and random O(1) entries
-*          in the upper triangle.
-*
-*     (14) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has geometrically spaced entries
-*          1, ..., ULP with random signs on the diagonal and random
-*          O(1) entries in the upper triangle.
-*
-*     (15) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has "clustered" entries 1, ULP,..., ULP
-*          with random signs on the diagonal and random O(1) entries
-*          in the upper triangle.
-*
-*     (16) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has real or complex conjugate paired
-*          eigenvalues randomly chosen from ( ULP, 1 ) and random
-*          O(1) entries in the upper triangle.
-*
-*     (17) Same as (16), but multiplied by a constant
-*          near the overflow threshold
-*     (18) Same as (16), but multiplied by a constant
-*          near the underflow threshold
-*
-*     (19) Nonsymmetric matrix with random entries chosen from (-1,1).
-*          If N is at least 4, all entries in first two rows and last
-*          row, and first column and last two columns are zero.
-*     (20) Same as (19), but multiplied by a constant
-*          near the overflow threshold
-*     (21) Same as (19), but multiplied by a constant
-*          near the underflow threshold
-*
-*     In addition, an input file will be read from logical unit number
-*     NIUNIT. The file contains matrices along with precomputed
-*     eigenvalues and reciprocal condition numbers for the eigenvalues
-*     and right eigenvectors. For these matrices, in addition to tests
-*     (1) to (9) we will compute the following two tests:
-*
-*    (10)  |RCONDV - RCDVIN| / cond(RCONDV)
-*
-*       RCONDV is the reciprocal right eigenvector condition number
-*       computed by DGEEVX and RCDVIN (the precomputed true value)
-*       is supplied as input. cond(RCONDV) is the condition number of
-*       RCONDV, and takes errors in computing RCONDV into account, so
-*       that the resulting quantity should be O(ULP). cond(RCONDV) is
-*       essentially given by norm(A)/RCONDE.
-*
-*    (11)  |RCONDE - RCDEIN| / cond(RCONDE)
-*
-*       RCONDE is the reciprocal eigenvalue condition number
-*       computed by DGEEVX and RCDEIN (the precomputed true value)
-*       is supplied as input.  cond(RCONDE) is the condition number
-*       of RCONDE, and takes errors in computing RCONDE into account,
-*       so that the resulting quantity should be O(ULP). cond(RCONDE)
-*       is essentially given by norm(A)/RCONDV.
-*
-*  Arguments
-*  ==========
-*
-*  NSIZES  (input) INTEGER
-*          The number of sizes of matrices to use.  NSIZES must be at
-*          least zero. If it is zero, no randomly generated matrices
-*          are tested, but any test matrices read from NIUNIT will be
-*          tested.
-*
-*  NN      (input) INTEGER array, dimension (NSIZES)
-*          An array containing the sizes to be used for the matrices.
-*          Zero values will be skipped.  The values must be at least
-*          zero.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE. NTYPES must be at least
-*          zero. If it is zero, no randomly generated test matrices
-*          are tested, but and test matrices read from NIUNIT will be
-*          tested. If it is MAXTYP+1 and NSIZES is 1, then an
-*          additional type, MAXTYP+1 is defined, which is to use
-*          whatever matrix is in A.  This is only useful if
-*          DOTYPE(1:MAXTYP) is .FALSE. and DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated.  If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to DDRVVX to continue the same random number
-*          sequence.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*
-*  NIUNIT  (input) INTEGER
-*          The FORTRAN unit number for reading in the data file of
-*          problems to solve.
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns INFO not equal to 0.)
-*
-*  A       (workspace) DOUBLE PRECISION array, dimension
-*                      (LDA, max(NN,12))
-*          Used to hold the matrix whose eigenvalues are to be
-*          computed.  On exit, A contains the last matrix actually used.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A and H.
-*          LDA >= max(NN,12), since 12 is the dimension of the largest
-*          matrix in the precomputed input file.
-*
-*  H       (workspace) DOUBLE PRECISION array, dimension
-*                      (LDA, max(NN,12))
-*          Another copy of the test matrix A, modified by DGEEVX.
-*
-*  WR      (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*  WI      (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*          The real and imaginary parts of the eigenvalues of A.
-*          On exit, WR + WI*i are the eigenvalues of the matrix in A.
-*
-*  WR1     (workspace) DOUBLE PRECISION array, dimension (max(NN,12))
-*  WI1     (workspace) DOUBLE PRECISION array, dimension (max(NN,12))
-*          Like WR, WI, these arrays contain the eigenvalues of A,
-*          but those computed when DGEEVX only computes a partial
-*          eigendecomposition, i.e. not the eigenvalues and left
-*          and right eigenvectors.
-*
-*  VL      (workspace) DOUBLE PRECISION array, dimension
-*                      (LDVL, max(NN,12))
-*          VL holds the computed left eigenvectors.
-*
-*  LDVL    (input) INTEGER
-*          Leading dimension of VL. Must be at least max(1,max(NN,12)).
-*
-*  VR      (workspace) DOUBLE PRECISION array, dimension
-*                      (LDVR, max(NN,12))
-*          VR holds the computed right eigenvectors.
-*
-*  LDVR    (input) INTEGER
-*          Leading dimension of VR. Must be at least max(1,max(NN,12)).
-*
-*  LRE     (workspace) DOUBLE PRECISION array, dimension
-*                      (LDLRE, max(NN,12))
-*          LRE holds the computed right or left eigenvectors.
-*
-*  LDLRE   (input) INTEGER
-*          Leading dimension of LRE. Must be at least max(1,max(NN,12))
-*
-*  RCONDV  (workspace) DOUBLE PRECISION array, dimension (N)
-*          RCONDV holds the computed reciprocal condition numbers
-*          for eigenvectors.
-*
-*  RCNDV1  (workspace) DOUBLE PRECISION array, dimension (N)
-*          RCNDV1 holds more computed reciprocal condition numbers
-*          for eigenvectors.
-*
-*  RCDVIN  (workspace) DOUBLE PRECISION array, dimension (N)
-*          When COMP = .TRUE. RCDVIN holds the precomputed reciprocal
-*          condition numbers for eigenvectors to be compared with
-*          RCONDV.
-*
-*  RCONDE  (workspace) DOUBLE PRECISION array, dimension (N)
-*          RCONDE holds the computed reciprocal condition numbers
-*          for eigenvalues.
-*
-*  RCNDE1  (workspace) DOUBLE PRECISION array, dimension (N)
-*          RCNDE1 holds more computed reciprocal condition numbers
-*          for eigenvalues.
-*
-*  RCDEIN  (workspace) DOUBLE PRECISION array, dimension (N)
-*          When COMP = .TRUE. RCDEIN holds the precomputed reciprocal
-*          condition numbers for eigenvalues to be compared with
-*          RCONDE.
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (11)
-*          The values computed by the seven tests described above.
-*          The values are currently limited to 1/ulp, to avoid overflow.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (NWORK)
-*
-*  NWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          max(6*12+2*12**2,6*NN(j)+2*NN(j)**2) =
-*          max(    360     ,6*NN(j)+2*NN(j)**2)    for all j.
-*
-*  IWORK   (workspace) INTEGER array, dimension (2*max(NN,12))
-*
-*  INFO    (output) INTEGER
-*          If 0,  then successful exit.
-*          If <0, then input paramter -INFO is incorrect.
-*          If >0, DLATMR, SLATMS, SLATME or DGET23 returned an error
-*                 code, and INFO is its absolute value.
-*
-*-----------------------------------------------------------------------
-*
-*     Some Local Variables and Parameters:
-*     ---- ----- --------- --- ----------
-*
-*     ZERO, ONE       Real 0 and 1.
-*     MAXTYP          The number of types defined.
-*     NMAX            Largest value in NN or 12.
-*     NERRS           The number of tests which have exceeded THRESH
-*     COND, CONDS,
-*     IMODE           Values to be passed to the matrix generators.
-*     ANORM           Norm of A; passed to matrix generators.
-*
-*     OVFL, UNFL      Overflow and underflow thresholds.
-*     ULP, ULPINV     Finest relative precision and its inverse.
-*     RTULP, RTULPI   Square roots of the previous 4 values.
-*
-*             The following four arrays decode JTYPE:
-*     KTYPE(j)        The general type (1-10) for type "j".
-*     KMODE(j)        The MODE value to be passed to the matrix
-*                     generator for type "j".
-*     KMAGN(j)        The order of magnitude ( O(1),
-*                     O(overflow^(1/2) ), O(underflow^(1/2) )
-*     KCONDS(j)       Selectw whether CONDS is to be 1 or
-*                     1/sqrt(ulp).  (0 means irrelevant.)
 *
 *  =====================================================================
 *

@@ -1,9 +1,163 @@
+*> \brief \b DLASD4
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            I, INFO, N
+*       DOUBLE PRECISION   RHO, SIGMA
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), DELTA( * ), WORK( * ), Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This subroutine computes the square root of the I-th updated
+*> eigenvalue of a positive symmetric rank-one modification to
+*> a positive diagonal matrix whose entries are given as the squares
+*> of the corresponding entries in the array d, and that
+*>
+*>        0 <= D(i) < D(j)  for  i < j
+*>
+*> and that RHO > 0. This is arranged by the calling routine, and is
+*> no loss in generality.  The rank-one modified system is thus
+*>
+*>        diag( D ) * diag( D ) +  RHO * Z * Z_transpose.
+*>
+*> where we assume the Euclidean norm of Z is 1.
+*>
+*> The method consists of approximating the rational functions in the
+*> secular equation by simpler interpolating rational functions.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The length of all arrays.
+*> \endverbatim
+*>
+*> \param[in] I
+*> \verbatim
+*>          I is INTEGER
+*>         The index of the eigenvalue to be computed.  1 <= I <= N.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension ( N )
+*>         The original eigenvalues.  It is assumed that they are in
+*>         order, 0 <= D(I) < D(J)  for I < J.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension ( N )
+*>         The components of the updating vector.
+*> \endverbatim
+*>
+*> \param[out] DELTA
+*> \verbatim
+*>          DELTA is DOUBLE PRECISION array, dimension ( N )
+*>         If N .ne. 1, DELTA contains (D(j) - sigma_I) in its  j-th
+*>         component.  If N = 1, then DELTA(1) = 1.  The vector DELTA
+*>         contains the information necessary to construct the
+*>         (singular) eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] RHO
+*> \verbatim
+*>          RHO is DOUBLE PRECISION
+*>         The scalar in the symmetric updating formula.
+*> \endverbatim
+*>
+*> \param[out] SIGMA
+*> \verbatim
+*>          SIGMA is DOUBLE PRECISION
+*>         The computed sigma_I, the I-th updated eigenvalue.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension ( N )
+*>         If N .ne. 1, WORK contains (D(j) + sigma_I) in its  j-th
+*>         component.  If N = 1, then WORK( 1 ) = 1.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>         = 0:  successful exit
+*>         > 0:  if INFO = 1, the updating process failed.
+*> \endverbatim
+*> \verbatim
+*>  Internal Parameters
+*>  ===================
+*> \endverbatim
+*> \verbatim
+*>  Logical variable ORGATI (origin-at-i?) is used for distinguishing
+*>  whether D(i) or D(i+1) is treated as the origin.
+*> \endverbatim
+*> \verbatim
+*>            ORGATI = .true.    origin at i
+*>            ORGATI = .false.   origin at i+1
+*> \endverbatim
+*> \verbatim
+*>  Logical variable SWTCH3 (switch-for-3-poles?) is for noting
+*>  if we are working with THREE poles!
+*> \endverbatim
+*> \verbatim
+*>  MAXIT is the maximum number of iterations allowed for each
+*>  eigenvalue.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ren-Cang Li, Computer Science Division, University of California
+*>     at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLASD4( N, I, D, Z, DELTA, RHO, SIGMA, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            I, INFO, N
@@ -12,84 +166,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   D( * ), DELTA( * ), WORK( * ), Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  This subroutine computes the square root of the I-th updated
-*  eigenvalue of a positive symmetric rank-one modification to
-*  a positive diagonal matrix whose entries are given as the squares
-*  of the corresponding entries in the array d, and that
-*
-*         0 <= D(i) < D(j)  for  i < j
-*
-*  and that RHO > 0. This is arranged by the calling routine, and is
-*  no loss in generality.  The rank-one modified system is thus
-*
-*         diag( D ) * diag( D ) +  RHO *  Z * Z_transpose.
-*
-*  where we assume the Euclidean norm of Z is 1.
-*
-*  The method consists of approximating the rational functions in the
-*  secular equation by simpler interpolating rational functions.
-*
-*  Arguments
-*  =========
-*
-*  N      (input) INTEGER
-*         The length of all arrays.
-*
-*  I      (input) INTEGER
-*         The index of the eigenvalue to be computed.  1 <= I <= N.
-*
-*  D      (input) DOUBLE PRECISION array, dimension ( N )
-*         The original eigenvalues.  It is assumed that they are in
-*         order, 0 <= D(I) < D(J)  for I < J.
-*
-*  Z      (input) DOUBLE PRECISION array, dimension ( N )
-*         The components of the updating vector.
-*
-*  DELTA  (output) DOUBLE PRECISION array, dimension ( N )
-*         If N .ne. 1, DELTA contains (D(j) - sigma_I) in its  j-th
-*         component.  If N = 1, then DELTA(1) = 1.  The vector DELTA
-*         contains the information necessary to construct the
-*         (singular) eigenvectors.
-*
-*  RHO    (input) DOUBLE PRECISION
-*         The scalar in the symmetric updating formula.
-*
-*  SIGMA  (output) DOUBLE PRECISION
-*         The computed sigma_I, the I-th updated eigenvalue.
-*
-*  WORK   (workspace) DOUBLE PRECISION array, dimension ( N )
-*         If N .ne. 1, WORK contains (D(j) + sigma_I) in its  j-th
-*         component.  If N = 1, then WORK( 1 ) = 1.
-*
-*  INFO   (output) INTEGER
-*         = 0:  successful exit
-*         > 0:  if INFO = 1, the updating process failed.
-*
-*  Internal Parameters
-*  ===================
-*
-*  Logical variable ORGATI (origin-at-i?) is used for distinguishing
-*  whether D(i) or D(i+1) is treated as the origin.
-*
-*            ORGATI = .true.    origin at i
-*            ORGATI = .false.   origin at i+1
-*
-*  Logical variable SWTCH3 (switch-for-3-poles?) is for noting
-*  if we are working with THREE poles!
-*
-*  MAXIT is the maximum number of iterations allowed for each
-*  eigenvalue.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ren-Cang Li, Computer Science Division, University of California
-*     at Berkeley, USA
 *
 *  =====================================================================
 *

@@ -1,10 +1,219 @@
+*> \brief \b SLAED2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,
+*                          Q2, INDX, INDXC, INDXP, COLTYP, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, K, LDQ, N, N1
+*       REAL               RHO
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            COLTYP( * ), INDX( * ), INDXC( * ), INDXP( * ),
+*      $                   INDXQ( * )
+*       REAL               D( * ), DLAMDA( * ), Q( LDQ, * ), Q2( * ),
+*      $                   W( * ), Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAED2 merges the two sets of eigenvalues together into a single
+*> sorted set.  Then it tries to deflate the size of the problem.
+*> There are two ways in which deflation can occur:  when two or more
+*> eigenvalues are close together or if there is a tiny entry in the
+*> Z vector.  For each such occurrence the order of the related secular
+*> equation problem is reduced by one.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] K
+*> \verbatim
+*>          K is INTEGER
+*>         The number of non-deflated eigenvalues, and the order of the
+*>         related secular equation. 0 <= K <=N.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The dimension of the symmetric tridiagonal matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] N1
+*> \verbatim
+*>          N1 is INTEGER
+*>         The location of the last eigenvalue in the leading sub-matrix.
+*>         min(1,N) <= N1 <= N/2.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>         On entry, D contains the eigenvalues of the two submatrices to
+*>         be combined.
+*>         On exit, D contains the trailing (N-K) updated eigenvalues
+*>         (those which were deflated) sorted into increasing order.
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is REAL array, dimension (LDQ, N)
+*>         On entry, Q contains the eigenvectors of two submatrices in
+*>         the two square blocks with corners at (1,1), (N1,N1)
+*>         and (N1+1, N1+1), (N,N).
+*>         On exit, Q contains the trailing (N-K) updated eigenvectors
+*>         (those which were deflated) in its last N-K columns.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>         The leading dimension of the array Q.  LDQ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] INDXQ
+*> \verbatim
+*>          INDXQ is INTEGER array, dimension (N)
+*>         The permutation which separately sorts the two sub-problems
+*>         in D into ascending order.  Note that elements in the second
+*>         half of this permutation must first have N1 added to their
+*>         values. Destroyed on exit.
+*> \endverbatim
+*>
+*> \param[in,out] RHO
+*> \verbatim
+*>          RHO is REAL
+*>         On entry, the off-diagonal element associated with the rank-1
+*>         cut which originally split the two submatrices which are now
+*>         being recombined.
+*>         On exit, RHO has been modified to the value required by
+*>         SLAED3.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is REAL array, dimension (N)
+*>         On entry, Z contains the updating vector (the last
+*>         row of the first sub-eigenvector matrix and the first row of
+*>         the second sub-eigenvector matrix).
+*>         On exit, the contents of Z have been destroyed by the updating
+*>         process.
+*> \endverbatim
+*>
+*> \param[out] DLAMDA
+*> \verbatim
+*>          DLAMDA is REAL array, dimension (N)
+*>         A copy of the first K eigenvalues which will be used by
+*>         SLAED3 to form the secular equation.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is REAL array, dimension (N)
+*>         The first k values of the final deflation-altered z-vector
+*>         which will be passed to SLAED3.
+*> \endverbatim
+*>
+*> \param[out] Q2
+*> \verbatim
+*>          Q2 is REAL array, dimension (N1**2+(N-N1)**2)
+*>         A copy of the first K eigenvectors which will be used by
+*>         SLAED3 in a matrix multiply (SGEMM) to solve for the new
+*>         eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] INDX
+*> \verbatim
+*>          INDX is INTEGER array, dimension (N)
+*>         The permutation used to sort the contents of DLAMDA into
+*>         ascending order.
+*> \endverbatim
+*>
+*> \param[out] INDXC
+*> \verbatim
+*>          INDXC is INTEGER array, dimension (N)
+*>         The permutation used to arrange the columns of the deflated
+*>         Q matrix into three groups:  the first group contains non-zero
+*>         elements only at and above N1, the second contains
+*>         non-zero elements only below N1, and the third is dense.
+*> \endverbatim
+*>
+*> \param[out] INDXP
+*> \verbatim
+*>          INDXP is INTEGER array, dimension (N)
+*>         The permutation used to place deflated values of D at the end
+*>         of the array.  INDXP(1:K) points to the nondeflated D-values
+*>         and INDXP(K+1:N) points to the deflated eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] COLTYP
+*> \verbatim
+*>          COLTYP is INTEGER array, dimension (N)
+*>         During execution, a label which will indicate which of the
+*>         following types a column in the Q2 matrix is:
+*>         1 : non-zero in the upper half only;
+*>         2 : dense;
+*>         3 : non-zero in the lower half only;
+*>         4 : deflated.
+*>         On exit, COLTYP(i) is the number of columns of type i,
+*>         for i=1 to 4 only.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Jeff Rutter, Computer Science Division, University of California
+*>     at Berkeley, USA
+*>  Modified by Francoise Tisseur, University of Tennessee.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,
      $                   Q2, INDX, INDXC, INDXP, COLTYP, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, K, LDQ, N, N1
@@ -16,116 +225,6 @@
       REAL               D( * ), DLAMDA( * ), Q( LDQ, * ), Q2( * ),
      $                   W( * ), Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAED2 merges the two sets of eigenvalues together into a single
-*  sorted set.  Then it tries to deflate the size of the problem.
-*  There are two ways in which deflation can occur:  when two or more
-*  eigenvalues are close together or if there is a tiny entry in the
-*  Z vector.  For each such occurrence the order of the related secular
-*  equation problem is reduced by one.
-*
-*  Arguments
-*  =========
-*
-*  K      (output) INTEGER
-*         The number of non-deflated eigenvalues, and the order of the
-*         related secular equation. 0 <= K <=N.
-*
-*  N      (input) INTEGER
-*         The dimension of the symmetric tridiagonal matrix.  N >= 0.
-*
-*  N1     (input) INTEGER
-*         The location of the last eigenvalue in the leading sub-matrix.
-*         min(1,N) <= N1 <= N/2.
-*
-*  D      (input/output) REAL array, dimension (N)
-*         On entry, D contains the eigenvalues of the two submatrices to
-*         be combined.
-*         On exit, D contains the trailing (N-K) updated eigenvalues
-*         (those which were deflated) sorted into increasing order.
-*
-*  Q      (input/output) REAL array, dimension (LDQ, N)
-*         On entry, Q contains the eigenvectors of two submatrices in
-*         the two square blocks with corners at (1,1), (N1,N1)
-*         and (N1+1, N1+1), (N,N).
-*         On exit, Q contains the trailing (N-K) updated eigenvectors
-*         (those which were deflated) in its last N-K columns.
-*
-*  LDQ    (input) INTEGER
-*         The leading dimension of the array Q.  LDQ >= max(1,N).
-*
-*  INDXQ  (input/output) INTEGER array, dimension (N)
-*         The permutation which separately sorts the two sub-problems
-*         in D into ascending order.  Note that elements in the second
-*         half of this permutation must first have N1 added to their
-*         values. Destroyed on exit.
-*
-*  RHO    (input/output) REAL
-*         On entry, the off-diagonal element associated with the rank-1
-*         cut which originally split the two submatrices which are now
-*         being recombined.
-*         On exit, RHO has been modified to the value required by
-*         SLAED3.
-*
-*  Z      (input) REAL array, dimension (N)
-*         On entry, Z contains the updating vector (the last
-*         row of the first sub-eigenvector matrix and the first row of
-*         the second sub-eigenvector matrix).
-*         On exit, the contents of Z have been destroyed by the updating
-*         process.
-*
-*  DLAMDA (output) REAL array, dimension (N)
-*         A copy of the first K eigenvalues which will be used by
-*         SLAED3 to form the secular equation.
-*
-*  W      (output) REAL array, dimension (N)
-*         The first k values of the final deflation-altered z-vector
-*         which will be passed to SLAED3.
-*
-*  Q2     (output) REAL array, dimension (N1**2+(N-N1)**2)
-*         A copy of the first K eigenvectors which will be used by
-*         SLAED3 in a matrix multiply (SGEMM) to solve for the new
-*         eigenvectors.
-*
-*  INDX   (workspace) INTEGER array, dimension (N)
-*         The permutation used to sort the contents of DLAMDA into
-*         ascending order.
-*
-*  INDXC  (output) INTEGER array, dimension (N)
-*         The permutation used to arrange the columns of the deflated
-*         Q matrix into three groups:  the first group contains non-zero
-*         elements only at and above N1, the second contains
-*         non-zero elements only below N1, and the third is dense.
-*
-*  INDXP  (workspace) INTEGER array, dimension (N)
-*         The permutation used to place deflated values of D at the end
-*         of the array.  INDXP(1:K) points to the nondeflated D-values
-*         and INDXP(K+1:N) points to the deflated eigenvalues.
-*
-*  COLTYP (workspace/output) INTEGER array, dimension (N)
-*         During execution, a label which will indicate which of the
-*         following types a column in the Q2 matrix is:
-*         1 : non-zero in the upper half only;
-*         2 : dense;
-*         3 : non-zero in the lower half only;
-*         4 : deflated.
-*         On exit, COLTYP(i) is the number of columns of type i,
-*         for i=1 to 4 only.
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Jeff Rutter, Computer Science Division, University of California
-*     at Berkeley, USA
-*  Modified by Francoise Tisseur, University of Tennessee.
 *
 *  =====================================================================
 *

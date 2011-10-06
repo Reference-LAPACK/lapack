@@ -1,9 +1,137 @@
+*> \brief \b CGBT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
+*                          RESID )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KL, KU, LDA, LDAFAC, M, N
+*       REAL               RESID
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       COMPLEX            A( LDA, * ), AFAC( LDAFAC, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGBT01 reconstructs a band matrix  A  from its L*U factorization and
+*> computes the residual:
+*>    norm(L*U - A) / ( N * norm(A) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*> The expression L*U - A is computed one column at a time, so A and
+*> AFAC are not modified.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>          The number of subdiagonals within the band of A.  KL >= 0.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>          The number of superdiagonals within the band of A.  KU >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          The original matrix A in band storage, stored in rows 1 to
+*>          KL+KU+1.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER.
+*>          The leading dimension of the array A.  LDA >= max(1,KL+KU+1).
+*> \endverbatim
+*>
+*> \param[in] AFAC
+*> \verbatim
+*>          AFAC is COMPLEX array, dimension (LDAFAC,N)
+*>          The factored form of the matrix A.  AFAC contains the banded
+*>          factors L and U from the L*U factorization, as computed by
+*>          CGBTRF.  U is stored as an upper triangular band matrix with
+*>          KL+KU superdiagonals in rows 1 to KL+KU+1, and the
+*>          multipliers used during the factorization are stored in rows
+*>          KL+KU+2 to 2*KL+KU+1.  See CGBTRF for further details.
+*> \endverbatim
+*>
+*> \param[in] LDAFAC
+*> \verbatim
+*>          LDAFAC is INTEGER
+*>          The leading dimension of the array AFAC.
+*>          LDAFAC >= max(1,2*KL*KU+1).
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (min(M,N))
+*>          The pivot indices from CGBTRF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (2*KL+KU+1)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          norm(L*U - A) / ( N * norm(A) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CGBT01( M, N, KL, KU, A, LDA, AFAC, LDAFAC, IPIV, WORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KL, KU, LDA, LDAFAC, M, N
@@ -13,59 +141,6 @@
       INTEGER            IPIV( * )
       COMPLEX            A( LDA, * ), AFAC( LDAFAC, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGBT01 reconstructs a band matrix  A  from its L*U factorization and
-*  computes the residual:
-*     norm(L*U - A) / ( N * norm(A) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  The expression L*U - A is computed one column at a time, so A and
-*  AFAC are not modified.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  KL      (input) INTEGER
-*          The number of subdiagonals within the band of A.  KL >= 0.
-*
-*  KU      (input) INTEGER
-*          The number of superdiagonals within the band of A.  KU >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA,N)
-*          The original matrix A in band storage, stored in rows 1 to
-*          KL+KU+1.
-*
-*  LDA     (input) INTEGER.
-*          The leading dimension of the array A.  LDA >= max(1,KL+KU+1).
-*
-*  AFAC    (input) COMPLEX array, dimension (LDAFAC,N)
-*          The factored form of the matrix A.  AFAC contains the banded
-*          factors L and U from the L*U factorization, as computed by
-*          CGBTRF.  U is stored as an upper triangular band matrix with
-*          KL+KU superdiagonals in rows 1 to KL+KU+1, and the
-*          multipliers used during the factorization are stored in rows
-*          KL+KU+2 to 2*KL+KU+1.  See CGBTRF for further details.
-*
-*  LDAFAC  (input) INTEGER
-*          The leading dimension of the array AFAC.
-*          LDAFAC >= max(1,2*KL*KU+1).
-*
-*  IPIV    (input) INTEGER array, dimension (min(M,N))
-*          The pivot indices from CGBTRF.
-*
-*  WORK    (workspace) COMPLEX array, dimension (2*KL+KU+1)
-*
-*  RESID   (output) REAL
-*          norm(L*U - A) / ( N * norm(A) * EPS )
 *
 *  =====================================================================
 *

@@ -1,9 +1,87 @@
+*> \brief \b DSTERF
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DSTERF( N, D, E, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), E( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DSTERF computes all eigenvalues of a symmetric tridiagonal matrix
+*> using the Pal-Walker-Kahan variant of the QL or QR algorithm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          On entry, the n diagonal elements of the tridiagonal matrix.
+*>          On exit, if INFO = 0, the eigenvalues in ascending order.
+*> \endverbatim
+*>
+*> \param[in,out] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          On entry, the (n-1) subdiagonal elements of the tridiagonal
+*>          matrix.
+*>          On exit, E has been destroyed.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  the algorithm failed to find all of the eigenvalues in
+*>                a total of 30*N iterations; if INFO = i, then i
+*>                elements of E have not converged to zero.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE DSTERF( N, D, E, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, N
@@ -11,34 +89,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   D( * ), E( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DSTERF computes all eigenvalues of a symmetric tridiagonal matrix
-*  using the Pal-Walker-Kahan variant of the QL or QR algorithm.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix.  N >= 0.
-*
-*  D       (input/output) DOUBLE PRECISION array, dimension (N)
-*          On entry, the n diagonal elements of the tridiagonal matrix.
-*          On exit, if INFO = 0, the eigenvalues in ascending order.
-*
-*  E       (input/output) DOUBLE PRECISION array, dimension (N-1)
-*          On entry, the (n-1) subdiagonal elements of the tridiagonal
-*          matrix.
-*          On exit, E has been destroyed.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  the algorithm failed to find all of the eigenvalues in
-*                a total of 30*N iterations; if INFO = i, then i
-*                elements of E have not converged to zero.
 *
 *  =====================================================================
 *

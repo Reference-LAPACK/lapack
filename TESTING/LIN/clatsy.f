@@ -1,8 +1,100 @@
+*> \brief \b CLATSY
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLATSY( UPLO, N, X, LDX, ISEED )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            LDX, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( * )
+*       COMPLEX            X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLATSY generates a special test matrix for the complex symmetric
+*> (indefinite) factorization.  The pivot blocks of the generated matrix
+*> will be in the following order:
+*>    2x2 pivot block, non diagonalizable
+*>    1x1 pivot block
+*>    2x2 pivot block, diagonalizable
+*>    (cycle repeats)
+*> A row interchange is required for each non-diagonalizable 2x2 block.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER
+*>          Specifies whether the generated matrix is to be upper or
+*>          lower triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The dimension of the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (LDX,N)
+*>          The generated matrix, consisting of 3x3 and 2x2 diagonal
+*>          blocks which result in the pivot sequence given above.
+*>          The matrix outside of these diagonal blocks is zero.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed for the random number generator.  The last
+*>          of the four integers must be odd.  (modified on exit)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CLATSY( UPLO, N, X, LDX, ISEED )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,42 +104,6 @@
       INTEGER            ISEED( * )
       COMPLEX            X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLATSY generates a special test matrix for the complex symmetric
-*  (indefinite) factorization.  The pivot blocks of the generated matrix
-*  will be in the following order:
-*     2x2 pivot block, non diagonalizable
-*     1x1 pivot block
-*     2x2 pivot block, diagonalizable
-*     (cycle repeats)
-*  A row interchange is required for each non-diagonalizable 2x2 block.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER
-*          Specifies whether the generated matrix is to be upper or
-*          lower triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The dimension of the matrix to be generated.
-*
-*  X       (output) COMPLEX array, dimension (LDX,N)
-*          The generated matrix, consisting of 3x3 and 2x2 diagonal
-*          blocks which result in the pivot sequence given above.
-*          The matrix outside of these diagonal blocks is zero.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed for the random number generator.  The last
-*          of the four integers must be odd.  (modified on exit)
 *
 *  =====================================================================
 *

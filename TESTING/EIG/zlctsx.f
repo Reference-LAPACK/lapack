@@ -1,28 +1,70 @@
-      LOGICAL          FUNCTION ZLCTSX( ALPHA, BETA )
+*> \brief \b ZLCTSX
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      COMPLEX*16         ALPHA, BETA
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       LOGICAL          FUNCTION ZLCTSX( ALPHA, BETA )
+* 
+*       .. Scalar Arguments ..
+*       COMPLEX*16         ALPHA, BETA
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  This function is used to determine what eigenvalues will be
-*  selected.  If this is part of the test driver ZDRGSX, do not
-*  change the code UNLESS you are testing input examples and not
-*  using the built-in examples.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This function is used to determine what eigenvalues will be
+*> selected.  If this is part of the test driver ZDRGSX, do not
+*> change the code UNLESS you are testing input examples and not
+*> using the built-in examples.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  ALPHA   (input) COMPLEX*16
-*  BETA    (input) COMPLEX*16
-*          parameters to decide whether the pair (ALPHA, BETA) is
-*          selected.
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX*16
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is COMPLEX*16
+*>          parameters to decide whether the pair (ALPHA, BETA) is
+*>          selected.
+*> \endverbatim
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
+      LOGICAL          FUNCTION ZLCTSX( ALPHA, BETA )
+*
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      COMPLEX*16         ALPHA, BETA
+*     ..
 *
 *  =====================================================================
 *

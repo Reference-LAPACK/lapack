@@ -1,9 +1,100 @@
+*> \brief \b SLAMRG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAMRG( N1, N2, A, STRD1, STRD2, INDEX )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            N1, N2, STRD1, STRD2
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            INDEX( * )
+*       REAL               A( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAMRG will create a permutation list which will merge the elements
+*> of A (which is composed of two independently sorted sets) into a
+*> single set which is sorted in ascending order.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N1
+*> \verbatim
+*>          N1 is INTEGER
+*> \endverbatim
+*>
+*> \param[in] N2
+*> \verbatim
+*>          N2 is INTEGER
+*>         These arguements contain the respective lengths of the two
+*>         sorted lists to be merged.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (N1+N2)
+*>         The first N1 elements of A contain a list of numbers which
+*>         are sorted in either ascending or descending order.  Likewise
+*>         for the final N2 elements.
+*> \endverbatim
+*>
+*> \param[in] STRD1
+*> \verbatim
+*>          STRD1 is INTEGER
+*> \endverbatim
+*>
+*> \param[in] STRD2
+*> \verbatim
+*>          STRD2 is INTEGER
+*>         These are the strides to be taken through the array A.
+*>         Allowable strides are 1 and -1.  They indicate whether a
+*>         subset of A is sorted in ascending (STRDx = 1) or descending
+*>         (STRDx = -1) order.
+*> \endverbatim
+*>
+*> \param[out] INDEX
+*> \verbatim
+*>          INDEX is INTEGER array, dimension (N1+N2)
+*>         On exit this array will contain a permutation such that
+*>         if B( I ) = A( INDEX( I ) ) for I=1,N1+N2, then B will be
+*>         sorted in ascending order.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE SLAMRG( N1, N2, A, STRD1, STRD2, INDEX )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            N1, N2, STRD1, STRD2
@@ -12,40 +103,6 @@
       INTEGER            INDEX( * )
       REAL               A( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAMRG will create a permutation list which will merge the elements
-*  of A (which is composed of two independently sorted sets) into a
-*  single set which is sorted in ascending order.
-*
-*  Arguments
-*  =========
-*
-*  N1     (input) INTEGER
-*
-*  N2     (input) INTEGER
-*         These arguements contain the respective lengths of the two
-*         sorted lists to be merged.
-*
-*  A      (input) REAL array, dimension (N1+N2)
-*         The first N1 elements of A contain a list of numbers which
-*         are sorted in either ascending or descending order.  Likewise
-*         for the final N2 elements.
-*
-*  STRD1  (input) INTEGER
-*
-*  STRD2  (input) INTEGER
-*         These are the strides to be taken through the array A.
-*         Allowable strides are 1 and -1.  They indicate whether a
-*         subset of A is sorted in ascending (STRDx = 1) or descending
-*         (STRDx = -1) order.
-*
-*  INDEX  (output) INTEGER array, dimension (N1+N2)
-*         On exit this array will contain a permutation such that
-*         if B( I ) = A( INDEX( I ) ) for I=1,N1+N2, then B will be
-*         sorted in ascending order.
 *
 *  =====================================================================
 *

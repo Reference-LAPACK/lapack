@@ -1,10 +1,286 @@
+*> \brief <b> ZGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
+*                         VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBVL, JOBVR
+*       INTEGER            INFO, LDA, LDB, LDVL, LDVR, LWORK, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( LDA, * ), ALPHA( * ), B( LDB, * ),
+*      $                   BETA( * ), VL( LDVL, * ), VR( LDVR, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This routine is deprecated and has been replaced by routine ZGGEV.
+*>
+*> ZGEGV computes the eigenvalues and, optionally, the left and/or right
+*> eigenvectors of a complex matrix pair (A,B).
+*> Given two square matrices A and B,
+*> the generalized nonsymmetric eigenvalue problem (GNEP) is to find the
+*> eigenvalues lambda and corresponding (non-zero) eigenvectors x such
+*> that
+*>    A*x = lambda*B*x.
+*>
+*> An alternate form is to find the eigenvalues mu and corresponding
+*> eigenvectors y such that
+*>    mu*A*y = B*y.
+*>
+*> These two forms are equivalent with mu = 1/lambda and x = y if
+*> neither lambda nor mu is zero.  In order to deal with the case that
+*> lambda or mu is zero or small, two values alpha and beta are returned
+*> for each eigenvalue, such that lambda = alpha/beta and
+*> mu = beta/alpha.
+*>
+*> The vectors x and y in the above equations are right eigenvectors of
+*> the matrix pair (A,B).  Vectors u and v satisfying
+*>    u**H*A = lambda*u**H*B  or  mu*v**H*A = v**H*B
+*> are left eigenvectors of (A,B).
+*>
+*> Note: this routine performs "full balancing" on A and B
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBVL
+*> \verbatim
+*>          JOBVL is CHARACTER*1
+*>          = 'N':  do not compute the left generalized eigenvectors;
+*>          = 'V':  compute the left generalized eigenvectors (returned
+*>                  in VL).
+*> \endverbatim
+*>
+*> \param[in] JOBVR
+*> \verbatim
+*>          JOBVR is CHARACTER*1
+*>          = 'N':  do not compute the right generalized eigenvectors;
+*>          = 'V':  compute the right generalized eigenvectors (returned
+*>                  in VR).
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A, B, VL, and VR.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA, N)
+*>          On entry, the matrix A.
+*>          If JOBVL = 'V' or JOBVR = 'V', then on exit A
+*>          contains the Schur form of A from the generalized Schur
+*>          factorization of the pair (A,B) after balancing.  If no
+*>          eigenvectors were computed, then only the diagonal elements
+*>          of the Schur form will be correct.  See ZGGHRD and ZHGEQZ
+*>          for details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDB, N)
+*>          On entry, the matrix B.
+*>          If JOBVL = 'V' or JOBVR = 'V', then on exit B contains the
+*>          upper triangular matrix obtained from B in the generalized
+*>          Schur factorization of the pair (A,B) after balancing.
+*>          If no eigenvectors were computed, then only the diagonal
+*>          elements of B will be correct.  See ZGGHRD and ZHGEQZ for
+*>          details.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX*16 array, dimension (N)
+*>          The complex scalars alpha that define the eigenvalues of
+*>          GNEP.
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is COMPLEX*16 array, dimension (N)
+*>          The complex scalars beta that define the eigenvalues of GNEP.
+*>          
+*>          Together, the quantities alpha = ALPHA(j) and beta = BETA(j)
+*>          represent the j-th eigenvalue of the matrix pair (A,B), in
+*>          one of the forms lambda = alpha/beta or mu = beta/alpha.
+*>          Since either lambda or mu may overflow, they should not,
+*>          in general, be computed.
+*> \endverbatim
+*>
+*> \param[out] VL
+*> \verbatim
+*>          VL is COMPLEX*16 array, dimension (LDVL,N)
+*>          If JOBVL = 'V', the left eigenvectors u(j) are stored
+*>          in the columns of VL, in the same order as their eigenvalues.
+*>          Each eigenvector is scaled so that its largest component has
+*>          abs(real part) + abs(imag. part) = 1, except for eigenvectors
+*>          corresponding to an eigenvalue with alpha = beta = 0, which
+*>          are set to zero.
+*>          Not referenced if JOBVL = 'N'.
+*> \endverbatim
+*>
+*> \param[in] LDVL
+*> \verbatim
+*>          LDVL is INTEGER
+*>          The leading dimension of the matrix VL. LDVL >= 1, and
+*>          if JOBVL = 'V', LDVL >= N.
+*> \endverbatim
+*>
+*> \param[out] VR
+*> \verbatim
+*>          VR is COMPLEX*16 array, dimension (LDVR,N)
+*>          If JOBVR = 'V', the right eigenvectors x(j) are stored
+*>          in the columns of VR, in the same order as their eigenvalues.
+*>          Each eigenvector is scaled so that its largest component has
+*>          abs(real part) + abs(imag. part) = 1, except for eigenvectors
+*>          corresponding to an eigenvalue with alpha = beta = 0, which
+*>          are set to zero.
+*>          Not referenced if JOBVR = 'N'.
+*> \endverbatim
+*>
+*> \param[in] LDVR
+*> \verbatim
+*>          LDVR is INTEGER
+*>          The leading dimension of the matrix VR. LDVR >= 1, and
+*>          if JOBVR = 'V', LDVR >= N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.  LWORK >= max(1,2*N).
+*>          For good performance, LWORK must generally be larger.
+*>          To compute the optimal value of LWORK, call ILAENV to get
+*>          blocksizes (for ZGEQRF, ZUNMQR, and ZUNGQR.)  Then compute:
+*>          NB  -- MAX of the blocksizes for ZGEQRF, ZUNMQR, and ZUNGQR;
+*>          The optimal LWORK is  MAX( 2*N, N*(NB+1) ).
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (8*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          =1,...,N:
+*>                The QZ iteration failed.  No eigenvectors have been
+*>                calculated, but ALPHA(j) and BETA(j) should be
+*>                correct for j=INFO+1,...,N.
+*>          > N:  errors that usually indicate LAPACK problems:
+*>                =N+1: error return from ZGGBAL
+*>                =N+2: error return from ZGEQRF
+*>                =N+3: error return from ZUNMQR
+*>                =N+4: error return from ZUNGQR
+*>                =N+5: error return from ZGGHRD
+*>                =N+6: error return from ZHGEQZ (other than failed
+*>                                               iteration)
+*>                =N+7: error return from ZTGEVC
+*>                =N+8: error return from ZGGBAK (computing VL)
+*>                =N+9: error return from ZGGBAK (computing VR)
+*>                =N+10: error return from ZLASCL (various calls)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16GEeigen
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Balancing
+*>  ---------
+*>
+*>  This driver calls ZGGBAL to both permute and scale rows and columns
+*>  of A and B.  The permutations PL and PR are chosen so that PL*A*PR
+*>  and PL*B*R will be upper triangular except for the diagonal blocks
+*>  A(i:j,i:j) and B(i:j,i:j), with i and j as close together as
+*>  possible.  The diagonal scaling matrices DL and DR are chosen so
+*>  that the pair  DL*PL*A*PR*DR, DL*PL*B*PR*DR have elements close to
+*>  one (except for the elements that start out zero.)
+*>
+*>  After the eigenvalues and eigenvectors of the balanced matrices
+*>  have been computed, ZGGBAK transforms the eigenvectors back to what
+*>  they would have been (in perfect arithmetic) if they had not been
+*>  balanced.
+*>
+*>  Contents of A and B on Exit
+*>  -------- -- - --- - -- ----
+*>
+*>  If any eigenvectors are computed (either JOBVL='V' or JOBVR='V' or
+*>  both), then on exit the arrays A and B will contain the complex Schur
+*>  form[*] of the "balanced" versions of A and B.  If no eigenvectors
+*>  are computed, then only the diagonal blocks will be correct.
+*>
+*>  [*] In other words, upper triangular form.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
      $                  VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBVL, JOBVR
@@ -16,182 +292,6 @@
      $                   BETA( * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  This routine is deprecated and has been replaced by routine ZGGEV.
-*
-*  ZGEGV computes the eigenvalues and, optionally, the left and/or right
-*  eigenvectors of a complex matrix pair (A,B).
-*  Given two square matrices A and B,
-*  the generalized nonsymmetric eigenvalue problem (GNEP) is to find the
-*  eigenvalues lambda and corresponding (non-zero) eigenvectors x such
-*  that
-*     A*x = lambda*B*x.
-*
-*  An alternate form is to find the eigenvalues mu and corresponding
-*  eigenvectors y such that
-*     mu*A*y = B*y.
-*
-*  These two forms are equivalent with mu = 1/lambda and x = y if
-*  neither lambda nor mu is zero.  In order to deal with the case that
-*  lambda or mu is zero or small, two values alpha and beta are returned
-*  for each eigenvalue, such that lambda = alpha/beta and
-*  mu = beta/alpha.
-*
-*  The vectors x and y in the above equations are right eigenvectors of
-*  the matrix pair (A,B).  Vectors u and v satisfying
-*     u**H*A = lambda*u**H*B  or  mu*v**H*A = v**H*B
-*  are left eigenvectors of (A,B).
-*
-*  Note: this routine performs "full balancing" on A and B
-*
-*  Arguments
-*  =========
-*
-*  JOBVL   (input) CHARACTER*1
-*          = 'N':  do not compute the left generalized eigenvectors;
-*          = 'V':  compute the left generalized eigenvectors (returned
-*                  in VL).
-*
-*  JOBVR   (input) CHARACTER*1
-*          = 'N':  do not compute the right generalized eigenvectors;
-*          = 'V':  compute the right generalized eigenvectors (returned
-*                  in VR).
-*
-*  N       (input) INTEGER
-*          The order of the matrices A, B, VL, and VR.  N >= 0.
-*
-*  A       (input/output) COMPLEX*16 array, dimension (LDA, N)
-*          On entry, the matrix A.
-*          If JOBVL = 'V' or JOBVR = 'V', then on exit A
-*          contains the Schur form of A from the generalized Schur
-*          factorization of the pair (A,B) after balancing.  If no
-*          eigenvectors were computed, then only the diagonal elements
-*          of the Schur form will be correct.  See ZGGHRD and ZHGEQZ
-*          for details.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  LDA >= max(1,N).
-*
-*  B       (input/output) COMPLEX*16 array, dimension (LDB, N)
-*          On entry, the matrix B.
-*          If JOBVL = 'V' or JOBVR = 'V', then on exit B contains the
-*          upper triangular matrix obtained from B in the generalized
-*          Schur factorization of the pair (A,B) after balancing.
-*          If no eigenvectors were computed, then only the diagonal
-*          elements of B will be correct.  See ZGGHRD and ZHGEQZ for
-*          details.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.  LDB >= max(1,N).
-*
-*  ALPHA   (output) COMPLEX*16 array, dimension (N)
-*          The complex scalars alpha that define the eigenvalues of
-*          GNEP.
-*
-*  BETA    (output) COMPLEX*16 array, dimension (N)
-*          The complex scalars beta that define the eigenvalues of GNEP.
-*          
-*          Together, the quantities alpha = ALPHA(j) and beta = BETA(j)
-*          represent the j-th eigenvalue of the matrix pair (A,B), in
-*          one of the forms lambda = alpha/beta or mu = beta/alpha.
-*          Since either lambda or mu may overflow, they should not,
-*          in general, be computed.
-*
-*  VL      (output) COMPLEX*16 array, dimension (LDVL,N)
-*          If JOBVL = 'V', the left eigenvectors u(j) are stored
-*          in the columns of VL, in the same order as their eigenvalues.
-*          Each eigenvector is scaled so that its largest component has
-*          abs(real part) + abs(imag. part) = 1, except for eigenvectors
-*          corresponding to an eigenvalue with alpha = beta = 0, which
-*          are set to zero.
-*          Not referenced if JOBVL = 'N'.
-*
-*  LDVL    (input) INTEGER
-*          The leading dimension of the matrix VL. LDVL >= 1, and
-*          if JOBVL = 'V', LDVL >= N.
-*
-*  VR      (output) COMPLEX*16 array, dimension (LDVR,N)
-*          If JOBVR = 'V', the right eigenvectors x(j) are stored
-*          in the columns of VR, in the same order as their eigenvalues.
-*          Each eigenvector is scaled so that its largest component has
-*          abs(real part) + abs(imag. part) = 1, except for eigenvectors
-*          corresponding to an eigenvalue with alpha = beta = 0, which
-*          are set to zero.
-*          Not referenced if JOBVR = 'N'.
-*
-*  LDVR    (input) INTEGER
-*          The leading dimension of the matrix VR. LDVR >= 1, and
-*          if JOBVR = 'V', LDVR >= N.
-*
-*  WORK    (workspace/output) COMPLEX*16 array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.  LWORK >= max(1,2*N).
-*          For good performance, LWORK must generally be larger.
-*          To compute the optimal value of LWORK, call ILAENV to get
-*          blocksizes (for ZGEQRF, ZUNMQR, and ZUNGQR.)  Then compute:
-*          NB  -- MAX of the blocksizes for ZGEQRF, ZUNMQR, and ZUNGQR;
-*          The optimal LWORK is  MAX( 2*N, N*(NB+1) ).
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  RWORK   (workspace/output) DOUBLE PRECISION array, dimension (8*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          =1,...,N:
-*                The QZ iteration failed.  No eigenvectors have been
-*                calculated, but ALPHA(j) and BETA(j) should be
-*                correct for j=INFO+1,...,N.
-*          > N:  errors that usually indicate LAPACK problems:
-*                =N+1: error return from ZGGBAL
-*                =N+2: error return from ZGEQRF
-*                =N+3: error return from ZUNMQR
-*                =N+4: error return from ZUNGQR
-*                =N+5: error return from ZGGHRD
-*                =N+6: error return from ZHGEQZ (other than failed
-*                                               iteration)
-*                =N+7: error return from ZTGEVC
-*                =N+8: error return from ZGGBAK (computing VL)
-*                =N+9: error return from ZGGBAK (computing VR)
-*                =N+10: error return from ZLASCL (various calls)
-*
-*  Further Details
-*  ===============
-*
-*  Balancing
-*  ---------
-*
-*  This driver calls ZGGBAL to both permute and scale rows and columns
-*  of A and B.  The permutations PL and PR are chosen so that PL*A*PR
-*  and PL*B*R will be upper triangular except for the diagonal blocks
-*  A(i:j,i:j) and B(i:j,i:j), with i and j as close together as
-*  possible.  The diagonal scaling matrices DL and DR are chosen so
-*  that the pair  DL*PL*A*PR*DR, DL*PL*B*PR*DR have elements close to
-*  one (except for the elements that start out zero.)
-*
-*  After the eigenvalues and eigenvectors of the balanced matrices
-*  have been computed, ZGGBAK transforms the eigenvectors back to what
-*  they would have been (in perfect arithmetic) if they had not been
-*  balanced.
-*
-*  Contents of A and B on Exit
-*  -------- -- - --- - -- ----
-*
-*  If any eigenvectors are computed (either JOBVL='V' or JOBVR='V' or
-*  both), then on exit the arrays A and B will contain the complex Schur
-*  form[*] of the "balanced" versions of A and B.  If no eigenvectors
-*  are computed, then only the diagonal blocks will be correct.
-*
-*  [*] In other words, upper triangular form.
 *
 *  =====================================================================
 *

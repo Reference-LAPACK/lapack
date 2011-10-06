@@ -1,9 +1,120 @@
+*> \brief \b DGET03
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
+*                          RCOND, RESID )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDAINV, LDWORK, N
+*       DOUBLE PRECISION   RCOND, RESID
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), AINV( LDAINV, * ), RWORK( * ),
+*      $                   WORK( LDWORK, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGET03 computes the residual for a general matrix times its inverse:
+*>    norm( I - AINV*A ) / ( N * norm(A) * norm(AINV) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows and columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The original N x N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] AINV
+*> \verbatim
+*>          AINV is DOUBLE PRECISION array, dimension (LDAINV,N)
+*>          The inverse of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDAINV
+*> \verbatim
+*>          LDAINV is INTEGER
+*>          The leading dimension of the array AINV.  LDAINV >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LDWORK,N)
+*> \endverbatim
+*>
+*> \param[in] LDWORK
+*> \verbatim
+*>          LDWORK is INTEGER
+*>          The leading dimension of the array WORK.  LDWORK >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>          The reciprocal of the condition number of A, computed as
+*>          ( 1/norm(A) ) / norm(AINV).
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is DOUBLE PRECISION
+*>          norm(I - AINV*A) / ( N * norm(A) * norm(AINV) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
      $                   RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDAINV, LDWORK, N
@@ -13,45 +124,6 @@
       DOUBLE PRECISION   A( LDA, * ), AINV( LDAINV, * ), RWORK( * ),
      $                   WORK( LDWORK, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGET03 computes the residual for a general matrix times its inverse:
-*     norm( I - AINV*A ) / ( N * norm(A) * norm(AINV) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  ==========
-*
-*  N       (input) INTEGER
-*          The number of rows and columns of the matrix A.  N >= 0.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The original N x N matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  AINV    (input) DOUBLE PRECISION array, dimension (LDAINV,N)
-*          The inverse of the matrix A.
-*
-*  LDAINV  (input) INTEGER
-*          The leading dimension of the array AINV.  LDAINV >= max(1,N).
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LDWORK,N)
-*
-*  LDWORK  (input) INTEGER
-*          The leading dimension of the array WORK.  LDWORK >= max(1,N).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  RCOND   (output) DOUBLE PRECISION
-*          The reciprocal of the condition number of A, computed as
-*          ( 1/norm(A) ) / norm(AINV).
-*
-*  RESID   (output) DOUBLE PRECISION
-*          norm(I - AINV*A) / ( N * norm(A) * norm(AINV) * EPS )
 *
 *  =====================================================================
 *

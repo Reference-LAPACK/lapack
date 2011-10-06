@@ -1,8 +1,84 @@
+*> \brief \b DLAORD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAORD( JOB, N, X, INCX )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOB
+*       INTEGER            INCX, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAORD sorts the elements of a vector x in increasing or decreasing
+*> order.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOB
+*> \verbatim
+*>          JOB is CHARACTER
+*>          = 'I':  Sort in increasing order
+*>          = 'D':  Sort in decreasing order
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The length of the vector X.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension
+*>                         (1+(N-1)*INCX)
+*>          On entry, the vector of length n to be sorted.
+*>          On exit, the vector x is sorted in the prescribed order.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The spacing between successive elements of X.  INCX >= 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DLAORD( JOB, N, X, INCX )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOB
@@ -11,30 +87,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAORD sorts the elements of a vector x in increasing or decreasing
-*  order.
-*
-*  Arguments
-*  =========
-*
-*  JOB     (input) CHARACTER
-*          = 'I':  Sort in increasing order
-*          = 'D':  Sort in decreasing order
-*
-*  N       (input) INTEGER
-*          The length of the vector X.
-*
-*  X       (input/output) DOUBLE PRECISION array, dimension
-*                         (1+(N-1)*INCX)
-*          On entry, the vector of length n to be sorted.
-*          On exit, the vector x is sorted in the prescribed order.
-*
-*  INCX    (input) INTEGER
-*          The spacing between successive elements of X.  INCX >= 0.
 *
 *  =====================================================================
 *

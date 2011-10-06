@@ -1,8 +1,123 @@
+*> \brief \b CTPT06
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWORK, RAT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, UPLO
+*       INTEGER            N
+*       REAL               RAT, RCOND, RCONDC
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * )
+*       COMPLEX            AP( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CTPT06 computes a test ratio comparing RCOND (the reciprocal
+*> condition number of the triangular matrix A) and RCONDC, the estimate
+*> computed by CTPCON.  Information about the triangular matrix is used
+*> if one estimate is zero and the other is non-zero to decide if
+*> underflow in the estimate is justified.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The estimate of the reciprocal condition number obtained by
+*>          forming the explicit inverse of the matrix A and computing
+*>          RCOND = 1/( norm(A) * norm(inv(A)) ).
+*> \endverbatim
+*>
+*> \param[in] RCONDC
+*> \verbatim
+*>          RCONDC is REAL
+*>          The estimate of the reciprocal condition number computed by
+*>          CTPCON.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER
+*>          Specifies whether the matrix A is upper or lower triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER
+*>          Specifies whether or not the matrix A is unit triangular.
+*>          = 'N':  Non-unit triangular
+*>          = 'U':  Unit triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] AP
+*> \verbatim
+*>          AP is COMPLEX array, dimension (N*(N+1)/2)
+*>          The upper or lower triangular matrix A, packed columnwise in
+*>          a linear array.  The j-th column of A is stored in the array
+*>          AP as follows:
+*>          if UPLO = 'U', AP((j-1)*j/2 + i) = A(i,j) for 1<=i<=j;
+*>          if UPLO = 'L',
+*>             AP((j-1)*(n-j) + j*(j+1)/2 + i-j) = A(i,j) for j<=i<=n.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RAT
+*> \verbatim
+*>          RAT is REAL
+*>          The test ratio.  If both RCOND and RCONDC are nonzero,
+*>             RAT = MAX( RCOND, RCONDC )/MIN( RCOND, RCONDC ) - 1.
+*>          If RAT = 0, the two estimates are exactly the same.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, RWORK, RAT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, UPLO
@@ -13,55 +128,6 @@
       REAL               RWORK( * )
       COMPLEX            AP( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CTPT06 computes a test ratio comparing RCOND (the reciprocal
-*  condition number of the triangular matrix A) and RCONDC, the estimate
-*  computed by CTPCON.  Information about the triangular matrix is used
-*  if one estimate is zero and the other is non-zero to decide if
-*  underflow in the estimate is justified.
-*
-*  Arguments
-*  =========
-*
-*  RCOND   (input) REAL
-*          The estimate of the reciprocal condition number obtained by
-*          forming the explicit inverse of the matrix A and computing
-*          RCOND = 1/( norm(A) * norm(inv(A)) ).
-*
-*  RCONDC  (input) REAL
-*          The estimate of the reciprocal condition number computed by
-*          CTPCON.
-*
-*  UPLO    (input) CHARACTER
-*          Specifies whether the matrix A is upper or lower triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  DIAG    (input) CHARACTER
-*          Specifies whether or not the matrix A is unit triangular.
-*          = 'N':  Non-unit triangular
-*          = 'U':  Unit triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  AP      (input) COMPLEX array, dimension (N*(N+1)/2)
-*          The upper or lower triangular matrix A, packed columnwise in
-*          a linear array.  The j-th column of A is stored in the array
-*          AP as follows:
-*          if UPLO = 'U', AP((j-1)*j/2 + i) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L',
-*             AP((j-1)*(n-j) + j*(j+1)/2 + i-j) = A(i,j) for j<=i<=n.
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  RAT     (output) REAL
-*          The test ratio.  If both RCOND and RCONDC are nonzero,
-*             RAT = MAX( RCOND, RCONDC )/MIN( RCOND, RCONDC ) - 1.
-*          If RAT = 0, the two estimates are exactly the same.
 *
 *  =====================================================================
 *

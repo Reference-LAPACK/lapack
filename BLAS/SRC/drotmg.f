@@ -1,50 +1,108 @@
+*> \brief \b DROTMG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION DD1,DD2,DX1,DY1
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION DPARAM(5)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
+*>    THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*>    DY2)**T.
+*>    WITH DPARAM(1)=DFLAG, H HAS ONE OF THE FOLLOWING FORMS..
+*>
+*>    DFLAG=-1.D0     DFLAG=0.D0        DFLAG=1.D0     DFLAG=-2.D0
+*>
+*>      (DH11  DH12)    (1.D0  DH12)    (DH11  1.D0)    (1.D0  0.D0)
+*>    H=(          )    (          )    (          )    (          )
+*>      (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
+*>    LOCATIONS 2-4 OF DPARAM CONTAIN DH11, DH21, DH12, AND DH22
+*>    RESPECTIVELY. (VALUES OF 1.D0, -1.D0, OR 0.D0 IMPLIED BY THE
+*>    VALUE OF DPARAM(1) ARE NOT STORED IN DPARAM.)
+*>
+*>    THE VALUES OF GAMSQ AND RGAMSQ SET IN THE DATA STATEMENT MAY BE
+*>    INEXACT.  THIS IS OK AS THEY ARE ONLY USED FOR TESTING THE SIZE
+*>    OF DD1 AND DD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
+*>
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in,out] DD1
+*> \verbatim
+*>          DD1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in,out] DD2
+*> \verbatim
+*>          DD2 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in,out] DX1
+*> \verbatim
+*>          DX1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] DY1
+*> \verbatim
+*>          DY1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in,out] DPARAM
+*> \verbatim
+*>          DPARAM is DOUBLE PRECISION array, dimension 5
+*>     DPARAM(1)=DFLAG
+*>     DPARAM(2)=DH11
+*>     DPARAM(3)=DH21
+*>     DPARAM(4)=DH12
+*>     DPARAM(5)=DH22
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_blas_level1
+*
+*  =====================================================================
       SUBROUTINE DROTMG(DD1,DD2,DX1,DY1,DPARAM)
+*
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       DOUBLE PRECISION DD1,DD2,DX1,DY1
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION DPARAM(5)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
-*     THE SECOND COMPONENT OF THE 2-VECTOR  (DSQRT(DD1)*DX1,DSQRT(DD2)*
-*     DY2)**T.
-*     WITH DPARAM(1)=DFLAG, H HAS ONE OF THE FOLLOWING FORMS..
-*
-*     DFLAG=-1.D0     DFLAG=0.D0        DFLAG=1.D0     DFLAG=-2.D0
-*
-*       (DH11  DH12)    (1.D0  DH12)    (DH11  1.D0)    (1.D0  0.D0)
-*     H=(          )    (          )    (          )    (          )
-*       (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
-*     LOCATIONS 2-4 OF DPARAM CONTAIN DH11, DH21, DH12, AND DH22
-*     RESPECTIVELY. (VALUES OF 1.D0, -1.D0, OR 0.D0 IMPLIED BY THE
-*     VALUE OF DPARAM(1) ARE NOT STORED IN DPARAM.)
-*
-*     THE VALUES OF GAMSQ AND RGAMSQ SET IN THE DATA STATEMENT MAY BE
-*     INEXACT.  THIS IS OK AS THEY ARE ONLY USED FOR TESTING THE SIZE
-*     OF DD1 AND DD2.  ALL ACTUAL SCALING OF DATA IS DONE USING GAM.
-*
-*
-*  Arguments
-*  =========
-*
-*  DD1    (input/output) DOUBLE PRECISION
-*
-*  DD2    (input/output) DOUBLE PRECISION
-*
-*  DX1    (input/output) DOUBLE PRECISION
-*
-*  DY1    (input) DOUBLE PRECISION
-*
-*  DPARAM (input/output)  DOUBLE PRECISION array, dimension 5
-*     DPARAM(1)=DFLAG
-*     DPARAM(2)=DH11
-*     DPARAM(3)=DH21
-*     DPARAM(4)=DH12
-*     DPARAM(5)=DH22
 *
 *  =====================================================================
 *

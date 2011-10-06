@@ -1,8 +1,159 @@
+C> \brief \b DGEQRF VARIANT: left-looking Level 3 BLAS version of the algorithm.
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGEQRF ( M, N, A, LDA, TAU, WORK, LWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), TAU( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+C>\details \b Purpose:
+C>\verbatim
+C>
+C> DGEQRF computes a QR factorization of a real M-by-N matrix A:
+C> A = Q * R.
+C>
+C> This is the left-looking Level 3 BLAS version of the algorithm.
+C>
+C>\endverbatim
+*
+*  Arguments
+*  =========
+*
+C> \param[in] M
+C> \verbatim
+C>          M is INTEGER
+C>          The number of rows of the matrix A.  M >= 0.
+C> \endverbatim
+C>
+C> \param[in] N
+C> \verbatim
+C>          N is INTEGER
+C>          The number of columns of the matrix A.  N >= 0.
+C> \endverbatim
+C>
+C> \param[in,out] A
+C> \verbatim
+C>          A is DOUBLE PRECISION array, dimension (LDA,N)
+C>          On entry, the M-by-N matrix A.
+C>          On exit, the elements on and above the diagonal of the array
+C>          contain the min(M,N)-by-N upper trapezoidal matrix R (R is
+C>          upper triangular if m >= n); the elements below the diagonal,
+C>          with the array TAU, represent the orthogonal matrix Q as a
+C>          product of min(m,n) elementary reflectors (see Further
+C>          Details).
+C> \endverbatim
+C>
+C> \param[in] LDA
+C> \verbatim
+C>          LDA is INTEGER
+C>          The leading dimension of the array A.  LDA >= max(1,M).
+C> \endverbatim
+C>
+C> \param[out] TAU
+C> \verbatim
+C>          TAU is DOUBLE PRECISION array, dimension (min(M,N))
+C>          The scalar factors of the elementary reflectors (see Further
+C>          Details).
+C> \endverbatim
+C>
+C> \param[out] WORK
+C> \verbatim
+C>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+C>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+C> \endverbatim
+C>
+C> \param[in] LWORK
+C> \verbatim
+C>          LWORK is INTEGER
+C> \endverbatim
+C> \verbatim
+C>          The dimension of the array WORK. The dimension can be divided into three parts.
+C> \endverbatim
+C> \verbatim
+C>          1) The part for the triangular factor T. If the very last T is not bigger 
+C>             than any of the rest, then this part is NB x ceiling(K/NB), otherwise, 
+C>             NB x (K-NT), where K = min(M,N) and NT is the dimension of the very last T              
+C> \endverbatim
+C> \verbatim
+C>          2) The part for the very last T when T is bigger than any of the rest T. 
+C>             The size of this part is NT x NT, where NT = K - ceiling ((K-NX)/NB) x NB,
+C>             where K = min(M,N), NX is calculated by
+C>                   NX = MAX( 0, ILAENV( 3, 'DGEQRF', ' ', M, N, -1, -1 ) )
+C> \endverbatim
+C> \verbatim
+C>          3) The part for dlarfb is of size max((N-M)*K, (N-M)*NB, K*NB, NB*NB)
+C> \endverbatim
+C> \verbatim
+C>          So LWORK = part1 + part2 + part3
+C> \endverbatim
+C> \verbatim
+C>          If LWORK = -1, then a workspace query is assumed; the routine
+C>          only calculates the optimal size of the WORK array, returns
+C>          this value as the first entry of the WORK array, and no error
+C>          message related to LWORK is issued by XERBLA.
+C> \endverbatim
+C>
+C> \param[out] INFO
+C> \verbatim
+C>          INFO is INTEGER
+C>          = 0:  successful exit
+C>          < 0:  if INFO = -i, the i-th argument had an illegal value
+C> \endverbatim
+C>
+*
+*  Authors
+*  =======
+*
+C> \author Univ. of Tennessee 
+C> \author Univ. of California Berkeley 
+C> \author Univ. of Colorado Denver 
+C> \author NAG Ltd. 
+*
+C> \date November 2011
+*
+C> \ingroup variantsGEcomputational
+*
+*
+*  Further Details
+*  ===============
+C>\details \b Further \b Details
+C> \verbatim
+C>
+C>  The matrix Q is represented as a product of elementary reflectors
+C>
+C>     Q = H(1) H(2) . . . H(k), where k = min(m,n).
+C>
+C>  Each H(i) has the form
+C>
+C>     H(i) = I - tau * v * v'
+C>
+C>  where tau is a real scalar, and v is a real vector with
+C>  v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
+C>  and tau in TAU(i).
+C>
+C> \endverbatim
+C>
+*  =====================================================================
       SUBROUTINE DGEQRF ( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     March 2008
+*  -- LAPACK computational routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LWORK, M, N
@@ -10,83 +161,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( LDA, * ), TAU( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGEQRF computes a QR factorization of a real M-by-N matrix A:
-*  A = Q * R.
-*
-*  This is the left-looking Level 3 BLAS version of the algorithm.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
-*          On entry, the M-by-N matrix A.
-*          On exit, the elements on and above the diagonal of the array
-*          contain the min(M,N)-by-N upper trapezoidal matrix R (R is
-*          upper triangular if m >= n); the elements below the diagonal,
-*          with the array TAU, represent the orthogonal matrix Q as a
-*          product of min(m,n) elementary reflectors (see Further
-*          Details).
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  TAU     (output) DOUBLE PRECISION array, dimension (min(M,N))
-*          The scalar factors of the elementary reflectors (see Further
-*          Details).
-*
-*  WORK    (workspace/output) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*
-*          The dimension of the array WORK. The dimension can be divided into three parts.
-*
-*          1) The part for the triangular factor T. If the very last T is not bigger 
-*             than any of the rest, then this part is NB x ceiling(K/NB), otherwise, 
-*             NB x (K-NT), where K = min(M,N) and NT is the dimension of the very last T              
-*
-*          2) The part for the very last T when T is bigger than any of the rest T. 
-*             The size of this part is NT x NT, where NT = K - ceiling ((K-NX)/NB) x NB,
-*             where K = min(M,N), NX is calculated by
-*                   NX = MAX( 0, ILAENV( 3, 'DGEQRF', ' ', M, N, -1, -1 ) )
-*
-*          3) The part for dlarfb is of size max((N-M)*K, (N-M)*NB, K*NB, NB*NB)
-*
-*          So LWORK = part1 + part2 + part3
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  The matrix Q is represented as a product of elementary reflectors
-*
-*     Q = H(1) H(2) . . . H(k), where k = min(m,n).
-*
-*  Each H(i) has the form
-*
-*     H(i) = I - tau * v * v'
-*
-*  where tau is a real scalar, and v is a real vector with
-*  v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
-*  and tau in TAU(i).
 *
 *  =====================================================================
 *

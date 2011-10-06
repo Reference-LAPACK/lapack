@@ -1,8 +1,103 @@
+*> \brief \b ZPTT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZPTT01( N, D, E, DF, EF, WORK, RESID )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            N
+*       DOUBLE PRECISION   RESID
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), DF( * )
+*       COMPLEX*16         E( * ), EF( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
+*> factorization and computes the residual
+*>    norm(L*D*L' - A) / ( n * norm(A) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGTER
+*>          The order of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The n diagonal elements of the tridiagonal matrix A.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is COMPLEX*16 array, dimension (N-1)
+*>          The (n-1) subdiagonal elements of the tridiagonal matrix A.
+*> \endverbatim
+*>
+*> \param[in] DF
+*> \verbatim
+*>          DF is DOUBLE PRECISION array, dimension (N)
+*>          The n diagonal elements of the factor L from the L*D*L'
+*>          factorization of A.
+*> \endverbatim
+*>
+*> \param[in] EF
+*> \verbatim
+*>          EF is COMPLEX*16 array, dimension (N-1)
+*>          The (n-1) subdiagonal elements of the factor L from the
+*>          L*D*L' factorization of A.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is DOUBLE PRECISION
+*>          norm(L*D*L' - A) / (n * norm(A) * EPS)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZPTT01( N, D, E, DF, EF, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            N
@@ -12,39 +107,6 @@
       DOUBLE PRECISION   D( * ), DF( * )
       COMPLEX*16         E( * ), EF( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
-*  factorization and computes the residual
-*     norm(L*D*L' - A) / ( n * norm(A) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGTER
-*          The order of the matrix A.
-*
-*  D       (input) DOUBLE PRECISION array, dimension (N)
-*          The n diagonal elements of the tridiagonal matrix A.
-*
-*  E       (input) COMPLEX*16 array, dimension (N-1)
-*          The (n-1) subdiagonal elements of the tridiagonal matrix A.
-*
-*  DF      (input) DOUBLE PRECISION array, dimension (N)
-*          The n diagonal elements of the factor L from the L*D*L'
-*          factorization of A.
-*
-*  EF      (input) COMPLEX*16 array, dimension (N-1)
-*          The (n-1) subdiagonal elements of the factor L from the
-*          L*D*L' factorization of A.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (2*N)
-*
-*  RESID   (output) DOUBLE PRECISION
-*          norm(L*D*L' - A) / (n * norm(A) * EPS)
 *
 *  =====================================================================
 *

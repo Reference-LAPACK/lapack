@@ -1,10 +1,179 @@
+*> \brief \b DLAED0
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
+*                          WORK, IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            ICOMPQ, INFO, LDQ, LDQS, N, QSIZ
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   D( * ), E( * ), Q( LDQ, * ), QSTORE( LDQS, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAED0 computes all eigenvalues and corresponding eigenvectors of a
+*> symmetric tridiagonal matrix using the divide and conquer method.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ICOMPQ
+*> \verbatim
+*>          ICOMPQ is INTEGER
+*>          = 0:  Compute eigenvalues only.
+*>          = 1:  Compute eigenvectors of original dense symmetric matrix
+*>                also.  On entry, Q contains the orthogonal matrix used
+*>                to reduce the original matrix to tridiagonal form.
+*>          = 2:  Compute eigenvalues and eigenvectors of tridiagonal
+*>                matrix.
+*> \endverbatim
+*>
+*> \param[in] QSIZ
+*> \verbatim
+*>          QSIZ is INTEGER
+*>         The dimension of the orthogonal matrix used to reduce
+*>         the full matrix to tridiagonal form.  QSIZ >= N if ICOMPQ = 1.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The dimension of the symmetric tridiagonal matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>         On entry, the main diagonal of the tridiagonal matrix.
+*>         On exit, its eigenvalues.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>         The off-diagonal elements of the tridiagonal matrix.
+*>         On exit, E has been destroyed.
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is DOUBLE PRECISION array, dimension (LDQ, N)
+*>         On entry, Q must contain an N-by-N orthogonal matrix.
+*>         If ICOMPQ = 0    Q is not referenced.
+*>         If ICOMPQ = 1    On entry, Q is a subset of the columns of the
+*>                          orthogonal matrix used to reduce the full
+*>                          matrix to tridiagonal form corresponding to
+*>                          the subset of the full matrix which is being
+*>                          decomposed at this time.
+*>         If ICOMPQ = 2    On entry, Q will be the identity matrix.
+*>                          On exit, Q contains the eigenvectors of the
+*>                          tridiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>         The leading dimension of the array Q.  If eigenvectors are
+*>         desired, then  LDQ >= max(1,N).  In any case,  LDQ >= 1.
+*> \endverbatim
+*>
+*> \param[out] QSTORE
+*> \verbatim
+*>          QSTORE is DOUBLE PRECISION array, dimension (LDQS, N)
+*>         Referenced only when ICOMPQ = 1.  Used to store parts of
+*>         the eigenvector matrix when the updating matrix multiplies
+*>         take place.
+*> \endverbatim
+*>
+*> \param[in] LDQS
+*> \verbatim
+*>          LDQS is INTEGER
+*>         The leading dimension of the array QSTORE.  If ICOMPQ = 1,
+*>         then  LDQS >= max(1,N).  In any case,  LDQS >= 1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array,
+*>         If ICOMPQ = 0 or 1, the dimension of WORK must be at least
+*>                     1 + 3*N + 2*N*lg N + 3*N**2
+*>                     ( lg( N ) = smallest integer k
+*>                                 such that 2^k >= N )
+*>         If ICOMPQ = 2, the dimension of WORK must be at least
+*>                     4*N + N**2.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array,
+*>         If ICOMPQ = 0 or 1, the dimension of IWORK must be at least
+*>                        6 + 6*N + 5*N*lg N.
+*>                        ( lg( N ) = smallest integer k
+*>                                    such that 2^k >= N )
+*>         If ICOMPQ = 2, the dimension of IWORK must be at least
+*>                        3 + 5*N.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  The algorithm failed to compute an eigenvalue while
+*>                working on the submatrix lying in rows and columns
+*>                INFO/(N+1) through mod(INFO,N+1).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Jeff Rutter, Computer Science Division, University of California
+*>     at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLAED0( ICOMPQ, QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS,
      $                   WORK, IWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            ICOMPQ, INFO, LDQ, LDQS, N, QSIZ
@@ -14,93 +183,6 @@
       DOUBLE PRECISION   D( * ), E( * ), Q( LDQ, * ), QSTORE( LDQS, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAED0 computes all eigenvalues and corresponding eigenvectors of a
-*  symmetric tridiagonal matrix using the divide and conquer method.
-*
-*  Arguments
-*  =========
-*
-*  ICOMPQ  (input) INTEGER
-*          = 0:  Compute eigenvalues only.
-*          = 1:  Compute eigenvectors of original dense symmetric matrix
-*                also.  On entry, Q contains the orthogonal matrix used
-*                to reduce the original matrix to tridiagonal form.
-*          = 2:  Compute eigenvalues and eigenvectors of tridiagonal
-*                matrix.
-*
-*  QSIZ   (input) INTEGER
-*         The dimension of the orthogonal matrix used to reduce
-*         the full matrix to tridiagonal form.  QSIZ >= N if ICOMPQ = 1.
-*
-*  N      (input) INTEGER
-*         The dimension of the symmetric tridiagonal matrix.  N >= 0.
-*
-*  D      (input/output) DOUBLE PRECISION array, dimension (N)
-*         On entry, the main diagonal of the tridiagonal matrix.
-*         On exit, its eigenvalues.
-*
-*  E      (input) DOUBLE PRECISION array, dimension (N-1)
-*         The off-diagonal elements of the tridiagonal matrix.
-*         On exit, E has been destroyed.
-*
-*  Q      (input/output) DOUBLE PRECISION array, dimension (LDQ, N)
-*         On entry, Q must contain an N-by-N orthogonal matrix.
-*         If ICOMPQ = 0    Q is not referenced.
-*         If ICOMPQ = 1    On entry, Q is a subset of the columns of the
-*                          orthogonal matrix used to reduce the full
-*                          matrix to tridiagonal form corresponding to
-*                          the subset of the full matrix which is being
-*                          decomposed at this time.
-*         If ICOMPQ = 2    On entry, Q will be the identity matrix.
-*                          On exit, Q contains the eigenvectors of the
-*                          tridiagonal matrix.
-*
-*  LDQ    (input) INTEGER
-*         The leading dimension of the array Q.  If eigenvectors are
-*         desired, then  LDQ >= max(1,N).  In any case,  LDQ >= 1.
-*
-*  QSTORE (workspace) DOUBLE PRECISION array, dimension (LDQS, N)
-*         Referenced only when ICOMPQ = 1.  Used to store parts of
-*         the eigenvector matrix when the updating matrix multiplies
-*         take place.
-*
-*  LDQS   (input) INTEGER
-*         The leading dimension of the array QSTORE.  If ICOMPQ = 1,
-*         then  LDQS >= max(1,N).  In any case,  LDQS >= 1.
-*
-*  WORK   (workspace) DOUBLE PRECISION array,
-*         If ICOMPQ = 0 or 1, the dimension of WORK must be at least
-*                     1 + 3*N + 2*N*lg N + 3*N**2
-*                     ( lg( N ) = smallest integer k
-*                                 such that 2^k >= N )
-*         If ICOMPQ = 2, the dimension of WORK must be at least
-*                     4*N + N**2.
-*
-*  IWORK  (workspace) INTEGER array,
-*         If ICOMPQ = 0 or 1, the dimension of IWORK must be at least
-*                        6 + 6*N + 5*N*lg N.
-*                        ( lg( N ) = smallest integer k
-*                                    such that 2^k >= N )
-*         If ICOMPQ = 2, the dimension of IWORK must be at least
-*                        3 + 5*N.
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  The algorithm failed to compute an eigenvalue while
-*                working on the submatrix lying in rows and columns
-*                INFO/(N+1) through mod(INFO,N+1).
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Jeff Rutter, Computer Science Division, University of California
-*     at Berkeley, USA
 *
 *  =====================================================================
 *

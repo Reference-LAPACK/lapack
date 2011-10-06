@@ -1,9 +1,104 @@
+*> \brief \b SSYSWAPR
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SSYSWAPR( UPLO, N, A, LDA, I1, I2)
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER        UPLO
+*       INTEGER          I1, I2, LDA, N
+*       ..
+*       .. Array Arguments ..
+*       REAL             A( LDA, N )
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SSYSWAPR applies an elementary permutation on the rows and the columns of
+*> a symmetric matrix.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the details of the factorization are stored
+*>          as an upper or lower triangular matrix.
+*>          = 'U':  Upper triangular, form is A = U*D*U**T;
+*>          = 'L':  Lower triangular, form is A = L*D*L**T.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          On entry, the NB diagonal matrix D and the multipliers
+*>          used to obtain the factor U or L as computed by SSYTRF.
+*> \endverbatim
+*> \verbatim
+*>          On exit, if INFO = 0, the (symmetric) inverse of the original
+*>          matrix.  If UPLO = 'U', the upper triangular part of the
+*>          inverse is formed and the part of A below the diagonal is not
+*>          referenced; if UPLO = 'L' the lower triangular part of the
+*>          inverse is formed and the part of A above the diagonal is
+*>          not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] I1
+*> \verbatim
+*>          I1 is INTEGER
+*>          Index of the first row to swap
+*> \endverbatim
+*>
+*> \param[in] I2
+*> \verbatim
+*>          I2 is INTEGER
+*>          Index of the second row to swap
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realSYauxiliary
+*
+*  =====================================================================
       SUBROUTINE SSYSWAPR( UPLO, N, A, LDA, I1, I2)
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER        UPLO
@@ -11,44 +106,6 @@
 *     ..
 *     .. Array Arguments ..
       REAL             A( LDA, N )
-*
-*  Purpose
-*  =======
-*
-*  SSYSWAPR applies an elementary permutation on the rows and the columns of
-*  a symmetric matrix.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the details of the factorization are stored
-*          as an upper or lower triangular matrix.
-*          = 'U':  Upper triangular, form is A = U*D*U**T;
-*          = 'L':  Lower triangular, form is A = L*D*L**T.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input/output) REAL array, dimension (LDA,N)
-*          On entry, the NB diagonal matrix D and the multipliers
-*          used to obtain the factor U or L as computed by SSYTRF.
-*
-*          On exit, if INFO = 0, the (symmetric) inverse of the original
-*          matrix.  If UPLO = 'U', the upper triangular part of the
-*          inverse is formed and the part of A below the diagonal is not
-*          referenced; if UPLO = 'L' the lower triangular part of the
-*          inverse is formed and the part of A above the diagonal is
-*          not referenced.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  I1      (input) INTEGER
-*          Index of the first row to swap
-*
-*  I2      (input) INTEGER
-*          Index of the second row to swap
 *
 *  =====================================================================
 *

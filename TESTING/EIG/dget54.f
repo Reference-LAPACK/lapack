@@ -1,9 +1,167 @@
+*> \brief \b DGET54
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
+*                          LDV, WORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, LDS, LDT, LDU, LDV, N
+*       DOUBLE PRECISION   RESULT
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), S( LDS, * ),
+*      $                   T( LDT, * ), U( LDU, * ), V( LDV, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGET54 checks a generalized decomposition of the form
+*>
+*>          A = U*S*V'  and B = U*T* V'
+*>
+*> where ' means transpose and U and V are orthogonal.
+*>
+*> Specifically,
+*>
+*>  RESULT = ||( A - U*S*V', B - U*T*V' )|| / (||( A, B )||*n*ulp )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The size of the matrix.  If it is zero, DGET54 does nothing.
+*>          It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA, N)
+*>          The original (unfactored) matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB, N)
+*>          The original (unfactored) matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension (LDS, N)
+*>          The factored matrix S.
+*> \endverbatim
+*>
+*> \param[in] LDS
+*> \verbatim
+*>          LDS is INTEGER
+*>          The leading dimension of S.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is DOUBLE PRECISION array, dimension (LDT, N)
+*>          The factored matrix T.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of T.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is DOUBLE PRECISION array, dimension (LDU, N)
+*>          The orthogonal matrix on the left-hand side in the
+*>          decomposition.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of U.  LDU must be at least N and
+*>          at least 1.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is DOUBLE PRECISION array, dimension (LDV, N)
+*>          The orthogonal matrix on the left-hand side in the
+*>          decomposition.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of V.  LDV must be at least N and
+*>          at least 1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (3*N**2)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION
+*>          The value RESULT, It is currently limited to 1/ulp, to
+*>          avoid overflow. Errors are flagged by RESULT=10/ulp.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
      $                   LDV, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, LDS, LDT, LDU, LDV, N
@@ -14,76 +172,6 @@
      $                   T( LDT, * ), U( LDU, * ), V( LDV, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGET54 checks a generalized decomposition of the form
-*
-*           A = U*S*V'  and B = U*T* V'
-*
-*  where ' means transpose and U and V are orthogonal.
-*
-*  Specifically,
-*
-*   RESULT = ||( A - U*S*V', B - U*T*V' )|| / (||( A, B )||*n*ulp )
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The size of the matrix.  If it is zero, DGET54 does nothing.
-*          It must be at least zero.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA, N)
-*          The original (unfactored) matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  It must be at least 1
-*          and at least N.
-*
-*  B       (input) DOUBLE PRECISION array, dimension (LDB, N)
-*          The original (unfactored) matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.  It must be at least 1
-*          and at least N.
-*
-*  S       (input) DOUBLE PRECISION array, dimension (LDS, N)
-*          The factored matrix S.
-*
-*  LDS     (input) INTEGER
-*          The leading dimension of S.  It must be at least 1
-*          and at least N.
-*
-*  T       (input) DOUBLE PRECISION array, dimension (LDT, N)
-*          The factored matrix T.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of T.  It must be at least 1
-*          and at least N.
-*
-*  U       (input) DOUBLE PRECISION array, dimension (LDU, N)
-*          The orthogonal matrix on the left-hand side in the
-*          decomposition.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of U.  LDU must be at least N and
-*          at least 1.
-*
-*  V       (input) DOUBLE PRECISION array, dimension (LDV, N)
-*          The orthogonal matrix on the left-hand side in the
-*          decomposition.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of V.  LDV must be at least N and
-*          at least 1.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (3*N**2)
-*
-*  RESULT  (output) DOUBLE PRECISION
-*          The value RESULT, It is currently limited to 1/ulp, to
-*          avoid overflow. Errors are flagged by RESULT=10/ulp.
 *
 *  =====================================================================
 *

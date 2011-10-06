@@ -1,10 +1,139 @@
+*> \brief \b SLAEXC
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            WANTQ
+*       INTEGER            INFO, J1, LDQ, LDT, N, N1, N2
+*       ..
+*       .. Array Arguments ..
+*       REAL               Q( LDQ, * ), T( LDT, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAEXC swaps adjacent diagonal blocks T11 and T22 of order 1 or 2 in
+*> an upper quasi-triangular matrix T by an orthogonal similarity
+*> transformation.
+*>
+*> T must be in Schur canonical form, that is, block upper triangular
+*> with 1-by-1 and 2-by-2 diagonal blocks; each 2-by-2 diagonal block
+*> has its diagonal elemnts equal and its off-diagonal elements of
+*> opposite sign.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] WANTQ
+*> \verbatim
+*>          WANTQ is LOGICAL
+*>          = .TRUE. : accumulate the transformation in the matrix Q;
+*>          = .FALSE.: do not accumulate the transformation.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix T. N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] T
+*> \verbatim
+*>          T is REAL array, dimension (LDT,N)
+*>          On entry, the upper quasi-triangular matrix T, in Schur
+*>          canonical form.
+*>          On exit, the updated matrix T, again in Schur canonical form.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T. LDT >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is REAL array, dimension (LDQ,N)
+*>          On entry, if WANTQ is .TRUE., the orthogonal matrix Q.
+*>          On exit, if WANTQ is .TRUE., the updated matrix Q.
+*>          If WANTQ is .FALSE., Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q.
+*>          LDQ >= 1; and if WANTQ is .TRUE., LDQ >= N.
+*> \endverbatim
+*>
+*> \param[in] J1
+*> \verbatim
+*>          J1 is INTEGER
+*>          The index of the first row of the first block T11.
+*> \endverbatim
+*>
+*> \param[in] N1
+*> \verbatim
+*>          N1 is INTEGER
+*>          The order of the first block T11. N1 = 0, 1 or 2.
+*> \endverbatim
+*>
+*> \param[in] N2
+*> \verbatim
+*>          N2 is INTEGER
+*>          The order of the second block T22. N2 = 0, 1 or 2.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          = 1: the transformed matrix T would be too far from Schur
+*>               form; the blocks are not swapped and T and Q are
+*>               unchanged.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE SLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
      $                   INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            WANTQ
@@ -13,62 +142,6 @@
 *     .. Array Arguments ..
       REAL               Q( LDQ, * ), T( LDT, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAEXC swaps adjacent diagonal blocks T11 and T22 of order 1 or 2 in
-*  an upper quasi-triangular matrix T by an orthogonal similarity
-*  transformation.
-*
-*  T must be in Schur canonical form, that is, block upper triangular
-*  with 1-by-1 and 2-by-2 diagonal blocks; each 2-by-2 diagonal block
-*  has its diagonal elemnts equal and its off-diagonal elements of
-*  opposite sign.
-*
-*  Arguments
-*  =========
-*
-*  WANTQ   (input) LOGICAL
-*          = .TRUE. : accumulate the transformation in the matrix Q;
-*          = .FALSE.: do not accumulate the transformation.
-*
-*  N       (input) INTEGER
-*          The order of the matrix T. N >= 0.
-*
-*  T       (input/output) REAL array, dimension (LDT,N)
-*          On entry, the upper quasi-triangular matrix T, in Schur
-*          canonical form.
-*          On exit, the updated matrix T, again in Schur canonical form.
-*
-*  LDT     (input)  INTEGER
-*          The leading dimension of the array T. LDT >= max(1,N).
-*
-*  Q       (input/output) REAL array, dimension (LDQ,N)
-*          On entry, if WANTQ is .TRUE., the orthogonal matrix Q.
-*          On exit, if WANTQ is .TRUE., the updated matrix Q.
-*          If WANTQ is .FALSE., Q is not referenced.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q.
-*          LDQ >= 1; and if WANTQ is .TRUE., LDQ >= N.
-*
-*  J1      (input) INTEGER
-*          The index of the first row of the first block T11.
-*
-*  N1      (input) INTEGER
-*          The order of the first block T11. N1 = 0, 1 or 2.
-*
-*  N2      (input) INTEGER
-*          The order of the second block T22. N2 = 0, 1 or 2.
-*
-*  WORK    (workspace) REAL array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          = 1: the transformed matrix T would be too far from Schur
-*               form; the blocks are not swapped and T and Q are
-*               unchanged.
 *
 *  =====================================================================
 *

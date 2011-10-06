@@ -1,75 +1,167 @@
+*> \brief \b DLSETS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
+*                          X, WORK, LWORK, RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, LWORK, M, N, P
+*       ..
+*       .. Array Arguments ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLSETS tests DGGLSE - a subroutine for solving linear equality
+*> constrained least square problem (LSE).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is INTEGER
+*>          The number of rows of the matrix B.  P >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and B.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The M-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[out] AF
+*> \verbatim
+*>          AF is DOUBLE PRECISION array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A, AF, Q and R.
+*>          LDA >= max(M,N).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,N)
+*>          The P-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[out] BF
+*> \verbatim
+*>          BF is DOUBLE PRECISION array, dimension (LDB,N)
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the arrays B, BF, V and S.
+*>          LDB >= max(P,N).
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension( M )
+*>          the vector C in the LSE problem.
+*> \endverbatim
+*>
+*> \param[out] CF
+*> \verbatim
+*>          CF is DOUBLE PRECISION array, dimension( M )
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension( P )
+*>          the vector D in the LSE problem.
+*> \endverbatim
+*>
+*> \param[out] DF
+*> \verbatim
+*>          DF is DOUBLE PRECISION array, dimension( P )
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension( N )
+*>          solution vector X in the LSE problem.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (2)
+*>          The test ratios:
+*>            RESULT(1) = norm( A*x - c )/ norm(A)*norm(X)*EPS
+*>            RESULT(2) = norm( B*x - d )/ norm(B)*norm(X)*EPS
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
      $                   X, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, LWORK, M, N, P
 *     ..
 *     .. Array Arguments ..
-*
-*  Purpose
-*  =======
-*
-*  DLSETS tests DGGLSE - a subroutine for solving linear equality
-*  constrained least square problem (LSE).
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  P       (input) INTEGER
-*          The number of rows of the matrix B.  P >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and B.  N >= 0.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The M-by-N matrix A.
-*
-*  AF      (workspace) DOUBLE PRECISION array, dimension (LDA,N)
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A, AF, Q and R.
-*          LDA >= max(M,N).
-*
-*  B       (input) DOUBLE PRECISION array, dimension (LDB,N)
-*          The P-by-N matrix A.
-*
-*  BF      (workspace) DOUBLE PRECISION array, dimension (LDB,N)
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the arrays B, BF, V and S.
-*          LDB >= max(P,N).
-*
-*  C       (input) DOUBLE PRECISION array, dimension( M )
-*          the vector C in the LSE problem.
-*
-*  CF      (workspace) DOUBLE PRECISION array, dimension( M )
-*
-*  D       (input) DOUBLE PRECISION array, dimension( P )
-*          the vector D in the LSE problem.
-*
-*  DF      (workspace) DOUBLE PRECISION array, dimension( P )
-*
-*  X       (output) DOUBLE PRECISION array, dimension( N )
-*          solution vector X in the LSE problem.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (M)
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (2)
-*          The test ratios:
-*            RESULT(1) = norm( A*x - c )/ norm(A)*norm(X)*EPS
-*            RESULT(2) = norm( B*x - d )/ norm(B)*norm(X)*EPS
 *
 *  ====================================================================
 *

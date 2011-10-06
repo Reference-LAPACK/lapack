@@ -1,88 +1,165 @@
+*> \brief \b ZLAGS2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
+*                          SNV, CSQ, SNQ )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            UPPER
+*       DOUBLE PRECISION   A1, A3, B1, B3, CSQ, CSU, CSV
+*       COMPLEX*16         A2, B2, SNQ, SNU, SNV
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLAGS2 computes 2-by-2 unitary matrices U, V and Q, such
+*> that if ( UPPER ) then
+*>
+*>           U**H *A*Q = U**H *( A1 A2 )*Q = ( x  0  )
+*>                             ( 0  A3 )     ( x  x  )
+*> and
+*>           V**H*B*Q = V**H *( B1 B2 )*Q = ( x  0  )
+*>                            ( 0  B3 )     ( x  x  )
+*>
+*> or if ( .NOT.UPPER ) then
+*>
+*>           U**H *A*Q = U**H *( A1 0  )*Q = ( x  x  )
+*>                             ( A2 A3 )     ( 0  x  )
+*> and
+*>           V**H *B*Q = V**H *( B1 0  )*Q = ( x  x  )
+*>                             ( B2 B3 )     ( 0  x  )
+*> where
+*>
+*>   U = (   CSU    SNU ), V = (  CSV    SNV ),
+*>       ( -SNU**H  CSU )      ( -SNV**H CSV )
+*>
+*>   Q = (   CSQ    SNQ )
+*>       ( -SNQ**H  CSQ )
+*>
+*> The rows of the transformed A and B are parallel. Moreover, if the
+*> input 2-by-2 matrix A is not zero, then the transformed (1,1) entry
+*> of A is not zero. If the input matrices A and B are both not zero,
+*> then the transformed (2,2) element of B is not zero, except when the
+*> first rows of input A and B are parallel and the second rows are
+*> zero.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPPER
+*> \verbatim
+*>          UPPER is LOGICAL
+*>          = .TRUE.: the input matrices A and B are upper triangular.
+*>          = .FALSE.: the input matrices A and B are lower triangular.
+*> \endverbatim
+*>
+*> \param[in] A1
+*> \verbatim
+*>          A1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] A2
+*> \verbatim
+*>          A2 is COMPLEX*16
+*> \endverbatim
+*>
+*> \param[in] A3
+*> \verbatim
+*>          A3 is DOUBLE PRECISION
+*>          On entry, A1, A2 and A3 are elements of the input 2-by-2
+*>          upper (lower) triangular matrix A.
+*> \endverbatim
+*>
+*> \param[in] B1
+*> \verbatim
+*>          B1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] B2
+*> \verbatim
+*>          B2 is COMPLEX*16
+*> \endverbatim
+*>
+*> \param[in] B3
+*> \verbatim
+*>          B3 is DOUBLE PRECISION
+*>          On entry, B1, B2 and B3 are elements of the input 2-by-2
+*>          upper (lower) triangular matrix B.
+*> \endverbatim
+*>
+*> \param[out] CSU
+*> \verbatim
+*>          CSU is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] SNU
+*> \verbatim
+*>          SNU is COMPLEX*16
+*>          The desired unitary matrix U.
+*> \endverbatim
+*>
+*> \param[out] CSV
+*> \verbatim
+*>          CSV is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] SNV
+*> \verbatim
+*>          SNV is COMPLEX*16
+*>          The desired unitary matrix V.
+*> \endverbatim
+*>
+*> \param[out] CSQ
+*> \verbatim
+*>          CSQ is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] SNQ
+*> \verbatim
+*>          SNQ is COMPLEX*16
+*>          The desired unitary matrix Q.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE ZLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
      $                   SNV, CSQ, SNQ )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            UPPER
       DOUBLE PRECISION   A1, A3, B1, B3, CSQ, CSU, CSV
       COMPLEX*16         A2, B2, SNQ, SNU, SNV
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLAGS2 computes 2-by-2 unitary matrices U, V and Q, such
-*  that if ( UPPER ) then
-*
-*            U**H *A*Q = U**H *( A1 A2 )*Q = ( x  0  )
-*                              ( 0  A3 )     ( x  x  )
-*  and
-*            V**H*B*Q = V**H *( B1 B2 )*Q = ( x  0  )
-*                             ( 0  B3 )     ( x  x  )
-*
-*  or if ( .NOT.UPPER ) then
-*
-*            U**H *A*Q = U**H *( A1 0  )*Q = ( x  x  )
-*                              ( A2 A3 )     ( 0  x  )
-*  and
-*            V**H *B*Q = V**H *( B1 0  )*Q = ( x  x  )
-*                              ( B2 B3 )     ( 0  x  )
-*  where
-*
-*    U = (   CSU    SNU ), V = (  CSV    SNV ),
-*        ( -SNU**H  CSU )      ( -SNV**H CSV )
-*
-*    Q = (   CSQ    SNQ )
-*        ( -SNQ**H  CSQ )
-*
-*  The rows of the transformed A and B are parallel. Moreover, if the
-*  input 2-by-2 matrix A is not zero, then the transformed (1,1) entry
-*  of A is not zero. If the input matrices A and B are both not zero,
-*  then the transformed (2,2) element of B is not zero, except when the
-*  first rows of input A and B are parallel and the second rows are
-*  zero.
-*
-*  Arguments
-*  =========
-*
-*  UPPER   (input) LOGICAL
-*          = .TRUE.: the input matrices A and B are upper triangular.
-*          = .FALSE.: the input matrices A and B are lower triangular.
-*
-*  A1      (input) DOUBLE PRECISION
-*
-*  A2      (input) COMPLEX*16
-*
-*  A3      (input) DOUBLE PRECISION
-*          On entry, A1, A2 and A3 are elements of the input 2-by-2
-*          upper (lower) triangular matrix A.
-*
-*  B1      (input) DOUBLE PRECISION
-*
-*  B2      (input) COMPLEX*16
-*
-*  B3      (input) DOUBLE PRECISION
-*          On entry, B1, B2 and B3 are elements of the input 2-by-2
-*          upper (lower) triangular matrix B.
-*
-*  CSU     (output) DOUBLE PRECISION
-*
-*  SNU     (output) COMPLEX*16
-*          The desired unitary matrix U.
-*
-*  CSV     (output) DOUBLE PRECISION
-*
-*  SNV     (output) COMPLEX*16
-*          The desired unitary matrix V.
-*
-*  CSQ     (output) DOUBLE PRECISION
-*
-*  SNQ     (output) COMPLEX*16
-*          The desired unitary matrix Q.
 *
 *  =====================================================================
 *

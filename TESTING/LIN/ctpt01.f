@@ -1,8 +1,120 @@
+*> \brief \b CTPT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, UPLO
+*       INTEGER            N
+*       REAL               RCOND, RESID
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * )
+*       COMPLEX            AINVP( * ), AP( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CTPT01 computes the residual for a triangular matrix A times its
+*> inverse when A is stored in packed format:
+*>    RESID = norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the matrix A is upper or lower triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>          Specifies whether or not the matrix A is unit triangular.
+*>          = 'N':  Non-unit triangular
+*>          = 'U':  Unit triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] AP
+*> \verbatim
+*>          AP is COMPLEX array, dimension (N*(N+1)/2)
+*>          The original upper or lower triangular matrix A, packed
+*>          columnwise in a linear array.  The j-th column of A is stored
+*>          in the array AP as follows:
+*>          if UPLO = 'U', AP((j-1)*j/2 + i) = A(i,j) for 1<=i<=j;
+*>          if UPLO = 'L',
+*>             AP((j-1)*(n-j) + j*(j+1)/2 + i-j) = A(i,j) for j<=i<=n.
+*> \endverbatim
+*>
+*> \param[in] AINVP
+*> \verbatim
+*>          AINVP is COMPLEX array, dimension (N*(N+1)/2)
+*>          On entry, the (triangular) inverse of the matrix A, packed
+*>          columnwise in a linear array as in AP.
+*>          On exit, the contents of AINVP are destroyed.
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The reciprocal condition number of A, computed as
+*>          1/(norm(A) * norm(AINV)).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CTPT01( UPLO, DIAG, N, AP, AINVP, RCOND, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, UPLO
@@ -13,52 +125,6 @@
       REAL               RWORK( * )
       COMPLEX            AINVP( * ), AP( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CTPT01 computes the residual for a triangular matrix A times its
-*  inverse when A is stored in packed format:
-*     RESID = norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the matrix A is upper or lower triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  DIAG    (input) CHARACTER*1
-*          Specifies whether or not the matrix A is unit triangular.
-*          = 'N':  Non-unit triangular
-*          = 'U':  Unit triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  AP      (input) COMPLEX array, dimension (N*(N+1)/2)
-*          The original upper or lower triangular matrix A, packed
-*          columnwise in a linear array.  The j-th column of A is stored
-*          in the array AP as follows:
-*          if UPLO = 'U', AP((j-1)*j/2 + i) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L',
-*             AP((j-1)*(n-j) + j*(j+1)/2 + i-j) = A(i,j) for j<=i<=n.
-*
-*  AINVP   (input) COMPLEX array, dimension (N*(N+1)/2)
-*          On entry, the (triangular) inverse of the matrix A, packed
-*          columnwise in a linear array as in AP.
-*          On exit, the contents of AINVP are destroyed.
-*
-*  RCOND   (output) REAL
-*          The reciprocal condition number of A, computed as
-*          1/(norm(A) * norm(AINV)).
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  RESID   (output) REAL
-*          norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS )
 *
 *  =====================================================================
 *

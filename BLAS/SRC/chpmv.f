@@ -1,4 +1,165 @@
+*> \brief \b CHPMV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+* 
+*       .. Scalar Arguments ..
+*       COMPLEX ALPHA,BETA
+*       INTEGER INCX,INCY,N
+*       CHARACTER UPLO
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX AP(*),X(*),Y(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CHPMV  performs the matrix-vector operation
+*>
+*>    y := alpha*A*x + beta*y,
+*>
+*> where alpha and beta are scalars, x and y are n element vectors and
+*> A is an n by n hermitian matrix, supplied in packed form.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>           On entry, UPLO specifies whether the upper or lower
+*>           triangular part of the matrix A is supplied in the packed
+*>           array AP as follows:
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'U' or 'u'   The upper triangular part of A is
+*>                                  supplied in AP.
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'L' or 'l'   The lower triangular part of A is
+*>                                  supplied in AP.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry, N specifies the order of the matrix A.
+*>           N must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX
+*>           On entry, ALPHA specifies the scalar alpha.
+*> \endverbatim
+*>
+*> \param[in] AP
+*> \verbatim
+*>          AP is COMPLEX array of DIMENSION at least
+*>           ( ( n*( n + 1 ) )/2 ).
+*>           Before entry with UPLO = 'U' or 'u', the array AP must
+*>           contain the upper triangular part of the hermitian matrix
+*>           packed sequentially, column by column, so that AP( 1 )
+*>           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 1, 2 )
+*>           and a( 2, 2 ) respectively, and so on.
+*>           Before entry with UPLO = 'L' or 'l', the array AP must
+*>           contain the lower triangular part of the hermitian matrix
+*>           packed sequentially, column by column, so that AP( 1 )
+*>           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 2, 1 )
+*>           and a( 3, 1 ) respectively, and so on.
+*>           Note that the imaginary parts of the diagonal elements need
+*>           not be set and are assumed to be zero.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is COMPLEX array of dimension at least
+*>           ( 1 + ( n - 1 )*abs( INCX ) ).
+*>           Before entry, the incremented array X must contain the n
+*>           element vector x.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>           On entry, INCX specifies the increment for the elements of
+*>           X. INCX must not be zero.
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is COMPLEX
+*>           On entry, BETA specifies the scalar beta. When BETA is
+*>           supplied as zero then Y need not be set on input.
+*> \endverbatim
+*>
+*> \param[in,out] Y
+*> \verbatim
+*>          Y is COMPLEX array of dimension at least
+*>           ( 1 + ( n - 1 )*abs( INCY ) ).
+*>           Before entry, the incremented array Y must contain the n
+*>           element vector y. On exit, Y is overwritten by the updated
+*>           vector y.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>           On entry, INCY specifies the increment for the elements of
+*>           Y. INCY must not be zero.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_blas_level2
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Level 2 Blas routine.
+*>  The vector and matrix arguments are not referenced when N = 0, or M = 0
+*>
+*>  -- Written on 22-October-1986.
+*>     Jack Dongarra, Argonne National Lab.
+*>     Jeremy Du Croz, Nag Central Office.
+*>     Sven Hammarling, Nag Central Office.
+*>     Richard Hanson, Sandia National Labs.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CHPMV(UPLO,N,ALPHA,AP,X,INCX,BETA,Y,INCY)
+*
+*  -- Reference BLAS level2 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       COMPLEX ALPHA,BETA
       INTEGER INCX,INCY,N
@@ -7,96 +168,6 @@
 *     .. Array Arguments ..
       COMPLEX AP(*),X(*),Y(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CHPMV  performs the matrix-vector operation
-*
-*     y := alpha*A*x + beta*y,
-*
-*  where alpha and beta are scalars, x and y are n element vectors and
-*  A is an n by n hermitian matrix, supplied in packed form.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO   - CHARACTER*1.
-*           On entry, UPLO specifies whether the upper or lower
-*           triangular part of the matrix A is supplied in the packed
-*           array AP as follows:
-*
-*              UPLO = 'U' or 'u'   The upper triangular part of A is
-*                                  supplied in AP.
-*
-*              UPLO = 'L' or 'l'   The lower triangular part of A is
-*                                  supplied in AP.
-*
-*           Unchanged on exit.
-*
-*  N      - INTEGER.
-*           On entry, N specifies the order of the matrix A.
-*           N must be at least zero.
-*           Unchanged on exit.
-*
-*  ALPHA  - COMPLEX         .
-*           On entry, ALPHA specifies the scalar alpha.
-*           Unchanged on exit.
-*
-*  AP     - COMPLEX          array of DIMENSION at least
-*           ( ( n*( n + 1 ) )/2 ).
-*           Before entry with UPLO = 'U' or 'u', the array AP must
-*           contain the upper triangular part of the hermitian matrix
-*           packed sequentially, column by column, so that AP( 1 )
-*           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 1, 2 )
-*           and a( 2, 2 ) respectively, and so on.
-*           Before entry with UPLO = 'L' or 'l', the array AP must
-*           contain the lower triangular part of the hermitian matrix
-*           packed sequentially, column by column, so that AP( 1 )
-*           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 2, 1 )
-*           and a( 3, 1 ) respectively, and so on.
-*           Note that the imaginary parts of the diagonal elements need
-*           not be set and are assumed to be zero.
-*           Unchanged on exit.
-*
-*  X      - COMPLEX          array of dimension at least
-*           ( 1 + ( n - 1 )*abs( INCX ) ).
-*           Before entry, the incremented array X must contain the n
-*           element vector x.
-*           Unchanged on exit.
-*
-*  INCX   - INTEGER.
-*           On entry, INCX specifies the increment for the elements of
-*           X. INCX must not be zero.
-*           Unchanged on exit.
-*
-*  BETA   - COMPLEX         .
-*           On entry, BETA specifies the scalar beta. When BETA is
-*           supplied as zero then Y need not be set on input.
-*           Unchanged on exit.
-*
-*  Y      - COMPLEX          array of dimension at least
-*           ( 1 + ( n - 1 )*abs( INCY ) ).
-*           Before entry, the incremented array Y must contain the n
-*           element vector y. On exit, Y is overwritten by the updated
-*           vector y.
-*
-*  INCY   - INTEGER.
-*           On entry, INCY specifies the increment for the elements of
-*           Y. INCY must not be zero.
-*           Unchanged on exit.
-*
-*  Further Details
-*  ===============
-*
-*  Level 2 Blas routine.
-*  The vector and matrix arguments are not referenced when N = 0, or M = 0
-*
-*  -- Written on 22-October-1986.
-*     Jack Dongarra, Argonne National Lab.
-*     Jeremy Du Croz, Nag Central Office.
-*     Sven Hammarling, Nag Central Office.
-*     Richard Hanson, Sandia National Labs.
 *
 *  =====================================================================
 *

@@ -1,10 +1,79 @@
-      INTEGER FUNCTION ILADLR( M, N, A, LDA )
-      IMPLICIT NONE
+*> \brief \b ILADLR
 *
-*  -- LAPACK auxiliary routine (version 3.3.1)                        --
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       INTEGER FUNCTION ILADLR( M, N, A, LDA )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            M, N, LDA
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ILADLR scans A for its last non-zero row.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The m by n matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1,M).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
+      INTEGER FUNCTION ILADLR( M, N, A, LDA )
+*
+*  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            M, N, LDA
@@ -12,26 +81,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ILADLR scans A for its last non-zero row.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The m by n matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >= max(1,M).
 *
 *  =====================================================================
 *

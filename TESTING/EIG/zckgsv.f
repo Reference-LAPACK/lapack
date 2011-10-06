@@ -1,10 +1,209 @@
+*> \brief \b ZCKGSV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+*                          NMAX, A, AF, B, BF, U, V, Q, ALPHA, BETA, R,
+*                          IWORK, WORK, RWORK, NIN, NOUT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, NIN, NM, NMATS, NMAX, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 ), IWORK( * ), MVAL( * ), NVAL( * ),
+*      $                   PVAL( * )
+*       DOUBLE PRECISION   ALPHA( * ), BETA( * ), RWORK( * )
+*       COMPLEX*16         A( * ), AF( * ), B( * ), BF( * ), Q( * ),
+*      $                   R( * ), U( * ), V( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZCKGSV tests ZGGSVD:
+*>        the GSVD for M-by-N matrix A and P-by-N matrix B.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NM
+*> \verbatim
+*>          NM is INTEGER
+*>          The number of values of M contained in the vector MVAL.
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] PVAL
+*> \verbatim
+*>          PVAL is INTEGER array, dimension (NP)
+*>          The values of the matrix row dimension P.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NMATS
+*> \verbatim
+*>          NMATS is INTEGER
+*>          The number of matrix types to be tested for each combination
+*>          of matrix dimensions.  If NMATS >= NTYPES (the maximum
+*>          number of matrix types), then all the different types are
+*>          generated for testing.  If NMATS < NTYPES, another input line
+*>          is read to get the numbers of the matrix types to be used.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed of the random number generator.  The array
+*>          elements should be between 0 and 4095, otherwise they will be
+*>          reduced mod 4096, and ISEED(4) must be odd.
+*>          On exit, the next seed in the random number sequence after
+*>          all the test matrices have been generated.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] NMAX
+*> \verbatim
+*>          NMAX is INTEGER
+*>          The maximum value permitted for M or N, used in dimensioning
+*>          the work arrays.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AF
+*> \verbatim
+*>          AF is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] BF
+*> \verbatim
+*>          BF is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] V
+*> \verbatim
+*>          V is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] ALPHA
+*> \verbatim
+*>          ALPHA is DOUBLE PRECISION array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is DOUBLE PRECISION array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[out] R
+*> \verbatim
+*>          R is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          The unit number for input.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0 :  successful exit
+*>          > 0 :  If ZLATMS returns an error code, the absolute value
+*>                 of it is returned.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZCKGSV( NM, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
      $                   NMAX, A, AF, B, BF, U, V, Q, ALPHA, BETA, R,
      $                   IWORK, WORK, RWORK, NIN, NOUT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, NIN, NM, NMATS, NMAX, NOUT
@@ -17,87 +216,6 @@
       COMPLEX*16         A( * ), AF( * ), B( * ), BF( * ), Q( * ),
      $                   R( * ), U( * ), V( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZCKGSV tests ZGGSVD:
-*         the GSVD for M-by-N matrix A and P-by-N matrix B.
-*
-*  Arguments
-*  =========
-*
-*  NM      (input) INTEGER
-*          The number of values of M contained in the vector MVAL.
-*
-*  MVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension M.
-*
-*  PVAL    (input) INTEGER array, dimension (NP)
-*          The values of the matrix row dimension P.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix column dimension N.
-*
-*  NMATS   (input) INTEGER
-*          The number of matrix types to be tested for each combination
-*          of matrix dimensions.  If NMATS >= NTYPES (the maximum
-*          number of matrix types), then all the different types are
-*          generated for testing.  If NMATS < NTYPES, another input line
-*          is read to get the numbers of the matrix types to be used.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed of the random number generator.  The array
-*          elements should be between 0 and 4095, otherwise they will be
-*          reduced mod 4096, and ISEED(4) must be odd.
-*          On exit, the next seed in the random number sequence after
-*          all the test matrices have been generated.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  NMAX    (input) INTEGER
-*          The maximum value permitted for M or N, used in dimensioning
-*          the work arrays.
-*
-*  A       (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  AF      (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  B       (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  BF      (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  U       (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  V       (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  Q       (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  ALPHA   (workspace) DOUBLE PRECISION array, dimension (NMAX)
-*
-*  BETA    (workspace) DOUBLE PRECISION array, dimension (NMAX)
-*
-*  R       (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  IWORK   (workspace) INTEGER array, dimension (NMAX)
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (NMAX)
-*
-*  NIN     (input) INTEGER
-*          The unit number for input.
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
-*
-*  INFO    (output) INTEGER
-*          = 0 :  successful exit
-*          > 0 :  If ZLATMS returns an error code, the absolute value
-*                 of it is returned.
 *
 *  =====================================================================
 *

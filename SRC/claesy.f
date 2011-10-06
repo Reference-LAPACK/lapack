@@ -1,61 +1,120 @@
+*> \brief \b CLAESY
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
+* 
+*       .. Scalar Arguments ..
+*       COMPLEX            A, B, C, CS1, EVSCAL, RT1, RT2, SN1
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLAESY computes the eigendecomposition of a 2-by-2 symmetric matrix
+*>    ( ( A, B );( B, C ) )
+*> provided the norm of the matrix of eigenvectors is larger than
+*> some threshold value.
+*>
+*> RT1 is the eigenvalue of larger absolute value, and RT2 of
+*> smaller absolute value.  If the eigenvectors are computed, then
+*> on return ( CS1, SN1 ) is the unit eigenvector for RT1, hence
+*>
+*> [  CS1     SN1   ] . [ A  B ] . [ CS1    -SN1   ] = [ RT1  0  ]
+*> [ -SN1     CS1   ]   [ B  C ]   [ SN1     CS1   ]   [  0  RT2 ]
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX
+*>          The ( 1, 1 ) element of input matrix.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is COMPLEX
+*>          The ( 1, 2 ) element of input matrix.  The ( 2, 1 ) element
+*>          is also given by B, since the 2-by-2 matrix is symmetric.
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is COMPLEX
+*>          The ( 2, 2 ) element of input matrix.
+*> \endverbatim
+*>
+*> \param[out] RT1
+*> \verbatim
+*>          RT1 is COMPLEX
+*>          The eigenvalue of larger modulus.
+*> \endverbatim
+*>
+*> \param[out] RT2
+*> \verbatim
+*>          RT2 is COMPLEX
+*>          The eigenvalue of smaller modulus.
+*> \endverbatim
+*>
+*> \param[out] EVSCAL
+*> \verbatim
+*>          EVSCAL is COMPLEX
+*>          The complex value by which the eigenvector matrix was scaled
+*>          to make it orthonormal.  If EVSCAL is zero, the eigenvectors
+*>          were not computed.  This means one of two things:  the 2-by-2
+*>          matrix could not be diagonalized, or the norm of the matrix
+*>          of eigenvectors before scaling was larger than the threshold
+*>          value THRESH (set below).
+*> \endverbatim
+*>
+*> \param[out] CS1
+*> \verbatim
+*>          CS1 is COMPLEX
+*> \endverbatim
+*>
+*> \param[out] SN1
+*> \verbatim
+*>          SN1 is COMPLEX
+*>          If EVSCAL .NE. 0,  ( CS1, SN1 ) is the unit right eigenvector
+*>          for RT1.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexSYauxiliary
+*
+*  =====================================================================
       SUBROUTINE CLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       COMPLEX            A, B, C, CS1, EVSCAL, RT1, RT2, SN1
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLAESY computes the eigendecomposition of a 2-by-2 symmetric matrix
-*     ( ( A, B );( B, C ) )
-*  provided the norm of the matrix of eigenvectors is larger than
-*  some threshold value.
-*
-*  RT1 is the eigenvalue of larger absolute value, and RT2 of
-*  smaller absolute value.  If the eigenvectors are computed, then
-*  on return ( CS1, SN1 ) is the unit eigenvector for RT1, hence
-*
-*  [  CS1     SN1   ] . [ A  B ] . [ CS1    -SN1   ] = [ RT1  0  ]
-*  [ -SN1     CS1   ]   [ B  C ]   [ SN1     CS1   ]   [  0  RT2 ]
-*
-*  Arguments
-*  =========
-*
-*  A       (input) COMPLEX
-*          The ( 1, 1 ) element of input matrix.
-*
-*  B       (input) COMPLEX
-*          The ( 1, 2 ) element of input matrix.  The ( 2, 1 ) element
-*          is also given by B, since the 2-by-2 matrix is symmetric.
-*
-*  C       (input) COMPLEX
-*          The ( 2, 2 ) element of input matrix.
-*
-*  RT1     (output) COMPLEX
-*          The eigenvalue of larger modulus.
-*
-*  RT2     (output) COMPLEX
-*          The eigenvalue of smaller modulus.
-*
-*  EVSCAL  (output) COMPLEX
-*          The complex value by which the eigenvector matrix was scaled
-*          to make it orthonormal.  If EVSCAL is zero, the eigenvectors
-*          were not computed.  This means one of two things:  the 2-by-2
-*          matrix could not be diagonalized, or the norm of the matrix
-*          of eigenvectors before scaling was larger than the threshold
-*          value THRESH (set below).
-*
-*  CS1     (output) COMPLEX
-*
-*  SN1     (output) COMPLEX
-*          If EVSCAL .NE. 0,  ( CS1, SN1 ) is the unit right eigenvector
-*          for RT1.
 *
 * =====================================================================
 *

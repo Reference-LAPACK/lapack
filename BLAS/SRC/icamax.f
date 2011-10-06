@@ -1,22 +1,70 @@
+*> \brief \b ICAMAX
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       INTEGER FUNCTION ICAMAX(N,CX,INCX)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER INCX,N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX CX(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    ICAMAX finds the index of element having max. absolute value.
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup aux_blas
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>     jack dongarra, linpack, 3/11/78.
+*>     modified 3/93 to return if incx .le. 0.
+*>     modified 12/3/93, array(1) declarations changed to array(*)
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       INTEGER FUNCTION ICAMAX(N,CX,INCX)
+*
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       INTEGER INCX,N
 *     ..
 *     .. Array Arguments ..
       COMPLEX CX(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     ICAMAX finds the index of element having max. absolute value.
-*
-*  Further Details
-*  ===============
-*
-*     jack dongarra, linpack, 3/11/78.
-*     modified 3/93 to return if incx .le. 0.
-*     modified 12/3/93, array(1) declarations changed to array(*)
 *
 *  =====================================================================
 *

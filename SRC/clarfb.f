@@ -1,11 +1,170 @@
+*> \brief \b CLARFB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLARFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, V, LDV,
+*                          T, LDT, C, LDC, WORK, LDWORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIRECT, SIDE, STOREV, TRANS
+*       INTEGER            K, LDC, LDT, LDV, LDWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            C( LDC, * ), T( LDT, * ), V( LDV, * ),
+*      $                   WORK( LDWORK, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLARFB applies a complex block reflector H or its transpose H**H to a
+*> complex M-by-N matrix C, from either the left or the right.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'L': apply H or H**H from the Left
+*>          = 'R': apply H or H**H from the Right
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          = 'N': apply H (No transpose)
+*>          = 'C': apply H**H (Conjugate transpose)
+*> \endverbatim
+*>
+*> \param[in] DIRECT
+*> \verbatim
+*>          DIRECT is CHARACTER*1
+*>          Indicates how H is formed from a product of elementary
+*>          reflectors
+*>          = 'F': H = H(1) H(2) . . . H(k) (Forward)
+*>          = 'B': H = H(k) . . . H(2) H(1) (Backward)
+*> \endverbatim
+*>
+*> \param[in] STOREV
+*> \verbatim
+*>          STOREV is CHARACTER*1
+*>          Indicates how the vectors which define the elementary
+*>          reflectors are stored:
+*>          = 'C': Columnwise
+*>          = 'R': Rowwise
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix C.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix C.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The order of the matrix T (= the number of elementary
+*>          reflectors whose product defines the block reflector).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*          The matrix V. See Further Details.
+*>
+*>  LDV     (input) INTEGER
+*>          The leading dimension of the array V.
+*>          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
+*>          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
+*>          if STOREV = 'R', LDV >= K.
+*>
+*>  T       (input) COMPLEX array, dimension (LDT,K)
+*>          The triangular K-by-K matrix T in the representation of the
+*>          block reflector.
+*>
+*>  LDT     (input) INTEGER
+*>          The leading dimension of the array T. LDT >= K.
+*>
+*>  C       (input/output) COMPLEX array, dimension (LDC,N)
+*>          On entry, the M-by-N matrix C.
+*>          On exit, C is overwritten by H*C or H**H*C or C*H or C*H**H.
+*>
+*>  LDC     (input) INTEGER
+*>          The leading dimension of the array C. LDC >= max(1,M).
+*>
+*>  WORK    (workspace) COMPLEX array, dimension (LDWORK,K)
+*>
+*>  LDWORK  (input) INTEGER
+*>          The leading dimension of the array WORK.
+*>          If SIDE = 'L', LDWORK >= max(1,N);
+*>          if SIDE = 'R', LDWORK >= max(1,M).
+*>
+*>
+*>  The shape of the matrix V and the storage of the vectors which define
+*>  the H(i) is best illustrated by the following example with n = 5 and
+*>  k = 3. The elements equal to 1 are not stored; the corresponding
+*>  array elements are modified but restored on exit. The rest of the
+*>  array is not used.
+*>
+*>  DIRECT = 'F' and STOREV = 'C':         DIRECT = 'F' and STOREV = 'R':
+*>
+*>               V = (  1       )                 V = (  1 v1 v1 v1 v1 )
+*>                   ( v1  1    )                     (     1 v2 v2 v2 )
+*>                   ( v1 v2  1 )                     (        1 v3 v3 )
+*>                   ( v1 v2 v3 )
+*>                   ( v1 v2 v3 )
+*>
+*>  DIRECT = 'B' and STOREV = 'C':         DIRECT = 'B' and STOREV = 'R':
+*>
+*>               V = ( v1 v2 v3 )                 V = ( v1 v1  1       )
+*>                   ( v1 v2 v3 )                     ( v2 v2 v2  1    )
+*>                   (  1 v2 v3 )                     ( v3 v3 v3 v3  1 )
+*>                   (     1 v3 )
+*>                   (        1 )
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CLARFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, V, LDV,
      $                   T, LDT, C, LDC, WORK, LDWORK )
-      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIRECT, SIDE, STOREV, TRANS
@@ -15,103 +174,6 @@
       COMPLEX            C( LDC, * ), T( LDT, * ), V( LDV, * ),
      $                   WORK( LDWORK, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLARFB applies a complex block reflector H or its transpose H**H to a
-*  complex M-by-N matrix C, from either the left or the right.
-*
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'L': apply H or H**H from the Left
-*          = 'R': apply H or H**H from the Right
-*
-*  TRANS   (input) CHARACTER*1
-*          = 'N': apply H (No transpose)
-*          = 'C': apply H**H (Conjugate transpose)
-*
-*  DIRECT  (input) CHARACTER*1
-*          Indicates how H is formed from a product of elementary
-*          reflectors
-*          = 'F': H = H(1) H(2) . . . H(k) (Forward)
-*          = 'B': H = H(k) . . . H(2) H(1) (Backward)
-*
-*  STOREV  (input) CHARACTER*1
-*          Indicates how the vectors which define the elementary
-*          reflectors are stored:
-*          = 'C': Columnwise
-*          = 'R': Rowwise
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix C.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix C.
-*
-*  K       (input) INTEGER
-*          The order of the matrix T (= the number of elementary
-*          reflectors whose product defines the block reflector).
-*
-*  V       (input) COMPLEX array, dimension
-*                                (LDV,K) if STOREV = 'C'
-*                                (LDV,M) if STOREV = 'R' and SIDE = 'L'
-*                                (LDV,N) if STOREV = 'R' and SIDE = 'R'
-*          The matrix V. See Further Details.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of the array V.
-*          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
-*          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
-*          if STOREV = 'R', LDV >= K.
-*
-*  T       (input) COMPLEX array, dimension (LDT,K)
-*          The triangular K-by-K matrix T in the representation of the
-*          block reflector.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of the array T. LDT >= K.
-*
-*  C       (input/output) COMPLEX array, dimension (LDC,N)
-*          On entry, the M-by-N matrix C.
-*          On exit, C is overwritten by H*C or H**H*C or C*H or C*H**H.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C. LDC >= max(1,M).
-*
-*  WORK    (workspace) COMPLEX array, dimension (LDWORK,K)
-*
-*  LDWORK  (input) INTEGER
-*          The leading dimension of the array WORK.
-*          If SIDE = 'L', LDWORK >= max(1,N);
-*          if SIDE = 'R', LDWORK >= max(1,M).
-*
-*  Further Details
-*  ===============
-*
-*  The shape of the matrix V and the storage of the vectors which define
-*  the H(i) is best illustrated by the following example with n = 5 and
-*  k = 3. The elements equal to 1 are not stored; the corresponding
-*  array elements are modified but restored on exit. The rest of the
-*  array is not used.
-*
-*  DIRECT = 'F' and STOREV = 'C':         DIRECT = 'F' and STOREV = 'R':
-*
-*               V = (  1       )                 V = (  1 v1 v1 v1 v1 )
-*                   ( v1  1    )                     (     1 v2 v2 v2 )
-*                   ( v1 v2  1 )                     (        1 v3 v3 )
-*                   ( v1 v2 v3 )
-*                   ( v1 v2 v3 )
-*
-*  DIRECT = 'B' and STOREV = 'C':         DIRECT = 'B' and STOREV = 'R':
-*
-*               V = ( v1 v2 v3 )                 V = ( v1 v1  1       )
-*                   ( v1 v2 v3 )                     ( v2 v2 v2  1    )
-*                   (  1 v2 v3 )                     ( v3 v3 v3 v3  1 )
-*                   (     1 v3 )
-*                   (        1 )
 *
 *  =====================================================================
 *

@@ -1,8 +1,100 @@
+*> \brief \b DQRT12
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DQRT12( M, N, A, LDA, S, WORK, LWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), S( * ), WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DQRT12 computes the singular values `svlues' of the upper trapezoid
+*> of A(1:M,1:N) and returns the ratio
+*>
+*>      || s - svlues||/(||svlues||*eps*max(M,N))
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The M-by-N matrix A. Only the upper trapezoid is referenced.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension (min(M,N))
+*>          The singular values of the matrix A.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK. LWORK >= max(M*N + 4*min(M,N) +
+*>          max(M,N), M*N+2*MIN( M, N )+4*N).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DQRT12( M, N, A, LDA, S, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.1.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     January 2007
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LWORK, M, N
@@ -10,38 +102,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( LDA, * ), S( * ), WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DQRT12 computes the singular values `svlues' of the upper trapezoid
-*  of A(1:M,1:N) and returns the ratio
-*
-*       || s - svlues||/(||svlues||*eps*max(M,N))
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The M-by-N matrix A. Only the upper trapezoid is referenced.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.
-*
-*  S       (input) DOUBLE PRECISION array, dimension (min(M,N))
-*          The singular values of the matrix A.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK. LWORK >= max(M*N + 4*min(M,N) +
-*          max(M,N), M*N+2*MIN( M, N )+4*N).
 *
 *  =====================================================================
 *

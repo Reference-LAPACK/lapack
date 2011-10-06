@@ -1,9 +1,161 @@
+*> \brief \b DQRT17
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DQRT17( TRANS, IRESID, M, N, NRHS, A,
+*                        LDA, X, LDX, B, LDB, C, WORK, LWORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            IRESID, LDA, LDB, LDX, LWORK, M, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), C( LDB, * ),
+*      $                   WORK( LWORK ), X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DQRT17 computes the ratio
+*>
+*>    || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
+*>
+*> where R = op(A)*X - B, op(A) is A or A', and
+*>
+*>    alpha = ||B|| if IRESID = 1 (zero-residual problem)
+*>    alpha = ||R|| if IRESID = 2 (otherwise).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies whether or not the transpose of A is used.
+*>          = 'N':  No transpose, op(A) = A.
+*>          = 'T':  Transpose, op(A) = A'.
+*> \endverbatim
+*>
+*> \param[in] IRESID
+*> \verbatim
+*>          IRESID is INTEGER
+*>          IRESID = 1 indicates zero-residual problem.
+*>          IRESID = 2 indicates non-zero residual.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.
+*>          If TRANS = 'N', the number of rows of the matrix B.
+*>          If TRANS = 'T', the number of rows of the matrix X.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix  A.
+*>          If TRANS = 'N', the number of rows of the matrix X.
+*>          If TRANS = 'T', the number of rows of the matrix B.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns of the matrices X and B.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The m-by-n matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= M.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (LDX,NRHS)
+*>          If TRANS = 'N', the n-by-nrhs matrix X.
+*>          If TRANS = 'T', the m-by-nrhs matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.
+*>          If TRANS = 'N', LDX >= N.
+*>          If TRANS = 'T', LDX >= M.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*>          If TRANS = 'N', the m-by-nrhs matrix B.
+*>          If TRANS = 'T', the n-by-nrhs matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.
+*>          If TRANS = 'N', LDB >= M.
+*>          If TRANS = 'T', LDB >= N.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK >= NRHS*(M+N).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DQRT17( TRANS, IRESID, M, N, NRHS, A,
      $                 LDA, X, LDX, B, LDB, C, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -13,74 +165,6 @@
       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), C( LDB, * ),
      $                   WORK( LWORK ), X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DQRT17 computes the ratio
-*
-*     || R'*op(A) ||/(||A||*alpha*max(M,N,NRHS)*eps)
-*
-*  where R = op(A)*X - B, op(A) is A or A', and
-*
-*     alpha = ||B|| if IRESID = 1 (zero-residual problem)
-*     alpha = ||R|| if IRESID = 2 (otherwise).
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies whether or not the transpose of A is used.
-*          = 'N':  No transpose, op(A) = A.
-*          = 'T':  Transpose, op(A) = A'.
-*
-*  IRESID  (input) INTEGER
-*          IRESID = 1 indicates zero-residual problem.
-*          IRESID = 2 indicates non-zero residual.
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.
-*          If TRANS = 'N', the number of rows of the matrix B.
-*          If TRANS = 'T', the number of rows of the matrix X.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix  A.
-*          If TRANS = 'N', the number of rows of the matrix X.
-*          If TRANS = 'T', the number of rows of the matrix B.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns of the matrices X and B.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The m-by-n matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >= M.
-*
-*  X       (input) DOUBLE PRECISION array, dimension (LDX,NRHS)
-*          If TRANS = 'N', the n-by-nrhs matrix X.
-*          If TRANS = 'T', the m-by-nrhs matrix X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.
-*          If TRANS = 'N', LDX >= N.
-*          If TRANS = 'T', LDX >= M.
-*
-*  B       (input) DOUBLE PRECISION array, dimension (LDB,NRHS)
-*          If TRANS = 'N', the m-by-nrhs matrix B.
-*          If TRANS = 'T', the n-by-nrhs matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.
-*          If TRANS = 'N', LDB >= M.
-*          If TRANS = 'T', LDB >= N.
-*
-*  C       (workspace) DOUBLE PRECISION array, dimension (LDB,NRHS)
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  LWORK >= NRHS*(M+N).
 *
 *  =====================================================================
 *

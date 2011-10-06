@@ -1,9 +1,117 @@
+*> \brief \b DSXT1
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DSXT1( IJOB, D1, N1, D2, N2, ABSTOL,
+*                        ULP, UNFL )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            IJOB, N1, N2
+*       DOUBLE PRECISION   ABSTOL, ULP, UNFL
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D1( * ), D2( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DSXT1  computes the difference between a set of eigenvalues.
+*> The result is returned as the function value.
+*>
+*> IJOB = 1:   Computes   max { min | D1(i)-D2(j) | }
+*>                         i     j
+*>
+*> IJOB = 2:   Computes   max { min | D1(i)-D2(j) | /
+*>                         i     j
+*>                              ( ABSTOL + |D1(i)|*ULP ) }
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ITYPE
+*> \verbatim
+*>          ITYPE is INTEGER
+*>          Specifies the type of tests to be performed.  (See above.)
+*> \endverbatim
+*>
+*> \param[in] D1
+*> \verbatim
+*>          D1 is DOUBLE PRECISION array, dimension (N1)
+*>          The first array.  D1 should be in increasing order, i.e.,
+*>          D1(j) <= D1(j+1).
+*> \endverbatim
+*>
+*> \param[in] N1
+*> \verbatim
+*>          N1 is INTEGER
+*>          The length of D1.
+*> \endverbatim
+*>
+*> \param[in] D2
+*> \verbatim
+*>          D2 is DOUBLE PRECISION array, dimension (N2)
+*>          The second array.  D2 should be in increasing order, i.e.,
+*>          D2(j) <= D2(j+1).
+*> \endverbatim
+*>
+*> \param[in] N2
+*> \verbatim
+*>          N2 is INTEGER
+*>          The length of D2.
+*> \endverbatim
+*>
+*> \param[in] ABSTOL
+*> \verbatim
+*>          ABSTOL is DOUBLE PRECISION
+*>          The absolute tolerance, used as a measure of the error.
+*> \endverbatim
+*>
+*> \param[in] ULP
+*> \verbatim
+*>          ULP is DOUBLE PRECISION
+*>          Machine precision.
+*> \endverbatim
+*>
+*> \param[in] UNFL
+*> \verbatim
+*>          UNFL is DOUBLE PRECISION
+*>          The smallest positive number whose reciprocal does not
+*>          overflow.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DSXT1( IJOB, D1, N1, D2, N2, ABSTOL,
      $                 ULP, UNFL )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            IJOB, N1, N2
@@ -12,49 +120,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   D1( * ), D2( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DSXT1  computes the difference between a set of eigenvalues.
-*  The result is returned as the function value.
-*
-*  IJOB = 1:   Computes   max { min | D1(i)-D2(j) | }
-*                          i     j
-*
-*  IJOB = 2:   Computes   max { min | D1(i)-D2(j) | /
-*                          i     j
-*                               ( ABSTOL + |D1(i)|*ULP ) }
-*
-*  Arguments
-*  =========
-*
-*  ITYPE   (input) INTEGER
-*          Specifies the type of tests to be performed.  (See above.)
-*
-*  D1      (input) DOUBLE PRECISION array, dimension (N1)
-*          The first array.  D1 should be in increasing order, i.e.,
-*          D1(j) <= D1(j+1).
-*
-*  N1      (input) INTEGER
-*          The length of D1.
-*
-*  D2      (input) DOUBLE PRECISION array, dimension (N2)
-*          The second array.  D2 should be in increasing order, i.e.,
-*          D2(j) <= D2(j+1).
-*
-*  N2      (input) INTEGER
-*          The length of D2.
-*
-*  ABSTOL  (input) DOUBLE PRECISION
-*          The absolute tolerance, used as a measure of the error.
-*
-*  ULP     (input) DOUBLE PRECISION
-*          Machine precision.
-*
-*  UNFL    (input) DOUBLE PRECISION
-*          The smallest positive number whose reciprocal does not
-*          overflow.
 *
 *  =====================================================================
 *

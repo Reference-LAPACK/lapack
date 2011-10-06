@@ -1,32 +1,71 @@
-      LOGICAL          FUNCTION ZSLECT( Z )
+*> \brief \b ZSLECT
 *
-*  -- LAPACK test routine (version 3.1.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     February 2007
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      COMPLEX*16         Z
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       LOGICAL          FUNCTION ZSLECT( Z )
+* 
+*       .. Scalar Arguments ..
+*       COMPLEX*16         Z
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  ZSLECT returns .TRUE. if the eigenvalue Z is to be selected,
-*  otherwise it returns .FALSE.
-*  It is used by ZCHK41 to test if ZGEES succesfully sorts eigenvalues,
-*  and by ZCHK43 to test if ZGEESX succesfully sorts eigenvalues.
-*
-*  The common block /SSLCT/ controls how eigenvalues are selected.
-*  If SELOPT = 0, then ZSLECT return .TRUE. when real(Z) is less than
-*  zero, and .FALSE. otherwise.
-*  If SELOPT is at least 1, ZSLECT returns SELVAL(SELOPT) and adds 1
-*  to SELOPT, cycling back to 1 at SELMAX.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZSLECT returns .TRUE. if the eigenvalue Z is to be selected,
+*> otherwise it returns .FALSE.
+*> It is used by ZCHK41 to test if ZGEES succesfully sorts eigenvalues,
+*> and by ZCHK43 to test if ZGEESX succesfully sorts eigenvalues.
+*>
+*> The common block /SSLCT/ controls how eigenvalues are selected.
+*> If SELOPT = 0, then ZSLECT return .TRUE. when real(Z) is less than
+*> zero, and .FALSE. otherwise.
+*> If SELOPT is at least 1, ZSLECT returns SELVAL(SELOPT) and adds 1
+*> to SELOPT, cycling back to 1 at SELMAX.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  Z       (input) COMPLEX*16
-*          The eigenvalue Z.
+*> \param[in] Z
+*> \verbatim
+*>          Z is COMPLEX*16
+*>          The eigenvalue Z.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
+      LOGICAL          FUNCTION ZSLECT( Z )
+*
+*  -- LAPACK test routine (version 3.1.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      COMPLEX*16         Z
+*     ..
 *
 *  =====================================================================
 *

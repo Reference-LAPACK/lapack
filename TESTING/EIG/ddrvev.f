@@ -1,11 +1,424 @@
+*> \brief \b DDRVEV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          NOUNIT, A, LDA, H, WR, WI, WR1, WI1, VL, LDVL,
+*                          VR, LDVR, LRE, LDLRE, RESULT, WORK, NWORK,
+*                          IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDLRE, LDVL, LDVR, NOUNIT, NSIZES,
+*      $                   NTYPES, NWORK
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), IWORK( * ), NN( * )
+*       DOUBLE PRECISION   A( LDA, * ), H( LDA, * ), LRE( LDLRE, * ),
+*      $                   RESULT( 7 ), VL( LDVL, * ), VR( LDVR, * ),
+*      $                   WI( * ), WI1( * ), WORK( * ), WR( * ), WR1( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    DDRVEV  checks the nonsymmetric eigenvalue problem driver DGEEV.
+*>
+*>    When DDRVEV is called, a number of matrix "sizes" ("n's") and a
+*>    number of matrix "types" are specified.  For each size ("n")
+*>    and each type of matrix, one matrix will be generated and used
+*>    to test the nonsymmetric eigenroutines.  For each matrix, 7
+*>    tests will be performed:
+*>
+*>    (1)     | A * VR - VR * W | / ( n |A| ulp )
+*>
+*>      Here VR is the matrix of unit right eigenvectors.
+*>      W is a block diagonal matrix, with a 1x1 block for each
+*>      real eigenvalue and a 2x2 block for each complex conjugate
+*>      pair.  If eigenvalues j and j+1 are a complex conjugate pair,
+*>      so WR(j) = WR(j+1) = wr and WI(j) = - WI(j+1) = wi, then the
+*>      2 x 2 block corresponding to the pair will be:
+*>
+*>              (  wr  wi  )
+*>              ( -wi  wr  )
+*>
+*>      Such a block multiplying an n x 2 matrix  ( ur ui ) on the
+*>      right will be the same as multiplying  ur + i*ui  by  wr + i*wi.
+*>
+*>    (2)     | A**H * VL - VL * W**H | / ( n |A| ulp )
+*>
+*>      Here VL is the matrix of unit left eigenvectors, A**H is the
+*>      conjugate transpose of A, and W is as above.
+*>
+*>    (3)     | |VR(i)| - 1 | / ulp and whether largest component real
+*>
+*>      VR(i) denotes the i-th column of VR.
+*>
+*>    (4)     | |VL(i)| - 1 | / ulp and whether largest component real
+*>
+*>      VL(i) denotes the i-th column of VL.
+*>
+*>    (5)     W(full) = W(partial)
+*>
+*>      W(full) denotes the eigenvalues computed when both VR and VL
+*>      are also computed, and W(partial) denotes the eigenvalues
+*>      computed when only W, only W and VR, or only W and VL are
+*>      computed.
+*>
+*>    (6)     VR(full) = VR(partial)
+*>
+*>      VR(full) denotes the right eigenvectors computed when both VR
+*>      and VL are computed, and VR(partial) denotes the result
+*>      when only VR is computed.
+*>
+*>     (7)     VL(full) = VL(partial)
+*>
+*>      VL(full) denotes the left eigenvectors computed when both VR
+*>      and VL are also computed, and VL(partial) denotes the result
+*>      when only VL is computed.
+*>
+*>    The "sizes" are specified by an array NN(1:NSIZES); the value of
+*>    each element NN(j) specifies one size.
+*>    The "types" are specified by a logical array DOTYPE( 1:NTYPES );
+*>    if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*>    Currently, the list of possible types is:
+*>
+*>    (1)  The zero matrix.
+*>    (2)  The identity matrix.
+*>    (3)  A (transposed) Jordan block, with 1's on the diagonal.
+*>
+*>    (4)  A diagonal matrix with evenly spaced entries
+*>         1, ..., ULP  and random signs.
+*>         (ULP = (first number larger than 1) - 1 )
+*>    (5)  A diagonal matrix with geometrically spaced entries
+*>         1, ..., ULP  and random signs.
+*>    (6)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
+*>         and random signs.
+*>
+*>    (7)  Same as (4), but multiplied by a constant near
+*>         the overflow threshold
+*>    (8)  Same as (4), but multiplied by a constant near
+*>         the underflow threshold
+*>
+*>    (9)  A matrix of the form  U' T U, where U is orthogonal and
+*>         T has evenly spaced entries 1, ..., ULP with random signs
+*>         on the diagonal and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (10) A matrix of the form  U' T U, where U is orthogonal and
+*>         T has geometrically spaced entries 1, ..., ULP with random
+*>         signs on the diagonal and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (11) A matrix of the form  U' T U, where U is orthogonal and
+*>         T has "clustered" entries 1, ULP,..., ULP with random
+*>         signs on the diagonal and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (12) A matrix of the form  U' T U, where U is orthogonal and
+*>         T has real or complex conjugate paired eigenvalues randomly
+*>         chosen from ( ULP, 1 ) and random O(1) entries in the upper
+*>         triangle.
+*>
+*>    (13) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has evenly spaced entries 1, ..., ULP
+*>         with random signs on the diagonal and random O(1) entries
+*>         in the upper triangle.
+*>
+*>    (14) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has geometrically spaced entries
+*>         1, ..., ULP with random signs on the diagonal and random
+*>         O(1) entries in the upper triangle.
+*>
+*>    (15) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has "clustered" entries 1, ULP,..., ULP
+*>         with random signs on the diagonal and random O(1) entries
+*>         in the upper triangle.
+*>
+*>    (16) A matrix of the form  X' T X, where X has condition
+*>         SQRT( ULP ) and T has real or complex conjugate paired
+*>         eigenvalues randomly chosen from ( ULP, 1 ) and random
+*>         O(1) entries in the upper triangle.
+*>
+*>    (17) Same as (16), but multiplied by a constant
+*>         near the overflow threshold
+*>    (18) Same as (16), but multiplied by a constant
+*>         near the underflow threshold
+*>
+*>    (19) Nonsymmetric matrix with random entries chosen from (-1,1).
+*>         If N is at least 4, all entries in first two rows and last
+*>         row, and first column and last two columns are zero.
+*>    (20) Same as (19), but multiplied by a constant
+*>         near the overflow threshold
+*>    (21) Same as (19), but multiplied by a constant
+*>         near the underflow threshold
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of sizes of matrices to use.  If it is zero,
+*>          DDRVEV does nothing.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER array, dimension (NSIZES)
+*>          An array containing the sizes to be used for the matrices.
+*>          Zero values will be skipped.  The values must be at least
+*>          zero.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, DDRVEV
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrix is in A.  This
+*>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated.  If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to DDRVEV to continue the same random number
+*>          sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns INFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA, max(NN))
+*>          Used to hold the matrix whose eigenvalues are to be
+*>          computed.  On exit, A contains the last matrix actually used.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A, and H. LDA must be at
+*>          least 1 and at least max(NN).
+*> \endverbatim
+*>
+*> \param[out] H
+*> \verbatim
+*>          H is DOUBLE PRECISION array, dimension (LDA, max(NN))
+*>          Another copy of the test matrix A, modified by DGEEV.
+*> \endverbatim
+*>
+*> \param[out] WR
+*> \verbatim
+*>          WR is DOUBLE PRECISION array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] WI
+*> \verbatim
+*>          WI is DOUBLE PRECISION array, dimension (max(NN))
+*> \endverbatim
+*> \verbatim
+*>          The real and imaginary parts of the eigenvalues of A.
+*>          On exit, WR + WI*i are the eigenvalues of the matrix in A.
+*> \endverbatim
+*>
+*> \param[out] WR1
+*> \verbatim
+*>          WR1 is DOUBLE PRECISION array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] WI1
+*> \verbatim
+*>          WI1 is DOUBLE PRECISION array, dimension (max(NN))
+*> \endverbatim
+*> \verbatim
+*>          Like WR, WI, these arrays contain the eigenvalues of A,
+*>          but those computed when DGEEV only computes a partial
+*>          eigendecomposition, i.e. not the eigenvalues and left
+*>          and right eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] VL
+*> \verbatim
+*>          VL is DOUBLE PRECISION array, dimension (LDVL, max(NN))
+*>          VL holds the computed left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDVL
+*> \verbatim
+*>          LDVL is INTEGER
+*>          Leading dimension of VL. Must be at least max(1,max(NN)).
+*> \endverbatim
+*>
+*> \param[out] VR
+*> \verbatim
+*>          VR is DOUBLE PRECISION array, dimension (LDVR, max(NN))
+*>          VR holds the computed right eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDVR
+*> \verbatim
+*>          LDVR is INTEGER
+*>          Leading dimension of VR. Must be at least max(1,max(NN)).
+*> \endverbatim
+*>
+*> \param[out] LRE
+*> \verbatim
+*>          LRE is DOUBLE PRECISION array, dimension (LDLRE,max(NN))
+*>          LRE holds the computed right or left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDLRE
+*> \verbatim
+*>          LDLRE is INTEGER
+*>          Leading dimension of LRE. Must be at least max(1,max(NN)).
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (7)
+*>          The values computed by the seven tests described above.
+*>          The values are currently limited to 1/ulp, to avoid overflow.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (NWORK)
+*> \endverbatim
+*>
+*> \param[in] NWORK
+*> \verbatim
+*>          NWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          5*NN(j)+2*NN(j)**2 for all j.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0, then everything ran OK.
+*>           -1: NSIZES < 0
+*>           -2: Some NN(j) < 0
+*>           -3: NTYPES < 0
+*>           -6: THRESH < 0
+*>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
+*>          -16: LDVL < 1 or LDVL < NMAX, where NMAX is max( NN(j) ).
+*>          -18: LDVR < 1 or LDVR < NMAX, where NMAX is max( NN(j) ).
+*>          -20: LDLRE < 1 or LDLRE < NMAX, where NMAX is max( NN(j) ).
+*>          -23: NWORK too small.
+*>          If  DLATMR, SLATMS, SLATME or DGEEV returns an error code,
+*>              the absolute value of it is returned.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>     Some Local Variables and Parameters:
+*>     ---- ----- --------- --- ----------
+*> \endverbatim
+*> \verbatim
+*>     ZERO, ONE       Real 0 and 1.
+*>     MAXTYP          The number of types defined.
+*>     NMAX            Largest value in NN.
+*>     NERRS           The number of tests which have exceeded THRESH
+*>     COND, CONDS,
+*>     IMODE           Values to be passed to the matrix generators.
+*>     ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>     OVFL, UNFL      Overflow and underflow thresholds.
+*>     ULP, ULPINV     Finest relative precision and its inverse.
+*>     RTULP, RTULPI   Square roots of the previous 4 values.
+*> \endverbatim
+*> \verbatim
+*>             The following four arrays decode JTYPE:
+*>     KTYPE(j)        The general type (1-10) for type "j".
+*>     KMODE(j)        The MODE value to be passed to the matrix
+*>                     generator for type "j".
+*>     KMAGN(j)        The order of magnitude ( O(1),
+*>                     O(overflow^(1/2) ), O(underflow^(1/2) )
+*>     KCONDS(j)       Selectw whether CONDS is to be 1 or
+*>                     1/sqrt(ulp).  (0 means irrelevant.)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, H, WR, WI, WR1, WI1, VL, LDVL,
      $                   VR, LDVR, LRE, LDLRE, RESULT, WORK, NWORK,
      $                   IWORK, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDLRE, LDVL, LDVR, NOUNIT, NSIZES,
@@ -19,285 +432,6 @@
      $                   RESULT( 7 ), VL( LDVL, * ), VR( LDVR, * ),
      $                   WI( * ), WI1( * ), WORK( * ), WR( * ), WR1( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     DDRVEV  checks the nonsymmetric eigenvalue problem driver DGEEV.
-*
-*     When DDRVEV is called, a number of matrix "sizes" ("n's") and a
-*     number of matrix "types" are specified.  For each size ("n")
-*     and each type of matrix, one matrix will be generated and used
-*     to test the nonsymmetric eigenroutines.  For each matrix, 7
-*     tests will be performed:
-*
-*     (1)     | A * VR - VR * W | / ( n |A| ulp )
-*
-*       Here VR is the matrix of unit right eigenvectors.
-*       W is a block diagonal matrix, with a 1x1 block for each
-*       real eigenvalue and a 2x2 block for each complex conjugate
-*       pair.  If eigenvalues j and j+1 are a complex conjugate pair,
-*       so WR(j) = WR(j+1) = wr and WI(j) = - WI(j+1) = wi, then the
-*       2 x 2 block corresponding to the pair will be:
-*
-*               (  wr  wi  )
-*               ( -wi  wr  )
-*
-*       Such a block multiplying an n x 2 matrix  ( ur ui ) on the
-*       right will be the same as multiplying  ur + i*ui  by  wr + i*wi.
-*
-*     (2)     | A**H * VL - VL * W**H | / ( n |A| ulp )
-*
-*       Here VL is the matrix of unit left eigenvectors, A**H is the
-*       conjugate transpose of A, and W is as above.
-*
-*     (3)     | |VR(i)| - 1 | / ulp and whether largest component real
-*
-*       VR(i) denotes the i-th column of VR.
-*
-*     (4)     | |VL(i)| - 1 | / ulp and whether largest component real
-*
-*       VL(i) denotes the i-th column of VL.
-*
-*     (5)     W(full) = W(partial)
-*
-*       W(full) denotes the eigenvalues computed when both VR and VL
-*       are also computed, and W(partial) denotes the eigenvalues
-*       computed when only W, only W and VR, or only W and VL are
-*       computed.
-*
-*     (6)     VR(full) = VR(partial)
-*
-*       VR(full) denotes the right eigenvectors computed when both VR
-*       and VL are computed, and VR(partial) denotes the result
-*       when only VR is computed.
-*
-*      (7)     VL(full) = VL(partial)
-*
-*       VL(full) denotes the left eigenvectors computed when both VR
-*       and VL are also computed, and VL(partial) denotes the result
-*       when only VL is computed.
-*
-*     The "sizes" are specified by an array NN(1:NSIZES); the value of
-*     each element NN(j) specifies one size.
-*     The "types" are specified by a logical array DOTYPE( 1:NTYPES );
-*     if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*     Currently, the list of possible types is:
-*
-*     (1)  The zero matrix.
-*     (2)  The identity matrix.
-*     (3)  A (transposed) Jordan block, with 1's on the diagonal.
-*
-*     (4)  A diagonal matrix with evenly spaced entries
-*          1, ..., ULP  and random signs.
-*          (ULP = (first number larger than 1) - 1 )
-*     (5)  A diagonal matrix with geometrically spaced entries
-*          1, ..., ULP  and random signs.
-*     (6)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
-*          and random signs.
-*
-*     (7)  Same as (4), but multiplied by a constant near
-*          the overflow threshold
-*     (8)  Same as (4), but multiplied by a constant near
-*          the underflow threshold
-*
-*     (9)  A matrix of the form  U' T U, where U is orthogonal and
-*          T has evenly spaced entries 1, ..., ULP with random signs
-*          on the diagonal and random O(1) entries in the upper
-*          triangle.
-*
-*     (10) A matrix of the form  U' T U, where U is orthogonal and
-*          T has geometrically spaced entries 1, ..., ULP with random
-*          signs on the diagonal and random O(1) entries in the upper
-*          triangle.
-*
-*     (11) A matrix of the form  U' T U, where U is orthogonal and
-*          T has "clustered" entries 1, ULP,..., ULP with random
-*          signs on the diagonal and random O(1) entries in the upper
-*          triangle.
-*
-*     (12) A matrix of the form  U' T U, where U is orthogonal and
-*          T has real or complex conjugate paired eigenvalues randomly
-*          chosen from ( ULP, 1 ) and random O(1) entries in the upper
-*          triangle.
-*
-*     (13) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has evenly spaced entries 1, ..., ULP
-*          with random signs on the diagonal and random O(1) entries
-*          in the upper triangle.
-*
-*     (14) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has geometrically spaced entries
-*          1, ..., ULP with random signs on the diagonal and random
-*          O(1) entries in the upper triangle.
-*
-*     (15) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has "clustered" entries 1, ULP,..., ULP
-*          with random signs on the diagonal and random O(1) entries
-*          in the upper triangle.
-*
-*     (16) A matrix of the form  X' T X, where X has condition
-*          SQRT( ULP ) and T has real or complex conjugate paired
-*          eigenvalues randomly chosen from ( ULP, 1 ) and random
-*          O(1) entries in the upper triangle.
-*
-*     (17) Same as (16), but multiplied by a constant
-*          near the overflow threshold
-*     (18) Same as (16), but multiplied by a constant
-*          near the underflow threshold
-*
-*     (19) Nonsymmetric matrix with random entries chosen from (-1,1).
-*          If N is at least 4, all entries in first two rows and last
-*          row, and first column and last two columns are zero.
-*     (20) Same as (19), but multiplied by a constant
-*          near the overflow threshold
-*     (21) Same as (19), but multiplied by a constant
-*          near the underflow threshold
-*
-*  Arguments
-*  ==========
-*
-*  NSIZES  (input) INTEGER
-*          The number of sizes of matrices to use.  If it is zero,
-*          DDRVEV does nothing.  It must be at least zero.
-*
-*  NN      (input) INTEGER array, dimension (NSIZES)
-*          An array containing the sizes to be used for the matrices.
-*          Zero values will be skipped.  The values must be at least
-*          zero.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE.   If it is zero, DDRVEV
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrix is in A.  This
-*          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated.  If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to DDRVEV to continue the same random number
-*          sequence.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns INFO not equal to 0.)
-*
-*  A       (workspace) DOUBLE PRECISION array, dimension (LDA, max(NN))
-*          Used to hold the matrix whose eigenvalues are to be
-*          computed.  On exit, A contains the last matrix actually used.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A, and H. LDA must be at
-*          least 1 and at least max(NN).
-*
-*  H       (workspace) DOUBLE PRECISION array, dimension (LDA, max(NN))
-*          Another copy of the test matrix A, modified by DGEEV.
-*
-*  WR      (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*  WI      (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*          The real and imaginary parts of the eigenvalues of A.
-*          On exit, WR + WI*i are the eigenvalues of the matrix in A.
-*
-*  WR1     (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*  WI1     (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*          Like WR, WI, these arrays contain the eigenvalues of A,
-*          but those computed when DGEEV only computes a partial
-*          eigendecomposition, i.e. not the eigenvalues and left
-*          and right eigenvectors.
-*
-*  VL      (workspace) DOUBLE PRECISION array, dimension (LDVL, max(NN))
-*          VL holds the computed left eigenvectors.
-*
-*  LDVL    (input) INTEGER
-*          Leading dimension of VL. Must be at least max(1,max(NN)).
-*
-*  VR      (workspace) DOUBLE PRECISION array, dimension (LDVR, max(NN))
-*          VR holds the computed right eigenvectors.
-*
-*  LDVR    (input) INTEGER
-*          Leading dimension of VR. Must be at least max(1,max(NN)).
-*
-*  LRE     (workspace) DOUBLE PRECISION array, dimension (LDLRE,max(NN))
-*          LRE holds the computed right or left eigenvectors.
-*
-*  LDLRE   (input) INTEGER
-*          Leading dimension of LRE. Must be at least max(1,max(NN)).
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (7)
-*          The values computed by the seven tests described above.
-*          The values are currently limited to 1/ulp, to avoid overflow.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (NWORK)
-*
-*  NWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          5*NN(j)+2*NN(j)**2 for all j.
-*
-*  IWORK   (workspace) INTEGER array, dimension (max(NN))
-*
-*  INFO    (output) INTEGER
-*          If 0, then everything ran OK.
-*           -1: NSIZES < 0
-*           -2: Some NN(j) < 0
-*           -3: NTYPES < 0
-*           -6: THRESH < 0
-*           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
-*          -16: LDVL < 1 or LDVL < NMAX, where NMAX is max( NN(j) ).
-*          -18: LDVR < 1 or LDVR < NMAX, where NMAX is max( NN(j) ).
-*          -20: LDLRE < 1 or LDLRE < NMAX, where NMAX is max( NN(j) ).
-*          -23: NWORK too small.
-*          If  DLATMR, SLATMS, SLATME or DGEEV returns an error code,
-*              the absolute value of it is returned.
-*
-*-----------------------------------------------------------------------
-*
-*     Some Local Variables and Parameters:
-*     ---- ----- --------- --- ----------
-*
-*     ZERO, ONE       Real 0 and 1.
-*     MAXTYP          The number of types defined.
-*     NMAX            Largest value in NN.
-*     NERRS           The number of tests which have exceeded THRESH
-*     COND, CONDS,
-*     IMODE           Values to be passed to the matrix generators.
-*     ANORM           Norm of A; passed to matrix generators.
-*
-*     OVFL, UNFL      Overflow and underflow thresholds.
-*     ULP, ULPINV     Finest relative precision and its inverse.
-*     RTULP, RTULPI   Square roots of the previous 4 values.
-*
-*             The following four arrays decode JTYPE:
-*     KTYPE(j)        The general type (1-10) for type "j".
-*     KMODE(j)        The MODE value to be passed to the matrix
-*                     generator for type "j".
-*     KMAGN(j)        The order of magnitude ( O(1),
-*                     O(overflow^(1/2) ), O(underflow^(1/2) )
-*     KCONDS(j)       Selectw whether CONDS is to be 1 or
-*                     1/sqrt(ulp).  (0 means irrelevant.)
 *
 *  =====================================================================
 *

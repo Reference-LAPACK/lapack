@@ -1,9 +1,133 @@
+*> \brief \b SPPT02
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
+*                          RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            LDB, LDX, N, NRHS
+*       REAL               RESID
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( * ), B( LDB, * ), RWORK( * ), X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SPPT02 computes the residual in the solution of a symmetric system
+*> of linear equations  A*x = b  when packed storage is used for the
+*> coefficient matrix.  The ratio computed is
+*>
+*>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS),
+*>
+*> where EPS is the machine precision.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          symmetric matrix A is stored:
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows and columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns of B, the matrix of right hand sides.
+*>          NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (N*(N+1)/2)
+*>          The original symmetric matrix A, stored as a packed
+*>          triangular matrix.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is REAL array, dimension (LDX,NRHS)
+*>          The computed solution vectors for the system of linear
+*>          equations.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.   LDX >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB,NRHS)
+*>          On entry, the right hand side vectors for the system of
+*>          linear equations.
+*>          On exit, B is overwritten with the difference B - A*X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          The maximum over the number of right hand sides of
+*>          norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -13,58 +137,6 @@
 *     .. Array Arguments ..
       REAL               A( * ), B( LDB, * ), RWORK( * ), X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SPPT02 computes the residual in the solution of a symmetric system
-*  of linear equations  A*x = b  when packed storage is used for the
-*  coefficient matrix.  The ratio computed is
-*
-*     RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS),
-*
-*  where EPS is the machine precision.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          symmetric matrix A is stored:
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The number of rows and columns of the matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns of B, the matrix of right hand sides.
-*          NRHS >= 0.
-*
-*  A       (input) REAL array, dimension (N*(N+1)/2)
-*          The original symmetric matrix A, stored as a packed
-*          triangular matrix.
-*
-*  X       (input) REAL array, dimension (LDX,NRHS)
-*          The computed solution vectors for the system of linear
-*          equations.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.   LDX >= max(1,N).
-*
-*  B       (input/output) REAL array, dimension (LDB,NRHS)
-*          On entry, the right hand side vectors for the system of
-*          linear equations.
-*          On exit, B is overwritten with the difference B - A*X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  RESID   (output) REAL
-*          The maximum over the number of right hand sides of
-*          norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *
 *  =====================================================================
 *

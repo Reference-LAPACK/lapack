@@ -1,9 +1,121 @@
+*> \brief \b SGESC2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, N
+*       REAL               SCALE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * ), JPIV( * )
+*       REAL               A( LDA, * ), RHS( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGESC2 solves a system of linear equations
+*>
+*>           A * X = scale* RHS
+*>
+*> with a general N-by-N matrix A using the LU factorization with
+*> complete pivoting computed by SGETC2.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          On entry, the  LU part of the factorization of the n-by-n
+*>          matrix A computed by SGETC2:  A = P * L * U * Q
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1, N).
+*> \endverbatim
+*>
+*> \param[in,out] RHS
+*> \verbatim
+*>          RHS is REAL array, dimension (N).
+*>          On entry, the right hand side vector b.
+*>          On exit, the solution vector X.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N).
+*>          The pivot indices; for 1 <= i <= N, row i of the
+*>          matrix has been interchanged with row IPIV(i).
+*> \endverbatim
+*>
+*> \param[in] JPIV
+*> \verbatim
+*>          JPIV is INTEGER array, dimension (N).
+*>          The pivot indices; for 1 <= j <= N, column j of the
+*>          matrix has been interchanged with column JPIV(j).
+*> \endverbatim
+*>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is REAL
+*>           On exit, SCALE contains the scale factor. SCALE is chosen
+*>           0 <= SCALE <= 1 to prevent owerflow in the solution.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realGEauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, N
@@ -13,52 +125,6 @@
       INTEGER            IPIV( * ), JPIV( * )
       REAL               A( LDA, * ), RHS( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGESC2 solves a system of linear equations
-*
-*            A * X = scale* RHS
-*
-*  with a general N-by-N matrix A using the LU factorization with
-*  complete pivoting computed by SGETC2.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.
-*
-*  A       (input) REAL array, dimension (LDA,N)
-*          On entry, the  LU part of the factorization of the n-by-n
-*          matrix A computed by SGETC2:  A = P * L * U * Q
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1, N).
-*
-*  RHS     (input/output) REAL array, dimension (N).
-*          On entry, the right hand side vector b.
-*          On exit, the solution vector X.
-*
-*  IPIV    (input) INTEGER array, dimension (N).
-*          The pivot indices; for 1 <= i <= N, row i of the
-*          matrix has been interchanged with row IPIV(i).
-*
-*  JPIV    (input) INTEGER array, dimension (N).
-*          The pivot indices; for 1 <= j <= N, column j of the
-*          matrix has been interchanged with column JPIV(j).
-*
-*  SCALE    (output) REAL
-*           On exit, SCALE contains the scale factor. SCALE is chosen
-*           0 <= SCALE <= 1 to prevent owerflow in the solution.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
 *

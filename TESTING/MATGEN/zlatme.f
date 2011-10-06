@@ -1,12 +1,312 @@
+*> \brief \b ZLATME
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
+*         RSIGN, 
+*                          UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM, 
+*         A, 
+*                          LDA, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIST, RSIGN, SIM, UPPER
+*       INTEGER            INFO, KL, KU, LDA, MODE, MODES, N
+*       DOUBLE PRECISION   ANORM, COND, CONDS
+*       COMPLEX*16         DMAX
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       DOUBLE PRECISION   DS( * )
+*       COMPLEX*16         A( LDA, * ), D( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    ZLATME generates random non-symmetric square matrices with
+*>    specified eigenvalues for testing LAPACK programs.
+*>
+*>    ZLATME operates by applying the following sequence of
+*>    operations:
+*>
+*>    1. Set the diagonal to D, where D may be input or
+*>         computed according to MODE, COND, DMAX, and RSIGN
+*>         as described below.
+*>
+*>    2. If UPPER='T', the upper triangle of A is set to random values
+*>         out of distribution DIST.
+*>
+*>    3. If SIM='T', A is multiplied on the left by a random matrix
+*>         X, whose singular values are specified by DS, MODES, and
+*>         CONDS, and on the right by X inverse.
+*>
+*>    4. If KL < N-1, the lower bandwidth is reduced to KL using
+*>         Householder transformations.  If KU < N-1, the upper
+*>         bandwidth is reduced to KU.
+*>
+*>    5. If ANORM is not negative, the matrix is scaled to have
+*>         maximum-element-norm ANORM.
+*>
+*>    (Note: since the matrix cannot be reduced beyond Hessenberg form,
+*>     no packing options are available.)
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           The number of columns (or rows) of A. Not modified.
+*> \endverbatim
+*>
+*> \param[in] DIST
+*> \verbatim
+*>          DIST is CHARACTER*1
+*>           On entry, DIST specifies the type of distribution to be used
+*>           to generate the random eigen-/singular values, and on the
+*>           upper triangle (see UPPER).
+*>           'U' => UNIFORM( 0, 1 )  ( 'U' for uniform )
+*>           'S' => UNIFORM( -1, 1 ) ( 'S' for symmetric )
+*>           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
+*>           'D' => uniform on the complex disc |z| < 1.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension ( 4 )
+*>           On entry ISEED specifies the seed of the random number
+*>           generator. They should lie between 0 and 4095 inclusive,
+*>           and ISEED(4) should be odd. The random number generator
+*>           uses a linear congruential sequence limited to small
+*>           integers, and so should produce machine independent
+*>           random numbers. The values of ISEED are changed on
+*>           exit, and can be used in the next call to ZLATME
+*>           to continue the same random number sequence.
+*>           Changed on exit.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is COMPLEX*16 array, dimension ( N )
+*>           This array is used to specify the eigenvalues of A.  If
+*>           MODE=0, then D is assumed to contain the eigenvalues
+*>           otherwise they will be computed according to MODE, COND,
+*>           DMAX, and RSIGN and placed in D.
+*>           Modified if MODE is nonzero.
+*> \endverbatim
+*>
+*> \param[in] MODE
+*> \verbatim
+*>          MODE is INTEGER
+*>           On entry this describes how the eigenvalues are to
+*>           be specified:
+*>           MODE = 0 means use D as input
+*>           MODE = 1 sets D(1)=1 and D(2:N)=1.0/COND
+*>           MODE = 2 sets D(1:N-1)=1 and D(N)=1.0/COND
+*>           MODE = 3 sets D(I)=COND**(-(I-1)/(N-1))
+*>           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND)
+*>           MODE = 5 sets D to random numbers in the range
+*>                    ( 1/COND , 1 ) such that their logarithms
+*>                    are uniformly distributed.
+*>           MODE = 6 set D to random numbers from same distribution
+*>                    as the rest of the matrix.
+*>           MODE < 0 has the same meaning as ABS(MODE), except that
+*>              the order of the elements of D is reversed.
+*>           Thus if MODE is between 1 and 4, D has entries ranging
+*>              from 1 to 1/COND, if between -1 and -4, D has entries
+*>              ranging from 1/COND to 1,
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] COND
+*> \verbatim
+*>          COND is DOUBLE PRECISION
+*>           On entry, this is used as described under MODE above.
+*>           If used, it must be >= 1. Not modified.
+*> \endverbatim
+*>
+*> \param[in] DMAX
+*> \verbatim
+*>          DMAX is COMPLEX*16
+*>           If MODE is neither -6, 0 nor 6, the contents of D, as
+*>           computed according to MODE and COND, will be scaled by
+*>           DMAX / max(abs(D(i))).  Note that DMAX need not be
+*>           positive or real: if DMAX is negative or complex (or zero),
+*>           D will be scaled by a negative or complex number (or zero).
+*>           If RSIGN='F' then the largest (absolute) eigenvalue will be
+*>           equal to DMAX.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] RSIGN
+*> \verbatim
+*>          RSIGN is CHARACTER*1
+*>           If MODE is not 0, 6, or -6, and RSIGN='T', then the
+*>           elements of D, as computed according to MODE and COND, will
+*>           be multiplied by a random complex number from the unit
+*>           circle |z| = 1.  If RSIGN='F', they will not be.  RSIGN may
+*>           only have the values 'T' or 'F'.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] UPPER
+*> \verbatim
+*>          UPPER is CHARACTER*1
+*>           If UPPER='T', then the elements of A above the diagonal
+*>           will be set to random numbers out of DIST.  If UPPER='F',
+*>           they will not.  UPPER may only have the values 'T' or 'F'.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] SIM
+*> \verbatim
+*>          SIM is CHARACTER*1
+*>           If SIM='T', then A will be operated on by a "similarity
+*>           transform", i.e., multiplied on the left by a matrix X and
+*>           on the right by X inverse.  X = U S V, where U and V are
+*>           random unitary matrices and S is a (diagonal) matrix of
+*>           singular values specified by DS, MODES, and CONDS.  If
+*>           SIM='F', then A will not be transformed.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in,out] DS
+*> \verbatim
+*>          DS is DOUBLE PRECISION array, dimension ( N )
+*>           This array is used to specify the singular values of X,
+*>           in the same way that D specifies the eigenvalues of A.
+*>           If MODE=0, the DS contains the singular values, which
+*>           may not be zero.
+*>           Modified if MODE is nonzero.
+*> \endverbatim
+*>
+*> \param[in] MODES
+*> \verbatim
+*>          MODES is INTEGER
+*> \endverbatim
+*>
+*> \param[in] CONDS
+*> \verbatim
+*>          CONDS is DOUBLE PRECISION
+*>           Similar to MODE and COND, but for specifying the diagonal
+*>           of S.  MODES=-6 and +6 are not allowed (since they would
+*>           result in randomly ill-conditioned eigenvalues.)
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>           This specifies the lower bandwidth of the  matrix.  KL=1
+*>           specifies upper Hessenberg form.  If KL is at least N-1,
+*>           then A will have full lower bandwidth.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>           This specifies the upper bandwidth of the  matrix.  KU=1
+*>           specifies lower Hessenberg form.  If KU is at least N-1,
+*>           then A will have full upper bandwidth; if KU and KL
+*>           are both at least N-1, then A will be dense.  Only one of
+*>           KU and KL may be less than N-1.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] ANORM
+*> \verbatim
+*>          ANORM is DOUBLE PRECISION
+*>           If ANORM is not negative, then A will be scaled by a non-
+*>           negative real number to make the maximum-element-norm of A
+*>           to be ANORM.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension ( LDA, N )
+*>           On exit A is the desired test matrix.
+*>           Modified.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           LDA specifies the first dimension of A as declared in the
+*>           calling program.  LDA must be at least M.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension ( 3*N )
+*>           Workspace.
+*>           Modified.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>           Error code.  On exit, INFO will be set to one of the
+*>           following values:
+*>             0 => normal return
+*>            -1 => N negative
+*>            -2 => DIST illegal string
+*>            -5 => MODE not in range -6 to 6
+*>            -6 => COND less than 1.0, and MODE neither -6, 0 nor 6
+*>            -9 => RSIGN is not 'T' or 'F'
+*>           -10 => UPPER is not 'T' or 'F'
+*>           -11 => SIM   is not 'T' or 'F'
+*>           -12 => MODES=0 and DS has a zero singular value.
+*>           -13 => MODES is not in the range -5 to 5.
+*>           -14 => MODES is nonzero and CONDS is less than 1.
+*>           -15 => KL is less than 1.
+*>           -16 => KU is less than 1, or KL and KU are both less than
+*>                  N-1.
+*>           -19 => LDA is less than M.
+*>            1  => Error return from ZLATM1 (computing D)
+*>            2  => Cannot scale to DMAX (max. eigenvalue is 0)
+*>            3  => Error return from DLATM1 (computing DS)
+*>            4  => Error return from ZLARGE
+*>            5  => Zero singular value from DLATM1.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_matgen
+*
+*  =====================================================================
       SUBROUTINE ZLATME( N, DIST, ISEED, D, MODE, COND, DMAX,
      $  RSIGN, 
      $                   UPPER, SIM, DS, MODES, CONDS, KL, KU, ANORM, 
      $  A, 
      $                   LDA, WORK, INFO )
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     June 2010
+*  -- LAPACK computational routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIST, RSIGN, SIM, UPPER
@@ -19,198 +319,6 @@
       DOUBLE PRECISION   DS( * )
       COMPLEX*16         A( LDA, * ), D( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     ZLATME generates random non-symmetric square matrices with
-*     specified eigenvalues for testing LAPACK programs.
-*
-*     ZLATME operates by applying the following sequence of
-*     operations:
-*
-*     1. Set the diagonal to D, where D may be input or
-*          computed according to MODE, COND, DMAX, and RSIGN
-*          as described below.
-*
-*     2. If UPPER='T', the upper triangle of A is set to random values
-*          out of distribution DIST.
-*
-*     3. If SIM='T', A is multiplied on the left by a random matrix
-*          X, whose singular values are specified by DS, MODES, and
-*          CONDS, and on the right by X inverse.
-*
-*     4. If KL < N-1, the lower bandwidth is reduced to KL using
-*          Householder transformations.  If KU < N-1, the upper
-*          bandwidth is reduced to KU.
-*
-*     5. If ANORM is not negative, the matrix is scaled to have
-*          maximum-element-norm ANORM.
-*
-*     (Note: since the matrix cannot be reduced beyond Hessenberg form,
-*      no packing options are available.)
-*
-*  Arguments
-*  =========
-*
-*  N        (input) INTEGER
-*           The number of columns (or rows) of A. Not modified.
-*
-*  DIST     (input) CHARACTER*1
-*           On entry, DIST specifies the type of distribution to be used
-*           to generate the random eigen-/singular values, and on the
-*           upper triangle (see UPPER).
-*           'U' => UNIFORM( 0, 1 )  ( 'U' for uniform )
-*           'S' => UNIFORM( -1, 1 ) ( 'S' for symmetric )
-*           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
-*           'D' => uniform on the complex disc |z| < 1.
-*           Not modified.
-*
-*  ISEED    (input/output) INTEGER array, dimension ( 4 )
-*           On entry ISEED specifies the seed of the random number
-*           generator. They should lie between 0 and 4095 inclusive,
-*           and ISEED(4) should be odd. The random number generator
-*           uses a linear congruential sequence limited to small
-*           integers, and so should produce machine independent
-*           random numbers. The values of ISEED are changed on
-*           exit, and can be used in the next call to ZLATME
-*           to continue the same random number sequence.
-*           Changed on exit.
-*
-*  D        (input/output) COMPLEX*16 array, dimension ( N )
-*           This array is used to specify the eigenvalues of A.  If
-*           MODE=0, then D is assumed to contain the eigenvalues
-*           otherwise they will be computed according to MODE, COND,
-*           DMAX, and RSIGN and placed in D.
-*           Modified if MODE is nonzero.
-*
-*  MODE     (input) INTEGER
-*           On entry this describes how the eigenvalues are to
-*           be specified:
-*           MODE = 0 means use D as input
-*           MODE = 1 sets D(1)=1 and D(2:N)=1.0/COND
-*           MODE = 2 sets D(1:N-1)=1 and D(N)=1.0/COND
-*           MODE = 3 sets D(I)=COND**(-(I-1)/(N-1))
-*           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND)
-*           MODE = 5 sets D to random numbers in the range
-*                    ( 1/COND , 1 ) such that their logarithms
-*                    are uniformly distributed.
-*           MODE = 6 set D to random numbers from same distribution
-*                    as the rest of the matrix.
-*           MODE < 0 has the same meaning as ABS(MODE), except that
-*              the order of the elements of D is reversed.
-*           Thus if MODE is between 1 and 4, D has entries ranging
-*              from 1 to 1/COND, if between -1 and -4, D has entries
-*              ranging from 1/COND to 1,
-*           Not modified.
-*
-*  COND     (input) DOUBLE PRECISION
-*           On entry, this is used as described under MODE above.
-*           If used, it must be >= 1. Not modified.
-*
-*  DMAX     (input) COMPLEX*16
-*           If MODE is neither -6, 0 nor 6, the contents of D, as
-*           computed according to MODE and COND, will be scaled by
-*           DMAX / max(abs(D(i))).  Note that DMAX need not be
-*           positive or real: if DMAX is negative or complex (or zero),
-*           D will be scaled by a negative or complex number (or zero).
-*           If RSIGN='F' then the largest (absolute) eigenvalue will be
-*           equal to DMAX.
-*           Not modified.
-*
-*  RSIGN    (input) CHARACTER*1
-*           If MODE is not 0, 6, or -6, and RSIGN='T', then the
-*           elements of D, as computed according to MODE and COND, will
-*           be multiplied by a random complex number from the unit
-*           circle |z| = 1.  If RSIGN='F', they will not be.  RSIGN may
-*           only have the values 'T' or 'F'.
-*           Not modified.
-*
-*  UPPER    (input) CHARACTER*1
-*           If UPPER='T', then the elements of A above the diagonal
-*           will be set to random numbers out of DIST.  If UPPER='F',
-*           they will not.  UPPER may only have the values 'T' or 'F'.
-*           Not modified.
-*
-*  SIM      (input) CHARACTER*1
-*           If SIM='T', then A will be operated on by a "similarity
-*           transform", i.e., multiplied on the left by a matrix X and
-*           on the right by X inverse.  X = U S V, where U and V are
-*           random unitary matrices and S is a (diagonal) matrix of
-*           singular values specified by DS, MODES, and CONDS.  If
-*           SIM='F', then A will not be transformed.
-*           Not modified.
-*
-*  DS       (input/output) DOUBLE PRECISION array, dimension ( N )
-*           This array is used to specify the singular values of X,
-*           in the same way that D specifies the eigenvalues of A.
-*           If MODE=0, the DS contains the singular values, which
-*           may not be zero.
-*           Modified if MODE is nonzero.
-*
-*  MODES    (input) INTEGER
-*
-*  CONDS    (input) DOUBLE PRECISION
-*           Similar to MODE and COND, but for specifying the diagonal
-*           of S.  MODES=-6 and +6 are not allowed (since they would
-*           result in randomly ill-conditioned eigenvalues.)
-*
-*  KL       (input) INTEGER
-*           This specifies the lower bandwidth of the  matrix.  KL=1
-*           specifies upper Hessenberg form.  If KL is at least N-1,
-*           then A will have full lower bandwidth.
-*           Not modified.
-*
-*  KU       (input) INTEGER
-*           This specifies the upper bandwidth of the  matrix.  KU=1
-*           specifies lower Hessenberg form.  If KU is at least N-1,
-*           then A will have full upper bandwidth; if KU and KL
-*           are both at least N-1, then A will be dense.  Only one of
-*           KU and KL may be less than N-1.
-*           Not modified.
-*
-*  ANORM    (input) DOUBLE PRECISION
-*           If ANORM is not negative, then A will be scaled by a non-
-*           negative real number to make the maximum-element-norm of A
-*           to be ANORM.
-*           Not modified.
-*
-*  A        (output) COMPLEX*16 array, dimension ( LDA, N )
-*           On exit A is the desired test matrix.
-*           Modified.
-*
-*  LDA      (input) INTEGER
-*           LDA specifies the first dimension of A as declared in the
-*           calling program.  LDA must be at least M.
-*           Not modified.
-*
-*  WORK     (workspace) COMPLEX*16 array, dimension ( 3*N )
-*           Workspace.
-*           Modified.
-*
-*  INFO     (output) INTEGER
-*           Error code.  On exit, INFO will be set to one of the
-*           following values:
-*             0 => normal return
-*            -1 => N negative
-*            -2 => DIST illegal string
-*            -5 => MODE not in range -6 to 6
-*            -6 => COND less than 1.0, and MODE neither -6, 0 nor 6
-*            -9 => RSIGN is not 'T' or 'F'
-*           -10 => UPPER is not 'T' or 'F'
-*           -11 => SIM   is not 'T' or 'F'
-*           -12 => MODES=0 and DS has a zero singular value.
-*           -13 => MODES is not in the range -5 to 5.
-*           -14 => MODES is nonzero and CONDS is less than 1.
-*           -15 => KL is less than 1.
-*           -16 => KU is less than 1, or KL and KU are both less than
-*                  N-1.
-*           -19 => LDA is less than M.
-*            1  => Error return from ZLATM1 (computing D)
-*            2  => Cannot scale to DMAX (max. eigenvalue is 0)
-*            3  => Error return from DLATM1 (computing DS)
-*            4  => Error return from ZLARGE
-*            5  => Zero singular value from DLATM1.
 *
 *  =====================================================================
 *

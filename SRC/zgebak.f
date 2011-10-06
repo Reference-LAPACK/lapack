@@ -1,10 +1,132 @@
+*> \brief \b ZGEBAK
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOB, SIDE
+*       INTEGER            IHI, ILO, INFO, LDV, M, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   SCALE( * )
+*       COMPLEX*16         V( LDV, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZGEBAK forms the right or left eigenvectors of a complex general
+*> matrix by backward transformation on the computed eigenvectors of the
+*> balanced matrix output by ZGEBAL.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOB
+*> \verbatim
+*>          JOB is CHARACTER*1
+*>          Specifies the type of backward transformation required:
+*>          = 'N', do nothing, return immediately;
+*>          = 'P', do backward transformation for permutation only;
+*>          = 'S', do backward transformation for scaling only;
+*>          = 'B', do backward transformations for both permutation and
+*>                 scaling.
+*>          JOB must be the same as the argument JOB supplied to ZGEBAL.
+*> \endverbatim
+*>
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'R':  V contains right eigenvectors;
+*>          = 'L':  V contains left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows of the matrix V.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] ILO
+*> \verbatim
+*>          ILO is INTEGER
+*> \endverbatim
+*>
+*> \param[in] IHI
+*> \verbatim
+*>          IHI is INTEGER
+*>          The integers ILO and IHI determined by ZGEBAL.
+*>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
+*> \endverbatim
+*>
+*> \param[in] SCALE
+*> \verbatim
+*>          SCALE is DOUBLE PRECISION array, dimension (N)
+*>          Details of the permutation and scaling factors, as returned
+*>          by ZGEBAL.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of columns of the matrix V.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] V
+*> \verbatim
+*>          V is COMPLEX*16 array, dimension (LDV,M)
+*>          On entry, the matrix of right or left eigenvectors to be
+*>          transformed, as returned by ZHSEIN or ZTREVC.
+*>          On exit, V is overwritten by the transformed eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V. LDV >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16GEcomputational
+*
+*  =====================================================================
       SUBROUTINE ZGEBAK( JOB, SIDE, N, ILO, IHI, SCALE, M, V, LDV,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOB, SIDE
@@ -14,57 +136,6 @@
       DOUBLE PRECISION   SCALE( * )
       COMPLEX*16         V( LDV, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZGEBAK forms the right or left eigenvectors of a complex general
-*  matrix by backward transformation on the computed eigenvectors of the
-*  balanced matrix output by ZGEBAL.
-*
-*  Arguments
-*  =========
-*
-*  JOB     (input) CHARACTER*1
-*          Specifies the type of backward transformation required:
-*          = 'N', do nothing, return immediately;
-*          = 'P', do backward transformation for permutation only;
-*          = 'S', do backward transformation for scaling only;
-*          = 'B', do backward transformations for both permutation and
-*                 scaling.
-*          JOB must be the same as the argument JOB supplied to ZGEBAL.
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'R':  V contains right eigenvectors;
-*          = 'L':  V contains left eigenvectors.
-*
-*  N       (input) INTEGER
-*          The number of rows of the matrix V.  N >= 0.
-*
-*  ILO     (input) INTEGER
-*
-*  IHI     (input) INTEGER
-*          The integers ILO and IHI determined by ZGEBAL.
-*          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
-*
-*  SCALE   (input) DOUBLE PRECISION array, dimension (N)
-*          Details of the permutation and scaling factors, as returned
-*          by ZGEBAL.
-*
-*  M       (input) INTEGER
-*          The number of columns of the matrix V.  M >= 0.
-*
-*  V       (input/output) COMPLEX*16 array, dimension (LDV,M)
-*          On entry, the matrix of right or left eigenvectors to be
-*          transformed, as returned by ZHSEIN or ZTREVC.
-*          On exit, V is overwritten by the transformed eigenvectors.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of the array V. LDV >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *
 *  =====================================================================
 *

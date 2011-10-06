@@ -1,10 +1,167 @@
+*> \brief \b ZHBTRD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZHBTRD( VECT, UPLO, N, KD, AB, LDAB, D, E, Q, LDQ,
+*                          WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO, VECT
+*       INTEGER            INFO, KD, LDAB, LDQ, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), E( * )
+*       COMPLEX*16         AB( LDAB, * ), Q( LDQ, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZHBTRD reduces a complex Hermitian band matrix A to real symmetric
+*> tridiagonal form T by a unitary similarity transformation:
+*> Q**H * A * Q = T.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] VECT
+*> \verbatim
+*>          VECT is CHARACTER*1
+*>          = 'N':  do not form Q;
+*>          = 'V':  form Q;
+*>          = 'U':  update a matrix X, by forming X*Q.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of superdiagonals of the matrix A if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AB
+*> \verbatim
+*>          AB is COMPLEX*16 array, dimension (LDAB,N)
+*>          On entry, the upper or lower triangle of the Hermitian band
+*>          matrix A, stored in the first KD+1 rows of the array.  The
+*>          j-th column of A is stored in the j-th column of the array AB
+*>          as follows:
+*>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
+*>          On exit, the diagonal elements of AB are overwritten by the
+*>          diagonal elements of the tridiagonal matrix T; if KD > 0, the
+*>          elements on the first superdiagonal (if UPLO = 'U') or the
+*>          first subdiagonal (if UPLO = 'L') are overwritten by the
+*>          off-diagonal elements of T; the rest of AB is overwritten by
+*>          values generated during the reduction.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD+1.
+*> \endverbatim
+*>
+*> \param[out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The diagonal elements of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[out] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          The off-diagonal elements of the tridiagonal matrix T:
+*>          E(i) = T(i,i+1) if UPLO = 'U'; E(i) = T(i+1,i) if UPLO = 'L'.
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is COMPLEX*16 array, dimension (LDQ,N)
+*>          On entry, if VECT = 'U', then Q must contain an N-by-N
+*>          matrix X; if VECT = 'N' or 'V', then Q need not be set.
+*> \endverbatim
+*> \verbatim
+*>          On exit:
+*>          if VECT = 'V', Q contains the N-by-N unitary matrix Q;
+*>          if VECT = 'U', Q contains the product X*Q;
+*>          if VECT = 'N', the array Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q.
+*>          LDQ >= 1, and LDQ >= N if VECT = 'V' or 'U'.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Modified by Linda Kaufman, Bell Labs.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZHBTRD( VECT, UPLO, N, KD, AB, LDAB, D, E, Q, LDQ,
      $                   WORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO, VECT
@@ -14,80 +171,6 @@
       DOUBLE PRECISION   D( * ), E( * )
       COMPLEX*16         AB( LDAB, * ), Q( LDQ, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZHBTRD reduces a complex Hermitian band matrix A to real symmetric
-*  tridiagonal form T by a unitary similarity transformation:
-*  Q**H * A * Q = T.
-*
-*  Arguments
-*  =========
-*
-*  VECT    (input) CHARACTER*1
-*          = 'N':  do not form Q;
-*          = 'V':  form Q;
-*          = 'U':  update a matrix X, by forming X*Q.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  KD      (input) INTEGER
-*          The number of superdiagonals of the matrix A if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
-*
-*  AB      (input/output) COMPLEX*16 array, dimension (LDAB,N)
-*          On entry, the upper or lower triangle of the Hermitian band
-*          matrix A, stored in the first KD+1 rows of the array.  The
-*          j-th column of A is stored in the j-th column of the array AB
-*          as follows:
-*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*          On exit, the diagonal elements of AB are overwritten by the
-*          diagonal elements of the tridiagonal matrix T; if KD > 0, the
-*          elements on the first superdiagonal (if UPLO = 'U') or the
-*          first subdiagonal (if UPLO = 'L') are overwritten by the
-*          off-diagonal elements of T; the rest of AB is overwritten by
-*          values generated during the reduction.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KD+1.
-*
-*  D       (output) DOUBLE PRECISION array, dimension (N)
-*          The diagonal elements of the tridiagonal matrix T.
-*
-*  E       (output) DOUBLE PRECISION array, dimension (N-1)
-*          The off-diagonal elements of the tridiagonal matrix T:
-*          E(i) = T(i,i+1) if UPLO = 'U'; E(i) = T(i+1,i) if UPLO = 'L'.
-*
-*  Q       (input/output) COMPLEX*16 array, dimension (LDQ,N)
-*          On entry, if VECT = 'U', then Q must contain an N-by-N
-*          matrix X; if VECT = 'N' or 'V', then Q need not be set.
-*
-*          On exit:
-*          if VECT = 'V', Q contains the N-by-N unitary matrix Q;
-*          if VECT = 'U', Q contains the product X*Q;
-*          if VECT = 'N', the array Q is not referenced.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q.
-*          LDQ >= 1, and LDQ >= N if VECT = 'V' or 'U'.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  Modified by Linda Kaufman, Bell Labs.
 *
 *  =====================================================================
 *

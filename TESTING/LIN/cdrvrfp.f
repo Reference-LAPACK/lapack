@@ -1,3 +1,244 @@
+*> \brief \b CDRVRFP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+*      +              THRESH, A, ASAV, AFAC, AINV, B,
+*      +              BSAV, XACT, X, ARF, ARFINV,
+*      +              C_WORK_CLATMS, C_WORK_CPOT02,
+*      +              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
+*      +              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NN, NNS, NNT, NOUT
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NVAL( NN ), NSVAL( NNS ), NTVAL( NNT )
+*       COMPLEX            A( * )
+*       COMPLEX            AINV( * )
+*       COMPLEX            ASAV( * )
+*       COMPLEX            B( * )
+*       COMPLEX            BSAV( * )
+*       COMPLEX            AFAC( * )
+*       COMPLEX            ARF( * )
+*       COMPLEX            ARFINV( * )
+*       COMPLEX            XACT( * )
+*       COMPLEX            X( * )
+*       COMPLEX            C_WORK_CLATMS( * )
+*       COMPLEX            C_WORK_CPOT02( * )
+*       COMPLEX            C_WORK_CPOT03( * )
+*       REAL               S_WORK_CLATMS( * )
+*       REAL               S_WORK_CLANHE( * )
+*       REAL               S_WORK_CPOT01( * )
+*       REAL               S_WORK_CPOT02( * )
+*       REAL               S_WORK_CPOT03( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CDRVRFP tests the LAPACK RFP routines:
+*>     CPFTRF, CPFTRS, and CPFTRI.
+*>
+*> This testing routine follow the same tests as CDRVPO (test for the full
+*> format Symmetric Positive Definite solver).
+*>
+*> The tests are performed in Full Format, convertion back and forth from
+*> full format to RFP format are performed using the routines CTRTTF and
+*> CTFTTR.
+*>
+*> First, a specific matrix A of size N is created. There is nine types of 
+*> different matrixes possible.
+*>  1. Diagonal                        6. Random, CNDNUM = sqrt(0.1/EPS)
+*>  2. Random, CNDNUM = 2              7. Random, CNDNUM = 0.1/EPS
+*> *3. First row and column zero       8. Scaled near underflow
+*> *4. Last row and column zero        9. Scaled near overflow
+*> *5. Middle row and column zero
+*> (* - tests error exits from CPFTRF, no test ratios are computed)
+*> A solution XACT of size N-by-NRHS is created and the associated right
+*> hand side B as well. Then CPFTRF is called to compute L (or U), the
+*> Cholesky factor of A. Then L (or U) is used to solve the linear system
+*> of equations AX = B. This gives X. Then L (or U) is used to compute the
+*> inverse of A, AINV. The following four tests are then performed:
+*> (1) norm( L*L' - A ) / ( N * norm(A) * EPS ) or
+*>     norm( U'*U - A ) / ( N * norm(A) * EPS ),
+*> (2) norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
+*> (3) norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
+*> (4) ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
+*> where EPS is the machine precision, RCOND the condition number of A, and
+*> norm( . ) the 1-norm for (1,2,3) and the inf-norm for (4).
+*> Errors occur when INFO parameter is not as expected. Failures occur when
+*> a test ratios is greater than THRES.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>                The unit number for output.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>                The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>                The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[in] NNS
+*> \verbatim
+*>          NNS is INTEGER
+*>                The number of values of NRHS contained in the vector NSVAL.
+*> \endverbatim
+*>
+*> \param[in] NSVAL
+*> \verbatim
+*>          NSVAL is INTEGER array, dimension (NNS)
+*>                The values of the number of right-hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] NNT
+*> \verbatim
+*>          NNT is INTEGER
+*>                The number of values of MATRIX TYPE contained in the vector NTVAL.
+*> \endverbatim
+*>
+*> \param[in] NTVAL
+*> \verbatim
+*>          NTVAL is INTEGER array, dimension (NNT)
+*>                The values of matrix type (between 0 and 9 for PO/PP/PF matrices).
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>                The threshold value for the test ratios.  A result is
+*>                included in the output file if RESULT >= THRESH.  To have
+*>                every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] ASAV
+*> \verbatim
+*>          ASAV is COMPLEX array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AFAC
+*> \verbatim
+*>          AFAC is COMPLEX array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AINV
+*> \verbatim
+*>          AINV is COMPLEX array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] BSAV
+*> \verbatim
+*>          BSAV is COMPLEX array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] XACT
+*> \verbatim
+*>          XACT is COMPLEX array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] ARF
+*> \verbatim
+*>          ARF is COMPLEX array, dimension ((NMAX*(NMAX+1))/2)
+*> \endverbatim
+*>
+*> \param[out] ARFINV
+*> \verbatim
+*>          ARFINV is COMPLEX array, dimension ((NMAX*(NMAX+1))/2)
+*> \endverbatim
+*>
+*> \param[out] C_WORK_CLATMS
+*> \verbatim
+*>          C_WORK_CLATMS is COMPLEX array, dimension ( 3*NMAX )
+*> \endverbatim
+*>
+*> \param[out] C_WORK_CPOT02
+*> \verbatim
+*>          C_WORK_CPOT02 is COMPLEX array, dimension ( NMAX*MAXRHS )
+*> \endverbatim
+*>
+*> \param[out] C_WORK_CPOT03
+*> \verbatim
+*>          C_WORK_CPOT03 is COMPLEX array, dimension ( NMAX*NMAX )
+*> \endverbatim
+*>
+*> \param[out] S_WORK_CLATMS
+*> \verbatim
+*>          S_WORK_CLATMS is REAL array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] S_WORK_CLANHE
+*> \verbatim
+*>          S_WORK_CLANHE is REAL array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] S_WORK_CPOT01
+*> \verbatim
+*>          S_WORK_CPOT01 is REAL array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] S_WORK_CPOT02
+*> \verbatim
+*>          S_WORK_CPOT02 is REAL array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] S_WORK_CPOT03
+*> \verbatim
+*>          S_WORK_CPOT03 is REAL array, dimension ( NMAX )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
@@ -6,8 +247,9 @@
      +              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
 *
 *  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            NN, NNS, NNT, NOUT
@@ -34,107 +276,6 @@
       REAL               S_WORK_CPOT02( * )
       REAL               S_WORK_CPOT03( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CDRVRFP tests the LAPACK RFP routines:
-*      CPFTRF, CPFTRS, and CPFTRI.
-*
-*  This testing routine follow the same tests as CDRVPO (test for the full
-*  format Symmetric Positive Definite solver).
-*
-*  The tests are performed in Full Format, convertion back and forth from
-*  full format to RFP format are performed using the routines CTRTTF and
-*  CTFTTR.
-*
-*  First, a specific matrix A of size N is created. There is nine types of 
-*  different matrixes possible.
-*   1. Diagonal                        6. Random, CNDNUM = sqrt(0.1/EPS)
-*   2. Random, CNDNUM = 2              7. Random, CNDNUM = 0.1/EPS
-*  *3. First row and column zero       8. Scaled near underflow
-*  *4. Last row and column zero        9. Scaled near overflow
-*  *5. Middle row and column zero
-*  (* - tests error exits from CPFTRF, no test ratios are computed)
-*  A solution XACT of size N-by-NRHS is created and the associated right
-*  hand side B as well. Then CPFTRF is called to compute L (or U), the
-*  Cholesky factor of A. Then L (or U) is used to solve the linear system
-*  of equations AX = B. This gives X. Then L (or U) is used to compute the
-*  inverse of A, AINV. The following four tests are then performed:
-*  (1) norm( L*L' - A ) / ( N * norm(A) * EPS ) or
-*      norm( U'*U - A ) / ( N * norm(A) * EPS ),
-*  (2) norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
-*  (3) norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
-*  (4) ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
-*  where EPS is the machine precision, RCOND the condition number of A, and
-*  norm( . ) the 1-norm for (1,2,3) and the inf-norm for (4).
-*  Errors occur when INFO parameter is not as expected. Failures occur when
-*  a test ratios is greater than THRES.
-*
-*  Arguments
-*  =========
-*
-*  NOUT          (input) INTEGER
-*                The unit number for output.
-*
-*  NN            (input) INTEGER
-*                The number of values of N contained in the vector NVAL.
-*
-*  NVAL          (input) INTEGER array, dimension (NN)
-*                The values of the matrix dimension N.
-*
-*  NNS           (input) INTEGER
-*                The number of values of NRHS contained in the vector NSVAL.
-*
-*  NSVAL         (input) INTEGER array, dimension (NNS)
-*                The values of the number of right-hand sides NRHS.
-*
-*  NNT           (input) INTEGER
-*                The number of values of MATRIX TYPE contained in the vector NTVAL.
-*
-*  NTVAL         (input) INTEGER array, dimension (NNT)
-*                The values of matrix type (between 0 and 9 for PO/PP/PF matrices).
-*
-*  THRESH        (input) REAL
-*                The threshold value for the test ratios.  A result is
-*                included in the output file if RESULT >= THRESH.  To have
-*                every test ratio printed, use THRESH = 0.
-*
-*  A             (workspace) COMPLEX array, dimension (NMAX*NMAX)
-*
-*  ASAV          (workspace) COMPLEX array, dimension (NMAX*NMAX)
-*
-*  AFAC          (workspace) COMPLEX array, dimension (NMAX*NMAX)
-*
-*  AINV          (workspace) COMPLEX array, dimension (NMAX*NMAX)
-*
-*  B             (workspace) COMPLEX array, dimension (NMAX*MAXRHS)
-*
-*  BSAV          (workspace) COMPLEX array, dimension (NMAX*MAXRHS)
-*
-*  XACT          (workspace) COMPLEX array, dimension (NMAX*MAXRHS)
-*
-*  X             (workspace) COMPLEX array, dimension (NMAX*MAXRHS)
-*
-*  ARF           (workspace) COMPLEX array, dimension ((NMAX*(NMAX+1))/2)
-*
-*  ARFINV        (workspace) COMPLEX array, dimension ((NMAX*(NMAX+1))/2)
-*
-*  C_WORK_CLATMS (workspace) COMPLEX array, dimension ( 3*NMAX )
-*
-*  C_WORK_CPOT02 (workspace) COMPLEX array, dimension ( NMAX*MAXRHS )
-*
-*  C_WORK_CPOT03 (workspace) COMPLEX array, dimension ( NMAX*NMAX )
-*
-*  S_WORK_CLATMS (workspace) REAL array, dimension ( NMAX )
-*
-*  S_WORK_CLANHE (workspace) REAL array, dimension ( NMAX )
-*
-*  S_WORK_CPOT01 (workspace) REAL array, dimension ( NMAX )
-*
-*  S_WORK_CPOT02 (workspace) REAL array, dimension ( NMAX )
-*
-*  S_WORK_CPOT03 (workspace) REAL array, dimension ( NMAX )
 *
 *  =====================================================================
 *

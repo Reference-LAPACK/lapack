@@ -1,9 +1,135 @@
+*> \brief \b SLAIC1
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            J, JOB
+*       REAL               C, GAMMA, S, SEST, SESTPR
+*       ..
+*       .. Array Arguments ..
+*       REAL               W( J ), X( J )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAIC1 applies one step of incremental condition estimation in
+*> its simplest version:
+*>
+*> Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j
+*> lower triangular matrix L, such that
+*>          twonorm(L*x) = sest
+*> Then SLAIC1 computes sestpr, s, c such that
+*> the vector
+*>                 [ s*x ]
+*>          xhat = [  c  ]
+*> is an approximate singular vector of
+*>                 [ L      0  ]
+*>          Lhat = [ w**T gamma ]
+*> in the sense that
+*>          twonorm(Lhat*xhat) = sestpr.
+*>
+*> Depending on JOB, an estimate for the largest or smallest singular
+*> value is computed.
+*>
+*> Note that [s c]**T and sestpr**2 is an eigenpair of the system
+*>
+*>     diag(sest*sest, 0) + [alpha  gamma] * [ alpha ]
+*>                                           [ gamma ]
+*>
+*> where  alpha =  x**T*w.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOB
+*> \verbatim
+*>          JOB is INTEGER
+*>          = 1: an estimate for the largest singular value is computed.
+*>          = 2: an estimate for the smallest singular value is computed.
+*> \endverbatim
+*>
+*> \param[in] J
+*> \verbatim
+*>          J is INTEGER
+*>          Length of X and W
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is REAL array, dimension (J)
+*>          The j-vector x.
+*> \endverbatim
+*>
+*> \param[in] SEST
+*> \verbatim
+*>          SEST is REAL
+*>          Estimated singular value of j by j matrix L
+*> \endverbatim
+*>
+*> \param[in] W
+*> \verbatim
+*>          W is REAL array, dimension (J)
+*>          The j-vector w.
+*> \endverbatim
+*>
+*> \param[in] GAMMA
+*> \verbatim
+*>          GAMMA is REAL
+*>          The diagonal element gamma.
+*> \endverbatim
+*>
+*> \param[out] SESTPR
+*> \verbatim
+*>          SESTPR is REAL
+*>          Estimated singular value of (j+1) by (j+1) matrix Lhat.
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is REAL
+*>          Sine needed in forming xhat.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is REAL
+*>          Cosine needed in forming xhat.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE SLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            J, JOB
@@ -12,66 +138,6 @@
 *     .. Array Arguments ..
       REAL               W( J ), X( J )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAIC1 applies one step of incremental condition estimation in
-*  its simplest version:
-*
-*  Let x, twonorm(x) = 1, be an approximate singular vector of an j-by-j
-*  lower triangular matrix L, such that
-*           twonorm(L*x) = sest
-*  Then SLAIC1 computes sestpr, s, c such that
-*  the vector
-*                  [ s*x ]
-*           xhat = [  c  ]
-*  is an approximate singular vector of
-*                  [ L      0  ]
-*           Lhat = [ w**T gamma ]
-*  in the sense that
-*           twonorm(Lhat*xhat) = sestpr.
-*
-*  Depending on JOB, an estimate for the largest or smallest singular
-*  value is computed.
-*
-*  Note that [s c]**T and sestpr**2 is an eigenpair of the system
-*
-*      diag(sest*sest, 0) + [alpha  gamma] * [ alpha ]
-*                                            [ gamma ]
-*
-*  where  alpha =  x**T*w.
-*
-*  Arguments
-*  =========
-*
-*  JOB     (input) INTEGER
-*          = 1: an estimate for the largest singular value is computed.
-*          = 2: an estimate for the smallest singular value is computed.
-*
-*  J       (input) INTEGER
-*          Length of X and W
-*
-*  X       (input) REAL array, dimension (J)
-*          The j-vector x.
-*
-*  SEST    (input) REAL
-*          Estimated singular value of j by j matrix L
-*
-*  W       (input) REAL array, dimension (J)
-*          The j-vector w.
-*
-*  GAMMA   (input) REAL
-*          The diagonal element gamma.
-*
-*  SESTPR  (output) REAL
-*          Estimated singular value of (j+1) by (j+1) matrix Lhat.
-*
-*  S       (output) REAL
-*          Sine needed in forming xhat.
-*
-*  C       (output) REAL
-*          Cosine needed in forming xhat.
 *
 *  =====================================================================
 *

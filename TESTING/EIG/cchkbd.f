@@ -1,11 +1,431 @@
+*> \brief \b CCHKBD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
+*                          ISEED, THRESH, A, LDA, BD, BE, S1, S2, X, LDX,
+*                          Y, Z, Q, LDQ, PT, LDPT, U, VT, WORK, LWORK,
+*                          RWORK, NOUT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDPT, LDQ, LDX, LWORK, NOUT, NRHS,
+*      $                   NSIZES, NTYPES
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), MVAL( * ), NVAL( * )
+*       REAL               BD( * ), BE( * ), RWORK( * ), S1( * ), S2( * )
+*       COMPLEX            A( LDA, * ), PT( LDPT, * ), Q( LDQ, * ),
+*      $                   U( LDPT, * ), VT( LDPT, * ), WORK( * ),
+*      $                   X( LDX, * ), Y( LDX, * ), Z( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CCHKBD checks the singular value decomposition (SVD) routines.
+*>
+*> CGEBRD reduces a complex general m by n matrix A to real upper or
+*> lower bidiagonal form by an orthogonal transformation: Q' * A * P = B
+*> (or A = Q * B * P').  The matrix B is upper bidiagonal if m >= n
+*> and lower bidiagonal if m < n.
+*>
+*> CUNGBR generates the orthogonal matrices Q and P' from CGEBRD.
+*> Note that Q and P are not necessarily square.
+*>
+*> CBDSQR computes the singular value decomposition of the bidiagonal
+*> matrix B as B = U S V'.  It is called three times to compute
+*>    1)  B = U S1 V', where S1 is the diagonal matrix of singular
+*>        values and the columns of the matrices U and V are the left
+*>        and right singular vectors, respectively, of B.
+*>    2)  Same as 1), but the singular values are stored in S2 and the
+*>        singular vectors are not computed.
+*>    3)  A = (UQ) S (P'V'), the SVD of the original matrix A.
+*> In addition, CBDSQR has an option to apply the left orthogonal matrix
+*> U to a matrix X, useful in least squares applications.
+*>
+*> For each pair of matrix dimensions (M,N) and each selected matrix
+*> type, an M by N matrix A and an M by NRHS matrix X are generated.
+*> The problem dimensions are as follows
+*>    A:          M x N
+*>    Q:          M x min(M,N) (but M x M if NRHS > 0)
+*>    P:          min(M,N) x N
+*>    B:          min(M,N) x min(M,N)
+*>    U, V:       min(M,N) x min(M,N)
+*>    S1, S2      diagonal, order min(M,N)
+*>    X:          M x NRHS
+*>
+*> For each generated matrix, 14 tests are performed:
+*>
+*> Test CGEBRD and CUNGBR
+*>
+*> (1)   | A - Q B PT | / ( |A| max(M,N) ulp ), PT = P'
+*>
+*> (2)   | I - Q' Q | / ( M ulp )
+*>
+*> (3)   | I - PT PT' | / ( N ulp )
+*>
+*> Test CBDSQR on bidiagonal matrix B
+*>
+*> (4)   | B - U S1 VT | / ( |B| min(M,N) ulp ), VT = V'
+*>
+*> (5)   | Y - U Z | / ( |Y| max(min(M,N),k) ulp ), where Y = Q' X
+*>                                                  and   Z = U' Y.
+*> (6)   | I - U' U | / ( min(M,N) ulp )
+*>
+*> (7)   | I - VT VT' | / ( min(M,N) ulp )
+*>
+*> (8)   S1 contains min(M,N) nonnegative values in decreasing order.
+*>       (Return 0 if true, 1/ULP if false.)
+*>
+*> (9)   0 if the true singular values of B are within THRESH of
+*>       those in S1.  2*THRESH if they are not.  (Tested using
+*>       SSVDCH)
+*>
+*> (10)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
+*>                                   computing U and V.
+*>
+*> Test CBDSQR on matrix A
+*>
+*> (11)  | A - (QU) S (VT PT) | / ( |A| max(M,N) ulp )
+*>
+*> (12)  | X - (QU) Z | / ( |X| max(M,k) ulp )
+*>
+*> (13)  | I - (QU)'(QU) | / ( M ulp )
+*>
+*> (14)  | I - (VT PT) (PT'VT') | / ( N ulp )
+*>
+*> The possible matrix types are
+*>
+*> (1)  The zero matrix.
+*> (2)  The identity matrix.
+*>
+*> (3)  A diagonal matrix with evenly spaced entries
+*>      1, ..., ULP  and random signs.
+*>      (ULP = (first number larger than 1) - 1 )
+*> (4)  A diagonal matrix with geometrically spaced entries
+*>      1, ..., ULP  and random signs.
+*> (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
+*>      and random signs.
+*>
+*> (6)  Same as (3), but multiplied by SQRT( overflow threshold )
+*> (7)  Same as (3), but multiplied by SQRT( underflow threshold )
+*>
+*> (8)  A matrix of the form  U D V, where U and V are orthogonal and
+*>      D has evenly spaced entries 1, ..., ULP with random signs
+*>      on the diagonal.
+*>
+*> (9)  A matrix of the form  U D V, where U and V are orthogonal and
+*>      D has geometrically spaced entries 1, ..., ULP with random
+*>      signs on the diagonal.
+*>
+*> (10) A matrix of the form  U D V, where U and V are orthogonal and
+*>      D has "clustered" entries 1, ULP,..., ULP with random
+*>      signs on the diagonal.
+*>
+*> (11) Same as (8), but multiplied by SQRT( overflow threshold )
+*> (12) Same as (8), but multiplied by SQRT( underflow threshold )
+*>
+*> (13) Rectangular matrix with random entries chosen from (-1,1).
+*> (14) Same as (13), but multiplied by SQRT( overflow threshold )
+*> (15) Same as (13), but multiplied by SQRT( underflow threshold )
+*>
+*> Special case:
+*> (16) A bidiagonal matrix with random entries chosen from a
+*>      logarithmic distribution on [ulp^2,ulp^(-2)]  (I.e., each
+*>      entry is  e^x, where x is chosen uniformly on
+*>      [ 2 log(ulp), -2 log(ulp) ] .)  For *this* type:
+*>      (a) CGEBRD is not called to reduce it to bidiagonal form.
+*>      (b) the bidiagonal is  min(M,N) x min(M,N); if M<N, the
+*>          matrix will be lower bidiagonal, otherwise upper.
+*>      (c) only tests 5--8 and 14 are performed.
+*>
+*> A subset of the full set of matrix types may be selected through
+*> the logical array DOTYPE.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of values of M and N contained in the vectors
+*>          MVAL and NVAL.  The matrix sizes are used in pairs (M,N).
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, CCHKBD
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrices are in A and B.
+*>          This is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size (m,n), a matrix
+*>          of type j will be generated.  If NTYPES is smaller than the
+*>          maximum number of types defined (PARAMETER MAXTYP), then
+*>          types NTYPES+1 through MAXTYP will not be generated.  If
+*>          NTYPES is larger than MAXTYP, DOTYPE(MAXTYP+1) through
+*>          DOTYPE(NTYPES) will be ignored.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns in the "right-hand side" matrices X, Y,
+*>          and Z, used in testing CBDSQR.  If NRHS = 0, then the
+*>          operations on the right-hand side will not be tested.
+*>          NRHS must be at least 0.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The values of ISEED are changed on exit, and can be
+*>          used in the next call to CCHKBD to continue the same random
+*>          number sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.  Note that the
+*>          expected value of the test ratios is O(1), so THRESH should
+*>          be a reasonably small multiple of 1, e.g., 10 or 100.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,NMAX)
+*>          where NMAX is the maximum value of N in NVAL.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,MMAX),
+*>          where MMAX is the maximum value of M in MVAL.
+*> \endverbatim
+*>
+*> \param[out] BD
+*> \verbatim
+*>          BD is REAL array, dimension
+*>                      (max(min(MVAL(j),NVAL(j))))
+*> \endverbatim
+*>
+*> \param[out] BE
+*> \verbatim
+*>          BE is REAL array, dimension
+*>                      (max(min(MVAL(j),NVAL(j))))
+*> \endverbatim
+*>
+*> \param[out] S1
+*> \verbatim
+*>          S1 is REAL array, dimension
+*>                      (max(min(MVAL(j),NVAL(j))))
+*> \endverbatim
+*>
+*> \param[out] S2
+*> \verbatim
+*>          S2 is REAL array, dimension
+*>                      (max(min(MVAL(j),NVAL(j))))
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (LDX,NRHS)
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the arrays X, Y, and Z.
+*>          LDX >= max(1,MMAX).
+*> \endverbatim
+*>
+*> \param[out] Y
+*> \verbatim
+*>          Y is COMPLEX array, dimension (LDX,NRHS)
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX array, dimension (LDX,NRHS)
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDQ,MMAX)
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q.  LDQ >= max(1,MMAX).
+*> \endverbatim
+*>
+*> \param[out] PT
+*> \verbatim
+*>          PT is COMPLEX array, dimension (LDPT,NMAX)
+*> \endverbatim
+*>
+*> \param[in] LDPT
+*> \verbatim
+*>          LDPT is INTEGER
+*>          The leading dimension of the arrays PT, U, and V.
+*>          LDPT >= max(1, max(min(MVAL(j),NVAL(j)))).
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is COMPLEX array, dimension
+*>                      (LDPT,max(min(MVAL(j),NVAL(j))))
+*> \endverbatim
+*>
+*> \param[out] V
+*> \verbatim
+*>          V is COMPLEX array, dimension
+*>                      (LDPT,max(min(MVAL(j),NVAL(j))))
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          3(M+N) and  M(M + max(M,N,k) + 1) + N*min(M,N)  for all
+*>          pairs  (M,N)=(MM(j),NN(j))
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension
+*>                      (5*max(min(M,N)))
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0, then everything ran OK.
+*>           -1: NSIZES < 0
+*>           -2: Some MM(j) < 0
+*>           -3: Some NN(j) < 0
+*>           -4: NTYPES < 0
+*>           -6: NRHS  < 0
+*>           -8: THRESH < 0
+*>          -11: LDA < 1 or LDA < MMAX, where MMAX is max( MM(j) ).
+*>          -17: LDB < 1 or LDB < MMAX.
+*>          -21: LDQ < 1 or LDQ < MMAX.
+*>          -23: LDP < 1 or LDP < MNMAX.
+*>          -27: LWORK too small.
+*>          If  CLATMR, CLATMS, CGEBRD, CUNGBR, or CBDSQR,
+*>              returns an error code, the
+*>              absolute value of it is returned.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>     Some Local Variables and Parameters:
+*>     ---- ----- --------- --- ----------
+*> \endverbatim
+*> \verbatim
+*>     ZERO, ONE       Real 0 and 1.
+*>     MAXTYP          The number of types defined.
+*>     NTEST           The number of tests performed, or which can
+*>                     be performed so far, for the current matrix.
+*>     MMAX            Largest value in NN.
+*>     NMAX            Largest value in NN.
+*>     MNMIN           min(MM(j), NN(j)) (the dimension of the bidiagonal
+*>                     matrix.)
+*>     MNMAX           The maximum value of MNMIN for j=1,...,NSIZES.
+*>     NFAIL           The number of tests which have exceeded THRESH
+*>     COND, IMODE     Values to be passed to the matrix generators.
+*>     ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>     OVFL, UNFL      Overflow and underflow thresholds.
+*>     RTOVFL, RTUNFL  Square roots of the previous 2 values.
+*>     ULP, ULPINV     Finest relative precision and its inverse.
+*> \endverbatim
+*> \verbatim
+*>             The following four arrays decode JTYPE:
+*>     KTYPE(j)        The general type (1-10) for type "j".
+*>     KMODE(j)        The MODE value to be passed to the matrix
+*>                     generator for type "j".
+*>     KMAGN(j)        The order of magnitude ( O(1),
+*>                     O(overflow^(1/2) ), O(underflow^(1/2) )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
      $                   ISEED, THRESH, A, LDA, BD, BE, S1, S2, X, LDX,
      $                   Y, Z, Q, LDQ, PT, LDPT, U, VT, WORK, LWORK,
      $                   RWORK, NOUT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDPT, LDQ, LDX, LWORK, NOUT, NRHS,
@@ -20,285 +440,6 @@
      $                   U( LDPT, * ), VT( LDPT, * ), WORK( * ),
      $                   X( LDX, * ), Y( LDX, * ), Z( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CCHKBD checks the singular value decomposition (SVD) routines.
-*
-*  CGEBRD reduces a complex general m by n matrix A to real upper or
-*  lower bidiagonal form by an orthogonal transformation: Q' * A * P = B
-*  (or A = Q * B * P').  The matrix B is upper bidiagonal if m >= n
-*  and lower bidiagonal if m < n.
-*
-*  CUNGBR generates the orthogonal matrices Q and P' from CGEBRD.
-*  Note that Q and P are not necessarily square.
-*
-*  CBDSQR computes the singular value decomposition of the bidiagonal
-*  matrix B as B = U S V'.  It is called three times to compute
-*     1)  B = U S1 V', where S1 is the diagonal matrix of singular
-*         values and the columns of the matrices U and V are the left
-*         and right singular vectors, respectively, of B.
-*     2)  Same as 1), but the singular values are stored in S2 and the
-*         singular vectors are not computed.
-*     3)  A = (UQ) S (P'V'), the SVD of the original matrix A.
-*  In addition, CBDSQR has an option to apply the left orthogonal matrix
-*  U to a matrix X, useful in least squares applications.
-*
-*  For each pair of matrix dimensions (M,N) and each selected matrix
-*  type, an M by N matrix A and an M by NRHS matrix X are generated.
-*  The problem dimensions are as follows
-*     A:          M x N
-*     Q:          M x min(M,N) (but M x M if NRHS > 0)
-*     P:          min(M,N) x N
-*     B:          min(M,N) x min(M,N)
-*     U, V:       min(M,N) x min(M,N)
-*     S1, S2      diagonal, order min(M,N)
-*     X:          M x NRHS
-*
-*  For each generated matrix, 14 tests are performed:
-*
-*  Test CGEBRD and CUNGBR
-*
-*  (1)   | A - Q B PT | / ( |A| max(M,N) ulp ), PT = P'
-*
-*  (2)   | I - Q' Q | / ( M ulp )
-*
-*  (3)   | I - PT PT' | / ( N ulp )
-*
-*  Test CBDSQR on bidiagonal matrix B
-*
-*  (4)   | B - U S1 VT | / ( |B| min(M,N) ulp ), VT = V'
-*
-*  (5)   | Y - U Z | / ( |Y| max(min(M,N),k) ulp ), where Y = Q' X
-*                                                   and   Z = U' Y.
-*  (6)   | I - U' U | / ( min(M,N) ulp )
-*
-*  (7)   | I - VT VT' | / ( min(M,N) ulp )
-*
-*  (8)   S1 contains min(M,N) nonnegative values in decreasing order.
-*        (Return 0 if true, 1/ULP if false.)
-*
-*  (9)   0 if the true singular values of B are within THRESH of
-*        those in S1.  2*THRESH if they are not.  (Tested using
-*        SSVDCH)
-*
-*  (10)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
-*                                    computing U and V.
-*
-*  Test CBDSQR on matrix A
-*
-*  (11)  | A - (QU) S (VT PT) | / ( |A| max(M,N) ulp )
-*
-*  (12)  | X - (QU) Z | / ( |X| max(M,k) ulp )
-*
-*  (13)  | I - (QU)'(QU) | / ( M ulp )
-*
-*  (14)  | I - (VT PT) (PT'VT') | / ( N ulp )
-*
-*  The possible matrix types are
-*
-*  (1)  The zero matrix.
-*  (2)  The identity matrix.
-*
-*  (3)  A diagonal matrix with evenly spaced entries
-*       1, ..., ULP  and random signs.
-*       (ULP = (first number larger than 1) - 1 )
-*  (4)  A diagonal matrix with geometrically spaced entries
-*       1, ..., ULP  and random signs.
-*  (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
-*       and random signs.
-*
-*  (6)  Same as (3), but multiplied by SQRT( overflow threshold )
-*  (7)  Same as (3), but multiplied by SQRT( underflow threshold )
-*
-*  (8)  A matrix of the form  U D V, where U and V are orthogonal and
-*       D has evenly spaced entries 1, ..., ULP with random signs
-*       on the diagonal.
-*
-*  (9)  A matrix of the form  U D V, where U and V are orthogonal and
-*       D has geometrically spaced entries 1, ..., ULP with random
-*       signs on the diagonal.
-*
-*  (10) A matrix of the form  U D V, where U and V are orthogonal and
-*       D has "clustered" entries 1, ULP,..., ULP with random
-*       signs on the diagonal.
-*
-*  (11) Same as (8), but multiplied by SQRT( overflow threshold )
-*  (12) Same as (8), but multiplied by SQRT( underflow threshold )
-*
-*  (13) Rectangular matrix with random entries chosen from (-1,1).
-*  (14) Same as (13), but multiplied by SQRT( overflow threshold )
-*  (15) Same as (13), but multiplied by SQRT( underflow threshold )
-*
-*  Special case:
-*  (16) A bidiagonal matrix with random entries chosen from a
-*       logarithmic distribution on [ulp^2,ulp^(-2)]  (I.e., each
-*       entry is  e^x, where x is chosen uniformly on
-*       [ 2 log(ulp), -2 log(ulp) ] .)  For *this* type:
-*       (a) CGEBRD is not called to reduce it to bidiagonal form.
-*       (b) the bidiagonal is  min(M,N) x min(M,N); if M<N, the
-*           matrix will be lower bidiagonal, otherwise upper.
-*       (c) only tests 5--8 and 14 are performed.
-*
-*  A subset of the full set of matrix types may be selected through
-*  the logical array DOTYPE.
-*
-*  Arguments
-*  ==========
-*
-*  NSIZES  (input) INTEGER
-*          The number of values of M and N contained in the vectors
-*          MVAL and NVAL.  The matrix sizes are used in pairs (M,N).
-*
-*  MVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension M.
-*
-*  NVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix column dimension N.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE.   If it is zero, CCHKBD
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrices are in A and B.
-*          This is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size (m,n), a matrix
-*          of type j will be generated.  If NTYPES is smaller than the
-*          maximum number of types defined (PARAMETER MAXTYP), then
-*          types NTYPES+1 through MAXTYP will not be generated.  If
-*          NTYPES is larger than MAXTYP, DOTYPE(MAXTYP+1) through
-*          DOTYPE(NTYPES) will be ignored.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns in the "right-hand side" matrices X, Y,
-*          and Z, used in testing CBDSQR.  If NRHS = 0, then the
-*          operations on the right-hand side will not be tested.
-*          NRHS must be at least 0.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The values of ISEED are changed on exit, and can be
-*          used in the next call to CCHKBD to continue the same random
-*          number sequence.
-*
-*  THRESH  (input) REAL
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.  Note that the
-*          expected value of the test ratios is O(1), so THRESH should
-*          be a reasonably small multiple of 1, e.g., 10 or 100.
-*
-*  A       (workspace) COMPLEX array, dimension (LDA,NMAX)
-*          where NMAX is the maximum value of N in NVAL.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,MMAX),
-*          where MMAX is the maximum value of M in MVAL.
-*
-*  BD      (workspace) REAL array, dimension
-*                      (max(min(MVAL(j),NVAL(j))))
-*
-*  BE      (workspace) REAL array, dimension
-*                      (max(min(MVAL(j),NVAL(j))))
-*
-*  S1      (workspace) REAL array, dimension
-*                      (max(min(MVAL(j),NVAL(j))))
-*
-*  S2      (workspace) REAL array, dimension
-*                      (max(min(MVAL(j),NVAL(j))))
-*
-*  X       (workspace) COMPLEX array, dimension (LDX,NRHS)
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the arrays X, Y, and Z.
-*          LDX >= max(1,MMAX).
-*
-*  Y       (workspace) COMPLEX array, dimension (LDX,NRHS)
-*
-*  Z       (workspace) COMPLEX array, dimension (LDX,NRHS)
-*
-*  Q       (workspace) COMPLEX array, dimension (LDQ,MMAX)
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q.  LDQ >= max(1,MMAX).
-*
-*  PT      (workspace) COMPLEX array, dimension (LDPT,NMAX)
-*
-*  LDPT    (input) INTEGER
-*          The leading dimension of the arrays PT, U, and V.
-*          LDPT >= max(1, max(min(MVAL(j),NVAL(j)))).
-*
-*  U       (workspace) COMPLEX array, dimension
-*                      (LDPT,max(min(MVAL(j),NVAL(j))))
-*
-*  V       (workspace) COMPLEX array, dimension
-*                      (LDPT,max(min(MVAL(j),NVAL(j))))
-*
-*  WORK    (workspace) COMPLEX array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          3(M+N) and  M(M + max(M,N,k) + 1) + N*min(M,N)  for all
-*          pairs  (M,N)=(MM(j),NN(j))
-*
-*  RWORK   (workspace) REAL array, dimension
-*                      (5*max(min(M,N)))
-*
-*  NOUT    (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IINFO not equal to 0.)
-*
-*  INFO    (output) INTEGER
-*          If 0, then everything ran OK.
-*           -1: NSIZES < 0
-*           -2: Some MM(j) < 0
-*           -3: Some NN(j) < 0
-*           -4: NTYPES < 0
-*           -6: NRHS  < 0
-*           -8: THRESH < 0
-*          -11: LDA < 1 or LDA < MMAX, where MMAX is max( MM(j) ).
-*          -17: LDB < 1 or LDB < MMAX.
-*          -21: LDQ < 1 or LDQ < MMAX.
-*          -23: LDP < 1 or LDP < MNMAX.
-*          -27: LWORK too small.
-*          If  CLATMR, CLATMS, CGEBRD, CUNGBR, or CBDSQR,
-*              returns an error code, the
-*              absolute value of it is returned.
-*
-*-----------------------------------------------------------------------
-*
-*     Some Local Variables and Parameters:
-*     ---- ----- --------- --- ----------
-*
-*     ZERO, ONE       Real 0 and 1.
-*     MAXTYP          The number of types defined.
-*     NTEST           The number of tests performed, or which can
-*                     be performed so far, for the current matrix.
-*     MMAX            Largest value in NN.
-*     NMAX            Largest value in NN.
-*     MNMIN           min(MM(j), NN(j)) (the dimension of the bidiagonal
-*                     matrix.)
-*     MNMAX           The maximum value of MNMIN for j=1,...,NSIZES.
-*     NFAIL           The number of tests which have exceeded THRESH
-*     COND, IMODE     Values to be passed to the matrix generators.
-*     ANORM           Norm of A; passed to matrix generators.
-*
-*     OVFL, UNFL      Overflow and underflow thresholds.
-*     RTOVFL, RTUNFL  Square roots of the previous 2 values.
-*     ULP, ULPINV     Finest relative precision and its inverse.
-*
-*             The following four arrays decode JTYPE:
-*     KTYPE(j)        The general type (1-10) for type "j".
-*     KMODE(j)        The MODE value to be passed to the matrix
-*                     generator for type "j".
-*     KMAGN(j)        The order of magnitude ( O(1),
-*                     O(overflow^(1/2) ), O(underflow^(1/2) )
 *
 * ======================================================================
 *

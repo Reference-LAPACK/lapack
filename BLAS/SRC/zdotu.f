@@ -1,21 +1,69 @@
+*> \brief \b ZDOTU
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       COMPLEX*16 FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER INCX,INCY,N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16 ZX(*),ZY(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    ZDOTU forms the dot product of two vectors.
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_blas_level1
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>     jack dongarra, 3/11/78.
+*>     modified 12/3/93, array(1) declarations changed to array(*)
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       COMPLEX*16 FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
+*
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       INTEGER INCX,INCY,N
 *     ..
 *     .. Array Arguments ..
       COMPLEX*16 ZX(*),ZY(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     ZDOTU forms the dot product of two vectors.
-*
-*  Further Details
-*  ===============
-*
-*     jack dongarra, 3/11/78.
-*     modified 12/3/93, array(1) declarations changed to array(*)
 *
 *  =====================================================================
 *

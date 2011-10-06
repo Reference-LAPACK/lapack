@@ -1,59 +1,114 @@
+*> \brief \b DLAS2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAS2( F, G, H, SSMIN, SSMAX )
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION   F, G, H, SSMAX, SSMIN
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAS2  computes the singular values of the 2-by-2 matrix
+*>    [  F   G  ]
+*>    [  0   H  ].
+*> On return, SSMIN is the smaller singular value and SSMAX is the
+*> larger singular value.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] F
+*> \verbatim
+*>          F is DOUBLE PRECISION
+*>          The (1,1) element of the 2-by-2 matrix.
+*> \endverbatim
+*>
+*> \param[in] G
+*> \verbatim
+*>          G is DOUBLE PRECISION
+*>          The (1,2) element of the 2-by-2 matrix.
+*> \endverbatim
+*>
+*> \param[in] H
+*> \verbatim
+*>          H is DOUBLE PRECISION
+*>          The (2,2) element of the 2-by-2 matrix.
+*> \endverbatim
+*>
+*> \param[out] SSMIN
+*> \verbatim
+*>          SSMIN is DOUBLE PRECISION
+*>          The smaller singular value.
+*> \endverbatim
+*>
+*> \param[out] SSMAX
+*> \verbatim
+*>          SSMAX is DOUBLE PRECISION
+*>          The larger singular value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Barring over/underflow, all output quantities are correct to within
+*>  a few units in the last place (ulps), even in the absence of a guard
+*>  digit in addition/subtraction.
+*>
+*>  In IEEE arithmetic, the code works correctly if one matrix element is
+*>  infinite.
+*>
+*>  Overflow will not occur unless the largest singular value itself
+*>  overflows, or is within a few ulps of overflow. (On machines with
+*>  partial overflow, like the Cray, overflow may occur if the largest
+*>  singular value is within a factor of 2 of overflow.)
+*>
+*>  Underflow is harmless if underflow is gradual. Otherwise, results
+*>  may correspond to a matrix modified by perturbations of size near
+*>  the underflow threshold.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLAS2( F, G, H, SSMIN, SSMAX )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   F, G, H, SSMAX, SSMIN
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAS2  computes the singular values of the 2-by-2 matrix
-*     [  F   G  ]
-*     [  0   H  ].
-*  On return, SSMIN is the smaller singular value and SSMAX is the
-*  larger singular value.
-*
-*  Arguments
-*  =========
-*
-*  F       (input) DOUBLE PRECISION
-*          The (1,1) element of the 2-by-2 matrix.
-*
-*  G       (input) DOUBLE PRECISION
-*          The (1,2) element of the 2-by-2 matrix.
-*
-*  H       (input) DOUBLE PRECISION
-*          The (2,2) element of the 2-by-2 matrix.
-*
-*  SSMIN   (output) DOUBLE PRECISION
-*          The smaller singular value.
-*
-*  SSMAX   (output) DOUBLE PRECISION
-*          The larger singular value.
-*
-*  Further Details
-*  ===============
-*
-*  Barring over/underflow, all output quantities are correct to within
-*  a few units in the last place (ulps), even in the absence of a guard
-*  digit in addition/subtraction.
-*
-*  In IEEE arithmetic, the code works correctly if one matrix element is
-*  infinite.
-*
-*  Overflow will not occur unless the largest singular value itself
-*  overflows, or is within a few ulps of overflow. (On machines with
-*  partial overflow, like the Cray, overflow may occur if the largest
-*  singular value is within a factor of 2 of overflow.)
-*
-*  Underflow is harmless if underflow is gradual. Otherwise, results
-*  may correspond to a matrix modified by perturbations of size near
-*  the underflow threshold.
 *
 *  ====================================================================
 *

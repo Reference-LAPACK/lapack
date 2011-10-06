@@ -1,8 +1,86 @@
+*> \brief \b ICOPY
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ICOPY( N, SX, INCX, SY, INCY )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCX, INCY, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            SX( * ), SY( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ICOPY copies an integer vector x to an integer vector y.
+*> Uses unrolled loops for increments equal to 1.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The length of the vectors SX and SY.
+*> \endverbatim
+*>
+*> \param[in] SX
+*> \verbatim
+*>          SX is INTEGER array, dimension (1+(N-1)*abs(INCX))
+*>          The vector X.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The spacing between consecutive elements of SX.
+*> \endverbatim
+*>
+*> \param[out] SY
+*> \verbatim
+*>          SY is INTEGER array, dimension (1+(N-1)*abs(INCY))
+*>          The vector Y.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>          The spacing between consecutive elements of SY.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup aux_lin
+*
+*  =====================================================================
       SUBROUTINE ICOPY( N, SX, INCX, SY, INCY )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, INCY, N
@@ -10,30 +88,6 @@
 *     .. Array Arguments ..
       INTEGER            SX( * ), SY( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ICOPY copies an integer vector x to an integer vector y.
-*  Uses unrolled loops for increments equal to 1.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The length of the vectors SX and SY.
-*
-*  SX      (input) INTEGER array, dimension (1+(N-1)*abs(INCX))
-*          The vector X.
-*
-*  INCX    (input) INTEGER
-*          The spacing between consecutive elements of SX.
-*
-*  SY      (output) INTEGER array, dimension (1+(N-1)*abs(INCY))
-*          The vector Y.
-*
-*  INCY    (input) INTEGER
-*          The spacing between consecutive elements of SY.
 *
 *  =====================================================================
 *

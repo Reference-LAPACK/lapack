@@ -1,9 +1,101 @@
+*> \brief \b CLAPLL
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLAPLL( N, X, INCX, Y, INCY, SSMIN )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCX, INCY, N
+*       REAL               SSMIN
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            X( * ), Y( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Given two column vectors X and Y, let
+*>
+*>                      A = ( X Y ).
+*>
+*> The subroutine first computes the QR factorization of A = Q*R,
+*> and then computes the SVD of the 2-by-2 upper triangular matrix R.
+*> The smaller singular value of R is returned in SSMIN, which is used
+*> as the measurement of the linear dependency of the vectors X and Y.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The length of the vectors X and Y.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (1+(N-1)*INCX)
+*>          On entry, X contains the N-vector X.
+*>          On exit, X is overwritten.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The increment between successive elements of X. INCX > 0.
+*> \endverbatim
+*>
+*> \param[in,out] Y
+*> \verbatim
+*>          Y is COMPLEX array, dimension (1+(N-1)*INCY)
+*>          On entry, Y contains the N-vector Y.
+*>          On exit, Y is overwritten.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>          The increment between successive elements of Y. INCY > 0.
+*> \endverbatim
+*>
+*> \param[out] SSMIN
+*> \verbatim
+*>          SSMIN is REAL
+*>          The smallest singular value of the N-by-2 matrix A = ( X Y ).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE CLAPLL( N, X, INCX, Y, INCY, SSMIN )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, INCY, N
@@ -12,41 +104,6 @@
 *     .. Array Arguments ..
       COMPLEX            X( * ), Y( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Given two column vectors X and Y, let
-*
-*                       A = ( X Y ).
-*
-*  The subroutine first computes the QR factorization of A = Q*R,
-*  and then computes the SVD of the 2-by-2 upper triangular matrix R.
-*  The smaller singular value of R is returned in SSMIN, which is used
-*  as the measurement of the linear dependency of the vectors X and Y.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The length of the vectors X and Y.
-*
-*  X       (input/output) COMPLEX array, dimension (1+(N-1)*INCX)
-*          On entry, X contains the N-vector X.
-*          On exit, X is overwritten.
-*
-*  INCX    (input) INTEGER
-*          The increment between successive elements of X. INCX > 0.
-*
-*  Y       (input/output) COMPLEX array, dimension (1+(N-1)*INCY)
-*          On entry, Y contains the N-vector Y.
-*          On exit, Y is overwritten.
-*
-*  INCY    (input) INTEGER
-*          The increment between successive elements of Y. INCY > 0.
-*
-*  SSMIN   (output) REAL
-*          The smallest singular value of the N-by-2 matrix A = ( X Y ).
 *
 *  =====================================================================
 *

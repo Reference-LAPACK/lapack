@@ -1,9 +1,143 @@
+*> \brief \b ZHETD2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, LDA, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), E( * )
+*       COMPLEX*16         A( LDA, * ), TAU( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZHETD2 reduces a complex Hermitian matrix A to real symmetric
+*> tridiagonal form T by a unitary similarity transformation:
+*> Q**H * A * Q = T.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          Hermitian matrix A is stored:
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16HEcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*          of elementary reflectors. See Further Details.
+*>
+*>  LDA     (input) INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*>
+*>  D       (output) DOUBLE PRECISION array, dimension (N)
+*>          The diagonal elements of the tridiagonal matrix T:
+*>          D(i) = A(i,i).
+*>
+*>  E       (output) DOUBLE PRECISION array, dimension (N-1)
+*>          The off-diagonal elements of the tridiagonal matrix T:
+*>          E(i) = A(i,i+1) if UPLO = 'U', E(i) = A(i+1,i) if UPLO = 'L'.
+*>
+*>  TAU     (output) COMPLEX*16 array, dimension (N-1)
+*>          The scalar factors of the elementary reflectors (see Further
+*>          Details).
+*>
+*>  INFO    (output) INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>
+*>
+*>  If UPLO = 'U', the matrix Q is represented as a product of elementary
+*>  reflectors
+*>
+*>     Q = H(n-1) . . . H(2) H(1).
+*>
+*>  Each H(i) has the form
+*>
+*>     H(i) = I - tau * v * v**H
+*>
+*>  where tau is a complex scalar, and v is a complex vector with
+*>  v(i+1:n) = 0 and v(i) = 1; v(1:i-1) is stored on exit in
+*>  A(1:i-1,i+1), and tau in TAU(i).
+*>
+*>  If UPLO = 'L', the matrix Q is represented as a product of elementary
+*>  reflectors
+*>
+*>     Q = H(1) H(2) . . . H(n-1).
+*>
+*>  Each H(i) has the form
+*>
+*>     H(i) = I - tau * v * v**H
+*>
+*>  where tau is a complex scalar, and v is a complex vector with
+*>  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in A(i+2:n,i),
+*>  and tau in TAU(i).
+*>
+*>  The contents of A on exit are illustrated by the following examples
+*>  with n = 5:
+*>
+*>  if UPLO = 'U':                       if UPLO = 'L':
+*>
+*>    (  d   e   v2  v3  v4 )              (  d                  )
+*>    (      d   e   v3  v4 )              (  e   d              )
+*>    (          d   e   v4 )              (  v1  e   d          )
+*>    (              d   e  )              (  v1  v2  e   d      )
+*>    (                  d  )              (  v1  v2  v3  e   d  )
+*>
+*>  where d and e denote diagonal and off-diagonal elements of T, and vi
+*>  denotes an element of the vector defining H(i).
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -13,106 +147,6 @@
       DOUBLE PRECISION   D( * ), E( * )
       COMPLEX*16         A( LDA, * ), TAU( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZHETD2 reduces a complex Hermitian matrix A to real symmetric
-*  tridiagonal form T by a unitary similarity transformation:
-*  Q**H * A * Q = T.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          Hermitian matrix A is stored:
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
-*          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
-*          n-by-n upper triangular part of A contains the upper
-*          triangular part of the matrix A, and the strictly lower
-*          triangular part of A is not referenced.  If UPLO = 'L', the
-*          leading n-by-n lower triangular part of A contains the lower
-*          triangular part of the matrix A, and the strictly upper
-*          triangular part of A is not referenced.
-*          On exit, if UPLO = 'U', the diagonal and first superdiagonal
-*          of A are overwritten by the corresponding elements of the
-*          tridiagonal matrix T, and the elements above the first
-*          superdiagonal, with the array TAU, represent the unitary
-*          matrix Q as a product of elementary reflectors; if UPLO
-*          = 'L', the diagonal and first subdiagonal of A are over-
-*          written by the corresponding elements of the tridiagonal
-*          matrix T, and the elements below the first subdiagonal, with
-*          the array TAU, represent the unitary matrix Q as a product
-*          of elementary reflectors. See Further Details.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  D       (output) DOUBLE PRECISION array, dimension (N)
-*          The diagonal elements of the tridiagonal matrix T:
-*          D(i) = A(i,i).
-*
-*  E       (output) DOUBLE PRECISION array, dimension (N-1)
-*          The off-diagonal elements of the tridiagonal matrix T:
-*          E(i) = A(i,i+1) if UPLO = 'U', E(i) = A(i+1,i) if UPLO = 'L'.
-*
-*  TAU     (output) COMPLEX*16 array, dimension (N-1)
-*          The scalar factors of the elementary reflectors (see Further
-*          Details).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  If UPLO = 'U', the matrix Q is represented as a product of elementary
-*  reflectors
-*
-*     Q = H(n-1) . . . H(2) H(1).
-*
-*  Each H(i) has the form
-*
-*     H(i) = I - tau * v * v**H
-*
-*  where tau is a complex scalar, and v is a complex vector with
-*  v(i+1:n) = 0 and v(i) = 1; v(1:i-1) is stored on exit in
-*  A(1:i-1,i+1), and tau in TAU(i).
-*
-*  If UPLO = 'L', the matrix Q is represented as a product of elementary
-*  reflectors
-*
-*     Q = H(1) H(2) . . . H(n-1).
-*
-*  Each H(i) has the form
-*
-*     H(i) = I - tau * v * v**H
-*
-*  where tau is a complex scalar, and v is a complex vector with
-*  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in A(i+2:n,i),
-*  and tau in TAU(i).
-*
-*  The contents of A on exit are illustrated by the following examples
-*  with n = 5:
-*
-*  if UPLO = 'U':                       if UPLO = 'L':
-*
-*    (  d   e   v2  v3  v4 )              (  d                  )
-*    (      d   e   v3  v4 )              (  e   d              )
-*    (          d   e   v4 )              (  v1  e   d          )
-*    (              d   e  )              (  v1  v2  e   d      )
-*    (                  d  )              (  v1  v2  v3  e   d  )
-*
-*  where d and e denote diagonal and off-diagonal elements of T, and vi
-*  denotes an element of the vector defining H(i).
 *
 *  =====================================================================
 *

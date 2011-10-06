@@ -1,9 +1,115 @@
+*> \brief \b CHPGST
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, ITYPE, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            AP( * ), BP( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CHPGST reduces a complex Hermitian-definite generalized
+*> eigenproblem to standard form, using packed storage.
+*>
+*> If ITYPE = 1, the problem is A*x = lambda*B*x,
+*> and A is overwritten by inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H)
+*>
+*> If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
+*> B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H*A*L.
+*>
+*> B must have been previously factorized as U**H*U or L*L**H by CPPTRF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ITYPE
+*> \verbatim
+*>          ITYPE is INTEGER
+*>          = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H);
+*>          = 2 or 3: compute U*A*U**H or L**H*A*L.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored and B is factored as
+*>                  U**H*U;
+*>          = 'L':  Lower triangle of A is stored and B is factored as
+*>                  L*L**H.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A and B.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AP
+*> \verbatim
+*>          AP is COMPLEX array, dimension (N*(N+1)/2)
+*>          On entry, the upper or lower triangle of the Hermitian matrix
+*>          A, packed columnwise in a linear array.  The j-th column of A
+*>          is stored in the array AP as follows:
+*>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
+*>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
+*> \endverbatim
+*> \verbatim
+*>          On exit, if INFO = 0, the transformed matrix, stored in the
+*>          same format as A.
+*> \endverbatim
+*>
+*> \param[in] BP
+*> \verbatim
+*>          BP is COMPLEX array, dimension (N*(N+1)/2)
+*>          The triangular factor from the Cholesky factorization of B,
+*>          stored in the same format as A, as returned by CPPTRF.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,54 +118,6 @@
 *     .. Array Arguments ..
       COMPLEX            AP( * ), BP( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CHPGST reduces a complex Hermitian-definite generalized
-*  eigenproblem to standard form, using packed storage.
-*
-*  If ITYPE = 1, the problem is A*x = lambda*B*x,
-*  and A is overwritten by inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H)
-*
-*  If ITYPE = 2 or 3, the problem is A*B*x = lambda*x or
-*  B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H*A*L.
-*
-*  B must have been previously factorized as U**H*U or L*L**H by CPPTRF.
-*
-*  Arguments
-*  =========
-*
-*  ITYPE   (input) INTEGER
-*          = 1: compute inv(U**H)*A*inv(U) or inv(L)*A*inv(L**H);
-*          = 2 or 3: compute U*A*U**H or L**H*A*L.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored and B is factored as
-*                  U**H*U;
-*          = 'L':  Lower triangle of A is stored and B is factored as
-*                  L*L**H.
-*
-*  N       (input) INTEGER
-*          The order of the matrices A and B.  N >= 0.
-*
-*  AP      (input/output) COMPLEX array, dimension (N*(N+1)/2)
-*          On entry, the upper or lower triangle of the Hermitian matrix
-*          A, packed columnwise in a linear array.  The j-th column of A
-*          is stored in the array AP as follows:
-*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
-*
-*          On exit, if INFO = 0, the transformed matrix, stored in the
-*          same format as A.
-*
-*  BP      (input) COMPLEX array, dimension (N*(N+1)/2)
-*          The triangular factor from the Cholesky factorization of B,
-*          stored in the same format as A, as returned by CPPTRF.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

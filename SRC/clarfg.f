@@ -1,9 +1,107 @@
+*> \brief \b CLARFG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLARFG( N, ALPHA, X, INCX, TAU )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCX, N
+*       COMPLEX            ALPHA, TAU
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLARFG generates a complex elementary reflector H of order n, such
+*> that
+*>
+*>       H**H * ( alpha ) = ( beta ),   H**H * H = I.
+*>              (   x   )   (   0  )
+*>
+*> where alpha and beta are scalars, with beta real, and x is an
+*> (n-1)-element complex vector. H is represented in the form
+*>
+*>       H = I - tau * ( 1 ) * ( 1 v**H ) ,
+*>                     ( v )
+*>
+*> where tau is a complex scalar and v is a complex (n-1)-element
+*> vector. Note that H is not hermitian.
+*>
+*> If the elements of x are all zero and alpha is real, then tau = 0
+*> and H is taken to be the unit matrix.
+*>
+*> Otherwise  1 <= real(tau) <= 2  and  abs(tau-1) <= 1 .
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the elementary reflector.
+*> \endverbatim
+*>
+*> \param[in,out] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX
+*>          On entry, the value alpha.
+*>          On exit, it is overwritten with the value beta.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension
+*>                         (1+(N-2)*abs(INCX))
+*>          On entry, the vector x.
+*>          On exit, it is overwritten with the vector v.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The increment between elements of X. INCX > 0.
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is COMPLEX
+*>          The value tau.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE CLARFG( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, N
@@ -12,50 +110,6 @@
 *     .. Array Arguments ..
       COMPLEX            X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLARFG generates a complex elementary reflector H of order n, such
-*  that
-*
-*        H**H * ( alpha ) = ( beta ),   H**H * H = I.
-*               (   x   )   (   0  )
-*
-*  where alpha and beta are scalars, with beta real, and x is an
-*  (n-1)-element complex vector. H is represented in the form
-*
-*        H = I - tau * ( 1 ) * ( 1 v**H ) ,
-*                      ( v )
-*
-*  where tau is a complex scalar and v is a complex (n-1)-element
-*  vector. Note that H is not hermitian.
-*
-*  If the elements of x are all zero and alpha is real, then tau = 0
-*  and H is taken to be the unit matrix.
-*
-*  Otherwise  1 <= real(tau) <= 2  and  abs(tau-1) <= 1 .
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the elementary reflector.
-*
-*  ALPHA   (input/output) COMPLEX
-*          On entry, the value alpha.
-*          On exit, it is overwritten with the value beta.
-*
-*  X       (input/output) COMPLEX array, dimension
-*                         (1+(N-2)*abs(INCX))
-*          On entry, the vector x.
-*          On exit, it is overwritten with the vector v.
-*
-*  INCX    (input) INTEGER
-*          The increment between elements of X. INCX > 0.
-*
-*  TAU     (output) COMPLEX
-*          The value tau.
 *
 *  =====================================================================
 *

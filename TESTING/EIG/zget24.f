@@ -1,11 +1,346 @@
+*> \brief \b ZGET24
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
+*                          H, HT, W, WT, WTMP, VS, LDVS, VS1, RCDEIN,
+*                          RCDVIN, NSLCT, ISLCT, ISRT, RESULT, WORK,
+*                          LWORK, RWORK, BWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            COMP
+*       INTEGER            INFO, ISRT, JTYPE, LDA, LDVS, LWORK, N, NOUNIT,
+*      $                   NSLCT
+*       DOUBLE PRECISION   RCDEIN, RCDVIN, THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            BWORK( * )
+*       INTEGER            ISEED( 4 ), ISLCT( * )
+*       DOUBLE PRECISION   RESULT( 17 ), RWORK( * )
+*       COMPLEX*16         A( LDA, * ), H( LDA, * ), HT( LDA, * ),
+*      $                   VS( LDVS, * ), VS1( LDVS, * ), W( * ),
+*      $                   WORK( * ), WT( * ), WTMP( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    ZGET24 checks the nonsymmetric eigenvalue (Schur form) problem
+*>    expert driver ZGEESX.
+*>
+*>    If COMP = .FALSE., the first 13 of the following tests will be
+*>    be performed on the input matrix A, and also tests 14 and 15
+*>    if LWORK is sufficiently large.
+*>    If COMP = .TRUE., all 17 test will be performed.
+*>
+*>    (1)     0 if T is in Schur form, 1/ulp otherwise
+*>           (no sorting of eigenvalues)
+*>
+*>    (2)     | A - VS T VS' | / ( n |A| ulp )
+*>
+*>      Here VS is the matrix of Schur eigenvectors, and T is in Schur
+*>      form  (no sorting of eigenvalues).
+*>
+*>    (3)     | I - VS VS' | / ( n ulp ) (no sorting of eigenvalues).
+*>
+*>    (4)     0     if W are eigenvalues of T
+*>            1/ulp otherwise
+*>            (no sorting of eigenvalues)
+*>
+*>    (5)     0     if T(with VS) = T(without VS),
+*>            1/ulp otherwise
+*>            (no sorting of eigenvalues)
+*>
+*>    (6)     0     if eigenvalues(with VS) = eigenvalues(without VS),
+*>            1/ulp otherwise
+*>            (no sorting of eigenvalues)
+*>
+*>    (7)     0 if T is in Schur form, 1/ulp otherwise
+*>            (with sorting of eigenvalues)
+*>
+*>    (8)     | A - VS T VS' | / ( n |A| ulp )
+*>
+*>      Here VS is the matrix of Schur eigenvectors, and T is in Schur
+*>      form  (with sorting of eigenvalues).
+*>
+*>    (9)     | I - VS VS' | / ( n ulp ) (with sorting of eigenvalues).
+*>
+*>    (10)    0     if W are eigenvalues of T
+*>            1/ulp otherwise
+*>            If workspace sufficient, also compare W with and
+*>            without reciprocal condition numbers
+*>            (with sorting of eigenvalues)
+*>
+*>    (11)    0     if T(with VS) = T(without VS),
+*>            1/ulp otherwise
+*>            If workspace sufficient, also compare T with and without
+*>            reciprocal condition numbers
+*>            (with sorting of eigenvalues)
+*>
+*>    (12)    0     if eigenvalues(with VS) = eigenvalues(without VS),
+*>            1/ulp otherwise
+*>            If workspace sufficient, also compare VS with and without
+*>            reciprocal condition numbers
+*>            (with sorting of eigenvalues)
+*>
+*>    (13)    if sorting worked and SDIM is the number of
+*>            eigenvalues which were SELECTed
+*>            If workspace sufficient, also compare SDIM with and
+*>            without reciprocal condition numbers
+*>
+*>    (14)    if RCONDE the same no matter if VS and/or RCONDV computed
+*>
+*>    (15)    if RCONDV the same no matter if VS and/or RCONDE computed
+*>
+*>    (16)  |RCONDE - RCDEIN| / cond(RCONDE)
+*>
+*>       RCONDE is the reciprocal average eigenvalue condition number
+*>       computed by ZGEESX and RCDEIN (the precomputed true value)
+*>       is supplied as input.  cond(RCONDE) is the condition number
+*>       of RCONDE, and takes errors in computing RCONDE into account,
+*>       so that the resulting quantity should be O(ULP). cond(RCONDE)
+*>       is essentially given by norm(A)/RCONDV.
+*>
+*>    (17)  |RCONDV - RCDVIN| / cond(RCONDV)
+*>
+*>       RCONDV is the reciprocal right invariant subspace condition
+*>       number computed by ZGEESX and RCDVIN (the precomputed true
+*>       value) is supplied as input. cond(RCONDV) is the condition
+*>       number of RCONDV, and takes errors in computing RCONDV into
+*>       account, so that the resulting quantity should be O(ULP).
+*>       cond(RCONDV) is essentially given by norm(A)/RCONDE.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] COMP
+*> \verbatim
+*>          COMP is LOGICAL
+*>          COMP describes which input tests to perform:
+*>            = .FALSE. if the computed condition numbers are not to
+*>                      be tested against RCDVIN and RCDEIN
+*>            = .TRUE.  if they are to be compared
+*> \endverbatim
+*>
+*> \param[in] JTYPE
+*> \verbatim
+*>          JTYPE is INTEGER
+*>          Type of input matrix. Used to label output if error occurs.
+*> \endverbatim
+*>
+*> \param[in] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          If COMP = .FALSE., the random number generator seed
+*>          used to produce matrix.
+*>          If COMP = .TRUE., ISEED(1) = the number of the example.
+*>          Used to label output if error occurs.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns INFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The dimension of A. N must be at least 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA, N)
+*>          Used to hold the matrix whose eigenvalues are to be
+*>          computed.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A, and H. LDA must be at
+*>          least 1 and at least N.
+*> \endverbatim
+*>
+*> \param[out] H
+*> \verbatim
+*>          H is COMPLEX*16 array, dimension (LDA, N)
+*>          Another copy of the test matrix A, modified by ZGEESX.
+*> \endverbatim
+*>
+*> \param[out] HT
+*> \verbatim
+*>          HT is COMPLEX*16 array, dimension (LDA, N)
+*>          Yet another copy of the test matrix A, modified by ZGEESX.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is COMPLEX*16 array, dimension (N)
+*>          The computed eigenvalues of A.
+*> \endverbatim
+*>
+*> \param[out] WT
+*> \verbatim
+*>          WT is COMPLEX*16 array, dimension (N)
+*>          Like W, this array contains the eigenvalues of A,
+*>          but those computed when ZGEESX only computes a partial
+*>          eigendecomposition, i.e. not Schur vectors
+*> \endverbatim
+*>
+*> \param[out] WTMP
+*> \verbatim
+*>          WTMP is COMPLEX*16 array, dimension (N)
+*>          Like W, this array contains the eigenvalues of A,
+*>          but sorted by increasing real or imaginary part.
+*> \endverbatim
+*>
+*> \param[out] VS
+*> \verbatim
+*>          VS is COMPLEX*16 array, dimension (LDVS, N)
+*>          VS holds the computed Schur vectors.
+*> \endverbatim
+*>
+*> \param[in] LDVS
+*> \verbatim
+*>          LDVS is INTEGER
+*>          Leading dimension of VS. Must be at least max(1, N).
+*> \endverbatim
+*>
+*> \param[out] VS1
+*> \verbatim
+*>          VS1 is COMPLEX*16 array, dimension (LDVS, N)
+*>          VS1 holds another copy of the computed Schur vectors.
+*> \endverbatim
+*>
+*> \param[in] RCDEIN
+*> \verbatim
+*>          RCDEIN is DOUBLE PRECISION
+*>          When COMP = .TRUE. RCDEIN holds the precomputed reciprocal
+*>          condition number for the average of selected eigenvalues.
+*> \endverbatim
+*>
+*> \param[in] RCDVIN
+*> \verbatim
+*>          RCDVIN is DOUBLE PRECISION
+*>          When COMP = .TRUE. RCDVIN holds the precomputed reciprocal
+*>          condition number for the selected right invariant subspace.
+*> \endverbatim
+*>
+*> \param[in] NSLCT
+*> \verbatim
+*>          NSLCT is INTEGER
+*>          When COMP = .TRUE. the number of selected eigenvalues
+*>          corresponding to the precomputed values RCDEIN and RCDVIN.
+*> \endverbatim
+*>
+*> \param[in] ISLCT
+*> \verbatim
+*>          ISLCT is INTEGER array, dimension (NSLCT)
+*>          When COMP = .TRUE. ISLCT selects the eigenvalues of the
+*>          input matrix corresponding to the precomputed values RCDEIN
+*>          and RCDVIN. For I=1, ... ,NSLCT, if ISLCT(I) = J, then the
+*>          eigenvalue with the J-th largest real or imaginary part is
+*>          selected. The real part is used if ISRT = 0, and the
+*>          imaginary part if ISRT = 1.
+*>          Not referenced if COMP = .FALSE.
+*> \endverbatim
+*>
+*> \param[in] ISRT
+*> \verbatim
+*>          ISRT is INTEGER
+*>          When COMP = .TRUE., ISRT describes how ISLCT is used to
+*>          choose a subset of the spectrum.
+*>          Not referenced if COMP = .FALSE.
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (17)
+*>          The values computed by the 17 tests described above.
+*>          The values are currently limited to 1/ulp, to avoid
+*>          overflow.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (2*N*N)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK to be passed to ZGEESX. This
+*>          must be at least 2*N, and N*(N+1)/2 if tests 14--16 are to
+*>          be performed.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] BWORK
+*> \verbatim
+*>          BWORK is LOGICAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0,  successful exit.
+*>          If <0, input parameter -INFO had an incorrect value.
+*>          If >0, ZGEESX returned an error code, the absolute
+*>                 value of which is returned.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
      $                   H, HT, W, WT, WTMP, VS, LDVS, VS1, RCDEIN,
      $                   RCDVIN, NSLCT, ISLCT, ISRT, RESULT, WORK,
      $                   LWORK, RWORK, BWORK, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            COMP
@@ -21,210 +356,6 @@
      $                   VS( LDVS, * ), VS1( LDVS, * ), W( * ),
      $                   WORK( * ), WT( * ), WTMP( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     ZGET24 checks the nonsymmetric eigenvalue (Schur form) problem
-*     expert driver ZGEESX.
-*
-*     If COMP = .FALSE., the first 13 of the following tests will be
-*     be performed on the input matrix A, and also tests 14 and 15
-*     if LWORK is sufficiently large.
-*     If COMP = .TRUE., all 17 test will be performed.
-*
-*     (1)     0 if T is in Schur form, 1/ulp otherwise
-*            (no sorting of eigenvalues)
-*
-*     (2)     | A - VS T VS' | / ( n |A| ulp )
-*
-*       Here VS is the matrix of Schur eigenvectors, and T is in Schur
-*       form  (no sorting of eigenvalues).
-*
-*     (3)     | I - VS VS' | / ( n ulp ) (no sorting of eigenvalues).
-*
-*     (4)     0     if W are eigenvalues of T
-*             1/ulp otherwise
-*             (no sorting of eigenvalues)
-*
-*     (5)     0     if T(with VS) = T(without VS),
-*             1/ulp otherwise
-*             (no sorting of eigenvalues)
-*
-*     (6)     0     if eigenvalues(with VS) = eigenvalues(without VS),
-*             1/ulp otherwise
-*             (no sorting of eigenvalues)
-*
-*     (7)     0 if T is in Schur form, 1/ulp otherwise
-*             (with sorting of eigenvalues)
-*
-*     (8)     | A - VS T VS' | / ( n |A| ulp )
-*
-*       Here VS is the matrix of Schur eigenvectors, and T is in Schur
-*       form  (with sorting of eigenvalues).
-*
-*     (9)     | I - VS VS' | / ( n ulp ) (with sorting of eigenvalues).
-*
-*     (10)    0     if W are eigenvalues of T
-*             1/ulp otherwise
-*             If workspace sufficient, also compare W with and
-*             without reciprocal condition numbers
-*             (with sorting of eigenvalues)
-*
-*     (11)    0     if T(with VS) = T(without VS),
-*             1/ulp otherwise
-*             If workspace sufficient, also compare T with and without
-*             reciprocal condition numbers
-*             (with sorting of eigenvalues)
-*
-*     (12)    0     if eigenvalues(with VS) = eigenvalues(without VS),
-*             1/ulp otherwise
-*             If workspace sufficient, also compare VS with and without
-*             reciprocal condition numbers
-*             (with sorting of eigenvalues)
-*
-*     (13)    if sorting worked and SDIM is the number of
-*             eigenvalues which were SELECTed
-*             If workspace sufficient, also compare SDIM with and
-*             without reciprocal condition numbers
-*
-*     (14)    if RCONDE the same no matter if VS and/or RCONDV computed
-*
-*     (15)    if RCONDV the same no matter if VS and/or RCONDE computed
-*
-*     (16)  |RCONDE - RCDEIN| / cond(RCONDE)
-*
-*        RCONDE is the reciprocal average eigenvalue condition number
-*        computed by ZGEESX and RCDEIN (the precomputed true value)
-*        is supplied as input.  cond(RCONDE) is the condition number
-*        of RCONDE, and takes errors in computing RCONDE into account,
-*        so that the resulting quantity should be O(ULP). cond(RCONDE)
-*        is essentially given by norm(A)/RCONDV.
-*
-*     (17)  |RCONDV - RCDVIN| / cond(RCONDV)
-*
-*        RCONDV is the reciprocal right invariant subspace condition
-*        number computed by ZGEESX and RCDVIN (the precomputed true
-*        value) is supplied as input. cond(RCONDV) is the condition
-*        number of RCONDV, and takes errors in computing RCONDV into
-*        account, so that the resulting quantity should be O(ULP).
-*        cond(RCONDV) is essentially given by norm(A)/RCONDE.
-*
-*  Arguments
-*  =========
-*
-*  COMP    (input) LOGICAL
-*          COMP describes which input tests to perform:
-*            = .FALSE. if the computed condition numbers are not to
-*                      be tested against RCDVIN and RCDEIN
-*            = .TRUE.  if they are to be compared
-*
-*  JTYPE   (input) INTEGER
-*          Type of input matrix. Used to label output if error occurs.
-*
-*  ISEED   (input) INTEGER array, dimension (4)
-*          If COMP = .FALSE., the random number generator seed
-*          used to produce matrix.
-*          If COMP = .TRUE., ISEED(1) = the number of the example.
-*          Used to label output if error occurs.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns INFO not equal to 0.)
-*
-*  N       (input) INTEGER
-*          The dimension of A. N must be at least 0.
-*
-*  A       (input/output) COMPLEX*16 array, dimension (LDA, N)
-*          Used to hold the matrix whose eigenvalues are to be
-*          computed.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A, and H. LDA must be at
-*          least 1 and at least N.
-*
-*  H       (workspace) COMPLEX*16 array, dimension (LDA, N)
-*          Another copy of the test matrix A, modified by ZGEESX.
-*
-*  HT      (workspace) COMPLEX*16 array, dimension (LDA, N)
-*          Yet another copy of the test matrix A, modified by ZGEESX.
-*
-*  W       (workspace) COMPLEX*16 array, dimension (N)
-*          The computed eigenvalues of A.
-*
-*  WT      (workspace) COMPLEX*16 array, dimension (N)
-*          Like W, this array contains the eigenvalues of A,
-*          but those computed when ZGEESX only computes a partial
-*          eigendecomposition, i.e. not Schur vectors
-*
-*  WTMP    (workspace) COMPLEX*16 array, dimension (N)
-*          Like W, this array contains the eigenvalues of A,
-*          but sorted by increasing real or imaginary part.
-*
-*  VS      (workspace) COMPLEX*16 array, dimension (LDVS, N)
-*          VS holds the computed Schur vectors.
-*
-*  LDVS    (input) INTEGER
-*          Leading dimension of VS. Must be at least max(1, N).
-*
-*  VS1     (workspace) COMPLEX*16 array, dimension (LDVS, N)
-*          VS1 holds another copy of the computed Schur vectors.
-*
-*  RCDEIN  (input) DOUBLE PRECISION
-*          When COMP = .TRUE. RCDEIN holds the precomputed reciprocal
-*          condition number for the average of selected eigenvalues.
-*
-*  RCDVIN  (input) DOUBLE PRECISION
-*          When COMP = .TRUE. RCDVIN holds the precomputed reciprocal
-*          condition number for the selected right invariant subspace.
-*
-*  NSLCT   (input) INTEGER
-*          When COMP = .TRUE. the number of selected eigenvalues
-*          corresponding to the precomputed values RCDEIN and RCDVIN.
-*
-*  ISLCT   (input) INTEGER array, dimension (NSLCT)
-*          When COMP = .TRUE. ISLCT selects the eigenvalues of the
-*          input matrix corresponding to the precomputed values RCDEIN
-*          and RCDVIN. For I=1, ... ,NSLCT, if ISLCT(I) = J, then the
-*          eigenvalue with the J-th largest real or imaginary part is
-*          selected. The real part is used if ISRT = 0, and the
-*          imaginary part if ISRT = 1.
-*          Not referenced if COMP = .FALSE.
-*
-*  ISRT    (input) INTEGER
-*          When COMP = .TRUE., ISRT describes how ISLCT is used to
-*          choose a subset of the spectrum.
-*          Not referenced if COMP = .FALSE.
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (17)
-*          The values computed by the 17 tests described above.
-*          The values are currently limited to 1/ulp, to avoid
-*          overflow.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (2*N*N)
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK to be passed to ZGEESX. This
-*          must be at least 2*N, and N*(N+1)/2 if tests 14--16 are to
-*          be performed.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  BWORK   (workspace) LOGICAL array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          If 0,  successful exit.
-*          If <0, input parameter -INFO had an incorrect value.
-*          If >0, ZGEESX returned an error code, the absolute
-*                 value of which is returned.
 *
 *  =====================================================================
 *

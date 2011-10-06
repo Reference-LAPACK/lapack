@@ -1,27 +1,69 @@
-      SUBROUTINE DCHKGK( NIN, NOUT )
+*> \brief \b DCHKGK
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      INTEGER            NIN, NOUT
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DCHKGK( NIN, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NIN, NOUT
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  DCHKGK tests DGGBAK, a routine for backward balancing  of
-*  a matrix pair (A, B).
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DCHKGK tests DGGBAK, a routine for backward balancing  of
+*> a matrix pair (A, B).
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  NIN     (input) INTEGER
-*          The logical unit number for input.  NIN > 0.
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          The logical unit number for input.  NIN > 0.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The logical unit number for output.  NOUT > 0.
+*> \endverbatim
+*>
 *
-*  NOUT    (input) INTEGER
-*          The logical unit number for output.  NOUT > 0.
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
+      SUBROUTINE DCHKGK( NIN, NOUT )
+*
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      INTEGER            NIN, NOUT
+*     ..
 *
 *  =====================================================================
 *

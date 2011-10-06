@@ -1,10 +1,133 @@
-      RECURSIVE SUBROUTINE SGEQRT3( M, N, A, LDA, T, LDT, INFO )
-      IMPLICIT NONE
+*> \brief \b SGEQRT3
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       RECURSIVE SUBROUTINE SGEQRT3( M, N, A, LDA, T, LDT, INFO )
 * 
-*  -- LAPACK routine (version 3.?) --
-*  -- LAPACK is a software package provided by Univ. of Tennessee, --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
-*  -- July 2011 --
+*       .. Scalar Arguments ..
+*       INTEGER   INFO, LDA, M, N, LDT
+*       ..
+*       .. Array Arguments ..
+*       REAL   A( LDA, * ), T( LDT, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGEQRT3 recursively computes a QR factorization of a real M-by-N 
+*> matrix A, using the compact WY representation of Q. 
+*>
+*> Based on the algorithm of Elmroth and Gustavson, 
+*> IBM J. Res. Develop. Vol 44 No. 4 July 2000.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= N.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          On entry, the real M-by-N matrix A.  On exit, the elements on and
+*>          above the diagonal contain the N-by-N upper triangular matrix R; the
+*>          elements below the diagonal are the columns of V.  See below for
+*>          further details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          T is REAL array, dimension (LDT,N)
+*>          The N-by-N upper triangular factor of the block reflector.
+*>          The elements on and above the diagonal contain the block
+*>          reflector T; the elements below the diagonal are not used.
+*>          See below for further details.
+*> \endverbatim
+*> \verbatim
+*>  LDT     (intput) INTEGER
+*>          The leading dimension of the array T.  LDT >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realGEcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  The matrix V stores the elementary reflectors H(i) in the i-th column
+*>  below the diagonal. For example, if M=5 and N=3, the matrix V is
+*>
+*>               V = (  1       )
+*>                   ( v1  1    )
+*>                   ( v1 v2  1 )
+*>                   ( v1 v2 v3 )
+*>                   ( v1 v2 v3 )
+*>
+*>  where the vi's represent the vectors which define H(i), which are returned
+*>  in the matrix A.  The 1's along the diagonal of V are not stored in A.  The
+*>  block reflector H is then given by
+*>
+*>               H = I - V * T * V**T
+*>
+*>  where V**T is the transpose of V.
+*>
+*>  For details of the algorithm, see Elmroth and Gustavson (cited above).
+*>
+*> \endverbatim
+*>
+*  =====================================================================
+      RECURSIVE SUBROUTINE SGEQRT3( M, N, A, LDA, T, LDT, INFO )
+*
+*  -- LAPACK computational routine (version 3.?) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER   INFO, LDA, M, N, LDT
@@ -12,68 +135,6 @@
 *     .. Array Arguments ..
       REAL   A( LDA, * ), T( LDT, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGEQRT3 recursively computes a QR factorization of a real M-by-N 
-*  matrix A, using the compact WY representation of Q. 
-*
-*  Based on the algorithm of Elmroth and Gustavson, 
-*  IBM J. Res. Develop. Vol 44 No. 4 July 2000.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= N.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  A       (input/output) REAL array, dimension (LDA,N)
-*          On entry, the real M-by-N matrix A.  On exit, the elements on and
-*          above the diagonal contain the N-by-N upper triangular matrix R; the
-*          elements below the diagonal are the columns of V.  See below for
-*          further details.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  T       (output) REAL array, dimension (LDT,N)
-*          The N-by-N upper triangular factor of the block reflector.
-*          The elements on and above the diagonal contain the block
-*          reflector T; the elements below the diagonal are not used.
-*          See below for further details.
-*
-*  LDT     (intput) INTEGER
-*          The leading dimension of the array T.  LDT >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  The matrix V stores the elementary reflectors H(i) in the i-th column
-*  below the diagonal. For example, if M=5 and N=3, the matrix V is
-*
-*               V = (  1       )
-*                   ( v1  1    )
-*                   ( v1 v2  1 )
-*                   ( v1 v2 v3 )
-*                   ( v1 v2 v3 )
-*
-*  where the vi's represent the vectors which define H(i), which are returned
-*  in the matrix A.  The 1's along the diagonal of V are not stored in A.  The
-*  block reflector H is then given by
-*
-*               H = I - V * T * V**T
-*
-*  where V**T is the transpose of V.
-*
-*  For details of the algorithm, see Elmroth and Gustavson (cited above).
 *
 *  =====================================================================
 *

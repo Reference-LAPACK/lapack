@@ -1,14 +1,109 @@
+*> \brief \b DLASQ1
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASQ1( N, D, E, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), E( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLASQ1 computes the singular values of a real N-by-N bidiagonal
+*> matrix with diagonal D and off-diagonal E. The singular values
+*> are computed to high relative accuracy, in the absence of
+*> denormalization, underflow and overflow. The algorithm was first
+*> presented in
+*>
+*> "Accurate singular values and differential qd algorithms" by K. V.
+*> Fernando and B. N. Parlett, Numer. Math., Vol-67, No. 2, pp. 191-230,
+*> 1994,
+*>
+*> and the present implementation is described in "An implementation of
+*> the dqds Algorithm (Positive Case)", LAPACK Working Note.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>        The number of rows and columns in the matrix. N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>        On entry, D contains the diagonal elements of the
+*>        bidiagonal matrix whose SVD is desired. On normal exit,
+*>        D contains the singular values in decreasing order.
+*> \endverbatim
+*>
+*> \param[in,out] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N)
+*>        On entry, elements E(1:N-1) contain the off-diagonal elements
+*>        of the bidiagonal matrix whose SVD is desired.
+*>        On exit, E is overwritten.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (4*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>        = 0: successful exit
+*>        < 0: if INFO = -i, the i-th argument had an illegal value
+*>        > 0: the algorithm failed
+*>             = 1, a split was marked by a positive value in E
+*>             = 2, current block of Z not diagonalized after 100*N
+*>                  iterations (in inner while loop)  On exit D and E
+*>                  represent a matrix with the same singular values
+*>                  which the calling subroutine could use to finish the
+*>                  computation, or even feed back into DLASQ1
+*>             = 3, termination criterion of outer while loop not met 
+*>                  (program created more than N unreduced blocks)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE DLASQ1( N, D, E, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.2)                                    --
-*
-*  -- Contributed by Osni Marques of the Lawrence Berkeley National   --
-*  -- Laboratory and Beresford Parlett of the Univ. of California at  --
-*  -- Berkeley                                                        --
-*  -- November 2008                                                   --
-*
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, N
@@ -16,53 +111,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   D( * ), E( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLASQ1 computes the singular values of a real N-by-N bidiagonal
-*  matrix with diagonal D and off-diagonal E. The singular values
-*  are computed to high relative accuracy, in the absence of
-*  denormalization, underflow and overflow. The algorithm was first
-*  presented in
-*
-*  "Accurate singular values and differential qd algorithms" by K. V.
-*  Fernando and B. N. Parlett, Numer. Math., Vol-67, No. 2, pp. 191-230,
-*  1994,
-*
-*  and the present implementation is described in "An implementation of
-*  the dqds Algorithm (Positive Case)", LAPACK Working Note.
-*
-*  Arguments
-*  =========
-*
-*  N     (input) INTEGER
-*        The number of rows and columns in the matrix. N >= 0.
-*
-*  D     (input/output) DOUBLE PRECISION array, dimension (N)
-*        On entry, D contains the diagonal elements of the
-*        bidiagonal matrix whose SVD is desired. On normal exit,
-*        D contains the singular values in decreasing order.
-*
-*  E     (input/output) DOUBLE PRECISION array, dimension (N)
-*        On entry, elements E(1:N-1) contain the off-diagonal elements
-*        of the bidiagonal matrix whose SVD is desired.
-*        On exit, E is overwritten.
-*
-*  WORK  (workspace) DOUBLE PRECISION array, dimension (4*N)
-*
-*  INFO  (output) INTEGER
-*        = 0: successful exit
-*        < 0: if INFO = -i, the i-th argument had an illegal value
-*        > 0: the algorithm failed
-*             = 1, a split was marked by a positive value in E
-*             = 2, current block of Z not diagonalized after 100*N
-*                  iterations (in inner while loop)  On exit D and E
-*                  represent a matrix with the same singular values
-*                  which the calling subroutine could use to finish the
-*                  computation, or even feed back into DLASQ1
-*             = 3, termination criterion of outer while loop not met 
-*                  (program created more than N unreduced blocks)
 *
 *  =====================================================================
 *

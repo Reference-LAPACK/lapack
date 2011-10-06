@@ -1,8 +1,119 @@
+*> \brief \b DSPT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            LDC, N
+*       DOUBLE PRECISION   RESID
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       DOUBLE PRECISION   A( * ), AFAC( * ), C( LDC, * ), RWORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DSPT01 reconstructs a symmetric indefinite packed matrix A from its
+*> block L*D*L' or U*D*U' factorization and computes the residual
+*>      norm( C - A ) / ( N * norm(A) * EPS ),
+*> where C is the reconstructed matrix and EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          symmetric matrix A is stored:
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows and columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (N*(N+1)/2)
+*>          The original symmetric matrix A, stored as a packed
+*>          triangular matrix.
+*> \endverbatim
+*>
+*> \param[in] AFAC
+*> \verbatim
+*>          AFAC is DOUBLE PRECISION array, dimension (N*(N+1)/2)
+*>          The factored form of the matrix A, stored as a packed
+*>          triangular matrix.  AFAC contains the block diagonal matrix D
+*>          and the multipliers used to obtain the factor L or U from the
+*>          block L*D*L' or U*D*U' factorization as computed by DSPTRF.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          The pivot indices from DSPTRF.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension (LDC,N)
+*> \endverbatim
+*> \verbatim
+*>  LDC     (integer) INTEGER
+*>          The leading dimension of the array C.  LDC >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is DOUBLE PRECISION
+*>          If UPLO = 'L', norm(L*D*L' - A) / ( N * norm(A) * EPS )
+*>          If UPLO = 'U', norm(U*D*U' - A) / ( N * norm(A) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DSPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -13,50 +124,6 @@
       INTEGER            IPIV( * )
       DOUBLE PRECISION   A( * ), AFAC( * ), C( LDC, * ), RWORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DSPT01 reconstructs a symmetric indefinite packed matrix A from its
-*  block L*D*L' or U*D*U' factorization and computes the residual
-*       norm( C - A ) / ( N * norm(A) * EPS ),
-*  where C is the reconstructed matrix and EPS is the machine epsilon.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          symmetric matrix A is stored:
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The number of rows and columns of the matrix A.  N >= 0.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (N*(N+1)/2)
-*          The original symmetric matrix A, stored as a packed
-*          triangular matrix.
-*
-*  AFAC    (input) DOUBLE PRECISION array, dimension (N*(N+1)/2)
-*          The factored form of the matrix A, stored as a packed
-*          triangular matrix.  AFAC contains the block diagonal matrix D
-*          and the multipliers used to obtain the factor L or U from the
-*          block L*D*L' or U*D*U' factorization as computed by DSPTRF.
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          The pivot indices from DSPTRF.
-*
-*  C       (workspace) DOUBLE PRECISION array, dimension (LDC,N)
-*
-*  LDC     (integer) INTEGER
-*          The leading dimension of the array C.  LDC >= max(1,N).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  RESID   (output) DOUBLE PRECISION
-*          If UPLO = 'L', norm(L*D*L' - A) / ( N * norm(A) * EPS )
-*          If UPLO = 'U', norm(U*D*U' - A) / ( N * norm(A) * EPS )
 *
 *  =====================================================================
 *

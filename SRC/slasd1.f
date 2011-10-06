@@ -1,10 +1,212 @@
+*> \brief \b SLASD1
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
+*                          IDXQ, IWORK, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDU, LDVT, NL, NR, SQRE
+*       REAL               ALPHA, BETA
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IDXQ( * ), IWORK( * )
+*       REAL               D( * ), U( LDU, * ), VT( LDVT, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLASD1 computes the SVD of an upper bidiagonal N-by-M matrix B,
+*> where N = NL + NR + 1 and M = N + SQRE. SLASD1 is called from SLASD0.
+*>
+*> A related subroutine SLASD7 handles the case in which the singular
+*> values (and the singular vectors in factored form) are desired.
+*>
+*> SLASD1 computes the SVD as follows:
+*>
+*>               ( D1(in)    0    0       0 )
+*>   B = U(in) * (   Z1**T   a   Z2**T    b ) * VT(in)
+*>               (   0       0   D2(in)   0 )
+*>
+*>     = U(out) * ( D(out) 0) * VT(out)
+*>
+*> where Z**T = (Z1**T a Z2**T b) = u**T VT**T, and u is a vector of dimension M
+*> with ALPHA and BETA in the NL+1 and NL+2 th entries and zeros
+*> elsewhere; and the entry b is empty if SQRE = 0.
+*>
+*> The left singular vectors of the original matrix are stored in U, and
+*> the transpose of the right singular vectors are stored in VT, and the
+*> singular values are in D.  The algorithm consists of three stages:
+*>
+*>    The first stage consists of deflating the size of the problem
+*>    when there are multiple singular values or when there are zeros in
+*>    the Z vector.  For each such occurence the dimension of the
+*>    secular equation problem is reduced by one.  This stage is
+*>    performed by the routine SLASD2.
+*>
+*>    The second stage consists of calculating the updated
+*>    singular values. This is done by finding the square roots of the
+*>    roots of the secular equation via the routine SLASD4 (as called
+*>    by SLASD3). This routine also calculates the singular vectors of
+*>    the current problem.
+*>
+*>    The final stage consists of computing the updated singular vectors
+*>    directly using the updated singular values.  The singular vectors
+*>    for the current problem are multiplied with the singular vectors
+*>    from the overall problem.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NL
+*> \verbatim
+*>          NL is INTEGER
+*>         The row dimension of the upper block.  NL >= 1.
+*> \endverbatim
+*>
+*> \param[in] NR
+*> \verbatim
+*>          NR is INTEGER
+*>         The row dimension of the lower block.  NR >= 1.
+*> \endverbatim
+*>
+*> \param[in] SQRE
+*> \verbatim
+*>          SQRE is INTEGER
+*>         = 0: the lower block is an NR-by-NR square matrix.
+*>         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
+*> \endverbatim
+*> \verbatim
+*>         The bidiagonal matrix has row dimension N = NL + NR + 1,
+*>         and column dimension M = N + SQRE.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL array, dimension (NL+NR+1).
+*>         N = NL+NR+1
+*>         On entry D(1:NL,1:NL) contains the singular values of the
+*>         upper block; and D(NL+2:N) contains the singular values of
+*>         the lower block. On exit D(1:N) contains the singular values
+*>         of the modified matrix.
+*> \endverbatim
+*>
+*> \param[in,out] ALPHA
+*> \verbatim
+*>          ALPHA is REAL
+*>         Contains the diagonal element associated with the added row.
+*> \endverbatim
+*>
+*> \param[in,out] BETA
+*> \verbatim
+*>          BETA is REAL
+*>         Contains the off-diagonal element associated with the added
+*>         row.
+*> \endverbatim
+*>
+*> \param[in,out] U
+*> \verbatim
+*>          U is REAL array, dimension (LDU,N)
+*>         On entry U(1:NL, 1:NL) contains the left singular vectors of
+*>         the upper block; U(NL+2:N, NL+2:N) contains the left singular
+*>         vectors of the lower block. On exit U contains the left
+*>         singular vectors of the bidiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>         The leading dimension of the array U.  LDU >= max( 1, N ).
+*> \endverbatim
+*>
+*> \param[in,out] VT
+*> \verbatim
+*>          VT is REAL array, dimension (LDVT,M)
+*>         where M = N + SQRE.
+*>         On entry VT(1:NL+1, 1:NL+1)**T contains the right singular
+*>         vectors of the upper block; VT(NL+2:M, NL+2:M)**T contains
+*>         the right singular vectors of the lower block. On exit
+*>         VT**T contains the right singular vectors of the
+*>         bidiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] LDVT
+*> \verbatim
+*>          LDVT is INTEGER
+*>         The leading dimension of the array VT.  LDVT >= max( 1, M ).
+*> \endverbatim
+*>
+*> \param[out] IDXQ
+*> \verbatim
+*>          IDXQ is INTEGER array, dimension (N)
+*>         This contains the permutation which will reintegrate the
+*>         subproblem just solved back into sorted order, i.e.
+*>         D( IDXQ( I = 1, N ) ) will be in ascending order.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (4*N)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (3*M**2+2*M)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  if INFO = 1, a singular value did not converge
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Huan Ren, Computer Science Division, University of
+*>     California at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
      $                   IDXQ, IWORK, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDU, LDVT, NL, NR, SQRE
@@ -14,119 +216,6 @@
       INTEGER            IDXQ( * ), IWORK( * )
       REAL               D( * ), U( LDU, * ), VT( LDVT, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLASD1 computes the SVD of an upper bidiagonal N-by-M matrix B,
-*  where N = NL + NR + 1 and M = N + SQRE. SLASD1 is called from SLASD0.
-*
-*  A related subroutine SLASD7 handles the case in which the singular
-*  values (and the singular vectors in factored form) are desired.
-*
-*  SLASD1 computes the SVD as follows:
-*
-*                ( D1(in)    0    0       0 )
-*    B = U(in) * (   Z1**T   a   Z2**T    b ) * VT(in)
-*                (   0       0   D2(in)   0 )
-*
-*      = U(out) * ( D(out) 0) * VT(out)
-*
-*  where Z**T = (Z1**T a Z2**T b) = u**T VT**T, and u is a vector of dimension M
-*  with ALPHA and BETA in the NL+1 and NL+2 th entries and zeros
-*  elsewhere; and the entry b is empty if SQRE = 0.
-*
-*  The left singular vectors of the original matrix are stored in U, and
-*  the transpose of the right singular vectors are stored in VT, and the
-*  singular values are in D.  The algorithm consists of three stages:
-*
-*     The first stage consists of deflating the size of the problem
-*     when there are multiple singular values or when there are zeros in
-*     the Z vector.  For each such occurence the dimension of the
-*     secular equation problem is reduced by one.  This stage is
-*     performed by the routine SLASD2.
-*
-*     The second stage consists of calculating the updated
-*     singular values. This is done by finding the square roots of the
-*     roots of the secular equation via the routine SLASD4 (as called
-*     by SLASD3). This routine also calculates the singular vectors of
-*     the current problem.
-*
-*     The final stage consists of computing the updated singular vectors
-*     directly using the updated singular values.  The singular vectors
-*     for the current problem are multiplied with the singular vectors
-*     from the overall problem.
-*
-*  Arguments
-*  =========
-*
-*  NL     (input) INTEGER
-*         The row dimension of the upper block.  NL >= 1.
-*
-*  NR     (input) INTEGER
-*         The row dimension of the lower block.  NR >= 1.
-*
-*  SQRE   (input) INTEGER
-*         = 0: the lower block is an NR-by-NR square matrix.
-*         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
-*
-*         The bidiagonal matrix has row dimension N = NL + NR + 1,
-*         and column dimension M = N + SQRE.
-*
-*  D      (input/output) REAL array, dimension (NL+NR+1).
-*         N = NL+NR+1
-*         On entry D(1:NL,1:NL) contains the singular values of the
-*         upper block; and D(NL+2:N) contains the singular values of
-*         the lower block. On exit D(1:N) contains the singular values
-*         of the modified matrix.
-*
-*  ALPHA  (input/output) REAL
-*         Contains the diagonal element associated with the added row.
-*
-*  BETA   (input/output) REAL
-*         Contains the off-diagonal element associated with the added
-*         row.
-*
-*  U      (input/output) REAL array, dimension (LDU,N)
-*         On entry U(1:NL, 1:NL) contains the left singular vectors of
-*         the upper block; U(NL+2:N, NL+2:N) contains the left singular
-*         vectors of the lower block. On exit U contains the left
-*         singular vectors of the bidiagonal matrix.
-*
-*  LDU    (input) INTEGER
-*         The leading dimension of the array U.  LDU >= max( 1, N ).
-*
-*  VT     (input/output) REAL array, dimension (LDVT,M)
-*         where M = N + SQRE.
-*         On entry VT(1:NL+1, 1:NL+1)**T contains the right singular
-*         vectors of the upper block; VT(NL+2:M, NL+2:M)**T contains
-*         the right singular vectors of the lower block. On exit
-*         VT**T contains the right singular vectors of the
-*         bidiagonal matrix.
-*
-*  LDVT   (input) INTEGER
-*         The leading dimension of the array VT.  LDVT >= max( 1, M ).
-*
-*  IDXQ  (output) INTEGER array, dimension (N)
-*         This contains the permutation which will reintegrate the
-*         subproblem just solved back into sorted order, i.e.
-*         D( IDXQ( I = 1, N ) ) will be in ascending order.
-*
-*  IWORK  (workspace) INTEGER array, dimension (4*N)
-*
-*  WORK   (workspace) REAL array, dimension (3*M**2+2*M)
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if INFO = 1, a singular value did not converge
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Huan Ren, Computer Science Division, University of
-*     California at Berkeley, USA
 *
 *  =====================================================================
 *

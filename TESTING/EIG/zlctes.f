@@ -1,31 +1,73 @@
-      LOGICAL          FUNCTION ZLCTES( Z, D )
+*> \brief \b ZLCTES
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      COMPLEX*16         D, Z
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       LOGICAL          FUNCTION ZLCTES( Z, D )
+* 
+*       .. Scalar Arguments ..
+*       COMPLEX*16         D, Z
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  ZLCTES returns .TRUE. if the eigenvalue Z/D is to be selected
-*  (specifically, in this subroutine, if the real part of the
-*  eigenvalue is negative), and otherwise it returns .FALSE..
-*
-*  It is used by the test routine ZDRGES to test whether the driver
-*  routine ZGGES succesfully sorts eigenvalues.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLCTES returns .TRUE. if the eigenvalue Z/D is to be selected
+*> (specifically, in this subroutine, if the real part of the
+*> eigenvalue is negative), and otherwise it returns .FALSE..
+*>
+*> It is used by the test routine ZDRGES to test whether the driver
+*> routine ZGGES succesfully sorts eigenvalues.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  Z       (input) COMPLEX*16
-*          The numerator part of a complex eigenvalue Z/D.
+*> \param[in] Z
+*> \verbatim
+*>          Z is COMPLEX*16
+*>          The numerator part of a complex eigenvalue Z/D.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is COMPLEX*16
+*>          The denominator part of a complex eigenvalue Z/D.
+*> \endverbatim
+*>
 *
-*  D       (input) COMPLEX*16
-*          The denominator part of a complex eigenvalue Z/D.
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
+      LOGICAL          FUNCTION ZLCTES( Z, D )
+*
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      COMPLEX*16         D, Z
+*     ..
 *
 *  =====================================================================
 *

@@ -1,17 +1,62 @@
-      SUBROUTINE DROTG(DA,DB,C,S)
-*     .. Scalar Arguments ..
-      DOUBLE PRECISION C,DA,DB,S
-*     ..
+*> \brief \b DROTG
 *
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DROTG(DA,DB,C,S)
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION C,DA,DB,S
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*     DROTG construct givens plane rotation.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    DROTG construct givens plane rotation.
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_blas_level1
+*
 *
 *  Further Details
 *  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>     jack dongarra, linpack, 3/11/78.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
+      SUBROUTINE DROTG(DA,DB,C,S)
 *
-*     jack dongarra, linpack, 3/11/78.
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      DOUBLE PRECISION C,DA,DB,S
+*     ..
 *
 *  =====================================================================
 *

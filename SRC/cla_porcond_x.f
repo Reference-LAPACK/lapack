@@ -1,16 +1,125 @@
+*> \brief \b CLA_PORCOND_X
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL FUNCTION CLA_PORCOND_X( UPLO, N, A, LDA, AF, LDAF, X, INFO,
+*                                    WORK, RWORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            N, LDA, LDAF, INFO
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), AF( LDAF, * ), WORK( * ), X( * )
+*       REAL               RWORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    CLA_PORCOND_X Computes the infinity norm condition number of
+*>    op(A) * diag(X) where X is a COMPLEX vector.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>       = 'U':  Upper triangle of A is stored;
+*>       = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>     The number of linear equations, i.e., the order of the
+*>     matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>     On entry, the N-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>     The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is COMPLEX array, dimension (LDAF,N)
+*>     The triangular factor U or L from the Cholesky factorization
+*>     A = U**H*U or A = L*L**H, as computed by CPOTRF.
+*> \endverbatim
+*>
+*> \param[in] LDAF
+*> \verbatim
+*>          LDAF is INTEGER
+*>     The leading dimension of the array AF.  LDAF >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (N)
+*>     The vector X in the formula op(A) * diag(X).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>       = 0:  Successful exit.
+*>     i > 0:  The ith argument is invalid.
+*> \endverbatim
+*>
+*> \param[in] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (2*N).
+*>     Workspace.
+*> \endverbatim
+*>
+*> \param[in] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N).
+*>     Workspace.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexPOcomputational
+*
+*  =====================================================================
       REAL FUNCTION CLA_PORCOND_X( UPLO, N, A, LDA, AF, LDAF, X, INFO,
      $                             WORK, RWORK )
 *
-*     -- LAPACK routine (version 3.2.1)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- April 2009                                                   --
+*  -- LAPACK computational routine (version 3.2.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
       INTEGER            N, LDA, LDAF, INFO
@@ -19,49 +128,6 @@
       COMPLEX            A( LDA, * ), AF( LDAF, * ), WORK( * ), X( * )
       REAL               RWORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     CLA_PORCOND_X Computes the infinity norm condition number of
-*     op(A) * diag(X) where X is a COMPLEX vector.
-*
-*  Arguments
-*  =========
-*
-*     UPLO    (input) CHARACTER*1
-*       = 'U':  Upper triangle of A is stored;
-*       = 'L':  Lower triangle of A is stored.
-*
-*     N       (input) INTEGER
-*     The number of linear equations, i.e., the order of the
-*     matrix A.  N >= 0.
-*
-*     A       (input) COMPLEX array, dimension (LDA,N)
-*     On entry, the N-by-N matrix A.
-*
-*     LDA     (input) INTEGER
-*     The leading dimension of the array A.  LDA >= max(1,N).
-*
-*     AF      (input) COMPLEX array, dimension (LDAF,N)
-*     The triangular factor U or L from the Cholesky factorization
-*     A = U**H*U or A = L*L**H, as computed by CPOTRF.
-*
-*     LDAF    (input) INTEGER
-*     The leading dimension of the array AF.  LDAF >= max(1,N).
-*
-*     X       (input) COMPLEX array, dimension (N)
-*     The vector X in the formula op(A) * diag(X).
-*
-*     INFO    (output) INTEGER
-*       = 0:  Successful exit.
-*     i > 0:  The ith argument is invalid.
-*
-*     WORK    (input) COMPLEX array, dimension (2*N).
-*     Workspace.
-*
-*     RWORK   (input) REAL array, dimension (N).
-*     Workspace.
 *
 *  =====================================================================
 *

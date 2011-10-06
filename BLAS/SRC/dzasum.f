@@ -1,22 +1,70 @@
+*> \brief \b DZASUM
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DZASUM(N,ZX,INCX)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER INCX,N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16 ZX(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    DZASUM takes the sum of the absolute values.
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_blas_level1
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>     jack dongarra, 3/11/78.
+*>     modified 3/93 to return if incx .le. 0.
+*>     modified 12/3/93, array(1) declarations changed to array(*)
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DZASUM(N,ZX,INCX)
+*
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       INTEGER INCX,N
 *     ..
 *     .. Array Arguments ..
       COMPLEX*16 ZX(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     DZASUM takes the sum of the absolute values.
-*
-*  Further Details
-*  ===============
-*
-*     jack dongarra, 3/11/78.
-*     modified 3/93 to return if incx .le. 0.
-*     modified 12/3/93, array(1) declarations changed to array(*)
 *
 *  =====================================================================
 *

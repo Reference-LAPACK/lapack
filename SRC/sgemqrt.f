@@ -1,11 +1,169 @@
+*> \brief \b SGEMQRT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGEMQRT( SIDE, TRANS, M, N, K, NB, V, LDV, T, LDT, 
+*                          C, LDC, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER SIDE, TRANS
+*       INTEGER   INFO, K, LDV, LDC, M, N, NB, LDT
+*       ..
+*       .. Array Arguments ..
+*       REAL   V( LDV, * ), C( LDC, * ), T( LDT, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGEMQRT overwrites the general real M-by-N matrix C with
+*>
+*>                 SIDE = 'L'     SIDE = 'R'
+*> TRANS = 'N':      Q C            C Q
+*> TRANS = 'T':   Q**T C            C Q**T
+*>
+*> where Q is a real orthogonal matrix defined as the product of K
+*> elementary reflectors:
+*>
+*>       Q = H(1) H(2) . . . H(K) = I - V T V**T
+*>
+*> generated using the compact WY representation as returned by SGEQRT. 
+*>
+*> Q is of order M if SIDE = 'L' and of order N  if SIDE = 'R'.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'L': apply Q or Q**T from the Left;
+*>          = 'R': apply Q or Q**T from the Right.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          = 'N':  No transpose, apply Q;
+*>          = 'T':  Transpose, apply Q**T.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix C. M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix C. N >= 0.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of elementary reflectors whose product defines
+*>          the matrix Q.
+*>          If SIDE = 'L', M >= K >= 0;
+*>          if SIDE = 'R', N >= K >= 0.
+*> \endverbatim
+*>
+*> \param[in] NB
+*> \verbatim
+*>          NB is INTEGER
+*>          The block size used for the storage of T.  K >= NB >= 1.
+*>          This must be the same value of NB used to generate T
+*>          in CGEQRT.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is REAL array, dimension (LDV,K)
+*>          The i-th column must contain the vector which defines the
+*>          elementary reflector H(i), for i = 1,2,...,k, as returned by
+*>          CGEQRT in the first K columns of its array argument A.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V.
+*>          If SIDE = 'L', LDA >= max(1,M);
+*>          if SIDE = 'R', LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is REAL array, dimension (LDT,K)
+*>          The upper triangular factors of the block reflectors
+*>          as returned by CGEQRT, stored as a NB-by-N matrix.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T.  LDT >= NB.
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is REAL array, dimension (LDC,N)
+*>          On entry, the M-by-N matrix C.
+*>          On exit, C is overwritten by Q C, Q**T C, C Q**T or C Q.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array. The dimension of WORK is
+*>           N*NB if SIDE = 'L', or  M*NB if SIDE = 'R'.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realGEcomputational
+*
+*  =====================================================================
       SUBROUTINE SGEMQRT( SIDE, TRANS, M, N, K, NB, V, LDV, T, LDT, 
      $                   C, LDC, WORK, INFO )
-      IMPLICIT NONE
 *
-*  -- LAPACK routine (version 3.?) --
-*  -- LAPACK is a software package provided by Univ. of Tennessee, --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
-*  -- July 2011 --
+*  -- LAPACK computational routine (version 3.?) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER SIDE, TRANS
@@ -14,83 +172,6 @@
 *     .. Array Arguments ..
       REAL   V( LDV, * ), C( LDC, * ), T( LDT, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGEMQRT overwrites the general real M-by-N matrix C with
-*
-*                  SIDE = 'L'     SIDE = 'R'
-*  TRANS = 'N':      Q C            C Q
-*  TRANS = 'T':   Q**T C            C Q**T
-*
-*  where Q is a real orthogonal matrix defined as the product of K
-*  elementary reflectors:
-*
-*        Q = H(1) H(2) . . . H(K) = I - V T V**T
-*
-*  generated using the compact WY representation as returned by SGEQRT. 
-*
-*  Q is of order M if SIDE = 'L' and of order N  if SIDE = 'R'.
-*
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'L': apply Q or Q**T from the Left;
-*          = 'R': apply Q or Q**T from the Right.
-*
-*  TRANS   (input) CHARACTER*1
-*          = 'N':  No transpose, apply Q;
-*          = 'T':  Transpose, apply Q**T.
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix C. M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix C. N >= 0.
-*
-*  K       (input) INTEGER
-*          The number of elementary reflectors whose product defines
-*          the matrix Q.
-*          If SIDE = 'L', M >= K >= 0;
-*          if SIDE = 'R', N >= K >= 0.
-*
-*  NB      (input) INTEGER
-*          The block size used for the storage of T.  K >= NB >= 1.
-*          This must be the same value of NB used to generate T
-*          in CGEQRT.
-*
-*  V       (input) REAL array, dimension (LDV,K)
-*          The i-th column must contain the vector which defines the
-*          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*          CGEQRT in the first K columns of its array argument A.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of the array V.
-*          If SIDE = 'L', LDA >= max(1,M);
-*          if SIDE = 'R', LDA >= max(1,N).
-*
-*  T       (input) REAL array, dimension (LDT,K)
-*          The upper triangular factors of the block reflectors
-*          as returned by CGEQRT, stored as a NB-by-N matrix.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of the array T.  LDT >= NB.
-*
-*  C       (input/output) REAL array, dimension (LDC,N)
-*          On entry, the M-by-N matrix C.
-*          On exit, C is overwritten by Q C, Q**T C, C Q**T or C Q.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C. LDC >= max(1,M).
-*
-*  WORK    (workspace/output) REAL array.  The dimension of WORK is
-*           N*NB if SIDE = 'L', or  M*NB if SIDE = 'R'.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

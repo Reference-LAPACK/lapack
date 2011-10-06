@@ -1,13 +1,252 @@
+*> \brief \b ZTRSNA
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+*                          LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          HOWMNY, JOB
+*       INTEGER            INFO, LDT, LDVL, LDVR, LDWORK, M, MM, N
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            SELECT( * )
+*       DOUBLE PRECISION   RWORK( * ), S( * ), SEP( * )
+*       COMPLEX*16         T( LDT, * ), VL( LDVL, * ), VR( LDVR, * ),
+*      $                   WORK( LDWORK, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZTRSNA estimates reciprocal condition numbers for specified
+*> eigenvalues and/or right eigenvectors of a complex upper triangular
+*> matrix T (or of any matrix Q*T*Q**H with Q unitary).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOB
+*> \verbatim
+*>          JOB is CHARACTER*1
+*>          Specifies whether condition numbers are required for
+*>          eigenvalues (S) or eigenvectors (SEP):
+*>          = 'E': for eigenvalues only (S);
+*>          = 'V': for eigenvectors only (SEP);
+*>          = 'B': for both eigenvalues and eigenvectors (S and SEP).
+*> \endverbatim
+*>
+*> \param[in] HOWMNY
+*> \verbatim
+*>          HOWMNY is CHARACTER*1
+*>          = 'A': compute condition numbers for all eigenpairs;
+*>          = 'S': compute condition numbers for selected eigenpairs
+*>                 specified by the array SELECT.
+*> \endverbatim
+*>
+*> \param[in] SELECT
+*> \verbatim
+*>          SELECT is LOGICAL array, dimension (N)
+*>          If HOWMNY = 'S', SELECT specifies the eigenpairs for which
+*>          condition numbers are required. To select condition numbers
+*>          for the j-th eigenpair, SELECT(j) must be set to .TRUE..
+*>          If HOWMNY = 'A', SELECT is not referenced.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix T. N >= 0.
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is COMPLEX*16 array, dimension (LDT,N)
+*>          The upper triangular matrix T.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T. LDT >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] VL
+*> \verbatim
+*>          VL is COMPLEX*16 array, dimension (LDVL,M)
+*>          If JOB = 'E' or 'B', VL must contain left eigenvectors of T
+*>          (or of any Q*T*Q**H with Q unitary), corresponding to the
+*>          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
+*>          must be stored in consecutive columns of VL, as returned by
+*>          ZHSEIN or ZTREVC.
+*>          If JOB = 'V', VL is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDVL
+*> \verbatim
+*>          LDVL is INTEGER
+*>          The leading dimension of the array VL.
+*>          LDVL >= 1; and if JOB = 'E' or 'B', LDVL >= N.
+*> \endverbatim
+*>
+*> \param[in] VR
+*> \verbatim
+*>          VR is COMPLEX*16 array, dimension (LDVR,M)
+*>          If JOB = 'E' or 'B', VR must contain right eigenvectors of T
+*>          (or of any Q*T*Q**H with Q unitary), corresponding to the
+*>          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
+*>          must be stored in consecutive columns of VR, as returned by
+*>          ZHSEIN or ZTREVC.
+*>          If JOB = 'V', VR is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDVR
+*> \verbatim
+*>          LDVR is INTEGER
+*>          The leading dimension of the array VR.
+*>          LDVR >= 1; and if JOB = 'E' or 'B', LDVR >= N.
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension (MM)
+*>          If JOB = 'E' or 'B', the reciprocal condition numbers of the
+*>          selected eigenvalues, stored in consecutive elements of the
+*>          array. Thus S(j), SEP(j), and the j-th columns of VL and VR
+*>          all correspond to the same eigenpair (but not in general the
+*>          j-th eigenpair, unless all eigenpairs are selected).
+*>          If JOB = 'V', S is not referenced.
+*> \endverbatim
+*>
+*> \param[out] SEP
+*> \verbatim
+*>          SEP is DOUBLE PRECISION array, dimension (MM)
+*>          If JOB = 'V' or 'B', the estimated reciprocal condition
+*>          numbers of the selected eigenvectors, stored in consecutive
+*>          elements of the array.
+*>          If JOB = 'E', SEP is not referenced.
+*> \endverbatim
+*>
+*> \param[in] MM
+*> \verbatim
+*>          MM is INTEGER
+*>          The number of elements in the arrays S (if JOB = 'E' or 'B')
+*>           and/or SEP (if JOB = 'V' or 'B'). MM >= M.
+*> \endverbatim
+*>
+*> \param[out] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of elements of the arrays S and/or SEP actually
+*>          used to store the estimated condition numbers.
+*>          If HOWMNY = 'A', M is set to N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (LDWORK,N+6)
+*>          If JOB = 'E', WORK is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDWORK
+*> \verbatim
+*>          LDWORK is INTEGER
+*>          The leading dimension of the array WORK.
+*>          LDWORK >= 1; and if JOB = 'V' or 'B', LDWORK >= N.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*>          If JOB = 'E', RWORK is not referenced.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  The reciprocal of the condition number of an eigenvalue lambda is
+*>  defined as
+*>
+*>          S(lambda) = |v**H*u| / (norm(u)*norm(v))
+*>
+*>  where u and v are the right and left eigenvectors of T corresponding
+*>  to lambda; v**H denotes the conjugate transpose of v, and norm(u)
+*>  denotes the Euclidean norm. These reciprocal condition numbers always
+*>  lie between zero (very badly conditioned) and one (very well
+*>  conditioned). If n = 1, S(lambda) is defined to be 1.
+*>
+*>  An approximate error bound for a computed eigenvalue W(i) is given by
+*>
+*>                      EPS * norm(T) / S(i)
+*>
+*>  where EPS is the machine precision.
+*>
+*>  The reciprocal of the condition number of the right eigenvector u
+*>  corresponding to lambda is defined as follows. Suppose
+*>
+*>              T = ( lambda  c  )
+*>                  (   0    T22 )
+*>
+*>  Then the reciprocal condition number is
+*>
+*>          SEP( lambda, T22 ) = sigma-min( T22 - lambda*I )
+*>
+*>  where sigma-min denotes the smallest singular value. We approximate
+*>  the smallest singular value by the reciprocal of an estimate of the
+*>  one-norm of the inverse of T22 - lambda*I. If n = 1, SEP(1) is
+*>  defined to be abs(T(1,1)).
+*>
+*>  An approximate error bound for a computed right eigenvector VR(i)
+*>  is given by
+*>
+*>                      EPS * norm(T) / SEP(i)
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
      $                   LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
-*
-*     Modified to call ZLACN2 in place of ZLACON, 10 Feb 03, SJH.
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          HOWMNY, JOB
@@ -19,144 +258,6 @@
       COMPLEX*16         T( LDT, * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   WORK( LDWORK, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZTRSNA estimates reciprocal condition numbers for specified
-*  eigenvalues and/or right eigenvectors of a complex upper triangular
-*  matrix T (or of any matrix Q*T*Q**H with Q unitary).
-*
-*  Arguments
-*  =========
-*
-*  JOB     (input) CHARACTER*1
-*          Specifies whether condition numbers are required for
-*          eigenvalues (S) or eigenvectors (SEP):
-*          = 'E': for eigenvalues only (S);
-*          = 'V': for eigenvectors only (SEP);
-*          = 'B': for both eigenvalues and eigenvectors (S and SEP).
-*
-*  HOWMNY  (input) CHARACTER*1
-*          = 'A': compute condition numbers for all eigenpairs;
-*          = 'S': compute condition numbers for selected eigenpairs
-*                 specified by the array SELECT.
-*
-*  SELECT  (input) LOGICAL array, dimension (N)
-*          If HOWMNY = 'S', SELECT specifies the eigenpairs for which
-*          condition numbers are required. To select condition numbers
-*          for the j-th eigenpair, SELECT(j) must be set to .TRUE..
-*          If HOWMNY = 'A', SELECT is not referenced.
-*
-*  N       (input) INTEGER
-*          The order of the matrix T. N >= 0.
-*
-*  T       (input) COMPLEX*16 array, dimension (LDT,N)
-*          The upper triangular matrix T.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of the array T. LDT >= max(1,N).
-*
-*  VL      (input) COMPLEX*16 array, dimension (LDVL,M)
-*          If JOB = 'E' or 'B', VL must contain left eigenvectors of T
-*          (or of any Q*T*Q**H with Q unitary), corresponding to the
-*          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
-*          must be stored in consecutive columns of VL, as returned by
-*          ZHSEIN or ZTREVC.
-*          If JOB = 'V', VL is not referenced.
-*
-*  LDVL    (input) INTEGER
-*          The leading dimension of the array VL.
-*          LDVL >= 1; and if JOB = 'E' or 'B', LDVL >= N.
-*
-*  VR      (input) COMPLEX*16 array, dimension (LDVR,M)
-*          If JOB = 'E' or 'B', VR must contain right eigenvectors of T
-*          (or of any Q*T*Q**H with Q unitary), corresponding to the
-*          eigenpairs specified by HOWMNY and SELECT. The eigenvectors
-*          must be stored in consecutive columns of VR, as returned by
-*          ZHSEIN or ZTREVC.
-*          If JOB = 'V', VR is not referenced.
-*
-*  LDVR    (input) INTEGER
-*          The leading dimension of the array VR.
-*          LDVR >= 1; and if JOB = 'E' or 'B', LDVR >= N.
-*
-*  S       (output) DOUBLE PRECISION array, dimension (MM)
-*          If JOB = 'E' or 'B', the reciprocal condition numbers of the
-*          selected eigenvalues, stored in consecutive elements of the
-*          array. Thus S(j), SEP(j), and the j-th columns of VL and VR
-*          all correspond to the same eigenpair (but not in general the
-*          j-th eigenpair, unless all eigenpairs are selected).
-*          If JOB = 'V', S is not referenced.
-*
-*  SEP     (output) DOUBLE PRECISION array, dimension (MM)
-*          If JOB = 'V' or 'B', the estimated reciprocal condition
-*          numbers of the selected eigenvectors, stored in consecutive
-*          elements of the array.
-*          If JOB = 'E', SEP is not referenced.
-*
-*  MM      (input) INTEGER
-*          The number of elements in the arrays S (if JOB = 'E' or 'B')
-*           and/or SEP (if JOB = 'V' or 'B'). MM >= M.
-*
-*  M       (output) INTEGER
-*          The number of elements of the arrays S and/or SEP actually
-*          used to store the estimated condition numbers.
-*          If HOWMNY = 'A', M is set to N.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (LDWORK,N+6)
-*          If JOB = 'E', WORK is not referenced.
-*
-*  LDWORK  (input) INTEGER
-*          The leading dimension of the array WORK.
-*          LDWORK >= 1; and if JOB = 'V' or 'B', LDWORK >= N.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*          If JOB = 'E', RWORK is not referenced.
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  The reciprocal of the condition number of an eigenvalue lambda is
-*  defined as
-*
-*          S(lambda) = |v**H*u| / (norm(u)*norm(v))
-*
-*  where u and v are the right and left eigenvectors of T corresponding
-*  to lambda; v**H denotes the conjugate transpose of v, and norm(u)
-*  denotes the Euclidean norm. These reciprocal condition numbers always
-*  lie between zero (very badly conditioned) and one (very well
-*  conditioned). If n = 1, S(lambda) is defined to be 1.
-*
-*  An approximate error bound for a computed eigenvalue W(i) is given by
-*
-*                      EPS * norm(T) / S(i)
-*
-*  where EPS is the machine precision.
-*
-*  The reciprocal of the condition number of the right eigenvector u
-*  corresponding to lambda is defined as follows. Suppose
-*
-*              T = ( lambda  c  )
-*                  (   0    T22 )
-*
-*  Then the reciprocal condition number is
-*
-*          SEP( lambda, T22 ) = sigma-min( T22 - lambda*I )
-*
-*  where sigma-min denotes the smallest singular value. We approximate
-*  the smallest singular value by the reciprocal of an estimate of the
-*  one-norm of the inverse of T22 - lambda*I. If n = 1, SEP(1) is
-*  defined to be abs(T(1,1)).
-*
-*  An approximate error bound for a computed right eigenvector VR(i)
-*  is given by
-*
-*                      EPS * norm(T) / SEP(i)
 *
 *  =====================================================================
 *

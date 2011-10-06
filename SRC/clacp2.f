@@ -1,9 +1,105 @@
+*> \brief \b CLACP2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLACP2( UPLO, M, N, A, LDA, B, LDB )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            LDA, LDB, M, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * )
+*       COMPLEX            B( LDB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLACP2 copies all or part of a real two-dimensional matrix A to a
+*> complex matrix B.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies the part of the matrix A to be copied to B.
+*>          = 'U':      Upper triangular part
+*>          = 'L':      Lower triangular part
+*>          Otherwise:  All of the matrix A
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The m by n matrix A.  If UPLO = 'U', only the upper trapezium
+*>          is accessed; if UPLO = 'L', only the lower trapezium is
+*>          accessed.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,N)
+*>          On exit, B = A in the locations specified by UPLO.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,M).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE CLACP2( UPLO, M, N, A, LDA, B, LDB )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -13,41 +109,6 @@
       REAL               A( LDA, * )
       COMPLEX            B( LDB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLACP2 copies all or part of a real two-dimensional matrix A to a
-*  complex matrix B.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies the part of the matrix A to be copied to B.
-*          = 'U':      Upper triangular part
-*          = 'L':      Lower triangular part
-*          Otherwise:  All of the matrix A
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  A       (input) REAL array, dimension (LDA,N)
-*          The m by n matrix A.  If UPLO = 'U', only the upper trapezium
-*          is accessed; if UPLO = 'L', only the lower trapezium is
-*          accessed.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  B       (output) COMPLEX array, dimension (LDB,N)
-*          On exit, B = A in the locations specified by UPLO.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,M).
 *
 *  =====================================================================
 *

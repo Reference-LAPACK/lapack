@@ -1,15 +1,93 @@
+*> \brief \b ZLASCL2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLASCL2 ( M, N, D, X, LDX )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            M, N, LDX
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * )
+*       COMPLEX*16         X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLASCL2 performs a diagonal scaling on a vector:
+*>   x <-- D * x
+*> where the DOUBLE PRECISION diagonal matrix D is stored as a vector.
+*>
+*> Eventually to be replaced by BLAS_zge_diag_scale in the new BLAS
+*> standard.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>     The number of rows of D and X. M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>     The number of columns of D and X. N >= 0.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, length M
+*>     Diagonal matrix D, stored as a vector of length M.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (LDX,N)
+*>     On entry, the vector X to be scaled by D.
+*>     On exit, the scaled vector.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>     The leading dimension of the vector X. LDX >= 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE ZLASCL2 ( M, N, D, X, LDX )
 *
-*     -- LAPACK routine (version 3.2.1)                               --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- April 2009                                                   --
+*  -- LAPACK computational routine (version 3.2.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       INTEGER            M, N, LDX
 *     ..
@@ -17,35 +95,6 @@
       DOUBLE PRECISION   D( * )
       COMPLEX*16         X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLASCL2 performs a diagonal scaling on a vector:
-*    x <-- D * x
-*  where the DOUBLE PRECISION diagonal matrix D is stored as a vector.
-*
-*  Eventually to be replaced by BLAS_zge_diag_scale in the new BLAS
-*  standard.
-*
-*  Arguments
-*  =========
-*
-*     M       (input) INTEGER
-*     The number of rows of D and X. M >= 0.
-*
-*     N       (input) INTEGER
-*     The number of columns of D and X. N >= 0.
-*
-*     D       (input) DOUBLE PRECISION array, length M
-*     Diagonal matrix D, stored as a vector of length M.
-*
-*     X       (input/output) COMPLEX*16 array, dimension (LDX,N)
-*     On entry, the vector X to be scaled by D.
-*     On exit, the scaled vector.
-*
-*     LDX     (input) INTEGER
-*     The leading dimension of the vector X. LDX >= 0.
 *
 *  =====================================================================
 *

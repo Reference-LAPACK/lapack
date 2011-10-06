@@ -1,9 +1,129 @@
+*> \brief \b SDRVRF3
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+*      +                    S_WORK_SLANGE, S_WORK_SGEQRF, TAU )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, NN, NOUT
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NVAL( NN )
+*       REAL               A( LDA, * ), ARF( * ), B1( LDA, * ),
+*      +                   B2( LDA, * ), S_WORK_SGEQRF( * ),
+*      +                   S_WORK_SLANGE( * ), TAU( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SDRVRF3 tests the LAPACK RFP routines:
+*>     STFSM
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>                The unit number for output.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>                The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>                The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>                The threshold value for the test ratios.  A result is
+*>                included in the output file if RESULT >= THRESH.  To have
+*>                every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>                The leading dimension of the array A.  LDA >= max(1,NMAX).
+*> \endverbatim
+*>
+*> \param[out] ARF
+*> \verbatim
+*>          ARF is REAL array, dimension ((NMAX*(NMAX+1))/2).
+*> \endverbatim
+*>
+*> \param[out] B1
+*> \verbatim
+*>          B1 is REAL array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[out] B2
+*> \verbatim
+*>          B2 is REAL array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[out] S_WORK_SLANGE
+*> \verbatim
+*>          S_WORK_SLANGE is REAL array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[out] S_WORK_SGEQRF
+*> \verbatim
+*>          S_WORK_SGEQRF is REAL array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is REAL array, dimension (NMAX)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
      +                    S_WORK_SLANGE, S_WORK_SGEQRF, TAU )
 *
 *  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, NN, NOUT
@@ -15,46 +135,6 @@
      +                   B2( LDA, * ), S_WORK_SGEQRF( * ),
      +                   S_WORK_SLANGE( * ), TAU( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SDRVRF3 tests the LAPACK RFP routines:
-*      STFSM
-*
-*  Arguments
-*  =========
-*
-*  NOUT          (input) INTEGER
-*                The unit number for output.
-*
-*  NN            (input) INTEGER
-*                The number of values of N contained in the vector NVAL.
-*
-*  NVAL          (input) INTEGER array, dimension (NN)
-*                The values of the matrix dimension N.
-*
-*  THRESH        (input) REAL
-*                The threshold value for the test ratios.  A result is
-*                included in the output file if RESULT >= THRESH.  To have
-*                every test ratio printed, use THRESH = 0.
-*
-*  A             (workspace) REAL array, dimension (LDA,NMAX)
-*
-*  LDA           (input) INTEGER
-*                The leading dimension of the array A.  LDA >= max(1,NMAX).
-*
-*  ARF           (workspace) REAL array, dimension ((NMAX*(NMAX+1))/2).
-*
-*  B1            (workspace) REAL array, dimension (LDA,NMAX)
-*
-*  B2            (workspace) REAL array, dimension (LDA,NMAX)
-*
-*  S_WORK_SLANGE (workspace) REAL array, dimension (NMAX)
-*
-*  S_WORK_SGEQRF (workspace) REAL array, dimension (NMAX)
-*
-*  TAU           (workspace) REAL array, dimension (NMAX)
 *
 *  =====================================================================
 *     ..

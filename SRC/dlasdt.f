@@ -1,9 +1,112 @@
+*> \brief \b DLASDT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASDT( N, LVL, ND, INODE, NDIML, NDIMR, MSUB )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LVL, MSUB, N, ND
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            INODE( * ), NDIML( * ), NDIMR( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLASDT creates a tree of subproblems for bidiagonal divide and
+*> conquer.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          On entry, the number of diagonal elements of the
+*>          bidiagonal matrix.
+*> \endverbatim
+*>
+*> \param[out] LVL
+*> \verbatim
+*>          LVL is INTEGER
+*>          On exit, the number of levels on the computation tree.
+*> \endverbatim
+*>
+*> \param[out] ND
+*> \verbatim
+*>          ND is INTEGER
+*>          On exit, the number of nodes on the tree.
+*> \endverbatim
+*>
+*> \param[out] INODE
+*> \verbatim
+*>          INODE is INTEGER array, dimension ( N )
+*>          On exit, centers of subproblems.
+*> \endverbatim
+*>
+*> \param[out] NDIML
+*> \verbatim
+*>          NDIML is INTEGER array, dimension ( N )
+*>          On exit, row dimensions of left children.
+*> \endverbatim
+*>
+*> \param[out] NDIMR
+*> \verbatim
+*>          NDIMR is INTEGER array, dimension ( N )
+*>          On exit, row dimensions of right children.
+*> \endverbatim
+*>
+*> \param[in] MSUB
+*> \verbatim
+*>          MSUB is INTEGER
+*>          On entry, the maximum row dimension each subproblem at the
+*>          bottom of the tree can be of.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Huan Ren, Computer Science Division, University of
+*>     California at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLASDT( N, LVL, ND, INODE, NDIML, NDIMR, MSUB )
 *
 *  -- LAPACK auxiliary routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LVL, MSUB, N, ND
@@ -11,45 +114,6 @@
 *     .. Array Arguments ..
       INTEGER            INODE( * ), NDIML( * ), NDIMR( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLASDT creates a tree of subproblems for bidiagonal divide and
-*  conquer.
-*
-*  Arguments
-*  =========
-*
-*   N      (input) INTEGER
-*          On entry, the number of diagonal elements of the
-*          bidiagonal matrix.
-*
-*   LVL    (output) INTEGER
-*          On exit, the number of levels on the computation tree.
-*
-*   ND     (output) INTEGER
-*          On exit, the number of nodes on the tree.
-*
-*   INODE  (output) INTEGER array, dimension ( N )
-*          On exit, centers of subproblems.
-*
-*   NDIML  (output) INTEGER array, dimension ( N )
-*          On exit, row dimensions of left children.
-*
-*   NDIMR  (output) INTEGER array, dimension ( N )
-*          On exit, row dimensions of right children.
-*
-*   MSUB   (input) INTEGER
-*          On entry, the maximum row dimension each subproblem at the
-*          bottom of the tree can be of.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Huan Ren, Computer Science Division, University of
-*     California at Berkeley, USA
 *
 *  =====================================================================
 *

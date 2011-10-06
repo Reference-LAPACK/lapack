@@ -1,9 +1,125 @@
+*> \brief \b ZDRVRF4
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
+*      +                    LDA, D_WORK_ZLANGE )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDC, NN, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NVAL( NN )
+*       DOUBLE PRECISION   D_WORK_ZLANGE( * )
+*       COMPLEX*16         A( LDA, * ), C1( LDC, * ), C2( LDC, *),
+*      +                   CRF( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZDRVRF4 tests the LAPACK RFP routines:
+*>     ZHFRK
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>                The unit number for output.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>                The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>                The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>                The threshold value for the test ratios.  A result is
+*>                included in the output file if RESULT >= THRESH.  To have
+*>                every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[out] C1
+*> \verbatim
+*>          C1 is COMPLEX*16 array, dimension (LDC,NMAX)
+*> \endverbatim
+*>
+*> \param[out] C2
+*> \verbatim
+*>          C2 is COMPLEX*16 array, dimension (LDC,NMAX)
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>                The leading dimension of the array A.  LDA >= max(1,NMAX).
+*> \endverbatim
+*>
+*> \param[out] CRF
+*> \verbatim
+*>          CRF is COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>                The leading dimension of the array A.  LDA >= max(1,NMAX).
+*> \endverbatim
+*>
+*> \param[out] D_WORK_ZLANGE
+*> \verbatim
+*>          D_WORK_ZLANGE is DOUBLE PRECISION array, dimension (NMAX)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
      +                    LDA, D_WORK_ZLANGE )
 *
 *  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDC, NN, NOUT
@@ -15,45 +131,6 @@
       COMPLEX*16         A( LDA, * ), C1( LDC, * ), C2( LDC, *),
      +                   CRF( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZDRVRF4 tests the LAPACK RFP routines:
-*      ZHFRK
-*
-*  Arguments
-*  =========
-*
-*  NOUT          (input) INTEGER
-*                The unit number for output.
-*
-*  NN            (input) INTEGER
-*                The number of values of N contained in the vector NVAL.
-*
-*  NVAL          (input) INTEGER array, dimension (NN)
-*                The values of the matrix dimension N.
-*
-*  THRESH        (input) DOUBLE PRECISION
-*                The threshold value for the test ratios.  A result is
-*                included in the output file if RESULT >= THRESH.  To have
-*                every test ratio printed, use THRESH = 0.
-*
-*  C1            (workspace) COMPLEX*16 array, dimension (LDC,NMAX)
-*
-*  C2            (workspace) COMPLEX*16 array, dimension (LDC,NMAX)
-*
-*  LDC           (input) INTEGER
-*                The leading dimension of the array A.  LDA >= max(1,NMAX).
-*
-*  CRF           (workspace) COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
-*
-*  A             (workspace) COMPLEX*16 array, dimension (LDA,NMAX)
-*
-*  LDA           (input) INTEGER
-*                The leading dimension of the array A.  LDA >= max(1,NMAX).
-*
-*  D_WORK_ZLANGE (workspace) DOUBLE PRECISION array, dimension (NMAX)
 *
 *  =====================================================================
 *     ..

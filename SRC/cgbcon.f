@@ -1,12 +1,148 @@
+*> \brief \b CGBCON
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCOND,
+*                          WORK, RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          NORM
+*       INTEGER            INFO, KL, KU, LDAB, N
+*       REAL               ANORM, RCOND
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       REAL               RWORK( * )
+*       COMPLEX            AB( LDAB, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGBCON estimates the reciprocal of the condition number of a complex
+*> general band matrix A, in either the 1-norm or the infinity-norm,
+*> using the LU factorization computed by CGBTRF.
+*>
+*> An estimate is obtained for norm(inv(A)), and the reciprocal of the
+*> condition number is computed as
+*>    RCOND = 1 / ( norm(A) * norm(inv(A)) ).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NORM
+*> \verbatim
+*>          NORM is CHARACTER*1
+*>          Specifies whether the 1-norm condition number or the
+*>          infinity-norm condition number is required:
+*>          = '1' or 'O':  1-norm;
+*>          = 'I':         Infinity-norm.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>          The number of subdiagonals within the band of A.  KL >= 0.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>          The number of superdiagonals within the band of A.  KU >= 0.
+*> \endverbatim
+*>
+*> \param[in] AB
+*> \verbatim
+*>          AB is COMPLEX array, dimension (LDAB,N)
+*>          Details of the LU factorization of the band matrix A, as
+*>          computed by CGBTRF.  U is stored as an upper triangular band
+*>          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
+*>          the multipliers used during the factorization are stored in
+*>          rows KL+KU+2 to 2*KL+KU+1.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= 2*KL+KU+1.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          The pivot indices; for 1 <= i <= N, row i of the matrix was
+*>          interchanged with row IPIV(i).
+*> \endverbatim
+*>
+*> \param[in] ANORM
+*> \verbatim
+*>          ANORM is REAL
+*>          If NORM = '1' or 'O', the 1-norm of the original matrix A.
+*>          If NORM = 'I', the infinity-norm of the original matrix A.
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The reciprocal of the condition number of the matrix A,
+*>          computed as RCOND = 1/(norm(A) * norm(inv(A))).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexGBcomputational
+*
+*  =====================================================================
       SUBROUTINE CGBCON( NORM, N, KL, KU, AB, LDAB, IPIV, ANORM, RCOND,
      $                   WORK, RWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
-*
-*     Modified to call CLACN2 in place of CLACON, 10 Feb 03, SJH.
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          NORM
@@ -18,65 +154,6 @@
       REAL               RWORK( * )
       COMPLEX            AB( LDAB, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGBCON estimates the reciprocal of the condition number of a complex
-*  general band matrix A, in either the 1-norm or the infinity-norm,
-*  using the LU factorization computed by CGBTRF.
-*
-*  An estimate is obtained for norm(inv(A)), and the reciprocal of the
-*  condition number is computed as
-*     RCOND = 1 / ( norm(A) * norm(inv(A)) ).
-*
-*  Arguments
-*  =========
-*
-*  NORM    (input) CHARACTER*1
-*          Specifies whether the 1-norm condition number or the
-*          infinity-norm condition number is required:
-*          = '1' or 'O':  1-norm;
-*          = 'I':         Infinity-norm.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  KL      (input) INTEGER
-*          The number of subdiagonals within the band of A.  KL >= 0.
-*
-*  KU      (input) INTEGER
-*          The number of superdiagonals within the band of A.  KU >= 0.
-*
-*  AB      (input) COMPLEX array, dimension (LDAB,N)
-*          Details of the LU factorization of the band matrix A, as
-*          computed by CGBTRF.  U is stored as an upper triangular band
-*          matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
-*          the multipliers used during the factorization are stored in
-*          rows KL+KU+2 to 2*KL+KU+1.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= 2*KL+KU+1.
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          The pivot indices; for 1 <= i <= N, row i of the matrix was
-*          interchanged with row IPIV(i).
-*
-*  ANORM   (input) REAL
-*          If NORM = '1' or 'O', the 1-norm of the original matrix A.
-*          If NORM = 'I', the infinity-norm of the original matrix A.
-*
-*  RCOND   (output) REAL
-*          The reciprocal of the condition number of the matrix A,
-*          computed as RCOND = 1/(norm(A) * norm(inv(A))).
-*
-*  WORK    (workspace) COMPLEX array, dimension (2*N)
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

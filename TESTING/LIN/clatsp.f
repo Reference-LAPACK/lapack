@@ -1,8 +1,95 @@
+*> \brief \b CLATSP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLATSP( UPLO, N, X, ISEED )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( * )
+*       COMPLEX            X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLATSP generates a special test matrix for the complex symmetric
+*> (indefinite) factorization for packed matrices.  The pivot blocks of
+*> the generated matrix will be in the following order:
+*>    2x2 pivot block, non diagonalizable
+*>    1x1 pivot block
+*>    2x2 pivot block, diagonalizable
+*>    (cycle repeats)
+*> A row interchange is required for each non-diagonalizable 2x2 block.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER
+*>          Specifies whether the generated matrix is to be upper or
+*>          lower triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The dimension of the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (N*(N+1)/2)
+*>          The generated matrix in packed storage format.  The matrix
+*>          consists of 3x3 and 2x2 diagonal blocks which result in the
+*>          pivot sequence given above.  The matrix outside these
+*>          diagonal blocks is zero.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed for the random number generator.  The last
+*>          of the four integers must be odd.  (modified on exit)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CLATSP( UPLO, N, X, ISEED )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,40 +99,6 @@
       INTEGER            ISEED( * )
       COMPLEX            X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLATSP generates a special test matrix for the complex symmetric
-*  (indefinite) factorization for packed matrices.  The pivot blocks of
-*  the generated matrix will be in the following order:
-*     2x2 pivot block, non diagonalizable
-*     1x1 pivot block
-*     2x2 pivot block, diagonalizable
-*     (cycle repeats)
-*  A row interchange is required for each non-diagonalizable 2x2 block.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER
-*          Specifies whether the generated matrix is to be upper or
-*          lower triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The dimension of the matrix to be generated.
-*
-*  X       (output) COMPLEX array, dimension (N*(N+1)/2)
-*          The generated matrix in packed storage format.  The matrix
-*          consists of 3x3 and 2x2 diagonal blocks which result in the
-*          pivot sequence given above.  The matrix outside these
-*          diagonal blocks is zero.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed for the random number generator.  The last
-*          of the four integers must be odd.  (modified on exit)
 *
 *  =====================================================================
 *

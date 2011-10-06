@@ -1,35 +1,80 @@
-      LOGICAL          FUNCTION SLCTSX( AR, AI, BETA )
+*> \brief \b SLCTSX
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      REAL               AI, AR, BETA
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       LOGICAL          FUNCTION SLCTSX( AR, AI, BETA )
+* 
+*       .. Scalar Arguments ..
+*       REAL               AI, AR, BETA
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  This function is used to determine what eigenvalues will be
-*  selected.  If this is part of the test driver SDRGSX, do not
-*  change the code UNLESS you are testing input examples and not
-*  using the built-in examples.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This function is used to determine what eigenvalues will be
+*> selected.  If this is part of the test driver SDRGSX, do not
+*> change the code UNLESS you are testing input examples and not
+*> using the built-in examples.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  AR      (input) REAL
-*          The numerator of the real part of a complex eigenvalue
-*          (AR/BETA) + i*(AI/BETA).
+*> \param[in] AR
+*> \verbatim
+*>          AR is REAL
+*>          The numerator of the real part of a complex eigenvalue
+*>          (AR/BETA) + i*(AI/BETA).
+*> \endverbatim
+*>
+*> \param[in] AI
+*> \verbatim
+*>          AI is REAL
+*>          The numerator of the imaginary part of a complex eigenvalue
+*>          (AR/BETA) + i*(AI).
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is REAL
+*>          The denominator part of a complex eigenvalue
+*>          (AR/BETA) + i*(AI/BETA).
+*> \endverbatim
+*>
 *
-*  AI      (input) REAL
-*          The numerator of the imaginary part of a complex eigenvalue
-*          (AR/BETA) + i*(AI).
+*  Authors
+*  =======
 *
-*  BETA    (input) REAL
-*          The denominator part of a complex eigenvalue
-*          (AR/BETA) + i*(AI/BETA).
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
+      LOGICAL          FUNCTION SLCTSX( AR, AI, BETA )
+*
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      REAL               AI, AR, BETA
+*     ..
 *
 *  =====================================================================
 *

@@ -1,35 +1,77 @@
-      LOGICAL          FUNCTION SSLECT( ZR, ZI )
+*> \brief \b SSLECT
 *
-*  -- LAPACK test routine (version 3.1.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     February 2007
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      REAL               ZI, ZR
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       LOGICAL          FUNCTION SSLECT( ZR, ZI )
+* 
+*       .. Scalar Arguments ..
+*       REAL               ZI, ZR
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  SSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
-*  selected, and otherwise it returns .FALSE.
-*  It is used by SCHK41 to test if SGEES succesfully sorts eigenvalues,
-*  and by SCHK43 to test if SGEESX succesfully sorts eigenvalues.
-*
-*  The common block /SSLCT/ controls how eigenvalues are selected.
-*  If SELOPT = 0, then SSLECT return .TRUE. when ZR is less than zero,
-*  and .FALSE. otherwise.
-*  If SELOPT is at least 1, SSLECT returns SELVAL(SELOPT) and adds 1
-*  to SELOPT, cycling back to 1 at SELMAX.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
+*> selected, and otherwise it returns .FALSE.
+*> It is used by SCHK41 to test if SGEES succesfully sorts eigenvalues,
+*> and by SCHK43 to test if SGEESX succesfully sorts eigenvalues.
+*>
+*> The common block /SSLCT/ controls how eigenvalues are selected.
+*> If SELOPT = 0, then SSLECT return .TRUE. when ZR is less than zero,
+*> and .FALSE. otherwise.
+*> If SELOPT is at least 1, SSLECT returns SELVAL(SELOPT) and adds 1
+*> to SELOPT, cycling back to 1 at SELMAX.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  ZR      (input) REAL
-*          The real part of a complex eigenvalue ZR + i*ZI.
+*> \param[in] ZR
+*> \verbatim
+*>          ZR is REAL
+*>          The real part of a complex eigenvalue ZR + i*ZI.
+*> \endverbatim
+*>
+*> \param[in] ZI
+*> \verbatim
+*>          ZI is REAL
+*>          The imaginary part of a complex eigenvalue ZR + i*ZI.
+*> \endverbatim
+*>
 *
-*  ZI      (input) REAL
-*          The imaginary part of a complex eigenvalue ZR + i*ZI.
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
+      LOGICAL          FUNCTION SSLECT( ZR, ZI )
+*
+*  -- LAPACK test routine (version 3.1.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      REAL               ZI, ZR
+*     ..
 *
 *  =====================================================================
 *

@@ -1,12 +1,122 @@
+*> \brief \b SPOCON
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SPOCON( UPLO, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, LDA, N
+*       REAL               ANORM, RCOND
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               A( LDA, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SPOCON estimates the reciprocal of the condition number (in the 
+*> 1-norm) of a real symmetric positive definite matrix using the
+*> Cholesky factorization A = U**T*U or A = L*L**T computed by SPOTRF.
+*>
+*> An estimate is obtained for norm(inv(A)), and the reciprocal of the
+*> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The triangular factor U or L from the Cholesky factorization
+*>          A = U**T*U or A = L*L**T, as computed by SPOTRF.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] ANORM
+*> \verbatim
+*>          ANORM is REAL
+*>          The 1-norm (or infinity-norm) of the symmetric matrix A.
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The reciprocal of the condition number of the matrix A,
+*>          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an
+*>          estimate of the 1-norm of inv(A) computed in this routine.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (3*N)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realPOcomputational
+*
+*  =====================================================================
       SUBROUTINE SPOCON( UPLO, N, A, LDA, ANORM, RCOND, WORK, IWORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
-*
-*     Modified to call SLACN2 in place of SLACON, 7 Feb 03, SJH.
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -17,49 +127,6 @@
       INTEGER            IWORK( * )
       REAL               A( LDA, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SPOCON estimates the reciprocal of the condition number (in the 
-*  1-norm) of a real symmetric positive definite matrix using the
-*  Cholesky factorization A = U**T*U or A = L*L**T computed by SPOTRF.
-*
-*  An estimate is obtained for norm(inv(A)), and the reciprocal of the
-*  condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input) REAL array, dimension (LDA,N)
-*          The triangular factor U or L from the Cholesky factorization
-*          A = U**T*U or A = L*L**T, as computed by SPOTRF.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  ANORM   (input) REAL
-*          The 1-norm (or infinity-norm) of the symmetric matrix A.
-*
-*  RCOND   (output) REAL
-*          The reciprocal of the condition number of the matrix A,
-*          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an
-*          estimate of the 1-norm of inv(A) computed in this routine.
-*
-*  WORK    (workspace) REAL array, dimension (3*N)
-*
-*  IWORK   (workspace) INTEGER array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

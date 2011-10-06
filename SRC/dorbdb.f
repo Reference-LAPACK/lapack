@@ -1,15 +1,291 @@
+*> \brief \b DORBDB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
+*                          X21, LDX21, X22, LDX22, THETA, PHI, TAUP1,
+*                          TAUP2, TAUQ1, TAUQ2, WORK, LWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          SIGNS, TRANS
+*       INTEGER            INFO, LDX11, LDX12, LDX21, LDX22, LWORK, M, P,
+*      $                   Q
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   PHI( * ), THETA( * )
+*       DOUBLE PRECISION   TAUP1( * ), TAUP2( * ), TAUQ1( * ), TAUQ2( * ),
+*      $                   WORK( * ), X11( LDX11, * ), X12( LDX12, * ),
+*      $                   X21( LDX21, * ), X22( LDX22, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DORBDB simultaneously bidiagonalizes the blocks of an M-by-M
+*> partitioned orthogonal matrix X:
+*>
+*>                                 [ B11 | B12 0  0 ]
+*>     [ X11 | X12 ]   [ P1 |    ] [  0  |  0 -I  0 ] [ Q1 |    ]**T
+*> X = [-----------] = [---------] [----------------] [---------]   .
+*>     [ X21 | X22 ]   [    | P2 ] [ B21 | B22 0  0 ] [    | Q2 ]
+*>                                 [  0  |  0  0  I ]
+*>
+*> X11 is P-by-Q. Q must be no larger than P, M-P, or M-Q. (If this is
+*> not the case, then X must be transposed and/or permuted. This can be
+*> done in constant time using the TRANS and SIGNS options. See DORCSD
+*> for details.)
+*>
+*> The orthogonal matrices P1, P2, Q1, and Q2 are P-by-P, (M-P)-by-
+*> (M-P), Q-by-Q, and (M-Q)-by-(M-Q), respectively. They are
+*> represented implicitly by Householder vectors.
+*>
+*> B11, B12, B21, and B22 are Q-by-Q bidiagonal matrices represented
+*> implicitly by angles THETA, PHI.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER
+*>          = 'T':      X, U1, U2, V1T, and V2T are stored in row-major
+*>                      order;
+*>          otherwise:  X, U1, U2, V1T, and V2T are stored in column-
+*>                      major order.
+*> \endverbatim
+*>
+*> \param[in] SIGNS
+*> \verbatim
+*>          SIGNS is CHARACTER
+*>          = 'O':      The lower-left block is made nonpositive (the
+*>                      "other" convention);
+*>          otherwise:  The upper-right block is made nonpositive (the
+*>                      "default" convention).
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows and columns in X.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is INTEGER
+*>          The number of rows in X11 and X12. 0 <= P <= M.
+*> \endverbatim
+*>
+*> \param[in] Q
+*> \verbatim
+*>          Q is INTEGER
+*>          The number of columns in X11 and X21. 0 <= Q <=
+*>          MIN(P,M-P,M-Q).
+*> \endverbatim
+*>
+*> \param[in,out] X11
+*> \verbatim
+*>          X11 is DOUBLE PRECISION array, dimension (LDX11,Q)
+*>          On entry, the top-left block of the orthogonal matrix to be
+*>          reduced. On exit, the form depends on TRANS:
+*>          If TRANS = 'N', then
+*>             the columns of tril(X11) specify reflectors for P1,
+*>             the rows of triu(X11,1) specify reflectors for Q1;
+*>          else TRANS = 'T', and
+*>             the rows of triu(X11) specify reflectors for P1,
+*>             the columns of tril(X11,-1) specify reflectors for Q1.
+*> \endverbatim
+*>
+*> \param[in] LDX11
+*> \verbatim
+*>          LDX11 is INTEGER
+*>          The leading dimension of X11. If TRANS = 'N', then LDX11 >=
+*>          P; else LDX11 >= Q.
+*> \endverbatim
+*>
+*> \param[in,out] X12
+*> \verbatim
+*>          X12 is DOUBLE PRECISION array, dimension (LDX12,M-Q)
+*>          On entry, the top-right block of the orthogonal matrix to
+*>          be reduced. On exit, the form depends on TRANS:
+*>          If TRANS = 'N', then
+*>             the rows of triu(X12) specify the first P reflectors for
+*>             Q2;
+*>          else TRANS = 'T', and
+*>             the columns of tril(X12) specify the first P reflectors
+*>             for Q2.
+*> \endverbatim
+*>
+*> \param[in] LDX12
+*> \verbatim
+*>          LDX12 is INTEGER
+*>          The leading dimension of X12. If TRANS = 'N', then LDX12 >=
+*>          P; else LDX11 >= M-Q.
+*> \endverbatim
+*>
+*> \param[in,out] X21
+*> \verbatim
+*>          X21 is DOUBLE PRECISION array, dimension (LDX21,Q)
+*>          On entry, the bottom-left block of the orthogonal matrix to
+*>          be reduced. On exit, the form depends on TRANS:
+*>          If TRANS = 'N', then
+*>             the columns of tril(X21) specify reflectors for P2;
+*>          else TRANS = 'T', and
+*>             the rows of triu(X21) specify reflectors for P2.
+*> \endverbatim
+*>
+*> \param[in] LDX21
+*> \verbatim
+*>          LDX21 is INTEGER
+*>          The leading dimension of X21. If TRANS = 'N', then LDX21 >=
+*>          M-P; else LDX21 >= Q.
+*> \endverbatim
+*>
+*> \param[in,out] X22
+*> \verbatim
+*>          X22 is DOUBLE PRECISION array, dimension (LDX22,M-Q)
+*>          On entry, the bottom-right block of the orthogonal matrix to
+*>          be reduced. On exit, the form depends on TRANS:
+*>          If TRANS = 'N', then
+*>             the rows of triu(X22(Q+1:M-P,P+1:M-Q)) specify the last
+*>             M-P-Q reflectors for Q2,
+*>          else TRANS = 'T', and
+*>             the columns of tril(X22(P+1:M-Q,Q+1:M-P)) specify the last
+*>             M-P-Q reflectors for P2.
+*> \endverbatim
+*>
+*> \param[in] LDX22
+*> \verbatim
+*>          LDX22 is INTEGER
+*>          The leading dimension of X22. If TRANS = 'N', then LDX22 >=
+*>          M-P; else LDX22 >= M-Q.
+*> \endverbatim
+*>
+*> \param[out] THETA
+*> \verbatim
+*>          THETA is DOUBLE PRECISION array, dimension (Q)
+*>          The entries of the bidiagonal blocks B11, B12, B21, B22 can
+*>          be computed from the angles THETA and PHI. See Further
+*>          Details.
+*> \endverbatim
+*>
+*> \param[out] PHI
+*> \verbatim
+*>          PHI is DOUBLE PRECISION array, dimension (Q-1)
+*>          The entries of the bidiagonal blocks B11, B12, B21, B22 can
+*>          be computed from the angles THETA and PHI. See Further
+*>          Details.
+*> \endverbatim
+*>
+*> \param[out] TAUP1
+*> \verbatim
+*>          TAUP1 is DOUBLE PRECISION array, dimension (P)
+*>          The scalar factors of the elementary reflectors that define
+*>          P1.
+*> \endverbatim
+*>
+*> \param[out] TAUP2
+*> \verbatim
+*>          TAUP2 is DOUBLE PRECISION array, dimension (M-P)
+*>          The scalar factors of the elementary reflectors that define
+*>          P2.
+*> \endverbatim
+*>
+*> \param[out] TAUQ1
+*> \verbatim
+*>          TAUQ1 is DOUBLE PRECISION array, dimension (Q)
+*>          The scalar factors of the elementary reflectors that define
+*>          Q1.
+*> \endverbatim
+*>
+*> \param[out] TAUQ2
+*> \verbatim
+*>          TAUQ2 is DOUBLE PRECISION array, dimension (M-Q)
+*>          The scalar factors of the elementary reflectors that define
+*>          Q2.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK. LWORK >= M-Q.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  The bidiagonal blocks B11, B12, B21, and B22 are represented
+*>  implicitly by angles THETA(1), ..., THETA(Q) and PHI(1), ...,
+*>  PHI(Q-1). B11 and B21 are upper bidiagonal, while B21 and B22 are
+*>  lower bidiagonal. Every entry in each bidiagonal band is a product
+*>  of a sine or cosine of a THETA with a sine or cosine of a PHI. See
+*>  [1] or DORCSD for details.
+*>
+*>  P1, P2, Q1, and Q2 are represented as products of elementary
+*>  reflectors. See DORCSD for details on generating P1, P2, Q1, and Q2
+*>  using DORGQR and DORGLQ.
+*>
+*>  Reference
+*>  =========
+*>
+*>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
+*>      Algorithms, 50(1):33-65, 2009.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
      $                   X21, LDX21, X22, LDX22, THETA, PHI, TAUP1,
      $                   TAUP2, TAUQ1, TAUQ2, WORK, LWORK, INFO )
-      IMPLICIT NONE
 *
-*  -- LAPACK routine (version 3.3.0) --
-*
-*  -- Contributed by Brian Sutton of the Randolph-Macon College --
-*  -- November 2010
-*
+*  -- LAPACK computational routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--     
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          SIGNS, TRANS
@@ -22,169 +298,6 @@
      $                   WORK( * ), X11( LDX11, * ), X12( LDX12, * ),
      $                   X21( LDX21, * ), X22( LDX22, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DORBDB simultaneously bidiagonalizes the blocks of an M-by-M
-*  partitioned orthogonal matrix X:
-*
-*                                  [ B11 | B12 0  0 ]
-*      [ X11 | X12 ]   [ P1 |    ] [  0  |  0 -I  0 ] [ Q1 |    ]**T
-*  X = [-----------] = [---------] [----------------] [---------]   .
-*      [ X21 | X22 ]   [    | P2 ] [ B21 | B22 0  0 ] [    | Q2 ]
-*                                  [  0  |  0  0  I ]
-*
-*  X11 is P-by-Q. Q must be no larger than P, M-P, or M-Q. (If this is
-*  not the case, then X must be transposed and/or permuted. This can be
-*  done in constant time using the TRANS and SIGNS options. See DORCSD
-*  for details.)
-*
-*  The orthogonal matrices P1, P2, Q1, and Q2 are P-by-P, (M-P)-by-
-*  (M-P), Q-by-Q, and (M-Q)-by-(M-Q), respectively. They are
-*  represented implicitly by Householder vectors.
-*
-*  B11, B12, B21, and B22 are Q-by-Q bidiagonal matrices represented
-*  implicitly by angles THETA, PHI.
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER
-*          = 'T':      X, U1, U2, V1T, and V2T are stored in row-major
-*                      order;
-*          otherwise:  X, U1, U2, V1T, and V2T are stored in column-
-*                      major order.
-*
-*  SIGNS   (input) CHARACTER
-*          = 'O':      The lower-left block is made nonpositive (the
-*                      "other" convention);
-*          otherwise:  The upper-right block is made nonpositive (the
-*                      "default" convention).
-*
-*  M       (input) INTEGER
-*          The number of rows and columns in X.
-*
-*  P       (input) INTEGER
-*          The number of rows in X11 and X12. 0 <= P <= M.
-*
-*  Q       (input) INTEGER
-*          The number of columns in X11 and X21. 0 <= Q <=
-*          MIN(P,M-P,M-Q).
-*
-*  X11     (input/output) DOUBLE PRECISION array, dimension (LDX11,Q)
-*          On entry, the top-left block of the orthogonal matrix to be
-*          reduced. On exit, the form depends on TRANS:
-*          If TRANS = 'N', then
-*             the columns of tril(X11) specify reflectors for P1,
-*             the rows of triu(X11,1) specify reflectors for Q1;
-*          else TRANS = 'T', and
-*             the rows of triu(X11) specify reflectors for P1,
-*             the columns of tril(X11,-1) specify reflectors for Q1.
-*
-*  LDX11   (input) INTEGER
-*          The leading dimension of X11. If TRANS = 'N', then LDX11 >=
-*          P; else LDX11 >= Q.
-*
-*  X12     (input/output) DOUBLE PRECISION array, dimension (LDX12,M-Q)
-*          On entry, the top-right block of the orthogonal matrix to
-*          be reduced. On exit, the form depends on TRANS:
-*          If TRANS = 'N', then
-*             the rows of triu(X12) specify the first P reflectors for
-*             Q2;
-*          else TRANS = 'T', and
-*             the columns of tril(X12) specify the first P reflectors
-*             for Q2.
-*
-*  LDX12   (input) INTEGER
-*          The leading dimension of X12. If TRANS = 'N', then LDX12 >=
-*          P; else LDX11 >= M-Q.
-*
-*  X21     (input/output) DOUBLE PRECISION array, dimension (LDX21,Q)
-*          On entry, the bottom-left block of the orthogonal matrix to
-*          be reduced. On exit, the form depends on TRANS:
-*          If TRANS = 'N', then
-*             the columns of tril(X21) specify reflectors for P2;
-*          else TRANS = 'T', and
-*             the rows of triu(X21) specify reflectors for P2.
-*
-*  LDX21   (input) INTEGER
-*          The leading dimension of X21. If TRANS = 'N', then LDX21 >=
-*          M-P; else LDX21 >= Q.
-*
-*  X22     (input/output) DOUBLE PRECISION array, dimension (LDX22,M-Q)
-*          On entry, the bottom-right block of the orthogonal matrix to
-*          be reduced. On exit, the form depends on TRANS:
-*          If TRANS = 'N', then
-*             the rows of triu(X22(Q+1:M-P,P+1:M-Q)) specify the last
-*             M-P-Q reflectors for Q2,
-*          else TRANS = 'T', and
-*             the columns of tril(X22(P+1:M-Q,Q+1:M-P)) specify the last
-*             M-P-Q reflectors for P2.
-*
-*  LDX22   (input) INTEGER
-*          The leading dimension of X22. If TRANS = 'N', then LDX22 >=
-*          M-P; else LDX22 >= M-Q.
-*
-*  THETA   (output) DOUBLE PRECISION array, dimension (Q)
-*          The entries of the bidiagonal blocks B11, B12, B21, B22 can
-*          be computed from the angles THETA and PHI. See Further
-*          Details.
-*
-*  PHI     (output) DOUBLE PRECISION array, dimension (Q-1)
-*          The entries of the bidiagonal blocks B11, B12, B21, B22 can
-*          be computed from the angles THETA and PHI. See Further
-*          Details.
-*
-*  TAUP1   (output) DOUBLE PRECISION array, dimension (P)
-*          The scalar factors of the elementary reflectors that define
-*          P1.
-*
-*  TAUP2   (output) DOUBLE PRECISION array, dimension (M-P)
-*          The scalar factors of the elementary reflectors that define
-*          P2.
-*
-*  TAUQ1   (output) DOUBLE PRECISION array, dimension (Q)
-*          The scalar factors of the elementary reflectors that define
-*          Q1.
-*
-*  TAUQ2   (output) DOUBLE PRECISION array, dimension (M-Q)
-*          The scalar factors of the elementary reflectors that define
-*          Q2.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK. LWORK >= M-Q.
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  The bidiagonal blocks B11, B12, B21, and B22 are represented
-*  implicitly by angles THETA(1), ..., THETA(Q) and PHI(1), ...,
-*  PHI(Q-1). B11 and B21 are upper bidiagonal, while B21 and B22 are
-*  lower bidiagonal. Every entry in each bidiagonal band is a product
-*  of a sine or cosine of a THETA with a sine or cosine of a PHI. See
-*  [1] or DORCSD for details.
-*
-*  P1, P2, Q1, and Q2 are represented as products of elementary
-*  reflectors. See DORCSD for details on generating P1, P2, Q1, and Q2
-*  using DORGQR and DORGLQ.
-*
-*  Reference
-*  =========
-*
-*  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
-*      Algorithms, 50(1):33-65, 2009.
 *
 *  ====================================================================
 *

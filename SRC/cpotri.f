@@ -1,9 +1,96 @@
+*> \brief \b CPOTRI
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CPOTRI( UPLO, N, A, LDA, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, LDA, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CPOTRI computes the inverse of a complex Hermitian positive definite
+*> matrix A using the Cholesky factorization A = U**H*U or A = L*L**H
+*> computed by CPOTRF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the triangular factor U or L from the Cholesky
+*>          factorization A = U**H*U or A = L*L**H, as computed by
+*>          CPOTRF.
+*>          On exit, the upper or lower triangle of the (Hermitian)
+*>          inverse of A, overwriting the input factor U or L.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, the (i,i) element of the factor U or L is
+*>                zero, and the inverse could not be computed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexPOcomputational
+*
+*  =====================================================================
       SUBROUTINE CPOTRI( UPLO, N, A, LDA, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,39 +99,6 @@
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CPOTRI computes the inverse of a complex Hermitian positive definite
-*  matrix A using the Cholesky factorization A = U**H*U or A = L*L**H
-*  computed by CPOTRF.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA,N)
-*          On entry, the triangular factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H, as computed by
-*          CPOTRF.
-*          On exit, the upper or lower triangle of the (Hermitian)
-*          inverse of A, overwriting the input factor U or L.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, the (i,i) element of the factor U or L is
-*                zero, and the inverse could not be computed.
 *
 *  =====================================================================
 *

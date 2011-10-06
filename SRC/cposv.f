@@ -1,9 +1,132 @@
+*> \brief <b> CPOSV computes the solution to system of linear equations A * X = B for PO matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, LDA, LDB, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), B( LDB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CPOSV computes the solution to a complex system of linear equations
+*>    A * X = B,
+*> where A is an N-by-N Hermitian positive definite matrix and X and B
+*> are N-by-NRHS matrices.
+*>
+*> The Cholesky decomposition is used to factor A as
+*>    A = U**H* U,  if UPLO = 'U', or
+*>    A = L * L**H,  if UPLO = 'L',
+*> where U is an upper triangular matrix and  L is a lower triangular
+*> matrix.  The factored form of A is then used to solve the system of
+*> equations A * X = B.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of linear equations, i.e., the order of the
+*>          matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrix B.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
+*>          N-by-N upper triangular part of A contains the upper
+*>          triangular part of the matrix A, and the strictly lower
+*>          triangular part of A is not referenced.  If UPLO = 'L', the
+*>          leading N-by-N lower triangular part of A contains the lower
+*>          triangular part of the matrix A, and the strictly upper
+*>          triangular part of A is not referenced.
+*> \endverbatim
+*> \verbatim
+*>          On exit, if INFO = 0, the factor U or L from the Cholesky
+*>          factorization A = U**H*U or A = L*L**H.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          On entry, the N-by-NRHS right hand side matrix B.
+*>          On exit, if INFO = 0, the N-by-NRHS solution matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, the leading minor of order i of A is not
+*>                positive definite, so the factorization could not be
+*>                completed, and the solution has not been computed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexPOsolve
+*
+*  =====================================================================
       SUBROUTINE CPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 *
-*  -- LAPACK driver routine (version 3.3.1) --
+*  -- LAPACK solve routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,65 +135,6 @@
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * ), B( LDB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CPOSV computes the solution to a complex system of linear equations
-*     A * X = B,
-*  where A is an N-by-N Hermitian positive definite matrix and X and B
-*  are N-by-NRHS matrices.
-*
-*  The Cholesky decomposition is used to factor A as
-*     A = U**H* U,  if UPLO = 'U', or
-*     A = L * L**H,  if UPLO = 'L',
-*  where U is an upper triangular matrix and  L is a lower triangular
-*  matrix.  The factored form of A is then used to solve the system of
-*  equations A * X = B.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The number of linear equations, i.e., the order of the
-*          matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrix B.  NRHS >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA,N)
-*          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
-*          N-by-N upper triangular part of A contains the upper
-*          triangular part of the matrix A, and the strictly lower
-*          triangular part of A is not referenced.  If UPLO = 'L', the
-*          leading N-by-N lower triangular part of A contains the lower
-*          triangular part of the matrix A, and the strictly upper
-*          triangular part of A is not referenced.
-*
-*          On exit, if INFO = 0, the factor U or L from the Cholesky
-*          factorization A = U**H*U or A = L*L**H.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  B       (input/output) COMPLEX array, dimension (LDB,NRHS)
-*          On entry, the N-by-NRHS right hand side matrix B.
-*          On exit, if INFO = 0, the N-by-NRHS solution matrix X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, the leading minor of order i of A is not
-*                positive definite, so the factorization could not be
-*                completed, and the solution has not been computed.
 *
 *  =====================================================================
 *

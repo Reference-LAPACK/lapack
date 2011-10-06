@@ -1,51 +1,94 @@
+*> \brief \b DBLAT3
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       PROGRAM DBLAT3
+* 
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Test program for the DOUBLE PRECISION Level 3 Blas.
+*>
+*> The program must be driven by a short data file. The first 14 records
+*> of the file are read using list-directed input, the last 6 records
+*> are read using the format ( A6, L2 ). An annotated example of a data
+*> file can be obtained by deleting the first 3 characters from the
+*> following 20 lines:
+*> 'dblat3.out'      NAME OF SUMMARY OUTPUT FILE
+*> 6                 UNIT NUMBER OF SUMMARY FILE
+*> 'DBLAT3.SNAP'     NAME OF SNAPSHOT OUTPUT FILE
+*> -1                UNIT NUMBER OF SNAPSHOT FILE (NOT USED IF .LT. 0)
+*> F        LOGICAL FLAG, T TO REWIND SNAPSHOT FILE AFTER EACH RECORD.
+*> F        LOGICAL FLAG, T TO STOP ON FAILURES.
+*> T        LOGICAL FLAG, T TO TEST ERROR EXITS.
+*> 16.0     THRESHOLD VALUE OF TEST RATIO
+*> 6                 NUMBER OF VALUES OF N
+*> 0 1 2 3 5 9       VALUES OF N
+*> 3                 NUMBER OF VALUES OF ALPHA
+*> 0.0 1.0 0.7       VALUES OF ALPHA
+*> 3                 NUMBER OF VALUES OF BETA
+*> 0.0 1.0 1.3       VALUES OF BETA
+*> DGEMM  T PUT F FOR NO TEST. SAME COLUMNS.
+*> DSYMM  T PUT F FOR NO TEST. SAME COLUMNS.
+*> DTRMM  T PUT F FOR NO TEST. SAME COLUMNS.
+*> DTRSM  T PUT F FOR NO TEST. SAME COLUMNS.
+*> DSYRK  T PUT F FOR NO TEST. SAME COLUMNS.
+*> DSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
+*>
+*> Further Details
+*> ===============
+*>
+*> See:
+*>
+*>    Dongarra J. J., Du Croz J. J., Duff I. S. and Hammarling S.
+*>    A Set of Level 3 Basic Linear Algebra Subprograms.
+*>
+*>    Technical Memorandum No.88 (Revision 1), Mathematics and
+*>    Computer Science Division, Argonne National Laboratory, 9700
+*>    South Cass Avenue, Argonne, Illinois 60439, US.
+*>
+*> -- Written on 8-February-1989.
+*>    Jack Dongarra, Argonne National Laboratory.
+*>    Iain Duff, AERE Harwell.
+*>    Jeremy Du Croz, Numerical Algorithms Group Ltd.
+*>    Sven Hammarling, Numerical Algorithms Group Ltd.
+*>
+*>    10-9-00:  Change STATUS='NEW' to 'UNKNOWN' so that the testers
+*>              can be run multiple times without deleting generated
+*>              output files (susan)
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_blas_testing
+*
+*  =====================================================================
       PROGRAM DBLAT3
 *
-*  Test program for the DOUBLE PRECISION Level 3 Blas.
+*  -- Reference BLAS test routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*  The program must be driven by a short data file. The first 14 records
-*  of the file are read using list-directed input, the last 6 records
-*  are read using the format ( A6, L2 ). An annotated example of a data
-*  file can be obtained by deleting the first 3 characters from the
-*  following 20 lines:
-*  'dblat3.out'      NAME OF SUMMARY OUTPUT FILE
-*  6                 UNIT NUMBER OF SUMMARY FILE
-*  'DBLAT3.SNAP'     NAME OF SNAPSHOT OUTPUT FILE
-*  -1                UNIT NUMBER OF SNAPSHOT FILE (NOT USED IF .LT. 0)
-*  F        LOGICAL FLAG, T TO REWIND SNAPSHOT FILE AFTER EACH RECORD.
-*  F        LOGICAL FLAG, T TO STOP ON FAILURES.
-*  T        LOGICAL FLAG, T TO TEST ERROR EXITS.
-*  16.0     THRESHOLD VALUE OF TEST RATIO
-*  6                 NUMBER OF VALUES OF N
-*  0 1 2 3 5 9       VALUES OF N
-*  3                 NUMBER OF VALUES OF ALPHA
-*  0.0 1.0 0.7       VALUES OF ALPHA
-*  3                 NUMBER OF VALUES OF BETA
-*  0.0 1.0 1.3       VALUES OF BETA
-*  DGEMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  DSYMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  DTRMM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  DTRSM  T PUT F FOR NO TEST. SAME COLUMNS.
-*  DSYRK  T PUT F FOR NO TEST. SAME COLUMNS.
-*  DSYR2K T PUT F FOR NO TEST. SAME COLUMNS.
-*
-*  See:
-*
-*     Dongarra J. J., Du Croz J. J., Duff I. S. and Hammarling S.
-*     A Set of Level 3 Basic Linear Algebra Subprograms.
-*
-*     Technical Memorandum No.88 (Revision 1), Mathematics and
-*     Computer Science Division, Argonne National Laboratory, 9700
-*     South Cass Avenue, Argonne, Illinois 60439, US.
-*
-*  -- Written on 8-February-1989.
-*     Jack Dongarra, Argonne National Laboratory.
-*     Iain Duff, AERE Harwell.
-*     Jeremy Du Croz, Numerical Algorithms Group Ltd.
-*     Sven Hammarling, Numerical Algorithms Group Ltd.
-*
-*     10-9-00:  Change STATUS='NEW' to 'UNKNOWN' so that the testers
-*               can be run multiple times without deleting generated
-*               output files (susan)
+*  =====================================================================
 *
 *     .. Parameters ..
       INTEGER            NIN

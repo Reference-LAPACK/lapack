@@ -1,3 +1,369 @@
+*> \brief \b ZGET23
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
+*                          NOUNIT, N, A, LDA, H, W, W1, VL, LDVL, VR,
+*                          LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
+*                          RCONDE, RCNDE1, RCDEIN, SCALE, SCALE1, RESULT,
+*                          WORK, LWORK, RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            COMP
+*       CHARACTER          BALANC
+*       INTEGER            INFO, ISRT, JTYPE, LDA, LDLRE, LDVL, LDVR,
+*      $                   LWORK, N, NOUNIT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       DOUBLE PRECISION   RCDEIN( * ), RCDVIN( * ), RCNDE1( * ),
+*      $                   RCNDV1( * ), RCONDE( * ), RCONDV( * ),
+*      $                   RESULT( 11 ), RWORK( * ), SCALE( * ),
+*      $                   SCALE1( * )
+*       COMPLEX*16         A( LDA, * ), H( LDA, * ), LRE( LDLRE, * ),
+*      $                   VL( LDVL, * ), VR( LDVR, * ), W( * ), W1( * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    ZGET23  checks the nonsymmetric eigenvalue problem driver CGEEVX.
+*>    If COMP = .FALSE., the first 8 of the following tests will be
+*>    performed on the input matrix A, and also test 9 if LWORK is
+*>    sufficiently large.
+*>    if COMP is .TRUE. all 11 tests will be performed.
+*>
+*>    (1)     | A * VR - VR * W | / ( n |A| ulp )
+*>
+*>      Here VR is the matrix of unit right eigenvectors.
+*>      W is a diagonal matrix with diagonal entries W(j).
+*>
+*>    (2)     | A**H * VL - VL * W**H | / ( n |A| ulp )
+*>
+*>      Here VL is the matrix of unit left eigenvectors, A**H is the
+*>      conjugate transpose of A, and W is as above.
+*>
+*>    (3)     | |VR(i)| - 1 | / ulp and largest component real
+*>
+*>      VR(i) denotes the i-th column of VR.
+*>
+*>    (4)     | |VL(i)| - 1 | / ulp and largest component real
+*>
+*>      VL(i) denotes the i-th column of VL.
+*>
+*>    (5)     0 if W(full) = W(partial), 1/ulp otherwise
+*>
+*>      W(full) denotes the eigenvalues computed when VR, VL, RCONDV
+*>      and RCONDE are also computed, and W(partial) denotes the
+*>      eigenvalues computed when only some of VR, VL, RCONDV, and
+*>      RCONDE are computed.
+*>
+*>    (6)     0 if VR(full) = VR(partial), 1/ulp otherwise
+*>
+*>      VR(full) denotes the right eigenvectors computed when VL, RCONDV
+*>      and RCONDE are computed, and VR(partial) denotes the result
+*>      when only some of VL and RCONDV are computed.
+*>
+*>    (7)     0 if VL(full) = VL(partial), 1/ulp otherwise
+*>
+*>      VL(full) denotes the left eigenvectors computed when VR, RCONDV
+*>      and RCONDE are computed, and VL(partial) denotes the result
+*>      when only some of VR and RCONDV are computed.
+*>
+*>    (8)     0 if SCALE, ILO, IHI, ABNRM (full) =
+*>                 SCALE, ILO, IHI, ABNRM (partial)
+*>            1/ulp otherwise
+*>
+*>      SCALE, ILO, IHI and ABNRM describe how the matrix is balanced.
+*>      (full) is when VR, VL, RCONDE and RCONDV are also computed, and
+*>      (partial) is when some are not computed.
+*>
+*>    (9)     0 if RCONDV(full) = RCONDV(partial), 1/ulp otherwise
+*>
+*>      RCONDV(full) denotes the reciprocal condition numbers of the
+*>      right eigenvectors computed when VR, VL and RCONDE are also
+*>      computed. RCONDV(partial) denotes the reciprocal condition
+*>      numbers when only some of VR, VL and RCONDE are computed.
+*>
+*>   (10)     |RCONDV - RCDVIN| / cond(RCONDV)
+*>
+*>      RCONDV is the reciprocal right eigenvector condition number
+*>      computed by ZGEEVX and RCDVIN (the precomputed true value)
+*>      is supplied as input. cond(RCONDV) is the condition number of
+*>      RCONDV, and takes errors in computing RCONDV into account, so
+*>      that the resulting quantity should be O(ULP). cond(RCONDV) is
+*>      essentially given by norm(A)/RCONDE.
+*>
+*>   (11)     |RCONDE - RCDEIN| / cond(RCONDE)
+*>
+*>      RCONDE is the reciprocal eigenvalue condition number
+*>      computed by ZGEEVX and RCDEIN (the precomputed true value)
+*>      is supplied as input.  cond(RCONDE) is the condition number
+*>      of RCONDE, and takes errors in computing RCONDE into account,
+*>      so that the resulting quantity should be O(ULP). cond(RCONDE)
+*>      is essentially given by norm(A)/RCONDV.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] COMP
+*> \verbatim
+*>          COMP is LOGICAL
+*>          COMP describes which input tests to perform:
+*>            = .FALSE. if the computed condition numbers are not to
+*>                      be tested against RCDVIN and RCDEIN
+*>            = .TRUE.  if they are to be compared
+*> \endverbatim
+*>
+*> \param[in] ISRT
+*> \verbatim
+*>          ISRT is INTEGER
+*>          If COMP = .TRUE., ISRT indicates in how the eigenvalues
+*>          corresponding to values in RCDVIN and RCDEIN are ordered:
+*>            = 0 means the eigenvalues are sorted by
+*>                increasing real part
+*>            = 1 means the eigenvalues are sorted by
+*>                increasing imaginary part
+*>          If COMP = .FALSE., ISRT is not referenced.
+*> \endverbatim
+*>
+*> \param[in] BALANC
+*> \verbatim
+*>          BALANC is CHARACTER
+*>          Describes the balancing option to be tested.
+*>            = 'N' for no permuting or diagonal scaling
+*>            = 'P' for permuting but no diagonal scaling
+*>            = 'S' for no permuting but diagonal scaling
+*>            = 'B' for permuting and diagonal scaling
+*> \endverbatim
+*>
+*> \param[in] JTYPE
+*> \verbatim
+*>          JTYPE is INTEGER
+*>          Type of input matrix. Used to label output if error occurs.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          If COMP = .FALSE., the random number generator seed
+*>          used to produce matrix.
+*>          If COMP = .TRUE., ISEED(1) = the number of the example.
+*>          Used to label output if error occurs.
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns INFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The dimension of A. N must be at least 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          Used to hold the matrix whose eigenvalues are to be
+*>          computed.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A, and H. LDA must be at
+*>          least 1 and at least N.
+*> \endverbatim
+*>
+*> \param[out] H
+*> \verbatim
+*>          H is COMPLEX*16 array, dimension (LDA,N)
+*>          Another copy of the test matrix A, modified by ZGEEVX.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is COMPLEX*16 array, dimension (N)
+*>          Contains the eigenvalues of A.
+*> \endverbatim
+*>
+*> \param[out] W1
+*> \verbatim
+*>          W1 is COMPLEX*16 array, dimension (N)
+*>          Like W, this array contains the eigenvalues of A,
+*>          but those computed when ZGEEVX only computes a partial
+*>          eigendecomposition, i.e. not the eigenvalues and left
+*>          and right eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] VL
+*> \verbatim
+*>          VL is COMPLEX*16 array, dimension (LDVL,N)
+*>          VL holds the computed left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDVL
+*> \verbatim
+*>          LDVL is INTEGER
+*>          Leading dimension of VL. Must be at least max(1,N).
+*> \endverbatim
+*>
+*> \param[out] VR
+*> \verbatim
+*>          VR is COMPLEX*16 array, dimension (LDVR,N)
+*>          VR holds the computed right eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDVR
+*> \verbatim
+*>          LDVR is INTEGER
+*>          Leading dimension of VR. Must be at least max(1,N).
+*> \endverbatim
+*>
+*> \param[out] LRE
+*> \verbatim
+*>          LRE is COMPLEX*16 array, dimension (LDLRE,N)
+*>          LRE holds the computed right or left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDLRE
+*> \verbatim
+*>          LDLRE is INTEGER
+*>          Leading dimension of LRE. Must be at least max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RCONDV
+*> \verbatim
+*>          RCONDV is DOUBLE PRECISION array, dimension (N)
+*>          RCONDV holds the computed reciprocal condition numbers
+*>          for eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] RCNDV1
+*> \verbatim
+*>          RCNDV1 is DOUBLE PRECISION array, dimension (N)
+*>          RCNDV1 holds more computed reciprocal condition numbers
+*>          for eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] RCDVIN
+*> \verbatim
+*>          RCDVIN is DOUBLE PRECISION array, dimension (N)
+*>          When COMP = .TRUE. RCDVIN holds the precomputed reciprocal
+*>          condition numbers for eigenvectors to be compared with
+*>          RCONDV.
+*> \endverbatim
+*>
+*> \param[out] RCONDE
+*> \verbatim
+*>          RCONDE is DOUBLE PRECISION array, dimension (N)
+*>          RCONDE holds the computed reciprocal condition numbers
+*>          for eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] RCNDE1
+*> \verbatim
+*>          RCNDE1 is DOUBLE PRECISION array, dimension (N)
+*>          RCNDE1 holds more computed reciprocal condition numbers
+*>          for eigenvalues.
+*> \endverbatim
+*>
+*> \param[in] RCDEIN
+*> \verbatim
+*>          RCDEIN is DOUBLE PRECISION array, dimension (N)
+*>          When COMP = .TRUE. RCDEIN holds the precomputed reciprocal
+*>          condition numbers for eigenvalues to be compared with
+*>          RCONDE.
+*> \endverbatim
+*>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is DOUBLE PRECISION array, dimension (N)
+*>          Holds information describing balancing of matrix.
+*> \endverbatim
+*>
+*> \param[out] SCALE1
+*> \verbatim
+*>          SCALE1 is DOUBLE PRECISION array, dimension (N)
+*>          Holds information describing balancing of matrix.
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (11)
+*>          The values computed by the 11 tests described above.
+*>          The values are currently limited to 1/ulp, to avoid
+*>          overflow.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          2*N, and 2*N+N**2 if tests 9, 10 or 11 are to be performed.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0,  successful exit.
+*>          If <0, input parameter -INFO had an incorrect value.
+*>          If >0, ZGEEVX returned an error code, the absolute
+*>                 value of which is returned.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
      $                   NOUNIT, N, A, LDA, H, W, W1, VL, LDVL, VR,
      $                   LDVR, LRE, LDLRE, RCONDV, RCNDV1, RCDVIN,
@@ -5,8 +371,9 @@
      $                   WORK, LWORK, RWORK, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            COMP
@@ -25,223 +392,6 @@
      $                   VL( LDVL, * ), VR( LDVR, * ), W( * ), W1( * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     ZGET23  checks the nonsymmetric eigenvalue problem driver CGEEVX.
-*     If COMP = .FALSE., the first 8 of the following tests will be
-*     performed on the input matrix A, and also test 9 if LWORK is
-*     sufficiently large.
-*     if COMP is .TRUE. all 11 tests will be performed.
-*
-*     (1)     | A * VR - VR * W | / ( n |A| ulp )
-*
-*       Here VR is the matrix of unit right eigenvectors.
-*       W is a diagonal matrix with diagonal entries W(j).
-*
-*     (2)     | A**H * VL - VL * W**H | / ( n |A| ulp )
-*
-*       Here VL is the matrix of unit left eigenvectors, A**H is the
-*       conjugate transpose of A, and W is as above.
-*
-*     (3)     | |VR(i)| - 1 | / ulp and largest component real
-*
-*       VR(i) denotes the i-th column of VR.
-*
-*     (4)     | |VL(i)| - 1 | / ulp and largest component real
-*
-*       VL(i) denotes the i-th column of VL.
-*
-*     (5)     0 if W(full) = W(partial), 1/ulp otherwise
-*
-*       W(full) denotes the eigenvalues computed when VR, VL, RCONDV
-*       and RCONDE are also computed, and W(partial) denotes the
-*       eigenvalues computed when only some of VR, VL, RCONDV, and
-*       RCONDE are computed.
-*
-*     (6)     0 if VR(full) = VR(partial), 1/ulp otherwise
-*
-*       VR(full) denotes the right eigenvectors computed when VL, RCONDV
-*       and RCONDE are computed, and VR(partial) denotes the result
-*       when only some of VL and RCONDV are computed.
-*
-*     (7)     0 if VL(full) = VL(partial), 1/ulp otherwise
-*
-*       VL(full) denotes the left eigenvectors computed when VR, RCONDV
-*       and RCONDE are computed, and VL(partial) denotes the result
-*       when only some of VR and RCONDV are computed.
-*
-*     (8)     0 if SCALE, ILO, IHI, ABNRM (full) =
-*                  SCALE, ILO, IHI, ABNRM (partial)
-*             1/ulp otherwise
-*
-*       SCALE, ILO, IHI and ABNRM describe how the matrix is balanced.
-*       (full) is when VR, VL, RCONDE and RCONDV are also computed, and
-*       (partial) is when some are not computed.
-*
-*     (9)     0 if RCONDV(full) = RCONDV(partial), 1/ulp otherwise
-*
-*       RCONDV(full) denotes the reciprocal condition numbers of the
-*       right eigenvectors computed when VR, VL and RCONDE are also
-*       computed. RCONDV(partial) denotes the reciprocal condition
-*       numbers when only some of VR, VL and RCONDE are computed.
-*
-*    (10)     |RCONDV - RCDVIN| / cond(RCONDV)
-*
-*       RCONDV is the reciprocal right eigenvector condition number
-*       computed by ZGEEVX and RCDVIN (the precomputed true value)
-*       is supplied as input. cond(RCONDV) is the condition number of
-*       RCONDV, and takes errors in computing RCONDV into account, so
-*       that the resulting quantity should be O(ULP). cond(RCONDV) is
-*       essentially given by norm(A)/RCONDE.
-*
-*    (11)     |RCONDE - RCDEIN| / cond(RCONDE)
-*
-*       RCONDE is the reciprocal eigenvalue condition number
-*       computed by ZGEEVX and RCDEIN (the precomputed true value)
-*       is supplied as input.  cond(RCONDE) is the condition number
-*       of RCONDE, and takes errors in computing RCONDE into account,
-*       so that the resulting quantity should be O(ULP). cond(RCONDE)
-*       is essentially given by norm(A)/RCONDV.
-*
-*  Arguments
-*  =========
-*
-*  COMP    (input) LOGICAL
-*          COMP describes which input tests to perform:
-*            = .FALSE. if the computed condition numbers are not to
-*                      be tested against RCDVIN and RCDEIN
-*            = .TRUE.  if they are to be compared
-*
-*  ISRT    (input) INTEGER
-*          If COMP = .TRUE., ISRT indicates in how the eigenvalues
-*          corresponding to values in RCDVIN and RCDEIN are ordered:
-*            = 0 means the eigenvalues are sorted by
-*                increasing real part
-*            = 1 means the eigenvalues are sorted by
-*                increasing imaginary part
-*          If COMP = .FALSE., ISRT is not referenced.
-*
-*  BALANC  (input) CHARACTER
-*          Describes the balancing option to be tested.
-*            = 'N' for no permuting or diagonal scaling
-*            = 'P' for permuting but no diagonal scaling
-*            = 'S' for no permuting but diagonal scaling
-*            = 'B' for permuting and diagonal scaling
-*
-*  JTYPE   (input) INTEGER
-*          Type of input matrix. Used to label output if error occurs.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*
-*  ISEED   (input) INTEGER array, dimension (4)
-*          If COMP = .FALSE., the random number generator seed
-*          used to produce matrix.
-*          If COMP = .TRUE., ISEED(1) = the number of the example.
-*          Used to label output if error occurs.
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns INFO not equal to 0.)
-*
-*  N       (input) INTEGER
-*          The dimension of A. N must be at least 0.
-*
-*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
-*          Used to hold the matrix whose eigenvalues are to be
-*          computed.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A, and H. LDA must be at
-*          least 1 and at least N.
-*
-*  H       (workspace) COMPLEX*16 array, dimension (LDA,N)
-*          Another copy of the test matrix A, modified by ZGEEVX.
-*
-*  W       (workspace) COMPLEX*16 array, dimension (N)
-*          Contains the eigenvalues of A.
-*
-*  W1      (workspace) COMPLEX*16 array, dimension (N)
-*          Like W, this array contains the eigenvalues of A,
-*          but those computed when ZGEEVX only computes a partial
-*          eigendecomposition, i.e. not the eigenvalues and left
-*          and right eigenvectors.
-*
-*  VL      (workspace) COMPLEX*16 array, dimension (LDVL,N)
-*          VL holds the computed left eigenvectors.
-*
-*  LDVL    (input) INTEGER
-*          Leading dimension of VL. Must be at least max(1,N).
-*
-*  VR      (workspace) COMPLEX*16 array, dimension (LDVR,N)
-*          VR holds the computed right eigenvectors.
-*
-*  LDVR    (input) INTEGER
-*          Leading dimension of VR. Must be at least max(1,N).
-*
-*  LRE     (workspace) COMPLEX*16 array, dimension (LDLRE,N)
-*          LRE holds the computed right or left eigenvectors.
-*
-*  LDLRE   (input) INTEGER
-*          Leading dimension of LRE. Must be at least max(1,N).
-*
-*  RCONDV  (workspace) DOUBLE PRECISION array, dimension (N)
-*          RCONDV holds the computed reciprocal condition numbers
-*          for eigenvectors.
-*
-*  RCNDV1  (workspace) DOUBLE PRECISION array, dimension (N)
-*          RCNDV1 holds more computed reciprocal condition numbers
-*          for eigenvectors.
-*
-*  RCDVIN  (input) DOUBLE PRECISION array, dimension (N)
-*          When COMP = .TRUE. RCDVIN holds the precomputed reciprocal
-*          condition numbers for eigenvectors to be compared with
-*          RCONDV.
-*
-*  RCONDE  (workspace) DOUBLE PRECISION array, dimension (N)
-*          RCONDE holds the computed reciprocal condition numbers
-*          for eigenvalues.
-*
-*  RCNDE1  (workspace) DOUBLE PRECISION array, dimension (N)
-*          RCNDE1 holds more computed reciprocal condition numbers
-*          for eigenvalues.
-*
-*  RCDEIN  (input) DOUBLE PRECISION array, dimension (N)
-*          When COMP = .TRUE. RCDEIN holds the precomputed reciprocal
-*          condition numbers for eigenvalues to be compared with
-*          RCONDE.
-*
-*  SCALE   (workspace) DOUBLE PRECISION array, dimension (N)
-*          Holds information describing balancing of matrix.
-*
-*  SCALE1  (workspace) DOUBLE PRECISION array, dimension (N)
-*          Holds information describing balancing of matrix.
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (11)
-*          The values computed by the 11 tests described above.
-*          The values are currently limited to 1/ulp, to avoid
-*          overflow.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          2*N, and 2*N+N**2 if tests 9, 10 or 11 are to be performed.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (2*N)
-*
-*  INFO    (output) INTEGER
-*          If 0,  successful exit.
-*          If <0, input parameter -INFO had an incorrect value.
-*          If >0, ZGEEVX returned an error code, the absolute
-*                 value of which is returned.
 *
 *  =====================================================================
 *

@@ -1,9 +1,118 @@
+*> \brief \b DGET01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
+*                          RESID )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDAFAC, M, N
+*       DOUBLE PRECISION   RESID
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       DOUBLE PRECISION   A( LDA, * ), AFAC( LDAFAC, * ), RWORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGET01 reconstructs a matrix A from its L*U factorization and
+*> computes the residual
+*>    norm(L*U - A) / ( N * norm(A) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The original M x N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] AFAC
+*> \verbatim
+*>          AFAC is DOUBLE PRECISION array, dimension (LDAFAC,N)
+*>          The factored form of the matrix A.  AFAC contains the factors
+*>          L and U from the L*U factorization as computed by DGETRF.
+*>          Overwritten with the reconstructed matrix, and then with the
+*>          difference L*U - A.
+*> \endverbatim
+*>
+*> \param[in] LDAFAC
+*> \verbatim
+*>          LDAFAC is INTEGER
+*>          The leading dimension of the array AFAC.  LDAFAC >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          The pivot indices from DGETRF.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is DOUBLE PRECISION
+*>          norm(L*U - A) / ( N * norm(A) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DGET01( M, N, A, LDA, AFAC, LDAFAC, IPIV, RWORK,
      $                   RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDAFAC, M, N
@@ -13,46 +122,6 @@
       INTEGER            IPIV( * )
       DOUBLE PRECISION   A( LDA, * ), AFAC( LDAFAC, * ), RWORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGET01 reconstructs a matrix A from its L*U factorization and
-*  computes the residual
-*     norm(L*U - A) / ( N * norm(A) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  ==========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The original M x N matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  AFAC    (input/output) DOUBLE PRECISION array, dimension (LDAFAC,N)
-*          The factored form of the matrix A.  AFAC contains the factors
-*          L and U from the L*U factorization as computed by DGETRF.
-*          Overwritten with the reconstructed matrix, and then with the
-*          difference L*U - A.
-*
-*  LDAFAC  (input) INTEGER
-*          The leading dimension of the array AFAC.  LDAFAC >= max(1,M).
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          The pivot indices from DGETRF.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (M)
-*
-*  RESID   (output) DOUBLE PRECISION
-*          norm(L*U - A) / ( N * norm(A) * EPS )
 *
 *  =====================================================================
 *

@@ -1,12 +1,142 @@
+*> \brief \b ZGTCON
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
+*                          WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          NORM
+*       INTEGER            INFO, N
+*       DOUBLE PRECISION   ANORM, RCOND
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       COMPLEX*16         D( * ), DL( * ), DU( * ), DU2( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZGTCON estimates the reciprocal of the condition number of a complex
+*> tridiagonal matrix A using the LU factorization as computed by
+*> ZGTTRF.
+*>
+*> An estimate is obtained for norm(inv(A)), and the reciprocal of the
+*> condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NORM
+*> \verbatim
+*>          NORM is CHARACTER*1
+*>          Specifies whether the 1-norm condition number or the
+*>          infinity-norm condition number is required:
+*>          = '1' or 'O':  1-norm;
+*>          = 'I':         Infinity-norm.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] DL
+*> \verbatim
+*>          DL is COMPLEX*16 array, dimension (N-1)
+*>          The (n-1) multipliers that define the matrix L from the
+*>          LU factorization of A as computed by ZGTTRF.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is COMPLEX*16 array, dimension (N)
+*>          The n diagonal elements of the upper triangular matrix U from
+*>          the LU factorization of A.
+*> \endverbatim
+*>
+*> \param[in] DU
+*> \verbatim
+*>          DU is COMPLEX*16 array, dimension (N-1)
+*>          The (n-1) elements of the first superdiagonal of U.
+*> \endverbatim
+*>
+*> \param[in] DU2
+*> \verbatim
+*>          DU2 is COMPLEX*16 array, dimension (N-2)
+*>          The (n-2) elements of the second superdiagonal of U.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          The pivot indices; for 1 <= i <= n, row i of the matrix was
+*>          interchanged with row IPIV(i).  IPIV(i) will always be either
+*>          i or i+1; IPIV(i) = i indicates a row interchange was not
+*>          required.
+*> \endverbatim
+*>
+*> \param[in] ANORM
+*> \verbatim
+*>          ANORM is DOUBLE PRECISION
+*>          If NORM = '1' or 'O', the 1-norm of the original matrix A.
+*>          If NORM = 'I', the infinity-norm of the original matrix A.
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>          The reciprocal of the condition number of the matrix A,
+*>          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an
+*>          estimate of the 1-norm of inv(A) computed in this routine.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE ZGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,
      $                   WORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
-*
-*     Modified to call ZLACN2 in place of ZLACON, 10 Feb 03, SJH.
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          NORM
@@ -17,63 +147,6 @@
       INTEGER            IPIV( * )
       COMPLEX*16         D( * ), DL( * ), DU( * ), DU2( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZGTCON estimates the reciprocal of the condition number of a complex
-*  tridiagonal matrix A using the LU factorization as computed by
-*  ZGTTRF.
-*
-*  An estimate is obtained for norm(inv(A)), and the reciprocal of the
-*  condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
-*
-*  Arguments
-*  =========
-*
-*  NORM    (input) CHARACTER*1
-*          Specifies whether the 1-norm condition number or the
-*          infinity-norm condition number is required:
-*          = '1' or 'O':  1-norm;
-*          = 'I':         Infinity-norm.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  DL      (input) COMPLEX*16 array, dimension (N-1)
-*          The (n-1) multipliers that define the matrix L from the
-*          LU factorization of A as computed by ZGTTRF.
-*
-*  D       (input) COMPLEX*16 array, dimension (N)
-*          The n diagonal elements of the upper triangular matrix U from
-*          the LU factorization of A.
-*
-*  DU      (input) COMPLEX*16 array, dimension (N-1)
-*          The (n-1) elements of the first superdiagonal of U.
-*
-*  DU2     (input) COMPLEX*16 array, dimension (N-2)
-*          The (n-2) elements of the second superdiagonal of U.
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          The pivot indices; for 1 <= i <= n, row i of the matrix was
-*          interchanged with row IPIV(i).  IPIV(i) will always be either
-*          i or i+1; IPIV(i) = i indicates a row interchange was not
-*          required.
-*
-*  ANORM   (input) DOUBLE PRECISION
-*          If NORM = '1' or 'O', the 1-norm of the original matrix A.
-*          If NORM = 'I', the infinity-norm of the original matrix A.
-*
-*  RCOND   (output) DOUBLE PRECISION
-*          The reciprocal of the condition number of the matrix A,
-*          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is an
-*          estimate of the 1-norm of inv(A) computed in this routine.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (2*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

@@ -1,9 +1,142 @@
+*> \brief \b SGEBAL
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOB
+*       INTEGER            IHI, ILO, INFO, LDA, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), SCALE( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGEBAL balances a general real matrix A.  This involves, first,
+*> permuting A by a similarity transformation to isolate eigenvalues
+*> in the first 1 to ILO-1 and last IHI+1 to N elements on the
+*> diagonal; and second, applying a diagonal similarity transformation
+*> to rows and columns ILO to IHI to make the rows and columns as
+*> close in norm as possible.  Both steps are optional.
+*>
+*> Balancing may reduce the 1-norm of the matrix, and improve the
+*> accuracy of the computed eigenvalues and/or eigenvectors.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOB
+*> \verbatim
+*>          JOB is CHARACTER*1
+*>          Specifies the operations to be performed on A:
+*>          = 'N':  none:  simply set ILO = 1, IHI = N, SCALE(I) = 1.0
+*>                  for i = 1,...,N;
+*>          = 'P':  permute only;
+*>          = 'S':  scale only;
+*>          = 'B':  both permute and scale.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realGEcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*          See Further Details.
+*>
+*>  LDA     (input) INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*>
+*>  ILO     (output) INTEGER
+*>
+*>  IHI     (output) INTEGER
+*>          ILO and IHI are set to integers such that on exit
+*>          A(i,j) = 0 if i > j and j = 1,...,ILO-1 or I = IHI+1,...,N.
+*>          If JOB = 'N' or 'S', ILO = 1 and IHI = N.
+*>
+*>  SCALE   (output) REAL array, dimension (N)
+*>          Details of the permutations and scaling factors applied to
+*>          A.  If P(j) is the index of the row and column interchanged
+*>          with row and column j and D(j) is the scaling factor
+*>          applied to row and column j, then
+*>          SCALE(j) = P(j)    for j = 1,...,ILO-1
+*>                   = D(j)    for j = ILO,...,IHI
+*>                   = P(j)    for j = IHI+1,...,N.
+*>          The order in which the interchanges are made is N to IHI+1,
+*>          then 1 to ILO-1.
+*>
+*>  INFO    (output) INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>
+*>
+*>  The permutations consist of row and column interchanges which put
+*>  the matrix in the form
+*>
+*>             ( T1   X   Y  )
+*>     P A P = (  0   B   Z  )
+*>             (  0   0   T2 )
+*>
+*>  where T1 and T2 are upper triangular matrices whose eigenvalues lie
+*>  along the diagonal.  The column indices ILO and IHI mark the starting
+*>  and ending columns of the submatrix B. Balancing consists of applying
+*>  a diagonal similarity transformation inv(D) * B * D to make the
+*>  1-norms of each row of B and its corresponding column nearly equal.
+*>  The output matrix is
+*>
+*>     ( T1     X*D          Y    )
+*>     (  0  inv(D)*B*D  inv(D)*Z ).
+*>     (  0      0           T2   )
+*>
+*>  Information about the permutations P and the diagonal matrix D is
+*>  returned in the vector SCALE.
+*>
+*>  This subroutine is based on the EISPACK routine BALANC.
+*>
+*>  Modified by Tzu-Yi Chen, Computer Science Division, University of
+*>    California at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
 *
-*  -- LAPACK routine (version 3.2.2) --
+*  -- LAPACK computational routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOB
@@ -12,93 +145,6 @@
 *     .. Array Arguments ..
       REAL               A( LDA, * ), SCALE( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGEBAL balances a general real matrix A.  This involves, first,
-*  permuting A by a similarity transformation to isolate eigenvalues
-*  in the first 1 to ILO-1 and last IHI+1 to N elements on the
-*  diagonal; and second, applying a diagonal similarity transformation
-*  to rows and columns ILO to IHI to make the rows and columns as
-*  close in norm as possible.  Both steps are optional.
-*
-*  Balancing may reduce the 1-norm of the matrix, and improve the
-*  accuracy of the computed eigenvalues and/or eigenvectors.
-*
-*  Arguments
-*  =========
-*
-*  JOB     (input) CHARACTER*1
-*          Specifies the operations to be performed on A:
-*          = 'N':  none:  simply set ILO = 1, IHI = N, SCALE(I) = 1.0
-*                  for i = 1,...,N;
-*          = 'P':  permute only;
-*          = 'S':  scale only;
-*          = 'B':  both permute and scale.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input/output) REAL array, dimension (LDA,N)
-*          On entry, the input matrix A.
-*          On exit,  A is overwritten by the balanced matrix.
-*          If JOB = 'N', A is not referenced.
-*          See Further Details.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  ILO     (output) INTEGER
-*
-*  IHI     (output) INTEGER
-*          ILO and IHI are set to integers such that on exit
-*          A(i,j) = 0 if i > j and j = 1,...,ILO-1 or I = IHI+1,...,N.
-*          If JOB = 'N' or 'S', ILO = 1 and IHI = N.
-*
-*  SCALE   (output) REAL array, dimension (N)
-*          Details of the permutations and scaling factors applied to
-*          A.  If P(j) is the index of the row and column interchanged
-*          with row and column j and D(j) is the scaling factor
-*          applied to row and column j, then
-*          SCALE(j) = P(j)    for j = 1,...,ILO-1
-*                   = D(j)    for j = ILO,...,IHI
-*                   = P(j)    for j = IHI+1,...,N.
-*          The order in which the interchanges are made is N to IHI+1,
-*          then 1 to ILO-1.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  The permutations consist of row and column interchanges which put
-*  the matrix in the form
-*
-*             ( T1   X   Y  )
-*     P A P = (  0   B   Z  )
-*             (  0   0   T2 )
-*
-*  where T1 and T2 are upper triangular matrices whose eigenvalues lie
-*  along the diagonal.  The column indices ILO and IHI mark the starting
-*  and ending columns of the submatrix B. Balancing consists of applying
-*  a diagonal similarity transformation inv(D) * B * D to make the
-*  1-norms of each row of B and its corresponding column nearly equal.
-*  The output matrix is
-*
-*     ( T1     X*D          Y    )
-*     (  0  inv(D)*B*D  inv(D)*Z ).
-*     (  0      0           T2   )
-*
-*  Information about the permutations P and the diagonal matrix D is
-*  returned in the vector SCALE.
-*
-*  This subroutine is based on the EISPACK routine BALANC.
-*
-*  Modified by Tzu-Yi Chen, Computer Science Division, University of
-*    California at Berkeley, USA
 *
 *  =====================================================================
 *

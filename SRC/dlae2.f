@@ -1,54 +1,109 @@
+*> \brief \b DLAE2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAE2( A, B, C, RT1, RT2 )
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION   A, B, C, RT1, RT2
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAE2  computes the eigenvalues of a 2-by-2 symmetric matrix
+*>    [  A   B  ]
+*>    [  B   C  ].
+*> On return, RT1 is the eigenvalue of larger absolute value, and RT2
+*> is the eigenvalue of smaller absolute value.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION
+*>          The (1,1) element of the 2-by-2 matrix.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is DOUBLE PRECISION
+*>          The (1,2) and (2,1) elements of the 2-by-2 matrix.
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is DOUBLE PRECISION
+*>          The (2,2) element of the 2-by-2 matrix.
+*> \endverbatim
+*>
+*> \param[out] RT1
+*> \verbatim
+*>          RT1 is DOUBLE PRECISION
+*>          The eigenvalue of larger absolute value.
+*> \endverbatim
+*>
+*> \param[out] RT2
+*> \verbatim
+*>          RT2 is DOUBLE PRECISION
+*>          The eigenvalue of smaller absolute value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  RT1 is accurate to a few ulps barring over/underflow.
+*>
+*>  RT2 may be inaccurate if there is massive cancellation in the
+*>  determinant A*C-B*B; higher precision or correctly rounded or
+*>  correctly truncated arithmetic would be needed to compute RT2
+*>  accurately in all cases.
+*>
+*>  Overflow is possible only if RT1 is within a factor of 5 of overflow.
+*>  Underflow is harmless if the input data is 0 or exceeds
+*>     underflow_threshold / macheps.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLAE2( A, B, C, RT1, RT2 )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   A, B, C, RT1, RT2
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAE2  computes the eigenvalues of a 2-by-2 symmetric matrix
-*     [  A   B  ]
-*     [  B   C  ].
-*  On return, RT1 is the eigenvalue of larger absolute value, and RT2
-*  is the eigenvalue of smaller absolute value.
-*
-*  Arguments
-*  =========
-*
-*  A       (input) DOUBLE PRECISION
-*          The (1,1) element of the 2-by-2 matrix.
-*
-*  B       (input) DOUBLE PRECISION
-*          The (1,2) and (2,1) elements of the 2-by-2 matrix.
-*
-*  C       (input) DOUBLE PRECISION
-*          The (2,2) element of the 2-by-2 matrix.
-*
-*  RT1     (output) DOUBLE PRECISION
-*          The eigenvalue of larger absolute value.
-*
-*  RT2     (output) DOUBLE PRECISION
-*          The eigenvalue of smaller absolute value.
-*
-*  Further Details
-*  ===============
-*
-*  RT1 is accurate to a few ulps barring over/underflow.
-*
-*  RT2 may be inaccurate if there is massive cancellation in the
-*  determinant A*C-B*B; higher precision or correctly rounded or
-*  correctly truncated arithmetic would be needed to compute RT2
-*  accurately in all cases.
-*
-*  Overflow is possible only if RT1 is within a factor of 5 of overflow.
-*  Underflow is harmless if the input data is 0 or exceeds
-*     underflow_threshold / macheps.
 *
 * =====================================================================
 *

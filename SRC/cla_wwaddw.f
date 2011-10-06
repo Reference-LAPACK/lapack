@@ -1,44 +1,91 @@
+*> \brief \b CLA_WWADDW
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLA_WWADDW( N, X, Y, W )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            X( * ), Y( * ), W( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*> Purpose
+*>    =======
+*>
+*>    CLA_WWADDW adds a vector W into a doubled-single vector (X, Y).
+*>
+*>    This works for all extant IBM's hex and binary floating point
+*>    arithmetics, but not for decimal.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>            The length of vectors X, Y, and W.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (N)
+*>            The first part of the doubled-single accumulation vector.
+*> \endverbatim
+*>
+*> \param[in,out] Y
+*> \verbatim
+*>          Y is COMPLEX array, dimension (N)
+*>            The second part of the doubled-single accumulation vector.
+*> \endverbatim
+*>
+*> \param[in] W
+*> \verbatim
+*>          W is COMPLEX array, dimension (N)
+*>            The vector to be added.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CLA_WWADDW( N, X, Y, W )
 *
-*     -- LAPACK routine (version 3.2.2)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- June 2010                                                    --
+*  -- LAPACK computational routine (version 3.2.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       INTEGER            N
 *     ..
 *     .. Array Arguments ..
       COMPLEX            X( * ), Y( * ), W( * )
 *     ..
-*
-*  Purpose
-*     =======
-*
-*     CLA_WWADDW adds a vector W into a doubled-single vector (X, Y).
-*
-*     This works for all extant IBM's hex and binary floating point
-*     arithmetics, but not for decimal.
-*
-*  Arguments
-*  =========
-*
-*     N      (input) INTEGER
-*            The length of vectors X, Y, and W.
-*
-*     X      (input/output) COMPLEX array, dimension (N)
-*            The first part of the doubled-single accumulation vector.
-*
-*     Y      (input/output) COMPLEX array, dimension (N)
-*            The second part of the doubled-single accumulation vector.
-*
-*     W      (input) COMPLEX array, dimension (N)
-*            The vector to be added.
 *
 *  =====================================================================
 *

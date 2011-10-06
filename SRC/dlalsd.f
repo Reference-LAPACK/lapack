@@ -1,10 +1,186 @@
+*> \brief \b DLALSD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
+*                          RANK, WORK, IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, LDB, N, NRHS, RANK, SMLSIZ
+*       DOUBLE PRECISION   RCOND
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   B( LDB, * ), D( * ), E( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLALSD uses the singular value decomposition of A to solve the least
+*> squares problem of finding X to minimize the Euclidean norm of each
+*> column of A*X-B, where A is N-by-N upper bidiagonal, and X and B
+*> are N-by-NRHS. The solution X overwrites B.
+*>
+*> The singular values of A smaller than RCOND times the largest
+*> singular value are treated as zero in solving the least squares
+*> problem; in this case a minimum norm solution is returned.
+*> The actual singular values are returned in D in ascending order.
+*>
+*> This code makes very mild assumptions about floating point
+*> arithmetic. It will work on machines with a guard digit in
+*> add/subtract, or on those binary machines without guard digits
+*> which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2.
+*> It could conceivably fail on hexadecimal or decimal machines
+*> without guard digits, but we know of none.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>         = 'U': D and E define an upper bidiagonal matrix.
+*>         = 'L': D and E define a  lower bidiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] SMLSIZ
+*> \verbatim
+*>          SMLSIZ is INTEGER
+*>         The maximum size of the subproblems at the bottom of the
+*>         computation tree.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The dimension of the  bidiagonal matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>         The number of columns of B. NRHS must be at least 1.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>         On entry D contains the main diagonal of the bidiagonal
+*>         matrix. On exit, if INFO = 0, D contains its singular values.
+*> \endverbatim
+*>
+*> \param[in,out] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>         Contains the super-diagonal entries of the bidiagonal matrix.
+*>         On exit, E has been destroyed.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*>         On input, B contains the right hand sides of the least
+*>         squares problem. On output, B contains the solution X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>         The leading dimension of B in the calling subprogram.
+*>         LDB must be at least max(1,N).
+*> \endverbatim
+*>
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>         The singular values of A less than or equal to RCOND times
+*>         the largest singular value are treated as zero in solving
+*>         the least squares problem. If RCOND is negative,
+*>         machine precision is used instead.
+*>         For example, if diag(S)*X=B were the least squares problem,
+*>         where diag(S) is a diagonal matrix of singular values, the
+*>         solution would be X(i) = B(i) / S(i) if S(i) is greater than
+*>         RCOND*max(S), and X(i) = 0 if S(i) is less than or equal to
+*>         RCOND*max(S).
+*> \endverbatim
+*>
+*> \param[out] RANK
+*> \verbatim
+*>          RANK is INTEGER
+*>         The number of singular values of A greater than RCOND times
+*>         the largest singular value.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension at least
+*>         (9*N + 2*N*SMLSIZ + 8*N*NLVL + N*NRHS + (SMLSIZ+1)**2),
+*>         where NLVL = max(0, INT(log_2 (N/(SMLSIZ+1))) + 1).
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension at least
+*>         (3*N*NLVL + 11*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>         = 0:  successful exit.
+*>         < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>         > 0:  The algorithm failed to compute a singular value while
+*>               working on the submatrix lying in rows and columns
+*>               INFO/(N+1) through MOD(INFO,N+1).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Ren-Cang Li, Computer Science Division, University of
+*>       California at Berkeley, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
      $                   RANK, WORK, IWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2.2) --
+*  -- LAPACK computational routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -15,96 +191,6 @@
       INTEGER            IWORK( * )
       DOUBLE PRECISION   B( LDB, * ), D( * ), E( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLALSD uses the singular value decomposition of A to solve the least
-*  squares problem of finding X to minimize the Euclidean norm of each
-*  column of A*X-B, where A is N-by-N upper bidiagonal, and X and B
-*  are N-by-NRHS. The solution X overwrites B.
-*
-*  The singular values of A smaller than RCOND times the largest
-*  singular value are treated as zero in solving the least squares
-*  problem; in this case a minimum norm solution is returned.
-*  The actual singular values are returned in D in ascending order.
-*
-*  This code makes very mild assumptions about floating point
-*  arithmetic. It will work on machines with a guard digit in
-*  add/subtract, or on those binary machines without guard digits
-*  which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2.
-*  It could conceivably fail on hexadecimal or decimal machines
-*  without guard digits, but we know of none.
-*
-*  Arguments
-*  =========
-*
-*  UPLO   (input) CHARACTER*1
-*         = 'U': D and E define an upper bidiagonal matrix.
-*         = 'L': D and E define a  lower bidiagonal matrix.
-*
-*  SMLSIZ (input) INTEGER
-*         The maximum size of the subproblems at the bottom of the
-*         computation tree.
-*
-*  N      (input) INTEGER
-*         The dimension of the  bidiagonal matrix.  N >= 0.
-*
-*  NRHS   (input) INTEGER
-*         The number of columns of B. NRHS must be at least 1.
-*
-*  D      (input/output) DOUBLE PRECISION array, dimension (N)
-*         On entry D contains the main diagonal of the bidiagonal
-*         matrix. On exit, if INFO = 0, D contains its singular values.
-*
-*  E      (input/output) DOUBLE PRECISION array, dimension (N-1)
-*         Contains the super-diagonal entries of the bidiagonal matrix.
-*         On exit, E has been destroyed.
-*
-*  B      (input/output) DOUBLE PRECISION array, dimension (LDB,NRHS)
-*         On input, B contains the right hand sides of the least
-*         squares problem. On output, B contains the solution X.
-*
-*  LDB    (input) INTEGER
-*         The leading dimension of B in the calling subprogram.
-*         LDB must be at least max(1,N).
-*
-*  RCOND  (input) DOUBLE PRECISION
-*         The singular values of A less than or equal to RCOND times
-*         the largest singular value are treated as zero in solving
-*         the least squares problem. If RCOND is negative,
-*         machine precision is used instead.
-*         For example, if diag(S)*X=B were the least squares problem,
-*         where diag(S) is a diagonal matrix of singular values, the
-*         solution would be X(i) = B(i) / S(i) if S(i) is greater than
-*         RCOND*max(S), and X(i) = 0 if S(i) is less than or equal to
-*         RCOND*max(S).
-*
-*  RANK   (output) INTEGER
-*         The number of singular values of A greater than RCOND times
-*         the largest singular value.
-*
-*  WORK   (workspace) DOUBLE PRECISION array, dimension at least
-*         (9*N + 2*N*SMLSIZ + 8*N*NLVL + N*NRHS + (SMLSIZ+1)**2),
-*         where NLVL = max(0, INT(log_2 (N/(SMLSIZ+1))) + 1).
-*
-*  IWORK  (workspace) INTEGER array, dimension at least
-*         (3*N*NLVL + 11*N)
-*
-*  INFO   (output) INTEGER
-*         = 0:  successful exit.
-*         < 0:  if INFO = -i, the i-th argument had an illegal value.
-*         > 0:  The algorithm failed to compute a singular value while
-*               working on the submatrix lying in rows and columns
-*               INFO/(N+1) through MOD(INFO,N+1).
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Ren-Cang Li, Computer Science Division, University of
-*       California at Berkeley, USA
-*     Osni Marques, LBNL/NERSC, USA
 *
 *  =====================================================================
 *

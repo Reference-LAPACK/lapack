@@ -1,9 +1,109 @@
+*> \brief \b SRZT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION SRZT01( M, N, A, AF, LDA, TAU, WORK,
+*                        LWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), AF( LDA, * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SRZT01 returns
+*>      || A - R*Q || / ( M * eps * ||A|| )
+*> for an upper trapezoidal A that was factored with STZRZF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The original upper trapezoidal M by N matrix A.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is REAL array, dimension (LDA,N)
+*>          The output of STZRZF for input matrix A.
+*>          The lower triangle is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A and AF.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is REAL array, dimension (M)
+*>          Details of the Householder transformations as returned by
+*>          STZRZF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK >= m*n + m*nb.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       REAL             FUNCTION SRZT01( M, N, A, AF, LDA, TAU, WORK,
      $                 LWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LWORK, M, N
@@ -12,41 +112,6 @@
       REAL               A( LDA, * ), AF( LDA, * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SRZT01 returns
-*       || A - R*Q || / ( M * eps * ||A|| )
-*  for an upper trapezoidal A that was factored with STZRZF.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrices A and AF.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and AF.
-*
-*  A       (input) REAL array, dimension (LDA,N)
-*          The original upper trapezoidal M by N matrix A.
-*
-*  AF      (input) REAL array, dimension (LDA,N)
-*          The output of STZRZF for input matrix A.
-*          The lower triangle is not referenced.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A and AF.
-*
-*  TAU     (input) REAL array, dimension (M)
-*          Details of the Householder transformations as returned by
-*          STZRZF.
-*
-*  WORK    (workspace) REAL array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  LWORK >= m*n + m*nb.
 *
 *  =====================================================================
 *

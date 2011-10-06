@@ -1,10 +1,145 @@
+*> \brief \b SLAGTM
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
+*                          B, LDB )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            LDB, LDX, N, NRHS
+*       REAL               ALPHA, BETA
+*       ..
+*       .. Array Arguments ..
+*       REAL               B( LDB, * ), D( * ), DL( * ), DU( * ),
+*      $                   X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAGTM performs a matrix-vector product of the form
+*>
+*>    B := alpha * A * X + beta * B
+*>
+*> where A is a tridiagonal matrix of order N, B and X are N by NRHS
+*> matrices, and alpha and beta are real scalars, each of which may be
+*> 0., 1., or -1.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies the operation applied to A.
+*>          = 'N':  No transpose, B := alpha * A * X + beta * B
+*>          = 'T':  Transpose,    B := alpha * A'* X + beta * B
+*>          = 'C':  Conjugate transpose = Transpose
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrices X and B.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is REAL
+*>          The scalar alpha.  ALPHA must be 0., 1., or -1.; otherwise,
+*>          it is assumed to be 0.
+*> \endverbatim
+*>
+*> \param[in] DL
+*> \verbatim
+*>          DL is REAL array, dimension (N-1)
+*>          The (n-1) sub-diagonal elements of T.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The diagonal elements of T.
+*> \endverbatim
+*>
+*> \param[in] DU
+*> \verbatim
+*>          DU is REAL array, dimension (N-1)
+*>          The (n-1) super-diagonal elements of T.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is REAL array, dimension (LDX,NRHS)
+*>          The N by NRHS matrix X.
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.  LDX >= max(N,1).
+*> \endverbatim
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is REAL
+*>          The scalar beta.  BETA must be 0., 1., or -1.; otherwise,
+*>          it is assumed to be 1.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB,NRHS)
+*>          On entry, the N by NRHS matrix B.
+*>          On exit, B is overwritten by the matrix expression
+*>          B := alpha * A * X + beta * B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(N,1).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE SLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
      $                   B, LDB )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -15,63 +150,6 @@
       REAL               B( LDB, * ), D( * ), DL( * ), DU( * ),
      $                   X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAGTM performs a matrix-vector product of the form
-*
-*     B := alpha * A * X + beta * B
-*
-*  where A is a tridiagonal matrix of order N, B and X are N by NRHS
-*  matrices, and alpha and beta are real scalars, each of which may be
-*  0., 1., or -1.
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies the operation applied to A.
-*          = 'N':  No transpose, B := alpha * A * X + beta * B
-*          = 'T':  Transpose,    B := alpha * A'* X + beta * B
-*          = 'C':  Conjugate transpose = Transpose
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrices X and B.
-*
-*  ALPHA   (input) REAL
-*          The scalar alpha.  ALPHA must be 0., 1., or -1.; otherwise,
-*          it is assumed to be 0.
-*
-*  DL      (input) REAL array, dimension (N-1)
-*          The (n-1) sub-diagonal elements of T.
-*
-*  D       (input) REAL array, dimension (N)
-*          The diagonal elements of T.
-*
-*  DU      (input) REAL array, dimension (N-1)
-*          The (n-1) super-diagonal elements of T.
-*
-*  X       (input) REAL array, dimension (LDX,NRHS)
-*          The N by NRHS matrix X.
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.  LDX >= max(N,1).
-*
-*  BETA    (input) REAL
-*          The scalar beta.  BETA must be 0., 1., or -1.; otherwise,
-*          it is assumed to be 1.
-*
-*  B       (input/output) REAL array, dimension (LDB,NRHS)
-*          On entry, the N by NRHS matrix B.
-*          On exit, B is overwritten by the matrix expression
-*          B := alpha * A * X + beta * B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(N,1).
 *
 *  =====================================================================
 *

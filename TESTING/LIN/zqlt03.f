@@ -1,9 +1,147 @@
+*> \brief \b ZQLT03
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZQLT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+*                          RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            K, LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RESULT( * ), RWORK( * )
+*       COMPLEX*16         AF( LDA, * ), C( LDA, * ), CC( LDA, * ),
+*      $                   Q( LDA, * ), TAU( * ), WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZQLT03 tests ZUNMQL, which computes Q*C, Q'*C, C*Q or C*Q'.
+*>
+*> ZQLT03 compares the results of a call to ZUNMQL with the results of
+*> forming Q explicitly by a call to ZUNGQL and then performing matrix
+*> multiplication by a call to ZGEMM.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The order of the orthogonal matrix Q.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows or columns of the matrix C; C is m-by-n if
+*>          Q is applied from the left, or n-by-m if Q is applied from
+*>          the right.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of elementary reflectors whose product defines the
+*>          orthogonal matrix Q.  M >= K >= 0.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is COMPLEX*16 array, dimension (LDA,N)
+*>          Details of the QL factorization of an m-by-n matrix, as
+*>          returned by ZGEQLF. See CGEQLF for further details.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is COMPLEX*16 array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[out] CC
+*> \verbatim
+*>          CC is COMPLEX*16 array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX*16 array, dimension (LDA,M)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays AF, C, CC, and Q.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is COMPLEX*16 array, dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors corresponding
+*>          to the QL factorization in AF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of WORK.  LWORK must be at least M, and should be
+*>          M*NB, where NB is the blocksize for this environment.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (4)
+*>          The test ratios compare two techniques for multiplying a
+*>          random matrix C by an m-by-m orthogonal matrix Q.
+*>          RESULT(1) = norm( Q*C - Q*C )  / ( M * norm(C) * EPS )
+*>          RESULT(2) = norm( C*Q - C*Q )  / ( M * norm(C) * EPS )
+*>          RESULT(3) = norm( Q'*C - Q'*C )/ ( M * norm(C) * EPS )
+*>          RESULT(4) = norm( C*Q' - C*Q' )/ ( M * norm(C) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZQLT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            K, LDA, LWORK, M, N
@@ -13,63 +151,6 @@
       COMPLEX*16         AF( LDA, * ), C( LDA, * ), CC( LDA, * ),
      $                   Q( LDA, * ), TAU( * ), WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZQLT03 tests ZUNMQL, which computes Q*C, Q'*C, C*Q or C*Q'.
-*
-*  ZQLT03 compares the results of a call to ZUNMQL with the results of
-*  forming Q explicitly by a call to ZUNGQL and then performing matrix
-*  multiplication by a call to ZGEMM.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The order of the orthogonal matrix Q.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of rows or columns of the matrix C; C is m-by-n if
-*          Q is applied from the left, or n-by-m if Q is applied from
-*          the right.  N >= 0.
-*
-*  K       (input) INTEGER
-*          The number of elementary reflectors whose product defines the
-*          orthogonal matrix Q.  M >= K >= 0.
-*
-*  AF      (input) COMPLEX*16 array, dimension (LDA,N)
-*          Details of the QL factorization of an m-by-n matrix, as
-*          returned by ZGEQLF. See CGEQLF for further details.
-*
-*  C       (workspace) COMPLEX*16 array, dimension (LDA,N)
-*
-*  CC      (workspace) COMPLEX*16 array, dimension (LDA,N)
-*
-*  Q       (workspace) COMPLEX*16 array, dimension (LDA,M)
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays AF, C, CC, and Q.
-*
-*  TAU     (input) COMPLEX*16 array, dimension (min(M,N))
-*          The scalar factors of the elementary reflectors corresponding
-*          to the QL factorization in AF.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of WORK.  LWORK must be at least M, and should be
-*          M*NB, where NB is the blocksize for this environment.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (M)
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (4)
-*          The test ratios compare two techniques for multiplying a
-*          random matrix C by an m-by-m orthogonal matrix Q.
-*          RESULT(1) = norm( Q*C - Q*C )  / ( M * norm(C) * EPS )
-*          RESULT(2) = norm( C*Q - C*Q )  / ( M * norm(C) * EPS )
-*          RESULT(3) = norm( Q'*C - Q'*C )/ ( M * norm(C) * EPS )
-*          RESULT(4) = norm( C*Q' - C*Q' )/ ( M * norm(C) * EPS )
 *
 *  =====================================================================
 *

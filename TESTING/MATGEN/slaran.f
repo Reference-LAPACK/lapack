@@ -1,40 +1,84 @@
-      REAL FUNCTION SLARAN( ISEED )
+*> \brief \b SLARAN
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  =========== DOCUMENTATION ===========
 *
-*     .. Array Arguments ..
-      INTEGER            ISEED( 4 )
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       REAL FUNCTION SLARAN( ISEED )
+* 
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  SLARAN returns a random real number from a uniform (0,1)
-*  distribution.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLARAN returns a random real number from a uniform (0,1)
+*> distribution.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed of the random number generator; the array
-*          elements must be between 0 and 4095, and ISEED(4) must be
-*          odd.
-*          On exit, the seed is updated.
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed of the random number generator; the array
+*>          elements must be between 0 and 4095, and ISEED(4) must be
+*>          odd.
+*>          On exit, the seed is updated.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup real_matgen
+*
 *
 *  Further Details
 *  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  This routine uses a multiplicative congruential method with modulus
+*>  2**48 and multiplier 33952834046453 (see G.S.Fishman,
+*>  'Multiplicative congruential random number generators with modulus
+*>  2**b: an exhaustive analysis for b = 32 and a partial analysis for
+*>  b = 48', Math. Comp. 189, pp 331-344, 1990).
+*>
+*>  48-bit integers are stored in 4 integer array elements with 12 bits
+*>  per element. Hence the routine is portable across machines with
+*>  integers of 32 bits or more.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
+      REAL FUNCTION SLARAN( ISEED )
 *
-*  This routine uses a multiplicative congruential method with modulus
-*  2**48 and multiplier 33952834046453 (see G.S.Fishman,
-*  'Multiplicative congruential random number generators with modulus
-*  2**b: an exhaustive analysis for b = 32 and a partial analysis for
-*  b = 48', Math. Comp. 189, pp 331-344, 1990).
+*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*  48-bit integers are stored in 4 integer array elements with 12 bits
-*  per element. Hence the routine is portable across machines with
-*  integers of 32 bits or more.
+*     .. Array Arguments ..
+      INTEGER            ISEED( 4 )
+*     ..
 *
 *  =====================================================================
 *

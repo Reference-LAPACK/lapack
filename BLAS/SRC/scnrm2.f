@@ -1,25 +1,73 @@
+*> \brief \b SCNRM2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL FUNCTION SCNRM2(N,X,INCX)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER INCX,N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX X(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SCNRM2 returns the euclidean norm of a vector via the function
+*> name, so that
+*>
+*>    SCNRM2 := sqrt( x**H*x )
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_blas_level1
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  -- This version written on 25-October-1982.
+*>     Modified on 14-October-1993 to inline the call to CLASSQ.
+*>     Sven Hammarling, Nag Ltd.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       REAL FUNCTION SCNRM2(N,X,INCX)
+*
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       INTEGER INCX,N
 *     ..
 *     .. Array Arguments ..
       COMPLEX X(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SCNRM2 returns the euclidean norm of a vector via the function
-*  name, so that
-*
-*     SCNRM2 := sqrt( x**H*x )
-*
-*  Further Details
-*  ===============
-*
-*  -- This version written on 25-October-1982.
-*     Modified on 14-October-1993 to inline the call to CLASSQ.
-*     Sven Hammarling, Nag Ltd.
 *
 *  =====================================================================
 *

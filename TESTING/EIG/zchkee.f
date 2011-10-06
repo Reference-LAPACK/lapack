@@ -1,1008 +1,1043 @@
-      PROGRAM ZCHKEE
+*> \brief \b ZCHKEE
 *
-*  -- LAPACK test routine (version 3.3.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     February 2007
+*  =========== DOCUMENTATION ===========
 *
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       PROGRAM ZCHKEE
+* 
 *  Purpose
 *  =======
 *
-*  ZCHKEE tests the COMPLEX*16 LAPACK subroutines for the matrix
-*  eigenvalue problem.  The test paths in this version are
-*
-*  NEP (Nonsymmetric Eigenvalue Problem):
-*      Test ZGEHRD, ZUNGHR, ZHSEQR, ZTREVC, ZHSEIN, and ZUNMHR
-*
-*  SEP (Hermitian Eigenvalue Problem):
-*      Test ZHETRD, ZUNGTR, ZSTEQR, ZSTERF, ZSTEIN, ZSTEDC,
-*      and drivers ZHEEV(X), ZHBEV(X), ZHPEV(X),
-*                  ZHEEVD,   ZHBEVD,   ZHPEVD
-*
-*  SVD (Singular Value Decomposition):
-*      Test ZGEBRD, ZUNGBR, and ZBDSQR
-*      and the drivers ZGESVD, ZGESDD
-*
-*  ZEV (Nonsymmetric Eigenvalue/eigenvector Driver):
-*      Test ZGEEV
-*
-*  ZES (Nonsymmetric Schur form Driver):
-*      Test ZGEES
-*
-*  ZVX (Nonsymmetric Eigenvalue/eigenvector Expert Driver):
-*      Test ZGEEVX
-*
-*  ZSX (Nonsymmetric Schur form Expert Driver):
-*      Test ZGEESX
-*
-*  ZGG (Generalized Nonsymmetric Eigenvalue Problem):
-*      Test ZGGHRD, ZGGBAL, ZGGBAK, ZHGEQZ, and ZTGEVC
-*      and the driver routines ZGEGS and ZGEGV
-*
-*  ZGS (Generalized Nonsymmetric Schur form Driver):
-*      Test ZGGES
-*
-*  ZGV (Generalized Nonsymmetric Eigenvalue/eigenvector Driver):
-*      Test ZGGEV
-*
-*  ZGX (Generalized Nonsymmetric Schur form Expert Driver):
-*      Test ZGGESX
-*
-*  ZXV (Generalized Nonsymmetric Eigenvalue/eigenvector Expert Driver):
-*      Test ZGGEVX
-*
-*  ZSG (Hermitian Generalized Eigenvalue Problem):
-*      Test ZHEGST, ZHEGV, ZHEGVD, ZHEGVX, ZHPGST, ZHPGV, ZHPGVD,
-*      ZHPGVX, ZHBGST, ZHBGV, ZHBGVD, and ZHBGVX
-*
-*  ZHB (Hermitian Band Eigenvalue Problem):
-*      Test ZHBTRD
-*
-*  ZBB (Band Singular Value Decomposition):
-*      Test ZGBBRD
-*
-*  ZEC (Eigencondition estimation):
-*      Test ZTRSYL, ZTREXC, ZTRSNA, and ZTRSEN
-*
-*  ZBL (Balancing a general matrix)
-*      Test ZGEBAL
-*
-*  ZBK (Back transformation on a balanced matrix)
-*      Test ZGEBAK
-*
-*  ZGL (Balancing a matrix pair)
-*      Test ZGGBAL
-*
-*  ZGK (Back transformation on a matrix pair)
-*      Test ZGGBAK
-*
-*  GLM (Generalized Linear Regression Model):
-*      Tests ZGGGLM
-*
-*  GQR (Generalized QR and RQ factorizations):
-*      Tests ZGGQRF and ZGGRQF
-*
-*  GSV (Generalized Singular Value Decomposition):
-*      Tests ZGGSVD, ZGGSVP, ZTGSJA, ZLAGS2, ZLAPLL, and ZLAPMT
-*
-*  CSD (CS decomposition):
-*      Tests ZUNCSD
-*
-*  LSE (Constrained Linear Least Squares):
-*      Tests ZGGLSE
-*
-*  Each test path has a different set of inputs, but the data sets for
-*  the driver routines xEV, xES, xVX, and xSX can be concatenated in a
-*  single input file.  The first line of input should contain one of the
-*  3-character path names in columns 1-3.  The number of remaining lines
-*  depends on what is found on the first line.
-*
-*  The number of matrix types used in testing is often controllable from
-*  the input file.  The number of matrix types for each path, and the
-*  test routine that describes them, is as follows:
-*
-*  Path name(s)  Types    Test routine
-*
-*  ZHS or NEP      21     ZCHKHS
-*  ZST or SEP      21     ZCHKST (routines)
-*                  18     ZDRVST (drivers)
-*  ZBD or SVD      16     ZCHKBD (routines)
-*                   5     ZDRVBD (drivers)
-*  ZEV             21     ZDRVEV
-*  ZES             21     ZDRVES
-*  ZVX             21     ZDRVVX
-*  ZSX             21     ZDRVSX
-*  ZGG             26     ZCHKGG (routines)
-*                  26     ZDRVGG (drivers)
-*  ZGS             26     ZDRGES
-*  ZGX              5     ZDRGSX
-*  ZGV             26     ZDRGEV
-*  ZXV              2     ZDRGVX
-*  ZSG             21     ZDRVSG
-*  ZHB             15     ZCHKHB
-*  ZBB             15     ZCHKBB
-*  ZEC              -     ZCHKEC
-*  ZBL              -     ZCHKBL
-*  ZBK              -     ZCHKBK
-*  ZGL              -     ZCHKGL
-*  ZGK              -     ZCHKGK
-*  GLM              8     ZCKGLM
-*  GQR              8     ZCKGQR
-*  GSV              8     ZCKGSV
-*  CSD              3     ZCKCSD
-*  LSE              8     ZCKLSE
-*
-*-----------------------------------------------------------------------
-*
-*  NEP input file:
-*
-*  line 2:  NN, INTEGER
-*           Number of values of N.
-*
-*  line 3:  NVAL, INTEGER array, dimension (NN)
-*           The values for the matrix dimension N.
-*
-*  line 4:  NPARMS, INTEGER
-*           Number of values of the parameters NB, NBMIN, NX, NS, and
-*           MAXB.
-*
-*  line 5:  NBVAL, INTEGER array, dimension (NPARMS)
-*           The values for the blocksize NB.
-*
-*  line 6:  NBMIN, INTEGER array, dimension (NPARMS)
-*           The values for the minimum blocksize NBMIN.
-*
-*  line 7:  NXVAL, INTEGER array, dimension (NPARMS)
-*           The values for the crossover point NX.
-*
-*  line 8:  INMIN, INTEGER array, dimension (NPARMS)
-*           LAHQR vs TTQRE crossover point, >= 11
-*
-*  line 9:  INWIN, INTEGER array, dimension (NPARMS)
-*           recommended deflation window size
-*
-*  line 10: INIBL, INTEGER array, dimension (NPARMS)
-*           nibble crossover point
-*
-*  line 11:  ISHFTS, INTEGER array, dimension (NPARMS)
-*           number of simultaneous shifts)
-*
-*  line 12:  IACC22, INTEGER array, dimension (NPARMS)
-*           select structured matrix multiply: 0, 1 or 2)
-*
-*  line 13: THRESH
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.  To have all of the test
-*           ratios printed, use THRESH = 0.0 .
-*
-*  line 14: NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 14 was 2:
-*
-*  line 15: INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 15-EOF:  The remaining lines occur in sets of 1 or 2 and allow
-*           the user to specify the matrix types.  Each line contains
-*           a 3-character path name in columns 1-3, and the number
-*           of matrix types must be the first nonblank item in columns
-*           4-80.  If the number of matrix types is at least 1 but is
-*           less than the maximum number of possible types, a second
-*           line will be read to get the numbers of the matrix types to
-*           be used.  For example,
-*  NEP 21
-*           requests all of the matrix types for the nonsymmetric
-*           eigenvalue problem, while
-*  NEP  4
-*  9 10 11 12
-*           requests only matrices of type 9, 10, 11, and 12.
-*
-*           The valid 3-character path names are 'NEP' or 'ZHS' for the
-*           nonsymmetric eigenvalue routines.
-*
-*-----------------------------------------------------------------------
-*
-*  SEP or ZSG input file:
-*
-*  line 2:  NN, INTEGER
-*           Number of values of N.
-*
-*  line 3:  NVAL, INTEGER array, dimension (NN)
-*           The values for the matrix dimension N.
-*
-*  line 4:  NPARMS, INTEGER
-*           Number of values of the parameters NB, NBMIN, and NX.
-*
-*  line 5:  NBVAL, INTEGER array, dimension (NPARMS)
-*           The values for the blocksize NB.
-*
-*  line 6:  NBMIN, INTEGER array, dimension (NPARMS)
-*           The values for the minimum blocksize NBMIN.
-*
-*  line 7:  NXVAL, INTEGER array, dimension (NPARMS)
-*           The values for the crossover point NX.
-*
-*  line 8:  THRESH
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 9:  TSTCHK, LOGICAL
-*           Flag indicating whether or not to test the LAPACK routines.
-*
-*  line 10: TSTDRV, LOGICAL
-*           Flag indicating whether or not to test the driver routines.
-*
-*  line 11: TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 12: NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 12 was 2:
-*
-*  line 13: INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 13-EOF:  Lines specifying matrix types, as for NEP.
-*           The valid 3-character path names are 'SEP' or 'ZST' for the
-*           Hermitian eigenvalue routines and driver routines, and
-*           'ZSG' for the routines for the Hermitian generalized
-*           eigenvalue problem.
-*
-*-----------------------------------------------------------------------
-*
-*  SVD input file:
-*
-*  line 2:  NN, INTEGER
-*           Number of values of M and N.
-*
-*  line 3:  MVAL, INTEGER array, dimension (NN)
-*           The values for the matrix row dimension M.
-*
-*  line 4:  NVAL, INTEGER array, dimension (NN)
-*           The values for the matrix column dimension N.
-*
-*  line 5:  NPARMS, INTEGER
-*           Number of values of the parameter NB, NBMIN, NX, and NRHS.
-*
-*  line 6:  NBVAL, INTEGER array, dimension (NPARMS)
-*           The values for the blocksize NB.
-*
-*  line 7:  NBMIN, INTEGER array, dimension (NPARMS)
-*           The values for the minimum blocksize NBMIN.
-*
-*  line 8:  NXVAL, INTEGER array, dimension (NPARMS)
-*           The values for the crossover point NX.
-*
-*  line 9:  NSVAL, INTEGER array, dimension (NPARMS)
-*           The values for the number of right hand sides NRHS.
-*
-*  line 10: THRESH
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 11: TSTCHK, LOGICAL
-*           Flag indicating whether or not to test the LAPACK routines.
-*
-*  line 12: TSTDRV, LOGICAL
-*           Flag indicating whether or not to test the driver routines.
-*
-*  line 13: TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 14: NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 14 was 2:
-*
-*  line 15: INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 15-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path names are 'SVD' or 'ZBD' for both the
-*           SVD routines and the SVD driver routines.
-*
-*-----------------------------------------------------------------------
-*
-*  ZEV and ZES data files:
-*
-*  line 1:  'ZEV' or 'ZES' in columns 1 to 3.
-*
-*  line 2:  NSIZES, INTEGER
-*           Number of sizes of matrices to use. Should be at least 0
-*           and at most 20. If NSIZES = 0, no testing is done
-*           (although the remaining  3 lines are still read).
-*
-*  line 3:  NN, INTEGER array, dimension(NSIZES)
-*           Dimensions of matrices to be tested.
-*
-*  line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
-*           These integer parameters determine how blocking is done
-*           (see ILAENV for details)
-*           NB     : block size
-*           NBMIN  : minimum block size
-*           NX     : minimum dimension for blocking
-*           NS     : number of shifts in xHSEQR
-*           NBCOL  : minimum column dimension for blocking
-*
-*  line 5:  THRESH, REAL
-*           The test threshold against which computed residuals are
-*           compared. Should generally be in the range from 10. to 20.
-*           If it is 0., all test case data will be printed.
-*
-*  line 6:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 6 was 2:
-*
-*  line 7:  INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 8 and following:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'ZEV' to test CGEEV, or
-*           'ZES' to test CGEES.
-*
-*-----------------------------------------------------------------------
-*
-*  The ZVX data has two parts. The first part is identical to ZEV,
-*  and the second part consists of test matrices with precomputed
-*  solutions.
-*
-*  line 1:  'ZVX' in columns 1-3.
-*
-*  line 2:  NSIZES, INTEGER
-*           If NSIZES = 0, no testing of randomly generated examples
-*           is done, but any precomputed examples are tested.
-*
-*  line 3:  NN, INTEGER array, dimension(NSIZES)
-*
-*  line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
-*
-*  line 5:  THRESH, REAL
-*
-*  line 6:  NEWSD, INTEGER
-*
-*  If line 6 was 2:
-*
-*  line 7:  INTEGER array, dimension (4)
-*
-*  lines 8 and following: The first line contains 'ZVX' in columns 1-3
-*           followed by the number of matrix types, possibly with
-*           a second line to specify certain matrix types.
-*           If the number of matrix types = 0, no testing of randomly
-*           generated examples is done, but any precomputed examples
-*           are tested.
-*
-*  remaining lines : Each matrix is stored on 1+N+N**2 lines, where N is
-*           its dimension. The first line contains the dimension N and
-*           ISRT (two integers). ISRT indicates whether the last N lines
-*           are sorted by increasing real part of the eigenvalue
-*           (ISRT=0) or by increasing imaginary part (ISRT=1). The next
-*           N**2 lines contain the matrix rowwise, one entry per line.
-*           The last N lines correspond to each eigenvalue. Each of
-*           these last N lines contains 4 real values: the real part of
-*           the eigenvalues, the imaginary part of the eigenvalue, the
-*           reciprocal condition number of the eigenvalues, and the
-*           reciprocal condition number of the vector eigenvector. The
-*           end of data is indicated by dimension N=0. Even if no data
-*           is to be tested, there must be at least one line containing
-*           N=0.
-*
-*-----------------------------------------------------------------------
-*
-*  The ZSX data is like ZVX. The first part is identical to ZEV, and the
-*  second part consists of test matrices with precomputed solutions.
-*
-*  line 1:  'ZSX' in columns 1-3.
-*
-*  line 2:  NSIZES, INTEGER
-*           If NSIZES = 0, no testing of randomly generated examples
-*           is done, but any precomputed examples are tested.
-*
-*  line 3:  NN, INTEGER array, dimension(NSIZES)
-*
-*  line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
-*
-*  line 5:  THRESH, REAL
-*
-*  line 6:  NEWSD, INTEGER
-*
-*  If line 6 was 2:
-*
-*  line 7:  INTEGER array, dimension (4)
-*
-*  lines 8 and following: The first line contains 'ZSX' in columns 1-3
-*           followed by the number of matrix types, possibly with
-*           a second line to specify certain matrix types.
-*           If the number of matrix types = 0, no testing of randomly
-*           generated examples is done, but any precomputed examples
-*           are tested.
-*
-*  remaining lines : Each matrix is stored on 3+N**2 lines, where N is
-*           its dimension. The first line contains the dimension N, the
-*           dimension M of an invariant subspace, and ISRT. The second
-*           line contains M integers, identifying the eigenvalues in the
-*           invariant subspace (by their position in a list of
-*           eigenvalues ordered by increasing real part (if ISRT=0) or
-*           by increasing imaginary part (if ISRT=1)). The next N**2
-*           lines contain the matrix rowwise. The last line contains the
-*           reciprocal condition number for the average of the selected
-*           eigenvalues, and the reciprocal condition number for the
-*           corresponding right invariant subspace. The end of data in
-*           indicated by a line containing N=0, M=0, and ISRT = 0.  Even
-*           if no data is to be tested, there must be at least one line
-*           containing N=0, M=0 and ISRT=0.
-*
-*-----------------------------------------------------------------------
-*
-*  ZGG input file:
-*
-*  line 2:  NN, INTEGER
-*           Number of values of N.
-*
-*  line 3:  NVAL, INTEGER array, dimension (NN)
-*           The values for the matrix dimension N.
-*
-*  line 4:  NPARMS, INTEGER
-*           Number of values of the parameters NB, NBMIN, NBCOL, NS, and
-*           MAXB.
-*
-*  line 5:  NBVAL, INTEGER array, dimension (NPARMS)
-*           The values for the blocksize NB.
-*
-*  line 6:  NBMIN, INTEGER array, dimension (NPARMS)
-*           The values for NBMIN, the minimum row dimension for blocks.
-*
-*  line 7:  NSVAL, INTEGER array, dimension (NPARMS)
-*           The values for the number of shifts.
-*
-*  line 8:  MXBVAL, INTEGER array, dimension (NPARMS)
-*           The values for MAXB, used in determining minimum blocksize.
-*
-*  line 9:  NBCOL, INTEGER array, dimension (NPARMS)
-*           The values for NBCOL, the minimum column dimension for
-*           blocks.
-*
-*  line 10: THRESH
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 11: TSTCHK, LOGICAL
-*           Flag indicating whether or not to test the LAPACK routines.
-*
-*  line 12: TSTDRV, LOGICAL
-*           Flag indicating whether or not to test the driver routines.
-*
-*  line 13: TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 14: NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 14 was 2:
-*
-*  line 15: INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 16-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'ZGG' for the generalized
-*           eigenvalue problem routines and driver routines.
-*
-*-----------------------------------------------------------------------
-*
-*  ZGS and ZGV input files:
-*
-*  line 1:  'ZGS' or 'ZGV' in columns 1 to 3.
-*
-*  line 2:  NN, INTEGER
-*           Number of values of N.
-*
-*  line 3:  NVAL, INTEGER array, dimension(NN)
-*           Dimensions of matrices to be tested.
-*
-*  line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
-*           These integer parameters determine how blocking is done
-*           (see ILAENV for details)
-*           NB     : block size
-*           NBMIN  : minimum block size
-*           NX     : minimum dimension for blocking
-*           NS     : number of shifts in xHGEQR
-*           NBCOL  : minimum column dimension for blocking
-*
-*  line 5:  THRESH, REAL
-*           The test threshold against which computed residuals are
-*           compared. Should generally be in the range from 10. to 20.
-*           If it is 0., all test case data will be printed.
-*
-*  line 6:  TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits.
-*
-*  line 7:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 17 was 2:
-*
-*  line 7:  INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 7-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'ZGS' for the generalized
-*           eigenvalue problem routines and driver routines.
-*
-*-----------------------------------------------------------------------
-*
-*  ZGX input file:
-*  line 1:  'ZGX' in columns 1 to 3.
-*
-*  line 2:  N, INTEGER
-*           Value of N.
-*
-*  line 3:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
-*           These integer parameters determine how blocking is done
-*           (see ILAENV for details)
-*           NB     : block size
-*           NBMIN  : minimum block size
-*           NX     : minimum dimension for blocking
-*           NS     : number of shifts in xHGEQR
-*           NBCOL  : minimum column dimension for blocking
-*
-*  line 4:  THRESH, REAL
-*           The test threshold against which computed residuals are
-*           compared. Should generally be in the range from 10. to 20.
-*           Information will be printed about each test for which the
-*           test ratio is greater than or equal to the threshold.
-*
-*  line 5:  TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 6:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 6 was 2:
-*
-*  line 7: INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  If line 2 was 0:
-*
-*  line 7-EOF: Precomputed examples are tested.
-*
-*  remaining lines : Each example is stored on 3+2*N*N lines, where N is
-*           its dimension. The first line contains the dimension (a
-*           single integer).  The next line contains an integer k such
-*           that only the last k eigenvalues will be selected and appear
-*           in the leading diagonal blocks of $A$ and $B$. The next N*N
-*           lines contain the matrix A, one element per line. The next N*N
-*           lines contain the matrix B. The last line contains the
-*           reciprocal of the eigenvalue cluster condition number and the
-*           reciprocal of the deflating subspace (associated with the
-*           selected eigencluster) condition number.  The end of data is
-*           indicated by dimension N=0.  Even if no data is to be tested,
-*           there must be at least one line containing N=0.
-*
-*-----------------------------------------------------------------------
-*
-*  ZXV input files:
-*  line 1:  'ZXV' in columns 1 to 3.
-*
-*  line 2:  N, INTEGER
-*           Value of N.
-*
-*  line 3:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
-*           These integer parameters determine how blocking is done
-*           (see ILAENV for details)
-*           NB     : block size
-*           NBMIN  : minimum block size
-*           NX     : minimum dimension for blocking
-*           NS     : number of shifts in xHGEQR
-*           NBCOL  : minimum column dimension for blocking
-*
-*  line 4:  THRESH, REAL
-*           The test threshold against which computed residuals are
-*           compared. Should generally be in the range from 10. to 20.
-*           Information will be printed about each test for which the
-*           test ratio is greater than or equal to the threshold.
-*
-*  line 5:  TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 6:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 6 was 2:
-*
-*  line 7: INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  If line 2 was 0:
-*
-*  line 7-EOF: Precomputed examples are tested.
-*
-*  remaining lines : Each example is stored on 3+2*N*N lines, where N is
-*           its dimension. The first line contains the dimension (a
-*           single integer). The next N*N lines contain the matrix A, one
-*           element per line. The next N*N lines contain the matrix B.
-*           The next line contains the reciprocals of the eigenvalue
-*           condition numbers.  The last line contains the reciprocals of
-*           the eigenvector condition numbers.  The end of data is
-*           indicated by dimension N=0.  Even if no data is to be tested,
-*           there must be at least one line containing N=0.
-*
-*-----------------------------------------------------------------------
-*
-*  ZHB input file:
-*
-*  line 2:  NN, INTEGER
-*           Number of values of N.
-*
-*  line 3:  NVAL, INTEGER array, dimension (NN)
-*           The values for the matrix dimension N.
-*
-*  line 4:  NK, INTEGER
-*           Number of values of K.
-*
-*  line 5:  KVAL, INTEGER array, dimension (NK)
-*           The values for the matrix dimension K.
-*
-*  line 6:  THRESH
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 7:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 7 was 2:
-*
-*  line 8:  INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 8-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'ZHB'.
-*
-*-----------------------------------------------------------------------
-*
-*  ZBB input file:
-*
-*  line 2:  NN, INTEGER
-*           Number of values of M and N.
-*
-*  line 3:  MVAL, INTEGER array, dimension (NN)
-*           The values for the matrix row dimension M.
-*
-*  line 4:  NVAL, INTEGER array, dimension (NN)
-*           The values for the matrix column dimension N.
-*
-*  line 4:  NK, INTEGER
-*           Number of values of K.
-*
-*  line 5:  KVAL, INTEGER array, dimension (NK)
-*           The values for the matrix bandwidth K.
-*
-*  line 6:  NPARMS, INTEGER
-*           Number of values of the parameter NRHS
-*
-*  line 7:  NSVAL, INTEGER array, dimension (NPARMS)
-*           The values for the number of right hand sides NRHS.
-*
-*  line 8:  THRESH
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 9:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 9 was 2:
-*
-*  line 10: INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 10-EOF:  Lines specifying matrix types, as for SVD.
-*           The 3-character path name is 'ZBB'.
-*
-*-----------------------------------------------------------------------
-*
-*  ZEC input file:
-*
-*  line  2: THRESH, REAL
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  lines  3-EOF:
-*
-*  Input for testing the eigencondition routines consists of a set of
-*  specially constructed test cases and their solutions.  The data
-*  format is not intended to be modified by the user.
-*
-*-----------------------------------------------------------------------
-*
-*  ZBL and ZBK input files:
-*
-*  line 1:  'ZBL' in columns 1-3 to test CGEBAL, or 'ZBK' in
-*           columns 1-3 to test CGEBAK.
-*
-*  The remaining lines consist of specially constructed test cases.
-*
-*-----------------------------------------------------------------------
-*
-*  ZGL and ZGK input files:
-*
-*  line 1:  'ZGL' in columns 1-3 to test ZGGBAL, or 'ZGK' in
-*           columns 1-3 to test ZGGBAK.
-*
-*  The remaining lines consist of specially constructed test cases.
-*
-*-----------------------------------------------------------------------
-*
-*  GLM data file:
-*
-*  line 1:  'GLM' in columns 1 to 3.
-*
-*  line 2:  NN, INTEGER
-*           Number of values of M, P, and N.
-*
-*  line 3:  MVAL, INTEGER array, dimension(NN)
-*           Values of M (row dimension).
-*
-*  line 4:  PVAL, INTEGER array, dimension(NN)
-*           Values of P (row dimension).
-*
-*  line 5:  NVAL, INTEGER array, dimension(NN)
-*           Values of N (column dimension), note M <= N <= M+P.
-*
-*  line 6:  THRESH, REAL
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 7:  TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 8:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 8 was 2:
-*
-*  line 9:  INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 9-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'GLM' for the generalized
-*           linear regression model routines.
-*
-*-----------------------------------------------------------------------
-*
-*  GQR data file:
-*
-*  line 1:  'GQR' in columns 1 to 3.
-*
-*  line 2:  NN, INTEGER
-*           Number of values of M, P, and N.
-*
-*  line 3:  MVAL, INTEGER array, dimension(NN)
-*           Values of M.
-*
-*  line 4:  PVAL, INTEGER array, dimension(NN)
-*           Values of P.
-*
-*  line 5:  NVAL, INTEGER array, dimension(NN)
-*           Values of N.
-*
-*  line 6:  THRESH, REAL
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 7:  TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 8:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 8 was 2:
-*
-*  line 9:  INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 9-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'GQR' for the generalized
-*           QR and RQ routines.
-*
-*-----------------------------------------------------------------------
-*
-*  GSV data file:
-*
-*  line 1:  'GSV' in columns 1 to 3.
-*
-*  line 2:  NN, INTEGER
-*           Number of values of M, P, and N.
-*
-*  line 3:  MVAL, INTEGER array, dimension(NN)
-*           Values of M (row dimension).
-*
-*  line 4:  PVAL, INTEGER array, dimension(NN)
-*           Values of P (row dimension).
-*
-*  line 5:  NVAL, INTEGER array, dimension(NN)
-*           Values of N (column dimension).
-*
-*  line 6:  THRESH, REAL
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 7:  TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 8:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 8 was 2:
-*
-*  line 9:  INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 9-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'GSV' for the generalized
-*           SVD routines.
-*
-*-----------------------------------------------------------------------
-*
-*  CSD data file:
-*
-*  line 1:  'CSD' in columns 1 to 3.
-*
-*  line 2:  NM, INTEGER
-*           Number of values of M, P, and N.
-*
-*  line 3:  MVAL, INTEGER array, dimension(NM)
-*           Values of M (row and column dimension of orthogonal matrix).
-*
-*  line 4:  PVAL, INTEGER array, dimension(NM)
-*           Values of P (row dimension of top-left block).
-*
-*  line 5:  NVAL, INTEGER array, dimension(NM)
-*           Values of N (column dimension of top-left block).
-*
-*  line 6:  THRESH, REAL
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 7:  TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 8:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 8 was 2:
-*
-*  line 9:  INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 9-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'CSD' for the CSD routine.
-*
-*-----------------------------------------------------------------------
-*
-*  LSE data file:
-*
-*  line 1:  'LSE' in columns 1 to 3.
-*
-*  line 2:  NN, INTEGER
-*           Number of values of M, P, and N.
-*
-*  line 3:  MVAL, INTEGER array, dimension(NN)
-*           Values of M.
-*
-*  line 4:  PVAL, INTEGER array, dimension(NN)
-*           Values of P.
-*
-*  line 5:  NVAL, INTEGER array, dimension(NN)
-*           Values of N, note P <= N <= P+M.
-*
-*  line 6:  THRESH, REAL
-*           Threshold value for the test ratios.  Information will be
-*           printed about each test for which the test ratio is greater
-*           than or equal to the threshold.
-*
-*  line 7:  TSTERR, LOGICAL
-*           Flag indicating whether or not to test the error exits for
-*           the LAPACK routines and driver routines.
-*
-*  line 8:  NEWSD, INTEGER
-*           A code indicating how to set the random number seed.
-*           = 0:  Set the seed to a default value before each run
-*           = 1:  Initialize the seed to a default value only before the
-*                 first run
-*           = 2:  Like 1, but use the seed values on the next line
-*
-*  If line 8 was 2:
-*
-*  line 9:  INTEGER array, dimension (4)
-*           Four integer values for the random number seed.
-*
-*  lines 9-EOF:  Lines specifying matrix types, as for NEP.
-*           The 3-character path name is 'GSV' for the generalized
-*           SVD routines.
-*
-*-----------------------------------------------------------------------
-*
-*  NMAX is currently set to 132 and must be at least 12 for some of the
-*  precomputed examples, and LWORK = NMAX*(5*NMAX+20) in the parameter
-*  statements below.  For SVD, we assume NRHS may be as big as N.  The
-*  parameter NEED is set to 14 to allow for 14 N-by-N matrices for ZGG.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZCHKEE tests the COMPLEX*16 LAPACK subroutines for the matrix
+*> eigenvalue problem.  The test paths in this version are
+*>
+*> NEP (Nonsymmetric Eigenvalue Problem):
+*>     Test ZGEHRD, ZUNGHR, ZHSEQR, ZTREVC, ZHSEIN, and ZUNMHR
+*>
+*> SEP (Hermitian Eigenvalue Problem):
+*>     Test ZHETRD, ZUNGTR, ZSTEQR, ZSTERF, ZSTEIN, ZSTEDC,
+*>     and drivers ZHEEV(X), ZHBEV(X), ZHPEV(X),
+*>                 ZHEEVD,   ZHBEVD,   ZHPEVD
+*>
+*> SVD (Singular Value Decomposition):
+*>     Test ZGEBRD, ZUNGBR, and ZBDSQR
+*>     and the drivers ZGESVD, ZGESDD
+*>
+*> ZEV (Nonsymmetric Eigenvalue/eigenvector Driver):
+*>     Test ZGEEV
+*>
+*> ZES (Nonsymmetric Schur form Driver):
+*>     Test ZGEES
+*>
+*> ZVX (Nonsymmetric Eigenvalue/eigenvector Expert Driver):
+*>     Test ZGEEVX
+*>
+*> ZSX (Nonsymmetric Schur form Expert Driver):
+*>     Test ZGEESX
+*>
+*> ZGG (Generalized Nonsymmetric Eigenvalue Problem):
+*>     Test ZGGHRD, ZGGBAL, ZGGBAK, ZHGEQZ, and ZTGEVC
+*>     and the driver routines ZGEGS and ZGEGV
+*>
+*> ZGS (Generalized Nonsymmetric Schur form Driver):
+*>     Test ZGGES
+*>
+*> ZGV (Generalized Nonsymmetric Eigenvalue/eigenvector Driver):
+*>     Test ZGGEV
+*>
+*> ZGX (Generalized Nonsymmetric Schur form Expert Driver):
+*>     Test ZGGESX
+*>
+*> ZXV (Generalized Nonsymmetric Eigenvalue/eigenvector Expert Driver):
+*>     Test ZGGEVX
+*>
+*> ZSG (Hermitian Generalized Eigenvalue Problem):
+*>     Test ZHEGST, ZHEGV, ZHEGVD, ZHEGVX, ZHPGST, ZHPGV, ZHPGVD,
+*>     ZHPGVX, ZHBGST, ZHBGV, ZHBGVD, and ZHBGVX
+*>
+*> ZHB (Hermitian Band Eigenvalue Problem):
+*>     Test ZHBTRD
+*>
+*> ZBB (Band Singular Value Decomposition):
+*>     Test ZGBBRD
+*>
+*> ZEC (Eigencondition estimation):
+*>     Test ZTRSYL, ZTREXC, ZTRSNA, and ZTRSEN
+*>
+*> ZBL (Balancing a general matrix)
+*>     Test ZGEBAL
+*>
+*> ZBK (Back transformation on a balanced matrix)
+*>     Test ZGEBAK
+*>
+*> ZGL (Balancing a matrix pair)
+*>     Test ZGGBAL
+*>
+*> ZGK (Back transformation on a matrix pair)
+*>     Test ZGGBAK
+*>
+*> GLM (Generalized Linear Regression Model):
+*>     Tests ZGGGLM
+*>
+*> GQR (Generalized QR and RQ factorizations):
+*>     Tests ZGGQRF and ZGGRQF
+*>
+*> GSV (Generalized Singular Value Decomposition):
+*>     Tests ZGGSVD, ZGGSVP, ZTGSJA, ZLAGS2, ZLAPLL, and ZLAPMT
+*>
+*> CSD (CS decomposition):
+*>     Tests ZUNCSD
+*>
+*> LSE (Constrained Linear Least Squares):
+*>     Tests ZGGLSE
+*>
+*> Each test path has a different set of inputs, but the data sets for
+*> the driver routines xEV, xES, xVX, and xSX can be concatenated in a
+*> single input file.  The first line of input should contain one of the
+*> 3-character path names in columns 1-3.  The number of remaining lines
+*> depends on what is found on the first line.
+*>
+*> The number of matrix types used in testing is often controllable from
+*> the input file.  The number of matrix types for each path, and the
+*> test routine that describes them, is as follows:
+*>
+*> Path name(s)  Types    Test routine
+*>
+*> ZHS or NEP      21     ZCHKHS
+*> ZST or SEP      21     ZCHKST (routines)
+*>                 18     ZDRVST (drivers)
+*> ZBD or SVD      16     ZCHKBD (routines)
+*>                  5     ZDRVBD (drivers)
+*> ZEV             21     ZDRVEV
+*> ZES             21     ZDRVES
+*> ZVX             21     ZDRVVX
+*> ZSX             21     ZDRVSX
+*> ZGG             26     ZCHKGG (routines)
+*>                 26     ZDRVGG (drivers)
+*> ZGS             26     ZDRGES
+*> ZGX              5     ZDRGSX
+*> ZGV             26     ZDRGEV
+*> ZXV              2     ZDRGVX
+*> ZSG             21     ZDRVSG
+*> ZHB             15     ZCHKHB
+*> ZBB             15     ZCHKBB
+*> ZEC              -     ZCHKEC
+*> ZBL              -     ZCHKBL
+*> ZBK              -     ZCHKBK
+*> ZGL              -     ZCHKGL
+*> ZGK              -     ZCHKGK
+*> GLM              8     ZCKGLM
+*> GQR              8     ZCKGQR
+*> GSV              8     ZCKGSV
+*> CSD              3     ZCKCSD
+*> LSE              8     ZCKLSE
+*>
+*>-----------------------------------------------------------------------
+*>
+*> NEP input file:
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of N.
+*>
+*> line 3:  NVAL, INTEGER array, dimension (NN)
+*>          The values for the matrix dimension N.
+*>
+*> line 4:  NPARMS, INTEGER
+*>          Number of values of the parameters NB, NBMIN, NX, NS, and
+*>          MAXB.
+*>
+*> line 5:  NBVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the blocksize NB.
+*>
+*> line 6:  NBMIN, INTEGER array, dimension (NPARMS)
+*>          The values for the minimum blocksize NBMIN.
+*>
+*> line 7:  NXVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the crossover point NX.
+*>
+*> line 8:  INMIN, INTEGER array, dimension (NPARMS)
+*>          LAHQR vs TTQRE crossover point, >= 11
+*>
+*> line 9:  INWIN, INTEGER array, dimension (NPARMS)
+*>          recommended deflation window size
+*>
+*> line 10: INIBL, INTEGER array, dimension (NPARMS)
+*>          nibble crossover point
+*>
+*> line 11:  ISHFTS, INTEGER array, dimension (NPARMS)
+*>          number of simultaneous shifts)
+*>
+*> line 12:  IACC22, INTEGER array, dimension (NPARMS)
+*>          select structured matrix multiply: 0, 1 or 2)
+*>
+*> line 13: THRESH
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.  To have all of the test
+*>          ratios printed, use THRESH = 0.0 .
+*>
+*> line 14: NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 14 was 2:
+*>
+*> line 15: INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 15-EOF:  The remaining lines occur in sets of 1 or 2 and allow
+*>          the user to specify the matrix types.  Each line contains
+*>          a 3-character path name in columns 1-3, and the number
+*>          of matrix types must be the first nonblank item in columns
+*>          4-80.  If the number of matrix types is at least 1 but is
+*>          less than the maximum number of possible types, a second
+*>          line will be read to get the numbers of the matrix types to
+*>          be used.  For example,
+*> NEP 21
+*>          requests all of the matrix types for the nonsymmetric
+*>          eigenvalue problem, while
+*> NEP  4
+*> 9 10 11 12
+*>          requests only matrices of type 9, 10, 11, and 12.
+*>
+*>          The valid 3-character path names are 'NEP' or 'ZHS' for the
+*>          nonsymmetric eigenvalue routines.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> SEP or ZSG input file:
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of N.
+*>
+*> line 3:  NVAL, INTEGER array, dimension (NN)
+*>          The values for the matrix dimension N.
+*>
+*> line 4:  NPARMS, INTEGER
+*>          Number of values of the parameters NB, NBMIN, and NX.
+*>
+*> line 5:  NBVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the blocksize NB.
+*>
+*> line 6:  NBMIN, INTEGER array, dimension (NPARMS)
+*>          The values for the minimum blocksize NBMIN.
+*>
+*> line 7:  NXVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the crossover point NX.
+*>
+*> line 8:  THRESH
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 9:  TSTCHK, LOGICAL
+*>          Flag indicating whether or not to test the LAPACK routines.
+*>
+*> line 10: TSTDRV, LOGICAL
+*>          Flag indicating whether or not to test the driver routines.
+*>
+*> line 11: TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 12: NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 12 was 2:
+*>
+*> line 13: INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 13-EOF:  Lines specifying matrix types, as for NEP.
+*>          The valid 3-character path names are 'SEP' or 'ZST' for the
+*>          Hermitian eigenvalue routines and driver routines, and
+*>          'ZSG' for the routines for the Hermitian generalized
+*>          eigenvalue problem.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> SVD input file:
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of M and N.
+*>
+*> line 3:  MVAL, INTEGER array, dimension (NN)
+*>          The values for the matrix row dimension M.
+*>
+*> line 4:  NVAL, INTEGER array, dimension (NN)
+*>          The values for the matrix column dimension N.
+*>
+*> line 5:  NPARMS, INTEGER
+*>          Number of values of the parameter NB, NBMIN, NX, and NRHS.
+*>
+*> line 6:  NBVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the blocksize NB.
+*>
+*> line 7:  NBMIN, INTEGER array, dimension (NPARMS)
+*>          The values for the minimum blocksize NBMIN.
+*>
+*> line 8:  NXVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the crossover point NX.
+*>
+*> line 9:  NSVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the number of right hand sides NRHS.
+*>
+*> line 10: THRESH
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 11: TSTCHK, LOGICAL
+*>          Flag indicating whether or not to test the LAPACK routines.
+*>
+*> line 12: TSTDRV, LOGICAL
+*>          Flag indicating whether or not to test the driver routines.
+*>
+*> line 13: TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 14: NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 14 was 2:
+*>
+*> line 15: INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 15-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path names are 'SVD' or 'ZBD' for both the
+*>          SVD routines and the SVD driver routines.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZEV and ZES data files:
+*>
+*> line 1:  'ZEV' or 'ZES' in columns 1 to 3.
+*>
+*> line 2:  NSIZES, INTEGER
+*>          Number of sizes of matrices to use. Should be at least 0
+*>          and at most 20. If NSIZES = 0, no testing is done
+*>          (although the remaining  3 lines are still read).
+*>
+*> line 3:  NN, INTEGER array, dimension(NSIZES)
+*>          Dimensions of matrices to be tested.
+*>
+*> line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
+*>          These integer parameters determine how blocking is done
+*>          (see ILAENV for details)
+*>          NB     : block size
+*>          NBMIN  : minimum block size
+*>          NX     : minimum dimension for blocking
+*>          NS     : number of shifts in xHSEQR
+*>          NBCOL  : minimum column dimension for blocking
+*>
+*> line 5:  THRESH, REAL
+*>          The test threshold against which computed residuals are
+*>          compared. Should generally be in the range from 10. to 20.
+*>          If it is 0., all test case data will be printed.
+*>
+*> line 6:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 6 was 2:
+*>
+*> line 7:  INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 8 and following:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'ZEV' to test CGEEV, or
+*>          'ZES' to test CGEES.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> The ZVX data has two parts. The first part is identical to ZEV,
+*> and the second part consists of test matrices with precomputed
+*> solutions.
+*>
+*> line 1:  'ZVX' in columns 1-3.
+*>
+*> line 2:  NSIZES, INTEGER
+*>          If NSIZES = 0, no testing of randomly generated examples
+*>          is done, but any precomputed examples are tested.
+*>
+*> line 3:  NN, INTEGER array, dimension(NSIZES)
+*>
+*> line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
+*>
+*> line 5:  THRESH, REAL
+*>
+*> line 6:  NEWSD, INTEGER
+*>
+*> If line 6 was 2:
+*>
+*> line 7:  INTEGER array, dimension (4)
+*>
+*> lines 8 and following: The first line contains 'ZVX' in columns 1-3
+*>          followed by the number of matrix types, possibly with
+*>          a second line to specify certain matrix types.
+*>          If the number of matrix types = 0, no testing of randomly
+*>          generated examples is done, but any precomputed examples
+*>          are tested.
+*>
+*> remaining lines : Each matrix is stored on 1+N+N**2 lines, where N is
+*>          its dimension. The first line contains the dimension N and
+*>          ISRT (two integers). ISRT indicates whether the last N lines
+*>          are sorted by increasing real part of the eigenvalue
+*>          (ISRT=0) or by increasing imaginary part (ISRT=1). The next
+*>          N**2 lines contain the matrix rowwise, one entry per line.
+*>          The last N lines correspond to each eigenvalue. Each of
+*>          these last N lines contains 4 real values: the real part of
+*>          the eigenvalues, the imaginary part of the eigenvalue, the
+*>          reciprocal condition number of the eigenvalues, and the
+*>          reciprocal condition number of the vector eigenvector. The
+*>          end of data is indicated by dimension N=0. Even if no data
+*>          is to be tested, there must be at least one line containing
+*>          N=0.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> The ZSX data is like ZVX. The first part is identical to ZEV, and the
+*> second part consists of test matrices with precomputed solutions.
+*>
+*> line 1:  'ZSX' in columns 1-3.
+*>
+*> line 2:  NSIZES, INTEGER
+*>          If NSIZES = 0, no testing of randomly generated examples
+*>          is done, but any precomputed examples are tested.
+*>
+*> line 3:  NN, INTEGER array, dimension(NSIZES)
+*>
+*> line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
+*>
+*> line 5:  THRESH, REAL
+*>
+*> line 6:  NEWSD, INTEGER
+*>
+*> If line 6 was 2:
+*>
+*> line 7:  INTEGER array, dimension (4)
+*>
+*> lines 8 and following: The first line contains 'ZSX' in columns 1-3
+*>          followed by the number of matrix types, possibly with
+*>          a second line to specify certain matrix types.
+*>          If the number of matrix types = 0, no testing of randomly
+*>          generated examples is done, but any precomputed examples
+*>          are tested.
+*>
+*> remaining lines : Each matrix is stored on 3+N**2 lines, where N is
+*>          its dimension. The first line contains the dimension N, the
+*>          dimension M of an invariant subspace, and ISRT. The second
+*>          line contains M integers, identifying the eigenvalues in the
+*>          invariant subspace (by their position in a list of
+*>          eigenvalues ordered by increasing real part (if ISRT=0) or
+*>          by increasing imaginary part (if ISRT=1)). The next N**2
+*>          lines contain the matrix rowwise. The last line contains the
+*>          reciprocal condition number for the average of the selected
+*>          eigenvalues, and the reciprocal condition number for the
+*>          corresponding right invariant subspace. The end of data in
+*>          indicated by a line containing N=0, M=0, and ISRT = 0.  Even
+*>          if no data is to be tested, there must be at least one line
+*>          containing N=0, M=0 and ISRT=0.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZGG input file:
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of N.
+*>
+*> line 3:  NVAL, INTEGER array, dimension (NN)
+*>          The values for the matrix dimension N.
+*>
+*> line 4:  NPARMS, INTEGER
+*>          Number of values of the parameters NB, NBMIN, NBCOL, NS, and
+*>          MAXB.
+*>
+*> line 5:  NBVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the blocksize NB.
+*>
+*> line 6:  NBMIN, INTEGER array, dimension (NPARMS)
+*>          The values for NBMIN, the minimum row dimension for blocks.
+*>
+*> line 7:  NSVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the number of shifts.
+*>
+*> line 8:  MXBVAL, INTEGER array, dimension (NPARMS)
+*>          The values for MAXB, used in determining minimum blocksize.
+*>
+*> line 9:  NBCOL, INTEGER array, dimension (NPARMS)
+*>          The values for NBCOL, the minimum column dimension for
+*>          blocks.
+*>
+*> line 10: THRESH
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 11: TSTCHK, LOGICAL
+*>          Flag indicating whether or not to test the LAPACK routines.
+*>
+*> line 12: TSTDRV, LOGICAL
+*>          Flag indicating whether or not to test the driver routines.
+*>
+*> line 13: TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 14: NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 14 was 2:
+*>
+*> line 15: INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 16-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'ZGG' for the generalized
+*>          eigenvalue problem routines and driver routines.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZGS and ZGV input files:
+*>
+*> line 1:  'ZGS' or 'ZGV' in columns 1 to 3.
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of N.
+*>
+*> line 3:  NVAL, INTEGER array, dimension(NN)
+*>          Dimensions of matrices to be tested.
+*>
+*> line 4:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
+*>          These integer parameters determine how blocking is done
+*>          (see ILAENV for details)
+*>          NB     : block size
+*>          NBMIN  : minimum block size
+*>          NX     : minimum dimension for blocking
+*>          NS     : number of shifts in xHGEQR
+*>          NBCOL  : minimum column dimension for blocking
+*>
+*> line 5:  THRESH, REAL
+*>          The test threshold against which computed residuals are
+*>          compared. Should generally be in the range from 10. to 20.
+*>          If it is 0., all test case data will be printed.
+*>
+*> line 6:  TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits.
+*>
+*> line 7:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 17 was 2:
+*>
+*> line 7:  INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 7-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'ZGS' for the generalized
+*>          eigenvalue problem routines and driver routines.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZGX input file:
+*> line 1:  'ZGX' in columns 1 to 3.
+*>
+*> line 2:  N, INTEGER
+*>          Value of N.
+*>
+*> line 3:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
+*>          These integer parameters determine how blocking is done
+*>          (see ILAENV for details)
+*>          NB     : block size
+*>          NBMIN  : minimum block size
+*>          NX     : minimum dimension for blocking
+*>          NS     : number of shifts in xHGEQR
+*>          NBCOL  : minimum column dimension for blocking
+*>
+*> line 4:  THRESH, REAL
+*>          The test threshold against which computed residuals are
+*>          compared. Should generally be in the range from 10. to 20.
+*>          Information will be printed about each test for which the
+*>          test ratio is greater than or equal to the threshold.
+*>
+*> line 5:  TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 6:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 6 was 2:
+*>
+*> line 7: INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> If line 2 was 0:
+*>
+*> line 7-EOF: Precomputed examples are tested.
+*>
+*> remaining lines : Each example is stored on 3+2*N*N lines, where N is
+*>          its dimension. The first line contains the dimension (a
+*>          single integer).  The next line contains an integer k such
+*>          that only the last k eigenvalues will be selected and appear
+*>          in the leading diagonal blocks of $A$ and $B$. The next N*N
+*>          lines contain the matrix A, one element per line. The next N*N
+*>          lines contain the matrix B. The last line contains the
+*>          reciprocal of the eigenvalue cluster condition number and the
+*>          reciprocal of the deflating subspace (associated with the
+*>          selected eigencluster) condition number.  The end of data is
+*>          indicated by dimension N=0.  Even if no data is to be tested,
+*>          there must be at least one line containing N=0.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZXV input files:
+*> line 1:  'ZXV' in columns 1 to 3.
+*>
+*> line 2:  N, INTEGER
+*>          Value of N.
+*>
+*> line 3:  NB, NBMIN, NX, NS, NBCOL, INTEGERs
+*>          These integer parameters determine how blocking is done
+*>          (see ILAENV for details)
+*>          NB     : block size
+*>          NBMIN  : minimum block size
+*>          NX     : minimum dimension for blocking
+*>          NS     : number of shifts in xHGEQR
+*>          NBCOL  : minimum column dimension for blocking
+*>
+*> line 4:  THRESH, REAL
+*>          The test threshold against which computed residuals are
+*>          compared. Should generally be in the range from 10. to 20.
+*>          Information will be printed about each test for which the
+*>          test ratio is greater than or equal to the threshold.
+*>
+*> line 5:  TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 6:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 6 was 2:
+*>
+*> line 7: INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> If line 2 was 0:
+*>
+*> line 7-EOF: Precomputed examples are tested.
+*>
+*> remaining lines : Each example is stored on 3+2*N*N lines, where N is
+*>          its dimension. The first line contains the dimension (a
+*>          single integer). The next N*N lines contain the matrix A, one
+*>          element per line. The next N*N lines contain the matrix B.
+*>          The next line contains the reciprocals of the eigenvalue
+*>          condition numbers.  The last line contains the reciprocals of
+*>          the eigenvector condition numbers.  The end of data is
+*>          indicated by dimension N=0.  Even if no data is to be tested,
+*>          there must be at least one line containing N=0.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZHB input file:
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of N.
+*>
+*> line 3:  NVAL, INTEGER array, dimension (NN)
+*>          The values for the matrix dimension N.
+*>
+*> line 4:  NK, INTEGER
+*>          Number of values of K.
+*>
+*> line 5:  KVAL, INTEGER array, dimension (NK)
+*>          The values for the matrix dimension K.
+*>
+*> line 6:  THRESH
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 7:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 7 was 2:
+*>
+*> line 8:  INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 8-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'ZHB'.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZBB input file:
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of M and N.
+*>
+*> line 3:  MVAL, INTEGER array, dimension (NN)
+*>          The values for the matrix row dimension M.
+*>
+*> line 4:  NVAL, INTEGER array, dimension (NN)
+*>          The values for the matrix column dimension N.
+*>
+*> line 4:  NK, INTEGER
+*>          Number of values of K.
+*>
+*> line 5:  KVAL, INTEGER array, dimension (NK)
+*>          The values for the matrix bandwidth K.
+*>
+*> line 6:  NPARMS, INTEGER
+*>          Number of values of the parameter NRHS
+*>
+*> line 7:  NSVAL, INTEGER array, dimension (NPARMS)
+*>          The values for the number of right hand sides NRHS.
+*>
+*> line 8:  THRESH
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 9:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 9 was 2:
+*>
+*> line 10: INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 10-EOF:  Lines specifying matrix types, as for SVD.
+*>          The 3-character path name is 'ZBB'.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZEC input file:
+*>
+*> line  2: THRESH, REAL
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> lines  3-EOF:
+*>
+*> Input for testing the eigencondition routines consists of a set of
+*> specially constructed test cases and their solutions.  The data
+*> format is not intended to be modified by the user.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZBL and ZBK input files:
+*>
+*> line 1:  'ZBL' in columns 1-3 to test CGEBAL, or 'ZBK' in
+*>          columns 1-3 to test CGEBAK.
+*>
+*> The remaining lines consist of specially constructed test cases.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> ZGL and ZGK input files:
+*>
+*> line 1:  'ZGL' in columns 1-3 to test ZGGBAL, or 'ZGK' in
+*>          columns 1-3 to test ZGGBAK.
+*>
+*> The remaining lines consist of specially constructed test cases.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> GLM data file:
+*>
+*> line 1:  'GLM' in columns 1 to 3.
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of M, P, and N.
+*>
+*> line 3:  MVAL, INTEGER array, dimension(NN)
+*>          Values of M (row dimension).
+*>
+*> line 4:  PVAL, INTEGER array, dimension(NN)
+*>          Values of P (row dimension).
+*>
+*> line 5:  NVAL, INTEGER array, dimension(NN)
+*>          Values of N (column dimension), note M <= N <= M+P.
+*>
+*> line 6:  THRESH, REAL
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 7:  TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 8:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 8 was 2:
+*>
+*> line 9:  INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 9-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'GLM' for the generalized
+*>          linear regression model routines.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> GQR data file:
+*>
+*> line 1:  'GQR' in columns 1 to 3.
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of M, P, and N.
+*>
+*> line 3:  MVAL, INTEGER array, dimension(NN)
+*>          Values of M.
+*>
+*> line 4:  PVAL, INTEGER array, dimension(NN)
+*>          Values of P.
+*>
+*> line 5:  NVAL, INTEGER array, dimension(NN)
+*>          Values of N.
+*>
+*> line 6:  THRESH, REAL
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 7:  TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 8:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 8 was 2:
+*>
+*> line 9:  INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 9-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'GQR' for the generalized
+*>          QR and RQ routines.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> GSV data file:
+*>
+*> line 1:  'GSV' in columns 1 to 3.
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of M, P, and N.
+*>
+*> line 3:  MVAL, INTEGER array, dimension(NN)
+*>          Values of M (row dimension).
+*>
+*> line 4:  PVAL, INTEGER array, dimension(NN)
+*>          Values of P (row dimension).
+*>
+*> line 5:  NVAL, INTEGER array, dimension(NN)
+*>          Values of N (column dimension).
+*>
+*> line 6:  THRESH, REAL
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 7:  TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 8:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 8 was 2:
+*>
+*> line 9:  INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 9-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'GSV' for the generalized
+*>          SVD routines.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> CSD data file:
+*>
+*> line 1:  'CSD' in columns 1 to 3.
+*>
+*> line 2:  NM, INTEGER
+*>          Number of values of M, P, and N.
+*>
+*> line 3:  MVAL, INTEGER array, dimension(NM)
+*>          Values of M (row and column dimension of orthogonal matrix).
+*>
+*> line 4:  PVAL, INTEGER array, dimension(NM)
+*>          Values of P (row dimension of top-left block).
+*>
+*> line 5:  NVAL, INTEGER array, dimension(NM)
+*>          Values of N (column dimension of top-left block).
+*>
+*> line 6:  THRESH, REAL
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 7:  TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 8:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 8 was 2:
+*>
+*> line 9:  INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 9-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'CSD' for the CSD routine.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> LSE data file:
+*>
+*> line 1:  'LSE' in columns 1 to 3.
+*>
+*> line 2:  NN, INTEGER
+*>          Number of values of M, P, and N.
+*>
+*> line 3:  MVAL, INTEGER array, dimension(NN)
+*>          Values of M.
+*>
+*> line 4:  PVAL, INTEGER array, dimension(NN)
+*>          Values of P.
+*>
+*> line 5:  NVAL, INTEGER array, dimension(NN)
+*>          Values of N, note P <= N <= P+M.
+*>
+*> line 6:  THRESH, REAL
+*>          Threshold value for the test ratios.  Information will be
+*>          printed about each test for which the test ratio is greater
+*>          than or equal to the threshold.
+*>
+*> line 7:  TSTERR, LOGICAL
+*>          Flag indicating whether or not to test the error exits for
+*>          the LAPACK routines and driver routines.
+*>
+*> line 8:  NEWSD, INTEGER
+*>          A code indicating how to set the random number seed.
+*>          = 0:  Set the seed to a default value before each run
+*>          = 1:  Initialize the seed to a default value only before the
+*>                first run
+*>          = 2:  Like 1, but use the seed values on the next line
+*>
+*> If line 8 was 2:
+*>
+*> line 9:  INTEGER array, dimension (4)
+*>          Four integer values for the random number seed.
+*>
+*> lines 9-EOF:  Lines specifying matrix types, as for NEP.
+*>          The 3-character path name is 'GSV' for the generalized
+*>          SVD routines.
+*>
+*>-----------------------------------------------------------------------
+*>
+*> NMAX is currently set to 132 and must be at least 12 for some of the
+*> precomputed examples, and LWORK = NMAX*(5*NMAX+20) in the parameter
+*> statements below.  For SVD, we assume NRHS may be as big as N.  The
+*> parameter NEED is set to 14 to allow for 14 N-by-N matrices for ZGG.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
+      PROGRAM ZCHKEE
+*
+*  -- LAPACK test routine (version 3.3.0) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *  =====================================================================
 *

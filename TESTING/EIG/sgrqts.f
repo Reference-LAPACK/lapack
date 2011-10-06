@@ -1,9 +1,188 @@
+*> \brief \b SGRQTS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
+*                          BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, LWORK, M, P, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), AF( LDA, * ), R( LDA, * ),
+*      $                   Q( LDA, * ),
+*      $                   B( LDB, * ), BF( LDB, * ), T( LDB, * ),
+*      $                   Z( LDB, * ), BWK( LDB, * ),
+*      $                   TAUA( * ), TAUB( * ),
+*      $                   RESULT( 4 ), RWORK( * ), WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGRQTS tests SGGRQF, which computes the GRQ factorization of an
+*> M-by-N matrix A and a P-by-N matrix B: A = R*Q and B = Z*T*Q.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is INTEGER
+*>          The number of rows of the matrix B.  P >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and B.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The M-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[out] AF
+*> \verbatim
+*>          AF is REAL array, dimension (LDA,N)
+*>          Details of the GRQ factorization of A and B, as returned
+*>          by SGGRQF, see SGGRQF for further details.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is REAL array, dimension (LDA,N)
+*>          The N-by-N orthogonal matrix Q.
+*> \endverbatim
+*>
+*> \param[out] R
+*> \verbatim
+*>          R is REAL array, dimension (LDA,MAX(M,N))
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A, AF, R and Q.
+*>          LDA >= max(M,N).
+*> \endverbatim
+*>
+*> \param[out] TAUA
+*> \verbatim
+*>          TAUA is REAL array, dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors, as returned
+*>          by SGGQRC.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB,N)
+*>          On entry, the P-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[out] BF
+*> \verbatim
+*>          BF is REAL array, dimension (LDB,N)
+*>          Details of the GQR factorization of A and B, as returned
+*>          by SGGRQF, see SGGRQF for further details.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is REAL array, dimension (LDB,P)
+*>          The P-by-P orthogonal matrix Z.
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          T is REAL array, dimension (LDB,max(P,N))
+*> \endverbatim
+*>
+*> \param[out] BWK
+*> \verbatim
+*>          BWK is REAL array, dimension (LDB,N)
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the arrays B, BF, Z and T.
+*>          LDB >= max(P,N).
+*> \endverbatim
+*>
+*> \param[out] TAUB
+*> \verbatim
+*>          TAUB is REAL array, dimension (min(P,N))
+*>          The scalar factors of the elementary reflectors, as returned
+*>          by SGGRQF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK, LWORK >= max(M,P,N)**2.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (4)
+*>          The test ratios:
+*>            RESULT(1) = norm( R - A*Q' ) / ( MAX(M,N)*norm(A)*ULP)
+*>            RESULT(2) = norm( T*Q - Z'*B ) / (MAX(P,N)*norm(B)*ULP)
+*>            RESULT(3) = norm( I - Q'*Q ) / ( N*ULP )
+*>            RESULT(4) = norm( I - Z'*Z ) / ( P*ULP )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
      $                   BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, LWORK, M, P, N
@@ -16,80 +195,6 @@
      $                   TAUA( * ), TAUB( * ),
      $                   RESULT( 4 ), RWORK( * ), WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGRQTS tests SGGRQF, which computes the GRQ factorization of an
-*  M-by-N matrix A and a P-by-N matrix B: A = R*Q and B = Z*T*Q.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  P       (input) INTEGER
-*          The number of rows of the matrix B.  P >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and B.  N >= 0.
-*
-*  A       (input) REAL array, dimension (LDA,N)
-*          The M-by-N matrix A.
-*
-*  AF      (output) REAL array, dimension (LDA,N)
-*          Details of the GRQ factorization of A and B, as returned
-*          by SGGRQF, see SGGRQF for further details.
-*
-*  Q       (output) REAL array, dimension (LDA,N)
-*          The N-by-N orthogonal matrix Q.
-*
-*  R       (workspace) REAL array, dimension (LDA,MAX(M,N))
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A, AF, R and Q.
-*          LDA >= max(M,N).
-*
-*  TAUA    (output) REAL array, dimension (min(M,N))
-*          The scalar factors of the elementary reflectors, as returned
-*          by SGGQRC.
-*
-*  B       (input) REAL array, dimension (LDB,N)
-*          On entry, the P-by-N matrix A.
-*
-*  BF      (output) REAL array, dimension (LDB,N)
-*          Details of the GQR factorization of A and B, as returned
-*          by SGGRQF, see SGGRQF for further details.
-*
-*  Z       (output) REAL array, dimension (LDB,P)
-*          The P-by-P orthogonal matrix Z.
-*
-*  T       (workspace) REAL array, dimension (LDB,max(P,N))
-*
-*  BWK     (workspace) REAL array, dimension (LDB,N)
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the arrays B, BF, Z and T.
-*          LDB >= max(P,N).
-*
-*  TAUB    (output) REAL array, dimension (min(P,N))
-*          The scalar factors of the elementary reflectors, as returned
-*          by SGGRQF.
-*
-*  WORK    (workspace) REAL array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK, LWORK >= max(M,P,N)**2.
-*
-*  RWORK   (workspace) REAL array, dimension (M)
-*
-*  RESULT  (output) REAL array, dimension (4)
-*          The test ratios:
-*            RESULT(1) = norm( R - A*Q' ) / ( MAX(M,N)*norm(A)*ULP)
-*            RESULT(2) = norm( T*Q - Z'*B ) / (MAX(P,N)*norm(B)*ULP)
-*            RESULT(3) = norm( I - Q'*Q ) / ( N*ULP )
-*            RESULT(4) = norm( I - Z'*Z ) / ( P*ULP )
 *
 *  =====================================================================
 *

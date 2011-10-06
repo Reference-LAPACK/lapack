@@ -1,16 +1,302 @@
+*> \brief \b DBBCSD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
+*                          THETA, PHI, U1, LDU1, U2, LDU2, V1T, LDV1T,
+*                          V2T, LDV2T, B11D, B11E, B12D, B12E, B21D, B21E,
+*                          B22D, B22E, WORK, LWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS
+*       INTEGER            INFO, LDU1, LDU2, LDV1T, LDV2T, LWORK, M, P, Q
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   B11D( * ), B11E( * ), B12D( * ), B12E( * ),
+*      $                   B21D( * ), B21E( * ), B22D( * ), B22E( * ),
+*      $                   PHI( * ), THETA( * ), WORK( * )
+*       DOUBLE PRECISION   U1( LDU1, * ), U2( LDU2, * ), V1T( LDV1T, * ),
+*      $                   V2T( LDV2T, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DBBCSD computes the CS decomposition of an orthogonal matrix in
+*> bidiagonal-block form,
+*>
+*>
+*>     [ B11 | B12 0  0 ]
+*>     [  0  |  0 -I  0 ]
+*> X = [----------------]
+*>     [ B21 | B22 0  0 ]
+*>     [  0  |  0  0  I ]
+*>
+*>                               [  C | -S  0  0 ]
+*>                   [ U1 |    ] [  0 |  0 -I  0 ] [ V1 |    ]**T
+*>                 = [---------] [---------------] [---------]   .
+*>                   [    | U2 ] [  S |  C  0  0 ] [    | V2 ]
+*>                               [  0 |  0  0  I ]
+*>
+*> X is M-by-M, its top-left block is P-by-Q, and Q must be no larger
+*> than P, M-P, or M-Q. (If Q is not the smallest index, then X must be
+*> transposed and/or permuted. This can be done in constant time using
+*> the TRANS and SIGNS options. See DORCSD for details.)
+*>
+*> The bidiagonal matrices B11, B12, B21, and B22 are represented
+*> implicitly by angles THETA(1:Q) and PHI(1:Q-1).
+*>
+*> The orthogonal matrices U1, U2, V1T, and V2T are input/output.
+*> The input matrices are pre- or post-multiplied by the appropriate
+*> singular vector matrices.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBU1
+*> \verbatim
+*>          JOBU1 is CHARACTER
+*>          = 'Y':      U1 is updated;
+*>          otherwise:  U1 is not updated.
+*> \endverbatim
+*>
+*> \param[in] JOBU2
+*> \verbatim
+*>          JOBU2 is CHARACTER
+*>          = 'Y':      U2 is updated;
+*>          otherwise:  U2 is not updated.
+*> \endverbatim
+*>
+*> \param[in] JOBV1T
+*> \verbatim
+*>          JOBV1T is CHARACTER
+*>          = 'Y':      V1T is updated;
+*>          otherwise:  V1T is not updated.
+*> \endverbatim
+*>
+*> \param[in] JOBV2T
+*> \verbatim
+*>          JOBV2T is CHARACTER
+*>          = 'Y':      V2T is updated;
+*>          otherwise:  V2T is not updated.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER
+*>          = 'T':      X, U1, U2, V1T, and V2T are stored in row-major
+*>                      order;
+*>          otherwise:  X, U1, U2, V1T, and V2T are stored in column-
+*>                      major order.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows and columns in X, the orthogonal matrix in
+*>          bidiagonal-block form.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is INTEGER
+*>          The number of rows in the top-left block of X. 0 <= P <= M.
+*> \endverbatim
+*>
+*> \param[in] Q
+*> \verbatim
+*>          Q is INTEGER
+*>          The number of columns in the top-left block of X.
+*>          0 <= Q <= MIN(P,M-P,M-Q).
+*> \endverbatim
+*>
+*> \param[in,out] THETA
+*> \verbatim
+*>          THETA is DOUBLE PRECISION array, dimension (Q)
+*>          On entry, the angles THETA(1),...,THETA(Q) that, along with
+*>          PHI(1), ...,PHI(Q-1), define the matrix in bidiagonal-block
+*>          form. On exit, the angles whose cosines and sines define the
+*>          diagonal blocks in the CS decomposition.
+*> \endverbatim
+*>
+*> \param[in,out] PHI
+*> \verbatim
+*>          PHI is DOUBLE PRECISION array, dimension (Q-1)
+*>          The angles PHI(1),...,PHI(Q-1) that, along with THETA(1),...,
+*>          THETA(Q), define the matrix in bidiagonal-block form.
+*> \endverbatim
+*>
+*> \param[in,out] U1
+*> \verbatim
+*>          U1 is DOUBLE PRECISION array, dimension (LDU1,P)
+*>          On entry, an LDU1-by-P matrix. On exit, U1 is postmultiplied
+*>          by the left singular vector matrix common to [ B11 ; 0 ] and
+*>          [ B12 0 0 ; 0 -I 0 0 ].
+*> \endverbatim
+*>
+*> \param[in] LDU1
+*> \verbatim
+*>          LDU1 is INTEGER
+*>          The leading dimension of the array U1.
+*> \endverbatim
+*>
+*> \param[in,out] U2
+*> \verbatim
+*>          U2 is DOUBLE PRECISION array, dimension (LDU2,M-P)
+*>          On entry, an LDU2-by-(M-P) matrix. On exit, U2 is
+*>          postmultiplied by the left singular vector matrix common to
+*>          [ B21 ; 0 ] and [ B22 0 0 ; 0 0 I ].
+*> \endverbatim
+*>
+*> \param[in] LDU2
+*> \verbatim
+*>          LDU2 is INTEGER
+*>          The leading dimension of the array U2.
+*> \endverbatim
+*>
+*> \param[in,out] V1T
+*> \verbatim
+*>          V1T is DOUBLE PRECISION array, dimension (LDV1T,Q)
+*>          On entry, a LDV1T-by-Q matrix. On exit, V1T is premultiplied
+*>          by the transpose of the right singular vector
+*>          matrix common to [ B11 ; 0 ] and [ B21 ; 0 ].
+*> \endverbatim
+*>
+*> \param[in] LDV1T
+*> \verbatim
+*>          LDV1T is INTEGER
+*>          The leading dimension of the array V1T.
+*> \endverbatim
+*>
+*> \param[in,out] V2T
+*> \verbatim
+*>          V2T is DOUBLE PRECISION array, dimenison (LDV2T,M-Q)
+*>          On entry, a LDV2T-by-(M-Q) matrix. On exit, V2T is
+*>          premultiplied by the transpose of the right
+*>          singular vector matrix common to [ B12 0 0 ; 0 -I 0 ] and
+*>          [ B22 0 0 ; 0 0 I ].
+*> \endverbatim
+*>
+*> \param[in] LDV2T
+*> \verbatim
+*>          LDV2T is INTEGER
+*>          The leading dimension of the array V2T.
+*> \endverbatim
+*>
+*> \param[out] B11D
+*> \verbatim
+*>          B11D is DOUBLE PRECISION array, dimension (Q)
+*>          When DBBCSD converges, B11D contains the cosines of THETA(1),
+*>          ..., THETA(Q). If DBBCSD fails to converge, then B11D
+*>          contains the diagonal of the partially reduced top-left
+*>          block.
+*> \endverbatim
+*>
+*> \param[out] B11E
+*> \verbatim
+*>          B11E is DOUBLE PRECISION array, dimension (Q-1)
+*>          When DBBCSD converges, B11E contains zeros. If DBBCSD fails
+*>          to converge, then B11E contains the superdiagonal of the
+*>          partially reduced top-left block.
+*> \endverbatim
+*>
+*> \param[out] B12D
+*> \verbatim
+*>          B12D is DOUBLE PRECISION array, dimension (Q)
+*>          When DBBCSD converges, B12D contains the negative sines of
+*>          THETA(1), ..., THETA(Q). If DBBCSD fails to converge, then
+*>          B12D contains the diagonal of the partially reduced top-right
+*>          block.
+*> \endverbatim
+*>
+*> \param[out] B12E
+*> \verbatim
+*>          B12E is DOUBLE PRECISION array, dimension (Q-1)
+*>          When DBBCSD converges, B12E contains zeros. If DBBCSD fails
+*>          to converge, then B12E contains the subdiagonal of the
+*>          partially reduced top-right block.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK. LWORK >= MAX(1,8*Q).
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the
+*>          routine only calculates the optimal size of the WORK array,
+*>          returns this value as the first entry of the work array, and
+*>          no error message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  if DBBCSD did not converge, INFO specifies the number
+*>                of nonzero entries in PHI, and B11D, B11E, etc.,
+*>                contain the partially reduced matrix.
+*> \endverbatim
+*> \verbatim
+*>  Reference
+*>  =========
+*> \endverbatim
+*> \verbatim
+*>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
+*>      Algorithms, 50(1):33-65, 2009.
+*> \endverbatim
+*> \verbatim
+*>  Internal Parameters
+*>  ===================
+*> \endverbatim
+*> \verbatim
+*>  TOLMUL  DOUBLE PRECISION, default = MAX(10,MIN(100,EPS**(-1/8)))
+*>          TOLMUL controls the convergence criterion of the QR loop.
+*>          Angles THETA(i), PHI(i) are rounded to 0 or PI/2 when they
+*>          are within TOLMUL*EPS of either bound.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE DBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
      $                   THETA, PHI, U1, LDU1, U2, LDU2, V1T, LDV1T,
      $                   V2T, LDV2T, B11D, B11E, B12D, B12E, B21D, B21E,
      $                   B22D, B22E, WORK, LWORK, INFO )
-      IMPLICIT NONE
 *
-*  -- LAPACK routine (version 3.3.0) --
-*
-*  -- Contributed by Brian Sutton of the Randolph-Macon College --
-*  -- November 2010
-*
+*  -- LAPACK computational routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--     
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS
@@ -23,170 +309,6 @@
       DOUBLE PRECISION   U1( LDU1, * ), U2( LDU2, * ), V1T( LDV1T, * ),
      $                   V2T( LDV2T, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DBBCSD computes the CS decomposition of an orthogonal matrix in
-*  bidiagonal-block form,
-*
-*
-*      [ B11 | B12 0  0 ]
-*      [  0  |  0 -I  0 ]
-*  X = [----------------]
-*      [ B21 | B22 0  0 ]
-*      [  0  |  0  0  I ]
-*
-*                                [  C | -S  0  0 ]
-*                    [ U1 |    ] [  0 |  0 -I  0 ] [ V1 |    ]**T
-*                  = [---------] [---------------] [---------]   .
-*                    [    | U2 ] [  S |  C  0  0 ] [    | V2 ]
-*                                [  0 |  0  0  I ]
-*
-*  X is M-by-M, its top-left block is P-by-Q, and Q must be no larger
-*  than P, M-P, or M-Q. (If Q is not the smallest index, then X must be
-*  transposed and/or permuted. This can be done in constant time using
-*  the TRANS and SIGNS options. See DORCSD for details.)
-*
-*  The bidiagonal matrices B11, B12, B21, and B22 are represented
-*  implicitly by angles THETA(1:Q) and PHI(1:Q-1).
-*
-*  The orthogonal matrices U1, U2, V1T, and V2T are input/output.
-*  The input matrices are pre- or post-multiplied by the appropriate
-*  singular vector matrices.
-*
-*  Arguments
-*  =========
-*
-*  JOBU1   (input) CHARACTER
-*          = 'Y':      U1 is updated;
-*          otherwise:  U1 is not updated.
-*
-*  JOBU2   (input) CHARACTER
-*          = 'Y':      U2 is updated;
-*          otherwise:  U2 is not updated.
-*
-*  JOBV1T  (input) CHARACTER
-*          = 'Y':      V1T is updated;
-*          otherwise:  V1T is not updated.
-*
-*  JOBV2T  (input) CHARACTER
-*          = 'Y':      V2T is updated;
-*          otherwise:  V2T is not updated.
-*
-*  TRANS   (input) CHARACTER
-*          = 'T':      X, U1, U2, V1T, and V2T are stored in row-major
-*                      order;
-*          otherwise:  X, U1, U2, V1T, and V2T are stored in column-
-*                      major order.
-*
-*  M       (input) INTEGER
-*          The number of rows and columns in X, the orthogonal matrix in
-*          bidiagonal-block form.
-*
-*  P       (input) INTEGER
-*          The number of rows in the top-left block of X. 0 <= P <= M.
-*
-*  Q       (input) INTEGER
-*          The number of columns in the top-left block of X.
-*          0 <= Q <= MIN(P,M-P,M-Q).
-*
-*  THETA   (input/output) DOUBLE PRECISION array, dimension (Q)
-*          On entry, the angles THETA(1),...,THETA(Q) that, along with
-*          PHI(1), ...,PHI(Q-1), define the matrix in bidiagonal-block
-*          form. On exit, the angles whose cosines and sines define the
-*          diagonal blocks in the CS decomposition.
-*
-*  PHI     (input/workspace) DOUBLE PRECISION array, dimension (Q-1)
-*          The angles PHI(1),...,PHI(Q-1) that, along with THETA(1),...,
-*          THETA(Q), define the matrix in bidiagonal-block form.
-*
-*  U1      (input/output) DOUBLE PRECISION array, dimension (LDU1,P)
-*          On entry, an LDU1-by-P matrix. On exit, U1 is postmultiplied
-*          by the left singular vector matrix common to [ B11 ; 0 ] and
-*          [ B12 0 0 ; 0 -I 0 0 ].
-*
-*  LDU1    (input) INTEGER
-*          The leading dimension of the array U1.
-*
-*  U2      (input/output) DOUBLE PRECISION array, dimension (LDU2,M-P)
-*          On entry, an LDU2-by-(M-P) matrix. On exit, U2 is
-*          postmultiplied by the left singular vector matrix common to
-*          [ B21 ; 0 ] and [ B22 0 0 ; 0 0 I ].
-*
-*  LDU2    (input) INTEGER
-*          The leading dimension of the array U2.
-*
-*  V1T     (input/output) DOUBLE PRECISION array, dimension (LDV1T,Q)
-*          On entry, a LDV1T-by-Q matrix. On exit, V1T is premultiplied
-*          by the transpose of the right singular vector
-*          matrix common to [ B11 ; 0 ] and [ B21 ; 0 ].
-*
-*  LDV1T   (input) INTEGER
-*          The leading dimension of the array V1T.
-*
-*  V2T     (input/output) DOUBLE PRECISION array, dimenison (LDV2T,M-Q)
-*          On entry, a LDV2T-by-(M-Q) matrix. On exit, V2T is
-*          premultiplied by the transpose of the right
-*          singular vector matrix common to [ B12 0 0 ; 0 -I 0 ] and
-*          [ B22 0 0 ; 0 0 I ].
-*
-*  LDV2T   (input) INTEGER
-*          The leading dimension of the array V2T.
-*
-*  B11D    (output) DOUBLE PRECISION array, dimension (Q)
-*          When DBBCSD converges, B11D contains the cosines of THETA(1),
-*          ..., THETA(Q). If DBBCSD fails to converge, then B11D
-*          contains the diagonal of the partially reduced top-left
-*          block.
-*
-*  B11E    (output) DOUBLE PRECISION array, dimension (Q-1)
-*          When DBBCSD converges, B11E contains zeros. If DBBCSD fails
-*          to converge, then B11E contains the superdiagonal of the
-*          partially reduced top-left block.
-*
-*  B12D    (output) DOUBLE PRECISION array, dimension (Q)
-*          When DBBCSD converges, B12D contains the negative sines of
-*          THETA(1), ..., THETA(Q). If DBBCSD fails to converge, then
-*          B12D contains the diagonal of the partially reduced top-right
-*          block.
-*
-*  B12E    (output) DOUBLE PRECISION array, dimension (Q-1)
-*          When DBBCSD converges, B12E contains zeros. If DBBCSD fails
-*          to converge, then B12E contains the subdiagonal of the
-*          partially reduced top-right block.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK. LWORK >= MAX(1,8*Q).
-*
-*          If LWORK = -1, then a workspace query is assumed; the
-*          routine only calculates the optimal size of the WORK array,
-*          returns this value as the first entry of the work array, and
-*          no error message related to LWORK is issued by XERBLA.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if DBBCSD did not converge, INFO specifies the number
-*                of nonzero entries in PHI, and B11D, B11E, etc.,
-*                contain the partially reduced matrix.
-*
-*  Reference
-*  =========
-*
-*  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
-*      Algorithms, 50(1):33-65, 2009.
-*
-*  Internal Parameters
-*  ===================
-*
-*  TOLMUL  DOUBLE PRECISION, default = MAX(10,MIN(100,EPS**(-1/8)))
-*          TOLMUL controls the convergence criterion of the QR loop.
-*          Angles THETA(i), PHI(i) are rounded to 0 or PI/2 when they
-*          are within TOLMUL*EPS of either bound.
 *
 *  ===================================================================
 *

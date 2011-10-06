@@ -1,10 +1,222 @@
+*> \brief \b STGEXC
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE STGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+*                          LDZ, IFST, ILST, WORK, LWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            WANTQ, WANTZ
+*       INTEGER            IFST, ILST, INFO, LDA, LDB, LDQ, LDZ, LWORK, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+*      $                   WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> STGEXC reorders the generalized real Schur decomposition of a real
+*> matrix pair (A,B) using an orthogonal equivalence transformation
+*>
+*>                (A, B) = Q * (A, B) * Z**T,
+*>
+*> so that the diagonal block of (A, B) with row index IFST is moved
+*> to row ILST.
+*>
+*> (A, B) must be in generalized real Schur canonical form (as returned
+*> by SGGES), i.e. A is block upper triangular with 1-by-1 and 2-by-2
+*> diagonal blocks. B is upper triangular.
+*>
+*> Optionally, the matrices Q and Z of generalized Schur vectors are
+*> updated.
+*>
+*>        Q(in) * A(in) * Z(in)**T = Q(out) * A(out) * Z(out)**T
+*>        Q(in) * B(in) * Z(in)**T = Q(out) * B(out) * Z(out)**T
+*>
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] WANTQ
+*> \verbatim
+*>          WANTQ is LOGICAL
+*>          .TRUE. : update the left transformation matrix Q;
+*>          .FALSE.: do not update Q.
+*> \endverbatim
+*>
+*> \param[in] WANTZ
+*> \verbatim
+*>          WANTZ is LOGICAL
+*>          .TRUE. : update the right transformation matrix Z;
+*>          .FALSE.: do not update Z.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A and B. N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          On entry, the matrix A in generalized real Schur canonical
+*>          form.
+*>          On exit, the updated matrix A, again in generalized
+*>          real Schur canonical form.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB,N)
+*>          On entry, the matrix B in generalized real Schur canonical
+*>          form (A,B).
+*>          On exit, the updated matrix B, again in generalized
+*>          real Schur canonical form (A,B).
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is REAL array, dimension (LDZ,N)
+*>          On entry, if WANTQ = .TRUE., the orthogonal matrix Q.
+*>          On exit, the updated matrix Q.
+*>          If WANTQ = .FALSE., Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q. LDQ >= 1.
+*>          If WANTQ = .TRUE., LDQ >= N.
+*> \endverbatim
+*>
+*> \param[in,out] Z
+*> \verbatim
+*>          Z is REAL array, dimension (LDZ,N)
+*>          On entry, if WANTZ = .TRUE., the orthogonal matrix Z.
+*>          On exit, the updated matrix Z.
+*>          If WANTZ = .FALSE., Z is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z. LDZ >= 1.
+*>          If WANTZ = .TRUE., LDZ >= N.
+*> \endverbatim
+*>
+*> \param[in,out] IFST
+*> \verbatim
+*>          IFST is INTEGER
+*> \endverbatim
+*>
+*> \param[in,out] ILST
+*> \verbatim
+*>          ILST is INTEGER
+*>          Specify the reordering of the diagonal blocks of (A, B).
+*>          The block with row index IFST is moved to row ILST, by a
+*>          sequence of swapping between adjacent blocks.
+*>          On exit, if IFST pointed on entry to the second row of
+*>          a 2-by-2 block, it is changed to point to the first row;
+*>          ILST always points to the first row of the block in its
+*>          final position (which may differ from its input value by
+*>          +1 or -1). 1 <= IFST, ILST <= N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>          LWORK >= 1 when N <= 1, otherwise LWORK >= 4*N + 16.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>           =0:  successful exit.
+*>           <0:  if INFO = -i, the i-th argument had an illegal value.
+*>           =1:  The transformed matrix pair (A, B) would be too far
+*>                from generalized Schur form; the problem is ill-
+*>                conditioned. (A, B) may have been partially reordered,
+*>                and ILST points to the first row of the current
+*>                position of the block being moved.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realGEcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*>
+*>  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
+*>      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
+*>      M.S. Moonen et al (eds), Linear Algebra for Large Scale and
+*>      Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE STGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, IFST, ILST, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            WANTQ, WANTZ
@@ -14,123 +226,6 @@
       REAL               A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
      $                   WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  STGEXC reorders the generalized real Schur decomposition of a real
-*  matrix pair (A,B) using an orthogonal equivalence transformation
-*
-*                 (A, B) = Q * (A, B) * Z**T,
-*
-*  so that the diagonal block of (A, B) with row index IFST is moved
-*  to row ILST.
-*
-*  (A, B) must be in generalized real Schur canonical form (as returned
-*  by SGGES), i.e. A is block upper triangular with 1-by-1 and 2-by-2
-*  diagonal blocks. B is upper triangular.
-*
-*  Optionally, the matrices Q and Z of generalized Schur vectors are
-*  updated.
-*
-*         Q(in) * A(in) * Z(in)**T = Q(out) * A(out) * Z(out)**T
-*         Q(in) * B(in) * Z(in)**T = Q(out) * B(out) * Z(out)**T
-*
-*
-*  Arguments
-*  =========
-*
-*  WANTQ   (input) LOGICAL
-*          .TRUE. : update the left transformation matrix Q;
-*          .FALSE.: do not update Q.
-*
-*  WANTZ   (input) LOGICAL
-*          .TRUE. : update the right transformation matrix Z;
-*          .FALSE.: do not update Z.
-*
-*  N       (input) INTEGER
-*          The order of the matrices A and B. N >= 0.
-*
-*  A       (input/output) REAL array, dimension (LDA,N)
-*          On entry, the matrix A in generalized real Schur canonical
-*          form.
-*          On exit, the updated matrix A, again in generalized
-*          real Schur canonical form.
-*
-*  LDA     (input)  INTEGER
-*          The leading dimension of the array A. LDA >= max(1,N).
-*
-*  B       (input/output) REAL array, dimension (LDB,N)
-*          On entry, the matrix B in generalized real Schur canonical
-*          form (A,B).
-*          On exit, the updated matrix B, again in generalized
-*          real Schur canonical form (A,B).
-*
-*  LDB     (input)  INTEGER
-*          The leading dimension of the array B. LDB >= max(1,N).
-*
-*  Q       (input/output) REAL array, dimension (LDZ,N)
-*          On entry, if WANTQ = .TRUE., the orthogonal matrix Q.
-*          On exit, the updated matrix Q.
-*          If WANTQ = .FALSE., Q is not referenced.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q. LDQ >= 1.
-*          If WANTQ = .TRUE., LDQ >= N.
-*
-*  Z       (input/output) REAL array, dimension (LDZ,N)
-*          On entry, if WANTZ = .TRUE., the orthogonal matrix Z.
-*          On exit, the updated matrix Z.
-*          If WANTZ = .FALSE., Z is not referenced.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z. LDZ >= 1.
-*          If WANTZ = .TRUE., LDZ >= N.
-*
-*  IFST    (input/output) INTEGER
-*
-*  ILST    (input/output) INTEGER
-*          Specify the reordering of the diagonal blocks of (A, B).
-*          The block with row index IFST is moved to row ILST, by a
-*          sequence of swapping between adjacent blocks.
-*          On exit, if IFST pointed on entry to the second row of
-*          a 2-by-2 block, it is changed to point to the first row;
-*          ILST always points to the first row of the block in its
-*          final position (which may differ from its input value by
-*          +1 or -1). 1 <= IFST, ILST <= N.
-*
-*  WORK    (workspace/output) REAL array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*          LWORK >= 1 when N <= 1, otherwise LWORK >= 4*N + 16.
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  INFO    (output) INTEGER
-*           =0:  successful exit.
-*           <0:  if INFO = -i, the i-th argument had an illegal value.
-*           =1:  The transformed matrix pair (A, B) would be too far
-*                from generalized Schur form; the problem is ill-
-*                conditioned. (A, B) may have been partially reordered,
-*                and ILST points to the first row of the current
-*                position of the block being moved.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*     Umea University, S-901 87 Umea, Sweden.
-*
-*  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
-*      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
-*      M.S. Moonen et al (eds), Linear Algebra for Large Scale and
-*      Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218.
 *
 *  =====================================================================
 *

@@ -1,33 +1,63 @@
+*> \brief \b ILAUPLO
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       INTEGER FUNCTION ILAUPLO( UPLO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This subroutine translated from a character string specifying a
+*> upper- or lower-triangular matrix to the relevant BLAST-specified
+*> integer constant.
+*>
+*> ILAUPLO returns an INTEGER.  If ILAUPLO < 0, then the input is not
+*> a character indicating an upper- or lower-triangular matrix.
+*> Otherwise ILAUPLO returns the constant value corresponding to UPLO.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       INTEGER FUNCTION ILAUPLO( UPLO )
 *
-*  -- LAPACK routine (version 3.2) --
-*
-*  -- April 2009                                                      --
-*
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
 *     ..
 *
-*  Purpose
-*  =======
-*
-*  This subroutine translated from a character string specifying a
-*  upper- or lower-triangular matrix to the relevant BLAST-specified
-*  integer constant.
-*
-*  ILAUPLO returns an INTEGER.  If ILAUPLO < 0, then the input is not
-*  a character indicating an upper- or lower-triangular matrix.
-*  Otherwise ILAUPLO returns the constant value corresponding to UPLO.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER
-*          = 'U':  A is upper triangular;
-*          = 'L':  A is lower triangular.
 *  =====================================================================
 *
 *     .. Parameters ..

@@ -1,49 +1,95 @@
-      SUBROUTINE SLARTGS( X, Y, SIGMA, CS, SN )
-      IMPLICIT NONE
+*> \brief \b SLARTGS
 *
-*  -- LAPACK routine (version 3.3.0) --
+*  =========== DOCUMENTATION ===========
 *
-*  -- Contributed by Brian Sutton of the Randolph-Macon College --
-*  -- November 2010
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
-*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--     
+*  Definition
+*  ==========
 *
-*     .. Scalar Arguments ..
-      REAL                    CS, SIGMA, SN, X, Y
-*     ..
-*
+*       SUBROUTINE SLARTGS( X, Y, SIGMA, CS, SN )
+* 
+*       .. Scalar Arguments ..
+*       REAL                    CS, SIGMA, SN, X, Y
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  SLARTGS generates a plane rotation designed to introduce a bulge in
-*  Golub-Reinsch-style implicit QR iteration for the bidiagonal SVD
-*  problem. X and Y are the top-row entries, and SIGMA is the shift.
-*  The computed CS and SN define a plane rotation satisfying
-*
-*     [  CS  SN  ]  .  [ X^2 - SIGMA ]  =  [ R ],
-*     [ -SN  CS  ]     [    X * Y    ]     [ 0 ]
-*
-*  with R nonnegative.  If X^2 - SIGMA and X * Y are 0, then the
-*  rotation is by PI/2.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLARTGS generates a plane rotation designed to introduce a bulge in
+*> Golub-Reinsch-style implicit QR iteration for the bidiagonal SVD
+*> problem. X and Y are the top-row entries, and SIGMA is the shift.
+*> The computed CS and SN define a plane rotation satisfying
+*>
+*>    [  CS  SN  ]  .  [ X^2 - SIGMA ]  =  [ R ],
+*>    [ -SN  CS  ]     [    X * Y    ]     [ 0 ]
+*>
+*> with R nonnegative.  If X^2 - SIGMA and X * Y are 0, then the
+*> rotation is by PI/2.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  X       (input) REAL
-*          The (1,1) entry of an upper bidiagonal matrix.
+*> \param[in] X
+*> \verbatim
+*>          X is REAL
+*>          The (1,1) entry of an upper bidiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] Y
+*> \verbatim
+*>          Y is REAL
+*>          The (1,2) entry of an upper bidiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] SIGMA
+*> \verbatim
+*>          SIGMA is REAL
+*>          The shift.
+*> \endverbatim
+*>
+*> \param[out] CS
+*> \verbatim
+*>          CS is REAL
+*>          The cosine of the rotation.
+*> \endverbatim
+*>
+*> \param[out] SN
+*> \verbatim
+*>          SN is REAL
+*>          The sine of the rotation.
+*> \endverbatim
+*>
 *
-*  Y       (input) REAL
-*          The (1,2) entry of an upper bidiagonal matrix.
+*  Authors
+*  =======
 *
-*  SIGMA   (input) REAL
-*          The shift.
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
-*  CS      (output) REAL
-*          The cosine of the rotation.
+*> \date November 2011
 *
-*  SN      (output) REAL
-*          The sine of the rotation.
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
+      SUBROUTINE SLARTGS( X, Y, SIGMA, CS, SN )
+*
+*  -- LAPACK computational routine (version 3.3.0) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      REAL                    CS, SIGMA, SN, X, Y
+*     ..
 *
 *  ===================================================================
 *

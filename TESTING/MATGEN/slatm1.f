@@ -1,8 +1,146 @@
+*> \brief \b SLATM1
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            IDIST, INFO, IRSIGN, MODE, N
+*       REAL               COND
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       REAL               D( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    SLATM1 computes the entries of D(1..N) as specified by
+*>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
+*>    of random numbers. SLATM1 is called by SLATMR to generate
+*>    random test matrices for LAPACK programs.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] MODE
+*> \verbatim
+*>          MODE is INTEGER
+*>           On entry describes how D is to be computed:
+*>           MODE = 0 means do not change D.
+*>           MODE = 1 sets D(1)=1 and D(2:N)=1.0/COND
+*>           MODE = 2 sets D(1:N-1)=1 and D(N)=1.0/COND
+*>           MODE = 3 sets D(I)=COND**(-(I-1)/(N-1))
+*>           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND)
+*>           MODE = 5 sets D to random numbers in the range
+*>                    ( 1/COND , 1 ) such that their logarithms
+*>                    are uniformly distributed.
+*>           MODE = 6 set D to random numbers from same distribution
+*>                    as the rest of the matrix.
+*>           MODE < 0 has the same meaning as ABS(MODE), except that
+*>              the order of the elements of D is reversed.
+*>           Thus if MODE is positive, D has entries ranging from
+*>              1 to 1/COND, if negative, from 1/COND to 1,
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] COND
+*> \verbatim
+*>          COND is REAL
+*>           On entry, used as described under MODE above.
+*>           If used, it must be >= 1. Not modified.
+*> \endverbatim
+*>
+*> \param[in] IRSIGN
+*> \verbatim
+*>          IRSIGN is INTEGER
+*>           On entry, if MODE neither -6, 0 nor 6, determines sign of
+*>           entries of D
+*>           0 => leave entries of D unchanged
+*>           1 => multiply each entry of D by 1 or -1 with probability .5
+*> \endverbatim
+*>
+*> \param[in] IDIST
+*> \verbatim
+*>          IDIST is CHARACTER*1
+*>           On entry, IDIST specifies the type of distribution to be
+*>           used to generate a random matrix .
+*>           1 => UNIFORM( 0, 1 )
+*>           2 => UNIFORM( -1, 1 )
+*>           3 => NORMAL( 0, 1 )
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension ( 4 )
+*>           On entry ISEED specifies the seed of the random number
+*>           generator. The random number generator uses a
+*>           linear congruential sequence limited to small
+*>           integers, and so should produce machine independent
+*>           random numbers. The values of ISEED are changed on
+*>           exit, and can be used in the next call to SLATM1
+*>           to continue the same random number sequence.
+*>           Changed on exit.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL array, dimension ( MIN( M , N ) )
+*>           Array to be computed according to MODE, COND and IRSIGN.
+*>           May be changed on exit if MODE is nonzero.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           Number of entries of D. Not modified.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>            0  => normal termination
+*>           -1  => if MODE not in range -6 to 6
+*>           -2  => if MODE neither -6, 0 nor 6, and
+*>                  IRSIGN neither 0 nor 1
+*>           -3  => if MODE neither -6, 0 nor 6 and COND less than 1
+*>           -4  => if MODE equals 6 or -6 and IDIST not in range 1 to 3
+*>           -7  => if N negative
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup real_matgen
+*
+*  =====================================================================
       SUBROUTINE SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     June 2010
+*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            IDIST, INFO, IRSIGN, MODE, N
@@ -12,79 +150,6 @@
       INTEGER            ISEED( 4 )
       REAL               D( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     SLATM1 computes the entries of D(1..N) as specified by
-*     MODE, COND and IRSIGN. IDIST and ISEED determine the generation
-*     of random numbers. SLATM1 is called by SLATMR to generate
-*     random test matrices for LAPACK programs.
-*
-*  Arguments
-*  =========
-*
-*  MODE     (input) INTEGER
-*           On entry describes how D is to be computed:
-*           MODE = 0 means do not change D.
-*           MODE = 1 sets D(1)=1 and D(2:N)=1.0/COND
-*           MODE = 2 sets D(1:N-1)=1 and D(N)=1.0/COND
-*           MODE = 3 sets D(I)=COND**(-(I-1)/(N-1))
-*           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND)
-*           MODE = 5 sets D to random numbers in the range
-*                    ( 1/COND , 1 ) such that their logarithms
-*                    are uniformly distributed.
-*           MODE = 6 set D to random numbers from same distribution
-*                    as the rest of the matrix.
-*           MODE < 0 has the same meaning as ABS(MODE), except that
-*              the order of the elements of D is reversed.
-*           Thus if MODE is positive, D has entries ranging from
-*              1 to 1/COND, if negative, from 1/COND to 1,
-*           Not modified.
-*
-*  COND     (input) REAL
-*           On entry, used as described under MODE above.
-*           If used, it must be >= 1. Not modified.
-*
-*  IRSIGN   (input) INTEGER
-*           On entry, if MODE neither -6, 0 nor 6, determines sign of
-*           entries of D
-*           0 => leave entries of D unchanged
-*           1 => multiply each entry of D by 1 or -1 with probability .5
-*
-*  IDIST    (input) CHARACTER*1
-*           On entry, IDIST specifies the type of distribution to be
-*           used to generate a random matrix .
-*           1 => UNIFORM( 0, 1 )
-*           2 => UNIFORM( -1, 1 )
-*           3 => NORMAL( 0, 1 )
-*           Not modified.
-*
-*  ISEED    (input/output) INTEGER array, dimension ( 4 )
-*           On entry ISEED specifies the seed of the random number
-*           generator. The random number generator uses a
-*           linear congruential sequence limited to small
-*           integers, and so should produce machine independent
-*           random numbers. The values of ISEED are changed on
-*           exit, and can be used in the next call to SLATM1
-*           to continue the same random number sequence.
-*           Changed on exit.
-*
-*  D        (input/output) REAL array, dimension ( MIN( M , N ) )
-*           Array to be computed according to MODE, COND and IRSIGN.
-*           May be changed on exit if MODE is nonzero.
-*
-*  N        (input) INTEGER
-*           Number of entries of D. Not modified.
-*
-*  INFO     (output) INTEGER
-*            0  => normal termination
-*           -1  => if MODE not in range -6 to 6
-*           -2  => if MODE neither -6, 0 nor 6, and
-*                  IRSIGN neither 0 nor 1
-*           -3  => if MODE neither -6, 0 nor 6 and COND less than 1
-*           -4  => if MODE equals 6 or -6 and IDIST not in range 1 to 3
-*           -7  => if N negative
 *
 *  =====================================================================
 *

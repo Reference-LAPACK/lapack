@@ -1,4 +1,64 @@
+*> \brief \b ZAXPY
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
+* 
+*       .. Scalar Arguments ..
+*       COMPLEX*16 ZA
+*       INTEGER INCX,INCY,N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16 ZX(*),ZY(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    ZAXPY constant times a vector plus a vector.
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_blas_level1
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>     jack dongarra, 3/11/78.
+*>     modified 12/3/93, array(1) declarations changed to array(*)
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZAXPY(N,ZA,ZX,INCX,ZY,INCY)
+*
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       COMPLEX*16 ZA
       INTEGER INCX,INCY,N
@@ -6,17 +66,6 @@
 *     .. Array Arguments ..
       COMPLEX*16 ZX(*),ZY(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     ZAXPY constant times a vector plus a vector.
-*
-*  Further Details
-*  ===============
-*
-*     jack dongarra, 3/11/78.
-*     modified 12/3/93, array(1) declarations changed to array(*)
 *
 *  =====================================================================
 *

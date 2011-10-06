@@ -1,11 +1,375 @@
+*> \brief \b ZCHKBB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
+*                          NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
+*                          BD, BE, Q, LDQ, P, LDP, C, LDC, CC, WORK,
+*                          LWORK, RWORK, RESULT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDAB, LDC, LDP, LDQ, LWORK, NOUNIT,
+*      $                   NRHS, NSIZES, NTYPES, NWDTHS
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), KK( * ), MVAL( * ), NVAL( * )
+*       DOUBLE PRECISION   BD( * ), BE( * ), RESULT( * ), RWORK( * )
+*       COMPLEX*16         A( LDA, * ), AB( LDAB, * ), C( LDC, * ),
+*      $                   CC( LDC, * ), P( LDP, * ), Q( LDQ, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZCHKBB tests the reduction of a general complex rectangular band
+*> matrix to real bidiagonal form.
+*>
+*> ZGBBRD factors a general band matrix A as  Q B P* , where * means
+*> conjugate transpose, B is upper bidiagonal, and Q and P are unitary;
+*> ZGBBRD can also overwrite a given matrix C with Q* C .
+*>
+*> For each pair of matrix dimensions (M,N) and each selected matrix
+*> type, an M by N matrix A and an M by NRHS matrix C are generated.
+*> The problem dimensions are as follows
+*>    A:          M x N
+*>    Q:          M x M
+*>    P:          N x N
+*>    B:          min(M,N) x min(M,N)
+*>    C:          M x NRHS
+*>
+*> For each generated matrix, 4 tests are performed:
+*>
+*> (1)   | A - Q B PT | / ( |A| max(M,N) ulp ), PT = P'
+*>
+*> (2)   | I - Q' Q | / ( M ulp )
+*>
+*> (3)   | I - PT PT' | / ( N ulp )
+*>
+*> (4)   | Y - Q' C | / ( |Y| max(M,NRHS) ulp ), where Y = Q' C.
+*>
+*> The "types" are specified by a logical array DOTYPE( 1:NTYPES );
+*> if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*> Currently, the list of possible types is:
+*>
+*> The possible matrix types are
+*>
+*> (1)  The zero matrix.
+*> (2)  The identity matrix.
+*>
+*> (3)  A diagonal matrix with evenly spaced entries
+*>      1, ..., ULP  and random signs.
+*>      (ULP = (first number larger than 1) - 1 )
+*> (4)  A diagonal matrix with geometrically spaced entries
+*>      1, ..., ULP  and random signs.
+*> (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
+*>      and random signs.
+*>
+*> (6)  Same as (3), but multiplied by SQRT( overflow threshold )
+*> (7)  Same as (3), but multiplied by SQRT( underflow threshold )
+*>
+*> (8)  A matrix of the form  U D V, where U and V are orthogonal and
+*>      D has evenly spaced entries 1, ..., ULP with random signs
+*>      on the diagonal.
+*>
+*> (9)  A matrix of the form  U D V, where U and V are orthogonal and
+*>      D has geometrically spaced entries 1, ..., ULP with random
+*>      signs on the diagonal.
+*>
+*> (10) A matrix of the form  U D V, where U and V are orthogonal and
+*>      D has "clustered" entries 1, ULP,..., ULP with random
+*>      signs on the diagonal.
+*>
+*> (11) Same as (8), but multiplied by SQRT( overflow threshold )
+*> (12) Same as (8), but multiplied by SQRT( underflow threshold )
+*>
+*> (13) Rectangular matrix with random entries chosen from (-1,1).
+*> (14) Same as (13), but multiplied by SQRT( overflow threshold )
+*> (15) Same as (13), but multiplied by SQRT( underflow threshold )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of values of M and N contained in the vectors
+*>          MVAL and NVAL.  The matrix sizes are used in pairs (M,N).
+*>          If NSIZES is zero, ZCHKBB does nothing.  NSIZES must be at
+*>          least zero.
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NSIZES)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NSIZES)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NWDTHS
+*> \verbatim
+*>          NWDTHS is INTEGER
+*>          The number of bandwidths to use.  If it is zero,
+*>          ZCHKBB does nothing.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] KK
+*> \verbatim
+*>          KK is INTEGER array, dimension (NWDTHS)
+*>          An array containing the bandwidths to be used for the band
+*>          matrices.  The values must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, ZCHKBB
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrix is in A.  This
+*>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated.  If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns in the "right-hand side" matrix C.
+*>          If NRHS = 0, then the operations on the right-hand side will
+*>          not be tested. NRHS must be at least 0.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to ZCHKBB to continue the same random number
+*>          sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension
+*>                            (LDA, max(NN))
+*>          Used to hold the matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  It must be at least 1
+*>          and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] AB
+*> \verbatim
+*>          AB is DOUBLE PRECISION array, dimension (LDAB, max(NN))
+*>          Used to hold A in band storage format.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of AB.  It must be at least 2 (not 1!)
+*>          and at least max( KK )+1.
+*> \endverbatim
+*>
+*> \param[out] BD
+*> \verbatim
+*>          BD is DOUBLE PRECISION array, dimension (max(NN))
+*>          Used to hold the diagonal of the bidiagonal matrix computed
+*>          by ZGBBRD.
+*> \endverbatim
+*>
+*> \param[out] BE
+*> \verbatim
+*>          BE is DOUBLE PRECISION array, dimension (max(NN))
+*>          Used to hold the off-diagonal of the bidiagonal matrix
+*>          computed by ZGBBRD.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX*16 array, dimension (LDQ, max(NN))
+*>          Used to hold the unitary matrix Q computed by ZGBBRD.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of Q.  It must be at least 1
+*>          and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] P
+*> \verbatim
+*>          P is COMPLEX*16 array, dimension (LDP, max(NN))
+*>          Used to hold the unitary matrix P computed by ZGBBRD.
+*> \endverbatim
+*>
+*> \param[in] LDP
+*> \verbatim
+*>          LDP is INTEGER
+*>          The leading dimension of P.  It must be at least 1
+*>          and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is COMPLEX*16 array, dimension (LDC, max(NN))
+*>          Used to hold the matrix C updated by ZGBBRD.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of U.  It must be at least 1
+*>          and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] CC
+*> \verbatim
+*>          CC is COMPLEX*16 array, dimension (LDC, max(NN))
+*>          Used to hold a copy of the matrix C.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          max( LDA+1, max(NN)+1 )*max(NN).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (max(NN))
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (4)
+*>          The values computed by the tests described above.
+*>          The values are currently limited to 1/ulp, to avoid
+*>          overflow.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0, then everything ran OK.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>       Some Local Variables and Parameters:
+*>       ---- ----- --------- --- ----------
+*>       ZERO, ONE       Real 0 and 1.
+*>       MAXTYP          The number of types defined.
+*>       NTEST           The number of tests performed, or which can
+*>                       be performed so far, for the current matrix.
+*>       NTESTT          The total number of tests performed so far.
+*>       NMAX            Largest value in NN.
+*>       NMATS           The number of matrices generated so far.
+*>       NERRS           The number of tests which have exceeded THRESH
+*>                       so far.
+*>       COND, IMODE     Values to be passed to the matrix generators.
+*>       ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>       OVFL, UNFL      Overflow and underflow thresholds.
+*>       ULP, ULPINV     Finest relative precision and its inverse.
+*>       RTOVFL, RTUNFL  Square roots of the previous 2 values.
+*>               The following four arrays decode JTYPE:
+*>       KTYPE(j)        The general type (1-10) for type "j".
+*>       KMODE(j)        The MODE value to be passed to the matrix
+*>                       generator for type "j".
+*>       KMAGN(j)        The order of magnitude ( O(1),
+*>                       O(overflow^(1/2) ), O(underflow^(1/2) )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
      $                   NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
      $                   BD, BE, Q, LDQ, P, LDP, C, LDC, CC, WORK,
      $                   LWORK, RWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (new routine for release 2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (input) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDAB, LDC, LDP, LDQ, LWORK, NOUNIT,
@@ -20,231 +384,6 @@
      $                   CC( LDC, * ), P( LDP, * ), Q( LDQ, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZCHKBB tests the reduction of a general complex rectangular band
-*  matrix to real bidiagonal form.
-*
-*  ZGBBRD factors a general band matrix A as  Q B P* , where * means
-*  conjugate transpose, B is upper bidiagonal, and Q and P are unitary;
-*  ZGBBRD can also overwrite a given matrix C with Q* C .
-*
-*  For each pair of matrix dimensions (M,N) and each selected matrix
-*  type, an M by N matrix A and an M by NRHS matrix C are generated.
-*  The problem dimensions are as follows
-*     A:          M x N
-*     Q:          M x M
-*     P:          N x N
-*     B:          min(M,N) x min(M,N)
-*     C:          M x NRHS
-*
-*  For each generated matrix, 4 tests are performed:
-*
-*  (1)   | A - Q B PT | / ( |A| max(M,N) ulp ), PT = P'
-*
-*  (2)   | I - Q' Q | / ( M ulp )
-*
-*  (3)   | I - PT PT' | / ( N ulp )
-*
-*  (4)   | Y - Q' C | / ( |Y| max(M,NRHS) ulp ), where Y = Q' C.
-*
-*  The "types" are specified by a logical array DOTYPE( 1:NTYPES );
-*  if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*  Currently, the list of possible types is:
-*
-*  The possible matrix types are
-*
-*  (1)  The zero matrix.
-*  (2)  The identity matrix.
-*
-*  (3)  A diagonal matrix with evenly spaced entries
-*       1, ..., ULP  and random signs.
-*       (ULP = (first number larger than 1) - 1 )
-*  (4)  A diagonal matrix with geometrically spaced entries
-*       1, ..., ULP  and random signs.
-*  (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
-*       and random signs.
-*
-*  (6)  Same as (3), but multiplied by SQRT( overflow threshold )
-*  (7)  Same as (3), but multiplied by SQRT( underflow threshold )
-*
-*  (8)  A matrix of the form  U D V, where U and V are orthogonal and
-*       D has evenly spaced entries 1, ..., ULP with random signs
-*       on the diagonal.
-*
-*  (9)  A matrix of the form  U D V, where U and V are orthogonal and
-*       D has geometrically spaced entries 1, ..., ULP with random
-*       signs on the diagonal.
-*
-*  (10) A matrix of the form  U D V, where U and V are orthogonal and
-*       D has "clustered" entries 1, ULP,..., ULP with random
-*       signs on the diagonal.
-*
-*  (11) Same as (8), but multiplied by SQRT( overflow threshold )
-*  (12) Same as (8), but multiplied by SQRT( underflow threshold )
-*
-*  (13) Rectangular matrix with random entries chosen from (-1,1).
-*  (14) Same as (13), but multiplied by SQRT( overflow threshold )
-*  (15) Same as (13), but multiplied by SQRT( underflow threshold )
-*
-*  Arguments
-*  =========
-*
-*  NSIZES  (input) INTEGER
-*          The number of values of M and N contained in the vectors
-*          MVAL and NVAL.  The matrix sizes are used in pairs (M,N).
-*          If NSIZES is zero, ZCHKBB does nothing.  NSIZES must be at
-*          least zero.
-*
-*  MVAL    (input) INTEGER array, dimension (NSIZES)
-*          The values of the matrix row dimension M.
-*
-*  NVAL    (input) INTEGER array, dimension (NSIZES)
-*          The values of the matrix column dimension N.
-*
-*  NWDTHS  (input) INTEGER
-*          The number of bandwidths to use.  If it is zero,
-*          ZCHKBB does nothing.  It must be at least zero.
-*
-*  KK      (input) INTEGER array, dimension (NWDTHS)
-*          An array containing the bandwidths to be used for the band
-*          matrices.  The values must be at least zero.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE.   If it is zero, ZCHKBB
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrix is in A.  This
-*          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated.  If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns in the "right-hand side" matrix C.
-*          If NRHS = 0, then the operations on the right-hand side will
-*          not be tested. NRHS must be at least 0.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to ZCHKBB to continue the same random number
-*          sequence.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IINFO not equal to 0.)
-*
-*  A       (input/workspace) DOUBLE PRECISION array, dimension
-*                            (LDA, max(NN))
-*          Used to hold the matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  It must be at least 1
-*          and at least max( NN ).
-*
-*  AB      (workspace) DOUBLE PRECISION array, dimension (LDAB, max(NN))
-*          Used to hold A in band storage format.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of AB.  It must be at least 2 (not 1!)
-*          and at least max( KK )+1.
-*
-*  BD      (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*          Used to hold the diagonal of the bidiagonal matrix computed
-*          by ZGBBRD.
-*
-*  BE      (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*          Used to hold the off-diagonal of the bidiagonal matrix
-*          computed by ZGBBRD.
-*
-*  Q       (workspace) COMPLEX*16 array, dimension (LDQ, max(NN))
-*          Used to hold the unitary matrix Q computed by ZGBBRD.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of Q.  It must be at least 1
-*          and at least max( NN ).
-*
-*  P       (workspace) COMPLEX*16 array, dimension (LDP, max(NN))
-*          Used to hold the unitary matrix P computed by ZGBBRD.
-*
-*  LDP     (input) INTEGER
-*          The leading dimension of P.  It must be at least 1
-*          and at least max( NN ).
-*
-*  C       (workspace) COMPLEX*16 array, dimension (LDC, max(NN))
-*          Used to hold the matrix C updated by ZGBBRD.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of U.  It must be at least 1
-*          and at least max( NN ).
-*
-*  CC      (workspace) COMPLEX*16 array, dimension (LDC, max(NN))
-*          Used to hold a copy of the matrix C.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          max( LDA+1, max(NN)+1 )*max(NN).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (max(NN))
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (4)
-*          The values computed by the tests described above.
-*          The values are currently limited to 1/ulp, to avoid
-*          overflow.
-*
-*  INFO    (output) INTEGER
-*          If 0, then everything ran OK.
-*
-*-----------------------------------------------------------------------
-*
-*       Some Local Variables and Parameters:
-*       ---- ----- --------- --- ----------
-*       ZERO, ONE       Real 0 and 1.
-*       MAXTYP          The number of types defined.
-*       NTEST           The number of tests performed, or which can
-*                       be performed so far, for the current matrix.
-*       NTESTT          The total number of tests performed so far.
-*       NMAX            Largest value in NN.
-*       NMATS           The number of matrices generated so far.
-*       NERRS           The number of tests which have exceeded THRESH
-*                       so far.
-*       COND, IMODE     Values to be passed to the matrix generators.
-*       ANORM           Norm of A; passed to matrix generators.
-*
-*       OVFL, UNFL      Overflow and underflow thresholds.
-*       ULP, ULPINV     Finest relative precision and its inverse.
-*       RTOVFL, RTUNFL  Square roots of the previous 2 values.
-*               The following four arrays decode JTYPE:
-*       KTYPE(j)        The general type (1-10) for type "j".
-*       KMODE(j)        The MODE value to be passed to the matrix
-*                       generator for type "j".
-*       KMAGN(j)        The order of magnitude ( O(1),
-*                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *
 *  =====================================================================
 *

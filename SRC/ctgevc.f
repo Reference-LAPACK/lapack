@@ -1,10 +1,220 @@
+*> \brief \b CTGEVC
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+*                          LDVL, VR, LDVR, MM, M, WORK, RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          HOWMNY, SIDE
+*       INTEGER            INFO, LDP, LDS, LDVL, LDVR, M, MM, N
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            SELECT( * )
+*       REAL               RWORK( * )
+*       COMPLEX            P( LDP, * ), S( LDS, * ), VL( LDVL, * ),
+*      $                   VR( LDVR, * ), WORK( * )
+*       ..
+*  
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CTGEVC computes some or all of the right and/or left eigenvectors of
+*> a pair of complex matrices (S,P), where S and P are upper triangular.
+*> Matrix pairs of this type are produced by the generalized Schur
+*> factorization of a complex matrix pair (A,B):
+*> 
+*>    A = Q*S*Z**H,  B = Q*P*Z**H
+*> 
+*> as computed by CGGHRD + CHGEQZ.
+*> 
+*> The right eigenvector x and the left eigenvector y of (S,P)
+*> corresponding to an eigenvalue w are defined by:
+*> 
+*>    S*x = w*P*x,  (y**H)*S = w*(y**H)*P,
+*> 
+*> where y**H denotes the conjugate tranpose of y.
+*> The eigenvalues are not input to this routine, but are computed
+*> directly from the diagonal elements of S and P.
+*> 
+*> This routine returns the matrices X and/or Y of right and left
+*> eigenvectors of (S,P), or the products Z*X and/or Q*Y,
+*> where Z and Q are input matrices.
+*> If Q and Z are the unitary factors from the generalized Schur
+*> factorization of a matrix pair (A,B), then Z*X and Q*Y
+*> are the matrices of right and left eigenvectors of (A,B).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'R': compute right eigenvectors only;
+*>          = 'L': compute left eigenvectors only;
+*>          = 'B': compute both right and left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] HOWMNY
+*> \verbatim
+*>          HOWMNY is CHARACTER*1
+*>          = 'A': compute all right and/or left eigenvectors;
+*>          = 'B': compute all right and/or left eigenvectors,
+*>                 backtransformed by the matrices in VR and/or VL;
+*>          = 'S': compute selected right and/or left eigenvectors,
+*>                 specified by the logical array SELECT.
+*> \endverbatim
+*>
+*> \param[in] SELECT
+*> \verbatim
+*>          SELECT is LOGICAL array, dimension (N)
+*>          If HOWMNY='S', SELECT specifies the eigenvectors to be
+*>          computed.  The eigenvector corresponding to the j-th
+*>          eigenvalue is computed if SELECT(j) = .TRUE..
+*>          Not referenced if HOWMNY = 'A' or 'B'.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices S and P.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is COMPLEX array, dimension (LDS,N)
+*>          The upper triangular matrix S from a generalized Schur
+*>          factorization, as computed by CHGEQZ.
+*> \endverbatim
+*>
+*> \param[in] LDS
+*> \verbatim
+*>          LDS is INTEGER
+*>          The leading dimension of array S.  LDS >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is COMPLEX array, dimension (LDP,N)
+*>          The upper triangular matrix P from a generalized Schur
+*>          factorization, as computed by CHGEQZ.  P must have real
+*>          diagonal elements.
+*> \endverbatim
+*>
+*> \param[in] LDP
+*> \verbatim
+*>          LDP is INTEGER
+*>          The leading dimension of array P.  LDP >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] VL
+*> \verbatim
+*>          VL is COMPLEX array, dimension (LDVL,MM)
+*>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
+*>          contain an N-by-N matrix Q (usually the unitary matrix Q
+*>          of left Schur vectors returned by CHGEQZ).
+*>          On exit, if SIDE = 'L' or 'B', VL contains:
+*>          if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
+*>          if HOWMNY = 'B', the matrix Q*Y;
+*>          if HOWMNY = 'S', the left eigenvectors of (S,P) specified by
+*>                      SELECT, stored consecutively in the columns of
+*>                      VL, in the same order as their eigenvalues.
+*>          Not referenced if SIDE = 'R'.
+*> \endverbatim
+*>
+*> \param[in] LDVL
+*> \verbatim
+*>          LDVL is INTEGER
+*>          The leading dimension of array VL.  LDVL >= 1, and if
+*>          SIDE = 'L' or 'l' or 'B' or 'b', LDVL >= N.
+*> \endverbatim
+*>
+*> \param[in,out] VR
+*> \verbatim
+*>          VR is COMPLEX array, dimension (LDVR,MM)
+*>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
+*>          contain an N-by-N matrix Q (usually the unitary matrix Z
+*>          of right Schur vectors returned by CHGEQZ).
+*>          On exit, if SIDE = 'R' or 'B', VR contains:
+*>          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
+*>          if HOWMNY = 'B', the matrix Z*X;
+*>          if HOWMNY = 'S', the right eigenvectors of (S,P) specified by
+*>                      SELECT, stored consecutively in the columns of
+*>                      VR, in the same order as their eigenvalues.
+*>          Not referenced if SIDE = 'L'.
+*> \endverbatim
+*>
+*> \param[in] LDVR
+*> \verbatim
+*>          LDVR is INTEGER
+*>          The leading dimension of the array VR.  LDVR >= 1, and if
+*>          SIDE = 'R' or 'B', LDVR >= N.
+*> \endverbatim
+*>
+*> \param[in] MM
+*> \verbatim
+*>          MM is INTEGER
+*>          The number of columns in the arrays VL and/or VR. MM >= M.
+*> \endverbatim
+*>
+*> \param[out] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of columns in the arrays VL and/or VR actually
+*>          used to store the eigenvectors.  If HOWMNY = 'A' or 'B', M
+*>          is set to N.  Each selected eigenvector occupies one column.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexGEcomputational
+*
+*  =====================================================================
       SUBROUTINE CTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, RWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          HOWMNY, SIDE
@@ -17,121 +227,6 @@
      $                   VR( LDVR, * ), WORK( * )
 *     ..
 *
-*
-*  Purpose
-*  =======
-*
-*  CTGEVC computes some or all of the right and/or left eigenvectors of
-*  a pair of complex matrices (S,P), where S and P are upper triangular.
-*  Matrix pairs of this type are produced by the generalized Schur
-*  factorization of a complex matrix pair (A,B):
-*  
-*     A = Q*S*Z**H,  B = Q*P*Z**H
-*  
-*  as computed by CGGHRD + CHGEQZ.
-*  
-*  The right eigenvector x and the left eigenvector y of (S,P)
-*  corresponding to an eigenvalue w are defined by:
-*  
-*     S*x = w*P*x,  (y**H)*S = w*(y**H)*P,
-*  
-*  where y**H denotes the conjugate tranpose of y.
-*  The eigenvalues are not input to this routine, but are computed
-*  directly from the diagonal elements of S and P.
-*  
-*  This routine returns the matrices X and/or Y of right and left
-*  eigenvectors of (S,P), or the products Z*X and/or Q*Y,
-*  where Z and Q are input matrices.
-*  If Q and Z are the unitary factors from the generalized Schur
-*  factorization of a matrix pair (A,B), then Z*X and Q*Y
-*  are the matrices of right and left eigenvectors of (A,B).
-*
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'R': compute right eigenvectors only;
-*          = 'L': compute left eigenvectors only;
-*          = 'B': compute both right and left eigenvectors.
-*
-*  HOWMNY  (input) CHARACTER*1
-*          = 'A': compute all right and/or left eigenvectors;
-*          = 'B': compute all right and/or left eigenvectors,
-*                 backtransformed by the matrices in VR and/or VL;
-*          = 'S': compute selected right and/or left eigenvectors,
-*                 specified by the logical array SELECT.
-*
-*  SELECT  (input) LOGICAL array, dimension (N)
-*          If HOWMNY='S', SELECT specifies the eigenvectors to be
-*          computed.  The eigenvector corresponding to the j-th
-*          eigenvalue is computed if SELECT(j) = .TRUE..
-*          Not referenced if HOWMNY = 'A' or 'B'.
-*
-*  N       (input) INTEGER
-*          The order of the matrices S and P.  N >= 0.
-*
-*  S       (input) COMPLEX array, dimension (LDS,N)
-*          The upper triangular matrix S from a generalized Schur
-*          factorization, as computed by CHGEQZ.
-*
-*  LDS     (input) INTEGER
-*          The leading dimension of array S.  LDS >= max(1,N).
-*
-*  P       (input) COMPLEX array, dimension (LDP,N)
-*          The upper triangular matrix P from a generalized Schur
-*          factorization, as computed by CHGEQZ.  P must have real
-*          diagonal elements.
-*
-*  LDP     (input) INTEGER
-*          The leading dimension of array P.  LDP >= max(1,N).
-*
-*  VL      (input/output) COMPLEX array, dimension (LDVL,MM)
-*          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
-*          contain an N-by-N matrix Q (usually the unitary matrix Q
-*          of left Schur vectors returned by CHGEQZ).
-*          On exit, if SIDE = 'L' or 'B', VL contains:
-*          if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
-*          if HOWMNY = 'B', the matrix Q*Y;
-*          if HOWMNY = 'S', the left eigenvectors of (S,P) specified by
-*                      SELECT, stored consecutively in the columns of
-*                      VL, in the same order as their eigenvalues.
-*          Not referenced if SIDE = 'R'.
-*
-*  LDVL    (input) INTEGER
-*          The leading dimension of array VL.  LDVL >= 1, and if
-*          SIDE = 'L' or 'l' or 'B' or 'b', LDVL >= N.
-*
-*  VR      (input/output) COMPLEX array, dimension (LDVR,MM)
-*          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
-*          contain an N-by-N matrix Q (usually the unitary matrix Z
-*          of right Schur vectors returned by CHGEQZ).
-*          On exit, if SIDE = 'R' or 'B', VR contains:
-*          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
-*          if HOWMNY = 'B', the matrix Z*X;
-*          if HOWMNY = 'S', the right eigenvectors of (S,P) specified by
-*                      SELECT, stored consecutively in the columns of
-*                      VR, in the same order as their eigenvalues.
-*          Not referenced if SIDE = 'L'.
-*
-*  LDVR    (input) INTEGER
-*          The leading dimension of the array VR.  LDVR >= 1, and if
-*          SIDE = 'R' or 'B', LDVR >= N.
-*
-*  MM      (input) INTEGER
-*          The number of columns in the arrays VL and/or VR. MM >= M.
-*
-*  M       (output) INTEGER
-*          The number of columns in the arrays VL and/or VR actually
-*          used to store the eigenvectors.  If HOWMNY = 'A' or 'B', M
-*          is set to N.  Each selected eigenvector occupies one column.
-*
-*  WORK    (workspace) COMPLEX array, dimension (2*N)
-*
-*  RWORK   (workspace) REAL array, dimension (2*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *
 *  =====================================================================
 *

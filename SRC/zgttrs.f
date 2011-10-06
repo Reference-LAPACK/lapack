@@ -1,10 +1,139 @@
+*> \brief \b ZGTTRS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            INFO, LDB, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       COMPLEX*16         B( LDB, * ), D( * ), DL( * ), DU( * ), DU2( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZGTTRS solves one of the systems of equations
+*>    A * X = B,  A**T * X = B,  or  A**H * X = B,
+*> with a tridiagonal matrix A using the LU factorization computed
+*> by ZGTTRF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies the form of the system of equations.
+*>          = 'N':  A * X = B     (No transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrix B.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] DL
+*> \verbatim
+*>          DL is COMPLEX*16 array, dimension (N-1)
+*>          The (n-1) multipliers that define the matrix L from the
+*>          LU factorization of A.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is COMPLEX*16 array, dimension (N)
+*>          The n diagonal elements of the upper triangular matrix U from
+*>          the LU factorization of A.
+*> \endverbatim
+*>
+*> \param[in] DU
+*> \verbatim
+*>          DU is COMPLEX*16 array, dimension (N-1)
+*>          The (n-1) elements of the first super-diagonal of U.
+*> \endverbatim
+*>
+*> \param[in] DU2
+*> \verbatim
+*>          DU2 is COMPLEX*16 array, dimension (N-2)
+*>          The (n-2) elements of the second super-diagonal of U.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          The pivot indices; for 1 <= i <= n, row i of the matrix was
+*>          interchanged with row IPIV(i).  IPIV(i) will always be either
+*>          i or i+1; IPIV(i) = i indicates a row interchange was not
+*>          required.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
+*>          On entry, the matrix of right hand side vectors B.
+*>          On exit, B is overwritten by the solution vectors X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -k, the k-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE ZGTTRS( TRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -14,61 +143,6 @@
       INTEGER            IPIV( * )
       COMPLEX*16         B( LDB, * ), D( * ), DL( * ), DU( * ), DU2( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZGTTRS solves one of the systems of equations
-*     A * X = B,  A**T * X = B,  or  A**H * X = B,
-*  with a tridiagonal matrix A using the LU factorization computed
-*  by ZGTTRF.
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies the form of the system of equations.
-*          = 'N':  A * X = B     (No transpose)
-*          = 'T':  A**T * X = B  (Transpose)
-*          = 'C':  A**H * X = B  (Conjugate transpose)
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrix B.  NRHS >= 0.
-*
-*  DL      (input) COMPLEX*16 array, dimension (N-1)
-*          The (n-1) multipliers that define the matrix L from the
-*          LU factorization of A.
-*
-*  D       (input) COMPLEX*16 array, dimension (N)
-*          The n diagonal elements of the upper triangular matrix U from
-*          the LU factorization of A.
-*
-*  DU      (input) COMPLEX*16 array, dimension (N-1)
-*          The (n-1) elements of the first super-diagonal of U.
-*
-*  DU2     (input) COMPLEX*16 array, dimension (N-2)
-*          The (n-2) elements of the second super-diagonal of U.
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          The pivot indices; for 1 <= i <= n, row i of the matrix was
-*          interchanged with row IPIV(i).  IPIV(i) will always be either
-*          i or i+1; IPIV(i) = i indicates a row interchange was not
-*          required.
-*
-*  B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS)
-*          On entry, the matrix of right hand side vectors B.
-*          On exit, B is overwritten by the solution vectors X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -k, the k-th argument had an illegal value
 *
 *  =====================================================================
 *

@@ -1,10 +1,173 @@
+*> \brief \b DLAEDA
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
+*                          GIVCOL, GIVNUM, Q, QPTR, Z, ZTEMP, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            CURLVL, CURPBM, INFO, N, TLVLS
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            GIVCOL( 2, * ), GIVPTR( * ), PERM( * ),
+*      $                   PRMPTR( * ), QPTR( * )
+*       DOUBLE PRECISION   GIVNUM( 2, * ), Q( * ), Z( * ), ZTEMP( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAEDA computes the Z vector corresponding to the merge step in the
+*> CURLVLth step of the merge process with TLVLS steps for the CURPBMth
+*> problem.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The dimension of the symmetric tridiagonal matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] TLVLS
+*> \verbatim
+*>          TLVLS is INTEGER
+*>         The total number of merging levels in the overall divide and
+*>         conquer tree.
+*> \endverbatim
+*>
+*> \param[in] CURLVL
+*> \verbatim
+*>          CURLVL is INTEGER
+*>         The current level in the overall merge routine,
+*>         0 <= curlvl <= tlvls.
+*> \endverbatim
+*>
+*> \param[in] CURPBM
+*> \verbatim
+*>          CURPBM is INTEGER
+*>         The current problem in the current level in the overall
+*>         merge routine (counting from upper left to lower right).
+*> \endverbatim
+*>
+*> \param[in] PRMPTR
+*> \verbatim
+*>          PRMPTR is INTEGER array, dimension (N lg N)
+*>         Contains a list of pointers which indicate where in PERM a
+*>         level's permutation is stored.  PRMPTR(i+1) - PRMPTR(i)
+*>         indicates the size of the permutation and incidentally the
+*>         size of the full, non-deflated problem.
+*> \endverbatim
+*>
+*> \param[in] PERM
+*> \verbatim
+*>          PERM is INTEGER array, dimension (N lg N)
+*>         Contains the permutations (from deflation and sorting) to be
+*>         applied to each eigenblock.
+*> \endverbatim
+*>
+*> \param[in] GIVPTR
+*> \verbatim
+*>          GIVPTR is INTEGER array, dimension (N lg N)
+*>         Contains a list of pointers which indicate where in GIVCOL a
+*>         level's Givens rotations are stored.  GIVPTR(i+1) - GIVPTR(i)
+*>         indicates the number of Givens rotations.
+*> \endverbatim
+*>
+*> \param[in] GIVCOL
+*> \verbatim
+*>          GIVCOL is INTEGER array, dimension (2, N lg N)
+*>         Each pair of numbers indicates a pair of columns to take place
+*>         in a Givens rotation.
+*> \endverbatim
+*>
+*> \param[in] GIVNUM
+*> \verbatim
+*>          GIVNUM is DOUBLE PRECISION array, dimension (2, N lg N)
+*>         Each number indicates the S value to be used in the
+*>         corresponding Givens rotation.
+*> \endverbatim
+*>
+*> \param[in] Q
+*> \verbatim
+*>          Q is DOUBLE PRECISION array, dimension (N**2)
+*>         Contains the square eigenblocks from previous levels, the
+*>         starting positions for blocks are given by QPTR.
+*> \endverbatim
+*>
+*> \param[in] QPTR
+*> \verbatim
+*>          QPTR is INTEGER array, dimension (N+2)
+*>         Contains a list of pointers which indicate where in Q an
+*>         eigenblock is stored.  SQRT( QPTR(i+1) - QPTR(i) ) indicates
+*>         the size of the block.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension (N)
+*>         On output this vector contains the updating vector (the last
+*>         row of the first sub-eigenvector matrix and the first row of
+*>         the second sub-eigenvector matrix).
+*> \endverbatim
+*>
+*> \param[out] ZTEMP
+*> \verbatim
+*>          ZTEMP is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Jeff Rutter, Computer Science Division, University of California
+*>     at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLAEDA( N, TLVLS, CURLVL, CURPBM, PRMPTR, PERM, GIVPTR,
      $                   GIVCOL, GIVNUM, Q, QPTR, Z, ZTEMP, INFO )
 *
-*  -- LAPACK routine (version 3.2.2) --
+*  -- LAPACK computational routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            CURLVL, CURPBM, INFO, N, TLVLS
@@ -14,81 +177,6 @@
      $                   PRMPTR( * ), QPTR( * )
       DOUBLE PRECISION   GIVNUM( 2, * ), Q( * ), Z( * ), ZTEMP( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAEDA computes the Z vector corresponding to the merge step in the
-*  CURLVLth step of the merge process with TLVLS steps for the CURPBMth
-*  problem.
-*
-*  Arguments
-*  =========
-*
-*  N      (input) INTEGER
-*         The dimension of the symmetric tridiagonal matrix.  N >= 0.
-*
-*  TLVLS  (input) INTEGER
-*         The total number of merging levels in the overall divide and
-*         conquer tree.
-*
-*  CURLVL (input) INTEGER
-*         The current level in the overall merge routine,
-*         0 <= curlvl <= tlvls.
-*
-*  CURPBM (input) INTEGER
-*         The current problem in the current level in the overall
-*         merge routine (counting from upper left to lower right).
-*
-*  PRMPTR (input) INTEGER array, dimension (N lg N)
-*         Contains a list of pointers which indicate where in PERM a
-*         level's permutation is stored.  PRMPTR(i+1) - PRMPTR(i)
-*         indicates the size of the permutation and incidentally the
-*         size of the full, non-deflated problem.
-*
-*  PERM   (input) INTEGER array, dimension (N lg N)
-*         Contains the permutations (from deflation and sorting) to be
-*         applied to each eigenblock.
-*
-*  GIVPTR (input) INTEGER array, dimension (N lg N)
-*         Contains a list of pointers which indicate where in GIVCOL a
-*         level's Givens rotations are stored.  GIVPTR(i+1) - GIVPTR(i)
-*         indicates the number of Givens rotations.
-*
-*  GIVCOL (input) INTEGER array, dimension (2, N lg N)
-*         Each pair of numbers indicates a pair of columns to take place
-*         in a Givens rotation.
-*
-*  GIVNUM (input) DOUBLE PRECISION array, dimension (2, N lg N)
-*         Each number indicates the S value to be used in the
-*         corresponding Givens rotation.
-*
-*  Q      (input) DOUBLE PRECISION array, dimension (N**2)
-*         Contains the square eigenblocks from previous levels, the
-*         starting positions for blocks are given by QPTR.
-*
-*  QPTR   (input) INTEGER array, dimension (N+2)
-*         Contains a list of pointers which indicate where in Q an
-*         eigenblock is stored.  SQRT( QPTR(i+1) - QPTR(i) ) indicates
-*         the size of the block.
-*
-*  Z      (output) DOUBLE PRECISION array, dimension (N)
-*         On output this vector contains the updating vector (the last
-*         row of the first sub-eigenvector matrix and the first row of
-*         the second sub-eigenvector matrix).
-*
-*  ZTEMP  (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Jeff Rutter, Computer Science Division, University of California
-*     at Berkeley, USA
 *
 *  =====================================================================
 *

@@ -1,9 +1,141 @@
+*> \brief \b SLAVSP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAVSP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, TRANS, UPLO
+*       INTEGER            INFO, LDB, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       REAL               A( * ), B( LDB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAVSP  performs one of the matrix-vector operations
+*>    x := A*x  or  x := A'*x,
+*> where x is an N element vector and  A is one of the factors
+*> from the block U*D*U' or L*D*L' factorization computed by SSPTRF.
+*>
+*> If TRANS = 'N', multiplies by U  or U * D  (or L  or L * D)
+*> If TRANS = 'T', multiplies by U' or D * U' (or L' or D * L' )
+*> If TRANS = 'C', multiplies by U' or D * U' (or L' or D * L' )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the factor stored in A is upper or lower
+*>          triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies the operation to be performed:
+*>          = 'N':  x := A*x
+*>          = 'T':  x := A'*x
+*>          = 'C':  x := A'*x
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>          Specifies whether or not the diagonal blocks are unit
+*>          matrices.  If the diagonal blocks are assumed to be unit,
+*>          then A = U or A = L, otherwise A = U*D or A = L*D.
+*>          = 'U':  Diagonal blocks are assumed to be unit matrices.
+*>          = 'N':  Diagonal blocks are assumed to be non-unit matrices.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows and columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of vectors
+*>          x to be multiplied by A.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (N*(N+1)/2)
+*>          The block diagonal matrix D and the multipliers used to
+*>          obtain the factor U or L, stored as a packed triangular
+*>          matrix as computed by SSPTRF.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          The pivot indices from SSPTRF.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB,NRHS)
+*>          On entry, B contains NRHS vectors of length N.
+*>          On exit, B is overwritten with the product A * B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -k, the k-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SLAVSP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
      $                   INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, TRANS, UPLO
@@ -13,66 +145,6 @@
       INTEGER            IPIV( * )
       REAL               A( * ), B( LDB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAVSP  performs one of the matrix-vector operations
-*     x := A*x  or  x := A'*x,
-*  where x is an N element vector and  A is one of the factors
-*  from the block U*D*U' or L*D*L' factorization computed by SSPTRF.
-*
-*  If TRANS = 'N', multiplies by U  or U * D  (or L  or L * D)
-*  If TRANS = 'T', multiplies by U' or D * U' (or L' or D * L' )
-*  If TRANS = 'C', multiplies by U' or D * U' (or L' or D * L' )
-*
-*  Arguments
-*  ==========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the factor stored in A is upper or lower
-*          triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies the operation to be performed:
-*          = 'N':  x := A*x
-*          = 'T':  x := A'*x
-*          = 'C':  x := A'*x
-*
-*  DIAG    (input) CHARACTER*1
-*          Specifies whether or not the diagonal blocks are unit
-*          matrices.  If the diagonal blocks are assumed to be unit,
-*          then A = U or A = L, otherwise A = U*D or A = L*D.
-*          = 'U':  Diagonal blocks are assumed to be unit matrices.
-*          = 'N':  Diagonal blocks are assumed to be non-unit matrices.
-*
-*  N       (input) INTEGER
-*          The number of rows and columns of the matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of vectors
-*          x to be multiplied by A.  NRHS >= 0.
-*
-*  A       (input) REAL array, dimension (N*(N+1)/2)
-*          The block diagonal matrix D and the multipliers used to
-*          obtain the factor U or L, stored as a packed triangular
-*          matrix as computed by SSPTRF.
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          The pivot indices from SSPTRF.
-*
-*  B       (input/output) REAL array, dimension (LDB,NRHS)
-*          On entry, B contains NRHS vectors of length N.
-*          On exit, B is overwritten with the product A * B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -k, the k-th argument had an illegal value
 *
 *  =====================================================================
 *

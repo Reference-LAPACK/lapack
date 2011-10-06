@@ -1,8 +1,143 @@
+*> \brief \b ZPSTF2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION   TOL
+*       INTEGER            INFO, LDA, N, RANK
+*       CHARACTER          UPLO
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         A( LDA, * )
+*       DOUBLE PRECISION   WORK( 2*N )
+*       INTEGER            PIV( N )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZPSTF2 computes the Cholesky factorization with complete
+*> pivoting of a complex Hermitian positive semidefinite matrix A.
+*>
+*> The factorization has the form
+*>    P**T * A * P = U**H * U ,  if UPLO = 'U',
+*>    P**T * A * P = L  * L**H,  if UPLO = 'L',
+*> where U is an upper triangular matrix and L is lower triangular, and
+*> P is stored as vector PIV.
+*>
+*> This algorithm does not attempt to check that A is positive
+*> semidefinite. This version of the algorithm calls level 2 BLAS.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          symmetric matrix A is stored.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
+*>          n by n upper triangular part of A contains the upper
+*>          triangular part of the matrix A, and the strictly lower
+*>          triangular part of A is not referenced.  If UPLO = 'L', the
+*>          leading n by n lower triangular part of A contains the lower
+*>          triangular part of the matrix A, and the strictly upper
+*>          triangular part of A is not referenced.
+*> \endverbatim
+*> \verbatim
+*>          On exit, if INFO = 0, the factor U or L from the Cholesky
+*>          factorization as above.
+*> \endverbatim
+*>
+*> \param[out] PIV
+*> \verbatim
+*>          PIV is INTEGER array, dimension (N)
+*>          PIV is such that the nonzero entries are P( PIV(K), K ) = 1.
+*> \endverbatim
+*>
+*> \param[out] RANK
+*> \verbatim
+*>          RANK is INTEGER
+*>          The rank of A given by the number of steps the algorithm
+*>          completed.
+*> \endverbatim
+*>
+*> \param[in] TOL
+*> \verbatim
+*>          TOL is DOUBLE PRECISION
+*>          User defined tolerance. If TOL < 0, then N*U*MAX( A( K,K ) )
+*>          will be used. The algorithm terminates at the (K-1)st step
+*>          if the pivot <= TOL.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (2*N)
+*>          Work space.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          < 0: If INFO = -K, the K-th argument had an illegal value,
+*>          = 0: algorithm completed successfully, and
+*>          > 0: the matrix A is either rank deficient with computed rank
+*>               as returned in RANK, or is indefinite.  See Section 7 of
+*>               LAPACK Working Note #161 for further information.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE ZPSTF2( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 *
-*  -- LAPACK PROTOTYPE routine (version 3.2.2) --
-*     Craig Lucas, University of Manchester / NAG Ltd.
-*     October, 2008
+*  -- LAPACK computational routine (version 3.2.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   TOL
@@ -14,70 +149,6 @@
       DOUBLE PRECISION   WORK( 2*N )
       INTEGER            PIV( N )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZPSTF2 computes the Cholesky factorization with complete
-*  pivoting of a complex Hermitian positive semidefinite matrix A.
-*
-*  The factorization has the form
-*     P**T * A * P = U**H * U ,  if UPLO = 'U',
-*     P**T * A * P = L  * L**H,  if UPLO = 'L',
-*  where U is an upper triangular matrix and L is lower triangular, and
-*  P is stored as vector PIV.
-*
-*  This algorithm does not attempt to check that A is positive
-*  semidefinite. This version of the algorithm calls level 2 BLAS.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          symmetric matrix A is stored.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
-*          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
-*          n by n upper triangular part of A contains the upper
-*          triangular part of the matrix A, and the strictly lower
-*          triangular part of A is not referenced.  If UPLO = 'L', the
-*          leading n by n lower triangular part of A contains the lower
-*          triangular part of the matrix A, and the strictly upper
-*          triangular part of A is not referenced.
-*
-*          On exit, if INFO = 0, the factor U or L from the Cholesky
-*          factorization as above.
-*
-*  PIV     (output) INTEGER array, dimension (N)
-*          PIV is such that the nonzero entries are P( PIV(K), K ) = 1.
-*
-*  RANK    (output) INTEGER
-*          The rank of A given by the number of steps the algorithm
-*          completed.
-*
-*  TOL     (input) DOUBLE PRECISION
-*          User defined tolerance. If TOL < 0, then N*U*MAX( A( K,K ) )
-*          will be used. The algorithm terminates at the (K-1)st step
-*          if the pivot <= TOL.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)
-*          Work space.
-*
-*  INFO    (output) INTEGER
-*          < 0: If INFO = -K, the K-th argument had an illegal value,
-*          = 0: algorithm completed successfully, and
-*          > 0: the matrix A is either rank deficient with computed rank
-*               as returned in RANK, or is indefinite.  See Section 7 of
-*               LAPACK Working Note #161 for further information.
 *
 *  =====================================================================
 *

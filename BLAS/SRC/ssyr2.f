@@ -1,4 +1,161 @@
+*> \brief \b SSYR2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+* 
+*       .. Scalar Arguments ..
+*       REAL ALPHA
+*       INTEGER INCX,INCY,LDA,N
+*       CHARACTER UPLO
+*       ..
+*       .. Array Arguments ..
+*       REAL A(LDA,*),X(*),Y(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SSYR2  performs the symmetric rank 2 operation
+*>
+*>    A := alpha*x*y**T + alpha*y*x**T + A,
+*>
+*> where alpha is a scalar, x and y are n element vectors and A is an n
+*> by n symmetric matrix.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>           On entry, UPLO specifies whether the upper or lower
+*>           triangular part of the array A is to be referenced as
+*>           follows:
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'U' or 'u'   Only the upper triangular part of A
+*>                                  is to be referenced.
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'L' or 'l'   Only the lower triangular part of A
+*>                                  is to be referenced.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry, N specifies the order of the matrix A.
+*>           N must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is REAL
+*>           On entry, ALPHA specifies the scalar alpha.
+*> \endverbatim
+*> \verbatim
+*>  X        REAL array of dimension at least
+*>           ( 1 + ( n - 1 )*abs( INCX ) ).
+*>           Before entry, the incremented array X must contain the n
+*>           element vector x.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>           On entry, INCX specifies the increment for the elements of
+*>           X. INCX must not be zero.
+*> \endverbatim
+*>
+*> \param[in] Y
+*> \verbatim
+*>          Y is REAL array of dimension at least
+*>           ( 1 + ( n - 1 )*abs( INCY ) ).
+*>           Before entry, the incremented array Y must contain the n
+*>           element vector y.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>           On entry, INCY specifies the increment for the elements of
+*>           Y. INCY must not be zero.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL array of DIMENSION ( LDA, n ).
+*>           Before entry with  UPLO = 'U' or 'u', the leading n by n
+*>           upper triangular part of the array A must contain the upper
+*>           triangular part of the symmetric matrix and the strictly
+*>           lower triangular part of A is not referenced. On exit, the
+*>           upper triangular part of the array A is overwritten by the
+*>           upper triangular part of the updated matrix.
+*>           Before entry with UPLO = 'L' or 'l', the leading n by n
+*>           lower triangular part of the array A must contain the lower
+*>           triangular part of the symmetric matrix and the strictly
+*>           upper triangular part of A is not referenced. On exit, the
+*>           lower triangular part of the array A is overwritten by the
+*>           lower triangular part of the updated matrix.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           On entry, LDA specifies the first dimension of A as declared
+*>           in the calling (sub) program. LDA must be at least
+*>           max( 1, n ).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_blas_level2
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Level 2 Blas routine.
+*>
+*>  -- Written on 22-October-1986.
+*>     Jack Dongarra, Argonne National Lab.
+*>     Jeremy Du Croz, Nag Central Office.
+*>     Sven Hammarling, Nag Central Office.
+*>     Richard Hanson, Sandia National Labs.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SSYR2(UPLO,N,ALPHA,X,INCX,Y,INCY,A,LDA)
+*
+*  -- Reference BLAS level2 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       REAL ALPHA
       INTEGER INCX,INCY,LDA,N
@@ -7,94 +164,6 @@
 *     .. Array Arguments ..
       REAL A(LDA,*),X(*),Y(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SSYR2  performs the symmetric rank 2 operation
-*
-*     A := alpha*x*y**T + alpha*y*x**T + A,
-*
-*  where alpha is a scalar, x and y are n element vectors and A is an n
-*  by n symmetric matrix.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO   - CHARACTER*1.
-*           On entry, UPLO specifies whether the upper or lower
-*           triangular part of the array A is to be referenced as
-*           follows:
-*
-*              UPLO = 'U' or 'u'   Only the upper triangular part of A
-*                                  is to be referenced.
-*
-*              UPLO = 'L' or 'l'   Only the lower triangular part of A
-*                                  is to be referenced.
-*
-*           Unchanged on exit.
-*
-*  N      - INTEGER.
-*           On entry, N specifies the order of the matrix A.
-*           N must be at least zero.
-*           Unchanged on exit.
-*
-*  ALPHA  - REAL            .
-*           On entry, ALPHA specifies the scalar alpha.
-*           Unchanged on exit.
-*
-*  X      - REAL             array of dimension at least
-*           ( 1 + ( n - 1 )*abs( INCX ) ).
-*           Before entry, the incremented array X must contain the n
-*           element vector x.
-*           Unchanged on exit.
-*
-*  INCX   - INTEGER.
-*           On entry, INCX specifies the increment for the elements of
-*           X. INCX must not be zero.
-*           Unchanged on exit.
-*
-*  Y      - REAL             array of dimension at least
-*           ( 1 + ( n - 1 )*abs( INCY ) ).
-*           Before entry, the incremented array Y must contain the n
-*           element vector y.
-*           Unchanged on exit.
-*
-*  INCY   - INTEGER.
-*           On entry, INCY specifies the increment for the elements of
-*           Y. INCY must not be zero.
-*           Unchanged on exit.
-*
-*  A      - REAL             array of DIMENSION ( LDA, n ).
-*           Before entry with  UPLO = 'U' or 'u', the leading n by n
-*           upper triangular part of the array A must contain the upper
-*           triangular part of the symmetric matrix and the strictly
-*           lower triangular part of A is not referenced. On exit, the
-*           upper triangular part of the array A is overwritten by the
-*           upper triangular part of the updated matrix.
-*           Before entry with UPLO = 'L' or 'l', the leading n by n
-*           lower triangular part of the array A must contain the lower
-*           triangular part of the symmetric matrix and the strictly
-*           upper triangular part of A is not referenced. On exit, the
-*           lower triangular part of the array A is overwritten by the
-*           lower triangular part of the updated matrix.
-*
-*  LDA    - INTEGER.
-*           On entry, LDA specifies the first dimension of A as declared
-*           in the calling (sub) program. LDA must be at least
-*           max( 1, n ).
-*           Unchanged on exit.
-*
-*  Further Details
-*  ===============
-*
-*  Level 2 Blas routine.
-*
-*  -- Written on 22-October-1986.
-*     Jack Dongarra, Argonne National Lab.
-*     Jeremy Du Croz, Nag Central Office.
-*     Sven Hammarling, Nag Central Office.
-*     Richard Hanson, Sandia National Labs.
 *
 *  =====================================================================
 *

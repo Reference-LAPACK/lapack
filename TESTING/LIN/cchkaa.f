@@ -1,79 +1,117 @@
-      PROGRAM CCHKAA
+*> \brief \b CCHKAA
 *
-*  -- LAPACK test routine (version 3.1.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     January 2007
+*  =========== DOCUMENTATION ===========
 *
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       PROGRAM CCHKAA
+* 
 *  Purpose
 *  =======
 *
-*  CCHKAA is the main test program for the COMPLEX linear equation
-*  routines.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CCHKAA is the main test program for the COMPLEX linear equation
+*> routines.
+*>
+*> The program must be driven by a short data file. The first 14 records
+*> specify problem dimensions and program options using list-directed
+*> input.  The remaining lines specify the LAPACK test paths and the
+*> number of matrix types to use in testing.  An annotated example of a
+*> data file can be obtained by deleting the first 3 characters from the
+*> following 38 lines:
+*> Data file for testing COMPLEX LAPACK linear equation routines
+*> 7                      Number of values of M
+*> 0 1 2 3 5 10 16        Values of M (row dimension)
+*> 7                      Number of values of N
+*> 0 1 2 3 5 10 16        Values of N (column dimension)
+*> 1                      Number of values of NRHS
+*> 2                      Values of NRHS (number of right hand sides)
+*> 5                      Number of values of NB
+*> 1 3 3 3 20             Values of NB (the blocksize)
+*> 1 0 5 9 1              Values of NX (crossover point)
+*> 3                      Number of values of RANK
+*> 30 50 90               Values of rank (as a % of N)
+*> 30.0                   Threshold value of test ratio
+*> T                      Put T to test the LAPACK routines
+*> T                      Put T to test the driver routines
+*> T                      Put T to test the error exits
+*> CGE   11               List types on next line if 0 < NTYPES < 11
+*> CGB    8               List types on next line if 0 < NTYPES <  8
+*> CGT   12               List types on next line if 0 < NTYPES < 12
+*> CPO    9               List types on next line if 0 < NTYPES <  9
+*> CPO    9               List types on next line if 0 < NTYPES <  9
+*> CPP    9               List types on next line if 0 < NTYPES <  9
+*> CPB    8               List types on next line if 0 < NTYPES <  8
+*> CPT   12               List types on next line if 0 < NTYPES < 12
+*> CHE   10               List types on next line if 0 < NTYPES < 10
+*> CHP   10               List types on next line if 0 < NTYPES < 10
+*> CSY   11               List types on next line if 0 < NTYPES < 11
+*> CSP   11               List types on next line if 0 < NTYPES < 11
+*> CTR   18               List types on next line if 0 < NTYPES < 18
+*> CTP   18               List types on next line if 0 < NTYPES < 18
+*> CTB   17               List types on next line if 0 < NTYPES < 17
+*> CQR    8               List types on next line if 0 < NTYPES <  8
+*> CRQ    8               List types on next line if 0 < NTYPES <  8
+*> CLQ    8               List types on next line if 0 < NTYPES <  8
+*> CQL    8               List types on next line if 0 < NTYPES <  8
+*> CQP    6               List types on next line if 0 < NTYPES <  6
+*> CTZ    3               List types on next line if 0 < NTYPES <  3
+*> CLS    6               List types on next line if 0 < NTYPES <  6
+*> CEQ
+*>
+*>\endverbatim
 *
-*  The program must be driven by a short data file. The first 14 records
-*  specify problem dimensions and program options using list-directed
-*  input.  The remaining lines specify the LAPACK test paths and the
-*  number of matrix types to use in testing.  An annotated example of a
-*  data file can be obtained by deleting the first 3 characters from the
-*  following 38 lines:
-*  Data file for testing COMPLEX LAPACK linear equation routines
-*  7                      Number of values of M
-*  0 1 2 3 5 10 16        Values of M (row dimension)
-*  7                      Number of values of N
-*  0 1 2 3 5 10 16        Values of N (column dimension)
-*  1                      Number of values of NRHS
-*  2                      Values of NRHS (number of right hand sides)
-*  5                      Number of values of NB
-*  1 3 3 3 20             Values of NB (the blocksize)
-*  1 0 5 9 1              Values of NX (crossover point)
-*  3                      Number of values of RANK
-*  30 50 90               Values of rank (as a % of N)
-*  30.0                   Threshold value of test ratio
-*  T                      Put T to test the LAPACK routines
-*  T                      Put T to test the driver routines
-*  T                      Put T to test the error exits
-*  CGE   11               List types on next line if 0 < NTYPES < 11
-*  CGB    8               List types on next line if 0 < NTYPES <  8
-*  CGT   12               List types on next line if 0 < NTYPES < 12
-*  CPO    9               List types on next line if 0 < NTYPES <  9
-*  CPO    9               List types on next line if 0 < NTYPES <  9
-*  CPP    9               List types on next line if 0 < NTYPES <  9
-*  CPB    8               List types on next line if 0 < NTYPES <  8
-*  CPT   12               List types on next line if 0 < NTYPES < 12
-*  CHE   10               List types on next line if 0 < NTYPES < 10
-*  CHP   10               List types on next line if 0 < NTYPES < 10
-*  CSY   11               List types on next line if 0 < NTYPES < 11
-*  CSP   11               List types on next line if 0 < NTYPES < 11
-*  CTR   18               List types on next line if 0 < NTYPES < 18
-*  CTP   18               List types on next line if 0 < NTYPES < 18
-*  CTB   17               List types on next line if 0 < NTYPES < 17
-*  CQR    8               List types on next line if 0 < NTYPES <  8
-*  CRQ    8               List types on next line if 0 < NTYPES <  8
-*  CLQ    8               List types on next line if 0 < NTYPES <  8
-*  CQL    8               List types on next line if 0 < NTYPES <  8
-*  CQP    6               List types on next line if 0 < NTYPES <  6
-*  CTZ    3               List types on next line if 0 < NTYPES <  3
-*  CLS    6               List types on next line if 0 < NTYPES <  6
-*  CEQ
+*  Arguments
+*  =========
 *
-*  Internal Parameters
-*  ===================
+*> \verbatim
+*>  NMAX    INTEGER
+*>          The maximum allowable value for N.
+*> \endverbatim
+*> \verbatim
+*>  MAXIN   INTEGER
+*>          The number of different values that can be used for each of
+*>          M, N, or NB
+*> \endverbatim
+*> \verbatim
+*>  MAXRHS  INTEGER
+*>          The maximum number of right hand sides
+*> \endverbatim
+*> \verbatim
+*>  NIN     INTEGER
+*>          The unit number for input
+*> \endverbatim
+*> \verbatim
+*>  NOUT    INTEGER
+*>          The unit number for output
+*> \endverbatim
+*>
 *
-*  NMAX    INTEGER
-*          The maximum allowable value for N.
+*  Authors
+*  =======
 *
-*  MAXIN   INTEGER
-*          The number of different values that can be used for each of
-*          M, N, or NB
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
-*  MAXRHS  INTEGER
-*          The maximum number of right hand sides
+*> \date November 2011
 *
-*  NIN     INTEGER
-*          The unit number for input
+*> \ingroup complex_lin
 *
-*  NOUT    INTEGER
-*          The unit number for output
+*  =====================================================================
+      PROGRAM CCHKAA
+*
+*  -- LAPACK test routine (version 3.1.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *  =====================================================================
 *

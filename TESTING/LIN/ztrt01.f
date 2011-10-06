@@ -1,9 +1,136 @@
+*> \brief \b ZTRT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
+*                          RWORK, RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, UPLO
+*       INTEGER            LDA, LDAINV, N
+*       DOUBLE PRECISION   RCOND, RESID
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( LDA, * ), AINV( LDAINV, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZTRT01 computes the residual for a triangular matrix A times its
+*> inverse:
+*>    RESID = norm( A*AINV - I ) / ( N * norm(A) * norm(AINV) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the matrix A is upper or lower triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>          Specifies whether or not the matrix A is unit triangular.
+*>          = 'N':  Non-unit triangular
+*>          = 'U':  Unit triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          The triangular matrix A.  If UPLO = 'U', the leading n by n
+*>          upper triangular part of the array A contains the upper
+*>          triangular matrix, and the strictly lower triangular part of
+*>          A is not referenced.  If UPLO = 'L', the leading n by n lower
+*>          triangular part of the array A contains the lower triangular
+*>          matrix, and the strictly upper triangular part of A is not
+*>          referenced.  If DIAG = 'U', the diagonal elements of A are
+*>          also not referenced and are assumed to be 1.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] AINV
+*> \verbatim
+*>          AINV is COMPLEX*16 array, dimension (LDAINV,N)
+*>          On entry, the (triangular) inverse of the matrix A, in the
+*>          same storage format as A.
+*>          On exit, the contents of AINV are destroyed.
+*> \endverbatim
+*>
+*> \param[in] LDAINV
+*> \verbatim
+*>          LDAINV is INTEGER
+*>          The leading dimension of the array AINV.  LDAINV >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>          The reciprocal condition number of A, computed as
+*>          1/(norm(A) * norm(AINV)).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is DOUBLE PRECISION
+*>          norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZTRT01( UPLO, DIAG, N, A, LDA, AINV, LDAINV, RCOND,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, UPLO
@@ -14,60 +141,6 @@
       DOUBLE PRECISION   RWORK( * )
       COMPLEX*16         A( LDA, * ), AINV( LDAINV, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZTRT01 computes the residual for a triangular matrix A times its
-*  inverse:
-*     RESID = norm( A*AINV - I ) / ( N * norm(A) * norm(AINV) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the matrix A is upper or lower triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  DIAG    (input) CHARACTER*1
-*          Specifies whether or not the matrix A is unit triangular.
-*          = 'N':  Non-unit triangular
-*          = 'U':  Unit triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input) COMPLEX*16 array, dimension (LDA,N)
-*          The triangular matrix A.  If UPLO = 'U', the leading n by n
-*          upper triangular part of the array A contains the upper
-*          triangular matrix, and the strictly lower triangular part of
-*          A is not referenced.  If UPLO = 'L', the leading n by n lower
-*          triangular part of the array A contains the lower triangular
-*          matrix, and the strictly upper triangular part of A is not
-*          referenced.  If DIAG = 'U', the diagonal elements of A are
-*          also not referenced and are assumed to be 1.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  AINV    (input) COMPLEX*16 array, dimension (LDAINV,N)
-*          On entry, the (triangular) inverse of the matrix A, in the
-*          same storage format as A.
-*          On exit, the contents of AINV are destroyed.
-*
-*  LDAINV  (input) INTEGER
-*          The leading dimension of the array AINV.  LDAINV >= max(1,N).
-*
-*  RCOND   (output) DOUBLE PRECISION
-*          The reciprocal condition number of A, computed as
-*          1/(norm(A) * norm(AINV)).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  RESID   (output) DOUBLE PRECISION
-*          norm(A*AINV - I) / ( N * norm(A) * norm(AINV) * EPS )
 *
 *  =====================================================================
 *
