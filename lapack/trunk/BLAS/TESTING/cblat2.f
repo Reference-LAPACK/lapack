@@ -1,72 +1,115 @@
+*> \brief \b CBLAT2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       PROGRAM CBLAT2
+* 
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Test program for the COMPLEX          Level 2 Blas.
+*>
+*> The program must be driven by a short data file. The first 18 records
+*> of the file are read using list-directed input, the last 17 records
+*> are read using the format ( A6, L2 ). An annotated example of a data
+*> file can be obtained by deleting the first 3 characters from the
+*> following 35 lines:
+*> 'cblat2.out'      NAME OF SUMMARY OUTPUT FILE
+*> 6                 UNIT NUMBER OF SUMMARY FILE
+*> 'CBLA2T.SNAP'     NAME OF SNAPSHOT OUTPUT FILE
+*> -1                UNIT NUMBER OF SNAPSHOT FILE (NOT USED IF .LT. 0)
+*> F        LOGICAL FLAG, T TO REWIND SNAPSHOT FILE AFTER EACH RECORD.
+*> F        LOGICAL FLAG, T TO STOP ON FAILURES.
+*> T        LOGICAL FLAG, T TO TEST ERROR EXITS.
+*> 16.0     THRESHOLD VALUE OF TEST RATIO
+*> 6                 NUMBER OF VALUES OF N
+*> 0 1 2 3 5 9       VALUES OF N
+*> 4                 NUMBER OF VALUES OF K
+*> 0 1 2 4           VALUES OF K
+*> 4                 NUMBER OF VALUES OF INCX AND INCY
+*> 1 2 -1 -2         VALUES OF INCX AND INCY
+*> 3                 NUMBER OF VALUES OF ALPHA
+*> (0.0,0.0) (1.0,0.0) (0.7,-0.9)       VALUES OF ALPHA
+*> 3                 NUMBER OF VALUES OF BETA
+*> (0.0,0.0) (1.0,0.0) (1.3,-1.1)       VALUES OF BETA
+*> CGEMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CGBMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CHEMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CHBMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CHPMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CTRMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CTBMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CTPMV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CTRSV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CTBSV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CTPSV  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CGERC  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CGERU  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CHER   T PUT F FOR NO TEST. SAME COLUMNS.
+*> CHPR   T PUT F FOR NO TEST. SAME COLUMNS.
+*> CHER2  T PUT F FOR NO TEST. SAME COLUMNS.
+*> CHPR2  T PUT F FOR NO TEST. SAME COLUMNS.
+*>
+*> Further Details
+*> ===============
+*>
+*>    See:
+*>
+*>       Dongarra J. J., Du Croz J. J., Hammarling S.  and Hanson R. J..
+*>       An  extended  set of Fortran  Basic Linear Algebra Subprograms.
+*>
+*>       Technical  Memoranda  Nos. 41 (revision 3) and 81,  Mathematics
+*>       and  Computer Science  Division,  Argonne  National Laboratory,
+*>       9700 South Cass Avenue, Argonne, Illinois 60439, US.
+*>
+*>       Or
+*>
+*>       NAG  Technical Reports TR3/87 and TR4/87,  Numerical Algorithms
+*>       Group  Ltd.,  NAG  Central  Office,  256  Banbury  Road, Oxford
+*>       OX2 7DE, UK,  and  Numerical Algorithms Group Inc.,  1101  31st
+*>       Street,  Suite 100,  Downers Grove,  Illinois 60515-1263,  USA.
+*>
+*>
+*> -- Written on 10-August-1987.
+*>    Richard Hanson, Sandia National Labs.
+*>    Jeremy Du Croz, NAG Central Office.
+*>
+*>    10-9-00:  Change STATUS='NEW' to 'UNKNOWN' so that the testers
+*>              can be run multiple times without deleting generated
+*>              output files (susan)
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_blas_testing
+*
+*  =====================================================================
       PROGRAM CBLAT2
 *
-*  Test program for the COMPLEX          Level 2 Blas.
+*  -- Reference BLAS test routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*  The program must be driven by a short data file. The first 18 records
-*  of the file are read using list-directed input, the last 17 records
-*  are read using the format ( A6, L2 ). An annotated example of a data
-*  file can be obtained by deleting the first 3 characters from the
-*  following 35 lines:
-*  'cblat2.out'      NAME OF SUMMARY OUTPUT FILE
-*  6                 UNIT NUMBER OF SUMMARY FILE
-*  'CBLA2T.SNAP'     NAME OF SNAPSHOT OUTPUT FILE
-*  -1                UNIT NUMBER OF SNAPSHOT FILE (NOT USED IF .LT. 0)
-*  F        LOGICAL FLAG, T TO REWIND SNAPSHOT FILE AFTER EACH RECORD.
-*  F        LOGICAL FLAG, T TO STOP ON FAILURES.
-*  T        LOGICAL FLAG, T TO TEST ERROR EXITS.
-*  16.0     THRESHOLD VALUE OF TEST RATIO
-*  6                 NUMBER OF VALUES OF N
-*  0 1 2 3 5 9       VALUES OF N
-*  4                 NUMBER OF VALUES OF K
-*  0 1 2 4           VALUES OF K
-*  4                 NUMBER OF VALUES OF INCX AND INCY
-*  1 2 -1 -2         VALUES OF INCX AND INCY
-*  3                 NUMBER OF VALUES OF ALPHA
-*  (0.0,0.0) (1.0,0.0) (0.7,-0.9)       VALUES OF ALPHA
-*  3                 NUMBER OF VALUES OF BETA
-*  (0.0,0.0) (1.0,0.0) (1.3,-1.1)       VALUES OF BETA
-*  CGEMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CGBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CHEMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CHBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CHPMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CTRMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CTBMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CTPMV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CTRSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CTBSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CTPSV  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CGERC  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CGERU  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CHER   T PUT F FOR NO TEST. SAME COLUMNS.
-*  CHPR   T PUT F FOR NO TEST. SAME COLUMNS.
-*  CHER2  T PUT F FOR NO TEST. SAME COLUMNS.
-*  CHPR2  T PUT F FOR NO TEST. SAME COLUMNS.
-*
-*     See:
-*
-*        Dongarra J. J., Du Croz J. J., Hammarling S.  and Hanson R. J..
-*        An  extended  set of Fortran  Basic Linear Algebra Subprograms.
-*
-*        Technical  Memoranda  Nos. 41 (revision 3) and 81,  Mathematics
-*        and  Computer Science  Division,  Argonne  National Laboratory,
-*        9700 South Cass Avenue, Argonne, Illinois 60439, US.
-*
-*        Or
-*
-*        NAG  Technical Reports TR3/87 and TR4/87,  Numerical Algorithms
-*        Group  Ltd.,  NAG  Central  Office,  256  Banbury  Road, Oxford
-*        OX2 7DE, UK,  and  Numerical Algorithms Group Inc.,  1101  31st
-*        Street,  Suite 100,  Downers Grove,  Illinois 60515-1263,  USA.
-*
-*
-*  -- Written on 10-August-1987.
-*     Richard Hanson, Sandia National Labs.
-*     Jeremy Du Croz, NAG Central Office.
-*
-*     10-9-00:  Change STATUS='NEW' to 'UNKNOWN' so that the testers
-*               can be run multiple times without deleting generated
-*               output files (susan)
+*  =====================================================================
 *
 *     .. Parameters ..
       INTEGER            NIN

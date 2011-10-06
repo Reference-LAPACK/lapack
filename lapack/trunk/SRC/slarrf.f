@@ -1,3 +1,185 @@
+*> \brief \b SLARRF
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLARRF( N, D, L, LD, CLSTRT, CLEND,
+*                          W, WGAP, WERR,
+*                          SPDIAM, CLGAPL, CLGAPR, PIVMIN, SIGMA,
+*                          DPLUS, LPLUS, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            CLSTRT, CLEND, INFO, N
+*       REAL               CLGAPL, CLGAPR, PIVMIN, SIGMA, SPDIAM
+*       ..
+*       .. Array Arguments ..
+*       REAL               D( * ), DPLUS( * ), L( * ), LD( * ),
+*      $          LPLUS( * ), W( * ), WGAP( * ), WERR( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Given the initial representation L D L^T and its cluster of close
+*> eigenvalues (in a relative measure), W( CLSTRT ), W( CLSTRT+1 ), ...
+*> W( CLEND ), SLARRF finds a new relatively robust representation
+*> L D L^T - SIGMA I = L(+) D(+) L(+)^T such that at least one of the
+*> eigenvalues of L(+) D(+) L(+)^T is relatively isolated.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix (subblock, if the matrix splitted).
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The N diagonal elements of the diagonal matrix D.
+*> \endverbatim
+*>
+*> \param[in] L
+*> \verbatim
+*>          L is REAL array, dimension (N-1)
+*>          The (N-1) subdiagonal elements of the unit bidiagonal
+*>          matrix L.
+*> \endverbatim
+*>
+*> \param[in] LD
+*> \verbatim
+*>          LD is REAL array, dimension (N-1)
+*>          The (N-1) elements L(i)*D(i).
+*> \endverbatim
+*>
+*> \param[in] CLSTRT
+*> \verbatim
+*>          CLSTRT is INTEGER
+*>          The index of the first eigenvalue in the cluster.
+*> \endverbatim
+*>
+*> \param[in] CLEND
+*> \verbatim
+*>          CLEND is INTEGER
+*>          The index of the last eigenvalue in the cluster.
+*> \endverbatim
+*>
+*> \param[in] W
+*> \verbatim
+*>          W is REAL array, dimension
+*>          dimension is >=  (CLEND-CLSTRT+1)
+*>          The eigenvalue APPROXIMATIONS of L D L^T in ascending order.
+*>          W( CLSTRT ) through W( CLEND ) form the cluster of relatively
+*>          close eigenalues.
+*> \endverbatim
+*>
+*> \param[in,out] WGAP
+*> \verbatim
+*>          WGAP is REAL array, dimension
+*>          dimension is >=  (CLEND-CLSTRT+1)
+*>          The separation from the right neighbor eigenvalue in W.
+*> \endverbatim
+*>
+*> \param[in] WERR
+*> \verbatim
+*>          WERR is REAL array, dimension
+*>          dimension is >=  (CLEND-CLSTRT+1)
+*>          WERR contain the semiwidth of the uncertainty
+*>          interval of the corresponding eigenvalue APPROXIMATION in W
+*> \endverbatim
+*>
+*> \param[in] SPDIAM
+*> \verbatim
+*>          SPDIAM is REAL
+*>          estimate of the spectral diameter obtained from the
+*>          Gerschgorin intervals
+*> \endverbatim
+*>
+*> \param[in] CLGAPL
+*> \verbatim
+*>          CLGAPL is REAL
+*> \endverbatim
+*>
+*> \param[in] CLGAPR
+*> \verbatim
+*>          CLGAPR is REAL
+*>          absolute gap on each end of the cluster.
+*>          Set by the calling routine to protect against shifts too close
+*>          to eigenvalues outside the cluster.
+*> \endverbatim
+*>
+*> \param[in] PIVMIN
+*> \verbatim
+*>          PIVMIN is REAL
+*>          The minimum pivot allowed in the Sturm sequence.
+*> \endverbatim
+*>
+*> \param[out] SIGMA
+*> \verbatim
+*>          SIGMA is REAL
+*>          The shift used to form L(+) D(+) L(+)^T.
+*> \endverbatim
+*>
+*> \param[out] DPLUS
+*> \verbatim
+*>          DPLUS is REAL array, dimension (N)
+*>          The N diagonal elements of the diagonal matrix D(+).
+*> \endverbatim
+*>
+*> \param[out] LPLUS
+*> \verbatim
+*>          LPLUS is REAL array, dimension (N-1)
+*>          The first (N-1) elements of LPLUS contain the subdiagonal
+*>          elements of the unit bidiagonal matrix L(+).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (2*N)
+*>          Workspace.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Beresford Parlett, University of California, Berkeley, USA
+*>     Jim Demmel, University of California, Berkeley, USA
+*>     Inderjit Dhillon, University of Texas, Austin, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>     Christof Voemel, University of California, Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLARRF( N, D, L, LD, CLSTRT, CLEND,
      $                   W, WGAP, WERR,
      $                   SPDIAM, CLGAPL, CLGAPR, PIVMIN, SIGMA,
@@ -6,8 +188,8 @@
 *  -- LAPACK auxiliary routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
-**
+*     November 2011
+*
 *     .. Scalar Arguments ..
       INTEGER            CLSTRT, CLEND, INFO, N
       REAL               CLGAPL, CLGAPR, PIVMIN, SIGMA, SPDIAM
@@ -16,89 +198,6 @@
       REAL               D( * ), DPLUS( * ), L( * ), LD( * ),
      $          LPLUS( * ), W( * ), WGAP( * ), WERR( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Given the initial representation L D L^T and its cluster of close
-*  eigenvalues (in a relative measure), W( CLSTRT ), W( CLSTRT+1 ), ...
-*  W( CLEND ), SLARRF finds a new relatively robust representation
-*  L D L^T - SIGMA I = L(+) D(+) L(+)^T such that at least one of the
-*  eigenvalues of L(+) D(+) L(+)^T is relatively isolated.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix (subblock, if the matrix splitted).
-*
-*  D       (input) REAL array, dimension (N)
-*          The N diagonal elements of the diagonal matrix D.
-*
-*  L       (input) REAL array, dimension (N-1)
-*          The (N-1) subdiagonal elements of the unit bidiagonal
-*          matrix L.
-*
-*  LD      (input) REAL array, dimension (N-1)
-*          The (N-1) elements L(i)*D(i).
-*
-*  CLSTRT  (input) INTEGER
-*          The index of the first eigenvalue in the cluster.
-*
-*  CLEND   (input) INTEGER
-*          The index of the last eigenvalue in the cluster.
-*
-*  W       (input) REAL array, dimension
-*          dimension is >=  (CLEND-CLSTRT+1)
-*          The eigenvalue APPROXIMATIONS of L D L^T in ascending order.
-*          W( CLSTRT ) through W( CLEND ) form the cluster of relatively
-*          close eigenalues.
-*
-*  WGAP    (input/output) REAL array, dimension
-*          dimension is >=  (CLEND-CLSTRT+1)
-*          The separation from the right neighbor eigenvalue in W.
-*
-*  WERR    (input) REAL array, dimension
-*          dimension is >=  (CLEND-CLSTRT+1)
-*          WERR contain the semiwidth of the uncertainty
-*          interval of the corresponding eigenvalue APPROXIMATION in W
-*
-*  SPDIAM  (input) REAL
-*          estimate of the spectral diameter obtained from the
-*          Gerschgorin intervals
-*
-*  CLGAPL  (input) REAL
-*
-*  CLGAPR  (input) REAL
-*          absolute gap on each end of the cluster.
-*          Set by the calling routine to protect against shifts too close
-*          to eigenvalues outside the cluster.
-*
-*  PIVMIN  (input) REAL
-*          The minimum pivot allowed in the Sturm sequence.
-*
-*  SIGMA   (output) REAL            
-*          The shift used to form L(+) D(+) L(+)^T.
-*
-*  DPLUS   (output) REAL array, dimension (N)
-*          The N diagonal elements of the diagonal matrix D(+).
-*
-*  LPLUS   (output) REAL array, dimension (N-1)
-*          The first (N-1) elements of LPLUS contain the subdiagonal
-*          elements of the unit bidiagonal matrix L(+).
-*
-*  WORK    (workspace) REAL array, dimension (2*N)
-*          Workspace.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Beresford Parlett, University of California, Berkeley, USA
-*     Jim Demmel, University of California, Berkeley, USA
-*     Inderjit Dhillon, University of Texas, Austin, USA
-*     Osni Marques, LBNL/NERSC, USA
-*     Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
 *

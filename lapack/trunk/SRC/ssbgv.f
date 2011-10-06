@@ -1,10 +1,180 @@
+*> \brief \b SSBGST
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SSBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
+*                         LDZ, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBZ, UPLO
+*       INTEGER            INFO, KA, KB, LDAB, LDBB, LDZ, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               AB( LDAB, * ), BB( LDBB, * ), W( * ),
+*      $                   WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SSBGV computes all the eigenvalues, and optionally, the eigenvectors
+*> of a real generalized symmetric-definite banded eigenproblem, of
+*> the form A*x=(lambda)*B*x. Here A and B are assumed to be symmetric
+*> and banded, and B is also positive definite.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBZ
+*> \verbatim
+*>          JOBZ is CHARACTER*1
+*>          = 'N':  Compute eigenvalues only;
+*>          = 'V':  Compute eigenvalues and eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangles of A and B are stored;
+*>          = 'L':  Lower triangles of A and B are stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A and B.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KA
+*> \verbatim
+*>          KA is INTEGER
+*>          The number of superdiagonals of the matrix A if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'. KA >= 0.
+*> \endverbatim
+*>
+*> \param[in] KB
+*> \verbatim
+*>          KB is INTEGER
+*>          The number of superdiagonals of the matrix B if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'. KB >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AB
+*> \verbatim
+*>          AB is REAL array, dimension (LDAB, N)
+*>          On entry, the upper or lower triangle of the symmetric band
+*>          matrix A, stored in the first ka+1 rows of the array.  The
+*>          j-th column of A is stored in the j-th column of the array AB
+*>          as follows:
+*>          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
+*> \endverbatim
+*> \verbatim
+*>          On exit, the contents of AB are destroyed.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KA+1.
+*> \endverbatim
+*>
+*> \param[in,out] BB
+*> \verbatim
+*>          BB is REAL array, dimension (LDBB, N)
+*>          On entry, the upper or lower triangle of the symmetric band
+*>          matrix B, stored in the first kb+1 rows of the array.  The
+*>          j-th column of B is stored in the j-th column of the array BB
+*>          as follows:
+*>          if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for max(1,j-kb)<=i<=j;
+*>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
+*> \endverbatim
+*> \verbatim
+*>          On exit, the factor S from the split Cholesky factorization
+*>          B = S**T*S, as returned by SPBSTF.
+*> \endverbatim
+*>
+*> \param[in] LDBB
+*> \verbatim
+*>          LDBB is INTEGER
+*>          The leading dimension of the array BB.  LDBB >= KB+1.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is REAL array, dimension (N)
+*>          If INFO = 0, the eigenvalues in ascending order.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is REAL array, dimension (LDZ, N)
+*>          If JOBZ = 'V', then if INFO = 0, Z contains the matrix Z of
+*>          eigenvectors, with the i-th column of Z holding the
+*>          eigenvector associated with W(i). The eigenvectors are
+*>          normalized so that Z**T*B*Z = I.
+*>          If JOBZ = 'N', then Z is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1, and if
+*>          JOBZ = 'V', LDZ >= N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (3*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, and i is:
+*>             <= N:  the algorithm failed to converge:
+*>                    i off-diagonal elements of an intermediate
+*>                    tridiagonal form did not converge to zero;
+*>             > N:   if INFO = N + i, for 1 <= i <= N, then SPBSTF
+*>                    returned INFO = i: B is not positive definite.
+*>                    The factorization of B could not be completed and
+*>                    no eigenvalues or eigenvectors were computed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHEReigen
+*
+*  =====================================================================
       SUBROUTINE SSBGV( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W, Z,
      $                  LDZ, WORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, UPLO
@@ -14,91 +184,6 @@
       REAL               AB( LDAB, * ), BB( LDBB, * ), W( * ),
      $                   WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SSBGV computes all the eigenvalues, and optionally, the eigenvectors
-*  of a real generalized symmetric-definite banded eigenproblem, of
-*  the form A*x=(lambda)*B*x. Here A and B are assumed to be symmetric
-*  and banded, and B is also positive definite.
-*
-*  Arguments
-*  =========
-*
-*  JOBZ    (input) CHARACTER*1
-*          = 'N':  Compute eigenvalues only;
-*          = 'V':  Compute eigenvalues and eigenvectors.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangles of A and B are stored;
-*          = 'L':  Lower triangles of A and B are stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrices A and B.  N >= 0.
-*
-*  KA      (input) INTEGER
-*          The number of superdiagonals of the matrix A if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'. KA >= 0.
-*
-*  KB      (input) INTEGER
-*          The number of superdiagonals of the matrix B if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'. KB >= 0.
-*
-*  AB      (input/output) REAL array, dimension (LDAB, N)
-*          On entry, the upper or lower triangle of the symmetric band
-*          matrix A, stored in the first ka+1 rows of the array.  The
-*          j-th column of A is stored in the j-th column of the array AB
-*          as follows:
-*          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
-*
-*          On exit, the contents of AB are destroyed.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KA+1.
-*
-*  BB      (input/output) REAL array, dimension (LDBB, N)
-*          On entry, the upper or lower triangle of the symmetric band
-*          matrix B, stored in the first kb+1 rows of the array.  The
-*          j-th column of B is stored in the j-th column of the array BB
-*          as follows:
-*          if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for max(1,j-kb)<=i<=j;
-*          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
-*
-*          On exit, the factor S from the split Cholesky factorization
-*          B = S**T*S, as returned by SPBSTF.
-*
-*  LDBB    (input) INTEGER
-*          The leading dimension of the array BB.  LDBB >= KB+1.
-*
-*  W       (output) REAL array, dimension (N)
-*          If INFO = 0, the eigenvalues in ascending order.
-*
-*  Z       (output) REAL array, dimension (LDZ, N)
-*          If JOBZ = 'V', then if INFO = 0, Z contains the matrix Z of
-*          eigenvectors, with the i-th column of Z holding the
-*          eigenvector associated with W(i). The eigenvectors are
-*          normalized so that Z**T*B*Z = I.
-*          If JOBZ = 'N', then Z is not referenced.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= 1, and if
-*          JOBZ = 'V', LDZ >= N.
-*
-*  WORK    (workspace) REAL array, dimension (3*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, and i is:
-*             <= N:  the algorithm failed to converge:
-*                    i off-diagonal elements of an intermediate
-*                    tridiagonal form did not converge to zero;
-*             > N:   if INFO = N + i, for 1 <= i <= N, then SPBSTF
-*                    returned INFO = i: B is not positive definite.
-*                    The factorization of B could not be completed and
-*                    no eigenvalues or eigenvectors were computed.
 *
 *  =====================================================================
 *

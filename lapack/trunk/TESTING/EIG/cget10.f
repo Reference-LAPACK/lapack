@@ -1,8 +1,110 @@
+*> \brief \b CGET10
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, M, N
+*       REAL               RESULT
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * )
+*       COMPLEX            A( LDA, * ), B( LDB, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGET10 compares two matrices A and B and computes the ratio
+*> RESULT = norm( A - B ) / ( norm(A) * M * EPS )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrices A and B.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and B.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          The m by n matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,N)
+*>          The m by n matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is COMPLEX array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL
+*>          RESULT = norm( A - B ) / ( norm(A) * M * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CGET10( M, N, A, LDA, B, LDB, WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, M, N
@@ -12,40 +114,6 @@
       REAL               RWORK( * )
       COMPLEX            A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGET10 compares two matrices A and B and computes the ratio
-*  RESULT = norm( A - B ) / ( norm(A) * M * EPS )
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrices A and B.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and B.
-*
-*  A       (input) COMPLEX array, dimension (LDA,N)
-*          The m by n matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  B       (input) COMPLEX array, dimension (LDB,N)
-*          The m by n matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,M).
-*
-*  WORK    (workspace) COMPLEX array, dimension (M)
-*
-*  RWORK   (workspace) COMPLEX array, dimension (M)
-*
-*  RESULT  (output) REAL
-*          RESULT = norm( A - B ) / ( norm(A) * M * EPS )
 *
 *  =====================================================================
 *

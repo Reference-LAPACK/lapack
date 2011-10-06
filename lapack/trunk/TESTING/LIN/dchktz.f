@@ -1,9 +1,143 @@
+*> \brief \b DCHKTZ
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
+*                          COPYA, S, TAU, WORK, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTERR
+*       INTEGER            NM, NN, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            MVAL( * ), NVAL( * )
+*       DOUBLE PRECISION   A( * ), COPYA( * ), S( * ),
+*      $                   TAU( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DCHKTZ tests DTZRQF and STZRZF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*> \endverbatim
+*>
+*> \param[in] NM
+*> \verbatim
+*>          NM is INTEGER
+*>          The number of values of M contained in the vector MVAL.
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (MMAX*NMAX)
+*>          where MMAX is the maximum value of M in MVAL and NMAX is the
+*>          maximum value of N in NVAL.
+*> \endverbatim
+*>
+*> \param[out] COPYA
+*> \verbatim
+*>          COPYA is DOUBLE PRECISION array, dimension (MMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension
+*>                      (min(MMAX,NMAX))
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (MMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension
+*>                      (MMAX*NMAX + 4*NMAX + MMAX)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DCHKTZ( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR, A,
      $                   COPYA, S, TAU, WORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     January 2007
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -16,56 +150,6 @@
       DOUBLE PRECISION   A( * ), COPYA( * ), S( * ),
      $                   TAU( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DCHKTZ tests DTZRQF and STZRZF.
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*
-*  NM      (input) INTEGER
-*          The number of values of M contained in the vector MVAL.
-*
-*  MVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension M.
-*
-*  NN      (input) INTEGER
-*          The number of values of N contained in the vector NVAL.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix column dimension N.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  A       (workspace) DOUBLE PRECISION array, dimension (MMAX*NMAX)
-*          where MMAX is the maximum value of M in MVAL and NMAX is the
-*          maximum value of N in NVAL.
-*
-*  COPYA   (workspace) DOUBLE PRECISION array, dimension (MMAX*NMAX)
-*
-*  S       (workspace) DOUBLE PRECISION array, dimension
-*                      (min(MMAX,NMAX))
-*
-*  TAU     (workspace) DOUBLE PRECISION array, dimension (MMAX)
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension
-*                      (MMAX*NMAX + 4*NMAX + MMAX)
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

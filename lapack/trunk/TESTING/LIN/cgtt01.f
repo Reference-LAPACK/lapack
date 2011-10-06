@@ -1,9 +1,145 @@
+*> \brief \b CGTT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
+*                          LDWORK, RWORK, RESID )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDWORK, N
+*       REAL               RESID
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       REAL               RWORK( * )
+*       COMPLEX            D( * ), DF( * ), DL( * ), DLF( * ), DU( * ),
+*      $                   DU2( * ), DUF( * ), WORK( LDWORK, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGTT01 reconstructs a tridiagonal matrix A from its LU factorization
+*> and computes the residual
+*>    norm(L*U - A) / ( norm(A) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGTER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] DL
+*> \verbatim
+*>          DL is COMPLEX array, dimension (N-1)
+*>          The (n-1) sub-diagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is COMPLEX array, dimension (N)
+*>          The diagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] DU
+*> \verbatim
+*>          DU is COMPLEX array, dimension (N-1)
+*>          The (n-1) super-diagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] DLF
+*> \verbatim
+*>          DLF is COMPLEX array, dimension (N-1)
+*>          The (n-1) multipliers that define the matrix L from the
+*>          LU factorization of A.
+*> \endverbatim
+*>
+*> \param[in] DF
+*> \verbatim
+*>          DF is COMPLEX array, dimension (N)
+*>          The n diagonal elements of the upper triangular matrix U from
+*>          the LU factorization of A.
+*> \endverbatim
+*>
+*> \param[in] DUF
+*> \verbatim
+*>          DUF is COMPLEX array, dimension (N-1)
+*>          The (n-1) elements of the first super-diagonal of U.
+*> \endverbatim
+*>
+*> \param[in] DU2
+*> \verbatim
+*>          DU2 is COMPLEX array, dimension (N-2)
+*>          The (n-2) elements of the second super-diagonal of U.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          The pivot indices; for 1 <= i <= n, row i of the matrix was
+*>          interchanged with row IPIV(i).  IPIV(i) will always be either
+*>          i or i+1; IPIV(i) = i indicates a row interchange was not
+*>          required.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (LDWORK,N)
+*> \endverbatim
+*>
+*> \param[in] LDWORK
+*> \verbatim
+*>          LDWORK is INTEGER
+*>          The leading dimension of the array WORK.  LDWORK >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          The scaled residual:  norm(L*U - A) / (norm(A) * EPS)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
      $                   LDWORK, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDWORK, N
@@ -15,59 +151,6 @@
       COMPLEX            D( * ), DF( * ), DL( * ), DLF( * ), DU( * ),
      $                   DU2( * ), DUF( * ), WORK( LDWORK, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGTT01 reconstructs a tridiagonal matrix A from its LU factorization
-*  and computes the residual
-*     norm(L*U - A) / ( norm(A) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGTER
-*          The order of the matrix A.  N >= 0.
-*
-*  DL      (input) COMPLEX array, dimension (N-1)
-*          The (n-1) sub-diagonal elements of A.
-*
-*  D       (input) COMPLEX array, dimension (N)
-*          The diagonal elements of A.
-*
-*  DU      (input) COMPLEX array, dimension (N-1)
-*          The (n-1) super-diagonal elements of A.
-*
-*  DLF     (input) COMPLEX array, dimension (N-1)
-*          The (n-1) multipliers that define the matrix L from the
-*          LU factorization of A.
-*
-*  DF      (input) COMPLEX array, dimension (N)
-*          The n diagonal elements of the upper triangular matrix U from
-*          the LU factorization of A.
-*
-*  DUF     (input) COMPLEX array, dimension (N-1)
-*          The (n-1) elements of the first super-diagonal of U.
-*
-*  DU2     (input) COMPLEX array, dimension (N-2)
-*          The (n-2) elements of the second super-diagonal of U.
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          The pivot indices; for 1 <= i <= n, row i of the matrix was
-*          interchanged with row IPIV(i).  IPIV(i) will always be either
-*          i or i+1; IPIV(i) = i indicates a row interchange was not
-*          required.
-*
-*  WORK    (workspace) COMPLEX array, dimension (LDWORK,N)
-*
-*  LDWORK  (input) INTEGER
-*          The leading dimension of the array WORK.  LDWORK >= max(1,N).
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  RESID   (output) REAL
-*          The scaled residual:  norm(L*U - A) / (norm(A) * EPS)
 *
 *  =====================================================================
 *

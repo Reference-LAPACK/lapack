@@ -1,36 +1,63 @@
+*> \brief \b ILAPREC
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       INTEGER FUNCTION ILAPREC( PREC )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          PREC
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This subroutine translated from a character string specifying an
+*> intermediate precision to the relevant BLAST-specified integer
+*> constant.
+*>
+*> ILAPREC returns an INTEGER.  If ILAPREC < 0, then the input is not a
+*> character indicating a supported intermediate precision.  Otherwise
+*> ILAPREC returns the constant value corresponding to PREC.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       INTEGER FUNCTION ILAPREC( PREC )
 *
-*  -- LAPACK routine (version 3.2.2)                                    --
-*
-*  -- June 2010                                                       --
-*
+*  -- LAPACK computational routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          PREC
 *     ..
 *
-*  Purpose
-*  =======
-*
-*  This subroutine translated from a character string specifying an
-*  intermediate precision to the relevant BLAST-specified integer
-*  constant.
-*
-*  ILAPREC returns an INTEGER.  If ILAPREC < 0, then the input is not a
-*  character indicating a supported intermediate precision.  Otherwise
-*  ILAPREC returns the constant value corresponding to PREC.
-*
-*  Arguments
-*  =========
-*
-*  PREC    (input) CHARACTER
-*          Specifies the form of the system of equations:
-*          = 'S':  Single
-*          = 'D':  Double
-*          = 'I':  Indigenous
-*          = 'X', 'E':  Extra
 *  =====================================================================
 *
 *     .. Parameters ..

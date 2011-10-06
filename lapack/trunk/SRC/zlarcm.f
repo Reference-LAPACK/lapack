@@ -1,9 +1,115 @@
+*> \brief \b ZLARCM
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, LDC, M, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), RWORK( * )
+*       COMPLEX*16         B( LDB, * ), C( LDC, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLARCM performs a very simple matrix-matrix multiplication:
+*>          C := A * B,
+*> where A is M by M and real; B is M by N and complex;
+*> C is M by N and complex.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A and of the matrix C.
+*>          M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns and rows of the matrix B and
+*>          the number of columns of the matrix C.
+*>          N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA, M)
+*>          A contains the M by M matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >=max(1,M).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB, N)
+*>          B contains the M by N matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >=max(1,M).
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is COMPLEX*16 array, dimension (LDC, N)
+*>          C contains the M by N matrix C.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDC >=max(1,M).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (2*M*N)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE ZLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, LDC, M, N
@@ -12,46 +118,6 @@
       DOUBLE PRECISION   A( LDA, * ), RWORK( * )
       COMPLEX*16         B( LDB, * ), C( LDC, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLARCM performs a very simple matrix-matrix multiplication:
-*           C := A * B,
-*  where A is M by M and real; B is M by N and complex;
-*  C is M by N and complex.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A and of the matrix C.
-*          M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns and rows of the matrix B and
-*          the number of columns of the matrix C.
-*          N >= 0.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA, M)
-*          A contains the M by M matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >=max(1,M).
-*
-*  B       (input) DOUBLE PRECISION array, dimension (LDB, N)
-*          B contains the M by N matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >=max(1,M).
-*
-*  C       (input) COMPLEX*16 array, dimension (LDC, N)
-*          C contains the M by N matrix C.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C. LDC >=max(1,M).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (2*M*N)
 *
 *  =====================================================================
 *

@@ -1,9 +1,146 @@
+*> \brief \b SLARZ
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          SIDE
+*       INTEGER            INCV, L, LDC, M, N
+*       REAL               TAU
+*       ..
+*       .. Array Arguments ..
+*       REAL               C( LDC, * ), V( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLARZ applies a real elementary reflector H to a real M-by-N
+*> matrix C, from either the left or the right. H is represented in the
+*> form
+*>
+*>       H = I - tau * v * v**T
+*>
+*> where tau is a real scalar and v is a real vector.
+*>
+*> If tau = 0, then H is taken to be the unit matrix.
+*>
+*>
+*> H is a product of k elementary reflectors as returned by STZRZF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'L': form  H * C
+*>          = 'R': form  C * H
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix C.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix C.
+*> \endverbatim
+*>
+*> \param[in] L
+*> \verbatim
+*>          L is INTEGER
+*>          The number of entries of the vector V containing
+*>          the meaningful part of the Householder vectors.
+*>          If SIDE = 'L', M >= L >= 0, if SIDE = 'R', N >= L >= 0.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is REAL array, dimension (1+(L-1)*abs(INCV))
+*>          The vector v in the representation of H as returned by
+*>          STZRZF. V is not used if TAU = 0.
+*> \endverbatim
+*>
+*> \param[in] INCV
+*> \verbatim
+*>          INCV is INTEGER
+*>          The increment between elements of v. INCV <> 0.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is REAL
+*>          The value tau in the representation of H.
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is REAL array, dimension (LDC,N)
+*>          On entry, the M-by-N matrix C.
+*>          On exit, C is overwritten by the matrix H * C if SIDE = 'L',
+*>          or C * H if SIDE = 'R'.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension
+*>                         (N) if SIDE = 'L'
+*>                      or (M) if SIDE = 'R'
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          SIDE
@@ -13,68 +150,6 @@
 *     .. Array Arguments ..
       REAL               C( LDC, * ), V( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLARZ applies a real elementary reflector H to a real M-by-N
-*  matrix C, from either the left or the right. H is represented in the
-*  form
-*
-*        H = I - tau * v * v**T
-*
-*  where tau is a real scalar and v is a real vector.
-*
-*  If tau = 0, then H is taken to be the unit matrix.
-*
-*
-*  H is a product of k elementary reflectors as returned by STZRZF.
-*
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'L': form  H * C
-*          = 'R': form  C * H
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix C.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix C.
-*
-*  L       (input) INTEGER
-*          The number of entries of the vector V containing
-*          the meaningful part of the Householder vectors.
-*          If SIDE = 'L', M >= L >= 0, if SIDE = 'R', N >= L >= 0.
-*
-*  V       (input) REAL array, dimension (1+(L-1)*abs(INCV))
-*          The vector v in the representation of H as returned by
-*          STZRZF. V is not used if TAU = 0.
-*
-*  INCV    (input) INTEGER
-*          The increment between elements of v. INCV <> 0.
-*
-*  TAU     (input) REAL
-*          The value tau in the representation of H.
-*
-*  C       (input/output) REAL array, dimension (LDC,N)
-*          On entry, the M-by-N matrix C.
-*          On exit, C is overwritten by the matrix H * C if SIDE = 'L',
-*          or C * H if SIDE = 'R'.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C. LDC >= max(1,M).
-*
-*  WORK    (workspace) REAL array, dimension
-*                         (N) if SIDE = 'L'
-*                      or (M) if SIDE = 'R'
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
 *
 *  =====================================================================
 *

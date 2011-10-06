@@ -1,16 +1,143 @@
+*> \brief \b CLA_GERCOND_C
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL FUNCTION CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV, C,
+*                                    CAPPLY, INFO, WORK, RWORK )
+* 
+*       .. Scalar Aguments ..
+*       CHARACTER          TRANS
+*       LOGICAL            CAPPLY
+*       INTEGER            N, LDA, LDAF, INFO
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       COMPLEX            A( LDA, * ), AF( LDAF, * ), WORK( * )
+*       REAL               C( * ), RWORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*> 
+*>    CLA_GERCOND_C computes the infinity norm condition number of
+*>    op(A) * inv(diag(C)) where C is a REAL vector.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>     Specifies the form of the system of equations:
+*>       = 'N':  A * X = B     (No transpose)
+*>       = 'T':  A**T * X = B  (Transpose)
+*>       = 'C':  A**H * X = B  (Conjugate Transpose = Transpose)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>     The number of linear equations, i.e., the order of the
+*>     matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>     On entry, the N-by-N matrix A
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>     The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is COMPLEX array, dimension (LDAF,N)
+*>     The factors L and U from the factorization
+*>     A = P*L*U as computed by CGETRF.
+*> \endverbatim
+*>
+*> \param[in] LDAF
+*> \verbatim
+*>          LDAF is INTEGER
+*>     The leading dimension of the array AF.  LDAF >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>     The pivot indices from the factorization A = P*L*U
+*>     as computed by CGETRF; row i of the matrix was interchanged
+*>     with row IPIV(i).
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is REAL array, dimension (N)
+*>     The vector C in the formula op(A) * inv(diag(C)).
+*> \endverbatim
+*>
+*> \param[in] CAPPLY
+*> \verbatim
+*>          CAPPLY is LOGICAL
+*>     If .TRUE. then access the vector C in the formula above.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>       = 0:  Successful exit.
+*>     i > 0:  The ith argument is invalid.
+*> \endverbatim
+*>
+*> \param[in] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (2*N).
+*>     Workspace.
+*> \endverbatim
+*>
+*> \param[in] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N).
+*>     Workspace.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexGEcomputational
+*
+*  =====================================================================
       REAL FUNCTION CLA_GERCOND_C( TRANS, N, A, LDA, AF, LDAF, IPIV, C,
      $                             CAPPLY, INFO, WORK, RWORK )
 *
-*     -- LAPACK routine (version 3.2.1)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- April 2009                                                   --
+*  -- LAPACK computational routine (version 3.2.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Aguments ..
       CHARACTER          TRANS
       LOGICAL            CAPPLY
@@ -21,59 +148,6 @@
       COMPLEX            A( LDA, * ), AF( LDAF, * ), WORK( * )
       REAL               C( * ), RWORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-* 
-*     CLA_GERCOND_C computes the infinity norm condition number of
-*     op(A) * inv(diag(C)) where C is a REAL vector.
-*
-*  Arguments
-*  =========
-*
-*     TRANS   (input) CHARACTER*1
-*     Specifies the form of the system of equations:
-*       = 'N':  A * X = B     (No transpose)
-*       = 'T':  A**T * X = B  (Transpose)
-*       = 'C':  A**H * X = B  (Conjugate Transpose = Transpose)
-*
-*     N       (input) INTEGER
-*     The number of linear equations, i.e., the order of the
-*     matrix A.  N >= 0.
-*
-*     A       (input) COMPLEX array, dimension (LDA,N)
-*     On entry, the N-by-N matrix A
-*
-*     LDA     (input) INTEGER
-*     The leading dimension of the array A.  LDA >= max(1,N).
-*
-*     AF      (input) COMPLEX array, dimension (LDAF,N)
-*     The factors L and U from the factorization
-*     A = P*L*U as computed by CGETRF.
-*
-*     LDAF    (input) INTEGER
-*     The leading dimension of the array AF.  LDAF >= max(1,N).
-*
-*     IPIV    (input) INTEGER array, dimension (N)
-*     The pivot indices from the factorization A = P*L*U
-*     as computed by CGETRF; row i of the matrix was interchanged
-*     with row IPIV(i).
-*
-*     C       (input) REAL array, dimension (N)
-*     The vector C in the formula op(A) * inv(diag(C)).
-*
-*     CAPPLY  (input) LOGICAL
-*     If .TRUE. then access the vector C in the formula above.
-*
-*     INFO    (output) INTEGER
-*       = 0:  Successful exit.
-*     i > 0:  The ith argument is invalid.
-*
-*     WORK    (input) COMPLEX array, dimension (2*N).
-*     Workspace.
-*
-*     RWORK   (input) REAL array, dimension (N).
-*     Workspace.
 *
 *  =====================================================================
 *

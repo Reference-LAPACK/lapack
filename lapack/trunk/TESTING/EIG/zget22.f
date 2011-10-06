@@ -1,9 +1,147 @@
+*> \brief \b ZGET22
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, W,
+*                          WORK, RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANSA, TRANSE, TRANSW
+*       INTEGER            LDA, LDE, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RESULT( 2 ), RWORK( * )
+*       COMPLEX*16         A( LDA, * ), E( LDE, * ), W( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZGET22 does an eigenvector check.
+*>
+*> The basic test is:
+*>
+*>    RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
+*>
+*> using the 1-norm.  It also tests the normalization of E:
+*>
+*>    RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
+*>                 j
+*>
+*> where E(j) is the j-th eigenvector, and m-norm is the max-norm of a
+*> vector.  The max-norm of a complex n-vector x in this case is the
+*> maximum of |re(x(i)| + |im(x(i)| over i = 1, ..., n.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANSA
+*> \verbatim
+*>          TRANSA is CHARACTER*1
+*>          Specifies whether or not A is transposed.
+*>          = 'N':  No transpose
+*>          = 'T':  Transpose
+*>          = 'C':  Conjugate transpose
+*> \endverbatim
+*>
+*> \param[in] TRANSE
+*> \verbatim
+*>          TRANSE is CHARACTER*1
+*>          Specifies whether or not E is transposed.
+*>          = 'N':  No transpose, eigenvectors are in columns of E
+*>          = 'T':  Transpose, eigenvectors are in rows of E
+*>          = 'C':  Conjugate transpose, eigenvectors are in rows of E
+*> \endverbatim
+*>
+*> \param[in] TRANSW
+*> \verbatim
+*>          TRANSW is CHARACTER*1
+*>          Specifies whether or not W is transposed.
+*>          = 'N':  No transpose
+*>          = 'T':  Transpose, same as TRANSW = 'N'
+*>          = 'C':  Conjugate transpose, use -WI(j) instead of WI(j)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          The matrix whose eigenvectors are in E.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is COMPLEX*16 array, dimension (LDE,N)
+*>          The matrix of eigenvectors. If TRANSE = 'N', the eigenvectors
+*>          are stored in the columns of E, if TRANSE = 'T' or 'C', the
+*>          eigenvectors are stored in the rows of E.
+*> \endverbatim
+*>
+*> \param[in] LDE
+*> \verbatim
+*>          LDE is INTEGER
+*>          The leading dimension of the array E.  LDE >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] W
+*> \verbatim
+*>          W is COMPLEX*16 array, dimension (N)
+*>          The eigenvalues of A.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (N*N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, W,
      $                   WORK, RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANSA, TRANSE, TRANSW
@@ -14,73 +152,6 @@
       COMPLEX*16         A( LDA, * ), E( LDE, * ), W( * ), WORK( * )
 *     ..
 *
-*  Purpose
-*  =======
-*
-*  ZGET22 does an eigenvector check.
-*
-*  The basic test is:
-*
-*     RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
-*
-*  using the 1-norm.  It also tests the normalization of E:
-*
-*     RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
-*                  j
-*
-*  where E(j) is the j-th eigenvector, and m-norm is the max-norm of a
-*  vector.  The max-norm of a complex n-vector x in this case is the
-*  maximum of |re(x(i)| + |im(x(i)| over i = 1, ..., n.
-*
-*  Arguments
-*  ==========
-*
-*  TRANSA  (input) CHARACTER*1
-*          Specifies whether or not A is transposed.
-*          = 'N':  No transpose
-*          = 'T':  Transpose
-*          = 'C':  Conjugate transpose
-*
-*  TRANSE  (input) CHARACTER*1
-*          Specifies whether or not E is transposed.
-*          = 'N':  No transpose, eigenvectors are in columns of E
-*          = 'T':  Transpose, eigenvectors are in rows of E
-*          = 'C':  Conjugate transpose, eigenvectors are in rows of E
-*
-*  TRANSW  (input) CHARACTER*1
-*          Specifies whether or not W is transposed.
-*          = 'N':  No transpose
-*          = 'T':  Transpose, same as TRANSW = 'N'
-*          = 'C':  Conjugate transpose, use -WI(j) instead of WI(j)
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input) COMPLEX*16 array, dimension (LDA,N)
-*          The matrix whose eigenvectors are in E.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  E       (input) COMPLEX*16 array, dimension (LDE,N)
-*          The matrix of eigenvectors. If TRANSE = 'N', the eigenvectors
-*          are stored in the columns of E, if TRANSE = 'T' or 'C', the
-*          eigenvectors are stored in the rows of E.
-*
-*  LDE     (input) INTEGER
-*          The leading dimension of the array E.  LDE >= max(1,N).
-*
-*  W       (input) COMPLEX*16 array, dimension (N)
-*          The eigenvalues of A.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (N*N)
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (2)
-*          RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
-*          RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
-*                       j
 *  =====================================================================
 *
 *     .. Parameters ..

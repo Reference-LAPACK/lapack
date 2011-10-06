@@ -1,8 +1,125 @@
+*> \brief \b ZLAGGE
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, KL, KU, LDA, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       DOUBLE PRECISION   D( * )
+*       COMPLEX*16         A( LDA, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLAGGE generates a complex general m by n matrix A, by pre- and post-
+*> multiplying a real diagonal matrix D with random unitary matrices:
+*> A = U*D*V. The lower and upper bandwidths may then be reduced to
+*> kl and ku by additional unitary transformations.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>          The number of nonzero subdiagonals within the band of A.
+*>          0 <= KL <= M-1.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>          The number of nonzero superdiagonals within the band of A.
+*>          0 <= KU <= N-1.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (min(M,N))
+*>          The diagonal elements of the diagonal matrix D.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          The generated m by n matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= M.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed of the random number generator; the array
+*>          elements must be between 0 and 4095, and ISEED(4) must be
+*>          odd.
+*>          On exit, the seed is updated.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (M+N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_matgen
+*
+*  =====================================================================
       SUBROUTINE ZLAGGE( M, N, KL, KU, D, A, LDA, ISEED, WORK, INFO )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, KL, KU, LDA, M, N
@@ -12,52 +129,6 @@
       DOUBLE PRECISION   D( * )
       COMPLEX*16         A( LDA, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLAGGE generates a complex general m by n matrix A, by pre- and post-
-*  multiplying a real diagonal matrix D with random unitary matrices:
-*  A = U*D*V. The lower and upper bandwidths may then be reduced to
-*  kl and ku by additional unitary transformations.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  KL      (input) INTEGER
-*          The number of nonzero subdiagonals within the band of A.
-*          0 <= KL <= M-1.
-*
-*  KU      (input) INTEGER
-*          The number of nonzero superdiagonals within the band of A.
-*          0 <= KU <= N-1.
-*
-*  D       (input) DOUBLE PRECISION array, dimension (min(M,N))
-*          The diagonal elements of the diagonal matrix D.
-*
-*  A       (output) COMPLEX*16 array, dimension (LDA,N)
-*          The generated m by n matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= M.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed of the random number generator; the array
-*          elements must be between 0 and 4095, and ISEED(4) must be
-*          odd.
-*          On exit, the seed is updated.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (M+N)
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

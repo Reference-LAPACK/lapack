@@ -1,3 +1,195 @@
+*> \brief \b DLARRB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
+*                          RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,
+*                          PIVMIN, SPDIAM, TWIST, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            IFIRST, ILAST, INFO, N, OFFSET, TWIST
+*       DOUBLE PRECISION   PIVMIN, RTOL1, RTOL2, SPDIAM
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   D( * ), LLD( * ), W( * ),
+*      $                   WERR( * ), WGAP( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Given the relatively robust representation(RRR) L D L^T, DLARRB
+*> does "limited" bisection to refine the eigenvalues of L D L^T,
+*> W( IFIRST-OFFSET ) through W( ILAST-OFFSET ), to more accuracy. Initial
+*> guesses for these eigenvalues are input in W, the corresponding estimate
+*> of the error in these guesses and their gaps are input in WERR
+*> and WGAP, respectively. During bisection, intervals
+*> [left, right] are maintained by storing their mid-points and
+*> semi-widths in the arrays W and WERR respectively.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The N diagonal elements of the diagonal matrix D.
+*> \endverbatim
+*>
+*> \param[in] LLD
+*> \verbatim
+*>          LLD is DOUBLE PRECISION array, dimension (N-1)
+*>          The (N-1) elements L(i)*L(i)*D(i).
+*> \endverbatim
+*>
+*> \param[in] IFIRST
+*> \verbatim
+*>          IFIRST is INTEGER
+*>          The index of the first eigenvalue to be computed.
+*> \endverbatim
+*>
+*> \param[in] ILAST
+*> \verbatim
+*>          ILAST is INTEGER
+*>          The index of the last eigenvalue to be computed.
+*> \endverbatim
+*>
+*> \param[in] RTOL1
+*> \verbatim
+*>          RTOL1 is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] RTOL2
+*> \verbatim
+*>          RTOL2 is DOUBLE PRECISION
+*>          Tolerance for the convergence of the bisection intervals.
+*>          An interval [LEFT,RIGHT] has converged if
+*>          RIGHT-LEFT.LT.MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
+*>          where GAP is the (estimated) distance to the nearest
+*>          eigenvalue.
+*> \endverbatim
+*>
+*> \param[in] OFFSET
+*> \verbatim
+*>          OFFSET is INTEGER
+*>          Offset for the arrays W, WGAP and WERR, i.e., the IFIRST-OFFSET
+*>          through ILAST-OFFSET elements of these arrays are to be used.
+*> \endverbatim
+*>
+*> \param[in,out] W
+*> \verbatim
+*>          W is DOUBLE PRECISION array, dimension (N)
+*>          On input, W( IFIRST-OFFSET ) through W( ILAST-OFFSET ) are
+*>          estimates of the eigenvalues of L D L^T indexed IFIRST throug
+*>          ILAST.
+*>          On output, these estimates are refined.
+*> \endverbatim
+*>
+*> \param[in,out] WGAP
+*> \verbatim
+*>          WGAP is DOUBLE PRECISION array, dimension (N-1)
+*>          On input, the (estimated) gaps between consecutive
+*>          eigenvalues of L D L^T, i.e., WGAP(I-OFFSET) is the gap between
+*>          eigenvalues I and I+1. Note that if IFIRST.EQ.ILAST
+*>          then WGAP(IFIRST-OFFSET) must be set to ZERO.
+*>          On output, these gaps are refined.
+*> \endverbatim
+*>
+*> \param[in,out] WERR
+*> \verbatim
+*>          WERR is DOUBLE PRECISION array, dimension (N)
+*>          On input, WERR( IFIRST-OFFSET ) through WERR( ILAST-OFFSET ) are
+*>          the errors in the estimates of the corresponding elements in W.
+*>          On output, these errors are refined.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (2*N)
+*>          Workspace.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (2*N)
+*>          Workspace.
+*> \endverbatim
+*>
+*> \param[in] PIVMIN
+*> \verbatim
+*>          PIVMIN is DOUBLE PRECISION
+*>          The minimum pivot in the Sturm sequence.
+*> \endverbatim
+*>
+*> \param[in] SPDIAM
+*> \verbatim
+*>          SPDIAM is DOUBLE PRECISION
+*>          The spectral diameter of the matrix.
+*> \endverbatim
+*>
+*> \param[in] TWIST
+*> \verbatim
+*>          TWIST is INTEGER
+*>          The twist index for the twisted factorization that is used
+*>          for the negcount.
+*>          TWIST = N: Compute negcount from L D L^T - LAMBDA I = L+ D+ L+^T
+*>          TWIST = 1: Compute negcount from L D L^T - LAMBDA I = U- D- U-^T
+*>          TWIST = R: Compute negcount from L D L^T - LAMBDA I = N(r) D(r) N(r)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          Error flag.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Beresford Parlett, University of California, Berkeley, USA
+*>     Jim Demmel, University of California, Berkeley, USA
+*>     Inderjit Dhillon, University of Texas, Austin, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>     Christof Voemel, University of California, Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
      $                   RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,
      $                   PIVMIN, SPDIAM, TWIST, INFO )
@@ -5,7 +197,7 @@
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            IFIRST, ILAST, INFO, N, OFFSET, TWIST
@@ -16,99 +208,6 @@
       DOUBLE PRECISION   D( * ), LLD( * ), W( * ),
      $                   WERR( * ), WGAP( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Given the relatively robust representation(RRR) L D L^T, DLARRB
-*  does "limited" bisection to refine the eigenvalues of L D L^T,
-*  W( IFIRST-OFFSET ) through W( ILAST-OFFSET ), to more accuracy. Initial
-*  guesses for these eigenvalues are input in W, the corresponding estimate
-*  of the error in these guesses and their gaps are input in WERR
-*  and WGAP, respectively. During bisection, intervals
-*  [left, right] are maintained by storing their mid-points and
-*  semi-widths in the arrays W and WERR respectively.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix.
-*
-*  D       (input) DOUBLE PRECISION array, dimension (N)
-*          The N diagonal elements of the diagonal matrix D.
-*
-*  LLD     (input) DOUBLE PRECISION array, dimension (N-1)
-*          The (N-1) elements L(i)*L(i)*D(i).
-*
-*  IFIRST  (input) INTEGER
-*          The index of the first eigenvalue to be computed.
-*
-*  ILAST   (input) INTEGER
-*          The index of the last eigenvalue to be computed.
-*
-*  RTOL1   (input) DOUBLE PRECISION
-*
-*  RTOL2   (input) DOUBLE PRECISION
-*          Tolerance for the convergence of the bisection intervals.
-*          An interval [LEFT,RIGHT] has converged if
-*          RIGHT-LEFT.LT.MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
-*          where GAP is the (estimated) distance to the nearest
-*          eigenvalue.
-*
-*  OFFSET  (input) INTEGER
-*          Offset for the arrays W, WGAP and WERR, i.e., the IFIRST-OFFSET
-*          through ILAST-OFFSET elements of these arrays are to be used.
-*
-*  W       (input/output) DOUBLE PRECISION array, dimension (N)
-*          On input, W( IFIRST-OFFSET ) through W( ILAST-OFFSET ) are
-*          estimates of the eigenvalues of L D L^T indexed IFIRST throug
-*          ILAST.
-*          On output, these estimates are refined.
-*
-*  WGAP    (input/output) DOUBLE PRECISION array, dimension (N-1)
-*          On input, the (estimated) gaps between consecutive
-*          eigenvalues of L D L^T, i.e., WGAP(I-OFFSET) is the gap between
-*          eigenvalues I and I+1. Note that if IFIRST.EQ.ILAST
-*          then WGAP(IFIRST-OFFSET) must be set to ZERO.
-*          On output, these gaps are refined.
-*
-*  WERR    (input/output) DOUBLE PRECISION array, dimension (N)
-*          On input, WERR( IFIRST-OFFSET ) through WERR( ILAST-OFFSET ) are
-*          the errors in the estimates of the corresponding elements in W.
-*          On output, these errors are refined.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)
-*          Workspace.
-*
-*  IWORK   (workspace) INTEGER array, dimension (2*N)
-*          Workspace.
-*
-*  PIVMIN  (input) DOUBLE PRECISION
-*          The minimum pivot in the Sturm sequence.
-*
-*  SPDIAM  (input) DOUBLE PRECISION
-*          The spectral diameter of the matrix.
-*
-*  TWIST   (input) INTEGER
-*          The twist index for the twisted factorization that is used
-*          for the negcount.
-*          TWIST = N: Compute negcount from L D L^T - LAMBDA I = L+ D+ L+^T
-*          TWIST = 1: Compute negcount from L D L^T - LAMBDA I = U- D- U-^T
-*          TWIST = R: Compute negcount from L D L^T - LAMBDA I = N(r) D(r) N(r)
-*
-*  INFO    (output) INTEGER
-*          Error flag.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Beresford Parlett, University of California, Berkeley, USA
-*     Jim Demmel, University of California, Berkeley, USA
-*     Inderjit Dhillon, University of Texas, Austin, USA
-*     Osni Marques, LBNL/NERSC, USA
-*     Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
 *

@@ -1,25 +1,73 @@
+*> \brief \b DZNRM2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DZNRM2(N,X,INCX)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER INCX,N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16 X(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DZNRM2 returns the euclidean norm of a vector via the function
+*> name, so that
+*>
+*>    DZNRM2 := sqrt( x**H*x )
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_blas_level1
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  -- This version written on 25-October-1982.
+*>     Modified on 14-October-1993 to inline the call to ZLASSQ.
+*>     Sven Hammarling, Nag Ltd.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DZNRM2(N,X,INCX)
+*
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       INTEGER INCX,N
 *     ..
 *     .. Array Arguments ..
       COMPLEX*16 X(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DZNRM2 returns the euclidean norm of a vector via the function
-*  name, so that
-*
-*     DZNRM2 := sqrt( x**H*x )
-*
-*  Further Details
-*  ===============
-*
-*  -- This version written on 25-October-1982.
-*     Modified on 14-October-1993 to inline the call to ZLASSQ.
-*     Sven Hammarling, Nag Ltd.
 *
 *  =====================================================================
 *

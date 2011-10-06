@@ -1,10 +1,173 @@
+*> \brief \b DLAEIN
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
+*                          LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            NOINIT, RIGHTV
+*       INTEGER            INFO, LDB, LDH, N
+*       DOUBLE PRECISION   BIGNUM, EPS3, SMLNUM, WI, WR
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   B( LDB, * ), H( LDH, * ), VI( * ), VR( * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAEIN uses inverse iteration to find a right or left eigenvector
+*> corresponding to the eigenvalue (WR,WI) of a real upper Hessenberg
+*> matrix H.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RIGHTV
+*> \verbatim
+*>          RIGHTV is LOGICAL
+*>          = .TRUE. : compute right eigenvector;
+*>          = .FALSE.: compute left eigenvector.
+*> \endverbatim
+*>
+*> \param[in] NOINIT
+*> \verbatim
+*>          NOINIT is LOGICAL
+*>          = .TRUE. : no initial vector supplied in (VR,VI).
+*>          = .FALSE.: initial vector supplied in (VR,VI).
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix H.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] H
+*> \verbatim
+*>          H is DOUBLE PRECISION array, dimension (LDH,N)
+*>          The upper Hessenberg matrix H.
+*> \endverbatim
+*>
+*> \param[in] LDH
+*> \verbatim
+*>          LDH is INTEGER
+*>          The leading dimension of the array H.  LDH >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] WR
+*> \verbatim
+*>          WR is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] WI
+*> \verbatim
+*>          WI is DOUBLE PRECISION
+*>          The real and imaginary parts of the eigenvalue of H whose
+*>          corresponding right or left eigenvector is to be computed.
+*> \endverbatim
+*>
+*> \param[in,out] VR
+*> \verbatim
+*>          VR is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[in,out] VI
+*> \verbatim
+*>          VI is DOUBLE PRECISION array, dimension (N)
+*>          On entry, if NOINIT = .FALSE. and WI = 0.0, VR must contain
+*>          a real starting vector for inverse iteration using the real
+*>          eigenvalue WR; if NOINIT = .FALSE. and WI.ne.0.0, VR and VI
+*>          must contain the real and imaginary parts of a complex
+*>          starting vector for inverse iteration using the complex
+*>          eigenvalue (WR,WI); otherwise VR and VI need not be set.
+*>          On exit, if WI = 0.0 (real eigenvalue), VR contains the
+*>          computed real eigenvector; if WI.ne.0.0 (complex eigenvalue),
+*>          VR and VI contain the real and imaginary parts of the
+*>          computed complex eigenvector. The eigenvector is normalized
+*>          so that the component of largest magnitude has magnitude 1;
+*>          here the magnitude of a complex number (x,y) is taken to be
+*>          |x| + |y|.
+*>          VI is not referenced if WI = 0.0.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,N)
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= N+1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[in] EPS3
+*> \verbatim
+*>          EPS3 is DOUBLE PRECISION
+*>          A small machine-dependent value which is used to perturb
+*>          close eigenvalues, and to replace zero pivots.
+*> \endverbatim
+*>
+*> \param[in] SMLNUM
+*> \verbatim
+*>          SMLNUM is DOUBLE PRECISION
+*>          A machine-dependent value close to the underflow threshold.
+*> \endverbatim
+*>
+*> \param[in] BIGNUM
+*> \verbatim
+*>          BIGNUM is DOUBLE PRECISION
+*>          A machine-dependent value close to the overflow threshold.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          = 1:  inverse iteration did not converge; VR is set to the
+*>                last iterate, and so is VI if WI.ne.0.0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
      $                   LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            NOINIT, RIGHTV
@@ -15,79 +178,6 @@
       DOUBLE PRECISION   B( LDB, * ), H( LDH, * ), VI( * ), VR( * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAEIN uses inverse iteration to find a right or left eigenvector
-*  corresponding to the eigenvalue (WR,WI) of a real upper Hessenberg
-*  matrix H.
-*
-*  Arguments
-*  =========
-*
-*  RIGHTV  (input) LOGICAL
-*          = .TRUE. : compute right eigenvector;
-*          = .FALSE.: compute left eigenvector.
-*
-*  NOINIT  (input) LOGICAL
-*          = .TRUE. : no initial vector supplied in (VR,VI).
-*          = .FALSE.: initial vector supplied in (VR,VI).
-*
-*  N       (input) INTEGER
-*          The order of the matrix H.  N >= 0.
-*
-*  H       (input) DOUBLE PRECISION array, dimension (LDH,N)
-*          The upper Hessenberg matrix H.
-*
-*  LDH     (input) INTEGER
-*          The leading dimension of the array H.  LDH >= max(1,N).
-*
-*  WR      (input) DOUBLE PRECISION
-*
-*  WI      (input) DOUBLE PRECISION
-*          The real and imaginary parts of the eigenvalue of H whose
-*          corresponding right or left eigenvector is to be computed.
-*
-*  VR      (input/output) DOUBLE PRECISION array, dimension (N)
-*
-*  VI      (input/output) DOUBLE PRECISION array, dimension (N)
-*          On entry, if NOINIT = .FALSE. and WI = 0.0, VR must contain
-*          a real starting vector for inverse iteration using the real
-*          eigenvalue WR; if NOINIT = .FALSE. and WI.ne.0.0, VR and VI
-*          must contain the real and imaginary parts of a complex
-*          starting vector for inverse iteration using the complex
-*          eigenvalue (WR,WI); otherwise VR and VI need not be set.
-*          On exit, if WI = 0.0 (real eigenvalue), VR contains the
-*          computed real eigenvector; if WI.ne.0.0 (complex eigenvalue),
-*          VR and VI contain the real and imaginary parts of the
-*          computed complex eigenvector. The eigenvector is normalized
-*          so that the component of largest magnitude has magnitude 1;
-*          here the magnitude of a complex number (x,y) is taken to be
-*          |x| + |y|.
-*          VI is not referenced if WI = 0.0.
-*
-*  B       (workspace) DOUBLE PRECISION array, dimension (LDB,N)
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= N+1.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  EPS3    (input) DOUBLE PRECISION
-*          A small machine-dependent value which is used to perturb
-*          close eigenvalues, and to replace zero pivots.
-*
-*  SMLNUM  (input) DOUBLE PRECISION
-*          A machine-dependent value close to the underflow threshold.
-*
-*  BIGNUM  (input) DOUBLE PRECISION
-*          A machine-dependent value close to the overflow threshold.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          = 1:  inverse iteration did not converge; VR is set to the
-*                last iterate, and so is VI if WI.ne.0.0.
 *
 *  =====================================================================
 *

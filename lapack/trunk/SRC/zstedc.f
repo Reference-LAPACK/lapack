@@ -1,10 +1,223 @@
+*> \brief \b ZSTEDC
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
+*                          LRWORK, IWORK, LIWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          COMPZ
+*       INTEGER            INFO, LDZ, LIWORK, LRWORK, LWORK, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   D( * ), E( * ), RWORK( * )
+*       COMPLEX*16         WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZSTEDC computes all eigenvalues and, optionally, eigenvectors of a
+*> symmetric tridiagonal matrix using the divide and conquer method.
+*> The eigenvectors of a full or band complex Hermitian matrix can also
+*> be found if ZHETRD or ZHPTRD or ZHBTRD has been used to reduce this
+*> matrix to tridiagonal form.
+*>
+*> This code makes very mild assumptions about floating point
+*> arithmetic. It will work on machines with a guard digit in
+*> add/subtract, or on those binary machines without guard digits
+*> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
+*> It could conceivably fail on hexadecimal or decimal machines
+*> without guard digits, but we know of none.  See DLAED3 for details.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] COMPZ
+*> \verbatim
+*>          COMPZ is CHARACTER*1
+*>          = 'N':  Compute eigenvalues only.
+*>          = 'I':  Compute eigenvectors of tridiagonal matrix also.
+*>          = 'V':  Compute eigenvectors of original Hermitian matrix
+*>                  also.  On entry, Z contains the unitary matrix used
+*>                  to reduce the original matrix to tridiagonal form.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The dimension of the symmetric tridiagonal matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          On entry, the diagonal elements of the tridiagonal matrix.
+*>          On exit, if INFO = 0, the eigenvalues in ascending order.
+*> \endverbatim
+*>
+*> \param[in,out] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          On entry, the subdiagonal elements of the tridiagonal matrix.
+*>          On exit, E has been destroyed.
+*> \endverbatim
+*>
+*> \param[in,out] Z
+*> \verbatim
+*>          Z is COMPLEX*16 array, dimension (LDZ,N)
+*>          On entry, if COMPZ = 'V', then Z contains the unitary
+*>          matrix used in the reduction to tridiagonal form.
+*>          On exit, if INFO = 0, then if COMPZ = 'V', Z contains the
+*>          orthonormal eigenvectors of the original Hermitian matrix,
+*>          and if COMPZ = 'I', Z contains the orthonormal eigenvectors
+*>          of the symmetric tridiagonal matrix.
+*>          If  COMPZ = 'N', then Z is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1.
+*>          If eigenvectors are desired, then LDZ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>          If COMPZ = 'N' or 'I', or N <= 1, LWORK must be at least 1.
+*>          If COMPZ = 'V' and N > 1, LWORK must be at least N*N.
+*>          Note that for COMPZ = 'V', then if N is less than or
+*>          equal to the minimum divide size, usually 25, then LWORK need
+*>          only be 1.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal sizes of the WORK, RWORK and
+*>          IWORK arrays, returns these values as the first entries of
+*>          the WORK, RWORK and IWORK arrays, and no error message
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array,
+*>                                         dimension (LRWORK)
+*>          On exit, if INFO = 0, RWORK(1) returns the optimal LRWORK.
+*> \endverbatim
+*>
+*> \param[in] LRWORK
+*> \verbatim
+*>          LRWORK is INTEGER
+*>          The dimension of the array RWORK.
+*>          If COMPZ = 'N' or N <= 1, LRWORK must be at least 1.
+*>          If COMPZ = 'V' and N > 1, LRWORK must be at least
+*>                         1 + 3*N + 2*N*lg N + 4*N**2 ,
+*>                         where lg( N ) = smallest integer k such
+*>                         that 2**k >= N.
+*>          If COMPZ = 'I' and N > 1, LRWORK must be at least
+*>                         1 + 4*N + 2*N**2 .
+*>          Note that for COMPZ = 'I' or 'V', then if N is less than or
+*>          equal to the minimum divide size, usually 25, then LRWORK
+*>          need only be max(1,2*(N-1)).
+*> \endverbatim
+*> \verbatim
+*>          If LRWORK = -1, then a workspace query is assumed; the
+*>          routine only calculates the optimal sizes of the WORK, RWORK
+*>          and IWORK arrays, returns these values as the first entries
+*>          of the WORK, RWORK and IWORK arrays, and no error message
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (MAX(1,LIWORK))
+*>          On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.
+*> \endverbatim
+*>
+*> \param[in] LIWORK
+*> \verbatim
+*>          LIWORK is INTEGER
+*>          The dimension of the array IWORK.
+*>          If COMPZ = 'N' or N <= 1, LIWORK must be at least 1.
+*>          If COMPZ = 'V' or N > 1,  LIWORK must be at least
+*>                                    6 + 6*N + 5*N*lg N.
+*>          If COMPZ = 'I' or N > 1,  LIWORK must be at least
+*>                                    3 + 5*N .
+*>          Note that for COMPZ = 'I' or 'V', then if N is less than or
+*>          equal to the minimum divide size, usually 25, then LIWORK
+*>          need only be 1.
+*> \endverbatim
+*> \verbatim
+*>          If LIWORK = -1, then a workspace query is assumed; the
+*>          routine only calculates the optimal sizes of the WORK, RWORK
+*>          and IWORK arrays, returns these values as the first entries
+*>          of the WORK, RWORK and IWORK arrays, and no error message
+*>          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  The algorithm failed to compute an eigenvalue while
+*>                working on the submatrix lying in rows and columns
+*>                INFO/(N+1) through mod(INFO,N+1).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Jeff Rutter, Computer Science Division, University of California
+*>     at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, RWORK,
      $                   LRWORK, IWORK, LIWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          COMPZ
@@ -15,130 +228,6 @@
       DOUBLE PRECISION   D( * ), E( * ), RWORK( * )
       COMPLEX*16         WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZSTEDC computes all eigenvalues and, optionally, eigenvectors of a
-*  symmetric tridiagonal matrix using the divide and conquer method.
-*  The eigenvectors of a full or band complex Hermitian matrix can also
-*  be found if ZHETRD or ZHPTRD or ZHBTRD has been used to reduce this
-*  matrix to tridiagonal form.
-*
-*  This code makes very mild assumptions about floating point
-*  arithmetic. It will work on machines with a guard digit in
-*  add/subtract, or on those binary machines without guard digits
-*  which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
-*  It could conceivably fail on hexadecimal or decimal machines
-*  without guard digits, but we know of none.  See DLAED3 for details.
-*
-*  Arguments
-*  =========
-*
-*  COMPZ   (input) CHARACTER*1
-*          = 'N':  Compute eigenvalues only.
-*          = 'I':  Compute eigenvectors of tridiagonal matrix also.
-*          = 'V':  Compute eigenvectors of original Hermitian matrix
-*                  also.  On entry, Z contains the unitary matrix used
-*                  to reduce the original matrix to tridiagonal form.
-*
-*  N       (input) INTEGER
-*          The dimension of the symmetric tridiagonal matrix.  N >= 0.
-*
-*  D       (input/output) DOUBLE PRECISION array, dimension (N)
-*          On entry, the diagonal elements of the tridiagonal matrix.
-*          On exit, if INFO = 0, the eigenvalues in ascending order.
-*
-*  E       (input/output) DOUBLE PRECISION array, dimension (N-1)
-*          On entry, the subdiagonal elements of the tridiagonal matrix.
-*          On exit, E has been destroyed.
-*
-*  Z       (input/output) COMPLEX*16 array, dimension (LDZ,N)
-*          On entry, if COMPZ = 'V', then Z contains the unitary
-*          matrix used in the reduction to tridiagonal form.
-*          On exit, if INFO = 0, then if COMPZ = 'V', Z contains the
-*          orthonormal eigenvectors of the original Hermitian matrix,
-*          and if COMPZ = 'I', Z contains the orthonormal eigenvectors
-*          of the symmetric tridiagonal matrix.
-*          If  COMPZ = 'N', then Z is not referenced.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= 1.
-*          If eigenvectors are desired, then LDZ >= max(1,N).
-*
-*  WORK    (workspace/output) COMPLEX*16 array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*          If COMPZ = 'N' or 'I', or N <= 1, LWORK must be at least 1.
-*          If COMPZ = 'V' and N > 1, LWORK must be at least N*N.
-*          Note that for COMPZ = 'V', then if N is less than or
-*          equal to the minimum divide size, usually 25, then LWORK need
-*          only be 1.
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal sizes of the WORK, RWORK and
-*          IWORK arrays, returns these values as the first entries of
-*          the WORK, RWORK and IWORK arrays, and no error message
-*          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
-*
-*  RWORK   (workspace/output) DOUBLE PRECISION array,
-*                                         dimension (LRWORK)
-*          On exit, if INFO = 0, RWORK(1) returns the optimal LRWORK.
-*
-*  LRWORK  (input) INTEGER
-*          The dimension of the array RWORK.
-*          If COMPZ = 'N' or N <= 1, LRWORK must be at least 1.
-*          If COMPZ = 'V' and N > 1, LRWORK must be at least
-*                         1 + 3*N + 2*N*lg N + 4*N**2 ,
-*                         where lg( N ) = smallest integer k such
-*                         that 2**k >= N.
-*          If COMPZ = 'I' and N > 1, LRWORK must be at least
-*                         1 + 4*N + 2*N**2 .
-*          Note that for COMPZ = 'I' or 'V', then if N is less than or
-*          equal to the minimum divide size, usually 25, then LRWORK
-*          need only be max(1,2*(N-1)).
-*
-*          If LRWORK = -1, then a workspace query is assumed; the
-*          routine only calculates the optimal sizes of the WORK, RWORK
-*          and IWORK arrays, returns these values as the first entries
-*          of the WORK, RWORK and IWORK arrays, and no error message
-*          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
-*
-*  IWORK   (workspace/output) INTEGER array, dimension (MAX(1,LIWORK))
-*          On exit, if INFO = 0, IWORK(1) returns the optimal LIWORK.
-*
-*  LIWORK  (input) INTEGER
-*          The dimension of the array IWORK.
-*          If COMPZ = 'N' or N <= 1, LIWORK must be at least 1.
-*          If COMPZ = 'V' or N > 1,  LIWORK must be at least
-*                                    6 + 6*N + 5*N*lg N.
-*          If COMPZ = 'I' or N > 1,  LIWORK must be at least
-*                                    3 + 5*N .
-*          Note that for COMPZ = 'I' or 'V', then if N is less than or
-*          equal to the minimum divide size, usually 25, then LIWORK
-*          need only be 1.
-*
-*          If LIWORK = -1, then a workspace query is assumed; the
-*          routine only calculates the optimal sizes of the WORK, RWORK
-*          and IWORK arrays, returns these values as the first entries
-*          of the WORK, RWORK and IWORK arrays, and no error message
-*          related to LWORK or LRWORK or LIWORK is issued by XERBLA.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  The algorithm failed to compute an eigenvalue while
-*                working on the submatrix lying in rows and columns
-*                INFO/(N+1) through mod(INFO,N+1).
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Jeff Rutter, Computer Science Division, University of California
-*     at Berkeley, USA
 *
 *  =====================================================================
 *

@@ -1,12 +1,267 @@
+*> \brief \b DLAED7
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
+*                          LDQ, INDXQ, RHO, CUTPNT, QSTORE, QPTR, PRMPTR,
+*                          PERM, GIVPTR, GIVCOL, GIVNUM, WORK, IWORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            CURLVL, CURPBM, CUTPNT, ICOMPQ, INFO, LDQ, N,
+*      $                   QSIZ, TLVLS
+*       DOUBLE PRECISION   RHO
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            GIVCOL( 2, * ), GIVPTR( * ), INDXQ( * ),
+*      $                   IWORK( * ), PERM( * ), PRMPTR( * ), QPTR( * )
+*       DOUBLE PRECISION   D( * ), GIVNUM( 2, * ), Q( LDQ, * ),
+*      $                   QSTORE( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAED7 computes the updated eigensystem of a diagonal
+*> matrix after modification by a rank-one symmetric matrix. This
+*> routine is used only for the eigenproblem which requires all
+*> eigenvalues and optionally eigenvectors of a dense symmetric matrix
+*> that has been reduced to tridiagonal form.  DLAED1 handles
+*> the case in which all eigenvalues and eigenvectors of a symmetric
+*> tridiagonal matrix are desired.
+*>
+*>   T = Q(in) ( D(in) + RHO * Z*Z**T ) Q**T(in) = Q(out) * D(out) * Q**T(out)
+*>
+*>    where Z = Q**Tu, u is a vector of length N with ones in the
+*>    CUTPNT and CUTPNT + 1 th elements and zeros elsewhere.
+*>
+*>    The eigenvectors of the original matrix are stored in Q, and the
+*>    eigenvalues are in D.  The algorithm consists of three stages:
+*>
+*>       The first stage consists of deflating the size of the problem
+*>       when there are multiple eigenvalues or if there is a zero in
+*>       the Z vector.  For each such occurence the dimension of the
+*>       secular equation problem is reduced by one.  This stage is
+*>       performed by the routine DLAED8.
+*>
+*>       The second stage consists of calculating the updated
+*>       eigenvalues. This is done by finding the roots of the secular
+*>       equation via the routine DLAED4 (as called by DLAED9).
+*>       This routine also calculates the eigenvectors of the current
+*>       problem.
+*>
+*>       The final stage consists of computing the updated eigenvectors
+*>       directly using the updated eigenvalues.  The eigenvectors for
+*>       the current problem are multiplied with the eigenvectors from
+*>       the overall problem.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ICOMPQ
+*> \verbatim
+*>          ICOMPQ is INTEGER
+*>          = 0:  Compute eigenvalues only.
+*>          = 1:  Compute eigenvectors of original dense symmetric matrix
+*>                also.  On entry, Q contains the orthogonal matrix used
+*>                to reduce the original matrix to tridiagonal form.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The dimension of the symmetric tridiagonal matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] QSIZ
+*> \verbatim
+*>          QSIZ is INTEGER
+*>         The dimension of the orthogonal matrix used to reduce
+*>         the full matrix to tridiagonal form.  QSIZ >= N if ICOMPQ = 1.
+*> \endverbatim
+*>
+*> \param[in] TLVLS
+*> \verbatim
+*>          TLVLS is INTEGER
+*>         The total number of merging levels in the overall divide and
+*>         conquer tree.
+*> \endverbatim
+*>
+*> \param[in] CURLVL
+*> \verbatim
+*>          CURLVL is INTEGER
+*>         The current level in the overall merge routine,
+*>         0 <= CURLVL <= TLVLS.
+*> \endverbatim
+*>
+*> \param[in] CURPBM
+*> \verbatim
+*>          CURPBM is INTEGER
+*>         The current problem in the current level in the overall
+*>         merge routine (counting from upper left to lower right).
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>         On entry, the eigenvalues of the rank-1-perturbed matrix.
+*>         On exit, the eigenvalues of the repaired matrix.
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is DOUBLE PRECISION array, dimension (LDQ, N)
+*>         On entry, the eigenvectors of the rank-1-perturbed matrix.
+*>         On exit, the eigenvectors of the repaired tridiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>         The leading dimension of the array Q.  LDQ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INDXQ
+*> \verbatim
+*>          INDXQ is INTEGER array, dimension (N)
+*>         The permutation which will reintegrate the subproblem just
+*>         solved back into sorted order, i.e., D( INDXQ( I = 1, N ) )
+*>         will be in ascending order.
+*> \endverbatim
+*>
+*> \param[in] RHO
+*> \verbatim
+*>          RHO is DOUBLE PRECISION
+*>         The subdiagonal element used to create the rank-1
+*>         modification.
+*> \endverbatim
+*>
+*> \param[in] CUTPNT
+*> \verbatim
+*>          CUTPNT is INTEGER
+*>         Contains the location of the last eigenvalue in the leading
+*>         sub-matrix.  min(1,N) <= CUTPNT <= N.
+*> \endverbatim
+*>
+*> \param[in,out] QSTORE
+*> \verbatim
+*>          QSTORE is DOUBLE PRECISION array, dimension (N**2+1)
+*>         Stores eigenvectors of submatrices encountered during
+*>         divide and conquer, packed together. QPTR points to
+*>         beginning of the submatrices.
+*> \endverbatim
+*>
+*> \param[in,out] QPTR
+*> \verbatim
+*>          QPTR is INTEGER array, dimension (N+2)
+*>         List of indices pointing to beginning of submatrices stored
+*>         in QSTORE. The submatrices are numbered starting at the
+*>         bottom left of the divide and conquer tree, from left to
+*>         right and bottom to top.
+*> \endverbatim
+*>
+*> \param[in] PRMPTR
+*> \verbatim
+*>          PRMPTR is INTEGER array, dimension (N lg N)
+*>         Contains a list of pointers which indicate where in PERM a
+*>         level's permutation is stored.  PRMPTR(i+1) - PRMPTR(i)
+*>         indicates the size of the permutation and also the size of
+*>         the full, non-deflated problem.
+*> \endverbatim
+*>
+*> \param[in] PERM
+*> \verbatim
+*>          PERM is INTEGER array, dimension (N lg N)
+*>         Contains the permutations (from deflation and sorting) to be
+*>         applied to each eigenblock.
+*> \endverbatim
+*>
+*> \param[in] GIVPTR
+*> \verbatim
+*>          GIVPTR is INTEGER array, dimension (N lg N)
+*>         Contains a list of pointers which indicate where in GIVCOL a
+*>         level's Givens rotations are stored.  GIVPTR(i+1) - GIVPTR(i)
+*>         indicates the number of Givens rotations.
+*> \endverbatim
+*>
+*> \param[in] GIVCOL
+*> \verbatim
+*>          GIVCOL is INTEGER array, dimension (2, N lg N)
+*>         Each pair of numbers indicates a pair of columns to take place
+*>         in a Givens rotation.
+*> \endverbatim
+*>
+*> \param[in] GIVNUM
+*> \verbatim
+*>          GIVNUM is DOUBLE PRECISION array, dimension (2, N lg N)
+*>         Each number indicates the S value to be used in the
+*>         corresponding Givens rotation.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (3*N+2*QSIZ*N)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (4*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  if INFO = 1, an eigenvalue did not converge
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Jeff Rutter, Computer Science Division, University of California
+*>     at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLAED7( ICOMPQ, N, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
      $                   LDQ, INDXQ, RHO, CUTPNT, QSTORE, QPTR, PRMPTR,
      $                   PERM, GIVPTR, GIVCOL, GIVNUM, WORK, IWORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            CURLVL, CURPBM, CUTPNT, ICOMPQ, INFO, LDQ, N,
@@ -19,144 +274,6 @@
       DOUBLE PRECISION   D( * ), GIVNUM( 2, * ), Q( LDQ, * ),
      $                   QSTORE( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAED7 computes the updated eigensystem of a diagonal
-*  matrix after modification by a rank-one symmetric matrix. This
-*  routine is used only for the eigenproblem which requires all
-*  eigenvalues and optionally eigenvectors of a dense symmetric matrix
-*  that has been reduced to tridiagonal form.  DLAED1 handles
-*  the case in which all eigenvalues and eigenvectors of a symmetric
-*  tridiagonal matrix are desired.
-*
-*    T = Q(in) ( D(in) + RHO * Z*Z**T ) Q**T(in) = Q(out) * D(out) * Q**T(out)
-*
-*     where Z = Q**Tu, u is a vector of length N with ones in the
-*     CUTPNT and CUTPNT + 1 th elements and zeros elsewhere.
-*
-*     The eigenvectors of the original matrix are stored in Q, and the
-*     eigenvalues are in D.  The algorithm consists of three stages:
-*
-*        The first stage consists of deflating the size of the problem
-*        when there are multiple eigenvalues or if there is a zero in
-*        the Z vector.  For each such occurence the dimension of the
-*        secular equation problem is reduced by one.  This stage is
-*        performed by the routine DLAED8.
-*
-*        The second stage consists of calculating the updated
-*        eigenvalues. This is done by finding the roots of the secular
-*        equation via the routine DLAED4 (as called by DLAED9).
-*        This routine also calculates the eigenvectors of the current
-*        problem.
-*
-*        The final stage consists of computing the updated eigenvectors
-*        directly using the updated eigenvalues.  The eigenvectors for
-*        the current problem are multiplied with the eigenvectors from
-*        the overall problem.
-*
-*  Arguments
-*  =========
-*
-*  ICOMPQ  (input) INTEGER
-*          = 0:  Compute eigenvalues only.
-*          = 1:  Compute eigenvectors of original dense symmetric matrix
-*                also.  On entry, Q contains the orthogonal matrix used
-*                to reduce the original matrix to tridiagonal form.
-*
-*  N      (input) INTEGER
-*         The dimension of the symmetric tridiagonal matrix.  N >= 0.
-*
-*  QSIZ   (input) INTEGER
-*         The dimension of the orthogonal matrix used to reduce
-*         the full matrix to tridiagonal form.  QSIZ >= N if ICOMPQ = 1.
-*
-*  TLVLS  (input) INTEGER
-*         The total number of merging levels in the overall divide and
-*         conquer tree.
-*
-*  CURLVL (input) INTEGER
-*         The current level in the overall merge routine,
-*         0 <= CURLVL <= TLVLS.
-*
-*  CURPBM (input) INTEGER
-*         The current problem in the current level in the overall
-*         merge routine (counting from upper left to lower right).
-*
-*  D      (input/output) DOUBLE PRECISION array, dimension (N)
-*         On entry, the eigenvalues of the rank-1-perturbed matrix.
-*         On exit, the eigenvalues of the repaired matrix.
-*
-*  Q      (input/output) DOUBLE PRECISION array, dimension (LDQ, N)
-*         On entry, the eigenvectors of the rank-1-perturbed matrix.
-*         On exit, the eigenvectors of the repaired tridiagonal matrix.
-*
-*  LDQ    (input) INTEGER
-*         The leading dimension of the array Q.  LDQ >= max(1,N).
-*
-*  INDXQ  (output) INTEGER array, dimension (N)
-*         The permutation which will reintegrate the subproblem just
-*         solved back into sorted order, i.e., D( INDXQ( I = 1, N ) )
-*         will be in ascending order.
-*
-*  RHO    (input) DOUBLE PRECISION
-*         The subdiagonal element used to create the rank-1
-*         modification.
-*
-*  CUTPNT (input) INTEGER
-*         Contains the location of the last eigenvalue in the leading
-*         sub-matrix.  min(1,N) <= CUTPNT <= N.
-*
-*  QSTORE (input/output) DOUBLE PRECISION array, dimension (N**2+1)
-*         Stores eigenvectors of submatrices encountered during
-*         divide and conquer, packed together. QPTR points to
-*         beginning of the submatrices.
-*
-*  QPTR   (input/output) INTEGER array, dimension (N+2)
-*         List of indices pointing to beginning of submatrices stored
-*         in QSTORE. The submatrices are numbered starting at the
-*         bottom left of the divide and conquer tree, from left to
-*         right and bottom to top.
-*
-*  PRMPTR (input) INTEGER array, dimension (N lg N)
-*         Contains a list of pointers which indicate where in PERM a
-*         level's permutation is stored.  PRMPTR(i+1) - PRMPTR(i)
-*         indicates the size of the permutation and also the size of
-*         the full, non-deflated problem.
-*
-*  PERM   (input) INTEGER array, dimension (N lg N)
-*         Contains the permutations (from deflation and sorting) to be
-*         applied to each eigenblock.
-*
-*  GIVPTR (input) INTEGER array, dimension (N lg N)
-*         Contains a list of pointers which indicate where in GIVCOL a
-*         level's Givens rotations are stored.  GIVPTR(i+1) - GIVPTR(i)
-*         indicates the number of Givens rotations.
-*
-*  GIVCOL (input) INTEGER array, dimension (2, N lg N)
-*         Each pair of numbers indicates a pair of columns to take place
-*         in a Givens rotation.
-*
-*  GIVNUM (input) DOUBLE PRECISION array, dimension (2, N lg N)
-*         Each number indicates the S value to be used in the
-*         corresponding Givens rotation.
-*
-*  WORK   (workspace) DOUBLE PRECISION array, dimension (3*N+2*QSIZ*N)
-*
-*  IWORK  (workspace) INTEGER array, dimension (4*N)
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if INFO = 1, an eigenvalue did not converge
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Jeff Rutter, Computer Science Division, University of California
-*     at Berkeley, USA
 *
 *  =====================================================================
 *

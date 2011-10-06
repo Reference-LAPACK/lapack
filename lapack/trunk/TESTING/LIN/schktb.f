@@ -1,10 +1,166 @@
+*> \brief \b SCHKTB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
+*                          NMAX, AB, AINV, B, X, XACT, WORK, RWORK, IWORK,
+*                          NOUT )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTERR
+*       INTEGER            NMAX, NN, NNS, NOUT
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            IWORK( * ), NSVAL( * ), NVAL( * )
+*       REAL               AB( * ), AINV( * ), B( * ), RWORK( * ),
+*      $                   WORK( * ), X( * ), XACT( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SCHKTB tests STBTRS, -RFS, and -CON, and SLATBS.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NNS
+*> \verbatim
+*>          NNS is INTEGER
+*>          The number of values of NRHS contained in the vector NSVAL.
+*> \endverbatim
+*>
+*> \param[in] NSVAL
+*> \verbatim
+*>          NSVAL is INTEGER array, dimension (NNS)
+*>          The values of the number of right hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[in] NMAX
+*> \verbatim
+*>          NMAX is INTEGER
+*>          The leading dimension of the work arrays.
+*>          NMAX >= the maximum value of N in NVAL.
+*> \endverbatim
+*>
+*> \param[out] AB
+*> \verbatim
+*>          AB is REAL array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AINV
+*> \verbatim
+*>          AINV is REAL array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is REAL array, dimension (NMAX*NSMAX)
+*>          where NSMAX is the largest entry in NSVAL.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is REAL array, dimension (NMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] XACT
+*> \verbatim
+*>          XACT is REAL array, dimension (NMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension
+*>                      (NMAX*max(3,NSMAX))
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension
+*>                      (max(NMAX,2*NSMAX))
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SCHKTB( DOTYPE, NN, NVAL, NNS, NSVAL, THRESH, TSTERR,
      $                   NMAX, AB, AINV, B, X, XACT, WORK, RWORK, IWORK,
      $                   NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -17,65 +173,6 @@
       REAL               AB( * ), AINV( * ), B( * ), RWORK( * ),
      $                   WORK( * ), X( * ), XACT( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SCHKTB tests STBTRS, -RFS, and -CON, and SLATBS.
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*
-*  NN      (input) INTEGER
-*          The number of values of N contained in the vector NVAL.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix column dimension N.
-*
-*  NNS     (input) INTEGER
-*          The number of values of NRHS contained in the vector NSVAL.
-*
-*  NSVAL   (input) INTEGER array, dimension (NNS)
-*          The values of the number of right hand sides NRHS.
-*
-*  THRESH  (input) REAL
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  NMAX    (input) INTEGER
-*          The leading dimension of the work arrays.
-*          NMAX >= the maximum value of N in NVAL.
-*
-*  AB      (workspace) REAL array, dimension (NMAX*NMAX)
-*
-*  AINV    (workspace) REAL array, dimension (NMAX*NMAX)
-*
-*  B       (workspace) REAL array, dimension (NMAX*NSMAX)
-*          where NSMAX is the largest entry in NSVAL.
-*
-*  X       (workspace) REAL array, dimension (NMAX*NSMAX)
-*
-*  XACT    (workspace) REAL array, dimension (NMAX*NSMAX)
-*
-*  WORK    (workspace) REAL array, dimension
-*                      (NMAX*max(3,NSMAX))
-*
-*  RWORK   (workspace) REAL array, dimension
-*                      (max(NMAX,2*NSMAX))
-*
-*  IWORK   (workspace) INTEGER array, dimension (NMAX)
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

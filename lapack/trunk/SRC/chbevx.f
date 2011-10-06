@@ -1,11 +1,266 @@
+*> \brief <b> CHBEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CHBEVX( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q, LDQ, VL,
+*                          VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK, RWORK,
+*                          IWORK, IFAIL, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBZ, RANGE, UPLO
+*       INTEGER            IL, INFO, IU, KD, LDAB, LDQ, LDZ, M, N
+*       REAL               ABSTOL, VL, VU
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IFAIL( * ), IWORK( * )
+*       REAL               RWORK( * ), W( * )
+*       COMPLEX            AB( LDAB, * ), Q( LDQ, * ), WORK( * ),
+*      $                   Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CHBEVX computes selected eigenvalues and, optionally, eigenvectors
+*> of a complex Hermitian band matrix A.  Eigenvalues and eigenvectors
+*> can be selected by specifying either a range of values or a range of
+*> indices for the desired eigenvalues.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBZ
+*> \verbatim
+*>          JOBZ is CHARACTER*1
+*>          = 'N':  Compute eigenvalues only;
+*>          = 'V':  Compute eigenvalues and eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] RANGE
+*> \verbatim
+*>          RANGE is CHARACTER*1
+*>          = 'A': all eigenvalues will be found;
+*>          = 'V': all eigenvalues in the half-open interval (VL,VU]
+*>                 will be found;
+*>          = 'I': the IL-th through IU-th eigenvalues will be found.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of superdiagonals of the matrix A if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AB
+*> \verbatim
+*>          AB is COMPLEX array, dimension (LDAB, N)
+*>          On entry, the upper or lower triangle of the Hermitian band
+*>          matrix A, stored in the first KD+1 rows of the array.  The
+*>          j-th column of A is stored in the j-th column of the array AB
+*>          as follows:
+*>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
+*> \endverbatim
+*> \verbatim
+*>          On exit, AB is overwritten by values generated during the
+*>          reduction to tridiagonal form.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD + 1.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDQ, N)
+*>          If JOBZ = 'V', the N-by-N unitary matrix used in the
+*>                          reduction to tridiagonal form.
+*>          If JOBZ = 'N', the array Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q.  If JOBZ = 'V', then
+*>          LDQ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] VL
+*> \verbatim
+*>          VL is REAL
+*> \endverbatim
+*>
+*> \param[in] VU
+*> \verbatim
+*>          VU is REAL
+*>          If RANGE='V', the lower and upper bounds of the interval to
+*>          be searched for eigenvalues. VL < VU.
+*>          Not referenced if RANGE = 'A' or 'I'.
+*> \endverbatim
+*>
+*> \param[in] IL
+*> \verbatim
+*>          IL is INTEGER
+*> \endverbatim
+*>
+*> \param[in] IU
+*> \verbatim
+*>          IU is INTEGER
+*>          If RANGE='I', the indices (in ascending order) of the
+*>          smallest and largest eigenvalues to be returned.
+*>          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
+*>          Not referenced if RANGE = 'A' or 'V'.
+*> \endverbatim
+*>
+*> \param[in] ABSTOL
+*> \verbatim
+*>          ABSTOL is REAL
+*>          The absolute error tolerance for the eigenvalues.
+*>          An approximate eigenvalue is accepted as converged
+*>          when it is determined to lie in an interval [a,b]
+*>          of width less than or equal to
+*> \endverbatim
+*> \verbatim
+*>                  ABSTOL + EPS *   max( |a|,|b| ) ,
+*> \endverbatim
+*> \verbatim
+*>          where EPS is the machine precision.  If ABSTOL is less than
+*>          or equal to zero, then  EPS*|T|  will be used in its place,
+*>          where |T| is the 1-norm of the tridiagonal matrix obtained
+*>          by reducing AB to tridiagonal form.
+*> \endverbatim
+*> \verbatim
+*>          Eigenvalues will be computed most accurately when ABSTOL is
+*>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
+*>          If this routine returns with INFO>0, indicating that some
+*>          eigenvectors did not converge, try setting ABSTOL to
+*>          2*SLAMCH('S').
+*> \endverbatim
+*> \verbatim
+*>          See "Computing Small Singular Values of Bidiagonal Matrices
+*>          with Guaranteed High Relative Accuracy," by Demmel and
+*>          Kahan, LAPACK Working Note #3.
+*> \endverbatim
+*>
+*> \param[out] M
+*> \verbatim
+*>          M is INTEGER
+*>          The total number of eigenvalues found.  0 <= M <= N.
+*>          If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is REAL array, dimension (N)
+*>          The first M elements contain the selected eigenvalues in
+*>          ascending order.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX array, dimension (LDZ, max(1,M))
+*>          If JOBZ = 'V', then if INFO = 0, the first M columns of Z
+*>          contain the orthonormal eigenvectors of the matrix A
+*>          corresponding to the selected eigenvalues, with the i-th
+*>          column of Z holding the eigenvector associated with W(i).
+*>          If an eigenvector fails to converge, then that column of Z
+*>          contains the latest approximation to the eigenvector, and the
+*>          index of the eigenvector is returned in IFAIL.
+*>          If JOBZ = 'N', then Z is not referenced.
+*>          Note: the user must ensure that at least max(1,M) columns are
+*>          supplied in the array Z; if RANGE = 'V', the exact value of M
+*>          is not known in advance and an upper bound must be used.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1, and if
+*>          JOBZ = 'V', LDZ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (7*N)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (5*N)
+*> \endverbatim
+*>
+*> \param[out] IFAIL
+*> \verbatim
+*>          IFAIL is INTEGER array, dimension (N)
+*>          If JOBZ = 'V', then if INFO = 0, the first M elements of
+*>          IFAIL are zero.  If INFO > 0, then IFAIL contains the
+*>          indices of the eigenvectors that failed to converge.
+*>          If JOBZ = 'N', then IFAIL is not referenced.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, then i eigenvectors failed to converge.
+*>                Their indices are stored in array IFAIL.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHEReigen
+*
+*  =====================================================================
       SUBROUTINE CHBEVX( JOBZ, RANGE, UPLO, N, KD, AB, LDAB, Q, LDQ, VL,
      $                   VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK, RWORK,
      $                   IWORK, IFAIL, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE, UPLO
@@ -18,142 +273,6 @@
       COMPLEX            AB( LDAB, * ), Q( LDQ, * ), WORK( * ),
      $                   Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CHBEVX computes selected eigenvalues and, optionally, eigenvectors
-*  of a complex Hermitian band matrix A.  Eigenvalues and eigenvectors
-*  can be selected by specifying either a range of values or a range of
-*  indices for the desired eigenvalues.
-*
-*  Arguments
-*  =========
-*
-*  JOBZ    (input) CHARACTER*1
-*          = 'N':  Compute eigenvalues only;
-*          = 'V':  Compute eigenvalues and eigenvectors.
-*
-*  RANGE   (input) CHARACTER*1
-*          = 'A': all eigenvalues will be found;
-*          = 'V': all eigenvalues in the half-open interval (VL,VU]
-*                 will be found;
-*          = 'I': the IL-th through IU-th eigenvalues will be found.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  KD      (input) INTEGER
-*          The number of superdiagonals of the matrix A if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'.  KD >= 0.
-*
-*  AB      (input/output) COMPLEX array, dimension (LDAB, N)
-*          On entry, the upper or lower triangle of the Hermitian band
-*          matrix A, stored in the first KD+1 rows of the array.  The
-*          j-th column of A is stored in the j-th column of the array AB
-*          as follows:
-*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*
-*          On exit, AB is overwritten by values generated during the
-*          reduction to tridiagonal form.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KD + 1.
-*
-*  Q       (output) COMPLEX array, dimension (LDQ, N)
-*          If JOBZ = 'V', the N-by-N unitary matrix used in the
-*                          reduction to tridiagonal form.
-*          If JOBZ = 'N', the array Q is not referenced.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q.  If JOBZ = 'V', then
-*          LDQ >= max(1,N).
-*
-*  VL      (input) REAL
-*
-*  VU      (input) REAL
-*          If RANGE='V', the lower and upper bounds of the interval to
-*          be searched for eigenvalues. VL < VU.
-*          Not referenced if RANGE = 'A' or 'I'.
-*
-*  IL      (input) INTEGER
-*
-*  IU      (input) INTEGER
-*          If RANGE='I', the indices (in ascending order) of the
-*          smallest and largest eigenvalues to be returned.
-*          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
-*          Not referenced if RANGE = 'A' or 'V'.
-*
-*  ABSTOL  (input) REAL
-*          The absolute error tolerance for the eigenvalues.
-*          An approximate eigenvalue is accepted as converged
-*          when it is determined to lie in an interval [a,b]
-*          of width less than or equal to
-*
-*                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*
-*          where EPS is the machine precision.  If ABSTOL is less than
-*          or equal to zero, then  EPS*|T|  will be used in its place,
-*          where |T| is the 1-norm of the tridiagonal matrix obtained
-*          by reducing AB to tridiagonal form.
-*
-*          Eigenvalues will be computed most accurately when ABSTOL is
-*          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
-*          If this routine returns with INFO>0, indicating that some
-*          eigenvectors did not converge, try setting ABSTOL to
-*          2*SLAMCH('S').
-*
-*          See "Computing Small Singular Values of Bidiagonal Matrices
-*          with Guaranteed High Relative Accuracy," by Demmel and
-*          Kahan, LAPACK Working Note #3.
-*
-*  M       (output) INTEGER
-*          The total number of eigenvalues found.  0 <= M <= N.
-*          If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1.
-*
-*  W       (output) REAL array, dimension (N)
-*          The first M elements contain the selected eigenvalues in
-*          ascending order.
-*
-*  Z       (output) COMPLEX array, dimension (LDZ, max(1,M))
-*          If JOBZ = 'V', then if INFO = 0, the first M columns of Z
-*          contain the orthonormal eigenvectors of the matrix A
-*          corresponding to the selected eigenvalues, with the i-th
-*          column of Z holding the eigenvector associated with W(i).
-*          If an eigenvector fails to converge, then that column of Z
-*          contains the latest approximation to the eigenvector, and the
-*          index of the eigenvector is returned in IFAIL.
-*          If JOBZ = 'N', then Z is not referenced.
-*          Note: the user must ensure that at least max(1,M) columns are
-*          supplied in the array Z; if RANGE = 'V', the exact value of M
-*          is not known in advance and an upper bound must be used.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= 1, and if
-*          JOBZ = 'V', LDZ >= max(1,N).
-*
-*  WORK    (workspace) COMPLEX array, dimension (N)
-*
-*  RWORK   (workspace) REAL array, dimension (7*N)
-*
-*  IWORK   (workspace) INTEGER array, dimension (5*N)
-*
-*  IFAIL   (output) INTEGER array, dimension (N)
-*          If JOBZ = 'V', then if INFO = 0, the first M elements of
-*          IFAIL are zero.  If INFO > 0, then IFAIL contains the
-*          indices of the eigenvectors that failed to converge.
-*          If JOBZ = 'N', then IFAIL is not referenced.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, then i eigenvectors failed to converge.
-*                Their indices are stored in array IFAIL.
 *
 *  =====================================================================
 *

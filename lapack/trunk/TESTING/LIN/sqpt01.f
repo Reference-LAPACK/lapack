@@ -1,9 +1,131 @@
+*> \brief \b SQPT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION SQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
+*                        WORK, LWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            K, LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            JPVT( * )
+*       REAL               A( LDA, * ), AF( LDA, * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SQPT01 tests the QR-factorization with pivoting of a matrix A.  The
+*> array AF contains the (possibly partial) QR-factorization of A, where
+*> the upper triangle of AF(1:k,1:k) is a partial triangular factor,
+*> the entries below the diagonal in the first k columns are the
+*> Householder vectors, and the rest of AF contains a partially updated
+*> matrix.
+*>
+*> This function returns ||A*P - Q*R||/(||norm(A)||*eps*M)
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of columns of AF that have been reduced
+*>          to upper triangular form.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA, N)
+*>          The original matrix A.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is REAL array, dimension (LDA,N)
+*>          The (possibly partial) output of SGEQPF.  The upper triangle
+*>          of AF(1:k,1:k) is a partial triangular factor, the entries
+*>          below the diagonal in the first k columns are the Householder
+*>          vectors, and the rest of AF contains a partially updated
+*>          matrix.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A and AF.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is REAL array, dimension (K)
+*>          Details of the Householder transformations as returned by
+*>          SGEQPF.
+*> \endverbatim
+*>
+*> \param[in] JPVT
+*> \verbatim
+*>          JPVT is INTEGER array, dimension (N)
+*>          Pivot information as returned by SGEQPF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK >= M*N+N.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       REAL             FUNCTION SQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
      $                 WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            K, LDA, LWORK, M, N
@@ -13,56 +135,6 @@
       REAL               A( LDA, * ), AF( LDA, * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SQPT01 tests the QR-factorization with pivoting of a matrix A.  The
-*  array AF contains the (possibly partial) QR-factorization of A, where
-*  the upper triangle of AF(1:k,1:k) is a partial triangular factor,
-*  the entries below the diagonal in the first k columns are the
-*  Householder vectors, and the rest of AF contains a partially updated
-*  matrix.
-*
-*  This function returns ||A*P - Q*R||/(||norm(A)||*eps*M)
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrices A and AF.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and AF.
-*
-*  K       (input) INTEGER
-*          The number of columns of AF that have been reduced
-*          to upper triangular form.
-*
-*  A       (input) REAL array, dimension (LDA, N)
-*          The original matrix A.
-*
-*  AF      (input) REAL array, dimension (LDA,N)
-*          The (possibly partial) output of SGEQPF.  The upper triangle
-*          of AF(1:k,1:k) is a partial triangular factor, the entries
-*          below the diagonal in the first k columns are the Householder
-*          vectors, and the rest of AF contains a partially updated
-*          matrix.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A and AF.
-*
-*  TAU     (input) REAL array, dimension (K)
-*          Details of the Householder transformations as returned by
-*          SGEQPF.
-*
-*  JPVT    (input) INTEGER array, dimension (N)
-*          Pivot information as returned by SGEQPF.
-*
-*  WORK    (workspace) REAL array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  LWORK >= M*N+N.
 *
 *  =====================================================================
 *

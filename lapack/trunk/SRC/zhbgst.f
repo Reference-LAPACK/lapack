@@ -1,10 +1,167 @@
+*> \brief \b ZHBGST
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZHBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
+*                          LDX, WORK, RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO, VECT
+*       INTEGER            INFO, KA, KB, LDAB, LDBB, LDX, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         AB( LDAB, * ), BB( LDBB, * ), WORK( * ),
+*      $                   X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZHBGST reduces a complex Hermitian-definite banded generalized
+*> eigenproblem  A*x = lambda*B*x  to standard form  C*y = lambda*y,
+*> such that C has the same bandwidth as A.
+*>
+*> B must have been previously factorized as S**H*S by ZPBSTF, using a
+*> split Cholesky factorization. A is overwritten by C = X**H*A*X, where
+*> X = S**(-1)*Q and Q is a unitary matrix chosen to preserve the
+*> bandwidth of A.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] VECT
+*> \verbatim
+*>          VECT is CHARACTER*1
+*>          = 'N':  do not form the transformation matrix X;
+*>          = 'V':  form X.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A and B.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KA
+*> \verbatim
+*>          KA is INTEGER
+*>          The number of superdiagonals of the matrix A if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'.  KA >= 0.
+*> \endverbatim
+*>
+*> \param[in] KB
+*> \verbatim
+*>          KB is INTEGER
+*>          The number of superdiagonals of the matrix B if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'.  KA >= KB >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AB
+*> \verbatim
+*>          AB is COMPLEX*16 array, dimension (LDAB,N)
+*>          On entry, the upper or lower triangle of the Hermitian band
+*>          matrix A, stored in the first ka+1 rows of the array.  The
+*>          j-th column of A is stored in the j-th column of the array AB
+*>          as follows:
+*>          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
+*> \endverbatim
+*> \verbatim
+*>          On exit, the transformed matrix X**H*A*X, stored in the same
+*>          format as A.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KA+1.
+*> \endverbatim
+*>
+*> \param[in] BB
+*> \verbatim
+*>          BB is COMPLEX*16 array, dimension (LDBB,N)
+*>          The banded factor S from the split Cholesky factorization of
+*>          B, as returned by ZPBSTF, stored in the first kb+1 rows of
+*>          the array.
+*> \endverbatim
+*>
+*> \param[in] LDBB
+*> \verbatim
+*>          LDBB is INTEGER
+*>          The leading dimension of the array BB.  LDBB >= KB+1.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (LDX,N)
+*>          If VECT = 'V', the n-by-n matrix X.
+*>          If VECT = 'N', the array X is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.
+*>          LDX >= max(1,N) if VECT = 'V'; LDX >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE ZHBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
      $                   LDX, WORK, RWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2.2) --
+*  -- LAPACK computational routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO, VECT
@@ -15,78 +172,6 @@
       COMPLEX*16         AB( LDAB, * ), BB( LDBB, * ), WORK( * ),
      $                   X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZHBGST reduces a complex Hermitian-definite banded generalized
-*  eigenproblem  A*x = lambda*B*x  to standard form  C*y = lambda*y,
-*  such that C has the same bandwidth as A.
-*
-*  B must have been previously factorized as S**H*S by ZPBSTF, using a
-*  split Cholesky factorization. A is overwritten by C = X**H*A*X, where
-*  X = S**(-1)*Q and Q is a unitary matrix chosen to preserve the
-*  bandwidth of A.
-*
-*  Arguments
-*  =========
-*
-*  VECT    (input) CHARACTER*1
-*          = 'N':  do not form the transformation matrix X;
-*          = 'V':  form X.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangle of A is stored;
-*          = 'L':  Lower triangle of A is stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrices A and B.  N >= 0.
-*
-*  KA      (input) INTEGER
-*          The number of superdiagonals of the matrix A if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'.  KA >= 0.
-*
-*  KB      (input) INTEGER
-*          The number of superdiagonals of the matrix B if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'.  KA >= KB >= 0.
-*
-*  AB      (input/output) COMPLEX*16 array, dimension (LDAB,N)
-*          On entry, the upper or lower triangle of the Hermitian band
-*          matrix A, stored in the first ka+1 rows of the array.  The
-*          j-th column of A is stored in the j-th column of the array AB
-*          as follows:
-*          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
-*
-*          On exit, the transformed matrix X**H*A*X, stored in the same
-*          format as A.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KA+1.
-*
-*  BB      (input) COMPLEX*16 array, dimension (LDBB,N)
-*          The banded factor S from the split Cholesky factorization of
-*          B, as returned by ZPBSTF, stored in the first kb+1 rows of
-*          the array.
-*
-*  LDBB    (input) INTEGER
-*          The leading dimension of the array BB.  LDBB >= KB+1.
-*
-*  X       (output) COMPLEX*16 array, dimension (LDX,N)
-*          If VECT = 'V', the n-by-n matrix X.
-*          If VECT = 'N', the array X is not referenced.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.
-*          LDX >= max(1,N) if VECT = 'V'; LDX >= 1 otherwise.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (N)
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *
 *  =====================================================================
 *

@@ -1,9 +1,133 @@
+*> \brief \b ZTRT06
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, RWORK,
+*                          RAT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, UPLO
+*       INTEGER            LDA, N
+*       DOUBLE PRECISION   RAT, RCOND, RCONDC
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZTRT06 computes a test ratio comparing RCOND (the reciprocal
+*> condition number of a triangular matrix A) and RCONDC, the estimate
+*> computed by ZTRCON.  Information about the triangular matrix A is
+*> used if one estimate is zero and the other is non-zero to decide if
+*> underflow in the estimate is justified.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>          The estimate of the reciprocal condition number obtained by
+*>          forming the explicit inverse of the matrix A and computing
+*>          RCOND = 1/( norm(A) * norm(inv(A)) ).
+*> \endverbatim
+*>
+*> \param[in] RCONDC
+*> \verbatim
+*>          RCONDC is DOUBLE PRECISION
+*>          The estimate of the reciprocal condition number computed by
+*>          ZTRCON.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER
+*>          Specifies whether the matrix A is upper or lower triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER
+*>          Specifies whether or not the matrix A is unit triangular.
+*>          = 'N':  Non-unit triangular
+*>          = 'U':  Unit triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          The triangular matrix A.  If UPLO = 'U', the leading n by n
+*>          upper triangular part of the array A contains the upper
+*>          triangular matrix, and the strictly lower triangular part of
+*>          A is not referenced.  If UPLO = 'L', the leading n by n lower
+*>          triangular part of the array A contains the lower triangular
+*>          matrix, and the strictly upper triangular part of A is not
+*>          referenced.  If DIAG = 'U', the diagonal elements of A are
+*>          also not referenced and are assumed to be 1.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RAT
+*> \verbatim
+*>          RAT is DOUBLE PRECISION
+*>          The test ratio.  If both RCOND and RCONDC are nonzero,
+*>             RAT = MAX( RCOND, RCONDC )/MIN( RCOND, RCONDC ) - 1.
+*>          If RAT = 0, the two estimates are exactly the same.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZTRT06( RCOND, RCONDC, UPLO, DIAG, N, A, LDA, RWORK,
      $                   RAT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, UPLO
@@ -14,60 +138,6 @@
       DOUBLE PRECISION   RWORK( * )
       COMPLEX*16         A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZTRT06 computes a test ratio comparing RCOND (the reciprocal
-*  condition number of a triangular matrix A) and RCONDC, the estimate
-*  computed by ZTRCON.  Information about the triangular matrix A is
-*  used if one estimate is zero and the other is non-zero to decide if
-*  underflow in the estimate is justified.
-*
-*  Arguments
-*  =========
-*
-*  RCOND   (input) DOUBLE PRECISION
-*          The estimate of the reciprocal condition number obtained by
-*          forming the explicit inverse of the matrix A and computing
-*          RCOND = 1/( norm(A) * norm(inv(A)) ).
-*
-*  RCONDC  (input) DOUBLE PRECISION
-*          The estimate of the reciprocal condition number computed by
-*          ZTRCON.
-*
-*  UPLO    (input) CHARACTER
-*          Specifies whether the matrix A is upper or lower triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  DIAG    (input) CHARACTER
-*          Specifies whether or not the matrix A is unit triangular.
-*          = 'N':  Non-unit triangular
-*          = 'U':  Unit triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input) COMPLEX*16 array, dimension (LDA,N)
-*          The triangular matrix A.  If UPLO = 'U', the leading n by n
-*          upper triangular part of the array A contains the upper
-*          triangular matrix, and the strictly lower triangular part of
-*          A is not referenced.  If UPLO = 'L', the leading n by n lower
-*          triangular part of the array A contains the lower triangular
-*          matrix, and the strictly upper triangular part of A is not
-*          referenced.  If DIAG = 'U', the diagonal elements of A are
-*          also not referenced and are assumed to be 1.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  RAT     (output) DOUBLE PRECISION
-*          The test ratio.  If both RCOND and RCONDC are nonzero,
-*             RAT = MAX( RCOND, RCONDC )/MIN( RCOND, RCONDC ) - 1.
-*          If RAT = 0, the two estimates are exactly the same.
 *
 *  =====================================================================
 *

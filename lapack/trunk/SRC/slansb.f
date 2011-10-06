@@ -1,10 +1,131 @@
+*> \brief \b SLANSB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION SLANSB( NORM, UPLO, N, K, AB, LDAB,
+*                        WORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          NORM, UPLO
+*       INTEGER            K, LDAB, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               AB( LDAB, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLANSB  returns the value of the one norm,  or the Frobenius norm, or
+*> the  infinity norm,  or the element of  largest absolute value  of an
+*> n by n symmetric band matrix A,  with k super-diagonals.
+*>
+*> Description
+*> ===========
+*>
+*> SLANSB returns the value
+*>
+*>    SLANSB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>             (
+*>             ( norm1(A),         NORM = '1', 'O' or 'o'
+*>             (
+*>             ( normI(A),         NORM = 'I' or 'i'
+*>             (
+*>             ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
+*>
+*> where  norm1  denotes the  one norm of a matrix (maximum column sum),
+*> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
+*> normF  denotes the  Frobenius norm of a matrix (square root of sum of
+*> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NORM
+*> \verbatim
+*>          NORM is CHARACTER*1
+*>          Specifies the value to be returned in SLANSB as described
+*>          above.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          band matrix A is supplied.
+*>          = 'U':  Upper triangular part is supplied
+*>          = 'L':  Lower triangular part is supplied
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.  When N = 0, SLANSB is
+*>          set to zero.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of super-diagonals or sub-diagonals of the
+*>          band matrix A.  K >= 0.
+*> \endverbatim
+*>
+*> \param[in] AB
+*> \verbatim
+*>          AB is REAL array, dimension (LDAB,N)
+*>          The upper or lower triangle of the symmetric band matrix A,
+*>          stored in the first K+1 rows of AB.  The j-th column of A is
+*>          stored in the j-th column of the array AB as follows:
+*>          if UPLO = 'U', AB(k+1+i-j,j) = A(i,j) for max(1,j-k)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)   = A(i,j) for j<=i<=min(n,j+k).
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= K+1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (MAX(1,LWORK)),
+*>          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
+*>          WORK is not referenced.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERauxiliary
+*
+*  =====================================================================
       REAL             FUNCTION SLANSB( NORM, UPLO, N, K, AB, LDAB,
      $                 WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          NORM, UPLO
@@ -13,66 +134,6 @@
 *     .. Array Arguments ..
       REAL               AB( LDAB, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLANSB  returns the value of the one norm,  or the Frobenius norm, or
-*  the  infinity norm,  or the element of  largest absolute value  of an
-*  n by n symmetric band matrix A,  with k super-diagonals.
-*
-*  Description
-*  ===========
-*
-*  SLANSB returns the value
-*
-*     SLANSB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
-*              (
-*              ( norm1(A),         NORM = '1', 'O' or 'o'
-*              (
-*              ( normI(A),         NORM = 'I' or 'i'
-*              (
-*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
-*
-*  where  norm1  denotes the  one norm of a matrix (maximum column sum),
-*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
-*  normF  denotes the  Frobenius norm of a matrix (square root of sum of
-*  squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*
-*  Arguments
-*  =========
-*
-*  NORM    (input) CHARACTER*1
-*          Specifies the value to be returned in SLANSB as described
-*          above.
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          band matrix A is supplied.
-*          = 'U':  Upper triangular part is supplied
-*          = 'L':  Lower triangular part is supplied
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.  When N = 0, SLANSB is
-*          set to zero.
-*
-*  K       (input) INTEGER
-*          The number of super-diagonals or sub-diagonals of the
-*          band matrix A.  K >= 0.
-*
-*  AB      (input) REAL array, dimension (LDAB,N)
-*          The upper or lower triangle of the symmetric band matrix A,
-*          stored in the first K+1 rows of AB.  The j-th column of A is
-*          stored in the j-th column of the array AB as follows:
-*          if UPLO = 'U', AB(k+1+i-j,j) = A(i,j) for max(1,j-k)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)   = A(i,j) for j<=i<=min(n,j+k).
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= K+1.
-*
-*  WORK    (workspace) REAL array, dimension (MAX(1,LWORK)),
-*          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
-*          WORK is not referenced.
 *
 * =====================================================================
 *

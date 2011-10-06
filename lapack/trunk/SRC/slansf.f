@@ -1,12 +1,216 @@
+*> \brief \b SLANSF
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL FUNCTION SLANSF( NORM, TRANSR, UPLO, N, A, WORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          NORM, TRANSR, UPLO
+*       INTEGER            N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( 0: * ), WORK( 0: * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLANSF returns the value of the one norm, or the Frobenius norm, or
+*> the infinity norm, or the element of largest absolute value of a
+*> real symmetric matrix A in RFP format.
+*>
+*> Description
+*> ===========
+*>
+*> SLANSF returns the value
+*>
+*>    SLANSF = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>             (
+*>             ( norm1(A),         NORM = '1', 'O' or 'o'
+*>             (
+*>             ( normI(A),         NORM = 'I' or 'i'
+*>             (
+*>             ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
+*>
+*> where  norm1  denotes the  one norm of a matrix (maximum column sum),
+*> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
+*> normF  denotes the  Frobenius norm of a matrix (square root of sum of
+*> squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NORM
+*> \verbatim
+*>          NORM is CHARACTER*1
+*>          Specifies the value to be returned in SLANSF as described
+*>          above.
+*> \endverbatim
+*>
+*> \param[in] TRANSR
+*> \verbatim
+*>          TRANSR is CHARACTER*1
+*>          Specifies whether the RFP format of A is normal or
+*>          transposed format.
+*>          = 'N':  RFP format is Normal;
+*>          = 'T':  RFP format is Transpose.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>           On entry, UPLO specifies whether the RFP matrix A came from
+*>           an upper or lower triangular matrix as follows:
+*>           = 'U': RFP A came from an upper triangular matrix;
+*>           = 'L': RFP A came from a lower triangular matrix.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A. N >= 0. When N = 0, SLANSF is
+*>          set to zero.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension ( N*(N+1)/2 );
+*>          On entry, the upper (if UPLO = 'U') or lower (if UPLO = 'L')
+*>          part of the symmetric matrix A stored in RFP format. See the
+*>          "Notes" below for more details.
+*>          Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (MAX(1,LWORK)),
+*>          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
+*>          WORK is not referenced.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  We first consider Rectangular Full Packed (RFP) Format when N is
+*>  even. We give an example where N = 6.
+*>
+*>      AP is Upper             AP is Lower
+*>
+*>   00 01 02 03 04 05       00
+*>      11 12 13 14 15       10 11
+*>         22 23 24 25       20 21 22
+*>            33 34 35       30 31 32 33
+*>               44 45       40 41 42 43 44
+*>                  55       50 51 52 53 54 55
+*>
+*>
+*>  Let TRANSR = 'N'. RFP holds AP as follows:
+*>  For UPLO = 'U' the upper trapezoid A(0:5,0:2) consists of the last
+*>  three columns of AP upper. The lower triangle A(4:6,0:2) consists of
+*>  the transpose of the first three columns of AP upper.
+*>  For UPLO = 'L' the lower trapezoid A(1:6,0:2) consists of the first
+*>  three columns of AP lower. The upper triangle A(0:2,0:2) consists of
+*>  the transpose of the last three columns of AP lower.
+*>  This covers the case N even and TRANSR = 'N'.
+*>
+*>         RFP A                   RFP A
+*>
+*>        03 04 05                33 43 53
+*>        13 14 15                00 44 54
+*>        23 24 25                10 11 55
+*>        33 34 35                20 21 22
+*>        00 44 45                30 31 32
+*>        01 11 55                40 41 42
+*>        02 12 22                50 51 52
+*>
+*>  Now let TRANSR = 'T'. RFP A in both UPLO cases is just the
+*>  transpose of RFP A above. One therefore gets:
+*>
+*>
+*>           RFP A                   RFP A
+*>
+*>     03 13 23 33 00 01 02    33 00 10 20 30 40 50
+*>     04 14 24 34 44 11 12    43 44 11 21 31 41 51
+*>     05 15 25 35 45 55 22    53 54 55 22 32 42 52
+*>
+*>
+*>  We then consider Rectangular Full Packed (RFP) Format when N is
+*>  odd. We give an example where N = 5.
+*>
+*>     AP is Upper                 AP is Lower
+*>
+*>   00 01 02 03 04              00
+*>      11 12 13 14              10 11
+*>         22 23 24              20 21 22
+*>            33 34              30 31 32 33
+*>               44              40 41 42 43 44
+*>
+*>
+*>  Let TRANSR = 'N'. RFP holds AP as follows:
+*>  For UPLO = 'U' the upper trapezoid A(0:4,0:2) consists of the last
+*>  three columns of AP upper. The lower triangle A(3:4,0:1) consists of
+*>  the transpose of the first two columns of AP upper.
+*>  For UPLO = 'L' the lower trapezoid A(0:4,0:2) consists of the first
+*>  three columns of AP lower. The upper triangle A(0:1,1:2) consists of
+*>  the transpose of the last two columns of AP lower.
+*>  This covers the case N odd and TRANSR = 'N'.
+*>
+*>         RFP A                   RFP A
+*>
+*>        02 03 04                00 33 43
+*>        12 13 14                10 11 44
+*>        22 23 24                20 21 22
+*>        00 33 34                30 31 32
+*>        01 11 44                40 41 42
+*>
+*>  Now let TRANSR = 'T'. RFP A in both UPLO cases is just the
+*>  transpose of RFP A above. One therefore gets:
+*>
+*>           RFP A                   RFP A
+*>
+*>     02 12 22 00 01             00 10 20 30 40 50
+*>     03 13 23 33 11             33 11 21 31 41 51
+*>     04 14 24 34 44             43 44 22 32 42 52
+*>
+*>  Reference
+*>  =========
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       REAL FUNCTION SLANSF( NORM, TRANSR, UPLO, N, A, WORK )
 *
-*  -- LAPACK routine (version 3.3.1)                                    --
-*
-*  -- Contributed by Fred Gustavson of the IBM Watson Research Center --
-*  -- April 2011                                                      --
-*
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          NORM, TRANSR, UPLO
@@ -15,151 +219,6 @@
 *     .. Array Arguments ..
       REAL               A( 0: * ), WORK( 0: * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLANSF returns the value of the one norm, or the Frobenius norm, or
-*  the infinity norm, or the element of largest absolute value of a
-*  real symmetric matrix A in RFP format.
-*
-*  Description
-*  ===========
-*
-*  SLANSF returns the value
-*
-*     SLANSF = ( max(abs(A(i,j))), NORM = 'M' or 'm'
-*              (
-*              ( norm1(A),         NORM = '1', 'O' or 'o'
-*              (
-*              ( normI(A),         NORM = 'I' or 'i'
-*              (
-*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
-*
-*  where  norm1  denotes the  one norm of a matrix (maximum column sum),
-*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
-*  normF  denotes the  Frobenius norm of a matrix (square root of sum of
-*  squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm.
-*
-*  Arguments
-*  =========
-*
-*  NORM    (input) CHARACTER*1
-*          Specifies the value to be returned in SLANSF as described
-*          above.
-*
-*  TRANSR  (input) CHARACTER*1
-*          Specifies whether the RFP format of A is normal or
-*          transposed format.
-*          = 'N':  RFP format is Normal;
-*          = 'T':  RFP format is Transpose.
-*
-*  UPLO    (input) CHARACTER*1
-*           On entry, UPLO specifies whether the RFP matrix A came from
-*           an upper or lower triangular matrix as follows:
-*           = 'U': RFP A came from an upper triangular matrix;
-*           = 'L': RFP A came from a lower triangular matrix.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A. N >= 0. When N = 0, SLANSF is
-*          set to zero.
-*
-*  A       (input) REAL array, dimension ( N*(N+1)/2 );
-*          On entry, the upper (if UPLO = 'U') or lower (if UPLO = 'L')
-*          part of the symmetric matrix A stored in RFP format. See the
-*          "Notes" below for more details.
-*          Unchanged on exit.
-*
-*  WORK    (workspace) REAL array, dimension (MAX(1,LWORK)),
-*          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
-*          WORK is not referenced.
-*
-*  Further Details
-*  ===============
-*
-*  We first consider Rectangular Full Packed (RFP) Format when N is
-*  even. We give an example where N = 6.
-*
-*      AP is Upper             AP is Lower
-*
-*   00 01 02 03 04 05       00
-*      11 12 13 14 15       10 11
-*         22 23 24 25       20 21 22
-*            33 34 35       30 31 32 33
-*               44 45       40 41 42 43 44
-*                  55       50 51 52 53 54 55
-*
-*
-*  Let TRANSR = 'N'. RFP holds AP as follows:
-*  For UPLO = 'U' the upper trapezoid A(0:5,0:2) consists of the last
-*  three columns of AP upper. The lower triangle A(4:6,0:2) consists of
-*  the transpose of the first three columns of AP upper.
-*  For UPLO = 'L' the lower trapezoid A(1:6,0:2) consists of the first
-*  three columns of AP lower. The upper triangle A(0:2,0:2) consists of
-*  the transpose of the last three columns of AP lower.
-*  This covers the case N even and TRANSR = 'N'.
-*
-*         RFP A                   RFP A
-*
-*        03 04 05                33 43 53
-*        13 14 15                00 44 54
-*        23 24 25                10 11 55
-*        33 34 35                20 21 22
-*        00 44 45                30 31 32
-*        01 11 55                40 41 42
-*        02 12 22                50 51 52
-*
-*  Now let TRANSR = 'T'. RFP A in both UPLO cases is just the
-*  transpose of RFP A above. One therefore gets:
-*
-*
-*           RFP A                   RFP A
-*
-*     03 13 23 33 00 01 02    33 00 10 20 30 40 50
-*     04 14 24 34 44 11 12    43 44 11 21 31 41 51
-*     05 15 25 35 45 55 22    53 54 55 22 32 42 52
-*
-*
-*  We then consider Rectangular Full Packed (RFP) Format when N is
-*  odd. We give an example where N = 5.
-*
-*     AP is Upper                 AP is Lower
-*
-*   00 01 02 03 04              00
-*      11 12 13 14              10 11
-*         22 23 24              20 21 22
-*            33 34              30 31 32 33
-*               44              40 41 42 43 44
-*
-*
-*  Let TRANSR = 'N'. RFP holds AP as follows:
-*  For UPLO = 'U' the upper trapezoid A(0:4,0:2) consists of the last
-*  three columns of AP upper. The lower triangle A(3:4,0:1) consists of
-*  the transpose of the first two columns of AP upper.
-*  For UPLO = 'L' the lower trapezoid A(0:4,0:2) consists of the first
-*  three columns of AP lower. The upper triangle A(0:1,1:2) consists of
-*  the transpose of the last two columns of AP lower.
-*  This covers the case N odd and TRANSR = 'N'.
-*
-*         RFP A                   RFP A
-*
-*        02 03 04                00 33 43
-*        12 13 14                10 11 44
-*        22 23 24                20 21 22
-*        00 33 34                30 31 32
-*        01 11 44                40 41 42
-*
-*  Now let TRANSR = 'T'. RFP A in both UPLO cases is just the
-*  transpose of RFP A above. One therefore gets:
-*
-*           RFP A                   RFP A
-*
-*     02 12 22 00 01             00 10 20 30 40 50
-*     03 13 23 33 11             33 11 21 31 41 51
-*     04 14 24 34 44             43 44 22 32 42 52
-*
-*  Reference
-*  =========
 *
 *  =====================================================================
 *

@@ -1,46 +1,109 @@
-      REAL             FUNCTION SLAMCH( CMACH )
+*> \brief \b SLAMCHF77 deprecated
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*      REAL FUNCTION SLAMCH( CMACH )
+*
+*     .. Scalar Arguments ..
+*      CHARACTER          CMACH
+*     ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAMCH determines single precision machine parameters.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] CMACH
+*> \verbatim
+*>          Specifies the value to be returned by SLAMCH:
+*>          = 'E' or 'e',   SLAMCH := eps
+*>          = 'S' or 's ,   SLAMCH := sfmin
+*>          = 'B' or 'b',   SLAMCH := base
+*>          = 'P' or 'p',   SLAMCH := eps*base
+*>          = 'N' or 'n',   SLAMCH := t
+*>          = 'R' or 'r',   SLAMCH := rnd
+*>          = 'M' or 'm',   SLAMCH := emin
+*>          = 'U' or 'u',   SLAMCH := rmin
+*>          = 'L' or 'l',   SLAMCH := emax
+*>          = 'O' or 'o',   SLAMCH := rmax
+*>          where
+*>          eps   = relative machine precision
+*>          sfmin = safe minimum, such that 1/sfmin does not overflow
+*>          base  = base of the machine
+*>          prec  = eps*base
+*>          t     = number of (base) digits in the mantissa
+*>          rnd   = 1.0 when rounding occurs in addition, 0.0 otherwise
+*>          emin  = minimum exponent before (gradual) underflow
+*>          rmin  = underflow threshold - base**(emin-1)
+*>          emax  = largest exponent before overflow
+*>          rmax  = overflow threshold  - (base**emax)*(1-eps)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
+      REAL FUNCTION SLAMCH( CMACH )
 *
 *  -- LAPACK auxiliary routine (version 3.3.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2010
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          CMACH
 *     ..
 *
-*  Purpose
-*  =======
+*     .. Scalar Arguments ..
+      LOGICAL            IEEE1, RND
+      INTEGER            BETA, T
+*     ..
 *
-*  SLAMCH determines single precision machine parameters.
+*     .. Scalar Arguments ..
+      LOGICAL            RND
+      INTEGER            BETA, EMAX, EMIN, T
+      REAL               EPS, RMAX, RMIN
+*     ..
 *
-*  Arguments
-*  =========
+*     .. Scalar Arguments ..
+      REAL               A, B
+*     ..
 *
-*  CMACH   (input) CHARACTER*1
-*          Specifies the value to be returned by SLAMCH:
-*          = 'E' or 'e',   SLAMCH := eps
-*          = 'S' or 's ,   SLAMCH := sfmin
-*          = 'B' or 'b',   SLAMCH := base
-*          = 'P' or 'p',   SLAMCH := eps*base
-*          = 'N' or 'n',   SLAMCH := t
-*          = 'R' or 'r',   SLAMCH := rnd
-*          = 'M' or 'm',   SLAMCH := emin
-*          = 'U' or 'u',   SLAMCH := rmin
-*          = 'L' or 'l',   SLAMCH := emax
-*          = 'O' or 'o',   SLAMCH := rmax
+*     .. Scalar Arguments ..
+      INTEGER            BASE
+      INTEGER            EMIN
+      REAL               START
+*     ..
 *
-*          where
-*
-*          eps   = relative machine precision
-*          sfmin = safe minimum, such that 1/sfmin does not overflow
-*          base  = base of the machine
-*          prec  = eps*base
-*          t     = number of (base) digits in the mantissa
-*          rnd   = 1.0 when rounding occurs in addition, 0.0 otherwise
-*          emin  = minimum exponent before (gradual) underflow
-*          rmin  = underflow threshold - base**(emin-1)
-*          emax  = largest exponent before overflow
-*          rmax  = overflow threshold  - (base**emax)*(1-eps)
+*     .. Scalar Arguments ..
+      LOGICAL            IEEE
+      INTEGER            BETA, EMAX, EMIN, P
+      REAL               RMAX
+*     ..
 *
 * =====================================================================
 *
@@ -127,6 +190,58 @@
 *
 ************************************************************************
 *
+*> \brief \b SLAMC1
+*>\details
+*> \b Purpose:
+*>\verbatim
+*>
+*> SLAMC1 determines the machine parameters given by BETA, T, RND, and
+*> IEEE1.
+*>
+*>\verbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          The base of the machine.
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          The number of ( BETA ) digits in the mantissa.
+*> \endverbatim
+*>
+*> \param[out] RND
+*> \verbatim
+*>          Specifies whether proper rounding  ( RND = .TRUE. )  or
+*>          chopping  ( RND = .FALSE. )  occurs in addition. This may not
+*>          be a reliable guide to the way in which the machine performs
+*>          its arithmetic.
+*> \endverbatim
+*>
+*> \param[out] IEEE1
+*> \verbatim
+*>          Specifies whether rounding appears to be done in the IEEE
+*>          'round to nearest' style.
+*>
+*>\endverbatim
+*> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
+*> \date November 2011
+*> \ingroup auxOTHERauxiliary
+*>
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  The routine is based on the routine  ENVRON  by Malcolm and
+*>  incorporates suggestions by Gentleman and Marovich. See
+*>
+*>     Malcolm M. A. (1972) Algorithms to reveal properties of
+*>        floating-point arithmetic. Comms. of the ACM, 15, 949-951.
+*>
+*>     Gentleman W. M. and Marovich S. B. (1974) More on algorithms
+*>        that reveal properties of floating point arithmetic units.
+*>        Comms. of the ACM, 17, 276-277.
+*> \endverbatim
+*>
       SUBROUTINE SLAMC1( BETA, T, RND, IEEE1 )
 *
 *  -- LAPACK auxiliary routine (version 3.3.0) --
@@ -137,45 +252,6 @@
       LOGICAL            IEEE1, RND
       INTEGER            BETA, T
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAMC1 determines the machine parameters given by BETA, T, RND, and
-*  IEEE1.
-*
-*  Arguments
-*  =========
-*
-*  BETA    (output) INTEGER
-*          The base of the machine.
-*
-*  T       (output) INTEGER
-*          The number of ( BETA ) digits in the mantissa.
-*
-*  RND     (output) LOGICAL
-*          Specifies whether proper rounding  ( RND = .TRUE. )  or
-*          chopping  ( RND = .FALSE. )  occurs in addition. This may not
-*          be a reliable guide to the way in which the machine performs
-*          its arithmetic.
-*
-*  IEEE1   (output) LOGICAL
-*          Specifies whether rounding appears to be done in the IEEE
-*          'round to nearest' style.
-*
-*  Further Details
-*  ===============
-*
-*  The routine is based on the routine  ENVRON  by Malcolm and
-*  incorporates suggestions by Gentleman and Marovich. See
-*
-*     Malcolm M. A. (1972) Algorithms to reveal properties of
-*        floating-point arithmetic. Comms. of the ACM, 15, 949-951.
-*
-*     Gentleman W. M. and Marovich S. B. (1974) More on algorithms
-*        that reveal properties of floating point arithmetic units.
-*        Comms. of the ACM, 17, 276-277.
-*
 * =====================================================================
 *
 *     .. Local Scalars ..
@@ -313,6 +389,79 @@
 *
 ************************************************************************
 *
+*> \brief \b SLAMC2
+*>\details
+*> \b Purpose:
+*>\verbatim
+*>
+*> SLAMC2 determines the machine parameters specified in its argument
+*> list.
+*>
+*>\endverbatim
+*> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
+*> \date November 2011
+*> \ingroup auxOTHERauxiliary
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          The base of the machine.
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          The number of ( BETA ) digits in the mantissa.
+*> \endverbatim
+*>
+*> \param[out] RND
+*> \verbatim
+*>          Specifies whether proper rounding  ( RND = .TRUE. )  or
+*>          chopping  ( RND = .FALSE. )  occurs in addition. This may not
+*>          be a reliable guide to the way in which the machine performs
+*>          its arithmetic.
+*> \endverbatim
+*>
+*> \param[out] EPS
+*> \verbatim
+*>          The smallest positive number such that
+*> \endverbatim
+*> \verbatim
+*>             fl( 1.0 - EPS ) .LT. 1.0,
+*> \endverbatim
+*> \verbatim
+*>          where fl denotes the computed value.
+*> \endverbatim
+*>
+*> \param[out] EMIN
+*> \verbatim
+*>          The minimum exponent before (gradual) underflow occurs.
+*> \endverbatim
+*>
+*> \param[out] RMIN
+*> \verbatim
+*>          The smallest normalized number for the machine, given by
+*>          BASE**( EMIN - 1 ), where  BASE  is the floating point value
+*>          of BETA.
+*> \endverbatim
+*>
+*> \param[out] EMAX
+*> \verbatim
+*>          The maximum exponent before overflow occurs.
+*> \endverbatim
+*>
+*> \param[out] RMAX
+*> \verbatim
+*>          The largest positive number for the machine, given by
+*>          BASE**EMAX * ( 1 - EPS ), where  BASE  is the floating point
+*>          value of BETA.
+*> \endverbatim
+*>
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  The computation of  EPS  is based on a routine PARANOIA by
+*>  W. Kahan of the University of California at Berkeley.
+*>
+*> \endverbatim
       SUBROUTINE SLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
 *
 *  -- LAPACK auxiliary routine (version 3.3.0) --
@@ -324,57 +473,6 @@
       INTEGER            BETA, EMAX, EMIN, T
       REAL               EPS, RMAX, RMIN
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAMC2 determines the machine parameters specified in its argument
-*  list.
-*
-*  Arguments
-*  =========
-*
-*  BETA    (output) INTEGER
-*          The base of the machine.
-*
-*  T       (output) INTEGER
-*          The number of ( BETA ) digits in the mantissa.
-*
-*  RND     (output) LOGICAL
-*          Specifies whether proper rounding  ( RND = .TRUE. )  or
-*          chopping  ( RND = .FALSE. )  occurs in addition. This may not
-*          be a reliable guide to the way in which the machine performs
-*          its arithmetic.
-*
-*  EPS     (output) REAL
-*          The smallest positive number such that
-*
-*             fl( 1.0 - EPS ) .LT. 1.0,
-*
-*          where fl denotes the computed value.
-*
-*  EMIN    (output) INTEGER
-*          The minimum exponent before (gradual) underflow occurs.
-*
-*  RMIN    (output) REAL
-*          The smallest normalized number for the machine, given by
-*          BASE**( EMIN - 1 ), where  BASE  is the floating point value
-*          of BETA.
-*
-*  EMAX    (output) INTEGER
-*          The maximum exponent before overflow occurs.
-*
-*  RMAX    (output) REAL
-*          The largest positive number for the machine, given by
-*          BASE**EMAX * ( 1 - EPS ), where  BASE  is the floating point
-*          value of BETA.
-*
-*  Further Details
-*  ===============
-*
-*  The computation of  EPS  is based on a routine PARANOIA by
-*  W. Kahan of the University of California at Berkeley.
-*
 * =====================================================================
 *
 *     .. Local Scalars ..
@@ -571,7 +669,24 @@
 *
 ************************************************************************
 *
-      REAL             FUNCTION SLAMC3( A, B )
+*> \brief \b SLAMC3
+*>\details
+*> \b Purpose:
+*>\verbatim
+*>
+*> SLAMC3  is intended to force  A  and  B  to be stored prior to doing
+*> the addition of  A  and  B ,  for use in situations where optimizers
+*> might hold one of these in a register.
+*>\endverbatim
+*>
+*> \param[in] A
+*>
+*> \param[in] B
+*> \verbatim
+*>          The values A and B.
+*> \endverbatim
+
+      REAL FUNCTION SLAMC3( A, B )
 *
 *  -- LAPACK auxiliary routine (version 3.3.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
@@ -580,21 +695,6 @@
 *     .. Scalar Arguments ..
       REAL               A, B
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAMC3  is intended to force  A  and  B  to be stored prior to doing
-*  the addition of  A  and  B ,  for use in situations where optimizers
-*  might hold one of these in a register.
-*
-*  Arguments
-*  =========
-*
-*  A       (input) REAL
-*  B       (input) REAL
-*          The values A and B.
-*
 * =====================================================================
 *
 *     .. Executable Statements ..
@@ -609,6 +709,32 @@
 *
 ************************************************************************
 *
+*> \brief \b SLAMC4
+*>\details
+*> \b Purpose:
+*>\verbatim
+*>
+*> SLAMC4 is a service routine for SLAMC2.
+*>
+*>\endverbatim
+*>
+*> \param[out] EMIN
+*> \verbatim
+*>          The minimum exponent before (gradual) underflow, computed by
+*>          setting A = START and dividing by BASE until the previous A
+*>          can not be recovered.
+*> \endverbatim
+*>
+*> \param[in] START
+*> \verbatim
+*>          The starting point for determining EMIN.
+*> \endverbatim
+*>
+*> \param[in] BASE
+*> \verbatim
+*>          The base of the machine.
+*> \endverbatim
+*>
       SUBROUTINE SLAMC4( EMIN, START, BASE )
 *
 *  -- LAPACK auxiliary routine (version 3.3.0) --
@@ -620,26 +746,6 @@
       INTEGER            EMIN
       REAL               START
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAMC4 is a service routine for SLAMC2.
-*
-*  Arguments
-*  =========
-*
-*  EMIN    (output) INTEGER 
-*          The minimum exponent before (gradual) underflow, computed by
-*          setting A = START and dividing by BASE until the previous A
-*          can not be recovered.
-*
-*  START   (input) REAL
-*          The starting point for determining EMIN.
-*
-*  BASE    (input) INTEGER
-*          The base of the machine.
-*
 * =====================================================================
 *
 *     .. Local Scalars ..
@@ -693,6 +799,52 @@
 *
 ************************************************************************
 *
+*> \brief \b SLAMC5
+*>\details
+*> \b Purpose:
+*>\verbatim
+*>
+*> SLAMC5 attempts to compute RMAX, the largest machine floating-point
+*> number, without overflow.  It assumes that EMAX + abs(EMIN) sum
+*> approximately to a power of 2.  It will fail on machines where this
+*> assumption does not hold, for example, the Cyber 205 (EMIN = -28625,
+*> EMAX = 28718).  It will also fail if the value supplied for EMIN is
+*> too large (i.e. too close to zero), probably with overflow.
+*>
+*>\endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          The base of floating-point arithmetic.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          The number of base BETA digits in the mantissa of a
+*>          floating-point value.
+*> \endverbatim
+*>
+*> \param[in] EMIN
+*> \verbatim
+*>          The minimum exponent before (gradual) underflow.
+*> \endverbatim
+*>
+*> \param[in] IEEE
+*> \verbatim
+*>          A logical flag specifying whether or not the arithmetic
+*>          system is thought to comply with the IEEE standard.
+*> \endverbatim
+*>
+*> \param[out] EMAX
+*> \verbatim
+*>          The largest exponent before overflow
+*> \endverbatim
+*>
+*> \param[out] RMAX
+*> \verbatim
+*>          The largest machine floating-point number.
+*> \endverbatim
+*>
       SUBROUTINE SLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
 *
 *  -- LAPACK auxiliary routine (version 3.3.0) --
@@ -704,40 +856,6 @@
       INTEGER            BETA, EMAX, EMIN, P
       REAL               RMAX
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAMC5 attempts to compute RMAX, the largest machine floating-point
-*  number, without overflow.  It assumes that EMAX + abs(EMIN) sum
-*  approximately to a power of 2.  It will fail on machines where this
-*  assumption does not hold, for example, the Cyber 205 (EMIN = -28625,
-*  EMAX = 28718).  It will also fail if the value supplied for EMIN is
-*  too large (i.e. too close to zero), probably with overflow.
-*
-*  Arguments
-*  =========
-*
-*  BETA    (input) INTEGER
-*          The base of floating-point arithmetic.
-*
-*  P       (input) INTEGER
-*          The number of base BETA digits in the mantissa of a
-*          floating-point value.
-*
-*  EMIN    (input) INTEGER
-*          The minimum exponent before (gradual) underflow.
-*
-*  IEEE    (input) LOGICAL
-*          A logical flag specifying whether or not the arithmetic
-*          system is thought to comply with the IEEE standard.
-*
-*  EMAX    (output) INTEGER
-*          The largest exponent before overflow
-*
-*  RMAX    (output) REAL
-*          The largest machine floating-point number.
-*
 * =====================================================================
 *
 *     .. Parameters ..

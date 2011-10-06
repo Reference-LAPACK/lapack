@@ -1,10 +1,202 @@
+*> \brief \b SCHKGB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
+*                          NSVAL, THRESH, TSTERR, A, LA, AFAC, LAFAC, B,
+*                          X, XACT, WORK, RWORK, IWORK, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTERR
+*       INTEGER            LA, LAFAC, NM, NN, NNB, NNS, NOUT
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+*      $                   NVAL( * )
+*       REAL               A( * ), AFAC( * ), B( * ), RWORK( * ),
+*      $                   WORK( * ), X( * ), XACT( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SCHKGB tests SGBTRF, -TRS, -RFS, and -CON
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*> \endverbatim
+*>
+*> \param[in] NM
+*> \verbatim
+*>          NM is INTEGER
+*>          The number of values of M contained in the vector MVAL.
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NNB
+*> \verbatim
+*>          NNB is INTEGER
+*>          The number of values of NB contained in the vector NBVAL.
+*> \endverbatim
+*>
+*> \param[in] NBVAL
+*> \verbatim
+*>          NBVAL is INTEGER array, dimension (NNB)
+*>          The values of the blocksize NB.
+*> \endverbatim
+*>
+*> \param[in] NNS
+*> \verbatim
+*>          NNS is INTEGER
+*>          The number of values of NRHS contained in the vector NSVAL.
+*> \endverbatim
+*>
+*> \param[in] NSVAL
+*> \verbatim
+*>          NSVAL is INTEGER array, dimension (NNS)
+*>          The values of the number of right hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is REAL array, dimension (LA)
+*> \endverbatim
+*>
+*> \param[in] LA
+*> \verbatim
+*>          LA is INTEGER
+*>          The length of the array A.  LA >= (KLMAX+KUMAX+1)*NMAX
+*>          where KLMAX is the largest entry in the local array KLVAL,
+*>                KUMAX is the largest entry in the local array KUVAL and
+*>                NMAX is the largest entry in the input array NVAL.
+*> \endverbatim
+*>
+*> \param[out] AFAC
+*> \verbatim
+*>          AFAC is REAL array, dimension (LAFAC)
+*> \endverbatim
+*>
+*> \param[in] LAFAC
+*> \verbatim
+*>          LAFAC is INTEGER
+*>          The length of the array AFAC. LAFAC >= (2*KLMAX+KUMAX+1)*NMAX
+*>          where KLMAX is the largest entry in the local array KLVAL,
+*>                KUMAX is the largest entry in the local array KUVAL and
+*>                NMAX is the largest entry in the input array NVAL.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is REAL array, dimension (NMAX*NSMAX)
+*>          where NSMAX is the largest entry in NSVAL.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is REAL array, dimension (NMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] XACT
+*> \verbatim
+*>          XACT is REAL array, dimension (NMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension
+*>                      (NMAX*max(3,NSMAX,NMAX))
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension
+*>                      (max(NMAX,2*NSMAX))
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (2*NMAX)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SCHKGB( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
      $                   NSVAL, THRESH, TSTERR, A, LA, AFAC, LAFAC, B,
      $                   X, XACT, WORK, RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -18,85 +210,6 @@
       REAL               A( * ), AFAC( * ), B( * ), RWORK( * ),
      $                   WORK( * ), X( * ), XACT( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SCHKGB tests SGBTRF, -TRS, -RFS, and -CON
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*
-*  NM      (input) INTEGER
-*          The number of values of M contained in the vector MVAL.
-*
-*  MVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension M.
-*
-*  NN      (input) INTEGER
-*          The number of values of N contained in the vector NVAL.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix column dimension N.
-*
-*  NNB     (input) INTEGER
-*          The number of values of NB contained in the vector NBVAL.
-*
-*  NBVAL   (input) INTEGER array, dimension (NNB)
-*          The values of the blocksize NB.
-*
-*  NNS     (input) INTEGER
-*          The number of values of NRHS contained in the vector NSVAL.
-*
-*  NSVAL   (input) INTEGER array, dimension (NNS)
-*          The values of the number of right hand sides NRHS.
-*
-*  THRESH  (input) REAL
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  A       (workspace) REAL array, dimension (LA)
-*
-*  LA      (input) INTEGER
-*          The length of the array A.  LA >= (KLMAX+KUMAX+1)*NMAX
-*          where KLMAX is the largest entry in the local array KLVAL,
-*                KUMAX is the largest entry in the local array KUVAL and
-*                NMAX is the largest entry in the input array NVAL.
-*
-*  AFAC    (workspace) REAL array, dimension (LAFAC)
-*
-*  LAFAC   (input) INTEGER
-*          The length of the array AFAC. LAFAC >= (2*KLMAX+KUMAX+1)*NMAX
-*          where KLMAX is the largest entry in the local array KLVAL,
-*                KUMAX is the largest entry in the local array KUVAL and
-*                NMAX is the largest entry in the input array NVAL.
-*
-*  B       (workspace) REAL array, dimension (NMAX*NSMAX)
-*          where NSMAX is the largest entry in NSVAL.
-*
-*  X       (workspace) REAL array, dimension (NMAX*NSMAX)
-*
-*  XACT    (workspace) REAL array, dimension (NMAX*NSMAX)
-*
-*  WORK    (workspace) REAL array, dimension
-*                      (NMAX*max(3,NSMAX,NMAX))
-*
-*  RWORK   (workspace) REAL array, dimension
-*                      (max(NMAX,2*NSMAX))
-*
-*  IWORK   (workspace) INTEGER array, dimension (2*NMAX)
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

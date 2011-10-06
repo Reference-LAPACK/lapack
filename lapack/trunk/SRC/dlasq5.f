@@ -1,15 +1,133 @@
+*> \brief \b DLASQ5
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASQ5( I0, N0, Z, PP, TAU, DMIN, DMIN1, DMIN2, DN,
+*                          DNM1, DNM2, IEEE )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            IEEE
+*       INTEGER            I0, N0, PP
+*       DOUBLE PRECISION   DMIN, DMIN1, DMIN2, DN, DNM1, DNM2, TAU
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLASQ5 computes one dqds transform in ping-pong form, one
+*> version for IEEE machines another for non IEEE machines.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] I0
+*> \verbatim
+*>          I0 is INTEGER
+*>        First index.
+*> \endverbatim
+*>
+*> \param[in] N0
+*> \verbatim
+*>          N0 is INTEGER
+*>        Last index.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension ( 4*N )
+*>        Z holds the qd array. EMIN is stored in Z(4*N0) to avoid
+*>        an extra argument.
+*> \endverbatim
+*>
+*> \param[in] PP
+*> \verbatim
+*>          PP is INTEGER
+*>        PP=0 for ping, PP=1 for pong.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION
+*>        This is the shift.
+*> \endverbatim
+*>
+*> \param[out] DMIN
+*> \verbatim
+*>          DMIN is DOUBLE PRECISION
+*>        Minimum value of d.
+*> \endverbatim
+*>
+*> \param[out] DMIN1
+*> \verbatim
+*>          DMIN1 is DOUBLE PRECISION
+*>        Minimum value of d, excluding D( N0 ).
+*> \endverbatim
+*>
+*> \param[out] DMIN2
+*> \verbatim
+*>          DMIN2 is DOUBLE PRECISION
+*>        Minimum value of d, excluding D( N0 ) and D( N0-1 ).
+*> \endverbatim
+*>
+*> \param[out] DN
+*> \verbatim
+*>          DN is DOUBLE PRECISION
+*>        d(N0), the last value of d.
+*> \endverbatim
+*>
+*> \param[out] DNM1
+*> \verbatim
+*>          DNM1 is DOUBLE PRECISION
+*>        d(N0-1).
+*> \endverbatim
+*>
+*> \param[out] DNM2
+*> \verbatim
+*>          DNM2 is DOUBLE PRECISION
+*>        d(N0-2).
+*> \endverbatim
+*>
+*> \param[in] IEEE
+*> \verbatim
+*>          IEEE is LOGICAL
+*>        Flag for IEEE or non IEEE arithmetic.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE DLASQ5( I0, N0, Z, PP, TAU, DMIN, DMIN1, DMIN2, DN,
      $                   DNM1, DNM2, IEEE )
 *
-*  -- LAPACK routine (version 3.2)                                    --
-*
-*  -- Contributed by Osni Marques of the Lawrence Berkeley National   --
-*  -- Laboratory and Beresford Parlett of the Univ. of California at  --
-*  -- Berkeley                                                        --
-*  -- November 2008                                                   --
-*
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            IEEE
@@ -19,52 +137,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLASQ5 computes one dqds transform in ping-pong form, one
-*  version for IEEE machines another for non IEEE machines.
-*
-*  Arguments
-*  =========
-*
-*  I0    (input) INTEGER
-*        First index.
-*
-*  N0    (input) INTEGER
-*        Last index.
-*
-*  Z     (input) DOUBLE PRECISION array, dimension ( 4*N )
-*        Z holds the qd array. EMIN is stored in Z(4*N0) to avoid
-*        an extra argument.
-*
-*  PP    (input) INTEGER
-*        PP=0 for ping, PP=1 for pong.
-*
-*  TAU   (input) DOUBLE PRECISION
-*        This is the shift.
-*
-*  DMIN  (output) DOUBLE PRECISION
-*        Minimum value of d.
-*
-*  DMIN1 (output) DOUBLE PRECISION
-*        Minimum value of d, excluding D( N0 ).
-*
-*  DMIN2 (output) DOUBLE PRECISION
-*        Minimum value of d, excluding D( N0 ) and D( N0-1 ).
-*
-*  DN    (output) DOUBLE PRECISION
-*        d(N0), the last value of d.
-*
-*  DNM1  (output) DOUBLE PRECISION
-*        d(N0-1).
-*
-*  DNM2  (output) DOUBLE PRECISION
-*        d(N0-2).
-*
-*  IEEE  (input) LOGICAL
-*        Flag for IEEE or non IEEE arithmetic.
 *
 *  =====================================================================
 *

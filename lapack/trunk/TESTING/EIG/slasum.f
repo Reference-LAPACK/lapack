@@ -1,22 +1,57 @@
+*> \brief \b SLASUM
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLASUM( TYPE, IOUNIT, IE, NRUN )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*3        TYPE
+*       INTEGER            IE, IOUNIT, NRUN
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*\details \b Purpose:
+*\verbatim
+*
+* SLASUM prints a summary of the results from one of the test routines.
+*
+* =====================================================================
+*
+*  Authors
+*  =======
+*
+* \author Univ. of Tennessee 
+* \author Univ. of California Berkeley 
+* \author Univ. of Colorado Denver 
+* \author NAG Ltd. 
+*
+* \date November 2011
+*
+* \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SLASUM( TYPE, IOUNIT, IE, NRUN )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        TYPE
       INTEGER            IE, IOUNIT, NRUN
 *     ..
 *
-*  Purpose
-*  =======
 *
-*  SLASUM prints a summary of the results from one of the test routines.
-*
-*  =====================================================================
-*
-*     .. Executable Statements ..
+*    .. Executable Statements ..
 *
       IF( IE.GT.0 ) THEN
          WRITE( IOUNIT, FMT = 9999 )TYPE, ': ', IE, ' out of ', NRUN,
@@ -29,6 +64,6 @@
  9998 FORMAT( / 1X, A14, A3, A24, I5, A11 )
       RETURN
 *
-*     End of SLASUM
+*    End of SLASUM
 *
       END

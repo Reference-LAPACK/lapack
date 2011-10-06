@@ -1,4 +1,207 @@
+*> \brief \b CHBMV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+* 
+*       .. Scalar Arguments ..
+*       COMPLEX ALPHA,BETA
+*       INTEGER INCX,INCY,K,LDA,N
+*       CHARACTER UPLO
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX A(LDA,*),X(*),Y(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CHBMV  performs the matrix-vector  operation
+*>
+*>    y := alpha*A*x + beta*y,
+*>
+*> where alpha and beta are scalars, x and y are n element vectors and
+*> A is an n by n hermitian band matrix, with k super-diagonals.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>           On entry, UPLO specifies whether the upper or lower
+*>           triangular part of the band matrix A is being supplied as
+*>           follows:
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'U' or 'u'   The upper triangular part of A is
+*>                                  being supplied.
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'L' or 'l'   The lower triangular part of A is
+*>                                  being supplied.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry, N specifies the order of the matrix A.
+*>           N must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>           On entry, K specifies the number of super-diagonals of the
+*>           matrix A. K must satisfy  0 .le. K.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX
+*>           On entry, ALPHA specifies the scalar alpha.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array of DIMENSION ( LDA, n ).
+*>           Before entry with UPLO = 'U' or 'u', the leading ( k + 1 )
+*>           by n part of the array A must contain the upper triangular
+*>           band part of the hermitian matrix, supplied column by
+*>           column, with the leading diagonal of the matrix in row
+*>           ( k + 1 ) of the array, the first super-diagonal starting at
+*>           position 2 in row k, and so on. The top left k by k triangle
+*>           of the array A is not referenced.
+*>           The following program segment will transfer the upper
+*>           triangular part of a hermitian band matrix from conventional
+*>           full matrix storage to band storage:
+*> \endverbatim
+*> \verbatim
+*>                 DO 20, J = 1, N
+*>                    M = K + 1 - J
+*>                    DO 10, I = MAX( 1, J - K ), J
+*>                       A( M + I, J ) = matrix( I, J )
+*>              10    CONTINUE
+*>              20 CONTINUE
+*> \endverbatim
+*> \verbatim
+*>           Before entry with UPLO = 'L' or 'l', the leading ( k + 1 )
+*>           by n part of the array A must contain the lower triangular
+*>           band part of the hermitian matrix, supplied column by
+*>           column, with the leading diagonal of the matrix in row 1 of
+*>           the array, the first sub-diagonal starting at position 1 in
+*>           row 2, and so on. The bottom right k by k triangle of the
+*>           array A is not referenced.
+*>           The following program segment will transfer the lower
+*>           triangular part of a hermitian band matrix from conventional
+*>           full matrix storage to band storage:
+*> \endverbatim
+*> \verbatim
+*>                 DO 20, J = 1, N
+*>                    M = 1 - J
+*>                    DO 10, I = J, MIN( N, J + K )
+*>                       A( M + I, J ) = matrix( I, J )
+*>              10    CONTINUE
+*>              20 CONTINUE
+*> \endverbatim
+*> \verbatim
+*>           Note that the imaginary parts of the diagonal elements need
+*>           not be set and are assumed to be zero.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           On entry, LDA specifies the first dimension of A as declared
+*>           in the calling (sub) program. LDA must be at least
+*>           ( k + 1 ).
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is COMPLEX array of DIMENSION at least
+*>           ( 1 + ( n - 1 )*abs( INCX ) ).
+*>           Before entry, the incremented array X must contain the
+*>           vector x.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>           On entry, INCX specifies the increment for the elements of
+*>           X. INCX must not be zero.
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is COMPLEX
+*>           On entry, BETA specifies the scalar beta.
+*> \endverbatim
+*>
+*> \param[in,out] Y
+*> \verbatim
+*>          Y is COMPLEX array of DIMENSION at least
+*>           ( 1 + ( n - 1 )*abs( INCY ) ).
+*>           Before entry, the incremented array Y must contain the
+*>           vector y. On exit, Y is overwritten by the updated vector y.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>           On entry, INCY specifies the increment for the elements of
+*>           Y. INCY must not be zero.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_blas_level2
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Level 2 Blas routine.
+*>  The vector and matrix arguments are not referenced when N = 0, or M = 0
+*>
+*>  -- Written on 22-October-1986.
+*>     Jack Dongarra, Argonne National Lab.
+*>     Jeremy Du Croz, Nag Central Office.
+*>     Sven Hammarling, Nag Central Office.
+*>     Richard Hanson, Sandia National Labs.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CHBMV(UPLO,N,K,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+*
+*  -- Reference BLAS level2 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       COMPLEX ALPHA,BETA
       INTEGER INCX,INCY,K,LDA,N
@@ -7,130 +210,6 @@
 *     .. Array Arguments ..
       COMPLEX A(LDA,*),X(*),Y(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CHBMV  performs the matrix-vector  operation
-*
-*     y := alpha*A*x + beta*y,
-*
-*  where alpha and beta are scalars, x and y are n element vectors and
-*  A is an n by n hermitian band matrix, with k super-diagonals.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO   - CHARACTER*1.
-*           On entry, UPLO specifies whether the upper or lower
-*           triangular part of the band matrix A is being supplied as
-*           follows:
-*
-*              UPLO = 'U' or 'u'   The upper triangular part of A is
-*                                  being supplied.
-*
-*              UPLO = 'L' or 'l'   The lower triangular part of A is
-*                                  being supplied.
-*
-*           Unchanged on exit.
-*
-*  N      - INTEGER.
-*           On entry, N specifies the order of the matrix A.
-*           N must be at least zero.
-*           Unchanged on exit.
-*
-*  K      - INTEGER.
-*           On entry, K specifies the number of super-diagonals of the
-*           matrix A. K must satisfy  0 .le. K.
-*           Unchanged on exit.
-*
-*  ALPHA  - COMPLEX         .
-*           On entry, ALPHA specifies the scalar alpha.
-*           Unchanged on exit.
-*
-*  A      - COMPLEX          array of DIMENSION ( LDA, n ).
-*           Before entry with UPLO = 'U' or 'u', the leading ( k + 1 )
-*           by n part of the array A must contain the upper triangular
-*           band part of the hermitian matrix, supplied column by
-*           column, with the leading diagonal of the matrix in row
-*           ( k + 1 ) of the array, the first super-diagonal starting at
-*           position 2 in row k, and so on. The top left k by k triangle
-*           of the array A is not referenced.
-*           The following program segment will transfer the upper
-*           triangular part of a hermitian band matrix from conventional
-*           full matrix storage to band storage:
-*
-*                 DO 20, J = 1, N
-*                    M = K + 1 - J
-*                    DO 10, I = MAX( 1, J - K ), J
-*                       A( M + I, J ) = matrix( I, J )
-*              10    CONTINUE
-*              20 CONTINUE
-*
-*           Before entry with UPLO = 'L' or 'l', the leading ( k + 1 )
-*           by n part of the array A must contain the lower triangular
-*           band part of the hermitian matrix, supplied column by
-*           column, with the leading diagonal of the matrix in row 1 of
-*           the array, the first sub-diagonal starting at position 1 in
-*           row 2, and so on. The bottom right k by k triangle of the
-*           array A is not referenced.
-*           The following program segment will transfer the lower
-*           triangular part of a hermitian band matrix from conventional
-*           full matrix storage to band storage:
-*
-*                 DO 20, J = 1, N
-*                    M = 1 - J
-*                    DO 10, I = J, MIN( N, J + K )
-*                       A( M + I, J ) = matrix( I, J )
-*              10    CONTINUE
-*              20 CONTINUE
-*
-*           Note that the imaginary parts of the diagonal elements need
-*           not be set and are assumed to be zero.
-*           Unchanged on exit.
-*
-*  LDA    - INTEGER.
-*           On entry, LDA specifies the first dimension of A as declared
-*           in the calling (sub) program. LDA must be at least
-*           ( k + 1 ).
-*           Unchanged on exit.
-*
-*  X      - COMPLEX          array of DIMENSION at least
-*           ( 1 + ( n - 1 )*abs( INCX ) ).
-*           Before entry, the incremented array X must contain the
-*           vector x.
-*           Unchanged on exit.
-*
-*  INCX   - INTEGER.
-*           On entry, INCX specifies the increment for the elements of
-*           X. INCX must not be zero.
-*           Unchanged on exit.
-*
-*  BETA   - COMPLEX         .
-*           On entry, BETA specifies the scalar beta.
-*           Unchanged on exit.
-*
-*  Y      - COMPLEX          array of DIMENSION at least
-*           ( 1 + ( n - 1 )*abs( INCY ) ).
-*           Before entry, the incremented array Y must contain the
-*           vector y. On exit, Y is overwritten by the updated vector y.
-*
-*  INCY   - INTEGER.
-*           On entry, INCY specifies the increment for the elements of
-*           Y. INCY must not be zero.
-*           Unchanged on exit.
-*
-*  Further Details
-*  ===============
-*
-*  Level 2 Blas routine.
-*  The vector and matrix arguments are not referenced when N = 0, or M = 0
-*
-*  -- Written on 22-October-1986.
-*     Jack Dongarra, Argonne National Lab.
-*     Jeremy Du Croz, Nag Central Office.
-*     Sven Hammarling, Nag Central Office.
-*     Richard Hanson, Sandia National Labs.
 *
 *  =====================================================================
 *

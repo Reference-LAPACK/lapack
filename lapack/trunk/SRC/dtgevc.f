@@ -1,10 +1,301 @@
+*> \brief \b DTGEVC
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
+*                          LDVL, VR, LDVR, MM, M, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          HOWMNY, SIDE
+*       INTEGER            INFO, LDP, LDS, LDVL, LDVR, M, MM, N
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            SELECT( * )
+*       DOUBLE PRECISION   P( LDP, * ), S( LDS, * ), VL( LDVL, * ),
+*      $                   VR( LDVR, * ), WORK( * )
+*       ..
+*  
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DTGEVC computes some or all of the right and/or left eigenvectors of
+*> a pair of real matrices (S,P), where S is a quasi-triangular matrix
+*> and P is upper triangular.  Matrix pairs of this type are produced by
+*> the generalized Schur factorization of a matrix pair (A,B):
+*>
+*>    A = Q*S*Z**T,  B = Q*P*Z**T
+*>
+*> as computed by DGGHRD + DHGEQZ.
+*>
+*> The right eigenvector x and the left eigenvector y of (S,P)
+*> corresponding to an eigenvalue w are defined by:
+*> 
+*>    S*x = w*P*x,  (y**H)*S = w*(y**H)*P,
+*> 
+*> where y**H denotes the conjugate tranpose of y.
+*> The eigenvalues are not input to this routine, but are computed
+*> directly from the diagonal blocks of S and P.
+*> 
+*> This routine returns the matrices X and/or Y of right and left
+*> eigenvectors of (S,P), or the products Z*X and/or Q*Y,
+*> where Z and Q are input matrices.
+*> If Q and Z are the orthogonal factors from the generalized Schur
+*> factorization of a matrix pair (A,B), then Z*X and Q*Y
+*> are the matrices of right and left eigenvectors of (A,B).
+*> 
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'R': compute right eigenvectors only;
+*>          = 'L': compute left eigenvectors only;
+*>          = 'B': compute both right and left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] HOWMNY
+*> \verbatim
+*>          HOWMNY is CHARACTER*1
+*>          = 'A': compute all right and/or left eigenvectors;
+*>          = 'B': compute all right and/or left eigenvectors,
+*>                 backtransformed by the matrices in VR and/or VL;
+*>          = 'S': compute selected right and/or left eigenvectors,
+*>                 specified by the logical array SELECT.
+*> \endverbatim
+*>
+*> \param[in] SELECT
+*> \verbatim
+*>          SELECT is LOGICAL array, dimension (N)
+*>          If HOWMNY='S', SELECT specifies the eigenvectors to be
+*>          computed.  If w(j) is a real eigenvalue, the corresponding
+*>          real eigenvector is computed if SELECT(j) is .TRUE..
+*>          If w(j) and w(j+1) are the real and imaginary parts of a
+*>          complex eigenvalue, the corresponding complex eigenvector
+*>          is computed if either SELECT(j) or SELECT(j+1) is .TRUE.,
+*>          and on exit SELECT(j) is set to .TRUE. and SELECT(j+1) is
+*>          set to .FALSE..
+*>          Not referenced if HOWMNY = 'A' or 'B'.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices S and P.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension (LDS,N)
+*>          The upper quasi-triangular matrix S from a generalized Schur
+*>          factorization, as computed by DHGEQZ.
+*> \endverbatim
+*>
+*> \param[in] LDS
+*> \verbatim
+*>          LDS is INTEGER
+*>          The leading dimension of array S.  LDS >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is DOUBLE PRECISION array, dimension (LDP,N)
+*>          The upper triangular matrix P from a generalized Schur
+*>          factorization, as computed by DHGEQZ.
+*>          2-by-2 diagonal blocks of P corresponding to 2-by-2 blocks
+*>          of S must be in positive diagonal form.
+*> \endverbatim
+*>
+*> \param[in] LDP
+*> \verbatim
+*>          LDP is INTEGER
+*>          The leading dimension of array P.  LDP >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] VL
+*> \verbatim
+*>          VL is DOUBLE PRECISION array, dimension (LDVL,MM)
+*>          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
+*>          contain an N-by-N matrix Q (usually the orthogonal matrix Q
+*>          of left Schur vectors returned by DHGEQZ).
+*>          On exit, if SIDE = 'L' or 'B', VL contains:
+*>          if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
+*>          if HOWMNY = 'B', the matrix Q*Y;
+*>          if HOWMNY = 'S', the left eigenvectors of (S,P) specified by
+*>                      SELECT, stored consecutively in the columns of
+*>                      VL, in the same order as their eigenvalues.
+*> \endverbatim
+*> \verbatim
+*>          A complex eigenvector corresponding to a complex eigenvalue
+*>          is stored in two consecutive columns, the first holding the
+*>          real part, and the second the imaginary part.
+*> \endverbatim
+*> \verbatim
+*>          Not referenced if SIDE = 'R'.
+*> \endverbatim
+*>
+*> \param[in] LDVL
+*> \verbatim
+*>          LDVL is INTEGER
+*>          The leading dimension of array VL.  LDVL >= 1, and if
+*>          SIDE = 'L' or 'B', LDVL >= N.
+*> \endverbatim
+*>
+*> \param[in,out] VR
+*> \verbatim
+*>          VR is DOUBLE PRECISION array, dimension (LDVR,MM)
+*>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
+*>          contain an N-by-N matrix Z (usually the orthogonal matrix Z
+*>          of right Schur vectors returned by DHGEQZ).
+*> \endverbatim
+*> \verbatim
+*>          On exit, if SIDE = 'R' or 'B', VR contains:
+*>          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
+*>          if HOWMNY = 'B' or 'b', the matrix Z*X;
+*>          if HOWMNY = 'S' or 's', the right eigenvectors of (S,P)
+*>                      specified by SELECT, stored consecutively in the
+*>                      columns of VR, in the same order as their
+*>                      eigenvalues.
+*> \endverbatim
+*> \verbatim
+*>          A complex eigenvector corresponding to a complex eigenvalue
+*>          is stored in two consecutive columns, the first holding the
+*>          real part and the second the imaginary part.
+*>          
+*>          Not referenced if SIDE = 'L'.
+*> \endverbatim
+*>
+*> \param[in] LDVR
+*> \verbatim
+*>          LDVR is INTEGER
+*>          The leading dimension of the array VR.  LDVR >= 1, and if
+*>          SIDE = 'R' or 'B', LDVR >= N.
+*> \endverbatim
+*>
+*> \param[in] MM
+*> \verbatim
+*>          MM is INTEGER
+*>          The number of columns in the arrays VL and/or VR. MM >= M.
+*> \endverbatim
+*>
+*> \param[out] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of columns in the arrays VL and/or VR actually
+*>          used to store the eigenvectors.  If HOWMNY = 'A' or 'B', M
+*>          is set to N.  Each selected real eigenvector occupies one
+*>          column and each selected complex eigenvector occupies two
+*>          columns.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (6*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  the 2-by-2 block (INFO:INFO+1) does not have a complex
+*>                eigenvalue.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleGEcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Allocation of workspace:
+*>  ---------- -- ---------
+*>
+*>     WORK( j ) = 1-norm of j-th column of A, above the diagonal
+*>     WORK( N+j ) = 1-norm of j-th column of B, above the diagonal
+*>     WORK( 2*N+1:3*N ) = real part of eigenvector
+*>     WORK( 3*N+1:4*N ) = imaginary part of eigenvector
+*>     WORK( 4*N+1:5*N ) = real part of back-transformed eigenvector
+*>     WORK( 5*N+1:6*N ) = imaginary part of back-transformed eigenvector
+*>
+*>  Rowwise vs. columnwise solution methods:
+*>  ------- --  ---------- -------- -------
+*>
+*>  Finding a generalized eigenvector consists basically of solving the
+*>  singular triangular system
+*>
+*>   (A - w B) x = 0     (for right) or:   (A - w B)**H y = 0  (for left)
+*>
+*>  Consider finding the i-th right eigenvector (assume all eigenvalues
+*>  are real). The equation to be solved is:
+*>       n                   i
+*>  0 = sum  C(j,k) v(k)  = sum  C(j,k) v(k)     for j = i,. . .,1
+*>      k=j                 k=j
+*>
+*>  where  C = (A - w B)  (The components v(i+1:n) are 0.)
+*>
+*>  The "rowwise" method is:
+*>
+*>  (1)  v(i) := 1
+*>  for j = i-1,. . .,1:
+*>                          i
+*>      (2) compute  s = - sum C(j,k) v(k)   and
+*>                        k=j+1
+*>
+*>      (3) v(j) := s / C(j,j)
+*>
+*>  Step 2 is sometimes called the "dot product" step, since it is an
+*>  inner product between the j-th row and the portion of the eigenvector
+*>  that has been computed so far.
+*>
+*>  The "columnwise" method consists basically in doing the sums
+*>  for all the rows in parallel.  As each v(j) is computed, the
+*>  contribution of v(j) times the j-th column of C is added to the
+*>  partial sums.  Since FORTRAN arrays are stored columnwise, this has
+*>  the advantage that at each step, the elements of C that are accessed
+*>  are adjacent to one another, whereas with the rowwise method, the
+*>  elements accessed at a step are spaced LDS (and LDP) words apart.
+*>
+*>  When finding left eigenvectors, the matrix in question is the
+*>  transpose of the one in storage, so the rowwise method then
+*>  actually accesses columns of A and B at each step, and so is the
+*>  preferred method.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
      $                   LDVL, VR, LDVR, MM, M, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          HOWMNY, SIDE
@@ -16,197 +307,6 @@
      $                   VR( LDVR, * ), WORK( * )
 *     ..
 *
-*
-*  Purpose
-*  =======
-*
-*  DTGEVC computes some or all of the right and/or left eigenvectors of
-*  a pair of real matrices (S,P), where S is a quasi-triangular matrix
-*  and P is upper triangular.  Matrix pairs of this type are produced by
-*  the generalized Schur factorization of a matrix pair (A,B):
-*
-*     A = Q*S*Z**T,  B = Q*P*Z**T
-*
-*  as computed by DGGHRD + DHGEQZ.
-*
-*  The right eigenvector x and the left eigenvector y of (S,P)
-*  corresponding to an eigenvalue w are defined by:
-*  
-*     S*x = w*P*x,  (y**H)*S = w*(y**H)*P,
-*  
-*  where y**H denotes the conjugate tranpose of y.
-*  The eigenvalues are not input to this routine, but are computed
-*  directly from the diagonal blocks of S and P.
-*  
-*  This routine returns the matrices X and/or Y of right and left
-*  eigenvectors of (S,P), or the products Z*X and/or Q*Y,
-*  where Z and Q are input matrices.
-*  If Q and Z are the orthogonal factors from the generalized Schur
-*  factorization of a matrix pair (A,B), then Z*X and Q*Y
-*  are the matrices of right and left eigenvectors of (A,B).
-* 
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'R': compute right eigenvectors only;
-*          = 'L': compute left eigenvectors only;
-*          = 'B': compute both right and left eigenvectors.
-*
-*  HOWMNY  (input) CHARACTER*1
-*          = 'A': compute all right and/or left eigenvectors;
-*          = 'B': compute all right and/or left eigenvectors,
-*                 backtransformed by the matrices in VR and/or VL;
-*          = 'S': compute selected right and/or left eigenvectors,
-*                 specified by the logical array SELECT.
-*
-*  SELECT  (input) LOGICAL array, dimension (N)
-*          If HOWMNY='S', SELECT specifies the eigenvectors to be
-*          computed.  If w(j) is a real eigenvalue, the corresponding
-*          real eigenvector is computed if SELECT(j) is .TRUE..
-*          If w(j) and w(j+1) are the real and imaginary parts of a
-*          complex eigenvalue, the corresponding complex eigenvector
-*          is computed if either SELECT(j) or SELECT(j+1) is .TRUE.,
-*          and on exit SELECT(j) is set to .TRUE. and SELECT(j+1) is
-*          set to .FALSE..
-*          Not referenced if HOWMNY = 'A' or 'B'.
-*
-*  N       (input) INTEGER
-*          The order of the matrices S and P.  N >= 0.
-*
-*  S       (input) DOUBLE PRECISION array, dimension (LDS,N)
-*          The upper quasi-triangular matrix S from a generalized Schur
-*          factorization, as computed by DHGEQZ.
-*
-*  LDS     (input) INTEGER
-*          The leading dimension of array S.  LDS >= max(1,N).
-*
-*  P       (input) DOUBLE PRECISION array, dimension (LDP,N)
-*          The upper triangular matrix P from a generalized Schur
-*          factorization, as computed by DHGEQZ.
-*          2-by-2 diagonal blocks of P corresponding to 2-by-2 blocks
-*          of S must be in positive diagonal form.
-*
-*  LDP     (input) INTEGER
-*          The leading dimension of array P.  LDP >= max(1,N).
-*
-*  VL      (input/output) DOUBLE PRECISION array, dimension (LDVL,MM)
-*          On entry, if SIDE = 'L' or 'B' and HOWMNY = 'B', VL must
-*          contain an N-by-N matrix Q (usually the orthogonal matrix Q
-*          of left Schur vectors returned by DHGEQZ).
-*          On exit, if SIDE = 'L' or 'B', VL contains:
-*          if HOWMNY = 'A', the matrix Y of left eigenvectors of (S,P);
-*          if HOWMNY = 'B', the matrix Q*Y;
-*          if HOWMNY = 'S', the left eigenvectors of (S,P) specified by
-*                      SELECT, stored consecutively in the columns of
-*                      VL, in the same order as their eigenvalues.
-*
-*          A complex eigenvector corresponding to a complex eigenvalue
-*          is stored in two consecutive columns, the first holding the
-*          real part, and the second the imaginary part.
-*
-*          Not referenced if SIDE = 'R'.
-*
-*  LDVL    (input) INTEGER
-*          The leading dimension of array VL.  LDVL >= 1, and if
-*          SIDE = 'L' or 'B', LDVL >= N.
-*
-*  VR      (input/output) DOUBLE PRECISION array, dimension (LDVR,MM)
-*          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
-*          contain an N-by-N matrix Z (usually the orthogonal matrix Z
-*          of right Schur vectors returned by DHGEQZ).
-*
-*          On exit, if SIDE = 'R' or 'B', VR contains:
-*          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
-*          if HOWMNY = 'B' or 'b', the matrix Z*X;
-*          if HOWMNY = 'S' or 's', the right eigenvectors of (S,P)
-*                      specified by SELECT, stored consecutively in the
-*                      columns of VR, in the same order as their
-*                      eigenvalues.
-*
-*          A complex eigenvector corresponding to a complex eigenvalue
-*          is stored in two consecutive columns, the first holding the
-*          real part and the second the imaginary part.
-*          
-*          Not referenced if SIDE = 'L'.
-*
-*  LDVR    (input) INTEGER
-*          The leading dimension of the array VR.  LDVR >= 1, and if
-*          SIDE = 'R' or 'B', LDVR >= N.
-*
-*  MM      (input) INTEGER
-*          The number of columns in the arrays VL and/or VR. MM >= M.
-*
-*  M       (output) INTEGER
-*          The number of columns in the arrays VL and/or VR actually
-*          used to store the eigenvectors.  If HOWMNY = 'A' or 'B', M
-*          is set to N.  Each selected real eigenvector occupies one
-*          column and each selected complex eigenvector occupies two
-*          columns.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (6*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  the 2-by-2 block (INFO:INFO+1) does not have a complex
-*                eigenvalue.
-*
-*  Further Details
-*  ===============
-*
-*  Allocation of workspace:
-*  ---------- -- ---------
-*
-*     WORK( j ) = 1-norm of j-th column of A, above the diagonal
-*     WORK( N+j ) = 1-norm of j-th column of B, above the diagonal
-*     WORK( 2*N+1:3*N ) = real part of eigenvector
-*     WORK( 3*N+1:4*N ) = imaginary part of eigenvector
-*     WORK( 4*N+1:5*N ) = real part of back-transformed eigenvector
-*     WORK( 5*N+1:6*N ) = imaginary part of back-transformed eigenvector
-*
-*  Rowwise vs. columnwise solution methods:
-*  ------- --  ---------- -------- -------
-*
-*  Finding a generalized eigenvector consists basically of solving the
-*  singular triangular system
-*
-*   (A - w B) x = 0     (for right) or:   (A - w B)**H y = 0  (for left)
-*
-*  Consider finding the i-th right eigenvector (assume all eigenvalues
-*  are real). The equation to be solved is:
-*       n                   i
-*  0 = sum  C(j,k) v(k)  = sum  C(j,k) v(k)     for j = i,. . .,1
-*      k=j                 k=j
-*
-*  where  C = (A - w B)  (The components v(i+1:n) are 0.)
-*
-*  The "rowwise" method is:
-*
-*  (1)  v(i) := 1
-*  for j = i-1,. . .,1:
-*                          i
-*      (2) compute  s = - sum C(j,k) v(k)   and
-*                        k=j+1
-*
-*      (3) v(j) := s / C(j,j)
-*
-*  Step 2 is sometimes called the "dot product" step, since it is an
-*  inner product between the j-th row and the portion of the eigenvector
-*  that has been computed so far.
-*
-*  The "columnwise" method consists basically in doing the sums
-*  for all the rows in parallel.  As each v(j) is computed, the
-*  contribution of v(j) times the j-th column of C is added to the
-*  partial sums.  Since FORTRAN arrays are stored columnwise, this has
-*  the advantage that at each step, the elements of C that are accessed
-*  are adjacent to one another, whereas with the rowwise method, the
-*  elements accessed at a step are spaced LDS (and LDP) words apart.
-*
-*  When finding left eigenvectors, the matrix in question is the
-*  transpose of the one in storage, so the rowwise method then
-*  actually accesses columns of A and B at each step, and so is the
-*  preferred method.
 *
 *  =====================================================================
 *

@@ -1,10 +1,120 @@
+*> \brief \b ZLARFX
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          SIDE
+*       INTEGER            LDC, M, N
+*       COMPLEX*16         TAU
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         C( LDC, * ), V( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLARFX applies a complex elementary reflector H to a complex m by n
+*> matrix C, from either the left or the right. H is represented in the
+*> form
+*>
+*>       H = I - tau * v * v**H
+*>
+*> where tau is a complex scalar and v is a complex vector.
+*>
+*> If tau = 0, then H is taken to be the unit matrix
+*>
+*> This version uses inline code if H has order < 11.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>          = 'L': form  H * C
+*>          = 'R': form  C * H
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix C.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix C.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is COMPLEX*16 array, dimension (M) if SIDE = 'L'
+*>                                        or (N) if SIDE = 'R'
+*>          The vector v in the representation of H.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is COMPLEX*16
+*>          The value tau in the representation of H.
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is COMPLEX*16 array, dimension (LDC,N)
+*>          On entry, the m by n matrix C.
+*>          On exit, C is overwritten by the matrix H * C if SIDE = 'L',
+*>          or C * H if SIDE = 'R'.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (N) if SIDE = 'L'
+*>                                            or (M) if SIDE = 'R'
+*>          WORK is not referenced if H has order < 11.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE ZLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
-      IMPLICIT NONE
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          SIDE
@@ -14,53 +124,6 @@
 *     .. Array Arguments ..
       COMPLEX*16         C( LDC, * ), V( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLARFX applies a complex elementary reflector H to a complex m by n
-*  matrix C, from either the left or the right. H is represented in the
-*  form
-*
-*        H = I - tau * v * v**H
-*
-*  where tau is a complex scalar and v is a complex vector.
-*
-*  If tau = 0, then H is taken to be the unit matrix
-*
-*  This version uses inline code if H has order < 11.
-*
-*  Arguments
-*  =========
-*
-*  SIDE    (input) CHARACTER*1
-*          = 'L': form  H * C
-*          = 'R': form  C * H
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix C.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix C.
-*
-*  V       (input) COMPLEX*16 array, dimension (M) if SIDE = 'L'
-*                                        or (N) if SIDE = 'R'
-*          The vector v in the representation of H.
-*
-*  TAU     (input) COMPLEX*16
-*          The value tau in the representation of H.
-*
-*  C       (input/output) COMPLEX*16 array, dimension (LDC,N)
-*          On entry, the m by n matrix C.
-*          On exit, C is overwritten by the matrix H * C if SIDE = 'L',
-*          or C * H if SIDE = 'R'.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C. LDA >= max(1,M).
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (N) if SIDE = 'L'
-*                                            or (M) if SIDE = 'R'
-*          WORK is not referenced if H has order < 11.
 *
 *  =====================================================================
 *

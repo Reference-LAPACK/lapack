@@ -1,11 +1,262 @@
+*> \brief \b CGGSVP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
+*                          TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
+*                          IWORK, RWORK, TAU, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBQ, JOBU, JOBV
+*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+*       REAL               TOLA, TOLB
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               RWORK( * )
+*       COMPLEX            A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+*      $                   TAU( * ), U( LDU, * ), V( LDV, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGGSVP computes unitary matrices U, V and Q such that
+*>
+*>                    N-K-L  K    L
+*>  U**H*A*Q =     K ( 0    A12  A13 )  if M-K-L >= 0;
+*>                 L ( 0     0   A23 )
+*>             M-K-L ( 0     0    0  )
+*>
+*>                  N-K-L  K    L
+*>         =     K ( 0    A12  A13 )  if M-K-L < 0;
+*>             M-K ( 0     0   A23 )
+*>
+*>                  N-K-L  K    L
+*>  V**H*B*Q =   L ( 0     0   B13 )
+*>             P-L ( 0     0    0  )
+*>
+*> where the K-by-K matrix A12 and L-by-L matrix B13 are nonsingular
+*> upper triangular; A23 is L-by-L upper triangular if M-K-L >= 0,
+*> otherwise A23 is (M-K)-by-L upper trapezoidal.  K+L = the effective
+*> numerical rank of the (M+P)-by-N matrix (A**H,B**H)**H. 
+*>
+*> This decomposition is the preprocessing step for computing the
+*> Generalized Singular Value Decomposition (GSVD), see subroutine
+*> CGGSVD.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBU
+*> \verbatim
+*>          JOBU is CHARACTER*1
+*>          = 'U':  Unitary matrix U is computed;
+*>          = 'N':  U is not computed.
+*> \endverbatim
+*>
+*> \param[in] JOBV
+*> \verbatim
+*>          JOBV is CHARACTER*1
+*>          = 'V':  Unitary matrix V is computed;
+*>          = 'N':  V is not computed.
+*> \endverbatim
+*>
+*> \param[in] JOBQ
+*> \verbatim
+*>          JOBQ is CHARACTER*1
+*>          = 'Q':  Unitary matrix Q is computed;
+*>          = 'N':  Q is not computed.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is INTEGER
+*>          The number of rows of the matrix B.  P >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and B.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the M-by-N matrix A.
+*>          On exit, A contains the triangular (or trapezoidal) matrix
+*>          described in the Purpose section.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,N)
+*>          On entry, the P-by-N matrix B.
+*>          On exit, B contains the triangular matrix described in
+*>          the Purpose section.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1,P).
+*> \endverbatim
+*>
+*> \param[in] TOLA
+*> \verbatim
+*>          TOLA is REAL
+*> \param[in] TOLB
+*> \verbatim
+*>          TOLB is REAL
+*>          TOLA and TOLB are the thresholds to determine the effective
+*>          numerical rank of matrix B and a subblock of A. Generally,
+*>          they are set to
+*>             TOLA = MAX(M,N)*norm(A)*MACHEPS,
+*>             TOLB = MAX(P,N)*norm(B)*MACHEPS.
+*>          The size of TOLA and TOLB may affect the size of backward
+*>          errors of the decomposition.
+*> \endverbatim
+*> \endverbatim
+*>
+*> \param[out] K
+*> \verbatim
+*>          K is INTEGER
+*> \param[out] L
+*> \verbatim
+*>          L is INTEGER
+*>          On exit, K and L specify the dimension of the subblocks
+*>          described in Purpose section.
+*>          K + L = effective numerical rank of (A**H,B**H)**H.
+*> \endverbatim
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is COMPLEX array, dimension (LDU,M)
+*>          If JOBU = 'U', U contains the unitary matrix U.
+*>          If JOBU = 'N', U is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of the array U. LDU >= max(1,M) if
+*>          JOBU = 'U'; LDU >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[out] V
+*> \verbatim
+*>          V is COMPLEX array, dimension (LDV,P)
+*>          If JOBV = 'V', V contains the unitary matrix V.
+*>          If JOBV = 'N', V is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V. LDV >= max(1,P) if
+*>          JOBV = 'V'; LDV >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDQ,N)
+*>          If JOBQ = 'Q', Q contains the unitary matrix Q.
+*>          If JOBQ = 'N', Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q. LDQ >= max(1,N) if
+*>          JOBQ = 'Q'; LDQ >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (max(3*N,M,P))
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  The subroutine uses LAPACK subroutine CGEQPF for the QR factorization
+*>  with column pivoting to detect the effective numerical rank of the
+*>  a matrix. It may be replaced by a better rank determination strategy.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
      $                   TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
      $                   IWORK, RWORK, TAU, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBQ, JOBU, JOBV
@@ -18,132 +269,6 @@
       COMPLEX            A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
      $                   TAU( * ), U( LDU, * ), V( LDV, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGGSVP computes unitary matrices U, V and Q such that
-*
-*                     N-K-L  K    L
-*   U**H*A*Q =     K ( 0    A12  A13 )  if M-K-L >= 0;
-*                  L ( 0     0   A23 )
-*              M-K-L ( 0     0    0  )
-*
-*                   N-K-L  K    L
-*          =     K ( 0    A12  A13 )  if M-K-L < 0;
-*              M-K ( 0     0   A23 )
-*
-*                   N-K-L  K    L
-*   V**H*B*Q =   L ( 0     0   B13 )
-*              P-L ( 0     0    0  )
-*
-*  where the K-by-K matrix A12 and L-by-L matrix B13 are nonsingular
-*  upper triangular; A23 is L-by-L upper triangular if M-K-L >= 0,
-*  otherwise A23 is (M-K)-by-L upper trapezoidal.  K+L = the effective
-*  numerical rank of the (M+P)-by-N matrix (A**H,B**H)**H. 
-*
-*  This decomposition is the preprocessing step for computing the
-*  Generalized Singular Value Decomposition (GSVD), see subroutine
-*  CGGSVD.
-*
-*  Arguments
-*  =========
-*
-*  JOBU    (input) CHARACTER*1
-*          = 'U':  Unitary matrix U is computed;
-*          = 'N':  U is not computed.
-*
-*  JOBV    (input) CHARACTER*1
-*          = 'V':  Unitary matrix V is computed;
-*          = 'N':  V is not computed.
-*
-*  JOBQ    (input) CHARACTER*1
-*          = 'Q':  Unitary matrix Q is computed;
-*          = 'N':  Q is not computed.
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  P       (input) INTEGER
-*          The number of rows of the matrix B.  P >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and B.  N >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA,N)
-*          On entry, the M-by-N matrix A.
-*          On exit, A contains the triangular (or trapezoidal) matrix
-*          described in the Purpose section.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >= max(1,M).
-*
-*  B       (input/output) COMPLEX array, dimension (LDB,N)
-*          On entry, the P-by-N matrix B.
-*          On exit, B contains the triangular matrix described in
-*          the Purpose section.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >= max(1,P).
-*
-*  TOLA    (input) REAL
-*  TOLB    (input) REAL
-*          TOLA and TOLB are the thresholds to determine the effective
-*          numerical rank of matrix B and a subblock of A. Generally,
-*          they are set to
-*             TOLA = MAX(M,N)*norm(A)*MACHEPS,
-*             TOLB = MAX(P,N)*norm(B)*MACHEPS.
-*          The size of TOLA and TOLB may affect the size of backward
-*          errors of the decomposition.
-*
-*  K       (output) INTEGER
-*  L       (output) INTEGER
-*          On exit, K and L specify the dimension of the subblocks
-*          described in Purpose section.
-*          K + L = effective numerical rank of (A**H,B**H)**H.
-*
-*  U       (output) COMPLEX array, dimension (LDU,M)
-*          If JOBU = 'U', U contains the unitary matrix U.
-*          If JOBU = 'N', U is not referenced.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of the array U. LDU >= max(1,M) if
-*          JOBU = 'U'; LDU >= 1 otherwise.
-*
-*  V       (output) COMPLEX array, dimension (LDV,P)
-*          If JOBV = 'V', V contains the unitary matrix V.
-*          If JOBV = 'N', V is not referenced.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of the array V. LDV >= max(1,P) if
-*          JOBV = 'V'; LDV >= 1 otherwise.
-*
-*  Q       (output) COMPLEX array, dimension (LDQ,N)
-*          If JOBQ = 'Q', Q contains the unitary matrix Q.
-*          If JOBQ = 'N', Q is not referenced.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q. LDQ >= max(1,N) if
-*          JOBQ = 'Q'; LDQ >= 1 otherwise.
-*
-*  IWORK   (workspace) INTEGER array, dimension (N)
-*
-*  RWORK   (workspace) REAL array, dimension (2*N)
-*
-*  TAU     (workspace) COMPLEX array, dimension (N)
-*
-*  WORK    (workspace) COMPLEX array, dimension (max(3*N,M,P))
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  The subroutine uses LAPACK subroutine CGEQPF for the QR factorization
-*  with column pivoting to detect the effective numerical rank of the
-*  a matrix. It may be replaced by a better rank determination strategy.
 *
 *  =====================================================================
 *

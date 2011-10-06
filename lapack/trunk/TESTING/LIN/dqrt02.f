@@ -1,9 +1,146 @@
+*> \brief \b DQRT02
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
+*                          RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            K, LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), AF( LDA, * ), Q( LDA, * ),
+*      $                   R( LDA, * ), RESULT( * ), RWORK( * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DQRT02 tests DORGQR, which generates an m-by-n matrix Q with
+*> orthonornmal columns that is defined as the product of k elementary
+*> reflectors.
+*>
+*> Given the QR factorization of an m-by-n matrix A, DQRT02 generates
+*> the orthogonal matrix Q defined by the factorization of the first k
+*> columns of A; it compares R(1:n,1:k) with Q(1:m,1:n)'*A(1:m,1:k),
+*> and checks that the columns of Q are orthonormal.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix Q to be generated.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix Q to be generated.
+*>          M >= N >= 0.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of elementary reflectors whose product defines the
+*>          matrix Q. N >= K >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The m-by-n matrix A which was factorized by DQRT01.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is DOUBLE PRECISION array, dimension (LDA,N)
+*>          Details of the QR factorization of A, as returned by DGEQRF.
+*>          See DGEQRF for further details.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is DOUBLE PRECISION array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[out] R
+*> \verbatim
+*>          R is DOUBLE PRECISION array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A, AF, Q and R. LDA >= M.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (N)
+*>          The scalar factors of the elementary reflectors corresponding
+*>          to the QR factorization in AF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (2)
+*>          The test ratios:
+*>          RESULT(1) = norm( R - Q'*A ) / ( M * norm(A) * EPS )
+*>          RESULT(2) = norm( I - Q'*Q ) / ( M * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            K, LDA, LWORK, M, N
@@ -13,62 +150,6 @@
      $                   R( LDA, * ), RESULT( * ), RWORK( * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DQRT02 tests DORGQR, which generates an m-by-n matrix Q with
-*  orthonornmal columns that is defined as the product of k elementary
-*  reflectors.
-*
-*  Given the QR factorization of an m-by-n matrix A, DQRT02 generates
-*  the orthogonal matrix Q defined by the factorization of the first k
-*  columns of A; it compares R(1:n,1:k) with Q(1:m,1:n)'*A(1:m,1:k),
-*  and checks that the columns of Q are orthonormal.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix Q to be generated.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix Q to be generated.
-*          M >= N >= 0.
-*
-*  K       (input) INTEGER
-*          The number of elementary reflectors whose product defines the
-*          matrix Q. N >= K >= 0.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The m-by-n matrix A which was factorized by DQRT01.
-*
-*  AF      (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          Details of the QR factorization of A, as returned by DGEQRF.
-*          See DGEQRF for further details.
-*
-*  Q       (workspace) DOUBLE PRECISION array, dimension (LDA,N)
-*
-*  R       (workspace) DOUBLE PRECISION array, dimension (LDA,N)
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A, AF, Q and R. LDA >= M.
-*
-*  TAU     (input) DOUBLE PRECISION array, dimension (N)
-*          The scalar factors of the elementary reflectors corresponding
-*          to the QR factorization in AF.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (M)
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (2)
-*          The test ratios:
-*          RESULT(1) = norm( R - Q'*A ) / ( M * norm(A) * EPS )
-*          RESULT(2) = norm( I - Q'*Q ) / ( M * EPS )
 *
 *  =====================================================================
 *

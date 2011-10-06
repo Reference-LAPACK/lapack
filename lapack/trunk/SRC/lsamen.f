@@ -1,35 +1,80 @@
+*> \brief \b LSAMEN
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       LOGICAL          FUNCTION LSAMEN( N, CA, CB )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*( * )    CA, CB
+*       INTEGER            N
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> LSAMEN  tests if the first N letters of CA are the same as the
+*> first N letters of CB, regardless of case.
+*> LSAMEN returns .TRUE. if CA and CB are equivalent except for case
+*> and .FALSE. otherwise.  LSAMEN also returns .FALSE. if LEN( CA )
+*> or LEN( CB ) is less than N.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of characters in CA and CB to be compared.
+*> \endverbatim
+*>
+*> \param[in] CA
+*> \verbatim
+*>          CA is CHARACTER*(*)
+*> \endverbatim
+*>
+*> \param[in] CB
+*> \verbatim
+*>          CB is CHARACTER*(*)
+*>          CA and CB specify two character strings of length at least N.
+*>          Only the first N characters of each string will be accessed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
       LOGICAL          FUNCTION LSAMEN( N, CA, CB )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*( * )    CA, CB
       INTEGER            N
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  LSAMEN  tests if the first N letters of CA are the same as the
-*  first N letters of CB, regardless of case.
-*  LSAMEN returns .TRUE. if CA and CB are equivalent except for case
-*  and .FALSE. otherwise.  LSAMEN also returns .FALSE. if LEN( CA )
-*  or LEN( CB ) is less than N.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The number of characters in CA and CB to be compared.
-*
-*  CA      (input) CHARACTER*(*)
-*
-*  CB      (input) CHARACTER*(*)
-*          CA and CB specify two character strings of length at least N.
-*          Only the first N characters of each string will be accessed.
 *
 * =====================================================================
 *

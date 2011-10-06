@@ -1,15 +1,120 @@
+*> \brief \b SLASQ6
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN,
+*                          DNM1, DNM2 )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            I0, N0, PP
+*       REAL               DMIN, DMIN1, DMIN2, DN, DNM1, DNM2
+*       ..
+*       .. Array Arguments ..
+*       REAL               Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLASQ6 computes one dqd (shift equal to zero) transform in
+*> ping-pong form, with protection against underflow and overflow.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] I0
+*> \verbatim
+*>          I0 is INTEGER
+*>        First index.
+*> \endverbatim
+*>
+*> \param[in] N0
+*> \verbatim
+*>          N0 is INTEGER
+*>        Last index.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is REAL array, dimension ( 4*N )
+*>        Z holds the qd array. EMIN is stored in Z(4*N0) to avoid
+*>        an extra argument.
+*> \endverbatim
+*>
+*> \param[in] PP
+*> \verbatim
+*>          PP is INTEGER
+*>        PP=0 for ping, PP=1 for pong.
+*> \endverbatim
+*>
+*> \param[out] DMIN
+*> \verbatim
+*>          DMIN is REAL
+*>        Minimum value of d.
+*> \endverbatim
+*>
+*> \param[out] DMIN1
+*> \verbatim
+*>          DMIN1 is REAL
+*>        Minimum value of d, excluding D( N0 ).
+*> \endverbatim
+*>
+*> \param[out] DMIN2
+*> \verbatim
+*>          DMIN2 is REAL
+*>        Minimum value of d, excluding D( N0 ) and D( N0-1 ).
+*> \endverbatim
+*>
+*> \param[out] DN
+*> \verbatim
+*>          DN is REAL
+*>        d(N0), the last value of d.
+*> \endverbatim
+*>
+*> \param[out] DNM1
+*> \verbatim
+*>          DNM1 is REAL
+*>        d(N0-1).
+*> \endverbatim
+*>
+*> \param[out] DNM2
+*> \verbatim
+*>          DNM2 is REAL
+*>        d(N0-2).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE SLASQ6( I0, N0, Z, PP, DMIN, DMIN1, DMIN2, DN,
      $                   DNM1, DNM2 )
 *
-*  -- LAPACK routine (version 3.2)                                    --
-*
-*  -- Contributed by Osni Marques of the Lawrence Berkeley National   --
-*  -- Laboratory and Beresford Parlett of the Univ. of California at  --
-*  -- Berkeley                                                        --
-*  -- November 2008                                                   --
-*
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            I0, N0, PP
@@ -18,46 +123,6 @@
 *     .. Array Arguments ..
       REAL               Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLASQ6 computes one dqd (shift equal to zero) transform in
-*  ping-pong form, with protection against underflow and overflow.
-*
-*  Arguments
-*  =========
-*
-*  I0    (input) INTEGER
-*        First index.
-*
-*  N0    (input) INTEGER
-*        Last index.
-*
-*  Z     (input) REAL array, dimension ( 4*N )
-*        Z holds the qd array. EMIN is stored in Z(4*N0) to avoid
-*        an extra argument.
-*
-*  PP    (input) INTEGER
-*        PP=0 for ping, PP=1 for pong.
-*
-*  DMIN  (output) REAL
-*        Minimum value of d.
-*
-*  DMIN1 (output) REAL
-*        Minimum value of d, excluding D( N0 ).
-*
-*  DMIN2 (output) REAL
-*        Minimum value of d, excluding D( N0 ) and D( N0-1 ).
-*
-*  DN    (output) REAL
-*        d(N0), the last value of d.
-*
-*  DNM1  (output) REAL
-*        d(N0-1).
-*
-*  DNM2  (output) REAL
-*        d(N0-2).
 *
 *  =====================================================================
 *

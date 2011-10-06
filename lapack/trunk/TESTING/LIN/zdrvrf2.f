@@ -1,10 +1,100 @@
+*> \brief \b ZDRVRF2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, NN, NOUT
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NVAL( NN )
+*       COMPLEX*16         A( LDA, * ), ARF( * ), AP(*), ASAV( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZDRVRF2 tests the LAPACK RFP convertion routines.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>                The unit number for output.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>                The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>                The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>                The leading dimension of the array A.  LDA >= max(1,NMAX).
+*> \endverbatim
+*>
+*> \param[out] ARF
+*> \verbatim
+*>          ARF is COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
+*> \endverbatim
+*>
+*> \param[out] AP
+*> \verbatim
+*>          AP is COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
+*> \endverbatim
+*>
+*> \param[out] A2
+*> \verbatim
+*>          A2 is COMPLEX*16 array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZDRVRF2( NOUT, NN, NVAL, A, LDA, ARF, AP, ASAV  )
 *
-      IMPLICIT NONE
-*
 *  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, NN, NOUT
@@ -13,34 +103,6 @@
       INTEGER            NVAL( NN )
       COMPLEX*16         A( LDA, * ), ARF( * ), AP(*), ASAV( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZDRVRF2 tests the LAPACK RFP convertion routines.
-*
-*  Arguments
-*  =========
-*
-*  NOUT          (input) INTEGER
-*                The unit number for output.
-*
-*  NN            (input) INTEGER
-*                The number of values of N contained in the vector NVAL.
-*
-*  NVAL          (input) INTEGER array, dimension (NN)
-*                The values of the matrix dimension N.
-*
-*  A             (workspace) COMPLEX*16 array, dimension (LDA,NMAX)
-*
-*  LDA           (input) INTEGER
-*                The leading dimension of the array A.  LDA >= max(1,NMAX).
-*
-*  ARF           (workspace) COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
-*
-*  AP            (workspace) COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
-*
-*  A2            (workspace) COMPLEX*16 array, dimension (LDA,NMAX)
 *
 *  =====================================================================
 *     ..

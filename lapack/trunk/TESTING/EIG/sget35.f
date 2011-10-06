@@ -1,45 +1,94 @@
+*> \brief \b SGET35
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET35( RMAX, LMAX, NINFO, KNT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, LMAX, NINFO
+*       REAL               RMAX
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET35 tests STRSYL, a routine for solving the Sylvester matrix
+*> equation
+*>
+*>    op(A)*X + ISGN*X*op(B) = scale*C,
+*>
+*> A and B are assumed to be in Schur canonical form, op() represents an
+*> optional transpose, and ISGN can be -1 or +1.  Scale is an output
+*> less than or equal to 1, chosen to avoid overflow in X.
+*>
+*> The test code verifies that the following residual is order 1:
+*>
+*>    norm(op(A)*X + ISGN*X*op(B) - scale*C) /
+*>        (EPS*max(norm(A),norm(B))*norm(X))
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is REAL
+*>          Value of the largest test ratio.
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER
+*>          Example number where largest test ratio achieved.
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER
+*>          Number of examples where INFO is nonzero.
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGET35( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, LMAX, NINFO
       REAL               RMAX
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET35 tests STRSYL, a routine for solving the Sylvester matrix
-*  equation
-*
-*     op(A)*X + ISGN*X*op(B) = scale*C,
-*
-*  A and B are assumed to be in Schur canonical form, op() represents an
-*  optional transpose, and ISGN can be -1 or +1.  Scale is an output
-*  less than or equal to 1, chosen to avoid overflow in X.
-*
-*  The test code verifies that the following residual is order 1:
-*
-*     norm(op(A)*X + ISGN*X*op(B) - scale*C) /
-*         (EPS*max(norm(A),norm(B))*norm(X))
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) REAL
-*          Value of the largest test ratio.
-*
-*  LMAX    (output) INTEGER
-*          Example number where largest test ratio achieved.
-*
-*  NINFO   (output) INTEGER
-*          Number of examples where INFO is nonzero.
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
 *
 *  =====================================================================
 *

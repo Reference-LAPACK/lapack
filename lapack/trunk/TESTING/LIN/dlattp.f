@@ -1,9 +1,136 @@
+*> \brief \b DLATTP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, B, WORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, TRANS, UPLO
+*       INTEGER            IMAT, INFO, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       DOUBLE PRECISION   A( * ), B( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLATTP generates a triangular test matrix in packed storage.
+*> IMAT and UPLO uniquely specify the properties of the test
+*> matrix, which is returned in the array AP.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] IMAT
+*> \verbatim
+*>          IMAT is INTEGER
+*>          An integer key describing which matrix to generate for this
+*>          path.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the matrix A will be upper or lower
+*>          triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies whether the matrix or its transpose will be used.
+*>          = 'N':  No transpose
+*>          = 'T':  Transpose
+*>          = 'C':  Conjugate transpose (= Transpose)
+*> \endverbatim
+*>
+*> \param[out] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>          Specifies whether or not the matrix A is unit triangular.
+*>          = 'N':  Non-unit triangular
+*>          = 'U':  Unit triangular
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          The seed vector for the random number generator (used in
+*>          DLATMS).  Modified on exit.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (N*(N+1)/2)
+*>          The upper or lower triangular matrix A, packed columnwise in
+*>          a linear array.  The j-th column of A is stored in the array
+*>          AP as follows:
+*>          if UPLO = 'U', AP((j-1)*j/2 + i) = A(i,j) for 1<=i<=j;
+*>          if UPLO = 'L',
+*>             AP((j-1)*(n-j) + j*(j+1)/2 + i-j) = A(i,j) for j<=i<=n.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (N)
+*>          The right hand side vector, if IMAT > 10.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (3*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0: if INFO = -k, the k-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, A, B, WORK,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, TRANS, UPLO
@@ -13,61 +140,6 @@
       INTEGER            ISEED( 4 )
       DOUBLE PRECISION   A( * ), B( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLATTP generates a triangular test matrix in packed storage.
-*  IMAT and UPLO uniquely specify the properties of the test
-*  matrix, which is returned in the array AP.
-*
-*  Arguments
-*  =========
-*
-*  IMAT    (input) INTEGER
-*          An integer key describing which matrix to generate for this
-*          path.
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the matrix A will be upper or lower
-*          triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies whether the matrix or its transpose will be used.
-*          = 'N':  No transpose
-*          = 'T':  Transpose
-*          = 'C':  Conjugate transpose (= Transpose)
-*
-*  DIAG    (output) CHARACTER*1
-*          Specifies whether or not the matrix A is unit triangular.
-*          = 'N':  Non-unit triangular
-*          = 'U':  Unit triangular
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          The seed vector for the random number generator (used in
-*          DLATMS).  Modified on exit.
-*
-*  N       (input) INTEGER
-*          The order of the matrix to be generated.
-*
-*  A       (output) DOUBLE PRECISION array, dimension (N*(N+1)/2)
-*          The upper or lower triangular matrix A, packed columnwise in
-*          a linear array.  The j-th column of A is stored in the array
-*          AP as follows:
-*          if UPLO = 'U', AP((j-1)*j/2 + i) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L',
-*             AP((j-1)*(n-j) + j*(j+1)/2 + i-j) = A(i,j) for j<=i<=n.
-*
-*  B       (output) DOUBLE PRECISION array, dimension (N)
-*          The right hand side vector, if IMAT > 10.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (3*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0: if INFO = -k, the k-th argument had an illegal value
 *
 *  =====================================================================
 *

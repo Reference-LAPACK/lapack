@@ -1,9 +1,95 @@
+*> \brief \b SPPTRI
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SPPTRI( UPLO, N, AP, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               AP( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SPPTRI computes the inverse of a real symmetric positive definite
+*> matrix A using the Cholesky factorization A = U**T*U or A = L*L**T
+*> computed by SPPTRF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangular factor is stored in AP;
+*>          = 'L':  Lower triangular factor is stored in AP.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AP
+*> \verbatim
+*>          AP is REAL array, dimension (N*(N+1)/2)
+*>          On entry, the triangular factor U or L from the Cholesky
+*>          factorization A = U**T*U or A = L*L**T, packed columnwise as
+*>          a linear array.  The j-th column of U or L is stored in the
+*>          array AP as follows:
+*>          if UPLO = 'U', AP(i + (j-1)*j/2) = U(i,j) for 1<=i<=j;
+*>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = L(i,j) for j<=i<=n.
+*> \endverbatim
+*> \verbatim
+*>          On exit, the upper or lower triangle of the (symmetric)
+*>          inverse of A, overwriting the input factor U or L.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, the (i,i) element of the factor U or L is
+*>                zero, and the inverse could not be computed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE SPPTRI( UPLO, N, AP, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,40 +98,6 @@
 *     .. Array Arguments ..
       REAL               AP( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SPPTRI computes the inverse of a real symmetric positive definite
-*  matrix A using the Cholesky factorization A = U**T*U or A = L*L**T
-*  computed by SPPTRF.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangular factor is stored in AP;
-*          = 'L':  Lower triangular factor is stored in AP.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  AP      (input/output) REAL array, dimension (N*(N+1)/2)
-*          On entry, the triangular factor U or L from the Cholesky
-*          factorization A = U**T*U or A = L*L**T, packed columnwise as
-*          a linear array.  The j-th column of U or L is stored in the
-*          array AP as follows:
-*          if UPLO = 'U', AP(i + (j-1)*j/2) = U(i,j) for 1<=i<=j;
-*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = L(i,j) for j<=i<=n.
-*
-*          On exit, the upper or lower triangle of the (symmetric)
-*          inverse of A, overwriting the input factor U or L.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, the (i,i) element of the factor U or L is
-*                zero, and the inverse could not be computed.
 *
 *  =====================================================================
 *

@@ -1,9 +1,105 @@
+*> \brief \b DLARFGP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLARFGP( N, ALPHA, X, INCX, TAU )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCX, N
+*       DOUBLE PRECISION   ALPHA, TAU
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLARFGP generates a real elementary reflector H of order n, such
+*> that
+*>
+*>       H * ( alpha ) = ( beta ),   H**T * H = I.
+*>           (   x   )   (   0  )
+*>
+*> where alpha and beta are scalars, beta is non-negative, and x is
+*> an (n-1)-element real vector.  H is represented in the form
+*>
+*>       H = I - tau * ( 1 ) * ( 1 v**T ) ,
+*>                     ( v )
+*>
+*> where tau is a real scalar and v is a real (n-1)-element
+*> vector.
+*>
+*> If the elements of x are all zero, then tau = 0 and H is taken to be
+*> the unit matrix.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the elementary reflector.
+*> \endverbatim
+*>
+*> \param[in,out] ALPHA
+*> \verbatim
+*>          ALPHA is DOUBLE PRECISION
+*>          On entry, the value alpha.
+*>          On exit, it is overwritten with the value beta.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension
+*>                         (1+(N-2)*abs(INCX))
+*>          On entry, the vector x.
+*>          On exit, it is overwritten with the vector v.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The increment between elements of X. INCX > 0.
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION
+*>          The value tau.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE DLARFGP( N, ALPHA, X, INCX, TAU )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, N
@@ -12,48 +108,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLARFGP generates a real elementary reflector H of order n, such
-*  that
-*
-*        H * ( alpha ) = ( beta ),   H**T * H = I.
-*            (   x   )   (   0  )
-*
-*  where alpha and beta are scalars, beta is non-negative, and x is
-*  an (n-1)-element real vector.  H is represented in the form
-*
-*        H = I - tau * ( 1 ) * ( 1 v**T ) ,
-*                      ( v )
-*
-*  where tau is a real scalar and v is a real (n-1)-element
-*  vector.
-*
-*  If the elements of x are all zero, then tau = 0 and H is taken to be
-*  the unit matrix.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the elementary reflector.
-*
-*  ALPHA   (input/output) DOUBLE PRECISION
-*          On entry, the value alpha.
-*          On exit, it is overwritten with the value beta.
-*
-*  X       (input/output) DOUBLE PRECISION array, dimension
-*                         (1+(N-2)*abs(INCX))
-*          On entry, the vector x.
-*          On exit, it is overwritten with the vector v.
-*
-*  INCX    (input) INTEGER
-*          The increment between elements of X. INCX > 0.
-*
-*  TAU     (output) DOUBLE PRECISION
-*          The value tau.
 *
 *  =====================================================================
 *

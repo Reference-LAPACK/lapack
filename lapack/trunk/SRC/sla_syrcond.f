@@ -1,16 +1,148 @@
+*> \brief \b SLA_SYRCOND
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL FUNCTION SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV, CMODE,
+*                                  C, INFO, WORK, IWORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            N, LDA, LDAF, INFO, CMODE
+*       ..
+*       .. Array Arguments
+*       INTEGER            IWORK( * ), IPIV( * )
+*       REAL               A( LDA, * ), AF( LDAF, * ), WORK( * ), C( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    SLA_SYRCOND estimates the Skeel condition number of  op(A) * op2(C)
+*>    where op2 is determined by CMODE as follows
+*>    CMODE =  1    op2(C) = C
+*>    CMODE =  0    op2(C) = I
+*>    CMODE = -1    op2(C) = inv(C)
+*>    The Skeel condition number cond(A) = norminf( |inv(A)||A| )
+*>    is computed by computing scaling factors R such that
+*>    diag(R)*A*op2(C) is row equilibrated and computing the standard
+*>    infinity-norm condition number.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>       = 'U':  Upper triangle of A is stored;
+*>       = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>     The number of linear equations, i.e., the order of the
+*>     matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>     On entry, the N-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>     The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is REAL array, dimension (LDAF,N)
+*>     The block diagonal matrix D and the multipliers used to
+*>     obtain the factor U or L as computed by SSYTRF.
+*> \endverbatim
+*>
+*> \param[in] LDAF
+*> \verbatim
+*>          LDAF is INTEGER
+*>     The leading dimension of the array AF.  LDAF >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>     Details of the interchanges and the block structure of D
+*>     as determined by SSYTRF.
+*> \endverbatim
+*>
+*> \param[in] CMODE
+*> \verbatim
+*>          CMODE is INTEGER
+*>     Determines op2(C) in the formula op(A) * op2(C) as follows:
+*>     CMODE =  1    op2(C) = C
+*>     CMODE =  0    op2(C) = I
+*>     CMODE = -1    op2(C) = inv(C)
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is REAL array, dimension (N)
+*>     The vector C in the formula op(A) * op2(C).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>       = 0:  Successful exit.
+*>     i > 0:  The ith argument is invalid.
+*> \endverbatim
+*>
+*> \param[in] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (3*N).
+*>     Workspace.
+*> \endverbatim
+*>
+*> \param[in] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (N).
+*>     Workspace.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realSYcomputational
+*
+*  =====================================================================
       REAL FUNCTION SLA_SYRCOND( UPLO, N, A, LDA, AF, LDAF, IPIV, CMODE,
      $                           C, INFO, WORK, IWORK )
 *
-*     -- LAPACK routine (version 3.2.1)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- April 2009                                                   --
+*  -- LAPACK computational routine (version 3.2.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
       INTEGER            N, LDA, LDAF, INFO, CMODE
@@ -19,66 +151,6 @@
       INTEGER            IWORK( * ), IPIV( * )
       REAL               A( LDA, * ), AF( LDAF, * ), WORK( * ), C( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     SLA_SYRCOND estimates the Skeel condition number of  op(A) * op2(C)
-*     where op2 is determined by CMODE as follows
-*     CMODE =  1    op2(C) = C
-*     CMODE =  0    op2(C) = I
-*     CMODE = -1    op2(C) = inv(C)
-*     The Skeel condition number cond(A) = norminf( |inv(A)||A| )
-*     is computed by computing scaling factors R such that
-*     diag(R)*A*op2(C) is row equilibrated and computing the standard
-*     infinity-norm condition number.
-*
-*  Arguments
-*  ==========
-*
-*     UPLO    (input) CHARACTER*1
-*       = 'U':  Upper triangle of A is stored;
-*       = 'L':  Lower triangle of A is stored.
-*
-*     N       (input) INTEGER
-*     The number of linear equations, i.e., the order of the
-*     matrix A.  N >= 0.
-*
-*     A       (input) REAL array, dimension (LDA,N)
-*     On entry, the N-by-N matrix A.
-*
-*     LDA     (input) INTEGER
-*     The leading dimension of the array A.  LDA >= max(1,N).
-*
-*     AF      (input) REAL array, dimension (LDAF,N)
-*     The block diagonal matrix D and the multipliers used to
-*     obtain the factor U or L as computed by SSYTRF.
-*
-*     LDAF    (input) INTEGER
-*     The leading dimension of the array AF.  LDAF >= max(1,N).
-*
-*     IPIV    (input) INTEGER array, dimension (N)
-*     Details of the interchanges and the block structure of D
-*     as determined by SSYTRF.
-*
-*     CMODE   (input) INTEGER
-*     Determines op2(C) in the formula op(A) * op2(C) as follows:
-*     CMODE =  1    op2(C) = C
-*     CMODE =  0    op2(C) = I
-*     CMODE = -1    op2(C) = inv(C)
-*
-*     C       (input) REAL array, dimension (N)
-*     The vector C in the formula op(A) * op2(C).
-*
-*     INFO    (output) INTEGER
-*       = 0:  Successful exit.
-*     i > 0:  The ith argument is invalid.
-*
-*     WORK    (input) REAL array, dimension (3*N).
-*     Workspace.
-*
-*     IWORK   (input) INTEGER array, dimension (N).
-*     Workspace.
 *
 *  =====================================================================
 *

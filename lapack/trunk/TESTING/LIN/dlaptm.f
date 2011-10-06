@@ -1,8 +1,127 @@
+*> \brief \b DLAPTM
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDB, LDX, N, NRHS
+*       DOUBLE PRECISION   ALPHA, BETA
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   B( LDB, * ), D( * ), E( * ), X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAPTM multiplies an N by NRHS matrix X by a symmetric tridiagonal
+*> matrix A and stores the result in a matrix B.  The operation has the
+*> form
+*>
+*>    B := alpha * A * X + beta * B
+*>
+*> where alpha may be either 1. or -1. and beta may be 0., 1., or -1.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrices X and B.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is DOUBLE PRECISION
+*>          The scalar alpha.  ALPHA must be 1. or -1.; otherwise,
+*>          it is assumed to be 0.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The n diagonal elements of the tridiagonal matrix A.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          The (n-1) subdiagonal or superdiagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (LDX,NRHS)
+*>          The N by NRHS matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.  LDX >= max(N,1).
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is DOUBLE PRECISION
+*>          The scalar beta.  BETA must be 0., 1., or -1.; otherwise,
+*>          it is assumed to be 1.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*>          On entry, the N by NRHS matrix B.
+*>          On exit, B is overwritten by the matrix expression
+*>          B := alpha * A * X + beta * B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(N,1).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDB, LDX, N, NRHS
@@ -11,55 +130,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   B( LDB, * ), D( * ), E( * ), X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAPTM multiplies an N by NRHS matrix X by a symmetric tridiagonal
-*  matrix A and stores the result in a matrix B.  The operation has the
-*  form
-*
-*     B := alpha * A * X + beta * B
-*
-*  where alpha may be either 1. or -1. and beta may be 0., 1., or -1.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrices X and B.
-*
-*  ALPHA   (input) DOUBLE PRECISION
-*          The scalar alpha.  ALPHA must be 1. or -1.; otherwise,
-*          it is assumed to be 0.
-*
-*  D       (input) DOUBLE PRECISION array, dimension (N)
-*          The n diagonal elements of the tridiagonal matrix A.
-*
-*  E       (input) DOUBLE PRECISION array, dimension (N-1)
-*          The (n-1) subdiagonal or superdiagonal elements of A.
-*
-*  X       (input) DOUBLE PRECISION array, dimension (LDX,NRHS)
-*          The N by NRHS matrix X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.  LDX >= max(N,1).
-*
-*  BETA    (input) DOUBLE PRECISION
-*          The scalar beta.  BETA must be 0., 1., or -1.; otherwise,
-*          it is assumed to be 1.
-*
-*  B       (input/output) DOUBLE PRECISION array, dimension (LDB,NRHS)
-*          On entry, the N by NRHS matrix B.
-*          On exit, B is overwritten by the matrix expression
-*          B := alpha * A * X + beta * B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(N,1).
 *
 *  =====================================================================
 *

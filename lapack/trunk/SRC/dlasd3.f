@@ -1,3 +1,226 @@
+*> \brief \b DLASD3
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
+*                          LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, K, LDQ, LDU, LDU2, LDVT, LDVT2, NL, NR,
+*      $                   SQRE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            CTOT( * ), IDXC( * )
+*       DOUBLE PRECISION   D( * ), DSIGMA( * ), Q( LDQ, * ), U( LDU, * ),
+*      $                   U2( LDU2, * ), VT( LDVT, * ), VT2( LDVT2, * ),
+*      $                   Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLASD3 finds all the square roots of the roots of the secular
+*> equation, as defined by the values in D and Z.  It makes the
+*> appropriate calls to DLASD4 and then updates the singular
+*> vectors by matrix multiplication.
+*>
+*> This code makes very mild assumptions about floating point
+*> arithmetic. It will work on machines with a guard digit in
+*> add/subtract, or on those binary machines without guard digits
+*> which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2.
+*> It could conceivably fail on hexadecimal or decimal machines
+*> without guard digits, but we know of none.
+*>
+*> DLASD3 is called from DLASD1.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NL
+*> \verbatim
+*>          NL is INTEGER
+*>         The row dimension of the upper block.  NL >= 1.
+*> \endverbatim
+*>
+*> \param[in] NR
+*> \verbatim
+*>          NR is INTEGER
+*>         The row dimension of the lower block.  NR >= 1.
+*> \endverbatim
+*>
+*> \param[in] SQRE
+*> \verbatim
+*>          SQRE is INTEGER
+*>         = 0: the lower block is an NR-by-NR square matrix.
+*>         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
+*> \endverbatim
+*> \verbatim
+*>         The bidiagonal matrix has N = NL + NR + 1 rows and
+*>         M = N + SQRE >= N columns.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>         The size of the secular equation, 1 =< K = < N.
+*> \endverbatim
+*>
+*> \param[out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension(K)
+*>         On exit the square roots of the roots of the secular equation,
+*>         in ascending order.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is DOUBLE PRECISION array,
+*>                     dimension at least (LDQ,K).
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>         The leading dimension of the array Q.  LDQ >= K.
+*> \endverbatim
+*>
+*> \param[in] DSIGMA
+*> \verbatim
+*>          DSIGMA is DOUBLE PRECISION array, dimension(K)
+*>         The first K elements of this array contain the old roots
+*>         of the deflated updating problem.  These are the poles
+*>         of the secular equation.
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is DOUBLE PRECISION array, dimension (LDU, N)
+*>         The last N - K columns of this matrix contain the deflated
+*>         left singular vectors.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>         The leading dimension of the array U.  LDU >= N.
+*> \endverbatim
+*>
+*> \param[in,out] U2
+*> \verbatim
+*>          U2 is DOUBLE PRECISION array, dimension (LDU2, N)
+*>         The first K columns of this matrix contain the non-deflated
+*>         left singular vectors for the split problem.
+*> \endverbatim
+*>
+*> \param[in] LDU2
+*> \verbatim
+*>          LDU2 is INTEGER
+*>         The leading dimension of the array U2.  LDU2 >= N.
+*> \endverbatim
+*>
+*> \param[out] VT
+*> \verbatim
+*>          VT is DOUBLE PRECISION array, dimension (LDVT, M)
+*>         The last M - K columns of VT**T contain the deflated
+*>         right singular vectors.
+*> \endverbatim
+*>
+*> \param[in] LDVT
+*> \verbatim
+*>          LDVT is INTEGER
+*>         The leading dimension of the array VT.  LDVT >= N.
+*> \endverbatim
+*>
+*> \param[in,out] VT2
+*> \verbatim
+*>          VT2 is DOUBLE PRECISION array, dimension (LDVT2, N)
+*>         The first K columns of VT2**T contain the non-deflated
+*>         right singular vectors for the split problem.
+*> \endverbatim
+*>
+*> \param[in] LDVT2
+*> \verbatim
+*>          LDVT2 is INTEGER
+*>         The leading dimension of the array VT2.  LDVT2 >= N.
+*> \endverbatim
+*>
+*> \param[in] IDXC
+*> \verbatim
+*>          IDXC is INTEGER array, dimension ( N )
+*>         The permutation used to arrange the columns of U (and rows of
+*>         VT) into three groups:  the first group contains non-zero
+*>         entries only at and above (or before) NL +1; the second
+*>         contains non-zero entries only at and below (or after) NL+2;
+*>         and the third is dense. The first column of U and the row of
+*>         VT are treated separately, however.
+*> \endverbatim
+*> \verbatim
+*>         The rows of the singular vectors found by DLASD4
+*>         must be likewise permuted before the matrix multiplies can
+*>         take place.
+*> \endverbatim
+*>
+*> \param[in] CTOT
+*> \verbatim
+*>          CTOT is INTEGER array, dimension ( 4 )
+*>         A count of the total number of the various types of columns
+*>         in U (or rows in VT), as described in IDXC. The fourth column
+*>         type is any column which has been deflated.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension (K)
+*>         The first K elements of this array contain the components
+*>         of the deflation-adjusted updating row vector.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>         = 0:  successful exit.
+*>         < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>         > 0:  if INFO = 1, a singular value did not converge
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Huan Ren, Computer Science Division, University of
+*>     California at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLASD3( NL, NR, SQRE, K, D, Q, LDQ, DSIGMA, U, LDU, U2,
      $                   LDU2, VT, LDVT, VT2, LDVT2, IDXC, CTOT, Z,
      $                   INFO )
@@ -5,7 +228,7 @@
 *  -- LAPACK auxiliary routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, K, LDQ, LDU, LDU2, LDVT, LDVT2, NL, NR,
@@ -17,118 +240,6 @@
      $                   U2( LDU2, * ), VT( LDVT, * ), VT2( LDVT2, * ),
      $                   Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLASD3 finds all the square roots of the roots of the secular
-*  equation, as defined by the values in D and Z.  It makes the
-*  appropriate calls to DLASD4 and then updates the singular
-*  vectors by matrix multiplication.
-*
-*  This code makes very mild assumptions about floating point
-*  arithmetic. It will work on machines with a guard digit in
-*  add/subtract, or on those binary machines without guard digits
-*  which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2.
-*  It could conceivably fail on hexadecimal or decimal machines
-*  without guard digits, but we know of none.
-*
-*  DLASD3 is called from DLASD1.
-*
-*  Arguments
-*  =========
-*
-*  NL     (input) INTEGER
-*         The row dimension of the upper block.  NL >= 1.
-*
-*  NR     (input) INTEGER
-*         The row dimension of the lower block.  NR >= 1.
-*
-*  SQRE   (input) INTEGER
-*         = 0: the lower block is an NR-by-NR square matrix.
-*         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
-*
-*         The bidiagonal matrix has N = NL + NR + 1 rows and
-*         M = N + SQRE >= N columns.
-*
-*  K      (input) INTEGER
-*         The size of the secular equation, 1 =< K = < N.
-*
-*  D      (output) DOUBLE PRECISION array, dimension(K)
-*         On exit the square roots of the roots of the secular equation,
-*         in ascending order.
-*
-*  Q      (workspace) DOUBLE PRECISION array,
-*                     dimension at least (LDQ,K).
-*
-*  LDQ    (input) INTEGER
-*         The leading dimension of the array Q.  LDQ >= K.
-*
-*  DSIGMA (input) DOUBLE PRECISION array, dimension(K)
-*         The first K elements of this array contain the old roots
-*         of the deflated updating problem.  These are the poles
-*         of the secular equation.
-*
-*  U      (output) DOUBLE PRECISION array, dimension (LDU, N)
-*         The last N - K columns of this matrix contain the deflated
-*         left singular vectors.
-*
-*  LDU    (input) INTEGER
-*         The leading dimension of the array U.  LDU >= N.
-*
-*  U2     (input/output) DOUBLE PRECISION array, dimension (LDU2, N)
-*         The first K columns of this matrix contain the non-deflated
-*         left singular vectors for the split problem.
-*
-*  LDU2   (input) INTEGER
-*         The leading dimension of the array U2.  LDU2 >= N.
-*
-*  VT     (output) DOUBLE PRECISION array, dimension (LDVT, M)
-*         The last M - K columns of VT**T contain the deflated
-*         right singular vectors.
-*
-*  LDVT   (input) INTEGER
-*         The leading dimension of the array VT.  LDVT >= N.
-*
-*  VT2    (input/output) DOUBLE PRECISION array, dimension (LDVT2, N)
-*         The first K columns of VT2**T contain the non-deflated
-*         right singular vectors for the split problem.
-*
-*  LDVT2  (input) INTEGER
-*         The leading dimension of the array VT2.  LDVT2 >= N.
-*
-*  IDXC   (input) INTEGER array, dimension ( N )
-*         The permutation used to arrange the columns of U (and rows of
-*         VT) into three groups:  the first group contains non-zero
-*         entries only at and above (or before) NL +1; the second
-*         contains non-zero entries only at and below (or after) NL+2;
-*         and the third is dense. The first column of U and the row of
-*         VT are treated separately, however.
-*
-*         The rows of the singular vectors found by DLASD4
-*         must be likewise permuted before the matrix multiplies can
-*         take place.
-*
-*  CTOT   (input) INTEGER array, dimension ( 4 )
-*         A count of the total number of the various types of columns
-*         in U (or rows in VT), as described in IDXC. The fourth column
-*         type is any column which has been deflated.
-*
-*  Z      (input) DOUBLE PRECISION array, dimension (K)
-*         The first K elements of this array contain the components
-*         of the deflation-adjusted updating row vector.
-*
-*  INFO   (output) INTEGER
-*         = 0:  successful exit.
-*         < 0:  if INFO = -i, the i-th argument had an illegal value.
-*         > 0:  if INFO = 1, a singular value did not converge
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Huan Ren, Computer Science Division, University of
-*     California at Berkeley, USA
 *
 *  =====================================================================
 *

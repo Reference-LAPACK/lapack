@@ -1,10 +1,146 @@
+*> \brief \b CLAED0
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLAED0( QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS, RWORK,
+*                          IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDQ, LDQS, N, QSIZ
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               D( * ), E( * ), RWORK( * )
+*       COMPLEX            Q( LDQ, * ), QSTORE( LDQS, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Using the divide and conquer method, CLAED0 computes all eigenvalues
+*> of a symmetric tridiagonal matrix which is one diagonal block of
+*> those from reducing a dense or band Hermitian matrix and
+*> corresponding eigenvectors of the dense or band matrix.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] QSIZ
+*> \verbatim
+*>          QSIZ is INTEGER
+*>         The dimension of the unitary matrix used to reduce
+*>         the full matrix to tridiagonal form.  QSIZ >= N if ICOMPQ = 1.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The dimension of the symmetric tridiagonal matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>         On entry, the diagonal elements of the tridiagonal matrix.
+*>         On exit, the eigenvalues in ascending order.
+*> \endverbatim
+*>
+*> \param[in,out] E
+*> \verbatim
+*>          E is REAL array, dimension (N-1)
+*>         On entry, the off-diagonal elements of the tridiagonal matrix.
+*>         On exit, E has been destroyed.
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDQ,N)
+*>         On entry, Q must contain an QSIZ x N matrix whose columns
+*>         unitarily orthonormal. It is a part of the unitary matrix
+*>         that reduces the full dense Hermitian matrix to a
+*>         (reducible) symmetric tridiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>         The leading dimension of the array Q.  LDQ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array,
+*>         the dimension of IWORK must be at least
+*>                      6 + 6*N + 5*N*lg N
+*>                      ( lg( N ) = smallest integer k
+*>                                  such that 2^k >= N )
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array,
+*>                               dimension (1 + 3*N + 2*N*lg N + 3*N**2)
+*>                        ( lg( N ) = smallest integer k
+*>                                    such that 2^k >= N )
+*> \endverbatim
+*>
+*> \param[out] QSTORE
+*> \verbatim
+*>          QSTORE is COMPLEX array, dimension (LDQS, N)
+*>         Used to store parts of
+*>         the eigenvector matrix when the updating matrix multiplies
+*>         take place.
+*> \endverbatim
+*>
+*> \param[in] LDQS
+*> \verbatim
+*>          LDQS is INTEGER
+*>         The leading dimension of the array QSTORE.
+*>         LDQS >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  The algorithm failed to compute an eigenvalue while
+*>                working on the submatrix lying in rows and columns
+*>                INFO/(N+1) through mod(INFO,N+1).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CLAED0( QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS, RWORK,
      $                   IWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDQ, LDQS, N, QSIZ
@@ -14,68 +150,6 @@
       REAL               D( * ), E( * ), RWORK( * )
       COMPLEX            Q( LDQ, * ), QSTORE( LDQS, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Using the divide and conquer method, CLAED0 computes all eigenvalues
-*  of a symmetric tridiagonal matrix which is one diagonal block of
-*  those from reducing a dense or band Hermitian matrix and
-*  corresponding eigenvectors of the dense or band matrix.
-*
-*  Arguments
-*  =========
-*
-*  QSIZ   (input) INTEGER
-*         The dimension of the unitary matrix used to reduce
-*         the full matrix to tridiagonal form.  QSIZ >= N if ICOMPQ = 1.
-*
-*  N      (input) INTEGER
-*         The dimension of the symmetric tridiagonal matrix.  N >= 0.
-*
-*  D      (input/output) REAL array, dimension (N)
-*         On entry, the diagonal elements of the tridiagonal matrix.
-*         On exit, the eigenvalues in ascending order.
-*
-*  E      (input/output) REAL array, dimension (N-1)
-*         On entry, the off-diagonal elements of the tridiagonal matrix.
-*         On exit, E has been destroyed.
-*
-*  Q      (input/output) COMPLEX array, dimension (LDQ,N)
-*         On entry, Q must contain an QSIZ x N matrix whose columns
-*         unitarily orthonormal. It is a part of the unitary matrix
-*         that reduces the full dense Hermitian matrix to a
-*         (reducible) symmetric tridiagonal matrix.
-*
-*  LDQ    (input) INTEGER
-*         The leading dimension of the array Q.  LDQ >= max(1,N).
-*
-*  IWORK  (workspace) INTEGER array,
-*         the dimension of IWORK must be at least
-*                      6 + 6*N + 5*N*lg N
-*                      ( lg( N ) = smallest integer k
-*                                  such that 2^k >= N )
-*
-*  RWORK  (workspace) REAL array,
-*                               dimension (1 + 3*N + 2*N*lg N + 3*N**2)
-*                        ( lg( N ) = smallest integer k
-*                                    such that 2^k >= N )
-*
-*  QSTORE (workspace) COMPLEX array, dimension (LDQS, N)
-*         Used to store parts of
-*         the eigenvector matrix when the updating matrix multiplies
-*         take place.
-*
-*  LDQS   (input) INTEGER
-*         The leading dimension of the array QSTORE.
-*         LDQS >= max(1,N).
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  The algorithm failed to compute an eigenvalue while
-*                working on the submatrix lying in rows and columns
-*                INFO/(N+1) through mod(INFO,N+1).
 *
 *  =====================================================================
 *

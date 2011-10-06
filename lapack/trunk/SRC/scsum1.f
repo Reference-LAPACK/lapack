@@ -1,9 +1,79 @@
+*> \brief \b SCSUM1
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION SCSUM1( N, CX, INCX )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCX, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            CX( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SCSUM1 takes the sum of the absolute values of a complex
+*> vector and returns a single precision result.
+*>
+*> Based on SCASUM from the Level 1 BLAS.
+*> The change is to use the 'genuine' absolute value.
+*>
+*> Contributed by Nick Higham for use with CLACON.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of elements in the vector CX.
+*> \endverbatim
+*>
+*> \param[in] CX
+*> \verbatim
+*>          CX is COMPLEX array, dimension (N)
+*>          The vector whose elements will be summed.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The spacing between successive values of CX.  INCX > 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       REAL             FUNCTION SCSUM1( N, CX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, N
@@ -11,29 +81,6 @@
 *     .. Array Arguments ..
       COMPLEX            CX( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SCSUM1 takes the sum of the absolute values of a complex
-*  vector and returns a single precision result.
-*
-*  Based on SCASUM from the Level 1 BLAS.
-*  The change is to use the 'genuine' absolute value.
-*
-*  Contributed by Nick Higham for use with CLACON.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The number of elements in the vector CX.
-*
-*  CX      (input) COMPLEX array, dimension (N)
-*          The vector whose elements will be summed.
-*
-*  INCX    (input) INTEGER
-*          The spacing between successive values of CX.  INCX > 0.
 *
 *  =====================================================================
 *

@@ -1,11 +1,276 @@
+*> \brief \b DLALS0
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
+*                          PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
+*                          POLES, DIFL, DIFR, Z, K, C, S, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            GIVPTR, ICOMPQ, INFO, K, LDB, LDBX, LDGCOL,
+*      $                   LDGNUM, NL, NR, NRHS, SQRE
+*       DOUBLE PRECISION   C, S
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            GIVCOL( LDGCOL, * ), PERM( * )
+*       DOUBLE PRECISION   B( LDB, * ), BX( LDBX, * ), DIFL( * ),
+*      $                   DIFR( LDGNUM, * ), GIVNUM( LDGNUM, * ),
+*      $                   POLES( LDGNUM, * ), WORK( * ), Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLALS0 applies back the multiplying factors of either the left or the
+*> right singular vector matrix of a diagonal matrix appended by a row
+*> to the right hand side matrix B in solving the least squares problem
+*> using the divide-and-conquer SVD approach.
+*>
+*> For the left singular vector matrix, three types of orthogonal
+*> matrices are involved:
+*>
+*> (1L) Givens rotations: the number of such rotations is GIVPTR; the
+*>      pairs of columns/rows they were applied to are stored in GIVCOL;
+*>      and the C- and S-values of these rotations are stored in GIVNUM.
+*>
+*> (2L) Permutation. The (NL+1)-st row of B is to be moved to the first
+*>      row, and for J=2:N, PERM(J)-th row of B is to be moved to the
+*>      J-th row.
+*>
+*> (3L) The left singular vector matrix of the remaining matrix.
+*>
+*> For the right singular vector matrix, four types of orthogonal
+*> matrices are involved:
+*>
+*> (1R) The right singular vector matrix of the remaining matrix.
+*>
+*> (2R) If SQRE = 1, one extra Givens rotation to generate the right
+*>      null space.
+*>
+*> (3R) The inverse transformation of (2L).
+*>
+*> (4R) The inverse transformation of (1L).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ICOMPQ
+*> \verbatim
+*>          ICOMPQ is INTEGER
+*>         Specifies whether singular vectors are to be computed in
+*>         factored form:
+*>         = 0: Left singular vector matrix.
+*>         = 1: Right singular vector matrix.
+*> \endverbatim
+*>
+*> \param[in] NL
+*> \verbatim
+*>          NL is INTEGER
+*>         The row dimension of the upper block. NL >= 1.
+*> \endverbatim
+*>
+*> \param[in] NR
+*> \verbatim
+*>          NR is INTEGER
+*>         The row dimension of the lower block. NR >= 1.
+*> \endverbatim
+*>
+*> \param[in] SQRE
+*> \verbatim
+*>          SQRE is INTEGER
+*>         = 0: the lower block is an NR-by-NR square matrix.
+*>         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
+*> \endverbatim
+*> \verbatim
+*>         The bidiagonal matrix has row dimension N = NL + NR + 1,
+*>         and column dimension M = N + SQRE.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>         The number of columns of B and BX. NRHS must be at least 1.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension ( LDB, NRHS )
+*>         On input, B contains the right hand sides of the least
+*>         squares problem in rows 1 through M. On output, B contains
+*>         the solution X in rows 1 through N.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>         The leading dimension of B. LDB must be at least
+*>         max(1,MAX( M, N ) ).
+*> \endverbatim
+*>
+*> \param[out] BX
+*> \verbatim
+*>          BX is DOUBLE PRECISION array, dimension ( LDBX, NRHS )
+*> \endverbatim
+*>
+*> \param[in] LDBX
+*> \verbatim
+*>          LDBX is INTEGER
+*>         The leading dimension of BX.
+*> \endverbatim
+*>
+*> \param[in] PERM
+*> \verbatim
+*>          PERM is INTEGER array, dimension ( N )
+*>         The permutations (from deflation and sorting) applied
+*>         to the two blocks.
+*> \endverbatim
+*>
+*> \param[in] GIVPTR
+*> \verbatim
+*>          GIVPTR is INTEGER
+*>         The number of Givens rotations which took place in this
+*>         subproblem.
+*> \endverbatim
+*>
+*> \param[in] GIVCOL
+*> \verbatim
+*>          GIVCOL is INTEGER array, dimension ( LDGCOL, 2 )
+*>         Each pair of numbers indicates a pair of rows/columns
+*>         involved in a Givens rotation.
+*> \endverbatim
+*>
+*> \param[in] LDGCOL
+*> \verbatim
+*>          LDGCOL is INTEGER
+*>         The leading dimension of GIVCOL, must be at least N.
+*> \endverbatim
+*>
+*> \param[in] GIVNUM
+*> \verbatim
+*>          GIVNUM is DOUBLE PRECISION array, dimension ( LDGNUM, 2 )
+*>         Each number indicates the C or S value used in the
+*>         corresponding Givens rotation.
+*> \endverbatim
+*>
+*> \param[in] LDGNUM
+*> \verbatim
+*>          LDGNUM is INTEGER
+*>         The leading dimension of arrays DIFR, POLES and
+*>         GIVNUM, must be at least K.
+*> \endverbatim
+*>
+*> \param[in] POLES
+*> \verbatim
+*>          POLES is DOUBLE PRECISION array, dimension ( LDGNUM, 2 )
+*>         On entry, POLES(1:K, 1) contains the new singular
+*>         values obtained from solving the secular equation, and
+*>         POLES(1:K, 2) is an array containing the poles in the secular
+*>         equation.
+*> \endverbatim
+*>
+*> \param[in] DIFL
+*> \verbatim
+*>          DIFL is DOUBLE PRECISION array, dimension ( K ).
+*>         On entry, DIFL(I) is the distance between I-th updated
+*>         (undeflated) singular value and the I-th (undeflated) old
+*>         singular value.
+*> \endverbatim
+*>
+*> \param[in] DIFR
+*> \verbatim
+*>          DIFR is DOUBLE PRECISION array, dimension ( LDGNUM, 2 ).
+*>         On entry, DIFR(I, 1) contains the distances between I-th
+*>         updated (undeflated) singular value and the I+1-th
+*>         (undeflated) old singular value. And DIFR(I, 2) is the
+*>         normalizing factor for the I-th right singular vector.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension ( K )
+*>         Contain the components of the deflation-adjusted updating row
+*>         vector.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>         Contains the dimension of the non-deflated matrix,
+*>         This is the order of the related secular equation. 1 <= K <=N.
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is DOUBLE PRECISION
+*>         C contains garbage if SQRE =0 and the C-value of a Givens
+*>         rotation related to the right null space if SQRE = 1.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is DOUBLE PRECISION
+*>         S contains garbage if SQRE =0 and the S-value of a Givens
+*>         rotation related to the right null space if SQRE = 1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension ( K )
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Ren-Cang Li, Computer Science Division, University of
+*>       California at Berkeley, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
      $                   POLES, DIFL, DIFR, Z, K, C, S, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            GIVPTR, ICOMPQ, INFO, K, LDB, LDBX, LDGCOL,
@@ -18,148 +283,6 @@
      $                   DIFR( LDGNUM, * ), GIVNUM( LDGNUM, * ),
      $                   POLES( LDGNUM, * ), WORK( * ), Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLALS0 applies back the multiplying factors of either the left or the
-*  right singular vector matrix of a diagonal matrix appended by a row
-*  to the right hand side matrix B in solving the least squares problem
-*  using the divide-and-conquer SVD approach.
-*
-*  For the left singular vector matrix, three types of orthogonal
-*  matrices are involved:
-*
-*  (1L) Givens rotations: the number of such rotations is GIVPTR; the
-*       pairs of columns/rows they were applied to are stored in GIVCOL;
-*       and the C- and S-values of these rotations are stored in GIVNUM.
-*
-*  (2L) Permutation. The (NL+1)-st row of B is to be moved to the first
-*       row, and for J=2:N, PERM(J)-th row of B is to be moved to the
-*       J-th row.
-*
-*  (3L) The left singular vector matrix of the remaining matrix.
-*
-*  For the right singular vector matrix, four types of orthogonal
-*  matrices are involved:
-*
-*  (1R) The right singular vector matrix of the remaining matrix.
-*
-*  (2R) If SQRE = 1, one extra Givens rotation to generate the right
-*       null space.
-*
-*  (3R) The inverse transformation of (2L).
-*
-*  (4R) The inverse transformation of (1L).
-*
-*  Arguments
-*  =========
-*
-*  ICOMPQ (input) INTEGER
-*         Specifies whether singular vectors are to be computed in
-*         factored form:
-*         = 0: Left singular vector matrix.
-*         = 1: Right singular vector matrix.
-*
-*  NL     (input) INTEGER
-*         The row dimension of the upper block. NL >= 1.
-*
-*  NR     (input) INTEGER
-*         The row dimension of the lower block. NR >= 1.
-*
-*  SQRE   (input) INTEGER
-*         = 0: the lower block is an NR-by-NR square matrix.
-*         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
-*
-*         The bidiagonal matrix has row dimension N = NL + NR + 1,
-*         and column dimension M = N + SQRE.
-*
-*  NRHS   (input) INTEGER
-*         The number of columns of B and BX. NRHS must be at least 1.
-*
-*  B      (input/output) DOUBLE PRECISION array, dimension ( LDB, NRHS )
-*         On input, B contains the right hand sides of the least
-*         squares problem in rows 1 through M. On output, B contains
-*         the solution X in rows 1 through N.
-*
-*  LDB    (input) INTEGER
-*         The leading dimension of B. LDB must be at least
-*         max(1,MAX( M, N ) ).
-*
-*  BX     (workspace) DOUBLE PRECISION array, dimension ( LDBX, NRHS )
-*
-*  LDBX   (input) INTEGER
-*         The leading dimension of BX.
-*
-*  PERM   (input) INTEGER array, dimension ( N )
-*         The permutations (from deflation and sorting) applied
-*         to the two blocks.
-*
-*  GIVPTR (input) INTEGER
-*         The number of Givens rotations which took place in this
-*         subproblem.
-*
-*  GIVCOL (input) INTEGER array, dimension ( LDGCOL, 2 )
-*         Each pair of numbers indicates a pair of rows/columns
-*         involved in a Givens rotation.
-*
-*  LDGCOL (input) INTEGER
-*         The leading dimension of GIVCOL, must be at least N.
-*
-*  GIVNUM (input) DOUBLE PRECISION array, dimension ( LDGNUM, 2 )
-*         Each number indicates the C or S value used in the
-*         corresponding Givens rotation.
-*
-*  LDGNUM (input) INTEGER
-*         The leading dimension of arrays DIFR, POLES and
-*         GIVNUM, must be at least K.
-*
-*  POLES  (input) DOUBLE PRECISION array, dimension ( LDGNUM, 2 )
-*         On entry, POLES(1:K, 1) contains the new singular
-*         values obtained from solving the secular equation, and
-*         POLES(1:K, 2) is an array containing the poles in the secular
-*         equation.
-*
-*  DIFL   (input) DOUBLE PRECISION array, dimension ( K ).
-*         On entry, DIFL(I) is the distance between I-th updated
-*         (undeflated) singular value and the I-th (undeflated) old
-*         singular value.
-*
-*  DIFR   (input) DOUBLE PRECISION array, dimension ( LDGNUM, 2 ).
-*         On entry, DIFR(I, 1) contains the distances between I-th
-*         updated (undeflated) singular value and the I+1-th
-*         (undeflated) old singular value. And DIFR(I, 2) is the
-*         normalizing factor for the I-th right singular vector.
-*
-*  Z      (input) DOUBLE PRECISION array, dimension ( K )
-*         Contain the components of the deflation-adjusted updating row
-*         vector.
-*
-*  K      (input) INTEGER
-*         Contains the dimension of the non-deflated matrix,
-*         This is the order of the related secular equation. 1 <= K <=N.
-*
-*  C      (input) DOUBLE PRECISION
-*         C contains garbage if SQRE =0 and the C-value of a Givens
-*         rotation related to the right null space if SQRE = 1.
-*
-*  S      (input) DOUBLE PRECISION
-*         S contains garbage if SQRE =0 and the S-value of a Givens
-*         rotation related to the right null space if SQRE = 1.
-*
-*  WORK   (workspace) DOUBLE PRECISION array, dimension ( K )
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Ren-Cang Li, Computer Science Division, University of
-*       California at Berkeley, USA
-*     Osni Marques, LBNL/NERSC, USA
 *
 *  =====================================================================
 *

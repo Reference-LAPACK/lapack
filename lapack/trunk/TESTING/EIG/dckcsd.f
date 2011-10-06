@@ -1,15 +1,195 @@
+*> \brief \b DCKCSD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
+*                          MMAX, X, XF, U1, U2, V1T, V2T, THETA, IWORK,
+*                          WORK, RWORK, NIN, NOUT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, NIN, NM, NMATS, MMAX, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 ), IWORK( * ), MVAL( * ), PVAL( * ),
+*      $                   QVAL( * )
+*       DOUBLE PRECISION   RWORK( * ), THETA( * )
+*       DOUBLE PRECISION   U1( * ), U2( * ), V1T( * ), V2T( * ),
+*      $                   WORK( * ), X( * ), XF( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DCKCSD tests DORCSD:
+*>        the CSD for an M-by-M orthogonal matrix X partitioned as
+*>        [ X11 X12; X21 X22 ]. X11 is P-by-Q.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NM
+*> \verbatim
+*>          NM is INTEGER
+*>          The number of values of M contained in the vector MVAL.
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] PVAL
+*> \verbatim
+*>          PVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension P.
+*> \endverbatim
+*>
+*> \param[in] QVAL
+*> \verbatim
+*>          QVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix column dimension Q.
+*> \endverbatim
+*>
+*> \param[in] NMATS
+*> \verbatim
+*>          NMATS is INTEGER
+*>          The number of matrix types to be tested for each combination
+*>          of matrix dimensions.  If NMATS >= NTYPES (the maximum
+*>          number of matrix types), then all the different types are
+*>          generated for testing.  If NMATS < NTYPES, another input line
+*>          is read to get the numbers of the matrix types to be used.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed of the random number generator.  The array
+*>          elements should be between 0 and 4095, otherwise they will be
+*>          reduced mod 4096, and ISEED(4) must be odd.
+*>          On exit, the next seed in the random number sequence after
+*>          all the test matrices have been generated.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] MMAX
+*> \verbatim
+*>          MMAX is INTEGER
+*>          The maximum value permitted for M, used in dimensioning the
+*>          work arrays.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (MMAX*MMAX)
+*> \endverbatim
+*>
+*> \param[out] XF
+*> \verbatim
+*>          XF is DOUBLE PRECISION array, dimension (MMAX*MMAX)
+*> \endverbatim
+*>
+*> \param[out] U1
+*> \verbatim
+*>          U1 is DOUBLE PRECISION array, dimension (MMAX*MMAX)
+*> \endverbatim
+*>
+*> \param[out] U2
+*> \verbatim
+*>          U2 is DOUBLE PRECISION array, dimension (MMAX*MMAX)
+*> \endverbatim
+*>
+*> \param[out] V1T
+*> \verbatim
+*>          V1T is DOUBLE PRECISION array, dimension (MMAX*MMAX)
+*> \endverbatim
+*>
+*> \param[out] V2T
+*> \verbatim
+*>          V2T is DOUBLE PRECISION array, dimension (MMAX*MMAX)
+*> \endverbatim
+*>
+*> \param[out] THETA
+*> \verbatim
+*>          THETA is DOUBLE PRECISION array, dimension (MMAX)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (MMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          The unit number for input.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0 :  successful exit
+*>          > 0 :  If DLAROR returns an error code, the absolute value
+*>                 of it is returned.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DCKCSD( NM, MVAL, PVAL, QVAL, NMATS, ISEED, THRESH,
      $                   MMAX, X, XF, U1, U2, V1T, V2T, THETA, IWORK,
      $                   WORK, RWORK, NIN, NOUT, INFO )
-      IMPLICIT NONE
 *
-*     Originally DCKGSV
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
-*
-*     Adapted to DCKCSD
-*     July 2010
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, NIN, NM, NMATS, MMAX, NOUT
@@ -22,82 +202,6 @@
       DOUBLE PRECISION   U1( * ), U2( * ), V1T( * ), V2T( * ),
      $                   WORK( * ), X( * ), XF( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DCKCSD tests DORCSD:
-*         the CSD for an M-by-M orthogonal matrix X partitioned as
-*         [ X11 X12; X21 X22 ]. X11 is P-by-Q.
-*
-*  Arguments
-*  =========
-*
-*  NM      (input) INTEGER
-*          The number of values of M contained in the vector MVAL.
-*
-*  MVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension M.
-*
-*  PVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension P.
-*
-*  QVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix column dimension Q.
-*
-*  NMATS   (input) INTEGER
-*          The number of matrix types to be tested for each combination
-*          of matrix dimensions.  If NMATS >= NTYPES (the maximum
-*          number of matrix types), then all the different types are
-*          generated for testing.  If NMATS < NTYPES, another input line
-*          is read to get the numbers of the matrix types to be used.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed of the random number generator.  The array
-*          elements should be between 0 and 4095, otherwise they will be
-*          reduced mod 4096, and ISEED(4) must be odd.
-*          On exit, the next seed in the random number sequence after
-*          all the test matrices have been generated.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  MMAX    (input) INTEGER
-*          The maximum value permitted for M, used in dimensioning the
-*          work arrays.
-*
-*  X       (workspace) DOUBLE PRECISION array, dimension (MMAX*MMAX)
-*
-*  XF      (workspace) DOUBLE PRECISION array, dimension (MMAX*MMAX)
-*
-*  U1      (workspace) DOUBLE PRECISION array, dimension (MMAX*MMAX)
-*
-*  U2      (workspace) DOUBLE PRECISION array, dimension (MMAX*MMAX)
-*
-*  V1T     (workspace) DOUBLE PRECISION array, dimension (MMAX*MMAX)
-*
-*  V2T     (workspace) DOUBLE PRECISION array, dimension (MMAX*MMAX)
-*
-*  THETA   (workspace) DOUBLE PRECISION array, dimension (MMAX)
-*
-*  IWORK   (workspace) INTEGER array, dimension (MMAX)
-*
-*  WORK    (workspace) DOUBLE PRECISION array
-*
-*  RWORK   (workspace) DOUBLE PRECISION array
-*
-*  NIN     (input) INTEGER
-*          The unit number for input.
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
-*
-*  INFO    (output) INTEGER
-*          = 0 :  successful exit
-*          > 0 :  If DLAROR returns an error code, the absolute value
-*                 of it is returned.
 *
 *  =====================================================================
 *

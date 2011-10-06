@@ -1,8 +1,101 @@
+*> \brief \b ALAREQ
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*3        PATH
+*       INTEGER            NIN, NMATS, NOUT, NTYPES
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ALAREQ handles input for the LAPACK test program.  It is called
+*> to evaluate the input line which requested NMATS matrix types for
+*> PATH.  The flow of control is as follows:
+*>
+*> If NMATS = NTYPES then
+*>    DOTYPE(1:NTYPES) = .TRUE.
+*> else
+*>    Read the next input line for NMATS matrix types
+*>    Set DOTYPE(I) = .TRUE. for each valid type I
+*> endif
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3
+*>          An LAPACK path name for testing.
+*> \endverbatim
+*>
+*> \param[in] NMATS
+*> \verbatim
+*>          NMATS is INTEGER
+*>          The number of matrix types to be used in testing this path.
+*> \endverbatim
+*>
+*> \param[out] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The vector of flags indicating if each type will be tested.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The maximum number of matrix types for this path.
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          The unit number for input.  NIN >= 1.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.  NOUT >= 1.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup aux_lin
+*
+*  =====================================================================
       SUBROUTINE ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
@@ -11,41 +104,6 @@
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ALAREQ handles input for the LAPACK test program.  It is called
-*  to evaluate the input line which requested NMATS matrix types for
-*  PATH.  The flow of control is as follows:
-*
-*  If NMATS = NTYPES then
-*     DOTYPE(1:NTYPES) = .TRUE.
-*  else
-*     Read the next input line for NMATS matrix types
-*     Set DOTYPE(I) = .TRUE. for each valid type I
-*  endif
-*
-*  Arguments
-*  =========
-*
-*  PATH    (input) CHARACTER*3
-*          An LAPACK path name for testing.
-*
-*  NMATS   (input) INTEGER
-*          The number of matrix types to be used in testing this path.
-*
-*  DOTYPE  (output) LOGICAL array, dimension (NTYPES)
-*          The vector of flags indicating if each type will be tested.
-*
-*  NTYPES  (input) INTEGER
-*          The maximum number of matrix types for this path.
-*
-*  NIN     (input) INTEGER
-*          The unit number for input.  NIN >= 1.
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.  NOUT >= 1.
 *
 *  =====================================================================
 *

@@ -1,38 +1,83 @@
-      LOGICAL          FUNCTION SLCTES( ZR, ZI, D )
+*> \brief \b SLCTES
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      REAL               D, ZI, ZR
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       LOGICAL          FUNCTION SLCTES( ZR, ZI, D )
+* 
+*       .. Scalar Arguments ..
+*       REAL               D, ZI, ZR
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  SLCTES returns .TRUE. if the eigenvalue (ZR/D) + sqrt(-1)*(ZI/D)
-*  is to be selected (specifically, in this subroutine, if the real
-*  part of the eigenvalue is negative), and otherwise it returns
-*  .FALSE..
-*
-*  It is used by the test routine SDRGES to test whether the driver
-*  routine SGGES succesfully sorts eigenvalues.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLCTES returns .TRUE. if the eigenvalue (ZR/D) + sqrt(-1)*(ZI/D)
+*> is to be selected (specifically, in this subroutine, if the real
+*> part of the eigenvalue is negative), and otherwise it returns
+*> .FALSE..
+*>
+*> It is used by the test routine SDRGES to test whether the driver
+*> routine SGGES succesfully sorts eigenvalues.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  ZR      (input) REAL
-*          The numerator of the real part of a complex eigenvalue
-*          (ZR/D) + i*(ZI/D).
+*> \param[in] ZR
+*> \verbatim
+*>          ZR is REAL
+*>          The numerator of the real part of a complex eigenvalue
+*>          (ZR/D) + i*(ZI/D).
+*> \endverbatim
+*>
+*> \param[in] ZI
+*> \verbatim
+*>          ZI is REAL
+*>          The numerator of the imaginary part of a complex eigenvalue
+*>          (ZR/D) + i*(ZI).
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL
+*>          The denominator part of a complex eigenvalue
+*>          (ZR/D) + i*(ZI/D).
+*> \endverbatim
+*>
 *
-*  ZI      (input) REAL
-*          The numerator of the imaginary part of a complex eigenvalue
-*          (ZR/D) + i*(ZI).
+*  Authors
+*  =======
 *
-*  D       (input) REAL
-*          The denominator part of a complex eigenvalue
-*          (ZR/D) + i*(ZI/D).
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
+      LOGICAL          FUNCTION SLCTES( ZR, ZI, D )
+*
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      REAL               D, ZI, ZR
+*     ..
 *
 *  =====================================================================
 *

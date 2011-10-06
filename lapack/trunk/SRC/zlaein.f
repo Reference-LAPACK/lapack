@@ -1,10 +1,150 @@
+*> \brief \b ZLAEIN
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
+*                          EPS3, SMLNUM, INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            NOINIT, RIGHTV
+*       INTEGER            INFO, LDB, LDH, N
+*       DOUBLE PRECISION   EPS3, SMLNUM
+*       COMPLEX*16         W
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         B( LDB, * ), H( LDH, * ), V( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLAEIN uses inverse iteration to find a right or left eigenvector
+*> corresponding to the eigenvalue W of a complex upper Hessenberg
+*> matrix H.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RIGHTV
+*> \verbatim
+*>          RIGHTV is LOGICAL
+*>          = .TRUE. : compute right eigenvector;
+*>          = .FALSE.: compute left eigenvector.
+*> \endverbatim
+*>
+*> \param[in] NOINIT
+*> \verbatim
+*>          NOINIT is LOGICAL
+*>          = .TRUE. : no initial vector supplied in V
+*>          = .FALSE.: initial vector supplied in V.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix H.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] H
+*> \verbatim
+*>          H is COMPLEX*16 array, dimension (LDH,N)
+*>          The upper Hessenberg matrix H.
+*> \endverbatim
+*>
+*> \param[in] LDH
+*> \verbatim
+*>          LDH is INTEGER
+*>          The leading dimension of the array H.  LDH >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] W
+*> \verbatim
+*>          W is COMPLEX*16
+*>          The eigenvalue of H whose corresponding right or left
+*>          eigenvector is to be computed.
+*> \endverbatim
+*>
+*> \param[in,out] V
+*> \verbatim
+*>          V is COMPLEX*16 array, dimension (N)
+*>          On entry, if NOINIT = .FALSE., V must contain a starting
+*>          vector for inverse iteration; otherwise V need not be set.
+*>          On exit, V contains the computed eigenvector, normalized so
+*>          that the component of largest magnitude has magnitude 1; here
+*>          the magnitude of a complex number (x,y) is taken to be
+*>          |x| + |y|.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDB,N)
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[in] EPS3
+*> \verbatim
+*>          EPS3 is DOUBLE PRECISION
+*>          A small machine-dependent value which is used to perturb
+*>          close eigenvalues, and to replace zero pivots.
+*> \endverbatim
+*>
+*> \param[in] SMLNUM
+*> \verbatim
+*>          SMLNUM is DOUBLE PRECISION
+*>          A machine-dependent value close to the underflow threshold.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          = 1:  inverse iteration did not converge; V is set to the
+*>                last iterate.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE ZLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
      $                   EPS3, SMLNUM, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            NOINIT, RIGHTV
@@ -16,64 +156,6 @@
       DOUBLE PRECISION   RWORK( * )
       COMPLEX*16         B( LDB, * ), H( LDH, * ), V( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLAEIN uses inverse iteration to find a right or left eigenvector
-*  corresponding to the eigenvalue W of a complex upper Hessenberg
-*  matrix H.
-*
-*  Arguments
-*  =========
-*
-*  RIGHTV   (input) LOGICAL
-*          = .TRUE. : compute right eigenvector;
-*          = .FALSE.: compute left eigenvector.
-*
-*  NOINIT   (input) LOGICAL
-*          = .TRUE. : no initial vector supplied in V
-*          = .FALSE.: initial vector supplied in V.
-*
-*  N       (input) INTEGER
-*          The order of the matrix H.  N >= 0.
-*
-*  H       (input) COMPLEX*16 array, dimension (LDH,N)
-*          The upper Hessenberg matrix H.
-*
-*  LDH     (input) INTEGER
-*          The leading dimension of the array H.  LDH >= max(1,N).
-*
-*  W       (input) COMPLEX*16
-*          The eigenvalue of H whose corresponding right or left
-*          eigenvector is to be computed.
-*
-*  V       (input/output) COMPLEX*16 array, dimension (N)
-*          On entry, if NOINIT = .FALSE., V must contain a starting
-*          vector for inverse iteration; otherwise V need not be set.
-*          On exit, V contains the computed eigenvector, normalized so
-*          that the component of largest magnitude has magnitude 1; here
-*          the magnitude of a complex number (x,y) is taken to be
-*          |x| + |y|.
-*
-*  B       (workspace) COMPLEX*16 array, dimension (LDB,N)
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  EPS3    (input) DOUBLE PRECISION
-*          A small machine-dependent value which is used to perturb
-*          close eigenvalues, and to replace zero pivots.
-*
-*  SMLNUM  (input) DOUBLE PRECISION
-*          A machine-dependent value close to the underflow threshold.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          = 1:  inverse iteration did not converge; V is set to the
-*                last iterate.
 *
 *  =====================================================================
 *

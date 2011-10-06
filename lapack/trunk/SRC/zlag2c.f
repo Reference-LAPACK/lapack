@@ -1,11 +1,109 @@
+*> \brief \b ZLAG2C
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLAG2C( M, N, A, LDA, SA, LDSA, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDSA, M, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            SA( LDSA, * )
+*       COMPLEX*16         A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLAG2C converts a COMPLEX*16 matrix, SA, to a COMPLEX matrix, A.
+*>
+*> RMAX is the overflow for the SINGLE PRECISION arithmetic
+*> ZLAG2C checks that all the entries of A are between -RMAX and
+*> RMAX. If not the convertion is aborted and a flag is raised.
+*>
+*> This is an auxiliary routine so there is no argument checking.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of lines of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          On entry, the M-by-N coefficient matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] SA
+*> \verbatim
+*>          SA is COMPLEX array, dimension (LDSA,N)
+*>          On exit, if INFO=0, the M-by-N coefficient matrix SA; if
+*>          INFO>0, the content of SA is unspecified.
+*> \endverbatim
+*>
+*> \param[in] LDSA
+*> \verbatim
+*>          LDSA is INTEGER
+*>          The leading dimension of the array SA.  LDSA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          = 1:  an entry of the matrix A is greater than the SINGLE
+*>                PRECISION overflow threshold, in this case, the content
+*>                of SA in exit is unspecified.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE ZLAG2C( M, N, A, LDA, SA, LDSA, INFO )
 *
-*  -- LAPACK PROTOTYPE auxiliary routine (version 3.3.1) --
+*  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
-*     ..
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDSA, M, N
 *     ..
@@ -13,45 +111,6 @@
       COMPLEX            SA( LDSA, * )
       COMPLEX*16         A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLAG2C converts a COMPLEX*16 matrix, SA, to a COMPLEX matrix, A.
-*
-*  RMAX is the overflow for the SINGLE PRECISION arithmetic
-*  ZLAG2C checks that all the entries of A are between -RMAX and
-*  RMAX. If not the convertion is aborted and a flag is raised.
-*
-*  This is an auxiliary routine so there is no argument checking.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of lines of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  A       (input) COMPLEX*16 array, dimension (LDA,N)
-*          On entry, the M-by-N coefficient matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  SA      (output) COMPLEX array, dimension (LDSA,N)
-*          On exit, if INFO=0, the M-by-N coefficient matrix SA; if
-*          INFO>0, the content of SA is unspecified.
-*
-*  LDSA    (input) INTEGER
-*          The leading dimension of the array SA.  LDSA >= max(1,M).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          = 1:  an entry of the matrix A is greater than the SINGLE
-*                PRECISION overflow threshold, in this case, the content
-*                of SA in exit is unspecified.
 *
 *  =====================================================================
 *

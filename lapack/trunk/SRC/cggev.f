@@ -1,10 +1,220 @@
+*> \brief <b> CGGEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
+*                         VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBVL, JOBVR
+*       INTEGER            INFO, LDA, LDB, LDVL, LDVR, LWORK, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * )
+*       COMPLEX            A( LDA, * ), ALPHA( * ), B( LDB, * ),
+*      $                   BETA( * ), VL( LDVL, * ), VR( LDVR, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGGEV computes for a pair of N-by-N complex nonsymmetric matrices
+*> (A,B), the generalized eigenvalues, and optionally, the left and/or
+*> right generalized eigenvectors.
+*>
+*> A generalized eigenvalue for a pair of matrices (A,B) is a scalar
+*> lambda or a ratio alpha/beta = lambda, such that A - lambda*B is
+*> singular. It is usually represented as the pair (alpha,beta), as
+*> there is a reasonable interpretation for beta=0, and even for both
+*> being zero.
+*>
+*> The right generalized eigenvector v(j) corresponding to the
+*> generalized eigenvalue lambda(j) of (A,B) satisfies
+*>
+*>              A * v(j) = lambda(j) * B * v(j).
+*>
+*> The left generalized eigenvector u(j) corresponding to the
+*> generalized eigenvalues lambda(j) of (A,B) satisfies
+*>
+*>              u(j)**H * A = lambda(j) * u(j)**H * B
+*>
+*> where u(j)**H is the conjugate-transpose of u(j).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBVL
+*> \verbatim
+*>          JOBVL is CHARACTER*1
+*>          = 'N':  do not compute the left generalized eigenvectors;
+*>          = 'V':  compute the left generalized eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] JOBVR
+*> \verbatim
+*>          JOBVR is CHARACTER*1
+*>          = 'N':  do not compute the right generalized eigenvectors;
+*>          = 'V':  compute the right generalized eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A, B, VL, and VR.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA, N)
+*>          On entry, the matrix A in the pair (A,B).
+*>          On exit, A has been overwritten.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB, N)
+*>          On entry, the matrix B in the pair (A,B).
+*>          On exit, B has been overwritten.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is COMPLEX array, dimension (N)
+*>          On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the
+*>          generalized eigenvalues.
+*> \endverbatim
+*> \verbatim
+*>          Note: the quotients ALPHA(j)/BETA(j) may easily over- or
+*>          underflow, and BETA(j) may even be zero.  Thus, the user
+*>          should avoid naively computing the ratio alpha/beta.
+*>          However, ALPHA will be always less than and usually
+*>          comparable with norm(A) in magnitude, and BETA always less
+*>          than and usually comparable with norm(B).
+*> \endverbatim
+*>
+*> \param[out] VL
+*> \verbatim
+*>          VL is COMPLEX array, dimension (LDVL,N)
+*>          If JOBVL = 'V', the left generalized eigenvectors u(j) are
+*>          stored one after another in the columns of VL, in the same
+*>          order as their eigenvalues.
+*>          Each eigenvector is scaled so the largest component has
+*>          abs(real part) + abs(imag. part) = 1.
+*>          Not referenced if JOBVL = 'N'.
+*> \endverbatim
+*>
+*> \param[in] LDVL
+*> \verbatim
+*>          LDVL is INTEGER
+*>          The leading dimension of the matrix VL. LDVL >= 1, and
+*>          if JOBVL = 'V', LDVL >= N.
+*> \endverbatim
+*>
+*> \param[out] VR
+*> \verbatim
+*>          VR is COMPLEX array, dimension (LDVR,N)
+*>          If JOBVR = 'V', the right generalized eigenvectors v(j) are
+*>          stored one after another in the columns of VR, in the same
+*>          order as their eigenvalues.
+*>          Each eigenvector is scaled so the largest component has
+*>          abs(real part) + abs(imag. part) = 1.
+*>          Not referenced if JOBVR = 'N'.
+*> \endverbatim
+*>
+*> \param[in] LDVR
+*> \verbatim
+*>          LDVR is INTEGER
+*>          The leading dimension of the matrix VR. LDVR >= 1, and
+*>          if JOBVR = 'V', LDVR >= N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.  LWORK >= max(1,2*N).
+*>          For good performance, LWORK must generally be larger.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (8*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          =1,...,N:
+*>                The QZ iteration failed.  No eigenvectors have been
+*>                calculated, but ALPHA(j) and BETA(j) should be
+*>                correct for j=INFO+1,...,N.
+*>          > N:  =N+1: other then QZ iteration failed in SHGEQZ,
+*>                =N+2: error return from STGEVC.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexGEeigen
+*
+*  =====================================================================
       SUBROUTINE CGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
      $                  VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBVL, JOBVR
@@ -16,120 +226,6 @@
      $                   BETA( * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGGEV computes for a pair of N-by-N complex nonsymmetric matrices
-*  (A,B), the generalized eigenvalues, and optionally, the left and/or
-*  right generalized eigenvectors.
-*
-*  A generalized eigenvalue for a pair of matrices (A,B) is a scalar
-*  lambda or a ratio alpha/beta = lambda, such that A - lambda*B is
-*  singular. It is usually represented as the pair (alpha,beta), as
-*  there is a reasonable interpretation for beta=0, and even for both
-*  being zero.
-*
-*  The right generalized eigenvector v(j) corresponding to the
-*  generalized eigenvalue lambda(j) of (A,B) satisfies
-*
-*               A * v(j) = lambda(j) * B * v(j).
-*
-*  The left generalized eigenvector u(j) corresponding to the
-*  generalized eigenvalues lambda(j) of (A,B) satisfies
-*
-*               u(j)**H * A = lambda(j) * u(j)**H * B
-*
-*  where u(j)**H is the conjugate-transpose of u(j).
-*
-*  Arguments
-*  =========
-*
-*  JOBVL   (input) CHARACTER*1
-*          = 'N':  do not compute the left generalized eigenvectors;
-*          = 'V':  compute the left generalized eigenvectors.
-*
-*  JOBVR   (input) CHARACTER*1
-*          = 'N':  do not compute the right generalized eigenvectors;
-*          = 'V':  compute the right generalized eigenvectors.
-*
-*  N       (input) INTEGER
-*          The order of the matrices A, B, VL, and VR.  N >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA, N)
-*          On entry, the matrix A in the pair (A,B).
-*          On exit, A has been overwritten.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  LDA >= max(1,N).
-*
-*  B       (input/output) COMPLEX array, dimension (LDB, N)
-*          On entry, the matrix B in the pair (A,B).
-*          On exit, B has been overwritten.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.  LDB >= max(1,N).
-*
-*  ALPHA   (output) COMPLEX array, dimension (N)
-*
-*  BETA    (output) COMPLEX array, dimension (N)
-*          On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the
-*          generalized eigenvalues.
-*
-*          Note: the quotients ALPHA(j)/BETA(j) may easily over- or
-*          underflow, and BETA(j) may even be zero.  Thus, the user
-*          should avoid naively computing the ratio alpha/beta.
-*          However, ALPHA will be always less than and usually
-*          comparable with norm(A) in magnitude, and BETA always less
-*          than and usually comparable with norm(B).
-*
-*  VL      (output) COMPLEX array, dimension (LDVL,N)
-*          If JOBVL = 'V', the left generalized eigenvectors u(j) are
-*          stored one after another in the columns of VL, in the same
-*          order as their eigenvalues.
-*          Each eigenvector is scaled so the largest component has
-*          abs(real part) + abs(imag. part) = 1.
-*          Not referenced if JOBVL = 'N'.
-*
-*  LDVL    (input) INTEGER
-*          The leading dimension of the matrix VL. LDVL >= 1, and
-*          if JOBVL = 'V', LDVL >= N.
-*
-*  VR      (output) COMPLEX array, dimension (LDVR,N)
-*          If JOBVR = 'V', the right generalized eigenvectors v(j) are
-*          stored one after another in the columns of VR, in the same
-*          order as their eigenvalues.
-*          Each eigenvector is scaled so the largest component has
-*          abs(real part) + abs(imag. part) = 1.
-*          Not referenced if JOBVR = 'N'.
-*
-*  LDVR    (input) INTEGER
-*          The leading dimension of the matrix VR. LDVR >= 1, and
-*          if JOBVR = 'V', LDVR >= N.
-*
-*  WORK    (workspace/output) COMPLEX array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.  LWORK >= max(1,2*N).
-*          For good performance, LWORK must generally be larger.
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  RWORK   (workspace/output) REAL array, dimension (8*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          =1,...,N:
-*                The QZ iteration failed.  No eigenvectors have been
-*                calculated, but ALPHA(j) and BETA(j) should be
-*                correct for j=INFO+1,...,N.
-*          > N:  =N+1: other then QZ iteration failed in SHGEQZ,
-*                =N+2: error return from STGEVC.
 *
 *  =====================================================================
 *

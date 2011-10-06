@@ -1,41 +1,90 @@
-      SUBROUTINE DQRT04(M,N,NB,RESULT)
+*> \brief \b DQRT04
 *
-*  -- LAPACK test routine (version 3.?) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     August 2011
+*  =========== DOCUMENTATION ===========
 *
-      IMPLICIT NONE
-*     .. Scalar Arguments ..
-      INTEGER LWORK, M, N, NB, LDT
-*     .. Return values ..
-      DOUBLE PRECISION RESULT(6)
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DQRT04(M,N,NB,RESULT)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER LWORK, M, N, NB, LDT
+*       .. Return values ..
+*       DOUBLE PRECISION RESULT(6)
+*  
 *  Purpose
 *  =======
 *
-*  DQRT04 tests DGEQRT and DGEMQRT.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DQRT04 tests DGEQRT and DGEMQRT.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  M       (input) INTEGER
-*          Number of rows in test matrix.
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          Number of rows in test matrix.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          Number of columns in test matrix.
+*> \endverbatim
+*>
+*> \param[in] NB
+*> \verbatim
+*>          NB is INTEGER
+*>          Block size of test matrix.  NB <= Min(M,N).
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (6)
+*>          Results of each of the six tests below.
+*> \endverbatim
+*> \verbatim
+*>          RESULT(1) = | A - Q R |
+*>          RESULT(2) = | I - Q^H Q |
+*>          RESULT(3) = | Q C - Q C |
+*>          RESULT(4) = | Q^H C - Q^H C |
+*>          RESULT(5) = | C Q - C Q | 
+*>          RESULT(6) = | C Q^H - C Q^H |
+*> \endverbatim
+*>
 *
-*  N       (input) INTEGER
-*          Number of columns in test matrix.
+*  Authors
+*  =======
 *
-*  NB      (input) INTEGER
-*          Block size of test matrix.  NB <= Min(M,N).
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
-*  RESULT  (output) DOUBLE PRECISION array, dimension (6)
-*          Results of each of the six tests below.
+*> \date November 2011
 *
-*          RESULT(1) = | A - Q R |
-*          RESULT(2) = | I - Q^H Q |
-*          RESULT(3) = | Q C - Q C |
-*          RESULT(4) = | Q^H C - Q^H C |
-*          RESULT(5) = | C Q - C Q | 
-*          RESULT(6) = | C Q^H - C Q^H |
+*> \ingroup double_lin
+*
+*  =====================================================================
+      SUBROUTINE DQRT04(M,N,NB,RESULT)
+*
+*  -- LAPACK test routine (version 3.?) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      INTEGER LWORK, M, N, NB, LDT
+*     .. Return values ..
+      DOUBLE PRECISION RESULT(6)
 *
 *  =====================================================================
 *

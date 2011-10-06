@@ -1,52 +1,103 @@
+*> \brief \b DLARTG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLARTG( F, G, CS, SN, R )
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION   CS, F, G, R, SN
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLARTG generate a plane rotation so that
+*>
+*>    [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
+*>    [ -SN  CS  ]     [ G ]     [ 0 ]
+*>
+*> This is a slower, more accurate version of the BLAS1 routine DROTG,
+*> with the following other differences:
+*>    F and G are unchanged on return.
+*>    If G=0, then CS=1 and SN=0.
+*>    If F=0 and (G .ne. 0), then CS=0 and SN=1 without doing any
+*>       floating point operations (saves work in DBDSQR when
+*>       there are zeros on the diagonal).
+*>
+*> If F exceeds G in magnitude, CS will be positive.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] F
+*> \verbatim
+*>          F is DOUBLE PRECISION
+*>          The first component of vector to be rotated.
+*> \endverbatim
+*>
+*> \param[in] G
+*> \verbatim
+*>          G is DOUBLE PRECISION
+*>          The second component of vector to be rotated.
+*> \endverbatim
+*>
+*> \param[out] CS
+*> \verbatim
+*>          CS is DOUBLE PRECISION
+*>          The cosine of the rotation.
+*> \endverbatim
+*>
+*> \param[out] SN
+*> \verbatim
+*>          SN is DOUBLE PRECISION
+*>          The sine of the rotation.
+*> \endverbatim
+*>
+*> \param[out] R
+*> \verbatim
+*>          R is DOUBLE PRECISION
+*>          The nonzero component of the rotated vector.
+*> \endverbatim
+*> \verbatim
+*>  This version has a few statements commented out for thread safety
+*>  (machine parameters are computed on each entry). 10 feb 03, SJH.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE DLARTG( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   CS, F, G, R, SN
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLARTG generate a plane rotation so that
-*
-*     [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
-*     [ -SN  CS  ]     [ G ]     [ 0 ]
-*
-*  This is a slower, more accurate version of the BLAS1 routine DROTG,
-*  with the following other differences:
-*     F and G are unchanged on return.
-*     If G=0, then CS=1 and SN=0.
-*     If F=0 and (G .ne. 0), then CS=0 and SN=1 without doing any
-*        floating point operations (saves work in DBDSQR when
-*        there are zeros on the diagonal).
-*
-*  If F exceeds G in magnitude, CS will be positive.
-*
-*  Arguments
-*  =========
-*
-*  F       (input) DOUBLE PRECISION
-*          The first component of vector to be rotated.
-*
-*  G       (input) DOUBLE PRECISION
-*          The second component of vector to be rotated.
-*
-*  CS      (output) DOUBLE PRECISION
-*          The cosine of the rotation.
-*
-*  SN      (output) DOUBLE PRECISION
-*          The sine of the rotation.
-*
-*  R       (output) DOUBLE PRECISION
-*          The nonzero component of the rotated vector.
-*
-*  This version has a few statements commented out for thread safety
-*  (machine parameters are computed on each entry). 10 feb 03, SJH.
 *
 *  =====================================================================
 *

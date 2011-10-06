@@ -1,13 +1,211 @@
+*> \brief \b CGTRFS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
+*                          IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            INFO, LDB, LDX, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       REAL               BERR( * ), FERR( * ), RWORK( * )
+*       COMPLEX            B( LDB, * ), D( * ), DF( * ), DL( * ),
+*      $                   DLF( * ), DU( * ), DU2( * ), DUF( * ),
+*      $                   WORK( * ), X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGTRFS improves the computed solution to a system of linear
+*> equations when the coefficient matrix is tridiagonal, and provides
+*> error bounds and backward error estimates for the solution.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies the form of the system of equations:
+*>          = 'N':  A * X = B     (No transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrix B.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] DL
+*> \verbatim
+*>          DL is COMPLEX array, dimension (N-1)
+*>          The (n-1) subdiagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is COMPLEX array, dimension (N)
+*>          The diagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] DU
+*> \verbatim
+*>          DU is COMPLEX array, dimension (N-1)
+*>          The (n-1) superdiagonal elements of A.
+*> \endverbatim
+*>
+*> \param[in] DLF
+*> \verbatim
+*>          DLF is COMPLEX array, dimension (N-1)
+*>          The (n-1) multipliers that define the matrix L from the
+*>          LU factorization of A as computed by CGTTRF.
+*> \endverbatim
+*>
+*> \param[in] DF
+*> \verbatim
+*>          DF is COMPLEX array, dimension (N)
+*>          The n diagonal elements of the upper triangular matrix U from
+*>          the LU factorization of A.
+*> \endverbatim
+*>
+*> \param[in] DUF
+*> \verbatim
+*>          DUF is COMPLEX array, dimension (N-1)
+*>          The (n-1) elements of the first superdiagonal of U.
+*> \endverbatim
+*>
+*> \param[in] DU2
+*> \verbatim
+*>          DU2 is COMPLEX array, dimension (N-2)
+*>          The (n-2) elements of the second superdiagonal of U.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          The pivot indices; for 1 <= i <= n, row i of the matrix was
+*>          interchanged with row IPIV(i).  IPIV(i) will always be either
+*>          i or i+1; IPIV(i) = i indicates a row interchange was not
+*>          required.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          The right hand side matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (LDX,NRHS)
+*>          On entry, the solution matrix X, as computed by CGTTRS.
+*>          On exit, the improved solution matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.  LDX >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] FERR
+*> \verbatim
+*>          FERR is REAL array, dimension (NRHS)
+*>          The estimated forward error bound for each solution vector
+*>          X(j) (the j-th column of the solution matrix X).
+*>          If XTRUE is the true solution corresponding to X(j), FERR(j)
+*>          is an estimated upper bound for the magnitude of the largest
+*>          element in (X(j) - XTRUE) divided by the magnitude of the
+*>          largest element in X(j).  The estimate is as reliable as
+*>          the estimate for RCOND, and is almost always a slight
+*>          overestimate of the true error.
+*> \endverbatim
+*>
+*> \param[out] BERR
+*> \verbatim
+*>          BERR is REAL array, dimension (NRHS)
+*>          The componentwise relative backward error of each solution
+*>          vector X(j) (i.e., the smallest relative change in
+*>          any element of A or B that makes X(j) an exact solution).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*> \verbatim
+*>  Internal Parameters
+*>  ===================
+*> \endverbatim
+*> \verbatim
+*>  ITMAX is the maximum number of steps of iterative refinement.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,
      $                   IPIV, B, LDB, X, LDX, FERR, BERR, WORK, RWORK,
      $                   INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
-*
-*     Modified to call CLACN2 in place of CLACON, 10 Feb 03, SJH.
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -20,99 +218,6 @@
      $                   DLF( * ), DU( * ), DU2( * ), DUF( * ),
      $                   WORK( * ), X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGTRFS improves the computed solution to a system of linear
-*  equations when the coefficient matrix is tridiagonal, and provides
-*  error bounds and backward error estimates for the solution.
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies the form of the system of equations:
-*          = 'N':  A * X = B     (No transpose)
-*          = 'T':  A**T * X = B  (Transpose)
-*          = 'C':  A**H * X = B  (Conjugate transpose)
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrix B.  NRHS >= 0.
-*
-*  DL      (input) COMPLEX array, dimension (N-1)
-*          The (n-1) subdiagonal elements of A.
-*
-*  D       (input) COMPLEX array, dimension (N)
-*          The diagonal elements of A.
-*
-*  DU      (input) COMPLEX array, dimension (N-1)
-*          The (n-1) superdiagonal elements of A.
-*
-*  DLF     (input) COMPLEX array, dimension (N-1)
-*          The (n-1) multipliers that define the matrix L from the
-*          LU factorization of A as computed by CGTTRF.
-*
-*  DF      (input) COMPLEX array, dimension (N)
-*          The n diagonal elements of the upper triangular matrix U from
-*          the LU factorization of A.
-*
-*  DUF     (input) COMPLEX array, dimension (N-1)
-*          The (n-1) elements of the first superdiagonal of U.
-*
-*  DU2     (input) COMPLEX array, dimension (N-2)
-*          The (n-2) elements of the second superdiagonal of U.
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          The pivot indices; for 1 <= i <= n, row i of the matrix was
-*          interchanged with row IPIV(i).  IPIV(i) will always be either
-*          i or i+1; IPIV(i) = i indicates a row interchange was not
-*          required.
-*
-*  B       (input) COMPLEX array, dimension (LDB,NRHS)
-*          The right hand side matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  X       (input/output) COMPLEX array, dimension (LDX,NRHS)
-*          On entry, the solution matrix X, as computed by CGTTRS.
-*          On exit, the improved solution matrix X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.  LDX >= max(1,N).
-*
-*  FERR    (output) REAL array, dimension (NRHS)
-*          The estimated forward error bound for each solution vector
-*          X(j) (the j-th column of the solution matrix X).
-*          If XTRUE is the true solution corresponding to X(j), FERR(j)
-*          is an estimated upper bound for the magnitude of the largest
-*          element in (X(j) - XTRUE) divided by the magnitude of the
-*          largest element in X(j).  The estimate is as reliable as
-*          the estimate for RCOND, and is almost always a slight
-*          overestimate of the true error.
-*
-*  BERR    (output) REAL array, dimension (NRHS)
-*          The componentwise relative backward error of each solution
-*          vector X(j) (i.e., the smallest relative change in
-*          any element of A or B that makes X(j) an exact solution).
-*
-*  WORK    (workspace) COMPLEX array, dimension (2*N)
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*
-*  Internal Parameters
-*  ===================
-*
-*  ITMAX is the maximum number of steps of iterative refinement.
 *
 *  =====================================================================
 *

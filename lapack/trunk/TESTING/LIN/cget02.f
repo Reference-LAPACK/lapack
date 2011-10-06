@@ -1,9 +1,144 @@
+*> \brief \b CGET02
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
+*                          RWORK, RESID )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            LDA, LDB, LDX, M, N, NRHS
+*       REAL               RESID
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * )
+*       COMPLEX            A( LDA, * ), B( LDB, * ), X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGET02 computes the residual for a solution of a system of linear
+*> equations  A*x = b  or  A'*x = b:
+*>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
+*> where EPS is the machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies the form of the system of equations:
+*>          = 'N':  A *x = b
+*>          = 'T':  A^T*x = b, where A^T is the transpose of A
+*>          = 'C':  A^H*x = b, where A^H is the conjugate transpose of A
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns of B, the matrix of right hand sides.
+*>          NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          The original M x N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (LDX,NRHS)
+*>          The computed solution vectors for the system of linear
+*>          equations.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.  If TRANS = 'N',
+*>          LDX >= max(1,N); if TRANS = 'T' or 'C', LDX >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          On entry, the right hand side vectors for the system of
+*>          linear equations.
+*>          On exit, B is overwritten with the difference B - A*X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  IF TRANS = 'N',
+*>          LDB >= max(1,M); if TRANS = 'T' or 'C', LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          The maximum over the number of right hand sides of
+*>          norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CGET02( TRANS, M, N, NRHS, A, LDA, X, LDX, B, LDB,
      $                   RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -14,62 +149,6 @@
       REAL               RWORK( * )
       COMPLEX            A( LDA, * ), B( LDB, * ), X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGET02 computes the residual for a solution of a system of linear
-*  equations  A*x = b  or  A'*x = b:
-*     RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
-*  where EPS is the machine epsilon.
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies the form of the system of equations:
-*          = 'N':  A *x = b
-*          = 'T':  A^T*x = b, where A^T is the transpose of A
-*          = 'C':  A^H*x = b, where A^H is the conjugate transpose of A
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns of B, the matrix of right hand sides.
-*          NRHS >= 0.
-*
-*  A       (input) COMPLEX array, dimension (LDA,N)
-*          The original M x N matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  X       (input) COMPLEX array, dimension (LDX,NRHS)
-*          The computed solution vectors for the system of linear
-*          equations.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.  If TRANS = 'N',
-*          LDX >= max(1,N); if TRANS = 'T' or 'C', LDX >= max(1,M).
-*
-*  B       (input/output) COMPLEX array, dimension (LDB,NRHS)
-*          On entry, the right hand side vectors for the system of
-*          linear equations.
-*          On exit, B is overwritten with the difference B - A*X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  IF TRANS = 'N',
-*          LDB >= max(1,M); if TRANS = 'T' or 'C', LDB >= max(1,N).
-*
-*  RWORK   (workspace) REAL array, dimension (M)
-*
-*  RESID   (output) REAL
-*          The maximum over the number of right hand sides of
-*          norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *
 *  =====================================================================
 *

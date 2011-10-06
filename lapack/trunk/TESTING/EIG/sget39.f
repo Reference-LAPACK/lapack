@@ -1,70 +1,119 @@
+*> \brief \b SGET39
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET39( RMAX, LMAX, NINFO, KNT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, LMAX, NINFO
+*       REAL               RMAX
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET39 tests SLAQTR, a routine for solving the real or
+*> special complex quasi upper triangular system
+*>
+*>      op(T)*p = scale*c,
+*> or
+*>      op(T + iB)*(p+iq) = scale*(c+id),
+*>
+*> in real arithmetic. T is upper quasi-triangular.
+*> If it is complex, then the first diagonal block of T must be
+*> 1 by 1, B has the special structure
+*>
+*>                B = [ b(1) b(2) ... b(n) ]
+*>                    [       w            ]
+*>                    [           w        ]
+*>                    [              .     ]
+*>                    [                 w  ]
+*>
+*> op(A) = A or A', where A' denotes the conjugate transpose of
+*> the matrix A.
+*>
+*> On input, X = [ c ].  On output, X = [ p ].
+*>               [ d ]                  [ q ]
+*>
+*> Scale is an output less than or equal to 1, chosen to avoid
+*> overflow in X.
+*> This subroutine is specially designed for the condition number
+*> estimation in the eigenproblem routine STRSNA.
+*>
+*> The test code verifies that the following residual is order 1:
+*>
+*>      ||(T+i*B)*(x1+i*x2) - scale*(d1+i*d2)||
+*>    -----------------------------------------
+*>        max(ulp*(||T||+||B||)*(||x1||+||x2||),
+*>            (||T||+||B||)*smlnum/ulp,
+*>            smlnum)
+*>
+*> (The (||T||+||B||)*smlnum/ulp term accounts for possible
+*>  (gradual or nongradual) underflow in x1 and x2.)
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is REAL
+*>          Value of the largest test ratio.
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER
+*>          Example number where largest test ratio achieved.
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER
+*>          Number of examples where INFO is nonzero.
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGET39( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, LMAX, NINFO
       REAL               RMAX
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET39 tests SLAQTR, a routine for solving the real or
-*  special complex quasi upper triangular system
-*
-*       op(T)*p = scale*c,
-*  or
-*       op(T + iB)*(p+iq) = scale*(c+id),
-*
-*  in real arithmetic. T is upper quasi-triangular.
-*  If it is complex, then the first diagonal block of T must be
-*  1 by 1, B has the special structure
-*
-*                 B = [ b(1) b(2) ... b(n) ]
-*                     [       w            ]
-*                     [           w        ]
-*                     [              .     ]
-*                     [                 w  ]
-*
-*  op(A) = A or A', where A' denotes the conjugate transpose of
-*  the matrix A.
-*
-*  On input, X = [ c ].  On output, X = [ p ].
-*                [ d ]                  [ q ]
-*
-*  Scale is an output less than or equal to 1, chosen to avoid
-*  overflow in X.
-*  This subroutine is specially designed for the condition number
-*  estimation in the eigenproblem routine STRSNA.
-*
-*  The test code verifies that the following residual is order 1:
-*
-*       ||(T+i*B)*(x1+i*x2) - scale*(d1+i*d2)||
-*     -----------------------------------------
-*         max(ulp*(||T||+||B||)*(||x1||+||x2||),
-*             (||T||+||B||)*smlnum/ulp,
-*             smlnum)
-*
-*  (The (||T||+||B||)*smlnum/ulp term accounts for possible
-*   (gradual or nongradual) underflow in x1 and x2.)
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) REAL
-*          Value of the largest test ratio.
-*
-*  LMAX    (output) INTEGER
-*          Example number where largest test ratio achieved.
-*
-*  NINFO   (output) INTEGER
-*          Number of examples where INFO is nonzero.
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
 *
 *  =====================================================================
 *

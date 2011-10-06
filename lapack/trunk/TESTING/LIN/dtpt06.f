@@ -1,8 +1,122 @@
+*> \brief \b DTPT06
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, WORK, RAT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, UPLO
+*       INTEGER            N
+*       DOUBLE PRECISION   RAT, RCOND, RCONDC
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   AP( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DTPT06 computes a test ratio comparing RCOND (the reciprocal
+*> condition number of a triangular matrix A) and RCONDC, the estimate
+*> computed by DTPCON.  Information about the triangular matrix A is
+*> used if one estimate is zero and the other is non-zero to decide if
+*> underflow in the estimate is justified.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>          The estimate of the reciprocal condition number obtained by
+*>          forming the explicit inverse of the matrix A and computing
+*>          RCOND = 1/( norm(A) * norm(inv(A)) ).
+*> \endverbatim
+*>
+*> \param[in] RCONDC
+*> \verbatim
+*>          RCONDC is DOUBLE PRECISION
+*>          The estimate of the reciprocal condition number computed by
+*>          DTPCON.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER
+*>          Specifies whether the matrix A is upper or lower triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER
+*>          Specifies whether or not the matrix A is unit triangular.
+*>          = 'N':  Non-unit triangular
+*>          = 'U':  Unit triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] AP
+*> \verbatim
+*>          AP is DOUBLE PRECISION array, dimension (N*(N+1)/2)
+*>          The upper or lower triangular matrix A, packed columnwise in
+*>          a linear array.  The j-th column of A is stored in the array
+*>          AP as follows:
+*>          if UPLO = 'U', AP((j-1)*j/2 + i) = A(i,j) for 1<=i<=j;
+*>          if UPLO = 'L',
+*>             AP((j-1)*(n-j) + j*(j+1)/2 + i-j) = A(i,j) for j<=i<=n.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RAT
+*> \verbatim
+*>          RAT is DOUBLE PRECISION
+*>          The test ratio.  If both RCOND and RCONDC are nonzero,
+*>             RAT = MAX( RCOND, RCONDC )/MIN( RCOND, RCONDC ) - 1.
+*>          If RAT = 0, the two estimates are exactly the same.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DTPT06( RCOND, RCONDC, UPLO, DIAG, N, AP, WORK, RAT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, UPLO
@@ -12,55 +126,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   AP( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DTPT06 computes a test ratio comparing RCOND (the reciprocal
-*  condition number of a triangular matrix A) and RCONDC, the estimate
-*  computed by DTPCON.  Information about the triangular matrix A is
-*  used if one estimate is zero and the other is non-zero to decide if
-*  underflow in the estimate is justified.
-*
-*  Arguments
-*  =========
-*
-*  RCOND   (input) DOUBLE PRECISION
-*          The estimate of the reciprocal condition number obtained by
-*          forming the explicit inverse of the matrix A and computing
-*          RCOND = 1/( norm(A) * norm(inv(A)) ).
-*
-*  RCONDC  (input) DOUBLE PRECISION
-*          The estimate of the reciprocal condition number computed by
-*          DTPCON.
-*
-*  UPLO    (input) CHARACTER
-*          Specifies whether the matrix A is upper or lower triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  DIAG    (input) CHARACTER
-*          Specifies whether or not the matrix A is unit triangular.
-*          = 'N':  Non-unit triangular
-*          = 'U':  Unit triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  AP      (input) DOUBLE PRECISION array, dimension (N*(N+1)/2)
-*          The upper or lower triangular matrix A, packed columnwise in
-*          a linear array.  The j-th column of A is stored in the array
-*          AP as follows:
-*          if UPLO = 'U', AP((j-1)*j/2 + i) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L',
-*             AP((j-1)*(n-j) + j*(j+1)/2 + i-j) = A(i,j) for j<=i<=n.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  RAT     (output) DOUBLE PRECISION
-*          The test ratio.  If both RCOND and RCONDC are nonzero,
-*             RAT = MAX( RCOND, RCONDC )/MIN( RCOND, RCONDC ) - 1.
-*          If RAT = 0, the two estimates are exactly the same.
 *
 *  =====================================================================
 *

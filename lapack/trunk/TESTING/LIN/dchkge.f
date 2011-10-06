@@ -1,13 +1,196 @@
+*> \brief \b DCHKGE
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
+*                          NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
+*                          X, XACT, WORK, RWORK, IWORK, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTERR
+*       INTEGER            NM, NMAX, NN, NNB, NNS, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+*      $                   NVAL( * )
+*       DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DCHKGE tests DGETRF, -TRI, -TRS, -RFS, and -CON.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*> \endverbatim
+*>
+*> \param[in] NM
+*> \verbatim
+*>          NM is INTEGER
+*>          The number of values of M contained in the vector MVAL.
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NNB
+*> \verbatim
+*>          NNB is INTEGER
+*>          The number of values of NB contained in the vector NBVAL.
+*> \endverbatim
+*>
+*> \param[in] NBVAL
+*> \verbatim
+*>          NBVAL is INTEGER array, dimension (NBVAL)
+*>          The values of the blocksize NB.
+*> \endverbatim
+*>
+*> \param[in] NNS
+*> \verbatim
+*>          NNS is INTEGER
+*>          The number of values of NRHS contained in the vector NSVAL.
+*> \endverbatim
+*>
+*> \param[in] NSVAL
+*> \verbatim
+*>          NSVAL is INTEGER array, dimension (NNS)
+*>          The values of the number of right hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[in] NMAX
+*> \verbatim
+*>          NMAX is INTEGER
+*>          The maximum value permitted for M or N, used in dimensioning
+*>          the work arrays.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AFAC
+*> \verbatim
+*>          AFAC is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AINV
+*> \verbatim
+*>          AINV is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (NMAX*NSMAX)
+*>          where NSMAX is the largest entry in NSVAL.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (NMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] XACT
+*> \verbatim
+*>          XACT is DOUBLE PRECISION array, dimension (NMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension
+*>                      (NMAX*max(3,NSMAX))
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension
+*>                      (max(2*NMAX,2*NSMAX+NWORK))
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (2*NMAX)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
      $                   NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
      $                   X, XACT, WORK, RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.2.1) --
-*
-*  -- April 2009                                                   --
-*
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -21,79 +204,6 @@
       DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DCHKGE tests DGETRF, -TRI, -TRS, -RFS, and -CON.
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*
-*  NM      (input) INTEGER
-*          The number of values of M contained in the vector MVAL.
-*
-*  MVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension M.
-*
-*  NN      (input) INTEGER
-*          The number of values of N contained in the vector NVAL.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix column dimension N.
-*
-*  NNB     (input) INTEGER
-*          The number of values of NB contained in the vector NBVAL.
-*
-*  NBVAL   (input) INTEGER array, dimension (NBVAL)
-*          The values of the blocksize NB.
-*
-*  NNS     (input) INTEGER
-*          The number of values of NRHS contained in the vector NSVAL.
-*
-*  NSVAL   (input) INTEGER array, dimension (NNS)
-*          The values of the number of right hand sides NRHS.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  NMAX    (input) INTEGER
-*          The maximum value permitted for M or N, used in dimensioning
-*          the work arrays.
-*
-*  A       (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  AFAC    (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  AINV    (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  B       (workspace) DOUBLE PRECISION array, dimension (NMAX*NSMAX)
-*          where NSMAX is the largest entry in NSVAL.
-*
-*  X       (workspace) DOUBLE PRECISION array, dimension (NMAX*NSMAX)
-*
-*  XACT    (workspace) DOUBLE PRECISION array, dimension (NMAX*NSMAX)
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension
-*                      (NMAX*max(3,NSMAX))
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension
-*                      (max(2*NMAX,2*NSMAX+NWORK))
-*
-*  IWORK   (workspace) INTEGER array, dimension (2*NMAX)
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

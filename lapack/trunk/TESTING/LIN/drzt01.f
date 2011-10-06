@@ -1,9 +1,109 @@
+*> \brief \b DRZT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DRZT01( M, N, A, AF, LDA, TAU, WORK,
+*                        LWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), AF( LDA, * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DRZT01 returns
+*>      || A - R*Q || / ( M * eps * ||A|| )
+*> for an upper trapezoidal A that was factored with DTZRZF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The original upper trapezoidal M by N matrix A.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The output of DTZRZF for input matrix A.
+*>          The lower triangle is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A and AF.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (M)
+*>          Details of the Householder transformations as returned by
+*>          DTZRZF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK >= m*n + m*nb.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DRZT01( M, N, A, AF, LDA, TAU, WORK,
      $                 LWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LWORK, M, N
@@ -12,41 +112,6 @@
       DOUBLE PRECISION   A( LDA, * ), AF( LDA, * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DRZT01 returns
-*       || A - R*Q || / ( M * eps * ||A|| )
-*  for an upper trapezoidal A that was factored with DTZRZF.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrices A and AF.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and AF.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The original upper trapezoidal M by N matrix A.
-*
-*  AF      (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The output of DTZRZF for input matrix A.
-*          The lower triangle is not referenced.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A and AF.
-*
-*  TAU     (input) DOUBLE PRECISION array, dimension (M)
-*          Details of the Householder transformations as returned by
-*          DTZRZF.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  LWORK >= m*n + m*nb.
 *
 *  =====================================================================
 *

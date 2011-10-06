@@ -1,9 +1,111 @@
+*> \brief \b CSPTRI
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CSPTRI( UPLO, N, AP, IPIV, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       COMPLEX            AP( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CSPTRI computes the inverse of a complex symmetric indefinite matrix
+*> A in packed storage using the factorization A = U*D*U**T or
+*> A = L*D*L**T computed by CSPTRF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the details of the factorization are stored
+*>          as an upper or lower triangular matrix.
+*>          = 'U':  Upper triangular, form is A = U*D*U**T;
+*>          = 'L':  Lower triangular, form is A = L*D*L**T.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AP
+*> \verbatim
+*>          AP is COMPLEX array, dimension (N*(N+1)/2)
+*>          On entry, the block diagonal matrix D and the multipliers
+*>          used to obtain the factor U or L as computed by CSPTRF,
+*>          stored as a packed triangular matrix.
+*> \endverbatim
+*> \verbatim
+*>          On exit, if INFO = 0, the (symmetric) inverse of the original
+*>          matrix, stored as a packed triangular matrix. The j-th column
+*>          of inv(A) is stored in the array AP as follows:
+*>          if UPLO = 'U', AP(i + (j-1)*j/2) = inv(A)(i,j) for 1<=i<=j;
+*>          if UPLO = 'L',
+*>             AP(i + (j-1)*(2n-j)/2) = inv(A)(i,j) for j<=i<=n.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          Details of the interchanges and the block structure of D
+*>          as determined by CSPTRF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*>          > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
+*>               inverse could not be computed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CSPTRI( UPLO, N, AP, IPIV, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -13,49 +115,6 @@
       INTEGER            IPIV( * )
       COMPLEX            AP( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CSPTRI computes the inverse of a complex symmetric indefinite matrix
-*  A in packed storage using the factorization A = U*D*U**T or
-*  A = L*D*L**T computed by CSPTRF.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the details of the factorization are stored
-*          as an upper or lower triangular matrix.
-*          = 'U':  Upper triangular, form is A = U*D*U**T;
-*          = 'L':  Lower triangular, form is A = L*D*L**T.
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  AP      (input/output) COMPLEX array, dimension (N*(N+1)/2)
-*          On entry, the block diagonal matrix D and the multipliers
-*          used to obtain the factor U or L as computed by CSPTRF,
-*          stored as a packed triangular matrix.
-*
-*          On exit, if INFO = 0, the (symmetric) inverse of the original
-*          matrix, stored as a packed triangular matrix. The j-th column
-*          of inv(A) is stored in the array AP as follows:
-*          if UPLO = 'U', AP(i + (j-1)*j/2) = inv(A)(i,j) for 1<=i<=j;
-*          if UPLO = 'L',
-*             AP(i + (j-1)*(2n-j)/2) = inv(A)(i,j) for j<=i<=n.
-*
-*  IPIV    (input) INTEGER array, dimension (N)
-*          Details of the interchanges and the block structure of D
-*          as determined by CSPTRF.
-*
-*  WORK    (workspace) COMPLEX array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
-*          > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
-*               inverse could not be computed.
 *
 *  =====================================================================
 *

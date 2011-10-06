@@ -1,4 +1,65 @@
+*> \brief \b SAXPY
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
+* 
+*       .. Scalar Arguments ..
+*       REAL SA
+*       INTEGER INCX,INCY,N
+*       ..
+*       .. Array Arguments ..
+*       REAL SX(*),SY(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    SAXPY constant times a vector plus a vector.
+*>    uses unrolled loops for increments equal to one.
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_blas_level1
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>     jack dongarra, linpack, 3/11/78.
+*>     modified 12/3/93, array(1) declarations changed to array(*)
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
+*
+*  -- Reference BLAS level1 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       REAL SA
       INTEGER INCX,INCY,N
@@ -6,18 +67,6 @@
 *     .. Array Arguments ..
       REAL SX(*),SY(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     SAXPY constant times a vector plus a vector.
-*     uses unrolled loops for increments equal to one.
-*
-*  Further Details
-*  ===============
-*
-*     jack dongarra, linpack, 3/11/78.
-*     modified 12/3/93, array(1) declarations changed to array(*)
 *
 *  =====================================================================
 *

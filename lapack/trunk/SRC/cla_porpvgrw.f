@@ -1,15 +1,106 @@
+*> \brief \b CLA_PORPVGRW
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL FUNCTION CLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF, LDAF, WORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*1        UPLO
+*       INTEGER            NCOLS, LDA, LDAF
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), AF( LDAF, * )
+*       REAL               WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*> 
+*> CLA_PORPVGRW computes the reciprocal pivot growth factor
+*> norm(A)/norm(U). The "max absolute element" norm is used. If this is
+*> much less than 1, the stability of the LU factorization of the
+*> (equilibrated) matrix A could be poor. This also means that the
+*> solution X, estimated condition numbers, and error bounds could be
+*> unreliable.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>       = 'U':  Upper triangle of A is stored;
+*>       = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
+*> \param[in] NCOLS
+*> \verbatim
+*>          NCOLS is INTEGER
+*>     The number of columns of the matrix A. NCOLS >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>     On entry, the N-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>     The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is COMPLEX array, dimension (LDAF,N)
+*>     The triangular factor U or L from the Cholesky factorization
+*>     A = U**T*U or A = L*L**T, as computed by CPOTRF.
+*> \endverbatim
+*>
+*> \param[in] LDAF
+*> \verbatim
+*>          LDAF is INTEGER
+*>     The leading dimension of the array AF.  LDAF >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (2*N)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexPOcomputational
+*
+*  =====================================================================
       REAL FUNCTION CLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF, LDAF, WORK )
 *
-*     -- LAPACK routine (version 3.2.2)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- June 2010                                                    --
+*  -- LAPACK computational routine (version 3.2.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       CHARACTER*1        UPLO
       INTEGER            NCOLS, LDA, LDAF
@@ -18,41 +109,6 @@
       COMPLEX            A( LDA, * ), AF( LDAF, * )
       REAL               WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-* 
-*  CLA_PORPVGRW computes the reciprocal pivot growth factor
-*  norm(A)/norm(U). The "max absolute element" norm is used. If this is
-*  much less than 1, the stability of the LU factorization of the
-*  (equilibrated) matrix A could be poor. This also means that the
-*  solution X, estimated condition numbers, and error bounds could be
-*  unreliable.
-*
-*  Arguments
-*  =========
-*
-*     UPLO    (input) CHARACTER*1
-*       = 'U':  Upper triangle of A is stored;
-*       = 'L':  Lower triangle of A is stored.
-*
-*     NCOLS   (input) INTEGER
-*     The number of columns of the matrix A. NCOLS >= 0.
-*
-*     A       (input) COMPLEX array, dimension (LDA,N)
-*     On entry, the N-by-N matrix A.
-*
-*     LDA     (input) INTEGER
-*     The leading dimension of the array A.  LDA >= max(1,N).
-*
-*     AF      (input) COMPLEX array, dimension (LDAF,N)
-*     The triangular factor U or L from the Cholesky factorization
-*     A = U**T*U or A = L*L**T, as computed by CPOTRF.
-*
-*     LDAF    (input) INTEGER
-*     The leading dimension of the array AF.  LDAF >= max(1,N).
-*
-*     WORK    (input) COMPLEX array, dimension (2*N)
 *
 *  =====================================================================
 *

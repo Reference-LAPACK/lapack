@@ -1,3 +1,282 @@
+*> \brief \b SLARRV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLARRV( N, VL, VU, D, L, PIVMIN,
+*                          ISPLIT, M, DOL, DOU, MINRGP,
+*                          RTOL1, RTOL2, W, WERR, WGAP,
+*                          IBLOCK, INDEXW, GERS, Z, LDZ, ISUPPZ,
+*                          WORK, IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            DOL, DOU, INFO, LDZ, M, N
+*       REAL               MINRGP, PIVMIN, RTOL1, RTOL2, VL, VU
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IBLOCK( * ), INDEXW( * ), ISPLIT( * ),
+*      $                   ISUPPZ( * ), IWORK( * )
+*       REAL               D( * ), GERS( * ), L( * ), W( * ), WERR( * ),
+*      $                   WGAP( * ), WORK( * )
+*       REAL              Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLARRV computes the eigenvectors of the tridiagonal matrix
+*> T = L D L**T given L, D and APPROXIMATIONS to the eigenvalues of L D L**T.
+*> The input eigenvalues should have been computed by SLARRE.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] VL
+*> \verbatim
+*>          VL is REAL
+*> \endverbatim
+*>
+*> \param[in] VU
+*> \verbatim
+*>          VU is REAL
+*>          Lower and upper bounds of the interval that contains the desired
+*>          eigenvalues. VL < VU. Needed to compute gaps on the left or right
+*>          end of the extremal eigenvalues in the desired RANGE.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          On entry, the N diagonal elements of the diagonal matrix D.
+*>          On exit, D may be overwritten.
+*> \endverbatim
+*>
+*> \param[in,out] L
+*> \verbatim
+*>          L is REAL array, dimension (N)
+*>          On entry, the (N-1) subdiagonal elements of the unit
+*>          bidiagonal matrix L are in elements 1 to N-1 of L
+*>          (if the matrix is not splitted.) At the end of each block
+*>          is stored the corresponding shift as given by SLARRE.
+*>          On exit, L is overwritten.
+*> \endverbatim
+*>
+*> \param[in] PIVMIN
+*> \verbatim
+*>          PIVMIN is REAL
+*>          The minimum pivot allowed in the Sturm sequence.
+*> \endverbatim
+*>
+*> \param[in] ISPLIT
+*> \verbatim
+*>          ISPLIT is INTEGER array, dimension (N)
+*>          The splitting points, at which T breaks up into blocks.
+*>          The first block consists of rows/columns 1 to
+*>          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1
+*>          through ISPLIT( 2 ), etc.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The total number of input eigenvalues.  0 <= M <= N.
+*> \endverbatim
+*>
+*> \param[in] DOL
+*> \verbatim
+*>          DOL is INTEGER
+*> \endverbatim
+*>
+*> \param[in] DOU
+*> \verbatim
+*>          DOU is INTEGER
+*>          If the user wants to compute only selected eigenvectors from all
+*>          the eigenvalues supplied, he can specify an index range DOL:DOU.
+*>          Or else the setting DOL=1, DOU=M should be applied.
+*>          Note that DOL and DOU refer to the order in which the eigenvalues
+*>          are stored in W.
+*>          If the user wants to compute only selected eigenpairs, then
+*>          the columns DOL-1 to DOU+1 of the eigenvector space Z contain the
+*>          computed eigenvectors. All other columns of Z are set to zero.
+*> \endverbatim
+*>
+*> \param[in] MINRGP
+*> \verbatim
+*>          MINRGP is REAL
+*> \endverbatim
+*>
+*> \param[in] RTOL1
+*> \verbatim
+*>          RTOL1 is REAL
+*> \endverbatim
+*>
+*> \param[in] RTOL2
+*> \verbatim
+*>          RTOL2 is REAL
+*>           Parameters for bisection.
+*>           An interval [LEFT,RIGHT] has converged if
+*>           RIGHT-LEFT.LT.MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
+*> \endverbatim
+*>
+*> \param[in,out] W
+*> \verbatim
+*>          W is REAL array, dimension (N)
+*>          The first M elements of W contain the APPROXIMATE eigenvalues for
+*>          which eigenvectors are to be computed.  The eigenvalues
+*>          should be grouped by split-off block and ordered from
+*>          smallest to largest within the block ( The output array
+*>          W from SLARRE is expected here ). Furthermore, they are with
+*>          respect to the shift of the corresponding root representation
+*>          for their block. On exit, W holds the eigenvalues of the
+*>          UNshifted matrix.
+*> \endverbatim
+*>
+*> \param[in,out] WERR
+*> \verbatim
+*>          WERR is REAL array, dimension (N)
+*>          The first M elements contain the semiwidth of the uncertainty
+*>          interval of the corresponding eigenvalue in W
+*> \endverbatim
+*>
+*> \param[in,out] WGAP
+*> \verbatim
+*>          WGAP is REAL array, dimension (N)
+*>          The separation from the right neighbor eigenvalue in W.
+*> \endverbatim
+*>
+*> \param[in] IBLOCK
+*> \verbatim
+*>          IBLOCK is INTEGER array, dimension (N)
+*>          The indices of the blocks (submatrices) associated with the
+*>          corresponding eigenvalues in W; IBLOCK(i)=1 if eigenvalue
+*>          W(i) belongs to the first block from the top, =2 if W(i)
+*>          belongs to the second block, etc.
+*> \endverbatim
+*>
+*> \param[in] INDEXW
+*> \verbatim
+*>          INDEXW is INTEGER array, dimension (N)
+*>          The indices of the eigenvalues within each block (submatrix);
+*>          for example, INDEXW(i)= 10 and IBLOCK(i)=2 imply that the
+*>          i-th eigenvalue W(i) is the 10-th eigenvalue in the second block.
+*> \endverbatim
+*>
+*> \param[in] GERS
+*> \verbatim
+*>          GERS is REAL array, dimension (2*N)
+*>          The N Gerschgorin intervals (the i-th Gerschgorin interval
+*>          is (GERS(2*i-1), GERS(2*i)). The Gerschgorin intervals should
+*>          be computed from the original UNshifted matrix.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is REAL array, dimension (LDZ, max(1,M) )
+*>          If INFO = 0, the first M columns of Z contain the
+*>          orthonormal eigenvectors of the matrix T
+*>          corresponding to the input eigenvalues, with the i-th
+*>          column of Z holding the eigenvector associated with W(i).
+*>          Note: the user must ensure that at least max(1,M) columns are
+*>          supplied in the array Z.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1, and if
+*>          JOBZ = 'V', LDZ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] ISUPPZ
+*> \verbatim
+*>          ISUPPZ is INTEGER array, dimension ( 2*max(1,M) )
+*>          The support of the eigenvectors in Z, i.e., the indices
+*>          indicating the nonzero elements in Z. The I-th eigenvector
+*>          is nonzero only in elements ISUPPZ( 2*I-1 ) through
+*>          ISUPPZ( 2*I ).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (12*N)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (7*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*> \endverbatim
+*> \verbatim
+*>          > 0:  A problem occured in SLARRV.
+*>          < 0:  One of the called subroutines signaled an internal problem.
+*>                Needs inspection of the corresponding parameter IINFO
+*>                for further information.
+*> \endverbatim
+*> \verbatim
+*>          =-1:  Problem in SLARRB when refining a child's eigenvalues.
+*>          =-2:  Problem in SLARRF when computing the RRR of a child.
+*>                When a child is inside a tight cluster, it can be difficult
+*>                to find an RRR. A partial remedy from the user's point of
+*>                view is to make the parameter MINRGP smaller and recompile.
+*>                However, as the orthogonality of the computed vectors is
+*>                proportional to 1/MINRGP, the user should be aware that
+*>                he might be trading in precision when he decreases MINRGP.
+*>          =-3:  Problem in SLARRB when refining a single eigenvalue
+*>                after the Rayleigh correction was rejected.
+*>          = 5:  The Rayleigh Quotient Iteration failed to converge to
+*>                full accuracy in MAXITR steps.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Beresford Parlett, University of California, Berkeley, USA
+*>     Jim Demmel, University of California, Berkeley, USA
+*>     Inderjit Dhillon, University of Texas, Austin, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>     Christof Voemel, University of California, Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLARRV( N, VL, VU, D, L, PIVMIN,
      $                   ISPLIT, M, DOL, DOU, MINRGP,
      $                   RTOL1, RTOL2, W, WERR, WGAP,
@@ -7,7 +286,7 @@
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            DOL, DOU, INFO, LDZ, M, N
@@ -20,156 +299,6 @@
      $                   WGAP( * ), WORK( * )
       REAL              Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLARRV computes the eigenvectors of the tridiagonal matrix
-*  T = L D L**T given L, D and APPROXIMATIONS to the eigenvalues of L D L**T.
-*  The input eigenvalues should have been computed by SLARRE.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix.  N >= 0.
-*
-*  VL      (input) REAL            
-*
-*  VU      (input) REAL            
-*          Lower and upper bounds of the interval that contains the desired
-*          eigenvalues. VL < VU. Needed to compute gaps on the left or right
-*          end of the extremal eigenvalues in the desired RANGE.
-*
-*  D       (input/output) REAL array, dimension (N)
-*          On entry, the N diagonal elements of the diagonal matrix D.
-*          On exit, D may be overwritten.
-*
-*  L       (input/output) REAL array, dimension (N)
-*          On entry, the (N-1) subdiagonal elements of the unit
-*          bidiagonal matrix L are in elements 1 to N-1 of L
-*          (if the matrix is not splitted.) At the end of each block
-*          is stored the corresponding shift as given by SLARRE.
-*          On exit, L is overwritten.
-*
-*  PIVMIN  (input) REAL
-*          The minimum pivot allowed in the Sturm sequence.
-*
-*  ISPLIT  (input) INTEGER array, dimension (N)
-*          The splitting points, at which T breaks up into blocks.
-*          The first block consists of rows/columns 1 to
-*          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1
-*          through ISPLIT( 2 ), etc.
-*
-*  M       (input) INTEGER
-*          The total number of input eigenvalues.  0 <= M <= N.
-*
-*  DOL     (input) INTEGER
-*
-*  DOU     (input) INTEGER
-*          If the user wants to compute only selected eigenvectors from all
-*          the eigenvalues supplied, he can specify an index range DOL:DOU.
-*          Or else the setting DOL=1, DOU=M should be applied.
-*          Note that DOL and DOU refer to the order in which the eigenvalues
-*          are stored in W.
-*          If the user wants to compute only selected eigenpairs, then
-*          the columns DOL-1 to DOU+1 of the eigenvector space Z contain the
-*          computed eigenvectors. All other columns of Z are set to zero.
-*
-*  MINRGP  (input) REAL            
-*
-*  RTOL1   (input) REAL            
-*
-*  RTOL2   (input) REAL            
-*           Parameters for bisection.
-*           An interval [LEFT,RIGHT] has converged if
-*           RIGHT-LEFT.LT.MAX( RTOL1*GAP, RTOL2*MAX(|LEFT|,|RIGHT|) )
-*
-*  W       (input/output) REAL array, dimension (N)
-*          The first M elements of W contain the APPROXIMATE eigenvalues for
-*          which eigenvectors are to be computed.  The eigenvalues
-*          should be grouped by split-off block and ordered from
-*          smallest to largest within the block ( The output array
-*          W from SLARRE is expected here ). Furthermore, they are with
-*          respect to the shift of the corresponding root representation
-*          for their block. On exit, W holds the eigenvalues of the
-*          UNshifted matrix.
-*
-*  WERR    (input/output) REAL array, dimension (N)
-*          The first M elements contain the semiwidth of the uncertainty
-*          interval of the corresponding eigenvalue in W
-*
-*  WGAP    (input/output) REAL array, dimension (N)
-*          The separation from the right neighbor eigenvalue in W.
-*
-*  IBLOCK  (input) INTEGER array, dimension (N)
-*          The indices of the blocks (submatrices) associated with the
-*          corresponding eigenvalues in W; IBLOCK(i)=1 if eigenvalue
-*          W(i) belongs to the first block from the top, =2 if W(i)
-*          belongs to the second block, etc.
-*
-*  INDEXW  (input) INTEGER array, dimension (N)
-*          The indices of the eigenvalues within each block (submatrix);
-*          for example, INDEXW(i)= 10 and IBLOCK(i)=2 imply that the
-*          i-th eigenvalue W(i) is the 10-th eigenvalue in the second block.
-*
-*  GERS    (input) REAL array, dimension (2*N)
-*          The N Gerschgorin intervals (the i-th Gerschgorin interval
-*          is (GERS(2*i-1), GERS(2*i)). The Gerschgorin intervals should
-*          be computed from the original UNshifted matrix.
-*
-*  Z       (output) REAL array, dimension (LDZ, max(1,M) )
-*          If INFO = 0, the first M columns of Z contain the
-*          orthonormal eigenvectors of the matrix T
-*          corresponding to the input eigenvalues, with the i-th
-*          column of Z holding the eigenvector associated with W(i).
-*          Note: the user must ensure that at least max(1,M) columns are
-*          supplied in the array Z.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= 1, and if
-*          JOBZ = 'V', LDZ >= max(1,N).
-*
-*  ISUPPZ  (output) INTEGER array, dimension ( 2*max(1,M) )
-*          The support of the eigenvectors in Z, i.e., the indices
-*          indicating the nonzero elements in Z. The I-th eigenvector
-*          is nonzero only in elements ISUPPZ( 2*I-1 ) through
-*          ISUPPZ( 2*I ).
-*
-*  WORK    (workspace) REAL array, dimension (12*N)
-*
-*  IWORK   (workspace) INTEGER array, dimension (7*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*
-*          > 0:  A problem occured in SLARRV.
-*          < 0:  One of the called subroutines signaled an internal problem.
-*                Needs inspection of the corresponding parameter IINFO
-*                for further information.
-*
-*          =-1:  Problem in SLARRB when refining a child's eigenvalues.
-*          =-2:  Problem in SLARRF when computing the RRR of a child.
-*                When a child is inside a tight cluster, it can be difficult
-*                to find an RRR. A partial remedy from the user's point of
-*                view is to make the parameter MINRGP smaller and recompile.
-*                However, as the orthogonality of the computed vectors is
-*                proportional to 1/MINRGP, the user should be aware that
-*                he might be trading in precision when he decreases MINRGP.
-*          =-3:  Problem in SLARRB when refining a single eigenvalue
-*                after the Rayleigh correction was rejected.
-*          = 5:  The Rayleigh Quotient Iteration failed to converge to
-*                full accuracy in MAXITR steps.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Beresford Parlett, University of California, Berkeley, USA
-*     Jim Demmel, University of California, Berkeley, USA
-*     Inderjit Dhillon, University of Texas, Austin, USA
-*     Osni Marques, LBNL/NERSC, USA
-*     Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
 *

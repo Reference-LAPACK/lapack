@@ -1,9 +1,129 @@
+*> \brief \b ZLAQSP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          EQUED, UPLO
+*       INTEGER            N
+*       DOUBLE PRECISION   AMAX, SCOND
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   S( * )
+*       COMPLEX*16         AP( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLAQSP equilibrates a symmetric matrix A using the scaling factors
+*> in the vector S.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          symmetric matrix A is stored.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AP
+*> \verbatim
+*>          AP is COMPLEX*16 array, dimension (N*(N+1)/2)
+*>          On entry, the upper or lower triangle of the symmetric matrix
+*>          A, packed columnwise in a linear array.  The j-th column of A
+*>          is stored in the array AP as follows:
+*>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
+*>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
+*> \endverbatim
+*> \verbatim
+*>          On exit, the equilibrated matrix:  diag(S) * A * diag(S), in
+*>          the same storage format as A.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension (N)
+*>          The scale factors for A.
+*> \endverbatim
+*>
+*> \param[in] SCOND
+*> \verbatim
+*>          SCOND is DOUBLE PRECISION
+*>          Ratio of the smallest S(i) to the largest S(i).
+*> \endverbatim
+*>
+*> \param[in] AMAX
+*> \verbatim
+*>          AMAX is DOUBLE PRECISION
+*>          Absolute value of largest matrix entry.
+*> \endverbatim
+*>
+*> \param[out] EQUED
+*> \verbatim
+*>          EQUED is CHARACTER*1
+*>          Specifies whether or not equilibration was done.
+*>          = 'N':  No equilibration.
+*>          = 'Y':  Equilibration was done, i.e., A has been replaced by
+*>                  diag(S) * A * diag(S).
+*> \endverbatim
+*> \verbatim
+*>  Internal Parameters
+*>  ===================
+*> \endverbatim
+*> \verbatim
+*>  THRESH is a threshold value used to decide if scaling should be done
+*>  based on the ratio of the scaling factors.  If SCOND < THRESH,
+*>  scaling is done.
+*> \endverbatim
+*> \verbatim
+*>  LARGE and SMALL are threshold values used to decide if scaling should
+*>  be done based on the absolute size of the largest matrix element.
+*>  If AMAX > LARGE or AMAX < SMALL, scaling is done.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE ZLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          EQUED, UPLO
@@ -14,60 +134,6 @@
       DOUBLE PRECISION   S( * )
       COMPLEX*16         AP( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLAQSP equilibrates a symmetric matrix A using the scaling factors
-*  in the vector S.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          symmetric matrix A is stored.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  AP      (input/output) COMPLEX*16 array, dimension (N*(N+1)/2)
-*          On entry, the upper or lower triangle of the symmetric matrix
-*          A, packed columnwise in a linear array.  The j-th column of A
-*          is stored in the array AP as follows:
-*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
-*
-*          On exit, the equilibrated matrix:  diag(S) * A * diag(S), in
-*          the same storage format as A.
-*
-*  S       (input) DOUBLE PRECISION array, dimension (N)
-*          The scale factors for A.
-*
-*  SCOND   (input) DOUBLE PRECISION
-*          Ratio of the smallest S(i) to the largest S(i).
-*
-*  AMAX    (input) DOUBLE PRECISION
-*          Absolute value of largest matrix entry.
-*
-*  EQUED   (output) CHARACTER*1
-*          Specifies whether or not equilibration was done.
-*          = 'N':  No equilibration.
-*          = 'Y':  Equilibration was done, i.e., A has been replaced by
-*                  diag(S) * A * diag(S).
-*
-*  Internal Parameters
-*  ===================
-*
-*  THRESH is a threshold value used to decide if scaling should be done
-*  based on the ratio of the scaling factors.  If SCOND < THRESH,
-*  scaling is done.
-*
-*  LARGE and SMALL are threshold values used to decide if scaling should
-*  be done based on the absolute size of the largest matrix element.
-*  If AMAX > LARGE or AMAX < SMALL, scaling is done.
 *
 *  =====================================================================
 *

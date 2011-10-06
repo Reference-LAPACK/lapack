@@ -1,11 +1,222 @@
+*> \brief \b CDRVLS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
+*                          NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
+*                          COPYB, C, S, COPYS, WORK, RWORK, IWORK,
+*                          NOUT )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTERR
+*       INTEGER            NM, NN, NNB, NNS, NOUT
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+*      $                   NVAL( * ), NXVAL( * )
+*       REAL               COPYS( * ), RWORK( * ), S( * )
+*       COMPLEX            A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CDRVLS tests the least squares driver routines CGELS, CGELSX, CGELSS,
+*> CGELSY and CGELSD.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*>          The matrix of type j is generated as follows:
+*>          j=1: A = U*D*V where U and V are random unitary matrices
+*>               and D has random entries (> 0.1) taken from a uniform
+*>               distribution (0,1). A is full rank.
+*>          j=2: The same of 1, but A is scaled up.
+*>          j=3: The same of 1, but A is scaled down.
+*>          j=4: A = U*D*V where U and V are random unitary matrices
+*>               and D has 3*min(M,N)/4 random entries (> 0.1) taken
+*>               from a uniform distribution (0,1) and the remaining
+*>               entries set to 0. A is rank-deficient.
+*>          j=5: The same of 4, but A is scaled up.
+*>          j=6: The same of 5, but A is scaled down.
+*> \endverbatim
+*>
+*> \param[in] NM
+*> \verbatim
+*>          NM is INTEGER
+*>          The number of values of M contained in the vector MVAL.
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NNB
+*> \verbatim
+*>          NNB is INTEGER
+*>          The number of values of NB and NX contained in the
+*>          vectors NBVAL and NXVAL.  The blocking parameters are used
+*>          in pairs (NB,NX).
+*> \endverbatim
+*>
+*> \param[in] NBVAL
+*> \verbatim
+*>          NBVAL is INTEGER array, dimension (NNB)
+*>          The values of the blocksize NB.
+*> \endverbatim
+*>
+*> \param[in] NXVAL
+*> \verbatim
+*>          NXVAL is INTEGER array, dimension (NNB)
+*>          The values of the crossover point NX.
+*> \endverbatim
+*>
+*> \param[in] NNS
+*> \verbatim
+*>          NNS is INTEGER
+*>          The number of values of NRHS contained in the vector NSVAL.
+*> \endverbatim
+*>
+*> \param[in] NSVAL
+*> \verbatim
+*>          NSVAL is INTEGER array, dimension (NNS)
+*>          The values of the number of right hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (MMAX*NMAX)
+*>          where MMAX is the maximum value of M in MVAL and NMAX is the
+*>          maximum value of N in NVAL.
+*> \endverbatim
+*>
+*> \param[out] COPYA
+*> \verbatim
+*>          COPYA is COMPLEX array, dimension (MMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (MMAX*NSMAX)
+*>          where MMAX is the maximum value of M in MVAL and NSMAX is the
+*>          maximum value of NRHS in NSVAL.
+*> \endverbatim
+*>
+*> \param[out] COPYB
+*> \verbatim
+*>          COPYB is COMPLEX array, dimension (MMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is COMPLEX array, dimension (MMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is REAL array, dimension
+*>                      (min(MMAX,NMAX))
+*> \endverbatim
+*>
+*> \param[out] COPYS
+*> \verbatim
+*>          COPYS is REAL array, dimension
+*>                      (min(MMAX,NMAX))
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension
+*>                      (MMAX*NMAX + 4*NMAX + MMAX).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (5*NMAX-1)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (15*NMAX)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
      $                   COPYB, C, S, COPYS, WORK, RWORK, IWORK,
      $                   NOUT )
 *
 *  -- LAPACK test routine (version 3.1.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     January 2007
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -20,99 +231,6 @@
       COMPLEX            A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CDRVLS tests the least squares driver routines CGELS, CGELSX, CGELSS,
-*  CGELSY and CGELSD.
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*          The matrix of type j is generated as follows:
-*          j=1: A = U*D*V where U and V are random unitary matrices
-*               and D has random entries (> 0.1) taken from a uniform
-*               distribution (0,1). A is full rank.
-*          j=2: The same of 1, but A is scaled up.
-*          j=3: The same of 1, but A is scaled down.
-*          j=4: A = U*D*V where U and V are random unitary matrices
-*               and D has 3*min(M,N)/4 random entries (> 0.1) taken
-*               from a uniform distribution (0,1) and the remaining
-*               entries set to 0. A is rank-deficient.
-*          j=5: The same of 4, but A is scaled up.
-*          j=6: The same of 5, but A is scaled down.
-*
-*  NM      (input) INTEGER
-*          The number of values of M contained in the vector MVAL.
-*
-*  MVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension M.
-*
-*  NN      (input) INTEGER
-*          The number of values of N contained in the vector NVAL.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix column dimension N.
-*
-*  NNB     (input) INTEGER
-*          The number of values of NB and NX contained in the
-*          vectors NBVAL and NXVAL.  The blocking parameters are used
-*          in pairs (NB,NX).
-*
-*  NBVAL   (input) INTEGER array, dimension (NNB)
-*          The values of the blocksize NB.
-*
-*  NXVAL   (input) INTEGER array, dimension (NNB)
-*          The values of the crossover point NX.
-*
-*  NNS     (input) INTEGER
-*          The number of values of NRHS contained in the vector NSVAL.
-*
-*  NSVAL   (input) INTEGER array, dimension (NNS)
-*          The values of the number of right hand sides NRHS.
-*
-*  THRESH  (input) REAL
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  A       (workspace) COMPLEX array, dimension (MMAX*NMAX)
-*          where MMAX is the maximum value of M in MVAL and NMAX is the
-*          maximum value of N in NVAL.
-*
-*  COPYA   (workspace) COMPLEX array, dimension (MMAX*NMAX)
-*
-*  B       (workspace) COMPLEX array, dimension (MMAX*NSMAX)
-*          where MMAX is the maximum value of M in MVAL and NSMAX is the
-*          maximum value of NRHS in NSVAL.
-*
-*  COPYB   (workspace) COMPLEX array, dimension (MMAX*NSMAX)
-*
-*  C       (workspace) COMPLEX array, dimension (MMAX*NSMAX)
-*
-*  S       (workspace) REAL array, dimension
-*                      (min(MMAX,NMAX))
-*
-*  COPYS   (workspace) REAL array, dimension
-*                      (min(MMAX,NMAX))
-*
-*  WORK    (workspace) COMPLEX array, dimension
-*                      (MMAX*NMAX + 4*NMAX + MMAX).
-*
-*  RWORK   (workspace) REAL array, dimension (5*NMAX-1)
-*
-*  IWORK   (workspace) INTEGER array, dimension (15*NMAX)
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

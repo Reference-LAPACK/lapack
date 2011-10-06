@@ -1,9 +1,145 @@
+*> \brief \b DGEQPF
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            JPVT( * )
+*       DOUBLE PRECISION   A( LDA, * ), TAU( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This routine is deprecated and has been replaced by routine DGEQP3.
+*>
+*> DGEQPF computes a QR factorization with column pivoting of a
+*> real M-by-N matrix A: A*P = Q*R.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A. M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A. N >= 0
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          On entry, the M-by-N matrix A.
+*>          On exit, the upper triangle of the array contains the
+*>          min(M,N)-by-N upper triangular matrix R; the elements
+*>          below the diagonal, together with the array TAU,
+*>          represent the orthogonal matrix Q as a product of
+*>          min(m,n) elementary reflectors.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] JPVT
+*> \verbatim
+*>          JPVT is INTEGER array, dimension (N)
+*>          On entry, if JPVT(i) .ne. 0, the i-th column of A is permuted
+*>          to the front of A*P (a leading column); if JPVT(i) = 0,
+*>          the i-th column of A is a free column.
+*>          On exit, if JPVT(i) = k, then the i-th column of A*P
+*>          was the k-th column of A.
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (3*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleGEcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  The matrix Q is represented as a product of elementary reflectors
+*>
+*>     Q = H(1) H(2) . . . H(n)
+*>
+*>  Each H(i) has the form
+*>
+*>     H = I - tau * v * v**T
+*>
+*>  where tau is a real scalar, and v is a real vector with
+*>  v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i).
+*>
+*>  The matrix P is represented in jpvt as follows: If
+*>     jpvt(j) = i
+*>  then the jth column of P is the ith canonical unit vector.
+*>
+*>  Partial column norm updating strategy modified by
+*>    Z. Drmac and Z. Bujanovic, Dept. of Mathematics,
+*>    University of Zagreb, Croatia.
+*>  -- April 2011                                                      --
+*>  For more details see LAPACK Working Note 176.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO )
 *
-*  -- LAPACK deprecated computational routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N
@@ -12,74 +148,6 @@
       INTEGER            JPVT( * )
       DOUBLE PRECISION   A( LDA, * ), TAU( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  This routine is deprecated and has been replaced by routine DGEQP3.
-*
-*  DGEQPF computes a QR factorization with column pivoting of a
-*  real M-by-N matrix A: A*P = Q*R.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A. M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A. N >= 0
-*
-*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
-*          On entry, the M-by-N matrix A.
-*          On exit, the upper triangle of the array contains the
-*          min(M,N)-by-N upper triangular matrix R; the elements
-*          below the diagonal, together with the array TAU,
-*          represent the orthogonal matrix Q as a product of
-*          min(m,n) elementary reflectors.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >= max(1,M).
-*
-*  JPVT    (input/output) INTEGER array, dimension (N)
-*          On entry, if JPVT(i) .ne. 0, the i-th column of A is permuted
-*          to the front of A*P (a leading column); if JPVT(i) = 0,
-*          the i-th column of A is a free column.
-*          On exit, if JPVT(i) = k, then the i-th column of A*P
-*          was the k-th column of A.
-*
-*  TAU     (output) DOUBLE PRECISION array, dimension (min(M,N))
-*          The scalar factors of the elementary reflectors.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (3*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  The matrix Q is represented as a product of elementary reflectors
-*
-*     Q = H(1) H(2) . . . H(n)
-*
-*  Each H(i) has the form
-*
-*     H = I - tau * v * v**T
-*
-*  where tau is a real scalar, and v is a real vector with
-*  v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i).
-*
-*  The matrix P is represented in jpvt as follows: If
-*     jpvt(j) = i
-*  then the jth column of P is the ith canonical unit vector.
-*
-*  Partial column norm updating strategy modified by
-*    Z. Drmac and Z. Bujanovic, Dept. of Mathematics,
-*    University of Zagreb, Croatia.
-*  -- April 2011                                                      --
-*  For more details see LAPACK Working Note 176.
 *
 *  =====================================================================
 *

@@ -1,43 +1,88 @@
+*> \brief \b ALADHD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ALADHD( IOUNIT, PATH )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*3        PATH
+*       INTEGER            IOUNIT
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ALADHD prints header information for the driver routines test paths.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] IOUNIT
+*> \verbatim
+*>          IOUNIT is INTEGER
+*>          The unit number to which the header information should be
+*>          printed.
+*> \endverbatim
+*>
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3
+*>          The name of the path for which the header information is to
+*>          be printed.  Current paths are
+*>             _GE:  General matrices
+*>             _GB:  General band
+*>             _GT:  General Tridiagonal
+*>             _PO:  Symmetric or Hermitian positive definite
+*>             _PS:  Symmetric or Hermitian positive semi-definite
+*>             _PP:  Symmetric or Hermitian positive definite packed
+*>             _PB:  Symmetric or Hermitian positive definite band
+*>             _PT:  Symmetric or Hermitian positive definite tridiagonal
+*>             _SY:  Symmetric indefinite
+*>             _SP:  Symmetric indefinite packed
+*>             _HE:  (complex) Hermitian indefinite
+*>             _HP:  (complex) Hermitian indefinite packed
+*>          The first character must be one of S, D, C, or Z (C or Z only
+*>          if complex).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup aux_lin
+*
+*  =====================================================================
       SUBROUTINE ALADHD( IOUNIT, PATH )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
       INTEGER            IOUNIT
 *     ..
 *
-*  Purpose
-*  =======
-*
-*  ALADHD prints header information for the driver routines test paths.
-*
-*  Arguments
-*  =========
-*
-*  IOUNIT  (input) INTEGER
-*          The unit number to which the header information should be
-*          printed.
-*
-*  PATH    (input) CHARACTER*3
-*          The name of the path for which the header information is to
-*          be printed.  Current paths are
-*             _GE:  General matrices
-*             _GB:  General band
-*             _GT:  General Tridiagonal
-*             _PO:  Symmetric or Hermitian positive definite
-*             _PS:  Symmetric or Hermitian positive semi-definite
-*             _PP:  Symmetric or Hermitian positive definite packed
-*             _PB:  Symmetric or Hermitian positive definite band
-*             _PT:  Symmetric or Hermitian positive definite tridiagonal
-*             _SY:  Symmetric indefinite
-*             _SP:  Symmetric indefinite packed
-*             _HE:  (complex) Hermitian indefinite
-*             _HP:  (complex) Hermitian indefinite packed
-*          The first character must be one of S, D, C, or Z (C or Z only
-*          if complex).
+*  =====================================================================
 *
 *     .. Local Scalars ..
       LOGICAL            CORZ, SORD

@@ -1,28 +1,67 @@
-      SUBROUTINE SERRRFP( NUNIT )
+*> \brief \b SERRRFP
 *
-*  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      INTEGER            NUNIT
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SERRRFP( NUNIT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NUNIT
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  SERRRFP tests the error exits for the REAL driver routines
-*  for solving linear systems of equations.
-*
-*  SDRVRFP tests the REAL LAPACK RFP routines:
-*      STFSM, STFTRI, SSFRK, STFTTP, STFTTR, SPFTRF, SPFTRS, STPTTF,
-*      STPTTR, STRTTF, and STRTTP
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SERRRFP tests the error exits for the REAL driver routines
+*> for solving linear systems of equations.
+*>
+*> SDRVRFP tests the REAL LAPACK RFP routines:
+*>     STFSM, STFTRI, SSFRK, STFTTP, STFTTR, SPFTRF, SPFTRS, STPTTF,
+*>     STPTTR, STRTTF, and STRTTP
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  NUNIT   (input) INTEGER
-*          The unit number for output.
+*> \param[in] NUNIT
+*> \verbatim
+*>          NUNIT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
+      SUBROUTINE SERRRFP( NUNIT )
+*
+*  -- LAPACK test routine (version 3.2.0) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      INTEGER            NUNIT
+*     ..
 *
 *  =====================================================================
 *

@@ -1,9 +1,141 @@
+*> \brief \b CPST01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
+*                          PIV, RWORK, RESID, RANK )
+* 
+*       .. Scalar Arguments ..
+*       REAL               RESID
+*       INTEGER            LDA, LDAFAC, LDPERM, N, RANK
+*       CHARACTER          UPLO
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), AFAC( LDAFAC, * ),
+*      $                   PERM( LDPERM, * )
+*       REAL               RWORK( * )
+*       INTEGER            PIV( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CPST01 reconstructs an Hermitian positive semidefinite matrix A
+*> from its L or U factors and the permutation matrix P and computes
+*> the residual
+*>    norm( P*L*L'*P' - A ) / ( N * norm(A) * EPS ) or
+*>    norm( P*U'*U*P' - A ) / ( N * norm(A) * EPS ),
+*> where EPS is the machine epsilon, L' is the conjugate transpose of L,
+*> and U' is the conjugate transpose of U.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          Hermitian matrix A is stored:
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows and columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          The original Hermitian matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N)
+*> \endverbatim
+*>
+*> \param[in] AFAC
+*> \verbatim
+*>          AFAC is COMPLEX array, dimension (LDAFAC,N)
+*>          The factor L or U from the L*L' or U'*U
+*>          factorization of A.
+*> \endverbatim
+*>
+*> \param[in] LDAFAC
+*> \verbatim
+*>          LDAFAC is INTEGER
+*>          The leading dimension of the array AFAC.  LDAFAC >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] PERM
+*> \verbatim
+*>          PERM is COMPLEX array, dimension (LDPERM,N)
+*>          Overwritten with the reconstructed matrix, and then with the
+*>          difference P*L*L'*P' - A (or P*U'*U*P' - A)
+*> \endverbatim
+*>
+*> \param[in] LDPERM
+*> \verbatim
+*>          LDPERM is INTEGER
+*>          The leading dimension of the array PERM.
+*>          LDAPERM >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] PIV
+*> \verbatim
+*>          PIV is INTEGER array, dimension (N)
+*>          PIV is such that the nonzero entries are
+*>          P( PIV( K ), K ) = 1.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          If UPLO = 'L', norm(L*L' - A) / ( N * norm(A) * EPS )
+*>          If UPLO = 'U', norm(U'*U - A) / ( N * norm(A) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
      $                   PIV, RWORK, RESID, RANK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Craig Lucas, University of Manchester / NAG Ltd.
-*     October, 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       REAL               RESID
@@ -16,60 +148,6 @@
       REAL               RWORK( * )
       INTEGER            PIV( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CPST01 reconstructs an Hermitian positive semidefinite matrix A
-*  from its L or U factors and the permutation matrix P and computes
-*  the residual
-*     norm( P*L*L'*P' - A ) / ( N * norm(A) * EPS ) or
-*     norm( P*U'*U*P' - A ) / ( N * norm(A) * EPS ),
-*  where EPS is the machine epsilon, L' is the conjugate transpose of L,
-*  and U' is the conjugate transpose of U.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          Hermitian matrix A is stored:
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The number of rows and columns of the matrix A.  N >= 0.
-*
-*  A       (input) COMPLEX array, dimension (LDA,N)
-*          The original Hermitian matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N)
-*
-*  AFAC    (input) COMPLEX array, dimension (LDAFAC,N)
-*          The factor L or U from the L*L' or U'*U
-*          factorization of A.
-*
-*  LDAFAC  (input) INTEGER
-*          The leading dimension of the array AFAC.  LDAFAC >= max(1,N).
-*
-*  PERM    (output) COMPLEX array, dimension (LDPERM,N)
-*          Overwritten with the reconstructed matrix, and then with the
-*          difference P*L*L'*P' - A (or P*U'*U*P' - A)
-*
-*  LDPERM  (input) INTEGER
-*          The leading dimension of the array PERM.
-*          LDAPERM >= max(1,N).
-*
-*  PIV     (input) INTEGER array, dimension (N)
-*          PIV is such that the nonzero entries are
-*          P( PIV( K ), K ) = 1.
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  RESID   (output) REAL
-*          If UPLO = 'L', norm(L*L' - A) / ( N * norm(A) * EPS )
-*          If UPLO = 'U', norm(U'*U - A) / ( N * norm(A) * EPS )
 *
 *  =====================================================================
 *

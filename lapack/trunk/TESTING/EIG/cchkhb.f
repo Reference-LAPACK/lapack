@@ -1,10 +1,307 @@
+*> \brief \b CCHKHB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CCHKHB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
+*                          THRESH, NOUNIT, A, LDA, SD, SE, U, LDU, WORK,
+*                          LWORK, RWORK, RESULT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDU, LWORK, NOUNIT, NSIZES, NTYPES,
+*      $                   NWDTHS
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), KK( * ), NN( * )
+*       REAL               RESULT( * ), RWORK( * ), SD( * ), SE( * )
+*       COMPLEX            A( LDA, * ), U( LDU, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CCHKHB tests the reduction of a Hermitian band matrix to tridiagonal
+*> from, used with the Hermitian eigenvalue problem.
+*>
+*> CHBTRD factors a Hermitian band matrix A as  U S U* , where * means
+*> conjugate transpose, S is symmetric tridiagonal, and U is unitary.
+*> CHBTRD can use either just the lower or just the upper triangle
+*> of A; CCHKHB checks both cases.
+*>
+*> When CCHKHB is called, a number of matrix "sizes" ("n's"), a number
+*> of bandwidths ("k's"), and a number of matrix "types" are
+*> specified.  For each size ("n"), each bandwidth ("k") less than or
+*> equal to "n", and each type of matrix, one matrix will be generated
+*> and used to test the hermitian banded reduction routine.  For each
+*> matrix, a number of tests will be performed:
+*>
+*> (1)     | A - V S V* | / ( |A| n ulp )  computed by CHBTRD with
+*>                                         UPLO='U'
+*>
+*> (2)     | I - UU* | / ( n ulp )
+*>
+*> (3)     | A - V S V* | / ( |A| n ulp )  computed by CHBTRD with
+*>                                         UPLO='L'
+*>
+*> (4)     | I - UU* | / ( n ulp )
+*>
+*> The "sizes" are specified by an array NN(1:NSIZES); the value of
+*> each element NN(j) specifies one size.
+*> The "types" are specified by a logical array DOTYPE( 1:NTYPES );
+*> if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*> Currently, the list of possible types is:
+*>
+*> (1)  The zero matrix.
+*> (2)  The identity matrix.
+*>
+*> (3)  A diagonal matrix with evenly spaced entries
+*>      1, ..., ULP  and random signs.
+*>      (ULP = (first number larger than 1) - 1 )
+*> (4)  A diagonal matrix with geometrically spaced entries
+*>      1, ..., ULP  and random signs.
+*> (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
+*>      and random signs.
+*>
+*> (6)  Same as (4), but multiplied by SQRT( overflow threshold )
+*> (7)  Same as (4), but multiplied by SQRT( underflow threshold )
+*>
+*> (8)  A matrix of the form  U* D U, where U is unitary and
+*>      D has evenly spaced entries 1, ..., ULP with random signs
+*>      on the diagonal.
+*>
+*> (9)  A matrix of the form  U* D U, where U is unitary and
+*>      D has geometrically spaced entries 1, ..., ULP with random
+*>      signs on the diagonal.
+*>
+*> (10) A matrix of the form  U* D U, where U is unitary and
+*>      D has "clustered" entries 1, ULP,..., ULP with random
+*>      signs on the diagonal.
+*>
+*> (11) Same as (8), but multiplied by SQRT( overflow threshold )
+*> (12) Same as (8), but multiplied by SQRT( underflow threshold )
+*>
+*> (13) Hermitian matrix with random entries chosen from (-1,1).
+*> (14) Same as (13), but multiplied by SQRT( overflow threshold )
+*> (15) Same as (13), but multiplied by SQRT( underflow threshold )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of sizes of matrices to use.  If it is zero,
+*>          CCHKHB does nothing.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER array, dimension (NSIZES)
+*>          An array containing the sizes to be used for the matrices.
+*>          Zero values will be skipped.  The values must be at least
+*>          zero.
+*> \endverbatim
+*>
+*> \param[in] NWDTHS
+*> \verbatim
+*>          NWDTHS is INTEGER
+*>          The number of bandwidths to use.  If it is zero,
+*>          CCHKHB does nothing.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] KK
+*> \verbatim
+*>          KK is INTEGER array, dimension (NWDTHS)
+*>          An array containing the bandwidths to be used for the band
+*>          matrices.  The values must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, CCHKHB
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrix is in A.  This
+*>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated.  If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to CCHKHB to continue the same random number
+*>          sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] NOUNIT
+*> \verbatim
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL array, dimension
+*>                            (LDA, max(NN))
+*>          Used to hold the matrix whose eigenvalues are to be
+*>          computed.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  It must be at least 2 (not 1!)
+*>          and at least max( KK )+1.
+*> \endverbatim
+*>
+*> \param[out] SD
+*> \verbatim
+*>          SD is REAL array, dimension (max(NN))
+*>          Used to hold the diagonal of the tridiagonal matrix computed
+*>          by CHBTRD.
+*> \endverbatim
+*>
+*> \param[out] SE
+*> \verbatim
+*>          SE is REAL array, dimension (max(NN))
+*>          Used to hold the off-diagonal of the tridiagonal matrix
+*>          computed by CHBTRD.
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is REAL array, dimension (LDU, max(NN))
+*>          Used to hold the unitary matrix computed by CHBTRD.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of U.  It must be at least 1
+*>          and at least max( NN ).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          max( LDA+1, max(NN)+1 )*max(NN).
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (4)
+*>          The values computed by the tests described above.
+*>          The values are currently limited to 1/ulp, to avoid
+*>          overflow.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0, then everything ran OK.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>       Some Local Variables and Parameters:
+*>       ---- ----- --------- --- ----------
+*>       ZERO, ONE       Real 0 and 1.
+*>       MAXTYP          The number of types defined.
+*>       NTEST           The number of tests performed, or which can
+*>                       be performed so far, for the current matrix.
+*>       NTESTT          The total number of tests performed so far.
+*>       NMAX            Largest value in NN.
+*>       NMATS           The number of matrices generated so far.
+*>       NERRS           The number of tests which have exceeded THRESH
+*>                       so far.
+*>       COND, IMODE     Values to be passed to the matrix generators.
+*>       ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>       OVFL, UNFL      Overflow and underflow thresholds.
+*>       ULP, ULPINV     Finest relative precision and its inverse.
+*>       RTOVFL, RTUNFL  Square roots of the previous 2 values.
+*>               The following four arrays decode JTYPE:
+*>       KTYPE(j)        The general type (1-10) for type "j".
+*>       KMODE(j)        The MODE value to be passed to the matrix
+*>                       generator for type "j".
+*>       KMAGN(j)        The order of magnitude ( O(1),
+*>                       O(overflow^(1/2) ), O(underflow^(1/2) )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CCHKHB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
      $                   THRESH, NOUNIT, A, LDA, SD, SE, U, LDU, WORK,
      $                   LWORK, RWORK, RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LWORK, NOUNIT, NSIZES, NTYPES,
@@ -17,197 +314,6 @@
       REAL               RESULT( * ), RWORK( * ), SD( * ), SE( * )
       COMPLEX            A( LDA, * ), U( LDU, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CCHKHB tests the reduction of a Hermitian band matrix to tridiagonal
-*  from, used with the Hermitian eigenvalue problem.
-*
-*  CHBTRD factors a Hermitian band matrix A as  U S U* , where * means
-*  conjugate transpose, S is symmetric tridiagonal, and U is unitary.
-*  CHBTRD can use either just the lower or just the upper triangle
-*  of A; CCHKHB checks both cases.
-*
-*  When CCHKHB is called, a number of matrix "sizes" ("n's"), a number
-*  of bandwidths ("k's"), and a number of matrix "types" are
-*  specified.  For each size ("n"), each bandwidth ("k") less than or
-*  equal to "n", and each type of matrix, one matrix will be generated
-*  and used to test the hermitian banded reduction routine.  For each
-*  matrix, a number of tests will be performed:
-*
-*  (1)     | A - V S V* | / ( |A| n ulp )  computed by CHBTRD with
-*                                          UPLO='U'
-*
-*  (2)     | I - UU* | / ( n ulp )
-*
-*  (3)     | A - V S V* | / ( |A| n ulp )  computed by CHBTRD with
-*                                          UPLO='L'
-*
-*  (4)     | I - UU* | / ( n ulp )
-*
-*  The "sizes" are specified by an array NN(1:NSIZES); the value of
-*  each element NN(j) specifies one size.
-*  The "types" are specified by a logical array DOTYPE( 1:NTYPES );
-*  if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*  Currently, the list of possible types is:
-*
-*  (1)  The zero matrix.
-*  (2)  The identity matrix.
-*
-*  (3)  A diagonal matrix with evenly spaced entries
-*       1, ..., ULP  and random signs.
-*       (ULP = (first number larger than 1) - 1 )
-*  (4)  A diagonal matrix with geometrically spaced entries
-*       1, ..., ULP  and random signs.
-*  (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
-*       and random signs.
-*
-*  (6)  Same as (4), but multiplied by SQRT( overflow threshold )
-*  (7)  Same as (4), but multiplied by SQRT( underflow threshold )
-*
-*  (8)  A matrix of the form  U* D U, where U is unitary and
-*       D has evenly spaced entries 1, ..., ULP with random signs
-*       on the diagonal.
-*
-*  (9)  A matrix of the form  U* D U, where U is unitary and
-*       D has geometrically spaced entries 1, ..., ULP with random
-*       signs on the diagonal.
-*
-*  (10) A matrix of the form  U* D U, where U is unitary and
-*       D has "clustered" entries 1, ULP,..., ULP with random
-*       signs on the diagonal.
-*
-*  (11) Same as (8), but multiplied by SQRT( overflow threshold )
-*  (12) Same as (8), but multiplied by SQRT( underflow threshold )
-*
-*  (13) Hermitian matrix with random entries chosen from (-1,1).
-*  (14) Same as (13), but multiplied by SQRT( overflow threshold )
-*  (15) Same as (13), but multiplied by SQRT( underflow threshold )
-*
-*  Arguments
-*  =========
-*
-*  NSIZES  (input) INTEGER
-*          The number of sizes of matrices to use.  If it is zero,
-*          CCHKHB does nothing.  It must be at least zero.
-*
-*  NN      (input) INTEGER array, dimension (NSIZES)
-*          An array containing the sizes to be used for the matrices.
-*          Zero values will be skipped.  The values must be at least
-*          zero.
-*
-*  NWDTHS  (input) INTEGER
-*          The number of bandwidths to use.  If it is zero,
-*          CCHKHB does nothing.  It must be at least zero.
-*
-*  KK      (input) INTEGER array, dimension (NWDTHS)
-*          An array containing the bandwidths to be used for the band
-*          matrices.  The values must be at least zero.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE.   If it is zero, CCHKHB
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrix is in A.  This
-*          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated.  If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to CCHKHB to continue the same random number
-*          sequence.
-*
-*  THRESH  (input) REAL
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*
-*  NOUNIT  (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IINFO not equal to 0.)
-*
-*  A       (input/workspace) REAL array, dimension
-*                            (LDA, max(NN))
-*          Used to hold the matrix whose eigenvalues are to be
-*          computed.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  It must be at least 2 (not 1!)
-*          and at least max( KK )+1.
-*
-*  SD      (workspace) REAL array, dimension (max(NN))
-*          Used to hold the diagonal of the tridiagonal matrix computed
-*          by CHBTRD.
-*
-*  SE      (workspace) REAL array, dimension (max(NN))
-*          Used to hold the off-diagonal of the tridiagonal matrix
-*          computed by CHBTRD.
-*
-*  U       (workspace) REAL array, dimension (LDU, max(NN))
-*          Used to hold the unitary matrix computed by CHBTRD.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of U.  It must be at least 1
-*          and at least max( NN ).
-*
-*  WORK    (workspace) REAL array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          max( LDA+1, max(NN)+1 )*max(NN).
-*
-*  RESULT  (output) REAL array, dimension (4)
-*          The values computed by the tests described above.
-*          The values are currently limited to 1/ulp, to avoid
-*          overflow.
-*
-*  INFO    (output) INTEGER
-*          If 0, then everything ran OK.
-*
-*-----------------------------------------------------------------------
-*
-*       Some Local Variables and Parameters:
-*       ---- ----- --------- --- ----------
-*       ZERO, ONE       Real 0 and 1.
-*       MAXTYP          The number of types defined.
-*       NTEST           The number of tests performed, or which can
-*                       be performed so far, for the current matrix.
-*       NTESTT          The total number of tests performed so far.
-*       NMAX            Largest value in NN.
-*       NMATS           The number of matrices generated so far.
-*       NERRS           The number of tests which have exceeded THRESH
-*                       so far.
-*       COND, IMODE     Values to be passed to the matrix generators.
-*       ANORM           Norm of A; passed to matrix generators.
-*
-*       OVFL, UNFL      Overflow and underflow thresholds.
-*       ULP, ULPINV     Finest relative precision and its inverse.
-*       RTOVFL, RTUNFL  Square roots of the previous 2 values.
-*               The following four arrays decode JTYPE:
-*       KTYPE(j)        The general type (1-10) for type "j".
-*       KMODE(j)        The MODE value to be passed to the matrix
-*                       generator for type "j".
-*       KMAGN(j)        The order of magnitude ( O(1),
-*                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *
 *  =====================================================================
 *

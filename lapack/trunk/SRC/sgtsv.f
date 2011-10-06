@@ -1,9 +1,131 @@
+*> \brief \b SGTSV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDB, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       REAL               B( LDB, * ), D( * ), DL( * ), DU( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGTSV  solves the equation
+*>
+*>    A*X = B,
+*>
+*> where A is an n by n tridiagonal matrix, by Gaussian elimination with
+*> partial pivoting.
+*>
+*> Note that the equation  A**T*X = B  may be solved by interchanging the
+*> order of the arguments DU and DL.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of the matrix B.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] DL
+*> \verbatim
+*>          DL is REAL array, dimension (N-1)
+*>          On entry, DL must contain the (n-1) sub-diagonal elements of
+*>          A.
+*> \endverbatim
+*> \verbatim
+*>          On exit, DL is overwritten by the (n-2) elements of the
+*>          second super-diagonal of the upper triangular matrix U from
+*>          the LU factorization of A, in DL(1), ..., DL(n-2).
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          On entry, D must contain the diagonal elements of A.
+*> \endverbatim
+*> \verbatim
+*>          On exit, D is overwritten by the n diagonal elements of U.
+*> \endverbatim
+*>
+*> \param[in,out] DU
+*> \verbatim
+*>          DU is REAL array, dimension (N-1)
+*>          On entry, DU must contain the (n-1) super-diagonal elements
+*>          of A.
+*> \endverbatim
+*> \verbatim
+*>          On exit, DU is overwritten by the (n-1) elements of the first
+*>          super-diagonal of U.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB,NRHS)
+*>          On entry, the N by NRHS matrix of right hand side matrix B.
+*>          On exit, if INFO = 0, the N by NRHS solution matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*>          > 0: if INFO = i, U(i,i) is exactly zero, and the solution
+*>               has not been computed.  The factorization has not been
+*>               completed unless i = N.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE SGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDB, N, NRHS
@@ -11,63 +133,6 @@
 *     .. Array Arguments ..
       REAL               B( LDB, * ), D( * ), DL( * ), DU( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGTSV  solves the equation
-*
-*     A*X = B,
-*
-*  where A is an n by n tridiagonal matrix, by Gaussian elimination with
-*  partial pivoting.
-*
-*  Note that the equation  A**T*X = B  may be solved by interchanging the
-*  order of the arguments DU and DL.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of the matrix B.  NRHS >= 0.
-*
-*  DL      (input/output) REAL array, dimension (N-1)
-*          On entry, DL must contain the (n-1) sub-diagonal elements of
-*          A.
-*
-*          On exit, DL is overwritten by the (n-2) elements of the
-*          second super-diagonal of the upper triangular matrix U from
-*          the LU factorization of A, in DL(1), ..., DL(n-2).
-*
-*  D       (input/output) REAL array, dimension (N)
-*          On entry, D must contain the diagonal elements of A.
-*
-*          On exit, D is overwritten by the n diagonal elements of U.
-*
-*  DU      (input/output) REAL array, dimension (N-1)
-*          On entry, DU must contain the (n-1) super-diagonal elements
-*          of A.
-*
-*          On exit, DU is overwritten by the (n-1) elements of the first
-*          super-diagonal of U.
-*
-*  B       (input/output) REAL array, dimension (LDB,NRHS)
-*          On entry, the N by NRHS matrix of right hand side matrix B.
-*          On exit, if INFO = 0, the N by NRHS solution matrix X.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
-*          > 0: if INFO = i, U(i,i) is exactly zero, and the solution
-*               has not been computed.  The factorization has not been
-*               completed unless i = N.
 *
 *  =====================================================================
 *

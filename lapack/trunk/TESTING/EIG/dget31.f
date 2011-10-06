@@ -1,8 +1,102 @@
+*> \brief \b DGET31
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGET31( RMAX, LMAX, NINFO, KNT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, LMAX
+*       DOUBLE PRECISION   RMAX
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NINFO( 2 )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGET31 tests DLALN2, a routine for solving
+*>
+*>    (ca A - w D)X = sB
+*>
+*> where A is an NA by NA matrix (NA=1 or 2 only), w is a real (NW=1) or
+*> complex (NW=2) constant, ca is a real constant, D is an NA by NA real
+*> diagonal matrix, and B is an NA by NW matrix (when NW=2 the second
+*> column of B contains the imaginary part of the solution).  The code
+*> returns X and s, where s is a scale factor, less than or equal to 1,
+*> which is chosen to avoid overflow in X.
+*>
+*> If any singular values of ca A-w D are less than another input
+*> parameter SMIN, they are perturbed up to SMIN.
+*>
+*> The test condition is that the scaled residual
+*>
+*>     norm( (ca A-w D)*X - s*B ) /
+*>           ( max( ulp*norm(ca A-w D), SMIN )*norm(X) )
+*>
+*> should be on the order of 1.  Here, ulp is the machine precision.
+*> Also, it is verified that SCALE is less than or equal to 1, and that
+*> XNORM = infinity-norm(X).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is DOUBLE PRECISION
+*>          Value of the largest test ratio.
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER
+*>          Example number where largest test ratio achieved.
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER array, dimension (3)
+*>          NINFO(1) = number of examples with INFO less than 0
+*>          NINFO(2) = number of examples with INFO greater than 0
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DGET31( RMAX, LMAX, NINFO, KNT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, LMAX
@@ -11,48 +105,6 @@
 *     .. Array Arguments ..
       INTEGER            NINFO( 2 )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGET31 tests DLALN2, a routine for solving
-*
-*     (ca A - w D)X = sB
-*
-*  where A is an NA by NA matrix (NA=1 or 2 only), w is a real (NW=1) or
-*  complex (NW=2) constant, ca is a real constant, D is an NA by NA real
-*  diagonal matrix, and B is an NA by NW matrix (when NW=2 the second
-*  column of B contains the imaginary part of the solution).  The code
-*  returns X and s, where s is a scale factor, less than or equal to 1,
-*  which is chosen to avoid overflow in X.
-*
-*  If any singular values of ca A-w D are less than another input
-*  parameter SMIN, they are perturbed up to SMIN.
-*
-*  The test condition is that the scaled residual
-*
-*      norm( (ca A-w D)*X - s*B ) /
-*            ( max( ulp*norm(ca A-w D), SMIN )*norm(X) )
-*
-*  should be on the order of 1.  Here, ulp is the machine precision.
-*  Also, it is verified that SCALE is less than or equal to 1, and that
-*  XNORM = infinity-norm(X).
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) DOUBLE PRECISION
-*          Value of the largest test ratio.
-*
-*  LMAX    (output) INTEGER
-*          Example number where largest test ratio achieved.
-*
-*  NINFO   (output) INTEGER array, dimension (3)
-*          NINFO(1) = number of examples with INFO less than 0
-*          NINFO(2) = number of examples with INFO greater than 0
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
 *
 *  =====================================================================
 *

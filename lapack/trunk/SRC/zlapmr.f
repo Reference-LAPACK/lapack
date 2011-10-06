@@ -1,14 +1,105 @@
-      SUBROUTINE ZLAPMR( FORWRD, M, N, X, LDX, K )
-      IMPLICIT NONE
+*> \brief \b ZLAPMR
 *
-*     Originally ZLAPMT
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLAPMR( FORWRD, M, N, X, LDX, K )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            FORWRD
+*       INTEGER            LDX, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            K( * )
+*       COMPLEX*16         X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLAPMR rearranges the rows of the M by N matrix X as specified
+*> by the permutation K(1),K(2),...,K(M) of the integers 1,...,M.
+*> If FORWRD = .TRUE.,  forward permutation:
+*>
+*>      X(K(I),*) is moved X(I,*) for I = 1,2,...,M.
+*>
+*> If FORWRD = .FALSE., backward permutation:
+*>
+*>      X(I,*) is moved to X(K(I),*) for I = 1,2,...,M.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] FORWRD
+*> \verbatim
+*>          FORWRD is LOGICAL
+*>          = .TRUE., forward permutation
+*>          = .FALSE., backward permutation
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix X. M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix X. N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (LDX,N)
+*>          On entry, the M by N matrix X.
+*>          On exit, X contains the permuted matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X, LDX >= MAX(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] K
+*> \verbatim
+*>          K is INTEGER array, dimension (M)
+*>          On entry, K contains the permutation vector. K is used as
+*>          internal workspace, but reset to its original value on
+*>          output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
+      SUBROUTINE ZLAPMR( FORWRD, M, N, X, LDX, K )
+*
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
-*
-*     Adapted to ZLAPMR
-*     July 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            FORWRD
@@ -18,44 +109,6 @@
       INTEGER            K( * )
       COMPLEX*16         X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLAPMR rearranges the rows of the M by N matrix X as specified
-*  by the permutation K(1),K(2),...,K(M) of the integers 1,...,M.
-*  If FORWRD = .TRUE.,  forward permutation:
-*
-*       X(K(I),*) is moved X(I,*) for I = 1,2,...,M.
-*
-*  If FORWRD = .FALSE., backward permutation:
-*
-*       X(I,*) is moved to X(K(I),*) for I = 1,2,...,M.
-*
-*  Arguments
-*  =========
-*
-*  FORWRD  (input) LOGICAL
-*          = .TRUE., forward permutation
-*          = .FALSE., backward permutation
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix X. M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix X. N >= 0.
-*
-*  X       (input/output) COMPLEX*16 array, dimension (LDX,N)
-*          On entry, the M by N matrix X.
-*          On exit, X contains the permuted matrix X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X, LDX >= MAX(1,M).
-*
-*  K       (input/output) INTEGER array, dimension (M)
-*          On entry, K contains the permutation vector. K is used as
-*          internal workspace, but reset to its original value on
-*          output.
 *
 *  =====================================================================
 *

@@ -1,8 +1,104 @@
+*> \brief \b SGET10
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, M, N
+*       REAL               RESULT
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), B( LDB, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET10 compares two matrices A and B and computes the ratio
+*> RESULT = norm( A - B ) / ( norm(A) * M * EPS )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrices A and B.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and B.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The m by n matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB,N)
+*>          The m by n matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL
+*>          RESULT = norm( A - B ) / ( norm(A) * M * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGET10( M, N, A, LDA, B, LDB, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, M, N
@@ -11,38 +107,6 @@
 *     .. Array Arguments ..
       REAL               A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET10 compares two matrices A and B and computes the ratio
-*  RESULT = norm( A - B ) / ( norm(A) * M * EPS )
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrices A and B.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and B.
-*
-*  A       (input) REAL array, dimension (LDA,N)
-*          The m by n matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  B       (input) REAL array, dimension (LDB,N)
-*          The m by n matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,M).
-*
-*  WORK    (workspace) REAL array, dimension (M)
-*
-*  RESULT  (output) REAL
-*          RESULT = norm( A - B ) / ( norm(A) * M * EPS )
 *
 *  =====================================================================
 *

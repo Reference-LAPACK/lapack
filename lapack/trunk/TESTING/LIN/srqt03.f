@@ -1,9 +1,147 @@
+*> \brief \b SRQT03
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
+*                          RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            K, LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               AF( LDA, * ), C( LDA, * ), CC( LDA, * ),
+*      $                   Q( LDA, * ), RESULT( * ), RWORK( * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SRQT03 tests SORMRQ, which computes Q*C, Q'*C, C*Q or C*Q'.
+*>
+*> SRQT03 compares the results of a call to SORMRQ with the results of
+*> forming Q explicitly by a call to SORGRQ and then performing matrix
+*> multiplication by a call to SGEMM.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows or columns of the matrix C; C is n-by-m if
+*>          Q is applied from the left, or m-by-n if Q is applied from
+*>          the right.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the orthogonal matrix Q.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of elementary reflectors whose product defines the
+*>          orthogonal matrix Q.  N >= K >= 0.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is REAL array, dimension (LDA,N)
+*>          Details of the RQ factorization of an m-by-n matrix, as
+*>          returned by SGERQF. See SGERQF for further details.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is REAL array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[out] CC
+*> \verbatim
+*>          CC is REAL array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is REAL array, dimension (LDA,N)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays AF, C, CC, and Q.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is REAL array, dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors corresponding
+*>          to the RQ factorization in AF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of WORK.  LWORK must be at least M, and should be
+*>          M*NB, where NB is the blocksize for this environment.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (4)
+*>          The test ratios compare two techniques for multiplying a
+*>          random matrix C by an n-by-n orthogonal matrix Q.
+*>          RESULT(1) = norm( Q*C - Q*C )  / ( N * norm(C) * EPS )
+*>          RESULT(2) = norm( C*Q - C*Q )  / ( N * norm(C) * EPS )
+*>          RESULT(3) = norm( Q'*C - Q'*C )/ ( N * norm(C) * EPS )
+*>          RESULT(4) = norm( C*Q' - C*Q' )/ ( N * norm(C) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SRQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            K, LDA, LWORK, M, N
@@ -13,63 +151,6 @@
      $                   Q( LDA, * ), RESULT( * ), RWORK( * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SRQT03 tests SORMRQ, which computes Q*C, Q'*C, C*Q or C*Q'.
-*
-*  SRQT03 compares the results of a call to SORMRQ with the results of
-*  forming Q explicitly by a call to SORGRQ and then performing matrix
-*  multiplication by a call to SGEMM.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows or columns of the matrix C; C is n-by-m if
-*          Q is applied from the left, or m-by-n if Q is applied from
-*          the right.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The order of the orthogonal matrix Q.  N >= 0.
-*
-*  K       (input) INTEGER
-*          The number of elementary reflectors whose product defines the
-*          orthogonal matrix Q.  N >= K >= 0.
-*
-*  AF      (input) REAL array, dimension (LDA,N)
-*          Details of the RQ factorization of an m-by-n matrix, as
-*          returned by SGERQF. See SGERQF for further details.
-*
-*  C       (workspace) REAL array, dimension (LDA,N)
-*
-*  CC      (workspace) REAL array, dimension (LDA,N)
-*
-*  Q       (workspace) REAL array, dimension (LDA,N)
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays AF, C, CC, and Q.
-*
-*  TAU     (input) REAL array, dimension (min(M,N))
-*          The scalar factors of the elementary reflectors corresponding
-*          to the RQ factorization in AF.
-*
-*  WORK    (workspace) REAL array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of WORK.  LWORK must be at least M, and should be
-*          M*NB, where NB is the blocksize for this environment.
-*
-*  RWORK   (workspace) REAL array, dimension (M)
-*
-*  RESULT  (output) REAL array, dimension (4)
-*          The test ratios compare two techniques for multiplying a
-*          random matrix C by an n-by-n orthogonal matrix Q.
-*          RESULT(1) = norm( Q*C - Q*C )  / ( N * norm(C) * EPS )
-*          RESULT(2) = norm( C*Q - C*Q )  / ( N * norm(C) * EPS )
-*          RESULT(3) = norm( Q'*C - Q'*C )/ ( N * norm(C) * EPS )
-*          RESULT(4) = norm( C*Q' - C*Q' )/ ( N * norm(C) * EPS )
 *
 *  =====================================================================
 *

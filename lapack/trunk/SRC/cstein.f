@@ -1,10 +1,184 @@
+*> \brief \b CSTEIN
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
+*                          IWORK, IFAIL, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDZ, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IBLOCK( * ), IFAIL( * ), ISPLIT( * ),
+*      $                   IWORK( * )
+*       REAL               D( * ), E( * ), W( * ), WORK( * )
+*       COMPLEX            Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CSTEIN computes the eigenvectors of a real symmetric tridiagonal
+*> matrix T corresponding to specified eigenvalues, using inverse
+*> iteration.
+*>
+*> The maximum number of iterations allowed for each eigenvector is
+*> specified by an internal parameter MAXITS (currently set to 5).
+*>
+*> Although the eigenvectors are real, they are stored in a complex
+*> array, which may be passed to CUNMTR or CUPMTR for back
+*> transformation to the eigenvectors of a complex Hermitian matrix
+*> which was reduced to tridiagonal form.
+*>
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The n diagonal elements of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is REAL array, dimension (N-1)
+*>          The (n-1) subdiagonal elements of the tridiagonal matrix
+*>          T, stored in elements 1 to N-1.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of eigenvectors to be found.  0 <= M <= N.
+*> \endverbatim
+*>
+*> \param[in] W
+*> \verbatim
+*>          W is REAL array, dimension (N)
+*>          The first M elements of W contain the eigenvalues for
+*>          which eigenvectors are to be computed.  The eigenvalues
+*>          should be grouped by split-off block and ordered from
+*>          smallest to largest within the block.  ( The output array
+*>          W from SSTEBZ with ORDER = 'B' is expected here. )
+*> \endverbatim
+*>
+*> \param[in] IBLOCK
+*> \verbatim
+*>          IBLOCK is INTEGER array, dimension (N)
+*>          The submatrix indices associated with the corresponding
+*>          eigenvalues in W; IBLOCK(i)=1 if eigenvalue W(i) belongs to
+*>          the first submatrix from the top, =2 if W(i) belongs to
+*>          the second submatrix, etc.  ( The output array IBLOCK
+*>          from SSTEBZ is expected here. )
+*> \endverbatim
+*>
+*> \param[in] ISPLIT
+*> \verbatim
+*>          ISPLIT is INTEGER array, dimension (N)
+*>          The splitting points, at which T breaks up into submatrices.
+*>          The first submatrix consists of rows/columns 1 to
+*>          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1
+*>          through ISPLIT( 2 ), etc.
+*>          ( The output array ISPLIT from SSTEBZ is expected here. )
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX array, dimension (LDZ, M)
+*>          The computed eigenvectors.  The eigenvector associated
+*>          with the eigenvalue W(i) is stored in the i-th column of
+*>          Z.  Any vector which fails to converge is set to its current
+*>          iterate after MAXITS iterations.
+*>          The imaginary parts of the eigenvectors are set to zero.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (5*N)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] IFAIL
+*> \verbatim
+*>          IFAIL is INTEGER array, dimension (M)
+*>          On normal exit, all elements of IFAIL are zero.
+*>          If one or more eigenvectors fail to converge after
+*>          MAXITS iterations, then their indices are stored in
+*>          array IFAIL.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*>          > 0: if INFO = i, then i eigenvectors failed to converge
+*>               in MAXITS iterations.  Their indices are stored in
+*>               array IFAIL.
+*> \endverbatim
+*> \verbatim
+*>  Internal Parameters
+*>  ===================
+*> \endverbatim
+*> \verbatim
+*>  MAXITS  INTEGER, default = 5
+*>          The maximum number of iterations performed.
+*> \endverbatim
+*> \verbatim
+*>  EXTRA   INTEGER, default = 2
+*>          The number of iterations performed after norm growth
+*>          criterion is satisfied, should be at least 1.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE CSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
      $                   IWORK, IFAIL, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDZ, M, N
@@ -15,96 +189,6 @@
       REAL               D( * ), E( * ), W( * ), WORK( * )
       COMPLEX            Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CSTEIN computes the eigenvectors of a real symmetric tridiagonal
-*  matrix T corresponding to specified eigenvalues, using inverse
-*  iteration.
-*
-*  The maximum number of iterations allowed for each eigenvector is
-*  specified by an internal parameter MAXITS (currently set to 5).
-*
-*  Although the eigenvectors are real, they are stored in a complex
-*  array, which may be passed to CUNMTR or CUPMTR for back
-*  transformation to the eigenvectors of a complex Hermitian matrix
-*  which was reduced to tridiagonal form.
-*
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix.  N >= 0.
-*
-*  D       (input) REAL array, dimension (N)
-*          The n diagonal elements of the tridiagonal matrix T.
-*
-*  E       (input) REAL array, dimension (N-1)
-*          The (n-1) subdiagonal elements of the tridiagonal matrix
-*          T, stored in elements 1 to N-1.
-*
-*  M       (input) INTEGER
-*          The number of eigenvectors to be found.  0 <= M <= N.
-*
-*  W       (input) REAL array, dimension (N)
-*          The first M elements of W contain the eigenvalues for
-*          which eigenvectors are to be computed.  The eigenvalues
-*          should be grouped by split-off block and ordered from
-*          smallest to largest within the block.  ( The output array
-*          W from SSTEBZ with ORDER = 'B' is expected here. )
-*
-*  IBLOCK  (input) INTEGER array, dimension (N)
-*          The submatrix indices associated with the corresponding
-*          eigenvalues in W; IBLOCK(i)=1 if eigenvalue W(i) belongs to
-*          the first submatrix from the top, =2 if W(i) belongs to
-*          the second submatrix, etc.  ( The output array IBLOCK
-*          from SSTEBZ is expected here. )
-*
-*  ISPLIT  (input) INTEGER array, dimension (N)
-*          The splitting points, at which T breaks up into submatrices.
-*          The first submatrix consists of rows/columns 1 to
-*          ISPLIT( 1 ), the second of rows/columns ISPLIT( 1 )+1
-*          through ISPLIT( 2 ), etc.
-*          ( The output array ISPLIT from SSTEBZ is expected here. )
-*
-*  Z       (output) COMPLEX array, dimension (LDZ, M)
-*          The computed eigenvectors.  The eigenvector associated
-*          with the eigenvalue W(i) is stored in the i-th column of
-*          Z.  Any vector which fails to converge is set to its current
-*          iterate after MAXITS iterations.
-*          The imaginary parts of the eigenvectors are set to zero.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= max(1,N).
-*
-*  WORK    (workspace) REAL array, dimension (5*N)
-*
-*  IWORK   (workspace) INTEGER array, dimension (N)
-*
-*  IFAIL   (output) INTEGER array, dimension (M)
-*          On normal exit, all elements of IFAIL are zero.
-*          If one or more eigenvectors fail to converge after
-*          MAXITS iterations, then their indices are stored in
-*          array IFAIL.
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
-*          > 0: if INFO = i, then i eigenvectors failed to converge
-*               in MAXITS iterations.  Their indices are stored in
-*               array IFAIL.
-*
-*  Internal Parameters
-*  ===================
-*
-*  MAXITS  INTEGER, default = 5
-*          The maximum number of iterations performed.
-*
-*  EXTRA   INTEGER, default = 2
-*          The number of iterations performed after norm growth
-*          criterion is satisfied, should be at least 1.
 *
 * =====================================================================
 *

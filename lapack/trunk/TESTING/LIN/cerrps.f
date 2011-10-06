@@ -1,28 +1,71 @@
+*> \brief \b CERRPS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CERRPS( PATH, NUNIT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NUNIT
+*       CHARACTER*3        PATH
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CERRPS tests the error exits for the COMPLEX routines
+*> for CPSTRF..
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3
+*>          The LAPACK path name for the routines to be tested.
+*> \endverbatim
+*>
+*> \param[in] NUNIT
+*> \verbatim
+*>          NUNIT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CERRPS( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Craig Lucas, University of Manchester / NAG Ltd.
-*     October, 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            NUNIT
       CHARACTER*3        PATH
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CERRPS tests the error exits for the COMPLEX routines
-*  for CPSTRF..
-*
-*  Arguments
-*  =========
-*
-*  PATH    (input) CHARACTER*3
-*          The LAPACK path name for the routines to be tested.
-*
-*  NUNIT   (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

@@ -1,37 +1,75 @@
-      PROGRAM ZCHKRFP
-      IMPLICIT NONE
+*> \brief \b ZCHKRFP
 *
-*  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  =========== DOCUMENTATION ===========
 *
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       PROGRAM ZCHKRFP
+* 
 *  Purpose
 *  =======
 *
-*  ZCHKRFP is the main test program for the COMPLEX*16 linear equation
-*  routines with RFP storage format
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZCHKRFP is the main test program for the COMPLEX*16 linear equation
+*> routines with RFP storage format
+*>
+*>
+*>\endverbatim
 *
+*  Arguments
+*  =========
 *
-*  Internal Parameters
-*  ===================
+*> \verbatim
+*>  MAXIN   INTEGER
+*>          The number of different values that can be used for each of
+*>          M, N, or NB
+*> \endverbatim
+*> \verbatim
+*>  MAXRHS  INTEGER
+*>          The maximum number of right hand sides
+*> \endverbatim
+*> \verbatim
+*>  NTYPES  INTEGER
+*> \endverbatim
+*> \verbatim
+*>  NMAX    INTEGER
+*>          The maximum allowable value for N.
+*> \endverbatim
+*> \verbatim
+*>  NIN     INTEGER
+*>          The unit number for input
+*> \endverbatim
+*> \verbatim
+*>  NOUT    INTEGER
+*>          The unit number for output
+*> \endverbatim
+*>
 *
-*  MAXIN   INTEGER
-*          The number of different values that can be used for each of
-*          M, N, or NB
+*  Authors
+*  =======
 *
-*  MAXRHS  INTEGER
-*          The maximum number of right hand sides
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
-*  NTYPES  INTEGER
+*> \date November 2011
 *
-*  NMAX    INTEGER
-*          The maximum allowable value for N.
+*> \ingroup complex16_lin
 *
-*  NIN     INTEGER
-*          The unit number for input
+*  =====================================================================
+      PROGRAM ZCHKRFP
 *
-*  NOUT    INTEGER
-*          The unit number for output
+*  -- LAPACK test routine (version 3.2.0) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *  =====================================================================
 *

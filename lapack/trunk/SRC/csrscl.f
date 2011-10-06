@@ -1,9 +1,85 @@
+*> \brief \b CSRSCL
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CSRSCL( N, SA, SX, INCX )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCX, N
+*       REAL               SA
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            SX( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CSRSCL multiplies an n-element complex vector x by the real scalar
+*> 1/a.  This is done without overflow or underflow as long as
+*> the final result x/a does not overflow or underflow.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of components of the vector x.
+*> \endverbatim
+*>
+*> \param[in] SA
+*> \verbatim
+*>          SA is REAL
+*>          The scalar a which is used to divide each component of x.
+*>          SA must be >= 0, or the subroutine will divide by zero.
+*> \endverbatim
+*>
+*> \param[in,out] SX
+*> \verbatim
+*>          SX is COMPLEX array, dimension
+*>                         (1+(N-1)*abs(INCX))
+*>          The n-element vector x.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The increment between successive values of the vector SX.
+*>          > 0:  SX(1) = X(1) and SX(1+(i-1)*INCX) = x(i),     1< i<= n
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE CSRSCL( N, SA, SX, INCX )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCX, N
@@ -12,31 +88,6 @@
 *     .. Array Arguments ..
       COMPLEX            SX( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CSRSCL multiplies an n-element complex vector x by the real scalar
-*  1/a.  This is done without overflow or underflow as long as
-*  the final result x/a does not overflow or underflow.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The number of components of the vector x.
-*
-*  SA      (input) REAL
-*          The scalar a which is used to divide each component of x.
-*          SA must be >= 0, or the subroutine will divide by zero.
-*
-*  SX      (input/output) COMPLEX array, dimension
-*                         (1+(N-1)*abs(INCX))
-*          The n-element vector x.
-*
-*  INCX    (input) INTEGER
-*          The increment between successive values of the vector SX.
-*          > 0:  SX(1) = X(1) and SX(1+(i-1)*INCX) = x(i),     1< i<= n
 *
 * =====================================================================
 *

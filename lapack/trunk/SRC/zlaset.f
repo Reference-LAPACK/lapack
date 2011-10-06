@@ -1,9 +1,107 @@
+*> \brief \b ZLASET
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLASET( UPLO, M, N, ALPHA, BETA, A, LDA )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            LDA, M, N
+*       COMPLEX*16         ALPHA, BETA
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLASET initializes a 2-D array A to BETA on the diagonal and
+*> ALPHA on the offdiagonals.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies the part of the matrix A to be set.
+*>          = 'U':      Upper triangular part is set. The lower triangle
+*>                      is unchanged.
+*>          = 'L':      Lower triangular part is set. The upper triangle
+*>                      is unchanged.
+*>          Otherwise:  All of the matrix A is set.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          On entry, M specifies the number of rows of A.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          On entry, N specifies the number of columns of A.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX*16
+*>          All the offdiagonal array elements are set to ALPHA.
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is COMPLEX*16
+*>          All the diagonal array elements are set to BETA.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          On entry, the m by n matrix A.
+*>          On exit, A(i,j) = ALPHA, 1 <= i <= m, 1 <= j <= n, i.ne.j;
+*>                   A(i,i) = BETA , 1 <= i <= min(m,n)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE ZLASET( UPLO, M, N, ALPHA, BETA, A, LDA )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -13,43 +111,6 @@
 *     .. Array Arguments ..
       COMPLEX*16         A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLASET initializes a 2-D array A to BETA on the diagonal and
-*  ALPHA on the offdiagonals.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies the part of the matrix A to be set.
-*          = 'U':      Upper triangular part is set. The lower triangle
-*                      is unchanged.
-*          = 'L':      Lower triangular part is set. The upper triangle
-*                      is unchanged.
-*          Otherwise:  All of the matrix A is set.
-*
-*  M       (input) INTEGER
-*          On entry, M specifies the number of rows of A.
-*
-*  N       (input) INTEGER
-*          On entry, N specifies the number of columns of A.
-*
-*  ALPHA   (input) COMPLEX*16
-*          All the offdiagonal array elements are set to ALPHA.
-*
-*  BETA    (input) COMPLEX*16
-*          All the diagonal array elements are set to BETA.
-*
-*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
-*          On entry, the m by n matrix A.
-*          On exit, A(i,j) = ALPHA, 1 <= i <= m, 1 <= j <= n, i.ne.j;
-*                   A(i,i) = BETA , 1 <= i <= min(m,n)
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
 *
 *  =====================================================================
 *

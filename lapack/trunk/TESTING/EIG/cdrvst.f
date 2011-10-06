@@ -1,11 +1,379 @@
+*> \brief \b CDRVST
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          NOUNIT, A, LDA, D1, D2, D3, WA1, WA2, WA3, U,
+*                          LDU, V, TAU, Z, WORK, LWORK, RWORK, LRWORK,
+*                          IWORK, LIWORK, RESULT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDU, LIWORK, LRWORK, LWORK, NOUNIT,
+*      $                   NSIZES, NTYPES
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), IWORK( * ), NN( * )
+*       REAL               D1( * ), D2( * ), D3( * ), RESULT( * ),
+*      $                   RWORK( * ), WA1( * ), WA2( * ), WA3( * )
+*       COMPLEX            A( LDA, * ), TAU( * ), U( LDU, * ),
+*      $                   V( LDU, * ), WORK( * ), Z( LDU, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>      CDRVST  checks the Hermitian eigenvalue problem drivers.
+*>
+*>              CHEEVD computes all eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian matrix,
+*>              using a divide-and-conquer algorithm.
+*>
+*>              CHEEVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian matrix.
+*>
+*>              CHEEVR computes selected eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian matrix
+*>              using the Relatively Robust Representation where it can.
+*>
+*>              CHPEVD computes all eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian matrix in packed
+*>              storage, using a divide-and-conquer algorithm.
+*>
+*>              CHPEVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian matrix in packed
+*>              storage.
+*>
+*>              CHBEVD computes all eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian band matrix,
+*>              using a divide-and-conquer algorithm.
+*>
+*>              CHBEVX computes selected eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian band matrix.
+*>
+*>              CHEEV computes all eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian matrix.
+*>
+*>              CHPEV computes all eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian matrix in packed
+*>              storage.
+*>
+*>              CHBEV computes all eigenvalues and, optionally,
+*>              eigenvectors of a complex Hermitian band matrix.
+*>
+*>      When CDRVST is called, a number of matrix "sizes" ("n's") and a
+*>      number of matrix "types" are specified.  For each size ("n")
+*>      and each type of matrix, one matrix will be generated and used
+*>      to test the appropriate drivers.  For each matrix and each
+*>      driver routine called, the following tests will be performed:
+*>
+*>      (1)     | A - Z D Z' | / ( |A| n ulp )
+*>
+*>      (2)     | I - Z Z' | / ( n ulp )
+*>
+*>      (3)     | D1 - D2 | / ( |D1| ulp )
+*>
+*>      where Z is the matrix of eigenvectors returned when the
+*>      eigenvector option is given and D1 and D2 are the eigenvalues
+*>      returned with and without the eigenvector option.
+*>
+*>      The "sizes" are specified by an array NN(1:NSIZES); the value of
+*>      each element NN(j) specifies one size.
+*>      The "types" are specified by a logical array DOTYPE( 1:NTYPES );
+*>      if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
+*>      Currently, the list of possible types is:
+*>
+*>      (1)  The zero matrix.
+*>      (2)  The identity matrix.
+*>
+*>      (3)  A diagonal matrix with evenly spaced entries
+*>           1, ..., ULP  and random signs.
+*>           (ULP = (first number larger than 1) - 1 )
+*>      (4)  A diagonal matrix with geometrically spaced entries
+*>           1, ..., ULP  and random signs.
+*>      (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
+*>           and random signs.
+*>
+*>      (6)  Same as (4), but multiplied by SQRT( overflow threshold )
+*>      (7)  Same as (4), but multiplied by SQRT( underflow threshold )
+*>
+*>      (8)  A matrix of the form  U* D U, where U is unitary and
+*>           D has evenly spaced entries 1, ..., ULP with random signs
+*>           on the diagonal.
+*>
+*>      (9)  A matrix of the form  U* D U, where U is unitary and
+*>           D has geometrically spaced entries 1, ..., ULP with random
+*>           signs on the diagonal.
+*>
+*>      (10) A matrix of the form  U* D U, where U is unitary and
+*>           D has "clustered" entries 1, ULP,..., ULP with random
+*>           signs on the diagonal.
+*>
+*>      (11) Same as (8), but multiplied by SQRT( overflow threshold )
+*>      (12) Same as (8), but multiplied by SQRT( underflow threshold )
+*>
+*>      (13) Symmetric matrix with random entries chosen from (-1,1).
+*>      (14) Same as (13), but multiplied by SQRT( overflow threshold )
+*>      (15) Same as (13), but multiplied by SQRT( underflow threshold )
+*>      (16) A band matrix with half bandwidth randomly chosen between
+*>           0 and N-1, with evenly spaced eigenvalues 1, ..., ULP
+*>           with random signs.
+*>      (17) Same as (16), but multiplied by SQRT( overflow threshold )
+*>      (18) Same as (16), but multiplied by SQRT( underflow threshold )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \verbatim
+*>  NSIZES  INTEGER
+*>          The number of sizes of matrices to use.  If it is zero,
+*>          CDRVST does nothing.  It must be at least zero.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NN      INTEGER array, dimension (NSIZES)
+*>          An array containing the sizes to be used for the matrices.
+*>          Zero values will be skipped.  The values must be at least
+*>          zero.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NTYPES  INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, CDRVST
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrix is in A.  This
+*>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  DOTYPE  LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size in NN a
+*>          matrix of that size and of type j will be generated.
+*>          If NTYPES is smaller than the maximum number of types
+*>          defined (PARAMETER MAXTYP), then types NTYPES+1 through
+*>          MAXTYP will not be generated.  If NTYPES is larger
+*>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
+*>          will be ignored.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  ISEED   INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator. The array elements should be between 0 and 4095;
+*>          if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>          be odd.  The random number generator uses a linear
+*>          congruential sequence limited to small integers, and so
+*>          should produce machine independent random numbers. The
+*>          values of ISEED are changed on exit, and can be used in the
+*>          next call to CDRVST to continue the same random number
+*>          sequence.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  THRESH  REAL
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  It must be at least zero.
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  NOUNIT  INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  A       COMPLEX array, dimension (LDA , max(NN))
+*>          Used to hold the matrix whose eigenvalues are to be
+*>          computed.  On exit, A contains the last matrix actually
+*>          used.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  LDA     INTEGER
+*>          The leading dimension of A.  It must be at
+*>          least 1 and at least max( NN ).
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  D1      REAL array, dimension (max(NN))
+*>          The eigenvalues of A, as computed by CSTEQR simlutaneously
+*>          with Z.  On exit, the eigenvalues in D1 correspond with the
+*>          matrix in A.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  D2      REAL array, dimension (max(NN))
+*>          The eigenvalues of A, as computed by CSTEQR if Z is not
+*>          computed.  On exit, the eigenvalues in D2 correspond with
+*>          the matrix in A.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  D3      REAL array, dimension (max(NN))
+*>          The eigenvalues of A, as computed by SSTERF.  On exit, the
+*>          eigenvalues in D3 correspond with the matrix in A.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  WA1     REAL array, dimension
+*> \endverbatim
+*> \verbatim
+*>  WA2     REAL array, dimension
+*> \endverbatim
+*> \verbatim
+*>  WA3     REAL array, dimension
+*> \endverbatim
+*> \verbatim
+*>  U       COMPLEX array, dimension (LDU, max(NN))
+*>          The unitary matrix computed by CHETRD + CUNGC3.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  LDU     INTEGER
+*>          The leading dimension of U, Z, and V.  It must be at
+*>          least 1 and at least max( NN ).
+*>          Not modified.
+*> \endverbatim
+*> \verbatim
+*>  V       COMPLEX array, dimension (LDU, max(NN))
+*>          The Housholder vectors computed by CHETRD in reducing A to
+*>          tridiagonal form.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  TAU     COMPLEX array, dimension (max(NN))
+*>          The Householder factors computed by CHETRD in reducing A
+*>          to tridiagonal form.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  Z       COMPLEX array, dimension (LDU, max(NN))
+*>          The unitary matrix of eigenvectors computed by CHEEVD,
+*>          CHEEVX, CHPEVD, CHPEVX, CHBEVD, and CHBEVX.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  WORK  - COMPLEX array of dimension ( LWORK )
+*>           Workspace.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  LWORK - INTEGER
+*>           The number of entries in WORK.  This must be at least
+*>           2*max( NN(j), 2 )**2.
+*>           Not modified.
+*> \endverbatim
+*> \verbatim
+*>  RWORK   REAL array, dimension (3*max(NN))
+*>           Workspace.
+*>           Modified.
+*> \endverbatim
+*> \verbatim
+*>  LRWORK - INTEGER
+*>           The number of entries in RWORK.
+*> \endverbatim
+*> \verbatim
+*>  IWORK   INTEGER array, dimension (6*max(NN))
+*>          Workspace.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  LIWORK - INTEGER
+*>           The number of entries in IWORK.
+*> \endverbatim
+*> \verbatim
+*>  RESULT  REAL array, dimension (??)
+*>          The values computed by the tests described above.
+*>          The values are currently limited to 1/ulp, to avoid
+*>          overflow.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>  INFO    INTEGER
+*>          If 0, then everything ran OK.
+*>           -1: NSIZES < 0
+*>           -2: Some NN(j) < 0
+*>           -3: NTYPES < 0
+*>           -5: THRESH < 0
+*>           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
+*>          -16: LDU < 1 or LDU < NMAX.
+*>          -21: LWORK too small.
+*>          If  SLATMR, SLATMS, CHETRD, SORGC3, CSTEQR, SSTERF,
+*>              or SORMC2 returns an error code, the
+*>              absolute value of it is returned.
+*>          Modified.
+*> \endverbatim
+*> \verbatim
+*>-----------------------------------------------------------------------
+*> \endverbatim
+*> \verbatim
+*>       Some Local Variables and Parameters:
+*>       ---- ----- --------- --- ----------
+*>       ZERO, ONE       Real 0 and 1.
+*>       MAXTYP          The number of types defined.
+*>       NTEST           The number of tests performed, or which can
+*>                       be performed so far, for the current matrix.
+*>       NTESTT          The total number of tests performed so far.
+*>       NMAX            Largest value in NN.
+*>       NMATS           The number of matrices generated so far.
+*>       NERRS           The number of tests which have exceeded THRESH
+*>                       so far (computed by SLAFTS).
+*>       COND, IMODE     Values to be passed to the matrix generators.
+*>       ANORM           Norm of A; passed to matrix generators.
+*> \endverbatim
+*> \verbatim
+*>       OVFL, UNFL      Overflow and underflow thresholds.
+*>       ULP, ULPINV     Finest relative precision and its inverse.
+*>       RTOVFL, RTUNFL  Square roots of the previous 2 values.
+*>               The following four arrays decode JTYPE:
+*>       KTYPE(j)        The general type (1-10) for type "j".
+*>       KMODE(j)        The MODE value to be passed to the matrix
+*>                       generator for type "j".
+*>       KMAGN(j)        The order of magnitude ( O(1),
+*>                       O(overflow^(1/2) ), O(underflow^(1/2) )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   NOUNIT, A, LDA, D1, D2, D3, WA1, WA2, WA3, U,
      $                   LDU, V, TAU, Z, WORK, LWORK, RWORK, LRWORK,
      $                   IWORK, LIWORK, RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LRWORK, LWORK, NOUNIT,
@@ -20,293 +388,6 @@
       COMPLEX            A( LDA, * ), TAU( * ), U( LDU, * ),
      $                   V( LDU, * ), WORK( * ), Z( LDU, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*       CDRVST  checks the Hermitian eigenvalue problem drivers.
-*
-*               CHEEVD computes all eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian matrix,
-*               using a divide-and-conquer algorithm.
-*
-*               CHEEVX computes selected eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian matrix.
-*
-*               CHEEVR computes selected eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian matrix
-*               using the Relatively Robust Representation where it can.
-*
-*               CHPEVD computes all eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian matrix in packed
-*               storage, using a divide-and-conquer algorithm.
-*
-*               CHPEVX computes selected eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian matrix in packed
-*               storage.
-*
-*               CHBEVD computes all eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian band matrix,
-*               using a divide-and-conquer algorithm.
-*
-*               CHBEVX computes selected eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian band matrix.
-*
-*               CHEEV computes all eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian matrix.
-*
-*               CHPEV computes all eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian matrix in packed
-*               storage.
-*
-*               CHBEV computes all eigenvalues and, optionally,
-*               eigenvectors of a complex Hermitian band matrix.
-*
-*       When CDRVST is called, a number of matrix "sizes" ("n's") and a
-*       number of matrix "types" are specified.  For each size ("n")
-*       and each type of matrix, one matrix will be generated and used
-*       to test the appropriate drivers.  For each matrix and each
-*       driver routine called, the following tests will be performed:
-*
-*       (1)     | A - Z D Z' | / ( |A| n ulp )
-*
-*       (2)     | I - Z Z' | / ( n ulp )
-*
-*       (3)     | D1 - D2 | / ( |D1| ulp )
-*
-*       where Z is the matrix of eigenvectors returned when the
-*       eigenvector option is given and D1 and D2 are the eigenvalues
-*       returned with and without the eigenvector option.
-*
-*       The "sizes" are specified by an array NN(1:NSIZES); the value of
-*       each element NN(j) specifies one size.
-*       The "types" are specified by a logical array DOTYPE( 1:NTYPES );
-*       if DOTYPE(j) is .TRUE., then matrix type "j" will be generated.
-*       Currently, the list of possible types is:
-*
-*       (1)  The zero matrix.
-*       (2)  The identity matrix.
-*
-*       (3)  A diagonal matrix with evenly spaced entries
-*            1, ..., ULP  and random signs.
-*            (ULP = (first number larger than 1) - 1 )
-*       (4)  A diagonal matrix with geometrically spaced entries
-*            1, ..., ULP  and random signs.
-*       (5)  A diagonal matrix with "clustered" entries 1, ULP, ..., ULP
-*            and random signs.
-*
-*       (6)  Same as (4), but multiplied by SQRT( overflow threshold )
-*       (7)  Same as (4), but multiplied by SQRT( underflow threshold )
-*
-*       (8)  A matrix of the form  U* D U, where U is unitary and
-*            D has evenly spaced entries 1, ..., ULP with random signs
-*            on the diagonal.
-*
-*       (9)  A matrix of the form  U* D U, where U is unitary and
-*            D has geometrically spaced entries 1, ..., ULP with random
-*            signs on the diagonal.
-*
-*       (10) A matrix of the form  U* D U, where U is unitary and
-*            D has "clustered" entries 1, ULP,..., ULP with random
-*            signs on the diagonal.
-*
-*       (11) Same as (8), but multiplied by SQRT( overflow threshold )
-*       (12) Same as (8), but multiplied by SQRT( underflow threshold )
-*
-*       (13) Symmetric matrix with random entries chosen from (-1,1).
-*       (14) Same as (13), but multiplied by SQRT( overflow threshold )
-*       (15) Same as (13), but multiplied by SQRT( underflow threshold )
-*       (16) A band matrix with half bandwidth randomly chosen between
-*            0 and N-1, with evenly spaced eigenvalues 1, ..., ULP
-*            with random signs.
-*       (17) Same as (16), but multiplied by SQRT( overflow threshold )
-*       (18) Same as (16), but multiplied by SQRT( underflow threshold )
-*
-*  Arguments
-*  =========
-*
-*  NSIZES  INTEGER
-*          The number of sizes of matrices to use.  If it is zero,
-*          CDRVST does nothing.  It must be at least zero.
-*          Not modified.
-*
-*  NN      INTEGER array, dimension (NSIZES)
-*          An array containing the sizes to be used for the matrices.
-*          Zero values will be skipped.  The values must be at least
-*          zero.
-*          Not modified.
-*
-*  NTYPES  INTEGER
-*          The number of elements in DOTYPE.   If it is zero, CDRVST
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrix is in A.  This
-*          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*          Not modified.
-*
-*  DOTYPE  LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size in NN a
-*          matrix of that size and of type j will be generated.
-*          If NTYPES is smaller than the maximum number of types
-*          defined (PARAMETER MAXTYP), then types NTYPES+1 through
-*          MAXTYP will not be generated.  If NTYPES is larger
-*          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
-*          will be ignored.
-*          Not modified.
-*
-*  ISEED   INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator. The array elements should be between 0 and 4095;
-*          if not they will be reduced mod 4096.  Also, ISEED(4) must
-*          be odd.  The random number generator uses a linear
-*          congruential sequence limited to small integers, and so
-*          should produce machine independent random numbers. The
-*          values of ISEED are changed on exit, and can be used in the
-*          next call to CDRVST to continue the same random number
-*          sequence.
-*          Modified.
-*
-*  THRESH  REAL
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  It must be at least zero.
-*          Not modified.
-*
-*  NOUNIT  INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IINFO not equal to 0.)
-*          Not modified.
-*
-*  A       COMPLEX array, dimension (LDA , max(NN))
-*          Used to hold the matrix whose eigenvalues are to be
-*          computed.  On exit, A contains the last matrix actually
-*          used.
-*          Modified.
-*
-*  LDA     INTEGER
-*          The leading dimension of A.  It must be at
-*          least 1 and at least max( NN ).
-*          Not modified.
-*
-*  D1      REAL array, dimension (max(NN))
-*          The eigenvalues of A, as computed by CSTEQR simlutaneously
-*          with Z.  On exit, the eigenvalues in D1 correspond with the
-*          matrix in A.
-*          Modified.
-*
-*  D2      REAL array, dimension (max(NN))
-*          The eigenvalues of A, as computed by CSTEQR if Z is not
-*          computed.  On exit, the eigenvalues in D2 correspond with
-*          the matrix in A.
-*          Modified.
-*
-*  D3      REAL array, dimension (max(NN))
-*          The eigenvalues of A, as computed by SSTERF.  On exit, the
-*          eigenvalues in D3 correspond with the matrix in A.
-*          Modified.
-*
-*  WA1     REAL array, dimension
-*
-*  WA2     REAL array, dimension
-*
-*  WA3     REAL array, dimension
-*
-*  U       COMPLEX array, dimension (LDU, max(NN))
-*          The unitary matrix computed by CHETRD + CUNGC3.
-*          Modified.
-*
-*  LDU     INTEGER
-*          The leading dimension of U, Z, and V.  It must be at
-*          least 1 and at least max( NN ).
-*          Not modified.
-*
-*  V       COMPLEX array, dimension (LDU, max(NN))
-*          The Housholder vectors computed by CHETRD in reducing A to
-*          tridiagonal form.
-*          Modified.
-*
-*  TAU     COMPLEX array, dimension (max(NN))
-*          The Householder factors computed by CHETRD in reducing A
-*          to tridiagonal form.
-*          Modified.
-*
-*  Z       COMPLEX array, dimension (LDU, max(NN))
-*          The unitary matrix of eigenvectors computed by CHEEVD,
-*          CHEEVX, CHPEVD, CHPEVX, CHBEVD, and CHBEVX.
-*          Modified.
-*
-*  WORK  - COMPLEX array of dimension ( LWORK )
-*           Workspace.
-*           Modified.
-*
-*  LWORK - INTEGER
-*           The number of entries in WORK.  This must be at least
-*           2*max( NN(j), 2 )**2.
-*           Not modified.
-*
-*  RWORK   REAL array, dimension (3*max(NN))
-*           Workspace.
-*           Modified.
-*
-*  LRWORK - INTEGER
-*           The number of entries in RWORK.
-*
-*  IWORK   INTEGER array, dimension (6*max(NN))
-*          Workspace.
-*          Modified.
-*
-*  LIWORK - INTEGER
-*           The number of entries in IWORK.
-*
-*  RESULT  REAL array, dimension (??)
-*          The values computed by the tests described above.
-*          The values are currently limited to 1/ulp, to avoid
-*          overflow.
-*          Modified.
-*
-*  INFO    INTEGER
-*          If 0, then everything ran OK.
-*           -1: NSIZES < 0
-*           -2: Some NN(j) < 0
-*           -3: NTYPES < 0
-*           -5: THRESH < 0
-*           -9: LDA < 1 or LDA < NMAX, where NMAX is max( NN(j) ).
-*          -16: LDU < 1 or LDU < NMAX.
-*          -21: LWORK too small.
-*          If  SLATMR, SLATMS, CHETRD, SORGC3, CSTEQR, SSTERF,
-*              or SORMC2 returns an error code, the
-*              absolute value of it is returned.
-*          Modified.
-*
-*-----------------------------------------------------------------------
-*
-*       Some Local Variables and Parameters:
-*       ---- ----- --------- --- ----------
-*       ZERO, ONE       Real 0 and 1.
-*       MAXTYP          The number of types defined.
-*       NTEST           The number of tests performed, or which can
-*                       be performed so far, for the current matrix.
-*       NTESTT          The total number of tests performed so far.
-*       NMAX            Largest value in NN.
-*       NMATS           The number of matrices generated so far.
-*       NERRS           The number of tests which have exceeded THRESH
-*                       so far (computed by SLAFTS).
-*       COND, IMODE     Values to be passed to the matrix generators.
-*       ANORM           Norm of A; passed to matrix generators.
-*
-*       OVFL, UNFL      Overflow and underflow thresholds.
-*       ULP, ULPINV     Finest relative precision and its inverse.
-*       RTOVFL, RTUNFL  Square roots of the previous 2 values.
-*               The following four arrays decode JTYPE:
-*       KTYPE(j)        The general type (1-10) for type "j".
-*       KMODE(j)        The MODE value to be passed to the matrix
-*                       generator for type "j".
-*       KMAGN(j)        The order of magnitude ( O(1),
-*                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *
 *  =====================================================================
 *

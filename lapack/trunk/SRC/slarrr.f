@@ -1,9 +1,101 @@
+*> \brief \b SLARRR
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLARRR( N, D, E, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            N, INFO
+*       ..
+*       .. Array Arguments ..
+*       REAL               D( * ), E( * )
+*       ..
+*  
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Perform tests to decide whether the symmetric tridiagonal matrix T
+*> warrants expensive computations which guarantee high relative accuracy
+*> in the eigenvalues.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix. N > 0.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The N diagonal elements of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in,out] E
+*> \verbatim
+*>          E is REAL array, dimension (N)
+*>          On entry, the first (N-1) entries contain the subdiagonal
+*>          elements of the tridiagonal matrix T; E(N) is set to ZERO.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          INFO = 0(default) : the matrix warrants computations preserving
+*>                              relative accuracy.
+*>          INFO = 1          : the matrix warrants computations guaranteeing
+*>                              only absolute accuracy.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Beresford Parlett, University of California, Berkeley, USA
+*>     Jim Demmel, University of California, Berkeley, USA
+*>     Inderjit Dhillon, University of Texas, Austin, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>     Christof Voemel, University of California, Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLARRR( N, D, E, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            N, INFO
@@ -12,42 +104,6 @@
       REAL               D( * ), E( * )
 *     ..
 *
-*
-*  Purpose
-*  =======
-*
-*  Perform tests to decide whether the symmetric tridiagonal matrix T
-*  warrants expensive computations which guarantee high relative accuracy
-*  in the eigenvalues.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix. N > 0.
-*
-*  D       (input) REAL array, dimension (N)
-*          The N diagonal elements of the tridiagonal matrix T.
-*
-*  E       (input/output) REAL array, dimension (N)
-*          On entry, the first (N-1) entries contain the subdiagonal
-*          elements of the tridiagonal matrix T; E(N) is set to ZERO.
-*
-*  INFO    (output) INTEGER
-*          INFO = 0(default) : the matrix warrants computations preserving
-*                              relative accuracy.
-*          INFO = 1          : the matrix warrants computations guaranteeing
-*                              only absolute accuracy.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Beresford Parlett, University of California, Berkeley, USA
-*     Jim Demmel, University of California, Berkeley, USA
-*     Inderjit Dhillon, University of Texas, Austin, USA
-*     Osni Marques, LBNL/NERSC, USA
-*     Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
 *

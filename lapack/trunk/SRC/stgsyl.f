@@ -1,11 +1,301 @@
+*> \brief \b STGSYL
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
+*                          LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
+*                          IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            IJOB, INFO, LDA, LDB, LDC, LDD, LDE, LDF,
+*      $                   LWORK, M, N
+*       REAL               DIF, SCALE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               A( LDA, * ), B( LDB, * ), C( LDC, * ),
+*      $                   D( LDD, * ), E( LDE, * ), F( LDF, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> STGSYL solves the generalized Sylvester equation:
+*>
+*>             A * R - L * B = scale * C                 (1)
+*>             D * R - L * E = scale * F
+*>
+*> where R and L are unknown m-by-n matrices, (A, D), (B, E) and
+*> (C, F) are given matrix pairs of size m-by-m, n-by-n and m-by-n,
+*> respectively, with real entries. (A, D) and (B, E) must be in
+*> generalized (real) Schur canonical form, i.e. A, B are upper quasi
+*> triangular and D, E are upper triangular.
+*>
+*> The solution (R, L) overwrites (C, F). 0 <= SCALE <= 1 is an output
+*> scaling factor chosen to avoid overflow.
+*>
+*> In matrix notation (1) is equivalent to solve  Zx = scale b, where
+*> Z is defined as
+*>
+*>            Z = [ kron(In, A)  -kron(B**T, Im) ]         (2)
+*>                [ kron(In, D)  -kron(E**T, Im) ].
+*>
+*> Here Ik is the identity matrix of size k and X**T is the transpose of
+*> X. kron(X, Y) is the Kronecker product between the matrices X and Y.
+*>
+*> If TRANS = 'T', STGSYL solves the transposed system Z**T*y = scale*b,
+*> which is equivalent to solve for R and L in
+*>
+*>             A**T * R + D**T * L = scale * C           (3)
+*>             R * B**T + L * E**T = scale * -F
+*>
+*> This case (TRANS = 'T') is used to compute an one-norm-based estimate
+*> of Dif[(A,D), (B,E)], the separation between the matrix pairs (A,D)
+*> and (B,E), using SLACON.
+*>
+*> If IJOB >= 1, STGSYL computes a Frobenius norm-based estimate
+*> of Dif[(A,D),(B,E)]. That is, the reciprocal of a lower bound on the
+*> reciprocal of the smallest singular value of Z. See [1-2] for more
+*> information.
+*>
+*> This is a level 3 BLAS algorithm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          = 'N', solve the generalized Sylvester equation (1).
+*>          = 'T', solve the 'transposed' system (3).
+*> \endverbatim
+*>
+*> \param[in] IJOB
+*> \verbatim
+*>          IJOB is INTEGER
+*>          Specifies what kind of functionality to be performed.
+*>           =0: solve (1) only.
+*>           =1: The functionality of 0 and 3.
+*>           =2: The functionality of 0 and 4.
+*>           =3: Only an estimate of Dif[(A,D), (B,E)] is computed.
+*>               (look ahead strategy IJOB  = 1 is used).
+*>           =4: Only an estimate of Dif[(A,D), (B,E)] is computed.
+*>               ( SGECON on sub-systems is used ).
+*>          Not referenced if TRANS = 'T'.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The order of the matrices A and D, and the row dimension of
+*>          the matrices C, F, R and L.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices B and E, and the column dimension
+*>          of the matrices C, F, R and L.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA, M)
+*>          The upper quasi triangular matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1, M).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB, N)
+*>          The upper quasi triangular matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1, N).
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is REAL array, dimension (LDC, N)
+*>          On entry, C contains the right-hand-side of the first matrix
+*>          equation in (1) or (3).
+*>          On exit, if IJOB = 0, 1 or 2, C has been overwritten by
+*>          the solution R. If IJOB = 3 or 4 and TRANS = 'N', C holds R,
+*>          the solution achieved during the computation of the
+*>          Dif-estimate.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDC >= max(1, M).
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (LDD, M)
+*>          The upper triangular matrix D.
+*> \endverbatim
+*>
+*> \param[in] LDD
+*> \verbatim
+*>          LDD is INTEGER
+*>          The leading dimension of the array D. LDD >= max(1, M).
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is REAL array, dimension (LDE, N)
+*>          The upper triangular matrix E.
+*> \endverbatim
+*>
+*> \param[in] LDE
+*> \verbatim
+*>          LDE is INTEGER
+*>          The leading dimension of the array E. LDE >= max(1, N).
+*> \endverbatim
+*>
+*> \param[in,out] F
+*> \verbatim
+*>          F is REAL array, dimension (LDF, N)
+*>          On entry, F contains the right-hand-side of the second matrix
+*>          equation in (1) or (3).
+*>          On exit, if IJOB = 0, 1 or 2, F has been overwritten by
+*>          the solution L. If IJOB = 3 or 4 and TRANS = 'N', F holds L,
+*>          the solution achieved during the computation of the
+*>          Dif-estimate.
+*> \endverbatim
+*>
+*> \param[in] LDF
+*> \verbatim
+*>          LDF is INTEGER
+*>          The leading dimension of the array F. LDF >= max(1, M).
+*> \endverbatim
+*>
+*> \param[out] DIF
+*> \verbatim
+*>          DIF is REAL
+*>          On exit DIF is the reciprocal of a lower bound of the
+*>          reciprocal of the Dif-function, i.e. DIF is an upper bound of
+*>          Dif[(A,D), (B,E)] = sigma_min(Z), where Z as in (2).
+*>          IF IJOB = 0 or TRANS = 'T', DIF is not touched.
+*> \endverbatim
+*>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is REAL
+*>          On exit SCALE is the scaling factor in (1) or (3).
+*>          If 0 < SCALE < 1, C and F hold the solutions R and L, resp.,
+*>          to a slightly perturbed system but the input matrices A, B, D
+*>          and E have not been changed. If SCALE = 0, C and F hold the
+*>          solutions R and L, respectively, to the homogeneous system
+*>          with C = F = 0. Normally, SCALE = 1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK. LWORK > = 1.
+*>          If IJOB = 1 or 2 and TRANS = 'N', LWORK >= max(1,2*M*N).
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (M+N+6)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>            =0: successful exit
+*>            <0: If INFO = -i, the i-th argument had an illegal value.
+*>            >0: (A, D) and (B, E) have common or close eigenvalues.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realSYcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*>
+*>  [1] B. Kagstrom and P. Poromaa, LAPACK-Style Algorithms and Software
+*>      for Solving the Generalized Sylvester Equation and Estimating the
+*>      Separation between Regular Matrix Pairs, Report UMINF - 93.23,
+*>      Department of Computing Science, Umea University, S-901 87 Umea,
+*>      Sweden, December 1993, Revised April 1994, Also as LAPACK Working
+*>      Note 75.  To appear in ACM Trans. on Math. Software, Vol 22,
+*>      No 1, 1996.
+*>
+*>  [2] B. Kagstrom, A Perturbation Analysis of the Generalized Sylvester
+*>      Equation (AR - LB, DR - LE ) = (C, F), SIAM J. Matrix Anal.
+*>      Appl., 15(4):1045-1060, 1994
+*>
+*>  [3] B. Kagstrom and L. Westin, Generalized Schur Methods with
+*>      Condition Estimators for Solving the Generalized Sylvester
+*>      Equation, IEEE Transactions on Automatic Control, Vol. 34, No. 7,
+*>      July 1989, pp 745-751.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE STGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
      $                   LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
      $                   IWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -19,178 +309,6 @@
      $                   D( LDD, * ), E( LDE, * ), F( LDF, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  STGSYL solves the generalized Sylvester equation:
-*
-*              A * R - L * B = scale * C                 (1)
-*              D * R - L * E = scale * F
-*
-*  where R and L are unknown m-by-n matrices, (A, D), (B, E) and
-*  (C, F) are given matrix pairs of size m-by-m, n-by-n and m-by-n,
-*  respectively, with real entries. (A, D) and (B, E) must be in
-*  generalized (real) Schur canonical form, i.e. A, B are upper quasi
-*  triangular and D, E are upper triangular.
-*
-*  The solution (R, L) overwrites (C, F). 0 <= SCALE <= 1 is an output
-*  scaling factor chosen to avoid overflow.
-*
-*  In matrix notation (1) is equivalent to solve  Zx = scale b, where
-*  Z is defined as
-*
-*             Z = [ kron(In, A)  -kron(B**T, Im) ]         (2)
-*                 [ kron(In, D)  -kron(E**T, Im) ].
-*
-*  Here Ik is the identity matrix of size k and X**T is the transpose of
-*  X. kron(X, Y) is the Kronecker product between the matrices X and Y.
-*
-*  If TRANS = 'T', STGSYL solves the transposed system Z**T*y = scale*b,
-*  which is equivalent to solve for R and L in
-*
-*              A**T * R + D**T * L = scale * C           (3)
-*              R * B**T + L * E**T = scale * -F
-*
-*  This case (TRANS = 'T') is used to compute an one-norm-based estimate
-*  of Dif[(A,D), (B,E)], the separation between the matrix pairs (A,D)
-*  and (B,E), using SLACON.
-*
-*  If IJOB >= 1, STGSYL computes a Frobenius norm-based estimate
-*  of Dif[(A,D),(B,E)]. That is, the reciprocal of a lower bound on the
-*  reciprocal of the smallest singular value of Z. See [1-2] for more
-*  information.
-*
-*  This is a level 3 BLAS algorithm.
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER*1
-*          = 'N', solve the generalized Sylvester equation (1).
-*          = 'T', solve the 'transposed' system (3).
-*
-*  IJOB    (input) INTEGER
-*          Specifies what kind of functionality to be performed.
-*           =0: solve (1) only.
-*           =1: The functionality of 0 and 3.
-*           =2: The functionality of 0 and 4.
-*           =3: Only an estimate of Dif[(A,D), (B,E)] is computed.
-*               (look ahead strategy IJOB  = 1 is used).
-*           =4: Only an estimate of Dif[(A,D), (B,E)] is computed.
-*               ( SGECON on sub-systems is used ).
-*          Not referenced if TRANS = 'T'.
-*
-*  M       (input) INTEGER
-*          The order of the matrices A and D, and the row dimension of
-*          the matrices C, F, R and L.
-*
-*  N       (input) INTEGER
-*          The order of the matrices B and E, and the column dimension
-*          of the matrices C, F, R and L.
-*
-*  A       (input) REAL array, dimension (LDA, M)
-*          The upper quasi triangular matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >= max(1, M).
-*
-*  B       (input) REAL array, dimension (LDB, N)
-*          The upper quasi triangular matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >= max(1, N).
-*
-*  C       (input/output) REAL array, dimension (LDC, N)
-*          On entry, C contains the right-hand-side of the first matrix
-*          equation in (1) or (3).
-*          On exit, if IJOB = 0, 1 or 2, C has been overwritten by
-*          the solution R. If IJOB = 3 or 4 and TRANS = 'N', C holds R,
-*          the solution achieved during the computation of the
-*          Dif-estimate.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C. LDC >= max(1, M).
-*
-*  D       (input) REAL array, dimension (LDD, M)
-*          The upper triangular matrix D.
-*
-*  LDD     (input) INTEGER
-*          The leading dimension of the array D. LDD >= max(1, M).
-*
-*  E       (input) REAL array, dimension (LDE, N)
-*          The upper triangular matrix E.
-*
-*  LDE     (input) INTEGER
-*          The leading dimension of the array E. LDE >= max(1, N).
-*
-*  F       (input/output) REAL array, dimension (LDF, N)
-*          On entry, F contains the right-hand-side of the second matrix
-*          equation in (1) or (3).
-*          On exit, if IJOB = 0, 1 or 2, F has been overwritten by
-*          the solution L. If IJOB = 3 or 4 and TRANS = 'N', F holds L,
-*          the solution achieved during the computation of the
-*          Dif-estimate.
-*
-*  LDF     (input) INTEGER
-*          The leading dimension of the array F. LDF >= max(1, M).
-*
-*  DIF     (output) REAL
-*          On exit DIF is the reciprocal of a lower bound of the
-*          reciprocal of the Dif-function, i.e. DIF is an upper bound of
-*          Dif[(A,D), (B,E)] = sigma_min(Z), where Z as in (2).
-*          IF IJOB = 0 or TRANS = 'T', DIF is not touched.
-*
-*  SCALE   (output) REAL
-*          On exit SCALE is the scaling factor in (1) or (3).
-*          If 0 < SCALE < 1, C and F hold the solutions R and L, resp.,
-*          to a slightly perturbed system but the input matrices A, B, D
-*          and E have not been changed. If SCALE = 0, C and F hold the
-*          solutions R and L, respectively, to the homogeneous system
-*          with C = F = 0. Normally, SCALE = 1.
-*
-*  WORK    (workspace/output) REAL array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK. LWORK > = 1.
-*          If IJOB = 1 or 2 and TRANS = 'N', LWORK >= max(1,2*M*N).
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  IWORK   (workspace) INTEGER array, dimension (M+N+6)
-*
-*  INFO    (output) INTEGER
-*            =0: successful exit
-*            <0: If INFO = -i, the i-th argument had an illegal value.
-*            >0: (A, D) and (B, E) have common or close eigenvalues.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*     Umea University, S-901 87 Umea, Sweden.
-*
-*  [1] B. Kagstrom and P. Poromaa, LAPACK-Style Algorithms and Software
-*      for Solving the Generalized Sylvester Equation and Estimating the
-*      Separation between Regular Matrix Pairs, Report UMINF - 93.23,
-*      Department of Computing Science, Umea University, S-901 87 Umea,
-*      Sweden, December 1993, Revised April 1994, Also as LAPACK Working
-*      Note 75.  To appear in ACM Trans. on Math. Software, Vol 22,
-*      No 1, 1996.
-*
-*  [2] B. Kagstrom, A Perturbation Analysis of the Generalized Sylvester
-*      Equation (AR - LB, DR - LE ) = (C, F), SIAM J. Matrix Anal.
-*      Appl., 15(4):1045-1060, 1994
-*
-*  [3] B. Kagstrom and L. Westin, Generalized Schur Methods with
-*      Condition Estimators for Solving the Generalized Sylvester
-*      Equation, IEEE Transactions on Automatic Control, Vol. 34, No. 7,
-*      July 1989, pp 745-751.
 *
 *  =====================================================================
 *  Replaced various illegal calls to SCOPY by calls to SLASET.

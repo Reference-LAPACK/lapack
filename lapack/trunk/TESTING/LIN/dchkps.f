@@ -1,10 +1,165 @@
+*> \brief \b DCHKPS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
+*                          THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
+*                          RWORK, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION   THRESH
+*       INTEGER            NMAX, NN, NNB, NOUT, NRANK
+*       LOGICAL            TSTERR
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( * ), AFAC( * ), PERM( * ), RWORK( * ),
+*      $                   WORK( * )
+*       INTEGER            NBVAL( * ), NVAL( * ), PIV( * ), RANKVAL( * )
+*       LOGICAL            DOTYPE( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DCHKPS tests DPSTRF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[in] NNB
+*> \verbatim
+*>          NNB is INTEGER
+*>          The number of values of NB contained in the vector NBVAL.
+*> \endverbatim
+*>
+*> \param[in] NBVAL
+*> \verbatim
+*>          NBVAL is INTEGER array, dimension (NBVAL)
+*>          The values of the block size NB.
+*> \endverbatim
+*>
+*> \param[in] NRANK
+*> \verbatim
+*>          NRANK is INTEGER
+*>          The number of values of RANK contained in the vector RANKVAL.
+*> \endverbatim
+*>
+*> \param[in] RANKVAL
+*> \verbatim
+*>          RANKVAL is INTEGER array, dimension (NBVAL)
+*>          The values of the block size NB.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[in] NMAX
+*> \verbatim
+*>          NMAX is INTEGER
+*>          The maximum value permitted for N, used in dimensioning the
+*>          work arrays.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AFAC
+*> \verbatim
+*>          AFAC is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] PERM
+*> \verbatim
+*>          PERM is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] PIV
+*> \verbatim
+*>          PIV is INTEGER array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (NMAX*3)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DCHKPS( DOTYPE, NN, NVAL, NNB, NBVAL, NRANK, RANKVAL,
      $                   THRESH, TSTERR, NMAX, A, AFAC, PERM, PIV, WORK,
      $                   RWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Craig Lucas, University of Manchester / NAG Ltd.
-*     October, 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   THRESH
@@ -17,64 +172,6 @@
       INTEGER            NBVAL( * ), NVAL( * ), PIV( * ), RANKVAL( * )
       LOGICAL            DOTYPE( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DCHKPS tests DPSTRF.
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*
-*  NN      (input) INTEGER
-*          The number of values of N contained in the vector NVAL.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix dimension N.
-*
-*  NNB     (input) INTEGER
-*          The number of values of NB contained in the vector NBVAL.
-*
-*  NBVAL   (input) INTEGER array, dimension (NBVAL)
-*          The values of the block size NB.
-*
-*  NRANK   (input) INTEGER
-*          The number of values of RANK contained in the vector RANKVAL.
-*
-*  RANKVAL (input) INTEGER array, dimension (NBVAL)
-*          The values of the block size NB.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  NMAX    (input) INTEGER
-*          The maximum value permitted for N, used in dimensioning the
-*          work arrays.
-*
-*  A       (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  AFAC    (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  PERM    (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  PIV     (workspace) INTEGER array, dimension (NMAX)
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (NMAX*3)
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (NMAX)
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

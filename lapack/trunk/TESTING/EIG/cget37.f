@@ -1,8 +1,101 @@
+*> \brief \b CGET37
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGET37( RMAX, LMAX, NINFO, KNT, NIN )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, NIN
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            LMAX( 3 ), NINFO( 3 )
+*       REAL               RMAX( 3 )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGET37 tests CTRSNA, a routine for estimating condition numbers of
+*> eigenvalues and/or right eigenvectors of a matrix.
+*>
+*> The test matrices are read from a file with logical unit number NIN.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is REAL array, dimension (3)
+*>          Value of the largest test ratio.
+*>          RMAX(1) = largest ratio comparing different calls to CTRSNA
+*>          RMAX(2) = largest error in reciprocal condition
+*>                    numbers taking their conditioning into account
+*>          RMAX(3) = largest error in reciprocal condition
+*>                    numbers not taking their conditioning into
+*>                    account (may be larger than RMAX(2))
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER array, dimension (3)
+*>          LMAX(i) is example number where largest test ratio
+*>          RMAX(i) is achieved. Also:
+*>          If CGEHRD returns INFO nonzero on example i, LMAX(1)=i
+*>          If CHSEQR returns INFO nonzero on example i, LMAX(2)=i
+*>          If CTRSNA returns INFO nonzero on example i, LMAX(3)=i
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER array, dimension (3)
+*>          NINFO(1) = No. of times CGEHRD returned INFO nonzero
+*>          NINFO(2) = No. of times CHSEQR returned INFO nonzero
+*>          NINFO(3) = No. of times CTRSNA returned INFO nonzero
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          Input logical unit number
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CGET37( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, NIN
@@ -11,44 +104,6 @@
       INTEGER            LMAX( 3 ), NINFO( 3 )
       REAL               RMAX( 3 )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGET37 tests CTRSNA, a routine for estimating condition numbers of
-*  eigenvalues and/or right eigenvectors of a matrix.
-*
-*  The test matrices are read from a file with logical unit number NIN.
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) REAL array, dimension (3)
-*          Value of the largest test ratio.
-*          RMAX(1) = largest ratio comparing different calls to CTRSNA
-*          RMAX(2) = largest error in reciprocal condition
-*                    numbers taking their conditioning into account
-*          RMAX(3) = largest error in reciprocal condition
-*                    numbers not taking their conditioning into
-*                    account (may be larger than RMAX(2))
-*
-*  LMAX    (output) INTEGER array, dimension (3)
-*          LMAX(i) is example number where largest test ratio
-*          RMAX(i) is achieved. Also:
-*          If CGEHRD returns INFO nonzero on example i, LMAX(1)=i
-*          If CHSEQR returns INFO nonzero on example i, LMAX(2)=i
-*          If CTRSNA returns INFO nonzero on example i, LMAX(3)=i
-*
-*  NINFO   (output) INTEGER array, dimension (3)
-*          NINFO(1) = No. of times CGEHRD returned INFO nonzero
-*          NINFO(2) = No. of times CHSEQR returned INFO nonzero
-*          NINFO(3) = No. of times CTRSNA returned INFO nonzero
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
-*
-*  NIN     (input) INTEGER
-*          Input logical unit number
 *
 *  =====================================================================
 *

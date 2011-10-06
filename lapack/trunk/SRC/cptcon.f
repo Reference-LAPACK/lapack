@@ -1,9 +1,122 @@
+*> \brief \b CPTCON
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, N
+*       REAL               ANORM, RCOND
+*       ..
+*       .. Array Arguments ..
+*       REAL               D( * ), RWORK( * )
+*       COMPLEX            E( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CPTCON computes the reciprocal of the condition number (in the
+*> 1-norm) of a complex Hermitian positive definite tridiagonal matrix
+*> using the factorization A = L*D*L**H or A = U**H*D*U computed by
+*> CPTTRF.
+*>
+*> Norm(inv(A)) is computed by a direct method, and the reciprocal of
+*> the condition number is computed as
+*>                  RCOND = 1 / (ANORM * norm(inv(A))).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The n diagonal elements of the diagonal matrix D from the
+*>          factorization of A, as computed by CPTTRF.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is COMPLEX array, dimension (N-1)
+*>          The (n-1) off-diagonal elements of the unit bidiagonal factor
+*>          U or L from the factorization of A, as computed by CPTTRF.
+*> \endverbatim
+*>
+*> \param[in] ANORM
+*> \verbatim
+*>          ANORM is REAL
+*>          The 1-norm of the original matrix A.
+*> \endverbatim
+*>
+*> \param[out] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The reciprocal of the condition number of the matrix A,
+*>          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is the
+*>          1-norm of inv(A) computed in this routine.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  The method used is described in Nicholas J. Higham, "Efficient
+*>  Algorithms for Computing the Condition Number of a Tridiagonal
+*>  Matrix", SIAM J. Sci. Stat. Comput., Vol. 7, No. 1, January 1986.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, N
@@ -13,53 +126,6 @@
       REAL               D( * ), RWORK( * )
       COMPLEX            E( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CPTCON computes the reciprocal of the condition number (in the
-*  1-norm) of a complex Hermitian positive definite tridiagonal matrix
-*  using the factorization A = L*D*L**H or A = U**H*D*U computed by
-*  CPTTRF.
-*
-*  Norm(inv(A)) is computed by a direct method, and the reciprocal of
-*  the condition number is computed as
-*                   RCOND = 1 / (ANORM * norm(inv(A))).
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  D       (input) REAL array, dimension (N)
-*          The n diagonal elements of the diagonal matrix D from the
-*          factorization of A, as computed by CPTTRF.
-*
-*  E       (input) COMPLEX array, dimension (N-1)
-*          The (n-1) off-diagonal elements of the unit bidiagonal factor
-*          U or L from the factorization of A, as computed by CPTTRF.
-*
-*  ANORM   (input) REAL
-*          The 1-norm of the original matrix A.
-*
-*  RCOND   (output) REAL
-*          The reciprocal of the condition number of the matrix A,
-*          computed as RCOND = 1/(ANORM * AINVNM), where AINVNM is the
-*          1-norm of inv(A) computed in this routine.
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  The method used is described in Nicholas J. Higham, "Efficient
-*  Algorithms for Computing the Condition Number of a Tridiagonal
-*  Matrix", SIAM J. Sci. Stat. Comput., Vol. 7, No. 1, January 1986.
 *
 *  =====================================================================
 *

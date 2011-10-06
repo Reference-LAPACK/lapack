@@ -1,9 +1,179 @@
+*> \brief \b SGET22
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, WR,
+*                          WI, WORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANSA, TRANSE, TRANSW
+*       INTEGER            LDA, LDE, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), E( LDE, * ), RESULT( 2 ), WI( * ),
+*      $                   WORK( * ), WR( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET22 does an eigenvector check.
+*>
+*> The basic test is:
+*>
+*>    RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
+*>
+*> using the 1-norm.  It also tests the normalization of E:
+*>
+*>    RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
+*>                 j
+*>
+*> where E(j) is the j-th eigenvector, and m-norm is the max-norm of a
+*> vector.  If an eigenvector is complex, as determined from WI(j)
+*> nonzero, then the max-norm of the vector ( er + i*ei ) is the maximum
+*> of
+*>    |er(1)| + |ei(1)|, ... , |er(n)| + |ei(n)|
+*>
+*> W is a block diagonal matrix, with a 1 by 1 block for each real
+*> eigenvalue and a 2 by 2 block for each complex conjugate pair.
+*> If eigenvalues j and j+1 are a complex conjugate pair, so that
+*> WR(j) = WR(j+1) = wr and WI(j) = - WI(j+1) = wi, then the 2 by 2
+*> block corresponding to the pair will be:
+*>
+*>    (  wr  wi  )
+*>    ( -wi  wr  )
+*>
+*> Such a block multiplying an n by 2 matrix ( ur ui ) on the right
+*> will be the same as multiplying  ur + i*ui  by  wr + i*wi.
+*>
+*> To handle various schemes for storage of left eigenvectors, there are
+*> options to use A-transpose instead of A, E-transpose instead of E,
+*> and/or W-transpose instead of W.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANSA
+*> \verbatim
+*>          TRANSA is CHARACTER*1
+*>          Specifies whether or not A is transposed.
+*>          = 'N':  No transpose
+*>          = 'T':  Transpose
+*>          = 'C':  Conjugate transpose (= Transpose)
+*> \endverbatim
+*>
+*> \param[in] TRANSE
+*> \verbatim
+*>          TRANSE is CHARACTER*1
+*>          Specifies whether or not E is transposed.
+*>          = 'N':  No transpose, eigenvectors are in columns of E
+*>          = 'T':  Transpose, eigenvectors are in rows of E
+*>          = 'C':  Conjugate transpose (= Transpose)
+*> \endverbatim
+*>
+*> \param[in] TRANSW
+*> \verbatim
+*>          TRANSW is CHARACTER*1
+*>          Specifies whether or not W is transposed.
+*>          = 'N':  No transpose
+*>          = 'T':  Transpose, use -WI(j) instead of WI(j)
+*>          = 'C':  Conjugate transpose, use -WI(j) instead of WI(j)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The matrix whose eigenvectors are in E.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is REAL array, dimension (LDE,N)
+*>          The matrix of eigenvectors. If TRANSE = 'N', the eigenvectors
+*>          are stored in the columns of E, if TRANSE = 'T' or 'C', the
+*>          eigenvectors are stored in the rows of E.
+*> \endverbatim
+*>
+*> \param[in] LDE
+*> \verbatim
+*>          LDE is INTEGER
+*>          The leading dimension of the array E.  LDE >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] WR
+*> \verbatim
+*>          WR is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[in] WI
+*> \verbatim
+*>          WI is REAL array, dimension (N)
+*> \endverbatim
+*> \verbatim
+*>          The real and imaginary parts of the eigenvalues of A.
+*>          Purely real eigenvalues are indicated by WI(j) = 0.
+*>          Complex conjugate pairs are indicated by WR(j)=WR(j+1) and
+*>          WI(j) = - WI(j+1) non-zero; the real part is assumed to be
+*>          stored in the j-th row/column and the imaginary part in
+*>          the (j+1)-th row/column.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (N*(N+1))
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (2)
+*>          RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
+*>          RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, WR,
      $                   WI, WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANSA, TRANSE, TRANSW
@@ -13,95 +183,6 @@
       REAL               A( LDA, * ), E( LDE, * ), RESULT( 2 ), WI( * ),
      $                   WORK( * ), WR( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET22 does an eigenvector check.
-*
-*  The basic test is:
-*
-*     RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
-*
-*  using the 1-norm.  It also tests the normalization of E:
-*
-*     RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
-*                  j
-*
-*  where E(j) is the j-th eigenvector, and m-norm is the max-norm of a
-*  vector.  If an eigenvector is complex, as determined from WI(j)
-*  nonzero, then the max-norm of the vector ( er + i*ei ) is the maximum
-*  of
-*     |er(1)| + |ei(1)|, ... , |er(n)| + |ei(n)|
-*
-*  W is a block diagonal matrix, with a 1 by 1 block for each real
-*  eigenvalue and a 2 by 2 block for each complex conjugate pair.
-*  If eigenvalues j and j+1 are a complex conjugate pair, so that
-*  WR(j) = WR(j+1) = wr and WI(j) = - WI(j+1) = wi, then the 2 by 2
-*  block corresponding to the pair will be:
-*
-*     (  wr  wi  )
-*     ( -wi  wr  )
-*
-*  Such a block multiplying an n by 2 matrix ( ur ui ) on the right
-*  will be the same as multiplying  ur + i*ui  by  wr + i*wi.
-*
-*  To handle various schemes for storage of left eigenvectors, there are
-*  options to use A-transpose instead of A, E-transpose instead of E,
-*  and/or W-transpose instead of W.
-*
-*  Arguments
-*  ==========
-*
-*  TRANSA  (input) CHARACTER*1
-*          Specifies whether or not A is transposed.
-*          = 'N':  No transpose
-*          = 'T':  Transpose
-*          = 'C':  Conjugate transpose (= Transpose)
-*
-*  TRANSE  (input) CHARACTER*1
-*          Specifies whether or not E is transposed.
-*          = 'N':  No transpose, eigenvectors are in columns of E
-*          = 'T':  Transpose, eigenvectors are in rows of E
-*          = 'C':  Conjugate transpose (= Transpose)
-*
-*  TRANSW  (input) CHARACTER*1
-*          Specifies whether or not W is transposed.
-*          = 'N':  No transpose
-*          = 'T':  Transpose, use -WI(j) instead of WI(j)
-*          = 'C':  Conjugate transpose, use -WI(j) instead of WI(j)
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  A       (input) REAL array, dimension (LDA,N)
-*          The matrix whose eigenvectors are in E.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  E       (input) REAL array, dimension (LDE,N)
-*          The matrix of eigenvectors. If TRANSE = 'N', the eigenvectors
-*          are stored in the columns of E, if TRANSE = 'T' or 'C', the
-*          eigenvectors are stored in the rows of E.
-*
-*  LDE     (input) INTEGER
-*          The leading dimension of the array E.  LDE >= max(1,N).
-*
-*  WR      (input) REAL array, dimension (N)
-*  WI      (input) REAL array, dimension (N)
-*          The real and imaginary parts of the eigenvalues of A.
-*          Purely real eigenvalues are indicated by WI(j) = 0.
-*          Complex conjugate pairs are indicated by WR(j)=WR(j+1) and
-*          WI(j) = - WI(j+1) non-zero; the real part is assumed to be
-*          stored in the j-th row/column and the imaginary part in
-*          the (j+1)-th row/column.
-*
-*  WORK    (workspace) REAL array, dimension (N*(N+1))
-*
-*  RESULT  (output) REAL array, dimension (2)
-*          RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
-*          RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
 *
 *  =====================================================================
 *

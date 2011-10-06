@@ -1,9 +1,100 @@
+*> \brief \b DLAMRG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAMRG( N1, N2, A, DTRD1, DTRD2, INDEX )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            DTRD1, DTRD2, N1, N2
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            INDEX( * )
+*       DOUBLE PRECISION   A( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAMRG will create a permutation list which will merge the elements
+*> of A (which is composed of two independently sorted sets) into a
+*> single set which is sorted in ascending order.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N1
+*> \verbatim
+*>          N1 is INTEGER
+*> \endverbatim
+*>
+*> \param[in] N2
+*> \verbatim
+*>          N2 is INTEGER
+*>         These arguements contain the respective lengths of the two
+*>         sorted lists to be merged.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (N1+N2)
+*>         The first N1 elements of A contain a list of numbers which
+*>         are sorted in either ascending or descending order.  Likewise
+*>         for the final N2 elements.
+*> \endverbatim
+*>
+*> \param[in] DTRD1
+*> \verbatim
+*>          DTRD1 is INTEGER
+*> \endverbatim
+*>
+*> \param[in] DTRD2
+*> \verbatim
+*>          DTRD2 is INTEGER
+*>         These are the strides to be taken through the array A.
+*>         Allowable strides are 1 and -1.  They indicate whether a
+*>         subset of A is sorted in ascending (DTRDx = 1) or descending
+*>         (DTRDx = -1) order.
+*> \endverbatim
+*>
+*> \param[out] INDEX
+*> \verbatim
+*>          INDEX is INTEGER array, dimension (N1+N2)
+*>         On exit this array will contain a permutation such that
+*>         if B( I ) = A( INDEX( I ) ) for I=1,N1+N2, then B will be
+*>         sorted in ascending order.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE DLAMRG( N1, N2, A, DTRD1, DTRD2, INDEX )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            DTRD1, DTRD2, N1, N2
@@ -12,40 +103,6 @@
       INTEGER            INDEX( * )
       DOUBLE PRECISION   A( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAMRG will create a permutation list which will merge the elements
-*  of A (which is composed of two independently sorted sets) into a
-*  single set which is sorted in ascending order.
-*
-*  Arguments
-*  =========
-*
-*  N1     (input) INTEGER
-*
-*  N2     (input) INTEGER
-*         These arguements contain the respective lengths of the two
-*         sorted lists to be merged.
-*
-*  A      (input) DOUBLE PRECISION array, dimension (N1+N2)
-*         The first N1 elements of A contain a list of numbers which
-*         are sorted in either ascending or descending order.  Likewise
-*         for the final N2 elements.
-*
-*  DTRD1  (input) INTEGER
-*
-*  DTRD2  (input) INTEGER
-*         These are the strides to be taken through the array A.
-*         Allowable strides are 1 and -1.  They indicate whether a
-*         subset of A is sorted in ascending (DTRDx = 1) or descending
-*         (DTRDx = -1) order.
-*
-*  INDEX  (output) INTEGER array, dimension (N1+N2)
-*         On exit this array will contain a permutation such that
-*         if B( I ) = A( INDEX( I ) ) for I=1,N1+N2, then B will be
-*         sorted in ascending order.
 *
 *  =====================================================================
 *

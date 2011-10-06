@@ -1,16 +1,184 @@
+*> \brief \b DLA_SYAMV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
+*                             INCY )
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION   ALPHA, BETA
+*       INTEGER            INCX, INCY, LDA, N, UPLO
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), X( * ), Y( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLA_SYAMV  performs the matrix-vector operation
+*>
+*>         y := alpha*abs(A)*abs(x) + beta*abs(y),
+*>
+*> where alpha and beta are scalars, x and y are vectors and A is an
+*> n by n symmetric matrix.
+*>
+*> This function is primarily used in calculating error bounds.
+*> To protect against underflow during evaluation, components in
+*> the resulting vector are perturbed away from zero by (N+1)
+*> times the underflow threshold.  To prevent unnecessarily large
+*> errors for block-structure embedded in general matrices,
+*> "symbolically" zero components are not perturbed.  A zero
+*> entry is considered "symbolic" if all multiplications involved
+*> in computing that entry have at least one zero multiplicand.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is INTEGER
+*>           On entry, UPLO specifies whether the upper or lower
+*>           triangular part of the array A is to be referenced as
+*>           follows:
+*> \endverbatim
+*> \verbatim
+*>              UPLO = BLAS_UPPER   Only the upper triangular part of A
+*>                                  is to be referenced.
+*> \endverbatim
+*> \verbatim
+*>              UPLO = BLAS_LOWER   Only the lower triangular part of A
+*>                                  is to be referenced.
+*> \endverbatim
+*> \verbatim
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry, N specifies the number of columns of the matrix A.
+*>           N must be at least zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is DOUBLE PRECISION .
+*>           On entry, ALPHA specifies the scalar alpha.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array of DIMENSION ( LDA, n ).
+*>           Before entry, the leading m by n part of the array A must
+*>           contain the matrix of coefficients.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           On entry, LDA specifies the first dimension of A as declared
+*>           in the calling (sub) program. LDA must be at least
+*>           max( 1, n ).
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension
+*>           ( 1 + ( n - 1 )*abs( INCX ) )
+*>           Before entry, the incremented array X must contain the
+*>           vector x.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>           On entry, INCX specifies the increment for the elements of
+*>           X. INCX must not be zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is DOUBLE PRECISION .
+*>           On entry, BETA specifies the scalar beta. When BETA is
+*>           supplied as zero then Y need not be set on input.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in,out] Y
+*> \verbatim
+*>          Y is DOUBLE PRECISION array, dimension
+*>           ( 1 + ( n - 1 )*abs( INCY ) )
+*>           Before entry with BETA non-zero, the incremented array Y
+*>           must contain the vector y. On exit, Y is overwritten by the
+*>           updated vector y.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>           On entry, INCY specifies the increment for the elements of
+*>           Y. INCY must not be zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleSYcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Level 2 Blas routine.
+*>
+*>  -- Written on 22-October-1986.
+*>     Jack Dongarra, Argonne National Lab.
+*>     Jeremy Du Croz, Nag Central Office.
+*>     Sven Hammarling, Nag Central Office.
+*>     Richard Hanson, Sandia National Labs.
+*>  -- Modified for the absolute-value product, April 2006
+*>     Jason Riedy, UC Berkeley
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
      $                      INCY )
 *
-*     -- LAPACK routine (version 3.2.2)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- June 2010                                                    --
+*  -- LAPACK computational routine (version 3.2.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   ALPHA, BETA
       INTEGER            INCX, INCY, LDA, N, UPLO
@@ -18,101 +186,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( LDA, * ), X( * ), Y( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLA_SYAMV  performs the matrix-vector operation
-*
-*          y := alpha*abs(A)*abs(x) + beta*abs(y),
-*
-*  where alpha and beta are scalars, x and y are vectors and A is an
-*  n by n symmetric matrix.
-*
-*  This function is primarily used in calculating error bounds.
-*  To protect against underflow during evaluation, components in
-*  the resulting vector are perturbed away from zero by (N+1)
-*  times the underflow threshold.  To prevent unnecessarily large
-*  errors for block-structure embedded in general matrices,
-*  "symbolically" zero components are not perturbed.  A zero
-*  entry is considered "symbolic" if all multiplications involved
-*  in computing that entry have at least one zero multiplicand.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO    (input) INTEGER
-*           On entry, UPLO specifies whether the upper or lower
-*           triangular part of the array A is to be referenced as
-*           follows:
-*
-*              UPLO = BLAS_UPPER   Only the upper triangular part of A
-*                                  is to be referenced.
-*
-*              UPLO = BLAS_LOWER   Only the lower triangular part of A
-*                                  is to be referenced.
-*
-*           Unchanged on exit.
-*
-*  N       (input) INTEGER
-*           On entry, N specifies the number of columns of the matrix A.
-*           N must be at least zero.
-*           Unchanged on exit.
-*
-*  ALPHA    (input) DOUBLE PRECISION   .
-*           On entry, ALPHA specifies the scalar alpha.
-*           Unchanged on exit.
-*
-*  A        (input) DOUBLE PRECISION   array of DIMENSION ( LDA, n ).
-*           Before entry, the leading m by n part of the array A must
-*           contain the matrix of coefficients.
-*           Unchanged on exit.
-*
-*  LDA     (input) INTEGER
-*           On entry, LDA specifies the first dimension of A as declared
-*           in the calling (sub) program. LDA must be at least
-*           max( 1, n ).
-*           Unchanged on exit.
-*
-*  X       (input) DOUBLE PRECISION array, dimension
-*           ( 1 + ( n - 1 )*abs( INCX ) )
-*           Before entry, the incremented array X must contain the
-*           vector x.
-*           Unchanged on exit.
-*
-*  INCX    (input) INTEGER
-*           On entry, INCX specifies the increment for the elements of
-*           X. INCX must not be zero.
-*           Unchanged on exit.
-*
-*  BETA     (input) DOUBLE PRECISION   .
-*           On entry, BETA specifies the scalar beta. When BETA is
-*           supplied as zero then Y need not be set on input.
-*           Unchanged on exit.
-*
-*  Y       (input/output) DOUBLE PRECISION  array, dimension
-*           ( 1 + ( n - 1 )*abs( INCY ) )
-*           Before entry with BETA non-zero, the incremented array Y
-*           must contain the vector y. On exit, Y is overwritten by the
-*           updated vector y.
-*
-*  INCY    (input) INTEGER
-*           On entry, INCY specifies the increment for the elements of
-*           Y. INCY must not be zero.
-*           Unchanged on exit.
-*
-*  Further Details
-*  ===============
-*
-*  Level 2 Blas routine.
-*
-*  -- Written on 22-October-1986.
-*     Jack Dongarra, Argonne National Lab.
-*     Jeremy Du Croz, Nag Central Office.
-*     Sven Hammarling, Nag Central Office.
-*     Richard Hanson, Sandia National Labs.
-*  -- Modified for the absolute-value product, April 2006
-*     Jason Riedy, UC Berkeley
 *
 *  =====================================================================
 *

@@ -1,15 +1,215 @@
+*> \brief \b DCSDTS
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
+*                          LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
+*                          RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDX, LDU1, LDU2, LDV1T, LDV2T, LWORK, M, P, Q
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   RESULT( 9 ), RWORK( * ), THETA( * )
+*       DOUBLE PRECISION   U1( LDU1, * ), U2( LDU2, * ), V1T( LDV1T, * ),
+*      $                   V2T( LDV2T, * ), WORK( LWORK ), X( LDX, * ),
+*      $                   XF( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DCSDTS tests DORCSD, which, given an M-by-M partitioned orthogonal
+*> matrix X,
+*>              Q  M-Q
+*>       X = [ X11 X12 ] P   ,
+*>           [ X21 X22 ] M-P
+*>
+*> computes the CSD
+*>
+*>       [ U1    ]**T * [ X11 X12 ] * [ V1    ]
+*>       [    U2 ]      [ X21 X22 ]   [    V2 ]
+*>
+*>                             [  I  0  0 |  0  0  0 ]
+*>                             [  0  C  0 |  0 -S  0 ]
+*>                             [  0  0  0 |  0  0 -I ]
+*>                           = [---------------------] = [ D11 D12 ] .
+*>                             [  0  0  0 |  I  0  0 ]   [ D21 D22 ]
+*>                             [  0  S  0 |  0  C  0 ]
+*>                             [  0  0  I |  0  0  0 ]
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix X.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is INTEGER
+*>          The number of rows of the matrix X11.  P >= 0.
+*> \endverbatim
+*>
+*> \param[in] Q
+*> \verbatim
+*>          Q is INTEGER
+*>          The number of columns of the matrix X11.  Q >= 0.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (LDX,M)
+*>          The M-by-M matrix X.
+*> \endverbatim
+*>
+*> \param[out] XF
+*> \verbatim
+*>          XF is DOUBLE PRECISION array, dimension (LDX,M)
+*>          Details of the CSD of X, as returned by DORCSD;
+*>          see DORCSD for further details.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the arrays X and XF.
+*>          LDX >= max( 1,M ).
+*> \endverbatim
+*>
+*> \param[out] U1
+*> \verbatim
+*>          U1 is DOUBLE PRECISION array, dimension(LDU1,P)
+*>          The P-by-P orthogonal matrix U1.
+*> \endverbatim
+*>
+*> \param[in] LDU1
+*> \verbatim
+*>          LDU1 is INTEGER
+*>          The leading dimension of the array U1. LDU >= max(1,P).
+*> \endverbatim
+*>
+*> \param[out] U2
+*> \verbatim
+*>          U2 is DOUBLE PRECISION array, dimension(LDU2,M-P)
+*>          The (M-P)-by-(M-P) orthogonal matrix U2.
+*> \endverbatim
+*>
+*> \param[in] LDU2
+*> \verbatim
+*>          LDU2 is INTEGER
+*>          The leading dimension of the array U2. LDU >= max(1,M-P).
+*> \endverbatim
+*>
+*> \param[out] V1T
+*> \verbatim
+*>          V1T is DOUBLE PRECISION array, dimension(LDV1T,Q)
+*>          The Q-by-Q orthogonal matrix V1T.
+*> \endverbatim
+*>
+*> \param[in] LDV1T
+*> \verbatim
+*>          LDV1T is INTEGER
+*>          The leading dimension of the array V1T. LDV1T >=
+*>          max(1,Q).
+*> \endverbatim
+*>
+*> \param[out] V2T
+*> \verbatim
+*>          V2T is DOUBLE PRECISION array, dimension(LDV2T,M-Q)
+*>          The (M-Q)-by-(M-Q) orthogonal matrix V2T.
+*> \endverbatim
+*>
+*> \param[in] LDV2T
+*> \verbatim
+*>          LDV2T is INTEGER
+*>          The leading dimension of the array V2T. LDV2T >=
+*>          max(1,M-Q).
+*> \endverbatim
+*>
+*> \param[out] THETA
+*> \verbatim
+*>          THETA is DOUBLE PRECISION array, dimension MIN(P,M-P,Q,M-Q)
+*>          The CS values of X; the essentially diagonal matrices C and
+*>          S are constructed from THETA; see subroutine DORCSD for
+*>          details.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (M)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (9)
+*>          The test ratios:
+*>          RESULT(1) = norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 )
+*>          RESULT(2) = norm( U1'*X12*V2 - D12 ) / ( MAX(1,P,M-Q)*EPS2 )
+*>          RESULT(3) = norm( U2'*X21*V1 - D21 ) / ( MAX(1,M-P,Q)*EPS2 )
+*>          RESULT(4) = norm( U2'*X22*V2 - D22 ) / ( MAX(1,M-P,M-Q)*EPS2 )
+*>          RESULT(5) = norm( I - U1'*U1 ) / ( MAX(1,P)*ULP )
+*>          RESULT(6) = norm( I - U2'*U2 ) / ( MAX(1,M-P)*ULP )
+*>          RESULT(7) = norm( I - V1T'*V1T ) / ( MAX(1,Q)*ULP )
+*>          RESULT(8) = norm( I - V2T'*V2T ) / ( MAX(1,M-Q)*ULP )
+*>          RESULT(9) = 0        if THETA is in increasing order and
+*>                               all angles are in [0,pi/2];
+*>                    = ULPINV   otherwise.
+*>          ( EPS2 = MAX( norm( I - X'*X ) / M, ULP ). )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
      $                   LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
      $                   RWORK, RESULT )
-      IMPLICIT NONE
 *
-*     Originally xGSVTS
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
-*
-*     Adapted to DCSDTS
-*     July 2010
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDX, LDU1, LDU2, LDV1T, LDV2T, LWORK, M, P, Q
@@ -21,106 +221,6 @@
      $                   V2T( LDV2T, * ), WORK( LWORK ), X( LDX, * ),
      $                   XF( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DCSDTS tests DORCSD, which, given an M-by-M partitioned orthogonal
-*  matrix X,
-*               Q  M-Q
-*        X = [ X11 X12 ] P   ,
-*            [ X21 X22 ] M-P
-*
-*  computes the CSD
-*
-*        [ U1    ]**T * [ X11 X12 ] * [ V1    ]
-*        [    U2 ]      [ X21 X22 ]   [    V2 ]
-*
-*                              [  I  0  0 |  0  0  0 ]
-*                              [  0  C  0 |  0 -S  0 ]
-*                              [  0  0  0 |  0  0 -I ]
-*                            = [---------------------] = [ D11 D12 ] .
-*                              [  0  0  0 |  I  0  0 ]   [ D21 D22 ]
-*                              [  0  S  0 |  0  C  0 ]
-*                              [  0  0  I |  0  0  0 ]
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix X.  M >= 0.
-*
-*  P       (input) INTEGER
-*          The number of rows of the matrix X11.  P >= 0.
-*
-*  Q       (input) INTEGER
-*          The number of columns of the matrix X11.  Q >= 0.
-*
-*  X       (input) DOUBLE PRECISION array, dimension (LDX,M)
-*          The M-by-M matrix X.
-*
-*  XF      (output) DOUBLE PRECISION array, dimension (LDX,M)
-*          Details of the CSD of X, as returned by DORCSD;
-*          see DORCSD for further details.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the arrays X and XF.
-*          LDX >= max( 1,M ).
-*
-*  U1      (output) DOUBLE PRECISION array, dimension(LDU1,P)
-*          The P-by-P orthogonal matrix U1.
-*
-*  LDU1    (input) INTEGER
-*          The leading dimension of the array U1. LDU >= max(1,P).
-*
-*  U2      (output) DOUBLE PRECISION array, dimension(LDU2,M-P)
-*          The (M-P)-by-(M-P) orthogonal matrix U2.
-*
-*  LDU2    (input) INTEGER
-*          The leading dimension of the array U2. LDU >= max(1,M-P).
-*
-*  V1T     (output) DOUBLE PRECISION array, dimension(LDV1T,Q)
-*          The Q-by-Q orthogonal matrix V1T.
-*
-*  LDV1T   (input) INTEGER
-*          The leading dimension of the array V1T. LDV1T >=
-*          max(1,Q).
-*
-*  V2T     (output) DOUBLE PRECISION array, dimension(LDV2T,M-Q)
-*          The (M-Q)-by-(M-Q) orthogonal matrix V2T.
-*
-*  LDV2T   (input) INTEGER
-*          The leading dimension of the array V2T. LDV2T >=
-*          max(1,M-Q).
-*
-*  THETA   (output) DOUBLE PRECISION array, dimension MIN(P,M-P,Q,M-Q)
-*          The CS values of X; the essentially diagonal matrices C and
-*          S are constructed from THETA; see subroutine DORCSD for
-*          details.
-*
-*  IWORK   (workspace) INTEGER array, dimension (M)
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK
-*
-*  RWORK   (workspace) DOUBLE PRECISION array
-*
-*  RESULT  (output) DOUBLE PRECISION array, dimension (9)
-*          The test ratios:
-*          RESULT(1) = norm( U1'*X11*V1 - D11 ) / ( MAX(1,P,Q)*EPS2 )
-*          RESULT(2) = norm( U1'*X12*V2 - D12 ) / ( MAX(1,P,M-Q)*EPS2 )
-*          RESULT(3) = norm( U2'*X21*V1 - D21 ) / ( MAX(1,M-P,Q)*EPS2 )
-*          RESULT(4) = norm( U2'*X22*V2 - D22 ) / ( MAX(1,M-P,M-Q)*EPS2 )
-*          RESULT(5) = norm( I - U1'*U1 ) / ( MAX(1,P)*ULP )
-*          RESULT(6) = norm( I - U2'*U2 ) / ( MAX(1,M-P)*ULP )
-*          RESULT(7) = norm( I - V1T'*V1T ) / ( MAX(1,Q)*ULP )
-*          RESULT(8) = norm( I - V2T'*V2T ) / ( MAX(1,M-Q)*ULP )
-*          RESULT(9) = 0        if THETA is in increasing order and
-*                               all angles are in [0,pi/2];
-*                    = ULPINV   otherwise.
-*          ( EPS2 = MAX( norm( I - X'*X ) / M, ULP ). )
 *
 *  =====================================================================
 *

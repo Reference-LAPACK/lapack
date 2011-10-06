@@ -1,17 +1,172 @@
+*> \brief \b DLA_GBRCOND
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
+*                                              AFB, LDAFB, IPIV, CMODE, C,
+*                                              INFO, WORK, IWORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            N, LDAB, LDAFB, INFO, KL, KU, CMODE
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * ), IPIV( * )
+*       DOUBLE PRECISION   AB( LDAB, * ), AFB( LDAFB, * ), WORK( * ),
+*      $                   C( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    DLA_GBRCOND Estimates the Skeel condition number of  op(A) * op2(C)
+*>    where op2 is determined by CMODE as follows
+*>    CMODE =  1    op2(C) = C
+*>    CMODE =  0    op2(C) = I
+*>    CMODE = -1    op2(C) = inv(C)
+*>    The Skeel condition number  cond(A) = norminf( |inv(A)||A| )
+*>    is computed by computing scaling factors R such that
+*>    diag(R)*A*op2(C) is row equilibrated and computing the standard
+*>    infinity-norm condition number.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>     Specifies the form of the system of equations:
+*>       = 'N':  A * X = B     (No transpose)
+*>       = 'T':  A**T * X = B  (Transpose)
+*>       = 'C':  A**H * X = B  (Conjugate Transpose = Transpose)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>     The number of linear equations, i.e., the order of the
+*>     matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>     The number of subdiagonals within the band of A.  KL >= 0.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>     The number of superdiagonals within the band of A.  KU >= 0.
+*> \endverbatim
+*>
+*> \param[in] AB
+*> \verbatim
+*>          AB is DOUBLE PRECISION array, dimension (LDAB,N)
+*>     On entry, the matrix A in band storage, in rows 1 to KL+KU+1.
+*>     The j-th column of A is stored in the j-th column of the
+*>     array AB as follows:
+*>     AB(KU+1+i-j,j) = A(i,j) for max(1,j-KU)<=i<=min(N,j+kl)
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>     The leading dimension of the array AB.  LDAB >= KL+KU+1.
+*> \endverbatim
+*>
+*> \param[in] AFB
+*> \verbatim
+*>          AFB is DOUBLE PRECISION array, dimension (LDAFB,N)
+*>     Details of the LU factorization of the band matrix A, as
+*>     computed by DGBTRF.  U is stored as an upper triangular
+*>     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
+*>     and the multipliers used during the factorization are stored
+*>     in rows KL+KU+2 to 2*KL+KU+1.
+*> \endverbatim
+*>
+*> \param[in] LDAFB
+*> \verbatim
+*>          LDAFB is INTEGER
+*>     The leading dimension of the array AFB.  LDAFB >= 2*KL+KU+1.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>     The pivot indices from the factorization A = P*L*U
+*>     as computed by DGBTRF; row i of the matrix was interchanged
+*>     with row IPIV(i).
+*> \endverbatim
+*>
+*> \param[in] CMODE
+*> \verbatim
+*>          CMODE is INTEGER
+*>     Determines op2(C) in the formula op(A) * op2(C) as follows:
+*>     CMODE =  1    op2(C) = C
+*>     CMODE =  0    op2(C) = I
+*>     CMODE = -1    op2(C) = inv(C)
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension (N)
+*>     The vector C in the formula op(A) * op2(C).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>       = 0:  Successful exit.
+*>     i > 0:  The ith argument is invalid.
+*> \endverbatim
+*>
+*> \param[in] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (5*N).
+*>     Workspace.
+*> \endverbatim
+*>
+*> \param[in] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (N).
+*>     Workspace.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleGBcomputational
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DLA_GBRCOND( TRANS, N, KL, KU, AB, LDAB,
      $                                       AFB, LDAFB, IPIV, CMODE, C,
      $                                       INFO, WORK, IWORK )
 *
-*     -- LAPACK routine (version 3.2.2)                               --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- June 2010                                                    --
+*  -- LAPACK computational routine (version 3.2.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
       INTEGER            N, LDAB, LDAFB, INFO, KL, KU, CMODE
@@ -21,81 +176,6 @@
       DOUBLE PRECISION   AB( LDAB, * ), AFB( LDAFB, * ), WORK( * ),
      $                   C( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     DLA_GBRCOND Estimates the Skeel condition number of  op(A) * op2(C)
-*     where op2 is determined by CMODE as follows
-*     CMODE =  1    op2(C) = C
-*     CMODE =  0    op2(C) = I
-*     CMODE = -1    op2(C) = inv(C)
-*     The Skeel condition number  cond(A) = norminf( |inv(A)||A| )
-*     is computed by computing scaling factors R such that
-*     diag(R)*A*op2(C) is row equilibrated and computing the standard
-*     infinity-norm condition number.
-*
-*  Arguments
-*  =========
-*
-*     TRANS   (input) CHARACTER*1
-*     Specifies the form of the system of equations:
-*       = 'N':  A * X = B     (No transpose)
-*       = 'T':  A**T * X = B  (Transpose)
-*       = 'C':  A**H * X = B  (Conjugate Transpose = Transpose)
-*
-*     N       (input) INTEGER
-*     The number of linear equations, i.e., the order of the
-*     matrix A.  N >= 0.
-*
-*     KL      (input) INTEGER
-*     The number of subdiagonals within the band of A.  KL >= 0.
-*
-*     KU      (input) INTEGER
-*     The number of superdiagonals within the band of A.  KU >= 0.
-*
-*     AB      (input) DOUBLE PRECISION array, dimension (LDAB,N)
-*     On entry, the matrix A in band storage, in rows 1 to KL+KU+1.
-*     The j-th column of A is stored in the j-th column of the
-*     array AB as follows:
-*     AB(KU+1+i-j,j) = A(i,j) for max(1,j-KU)<=i<=min(N,j+kl)
-*
-*     LDAB    (input) INTEGER
-*     The leading dimension of the array AB.  LDAB >= KL+KU+1.
-*
-*     AFB     (input) DOUBLE PRECISION array, dimension (LDAFB,N)
-*     Details of the LU factorization of the band matrix A, as
-*     computed by DGBTRF.  U is stored as an upper triangular
-*     band matrix with KL+KU superdiagonals in rows 1 to KL+KU+1,
-*     and the multipliers used during the factorization are stored
-*     in rows KL+KU+2 to 2*KL+KU+1.
-*
-*     LDAFB   (input) INTEGER
-*     The leading dimension of the array AFB.  LDAFB >= 2*KL+KU+1.
-*
-*     IPIV    (input) INTEGER array, dimension (N)
-*     The pivot indices from the factorization A = P*L*U
-*     as computed by DGBTRF; row i of the matrix was interchanged
-*     with row IPIV(i).
-*
-*     CMODE   (input) INTEGER
-*     Determines op2(C) in the formula op(A) * op2(C) as follows:
-*     CMODE =  1    op2(C) = C
-*     CMODE =  0    op2(C) = I
-*     CMODE = -1    op2(C) = inv(C)
-*
-*     C       (input) DOUBLE PRECISION array, dimension (N)
-*     The vector C in the formula op(A) * op2(C).
-*
-*     INFO    (output) INTEGER
-*       = 0:  Successful exit.
-*     i > 0:  The ith argument is invalid.
-*
-*     WORK    (input) DOUBLE PRECISION array, dimension (5*N).
-*     Workspace.
-*
-*     IWORK   (input) INTEGER array, dimension (N).
-*     Workspace.
 *
 *  =====================================================================
 *

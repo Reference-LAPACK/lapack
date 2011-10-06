@@ -1,8 +1,170 @@
+*> \brief \b ZLAROR
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          INIT, SIDE
+*       INTEGER            INFO, LDA, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       COMPLEX*16         A( LDA, * ), X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    ZLAROR pre- or post-multiplies an M by N matrix A by a random
+*>    unitary matrix U, overwriting A. A may optionally be
+*>    initialized to the identity matrix before multiplying by U.
+*>    U is generated using the method of G.W. Stewart
+*>    ( SIAM J. Numer. Anal. 17, 1980, pp. 403-409 ).
+*>    (BLAS-2 version)
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>           SIDE specifies whether A is multiplied on the left or right
+*>           by U.
+*>       SIDE = 'L'   Multiply A on the left (premultiply) by U
+*>       SIDE = 'R'   Multiply A on the right (postmultiply) by UC>       SIDE = 'C'   Multiply A on the left by U and the right by UC>       SIDE = 'T'   Multiply A on the left by U and the right by U'
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] INIT
+*> \verbatim
+*>          INIT is CHARACTER*1
+*>           INIT specifies whether or not A should be initialized to
+*>           the identity matrix.
+*>              INIT = 'I'   Initialize A to (a section of) the
+*>                           identity matrix before applying U.
+*>              INIT = 'N'   No initialization.  Apply U to the
+*>                           input matrix A.
+*> \endverbatim
+*> \verbatim
+*>           INIT = 'I' may be used to generate square (i.e., unitary)
+*>           or rectangular orthogonal matrices (orthogonality being
+*>           in the sense of ZDOTC):
+*> \endverbatim
+*> \verbatim
+*>           For square matrices, M=N, and SIDE many be either 'L' or
+*>           'R'; the rows will be orthogonal to each other, as will the
+*>           columns.
+*>           For rectangular matrices where M < N, SIDE = 'R' will
+*>           produce a dense matrix whose rows will be orthogonal and
+*>           whose columns will not, while SIDE = 'L' will produce a
+*>           matrix whose rows will be orthogonal, and whose first M
+*>           columns will be orthogonal, the remaining columns being
+*>           zero.
+*>           For matrices where M > N, just use the previous
+*>           explanation, interchanging 'L' and 'R' and "rows" and
+*>           "columns".
+*> \endverbatim
+*> \verbatim
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>           Number of rows of A. Not modified.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           Number of columns of A. Not modified.
+*> \endverbatim
+*> \verbatim
+*>  A        COMPLEX*16 array, dimension ( LDA, N )
+*>           Input and output array. Overwritten by U A ( if SIDE = 'L' )
+*>           or by A U ( if SIDE = 'R' )
+*>           or by U A U* ( if SIDE = 'C')
+*>           or by U A U' ( if SIDE = 'T') on exit.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           Leading dimension of A. Must be at least MAX ( 1, M ).
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension ( 4 )
+*>           On entry ISEED specifies the seed of the random number
+*>           generator. The array elements should be between 0 and 4095;
+*>           if not they will be reduced mod 4096.  Also, ISEED(4) must
+*>           be odd.  The random number generator uses a linear
+*>           congruential sequence limited to small integers, and so
+*>           should produce machine independent random numbers. The
+*>           values of ISEED are changed on exit, and can be used in the
+*>           next call to ZLAROR to continue the same random number
+*>           sequence.
+*>           Modified.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension ( 3*MAX( M, N ) )
+*>           Workspace. Of length:
+*>               2*M + N if SIDE = 'L',
+*>               2*N + M if SIDE = 'R',
+*>               3*N     if SIDE = 'C' or 'T'.
+*>           Modified.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>           An error flag.  It is set to:
+*>            0  if no error.
+*>            1  if ZLARND returned a bad random number (installation
+*>               problem)
+*>           -1  if SIDE is not L, R, C, or T.
+*>           -3  if M is negative.
+*>           -4  if N is negative or if SIDE is C or T and N is not equal
+*>               to M.
+*>           -6  if LDA is less than M.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_matgen
+*
+*  =====================================================================
       SUBROUTINE ZLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     June 2010
+*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          INIT, SIDE
@@ -12,101 +174,6 @@
       INTEGER            ISEED( 4 )
       COMPLEX*16         A( LDA, * ), X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     ZLAROR pre- or post-multiplies an M by N matrix A by a random
-*     unitary matrix U, overwriting A. A may optionally be
-*     initialized to the identity matrix before multiplying by U.
-*     U is generated using the method of G.W. Stewart
-*     ( SIAM J. Numer. Anal. 17, 1980, pp. 403-409 ).
-*     (BLAS-2 version)
-*
-*  Arguments
-*  =========
-*
-*  SIDE     (input) CHARACTER*1
-*           SIDE specifies whether A is multiplied on the left or right
-*           by U.
-*       SIDE = 'L'   Multiply A on the left (premultiply) by U
-*       SIDE = 'R'   Multiply A on the right (postmultiply) by U*
-*       SIDE = 'C'   Multiply A on the left by U and the right by U*
-*       SIDE = 'T'   Multiply A on the left by U and the right by U'
-*           Not modified.
-*
-*  INIT     (input) CHARACTER*1
-*           INIT specifies whether or not A should be initialized to
-*           the identity matrix.
-*              INIT = 'I'   Initialize A to (a section of) the
-*                           identity matrix before applying U.
-*              INIT = 'N'   No initialization.  Apply U to the
-*                           input matrix A.
-*
-*           INIT = 'I' may be used to generate square (i.e., unitary)
-*           or rectangular orthogonal matrices (orthogonality being
-*           in the sense of ZDOTC):
-*
-*           For square matrices, M=N, and SIDE many be either 'L' or
-*           'R'; the rows will be orthogonal to each other, as will the
-*           columns.
-*           For rectangular matrices where M < N, SIDE = 'R' will
-*           produce a dense matrix whose rows will be orthogonal and
-*           whose columns will not, while SIDE = 'L' will produce a
-*           matrix whose rows will be orthogonal, and whose first M
-*           columns will be orthogonal, the remaining columns being
-*           zero.
-*           For matrices where M > N, just use the previous
-*           explanation, interchanging 'L' and 'R' and "rows" and
-*           "columns".
-*
-*           Not modified.
-*
-*  M        (input) INTEGER
-*           Number of rows of A. Not modified.
-*
-*  N        (input) INTEGER
-*           Number of columns of A. Not modified.
-*
-*  A        COMPLEX*16 array, dimension ( LDA, N )
-*           Input and output array. Overwritten by U A ( if SIDE = 'L' )
-*           or by A U ( if SIDE = 'R' )
-*           or by U A U* ( if SIDE = 'C')
-*           or by U A U' ( if SIDE = 'T') on exit.
-*
-*  LDA      (input) INTEGER
-*           Leading dimension of A. Must be at least MAX ( 1, M ).
-*           Not modified.
-*
-*  ISEED    (input/output) INTEGER array, dimension ( 4 )
-*           On entry ISEED specifies the seed of the random number
-*           generator. The array elements should be between 0 and 4095;
-*           if not they will be reduced mod 4096.  Also, ISEED(4) must
-*           be odd.  The random number generator uses a linear
-*           congruential sequence limited to small integers, and so
-*           should produce machine independent random numbers. The
-*           values of ISEED are changed on exit, and can be used in the
-*           next call to ZLAROR to continue the same random number
-*           sequence.
-*           Modified.
-*
-*  X       (workspace) COMPLEX*16 array, dimension ( 3*MAX( M, N ) )
-*           Workspace. Of length:
-*               2*M + N if SIDE = 'L',
-*               2*N + M if SIDE = 'R',
-*               3*N     if SIDE = 'C' or 'T'.
-*           Modified.
-*
-*  INFO    (output) INTEGER
-*           An error flag.  It is set to:
-*            0  if no error.
-*            1  if ZLARND returned a bad random number (installation
-*               problem)
-*           -1  if SIDE is not L, R, C, or T.
-*           -3  if M is negative.
-*           -4  if N is negative or if SIDE is C or T and N is not equal
-*               to M.
-*           -6  if LDA is less than M.
 *
 *  =====================================================================
 *

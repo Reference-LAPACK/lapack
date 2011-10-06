@@ -1,10 +1,174 @@
+*> \brief \b DLASD8
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,
+*                          DSIGMA, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            ICOMPQ, INFO, K, LDDIFR
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), DIFL( * ), DIFR( LDDIFR, * ),
+*      $                   DSIGMA( * ), VF( * ), VL( * ), WORK( * ),
+*      $                   Z( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLASD8 finds the square roots of the roots of the secular equation,
+*> as defined by the values in DSIGMA and Z. It makes the appropriate
+*> calls to DLASD4, and stores, for each  element in D, the distance
+*> to its two nearest poles (elements in DSIGMA). It also updates
+*> the arrays VF and VL, the first and last components of all the
+*> right singular vectors of the original bidiagonal matrix.
+*>
+*> DLASD8 is called from DLASD6.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ICOMPQ
+*> \verbatim
+*>          ICOMPQ is INTEGER
+*>          Specifies whether singular vectors are to be computed in
+*>          factored form in the calling routine:
+*>          = 0: Compute singular values only.
+*>          = 1: Compute singular vectors in factored form as well.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of terms in the rational function to be solved
+*>          by DLASD4.  K >= 1.
+*> \endverbatim
+*>
+*> \param[out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension ( K )
+*>          On output, D contains the updated singular values.
+*> \endverbatim
+*>
+*> \param[in,out] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension ( K )
+*>          On entry, the first K elements of this array contain the
+*>          components of the deflation-adjusted updating row vector.
+*>          On exit, Z is updated.
+*> \endverbatim
+*>
+*> \param[in,out] VF
+*> \verbatim
+*>          VF is DOUBLE PRECISION array, dimension ( K )
+*>          On entry, VF contains  information passed through DBEDE8.
+*>          On exit, VF contains the first K components of the first
+*>          components of all right singular vectors of the bidiagonal
+*>          matrix.
+*> \endverbatim
+*>
+*> \param[in,out] VL
+*> \verbatim
+*>          VL is DOUBLE PRECISION array, dimension ( K )
+*>          On entry, VL contains  information passed through DBEDE8.
+*>          On exit, VL contains the first K components of the last
+*>          components of all right singular vectors of the bidiagonal
+*>          matrix.
+*> \endverbatim
+*>
+*> \param[out] DIFL
+*> \verbatim
+*>          DIFL is DOUBLE PRECISION array, dimension ( K )
+*>          On exit, DIFL(I) = D(I) - DSIGMA(I).
+*> \endverbatim
+*>
+*> \param[out] DIFR
+*> \verbatim
+*>          DIFR is DOUBLE PRECISION array,
+*>                   dimension ( LDDIFR, 2 ) if ICOMPQ = 1 and
+*>                   dimension ( K ) if ICOMPQ = 0.
+*>          On exit, DIFR(I,1) = D(I) - DSIGMA(I+1), DIFR(K,1) is not
+*>          defined and will not be referenced.
+*> \endverbatim
+*> \verbatim
+*>          If ICOMPQ = 1, DIFR(1:K,2) is an array containing the
+*>          normalizing factors for the right singular vector matrix.
+*> \endverbatim
+*>
+*> \param[in] LDDIFR
+*> \verbatim
+*>          LDDIFR is INTEGER
+*>          The leading dimension of DIFR, must be at least K.
+*> \endverbatim
+*>
+*> \param[in,out] DSIGMA
+*> \verbatim
+*>          DSIGMA is DOUBLE PRECISION array, dimension ( K )
+*>          On entry, the first K elements of this array contain the old
+*>          roots of the deflated updating problem.  These are the poles
+*>          of the secular equation.
+*>          On exit, the elements of DSIGMA may be very slightly altered
+*>          in value.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension at least 3 * K
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  if INFO = 1, a singular value did not converge
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Huan Ren, Computer Science Division, University of
+*>     California at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,
      $                   DSIGMA, WORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.3.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            ICOMPQ, INFO, K, LDDIFR
@@ -14,87 +178,6 @@
      $                   DSIGMA( * ), VF( * ), VL( * ), WORK( * ),
      $                   Z( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLASD8 finds the square roots of the roots of the secular equation,
-*  as defined by the values in DSIGMA and Z. It makes the appropriate
-*  calls to DLASD4, and stores, for each  element in D, the distance
-*  to its two nearest poles (elements in DSIGMA). It also updates
-*  the arrays VF and VL, the first and last components of all the
-*  right singular vectors of the original bidiagonal matrix.
-*
-*  DLASD8 is called from DLASD6.
-*
-*  Arguments
-*  =========
-*
-*  ICOMPQ  (input) INTEGER
-*          Specifies whether singular vectors are to be computed in
-*          factored form in the calling routine:
-*          = 0: Compute singular values only.
-*          = 1: Compute singular vectors in factored form as well.
-*
-*  K       (input) INTEGER
-*          The number of terms in the rational function to be solved
-*          by DLASD4.  K >= 1.
-*
-*  D       (output) DOUBLE PRECISION array, dimension ( K )
-*          On output, D contains the updated singular values.
-*
-*  Z       (input/output) DOUBLE PRECISION array, dimension ( K )
-*          On entry, the first K elements of this array contain the
-*          components of the deflation-adjusted updating row vector.
-*          On exit, Z is updated.
-*
-*  VF      (input/output) DOUBLE PRECISION array, dimension ( K )
-*          On entry, VF contains  information passed through DBEDE8.
-*          On exit, VF contains the first K components of the first
-*          components of all right singular vectors of the bidiagonal
-*          matrix.
-*
-*  VL      (input/output) DOUBLE PRECISION array, dimension ( K )
-*          On entry, VL contains  information passed through DBEDE8.
-*          On exit, VL contains the first K components of the last
-*          components of all right singular vectors of the bidiagonal
-*          matrix.
-*
-*  DIFL    (output) DOUBLE PRECISION array, dimension ( K )
-*          On exit, DIFL(I) = D(I) - DSIGMA(I).
-*
-*  DIFR    (output) DOUBLE PRECISION array,
-*                   dimension ( LDDIFR, 2 ) if ICOMPQ = 1 and
-*                   dimension ( K ) if ICOMPQ = 0.
-*          On exit, DIFR(I,1) = D(I) - DSIGMA(I+1), DIFR(K,1) is not
-*          defined and will not be referenced.
-*
-*          If ICOMPQ = 1, DIFR(1:K,2) is an array containing the
-*          normalizing factors for the right singular vector matrix.
-*
-*  LDDIFR  (input) INTEGER
-*          The leading dimension of DIFR, must be at least K.
-*
-*  DSIGMA  (input/output) DOUBLE PRECISION array, dimension ( K )
-*          On entry, the first K elements of this array contain the old
-*          roots of the deflated updating problem.  These are the poles
-*          of the secular equation.
-*          On exit, the elements of DSIGMA may be very slightly altered
-*          in value.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension at least 3 * K
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  if INFO = 1, a singular value did not converge
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Huan Ren, Computer Science Division, University of
-*     California at Berkeley, USA
 *
 *  =====================================================================
 *

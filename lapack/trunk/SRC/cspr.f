@@ -1,9 +1,136 @@
+*> \brief \b CSPR
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CSPR( UPLO, N, ALPHA, X, INCX, AP )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INCX, N
+*       COMPLEX            ALPHA
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            AP( * ), X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CSPR    performs the symmetric rank 1 operation
+*>
+*>    A := alpha*x*x**H + A,
+*>
+*> where alpha is a complex scalar, x is an n element vector and A is an
+*> n by n symmetric matrix, supplied in packed form.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>           On entry, UPLO specifies whether the upper or lower
+*>           triangular part of the matrix A is supplied in the packed
+*>           array AP as follows:
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'U' or 'u'   The upper triangular part of A is
+*>                                  supplied in AP.
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'L' or 'l'   The lower triangular part of A is
+*>                                  supplied in AP.
+*> \endverbatim
+*> \verbatim
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry, N specifies the order of the matrix A.
+*>           N must be at least zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX
+*>           On entry, ALPHA specifies the scalar alpha.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is COMPLEX array, dimension at least
+*>           ( 1 + ( N - 1 )*abs( INCX ) ).
+*>           Before entry, the incremented array X must contain the N-
+*>           element vector x.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>           On entry, INCX specifies the increment for the elements of
+*>           X. INCX must not be zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in,out] AP
+*> \verbatim
+*>          AP is COMPLEX array, dimension at least
+*>           ( ( N*( N + 1 ) )/2 ).
+*>           Before entry, with  UPLO = 'U' or 'u', the array AP must
+*>           contain the upper triangular part of the symmetric matrix
+*>           packed sequentially, column by column, so that AP( 1 )
+*>           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 1, 2 )
+*>           and a( 2, 2 ) respectively, and so on. On exit, the array
+*>           AP is overwritten by the upper triangular part of the
+*>           updated matrix.
+*>           Before entry, with UPLO = 'L' or 'l', the array AP must
+*>           contain the lower triangular part of the symmetric matrix
+*>           packed sequentially, column by column, so that AP( 1 )
+*>           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 2, 1 )
+*>           and a( 3, 1 ) respectively, and so on. On exit, the array
+*>           AP is overwritten by the lower triangular part of the
+*>           updated matrix.
+*>           Note that the imaginary parts of the diagonal elements need
+*>           not be set, they are assumed to be zero, and on exit they
+*>           are set to zero.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE CSPR( UPLO, N, ALPHA, X, INCX, AP )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -13,72 +140,6 @@
 *     .. Array Arguments ..
       COMPLEX            AP( * ), X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CSPR    performs the symmetric rank 1 operation
-*
-*     A := alpha*x*x**H + A,
-*
-*  where alpha is a complex scalar, x is an n element vector and A is an
-*  n by n symmetric matrix, supplied in packed form.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO     (input) CHARACTER*1
-*           On entry, UPLO specifies whether the upper or lower
-*           triangular part of the matrix A is supplied in the packed
-*           array AP as follows:
-*
-*              UPLO = 'U' or 'u'   The upper triangular part of A is
-*                                  supplied in AP.
-*
-*              UPLO = 'L' or 'l'   The lower triangular part of A is
-*                                  supplied in AP.
-*
-*           Unchanged on exit.
-*
-*  N        (input) INTEGER
-*           On entry, N specifies the order of the matrix A.
-*           N must be at least zero.
-*           Unchanged on exit.
-*
-*  ALPHA    (input) COMPLEX
-*           On entry, ALPHA specifies the scalar alpha.
-*           Unchanged on exit.
-*
-*  X        (input) COMPLEX array, dimension at least
-*           ( 1 + ( N - 1 )*abs( INCX ) ).
-*           Before entry, the incremented array X must contain the N-
-*           element vector x.
-*           Unchanged on exit.
-*
-*  INCX     (input) INTEGER
-*           On entry, INCX specifies the increment for the elements of
-*           X. INCX must not be zero.
-*           Unchanged on exit.
-*
-*  AP       (input/output) COMPLEX array, dimension at least
-*           ( ( N*( N + 1 ) )/2 ).
-*           Before entry, with  UPLO = 'U' or 'u', the array AP must
-*           contain the upper triangular part of the symmetric matrix
-*           packed sequentially, column by column, so that AP( 1 )
-*           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 1, 2 )
-*           and a( 2, 2 ) respectively, and so on. On exit, the array
-*           AP is overwritten by the upper triangular part of the
-*           updated matrix.
-*           Before entry, with UPLO = 'L' or 'l', the array AP must
-*           contain the lower triangular part of the symmetric matrix
-*           packed sequentially, column by column, so that AP( 1 )
-*           contains a( 1, 1 ), AP( 2 ) and AP( 3 ) contain a( 2, 1 )
-*           and a( 3, 1 ) respectively, and so on. On exit, the array
-*           AP is overwritten by the lower triangular part of the
-*           updated matrix.
-*           Note that the imaginary parts of the diagonal elements need
-*           not be set, they are assumed to be zero, and on exit they
-*           are set to zero.
 *
 * =====================================================================
 *

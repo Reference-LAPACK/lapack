@@ -1,34 +1,76 @@
+*> \brief \b XERBLA
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE XERBLA( SRNAME, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*(*)      SRNAME
+*       INTEGER            INFO
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> XERBLA  is an error handler for the LAPACK routines.
+*> It is called by an LAPACK routine if an input parameter has an
+*> invalid value.  A message is printed and execution stops.
+*>
+*> Installers may consider modifying the STOP statement in order to
+*> call system-specific exception-handling facilities.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SRNAME
+*> \verbatim
+*>          SRNAME is CHARACTER*(*)
+*>          The name of the routine which called XERBLA.
+*> \endverbatim
+*>
+*> \param[in] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          The position of the invalid parameter in the parameter list
+*>          of the calling routine.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE XERBLA( SRNAME, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*(*)      SRNAME
       INTEGER            INFO
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  XERBLA  is an error handler for the LAPACK routines.
-*  It is called by an LAPACK routine if an input parameter has an
-*  invalid value.  A message is printed and execution stops.
-*
-*  Installers may consider modifying the STOP statement in order to
-*  call system-specific exception-handling facilities.
-*
-*  Arguments
-*  =========
-*
-*  SRNAME  (input) CHARACTER*(*)
-*          The name of the routine which called XERBLA.
-*
-*  INFO    (input) INTEGER
-*          The position of the invalid parameter in the parameter list
-*          of the calling routine.
 *
 * =====================================================================
 *

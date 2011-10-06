@@ -1,9 +1,131 @@
+*> \brief \b DQPT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
+*                        WORK, LWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            K, LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            JPVT( * )
+*       DOUBLE PRECISION   A( LDA, * ), AF( LDA, * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DQPT01 tests the QR-factorization with pivoting of a matrix A.  The
+*> array AF contains the (possibly partial) QR-factorization of A, where
+*> the upper triangle of AF(1:k,1:k) is a partial triangular factor,
+*> the entries below the diagonal in the first k columns are the
+*> Householder vectors, and the rest of AF contains a partially updated
+*> matrix.
+*>
+*> This function returns ||A*P - Q*R||/(||norm(A)||*eps*M)
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of columns of AF that have been reduced
+*>          to upper triangular form.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA, N)
+*>          The original matrix A.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is DOUBLE PRECISION array, dimension (LDA,N)
+*>          The (possibly partial) output of DGEQPF.  The upper triangle
+*>          of AF(1:k,1:k) is a partial triangular factor, the entries
+*>          below the diagonal in the first k columns are the Householder
+*>          vectors, and the rest of AF contains a partially updated
+*>          matrix.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A and AF.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (K)
+*>          Details of the Householder transformations as returned by
+*>          DGEQPF.
+*> \endverbatim
+*>
+*> \param[in] JPVT
+*> \verbatim
+*>          JPVT is INTEGER array, dimension (N)
+*>          Pivot information as returned by DGEQPF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK >= M*N+N.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
      $                 WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            K, LDA, LWORK, M, N
@@ -13,56 +135,6 @@
       DOUBLE PRECISION   A( LDA, * ), AF( LDA, * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DQPT01 tests the QR-factorization with pivoting of a matrix A.  The
-*  array AF contains the (possibly partial) QR-factorization of A, where
-*  the upper triangle of AF(1:k,1:k) is a partial triangular factor,
-*  the entries below the diagonal in the first k columns are the
-*  Householder vectors, and the rest of AF contains a partially updated
-*  matrix.
-*
-*  This function returns ||A*P - Q*R||/(||norm(A)||*eps*M)
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrices A and AF.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and AF.
-*
-*  K       (input) INTEGER
-*          The number of columns of AF that have been reduced
-*          to upper triangular form.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (LDA, N)
-*          The original matrix A.
-*
-*  AF      (input) DOUBLE PRECISION array, dimension (LDA,N)
-*          The (possibly partial) output of DGEQPF.  The upper triangle
-*          of AF(1:k,1:k) is a partial triangular factor, the entries
-*          below the diagonal in the first k columns are the Householder
-*          vectors, and the rest of AF contains a partially updated
-*          matrix.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A and AF.
-*
-*  TAU     (input) DOUBLE PRECISION array, dimension (K)
-*          Details of the Householder transformations as returned by
-*          DGEQPF.
-*
-*  JPVT    (input) INTEGER array, dimension (N)
-*          Pivot information as returned by DGEQPF.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  LWORK >= M*N+N.
 *
 *  =====================================================================
 *

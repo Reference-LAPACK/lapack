@@ -1,10 +1,178 @@
+*> \brief \b DCKLSE
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DCKLSE( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
+*                          NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, NIN, NMATS, NMAX, NN, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 ), MVAL( * ), NVAL( * ), PVAL( * )
+*       DOUBLE PRECISION   A( * ), AF( * ), B( * ), BF( * ), RWORK( * ),
+*      $                   WORK( * ), X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DCKLSE tests DGGLSE - a subroutine for solving linear equality
+*> constrained least square problem (LSE).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of (M,P,N) contained in the vectors
+*>          (MVAL, PVAL, NVAL).
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix row(column) dimension M.
+*> \endverbatim
+*>
+*> \param[in] PVAL
+*> \verbatim
+*>          PVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix row(column) dimension P.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix column(row) dimension N.
+*> \endverbatim
+*>
+*> \param[in] NMATS
+*> \verbatim
+*>          NMATS is INTEGER
+*>          The number of matrix types to be tested for each combination
+*>          of matrix dimensions.  If NMATS >= NTYPES (the maximum
+*>          number of matrix types), then all the different types are
+*>          generated for testing.  If NMATS < NTYPES, another input line
+*>          is read to get the numbers of the matrix types to be used.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed of the random number generator.  The array
+*>          elements should be between 0 and 4095, otherwise they will be
+*>          reduced mod 4096, and ISEED(4) must be odd.
+*>          On exit, the next seed in the random number sequence after
+*>          all the test matrices have been generated.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] NMAX
+*> \verbatim
+*>          NMAX is INTEGER
+*>          The maximum value permitted for M or N, used in dimensioning
+*>          the work arrays.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AF
+*> \verbatim
+*>          AF is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] BF
+*> \verbatim
+*>          BF is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (5*NMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          The unit number for input.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0 :  successful exit
+*>          > 0 :  If DLATMS returns an error code, the absolute value
+*>                 of it is returned.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DCKLSE( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
      $                   NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
      $                   INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, NIN, NMATS, NMAX, NN, NOUT
@@ -15,76 +183,6 @@
       DOUBLE PRECISION   A( * ), AF( * ), B( * ), BF( * ), RWORK( * ),
      $                   WORK( * ), X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DCKLSE tests DGGLSE - a subroutine for solving linear equality
-*  constrained least square problem (LSE).
-*
-*  Arguments
-*  =========
-*
-*  NN      (input) INTEGER
-*          The number of values of (M,P,N) contained in the vectors
-*          (MVAL, PVAL, NVAL).
-*
-*  MVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix row(column) dimension M.
-*
-*  PVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix row(column) dimension P.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix column(row) dimension N.
-*
-*  NMATS   (input) INTEGER
-*          The number of matrix types to be tested for each combination
-*          of matrix dimensions.  If NMATS >= NTYPES (the maximum
-*          number of matrix types), then all the different types are
-*          generated for testing.  If NMATS < NTYPES, another input line
-*          is read to get the numbers of the matrix types to be used.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed of the random number generator.  The array
-*          elements should be between 0 and 4095, otherwise they will be
-*          reduced mod 4096, and ISEED(4) must be odd.
-*          On exit, the next seed in the random number sequence after
-*          all the test matrices have been generated.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  NMAX    (input) INTEGER
-*          The maximum value permitted for M or N, used in dimensioning
-*          the work arrays.
-*
-*  A       (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  AF      (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  B       (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  BF      (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  X       (workspace) DOUBLE PRECISION array, dimension (5*NMAX)
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (NMAX)
-*
-*  NIN     (input) INTEGER
-*          The unit number for input.
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
-*
-*  INFO    (output) INTEGER
-*          = 0 :  successful exit
-*          > 0 :  If DLATMS returns an error code, the absolute value
-*                 of it is returned.
 *
 *  =====================================================================
 *

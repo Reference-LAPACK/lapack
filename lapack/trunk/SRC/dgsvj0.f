@@ -1,22 +1,217 @@
+*> \brief \b DGSVJ0
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
+*                          SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, NSWEEP
+*       DOUBLE PRECISION   EPS, SFMIN, TOL
+*       CHARACTER*1        JOBV
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), SVA( N ), D( N ), V( LDV, * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGSVJ0 is called from DGESVJ as a pre-processor and that is its main
+*> purpose. It applies Jacobi rotations in the same way as DGESVJ does, but
+*> it does not check convergence (stopping criterion). Few tuning
+*> parameters (marked by [TP]) are available for the implementer.
+*>
+*> Further Details
+*> ~~~~~~~~~~~~~~~
+*> DGSVJ0 is used just to enable SGESVJ to call a simplified version of
+*> itself to work on a submatrix of the original matrix.
+*>
+*> Contributors
+*> ~~~~~~~~~~~~
+*> Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
+*>
+*> Bugs, Examples and Comments
+*> ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*> Please report all bugs and send interesting test examples and comments to
+*> drmac@math.hr. Thank you.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBV
+*> \verbatim
+*>          JOBV is CHARACTER*1
+*>          Specifies whether the output from this procedure is used
+*>          to compute the matrix V:
+*>          = 'V': the product of the Jacobi rotations is accumulated
+*>                 by postmulyiplying the N-by-N array V.
+*>                (See the description of V.)
+*>          = 'A': the product of the Jacobi rotations is accumulated
+*>                 by postmulyiplying the MV-by-N array V.
+*>                (See the descriptions of MV and V.)
+*>          = 'N': the Jacobi rotations are not accumulated.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the input matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the input matrix A.
+*>          M >= N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          On entry, M-by-N matrix A, such that A*diag(D) represents
+*>          the input matrix.
+*>          On exit,
+*>          A_onexit * D_onexit represents the input matrix A*diag(D)
+*>          post-multiplied by a sequence of Jacobi rotations, where the
+*>          rotation threshold and the total number of sweeps are given in
+*>          TOL and NSWEEP, respectively.
+*>          (See the descriptions of D, TOL and NSWEEP.)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          The array D accumulates the scaling factors from the fast scaled
+*>          Jacobi rotations.
+*>          On entry, A*diag(D) represents the input matrix.
+*>          On exit, A_onexit*diag(D_onexit) represents the input matrix
+*>          post-multiplied by a sequence of Jacobi rotations, where the
+*>          rotation threshold and the total number of sweeps are given in
+*>          TOL and NSWEEP, respectively.
+*>          (See the descriptions of A, TOL and NSWEEP.)
+*> \endverbatim
+*>
+*> \param[in,out] SVA
+*> \verbatim
+*>          SVA is DOUBLE PRECISION array, dimension (N)
+*>          On entry, SVA contains the Euclidean norms of the columns of
+*>          the matrix A*diag(D).
+*>          On exit, SVA contains the Euclidean norms of the columns of
+*>          the matrix onexit*diag(D_onexit).
+*> \endverbatim
+*>
+*> \param[in] MV
+*> \verbatim
+*>          MV is INTEGER
+*>          If JOBV .EQ. 'A', then MV rows of V are post-multipled by a
+*>                           sequence of Jacobi rotations.
+*>          If JOBV = 'N',   then MV is not referenced.
+*> \endverbatim
+*>
+*> \param[in,out] V
+*> \verbatim
+*>          V is DOUBLE PRECISION array, dimension (LDV,N)
+*>          If JOBV .EQ. 'V' then N rows of V are post-multipled by a
+*>                           sequence of Jacobi rotations.
+*>          If JOBV .EQ. 'A' then MV rows of V are post-multipled by a
+*>                           sequence of Jacobi rotations.
+*>          If JOBV = 'N',   then V is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V,  LDV >= 1.
+*>          If JOBV = 'V', LDV .GE. N.
+*>          If JOBV = 'A', LDV .GE. MV.
+*> \endverbatim
+*>
+*> \param[in] EPS
+*> \verbatim
+*>          EPS is DOUBLE PRECISION
+*>          EPS = DLAMCH('Epsilon')
+*> \endverbatim
+*>
+*> \param[in] SFMIN
+*> \verbatim
+*>          SFMIN is DOUBLE PRECISION
+*>          SFMIN = DLAMCH('Safe Minimum')
+*> \endverbatim
+*>
+*> \param[in] TOL
+*> \verbatim
+*>          TOL is DOUBLE PRECISION
+*>          TOL is the threshold for Jacobi rotations. For a pair
+*>          A(:,p), A(:,q) of pivot columns, the Jacobi rotation is
+*>          applied only if DABS(COS(angle(A(:,p),A(:,q)))) .GT. TOL.
+*> \endverbatim
+*>
+*> \param[in] NSWEEP
+*> \verbatim
+*>          NSWEEP is INTEGER
+*>          NSWEEP is the number of sweeps of Jacobi rotations to be
+*>          performed.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          LWORK is the dimension of WORK. LWORK .GE. M.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0 : successful exit.
+*>          < 0 : if INFO = -i, then the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE DGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
      $                   SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1)                                  --
-*
-*  -- Contributed by Zlatko Drmac of the University of Zagreb and     --
-*  -- Kresimir Veselic of the Fernuniversitaet Hagen                  --
-*  -- April 2011                                                      --
-*
+*  -- LAPACK computational routine (version 1.23, October 23. 2008.) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-* This routine is also part of SIGMA (version 1.23, October 23. 2008.)
-* SIGMA is a library of algorithms for highly accurate algorithms for
-* computation of SVD, PSVD, QSVD, (H,K)-SVD, and for solution of the
-* eigenvalue problems Hx = lambda M x, H M x = lambda x with H, M > 0.
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, NSWEEP
       DOUBLE PRECISION   EPS, SFMIN, TOL
@@ -26,119 +221,6 @@
       DOUBLE PRECISION   A( LDA, * ), SVA( N ), D( N ), V( LDV, * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGSVJ0 is called from DGESVJ as a pre-processor and that is its main
-*  purpose. It applies Jacobi rotations in the same way as DGESVJ does, but
-*  it does not check convergence (stopping criterion). Few tuning
-*  parameters (marked by [TP]) are available for the implementer.
-*
-*  Further Details
-*  ~~~~~~~~~~~~~~~
-*  DGSVJ0 is used just to enable SGESVJ to call a simplified version of
-*  itself to work on a submatrix of the original matrix.
-*
-*  Contributors
-*  ~~~~~~~~~~~~
-*  Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
-*
-*  Bugs, Examples and Comments
-*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*  Please report all bugs and send interesting test examples and comments to
-*  drmac@math.hr. Thank you.
-*
-*  Arguments
-*  =========
-*
-*  JOBV    (input) CHARACTER*1
-*          Specifies whether the output from this procedure is used
-*          to compute the matrix V:
-*          = 'V': the product of the Jacobi rotations is accumulated
-*                 by postmulyiplying the N-by-N array V.
-*                (See the description of V.)
-*          = 'A': the product of the Jacobi rotations is accumulated
-*                 by postmulyiplying the MV-by-N array V.
-*                (See the descriptions of MV and V.)
-*          = 'N': the Jacobi rotations are not accumulated.
-*
-*  M       (input) INTEGER
-*          The number of rows of the input matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the input matrix A.
-*          M >= N >= 0.
-*
-*  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
-*          On entry, M-by-N matrix A, such that A*diag(D) represents
-*          the input matrix.
-*          On exit,
-*          A_onexit * D_onexit represents the input matrix A*diag(D)
-*          post-multiplied by a sequence of Jacobi rotations, where the
-*          rotation threshold and the total number of sweeps are given in
-*          TOL and NSWEEP, respectively.
-*          (See the descriptions of D, TOL and NSWEEP.)
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  D       (input/workspace/output) DOUBLE PRECISION array, dimension (N)
-*          The array D accumulates the scaling factors from the fast scaled
-*          Jacobi rotations.
-*          On entry, A*diag(D) represents the input matrix.
-*          On exit, A_onexit*diag(D_onexit) represents the input matrix
-*          post-multiplied by a sequence of Jacobi rotations, where the
-*          rotation threshold and the total number of sweeps are given in
-*          TOL and NSWEEP, respectively.
-*          (See the descriptions of A, TOL and NSWEEP.)
-*
-*  SVA     (input/workspace/output) DOUBLE PRECISION array, dimension (N)
-*          On entry, SVA contains the Euclidean norms of the columns of
-*          the matrix A*diag(D).
-*          On exit, SVA contains the Euclidean norms of the columns of
-*          the matrix onexit*diag(D_onexit).
-*
-*  MV      (input) INTEGER
-*          If JOBV .EQ. 'A', then MV rows of V are post-multipled by a
-*                           sequence of Jacobi rotations.
-*          If JOBV = 'N',   then MV is not referenced.
-*
-*  V       (input/output) DOUBLE PRECISION array, dimension (LDV,N)
-*          If JOBV .EQ. 'V' then N rows of V are post-multipled by a
-*                           sequence of Jacobi rotations.
-*          If JOBV .EQ. 'A' then MV rows of V are post-multipled by a
-*                           sequence of Jacobi rotations.
-*          If JOBV = 'N',   then V is not referenced.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of the array V,  LDV >= 1.
-*          If JOBV = 'V', LDV .GE. N.
-*          If JOBV = 'A', LDV .GE. MV.
-*
-*  EPS     (input) DOUBLE PRECISION
-*          EPS = DLAMCH('Epsilon')
-*
-*  SFMIN   (input) DOUBLE PRECISION
-*          SFMIN = DLAMCH('Safe Minimum')
-*
-*  TOL     (input) DOUBLE PRECISION
-*          TOL is the threshold for Jacobi rotations. For a pair
-*          A(:,p), A(:,q) of pivot columns, the Jacobi rotation is
-*          applied only if DABS(COS(angle(A(:,p),A(:,q)))) .GT. TOL.
-*
-*  NSWEEP  (input) INTEGER
-*          NSWEEP is the number of sweeps of Jacobi rotations to be
-*          performed.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          LWORK is the dimension of WORK. LWORK .GE. M.
-*
-*  INFO    (output) INTEGER
-*          = 0 : successful exit.
-*          < 0 : if INFO = -i, then the i-th argument had an illegal value
 *
 *  =====================================================================
 *

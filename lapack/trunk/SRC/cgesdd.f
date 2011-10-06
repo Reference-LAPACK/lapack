@@ -1,11 +1,230 @@
+*> \brief \b CGESC2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT,
+*                          WORK, LWORK, RWORK, IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBZ
+*       INTEGER            INFO, LDA, LDU, LDVT, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               RWORK( * ), S( * )
+*       COMPLEX            A( LDA, * ), U( LDU, * ), VT( LDVT, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGESDD computes the singular value decomposition (SVD) of a complex
+*> M-by-N matrix A, optionally computing the left and/or right singular
+*> vectors, by using divide-and-conquer method. The SVD is written
+*>
+*>      A = U * SIGMA * conjugate-transpose(V)
+*>
+*> where SIGMA is an M-by-N matrix which is zero except for its
+*> min(m,n) diagonal elements, U is an M-by-M unitary matrix, and
+*> V is an N-by-N unitary matrix.  The diagonal elements of SIGMA
+*> are the singular values of A; they are real and non-negative, and
+*> are returned in descending order.  The first min(m,n) columns of
+*> U and V are the left and right singular vectors of A.
+*>
+*> Note that the routine returns VT = V**H, not V.
+*>
+*> The divide and conquer algorithm makes very mild assumptions about
+*> floating point arithmetic. It will work on machines with a guard
+*> digit in add/subtract, or on those binary machines without guard
+*> digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
+*> Cray-2. It could conceivably fail on hexadecimal or decimal machines
+*> without guard digits, but we know of none.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBZ
+*> \verbatim
+*>          JOBZ is CHARACTER*1
+*>          Specifies options for computing all or part of the matrix U:
+*>          = 'A':  all M columns of U and all N rows of V**H are
+*>                  returned in the arrays U and VT;
+*>          = 'S':  the first min(M,N) columns of U and the first
+*>                  min(M,N) rows of V**H are returned in the arrays U
+*>                  and VT;
+*>          = 'O':  If M >= N, the first N columns of U are overwritten
+*>                  in the array A and all rows of V**H are returned in
+*>                  the array VT;
+*>                  otherwise, all columns of U are returned in the
+*>                  array U and the first M rows of V**H are overwritten
+*>                  in the array A;
+*>          = 'N':  no columns of U or rows of V**H are computed.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the input matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the input matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the M-by-N matrix A.
+*>          On exit,
+*>          if JOBZ = 'O',  A is overwritten with the first N columns
+*>                          of U (the left singular vectors, stored
+*>                          columnwise) if M >= N;
+*>                          A is overwritten with the first M rows
+*>                          of V**H (the right singular vectors, stored
+*>                          rowwise) otherwise.
+*>          if JOBZ .ne. 'O', the contents of A are destroyed.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is REAL array, dimension (min(M,N))
+*>          The singular values of A, sorted so that S(i) >= S(i+1).
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is COMPLEX array, dimension (LDU,UCOL)
+*>          UCOL = M if JOBZ = 'A' or JOBZ = 'O' and M < N;
+*>          UCOL = min(M,N) if JOBZ = 'S'.
+*>          If JOBZ = 'A' or JOBZ = 'O' and M < N, U contains the M-by-M
+*>          unitary matrix U;
+*>          if JOBZ = 'S', U contains the first min(M,N) columns of U
+*>          (the left singular vectors, stored columnwise);
+*>          if JOBZ = 'O' and M >= N, or JOBZ = 'N', U is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of the array U.  LDU >= 1; if
+*>          JOBZ = 'S' or 'A' or JOBZ = 'O' and M < N, LDU >= M.
+*> \endverbatim
+*>
+*> \param[out] VT
+*> \verbatim
+*>          VT is COMPLEX array, dimension (LDVT,N)
+*>          If JOBZ = 'A' or JOBZ = 'O' and M >= N, VT contains the
+*>          N-by-N unitary matrix V**H;
+*>          if JOBZ = 'S', VT contains the first min(M,N) rows of
+*>          V**H (the right singular vectors, stored rowwise);
+*>          if JOBZ = 'O' and M < N, or JOBZ = 'N', VT is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDVT
+*> \verbatim
+*>          LDVT is INTEGER
+*>          The leading dimension of the array VT.  LDVT >= 1; if
+*>          JOBZ = 'A' or JOBZ = 'O' and M >= N, LDVT >= N;
+*>          if JOBZ = 'S', LDVT >= min(M,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK. LWORK >= 1.
+*>          if JOBZ = 'N', LWORK >= 2*min(M,N)+max(M,N).
+*>          if JOBZ = 'O',
+*>                LWORK >= 2*min(M,N)*min(M,N)+2*min(M,N)+max(M,N).
+*>          if JOBZ = 'S' or 'A',
+*>                LWORK >= min(M,N)*min(M,N)+2*min(M,N)+max(M,N).
+*>          For good performance, LWORK should generally be larger.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, a workspace query is assumed.  The optimal
+*>          size for the WORK array is calculated and stored in WORK(1),
+*>          and no other work except argument checking is performed.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (MAX(1,LRWORK))
+*>          If JOBZ = 'N', LRWORK >= 5*min(M,N).
+*>          Otherwise, 
+*>          LRWORK >= min(M,N)*max(5*min(M,N)+7,2*max(M,N)+2*min(M,N)+1)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (8*min(M,N))
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  The updating process of SBDSDC did not converge.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexGEsing
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Huan Ren, Computer Science Division, University of
+*>     California at Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT,
      $                   WORK, LWORK, RWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2.2) --
+*  -- LAPACK sing routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
-*     8-15-00:  Improve consistency of WS calculations (eca)
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ
@@ -17,132 +236,6 @@
       COMPLEX            A( LDA, * ), U( LDU, * ), VT( LDVT, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGESDD computes the singular value decomposition (SVD) of a complex
-*  M-by-N matrix A, optionally computing the left and/or right singular
-*  vectors, by using divide-and-conquer method. The SVD is written
-*
-*       A = U * SIGMA * conjugate-transpose(V)
-*
-*  where SIGMA is an M-by-N matrix which is zero except for its
-*  min(m,n) diagonal elements, U is an M-by-M unitary matrix, and
-*  V is an N-by-N unitary matrix.  The diagonal elements of SIGMA
-*  are the singular values of A; they are real and non-negative, and
-*  are returned in descending order.  The first min(m,n) columns of
-*  U and V are the left and right singular vectors of A.
-*
-*  Note that the routine returns VT = V**H, not V.
-*
-*  The divide and conquer algorithm makes very mild assumptions about
-*  floating point arithmetic. It will work on machines with a guard
-*  digit in add/subtract, or on those binary machines without guard
-*  digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
-*  Cray-2. It could conceivably fail on hexadecimal or decimal machines
-*  without guard digits, but we know of none.
-*
-*  Arguments
-*  =========
-*
-*  JOBZ    (input) CHARACTER*1
-*          Specifies options for computing all or part of the matrix U:
-*          = 'A':  all M columns of U and all N rows of V**H are
-*                  returned in the arrays U and VT;
-*          = 'S':  the first min(M,N) columns of U and the first
-*                  min(M,N) rows of V**H are returned in the arrays U
-*                  and VT;
-*          = 'O':  If M >= N, the first N columns of U are overwritten
-*                  in the array A and all rows of V**H are returned in
-*                  the array VT;
-*                  otherwise, all columns of U are returned in the
-*                  array U and the first M rows of V**H are overwritten
-*                  in the array A;
-*          = 'N':  no columns of U or rows of V**H are computed.
-*
-*  M       (input) INTEGER
-*          The number of rows of the input matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the input matrix A.  N >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA,N)
-*          On entry, the M-by-N matrix A.
-*          On exit,
-*          if JOBZ = 'O',  A is overwritten with the first N columns
-*                          of U (the left singular vectors, stored
-*                          columnwise) if M >= N;
-*                          A is overwritten with the first M rows
-*                          of V**H (the right singular vectors, stored
-*                          rowwise) otherwise.
-*          if JOBZ .ne. 'O', the contents of A are destroyed.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  S       (output) REAL array, dimension (min(M,N))
-*          The singular values of A, sorted so that S(i) >= S(i+1).
-*
-*  U       (output) COMPLEX array, dimension (LDU,UCOL)
-*          UCOL = M if JOBZ = 'A' or JOBZ = 'O' and M < N;
-*          UCOL = min(M,N) if JOBZ = 'S'.
-*          If JOBZ = 'A' or JOBZ = 'O' and M < N, U contains the M-by-M
-*          unitary matrix U;
-*          if JOBZ = 'S', U contains the first min(M,N) columns of U
-*          (the left singular vectors, stored columnwise);
-*          if JOBZ = 'O' and M >= N, or JOBZ = 'N', U is not referenced.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of the array U.  LDU >= 1; if
-*          JOBZ = 'S' or 'A' or JOBZ = 'O' and M < N, LDU >= M.
-*
-*  VT      (output) COMPLEX array, dimension (LDVT,N)
-*          If JOBZ = 'A' or JOBZ = 'O' and M >= N, VT contains the
-*          N-by-N unitary matrix V**H;
-*          if JOBZ = 'S', VT contains the first min(M,N) rows of
-*          V**H (the right singular vectors, stored rowwise);
-*          if JOBZ = 'O' and M < N, or JOBZ = 'N', VT is not referenced.
-*
-*  LDVT    (input) INTEGER
-*          The leading dimension of the array VT.  LDVT >= 1; if
-*          JOBZ = 'A' or JOBZ = 'O' and M >= N, LDVT >= N;
-*          if JOBZ = 'S', LDVT >= min(M,N).
-*
-*  WORK    (workspace/output) COMPLEX array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK. LWORK >= 1.
-*          if JOBZ = 'N', LWORK >= 2*min(M,N)+max(M,N).
-*          if JOBZ = 'O',
-*                LWORK >= 2*min(M,N)*min(M,N)+2*min(M,N)+max(M,N).
-*          if JOBZ = 'S' or 'A',
-*                LWORK >= min(M,N)*min(M,N)+2*min(M,N)+max(M,N).
-*          For good performance, LWORK should generally be larger.
-*
-*          If LWORK = -1, a workspace query is assumed.  The optimal
-*          size for the WORK array is calculated and stored in WORK(1),
-*          and no other work except argument checking is performed.
-*
-*  RWORK   (workspace) REAL array, dimension (MAX(1,LRWORK))
-*          If JOBZ = 'N', LRWORK >= 5*min(M,N).
-*          Otherwise, 
-*          LRWORK >= min(M,N)*max(5*min(M,N)+7,2*max(M,N)+2*min(M,N)+1)
-*
-*  IWORK   (workspace) INTEGER array, dimension (8*min(M,N))
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  The updating process of SBDSDC did not converge.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Huan Ren, Computer Science Division, University of
-*     California at Berkeley, USA
 *
 *  =====================================================================
 *

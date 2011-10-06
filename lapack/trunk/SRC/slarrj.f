@@ -1,3 +1,167 @@
+*> \brief \b SLARRJ
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLARRJ( N, D, E2, IFIRST, ILAST,
+*                          RTOL, OFFSET, W, WERR, WORK, IWORK,
+*                          PIVMIN, SPDIAM, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            IFIRST, ILAST, INFO, N, OFFSET
+*       REAL               PIVMIN, RTOL, SPDIAM
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       REAL               D( * ), E2( * ), W( * ),
+*      $                   WERR( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Given the initial eigenvalue approximations of T, SLARRJ
+*> does  bisection to refine the eigenvalues of T,
+*> W( IFIRST-OFFSET ) through W( ILAST-OFFSET ), to more accuracy. Initial
+*> guesses for these eigenvalues are input in W, the corresponding estimate
+*> of the error in these guesses in WERR. During bisection, intervals
+*> [left, right] are maintained by storing their mid-points and
+*> semi-widths in the arrays W and WERR respectively.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The N diagonal elements of T.
+*> \endverbatim
+*>
+*> \param[in] E2
+*> \verbatim
+*>          E2 is REAL array, dimension (N-1)
+*>          The Squares of the (N-1) subdiagonal elements of T.
+*> \endverbatim
+*>
+*> \param[in] IFIRST
+*> \verbatim
+*>          IFIRST is INTEGER
+*>          The index of the first eigenvalue to be computed.
+*> \endverbatim
+*>
+*> \param[in] ILAST
+*> \verbatim
+*>          ILAST is INTEGER
+*>          The index of the last eigenvalue to be computed.
+*> \endverbatim
+*>
+*> \param[in] RTOL
+*> \verbatim
+*>          RTOL is REAL
+*>          Tolerance for the convergence of the bisection intervals.
+*>          An interval [LEFT,RIGHT] has converged if
+*>          RIGHT-LEFT.LT.RTOL*MAX(|LEFT|,|RIGHT|).
+*> \endverbatim
+*>
+*> \param[in] OFFSET
+*> \verbatim
+*>          OFFSET is INTEGER
+*>          Offset for the arrays W and WERR, i.e., the IFIRST-OFFSET
+*>          through ILAST-OFFSET elements of these arrays are to be used.
+*> \endverbatim
+*>
+*> \param[in,out] W
+*> \verbatim
+*>          W is REAL array, dimension (N)
+*>          On input, W( IFIRST-OFFSET ) through W( ILAST-OFFSET ) are
+*>          estimates of the eigenvalues of L D L^T indexed IFIRST through
+*>          ILAST.
+*>          On output, these estimates are refined.
+*> \endverbatim
+*>
+*> \param[in,out] WERR
+*> \verbatim
+*>          WERR is REAL array, dimension (N)
+*>          On input, WERR( IFIRST-OFFSET ) through WERR( ILAST-OFFSET ) are
+*>          the errors in the estimates of the corresponding elements in W.
+*>          On output, these errors are refined.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (2*N)
+*>          Workspace.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (2*N)
+*>          Workspace.
+*> \endverbatim
+*>
+*> \param[in] PIVMIN
+*> \verbatim
+*>          PIVMIN is REAL
+*>          The minimum pivot in the Sturm sequence for T.
+*> \endverbatim
+*>
+*> \param[in] SPDIAM
+*> \verbatim
+*>          SPDIAM is REAL
+*>          The spectral diameter of T.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          Error flag.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Beresford Parlett, University of California, Berkeley, USA
+*>     Jim Demmel, University of California, Berkeley, USA
+*>     Inderjit Dhillon, University of Texas, Austin, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>     Christof Voemel, University of California, Berkeley, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLARRJ( N, D, E2, IFIRST, ILAST,
      $                   RTOL, OFFSET, W, WERR, WORK, IWORK,
      $                   PIVMIN, SPDIAM, INFO )
@@ -5,7 +169,7 @@
 *  -- LAPACK auxiliary routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            IFIRST, ILAST, INFO, N, OFFSET
@@ -16,80 +180,6 @@
       REAL               D( * ), E2( * ), W( * ),
      $                   WERR( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Given the initial eigenvalue approximations of T, SLARRJ
-*  does  bisection to refine the eigenvalues of T,
-*  W( IFIRST-OFFSET ) through W( ILAST-OFFSET ), to more accuracy. Initial
-*  guesses for these eigenvalues are input in W, the corresponding estimate
-*  of the error in these guesses in WERR. During bisection, intervals
-*  [left, right] are maintained by storing their mid-points and
-*  semi-widths in the arrays W and WERR respectively.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix.
-*
-*  D       (input) REAL array, dimension (N)
-*          The N diagonal elements of T.
-*
-*  E2      (input) REAL array, dimension (N-1)
-*          The Squares of the (N-1) subdiagonal elements of T.
-*
-*  IFIRST  (input) INTEGER
-*          The index of the first eigenvalue to be computed.
-*
-*  ILAST   (input) INTEGER
-*          The index of the last eigenvalue to be computed.
-*
-*  RTOL   (input) REAL            
-*          Tolerance for the convergence of the bisection intervals.
-*          An interval [LEFT,RIGHT] has converged if
-*          RIGHT-LEFT.LT.RTOL*MAX(|LEFT|,|RIGHT|).
-*
-*  OFFSET  (input) INTEGER
-*          Offset for the arrays W and WERR, i.e., the IFIRST-OFFSET
-*          through ILAST-OFFSET elements of these arrays are to be used.
-*
-*  W       (input/output) REAL array, dimension (N)
-*          On input, W( IFIRST-OFFSET ) through W( ILAST-OFFSET ) are
-*          estimates of the eigenvalues of L D L^T indexed IFIRST through
-*          ILAST.
-*          On output, these estimates are refined.
-*
-*  WERR    (input/output) REAL array, dimension (N)
-*          On input, WERR( IFIRST-OFFSET ) through WERR( ILAST-OFFSET ) are
-*          the errors in the estimates of the corresponding elements in W.
-*          On output, these errors are refined.
-*
-*  WORK    (workspace) REAL array, dimension (2*N)
-*          Workspace.
-*
-*  IWORK   (workspace) INTEGER array, dimension (2*N)
-*          Workspace.
-*
-*  PIVMIN  (input) REAL
-*          The minimum pivot in the Sturm sequence for T.
-*
-*  SPDIAM  (input) REAL
-*          The spectral diameter of T.
-*
-*  INFO    (output) INTEGER
-*          Error flag.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Beresford Parlett, University of California, Berkeley, USA
-*     Jim Demmel, University of California, Berkeley, USA
-*     Inderjit Dhillon, University of Texas, Austin, USA
-*     Osni Marques, LBNL/NERSC, USA
-*     Christof Voemel, University of California, Berkeley, USA
 *
 *  =====================================================================
 *

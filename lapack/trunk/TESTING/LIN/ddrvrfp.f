@@ -1,3 +1,243 @@
+*> \brief \b DDRVRFP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
+*      +              THRESH, A, ASAV, AFAC, AINV, B,
+*      +              BSAV, XACT, X, ARF, ARFINV,
+*      +              D_WORK_DLATMS, D_WORK_DPOT01, D_TEMP_DPOT02,
+*      +              D_TEMP_DPOT03, D_WORK_DLANSY,
+*      +              D_WORK_DPOT02, D_WORK_DPOT03 )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NN, NNS, NNT, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NVAL( NN ), NSVAL( NNS ), NTVAL( NNT )
+*       DOUBLE PRECISION   A( * )
+*       DOUBLE PRECISION   AINV( * )
+*       DOUBLE PRECISION   ASAV( * )
+*       DOUBLE PRECISION   B( * )
+*       DOUBLE PRECISION   BSAV( * )
+*       DOUBLE PRECISION   AFAC( * )
+*       DOUBLE PRECISION   ARF( * )
+*       DOUBLE PRECISION   ARFINV( * )
+*       DOUBLE PRECISION   XACT( * )
+*       DOUBLE PRECISION   X( * )
+*       DOUBLE PRECISION   D_WORK_DLATMS( * )
+*       DOUBLE PRECISION   D_WORK_DPOT01( * )
+*       DOUBLE PRECISION   D_TEMP_DPOT02( * )
+*       DOUBLE PRECISION   D_TEMP_DPOT03( * )
+*       DOUBLE PRECISION   D_WORK_DLANSY( * )
+*       DOUBLE PRECISION   D_WORK_DPOT02( * )
+*       DOUBLE PRECISION   D_WORK_DPOT03( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DDRVRFP tests the LAPACK RFP routines:
+*>     DPFTRF, DPFTRS, and DPFTRI.
+*>
+*> This testing routine follow the same tests as DDRVPO (test for the full
+*> format Symmetric Positive Definite solver).
+*>
+*> The tests are performed in Full Format, convertion back and forth from
+*> full format to RFP format are performed using the routines DTRTTF and
+*> DTFTTR.
+*>
+*> First, a specific matrix A of size N is created. There is nine types of 
+*> different matrixes possible.
+*>  1. Diagonal                        6. Random, CNDNUM = sqrt(0.1/EPS)
+*>  2. Random, CNDNUM = 2              7. Random, CNDNUM = 0.1/EPS
+*> *3. First row and column zero       8. Scaled near underflow
+*> *4. Last row and column zero        9. Scaled near overflow
+*> *5. Middle row and column zero
+*> (* - tests error exits from DPFTRF, no test ratios are computed)
+*> A solution XACT of size N-by-NRHS is created and the associated right
+*> hand side B as well. Then DPFTRF is called to compute L (or U), the
+*> Cholesky factor of A. Then L (or U) is used to solve the linear system
+*> of equations AX = B. This gives X. Then L (or U) is used to compute the
+*> inverse of A, AINV. The following four tests are then performed:
+*> (1) norm( L*L' - A ) / ( N * norm(A) * EPS ) or
+*>     norm( U'*U - A ) / ( N * norm(A) * EPS ),
+*> (2) norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
+*> (3) norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
+*> (4) ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
+*> where EPS is the machine precision, RCOND the condition number of A, and
+*> norm( . ) the 1-norm for (1,2,3) and the inf-norm for (4).
+*> Errors occur when INFO parameter is not as expected. Failures occur when
+*> a test ratios is greater than THRES.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>                The unit number for output.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>                The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>                The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[in] NNS
+*> \verbatim
+*>          NNS is INTEGER
+*>                The number of values of NRHS contained in the vector NSVAL.
+*> \endverbatim
+*>
+*> \param[in] NSVAL
+*> \verbatim
+*>          NSVAL is INTEGER array, dimension (NNS)
+*>                The values of the number of right-hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] NNT
+*> \verbatim
+*>          NNT is INTEGER
+*>                The number of values of MATRIX TYPE contained in the vector NTVAL.
+*> \endverbatim
+*>
+*> \param[in] NTVAL
+*> \verbatim
+*>          NTVAL is INTEGER array, dimension (NNT)
+*>                The values of matrix type (between 0 and 9 for PO/PP/PF matrices).
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>                The threshold value for the test ratios.  A result is
+*>                included in the output file if RESULT >= THRESH.  To have
+*>                every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] ASAV
+*> \verbatim
+*>          ASAV is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AFAC
+*> \verbatim
+*>          AFAC is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AINV
+*> \verbatim
+*>          AINV is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] BSAV
+*> \verbatim
+*>          BSAV is DOUBLE PRECISION array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] XACT
+*> \verbatim
+*>          XACT is DOUBLE PRECISION array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (NMAX*MAXRHS)
+*> \endverbatim
+*>
+*> \param[out] ARF
+*> \verbatim
+*>          ARF is DOUBLE PRECISION array, dimension ((NMAX*(NMAX+1))/2)
+*> \endverbatim
+*>
+*> \param[out] ARFINV
+*> \verbatim
+*>          ARFINV is DOUBLE PRECISION array, dimension ((NMAX*(NMAX+1))/2)
+*> \endverbatim
+*>
+*> \param[out] D_WORK_DLATMS
+*> \verbatim
+*>          D_WORK_DLATMS is DOUBLE PRECISION array, dimension ( 3*NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_DPOT01
+*> \verbatim
+*>          D_WORK_DPOT01 is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_TEMP_DPOT02
+*> \verbatim
+*>          D_TEMP_DPOT02 is DOUBLE PRECISION array, dimension ( NMAX*MAXRHS )
+*> \endverbatim
+*>
+*> \param[out] D_TEMP_DPOT03
+*> \verbatim
+*>          D_TEMP_DPOT03 is DOUBLE PRECISION array, dimension ( NMAX*NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_DLATMS
+*> \verbatim
+*>          D_WORK_DLATMS is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_DLANSY
+*> \verbatim
+*>          D_WORK_DLANSY is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_DPOT02
+*> \verbatim
+*>          D_WORK_DPOT02 is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*> \param[out] D_WORK_DPOT03
+*> \verbatim
+*>          D_WORK_DPOT03 is DOUBLE PRECISION array, dimension ( NMAX )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
      +              THRESH, A, ASAV, AFAC, AINV, B,
      +              BSAV, XACT, X, ARF, ARFINV,
@@ -6,8 +246,9 @@
      +              D_WORK_DPOT02, D_WORK_DPOT03 )
 *
 *  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            NN, NNS, NNT, NOUT
@@ -33,107 +274,6 @@
       DOUBLE PRECISION   D_WORK_DPOT02( * )
       DOUBLE PRECISION   D_WORK_DPOT03( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DDRVRFP tests the LAPACK RFP routines:
-*      DPFTRF, DPFTRS, and DPFTRI.
-*
-*  This testing routine follow the same tests as DDRVPO (test for the full
-*  format Symmetric Positive Definite solver).
-*
-*  The tests are performed in Full Format, convertion back and forth from
-*  full format to RFP format are performed using the routines DTRTTF and
-*  DTFTTR.
-*
-*  First, a specific matrix A of size N is created. There is nine types of 
-*  different matrixes possible.
-*   1. Diagonal                        6. Random, CNDNUM = sqrt(0.1/EPS)
-*   2. Random, CNDNUM = 2              7. Random, CNDNUM = 0.1/EPS
-*  *3. First row and column zero       8. Scaled near underflow
-*  *4. Last row and column zero        9. Scaled near overflow
-*  *5. Middle row and column zero
-*  (* - tests error exits from DPFTRF, no test ratios are computed)
-*  A solution XACT of size N-by-NRHS is created and the associated right
-*  hand side B as well. Then DPFTRF is called to compute L (or U), the
-*  Cholesky factor of A. Then L (or U) is used to solve the linear system
-*  of equations AX = B. This gives X. Then L (or U) is used to compute the
-*  inverse of A, AINV. The following four tests are then performed:
-*  (1) norm( L*L' - A ) / ( N * norm(A) * EPS ) or
-*      norm( U'*U - A ) / ( N * norm(A) * EPS ),
-*  (2) norm(B - A*X) / ( norm(A) * norm(X) * EPS ),
-*  (3) norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
-*  (4) ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
-*  where EPS is the machine precision, RCOND the condition number of A, and
-*  norm( . ) the 1-norm for (1,2,3) and the inf-norm for (4).
-*  Errors occur when INFO parameter is not as expected. Failures occur when
-*  a test ratios is greater than THRES.
-*
-*  Arguments
-*  =========
-*
-*  NOUT          (input) INTEGER
-*                The unit number for output.
-*
-*  NN            (input) INTEGER
-*                The number of values of N contained in the vector NVAL.
-*
-*  NVAL          (input) INTEGER array, dimension (NN)
-*                The values of the matrix dimension N.
-*
-*  NNS           (input) INTEGER
-*                The number of values of NRHS contained in the vector NSVAL.
-*
-*  NSVAL         (input) INTEGER array, dimension (NNS)
-*                The values of the number of right-hand sides NRHS.
-*
-*  NNT           (input) INTEGER
-*                The number of values of MATRIX TYPE contained in the vector NTVAL.
-*
-*  NTVAL         (input) INTEGER array, dimension (NNT)
-*                The values of matrix type (between 0 and 9 for PO/PP/PF matrices).
-*
-*  THRESH        (input) DOUBLE PRECISION
-*                The threshold value for the test ratios.  A result is
-*                included in the output file if RESULT >= THRESH.  To have
-*                every test ratio printed, use THRESH = 0.
-*
-*  A             (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  ASAV          (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  AFAC          (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  AINV          (workspace) DOUBLE PRECISION array, dimension (NMAX*NMAX)
-*
-*  B             (workspace) DOUBLE PRECISION array, dimension (NMAX*MAXRHS)
-*
-*  BSAV          (workspace) DOUBLE PRECISION array, dimension (NMAX*MAXRHS)
-*
-*  XACT          (workspace) DOUBLE PRECISION array, dimension (NMAX*MAXRHS)
-*
-*  X             (workspace) DOUBLE PRECISION array, dimension (NMAX*MAXRHS)
-*
-*  ARF           (workspace) DOUBLE PRECISION array, dimension ((NMAX*(NMAX+1))/2)
-*
-*  ARFINV        (workspace) DOUBLE PRECISION array, dimension ((NMAX*(NMAX+1))/2)
-*
-*  D_WORK_DLATMS (workspace) DOUBLE PRECISION array, dimension ( 3*NMAX )
-*
-*  D_WORK_DPOT01 (workspace) DOUBLE PRECISION array, dimension ( NMAX )
-*
-*  D_TEMP_DPOT02 (workspace) DOUBLE PRECISION array, dimension ( NMAX*MAXRHS )
-*
-*  D_TEMP_DPOT03 (workspace) DOUBLE PRECISION array, dimension ( NMAX*NMAX )
-*
-*  D_WORK_DLATMS (workspace) DOUBLE PRECISION array, dimension ( NMAX )
-*
-*  D_WORK_DLANSY (workspace) DOUBLE PRECISION array, dimension ( NMAX )
-*
-*  D_WORK_DPOT02 (workspace) DOUBLE PRECISION array, dimension ( NMAX )
-*
-*  D_WORK_DPOT03 (workspace) DOUBLE PRECISION array, dimension ( NMAX )
 *
 *  =====================================================================
 *

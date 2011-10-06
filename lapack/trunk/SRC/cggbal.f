@@ -1,10 +1,180 @@
+*> \brief \b CGGBAL
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
+*                          RSCALE, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOB
+*       INTEGER            IHI, ILO, INFO, LDA, LDB, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               LSCALE( * ), RSCALE( * ), WORK( * )
+*       COMPLEX            A( LDA, * ), B( LDB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CGGBAL balances a pair of general complex matrices (A,B).  This
+*> involves, first, permuting A and B by similarity transformations to
+*> isolate eigenvalues in the first 1 to ILO$-$1 and last IHI+1 to N
+*> elements on the diagonal; and second, applying a diagonal similarity
+*> transformation to rows and columns ILO to IHI to make the rows
+*> and columns as close in norm as possible. Both steps are optional.
+*>
+*> Balancing may reduce the 1-norm of the matrices, and improve the
+*> accuracy of the computed eigenvalues and/or eigenvectors in the
+*> generalized eigenvalue problem A*x = lambda*B*x.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOB
+*> \verbatim
+*>          JOB is CHARACTER*1
+*>          Specifies the operations to be performed on A and B:
+*>          = 'N':  none:  simply set ILO = 1, IHI = N, LSCALE(I) = 1.0
+*>                  and RSCALE(I) = 1.0 for i=1,...,N;
+*>          = 'P':  permute only;
+*>          = 'S':  scale only;
+*>          = 'B':  both permute and scale.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A and B.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the input matrix A.
+*>          On exit, A is overwritten by the balanced matrix.
+*>          If JOB = 'N', A is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,N)
+*>          On entry, the input matrix B.
+*>          On exit, B is overwritten by the balanced matrix.
+*>          If JOB = 'N', B is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] ILO
+*> \verbatim
+*>          ILO is INTEGER
+*> \endverbatim
+*>
+*> \param[out] IHI
+*> \verbatim
+*>          IHI is INTEGER
+*>          ILO and IHI are set to integers such that on exit
+*>          A(i,j) = 0 and B(i,j) = 0 if i > j and
+*>          j = 1,...,ILO-1 or i = IHI+1,...,N.
+*>          If JOB = 'N' or 'S', ILO = 1 and IHI = N.
+*> \endverbatim
+*>
+*> \param[out] LSCALE
+*> \verbatim
+*>          LSCALE is REAL array, dimension (N)
+*>          Details of the permutations and scaling factors applied
+*>          to the left side of A and B.  If P(j) is the index of the
+*>          row interchanged with row j, and D(j) is the scaling factor
+*>          applied to row j, then
+*>            LSCALE(j) = P(j)    for J = 1,...,ILO-1
+*>                      = D(j)    for J = ILO,...,IHI
+*>                      = P(j)    for J = IHI+1,...,N.
+*>          The order in which the interchanges are made is N to IHI+1,
+*>          then 1 to ILO-1.
+*> \endverbatim
+*>
+*> \param[out] RSCALE
+*> \verbatim
+*>          RSCALE is REAL array, dimension (N)
+*>          Details of the permutations and scaling factors applied
+*>          to the right side of A and B.  If P(j) is the index of the
+*>          column interchanged with column j, and D(j) is the scaling
+*>          factor applied to column j, then
+*>            RSCALE(j) = P(j)    for J = 1,...,ILO-1
+*>                      = D(j)    for J = ILO,...,IHI
+*>                      = P(j)    for J = IHI+1,...,N.
+*>          The order in which the interchanges are made is N to IHI+1,
+*>          then 1 to ILO-1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (lwork)
+*>          lwork must be at least max(1,6*N) when JOB = 'S' or 'B', and
+*>          at least 1 when JOB = 'N' or 'P'.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexGBcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  See R.C. WARD, Balancing the generalized eigenvalue problem,
+*>                 SIAM J. Sci. Stat. Comp. 2 (1981), 141-152.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
      $                   RSCALE, WORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOB
@@ -14,94 +184,6 @@
       REAL               LSCALE( * ), RSCALE( * ), WORK( * )
       COMPLEX            A( LDA, * ), B( LDB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CGGBAL balances a pair of general complex matrices (A,B).  This
-*  involves, first, permuting A and B by similarity transformations to
-*  isolate eigenvalues in the first 1 to ILO$-$1 and last IHI+1 to N
-*  elements on the diagonal; and second, applying a diagonal similarity
-*  transformation to rows and columns ILO to IHI to make the rows
-*  and columns as close in norm as possible. Both steps are optional.
-*
-*  Balancing may reduce the 1-norm of the matrices, and improve the
-*  accuracy of the computed eigenvalues and/or eigenvectors in the
-*  generalized eigenvalue problem A*x = lambda*B*x.
-*
-*  Arguments
-*  =========
-*
-*  JOB     (input) CHARACTER*1
-*          Specifies the operations to be performed on A and B:
-*          = 'N':  none:  simply set ILO = 1, IHI = N, LSCALE(I) = 1.0
-*                  and RSCALE(I) = 1.0 for i=1,...,N;
-*          = 'P':  permute only;
-*          = 'S':  scale only;
-*          = 'B':  both permute and scale.
-*
-*  N       (input) INTEGER
-*          The order of the matrices A and B.  N >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA,N)
-*          On entry, the input matrix A.
-*          On exit, A is overwritten by the balanced matrix.
-*          If JOB = 'N', A is not referenced.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >= max(1,N).
-*
-*  B       (input/output) COMPLEX array, dimension (LDB,N)
-*          On entry, the input matrix B.
-*          On exit, B is overwritten by the balanced matrix.
-*          If JOB = 'N', B is not referenced.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >= max(1,N).
-*
-*  ILO     (output) INTEGER
-*
-*  IHI     (output) INTEGER
-*          ILO and IHI are set to integers such that on exit
-*          A(i,j) = 0 and B(i,j) = 0 if i > j and
-*          j = 1,...,ILO-1 or i = IHI+1,...,N.
-*          If JOB = 'N' or 'S', ILO = 1 and IHI = N.
-*
-*  LSCALE  (output) REAL array, dimension (N)
-*          Details of the permutations and scaling factors applied
-*          to the left side of A and B.  If P(j) is the index of the
-*          row interchanged with row j, and D(j) is the scaling factor
-*          applied to row j, then
-*            LSCALE(j) = P(j)    for J = 1,...,ILO-1
-*                      = D(j)    for J = ILO,...,IHI
-*                      = P(j)    for J = IHI+1,...,N.
-*          The order in which the interchanges are made is N to IHI+1,
-*          then 1 to ILO-1.
-*
-*  RSCALE  (output) REAL array, dimension (N)
-*          Details of the permutations and scaling factors applied
-*          to the right side of A and B.  If P(j) is the index of the
-*          column interchanged with column j, and D(j) is the scaling
-*          factor applied to column j, then
-*            RSCALE(j) = P(j)    for J = 1,...,ILO-1
-*                      = D(j)    for J = ILO,...,IHI
-*                      = P(j)    for J = IHI+1,...,N.
-*          The order in which the interchanges are made is N to IHI+1,
-*          then 1 to ILO-1.
-*
-*  WORK    (workspace) REAL array, dimension (lwork)
-*          lwork must be at least max(1,6*N) when JOB = 'S' or 'B', and
-*          at least 1 when JOB = 'N' or 'P'.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  See R.C. WARD, Balancing the generalized eigenvalue problem,
-*                 SIAM J. Sci. Stat. Comp. 2 (1981), 141-152.
 *
 *  =====================================================================
 *

@@ -1,11 +1,299 @@
+*> \brief \b CHBGST
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CHBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, BB,
+*                          LDBB, Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
+*                          LDZ, WORK, RWORK, IWORK, IFAIL, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBZ, RANGE, UPLO
+*       INTEGER            IL, INFO, IU, KA, KB, LDAB, LDBB, LDQ, LDZ, M,
+*      $                   N
+*       REAL               ABSTOL, VL, VU
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IFAIL( * ), IWORK( * )
+*       REAL               RWORK( * ), W( * )
+*       COMPLEX            AB( LDAB, * ), BB( LDBB, * ), Q( LDQ, * ),
+*      $                   WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CHBGVX computes all the eigenvalues, and optionally, the eigenvectors
+*> of a complex generalized Hermitian-definite banded eigenproblem, of
+*> the form A*x=(lambda)*B*x. Here A and B are assumed to be Hermitian
+*> and banded, and B is also positive definite.  Eigenvalues and
+*> eigenvectors can be selected by specifying either all eigenvalues,
+*> a range of values or a range of indices for the desired eigenvalues.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBZ
+*> \verbatim
+*>          JOBZ is CHARACTER*1
+*>          = 'N':  Compute eigenvalues only;
+*>          = 'V':  Compute eigenvalues and eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] RANGE
+*> \verbatim
+*>          RANGE is CHARACTER*1
+*>          = 'A': all eigenvalues will be found;
+*>          = 'V': all eigenvalues in the half-open interval (VL,VU]
+*>                 will be found;
+*>          = 'I': the IL-th through IU-th eigenvalues will be found.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangles of A and B are stored;
+*>          = 'L':  Lower triangles of A and B are stored.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A and B.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KA
+*> \verbatim
+*>          KA is INTEGER
+*>          The number of superdiagonals of the matrix A if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'. KA >= 0.
+*> \endverbatim
+*>
+*> \param[in] KB
+*> \verbatim
+*>          KB is INTEGER
+*>          The number of superdiagonals of the matrix B if UPLO = 'U',
+*>          or the number of subdiagonals if UPLO = 'L'. KB >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] AB
+*> \verbatim
+*>          AB is COMPLEX array, dimension (LDAB, N)
+*>          On entry, the upper or lower triangle of the Hermitian band
+*>          matrix A, stored in the first ka+1 rows of the array.  The
+*>          j-th column of A is stored in the j-th column of the array AB
+*>          as follows:
+*>          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
+*> \endverbatim
+*> \verbatim
+*>          On exit, the contents of AB are destroyed.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KA+1.
+*> \endverbatim
+*>
+*> \param[in,out] BB
+*> \verbatim
+*>          BB is COMPLEX array, dimension (LDBB, N)
+*>          On entry, the upper or lower triangle of the Hermitian band
+*>          matrix B, stored in the first kb+1 rows of the array.  The
+*>          j-th column of B is stored in the j-th column of the array BB
+*>          as follows:
+*>          if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for max(1,j-kb)<=i<=j;
+*>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
+*> \endverbatim
+*> \verbatim
+*>          On exit, the factor S from the split Cholesky factorization
+*>          B = S**H*S, as returned by CPBSTF.
+*> \endverbatim
+*>
+*> \param[in] LDBB
+*> \verbatim
+*>          LDBB is INTEGER
+*>          The leading dimension of the array BB.  LDBB >= KB+1.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDQ, N)
+*>          If JOBZ = 'V', the n-by-n matrix used in the reduction of
+*>          A*x = (lambda)*B*x to standard form, i.e. C*x = (lambda)*x,
+*>          and consequently C to tridiagonal form.
+*>          If JOBZ = 'N', the array Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q.  If JOBZ = 'N',
+*>          LDQ >= 1. If JOBZ = 'V', LDQ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] VL
+*> \verbatim
+*>          VL is REAL
+*> \param[in] VU
+*> \verbatim
+*>          VU is REAL
+*>          If RANGE='V', the lower and upper bounds of the interval to
+*>          be searched for eigenvalues. VL < VU.
+*>          Not referenced if RANGE = 'A' or 'I'.
+*> \endverbatim
+*> \endverbatim
+*>
+*> \param[in] IL
+*> \verbatim
+*>          IL is INTEGER
+*> \param[in] IU
+*> \verbatim
+*>          IU is INTEGER
+*>          If RANGE='I', the indices (in ascending order) of the
+*>          smallest and largest eigenvalues to be returned.
+*>          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
+*>          Not referenced if RANGE = 'A' or 'V'.
+*> \endverbatim
+*> \endverbatim
+*>
+*> \param[in] ABSTOL
+*> \verbatim
+*>          ABSTOL is REAL
+*>          The absolute error tolerance for the eigenvalues.
+*>          An approximate eigenvalue is accepted as converged
+*>          when it is determined to lie in an interval [a,b]
+*>          of width less than or equal to
+*> \endverbatim
+*> \verbatim
+*>                  ABSTOL + EPS *   max( |a|,|b| ) ,
+*> \endverbatim
+*> \verbatim
+*>          where EPS is the machine precision.  If ABSTOL is less than
+*>          or equal to zero, then  EPS*|T|  will be used in its place,
+*>          where |T| is the 1-norm of the tridiagonal matrix obtained
+*>          by reducing AP to tridiagonal form.
+*> \endverbatim
+*> \verbatim
+*>          Eigenvalues will be computed most accurately when ABSTOL is
+*>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
+*>          If this routine returns with INFO>0, indicating that some
+*>          eigenvectors did not converge, try setting ABSTOL to
+*>          2*SLAMCH('S').
+*> \endverbatim
+*>
+*> \param[out] M
+*> \verbatim
+*>          M is INTEGER
+*>          The total number of eigenvalues found.  0 <= M <= N.
+*>          If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is REAL array, dimension (N)
+*>          If INFO = 0, the eigenvalues in ascending order.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX array, dimension (LDZ, N)
+*>          If JOBZ = 'V', then if INFO = 0, Z contains the matrix Z of
+*>          eigenvectors, with the i-th column of Z holding the
+*>          eigenvector associated with W(i). The eigenvectors are
+*>          normalized so that Z**H*B*Z = I.
+*>          If JOBZ = 'N', then Z is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1, and if
+*>          JOBZ = 'V', LDZ >= N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (7*N)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (5*N)
+*> \endverbatim
+*>
+*> \param[out] IFAIL
+*> \verbatim
+*>          IFAIL is INTEGER array, dimension (N)
+*>          If JOBZ = 'V', then if INFO = 0, the first M elements of
+*>          IFAIL are zero.  If INFO > 0, then IFAIL contains the
+*>          indices of the eigenvectors that failed to converge.
+*>          If JOBZ = 'N', then IFAIL is not referenced.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, and i is:
+*>             <= N:  then i eigenvectors failed to converge.  Their
+*>                    indices are stored in array IFAIL.
+*>             > N:   if INFO = N + i, for 1 <= i <= N, then CPBSTF
+*>                    returned INFO = i: B is not positive definite.
+*>                    The factorization of B could not be completed and
+*>                    no eigenvalues or eigenvectors were computed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHEReigen
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CHBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, BB,
      $                   LDBB, Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
      $                   LDZ, WORK, RWORK, IWORK, IFAIL, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ, RANGE, UPLO
@@ -19,160 +307,6 @@
       COMPLEX            AB( LDAB, * ), BB( LDBB, * ), Q( LDQ, * ),
      $                   WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CHBGVX computes all the eigenvalues, and optionally, the eigenvectors
-*  of a complex generalized Hermitian-definite banded eigenproblem, of
-*  the form A*x=(lambda)*B*x. Here A and B are assumed to be Hermitian
-*  and banded, and B is also positive definite.  Eigenvalues and
-*  eigenvectors can be selected by specifying either all eigenvalues,
-*  a range of values or a range of indices for the desired eigenvalues.
-*
-*  Arguments
-*  =========
-*
-*  JOBZ    (input) CHARACTER*1
-*          = 'N':  Compute eigenvalues only;
-*          = 'V':  Compute eigenvalues and eigenvectors.
-*
-*  RANGE   (input) CHARACTER*1
-*          = 'A': all eigenvalues will be found;
-*          = 'V': all eigenvalues in the half-open interval (VL,VU]
-*                 will be found;
-*          = 'I': the IL-th through IU-th eigenvalues will be found.
-*
-*  UPLO    (input) CHARACTER*1
-*          = 'U':  Upper triangles of A and B are stored;
-*          = 'L':  Lower triangles of A and B are stored.
-*
-*  N       (input) INTEGER
-*          The order of the matrices A and B.  N >= 0.
-*
-*  KA      (input) INTEGER
-*          The number of superdiagonals of the matrix A if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'. KA >= 0.
-*
-*  KB      (input) INTEGER
-*          The number of superdiagonals of the matrix B if UPLO = 'U',
-*          or the number of subdiagonals if UPLO = 'L'. KB >= 0.
-*
-*  AB      (input/output) COMPLEX array, dimension (LDAB, N)
-*          On entry, the upper or lower triangle of the Hermitian band
-*          matrix A, stored in the first ka+1 rows of the array.  The
-*          j-th column of A is stored in the j-th column of the array AB
-*          as follows:
-*          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
-*
-*          On exit, the contents of AB are destroyed.
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KA+1.
-*
-*  BB      (input/output) COMPLEX array, dimension (LDBB, N)
-*          On entry, the upper or lower triangle of the Hermitian band
-*          matrix B, stored in the first kb+1 rows of the array.  The
-*          j-th column of B is stored in the j-th column of the array BB
-*          as follows:
-*          if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for max(1,j-kb)<=i<=j;
-*          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
-*
-*          On exit, the factor S from the split Cholesky factorization
-*          B = S**H*S, as returned by CPBSTF.
-*
-*  LDBB    (input) INTEGER
-*          The leading dimension of the array BB.  LDBB >= KB+1.
-*
-*  Q       (output) COMPLEX array, dimension (LDQ, N)
-*          If JOBZ = 'V', the n-by-n matrix used in the reduction of
-*          A*x = (lambda)*B*x to standard form, i.e. C*x = (lambda)*x,
-*          and consequently C to tridiagonal form.
-*          If JOBZ = 'N', the array Q is not referenced.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q.  If JOBZ = 'N',
-*          LDQ >= 1. If JOBZ = 'V', LDQ >= max(1,N).
-*
-*  VL      (input) REAL
-*  VU      (input) REAL
-*          If RANGE='V', the lower and upper bounds of the interval to
-*          be searched for eigenvalues. VL < VU.
-*          Not referenced if RANGE = 'A' or 'I'.
-*
-*  IL      (input) INTEGER
-*  IU      (input) INTEGER
-*          If RANGE='I', the indices (in ascending order) of the
-*          smallest and largest eigenvalues to be returned.
-*          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
-*          Not referenced if RANGE = 'A' or 'V'.
-*
-*  ABSTOL  (input) REAL
-*          The absolute error tolerance for the eigenvalues.
-*          An approximate eigenvalue is accepted as converged
-*          when it is determined to lie in an interval [a,b]
-*          of width less than or equal to
-*
-*                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*
-*          where EPS is the machine precision.  If ABSTOL is less than
-*          or equal to zero, then  EPS*|T|  will be used in its place,
-*          where |T| is the 1-norm of the tridiagonal matrix obtained
-*          by reducing AP to tridiagonal form.
-*
-*          Eigenvalues will be computed most accurately when ABSTOL is
-*          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
-*          If this routine returns with INFO>0, indicating that some
-*          eigenvectors did not converge, try setting ABSTOL to
-*          2*SLAMCH('S').
-*
-*  M       (output) INTEGER
-*          The total number of eigenvalues found.  0 <= M <= N.
-*          If RANGE = 'A', M = N, and if RANGE = 'I', M = IU-IL+1.
-*
-*  W       (output) REAL array, dimension (N)
-*          If INFO = 0, the eigenvalues in ascending order.
-*
-*  Z       (output) COMPLEX array, dimension (LDZ, N)
-*          If JOBZ = 'V', then if INFO = 0, Z contains the matrix Z of
-*          eigenvectors, with the i-th column of Z holding the
-*          eigenvector associated with W(i). The eigenvectors are
-*          normalized so that Z**H*B*Z = I.
-*          If JOBZ = 'N', then Z is not referenced.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= 1, and if
-*          JOBZ = 'V', LDZ >= N.
-*
-*  WORK    (workspace) COMPLEX array, dimension (N)
-*
-*  RWORK   (workspace) REAL array, dimension (7*N)
-*
-*  IWORK   (workspace) INTEGER array, dimension (5*N)
-*
-*  IFAIL   (output) INTEGER array, dimension (N)
-*          If JOBZ = 'V', then if INFO = 0, the first M elements of
-*          IFAIL are zero.  If INFO > 0, then IFAIL contains the
-*          indices of the eigenvectors that failed to converge.
-*          If JOBZ = 'N', then IFAIL is not referenced.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, and i is:
-*             <= N:  then i eigenvectors failed to converge.  Their
-*                    indices are stored in array IFAIL.
-*             > N:   if INFO = N + i, for 1 <= i <= N, then CPBSTF
-*                    returned INFO = i: B is not positive definite.
-*                    The factorization of B could not be completed and
-*                    no eigenvalues or eigenvectors were computed.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *
 *  =====================================================================
 *

@@ -1,55 +1,113 @@
+*> \brief \b CLARTG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLARTG( F, G, CS, SN, R )
+* 
+*       .. Scalar Arguments ..
+*       REAL               CS
+*       COMPLEX            F, G, R, SN
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLARTG generates a plane rotation so that
+*>
+*>    [  CS  SN  ]     [ F ]     [ R ]
+*>    [  __      ]  .  [   ]  =  [   ]   where CS**2 + |SN|**2 = 1.
+*>    [ -SN  CS  ]     [ G ]     [ 0 ]
+*>
+*> This is a faster version of the BLAS1 routine CROTG, except for
+*> the following differences:
+*>    F and G are unchanged on return.
+*>    If G=0, then CS=1 and SN=0.
+*>    If F=0, then CS=0 and SN is chosen so that R is real.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] F
+*> \verbatim
+*>          F is COMPLEX
+*>          The first component of vector to be rotated.
+*> \endverbatim
+*>
+*> \param[in] G
+*> \verbatim
+*>          G is COMPLEX
+*>          The second component of vector to be rotated.
+*> \endverbatim
+*>
+*> \param[out] CS
+*> \verbatim
+*>          CS is REAL
+*>          The cosine of the rotation.
+*> \endverbatim
+*>
+*> \param[out] SN
+*> \verbatim
+*>          SN is COMPLEX
+*>          The sine of the rotation.
+*> \endverbatim
+*>
+*> \param[out] R
+*> \verbatim
+*>          R is COMPLEX
+*>          The nonzero component of the rotated vector.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*  Further Details
+*>  ======= =======
+*>
+*>  3-5-96 - Modified with a new algorithm by W. Kahan and J. Demmel
+*>
+*>  This version has a few statements commented out for thread safety
+*>  (machine parameters are computed on each entry). 10 feb 03, SJH.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CLARTG( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       REAL               CS
       COMPLEX            F, G, R, SN
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLARTG generates a plane rotation so that
-*
-*     [  CS  SN  ]     [ F ]     [ R ]
-*     [  __      ]  .  [   ]  =  [   ]   where CS**2 + |SN|**2 = 1.
-*     [ -SN  CS  ]     [ G ]     [ 0 ]
-*
-*  This is a faster version of the BLAS1 routine CROTG, except for
-*  the following differences:
-*     F and G are unchanged on return.
-*     If G=0, then CS=1 and SN=0.
-*     If F=0, then CS=0 and SN is chosen so that R is real.
-*
-*  Arguments
-*  =========
-*
-*  F       (input) COMPLEX
-*          The first component of vector to be rotated.
-*
-*  G       (input) COMPLEX
-*          The second component of vector to be rotated.
-*
-*  CS      (output) REAL
-*          The cosine of the rotation.
-*
-*  SN      (output) COMPLEX
-*          The sine of the rotation.
-*
-*  R       (output) COMPLEX
-*          The nonzero component of the rotated vector.
-*
-*  Further Details
-*  ======= =======
-*
-*  3-5-96 - Modified with a new algorithm by W. Kahan and J. Demmel
-*
-*  This version has a few statements commented out for thread safety
-*  (machine parameters are computed on each entry). 10 feb 03, SJH.
 *
 *  =====================================================================
 *

@@ -1,10 +1,166 @@
+*> \brief \b DLAQTR
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WORK,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            LREAL, LTRAN
+*       INTEGER            INFO, LDT, N
+*       DOUBLE PRECISION   SCALE, W
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   B( * ), T( LDT, * ), WORK( * ), X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAQTR solves the real quasi-triangular system
+*>
+*>              op(T)*p = scale*c,               if LREAL = .TRUE.
+*>
+*> or the complex quasi-triangular systems
+*>
+*>            op(T + iB)*(p+iq) = scale*(c+id),  if LREAL = .FALSE.
+*>
+*> in real arithmetic, where T is upper quasi-triangular.
+*> If LREAL = .FALSE., then the first diagonal block of T must be
+*> 1 by 1, B is the specially structured matrix
+*>
+*>                B = [ b(1) b(2) ... b(n) ]
+*>                    [       w            ]
+*>                    [           w        ]
+*>                    [              .     ]
+*>                    [                 w  ]
+*>
+*> op(A) = A or A**T, A**T denotes the transpose of
+*> matrix A.
+*>
+*> On input, X = [ c ].  On output, X = [ p ].
+*>               [ d ]                  [ q ]
+*>
+*> This subroutine is designed for the condition number estimation
+*> in routine DTRSNA.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] LTRAN
+*> \verbatim
+*>          LTRAN is LOGICAL
+*>          On entry, LTRAN specifies the option of conjugate transpose:
+*>             = .FALSE.,    op(T+i*B) = T+i*B,
+*>             = .TRUE.,     op(T+i*B) = (T+i*B)**T.
+*> \endverbatim
+*>
+*> \param[in] LREAL
+*> \verbatim
+*>          LREAL is LOGICAL
+*>          On entry, LREAL specifies the input matrix structure:
+*>             = .FALSE.,    the input is complex
+*>             = .TRUE.,     the input is real
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          On entry, N specifies the order of T+i*B. N >= 0.
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is DOUBLE PRECISION array, dimension (LDT,N)
+*>          On entry, T contains a matrix in Schur canonical form.
+*>          If LREAL = .FALSE., then the first diagonal block of T mu
+*>          be 1 by 1.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the matrix T. LDT >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (N)
+*>          On entry, B contains the elements to form the matrix
+*>          B as described above.
+*>          If LREAL = .TRUE., B is not referenced.
+*> \endverbatim
+*>
+*> \param[in] W
+*> \verbatim
+*>          W is DOUBLE PRECISION
+*>          On entry, W is the diagonal element of the matrix B.
+*>          If LREAL = .TRUE., W is not referenced.
+*> \endverbatim
+*>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is DOUBLE PRECISION
+*>          On exit, SCALE is the scale factor.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (2*N)
+*>          On entry, X contains the right hand side of the system.
+*>          On exit, X is overwritten by the solution.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          On exit, INFO is set to
+*>             0: successful exit.
+*>               1: the some diagonal 1 by 1 block has been perturbed by
+*>                  a small number SMIN to keep nonsingularity.
+*>               2: the some diagonal 2 by 2 block has been perturbed by
+*>                  a small number in DLALN2 to keep nonsingularity.
+*>          NOTE: In the interests of speed, this routine does not
+*>                check the inputs for errors.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE DLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WORK,
      $                   INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            LREAL, LTRAN
@@ -14,88 +170,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   B( * ), T( LDT, * ), WORK( * ), X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAQTR solves the real quasi-triangular system
-*
-*               op(T)*p = scale*c,               if LREAL = .TRUE.
-*
-*  or the complex quasi-triangular systems
-*
-*             op(T + iB)*(p+iq) = scale*(c+id),  if LREAL = .FALSE.
-*
-*  in real arithmetic, where T is upper quasi-triangular.
-*  If LREAL = .FALSE., then the first diagonal block of T must be
-*  1 by 1, B is the specially structured matrix
-*
-*                 B = [ b(1) b(2) ... b(n) ]
-*                     [       w            ]
-*                     [           w        ]
-*                     [              .     ]
-*                     [                 w  ]
-*
-*  op(A) = A or A**T, A**T denotes the transpose of
-*  matrix A.
-*
-*  On input, X = [ c ].  On output, X = [ p ].
-*                [ d ]                  [ q ]
-*
-*  This subroutine is designed for the condition number estimation
-*  in routine DTRSNA.
-*
-*  Arguments
-*  =========
-*
-*  LTRAN   (input) LOGICAL
-*          On entry, LTRAN specifies the option of conjugate transpose:
-*             = .FALSE.,    op(T+i*B) = T+i*B,
-*             = .TRUE.,     op(T+i*B) = (T+i*B)**T.
-*
-*  LREAL   (input) LOGICAL
-*          On entry, LREAL specifies the input matrix structure:
-*             = .FALSE.,    the input is complex
-*             = .TRUE.,     the input is real
-*
-*  N       (input) INTEGER
-*          On entry, N specifies the order of T+i*B. N >= 0.
-*
-*  T       (input) DOUBLE PRECISION array, dimension (LDT,N)
-*          On entry, T contains a matrix in Schur canonical form.
-*          If LREAL = .FALSE., then the first diagonal block of T mu
-*          be 1 by 1.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of the matrix T. LDT >= max(1,N).
-*
-*  B       (input) DOUBLE PRECISION array, dimension (N)
-*          On entry, B contains the elements to form the matrix
-*          B as described above.
-*          If LREAL = .TRUE., B is not referenced.
-*
-*  W       (input) DOUBLE PRECISION
-*          On entry, W is the diagonal element of the matrix B.
-*          If LREAL = .TRUE., W is not referenced.
-*
-*  SCALE   (output) DOUBLE PRECISION
-*          On exit, SCALE is the scale factor.
-*
-*  X       (input/output) DOUBLE PRECISION array, dimension (2*N)
-*          On entry, X contains the right hand side of the system.
-*          On exit, X is overwritten by the solution.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          On exit, INFO is set to
-*             0: successful exit.
-*               1: the some diagonal 1 by 1 block has been perturbed by
-*                  a small number SMIN to keep nonsingularity.
-*               2: the some diagonal 2 by 2 block has been perturbed by
-*                  a small number in DLALN2 to keep nonsingularity.
-*          NOTE: In the interests of speed, this routine does not
-*                check the inputs for errors.
 *
 * =====================================================================
 *

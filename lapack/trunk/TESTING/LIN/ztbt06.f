@@ -1,9 +1,137 @@
+*> \brief \b ZTBT06
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
+*                          RWORK, RAT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, UPLO
+*       INTEGER            KD, LDAB, N
+*       DOUBLE PRECISION   RAT, RCOND, RCONDC
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         AB( LDAB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZTBT06 computes a test ratio comparing RCOND (the reciprocal
+*> condition number of a triangular matrix A) and RCONDC, the estimate
+*> computed by ZTBCON.  Information about the triangular matrix A is
+*> used if one estimate is zero and the other is non-zero to decide if
+*> underflow in the estimate is justified.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>          The estimate of the reciprocal condition number obtained by
+*>          forming the explicit inverse of the matrix A and computing
+*>          RCOND = 1/( norm(A) * norm(inv(A)) ).
+*> \endverbatim
+*>
+*> \param[in] RCONDC
+*> \verbatim
+*>          RCONDC is DOUBLE PRECISION
+*>          The estimate of the reciprocal condition number computed by
+*>          ZTBCON.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER
+*>          Specifies whether the matrix A is upper or lower triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER
+*>          Specifies whether or not the matrix A is unit triangular.
+*>          = 'N':  Non-unit triangular
+*>          = 'U':  Unit triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of superdiagonals or subdiagonals of the
+*>          triangular band matrix A.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[in] AB
+*> \verbatim
+*>          AB is COMPLEX*16 array, dimension (LDAB,N)
+*>          The upper or lower triangular band matrix A, stored in the
+*>          first kd+1 rows of the array. The j-th column of A is stored
+*>          in the j-th column of the array AB as follows:
+*>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
+*>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD+1.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RAT
+*> \verbatim
+*>          RAT is DOUBLE PRECISION
+*>          The test ratio.  If both RCOND and RCONDC are nonzero,
+*>             RAT = MAX( RCOND, RCONDC )/MIN( RCOND, RCONDC ) - 1.
+*>          If RAT = 0, the two estimates are exactly the same.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZTBT06( RCOND, RCONDC, UPLO, DIAG, N, KD, AB, LDAB,
      $                   RWORK, RAT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, UPLO
@@ -14,61 +142,6 @@
       DOUBLE PRECISION   RWORK( * )
       COMPLEX*16         AB( LDAB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZTBT06 computes a test ratio comparing RCOND (the reciprocal
-*  condition number of a triangular matrix A) and RCONDC, the estimate
-*  computed by ZTBCON.  Information about the triangular matrix A is
-*  used if one estimate is zero and the other is non-zero to decide if
-*  underflow in the estimate is justified.
-*
-*  Arguments
-*  =========
-*
-*  RCOND   (input) DOUBLE PRECISION
-*          The estimate of the reciprocal condition number obtained by
-*          forming the explicit inverse of the matrix A and computing
-*          RCOND = 1/( norm(A) * norm(inv(A)) ).
-*
-*  RCONDC  (input) DOUBLE PRECISION
-*          The estimate of the reciprocal condition number computed by
-*          ZTBCON.
-*
-*  UPLO    (input) CHARACTER
-*          Specifies whether the matrix A is upper or lower triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  DIAG    (input) CHARACTER
-*          Specifies whether or not the matrix A is unit triangular.
-*          = 'N':  Non-unit triangular
-*          = 'U':  Unit triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  KD      (input) INTEGER
-*          The number of superdiagonals or subdiagonals of the
-*          triangular band matrix A.  KD >= 0.
-*
-*  AB      (input) COMPLEX*16 array, dimension (LDAB,N)
-*          The upper or lower triangular band matrix A, stored in the
-*          first kd+1 rows of the array. The j-th column of A is stored
-*          in the j-th column of the array AB as follows:
-*          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
-*          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KD+1.
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  RAT     (output) DOUBLE PRECISION
-*          The test ratio.  If both RCOND and RCONDC are nonzero,
-*             RAT = MAX( RCOND, RCONDC )/MIN( RCOND, RCONDC ) - 1.
-*          If RAT = 0, the two estimates are exactly the same.
 *
 *  =====================================================================
 *

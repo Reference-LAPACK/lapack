@@ -1,8 +1,108 @@
+*> \brief \b SSVDCH
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SSVDCH( N, S, E, SVD, TOL, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, N
+*       REAL               TOL
+*       ..
+*       .. Array Arguments ..
+*       REAL               E( * ), S( * ), SVD( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SSVDCH checks to see if SVD(1) ,..., SVD(N) are accurate singular
+*> values of the bidiagonal matrix B with diagonal entries
+*> S(1) ,..., S(N) and superdiagonal entries E(1) ,..., E(N-1)).
+*> It does this by expanding each SVD(I) into an interval
+*> [SVD(I) * (1-EPS) , SVD(I) * (1+EPS)], merging overlapping intervals
+*> if any, and using Sturm sequences to count and verify whether each
+*> resulting interval has the correct number of singular values (using
+*> SSVDCT). Here EPS=TOL*MAX(N/10,1)*MACHEP, where MACHEP is the
+*> machine precision. The routine assumes the singular values are sorted
+*> with SVD(1) the largest and SVD(N) smallest.  If each interval
+*> contains the correct number of singular values, INFO = 0 is returned,
+*> otherwise INFO is the index of the first singular value in the first
+*> bad interval.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The dimension of the bidiagonal matrix B.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is REAL array, dimension (N)
+*>          The diagonal entries of the bidiagonal matrix B.
+*> \endverbatim
+*>
+*> \param[in] E
+*> \verbatim
+*>          E is REAL array, dimension (N-1)
+*>          The superdiagonal entries of the bidiagonal matrix B.
+*> \endverbatim
+*>
+*> \param[in] SVD
+*> \verbatim
+*>          SVD is REAL array, dimension (N)
+*>          The computed singular values to be checked.
+*> \endverbatim
+*>
+*> \param[in] TOL
+*> \verbatim
+*>          TOL is REAL
+*>          Error tolerance for checking, a multiplier of the
+*>          machine precision.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          =0 if the singular values are all correct (to within
+*>             1 +- TOL*MACHEPS)
+*>          >0 if the interval containing the INFO-th singular value
+*>             contains the incorrect number of singular values.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SSVDCH( N, S, E, SVD, TOL, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, N
@@ -11,48 +111,6 @@
 *     .. Array Arguments ..
       REAL               E( * ), S( * ), SVD( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SSVDCH checks to see if SVD(1) ,..., SVD(N) are accurate singular
-*  values of the bidiagonal matrix B with diagonal entries
-*  S(1) ,..., S(N) and superdiagonal entries E(1) ,..., E(N-1)).
-*  It does this by expanding each SVD(I) into an interval
-*  [SVD(I) * (1-EPS) , SVD(I) * (1+EPS)], merging overlapping intervals
-*  if any, and using Sturm sequences to count and verify whether each
-*  resulting interval has the correct number of singular values (using
-*  SSVDCT). Here EPS=TOL*MAX(N/10,1)*MACHEP, where MACHEP is the
-*  machine precision. The routine assumes the singular values are sorted
-*  with SVD(1) the largest and SVD(N) smallest.  If each interval
-*  contains the correct number of singular values, INFO = 0 is returned,
-*  otherwise INFO is the index of the first singular value in the first
-*  bad interval.
-*
-*  Arguments
-*  ==========
-*
-*  N       (input) INTEGER
-*          The dimension of the bidiagonal matrix B.
-*
-*  S       (input) REAL array, dimension (N)
-*          The diagonal entries of the bidiagonal matrix B.
-*
-*  E       (input) REAL array, dimension (N-1)
-*          The superdiagonal entries of the bidiagonal matrix B.
-*
-*  SVD     (input) REAL array, dimension (N)
-*          The computed singular values to be checked.
-*
-*  TOL     (input) REAL
-*          Error tolerance for checking, a multiplier of the
-*          machine precision.
-*
-*  INFO    (output) INTEGER
-*          =0 if the singular values are all correct (to within
-*             1 +- TOL*MACHEPS)
-*          >0 if the interval containing the INFO-th singular value
-*             contains the incorrect number of singular values.
 *
 *  =====================================================================
 *

@@ -1,26 +1,65 @@
-      LOGICAL          FUNCTION LSAME( CA, CB )
+*> \brief \b LSAME
 *
-*  -- LAPACK auxiliary routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*      LOGICAL FUNCTION LSAME( CA, CB )
 *
 *     .. Scalar Arguments ..
-      CHARACTER          CA, CB
+*      CHARACTER          CA, CB
 *     ..
-*
+*  
 *  Purpose
 *  =======
 *
-*  LSAME returns .TRUE. if CA is the same letter as CB regardless of
-*  case.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> LSAME returns .TRUE. if CA is the same letter as CB regardless of
+*> case.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  CA      (input) CHARACTER*1
+*> \param[in] CA
+*> \verbatim
+*> \endverbatim
+*>
+*> \param[in] CB
+*> \verbatim
+*>          CA and CB specify the single characters to be compared.
+*> \endverbatim
 *
-*  CB      (input) CHARACTER*1
-*          CA and CB specify the single characters to be compared.
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
+      LOGICAL FUNCTION LSAME( CA, CB )
+*
+*  -- LAPACK auxiliary routine (version 3.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      CHARACTER          CA, CB
+*     ..
 *
 * =====================================================================
 *

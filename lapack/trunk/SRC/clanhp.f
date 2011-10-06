@@ -1,9 +1,119 @@
+*> \brief \b CLANHP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION CLANHP( NORM, UPLO, N, AP, WORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          NORM, UPLO
+*       INTEGER            N
+*       ..
+*       .. Array Arguments ..
+*       REAL               WORK( * )
+*       COMPLEX            AP( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLANHP  returns the value of the one norm,  or the Frobenius norm, or
+*> the  infinity norm,  or the  element of  largest absolute value  of a
+*> complex hermitian matrix A,  supplied in packed form.
+*>
+*> Description
+*> ===========
+*>
+*> CLANHP returns the value
+*>
+*>    CLANHP = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>             (
+*>             ( norm1(A),         NORM = '1', 'O' or 'o'
+*>             (
+*>             ( normI(A),         NORM = 'I' or 'i'
+*>             (
+*>             ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
+*>
+*> where  norm1  denotes the  one norm of a matrix (maximum column sum),
+*> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
+*> normF  denotes the  Frobenius norm of a matrix (square root of sum of
+*> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NORM
+*> \verbatim
+*>          NORM is CHARACTER*1
+*>          Specifies the value to be returned in CLANHP as described
+*>          above.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          hermitian matrix A is supplied.
+*>          = 'U':  Upper triangular part of A is supplied
+*>          = 'L':  Lower triangular part of A is supplied
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.  When N = 0, CLANHP is
+*>          set to zero.
+*> \endverbatim
+*>
+*> \param[in] AP
+*> \verbatim
+*>          AP is COMPLEX array, dimension (N*(N+1)/2)
+*>          The upper or lower triangle of the hermitian matrix A, packed
+*>          columnwise in a linear array.  The j-th column of A is stored
+*>          in the array AP as follows:
+*>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
+*>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
+*>          Note that the  imaginary parts of the diagonal elements need
+*>          not be set and are assumed to be zero.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (MAX(1,LWORK)),
+*>          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
+*>          WORK is not referenced.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       REAL             FUNCTION CLANHP( NORM, UPLO, N, AP, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          NORM, UPLO
@@ -13,61 +123,6 @@
       REAL               WORK( * )
       COMPLEX            AP( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLANHP  returns the value of the one norm,  or the Frobenius norm, or
-*  the  infinity norm,  or the  element of  largest absolute value  of a
-*  complex hermitian matrix A,  supplied in packed form.
-*
-*  Description
-*  ===========
-*
-*  CLANHP returns the value
-*
-*     CLANHP = ( max(abs(A(i,j))), NORM = 'M' or 'm'
-*              (
-*              ( norm1(A),         NORM = '1', 'O' or 'o'
-*              (
-*              ( normI(A),         NORM = 'I' or 'i'
-*              (
-*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
-*
-*  where  norm1  denotes the  one norm of a matrix (maximum column sum),
-*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
-*  normF  denotes the  Frobenius norm of a matrix (square root of sum of
-*  squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*
-*  Arguments
-*  =========
-*
-*  NORM    (input) CHARACTER*1
-*          Specifies the value to be returned in CLANHP as described
-*          above.
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          hermitian matrix A is supplied.
-*          = 'U':  Upper triangular part of A is supplied
-*          = 'L':  Lower triangular part of A is supplied
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.  When N = 0, CLANHP is
-*          set to zero.
-*
-*  AP      (input) COMPLEX array, dimension (N*(N+1)/2)
-*          The upper or lower triangle of the hermitian matrix A, packed
-*          columnwise in a linear array.  The j-th column of A is stored
-*          in the array AP as follows:
-*          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
-*          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
-*          Note that the  imaginary parts of the diagonal elements need
-*          not be set and are assumed to be zero.
-*
-*  WORK    (workspace) REAL array, dimension (MAX(1,LWORK)),
-*          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
-*          WORK is not referenced.
 *
 * =====================================================================
 *

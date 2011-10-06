@@ -1,10 +1,185 @@
+*> \brief <b> ZGELSX solves overdetermined or underdetermined systems for GE matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGELSX( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
+*                          WORK, RWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDB, M, N, NRHS, RANK
+*       DOUBLE PRECISION   RCOND
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            JPVT( * )
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This routine is deprecated and has been replaced by routine ZGELSY.
+*>
+*> ZGELSX computes the minimum-norm solution to a complex linear least
+*> squares problem:
+*>     minimize || A * X - B ||
+*> using a complete orthogonal factorization of A.  A is an M-by-N
+*> matrix which may be rank-deficient.
+*>
+*> Several right hand side vectors b and solution vectors x can be
+*> handled in a single call; they are stored as the columns of the
+*> M-by-NRHS right hand side matrix B and the N-by-NRHS solution
+*> matrix X.
+*>
+*> The routine first computes a QR factorization with column pivoting:
+*>     A * P = Q * [ R11 R12 ]
+*>                 [  0  R22 ]
+*> with R11 defined as the largest leading submatrix whose estimated
+*> condition number is less than 1/RCOND.  The order of R11, RANK,
+*> is the effective rank of A.
+*>
+*> Then, R22 is considered to be negligible, and R12 is annihilated
+*> by unitary transformations from the right, arriving at the
+*> complete orthogonal factorization:
+*>    A * P = Q * [ T11 0 ] * Z
+*>                [  0  0 ]
+*> The minimum-norm solution is then
+*>    X = P * Z**H [ inv(T11)*Q1**H*B ]
+*>                 [        0         ]
+*> where Q1 consists of the first RANK columns of Q.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of
+*>          columns of matrices B and X. NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          On entry, the M-by-N matrix A.
+*>          On exit, A has been overwritten by details of its
+*>          complete orthogonal factorization.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
+*>          On entry, the M-by-NRHS right hand side matrix B.
+*>          On exit, the N-by-NRHS solution matrix X.
+*>          If m >= n and RANK = n, the residual sum-of-squares for
+*>          the solution in the i-th column is given by the sum of
+*>          squares of elements N+1:M in that column.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1,M,N).
+*> \endverbatim
+*>
+*> \param[in,out] JPVT
+*> \verbatim
+*>          JPVT is INTEGER array, dimension (N)
+*>          On entry, if JPVT(i) .ne. 0, the i-th column of A is an
+*>          initial column, otherwise it is a free column.  Before
+*>          the QR factorization of A, all initial columns are
+*>          permuted to the leading positions; only the remaining
+*>          free columns are moved as a result of column pivoting
+*>          during the factorization.
+*>          On exit, if JPVT(i) = k, then the i-th column of A*P
+*>          was the k-th column of A.
+*> \endverbatim
+*>
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>          RCOND is used to determine the effective rank of A, which
+*>          is defined as the order of the largest leading triangular
+*>          submatrix R11 in the QR factorization with pivoting of A,
+*>          whose estimated condition number < 1/RCOND.
+*> \endverbatim
+*>
+*> \param[out] RANK
+*> \verbatim
+*>          RANK is INTEGER
+*>          The effective rank of A, i.e., the order of the submatrix
+*>          R11.  This is the same as the order of the submatrix T11
+*>          in the complete orthogonal factorization of A.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension
+*>                      (min(M,N) + max( N, 2*min(M,N)+NRHS )),
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16GEsolve
+*
+*  =====================================================================
       SUBROUTINE ZGELSX( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
      $                   WORK, RWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.3.1) --
+*  -- LAPACK solve routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDB, M, N, NRHS, RANK
@@ -15,100 +190,6 @@
       DOUBLE PRECISION   RWORK( * )
       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  This routine is deprecated and has been replaced by routine ZGELSY.
-*
-*  ZGELSX computes the minimum-norm solution to a complex linear least
-*  squares problem:
-*      minimize || A * X - B ||
-*  using a complete orthogonal factorization of A.  A is an M-by-N
-*  matrix which may be rank-deficient.
-*
-*  Several right hand side vectors b and solution vectors x can be
-*  handled in a single call; they are stored as the columns of the
-*  M-by-NRHS right hand side matrix B and the N-by-NRHS solution
-*  matrix X.
-*
-*  The routine first computes a QR factorization with column pivoting:
-*      A * P = Q * [ R11 R12 ]
-*                  [  0  R22 ]
-*  with R11 defined as the largest leading submatrix whose estimated
-*  condition number is less than 1/RCOND.  The order of R11, RANK,
-*  is the effective rank of A.
-*
-*  Then, R22 is considered to be negligible, and R12 is annihilated
-*  by unitary transformations from the right, arriving at the
-*  complete orthogonal factorization:
-*     A * P = Q * [ T11 0 ] * Z
-*                 [  0  0 ]
-*  The minimum-norm solution is then
-*     X = P * Z**H [ inv(T11)*Q1**H*B ]
-*                  [        0         ]
-*  where Q1 consists of the first RANK columns of Q.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of
-*          columns of matrices B and X. NRHS >= 0.
-*
-*  A       (input/output) COMPLEX*16 array, dimension (LDA,N)
-*          On entry, the M-by-N matrix A.
-*          On exit, A has been overwritten by details of its
-*          complete orthogonal factorization.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  B       (input/output) COMPLEX*16 array, dimension (LDB,NRHS)
-*          On entry, the M-by-NRHS right hand side matrix B.
-*          On exit, the N-by-NRHS solution matrix X.
-*          If m >= n and RANK = n, the residual sum-of-squares for
-*          the solution in the i-th column is given by the sum of
-*          squares of elements N+1:M in that column.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >= max(1,M,N).
-*
-*  JPVT    (input/output) INTEGER array, dimension (N)
-*          On entry, if JPVT(i) .ne. 0, the i-th column of A is an
-*          initial column, otherwise it is a free column.  Before
-*          the QR factorization of A, all initial columns are
-*          permuted to the leading positions; only the remaining
-*          free columns are moved as a result of column pivoting
-*          during the factorization.
-*          On exit, if JPVT(i) = k, then the i-th column of A*P
-*          was the k-th column of A.
-*
-*  RCOND   (input) DOUBLE PRECISION
-*          RCOND is used to determine the effective rank of A, which
-*          is defined as the order of the largest leading triangular
-*          submatrix R11 in the QR factorization with pivoting of A,
-*          whose estimated condition number < 1/RCOND.
-*
-*  RANK    (output) INTEGER
-*          The effective rank of A, i.e., the order of the submatrix
-*          R11.  This is the same as the order of the submatrix T11
-*          in the complete orthogonal factorization of A.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension
-*                      (min(M,N) + max( N, 2*min(M,N)+NRHS )),
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (2*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

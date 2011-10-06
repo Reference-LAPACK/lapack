@@ -1,16 +1,179 @@
+*> \brief \b SLA_GEAMV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+*                              Y, INCY )
+* 
+*       .. Scalar Arguments ..
+*       REAL               ALPHA, BETA
+*       INTEGER            INCX, INCY, LDA, M, N, TRANS
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), X( * ), Y( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLA_GEAMV  performs one of the matrix-vector operations
+*>
+*>         y := alpha*abs(A)*abs(x) + beta*abs(y),
+*>    or   y := alpha*abs(A)**T*abs(x) + beta*abs(y),
+*>
+*> where alpha and beta are scalars, x and y are vectors and A is an
+*> m by n matrix.
+*>
+*> This function is primarily used in calculating error bounds.
+*> To protect against underflow during evaluation, components in
+*> the resulting vector are perturbed away from zero by (N+1)
+*> times the underflow threshold.  To prevent unnecessarily large
+*> errors for block-structure embedded in general matrices,
+*> "symbolically" zero components are not perturbed.  A zero
+*> entry is considered "symbolic" if all multiplications involved
+*> in computing that entry have at least one zero multiplicand.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is INTEGER
+*>           On entry, TRANS specifies the operation to be performed as
+*>           follows:
+*> \endverbatim
+*> \verbatim
+*>             BLAS_NO_TRANS      y := alpha*abs(A)*abs(x) + beta*abs(y)
+*>             BLAS_TRANS         y := alpha*abs(A**T)*abs(x) + beta*abs(y)
+*>             BLAS_CONJ_TRANS    y := alpha*abs(A**T)*abs(x) + beta*abs(y)
+*> \endverbatim
+*> \verbatim
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>           On entry, M specifies the number of rows of the matrix A.
+*>           M must be at least zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry, N specifies the number of columns of the matrix A.
+*>           N must be at least zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is REAL
+*>           On entry, ALPHA specifies the scalar alpha.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array of DIMENSION ( LDA, n )
+*>           Before entry, the leading m by n part of the array A must
+*>           contain the matrix of coefficients.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           On entry, LDA specifies the first dimension of A as declared
+*>           in the calling (sub) program. LDA must be at least
+*>           max( 1, m ).
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is REAL array, dimension
+*>           ( 1 + ( n - 1 )*abs( INCX ) ) when TRANS = 'N' or 'n'
+*>           and at least
+*>           ( 1 + ( m - 1 )*abs( INCX ) ) otherwise.
+*>           Before entry, the incremented array X must contain the
+*>           vector x.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>           On entry, INCX specifies the increment for the elements of
+*>           X. INCX must not be zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is REAL
+*>           On entry, BETA specifies the scalar beta. When BETA is
+*>           supplied as zero then Y need not be set on input.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in,out] Y
+*> \verbatim
+*>          Y is REAL
+*>           Array of DIMENSION at least
+*>           ( 1 + ( m - 1 )*abs( INCY ) ) when TRANS = 'N' or 'n'
+*>           and at least
+*>           ( 1 + ( n - 1 )*abs( INCY ) ) otherwise.
+*>           Before entry with BETA non-zero, the incremented array Y
+*>           must contain the vector y. On exit, Y is overwritten by the
+*>           updated vector y.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>           On entry, INCY specifies the increment for the elements of
+*>           Y. INCY must not be zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*> \verbatim
+*>  Level 2 Blas routine.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realGEcomputational
+*
+*  =====================================================================
       SUBROUTINE SLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
      $                       Y, INCY )
 *
-*     -- LAPACK routine (version 3.3.1)                                 --
-*     -- Contributed by James Demmel, Deaglan Halligan, Yozo Hida and --
-*     -- Jason Riedy of Univ. of California Berkeley.                 --
-*     -- June 2010                                                    --
+*  -- LAPACK computational routine (version 3.3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     -- LAPACK is a software package provided by Univ. of Tennessee, --
-*     -- Univ. of California Berkeley and NAG Ltd.                    --
-*
-      IMPLICIT NONE
-*     ..
 *     .. Scalar Arguments ..
       REAL               ALPHA, BETA
       INTEGER            INCX, INCY, LDA, M, N, TRANS
@@ -18,98 +181,6 @@
 *     .. Array Arguments ..
       REAL               A( LDA, * ), X( * ), Y( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLA_GEAMV  performs one of the matrix-vector operations
-*
-*          y := alpha*abs(A)*abs(x) + beta*abs(y),
-*     or   y := alpha*abs(A)**T*abs(x) + beta*abs(y),
-*
-*  where alpha and beta are scalars, x and y are vectors and A is an
-*  m by n matrix.
-*
-*  This function is primarily used in calculating error bounds.
-*  To protect against underflow during evaluation, components in
-*  the resulting vector are perturbed away from zero by (N+1)
-*  times the underflow threshold.  To prevent unnecessarily large
-*  errors for block-structure embedded in general matrices,
-*  "symbolically" zero components are not perturbed.  A zero
-*  entry is considered "symbolic" if all multiplications involved
-*  in computing that entry have at least one zero multiplicand.
-*
-*  Arguments
-*  ==========
-*
-*  TRANS   (input) INTEGER
-*           On entry, TRANS specifies the operation to be performed as
-*           follows:
-*
-*             BLAS_NO_TRANS      y := alpha*abs(A)*abs(x) + beta*abs(y)
-*             BLAS_TRANS         y := alpha*abs(A**T)*abs(x) + beta*abs(y)
-*             BLAS_CONJ_TRANS    y := alpha*abs(A**T)*abs(x) + beta*abs(y)
-*
-*           Unchanged on exit.
-*
-*  M        (input) INTEGER
-*           On entry, M specifies the number of rows of the matrix A.
-*           M must be at least zero.
-*           Unchanged on exit.
-*
-*  N        (input) INTEGER
-*           On entry, N specifies the number of columns of the matrix A.
-*           N must be at least zero.
-*           Unchanged on exit.
-*
-*  ALPHA    (input) REAL
-*           On entry, ALPHA specifies the scalar alpha.
-*           Unchanged on exit.
-*
-*  A        (input) REAL array of DIMENSION ( LDA, n )
-*           Before entry, the leading m by n part of the array A must
-*           contain the matrix of coefficients.
-*           Unchanged on exit.
-*
-*  LDA      (input) INTEGER
-*           On entry, LDA specifies the first dimension of A as declared
-*           in the calling (sub) program. LDA must be at least
-*           max( 1, m ).
-*           Unchanged on exit.
-*
-*  X        (input) REAL array, dimension
-*           ( 1 + ( n - 1 )*abs( INCX ) ) when TRANS = 'N' or 'n'
-*           and at least
-*           ( 1 + ( m - 1 )*abs( INCX ) ) otherwise.
-*           Before entry, the incremented array X must contain the
-*           vector x.
-*           Unchanged on exit.
-*
-*  INCX     (input) INTEGER
-*           On entry, INCX specifies the increment for the elements of
-*           X. INCX must not be zero.
-*           Unchanged on exit.
-*
-*  BETA     (input) REAL
-*           On entry, BETA specifies the scalar beta. When BETA is
-*           supplied as zero then Y need not be set on input.
-*           Unchanged on exit.
-*
-*  Y        (input/output) REAL
-*           Array of DIMENSION at least
-*           ( 1 + ( m - 1 )*abs( INCY ) ) when TRANS = 'N' or 'n'
-*           and at least
-*           ( 1 + ( n - 1 )*abs( INCY ) ) otherwise.
-*           Before entry with BETA non-zero, the incremented array Y
-*           must contain the vector y. On exit, Y is overwritten by the
-*           updated vector y.
-*
-*  INCY     (input) INTEGER
-*           On entry, INCY specifies the increment for the elements of
-*           Y. INCY must not be zero.
-*           Unchanged on exit.
-*
-*  Level 2 Blas routine.
 *
 *  =====================================================================
 *

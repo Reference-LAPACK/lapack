@@ -1,24 +1,62 @@
-      SUBROUTINE DERRAC( NUNIT )
-      IMPLICIT NONE
+*> \brief \b DERRAC
 *
-*  -- LAPACK test routine (version 3.1.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     May 2007
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      INTEGER            NUNIT
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DERRAC( NUNIT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NUNIT
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  DERRAC tests the error exits for DSPOSV.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DERRAC tests the error exits for DSPOSV.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  NUNIT   (input) INTEGER
-*          The unit number for output.
+*> \param[in] NUNIT
+*> \verbatim
+*>          NUNIT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
+      SUBROUTINE DERRAC( NUNIT )
+*
+*  -- LAPACK test routine (version 3.1.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      INTEGER            NUNIT
+*     ..
 *
 *  =====================================================================
 *

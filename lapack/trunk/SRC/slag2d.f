@@ -1,11 +1,106 @@
+*> \brief \b SLAG2D
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDSA, M, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               SA( LDSA, * )
+*       DOUBLE PRECISION   A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAG2D converts a SINGLE PRECISION matrix, SA, to a DOUBLE
+*> PRECISION matrix, A.
+*>
+*> Note that while it is possible to overflow while converting
+*> from double to single, it is not possible to overflow when
+*> converting from single to double.
+*>
+*> This is an auxiliary routine so there is no argument checking.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of lines of the matrix A.  M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] SA
+*> \verbatim
+*>          SA is REAL array, dimension (LDSA,N)
+*>          On entry, the M-by-N coefficient matrix SA.
+*> \endverbatim
+*>
+*> \param[in] LDSA
+*> \verbatim
+*>          LDSA is INTEGER
+*>          The leading dimension of the array SA.  LDSA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          On exit, the M-by-N coefficient matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
 *
-*  -- LAPACK PROTOTYPE auxiliary routine (version 3.3.1) --
+*  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
-*     ..
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDSA, M, N
 *     ..
@@ -13,42 +108,6 @@
       REAL               SA( LDSA, * )
       DOUBLE PRECISION   A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAG2D converts a SINGLE PRECISION matrix, SA, to a DOUBLE
-*  PRECISION matrix, A.
-*
-*  Note that while it is possible to overflow while converting
-*  from double to single, it is not possible to overflow when
-*  converting from single to double.
-*
-*  This is an auxiliary routine so there is no argument checking.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of lines of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  SA      (input) REAL array, dimension (LDSA,N)
-*          On entry, the M-by-N coefficient matrix SA.
-*
-*  LDSA    (input) INTEGER
-*          The leading dimension of the array SA.  LDSA >= max(1,M).
-*
-*  A       (output) DOUBLE PRECISION array, dimension (LDA,N)
-*          On exit, the M-by-N coefficient matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
 *
 *  =====================================================================
 *

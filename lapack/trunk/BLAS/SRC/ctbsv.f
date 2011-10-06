@@ -1,4 +1,214 @@
+*> \brief \b CTBSV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER INCX,K,LDA,N
+*       CHARACTER DIAG,TRANS,UPLO
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX A(LDA,*),X(*)
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CTBSV  solves one of the systems of equations
+*>
+*>    A*x = b,   or   A**T*x = b,   or   A**H*x = b,
+*>
+*> where b and x are n element vectors and A is an n by n unit, or
+*> non-unit, upper or lower triangular band matrix, with ( k + 1 )
+*> diagonals.
+*>
+*> No test for singularity or near-singularity is included in this
+*> routine. Such tests must be performed before calling this routine.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>           On entry, UPLO specifies whether the matrix is an upper or
+*>           lower triangular matrix as follows:
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'U' or 'u'   A is an upper triangular matrix.
+*> \endverbatim
+*> \verbatim
+*>              UPLO = 'L' or 'l'   A is a lower triangular matrix.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>           On entry, TRANS specifies the equations to be solved as
+*>           follows:
+*> \endverbatim
+*> \verbatim
+*>              TRANS = 'N' or 'n'   A*x = b.
+*> \endverbatim
+*> \verbatim
+*>              TRANS = 'T' or 't'   A**T*x = b.
+*> \endverbatim
+*> \verbatim
+*>              TRANS = 'C' or 'c'   A**H*x = b.
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>           On entry, DIAG specifies whether or not A is unit
+*>           triangular as follows:
+*> \endverbatim
+*> \verbatim
+*>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
+*> \endverbatim
+*> \verbatim
+*>              DIAG = 'N' or 'n'   A is not assumed to be unit
+*>                                  triangular.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry, N specifies the order of the matrix A.
+*>           N must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>           On entry with UPLO = 'U' or 'u', K specifies the number of
+*>           super-diagonals of the matrix A.
+*>           On entry with UPLO = 'L' or 'l', K specifies the number of
+*>           sub-diagonals of the matrix A.
+*>           K must satisfy  0 .le. K.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array of DIMENSION ( LDA, n ).
+*>           Before entry with UPLO = 'U' or 'u', the leading ( k + 1 )
+*>           by n part of the array A must contain the upper triangular
+*>           band part of the matrix of coefficients, supplied column by
+*>           column, with the leading diagonal of the matrix in row
+*>           ( k + 1 ) of the array, the first super-diagonal starting at
+*>           position 2 in row k, and so on. The top left k by k triangle
+*>           of the array A is not referenced.
+*>           The following program segment will transfer an upper
+*>           triangular band matrix from conventional full matrix storage
+*>           to band storage:
+*> \endverbatim
+*> \verbatim
+*>                 DO 20, J = 1, N
+*>                    M = K + 1 - J
+*>                    DO 10, I = MAX( 1, J - K ), J
+*>                       A( M + I, J ) = matrix( I, J )
+*>              10    CONTINUE
+*>              20 CONTINUE
+*> \endverbatim
+*> \verbatim
+*>           Before entry with UPLO = 'L' or 'l', the leading ( k + 1 )
+*>           by n part of the array A must contain the lower triangular
+*>           band part of the matrix of coefficients, supplied column by
+*>           column, with the leading diagonal of the matrix in row 1 of
+*>           the array, the first sub-diagonal starting at position 1 in
+*>           row 2, and so on. The bottom right k by k triangle of the
+*>           array A is not referenced.
+*>           The following program segment will transfer a lower
+*>           triangular band matrix from conventional full matrix storage
+*>           to band storage:
+*> \endverbatim
+*> \verbatim
+*>                 DO 20, J = 1, N
+*>                    M = 1 - J
+*>                    DO 10, I = J, MIN( N, J + K )
+*>                       A( M + I, J ) = matrix( I, J )
+*>              10    CONTINUE
+*>              20 CONTINUE
+*> \endverbatim
+*> \verbatim
+*>           Note that when DIAG = 'U' or 'u' the elements of the array A
+*>           corresponding to the diagonal elements of the matrix are not
+*>           referenced, but are assumed to be unity.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           On entry, LDA specifies the first dimension of A as declared
+*>           in the calling (sub) program. LDA must be at least
+*>           ( k + 1 ).
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX array of dimension at least
+*>           ( 1 + ( n - 1 )*abs( INCX ) ).
+*>           Before entry, the incremented array X must contain the n
+*>           element right-hand side vector b. On exit, X is overwritten
+*>           with the solution vector x.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>           On entry, INCX specifies the increment for the elements of
+*>           X. INCX must not be zero.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_blas_level2
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Level 2 Blas routine.
+*>
+*>  -- Written on 22-October-1986.
+*>     Jack Dongarra, Argonne National Lab.
+*>     Jeremy Du Croz, Nag Central Office.
+*>     Sven Hammarling, Nag Central Office.
+*>     Richard Hanson, Sandia National Labs.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CTBSV(UPLO,TRANS,DIAG,N,K,A,LDA,X,INCX)
+*
+*  -- Reference BLAS level2 routine (version 3.4.0) --
+*  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
 *     .. Scalar Arguments ..
       INTEGER INCX,K,LDA,N
       CHARACTER DIAG,TRANS,UPLO
@@ -6,139 +216,6 @@
 *     .. Array Arguments ..
       COMPLEX A(LDA,*),X(*)
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CTBSV  solves one of the systems of equations
-*
-*     A*x = b,   or   A**T*x = b,   or   A**H*x = b,
-*
-*  where b and x are n element vectors and A is an n by n unit, or
-*  non-unit, upper or lower triangular band matrix, with ( k + 1 )
-*  diagonals.
-*
-*  No test for singularity or near-singularity is included in this
-*  routine. Such tests must be performed before calling this routine.
-*
-*  Arguments
-*  ==========
-*
-*  UPLO   - CHARACTER*1.
-*           On entry, UPLO specifies whether the matrix is an upper or
-*           lower triangular matrix as follows:
-*
-*              UPLO = 'U' or 'u'   A is an upper triangular matrix.
-*
-*              UPLO = 'L' or 'l'   A is a lower triangular matrix.
-*
-*           Unchanged on exit.
-*
-*  TRANS  - CHARACTER*1.
-*           On entry, TRANS specifies the equations to be solved as
-*           follows:
-*
-*              TRANS = 'N' or 'n'   A*x = b.
-*
-*              TRANS = 'T' or 't'   A**T*x = b.
-*
-*              TRANS = 'C' or 'c'   A**H*x = b.
-*
-*           Unchanged on exit.
-*
-*  DIAG   - CHARACTER*1.
-*           On entry, DIAG specifies whether or not A is unit
-*           triangular as follows:
-*
-*              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
-*
-*              DIAG = 'N' or 'n'   A is not assumed to be unit
-*                                  triangular.
-*
-*           Unchanged on exit.
-*
-*  N      - INTEGER.
-*           On entry, N specifies the order of the matrix A.
-*           N must be at least zero.
-*           Unchanged on exit.
-*
-*  K      - INTEGER.
-*           On entry with UPLO = 'U' or 'u', K specifies the number of
-*           super-diagonals of the matrix A.
-*           On entry with UPLO = 'L' or 'l', K specifies the number of
-*           sub-diagonals of the matrix A.
-*           K must satisfy  0 .le. K.
-*           Unchanged on exit.
-*
-*  A      - COMPLEX          array of DIMENSION ( LDA, n ).
-*           Before entry with UPLO = 'U' or 'u', the leading ( k + 1 )
-*           by n part of the array A must contain the upper triangular
-*           band part of the matrix of coefficients, supplied column by
-*           column, with the leading diagonal of the matrix in row
-*           ( k + 1 ) of the array, the first super-diagonal starting at
-*           position 2 in row k, and so on. The top left k by k triangle
-*           of the array A is not referenced.
-*           The following program segment will transfer an upper
-*           triangular band matrix from conventional full matrix storage
-*           to band storage:
-*
-*                 DO 20, J = 1, N
-*                    M = K + 1 - J
-*                    DO 10, I = MAX( 1, J - K ), J
-*                       A( M + I, J ) = matrix( I, J )
-*              10    CONTINUE
-*              20 CONTINUE
-*
-*           Before entry with UPLO = 'L' or 'l', the leading ( k + 1 )
-*           by n part of the array A must contain the lower triangular
-*           band part of the matrix of coefficients, supplied column by
-*           column, with the leading diagonal of the matrix in row 1 of
-*           the array, the first sub-diagonal starting at position 1 in
-*           row 2, and so on. The bottom right k by k triangle of the
-*           array A is not referenced.
-*           The following program segment will transfer a lower
-*           triangular band matrix from conventional full matrix storage
-*           to band storage:
-*
-*                 DO 20, J = 1, N
-*                    M = 1 - J
-*                    DO 10, I = J, MIN( N, J + K )
-*                       A( M + I, J ) = matrix( I, J )
-*              10    CONTINUE
-*              20 CONTINUE
-*
-*           Note that when DIAG = 'U' or 'u' the elements of the array A
-*           corresponding to the diagonal elements of the matrix are not
-*           referenced, but are assumed to be unity.
-*           Unchanged on exit.
-*
-*  LDA    - INTEGER.
-*           On entry, LDA specifies the first dimension of A as declared
-*           in the calling (sub) program. LDA must be at least
-*           ( k + 1 ).
-*           Unchanged on exit.
-*
-*  X      - COMPLEX          array of dimension at least
-*           ( 1 + ( n - 1 )*abs( INCX ) ).
-*           Before entry, the incremented array X must contain the n
-*           element right-hand side vector b. On exit, X is overwritten
-*           with the solution vector x.
-*
-*  INCX   - INTEGER.
-*           On entry, INCX specifies the increment for the elements of
-*           X. INCX must not be zero.
-*           Unchanged on exit.
-*
-*  Further Details
-*  ===============
-*
-*  Level 2 Blas routine.
-*
-*  -- Written on 22-October-1986.
-*     Jack Dongarra, Argonne National Lab.
-*     Jeremy Du Croz, Nag Central Office.
-*     Sven Hammarling, Nag Central Office.
-*     Richard Hanson, Sandia National Labs.
 *
 *  =====================================================================
 *

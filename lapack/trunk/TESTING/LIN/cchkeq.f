@@ -1,27 +1,70 @@
+*> \brief \b CCHKEQ
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CCHKEQ( THRESH, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NOUT
+*       REAL               THRESH
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CCHKEQ tests CGEEQU, CGBEQU, CPOEQU, CPPEQU and CPBEQU
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          Threshold for testing routines. Should be between 2 and 10.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CCHKEQ( THRESH, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            NOUT
       REAL               THRESH
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CCHKEQ tests CGEEQU, CGBEQU, CPOEQU, CPPEQU and CPBEQU
-*
-*  Arguments
-*  =========
-*
-*  THRESH  (input) REAL
-*          Threshold for testing routines. Should be between 2 and 10.
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

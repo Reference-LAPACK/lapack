@@ -1,9 +1,109 @@
+*> \brief \b ZTZT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION ZTZT01( M, N, A, AF, LDA, TAU, WORK,
+*                        LWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LWORK, M, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX*16         A( LDA, * ), AF( LDA, * ), TAU( * ),
+*      $                   WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZTZT01 returns
+*>      || A - R*Q || / ( M * eps * ||A|| )
+*> for an upper trapezoidal A that was factored with ZTZRQF.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrices A and AF.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          The original upper trapezoidal M by N matrix A.
+*> \endverbatim
+*>
+*> \param[in] AF
+*> \verbatim
+*>          AF is COMPLEX*16 array, dimension (LDA,N)
+*>          The output of ZTZRQF for input matrix A.
+*>          The lower triangle is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the arrays A and AF.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is COMPLEX*16 array, dimension (M)
+*>          Details of the  Householder transformations as returned by
+*>          ZTZRQF.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK >= m*n + m.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION ZTZT01( M, N, A, AF, LDA, TAU, WORK,
      $                 LWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LWORK, M, N
@@ -12,41 +112,6 @@
       COMPLEX*16         A( LDA, * ), AF( LDA, * ), TAU( * ),
      $                   WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZTZT01 returns
-*       || A - R*Q || / ( M * eps * ||A|| )
-*  for an upper trapezoidal A that was factored with ZTZRQF.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrices A and AF.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrices A and AF.
-*
-*  A       (input) COMPLEX*16 array, dimension (LDA,N)
-*          The original upper trapezoidal M by N matrix A.
-*
-*  AF      (input) COMPLEX*16 array, dimension (LDA,N)
-*          The output of ZTZRQF for input matrix A.
-*          The lower triangle is not referenced.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the arrays A and AF.
-*
-*  TAU     (input) COMPLEX*16 array, dimension (M)
-*          Details of the  Householder transformations as returned by
-*          ZTZRQF.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  LWORK >= m*n + m.
 *
 *  =====================================================================
 *

@@ -1,12 +1,276 @@
+*> \brief \b SLALSA
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
+*                          LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
+*                          GIVCOL, LDGCOL, PERM, GIVNUM, C, S, WORK,
+*                          IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            ICOMPQ, INFO, LDB, LDBX, LDGCOL, LDU, N, NRHS,
+*      $                   SMLSIZ
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            GIVCOL( LDGCOL, * ), GIVPTR( * ), IWORK( * ),
+*      $                   K( * ), PERM( LDGCOL, * )
+*       REAL               B( LDB, * ), BX( LDBX, * ), C( * ),
+*      $                   DIFL( LDU, * ), DIFR( LDU, * ),
+*      $                   GIVNUM( LDU, * ), POLES( LDU, * ), S( * ),
+*      $                   U( LDU, * ), VT( LDU, * ), WORK( * ),
+*      $                   Z( LDU, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLALSA is an itermediate step in solving the least squares problem
+*> by computing the SVD of the coefficient matrix in compact form (The
+*> singular vectors are computed as products of simple orthorgonal
+*> matrices.).
+*>
+*> If ICOMPQ = 0, SLALSA applies the inverse of the left singular vector
+*> matrix of an upper bidiagonal matrix to the right hand side; and if
+*> ICOMPQ = 1, SLALSA applies the right singular vector matrix to the
+*> right hand side. The singular vector matrices were generated in
+*> compact form by SLALSA.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ICOMPQ
+*> \verbatim
+*>          ICOMPQ is INTEGER
+*>         Specifies whether the left or the right singular vector
+*>         matrix is involved.
+*>         = 0: Left singular vector matrix
+*>         = 1: Right singular vector matrix
+*> \endverbatim
+*>
+*> \param[in] SMLSIZ
+*> \verbatim
+*>          SMLSIZ is INTEGER
+*>         The maximum size of the subproblems at the bottom of the
+*>         computation tree.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The row and column dimensions of the upper bidiagonal matrix.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>         The number of columns of B and BX. NRHS must be at least 1.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is REAL array, dimension ( LDB, NRHS )
+*>         On input, B contains the right hand sides of the least
+*>         squares problem in rows 1 through M.
+*>         On output, B contains the solution X in rows 1 through N.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>         The leading dimension of B in the calling subprogram.
+*>         LDB must be at least max(1,MAX( M, N ) ).
+*> \endverbatim
+*>
+*> \param[out] BX
+*> \verbatim
+*>          BX is REAL array, dimension ( LDBX, NRHS )
+*>         On exit, the result of applying the left or right singular
+*>         vector matrix to B.
+*> \endverbatim
+*>
+*> \param[in] LDBX
+*> \verbatim
+*>          LDBX is INTEGER
+*>         The leading dimension of BX.
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is REAL array, dimension ( LDU, SMLSIZ ).
+*>         On entry, U contains the left singular vector matrices of all
+*>         subproblems at the bottom level.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER, LDU = > N.
+*>         The leading dimension of arrays U, VT, DIFL, DIFR,
+*>         POLES, GIVNUM, and Z.
+*> \endverbatim
+*>
+*> \param[in] VT
+*> \verbatim
+*>          VT is REAL array, dimension ( LDU, SMLSIZ+1 ).
+*>         On entry, VT**T contains the right singular vector matrices of
+*>         all subproblems at the bottom level.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER array, dimension ( N ).
+*> \endverbatim
+*>
+*> \param[in] DIFL
+*> \verbatim
+*>          DIFL is REAL array, dimension ( LDU, NLVL ).
+*>         where NLVL = INT(log_2 (N/(SMLSIZ+1))) + 1.
+*> \endverbatim
+*>
+*> \param[in] DIFR
+*> \verbatim
+*>          DIFR is REAL array, dimension ( LDU, 2 * NLVL ).
+*>         On entry, DIFL(*, I) and DIFR(*, 2 * I -1) record
+*>         distances between singular values on the I-th level and
+*>         singular values on the (I -1)-th level, and DIFR(*, 2 * I)
+*>         record the normalizing factors of the right singular vectors
+*>         matrices of subproblems on I-th level.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is REAL array, dimension ( LDU, NLVL ).
+*>         On entry, Z(1, I) contains the components of the deflation-
+*>         adjusted updating row vector for subproblems on the I-th
+*>         level.
+*> \endverbatim
+*>
+*> \param[in] POLES
+*> \verbatim
+*>          POLES is REAL array, dimension ( LDU, 2 * NLVL ).
+*>         On entry, POLES(*, 2 * I -1: 2 * I) contains the new and old
+*>         singular values involved in the secular equations on the I-th
+*>         level.
+*> \endverbatim
+*>
+*> \param[in] GIVPTR
+*> \verbatim
+*>          GIVPTR is INTEGER array, dimension ( N ).
+*>         On entry, GIVPTR( I ) records the number of Givens
+*>         rotations performed on the I-th problem on the computation
+*>         tree.
+*> \endverbatim
+*>
+*> \param[in] GIVCOL
+*> \verbatim
+*>          GIVCOL is INTEGER array, dimension ( LDGCOL, 2 * NLVL ).
+*>         On entry, for each I, GIVCOL(*, 2 * I - 1: 2 * I) records the
+*>         locations of Givens rotations performed on the I-th level on
+*>         the computation tree.
+*> \endverbatim
+*>
+*> \param[in] LDGCOL
+*> \verbatim
+*>          LDGCOL is INTEGER, LDGCOL = > N.
+*>         The leading dimension of arrays GIVCOL and PERM.
+*> \endverbatim
+*>
+*> \param[in] PERM
+*> \verbatim
+*>          PERM is INTEGER array, dimension ( LDGCOL, NLVL ).
+*>         On entry, PERM(*, I) records permutations done on the I-th
+*>         level of the computation tree.
+*> \endverbatim
+*>
+*> \param[in] GIVNUM
+*> \verbatim
+*>          GIVNUM is REAL array, dimension ( LDU, 2 * NLVL ).
+*>         On entry, GIVNUM(*, 2 *I -1 : 2 * I) records the C- and S-
+*>         values of Givens rotations performed on the I-th level on the
+*>         computation tree.
+*> \endverbatim
+*>
+*> \param[in] C
+*> \verbatim
+*>          C is REAL array, dimension ( N ).
+*>         On entry, if the I-th subproblem is not square,
+*>         C( I ) contains the C-value of a Givens rotation related to
+*>         the right null space of the I-th subproblem.
+*> \endverbatim
+*>
+*> \param[in] S
+*> \verbatim
+*>          S is REAL array, dimension ( N ).
+*>         On entry, if the I-th subproblem is not square,
+*>         S( I ) contains the S-value of a Givens rotation related to
+*>         the right null space of the I-th subproblem.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array.
+*>         The dimension must be at least N.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array.
+*>         The dimension must be at least 3 * N
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Ming Gu and Ren-Cang Li, Computer Science Division, University of
+*>       California at Berkeley, USA
+*>     Osni Marques, LBNL/NERSC, USA
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, WORK,
      $                   IWORK, INFO )
 *
-*  -- LAPACK routine (version 3.2) --
+*  -- LAPACK computational routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            ICOMPQ, INFO, LDB, LDBX, LDGCOL, LDU, N, NRHS,
@@ -21,140 +285,6 @@
      $                   U( LDU, * ), VT( LDU, * ), WORK( * ),
      $                   Z( LDU, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLALSA is an itermediate step in solving the least squares problem
-*  by computing the SVD of the coefficient matrix in compact form (The
-*  singular vectors are computed as products of simple orthorgonal
-*  matrices.).
-*
-*  If ICOMPQ = 0, SLALSA applies the inverse of the left singular vector
-*  matrix of an upper bidiagonal matrix to the right hand side; and if
-*  ICOMPQ = 1, SLALSA applies the right singular vector matrix to the
-*  right hand side. The singular vector matrices were generated in
-*  compact form by SLALSA.
-*
-*  Arguments
-*  =========
-*
-*
-*  ICOMPQ (input) INTEGER
-*         Specifies whether the left or the right singular vector
-*         matrix is involved.
-*         = 0: Left singular vector matrix
-*         = 1: Right singular vector matrix
-*
-*  SMLSIZ (input) INTEGER
-*         The maximum size of the subproblems at the bottom of the
-*         computation tree.
-*
-*  N      (input) INTEGER
-*         The row and column dimensions of the upper bidiagonal matrix.
-*
-*  NRHS   (input) INTEGER
-*         The number of columns of B and BX. NRHS must be at least 1.
-*
-*  B      (input/output) REAL array, dimension ( LDB, NRHS )
-*         On input, B contains the right hand sides of the least
-*         squares problem in rows 1 through M.
-*         On output, B contains the solution X in rows 1 through N.
-*
-*  LDB    (input) INTEGER
-*         The leading dimension of B in the calling subprogram.
-*         LDB must be at least max(1,MAX( M, N ) ).
-*
-*  BX     (output) REAL array, dimension ( LDBX, NRHS )
-*         On exit, the result of applying the left or right singular
-*         vector matrix to B.
-*
-*  LDBX   (input) INTEGER
-*         The leading dimension of BX.
-*
-*  U      (input) REAL array, dimension ( LDU, SMLSIZ ).
-*         On entry, U contains the left singular vector matrices of all
-*         subproblems at the bottom level.
-*
-*  LDU    (input) INTEGER, LDU = > N.
-*         The leading dimension of arrays U, VT, DIFL, DIFR,
-*         POLES, GIVNUM, and Z.
-*
-*  VT     (input) REAL array, dimension ( LDU, SMLSIZ+1 ).
-*         On entry, VT**T contains the right singular vector matrices of
-*         all subproblems at the bottom level.
-*
-*  K      (input) INTEGER array, dimension ( N ).
-*
-*  DIFL   (input) REAL array, dimension ( LDU, NLVL ).
-*         where NLVL = INT(log_2 (N/(SMLSIZ+1))) + 1.
-*
-*  DIFR   (input) REAL array, dimension ( LDU, 2 * NLVL ).
-*         On entry, DIFL(*, I) and DIFR(*, 2 * I -1) record
-*         distances between singular values on the I-th level and
-*         singular values on the (I -1)-th level, and DIFR(*, 2 * I)
-*         record the normalizing factors of the right singular vectors
-*         matrices of subproblems on I-th level.
-*
-*  Z      (input) REAL array, dimension ( LDU, NLVL ).
-*         On entry, Z(1, I) contains the components of the deflation-
-*         adjusted updating row vector for subproblems on the I-th
-*         level.
-*
-*  POLES  (input) REAL array, dimension ( LDU, 2 * NLVL ).
-*         On entry, POLES(*, 2 * I -1: 2 * I) contains the new and old
-*         singular values involved in the secular equations on the I-th
-*         level.
-*
-*  GIVPTR (input) INTEGER array, dimension ( N ).
-*         On entry, GIVPTR( I ) records the number of Givens
-*         rotations performed on the I-th problem on the computation
-*         tree.
-*
-*  GIVCOL (input) INTEGER array, dimension ( LDGCOL, 2 * NLVL ).
-*         On entry, for each I, GIVCOL(*, 2 * I - 1: 2 * I) records the
-*         locations of Givens rotations performed on the I-th level on
-*         the computation tree.
-*
-*  LDGCOL (input) INTEGER, LDGCOL = > N.
-*         The leading dimension of arrays GIVCOL and PERM.
-*
-*  PERM   (input) INTEGER array, dimension ( LDGCOL, NLVL ).
-*         On entry, PERM(*, I) records permutations done on the I-th
-*         level of the computation tree.
-*
-*  GIVNUM (input) REAL array, dimension ( LDU, 2 * NLVL ).
-*         On entry, GIVNUM(*, 2 *I -1 : 2 * I) records the C- and S-
-*         values of Givens rotations performed on the I-th level on the
-*         computation tree.
-*
-*  C      (input) REAL array, dimension ( N ).
-*         On entry, if the I-th subproblem is not square,
-*         C( I ) contains the C-value of a Givens rotation related to
-*         the right null space of the I-th subproblem.
-*
-*  S      (input) REAL array, dimension ( N ).
-*         On entry, if the I-th subproblem is not square,
-*         S( I ) contains the S-value of a Givens rotation related to
-*         the right null space of the I-th subproblem.
-*
-*  WORK   (workspace) REAL array.
-*         The dimension must be at least N.
-*
-*  IWORK  (workspace) INTEGER array.
-*         The dimension must be at least 3 * N
-*
-*  INFO   (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Ming Gu and Ren-Cang Li, Computer Science Division, University of
-*       California at Berkeley, USA
-*     Osni Marques, LBNL/NERSC, USA
 *
 *  =====================================================================
 *

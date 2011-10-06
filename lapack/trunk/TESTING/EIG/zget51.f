@@ -1,9 +1,165 @@
+*> \brief \b ZGET51
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
+*                          RWORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            ITYPE, LDA, LDB, LDU, LDV, N
+*       DOUBLE PRECISION   RESULT
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( LDA, * ), B( LDB, * ), U( LDU, * ),
+*      $                   V( LDV, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>      ZGET51  generally checks a decomposition of the form
+*>
+*>              A = U B VC>
+*>      where * means conjugate transpose and U and V are unitary.
+*>
+*>      Specifically, if ITYPE=1
+*>
+*>              RESULT = | A - U B V* | / ( |A| n ulp )
+*>
+*>      If ITYPE=2, then:
+*>
+*>              RESULT = | A - B | / ( |A| n ulp )
+*>
+*>      If ITYPE=3, then:
+*>
+*>              RESULT = | I - UU* | / ( n ulp )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ITYPE
+*> \verbatim
+*>          ITYPE is INTEGER
+*>          Specifies the type of tests to be performed.
+*>          =1: RESULT = | A - U B V* | / ( |A| n ulp )
+*>          =2: RESULT = | A - B | / ( |A| n ulp )
+*>          =3: RESULT = | I - UU* | / ( n ulp )
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The size of the matrix.  If it is zero, ZGET51 does nothing.
+*>          It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA, N)
+*>          The original (unfactored) matrix.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDB, N)
+*>          The factored matrix.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.  It must be at least 1
+*>          and at least N.
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is COMPLEX*16 array, dimension (LDU, N)
+*>          The unitary matrix on the left-hand side in the
+*>          decomposition.
+*>          Not referenced if ITYPE=2
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of U.  LDU must be at least N and
+*>          at least 1.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is COMPLEX*16 array, dimension (LDV, N)
+*>          The unitary matrix on the left-hand side in the
+*>          decomposition.
+*>          Not referenced if ITYPE=2
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of V.  LDV must be at least N and
+*>          at least 1.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (2*N**2)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION
+*>          The values computed by the test specified by ITYPE.  The
+*>          value is currently limited to 1/ulp, to avoid overflow.
+*>          Errors are flagged by RESULT=10/ulp.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
       SUBROUTINE ZGET51( ITYPE, N, A, LDA, B, LDB, U, LDU, V, LDV, WORK,
      $                   RWORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            ITYPE, LDA, LDB, LDU, LDV, N
@@ -14,81 +170,6 @@
       COMPLEX*16         A( LDA, * ), B( LDB, * ), U( LDU, * ),
      $                   V( LDV, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*       ZGET51  generally checks a decomposition of the form
-*
-*               A = U B V*
-*
-*       where * means conjugate transpose and U and V are unitary.
-*
-*       Specifically, if ITYPE=1
-*
-*               RESULT = | A - U B V* | / ( |A| n ulp )
-*
-*       If ITYPE=2, then:
-*
-*               RESULT = | A - B | / ( |A| n ulp )
-*
-*       If ITYPE=3, then:
-*
-*               RESULT = | I - UU* | / ( n ulp )
-*
-*  Arguments
-*  =========
-*
-*  ITYPE   (input) INTEGER
-*          Specifies the type of tests to be performed.
-*          =1: RESULT = | A - U B V* | / ( |A| n ulp )
-*          =2: RESULT = | A - B | / ( |A| n ulp )
-*          =3: RESULT = | I - UU* | / ( n ulp )
-*
-*  N       (input) INTEGER
-*          The size of the matrix.  If it is zero, ZGET51 does nothing.
-*          It must be at least zero.
-*
-*  A       (input) COMPLEX*16 array, dimension (LDA, N)
-*          The original (unfactored) matrix.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  It must be at least 1
-*          and at least N.
-*
-*  B       (input) COMPLEX*16 array, dimension (LDB, N)
-*          The factored matrix.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.  It must be at least 1
-*          and at least N.
-*
-*  U       (input) COMPLEX*16 array, dimension (LDU, N)
-*          The unitary matrix on the left-hand side in the
-*          decomposition.
-*          Not referenced if ITYPE=2
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of U.  LDU must be at least N and
-*          at least 1.
-*
-*  V       (input) COMPLEX*16 array, dimension (LDV, N)
-*          The unitary matrix on the left-hand side in the
-*          decomposition.
-*          Not referenced if ITYPE=2
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of V.  LDV must be at least N and
-*          at least 1.
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension (2*N**2)
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  RESULT  (output) DOUBLE PRECISION
-*          The values computed by the test specified by ITYPE.  The
-*          value is currently limited to 1/ulp, to avoid overflow.
-*          Errors are flagged by RESULT=10/ulp.
 *
 *  =====================================================================
 *

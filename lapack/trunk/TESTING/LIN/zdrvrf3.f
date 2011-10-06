@@ -1,9 +1,130 @@
+*> \brief \b ZDRVRF3
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
+*      +                    D_WORK_ZLANGE, Z_WORK_ZGEQRF, TAU )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, NN, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NVAL( NN )
+*       DOUBLE PRECISION   D_WORK_ZLANGE( * )
+*       COMPLEX*16         A( LDA, * ), ARF( * ), B1( LDA, * ),
+*      +                   B2( LDA, * )
+*       COMPLEX*16         Z_WORK_ZGEQRF( * ), TAU( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZDRVRF3 tests the LAPACK RFP routines:
+*>     ZTFSM
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>                The unit number for output.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>                The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>                The values of the matrix dimension N.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>                The threshold value for the test ratios.  A result is
+*>                included in the output file if RESULT >= THRESH.  To have
+*>                every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>                The leading dimension of the array A.  LDA >= max(1,NMAX).
+*> \endverbatim
+*>
+*> \param[out] ARF
+*> \verbatim
+*>          ARF is COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
+*> \endverbatim
+*>
+*> \param[out] B1
+*> \verbatim
+*>          B1 is COMPLEX*16 array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[out] B2
+*> \verbatim
+*>          B2 is COMPLEX*16 array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[out] D_WORK_ZLANGE
+*> \verbatim
+*>          D_WORK_ZLANGE is DOUBLE PRECISION array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[out] Z_WORK_ZGEQRF
+*> \verbatim
+*>          Z_WORK_ZGEQRF is COMPLEX*16 array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is COMPLEX*16 array, dimension (NMAX)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
      +                    D_WORK_ZLANGE, Z_WORK_ZGEQRF, TAU )
 *
 *  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, NN, NOUT
@@ -16,46 +137,6 @@
      +                   B2( LDA, * )
       COMPLEX*16         Z_WORK_ZGEQRF( * ), TAU( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZDRVRF3 tests the LAPACK RFP routines:
-*      ZTFSM
-*
-*  Arguments
-*  =========
-*
-*  NOUT          (input) INTEGER
-*                The unit number for output.
-*
-*  NN            (input) INTEGER
-*                The number of values of N contained in the vector NVAL.
-*
-*  NVAL          (input) INTEGER array, dimension (NN)
-*                The values of the matrix dimension N.
-*
-*  THRESH        (input) DOUBLE PRECISION
-*                The threshold value for the test ratios.  A result is
-*                included in the output file if RESULT >= THRESH.  To have
-*                every test ratio printed, use THRESH = 0.
-*
-*  A             (workspace) COMPLEX*16 array, dimension (LDA,NMAX)
-*
-*  LDA           (input) INTEGER
-*                The leading dimension of the array A.  LDA >= max(1,NMAX).
-*
-*  ARF           (workspace) COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
-*
-*  B1            (workspace) COMPLEX*16 array, dimension (LDA,NMAX)
-*
-*  B2            (workspace) COMPLEX*16 array, dimension (LDA,NMAX)
-*
-*  D_WORK_ZLANGE (workspace) DOUBLE PRECISION array, dimension (NMAX)
-*
-*  Z_WORK_ZGEQRF (workspace) COMPLEX*16 array, dimension (NMAX)
-*
-*  TAU           (workspace) COMPLEX*16 array, dimension (NMAX)
 *
 *  =====================================================================
 *     ..

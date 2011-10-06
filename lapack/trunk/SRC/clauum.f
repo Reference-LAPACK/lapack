@@ -1,9 +1,103 @@
+*> \brief \b CLAUUM
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLAUUM( UPLO, N, A, LDA, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            INFO, LDA, N
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLAUUM computes the product U * U**H or L**H * L, where the triangular
+*> factor U or L is stored in the upper or lower triangular part of
+*> the array A.
+*>
+*> If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
+*> overwriting the factor U in A.
+*> If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
+*> overwriting the factor L in A.
+*>
+*> This is the blocked form of the algorithm, calling Level 3 BLAS.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the triangular factor stored in the array A
+*>          is upper or lower triangular:
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the triangular factor U or L.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the triangular factor U or L.
+*>          On exit, if UPLO = 'U', the upper triangle of A is
+*>          overwritten with the upper triangle of the product U * U**H;
+*>          if UPLO = 'L', the lower triangle of A is overwritten with
+*>          the lower triangle of the product L**H * L.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -k, the k-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE CLAUUM( UPLO, N, A, LDA, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -12,46 +106,6 @@
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLAUUM computes the product U * U**H or L**H * L, where the triangular
-*  factor U or L is stored in the upper or lower triangular part of
-*  the array A.
-*
-*  If UPLO = 'U' or 'u' then the upper triangle of the result is stored,
-*  overwriting the factor U in A.
-*  If UPLO = 'L' or 'l' then the lower triangle of the result is stored,
-*  overwriting the factor L in A.
-*
-*  This is the blocked form of the algorithm, calling Level 3 BLAS.
-*
-*  Arguments
-*  =========
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the triangular factor stored in the array A
-*          is upper or lower triangular:
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The order of the triangular factor U or L.  N >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA,N)
-*          On entry, the triangular factor U or L.
-*          On exit, if UPLO = 'U', the upper triangle of A is
-*          overwritten with the upper triangle of the product U * U**H;
-*          if UPLO = 'L', the lower triangle of A is overwritten with
-*          the lower triangle of the product L**H * L.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -k, the k-th argument had an illegal value
 *
 *  =====================================================================
 *

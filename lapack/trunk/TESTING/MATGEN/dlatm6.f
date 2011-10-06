@@ -1,9 +1,188 @@
+*> \brief \b DLATM6
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
+*                          BETA, WX, WY, S, DIF )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDX, LDY, N, TYPE
+*       DOUBLE PRECISION   ALPHA, BETA, WX, WY
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), B( LDA, * ), DIF( * ), S( * ),
+*      $                   X( LDX, * ), Y( LDY, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLATM6 generates test matrices for the generalized eigenvalue
+*> problem, their corresponding right and left eigenvector matrices,
+*> and also reciprocal condition numbers for all eigenvalues and
+*> the reciprocal condition numbers of eigenvectors corresponding to
+*> the 1th and 5th eigenvalues.
+*>
+*> Test Matrices
+*> =============
+*>
+*> Two kinds of test matrix pairs
+*>
+*>       (A, B) = inverse(YH) * (Da, Db) * inverse(X)
+*>
+*> are used in the tests:
+*>
+*> Type 1:
+*>    Da = 1+a   0    0    0    0    Db = 1   0   0   0   0
+*>          0   2+a   0    0    0         0   1   0   0   0
+*>          0    0   3+a   0    0         0   0   1   0   0
+*>          0    0    0   4+a   0         0   0   0   1   0
+*>          0    0    0    0   5+a ,      0   0   0   0   1 , and
+*>
+*> Type 2:
+*>    Da =  1   -1    0    0    0    Db = 1   0   0   0   0
+*>          1    1    0    0    0         0   1   0   0   0
+*>          0    0    1    0    0         0   0   1   0   0
+*>          0    0    0   1+a  1+b        0   0   0   1   0
+*>          0    0    0  -1-b  1+a ,      0   0   0   0   1 .
+*>
+*> In both cases the same inverse(YH) and inverse(X) are used to compute
+*> (A, B), giving the exact eigenvectors to (A,B) as (YH, X):
+*>
+*> YH:  =  1    0   -y    y   -y    X =  1   0  -x  -x   x
+*>         0    1   -y    y   -y         0   1   x  -x  -x
+*>         0    0    1    0    0         0   0   1   0   0
+*>         0    0    0    1    0         0   0   0   1   0
+*>         0    0    0    0    1,        0   0   0   0   1 ,
+*>
+*> where a, b, x and y will have all values independently of each other.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TYPE
+*> \verbatim
+*>          TYPE is INTEGER
+*>          Specifies the problem type (see futher details).
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          Size of the matrices A and B.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA, N).
+*>          On exit A N-by-N is initialized according to TYPE.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A and of B.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDA, N).
+*>          On exit B N-by-N is initialized according to TYPE.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (LDX, N).
+*>          On exit X is the N-by-N matrix of right eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of X.
+*> \endverbatim
+*>
+*> \param[out] Y
+*> \verbatim
+*>          Y is DOUBLE PRECISION array, dimension (LDY, N).
+*>          On exit Y is the N-by-N matrix of left eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] LDY
+*> \verbatim
+*>          LDY is INTEGER
+*>          The leading dimension of Y.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] BETA
+*> \verbatim
+*>          BETA is DOUBLE PRECISION
+*> \endverbatim
+*> \verbatim
+*>          Weighting constants for matrix A.
+*> \endverbatim
+*>
+*> \param[in] WX
+*> \verbatim
+*>          WX is DOUBLE PRECISION
+*>          Constant for right eigenvector matrix.
+*> \endverbatim
+*>
+*> \param[in] WY
+*> \verbatim
+*>          WY is DOUBLE PRECISION
+*>          Constant for left eigenvector matrix.
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is DOUBLE PRECISION array, dimension (N)
+*>          S(i) is the reciprocal condition number for eigenvalue i.
+*> \endverbatim
+*>
+*> \param[out] DIF
+*> \verbatim
+*>          DIF is DOUBLE PRECISION array, dimension (N)
+*>          DIF(i) is the reciprocal condition number for eigenvector i.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_matgen
+*
+*  =====================================================================
       SUBROUTINE DLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
      $                   BETA, WX, WY, S, DIF )
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK computational routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDX, LDY, N, TYPE
@@ -13,95 +192,6 @@
       DOUBLE PRECISION   A( LDA, * ), B( LDA, * ), DIF( * ), S( * ),
      $                   X( LDX, * ), Y( LDY, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLATM6 generates test matrices for the generalized eigenvalue
-*  problem, their corresponding right and left eigenvector matrices,
-*  and also reciprocal condition numbers for all eigenvalues and
-*  the reciprocal condition numbers of eigenvectors corresponding to
-*  the 1th and 5th eigenvalues.
-*
-*  Test Matrices
-*  =============
-*
-*  Two kinds of test matrix pairs
-*
-*        (A, B) = inverse(YH) * (Da, Db) * inverse(X)
-*
-*  are used in the tests:
-*
-*  Type 1:
-*     Da = 1+a   0    0    0    0    Db = 1   0   0   0   0
-*           0   2+a   0    0    0         0   1   0   0   0
-*           0    0   3+a   0    0         0   0   1   0   0
-*           0    0    0   4+a   0         0   0   0   1   0
-*           0    0    0    0   5+a ,      0   0   0   0   1 , and
-*
-*  Type 2:
-*     Da =  1   -1    0    0    0    Db = 1   0   0   0   0
-*           1    1    0    0    0         0   1   0   0   0
-*           0    0    1    0    0         0   0   1   0   0
-*           0    0    0   1+a  1+b        0   0   0   1   0
-*           0    0    0  -1-b  1+a ,      0   0   0   0   1 .
-*
-*  In both cases the same inverse(YH) and inverse(X) are used to compute
-*  (A, B), giving the exact eigenvectors to (A,B) as (YH, X):
-*
-*  YH:  =  1    0   -y    y   -y    X =  1   0  -x  -x   x
-*          0    1   -y    y   -y         0   1   x  -x  -x
-*          0    0    1    0    0         0   0   1   0   0
-*          0    0    0    1    0         0   0   0   1   0
-*          0    0    0    0    1,        0   0   0   0   1 ,
-*
-* where a, b, x and y will have all values independently of each other.
-*
-*  Arguments
-*  =========
-*
-*  TYPE    (input) INTEGER
-*          Specifies the problem type (see futher details).
-*
-*  N       (input) INTEGER
-*          Size of the matrices A and B.
-*
-*  A       (output) DOUBLE PRECISION array, dimension (LDA, N).
-*          On exit A N-by-N is initialized according to TYPE.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A and of B.
-*
-*  B       (output) DOUBLE PRECISION array, dimension (LDA, N).
-*          On exit B N-by-N is initialized according to TYPE.
-*
-*  X       (output) DOUBLE PRECISION array, dimension (LDX, N).
-*          On exit X is the N-by-N matrix of right eigenvectors.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of X.
-*
-*  Y       (output) DOUBLE PRECISION array, dimension (LDY, N).
-*          On exit Y is the N-by-N matrix of left eigenvectors.
-*
-*  LDY     (input) INTEGER
-*          The leading dimension of Y.
-*
-*  ALPHA   (input) DOUBLE PRECISION
-*  BETA    (input) DOUBLE PRECISION
-*          Weighting constants for matrix A.
-*
-*  WX      (input) DOUBLE PRECISION
-*          Constant for right eigenvector matrix.
-*
-*  WY      (input) DOUBLE PRECISION
-*          Constant for left eigenvector matrix.
-*
-*  S       (output) DOUBLE PRECISION array, dimension (N)
-*          S(i) is the reciprocal condition number for eigenvalue i.
-*
-*  DIF     (output) DOUBLE PRECISION array, dimension (N)
-*          DIF(i) is the reciprocal condition number for eigenvector i.
 *
 *  =====================================================================
 *

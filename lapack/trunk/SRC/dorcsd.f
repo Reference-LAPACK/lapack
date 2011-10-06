@@ -1,19 +1,268 @@
+*> \brief \b DORCSD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       RECURSIVE SUBROUTINE DORCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
+*                                    SIGNS, M, P, Q, X11, LDX11, X12,
+*                                    LDX12, X21, LDX21, X22, LDX22, THETA,
+*                                    U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
+*                                    LDV2T, WORK, LWORK, IWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBU1, JOBU2, JOBV1T, JOBV2T, SIGNS, TRANS
+*       INTEGER            INFO, LDU1, LDU2, LDV1T, LDV2T, LDX11, LDX12,
+*      $                   LDX21, LDX22, LWORK, M, P, Q
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IWORK( * )
+*       DOUBLE PRECISION   THETA( * )
+*       DOUBLE PRECISION   U1( LDU1, * ), U2( LDU2, * ), V1T( LDV1T, * ),
+*      $                   V2T( LDV2T, * ), WORK( * ), X11( LDX11, * ),
+*      $                   X12( LDX12, * ), X21( LDX21, * ), X22( LDX22,
+*      $                   * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DORCSD computes the CS decomposition of an M-by-M partitioned
+*> orthogonal matrix X:
+*>
+*>                                 [  I  0  0 |  0  0  0 ]
+*>                                 [  0  C  0 |  0 -S  0 ]
+*>     [ X11 | X12 ]   [ U1 |    ] [  0  0  0 |  0  0 -I ] [ V1 |    ]**T
+*> X = [-----------] = [---------] [---------------------] [---------]   .
+*>     [ X21 | X22 ]   [    | U2 ] [  0  0  0 |  I  0  0 ] [    | V2 ]
+*>                                 [  0  S  0 |  0  C  0 ]
+*>                                 [  0  0  I |  0  0  0 ]
+*>
+*> X11 is P-by-Q. The orthogonal matrices U1, U2, V1, and V2 are P-by-P,
+*> (M-P)-by-(M-P), Q-by-Q, and (M-Q)-by-(M-Q), respectively. C and S are
+*> R-by-R nonnegative diagonal matrices satisfying C^2 + S^2 = I, in
+*> which R = MIN(P,M-P,Q,M-Q).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBU1
+*> \verbatim
+*>          JOBU1 is CHARACTER
+*>          = 'Y':      U1 is computed;
+*>          otherwise:  U1 is not computed.
+*> \endverbatim
+*>
+*> \param[in] JOBU2
+*> \verbatim
+*>          JOBU2 is CHARACTER
+*>          = 'Y':      U2 is computed;
+*>          otherwise:  U2 is not computed.
+*> \endverbatim
+*>
+*> \param[in] JOBV1T
+*> \verbatim
+*>          JOBV1T is CHARACTER
+*>          = 'Y':      V1T is computed;
+*>          otherwise:  V1T is not computed.
+*> \endverbatim
+*>
+*> \param[in] JOBV2T
+*> \verbatim
+*>          JOBV2T is CHARACTER
+*>          = 'Y':      V2T is computed;
+*>          otherwise:  V2T is not computed.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER
+*>          = 'T':      X, U1, U2, V1T, and V2T are stored in row-major
+*>                      order;
+*>          otherwise:  X, U1, U2, V1T, and V2T are stored in column-
+*>                      major order.
+*> \endverbatim
+*>
+*> \param[in] SIGNS
+*> \verbatim
+*>          SIGNS is CHARACTER
+*>          = 'O':      The lower-left block is made nonpositive (the
+*>                      "other" convention);
+*>          otherwise:  The upper-right block is made nonpositive (the
+*>                      "default" convention).
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows and columns in X.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is INTEGER
+*>          The number of rows in X11 and X12. 0 <= P <= M.
+*> \endverbatim
+*>
+*> \param[in] Q
+*> \verbatim
+*>          Q is INTEGER
+*>          The number of columns in X11 and X21. 0 <= Q <= M.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (LDX,M)
+*>          On entry, the orthogonal matrix whose CSD is desired.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of X. LDX >= MAX(1,M).
+*> \endverbatim
+*>
+*> \param[out] THETA
+*> \verbatim
+*>          THETA is DOUBLE PRECISION array, dimension (R), in which R =
+*>          MIN(P,M-P,Q,M-Q).
+*>          C = DIAG( COS(THETA(1)), ... , COS(THETA(R)) ) and
+*>          S = DIAG( SIN(THETA(1)), ... , SIN(THETA(R)) ).
+*> \endverbatim
+*>
+*> \param[out] U1
+*> \verbatim
+*>          U1 is DOUBLE PRECISION array, dimension (P)
+*>          If JOBU1 = 'Y', U1 contains the P-by-P orthogonal matrix U1.
+*> \endverbatim
+*>
+*> \param[in] LDU1
+*> \verbatim
+*>          LDU1 is INTEGER
+*>          The leading dimension of U1. If JOBU1 = 'Y', LDU1 >=
+*>          MAX(1,P).
+*> \endverbatim
+*>
+*> \param[out] U2
+*> \verbatim
+*>          U2 is DOUBLE PRECISION array, dimension (M-P)
+*>          If JOBU2 = 'Y', U2 contains the (M-P)-by-(M-P) orthogonal
+*>          matrix U2.
+*> \endverbatim
+*>
+*> \param[in] LDU2
+*> \verbatim
+*>          LDU2 is INTEGER
+*>          The leading dimension of U2. If JOBU2 = 'Y', LDU2 >=
+*>          MAX(1,M-P).
+*> \endverbatim
+*>
+*> \param[out] V1T
+*> \verbatim
+*>          V1T is DOUBLE PRECISION array, dimension (Q)
+*>          If JOBV1T = 'Y', V1T contains the Q-by-Q matrix orthogonal
+*>          matrix V1**T.
+*> \endverbatim
+*>
+*> \param[in] LDV1T
+*> \verbatim
+*>          LDV1T is INTEGER
+*>          The leading dimension of V1T. If JOBV1T = 'Y', LDV1T >=
+*>          MAX(1,Q).
+*> \endverbatim
+*>
+*> \param[out] V2T
+*> \verbatim
+*>          V2T is DOUBLE PRECISION array, dimension (M-Q)
+*>          If JOBV2T = 'Y', V2T contains the (M-Q)-by-(M-Q) orthogonal
+*>          matrix V2**T.
+*> \endverbatim
+*>
+*> \param[in] LDV2T
+*> \verbatim
+*>          LDV2T is INTEGER
+*>          The leading dimension of V2T. If JOBV2T = 'Y', LDV2T >=
+*>          MAX(1,M-Q).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*>          If INFO > 0 on exit, WORK(2:R) contains the values PHI(1),
+*>          ..., PHI(R-1) that, together with THETA(1), ..., THETA(R),
+*>          define the matrix in intermediate bidiagonal-block form
+*>          remaining after nonconvergence. INFO specifies the number
+*>          of nonzero PHI's.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the work array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (M-MIN(P, M-P, Q, M-Q))
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  DBBCSD did not converge. See the description of WORK
+*>                above for details.
+*> \endverbatim
+*> \verbatim
+*>  Reference
+*>  =========
+*> \endverbatim
+*> \verbatim
+*>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
+*>      Algorithms, 50(1):33-65, 2009.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*  =====================================================================
       RECURSIVE SUBROUTINE DORCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
      $                             SIGNS, M, P, Q, X11, LDX11, X12,
      $                             LDX12, X21, LDX21, X22, LDX22, THETA,
      $                             U1, LDU1, U2, LDU2, V1T, LDV1T, V2T,
      $                             LDV2T, WORK, LWORK, IWORK, INFO )
-      IMPLICIT NONE
 *
-*  -- LAPACK routine (version 3.3.1) --
-*
-*  -- Contributed by Brian Sutton of the Randolph-Macon College --
-*  -- November 2010
-*
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--     
-*
-* @precisions normal d -> s
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBU1, JOBU2, JOBV1T, JOBV2T, SIGNS, TRANS
@@ -28,137 +277,6 @@
      $                   X12( LDX12, * ), X21( LDX21, * ), X22( LDX22,
      $                   * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DORCSD computes the CS decomposition of an M-by-M partitioned
-*  orthogonal matrix X:
-*
-*                                  [  I  0  0 |  0  0  0 ]
-*                                  [  0  C  0 |  0 -S  0 ]
-*      [ X11 | X12 ]   [ U1 |    ] [  0  0  0 |  0  0 -I ] [ V1 |    ]**T
-*  X = [-----------] = [---------] [---------------------] [---------]   .
-*      [ X21 | X22 ]   [    | U2 ] [  0  0  0 |  I  0  0 ] [    | V2 ]
-*                                  [  0  S  0 |  0  C  0 ]
-*                                  [  0  0  I |  0  0  0 ]
-*
-*  X11 is P-by-Q. The orthogonal matrices U1, U2, V1, and V2 are P-by-P,
-*  (M-P)-by-(M-P), Q-by-Q, and (M-Q)-by-(M-Q), respectively. C and S are
-*  R-by-R nonnegative diagonal matrices satisfying C^2 + S^2 = I, in
-*  which R = MIN(P,M-P,Q,M-Q).
-*
-*  Arguments
-*  =========
-*
-*  JOBU1   (input) CHARACTER
-*          = 'Y':      U1 is computed;
-*          otherwise:  U1 is not computed.
-*
-*  JOBU2   (input) CHARACTER
-*          = 'Y':      U2 is computed;
-*          otherwise:  U2 is not computed.
-*
-*  JOBV1T  (input) CHARACTER
-*          = 'Y':      V1T is computed;
-*          otherwise:  V1T is not computed.
-*
-*  JOBV2T  (input) CHARACTER
-*          = 'Y':      V2T is computed;
-*          otherwise:  V2T is not computed.
-*
-*  TRANS   (input) CHARACTER
-*          = 'T':      X, U1, U2, V1T, and V2T are stored in row-major
-*                      order;
-*          otherwise:  X, U1, U2, V1T, and V2T are stored in column-
-*                      major order.
-*
-*  SIGNS   (input) CHARACTER
-*          = 'O':      The lower-left block is made nonpositive (the
-*                      "other" convention);
-*          otherwise:  The upper-right block is made nonpositive (the
-*                      "default" convention).
-*
-*  M       (input) INTEGER
-*          The number of rows and columns in X.
-*
-*  P       (input) INTEGER
-*          The number of rows in X11 and X12. 0 <= P <= M.
-*
-*  Q       (input) INTEGER
-*          The number of columns in X11 and X21. 0 <= Q <= M.
-*
-*  X       (input/workspace) DOUBLE PRECISION array, dimension (LDX,M)
-*          On entry, the orthogonal matrix whose CSD is desired.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of X. LDX >= MAX(1,M).
-*
-*  THETA   (output) DOUBLE PRECISION array, dimension (R), in which R =
-*          MIN(P,M-P,Q,M-Q).
-*          C = DIAG( COS(THETA(1)), ... , COS(THETA(R)) ) and
-*          S = DIAG( SIN(THETA(1)), ... , SIN(THETA(R)) ).
-*
-*  U1      (output) DOUBLE PRECISION array, dimension (P)
-*          If JOBU1 = 'Y', U1 contains the P-by-P orthogonal matrix U1.
-*
-*  LDU1    (input) INTEGER
-*          The leading dimension of U1. If JOBU1 = 'Y', LDU1 >=
-*          MAX(1,P).
-*
-*  U2      (output) DOUBLE PRECISION array, dimension (M-P)
-*          If JOBU2 = 'Y', U2 contains the (M-P)-by-(M-P) orthogonal
-*          matrix U2.
-*
-*  LDU2    (input) INTEGER
-*          The leading dimension of U2. If JOBU2 = 'Y', LDU2 >=
-*          MAX(1,M-P).
-*
-*  V1T     (output) DOUBLE PRECISION array, dimension (Q)
-*          If JOBV1T = 'Y', V1T contains the Q-by-Q matrix orthogonal
-*          matrix V1**T.
-*
-*  LDV1T   (input) INTEGER
-*          The leading dimension of V1T. If JOBV1T = 'Y', LDV1T >=
-*          MAX(1,Q).
-*
-*  V2T     (output) DOUBLE PRECISION array, dimension (M-Q)
-*          If JOBV2T = 'Y', V2T contains the (M-Q)-by-(M-Q) orthogonal
-*          matrix V2**T.
-*
-*  LDV2T   (input) INTEGER
-*          The leading dimension of V2T. If JOBV2T = 'Y', LDV2T >=
-*          MAX(1,M-Q).
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*          If INFO > 0 on exit, WORK(2:R) contains the values PHI(1),
-*          ..., PHI(R-1) that, together with THETA(1), ..., THETA(R),
-*          define the matrix in intermediate bidiagonal-block form
-*          remaining after nonconvergence. INFO specifies the number
-*          of nonzero PHI's.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the work array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  IWORK   (workspace) INTEGER array, dimension (M-MIN(P, M-P, Q, M-Q))
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit.
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  DBBCSD did not converge. See the description of WORK
-*                above for details.
-*
-*  Reference
-*  =========
-*
-*  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
-*      Algorithms, 50(1):33-65, 2009.
 *
 *  ===================================================================
 *

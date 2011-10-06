@@ -1,9 +1,129 @@
+*> \brief \b ZLACN2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLACN2( N, V, X, EST, KASE, ISAVE )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KASE, N
+*       DOUBLE PRECISION   EST
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISAVE( 3 )
+*       COMPLEX*16         V( * ), X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLACN2 estimates the 1-norm of a square, complex matrix A.
+*> Reverse communication is used for evaluating matrix-vector products.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         The order of the matrix.  N >= 1.
+*> \endverbatim
+*>
+*> \param[out] V
+*> \verbatim
+*>          V is COMPLEX*16 array, dimension (N)
+*>         On the final return, V = A*W,  where  EST = norm(V)/norm(W)
+*>         (W is not returned).
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (N)
+*>         On an intermediate return, X should be overwritten by
+*>               A * X,   if KASE=1,
+*>               A**H * X,  if KASE=2,
+*>         where A**H is the conjugate transpose of A, and ZLACN2 must be
+*>         re-called with all the other parameters unchanged.
+*> \endverbatim
+*>
+*> \param[in,out] EST
+*> \verbatim
+*>          EST is DOUBLE PRECISION
+*>         On entry with KASE = 1 or 2 and ISAVE(1) = 3, EST should be
+*>         unchanged from the previous call to ZLACN2.
+*>         On exit, EST is an estimate (a lower bound) for norm(A). 
+*> \endverbatim
+*>
+*> \param[in,out] KASE
+*> \verbatim
+*>          KASE is INTEGER
+*>         On the initial call to ZLACN2, KASE should be 0.
+*>         On an intermediate return, KASE will be 1 or 2, indicating
+*>         whether X should be overwritten by A * X  or A**H * X.
+*>         On the final return from ZLACN2, KASE will again be 0.
+*> \endverbatim
+*>
+*> \param[in,out] ISAVE
+*> \verbatim
+*>          ISAVE is INTEGER array, dimension (3)
+*>         ISAVE is used to save variables between calls to ZLACN2
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Contributed by Nick Higham, University of Manchester.
+*>  Originally named CONEST, dated March 16, 1988.
+*>
+*>  Reference: N.J. Higham, "FORTRAN codes for estimating the one-norm of
+*>  a real or complex matrix, with applications to condition estimation",
+*>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
+*>
+*>  Last modified:  April, 1999
+*>
+*>  This is a thread safe version of ZLACON, which uses the array ISAVE
+*>  in place of a SAVE statement, as follows:
+*>
+*>     ZLACON     ZLACN2
+*>      JUMP     ISAVE(1)
+*>      J        ISAVE(2)
+*>      ITER     ISAVE(3)
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZLACN2( N, V, X, EST, KASE, ISAVE )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KASE, N
@@ -13,63 +133,6 @@
       INTEGER            ISAVE( 3 )
       COMPLEX*16         V( * ), X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLACN2 estimates the 1-norm of a square, complex matrix A.
-*  Reverse communication is used for evaluating matrix-vector products.
-*
-*  Arguments
-*  =========
-*
-*  N      (input) INTEGER
-*         The order of the matrix.  N >= 1.
-*
-*  V      (workspace) COMPLEX*16 array, dimension (N)
-*         On the final return, V = A*W,  where  EST = norm(V)/norm(W)
-*         (W is not returned).
-*
-*  X      (input/output) COMPLEX*16 array, dimension (N)
-*         On an intermediate return, X should be overwritten by
-*               A * X,   if KASE=1,
-*               A**H * X,  if KASE=2,
-*         where A**H is the conjugate transpose of A, and ZLACN2 must be
-*         re-called with all the other parameters unchanged.
-*
-*  EST    (input/output) DOUBLE PRECISION
-*         On entry with KASE = 1 or 2 and ISAVE(1) = 3, EST should be
-*         unchanged from the previous call to ZLACN2.
-*         On exit, EST is an estimate (a lower bound) for norm(A). 
-*
-*  KASE   (input/output) INTEGER
-*         On the initial call to ZLACN2, KASE should be 0.
-*         On an intermediate return, KASE will be 1 or 2, indicating
-*         whether X should be overwritten by A * X  or A**H * X.
-*         On the final return from ZLACN2, KASE will again be 0.
-*
-*  ISAVE  (input/output) INTEGER array, dimension (3)
-*         ISAVE is used to save variables between calls to ZLACN2
-*
-*  Further Details
-*  ===============
-*
-*  Contributed by Nick Higham, University of Manchester.
-*  Originally named CONEST, dated March 16, 1988.
-*
-*  Reference: N.J. Higham, "FORTRAN codes for estimating the one-norm of
-*  a real or complex matrix, with applications to condition estimation",
-*  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
-*
-*  Last modified:  April, 1999
-*
-*  This is a thread safe version of ZLACON, which uses the array ISAVE
-*  in place of a SAVE statement, as follows:
-*
-*     ZLACON     ZLACN2
-*      JUMP     ISAVE(1)
-*      J        ISAVE(2)
-*      ITER     ISAVE(3)
 *
 *  =====================================================================
 *

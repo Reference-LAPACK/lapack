@@ -1,9 +1,159 @@
+*> \brief \b SQRT15
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
+*                          RANK, NORMA, NORMB, ISEED, WORK, LWORK )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, LWORK, M, N, NRHS, RANK, RKSEL, SCALE
+*       REAL               NORMA, NORMB
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       REAL               A( LDA, * ), B( LDB, * ), S( * ), WORK( LWORK )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SQRT15 generates a matrix with full or deficient rank and of various
+*> norms.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] SCALE
+*> \verbatim
+*>          SCALE is INTEGER
+*>          SCALE = 1: normally scaled matrix
+*>          SCALE = 2: matrix scaled up
+*>          SCALE = 3: matrix scaled down
+*> \endverbatim
+*>
+*> \param[in] RKSEL
+*> \verbatim
+*>          RKSEL is INTEGER
+*>          RKSEL = 1: full rank matrix
+*>          RKSEL = 2: rank-deficient matrix
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of A.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns of B.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The M-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB, NRHS)
+*>          A matrix that is in the range space of matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is REAL array, dimension MIN(M,N)
+*>          Singular values of A.
+*> \endverbatim
+*>
+*> \param[out] RANK
+*> \verbatim
+*>          RANK is INTEGER
+*>          number of nonzero singular values of A.
+*> \endverbatim
+*>
+*> \param[out] NORMA
+*> \verbatim
+*>          NORMA is REAL
+*>          one-norm of A.
+*> \endverbatim
+*>
+*> \param[out] NORMB
+*> \verbatim
+*>          NORMB is REAL
+*>          one-norm of B.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is integer array, dimension (4)
+*>          seed for random number generator.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          length of work space required.
+*>          LWORK >= MAX(M+MIN(M,N),NRHS*MIN(M,N),2*N+M)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
      $                   RANK, NORMA, NORMB, ISEED, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, LWORK, M, N, NRHS, RANK, RKSEL, SCALE
@@ -13,66 +163,6 @@
       INTEGER            ISEED( 4 )
       REAL               A( LDA, * ), B( LDB, * ), S( * ), WORK( LWORK )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SQRT15 generates a matrix with full or deficient rank and of various
-*  norms.
-*
-*  Arguments
-*  =========
-*
-*  SCALE   (input) INTEGER
-*          SCALE = 1: normally scaled matrix
-*          SCALE = 2: matrix scaled up
-*          SCALE = 3: matrix scaled down
-*
-*  RKSEL   (input) INTEGER
-*          RKSEL = 1: full rank matrix
-*          RKSEL = 2: rank-deficient matrix
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.
-*
-*  N       (input) INTEGER
-*          The number of columns of A.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns of B.
-*
-*  A       (output) REAL array, dimension (LDA,N)
-*          The M-by-N matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.
-*
-*  B       (output) REAL array, dimension (LDB, NRHS)
-*          A matrix that is in the range space of matrix A.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.
-*
-*  S       (output) REAL array, dimension MIN(M,N)
-*          Singular values of A.
-*
-*  RANK    (output) INTEGER
-*          number of nonzero singular values of A.
-*
-*  NORMA   (output) REAL
-*          one-norm of A.
-*
-*  NORMB   (output) REAL
-*          one-norm of B.
-*
-*  ISEED   (input/output) integer array, dimension (4)
-*          seed for random number generator.
-*
-*  WORK    (workspace) REAL array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          length of work space required.
-*          LWORK >= MAX(M+MIN(M,N),NRHS*MIN(M,N),2*N+M)
 *
 *  =====================================================================
 *

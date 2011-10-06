@@ -1,8 +1,137 @@
+*> \brief \b SGET53
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET53( A, LDA, B, LDB, SCALE, WR, WI, RESULT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDB
+*       REAL               RESULT, SCALE, WI, WR
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), B( LDB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET53  checks the generalized eigenvalues computed by SLAG2.
+*>
+*> The basic test for an eigenvalue is:
+*>
+*>                              | det( s A - w B ) |
+*>     RESULT =  ---------------------------------------------------
+*>               ulp max( s norm(A), |w| norm(B) )*norm( s A - w B )
+*>
+*> Two "safety checks" are performed:
+*>
+*> (1)  ulp*max( s*norm(A), |w|*norm(B) )  must be at least
+*>      safe_minimum.  This insures that the test performed is
+*>      not essentially  det(0*A + 0*B)=0.
+*>
+*> (2)  s*norm(A) + |w|*norm(B) must be less than 1/safe_minimum.
+*>      This insures that  s*A - w*B  will not overflow.
+*>
+*> If these tests are not passed, then  s  and  w  are scaled and
+*> tested anyway, if this is possible.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA, 2)
+*>          The 2x2 matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  It must be at least 2.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB, N)
+*>          The 2x2 upper-triangular matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.  It must be at least 2.
+*> \endverbatim
+*>
+*> \param[in] SCALE
+*> \verbatim
+*>          SCALE is REAL
+*>          The "scale factor" s in the formula  s A - w B .  It is
+*>          assumed to be non-negative.
+*> \endverbatim
+*>
+*> \param[in] WR
+*> \verbatim
+*>          WR is REAL
+*>          The real part of the eigenvalue  w  in the formula
+*>          s A - w B .
+*> \endverbatim
+*>
+*> \param[in] WI
+*> \verbatim
+*>          WI is REAL
+*>          The imaginary part of the eigenvalue  w  in the formula
+*>          s A - w B .
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL
+*>          If INFO is 2 or less, the value computed by the test
+*>             described above.
+*>          If INFO=3, this will just be 1/ulp.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          =0:  The input data pass the "safety checks".
+*>          =1:  s*norm(A) + |w|*norm(B) > 1/safe_minimum.
+*>          =2:  ulp*max( s*norm(A), |w|*norm(B) ) < safe_minimum
+*>          =3:  same as INFO=2, but  s  and  w  could not be scaled so
+*>               as to compute the test.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGET53( A, LDA, B, LDB, SCALE, WR, WI, RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDB
@@ -11,68 +140,6 @@
 *     .. Array Arguments ..
       REAL               A( LDA, * ), B( LDB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET53  checks the generalized eigenvalues computed by SLAG2.
-*
-*  The basic test for an eigenvalue is:
-*
-*                               | det( s A - w B ) |
-*      RESULT =  ---------------------------------------------------
-*                ulp max( s norm(A), |w| norm(B) )*norm( s A - w B )
-*
-*  Two "safety checks" are performed:
-*
-*  (1)  ulp*max( s*norm(A), |w|*norm(B) )  must be at least
-*       safe_minimum.  This insures that the test performed is
-*       not essentially  det(0*A + 0*B)=0.
-*
-*  (2)  s*norm(A) + |w|*norm(B) must be less than 1/safe_minimum.
-*       This insures that  s*A - w*B  will not overflow.
-*
-*  If these tests are not passed, then  s  and  w  are scaled and
-*  tested anyway, if this is possible.
-*
-*  Arguments
-*  =========
-*
-*  A       (input) REAL array, dimension (LDA, 2)
-*          The 2x2 matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  It must be at least 2.
-*
-*  B       (input) REAL array, dimension (LDB, N)
-*          The 2x2 upper-triangular matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.  It must be at least 2.
-*
-*  SCALE   (input) REAL
-*          The "scale factor" s in the formula  s A - w B .  It is
-*          assumed to be non-negative.
-*
-*  WR      (input) REAL
-*          The real part of the eigenvalue  w  in the formula
-*          s A - w B .
-*
-*  WI      (input) REAL
-*          The imaginary part of the eigenvalue  w  in the formula
-*          s A - w B .
-*
-*  RESULT  (output) REAL
-*          If INFO is 2 or less, the value computed by the test
-*             described above.
-*          If INFO=3, this will just be 1/ulp.
-*
-*  INFO    (output) INTEGER
-*          =0:  The input data pass the "safety checks".
-*          =1:  s*norm(A) + |w|*norm(B) > 1/safe_minimum.
-*          =2:  ulp*max( s*norm(A), |w|*norm(B) ) < safe_minimum
-*          =3:  same as INFO=2, but  s  and  w  could not be scaled so
-*               as to compute the test.
 *
 *  =====================================================================
 *

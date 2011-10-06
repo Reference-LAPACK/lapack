@@ -1,11 +1,163 @@
+*> \brief \b ZDRVAB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZDRVAB( DOTYPE, NM, MVAL, NNS,
+*                          NSVAL, THRESH, NMAX, A, AFAC, B,
+*                          X, WORK, RWORK, SWORK, IWORK, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NM, NMAX, NNS, NOUT
+*       DOUBLE PRECISION   THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            MVAL( * ), NSVAL( * ), IWORK( * )
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX            SWORK( * )
+*       COMPLEX*16         A( * ), AFAC( * ), B( * ),
+*      $                   WORK( * ), X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZDRVAB tests ZCGESV
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*> \endverbatim
+*>
+*> \param[in] NM
+*> \verbatim
+*>          NM is INTEGER
+*>          The number of values of M contained in the vector MVAL.
+*> \endverbatim
+*>
+*> \param[in] MVAL
+*> \verbatim
+*>          MVAL is INTEGER array, dimension (NM)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] NNS
+*> \verbatim
+*>          NNS is INTEGER
+*>          The number of values of NRHS contained in the vector NSVAL.
+*> \endverbatim
+*>
+*> \param[in] NSVAL
+*> \verbatim
+*>          NSVAL is INTEGER array, dimension (NNS)
+*>          The values of the number of right hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is DOUBLE PRECISION
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] NMAX
+*> \verbatim
+*>          NMAX is INTEGER
+*>          The maximum value permitted for M or N, used in dimensioning
+*>          the work arrays.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] AFAC
+*> \verbatim
+*>          AFAC is COMPLEX*16 array, dimension (NMAX*NMAX)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (NMAX*NSMAX)
+*>          where NSMAX is the largest entry in NSVAL.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (NMAX*NSMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension
+*>                      (NMAX*max(3,NSMAX*2))
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension
+*>                      NMAX
+*> \endverbatim
+*>
+*> \param[out] SWORK
+*> \verbatim
+*>          SWORK is COMPLEX array, dimension
+*>                      (NMAX*(NSMAX+NMAX))
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension
+*>                      NMAX
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZDRVAB( DOTYPE, NM, MVAL, NNS,
      $                   NSVAL, THRESH, NMAX, A, AFAC, B,
      $                   X, WORK, RWORK, SWORK, IWORK, NOUT )
-      IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     June 2010
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            NM, NMAX, NNS, NOUT
@@ -19,64 +171,6 @@
       COMPLEX*16         A( * ), AFAC( * ), B( * ),
      $                   WORK( * ), X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZDRVAB tests ZCGESV
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*
-*  NM      (input) INTEGER
-*          The number of values of M contained in the vector MVAL.
-*
-*  MVAL    (input) INTEGER array, dimension (NM)
-*          The values of the matrix row dimension M.
-*
-*  NNS     (input) INTEGER
-*          The number of values of NRHS contained in the vector NSVAL.
-*
-*  NSVAL   (input) INTEGER array, dimension (NNS)
-*          The values of the number of right hand sides NRHS.
-*
-*  THRESH  (input) DOUBLE PRECISION
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  NMAX    (input) INTEGER
-*          The maximum value permitted for M or N, used in dimensioning
-*          the work arrays.
-*
-*  A       (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  AFAC    (workspace) COMPLEX*16 array, dimension (NMAX*NMAX)
-*
-*  B       (workspace) COMPLEX*16 array, dimension (NMAX*NSMAX)
-*          where NSMAX is the largest entry in NSVAL.
-*
-*  X       (workspace) COMPLEX*16 array, dimension (NMAX*NSMAX)
-*
-*  WORK    (workspace) COMPLEX*16 array, dimension
-*                      (NMAX*max(3,NSMAX*2))
-*
-*  RWORK   (workspace) DOUBLE PRECISION array, dimension
-*                      NMAX
-*
-*  SWORK   (workspace) COMPLEX array, dimension
-*                      (NMAX*(NSMAX+NMAX))
-*
-*  IWORK   (workspace) INTEGER array, dimension
-*                      NMAX
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

@@ -1,10 +1,158 @@
+*> \brief \b CTRSYL
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
+*                          LDC, SCALE, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANA, TRANB
+*       INTEGER            INFO, ISGN, LDA, LDB, LDC, M, N
+*       REAL               SCALE
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CTRSYL solves the complex Sylvester matrix equation:
+*>
+*>    op(A)*X + X*op(B) = scale*C or
+*>    op(A)*X - X*op(B) = scale*C,
+*>
+*> where op(A) = A or A**H, and A and B are both upper triangular. A is
+*> M-by-M and B is N-by-N; the right hand side C and the solution X are
+*> M-by-N; and scale is an output scale factor, set <= 1 to avoid
+*> overflow in X.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANA
+*> \verbatim
+*>          TRANA is CHARACTER*1
+*>          Specifies the option op(A):
+*>          = 'N': op(A) = A    (No transpose)
+*>          = 'C': op(A) = A**H (Conjugate transpose)
+*> \endverbatim
+*>
+*> \param[in] TRANB
+*> \verbatim
+*>          TRANB is CHARACTER*1
+*>          Specifies the option op(B):
+*>          = 'N': op(B) = B    (No transpose)
+*>          = 'C': op(B) = B**H (Conjugate transpose)
+*> \endverbatim
+*>
+*> \param[in] ISGN
+*> \verbatim
+*>          ISGN is INTEGER
+*>          Specifies the sign in the equation:
+*>          = +1: solve op(A)*X + X*op(B) = scale*C
+*>          = -1: solve op(A)*X - X*op(B) = scale*C
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The order of the matrix A, and the number of rows in the
+*>          matrices X and C. M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix B, and the number of columns in the
+*>          matrices X and C. N >= 0.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,M)
+*>          The upper triangular matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,N)
+*>          The upper triangular matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is COMPLEX array, dimension (LDC,N)
+*>          On entry, the M-by-N right hand side matrix C.
+*>          On exit, C is overwritten by the solution matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDC >= max(1,M)
+*> \endverbatim
+*>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is REAL
+*>          The scale factor, scale, set <= 1 to avoid overflow in X.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*>          = 1: A and B have common or very close eigenvalues; perturbed
+*>               values were used to solve the equation (but the matrices
+*>               A and B are unchanged).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexSYcomputational
+*
+*  =====================================================================
       SUBROUTINE CTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
      $                   LDC, SCALE, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANA, TRANB
@@ -14,74 +162,6 @@
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CTRSYL solves the complex Sylvester matrix equation:
-*
-*     op(A)*X + X*op(B) = scale*C or
-*     op(A)*X - X*op(B) = scale*C,
-*
-*  where op(A) = A or A**H, and A and B are both upper triangular. A is
-*  M-by-M and B is N-by-N; the right hand side C and the solution X are
-*  M-by-N; and scale is an output scale factor, set <= 1 to avoid
-*  overflow in X.
-*
-*  Arguments
-*  =========
-*
-*  TRANA   (input) CHARACTER*1
-*          Specifies the option op(A):
-*          = 'N': op(A) = A    (No transpose)
-*          = 'C': op(A) = A**H (Conjugate transpose)
-*
-*  TRANB   (input) CHARACTER*1
-*          Specifies the option op(B):
-*          = 'N': op(B) = B    (No transpose)
-*          = 'C': op(B) = B**H (Conjugate transpose)
-*
-*  ISGN    (input) INTEGER
-*          Specifies the sign in the equation:
-*          = +1: solve op(A)*X + X*op(B) = scale*C
-*          = -1: solve op(A)*X - X*op(B) = scale*C
-*
-*  M       (input) INTEGER
-*          The order of the matrix A, and the number of rows in the
-*          matrices X and C. M >= 0.
-*
-*  N       (input) INTEGER
-*          The order of the matrix B, and the number of columns in the
-*          matrices X and C. N >= 0.
-*
-*  A       (input) COMPLEX array, dimension (LDA,M)
-*          The upper triangular matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >= max(1,M).
-*
-*  B       (input) COMPLEX array, dimension (LDB,N)
-*          The upper triangular matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >= max(1,N).
-*
-*  C       (input/output) COMPLEX array, dimension (LDC,N)
-*          On entry, the M-by-N right hand side matrix C.
-*          On exit, C is overwritten by the solution matrix X.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of the array C. LDC >= max(1,M)
-*
-*  SCALE   (output) REAL
-*          The scale factor, scale, set <= 1 to avoid overflow in X.
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
-*          = 1: A and B have common or very close eigenvalues; perturbed
-*               values were used to solve the equation (but the matrices
-*               A and B are unchanged).
 *
 *  =====================================================================
 *

@@ -1,9 +1,187 @@
+*> \brief \b ZGBT05
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
+*                          LDX, XACT, LDXACT, FERR, BERR, RESLTS )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            KL, KU, LDAB, LDB, LDX, LDXACT, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   BERR( * ), FERR( * ), RESLTS( * )
+*       COMPLEX*16         AB( LDAB, * ), B( LDB, * ), X( LDX, * ),
+*      $                   XACT( LDXACT, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZGBT05 tests the error bounds from iterative refinement for the
+*> computed solution to a system of equations op(A)*X = B, where A is a
+*> general band matrix of order n with kl subdiagonals and ku
+*> superdiagonals and op(A) = A or A**T, depending on TRANS.
+*>
+*> RESLTS(1) = test of the error bound
+*>           = norm(X - XACT) / ( norm(X) * FERR )
+*>
+*> A large value is returned if this ratio is not less than one.
+*>
+*> RESLTS(2) = residual from the iterative refinement routine
+*>           = the maximum of BERR / ( NZ*EPS + (*) ), where
+*>             (*) = NZ*UNFL / (min_i (abs(op(A))*abs(X) +abs(b))_i )
+*>             and NZ = max. number of nonzeros in any row of A, plus 1
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies the form of the system of equations.
+*>          = 'N':  A * X = B     (No transpose)
+*>          = 'T':  A**T * X = B  (Transpose)
+*>          = 'C':  A**H * X = B  (Conjugate transpose = Transpose)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows of the matrices X, B, and XACT, and the
+*>          order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>          The number of subdiagonals within the band of A.  KL >= 0.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>          The number of superdiagonals within the band of A.  KU >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns of the matrices X, B, and XACT.
+*>          NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] AB
+*> \verbatim
+*>          AB is COMPLEX*16 array, dimension (LDAB,N)
+*>          The original band matrix A, stored in rows 1 to KL+KU+1.
+*>          The j-th column of A is stored in the j-th column of the
+*>          array AB as follows:
+*>          AB(ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(n,j+kl).
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KL+KU+1.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
+*>          The right hand side vectors for the system of linear
+*>          equations.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (LDX,NRHS)
+*>          The computed solution vectors.  Each vector is stored as a
+*>          column of the matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.  LDX >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] XACT
+*> \verbatim
+*>          XACT is COMPLEX*16 array, dimension (LDX,NRHS)
+*>          The exact solution vectors.  Each vector is stored as a
+*>          column of the matrix XACT.
+*> \endverbatim
+*>
+*> \param[in] LDXACT
+*> \verbatim
+*>          LDXACT is INTEGER
+*>          The leading dimension of the array XACT.  LDXACT >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] FERR
+*> \verbatim
+*>          FERR is DOUBLE PRECISION array, dimension (NRHS)
+*>          The estimated forward error bounds for each solution vector
+*>          X.  If XTRUE is the true solution, FERR bounds the magnitude
+*>          of the largest entry in (X - XTRUE) divided by the magnitude
+*>          of the largest entry in X.
+*> \endverbatim
+*>
+*> \param[in] BERR
+*> \verbatim
+*>          BERR is DOUBLE PRECISION array, dimension (NRHS)
+*>          The componentwise relative backward error of each solution
+*>          vector (i.e., the smallest relative change in any entry of A
+*>          or B that makes X an exact solution).
+*> \endverbatim
+*>
+*> \param[out] RESLTS
+*> \verbatim
+*>          RESLTS is DOUBLE PRECISION array, dimension (2)
+*>          The maximum over the NRHS solution vectors of the ratios:
+*>          RESLTS(1) = norm(X - XACT) / ( norm(X) * FERR )
+*>          RESLTS(2) = BERR / ( NZ*EPS + (*) )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
      $                   LDX, XACT, LDXACT, FERR, BERR, RESLTS )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -14,93 +192,6 @@
       COMPLEX*16         AB( LDAB, * ), B( LDB, * ), X( LDX, * ),
      $                   XACT( LDXACT, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZGBT05 tests the error bounds from iterative refinement for the
-*  computed solution to a system of equations op(A)*X = B, where A is a
-*  general band matrix of order n with kl subdiagonals and ku
-*  superdiagonals and op(A) = A or A**T, depending on TRANS.
-*
-*  RESLTS(1) = test of the error bound
-*            = norm(X - XACT) / ( norm(X) * FERR )
-*
-*  A large value is returned if this ratio is not less than one.
-*
-*  RESLTS(2) = residual from the iterative refinement routine
-*            = the maximum of BERR / ( NZ*EPS + (*) ), where
-*              (*) = NZ*UNFL / (min_i (abs(op(A))*abs(X) +abs(b))_i )
-*              and NZ = max. number of nonzeros in any row of A, plus 1
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies the form of the system of equations.
-*          = 'N':  A * X = B     (No transpose)
-*          = 'T':  A**T * X = B  (Transpose)
-*          = 'C':  A**H * X = B  (Conjugate transpose = Transpose)
-*
-*  N       (input) INTEGER
-*          The number of rows of the matrices X, B, and XACT, and the
-*          order of the matrix A.  N >= 0.
-*
-*  KL      (input) INTEGER
-*          The number of subdiagonals within the band of A.  KL >= 0.
-*
-*  KU      (input) INTEGER
-*          The number of superdiagonals within the band of A.  KU >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns of the matrices X, B, and XACT.
-*          NRHS >= 0.
-*
-*  AB      (input) COMPLEX*16 array, dimension (LDAB,N)
-*          The original band matrix A, stored in rows 1 to KL+KU+1.
-*          The j-th column of A is stored in the j-th column of the
-*          array AB as follows:
-*          AB(ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(n,j+kl).
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KL+KU+1.
-*
-*  B       (input) COMPLEX*16 array, dimension (LDB,NRHS)
-*          The right hand side vectors for the system of linear
-*          equations.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  X       (input) COMPLEX*16 array, dimension (LDX,NRHS)
-*          The computed solution vectors.  Each vector is stored as a
-*          column of the matrix X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.  LDX >= max(1,N).
-*
-*  XACT    (input) COMPLEX*16 array, dimension (LDX,NRHS)
-*          The exact solution vectors.  Each vector is stored as a
-*          column of the matrix XACT.
-*
-*  LDXACT  (input) INTEGER
-*          The leading dimension of the array XACT.  LDXACT >= max(1,N).
-*
-*  FERR    (input) DOUBLE PRECISION array, dimension (NRHS)
-*          The estimated forward error bounds for each solution vector
-*          X.  If XTRUE is the true solution, FERR bounds the magnitude
-*          of the largest entry in (X - XTRUE) divided by the magnitude
-*          of the largest entry in X.
-*
-*  BERR    (input) DOUBLE PRECISION array, dimension (NRHS)
-*          The componentwise relative backward error of each solution
-*          vector (i.e., the smallest relative change in any entry of A
-*          or B that makes X an exact solution).
-*
-*  RESLTS  (output) DOUBLE PRECISION array, dimension (2)
-*          The maximum over the NRHS solution vectors of the ratios:
-*          RESLTS(1) = norm(X - XACT) / ( norm(X) * FERR )
-*          RESLTS(2) = BERR / ( NZ*EPS + (*) )
 *
 *  =====================================================================
 *

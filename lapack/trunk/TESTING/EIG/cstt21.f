@@ -1,9 +1,143 @@
+*> \brief \b CSTT21
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
+*                          RESULT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KBAND, LDU, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               AD( * ), AE( * ), RESULT( 2 ), RWORK( * ),
+*      $                   SD( * ), SE( * )
+*       COMPLEX            U( LDU, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CSTT21  checks a decomposition of the form
+*>
+*>    A = U S UC>
+*> where * means conjugate transpose, A is real symmetric tridiagonal,
+*> U is unitary, and S is real and diagonal (if KBAND=0) or symmetric
+*> tridiagonal (if KBAND=1).  Two tests are performed:
+*>
+*>    RESULT(1) = | A - U S U* | / ( |A| n ulp )
+*>
+*>    RESULT(2) = | I - UU* | / ( n ulp )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The size of the matrix.  If it is zero, CSTT21 does nothing.
+*>          It must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] KBAND
+*> \verbatim
+*>          KBAND is INTEGER
+*>          The bandwidth of the matrix S.  It may only be zero or one.
+*>          If zero, then S is diagonal, and SE is not referenced.  If
+*>          one, then S is symmetric tri-diagonal.
+*> \endverbatim
+*>
+*> \param[in] AD
+*> \verbatim
+*>          AD is REAL array, dimension (N)
+*>          The diagonal of the original (unfactored) matrix A.  A is
+*>          assumed to be real symmetric tridiagonal.
+*> \endverbatim
+*>
+*> \param[in] AE
+*> \verbatim
+*>          AE is REAL array, dimension (N-1)
+*>          The off-diagonal of the original (unfactored) matrix A.  A
+*>          is assumed to be symmetric tridiagonal.  AE(1) is the (1,2)
+*>          and (2,1) element, AE(2) is the (2,3) and (3,2) element, etc.
+*> \endverbatim
+*>
+*> \param[in] SD
+*> \verbatim
+*>          SD is REAL array, dimension (N)
+*>          The diagonal of the real (symmetric tri-) diagonal matrix S.
+*> \endverbatim
+*>
+*> \param[in] SE
+*> \verbatim
+*>          SE is REAL array, dimension (N-1)
+*>          The off-diagonal of the (symmetric tri-) diagonal matrix S.
+*>          Not referenced if KBSND=0.  If KBAND=1, then AE(1) is the
+*>          (1,2) and (2,1) element, SE(2) is the (2,3) and (3,2)
+*>          element, etc.
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is COMPLEX array, dimension (LDU, N)
+*>          The unitary matrix in the decomposition.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of U.  LDU must be at least N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (N**2)
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (2)
+*>          The values computed by the two tests described above.  The
+*>          values are currently limited to 1/ulp, to avoid overflow.
+*>          RESULT(1) is always modified.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
      $                   RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KBAND, LDU, N
@@ -13,66 +147,6 @@
      $                   SD( * ), SE( * )
       COMPLEX            U( LDU, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CSTT21  checks a decomposition of the form
-*
-*     A = U S U*
-*
-*  where * means conjugate transpose, A is real symmetric tridiagonal,
-*  U is unitary, and S is real and diagonal (if KBAND=0) or symmetric
-*  tridiagonal (if KBAND=1).  Two tests are performed:
-*
-*     RESULT(1) = | A - U S U* | / ( |A| n ulp )
-*
-*     RESULT(2) = | I - UU* | / ( n ulp )
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The size of the matrix.  If it is zero, CSTT21 does nothing.
-*          It must be at least zero.
-*
-*  KBAND   (input) INTEGER
-*          The bandwidth of the matrix S.  It may only be zero or one.
-*          If zero, then S is diagonal, and SE is not referenced.  If
-*          one, then S is symmetric tri-diagonal.
-*
-*  AD      (input) REAL array, dimension (N)
-*          The diagonal of the original (unfactored) matrix A.  A is
-*          assumed to be real symmetric tridiagonal.
-*
-*  AE      (input) REAL array, dimension (N-1)
-*          The off-diagonal of the original (unfactored) matrix A.  A
-*          is assumed to be symmetric tridiagonal.  AE(1) is the (1,2)
-*          and (2,1) element, AE(2) is the (2,3) and (3,2) element, etc.
-*
-*  SD      (input) REAL array, dimension (N)
-*          The diagonal of the real (symmetric tri-) diagonal matrix S.
-*
-*  SE      (input) REAL array, dimension (N-1)
-*          The off-diagonal of the (symmetric tri-) diagonal matrix S.
-*          Not referenced if KBSND=0.  If KBAND=1, then AE(1) is the
-*          (1,2) and (2,1) element, SE(2) is the (2,3) and (3,2)
-*          element, etc.
-*
-*  U       (input) COMPLEX array, dimension (LDU, N)
-*          The unitary matrix in the decomposition.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of U.  LDU must be at least N.
-*
-*  WORK    (workspace) COMPLEX array, dimension (N**2)
-*
-*  RWORK   (workspace) REAL array, dimension (N)
-*
-*  RESULT  (output) REAL array, dimension (2)
-*          The values computed by the two tests described above.  The
-*          values are currently limited to 1/ulp, to avoid overflow.
-*          RESULT(1) is always modified.
 *
 *  =====================================================================
 *

@@ -1,10 +1,281 @@
+*> \brief \b SLATM5
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD,
+*                          E, LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCKA,
+*                          QBLCKB )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDA, LDB, LDC, LDD, LDE, LDF, LDL, LDR, M, N,
+*      $                   PRTYPE, QBLCKA, QBLCKB
+*       REAL               ALPHA
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), B( LDB, * ), C( LDC, * ),
+*      $                   D( LDD, * ), E( LDE, * ), F( LDF, * ),
+*      $                   L( LDL, * ), R( LDR, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLATM5 generates matrices involved in the Generalized Sylvester
+*> equation:
+*>
+*>     A * R - L * B = C
+*>     D * R - L * E = F
+*>
+*> They also satisfy (the diagonalization condition)
+*>
+*>  [ I -L ] ( [ A  -C ], [ D -F ] ) [ I  R ] = ( [ A    ], [ D    ] )
+*>  [    I ] ( [     B ]  [    E ] ) [    I ]   ( [    B ]  [    E ] )
+*>
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] PRTYPE
+*> \verbatim
+*>          PRTYPE is INTEGER
+*>          "Points" to a certian type of the matrices to generate
+*>          (see futher details).
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          Specifies the order of A and D and the number of rows in
+*>          C, F,  R and L.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          Specifies the order of B and E and the number of columns in
+*>          C, F, R and L.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA, M).
+*>          On exit A M-by-M is initialized according to PRTYPE.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB, N).
+*>          On exit B N-by-N is initialized according to PRTYPE.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is REAL array, dimension (LDC, N).
+*>          On exit C M-by-N is initialized according to PRTYPE.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of C.
+*> \endverbatim
+*>
+*> \param[out] D
+*> \verbatim
+*>          D is REAL array, dimension (LDD, M).
+*>          On exit D M-by-M is initialized according to PRTYPE.
+*> \endverbatim
+*>
+*> \param[in] LDD
+*> \verbatim
+*>          LDD is INTEGER
+*>          The leading dimension of D.
+*> \endverbatim
+*>
+*> \param[out] E
+*> \verbatim
+*>          E is REAL array, dimension (LDE, N).
+*>          On exit E N-by-N is initialized according to PRTYPE.
+*> \endverbatim
+*>
+*> \param[in] LDE
+*> \verbatim
+*>          LDE is INTEGER
+*>          The leading dimension of E.
+*> \endverbatim
+*>
+*> \param[out] F
+*> \verbatim
+*>          F is REAL array, dimension (LDF, N).
+*>          On exit F M-by-N is initialized according to PRTYPE.
+*> \endverbatim
+*>
+*> \param[in] LDF
+*> \verbatim
+*>          LDF is INTEGER
+*>          The leading dimension of F.
+*> \endverbatim
+*>
+*> \param[out] R
+*> \verbatim
+*>          R is REAL array, dimension (LDR, N).
+*>          On exit R M-by-N is initialized according to PRTYPE.
+*> \endverbatim
+*>
+*> \param[in] LDR
+*> \verbatim
+*>          LDR is INTEGER
+*>          The leading dimension of R.
+*> \endverbatim
+*>
+*> \param[out] L
+*> \verbatim
+*>          L is REAL array, dimension (LDL, N).
+*>          On exit L M-by-N is initialized according to PRTYPE.
+*> \endverbatim
+*>
+*> \param[in] LDL
+*> \verbatim
+*>          LDL is INTEGER
+*>          The leading dimension of L.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is REAL
+*>          Parameter used in generating PRTYPE = 1 and 5 matrices.
+*> \endverbatim
+*>
+*> \param[in] QBLCKA
+*> \verbatim
+*>          QBLCKA is INTEGER
+*>          When PRTYPE = 3, specifies the distance between 2-by-2
+*>          blocks on the diagonal in A. Otherwise, QBLCKA is not
+*>          referenced. QBLCKA > 1.
+*> \endverbatim
+*>
+*> \param[in] QBLCKB
+*> \verbatim
+*>          QBLCKB is INTEGER
+*>          When PRTYPE = 3, specifies the distance between 2-by-2
+*>          blocks on the diagonal in B. Otherwise, QBLCKB is not
+*>          referenced. QBLCKB > 1.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup real_matgen
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  PRTYPE = 1: A and B are Jordan blocks, D and E are identity matrices
+*>
+*>             A : if (i == j) then A(i, j) = 1.0
+*>                 if (j == i + 1) then A(i, j) = -1.0
+*>                 else A(i, j) = 0.0,            i, j = 1...M
+*>
+*>             B : if (i == j) then B(i, j) = 1.0 - ALPHA
+*>                 if (j == i + 1) then B(i, j) = 1.0
+*>                 else B(i, j) = 0.0,            i, j = 1...N
+*>
+*>             D : if (i == j) then D(i, j) = 1.0
+*>                 else D(i, j) = 0.0,            i, j = 1...M
+*>
+*>             E : if (i == j) then E(i, j) = 1.0
+*>                 else E(i, j) = 0.0,            i, j = 1...N
+*>
+*>             L =  R are chosen from [-10...10],
+*>                  which specifies the right hand sides (C, F).
+*>
+*>  PRTYPE = 2 or 3: Triangular and/or quasi- triangular.
+*>
+*>             A : if (i <= j) then A(i, j) = [-1...1]
+*>                 else A(i, j) = 0.0,             i, j = 1...M
+*>
+*>                 if (PRTYPE = 3) then
+*>                    A(k + 1, k + 1) = A(k, k)
+*>                    A(k + 1, k) = [-1...1]
+*>                    sign(A(k, k + 1) = -(sin(A(k + 1, k))
+*>                        k = 1, M - 1, QBLCKA
+*>
+*>             B : if (i <= j) then B(i, j) = [-1...1]
+*>                 else B(i, j) = 0.0,            i, j = 1...N
+*>
+*>                 if (PRTYPE = 3) then
+*>                    B(k + 1, k + 1) = B(k, k)
+*>                    B(k + 1, k) = [-1...1]
+*>                    sign(B(k, k + 1) = -(sign(B(k + 1, k))
+*>                        k = 1, N - 1, QBLCKB
+*>
+*>             D : if (i <= j) then D(i, j) = [-1...1].
+*>                 else D(i, j) = 0.0,            i, j = 1...M
+*>
+*>
+*>             E : if (i <= j) then D(i, j) = [-1...1]
+*>                 else E(i, j) = 0.0,            i, j = 1...N
+*>
+*>                 L, R are chosen from [-10...10],
+*>                 which specifies the right hand sides (C, F).
+*>
+*>  PRTYPE = 4 Full
+*>             A(i, j) = [-10...10]
+*>             D(i, j) = [-1...1]    i,j = 1...M
+*>             B(i, j) = [-10...10]
+*>             E(i, j) = [-1...1]    i,j = 1...N
+*>             R(i, j) = [-10...10]
+*>             L(i, j) = [-1...1]    i = 1..M ,j = 1...N
+*>
+*>             L, R specifies the right hand sides (C, F).
+*>
+*>  PRTYPE = 5 special case common and/or close eigs.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD,
      $                   E, LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCKA,
      $                   QBLCKB )
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK computational routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDA, LDB, LDC, LDD, LDE, LDF, LDL, LDR, M, N,
@@ -16,162 +287,6 @@
      $                   D( LDD, * ), E( LDE, * ), F( LDF, * ),
      $                   L( LDL, * ), R( LDR, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLATM5 generates matrices involved in the Generalized Sylvester
-*  equation:
-*
-*      A * R - L * B = C
-*      D * R - L * E = F
-*
-*  They also satisfy (the diagonalization condition)
-*
-*   [ I -L ] ( [ A  -C ], [ D -F ] ) [ I  R ] = ( [ A    ], [ D    ] )
-*   [    I ] ( [     B ]  [    E ] ) [    I ]   ( [    B ]  [    E ] )
-*
-*
-*  Arguments
-*  =========
-*
-*  PRTYPE  (input) INTEGER
-*          "Points" to a certian type of the matrices to generate
-*          (see futher details).
-*
-*  M       (input) INTEGER
-*          Specifies the order of A and D and the number of rows in
-*          C, F,  R and L.
-*
-*  N       (input) INTEGER
-*          Specifies the order of B and E and the number of columns in
-*          C, F, R and L.
-*
-*  A       (output) REAL array, dimension (LDA, M).
-*          On exit A M-by-M is initialized according to PRTYPE.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.
-*
-*  B       (output) REAL array, dimension (LDB, N).
-*          On exit B N-by-N is initialized according to PRTYPE.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.
-*
-*  C       (output) REAL array, dimension (LDC, N).
-*          On exit C M-by-N is initialized according to PRTYPE.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of C.
-*
-*  D       (output) REAL array, dimension (LDD, M).
-*          On exit D M-by-M is initialized according to PRTYPE.
-*
-*  LDD     (input) INTEGER
-*          The leading dimension of D.
-*
-*  E       (output) REAL array, dimension (LDE, N).
-*          On exit E N-by-N is initialized according to PRTYPE.
-*
-*  LDE     (input) INTEGER
-*          The leading dimension of E.
-*
-*  F       (output) REAL array, dimension (LDF, N).
-*          On exit F M-by-N is initialized according to PRTYPE.
-*
-*  LDF     (input) INTEGER
-*          The leading dimension of F.
-*
-*  R       (output) REAL array, dimension (LDR, N).
-*          On exit R M-by-N is initialized according to PRTYPE.
-*
-*  LDR     (input) INTEGER
-*          The leading dimension of R.
-*
-*  L       (output) REAL array, dimension (LDL, N).
-*          On exit L M-by-N is initialized according to PRTYPE.
-*
-*  LDL     (input) INTEGER
-*          The leading dimension of L.
-*
-*  ALPHA   (input) REAL
-*          Parameter used in generating PRTYPE = 1 and 5 matrices.
-*
-*  QBLCKA  (input) INTEGER
-*          When PRTYPE = 3, specifies the distance between 2-by-2
-*          blocks on the diagonal in A. Otherwise, QBLCKA is not
-*          referenced. QBLCKA > 1.
-*
-*  QBLCKB  (input) INTEGER
-*          When PRTYPE = 3, specifies the distance between 2-by-2
-*          blocks on the diagonal in B. Otherwise, QBLCKB is not
-*          referenced. QBLCKB > 1.
-*
-*
-*  Further Details
-*  ===============
-*
-*  PRTYPE = 1: A and B are Jordan blocks, D and E are identity matrices
-*
-*             A : if (i == j) then A(i, j) = 1.0
-*                 if (j == i + 1) then A(i, j) = -1.0
-*                 else A(i, j) = 0.0,            i, j = 1...M
-*
-*             B : if (i == j) then B(i, j) = 1.0 - ALPHA
-*                 if (j == i + 1) then B(i, j) = 1.0
-*                 else B(i, j) = 0.0,            i, j = 1...N
-*
-*             D : if (i == j) then D(i, j) = 1.0
-*                 else D(i, j) = 0.0,            i, j = 1...M
-*
-*             E : if (i == j) then E(i, j) = 1.0
-*                 else E(i, j) = 0.0,            i, j = 1...N
-*
-*             L =  R are chosen from [-10...10],
-*                  which specifies the right hand sides (C, F).
-*
-*  PRTYPE = 2 or 3: Triangular and/or quasi- triangular.
-*
-*             A : if (i <= j) then A(i, j) = [-1...1]
-*                 else A(i, j) = 0.0,             i, j = 1...M
-*
-*                 if (PRTYPE = 3) then
-*                    A(k + 1, k + 1) = A(k, k)
-*                    A(k + 1, k) = [-1...1]
-*                    sign(A(k, k + 1) = -(sin(A(k + 1, k))
-*                        k = 1, M - 1, QBLCKA
-*
-*             B : if (i <= j) then B(i, j) = [-1...1]
-*                 else B(i, j) = 0.0,            i, j = 1...N
-*
-*                 if (PRTYPE = 3) then
-*                    B(k + 1, k + 1) = B(k, k)
-*                    B(k + 1, k) = [-1...1]
-*                    sign(B(k, k + 1) = -(sign(B(k + 1, k))
-*                        k = 1, N - 1, QBLCKB
-*
-*             D : if (i <= j) then D(i, j) = [-1...1].
-*                 else D(i, j) = 0.0,            i, j = 1...M
-*
-*
-*             E : if (i <= j) then D(i, j) = [-1...1]
-*                 else E(i, j) = 0.0,            i, j = 1...N
-*
-*                 L, R are chosen from [-10...10],
-*                 which specifies the right hand sides (C, F).
-*
-*  PRTYPE = 4 Full
-*             A(i, j) = [-10...10]
-*             D(i, j) = [-1...1]    i,j = 1...M
-*             B(i, j) = [-10...10]
-*             E(i, j) = [-1...1]    i,j = 1...N
-*             R(i, j) = [-10...10]
-*             L(i, j) = [-1...1]    i = 1..M ,j = 1...N
-*
-*             L, R specifies the right hand sides (C, F).
-*
-*  PRTYPE = 5 special case common and/or close eigs.
 *
 *  =====================================================================
 *

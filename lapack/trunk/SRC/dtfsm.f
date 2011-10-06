@@ -1,15 +1,294 @@
+*> \brief \b DTFSM
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
+*                         B, LDB )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANSR, DIAG, SIDE, TRANS, UPLO
+*       INTEGER            LDB, M, N
+*       DOUBLE PRECISION   ALPHA
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( 0: * ), B( 0: LDB-1, 0: * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> Level 3 BLAS like routine for A in RFP Format.
+*>
+*> DTFSM  solves the matrix equation
+*>
+*>    op( A )*X = alpha*B  or  X*op( A ) = alpha*B
+*>
+*> where alpha is a scalar, X and B are m by n matrices, A is a unit, or
+*> non-unit,  upper or lower triangular matrix  and  op( A )  is one  of
+*>
+*>    op( A ) = A   or   op( A ) = A**T.
+*>
+*> A is in Rectangular Full Packed (RFP) Format.
+*>
+*> The matrix X is overwritten on B.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANSR
+*> \verbatim
+*>          TRANSR is CHARACTER*1
+*>          = 'N':  The Normal Form of RFP A is stored;
+*>          = 'T':  The Transpose Form of RFP A is stored.
+*> \endverbatim
+*>
+*> \param[in] SIDE
+*> \verbatim
+*>          SIDE is CHARACTER*1
+*>           On entry, SIDE specifies whether op( A ) appears on the left
+*>           or right of X as follows:
+*> \endverbatim
+*> \verbatim
+*>              SIDE = 'L' or 'l'   op( A )*X = alpha*B.
+*> \endverbatim
+*> \verbatim
+*>              SIDE = 'R' or 'r'   X*op( A ) = alpha*B.
+*> \endverbatim
+*> \verbatim
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>           On entry, UPLO specifies whether the RFP matrix A came from
+*>           an upper or lower triangular matrix as follows:
+*>           UPLO = 'U' or 'u' RFP A came from an upper triangular matrix
+*>           UPLO = 'L' or 'l' RFP A came from a  lower triangular matrix
+*> \endverbatim
+*> \verbatim
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>           On entry, TRANS  specifies the form of op( A ) to be used
+*>           in the matrix multiplication as follows:
+*> \endverbatim
+*> \verbatim
+*>              TRANS  = 'N' or 'n'   op( A ) = A.
+*> \endverbatim
+*> \verbatim
+*>              TRANS  = 'T' or 't'   op( A ) = A'.
+*> \endverbatim
+*> \verbatim
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>           On entry, DIAG specifies whether or not RFP A is unit
+*>           triangular as follows:
+*> \endverbatim
+*> \verbatim
+*>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
+*> \endverbatim
+*> \verbatim
+*>              DIAG = 'N' or 'n'   A is not assumed to be unit
+*>                                  triangular.
+*> \endverbatim
+*> \verbatim
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>           On entry, M specifies the number of rows of B. M must be at
+*>           least zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           On entry, N specifies the number of columns of B.  N must be
+*>           at least zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] ALPHA
+*> \verbatim
+*>          ALPHA is DOUBLE PRECISION
+*>           On entry,  ALPHA specifies the scalar  alpha. When  alpha is
+*>           zero then  A is not referenced and  B need not be set before
+*>           entry.
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (NT)
+*>           NT = N*(N+1)/2. On entry, the matrix A in RFP Format.
+*>           RFP Format is described by TRANSR, UPLO and N as follows:
+*>           If TRANSR='N' then RFP A is (0:N,0:K-1) when N is even;
+*>           K=N/2. RFP A is (0:N-1,0:K) when N is odd; K=N/2. If
+*>           TRANSR = 'T' then RFP is the transpose of RFP A as
+*>           defined when TRANSR = 'N'. The contents of RFP A are defined
+*>           by UPLO as follows: If UPLO = 'U' the RFP A contains the NT
+*>           elements of upper packed A either in normal or
+*>           transpose Format. If UPLO = 'L' the RFP A contains
+*>           the NT elements of lower packed A either in normal or
+*>           transpose Format. The LDA of RFP A is (N+1)/2 when
+*>           TRANSR = 'T'. When TRANSR is 'N' the LDA is N+1 when N is
+*>           even and is N when is odd.
+*>           See the Note below for more details. Unchanged on exit.
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,N)
+*>           Before entry,  the leading  m by n part of the array  B must
+*>           contain  the  right-hand  side  matrix  B,  and  on exit  is
+*>           overwritten by the solution matrix  X.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>           On entry, LDB specifies the first dimension of B as declared
+*>           in  the  calling  (sub)  program.   LDB  must  be  at  least
+*>           max( 1, m ).
+*>           Unchanged on exit.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  We first consider Rectangular Full Packed (RFP) Format when N is
+*>  even. We give an example where N = 6.
+*>
+*>      AP is Upper             AP is Lower
+*>
+*>   00 01 02 03 04 05       00
+*>      11 12 13 14 15       10 11
+*>         22 23 24 25       20 21 22
+*>            33 34 35       30 31 32 33
+*>               44 45       40 41 42 43 44
+*>                  55       50 51 52 53 54 55
+*>
+*>
+*>  Let TRANSR = 'N'. RFP holds AP as follows:
+*>  For UPLO = 'U' the upper trapezoid A(0:5,0:2) consists of the last
+*>  three columns of AP upper. The lower triangle A(4:6,0:2) consists of
+*>  the transpose of the first three columns of AP upper.
+*>  For UPLO = 'L' the lower trapezoid A(1:6,0:2) consists of the first
+*>  three columns of AP lower. The upper triangle A(0:2,0:2) consists of
+*>  the transpose of the last three columns of AP lower.
+*>  This covers the case N even and TRANSR = 'N'.
+*>
+*>         RFP A                   RFP A
+*>
+*>        03 04 05                33 43 53
+*>        13 14 15                00 44 54
+*>        23 24 25                10 11 55
+*>        33 34 35                20 21 22
+*>        00 44 45                30 31 32
+*>        01 11 55                40 41 42
+*>        02 12 22                50 51 52
+*>
+*>  Now let TRANSR = 'T'. RFP A in both UPLO cases is just the
+*>  transpose of RFP A above. One therefore gets:
+*>
+*>
+*>           RFP A                   RFP A
+*>
+*>     03 13 23 33 00 01 02    33 00 10 20 30 40 50
+*>     04 14 24 34 44 11 12    43 44 11 21 31 41 51
+*>     05 15 25 35 45 55 22    53 54 55 22 32 42 52
+*>
+*>
+*>  We then consider Rectangular Full Packed (RFP) Format when N is
+*>  odd. We give an example where N = 5.
+*>
+*>     AP is Upper                 AP is Lower
+*>
+*>   00 01 02 03 04              00
+*>      11 12 13 14              10 11
+*>         22 23 24              20 21 22
+*>            33 34              30 31 32 33
+*>               44              40 41 42 43 44
+*>
+*>
+*>  Let TRANSR = 'N'. RFP holds AP as follows:
+*>  For UPLO = 'U' the upper trapezoid A(0:4,0:2) consists of the last
+*>  three columns of AP upper. The lower triangle A(3:4,0:1) consists of
+*>  the transpose of the first two columns of AP upper.
+*>  For UPLO = 'L' the lower trapezoid A(0:4,0:2) consists of the first
+*>  three columns of AP lower. The upper triangle A(0:1,1:2) consists of
+*>  the transpose of the last two columns of AP lower.
+*>  This covers the case N odd and TRANSR = 'N'.
+*>
+*>         RFP A                   RFP A
+*>
+*>        02 03 04                00 33 43
+*>        12 13 14                10 11 44
+*>        22 23 24                20 21 22
+*>        00 33 34                30 31 32
+*>        01 11 44                40 41 42
+*>
+*>  Now let TRANSR = 'T'. RFP A in both UPLO cases is just the
+*>  transpose of RFP A above. One therefore gets:
+*>
+*>           RFP A                   RFP A
+*>
+*>     02 12 22 00 01             00 10 20 30 40 50
+*>     03 13 23 33 11             33 11 21 31 41 51
+*>     04 14 24 34 44             43 44 22 32 42 52
+*>
+*>  Reference
+*>  =========
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DTFSM( TRANSR, SIDE, UPLO, TRANS, DIAG, M, N, ALPHA, A,
      $                  B, LDB )
 *
-*  -- LAPACK routine (version 3.3.1)                                    --
-*
-*  -- Contributed by Fred Gustavson of the IBM Watson Research Center --
-*  -- April 2011                                                      --
-*
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
-*     ..
 *     .. Scalar Arguments ..
       CHARACTER          TRANSR, DIAG, SIDE, TRANS, UPLO
       INTEGER            LDB, M, N
@@ -18,200 +297,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( 0: * ), B( 0: LDB-1, 0: * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  Level 3 BLAS like routine for A in RFP Format.
-*
-*  DTFSM  solves the matrix equation
-*
-*     op( A )*X = alpha*B  or  X*op( A ) = alpha*B
-*
-*  where alpha is a scalar, X and B are m by n matrices, A is a unit, or
-*  non-unit,  upper or lower triangular matrix  and  op( A )  is one  of
-*
-*     op( A ) = A   or   op( A ) = A**T.
-*
-*  A is in Rectangular Full Packed (RFP) Format.
-*
-*  The matrix X is overwritten on B.
-*
-*  Arguments
-*  ==========
-*
-*  TRANSR  (input) CHARACTER*1
-*          = 'N':  The Normal Form of RFP A is stored;
-*          = 'T':  The Transpose Form of RFP A is stored.
-*
-*  SIDE    (input) CHARACTER*1
-*           On entry, SIDE specifies whether op( A ) appears on the left
-*           or right of X as follows:
-*
-*              SIDE = 'L' or 'l'   op( A )*X = alpha*B.
-*
-*              SIDE = 'R' or 'r'   X*op( A ) = alpha*B.
-*
-*           Unchanged on exit.
-*
-*  UPLO    (input) CHARACTER*1
-*           On entry, UPLO specifies whether the RFP matrix A came from
-*           an upper or lower triangular matrix as follows:
-*           UPLO = 'U' or 'u' RFP A came from an upper triangular matrix
-*           UPLO = 'L' or 'l' RFP A came from a  lower triangular matrix
-*
-*           Unchanged on exit.
-*
-*  TRANS   (input) CHARACTER*1
-*           On entry, TRANS  specifies the form of op( A ) to be used
-*           in the matrix multiplication as follows:
-*
-*              TRANS  = 'N' or 'n'   op( A ) = A.
-*
-*              TRANS  = 'T' or 't'   op( A ) = A'.
-*
-*           Unchanged on exit.
-*
-*  DIAG    (input) CHARACTER*1
-*           On entry, DIAG specifies whether or not RFP A is unit
-*           triangular as follows:
-*
-*              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
-*
-*              DIAG = 'N' or 'n'   A is not assumed to be unit
-*                                  triangular.
-*
-*           Unchanged on exit.
-*
-*  M       (input) INTEGER
-*           On entry, M specifies the number of rows of B. M must be at
-*           least zero.
-*           Unchanged on exit.
-*
-*  N       (input) INTEGER
-*           On entry, N specifies the number of columns of B.  N must be
-*           at least zero.
-*           Unchanged on exit.
-*
-*  ALPHA   (input) DOUBLE PRECISION
-*           On entry,  ALPHA specifies the scalar  alpha. When  alpha is
-*           zero then  A is not referenced and  B need not be set before
-*           entry.
-*           Unchanged on exit.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (NT)
-*           NT = N*(N+1)/2. On entry, the matrix A in RFP Format.
-*           RFP Format is described by TRANSR, UPLO and N as follows:
-*           If TRANSR='N' then RFP A is (0:N,0:K-1) when N is even;
-*           K=N/2. RFP A is (0:N-1,0:K) when N is odd; K=N/2. If
-*           TRANSR = 'T' then RFP is the transpose of RFP A as
-*           defined when TRANSR = 'N'. The contents of RFP A are defined
-*           by UPLO as follows: If UPLO = 'U' the RFP A contains the NT
-*           elements of upper packed A either in normal or
-*           transpose Format. If UPLO = 'L' the RFP A contains
-*           the NT elements of lower packed A either in normal or
-*           transpose Format. The LDA of RFP A is (N+1)/2 when
-*           TRANSR = 'T'. When TRANSR is 'N' the LDA is N+1 when N is
-*           even and is N when is odd.
-*           See the Note below for more details. Unchanged on exit.
-*
-*  B       (input/output) DOUBLE PRECISION array,  dimension (LDB,N)
-*           Before entry,  the leading  m by n part of the array  B must
-*           contain  the  right-hand  side  matrix  B,  and  on exit  is
-*           overwritten by the solution matrix  X.
-*
-*  LDB     (input) INTEGER
-*           On entry, LDB specifies the first dimension of B as declared
-*           in  the  calling  (sub)  program.   LDB  must  be  at  least
-*           max( 1, m ).
-*           Unchanged on exit.
-*
-*  Further Details
-*  ===============
-*
-*  We first consider Rectangular Full Packed (RFP) Format when N is
-*  even. We give an example where N = 6.
-*
-*      AP is Upper             AP is Lower
-*
-*   00 01 02 03 04 05       00
-*      11 12 13 14 15       10 11
-*         22 23 24 25       20 21 22
-*            33 34 35       30 31 32 33
-*               44 45       40 41 42 43 44
-*                  55       50 51 52 53 54 55
-*
-*
-*  Let TRANSR = 'N'. RFP holds AP as follows:
-*  For UPLO = 'U' the upper trapezoid A(0:5,0:2) consists of the last
-*  three columns of AP upper. The lower triangle A(4:6,0:2) consists of
-*  the transpose of the first three columns of AP upper.
-*  For UPLO = 'L' the lower trapezoid A(1:6,0:2) consists of the first
-*  three columns of AP lower. The upper triangle A(0:2,0:2) consists of
-*  the transpose of the last three columns of AP lower.
-*  This covers the case N even and TRANSR = 'N'.
-*
-*         RFP A                   RFP A
-*
-*        03 04 05                33 43 53
-*        13 14 15                00 44 54
-*        23 24 25                10 11 55
-*        33 34 35                20 21 22
-*        00 44 45                30 31 32
-*        01 11 55                40 41 42
-*        02 12 22                50 51 52
-*
-*  Now let TRANSR = 'T'. RFP A in both UPLO cases is just the
-*  transpose of RFP A above. One therefore gets:
-*
-*
-*           RFP A                   RFP A
-*
-*     03 13 23 33 00 01 02    33 00 10 20 30 40 50
-*     04 14 24 34 44 11 12    43 44 11 21 31 41 51
-*     05 15 25 35 45 55 22    53 54 55 22 32 42 52
-*
-*
-*  We then consider Rectangular Full Packed (RFP) Format when N is
-*  odd. We give an example where N = 5.
-*
-*     AP is Upper                 AP is Lower
-*
-*   00 01 02 03 04              00
-*      11 12 13 14              10 11
-*         22 23 24              20 21 22
-*            33 34              30 31 32 33
-*               44              40 41 42 43 44
-*
-*
-*  Let TRANSR = 'N'. RFP holds AP as follows:
-*  For UPLO = 'U' the upper trapezoid A(0:4,0:2) consists of the last
-*  three columns of AP upper. The lower triangle A(3:4,0:1) consists of
-*  the transpose of the first two columns of AP upper.
-*  For UPLO = 'L' the lower trapezoid A(0:4,0:2) consists of the first
-*  three columns of AP lower. The upper triangle A(0:1,1:2) consists of
-*  the transpose of the last two columns of AP lower.
-*  This covers the case N odd and TRANSR = 'N'.
-*
-*         RFP A                   RFP A
-*
-*        02 03 04                00 33 43
-*        12 13 14                10 11 44
-*        22 23 24                20 21 22
-*        00 33 34                30 31 32
-*        01 11 44                40 41 42
-*
-*  Now let TRANSR = 'T'. RFP A in both UPLO cases is just the
-*  transpose of RFP A above. One therefore gets:
-*
-*           RFP A                   RFP A
-*
-*     02 12 22 00 01             00 10 20 30 40 50
-*     03 13 23 33 11             33 11 21 31 41 51
-*     04 14 24 34 44             43 44 22 32 42 52
-*
-*  Reference
-*  =========
 *
 *  =====================================================================
 *

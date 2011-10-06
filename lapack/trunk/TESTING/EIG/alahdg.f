@@ -1,35 +1,78 @@
+*> \brief \b ALAHDG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ALAHDG( IOUNIT, PATH )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*3       PATH
+*       INTEGER           IOUNIT
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ALAHDG prints header information for the different test paths.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] IOUNIT
+*> \verbatim
+*>          IOUNIT is INTEGER
+*>          The unit number to which the header information should be
+*>          printed.
+*> \endverbatim
+*>
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3
+*>          The name of the path for which the header information is to
+*>          be printed.  Current paths are
+*>             GQR:  GQR (general matrices)
+*>             GRQ:  GRQ (general matrices)
+*>             LSE:  LSE Problem
+*>             GLM:  GLM Problem
+*>             GSV:  Generalized Singular Value Decomposition
+*>             CSD:  CS Decomposition
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup aux_eig
+*
+*  =====================================================================
       SUBROUTINE ALAHDG( IOUNIT, PATH )
 *
 *  -- LAPACK test routine (version 3.1.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*3       PATH
       INTEGER           IOUNIT
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ALAHDG prints header information for the different test paths.
-*
-*  Arguments
-*  =========
-*
-*  IOUNIT  (input) INTEGER
-*          The unit number to which the header information should be
-*          printed.
-*
-*  PATH    (input) CHARACTER*3
-*          The name of the path for which the header information is to
-*          be printed.  Current paths are
-*             GQR:  GQR (general matrices)
-*             GRQ:  GRQ (general matrices)
-*             LSE:  LSE Problem
-*             GLM:  GLM Problem
-*             GSV:  Generalized Singular Value Decomposition
-*             CSD:  CS Decomposition
 *
 *  =====================================================================
 *

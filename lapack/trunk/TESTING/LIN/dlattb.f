@@ -1,9 +1,146 @@
+*> \brief \b DLATTB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLATTB( IMAT, UPLO, TRANS, DIAG, ISEED, N, KD, AB,
+*                          LDAB, B, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, TRANS, UPLO
+*       INTEGER            IMAT, INFO, KD, LDAB, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       DOUBLE PRECISION   AB( LDAB, * ), B( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLATTB generates a triangular test matrix in 2-dimensional storage.
+*> IMAT and UPLO uniquely specify the properties of the test matrix,
+*> which is returned in the array A.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] IMAT
+*> \verbatim
+*>          IMAT is INTEGER
+*>          An integer key describing which matrix to generate for this
+*>          path.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the matrix A will be upper or lower
+*>          triangular.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          Specifies whether the matrix or its transpose will be used.
+*>          = 'N':  No transpose
+*>          = 'T':  Transpose
+*>          = 'C':  Conjugate transpose (= transpose)
+*> \endverbatim
+*>
+*> \param[out] DIAG
+*> \verbatim
+*>          DIAG is CHARACTER*1
+*>          Specifies whether or not the matrix A is unit triangular.
+*>          = 'N':  Non-unit triangular
+*>          = 'U':  Unit triangular
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          The seed vector for the random number generator (used in
+*>          DLATMS).  Modified on exit.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[in] KD
+*> \verbatim
+*>          KD is INTEGER
+*>          The number of superdiagonals or subdiagonals of the banded
+*>          triangular matrix A.  KD >= 0.
+*> \endverbatim
+*>
+*> \param[out] AB
+*> \verbatim
+*>          AB is DOUBLE PRECISION array, dimension (LDAB,N)
+*>          The upper or lower triangular banded matrix A, stored in the
+*>          first KD+1 rows of AB.  Let j be a column of A, 1<=j<=n.
+*>          If UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j.
+*>          If UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD+1.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0: if INFO = -k, the k-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       SUBROUTINE DLATTB( IMAT, UPLO, TRANS, DIAG, ISEED, N, KD, AB,
      $                   LDAB, B, WORK, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, TRANS, UPLO
@@ -13,65 +150,6 @@
       INTEGER            ISEED( 4 )
       DOUBLE PRECISION   AB( LDAB, * ), B( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLATTB generates a triangular test matrix in 2-dimensional storage.
-*  IMAT and UPLO uniquely specify the properties of the test matrix,
-*  which is returned in the array A.
-*
-*  Arguments
-*  =========
-*
-*  IMAT    (input) INTEGER
-*          An integer key describing which matrix to generate for this
-*          path.
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the matrix A will be upper or lower
-*          triangular.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  TRANS   (input) CHARACTER*1
-*          Specifies whether the matrix or its transpose will be used.
-*          = 'N':  No transpose
-*          = 'T':  Transpose
-*          = 'C':  Conjugate transpose (= transpose)
-*
-*  DIAG    (output) CHARACTER*1
-*          Specifies whether or not the matrix A is unit triangular.
-*          = 'N':  Non-unit triangular
-*          = 'U':  Unit triangular
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          The seed vector for the random number generator (used in
-*          DLATMS).  Modified on exit.
-*
-*  N       (input) INTEGER
-*          The order of the matrix to be generated.
-*
-*  KD      (input) INTEGER
-*          The number of superdiagonals or subdiagonals of the banded
-*          triangular matrix A.  KD >= 0.
-*
-*  AB      (output) DOUBLE PRECISION array, dimension (LDAB,N)
-*          The upper or lower triangular banded matrix A, stored in the
-*          first KD+1 rows of AB.  Let j be a column of A, 1<=j<=n.
-*          If UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j.
-*          If UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*
-*  LDAB    (input) INTEGER
-*          The leading dimension of the array AB.  LDAB >= KD+1.
-*
-*  B       (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0: if INFO = -k, the k-th argument had an illegal value
 *
 *  =====================================================================
 *

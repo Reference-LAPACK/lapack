@@ -1,18 +1,58 @@
+*> \brief \b DLASUM
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLASUM( TYPE, IOUNIT, IE, NRUN )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*3        TYPE
+*       INTEGER            IE, IOUNIT, NRUN
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLASUM prints a summary of the results from one of the test routines.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DLASUM( TYPE, IOUNIT, IE, NRUN )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        TYPE
       INTEGER            IE, IOUNIT, NRUN
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLASUM prints a summary of the results from one of the test routines.
 *
 *  =====================================================================
 *

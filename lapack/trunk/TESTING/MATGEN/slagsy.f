@@ -1,8 +1,112 @@
+*> \brief \b SLAGSY
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, K, LDA, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       REAL               A( LDA, * ), D( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLAGSY generates a real symmetric matrix A, by pre- and post-
+*> multiplying a real diagonal matrix D with a random orthogonal matrix:
+*> A = U*D*U'. The semi-bandwidth may then be reduced to k by additional
+*> orthogonal transformations.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of nonzero subdiagonals within the band of A.
+*>          0 <= K <= N-1.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The diagonal elements of the diagonal matrix D.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          The generated n by n symmetric matrix A (the full matrix is
+*>          stored).
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= N.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed of the random number generator; the array
+*>          elements must be between 0 and 4095, and ISEED(4) must be
+*>          odd.
+*>          On exit, the seed is updated.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup real_matgen
+*
+*  =====================================================================
       SUBROUTINE SLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
 *
-*  -- LAPACK auxiliary test routine (version 3.1)
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK auxiliary routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, K, LDA, N
@@ -11,46 +115,6 @@
       INTEGER            ISEED( 4 )
       REAL               A( LDA, * ), D( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLAGSY generates a real symmetric matrix A, by pre- and post-
-*  multiplying a real diagonal matrix D with a random orthogonal matrix:
-*  A = U*D*U'. The semi-bandwidth may then be reduced to k by additional
-*  orthogonal transformations.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  K       (input) INTEGER
-*          The number of nonzero subdiagonals within the band of A.
-*          0 <= K <= N-1.
-*
-*  D       (input) REAL array, dimension (N)
-*          The diagonal elements of the diagonal matrix D.
-*
-*  A       (output) REAL array, dimension (LDA,N)
-*          The generated n by n symmetric matrix A (the full matrix is
-*          stored).
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= N.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed of the random number generator; the array
-*          elements must be between 0 and 4095, and ISEED(4) must be
-*          odd.
-*          On exit, the seed is updated.
-*
-*  WORK    (workspace) REAL array, dimension (2*N)
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

@@ -1,64 +1,134 @@
+*> \brief \b SLANV2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLANV2( A, B, C, D, RT1R, RT1I, RT2R, RT2I, CS, SN )
+* 
+*       .. Scalar Arguments ..
+*       REAL               A, B, C, CS, D, RT1I, RT1R, RT2I, RT2R, SN
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric
+*> matrix in standard form:
+*>
+*>      [ A  B ] = [ CS -SN ] [ AA  BB ] [ CS  SN ]
+*>      [ C  D ]   [ SN  CS ] [ CC  DD ] [-SN  CS ]
+*>
+*> where either
+*> 1) CC = 0 so that AA and DD are real eigenvalues of the matrix, or
+*> 2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are complex
+*> conjugate eigenvalues.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is REAL
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is REAL
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL
+*>          On entry, the elements of the input matrix.
+*>          On exit, they are overwritten by the elements of the
+*>          standardised Schur form.
+*> \endverbatim
+*>
+*> \param[out] RT1R
+*> \verbatim
+*>          RT1R is REAL
+*> \endverbatim
+*>
+*> \param[out] RT1I
+*> \verbatim
+*>          RT1I is REAL
+*> \endverbatim
+*>
+*> \param[out] RT2R
+*> \verbatim
+*>          RT2R is REAL
+*> \endverbatim
+*>
+*> \param[out] RT2I
+*> \verbatim
+*>          RT2I is REAL
+*>          The real and imaginary parts of the eigenvalues. If the
+*>          eigenvalues are a complex conjugate pair, RT1I > 0.
+*> \endverbatim
+*>
+*> \param[out] CS
+*> \verbatim
+*>          CS is REAL
+*> \endverbatim
+*>
+*> \param[out] SN
+*> \verbatim
+*>          SN is REAL
+*>          Parameters of the rotation matrix.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup realOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Modified by V. Sima, Research Institute for Informatics, Bucharest,
+*>  Romania, to reduce the risk of cancellation errors,
+*>  when computing real eigenvalues, and to ensure, if possible, that
+*>  abs(RT1R) >= abs(RT2R).
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE SLANV2( A, B, C, D, RT1R, RT1I, RT2R, RT2I, CS, SN )
 *
 *  -- LAPACK auxiliary routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2010
+*     November 2011
 *
 *     .. Scalar Arguments ..
       REAL               A, B, C, CS, D, RT1I, RT1R, RT2I, RT2R, SN
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric
-*  matrix in standard form:
-*
-*       [ A  B ] = [ CS -SN ] [ AA  BB ] [ CS  SN ]
-*       [ C  D ]   [ SN  CS ] [ CC  DD ] [-SN  CS ]
-*
-*  where either
-*  1) CC = 0 so that AA and DD are real eigenvalues of the matrix, or
-*  2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are complex
-*  conjugate eigenvalues.
-*
-*  Arguments
-*  =========
-*
-*  A       (input/output) REAL            
-*
-*  B       (input/output) REAL            
-*
-*  C       (input/output) REAL            
-*
-*  D       (input/output) REAL            
-*          On entry, the elements of the input matrix.
-*          On exit, they are overwritten by the elements of the
-*          standardised Schur form.
-*
-*  RT1R    (output) REAL 
-*
-*  RT1I    (output) REAL            
-*
-*  RT2R    (output) REAL            
-*
-*  RT2I    (output) REAL            
-*          The real and imaginary parts of the eigenvalues. If the
-*          eigenvalues are a complex conjugate pair, RT1I > 0.
-*
-*  CS      (output) REAL            
-*
-*  SN      (output) REAL            
-*          Parameters of the rotation matrix.
-*
-*  Further Details
-*  ===============
-*
-*  Modified by V. Sima, Research Institute for Informatics, Bucharest,
-*  Romania, to reduce the risk of cancellation errors,
-*  when computing real eigenvalues, and to ensure, if possible, that
-*  abs(RT1R) >= abs(RT2R).
 *
 *  =====================================================================
 *

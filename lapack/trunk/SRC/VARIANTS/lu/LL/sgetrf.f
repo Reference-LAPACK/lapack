@@ -1,8 +1,109 @@
+C> \brief \b SGETRF VARIANT: left-looking Level 3 BLAS version of the algorithm.
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGETRF ( M, N, A, LDA, IPIV, INFO)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       REAL               A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+C>\details \b Purpose:
+C>\verbatim
+C>
+C> SGETRF computes an LU factorization of a general M-by-N matrix A
+C> using partial pivoting with row interchanges.
+C>
+C> The factorization has the form
+C>    A = P * L * U
+C> where P is a permutation matrix, L is lower triangular with unit
+C> diagonal elements (lower trapezoidal if m > n), and U is upper
+C> triangular (upper trapezoidal if m < n).
+C>
+C> This is the left-looking Level 3 BLAS version of the algorithm.
+C>
+C>\endverbatim
+*
+*  Arguments
+*  =========
+*
+C> \param[in] M
+C> \verbatim
+C>          M is INTEGER
+C>          The number of rows of the matrix A.  M >= 0.
+C> \endverbatim
+C>
+C> \param[in] N
+C> \verbatim
+C>          N is INTEGER
+C>          The number of columns of the matrix A.  N >= 0.
+C> \endverbatim
+C>
+C> \param[in,out] A
+C> \verbatim
+C>          A is REAL array, dimension (LDA,N)
+C>          On entry, the M-by-N matrix to be factored.
+C>          On exit, the factors L and U from the factorization
+C>          A = P*L*U; the unit diagonal elements of L are not stored.
+C> \endverbatim
+C>
+C> \param[in] LDA
+C> \verbatim
+C>          LDA is INTEGER
+C>          The leading dimension of the array A.  LDA >= max(1,M).
+C> \endverbatim
+C>
+C> \param[out] IPIV
+C> \verbatim
+C>          IPIV is INTEGER array, dimension (min(M,N))
+C>          The pivot indices; for 1 <= i <= min(M,N), row i of the
+C>          matrix was interchanged with row IPIV(i).
+C> \endverbatim
+C>
+C> \param[out] INFO
+C> \verbatim
+C>          INFO is INTEGER
+C>          = 0:  successful exit
+C>          < 0:  if INFO = -i, the i-th argument had an illegal value
+C>          > 0:  if INFO = i, U(i,i) is exactly zero. The factorization
+C>                has been completed, but the factor U is exactly
+C>                singular, and division by zero will occur if it is used
+C>                to solve a system of equations.
+C> \endverbatim
+C>
+*
+*  Authors
+*  =======
+*
+C> \author Univ. of Tennessee 
+C> \author Univ. of California Berkeley 
+C> \author Univ. of Colorado Denver 
+C> \author NAG Ltd. 
+*
+C> \date November 2011
+*
+C> \ingroup variantsGEcomputational
+*
+*  =====================================================================
       SUBROUTINE SGETRF ( M, N, A, LDA, IPIV, INFO)
 *
-*  -- LAPACK routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     March 2008
+*  -- LAPACK computational routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N
@@ -11,49 +112,6 @@
       INTEGER            IPIV( * )
       REAL               A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGETRF computes an LU factorization of a general M-by-N matrix A
-*  using partial pivoting with row interchanges.
-*
-*  The factorization has the form
-*     A = P * L * U
-*  where P is a permutation matrix, L is lower triangular with unit
-*  diagonal elements (lower trapezoidal if m > n), and U is upper
-*  triangular (upper trapezoidal if m < n).
-*
-*  This is the left-looking Level 3 BLAS version of the algorithm.
-*
-*  Arguments
-*  =========
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.  M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.  N >= 0.
-*
-*  A       (input/output) REAL array, dimension (LDA,N)
-*          On entry, the M-by-N matrix to be factored.
-*          On exit, the factors L and U from the factorization
-*          A = P*L*U; the unit diagonal elements of L are not stored.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,M).
-*
-*  IPIV    (output) INTEGER array, dimension (min(M,N))
-*          The pivot indices; for 1 <= i <= min(M,N), row i of the
-*          matrix was interchanged with row IPIV(i).
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, U(i,i) is exactly zero. The factorization
-*                has been completed, but the factor U is exactly
-*                singular, and division by zero will occur if it is used
-*                to solve a system of equations.
 *
 *  =====================================================================
 *

@@ -1,10 +1,183 @@
+*> \brief \b CDRVGB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, LA,
+*                          AFB, LAFB, ASAV, B, BSAV, X, XACT, S, WORK,
+*                          RWORK, IWORK, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTERR
+*       INTEGER            LA, LAFB, NN, NOUT, NRHS
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            IWORK( * ), NVAL( * )
+*       REAL               RWORK( * ), S( * )
+*       COMPLEX            A( * ), AFB( * ), ASAV( * ), B( * ), BSAV( * ),
+*      $                   WORK( * ), X( * ), XACT( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CDRVGB tests the driver routines CGBSV and -SVX.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          The matrix types to be used for testing.  Matrices of type j
+*>          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
+*>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER
+*>          The number of values of N contained in the vector NVAL.
+*> \endverbatim
+*>
+*> \param[in] NVAL
+*> \verbatim
+*>          NVAL is INTEGER array, dimension (NN)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand side vectors to be generated for
+*>          each linear system.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  To have
+*>          every test ratio printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LA)
+*> \endverbatim
+*>
+*> \param[in] LA
+*> \verbatim
+*>          LA is INTEGER
+*>          The length of the array A.  LA >= (2*NMAX-1)*NMAX
+*>          where NMAX is the largest entry in NVAL.
+*> \endverbatim
+*>
+*> \param[out] AFB
+*> \verbatim
+*>          AFB is COMPLEX array, dimension (LAFB)
+*> \endverbatim
+*>
+*> \param[in] LAFB
+*> \verbatim
+*>          LAFB is INTEGER
+*>          The length of the array AFB.  LAFB >= (3*NMAX-2)*NMAX
+*>          where NMAX is the largest entry in NVAL.
+*> \endverbatim
+*>
+*> \param[out] ASAV
+*> \verbatim
+*>          ASAV is COMPLEX array, dimension (LA)
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (NMAX*NRHS)
+*> \endverbatim
+*>
+*> \param[out] BSAV
+*> \verbatim
+*>          BSAV is COMPLEX array, dimension (NMAX*NRHS)
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (NMAX*NRHS)
+*> \endverbatim
+*>
+*> \param[out] XACT
+*> \verbatim
+*>          XACT is COMPLEX array, dimension (NMAX*NRHS)
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is REAL array, dimension (2*NMAX)
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension
+*>                      (NMAX*max(3,NRHS,NMAX))
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension
+*>                      (max(NMAX,2*NRHS))
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (NMAX)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       SUBROUTINE CDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, LA,
      $                   AFB, LAFB, ASAV, B, BSAV, X, XACT, S, WORK,
      $                   RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -18,72 +191,6 @@
       COMPLEX            A( * ), AFB( * ), ASAV( * ), B( * ), BSAV( * ),
      $                   WORK( * ), X( * ), XACT( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CDRVGB tests the driver routines CGBSV and -SVX.
-*
-*  Arguments
-*  =========
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          The matrix types to be used for testing.  Matrices of type j
-*          (for 1 <= j <= NTYPES) are used for testing if DOTYPE(j) =
-*          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
-*
-*  NN      (input) INTEGER
-*          The number of values of N contained in the vector NVAL.
-*
-*  NVAL    (input) INTEGER array, dimension (NN)
-*          The values of the matrix column dimension N.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand side vectors to be generated for
-*          each linear system.
-*
-*  THRESH  (input) REAL
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  To have
-*          every test ratio printed, use THRESH = 0.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  A       (workspace) COMPLEX array, dimension (LA)
-*
-*  LA      (input) INTEGER
-*          The length of the array A.  LA >= (2*NMAX-1)*NMAX
-*          where NMAX is the largest entry in NVAL.
-*
-*  AFB     (workspace) COMPLEX array, dimension (LAFB)
-*
-*  LAFB    (input) INTEGER
-*          The length of the array AFB.  LAFB >= (3*NMAX-2)*NMAX
-*          where NMAX is the largest entry in NVAL.
-*
-*  ASAV    (workspace) COMPLEX array, dimension (LA)
-*
-*  B       (workspace) COMPLEX array, dimension (NMAX*NRHS)
-*
-*  BSAV    (workspace) COMPLEX array, dimension (NMAX*NRHS)
-*
-*  X       (workspace) COMPLEX array, dimension (NMAX*NRHS)
-*
-*  XACT    (workspace) COMPLEX array, dimension (NMAX*NRHS)
-*
-*  S       (workspace) REAL array, dimension (2*NMAX)
-*
-*  WORK    (workspace) COMPLEX array, dimension
-*                      (NMAX*max(3,NRHS,NMAX))
-*
-*  RWORK   (workspace) REAL array, dimension
-*                      (max(NMAX,2*NRHS))
-*
-*  IWORK   (workspace) INTEGER array, dimension (NMAX)
-*
-*  NOUT    (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

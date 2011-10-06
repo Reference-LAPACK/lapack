@@ -1,9 +1,125 @@
+*> \brief \b SLATB5
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM, MODE,
+*                          CNDNUM, DIST )
+* 
+*       .. Scalar Arguments ..
+*       REAL               ANORM, CNDNUM
+*       INTEGER            IMAT, KL, KU, MODE, N
+*       CHARACTER          DIST, TYPE
+*       CHARACTER*3        PATH
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLATB5 sets parameters for the matrix generator based on the type
+*> of matrix to be generated.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3
+*>          The LAPACK path name.
+*> \endverbatim
+*>
+*> \param[in] IMAT
+*> \verbatim
+*>          IMAT is INTEGER
+*>          An integer key describing which matrix to generate for this
+*>          path.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows and columns in the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[out] TYPE
+*> \verbatim
+*>          TYPE is CHARACTER*1
+*>          The type of the matrix to be generated:
+*>          = 'S':  symmetric matrix
+*>          = 'P':  symmetric positive (semi)definite matrix
+*>          = 'N':  nonsymmetric matrix
+*> \endverbatim
+*>
+*> \param[out] KL
+*> \verbatim
+*>          KL is INTEGER
+*>          The lower band width of the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[out] KU
+*> \verbatim
+*>          KU is INTEGER
+*>          The upper band width of the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[out] ANORM
+*> \verbatim
+*>          ANORM is REAL
+*>          The desired norm of the matrix to be generated.  The diagonal
+*>          matrix of singular values or eigenvalues is scaled by this
+*>          value.
+*> \endverbatim
+*>
+*> \param[out] MODE
+*> \verbatim
+*>          MODE is INTEGER
+*>          A key indicating how to choose the vector of eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] CNDNUM
+*> \verbatim
+*>          CNDNUM is REAL
+*>          The desired condition number.
+*> \endverbatim
+*>
+*> \param[out] DIST
+*> \verbatim
+*>          DIST is CHARACTER*1
+*>          The type of distribution to be used by the random number
+*>          generator.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SLATB5( PATH, IMAT, N, TYPE, KL, KU, ANORM, MODE,
      $                   CNDNUM, DIST )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Craig Lucas, University of Manchester / NAG Ltd.
-*     October, 2008
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       REAL               ANORM, CNDNUM
@@ -11,52 +127,6 @@
       CHARACTER          DIST, TYPE
       CHARACTER*3        PATH
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLATB5 sets parameters for the matrix generator based on the type
-*  of matrix to be generated.
-*
-*  Arguments
-*  =========
-*
-*  PATH    (input) CHARACTER*3
-*          The LAPACK path name.
-*
-*  IMAT    (input) INTEGER
-*          An integer key describing which matrix to generate for this
-*          path.
-*
-*  N       (input) INTEGER
-*          The number of rows and columns in the matrix to be generated.
-*
-*  TYPE    (output) CHARACTER*1
-*          The type of the matrix to be generated:
-*          = 'S':  symmetric matrix
-*          = 'P':  symmetric positive (semi)definite matrix
-*          = 'N':  nonsymmetric matrix
-*
-*  KL      (output) INTEGER
-*          The lower band width of the matrix to be generated.
-*
-*  KU      (output) INTEGER
-*          The upper band width of the matrix to be generated.
-*
-*  ANORM   (output) REAL
-*          The desired norm of the matrix to be generated.  The diagonal
-*          matrix of singular values or eigenvalues is scaled by this
-*          value.
-*
-*  MODE    (output) INTEGER
-*          A key indicating how to choose the vector of eigenvalues.
-*
-*  CNDNUM  (output) REAL
-*          The desired condition number.
-*
-*  DIST    (output) CHARACTER*1
-*          The type of distribution to be used by the random number
-*          generator.
 *
 *  =====================================================================
 *

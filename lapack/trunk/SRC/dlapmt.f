@@ -1,9 +1,105 @@
+*> \brief \b DLAPMT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DLAPMT( FORWRD, M, N, X, LDX, K )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            FORWRD
+*       INTEGER            LDX, M, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            K( * )
+*       DOUBLE PRECISION   X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DLAPMT rearranges the columns of the M by N matrix X as specified
+*> by the permutation K(1),K(2),...,K(N) of the integers 1,...,N.
+*> If FORWRD = .TRUE.,  forward permutation:
+*>
+*>      X(*,K(J)) is moved X(*,J) for J = 1,2,...,N.
+*>
+*> If FORWRD = .FALSE., backward permutation:
+*>
+*>      X(*,J) is moved to X(*,K(J)) for J = 1,2,...,N.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] FORWRD
+*> \verbatim
+*>          FORWRD is LOGICAL
+*>          = .TRUE., forward permutation
+*>          = .FALSE., backward permutation
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix X. M >= 0.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix X. N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is DOUBLE PRECISION array, dimension (LDX,N)
+*>          On entry, the M by N matrix X.
+*>          On exit, X contains the permuted matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X, LDX >= MAX(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] K
+*> \verbatim
+*>          K is INTEGER array, dimension (N)
+*>          On entry, K contains the permutation vector. K is used as
+*>          internal workspace, but reset to its original value on
+*>          output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE DLAPMT( FORWRD, M, N, X, LDX, K )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            FORWRD
@@ -13,44 +109,6 @@
       INTEGER            K( * )
       DOUBLE PRECISION   X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DLAPMT rearranges the columns of the M by N matrix X as specified
-*  by the permutation K(1),K(2),...,K(N) of the integers 1,...,N.
-*  If FORWRD = .TRUE.,  forward permutation:
-*
-*       X(*,K(J)) is moved X(*,J) for J = 1,2,...,N.
-*
-*  If FORWRD = .FALSE., backward permutation:
-*
-*       X(*,J) is moved to X(*,K(J)) for J = 1,2,...,N.
-*
-*  Arguments
-*  =========
-*
-*  FORWRD  (input) LOGICAL
-*          = .TRUE., forward permutation
-*          = .FALSE., backward permutation
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix X. M >= 0.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix X. N >= 0.
-*
-*  X       (input/output) DOUBLE PRECISION array, dimension (LDX,N)
-*          On entry, the M by N matrix X.
-*          On exit, X contains the permuted matrix X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X, LDX >= MAX(1,M).
-*
-*  K       (input/output) INTEGER array, dimension (N)
-*          On entry, K contains the permutation vector. K is used as
-*          internal workspace, but reset to its original value on
-*          output.
 *
 *  =====================================================================
 *

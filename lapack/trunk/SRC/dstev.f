@@ -1,9 +1,117 @@
+*> \brief <b> DSTEV computes the eigenvalues and, optionally, the left and/or right eigenvectors for OTHER matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DSTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBZ
+*       INTEGER            INFO, LDZ, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   D( * ), E( * ), WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DSTEV computes all eigenvalues and, optionally, eigenvectors of a
+*> real symmetric tridiagonal matrix A.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBZ
+*> \verbatim
+*>          JOBZ is CHARACTER*1
+*>          = 'N':  Compute eigenvalues only;
+*>          = 'V':  Compute eigenvalues and eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is DOUBLE PRECISION array, dimension (N)
+*>          On entry, the n diagonal elements of the tridiagonal matrix
+*>          A.
+*>          On exit, if INFO = 0, the eigenvalues in ascending order.
+*> \endverbatim
+*>
+*> \param[in,out] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          On entry, the (n-1) subdiagonal elements of the tridiagonal
+*>          matrix A, stored in elements 1 to N-1 of E.
+*>          On exit, the contents of E are destroyed.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension (LDZ, N)
+*>          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal
+*>          eigenvectors of the matrix A, with the i-th column of Z
+*>          holding the eigenvector associated with D(i).
+*>          If JOBZ = 'N', then Z is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1, and if
+*>          JOBZ = 'V', LDZ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (max(1,2*N-2))
+*>          If JOBZ = 'N', WORK is not referenced.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*>          > 0:  if INFO = i, the algorithm failed to converge; i
+*>                off-diagonal elements of E did not converge to zero.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleOTHEReigen
+*
+*  =====================================================================
       SUBROUTINE DSTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ
@@ -12,51 +120,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   D( * ), E( * ), WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DSTEV computes all eigenvalues and, optionally, eigenvectors of a
-*  real symmetric tridiagonal matrix A.
-*
-*  Arguments
-*  =========
-*
-*  JOBZ    (input) CHARACTER*1
-*          = 'N':  Compute eigenvalues only;
-*          = 'V':  Compute eigenvalues and eigenvectors.
-*
-*  N       (input) INTEGER
-*          The order of the matrix.  N >= 0.
-*
-*  D       (input/output) DOUBLE PRECISION array, dimension (N)
-*          On entry, the n diagonal elements of the tridiagonal matrix
-*          A.
-*          On exit, if INFO = 0, the eigenvalues in ascending order.
-*
-*  E       (input/output) DOUBLE PRECISION array, dimension (N-1)
-*          On entry, the (n-1) subdiagonal elements of the tridiagonal
-*          matrix A, stored in elements 1 to N-1 of E.
-*          On exit, the contents of E are destroyed.
-*
-*  Z       (output) DOUBLE PRECISION array, dimension (LDZ, N)
-*          If JOBZ = 'V', then if INFO = 0, Z contains the orthonormal
-*          eigenvectors of the matrix A, with the i-th column of Z
-*          holding the eigenvector associated with D(i).
-*          If JOBZ = 'N', then Z is not referenced.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= 1, and if
-*          JOBZ = 'V', LDZ >= max(1,N).
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (max(1,2*N-2))
-*          If JOBZ = 'N', WORK is not referenced.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*          > 0:  if INFO = i, the algorithm failed to converge; i
-*                off-diagonal elements of E did not converge to zero.
 *
 *  =====================================================================
 *

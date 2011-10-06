@@ -1,10 +1,361 @@
+*> \brief \b CDRGSX
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B,
+*                          AI, BI, Z, Q, ALPHA, BETA, C, LDC, S, WORK,
+*                          LWORK, RWORK, IWORK, LIWORK, BWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDC, LIWORK, LWORK, NCMAX, NIN,
+*      $                   NOUT, NSIZE
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            BWORK( * )
+*       INTEGER            IWORK( * )
+*       REAL               RWORK( * ), S( * )
+*       COMPLEX            A( LDA, * ), AI( LDA, * ), ALPHA( * ),
+*      $                   B( LDA, * ), BETA( * ), BI( LDA, * ),
+*      $                   C( LDC, * ), Q( LDA, * ), WORK( * ),
+*      $                   Z( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
+*> problem expert driver CGGESX.
+*>
+*> CGGES factors A and B as Q*S*Z'  and Q*T*Z' , where ' means conjugate
+*> transpose, S and T are  upper triangular (i.e., in generalized Schur
+*> form), and Q and Z are unitary. It also computes the generalized
+*> eigenvalues (alpha(j),beta(j)), j=1,...,n.  Thus,
+*> w(j) = alpha(j)/beta(j) is a root of the characteristic equation
+*>
+*>                 det( A - w(j) B ) = 0
+*>
+*> Optionally it also reorders the eigenvalues so that a selected
+*> cluster of eigenvalues appears in the leading diagonal block of the
+*> Schur forms; computes a reciprocal condition number for the average
+*> of the selected eigenvalues; and computes a reciprocal condition
+*> number for the right and left deflating subspaces corresponding to
+*> the selected eigenvalues.
+*>
+*> When CDRGSX is called with NSIZE > 0, five (5) types of built-in
+*> matrix pairs are used to test the routine CGGESX.
+*>
+*> When CDRGSX is called with NSIZE = 0, it reads in test matrix data
+*> to test CGGESX.
+*> (need more details on what kind of read-in data are needed).
+*>
+*> For each matrix pair, the following tests will be performed and
+*> compared with the threshhold THRESH except for the tests (7) and (9):
+*>
+*> (1)   | A - Q S Z' | / ( |A| n ulp )
+*>
+*> (2)   | B - Q T Z' | / ( |B| n ulp )
+*>
+*> (3)   | I - QQ' | / ( n ulp )
+*>
+*> (4)   | I - ZZ' | / ( n ulp )
+*>
+*> (5)   if A is in Schur form (i.e. triangular form)
+*>
+*> (6)   maximum over j of D(j)  where:
+*>
+*>                     |alpha(j) - S(j,j)|        |beta(j) - T(j,j)|
+*>           D(j) = ------------------------ + -----------------------
+*>                  max(|alpha(j)|,|S(j,j)|)   max(|beta(j)|,|T(j,j)|)
+*>
+*> (7)   if sorting worked and SDIM is the number of eigenvalues
+*>       which were selected.
+*>
+*> (8)   the estimated value DIF does not differ from the true values of
+*>       Difu and Difl more than a factor 10*THRESH. If the estimate DIF
+*>       equals zero the corresponding true values of Difu and Difl
+*>       should be less than EPS*norm(A, B). If the true value of Difu
+*>       and Difl equal zero, the estimate DIF should be less than
+*>       EPS*norm(A, B).
+*>
+*> (9)   If INFO = N+3 is returned by CGGESX, the reordering "failed"
+*>       and we check that DIF = PL = PR = 0 and that the true value of
+*>       Difu and Difl is < EPS*norm(A, B). We count the events when
+*>       INFO=N+3.
+*>
+*> For read-in test matrices, the same tests are run except that the
+*> exact value for DIF (and PL) is input data.  Additionally, there is
+*> one more test run for read-in test matrices:
+*>
+*> (10)  the estimated value PL does not differ from the true value of
+*>       PLTRU more than a factor THRESH. If the estimate PL equals
+*>       zero the corresponding true value of PLTRU should be less than
+*>       EPS*norm(A, B). If the true value of PLTRU equal zero, the
+*>       estimate PL should be less than EPS*norm(A, B).
+*>
+*> Note that for the built-in tests, a total of 10*NSIZE*(NSIZE-1)
+*> matrix pairs are generated and tested. NSIZE should be kept small.
+*>
+*> SVD (routine CGESVD) is used for computing the true value of DIF_u
+*> and DIF_l when testing the built-in test problems.
+*>
+*> Built-in Test Matrices
+*> ======================
+*>
+*> All built-in test matrices are the 2 by 2 block of triangular
+*> matrices
+*>
+*>          A = [ A11 A12 ]    and      B = [ B11 B12 ]
+*>              [     A22 ]                 [     B22 ]
+*>
+*> where for different type of A11 and A22 are given as the following.
+*> A12 and B12 are chosen so that the generalized Sylvester equation
+*>
+*>          A11*R - L*A22 = -A12
+*>          B11*R - L*B22 = -B12
+*>
+*> have prescribed solution R and L.
+*>
+*> Type 1:  A11 = J_m(1,-1) and A_22 = J_k(1-a,1).
+*>          B11 = I_m, B22 = I_k
+*>          where J_k(a,b) is the k-by-k Jordan block with ``a'' on
+*>          diagonal and ``b'' on superdiagonal.
+*>
+*> Type 2:  A11 = (a_ij) = ( 2(.5-sin(i)) ) and
+*>          B11 = (b_ij) = ( 2(.5-sin(ij)) ) for i=1,...,m, j=i,...,m
+*>          A22 = (a_ij) = ( 2(.5-sin(i+j)) ) and
+*>          B22 = (b_ij) = ( 2(.5-sin(ij)) ) for i=m+1,...,k, j=i,...,k
+*>
+*> Type 3:  A11, A22 and B11, B22 are chosen as for Type 2, but each
+*>          second diagonal block in A_11 and each third diagonal block
+*>          in A_22 are made as 2 by 2 blocks.
+*>
+*> Type 4:  A11 = ( 20(.5 - sin(ij)) ) and B22 = ( 2(.5 - sin(i+j)) )
+*>             for i=1,...,m,  j=1,...,m and
+*>          A22 = ( 20(.5 - sin(i+j)) ) and B22 = ( 2(.5 - sin(ij)) )
+*>             for i=m+1,...,k,  j=m+1,...,k
+*>
+*> Type 5:  (A,B) and have potentially close or common eigenvalues and
+*>          very large departure from block diagonality A_11 is chosen
+*>          as the m x m leading submatrix of A_1:
+*>                  |  1  b                            |
+*>                  | -b  1                            |
+*>                  |        1+d  b                    |
+*>                  |         -b 1+d                   |
+*>           A_1 =  |                  d  1            |
+*>                  |                 -1  d            |
+*>                  |                        -d  1     |
+*>                  |                        -1 -d     |
+*>                  |                               1  |
+*>          and A_22 is chosen as the k x k leading submatrix of A_2:
+*>                  | -1  b                            |
+*>                  | -b -1                            |
+*>                  |       1-d  b                     |
+*>                  |       -b  1-d                    |
+*>           A_2 =  |                 d 1+b            |
+*>                  |               -1-b d             |
+*>                  |                       -d  1+b    |
+*>                  |                      -1+b  -d    |
+*>                  |                              1-d |
+*>          and matrix B are chosen as identity matrices (see SLATM5).
+*>
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZE
+*> \verbatim
+*>          NSIZE is INTEGER
+*>          The maximum size of the matrices to use. NSIZE >= 0.
+*>          If NSIZE = 0, no built-in tests matrices are used, but
+*>          read-in test matrices are used to test SGGESX.
+*> \endverbatim
+*>
+*> \param[in] NCMAX
+*> \verbatim
+*>          NCMAX is INTEGER
+*>          Maximum allowable NMAX for generating Kroneker matrix
+*>          in call to CLAKF2
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          A test will count as "failed" if the "error", computed as
+*>          described above, exceeds THRESH.  Note that the error
+*>          is scaled to be O(1), so THRESH should be a reasonably
+*>          small multiple of 1, e.g., 10 or 100.  In particular,
+*>          it should not depend on the precision (single vs. double)
+*>          or the size of the matrix.  THRESH >= 0.
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          The FORTRAN unit number for reading in the data file of
+*>          problems to solve.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns INFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA, NSIZE)
+*>          Used to store the matrix whose eigenvalues are to be
+*>          computed.  On exit, A contains the last matrix actually used.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A, B, AI, BI, Z and Q,
+*>          LDA >= max( 1, NSIZE ). For the read-in test,
+*>          LDA >= max( 1, N ), N is the size of the test matrices.
+*> \endverbatim
+*>
+*> \param[out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDA, NSIZE)
+*>          Used to store the matrix whose eigenvalues are to be
+*>          computed.  On exit, B contains the last matrix actually used.
+*> \endverbatim
+*>
+*> \param[out] AI
+*> \verbatim
+*>          AI is COMPLEX array, dimension (LDA, NSIZE)
+*>          Copy of A, modified by CGGESX.
+*> \endverbatim
+*>
+*> \param[out] BI
+*> \verbatim
+*>          BI is COMPLEX array, dimension (LDA, NSIZE)
+*>          Copy of B, modified by CGGESX.
+*> \endverbatim
+*>
+*> \param[out] Z
+*> \verbatim
+*>          Z is COMPLEX array, dimension (LDA, NSIZE)
+*>          Z holds the left Schur vectors computed by CGGESX.
+*> \endverbatim
+*>
+*> \param[out] Q
+*> \verbatim
+*>          Q is COMPLEX array, dimension (LDA, NSIZE)
+*>          Q holds the right Schur vectors computed by CGGESX.
+*> \endverbatim
+*>
+*> \param[out] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX array, dimension (NSIZE)
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is COMPLEX array, dimension (NSIZE)
+*> \endverbatim
+*> \verbatim
+*>          On exit, ALPHA/BETA are the eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is COMPLEX array, dimension (LDC, LDC)
+*>          Store the matrix generated by subroutine CLAKF2, this is the
+*>          matrix formed by Kronecker products used for estimating
+*>          DIF.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of C. LDC >= max(1, LDA*LDA/2 ).
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is REAL array, dimension (LDC)
+*>          Singular values of C
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.  LWORK >= 3*NSIZE*NSIZE/2
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array,
+*>                                 dimension (5*NSIZE*NSIZE/2 - 4)
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension (LIWORK)
+*> \endverbatim
+*>
+*> \param[in] LIWORK
+*> \verbatim
+*>          LIWORK is INTEGER
+*>          The dimension of the array IWORK. LIWORK >= NSIZE + 2.
+*> \endverbatim
+*>
+*> \param[out] BWORK
+*> \verbatim
+*>          BWORK is LOGICAL array, dimension (NSIZE)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          > 0:  A routine returned an error code.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
       SUBROUTINE CDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B,
      $                   AI, BI, Z, Q, ALPHA, BETA, C, LDC, S, WORK,
      $                   LWORK, RWORK, IWORK, LIWORK, BWORK, INFO )
 *
 *  -- LAPACK test routine (version 3.3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*  -- April 2011                                                      --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDC, LIWORK, LWORK, NCMAX, NIN,
@@ -20,233 +371,6 @@
      $                   C( LDC, * ), Q( LDA, * ), WORK( * ),
      $                   Z( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
-*  problem expert driver CGGESX.
-*
-*  CGGES factors A and B as Q*S*Z'  and Q*T*Z' , where ' means conjugate
-*  transpose, S and T are  upper triangular (i.e., in generalized Schur
-*  form), and Q and Z are unitary. It also computes the generalized
-*  eigenvalues (alpha(j),beta(j)), j=1,...,n.  Thus,
-*  w(j) = alpha(j)/beta(j) is a root of the characteristic equation
-*
-*                  det( A - w(j) B ) = 0
-*
-*  Optionally it also reorders the eigenvalues so that a selected
-*  cluster of eigenvalues appears in the leading diagonal block of the
-*  Schur forms; computes a reciprocal condition number for the average
-*  of the selected eigenvalues; and computes a reciprocal condition
-*  number for the right and left deflating subspaces corresponding to
-*  the selected eigenvalues.
-*
-*  When CDRGSX is called with NSIZE > 0, five (5) types of built-in
-*  matrix pairs are used to test the routine CGGESX.
-*
-*  When CDRGSX is called with NSIZE = 0, it reads in test matrix data
-*  to test CGGESX.
-*  (need more details on what kind of read-in data are needed).
-*
-*  For each matrix pair, the following tests will be performed and
-*  compared with the threshhold THRESH except for the tests (7) and (9):
-*
-*  (1)   | A - Q S Z' | / ( |A| n ulp )
-*
-*  (2)   | B - Q T Z' | / ( |B| n ulp )
-*
-*  (3)   | I - QQ' | / ( n ulp )
-*
-*  (4)   | I - ZZ' | / ( n ulp )
-*
-*  (5)   if A is in Schur form (i.e. triangular form)
-*
-*  (6)   maximum over j of D(j)  where:
-*
-*                      |alpha(j) - S(j,j)|        |beta(j) - T(j,j)|
-*            D(j) = ------------------------ + -----------------------
-*                   max(|alpha(j)|,|S(j,j)|)   max(|beta(j)|,|T(j,j)|)
-*
-*  (7)   if sorting worked and SDIM is the number of eigenvalues
-*        which were selected.
-*
-*  (8)   the estimated value DIF does not differ from the true values of
-*        Difu and Difl more than a factor 10*THRESH. If the estimate DIF
-*        equals zero the corresponding true values of Difu and Difl
-*        should be less than EPS*norm(A, B). If the true value of Difu
-*        and Difl equal zero, the estimate DIF should be less than
-*        EPS*norm(A, B).
-*
-*  (9)   If INFO = N+3 is returned by CGGESX, the reordering "failed"
-*        and we check that DIF = PL = PR = 0 and that the true value of
-*        Difu and Difl is < EPS*norm(A, B). We count the events when
-*        INFO=N+3.
-*
-*  For read-in test matrices, the same tests are run except that the
-*  exact value for DIF (and PL) is input data.  Additionally, there is
-*  one more test run for read-in test matrices:
-*
-*  (10)  the estimated value PL does not differ from the true value of
-*        PLTRU more than a factor THRESH. If the estimate PL equals
-*        zero the corresponding true value of PLTRU should be less than
-*        EPS*norm(A, B). If the true value of PLTRU equal zero, the
-*        estimate PL should be less than EPS*norm(A, B).
-*
-*  Note that for the built-in tests, a total of 10*NSIZE*(NSIZE-1)
-*  matrix pairs are generated and tested. NSIZE should be kept small.
-*
-*  SVD (routine CGESVD) is used for computing the true value of DIF_u
-*  and DIF_l when testing the built-in test problems.
-*
-*  Built-in Test Matrices
-*  ======================
-*
-*  All built-in test matrices are the 2 by 2 block of triangular
-*  matrices
-*
-*           A = [ A11 A12 ]    and      B = [ B11 B12 ]
-*               [     A22 ]                 [     B22 ]
-*
-*  where for different type of A11 and A22 are given as the following.
-*  A12 and B12 are chosen so that the generalized Sylvester equation
-*
-*           A11*R - L*A22 = -A12
-*           B11*R - L*B22 = -B12
-*
-*  have prescribed solution R and L.
-*
-*  Type 1:  A11 = J_m(1,-1) and A_22 = J_k(1-a,1).
-*           B11 = I_m, B22 = I_k
-*           where J_k(a,b) is the k-by-k Jordan block with ``a'' on
-*           diagonal and ``b'' on superdiagonal.
-*
-*  Type 2:  A11 = (a_ij) = ( 2(.5-sin(i)) ) and
-*           B11 = (b_ij) = ( 2(.5-sin(ij)) ) for i=1,...,m, j=i,...,m
-*           A22 = (a_ij) = ( 2(.5-sin(i+j)) ) and
-*           B22 = (b_ij) = ( 2(.5-sin(ij)) ) for i=m+1,...,k, j=i,...,k
-*
-*  Type 3:  A11, A22 and B11, B22 are chosen as for Type 2, but each
-*           second diagonal block in A_11 and each third diagonal block
-*           in A_22 are made as 2 by 2 blocks.
-*
-*  Type 4:  A11 = ( 20(.5 - sin(ij)) ) and B22 = ( 2(.5 - sin(i+j)) )
-*              for i=1,...,m,  j=1,...,m and
-*           A22 = ( 20(.5 - sin(i+j)) ) and B22 = ( 2(.5 - sin(ij)) )
-*              for i=m+1,...,k,  j=m+1,...,k
-*
-*  Type 5:  (A,B) and have potentially close or common eigenvalues and
-*           very large departure from block diagonality A_11 is chosen
-*           as the m x m leading submatrix of A_1:
-*                   |  1  b                            |
-*                   | -b  1                            |
-*                   |        1+d  b                    |
-*                   |         -b 1+d                   |
-*            A_1 =  |                  d  1            |
-*                   |                 -1  d            |
-*                   |                        -d  1     |
-*                   |                        -1 -d     |
-*                   |                               1  |
-*           and A_22 is chosen as the k x k leading submatrix of A_2:
-*                   | -1  b                            |
-*                   | -b -1                            |
-*                   |       1-d  b                     |
-*                   |       -b  1-d                    |
-*            A_2 =  |                 d 1+b            |
-*                   |               -1-b d             |
-*                   |                       -d  1+b    |
-*                   |                      -1+b  -d    |
-*                   |                              1-d |
-*           and matrix B are chosen as identity matrices (see SLATM5).
-*
-*
-*  Arguments
-*  =========
-*
-*  NSIZE   (input) INTEGER
-*          The maximum size of the matrices to use. NSIZE >= 0.
-*          If NSIZE = 0, no built-in tests matrices are used, but
-*          read-in test matrices are used to test SGGESX.
-*
-*  NCMAX   (input) INTEGER
-*          Maximum allowable NMAX for generating Kroneker matrix
-*          in call to CLAKF2
-*
-*  THRESH  (input) REAL
-*          A test will count as "failed" if the "error", computed as
-*          described above, exceeds THRESH.  Note that the error
-*          is scaled to be O(1), so THRESH should be a reasonably
-*          small multiple of 1, e.g., 10 or 100.  In particular,
-*          it should not depend on the precision (single vs. double)
-*          or the size of the matrix.  THRESH >= 0.
-*
-*  NIN     (input) INTEGER
-*          The FORTRAN unit number for reading in the data file of
-*          problems to solve.
-*
-*  NOUT    (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns INFO not equal to 0.)
-*
-*  A       (workspace) COMPLEX array, dimension (LDA, NSIZE)
-*          Used to store the matrix whose eigenvalues are to be
-*          computed.  On exit, A contains the last matrix actually used.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A, B, AI, BI, Z and Q,
-*          LDA >= max( 1, NSIZE ). For the read-in test,
-*          LDA >= max( 1, N ), N is the size of the test matrices.
-*
-*  B       (workspace) COMPLEX array, dimension (LDA, NSIZE)
-*          Used to store the matrix whose eigenvalues are to be
-*          computed.  On exit, B contains the last matrix actually used.
-*
-*  AI      (workspace) COMPLEX array, dimension (LDA, NSIZE)
-*          Copy of A, modified by CGGESX.
-*
-*  BI      (workspace) COMPLEX array, dimension (LDA, NSIZE)
-*          Copy of B, modified by CGGESX.
-*
-*  Z       (workspace) COMPLEX array, dimension (LDA, NSIZE)
-*          Z holds the left Schur vectors computed by CGGESX.
-*
-*  Q       (workspace) COMPLEX array, dimension (LDA, NSIZE)
-*          Q holds the right Schur vectors computed by CGGESX.
-*
-*  ALPHA   (workspace) COMPLEX array, dimension (NSIZE)
-*  BETA    (workspace) COMPLEX array, dimension (NSIZE)
-*          On exit, ALPHA/BETA are the eigenvalues.
-*
-*  C       (workspace) COMPLEX array, dimension (LDC, LDC)
-*          Store the matrix generated by subroutine CLAKF2, this is the
-*          matrix formed by Kronecker products used for estimating
-*          DIF.
-*
-*  LDC     (input) INTEGER
-*          The leading dimension of C. LDC >= max(1, LDA*LDA/2 ).
-*
-*  S       (workspace) REAL array, dimension (LDC)
-*          Singular values of C
-*
-*  WORK    (workspace) COMPLEX array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.  LWORK >= 3*NSIZE*NSIZE/2
-*
-*  RWORK   (workspace) REAL array,
-*                                 dimension (5*NSIZE*NSIZE/2 - 4)
-*
-*  IWORK   (workspace) INTEGER array, dimension (LIWORK)
-*
-*  LIWORK  (input) INTEGER
-*          The dimension of the array IWORK. LIWORK >= NSIZE + 2.
-*
-*  BWORK   (workspace) LOGICAL array, dimension (NSIZE)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          > 0:  A routine returned an error code.
 *
 *  =====================================================================
 *

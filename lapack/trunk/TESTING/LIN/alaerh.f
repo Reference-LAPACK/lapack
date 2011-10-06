@@ -1,9 +1,158 @@
+*> \brief \b ALAERH
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, KU,
+*                          N5, IMAT, NFAIL, NERRS, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*3        PATH
+*       CHARACTER*( * )    SUBNAM
+*       CHARACTER*( * )    OPTS
+*       INTEGER            IMAT, INFO, INFOE, KL, KU, M, N, N5, NERRS,
+*      $                   NFAIL, NOUT
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ALAERH is an error handler for the LAPACK routines.  It prints the
+*> header if this is the first error message and prints the error code
+*> and form of recovery, if any.  The character evaluations in this
+*> routine may make it slow, but it should not be called once the LAPACK
+*> routines are fully debugged.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3
+*>          The LAPACK path name of subroutine SUBNAM.
+*> \endverbatim
+*>
+*> \param[in] SUBNAM
+*> \verbatim
+*>          SUBNAM is CHARACTER*(*)
+*>          The name of the subroutine that returned an error code.
+*> \endverbatim
+*>
+*> \param[in] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          The error code returned from routine SUBNAM.
+*> \endverbatim
+*>
+*> \param[in] INFOE
+*> \verbatim
+*>          INFOE is INTEGER
+*>          The expected error code from routine SUBNAM, if SUBNAM were
+*>          error-free.  If INFOE = 0, an error message is printed, but
+*>          if INFOE.NE.0, we assume only the return code INFO is wrong.
+*> \endverbatim
+*>
+*> \param[in] OPTS
+*> \verbatim
+*>          OPTS is CHARACTER*(*)
+*>          The character options to the subroutine SUBNAM, concatenated
+*>          into a single character string.  For example, UPLO = 'U',
+*>          TRANS = 'T', and DIAG = 'N' for a triangular routine would
+*>          be specified as OPTS = 'UTN'.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The matrix row dimension.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The matrix column dimension.  Accessed only if PATH = xGE or
+*>          xGB.
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>          The number of sub-diagonals of the matrix.  Accessed only if
+*>          PATH = xGB, xPB, or xTB.  Also used for NRHS for PATH = xLS.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>          The number of super-diagonals of the matrix.  Accessed only
+*>          if PATH = xGB.
+*> \endverbatim
+*>
+*> \param[in] N5
+*> \verbatim
+*>          N5 is INTEGER
+*>          A fifth integer parameter, may be the blocksize NB or the
+*>          number of right hand sides NRHS.
+*> \endverbatim
+*>
+*> \param[in] IMAT
+*> \verbatim
+*>          IMAT is INTEGER
+*>          The matrix type.
+*> \endverbatim
+*>
+*> \param[in] NFAIL
+*> \verbatim
+*>          NFAIL is INTEGER
+*>          The number of prior tests that did not pass the threshold;
+*>          used to determine if the header should be printed.
+*> \endverbatim
+*>
+*> \param[in,out] NERRS
+*> \verbatim
+*>          NERRS is INTEGER
+*>          On entry, the number of errors already detected; used to
+*>          determine if the header should be printed.
+*>          On exit, NERRS is increased by 1.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The unit number on which results are to be printed.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup aux_lin
+*
+*  =====================================================================
       SUBROUTINE ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, KU,
      $                   N5, IMAT, NFAIL, NERRS, NOUT )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
@@ -12,72 +161,6 @@
       INTEGER            IMAT, INFO, INFOE, KL, KU, M, N, N5, NERRS,
      $                   NFAIL, NOUT
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ALAERH is an error handler for the LAPACK routines.  It prints the
-*  header if this is the first error message and prints the error code
-*  and form of recovery, if any.  The character evaluations in this
-*  routine may make it slow, but it should not be called once the LAPACK
-*  routines are fully debugged.
-*
-*  Arguments
-*  =========
-*
-*  PATH    (input) CHARACTER*3
-*          The LAPACK path name of subroutine SUBNAM.
-*
-*  SUBNAM  (input) CHARACTER*(*)
-*          The name of the subroutine that returned an error code.
-*
-*  INFO    (input) INTEGER
-*          The error code returned from routine SUBNAM.
-*
-*  INFOE   (input) INTEGER
-*          The expected error code from routine SUBNAM, if SUBNAM were
-*          error-free.  If INFOE = 0, an error message is printed, but
-*          if INFOE.NE.0, we assume only the return code INFO is wrong.
-*
-*  OPTS    (input) CHARACTER*(*)
-*          The character options to the subroutine SUBNAM, concatenated
-*          into a single character string.  For example, UPLO = 'U',
-*          TRANS = 'T', and DIAG = 'N' for a triangular routine would
-*          be specified as OPTS = 'UTN'.
-*
-*  M       (input) INTEGER
-*          The matrix row dimension.
-*
-*  N       (input) INTEGER
-*          The matrix column dimension.  Accessed only if PATH = xGE or
-*          xGB.
-*
-*  KL      (input) INTEGER
-*          The number of sub-diagonals of the matrix.  Accessed only if
-*          PATH = xGB, xPB, or xTB.  Also used for NRHS for PATH = xLS.
-*
-*  KU      (input) INTEGER
-*          The number of super-diagonals of the matrix.  Accessed only
-*          if PATH = xGB.
-*
-*  N5      (input) INTEGER
-*          A fifth integer parameter, may be the blocksize NB or the
-*          number of right hand sides NRHS.
-*
-*  IMAT    (input) INTEGER
-*          The matrix type.
-*
-*  NFAIL   (input) INTEGER
-*          The number of prior tests that did not pass the threshold;
-*          used to determine if the header should be printed.
-*
-*  NERRS   (input/output) INTEGER
-*          On entry, the number of errors already detected; used to
-*          determine if the header should be printed.
-*          On exit, NERRS is increased by 1.
-*
-*  NOUT    (input) INTEGER
-*          The unit number on which results are to be printed.
 *
 *  =====================================================================
 *

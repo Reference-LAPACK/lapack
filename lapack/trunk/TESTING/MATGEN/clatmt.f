@@ -1,9 +1,353 @@
+*> \brief \b CLATMT
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLATMT( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
+*                          RANK, KL, KU, PACK, A, LDA, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       REAL               COND, DMAX
+*       INTEGER            INFO, KL, KU, LDA, M, MODE, N, RANK
+*       CHARACTER          DIST, PACK, SYM
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), WORK( * )
+*       REAL               D( * )
+*       INTEGER            ISEED( 4 )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    CLATMT generates random matrices with specified singular values
+*>    (or hermitian with specified eigenvalues)
+*>    for testing LAPACK programs.
+*>
+*>    CLATMT operates by applying the following sequence of
+*>    operations:
+*>
+*>      Set the diagonal to D, where D may be input or
+*>         computed according to MODE, COND, DMAX, and SYM
+*>         as described below.
+*>
+*>      Generate a matrix with the appropriate band structure, by one
+*>         of two methods:
+*>
+*>      Method A:
+*>          Generate a dense M x N matrix by multiplying D on the left
+*>              and the right by random unitary matrices, then:
+*>
+*>          Reduce the bandwidth according to KL and KU, using
+*>              Householder transformations.
+*>
+*>      Method B:
+*>          Convert the bandwidth-0 (i.e., diagonal) matrix to a
+*>              bandwidth-1 matrix using Givens rotations, "chasing"
+*>              out-of-band elements back, much as in QR; then convert
+*>              the bandwidth-1 to a bandwidth-2 matrix, etc.  Note
+*>              that for reasonably small bandwidths (relative to M and
+*>              N) this requires less storage, as a dense matrix is not
+*>              generated.  Also, for hermitian or symmetric matrices,
+*>              only one triangle is generated.
+*>
+*>      Method A is chosen if the bandwidth is a large fraction of the
+*>          order of the matrix, and LDA is at least M (so a dense
+*>          matrix can be stored.)  Method B is chosen if the bandwidth
+*>          is small (< 1/2 N for hermitian or symmetric, < .3 N+M for
+*>          non-symmetric), or LDA is less than M and not less than the
+*>          bandwidth.
+*>
+*>      Pack the matrix if desired. Options specified by PACK are:
+*>         no packing
+*>         zero out upper half (if hermitian)
+*>         zero out lower half (if hermitian)
+*>         store the upper half columnwise (if hermitian or upper
+*>               triangular)
+*>         store the lower half columnwise (if hermitian or lower
+*>               triangular)
+*>         store the lower triangle in banded format (if hermitian or
+*>               lower triangular)
+*>         store the upper triangle in banded format (if hermitian or
+*>               upper triangular)
+*>         store the entire matrix in banded format
+*>      If Method B is chosen, and band format is specified, then the
+*>         matrix will be generated in the band format, so no repacking
+*>         will be necessary.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>           The number of rows of A. Not modified.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>           The number of columns of A. N must equal M if the matrix
+*>           is symmetric or hermitian (i.e., if SYM is not 'N')
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] DIST
+*> \verbatim
+*>          DIST is CHARACTER*1
+*>           On entry, DIST specifies the type of distribution to be used
+*>           to generate the random eigen-/singular values.
+*>           'U' => UNIFORM( 0, 1 )  ( 'U' for uniform )
+*>           'S' => UNIFORM( -1, 1 ) ( 'S' for symmetric )
+*>           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension ( 4 )
+*>           On entry ISEED specifies the seed of the random number
+*>           generator. They should lie between 0 and 4095 inclusive,
+*>           and ISEED(4) should be odd. The random number generator
+*>           uses a linear congruential sequence limited to small
+*>           integers, and so should produce machine independent
+*>           random numbers. The values of ISEED are changed on
+*>           exit, and can be used in the next call to CLATMT
+*>           to continue the same random number sequence.
+*>           Changed on exit.
+*> \endverbatim
+*>
+*> \param[in] SYM
+*> \verbatim
+*>          SYM is CHARACTER*1
+*>           If SYM='H', the generated matrix is hermitian, with
+*>             eigenvalues specified by D, COND, MODE, and DMAX; they
+*>             may be positive, negative, or zero.
+*>           If SYM='P', the generated matrix is hermitian, with
+*>             eigenvalues (= singular values) specified by D, COND,
+*>             MODE, and DMAX; they will not be negative.
+*>           If SYM='N', the generated matrix is nonsymmetric, with
+*>             singular values specified by D, COND, MODE, and DMAX;
+*>             they will not be negative.
+*>           If SYM='S', the generated matrix is (complex) symmetric,
+*>             with singular values specified by D, COND, MODE, and
+*>             DMAX; they will not be negative.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL array, dimension ( MIN( M, N ) )
+*>           This array is used to specify the singular values or
+*>           eigenvalues of A (see SYM, above.)  If MODE=0, then D is
+*>           assumed to contain the singular/eigenvalues, otherwise
+*>           they will be computed according to MODE, COND, and DMAX,
+*>           and placed in D.
+*>           Modified if MODE is nonzero.
+*> \endverbatim
+*>
+*> \param[in] MODE
+*> \verbatim
+*>          MODE is INTEGER
+*>           On entry this describes how the singular/eigenvalues are to
+*>           be specified:
+*>           MODE = 0 means use D as input
+*>           MODE = 1 sets D(1)=1 and D(2:RANK)=1.0/COND
+*>           MODE = 2 sets D(1:RANK-1)=1 and D(RANK)=1.0/COND
+*>           MODE = 3 sets D(I)=COND**(-(I-1)/(RANK-1))
+*>           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND)
+*>           MODE = 5 sets D to random numbers in the range
+*>                    ( 1/COND , 1 ) such that their logarithms
+*>                    are uniformly distributed.
+*>           MODE = 6 set D to random numbers from same distribution
+*>                    as the rest of the matrix.
+*>           MODE < 0 has the same meaning as ABS(MODE), except that
+*>              the order of the elements of D is reversed.
+*>           Thus if MODE is positive, D has entries ranging from
+*>              1 to 1/COND, if negative, from 1/COND to 1,
+*>           If SYM='H', and MODE is neither 0, 6, nor -6, then
+*>              the elements of D will also be multiplied by a random
+*>              sign (i.e., +1 or -1.)
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] COND
+*> \verbatim
+*>          COND is REAL
+*>           On entry, this is used as described under MODE above.
+*>           If used, it must be >= 1. Not modified.
+*> \endverbatim
+*>
+*> \param[in] DMAX
+*> \verbatim
+*>          DMAX is REAL
+*>           If MODE is neither -6, 0 nor 6, the contents of D, as
+*>           computed according to MODE and COND, will be scaled by
+*>           DMAX / max(abs(D(i))); thus, the maximum absolute eigen- or
+*>           singular value (which is to say the norm) will be abs(DMAX).
+*>           Note that DMAX need not be positive: if DMAX is negative
+*>           (or zero), D will be scaled by a negative number (or zero).
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] RANK
+*> \verbatim
+*>          RANK is INTEGER
+*>           The rank of matrix to be generated for modes 1,2,3 only.
+*>           D( RANK+1:N ) = 0.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] KL
+*> \verbatim
+*>          KL is INTEGER
+*>           This specifies the lower bandwidth of the  matrix. For
+*>           example, KL=0 implies upper triangular, KL=1 implies upper
+*>           Hessenberg, and KL being at least M-1 means that the matrix
+*>           has full lower bandwidth.  KL must equal KU if the matrix
+*>           is symmetric or hermitian.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] KU
+*> \verbatim
+*>          KU is INTEGER
+*>           This specifies the upper bandwidth of the  matrix. For
+*>           example, KU=0 implies lower triangular, KU=1 implies lower
+*>           Hessenberg, and KU being at least N-1 means that the matrix
+*>           has full upper bandwidth.  KL must equal KU if the matrix
+*>           is symmetric or hermitian.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in] PACK
+*> \verbatim
+*>          PACK is CHARACTER*1
+*>           This specifies packing of matrix as follows:
+*>           'N' => no packing
+*>           'U' => zero out all subdiagonal entries (if symmetric
+*>                  or hermitian)
+*>           'L' => zero out all superdiagonal entries (if symmetric
+*>                  or hermitian)
+*>           'C' => store the upper triangle columnwise (only if the
+*>                  matrix is symmetric, hermitian, or upper triangular)
+*>           'R' => store the lower triangle columnwise (only if the
+*>                  matrix is symmetric, hermitian, or lower triangular)
+*>           'B' => store the lower triangle in band storage scheme
+*>                  (only if the matrix is symmetric, hermitian, or
+*>                  lower triangular)
+*>           'Q' => store the upper triangle in band storage scheme
+*>                  (only if the matrix is symmetric, hermitian, or
+*>                  upper triangular)
+*>           'Z' => store the entire matrix in band storage scheme
+*>                      (pivoting can be provided for by using this
+*>                      option to store A in the trailing rows of
+*>                      the allocated storage)
+*> \endverbatim
+*> \verbatim
+*>           Using these options, the various LAPACK packed and banded
+*>           storage schemes can be obtained:
+*>           GB                    - use 'Z'
+*>           PB, SB, HB, or TB     - use 'B' or 'Q'
+*>           PP, SP, HB, or TP     - use 'C' or 'R'
+*> \endverbatim
+*> \verbatim
+*>           If two calls to CLATMT differ only in the PACK parameter,
+*>           they will generate mathematically equivalent matrices.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension ( LDA, N )
+*>           On exit A is the desired test matrix.  A is first generated
+*>           in full (unpacked) form, and then packed, if so specified
+*>           by PACK.  Thus, the first M elements of the first N
+*>           columns will always be modified.  If PACK specifies a
+*>           packed or banded storage scheme, all LDA elements of the
+*>           first N columns will be modified; the elements of the
+*>           array which do not correspond to elements of the generated
+*>           matrix are set to zero.
+*>           Modified.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>           LDA specifies the first dimension of A as declared in the
+*>           calling program.  If PACK='N', 'U', 'L', 'C', or 'R', then
+*>           LDA must be at least M.  If PACK='B' or 'Q', then LDA must
+*>           be at least MIN( KL, M-1) (which is equal to MIN(KU,N-1)).
+*>           If PACK='Z', LDA must be large enough to hold the packed
+*>           array: MIN( KU, N-1) + MIN( KL, M-1) + 1.
+*>           Not modified.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension ( 3*MAX( N, M ) )
+*>           Workspace.
+*>           Modified.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>           Error code.  On exit, INFO will be set to one of the
+*>           following values:
+*>             0 => normal return
+*>            -1 => M negative or unequal to N and SYM='S', 'H', or 'P'
+*>            -2 => N negative
+*>            -3 => DIST illegal string
+*>            -5 => SYM illegal string
+*>            -7 => MODE not in range -6 to 6
+*>            -8 => COND less than 1.0, and MODE neither -6, 0 nor 6
+*>           -10 => KL negative
+*>           -11 => KU negative, or SYM is not 'N' and KU is not equal to
+*>                  KL
+*>           -12 => PACK illegal string, or PACK='U' or 'L', and SYM='N';
+*>                  or PACK='C' or 'Q' and SYM='N' and KL is not zero;
+*>                  or PACK='R' or 'B' and SYM='N' and KU is not zero;
+*>                  or PACK='U', 'L', 'C', 'R', 'B', or 'Q', and M is not
+*>                  N.
+*>           -14 => LDA is less than M, or PACK='Z' and LDA is less than
+*>                  MIN(KU,N-1) + MIN(KL,M-1) + 1.
+*>            1  => Error return from SLATM7
+*>            2  => Cannot scale to DMAX (max. sing. value is 0)
+*>            3  => Error return from CLAGGE, CLAGHE or CLAGSY
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_matgen
+*
+*  =====================================================================
       SUBROUTINE CLATMT( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
      $                   RANK, KL, KU, PACK, A, LDA, WORK, INFO )
 *
-*  -- LAPACK test routine (version 3.1) --
-*     Craig Lucas, University of Manchester / NAG Ltd.
-*     October, 2008
+*  -- LAPACK computational routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       REAL               COND, DMAX
@@ -15,253 +359,6 @@
       REAL               D( * )
       INTEGER            ISEED( 4 )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     CLATMT generates random matrices with specified singular values
-*     (or hermitian with specified eigenvalues)
-*     for testing LAPACK programs.
-*
-*     CLATMT operates by applying the following sequence of
-*     operations:
-*
-*       Set the diagonal to D, where D may be input or
-*          computed according to MODE, COND, DMAX, and SYM
-*          as described below.
-*
-*       Generate a matrix with the appropriate band structure, by one
-*          of two methods:
-*
-*       Method A:
-*           Generate a dense M x N matrix by multiplying D on the left
-*               and the right by random unitary matrices, then:
-*
-*           Reduce the bandwidth according to KL and KU, using
-*               Householder transformations.
-*
-*       Method B:
-*           Convert the bandwidth-0 (i.e., diagonal) matrix to a
-*               bandwidth-1 matrix using Givens rotations, "chasing"
-*               out-of-band elements back, much as in QR; then convert
-*               the bandwidth-1 to a bandwidth-2 matrix, etc.  Note
-*               that for reasonably small bandwidths (relative to M and
-*               N) this requires less storage, as a dense matrix is not
-*               generated.  Also, for hermitian or symmetric matrices,
-*               only one triangle is generated.
-*
-*       Method A is chosen if the bandwidth is a large fraction of the
-*           order of the matrix, and LDA is at least M (so a dense
-*           matrix can be stored.)  Method B is chosen if the bandwidth
-*           is small (< 1/2 N for hermitian or symmetric, < .3 N+M for
-*           non-symmetric), or LDA is less than M and not less than the
-*           bandwidth.
-*
-*       Pack the matrix if desired. Options specified by PACK are:
-*          no packing
-*          zero out upper half (if hermitian)
-*          zero out lower half (if hermitian)
-*          store the upper half columnwise (if hermitian or upper
-*                triangular)
-*          store the lower half columnwise (if hermitian or lower
-*                triangular)
-*          store the lower triangle in banded format (if hermitian or
-*                lower triangular)
-*          store the upper triangle in banded format (if hermitian or
-*                upper triangular)
-*          store the entire matrix in banded format
-*       If Method B is chosen, and band format is specified, then the
-*          matrix will be generated in the band format, so no repacking
-*          will be necessary.
-*
-*  Arguments
-*  =========
-*
-*  M        (input) INTEGER
-*           The number of rows of A. Not modified.
-*
-*  N        (input) INTEGER
-*           The number of columns of A. N must equal M if the matrix
-*           is symmetric or hermitian (i.e., if SYM is not 'N')
-*           Not modified.
-*
-*  DIST     (input) CHARACTER*1
-*           On entry, DIST specifies the type of distribution to be used
-*           to generate the random eigen-/singular values.
-*           'U' => UNIFORM( 0, 1 )  ( 'U' for uniform )
-*           'S' => UNIFORM( -1, 1 ) ( 'S' for symmetric )
-*           'N' => NORMAL( 0, 1 )   ( 'N' for normal )
-*           Not modified.
-*
-*  ISEED    (input/output) INTEGER array, dimension ( 4 )
-*           On entry ISEED specifies the seed of the random number
-*           generator. They should lie between 0 and 4095 inclusive,
-*           and ISEED(4) should be odd. The random number generator
-*           uses a linear congruential sequence limited to small
-*           integers, and so should produce machine independent
-*           random numbers. The values of ISEED are changed on
-*           exit, and can be used in the next call to CLATMT
-*           to continue the same random number sequence.
-*           Changed on exit.
-*
-*  SYM      (input) CHARACTER*1
-*           If SYM='H', the generated matrix is hermitian, with
-*             eigenvalues specified by D, COND, MODE, and DMAX; they
-*             may be positive, negative, or zero.
-*           If SYM='P', the generated matrix is hermitian, with
-*             eigenvalues (= singular values) specified by D, COND,
-*             MODE, and DMAX; they will not be negative.
-*           If SYM='N', the generated matrix is nonsymmetric, with
-*             singular values specified by D, COND, MODE, and DMAX;
-*             they will not be negative.
-*           If SYM='S', the generated matrix is (complex) symmetric,
-*             with singular values specified by D, COND, MODE, and
-*             DMAX; they will not be negative.
-*           Not modified.
-*
-*  D        (input/output) REAL array, dimension ( MIN( M, N ) )
-*           This array is used to specify the singular values or
-*           eigenvalues of A (see SYM, above.)  If MODE=0, then D is
-*           assumed to contain the singular/eigenvalues, otherwise
-*           they will be computed according to MODE, COND, and DMAX,
-*           and placed in D.
-*           Modified if MODE is nonzero.
-*
-*  MODE     (input) INTEGER
-*           On entry this describes how the singular/eigenvalues are to
-*           be specified:
-*           MODE = 0 means use D as input
-*           MODE = 1 sets D(1)=1 and D(2:RANK)=1.0/COND
-*           MODE = 2 sets D(1:RANK-1)=1 and D(RANK)=1.0/COND
-*           MODE = 3 sets D(I)=COND**(-(I-1)/(RANK-1))
-*           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND)
-*           MODE = 5 sets D to random numbers in the range
-*                    ( 1/COND , 1 ) such that their logarithms
-*                    are uniformly distributed.
-*           MODE = 6 set D to random numbers from same distribution
-*                    as the rest of the matrix.
-*           MODE < 0 has the same meaning as ABS(MODE), except that
-*              the order of the elements of D is reversed.
-*           Thus if MODE is positive, D has entries ranging from
-*              1 to 1/COND, if negative, from 1/COND to 1,
-*           If SYM='H', and MODE is neither 0, 6, nor -6, then
-*              the elements of D will also be multiplied by a random
-*              sign (i.e., +1 or -1.)
-*           Not modified.
-*
-*  COND     (input) REAL
-*           On entry, this is used as described under MODE above.
-*           If used, it must be >= 1. Not modified.
-*
-*  DMAX     (input) REAL
-*           If MODE is neither -6, 0 nor 6, the contents of D, as
-*           computed according to MODE and COND, will be scaled by
-*           DMAX / max(abs(D(i))); thus, the maximum absolute eigen- or
-*           singular value (which is to say the norm) will be abs(DMAX).
-*           Note that DMAX need not be positive: if DMAX is negative
-*           (or zero), D will be scaled by a negative number (or zero).
-*           Not modified.
-*
-*  RANK     (input) INTEGER
-*           The rank of matrix to be generated for modes 1,2,3 only.
-*           D( RANK+1:N ) = 0.
-*           Not modified.
-*
-*  KL       (input) INTEGER
-*           This specifies the lower bandwidth of the  matrix. For
-*           example, KL=0 implies upper triangular, KL=1 implies upper
-*           Hessenberg, and KL being at least M-1 means that the matrix
-*           has full lower bandwidth.  KL must equal KU if the matrix
-*           is symmetric or hermitian.
-*           Not modified.
-*
-*  KU       (input) INTEGER
-*           This specifies the upper bandwidth of the  matrix. For
-*           example, KU=0 implies lower triangular, KU=1 implies lower
-*           Hessenberg, and KU being at least N-1 means that the matrix
-*           has full upper bandwidth.  KL must equal KU if the matrix
-*           is symmetric or hermitian.
-*           Not modified.
-*
-*  PACK     (input) CHARACTER*1
-*           This specifies packing of matrix as follows:
-*           'N' => no packing
-*           'U' => zero out all subdiagonal entries (if symmetric
-*                  or hermitian)
-*           'L' => zero out all superdiagonal entries (if symmetric
-*                  or hermitian)
-*           'C' => store the upper triangle columnwise (only if the
-*                  matrix is symmetric, hermitian, or upper triangular)
-*           'R' => store the lower triangle columnwise (only if the
-*                  matrix is symmetric, hermitian, or lower triangular)
-*           'B' => store the lower triangle in band storage scheme
-*                  (only if the matrix is symmetric, hermitian, or
-*                  lower triangular)
-*           'Q' => store the upper triangle in band storage scheme
-*                  (only if the matrix is symmetric, hermitian, or
-*                  upper triangular)
-*           'Z' => store the entire matrix in band storage scheme
-*                      (pivoting can be provided for by using this
-*                      option to store A in the trailing rows of
-*                      the allocated storage)
-*
-*           Using these options, the various LAPACK packed and banded
-*           storage schemes can be obtained:
-*           GB                    - use 'Z'
-*           PB, SB, HB, or TB     - use 'B' or 'Q'
-*           PP, SP, HB, or TP     - use 'C' or 'R'
-*
-*           If two calls to CLATMT differ only in the PACK parameter,
-*           they will generate mathematically equivalent matrices.
-*           Not modified.
-*
-*  A        (input/output) COMPLEX array, dimension ( LDA, N )
-*           On exit A is the desired test matrix.  A is first generated
-*           in full (unpacked) form, and then packed, if so specified
-*           by PACK.  Thus, the first M elements of the first N
-*           columns will always be modified.  If PACK specifies a
-*           packed or banded storage scheme, all LDA elements of the
-*           first N columns will be modified; the elements of the
-*           array which do not correspond to elements of the generated
-*           matrix are set to zero.
-*           Modified.
-*
-*  LDA      (input) INTEGER
-*           LDA specifies the first dimension of A as declared in the
-*           calling program.  If PACK='N', 'U', 'L', 'C', or 'R', then
-*           LDA must be at least M.  If PACK='B' or 'Q', then LDA must
-*           be at least MIN( KL, M-1) (which is equal to MIN(KU,N-1)).
-*           If PACK='Z', LDA must be large enough to hold the packed
-*           array: MIN( KU, N-1) + MIN( KL, M-1) + 1.
-*           Not modified.
-*
-*  WORK     (workspace) COMPLEX array, dimension ( 3*MAX( N, M ) )
-*           Workspace.
-*           Modified.
-*
-*  INFO     (output) INTEGER
-*           Error code.  On exit, INFO will be set to one of the
-*           following values:
-*             0 => normal return
-*            -1 => M negative or unequal to N and SYM='S', 'H', or 'P'
-*            -2 => N negative
-*            -3 => DIST illegal string
-*            -5 => SYM illegal string
-*            -7 => MODE not in range -6 to 6
-*            -8 => COND less than 1.0, and MODE neither -6, 0 nor 6
-*           -10 => KL negative
-*           -11 => KU negative, or SYM is not 'N' and KU is not equal to
-*                  KL
-*           -12 => PACK illegal string, or PACK='U' or 'L', and SYM='N';
-*                  or PACK='C' or 'Q' and SYM='N' and KL is not zero;
-*                  or PACK='R' or 'B' and SYM='N' and KU is not zero;
-*                  or PACK='U', 'L', 'C', 'R', 'B', or 'Q', and M is not
-*                  N.
-*           -14 => LDA is less than M, or PACK='Z' and LDA is less than
-*                  MIN(KU,N-1) + MIN(KL,M-1) + 1.
-*            1  => Error return from SLATM7
-*            2  => Cannot scale to DMAX (max. sing. value is 0)
-*            3  => Error return from CLAGGE, CLAGHE or CLAGSY
 *
 *  =====================================================================
 *

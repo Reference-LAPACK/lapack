@@ -1,8 +1,99 @@
+*> \brief \b SGET36
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET36( RMAX, LMAX, NINFO, KNT, NIN )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            KNT, LMAX, NIN
+*       REAL               RMAX
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            NINFO( 3 )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET36 tests STREXC, a routine for moving blocks (either 1 by 1 or
+*> 2 by 2) on the diagonal of a matrix in real Schur form.  Thus, SLAEXC
+*> computes an orthogonal matrix Q such that
+*>
+*>    Q' * T1 * Q  = T2
+*>
+*> and where one of the diagonal blocks of T1 (the one at row IFST) has
+*> been moved to position ILST.
+*>
+*> The test code verifies that the residual Q'*T1*Q-T2 is small, that T2
+*> is in Schur form, and that the final position of the IFST block is
+*> ILST (within +-1).
+*>
+*> The test matrices are read from a file with logical unit number NIN.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[out] RMAX
+*> \verbatim
+*>          RMAX is REAL
+*>          Value of the largest test ratio.
+*> \endverbatim
+*>
+*> \param[out] LMAX
+*> \verbatim
+*>          LMAX is INTEGER
+*>          Example number where largest test ratio achieved.
+*> \endverbatim
+*>
+*> \param[out] NINFO
+*> \verbatim
+*>          NINFO is INTEGER array, dimension (3)
+*>          NINFO(J) is the number of examples where INFO=J.
+*> \endverbatim
+*>
+*> \param[out] KNT
+*> \verbatim
+*>          KNT is INTEGER
+*>          Total number of examples tested.
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          Input logical unit number.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SGET36( RMAX, LMAX, NINFO, KNT, NIN )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            KNT, LMAX, NIN
@@ -11,42 +102,6 @@
 *     .. Array Arguments ..
       INTEGER            NINFO( 3 )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET36 tests STREXC, a routine for moving blocks (either 1 by 1 or
-*  2 by 2) on the diagonal of a matrix in real Schur form.  Thus, SLAEXC
-*  computes an orthogonal matrix Q such that
-*
-*     Q' * T1 * Q  = T2
-*
-*  and where one of the diagonal blocks of T1 (the one at row IFST) has
-*  been moved to position ILST.
-*
-*  The test code verifies that the residual Q'*T1*Q-T2 is small, that T2
-*  is in Schur form, and that the final position of the IFST block is
-*  ILST (within +-1).
-*
-*  The test matrices are read from a file with logical unit number NIN.
-*
-*  Arguments
-*  ==========
-*
-*  RMAX    (output) REAL
-*          Value of the largest test ratio.
-*
-*  LMAX    (output) INTEGER
-*          Example number where largest test ratio achieved.
-*
-*  NINFO   (output) INTEGER array, dimension (3)
-*          NINFO(J) is the number of examples where INFO=J.
-*
-*  KNT     (output) INTEGER
-*          Total number of examples tested.
-*
-*  NIN     (input) INTEGER
-*          Input logical unit number.
 *
 *  =====================================================================
 *

@@ -1,12 +1,268 @@
+*> \brief \b ZTRSEN
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,
+*                          SEP, WORK, LWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          COMPQ, JOB
+*       INTEGER            INFO, LDQ, LDT, LWORK, M, N
+*       DOUBLE PRECISION   S, SEP
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            SELECT( * )
+*       COMPLEX*16         Q( LDQ, * ), T( LDT, * ), W( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZTRSEN reorders the Schur factorization of a complex matrix
+*> A = Q*T*Q**H, so that a selected cluster of eigenvalues appears in
+*> the leading positions on the diagonal of the upper triangular matrix
+*> T, and the leading columns of Q form an orthonormal basis of the
+*> corresponding right invariant subspace.
+*>
+*> Optionally the routine computes the reciprocal condition numbers of
+*> the cluster of eigenvalues and/or the invariant subspace.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOB
+*> \verbatim
+*>          JOB is CHARACTER*1
+*>          Specifies whether condition numbers are required for the
+*>          cluster of eigenvalues (S) or the invariant subspace (SEP):
+*>          = 'N': none;
+*>          = 'E': for eigenvalues only (S);
+*>          = 'V': for invariant subspace only (SEP);
+*>          = 'B': for both eigenvalues and invariant subspace (S and
+*>                 SEP).
+*> \endverbatim
+*>
+*> \param[in] COMPQ
+*> \verbatim
+*>          COMPQ is CHARACTER*1
+*>          = 'V': update the matrix Q of Schur vectors;
+*>          = 'N': do not update Q.
+*> \endverbatim
+*>
+*> \param[in] SELECT
+*> \verbatim
+*>          SELECT is LOGICAL array, dimension (N)
+*>          SELECT specifies the eigenvalues in the selected cluster. To
+*>          select the j-th eigenvalue, SELECT(j) must be set to .TRUE..
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix T. N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] T
+*> \verbatim
+*>          T is COMPLEX*16 array, dimension (LDT,N)
+*>          On entry, the upper triangular matrix T.
+*>          On exit, T is overwritten by the reordered matrix T, with the
+*>          selected eigenvalues as the leading diagonal elements.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T. LDT >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is COMPLEX*16 array, dimension (LDQ,N)
+*>          On entry, if COMPQ = 'V', the matrix Q of Schur vectors.
+*>          On exit, if COMPQ = 'V', Q has been postmultiplied by the
+*>          unitary transformation matrix which reorders T; the leading M
+*>          columns of Q form an orthonormal basis for the specified
+*>          invariant subspace.
+*>          If COMPQ = 'N', Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q.
+*>          LDQ >= 1; and if COMPQ = 'V', LDQ >= N.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is COMPLEX*16 array, dimension (N)
+*>          The reordered eigenvalues of T, in the same order as they
+*>          appear on the diagonal of T.
+*> \endverbatim
+*>
+*> \param[out] M
+*> \verbatim
+*>          M is INTEGER
+*>          The dimension of the specified invariant subspace.
+*>          0 <= M <= N.
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is DOUBLE PRECISION
+*>          If JOB = 'E' or 'B', S is a lower bound on the reciprocal
+*>          condition number for the selected cluster of eigenvalues.
+*>          S cannot underestimate the true reciprocal condition number
+*>          by more than a factor of sqrt(N). If M = 0 or N, S = 1.
+*>          If JOB = 'N' or 'V', S is not referenced.
+*> \endverbatim
+*>
+*> \param[out] SEP
+*> \verbatim
+*>          SEP is DOUBLE PRECISION
+*>          If JOB = 'V' or 'B', SEP is the estimated reciprocal
+*>          condition number of the specified invariant subspace. If
+*>          M = 0 or N, SEP = norm(T).
+*>          If JOB = 'N' or 'E', SEP is not referenced.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>          If JOB = 'N', LWORK >= 1;
+*>          if JOB = 'E', LWORK = max(1,M*(N-M));
+*>          if JOB = 'V' or 'B', LWORK >= max(1,2*M*(N-M)).
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERcomputational
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  ZTRSEN first collects the selected eigenvalues by computing a unitary
+*>  transformation Z to move them to the top left corner of T. In other
+*>  words, the selected eigenvalues are the eigenvalues of T11 in:
+*>
+*>          Z**H * T * Z = ( T11 T12 ) n1
+*>                         (  0  T22 ) n2
+*>                            n1  n2
+*>
+*>  where N = n1+n2. The first
+*>  n1 columns of Z span the specified invariant subspace of T.
+*>
+*>  If T has been obtained from the Schur factorization of a matrix
+*>  A = Q*T*Q**H, then the reordered Schur factorization of A is given by
+*>  A = (Q*Z)*(Z**H*T*Z)*(Q*Z)**H, and the first n1 columns of Q*Z span the
+*>  corresponding invariant subspace of A.
+*>
+*>  The reciprocal condition number of the average of the eigenvalues of
+*>  T11 may be returned in S. S lies between 0 (very badly conditioned)
+*>  and 1 (very well conditioned). It is computed as follows. First we
+*>  compute R so that
+*>
+*>                         P = ( I  R ) n1
+*>                             ( 0  0 ) n2
+*>                               n1 n2
+*>
+*>  is the projector on the invariant subspace associated with T11.
+*>  R is the solution of the Sylvester equation:
+*>
+*>                        T11*R - R*T22 = T12.
+*>
+*>  Let F-norm(M) denote the Frobenius-norm of M and 2-norm(M) denote
+*>  the two-norm of M. Then S is computed as the lower bound
+*>
+*>                      (1 + F-norm(R)**2)**(-1/2)
+*>
+*>  on the reciprocal of 2-norm(P), the true reciprocal condition number.
+*>  S cannot underestimate 1 / 2-norm(P) by more than a factor of
+*>  sqrt(N).
+*>
+*>  An approximate error bound for the computed average of the
+*>  eigenvalues of T11 is
+*>
+*>                         EPS * norm(T) / S
+*>
+*>  where EPS is the machine precision.
+*>
+*>  The reciprocal condition number of the right invariant subspace
+*>  spanned by the first n1 columns of Z (or of Q*Z) is returned in SEP.
+*>  SEP is defined as the separation of T11 and T22:
+*>
+*>                     sep( T11, T22 ) = sigma-min( C )
+*>
+*>  where sigma-min(C) is the smallest singular value of the
+*>  n1*n2-by-n1*n2 matrix
+*>
+*>     C  = kprod( I(n2), T11 ) - kprod( transpose(T22), I(n1) )
+*>
+*>  I(m) is an m by m identity matrix, and kprod denotes the Kronecker
+*>  product. We estimate sigma-min(C) by the reciprocal of an estimate of
+*>  the 1-norm of inverse(C). The true reciprocal 1-norm of inverse(C)
+*>  cannot differ from sigma-min(C) by more than a factor of sqrt(n1*n2).
+*>
+*>  When SEP is small, small changes in T can cause large changes in
+*>  the invariant subspace. An approximate bound on the maximum angular
+*>  error in the computed right invariant subspace is
+*>
+*>                      EPS * norm(T) / SEP
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,
      $                   SEP, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
-*
-*     Modified to call ZLACN2 in place of ZLACON, 10 Feb 03, SJH.
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          COMPQ, JOB
@@ -17,171 +273,6 @@
       LOGICAL            SELECT( * )
       COMPLEX*16         Q( LDQ, * ), T( LDT, * ), W( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZTRSEN reorders the Schur factorization of a complex matrix
-*  A = Q*T*Q**H, so that a selected cluster of eigenvalues appears in
-*  the leading positions on the diagonal of the upper triangular matrix
-*  T, and the leading columns of Q form an orthonormal basis of the
-*  corresponding right invariant subspace.
-*
-*  Optionally the routine computes the reciprocal condition numbers of
-*  the cluster of eigenvalues and/or the invariant subspace.
-*
-*  Arguments
-*  =========
-*
-*  JOB     (input) CHARACTER*1
-*          Specifies whether condition numbers are required for the
-*          cluster of eigenvalues (S) or the invariant subspace (SEP):
-*          = 'N': none;
-*          = 'E': for eigenvalues only (S);
-*          = 'V': for invariant subspace only (SEP);
-*          = 'B': for both eigenvalues and invariant subspace (S and
-*                 SEP).
-*
-*  COMPQ   (input) CHARACTER*1
-*          = 'V': update the matrix Q of Schur vectors;
-*          = 'N': do not update Q.
-*
-*  SELECT  (input) LOGICAL array, dimension (N)
-*          SELECT specifies the eigenvalues in the selected cluster. To
-*          select the j-th eigenvalue, SELECT(j) must be set to .TRUE..
-*
-*  N       (input) INTEGER
-*          The order of the matrix T. N >= 0.
-*
-*  T       (input/output) COMPLEX*16 array, dimension (LDT,N)
-*          On entry, the upper triangular matrix T.
-*          On exit, T is overwritten by the reordered matrix T, with the
-*          selected eigenvalues as the leading diagonal elements.
-*
-*  LDT     (input) INTEGER
-*          The leading dimension of the array T. LDT >= max(1,N).
-*
-*  Q       (input/output) COMPLEX*16 array, dimension (LDQ,N)
-*          On entry, if COMPQ = 'V', the matrix Q of Schur vectors.
-*          On exit, if COMPQ = 'V', Q has been postmultiplied by the
-*          unitary transformation matrix which reorders T; the leading M
-*          columns of Q form an orthonormal basis for the specified
-*          invariant subspace.
-*          If COMPQ = 'N', Q is not referenced.
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q.
-*          LDQ >= 1; and if COMPQ = 'V', LDQ >= N.
-*
-*  W       (output) COMPLEX*16 array, dimension (N)
-*          The reordered eigenvalues of T, in the same order as they
-*          appear on the diagonal of T.
-*
-*  M       (output) INTEGER
-*          The dimension of the specified invariant subspace.
-*          0 <= M <= N.
-*
-*  S       (output) DOUBLE PRECISION
-*          If JOB = 'E' or 'B', S is a lower bound on the reciprocal
-*          condition number for the selected cluster of eigenvalues.
-*          S cannot underestimate the true reciprocal condition number
-*          by more than a factor of sqrt(N). If M = 0 or N, S = 1.
-*          If JOB = 'N' or 'V', S is not referenced.
-*
-*  SEP     (output) DOUBLE PRECISION
-*          If JOB = 'V' or 'B', SEP is the estimated reciprocal
-*          condition number of the specified invariant subspace. If
-*          M = 0 or N, SEP = norm(T).
-*          If JOB = 'N' or 'E', SEP is not referenced.
-*
-*  WORK    (workspace/output) COMPLEX*16 array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*          If JOB = 'N', LWORK >= 1;
-*          if JOB = 'E', LWORK = max(1,M*(N-M));
-*          if JOB = 'V' or 'B', LWORK >= max(1,2*M*(N-M)).
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value
-*
-*  Further Details
-*  ===============
-*
-*  ZTRSEN first collects the selected eigenvalues by computing a unitary
-*  transformation Z to move them to the top left corner of T. In other
-*  words, the selected eigenvalues are the eigenvalues of T11 in:
-*
-*          Z**H * T * Z = ( T11 T12 ) n1
-*                         (  0  T22 ) n2
-*                            n1  n2
-*
-*  where N = n1+n2. The first
-*  n1 columns of Z span the specified invariant subspace of T.
-*
-*  If T has been obtained from the Schur factorization of a matrix
-*  A = Q*T*Q**H, then the reordered Schur factorization of A is given by
-*  A = (Q*Z)*(Z**H*T*Z)*(Q*Z)**H, and the first n1 columns of Q*Z span the
-*  corresponding invariant subspace of A.
-*
-*  The reciprocal condition number of the average of the eigenvalues of
-*  T11 may be returned in S. S lies between 0 (very badly conditioned)
-*  and 1 (very well conditioned). It is computed as follows. First we
-*  compute R so that
-*
-*                         P = ( I  R ) n1
-*                             ( 0  0 ) n2
-*                               n1 n2
-*
-*  is the projector on the invariant subspace associated with T11.
-*  R is the solution of the Sylvester equation:
-*
-*                        T11*R - R*T22 = T12.
-*
-*  Let F-norm(M) denote the Frobenius-norm of M and 2-norm(M) denote
-*  the two-norm of M. Then S is computed as the lower bound
-*
-*                      (1 + F-norm(R)**2)**(-1/2)
-*
-*  on the reciprocal of 2-norm(P), the true reciprocal condition number.
-*  S cannot underestimate 1 / 2-norm(P) by more than a factor of
-*  sqrt(N).
-*
-*  An approximate error bound for the computed average of the
-*  eigenvalues of T11 is
-*
-*                         EPS * norm(T) / S
-*
-*  where EPS is the machine precision.
-*
-*  The reciprocal condition number of the right invariant subspace
-*  spanned by the first n1 columns of Z (or of Q*Z) is returned in SEP.
-*  SEP is defined as the separation of T11 and T22:
-*
-*                     sep( T11, T22 ) = sigma-min( C )
-*
-*  where sigma-min(C) is the smallest singular value of the
-*  n1*n2-by-n1*n2 matrix
-*
-*     C  = kprod( I(n2), T11 ) - kprod( transpose(T22), I(n1) )
-*
-*  I(m) is an m by m identity matrix, and kprod denotes the Kronecker
-*  product. We estimate sigma-min(C) by the reciprocal of an estimate of
-*  the 1-norm of inverse(C). The true reciprocal 1-norm of inverse(C)
-*  cannot differ from sigma-min(C) by more than a factor of sqrt(n1*n2).
-*
-*  When SEP is small, small changes in T can cause large changes in
-*  the invariant subspace. An approximate bound on the maximum angular
-*  error in the computed right invariant subspace is
-*
-*                      EPS * norm(T) / SEP
 *
 *  =====================================================================
 *

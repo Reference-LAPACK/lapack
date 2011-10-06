@@ -1,29 +1,67 @@
-      SUBROUTINE ZERRRFP( NUNIT )
-      IMPLICIT NONE
+*> \brief \b ZERRRFP
 *
-*  -- LAPACK test routine (version 3.2.0) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2008
+*  =========== DOCUMENTATION ===========
 *
-*     .. Scalar Arguments ..
-      INTEGER            NUNIT
-*     ..
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZERRRFP( NUNIT )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            NUNIT
+*       ..
+*  
 *  Purpose
 *  =======
 *
-*  ZERRRFP tests the error exits for the COMPLEX*16 driver routines
-*  for solving linear systems of equations.
-*
-*  ZDRVRFP tests the COMPLEX*16 LAPACK RFP routines:
-*      ZTFSM, ZTFTRI, ZHFRK, ZTFTTP, ZTFTTR, ZPFTRF, ZPFTRS, ZTPTTF,
-*      ZTPTTR, ZTRTTF, and ZTRTTP
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZERRRFP tests the error exits for the COMPLEX*16 driver routines
+*> for solving linear systems of equations.
+*>
+*> ZDRVRFP tests the COMPLEX*16 LAPACK RFP routines:
+*>     ZTFSM, ZTFTRI, ZHFRK, ZTFTTP, ZTFTTR, ZPFTRF, ZPFTRS, ZTPTTF,
+*>     ZTPTTR, ZTRTTF, and ZTRTTP
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  NUNIT   (input) INTEGER
-*          The unit number for output.
+*> \param[in] NUNIT
+*> \verbatim
+*>          NUNIT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
+      SUBROUTINE ZERRRFP( NUNIT )
+*
+*  -- LAPACK test routine (version 3.2.0) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      INTEGER            NUNIT
+*     ..
 *
 *  =====================================================================
 *

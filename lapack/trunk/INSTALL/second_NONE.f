@@ -1,16 +1,47 @@
-      REAL FUNCTION SECOND( )
+*> \brief \b SECOND returns nothing
 *
-*  -- LAPACK auxiliary routine (version 3.2) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     February 2007
+*  =========== DOCUMENTATION ===========
 *
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*      REAL FUNCTION SECOND( )
+*  
 *  Purpose
 *  =======
 *
-*  SECOND returns nothing instead of returning the user time for a process in seconds.
-*  If you are using that routine, it means that neither EXTERNAL ETIME,
-*  EXTERNAL ETIME_, INTERNAL ETIME, INTERNAL CPU_TIME is available  on
-*  your machine.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>  SECOND returns nothing instead of returning the user time for a process in seconds.
+*>  If you are using that routine, it means that neither EXTERNAL ETIME,
+*>  EXTERNAL ETIME_, INTERNAL ETIME, INTERNAL CPU_TIME is available  on
+*>  your machine.
+*>
+*>\endverbatim
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
+      REAL FUNCTION SECOND( )
+*
+*  -- LAPACK auxiliary routine (version 3.2) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 * =====================================================================
 *

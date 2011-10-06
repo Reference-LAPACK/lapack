@@ -1,28 +1,70 @@
+*> \brief \b SGET06
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION SGET06( RCOND, RCONDC )
+* 
+*       .. Scalar Arguments ..
+*       REAL               RCOND, RCONDC
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET06 computes a test ratio to compare two values for RCOND.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The estimate of the reciprocal of the condition number of A,
+*>          as computed by SGECON.
+*> \endverbatim
+*>
+*> \param[in] RCONDC
+*> \verbatim
+*>          RCONDC is REAL
+*>          The reciprocal of the condition number of A, computed as
+*>          ( 1/norm(A) ) / norm(inv(A)).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       REAL             FUNCTION SGET06( RCOND, RCONDC )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       REAL               RCOND, RCONDC
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET06 computes a test ratio to compare two values for RCOND.
-*
-*  Arguments
-*  ==========
-*
-*  RCOND   (input) REAL
-*          The estimate of the reciprocal of the condition number of A,
-*          as computed by SGECON.
-*
-*  RCONDC  (input) REAL
-*          The reciprocal of the condition number of A, computed as
-*          ( 1/norm(A) ) / norm(inv(A)).
 *
 *  =====================================================================
 *

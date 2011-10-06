@@ -1,9 +1,125 @@
+*> \brief \b ZLARGV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLARGV( N, X, INCX, Y, INCY, C, INCC )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INCC, INCX, INCY, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   C( * )
+*       COMPLEX*16         X( * ), Y( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLARGV generates a vector of complex plane rotations with real
+*> cosines, determined by elements of the complex vectors x and y.
+*> For i = 1,2,...,n
+*>
+*>    (        c(i)   s(i) ) ( x(i) ) = ( r(i) )
+*>    ( -conjg(s(i))  c(i) ) ( y(i) ) = (   0  )
+*>
+*>    where c(i)**2 + ABS(s(i))**2 = 1
+*>
+*> The following conventions are used (these are the same as in ZLARTG,
+*> but differ from the BLAS1 routine ZROTG):
+*>    If y(i)=0, then c(i)=1 and s(i)=0.
+*>    If x(i)=0, then c(i)=0 and s(i) is chosen so that r(i) is real.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of plane rotations to be generated.
+*> \endverbatim
+*>
+*> \param[in,out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (1+(N-1)*INCX)
+*>          On entry, the vector x.
+*>          On exit, x(i) is overwritten by r(i), for i = 1,...,n.
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>          The increment between elements of X. INCX > 0.
+*> \endverbatim
+*>
+*> \param[in,out] Y
+*> \verbatim
+*>          Y is COMPLEX*16 array, dimension (1+(N-1)*INCY)
+*>          On entry, the vector y.
+*>          On exit, the sines of the plane rotations.
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>          The increment between elements of Y. INCY > 0.
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is DOUBLE PRECISION array, dimension (1+(N-1)*INCC)
+*>          The cosines of the plane rotations.
+*> \endverbatim
+*>
+*> \param[in] INCC
+*> \verbatim
+*>          INCC is INTEGER
+*>          The increment between elements of C. INCC > 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  6-6-96 - Modified with a new algorithm by W. Kahan and J. Demmel
+*>
+*>  This version has a few statements commented out for thread safety
+*>  (machine parameters are computed on each entry). 10 feb 03, SJH.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZLARGV( N, X, INCX, Y, INCY, C, INCC )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INCC, INCX, INCY, N
@@ -12,57 +128,6 @@
       DOUBLE PRECISION   C( * )
       COMPLEX*16         X( * ), Y( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLARGV generates a vector of complex plane rotations with real
-*  cosines, determined by elements of the complex vectors x and y.
-*  For i = 1,2,...,n
-*
-*     (        c(i)   s(i) ) ( x(i) ) = ( r(i) )
-*     ( -conjg(s(i))  c(i) ) ( y(i) ) = (   0  )
-*
-*     where c(i)**2 + ABS(s(i))**2 = 1
-*
-*  The following conventions are used (these are the same as in ZLARTG,
-*  but differ from the BLAS1 routine ZROTG):
-*     If y(i)=0, then c(i)=1 and s(i)=0.
-*     If x(i)=0, then c(i)=0 and s(i) is chosen so that r(i) is real.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The number of plane rotations to be generated.
-*
-*  X       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCX)
-*          On entry, the vector x.
-*          On exit, x(i) is overwritten by r(i), for i = 1,...,n.
-*
-*  INCX    (input) INTEGER
-*          The increment between elements of X. INCX > 0.
-*
-*  Y       (input/output) COMPLEX*16 array, dimension (1+(N-1)*INCY)
-*          On entry, the vector y.
-*          On exit, the sines of the plane rotations.
-*
-*  INCY    (input) INTEGER
-*          The increment between elements of Y. INCY > 0.
-*
-*  C       (output) DOUBLE PRECISION array, dimension (1+(N-1)*INCC)
-*          The cosines of the plane rotations.
-*
-*  INCC    (input) INTEGER
-*          The increment between elements of C. INCC > 0.
-*
-*  Further Details
-*  ===============
-*
-*  6-6-96 - Modified with a new algorithm by W. Kahan and J. Demmel
-*
-*  This version has a few statements commented out for thread safety
-*  (machine parameters are computed on each entry). 10 feb 03, SJH.
 *
 *  =====================================================================
 *

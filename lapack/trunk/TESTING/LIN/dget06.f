@@ -1,28 +1,70 @@
+*> \brief \b DGET06
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION DGET06( RCOND, RCONDC )
+* 
+*       .. Scalar Arguments ..
+*       DOUBLE PRECISION   RCOND, RCONDC
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGET06 computes a test ratio to compare two values for RCOND.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is DOUBLE PRECISION
+*>          The estimate of the reciprocal of the condition number of A,
+*>          as computed by DGECON.
+*> \endverbatim
+*>
+*> \param[in] RCONDC
+*> \verbatim
+*>          RCONDC is DOUBLE PRECISION
+*>          The reciprocal of the condition number of A, computed as
+*>          ( 1/norm(A) ) / norm(inv(A)).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_lin
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION DGET06( RCOND, RCONDC )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   RCOND, RCONDC
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGET06 computes a test ratio to compare two values for RCOND.
-*
-*  Arguments
-*  ==========
-*
-*  RCOND   (input) DOUBLE PRECISION
-*          The estimate of the reciprocal of the condition number of A,
-*          as computed by DGECON.
-*
-*  RCONDC  (input) DOUBLE PRECISION
-*          The reciprocal of the condition number of A, computed as
-*          ( 1/norm(A) ) / norm(inv(A)).
 *
 *  =====================================================================
 *

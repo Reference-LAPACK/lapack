@@ -1,8 +1,112 @@
+*> \brief \b DSTECH
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DSTECH( N, A, B, EIG, TOL, WORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, N
+*       DOUBLE PRECISION   TOL
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( * ), B( * ), EIG( * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    Let T be the tridiagonal matrix with diagonal entries A(1) ,...,
+*>    A(N) and offdiagonal entries B(1) ,..., B(N-1)).  DSTECH checks to
+*>    see if EIG(1) ,..., EIG(N) are indeed accurate eigenvalues of T.
+*>    It does this by expanding each EIG(I) into an interval
+*>    [SVD(I) - EPS, SVD(I) + EPS], merging overlapping intervals if
+*>    any, and using Sturm sequences to count and verify whether each
+*>    resulting interval has the correct number of eigenvalues (using
+*>    DSTECT).  Here EPS = TOL*MAZHEPS*MAXEIG, where MACHEPS is the
+*>    machine precision and MAXEIG is the absolute value of the largest
+*>    eigenvalue. If each interval contains the correct number of
+*>    eigenvalues, INFO = 0 is returned, otherwise INFO is the index of
+*>    the first eigenvalue in the first bad interval.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The dimension of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (N)
+*>          The diagonal entries of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (N-1)
+*>          The offdiagonal entries of the tridiagonal matrix T.
+*> \endverbatim
+*>
+*> \param[in] EIG
+*> \verbatim
+*>          EIG is DOUBLE PRECISION array, dimension (N)
+*>          The purported eigenvalues to be checked.
+*> \endverbatim
+*>
+*> \param[in] TOL
+*> \verbatim
+*>          TOL is DOUBLE PRECISION
+*>          Error tolerance for checking, a multiple of the
+*>          machine precision.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          0  if the eigenvalues are all correct (to within
+*>             1 +- TOL*MAZHEPS*MAXEIG)
+*>          >0 if the interval containing the INFO-th eigenvalue
+*>             contains the incorrect number of eigenvalues.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DSTECH( N, A, B, EIG, TOL, WORK, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, N
@@ -11,49 +115,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( * ), B( * ), EIG( * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     Let T be the tridiagonal matrix with diagonal entries A(1) ,...,
-*     A(N) and offdiagonal entries B(1) ,..., B(N-1)).  DSTECH checks to
-*     see if EIG(1) ,..., EIG(N) are indeed accurate eigenvalues of T.
-*     It does this by expanding each EIG(I) into an interval
-*     [SVD(I) - EPS, SVD(I) + EPS], merging overlapping intervals if
-*     any, and using Sturm sequences to count and verify whether each
-*     resulting interval has the correct number of eigenvalues (using
-*     DSTECT).  Here EPS = TOL*MAZHEPS*MAXEIG, where MACHEPS is the
-*     machine precision and MAXEIG is the absolute value of the largest
-*     eigenvalue. If each interval contains the correct number of
-*     eigenvalues, INFO = 0 is returned, otherwise INFO is the index of
-*     the first eigenvalue in the first bad interval.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The dimension of the tridiagonal matrix T.
-*
-*  A       (input) DOUBLE PRECISION array, dimension (N)
-*          The diagonal entries of the tridiagonal matrix T.
-*
-*  B       (input) DOUBLE PRECISION array, dimension (N-1)
-*          The offdiagonal entries of the tridiagonal matrix T.
-*
-*  EIG     (input) DOUBLE PRECISION array, dimension (N)
-*          The purported eigenvalues to be checked.
-*
-*  TOL     (input) DOUBLE PRECISION
-*          Error tolerance for checking, a multiple of the
-*          machine precision.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (N)
-*
-*  INFO    (output) INTEGER
-*          0  if the eigenvalues are all correct (to within
-*             1 +- TOL*MAZHEPS*MAXEIG)
-*          >0 if the interval containing the INFO-th eigenvalue
-*             contains the incorrect number of eigenvalues.
 *
 *  =====================================================================
 *

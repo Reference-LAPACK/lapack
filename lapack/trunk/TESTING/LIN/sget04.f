@@ -1,8 +1,113 @@
+*> \brief \b SGET04
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            LDX, LDXACT, N, NRHS
+*       REAL               RCOND, RESID
+*       ..
+*       .. Array Arguments ..
+*       REAL               X( LDX, * ), XACT( LDXACT, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SGET04 computes the difference between a computed solution and the
+*> true solution to a system of linear equations.
+*>
+*> RESID =  ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
+*> where RCOND is the reciprocal of the condition number and EPS is the
+*> machine epsilon.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of rows of the matrices X and XACT.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of columns of the matrices X and XACT.  NRHS >= 0.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is REAL array, dimension (LDX,NRHS)
+*>          The computed solution vectors.  Each vector is stored as a
+*>          column of the matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.  LDX >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] XACT
+*> \verbatim
+*>          XACT is REAL array, dimension( LDX, NRHS )
+*>          The exact solution vectors.  Each vector is stored as a
+*>          column of the matrix XACT.
+*> \endverbatim
+*>
+*> \param[in] LDXACT
+*> \verbatim
+*>          LDXACT is INTEGER
+*>          The leading dimension of the array XACT.  LDXACT >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          The reciprocal of the condition number of the coefficient
+*>          matrix in the system of equations.
+*> \endverbatim
+*>
+*> \param[out] RESID
+*> \verbatim
+*>          RESID is REAL
+*>          The maximum over the NRHS solution vectors of
+*>          ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS )
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_lin
+*
+*  =====================================================================
       SUBROUTINE SGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            LDX, LDXACT, N, NRHS
@@ -11,47 +116,6 @@
 *     .. Array Arguments ..
       REAL               X( LDX, * ), XACT( LDXACT, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SGET04 computes the difference between a computed solution and the
-*  true solution to a system of linear equations.
-*
-*  RESID =  ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
-*  where RCOND is the reciprocal of the condition number and EPS is the
-*  machine epsilon.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The number of rows of the matrices X and XACT.  N >= 0.
-*
-*  NRHS    (input) INTEGER
-*          The number of columns of the matrices X and XACT.  NRHS >= 0.
-*
-*  X       (input) REAL array, dimension (LDX,NRHS)
-*          The computed solution vectors.  Each vector is stored as a
-*          column of the matrix X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.  LDX >= max(1,N).
-*
-*  XACT    (input) REAL array, dimension( LDX, NRHS )
-*          The exact solution vectors.  Each vector is stored as a
-*          column of the matrix XACT.
-*
-*  LDXACT  (input) INTEGER
-*          The leading dimension of the array XACT.  LDXACT >= max(1,N).
-*
-*  RCOND   (input) REAL
-*          The reciprocal of the condition number of the coefficient
-*          matrix in the system of equations.
-*
-*  RESID   (output) REAL
-*          The maximum over the NRHS solution vectors of
-*          ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS )
 *
 *  =====================================================================
 *

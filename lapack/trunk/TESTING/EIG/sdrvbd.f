@@ -1,10 +1,330 @@
+*> \brief \b SDRVBD
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SDRVBD( NSIZES, MM, NN, NTYPES, DOTYPE, ISEED, THRESH,
+*                          A, LDA, U, LDU, VT, LDVT, ASAV, USAV, VTSAV, S,
+*                          SSAV, E, WORK, LWORK, IWORK, NOUT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, LDU, LDVT, LWORK, NOUT, NSIZES,
+*      $                   NTYPES
+*       REAL               THRESH
+*       ..
+*       .. Array Arguments ..
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            ISEED( 4 ), IWORK( * ), MM( * ), NN( * )
+*       REAL               A( LDA, * ), ASAV( LDA, * ), E( * ), S( * ),
+*      $                   SSAV( * ), U( LDU, * ), USAV( LDU, * ),
+*      $                   VT( LDVT, * ), VTSAV( LDVT, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SDRVBD checks the singular value decomposition (SVD) drivers
+*> SGESVD, SGESDD, SGESVJ, and SGEJSV.
+*>
+*> Both SGESVD and SGESDD factor A = U diag(S) VT, where U and VT are
+*> orthogonal and diag(S) is diagonal with the entries of the array S
+*> on its diagonal. The entries of S are the singular values,
+*> nonnegative and stored in decreasing order.  U and VT can be
+*> optionally not computed, overwritten on A, or computed partially.
+*>
+*> A is M by N. Let MNMIN = min( M, N ). S has dimension MNMIN.
+*> U can be M by M or M by MNMIN. VT can be N by N or MNMIN by N.
+*>
+*> When SDRVBD is called, a number of matrix "sizes" (M's and N's)
+*> and a number of matrix "types" are specified.  For each size (M,N)
+*> and each type of matrix, and for the minimal workspace as well as
+*> workspace adequate to permit blocking, an  M x N  matrix "A" will be
+*> generated and used to test the SVD routines.  For each matrix, A will
+*> be factored as A = U diag(S) VT and the following 12 tests computed:
+*>
+*> Test for SGESVD:
+*>
+*> (1)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*>
+*> (2)    | I - U'U | / ( M ulp )
+*>
+*> (3)    | I - VT VT' | / ( N ulp )
+*>
+*> (4)    S contains MNMIN nonnegative values in decreasing order.
+*>        (Return 0 if true, 1/ULP if false.)
+*>
+*> (5)    | U - Upartial | / ( M ulp ) where Upartial is a partially
+*>        computed U.
+*>
+*> (6)    | VT - VTpartial | / ( N ulp ) where VTpartial is a partially
+*>        computed VT.
+*>
+*> (7)    | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
+*>        vector of singular values from the partial SVD
+*>
+*> Test for SGESDD:
+*>
+*> (8)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*>
+*> (9)    | I - U'U | / ( M ulp )
+*>
+*> (10)   | I - VT VT' | / ( N ulp )
+*>
+*> (11)   S contains MNMIN nonnegative values in decreasing order.
+*>        (Return 0 if true, 1/ULP if false.)
+*>
+*> (12)   | U - Upartial | / ( M ulp ) where Upartial is a partially
+*>        computed U.
+*>
+*> (13)   | VT - VTpartial | / ( N ulp ) where VTpartial is a partially
+*>        computed VT.
+*>
+*> (14)   | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
+*>        vector of singular values from the partial SVD
+*>
+*> Test for SGESVJ:
+*>
+*> (15)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*>
+*> (16)    | I - U'U | / ( M ulp )
+*>
+*> (17)   | I - VT VT' | / ( N ulp )
+*>
+*> (18)   S contains MNMIN nonnegative values in decreasing order.
+*>        (Return 0 if true, 1/ULP if false.)
+*>
+*> Test for SGEJSV:
+*>
+*> (19)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*>
+*> (20)    | I - U'U | / ( M ulp )
+*>
+*> (21)   | I - VT VT' | / ( N ulp )
+*>
+*> (22)   S contains MNMIN nonnegative values in decreasing order.
+*>        (Return 0 if true, 1/ULP if false.)
+*>
+*> The "sizes" are specified by the arrays MM(1:NSIZES) and
+*> NN(1:NSIZES); the value of each element pair (MM(j),NN(j))
+*> specifies one size.  The "types" are specified by a logical array
+*> DOTYPE( 1:NTYPES ); if DOTYPE(j) is .TRUE., then matrix type "j"
+*> will be generated.
+*> Currently, the list of possible types is:
+*>
+*> (1)  The zero matrix.
+*> (2)  The identity matrix.
+*> (3)  A matrix of the form  U D V, where U and V are orthogonal and
+*>      D has evenly spaced entries 1, ..., ULP with random signs
+*>      on the diagonal.
+*> (4)  Same as (3), but multiplied by the underflow-threshold / ULP.
+*> (5)  Same as (3), but multiplied by the overflow-threshold * ULP.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NSIZES
+*> \verbatim
+*>          NSIZES is INTEGER
+*>          The number of matrix sizes (M,N) contained in the vectors
+*>          MM and NN.
+*> \endverbatim
+*>
+*> \param[in] MM
+*> \verbatim
+*>          MM is INTEGER array, dimension (NSIZES)
+*>          The values of the matrix row dimension M.
+*> \endverbatim
+*>
+*> \param[in] NN
+*> \verbatim
+*>          NN is INTEGER array, dimension (NSIZES)
+*>          The values of the matrix column dimension N.
+*> \endverbatim
+*>
+*> \param[in] NTYPES
+*> \verbatim
+*>          NTYPES is INTEGER
+*>          The number of elements in DOTYPE.   If it is zero, SDRVBD
+*>          does nothing.  It must be at least zero.  If it is MAXTYP+1
+*>          and NSIZES is 1, then an additional type, MAXTYP+1 is
+*>          defined, which is to use whatever matrices are in A and B.
+*>          This is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
+*>          DOTYPE(MAXTYP+1) is .TRUE. .
+*> \endverbatim
+*>
+*> \param[in] DOTYPE
+*> \verbatim
+*>          DOTYPE is LOGICAL array, dimension (NTYPES)
+*>          If DOTYPE(j) is .TRUE., then for each size (m,n), a matrix
+*>          of type j will be generated.  If NTYPES is smaller than the
+*>          maximum number of types defined (PARAMETER MAXTYP), then
+*>          types NTYPES+1 through MAXTYP will not be generated.  If
+*>          NTYPES is larger than MAXTYP, DOTYPE(MAXTYP+1) through
+*>          DOTYPE(NTYPES) will be ignored.
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed of the random number generator.  The array
+*>          elements should be between 0 and 4095; if not they will be
+*>          reduced mod 4096.  Also, ISEED(4) must be odd.
+*>          On exit, ISEED is changed and can be used in the next call to
+*>          SDRVBD to continue the same random number sequence.
+*> \endverbatim
+*>
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          The threshold value for the test ratios.  A result is
+*>          included in the output file if RESULT >= THRESH.  The test
+*>          ratios are scaled to be O(1), so THRESH should be a small
+*>          multiple of 1, e.g., 10 or 100.  To have every test ratio
+*>          printed, use THRESH = 0.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,NMAX)
+*>          where NMAX is the maximum value of N in NN.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,MMAX),
+*>          where MMAX is the maximum value of M in MM.
+*> \endverbatim
+*>
+*> \param[out] U
+*> \verbatim
+*>          U is REAL array, dimension (LDU,MMAX)
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of the array U.  LDU >= max(1,MMAX).
+*> \endverbatim
+*>
+*> \param[out] VT
+*> \verbatim
+*>          VT is REAL array, dimension (LDVT,NMAX)
+*> \endverbatim
+*>
+*> \param[in] LDVT
+*> \verbatim
+*>          LDVT is INTEGER
+*>          The leading dimension of the array VT.  LDVT >= max(1,NMAX).
+*> \endverbatim
+*>
+*> \param[out] ASAV
+*> \verbatim
+*>          ASAV is REAL array, dimension (LDA,NMAX)
+*> \endverbatim
+*>
+*> \param[out] USAV
+*> \verbatim
+*>          USAV is REAL array, dimension (LDU,MMAX)
+*> \endverbatim
+*>
+*> \param[out] VTSAV
+*> \verbatim
+*>          VTSAV is REAL array, dimension (LDVT,NMAX)
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is REAL array, dimension
+*>                      (max(min(MM,NN)))
+*> \endverbatim
+*>
+*> \param[out] SSAV
+*> \verbatim
+*>          SSAV is REAL array, dimension
+*>                      (max(min(MM,NN)))
+*> \endverbatim
+*>
+*> \param[out] E
+*> \verbatim
+*>          E is REAL array, dimension
+*>                      (max(min(MM,NN)))
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The number of entries in WORK.  This must be at least
+*>          max(3*MN+MX,5*MN-4)+2*MN**2 for all pairs
+*>          pairs  (MN,MX)=( min(MM(j),NN(j), max(MM(j),NN(j)) )
+*> \endverbatim
+*>
+*> \param[out] IWORK
+*> \verbatim
+*>          IWORK is INTEGER array, dimension at least 8*min(M,N)
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          If 0, then everything ran OK.
+*>           -1: NSIZES < 0
+*>           -2: Some MM(j) < 0
+*>           -3: Some NN(j) < 0
+*>           -4: NTYPES < 0
+*>           -7: THRESH < 0
+*>          -10: LDA < 1 or LDA < MMAX, where MMAX is max( MM(j) ).
+*>          -12: LDU < 1 or LDU < MMAX.
+*>          -14: LDVT < 1 or LDVT < NMAX, where NMAX is max( NN(j) ).
+*>          -21: LWORK too small.
+*>          If  SLATMS, or SGESVD returns an error code, the
+*>              absolute value of it is returned.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SDRVBD( NSIZES, MM, NN, NTYPES, DOTYPE, ISEED, THRESH,
      $                   A, LDA, U, LDU, VT, LDVT, ASAV, USAV, VTSAV, S,
      $                   SSAV, E, WORK, LWORK, IWORK, NOUT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LDVT, LWORK, NOUT, NSIZES,
@@ -18,207 +338,6 @@
      $                   SSAV( * ), U( LDU, * ), USAV( LDU, * ),
      $                   VT( LDVT, * ), VTSAV( LDVT, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SDRVBD checks the singular value decomposition (SVD) drivers
-*  SGESVD, SGESDD, SGESVJ, and SGEJSV.
-*
-*  Both SGESVD and SGESDD factor A = U diag(S) VT, where U and VT are
-*  orthogonal and diag(S) is diagonal with the entries of the array S
-*  on its diagonal. The entries of S are the singular values,
-*  nonnegative and stored in decreasing order.  U and VT can be
-*  optionally not computed, overwritten on A, or computed partially.
-*
-*  A is M by N. Let MNMIN = min( M, N ). S has dimension MNMIN.
-*  U can be M by M or M by MNMIN. VT can be N by N or MNMIN by N.
-*
-*  When SDRVBD is called, a number of matrix "sizes" (M's and N's)
-*  and a number of matrix "types" are specified.  For each size (M,N)
-*  and each type of matrix, and for the minimal workspace as well as
-*  workspace adequate to permit blocking, an  M x N  matrix "A" will be
-*  generated and used to test the SVD routines.  For each matrix, A will
-*  be factored as A = U diag(S) VT and the following 12 tests computed:
-*
-*  Test for SGESVD:
-*
-*  (1)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
-*
-*  (2)    | I - U'U | / ( M ulp )
-*
-*  (3)    | I - VT VT' | / ( N ulp )
-*
-*  (4)    S contains MNMIN nonnegative values in decreasing order.
-*         (Return 0 if true, 1/ULP if false.)
-*
-*  (5)    | U - Upartial | / ( M ulp ) where Upartial is a partially
-*         computed U.
-*
-*  (6)    | VT - VTpartial | / ( N ulp ) where VTpartial is a partially
-*         computed VT.
-*
-*  (7)    | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
-*         vector of singular values from the partial SVD
-*
-*  Test for SGESDD:
-*
-*  (8)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
-*
-*  (9)    | I - U'U | / ( M ulp )
-*
-*  (10)   | I - VT VT' | / ( N ulp )
-*
-*  (11)   S contains MNMIN nonnegative values in decreasing order.
-*         (Return 0 if true, 1/ULP if false.)
-*
-*  (12)   | U - Upartial | / ( M ulp ) where Upartial is a partially
-*         computed U.
-*
-*  (13)   | VT - VTpartial | / ( N ulp ) where VTpartial is a partially
-*         computed VT.
-*
-*  (14)   | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
-*         vector of singular values from the partial SVD
-*
-*  Test for SGESVJ:
-*
-*  (15)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
-*
-*  (16)    | I - U'U | / ( M ulp )
-*
-*  (17)   | I - VT VT' | / ( N ulp )
-*
-*  (18)   S contains MNMIN nonnegative values in decreasing order.
-*         (Return 0 if true, 1/ULP if false.)
-*
-*  Test for SGEJSV:
-*
-*  (19)    | A - U diag(S) VT | / ( |A| max(M,N) ulp )
-*
-*  (20)    | I - U'U | / ( M ulp )
-*
-*  (21)   | I - VT VT' | / ( N ulp )
-*
-*  (22)   S contains MNMIN nonnegative values in decreasing order.
-*         (Return 0 if true, 1/ULP if false.)
-*
-*  The "sizes" are specified by the arrays MM(1:NSIZES) and
-*  NN(1:NSIZES); the value of each element pair (MM(j),NN(j))
-*  specifies one size.  The "types" are specified by a logical array
-*  DOTYPE( 1:NTYPES ); if DOTYPE(j) is .TRUE., then matrix type "j"
-*  will be generated.
-*  Currently, the list of possible types is:
-*
-*  (1)  The zero matrix.
-*  (2)  The identity matrix.
-*  (3)  A matrix of the form  U D V, where U and V are orthogonal and
-*       D has evenly spaced entries 1, ..., ULP with random signs
-*       on the diagonal.
-*  (4)  Same as (3), but multiplied by the underflow-threshold / ULP.
-*  (5)  Same as (3), but multiplied by the overflow-threshold * ULP.
-*
-*  Arguments
-*  ==========
-*
-*  NSIZES  (input) INTEGER
-*          The number of matrix sizes (M,N) contained in the vectors
-*          MM and NN.
-*
-*  MM      (input) INTEGER array, dimension (NSIZES)
-*          The values of the matrix row dimension M.
-*
-*  NN      (input) INTEGER array, dimension (NSIZES)
-*          The values of the matrix column dimension N.
-*
-*  NTYPES  (input) INTEGER
-*          The number of elements in DOTYPE.   If it is zero, SDRVBD
-*          does nothing.  It must be at least zero.  If it is MAXTYP+1
-*          and NSIZES is 1, then an additional type, MAXTYP+1 is
-*          defined, which is to use whatever matrices are in A and B.
-*          This is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
-*          DOTYPE(MAXTYP+1) is .TRUE. .
-*
-*  DOTYPE  (input) LOGICAL array, dimension (NTYPES)
-*          If DOTYPE(j) is .TRUE., then for each size (m,n), a matrix
-*          of type j will be generated.  If NTYPES is smaller than the
-*          maximum number of types defined (PARAMETER MAXTYP), then
-*          types NTYPES+1 through MAXTYP will not be generated.  If
-*          NTYPES is larger than MAXTYP, DOTYPE(MAXTYP+1) through
-*          DOTYPE(NTYPES) will be ignored.
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed of the random number generator.  The array
-*          elements should be between 0 and 4095; if not they will be
-*          reduced mod 4096.  Also, ISEED(4) must be odd.
-*          On exit, ISEED is changed and can be used in the next call to
-*          SDRVBD to continue the same random number sequence.
-*
-*  THRESH  (input) REAL
-*          The threshold value for the test ratios.  A result is
-*          included in the output file if RESULT >= THRESH.  The test
-*          ratios are scaled to be O(1), so THRESH should be a small
-*          multiple of 1, e.g., 10 or 100.  To have every test ratio
-*          printed, use THRESH = 0.
-*
-*  A       (workspace) REAL array, dimension (LDA,NMAX)
-*          where NMAX is the maximum value of N in NN.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,MMAX),
-*          where MMAX is the maximum value of M in MM.
-*
-*  U       (workspace) REAL array, dimension (LDU,MMAX)
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of the array U.  LDU >= max(1,MMAX).
-*
-*  VT      (workspace) REAL array, dimension (LDVT,NMAX)
-*
-*  LDVT    (input) INTEGER
-*          The leading dimension of the array VT.  LDVT >= max(1,NMAX).
-*
-*  ASAV    (workspace) REAL array, dimension (LDA,NMAX)
-*
-*  USAV    (workspace) REAL array, dimension (LDU,MMAX)
-*
-*  VTSAV   (workspace) REAL array, dimension (LDVT,NMAX)
-*
-*  S       (workspace) REAL array, dimension
-*                      (max(min(MM,NN)))
-*
-*  SSAV    (workspace) REAL array, dimension
-*                      (max(min(MM,NN)))
-*
-*  E       (workspace) REAL array, dimension
-*                      (max(min(MM,NN)))
-*
-*  WORK    (workspace) REAL array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The number of entries in WORK.  This must be at least
-*          max(3*MN+MX,5*MN-4)+2*MN**2 for all pairs
-*          pairs  (MN,MX)=( min(MM(j),NN(j), max(MM(j),NN(j)) )
-*
-*  IWORK   (workspace) INTEGER array, dimension at least 8*min(M,N)
-*
-*  NOUT    (input) INTEGER
-*          The FORTRAN unit number for printing out error messages
-*          (e.g., if a routine returns IINFO not equal to 0.)
-*
-*  INFO    (output) INTEGER
-*          If 0, then everything ran OK.
-*           -1: NSIZES < 0
-*           -2: Some MM(j) < 0
-*           -3: Some NN(j) < 0
-*           -4: NTYPES < 0
-*           -7: THRESH < 0
-*          -10: LDA < 1 or LDA < MMAX, where MMAX is max( MM(j) ).
-*          -12: LDU < 1 or LDU < MMAX.
-*          -14: LDVT < 1 or LDVT < NMAX, where NMAX is max( NN(j) ).
-*          -21: LWORK too small.
-*          If  SLATMS, or SGESVD returns an error code, the
-*              absolute value of it is returned.
 *
 *  =====================================================================
 *

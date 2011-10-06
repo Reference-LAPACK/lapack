@@ -1,12 +1,157 @@
+*> \brief \b SSGT01
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
+*                          WORK, RESULT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          UPLO
+*       INTEGER            ITYPE, LDA, LDB, LDZ, M, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               A( LDA, * ), B( LDB, * ), D( * ), RESULT( * ),
+*      $                   WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SSGT01 checks a decomposition of the form
+*>
+*>    A Z   =  B Z D or
+*>    A B Z =  Z D or
+*>    B A Z =  Z D
+*>
+*> where A is a symmetric matrix, B is
+*> symmetric positive definite, Z is orthogonal, and D is diagonal.
+*>
+*> One of the following test ratios is computed:
+*>
+*> ITYPE = 1:  RESULT(1) = | A Z - B Z D | / ( |A| |Z| n ulp )
+*>
+*> ITYPE = 2:  RESULT(1) = | A B Z - Z D | / ( |A| |Z| n ulp )
+*>
+*> ITYPE = 3:  RESULT(1) = | B A Z - Z D | / ( |A| |Z| n ulp )
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ITYPE
+*> \verbatim
+*>          ITYPE is INTEGER
+*>          The form of the symmetric generalized eigenproblem.
+*>          = 1:  A*z = (lambda)*B*z
+*>          = 2:  A*B*z = (lambda)*z
+*>          = 3:  B*A*z = (lambda)*z
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          symmetric matrices A and B is stored.
+*>          = 'U':  Upper triangular
+*>          = 'L':  Lower triangular
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of eigenvalues found.  0 <= M <= N.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA, N)
+*>          The original symmetric matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] B
+*> \verbatim
+*>          B is REAL array, dimension (LDB, N)
+*>          The original symmetric positive definite matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is REAL array, dimension (LDZ, M)
+*>          The computed eigenvectors of the generalized eigenproblem.
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is REAL array, dimension (M)
+*>          The computed eigenvalues of the generalized eigenproblem.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (N*N)
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (1)
+*>          The test ratio as described above.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SSGT01( ITYPE, UPLO, N, M, A, LDA, B, LDB, Z, LDZ, D,
      $                   WORK, RESULT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
-*
-*     modified August 1997, a new parameter M is added to the calling
-*     sequence.
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
@@ -16,73 +161,6 @@
       REAL               A( LDA, * ), B( LDB, * ), D( * ), RESULT( * ),
      $                   WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SSGT01 checks a decomposition of the form
-*
-*     A Z   =  B Z D or
-*     A B Z =  Z D or
-*     B A Z =  Z D
-*
-*  where A is a symmetric matrix, B is
-*  symmetric positive definite, Z is orthogonal, and D is diagonal.
-*
-*  One of the following test ratios is computed:
-*
-*  ITYPE = 1:  RESULT(1) = | A Z - B Z D | / ( |A| |Z| n ulp )
-*
-*  ITYPE = 2:  RESULT(1) = | A B Z - Z D | / ( |A| |Z| n ulp )
-*
-*  ITYPE = 3:  RESULT(1) = | B A Z - Z D | / ( |A| |Z| n ulp )
-*
-*  Arguments
-*  =========
-*
-*  ITYPE   (input) INTEGER
-*          The form of the symmetric generalized eigenproblem.
-*          = 1:  A*z = (lambda)*B*z
-*          = 2:  A*B*z = (lambda)*z
-*          = 3:  B*A*z = (lambda)*z
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          symmetric matrices A and B is stored.
-*          = 'U':  Upper triangular
-*          = 'L':  Lower triangular
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  M       (input) INTEGER
-*          The number of eigenvalues found.  0 <= M <= N.
-*
-*  A       (input) REAL array, dimension (LDA, N)
-*          The original symmetric matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  B       (input) REAL array, dimension (LDB, N)
-*          The original symmetric positive definite matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B.  LDB >= max(1,N).
-*
-*  Z       (input) REAL array, dimension (LDZ, M)
-*          The computed eigenvectors of the generalized eigenproblem.
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDZ >= max(1,N).
-*
-*  D       (input) REAL array, dimension (M)
-*          The computed eigenvalues of the generalized eigenproblem.
-*
-*  WORK    (workspace) REAL array, dimension (N*N)
-*
-*  RESULT  (output) REAL array, dimension (1)
-*          The test ratio as described above.
 *
 *  =====================================================================
 *

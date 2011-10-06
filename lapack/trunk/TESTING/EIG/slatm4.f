@@ -1,9 +1,188 @@
+*> \brief \b SLATM4
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLATM4( ITYPE, N, NZ1, NZ2, ISIGN, AMAGN, RCOND,
+*                          TRIANG, IDIST, ISEED, A, LDA )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            IDIST, ISIGN, ITYPE, LDA, N, NZ1, NZ2
+*       REAL               AMAGN, RCOND, TRIANG
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       REAL               A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLATM4 generates basic square matrices, which may later be
+*> multiplied by others in order to produce test matrices.  It is
+*> intended mainly to be used to test the generalized eigenvalue
+*> routines.
+*>
+*> It first generates the diagonal and (possibly) subdiagonal,
+*> according to the value of ITYPE, NZ1, NZ2, ISIGN, AMAGN, and RCOND.
+*> It then fills in the upper triangle with random numbers, if TRIANG is
+*> non-zero.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] ITYPE
+*> \verbatim
+*>          ITYPE is INTEGER
+*>          The "type" of matrix on the diagonal and sub-diagonal.
+*>          If ITYPE < 0, then type abs(ITYPE) is generated and then
+*>             swapped end for end (A(I,J) := A'(N-J,N-I).)  See also
+*>             the description of AMAGN and ISIGN.
+*> \endverbatim
+*> \verbatim
+*>          Special types:
+*>          = 0:  the zero matrix.
+*>          = 1:  the identity.
+*>          = 2:  a transposed Jordan block.
+*>          = 3:  If N is odd, then a k+1 x k+1 transposed Jordan block
+*>                followed by a k x k identity block, where k=(N-1)/2.
+*>                If N is even, then k=(N-2)/2, and a zero diagonal entry
+*>                is tacked onto the end.
+*> \endverbatim
+*> \verbatim
+*>          Diagonal types.  The diagonal consists of NZ1 zeros, then
+*>             k=N-NZ1-NZ2 nonzeros.  The subdiagonal is zero.  ITYPE
+*>             specifies the nonzero diagonal entries as follows:
+*>          = 4:  1, ..., k
+*>          = 5:  1, RCOND, ..., RCOND
+*>          = 6:  1, ..., 1, RCOND
+*>          = 7:  1, a, a^2, ..., a^(k-1)=RCOND
+*>          = 8:  1, 1-d, 1-2*d, ..., 1-(k-1)*d=RCOND
+*>          = 9:  random numbers chosen from (RCOND,1)
+*>          = 10: random numbers with distribution IDIST (see SLARND.)
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix.
+*> \endverbatim
+*>
+*> \param[in] NZ1
+*> \verbatim
+*>          NZ1 is INTEGER
+*>          If abs(ITYPE) > 3, then the first NZ1 diagonal entries will
+*>          be zero.
+*> \endverbatim
+*>
+*> \param[in] NZ2
+*> \verbatim
+*>          NZ2 is INTEGER
+*>          If abs(ITYPE) > 3, then the last NZ2 diagonal entries will
+*>          be zero.
+*> \endverbatim
+*>
+*> \param[in] ISIGN
+*> \verbatim
+*>          ISIGN is INTEGER
+*>          = 0: The sign of the diagonal and subdiagonal entries will
+*>               be left unchanged.
+*>          = 1: The diagonal and subdiagonal entries will have their
+*>               sign changed at random.
+*>          = 2: If ITYPE is 2 or 3, then the same as ISIGN=1.
+*>               Otherwise, with probability 0.5, odd-even pairs of
+*>               diagonal entries A(2*j-1,2*j-1), A(2*j,2*j) will be
+*>               converted to a 2x2 block by pre- and post-multiplying
+*>               by distinct random orthogonal rotations.  The remaining
+*>               diagonal entries will have their sign changed at random.
+*> \endverbatim
+*>
+*> \param[in] AMAGN
+*> \verbatim
+*>          AMAGN is REAL
+*>          The diagonal and subdiagonal entries will be multiplied by
+*>          AMAGN.
+*> \endverbatim
+*>
+*> \param[in] RCOND
+*> \verbatim
+*>          RCOND is REAL
+*>          If abs(ITYPE) > 4, then the smallest diagonal entry will be
+*>          entry will be RCOND.  RCOND must be between 0 and 1.
+*> \endverbatim
+*>
+*> \param[in] TRIANG
+*> \verbatim
+*>          TRIANG is REAL
+*>          The entries above the diagonal will be random numbers with
+*>          magnitude bounded by TRIANG (i.e., random numbers multiplied
+*>          by TRIANG.)
+*> \endverbatim
+*>
+*> \param[in] IDIST
+*> \verbatim
+*>          IDIST is INTEGER
+*>          Specifies the type of distribution to be used to generate a
+*>          random matrix.
+*>          = 1:  UNIFORM( 0, 1 )
+*>          = 2:  UNIFORM( -1, 1 )
+*>          = 3:  NORMAL ( 0, 1 )
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry ISEED specifies the seed of the random number
+*>          generator.  The values of ISEED are changed on exit, and can
+*>          be used in the next call to SLATM4 to continue the same
+*>          random number sequence.
+*>          Note: ISEED(4) should be odd, for the random number generator
+*>          used at present.
+*> \endverbatim
+*>
+*> \param[out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA, N)
+*>          Array to be computed.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          Leading dimension of A.  Must be at least 1 and at least N.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SLATM4( ITYPE, N, NZ1, NZ2, ISIGN, AMAGN, RCOND,
      $                   TRIANG, IDIST, ISEED, A, LDA )
 *
-*  -- LAPACK auxiliary test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            IDIST, ISIGN, ITYPE, LDA, N, NZ1, NZ2
@@ -13,105 +192,6 @@
       INTEGER            ISEED( 4 )
       REAL               A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLATM4 generates basic square matrices, which may later be
-*  multiplied by others in order to produce test matrices.  It is
-*  intended mainly to be used to test the generalized eigenvalue
-*  routines.
-*
-*  It first generates the diagonal and (possibly) subdiagonal,
-*  according to the value of ITYPE, NZ1, NZ2, ISIGN, AMAGN, and RCOND.
-*  It then fills in the upper triangle with random numbers, if TRIANG is
-*  non-zero.
-*
-*  Arguments
-*  =========
-*
-*  ITYPE   (input) INTEGER
-*          The "type" of matrix on the diagonal and sub-diagonal.
-*          If ITYPE < 0, then type abs(ITYPE) is generated and then
-*             swapped end for end (A(I,J) := A'(N-J,N-I).)  See also
-*             the description of AMAGN and ISIGN.
-*
-*          Special types:
-*          = 0:  the zero matrix.
-*          = 1:  the identity.
-*          = 2:  a transposed Jordan block.
-*          = 3:  If N is odd, then a k+1 x k+1 transposed Jordan block
-*                followed by a k x k identity block, where k=(N-1)/2.
-*                If N is even, then k=(N-2)/2, and a zero diagonal entry
-*                is tacked onto the end.
-*
-*          Diagonal types.  The diagonal consists of NZ1 zeros, then
-*             k=N-NZ1-NZ2 nonzeros.  The subdiagonal is zero.  ITYPE
-*             specifies the nonzero diagonal entries as follows:
-*          = 4:  1, ..., k
-*          = 5:  1, RCOND, ..., RCOND
-*          = 6:  1, ..., 1, RCOND
-*          = 7:  1, a, a^2, ..., a^(k-1)=RCOND
-*          = 8:  1, 1-d, 1-2*d, ..., 1-(k-1)*d=RCOND
-*          = 9:  random numbers chosen from (RCOND,1)
-*          = 10: random numbers with distribution IDIST (see SLARND.)
-*
-*  N       (input) INTEGER
-*          The order of the matrix.
-*
-*  NZ1     (input) INTEGER
-*          If abs(ITYPE) > 3, then the first NZ1 diagonal entries will
-*          be zero.
-*
-*  NZ2     (input) INTEGER
-*          If abs(ITYPE) > 3, then the last NZ2 diagonal entries will
-*          be zero.
-*
-*  ISIGN   (input) INTEGER
-*          = 0: The sign of the diagonal and subdiagonal entries will
-*               be left unchanged.
-*          = 1: The diagonal and subdiagonal entries will have their
-*               sign changed at random.
-*          = 2: If ITYPE is 2 or 3, then the same as ISIGN=1.
-*               Otherwise, with probability 0.5, odd-even pairs of
-*               diagonal entries A(2*j-1,2*j-1), A(2*j,2*j) will be
-*               converted to a 2x2 block by pre- and post-multiplying
-*               by distinct random orthogonal rotations.  The remaining
-*               diagonal entries will have their sign changed at random.
-*
-*  AMAGN   (input) REAL
-*          The diagonal and subdiagonal entries will be multiplied by
-*          AMAGN.
-*
-*  RCOND   (input) REAL
-*          If abs(ITYPE) > 4, then the smallest diagonal entry will be
-*          entry will be RCOND.  RCOND must be between 0 and 1.
-*
-*  TRIANG  (input) REAL
-*          The entries above the diagonal will be random numbers with
-*          magnitude bounded by TRIANG (i.e., random numbers multiplied
-*          by TRIANG.)
-*
-*  IDIST   (input) INTEGER
-*          Specifies the type of distribution to be used to generate a
-*          random matrix.
-*          = 1:  UNIFORM( 0, 1 )
-*          = 2:  UNIFORM( -1, 1 )
-*          = 3:  NORMAL ( 0, 1 )
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry ISEED specifies the seed of the random number
-*          generator.  The values of ISEED are changed on exit, and can
-*          be used in the next call to SLATM4 to continue the same
-*          random number sequence.
-*          Note: ISEED(4) should be odd, for the random number generator
-*          used at present.
-*
-*  A       (output) REAL array, dimension (LDA, N)
-*          Array to be computed.
-*
-*  LDA     (input) INTEGER
-*          Leading dimension of A.  Must be at least 1 and at least N.
 *
 *  =====================================================================
 *

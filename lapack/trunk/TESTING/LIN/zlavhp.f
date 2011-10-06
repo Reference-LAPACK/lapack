@@ -1,9 +1,151 @@
+*> \brief \b ZLAVHP
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLAVHP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
+*                          INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          DIAG, TRANS, UPLO
+*       INTEGER            INFO, LDB, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * )
+*       COMPLEX*16         A( * ), B( LDB, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*>    ZLAVHP  performs one of the matrix-vector operations
+*>       x := A*x  or  x := A^H*x,
+*>    where x is an N element vector and  A is one of the factors
+*>    from the symmetric factorization computed by ZHPTRF.
+*>    ZHPTRF produces a factorization of the form
+*>         U * D * U^H     or     L * D * L^H,
+*>    where U (or L) is a product of permutation and unit upper (lower)
+*>    triangular matrices, U^H (or L^H) is the conjugate transpose of
+*>    U (or L), and D is Hermitian and block diagonal with 1 x 1 and
+*>    2 x 2 diagonal blocks.  The multipliers for the transformations
+*>    and the upper or lower triangular parts of the diagonal blocks
+*>    are stored columnwise in packed format in the linear array A.
+*>
+*>    If TRANS = 'N' or 'n', ZLAVHP multiplies either by U or U * D
+*>    (or L or L * D).
+*>    If TRANS = 'C' or 'c', ZLAVHP multiplies either by U^H or D * U^H
+*>    (or L^H or D * L^H ).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \verbatim
+*>  UPLO   - CHARACTER*1
+*>           On entry, UPLO specifies whether the triangular matrix
+*>           stored in A is upper or lower triangular.
+*>              UPLO = 'U' or 'u'   The matrix is upper triangular.
+*>              UPLO = 'L' or 'l'   The matrix is lower triangular.
+*>           Unchanged on exit.
+*> \endverbatim
+*> \verbatim
+*>  TRANS  - CHARACTER*1
+*>           On entry, TRANS specifies the operation to be performed as
+*>           follows:
+*>              TRANS = 'N' or 'n'   x := A*x.
+*>              TRANS = 'C' or 'c'   x := A^H*x.
+*>           Unchanged on exit.
+*> \endverbatim
+*> \verbatim
+*>  DIAG   - CHARACTER*1
+*>           On entry, DIAG specifies whether the diagonal blocks are
+*>           assumed to be unit matrices, as follows:
+*>              DIAG = 'U' or 'u'   Diagonal blocks are unit matrices.
+*>              DIAG = 'N' or 'n'   Diagonal blocks are non-unit.
+*>           Unchanged on exit.
+*> \endverbatim
+*> \verbatim
+*>  N      - INTEGER
+*>           On entry, N specifies the order of the matrix A.
+*>           N must be at least zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*> \verbatim
+*>  NRHS   - INTEGER
+*>           On entry, NRHS specifies the number of right hand sides,
+*>           i.e., the number of vectors x to be multiplied by A.
+*>           NRHS must be at least zero.
+*>           Unchanged on exit.
+*> \endverbatim
+*> \verbatim
+*>  A      - COMPLEX*16 array, dimension( N*(N+1)/2 )
+*>           On entry, A contains a block diagonal matrix and the
+*>           multipliers of the transformations used to obtain it,
+*>           stored as a packed triangular matrix.
+*>           Unchanged on exit.
+*> \endverbatim
+*> \verbatim
+*>  IPIV   - INTEGER array, dimension( N )
+*>           On entry, IPIV contains the vector of pivot indices as
+*>           determined by ZSPTRF or ZHPTRF.
+*>           If IPIV( K ) = K, no interchange was done.
+*>           If IPIV( K ) <> K but IPIV( K ) > 0, then row K was inter-
+*>           changed with row IPIV( K ) and a 1 x 1 pivot block was used.
+*>           If IPIV( K ) < 0 and UPLO = 'U', then row K-1 was exchanged
+*>           with row | IPIV( K ) | and a 2 x 2 pivot block was used.
+*>           If IPIV( K ) < 0 and UPLO = 'L', then row K+1 was exchanged
+*>           with row | IPIV( K ) | and a 2 x 2 pivot block was used.
+*> \endverbatim
+*> \verbatim
+*>  B      - COMPLEX*16 array, dimension( LDB, NRHS )
+*>           On entry, B contains NRHS vectors of length N.
+*>           On exit, B is overwritten with the product A * B.
+*> \endverbatim
+*> \verbatim
+*>  LDB    - INTEGER
+*>           On entry, LDB contains the leading dimension of B as
+*>           declared in the calling program.  LDB must be at least
+*>           max( 1, N ).
+*>           Unchanged on exit.
+*> \endverbatim
+*> \verbatim
+*>  INFO   - INTEGER
+*>           INFO is the error flag.
+*>           On exit, a value of 0 indicates a successful exit.
+*>           A negative value, say -K, indicates that the K-th argument
+*>           has an illegal value.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16_lin
+*
+*  =====================================================================
       SUBROUTINE ZLAVHP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
      $                   INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIAG, TRANS, UPLO
@@ -13,95 +155,6 @@
       INTEGER            IPIV( * )
       COMPLEX*16         A( * ), B( LDB, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*     ZLAVHP  performs one of the matrix-vector operations
-*        x := A*x  or  x := A^H*x,
-*     where x is an N element vector and  A is one of the factors
-*     from the symmetric factorization computed by ZHPTRF.
-*     ZHPTRF produces a factorization of the form
-*          U * D * U^H     or     L * D * L^H,
-*     where U (or L) is a product of permutation and unit upper (lower)
-*     triangular matrices, U^H (or L^H) is the conjugate transpose of
-*     U (or L), and D is Hermitian and block diagonal with 1 x 1 and
-*     2 x 2 diagonal blocks.  The multipliers for the transformations
-*     and the upper or lower triangular parts of the diagonal blocks
-*     are stored columnwise in packed format in the linear array A.
-*
-*     If TRANS = 'N' or 'n', ZLAVHP multiplies either by U or U * D
-*     (or L or L * D).
-*     If TRANS = 'C' or 'c', ZLAVHP multiplies either by U^H or D * U^H
-*     (or L^H or D * L^H ).
-*
-*  Arguments
-*  ==========
-*
-*  UPLO   - CHARACTER*1
-*           On entry, UPLO specifies whether the triangular matrix
-*           stored in A is upper or lower triangular.
-*              UPLO = 'U' or 'u'   The matrix is upper triangular.
-*              UPLO = 'L' or 'l'   The matrix is lower triangular.
-*           Unchanged on exit.
-*
-*  TRANS  - CHARACTER*1
-*           On entry, TRANS specifies the operation to be performed as
-*           follows:
-*              TRANS = 'N' or 'n'   x := A*x.
-*              TRANS = 'C' or 'c'   x := A^H*x.
-*           Unchanged on exit.
-*
-*  DIAG   - CHARACTER*1
-*           On entry, DIAG specifies whether the diagonal blocks are
-*           assumed to be unit matrices, as follows:
-*              DIAG = 'U' or 'u'   Diagonal blocks are unit matrices.
-*              DIAG = 'N' or 'n'   Diagonal blocks are non-unit.
-*           Unchanged on exit.
-*
-*  N      - INTEGER
-*           On entry, N specifies the order of the matrix A.
-*           N must be at least zero.
-*           Unchanged on exit.
-*
-*  NRHS   - INTEGER
-*           On entry, NRHS specifies the number of right hand sides,
-*           i.e., the number of vectors x to be multiplied by A.
-*           NRHS must be at least zero.
-*           Unchanged on exit.
-*
-*  A      - COMPLEX*16 array, dimension( N*(N+1)/2 )
-*           On entry, A contains a block diagonal matrix and the
-*           multipliers of the transformations used to obtain it,
-*           stored as a packed triangular matrix.
-*           Unchanged on exit.
-*
-*  IPIV   - INTEGER array, dimension( N )
-*           On entry, IPIV contains the vector of pivot indices as
-*           determined by ZSPTRF or ZHPTRF.
-*           If IPIV( K ) = K, no interchange was done.
-*           If IPIV( K ) <> K but IPIV( K ) > 0, then row K was inter-
-*           changed with row IPIV( K ) and a 1 x 1 pivot block was used.
-*           If IPIV( K ) < 0 and UPLO = 'U', then row K-1 was exchanged
-*           with row | IPIV( K ) | and a 2 x 2 pivot block was used.
-*           If IPIV( K ) < 0 and UPLO = 'L', then row K+1 was exchanged
-*           with row | IPIV( K ) | and a 2 x 2 pivot block was used.
-*
-*  B      - COMPLEX*16 array, dimension( LDB, NRHS )
-*           On entry, B contains NRHS vectors of length N.
-*           On exit, B is overwritten with the product A * B.
-*
-*  LDB    - INTEGER
-*           On entry, LDB contains the leading dimension of B as
-*           declared in the calling program.  LDB must be at least
-*           max( 1, N ).
-*           Unchanged on exit.
-*
-*  INFO   - INTEGER
-*           INFO is the error flag.
-*           On exit, a value of 0 indicates a successful exit.
-*           A negative value, say -K, indicates that the K-th argument
-*           has an illegal value.
 *
 *  =====================================================================
 *

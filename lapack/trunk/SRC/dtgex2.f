@@ -1,10 +1,219 @@
+*> \brief \b DTGEX2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
+*                          LDZ, J1, N1, N2, WORK, LWORK, INFO )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            WANTQ, WANTZ
+*       INTEGER            INFO, J1, LDA, LDB, LDQ, LDZ, LWORK, N, N1, N2
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+*      $                   WORK( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DTGEX2 swaps adjacent diagonal blocks (A11, B11) and (A22, B22)
+*> of size 1-by-1 or 2-by-2 in an upper (quasi) triangular matrix pair
+*> (A, B) by an orthogonal equivalence transformation.
+*>
+*> (A, B) must be in generalized real Schur canonical form (as returned
+*> by DGGES), i.e. A is block upper triangular with 1-by-1 and 2-by-2
+*> diagonal blocks. B is upper triangular.
+*>
+*> Optionally, the matrices Q and Z of generalized Schur vectors are
+*> updated.
+*>
+*>        Q(in) * A(in) * Z(in)**T = Q(out) * A(out) * Z(out)**T
+*>        Q(in) * B(in) * Z(in)**T = Q(out) * B(out) * Z(out)**T
+*>
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] WANTQ
+*> \verbatim
+*>          WANTQ is LOGICAL
+*>          .TRUE. : update the left transformation matrix Q;
+*>          .FALSE.: do not update Q.
+*> \endverbatim
+*>
+*> \param[in] WANTZ
+*> \verbatim
+*>          WANTZ is LOGICAL
+*>          .TRUE. : update the right transformation matrix Z;
+*>          .FALSE.: do not update Z.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A and B. N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimensions (LDA,N)
+*>          On entry, the matrix A in the pair (A, B).
+*>          On exit, the updated matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimensions (LDB,N)
+*>          On entry, the matrix B in the pair (A, B).
+*>          On exit, the updated matrix B.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is DOUBLE PRECISION array, dimension (LDQ,N)
+*>          On entry, if WANTQ = .TRUE., the orthogonal matrix Q.
+*>          On exit, the updated matrix Q.
+*>          Not referenced if WANTQ = .FALSE..
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q. LDQ >= 1.
+*>          If WANTQ = .TRUE., LDQ >= N.
+*> \endverbatim
+*>
+*> \param[in,out] Z
+*> \verbatim
+*>          Z is DOUBLE PRECISION array, dimension (LDZ,N)
+*>          On entry, if WANTZ =.TRUE., the orthogonal matrix Z.
+*>          On exit, the updated matrix Z.
+*>          Not referenced if WANTZ = .FALSE..
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z. LDZ >= 1.
+*>          If WANTZ = .TRUE., LDZ >= N.
+*> \endverbatim
+*>
+*> \param[in] J1
+*> \verbatim
+*>          J1 is INTEGER
+*>          The index to the first block (A11, B11). 1 <= J1 <= N.
+*> \endverbatim
+*>
+*> \param[in] N1
+*> \verbatim
+*>          N1 is INTEGER
+*>          The order of the first block (A11, B11). N1 = 0, 1 or 2.
+*> \endverbatim
+*>
+*> \param[in] N2
+*> \verbatim
+*>          N2 is INTEGER
+*>          The order of the second block (A22, B22). N2 = 0, 1 or 2.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)).
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>          LWORK >=  MAX( 1, N*(N2+N1), (N2+N1)*(N2+N1)*2 )
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>            =0: Successful exit
+*>            >0: If INFO = 1, the transformed matrix (A, B) would be
+*>                too far from generalized Schur form; the blocks are
+*>                not swapped and (A, B) and (Q, Z) are unchanged.
+*>                The problem of swapping is too ill-conditioned.
+*>            <0: If INFO = -16: LWORK is too small. Appropriate value
+*>                for LWORK is returned in WORK(1).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleGEauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*>
+*>  In the current code both weak and strong stability tests are
+*>  performed. The user can omit the strong stability test by changing
+*>  the internal logical parameter WANDS to .FALSE.. See ref. [2] for
+*>  details.
+*>
+*>  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
+*>      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
+*>      M.S. Moonen et al (eds), Linear Algebra for Large Scale and
+*>      Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218.
+*>
+*>  [2] B. Kagstrom and P. Poromaa; Computing Eigenspaces with Specified
+*>      Eigenvalues of a Regular Matrix Pair (A, B) and Condition
+*>      Estimation: Theory, Algorithms and Software,
+*>      Report UMINF - 94.04, Department of Computing Science, Umea
+*>      University, S-901 87 Umea, Sweden, 1994. Also as LAPACK Working
+*>      Note 87. To appear in Numerical Algorithms, 1996.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
      $                   LDZ, J1, N1, N2, WORK, LWORK, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            WANTQ, WANTZ
@@ -14,118 +223,6 @@
       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
      $                   WORK( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DTGEX2 swaps adjacent diagonal blocks (A11, B11) and (A22, B22)
-*  of size 1-by-1 or 2-by-2 in an upper (quasi) triangular matrix pair
-*  (A, B) by an orthogonal equivalence transformation.
-*
-*  (A, B) must be in generalized real Schur canonical form (as returned
-*  by DGGES), i.e. A is block upper triangular with 1-by-1 and 2-by-2
-*  diagonal blocks. B is upper triangular.
-*
-*  Optionally, the matrices Q and Z of generalized Schur vectors are
-*  updated.
-*
-*         Q(in) * A(in) * Z(in)**T = Q(out) * A(out) * Z(out)**T
-*         Q(in) * B(in) * Z(in)**T = Q(out) * B(out) * Z(out)**T
-*
-*
-*  Arguments
-*  =========
-*
-*  WANTQ   (input) LOGICAL
-*          .TRUE. : update the left transformation matrix Q;
-*          .FALSE.: do not update Q.
-*
-*  WANTZ   (input) LOGICAL
-*          .TRUE. : update the right transformation matrix Z;
-*          .FALSE.: do not update Z.
-*
-*  N       (input) INTEGER
-*          The order of the matrices A and B. N >= 0.
-*
-*  A       (input/output) DOUBLE PRECISION array, dimensions (LDA,N)
-*          On entry, the matrix A in the pair (A, B).
-*          On exit, the updated matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A. LDA >= max(1,N).
-*
-*  B       (input/output) DOUBLE PRECISION array, dimensions (LDB,N)
-*          On entry, the matrix B in the pair (A, B).
-*          On exit, the updated matrix B.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of the array B. LDB >= max(1,N).
-*
-*  Q       (input/output) DOUBLE PRECISION array, dimension (LDQ,N)
-*          On entry, if WANTQ = .TRUE., the orthogonal matrix Q.
-*          On exit, the updated matrix Q.
-*          Not referenced if WANTQ = .FALSE..
-*
-*  LDQ     (input) INTEGER
-*          The leading dimension of the array Q. LDQ >= 1.
-*          If WANTQ = .TRUE., LDQ >= N.
-*
-*  Z       (input/output) DOUBLE PRECISION array, dimension (LDZ,N)
-*          On entry, if WANTZ =.TRUE., the orthogonal matrix Z.
-*          On exit, the updated matrix Z.
-*          Not referenced if WANTZ = .FALSE..
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z. LDZ >= 1.
-*          If WANTZ = .TRUE., LDZ >= N.
-*
-*  J1      (input) INTEGER
-*          The index to the first block (A11, B11). 1 <= J1 <= N.
-*
-*  N1      (input) INTEGER
-*          The order of the first block (A11, B11). N1 = 0, 1 or 2.
-*
-*  N2      (input) INTEGER
-*          The order of the second block (A22, B22). N2 = 0, 1 or 2.
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK)).
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.
-*          LWORK >=  MAX( 1, N*(N2+N1), (N2+N1)*(N2+N1)*2 )
-*
-*  INFO    (output) INTEGER
-*            =0: Successful exit
-*            >0: If INFO = 1, the transformed matrix (A, B) would be
-*                too far from generalized Schur form; the blocks are
-*                not swapped and (A, B) and (Q, Z) are unchanged.
-*                The problem of swapping is too ill-conditioned.
-*            <0: If INFO = -16: LWORK is too small. Appropriate value
-*                for LWORK is returned in WORK(1).
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*     Umea University, S-901 87 Umea, Sweden.
-*
-*  In the current code both weak and strong stability tests are
-*  performed. The user can omit the strong stability test by changing
-*  the internal logical parameter WANDS to .FALSE.. See ref. [2] for
-*  details.
-*
-*  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
-*      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
-*      M.S. Moonen et al (eds), Linear Algebra for Large Scale and
-*      Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218.
-*
-*  [2] B. Kagstrom and P. Poromaa; Computing Eigenspaces with Specified
-*      Eigenvalues of a Regular Matrix Pair (A, B) and Condition
-*      Estimation: Theory, Algorithms and Software,
-*      Report UMINF - 94.04, Department of Computing Science, Umea
-*      University, S-901 87 Umea, Sweden, 1994. Also as LAPACK Working
-*      Note 87. To appear in Numerical Algorithms, 1996.
 *
 *  =====================================================================
 *  Replaced various illegal calls to DCOPY by calls to DLASET, or by DO

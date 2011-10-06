@@ -1,25 +1,29 @@
-      SUBROUTINE CLAHILB(N, NRHS, A, LDA, X, LDX, B, LDB, WORK, 
-     $     INFO, PATH)
-!
-!  -- LAPACK auxiliary test routine (version 3.0) --
-!     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
-!     Courant Institute, Argonne National Lab, and Rice University
-!     28 August, 2006
-!
-!     David Vu <dtv@cs.berkeley.edu>
-!     Yozo Hida <yozo@cs.berkeley.edu>
-!     Jason Riedy <ejr@cs.berkeley.edu>
-!     D. Halligan <dhalligan@berkeley.edu>
-!
-      IMPLICIT NONE
-!     .. Scalar Arguments ..
-      INTEGER T, N, NRHS, LDA, LDX, LDB, INFO
-!     .. Array Arguments ..
-      REAL WORK(N)
-      COMPLEX A(LDA,N), X(LDX, NRHS), B(LDB, NRHS)
-      CHARACTER*3        PATH
-!     ..
-!
+*> \brief \b CLAHILB
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLAHILB(N, NRHS, A, LDA, X, LDX, B, LDB, WORK, 
+*            INFO, PATH)
+* 
+* !     .. Scalar Arguments ..
+*       INTEGER T, N, NRHS, LDA, LDX, LDB, INFO
+* !     .. Array Arguments ..
+*       REAL WORK(N)
+*       COMPLEX A(LDA,N), X(LDX, NRHS), B(LDB, NRHS)
+*       CHARACTER*3        PATH
+* !     ..
+* !
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
 !  Purpose
 !  =======
 !
@@ -42,43 +46,40 @@
 !  In single, the generated solution is exact for N <= 6 and has
 !  small componentwise error for 7 <= N <= 11.
 !
-!  Arguments
-!  =========
-!
-!  N       (input) INTEGER
-!          The dimension of the matrix A.
-!
-!  NRHS    (input) NRHS
-!          The requested number of right-hand sides.
-!
-!  A       (output) COMPLEX array, dimension (LDA, N)
-!          The generated scaled Hilbert matrix.
-!
-!  LDA     (input) INTEGER
-!          The leading dimension of the array A.  LDA >= N.
-!
-!  X       (output) COMPLEX array, dimension (LDX, NRHS)
-!          The generated exact solutions.  Currently, the first NRHS
-!          columns of the inverse Hilbert matrix.
-!
-!  LDX     (input) INTEGER
-!          The leading dimension of the array X.  LDX >= N.
-!
-!  B       (output) REAL array, dimension (LDB, NRHS)
-!          The generated right-hand sides.  Currently, the first NRHS
-!          columns of LCM(1, 2, ..., 2*N-1) * the identity matrix.
-!
-!  LDB     (input) INTEGER
-!          The leading dimension of the array B.  LDB >= N.
-!
-!  WORK    (workspace) REAL array, dimension (N)
-!
-!
-!  INFO    (output) INTEGER
-!          = 0: successful exit
-!          = 1: N is too large; the data is still generated but may not
-!               be not exact.
-!          < 0: if INFO = -i, the i-th argument had an illegal value
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
+      SUBROUTINE CLAHILB(N, NRHS, A, LDA, X, LDX, B, LDB, WORK, 
+     $     INFO, PATH)
+*
+*  -- LAPACK test routine (version 3.0) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+!     .. Scalar Arguments ..
+      INTEGER T, N, NRHS, LDA, LDX, LDB, INFO
+!     .. Array Arguments ..
+      REAL WORK(N)
+      COMPLEX A(LDA,N), X(LDX, NRHS), B(LDB, NRHS)
+      CHARACTER*3        PATH
+!     ..
 !
 !  =====================================================================
 

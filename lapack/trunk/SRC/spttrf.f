@@ -1,9 +1,92 @@
+*> \brief \b SPTTRF
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SPTTRF( N, D, E, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               D( * ), E( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SPTTRF computes the L*D*L**T factorization of a real symmetric
+*> positive definite tridiagonal matrix A.  The factorization may also
+*> be regarded as having the form A = U**T*D*U.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          On entry, the n diagonal elements of the tridiagonal matrix
+*>          A.  On exit, the n diagonal elements of the diagonal matrix
+*>          D from the L*D*L**T factorization of A.
+*> \endverbatim
+*>
+*> \param[in,out] E
+*> \verbatim
+*>          E is REAL array, dimension (N-1)
+*>          On entry, the (n-1) subdiagonal elements of the tridiagonal
+*>          matrix A.  On exit, the (n-1) subdiagonal elements of the
+*>          unit bidiagonal factor L from the L*D*L**T factorization of A.
+*>          E can also be regarded as the superdiagonal of the unit
+*>          bidiagonal factor U from the U**T*D*U factorization of A.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -k, the k-th argument had an illegal value
+*>          > 0: if INFO = k, the leading minor of order k is not
+*>               positive definite; if k < N, the factorization could not
+*>               be completed, while if k = N, the factorization was
+*>               completed, but D(N) <= 0.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERcomputational
+*
+*  =====================================================================
       SUBROUTINE SPTTRF( N, D, E, INFO )
 *
-*  -- LAPACK routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*  -- April 2011                                                      --
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, N
@@ -11,39 +94,6 @@
 *     .. Array Arguments ..
       REAL               D( * ), E( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SPTTRF computes the L*D*L**T factorization of a real symmetric
-*  positive definite tridiagonal matrix A.  The factorization may also
-*  be regarded as having the form A = U**T*D*U.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.
-*
-*  D       (input/output) REAL array, dimension (N)
-*          On entry, the n diagonal elements of the tridiagonal matrix
-*          A.  On exit, the n diagonal elements of the diagonal matrix
-*          D from the L*D*L**T factorization of A.
-*
-*  E       (input/output) REAL array, dimension (N-1)
-*          On entry, the (n-1) subdiagonal elements of the tridiagonal
-*          matrix A.  On exit, the (n-1) subdiagonal elements of the
-*          unit bidiagonal factor L from the L*D*L**T factorization of A.
-*          E can also be regarded as the superdiagonal of the unit
-*          bidiagonal factor U from the U**T*D*U factorization of A.
-*
-*  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -k, the k-th argument had an illegal value
-*          > 0: if INFO = k, the leading minor of order k is not
-*               positive definite; if k < N, the factorization could not
-*               be completed, while if k = N, the factorization was
-*               completed, but D(N) <= 0.
 *
 *  =====================================================================
 *

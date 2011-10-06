@@ -1,9 +1,167 @@
+*> \brief \b DORT03
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DORT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
+*                          RESULT, INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*( * )    RC
+*       INTEGER            INFO, K, LDU, LDV, LWORK, MU, MV, N
+*       DOUBLE PRECISION   RESULT
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   U( LDU, * ), V( LDV, * ), WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DORT03 compares two orthogonal matrices U and V to see if their
+*> corresponding rows or columns span the same spaces.  The rows are
+*> checked if RC = 'R', and the columns are checked if RC = 'C'.
+*>
+*> RESULT is the maximum of
+*>
+*>    | V*V' - I | / ( MV ulp ), if RC = 'R', or
+*>
+*>    | V'*V - I | / ( MV ulp ), if RC = 'C',
+*>
+*> and the maximum over rows (or columns) 1 to K of
+*>
+*>    | U(i) - S*V(i) |/ ( N ulp )
+*>
+*> where S is +-1 (chosen to minimize the expression), U(i) is the i-th
+*> row (column) of U, and V(i) is the i-th row (column) of V.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] RC
+*> \verbatim
+*>          RC is CHARACTER*1
+*>          If RC = 'R' the rows of U and V are to be compared.
+*>          If RC = 'C' the columns of U and V are to be compared.
+*> \endverbatim
+*>
+*> \param[in] MU
+*> \verbatim
+*>          MU is INTEGER
+*>          The number of rows of U if RC = 'R', and the number of
+*>          columns if RC = 'C'.  If MU = 0 DORT03 does nothing.
+*>          MU must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] MV
+*> \verbatim
+*>          MV is INTEGER
+*>          The number of rows of V if RC = 'R', and the number of
+*>          columns if RC = 'C'.  If MV = 0 DORT03 does nothing.
+*>          MV must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          If RC = 'R', the number of columns in the matrices U and V,
+*>          and if RC = 'C', the number of rows in U and V.  If N = 0
+*>          DORT03 does nothing.  N must be at least zero.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The number of rows or columns of U and V to compare.
+*>          0 <= K <= max(MU,MV).
+*> \endverbatim
+*>
+*> \param[in] U
+*> \verbatim
+*>          U is DOUBLE PRECISION array, dimension (LDU,N)
+*>          The first matrix to compare.  If RC = 'R', U is MU by N, and
+*>          if RC = 'C', U is N by MU.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of U.  If RC = 'R', LDU >= max(1,MU),
+*>          and if RC = 'C', LDU >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is DOUBLE PRECISION array, dimension (LDV,N)
+*>          The second matrix to compare.  If RC = 'R', V is MV by N, and
+*>          if RC = 'C', V is N by MV.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of V.  If RC = 'R', LDV >= max(1,MV),
+*>          and if RC = 'C', LDV >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  For best performance, LWORK
+*>          should be at least N*N if RC = 'C' or M*M if RC = 'R', but
+*>          the tests will be done even if LWORK is 0.
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION
+*>          The value computed by the test described above.  RESULT is
+*>          limited to 1/ulp to avoid overflow.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          0  indicates a successful exit
+*>          -k indicates the k-th parameter had an illegal value
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DORT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
      $                   RESULT, INFO )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*( * )    RC
@@ -13,83 +171,6 @@
 *     .. Array Arguments ..
       DOUBLE PRECISION   U( LDU, * ), V( LDV, * ), WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DORT03 compares two orthogonal matrices U and V to see if their
-*  corresponding rows or columns span the same spaces.  The rows are
-*  checked if RC = 'R', and the columns are checked if RC = 'C'.
-*
-*  RESULT is the maximum of
-*
-*     | V*V' - I | / ( MV ulp ), if RC = 'R', or
-*
-*     | V'*V - I | / ( MV ulp ), if RC = 'C',
-*
-*  and the maximum over rows (or columns) 1 to K of
-*
-*     | U(i) - S*V(i) |/ ( N ulp )
-*
-*  where S is +-1 (chosen to minimize the expression), U(i) is the i-th
-*  row (column) of U, and V(i) is the i-th row (column) of V.
-*
-*  Arguments
-*  ==========
-*
-*  RC      (input) CHARACTER*1
-*          If RC = 'R' the rows of U and V are to be compared.
-*          If RC = 'C' the columns of U and V are to be compared.
-*
-*  MU      (input) INTEGER
-*          The number of rows of U if RC = 'R', and the number of
-*          columns if RC = 'C'.  If MU = 0 DORT03 does nothing.
-*          MU must be at least zero.
-*
-*  MV      (input) INTEGER
-*          The number of rows of V if RC = 'R', and the number of
-*          columns if RC = 'C'.  If MV = 0 DORT03 does nothing.
-*          MV must be at least zero.
-*
-*  N       (input) INTEGER
-*          If RC = 'R', the number of columns in the matrices U and V,
-*          and if RC = 'C', the number of rows in U and V.  If N = 0
-*          DORT03 does nothing.  N must be at least zero.
-*
-*  K       (input) INTEGER
-*          The number of rows or columns of U and V to compare.
-*          0 <= K <= max(MU,MV).
-*
-*  U       (input) DOUBLE PRECISION array, dimension (LDU,N)
-*          The first matrix to compare.  If RC = 'R', U is MU by N, and
-*          if RC = 'C', U is N by MU.
-*
-*  LDU     (input) INTEGER
-*          The leading dimension of U.  If RC = 'R', LDU >= max(1,MU),
-*          and if RC = 'C', LDU >= max(1,N).
-*
-*  V       (input) DOUBLE PRECISION array, dimension (LDV,N)
-*          The second matrix to compare.  If RC = 'R', V is MV by N, and
-*          if RC = 'C', V is N by MV.
-*
-*  LDV     (input) INTEGER
-*          The leading dimension of V.  If RC = 'R', LDV >= max(1,MV),
-*          and if RC = 'C', LDV >= max(1,N).
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          The length of the array WORK.  For best performance, LWORK
-*          should be at least N*N if RC = 'C' or M*M if RC = 'R', but
-*          the tests will be done even if LWORK is 0.
-*
-*  RESULT  (output) DOUBLE PRECISION
-*          The value computed by the test described above.  RESULT is
-*          limited to 1/ulp to avoid overflow.
-*
-*  INFO    (output) INTEGER
-*          0  indicates a successful exit
-*          -k indicates the k-th parameter had an illegal value
 *
 *  =====================================================================
 *

@@ -1,10 +1,170 @@
+*> \brief \b CLATDF
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
+*                          JPIV )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            IJOB, LDZ, N
+*       REAL               RDSCAL, RDSUM
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * ), JPIV( * )
+*       COMPLEX            RHS( * ), Z( LDZ, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CLATDF computes the contribution to the reciprocal Dif-estimate
+*> by solving for x in Z * x = b, where b is chosen such that the norm
+*> of x is as large as possible. It is assumed that LU decomposition
+*> of Z has been computed by CGETC2. On entry RHS = f holds the
+*> contribution from earlier solved sub-systems, and on return RHS = x.
+*>
+*> The factorization of Z returned by CGETC2 has the form
+*> Z = P * L * U * Q, where P and Q are permutation matrices. L is lower
+*> triangular with unit diagonal elements and U is upper triangular.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] IJOB
+*> \verbatim
+*>          IJOB is INTEGER
+*>          IJOB = 2: First compute an approximative null-vector e
+*>              of Z using CGECON, e is normalized and solve for
+*>              Zx = +-e - f with the sign giving the greater value of
+*>              2-norm(x).  About 5 times as expensive as Default.
+*>          IJOB .ne. 2: Local look ahead strategy where
+*>              all entries of the r.h.s. b is choosen as either +1 or
+*>              -1.  Default.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix Z.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is REAL array, dimension (LDZ, N)
+*>          On entry, the LU part of the factorization of the n-by-n
+*>          matrix Z computed by CGETC2:  Z = P * L * U * Q
+*> \endverbatim
+*>
+*> \param[in] LDZ
+*> \verbatim
+*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDA >= max(1, N).
+*> \endverbatim
+*>
+*> \param[in,out] RHS
+*> \verbatim
+*>          RHS is REAL array, dimension (N).
+*>          On entry, RHS contains contributions from other subsystems.
+*>          On exit, RHS contains the solution of the subsystem with
+*>          entries according to the value of IJOB (see above).
+*> \endverbatim
+*>
+*> \param[in,out] RDSUM
+*> \verbatim
+*>          RDSUM is REAL
+*>          On entry, the sum of squares of computed contributions to
+*>          the Dif-estimate under computation by CTGSYL, where the
+*>          scaling factor RDSCAL (see below) has been factored out.
+*>          On exit, the corresponding sum of squares updated with the
+*>          contributions from the current sub-system.
+*>          If TRANS = 'T' RDSUM is not touched.
+*>          NOTE: RDSUM only makes sense when CTGSY2 is called by CTGSYL.
+*> \endverbatim
+*>
+*> \param[in,out] RDSCAL
+*> \verbatim
+*>          RDSCAL is REAL
+*>          On entry, scaling factor used to prevent overflow in RDSUM.
+*>          On exit, RDSCAL is updated w.r.t. the current contributions
+*>          in RDSUM.
+*>          If TRANS = 'T', RDSCAL is not touched.
+*>          NOTE: RDSCAL only makes sense when CTGSY2 is called by
+*>          CTGSYL.
+*> \endverbatim
+*>
+*> \param[in] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N).
+*>          The pivot indices; for 1 <= i <= N, row i of the
+*>          matrix has been interchanged with row IPIV(i).
+*> \endverbatim
+*>
+*> \param[in] JPIV
+*> \verbatim
+*>          JPIV is INTEGER array, dimension (N).
+*>          The pivot indices; for 1 <= j <= N, column j of the
+*>          matrix has been interchanged with column JPIV(j).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexOTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*>
+*>  This routine is a further developed implementation of algorithm
+*>  BSOLVE in [1] using complete pivoting in the LU factorization.
+*>
+*>   [1]   Bo Kagstrom and Lars Westin,
+*>         Generalized Schur Methods with Condition Estimators for
+*>         Solving the Generalized Sylvester Equation, IEEE Transactions
+*>         on Automatic Control, Vol. 34, No. 7, July 1989, pp 745-751.
+*>
+*>   [2]   Peter Poromaa,
+*>         On Efficient and Robust Estimators for the Separation
+*>         between two Regular Matrix Pairs with Applications in
+*>         Condition Estimation. Report UMINF-95.05, Department of
+*>         Computing Science, Umea University, S-901 87 Umea, Sweden,
+*>         1995.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
      $                   JPIV )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            IJOB, LDZ, N
@@ -14,93 +174,6 @@
       INTEGER            IPIV( * ), JPIV( * )
       COMPLEX            RHS( * ), Z( LDZ, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CLATDF computes the contribution to the reciprocal Dif-estimate
-*  by solving for x in Z * x = b, where b is chosen such that the norm
-*  of x is as large as possible. It is assumed that LU decomposition
-*  of Z has been computed by CGETC2. On entry RHS = f holds the
-*  contribution from earlier solved sub-systems, and on return RHS = x.
-*
-*  The factorization of Z returned by CGETC2 has the form
-*  Z = P * L * U * Q, where P and Q are permutation matrices. L is lower
-*  triangular with unit diagonal elements and U is upper triangular.
-*
-*  Arguments
-*  =========
-*
-*  IJOB    (input) INTEGER
-*          IJOB = 2: First compute an approximative null-vector e
-*              of Z using CGECON, e is normalized and solve for
-*              Zx = +-e - f with the sign giving the greater value of
-*              2-norm(x).  About 5 times as expensive as Default.
-*          IJOB .ne. 2: Local look ahead strategy where
-*              all entries of the r.h.s. b is choosen as either +1 or
-*              -1.  Default.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix Z.
-*
-*  Z       (input) REAL array, dimension (LDZ, N)
-*          On entry, the LU part of the factorization of the n-by-n
-*          matrix Z computed by CGETC2:  Z = P * L * U * Q
-*
-*  LDZ     (input) INTEGER
-*          The leading dimension of the array Z.  LDA >= max(1, N).
-*
-*  RHS     (input/output) REAL array, dimension (N).
-*          On entry, RHS contains contributions from other subsystems.
-*          On exit, RHS contains the solution of the subsystem with
-*          entries according to the value of IJOB (see above).
-*
-*  RDSUM   (input/output) REAL
-*          On entry, the sum of squares of computed contributions to
-*          the Dif-estimate under computation by CTGSYL, where the
-*          scaling factor RDSCAL (see below) has been factored out.
-*          On exit, the corresponding sum of squares updated with the
-*          contributions from the current sub-system.
-*          If TRANS = 'T' RDSUM is not touched.
-*          NOTE: RDSUM only makes sense when CTGSY2 is called by CTGSYL.
-*
-*  RDSCAL  (input/output) REAL
-*          On entry, scaling factor used to prevent overflow in RDSUM.
-*          On exit, RDSCAL is updated w.r.t. the current contributions
-*          in RDSUM.
-*          If TRANS = 'T', RDSCAL is not touched.
-*          NOTE: RDSCAL only makes sense when CTGSY2 is called by
-*          CTGSYL.
-*
-*  IPIV    (input) INTEGER array, dimension (N).
-*          The pivot indices; for 1 <= i <= N, row i of the
-*          matrix has been interchanged with row IPIV(i).
-*
-*  JPIV    (input) INTEGER array, dimension (N).
-*          The pivot indices; for 1 <= j <= N, column j of the
-*          matrix has been interchanged with column JPIV(j).
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*     Umea University, S-901 87 Umea, Sweden.
-*
-*  This routine is a further developed implementation of algorithm
-*  BSOLVE in [1] using complete pivoting in the LU factorization.
-*
-*   [1]   Bo Kagstrom and Lars Westin,
-*         Generalized Schur Methods with Condition Estimators for
-*         Solving the Generalized Sylvester Equation, IEEE Transactions
-*         on Automatic Control, Vol. 34, No. 7, July 1989, pp 745-751.
-*
-*   [2]   Peter Poromaa,
-*         On Efficient and Robust Estimators for the Separation
-*         between two Regular Matrix Pairs with Applications in
-*         Condition Estimation. Report UMINF-95.05, Department of
-*         Computing Science, Umea University, S-901 87 Umea, Sweden,
-*         1995.
 *
 *  =====================================================================
 *

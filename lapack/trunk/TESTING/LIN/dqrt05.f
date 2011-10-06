@@ -1,45 +1,97 @@
-      SUBROUTINE DQRT05(M,N,L,NB,RESULT)
+*> \brief \b DQRT05
 *
-*  -- LAPACK test routine (version 3.?) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     August 2011
+*  =========== DOCUMENTATION ===========
 *
-      IMPLICIT NONE
-*     .. Scalar Arguments ..
-      INTEGER LWORK, M, N, L, NB, LDT
-*     .. Return values ..
-      DOUBLE PRECISION RESULT(6)
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DQRT05(M,N,L,NB,RESULT)
+* 
+*       .. Scalar Arguments ..
+*       INTEGER LWORK, M, N, L, NB, LDT
+*       .. Return values ..
+*       DOUBLE PRECISION RESULT(6)
+*  
 *  Purpose
 *  =======
 *
-*  DQRT05 tests DTPQRT and DTPMQRT.
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DQRT05 tests DTPQRT and DTPMQRT.
+*>
+*>\endverbatim
 *
 *  Arguments
 *  =========
 *
-*  M       (input) INTEGER
-*          Number of rows in lower part of the test matrix.
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          Number of rows in lower part of the test matrix.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          Number of columns in test matrix.
+*> \endverbatim
+*>
+*> \param[in] L
+*> \verbatim
+*>          L is INTEGER
+*>          The number of rows of the upper trapezoidal part the
+*>          lower test matrix.  0 <= L <= M.
+*> \endverbatim
+*>          
+*> \param[in] NB
+*> \verbatim
+*>          NB is INTEGER
+*>          Block size of test matrix.  NB <= N.
+*> \endverbatim
+*>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is DOUBLE PRECISION array, dimension (6)
+*>          Results of each of the six tests below.
+*> \endverbatim
+*> \verbatim
+*>          RESULT(1) = | A - Q R |
+*>          RESULT(2) = | I - Q^H Q |
+*>          RESULT(3) = | Q C - Q C |
+*>          RESULT(4) = | Q^H C - Q^H C |
+*>          RESULT(5) = | C Q - C Q | 
+*>          RESULT(6) = | C Q^H - C Q^H |
+*> \endverbatim
+*>
 *
-*  N       (input) INTEGER
-*          Number of columns in test matrix.
+*  Authors
+*  =======
 *
-*  L       (input) INTEGER
-*          The number of rows of the upper trapezoidal part the
-*          lower test matrix.  0 <= L <= M.
-*          
-*  NB      (input) INTEGER
-*          Block size of test matrix.  NB <= N.
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
-*  RESULT  (output) DOUBLE PRECISION array, dimension (6)
-*          Results of each of the six tests below.
+*> \date November 2011
 *
-*          RESULT(1) = | A - Q R |
-*          RESULT(2) = | I - Q^H Q |
-*          RESULT(3) = | Q C - Q C |
-*          RESULT(4) = | Q^H C - Q^H C |
-*          RESULT(5) = | C Q - C Q | 
-*          RESULT(6) = | C Q^H - C Q^H |
+*> \ingroup double_lin
+*
+*  =====================================================================
+      SUBROUTINE DQRT05(M,N,L,NB,RESULT)
+*
+*  -- LAPACK test routine (version 3.?) --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
+*
+*     .. Scalar Arguments ..
+      INTEGER LWORK, M, N, L, NB, LDT
+*     .. Return values ..
+      DOUBLE PRECISION RESULT(6)
 *
 *  =====================================================================
 *      

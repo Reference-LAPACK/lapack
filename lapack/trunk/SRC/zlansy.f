@@ -1,9 +1,125 @@
+*> \brief \b ZLANSY
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       DOUBLE PRECISION FUNCTION ZLANSY( NORM, UPLO, N, A, LDA, WORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          NORM, UPLO
+*       INTEGER            LDA, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   WORK( * )
+*       COMPLEX*16         A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLANSY  returns the value of the one norm,  or the Frobenius norm, or
+*> the  infinity norm,  or the  element of  largest absolute value  of a
+*> complex symmetric matrix A.
+*>
+*> Description
+*> ===========
+*>
+*> ZLANSY returns the value
+*>
+*>    ZLANSY = ( max(abs(A(i,j))), NORM = 'M' or 'm'
+*>             (
+*>             ( norm1(A),         NORM = '1', 'O' or 'o'
+*>             (
+*>             ( normI(A),         NORM = 'I' or 'i'
+*>             (
+*>             ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
+*>
+*> where  norm1  denotes the  one norm of a matrix (maximum column sum),
+*> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
+*> normF  denotes the  Frobenius norm of a matrix (square root of sum of
+*> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] NORM
+*> \verbatim
+*>          NORM is CHARACTER*1
+*>          Specifies the value to be returned in ZLANSY as described
+*>          above.
+*> \endverbatim
+*>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          Specifies whether the upper or lower triangular part of the
+*>          symmetric matrix A is to be referenced.
+*>          = 'U':  Upper triangular part of A is referenced
+*>          = 'L':  Lower triangular part of A is referenced
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A.  N >= 0.  When N = 0, ZLANSY is
+*>          set to zero.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          The symmetric matrix A.  If UPLO = 'U', the leading n by n
+*>          upper triangular part of A contains the upper triangular part
+*>          of the matrix A, and the strictly lower triangular part of A
+*>          is not referenced.  If UPLO = 'L', the leading n by n lower
+*>          triangular part of A contains the lower triangular part of
+*>          the matrix A, and the strictly upper triangular part of A is
+*>          not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(N,1).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK)),
+*>          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
+*>          WORK is not referenced.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16SYauxiliary
+*
+*  =====================================================================
       DOUBLE PRECISION FUNCTION ZLANSY( NORM, UPLO, N, A, LDA, WORK )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          NORM, UPLO
@@ -13,64 +129,6 @@
       DOUBLE PRECISION   WORK( * )
       COMPLEX*16         A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLANSY  returns the value of the one norm,  or the Frobenius norm, or
-*  the  infinity norm,  or the  element of  largest absolute value  of a
-*  complex symmetric matrix A.
-*
-*  Description
-*  ===========
-*
-*  ZLANSY returns the value
-*
-*     ZLANSY = ( max(abs(A(i,j))), NORM = 'M' or 'm'
-*              (
-*              ( norm1(A),         NORM = '1', 'O' or 'o'
-*              (
-*              ( normI(A),         NORM = 'I' or 'i'
-*              (
-*              ( normF(A),         NORM = 'F', 'f', 'E' or 'e'
-*
-*  where  norm1  denotes the  one norm of a matrix (maximum column sum),
-*  normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
-*  normF  denotes the  Frobenius norm of a matrix (square root of sum of
-*  squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*
-*  Arguments
-*  =========
-*
-*  NORM    (input) CHARACTER*1
-*          Specifies the value to be returned in ZLANSY as described
-*          above.
-*
-*  UPLO    (input) CHARACTER*1
-*          Specifies whether the upper or lower triangular part of the
-*          symmetric matrix A is to be referenced.
-*          = 'U':  Upper triangular part of A is referenced
-*          = 'L':  Lower triangular part of A is referenced
-*
-*  N       (input) INTEGER
-*          The order of the matrix A.  N >= 0.  When N = 0, ZLANSY is
-*          set to zero.
-*
-*  A       (input) COMPLEX*16 array, dimension (LDA,N)
-*          The symmetric matrix A.  If UPLO = 'U', the leading n by n
-*          upper triangular part of A contains the upper triangular part
-*          of the matrix A, and the strictly lower triangular part of A
-*          is not referenced.  If UPLO = 'L', the leading n by n lower
-*          triangular part of A contains the lower triangular part of
-*          the matrix A, and the strictly upper triangular part of A is
-*          not referenced.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(N,1).
-*
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK)),
-*          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
-*          WORK is not referenced.
 *
 * =====================================================================
 *

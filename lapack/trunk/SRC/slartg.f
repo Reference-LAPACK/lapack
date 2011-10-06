@@ -1,52 +1,103 @@
+*> \brief \b SLARTG
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SLARTG( F, G, CS, SN, R )
+* 
+*       .. Scalar Arguments ..
+*       REAL               CS, F, G, R, SN
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SLARTG generate a plane rotation so that
+*>
+*>    [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
+*>    [ -SN  CS  ]     [ G ]     [ 0 ]
+*>
+*> This is a slower, more accurate version of the BLAS1 routine SROTG,
+*> with the following other differences:
+*>    F and G are unchanged on return.
+*>    If G=0, then CS=1 and SN=0.
+*>    If F=0 and (G .ne. 0), then CS=0 and SN=1 without doing any
+*>       floating point operations (saves work in SBDSQR when
+*>       there are zeros on the diagonal).
+*>
+*> If F exceeds G in magnitude, CS will be positive.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] F
+*> \verbatim
+*>          F is REAL
+*>          The first component of vector to be rotated.
+*> \endverbatim
+*>
+*> \param[in] G
+*> \verbatim
+*>          G is REAL
+*>          The second component of vector to be rotated.
+*> \endverbatim
+*>
+*> \param[out] CS
+*> \verbatim
+*>          CS is REAL
+*>          The cosine of the rotation.
+*> \endverbatim
+*>
+*> \param[out] SN
+*> \verbatim
+*>          SN is REAL
+*>          The sine of the rotation.
+*> \endverbatim
+*>
+*> \param[out] R
+*> \verbatim
+*>          R is REAL
+*>          The nonzero component of the rotated vector.
+*> \endverbatim
+*> \verbatim
+*>  This version has a few statements commented out for thread safety
+*>  (machine parameters are computed on each entry). 10 feb 03, SJH.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup auxOTHERauxiliary
+*
+*  =====================================================================
       SUBROUTINE SLARTG( F, G, CS, SN, R )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       REAL               CS, F, G, R, SN
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SLARTG generate a plane rotation so that
-*
-*     [  CS  SN  ]  .  [ F ]  =  [ R ]   where CS**2 + SN**2 = 1.
-*     [ -SN  CS  ]     [ G ]     [ 0 ]
-*
-*  This is a slower, more accurate version of the BLAS1 routine SROTG,
-*  with the following other differences:
-*     F and G are unchanged on return.
-*     If G=0, then CS=1 and SN=0.
-*     If F=0 and (G .ne. 0), then CS=0 and SN=1 without doing any
-*        floating point operations (saves work in SBDSQR when
-*        there are zeros on the diagonal).
-*
-*  If F exceeds G in magnitude, CS will be positive.
-*
-*  Arguments
-*  =========
-*
-*  F       (input) REAL
-*          The first component of vector to be rotated.
-*
-*  G       (input) REAL
-*          The second component of vector to be rotated.
-*
-*  CS      (output) REAL
-*          The cosine of the rotation.
-*
-*  SN      (output) REAL
-*          The sine of the rotation.
-*
-*  R       (output) REAL
-*          The nonzero component of the rotated vector.
-*
-*  This version has a few statements commented out for thread safety
-*  (machine parameters are computed on each entry). 10 feb 03, SJH.
 *
 *  =====================================================================
 *

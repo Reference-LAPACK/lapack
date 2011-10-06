@@ -1,43 +1,93 @@
+*> \brief \b SCHKEC
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE SCHKEC( THRESH, TSTERR, NIN, NOUT )
+* 
+*       .. Scalar Arguments ..
+*       LOGICAL            TSTERR
+*       INTEGER            NIN, NOUT
+*       REAL               THRESH
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> SCHKEC tests eigen- condition estimation routines
+*>        SLALN2, SLASY2, SLANV2, SLAQTR, SLAEXC,
+*>        STRSYL, STREXC, STRSNA, STRSEN
+*>
+*> In all cases, the routine runs through a fixed set of numerical
+*> examples, subjects them to various tests, and compares the test
+*> results to a threshold THRESH. In addition, STREXC, STRSNA and STRSEN
+*> are tested by reading in precomputed examples from a file (on input
+*> unit NIN).  Output is written to output unit NOUT.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] THRESH
+*> \verbatim
+*>          THRESH is REAL
+*>          Threshold for residual tests.  A computed test ratio passes
+*>          the threshold if it is less than THRESH.
+*> \endverbatim
+*>
+*> \param[in] TSTERR
+*> \verbatim
+*>          TSTERR is LOGICAL
+*>          Flag that indicates whether error exits are to be tested.
+*> \endverbatim
+*>
+*> \param[in] NIN
+*> \verbatim
+*>          NIN is INTEGER
+*>          The logical unit number for input.
+*> \endverbatim
+*>
+*> \param[in] NOUT
+*> \verbatim
+*>          NOUT is INTEGER
+*>          The logical unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup single_eig
+*
+*  =====================================================================
       SUBROUTINE SCHKEC( THRESH, TSTERR, NIN, NOUT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
       INTEGER            NIN, NOUT
       REAL               THRESH
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  SCHKEC tests eigen- condition estimation routines
-*         SLALN2, SLASY2, SLANV2, SLAQTR, SLAEXC,
-*         STRSYL, STREXC, STRSNA, STRSEN
-*
-*  In all cases, the routine runs through a fixed set of numerical
-*  examples, subjects them to various tests, and compares the test
-*  results to a threshold THRESH. In addition, STREXC, STRSNA and STRSEN
-*  are tested by reading in precomputed examples from a file (on input
-*  unit NIN).  Output is written to output unit NOUT.
-*
-*  Arguments
-*  =========
-*
-*  THRESH  (input) REAL
-*          Threshold for residual tests.  A computed test ratio passes
-*          the threshold if it is less than THRESH.
-*
-*  TSTERR  (input) LOGICAL
-*          Flag that indicates whether error exits are to be tested.
-*
-*  NIN     (input) INTEGER
-*          The logical unit number for input.
-*
-*  NOUT    (input) INTEGER
-*          The logical unit number for output.
 *
 *  =====================================================================
 *

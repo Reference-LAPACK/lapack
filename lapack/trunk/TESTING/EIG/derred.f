@@ -1,38 +1,81 @@
+*> \brief \b DERRED
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DERRED( PATH, NUNIT )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER*3        PATH
+*       INTEGER            NUNIT
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DERRED tests the error exits for the eigenvalue driver routines for
+*> DOUBLE PRECISION matrices:
+*>
+*> PATH  driver   description
+*> ----  ------   -----------
+*> SEV   DGEEV    find eigenvalues/eigenvectors for nonsymmetric A
+*> SES   DGEES    find eigenvalues/Schur form for nonsymmetric A
+*> SVX   DGEEVX   SGEEV + balancing and condition estimation
+*> SSX   DGEESX   SGEES + balancing and condition estimation
+*> DBD   DGESVD   compute SVD of an M-by-N matrix A
+*>       DGESDD   compute SVD of an M-by-N matrix A (by divide and
+*>                conquer)
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3
+*>          The LAPACK path name for the routines to be tested.
+*> \endverbatim
+*>
+*> \param[in] NUNIT
+*> \verbatim
+*>          NUNIT is INTEGER
+*>          The unit number for output.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup double_eig
+*
+*  =====================================================================
       SUBROUTINE DERRED( PATH, NUNIT )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
       INTEGER            NUNIT
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DERRED tests the error exits for the eigenvalue driver routines for
-*  DOUBLE PRECISION matrices:
-*
-*  PATH  driver   description
-*  ----  ------   -----------
-*  SEV   DGEEV    find eigenvalues/eigenvectors for nonsymmetric A
-*  SES   DGEES    find eigenvalues/Schur form for nonsymmetric A
-*  SVX   DGEEVX   SGEEV + balancing and condition estimation
-*  SSX   DGEESX   SGEES + balancing and condition estimation
-*  DBD   DGESVD   compute SVD of an M-by-N matrix A
-*        DGESDD   compute SVD of an M-by-N matrix A (by divide and
-*                 conquer)
-*
-*  Arguments
-*  =========
-*
-*  PATH    (input) CHARACTER*3
-*          The LAPACK path name for the routines to be tested.
-*
-*  NUNIT   (input) INTEGER
-*          The unit number for output.
 *
 *  =====================================================================
 *

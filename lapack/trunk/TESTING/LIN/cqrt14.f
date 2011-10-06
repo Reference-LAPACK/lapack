@@ -1,9 +1,127 @@
+*> \brief \b CQRT14
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       REAL             FUNCTION CQRT14( TRANS, M, N, NRHS, A, LDA, X,
+*                        LDX, WORK, LWORK )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          TRANS
+*       INTEGER            LDA, LDX, LWORK, M, N, NRHS
+*       ..
+*       .. Array Arguments ..
+*       COMPLEX            A( LDA, * ), WORK( LWORK ), X( LDX, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> CQRT14 checks whether X is in the row space of A or A'.  It does so
+*> by scaling both X and A such that their norms are in the range
+*> [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
+*> (if TRANS = 'C') or an LQ factorization of [A',X]' (if TRANS = 'N'),
+*> and returning the norm of the trailing triangle, scaled by
+*> MAX(M,N,NRHS)*eps.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] TRANS
+*> \verbatim
+*>          TRANS is CHARACTER*1
+*>          = 'N':  No transpose, check for X in the row space of A
+*>          = 'C':  Conjugate transpose, check for X in row space of A'.
+*> \endverbatim
+*>
+*> \param[in] M
+*> \verbatim
+*>          M is INTEGER
+*>          The number of rows of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of columns of the matrix A.
+*> \endverbatim
+*>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, i.e., the number of columns
+*>          of X.
+*> \endverbatim
+*>
+*> \param[in] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          The M-by-N matrix A.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (LDX,NRHS)
+*>          If TRANS = 'N', the N-by-NRHS matrix X.
+*>          IF TRANS = 'C', the M-by-NRHS matrix X.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array dimension (LWORK)
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          length of workspace array required
+*>          If TRANS = 'N', LWORK >= (M+NRHS)*(N+2);
+*>          if TRANS = 'C', LWORK >= (N+NRHS)*(M+2).
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex_lin
+*
+*  =====================================================================
       REAL             FUNCTION CQRT14( TRANS, M, N, NRHS, A, LDA, X,
      $                 LDX, WORK, LWORK )
 *
 *  -- LAPACK test routine (version 3.1) --
-*     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
-*     November 2006
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
@@ -12,53 +130,6 @@
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * ), WORK( LWORK ), X( LDX, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  CQRT14 checks whether X is in the row space of A or A'.  It does so
-*  by scaling both X and A such that their norms are in the range
-*  [sqrt(eps), 1/sqrt(eps)], then computing a QR factorization of [A,X]
-*  (if TRANS = 'C') or an LQ factorization of [A',X]' (if TRANS = 'N'),
-*  and returning the norm of the trailing triangle, scaled by
-*  MAX(M,N,NRHS)*eps.
-*
-*  Arguments
-*  =========
-*
-*  TRANS   (input) CHARACTER*1
-*          = 'N':  No transpose, check for X in the row space of A
-*          = 'C':  Conjugate transpose, check for X in row space of A'.
-*
-*  M       (input) INTEGER
-*          The number of rows of the matrix A.
-*
-*  N       (input) INTEGER
-*          The number of columns of the matrix A.
-*
-*  NRHS    (input) INTEGER
-*          The number of right hand sides, i.e., the number of columns
-*          of X.
-*
-*  A       (input) COMPLEX array, dimension (LDA,N)
-*          The M-by-N matrix A.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.
-*
-*  X       (input) COMPLEX array, dimension (LDX,NRHS)
-*          If TRANS = 'N', the N-by-NRHS matrix X.
-*          IF TRANS = 'C', the M-by-NRHS matrix X.
-*
-*  LDX     (input) INTEGER
-*          The leading dimension of the array X.
-*
-*  WORK    (workspace) COMPLEX array dimension (LWORK)
-*
-*  LWORK   (input) INTEGER
-*          length of workspace array required
-*          If TRANS = 'N', LWORK >= (M+NRHS)*(N+2);
-*          if TRANS = 'C', LWORK >= (N+NRHS)*(M+2).
 *
 *  =====================================================================
 *

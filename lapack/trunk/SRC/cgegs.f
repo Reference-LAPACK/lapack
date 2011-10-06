@@ -1,11 +1,228 @@
+*> \brief <b> CGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE CGEGS( JOBVSL, JOBVSR, N, A, LDA, B, LDB, ALPHA, BETA,
+*                         VSL, LDVSL, VSR, LDVSR, WORK, LWORK, RWORK,
+*                         INFO )
+* 
+*       .. Scalar Arguments ..
+*       CHARACTER          JOBVSL, JOBVSR
+*       INTEGER            INFO, LDA, LDB, LDVSL, LDVSR, LWORK, N
+*       ..
+*       .. Array Arguments ..
+*       REAL               RWORK( * )
+*       COMPLEX            A( LDA, * ), ALPHA( * ), B( LDB, * ),
+*      $                   BETA( * ), VSL( LDVSL, * ), VSR( LDVSR, * ),
+*      $                   WORK( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> This routine is deprecated and has been replaced by routine CGGES.
+*>
+*> CGEGS computes the eigenvalues, Schur form, and, optionally, the
+*> left and or/right Schur vectors of a complex matrix pair (A,B).
+*> Given two square matrices A and B, the generalized Schur
+*> factorization has the form
+*> 
+*>    A = Q*S*Z**H,  B = Q*T*Z**H
+*> 
+*> where Q and Z are unitary matrices and S and T are upper triangular.
+*> The columns of Q are the left Schur vectors
+*> and the columns of Z are the right Schur vectors.
+*> 
+*> If only the eigenvalues of (A,B) are needed, the driver routine
+*> CGEGV should be used instead.  See CGEGV for a description of the
+*> eigenvalues of the generalized nonsymmetric eigenvalue problem
+*> (GNEP).
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] JOBVSL
+*> \verbatim
+*>          JOBVSL is CHARACTER*1
+*>          = 'N':  do not compute the left Schur vectors;
+*>          = 'V':  compute the left Schur vectors (returned in VSL).
+*> \endverbatim
+*>
+*> \param[in] JOBVSR
+*> \verbatim
+*>          JOBVSR is CHARACTER*1
+*>          = 'N':  do not compute the right Schur vectors;
+*>          = 'V':  compute the right Schur vectors (returned in VSR).
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrices A, B, VSL, and VSR.  N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA, N)
+*>          On entry, the matrix A.
+*>          On exit, the upper triangular matrix S from the generalized
+*>          Schur factorization.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB, N)
+*>          On entry, the matrix B.
+*>          On exit, the upper triangular matrix T from the generalized
+*>          Schur factorization.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of B.  LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] ALPHA
+*> \verbatim
+*>          ALPHA is COMPLEX array, dimension (N)
+*>          The complex scalars alpha that define the eigenvalues of
+*>          GNEP.  ALPHA(j) = S(j,j), the diagonal element of the Schur
+*>          form of A.
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is COMPLEX array, dimension (N)
+*>          The non-negative real scalars beta that define the
+*>          eigenvalues of GNEP.  BETA(j) = T(j,j), the diagonal element
+*>          of the triangular factor T.
+*> \endverbatim
+*> \verbatim
+*>          Together, the quantities alpha = ALPHA(j) and beta = BETA(j)
+*>          represent the j-th eigenvalue of the matrix pair (A,B), in
+*>          one of the forms lambda = alpha/beta or mu = beta/alpha.
+*>          Since either lambda or mu may overflow, they should not,
+*>          in general, be computed.
+*> \endverbatim
+*>
+*> \param[out] VSL
+*> \verbatim
+*>          VSL is COMPLEX array, dimension (LDVSL,N)
+*>          If JOBVSL = 'V', the matrix of left Schur vectors Q.
+*>          Not referenced if JOBVSL = 'N'.
+*> \endverbatim
+*>
+*> \param[in] LDVSL
+*> \verbatim
+*>          LDVSL is INTEGER
+*>          The leading dimension of the matrix VSL. LDVSL >= 1, and
+*>          if JOBVSL = 'V', LDVSL >= N.
+*> \endverbatim
+*>
+*> \param[out] VSR
+*> \verbatim
+*>          VSR is COMPLEX array, dimension (LDVSR,N)
+*>          If JOBVSR = 'V', the matrix of right Schur vectors Z.
+*>          Not referenced if JOBVSR = 'N'.
+*> \endverbatim
+*>
+*> \param[in] LDVSR
+*> \verbatim
+*>          LDVSR is INTEGER
+*>          The leading dimension of the matrix VSR. LDVSR >= 1, and
+*>          if JOBVSR = 'V', LDVSR >= N.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.  LWORK >= max(1,2*N).
+*>          For good performance, LWORK must generally be larger.
+*>          To compute the optimal value of LWORK, call ILAENV to get
+*>          blocksizes (for CGEQRF, CUNMQR, and CUNGQR.)  Then compute:
+*>          NB  -- MAX of the blocksizes for CGEQRF, CUNMQR, and CUNGQR;
+*>          the optimal LWORK is N*(NB+1).
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (3*N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          =1,...,N:
+*>                The QZ iteration failed.  (A,B) are not in Schur
+*>                form, but ALPHA(j) and BETA(j) should be correct for
+*>                j=INFO+1,...,N.
+*>          > N:  errors that usually indicate LAPACK problems:
+*>                =N+1: error return from CGGBAL
+*>                =N+2: error return from CGEQRF
+*>                =N+3: error return from CUNMQR
+*>                =N+4: error return from CUNGQR
+*>                =N+5: error return from CGGHRD
+*>                =N+6: error return from CHGEQZ (other than failed
+*>                                               iteration)
+*>                =N+7: error return from CGGBAK (computing VSL)
+*>                =N+8: error return from CGGBAK (computing VSR)
+*>                =N+9: error return from CLASCL (various places)
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complexGEeigen
+*
+*  =====================================================================
       SUBROUTINE CGEGS( JOBVSL, JOBVSR, N, A, LDA, B, LDB, ALPHA, BETA,
      $                  VSL, LDVSL, VSR, LDVSR, WORK, LWORK, RWORK,
      $                  INFO )
 *
-*  -- LAPACK driver routine (version 3.2) --
+*  -- LAPACK eigen routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBVSL, JOBVSR
@@ -17,126 +234,6 @@
      $                   BETA( * ), VSL( LDVSL, * ), VSR( LDVSR, * ),
      $                   WORK( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  This routine is deprecated and has been replaced by routine CGGES.
-*
-*  CGEGS computes the eigenvalues, Schur form, and, optionally, the
-*  left and or/right Schur vectors of a complex matrix pair (A,B).
-*  Given two square matrices A and B, the generalized Schur
-*  factorization has the form
-*  
-*     A = Q*S*Z**H,  B = Q*T*Z**H
-*  
-*  where Q and Z are unitary matrices and S and T are upper triangular.
-*  The columns of Q are the left Schur vectors
-*  and the columns of Z are the right Schur vectors.
-*  
-*  If only the eigenvalues of (A,B) are needed, the driver routine
-*  CGEGV should be used instead.  See CGEGV for a description of the
-*  eigenvalues of the generalized nonsymmetric eigenvalue problem
-*  (GNEP).
-*
-*  Arguments
-*  =========
-*
-*  JOBVSL   (input) CHARACTER*1
-*          = 'N':  do not compute the left Schur vectors;
-*          = 'V':  compute the left Schur vectors (returned in VSL).
-*
-*  JOBVSR   (input) CHARACTER*1
-*          = 'N':  do not compute the right Schur vectors;
-*          = 'V':  compute the right Schur vectors (returned in VSR).
-*
-*  N       (input) INTEGER
-*          The order of the matrices A, B, VSL, and VSR.  N >= 0.
-*
-*  A       (input/output) COMPLEX array, dimension (LDA, N)
-*          On entry, the matrix A.
-*          On exit, the upper triangular matrix S from the generalized
-*          Schur factorization.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of A.  LDA >= max(1,N).
-*
-*  B       (input/output) COMPLEX array, dimension (LDB, N)
-*          On entry, the matrix B.
-*          On exit, the upper triangular matrix T from the generalized
-*          Schur factorization.
-*
-*  LDB     (input) INTEGER
-*          The leading dimension of B.  LDB >= max(1,N).
-*
-*  ALPHA   (output) COMPLEX array, dimension (N)
-*          The complex scalars alpha that define the eigenvalues of
-*          GNEP.  ALPHA(j) = S(j,j), the diagonal element of the Schur
-*          form of A.
-*
-*  BETA    (output) COMPLEX array, dimension (N)
-*          The non-negative real scalars beta that define the
-*          eigenvalues of GNEP.  BETA(j) = T(j,j), the diagonal element
-*          of the triangular factor T.
-*
-*          Together, the quantities alpha = ALPHA(j) and beta = BETA(j)
-*          represent the j-th eigenvalue of the matrix pair (A,B), in
-*          one of the forms lambda = alpha/beta or mu = beta/alpha.
-*          Since either lambda or mu may overflow, they should not,
-*          in general, be computed.
-*
-*  VSL     (output) COMPLEX array, dimension (LDVSL,N)
-*          If JOBVSL = 'V', the matrix of left Schur vectors Q.
-*          Not referenced if JOBVSL = 'N'.
-*
-*  LDVSL   (input) INTEGER
-*          The leading dimension of the matrix VSL. LDVSL >= 1, and
-*          if JOBVSL = 'V', LDVSL >= N.
-*
-*  VSR     (output) COMPLEX array, dimension (LDVSR,N)
-*          If JOBVSR = 'V', the matrix of right Schur vectors Z.
-*          Not referenced if JOBVSR = 'N'.
-*
-*  LDVSR   (input) INTEGER
-*          The leading dimension of the matrix VSR. LDVSR >= 1, and
-*          if JOBVSR = 'V', LDVSR >= N.
-*
-*  WORK    (workspace/output) COMPLEX array, dimension (MAX(1,LWORK))
-*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*
-*  LWORK   (input) INTEGER
-*          The dimension of the array WORK.  LWORK >= max(1,2*N).
-*          For good performance, LWORK must generally be larger.
-*          To compute the optimal value of LWORK, call ILAENV to get
-*          blocksizes (for CGEQRF, CUNMQR, and CUNGQR.)  Then compute:
-*          NB  -- MAX of the blocksizes for CGEQRF, CUNMQR, and CUNGQR;
-*          the optimal LWORK is N*(NB+1).
-*
-*          If LWORK = -1, then a workspace query is assumed; the routine
-*          only calculates the optimal size of the WORK array, returns
-*          this value as the first entry of the WORK array, and no error
-*          message related to LWORK is issued by XERBLA.
-*
-*  RWORK   (workspace) REAL array, dimension (3*N)
-*
-*  INFO    (output) INTEGER
-*          = 0:  successful exit
-*          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*          =1,...,N:
-*                The QZ iteration failed.  (A,B) are not in Schur
-*                form, but ALPHA(j) and BETA(j) should be correct for
-*                j=INFO+1,...,N.
-*          > N:  errors that usually indicate LAPACK problems:
-*                =N+1: error return from CGGBAL
-*                =N+2: error return from CGEQRF
-*                =N+3: error return from CUNMQR
-*                =N+4: error return from CUNGQR
-*                =N+5: error return from CGGHRD
-*                =N+6: error return from CHGEQZ (other than failed
-*                                               iteration)
-*                =N+7: error return from CGGBAK (computing VSL)
-*                =N+8: error return from CGGBAK (computing VSR)
-*                =N+9: error return from CLASCL (various places)
 *
 *  =====================================================================
 *

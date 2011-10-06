@@ -1,9 +1,118 @@
+*> \brief \b DGETC2
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE DGETC2( N, A, LDA, IPIV, JPIV, INFO )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            INFO, LDA, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            IPIV( * ), JPIV( * )
+*       DOUBLE PRECISION   A( LDA, * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> DGETC2 computes an LU factorization with complete pivoting of the
+*> n-by-n matrix A. The factorization has the form A = P * L * U * Q,
+*> where P and Q are permutation matrices, L is lower triangular with
+*> unit diagonal elements and U is upper triangular.
+*>
+*> This is the Level 2 BLAS algorithm.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the matrix A. N >= 0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA, N)
+*>          On entry, the n-by-n matrix A to be factored.
+*>          On exit, the factors L and U from the factorization
+*>          A = P*L*U*Q; the unit diagonal elements of L are not stored.
+*>          If U(k, k) appears to be less than SMIN, U(k, k) is given the
+*>          value of SMIN, i.e., giving a nonsingular perturbed system.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension(N).
+*>          The pivot indices; for 1 <= i <= N, row i of the
+*>          matrix has been interchanged with row IPIV(i).
+*> \endverbatim
+*>
+*> \param[out] JPIV
+*> \verbatim
+*>          JPIV is INTEGER array, dimension(N).
+*>          The pivot indices; for 1 <= j <= N, column j of the
+*>          matrix has been interchanged with column JPIV(j).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>           = 0: successful exit
+*>           > 0: if INFO = k, U(k, k) is likely to produce owerflow if
+*>                we try to solve for x in Ax = b. So U is perturbed to
+*>                avoid the overflow.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup doubleGEauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  Based on contributions by
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE DGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, N
@@ -12,53 +121,6 @@
       INTEGER            IPIV( * ), JPIV( * )
       DOUBLE PRECISION   A( LDA, * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  DGETC2 computes an LU factorization with complete pivoting of the
-*  n-by-n matrix A. The factorization has the form A = P * L * U * Q,
-*  where P and Q are permutation matrices, L is lower triangular with
-*  unit diagonal elements and U is upper triangular.
-*
-*  This is the Level 2 BLAS algorithm.
-*
-*  Arguments
-*  =========
-*
-*  N       (input) INTEGER
-*          The order of the matrix A. N >= 0.
-*
-*  A       (input/output) DOUBLE PRECISION array, dimension (LDA, N)
-*          On entry, the n-by-n matrix A to be factored.
-*          On exit, the factors L and U from the factorization
-*          A = P*L*U*Q; the unit diagonal elements of L are not stored.
-*          If U(k, k) appears to be less than SMIN, U(k, k) is given the
-*          value of SMIN, i.e., giving a nonsingular perturbed system.
-*
-*  LDA     (input) INTEGER
-*          The leading dimension of the array A.  LDA >= max(1,N).
-*
-*  IPIV    (output) INTEGER array, dimension(N).
-*          The pivot indices; for 1 <= i <= N, row i of the
-*          matrix has been interchanged with row IPIV(i).
-*
-*  JPIV    (output) INTEGER array, dimension(N).
-*          The pivot indices; for 1 <= j <= N, column j of the
-*          matrix has been interchanged with column JPIV(j).
-*
-*  INFO    (output) INTEGER
-*           = 0: successful exit
-*           > 0: if INFO = k, U(k, k) is likely to produce owerflow if
-*                we try to solve for x in Ax = b. So U is perturbed to
-*                avoid the overflow.
-*
-*  Further Details
-*  ===============
-*
-*  Based on contributions by
-*     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*     Umea University, S-901 87 Umea, Sweden.
 *
 *  =====================================================================
 *

@@ -1,9 +1,102 @@
+*> \brief \b ZLARNV
+*
+*  =========== DOCUMENTATION ===========
+*
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
+*
+*  Definition
+*  ==========
+*
+*       SUBROUTINE ZLARNV( IDIST, ISEED, N, X )
+* 
+*       .. Scalar Arguments ..
+*       INTEGER            IDIST, N
+*       ..
+*       .. Array Arguments ..
+*       INTEGER            ISEED( 4 )
+*       COMPLEX*16         X( * )
+*       ..
+*  
+*  Purpose
+*  =======
+*
+*>\details \b Purpose:
+*>\verbatim
+*>
+*> ZLARNV returns a vector of n random complex numbers from a uniform or
+*> normal distribution.
+*>
+*>\endverbatim
+*
+*  Arguments
+*  =========
+*
+*> \param[in] IDIST
+*> \verbatim
+*>          IDIST is INTEGER
+*>          Specifies the distribution of the random numbers:
+*>          = 1:  real and imaginary parts each uniform (0,1)
+*>          = 2:  real and imaginary parts each uniform (-1,1)
+*>          = 3:  real and imaginary parts each normal (0,1)
+*>          = 4:  uniformly distributed on the disc abs(z) < 1
+*>          = 5:  uniformly distributed on the circle abs(z) = 1
+*> \endverbatim
+*>
+*> \param[in,out] ISEED
+*> \verbatim
+*>          ISEED is INTEGER array, dimension (4)
+*>          On entry, the seed of the random number generator; the array
+*>          elements must be between 0 and 4095, and ISEED(4) must be
+*>          odd.
+*>          On exit, the seed is updated.
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The number of random numbers to be generated.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (N)
+*>          The generated random numbers.
+*> \endverbatim
+*>
+*
+*  Authors
+*  =======
+*
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
+*
+*> \date November 2011
+*
+*> \ingroup complex16OTHERauxiliary
+*
+*
+*  Further Details
+*  ===============
+*>\details \b Further \b Details
+*> \verbatim
+*>
+*>  This routine calls the auxiliary routine DLARUV to generate random
+*>  real numbers from a uniform (0,1) distribution, in batches of up to
+*>  128 using vectorisable code. The Box-Muller method is used to
+*>  transform numbers from a uniform to a normal distribution.
+*>
+*> \endverbatim
+*>
+*  =====================================================================
       SUBROUTINE ZLARNV( IDIST, ISEED, N, X )
 *
 *  -- LAPACK auxiliary routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2006
+*     November 2011
 *
 *     .. Scalar Arguments ..
       INTEGER            IDIST, N
@@ -12,43 +105,6 @@
       INTEGER            ISEED( 4 )
       COMPLEX*16         X( * )
 *     ..
-*
-*  Purpose
-*  =======
-*
-*  ZLARNV returns a vector of n random complex numbers from a uniform or
-*  normal distribution.
-*
-*  Arguments
-*  =========
-*
-*  IDIST   (input) INTEGER
-*          Specifies the distribution of the random numbers:
-*          = 1:  real and imaginary parts each uniform (0,1)
-*          = 2:  real and imaginary parts each uniform (-1,1)
-*          = 3:  real and imaginary parts each normal (0,1)
-*          = 4:  uniformly distributed on the disc abs(z) < 1
-*          = 5:  uniformly distributed on the circle abs(z) = 1
-*
-*  ISEED   (input/output) INTEGER array, dimension (4)
-*          On entry, the seed of the random number generator; the array
-*          elements must be between 0 and 4095, and ISEED(4) must be
-*          odd.
-*          On exit, the seed is updated.
-*
-*  N       (input) INTEGER
-*          The number of random numbers to be generated.
-*
-*  X       (output) COMPLEX*16 array, dimension (N)
-*          The generated random numbers.
-*
-*  Further Details
-*  ===============
-*
-*  This routine calls the auxiliary routine DLARUV to generate random
-*  real numbers from a uniform (0,1) distribution, in batches of up to
-*  128 using vectorisable code. The Box-Muller method is used to
-*  transform numbers from a uniform to a normal distribution.
 *
 *  =====================================================================
 *
