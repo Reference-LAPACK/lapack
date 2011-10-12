@@ -121,7 +121,7 @@ else(NOSPACES)
 endif(NOSPACES)
 set(CTEST_SITE              "${hostname}")
 set(CTEST_BUILD_NAME        "${BUILDNAME}")
-set(CTEST_TEST_TIMEOUT           "1500")
+set(CTEST_TEST_TIMEOUT           "36000")
 
 # CVS command and the checkout command
 if(NOT EXISTS "${CTEST_DASHBOARD_ROOT}/${CTEST_DIR_NAME}")
