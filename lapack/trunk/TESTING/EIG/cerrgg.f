@@ -23,7 +23,7 @@
 *>
 *> CERRGG tests the error exits for CGGES, CGGESX, CGGEV, CGGEVX,
 *> CGGGLM, CGGHRD, CGGLSE, CGGQRF, CGGRQF, CGGSVD, CGGSVP, CHGEQZ,
-*> CTGEVC, CTGEXC, CTGSEN, CTGSJA, CTGSNA, and CTGSYL.
+*> CTGEVC, CTGEXC, CTGSEN, CTGSJA, CTGSNA, CTGSYL and CUNCSD.
 *>
 *>\endverbatim
 *
@@ -100,7 +100,7 @@
       EXTERNAL           CGGES, CGGESX, CGGEV, CGGEVX, CGGGLM, CGGHRD,
      $                   CGGLSE, CGGQRF, CGGRQF, CGGSVD, CGGSVP, CHGEQZ,
      $                   CHKXER, CTGEVC, CTGEXC, CTGSEN, CTGSJA, CTGSNA,
-     $                   CTGSYL
+     $                   CTGSYL, CUNCSD
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -508,6 +508,71 @@
          CALL CGGLSE( 1, 1, 1, A, 1, B, 1, TAU, ALPHA, BETA, W, 1,
      $                INFO )
          CALL CHKXER( 'CGGLSE', INFOT, NOUT, LERR, OK )
+         NT = NT + 8
+*
+*     Test error exits for the CSD path.
+*
+      ELSE IF( LSAMEN( 3, PATH, 'CSD' ) ) THEN
+*
+*        CUNCSD
+*
+         SRNAMT = 'CUNCSD'
+         INFOT = 7
+         CALL CUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 -1, 0, 0, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 1, W, LW, RW, LW, IW, INFO )      
+         CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL CUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, -1, 0, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 1, W, LW, RW, LW, IW, INFO )      
+         CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL CUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, -1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 1, W, LW, RW, LW, IW, INFO )      
+         CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL CUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, -1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 1, W, LW, RW, LW, IW, INFO )      
+         CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 20
+         CALL CUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, -1, A, 1, A, 1, A,
+     $                 1, W, LW, RW, LW, IW, INFO )      
+         CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 22
+         CALL CUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, -1, A, 1, A,
+     $                 1, W, LW, RW, LW, IW, INFO )      
+         CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 24
+         CALL CUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, -1, A,
+     $                 1, W, LW, RW, LW, IW, INFO )      
+         CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 26
+         CALL CUNCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 -1, W, LW, RW, LW, IW, INFO )      
+         CALL CHKXER( 'CUNCSD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
 *     Test error exits for the GQR path.

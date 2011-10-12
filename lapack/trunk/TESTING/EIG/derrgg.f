@@ -23,7 +23,7 @@
 *>
 *> DERRGG tests the error exits for DGGES, DGGESX, DGGEV, DGGEVX,
 *> DGGGLM, DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD, DGGSVP, DHGEQZ,
-*> DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA, and DTGSYL.
+*> DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA, and DTGSYL.
 *>
 *>\endverbatim
 *
@@ -98,8 +98,8 @@
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, DGGES, DGGESX, DGGEV, DGGEVX, DGGGLM,
      $                   DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD, DGGSVP,
-     $                   DHGEQZ, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA,
-     $                   DTGSYL
+     $                   DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA,
+     $                   DTGSNA, DTGSYL
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -491,6 +491,71 @@
          INFOT = 12
          CALL DGGLSE( 1, 1, 1, A, 1, B, 1, R1, R2, R3, W, 1, INFO )
          CALL CHKXER( 'DGGLSE', INFOT, NOUT, LERR, OK )
+         NT = NT + 8
+*
+*     Test error exits for the CSD path.
+*
+      ELSE IF( LSAMEN( 3, PATH, 'CSD' ) ) THEN
+*
+*        DORCSD
+*
+         SRNAMT = 'DORCSD'
+         INFOT = 7
+         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 -1, 0, 0, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 1, W, LW, IW, INFO )      
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, -1, 0, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 1, W, LW, IW, INFO )      
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, -1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 1, W, LW, IW, INFO )      
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, -1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 1, W, LW, IW, INFO )      
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 20
+         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, -1, A, 1, A, 1, A,
+     $                 1, W, LW, IW, INFO )      
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 22
+         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, -1, A, 1, A,
+     $                 1, W, LW, IW, INFO )      
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 24
+         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, -1, A,
+     $                 1, W, LW, IW, INFO )      
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
+         INFOT = 26
+         CALL DORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
+     $                 1, 1, 1, A, 1, A,
+     $                 1, A, 1, A, 1, A,
+     $                 A, 1, A, 1, A, 1, A,
+     $                 -1, W, LW, IW, INFO )      
+         CALL CHKXER( 'DORCSD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
 *     Test error exits for the GQR path.

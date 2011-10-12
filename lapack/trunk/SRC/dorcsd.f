@@ -334,13 +334,13 @@
      $         ( .NOT.COLMAJOR .AND. LDX11 .LT. MAX(1,Q) ) ) THEN
          INFO = -11
       ELSE IF( WANTU1 .AND. LDU1 .LT. P ) THEN
-         INFO = -14
-      ELSE IF( WANTU2 .AND. LDU2 .LT. M-P ) THEN
-         INFO = -16
-      ELSE IF( WANTV1T .AND. LDV1T .LT. Q ) THEN
-         INFO = -18
-      ELSE IF( WANTV2T .AND. LDV2T .LT. M-Q ) THEN
          INFO = -20
+      ELSE IF( WANTU2 .AND. LDU2 .LT. M-P ) THEN
+         INFO = -22
+      ELSE IF( WANTV1T .AND. LDV1T .LT. Q ) THEN
+         INFO = -24
+      ELSE IF( WANTV2T .AND. LDV2T .LT. M-Q ) THEN
+         INFO = -26
       END IF
 *
 *     Work with transpose if convenient
