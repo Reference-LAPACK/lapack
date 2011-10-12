@@ -129,8 +129,9 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            IEEE
-      INTEGER            I0, I4, IINFO, IPN4, ITER, IWHILA, IWHILB, K,
-     $                   KMIN, N0, NBIG, NDIV, NFAIL, PP, SPLT, TTYPE
+      INTEGER            I0, I1, I4, IINFO, IPN4, ITER, IWHILA, IWHILB,
+     $                   K, KMIN, N0, N1, NBIG, NDIV, NFAIL, PP, SPLT, 
+     $                   TTYPE
       DOUBLE PRECISION   D, DEE, DEEMIN, DESIG, DMIN, DMIN1, DMIN2, DN,
      $                   DN1, DN2, E, EMAX, EMIN, EPS, G, OLDEMN, QMAX,
      $                   QMIN, S, SAFMIN, SIGMA, T, TAU, TEMP, TOL,

@@ -516,7 +516,7 @@
 *
          IF( I1.GT.1 ) THEN
             N1 = I1-1
-            DO WHILE( ( I1.GE.2 ) .AND. ( Z(4*I-5).GE.ZERO ) )
+            DO WHILE( ( I1.GE.2 ) .AND. ( Z(4*I1-5).GE.ZERO ) )
                I1 = I1 - 1
             END DO
             IF( I1.GE.1 ) THEN
