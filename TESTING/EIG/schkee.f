@@ -2351,6 +2351,7 @@
 *        CSD:  CS Decomposition
 *        ----------------------------------------------
 *
+         CALL XLAENV(1,1)
          IF( TSTERR )
      $      CALL SERRGG( 'CSD', NOUT )
          CALL SCKCSD( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,
