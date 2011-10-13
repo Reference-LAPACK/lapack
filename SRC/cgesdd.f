@@ -1,4 +1,4 @@
-*> \brief \b CGESC2
+*> \brief \b CGESDD
 *
 *  =========== DOCUMENTATION ===========
 *
