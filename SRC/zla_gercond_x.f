@@ -5,6 +5,14 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
+*> Download ZLA_GERCOND_X + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zla_gercond_x.f"> 
+*> [TGZ]</a> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zla_gercond_x.f"> 
+*> [ZIP]</a> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zla_gercond_x.f"> 
+*> [TXT]</a> 
+*
 *  Definition
 *  ==========
 *

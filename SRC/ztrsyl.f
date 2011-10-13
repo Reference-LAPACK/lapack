@@ -5,6 +5,14 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
+*> Download ZTRSYL + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztrsyl.f"> 
+*> [TGZ]</a> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztrsyl.f"> 
+*> [ZIP]</a> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztrsyl.f"> 
+*> [TXT]</a> 
+*
 *  Definition
 *  ==========
 *
