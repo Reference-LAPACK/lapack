@@ -33,6 +33,7 @@
 *> DBD   DGESVD   compute SVD of an M-by-N matrix A
 *>       DGESDD   compute SVD of an M-by-N matrix A (by divide and
 *>                conquer)
+*>       DGEJSV   compute SVD of an M-by-N matrix A where M >= N
 *>
 *>\endverbatim
 *
@@ -98,8 +99,8 @@
      $                   W( 4*NMAX ), WI( NMAX ), WR( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, DGEES, DGEESX, DGEEV, DGEEVX, DGESDD,
-     $                   DGESVD
+      EXTERNAL           CHKXER, DGEES, DGEESX, DGEEV, DGEEVX, DGEJSV,
+     $                   DGESDD, DGESVD
 *     ..
 *     .. External Functions ..
       LOGICAL            DSLECT, LSAMEN
@@ -324,7 +325,7 @@
          INFOT = 11
          CALL DGESVD( 'N', 'A', 1, 2, A, 1, S, U, 1, VT, 1, W, 5, INFO )
          CALL CHKXER( 'DGESVD', INFOT, NOUT, LERR, OK )
-         NT = NT + 8
+         NT = 8
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
@@ -353,7 +354,73 @@
          INFOT = 10
          CALL DGESDD( 'A', 1, 2, A, 1, S, U, 1, VT, 1, W, 5, IW, INFO )
          CALL CHKXER( 'DGESDD', INFOT, NOUT, LERR, OK )
-         NT = NT - 2
+         NT = 6
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )
+         END IF
+*
+*        Test DGEJSV
+*
+         SRNAMT = 'DGEJSV'
+         INFOT = 1
+         CALL DGEJSV( 'X', 'U', 'V', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DGEJSV( 'G', 'X', 'V', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DGEJSV( 'G', 'U', 'X', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DGEJSV( 'G', 'U', 'V', 'X', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DGEJSV( 'G', 'U', 'V', 'R', 'X', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DGEJSV( 'G', 'U', 'V', 'R', 'N', 'X',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 -1, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 0, -1, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 1, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 13
+         CALL DGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 2, A, 2, S, U, 1, VT, 2,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 14
+         CALL DGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 2, A, 2, S, U, 2, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
+         NT = 11
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
