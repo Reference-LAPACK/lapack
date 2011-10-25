@@ -407,12 +407,14 @@
 *
 *                    Factor the matrix A.
 *
+                     SRNAMT = 'CGETRF'
                      CALL CGETRF( N, N, AFAC, LDA, IWORK, INFO )
 *
 *                    Form the inverse of A.
 *
                      CALL CLACPY( 'Full', N, N, AFAC, LDA, A, LDA )
                      LWORK = NMAX*MAX( 3, NRHS )
+                     SRNAMT = 'CGETRI'
                      CALL CGETRI( N, A, LDA, IWORK, WORK, LWORK, INFO )
 *
 *                    Compute the 1-norm condition number of A.

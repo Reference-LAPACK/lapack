@@ -407,12 +407,14 @@
 *
 *                    Factor the matrix A.
 *
+                     SRNAMT = 'DGETRF'
                      CALL DGETRF( N, N, AFAC, LDA, IWORK, INFO )
 *
 *                    Form the inverse of A.
 *
                      CALL DLACPY( 'Full', N, N, AFAC, LDA, A, LDA )
                      LWORK = NMAX*MAX( 3, NRHS )
+                     SRNAMT = 'DGETRI'
                      CALL DGETRI( N, A, LDA, IWORK, WORK, LWORK, INFO )
 *
 *                    Compute the 1-norm condition number of A.
