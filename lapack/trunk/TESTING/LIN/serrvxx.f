@@ -84,7 +84,7 @@
       REAL               A( NMAX, NMAX ), AF( NMAX, NMAX ), B( NMAX ),
      $                   C( NMAX ), R( NMAX ), R1( NMAX ), R2( NMAX ),
      $                   W( 2*NMAX ), X( NMAX ), ERR_BNDS_N( NMAX, 3 ),
-     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS
+     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS( 1 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
@@ -205,7 +205,7 @@
 *        SGESVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'SGESVXX'
          INFOT = 1
          CALL SGESVXX( '/', 'N', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B, 1,
@@ -352,7 +352,7 @@
 *        SGBSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'SGBSVXX'
          INFOT = 1
          CALL SGBSVXX( '/', 'N', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
@@ -557,7 +557,7 @@
 *        SPOSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'SPOSVXX'
          INFOT = 1
          CALL SPOSVXX( '/', 'U', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
@@ -842,7 +842,7 @@
 *        SSYSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'SSYSVXX'
          INFOT = 1
          EQ = 'N'

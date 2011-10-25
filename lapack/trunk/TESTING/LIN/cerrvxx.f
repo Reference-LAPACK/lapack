@@ -83,7 +83,7 @@
       INTEGER            IP( NMAX )
       REAL               C( NMAX ), R( NMAX ), R1( NMAX ), R2( NMAX ),
      $                   RF( NMAX ), RW( NMAX ), ERR_BNDS_N( NMAX, 3 ),
-     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS
+     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS( 1 )
       COMPLEX            A( NMAX, NMAX ), AF( NMAX, NMAX ), B( NMAX ),
      $                   W( 2*NMAX ), X( NMAX )
 *     ..
@@ -207,7 +207,7 @@
 *        CGESVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'CGESVXX'
          INFOT = 1
          CALL CGESVXX( '/', 'N', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B, 1,
@@ -354,7 +354,7 @@
 *        CGBSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'CGBSVXX'
          INFOT = 1
          CALL CGBSVXX( '/', 'N', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
@@ -559,7 +559,7 @@
 *        CPOSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'CPOSVXX'
          INFOT = 1
          CALL CPOSVXX( '/', 'U', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
@@ -847,7 +847,7 @@
 *        CHESVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'CHESVXX'
          INFOT = 1
          CALL CHESVXX( '/', 'U', 0, 0, A, 1, AF, 1, IP, EQ, C, B, 1, X,
@@ -1009,7 +1009,7 @@
 *        CSYSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'CSYSVXX'
          INFOT = 1
          EQ = 'N'
