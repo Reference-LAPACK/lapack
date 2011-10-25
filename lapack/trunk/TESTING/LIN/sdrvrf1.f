@@ -171,6 +171,9 @@
          N = NVAL( IIN )
 *
          DO 120 IIT = 1, 3
+         
+*           Quick Return if possible
+            IF ( N .EQ. 0 ) EXIT
 *
 *           IIT = 1 : random matrix
 *           IIT = 2 : random matrix scaled near underflow
