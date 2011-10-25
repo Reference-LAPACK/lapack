@@ -83,7 +83,7 @@
       INTEGER            IP( NMAX )
       DOUBLE PRECISION   C( NMAX ), R( NMAX ), R1( NMAX ), R2( NMAX ),
      $                   RF( NMAX ), RW( NMAX ), ERR_BNDS_N( NMAX, 3 ),
-     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS
+     $                   ERR_BNDS_C( NMAX, 3 ), PARAMS( 1 )
       COMPLEX*16         A( NMAX, NMAX ), AF( NMAX, NMAX ), B( NMAX ),
      $                   W( 2*NMAX ), X( NMAX )
 *     ..
@@ -209,7 +209,7 @@
 *        ZGESVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'ZGESVXX'
          INFOT = 1
          CALL ZGESVXX( '/', 'N', 0, 0, A, 1, AF, 1, IP, EQ, R, C, B,
@@ -367,7 +367,7 @@
 *        ZGBSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'ZGBSVXX'
          INFOT = 1
          CALL ZGBSVXX( '/', 'N', 0, 0, 0, 0, A, 1, AF, 1, IP, EQ, R, C,
@@ -572,7 +572,7 @@
 *        ZPOSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'ZPOSVXX'
          INFOT = 1
          CALL ZPOSVXX( '/', 'U', 0, 0, A, 1, AF, 1, EQ, C, B, 1, X, 1,
@@ -860,7 +860,7 @@
 *        ZHESVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'ZHESVXX'
          INFOT = 1
          CALL ZHESVXX( '/', 'U', 0, 0, A, 1, AF, 1, IP, EQ, C, B, 1, X,
@@ -1022,7 +1022,7 @@
 *        ZSYSVXX
 *
          N_ERR_BNDS = 3
-         NPARAMS = 0
+         NPARAMS = 1
          SRNAMT = 'ZSYSVXX'
          INFOT = 1
          EQ = 'N'
