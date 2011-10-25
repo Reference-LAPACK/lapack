@@ -33,6 +33,7 @@
 *> SBD   SGESVD   compute SVD of an M-by-N matrix A
 *>       SGESDD   compute SVD of an M-by-N matrix A (by divide and
 *>                conquer)
+*>       SGEJSV   compute SVD of an M-by-N matrix A where M >= N
 *>
 *>\endverbatim
 *
@@ -98,12 +99,15 @@
      $                   W( 4*NMAX ), WI( NMAX ), WR( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, SGEES, SGEESX, SGEEV, SGEEVX, SGESDD,
-     $                   SGESVD
+      EXTERNAL           CHKXER, SGEES, SGEESX, SGEEV, SGEEVX, SGEJSV,
+     $                   SGESDD, SGESVD
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN, SSLECT
       EXTERNAL           LSAMEN, SSLECT
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          LEN_TRIM
 *     ..
 *     .. Arrays in Common ..
       LOGICAL            SELVAL( 20 )
@@ -321,7 +325,13 @@
          INFOT = 11
          CALL SGESVD( 'N', 'A', 1, 2, A, 1, S, U, 1, VT, 1, W, 5, INFO )
          CALL CHKXER( 'SGESVD', INFOT, NOUT, LERR, OK )
-         NT = NT + 8
+         NT = 8
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )
+         END IF
 *
 *        Test SGESDD
 *
@@ -344,23 +354,95 @@
          INFOT = 10
          CALL SGESDD( 'A', 1, 2, A, 1, S, U, 1, VT, 1, W, 5, IW, INFO )
          CALL CHKXER( 'SGESDD', INFOT, NOUT, LERR, OK )
-         NT = NT + 6
+         NT = 6
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )
+         END IF
+*
+*        Test SGEJSV
+*
+         SRNAMT = 'SGEJSV'
+         INFOT = 1
+         CALL SGEJSV( 'X', 'U', 'V', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SGEJSV( 'G', 'X', 'V', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SGEJSV( 'G', 'U', 'X', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SGEJSV( 'G', 'U', 'V', 'X', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SGEJSV( 'G', 'U', 'V', 'R', 'X', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL SGEJSV( 'G', 'U', 'V', 'R', 'N', 'X',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 -1, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 0, -1, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 1, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 13
+         CALL SGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 2, A, 2, S, U, 1, VT, 2,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 14
+         CALL SGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 2, A, 2, S, U, 2, VT, 1,
+     $                 W, 1, IW, INFO)
+         CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
+         NT = 11
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )
+         END IF
       END IF
 *
 *     Print a summary line.
 *
       IF( .NOT.LSAMEN( 2, C2, 'BD' ) ) THEN
          IF( OK ) THEN
-            WRITE( NOUT, FMT = 9999 )PATH, NT
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
          ELSE
-            WRITE( NOUT, FMT = 9998 )PATH
+            WRITE( NOUT, FMT = 9998 )
          END IF
       END IF
 *
- 9999 FORMAT( 1X, A3, ' routines passed the tests of the error exits (',
-     $        I3, ' tests done)' )
- 9998 FORMAT( ' *** ', A3, ' routines failed the tests of the error ex',
-     $        'its ***' )
+ 9999 FORMAT( 1X, A, ' passed the tests of the error exits (', I3,
+     $      ' tests done)' )
+ 9998 FORMAT( ' *** ', A, ' failed the tests of the error exits ***' )
       RETURN
 *
 *     End of SERRED
