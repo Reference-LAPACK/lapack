@@ -48,12 +48,10 @@
 *>           On  entry,   UPLO  specifies  whether  the  upper  or  lower
 *>           triangular  part  of the  array  C  is to be  referenced  as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   Only the  upper triangular part of  C
 *>                                  is to be referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   Only the  lower triangular part of  C
 *>                                  is to be referenced.
 *> \endverbatim
@@ -63,16 +61,13 @@
 *>          TRANS is CHARACTER*1
 *>           On entry,  TRANS  specifies the operation to be performed as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'N' or 'n'   C := alpha*A*B**T + alpha*B*A**T +
 *>                                        beta*C.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'T' or 't'   C := alpha*A**T*B + alpha*B**T*A +
 *>                                        beta*C.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'C' or 'c'   C := alpha*A**T*B + alpha*B**T*A +
 *>                                        beta*C.
 *> \endverbatim

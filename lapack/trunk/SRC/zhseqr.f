@@ -75,9 +75,13 @@
 *> \param[in] ILO
 *> \verbatim
 *>          ILO is INTEGER
+*> \endverbatim
+*>
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
+*> \endverbatim
+*> \verbatim
 *>           It is assumed that H is already upper triangular in rows
 *>           and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
 *>           set by a previous call to ZGEBAL, and then passed to ZGEHRD
@@ -85,7 +89,6 @@
 *>           form. Otherwise ILO and IHI should be set to 1 and N
 *>           respectively.  If N.GT.0, then 1.LE.ILO.LE.IHI.LE.N.
 *>           If N = 0, then ILO = 1 and IHI = 0.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] H

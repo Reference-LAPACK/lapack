@@ -80,8 +80,10 @@
 *> \verbatim
 *>          C is COMPLEX*16 array, dimension (LDC,N)
 *> \endverbatim
+*>
+*> \param[in] LDC
 *> \verbatim
-*>  LDC     (integer) INTEGER
+*>          LDC is INTEGER
 *>          The leading dimension of the array C.  LDC >= max(1,N).
 *> \endverbatim
 *>

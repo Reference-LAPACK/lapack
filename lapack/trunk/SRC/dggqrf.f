@@ -102,6 +102,68 @@
 *>          The leading dimension of the array A. LDA >= max(1,N).
 *> \endverbatim
 *>
+*> \param[out] TAUA
+*> \verbatim
+*>          TAUA is DOUBLE PRECISION array, dimension (min(N,M))
+*>          The scalar factors of the elementary reflectors which
+*>          represent the orthogonal matrix Q (see Further Details).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,P)
+*>          On entry, the N-by-P matrix B.
+*>          On exit, if N <= P, the upper triangle of the subarray
+*>          B(1:N,P-N+1:P) contains the N-by-N upper triangular matrix T;
+*>          if N > P, the elements on and above the (N-P)-th subdiagonal
+*>          contain the N-by-P upper trapezoidal matrix T; the remaining
+*>          elements, with the array TAUB, represent the orthogonal
+*>          matrix Z as a product of elementary reflectors (see Further
+*>          Details).
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] TAUB
+*> \verbatim
+*>          TAUB is DOUBLE PRECISION array, dimension (min(N,P))
+*>          The scalar factors of the elementary reflectors which
+*>          represent the orthogonal matrix Z (see Further Details).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK. LWORK >= max(1,N,M,P).
+*>          For optimum performance LWORK >= max(N,M,P)*max(NB1,NB2,NB3),
+*>          where NB1 is the optimal blocksize for the QR factorization
+*>          of an N-by-M matrix, NB2 is the optimal blocksize for the
+*>          RQ factorization of an N-by-P matrix, and NB3 is the optimal
+*>          blocksize for a call of DORMQR.
+*>
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -120,45 +182,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          represent the orthogonal matrix Q (see Further Details).
-*>
-*>  B       (input/output) DOUBLE PRECISION array, dimension (LDB,P)
-*>          On entry, the N-by-P matrix B.
-*>          On exit, if N <= P, the upper triangle of the subarray
-*>          B(1:N,P-N+1:P) contains the N-by-N upper triangular matrix T;
-*>          if N > P, the elements on and above the (N-P)-th subdiagonal
-*>          contain the N-by-P upper trapezoidal matrix T; the remaining
-*>          elements, with the array TAUB, represent the orthogonal
-*>          matrix Z as a product of elementary reflectors (see Further
-*>          Details).
-*>
-*>  LDB     (input) INTEGER
-*>          The leading dimension of the array B. LDB >= max(1,N).
-*>
-*>  TAUB    (output) DOUBLE PRECISION array, dimension (min(N,P))
-*>          The scalar factors of the elementary reflectors which
-*>          represent the orthogonal matrix Z (see Further Details).
-*>
-*>  WORK    (workspace/output) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
-*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*>
-*>  LWORK   (input) INTEGER
-*>          The dimension of the array WORK. LWORK >= max(1,N,M,P).
-*>          For optimum performance LWORK >= max(N,M,P)*max(NB1,NB2,NB3),
-*>          where NB1 is the optimal blocksize for the QR factorization
-*>          of an N-by-M matrix, NB2 is the optimal blocksize for the
-*>          RQ factorization of an N-by-P matrix, and NB3 is the optimal
-*>          blocksize for a call of DORMQR.
-*>
-*>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
-*>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
-*>
-*>  INFO    (output) INTEGER
-*>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>
 *>
 *>  The matrix Q is represented as a product of elementary reflectors
 *>

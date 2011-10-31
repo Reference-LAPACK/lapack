@@ -97,9 +97,13 @@
 *> \param[in,out] IFST
 *> \verbatim
 *>          IFST is INTEGER
+*> \endverbatim
+*>
 *> \param[in,out] ILST
 *> \verbatim
 *>          ILST is INTEGER
+*> \endverbatim
+*> \verbatim
 *>          Specify the reordering of the diagonal blocks of T.
 *>          The block with row index IFST is moved to row ILST, by a
 *>          sequence of transpositions between adjacent blocks.
@@ -108,7 +112,6 @@
 *>          always points to the first row of the block in its final
 *>          position (which may differ from its input value by +1 or -1).
 *>          1 <= IFST <= N; 1 <= ILST <= N.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] WORK

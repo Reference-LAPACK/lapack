@@ -55,8 +55,10 @@
 *>          ALPHA is REAL
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
+*>
+*> \param[in] X
 *> \verbatim
-*>  X        REAL array of dimension at least
+*>          X is REAL array of dimension at least
 *>           ( 1 + ( m - 1 )*abs( INCX ) ).
 *>           Before entry, the incremented array X must contain the m
 *>           element vector x.

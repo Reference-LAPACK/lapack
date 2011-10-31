@@ -127,16 +127,52 @@
 *>          The number of columns in X11 and X21. 0 <= Q <= M.
 *> \endverbatim
 *>
-*> \param[in,out] X
+*> \param[in,out] X11
 *> \verbatim
-*>          X is DOUBLE PRECISION array, dimension (LDX,M)
-*>          On entry, the orthogonal matrix whose CSD is desired.
+*>          X11 is DOUBLE PRECISION array, dimension (LDX11,Q)
+*>          On entry, part of the orthogonal matrix whose CSD is desired.
 *> \endverbatim
 *>
-*> \param[in] LDX
+*> \param[in] LDX11
 *> \verbatim
-*>          LDX is INTEGER
-*>          The leading dimension of X. LDX >= MAX(1,M).
+*>          LDX11 is INTEGER
+*>          The leading dimension of X11. LDX11 >= MAX(1,P).
+*> \endverbatim
+*>
+*> \param[in,out] X12
+*> \verbatim
+*>          X12 is DOUBLE PRECISION array, dimension (LDX12,M-Q)
+*>          On entry, part of the orthogonal matrix whose CSD is desired.
+*> \endverbatim
+*>
+*> \param[in] LDX12
+*> \verbatim
+*>          LDX12 is INTEGER
+*>          The leading dimension of X12. LDX12 >= MAX(1,P).
+*> \endverbatim
+*>
+*> \param[in,out] X21
+*> \verbatim
+*>          X21 is DOUBLE PRECISION array, dimension (LDX21,Q)
+*>          On entry, part of the orthogonal matrix whose CSD is desired.
+*> \endverbatim
+*>
+*> \param[in] LDX21
+*> \verbatim
+*>          LDX21 is INTEGER
+*>          The leading dimension of X11. LDX21 >= MAX(1,M-P).
+*> \endverbatim
+*>
+*> \param[in,out] X22
+*> \verbatim
+*>          X22 is DOUBLE PRECISION array, dimension (LDX22,M-Q)
+*>          On entry, part of the orthogonal matrix whose CSD is desired.
+*> \endverbatim
+*>
+*> \param[in] LDX22
+*> \verbatim
+*>          LDX22 is INTEGER
+*>          The leading dimension of X11. LDX22 >= MAX(1,M-P).
 *> \endverbatim
 *>
 *> \param[out] THETA

@@ -19,7 +19,7 @@
 *       SUBROUTINE SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
 *                                       LDA, AF, LDAF, IPIV, COLEQU, C, B,
 *                                       LDB, Y, LDY, BERR_OUT, N_NORMS,
-*                                       ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
+*                                       ERRS_N, ERRS_C, RES,
 *                                       AYB, DY, Y_TAIL, RCOND, ITHRESH,
 *                                       RTHRESH, DZ_UB, IGNORE_CWISE,
 *                                       INFO )
@@ -35,8 +35,8 @@
 *       REAL               A( LDA, * ), AF( LDAF, * ), B( LDB, * ),
 *      $                   Y( LDY, * ), RES( * ), DY( * ), Y_TAIL( * )
 *       REAL               C( * ), AYB( * ), RCOND, BERR_OUT( * ),
-*      $                   ERR_BNDS_NORM( NRHS, * ),
-*      $                   ERR_BNDS_COMP( NRHS, * )
+*      $                   ERRS_N( NRHS, * ),
+*      $                   ERRS_C( NRHS, * )
 *       ..
 *  
 *  Purpose
@@ -50,10 +50,10 @@
 *> and provides error bounds and backward error estimates for the solution.
 *> This subroutine is called by SGERFSX to perform iterative refinement.
 *> In addition to normwise error bound, the code provides maximum
-*> componentwise error bound if possible. See comments for ERR_BNDS_NORM
-*> and ERR_BNDS_COMP for details of the error bounds. Note that this
+*> componentwise error bound if possible. See comments for ERRS_N
+*> and ERRS_C for details of the error bounds. Note that this
 *> subroutine is only resonsible for setting the second fields of
-*> ERR_BNDS_NORM and ERR_BNDS_COMP.
+*> ERRS_N and ERRS_C.
 *>
 *>\endverbatim
 *
@@ -187,49 +187,43 @@
 *> \param[in] N_NORMS
 *> \verbatim
 *>          N_NORMS is INTEGER
-*>     Determines which error bounds to return (see ERR_BNDS_NORM
-*>     and ERR_BNDS_COMP).
+*>     Determines which error bounds to return (see ERRS_N
+*>     and ERRS_C).
 *>     If N_NORMS >= 1 return normwise error bounds.
 *>     If N_NORMS >= 2 return componentwise error bounds.
 *> \endverbatim
 *>
-*> \param[in,out] ERR_BNDS_NORM
+*> \param[in,out] ERRS_N
 *> \verbatim
-*>          ERR_BNDS_NORM is REAL array, dimension (NRHS, N_ERR_BNDS)
+*>          ERRS_N is REAL array, dimension (NRHS, N_ERR_BNDS)
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     normwise relative error, which is defined as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>     Normwise relative error in the ith solution vector:
 *>             max_j (abs(XTRUE(j,i) - X(j,i)))
 *>            ------------------------------
 *>                  max_j abs(X(j,i))
-*> \endverbatim
-*> \verbatim
+*>
 *>     The array is indexed by the type of error information as described
 *>     below. There currently are up to three pieces of information
 *>     returned.
-*> \endverbatim
-*> \verbatim
-*>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
+*>
+*>     The first index in ERRS_N(i,:) corresponds to the ith
 *>     right-hand side.
-*> \endverbatim
-*> \verbatim
-*>     The second index in ERR_BNDS_NORM(:,err) contains the following
+*>
+*>     The second index in ERRS_N(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
 *>              sqrt(n) * slamch('Epsilon').
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
 *>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
 *>              sqrt(n) * slamch('Epsilon') to determine if the error
@@ -238,55 +232,48 @@
 *>              appropriately scaled matrix Z.
 *>              Let Z = S*A, where S scales each row by a power of the
 *>              radix so all absolute row sums of Z are approximately 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>     This subroutine is only responsible for setting the second field
 *>     above.
 *>     See Lapack Working Note 165 for further details and extra
 *>     cautions.
 *> \endverbatim
 *>
-*> \param[in,out] ERR_BNDS_COMP
+*> \param[in,out] ERRS_C
 *> \verbatim
-*>          ERR_BNDS_COMP is REAL array, dimension (NRHS, N_ERR_BNDS)
+*>          ERRS_C is REAL array, dimension (NRHS, N_ERR_BNDS)
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     componentwise relative error, which is defined as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>     Componentwise relative error in the ith solution vector:
 *>                    abs(XTRUE(j,i) - X(j,i))
 *>             max_j ----------------------
 *>                         abs(X(j,i))
-*> \endverbatim
-*> \verbatim
+*>
 *>     The array is indexed by the right-hand side i (on which the
 *>     componentwise relative error depends), and the type of error
 *>     information as described below. There currently are up to three
 *>     pieces of information returned for each right-hand side. If
 *>     componentwise accuracy is not requested (PARAMS(3) = 0.0), then
-*>     ERR_BNDS_COMP is not accessed.  If N_ERR_BNDS .LT. 3, then at most
+*>     ERRS_C is not accessed.  If N_ERR_BNDS .LT. 3, then at most
 *>     the first (:,N_ERR_BNDS) entries are returned.
-*> \endverbatim
-*> \verbatim
-*>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
+*>
+*>     The first index in ERRS_C(i,:) corresponds to the ith
 *>     right-hand side.
-*> \endverbatim
-*> \verbatim
-*>     The second index in ERR_BNDS_COMP(:,err) contains the following
+*>
+*>     The second index in ERRS_C(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
 *>              sqrt(n) * slamch('Epsilon').
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
 *>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
 *>              sqrt(n) * slamch('Epsilon') to determine if the error
@@ -297,8 +284,7 @@
 *>              current right-hand side and S scales each row of
 *>              A*diag(x) by a power of the radix so all absolute row
 *>              sums of Z are approximately 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>     This subroutine is only responsible for setting the second field
 *>     above.
 *>     See Lapack Working Note 165 for further details and extra
@@ -349,7 +335,7 @@
 *>     permit convergence using approximate factorizations or
 *>     factorizations other than LU. If the factorization uses a
 *>     technique other than Gaussian elimination, the guarantees in
-*>     ERR_BNDS_NORM and ERR_BNDS_COMP may no longer be trustworthy.
+*>     ERRS_N and ERRS_C may no longer be trustworthy.
 *> \endverbatim
 *>
 *> \param[in] RTHRESH
@@ -407,7 +393,7 @@
       SUBROUTINE SLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
      $                                LDA, AF, LDAF, IPIV, COLEQU, C, B,
      $                                LDB, Y, LDY, BERR_OUT, N_NORMS,
-     $                                ERR_BNDS_NORM, ERR_BNDS_COMP, RES,
+     $                                ERRS_N, ERRS_C, RES,
      $                                AYB, DY, Y_TAIL, RCOND, ITHRESH,
      $                                RTHRESH, DZ_UB, IGNORE_CWISE,
      $                                INFO )
@@ -428,8 +414,8 @@
       REAL               A( LDA, * ), AF( LDAF, * ), B( LDB, * ),
      $                   Y( LDY, * ), RES( * ), DY( * ), Y_TAIL( * )
       REAL               C( * ), AYB( * ), RCOND, BERR_OUT( * ),
-     $                   ERR_BNDS_NORM( NRHS, * ),
-     $                   ERR_BNDS_COMP( NRHS, * )
+     $                   ERRS_N( NRHS, * ),
+     $                   ERRS_C( NRHS, * )
 *     ..
 *
 *  =====================================================================
@@ -665,11 +651,11 @@
 *     Compute error bounds
 *
          IF (N_NORMS .GE. 1) THEN
-            ERR_BNDS_NORM( J, LA_LINRX_ERR_I ) =
+            ERRS_N( J, LA_LINRX_ERR_I ) =
      $           FINAL_DX_X / (1 - DXRATMAX)
          END IF
          IF ( N_NORMS .GE. 2 ) THEN
-            ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) =
+            ERRS_C( J, LA_LINRX_ERR_I ) =
      $           FINAL_DZ_Z / (1 - DZRATMAX)
          END IF
 *

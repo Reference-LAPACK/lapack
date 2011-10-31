@@ -433,6 +433,18 @@
 *>          RCONDE.
 *> \endverbatim
 *>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is DOUBLE PRECISION array, dimension (N)
+*>          Holds information describing balancing of matrix.
+*> \endverbatim
+*>
+*> \param[out] SCALE1
+*> \verbatim
+*>          SCALE1 is DOUBLE PRECISION array, dimension (N)
+*>          Holds information describing balancing of matrix.
+*> \endverbatim
+*>
 *> \param[out] RESULT
 *> \verbatim
 *>          RESULT is DOUBLE PRECISION array, dimension (11)

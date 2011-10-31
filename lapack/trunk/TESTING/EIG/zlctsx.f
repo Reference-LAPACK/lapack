@@ -33,12 +33,15 @@
 *> \param[in] ALPHA
 *> \verbatim
 *>          ALPHA is COMPLEX*16
+*> \endverbatim
+*>
 *> \param[in] BETA
 *> \verbatim
 *>          BETA is COMPLEX*16
+*> \endverbatim
+*> \verbatim
 *>          parameters to decide whether the pair (ALPHA, BETA) is
 *>          selected.
-*> \endverbatim
 *> \endverbatim
 *>
 *

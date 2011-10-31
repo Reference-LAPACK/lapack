@@ -284,14 +284,12 @@
 *>                    determined to be strictly smaller than N, SCONDA is
 *>                    returned as -1, thus indicating that the smallest
 *>                    singular values might be lost.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If full SVD is needed, the following two condition numbers are
 *>          useful for the analysis of the algorithm. They are provied for
 *>          a developer/implementer who is familiar with the details of
 *>          the method.
-*> \endverbatim
-*> \verbatim
+*>
 *>          WORK(4) = an estimate of the scaled condition number of the
 *>                    triangular factor in the first QR factorization.
 *>          WORK(5) = an estimate of the scaled condition number of the
@@ -299,8 +297,7 @@
 *>          The following two parameters are computed if JOBT .EQ. 'T'.
 *>          They are provided for a developer/implementer who is familiar
 *>          with the details of the method.
-*> \endverbatim
-*> \verbatim
+*>
 *>          WORK(6) = the entropy of A^t*A :: this is the Shannon entropy
 *>                    of diag(A^t*A) / Trace(A^t*A) taken as point in the
 *>                    probability simplex.
@@ -312,8 +309,7 @@
 *>          LWORK is INTEGER
 *>          Length of WORK to confirm proper allocation of work space.
 *>          LWORK depends on the job:
-*> \endverbatim
-*> \verbatim
+*>
 *>          If only SIGMA is needed ( JOBU.EQ.'N', JOBV.EQ.'N' ) and
 *>            -> .. no scaled condition estimate required (JOBE.EQ.'N'):
 *>               LWORK >= max(2*M+N,4*N+1,7). This is the minimal requirement.
@@ -330,8 +326,7 @@
 *>               In general, the optimal length LWORK is computed as
 *>               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF), 
 *>                                                     N+N*N+LWORK(DPOCON),7).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If SIGMA and the right singular vectors are needed (JOBV.EQ.'V'),
 *>            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
 *>            -> For optimal performance, LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
@@ -339,8 +334,7 @@
 *>               DORMLQ. In general, the optimal length LWORK is computed as
 *>               LWORK >= max(2*M+N,N+LWORK(DGEQP3), N+LWORK(DPOCON), 
 *>                       N+LWORK(DGELQ), 2*N+LWORK(DGEQRF), N+LWORK(DORMLQ)).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If SIGMA and the left singular vectors are needed
 *>            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
 *>            -> For optimal performance:

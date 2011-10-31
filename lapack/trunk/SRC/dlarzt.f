@@ -66,6 +66,64 @@
 *>          = 'B': H = H(k) . . . H(2) H(1) (Backward)
 *> \endverbatim
 *>
+*> \param[in] STOREV
+*> \verbatim
+*>          STOREV is CHARACTER*1
+*>          Specifies how the vectors which define the elementary
+*>          reflectors are stored (see also Further Details):
+*>          = 'C': columnwise                        (not supported yet)
+*>          = 'R': rowwise
+*> \endverbatim
+*>
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>          The order of the block reflector H. N >= 0.
+*> \endverbatim
+*>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*>          The order of the triangular factor T (= the number of
+*>          elementary reflectors). K >= 1.
+*> \endverbatim
+*>
+*> \param[in,out] V
+*> \verbatim
+*>          V is DOUBLE PRECISION array, dimension
+*>                               (LDV,K) if STOREV = 'C'
+*>                               (LDV,N) if STOREV = 'R'
+*>          The matrix V. See further details.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V.
+*>          If STOREV = 'C', LDV >= max(1,N); if STOREV = 'R', LDV >= K.
+*> \endverbatim
+*>
+*> \param[in] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (K)
+*>          TAU(i) must contain the scalar factor of the elementary
+*>          reflector H(i).
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          T is DOUBLE PRECISION array, dimension (LDT,K)
+*>          The k by k triangular factor T of the block reflector.
+*>          If DIRECT = 'F', T is upper triangular; if DIRECT = 'B', T is
+*>          lower triangular. The rest of the array is not used.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T. LDT >= K.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -84,38 +142,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          reflectors are stored (see also Further Details):
-*>          = 'C': columnwise                        (not supported yet)
-*>          = 'R': rowwise
-*>
-*>  N       (input) INTEGER
-*>          The order of the block reflector H. N >= 0.
-*>
-*>  K       (input) INTEGER
-*>          The order of the triangular factor T (= the number of
-*>          elementary reflectors). K >= 1.
-*>
-*>  V       (input/output) DOUBLE PRECISION array, dimension
-*>                               (LDV,K) if STOREV = 'C'
-*>                               (LDV,N) if STOREV = 'R'
-*>          The matrix V. See further details.
-*>
-*>  LDV     (input) INTEGER
-*>          The leading dimension of the array V.
-*>          If STOREV = 'C', LDV >= max(1,N); if STOREV = 'R', LDV >= K.
-*>
-*>  TAU     (input) DOUBLE PRECISION array, dimension (K)
-*>          TAU(i) must contain the scalar factor of the elementary
-*>          reflector H(i).
-*>
-*>  T       (output) DOUBLE PRECISION array, dimension (LDT,K)
-*>          The k by k triangular factor T of the block reflector.
-*>          If DIRECT = 'F', T is upper triangular; if DIRECT = 'B', T is
-*>          lower triangular. The rest of the array is not used.
-*>
-*>  LDT     (input) INTEGER
-*>          The leading dimension of the array T. LDT >= K.
-*>
 *>
 *>  Based on contributions by
 *>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA

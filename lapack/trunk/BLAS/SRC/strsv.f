@@ -44,11 +44,9 @@
 *>          UPLO is CHARACTER*1
 *>           On entry, UPLO specifies whether the matrix is an upper or
 *>           lower triangular matrix as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   A is an upper triangular matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   A is a lower triangular matrix.
 *> \endverbatim
 *>
@@ -57,14 +55,11 @@
 *>          TRANS is CHARACTER*1
 *>           On entry, TRANS specifies the equations to be solved as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'N' or 'n'   A*x = b.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'T' or 't'   A**T*x = b.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'C' or 'c'   A**T*x = b.
 *> \endverbatim
 *>
@@ -73,11 +68,9 @@
 *>          DIAG is CHARACTER*1
 *>           On entry, DIAG specifies whether or not A is unit
 *>           triangular as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
-*> \endverbatim
-*> \verbatim
+*>
 *>              DIAG = 'N' or 'n'   A is not assumed to be unit
 *>                                  triangular.
 *> \endverbatim

@@ -152,26 +152,32 @@
 *> \param[in] VL
 *> \verbatim
 *>          VL is REAL
+*> \endverbatim
+*>
 *> \param[in] VU
 *> \verbatim
 *>          VU is REAL
+*> \endverbatim
+*> \verbatim
 *>          If RANGE='V', the lower and upper bounds of the interval to
 *>          be searched for eigenvalues. VL < VU.
 *>          Not referenced if RANGE = 'A' or 'I'.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in] IL
 *> \verbatim
 *>          IL is INTEGER
+*> \endverbatim
+*>
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
+*> \endverbatim
+*> \verbatim
 *>          If RANGE='I', the indices (in ascending order) of the
 *>          smallest and largest eigenvalues to be returned.
 *>          1 <= IL <= IU <= N, if N > 0.
 *>          Not referenced if RANGE = 'A' or 'V'.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] M

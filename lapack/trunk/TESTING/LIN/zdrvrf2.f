@@ -70,9 +70,9 @@
 *>          AP is COMPLEX*16 array, dimension ((NMAX*(NMAX+1))/2).
 *> \endverbatim
 *>
-*> \param[out] A2
+*> \param[out] ASAV
 *> \verbatim
-*>          A2 is COMPLEX*16 array, dimension (LDA,NMAX)
+*>          ASAV is COMPLEX*16 array, dimension (LDA,NMAX)
 *> \endverbatim
 *>
 *

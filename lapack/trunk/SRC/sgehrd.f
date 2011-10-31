@@ -45,6 +45,75 @@
 *>          The order of the matrix A.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in] ILO
+*> \verbatim
+*>          ILO is INTEGER
+*> \endverbatim
+*>
+*> \param[in] IHI
+*> \verbatim
+*>          IHI is INTEGER
+*> \endverbatim
+*> \verbatim
+*>          It is assumed that A is already upper triangular in rows
+*>          and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
+*>          set by a previous call to SGEBAL; otherwise they should be
+*>          set to 1 and N respectively. See Further Details.
+*>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          On entry, the N-by-N general matrix to be reduced.
+*>          On exit, the upper triangle and the first subdiagonal of A
+*>          are overwritten with the upper Hessenberg matrix H, and the
+*>          elements below the first subdiagonal, with the array TAU,
+*>          represent the orthogonal matrix Q as a product of elementary
+*>          reflectors. See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is REAL array, dimension (N-1)
+*>          The scalar factors of the elementary reflectors (see Further
+*>          Details). Elements 1:ILO-1 and IHI:N-1 of TAU are set to
+*>          zero.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LWORK)
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The length of the array WORK.  LWORK >= max(1,N).
+*>          For optimum performance LWORK >= N*NB, where NB is the
+*>          optimal blocksize.
+*> \endverbatim
+*> \verbatim
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -63,42 +132,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          set to 1 and N respectively. See Further Details.
-*>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
-*>
-*>  A       (input/output) REAL array, dimension (LDA,N)
-*>          On entry, the N-by-N general matrix to be reduced.
-*>          On exit, the upper triangle and the first subdiagonal of A
-*>          are overwritten with the upper Hessenberg matrix H, and the
-*>          elements below the first subdiagonal, with the array TAU,
-*>          represent the orthogonal matrix Q as a product of elementary
-*>          reflectors. See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
-*>
-*>  TAU     (output) REAL array, dimension (N-1)
-*>          The scalar factors of the elementary reflectors (see Further
-*>          Details). Elements 1:ILO-1 and IHI:N-1 of TAU are set to
-*>          zero.
-*>
-*>  WORK    (workspace/output) REAL array, dimension (LWORK)
-*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*>
-*>  LWORK   (input) INTEGER
-*>          The length of the array WORK.  LWORK >= max(1,N).
-*>          For optimum performance LWORK >= N*NB, where NB is the
-*>          optimal blocksize.
-*>
-*>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
-*>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
-*>
-*>  INFO    (output) INTEGER
-*>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>
 *>
 *>  The matrix Q is represented as a product of (ihi-ilo) elementary
 *>  reflectors

@@ -65,9 +65,9 @@
 *>        PP=0 for ping, PP=1 for pong.
 *> \endverbatim
 *>
-*> \param[in] NOIN
+*> \param[in] N0IN
 *> \verbatim
-*>          NOIN is INTEGER
+*>          N0IN is INTEGER
 *>        The value of N0 at start of EIGTEST.
 *> \endverbatim
 *>
@@ -144,7 +144,7 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  CNST1 = 9/16
+*>  CNST1 = 9/16
 *>
 *> \endverbatim
 *>

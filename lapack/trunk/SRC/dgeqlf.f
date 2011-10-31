@@ -51,6 +51,59 @@
 *>          The number of columns of the matrix A.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          On entry, the M-by-N matrix A.
+*>          On exit,
+*>          if m >= n, the lower triangle of the subarray
+*>          A(m-n+1:m,1:n) contains the N-by-N lower triangular matrix L;
+*>          if m <= n, the elements on and below the (n-m)-th
+*>          superdiagonal contain the M-by-N lower trapezoidal matrix L;
+*>          the remaining elements, with the array TAU, represent the
+*>          orthogonal matrix Q as a product of elementary reflectors
+*>          (see Further Details).
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors (see Further
+*>          Details).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.  LWORK >= max(1,N).
+*>          For optimum performance LWORK >= N*NB, where NB is the
+*>          optimal blocksize.
+*>
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -69,32 +122,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          (see Further Details).
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,M).
-*>
-*>  TAU     (output) DOUBLE PRECISION array, dimension (min(M,N))
-*>          The scalar factors of the elementary reflectors (see Further
-*>          Details).
-*>
-*>  WORK    (workspace/output) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
-*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*>
-*>  LWORK   (input) INTEGER
-*>          The dimension of the array WORK.  LWORK >= max(1,N).
-*>          For optimum performance LWORK >= N*NB, where NB is the
-*>          optimal blocksize.
-*>
-*>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
-*>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
-*>
-*>  INFO    (output) INTEGER
-*>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>
 *>
 *>  The matrix Q is represented as a product of elementary reflectors
 *>

@@ -57,6 +57,12 @@
 *>          The values of the matrix dimension N.
 *> \endverbatim
 *>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides, NRHS >= 0.
+*> \endverbatim
+*>
 *> \param[in] THRESH
 *> \verbatim
 *>          THRESH is REAL

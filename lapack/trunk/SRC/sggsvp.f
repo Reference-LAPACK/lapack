@@ -136,9 +136,13 @@
 *> \param[in] TOLA
 *> \verbatim
 *>          TOLA is REAL
+*> \endverbatim
+*>
 *> \param[in] TOLB
 *> \verbatim
 *>          TOLB is REAL
+*> \endverbatim
+*> \verbatim
 *>          TOLA and TOLB are the thresholds to determine the effective
 *>          numerical rank of matrix B and a subblock of A. Generally,
 *>          they are set to
@@ -147,18 +151,20 @@
 *>          The size of TOLA and TOLB may affect the size of backward
 *>          errors of the decomposition.
 *> \endverbatim
-*> \endverbatim
 *>
 *> \param[out] K
 *> \verbatim
 *>          K is INTEGER
+*> \endverbatim
+*>
 *> \param[out] L
 *> \verbatim
 *>          L is INTEGER
+*> \endverbatim
+*> \verbatim
 *>          On exit, K and L specify the dimension of the subblocks
 *>          described in Purpose section.
 *>          K + L = effective numerical rank of (A**T,B**T)**T.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] U

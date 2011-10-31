@@ -8,7 +8,7 @@
 *  Definition
 *  ==========
 *
-*       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
+*       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
 *                        N4 )
 * 
 *       .. Scalar Arguments ..
@@ -63,8 +63,7 @@
 *>               computation tree in the divide-and-conquer algorithm
 *>          =10: ieee NaN arithmetic can be trusted not to trap
 *>          =11: infinity arithmetic can be trusted not to trap
-*> \endverbatim
-*> \verbatim
+*>
 *>          Other specifications (up to 100) can be added later.
 *> \endverbatim
 *>
@@ -101,15 +100,14 @@
 *> \param[in] N4
 *> \verbatim
 *>          N4 is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          Problem dimensions for the subroutine NAME; these may not all
 *>          be required.
 *> \endverbatim
 *>
-*> \param[out] (ILAENV)
+*> \return ILAENV
 *> \verbatim
-*>          (ILAENV) is INTEGER
+*>          ILAENV is INTEGER
 *>          >= 0: the value of the parameter specified by ISPEC
 *>          < 0:  if ILAENV = -k, the k-th argument had an illegal value.
 *> \endverbatim

@@ -51,6 +51,42 @@
 *>          The number of columns of the matrix A.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the m by n matrix A.
+*>          On exit, the elements on and above the diagonal of the array
+*>          contain the min(m,n) by n upper trapezoidal matrix R (R is
+*>          upper triangular if m >= n); the elements below the diagonal,
+*>          with the array TAU, represent the unitary matrix Q as a
+*>          product of elementary reflectors (see Further Details).
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is COMPLEX array, dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors (see Further
+*>          Details).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -69,21 +105,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          product of elementary reflectors (see Further Details).
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,M).
-*>
-*>  TAU     (output) COMPLEX array, dimension (min(M,N))
-*>          The scalar factors of the elementary reflectors (see Further
-*>          Details).
-*>
-*>  WORK    (workspace) COMPLEX array, dimension (N)
-*>
-*>  INFO    (output) INTEGER
-*>          = 0: successful exit
-*>          < 0: if INFO = -i, the i-th argument had an illegal value
-*>
 *>
 *>  The matrix Q is represented as a product of elementary reflectors
 *>

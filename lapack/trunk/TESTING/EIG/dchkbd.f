@@ -339,9 +339,9 @@
 *>                      (LDPT,max(min(MVAL(j),NVAL(j))))
 *> \endverbatim
 *>
-*> \param[out] V
+*> \param[out] VT
 *> \verbatim
-*>          V is DOUBLE PRECISION array, dimension
+*>          VT is DOUBLE PRECISION array, dimension
 *>                      (LDPT,max(min(MVAL(j),NVAL(j))))
 *> \endverbatim
 *>

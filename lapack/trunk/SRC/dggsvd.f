@@ -163,13 +163,16 @@
 *> \param[out] K
 *> \verbatim
 *>          K is INTEGER
+*> \endverbatim
+*>
 *> \param[out] L
 *> \verbatim
 *>          L is INTEGER
-*>          On exit, K and L specify the dimension of the subblocks
-*>          described in the Purpose section.
-*>          K + L = effective numerical rank of (A**T,B**T)**T.
 *> \endverbatim
+*> \verbatim
+*>          On exit, K and L specify the dimension of the subblocks
+*>          described in Purpose.
+*>          K + L = effective numerical rank of (A**T,B**T)**T.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -203,9 +206,13 @@
 *> \param[out] ALPHA
 *> \verbatim
 *>          ALPHA is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*> \verbatim
 *>          On exit, ALPHA and BETA contain the generalized singular
 *>          value pairs of A and B;
 *>            ALPHA(1:K) = 1,
@@ -219,7 +226,6 @@
 *>          and
 *>            ALPHA(K+L+1:N) = 0
 *>            BETA(K+L+1:N)  = 0
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] U

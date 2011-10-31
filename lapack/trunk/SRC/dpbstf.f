@@ -81,6 +81,26 @@
 *>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
 *> \endverbatim
+*> \verbatim
+*>          On exit, if INFO = 0, the factor S from the split Cholesky
+*>          factorization A = S**T*S. See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDAB
+*> \verbatim
+*>          LDAB is INTEGER
+*>          The leading dimension of the array AB.  LDAB >= KD+1.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*>          > 0: if INFO = i, the factorization could not be completed,
+*>               because the updated element a(i,i) was negative; the
+*>               matrix A is not positive definite.
+*> \endverbatim
 *>
 *
 *  Authors
@@ -100,18 +120,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          factorization A = S**T*S. See Further Details.
-*>
-*>  LDAB    (input) INTEGER
-*>          The leading dimension of the array AB.  LDAB >= KD+1.
-*>
-*>  INFO    (output) INTEGER
-*>          = 0: successful exit
-*>          < 0: if INFO = -i, the i-th argument had an illegal value
-*>          > 0: if INFO = i, the factorization could not be completed,
-*>               because the updated element a(i,i) was negative; the
-*>               matrix A is not positive definite.
-*>
 *>
 *>  The band storage scheme is illustrated by the following example, when
 *>  N = 7, KD = 2:

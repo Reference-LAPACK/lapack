@@ -94,8 +94,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  Further Details
-*>  ======= =======
 *>
 *>  3-5-96 - Modified with a new algorithm by W. Kahan and J. Demmel
 *>

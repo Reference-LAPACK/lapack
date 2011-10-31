@@ -40,9 +40,9 @@
 *  Arguments
 *  =========
 *
-*> \param[in] ITYPE
+*> \param[in] IJOB
 *> \verbatim
-*>          ITYPE is INTEGER
+*>          IJOB is INTEGER
 *>          Specifies the type of tests to be performed.  (See above.)
 *> \endverbatim
 *>

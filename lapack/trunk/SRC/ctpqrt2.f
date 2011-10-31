@@ -55,6 +55,61 @@
 *>          N >= 0.
 *> \endverbatim
 *>
+*> \param[in] L
+*> \verbatim
+*>          L is INTEGER
+*>          The number of rows of the upper trapezoidal part of B.  
+*>          MIN(M,N) >= L >= 0.  See Further Details.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the upper triangular N-by-N matrix A.
+*>          On exit, the elements on and above the diagonal of the array
+*>          contain the upper triangular matrix R.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,N)
+*>          On entry, the pentagonal M-by-N matrix B.  The first M-L rows 
+*>          are rectangular, and the last L rows are upper trapezoidal.
+*>          On exit, B contains the pentagonal matrix V.  See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B.  LDB >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          T is COMPLEX array, dimension (LDT,N)
+*>          The N-by-N upper triangular factor T of the block reflector.
+*>          See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T.  LDT >= max(1,N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -73,35 +128,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          MIN(M,N) >= L >= 0.  See Further Details.
-*>
-*>  A       (input/output) COMPLEX array, dimension (LDA,N)
-*>          On entry, the upper triangular N-by-N matrix A.
-*>          On exit, the elements on and above the diagonal of the array
-*>          contain the upper triangular matrix R.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
-*>
-*>  B       (input/output) COMPLEX array, dimension (LDB,N)
-*>          On entry, the pentagonal M-by-N matrix B.  The first M-L rows 
-*>          are rectangular, and the last L rows are upper trapezoidal.
-*>          On exit, B contains the pentagonal matrix V.  See Further Details.
-*>
-*>  LDB     (input) INTEGER
-*>          The leading dimension of the array B.  LDB >= max(1,M).
-*>
-*>  T       (output) COMPLEX array, dimension (LDT,N)
-*>          The N-by-N upper triangular factor T of the block reflector.
-*>          See Further Details.
-*>
-*>  LDT     (input) INTEGER
-*>          The leading dimension of the array T.  LDT >= max(1,N)
-*>
-*>  INFO    (output) INTEGER
-*>          = 0: successful exit
-*>          < 0: if INFO = -i, the i-th argument had an illegal value
-*>
 *>
 *>  The input matrix C is a (N+M)-by-N matrix  
 *>

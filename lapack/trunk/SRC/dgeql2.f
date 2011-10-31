@@ -51,6 +51,44 @@
 *>          The number of columns of the matrix A.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          On entry, the m by n matrix A.
+*>          On exit, if m >= n, the lower triangle of the subarray
+*>          A(m-n+1:m,1:n) contains the n by n lower triangular matrix L;
+*>          if m <= n, the elements on and below the (n-m)-th
+*>          superdiagonal contain the m by n lower trapezoidal matrix L;
+*>          the remaining elements, with the array TAU, represent the
+*>          orthogonal matrix Q as a product of elementary reflectors
+*>          (see Further Details).
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors (see Further
+*>          Details).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -69,21 +107,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          (see Further Details).
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,M).
-*>
-*>  TAU     (output) DOUBLE PRECISION array, dimension (min(M,N))
-*>          The scalar factors of the elementary reflectors (see Further
-*>          Details).
-*>
-*>  WORK    (workspace) DOUBLE PRECISION array, dimension (N)
-*>
-*>  INFO    (output) INTEGER
-*>          = 0: successful exit
-*>          < 0: if INFO = -i, the i-th argument had an illegal value
-*>
 *>
 *>  The matrix Q is represented as a product of elementary reflectors
 *>

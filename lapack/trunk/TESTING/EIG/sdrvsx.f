@@ -402,6 +402,11 @@
 *>          IWORK is INTEGER array, dimension (max(NN)*max(NN))
 *> \endverbatim
 *>
+*> \param[out] BWORK
+*> \verbatim
+*>          BWORK is LOGICAL array, dimension (max(NN))
+*> \endverbatim
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER

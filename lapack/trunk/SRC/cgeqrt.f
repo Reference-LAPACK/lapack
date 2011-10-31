@@ -79,12 +79,12 @@
 *>          The upper triangular block reflectors stored in compact form
 *>          as a sequence of upper triangular blocks.  See below
 *>          for further details.
+*> \endverbatim
 *>          
 *> \param[in] LDT
 *> \verbatim
 *>          LDT is INTEGER
 *>          The leading dimension of the array T.  LDT >= NB.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -117,7 +117,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  
 *>  The matrix V stores the elementary reflectors H(i) in the i-th column
 *>  below the diagonal. For example, if M=5 and N=3, the matrix V is
 *>

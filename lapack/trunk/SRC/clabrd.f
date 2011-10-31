@@ -67,6 +67,87 @@
 *>          The number of leading rows and columns of A to be reduced.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the m by n general matrix to be reduced.
+*>          On exit, the first NB rows and columns of the matrix are
+*>          overwritten; the rest of the array is unchanged.
+*>          If m >= n, elements on and below the diagonal in the first NB
+*>            columns, with the array TAUQ, represent the unitary
+*>            matrix Q as a product of elementary reflectors; and
+*>            elements above the diagonal in the first NB rows, with the
+*>            array TAUP, represent the unitary matrix P as a product
+*>            of elementary reflectors.
+*>          If m < n, elements below the diagonal in the first NB
+*>            columns, with the array TAUQ, represent the unitary
+*>            matrix Q as a product of elementary reflectors, and
+*>            elements on and above the diagonal in the first NB rows,
+*>            with the array TAUP, represent the unitary matrix P as
+*>            a product of elementary reflectors.
+*>          See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] D
+*> \verbatim
+*>          D is REAL array, dimension (NB)
+*>          The diagonal elements of the first NB rows and columns of
+*>          the reduced matrix.  D(i) = A(i,i).
+*> \endverbatim
+*>
+*> \param[out] E
+*> \verbatim
+*>          E is REAL array, dimension (NB)
+*>          The off-diagonal elements of the first NB rows and columns of
+*>          the reduced matrix.
+*> \endverbatim
+*>
+*> \param[out] TAUQ
+*> \verbatim
+*>          TAUQ is COMPLEX array dimension (NB)
+*>          The scalar factors of the elementary reflectors which
+*>          represent the unitary matrix Q. See Further Details.
+*> \endverbatim
+*>
+*> \param[out] TAUP
+*> \verbatim
+*>          TAUP is COMPLEX array, dimension (NB)
+*>          The scalar factors of the elementary reflectors which
+*>          represent the unitary matrix P. See Further Details.
+*> \endverbatim
+*>
+*> \param[out] X
+*> \verbatim
+*>          X is COMPLEX array, dimension (LDX,NB)
+*>          The m-by-nb matrix X required to update the unreduced part
+*>          of A.
+*> \endverbatim
+*>
+*> \param[in] LDX
+*> \verbatim
+*>          LDX is INTEGER
+*>          The leading dimension of the array X. LDX >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] Y
+*> \verbatim
+*>          Y is COMPLEX array, dimension (LDY,NB)
+*>          The n-by-nb matrix Y required to update the unreduced part
+*>          of A.
+*> \endverbatim
+*>
+*> \param[in] LDY
+*> \verbatim
+*>          LDY is INTEGER
+*>          The leading dimension of the array Y. LDY >= max(1,N).
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -85,41 +166,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,M).
-*>
-*>  D       (output) REAL array, dimension (NB)
-*>          The diagonal elements of the first NB rows and columns of
-*>          the reduced matrix.  D(i) = A(i,i).
-*>
-*>  E       (output) REAL array, dimension (NB)
-*>          The off-diagonal elements of the first NB rows and columns of
-*>          the reduced matrix.
-*>
-*>  TAUQ    (output) COMPLEX array dimension (NB)
-*>          The scalar factors of the elementary reflectors which
-*>          represent the unitary matrix Q. See Further Details.
-*>
-*>  TAUP    (output) COMPLEX array, dimension (NB)
-*>          The scalar factors of the elementary reflectors which
-*>          represent the unitary matrix P. See Further Details.
-*>
-*>  X       (output) COMPLEX array, dimension (LDX,NB)
-*>          The m-by-nb matrix X required to update the unreduced part
-*>          of A.
-*>
-*>  LDX     (input) INTEGER
-*>          The leading dimension of the array X. LDX >= max(1,M).
-*>
-*>  Y       (output) COMPLEX array, dimension (LDY,NB)
-*>          The n-by-nb matrix Y required to update the unreduced part
-*>          of A.
-*>
-*>  LDY     (input) INTEGER
-*>          The leading dimension of the array Y. LDY >= max(1,N).
-*>
 *>
 *>  The matrices Q and P are represented as products of elementary
 *>  reflectors:

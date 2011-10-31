@@ -65,6 +65,54 @@
 *>          The order of the matrix A.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the input matrix A.
+*>          On exit,  A is overwritten by the balanced matrix.
+*>          If JOB = 'N', A is not referenced.
+*>          See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] ILO
+*> \verbatim
+*>          ILO is INTEGER
+*> \endverbatim
+*> \param[out] IHI
+*> \verbatim
+*>          IHI is INTEGER
+*>          ILO and IHI are set to integers such that on exit
+*>          A(i,j) = 0 if i > j and j = 1,...,ILO-1 or I = IHI+1,...,N.
+*>          If JOB = 'N' or 'S', ILO = 1 and IHI = N.
+*> \endverbatim
+*>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is REAL array, dimension (N)
+*>          Details of the permutations and scaling factors applied to
+*>          A.  If P(j) is the index of the row and column interchanged
+*>          with row and column j and D(j) is the scaling factor
+*>          applied to row and column j, then
+*>          SCALE(j) = P(j)    for j = 1,...,ILO-1
+*>                   = D(j)    for j = ILO,...,IHI
+*>                   = P(j)    for j = IHI+1,...,N.
+*>          The order in which the interchanges are made is N to IHI+1,
+*>          then 1 to ILO-1.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -83,33 +131,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
-*>
-*>  ILO     (output) INTEGER
-*>
-*>  IHI     (output) INTEGER
-*>          ILO and IHI are set to integers such that on exit
-*>          A(i,j) = 0 if i > j and j = 1,...,ILO-1 or I = IHI+1,...,N.
-*>          If JOB = 'N' or 'S', ILO = 1 and IHI = N.
-*>
-*>  SCALE   (output) REAL array, dimension (N)
-*>          Details of the permutations and scaling factors applied to
-*>          A.  If P(j) is the index of the row and column interchanged
-*>          with row and column j and D(j) is the scaling factor
-*>          applied to row and column j, then
-*>          SCALE(j) = P(j)    for j = 1,...,ILO-1
-*>                   = D(j)    for j = ILO,...,IHI
-*>                   = P(j)    for j = IHI+1,...,N.
-*>          The order in which the interchanges are made is N to IHI+1,
-*>          then 1 to ILO-1.
-*>
-*>  INFO    (output) INTEGER
-*>          = 0:  successful exit.
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>
 *>
 *>  The permutations consist of row and column interchanges which put
 *>  the matrix in the form

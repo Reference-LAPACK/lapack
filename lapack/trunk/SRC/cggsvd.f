@@ -163,13 +163,16 @@
 *> \param[out] K
 *> \verbatim
 *>          K is INTEGER
+*> \endverbatim
+*>
 *> \param[out] L
 *> \verbatim
 *>          L is INTEGER
+*> \endverbatim
+*> \verbatim
 *>          On exit, K and L specify the dimension of the subblocks
 *>          described in Purpose.
 *>          K + L = effective numerical rank of (A**H,B**H)**H.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -203,9 +206,13 @@
 *> \param[out] ALPHA
 *> \verbatim
 *>          ALPHA is REAL array, dimension (N)
+*> \endverbatim
+*>
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is REAL array, dimension (N)
+*> \endverbatim
+*> \verbatim
 *>          On exit, ALPHA and BETA contain the generalized singular
 *>          value pairs of A and B;
 *>            ALPHA(1:K) = 1,
@@ -214,12 +221,11 @@
 *>            ALPHA(K+1:K+L) = C,
 *>            BETA(K+1:K+L)  = S,
 *>          or if M-K-L < 0,
-*>            ALPHA(K+1:M)= C, ALPHA(M+1:K+L)= 0
-*>            BETA(K+1:M) = S, BETA(M+1:K+L) = 1
+*>            ALPHA(K+1:M)=C, ALPHA(M+1:K+L)=0
+*>            BETA(K+1:M) =S, BETA(M+1:K+L) =1
 *>          and
 *>            ALPHA(K+L+1:N) = 0
 *>            BETA(K+L+1:N)  = 0
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] U

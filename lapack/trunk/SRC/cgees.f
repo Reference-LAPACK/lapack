@@ -47,7 +47,7 @@
 *> Schur form so that selected eigenvalues are at the top left.
 *> The leading columns of Z then form an orthonormal basis for the
 *> invariant subspace corresponding to the selected eigenvalues.
-
+*>
 *> A complex matrix is in Schur form if it is upper triangular.
 *>
 *>\endverbatim

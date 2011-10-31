@@ -65,6 +65,55 @@
 *>          The number of columns to be reduced.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N-K+1)
+*>          On entry, the n-by-(n-k+1) general matrix A.
+*>          On exit, the elements on and above the k-th subdiagonal in
+*>          the first NB columns are overwritten with the corresponding
+*>          elements of the reduced matrix; the elements below the k-th
+*>          subdiagonal, with the array TAU, represent the matrix Q as a
+*>          product of elementary reflectors. The other columns of A are
+*>          unchanged. See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is DOUBLE PRECISION array, dimension (NB)
+*>          The scalar factors of the elementary reflectors. See Further
+*>          Details.
+*> \endverbatim
+*>
+*> \param[out] T
+*> \verbatim
+*>          T is DOUBLE PRECISION array, dimension (LDT,NB)
+*>          The upper triangular matrix T.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T.  LDT >= NB.
+*> \endverbatim
+*>
+*> \param[out] Y
+*> \verbatim
+*>          Y is DOUBLE PRECISION array, dimension (LDY,NB)
+*>          The n-by-nb matrix Y.
+*> \endverbatim
+*>
+*> \param[in] LDY
+*> \verbatim
+*>          LDY is INTEGER
+*>          The leading dimension of the array Y. LDY >= N.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -83,27 +132,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          unchanged. See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
-*>
-*>  TAU     (output) DOUBLE PRECISION array, dimension (NB)
-*>          The scalar factors of the elementary reflectors. See Further
-*>          Details.
-*>
-*>  T       (output) DOUBLE PRECISION array, dimension (LDT,NB)
-*>          The upper triangular matrix T.
-*>
-*>  LDT     (input) INTEGER
-*>          The leading dimension of the array T.  LDT >= NB.
-*>
-*>  Y       (output) DOUBLE PRECISION array, dimension (LDY,NB)
-*>          The n-by-nb matrix Y.
-*>
-*>  LDY     (input) INTEGER
-*>          The leading dimension of the array Y. LDY >= N.
-*>
 *>
 *>  The matrix Q is represented as a product of nb elementary reflectors
 *>

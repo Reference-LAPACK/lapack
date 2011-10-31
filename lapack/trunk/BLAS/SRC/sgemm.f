@@ -46,14 +46,11 @@
 *>          TRANSA is CHARACTER*1
 *>           On entry, TRANSA specifies the form of op( A ) to be used in
 *>           the matrix multiplication as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSA = 'N' or 'n',  op( A ) = A.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSA = 'T' or 't',  op( A ) = A**T.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSA = 'C' or 'c',  op( A ) = A**T.
 *> \endverbatim
 *>
@@ -62,14 +59,11 @@
 *>          TRANSB is CHARACTER*1
 *>           On entry, TRANSB specifies the form of op( B ) to be used in
 *>           the matrix multiplication as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSB = 'N' or 'n',  op( B ) = B.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSB = 'T' or 't',  op( B ) = B**T.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSB = 'C' or 'c',  op( B ) = B**T.
 *> \endverbatim
 *>

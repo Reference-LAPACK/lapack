@@ -97,6 +97,93 @@
 *>          K >= 0.
 *> \endverbatim
 *>
+*> \param[in] L
+*> \verbatim
+*>          L is INTEGER
+*>          The order of the trapezoidal part of V.  
+*>          K >= L >= 0.  See Further Details.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is COMPLEX*16 array, dimension
+*>                                (LDV,K) if STOREV = 'C'
+*>                                (LDV,M) if STOREV = 'R' and SIDE = 'L'
+*>                                (LDV,N) if STOREV = 'R' and SIDE = 'R'
+*>          The pentagonal matrix V, which contains the elementary reflectors
+*>          H(1), H(2), ..., H(K).  See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V.
+*>          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
+*>          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
+*>          if STOREV = 'R', LDV >= K.
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is COMPLEX*16 array, dimension (LDT,K)
+*>          The triangular K-by-K matrix T in the representation of the
+*>          block reflector.  
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T. 
+*>          LDT >= K.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension
+*>          (LDA,N) if SIDE = 'L' or (LDA,K) if SIDE = 'R'
+*>          On entry, the K-by-N or M-by-K matrix A.
+*>          On exit, A is overwritten by the corresponding block of 
+*>          H*C or H**H*C or C*H or C*H**H.  See Futher Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. 
+*>          If SIDE = 'L', LDC >= max(1,K);
+*>          If SIDE = 'R', LDC >= max(1,M). 
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX*16 array, dimension (LDB,N)
+*>          On entry, the M-by-N matrix B.
+*>          On exit, B is overwritten by the corresponding block of
+*>          H*C or H**H*C or C*H or C*H**H.  See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. 
+*>          LDB >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension
+*>          (LDWORK,N) if SIDE = 'L',
+*>          (LDWORK,K) if SIDE = 'R'.
+*> \endverbatim
+*>
+*> \param[in] LDWORK
+*> \verbatim
+*>          LDWORK is INTEGER
+*>          The leading dimension of the array WORK.
+*>          If SIDE = 'L', LDWORK >= K; 
+*>          if SIDE = 'R', LDWORK >= M.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -115,58 +202,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          K >= L >= 0.  See Further Details.
-*>
-*>  V       (input) COMPLEX*16 array, dimension
-*>                                (LDV,K) if STOREV = 'C'
-*>                                (LDV,M) if STOREV = 'R' and SIDE = 'L'
-*>                                (LDV,N) if STOREV = 'R' and SIDE = 'R'
-*>          The pentagonal matrix V, which contains the elementary reflectors
-*>          H(1), H(2), ..., H(K).  See Further Details.
-*>
-*>  LDV     (input) INTEGER
-*>          The leading dimension of the array V.
-*>          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
-*>          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
-*>          if STOREV = 'R', LDV >= K.
-*>
-*>  T       (input) COMPLEX*16 array, dimension (LDT,K)
-*>          The triangular K-by-K matrix T in the representation of the
-*>          block reflector.  
-*>
-*>  LDT     (input) INTEGER
-*>          The leading dimension of the array T. 
-*>          LDT >= K.
-*>
-*>  A       (input/output) COMPLEX*16 array, dimension 
-*>          (LDA,N) if SIDE = 'L' or (LDA,K) if SIDE = 'R'
-*>          On entry, the K-by-N or M-by-K matrix A.
-*>          On exit, A is overwritten by the corresponding block of 
-*>          H*C or H**H*C or C*H or C*H**H.  See Futher Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A. 
-*>          If SIDE = 'L', LDC >= max(1,K);
-*>          If SIDE = 'R', LDC >= max(1,M). 
-*>
-*>  B       (input/output) COMPLEX*16 array, dimension (LDB,N)
-*>          On entry, the M-by-N matrix B.
-*>          On exit, B is overwritten by the corresponding block of
-*>          H*C or H**H*C or C*H or C*H**H.  See Further Details.
-*>
-*>  LDB     (input) INTEGER
-*>          The leading dimension of the array B. 
-*>          LDB >= max(1,M).
-*>
-*>  WORK    (workspace) COMPLEX*16 array, dimension 
-*>          (LDWORK,N) if SIDE = 'L',
-*>          (LDWORK,K) if SIDE = 'R'.
-*>
-*>  LDWORK  (input) INTEGER
-*>          The leading dimension of the array WORK.
-*>          If SIDE = 'L', LDWORK >= K; 
-*>          if SIDE = 'R', LDWORK >= M.
-*>
 *>
 *>  The matrix C is a composite matrix formed from blocks A and B.
 *>  The block B is of size M-by-N; if SIDE = 'R', A is of size M-by-K, 

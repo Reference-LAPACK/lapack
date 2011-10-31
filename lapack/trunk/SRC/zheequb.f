@@ -48,6 +48,13 @@
 *  Arguments
 *  =========
 *
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>          = 'U':  Upper triangles of A and B are stored;
+*>          = 'L':  Lower triangles of A and B are stored.
+*> \endverbatim
+*>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
@@ -88,13 +95,19 @@
 *>          Absolute value of largest matrix element.  If AMAX is very
 *>          close to overflow or very close to underflow, the matrix
 *>          should be scaled.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (3*N)
+*> \endverbatim
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  if INFO = i, the i-th diagonal element is nonpositive.
-*> \endverbatim
 *> \endverbatim
 *>
 *

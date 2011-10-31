@@ -93,6 +93,63 @@
 *>          reflectors whose product defines the block reflector).
 *> \endverbatim
 *>
+*> \param[in] V
+*> \verbatim
+*>          V is REAL array, dimension
+*>                                (LDV,K) if STOREV = 'C'
+*>                                (LDV,M) if STOREV = 'R' and SIDE = 'L'
+*>                                (LDV,N) if STOREV = 'R' and SIDE = 'R'
+*>          The matrix V. See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V.
+*>          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
+*>          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
+*>          if STOREV = 'R', LDV >= K.
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is REAL array, dimension (LDT,K)
+*>          The triangular k by k matrix T in the representation of the
+*>          block reflector.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T. LDT >= K.
+*> \endverbatim
+*>
+*> \param[in,out] C
+*> \verbatim
+*>          C is REAL array, dimension (LDC,N)
+*>          On entry, the m by n matrix C.
+*>          On exit, C is overwritten by H*C or H**T*C or C*H or C*H**T.
+*> \endverbatim
+*>
+*> \param[in] LDC
+*> \verbatim
+*>          LDC is INTEGER
+*>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (LDWORK,K)
+*> \endverbatim
+*>
+*> \param[in] LDWORK
+*> \verbatim
+*>          LDWORK is INTEGER
+*>          The leading dimension of the array WORK.
+*>          If SIDE = 'L', LDWORK >= max(1,N);
+*>          if SIDE = 'R', LDWORK >= max(1,M).
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -111,35 +168,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          The matrix V. See Further Details.
-*>
-*>  LDV     (input) INTEGER
-*>          The leading dimension of the array V.
-*>          If STOREV = 'C' and SIDE = 'L', LDV >= max(1,M);
-*>          if STOREV = 'C' and SIDE = 'R', LDV >= max(1,N);
-*>          if STOREV = 'R', LDV >= K.
-*>
-*>  T       (input) REAL array, dimension (LDT,K)
-*>          The triangular k by k matrix T in the representation of the
-*>          block reflector.
-*>
-*>  LDT     (input) INTEGER
-*>          The leading dimension of the array T. LDT >= K.
-*>
-*>  C       (input/output) REAL array, dimension (LDC,N)
-*>          On entry, the m by n matrix C.
-*>          On exit, C is overwritten by H*C or H**T*C or C*H or C*H**T.
-*>
-*>  LDC     (input) INTEGER
-*>          The leading dimension of the array C. LDC >= max(1,M).
-*>
-*>  WORK    (workspace) REAL array, dimension (LDWORK,K)
-*>
-*>  LDWORK  (input) INTEGER
-*>          The leading dimension of the array WORK.
-*>          If SIDE = 'L', LDWORK >= max(1,N);
-*>          if SIDE = 'R', LDWORK >= max(1,M).
-*>
 *>
 *>  The shape of the matrix V and the storage of the vectors which define
 *>  the H(i) is best illustrated by the following example with n = 5 and

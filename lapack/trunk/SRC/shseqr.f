@@ -76,17 +76,20 @@
 *> \param[in] ILO
 *> \verbatim
 *>          ILO is INTEGER
+*> \endverbatim
+*>
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
+*> \endverbatim
+*> \verbatim
 *>           It is assumed that H is already upper triangular in rows
 *>           and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
-*>           set by a previous call to SGEBAL, and then passed to SGEHRD
+*>           set by a previous call to SGEBAL, and then passed to ZGEHRD
 *>           when the matrix output by SGEBAL is reduced to Hessenberg
 *>           form. Otherwise ILO and IHI should be set to 1 and N
 *>           respectively.  If N.GT.0, then 1.LE.ILO.LE.IHI.LE.N.
 *>           If N = 0, then ILO = 1 and IHI = 0.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] H
@@ -118,9 +121,13 @@
 *> \param[out] WR
 *> \verbatim
 *>          WR is REAL array, dimension (N)
+*> \endverbatim
+*>
 *> \param[out] WI
 *> \verbatim
 *>          WI is REAL array, dimension (N)
+*> \endverbatim
+*> \verbatim
 *>           The real and imaginary parts, respectively, of the computed
 *>           eigenvalues. If two eigenvalues are computed as a complex
 *>           conjugate pair, they are stored in consecutive elements of
@@ -130,7 +137,6 @@
 *>           in H, with WR(i) = H(i,i) and, if H(i:i+1,i:i+1) is a 2-by-2
 *>           diagonal block, WI(i) = sqrt(-H(i+1,i)*H(i,i+1)) and
 *>           WI(i+1) = -WI(i).
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] Z
@@ -192,42 +198,33 @@
 *>                the eigenvalues.  Elements 1:ilo-1 and i+1:n of WR
 *>                and WI contain those eigenvalues which have been
 *>                successfully computed.  (Failures are rare.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and JOB = 'E', then on exit, the
 *>                remaining unconverged eigenvalues are the eigen-
 *>                values of the upper Hessenberg matrix rows and
 *>                columns ILO through INFO of the final, output
 *>                value of H.
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and JOB   = 'S', then on exit
-*> \endverbatim
-*> \verbatim
+*>
 *>           (*)  (initial value of H)*U  = U*(final value of H)
-*> \endverbatim
-*> \verbatim
+*>
 *>                where U is an orthogonal matrix.  The final
 *>                value of H is upper Hessenberg and quasi-triangular
 *>                in rows and columns INFO+1 through IHI.
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and COMPZ = 'V', then on exit
-*> \endverbatim
-*> \verbatim
+*>
 *>                  (final value of Z)  =  (initial value of Z)*U
-*> \endverbatim
-*> \verbatim
+*>
 *>                where U is the orthogonal matrix in (*) (regard-
 *>                less of the value of JOB.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and COMPZ = 'I', then on exit
 *>                      (final value of Z)  = U
 *>                where U is the orthogonal matrix in (*) (regard-
 *>                less of the value of JOB.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and COMPZ = 'N', then Z is not
 *>                accessed.
 *> \endverbatim

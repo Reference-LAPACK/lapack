@@ -175,6 +175,175 @@
 *>          The number of columns of the matrices A and B.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in] K
+*> \verbatim
+*>          K is INTEGER
+*> \endverbatim
+*>
+*> \param[in] L
+*> \verbatim
+*>          L is INTEGER
+*> \endverbatim
+*> \verbatim
+*>          K and L specify the subblocks in the input matrices A and B:
+*>          A23 = A(K+1:MIN(K+L,M),N-L+1:N) and B13 = B(1:L,N-L+1:N)
+*>          of A and B, whose GSVD is going to be computed by DTGSJA.
+*>          See Further Details.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          On entry, the M-by-N matrix A.
+*>          On exit, A(N-K+1:N,1:MIN(K+L,M) ) contains the triangular
+*>          matrix R or part of R.  See Purpose for details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is DOUBLE PRECISION array, dimension (LDB,N)
+*>          On entry, the P-by-N matrix B.
+*>          On exit, if necessary, B(M-K+1:L,N+M-K-L+1:N) contains
+*>          a part of R.  See Purpose for details.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. LDB >= max(1,P).
+*> \endverbatim
+*>
+*> \param[in] TOLA
+*> \verbatim
+*>          TOLA is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] TOLB
+*> \verbatim
+*>          TOLB is DOUBLE PRECISION
+*> \endverbatim
+*> \verbatim
+*>          TOLA and TOLB are the convergence criteria for the Jacobi-
+*>          Kogbetliantz iteration procedure. Generally, they are the
+*>          same as used in the preprocessing step, say
+*>              TOLA = max(M,N)*norm(A)*MAZHEPS,
+*>              TOLB = max(P,N)*norm(B)*MAZHEPS.
+*> \endverbatim
+*>
+*> \param[out] ALPHA
+*> \verbatim
+*>          ALPHA is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*> \verbatim
+*>          On exit, ALPHA and BETA contain the generalized singular
+*>          value pairs of A and B;
+*>            ALPHA(1:K) = 1,
+*>            BETA(1:K)  = 0,
+*>          and if M-K-L >= 0,
+*>            ALPHA(K+1:K+L) = diag(C),
+*>            BETA(K+1:K+L)  = diag(S),
+*>          or if M-K-L < 0,
+*>            ALPHA(K+1:M)= C, ALPHA(M+1:K+L)= 0
+*>            BETA(K+1:M) = S, BETA(M+1:K+L) = 1.
+*>          Furthermore, if K+L < N,
+*>            ALPHA(K+L+1:N) = 0 and
+*>            BETA(K+L+1:N)  = 0.
+*> \endverbatim
+*>
+*> \param[in,out] U
+*> \verbatim
+*>          U is DOUBLE PRECISION array, dimension (LDU,M)
+*>          On entry, if JOBU = 'U', U must contain a matrix U1 (usually
+*>          the orthogonal matrix returned by DGGSVP).
+*>          On exit,
+*>          if JOBU = 'I', U contains the orthogonal matrix U;
+*>          if JOBU = 'U', U contains the product U1*U.
+*>          If JOBU = 'N', U is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDU
+*> \verbatim
+*>          LDU is INTEGER
+*>          The leading dimension of the array U. LDU >= max(1,M) if
+*>          JOBU = 'U'; LDU >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[in,out] V
+*> \verbatim
+*>          V is DOUBLE PRECISION array, dimension (LDV,P)
+*>          On entry, if JOBV = 'V', V must contain a matrix V1 (usually
+*>          the orthogonal matrix returned by DGGSVP).
+*>          On exit,
+*>          if JOBV = 'I', V contains the orthogonal matrix V;
+*>          if JOBV = 'V', V contains the product V1*V.
+*>          If JOBV = 'N', V is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V. LDV >= max(1,P) if
+*>          JOBV = 'V'; LDV >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[in,out] Q
+*> \verbatim
+*>          Q is DOUBLE PRECISION array, dimension (LDQ,N)
+*>          On entry, if JOBQ = 'Q', Q must contain a matrix Q1 (usually
+*>          the orthogonal matrix returned by DGGSVP).
+*>          On exit,
+*>          if JOBQ = 'I', Q contains the orthogonal matrix Q;
+*>          if JOBQ = 'Q', Q contains the product Q1*Q.
+*>          If JOBQ = 'N', Q is not referenced.
+*> \endverbatim
+*>
+*> \param[in] LDQ
+*> \verbatim
+*>          LDQ is INTEGER
+*>          The leading dimension of the array Q. LDQ >= max(1,N) if
+*>          JOBQ = 'Q'; LDQ >= 1 otherwise.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is DOUBLE PRECISION array, dimension (2*N)
+*> \endverbatim
+*>
+*> \param[out] NCYCLE
+*> \verbatim
+*>          NCYCLE is INTEGER
+*>          The number of cycles required for convergence.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>          = 1:  the procedure does not converge after MAXIT cycles.
+*> \endverbatim
+*>
+*> \verbatim
+*>  Internal Parameters
+*>  ===================
+*>
+*>  MAXIT   INTEGER
+*>          MAXIT specifies the total loops that the iterative procedure
+*>          may take. If after MAXIT cycles, the routine fails to
+*>          converge, we return INFO = 1.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -193,102 +362,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          See Further Details.
-*>
-*>  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
-*>          On entry, the M-by-N matrix A.
-*>          On exit, A(N-K+1:N,1:MIN(K+L,M) ) contains the triangular
-*>          matrix R or part of R.  See Purpose for details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A. LDA >= max(1,M).
-*>
-*>  B       (input/output) DOUBLE PRECISION array, dimension (LDB,N)
-*>          On entry, the P-by-N matrix B.
-*>          On exit, if necessary, B(M-K+1:L,N+M-K-L+1:N) contains
-*>          a part of R.  See Purpose for details.
-*>
-*>  LDB     (input) INTEGER
-*>          The leading dimension of the array B. LDB >= max(1,P).
-*>
-*>  TOLA    (input) DOUBLE PRECISION
-*>  TOLB    (input) DOUBLE PRECISION
-*>          TOLA and TOLB are the convergence criteria for the Jacobi-
-*>          Kogbetliantz iteration procedure. Generally, they are the
-*>          same as used in the preprocessing step, say
-*>              TOLA = max(M,N)*norm(A)*MAZHEPS,
-*>              TOLB = max(P,N)*norm(B)*MAZHEPS.
-*>
-*>  ALPHA   (output) DOUBLE PRECISION array, dimension (N)
-*>  BETA    (output) DOUBLE PRECISION array, dimension (N)
-*>          On exit, ALPHA and BETA contain the generalized singular
-*>          value pairs of A and B;
-*>            ALPHA(1:K) = 1,
-*>            BETA(1:K)  = 0,
-*>          and if M-K-L >= 0,
-*>            ALPHA(K+1:K+L) = diag(C),
-*>            BETA(K+1:K+L)  = diag(S),
-*>          or if M-K-L < 0,
-*>            ALPHA(K+1:M)= C, ALPHA(M+1:K+L)= 0
-*>            BETA(K+1:M) = S, BETA(M+1:K+L) = 1.
-*>          Furthermore, if K+L < N,
-*>            ALPHA(K+L+1:N) = 0 and
-*>            BETA(K+L+1:N)  = 0.
-*>
-*>  U       (input/output) DOUBLE PRECISION array, dimension (LDU,M)
-*>          On entry, if JOBU = 'U', U must contain a matrix U1 (usually
-*>          the orthogonal matrix returned by DGGSVP).
-*>          On exit,
-*>          if JOBU = 'I', U contains the orthogonal matrix U;
-*>          if JOBU = 'U', U contains the product U1*U.
-*>          If JOBU = 'N', U is not referenced.
-*>
-*>  LDU     (input) INTEGER
-*>          The leading dimension of the array U. LDU >= max(1,M) if
-*>          JOBU = 'U'; LDU >= 1 otherwise.
-*>
-*>  V       (input/output) DOUBLE PRECISION array, dimension (LDV,P)
-*>          On entry, if JOBV = 'V', V must contain a matrix V1 (usually
-*>          the orthogonal matrix returned by DGGSVP).
-*>          On exit,
-*>          if JOBV = 'I', V contains the orthogonal matrix V;
-*>          if JOBV = 'V', V contains the product V1*V.
-*>          If JOBV = 'N', V is not referenced.
-*>
-*>  LDV     (input) INTEGER
-*>          The leading dimension of the array V. LDV >= max(1,P) if
-*>          JOBV = 'V'; LDV >= 1 otherwise.
-*>
-*>  Q       (input/output) DOUBLE PRECISION array, dimension (LDQ,N)
-*>          On entry, if JOBQ = 'Q', Q must contain a matrix Q1 (usually
-*>          the orthogonal matrix returned by DGGSVP).
-*>          On exit,
-*>          if JOBQ = 'I', Q contains the orthogonal matrix Q;
-*>          if JOBQ = 'Q', Q contains the product Q1*Q.
-*>          If JOBQ = 'N', Q is not referenced.
-*>
-*>  LDQ     (input) INTEGER
-*>          The leading dimension of the array Q. LDQ >= max(1,N) if
-*>          JOBQ = 'Q'; LDQ >= 1 otherwise.
-*>
-*>  WORK    (workspace) DOUBLE PRECISION array, dimension (2*N)
-*>
-*>  NCYCLE  (output) INTEGER
-*>          The number of cycles required for convergence.
-*>
-*>  INFO    (output) INTEGER
-*>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>          = 1:  the procedure does not converge after MAXIT cycles.
-*>
-*>  Internal Parameters
-*>  ===================
-*>
-*>  MAXIT   INTEGER
-*>          MAXIT specifies the total loops that the iterative procedure
-*>          may take. If after MAXIT cycles, the routine fails to
-*>          converge, we return INFO = 1.
-*>
 *>
 *>  DTGSJA essentially uses a variant of Kogbetliantz algorithm to reduce
 *>  min(L,M-K)-by-L triangular (or trapezoidal) matrix A23 and L-by-L

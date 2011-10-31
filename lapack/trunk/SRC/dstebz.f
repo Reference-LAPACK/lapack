@@ -86,27 +86,33 @@
 *> \param[in] VL
 *> \verbatim
 *>          VL is DOUBLE PRECISION
+*> \endverbatim
+*>
 *> \param[in] VU
 *> \verbatim
 *>          VU is DOUBLE PRECISION
+*> \endverbatim
+*> \verbatim
 *>          If RANGE='V', the lower and upper bounds of the interval to
 *>          be searched for eigenvalues.  Eigenvalues less than or equal
 *>          to VL, or greater than VU, will not be returned.  VL < VU.
 *>          Not referenced if RANGE = 'A' or 'I'.
 *> \endverbatim
-*> \endverbatim
 *>
 *> \param[in] IL
 *> \verbatim
 *>          IL is INTEGER
+*> \endverbatim
+*>
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
+*> \endverbatim
+*> \verbatim
 *>          If RANGE='I', the indices (in ascending order) of the
 *>          smallest and largest eigenvalues to be returned.
 *>          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
 *>          Not referenced if RANGE = 'A' or 'V'.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in] ABSTOL

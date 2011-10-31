@@ -234,14 +234,12 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
-*> \endverbatim
-*> \verbatim
+*>
 *>          > 0:  A problem occured in DLARRV.
 *>          < 0:  One of the called subroutines signaled an internal problem.
 *>                Needs inspection of the corresponding parameter IINFO
 *>                for further information.
-*> \endverbatim
-*> \verbatim
+*>
 *>          =-1:  Problem in DLARRB when refining a child's eigenvalues.
 *>          =-2:  Problem in DLARRF when computing the RRR of a child.
 *>                When a child is inside a tight cluster, it can be difficult

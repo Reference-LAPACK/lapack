@@ -48,12 +48,10 @@
 *>           On  entry,   UPLO  specifies  whether  the  upper  or  lower
 *>           triangular  part  of the  array  C  is to be  referenced  as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   Only the  upper triangular part of  C
 *>                                  is to be referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   Only the  lower triangular part of  C
 *>                                  is to be referenced.
 *> \endverbatim
@@ -63,12 +61,10 @@
 *>          TRANS is CHARACTER*1
 *>           On entry,  TRANS  specifies the operation to be performed as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'N' or 'n'    C := alpha*A*B**T + alpha*B*A**T +
 *>                                         beta*C.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'T' or 't'    C := alpha*A**T*B + alpha*B**T*A +
 *>                                         beta*C.
 *> \endverbatim
@@ -94,8 +90,10 @@
 *>          ALPHA is COMPLEX
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
+*>
+*> \param[in] A
 *> \verbatim
-*>  A        COMPLEX array of DIMENSION ( LDA, ka ), where ka is
+*>          A is COMPLEX array of DIMENSION ( LDA, ka ), where ka is
 *>           k  when  TRANS = 'N' or 'n',  and is  n  otherwise.
 *>           Before entry with  TRANS = 'N' or 'n',  the  leading  n by k
 *>           part of the array  A  must contain the matrix  A,  otherwise

@@ -203,37 +203,29 @@
 *>                the eigenvalues.  Elements 1:ilo-1 and i+1:n of WR
 *>                and WI contain those eigenvalues which have been
 *>                successfully computed.  (Failures are rare.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and WANT is .FALSE., then on exit,
 *>                the remaining unconverged eigenvalues are the eigen-
 *>                values of the upper Hessenberg matrix rows and
 *>                columns ILO through INFO of the final, output
 *>                value of H.
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and WANTT is .TRUE., then on exit
-*> \endverbatim
-*> \verbatim
+*>
 *>           (*)  (initial value of H)*U  = U*(final value of H)
-*> \endverbatim
-*> \verbatim
-*>                where U is an orthogonal matrix.  The final
-*>                value of H is upper Hessenberg and quasi-triangular
-*>                in rows and columns INFO+1 through IHI.
-*> \endverbatim
-*> \verbatim
+*>
+*>                where U is a orthogonal matrix.  The final
+*>                value of  H is upper Hessenberg and triangular in
+*>                rows and columns INFO+1 through IHI.
+*>
 *>                If INFO .GT. 0 and WANTZ is .TRUE., then on exit
-*> \endverbatim
-*> \verbatim
+*>
 *>                  (final value of Z(ILO:IHI,ILOZ:IHIZ)
 *>                   =  (initial value of Z(ILO:IHI,ILOZ:IHIZ)*U
-*> \endverbatim
-*> \verbatim
+*>
 *>                where U is the orthogonal matrix in (*) (regard-
 *>                less of the value of WANTT.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and WANTZ is .FALSE., then Z is not
 *>                accessed.
 *> \endverbatim

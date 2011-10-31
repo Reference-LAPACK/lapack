@@ -69,7 +69,14 @@
 *> \param[in] S1
 *> \verbatim
 *>          S1 is COMPLEX*16
-*>       S2     S1 and S2 are the shifts defining K in (*) above.
+*> \endverbatim
+*>
+*> \param[in] S2
+*> \verbatim
+*>          S2 is COMPLEX*16
+*> \endverbatim
+*> \verbatim
+*>          S1 and S2 are the shifts defining K in (*) above.
 *> \endverbatim
 *>
 *> \param[out] V

@@ -117,7 +117,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  
 *>  The matrix V stores the elementary reflectors H(i) in the i-th column
 *>  below the diagonal. For example, if M=5 and N=3, the matrix V is
 *>

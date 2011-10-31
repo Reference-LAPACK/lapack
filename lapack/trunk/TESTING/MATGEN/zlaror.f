@@ -56,13 +56,11 @@
 *>                           identity matrix before applying U.
 *>              INIT = 'N'   No initialization.  Apply U to the
 *>                           input matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>           INIT = 'I' may be used to generate square (i.e., unitary)
 *>           or rectangular orthogonal matrices (orthogonality being
 *>           in the sense of ZDOTC):
-*> \endverbatim
-*> \verbatim
+*>
 *>           For square matrices, M=N, and SIDE many be either 'L' or
 *>           'R'; the rows will be orthogonal to each other, as will the
 *>           columns.
@@ -75,8 +73,7 @@
 *>           For matrices where M > N, just use the previous
 *>           explanation, interchanging 'L' and 'R' and "rows" and
 *>           "columns".
-*> \endverbatim
-*> \verbatim
+*>
 *>           Not modified.
 *> \endverbatim
 *>
@@ -91,8 +88,10 @@
 *>          N is INTEGER
 *>           Number of columns of A. Not modified.
 *> \endverbatim
+*>
+*> \param[in,out] A
 *> \verbatim
-*>  A        COMPLEX*16 array, dimension ( LDA, N )
+*>           A is COMPLEX*16 array, dimension ( LDA, N )
 *>           Input and output array. Overwritten by U A ( if SIDE = 'L' )
 *>           or by A U ( if SIDE = 'R' )
 *>           or by U A U* ( if SIDE = 'C')

@@ -44,14 +44,11 @@
 *>          TRANS is CHARACTER*1
 *>           On entry, TRANS specifies the operation to be performed as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'N' or 'n'   y := alpha*A*x + beta*y.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'T' or 't'   y := alpha*A**T*x + beta*y.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'C' or 'c'   y := alpha*A**H*x + beta*y.
 *> \endverbatim
 *>
@@ -103,8 +100,7 @@
 *>           are not referenced.
 *>           The following program segment will transfer a band matrix
 *>           from conventional full matrix storage to band storage:
-*> \endverbatim
-*> \verbatim
+*>
 *>                 DO 20, J = 1, N
 *>                    K = KU + 1 - J
 *>                    DO 10, I = MAX( 1, J - KU ), MIN( M, J + KL )

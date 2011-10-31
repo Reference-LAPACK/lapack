@@ -44,11 +44,9 @@
 *>          SIDE is CHARACTER*1
 *>           On entry,  SIDE specifies whether  op( A ) multiplies B from
 *>           the left or right as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              SIDE = 'L' or 'l'   B := alpha*op( A )*B.
-*> \endverbatim
-*> \verbatim
+*>
 *>              SIDE = 'R' or 'r'   B := alpha*B*op( A ).
 *> \endverbatim
 *>
@@ -57,11 +55,9 @@
 *>          UPLO is CHARACTER*1
 *>           On entry, UPLO specifies whether the matrix A is an upper or
 *>           lower triangular matrix as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   A is an upper triangular matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   A is a lower triangular matrix.
 *> \endverbatim
 *>
@@ -70,14 +66,11 @@
 *>          TRANSA is CHARACTER*1
 *>           On entry, TRANSA specifies the form of op( A ) to be used in
 *>           the matrix multiplication as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSA = 'N' or 'n'   op( A ) = A.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSA = 'T' or 't'   op( A ) = A**T.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANSA = 'C' or 'c'   op( A ) = A**T.
 *> \endverbatim
 *>
@@ -86,11 +79,9 @@
 *>          DIAG is CHARACTER*1
 *>           On entry, DIAG specifies whether or not A is unit triangular
 *>           as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
-*> \endverbatim
-*> \verbatim
+*>
 *>              DIAG = 'N' or 'n'   A is not assumed to be unit
 *>                                  triangular.
 *> \endverbatim

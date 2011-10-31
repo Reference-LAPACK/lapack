@@ -43,12 +43,10 @@
 *>           On entry, UPLO specifies whether the upper or lower
 *>           triangular part of the matrix A is supplied in the packed
 *>           array AP as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   The upper triangular part of A is
 *>                                  supplied in AP.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   The lower triangular part of A is
 *>                                  supplied in AP.
 *> \endverbatim
@@ -80,8 +78,10 @@
 *>           On entry, INCX specifies the increment for the elements of
 *>           X. INCX must not be zero.
 *> \endverbatim
+*>
+*> \param[in] Y
 *> \verbatim
-*>  Y        COMPLEX array of dimension at least
+*>          Y is COMPLEX array of dimension at least
 *>           ( 1 + ( n - 1 )*abs( INCY ) ).
 *>           Before entry, the incremented array Y must contain the n
 *>           element vector y.

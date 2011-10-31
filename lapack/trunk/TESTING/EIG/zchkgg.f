@@ -439,9 +439,9 @@
 *>          matrices in S1 and P1.
 *> \endverbatim
 *>
-*> \param[out] EVEZTR
+*> \param[out] EVECTR
 *> \verbatim
-*>          EVEZTR is COMPLEX*16 array, dimension (LDU, max(NN))
+*>          EVECTR is COMPLEX*16 array, dimension (LDU, max(NN))
 *>          The (upper triangular) right eigenvector matrix for the
 *>          matrices in S1 and P1.
 *> \endverbatim

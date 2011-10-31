@@ -133,6 +133,13 @@
 *>               copied to AF and factored.
 *> \endverbatim
 *>
+*> \param[in] UPLO
+*> \verbatim
+*>          UPLO is CHARACTER*1
+*>       = 'U':  Upper triangle of A is stored;
+*>       = 'L':  Lower triangle of A is stored.
+*> \endverbatim
+*>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER

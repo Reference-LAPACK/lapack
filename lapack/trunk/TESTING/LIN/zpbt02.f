@@ -59,6 +59,12 @@
 *>          or the number of sub-diagonals if UPLO = 'L'.  KD >= 0.
 *> \endverbatim
 *>
+*> \param[in] NRHS
+*> \verbatim
+*>          NRHS is INTEGER
+*>          The number of right hand sides. NRHS >= 0.
+*> \endverbatim
+*>
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)

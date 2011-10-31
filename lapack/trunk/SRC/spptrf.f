@@ -102,8 +102,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  Further Details
-*>  ======= =======
 *>
 *>  The packed storage scheme is illustrated by the following example
 *>  when N = 4, UPLO = 'U':

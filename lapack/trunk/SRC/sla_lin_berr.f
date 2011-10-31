@@ -77,12 +77,12 @@
 *>     The denominator in the relative backward error formula above, i.e.,
 *>     the matrix abs(op(A_s))*abs(Y) + abs(B_s). The matrices A, Y, and B
 *>     are from iterative refinement (see sla_gerfsx_extended.f).
+*> \endverbatim
 *>     
 *> \param[out] BERR
 *> \verbatim
 *>          BERR is REAL array, dimension (NRHS)
 *>     The componentwise relative backward error from the formula above.
-*> \endverbatim
 *> \endverbatim
 *>
 *
