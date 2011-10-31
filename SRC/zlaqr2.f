@@ -126,12 +126,13 @@
 *> \param[in] ILOZ
 *> \verbatim
 *>          ILOZ is INTEGER
+*> \endverbatim
+*>
 *> \param[in] IHIZ
 *> \verbatim
 *>          IHIZ is INTEGER
 *>          Specify the rows of Z to which transformations must be
 *>          applied if WANTZ is .TRUE.. 1 .LE. ILOZ .LE. IHIZ .LE. N.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] Z

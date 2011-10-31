@@ -192,7 +192,7 @@
 *> DLAMC1 determines the machine parameters given by BETA, T, RND, and
 *> IEEE1.
 *>
-*>\verbatim
+*>\endverbatim
 *>
 *> \param[out] BETA
 *> \verbatim
@@ -417,11 +417,7 @@
 *> \param[out] EPS
 *> \verbatim
 *>          The smallest positive number such that
-*> \endverbatim
-*> \verbatim
 *>             fl( 1.0 - EPS ) .LT. 1.0,
-*> \endverbatim
-*> \verbatim
 *>          where fl denotes the computed value.
 *> \endverbatim
 *>

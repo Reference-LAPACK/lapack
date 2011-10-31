@@ -77,8 +77,10 @@
 *>          reflector T; the elements below the diagonal are not used.
 *>          See below for further details.
 *> \endverbatim
+*>
+*> \param[in] LDT
 *> \verbatim
-*>  LDT     (intput) INTEGER
+*>          LDT is INTEGER
 *>          The leading dimension of the array T.  LDT >= max(1,N).
 *> \endverbatim
 *>

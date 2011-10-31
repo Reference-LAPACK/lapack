@@ -262,9 +262,9 @@
 *>          LIWORK is INTEGER
 *>          Leading dimension of IWORK.  LIWORK >= N+2.
 *> \endverbatim
-*> \verbatim
 *>
 *> \param[out] RESULT	
+*> \verbatim
 *>  		RESULT is DOUBLE PRECISION array, dimension (4)
 *> \endverbatim
 *>

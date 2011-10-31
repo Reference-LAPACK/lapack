@@ -70,9 +70,9 @@
 *>          AP is DOUBLE PRECISION array, dimension ((NMAX*(NMAX+1))/2).
 *> \endverbatim
 *>
-*> \param[out] A2
+*> \param[out] ASAV
 *> \verbatim
-*>          A2 is DOUBLE PRECISION array, dimension (LDA,NMAX)
+*>          ASAV is DOUBLE PRECISION array, dimension (LDA,NMAX)
 *> \endverbatim
 *>
 *

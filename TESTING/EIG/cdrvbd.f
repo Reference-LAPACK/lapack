@@ -181,13 +181,6 @@
 *>          or the size of the matrix.  It must be at least zero.
 *> \endverbatim
 *>
-*> \param[in] NOUNIT
-*> \verbatim
-*>          NOUNIT is INTEGER
-*>          The FORTRAN unit number for printing out error messages
-*>          (e.g., if a routine returns IINFO not equal to 0.)
-*> \endverbatim
-*>
 *> \param[out] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,max(NN))
@@ -297,12 +290,11 @@
 *>          IWORK is INTEGER array, dimension at least 8*min(M,N)
 *> \endverbatim
 *>
-*> \param[out] RESULT
+*> \param[in] NOUNIT
 *> \verbatim
-*>          RESULT is REAL array, dimension (7)
-*>          The values computed by the 7 tests described above.
-*>          The values are currently limited to 1/ULP, to avoid
-*>          overflow.
+*>          NOUNIT is INTEGER
+*>          The FORTRAN unit number for printing out error messages
+*>          (e.g., if a routine returns IINFO not equal to 0.)
 *> \endverbatim
 *>
 *> \param[out] INFO

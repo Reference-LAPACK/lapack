@@ -68,13 +68,13 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (LDWORK,N)
+*>          WORK is COMPLEX*16 array, dimension (LDW,N)
 *> \endverbatim
 *>
-*> \param[in] LDWORK
+*> \param[in] LDW
 *> \verbatim
-*>          LDWORK is INTEGER
-*>          The leading dimension of the array WORK.  LDWORK >= max(1,N).
+*>          LDW is INTEGER
+*>          The leading dimension of the array WORK.  LDW >= max(1,N).
 *> \endverbatim
 *>
 *> \param[out] RWORK

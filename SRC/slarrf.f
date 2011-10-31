@@ -159,6 +159,11 @@
 *>          Workspace.
 *> \endverbatim
 *>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          Signals processing OK (=0) or failure (=1)
+*> \endverbatim
 *
 *  Authors
 *  =======

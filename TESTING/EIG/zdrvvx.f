@@ -361,17 +361,73 @@
 *>          Leading dimension of LRE. Must be at least max(1,max(NN,12))
 *> \endverbatim
 *>
+*> \param[out] RCONDV
+*> \verbatim
+*>          RCONDV is DOUBLE PRECISION array, dimension (N)
+*>          RCONDV holds the computed reciprocal condition numbers
+*>          for eigenvectors.
+*> \endverbatim
+*>
+*> \param[out] RCNDV1
+*> \verbatim
+*>          RCNDV1 is DOUBLE PRECISION array, dimension (N)
+*>          RCNDV1 holds more computed reciprocal condition numbers
+*>          for eigenvectors.
+*> \endverbatim
+*>
+*> \param[in] RCDVIN
+*> \verbatim
+*>          RCDVIN is DOUBLE PRECISION array, dimension (N)
+*>          When COMP = .TRUE. RCDVIN holds the precomputed reciprocal
+*>          condition numbers for eigenvectors to be compared with
+*>          RCONDV.
+*> \endverbatim
+*>
+*> \param[out] RCONDE
+*> \verbatim
+*>          RCONDE is DOUBLE PRECISION array, dimension (N)
+*>          RCONDE holds the computed reciprocal condition numbers
+*>          for eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] RCNDE1
+*> \verbatim
+*>          RCNDE1 is DOUBLE PRECISION array, dimension (N)
+*>          RCNDE1 holds more computed reciprocal condition numbers
+*>          for eigenvalues.
+*> \endverbatim
+*>
+*> \param[in] RCDEIN
+*> \verbatim
+*>          RCDEIN is DOUBLE PRECISION array, dimension (N)
+*>          When COMP = .TRUE. RCDEIN holds the precomputed reciprocal
+*>          condition numbers for eigenvalues to be compared with
+*>          RCONDE.
+*> \endverbatim
+*>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is DOUBLE PRECISION array, dimension (N)
+*>          Holds information describing balancing of matrix.
+*> \endverbatim
+*>
+*> \param[out] SCALE1
+*> \verbatim
+*>          SCALE1 is DOUBLE PRECISION array, dimension (N)
+*>          Holds information describing balancing of matrix.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX*16 array, dimension (NWORK)
+*> \endverbatim
+*>
 *> \param[out] RESULT
 *> \verbatim
 *>          RESULT is DOUBLE PRECISION array, dimension (11)
 *>          The values computed by the seven tests described above.
 *>          The values are currently limited to 1/ulp, to avoid
 *>          overflow.
-*> \endverbatim
-*>
-*> \param[out] WORK
-*> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (NWORK)
 *> \endverbatim
 *>
 *> \param[in] NWORK

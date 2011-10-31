@@ -54,6 +54,75 @@
 *>          The number of columns in the matrix A.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          On entry, the m by n general matrix to be reduced.
+*>          On exit,
+*>          if m >= n, the diagonal and the first superdiagonal are
+*>            overwritten with the upper bidiagonal matrix B; the
+*>            elements below the diagonal, with the array TAUQ, represent
+*>            the orthogonal matrix Q as a product of elementary
+*>            reflectors, and the elements above the first superdiagonal,
+*>            with the array TAUP, represent the orthogonal matrix P as
+*>            a product of elementary reflectors;
+*>          if m < n, the diagonal and the first subdiagonal are
+*>            overwritten with the lower bidiagonal matrix B; the
+*>            elements below the first subdiagonal, with the array TAUQ,
+*>            represent the orthogonal matrix Q as a product of
+*>            elementary reflectors, and the elements above the diagonal,
+*>            with the array TAUP, represent the orthogonal matrix P as
+*>            a product of elementary reflectors.
+*>          See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] D
+*> \verbatim
+*>          D is REAL array, dimension (min(M,N))
+*>          The diagonal elements of the bidiagonal matrix B:
+*>          D(i) = A(i,i).
+*> \endverbatim
+*>
+*> \param[out] E
+*> \verbatim
+*>          E is REAL array, dimension (min(M,N)-1)
+*>          The off-diagonal elements of the bidiagonal matrix B:
+*>          if m >= n, E(i) = A(i,i+1) for i = 1,2,...,n-1;
+*>          if m < n, E(i) = A(i+1,i) for i = 1,2,...,m-1.
+*> \endverbatim
+*>
+*> \param[out] TAUQ
+*> \verbatim
+*>          TAUQ is REAL array dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors which
+*>          represent the orthogonal matrix Q. See Further Details.
+*> \endverbatim
+*>
+*> \param[out] TAUP
+*> \verbatim
+*>          TAUP is REAL array, dimension (min(M,N))
+*>          The scalar factors of the elementary reflectors which
+*>          represent the orthogonal matrix P. See Further Details.
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is REAL array, dimension (max(M,N))
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0: successful exit.
+*>          < 0: if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -72,34 +141,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,M).
-*>
-*>  D       (output) REAL array, dimension (min(M,N))
-*>          The diagonal elements of the bidiagonal matrix B:
-*>          D(i) = A(i,i).
-*>
-*>  E       (output) REAL array, dimension (min(M,N)-1)
-*>          The off-diagonal elements of the bidiagonal matrix B:
-*>          if m >= n, E(i) = A(i,i+1) for i = 1,2,...,n-1;
-*>          if m < n, E(i) = A(i+1,i) for i = 1,2,...,m-1.
-*>
-*>  TAUQ    (output) REAL array dimension (min(M,N))
-*>          The scalar factors of the elementary reflectors which
-*>          represent the orthogonal matrix Q. See Further Details.
-*>
-*>  TAUP    (output) REAL array, dimension (min(M,N))
-*>          The scalar factors of the elementary reflectors which
-*>          represent the orthogonal matrix P. See Further Details.
-*>
-*>  WORK    (workspace) REAL array, dimension (max(M,N))
-*>
-*>  INFO    (output) INTEGER
-*>          = 0: successful exit.
-*>          < 0: if INFO = -i, the i-th argument had an illegal value.
-*>
 *>
 *>  The matrices Q and P are represented as products of elementary
 *>  reflectors:

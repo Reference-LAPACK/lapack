@@ -104,7 +104,7 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  Local Variables: I0:N0 defines a current unreduced segment of Z.
+*>  Local Variables: I0:N0 defines a current unreduced segment of Z.
 *>  The shifts are accumulated in SIGMA. Iteration count is in ITER.
 *>  Ping-pong is controlled by PP (alternates between 0 and 1).
 *>

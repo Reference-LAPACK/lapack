@@ -129,8 +129,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  Further Details
-*>  ======= =======
 *>
 *>  Reference: Livne, O.E. and Golub, G.H., "Scaling by Binormalization",
 *>  Numerical Algorithms, vol. 35, no. 1, pp. 97-120, January 2004.

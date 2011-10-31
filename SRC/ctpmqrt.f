@@ -67,6 +67,7 @@
 *> \verbatim
 *>          N is INTEGER
 *>          The number of columns of the matrix B. N >= 0.
+*> \endverbatim
 *> 
 *> \param[in] K
 *> \verbatim
@@ -74,6 +75,95 @@
 *>          The number of elementary reflectors whose product defines
 *>          the matrix Q.
 *> \endverbatim
+*>
+*> \param[in] L
+*> \verbatim
+*>          L is INTEGER
+*>          The order of the trapezoidal part of V.  
+*>          K >= L >= 0.  See Further Details.
+*> \endverbatim
+*>
+*> \param[in] NB
+*> \verbatim
+*>          NB is INTEGER
+*>          The block size used for the storage of T.  K >= NB >= 1.
+*>          This must be the same value of NB used to generate T
+*>          in CTPQRT.
+*> \endverbatim
+*>
+*> \param[in] V
+*> \verbatim
+*>          V is COMPLEX array, dimension (LDA,K)
+*>          The i-th column must contain the vector which defines the
+*>          elementary reflector H(i), for i = 1,2,...,k, as returned by
+*>          CTPQRT in B.  See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDV
+*> \verbatim
+*>          LDV is INTEGER
+*>          The leading dimension of the array V.
+*>          If SIDE = 'L', LDV >= max(1,M);
+*>          if SIDE = 'R', LDV >= max(1,N).
+*> \endverbatim
+*>
+*> \param[in] T
+*> \verbatim
+*>          T is COMPLEX array, dimension (LDT,K)
+*>          The upper triangular factors of the block reflectors
+*>          as returned by CTPQRT, stored as a NB-by-K matrix.
+*> \endverbatim
+*>
+*> \param[in] LDT
+*> \verbatim
+*>          LDT is INTEGER
+*>          The leading dimension of the array T.  LDT >= NB.
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension
+*>          (LDA,N) if SIDE = 'L' or 
+*>          (LDA,K) if SIDE = 'R'
+*>          On entry, the K-by-N or M-by-K matrix A.
+*>          On exit, A is overwritten by the corresponding block of 
+*>          Q*C or Q**H*C or C*Q or C*Q**H.  See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A. 
+*>          If SIDE = 'L', LDC >= max(1,K);
+*>          If SIDE = 'R', LDC >= max(1,M). 
+*> \endverbatim
+*>
+*> \param[in,out] B
+*> \verbatim
+*>          B is COMPLEX array, dimension (LDB,N)
+*>          On entry, the M-by-N matrix B.
+*>          On exit, B is overwritten by the corresponding block of
+*>          Q*C or Q**H*C or C*Q or C*Q**H.  See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDB
+*> \verbatim
+*>          LDB is INTEGER
+*>          The leading dimension of the array B. 
+*>          LDB >= max(1,M).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array. The dimension of WORK is
+*>           N*NB if SIDE = 'L', or  M*NB if SIDE = 'R'.
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
 *>
 *
@@ -94,58 +184,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          K >= L >= 0.  See Further Details.
-*>
-*>  NB      (input) INTEGER
-*>          The block size used for the storage of T.  K >= NB >= 1.
-*>          This must be the same value of NB used to generate T
-*>          in CTPQRT.
-*>
-*>  V       (input) COMPLEX array, dimension (LDA,K)
-*>          The i-th column must contain the vector which defines the
-*>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          CTPQRT in B.  See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.
-*>          If SIDE = 'L', LDA >= max(1,M);
-*>          if SIDE = 'R', LDA >= max(1,N).
-*>
-*>  T       (input) COMPLEX array, dimension (LDT,K)
-*>          The upper triangular factors of the block reflectors
-*>          as returned by CTPQRT, stored as a NB-by-K matrix.
-*>
-*>  LDT     (input) INTEGER
-*>          The leading dimension of the array T.  LDT >= NB.
-*>
-*>  A       (input/output) COMPLEX array, dimension 
-*>          (LDA,N) if SIDE = 'L' or 
-*>          (LDA,K) if SIDE = 'R'
-*>          On entry, the K-by-N or M-by-K matrix A.
-*>          On exit, A is overwritten by the corresponding block of 
-*>          Q*C or Q**H*C or C*Q or C*Q**H.  See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A. 
-*>          If SIDE = 'L', LDC >= max(1,K);
-*>          If SIDE = 'R', LDC >= max(1,M). 
-*>
-*>  B       (input/output) COMPLEX array, dimension (LDB,N)
-*>          On entry, the M-by-N matrix B.
-*>          On exit, B is overwritten by the corresponding block of
-*>          Q*C or Q**H*C or C*Q or C*Q**H.  See Further Details.
-*>
-*>  LDB     (input) INTEGER
-*>          The leading dimension of the array B. 
-*>          LDB >= max(1,M).
-*>
-*>  WORK    (workspace/output) COMPLEX array.  The dimension of WORK is
-*>           N*NB if SIDE = 'L', or  M*NB if SIDE = 'R'.
-*>
-*>  INFO    (output) INTEGER
-*>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*>
 *>
 *>  The columns of the pentagonal matrix V contain the elementary reflectors
 *>  H(1), H(2), ..., H(K); V is composed of a rectangular block V1 and a 

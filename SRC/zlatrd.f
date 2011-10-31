@@ -71,6 +71,66 @@
 *>          The number of rows and columns to be reduced.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
+*>          n-by-n upper triangular part of A contains the upper
+*>          triangular part of the matrix A, and the strictly lower
+*>          triangular part of A is not referenced.  If UPLO = 'L', the
+*>          leading n-by-n lower triangular part of A contains the lower
+*>          triangular part of the matrix A, and the strictly upper
+*>          triangular part of A is not referenced.
+*>          On exit:
+*>          if UPLO = 'U', the last NB columns have been reduced to
+*>            tridiagonal form, with the diagonal elements overwriting
+*>            the diagonal elements of A; the elements above the diagonal
+*>            with the array TAU, represent the unitary matrix Q as a
+*>            product of elementary reflectors;
+*>          if UPLO = 'L', the first NB columns have been reduced to
+*>            tridiagonal form, with the diagonal elements overwriting
+*>            the diagonal elements of A; the elements below the diagonal
+*>            with the array TAU, represent the  unitary matrix Q as a
+*>            product of elementary reflectors.
+*>          See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] E
+*> \verbatim
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          If UPLO = 'U', E(n-nb:n-1) contains the superdiagonal
+*>          elements of the last NB columns of the reduced matrix;
+*>          if UPLO = 'L', E(1:nb) contains the subdiagonal elements of
+*>          the first NB columns of the reduced matrix.
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is COMPLEX*16 array, dimension (N-1)
+*>          The scalar factors of the elementary reflectors, stored in
+*>          TAU(n-nb:n-1) if UPLO = 'U', and in TAU(1:nb) if UPLO = 'L'.
+*>          See Further Details.
+*> \endverbatim
+*>
+*> \param[out] W
+*> \verbatim
+*>          W is COMPLEX*16 array, dimension (LDW,NB)
+*>          The n-by-nb matrix W required to update the unreduced part
+*>          of A.
+*> \endverbatim
+*>
+*> \param[in] LDW
+*> \verbatim
+*>          LDW is INTEGER
+*>          The leading dimension of the array W. LDW >= max(1,N).
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -89,29 +149,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
-*>
-*>  E       (output) DOUBLE PRECISION array, dimension (N-1)
-*>          If UPLO = 'U', E(n-nb:n-1) contains the superdiagonal
-*>          elements of the last NB columns of the reduced matrix;
-*>          if UPLO = 'L', E(1:nb) contains the subdiagonal elements of
-*>          the first NB columns of the reduced matrix.
-*>
-*>  TAU     (output) COMPLEX*16 array, dimension (N-1)
-*>          The scalar factors of the elementary reflectors, stored in
-*>          TAU(n-nb:n-1) if UPLO = 'U', and in TAU(1:nb) if UPLO = 'L'.
-*>          See Further Details.
-*>
-*>  W       (output) COMPLEX*16 array, dimension (LDW,NB)
-*>          The n-by-nb matrix W required to update the unreduced part
-*>          of A.
-*>
-*>  LDW     (input) INTEGER
-*>          The leading dimension of the array W. LDW >= max(1,N).
-*>
 *>
 *>  If UPLO = 'U', the matrix Q is represented as a product of elementary
 *>  reflectors

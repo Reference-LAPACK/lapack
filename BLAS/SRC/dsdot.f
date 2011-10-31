@@ -70,7 +70,7 @@
 *>         storage spacing between elements of SY
 *> \endverbatim
 *>
-*> \param[out] DSDOT
+*> \result DSDOT
 *> \verbatim
 *>          DSDOT is DOUBLE PRECISION
 *>         DSDOT  double precision dot product (zero if N.LE.0)

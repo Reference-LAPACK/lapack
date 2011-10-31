@@ -110,9 +110,9 @@
 *>          be required.
 *> \endverbatim
 *>
-*> \param[out] (ILAENV)
+*> \result ILAENV
 *> \verbatim
-*>          (ILAENV) is INTEGER
+*>          ILAENV is INTEGER
 *>          >= 0: the value of the parameter specified by ISPEC
 *>          < 0:  if ILAENV = -k, the k-th argument had an illegal value.
 *> \endverbatim

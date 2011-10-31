@@ -45,6 +45,58 @@
 *>          The order of the matrix A.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in] ILO
+*> \verbatim
+*>          ILO is INTEGER
+*> \endverbatim
+*>
+*> \param[in] IHI
+*> \verbatim
+*>          IHI is INTEGER
+*>
+*>          It is assumed that A is already upper triangular in rows
+*>          and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
+*>          set by a previous call to CGEBAL; otherwise they should be
+*>          set to 1 and N respectively. See Further Details.
+*>          1 <= ILO <= IHI <= max(1,N).
+*> \endverbatim
+*>
+*> \param[in,out] A
+*> \verbatim
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the n by n general matrix to be reduced.
+*>          On exit, the upper triangle and the first subdiagonal of A
+*>          are overwritten with the upper Hessenberg matrix H, and the
+*>          elements below the first subdiagonal, with the array TAU,
+*>          represent the unitary matrix Q as a product of elementary
+*>          reflectors. See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is COMPLEX array, dimension (N-1)
+*>          The scalar factors of the elementary reflectors (see Further
+*>          Details).
+*> \endverbatim
+*>
+*> \param[out] WORK
+*> \verbatim
+*>          WORK is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -63,30 +115,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          set to 1 and N respectively. See Further Details.
-*>          1 <= ILO <= IHI <= max(1,N).
-*>
-*>  A       (input/output) COMPLEX array, dimension (LDA,N)
-*>          On entry, the n by n general matrix to be reduced.
-*>          On exit, the upper triangle and the first subdiagonal of A
-*>          are overwritten with the upper Hessenberg matrix H, and the
-*>          elements below the first subdiagonal, with the array TAU,
-*>          represent the unitary matrix Q as a product of elementary
-*>          reflectors. See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
-*>
-*>  TAU     (output) COMPLEX array, dimension (N-1)
-*>          The scalar factors of the elementary reflectors (see Further
-*>          Details).
-*>
-*>  WORK    (workspace) COMPLEX array, dimension (N)
-*>
-*>  INFO    (output) INTEGER
-*>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>
 *>
 *>  The matrix Q is represented as a product of (ihi-ilo) elementary
 *>  reflectors

@@ -152,12 +152,18 @@
 *> \param[out] ALPHAR
 *> \verbatim
 *>          ALPHAR is REAL array, dimension (N)
+*> \endverbatim
+*>
 *> \param[out] ALPHAI
 *> \verbatim
 *>          ALPHAI is REAL array, dimension (N)
+*> \endverbatim
+*>
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is REAL array, dimension (N)
+*> \endverbatim
+*> \verbatim
 *>          On exit, (ALPHAR(j) + ALPHAI(j)*i)/BETA(j), j=1,...,N, will
 *>          be the generalized eigenvalues.  ALPHAR(j) + ALPHAI(j)*i
 *>          and BETA(j),j=1,...,N  are the diagonals of the complex Schur
@@ -167,8 +173,6 @@
 *>          If ALPHAI(j) is zero, then the j-th eigenvalue is real; if
 *>          positive, then the j-th and (j+1)-st eigenvalues are a
 *>          complex conjugate pair, with ALPHAI(j+1) negative.
-*> \endverbatim
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] Q
@@ -217,16 +221,19 @@
 *> \param[out] PL
 *> \verbatim
 *>          PL is REAL
+*> \endverbatim
+*>
 *> \param[out] PR
 *> \verbatim
 *>          PR is REAL
+*> \endverbatim
+*> \verbatim
 *>          If IJOB = 1, 4 or 5, PL, PR are lower bounds on the
 *>          reciprocal of the norm of "projections" onto left and right
 *>          eigenspaces with respect to the selected cluster.
 *>          0 < PL, PR <= 1.
 *>          If M = 0 or M = N, PL = PR  = 1.
 *>          If IJOB = 0, 2 or 3, PL and PR are not referenced.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] DIF

@@ -51,14 +51,17 @@
 *> \param[in] ILO
 *> \verbatim
 *>          ILO is INTEGER
+*> \endverbatim
+*>
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
+*> \endverbatim
+*> \verbatim
 *>          ILO and IHI must have the same values as in the previous call
 *>          of CGEHRD. Q is equal to the unit matrix except in the
 *>          submatrix Q(ilo+1:ihi,ilo+1:ihi).
 *>          1 <= ILO <= IHI <= N, if N > 0; ILO=1 and IHI=0, if N=0.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] A

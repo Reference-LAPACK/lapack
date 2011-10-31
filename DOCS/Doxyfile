@@ -45,7 +45,7 @@ PROJECT_BRIEF          = "LAPACK: Linear Algebra PACKage"
 # exceed 55 pixels and the maximum width should not exceed 200 pixels. 
 # Doxygen will copy the logo to the output directory.
 
-PROJECT_LOGO           = 
+PROJECT_LOGO           = DOCS/lapack.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
@@ -193,7 +193,8 @@ TAB_SIZE               = 8
 # will result in a user-defined paragraph with heading "Side Effects:". 
 # You can put \n's in the value part of an alias to insert newlines.
 
-ALIASES                = 
+ALIASES                = "purpose=\details \b Purpose"
+#ALIASES                += "FurtherDetails=\details \b Further \b Details"
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C 
 # sources only. Doxygen will then generate output that is more tailored for C. 
@@ -617,7 +618,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # and error messages should be written. If left blank the output is written 
 # to stderr.
 
-WARN_LOGFILE           = 
+WARN_LOGFILE           = output_err
 
 #---------------------------------------------------------------------------
 # configuration options related to the input files
@@ -660,7 +661,15 @@ RECURSIVE              = YES
 # subdirectory from a directory tree whose root is specified with the INPUT tag. 
 # Note that relative paths are relative to directory from which doxygen is run.
 
-EXCLUDE                = CMAKE
+EXCLUDE                = CMAKE \
+                         DOCS \
+                         .svn \
+                         SRC/.svn \
+                         INSTALL/.svn \
+                         TESTING/.svn \
+                         TESTING/EIG/.svn \
+                         TESTING/MATGEN/.svn \
+                         TESTING/LIN/.svn \
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix file system feature) are excluded 
@@ -1346,7 +1355,7 @@ MAN_EXTENSION          = .3
 # only source the real man page, but without them the man command 
 # would be unable to find the correct page. The default is NO.
 
-MAN_LINKS              = NO
+MAN_LINKS              = YES
 
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
@@ -1677,7 +1686,7 @@ DIRECTORY_GRAPH        = YES
 # HTML_FILE_EXTENSION to xhtml in order to make the SVG files 
 # visible in IE 9+ (other browsers do not have this requirement).
 
-DOT_IMAGE_FORMAT       = png
+DOT_IMAGE_FORMAT       = svg
 
 # If DOT_IMAGE_FORMAT is set to svg, then this option can be set to YES to 
 # enable generation of interactive SVG images that allow zooming and panning. 

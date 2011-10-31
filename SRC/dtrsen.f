@@ -130,9 +130,12 @@
 *> \param[out] WR
 *> \verbatim
 *>          WR is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
 *> \param[out] WI
 *> \verbatim
 *>          WI is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*> \verbatim
 *>          The real and imaginary parts, respectively, of the reordered
 *>          eigenvalues of T. The eigenvalues are stored in the same
 *>          order as on the diagonal of T, with WR(i) = T(i,i) and, if
@@ -140,7 +143,6 @@
 *>          WI(i+1) = -WI(i). Note that if a complex eigenvalue is
 *>          sufficiently ill-conditioned, then its value may differ
 *>          significantly from its value before reordering.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] M

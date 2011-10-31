@@ -121,6 +121,12 @@
 *>          RWORK is REAL array, dimension (N)
 *> \endverbatim
 *>
+*> \param[out] RESULT
+*> \verbatim
+*>          RESULT is REAL array, dimension (2)
+*>          RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
+*>          RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
+*> \endverbatim
 *
 *  Authors
 *  =======

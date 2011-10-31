@@ -70,9 +70,9 @@
 *>          AP is REAL array, dimension ((NMAX*(NMAX+1))/2).
 *> \endverbatim
 *>
-*> \param[out] A2
+*> \param[out] ASAV
 *> \verbatim
-*>          A2 is REAL array, dimension (LDA,NMAX)
+*>          ASAV is REAL array, dimension (LDA,NMAX)
 *> \endverbatim
 *>
 *

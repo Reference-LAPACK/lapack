@@ -153,12 +153,6 @@
 *>          to update the system.
 *> \endverbatim
 *>
-*> \param[in] LDS
-*> \verbatim
-*>          LDS is INTEGER
-*>          The leading dimension of S.  LDS >= max(1,K).
-*> \endverbatim
-*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER

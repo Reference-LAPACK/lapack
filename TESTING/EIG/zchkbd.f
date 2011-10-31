@@ -317,9 +317,9 @@
 *>                      (LDPT,max(min(MVAL(j),NVAL(j))))
 *> \endverbatim
 *>
-*> \param[out] V
+*> \param[out] VT
 *> \verbatim
-*>          V is COMPLEX*16 array, dimension
+*>          VT is COMPLEX*16 array, dimension
 *>                      (LDPT,max(min(MVAL(j),NVAL(j))))
 *> \endverbatim
 *>

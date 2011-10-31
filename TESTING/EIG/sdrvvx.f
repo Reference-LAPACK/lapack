@@ -431,6 +431,18 @@
 *>          RCONDE.
 *> \endverbatim
 *>
+*> \param[out] SCALE
+*> \verbatim
+*>          SCALE is REAL array, dimension (N)
+*>          Holds information describing balancing of matrix.
+*> \endverbatim
+*>
+*> \param[out] SCALE1
+*> \verbatim
+*>          SCALE1 is REAL array, dimension (N)
+*>          Holds information describing balancing of matrix.
+*> \endverbatim
+*>
 *> \param[out] RESULT
 *> \verbatim
 *>          RESULT is REAL array, dimension (11)

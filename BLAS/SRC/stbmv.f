@@ -41,11 +41,9 @@
 *>          UPLO is CHARACTER*1
 *>           On entry, UPLO specifies whether the matrix is an upper or
 *>           lower triangular matrix as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   A is an upper triangular matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   A is a lower triangular matrix.
 *> \endverbatim
 *>
@@ -54,14 +52,11 @@
 *>          TRANS is CHARACTER*1
 *>           On entry, TRANS specifies the operation to be performed as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'N' or 'n'   x := A*x.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'T' or 't'   x := A**T*x.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS = 'C' or 'c'   x := A**T*x.
 *> \endverbatim
 *>
@@ -70,11 +65,9 @@
 *>          DIAG is CHARACTER*1
 *>           On entry, DIAG specifies whether or not A is unit
 *>           triangular as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
-*> \endverbatim
-*> \verbatim
+*>
 *>              DIAG = 'N' or 'n'   A is not assumed to be unit
 *>                                  triangular.
 *> \endverbatim
@@ -109,16 +102,14 @@
 *>           The following program segment will transfer an upper
 *>           triangular band matrix from conventional full matrix storage
 *>           to band storage:
-*> \endverbatim
-*> \verbatim
+*>
 *>                 DO 20, J = 1, N
 *>                    M = K + 1 - J
 *>                    DO 10, I = MAX( 1, J - K ), J
 *>                       A( M + I, J ) = matrix( I, J )
 *>              10    CONTINUE
 *>              20 CONTINUE
-*> \endverbatim
-*> \verbatim
+*>
 *>           Before entry with UPLO = 'L' or 'l', the leading ( k + 1 )
 *>           by n part of the array A must contain the lower triangular
 *>           band part of the matrix of coefficients, supplied column by
@@ -129,16 +120,14 @@
 *>           The following program segment will transfer a lower
 *>           triangular band matrix from conventional full matrix storage
 *>           to band storage:
-*> \endverbatim
-*> \verbatim
+*>
 *>                 DO 20, J = 1, N
 *>                    M = 1 - J
 *>                    DO 10, I = J, MIN( N, J + K )
 *>                       A( M + I, J ) = matrix( I, J )
 *>              10    CONTINUE
 *>              20 CONTINUE
-*> \endverbatim
-*> \verbatim
+*>
 *>           Note that when DIAG = 'U' or 'u' the elements of the array A
 *>           corresponding to the diagonal elements of the matrix are not
 *>           referenced, but are assumed to be unity.

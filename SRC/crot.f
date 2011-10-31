@@ -76,6 +76,8 @@
 *> \param[in] C
 *> \verbatim
 *>          C is REAL
+*> \endverbatim
+*>
 *> \param[in] S
 *> \verbatim
 *>          S is COMPLEX
@@ -83,7 +85,6 @@
 *>             [  C          S  ]
 *>             [ -conjg(S)   C  ]
 *>          where C*C + S*CONJG(S) = 1.0.
-*> \endverbatim
 *> \endverbatim
 *>
 *

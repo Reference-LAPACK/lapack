@@ -387,6 +387,64 @@
 *>          eigenvalues in D3 correspond with the matrix in A.
 *> \endverbatim
 *>
+*> \param[out] D4
+*> \verbatim
+*>          D4 is REAL array of
+*>                             dimension( max(NN) )
+*>          The eigenvalues of A, as computed by CPTEQR(V).
+*>          ZPTEQR factors S as  Z4 D4 Z4*
+*>          On exit, the eigenvalues in D4 correspond with the matrix in A.
+*> \endverbatim
+*>
+*> \param[out] D5
+*> \verbatim
+*>          D5 is REAL array of
+*>                             dimension( max(NN) )
+*>          The eigenvalues of A, as computed by ZPTEQR(N)
+*>          when Z is not computed. On exit, the
+*>          eigenvalues in D4 correspond with the matrix in A.
+*> \endverbatim
+*>
+*> \param[out] WA1
+*> \verbatim
+*>          WA1 is REAL array of
+*>                             dimension( max(NN) )
+*>          All eigenvalues of A, computed to high
+*>          absolute accuracy, with different range options.
+*>          as computed by SSTEBZ.
+*> \endverbatim
+*>
+*> \param[out] WA2
+*> \verbatim
+*>          WA2 is REAL array of
+*>                             dimension( max(NN) )
+*>          Selected eigenvalues of A, computed to high
+*>          absolute accuracy, with different range options.
+*>          as computed by SSTEBZ.
+*>          Choose random values for IL and IU, and ask for the
+*>          IL-th through IU-th eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] WA3
+*> \verbatim
+*>          WA3 is REAL array of
+*>                             dimension( max(NN) )
+*>          Selected eigenvalues of A, computed to high
+*>          absolute accuracy, with different range options.
+*>          as computed by SSTEBZ.
+*>          Determine the values VL and VU of the IL-th and IU-th
+*>          eigenvalues and ask for all eigenvalues in this range.
+*> \endverbatim
+*>
+*> \param[out] WR
+*> \verbatim
+*>          WR is DOUBLE PRECISION array of
+*>                             dimension( max(NN) )
+*>          All eigenvalues of A, computed to high
+*>          absolute accuracy, with different options.
+*>          as computed by DSTEBZ.
+*> \endverbatim
+*>
 *> \param[out] U
 *> \verbatim
 *>          U is COMPLEX array of
@@ -455,15 +513,26 @@
 *> \param[out] IWORK
 *> \verbatim
 *>          IWORK is INTEGER array,
-*>             dimension (6 + 6*Nmax + 5 * Nmax * lg Nmax )
-*>          where Nmax = max( NN(j), 2 ) and lg = log base 2.
 *>          Workspace.
+*> \endverbatim
+*>
+*> \param[out] LIWORK
+*> \verbatim
+*>          LIWORK is INTEGER
+*>          The number of entries in IWORK.  This must be at least
+*>                  6 + 6*Nmax + 5 * Nmax * lg Nmax 
+*>          where Nmax = max( NN(j), 2 ) and lg = log base 2.
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array of
-*>                      dimension( ??? )
+*>          RWORK is REAL array
+*> \endverbatim
+*>
+*> \param[in] LRWORK
+*> \verbatim
+*>          LRWORK is INTEGER
+*>          The number of entries in LRWORK (dimension( ??? )
 *> \endverbatim
 *>
 *> \param[out] RESULT

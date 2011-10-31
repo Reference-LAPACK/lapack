@@ -1,4 +1,4 @@
-*> \brief <b> DGBSV computes the solution to system of linear equations A * X = B for GB matrices</b>
+*> \brief <b> DGBSV computes the solution to system of linear equations A * X = B for GB matrices</b> (simple driver)
 *
 *  =========== DOCUMENTATION ===========
 *

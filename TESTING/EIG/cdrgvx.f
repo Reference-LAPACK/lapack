@@ -222,9 +222,9 @@
 *>  		S is REAL array, dimension (N)
 *> \endverbatim
 *>
-*> \param[out] DTRU	
+*> \param[out] STRU	
 *> \verbatim
-*>  		DTRU is REAL array, dimension (N)
+*>  		STRU is REAL array, dimension (N)
 *> \endverbatim
 *>
 *> \param[out] DIF		

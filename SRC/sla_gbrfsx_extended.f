@@ -107,29 +107,29 @@
 *>     matrix B.
 *> \endverbatim
 *>
-*> \param[in] A
+*> \param[in] AB
 *> \verbatim
-*>          A is REAL array, dimension (LDA,N)
-*>     On entry, the N-by-N matrix A.
+*>          AB is REAL array, dimension (LDAB,N)
+*>     On entry, the N-by-N matrix AB.
 *> \endverbatim
 *>
-*> \param[in] LDA
+*> \param[in] LDAB
 *> \verbatim
-*>          LDA is INTEGER
-*>     The leading dimension of the array A.  LDA >= max(1,N).
+*>          LDAB is INTEGER
+*>     The leading dimension of the array AB.  LDAB >= max(1,N).
 *> \endverbatim
 *>
-*> \param[in] AF
+*> \param[in] AFB
 *> \verbatim
-*>          AF is REAL array, dimension (LDAF,N)
+*>          AFB is REAL array, dimension (LDAFB,N)
 *>     The factors L and U from the factorization
 *>     A = P*L*U as computed by SGBTRF.
 *> \endverbatim
 *>
-*> \param[in] LDAF
+*> \param[in] LDAFB
 *> \verbatim
-*>          LDAF is INTEGER
-*>     The leading dimension of the array AF.  LDAF >= max(1,N).
+*>          LDAFB is INTEGER
+*>     The leading dimension of the array AF.  LDAFB >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in] IPIV
@@ -212,37 +212,31 @@
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     normwise relative error, which is defined as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>     Normwise relative error in the ith solution vector:
 *>             max_j (abs(XTRUE(j,i) - X(j,i)))
 *>            ------------------------------
 *>                  max_j abs(X(j,i))
-*> \endverbatim
-*> \verbatim
+*>
 *>     The array is indexed by the type of error information as described
 *>     below. There currently are up to three pieces of information
 *>     returned.
-*> \endverbatim
-*> \verbatim
+*>
 *>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
 *>     right-hand side.
-*> \endverbatim
-*> \verbatim
+*>
 *>     The second index in ERR_BNDS_NORM(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
 *>              sqrt(n) * slamch('Epsilon').
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
 *>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
 *>              sqrt(n) * slamch('Epsilon') to determine if the error
@@ -251,8 +245,7 @@
 *>              appropriately scaled matrix Z.
 *>              Let Z = S*A, where S scales each row by a power of the
 *>              radix so all absolute row sums of Z are approximately 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>     This subroutine is only responsible for setting the second field
 *>     above.
 *>     See Lapack Working Note 165 for further details and extra
@@ -266,14 +259,12 @@
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     componentwise relative error, which is defined as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>     Componentwise relative error in the ith solution vector:
 *>                    abs(XTRUE(j,i) - X(j,i))
 *>             max_j ----------------------
 *>                         abs(X(j,i))
-*> \endverbatim
-*> \verbatim
+*>
 *>     The array is indexed by the right-hand side i (on which the
 *>     componentwise relative error depends), and the type of error
 *>     information as described below. There currently are up to three
@@ -281,26 +272,22 @@
 *>     componentwise accuracy is not requested (PARAMS(3) = 0.0), then
 *>     ERR_BNDS_COMP is not accessed.  If N_ERR_BNDS .LT. 3, then at most
 *>     the first (:,N_ERR_BNDS) entries are returned.
-*> \endverbatim
-*> \verbatim
+*>
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
 *>     right-hand side.
-*> \endverbatim
-*> \verbatim
+*>
 *>     The second index in ERR_BNDS_COMP(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
 *>              sqrt(n) * slamch('Epsilon').
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
 *>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
 *>              sqrt(n) * slamch('Epsilon') to determine if the error
@@ -311,8 +298,7 @@
 *>              current right-hand side and S scales each row of
 *>              A*diag(x) by a power of the radix so all absolute row
 *>              sums of Z are approximately 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>     This subroutine is only responsible for setting the second field
 *>     above.
 *>     See Lapack Working Note 165 for further details and extra

@@ -147,14 +147,17 @@
 *> \param[out] ALPHA
 *> \verbatim
 *>          ALPHA is COMPLEX array, dimension (N)
+*> \endverbatim
+*>
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is COMPLEX array, dimension (N)
+*> \endverbatim
+*> \verbatim
 *>          The diagonal elements of A and B, respectively,
 *>          when the pair (A,B) has been reduced to generalized Schur
 *>          form.  ALPHA(i)/BETA(i) i=1,...,N are the generalized
 *>          eigenvalues.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] Q
@@ -203,16 +206,19 @@
 *> \param[out] PL
 *> \verbatim
 *>          PL is REAL
+*> \endverbatim
+*>
 *> \param[out] PR
 *> \verbatim
 *>          PR is REAL
+*> \endverbatim
+*> \verbatim
 *>          If IJOB = 1, 4 or 5, PL, PR are lower bounds on the
 *>          reciprocal  of the norm of "projections" onto left and right
 *>          eigenspace with respect to the selected cluster.
 *>          0 < PL, PR <= 1.
 *>          If M = 0 or M = N, PL = PR  = 1.
 *>          If IJOB = 0, 2 or 3 PL, PR are not referenced.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[out] DIF

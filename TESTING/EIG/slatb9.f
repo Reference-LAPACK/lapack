@@ -44,12 +44,21 @@
 *>          IMAT is INTEGER
 *>          An integer key describing which matrix to generate for this
 *>          path.
+*>          = 1:   A: diagonal, B: upper triangular
+*>          = 2:   A: upper triangular, B: upper triangular
+*>          = 3:   A: lower triangular, B: upper triangular
+*>          Else:  A: general dense, B: general dense
 *> \endverbatim
 *>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
 *>          The number of rows in the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[in] P
+*> \verbatim
+*>          P is INTEGER
 *> \endverbatim
 *>
 *> \param[in] N
@@ -67,15 +76,27 @@
 *>          = 'N':  nonsymmetric matrix.
 *> \endverbatim
 *>
-*> \param[out] KL
+*> \param[out] KLA
 *> \verbatim
-*>          KL is INTEGER
+*>          KLA is INTEGER
 *>          The lower band width of the matrix to be generated.
 *> \endverbatim
 *>
-*> \param[out] KU
+*> \param[out] KUA
 *> \verbatim
-*>          KU is INTEGER
+*>          KUA is INTEGER
+*>          The upper band width of the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[out] KLB
+*> \verbatim
+*>          KLB is INTEGER
+*>          The lower band width of the matrix to be generated.
+*> \endverbatim
+*>
+*> \param[out] KUB
+*> \verbatim
+*>          KUA is INTEGER
 *>          The upper band width of the matrix to be generated.
 *> \endverbatim
 *>
@@ -87,21 +108,48 @@
 *>          value.
 *> \endverbatim
 *>
-*> \param[out] MODE
+*> \param[out] BNORM
 *> \verbatim
-*>          MODE is INTEGER
+*>          BNORM is REAL
+*>          The desired norm of the matrix to be generated.  The diagonal
+*>          matrix of singular values or eigenvalues is scaled by this
+*>          value.
+*> \endverbatim
+*>
+*> \param[out] MODEA
+*> \verbatim
+*>          MODEA is INTEGER
 *>          A key indicating how to choose the vector of eigenvalues.
 *> \endverbatim
 *>
-*> \param[out] CNDNUM
+*> \param[out] MODEB
 *> \verbatim
-*>          CNDNUM is REAL
+*>          MODEB is INTEGER
+*>          A key indicating how to choose the vector of eigenvalues.
+*> \endverbatim
+*>
+*> \param[out] CNDNMA
+*> \verbatim
+*>          CNDNMA is REAL
 *>          The desired condition number.
 *> \endverbatim
 *>
-*> \param[out] DIST
+*> \param[out] CNDNMB
 *> \verbatim
-*>          DIST is CHARACTER*1
+*>          CNDNMB is REAL
+*>          The desired condition number.
+*> \endverbatim
+*>
+*> \param[out] DISTA
+*> \verbatim
+*>          DISTA is CHARACTER*1
+*>          The type of distribution to be used by the random number
+*>          generator.
+*> \endverbatim
+*>
+*> \param[out] DISTB
+*> \verbatim
+*>          DISTB is CHARACTER*1
 *>          The type of distribution to be used by the random number
 *>          generator.
 *> \endverbatim

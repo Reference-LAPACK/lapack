@@ -95,13 +95,6 @@
 *>          The values of the number of right hand sides NRHS.
 *> \endverbatim
 *>
-*> \param[in] NRHS
-*> \verbatim
-*>          NRHS is INTEGER
-*>          The number of right hand side vectors to be generated for
-*>          each linear system.
-*> \endverbatim
-*>
 *> \param[in] THRESH
 *> \verbatim
 *>          THRESH is REAL

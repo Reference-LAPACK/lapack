@@ -43,12 +43,10 @@
 *>           On entry, UPLO specifies whether the upper or lower
 *>           triangular part of the matrix A is supplied in the packed
 *>           array AP as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   The upper triangular part of A is
 *>                                  supplied in AP.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   The lower triangular part of A is
 *>                                  supplied in AP.
 *> \endverbatim

@@ -43,12 +43,10 @@
 *>           On entry, UPLO specifies whether the upper or lower
 *>           triangular part of the array A is to be referenced as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   Only the upper triangular part of A
 *>                                  is to be referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   Only the lower triangular part of A
 *>                                  is to be referenced.
 *> \endverbatim
@@ -65,8 +63,10 @@
 *>          ALPHA is COMPLEX
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
+*>
+*> \param[in] X
 *> \verbatim
-*>  X        COMPLEX array of dimension at least
+*>          X is COMPLEX array of dimension at least
 *>           ( 1 + ( n - 1 )*abs( INCX ) ).
 *>           Before entry, the incremented array X must contain the n
 *>           element vector x.
@@ -78,8 +78,10 @@
 *>           On entry, INCX specifies the increment for the elements of
 *>           X. INCX must not be zero.
 *> \endverbatim
+*>
+*> \param[in] Y
 *> \verbatim
-*>  Y        COMPLEX array of dimension at least
+*>          Y is COMPLEX array of dimension at least
 *>           ( 1 + ( n - 1 )*abs( INCY ) ).
 *>           Before entry, the incremented array Y must contain the n
 *>           element vector y.

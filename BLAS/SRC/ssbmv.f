@@ -43,12 +43,10 @@
 *>           On entry, UPLO specifies whether the upper or lower
 *>           triangular part of the band matrix A is being supplied as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   The upper triangular part of A is
 *>                                  being supplied.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   The lower triangular part of A is
 *>                                  being supplied.
 *> \endverbatim
@@ -86,16 +84,14 @@
 *>           The following program segment will transfer the upper
 *>           triangular part of a symmetric band matrix from conventional
 *>           full matrix storage to band storage:
-*> \endverbatim
-*> \verbatim
+*>
 *>                 DO 20, J = 1, N
 *>                    M = K + 1 - J
 *>                    DO 10, I = MAX( 1, J - K ), J
 *>                       A( M + I, J ) = matrix( I, J )
 *>              10    CONTINUE
 *>              20 CONTINUE
-*> \endverbatim
-*> \verbatim
+*>
 *>           Before entry with UPLO = 'L' or 'l', the leading ( k + 1 )
 *>           by n part of the array A must contain the lower triangular
 *>           band part of the symmetric matrix, supplied column by
@@ -106,8 +102,7 @@
 *>           The following program segment will transfer the lower
 *>           triangular part of a symmetric band matrix from conventional
 *>           full matrix storage to band storage:
-*> \endverbatim
-*> \verbatim
+*>
 *>                 DO 20, J = 1, N
 *>                    M = 1 - J
 *>                    DO 10, I = J, MIN( N, J + K )

@@ -123,11 +123,14 @@
 *> \param[out] X
 *> \verbatim
 *>          X is COMPLEX array, dimension (M)
+*> \endverbatim
+*>
 *> \param[out] Y
 *> \verbatim
 *>          Y is COMPLEX array, dimension (P)
-*>          On exit, X and Y are the solutions of the GLM problem.
 *> \endverbatim
+*> \verbatim
+*>          On exit, X and Y are the solutions of the GLM problem.
 *> \endverbatim
 *>
 *> \param[out] WORK

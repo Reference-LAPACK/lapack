@@ -118,16 +118,19 @@
 *> \param[in,out] WR
 *> \verbatim
 *>          WR is REAL array, dimension (N)
+*> \endverbatim
+*>
 *> \param[in] WI
 *> \verbatim
 *>          WI is REAL array, dimension (N)
+*> \endverbatim
+*> \verbatim
 *>          On entry, the real and imaginary parts of the eigenvalues of
 *>          H; a complex conjugate pair of eigenvalues must be stored in
 *>          consecutive elements of WR and WI.
 *>          On exit, WR may have been altered since close eigenvalues
 *>          are perturbed slightly in searching for independent
 *>          eigenvectors.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] VL

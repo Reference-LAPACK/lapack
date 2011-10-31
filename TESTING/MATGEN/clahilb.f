@@ -113,6 +113,12 @@
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
 *>
+*> \param[in] PATH
+*> \verbatim
+*>          PATH is CHARACTER*3
+*>          The LAPACK path name.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======

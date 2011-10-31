@@ -73,12 +73,13 @@
 *>          = 'V': all eigenvalues in the half-open interval (VL,VU]
 *>                 will be found.
 *>          = 'I': the IL-th through IU-th eigenvalues will be found.
+*> \endverbatim
+*>
 *> \param[in] UPLO
 *> \verbatim
 *>          UPLO is CHARACTER*1
 *>          = 'U':  Upper triangles of A and B are stored;
 *>          = 'L':  Lower triangles of A and B are stored.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in] N
@@ -95,8 +96,7 @@
 *>          upper triangular part of the matrix A.  If UPLO = 'L',
 *>          the leading N-by-N lower triangular part of A contains
 *>          the lower triangular part of the matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit,  the lower triangle (if UPLO='L') or the upper
 *>          triangle (if UPLO='U') of A, including the diagonal, is
 *>          destroyed.
@@ -116,8 +116,7 @@
 *>          upper triangular part of the matrix B.  If UPLO = 'L',
 *>          the leading N-by-N lower triangular part of B contains
 *>          the lower triangular part of the matrix B.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO <= N, the part of B containing the matrix is
 *>          overwritten by the triangular factor U or L from the Cholesky
 *>          factorization B = U**H*U or B = L*L**H.
@@ -132,26 +131,32 @@
 *> \param[in] VL
 *> \verbatim
 *>          VL is DOUBLE PRECISION
+*> \endverbatim
+*>
 *> \param[in] VU
 *> \verbatim
 *>          VU is DOUBLE PRECISION
+*> \endverbatim
+*> \verbatim
 *>          If RANGE='V', the lower and upper bounds of the interval to
 *>          be searched for eigenvalues. VL < VU.
 *>          Not referenced if RANGE = 'A' or 'I'.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in] IL
 *> \verbatim
 *>          IL is INTEGER
+*> \endverbatim
+*>
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
+*> \endverbatim
+*> \verbatim
 *>          If RANGE='I', the indices (in ascending order) of the
 *>          smallest and largest eigenvalues to be returned.
 *>          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
 *>          Not referenced if RANGE = 'A' or 'V'.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in] ABSTOL
@@ -161,19 +166,16 @@
 *>          An approximate eigenvalue is accepted as converged
 *>          when it is determined to lie in an interval [a,b]
 *>          of width less than or equal to
-*> \endverbatim
-*> \verbatim
+*>
 *>                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*> \endverbatim
-*> \verbatim
+*>
 *>          where EPS is the machine precision.  If ABSTOL is less than
 *>          or equal to zero, then  EPS*|T|  will be used in its place,
 *>          where |T| is the 1-norm of the tridiagonal matrix obtained
 *>          by reducing C to tridiagonal form, where C is the symmetric
 *>          matrix of the standard symmetric problem to which the
 *>          generalized problem is transformed.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
 *>          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
@@ -206,8 +208,7 @@
 *>          The eigenvectors are normalized as follows:
 *>          if ITYPE = 1 or 2, Z**T*B*Z = I;
 *>          if ITYPE = 3, Z**T*inv(B)*Z = I.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If an eigenvector fails to converge, then that column of Z
 *>          contains the latest approximation to the eigenvector, and the
 *>          index of the eigenvector is returned in IFAIL.

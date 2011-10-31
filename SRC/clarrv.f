@@ -84,8 +84,10 @@
 *>          is stored the corresponding shift as given by SLARRE.
 *>          On exit, L is overwritten.
 *> \endverbatim
+*>
+*> \param[in] PIVMIN
 *> \verbatim
-*>  PIVMIN  (in) DOUBLE PRECISION
+*>          PIVMIN is REAL
 *>          The minimum pivot allowed in the Sturm sequence.
 *> \endverbatim
 *>
@@ -232,14 +234,12 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
-*> \endverbatim
-*> \verbatim
+*>
 *>          > 0:  A problem occured in CLARRV.
 *>          < 0:  One of the called subroutines signaled an internal problem.
 *>                Needs inspection of the corresponding parameter IINFO
 *>                for further information.
-*> \endverbatim
-*> \verbatim
+*>
 *>          =-1:  Problem in SLARRB when refining a child's eigenvalues.
 *>          =-2:  Problem in SLARRF when computing the RRR of a child.
 *>                When a child is inside a tight cluster, it can be difficult

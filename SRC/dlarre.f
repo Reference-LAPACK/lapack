@@ -278,7 +278,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  Further Details
 *>  The base representations are required to suffer very little
 *>  element growth and consequently define all their eigenvalues to
 *>  high relative accuracy.

@@ -185,7 +185,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension
+*>          A is COMPLEX*16 array, dimension
 *>                            (LDA, max(NN))
 *>          Used to hold the matrix whose eigenvalues are to be
 *>          computed.
@@ -214,7 +214,7 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is DOUBLE PRECISION array, dimension (LDU, max(NN))
+*>          U is COMPLEX*16 array, dimension (LDU, max(NN))
 *>          Used to hold the unitary matrix computed by ZHBTRD.
 *> \endverbatim
 *>
@@ -227,7 +227,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -235,6 +235,11 @@
 *>          LWORK is INTEGER
 *>          The number of entries in WORK.  This must be at least
 *>          max( LDA+1, max(NN)+1 )*max(NN).
+*> \endverbatim
+*>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array
 *> \endverbatim
 *>
 *> \param[out] RESULT

@@ -43,12 +43,10 @@
 *>           On entry, UPLO specifies whether the upper or lower
 *>           triangular part of the matrix A is supplied in the packed
 *>           array AP as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   The upper triangular part of A is
 *>                                  supplied in AP.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   The lower triangular part of A is
 *>                                  supplied in AP.
 *> \endverbatim
@@ -65,8 +63,10 @@
 *>          ALPHA is REAL
 *>           On entry, ALPHA specifies the scalar alpha.
 *> \endverbatim
+*>
+*> \param[in] X
 *> \verbatim
-*>  X        REAL array of dimension at least
+*>          X is REAL array of dimension at least
 *>           ( 1 + ( n - 1 )*abs( INCX ) ).
 *>           Before entry, the incremented array X must contain the n
 *>           element vector x.

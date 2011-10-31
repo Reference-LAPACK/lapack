@@ -55,6 +55,62 @@
 *>          The order of the matrix A.  N >= 0.
 *> \endverbatim
 *>
+*> \param[in,out] A
+*> \verbatim
+*>          A is REAL array, dimension (LDA,N)
+*>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
+*>          n-by-n upper triangular part of A contains the upper
+*>          triangular part of the matrix A, and the strictly lower
+*>          triangular part of A is not referenced.  If UPLO = 'L', the
+*>          leading n-by-n lower triangular part of A contains the lower
+*>          triangular part of the matrix A, and the strictly upper
+*>          triangular part of A is not referenced.
+*>          On exit, if UPLO = 'U', the diagonal and first superdiagonal
+*>          of A are overwritten by the corresponding elements of the
+*>          tridiagonal matrix T, and the elements above the first
+*>          superdiagonal, with the array TAU, represent the orthogonal
+*>          matrix Q as a product of elementary reflectors; if UPLO
+*>          = 'L', the diagonal and first subdiagonal of A are over-
+*>          written by the corresponding elements of the tridiagonal
+*>          matrix T, and the elements below the first subdiagonal, with
+*>          the array TAU, represent the orthogonal matrix Q as a product
+*>          of elementary reflectors. See Further Details.
+*> \endverbatim
+*>
+*> \param[in] LDA
+*> \verbatim
+*>          LDA is INTEGER
+*>          The leading dimension of the array A.  LDA >= max(1,N).
+*> \endverbatim
+*>
+*> \param[out] D
+*> \verbatim
+*>          D is REAL array, dimension (N)
+*>          The diagonal elements of the tridiagonal matrix T:
+*>          D(i) = A(i,i).
+*> \endverbatim
+*>
+*> \param[out] E
+*> \verbatim
+*>          E is REAL array, dimension (N-1)
+*>          The off-diagonal elements of the tridiagonal matrix T:
+*>          E(i) = A(i,i+1) if UPLO = 'U', E(i) = A(i+1,i) if UPLO = 'L'.
+*> \endverbatim
+*>
+*> \param[out] TAU
+*> \verbatim
+*>          TAU is REAL array, dimension (N-1)
+*>          The scalar factors of the elementary reflectors (see Further
+*>          Details).
+*> \endverbatim
+*>
+*> \param[out] INFO
+*> \verbatim
+*>          INFO is INTEGER
+*>          = 0:  successful exit
+*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======
@@ -73,27 +129,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*          of elementary reflectors. See Further Details.
-*>
-*>  LDA     (input) INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
-*>
-*>  D       (output) REAL array, dimension (N)
-*>          The diagonal elements of the tridiagonal matrix T:
-*>          D(i) = A(i,i).
-*>
-*>  E       (output) REAL array, dimension (N-1)
-*>          The off-diagonal elements of the tridiagonal matrix T:
-*>          E(i) = A(i,i+1) if UPLO = 'U', E(i) = A(i+1,i) if UPLO = 'L'.
-*>
-*>  TAU     (output) REAL array, dimension (N-1)
-*>          The scalar factors of the elementary reflectors (see Further
-*>          Details).
-*>
-*>  INFO    (output) INTEGER
-*>          = 0:  successful exit
-*>          < 0:  if INFO = -i, the i-th argument had an illegal value.
-*>
 *>
 *>  If UPLO = 'U', the matrix Q is represented as a product of elementary
 *>  reflectors

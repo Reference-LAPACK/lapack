@@ -67,12 +67,6 @@
 *>     column INFO is exactly 0.
 *> \endverbatim
 *>
-*> \param[in] NCOLS
-*> \verbatim
-*>          NCOLS is INTEGER
-*>     The number of columns of the matrix A. NCOLS >= 0.
-*> \endverbatim
-*>
 *> \param[in] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)

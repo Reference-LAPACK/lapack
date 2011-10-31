@@ -169,8 +169,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  Further Details
-*>  ======= =======
 *>
 *>  A rough bound on x is computed; if that is less than overflow, STRSV
 *>  is called, otherwise, specific code is used which checks for possible

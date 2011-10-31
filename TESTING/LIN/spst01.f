@@ -113,6 +113,12 @@
 *>          If UPLO = 'U', norm(U'*U - A) / ( N * norm(A) * EPS )
 *> \endverbatim
 *>
+*> \param[in] RANK
+*> \verbatim
+*>          RANK is INTEGER
+*>          number of nonzero singular values of A.
+*> \endverbatim
+*>
 *
 *  Authors
 *  =======

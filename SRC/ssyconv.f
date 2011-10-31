@@ -89,19 +89,6 @@
 *>          WORK is REAL array, dimension (N)
 *> \endverbatim
 *>
-*> \param[in] LWORK
-*> \verbatim
-*>          LWORK is INTEGER
-*>          The length of WORK.  LWORK >=1. 
-*>          LWORK = N
-*> \endverbatim
-*> \verbatim
-*>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
-*>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
-*> \endverbatim
-*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER

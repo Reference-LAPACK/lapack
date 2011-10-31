@@ -79,14 +79,17 @@
 *> \param[in] CFROM
 *> \verbatim
 *>          CFROM is REAL
+*> \endverbatim
+*>
 *> \param[in] CTO
 *> \verbatim
 *>          CTO is REAL
+*> \endverbatim
+*> \verbatim
 *>          The matrix A is multiplied by CTO/CFROM. A(I,J) is computed
 *>          without over/underflow if the final result CTO*A(I,J)/CFROM
 *>          can be represented without over/underflow.  CFROM must be
 *>          nonzero.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in] M

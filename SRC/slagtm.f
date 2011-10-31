@@ -99,11 +99,12 @@
 *> \verbatim
 *>          X is REAL array, dimension (LDX,NRHS)
 *>          The N by NRHS matrix X.
+*> \endverbatim
+*>
 *> \param[in] LDX
 *> \verbatim
 *>          LDX is INTEGER
 *>          The leading dimension of the array X.  LDX >= max(N,1).
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in] BETA

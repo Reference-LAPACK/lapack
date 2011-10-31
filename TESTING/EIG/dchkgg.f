@@ -453,9 +453,9 @@
 *>          the matrices in S1 and P1.  (See DTGEVC for the format.)
 *> \endverbatim
 *>
-*> \param[out] EVEZTR
+*> \param[out] EVECTR
 *> \verbatim
-*>          EVEZTR is DOUBLE PRECISION array, dimension (LDU, max(NN))
+*>          EVECTR is DOUBLE PRECISION array, dimension (LDU, max(NN))
 *>          The (block upper triangular) right eigenvector matrix for
 *>          the matrices in S1 and P1.  (See DTGEVC for the format.)
 *> \endverbatim

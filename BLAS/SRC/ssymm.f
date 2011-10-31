@@ -46,11 +46,9 @@
 *>          SIDE is CHARACTER*1
 *>           On entry,  SIDE  specifies whether  the  symmetric matrix  A
 *>           appears on the  left or right  in the  operation as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              SIDE = 'L' or 'l'   C := alpha*A*B + beta*C,
-*> \endverbatim
-*> \verbatim
+*>
 *>              SIDE = 'R' or 'r'   C := alpha*B*A + beta*C,
 *> \endverbatim
 *>
@@ -60,12 +58,10 @@
 *>           On  entry,   UPLO  specifies  whether  the  upper  or  lower
 *>           triangular  part  of  the  symmetric  matrix   A  is  to  be
 *>           referenced as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'U' or 'u'   Only the upper triangular part of the
 *>                                  symmetric matrix is to be referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = 'L' or 'l'   Only the lower triangular part of the
 *>                                  symmetric matrix is to be referenced.
 *> \endverbatim

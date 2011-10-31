@@ -104,8 +104,6 @@
 *  ===============
 *>\details \b Further \b Details
 *> \verbatim
-*  Further Details
-*>  ======= =======
 *>
 *>  Contributed by Nick Higham, University of Manchester.
 *>  Originally named SONEST, dated March 16, 1988.

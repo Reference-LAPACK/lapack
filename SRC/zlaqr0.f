@@ -71,9 +71,13 @@
 *> \param[in] ILO
 *> \verbatim
 *>          ILO is INTEGER
+*> \endverbatim
+*>
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
+*> \endverbatim
+*> \verbatim
 *>           It is assumed that H is already upper triangular in rows
 *>           and columns 1:ILO-1 and IHI+1:N and, if ILO.GT.1,
 *>           H(ILO,ILO-1) is zero. ILO and IHI are normally set by a
@@ -82,7 +86,6 @@
 *>           Otherwise, ILO and IHI should be set to 1 and N,
 *>           respectively.  If N.GT.0, then 1.LE.ILO.LE.IHI.LE.N.
 *>           If N = 0, then ILO = 1 and IHI = 0.
-*> \endverbatim
 *> \endverbatim
 *>
 *> \param[in,out] H
@@ -114,6 +117,19 @@
 *>           in W(ILO:IHI). If WANTT is .TRUE., then the eigenvalues are
 *>           stored in the same order as on the diagonal of the Schur
 *>           form returned in H, with W(i) = H(i,i).
+*> \endverbatim
+*>
+*> \param[in] ILOZ
+*> \verbatim
+*>          ILOZ is INTEGER
+*> \endverbatim
+*>
+*> \param[in] IHIZ
+*> \verbatim
+*>          IHIZ is INTEGER
+*>           Specify the rows of Z to which transformations must be
+*>           applied if WANTZ is .TRUE..
+*>           1 .LE. ILOZ .LE. ILO; IHI .LE. IHIZ .LE. N.
 *> \endverbatim
 *>
 *> \param[in,out] Z
@@ -166,37 +182,29 @@
 *>                the eigenvalues.  Elements 1:ilo-1 and i+1:n of WR
 *>                and WI contain those eigenvalues which have been
 *>                successfully computed.  (Failures are rare.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and WANT is .FALSE., then on exit,
 *>                the remaining unconverged eigenvalues are the eigen-
 *>                values of the upper Hessenberg matrix rows and
 *>                columns ILO through INFO of the final, output
 *>                value of H.
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and WANTT is .TRUE., then on exit
-*> \endverbatim
-*> \verbatim
+*>
 *>           (*)  (initial value of H)*U  = U*(final value of H)
-*> \endverbatim
-*> \verbatim
+*>
 *>                where U is a unitary matrix.  The final
 *>                value of  H is upper Hessenberg and triangular in
 *>                rows and columns INFO+1 through IHI.
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and WANTZ is .TRUE., then on exit
-*> \endverbatim
-*> \verbatim
+*>
 *>                  (final value of Z(ILO:IHI,ILOZ:IHIZ)
 *>                   =  (initial value of Z(ILO:IHI,ILOZ:IHIZ)*U
-*> \endverbatim
-*> \verbatim
+*>
 *>                where U is the unitary matrix in (*) (regard-
 *>                less of the value of WANTT.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and WANTZ is .FALSE., then Z is not
 *>                accessed.
 *> \endverbatim

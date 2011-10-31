@@ -170,7 +170,9 @@
 *
          N = NVAL( IIN )
 *
-         DO 120 IIT = 1, 3
+         DO 120 IIT = 1, 3         
+*           Nothing to do for N=0
+            IF ( N .EQ. 0 ) EXIT
          
 *           Quick Return if possible
             IF ( N .EQ. 0 ) EXIT

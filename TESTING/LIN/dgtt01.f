@@ -82,9 +82,9 @@
 *>          The (n-1) elements of the first super-diagonal of U.
 *> \endverbatim
 *>
-*> \param[in] DU2F
+*> \param[in] DU2
 *> \verbatim
-*>          DU2F is DOUBLE PRECISION array, dimension (N-2)
+*>          DU2 is DOUBLE PRECISION array, dimension (N-2)
 *>          The (n-2) elements of the second super-diagonal of U.
 *> \endverbatim
 *>
