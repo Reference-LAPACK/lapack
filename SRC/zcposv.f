@@ -107,12 +107,10 @@
 *>          leading N-by-N lower triangular part of A contains the lower
 *>          triangular part of the matrix A, and the strictly upper
 *>          triangular part of A is not referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note that the imaginary parts of the diagonal
 *>          elements need not be set and are assumed to be zero.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if iterative refinement has been successfully used
 *>          (INFO.EQ.0 and ITER.GE.0, see description below), then A is
 *>          unchanged, if double precision factorization has been used

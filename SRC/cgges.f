@@ -108,8 +108,7 @@
 *>          to the top left of the Schur form.
 *>          An eigenvalue ALPHA(j)/BETA(j) is selected if
 *>          SELCTG(ALPHA(j),BETA(j)) is true.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note that a selected complex eigenvalue may no longer satisfy
 *>          SELCTG(ALPHA(j),BETA(j)) = .TRUE. after ordering, since
 *>          ordering may change the value of complex eigenvalues
@@ -171,8 +170,7 @@
 *>          generalized eigenvalues.  ALPHA(j), j=1,...,N  and  BETA(j),
 *>          j=1,...,N  are the diagonals of the complex Schur form (A,B)
 *>          output by CGGES. The  BETA(j) will be non-negative real.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note: the quotients ALPHA(j)/BETA(j) may easily over- or
 *>          underflow, and BETA(j) may even be zero.  Thus, the user
 *>          should avoid naively computing the ratio alpha/beta.
@@ -220,8 +218,7 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.  LWORK >= max(1,2*N).
 *>          For good performance, LWORK must generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

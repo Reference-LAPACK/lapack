@@ -40,13 +40,11 @@
 *>  MODE   - INTEGER
 *>           On entry describes how D is to be computed:
 *>           MODE = 0 means do not change D.
-*> \endverbatim
-*> \verbatim
+*>
 *>           MODE = 1 sets D(1)=1 and D(2:RANK)=1.0/COND
 *>           MODE = 2 sets D(1:RANK-1)=1 and D(RANK)=1.0/COND
 *>           MODE = 3 sets D(I)=COND**(-(I-1)/(RANK-1)) I=1:RANK
-*> \endverbatim
-*> \verbatim
+*>
 *>           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND)
 *>           MODE = 5 sets D to random numbers in the range
 *>                    ( 1/COND , 1 ) such that their logarithms
@@ -58,20 +56,17 @@
 *>           Thus if MODE is positive, D has entries ranging from
 *>              1 to 1/COND, if negative, from 1/COND to 1,
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  COND   - DOUBLE PRECISION
 *>           On entry, used as described under MODE above.
 *>           If used, it must be >= 1. Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IRSIGN - INTEGER
 *>           On entry, if MODE neither -6, 0 nor 6, determines sign of
 *>           entries of D
 *>           0 => leave entries of D unchanged
 *>           1 => multiply each entry of D by 1 or -1 with probability .5
-*> \endverbatim
-*> \verbatim
+*>
 *>  IDIST  - CHARACTER*1
 *>           On entry, IDIST specifies the type of distribution to be
 *>           used to generate a random matrix .
@@ -79,8 +74,7 @@
 *>           2 => UNIFORM( -1, 1 )
 *>           3 => NORMAL( 0, 1 )
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  ISEED  - INTEGER array, dimension ( 4 )
 *>           On entry ISEED specifies the seed of the random number
 *>           generator. The random number generator uses a
@@ -90,23 +84,19 @@
 *>           exit, and can be used in the next call to DLATM7
 *>           to continue the same random number sequence.
 *>           Changed on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D      - DOUBLE PRECISION array, dimension ( MIN( M , N ) )
 *>           Array to be computed according to MODE, COND and IRSIGN.
 *>           May be changed on exit if MODE is nonzero.
-*> \endverbatim
-*> \verbatim
+*>
 *>  N      - INTEGER
 *>           Number of entries of D. Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RANK   - INTEGER
 *>           The rank of matrix to be generated for modes 1,2,3 only.
 *>           D( RANK+1:N ) = 0.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  INFO   - INTEGER
 *>            0  => normal termination
 *>           -1  => if MODE not in range -6 to 6

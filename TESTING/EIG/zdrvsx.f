@@ -392,11 +392,9 @@
 *>            <0,  input parameter -INFO is incorrect
 *>            >0,  ZLATMR, CLATMS, CLATME or ZGET24 returned an error
 *>                 code and INFO is its absolute value
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>     Some Local Variables and Parameters:
 *>     ---- ----- --------- --- ----------
 *>     ZERO, ONE       Real 0 and 1.
@@ -406,8 +404,7 @@
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>     OVFL, UNFL      Overflow and underflow thresholds.
 *>     ULP, ULPINV     Finest relative precision and its inverse.
 *>     RTULP, RTULPI   Square roots of the previous 4 values.

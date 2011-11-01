@@ -145,8 +145,7 @@
 *>          if UPLO = 'U', AB(KD+1+i-j,j) = A(i,j) for max(1,j-KD)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(N,j+KD).
 *>          See below for further details.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if FACT = 'E' and EQUED = 'Y', A is overwritten by
 *>          diag(S)*A*diag(S).
 *> \endverbatim
@@ -165,13 +164,11 @@
 *>          factorization A = U**H*U or A = L*L**H of the band matrix
 *>          A, in the same storage format as A (see AB).  If EQUED = 'Y',
 *>          then AFB is the factored form of the equilibrated matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then AFB is an output argument and on exit
 *>          returns the triangular factor U or L from the Cholesky
 *>          factorization A = U**H*U or A = L*L**H.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'E', then AFB is an output argument and on exit
 *>          returns the triangular factor U or L from the Cholesky
 *>          factorization A = U**H*U or A = L*L**H of the equilibrated

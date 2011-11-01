@@ -128,8 +128,7 @@
 *>          to obtain the factor U or L from the factorization
 *>          A = U*D*U**T or A = L*D*L**T as computed by ZSPTRF, stored as
 *>          a packed triangular matrix in the same storage format as A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then AFP is an output argument and on exit
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
@@ -150,8 +149,7 @@
 *>          is a 2-by-2 diagonal block.  If UPLO = 'L' and IPIV(k) =
 *>          IPIV(k+1) < 0, then rows and columns k+1 and -IPIV(k) were
 *>          interchanged and D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains details of the interchanges and the block structure
 *>          of D, as determined by ZSPTRF.

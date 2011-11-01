@@ -98,8 +98,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the contents of AB are destroyed.
 *> \endverbatim
 *>
@@ -118,8 +117,7 @@
 *>          as follows:
 *>          if UPLO = 'U', BB(ka+1+i-j,j) = B(i,j) for max(1,j-kb)<=i<=j;
 *>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the factor S from the split Cholesky factorization
 *>          B = S**T*S, as returned by DPBSTF.
 *> \endverbatim
@@ -166,8 +164,7 @@
 *>          If N <= 1,               LWORK >= 1.
 *>          If JOBZ = 'N' and N > 1, LWORK >= 3*N.
 *>          If JOBZ = 'V' and N > 1, LWORK >= 1 + 5*N + 2*N**2.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
@@ -187,8 +184,7 @@
 *>          The dimension of the array IWORK.
 *>          If JOBZ  = 'N' or N <= 1, LIWORK >= 1.
 *>          If JOBZ  = 'V' and N > 1, LIWORK >= 3 + 5*N.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of

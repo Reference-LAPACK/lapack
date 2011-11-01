@@ -164,8 +164,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, (ALPHAR(j) + ALPHAI(j)*i)/BETA(j), j=1,...,N, will
 *>          be the generalized eigenvalues.  ALPHAR(j) + ALPHAI(j)*i
 *>          and BETA(j),j=1,...,N  are the diagonals of the complex Schur
@@ -228,8 +227,7 @@
 *> \param[out] PR
 *> \verbatim
 *>          PR is REAL
-*> \endverbatim
-*> \verbatim
+*>
 *>          If IJOB = 1, 4 or 5, PL, PR are lower bounds on the
 *>          reciprocal of the norm of "projections" onto left and right
 *>          eigenspaces with respect to the selected cluster.
@@ -261,8 +259,7 @@
 *>          The dimension of the array WORK. LWORK >=  4*N+16.
 *>          If IJOB = 1, 2 or 4, LWORK >= MAX(4*N+16, 2*M*(N-M)).
 *>          If IJOB = 3 or 5, LWORK >= MAX(4*N+16, 4*M*(N-M)).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -281,8 +278,7 @@
 *>          The dimension of the array IWORK. LIWORK >= 1.
 *>          If IJOB = 1, 2 or 4, LIWORK >=  N+6.
 *>          If IJOB = 3 or 5, LIWORK >= MAX(2*M*(N-M), N+6).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and

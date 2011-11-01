@@ -65,8 +65,7 @@
 *>          On entry, the block diagonal matrix D and the multipliers
 *>          used to obtain the factor U or L as computed by CHPTRF,
 *>          stored as a packed triangular matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the (Hermitian) inverse of the original
 *>          matrix, stored as a packed triangular matrix. The j-th column
 *>          of inv(A) is stored in the array AP as follows:

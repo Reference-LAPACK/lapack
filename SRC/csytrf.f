@@ -75,8 +75,7 @@
 *>          leading N-by-N lower triangular part of A contains the lower
 *>          triangular part of the matrix A, and the strictly upper
 *>          triangular part of A is not referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L (see below for further details).
 *> \endverbatim
@@ -111,8 +110,7 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >=1.  For best performance
 *>          LWORK >= N*NB, where NB is the block size returned by ILAENV.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

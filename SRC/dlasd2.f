@@ -71,8 +71,7 @@
 *>          SQRE is INTEGER
 *>         = 0: the lower block is an NR-by-NR square matrix.
 *>         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>         The bidiagonal matrix has N = NL + NR + 1 rows and
 *>         M = N + SQRE >= N columns.
 *> \endverbatim
@@ -236,8 +235,7 @@
 *>         2 : non-zero in the lower half only
 *>         3 : dense
 *>         4 : deflated
-*> \endverbatim
-*> \verbatim
+*>
 *>         On exit, it is an array of dimension 4, with COLTYP(I) being
 *>         the dimension of the I-th type columns.
 *> \endverbatim

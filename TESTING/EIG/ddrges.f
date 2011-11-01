@@ -346,8 +346,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is DOUBLE PRECISION array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized eigenvalues of (A,B) computed by DGGES.
 *>          ( ALPHAR(k)+ALPHAI(k)*i ) / BETA(k) is the k-th
 *>          generalized eigenvalue of A and B.

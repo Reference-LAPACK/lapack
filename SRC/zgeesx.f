@@ -184,8 +184,7 @@
 *>          that an error is only returned if LWORK < max(1,2*N), but if
 *>          SENSE = 'E' or 'V' or 'B' this may not be large enough.
 *>          For good performance, LWORK must generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates upper bound on the optimal size of the
 *>          array WORK, returns this value as the first entry of the WORK

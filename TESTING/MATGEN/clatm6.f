@@ -131,8 +131,7 @@
 *> \param[in] BETA
 *> \verbatim
 *>          BETA is COMPLEX
-*> \endverbatim
-*> \verbatim
+*>
 *>          Weighting constants for matrix A.
 *> \endverbatim
 *>

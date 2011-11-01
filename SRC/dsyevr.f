@@ -185,22 +185,18 @@
 *>          An approximate eigenvalue is accepted as converged
 *>          when it is determined to lie in an interval [a,b]
 *>          of width less than or equal to
-*> \endverbatim
-*> \verbatim
+*>
 *>                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*> \endverbatim
-*> \verbatim
+*>
 *>          where EPS is the machine precision.  If ABSTOL is less than
 *>          or equal to zero, then  EPS*|T|  will be used in its place,
 *>          where |T| is the 1-norm of the tridiagonal matrix obtained
 *>          by reducing A to tridiagonal form.
-*> \endverbatim
-*> \verbatim
+*>
 *>          See "Computing Small Singular Values of Bidiagonal Matrices
 *>          with Guaranteed High Relative Accuracy," by Demmel and
 *>          Kahan, LAPACK Working Note #3.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If high relative accuracy is important, set ABSTOL to
 *>          DLAMCH( 'Safe minimum' ).  Doing so will guarantee that
 *>          eigenvalues are computed to high relative accuracy when
@@ -271,8 +267,7 @@
 *>          For optimal efficiency, LWORK >= (NB+6)*N,
 *>          where NB is the max of the blocksize for DSYTRD and DORMTR
 *>          returned by ILAENV.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -289,8 +284,7 @@
 *> \verbatim
 *>          LIWORK is INTEGER
 *>          The dimension of the array IWORK.  LIWORK >= max(1,10*N).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and

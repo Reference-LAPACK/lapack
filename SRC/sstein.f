@@ -145,16 +145,13 @@
 *>          > 0: if INFO = i, then i eigenvectors failed to converge
 *>               in MAXITS iterations.  Their indices are stored in
 *>               array IFAIL.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  MAXITS  INTEGER, default = 5
 *>          The maximum number of iterations performed.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EXTRA   INTEGER, default = 2
 *>          The number of iterations performed after norm growth
 *>          criterion is satisfied, should be at least 1.

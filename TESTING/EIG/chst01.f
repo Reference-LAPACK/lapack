@@ -57,8 +57,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          A is assumed to be upper triangular in rows and columns
 *>          1:ILO-1 and IHI+1:N, so Q differs from the identity only in
 *>          rows and columns ILO+1:IHI.

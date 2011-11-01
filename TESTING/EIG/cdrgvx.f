@@ -180,8 +180,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is COMPLEX array, dimension (NSIZE)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, ALPHA/BETA are the eigenvalues.
 *> \endverbatim
 *>

@@ -182,8 +182,7 @@
 *>          generalized eigenvalues.  ALPHA(j) and BETA(j),j=1,...,N  are
 *>          the diagonals of the complex Schur form (S,T).  BETA(j) will
 *>          be non-negative real.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note: the quotients ALPHA(j)/BETA(j) may easily over- or
 *>          underflow, and BETA(j) may even be zero.  Thus, the user
 *>          should avoid naively computing the ratio alpha/beta.
@@ -254,8 +253,7 @@
 *>          Note also that an error is only returned if
 *>          LWORK < MAX(1,2*N), but if SENSE = 'E' or 'V' or 'B' this may
 *>          not be large enough.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the bound on the optimal size of the WORK
 *>          array and the minimum size of the IWORK array, returns these
@@ -282,8 +280,7 @@
 *>          The dimension of the array WORK.
 *>          If SENSE = 'N' or N = 0, LIWORK >= 1, otherwise
 *>          LIWORK >= N+2.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the bound on the optimal size of the
 *>          WORK array and the minimum size of the IWORK array, returns

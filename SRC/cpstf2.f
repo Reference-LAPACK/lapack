@@ -79,8 +79,7 @@
 *>          leading n by n lower triangular part of A contains the lower
 *>          triangular part of the matrix A, and the strictly upper
 *>          triangular part of A is not referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the factor U or L from the Cholesky
 *>          factorization as above.
 *> \endverbatim

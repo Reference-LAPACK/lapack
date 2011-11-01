@@ -367,15 +367,12 @@
 *>          If  CLATMR, CLATMS, CGEBRD, CUNGBR, or CBDSQR,
 *>              returns an error code, the
 *>              absolute value of it is returned.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>     Some Local Variables and Parameters:
 *>     ---- ----- --------- --- ----------
-*> \endverbatim
-*> \verbatim
+*>
 *>     ZERO, ONE       Real 0 and 1.
 *>     MAXTYP          The number of types defined.
 *>     NTEST           The number of tests performed, or which can
@@ -388,13 +385,11 @@
 *>     NFAIL           The number of tests which have exceeded THRESH
 *>     COND, IMODE     Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>     OVFL, UNFL      Overflow and underflow thresholds.
 *>     RTOVFL, RTUNFL  Square roots of the previous 2 values.
 *>     ULP, ULPINV     Finest relative precision and its inverse.
-*> \endverbatim
-*> \verbatim
+*>
 *>             The following four arrays decode JTYPE:
 *>     KTYPE(j)        The general type (1-10) for type "j".
 *>     KMODE(j)        The MODE value to be passed to the matrix

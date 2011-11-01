@@ -72,8 +72,7 @@
 *>        = 0: then the input matrix is N-by-N.
 *>        = 1: then the input matrix is N-by-(N+1) if UPLU = 'U' and
 *>             (N+1)-by-N if UPLU = 'L'.
-*> \endverbatim
-*> \verbatim
+*>
 *>        The bidiagonal matrix has
 *>        N = NL + NR + 1 rows and
 *>        M = N + SQRE >= N columns.

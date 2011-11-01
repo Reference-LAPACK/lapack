@@ -113,8 +113,7 @@
 *>          Details of the interchanges and the block structure of D.
 *>          If UPLO = 'U', only the last KB elements of IPIV are set;
 *>          if UPLO = 'L', only the first KB elements are set.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
 *>          interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and

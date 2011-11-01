@@ -129,8 +129,7 @@
 *>          is the relative machine precision, but if TOL is supplied as
 *>          non-positive, then it is reset to eps*max( abs( u(i,j) ) ).
 *>          If  JOB .gt. 0  then TOL is not referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, TOL is changed as described above, only if TOL is
 *>          non-positive on entry. Otherwise TOL is unchanged.
 *> \endverbatim

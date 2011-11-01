@@ -85,8 +85,7 @@
 *>          leading N-by-N lower triangular part of A contains the lower
 *>          triangular part of the matrix A, and the strictly upper
 *>          triangular part of A is not referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the block diagonal matrix D and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*D*U**T or A = L*D*L**T as computed by
@@ -140,8 +139,7 @@
 *>          ZSYTRF.
 *>          for LWORK < N, TRS will be done with Level BLAS 2
 *>          for LWORK >= N, TRS will be done with Level BLAS 3
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

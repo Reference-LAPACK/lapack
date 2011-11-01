@@ -89,8 +89,7 @@
 *>                 to make the rows and columns of A more equal in
 *>                 norm. Do not permute;
 *>          = 'B': Both diagonally scale and permute A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Computed reciprocal condition numbers will be for the matrix
 *>          after balancing and/or permuting. Permuting does not change
 *>          condition numbers (in exact arithmetic), but balancing does.
@@ -120,8 +119,7 @@
 *>          = 'E': Computed for eigenvalues only;
 *>          = 'V': Computed for right eigenvectors only;
 *>          = 'B': Computed for eigenvalues and right eigenvectors.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If SENSE = 'E' or 'B', both left and right eigenvectors
 *>          must also be computed (JOBVL = 'V' and JOBVR = 'V').
 *> \endverbatim
@@ -265,8 +263,7 @@
 *>          LWORK >= max(1,2*N), and if JOBVL = 'V' or JOBVR = 'V',
 *>          LWORK >= 3*N.  If SENSE = 'V' or 'B', LWORK >= N*(N+6).
 *>          For good performance, LWORK must generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

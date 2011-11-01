@@ -266,8 +266,7 @@
 *> \param[out] WI
 *> \verbatim
 *>          WI is REAL array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The real and imaginary parts of the eigenvalues of A.
 *>          On exit, WR + WI*i are the eigenvalues of the matrix in A.
 *> \endverbatim
@@ -280,8 +279,7 @@
 *> \param[out] WI1
 *> \verbatim
 *>          WI1 is REAL array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
 *>          but those computed when SGEEV only computes a partial
 *>          eigendecomposition, i.e. not the eigenvalues and left
@@ -363,15 +361,12 @@
 *>          -23: NWORK too small.
 *>          If  SLATMR, SLATMS, SLATME or SGEEV returns an error code,
 *>              the absolute value of it is returned.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>     Some Local Variables and Parameters:
 *>     ---- ----- --------- --- ----------
-*> \endverbatim
-*> \verbatim
+*>
 *>     ZERO, ONE       Real 0 and 1.
 *>     MAXTYP          The number of types defined.
 *>     NMAX            Largest value in NN.
@@ -379,13 +374,11 @@
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>     OVFL, UNFL      Overflow and underflow thresholds.
 *>     ULP, ULPINV     Finest relative precision and its inverse.
 *>     RTULP, RTULPI   Square roots of the previous 4 values.
-*> \endverbatim
-*> \verbatim
+*>
 *>             The following four arrays decode JTYPE:
 *>     KTYPE(j)        The general type (1-10) for type "j".
 *>     KMODE(j)        The MODE value to be passed to the matrix

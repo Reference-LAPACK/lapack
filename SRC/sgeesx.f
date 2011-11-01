@@ -209,8 +209,7 @@
 *>          returned if LWORK < max(1,3*N), but if SENSE = 'E' or 'V' or
 *>          'B' this may not be large enough.
 *>          For good performance, LWORK must generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates upper bounds on the optimal sizes of the
 *>          arrays WORK and IWORK, returns these values as the first
@@ -232,8 +231,7 @@
 *>          Note that SDIM*(N-SDIM) <= N*N/4. Note also that an error is
 *>          only returned if LIWORK < 1, but if SENSE = 'V' or 'B' this
 *>          may not be large enough.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates upper bounds on the optimal sizes of
 *>          the arrays WORK and IWORK, returns these values as the first

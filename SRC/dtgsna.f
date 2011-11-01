@@ -203,8 +203,7 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK. LWORK >= max(1,N).
 *>          If JOB = 'V' or 'B' LWORK >= 2*N*(N+2)+16.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

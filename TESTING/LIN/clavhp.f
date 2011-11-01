@@ -56,44 +56,38 @@
 *>              UPLO = 'U' or 'u'   The matrix is upper triangular.
 *>              UPLO = 'L' or 'l'   The matrix is lower triangular.
 *>           Unchanged on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  TRANS  - CHARACTER*1
 *>           On entry, TRANS specifies the operation to be performed as
 *>           follows:
 *>              TRANS = 'N' or 'n'   x := A*x.
 *>              TRANS = 'C' or 'c'   x := A^H*x.
 *>           Unchanged on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  DIAG   - CHARACTER*1
 *>           On entry, DIAG specifies whether the diagonal blocks are
 *>           assumed to be unit matrices, as follows:
 *>              DIAG = 'U' or 'u'   Diagonal blocks are unit matrices.
 *>              DIAG = 'N' or 'n'   Diagonal blocks are non-unit.
 *>           Unchanged on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  N      - INTEGER
 *>           On entry, N specifies the order of the matrix A.
 *>           N must be at least zero.
 *>           Unchanged on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NRHS   - INTEGER
 *>           On entry, NRHS specifies the number of right hand sides,
 *>           i.e., the number of vectors x to be multiplied by A.
 *>           NRHS must be at least zero.
 *>           Unchanged on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  A      - COMPLEX array, dimension( N*(N+1)/2 )
 *>           On entry, A contains a block diagonal matrix and the
 *>           multipliers of the transformations used to obtain it,
 *>           stored as a packed triangular matrix.
 *>           Unchanged on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IPIV   - INTEGER array, dimension( N )
 *>           On entry, IPIV contains the vector of pivot indices as
 *>           determined by CSPTRF or CHPTRF.
@@ -104,20 +98,17 @@
 *>           with row | IPIV( K ) | and a 2 x 2 pivot block was used.
 *>           If IPIV( K ) < 0 and UPLO = 'L', then row K+1 was exchanged
 *>           with row | IPIV( K ) | and a 2 x 2 pivot block was used.
-*> \endverbatim
-*> \verbatim
+*>
 *>  B      - COMPLEX array, dimension( LDB, NRHS )
 *>           On entry, B contains NRHS vectors of length N.
 *>           On exit, B is overwritten with the product A * B.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDB    - INTEGER
 *>           On entry, LDB contains the leading dimension of B as
 *>           declared in the calling program.  LDB must be at least
 *>           max( 1, N ).
 *>           Unchanged on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  INFO   - INTEGER
 *>           INFO is the error flag.
 *>           On exit, a value of 0 indicates a successful exit.

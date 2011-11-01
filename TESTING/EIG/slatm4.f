@@ -48,8 +48,7 @@
 *>          If ITYPE < 0, then type abs(ITYPE) is generated and then
 *>             swapped end for end (A(I,J) := A'(N-J,N-I).)  See also
 *>             the description of AMAGN and ISIGN.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Special types:
 *>          = 0:  the zero matrix.
 *>          = 1:  the identity.
@@ -58,8 +57,7 @@
 *>                followed by a k x k identity block, where k=(N-1)/2.
 *>                If N is even, then k=(N-2)/2, and a zero diagonal entry
 *>                is tacked onto the end.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Diagonal types.  The diagonal consists of NZ1 zeros, then
 *>             k=N-NZ1-NZ2 nonzeros.  The subdiagonal is zero.  ITYPE
 *>             specifies the nonzero diagonal entries as follows:

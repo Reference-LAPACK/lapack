@@ -136,8 +136,7 @@
 *>           If .TRUE., then CLAROT will rotate two rows.  If .FALSE.,
 *>           then it will rotate two columns.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LLEFT  - LOGICAL
 *>           If .TRUE., then XLEFT will be used instead of the
 *>           corresponding element of A for the first element in the
@@ -145,16 +144,14 @@
 *>           If .FALSE., then the corresponding element of A will be
 *>           used.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LRIGHT - LOGICAL
 *>           If .TRUE., then XRIGHT will be used instead of the
 *>           corresponding element of A for the last element in the
 *>           first row (if LROWS=.FALSE.) or column (if LROWS=.TRUE.) If
 *>           .FALSE., then the corresponding element of A will be used.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NL     - INTEGER
 *>           The length of the rows (if LROWS=.TRUE.) or columns (if
 *>           LROWS=.FALSE.) to be rotated.  If XLEFT and/or XRIGHT are
@@ -166,8 +163,7 @@
 *>           LRIGHT are .TRUE. must be at least zero; if not, XERBLA
 *>           will be called.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  C, S   - COMPLEX
 *>           Specify the Givens rotation to be applied.  If LROWS is
 *>           true, then the matrix ( c  s )
@@ -179,15 +175,13 @@
 *>           are complex.  For a Givens rotation, |C|**2 + |S|**2 should
 *>           be 1, but this is not checked.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  A      - COMPLEX array.
 *>           The array containing the rows/columns to be rotated.  The
 *>           first element of A should be the upper left element to
 *>           be rotated.
 *>           Read and modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDA    - INTEGER
 *>           The "effective" leading dimension of A.  If A contains
 *>           a matrix stored in GE, HE, or SY format, then this is just
@@ -206,15 +200,13 @@
 *>           it must be at least NL minus the number of .TRUE. values
 *>           in XLEFT and XRIGHT.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  XLEFT  - COMPLEX
 *>           If LLEFT is .TRUE., then XLEFT will be used and modified
 *>           instead of A(2,1) (if LROWS=.TRUE.) or A(1,2)
 *>           (if LROWS=.FALSE.).
 *>           Read and modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  XRIGHT - COMPLEX
 *>           If LRIGHT is .TRUE., then XRIGHT will be used and modified
 *>           instead of A(1,NL) (if LROWS=.TRUE.) or A(NL,1)

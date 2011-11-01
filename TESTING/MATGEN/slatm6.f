@@ -133,8 +133,7 @@
 *> \param[in] BETA
 *> \verbatim
 *>          BETA is REAL
-*> \endverbatim
-*> \verbatim
+*>
 *>          Weighting constants for matrix A.
 *> \endverbatim
 *>

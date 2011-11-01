@@ -156,13 +156,11 @@
 *>           On entry this describes how the singular/eigenvalues are to
 *>           be specified:
 *>           MODE = 0 means use D as input
-*> \endverbatim
-*> \verbatim
+*>
 *>           MODE = 1 sets D(1)=1 and D(2:RANK)=1.0/COND
 *>           MODE = 2 sets D(1:RANK-1)=1 and D(RANK)=1.0/COND
 *>           MODE = 3 sets D(I)=COND**(-(I-1)/(RANK-1))
-*> \endverbatim
-*> \verbatim
+*>
 *>           MODE = 4 sets D(i)=1 - (i-1)/(N-1)*(1 - 1/COND)
 *>           MODE = 5 sets D to random numbers in the range
 *>                    ( 1/COND , 1 ) such that their logarithms
@@ -247,15 +245,13 @@
 *>                      (pivoting can be provided for by using this
 *>                      option to store A in the trailing rows of
 *>                      the allocated storage)
-*> \endverbatim
-*> \verbatim
+*>
 *>           Using these options, the various LAPACK packed and banded
 *>           storage schemes can be obtained:
 *>           GB               - use 'Z'
 *>           PB, SB or TB     - use 'B' or 'Q'
 *>           PP, SP or TP     - use 'C' or 'R'
-*> \endverbatim
-*> \verbatim
+*>
 *>           If two calls to SLATMT differ only in the PACK parameter,
 *>           they will generate mathematically equivalent matrices.
 *>           Not modified.

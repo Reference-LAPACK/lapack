@@ -82,8 +82,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the factor S from the split Cholesky
 *>          factorization A = S**H*S. See Further Details.
 *> \endverbatim

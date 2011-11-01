@@ -161,8 +161,7 @@
 *>          If JOB = 'N', LWORK >= 1;
 *>          if JOB = 'E', LWORK = max(1,M*(N-M));
 *>          if JOB = 'V' or 'B', LWORK >= max(1,2*M*(N-M)).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

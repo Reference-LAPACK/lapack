@@ -138,8 +138,7 @@
 *>          not 'N', then A must have been equilibrated by the scaling
 *>          factors in R and/or C.  A is not modified if FACT = 'F' or
 *>          'N', or if FACT = 'E' and EQUED = 'N' on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if EQUED .ne. 'N', A is scaled as follows:
 *>          EQUED = 'R':  A := diag(R) * A
 *>          EQUED = 'C':  A := A * diag(C)
@@ -159,13 +158,11 @@
 *>          contains the factors L and U from the factorization
 *>          A = P*L*U as computed by CGETRF.  If EQUED .ne. 'N', then
 *>          AF is the factored form of the equilibrated matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then AF is an output argument and on exit
 *>          returns the factors L and U from the factorization A = P*L*U
 *>          of the original matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'E', then AF is an output argument and on exit
 *>          returns the factors L and U from the factorization A = P*L*U
 *>          of the equilibrated matrix A (see the description of A for
@@ -185,13 +182,11 @@
 *>          contains the pivot indices from the factorization A = P*L*U
 *>          as computed by CGETRF; row i of the matrix was interchanged
 *>          with row IPIV(i).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains the pivot indices from the factorization A = P*L*U
 *>          of the original matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'E', then IPIV is an output argument and on exit
 *>          contains the pivot indices from the factorization A = P*L*U
 *>          of the equilibrated matrix A.

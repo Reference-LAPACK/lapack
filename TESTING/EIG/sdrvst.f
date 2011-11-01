@@ -151,15 +151,13 @@
 *>          The number of sizes of matrices to use.  If it is zero,
 *>          SDRVST does nothing.  It must be at least zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NN      INTEGER array, dimension (NSIZES)
 *>          An array containing the sizes to be used for the matrices.
 *>          Zero values will be skipped.  The values must be at least
 *>          zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NTYPES  INTEGER
 *>          The number of elements in DOTYPE.   If it is zero, SDRVST
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
@@ -168,8 +166,7 @@
 *>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
 *>          DOTYPE(MAXTYP+1) is .TRUE. .
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  DOTYPE  LOGICAL array, dimension (NTYPES)
 *>          If DOTYPE(j) is .TRUE., then for each size in NN a
 *>          matrix of that size and of type j will be generated.
@@ -179,8 +176,7 @@
 *>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
 *>          will be ignored.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  ISEED   INTEGER array, dimension (4)
 *>          On entry ISEED specifies the seed of the random number
 *>          generator. The array elements should be between 0 and 4095;
@@ -192,8 +188,7 @@
 *>          next call to SDRVST to continue the same random number
 *>          sequence.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH  REAL
 *>          A test will count as "failed" if the "error", computed as
 *>          described above, exceeds THRESH.  Note that the error
@@ -202,120 +197,99 @@
 *>          it should not depend on the precision (single vs. double)
 *>          or the size of the matrix.  It must be at least zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NOUNIT  INTEGER
 *>          The FORTRAN unit number for printing out error messages
 *>          (e.g., if a routine returns IINFO not equal to 0.)
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  A       REAL array, dimension (LDA , max(NN))
 *>          Used to hold the matrix whose eigenvalues are to be
 *>          computed.  On exit, A contains the last matrix actually
 *>          used.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDA     INTEGER
 *>          The leading dimension of A.  It must be at
 *>          least 1 and at least max( NN ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D1      REAL array, dimension (max(NN))
 *>          The eigenvalues of A, as computed by SSTEQR simlutaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D2      REAL array, dimension (max(NN))
 *>          The eigenvalues of A, as computed by SSTEQR if Z is not
 *>          computed.  On exit, the eigenvalues in D2 correspond with
 *>          the matrix in A.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D3      REAL array, dimension (max(NN))
 *>          The eigenvalues of A, as computed by SSTERF.  On exit, the
 *>          eigenvalues in D3 correspond with the matrix in A.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D4      REAL array, dimension
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVEIGS  REAL array, dimension (max(NN))
 *>          The eigenvalues as computed by SSTEV('N', ... )
 *>          (I reserve the right to change this to the output of
 *>          whichever algorithm computes the most accurate eigenvalues).
-*> \endverbatim
-*> \verbatim
+*>
 *>  WA1     REAL array, dimension
-*> \endverbatim
-*> \verbatim
+*>
 *>  WA2     REAL array, dimension
-*> \endverbatim
-*> \verbatim
+*>
 *>  WA3     REAL array, dimension
-*> \endverbatim
-*> \verbatim
+*>
 *>  U       REAL array, dimension (LDU, max(NN))
 *>          The orthogonal matrix computed by SSYTRD + SORGTR.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDU     INTEGER
 *>          The leading dimension of U, Z, and V.  It must be at
 *>          least 1 and at least max( NN ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  V       REAL array, dimension (LDU, max(NN))
 *>          The Housholder vectors computed by SSYTRD in reducing A to
 *>          tridiagonal form.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  TAU     REAL array, dimension (max(NN))
 *>          The Householder factors computed by SSYTRD in reducing A
 *>          to tridiagonal form.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Z       REAL array, dimension (LDU, max(NN))
 *>          The orthogonal matrix of eigenvectors computed by SSTEQR,
 *>          SPTEQR, and SSTEIN.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WORK    REAL array, dimension (LWORK)
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LWORK   INTEGER
 *>          The number of entries in WORK.  This must be at least
 *>          1 + 4 * Nmax + 2 * Nmax * lg Nmax + 4 * Nmax**2
 *>          where Nmax = max( NN(j), 2 ) and lg = log base 2.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IWORK   INTEGER array,
 *>             dimension (6 + 6*Nmax + 5 * Nmax * lg Nmax )
 *>          where Nmax = max( NN(j), 2 ) and lg = log base 2.
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RESULT  REAL array, dimension (105)
 *>          The values computed by the tests described above.
 *>          The values are currently limited to 1/ulp, to avoid
 *>          overflow.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  INFO    INTEGER
 *>          If 0, then everything ran OK.
 *>           -1: NSIZES < 0
@@ -329,11 +303,9 @@
 *>              or SORMTR returns an error code, the
 *>              absolute value of it is returned.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>       Some Local Variables and Parameters:
 *>       ---- ----- --------- --- ----------
 *>       ZERO, ONE       Real 0 and 1.
@@ -347,8 +319,7 @@
 *>                       so far (computed by SLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>       OVFL, UNFL      Overflow and underflow thresholds.
 *>       ULP, ULPINV     Finest relative precision and its inverse.
 *>       RTOVFL, RTUNFL  Square roots of the previous 2 values.
@@ -358,8 +329,7 @@
 *>                       generator for type "j".
 *>       KMAGN(j)        The order of magnitude ( O(1),
 *>                       O(overflow^(1/2) ), O(underflow^(1/2) )
-*> \endverbatim
-*> \verbatim
+*>
 *>     The tests performed are:                 Routine tested
 *>    1= | A - U S U' | / ( |A| n ulp )         SSTEV('V', ... )
 *>    2= | I - U U' | / ( n ulp )               SSTEV('V', ... )
@@ -385,8 +355,7 @@
 *>    22= | A - U S U' | / ( |A| n ulp )        SSTEVR('V','V', ... )
 *>    23= | I - U U' | / ( n ulp )              SSTEVR('V','V', ... )
 *>    24= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSTEVR('N','V', ... )
-*> \endverbatim
-*> \verbatim
+*>
 *>    25= | A - U S U' | / ( |A| n ulp )        SSYEV('L','V', ... )
 *>    26= | I - U U' | / ( n ulp )              SSYEV('L','V', ... )
 *>    27= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEV('L','N', ... )
@@ -441,15 +410,12 @@
 *>    76= | A - U S U' | / ( |A| n ulp )        SSYEVR('L','V','V', ... )
 *>    77= | I - U U' | / ( n ulp )              SSYEVR('L','V','V', ... )
 *>    78= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSYEVR('L','N','V', ... )
-*> \endverbatim
-*> \verbatim
+*>
 *>    Tests 25 through 78 are repeated (as tests 79 through 132)
 *>    with UPLO='U'
-*> \endverbatim
-*> \verbatim
+*>
 *>    To be added in 1999
-*> \endverbatim
-*> \verbatim
+*>
 *>    79= | A - U S U' | / ( |A| n ulp )        SSPEVR('L','V','A', ... )
 *>    80= | I - U U' | / ( n ulp )              SSPEVR('L','V','A', ... )
 *>    81= |D(with Z) - D(w/o Z)| / (|D| ulp)    SSPEVR('L','N','A', ... )

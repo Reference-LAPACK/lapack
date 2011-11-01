@@ -186,8 +186,7 @@
 *> \param[in] L
 *> \verbatim
 *>          L is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          K and L specify the subblocks in the input matrices A and B:
 *>          A23 = A(K+1:MIN(K+L,M),N-L+1:N) and B13 = B(1:L,,N-L+1:N)
 *>          of A and B, whose GSVD is going to be computed by ZTGSJA.
@@ -230,8 +229,7 @@
 *> \param[in] TOLB
 *> \verbatim
 *>          TOLB is DOUBLE PRECISION
-*> \endverbatim
-*> \verbatim
+*>
 *>          TOLA and TOLB are the convergence criteria for the Jacobi-
 *>          Kogbetliantz iteration procedure. Generally, they are the
 *>          same as used in the preprocessing step, say
@@ -247,8 +245,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is DOUBLE PRECISION array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, ALPHA and BETA contain the generalized singular
 *>          value pairs of A and B;
 *>            ALPHA(1:K) = 1,
@@ -335,8 +332,7 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          = 1:  the procedure does not converge after MAXIT cycles.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
 *>

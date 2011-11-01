@@ -29,23 +29,18 @@
 *>  MAXIN   INTEGER
 *>          The number of different values that can be used for each of
 *>          M, N, or NB
-*> \endverbatim
-*> \verbatim
+*>
 *>  MAXRHS  INTEGER
 *>          The maximum number of right hand sides
-*> \endverbatim
-*> \verbatim
+*>
 *>  NTYPES  INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>  NMAX    INTEGER
 *>          The maximum allowable value for N.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NIN     INTEGER
 *>          The unit number for input
-*> \endverbatim
-*> \verbatim
+*>
 *>  NOUT    INTEGER
 *>          The unit number for output
 *> \endverbatim

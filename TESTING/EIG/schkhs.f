@@ -166,15 +166,13 @@
 *>           The number of sizes of matrices to use.  If it is zero,
 *>           SCHKHS does nothing.  It must be at least zero.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NN     - INTEGER array, dimension (NSIZES)
 *>           An array containing the sizes to be used for the matrices.
 *>           Zero values will be skipped.  The values must be at least
 *>           zero.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NTYPES - INTEGER
 *>           The number of elements in DOTYPE.   If it is zero, SCHKHS
 *>           does nothing.  It must be at least zero.  If it is MAXTYP+1
@@ -183,8 +181,7 @@
 *>           is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
 *>           DOTYPE(MAXTYP+1) is .TRUE. .
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  DOTYPE - LOGICAL array, dimension (NTYPES)
 *>           If DOTYPE(j) is .TRUE., then for each size in NN a
 *>           matrix of that size and of type j will be generated.
@@ -194,8 +191,7 @@
 *>           than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
 *>           will be ignored.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  ISEED  - INTEGER array, dimension (4)
 *>           On entry ISEED specifies the seed of the random number
 *>           generator. The array elements should be between 0 and 4095;
@@ -207,8 +203,7 @@
 *>           next call to SCHKHS to continue the same random number
 *>           sequence.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH - REAL
 *>           A test will count as "failed" if the "error", computed as
 *>           described above, exceeds THRESH.  Note that the error
@@ -217,75 +212,63 @@
 *>           it should not depend on the precision (single vs. double)
 *>           or the size of the matrix.  It must be at least zero.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NOUNIT - INTEGER
 *>           The FORTRAN unit number for printing out error messages
 *>           (e.g., if a routine returns IINFO not equal to 0.)
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  A      - REAL array, dimension (LDA,max(NN))
 *>           Used to hold the matrix whose eigenvalues are to be
 *>           computed.  On exit, A contains the last matrix actually
 *>           used.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDA    - INTEGER
 *>           The leading dimension of A, H, T1 and T2.  It must be at
 *>           least 1 and at least max( NN ).
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  H      - REAL array, dimension (LDA,max(NN))
 *>           The upper hessenberg matrix computed by SGEHRD.  On exit,
 *>           H contains the Hessenberg form of the matrix in A.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  T1     - REAL array, dimension (LDA,max(NN))
 *>           The Schur (="quasi-triangular") matrix computed by SHSEQR
 *>           if Z is computed.  On exit, T1 contains the Schur form of
 *>           the matrix in A.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  T2     - REAL array, dimension (LDA,max(NN))
 *>           The Schur matrix computed by SHSEQR when Z is not computed.
 *>           This should be identical to T1.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDU    - INTEGER
 *>           The leading dimension of U, Z, UZ and UU.  It must be at
 *>           least 1 and at least max( NN ).
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  U      - REAL array, dimension (LDU,max(NN))
 *>           The orthogonal matrix computed by SGEHRD.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Z      - REAL array, dimension (LDU,max(NN))
 *>           The orthogonal matrix computed by SHSEQR.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  UZ     - REAL array, dimension (LDU,max(NN))
 *>           The product of U times Z.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WR1    - REAL array, dimension (max(NN))
 *>  WI1    - REAL array, dimension (max(NN))
 *>           The real and imaginary parts of the eigenvalues of A,
 *>           as computed when Z is computed.
 *>           On exit, WR1 + WI1*i are the eigenvalues of the matrix in A.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WR3    - REAL array, dimension (max(NN))
 *>  WI3    - REAL array, dimension (max(NN))
 *>           Like WR1, WI1, these arrays contain the eigenvalues of A,
@@ -294,72 +277,60 @@
 *>           Schur form than is necessary for computing the
 *>           eigenvalues.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVECTL - REAL array, dimension (LDU,max(NN))
 *>           The (upper triangular) left eigenvector matrix for the
 *>           matrix in T1.  For complex conjugate pairs, the real part
 *>           is stored in one row and the imaginary part in the next.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVECTR - REAL array, dimension (LDU,max(NN))
 *>           The (upper triangular) right eigenvector matrix for the
 *>           matrix in T1.  For complex conjugate pairs, the real part
 *>           is stored in one column and the imaginary part in the next.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVECTY - REAL array, dimension (LDU,max(NN))
 *>           The left eigenvector matrix for the
 *>           matrix in H.  For complex conjugate pairs, the real part
 *>           is stored in one row and the imaginary part in the next.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVECTX - REAL array, dimension (LDU,max(NN))
 *>           The right eigenvector matrix for the
 *>           matrix in H.  For complex conjugate pairs, the real part
 *>           is stored in one column and the imaginary part in the next.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  UU     - REAL array, dimension (LDU,max(NN))
 *>           Details of the orthogonal matrix computed by SGEHRD.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  TAU    - REAL array, dimension(max(NN))
 *>           Further details of the orthogonal matrix computed by SGEHRD.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WORK   - REAL array, dimension (NWORK)
 *>           Workspace.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NWORK  - INTEGER
 *>           The number of entries in WORK.  NWORK >= 4*NN(j)*NN(j) + 2.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IWORK  - INTEGER array, dimension (max(NN))
 *>           Workspace.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  SELECT - LOGICAL array, dimension (max(NN))
 *>           Workspace.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RESULT - REAL array, dimension (14)
 *>           The values computed by the fourteen tests described above.
 *>           The values are currently limited to 1/ulp, to avoid
 *>           overflow.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  INFO   - INTEGER
 *>           If 0, then everything ran OK.
 *>            -1: NSIZES < 0
@@ -376,15 +347,12 @@
 *>           If >2, then 30*N iterations were not enough to find an
 *>               eigenvalue or to decompose the problem.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>     Some Local Variables and Parameters:
 *>     ---- ----- --------- --- ----------
-*> \endverbatim
-*> \verbatim
+*>
 *>     ZERO, ONE       Real 0 and 1.
 *>     MAXTYP          The number of types defined.
 *>     MTEST           The number of tests defined: care must be taken
@@ -403,14 +371,12 @@
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>     OVFL, UNFL      Overflow and underflow thresholds.
 *>     ULP, ULPINV     Finest relative precision and its inverse.
 *>     RTOVFL, RTUNFL,
 *>     RTULP, RTULPI   Square roots of the previous 4 values.
-*> \endverbatim
-*> \verbatim
+*>
 *>             The following four arrays decode JTYPE:
 *>     KTYPE(j)        The general type (1-10) for type "j".
 *>     KMODE(j)        The MODE value to be passed to the matrix

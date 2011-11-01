@@ -143,8 +143,7 @@
 *>          For optimum performance LWORK >= N*NB if SIDE = 'L', and
 *>          LWORK >= M*NB if SIDE = 'R', where NB is the optimal
 *>          blocksize.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

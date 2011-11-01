@@ -450,15 +450,12 @@
 *>          If <0, then input paramter -INFO is incorrect.
 *>          If >0, ZLATMR, CLATMS, CLATME or ZGET23 returned an error
 *>                 code, and INFO is its absolute value.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>     Some Local Variables and Parameters:
 *>     ---- ----- --------- --- ----------
-*> \endverbatim
-*> \verbatim
+*>
 *>     ZERO, ONE       Real 0 and 1.
 *>     MAXTYP          The number of types defined.
 *>     NMAX            Largest value in NN or 12.
@@ -466,13 +463,11 @@
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>     OVFL, UNFL      Overflow and underflow thresholds.
 *>     ULP, ULPINV     Finest relative precision and its inverse.
 *>     RTULP, RTULPI   Square roots of the previous 4 values.
-*> \endverbatim
-*> \verbatim
+*>
 *>             The following four arrays decode JTYPE:
 *>     KTYPE(j)        The general type (1-10) for type "j".
 *>     KMODE(j)        The MODE value to be passed to the matrix

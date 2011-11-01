@@ -282,8 +282,7 @@
 *> \verbatim
 *>          LRWORK is INTEGER
 *>          The dimension of the array RWORK. LRWORK >= MAX(1,8*Q).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LRWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the RWORK array,
 *>          returns this value as the first entry of the work array, and
@@ -298,20 +297,16 @@
 *>          > 0:  if CBBCSD did not converge, INFO specifies the number
 *>                of nonzero entries in PHI, and B11D, B11E, etc.,
 *>                contain the partially reduced matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Reference
 *>  =========
-*> \endverbatim
-*> \verbatim
+*>
 *>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
 *>      Algorithms, 50(1):33-65, 2009.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  TOLMUL  REAL, default = MAX(10,MIN(100,EPS**(-1/8)))
 *>          TOLMUL controls the convergence criterion of the QR loop.
 *>          Angles THETA(i), PHI(i) are rounded to 0 or PI/2 when they

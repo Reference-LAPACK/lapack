@@ -94,8 +94,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, AB is overwritten by values generated during the
 *>          reduction to tridiagonal form.  If UPLO = 'U', the first
 *>          superdiagonal and the diagonal of the tridiagonal matrix T
@@ -159,24 +158,20 @@
 *>          An approximate eigenvalue is accepted as converged
 *>          when it is determined to lie in an interval [a,b]
 *>          of width less than or equal to
-*> \endverbatim
-*> \verbatim
+*>
 *>                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*> \endverbatim
-*> \verbatim
+*>
 *>          where EPS is the machine precision.  If ABSTOL is less than
 *>          or equal to zero, then  EPS*|T|  will be used in its place,
 *>          where |T| is the 1-norm of the tridiagonal matrix obtained
 *>          by reducing AB to tridiagonal form.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
 *>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
 *>          eigenvectors did not converge, try setting ABSTOL to
 *>          2*SLAMCH('S').
-*> \endverbatim
-*> \verbatim
+*>
 *>          See "Computing Small Singular Values of Bidiagonal Matrices
 *>          with Guaranteed High Relative Accuracy," by Demmel and
 *>          Kahan, LAPACK Working Note #3.

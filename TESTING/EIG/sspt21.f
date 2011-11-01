@@ -95,12 +95,10 @@
 *>          Specifies the type of tests to be performed.
 *>          1: U expressed as a dense orthogonal matrix:
 *>             RESULT(1) = | A - U S U' | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU' | / ( n ulp )
-*> \endverbatim
-*> \verbatim
+*>
 *>          2: U expressed as a product V of Housholder transformations:
 *>             RESULT(1) = | A - V S V' | / ( |A| n ulp )
-*> \endverbatim
-*> \verbatim
+*>
 *>          3: U expressed both as a dense orthogonal matrix and
 *>             as a product of Housholder transformations:
 *>             RESULT(1) = | I - VU' | / ( n ulp )

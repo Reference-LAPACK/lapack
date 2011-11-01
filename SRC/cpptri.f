@@ -65,8 +65,7 @@
 *>          array AP as follows:
 *>          if UPLO = 'U', AP(i + (j-1)*j/2) = U(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = L(i,j) for j<=i<=n.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the upper or lower triangle of the (Hermitian)
 *>          inverse of A, overwriting the input factor U or L.
 *> \endverbatim

@@ -138,8 +138,7 @@
 *> \param[in] VU
 *> \verbatim
 *>          VU is REAL
-*> \endverbatim
-*> \verbatim
+*>
 *>          If RANGE='V', the lower and upper bounds of the interval to
 *>          be searched for eigenvalues. VL < VU.
 *>          Not referenced if RANGE = 'A' or 'I'.
@@ -153,8 +152,7 @@
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          If RANGE='I', the indices (in ascending order) of the
 *>          smallest and largest eigenvalues to be returned.
 *>          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
@@ -238,8 +236,7 @@
 *>          The length of the array WORK.  LWORK >= max(1,2*N).
 *>          For optimal efficiency, LWORK >= (NB+1)*N,
 *>          where NB is the blocksize for CHETRD returned by ILAENV.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

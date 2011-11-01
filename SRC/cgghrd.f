@@ -101,8 +101,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          ILO and IHI mark the rows and columns of A which are to be
 *>          reduced.  It is assumed that A is already upper triangular
 *>          in rows and columns 1:ILO-1 and IHI+1:N.  ILO and IHI are

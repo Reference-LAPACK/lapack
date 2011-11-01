@@ -87,8 +87,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          ILO and IHI must have the same values as in the previous call
 *>          of CGEHRD. Q is equal to the unit matrix except in the
 *>          submatrix Q(ilo+1:ihi,ilo+1:ihi).
@@ -151,8 +150,7 @@
 *>          For optimum performance LWORK >= N*NB if SIDE = 'L', and
 *>          LWORK >= M*NB if SIDE = 'R', where NB is the optimal
 *>          blocksize.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

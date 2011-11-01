@@ -107,8 +107,7 @@
 *>                         (M,1)   if SIDE = 'R'
 *>          On entry, the n-vector C1 if SIDE = 'L', or the m-vector C1
 *>          if SIDE = 'R'.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the first row of P*C if SIDE = 'L', or the first
 *>          column of C*P if SIDE = 'R'.
 *> \endverbatim
@@ -120,8 +119,7 @@
 *>                         (LDC, N-1) if SIDE = 'R'
 *>          On entry, the (m - 1) x n matrix C2 if SIDE = 'L', or the
 *>          m x (n - 1) matrix C2 if SIDE = 'R'.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, rows 2:m of P*C if SIDE = 'L', or columns 2:m of C*P
 *>          if SIDE = 'R'.
 *> \endverbatim

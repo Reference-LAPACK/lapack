@@ -249,8 +249,7 @@
 *>          < 0:  One of the called subroutines signaled an internal problem.
 *>                Needs inspection of the corresponding parameter IINFO
 *>                for further information.
-*> \endverbatim
-*> \verbatim
+*>
 *>          =-1:  Problem in SLARRD.
 *>          = 2:  No base representation could be found in MAXTRY iterations.
 *>                Increasing MAXTRY and recompilation might be a remedy.

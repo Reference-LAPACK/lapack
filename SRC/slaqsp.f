@@ -66,8 +66,7 @@
 *>          is stored in the array AP as follows:
 *>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the equilibrated matrix:  diag(S) * A * diag(S), in
 *>          the same storage format as A.
 *> \endverbatim
@@ -97,17 +96,14 @@
 *>          = 'N':  No equilibration.
 *>          = 'Y':  Equilibration was done, i.e., A has been replaced by
 *>                  diag(S) * A * diag(S).
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH is a threshold value used to decide if scaling should be done
 *>  based on the ratio of the scaling factors.  If SCOND < THRESH,
 *>  scaling is done.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LARGE and SMALL are threshold values used to decide if scaling should
 *>  be done based on the absolute size of the largest matrix element.
 *>  If AMAX > LARGE or AMAX < SMALL, scaling is done.

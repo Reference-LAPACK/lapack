@@ -83,8 +83,7 @@
 *>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
 *>          See below for further details.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
 *>          A = U*D*U**H or A = L*D*L**H as computed by CHPTRF, stored as

@@ -114,8 +114,7 @@
 *>          Q is COMPLEX array, dimension (LDQ,N)
 *>          On entry, if VECT = 'U', then Q must contain an N-by-N
 *>          matrix X; if VECT = 'N' or 'V', then Q need not be set.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit:
 *>          if VECT = 'V', Q contains the N-by-N unitary matrix Q;
 *>          if VECT = 'U', Q contains the product X*Q;

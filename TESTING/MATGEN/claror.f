@@ -56,13 +56,11 @@
 *>                           identity matrix before applying U.
 *>              INIT = 'N'   No initialization.  Apply U to the
 *>                           input matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>           INIT = 'I' may be used to generate square (i.e., unitary)
 *>           or rectangular orthogonal matrices (orthogonality being
 *>           in the sense of CDOTC):
-*> \endverbatim
-*> \verbatim
+*>
 *>           For square matrices, M=N, and SIDE many be either 'L' or
 *>           'R'; the rows will be orthogonal to each other, as will the
 *>           columns.
@@ -75,8 +73,7 @@
 *>           For matrices where M > N, just use the previous
 *>           explaination, interchanging 'L' and 'R' and "rows" and
 *>           "columns".
-*> \endverbatim
-*> \verbatim
+*>
 *>           Not modified.
 *> \endverbatim
 *>

@@ -174,8 +174,7 @@
 *>          if JOBZ = 'S' or 'A',
 *>                LWORK >= min(M,N)*min(M,N)+2*min(M,N)+max(M,N).
 *>          For good performance, LWORK should generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, a workspace query is assumed.  The optimal
 *>          size for the WORK array is calculated and stored in WORK(1),
 *>          and no other work except argument checking is performed.

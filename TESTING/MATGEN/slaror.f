@@ -53,23 +53,19 @@
 *>          = 'I':  Initialize A to (a section of) the identity matrix
 *>                   before applying U.
 *>          = 'N':  No initialization.  Apply U to the input matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          INIT = 'I' may be used to generate square or rectangular
 *>          orthogonal matrices:
-*> \endverbatim
-*> \verbatim
+*>
 *>          For M = N and SIDE = 'L' or 'R', the rows will be orthogonal
 *>          to each other, as will the columns.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If M < N, SIDE = 'R' produces a dense matrix whose rows are
 *>          orthogonal and whose columns are not, while SIDE = 'L'
 *>          produces a matrix whose rows are orthogonal, and whose first
 *>          M columns are orthogonal, and whose remaining columns are
 *>          zero.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If M > N, SIDE = 'L' produces a dense matrix whose columns
 *>          are orthogonal and whose rows are not, while SIDE = 'R'
 *>          produces a matrix whose columns are orthogonal, and whose

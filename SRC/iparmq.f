@@ -44,21 +44,18 @@
 *>          ISPEC is integer scalar
 *>              ISPEC specifies which tunable parameter IPARMQ should
 *>              return.
-*> \endverbatim
-*> \verbatim
+*>
 *>              ISPEC=12: (INMIN)  Matrices of order nmin or less
 *>                        are sent directly to xLAHQR, the implicit
 *>                        double shift QR algorithm.  NMIN must be
 *>                        at least 11.
-*> \endverbatim
-*> \verbatim
+*>
 *>              ISPEC=13: (INWIN)  Size of the deflation window.
 *>                        This is best set greater than or equal to
 *>                        the number of simultaneous shifts NS.
 *>                        Larger matrices benefit from larger deflation
 *>                        windows.
-*> \endverbatim
-*> \verbatim
+*>
 *>              ISPEC=14: (INIBL) Determines when to stop nibbling and
 *>                        invest in an (expensive) multi-shift QR sweep.
 *>                        If the aggressive early deflation subroutine
@@ -73,12 +70,10 @@
 *>                        IPARMQ(ISPEC=14) greater than or equal to 100
 *>                        prevents TTQRE from skipping a multi-shift
 *>                        QR sweep.
-*> \endverbatim
-*> \verbatim
+*>
 *>              ISPEC=15: (NSHFTS) The number of simultaneous shifts in
 *>                        a multi-shift QR iteration.
-*> \endverbatim
-*> \verbatim
+*>
 *>              ISPEC=16: (IACC22) IPARMQ is set to 0, 1 or 2 with the
 *>                        following meanings.
 *>                        0:  During the multi-shift QR sweep,

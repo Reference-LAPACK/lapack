@@ -120,12 +120,10 @@
 *>          INFO is INTEGER
 *>          = 0:       Eigenvalue converged
 *>          = -1:      Eigenvalue did NOT converge
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  FUDGE   DOUBLE PRECISION, default = 2
 *>          A "fudge factor" to widen the Gershgorin intervals.
 *> \endverbatim

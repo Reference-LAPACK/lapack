@@ -89,8 +89,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the contents of AB are destroyed.
 *> \endverbatim
 *>
@@ -109,8 +108,7 @@
 *>          as follows:
 *>          if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for max(1,j-kb)<=i<=j;
 *>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the factor S from the split Cholesky factorization
 *>          B = S**T*S, as returned by DPBSTF.
 *> \endverbatim

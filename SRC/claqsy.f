@@ -69,8 +69,7 @@
 *>          leading n by n lower triangular part of A contains the lower
 *>          triangular part of the matrix A, and the strictly upper
 *>          triangular part of A is not referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if EQUED = 'Y', the equilibrated matrix:
 *>          diag(S) * A * diag(S).
 *> \endverbatim
@@ -106,17 +105,14 @@
 *>          = 'N':  No equilibration.
 *>          = 'Y':  Equilibration was done, i.e., A has been replaced by
 *>                  diag(S) * A * diag(S).
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH is a threshold value used to decide if scaling should be done
 *>  based on the ratio of the scaling factors.  If SCOND < THRESH,
 *>  scaling is done.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LARGE and SMALL are threshold values used to decide if scaling should
 *>  be done based on the absolute size of the largest matrix element.
 *>  If AMAX > LARGE or AMAX < SMALL, scaling is done.

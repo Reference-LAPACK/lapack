@@ -162,8 +162,7 @@
 *>          tree (usually about 25), and
 *>             NLVL = MAX( 0, INT( LOG_2( MIN( M,N )/(SMLSIZ+1) ) ) + 1 )
 *>          For good performance, LWORK should generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the array WORK and the
 *>          minimum size of the array IWORK, and returns these values as

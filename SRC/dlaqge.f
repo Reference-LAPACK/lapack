@@ -111,18 +111,15 @@
 *>                  by diag(C).
 *>          = 'B':  Both row and column equilibration, i.e., A has been
 *>                  replaced by diag(R) * A * diag(C).
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH is a threshold value used to decide if row or column scaling
 *>  should be done based on the ratio of the row or column scaling
 *>  factors.  If ROWCND < THRESH, row scaling is done, and if
 *>  COLCND < THRESH, column scaling is done.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LARGE and SMALL are threshold values used to decide if row scaling
 *>  should be done based on the absolute size of the largest matrix
 *>  element.  If AMAX > LARGE or AMAX < SMALL, row scaling is done.

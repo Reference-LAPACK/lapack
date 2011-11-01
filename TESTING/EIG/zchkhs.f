@@ -176,15 +176,13 @@
 *>           The number of sizes of matrices to use.  If it is zero,
 *>           ZCHKHS does nothing.  It must be at least zero.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NN     - INTEGER array, dimension (NSIZES)
 *>           An array containing the sizes to be used for the matrices.
 *>           Zero values will be skipped.  The values must be at least
 *>           zero.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NTYPES - INTEGER
 *>           The number of elements in DOTYPE.   If it is zero, ZCHKHS
 *>           does nothing.  It must be at least zero.  If it is MAXTYP+1
@@ -193,8 +191,7 @@
 *>           is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
 *>           DOTYPE(MAXTYP+1) is .TRUE. .
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  DOTYPE - LOGICAL array, dimension (NTYPES)
 *>           If DOTYPE(j) is .TRUE., then for each size in NN a
 *>           matrix of that size and of type j will be generated.
@@ -204,8 +201,7 @@
 *>           than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
 *>           will be ignored.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  ISEED  - INTEGER array, dimension (4)
 *>           On entry ISEED specifies the seed of the random number
 *>           generator. The array elements should be between 0 and 4095;
@@ -217,8 +213,7 @@
 *>           next call to ZCHKHS to continue the same random number
 *>           sequence.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH - DOUBLE PRECISION
 *>           A test will count as "failed" if the "error", computed as
 *>           described above, exceeds THRESH.  Note that the error
@@ -227,74 +222,62 @@
 *>           it should not depend on the precision (single vs. double)
 *>           or the size of the matrix.  It must be at least zero.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NOUNIT - INTEGER
 *>           The FORTRAN unit number for printing out error messages
 *>           (e.g., if a routine returns IINFO not equal to 0.)
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  A      - COMPLEX*16 array, dimension (LDA,max(NN))
 *>           Used to hold the matrix whose eigenvalues are to be
 *>           computed.  On exit, A contains the last matrix actually
 *>           used.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDA    - INTEGER
 *>           The leading dimension of A, H, T1 and T2.  It must be at
 *>           least 1 and at least max( NN ).
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  H      - COMPLEX*16 array, dimension (LDA,max(NN))
 *>           The upper hessenberg matrix computed by ZGEHRD.  On exit,
 *>           H contains the Hessenberg form of the matrix in A.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  T1     - COMPLEX*16 array, dimension (LDA,max(NN))
 *>           The Schur (="quasi-triangular") matrix computed by ZHSEQR
 *>           if Z is computed.  On exit, T1 contains the Schur form of
 *>           the matrix in A.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  T2     - COMPLEX*16 array, dimension (LDA,max(NN))
 *>           The Schur matrix computed by ZHSEQR when Z is not computed.
 *>           This should be identical to T1.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDU    - INTEGER
 *>           The leading dimension of U, Z, UZ and UU.  It must be at
 *>           least 1 and at least max( NN ).
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  U      - COMPLEX*16 array, dimension (LDU,max(NN))
 *>           The unitary matrix computed by ZGEHRD.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Z      - COMPLEX*16 array, dimension (LDU,max(NN))
 *>           The unitary matrix computed by ZHSEQR.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  UZ     - COMPLEX*16 array, dimension (LDU,max(NN))
 *>           The product of U times Z.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  W1     - COMPLEX*16 array, dimension (max(NN))
 *>           The eigenvalues of A, as computed by a full Schur
 *>           decomposition H = Z T Z'.  On exit, W1 contains the
 *>           eigenvalues of the matrix in A.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  W3     - COMPLEX*16 array, dimension (max(NN))
 *>           The eigenvalues of A, as computed by a partial Schur
 *>           decomposition (Z not computed, T only computed as much
@@ -302,72 +285,59 @@
 *>           W3 contains the eigenvalues of the matrix in A, possibly
 *>           perturbed by ZHSEIN.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVECTL - COMPLEX*16 array, dimension (LDU,max(NN))
 *>           The conjugate transpose of the (upper triangular) left
 *>           eigenvector matrix for the matrix in T1.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVEZTR - COMPLEX*16 array, dimension (LDU,max(NN))
 *>           The (upper triangular) right eigenvector matrix for the
 *>           matrix in T1.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVECTY - COMPLEX*16 array, dimension (LDU,max(NN))
 *>           The conjugate transpose of the left eigenvector matrix
 *>           for the matrix in H.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  EVECTX - COMPLEX*16 array, dimension (LDU,max(NN))
 *>           The right eigenvector matrix for the matrix in H.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  UU     - COMPLEX*16 array, dimension (LDU,max(NN))
 *>           Details of the unitary matrix computed by ZGEHRD.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  TAU    - COMPLEX*16 array, dimension (max(NN))
 *>           Further details of the unitary matrix computed by ZGEHRD.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WORK   - COMPLEX*16 array, dimension (NWORK)
 *>           Workspace.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NWORK  - INTEGER
 *>           The number of entries in WORK.  NWORK >= 4*NN(j)*NN(j) + 2.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RWORK  - DOUBLE PRECISION array, dimension (max(NN))
 *>           Workspace.  Could be equivalenced to IWORK, but not SELECT.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IWORK  - INTEGER array, dimension (max(NN))
 *>           Workspace.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  SELECT - LOGICAL array, dimension (max(NN))
 *>           Workspace.  Could be equivalenced to IWORK, but not RWORK.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RESULT - DOUBLE PRECISION array, dimension (14)
 *>           The values computed by the fourteen tests described above.
 *>           The values are currently limited to 1/ulp, to avoid
 *>           overflow.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  INFO   - INTEGER
 *>           If 0, then everything ran OK.
 *>            -1: NSIZES < 0
@@ -384,15 +354,12 @@
 *>           If >2, then 30*N iterations were not enough to find an
 *>               eigenvalue or to decompose the problem.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>     Some Local Variables and Parameters:
 *>     ---- ----- --------- --- ----------
-*> \endverbatim
-*> \verbatim
+*>
 *>     ZERO, ONE       Real 0 and 1.
 *>     MAXTYP          The number of types defined.
 *>     MTEST           The number of tests defined: care must be taken
@@ -411,14 +378,12 @@
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>     OVFL, UNFL      Overflow and underflow thresholds.
 *>     ULP, ULPINV     Finest relative precision and its inverse.
 *>     RTOVFL, RTUNFL,
 *>     RTULP, RTULPI   Square roots of the previous 4 values.
-*> \endverbatim
-*> \verbatim
+*>
 *>             The following four arrays decode JTYPE:
 *>     KTYPE(j)        The general type (1-10) for type "j".
 *>     KMODE(j)        The MODE value to be passed to the matrix

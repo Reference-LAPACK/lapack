@@ -93,8 +93,7 @@
 *> \param[in] VU
 *> \verbatim
 *>          VU is DOUBLE PRECISION
-*> \endverbatim
-*> \verbatim
+*>
 *>          If RANGE='V', the lower and upper bounds of the interval to
 *>          be searched for eigenvalues.  Eigenvalues less than or equal
 *>          to VL, or greater than VU, will not be returned.  VL < VU.
@@ -109,8 +108,7 @@
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          If RANGE='I', the indices (in ascending order) of the
 *>          smallest and largest eigenvalues to be returned.
 *>          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
@@ -125,8 +123,7 @@
 *>          determined to lie in an interval whose width is ABSTOL or
 *>          less.  If ABSTOL is less than or equal to zero, then ULP*|T|
 *>          will be used, where |T| means the 1-norm of T.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
 *>          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
 *> \endverbatim
@@ -229,19 +226,16 @@
 *>                                        floating-point arithmetic.
 *>                        Cure: Increase the PARAMETER "FUDGE",
 *>                              recompile, and try again.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  RELFAC  DOUBLE PRECISION, default = 2.0e0
 *>          The relative tolerance.  An interval (a,b] lies within
 *>          "relative tolerance" if  b-a < RELFAC*ulp*max(|a|,|b|),
 *>          where "ulp" is the machine precision (distance from 1 to
 *>          the next larger floating point number.)
-*> \endverbatim
-*> \verbatim
+*>
 *>  FUDGE   DOUBLE PRECISION, default = 2
 *>          A "fudge factor" to widen the Gershgorin intervals.  Ideally,
 *>          a value of 1 should work, but on machines with sloppy

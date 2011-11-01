@@ -76,8 +76,7 @@
 *>          The j-th column of A is stored in the j-th column of the
 *>          array AB as follows:
 *>          AB(kl+ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, details of the factorization: U is stored as an
 *>          upper triangular band matrix with KL+KU superdiagonals in
 *>          rows 1 to KL+KU+1, and the multipliers used during the

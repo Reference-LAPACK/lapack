@@ -124,8 +124,7 @@
 *>          The non-negative real scalars beta that define the
 *>          eigenvalues of GNEP.  BETA(j) = T(j,j), the diagonal element
 *>          of the triangular factor T.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Together, the quantities alpha = ALPHA(j) and beta = BETA(j)
 *>          represent the j-th eigenvalue of the matrix pair (A,B), in
 *>          one of the forms lambda = alpha/beta or mu = beta/alpha.
@@ -176,8 +175,7 @@
 *>          blocksizes (for CGEQRF, CUNMQR, and CUNGQR.)  Then compute:
 *>          NB  -- MAX of the blocksizes for CGEQRF, CUNMQR, and CUNGQR;
 *>          the optimal LWORK is N*(NB+1).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

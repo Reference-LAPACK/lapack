@@ -50,8 +50,7 @@
 *> \verbatim
 *>          RESULT is DOUBLE PRECISION array, dimension (6)
 *>          Results of each of the six tests below.
-*> \endverbatim
-*> \verbatim
+*>
 *>          RESULT(1) = | A - Q R |
 *>          RESULT(2) = | I - Q^H Q |
 *>          RESULT(3) = | Q C - Q C |

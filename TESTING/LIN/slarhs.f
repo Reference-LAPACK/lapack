@@ -113,12 +113,10 @@
 *>          KU is INTEGER
 *>          Used only if A is a general band matrix or if A is
 *>          triangular.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If PATH = xGB, specifies the number of superdiagonals of A,
 *>          and 0 <= KU <= N-1.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If PATH = xTR, xTP, or xTB, specifies whether or not the
 *>          matrix has unit diagonal:
 *>          = 1:  matrix has non-unit diagonal (default)

@@ -171,8 +171,7 @@
 *>             u(j) = VL(:,j) + i*VL(:,j+1)
 *>          and
 *>            u(j+1) = VL(:,j) - i*VL(:,j+1).
-*> \endverbatim
-*> \verbatim
+*>
 *>          Each eigenvector is scaled so that its largest component has
 *>          abs(real part) + abs(imag. part) = 1, except for eigenvectors
 *>          corresponding to an eigenvalue with alpha = beta = 0, which
@@ -198,8 +197,7 @@
 *>            x(j) = VR(:,j) + i*VR(:,j+1)
 *>          and
 *>            x(j+1) = VR(:,j) - i*VR(:,j+1).
-*> \endverbatim
-*> \verbatim
+*>
 *>          Each eigenvector is scaled so that its largest component has
 *>          abs(real part) + abs(imag. part) = 1, except for eigenvalues
 *>          corresponding to an eigenvalue with alpha = beta = 0, which
@@ -230,8 +228,7 @@
 *>          NB  -- MAX of the blocksizes for DGEQRF, DORMQR, and DORGQR;
 *>          The optimal LWORK is:
 *>              2*N + MAX( 6*N, N*(NB+1) ).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

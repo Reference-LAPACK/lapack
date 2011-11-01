@@ -66,8 +66,7 @@
 *>          DL is DOUBLE PRECISION array, dimension (N-1)
 *>          On entry, DL must contain the (n-1) sub-diagonal elements of
 *>          A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, DL is overwritten by the (n-2) elements of the
 *>          second super-diagonal of the upper triangular matrix U from
 *>          the LU factorization of A, in DL(1), ..., DL(n-2).
@@ -77,8 +76,7 @@
 *> \verbatim
 *>          D is DOUBLE PRECISION array, dimension (N)
 *>          On entry, D must contain the diagonal elements of A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, D is overwritten by the n diagonal elements of U.
 *> \endverbatim
 *>
@@ -87,8 +85,7 @@
 *>          DU is DOUBLE PRECISION array, dimension (N-1)
 *>          On entry, DU must contain the (n-1) super-diagonal elements
 *>          of A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, DU is overwritten by the (n-1) elements of the first
 *>          super-diagonal of U.
 *> \endverbatim

@@ -76,8 +76,7 @@
 *> \verbatim
 *>          R is REAL
 *>          The nonzero component of the rotated vector.
-*> \endverbatim
-*> \verbatim
+*>
 *>  This version has a few statements commented out for thread safety
 *>  (machine parameters are computed on each entry). 10 feb 03, SJH.
 *> \endverbatim

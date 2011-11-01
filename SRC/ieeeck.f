@@ -62,8 +62,7 @@
 *>          Must contain the value 1.0
 *>          This is passed to prevent the compiler from optimizing
 *>          away this code.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RETURN VALUE:  INTEGER
 *>          = 0:  Arithmetic failed to produce the correct answers
 *>          = 1:  Arithmetic produced the correct answers

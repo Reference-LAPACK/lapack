@@ -83,12 +83,10 @@
 *>          UPLO is CHARACTER
 *>            On entry, UPLO specifies whether the RFP matrix A came from
 *>            an upper or lower triangular matrix as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>            UPLO = 'U' or 'u' RFP A came from an upper triangular
 *>            matrix
-*> \endverbatim
-*> \verbatim
+*>
 *>            UPLO = 'L' or 'l' RFP A came from a  lower triangular
 *>            matrix
 *> \endverbatim

@@ -84,8 +84,7 @@
 *>          upper triangular part of the matrix A.  If UPLO = 'L',
 *>          the leading N-by-N lower triangular part of A contains
 *>          the lower triangular part of the matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if JOBZ = 'V', then if INFO = 0, A contains the
 *>          matrix Z of eigenvectors.  The eigenvectors are normalized
 *>          as follows:
@@ -110,8 +109,7 @@
 *>          contains the upper triangular part of the matrix B.
 *>          If UPLO = 'L', the leading N-by-N lower triangular part of B
 *>          contains the lower triangular part of the matrix B.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO <= N, the part of B containing the matrix is
 *>          overwritten by the triangular factor U or L from the Cholesky
 *>          factorization B = U**H*U or B = L*L**H.
@@ -141,8 +139,7 @@
 *>          The length of the array WORK.  LWORK >= max(1,2*N-1).
 *>          For optimal efficiency, LWORK >= (NB+1)*N,
 *>          where NB is the blocksize for ZHETRD returned by ILAENV.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

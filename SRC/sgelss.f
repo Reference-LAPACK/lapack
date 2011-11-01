@@ -140,8 +140,7 @@
 *>          The dimension of the array WORK. LWORK >= 1, and also:
 *>          LWORK >= 3*min(M,N) + max( 2*min(M,N), max(M,N), NRHS )
 *>          For good performance, LWORK should generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
