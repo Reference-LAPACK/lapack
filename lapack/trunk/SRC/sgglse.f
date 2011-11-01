@@ -5,13 +5,15 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
+*> \htmlonly
 *> Download SGGLSE + dependencies 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgglse.f"> 
 *> [TGZ]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgglse.f"> 
 *> [ZIP]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgglse.f"> 
-*> [TXT]</a> 
+*> [TXT]</a>
+*> \endhtmlonly 
 *
 *  Definition
 *  ==========
@@ -181,7 +183,7 @@
       SUBROUTINE SGGLSE( M, N, P, A, LDA, B, LDB, C, D, X, WORK, LWORK,
      $                   INFO )
 *
-*  -- LAPACK solve routine (version 3.3.1) --
+*  -- LAPACK driver routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

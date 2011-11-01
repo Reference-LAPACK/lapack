@@ -5,13 +5,15 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
+*> \htmlonly
 *> Download ZGGESX + dependencies 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggesx.f"> 
 *> [TGZ]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggesx.f"> 
 *> [ZIP]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggesx.f"> 
-*> [TXT]</a> 
+*> [TXT]</a>
+*> \endhtmlonly 
 *
 *  Definition
 *  ==========
@@ -333,7 +335,7 @@
      $                   LDVSR, RCONDE, RCONDV, WORK, LWORK, RWORK,
      $                   IWORK, LIWORK, BWORK, INFO )
 *
-*  -- LAPACK eigen routine (version 3.2) --
+*  -- LAPACK driver routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

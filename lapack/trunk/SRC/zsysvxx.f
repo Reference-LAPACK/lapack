@@ -5,13 +5,15 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
+*> \htmlonly
 *> Download ZSYSVXX + dependencies 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsysvxx.f"> 
 *> [TGZ]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsysvxx.f"> 
 *> [ZIP]</a> 
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsysvxx.f"> 
-*> [TXT]</a> 
+*> [TXT]</a>
+*> \endhtmlonly 
 *
 *  Definition
 *  ==========
@@ -525,7 +527,7 @@
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, RWORK, INFO )
 *
-*  -- LAPACK solve routine (version 3.2.2) --
+*  -- LAPACK driver routine (version 3.2.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011
