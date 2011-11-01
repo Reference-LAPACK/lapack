@@ -138,8 +138,7 @@
 *>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
 *>          See below for further details.  A is not modified if
 *>          FACT = 'F' or 'N', or if FACT = 'E' and EQUED = 'N' on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if FACT = 'E' and EQUED = 'Y', A is overwritten by
 *>          diag(S)*A*diag(S).
 *> \endverbatim
@@ -152,14 +151,12 @@
 *>          factorization A = U**H*U or A = L*L**H, in the same storage
 *>          format as A.  If EQUED .ne. 'N', then AFP is the factored
 *>          form of the equilibrated matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then AFP is an output argument and on exit
 *>          returns the triangular factor U or L from the Cholesky
 *>          factorization A = U**H * U or A = L * L**H of the original
 *>          matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'E', then AFP is an output argument and on exit
 *>          returns the triangular factor U or L from the Cholesky
 *>          factorization A = U**H * U or A = L * L**H of the equilibrated

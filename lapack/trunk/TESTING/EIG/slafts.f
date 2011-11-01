@@ -41,51 +41,43 @@
 *>           On entry, TYPE specifies the matrix type to be used in the
 *>           printed messages.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  N      - INTEGER
 *>           On entry, N specifies the order of the test matrix.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IMAT   - INTEGER
 *>           On entry, IMAT specifies the type of the test matrix.
 *>           A listing of the different types is printed by SLAHD2
 *>           to the output file if a test fails to pass the threshold.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NTESTS - INTEGER
 *>           On entry, NTESTS is the number of tests performed on the
 *>           subroutines in the path given by TYPE.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RESULT - REAL               array of dimension( NTESTS )
 *>           On entry, RESULT contains the test ratios from the tests
 *>           performed in the calling program.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  ISEED  - INTEGER            array of dimension( 4 )
 *>           Contains the random seed that generated the matrix used
 *>           for the tests whose ratios are in RESULT.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH - REAL
 *>           On entry, THRESH specifies the acceptable threshold of the
 *>           test ratios.  If RESULT( K ) > THRESH, then the K-th test
 *>           did not pass the threshold and a message will be printed.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IOUNIT - INTEGER
 *>           On entry, IOUNIT specifies the unit number of the file
 *>           to which the messages are printed.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IE     - INTEGER
 *>           On entry, IE contains the number of tests which have
 *>           failed to pass the threshold so far.

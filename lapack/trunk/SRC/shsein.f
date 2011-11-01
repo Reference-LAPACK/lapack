@@ -125,8 +125,7 @@
 *> \param[in] WI
 *> \verbatim
 *>          WI is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On entry, the real and imaginary parts of the eigenvalues of
 *>          H; a complex conjugate pair of eigenvalues must be stored in
 *>          consecutive elements of WR and WI.

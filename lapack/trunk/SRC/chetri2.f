@@ -65,8 +65,7 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the NB diagonal matrix D and the multipliers
 *>          used to obtain the factor U or L as computed by CHETRF.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the (symmetric) inverse of the original
 *>          matrix.  If UPLO = 'U', the upper triangular part of the
 *>          inverse is formed and the part of A below the diagonal is not

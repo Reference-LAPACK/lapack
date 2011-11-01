@@ -116,8 +116,7 @@
 *>          SELCTG(ALPHAR(j),ALPHAI(j),BETA(j)) is true; i.e. if either
 *>          one of a complex conjugate pair of eigenvalues is selected,
 *>          then both complex eigenvalues are selected.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note that in the ill-conditioned case, a selected complex
 *>          eigenvalue may no longer satisfy SELCTG(ALPHAR(j),ALPHAI(j),
 *>          BETA(j)) = .TRUE. after ordering. INFO is to be set to N+2
@@ -189,8 +188,7 @@
 *>          If ALPHAI(j) is zero, then the j-th eigenvalue is real; if
 *>          positive, then the j-th and (j+1)-st eigenvalues are a
 *>          complex conjugate pair, with ALPHAI(j+1) negative.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note: the quotients ALPHAR(j)/BETA(j) and ALPHAI(j)/BETA(j)
 *>          may easily over- or underflow, and BETA(j) may even be zero.
 *>          Thus, the user should avoid naively computing the ratio.
@@ -239,8 +237,7 @@
 *>          The dimension of the array WORK.
 *>          If N = 0, LWORK >= 1, else LWORK >= max(8*N,6*N+16).
 *>          For good performance , LWORK must generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

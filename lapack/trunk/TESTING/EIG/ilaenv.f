@@ -66,8 +66,7 @@
 *>          12 <= ISPEC <= 16:
 *>               xHSEQR or one of its subroutines,
 *>               see IPARMQ for detailed explanation
-*> \endverbatim
-*> \verbatim
+*>
 *>          Other specifications (up to 100) can be added later.
 *> \endverbatim
 *>
@@ -104,8 +103,7 @@
 *> \param[in] N4
 *> \verbatim
 *>          N4 is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          Problem dimensions for the subroutine NAME; these may not all
 *>          be required.
 *> \endverbatim

@@ -78,8 +78,7 @@
 *>          triangular part of A is not referenced.  If DIAG = 'U', the
 *>          diagonal elements of A are also not referenced and are
 *>          assumed to be 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the (triangular) inverse of the original matrix, in
 *>          the same storage format.
 *> \endverbatim

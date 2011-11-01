@@ -204,8 +204,7 @@
 *>          If ALPHAI(j) is zero, then the j-th eigenvalue is real; if
 *>          positive, then the j-th and (j+1)-st eigenvalues are a
 *>          complex conjugate pair, with ALPHAI(j+1) negative.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note: the quotients ALPHAR(j)/BETA(j) and ALPHAI(j)/BETA(j)
 *>          may easily over- or underflow, and BETA(j) may even be zero.
 *>          Thus, the user should avoid naively computing the ratio.
@@ -277,8 +276,7 @@
 *>          Note also that an error is only returned if
 *>          LWORK < max( 8*N, 6*N+16), but if SENSE = 'E' or 'V' or 'B'
 *>          this may not be large enough.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the bound on the optimal size of the WORK
 *>          array and the minimum size of the IWORK array, returns these
@@ -299,8 +297,7 @@
 *>          The dimension of the array IWORK.
 *>          If SENSE = 'N' or N = 0, LIWORK >= 1, otherwise
 *>          LIWORK >= N+6.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the bound on the optimal size of the
 *>          WORK array and the minimum size of the IWORK array, returns

@@ -111,8 +111,7 @@
 *>                   dimension ( K ) if ICOMPQ = 0.
 *>          On exit, DIFR(I,1) = D(I) - DSIGMA(I+1), DIFR(K,1) is not
 *>          defined and will not be referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If ICOMPQ = 1, DIFR(1:K,2) is an array containing the
 *>          normalizing factors for the right singular vector matrix.
 *> \endverbatim

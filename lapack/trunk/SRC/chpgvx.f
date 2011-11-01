@@ -98,8 +98,7 @@
 *>          is stored in the array AP as follows:
 *>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the contents of AP are destroyed.
 *> \endverbatim
 *>
@@ -111,8 +110,7 @@
 *>          is stored in the array BP as follows:
 *>          if UPLO = 'U', BP(i + (j-1)*j/2) = B(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', BP(i + (j-1)*(2*n-j)/2) = B(i,j) for j<=i<=n.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the triangular factor U or L from the Cholesky
 *>          factorization B = U**H*U or B = L*L**H, in the same storage
 *>          format as B.
@@ -126,8 +124,7 @@
 *> \param[in] VU
 *> \verbatim
 *>          VU is REAL
-*> \endverbatim
-*> \verbatim
+*>
 *>          If RANGE='V', the lower and upper bounds of the interval to
 *>          be searched for eigenvalues. VL < VU.
 *>          Not referenced if RANGE = 'A' or 'I'.
@@ -141,8 +138,7 @@
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          If RANGE='I', the indices (in ascending order) of the
 *>          smallest and largest eigenvalues to be returned.
 *>          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
@@ -156,17 +152,14 @@
 *>          An approximate eigenvalue is accepted as converged
 *>          when it is determined to lie in an interval [a,b]
 *>          of width less than or equal to
-*> \endverbatim
-*> \verbatim
+*>
 *>                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*> \endverbatim
-*> \verbatim
+*>
 *>          where EPS is the machine precision.  If ABSTOL is less than
 *>          or equal to zero, then  EPS*|T|  will be used in its place,
 *>          where |T| is the 1-norm of the tridiagonal matrix obtained
 *>          by reducing AP to tridiagonal form.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
 *>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
@@ -199,8 +192,7 @@
 *>          The eigenvectors are normalized as follows:
 *>          if ITYPE = 1 or 2, Z**H*B*Z = I;
 *>          if ITYPE = 3, Z**H*inv(B)*Z = I.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If an eigenvector fails to converge, then that column of Z
 *>          contains the latest approximation to the eigenvector, and the
 *>          index of the eigenvector is returned in IFAIL.

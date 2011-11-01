@@ -76,8 +76,7 @@
 *>          leading n-by-n lower triangular part of A contains the lower
 *>          triangular part of the matrix A, and the strictly upper
 *>          triangular part of A is not referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L (see below for further details).
 *> \endverbatim

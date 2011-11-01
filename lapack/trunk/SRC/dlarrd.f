@@ -279,12 +279,10 @@
 *>                                        floating-point arithmetic.
 *>                        Cure: Increase the PARAMETER "FUDGE",
 *>                              recompile, and try again.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  FUDGE   DOUBLE PRECISION, default = 2
 *>          A "fudge factor" to widen the Gershgorin intervals.  Ideally,
 *>          a value of 1 should work, but on machines with sloppy
@@ -292,8 +290,7 @@
 *>          publicly released versions should be large enough to handle
 *>          the worst machine around.  Note that this has no effect
 *>          on accuracy of the solution.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Based on contributions by
 *>     W. Kahan, University of California, Berkeley, USA
 *>     Beresford Parlett, University of California, Berkeley, USA

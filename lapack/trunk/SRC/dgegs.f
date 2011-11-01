@@ -182,8 +182,7 @@
 *>          blocksizes (for DGEQRF, DORMQR, and DORGQR.)  Then compute:
 *>          NB  -- MAX of the blocksizes for DGEQRF, DORMQR, and DORGQR
 *>          The optimal LWORK is  2*N + N*(NB+1).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

@@ -63,13 +63,11 @@
 *>          TRANS is INTEGER
 *>           On entry, TRANS specifies the operation to be performed as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>             BLAS_NO_TRANS      y := alpha*abs(A)*abs(x) + beta*abs(y)
 *>             BLAS_TRANS         y := alpha*abs(A**T)*abs(x) + beta*abs(y)
 *>             BLAS_CONJ_TRANS    y := alpha*abs(A**T)*abs(x) + beta*abs(y)
-*> \endverbatim
-*> \verbatim
+*>
 *>           Unchanged on exit.
 *> \endverbatim
 *>
@@ -169,8 +167,7 @@
 *>           On entry, INCY specifies the increment for the elements of
 *>           Y. INCY must not be zero.
 *>           Unchanged on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Level 2 Blas routine.
 *> \endverbatim
 *>

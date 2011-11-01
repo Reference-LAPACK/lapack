@@ -82,8 +82,7 @@
 *>                  vectors) are overwritten on the array A;
 *>          = 'N':  no rows of V**H (no right singular vectors) are
 *>                  computed.
-*> \endverbatim
-*> \verbatim
+*>
 *>          JOBVT and JOBU cannot both be 'O'.
 *> \endverbatim
 *>
@@ -172,8 +171,7 @@
 *>          The dimension of the array WORK.
 *>          LWORK >=  MAX(1,2*MIN(M,N)+MAX(M,N)).
 *>          For good performance, LWORK should generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

@@ -159,8 +159,7 @@
 *>              2*M + M*NRHS
 *>          if M is less than N, the code will execute correctly.
 *>          For good performance, LWORK should generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the array WORK and the
 *>          minimum sizes of the arrays RWORK and IWORK, and returns

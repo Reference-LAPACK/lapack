@@ -154,8 +154,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is COMPLEX*16 array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          The diagonal elements of A and B, respectively,
 *>          when the pair (A,B) has been reduced to generalized Schur
 *>          form.  ALPHA(i)/BETA(i) i=1,...,N are the generalized
@@ -213,8 +212,7 @@
 *> \param[out] PR
 *> \verbatim
 *>          PR is DOUBLE PRECISION
-*> \endverbatim
-*> \verbatim
+*>
 *>          If IJOB = 1, 4 or 5, PL, PR are lower bounds on the
 *>          reciprocal  of the norm of "projections" onto left and right
 *>          eigenspace with respect to the selected cluster.
@@ -247,8 +245,7 @@
 *>          The dimension of the array WORK. LWORK >=  1
 *>          If IJOB = 1, 2 or 4, LWORK >=  2*M*(N-M)
 *>          If IJOB = 3 or 5, LWORK >=  4*M*(N-M)
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -267,8 +264,7 @@
 *>          The dimension of the array IWORK. LIWORK >= 1.
 *>          If IJOB = 1, 2 or 4, LIWORK >=  N+2;
 *>          If IJOB = 3 or 5, LIWORK >= MAX(N+2, 2*M*(N-M));
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and

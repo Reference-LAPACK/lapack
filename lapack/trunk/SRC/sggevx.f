@@ -169,8 +169,7 @@
 *>          the j-th eigenvalue is real; if positive, then the j-th and
 *>          (j+1)-st eigenvalues are a complex conjugate pair, with
 *>          ALPHAI(j+1) negative.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note: the quotients ALPHAR(j)/BETA(j) and ALPHAI(j)/BETA(j)
 *>          may easily over- or underflow, and BETA(j) may even be zero.
 *>          Thus, the user should avoid naively computing the ratio
@@ -314,8 +313,7 @@
 *>          LWORK >= max(1,6*N).
 *>          If SENSE = 'E', LWORK >= max(1,10*N).
 *>          If SENSE = 'V' or 'B', LWORK >= 2*N*N+8*N+16.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

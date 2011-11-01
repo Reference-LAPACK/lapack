@@ -168,12 +168,10 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  ITMAX is the maximum number of steps of iterative refinement.
 *> \endverbatim
 *>

@@ -131,8 +131,7 @@
 *> \param[in] WI
 *> \verbatim
 *>          WI is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          The real and imaginary parts of the eigenvalues of A.
 *>          Purely real eigenvalues are indicated by WI(j) = 0.
 *>          Complex conjugate pairs are indicated by WR(j)=WR(j+1) and

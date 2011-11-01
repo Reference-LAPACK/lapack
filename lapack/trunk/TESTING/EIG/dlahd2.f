@@ -40,15 +40,13 @@
 *>          PATH is CHARACTER*3.
 *>          On entry, PATH contains the name of the path for which the
 *>          header information is to be printed.  Current paths are
-*> \endverbatim
-*> \verbatim
+*>
 *>             DHS, ZHS:  Non-symmetric eigenproblem.
 *>             DST, ZST:  Symmetric eigenproblem.
 *>             DSG, ZSG:  Symmetric Generalized eigenproblem.
 *>             DBD, ZBD:  Singular Value Decomposition (SVD)
 *>             DBB, ZBB:  General Banded reduction to bidiagonal form
-*> \endverbatim
-*> \verbatim
+*>
 *>          These paths also are supplied in double precision (replace
 *>          leading S by D and leading C by Z in path names).
 *> \endverbatim

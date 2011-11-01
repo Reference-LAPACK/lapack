@@ -40,15 +40,13 @@
 *>          PATH is CHARACTER*3.
 *>          On entry, PATH contains the name of the path for which the
 *>          header information is to be printed.  Current paths are
-*> \endverbatim
-*> \verbatim
+*>
 *>             SHS, CHS:  Non-symmetric eigenproblem.
 *>             SST, CST:  Symmetric eigenproblem.
 *>             SSG, CSG:  Symmetric Generalized eigenproblem.
 *>             SBD, CBD:  Singular Value Decomposition (SVD)
 *>             SBB, CBB:  General Banded reduction to bidiagonal form
-*> \endverbatim
-*> \verbatim
+*>
 *>          These paths also are supplied in double precision (replace
 *>          leading S by D and leading C by Z in path names).
 *> \endverbatim

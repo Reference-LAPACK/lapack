@@ -169,8 +169,7 @@
 *> \param[out] L
 *> \verbatim
 *>          L is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, K and L specify the dimension of the subblocks
 *>          described in Purpose.
 *>          K + L = effective numerical rank of (A**H,B**H)**H.
@@ -212,8 +211,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is DOUBLE PRECISION array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, ALPHA and BETA contain the generalized singular
 *>          value pairs of A and B;
 *>            ALPHA(1:K) = 1,
@@ -299,12 +297,10 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, the Jacobi-type procedure failed to
 *>                converge.  For further details, see subroutine ZTGSJA.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  TOLA    DOUBLE PRECISION
 *>  TOLB    DOUBLE PRECISION
 *>          TOLA and TOLB are the thresholds to determine the effective

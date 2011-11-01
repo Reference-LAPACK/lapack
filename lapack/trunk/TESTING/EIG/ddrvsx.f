@@ -326,8 +326,7 @@
 *> \param[out] WI
 *> \verbatim
 *>          WI is DOUBLE PRECISION array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The real and imaginary parts of the eigenvalues of A.
 *>          On exit, WR + WI*i are the eigenvalues of the matrix in A.
 *> \endverbatim
@@ -340,8 +339,7 @@
 *> \param[out] WIT
 *> \verbatim
 *>          WIT is DOUBLE PRECISION array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
 *>          but those computed when DGEESX only computes a partial
 *>          eigendecomposition, i.e. not Schur vectors
@@ -355,8 +353,7 @@
 *> \param[out] WITMP
 *> \verbatim
 *>          WITMP is DOUBLE PRECISION array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          More temporary storage for eigenvalues.
 *> \endverbatim
 *>
@@ -414,11 +411,9 @@
 *>            <0,  input parameter -INFO is incorrect
 *>            >0,  DLATMR, SLATMS, SLATME or DGET24 returned an error
 *>                 code and INFO is its absolute value
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>     Some Local Variables and Parameters:
 *>     ---- ----- --------- --- ----------
 *>     ZERO, ONE       Real 0 and 1.
@@ -428,8 +423,7 @@
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>     OVFL, UNFL      Overflow and underflow thresholds.
 *>     ULP, ULPINV     Finest relative precision and its inverse.
 *>     RTULP, RTULPI   Square roots of the previous 4 values.

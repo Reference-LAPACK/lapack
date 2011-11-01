@@ -78,8 +78,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>           It is assumed that H is already upper triangular in rows
 *>           and columns 1:ILO-1 and IHI+1:N and, if ILO.GT.1,
 *>           H(ILO,ILO-1) is zero. ILO and IHI are normally set by a
@@ -100,8 +99,7 @@
 *>           .FALSE., then the contents of H are unspecified on exit.
 *>           (The output value of H when INFO.GT.0 is given under the
 *>           description of INFO below.)
-*> \endverbatim
-*> \verbatim
+*>
 *>           This subroutine may explicitly set H(i,j) = 0 for i.GT.j and
 *>           j = 1, 2, ... ILO-1 or j = IHI+1, IHI+2, ... N.
 *> \endverbatim
@@ -166,8 +164,7 @@
 *>           is sufficient, but LWORK typically as large as 6*N may
 *>           be required for optimal performance.  A workspace query
 *>           to determine the optimal workspace size is recommended.
-*> \endverbatim
-*> \verbatim
+*>
 *>           If LWORK = -1, then ZLAQR0 does a workspace query.
 *>           In this case, ZLAQR0 checks the input parameters and
 *>           estimates the optimal workspace size for the given

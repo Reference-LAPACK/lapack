@@ -169,8 +169,7 @@
 *>          where NB is an upper bound on the blocksize returned
 *>          by ILAENV for the routines CGEQP3, CTZRZF, CTZRQF, CUNMQR,
 *>          and CUNMRZ.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

@@ -82,8 +82,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>           It is assumed that H is already upper triangular in rows
 *>           and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
 *>           set by a previous call to CGEBAL, and then passed to ZGEHRD
@@ -102,8 +101,7 @@
 *>           Schur form). If INFO = 0 and JOB = 'E', the contents of
 *>           H are unspecified on exit.  (The output value of H when
 *>           INFO.GT.0 is given under the description of INFO below.)
-*> \endverbatim
-*> \verbatim
+*>
 *>           Unlike earlier versions of CHSEQR, this subroutine may
 *>           explicitly H(i,j) = 0 for i.GT.j and j = 1, 2, ... ILO-1
 *>           or j = IHI+1, IHI+2, ... N.
@@ -162,8 +160,7 @@
 *>           may be required for optimal performance.  A workspace
 *>           query is recommended to determine the optimal workspace
 *>           size.
-*> \endverbatim
-*> \verbatim
+*>
 *>           If LWORK = -1, then CHSEQR does a workspace query.
 *>           In this case, CHSEQR checks the input parameters and
 *>           estimates the optimal workspace size for the given
@@ -182,42 +179,33 @@
 *>                the eigenvalues.  Elements 1:ilo-1 and i+1:n of WR
 *>                and WI contain those eigenvalues which have been
 *>                successfully computed.  (Failures are rare.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and JOB = 'E', then on exit, the
 *>                remaining unconverged eigenvalues are the eigen-
 *>                values of the upper Hessenberg matrix rows and
 *>                columns ILO through INFO of the final, output
 *>                value of H.
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and JOB   = 'S', then on exit
-*> \endverbatim
-*> \verbatim
+*>
 *>           (*)  (initial value of H)*U  = U*(final value of H)
-*> \endverbatim
-*> \verbatim
+*>
 *>                where U is a unitary matrix.  The final
 *>                value of  H is upper Hessenberg and triangular in
 *>                rows and columns INFO+1 through IHI.
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and COMPZ = 'V', then on exit
-*> \endverbatim
-*> \verbatim
+*>
 *>                  (final value of Z)  =  (initial value of Z)*U
-*> \endverbatim
-*> \verbatim
+*>
 *>                where U is the unitary matrix in (*) (regard-
 *>                less of the value of JOB.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and COMPZ = 'I', then on exit
 *>                      (final value of Z)  = U
 *>                where U is the unitary matrix in (*) (regard-
 *>                less of the value of JOB.)
-*> \endverbatim
-*> \verbatim
+*>
 *>                If INFO .GT. 0 and COMPZ = 'N', then Z is not
 *>                accessed.
 *> \endverbatim

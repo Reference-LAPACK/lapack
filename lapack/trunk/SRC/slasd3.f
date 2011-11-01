@@ -75,8 +75,7 @@
 *>          SQRE is INTEGER
 *>         = 0: the lower block is an NR-by-NR square matrix.
 *>         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>         The bidiagonal matrix has N = NL + NR + 1 rows and
 *>         M = N + SQRE >= N columns.
 *> \endverbatim
@@ -175,8 +174,7 @@
 *>         contains non-zero entries only at and below (or after) NL+2;
 *>         and the third is dense. The first column of U and the row of
 *>         VT are treated separately, however.
-*> \endverbatim
-*> \verbatim
+*>
 *>         The rows of the singular vectors found by SLASD4
 *>         must be likewise permuted before the matrix multiplies can
 *>         take place.

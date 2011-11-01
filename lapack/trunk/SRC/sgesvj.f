@@ -224,8 +224,7 @@
 *>                 The singular values of A are SCALE*SVA(1:N), and this
 *>                 factored representation is due to the fact that some of the
 *>                 singular values of A might underflow or overflow.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If INFO .GT. 0 :
 *>          the procedure SGESVJ did not converge in the given number of
 *>          iterations (sweeps) and SCALE*SVA(1:N) may not be accurate.

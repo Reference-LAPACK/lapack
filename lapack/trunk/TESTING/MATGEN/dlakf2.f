@@ -75,8 +75,7 @@
 *> \param[in] E
 *> \verbatim
 *>          E is DOUBLE PRECISION, dimension ( LDA, N )
-*> \endverbatim
-*> \verbatim
+*>
 *>          The matrices used in forming the output matrix Z.
 *> \endverbatim
 *>

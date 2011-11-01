@@ -117,8 +117,7 @@
 *>          If JOBZ = 'N' and N > 1, LWORK must be at least 2*N+1.
 *>          If JOBZ = 'V' and N > 1, LWORK must be at least 
 *>                                                1 + 6*N + 2*N**2.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
@@ -139,8 +138,7 @@
 *>          If N <= 1,                LIWORK must be at least 1.
 *>          If JOBZ  = 'N' and N > 1, LIWORK must be at least 1.
 *>          If JOBZ  = 'V' and N > 1, LIWORK must be at least 3 + 5*N.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of

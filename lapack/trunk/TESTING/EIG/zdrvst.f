@@ -141,15 +141,13 @@
 *>          The number of sizes of matrices to use.  If it is zero,
 *>          ZDRVST does nothing.  It must be at least zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NN      INTEGER array, dimension (NSIZES)
 *>          An array containing the sizes to be used for the matrices.
 *>          Zero values will be skipped.  The values must be at least
 *>          zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NTYPES  INTEGER
 *>          The number of elements in DOTYPE.   If it is zero, ZDRVST
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
@@ -158,8 +156,7 @@
 *>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
 *>          DOTYPE(MAXTYP+1) is .TRUE. .
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  DOTYPE  LOGICAL array, dimension (NTYPES)
 *>          If DOTYPE(j) is .TRUE., then for each size in NN a
 *>          matrix of that size and of type j will be generated.
@@ -169,8 +166,7 @@
 *>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
 *>          will be ignored.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  ISEED   INTEGER array, dimension (4)
 *>          On entry ISEED specifies the seed of the random number
 *>          generator. The array elements should be between 0 and 4095;
@@ -182,8 +178,7 @@
 *>          next call to ZDRVST to continue the same random number
 *>          sequence.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH  DOUBLE PRECISION
 *>          A test will count as "failed" if the "error", computed as
 *>          described above, exceeds THRESH.  Note that the error
@@ -192,121 +187,99 @@
 *>          it should not depend on the precision (single vs. double)
 *>          or the size of the matrix.  It must be at least zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NOUNIT  INTEGER
 *>          The FORTRAN unit number for printing out error messages
 *>          (e.g., if a routine returns IINFO not equal to 0.)
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  A       COMPLEX*16 array, dimension (LDA , max(NN))
 *>          Used to hold the matrix whose eigenvalues are to be
 *>          computed.  On exit, A contains the last matrix actually
 *>          used.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDA     INTEGER
 *>          The leading dimension of A.  It must be at
 *>          least 1 and at least max( NN ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D1      DOUBLE PRECISION array, dimension (max(NN))
 *>          The eigenvalues of A, as computed by ZSTEQR simlutaneously
 *>          with Z.  On exit, the eigenvalues in D1 correspond with the
 *>          matrix in A.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D2      DOUBLE PRECISION array, dimension (max(NN))
 *>          The eigenvalues of A, as computed by ZSTEQR if Z is not
 *>          computed.  On exit, the eigenvalues in D2 correspond with
 *>          the matrix in A.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D3      DOUBLE PRECISION array, dimension (max(NN))
 *>          The eigenvalues of A, as computed by DSTERF.  On exit, the
 *>          eigenvalues in D3 correspond with the matrix in A.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WA1     DOUBLE PRECISION array, dimension
-*> \endverbatim
-*> \verbatim
+*>
 *>  WA2     DOUBLE PRECISION array, dimension
-*> \endverbatim
-*> \verbatim
+*>
 *>  WA3     DOUBLE PRECISION array, dimension
-*> \endverbatim
-*> \verbatim
+*>
 *>  U       COMPLEX*16 array, dimension (LDU, max(NN))
 *>          The unitary matrix computed by ZHETRD + ZUNGC3.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDU     INTEGER
 *>          The leading dimension of U, Z, and V.  It must be at
 *>          least 1 and at least max( NN ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  V       COMPLEX*16 array, dimension (LDU, max(NN))
 *>          The Housholder vectors computed by ZHETRD in reducing A to
 *>          tridiagonal form.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  TAU     COMPLEX*16 array, dimension (max(NN))
 *>          The Householder factors computed by ZHETRD in reducing A
 *>          to tridiagonal form.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Z       COMPLEX*16 array, dimension (LDU, max(NN))
 *>          The unitary matrix of eigenvectors computed by ZHEEVD,
 *>          ZHEEVX, ZHPEVD, CHPEVX, ZHBEVD, and CHBEVX.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WORK  - COMPLEX*16 array of dimension ( LWORK )
 *>           Workspace.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LWORK - INTEGER
 *>           The number of entries in WORK.  This must be at least
 *>           2*max( NN(j), 2 )**2.
 *>           Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RWORK   DOUBLE PRECISION array, dimension (3*max(NN))
 *>           Workspace.
 *>           Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LRWORK - INTEGER
 *>           The number of entries in RWORK.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IWORK   INTEGER array, dimension (6*max(NN))
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LIWORK - INTEGER
 *>           The number of entries in IWORK.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RESULT  DOUBLE PRECISION array, dimension (??)
 *>          The values computed by the tests described above.
 *>          The values are currently limited to 1/ulp, to avoid
 *>          overflow.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  INFO    INTEGER
 *>          If 0, then everything ran OK.
 *>           -1: NSIZES < 0
@@ -320,11 +293,9 @@
 *>              or DORMC2 returns an error code, the
 *>              absolute value of it is returned.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>       Some Local Variables and Parameters:
 *>       ---- ----- --------- --- ----------
 *>       ZERO, ONE       Real 0 and 1.
@@ -338,8 +309,7 @@
 *>                       so far (computed by DLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>       OVFL, UNFL      Overflow and underflow thresholds.
 *>       ULP, ULPINV     Finest relative precision and its inverse.
 *>       RTOVFL, RTUNFL  Square roots of the previous 2 values.

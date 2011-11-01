@@ -81,8 +81,7 @@
 *>                  vectors) are overwritten on the array A;
 *>          = 'N':  no rows of V**T (no right singular vectors) are
 *>                  computed.
-*> \endverbatim
-*> \verbatim
+*>
 *>          JOBVT and JOBU cannot both be 'O'.
 *> \endverbatim
 *>
@@ -179,8 +178,7 @@
 *>             - PATH 1t (N much larger than M, JOBVT='N')
 *>          LWORK >= MAX(1,3*MIN(M,N)+MAX(M,N),5*MIN(M,N)) for the other paths
 *>          For good performance, LWORK should generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

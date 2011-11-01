@@ -180,12 +180,10 @@
 *>                elements of a bidiagonal matrix which is orthogonally
 *>                similar to the input matrix B;  if INFO = i, i
 *>                elements of E have not converged to zero.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  TOLMUL  DOUBLE PRECISION, default = max(10,min(100,EPS**(-1/8)))
 *>          TOLMUL controls the convergence criterion of the QR loop.
 *>          If it is positive, TOLMUL*EPS is the desired relative
@@ -200,8 +198,7 @@
 *>          Default is to lose at either one eighth or 2 of the
 *>             available decimal digits in each computed singular value
 *>             (whichever is smaller).
-*> \endverbatim
-*> \verbatim
+*>
 *>  MAXITR  INTEGER, default = 6
 *>          MAXITR controls the maximum number of passes of the
 *>          algorithm through its inner loop. The algorithms stops

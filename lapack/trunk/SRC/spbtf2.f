@@ -81,8 +81,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the triangular factor U or L from the
 *>          Cholesky factorization A = U**T*U or A = L*L**T of the band
 *>          matrix A, in the same storage format as A.

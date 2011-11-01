@@ -363,8 +363,7 @@
 *> \param[out] BETA1
 *> \verbatim
 *>          BETA1 is DOUBLE PRECISION array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized eigenvalues of (A,B) computed by DGEGS.
 *>          ( ALPHR1(k)+ALPHI1(k)*i ) / BETA1(k) is the k-th
 *>          generalized eigenvalue of the matrices in A and B.
@@ -383,8 +382,7 @@
 *> \param[out] BETA2
 *> \verbatim
 *>          BETA2 is DOUBLE PRECISION array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized eigenvalues of (A,B) computed by DGEGV.
 *>          ( ALPHR2(k)+ALPHI2(k)*i ) / BETA2(k) is the k-th
 *>          generalized eigenvalue of the matrices in A and B.

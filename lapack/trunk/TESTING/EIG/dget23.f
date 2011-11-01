@@ -214,8 +214,7 @@
 *> \param[out] WI
 *> \verbatim
 *>          WI is DOUBLE PRECISION array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          The real and imaginary parts of the eigenvalues of A.
 *>          On exit, WR + WI*i are the eigenvalues of the matrix in A.
 *> \endverbatim
@@ -228,8 +227,7 @@
 *> \param[out] WI1
 *> \verbatim
 *>          WI1 is DOUBLE PRECISION array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
 *>          but those computed when DGEEVX only computes a partial
 *>          eigendecomposition, i.e. not the eigenvalues and left

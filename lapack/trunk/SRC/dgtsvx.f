@@ -135,8 +135,7 @@
 *>          If FACT = 'F', then DLF is an input argument and on entry
 *>          contains the (n-1) multipliers that define the matrix L from
 *>          the LU factorization of A as computed by DGTTRF.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then DLF is an output argument and on exit
 *>          contains the (n-1) multipliers that define the matrix L from
 *>          the LU factorization of A.
@@ -148,8 +147,7 @@
 *>          If FACT = 'F', then DF is an input argument and on entry
 *>          contains the n diagonal elements of the upper triangular
 *>          matrix U from the LU factorization of A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then DF is an output argument and on exit
 *>          contains the n diagonal elements of the upper triangular
 *>          matrix U from the LU factorization of A.
@@ -160,8 +158,7 @@
 *>          DUF is or output) DOUBLE PRECISION array, dimension (N-1)
 *>          If FACT = 'F', then DUF is an input argument and on entry
 *>          contains the (n-1) elements of the first superdiagonal of U.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then DUF is an output argument and on exit
 *>          contains the (n-1) elements of the first superdiagonal of U.
 *> \endverbatim
@@ -172,8 +169,7 @@
 *>          If FACT = 'F', then DU2 is an input argument and on entry
 *>          contains the (n-2) elements of the second superdiagonal of
 *>          U.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then DU2 is an output argument and on exit
 *>          contains the (n-2) elements of the second superdiagonal of
 *>          U.
@@ -185,8 +181,7 @@
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the LU factorization of A as
 *>          computed by DGTTRF.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains the pivot indices from the LU factorization of A;
 *>          row i of the matrix was interchanged with row IPIV(i).

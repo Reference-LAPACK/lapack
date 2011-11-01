@@ -80,8 +80,7 @@
 *>          is stored in the array AP as follows:
 *>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', AP(i + (j-1)*(2n-j)/2) = A(i,j) for j<=i<=n.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the transformed matrix, stored in the
 *>          same format as A.
 *> \endverbatim

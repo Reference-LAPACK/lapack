@@ -94,8 +94,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the transformed matrix X**H*A*X, stored in the same
 *>          format as A.
 *> \endverbatim

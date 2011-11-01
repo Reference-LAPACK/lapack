@@ -93,8 +93,7 @@
 *>          is stored in the array AP as follows:
 *>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the contents of AP are destroyed.
 *> \endverbatim
 *>
@@ -106,8 +105,7 @@
 *>          is stored in the array BP as follows:
 *>          if UPLO = 'U', BP(i + (j-1)*j/2) = B(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', BP(i + (j-1)*(2*n-j)/2) = B(i,j) for j<=i<=n.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the triangular factor U or L from the Cholesky
 *>          factorization B = U**T*U or B = L*L**T, in the same storage
 *>          format as B.
@@ -149,8 +147,7 @@
 *>          If N <= 1,               LWORK >= 1.
 *>          If JOBZ = 'N' and N > 1, LWORK >= 2*N.
 *>          If JOBZ = 'V' and N > 1, LWORK >= 1 + 6*N + 2*N**2.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the required sizes of the WORK and IWORK
 *>          arrays, returns these values as the first entries of the WORK
@@ -170,8 +167,7 @@
 *>          The dimension of the array IWORK.
 *>          If JOBZ  = 'N' or N <= 1, LIWORK >= 1.
 *>          If JOBZ  = 'V' and N > 1, LIWORK >= 3 + 5*N.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the required sizes of the WORK and
 *>          IWORK arrays, returns these values as the first entries of

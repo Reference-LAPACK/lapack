@@ -336,11 +336,9 @@
 *>          -18: NWORK too small.
 *>          If  ZLATMR, CLATMS, CLATME or ZGEES returns an error code,
 *>              the absolute value of it is returned.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>     Some Local Variables and Parameters:
 *>     ---- ----- --------- --- ----------
 *>     ZERO, ONE       Real 0 and 1.
@@ -350,8 +348,7 @@
 *>     COND, CONDS,
 *>     IMODE           Values to be passed to the matrix generators.
 *>     ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>     OVFL, UNFL      Overflow and underflow thresholds.
 *>     ULP, ULPINV     Finest relative precision and its inverse.
 *>     RTULP, RTULPI   Square roots of the previous 4 values.

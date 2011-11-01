@@ -97,8 +97,7 @@
 *>          SQRE is INTEGER
 *>         = 0: the lower block is an NR-by-NR square matrix.
 *>         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>         The bidiagonal matrix has row dimension N = NL + NR + 1,
 *>         and column dimension M = N + SQRE.
 *> \endverbatim

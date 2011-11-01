@@ -158,8 +158,7 @@
 *>          BETA is COMPLEX array, dimension (N)
 *>          On exit, ALPHA(j)/BETA(j), j=1,...,N, will be the generalized
 *>          eigenvalues.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Note: the quotient ALPHA(j)/BETA(j) ) may easily over- or
 *>          underflow, and BETA(j) may even be zero.  Thus, the user
 *>          should avoid naively computing the ratio ALPHA/BETA.
@@ -289,8 +288,7 @@
 *>          The dimension of the array WORK. LWORK >= max(1,2*N).
 *>          If SENSE = 'E', LWORK >= max(1,4*N).
 *>          If SENSE = 'V' or 'B', LWORK >= max(1,2*N*N+2*N).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

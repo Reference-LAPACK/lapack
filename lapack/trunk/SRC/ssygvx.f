@@ -97,8 +97,7 @@
 *>          upper triangular part of the matrix A.  If UPLO = 'L',
 *>          the leading N-by-N lower triangular part of A contains
 *>          the lower triangular part of the matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the lower triangle (if UPLO='L') or the upper
 *>          triangle (if UPLO='U') of A, including the diagonal, is
 *>          destroyed.
@@ -118,8 +117,7 @@
 *>          upper triangular part of the matrix B.  If UPLO = 'L',
 *>          the leading N-by-N lower triangular part of B contains
 *>          the lower triangular part of the matrix B.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO <= N, the part of B containing the matrix is
 *>          overwritten by the triangular factor U or L from the Cholesky
 *>          factorization B = U**T*U or B = L*L**T.
@@ -165,19 +163,16 @@
 *>          An approximate eigenvalue is accepted as converged
 *>          when it is determined to lie in an interval [a,b]
 *>          of width less than or equal to
-*> \endverbatim
-*> \verbatim
+*>
 *>                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*> \endverbatim
-*> \verbatim
+*>
 *>          where EPS is the machine precision.  If ABSTOL is less than
 *>          or equal to zero, then  EPS*|T|  will be used in its place,
 *>          where |T| is the 1-norm of the tridiagonal matrix obtained
 *>          by reducing C to tridiagonal form, where C is the symmetric
 *>          matrix of the standard symmetric problem to which the
 *>          generalized problem is transformed.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
 *>          set to twice the underflow threshold 2*DLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
@@ -210,8 +205,7 @@
 *>          The eigenvectors are normalized as follows:
 *>          if ITYPE = 1 or 2, Z**T*B*Z = I;
 *>          if ITYPE = 3, Z**T*inv(B)*Z = I.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If an eigenvector fails to converge, then that column of Z
 *>          contains the latest approximation to the eigenvector, and the
 *>          index of the eigenvector is returned in IFAIL.
@@ -239,8 +233,7 @@
 *>          The length of the array WORK.  LWORK >= max(1,8*N).
 *>          For optimal efficiency, LWORK >= (NB+3)*N,
 *>          where NB is the blocksize for SSYTRD returned by ILAENV.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

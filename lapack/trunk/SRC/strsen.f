@@ -137,8 +137,7 @@
 *> \param[out] WI
 *> \verbatim
 *>          WI is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          The real and imaginary parts, respectively, of the reordered
 *>          eigenvalues of T. The eigenvalues are stored in the same
 *>          order as on the diagonal of T, with WR(i) = T(i,i) and, if
@@ -187,8 +186,7 @@
 *>          If JOB = 'N', LWORK >= max(1,N);
 *>          if JOB = 'E', LWORK >= max(1,M*(N-M));
 *>          if JOB = 'V' or 'B', LWORK >= max(1,2*M*(N-M)).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -207,8 +205,7 @@
 *>          The dimension of the array IWORK.
 *>          If JOB = 'N' or 'E', LIWORK >= 1;
 *>          if JOB = 'V' or 'B', LIWORK >= max(1,M*(N-M)).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal size of the IWORK array,
 *>          returns this value as the first entry of the IWORK array, and

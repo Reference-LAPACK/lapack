@@ -92,8 +92,7 @@
 *>          The dimension of the array WORK.  LWORK >= max(1,N).
 *>          For optimum performance LWORK >= N*NB, where NB is
 *>          the optimal blocksize.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

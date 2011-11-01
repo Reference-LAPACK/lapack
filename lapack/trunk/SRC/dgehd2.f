@@ -55,8 +55,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          It is assumed that A is already upper triangular in rows
 *>          and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
 *>          set by a previous call to DGEBAL; otherwise they should be

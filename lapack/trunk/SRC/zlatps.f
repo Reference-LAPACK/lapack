@@ -125,15 +125,13 @@
 *> \param[in,out] CNORM
 *> \verbatim
 *>          CNORM is or output) DOUBLE PRECISION array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          If NORMIN = 'Y', CNORM is an input argument and CNORM(j)
 *>          contains the norm of the off-diagonal part of the j-th column
 *>          of A.  If TRANS = 'N', CNORM(j) must be greater than or equal
 *>          to the infinity-norm, and if TRANS = 'T' or 'C', CNORM(j)
 *>          must be greater than or equal to the 1-norm.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If NORMIN = 'N', CNORM is an output argument and CNORM(j)
 *>          returns the 1-norm of the offdiagonal part of the j-th column
 *>          of A.

@@ -180,8 +180,7 @@
 *>          The real non-negative scalars beta that define the
 *>          eigenvalues of GNEP.  BETA(i) = P(i,i) in the generalized
 *>          Schur factorization.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Together, the quantities alpha = ALPHA(j) and beta = BETA(j)
 *>          represent the j-th eigenvalue of the matrix pair (A,B), in
 *>          one of the forms lambda = alpha/beta or mu = beta/alpha.
@@ -235,8 +234,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.  LWORK >= max(1,N).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

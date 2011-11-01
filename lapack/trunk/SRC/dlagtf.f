@@ -67,8 +67,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (N)
 *>          On entry, A must contain the diagonal elements of T.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, A is overwritten by the n diagonal elements of the
 *>          upper triangular matrix U of the factorization of T.
 *> \endverbatim
@@ -84,8 +83,7 @@
 *>          B is DOUBLE PRECISION array, dimension (N-1)
 *>          On entry, B must contain the (n-1) super-diagonal elements of
 *>          T.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, B is overwritten by the (n-1) super-diagonal
 *>          elements of the matrix U of the factorization of T.
 *> \endverbatim
@@ -95,8 +93,7 @@
 *>          C is DOUBLE PRECISION array, dimension (N-1)
 *>          On entry, C must contain the (n-1) sub-diagonal elements of
 *>          T.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, C is overwritten by the (n-1) sub-diagonal elements
 *>          of the matrix L of the factorization of T.
 *> \endverbatim
@@ -128,11 +125,9 @@
 *>          an interchange occurred at the kth step of the elimination,
 *>          then IN(k) = 1, otherwise IN(k) = 0. The element IN(n)
 *>          returns the smallest positive integer j such that
-*> \endverbatim
-*> \verbatim
+*>
 *>             abs( u(j,j) ).le. norm( (T - lambda*I)(j) )*TOL,
-*> \endverbatim
-*> \verbatim
+*>
 *>          where norm( A(j) ) denotes the sum of the absolute values of
 *>          the jth row of the matrix A. If no such j exists then IN(n)
 *>          is returned as zero. If IN(n) is returned as positive, then a

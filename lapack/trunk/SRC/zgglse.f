@@ -141,8 +141,7 @@
 *>          For optimum performance LWORK >= P+min(M,N)+max(M,N)*NB,
 *>          where NB is an upper bound for the optimal blocksizes for
 *>          ZGEQRF, CGERQF, ZUNMQR and CUNMRQ.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

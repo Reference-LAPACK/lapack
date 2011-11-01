@@ -156,8 +156,7 @@
 *>          The dimension of the array WORK.  LWORK >= max(1,3*N), and
 *>          if JOBVL = 'V' or JOBVR = 'V', LWORK >= 4*N.  For good
 *>          performance, LWORK must generally be larger.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

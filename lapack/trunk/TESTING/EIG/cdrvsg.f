@@ -172,15 +172,13 @@
 *>          The number of sizes of matrices to use.  If it is zero,
 *>          CDRVSG does nothing.  It must be at least zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NN      INTEGER array, dimension (NSIZES)
 *>          An array containing the sizes to be used for the matrices.
 *>          Zero values will be skipped.  The values must be at least
 *>          zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NTYPES  INTEGER
 *>          The number of elements in DOTYPE.   If it is zero, CDRVSG
 *>          does nothing.  It must be at least zero.  If it is MAXTYP+1
@@ -189,8 +187,7 @@
 *>          is only useful if DOTYPE(1:MAXTYP) is .FALSE. and
 *>          DOTYPE(MAXTYP+1) is .TRUE. .
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  DOTYPE  LOGICAL array, dimension (NTYPES)
 *>          If DOTYPE(j) is .TRUE., then for each size in NN a
 *>          matrix of that size and of type j will be generated.
@@ -200,8 +197,7 @@
 *>          than MAXTYP, DOTYPE(MAXTYP+1) through DOTYPE(NTYPES)
 *>          will be ignored.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  ISEED   INTEGER array, dimension (4)
 *>          On entry ISEED specifies the seed of the random number
 *>          generator. The array elements should be between 0 and 4095;
@@ -213,8 +209,7 @@
 *>          next call to CDRVSG to continue the same random number
 *>          sequence.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH  REAL
 *>          A test will count as "failed" if the "error", computed as
 *>          described above, exceeds THRESH.  Note that the error
@@ -223,118 +218,98 @@
 *>          it should not depend on the precision (single vs. double)
 *>          or the size of the matrix.  It must be at least zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NOUNIT  INTEGER
 *>          The FORTRAN unit number for printing out error messages
 *>          (e.g., if a routine returns IINFO not equal to 0.)
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  A       COMPLEX array, dimension (LDA , max(NN))
 *>          Used to hold the matrix whose eigenvalues are to be
 *>          computed.  On exit, A contains the last matrix actually
 *>          used.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDA     INTEGER
 *>          The leading dimension of A.  It must be at
 *>          least 1 and at least max( NN ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  B       COMPLEX array, dimension (LDB , max(NN))
 *>          Used to hold the Hermitian positive definite matrix for
 *>          the generailzed problem.
 *>          On exit, B contains the last matrix actually
 *>          used.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDB     INTEGER
 *>          The leading dimension of B.  It must be at
 *>          least 1 and at least max( NN ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D       REAL array, dimension (max(NN))
 *>          The eigenvalues of A. On exit, the eigenvalues in D
 *>          correspond with the matrix in A.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Z       COMPLEX array, dimension (LDZ, max(NN))
 *>          The matrix of eigenvectors.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDZ     INTEGER
 *>          The leading dimension of ZZ.  It must be at least 1 and
 *>          at least max( NN ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  AB      COMPLEX array, dimension (LDA, max(NN))
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  BB      COMPLEX array, dimension (LDB, max(NN))
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  AP      COMPLEX array, dimension (max(NN)**2)
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  BP      COMPLEX array, dimension (max(NN)**2)
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WORK    COMPLEX array, dimension (NWORK)
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  NWORK   INTEGER
 *>          The number of entries in WORK.  This must be at least
 *>          2*N + N**2  where  N = max( NN(j), 2 ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RWORK   REAL array, dimension (LRWORK)
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LRWORK  INTEGER
 *>          The number of entries in RWORK.  This must be at least
 *>          max( 7*N, 1 + 4*N + 2*N*lg(N) + 3*N**2 ) where
 *>          N = max( NN(j) ) and lg( N ) = smallest integer k such
 *>          that 2**k >= N .
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  IWORK   INTEGER array, dimension (LIWORK))
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LIWORK  INTEGER
 *>          The number of entries in IWORK.  This must be at least
 *>          2 + 5*max( NN(j) ).
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RESULT  REAL array, dimension (70)
 *>          The values computed by the 70 tests described above.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  INFO    INTEGER
 *>          If 0, then everything ran OK.
 *>           -1: NSIZES < 0
@@ -350,11 +325,9 @@
 *>              CHPGVD, CHEGVX, CHPGVX, CHBGVX returns an error code,
 *>              the absolute value of it is returned.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>-----------------------------------------------------------------------
-*> \endverbatim
-*> \verbatim
+*>
 *>       Some Local Variables and Parameters:
 *>       ---- ----- --------- --- ----------
 *>       ZERO, ONE       Real 0 and 1.
@@ -368,8 +341,7 @@
 *>                       so far (computed by SLAFTS).
 *>       COND, IMODE     Values to be passed to the matrix generators.
 *>       ANORM           Norm of A; passed to matrix generators.
-*> \endverbatim
-*> \verbatim
+*>
 *>       OVFL, UNFL      Overflow and underflow thresholds.
 *>       ULP, ULPINV     Finest relative precision and its inverse.
 *>       RTOVFL, RTUNFL  Square roots of the previous 2 values.

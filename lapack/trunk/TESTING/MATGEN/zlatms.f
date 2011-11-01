@@ -245,15 +245,13 @@
 *>                      (pivoting can be provided for by using this
 *>                      option to store A in the trailing rows of
 *>                      the allocated storage)
-*> \endverbatim
-*> \verbatim
+*>
 *>           Using these options, the various LAPACK packed and banded
 *>           storage schemes can be obtained:
 *>           GB                    - use 'Z'
 *>           PB, SB, HB, or TB     - use 'B' or 'Q'
 *>           PP, SP, HB, or TP     - use 'C' or 'R'
-*> \endverbatim
-*> \verbatim
+*>
 *>           If two calls to ZLATMS differ only in the PACK parameter,
 *>           they will generate mathematically equivalent matrices.
 *>           Not modified.

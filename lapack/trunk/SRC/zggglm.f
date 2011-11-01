@@ -130,8 +130,7 @@
 *> \param[out] Y
 *> \verbatim
 *>          Y is COMPLEX*16 array, dimension (P)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, X and Y are the solutions of the GLM problem.
 *> \endverbatim
 *>
@@ -148,8 +147,7 @@
 *>          For optimum performance, LWORK >= M+min(N,P)+max(N,P)*NB,
 *>          where NB is an upper bound for the optimal blocksizes for
 *>          ZGEQRF, ZGERQF, ZUNMQR and ZUNMRQ.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

@@ -38,8 +38,7 @@
 *> \param[in] BETA
 *> \verbatim
 *>          BETA is COMPLEX
-*> \endverbatim
-*> \verbatim
+*>
 *>          parameters to decide whether the pair (ALPHA, BETA) is
 *>          selected.
 *> \endverbatim

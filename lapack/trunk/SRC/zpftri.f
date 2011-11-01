@@ -76,8 +76,7 @@
 *>          of lower packed A. The LDA of RFP A is (N+1)/2 when TRANSR =
 *>          'C'. When TRANSR is 'N' the LDA is N+1 when N is even and N
 *>          is odd. See the Note below for more details.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the Hermitian inverse of the original matrix, in the
 *>          same storage format.
 *> \endverbatim

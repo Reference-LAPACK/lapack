@@ -83,8 +83,7 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>           It is assumed that H is already upper triangular in rows
 *>           and columns 1:ILO-1 and IHI+1:N. ILO and IHI are normally
 *>           set by a previous call to SGEBAL, and then passed to ZGEHRD
@@ -107,8 +106,7 @@
 *>           contents of H are unspecified on exit.  (The output value of
 *>           H when INFO.GT.0 is given under the description of INFO
 *>           below.)
-*> \endverbatim
-*> \verbatim
+*>
 *>           Unlike earlier versions of SHSEQR, this subroutine may
 *>           explicitly H(i,j) = 0 for i.GT.j and j = 1, 2, ... ILO-1
 *>           or j = IHI+1, IHI+2, ... N.
@@ -128,8 +126,7 @@
 *> \param[out] WI
 *> \verbatim
 *>          WI is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>           The real and imaginary parts, respectively, of the computed
 *>           eigenvalues. If two eigenvalues are computed as a complex
 *>           conjugate pair, they are stored in consecutive elements of
@@ -180,8 +177,7 @@
 *>           may be required for optimal performance.  A workspace
 *>           query is recommended to determine the optimal workspace
 *>           size.
-*> \endverbatim
-*> \verbatim
+*>
 *>           If LWORK = -1, then SHSEQR does a workspace query.
 *>           In this case, SHSEQR checks the input parameters and
 *>           estimates the optimal workspace size for the given

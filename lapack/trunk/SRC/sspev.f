@@ -70,8 +70,7 @@
 *>          is stored in the array AP as follows:
 *>          if UPLO = 'U', AP(i + (j-1)*j/2) = A(i,j) for 1<=i<=j;
 *>          if UPLO = 'L', AP(i + (j-1)*(2*n-j)/2) = A(i,j) for j<=i<=n.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, AP is overwritten by values generated during the
 *>          reduction to tridiagonal form.  If UPLO = 'U', the diagonal
 *>          and first superdiagonal of the tridiagonal matrix T overwrite

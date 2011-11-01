@@ -104,8 +104,7 @@
 *> \param[in,out] ILST
 *> \verbatim
 *>          ILST is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          Specify the reordering of the diagonal blocks of T.
 *>          The block with row index IFST is moved to row ILST, by a
 *>          sequence of transpositions between adjacent blocks.

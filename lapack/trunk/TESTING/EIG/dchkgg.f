@@ -423,8 +423,7 @@
 *> \param[out] BETA1
 *> \verbatim
 *>          BETA1 is DOUBLE PRECISION array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized eigenvalues of (A,B) computed by DHGEQZ
 *>          when Q, Z, and the full Schur matrices are computed.
 *>          On exit, ( ALPHR1(k)+ALPHI1(k)*i ) / BETA1(k) is the k-th

@@ -131,24 +131,20 @@
 *>          An approximate eigenvalue is accepted as converged
 *>          when it is determined to lie in an interval [a,b]
 *>          of width less than or equal to
-*> \endverbatim
-*> \verbatim
+*>
 *>                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*> \endverbatim
-*> \verbatim
+*>
 *>          where EPS is the machine precision.  If ABSTOL is less than
 *>          or equal to zero, then  EPS*|T|  will be used in its place,
 *>          where |T| is the 1-norm of the tridiagonal matrix obtained
 *>          by reducing A to tridiagonal form.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
 *>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some
 *>          eigenvectors did not converge, try setting ABSTOL to
 *>          2*SLAMCH('S').
-*> \endverbatim
-*> \verbatim
+*>
 *>          See "Computing Small Singular Values of Bidiagonal Matrices
 *>          with Guaranteed High Relative Accuracy," by Demmel and
 *>          Kahan, LAPACK Working Note #3.
@@ -205,8 +201,7 @@
 *>          For optimal efficiency, LWORK >= (NB+1)*N,
 *>          where NB is the max of the blocksize for CHETRD and for
 *>          CUNMTR as returned by ILAENV.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error

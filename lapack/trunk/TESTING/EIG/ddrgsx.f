@@ -283,8 +283,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is DOUBLE PRECISION array, dimension (NSIZE)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, (ALPHAR + ALPHAI*i)/BETA are the eigenvalues.
 *> \endverbatim
 *>

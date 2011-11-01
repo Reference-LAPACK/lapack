@@ -151,14 +151,12 @@
 *>          The j-th column of A is stored in the j-th column of the
 *>          array AB as follows:
 *>          AB(KU+1+i-j,j) = A(i,j) for max(1,j-KU)<=i<=min(N,j+kl)
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'F' and EQUED is not 'N', then A must have been
 *>          equilibrated by the scaling factors in R and/or C.  AB is not
 *>          modified if FACT = 'F' or 'N', or if FACT = 'E' and
 *>          EQUED = 'N' on exit.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if EQUED .ne. 'N', A is scaled as follows:
 *>          EQUED = 'R':  A := diag(R) * A
 *>          EQUED = 'C':  A := A * diag(C)
@@ -181,12 +179,10 @@
 *>          and the multipliers used during the factorization are stored
 *>          in rows KL+KU+2 to 2*KL+KU+1.  If EQUED .ne. 'N', then AFB is
 *>          the factored form of the equilibrated matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then AFB is an output argument and on exit
 *>          returns details of the LU factorization of A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'E', then AFB is an output argument and on exit
 *>          returns details of the LU factorization of the equilibrated
 *>          matrix A (see the description of AB for the form of the
@@ -206,13 +202,11 @@
 *>          contains the pivot indices from the factorization A = L*U
 *>          as computed by CGBTRF; row i of the matrix was interchanged
 *>          with row IPIV(i).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'N', then IPIV is an output argument and on exit
 *>          contains the pivot indices from the factorization A = L*U
 *>          of the original matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If FACT = 'E', then IPIV is an output argument and on exit
 *>          contains the pivot indices from the factorization A = L*U
 *>          of the equilibrated matrix A.

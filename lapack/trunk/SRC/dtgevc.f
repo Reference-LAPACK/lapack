@@ -146,13 +146,11 @@
 *>          if HOWMNY = 'S', the left eigenvectors of (S,P) specified by
 *>                      SELECT, stored consecutively in the columns of
 *>                      VL, in the same order as their eigenvalues.
-*> \endverbatim
-*> \verbatim
+*>
 *>          A complex eigenvector corresponding to a complex eigenvalue
 *>          is stored in two consecutive columns, the first holding the
 *>          real part, and the second the imaginary part.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Not referenced if SIDE = 'R'.
 *> \endverbatim
 *>
@@ -169,8 +167,7 @@
 *>          On entry, if SIDE = 'R' or 'B' and HOWMNY = 'B', VR must
 *>          contain an N-by-N matrix Z (usually the orthogonal matrix Z
 *>          of right Schur vectors returned by DHGEQZ).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if SIDE = 'R' or 'B', VR contains:
 *>          if HOWMNY = 'A', the matrix X of right eigenvectors of (S,P);
 *>          if HOWMNY = 'B' or 'b', the matrix Z*X;
@@ -178,8 +175,7 @@
 *>                      specified by SELECT, stored consecutively in the
 *>                      columns of VR, in the same order as their
 *>                      eigenvalues.
-*> \endverbatim
-*> \verbatim
+*>
 *>          A complex eigenvector corresponding to a complex eigenvalue
 *>          is stored in two consecutive columns, the first holding the
 *>          real part and the second the imaginary part.

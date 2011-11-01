@@ -161,8 +161,7 @@
 *> \param[in,out] TAU
 *> \verbatim
 *>          TAU is REAL
-*> \endverbatim
-*> \verbatim
+*>
 *>         These are passed as arguments in order to save their values
 *>         between calls to SLASQ3.
 *> \endverbatim

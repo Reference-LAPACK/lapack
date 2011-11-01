@@ -140,8 +140,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized singular value pairs of A and B, the
 *>          ``diagonal'' matrices D1 and D2 are constructed from
 *>          ALPHA and BETA, see subroutine CGGSVD for details.

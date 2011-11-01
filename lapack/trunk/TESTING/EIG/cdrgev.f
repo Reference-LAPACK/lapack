@@ -328,8 +328,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is COMPLEX array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized eigenvalues of (A,B) computed by CGGEV.
 *>          ( ALPHAR(k)+ALPHAI(k)*i ) / BETA(k) is the k-th
 *>          generalized eigenvalue of A and B.
@@ -343,8 +342,7 @@
 *> \param[out] BETA1
 *> \verbatim
 *>          BETA1 is COMPLEX array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          Like ALPHAR, ALPHAI, BETA, these arrays contain the
 *>          eigenvalues of A and B, but those computed when CGGEV only
 *>          computes a partial eigendecomposition, i.e. not the

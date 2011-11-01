@@ -321,8 +321,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is COMPLEX array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized eigenvalues of (A,B) computed by CGGES.
 *>          ALPHA(k) / BETA(k) is the k-th generalized eigenvalue of A
 *>          and B.

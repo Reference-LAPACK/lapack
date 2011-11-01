@@ -82,8 +82,7 @@
 *>          of lower packed A. The LDA of RFP A is (N+1)/2 when TRANSR =
 *>          'T'. When TRANSR is 'N' the LDA is N+1 when N is even and N
 *>          is odd. See the Note below for more details.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the factor U or L from the Cholesky
 *>          factorization RFP A = U**T*U or RFP A = L*L**T.
 *> \endverbatim

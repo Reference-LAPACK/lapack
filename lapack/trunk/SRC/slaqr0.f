@@ -102,8 +102,7 @@
 *>           .FALSE., then the contents of H are unspecified on exit.
 *>           (The output value of H when INFO.GT.0 is given under the
 *>           description of INFO below.)
-*> \endverbatim
-*> \verbatim
+*>
 *>           This subroutine may explicitly set H(i,j) = 0 for i.GT.j and
 *>           j = 1, 2, ... ILO-1 or j = IHI+1, IHI+2, ... N.
 *> \endverbatim
@@ -180,8 +179,7 @@
 *>           is sufficient, but LWORK typically as large as 6*N may
 *>           be required for optimal performance.  A workspace query
 *>           to determine the optimal workspace size is recommended.
-*> \endverbatim
-*> \verbatim
+*>
 *>           If LWORK = -1, then SLAQR0 does a workspace query.
 *>           In this case, SLAQR0 checks the input parameters and
 *>           estimates the optimal workspace size for the given

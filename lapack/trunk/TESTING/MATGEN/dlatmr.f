@@ -276,8 +276,7 @@
 *>                  nonsymmetric).
 *>           'B' or 'F' => both or full pivoting, i.e., on both sides.
 *>                         In this case, M must equal N
-*> \endverbatim
-*> \verbatim
+*>
 *>           If two calls to DLATMR both have full bandwidth (KL = M-1
 *>           and KU = N-1), and differ only in the PIVTNG and PACK
 *>           parameters, then the matrices generated will differ only
@@ -369,15 +368,13 @@
 *>                      (pivoting can be provided for by using this
 *>                      option to store A in the trailing rows of
 *>                      the allocated storage)
-*> \endverbatim
-*> \verbatim
+*>
 *>           Using these options, the various LAPACK packed and banded
 *>           storage schemes can be obtained:
 *>           GB               - use 'Z'
 *>           PB, SB or TB     - use 'B' or 'Q'
 *>           PP, SP or TP     - use 'C' or 'R'
-*> \endverbatim
-*> \verbatim
+*>
 *>           If two calls to DLATMR differ only in the PACK parameter,
 *>           they will generate mathematically equivalent matrices.
 *>           Not modified.

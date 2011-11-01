@@ -138,8 +138,7 @@
 *>                 values in SVA(1:N)) and V is still a decomposition of the
 *>                 input matrix A in the sense that the residual
 *>                 ||A-SCALE*U*SIGMA*V^T||_2 / ||A||_2 is small.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If JOBU .EQ. 'N' :
 *>                 If INFO .EQ. 0 :
 *>                 Note that the left singular vectors are 'for free' in the

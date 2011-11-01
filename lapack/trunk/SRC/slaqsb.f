@@ -74,8 +74,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO = 0, the triangular factor U or L from the
 *>          Cholesky factorization A = U**T*U or A = L*L**T of the band
 *>          matrix A, in the same storage format as A.
@@ -112,17 +111,14 @@
 *>          = 'N':  No equilibration.
 *>          = 'Y':  Equilibration was done, i.e., A has been replaced by
 *>                  diag(S) * A * diag(S).
-*> \endverbatim
-*> \verbatim
+*>
 *>  Internal Parameters
 *>  ===================
-*> \endverbatim
-*> \verbatim
+*>
 *>  THRESH is a threshold value used to decide if scaling should be done
 *>  based on the ratio of the scaling factors.  If SCOND < THRESH,
 *>  scaling is done.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LARGE and SMALL are threshold values used to decide if scaling should
 *>  be done based on the absolute size of the largest matrix element.
 *>  If AMAX > LARGE or AMAX < SMALL, scaling is done.

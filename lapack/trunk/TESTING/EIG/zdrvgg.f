@@ -333,8 +333,7 @@
 *> \param[out] BETA1
 *> \verbatim
 *>          BETA1 is COMPLEX*16 array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized eigenvalues of (A,B) computed by ZGEGS.
 *>          ALPHA1(k) / BETA1(k)  is the k-th generalized eigenvalue of
 *>          the matrices in A and B.
@@ -348,8 +347,7 @@
 *> \param[out] BETA2
 *> \verbatim
 *>          BETA2 is COMPLEX*16 array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          The generalized eigenvalues of (A,B) computed by ZGEGV.
 *>          ALPHA2(k) / BETA2(k)  is the k-th generalized eigenvalue of
 *>          the matrices in A and B.

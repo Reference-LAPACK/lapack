@@ -82,13 +82,11 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On exit, the leading m-by-n submatrix of A is set as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>          if UPLO = 'U', A(i,j) = ALPHA, 1<=i<=j-1, 1<=j<=n,
 *>          if UPLO = 'L', A(i,j) = ALPHA, j+1<=i<=m, 1<=j<=n,
 *>          otherwise,     A(i,j) = ALPHA, 1<=i<=m, 1<=j<=n, i.ne.j,
-*> \endverbatim
-*> \verbatim
+*>
 *>          and, for all UPLO, A(i,i) = BETA, 1<=i<=min(m,n).
 *> \endverbatim
 *>

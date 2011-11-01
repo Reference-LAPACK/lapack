@@ -96,8 +96,7 @@
 *> \param[in] ILST
 *> \verbatim
 *>          ILST is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          Specify the reordering of the diagonal elements of T:
 *>          The element with row index IFST is moved to row ILST by a
 *>          sequence of transpositions between adjacent elements.

@@ -79,8 +79,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, AB is overwritten by values generated during the
 *>          reduction to tridiagonal form.  If UPLO = 'U', the first
 *>          superdiagonal and the diagonal of the tridiagonal matrix T

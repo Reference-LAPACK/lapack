@@ -245,8 +245,7 @@
 *>          The dimension of the work array WORK.  LWORK = 2*NW
 *>          suffices, but greater efficiency may result from larger
 *>          values of LWORK.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; SLAQR3
 *>          only estimates the optimal workspace size for the given
 *>          values of N, NW, KTOP and KBOT.  The estimate is returned

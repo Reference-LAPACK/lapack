@@ -188,8 +188,7 @@
 *> \param[out] BETA
 *> \verbatim
 *>          BETA is REAL array, dimension (NSIZE)
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, (ALPHAR + ALPHAI*i)/BETA are the eigenvalues.
 *> \endverbatim
 *>

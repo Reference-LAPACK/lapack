@@ -68,14 +68,11 @@
 *>          SIDE is CHARACTER*1
 *>           On entry, SIDE specifies whether op( A ) appears on the left
 *>           or right of X as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              SIDE = 'L' or 'l'   op( A )*X = alpha*B.
-*> \endverbatim
-*> \verbatim
+*>
 *>              SIDE = 'R' or 'r'   X*op( A ) = alpha*B.
-*> \endverbatim
-*> \verbatim
+*>
 *>           Unchanged on exit.
 *> \endverbatim
 *>
@@ -86,8 +83,7 @@
 *>           an upper or lower triangular matrix as follows:
 *>           UPLO = 'U' or 'u' RFP A came from an upper triangular matrix
 *>           UPLO = 'L' or 'l' RFP A came from a  lower triangular matrix
-*> \endverbatim
-*> \verbatim
+*>
 *>           Unchanged on exit.
 *> \endverbatim
 *>
@@ -96,14 +92,11 @@
 *>          TRANS is CHARACTER*1
 *>           On entry, TRANS  specifies the form of op( A ) to be used
 *>           in the matrix multiplication as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS  = 'N' or 'n'   op( A ) = A.
-*> \endverbatim
-*> \verbatim
+*>
 *>              TRANS  = 'C' or 'c'   op( A ) = conjg( A' ).
-*> \endverbatim
-*> \verbatim
+*>
 *>           Unchanged on exit.
 *> \endverbatim
 *>
@@ -112,15 +105,12 @@
 *>          DIAG is CHARACTER*1
 *>           On entry, DIAG specifies whether or not RFP A is unit
 *>           triangular as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              DIAG = 'U' or 'u'   A is assumed to be unit triangular.
-*> \endverbatim
-*> \verbatim
+*>
 *>              DIAG = 'N' or 'n'   A is not assumed to be unit
 *>                                  triangular.
-*> \endverbatim
-*> \verbatim
+*>
 *>           Unchanged on exit.
 *> \endverbatim
 *>

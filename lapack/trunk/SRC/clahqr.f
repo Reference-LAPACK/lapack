@@ -147,22 +147,19 @@
 *>                  per eigenvalue; elements i+1:ihi of W contain
 *>                  those eigenvalues which have been successfully
 *>                  computed.
-*> \endverbatim
-*> \verbatim
+*>
 *>                  If INFO .GT. 0 and WANTT is .FALSE., then on exit,
 *>                  the remaining unconverged eigenvalues are the
 *>                  eigenvalues of the upper Hessenberg matrix
 *>                  rows and columns ILO thorugh INFO of the final,
 *>                  output value of H.
-*> \endverbatim
-*> \verbatim
+*>
 *>                  If INFO .GT. 0 and WANTT is .TRUE., then on exit
 *>          (*)       (initial value of H)*U  = U*(final value of H)
 *>                  where U is an orthognal matrix.    The final
 *>                  value of H is upper Hessenberg and triangular in
 *>                  rows and columns INFO+1 through IHI.
-*> \endverbatim
-*> \verbatim
+*>
 *>                  If INFO .GT. 0 and WANTZ is .TRUE., then on exit
 *>                      (final value of Z)  = (initial value of Z)*U
 *>                  where U is the orthogonal matrix in (*)

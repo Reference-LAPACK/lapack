@@ -357,8 +357,7 @@
 *> \param[out] BETA1
 *> \verbatim
 *>          BETA1 is REAL array, dimension (max(NN))
-*> \endverbatim
-*> \verbatim
+*>
 *>          Like ALPHAR, ALPHAI, BETA, these arrays contain the
 *>          eigenvalues of A and B, but those computed when SGGEV only
 *>          computes a partial eigendecomposition, i.e. not the

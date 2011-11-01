@@ -252,8 +252,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the work array, and no error
@@ -275,8 +274,7 @@
 *> \verbatim
 *>          LRWORK is INTEGER
 *>          The dimension of the array RWORK.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LRWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the RWORK array, returns
 *>          this value as the first entry of the work array, and no error
@@ -295,12 +293,10 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  ZBBCSD did not converge. See the description of RWORK
 *>                above for details.
-*> \endverbatim
-*> \verbatim
+*>
 *>  Reference
 *>  =========
-*> \endverbatim
-*> \verbatim
+*>
 *>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
 *>      Algorithms, 50(1):33-65, 2009.
 *> \endverbatim

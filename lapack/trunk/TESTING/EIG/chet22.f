@@ -54,104 +54,88 @@
 *>          Specifies the type of tests to be performed.
 *>          1: U expressed as a dense orthogonal matrix:
 *>             RESULT(1) = | A - U S U' | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU' | / ( n ulp )
-*> \endverbatim
-*> \verbatim
+*>
 *>  UPLO    CHARACTER
 *>          If UPLO='U', the upper triangle of A will be used and the
 *>          (strictly) lower triangle will not be referenced.  If
 *>          UPLO='L', the lower triangle of A will be used and the
 *>          (strictly) upper triangle will not be referenced.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  N       INTEGER
 *>          The size of the matrix.  If it is zero, CHET22 does nothing.
 *>          It must be at least zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  M       INTEGER
 *>          The number of columns of U.  If it is zero, CHET22 does
 *>          nothing.  It must be at least zero.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  KBAND   INTEGER
 *>          The bandwidth of the matrix.  It may only be zero or one.
 *>          If zero, then S is diagonal, and E is not referenced.  If
 *>          one, then S is symmetric tri-diagonal.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  A       COMPLEX array, dimension (LDA , N)
 *>          The original (unfactored) matrix.  It is assumed to be
 *>          symmetric, and only the upper (UPLO='U') or only the lower
 *>          (UPLO='L') will be referenced.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDA     INTEGER
 *>          The leading dimension of A.  It must be at least 1
 *>          and at least N.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  D       REAL array, dimension (N)
 *>          The diagonal of the (symmetric tri-) diagonal matrix.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  E       REAL array, dimension (N)
 *>          The off-diagonal of the (symmetric tri-) diagonal matrix.
 *>          E(1) is ignored, E(2) is the (1,2) and (2,1) element, etc.
 *>          Not referenced if KBAND=0.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  U       COMPLEX array, dimension (LDU, N)
 *>          If ITYPE=1, this contains the orthogonal matrix in
 *>          the decomposition, expressed as a dense matrix.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDU     INTEGER
 *>          The leading dimension of U.  LDU must be at least N and
 *>          at least 1.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  V       COMPLEX array, dimension (LDV, N)
 *>          If ITYPE=2 or 3, the lower triangle of this array contains
 *>          the Householder vectors used to describe the orthogonal
 *>          matrix in the decomposition.  If ITYPE=1, then it is not
 *>          referenced.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  LDV     INTEGER
 *>          The leading dimension of V.  LDV must be at least N and
 *>          at least 1.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  TAU     COMPLEX array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
 *>          v(j) v(j)' in the Householder transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *>          Not modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  WORK    COMPLEX array, dimension (2*N**2)
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RWORK   REAL array, dimension (N)
 *>          Workspace.
 *>          Modified.
-*> \endverbatim
-*> \verbatim
+*>
 *>  RESULT  REAL array, dimension (2)
 *>          The values computed by the two tests described above.  The
 *>          values are currently limited to 1/ulp, to avoid overflow.

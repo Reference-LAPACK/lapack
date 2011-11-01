@@ -89,8 +89,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(kd+1+i-j,j) = A(i,j) for max(1,j-kd)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+kd).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, AB is overwritten by values generated during the
 *>          reduction to tridiagonal form.  If UPLO = 'U', the first
 *>          superdiagonal and the diagonal of the tridiagonal matrix T
@@ -140,8 +139,7 @@
 *>          If N <= 1,               LWORK must be at least 1.
 *>          If JOBZ = 'N' and N > 1, LWORK must be at least N.
 *>          If JOBZ = 'V' and N > 1, LWORK must be at least 2*N**2.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
@@ -164,8 +162,7 @@
 *>          If JOBZ = 'N' and N > 1, LRWORK must be at least N.
 *>          If JOBZ = 'V' and N > 1, LRWORK must be at least
 *>                        1 + 5*N + 2*N**2.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LRWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
@@ -185,8 +182,7 @@
 *>          The dimension of array IWORK.
 *>          If JOBZ = 'N' or N <= 1, LIWORK must be at least 1.
 *>          If JOBZ = 'V' and N > 1, LIWORK must be at least 3 + 5*N .
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries

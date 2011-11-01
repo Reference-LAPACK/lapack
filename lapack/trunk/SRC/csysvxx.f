@@ -168,8 +168,7 @@
 *>     N-by-N lower triangular part of A contains the lower
 *>     triangular part of the matrix A, and the strictly upper
 *>     triangular part of A is not referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>     On exit, if FACT = 'E' and EQUED = 'Y', A is overwritten by
 *>     diag(S)*A*diag(S).
 *> \endverbatim
@@ -187,8 +186,7 @@
 *>     contains the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
 *>     U*D*U**T or A = L*D*L**T as computed by SSYTRF.
-*> \endverbatim
-*> \verbatim
+*>
 *>     If FACT = 'N', then AF is an output argument and on exit
 *>     returns the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
@@ -214,8 +212,7 @@
 *>     diagonal block.  If UPLO = 'L' and IPIV(k) = IPIV(k+1) < 0,
 *>     then rows and columns k+1 and -IPIV(k) were interchanged
 *>     and D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
-*> \endverbatim
-*> \verbatim
+*>
 *>     If FACT = 'N', then IPIV is an output argument and on exit
 *>     contains details of the interchanges and the block
 *>     structure of D, as determined by SSYTRF.
@@ -326,37 +323,31 @@
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     normwise relative error, which is defined as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>     Normwise relative error in the ith solution vector:
 *>             max_j (abs(XTRUE(j,i) - X(j,i)))
 *>            ------------------------------
 *>                  max_j abs(X(j,i))
-*> \endverbatim
-*> \verbatim
+*>
 *>     The array is indexed by the type of error information as described
 *>     below. There currently are up to three pieces of information
 *>     returned.
-*> \endverbatim
-*> \verbatim
+*>
 *>     The first index in ERR_BNDS_NORM(i,:) corresponds to the ith
 *>     right-hand side.
-*> \endverbatim
-*> \verbatim
+*>
 *>     The second index in ERR_BNDS_NORM(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
 *>              sqrt(n) * slamch('Epsilon').
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
 *>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 3  Reciprocal condition number: Estimated normwise
 *>              reciprocal condition number.  Compared with the threshold
 *>              sqrt(n) * slamch('Epsilon') to determine if the error
@@ -365,8 +356,7 @@
 *>              appropriately scaled matrix Z.
 *>              Let Z = S*A, where S scales each row by a power of the
 *>              radix so all absolute row sums of Z are approximately 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>     See Lapack Working Note 165 for further details and extra
 *>     cautions.
 *> \endverbatim
@@ -377,14 +367,12 @@
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     componentwise relative error, which is defined as follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>     Componentwise relative error in the ith solution vector:
 *>                    abs(XTRUE(j,i) - X(j,i))
 *>             max_j ----------------------
 *>                         abs(X(j,i))
-*> \endverbatim
-*> \verbatim
+*>
 *>     The array is indexed by the right-hand side i (on which the
 *>     componentwise relative error depends), and the type of error
 *>     information as described below. There currently are up to three
@@ -392,26 +380,22 @@
 *>     componentwise accuracy is not requested (PARAMS(3) = 0.0), then
 *>     ERR_BNDS_COMP is not accessed.  If N_ERR_BNDS .LT. 3, then at most
 *>     the first (:,N_ERR_BNDS) entries are returned.
-*> \endverbatim
-*> \verbatim
+*>
 *>     The first index in ERR_BNDS_COMP(i,:) corresponds to the ith
 *>     right-hand side.
-*> \endverbatim
-*> \verbatim
+*>
 *>     The second index in ERR_BNDS_COMP(:,err) contains the following
 *>     three fields:
 *>     err = 1 "Trust/don't trust" boolean. Trust the answer if the
 *>              reciprocal condition number is less than the threshold
 *>              sqrt(n) * slamch('Epsilon').
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 2 "Guaranteed" error bound: The estimated forward error,
 *>              almost certainly within a factor of 10 of the true error
 *>              so long as the next entry is greater than the threshold
 *>              sqrt(n) * slamch('Epsilon'). This error bound should only
 *>              be trusted if the previous boolean is true.
-*> \endverbatim
-*> \verbatim
+*>
 *>     err = 3  Reciprocal condition number: Estimated componentwise
 *>              reciprocal condition number.  Compared with the threshold
 *>              sqrt(n) * slamch('Epsilon') to determine if the error
@@ -422,8 +406,7 @@
 *>              current right-hand side and S scales each row of
 *>              A*diag(x) by a power of the radix so all absolute row
 *>              sums of Z are approximately 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>     See Lapack Working Note 165 for further details and extra
 *>     cautions.
 *> \endverbatim
@@ -442,8 +425,7 @@
 *>     that entry will be filled with default value used for that
 *>     parameter.  Only positions up to NPARAMS are accessed; defaults
 *>     are used for higher-numbered parameters.
-*> \endverbatim
-*> \verbatim
+*>
 *>       PARAMS(LA_LINRX_ITREF_I = 1) : Whether to perform iterative
 *>            refinement or not.
 *>         Default: 1.0
@@ -454,8 +436,7 @@
 *>                    compilation environment does not support DOUBLE
 *>                    PRECISION.
 *>              (other values are reserved for future use)
-*> \endverbatim
-*> \verbatim
+*>
 *>       PARAMS(LA_LINRX_ITHRESH_I = 2) : Maximum number of residual
 *>            computations allowed for refinement.
 *>         Default: 10
@@ -465,8 +446,7 @@
 *>                     Gaussian elimination, the guarantees in
 *>                     err_bnds_norm and err_bnds_comp may no longer be
 *>                     trustworthy.
-*> \endverbatim
-*> \verbatim
+*>
 *>       PARAMS(LA_LINRX_CWISE_I = 3) : Flag determining if the code
 *>            will attempt to find a solution with small componentwise
 *>            relative error in the double-precision algorithm.  Positive

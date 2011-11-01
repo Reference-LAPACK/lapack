@@ -63,16 +63,13 @@
 *>           On entry, UPLO specifies whether the upper or lower
 *>           triangular part of the array A is to be referenced as
 *>           follows:
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = BLAS_UPPER   Only the upper triangular part of A
 *>                                  is to be referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>              UPLO = BLAS_LOWER   Only the lower triangular part of A
 *>                                  is to be referenced.
-*> \endverbatim
-*> \verbatim
+*>
 *>           Unchanged on exit.
 *> \endverbatim
 *>

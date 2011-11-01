@@ -119,8 +119,7 @@
 *>          Note that for COMPZ = 'V', then if N is less than or
 *>          equal to the minimum divide size, usually 25, then LWORK need
 *>          only be 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
@@ -148,8 +147,7 @@
 *>          Note that for COMPZ = 'I' or 'V', then if N is less than or
 *>          equal to the minimum divide size, usually 25, then LRWORK
 *>          need only be max(1,2*(N-1)).
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LRWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
@@ -175,8 +173,7 @@
 *>          Note that for COMPZ = 'I' or 'V', then if N is less than or
 *>          equal to the minimum divide size, usually 25, then LIWORK
 *>          need only be 1.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries

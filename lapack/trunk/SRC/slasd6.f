@@ -118,8 +118,7 @@
 *>          SQRE is INTEGER
 *>         = 0: the lower block is an NR-by-NR square matrix.
 *>         = 1: the lower block is an NR-by-(NR+1) rectangular matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>         The bidiagonal matrix has row dimension N = NL + NR + 1,
 *>         and column dimension M = N + SQRE.
 *> \endverbatim
@@ -239,12 +238,10 @@
 *>         On exit, DIFR(I, 1) is the distance between I-th updated
 *>         (undeflated) singular value and the I+1-th (undeflated) old
 *>         singular value.
-*> \endverbatim
-*> \verbatim
+*>
 *>         If ICOMPQ = 1, DIFR(1:K,2) is an array containing the
 *>         normalizing factors for the right singular vector matrix.
-*> \endverbatim
-*> \verbatim
+*>
 *>         See SLASD8 for details on DIFL and DIFR.
 *> \endverbatim
 *>

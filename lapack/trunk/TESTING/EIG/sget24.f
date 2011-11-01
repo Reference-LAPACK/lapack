@@ -205,8 +205,7 @@
 *> \param[out] WI
 *> \verbatim
 *>          WI is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          The real and imaginary parts of the eigenvalues of A.
 *>          On exit, WR + WI*i are the eigenvalues of the matrix in A.
 *> \endverbatim
@@ -219,8 +218,7 @@
 *> \param[out] WIT
 *> \verbatim
 *>          WIT is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
 *>          but those computed when SGEESX only computes a partial
 *>          eigendecomposition, i.e. not Schur vectors
@@ -234,8 +232,7 @@
 *> \param[out] WITMP
 *> \verbatim
 *>          WITMP is REAL array, dimension (N)
-*> \endverbatim
-*> \verbatim
+*>
 *>          Like WR, WI, these arrays contain the eigenvalues of A,
 *>          but sorted by increasing real part.
 *> \endverbatim

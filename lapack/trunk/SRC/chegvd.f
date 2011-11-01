@@ -92,8 +92,7 @@
 *>          upper triangular part of the matrix A.  If UPLO = 'L',
 *>          the leading N-by-N lower triangular part of A contains
 *>          the lower triangular part of the matrix A.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if JOBZ = 'V', then if INFO = 0, A contains the
 *>          matrix Z of eigenvectors.  The eigenvectors are normalized
 *>          as follows:
@@ -118,8 +117,7 @@
 *>          upper triangular part of the matrix B.  If UPLO = 'L',
 *>          the leading N-by-N lower triangular part of B contains
 *>          the lower triangular part of the matrix B.
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, if INFO <= N, the part of B containing the matrix is
 *>          overwritten by the triangular factor U or L from the Cholesky
 *>          factorization B = U**H*U or B = L*L**H.
@@ -150,8 +148,7 @@
 *>          If N <= 1,                LWORK >= 1.
 *>          If JOBZ  = 'N' and N > 1, LWORK >= N + 1.
 *>          If JOBZ  = 'V' and N > 1, LWORK >= 2*N + N**2.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal sizes of the WORK, RWORK and
 *>          IWORK arrays, returns these values as the first entries of
@@ -172,8 +169,7 @@
 *>          If N <= 1,                LRWORK >= 1.
 *>          If JOBZ  = 'N' and N > 1, LRWORK >= N.
 *>          If JOBZ  = 'V' and N > 1, LRWORK >= 1 + 5*N + 2*N**2.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LRWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries
@@ -194,8 +190,7 @@
 *>          If N <= 1,                LIWORK >= 1.
 *>          If JOBZ  = 'N' and N > 1, LIWORK >= 1.
 *>          If JOBZ  = 'V' and N > 1, LIWORK >= 3 + 5*N.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LIWORK = -1, then a workspace query is assumed; the
 *>          routine only calculates the optimal sizes of the WORK, RWORK
 *>          and IWORK arrays, returns these values as the first entries

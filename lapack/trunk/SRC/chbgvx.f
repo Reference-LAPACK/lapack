@@ -105,8 +105,7 @@
 *>          as follows:
 *>          if UPLO = 'U', AB(ka+1+i-j,j) = A(i,j) for max(1,j-ka)<=i<=j;
 *>          if UPLO = 'L', AB(1+i-j,j)    = A(i,j) for j<=i<=min(n,j+ka).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the contents of AB are destroyed.
 *> \endverbatim
 *>
@@ -125,8 +124,7 @@
 *>          as follows:
 *>          if UPLO = 'U', BB(kb+1+i-j,j) = B(i,j) for max(1,j-kb)<=i<=j;
 *>          if UPLO = 'L', BB(1+i-j,j)    = B(i,j) for j<=i<=min(n,j+kb).
-*> \endverbatim
-*> \verbatim
+*>
 *>          On exit, the factor S from the split Cholesky factorization
 *>          B = S**H*S, as returned by CPBSTF.
 *> \endverbatim
@@ -161,8 +159,7 @@
 *> \param[in] VU
 *> \verbatim
 *>          VU is REAL
-*> \endverbatim
-*> \verbatim
+*>
 *>          If RANGE='V', the lower and upper bounds of the interval to
 *>          be searched for eigenvalues. VL < VU.
 *>          Not referenced if RANGE = 'A' or 'I'.
@@ -176,8 +173,7 @@
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
-*> \endverbatim
-*> \verbatim
+*>
 *>          If RANGE='I', the indices (in ascending order) of the
 *>          smallest and largest eigenvalues to be returned.
 *>          1 <= IL <= IU <= N, if N > 0; IL = 1 and IU = 0 if N = 0.
@@ -191,17 +187,14 @@
 *>          An approximate eigenvalue is accepted as converged
 *>          when it is determined to lie in an interval [a,b]
 *>          of width less than or equal to
-*> \endverbatim
-*> \verbatim
+*>
 *>                  ABSTOL + EPS *   max( |a|,|b| ) ,
-*> \endverbatim
-*> \verbatim
+*>
 *>          where EPS is the machine precision.  If ABSTOL is less than
 *>          or equal to zero, then  EPS*|T|  will be used in its place,
 *>          where |T| is the 1-norm of the tridiagonal matrix obtained
 *>          by reducing AP to tridiagonal form.
-*> \endverbatim
-*> \verbatim
+*>
 *>          Eigenvalues will be computed most accurately when ABSTOL is
 *>          set to twice the underflow threshold 2*SLAMCH('S'), not zero.
 *>          If this routine returns with INFO>0, indicating that some

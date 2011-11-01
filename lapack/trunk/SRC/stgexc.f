@@ -169,8 +169,7 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>          LWORK >= 1 when N <= 1, otherwise LWORK >= 4*N + 16.
-*> \endverbatim
-*> \verbatim
+*>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
