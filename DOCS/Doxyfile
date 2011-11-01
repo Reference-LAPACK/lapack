@@ -193,8 +193,7 @@ TAB_SIZE               = 8
 # will result in a user-defined paragraph with heading "Side Effects:". 
 # You can put \n's in the value part of an alias to insert newlines.
 
-ALIASES                = "purpose=\details \b Purpose"
-#ALIASES                += "FurtherDetails=\details \b Further \b Details"
+ALIASES                =
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C 
 # sources only. Doxygen will then generate output that is more tailored for C. 
@@ -664,7 +663,21 @@ RECURSIVE              = YES
 EXCLUDE                = CMAKE \
                          DOCS \
                          .svn \
+                         BLAS/.svn \
+                         BLAS/SRC/.svn \
+                         BLAS/TESTING/.svn \
                          SRC/.svn \
+                         SRC/VARIANTS/.svn \
+                         SRC/VARIANTS/LIB/.svn \
+                         SRC/VARIANTS/cholesky/.svn \
+                         SRC/VARIANTS/cholesky/RL/.svn \
+                         SRC/VARIANTS/cholesky/TOP/.svn \
+                         SRC/VARIANTS/lu/.svn \
+                         SRC/VARIANTS/lu/CR/.svn \
+                         SRC/VARIANTS/lu/LL/.svn \
+                         SRC/VARIANTS/lu/REC/.svn \
+                         SRC/VARIANTS/qr/.svn \
+                         SRC/VARIANTS/qr/LL/.svn \
                          INSTALL/.svn \
                          TESTING/.svn \
                          TESTING/EIG/.svn \
@@ -1195,7 +1208,7 @@ SERVER_BASED_SEARCH    = NO
 # If the GENERATE_LATEX tag is set to YES (the default) Doxygen will 
 # generate Latex output.
 
-GENERATE_LATEX         = YES
+GENERATE_LATEX         = NO
 
 # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. 
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
@@ -1336,7 +1349,7 @@ RTF_EXTENSIONS_FILE    =
 # If the GENERATE_MAN tag is set to YES (the default) Doxygen will 
 # generate man pages
 
-GENERATE_MAN           = YES
+GENERATE_MAN           = NO
 
 # The MAN_OUTPUT tag is used to specify where the man pages will be put. 
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
