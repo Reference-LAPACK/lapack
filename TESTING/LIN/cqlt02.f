@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CQLT02( M, N, K, A, AF, Q, L, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,11 +20,11 @@
 *      $                   Q( LDA, * ), TAU( * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CQLT02 tests CUNGQL, which generates an m-by-n matrix Q with
 *> orthonornmal columns that is defined as the product of k elementary
@@ -35,11 +35,10 @@
 *> columns of A; it compares L(m-n+1:m,n-k+1:n) with
 *> Q(1:m,m-n+1:m)'*A(1:m,n-k+1:n), and checks that the columns of Q are
 *> orthonormal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -120,10 +119,9 @@
 *>          RESULT(1) = norm( L - Q'*A ) / ( M * norm(A) * EPS )
 *>          RESULT(2) = norm( I - Q'*Q ) / ( M * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

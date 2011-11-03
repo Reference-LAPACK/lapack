@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHST01( N, ILO, IHI, A, LDA, H, LDH, Q, LDQ, WORK,
 *                          LWORK, RWORK, RESULT )
@@ -20,11 +20,11 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHST01 tests the reduction of a general matrix A to upper Hessenberg
 *> form:  A = Q*H*Q'.  Two test ratios are computed;
@@ -37,11 +37,10 @@
 *>
 *> In this version, ILO and IHI are not used, but they could be used
 *> to save some work if this is desired.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -124,10 +123,9 @@
 *>          RESULT(1) = norm( A - Q*H*Q' ) / ( norm(A) * N * EPS )
 *>          RESULT(2) = norm( I - Q'*Q ) / ( N * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

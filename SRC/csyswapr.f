@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSYSWAPR( UPLO, N, A, LDA, I1, I2)
 * 
@@ -27,19 +27,18 @@
 *       .. Array Arguments ..
 *       COMPLEX          A( LDA, N )
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CSYSWAPR applies an elementary permutation on the rows and the columns of
 *> a symmetric matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -87,10 +86,9 @@
 *>          I2 is INTEGER
 *>          Index of the second row to swap
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

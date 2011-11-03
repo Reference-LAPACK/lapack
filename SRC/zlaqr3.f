@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,
 *                          IHIZ, Z, LDZ, NS, ND, SH, V, LDV, NH, T, LDT,
@@ -32,11 +32,11 @@
 *      $                   WORK( * ), WV( LDWV, * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    Aggressive early deflation:
 *>
@@ -49,11 +49,10 @@
 *>    hoped that the final version of H has many zero subdiagonal
 *>    entries.
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTT
 *> \verbatim
@@ -244,10 +243,9 @@
 *>          in WORK(1).  No error message related to LWORK is issued
 *>          by XERBLA.  Neither H nor Z are accessed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -258,17 +256,11 @@
 *
 *> \ingroup complex16OTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>     Based on contributions by
-*>        Karen Braman and Ralph Byers, Department of Mathematics,
-*>        University of Kansas, USA
-*>
-*> \endverbatim
+*>       Karen Braman and Ralph Byers, Department of Mathematics,
+*>       University of Kansas, USA
 *>
 *  =====================================================================
       SUBROUTINE ZLAQR3( WANTT, WANTZ, N, KTOP, KBOT, NW, H, LDH, ILOZ,

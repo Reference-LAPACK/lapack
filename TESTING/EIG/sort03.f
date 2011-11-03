@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SORT03( RC, MU, MV, N, K, U, LDU, V, LDV, WORK, LWORK,
 *                          RESULT, INFO )
@@ -20,11 +20,11 @@
 *       REAL               U( LDU, * ), V( LDV, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SORT03 compares two orthogonal matrices U and V to see if their
 *> corresponding rows or columns span the same spaces.  The rows are
@@ -42,11 +42,10 @@
 *>
 *> where S is +-1 (chosen to minimize the expression), U(i) is the i-th
 *> row (column) of U, and V(i) is the i-th row (column) of V.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] RC
 *> \verbatim
@@ -140,10 +139,9 @@
 *>          0  indicates a successful exit
 *>          -k indicates the k-th parameter had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

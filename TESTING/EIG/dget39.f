@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGET39( RMAX, LMAX, NINFO, KNT )
 * 
@@ -15,11 +15,11 @@
 *       DOUBLE PRECISION   RMAX
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGET39 tests DLAQTR, a routine for solving the real or
 *> special complex quasi upper triangular system
@@ -59,11 +59,10 @@
 *>
 *> (The (||T||+||B||)*smlnum/ulp term accounts for possible
 *>  (gradual or nongradual) underflow in x1 and x2.)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -88,10 +87,9 @@
 *>          KNT is INTEGER
 *>          Total number of examples tested.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

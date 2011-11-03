@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLARTGS( X, Y, SIGMA, CS, SN )
 * 
@@ -24,11 +24,11 @@
 *       REAL                    CS, SIGMA, SN, X, Y
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLARTGS generates a plane rotation designed to introduce a bulge in
 *> Golub-Reinsch-style implicit QR iteration for the bidiagonal SVD
@@ -40,11 +40,10 @@
 *>
 *> with R nonnegative.  If X^2 - SIGMA and X * Y are 0, then the
 *> rotation is by PI/2.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] X
 *> \verbatim
@@ -75,10 +74,9 @@
 *>          SN is REAL
 *>          The sine of the rotation.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

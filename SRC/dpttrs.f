@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DPTTRS( N, NRHS, D, E, B, LDB, INFO )
 * 
@@ -27,11 +27,11 @@
 *       DOUBLE PRECISION   B( LDB, * ), D( * ), E( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DPTTRS solves a tridiagonal system of the form
 *>    A * X = B
@@ -39,11 +39,10 @@
 *> diagonal matrix specified in the vector D, L is a unit bidiagonal
 *> matrix whose subdiagonal is specified in the vector E, and X and B
 *> are N by NRHS matrices.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -94,10 +93,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -k, the k-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

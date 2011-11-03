@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE STGSNA( JOB, HOWMNY, SELECT, N, A, LDA, B, LDB, VL,
 *                          LDVL, VR, LDVR, S, DIF, MM, M, WORK, LWORK,
@@ -33,11 +33,11 @@
 *      $                   VL( LDVL, * ), VR( LDVR, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> STGSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or eigenvectors of a matrix pair (A, B) in
@@ -49,11 +49,10 @@
 *> i.e. A is block upper triangular with 1-by-1 and 2-by-2 diagonal
 *> blocks. B is upper triangular.
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -222,10 +221,9 @@
 *>          =0: Successful exit
 *>          <0: If INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -236,10 +234,9 @@
 *
 *> \ingroup realOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The reciprocal of the condition number of a generalized eigenvalue
@@ -345,13 +342,18 @@
 *>             EPS * norm(A, B) / DIF(i).
 *>
 *>  See ref. [2-3] for more details and further references.
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
 *>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
 *>
-*>  References
-*>  ==========
+*> \verbatim
 *>
 *>  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
 *>      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
@@ -372,7 +374,6 @@
 *>      Sweden, December 1993, Revised April 1994, Also as LAPACK Working
 *>      Note 75.  To appear in ACM Trans. on Math. Software, Vol 22,
 *>      No 1, 1996.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

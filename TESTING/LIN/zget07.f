@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGET07( TRANS, N, NRHS, A, LDA, B, LDB, X, LDX, XACT,
 *                          LDXACT, FERR, CHKFERR, BERR, RESLTS )
@@ -22,11 +22,11 @@
 *      $                   XACT( LDXACT, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGET07 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations op(A)*X = B, where A is a
@@ -40,11 +40,10 @@
 *> RESLTS(2) = residual from the iterative refinement routine
 *>           = the maximum of BERR / ( (n+1)*EPS + (*) ), where
 *>             (*) = (n+1)*UNFL / (min_i (abs(op(A))*abs(X) +abs(b))_i )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -150,10 +149,9 @@
 *>          RESLTS(1) = norm(X - XACT) / ( norm(X) * FERR )
 *>          RESLTS(2) = BERR / ( (n+1)*EPS + (*) )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

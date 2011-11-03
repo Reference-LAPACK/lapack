@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGBT05( TRANS, N, KL, KU, NRHS, AB, LDAB, B, LDB, X,
 *                          LDX, XACT, LDXACT, FERR, BERR, RESLTS )
@@ -21,11 +21,11 @@
 *      $                   XACT( LDXACT, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGBT05 tests the error bounds from iterative refinement for the
 *> computed solution to a system of equations op(A)*X = B, where A is a
@@ -41,11 +41,10 @@
 *>           = the maximum of BERR / ( NZ*EPS + (*) ), where
 *>             (*) = NZ*UNFL / (min_i (abs(op(A))*abs(X) +abs(b))_i )
 *>             and NZ = max. number of nonzeros in any row of A, plus 1
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -160,10 +159,9 @@
 *>          RESLTS(1) = norm(X - XACT) / ( norm(X) * FERR )
 *>          RESLTS(2) = BERR / ( NZ*EPS + (*) )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

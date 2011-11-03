@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DZNRM2(N,X,INCX)
 * 
@@ -17,21 +17,20 @@
 *       COMPLEX*16 X(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DZNRM2 returns the euclidean norm of a vector via the function
 *> name, so that
 *>
 *>    DZNRM2 := sqrt( x**H*x )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -42,16 +41,14 @@
 *
 *> \ingroup double_blas_level1
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  -- This version written on 25-October-1982.
 *>     Modified on 14-October-1993 to inline the call to ZLASSQ.
 *>     Sven Hammarling, Nag Ltd.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

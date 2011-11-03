@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTGSYL( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
 *                          LDD, E, LDE, F, LDF, SCALE, DIF, WORK, LWORK,
@@ -35,11 +35,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTGSYL solves the generalized Sylvester equation:
 *>
@@ -80,11 +80,10 @@
 *> information.
 *>
 *> This is a level 3 BLAS algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -253,10 +252,9 @@
 *>            <0: If INFO = -i, the i-th argument had an illegal value.
 *>            >0: (A, D) and (B, E) have common or close eigenvalues.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -267,15 +265,16 @@
 *
 *> \ingroup doubleSYcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
 *>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
+*>
+*> \verbatim
 *>
 *>  [1] B. Kagstrom and P. Poromaa, LAPACK-Style Algorithms and Software
 *>      for Solving the Generalized Sylvester Equation and Estimating the
@@ -293,7 +292,6 @@
 *>      Condition Estimators for Solving the Generalized Sylvester
 *>      Equation, IEEE Transactions on Automatic Control, Vol. 34, No. 7,
 *>      July 1989, pp 745-751.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

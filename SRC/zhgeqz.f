@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
 *                          ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK,
@@ -33,11 +33,11 @@
 *      $                   Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHGEQZ computes the eigenvalues of a complex matrix pair (H,T),
 *> where H is an upper Hessenberg matrix and T is upper triangular,
@@ -81,11 +81,10 @@
 *> Ref: C.B. Moler & G.W. Stewart, "An Algorithm for Generalized Matrix
 *>      Eigenvalue Problems", SIAM J. Numer. Anal., 10(1973),
 *>      pp. 241--256.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -258,10 +257,9 @@
 *>                     in Schur form, but ALPHA(i) and BETA(i),
 *>                     i=INFO-N+1,...,N should be correct.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -272,15 +270,13 @@
 *
 *> \ingroup complex16GEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  We assume that complex ABS works as long as its value is less than
 *>  overflow.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

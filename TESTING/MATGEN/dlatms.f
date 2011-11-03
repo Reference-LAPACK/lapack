@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLATMS( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
 *                          KL, KU, PACK, A, LDA, WORK, INFO )
@@ -21,11 +21,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), D( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DLATMS generates random matrices with specified singular values
 *>    (or symmetric/hermitian with specified eigenvalues)
@@ -81,11 +81,10 @@
 *>      If Method B is chosen, and band format is specified, then the
 *>         matrix will be generated in the band format, so no repacking
 *>         will be necessary.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -305,10 +304,9 @@
 *>            2  => Cannot scale to DMAX (max. sing. value is 0)
 *>            3  => Error return from DLAGGE or SLAGSY
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

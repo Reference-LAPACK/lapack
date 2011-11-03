@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL          FUNCTION ZLCTSX( ALPHA, BETA )
 * 
@@ -14,21 +14,20 @@
 *       COMPLEX*16         ALPHA, BETA
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This function is used to determine what eigenvalues will be
 *> selected.  If this is part of the test driver ZDRGSX, do not
 *> change the code UNLESS you are testing input examples and not
 *> using the built-in examples.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ALPHA
 *> \verbatim
@@ -42,10 +41,9 @@
 *>          parameters to decide whether the pair (ALPHA, BETA) is
 *>          selected.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

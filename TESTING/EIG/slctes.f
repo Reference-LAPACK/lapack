@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL          FUNCTION SLCTES( ZR, ZI, D )
 * 
@@ -14,11 +14,11 @@
 *       REAL               D, ZI, ZR
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLCTES returns .TRUE. if the eigenvalue (ZR/D) + sqrt(-1)*(ZI/D)
 *> is to be selected (specifically, in this subroutine, if the real
@@ -27,11 +27,10 @@
 *>
 *> It is used by the test routine SDRGES to test whether the driver
 *> routine SGGES succesfully sorts eigenvalues.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ZR
 *> \verbatim
@@ -53,10 +52,9 @@
 *>          The denominator part of a complex eigenvalue
 *>          (ZR/D) + i*(ZI/D).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

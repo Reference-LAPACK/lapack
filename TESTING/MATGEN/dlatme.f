@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI, 
 *         RSIGN, 
@@ -25,11 +25,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), D( * ), DS( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DLATME generates random non-symmetric square matrices with
 *>    specified eigenvalues for testing LAPACK programs.
@@ -63,11 +63,10 @@
 *>
 *>    (Note: since the matrix cannot be reduced beyond Hessenberg form,
 *>     no packing options are available.)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -313,10 +312,9 @@
 *>            4  => Error return from DLARGE
 *>            5  => Zero singular value from DLATM1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

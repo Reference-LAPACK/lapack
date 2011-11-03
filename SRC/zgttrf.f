@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         D( * ), DL( * ), DU( * ), DU2( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGTTRF computes an LU factorization of a complex tridiagonal matrix A
 *> using elimination with partial pivoting and row interchanges.
@@ -42,11 +42,10 @@
 *> where L is a product of permutation and unit lower bidiagonal
 *> matrices and U is upper triangular with nonzeros in only the main
 *> diagonal and first two superdiagonals.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -109,10 +108,9 @@
 *>                singular, and division by zero will occur if it is used
 *>                to solve a system of equations.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

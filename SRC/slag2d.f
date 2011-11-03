@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAG2D( M, N, SA, LDSA, A, LDA, INFO )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAG2D converts a SINGLE PRECISION matrix, SA, to a DOUBLE
 *> PRECISION matrix, A.
@@ -42,11 +42,10 @@
 *> converting from single to double.
 *>
 *> This is an auxiliary routine so there is no argument checking.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -89,10 +88,9 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

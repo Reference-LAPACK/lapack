@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAHRD( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 * 
@@ -28,11 +28,11 @@
 *      $                   Y( LDY, NB )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAHRD reduces the first NB columns of a real general n-by-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
@@ -43,11 +43,10 @@
 *> This is an OBSOLETE auxiliary routine. 
 *> This routine will be 'deprecated' in a  future release.
 *> Please use the new routine SLAHR2 instead.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -116,10 +115,9 @@
 *>          LDY is INTEGER
 *>          The leading dimension of the array Y. LDY >= N.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -130,10 +128,9 @@
 *
 *> \ingroup realOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix Q is represented as a product of nb elementary reflectors
@@ -167,7 +164,6 @@
 *>  where a denotes an element of the original matrix A, h denotes a
 *>  modified element of the upper Hessenberg matrix H, and vi denotes an
 *>  element of the vector defining H(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

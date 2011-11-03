@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE STZRZF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 * 
@@ -27,11 +27,11 @@
 *       REAL               A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> STZRZF reduces the M-by-N ( M<=N ) real upper trapezoidal matrix A
 *> to upper triangular form by means of orthogonal transformations.
@@ -42,11 +42,10 @@
 *>
 *> where Z is an N-by-N orthogonal matrix and R is an M-by-M upper
 *> triangular matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -108,10 +107,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -122,14 +120,15 @@
 *
 *> \ingroup realOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
+*
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
 *>
 *>  The factorization is obtained by Householder's method.  The kth
 *>  transformation matrix, Z( k ), which is used to introduce zeros into
@@ -156,7 +155,6 @@
 *>  Z is given by
 *>
 *>     Z =  Z( 1 ) * Z( 2 ) * ... * Z( m ).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

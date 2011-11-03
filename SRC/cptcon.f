@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPTCON( N, D, E, ANORM, RCOND, RWORK, INFO )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX            E( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPTCON computes the reciprocal of the condition number (in the
 *> 1-norm) of a complex Hermitian positive definite tridiagonal matrix
@@ -43,11 +43,10 @@
 *> Norm(inv(A)) is computed by a direct method, and the reciprocal of
 *> the condition number is computed as
 *>                  RCOND = 1 / (ANORM * norm(inv(A))).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -94,10 +93,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -108,16 +106,14 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The method used is described in Nicholas J. Higham, "Efficient
 *>  Algorithms for Computing the Condition Number of a Tridiagonal
 *>  Matrix", SIAM J. Sci. Stat. Comput., Vol. 7, No. 1, January 1986.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

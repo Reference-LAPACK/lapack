@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSPTRI( UPLO, N, AP, IPIV, WORK, INFO )
 * 
@@ -29,20 +29,19 @@
 *       REAL               AP( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSPTRI computes the inverse of a real symmetric indefinite matrix
 *> A in packed storage using the factorization A = U*D*U**T or
 *> A = L*D*L**T computed by SSPTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -94,10 +93,9 @@
 *>          > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
 *>               inverse could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

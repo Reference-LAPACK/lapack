@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CERRST( PATH, NUNIT )
 * 
@@ -15,21 +15,20 @@
 *       INTEGER            NUNIT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CERRST tests the error exits for CHETRD, CUNGTR, CUNMTR, CHPTRD,
 *> CUNGTR, CUPMTR, CSTEQR, CSTEIN, CPTEQR, CHBTRD,
 *> CHEEV, CHEEVX, CHEEVD, CHBEV, CHBEVX, CHBEVD,
 *> CHPEV, CHPEVX, CHPEVD, and CSTEDC.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PATH
 *> \verbatim
@@ -42,10 +41,9 @@
 *>          NUNIT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

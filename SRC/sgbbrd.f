@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGBBRD( VECT, M, N, NCC, KL, KU, AB, LDAB, D, E, Q,
 *                          LDQ, PT, LDPT, C, LDC, WORK, INFO )
@@ -30,22 +30,21 @@
 *      $                   PT( LDPT, * ), Q( LDQ, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGBBRD reduces a real general m-by-n band matrix A to upper
 *> bidiagonal form B by an orthogonal transformation: Q**T * A * P = B.
 *>
 *> The routine computes B, and optionally forms Q or P**T, or computes
 *> Q**T*C for a given matrix C.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] VECT
 *> \verbatim
@@ -171,10 +170,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

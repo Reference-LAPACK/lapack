@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DLANSF( NORM, TRANSR, UPLO, N, A, WORK )
 * 
@@ -28,20 +28,19 @@
 *       DOUBLE PRECISION   A( 0: * ), WORK( 0: * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLANSF returns the value of the one norm, or the Frobenius norm, or
 *> the infinity norm, or the element of largest absolute value of a
 *> real symmetric matrix A in RFP format.
+*> \endverbatim
 *>
-*> Description
-*> ===========
-*>
-*> DLANSF returns the value
+*> \return DLANSF
+*> \verbatim
 *>
 *>    DLANSF = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
@@ -55,11 +54,10 @@
 *> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
 *> normF  denotes the  Frobenius norm of a matrix (square root of sum of
 *> squares).  Note that  max(abs(A(i,j)))  is not a  matrix norm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NORM
 *> \verbatim
@@ -108,10 +106,9 @@
 *>          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
 *>          WORK is not referenced.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -122,10 +119,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  We first consider Rectangular Full Packed (RFP) Format when N is
@@ -208,12 +204,8 @@
 *>     02 12 22 00 01             00 10 20 30 40 50
 *>     03 13 23 33 11             33 11 21 31 41 51
 *>     04 14 24 34 44             43 44 22 32 42 52
-*>
-*>  Reference
-*>  =========
-*>
 *> \endverbatim
-*>
+*
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLANSF( NORM, TRANSR, UPLO, N, A, WORK )
 *

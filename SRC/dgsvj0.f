@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
 *                          SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
@@ -31,35 +31,20 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGSVJ0 is called from DGESVJ as a pre-processor and that is its main
 *> purpose. It applies Jacobi rotations in the same way as DGESVJ does, but
 *> it does not check convergence (stopping criterion). Few tuning
 *> parameters (marked by [TP]) are available for the implementer.
-*>
-*> Further Details
-*> ~~~~~~~~~~~~~~~
-*> DGSVJ0 is used just to enable SGESVJ to call a simplified version of
-*> itself to work on a submatrix of the original matrix.
-*>
-*> Contributors
-*> ~~~~~~~~~~~~
-*> Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
-*>
-*> Bugs, Examples and Comments
-*> ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*> Please report all bugs and send interesting test examples and comments to
-*> drmac@math.hr. Thank you.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBV
 *> \verbatim
@@ -199,10 +184,9 @@
 *>          = 0 : successful exit.
 *>          < 0 : if INFO = -i, then the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -212,6 +196,23 @@
 *> \date November 2011
 *
 *> \ingroup doubleOTHERcomputational
+*
+*> \par Further Details:
+*  =====================
+*>
+*> DGSVJ0 is used just to enable DGESVJ to call a simplified version of
+*> itself to work on a submatrix of the original matrix.
+*>
+*> \par Contributors:
+*  ==================
+*>
+*> Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
+*>
+*> \par Bugs, Examples and Comments:
+*  =================================
+*>
+*> Please report all bugs and send interesting test examples and comments to
+*> drmac@math.hr. Thank you.
 *
 *  =====================================================================
       SUBROUTINE DGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,

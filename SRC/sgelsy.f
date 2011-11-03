@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
 *                          WORK, LWORK, INFO )
@@ -30,11 +30,11 @@
 *       REAL               A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGELSY computes the minimum-norm solution to a real linear least
 *> squares problem:
@@ -72,11 +72,10 @@
 *>   o Matrix B (the right hand side) is updated with Blas-3.
 *>   o The permutation of matrix B (the right hand side) is faster and
 *>     more simple.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -181,10 +180,9 @@
 *>          = 0: successful exit
 *>          < 0: If INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -195,18 +193,12 @@
 *
 *> \ingroup realGEsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
-*>    E. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain
-*>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain
-*>
-*> \endverbatim
+*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA \n 
+*>    E. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
+*>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
 *>
 *  =====================================================================
       SUBROUTINE SGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,

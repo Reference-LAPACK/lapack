@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
 *                          LDY )
@@ -30,11 +30,11 @@
 *      $                   Y( LDY, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLABRD reduces the first NB rows and columns of a complex general
 *> m by n matrix A to upper or lower real bidiagonal form by a unitary
@@ -45,11 +45,10 @@
 *> bidiagonal form.
 *>
 *> This is an auxiliary routine called by ZGEBRD
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -149,10 +148,9 @@
 *>          LDY is INTEGER
 *>          The leading dimension of the array Y. LDY >= max(1,N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -163,10 +161,9 @@
 *
 *> \ingroup complex16OTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrices Q and P are represented as products of elementary
@@ -209,7 +206,6 @@
 *>  where a denotes an element of the original matrix which is unchanged,
 *>  vi denotes an element of the vector defining H(i), and ui an element
 *>  of the vector defining G(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

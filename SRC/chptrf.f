@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHPTRF( UPLO, N, AP, IPIV, INFO )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX            AP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHPTRF computes the factorization of a complex Hermitian packed
 *> matrix A using the Bunch-Kaufman diagonal pivoting method:
@@ -43,11 +43,10 @@
 *> where U (or L) is a product of permutation and unit upper (lower)
 *> triangular matrices, and D is Hermitian and block diagonal with
 *> 1-by-1 and 2-by-2 diagonal blocks.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -99,10 +98,9 @@
 *>               exactly singular, and division by zero will occur if it
 *>               is used to solve a system of equations.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -113,14 +111,10 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Further Details:
+*  =====================
 *>
-*>  5-96 - Based on modifications by J. Lewis, Boeing Computer Services
-*>         Company
+*> \verbatim
 *>
 *>  If UPLO = 'U', then A = U*D*U**H, where
 *>     U = P(n)*U(n)* ... *P(k)U(k)* ...,
@@ -155,8 +149,12 @@
 *>  If s = 1, D(k) overwrites A(k,k), and v overwrites A(k+1:n,k).
 *>  If s = 2, the lower triangle of D(k) overwrites A(k,k), A(k+1,k),
 *>  and A(k+1,k+1), and v overwrites A(k+2:n,k:k+1).
-*>
 *> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>  J. Lewis, Boeing Computer Services Company
 *>
 *  =====================================================================
       SUBROUTINE CHPTRF( UPLO, N, AP, IPIV, INFO )

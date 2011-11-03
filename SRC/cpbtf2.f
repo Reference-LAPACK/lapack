@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPBTF2( UPLO, N, KD, AB, LDAB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            AB( LDAB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPBTF2 computes the Cholesky factorization of a complex Hermitian
 *> positive definite band matrix A.
@@ -44,11 +44,10 @@
 *> of U, and L is lower triangular.
 *>
 *> This is the unblocked version of the algorithm, calling Level 2 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -102,10 +101,9 @@
 *>               positive definite, and the factorization could not be
 *>               completed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -116,10 +114,9 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The band storage scheme is illustrated by the following example, when
@@ -140,7 +137,6 @@
 *>     a31  a42  a53  a64   *    *      l31  l42  l53  l64   *    *
 *>
 *>  Array elements marked * are not used by the routine.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

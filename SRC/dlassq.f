@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLASSQ( N, X, INCX, SCALE, SUMSQ )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLASSQ  returns the values  scl  and  smsq  such that
 *>
@@ -47,11 +47,10 @@
 *> scl and smsq are overwritten on SCALE and SUMSQ respectively.
 *>
 *> The routine makes only one pass through the vector x.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -88,10 +87,9 @@
 *>          On exit, SUMSQ is overwritten with  smsq , the basic sum of
 *>          squares from which  scl  has been factored out.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

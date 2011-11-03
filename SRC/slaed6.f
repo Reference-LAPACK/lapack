@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )
 * 
@@ -29,11 +29,11 @@
 *       REAL               D( 3 ), Z( 3 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAED6 computes the positive or negative root (closest to the origin)
 *> of
@@ -49,11 +49,10 @@
 *> This routine will be called by SLAED4 when necessary. In most cases,
 *> the root sought is the smallest in magnitude, though it might not be
 *> in some extremely rare situations.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] KNITER
 *> \verbatim
@@ -107,10 +106,9 @@
 *>               = 0: successful exit
 *>               > 0: if INFO = 1, failure to converge
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -121,23 +119,23 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
-*>  30/06/99: Based on contributions by
-*>     Ren-Cang Li, Computer Science Division, University of California
-*>     at Berkeley, USA
-*>
-*>  10/02/03: This version has a few statements commented out for thread safety
-*>     (machine parameters are computed on each entry). SJH.
+*>  10/02/03: This version has a few statements commented out for thread
+*>  safety (machine parameters are computed on each entry). SJH.
 *>
 *>  05/10/06: Modified from a new version of Ren-Cang Li, use
 *>     Gragg-Thornton-Warner cubic convergent scheme for better stability.
-*>
 *> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Ren-Cang Li, Computer Science Division, University of California
+*>     at Berkeley, USA
 *>
 *  =====================================================================
       SUBROUTINE SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )

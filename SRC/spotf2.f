@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPOTF2( UPLO, N, A, LDA, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPOTF2 computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A.
@@ -43,11 +43,10 @@
 *> where U is an upper triangular matrix and L is lower triangular.
 *>
 *> This is the unblocked version of the algorithm, calling Level 2 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -94,10 +93,9 @@
 *>               positive definite, and the factorization could not be
 *>               completed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

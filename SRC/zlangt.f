@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION ZLANGT( NORM, N, DL, D, DU )
 * 
@@ -28,20 +28,19 @@
 *       COMPLEX*16         D( * ), DL( * ), DU( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLANGT  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> complex tridiagonal matrix A.
+*> \endverbatim
 *>
-*> Description
-*> ===========
-*>
-*> ZLANGT returns the value
+*> \return ZLANGT
+*> \verbatim
 *>
 *>    ZLANGT = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
@@ -55,11 +54,10 @@
 *> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
 *> normF  denotes the  Frobenius norm of a matrix (square root of sum of
 *> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NORM
 *> \verbatim
@@ -92,10 +90,9 @@
 *>          DU is COMPLEX*16 array, dimension (N-1)
 *>          The (n-1) super-diagonal elements of A.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

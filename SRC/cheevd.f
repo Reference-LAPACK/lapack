@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
 *                          LRWORK, IWORK, LIWORK, INFO )
@@ -31,11 +31,11 @@
 *       COMPLEX            A( LDA, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHEEVD computes all eigenvalues and, optionally, eigenvectors of a
 *> complex Hermitian matrix A.  If eigenvectors are desired, it uses a
@@ -47,11 +47,10 @@
 *> digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
 *> Cray-2. It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -178,10 +177,9 @@
 *>                lying in rows and columns INFO/(N+1) through
 *>                mod(INFO,N+1).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -192,18 +190,16 @@
 *
 *> \ingroup complexHEeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Jeff Rutter, Computer Science Division, University of California
-*>     at Berkeley, USA
+*> \par Further Details:
+*  =====================
 *>
 *>  Modified description of INFO. Sven, 16 Feb 05.
-*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*> Jeff Rutter, Computer Science Division, University of California
+*> at Berkeley, USA
 *>
 *  =====================================================================
       SUBROUTINE CHEEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,

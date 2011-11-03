@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,
 *                          INFO )
@@ -30,11 +30,11 @@
 *       REAL               D( * ), Q( LDQ, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAED1 computes the updated eigensystem of a diagonal
 *> matrix after modification by a rank-one symmetric matrix.  This
@@ -68,11 +68,10 @@
 *>       directly using the updated eigenvalues.  The eigenvectors for
 *>       the current problem are multiplied with the eigenvectors from
 *>       the overall problem.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -140,10 +139,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, an eigenvalue did not converge
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -154,18 +152,12 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>     Jeff Rutter, Computer Science Division, University of California
-*>     at Berkeley, USA
-*>  Modified by Francoise Tisseur, University of Tennessee.
-*>
-*> \endverbatim
+*> Jeff Rutter, Computer Science Division, University of California
+*> at Berkeley, USA \n
+*>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
       SUBROUTINE SLAED1( N, D, Q, LDQ, INDXQ, RHO, CUTPNT, WORK, IWORK,

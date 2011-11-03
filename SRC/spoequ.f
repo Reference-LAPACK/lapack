@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPOEQU( N, A, LDA, S, SCOND, AMAX, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               A( LDA, * ), S( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPOEQU computes row and column scalings intended to equilibrate a
 *> symmetric positive definite matrix A and reduce its condition number
@@ -42,11 +42,10 @@
 *> choice of S puts the condition number of B within a factor N of the
 *> smallest possible condition number over all possible diagonal
 *> scalings.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -97,10 +96,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  if INFO = i, the i-th diagonal element is nonpositive.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARRJ( N, D, E2, IFIRST, ILAST,
 *                          RTOL, OFFSET, W, WERR, WORK, IWORK,
@@ -32,11 +32,11 @@
 *      $                   WERR( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Given the initial eigenvalue approximations of T, DLARRJ
 *> does  bisection to refine the eigenvalues of T,
@@ -45,11 +45,10 @@
 *> of the error in these guesses in WERR. During bisection, intervals
 *> [left, right] are maintained by storing their mid-points and
 *> semi-widths in the arrays W and WERR respectively.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -142,10 +141,9 @@
 *>          INFO is INTEGER
 *>          Error flag.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -156,21 +154,15 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
+*> \par Contributors:
+*  ==================
+*>
+*> Beresford Parlett, University of California, Berkeley, USA \n
+*> Jim Demmel, University of California, Berkeley, USA \n
+*> Inderjit Dhillon, University of Texas, Austin, USA \n
+*> Osni Marques, LBNL/NERSC, USA \n
+*> Christof Voemel, University of California, Berkeley, USA
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE DLARRJ( N, D, E2, IFIRST, ILAST,
      $                   RTOL, OFFSET, W, WERR, WORK, IWORK,

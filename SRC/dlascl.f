@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLASCL( TYPE, KL, KU, CFROM, CTO, M, N, A, LDA, INFO )
 * 
@@ -29,22 +29,21 @@
 *       DOUBLE PRECISION   A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLASCL multiplies the M by N real matrix A by the real scalar
 *> CTO/CFROM.  This is done without over/underflow as long as the final
 *> result CTO*A(I,J)/CFROM does not over/underflow. TYPE specifies that
 *> A may be full, upper triangular, lower triangular, upper Hessenberg,
 *> or banded.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TYPE
 *> \verbatim
@@ -124,10 +123,9 @@
 *>          0  - successful exit
 *>          <0 - if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

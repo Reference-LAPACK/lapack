@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSTEBZ( RANGE, ORDER, N, VL, VU, IL, IU, ABSTOL, D, E,
 *                          M, NSPLIT, W, IBLOCK, ISPLIT, WORK, IWORK,
@@ -32,11 +32,11 @@
 *       REAL               D( * ), E( * ), W( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSTEBZ computes the eigenvalues of a symmetric tridiagonal
 *> matrix T.  The user may ask for all eigenvalues, all eigenvalues
@@ -50,11 +50,10 @@
 *> See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
 *> Matrix", Report CS41, Computer Science Dept., Stanford
 *> University, July 21, 1966.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] RANGE
 *> \verbatim
@@ -226,10 +225,12 @@
 *>                                        floating-point arithmetic.
 *>                        Cure: Increase the PARAMETER "FUDGE",
 *>                              recompile, and try again.
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  RELFAC  REAL, default = 2.0e0
 *>          The relative tolerance.  An interval (a,b] lies within
 *>          "relative tolerance" if  b-a < RELFAC*ulp*max(|a|,|b|),
@@ -244,10 +245,9 @@
 *>          the worst machine around.  Note that this has no effect
 *>          on accuracy of the solution.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

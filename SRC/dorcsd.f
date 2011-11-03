@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       RECURSIVE SUBROUTINE DORCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS,
 *                                    SIGNS, M, P, Q, X11, LDX11, X12,
@@ -38,11 +38,11 @@
 *      $                   * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DORCSD computes the CS decomposition of an M-by-M partitioned
 *> orthogonal matrix X:
@@ -59,11 +59,10 @@
 *> (M-P)-by-(M-P), Q-by-Q, and (M-Q)-by-(M-Q), respectively. C and S are
 *> R-by-R nonnegative diagonal matrices satisfying C^2 + S^2 = I, in
 *> which R = MIN(P,M-P,Q,M-Q).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBU1
 *> \verbatim
@@ -274,17 +273,16 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  DBBCSD did not converge. See the description of WORK
 *>                above for details.
-*>
-*>  Reference
-*>  =========
+*> \endverbatim
+*
+*> \par References:
+*  ================
 *>
 *>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
 *>      Algorithms, 50(1):33-65, 2009.
-*> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

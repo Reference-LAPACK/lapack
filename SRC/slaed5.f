@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAED5( I, D, Z, DELTA, RHO, DLAM )
 * 
@@ -28,11 +28,11 @@
 *       REAL               D( 2 ), DELTA( 2 ), Z( 2 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This subroutine computes the I-th eigenvalue of a symmetric rank-one
 *> modification of a 2-by-2 diagonal matrix
@@ -45,11 +45,10 @@
 *>
 *> We also assume RHO > 0 and that the Euclidean norm of the vector
 *> Z is one.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] I
 *> \verbatim
@@ -87,10 +86,9 @@
 *>          DLAM is REAL
 *>         The computed lambda_I, the I-th updated eigenvalue.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -101,17 +99,11 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ren-Cang Li, Computer Science Division, University of California
 *>     at Berkeley, USA
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SLAED5( I, D, Z, DELTA, RHO, DLAM )

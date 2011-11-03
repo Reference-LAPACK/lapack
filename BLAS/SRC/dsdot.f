@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DSDOT(N,SX,INCX,SY,INCY)
 * 
@@ -22,11 +22,12 @@
 *    Lawson, C. L., (JPL), Hanson, R. J., (SNLA), 
 *    Kincaid, D. R., (U. of Texas), Krogh, F. T., (JPL)
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
 *> Compute the inner product of two vectors with extended
 *> precision accumulation and result.
 *>
@@ -34,11 +35,10 @@
 *> DSDOT = sum for I = 0 to N-1 of  SX(LX+I*INCX) * SY(LY+I*INCY),
 *> where LX = 1 if INCX .GE. 0, else LX = 1+(1-N)*INCX, and LY is
 *> defined in a similar way using INCY.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -75,10 +75,9 @@
 *>          DSDOT is DOUBLE PRECISION
 *>         DSDOT  double precision dot product (zero if N.LE.0)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -89,13 +88,17 @@
 *
 *> \ingroup double_blas_level1
 *
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*> \endverbatim
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par References:
+*  ================
+*>
 *> \verbatim
 *>
-*>  REFERENCES
 *>      
 *>  C. L. Lawson, R. J. Hanson, D. R. Kincaid and F. T.
 *>  Krogh, Basic linear algebra subprograms for Fortran
@@ -111,7 +114,6 @@
 *>  920310  Corrected definition of LX in DESCRIPTION.  (WRB)
 *>  920501  Reformatted the REFERENCES section.  (WRB)
 *>  070118  Reformat to LAPACK style (JL)
-*>
 *> \endverbatim
 *>
 *  =====================================================================
@@ -129,8 +131,8 @@
       REAL SX(*),SY(*)
 *     ..
 *
-*  AUTHORS
-*  =======
+*  Authors:
+*  ========
 *  Lawson, C. L., (JPL), Hanson, R. J., (SNLA), 
 *  Kincaid, D. R., (U. of Texas), Krogh, F. T., (JPL)
 *

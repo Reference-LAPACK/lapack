@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ALASMG( TYPE, NOUT, NFAIL, NRUN, NERRS )
 * 
@@ -15,18 +15,17 @@
 *       INTEGER            NFAIL, NOUT, NRUN, NERRS
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ALASMG prints a summary of results from one of the -CHK- routines.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TYPE
 *> \verbatim
@@ -58,10 +57,9 @@
 *>          NERRS is INTEGER
 *>          The number of error messages recorded.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

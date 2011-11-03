@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZTRTRI( UPLO, DIAG, N, A, LDA, INFO )
 * 
@@ -28,21 +28,20 @@
 *       COMPLEX*16         A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZTRTRI computes the inverse of a complex upper or lower triangular
 *> matrix A.
 *>
 *> This is the Level 3 BLAS version of the algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -94,10 +93,9 @@
 *>          > 0: if INFO = i, A(i,i) is exactly zero.  The triangular
 *>               matrix is singular and its inverse can not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

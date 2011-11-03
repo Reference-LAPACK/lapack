@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, W, VL,
 *                          LDVL, VR, LDVR, ILO, IHI, SCALE, ABNRM, RCONDE,
@@ -34,11 +34,11 @@
 *      $                   W( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGEEVX computes for an N-by-N complex nonsymmetric matrix A, the
 *> eigenvalues and, optionally, the left and/or right eigenvectors.
@@ -69,11 +69,10 @@
 *> (in exact arithmetic) but diagonal scaling will.  For further
 *> explanation of balancing, see section 4.10.2 of the LAPACK
 *> Users' Guide.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] BALANC
 *> \verbatim
@@ -268,10 +267,9 @@
 *>                have been computed; elements 1:ILO-1 and i+1:N of W
 *>                contain eigenvalues which have converged.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

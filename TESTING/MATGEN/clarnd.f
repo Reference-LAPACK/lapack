@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       COMPLEX FUNCTION CLARND( IDIST, ISEED )
 * 
@@ -17,19 +17,18 @@
 *       INTEGER            ISEED( 4 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLARND returns a random complex number from a uniform or normal
 *> distribution.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IDIST
 *> \verbatim
@@ -50,10 +49,9 @@
 *>          odd.
 *>          On exit, the seed is updated.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -64,16 +62,14 @@
 *
 *> \ingroup complex_matgen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  This routine calls the auxiliary routine SLARAN to generate a random
 *>  real number from a uniform (0,1) distribution. The Box-Muller method
 *>  is used to transform numbers from a uniform to a normal distribution.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

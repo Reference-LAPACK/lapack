@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION SLANEG( N, D, LLD, SIGMA, PIVMIN, R )
 * 
@@ -28,11 +28,11 @@
 *       REAL               D( * ), LLD( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLANEG computes the Sturm count, the number of negative pivots
 *> encountered while factoring tridiagonal T - sigma I = L D L^T.
@@ -52,11 +52,10 @@
 *>   Modern Symmetric Tridiagonal Eigensolvers," SIAM Journal on
 *>   Scientific Computing, v28, n5, 2006.  DOI 10.1137/050641624
 *>   (Tech report version in LAWN 172 with the same title.)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -96,10 +95,9 @@
 *>          The twist index for the twisted factorization that is used
 *>          for the negcount.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -110,18 +108,12 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>     Jason Riedy, University of California, Berkeley, USA
-*>
-*> \endverbatim
+*>     Osni Marques, LBNL/NERSC, USA \n
+*>     Christof Voemel, University of California, Berkeley, USA \n
+*>     Jason Riedy, University of California, Berkeley, USA \n
 *>
 *  =====================================================================
       INTEGER FUNCTION SLANEG( N, D, LLD, SIGMA, PIVMIN, R )

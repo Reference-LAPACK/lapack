@@ -5,16 +5,16 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       PROGRAM SCHKEE
 * 
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SCHKEE tests the REAL LAPACK subroutines for the matrix
 *> eigenvalue problem.  The test paths in this version are
@@ -1018,15 +1018,14 @@
 *> precomputed examples, and LWORK = NMAX*(5*NMAX+5)+1 in the parameter
 *> statements below.  For SVD, we assume NRHS may be as big as N.  The
 *> parameter NEED is set to 14 to allow for 14 N-by-N matrices for SGG.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -1037,8 +1036,7 @@
 *
 *> \ingroup single_eig
 *
-*  =====================================================================
-      PROGRAM SCHKEE
+*  =====================================================================      PROGRAM SCHKEE
 *
 *  -- LAPACK test routine (version 3.1.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

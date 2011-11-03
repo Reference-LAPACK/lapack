@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGETRI( N, A, LDA, IPIV, WORK, LWORK, INFO )
 * 
@@ -28,22 +28,21 @@
 *       DOUBLE PRECISION   A( LDA, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGETRI computes the inverse of a matrix using the LU factorization
 *> computed by DGETRF.
 *>
 *> This method inverts U and then computes inv(A) by solving the system
 *> inv(A)*L = inv(U) for inv(A).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -99,10 +98,9 @@
 *>          > 0:  if INFO = i, U(i,i) is exactly zero; the matrix is
 *>                singular and its inverse could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

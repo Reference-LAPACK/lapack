@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPOSV( UPLO, N, NRHS, A, LDA, B, LDB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            A( LDA, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPOSV computes the solution to a complex system of linear equations
 *>    A * X = B,
@@ -45,11 +45,10 @@
 *> where U is an upper triangular matrix and  L is a lower triangular
 *> matrix.  The factored form of A is then used to solve the system of
 *> equations A * X = B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -115,10 +114,9 @@
 *>                positive definite, so the factorization could not be
 *>                completed, and the solution has not been computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

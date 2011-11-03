@@ -5,16 +5,16 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       PROGRAM DCHKAA
 * 
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DCHKAA is the main test program for the DOUBLE PRECISION LAPACK
 *> linear equation routines
@@ -62,11 +62,10 @@
 *> DTZ    3               List types on next line if 0 < NTYPES <  3
 *> DLS    6               List types on next line if 0 < NTYPES <  6
 *> DEQ
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  NMAX    INTEGER
@@ -85,10 +84,9 @@
 *>  NOUT    INTEGER
 *>          The unit number for output
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -99,8 +97,7 @@
 *
 *> \ingroup double_lin
 *
-*  =====================================================================
-      PROGRAM DCHKAA
+*  =====================================================================      PROGRAM DCHKAA
 *
 *  -- LAPACK test routine (version 3.1.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

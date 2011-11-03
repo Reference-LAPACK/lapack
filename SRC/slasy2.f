@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASY2( LTRANL, LTRANR, ISGN, N1, N2, TL, LDTL, TR,
 *                          LDTR, B, LDB, SCALE, X, LDX, XNORM, INFO )
@@ -31,11 +31,11 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLASY2 solves for the N1 by N2 matrix X, 1 <= N1,N2 <= 2, in
 *>
@@ -43,11 +43,10 @@
 *>
 *> where TL is N1 by N1, TR is N2 by N2, B is N1 by N2, and ISGN = 1 or
 *> -1.  op(T) = T or T**T, where T**T denotes the transpose of T.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] LTRANL
 *> \verbatim
@@ -158,10 +157,9 @@
 *>          NOTE: In the interests of speed, this routine does not
 *>                check the inputs for errors.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

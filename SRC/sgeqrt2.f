@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGEQRT2( M, N, A, LDA, T, LDT, INFO )
 * 
@@ -27,19 +27,18 @@
 *       REAL   A( LDA, * ), T( LDT, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGEQRT2 computes a QR factorization of a real M-by-N matrix A, 
 *> using the compact WY representation of Q. 
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -89,10 +88,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -103,10 +101,9 @@
 *
 *> \ingroup realGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix V stores the elementary reflectors H(i) in the i-th column
@@ -125,7 +122,6 @@
 *>               H = I - V * T * V**T
 *>
 *>  where V**T is the transpose of V.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

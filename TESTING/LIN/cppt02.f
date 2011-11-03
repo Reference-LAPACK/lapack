@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPPT02( UPLO, N, NRHS, A, X, LDX, B, LDB, RWORK,
 *                          RESID )
@@ -21,11 +21,11 @@
 *       COMPLEX            A( * ), B( LDB, * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPPT02 computes the residual in the solution of a Hermitian system
 *> of linear equations  A*x = b  when packed storage is used for the
@@ -34,11 +34,10 @@
 *>    RESID = norm(B - A*X) / ( norm(A) * norm(X) * EPS),
 *>
 *> where EPS is the machine precision.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -107,10 +106,9 @@
 *>          The maximum over the number of right hand sides of
 *>          norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

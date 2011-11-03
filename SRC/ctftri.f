@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CTFTRI( TRANSR, UPLO, DIAG, N, A, INFO )
 * 
@@ -28,21 +28,20 @@
 *       COMPLEX            A( 0: * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CTFTRI computes the inverse of a triangular matrix A stored in RFP
 *> format.
 *>
 *> This is a Level 3 BLAS version of the algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSR
 *> \verbatim
@@ -98,10 +97,9 @@
 *>          > 0: if INFO = i, A(i,i) is exactly zero.  The triangular
 *>               matrix is singular and its inverse can not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -112,10 +110,9 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  We first consider Standard Packed Format when N is even.
@@ -219,7 +216,6 @@
 *>     03 13 23 33 11             33 11 21 31 41 51
 *>     -- -- -- -- --                   -- -- -- --
 *>     04 14 24 34 44             43 44 22 32 42 52
-*>
 *> \endverbatim
 *>
 *  =====================================================================

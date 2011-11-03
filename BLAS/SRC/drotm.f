@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DROTM(N,DX,INCX,DY,INCY,DPARAM)
 * 
@@ -17,11 +17,11 @@
 *       DOUBLE PRECISION DPARAM(5),DX(*),DY(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    APPLY THE MODIFIED GIVENS TRANSFORMATION, H, TO THE 2 BY N MATRIX
 *>
@@ -38,11 +38,10 @@
 *>    H=(          )    (          )    (          )    (          )
 *>      (DH21  DH22),   (DH21  1.D0),   (-1.D0 DH22),   (0.D0  1.D0).
 *>    SEE DROTMG FOR A DESCRIPTION OF DATA STORAGE IN DPARAM.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -83,10 +82,9 @@
 *>     DPARAM(4)=DH12
 *>     DPARAM(5)=DH22
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

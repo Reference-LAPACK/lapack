@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSBGST( VECT, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, X,
 *                          LDX, WORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSBGST reduces a real symmetric-definite banded generalized
 *> eigenproblem  A*x = lambda*B*x  to standard form  C*y = lambda*y,
@@ -44,11 +44,10 @@
 *> split Cholesky factorization. A is overwritten by C = X**T*A*X, where
 *> X = S**(-1)*Q and Q is an orthogonal matrix chosen to preserve the
 *> bandwidth of A.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] VECT
 *> \verbatim
@@ -143,10 +142,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

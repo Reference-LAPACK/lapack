@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,
 *                          SR, SI, H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U,
@@ -33,19 +33,18 @@
 *      $                   Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DLAQR5, called by DLAQR0, performs a
 *>    single small-bulge multi-shift QR sweep.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTT
 *> \verbatim
@@ -228,10 +227,9 @@
 *>             LDWV is the leading dimension of WV as declared in the
 *>             in the calling subroutine.  LDWV.GE.NV.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -242,24 +240,19 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
+*> \par Contributors:
+*  ==================
+*>
+*>       Karen Braman and Ralph Byers, Department of Mathematics,
+*>       University of Kansas, USA
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par References:
+*  ================
 *>
-*>     Based on contributions by
-*>        Karen Braman and Ralph Byers, Department of Mathematics,
-*>        University of Kansas, USA
-*>
-*>     Reference:
-*>
-*>     K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
-*>     Algorithm Part I: Maintaining Well Focused Shifts, and
-*>     Level 3 Performance, SIAM Journal of Matrix Analysis,
-*>     volume 23, pages 929--947, 2002.
-*>
-*> \endverbatim
+*>       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
+*>       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
+*>       Performance, SIAM Journal of Matrix Analysis, volume 23, pages
+*>       929--947, 2002.
 *>
 *  =====================================================================
       SUBROUTINE DLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS,

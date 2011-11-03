@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
 *                          IL, IU, ABSTOL, M, W, Z, LDZ, WORK, IWORK,
@@ -33,11 +33,11 @@
 *      $                   Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSPGVX computes selected eigenvalues, and optionally, eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
@@ -46,11 +46,10 @@
 *> is also positive definite.  Eigenvalues and eigenvectors can be
 *> selected by specifying either a range of values or a range of indices
 *> for the desired eigenvalues.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -241,10 +240,9 @@
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -255,17 +253,11 @@
 *
 *> \ingroup doubleOTHEReigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
-*>
-*> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE DSPGVX( ITYPE, JOBZ, RANGE, UPLO, N, AP, BP, VL, VU,
      $                   IL, IU, ABSTOL, M, W, Z, LDZ, WORK, IWORK,

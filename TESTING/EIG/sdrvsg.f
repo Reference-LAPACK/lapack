@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SDRVSG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, B, LDB, D, Z, LDZ, AB, BB, AP,
@@ -25,11 +25,11 @@
 *      $                   RESULT( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>      SDRVSG checks the real symmetric generalized eigenproblem
 *>      drivers.
@@ -159,11 +159,10 @@
 *>      (19) Same as (8), but with KA = 3 and KB = 1
 *>      (20) Same as (8), but with KA = 3 and KB = 2
 *>      (21) Same as (8), but with KA = 3 and KB = 3
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  NSIZES  INTEGER
@@ -338,10 +337,9 @@
 *>       KMAGN(j)        The order of magnitude ( O(1),
 *>                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

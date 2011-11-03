@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZCHKHS( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, T1, T2, U, LDU, Z, UZ, W1,
@@ -30,11 +30,11 @@
 *      $                   WORK( * ), Z( LDU, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZCHKHS  checks the nonsymmetric eigenvalue problem routines.
 *>
@@ -165,11 +165,10 @@
 *>    (19) Nonsymmetric matrix with random entries chosen from |z| < 1
 *>    (20) Same as (19), but multiplied by SQRT( overflow threshold )
 *>    (21) Same as (19), but multiplied by SQRT( underflow threshold )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  NSIZES - INTEGER
@@ -393,10 +392,9 @@
 *>     KCONDS(j)       Selects whether CONDS is to be 1 or
 *>                     1/sqrt(ulp).  (0 means irrelevant.)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASQ2( N, Z, INFO )
 * 
@@ -27,11 +27,11 @@
 *       REAL               Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLASQ2 computes all the eigenvalues of the symmetric positive 
 *> definite tridiagonal matrix associated with the qd array Z to high
@@ -48,11 +48,10 @@
 *> on machines which follow ieee-754 floating-point standard in their
 *> handling of infinities and NaNs, and false otherwise. This variable
 *> is passed to SLASQ3.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -87,10 +86,9 @@
 *>              = 3, termination criterion of outer while loop not met 
 *>                   (program created more than N unreduced blocks)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -101,15 +99,14 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
+*>
 *>  Local Variables: I0:N0 defines a current unreduced segment of Z.
 *>  The shifts are accumulated in SIGMA. Iteration count is in ITER.
 *>  Ping-pong is controlled by PP (alternates between 0 and 1).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

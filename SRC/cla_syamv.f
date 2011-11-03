@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLA_SYAMV( UPLO, N, ALPHA, A, LDA, X, INCX, BETA, Y,
 *                             INCY )
@@ -31,11 +31,11 @@
 *       REAL               Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLA_SYAMV  performs the matrix-vector operation
 *>
@@ -52,11 +52,10 @@
 *> "symbolically" zero components are not perturbed.  A zero
 *> entry is considered "symbolic" if all multiplications involved
 *> in computing that entry have at least one zero multiplicand.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -147,10 +146,9 @@
 *>           Y. INCY must not be zero.
 *>           Unchanged on exit.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -161,10 +159,9 @@
 *
 *> \ingroup complexSYcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 2 Blas routine.
@@ -176,7 +173,6 @@
 *>     Richard Hanson, Sandia National Labs.
 *>  -- Modified for the absolute-value product, April 2006
 *>     Jason Riedy, UC Berkeley
-*>
 *> \endverbatim
 *>
 *  =====================================================================

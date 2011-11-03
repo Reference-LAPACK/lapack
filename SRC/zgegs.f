@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGEGS( JOBVSL, JOBVSR, N, A, LDA, B, LDB, ALPHA, BETA,
 *                         VSL, LDVSL, VSR, LDVSR, WORK, LWORK, RWORK,
@@ -33,11 +33,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This routine is deprecated and has been replaced by routine ZGGES.
 *>
@@ -56,11 +56,10 @@
 *> ZGEGV should be used instead.  See ZGEGV for a description of the
 *> eigenvalues of the generalized nonsymmetric eigenvalue problem
 *> (GNEP).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVSL
 *> \verbatim
@@ -208,10 +207,9 @@
 *>                =N+8: error return from ZGGBAK (computing VSR)
 *>                =N+9: error return from ZLASCL (various places)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

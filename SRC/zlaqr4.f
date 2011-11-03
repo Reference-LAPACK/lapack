@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAQR4( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,
 *                          IHIZ, Z, LDZ, WORK, LWORK, INFO )
@@ -29,11 +29,11 @@
 *       COMPLEX*16         H( LDH, * ), W( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZLAQR4 implements one level of recursion for ZLAQR0.
 *>    It is a complete implementation of the small bulge multi-shift
@@ -51,11 +51,10 @@
 *>    matrix Q so that this routine can give the Schur factorization
 *>    of a matrix A which has been reduced to the Hessenberg form H
 *>    by the unitary matrix Q:  A = Q*H*Q**H = (QZ)*H*(QZ)**H.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTT
 *> \verbatim
@@ -213,10 +212,9 @@
 *>                If INFO .GT. 0 and WANTZ is .FALSE., then Z is not
 *>                accessed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -227,27 +225,23 @@
 *
 *> \ingroup complex16OTHERauxiliary
 *
+*> \par Contributors:
+*  ==================
+*>
+*>       Karen Braman and Ralph Byers, Department of Mathematics,
+*>       University of Kansas, USA
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par References:
+*  ================
 *>
-*>     Based on contributions by
-*>        Karen Braman and Ralph Byers, Department of Mathematics,
-*>        University of Kansas, USA
-*>
-*>     References:
 *>       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
 *>       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
 *>       Performance, SIAM Journal of Matrix Analysis, volume 23, pages
 *>       929--947, 2002.
-*>
+*> \n
 *>       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
 *>       Algorithm Part II: Aggressive Early Deflation, SIAM Journal
 *>       of Matrix Analysis, volume 23, pages 948--973, 2002.
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE ZLAQR4( WANTT, WANTZ, N, ILO, IHI, H, LDH, W, ILOZ,

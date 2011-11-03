@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, V,
 *                          LDV, WORK, LWORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGESVJ computes the singular value decomposition (SVD) of a real
 *> M-by-N matrix A, where M >= N. The SVD of A is written as
@@ -45,62 +45,10 @@
 *> matrix, and V is an N-by-N orthogonal matrix. The diagonal elements
 *> of SIGMA are the singular values of A. The columns of U and V are the
 *> left and the right singular vectors of A, respectively.
-*>
-*> Further Details
-*> ~~~~~~~~~~~~~~~
-*> The orthogonal N-by-N matrix V is obtained as a product of Jacobi plane
-*> rotations. The rotations are implemented as fast scaled rotations of
-*> Anda and Park [1]. In the case of underflow of the Jacobi angle, a
-*> modified Jacobi transformation of Drmac [4] is used. Pivot strategy uses
-*> column interchanges of de Rijk [2]. The relative accuracy of the computed
-*> singular values and the accuracy of the computed singular vectors (in
-*> angle metric) is as guaranteed by the theory of Demmel and Veselic [3].
-*> The condition number that determines the accuracy in the full rank case
-*> is essentially min_{D=diag} kappa(A*D), where kappa(.) is the
-*> spectral condition number. The best performance of this Jacobi SVD
-*> procedure is achieved if used in an  accelerated version of Drmac and
-*> Veselic [5,6], and it is the kernel routine in the SIGMA library [7].
-*> Some tunning parameters (marked with [TP]) are available for the
-*> implementer.
-*> The computational range for the nonzero singular values is the  machine
-*> number interval ( UNDERFLOW , OVERFLOW ). In extreme cases, even
-*> denormalized singular values can be computed with the corresponding
-*> gradual loss of accurate digits.
-*>
-*> Contributors
-*> ~~~~~~~~~~~~
-*> Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
-*>
-*> References
-*> ~~~~~~~~~~
-*> [1] A. A. Anda and H. Park: Fast plane rotations with dynamic scaling.
-*>    SIAM J. matrix Anal. Appl., Vol. 15 (1994), pp. 162-174.
-*> [2] P. P. M. De Rijk: A one-sided Jacobi algorithm for computing the
-*>    singular value decomposition on a vector computer.
-*>    SIAM J. Sci. Stat. Comp., Vol. 10 (1998), pp. 359-371.
-*> [3] J. Demmel and K. Veselic: Jacobi method is more accurate than QR.
-*> [4] Z. Drmac: Implementation of Jacobi rotations for accurate singular
-*>    value computation in floating point arithmetic.
-*>    SIAM J. Sci. Comp., Vol. 18 (1997), pp. 1200-1222.
-*> [5] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm I.
-*>    SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1322-1342.
-*>    LAPACK Working note 169.
-*> [6] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm II.
-*>    SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1343-1362.
-*>    LAPACK Working note 170.
-*> [7] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
-*>    QSVD, (H,K)-SVD computations.
-*>    Department of Mathematics, University of Zagreb, 2008.
-*>
-*> Bugs, Examples and Comments
-*> ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*> Please report all bugs and send interesting test examples and comments to
-*> drmac@math.hr. Thank you.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBA
 *> \verbatim
@@ -301,10 +249,9 @@
 *>                of sweeps. The output may still be useful. See the
 *>                description of WORK.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -314,6 +261,61 @@
 *> \date November 2011
 *
 *> \ingroup realGEcomputational
+*
+*> \par Further Details:
+*  =====================
+*>
+*> The orthogonal N-by-N matrix V is obtained as a product of Jacobi plane
+*> rotations. The rotations are implemented as fast scaled rotations of
+*> Anda and Park [1]. In the case of underflow of the Jacobi angle, a
+*> modified Jacobi transformation of Drmac [4] is used. Pivot strategy uses
+*> column interchanges of de Rijk [2]. The relative accuracy of the computed
+*> singular values and the accuracy of the computed singular vectors (in
+*> angle metric) is as guaranteed by the theory of Demmel and Veselic [3].
+*> The condition number that determines the accuracy in the full rank case
+*> is essentially min_{D=diag} kappa(A*D), where kappa(.) is the
+*> spectral condition number. The best performance of this Jacobi SVD
+*> procedure is achieved if used in an  accelerated version of Drmac and
+*> Veselic [5,6], and it is the kernel routine in the SIGMA library [7].
+*> Some tunning parameters (marked with [TP]) are available for the
+*> implementer. \n
+*> The computational range for the nonzero singular values is the  machine
+*> number interval ( UNDERFLOW , OVERFLOW ). In extreme cases, even
+*> denormalized singular values can be computed with the corresponding
+*> gradual loss of accurate digits.
+*>
+*> \par Contributors:
+*  ==================
+*>
+*> Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
+*>
+*> \par References:
+*  ================
+*>
+*> [1] A. A. Anda and H. Park: Fast plane rotations with dynamic scaling. \n
+*>    SIAM J. matrix Anal. Appl., Vol. 15 (1994), pp. 162-174. \n\n
+*> [2] P. P. M. De Rijk: A one-sided Jacobi algorithm for computing the
+*>    singular value decomposition on a vector computer. \n
+*>    SIAM J. Sci. Stat. Comp., Vol. 10 (1998), pp. 359-371. \n\n
+*> [3] J. Demmel and K. Veselic: Jacobi method is more accurate than QR. \n
+*> [4] Z. Drmac: Implementation of Jacobi rotations for accurate singular
+*>    value computation in floating point arithmetic. \n
+*>    SIAM J. Sci. Comp., Vol. 18 (1997), pp. 1200-1222. \n\n
+*> [5] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm I. \n
+*>    SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1322-1342. \n
+*>    LAPACK Working note 169. \n\n
+*> [6] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm II. \n
+*>    SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1343-1362. \n
+*>    LAPACK Working note 170. \n\n
+*> [7] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
+*>    QSVD, (H,K)-SVD computations.\n
+*>    Department of Mathematics, University of Zagreb, 2008.
+*>
+*> \par Bugs, Examples and Comments:
+*  =================================
+*>
+*> Please report all bugs and send interesting test examples and comments to
+*> drmac@math.hr. Thank you.
 *
 *  =====================================================================
       SUBROUTINE SGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, V,

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLARZT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            T( LDT, * ), TAU( * ), V( LDV, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLARZT forms the triangular factor T of a complex block reflector
 *> H of order > n, which is defined as a product of k elementary
@@ -53,11 +53,10 @@
 *>    H  =  I - V**H * T * V
 *>
 *> Currently, only STOREV = 'R' and DIRECT = 'B' are supported.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] DIRECT
 *> \verbatim
@@ -125,10 +124,9 @@
 *>          LDT is INTEGER
 *>          The leading dimension of the array T. LDT >= K.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -139,14 +137,15 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
+*
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
 *>
 *>  The shape of the matrix V and the storage of the vectors which define
 *>  the H(i) is best illustrated by the following example with n = 5 and
@@ -181,7 +180,6 @@
 *>     V = ( v1 v2 v3 )
 *>         ( v1 v2 v3 )
 *>         ( v1 v2 v3 )
-*>
 *> \endverbatim
 *>
 *  =====================================================================

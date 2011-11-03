@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGLMTS( N, M, P, A, AF, LDA, B, BF, LDB, D, DF,
 *                          X, U, WORK, LWORK, RWORK, RESULT )
@@ -20,19 +20,18 @@
 *      $                   BF( LDB, * ), RWORK( * ), D( * ), DF( * ),
 *      $                   U( * ), WORK( LWORK ), X( * )
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGLMTS tests SGGGLM - a subroutine for solving the generalized
 *> linear model problem.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -133,10 +132,9 @@
 *>            RESULT = -----------------------------------------
 *>                     (norm(A)+norm(B))*(norm(x)+norm(u))*EPS
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

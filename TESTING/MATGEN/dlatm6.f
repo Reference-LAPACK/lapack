@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLATM6( TYPE, N, A, LDA, B, X, LDX, Y, LDY, ALPHA,
 *                          BETA, WX, WY, S, DIF )
@@ -20,11 +20,11 @@
 *      $                   X( LDX, * ), Y( LDY, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLATM6 generates test matrices for the generalized eigenvalue
 *> problem, their corresponding right and left eigenvector matrices,
@@ -65,11 +65,10 @@
 *>         0    0    0    0    1,        0   0   0   0   1 ,
 *>
 *> where a, b, x and y will have all values independently of each other.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TYPE
 *> \verbatim
@@ -160,10 +159,9 @@
 *>          DIF is DOUBLE PRECISION array, dimension (N)
 *>          DIF(i) is the reciprocal condition number for eigenvector i.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLARUV( ISEED, N, X )
 * 
@@ -28,21 +28,20 @@
 *       REAL               X( N )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLARUV returns a vector of n random real numbers from a uniform (0,1)
 *> distribution (n <= 128).
 *>
 *> This is an auxiliary routine called by SLARNV and CLARNV.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in,out] ISEED
 *> \verbatim
@@ -64,10 +63,9 @@
 *>          X is REAL array, dimension (N)
 *>          The generated random numbers.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -78,10 +76,9 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  This routine uses a multiplicative congruential method with modulus
@@ -93,7 +90,6 @@
 *>  48-bit integers are stored in 4 integer array elements with 12 bits
 *>  per element. Hence the routine is portable across machines with
 *>  integers of 32 bits or more.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

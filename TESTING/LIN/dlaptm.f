@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAPTM( N, NRHS, ALPHA, D, E, X, LDX, BETA, B, LDB )
 * 
@@ -18,11 +18,11 @@
 *       DOUBLE PRECISION   B( LDB, * ), D( * ), E( * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAPTM multiplies an N by NRHS matrix X by a symmetric tridiagonal
 *> matrix A and stores the result in a matrix B.  The operation has the
@@ -31,11 +31,10 @@
 *>    B := alpha * A * X + beta * B
 *>
 *> where alpha may be either 1. or -1. and beta may be 0., 1., or -1.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -101,10 +100,9 @@
 *>          LDB is INTEGER
 *>          The leading dimension of the array B.  LDB >= max(N,1).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

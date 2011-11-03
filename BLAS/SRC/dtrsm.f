@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTRSM(SIDE,UPLO,TRANSA,DIAG,M,N,ALPHA,A,LDA,B,LDB)
 * 
@@ -19,11 +19,11 @@
 *       DOUBLE PRECISION A(LDA,*),B(LDB,*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTRSM  solves one of the matrix equations
 *>
@@ -35,11 +35,10 @@
 *>    op( A ) = A   or   op( A ) = A**T.
 *>
 *> The matrix X is overwritten on B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -151,10 +150,9 @@
 *>           in  the  calling  (sub)  program.   LDB  must  be  at  least
 *>           max( 1, m ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -165,10 +163,9 @@
 *
 *> \ingroup double_blas_level3
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 3 Blas routine.
@@ -179,7 +176,6 @@
 *>     Iain Duff, AERE Harwell.
 *>     Jeremy Du Croz, Numerical Algorithms Group Ltd.
 *>     Sven Hammarling, Numerical Algorithms Group Ltd.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

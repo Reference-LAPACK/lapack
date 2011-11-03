@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASV2( F, G, H, SSMIN, SSMAX, SNR, CSR, SNL, CSL )
 * 
@@ -24,11 +24,11 @@
 *       REAL               CSL, CSR, F, G, H, SNL, SNR, SSMAX, SSMIN
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLASV2 computes the singular value decomposition of a 2-by-2
 *> triangular matrix
@@ -40,11 +40,10 @@
 *>
 *>    [ CSL  SNL ] [  F   G  ] [ CSR -SNR ]  =  [ SSMAX   0   ]
 *>    [-SNL  CSL ] [  0   H  ] [ SNR  CSR ]     [  0    SSMIN ].
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] F
 *> \verbatim
@@ -99,10 +98,9 @@
 *>          The vector (CSR, SNR) is a unit right singular vector for the
 *>          singular value abs(SSMAX).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -113,10 +111,9 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Any input parameter may be aliased with any output parameter.
@@ -136,7 +133,6 @@
 *>  Underflow is harmless if underflow is gradual. Otherwise, results
 *>  may correspond to a matrix modified by perturbations of size near
 *>  the underflow threshold.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

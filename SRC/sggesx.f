@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGGESX( JOBVSL, JOBVSR, SORT, SELCTG, SENSE, N, A, LDA,
 *                          B, LDB, SDIM, ALPHAR, ALPHAI, BETA, VSL, LDVSL,
@@ -41,11 +41,11 @@
 *       EXTERNAL           SELCTG
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGGESX computes for a pair of N-by-N real nonsymmetric matrices
 *> (A,B), the generalized eigenvalues, the real Schur form (S,T), and,
@@ -81,11 +81,10 @@
 *> and the pair of corresponding 2-by-2 blocks in S and T will have a
 *> complex conjugate pair of generalized eigenvalues.
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVSL
 *> \verbatim
@@ -329,10 +328,9 @@
 *>                      be caused due to scaling.
 *>                =N+3: reordering failed in STGSEN.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -343,10 +341,9 @@
 *
 *> \ingroup realGEeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  An approximate (asymptotic) bound on the average absolute error of
@@ -360,7 +357,6 @@
 *>       EPS * norm((A, B)) / RCONDV( 2 ).
 *>
 *>  See LAPACK User's Guide, section 4.11 for more information.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

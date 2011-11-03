@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLATMR( M, N, DIST, ISEED, SYM, D, MODE, COND, DMAX,
 *                          RSIGN, GRADE, DL, MODEL, CONDL, DR, MODER,
@@ -24,11 +24,11 @@
 *       COMPLEX            A( LDA, * ), D( * ), DL( * ), DR( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    CLATMR generates random matrices of various types for testing
 *>    LAPACK programs.
@@ -85,11 +85,10 @@
 *>          in the order of the rows and/or columns, and otherwise
 *>          contain the same data. This consistency cannot be and
 *>          is not maintained with less than full bandwidth.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -472,10 +471,9 @@
 *>             5 => ANORM is positive, but matrix constructed prior to
 *>                  attempting to scale it to have norm ANORM, is zero
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

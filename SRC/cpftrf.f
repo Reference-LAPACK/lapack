@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPFTRF( TRANSR, UPLO, N, A, INFO )
 * 
@@ -27,11 +27,11 @@
 *       .. Array Arguments ..
 *       COMPLEX            A( 0: * )
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPFTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A.
@@ -42,11 +42,10 @@
 *> where U is an upper triangular matrix and L is lower triangular.
 *>
 *> This is the block version of the algorithm, calling Level 3 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSR
 *> \verbatim
@@ -196,10 +195,9 @@
 *>     -- -- -- -- --                   -- -- -- --
 *>     04 14 24 34 44             43 44 22 32 42 52
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

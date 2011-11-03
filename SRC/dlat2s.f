@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAT2S( UPLO, N, A, LDA, SA, LDSA, INFO )
 * 
@@ -29,11 +29,11 @@
 *       DOUBLE PRECISION   A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAT2S converts a DOUBLE PRECISION triangular matrix, SA, to a SINGLE
 *> PRECISION triangular matrix, A.
@@ -43,11 +43,10 @@
 *> RMAX. If not the convertion is aborted and a flag is raised.
 *>
 *> This is an auxiliary routine so there is no argument checking.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -96,10 +95,9 @@
 *>                PRECISION overflow threshold, in this case, the content
 *>                of the UPLO part of SA in exit is unspecified.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

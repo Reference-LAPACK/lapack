@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAPLL( N, X, INCX, Y, INCY, SSMIN )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         X( * ), Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Given two column vectors X and Y, let
 *>
@@ -42,11 +42,10 @@
 *> and then computes the SVD of the 2-by-2 upper triangular matrix R.
 *> The smaller singular value of R is returned in SSMIN, which is used
 *> as the measurement of the linear dependency of the vectors X and Y.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -85,10 +84,9 @@
 *>          SSMIN is DOUBLE PRECISION
 *>          The smallest singular value of the N-by-2 matrix A = ( X Y ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

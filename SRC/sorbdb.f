@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,
 *                          X21, LDX21, X22, LDX22, THETA, PHI, TAUP1,
@@ -34,11 +34,11 @@
 *      $                   X21( LDX21, * ), X22( LDX22, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SORBDB simultaneously bidiagonalizes the blocks of an M-by-M
 *> partitioned orthogonal matrix X:
@@ -60,11 +60,10 @@
 *>
 *> B11, B12, B21, and B22 are Q-by-Q bidiagonal matrices represented
 *> implicitly by angles THETA, PHI.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -247,10 +246,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -261,10 +259,9 @@
 *
 *> \ingroup realOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The bidiagonal blocks B11, B12, B21, and B22 are represented
@@ -277,14 +274,13 @@
 *>  P1, P2, Q1, and Q2 are represented as products of elementary
 *>  reflectors. See SORCSD for details on generating P1, P2, Q1, and Q2
 *>  using SORGQR and SORGLQ.
-*>
-*>  Reference
-*>  =========
+*> \endverbatim
+*
+*> \par References:
+*  ================
 *>
 *>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
 *>      Algorithms, 50(1):33-65, 2009.
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SORBDB( TRANS, SIGNS, M, P, Q, X11, LDX11, X12, LDX12,

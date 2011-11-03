@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGGBAL( JOB, N, A, LDA, B, LDB, ILO, IHI, LSCALE,
 *                          RSCALE, WORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   RSCALE( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGGBAL balances a pair of general real matrices (A,B).  This
 *> involves, first, permuting A and B by similarity transformations to
@@ -46,11 +46,10 @@
 *> Balancing may reduce the 1-norm of the matrices, and improve the
 *> accuracy of the computed eigenvalues and/or eigenvectors in the
 *> generalized eigenvalue problem A*x = lambda*B*x.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -152,10 +151,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -166,15 +164,13 @@
 *
 *> \ingroup doubleGBcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  See R.C. WARD, Balancing the generalized eigenvalue problem,
 *>                 SIAM J. Sci. Stat. Comp. 2 (1981), 141-152.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

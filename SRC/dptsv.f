@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DPTSV( N, NRHS, D, E, B, LDB, INFO )
 * 
@@ -27,11 +27,11 @@
 *       DOUBLE PRECISION   B( LDB, * ), D( * ), E( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DPTSV computes the solution to a real system of linear equations
 *> A*X = B, where A is an N-by-N symmetric positive definite tridiagonal
@@ -39,11 +39,10 @@
 *>
 *> A is factored as A = L*D*L**T, and the factored form of A is then
 *> used to solve the system of equations.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -99,10 +98,9 @@
 *>                computed.  The factorization has not been completed
 *>                unless i = N.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

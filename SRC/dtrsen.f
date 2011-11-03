@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, WR, WI,
 *                          M, S, SEP, WORK, LWORK, IWORK, LIWORK, INFO )
@@ -33,11 +33,11 @@
 *      $                   WR( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTRSEN reorders the real Schur factorization of a real matrix
 *> A = Q*T*Q**T, so that a selected cluster of eigenvalues appears in
@@ -52,11 +52,10 @@
 *> block upper triangular with 1-by-1 and 2-by-2 diagonal blocks; each
 *> 2-by-2 diagonal block has its diagonal elemnts equal and its
 *> off-diagonal elements of opposite sign.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -222,10 +221,9 @@
 *>               contain the eigenvalues in the same order as in T; S and
 *>               SEP (if requested) are set to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -236,10 +234,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  DTRSEN first collects the selected eigenvalues by computing an
@@ -310,7 +307,6 @@
 *>  error in the computed right invariant subspace is
 *>
 *>                      EPS * norm(T) / SEP
-*>
 *> \endverbatim
 *>
 *  =====================================================================

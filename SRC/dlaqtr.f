@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAQTR( LTRAN, LREAL, N, T, LDT, B, W, SCALE, X, WORK,
 *                          INFO )
@@ -30,11 +30,11 @@
 *       DOUBLE PRECISION   B( * ), T( LDT, * ), WORK( * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAQTR solves the real quasi-triangular system
 *>
@@ -62,11 +62,10 @@
 *>
 *> This subroutine is designed for the condition number estimation
 *> in routine DTRSNA.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] LTRAN
 *> \verbatim
@@ -149,10 +148,9 @@
 *>          NOTE: In the interests of speed, this routine does not
 *>                check the inputs for errors.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

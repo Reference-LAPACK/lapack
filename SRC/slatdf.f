@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
 *                          JPIV )
@@ -30,11 +30,11 @@
 *       REAL               RHS( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLATDF uses the LU factorization of the n-by-n matrix Z computed by
 *> SGETC2 and computes a contribution to the reciprocal Dif-estimate
@@ -45,11 +45,10 @@
 *> The factorization of Z returned by SGETC2 has the form Z = P*L*U*Q,
 *> where P and Q are permutation matrices. L is lower triangular with
 *> unit diagonal elements and U is upper triangular.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IJOB
 *> \verbatim
@@ -125,10 +124,9 @@
 *>          The pivot indices; for 1 <= j <= N, column j of the
 *>          matrix has been interchanged with column JPIV(j).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -139,18 +137,23 @@
 *
 *> \ingroup realOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*>     Umea University, S-901 87 Umea, Sweden.
+*> \par Further Details:
+*  =====================
 *>
 *>  This routine is a further developed implementation of algorithm
 *>  BSOLVE in [1] using complete pivoting in the LU factorization.
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
+*>
+*> \verbatim
+*>
 *>
 *>  [1] Bo Kagstrom and Lars Westin,
 *>      Generalized Schur Methods with Condition Estimators for
@@ -162,7 +165,6 @@
 *>      between two Regular Matrix Pairs with Applications in
 *>      Condition Estimation. Report IMINF-95.05, Departement of
 *>      Computing Science, Umea University, S-901 87 Umea, Sweden, 1995.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

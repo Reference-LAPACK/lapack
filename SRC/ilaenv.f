@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 * 
@@ -25,11 +25,11 @@
 *       INTEGER            ISPEC, N1, N2, N3, N4
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ILAENV is called from the LAPACK routines to choose problem-dependent
 *> parameters for the local environment.  See ISPEC for a description of
@@ -47,11 +47,10 @@
 *>
 *> This routine will not function correctly if it is converted to all
 *> lower case.  Converting it to all upper case is allowed.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ISPEC
 *> \verbatim
@@ -124,10 +123,9 @@
 *>          Problem dimensions for the subroutine NAME; these may not all
 *>          be required.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -138,10 +136,9 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The following conventions have been used when calling ILAENV from the
@@ -160,7 +157,6 @@
 *>
 *>      NB = ILAENV( 1, 'STRTRI', UPLO // DIAG, N, -1, -1, -1 )
 *>      IF( NB.LE.1 ) NB = MAX( 1, N )
-*>
 *> \endverbatim
 *>
 *  =====================================================================

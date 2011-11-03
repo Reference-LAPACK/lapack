@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )
 * 
@@ -29,11 +29,11 @@
 *       REAL               A( LDA, * ), S( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSYEQUB computes row and column scalings intended to equilibrate a
 *> symmetric matrix A and reduce its condition number
@@ -43,11 +43,10 @@
 *> choice of S puts the condition number of B within a factor N of the
 *> smallest possible condition number over all possible diagonal
 *> scalings.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -112,10 +111,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  if INFO = i, the i-th diagonal element is nonpositive.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -126,18 +124,13 @@
 *
 *> \ingroup realSYcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par References:
+*  ================
 *>
-*>  Reference: Livne, O.E. and Golub, G.H., "Scaling by Binormalization",
-*>  Numerical Algorithms, vol. 35, no. 1, pp. 97-120, January 2004.
-*>  DOI 10.1023/B:NUMA.0000016606.32820.69
+*>  Livne, O.E. and Golub, G.H., "Scaling by Binormalization", \n
+*>  Numerical Algorithms, vol. 35, no. 1, pp. 97-120, January 2004. \n
+*>  DOI 10.1023/B:NUMA.0000016606.32820.69 \n
 *>  Tech report version: http://ruready.utah.edu/archive/papers/bin.pdf
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )

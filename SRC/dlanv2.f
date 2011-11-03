@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLANV2( A, B, C, D, RT1R, RT1I, RT2R, RT2I, CS, SN )
 * 
@@ -24,11 +24,11 @@
 *       DOUBLE PRECISION   A, B, C, CS, D, RT1I, RT1R, RT2I, RT2R, SN
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric
 *> matrix in standard form:
@@ -40,11 +40,10 @@
 *> 1) CC = 0 so that AA and DD are real eigenvalues of the matrix, or
 *> 2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are complex
 *> conjugate eigenvalues.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in,out] A
 *> \verbatim
@@ -101,10 +100,9 @@
 *>          SN is DOUBLE PRECISION
 *>          Parameters of the rotation matrix.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -115,17 +113,15 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Modified by V. Sima, Research Institute for Informatics, Bucharest,
 *>  Romania, to reduce the risk of cancellation errors,
 *>  when computing real eigenvalues, and to ensure, if possible, that
 *>  abs(RT1R) >= abs(RT2R).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAFTS( TYPE, M, N, IMAT, NTESTS, RESULT, ISEED,
 *                          THRESH, IOUNIT, IE )
@@ -21,20 +21,19 @@
 *       DOUBLE PRECISION   RESULT( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DLAFTS tests the result vector against the threshold value to
 *>    see which tests for this matrix type failed to pass the threshold.
 *>    Output is to the file given by unit IOUNIT.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  TYPE   - CHARACTER*3
@@ -83,10 +82,9 @@
 *>           failed to pass the threshold so far.
 *>           Updated on exit if any of the ratios in RESULT also fail.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

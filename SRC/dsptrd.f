@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSPTRD( UPLO, N, AP, D, E, TAU, INFO )
 * 
@@ -28,20 +28,19 @@
 *       DOUBLE PRECISION   AP( * ), D( * ), E( * ), TAU( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSPTRD reduces a real symmetric matrix A stored in packed form to
 *> symmetric tridiagonal form T by an orthogonal similarity
 *> transformation: Q**T * A * Q = T.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -103,10 +102,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -117,10 +115,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  If UPLO = 'U', the matrix Q is represented as a product of elementary
@@ -148,7 +145,6 @@
 *>  where tau is a real scalar, and v is a real vector with
 *>  v(1:i) = 0 and v(i+1) = 1; v(i+2:n) is stored on exit in AP,
 *>  overwriting A(i+2:n,i), and tau is stored in TAU(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

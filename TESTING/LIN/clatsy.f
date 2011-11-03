@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLATSY( UPLO, N, X, LDX, ISEED )
 * 
@@ -19,11 +19,11 @@
 *       COMPLEX            X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLATSY generates a special test matrix for the complex symmetric
 *> (indefinite) factorization.  The pivot blocks of the generated matrix
@@ -33,11 +33,10 @@
 *>    2x2 pivot block, diagonalizable
 *>    (cycle repeats)
 *> A row interchange is required for each non-diagonalizable 2x2 block.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -74,10 +73,9 @@
 *>          On entry, the seed for the random number generator.  The last
 *>          of the four integers must be odd.  (modified on exit)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

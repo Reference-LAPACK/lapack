@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASQ4( I0, N0, Z, PP, N0IN, DMIN, DMIN1, DMIN2, DN,
 *                          DN1, DN2, TAU, TTYPE, G )
@@ -29,19 +29,18 @@
 *       REAL               Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLASQ4 computes an approximation TAU to the smallest eigenvalue
 *> using values of d from the previous transform.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] I0
 *> \verbatim
@@ -127,10 +126,9 @@
 *>        G is passed as an argument in order to save its value between
 *>        calls to SLASQ4.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -141,13 +139,12 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>  CNST1 = 9/16
+*> \par Further Details:
+*  =====================
 *>
+*> \verbatim
+*>
+*>  CNST1 = 9/16
 *> \endverbatim
 *>
 *  =====================================================================

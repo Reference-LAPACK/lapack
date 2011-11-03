@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGET34( RMAX, LMAX, NINFO, KNT )
 * 
@@ -18,11 +18,11 @@
 *       INTEGER            NINFO( 2 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGET34 tests DLAEXC, a routine for swapping adjacent blocks (either
 *> 1 by 1 or 2 by 2) on the diagonal of a matrix in real Schur form.
@@ -38,11 +38,10 @@
 *>
 *> The test code verifies these last last assertions, as well as that
 *> the residual in the above equation is small.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -67,10 +66,9 @@
 *>          KNT is INTEGER
 *>          Total number of examples tested.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SRQT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,11 +20,11 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SRQT02 tests SORGRQ, which generates an m-by-n matrix Q with
 *> orthonornmal rows that is defined as the product of k elementary
@@ -35,11 +35,10 @@
 *> rows of A; it compares R(m-k+1:m,n-m+1:n) with
 *> A(m-k+1:m,1:n)*Q(n-m+1:n,1:n)', and checks that the rows of Q are
 *> orthonormal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -120,10 +119,9 @@
 *>          RESULT(1) = norm( R - A*Q' ) / ( N * norm(A) * EPS )
 *>          RESULT(2) = norm( I - Q*Q' ) / ( N * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

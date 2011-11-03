@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHET21( ITYPE, UPLO, N, KBAND, A, LDA, D, E, U, LDU, V,
 *                          LDV, TAU, WORK, RWORK, RESULT )
@@ -21,11 +21,11 @@
 *      $                   V( LDV, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHET21 generally checks a decomposition of the form
 *>
@@ -56,11 +56,10 @@
 *> V = H(1)...H(n-2),  where H(j) = I  -  tau(j) v(j) v(j)C> and each
 *> vector v(j) has its first j elements 0 and the remaining n-j elements
 *> stored in V(j+1:n,j).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -195,10 +194,9 @@
 *>          RESULT(1) is always modified.  RESULT(2) is modified only
 *>          if ITYPE=1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPPTRI( UPLO, N, AP, INFO )
 * 
@@ -28,20 +28,19 @@
 *       COMPLEX            AP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPPTRI computes the inverse of a complex Hermitian positive definite
 *> matrix A using the Cholesky factorization A = U**H*U or A = L*L**H
 *> computed by CPPTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -78,10 +77,9 @@
 *>          > 0:  if INFO = i, the (i,i) element of the factor U or L is
 *>                zero, and the inverse could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGGBAK( JOB, SIDE, N, ILO, IHI, LSCALE, RSCALE, M, V,
 *                          LDV, INFO )
@@ -30,21 +30,20 @@
 *       COMPLEX            V( LDV, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGGBAK forms the right or left eigenvectors of a complex generalized
 *> eigenvalue problem A*x = lambda*B*x, by backward transformation on
 *> the computed eigenvectors of the balanced pair of matrices output by
 *> CGGBAL.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -123,10 +122,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -137,15 +135,13 @@
 *
 *> \ingroup complexGBcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  See R.C. Ward, Balancing the generalized eigenvalue problem,
 *>                 SIAM J. Sci. Stat. Comp. 2 (1981), 141-152.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

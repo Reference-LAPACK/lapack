@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
 *                          JPIV )
@@ -30,11 +30,11 @@
 *       COMPLEX            RHS( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLATDF computes the contribution to the reciprocal Dif-estimate
 *> by solving for x in Z * x = b, where b is chosen such that the norm
@@ -45,11 +45,10 @@
 *> The factorization of Z returned by CGETC2 has the form
 *> Z = P * L * U * Q, where P and Q are permutation matrices. L is lower
 *> triangular with unit diagonal elements and U is upper triangular.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IJOB
 *> \verbatim
@@ -126,10 +125,9 @@
 *>          The pivot indices; for 1 <= j <= N, column j of the
 *>          matrix has been interchanged with column JPIV(j).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -140,18 +138,20 @@
 *
 *> \ingroup complexOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*>     Umea University, S-901 87 Umea, Sweden.
+*> \par Further Details:
+*  =====================
 *>
 *>  This routine is a further developed implementation of algorithm
 *>  BSOLVE in [1] using complete pivoting in the LU factorization.
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
 *>
 *>   [1]   Bo Kagstrom and Lars Westin,
 *>         Generalized Schur Methods with Condition Estimators for
@@ -164,9 +164,7 @@
 *>         Condition Estimation. Report UMINF-95.05, Department of
 *>         Computing Science, Umea University, S-901 87 Umea, Sweden,
 *>         1995.
-*>
-*> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE CLATDF( IJOB, N, Z, LDZ, RHS, RDSUM, RDSCAL, IPIV,
      $                   JPIV )

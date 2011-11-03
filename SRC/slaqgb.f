@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAQGB( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                          AMAX, EQUED )
@@ -30,20 +30,19 @@
 *       REAL               AB( LDAB, * ), C( * ), R( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAQGB equilibrates a general M by N band matrix A with KL
 *> subdiagonals and KU superdiagonals using the row and scaling factors
 *> in the vectors R and C.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -128,10 +127,12 @@
 *>                  by diag(C).
 *>          = 'B':  Both row and column equilibration, i.e., A has been
 *>                  replaced by diag(R) * A * diag(C).
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  THRESH is a threshold value used to decide if row or column scaling
 *>  should be done based on the ratio of the row or column scaling
 *>  factors.  If ROWCND < THRESH, row scaling is done, and if
@@ -141,10 +142,9 @@
 *>  should be done based on the absolute size of the largest matrix
 *>  element.  If AMAX > LARGE or AMAX < SMALL, row scaling is done.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

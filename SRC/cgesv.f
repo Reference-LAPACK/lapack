@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGESV( N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            A( LDA, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGESV computes the solution to a complex system of linear equations
 *>    A * X = B,
@@ -44,11 +44,10 @@
 *> where P is a permutation matrix, L is unit lower triangular, and U is
 *> upper triangular.  The factored form of A is then used to solve the
 *> system of equations A * X = B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -107,10 +106,9 @@
 *>                has been completed, but the factor U is exactly
 *>                singular, so the solution could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

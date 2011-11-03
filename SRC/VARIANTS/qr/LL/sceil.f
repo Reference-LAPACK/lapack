@@ -5,8 +5,8 @@ C> \brief \b SCEIL
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL FUNCTION SCEIL( A )
 * 
@@ -39,12 +39,12 @@ C>\details \b Purpose:
 C>\verbatim
 C>\endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 C> \author Univ. of Tennessee 
 C> \author Univ. of California Berkeley 

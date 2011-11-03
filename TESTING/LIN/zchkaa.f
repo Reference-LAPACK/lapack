@@ -5,16 +5,16 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       PROGRAM ZCHKAA
 * 
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZCHKAA is the main test program for the COMPLEX*16 linear equation
 *> routines.
@@ -64,11 +64,10 @@
 *> ZTZ    3               List types on next line if 0 < NTYPES <  3
 *> ZLS    6               List types on next line if 0 < NTYPES <  6
 *> ZEQ
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  NMAX    INTEGER
@@ -87,10 +86,9 @@
 *>  NOUT    INTEGER
 *>          The unit number for output
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -101,8 +99,7 @@
 *
 *> \ingroup complex16_lin
 *
-*  =====================================================================
-      PROGRAM ZCHKAA
+*  =====================================================================      PROGRAM ZCHKAA
 *
 *  -- LAPACK test routine (version 3.1.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

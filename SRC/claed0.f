@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAED0( QSIZ, N, D, E, Q, LDQ, QSTORE, LDQS, RWORK,
 *                          IWORK, INFO )
@@ -30,21 +30,20 @@
 *       COMPLEX            Q( LDQ, * ), QSTORE( LDQS, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Using the divide and conquer method, CLAED0 computes all eigenvalues
 *> of a symmetric tridiagonal matrix which is one diagonal block of
 *> those from reducing a dense or band Hermitian matrix and
 *> corresponding eigenvectors of the dense or band matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] QSIZ
 *> \verbatim
@@ -129,10 +128,9 @@
 *>                working on the submatrix lying in rows and columns
 *>                INFO/(N+1) through mod(INFO,N+1).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

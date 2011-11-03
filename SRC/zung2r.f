@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZUNG2R( M, N, K, A, LDA, TAU, WORK, INFO )
 * 
@@ -27,11 +27,11 @@
 *       COMPLEX*16         A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZUNG2R generates an m by n complex matrix Q with orthonormal columns,
 *> which is defined as the first n columns of a product of k elementary
@@ -40,11 +40,10 @@
 *>       Q  =  H(1) H(2) . . . H(k)
 *>
 *> as returned by ZGEQRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -99,10 +98,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument has an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

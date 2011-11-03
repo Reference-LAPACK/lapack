@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )
 * 
@@ -25,19 +25,18 @@
 *       REAL               ONE, ZERO
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> IEEECK is called from the ILAENV to verify that Infinity and
 *> possibly NaN arithmetic is safe (i.e. will not trap).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ISPEC
 *> \verbatim
@@ -67,10 +66,9 @@
 *>          = 0:  Arithmetic failed to produce the correct answers
 *>          = 1:  Arithmetic produced the correct answers
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

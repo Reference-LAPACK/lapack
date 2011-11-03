@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DPFTRF( TRANSR, UPLO, N, A, INFO )
 * 
@@ -27,11 +27,11 @@
 *       .. Array Arguments ..
 *       DOUBLE PRECISION   A( 0: * )
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DPFTRF computes the Cholesky factorization of a real symmetric
 *> positive definite matrix A.
@@ -42,11 +42,10 @@
 *> where U is an upper triangular matrix and L is lower triangular.
 *>
 *> This is the block version of the algorithm, calling Level 3 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSR
 *> \verbatim
@@ -96,10 +95,9 @@
 *>                positive definite, and the factorization could not be
 *>                completed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -110,10 +108,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  We first consider Rectangular Full Packed (RFP) Format when N is
@@ -196,7 +193,6 @@
 *>     02 12 22 00 01             00 10 20 30 40 50
 *>     03 13 23 33 11             33 11 21 31 41 51
 *>     04 14 24 34 44             43 44 22 32 42 52
-*>
 *> \endverbatim
 *>
 *  =====================================================================

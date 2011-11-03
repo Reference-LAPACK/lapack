@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZPPEQU( UPLO, N, AP, S, SCOND, AMAX, INFO )
 * 
@@ -30,11 +30,11 @@
 *       COMPLEX*16         AP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZPPEQU computes row and column scalings intended to equilibrate a
 *> Hermitian positive definite matrix A in packed storage and reduce
@@ -44,11 +44,10 @@
 *> This choice of S puts the condition number of B within a factor N of
 *> the smallest possible condition number over all possible diagonal
 *> scalings.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -102,10 +101,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  if INFO = i, the i-th diagonal element is nonpositive.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

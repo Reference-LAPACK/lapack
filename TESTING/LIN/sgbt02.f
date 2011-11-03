@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGBT02( TRANS, M, N, KL, KU, NRHS, A, LDA, X, LDX, B,
 *                          LDB, RESID )
@@ -20,21 +20,20 @@
 *       REAL               A( LDA, * ), B( LDB, * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGBT02 computes the residual for a solution of a banded system of
 *> equations  A*x = b  or  A'*x = b:
 *>    RESID = norm( B - A*X ) / ( norm(A) * norm(X) * EPS).
 *> where EPS is the machine precision.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -123,10 +122,9 @@
 *>          The maximum over the number of right hand sides of
 *>          norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

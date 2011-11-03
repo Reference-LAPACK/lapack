@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLARFY( UPLO, N, V, INCV, TAU, C, LDC, WORK )
 * 
@@ -19,11 +19,11 @@
 *       REAL               C( LDC, * ), V( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLARFY applies an elementary reflector, or Householder matrix, H,
 *> to an n x n symmetric matrix C, from both the left and the right.
@@ -35,11 +35,10 @@
 *> where  tau  is a scalar and  v  is a vector.
 *>
 *> If  tau  is  zero, then  H  is taken to be the unit matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -93,10 +92,9 @@
 *> \verbatim
 *>          WORK is REAL array, dimension (N)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

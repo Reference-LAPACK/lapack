@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 * 
@@ -20,19 +20,18 @@
 *       COMPLEX*16         A( LDA, * ), ARF( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZDRVRF1 tests the LAPACK RFP routines:
 *>     ZLANHF.F
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NOUT
 *> \verbatim
@@ -80,10 +79,9 @@
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

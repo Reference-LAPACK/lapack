@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL FUNCTION SLA_GERCOND ( TRANS, N, A, LDA, AF, LDAF, IPIV,
 *                                   CMODE, C, INFO, WORK, IWORK )
@@ -31,11 +31,11 @@
 *      $                   C( * )
 *      ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    SLA_GERCOND estimates the Skeel condition number of op(A) * op2(C)
 *>    where op2 is determined by CMODE as follows
@@ -46,11 +46,10 @@
 *>    is computed by computing scaling factors R such that
 *>    diag(R)*A*op2(C) is row equilibrated and computing the standard
 *>    infinity-norm condition number.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -134,10 +133,9 @@
 *>          IWORK is INTEGER array, dimension (N).
 *>     Workspace.2
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

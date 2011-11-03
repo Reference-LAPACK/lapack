@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION IZAMAX(N,ZX,INCX)
 * 
@@ -17,18 +17,17 @@
 *       COMPLEX*16 ZX(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    IZAMAX finds the index of element having max. absolute value.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -39,16 +38,14 @@
 *
 *> \ingroup aux_blas
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>     jack dongarra, 1/15/85.
 *>     modified 3/93 to return if incx .le. 0.
 *>     modified 12/3/93, array(1) declarations changed to array(*)
-*>
 *> \endverbatim
 *>
 *  =====================================================================

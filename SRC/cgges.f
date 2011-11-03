@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
 *                         SDIM, ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK,
@@ -38,11 +38,11 @@
 *       EXTERNAL           SELCTG
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGGES computes for a pair of N-by-N complex nonsymmetric matrices
 *> (A,B), the generalized eigenvalues, the generalized complex Schur
@@ -70,11 +70,10 @@
 *> A pair of matrices (S,T) is in generalized complex Schur form if S
 *> and T are upper triangular and, in addition, the diagonal elements
 *> of T are non-negative real numbers.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVSL
 *> \verbatim
@@ -253,10 +252,9 @@
 *>                      be caused due to scaling.
 *>                =N+3: reordering falied in CTGSEN.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

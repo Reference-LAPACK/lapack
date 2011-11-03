@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE STGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
 *                          LDVL, VR, LDVR, MM, M, WORK, INFO )
@@ -32,11 +32,11 @@
 *       ..
 *  
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> STGEVC computes some or all of the right and/or left eigenvectors of
 *> a pair of real matrices (S,P), where S is a quasi-triangular matrix
@@ -63,10 +63,10 @@
 *> factorization of a matrix pair (A,B), then Z*X and Q*Y
 *> are the matrices of right and left eigenvectors of (A,B).
 *> 
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -219,10 +219,9 @@
 *>          > 0:  the 2-by-2 block (INFO:INFO+1) does not have a complex
 *>                eigenvalue.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -233,10 +232,9 @@
 *
 *> \ingroup realGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Allocation of workspace:
@@ -291,7 +289,6 @@
 *>  transpose of the one in storage, so the rowwise method then
 *>  actually accesses columns of A and B at each step, and so is the
 *>  preferred method.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

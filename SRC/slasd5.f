@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASD5( I, D, Z, DELTA, RHO, DSIGMA, WORK )
 * 
@@ -28,11 +28,11 @@
 *       REAL               D( 2 ), DELTA( 2 ), WORK( 2 ), Z( 2 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This subroutine computes the square root of the I-th eigenvalue
 *> of a positive symmetric rank-one modification of a 2-by-2 diagonal
@@ -46,11 +46,10 @@
 *>
 *> We also assume RHO > 0 and that the Euclidean norm of the vector
 *> Z is one.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] I
 *> \verbatim
@@ -95,10 +94,9 @@
 *>          WORK is REAL array, dimension (2)
 *>         WORK contains (D(j) + sigma_I) in its  j-th component.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -109,17 +107,11 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ren-Cang Li, Computer Science Division, University of California
 *>     at Berkeley, USA
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SLASD5( I, D, Z, DELTA, RHO, DSIGMA, WORK )

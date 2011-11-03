@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, J1, N1, N2, WORK, LWORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTGEX2 swaps adjacent diagonal blocks (A11, B11) and (A22, B22)
 *> of size 1-by-1 or 2-by-2 in an upper (quasi) triangular matrix pair
@@ -50,11 +50,10 @@
 *>        Q(in) * A(in) * Z(in)**T = Q(out) * A(out) * Z(out)**T
 *>        Q(in) * B(in) * Z(in)**T = Q(out) * B(out) * Z(out)**T
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTQ
 *> \verbatim
@@ -173,10 +172,9 @@
 *>            <0: If INFO = -16: LWORK is too small. Appropriate value
 *>                for LWORK is returned in WORK(1).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -187,20 +185,24 @@
 *
 *> \ingroup doubleGEauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*>     Umea University, S-901 87 Umea, Sweden.
+*> \par Further Details:
+*  =====================
 *>
 *>  In the current code both weak and strong stability tests are
 *>  performed. The user can omit the strong stability test by changing
 *>  the internal logical parameter WANDS to .FALSE.. See ref. [2] for
 *>  details.
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
+*>
+*> \verbatim
 *>
 *>  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
 *>      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
@@ -213,7 +215,6 @@
 *>      Report UMINF - 94.04, Department of Computing Science, Umea
 *>      University, S-901 87 Umea, Sweden, 1994. Also as LAPACK Working
 *>      Note 87. To appear in Numerical Algorithms, 1996.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPTTRS( UPLO, N, NRHS, D, E, B, LDB, INFO )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX            B( LDB, * ), E( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPTTRS solves a tridiagonal system of the form
 *>    A * X = B
@@ -41,11 +41,10 @@
 *> D is a diagonal matrix specified in the vector D, U (or L) is a unit
 *> bidiagonal matrix whose superdiagonal (subdiagonal) is specified in
 *> the vector E, and X and B are N by NRHS matrices.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -106,10 +105,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -k, the k-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

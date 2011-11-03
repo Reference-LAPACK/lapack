@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CUNGR2( M, N, K, A, LDA, TAU, WORK, INFO )
 * 
@@ -27,11 +27,11 @@
 *       COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CUNGR2 generates an m by n complex matrix Q with orthonormal rows,
 *> which is defined as the last m rows of a product of k elementary
@@ -40,11 +40,10 @@
 *>       Q  =  H(1)**H H(2)**H . . . H(k)**H
 *>
 *> as returned by CGERQF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -99,10 +98,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument has an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

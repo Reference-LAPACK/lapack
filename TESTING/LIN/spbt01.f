@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPBT01( UPLO, N, KD, A, LDA, AFAC, LDAFAC, RWORK,
 *                          RESID )
@@ -20,11 +20,11 @@
 *       REAL               A( LDA, * ), AFAC( LDAFAC, * ), RWORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPBT01 reconstructs a symmetric positive definite band matrix A from
 *> its L*L' or U'*U factorization and computes the residual
@@ -32,11 +32,10 @@
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon, L' is the conjugate transpose of
 *> L, and U' is the conjugate transpose of U.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -103,10 +102,9 @@
 *>          If UPLO = 'L', norm(L*L' - A) / ( N * norm(A) * EPS )
 *>          If UPLO = 'U', norm(U'*U - A) / ( N * norm(A) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

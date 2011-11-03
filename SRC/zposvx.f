@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZPOSVX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
 *                          S, B, LDB, X, LDX, RCOND, FERR, BERR, WORK,
@@ -33,11 +33,11 @@
 *      $                   WORK( * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZPOSVX uses the Cholesky factorization A = U**H*U or A = L*L**H to
 *> compute the solution to a complex system of linear equations
@@ -47,9 +47,12 @@
 *>
 *> Error bounds on the solution and a condition estimate are also
 *> provided.
+*> \endverbatim
+*
+*> \par Description:
+*  =================
 *>
-*> Description
-*> ===========
+*> \verbatim
 *>
 *> The following steps are performed:
 *>
@@ -85,11 +88,10 @@
 *> 6. If equilibration was used, the matrix X is premultiplied by
 *>    diag(S) so that it solves the original system before
 *>    equilibration.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] FACT
 *> \verbatim
@@ -286,10 +288,9 @@
 *>                       computed solution can be more accurate than the
 *>                       value of RCOND would suggest.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

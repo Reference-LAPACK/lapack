@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SBDSQR( UPLO, N, NCVT, NRU, NCC, D, E, VT, LDVT, U,
 *                          LDU, C, LDC, WORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   VT( LDVT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SBDSQR computes the singular values and, optionally, the right and/or
 *> left singular vectors from the singular value decomposition (SVD) of
@@ -65,11 +65,10 @@
 *> B. Parlett and V. Fernando, Technical Report CPAM-554, Mathematics
 *> Department, University of California at Berkeley, July 1992
 *> for a detailed description of the algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -187,10 +186,12 @@
 *>                   elements of a bidiagonal matrix which is orthogonally
 *>                   similar to the input matrix B;  if INFO = i, i
 *>                   elements of E have not converged to zero.
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  TOLMUL  REAL, default = max(10,min(100,EPS**(-1/8)))
 *>          TOLMUL controls the convergence criterion of the QR loop.
 *>          If it is positive, TOLMUL*EPS is the desired relative
@@ -212,10 +213,9 @@
 *>          (and so fails to converge) if the number of passes
 *>          through the inner loop exceeds MAXITR*N**2.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
 *                          H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,
@@ -32,19 +32,18 @@
 *      $                   WH( LDWH, * ), WV( LDWV, * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZLAQR5, called by ZLAQR0, performs a
 *>    single small-bulge multi-shift QR sweep.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTT
 *> \verbatim
@@ -220,10 +219,9 @@
 *>             LDWV is the leading dimension of WV as declared in the
 *>             in the calling subroutine.  LDWV.GE.NV.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -234,6 +232,20 @@
 *
 *> \ingroup complex16OTHERauxiliary
 *
+*> \par Contributors:
+*  ==================
+*>
+*>       Karen Braman and Ralph Byers, Department of Mathematics,
+*>       University of Kansas, USA
+*
+*> \par References:
+*  ================
+*>
+*>       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
+*>       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
+*>       Performance, SIAM Journal of Matrix Analysis, volume 23, pages
+*>       929--947, 2002.
+*>
 *  =====================================================================
       SUBROUTINE ZLAQR5( WANTT, WANTZ, KACC22, N, KTOP, KBOT, NSHFTS, S,
      $                   H, LDH, ILOZ, IHIZ, Z, LDZ, V, LDV, U, LDU, NV,
@@ -253,19 +265,6 @@
       COMPLEX*16         H( LDH, * ), S( * ), U( LDU, * ), V( LDV, * ),
      $                   WH( LDWH, * ), WV( LDWV, * ), Z( LDZ, * )
 *     ..
-*
-*  ================================================================
-*     Based on contributions by
-*        Karen Braman and Ralph Byers, Department of Mathematics,
-*        University of Kansas, USA
-*
-*  ================================================================
-*     Reference:
-*
-*     K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
-*     Algorithm Part I: Maintaining Well Focused Shifts, and
-*     Level 3 Performance, SIAM Journal of Matrix Analysis,
-*     volume 23, pages 929--947, 2002.
 *
 *  ================================================================
 *     .. Parameters ..

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION ZLA_GERPVGRW( N, NCOLS, A, LDA, AF,
 *                LDAF )
@@ -28,11 +28,12 @@
 *       COMPLEX*16         A( LDA, * ), AF( LDAF, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
 *> 
 *> ZLA_GERPVGRW computes the reciprocal pivot growth factor
 *> norm(A)/norm(U). The "max absolute element" norm is used. If this is
@@ -40,11 +41,10 @@
 *> (equilibrated) matrix A could be poor. This also means that the
 *> solution X, estimated condition numbers, and error bounds could be
 *> unreliable.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -83,10 +83,9 @@
 *>          LDAF is INTEGER
 *>     The leading dimension of the array AF.  LDAF >= max(1,N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

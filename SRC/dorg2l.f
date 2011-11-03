@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DORG2L( M, N, K, A, LDA, TAU, WORK, INFO )
 * 
@@ -27,11 +27,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DORG2L generates an m by n real matrix Q with orthonormal columns,
 *> which is defined as the last n columns of a product of k elementary
@@ -40,11 +40,10 @@
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
 *> as returned by DGEQLF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -99,10 +98,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument has an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

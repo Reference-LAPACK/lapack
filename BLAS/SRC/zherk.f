@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHERK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
 * 
@@ -19,11 +19,11 @@
 *       COMPLEX*16 A(LDA,*),C(LDC,*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHERK  performs one of the hermitian rank k operations
 *>
@@ -36,11 +36,10 @@
 *> where  alpha and beta  are  real scalars,  C is an  n by n  hermitian
 *> matrix and  A  is an  n by k  matrix in the  first case and a  k by n
 *> matrix in the second case.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -141,10 +140,9 @@
 *>           in  the  calling  (sub)  program.   LDC  must  be  at  least
 *>           max( 1, n ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -155,10 +153,9 @@
 *
 *> \ingroup complex16_blas_level3
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 3 Blas routine.
@@ -171,7 +168,6 @@
 *>
 *>  -- Modified 8-Nov-93 to set C(J,J) to DBLE( C(J,J) ) when BETA = 1.
 *>     Ed Anderson, Cray Research Inc.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

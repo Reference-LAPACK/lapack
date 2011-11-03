@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAIPD( N, A, INDA, VINDA )
 * 
@@ -17,21 +17,20 @@
 *       COMPLEX            A( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAIPD sets the imaginary part of the diagonal elements of a complex
 *> matrix A to a large value.  This is used to test LAPACK routines for
 *> complex Hermitian matrices, which are not supposed to access or use
 *> the imaginary parts of the diagonals.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -68,10 +67,9 @@
 *>         = 1:  packed upper triangular matrix
 *>         = -1:  packed lower triangular matrix
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

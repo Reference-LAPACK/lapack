@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION IPARMQ( ISPEC, NAME, OPTS, N, ILO, IHI, LWORK )
 * 
@@ -24,20 +24,19 @@
 *       INTEGER            IHI, ILO, ISPEC, LWORK, N
 *       CHARACTER          NAME*( * ), OPTS*( * )
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>      This program sets problem and machine dependent parameters
 *>      useful for xHSEQR and its subroutines. It is called whenever 
 *>      ILAENV is called with 12 <= ISPEC <= 16
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ISPEC
 *> \verbatim
@@ -131,10 +130,9 @@
 *>          LWORK is integer scalar
 *>               The amount of workspace available.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -145,10 +143,9 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>       Little is known about how best to choose these parameters.
@@ -212,7 +209,6 @@
 *>       IPARMQ(ISPEC=16) Select structured matrix multiply.
 *>                        (See ISPEC=16 above for details.)
 *>                        Default: 3.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

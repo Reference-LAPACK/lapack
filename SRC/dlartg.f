@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARTG( F, G, CS, SN, R )
 * 
@@ -24,11 +24,11 @@
 *       DOUBLE PRECISION   CS, F, G, R, SN
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARTG generate a plane rotation so that
 *>
@@ -44,11 +44,10 @@
 *>       there are zeros on the diagonal).
 *>
 *> If F exceeds G in magnitude, CS will be positive.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] F
 *> \verbatim
@@ -82,10 +81,9 @@
 *>  This version has a few statements commented out for thread safety
 *>  (machine parameters are computed on each entry). 10 feb 03, SJH.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLASSQ( N, X, INCX, SCALE, SUMSQ )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLASSQ returns the values scl and ssq such that
 *>
@@ -52,11 +52,10 @@
 *> SCALE and SUMSQ are overwritten by scl and ssq respectively.
 *>
 *> The routine makes only one pass through the vector X.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -91,10 +90,9 @@
 *>          On entry, the value  sumsq  in the equation above.
 *>          On exit, SUMSQ is overwritten with the value  ssq .
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

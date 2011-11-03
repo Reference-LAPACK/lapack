@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DLARAN( ISEED )
 * 
@@ -14,19 +14,18 @@
 *       INTEGER            ISEED( 4 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARAN returns a random real number from a uniform (0,1)
 *> distribution.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in,out] ISEED
 *> \verbatim
@@ -36,10 +35,9 @@
 *>          odd.
 *>          On exit, the seed is updated.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -50,10 +48,9 @@
 *
 *> \ingroup list_temp
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  This routine uses a multiplicative congruential method with modulus
@@ -65,7 +62,6 @@
 *>  48-bit integers are stored in 4 integer array elements with 12 bits
 *>  per element. Hence the routine is portable across machines with
 *>  integers of 32 bits or more.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

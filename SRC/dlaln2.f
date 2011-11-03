@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLALN2( LTRANS, NA, NW, SMIN, CA, A, LDA, D1, D2, B,
 *                          LDB, WR, WI, X, LDX, SCALE, XNORM, INFO )
@@ -30,11 +30,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLALN2 solves a system of the form  (ca A - w D ) X = s B
 *> or (ca A**T - w D) X = s B   with possible scaling ("s") and
@@ -66,11 +66,10 @@
 *>
 *> Note: all input quantities are assumed to be smaller than overflow
 *> by a reasonable factor.  (See BIGNUM.)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] LTRANS
 *> \verbatim
@@ -202,10 +201,9 @@
 *>          NOTE: In the interests of speed, this routine does not
 *>                check the inputs for errors.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

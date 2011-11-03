@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL          FUNCTION CLCTES( Z, D )
 * 
@@ -14,11 +14,11 @@
 *       COMPLEX            D, Z
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLCTES returns .TRUE. if the eigenvalue Z/D is to be selected
 *> (specifically, in this subroutine, if the real part of the
@@ -26,11 +26,10 @@
 *>
 *> It is used by the test routine CDRGES to test whether the driver
 *> routine CGGES succesfully sorts eigenvalues.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] Z
 *> \verbatim
@@ -43,10 +42,9 @@
 *>          D is COMPLEX
 *>          The denominator part of a complex eigenvalue Z/D.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

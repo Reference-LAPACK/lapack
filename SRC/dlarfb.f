@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, V, LDV,
 *                          T, LDT, C, LDC, WORK, LDWORK )
@@ -30,19 +30,18 @@
 *      $                   WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARFB applies a real block reflector H or its transpose H**T to a
 *> real m by n matrix C, from either the left or the right.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -151,10 +150,9 @@
 *>          If SIDE = 'L', LDWORK >= max(1,N);
 *>          if SIDE = 'R', LDWORK >= max(1,M).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -165,10 +163,9 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The shape of the matrix V and the storage of the vectors which define
@@ -192,7 +189,6 @@
 *>                   (  1 v2 v3 )                     ( v3 v3 v3 v3  1 )
 *>                   (     1 v3 )
 *>                   (        1 )
-*>
 *> \endverbatim
 *>
 *  =====================================================================

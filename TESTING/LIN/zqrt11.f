@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION ZQRT11( M, K, A, LDA, TAU, WORK, LWORK )
 * 
@@ -17,11 +17,11 @@
 *       COMPLEX*16         A( LDA, * ), TAU( * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZQRT11 computes the test ratio
 *>
@@ -35,11 +35,10 @@
 *> where tau(k) is stored in TAU(k) and v(k) is an m-vector of the form
 *> [ 0 ... 0 1 x(k) ]', where x(k) is a vector of length m-k stored
 *> in A(k+1:m,k).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -83,10 +82,9 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= M*M + M.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

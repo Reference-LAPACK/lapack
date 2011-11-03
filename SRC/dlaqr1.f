@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   H( LDH, * ), V( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>      Given a 2-by-2 or 3-by-3 matrix H, DLAQR1 sets v to a
 *>      scalar multiple of the first column of the product
@@ -48,11 +48,10 @@
 *>
 *>      This is useful for starting double implicit shift bulges
 *>      in the QR algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -100,10 +99,9 @@
 *>              A scalar multiple of the first column of the
 *>              matrix K in (*).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -114,17 +112,11 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>     Based on contributions by
-*>        Karen Braman and Ralph Byers, Department of Mathematics,
-*>        University of Kansas, USA
-*>
-*> \endverbatim
+*>       Karen Braman and Ralph Byers, Department of Mathematics,
+*>       University of Kansas, USA
 *>
 *  =====================================================================
       SUBROUTINE DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )

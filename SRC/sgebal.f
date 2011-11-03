@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               A( LDA, * ), SCALE( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGEBAL balances a general real matrix A.  This involves, first,
 *> permuting A by a similarity transformation to isolate eigenvalues
@@ -43,11 +43,10 @@
 *>
 *> Balancing may reduce the 1-norm of the matrix, and improve the
 *> accuracy of the computed eigenvalues and/or eigenvectors.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -113,10 +112,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -127,10 +125,9 @@
 *
 *> \ingroup realGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The permutations consist of row and column interchanges which put
@@ -158,7 +155,6 @@
 *>
 *>  Modified by Tzu-Yi Chen, Computer Science Division, University of
 *>    California at Berkeley, USA
-*>
 *> \endverbatim
 *>
 *  =====================================================================

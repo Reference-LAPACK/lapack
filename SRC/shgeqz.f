@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SHGEQZ( JOB, COMPQ, COMPZ, N, ILO, IHI, H, LDH, T, LDT,
 *                          ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
@@ -32,11 +32,11 @@
 *      $                   WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SHGEQZ computes the eigenvalues of a real matrix pair (H,T),
 *> where H is an upper Hessenberg matrix and T is upper triangular,
@@ -92,11 +92,10 @@
 *> Ref: C.B. Moler & G.W. Stewart, "An Algorithm for Generalized Matrix
 *>      Eigenvalue Problems", SIAM J. Numer. Anal., 10(1973),
 *>      pp. 241--256.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -274,10 +273,9 @@
 *>                     in Schur form, but ALPHAR(i), ALPHAI(i), and
 *>                     BETA(i), i=INFO-N+1,...,N should be correct.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -288,10 +286,9 @@
 *
 *> \ingroup realGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Iteration counters:
@@ -300,7 +297,6 @@
 *>  IITER  -- counts iterations run since ILAST was last
 *>            changed.  This is therefore reset only when a 1-by-1 or
 *>            2-by-2 block deflates off the bottom.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

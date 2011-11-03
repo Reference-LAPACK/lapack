@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 * 
@@ -28,21 +28,20 @@
 *       COMPLEX            B( LDB, * ), C( LDC, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLARCM performs a very simple matrix-matrix multiplication:
 *>          C := A * B,
 *> where A is M by M and real; B is M by N and complex;
 *> C is M by N and complex.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -99,10 +98,9 @@
 *> \verbatim
 *>          RWORK is REAL array, dimension (2*M*N)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASRT( ID, N, D, INFO )
 * 
@@ -28,22 +28,21 @@
 *       REAL               D( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Sort the numbers in D in increasing order (if ID = 'I') or
 *> in decreasing order (if ID = 'D' ).
 *>
 *> Use Quick Sort, reverting to Insertion sort on arrays of
 *> size <= 20. Dimension of STACK limits N to about 2**32.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ID
 *> \verbatim
@@ -73,10 +72,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLATM5( PRTYPE, M, N, A, LDA, B, LDB, C, LDC, D, LDD,
 *                          E, LDE, F, LDF, R, LDR, L, LDL, ALPHA, QBLCKA,
@@ -23,11 +23,11 @@
 *      $                   L( LDL, * ), R( LDR, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLATM5 generates matrices involved in the Generalized Sylvester
 *> equation:
@@ -40,11 +40,10 @@
 *>  [ I -L ] ( [ A  -C ], [ D -F ] ) [ I  R ] = ( [ A    ], [ D    ] )
 *>  [    I ] ( [     B ]  [    E ] ) [    I ]   ( [    B ]  [    E ] )
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PRTYPE
 *> \verbatim
@@ -184,10 +183,9 @@
 *>          blocks on the diagonal in B. Otherwise, QBLCKB is not
 *>          referenced. QBLCKB > 1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -198,10 +196,9 @@
 *
 *> \ingroup complex16_matgen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  PRTYPE = 1: A and B are Jordan blocks, D and E are identity matrices
@@ -264,7 +261,6 @@
 *>             L, R specifies the right hand sides (C, F).
 *>
 *>  PRTYPE = 5 special case common and/or close eigs.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

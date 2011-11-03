@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGET24( COMP, JTYPE, THRESH, ISEED, NOUNIT, N, A, LDA,
 *                          H, HT, WR, WI, WRT, WIT, WRTMP, WITMP, VS,
@@ -27,11 +27,11 @@
 *      $                   WR( * ), WRT( * ), WRTMP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DGET24 checks the nonsymmetric eigenvalue (Schur form) problem
 *>    expert driver DGEESX.
@@ -117,11 +117,10 @@
 *>       number of RCONDV, and takes errors in computing RCONDV into
 *>       account, so that the resulting quantity should be O(ULP).
 *>       cond(RCONDV) is essentially given by norm(A)/RCONDE.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMP
 *> \verbatim
@@ -325,10 +324,9 @@
 *>          If >0, DGEESX returned an error code, the absolute
 *>                 value of which is returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

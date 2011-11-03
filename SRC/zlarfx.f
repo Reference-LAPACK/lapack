@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLARFX( SIDE, M, N, V, TAU, C, LDC, WORK )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX*16         C( LDC, * ), V( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLARFX applies a complex elementary reflector H to a complex m by n
 *> matrix C, from either the left or the right. H is represented in the
@@ -46,11 +46,10 @@
 *> If tau = 0, then H is taken to be the unit matrix
 *>
 *> This version uses inline code if H has order < 11.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -104,10 +103,9 @@
 *>                                            or (M) if SIDE = 'R'
 *>          WORK is not referenced if H has order < 11.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

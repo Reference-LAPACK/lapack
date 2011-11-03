@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DLANTR( NORM, UPLO, DIAG, M, N, A, LDA,
 *                        WORK )
@@ -29,20 +29,19 @@
 *       DOUBLE PRECISION   A( LDA, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLANTR  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> trapezoidal or triangular matrix A.
+*> \endverbatim
 *>
-*> Description
-*> ===========
-*>
-*> DLANTR returns the value
+*> \return DLANTR
+*> \verbatim
 *>
 *>    DLANTR = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
@@ -56,11 +55,10 @@
 *> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
 *> normF  denotes the  Frobenius norm of a matrix (square root of sum of
 *> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NORM
 *> \verbatim
@@ -126,10 +124,9 @@
 *>          where LWORK >= M when NORM = 'I'; otherwise, WORK is not
 *>          referenced.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

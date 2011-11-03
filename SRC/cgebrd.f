@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGEBRD( M, N, A, LDA, D, E, TAUQ, TAUP, WORK, LWORK,
 *                          INFO )
@@ -30,21 +30,20 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGEBRD reduces a general complex M-by-N matrix A to upper or lower
 *> bidiagonal form B by a unitary transformation: Q**H * A * P = B.
 *>
 *> If m >= n, B is upper bidiagonal; if m < n, B is lower bidiagonal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -140,10 +139,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -154,10 +152,9 @@
 *
 *> \ingroup complexGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrices Q and P are represented as products of elementary
@@ -203,7 +200,6 @@
 *>  where d and e denote diagonal and off-diagonal elements of B, vi
 *>  denotes an element of the vector defining H(i), and ui an element of
 *>  the vector defining G(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

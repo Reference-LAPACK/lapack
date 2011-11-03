@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHETD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 * 
@@ -29,20 +29,19 @@
 *       COMPLEX*16         A( LDA, * ), TAU( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHETD2 reduces a complex Hermitian matrix A to real symmetric
 *> tridiagonal form T by a unitary similarity transformation:
 *> Q**H * A * Q = T.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -114,10 +113,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -128,10 +126,9 @@
 *
 *> \ingroup complex16HEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  If UPLO = 'U', the matrix Q is represented as a product of elementary
@@ -173,7 +170,6 @@
 *>
 *>  where d and e denote diagonal and off-diagonal elements of T, and vi
 *>  denotes an element of the vector defining H(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, HT, W, WT, VS, LDVS, RESULT,
@@ -24,11 +24,11 @@
 *      $                   VS( LDVS, * ), W( * ), WORK( * ), WT( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    CDRVES checks the nonsymmetric eigenvalue (Schur form) problem
 *>    driver CGEES.
@@ -161,11 +161,10 @@
 *>         near the overflow threshold
 *>    (21) Same as (19), but multiplied by a constant
 *>         near the underflow threshold
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -361,10 +360,9 @@
 *>     KCONDS(j)       Select whether CONDS is to be 1 or
 *>                     1/sqrt(ulp).  (0 means irrelevant.)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

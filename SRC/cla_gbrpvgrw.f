@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL FUNCTION CLA_GBRPVGRW( N, KL, KU, NCOLS, AB, LDAB, AFB,
 *                                   LDAFB )
@@ -28,11 +28,11 @@
 *       COMPLEX            AB( LDAB, * ), AFB( LDAFB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLA_GBRPVGRW computes the reciprocal pivot growth factor
 *> norm(A)/norm(U). The "max absolute element" norm is used. If this is
@@ -40,11 +40,10 @@
 *> (equilibrated) matrix A could be poor. This also means that the
 *> solution X, estimated condition numbers, and error bounds could be
 *> unreliable.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -101,10 +100,9 @@
 *>          LDAFB is INTEGER
 *>     The leading dimension of the array AFB.  LDAFB >= 2*KL+KU+1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

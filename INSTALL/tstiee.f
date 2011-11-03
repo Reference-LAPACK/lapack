@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -18,7 +18,6 @@
 *> \ingroup auxOTHERauxiliary
 *
 *  =====================================================================
-
       PROGRAM TSTIEE
 *
 *  -- LAPACK test routine (version 3.2) --
@@ -107,8 +106,8 @@
 *  This routine will not function correctly if it is converted to all
 *  lower case.  Converting it to all upper case is allowed.
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *  ISPEC   (input) INTEGER
 *          Specifies the parameter to be returned as the value of
@@ -640,8 +639,8 @@
 *  IEEECK is called from the ILAENV to verify that Inifinity and 
 *  possibly NaN arithmetic is safe (i.e. will not trap).
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *  ISPEC   (input) INTEGER
 *          Specifies whether to test just for inifinity arithmetic

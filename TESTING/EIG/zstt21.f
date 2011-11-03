@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZSTT21( N, KBAND, AD, AE, SD, SE, U, LDU, WORK, RWORK,
 *                          RESULT )
@@ -20,11 +20,11 @@
 *       COMPLEX*16         U( LDU, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZSTT21  checks a decomposition of the form
 *>
@@ -36,11 +36,10 @@
 *>    RESULT(1) = | A - U S U* | / ( |A| n ulp )
 *>
 *>    RESULT(2) = | I - UU* | / ( n ulp )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -116,10 +115,9 @@
 *>          values are currently limited to 1/ulp, to avoid overflow.
 *>          RESULT(1) is always modified.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

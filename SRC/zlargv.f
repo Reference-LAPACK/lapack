@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLARGV( N, X, INCX, Y, INCY, C, INCC )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         X( * ), Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLARGV generates a vector of complex plane rotations with real
 *> cosines, determined by elements of the complex vectors x and y.
@@ -47,11 +47,10 @@
 *> but differ from the BLAS1 routine ZROTG):
 *>    If y(i)=0, then c(i)=1 and s(i)=0.
 *>    If x(i)=0, then c(i)=0 and s(i) is chosen so that r(i) is real.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -96,10 +95,9 @@
 *>          INCC is INTEGER
 *>          The increment between elements of C. INCC > 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -110,17 +108,15 @@
 *
 *> \ingroup complex16OTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  6-6-96 - Modified with a new algorithm by W. Kahan and J. Demmel
 *>
 *>  This version has a few statements commented out for thread safety
 *>  (machine parameters are computed on each entry). 10 feb 03, SJH.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

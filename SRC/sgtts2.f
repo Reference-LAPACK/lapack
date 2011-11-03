@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
 * 
@@ -28,21 +28,20 @@
 *       REAL               B( LDB, * ), D( * ), DL( * ), DU( * ), DU2( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGTTS2 solves one of the systems of equations
 *>    A*X = B  or  A**T*X = B,
 *> with a tridiagonal matrix A using the LU factorization computed
 *> by SGTTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITRANS
 *> \verbatim
@@ -113,10 +112,9 @@
 *>          LDB is INTEGER
 *>          The leading dimension of the array B.  LDB >= max(1,N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,25 +5,24 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       PROGRAM SCHKRFP
 * 
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SCHKRFP is the main test program for the REAL linear
 *> equation routines with RFP storage format
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  MAXIN   INTEGER
@@ -44,10 +43,9 @@
 *>  NOUT    INTEGER
 *>          The unit number for output
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -58,8 +56,7 @@
 *
 *> \ingroup single_lin
 *
-*  =====================================================================
-      PROGRAM SCHKRFP
+*  =====================================================================      PROGRAM SCHKRFP
 *
 *  -- LAPACK test routine (version 3.2.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

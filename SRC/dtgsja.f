@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
 *                          LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
@@ -34,11 +34,11 @@
 *      $                   V( LDV, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTGSJA computes the generalized singular value decomposition (GSVD)
 *> of two real upper triangular (or trapezoidal) matrices A and B.
@@ -123,11 +123,10 @@
 *> The computation of the orthogonal transformation matrices U, V or Q
 *> is optional.  These matrices may either be formed explicitly, or they
 *> may be postmultiplied into input matrices U1, V1, or Q1.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBU
 *> \verbatim
@@ -342,10 +341,9 @@
 *>          may take. If after MAXIT cycles, the routine fails to
 *>          converge, we return INFO = 1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -356,10 +354,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  DTGSJA essentially uses a variant of Kogbetliantz algorithm to reduce
@@ -374,7 +371,6 @@
 *>                C1**2 + S1**2 = I,
 *>
 *>  and R1 is an L-by-L nonsingular upper triangular matrix.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

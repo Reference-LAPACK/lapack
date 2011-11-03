@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAS2( F, G, H, SSMIN, SSMAX )
 * 
@@ -24,22 +24,21 @@
 *       DOUBLE PRECISION   F, G, H, SSMAX, SSMIN
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAS2  computes the singular values of the 2-by-2 matrix
 *>    [  F   G  ]
 *>    [  0   H  ].
 *> On return, SSMIN is the smaller singular value and SSMAX is the
 *> larger singular value.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] F
 *> \verbatim
@@ -70,10 +69,9 @@
 *>          SSMAX is DOUBLE PRECISION
 *>          The larger singular value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -84,10 +82,9 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Barring over/underflow, all output quantities are correct to within
@@ -105,7 +102,6 @@
 *>  Underflow is harmless if underflow is gradual. Otherwise, results
 *>  may correspond to a matrix modified by perturbations of size near
 *>  the underflow threshold.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

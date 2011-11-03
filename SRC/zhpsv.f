@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHPSV( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX*16         AP( * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHPSV computes the solution to a complex system of linear equations
 *>    A * X = B,
@@ -47,11 +47,10 @@
 *> triangular matrices, D is Hermitian and block diagonal with 1-by-1
 *> and 2-by-2 diagonal blocks.  The factored form of A is then used to
 *> solve the system of equations A * X = B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -127,10 +126,9 @@
 *>                exactly singular, so the solution could not be
 *>                computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -141,10 +139,9 @@
 *
 *> \ingroup complex16OTHERsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The packed storage scheme is illustrated by the following example
@@ -160,7 +157,6 @@
 *>  Packed storage of the upper triangle of A:
 *>
 *>  AP = [ a11, a12, a22, a13, a23, a33, a14, a24, a34, a44 ]
-*>
 *> \endverbatim
 *>
 *  =====================================================================

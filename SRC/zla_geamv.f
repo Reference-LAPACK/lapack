@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
 *                              Y, INCY )
@@ -31,11 +31,11 @@
 *       DOUBLE PRECISION   Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLA_GEAMV  performs one of the matrix-vector operations
 *>
@@ -53,11 +53,10 @@
 *> "symbolically" zero components are not perturbed.  A zero
 *> entry is considered "symbolic" if all multiplications involved
 *> in computing that entry have at least one zero multiplicand.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -159,10 +158,9 @@
 *>
 *>  Level 2 Blas routine.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

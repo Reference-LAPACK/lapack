@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   T( LDT, * ), TAU( * ), V( LDV, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARFT forms the triangular factor T of a real block reflector H
 *> of order n, which is defined as a product of k elementary reflectors.
@@ -50,11 +50,10 @@
 *> H(i) is stored in the i-th row of the array V, and
 *>
 *>    H  =  I - V**T * T * V
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] DIRECT
 *> \verbatim
@@ -122,10 +121,9 @@
 *>          LDT is INTEGER
 *>          The leading dimension of the array T. LDT >= K.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -136,10 +134,9 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The shape of the matrix V and the storage of the vectors which define
@@ -163,7 +160,6 @@
 *>                   (  1 v2 v3 )                     ( v3 v3 v3 v3  1 )
 *>                   (     1 v3 )
 *>                   (        1 )
-*>
 *> \endverbatim
 *>
 *  =====================================================================

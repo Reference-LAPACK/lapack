@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGET31( RMAX, LMAX, NINFO, KNT )
 * 
@@ -18,11 +18,11 @@
 *       INTEGER            NINFO( 2 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGET31 tests SLALN2, a routine for solving
 *>
@@ -46,11 +46,10 @@
 *> should be on the order of 1.  Here, ulp is the machine precision.
 *> Also, it is verified that SCALE is less than or equal to 1, and that
 *> XNORM = infinity-norm(X).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -76,10 +75,9 @@
 *>          KNT is INTEGER
 *>          Total number of examples tested.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

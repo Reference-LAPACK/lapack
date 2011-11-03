@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION ZQRT14( TRANS, M, N, NRHS, A, LDA, X,
 *                        LDX, WORK, LWORK )
@@ -19,11 +19,11 @@
 *       COMPLEX*16         A( LDA, * ), WORK( LWORK ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZQRT14 checks whether X is in the row space of A or A'.  It does so
 *> by scaling both X and A such that their norms are in the range
@@ -31,11 +31,10 @@
 *> (if TRANS = 'C') or an LQ factorization of [A',X]' (if TRANS = 'N'),
 *> and returning the norm of the trailing triangle, scaled by
 *> MAX(M,N,NRHS)*eps.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -100,10 +99,9 @@
 *>          If TRANS = 'N', LWORK >= (M+NRHS)*(N+2);
 *>          if TRANS = 'C', LWORK >= (N+NRHS)*(M+2).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

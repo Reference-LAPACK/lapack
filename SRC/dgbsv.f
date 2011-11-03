@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGBSV( N, KL, KU, NRHS, AB, LDAB, IPIV, B, LDB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   AB( LDAB, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGBSV computes the solution to a real system of linear equations
 *> A * X = B, where A is a band matrix of order N with KL subdiagonals
@@ -43,11 +43,10 @@
 *> and unit lower triangular matrices with KL subdiagonals, and U is
 *> upper triangular with KL+KU superdiagonals.  The factored form of A
 *> is then used to solve the system of equations A * X = B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -125,10 +124,9 @@
 *>                has been completed, but the factor U is exactly
 *>                singular, and the solution has not been computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -139,10 +137,9 @@
 *
 *> \ingroup doubleGBsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The band storage scheme is illustrated by the following example, when
@@ -160,7 +157,6 @@
 *>  Array elements marked * are not used by the routine; elements marked
 *>  + need not be set on entry, but are required by the routine to store
 *>  elements of U because of fill-in resulting from the row interchanges.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

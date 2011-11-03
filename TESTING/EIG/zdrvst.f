@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, D1, D2, D3, WA1, WA2, WA3, U,
@@ -27,11 +27,11 @@
 *      $                   V( LDU, * ), WORK( * ), Z( LDU, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>      ZDRVST  checks the Hermitian eigenvalue problem drivers.
 *>
@@ -130,11 +130,10 @@
 *>           with random signs.
 *>      (17) Same as (16), but multiplied by SQRT( overflow threshold )
 *>      (18) Same as (16), but multiplied by SQRT( underflow threshold )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  NSIZES  INTEGER
@@ -320,10 +319,9 @@
 *>       KMAGN(j)        The order of magnitude ( O(1),
 *>                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SORT01( ROWCOL, M, N, U, LDU, WORK, LWORK, RESID )
 * 
@@ -19,11 +19,11 @@
 *       REAL               U( LDU, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SORT01 checks that the matrix U is orthogonal by computing the ratio
 *>
@@ -41,11 +41,10 @@
 *> where EPS is the machine precision.  ROWCOL is used only if m = n;
 *> if m > n, ROWCOL is assumed to be 'C', and if m < n, ROWCOL is
 *> assumed to be 'R'.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ROWCOL
 *> \verbatim
@@ -101,10 +100,9 @@
 *>          RESID = norm( I - U * U' ) / ( n * EPS ), if ROWCOL = 'R', or
 *>          RESID = norm( I - U' * U ) / ( m * EPS ), if ROWCOL = 'C'.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

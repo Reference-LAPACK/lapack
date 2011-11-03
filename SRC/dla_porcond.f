@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DLA_PORCOND( UPLO, N, A, LDA, AF, LDAF,
 *                                              CMODE, C, INFO, WORK,
@@ -32,11 +32,11 @@
 *       INTEGER            IWORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DLA_PORCOND Estimates the Skeel condition number of  op(A) * op2(C)
 *>    where op2 is determined by CMODE as follows
@@ -47,11 +47,10 @@
 *>    is computed by computing scaling factors R such that
 *>    diag(R)*A*op2(C) is row equilibrated and computing the standard
 *>    infinity-norm condition number.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -125,10 +124,9 @@
 *>          IWORK is INTEGER array, dimension (N).
 *>     Workspace.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

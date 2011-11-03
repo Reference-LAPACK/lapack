@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL             FUNCTION SLANGB( NORM, N, KL, KU, AB, LDAB,
 *                        WORK )
@@ -29,20 +29,19 @@
 *       REAL               AB( LDAB, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLANGB  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the element of  largest absolute value  of an
 *> n by n band matrix  A,  with kl sub-diagonals and ku super-diagonals.
+*> \endverbatim
 *>
-*> Description
-*> ===========
-*>
-*> SLANGB returns the value
+*> \return SLANGB
+*> \verbatim
 *>
 *>    SLANGB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
@@ -56,11 +55,10 @@
 *> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
 *> normF  denotes the  Frobenius norm of a matrix (square root of sum of
 *> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NORM
 *> \verbatim
@@ -109,10 +107,9 @@
 *>          where LWORK >= N when NORM = 'I'; otherwise, WORK is not
 *>          referenced.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

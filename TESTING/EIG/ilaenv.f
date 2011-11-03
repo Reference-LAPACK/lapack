@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
 *                        N4 )
@@ -16,11 +16,11 @@
 *       INTEGER            ISPEC, N1, N2, N3, N4
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ILAENV returns problem-dependent parameters for the local
 *> environment.  See ISPEC for a description of the parameters.
@@ -29,11 +29,10 @@
 *> the integer array IPARMS in the common block CLAENV and the value
 *> with index ISPEC is copied to ILAENV.  This version of ILAENV is
 *> to be used in conjunction with XLAENV in TESTING and TIMING.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ISPEC
 *> \verbatim
@@ -114,10 +113,9 @@
 *>          >= 0: the value of the parameter specified by ISPEC
 *>          < 0:  if ILAENV = -k, the k-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -128,10 +126,9 @@
 *
 *> \ingroup aux_eig
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The following conventions have been used when calling ILAENV from the
@@ -150,7 +147,6 @@
 *>
 *>      NB = ILAENV( 1, 'STRTRI', UPLO // DIAG, N, -1, -1, -1 )
 *>      IF( NB.LE.1 ) NB = MAX( 1, N )
-*>
 *> \endverbatim
 *>
 *  =====================================================================

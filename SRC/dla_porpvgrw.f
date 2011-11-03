@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DLA_PORPVGRW( UPLO, NCOLS, A, LDA, AF, 
 *                                               LDAF, WORK )
@@ -29,11 +29,12 @@
 *       DOUBLE PRECISION   A( LDA, * ), AF( LDAF, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
 *> 
 *> DLA_PORPVGRW computes the reciprocal pivot growth factor
 *> norm(A)/norm(U). The "max absolute element" norm is used. If this is
@@ -41,11 +42,10 @@
 *> (equilibrated) matrix A could be poor. This also means that the
 *> solution X, estimated condition numbers, and error bounds could be
 *> unreliable.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -89,10 +89,9 @@
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension (2*N)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

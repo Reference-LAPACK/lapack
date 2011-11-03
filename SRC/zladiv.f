@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       COMPLEX*16     FUNCTION ZLADIV( X, Y )
 * 
@@ -24,20 +24,19 @@
 *       COMPLEX*16         X, Y
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLADIV := X / Y, where X and Y are complex.  The computation of X / Y
 *> will not overflow on an intermediary step unless the results
 *> overflows.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] X
 *> \verbatim
@@ -49,10 +48,9 @@
 *>          Y is COMPLEX*16
 *>          The complex scalars X and Y.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTREVC( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
 *                          LDVR, MM, M, WORK, INFO )
@@ -31,11 +31,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTREVC computes some or all of the right and/or left eigenvectors of
 *> a real upper quasi-triangular matrix T.
@@ -56,11 +56,10 @@
 *> input matrix.  If Q is the orthogonal factor that reduces a matrix
 *> A to Schur form T, then Q*X and Q*Y are the matrices of right and
 *> left eigenvectors of A.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -192,10 +191,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -206,10 +204,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The algorithm used in this program is basically backward (forward)
@@ -219,7 +216,6 @@
 *>  Each eigenvector is normalized so that the element of largest
 *>  magnitude has magnitude 1; here the magnitude of a complex number
 *>  (x,y) is taken to be |x| + |y|.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

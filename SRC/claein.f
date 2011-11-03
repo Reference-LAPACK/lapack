@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAEIN( RIGHTV, NOINIT, N, H, LDH, W, V, B, LDB, RWORK,
 *                          EPS3, SMLNUM, INFO )
@@ -32,20 +32,19 @@
 *       COMPLEX            B( LDB, * ), H( LDH, * ), V( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAEIN uses inverse iteration to find a right or left eigenvector
 *> corresponding to the eigenvalue W of a complex upper Hessenberg
 *> matrix H.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] RIGHTV
 *> \verbatim
@@ -133,10 +132,9 @@
 *>          = 1:  inverse iteration did not converge; V is set to the
 *>                last iterate.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

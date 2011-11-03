@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,
 *                          LIWORK, INFO )
@@ -30,11 +30,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), W( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSYEVD computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A. If eigenvectors are desired, it uses a
@@ -49,11 +49,10 @@
 *>
 *> Because of large use of BLAS of level 3, DSYEVD needs N**2 more
 *> workspace than DSYEVX.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -159,10 +158,9 @@
 *>                lying in rows and columns INFO/(N+1) through
 *>                mod(INFO,N+1).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -173,19 +171,15 @@
 *
 *> \ingroup doubleSYeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>     Jeff Rutter, Computer Science Division, University of California
-*>     at Berkeley, USA
-*>  Modified by Francoise Tisseur, University of Tennessee.
-*>
-*>  Modified description of INFO. Sven, 16 Feb 05.
-*> \endverbatim
+*> Jeff Rutter, Computer Science Division, University of California
+*> at Berkeley, USA \n
+*>  Modified by Francoise Tisseur, University of Tennessee \n
+*>  Modified description of INFO. Sven, 16 Feb 05. \n
+
+
 *>
 *  =====================================================================
       SUBROUTINE DSYEVD( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, IWORK,

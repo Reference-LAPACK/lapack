@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSTEIN( N, D, E, M, W, IBLOCK, ISPLIT, Z, LDZ, WORK,
 *                          IWORK, IFAIL, INFO )
@@ -30,11 +30,11 @@
 *       REAL               D( * ), E( * ), W( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSTEIN computes the eigenvectors of a real symmetric tridiagonal
 *> matrix T corresponding to specified eigenvalues, using inverse
@@ -42,11 +42,10 @@
 *>
 *> The maximum number of iterations allowed for each eigenvector is
 *> specified by an internal parameter MAXITS (currently set to 5).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -145,10 +144,12 @@
 *>          > 0: if INFO = i, then i eigenvectors failed to converge
 *>               in MAXITS iterations.  Their indices are stored in
 *>               array IFAIL.
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  MAXITS  INTEGER, default = 5
 *>          The maximum number of iterations performed.
 *>
@@ -156,10 +157,9 @@
 *>          The number of iterations performed after norm growth
 *>          criterion is satisfied, should be at least 1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

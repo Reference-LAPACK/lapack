@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLARRF( N, D, L, LD, CLSTRT, CLEND,
 *                          W, WGAP, WERR,
@@ -32,22 +32,21 @@
 *      $          LPLUS( * ), W( * ), WGAP( * ), WERR( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Given the initial representation L D L^T and its cluster of close
 *> eigenvalues (in a relative measure), W( CLSTRT ), W( CLSTRT+1 ), ...
 *> W( CLEND ), SLARRF finds a new relatively robust representation
 *> L D L^T - SIGMA I = L(+) D(+) L(+)^T such that at least one of the
 *> eigenvalues of L(+) D(+) L(+)^T is relatively isolated.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -167,8 +166,8 @@
 *>          Signals processing OK (=0) or failure (=1)
 *> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -179,21 +178,15 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
+*> \par Contributors:
+*  ==================
+*>
+*> Beresford Parlett, University of California, Berkeley, USA \n
+*> Jim Demmel, University of California, Berkeley, USA \n
+*> Inderjit Dhillon, University of Texas, Austin, USA \n
+*> Osni Marques, LBNL/NERSC, USA \n
+*> Christof Voemel, University of California, Berkeley, USA
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE SLARRF( N, D, L, LD, CLSTRT, CLEND,
      $                   W, WGAP, WERR,

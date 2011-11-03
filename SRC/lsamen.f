@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL          FUNCTION LSAMEN( N, CA, CB )
 * 
@@ -25,22 +25,21 @@
 *       INTEGER            N
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> LSAMEN  tests if the first N letters of CA are the same as the
 *> first N letters of CB, regardless of case.
 *> LSAMEN returns .TRUE. if CA and CB are equivalent except for case
 *> and .FALSE. otherwise.  LSAMEN also returns .FALSE. if LEN( CA )
 *> or LEN( CB ) is less than N.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -59,10 +58,9 @@
 *>          CA and CB specify two character strings of length at least N.
 *>          Only the first N characters of each string will be accessed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

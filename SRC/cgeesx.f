@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGEESX( JOBVS, SORT, SELECT, SENSE, N, A, LDA, SDIM, W,
 *                          VS, LDVS, RCONDE, RCONDV, WORK, LWORK, RWORK,
@@ -37,11 +37,11 @@
 *       EXTERNAL           SELECT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGEESX computes for an N-by-N complex nonsymmetric matrix A, the
 *> eigenvalues, the Schur form T, and, optionally, the matrix of Schur
@@ -60,11 +60,10 @@
 *> these quantities are called s and sep respectively).
 *>
 *> A complex matrix is in Schur form if it is upper triangular.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVS
 *> \verbatim
@@ -222,10 +221,9 @@
 *>                   the Schur form no longer satisfy SELECT=.TRUE.  This
 *>                   could also be caused by underflow due to scaling.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

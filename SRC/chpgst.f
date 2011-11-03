@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHPGST( ITYPE, UPLO, N, AP, BP, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            AP( * ), BP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHPGST reduces a complex Hermitian-definite generalized
 *> eigenproblem to standard form, using packed storage.
@@ -44,11 +44,10 @@
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H*A*L.
 *>
 *> B must have been previously factorized as U**H*U or L*L**H by CPPTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -98,10 +97,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

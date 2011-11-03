@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAEXC( WANTQ, N, T, LDT, Q, LDQ, J1, N1, N2, WORK,
 *                          INFO )
@@ -29,11 +29,11 @@
 *       REAL               Q( LDQ, * ), T( LDT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAEXC swaps adjacent diagonal blocks T11 and T22 of order 1 or 2 in
 *> an upper quasi-triangular matrix T by an orthogonal similarity
@@ -43,11 +43,10 @@
 *> with 1-by-1 and 2-by-2 diagonal blocks; each 2-by-2 diagonal block
 *> has its diagonal elemnts equal and its off-diagonal elements of
 *> opposite sign.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTQ
 *> \verbatim
@@ -122,10 +121,9 @@
 *>               form; the blocks are not swapped and T and Q are
 *>               unchanged.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

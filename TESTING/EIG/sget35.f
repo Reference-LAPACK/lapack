@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGET35( RMAX, LMAX, NINFO, KNT )
 * 
@@ -15,11 +15,11 @@
 *       REAL               RMAX
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGET35 tests STRSYL, a routine for solving the Sylvester matrix
 *> equation
@@ -34,11 +34,10 @@
 *>
 *>    norm(op(A)*X + ISGN*X*op(B) - scale*C) /
 *>        (EPS*max(norm(A),norm(B))*norm(X))
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -63,10 +62,9 @@
 *>          KNT is INTEGER
 *>          Total number of examples tested.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

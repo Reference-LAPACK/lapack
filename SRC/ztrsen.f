@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZTRSEN( JOB, COMPQ, SELECT, N, T, LDT, Q, LDQ, W, M, S,
 *                          SEP, WORK, LWORK, INFO )
@@ -31,11 +31,11 @@
 *       COMPLEX*16         Q( LDQ, * ), T( LDT, * ), W( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZTRSEN reorders the Schur factorization of a complex matrix
 *> A = Q*T*Q**H, so that a selected cluster of eigenvalues appears in
@@ -45,11 +45,10 @@
 *>
 *> Optionally the routine computes the reciprocal condition numbers of
 *> the cluster of eigenvalues and/or the invariant subspace.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -174,10 +173,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -188,10 +186,9 @@
 *
 *> \ingroup complex16OTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  ZTRSEN first collects the selected eigenvalues by computing a unitary
@@ -261,7 +258,6 @@
 *>  error in the computed right invariant subspace is
 *>
 *>                      EPS * norm(T) / SEP
-*>
 *> \endverbatim
 *>
 *  =====================================================================

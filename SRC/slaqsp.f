@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAQSP( UPLO, N, AP, S, SCOND, AMAX, EQUED )
 * 
@@ -29,19 +29,18 @@
 *       REAL               AP( * ), S( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAQSP equilibrates a symmetric matrix A using the scaling factors
 *> in the vector S.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -96,10 +95,12 @@
 *>          = 'N':  No equilibration.
 *>          = 'Y':  Equilibration was done, i.e., A has been replaced by
 *>                  diag(S) * A * diag(S).
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  THRESH is a threshold value used to decide if scaling should be done
 *>  based on the ratio of the scaling factors.  If SCOND < THRESH,
 *>  scaling is done.
@@ -108,10 +109,9 @@
 *>  be done based on the absolute size of the largest matrix element.
 *>  If AMAX > LARGE or AMAX < SMALL, scaling is done.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

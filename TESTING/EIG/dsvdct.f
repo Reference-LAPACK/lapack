@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSVDCT( N, S, E, SHIFT, NUM )
 * 
@@ -18,11 +18,11 @@
 *       DOUBLE PRECISION   E( * ), S( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSVDCT counts the number NUM of eigenvalues of a 2*N by 2*N
 *> tridiagonal matrix T which are less than or equal to SHIFT.  T is
@@ -37,11 +37,10 @@
 *> See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
 *> Matrix", Report CS41, Computer Science Dept., Stanford University,
 *> July 21, 1966
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -72,10 +71,9 @@
 *>          NUM is INTEGER
 *>          The number of eigenvalues of T less than or equal to SHIFT.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

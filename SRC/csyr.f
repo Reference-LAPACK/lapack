@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSYR( UPLO, N, ALPHA, X, INCX, A, LDA )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX            A( LDA, * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CSYR   performs the symmetric rank 1 operation
 *>
@@ -41,11 +41,10 @@
 *>
 *> where alpha is a complex scalar, x is an n element vector and A is an
 *> n by n symmetric matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -120,10 +119,9 @@
 *>           max( 1, N ).
 *>           Unchanged on exit.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

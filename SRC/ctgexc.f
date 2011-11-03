@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, IFST, ILST, INFO )
@@ -30,11 +30,11 @@
 *      $                   Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CTGEXC reorders the generalized Schur decomposition of a complex
 *> matrix pair (A,B), using an unitary equivalence transformation
@@ -49,11 +49,10 @@
 *>
 *>        Q(in) * A(in) * Z(in)**H = Q(out) * A(out) * Z(out)**H
 *>        Q(in) * B(in) * Z(in)**H = Q(out) * B(out) * Z(out)**H
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTQ
 *> \verbatim
@@ -155,10 +154,9 @@
 *>                and ILST points to the first row of the current
 *>                position of the block being moved.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -169,28 +167,27 @@
 *
 *> \ingroup complexGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
 *>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
 *>
 *>  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
 *>      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
 *>      M.S. Moonen et al (eds), Linear Algebra for Large Scale and
 *>      Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218.
-*>
+*> \n
 *>  [2] B. Kagstrom and P. Poromaa; Computing Eigenspaces with Specified
 *>      Eigenvalues of a Regular Matrix Pair (A, B) and Condition
 *>      Estimation: Theory, Algorithms and Software, Report
 *>      UMINF - 94.04, Department of Computing Science, Umea University,
 *>      S-901 87 Umea, Sweden, 1994. Also as LAPACK Working Note 87.
 *>      To appear in Numerical Algorithms, 1996.
-*>
+*> \n
 *>  [3] B. Kagstrom and P. Poromaa, LAPACK-Style Algorithms and Software
 *>      for Solving the Generalized Sylvester Equation and Estimating the
 *>      Separation between Regular Matrix Pairs, Report UMINF - 93.23,
@@ -198,8 +195,6 @@
 *>      Sweden, December 1993, Revised April 1994, Also as LAPACK working
 *>      Note 75. To appear in ACM Trans. on Math. Software, Vol 22, No 1,
 *>      1996.
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE CTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,

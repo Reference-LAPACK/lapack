@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGTSVX( FACT, TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF,
 *                          DU2, IPIV, B, LDB, X, LDX, RCOND, FERR, BERR,
@@ -34,11 +34,11 @@
 *      $                   FERR( * ), WORK( * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGTSVX uses the LU factorization to compute the solution to a real
 *> system of linear equations A * X = B or A**T * X = B,
@@ -47,9 +47,12 @@
 *>
 *> Error bounds on the solution and a condition estimate are also
 *> provided.
+*> \endverbatim
+*
+*> \par Description:
+*  =================
 *>
-*> Description
-*> ===========
+*> \verbatim
 *>
 *> The following steps are performed:
 *>
@@ -71,11 +74,10 @@
 *> 4. Iterative refinement is applied to improve the computed solution
 *>    matrix and calculate error bounds and backward error estimates
 *>    for it.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] FACT
 *> \verbatim
@@ -273,10 +275,9 @@
 *>                       computed solution can be more accurate than the
 *>                       value of RCOND would suggest.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

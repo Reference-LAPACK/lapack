@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLACON( N, V, X, ISGN, EST, KASE )
 * 
@@ -29,19 +29,18 @@
 *       REAL               V( * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLACON estimates the 1-norm of a square, real matrix A.
 *> Reverse communication is used for evaluating matrix-vector products.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -87,10 +86,9 @@
 *>         whether X should be overwritten by A * X  or A**T * X.
 *>         On the final return from SLACON, KASE will again be 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -101,20 +99,18 @@
 *
 *> \ingroup realOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Contributed by Nick Higham, University of Manchester.
+*>  Nick Higham, University of Manchester. \n
 *>  Originally named SONEST, dated March 16, 1988.
+*
+*> \par References:
+*  ================
 *>
-*>  Reference: N.J. Higham, "FORTRAN codes for estimating the one-norm of
+*>  N.J. Higham, "FORTRAN codes for estimating the one-norm of
 *>  a real or complex matrix, with applications to condition estimation",
 *>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SLACON( N, V, X, ISGN, EST, KASE )

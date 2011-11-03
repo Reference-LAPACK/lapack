@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DDRVVX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NIUNIT, NOUNIT, A, LDA, H, WR, WI, WR1, WI1,
@@ -30,11 +30,11 @@
 *      $                   WI1( * ), WORK( * ), WR( * ), WR1( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DDRVVX  checks the nonsymmetric eigenvalue problem expert driver
 *>    DGEEVX.
@@ -211,11 +211,10 @@
 *>      of RCONDE, and takes errors in computing RCONDE into account,
 *>      so that the resulting quantity should be O(ULP). cond(RCONDE)
 *>      is essentially given by norm(A)/RCONDV.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -502,10 +501,9 @@
 *>     KCONDS(j)       Selectw whether CONDS is to be 1 or
 *>                     1/sqrt(ulp).  (0 means irrelevant.)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSTECH( N, A, B, EIG, TOL, WORK, INFO )
 * 
@@ -18,11 +18,11 @@
 *       REAL               A( * ), B( * ), EIG( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    Let T be the tridiagonal matrix with diagonal entries A(1) ,...,
 *>    A(N) and offdiagonal entries B(1) ,..., B(N-1)).  SSTECH checks to
@@ -36,11 +36,10 @@
 *>    eigenvalue. If each interval contains the correct number of
 *>    eigenvalues, INFO = 0 is returned, otherwise INFO is the index of
 *>    the first eigenvalue in the first bad interval.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -86,10 +85,9 @@
 *>          >0 if the interval containing the INFO-th eigenvalue
 *>             contains the incorrect number of eigenvalues.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

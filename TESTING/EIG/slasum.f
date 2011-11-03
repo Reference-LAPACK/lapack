@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASUM( TYPE, IOUNIT, IE, NRUN )
 * 
@@ -25,8 +25,8 @@
 *
 * =====================================================================
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 * \author Univ. of Tennessee 
 * \author Univ. of California Berkeley 

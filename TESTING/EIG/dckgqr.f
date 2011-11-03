@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
 *                          THRESH, NMAX, A, AF, AQ, AR, TAUA, B, BF, BZ,
@@ -23,20 +23,19 @@
 *      $                   RWORK( * ), TAUA( * ), TAUB( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DCKGQR tests
 *> DGGQRF: GQR factorization for N-by-M matrix A and N-by-P matrix B,
 *> DGGRQF: GRQ factorization for M-by-N matrix A and P-by-N matrix B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NM
 *> \verbatim
@@ -193,10 +192,9 @@
 *>          > 0 :  If DLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

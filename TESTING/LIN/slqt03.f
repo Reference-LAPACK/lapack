@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,22 +20,21 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLQT03 tests SORMLQ, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
 *> SLQT03 compares the results of a call to SORMLQ with the results of
 *> forming Q explicitly by a call to SORGLQ and then performing matrix
 *> multiplication by a call to SGEMM.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -120,10 +119,9 @@
 *>          RESULT(3) = norm( Q'*C - Q'*C )/ ( N * norm(C) * EPS )
 *>          RESULT(4) = norm( C*Q' - C*Q' )/ ( N * norm(C) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAKF2( M, N, A, LDA, B, D, E, Z, LDZ )
 * 
@@ -18,11 +18,11 @@
 *      $                   E( LDA, * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Form the 2*M*N by 2*M*N matrix
 *>
@@ -32,11 +32,10 @@
 *> where In is the identity matrix of size n and X' is the transpose
 *> of X. kron(X, Y) is the Kronecker product between the matrices X
 *> and Y.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -90,10 +89,9 @@
 *>          LDZ is INTEGER
 *>          The leading dimension of Z. ( LDZ >= 2*M*N )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

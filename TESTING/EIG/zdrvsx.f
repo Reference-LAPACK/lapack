@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZDRVSX( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NIUNIT, NOUNIT, A, LDA, H, HT, W, WT, WTMP, VS,
@@ -27,11 +27,11 @@
 *      $                   WORK( * ), WT( * ), WTMP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZDRVSX checks the nonsymmetric eigenvalue (Schur form) problem
 *>    expert driver ZGEESX.
@@ -206,11 +206,10 @@
 *>      number of RCONDV, and takes errors in computing RCONDV into
 *>      account, so that the resulting quantity should be O(ULP).
 *>      cond(RCONDV) is essentially given by norm(A)/RCONDE.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -417,10 +416,9 @@
 *>     KCONDS(j)       Selectw whether CONDS is to be 1 or
 *>                     1/sqrt(ulp).  (0 means irrelevant.)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

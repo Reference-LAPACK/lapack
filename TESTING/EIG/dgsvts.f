@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGSVTS( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
 *                          LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
@@ -24,20 +24,19 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGSVTS tests DGGSVD, which computes the GSVD of an M-by-N matrix A
 *> and a P-by-N matrix B:
 *>              U'*A*Q = D1*R and V'*B*Q = D2*R.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -193,10 +192,9 @@
 *>          RESULT(6) = 0        if ALPHA is in decreasing order;
 *>                    = ULPINV   otherwise.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

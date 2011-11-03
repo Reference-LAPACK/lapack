@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGGES( JOBVSL, JOBVSR, SORT, SELCTG, N, A, LDA, B, LDB,
 *                         SDIM, ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR,
@@ -37,11 +37,11 @@
 *       EXTERNAL           SELCTG
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGGES computes for a pair of N-by-N real nonsymmetric matrices (A,B),
 *> the generalized eigenvalues, the generalized real Schur form (S,T),
@@ -76,11 +76,10 @@
 *> and the pair of corresponding 2-by-2 blocks in S and T will have a
 *> complex conjugate pair of generalized eigenvalues.
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVSL
 *> \verbatim
@@ -267,10 +266,9 @@
 *>                      be caused due to scaling.
 *>                =N+3: reordering failed in STGSEN.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

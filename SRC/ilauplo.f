@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION ILAUPLO( UPLO )
 * 
@@ -24,11 +24,11 @@
 *       CHARACTER          UPLO
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This subroutine translated from a character string specifying a
 *> upper- or lower-triangular matrix to the relevant BLAST-specified
@@ -37,15 +37,14 @@
 *> ILAUPLO returns an INTEGER.  If ILAUPLO < 0, then the input is not
 *> a character indicating an upper- or lower-triangular matrix.
 *> Otherwise ILAUPLO returns the constant value corresponding to UPLO.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

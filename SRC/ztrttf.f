@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZTRTTF( TRANSR, UPLO, N, A, LDA, ARF, INFO )
 * 
@@ -28,19 +28,18 @@
 *       COMPLEX*16         A( 0: LDA-1, 0: * ), ARF( 0: * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZTRTTF copies a triangular matrix A from standard full format (TR)
 *> to rectangular full packed format (TF) .
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSR
 *> \verbatim
@@ -93,10 +92,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -107,10 +105,9 @@
 *
 *> \ingroup complex16OTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  We first consider Standard Packed Format when N is even.
@@ -214,7 +211,6 @@
 *>     03 13 23 33 11             33 11 21 31 41 51
 *>     -- -- -- -- --                   -- -- -- --
 *>     04 14 24 34 44             43 44 22 32 42 52
-*>
 *> \endverbatim
 *>
 *  =====================================================================

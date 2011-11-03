@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,
 *                          M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
@@ -32,11 +32,11 @@
 *       DOUBLE PRECISION   D( * ), E( * ), W( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSTEVR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T.  Eigenvalues and
@@ -78,11 +78,10 @@
 *> hence may abort due to a floating point exception in environments
 *> which do not handle NaNs and infinities in the ieee standard default
 *> manner.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -272,10 +271,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  Internal error
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -286,19 +284,13 @@
 *
 *> \ingroup doubleOTHEReigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>     Inderjit Dhillon, IBM Almaden, USA
-*>     Osni Marques, LBNL/NERSC, USA
+*>     Inderjit Dhillon, IBM Almaden, USA \n
+*>     Osni Marques, LBNL/NERSC, USA \n
 *>     Ken Stanley, Computer Science Division, University of
-*>       California at Berkeley, USA
-*>
-*> \endverbatim
+*>       California at Berkeley, USA \n
 *>
 *  =====================================================================
       SUBROUTINE DSTEVR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU, ABSTOL,

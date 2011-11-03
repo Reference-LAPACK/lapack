@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DORGL2( M, N, K, A, LDA, TAU, WORK, INFO )
 * 
@@ -27,11 +27,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DORGL2 generates an m by n real matrix Q with orthonormal rows,
 *> which is defined as the first m rows of a product of k elementary
@@ -40,11 +40,10 @@
 *>       Q  =  H(k) . . . H(2) H(1)
 *>
 *> as returned by DGELQF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -98,10 +97,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument has an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

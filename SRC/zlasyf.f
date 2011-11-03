@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLASYF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX*16         A( LDA, * ), W( LDW, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLASYF computes a partial factorization of a complex symmetric matrix
 *> A using the Bunch-Kaufman diagonal pivoting method. The partial
@@ -52,11 +52,10 @@
 *> ZLASYF is an auxiliary routine called by ZSYTRF. It uses blocked code
 *> (calling Level 3 BLAS) to update the submatrix A11 (if UPLO = 'U') or
 *> A22 (if UPLO = 'L').
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -142,10 +141,9 @@
 *>               has been completed, but the block diagonal matrix D is
 *>               exactly singular.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

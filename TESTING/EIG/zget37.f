@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGET37( RMAX, LMAX, NINFO, KNT, NIN )
 * 
@@ -18,21 +18,20 @@
 *       DOUBLE PRECISION   RMAX( 3 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGET37 tests ZTRSNA, a routine for estimating condition numbers of
 *> eigenvalues and/or right eigenvectors of a matrix.
 *>
 *> The test matrices are read from a file with logical unit number NIN.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -75,10 +74,9 @@
 *>          NIN is INTEGER
 *>          Input logical unit number
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

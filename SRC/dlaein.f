@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAEIN( RIGHTV, NOINIT, N, H, LDH, WR, WI, VR, VI, B,
 *                          LDB, WORK, EPS3, SMLNUM, BIGNUM, INFO )
@@ -31,20 +31,19 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAEIN uses inverse iteration to find a right or left eigenvector
 *> corresponding to the eigenvalue (WR,WI) of a real upper Hessenberg
 *> matrix H.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] RIGHTV
 *> \verbatim
@@ -156,10 +155,9 @@
 *>          = 1:  inverse iteration did not converge; VR is set to the
 *>                last iterate, and so is VI if WI.ne.0.0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

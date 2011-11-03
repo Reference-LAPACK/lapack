@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DCHKEC( THRESH, TSTERR, NIN, NOUT )
 * 
@@ -16,11 +16,11 @@
 *       DOUBLE PRECISION   THRESH
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DCHKEC tests eigen- condition estimation routines
 *>        DLALN2, DLASY2, DLANV2, DLAQTR, DLAEXC,
@@ -31,11 +31,10 @@
 *> results to a threshold THRESH. In addition, DTREXC, DTRSNA and DTRSEN
 *> are tested by reading in precomputed examples from a file (on input
 *> unit NIN).  Output is written to output unit NOUT.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] THRESH
 *> \verbatim
@@ -61,10 +60,9 @@
 *>          NOUT is INTEGER
 *>          The logical unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

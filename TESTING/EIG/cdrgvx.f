@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CDRGVX( NSIZE, THRESH, NIN, NOUT, A, LDA, B, AI, BI,
 *                          ALPHA, BETA, VL, VR, ILO, IHI, LSCALE, RSCALE,
@@ -29,11 +29,11 @@
 *      $                   VL( LDA, * ), VR( LDA, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CDRGVX checks the nonsymmetric generalized eigenvalue problem
 *> expert driver CGGEVX.
@@ -99,11 +99,10 @@
 *>
 *> a, b, x and y will have all values independently of each other from
 *> { sqrt(sqrt(ULP)),  0.1,  1,  10,  1/sqrt(sqrt(ULP)) }.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZE
 *> \verbatim
@@ -280,10 +279,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  A routine returned an error code.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,
 *                          WORK, LWORK, RWORK, INFO )
@@ -31,11 +31,11 @@
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGELSY computes the minimum-norm solution to a complex linear least
 *> squares problem:
@@ -73,11 +73,10 @@
 *>     the call to the subroutine xGEQP3. This subroutine is a Blas-3
 *>     version of the QR factorization with column pivoting.
 *>   o Matrix B (the right hand side) is updated with Blas-3.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -187,10 +186,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -201,18 +199,12 @@
 *
 *> \ingroup complex16GEsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
-*>    E. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain
-*>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain
-*>
-*> \endverbatim
+*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA \n 
+*>    E. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
+*>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain \n
 *>
 *  =====================================================================
       SUBROUTINE ZGELSY( M, N, NRHS, A, LDA, B, LDB, JPVT, RCOND, RANK,

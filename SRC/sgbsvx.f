@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGBSVX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
 *                          LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
@@ -34,11 +34,11 @@
 *      $                   WORK( * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGBSVX uses the LU factorization to compute the solution to a real
 *> system of linear equations A * X = B, A**T * X = B, or A**H * X = B,
@@ -47,9 +47,12 @@
 *>
 *> Error bounds on the solution and a condition estimate are also
 *> provided.
+*> \endverbatim
+*
+*> \par Description:
+*  =================
 *>
-*> Description
-*> ===========
+*> \verbatim
 *>
 *> The following steps are performed by this subroutine:
 *>
@@ -87,11 +90,10 @@
 *> 6. If equilibration was used, the matrix X is premultiplied by
 *>    diag(C) (if TRANS = 'N') or diag(R) (if TRANS = 'T' or 'C') so
 *>    that it solves the original system before equilibration.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] FACT
 *> \verbatim
@@ -348,10 +350,9 @@
 *>                       there are a number of situations where the
 *>                       computed solution can be more accurate than the
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

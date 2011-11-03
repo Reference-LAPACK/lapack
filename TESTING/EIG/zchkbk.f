@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZCHKBK( NIN, NOUT )
 * 
@@ -14,20 +14,19 @@
 *       INTEGER            NIN, NOUT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZCHKBK tests ZGEBAK, a routine for backward transformation of
 *> the computed right or left eigenvectors if the orginal matrix
 *> was preprocessed by balance subroutine ZGEBAL.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NIN
 *> \verbatim
@@ -40,10 +39,9 @@
 *>          NOUT is INTEGER
 *>          The logical unit number for output.  NOUT > 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

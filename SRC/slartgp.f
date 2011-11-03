@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLARTGP( F, G, CS, SN, R )
 * 
@@ -24,11 +24,11 @@
 *       REAL               CS, F, G, R, SN
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLARTGP generates a plane rotation so that
 *>
@@ -42,11 +42,10 @@
 *>    If F=0 and (G .ne. 0), then CS=0 and SN=(+/-)1.
 *>
 *> The sign is chosen so that R >= 0.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] F
 *> \verbatim
@@ -80,10 +79,9 @@
 *>  This version has a few statements commented out for thread safety
 *>  (machine parameters are computed on each entry). 10 feb 03, SJH.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

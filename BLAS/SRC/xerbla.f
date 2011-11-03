@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE XERBLA( SRNAME, INFO )
 * 
@@ -15,11 +15,11 @@
 *       INTEGER            INFO
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> XERBLA  is an error handler for the LAPACK routines.
 *> It is called by an LAPACK routine if an input parameter has an
@@ -27,11 +27,10 @@
 *>
 *> Installers may consider modifying the STOP statement in order to
 *> call system-specific exception-handling facilities.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SRNAME
 *> \verbatim
@@ -45,10 +44,9 @@
 *>          The position of the invalid parameter in the parameter list
 *>          of the calling routine.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

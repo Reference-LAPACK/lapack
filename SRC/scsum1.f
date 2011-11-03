@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL             FUNCTION SCSUM1( N, CX, INCX )
 * 
@@ -27,24 +27,21 @@
 *       COMPLEX            CX( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SCSUM1 takes the sum of the absolute values of a complex
 *> vector and returns a single precision result.
 *>
 *> Based on SCASUM from the Level 1 BLAS.
 *> The change is to use the 'genuine' absolute value.
-*>
-*> Contributed by Nick Higham for use with CLACON.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -63,10 +60,9 @@
 *>          INCX is INTEGER
 *>          The spacing between successive values of CX.  INCX > 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -76,6 +72,11 @@
 *> \date November 2011
 *
 *> \ingroup complexOTHERauxiliary
+*
+*> \par Contributors:
+*  ==================
+*>
+*> Nick Higham for use with CLACON.
 *
 *  =====================================================================
       REAL             FUNCTION SCSUM1( N, CX, INCX )

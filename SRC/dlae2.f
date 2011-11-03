@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAE2( A, B, C, RT1, RT2 )
 * 
@@ -24,22 +24,21 @@
 *       DOUBLE PRECISION   A, B, C, RT1, RT2
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAE2  computes the eigenvalues of a 2-by-2 symmetric matrix
 *>    [  A   B  ]
 *>    [  B   C  ].
 *> On return, RT1 is the eigenvalue of larger absolute value, and RT2
 *> is the eigenvalue of smaller absolute value.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] A
 *> \verbatim
@@ -70,10 +69,9 @@
 *>          RT2 is DOUBLE PRECISION
 *>          The eigenvalue of smaller absolute value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -84,10 +82,9 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  RT1 is accurate to a few ulps barring over/underflow.
@@ -100,7 +97,6 @@
 *>  Overflow is possible only if RT1 is within a factor of 5 of overflow.
 *>  Underflow is harmless if the input data is 0 or exceeds
 *>     underflow_threshold / macheps.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

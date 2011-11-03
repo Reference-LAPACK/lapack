@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
 *                          WORK )
@@ -30,20 +30,19 @@
 *       COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAQP2 computes a QR factorization with column pivoting of
 *> the block A(OFFSET+1:M,1:N).
 *> The block A(1:OFFSET,1:N) is accordingly pivoted, but not factorized.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -114,10 +113,9 @@
 *> \verbatim
 *>          WORK is COMPLEX array, dimension (N)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -128,23 +126,25 @@
 *
 *> \ingroup complexOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain
 *>    X. Sun, Computer Science Dept., Duke University, USA
-*>
-*>  Partial column norm updating strategy modified by
+*> \n
+*>  Partial column norm updating strategy modified on April 2011
 *>    Z. Drmac and Z. Bujanovic, Dept. of Mathematics,
 *>    University of Zagreb, Croatia.
-*>  -- April 2011                                                      --
-*>  For more details see LAPACK Working Note 176.
-*> \endverbatim
+*
+*> \par References:
+*  ================
 *>
+*> LAPACK Working Note 176
+*
+*> \htmlonly
+*> <a href="http://www.netlib.org/lapack/lawnspdf/lawn176.pdf">[PDF]</a> 
+*> \endhtmlonly 
+*
 *  =====================================================================
       SUBROUTINE CLAQP2( M, N, OFFSET, A, LDA, JPVT, TAU, VN1, VN2,
      $                   WORK )

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )
 * 
@@ -29,11 +29,11 @@
 *       REAL               A( * ), B( * ), C( * ), D( * ), Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAGTS may be used to solve one of the systems of equations
 *>
@@ -48,11 +48,10 @@
 *> controlled by the argument JOB, and in each case there is an option
 *> to perturb zero or very small diagonal elements of U, this option
 *> being intended for use in applications such as inverse iteration.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -146,10 +145,9 @@
 *>                  the elements of the right-hand side vector y are very
 *>                  large.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

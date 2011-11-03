@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLARNV( IDIST, ISEED, N, X )
 * 
@@ -28,19 +28,18 @@
 *       COMPLEX*16         X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLARNV returns a vector of n random complex numbers from a uniform or
 *> normal distribution.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IDIST
 *> \verbatim
@@ -73,10 +72,9 @@
 *>          X is COMPLEX*16 array, dimension (N)
 *>          The generated random numbers.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -87,17 +85,15 @@
 *
 *> \ingroup complex16OTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  This routine calls the auxiliary routine DLARUV to generate random
 *>  real numbers from a uniform (0,1) distribution, in batches of up to
 *>  128 using vectorisable code. The Box-Muller method is used to
 *>  transform numbers from a uniform to a normal distribution.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

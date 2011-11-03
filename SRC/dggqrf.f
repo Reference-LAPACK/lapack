@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGGQRF( N, M, P, A, LDA, TAUA, B, LDB, TAUB, WORK,
 *                          LWORK, INFO )
@@ -29,11 +29,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGGQRF computes a generalized QR factorization of an N-by-M matrix A
 *> and an N-by-P matrix B:
@@ -62,11 +62,10 @@
 *>
 *> where inv(B) denotes the inverse of the matrix B, and Z**T denotes the
 *> transpose of the matrix Z.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -165,10 +164,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -179,10 +177,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix Q is represented as a product of elementary reflectors
@@ -212,7 +209,6 @@
 *>  B(n-k+i,1:p-k+i-1), and taub in TAUB(i).
 *>  To form Z explicitly, use LAPACK subroutine DORGRQ.
 *>  To use Z to update another matrix, use LAPACK subroutine DORMRQ.
-*>
 *> \endverbatim
 *>
 *  =====================================================================
