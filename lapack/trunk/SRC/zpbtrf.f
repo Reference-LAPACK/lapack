@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZPBTRF( UPLO, N, KD, AB, LDAB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         AB( LDAB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZPBTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite band matrix A.
@@ -41,11 +41,10 @@
 *>    A = U**H * U,  if UPLO = 'U', or
 *>    A = L  * L**H,  if UPLO = 'L',
 *> where U is an upper triangular matrix and L is lower triangular.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -97,10 +96,9 @@
 *>                positive definite, and the factorization could not be
 *>                completed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -111,10 +109,9 @@
 *
 *> \ingroup complex16OTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The band storage scheme is illustrated by the following example, when
@@ -135,12 +132,13 @@
 *>     a31  a42  a53  a64   *    *      l31  l42  l53  l64   *    *
 *>
 *>  Array elements marked * are not used by the routine.
-*>
-*>  Contributed by
-*>  Peter Mayes and Giuseppe Radicati, IBM ECSEC, Rome, March 23, 1989
-*>
 *> \endverbatim
+*
+*> \par Contributors:
+*  ==================
 *>
+*>  Peter Mayes and Giuseppe Radicati, IBM ECSEC, Rome, March 23, 1989
+*
 *  =====================================================================
       SUBROUTINE ZPBTRF( UPLO, N, KD, AB, LDAB, INFO )
 *

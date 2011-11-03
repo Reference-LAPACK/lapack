@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARFG( N, ALPHA, X, INCX, TAU )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARFG generates a real elementary reflector H of order n, such
 *> that
@@ -53,11 +53,10 @@
 *> the unit matrix.
 *>
 *> Otherwise  1 <= tau <= 2.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -91,10 +90,9 @@
 *>          TAU is DOUBLE PRECISION
 *>          The value tau.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

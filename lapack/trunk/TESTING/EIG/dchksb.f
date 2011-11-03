@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DCHKSB( NSIZES, NN, NWDTHS, KK, NTYPES, DOTYPE, ISEED,
 *                          THRESH, NOUNIT, A, LDA, SD, SE, U, LDU, WORK,
@@ -24,11 +24,11 @@
 *      $                   U( LDU, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DCHKSB tests the reduction of a symmetric band matrix to tridiagonal
 *> form, used with the symmetric eigenvalue problem.
@@ -93,11 +93,10 @@
 *> (13) Symmetric matrix with random entries chosen from (-1,1).
 *> (14) Same as (13), but multiplied by SQRT( overflow threshold )
 *> (15) Same as (13), but multiplied by SQRT( underflow threshold )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -276,10 +275,9 @@
 *>       KMAGN(j)        The order of magnitude ( O(1),
 *>                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

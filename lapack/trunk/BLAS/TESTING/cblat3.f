@@ -5,16 +5,16 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       PROGRAM CBLAT3
 * 
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Test program for the COMPLEX          Level 3 Blas.
 *>
@@ -68,11 +68,10 @@
 *>    10-9-00:  Change STATUS='NEW' to 'UNKNOWN' so that the testers
 *>              can be run multiple times without deleting generated
 *>              output files (susan)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -83,8 +82,7 @@
 *
 *> \ingroup complex_blas_testing
 *
-*  =====================================================================
-      PROGRAM CBLAT3
+*  =====================================================================      PROGRAM CBLAT3
 *
 *  -- Reference BLAS test routine (version 3.4.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

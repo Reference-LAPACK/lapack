@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,
 *                          WORK, LWORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   VT( LDVT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGESVD computes the singular value decomposition (SVD) of a real
 *> M-by-N matrix A, optionally computing the left and/or right singular
@@ -50,11 +50,10 @@
 *> U and V are the left and right singular vectors of A.
 *>
 *> Note that the routine returns V**T, not V.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBU
 *> \verbatim
@@ -195,10 +194,9 @@
 *>                did not converge to zero. See the description of WORK
 *>                above for details.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHSEQR( JOB, COMPZ, N, ILO, IHI, H, LDH, W, Z, LDZ,
 *                          WORK, LWORK, INFO )
@@ -28,13 +28,12 @@
 *       .. Array Arguments ..
 *       COMPLEX*16         H( LDH, * ), W( * ), WORK( * ), Z( LDZ, * )
 *       ..
-*  Purpose
-*  =======
+*  
 *
-*>\details \b Purpose:
-*>\verbatim
-*> Purpose
-*>    =======
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZHSEQR computes the eigenvalues of a Hessenberg matrix H
 *>    and, optionally, the matrices T and Z from the Schur decomposition
@@ -45,11 +44,10 @@
 *>    matrix Q so that this routine can give the Schur factorization
 *>    of a matrix A which has been reduced to the Hessenberg form H
 *>    by the unitary matrix Q:  A = Q*H*Q**H = (QZ)*H*(QZ)**H.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -209,10 +207,9 @@
 *>                If INFO .GT. 0 and COMPZ = 'N', then Z is not
 *>                accessed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -222,6 +219,81 @@
 *> \date November 2011
 *
 *> \ingroup complex16OTHERcomputational
+*
+*> \par Contributors:
+*  ==================
+*>
+*>       Karen Braman and Ralph Byers, Department of Mathematics,
+*>       University of Kansas, USA
+*
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
+*>
+*>             Default values supplied by
+*>             ILAENV(ISPEC,'ZHSEQR',JOB(:1)//COMPZ(:1),N,ILO,IHI,LWORK).
+*>             It is suggested that these defaults be adjusted in order
+*>             to attain best performance in each particular
+*>             computational environment.
+*>
+*>            ISPEC=12: The ZLAHQR vs ZLAQR0 crossover point.
+*>                      Default: 75. (Must be at least 11.)
+*>
+*>            ISPEC=13: Recommended deflation window size.
+*>                      This depends on ILO, IHI and NS.  NS is the
+*>                      number of simultaneous shifts returned
+*>                      by ILAENV(ISPEC=15).  (See ISPEC=15 below.)
+*>                      The default for (IHI-ILO+1).LE.500 is NS.
+*>                      The default for (IHI-ILO+1).GT.500 is 3*NS/2.
+*>
+*>            ISPEC=14: Nibble crossover point. (See IPARMQ for
+*>                      details.)  Default: 14% of deflation window
+*>                      size.
+*>
+*>            ISPEC=15: Number of simultaneous shifts in a multishift
+*>                      QR iteration.
+*>
+*>                      If IHI-ILO+1 is ...
+*>
+*>                      greater than      ...but less    ... the
+*>                      or equal to ...      than        default is
+*>
+*>                           1               30          NS =   2(+)
+*>                          30               60          NS =   4(+)
+*>                          60              150          NS =  10(+)
+*>                         150              590          NS =  **
+*>                         590             3000          NS =  64
+*>                        3000             6000          NS = 128
+*>                        6000             infinity      NS = 256
+*>
+*>                  (+)  By default some or all matrices of this order
+*>                       are passed to the implicit double shift routine
+*>                       ZLAHQR and this parameter is ignored.  See
+*>                       ISPEC=12 above and comments in IPARMQ for
+*>                       details.
+*>
+*>                 (**)  The asterisks (**) indicate an ad-hoc
+*>                       function of N increasing from 10 to 64.
+*>
+*>            ISPEC=16: Select structured matrix multiply.
+*>                      If the number of simultaneous shifts (specified
+*>                      by ISPEC=15) is less than 14, then the default
+*>                      for ISPEC=16 is 0.  Otherwise the default for
+*>                      ISPEC=16 is 2.
+*> \endverbatim
+*
+*> \par References:
+*  ================
+*>
+*>       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
+*>       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
+*>       Performance, SIAM Journal of Matrix Analysis, volume 23, pages
+*>       929--947, 2002.
+*> \n
+*>       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
+*>       Algorithm Part II: Aggressive Early Deflation, SIAM Journal
+*>       of Matrix Analysis, volume 23, pages 948--973, 2002.
 *
 *  =====================================================================
       SUBROUTINE ZHSEQR( JOB, COMPZ, N, ILO, IHI, H, LDH, W, Z, LDZ,
@@ -239,75 +311,9 @@
 *     .. Array Arguments ..
       COMPLEX*16         H( LDH, * ), W( * ), WORK( * ), Z( LDZ, * )
 *     ..
-*  ================================================================
-*             Default values supplied by
-*             ILAENV(ISPEC,'ZHSEQR',JOB(:1)//COMPZ(:1),N,ILO,IHI,LWORK).
-*             It is suggested that these defaults be adjusted in order
-*             to attain best performance in each particular
-*             computational environment.
 *
-*            ISPEC=12: The ZLAHQR vs ZLAQR0 crossover point.
-*                      Default: 75. (Must be at least 11.)
+*  =====================================================================
 *
-*            ISPEC=13: Recommended deflation window size.
-*                      This depends on ILO, IHI and NS.  NS is the
-*                      number of simultaneous shifts returned
-*                      by ILAENV(ISPEC=15).  (See ISPEC=15 below.)
-*                      The default for (IHI-ILO+1).LE.500 is NS.
-*                      The default for (IHI-ILO+1).GT.500 is 3*NS/2.
-*
-*            ISPEC=14: Nibble crossover point. (See IPARMQ for
-*                      details.)  Default: 14% of deflation window
-*                      size.
-*
-*            ISPEC=15: Number of simultaneous shifts in a multishift
-*                      QR iteration.
-*
-*                      If IHI-ILO+1 is ...
-*
-*                      greater than      ...but less    ... the
-*                      or equal to ...      than        default is
-*
-*                           1               30          NS =   2(+)
-*                          30               60          NS =   4(+)
-*                          60              150          NS =  10(+)
-*                         150              590          NS =  **
-*                         590             3000          NS =  64
-*                        3000             6000          NS = 128
-*                        6000             infinity      NS = 256
-*
-*                  (+)  By default some or all matrices of this order
-*                       are passed to the implicit double shift routine
-*                       ZLAHQR and this parameter is ignored.  See
-*                       ISPEC=12 above and comments in IPARMQ for
-*                       details.
-*
-*                 (**)  The asterisks (**) indicate an ad-hoc
-*                       function of N increasing from 10 to 64.
-*
-*            ISPEC=16: Select structured matrix multiply.
-*                      If the number of simultaneous shifts (specified
-*                      by ISPEC=15) is less than 14, then the default
-*                      for ISPEC=16 is 0.  Otherwise the default for
-*                      ISPEC=16 is 2.
-*
-*  ================================================================
-*     Based on contributions by
-*        Karen Braman and Ralph Byers, Department of Mathematics,
-*        University of Kansas, USA
-*
-*  ================================================================
-*     References:
-*       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
-*       Algorithm Part I: Maintaining Well Focused Shifts, and Level 3
-*       Performance, SIAM Journal of Matrix Analysis, volume 23, pages
-*       929--947, 2002.
-*
-*       K. Braman, R. Byers and R. Mathias, The Multi-Shift QR
-*       Algorithm Part II: Aggressive Early Deflation, SIAM Journal
-*       of Matrix Analysis, volume 23, pages 948--973, 2002.
-*
-*  ================================================================
 *     .. Parameters ..
 *
 *     ==== Matrices of order NTINY or smaller must be processed by

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SDRVBD( NSIZES, MM, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          A, LDA, U, LDU, VT, LDVT, ASAV, USAV, VTSAV, S,
@@ -25,11 +25,11 @@
 *      $                   VT( LDVT, * ), VTSAV( LDVT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SDRVBD checks the singular value decomposition (SVD) drivers
 *> SGESVD, SGESDD, SGESVJ, and SGEJSV.
@@ -126,11 +126,10 @@
 *>      on the diagonal.
 *> (4)  Same as (3), but multiplied by the underflow-threshold / ULP.
 *> (5)  Same as (3), but multiplied by the overflow-threshold * ULP.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -302,10 +301,9 @@
 *>          If  SLATMS, or SGESVD returns an error code, the
 *>              absolute value of it is returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

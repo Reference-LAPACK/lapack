@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGBTRF( M, N, KL, KU, AB, LDAB, IPIV, INFO )
 * 
@@ -28,21 +28,20 @@
 *       COMPLEX*16         AB( LDAB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGBTRF computes an LU factorization of a complex m-by-n band matrix A
 *> using partial pivoting with row interchanges.
 *>
 *> This is the blocked version of the algorithm, calling Level 3 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -107,10 +106,9 @@
 *>               singular, and division by zero will occur if it is used
 *>               to solve a system of equations.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -121,10 +119,9 @@
 *
 *> \ingroup complex16GBcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The band storage scheme is illustrated by the following example, when
@@ -142,7 +139,6 @@
 *>  Array elements marked * are not used by the routine; elements marked
 *>  + need not be set on entry, but are required by the routine to store
 *>  elements of U because of fill-in resulting from the row interchanges.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

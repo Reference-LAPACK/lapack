@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAVSY( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
 *                          LDB, INFO )
@@ -20,11 +20,11 @@
 *       REAL               A( LDA, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAVSY  performs one of the matrix-vector operations
 *>    x := A*x  or  x := A'*x,
@@ -34,11 +34,10 @@
 *> If TRANS = 'N', multiplies by U  or U * D  (or L  or L * D)
 *> If TRANS = 'T', multiplies by U' or D * U' (or L' or D * L')
 *> If TRANS = 'C', multiplies by U' or D * U' (or L' or D * L')
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -119,10 +118,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -k, the k-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CCHKBB( NSIZES, MVAL, NVAL, NWDTHS, KK, NTYPES, DOTYPE,
 *                          NRHS, ISEED, THRESH, NOUNIT, A, LDA, AB, LDAB,
@@ -27,11 +27,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CCHKBB tests the reduction of a general complex rectangular band
 *> matrix to real bidiagonal form.
@@ -97,11 +97,10 @@
 *> (13) Rectangular matrix with random entries chosen from (-1,1).
 *> (14) Same as (13), but multiplied by SQRT( overflow threshold )
 *> (15) Same as (13), but multiplied by SQRT( underflow threshold )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -343,10 +342,9 @@
 *>       KMAGN(j)        The order of magnitude ( O(1),
 *>                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

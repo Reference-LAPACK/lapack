@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSBTRD( VECT, UPLO, N, KD, AB, LDAB, D, E, Q, LDQ,
 *                          WORK, INFO )
@@ -30,20 +30,19 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSBTRD reduces a real symmetric band matrix A to symmetric
 *> tridiagonal form T by an orthogonal similarity transformation:
 *> Q**T * A * Q = T.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] VECT
 *> \verbatim
@@ -139,10 +138,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -153,14 +151,12 @@
 *
 *> \ingroup realOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Modified by Linda Kaufman, Bell Labs.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

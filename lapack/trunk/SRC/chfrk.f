@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
 *                         C )
@@ -30,11 +30,11 @@
 *       COMPLEX            A( LDA, * ), C( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Level 3 BLAS like routine for C in RFP Format.
 *>
@@ -49,11 +49,10 @@
 *> where alpha and beta are real scalars, C is an n--by--n Hermitian
 *> matrix and A is an n--by--k matrix in the first case and a k--by--n
 *> matrix in the second case.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSR
 *> \verbatim
@@ -152,10 +151,9 @@
 *>           parts of the diagonal elements need not be set, they are
 *>           assumed to be zero, and on exit they are set to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

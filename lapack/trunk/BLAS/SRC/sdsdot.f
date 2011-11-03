@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL FUNCTION SDSDOT(N,SB,SX,INCX,SY,INCY)
 * 
@@ -118,15 +118,15 @@
 *       SDSDOT = DSDOT
 *       RETURN
 *       END
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
-*>\endverbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

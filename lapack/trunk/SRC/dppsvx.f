@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DPPSVX( FACT, UPLO, N, NRHS, AP, AFP, EQUED, S, B, LDB,
 *                          X, LDX, RCOND, FERR, BERR, WORK, IWORK, INFO )
@@ -32,11 +32,11 @@
 *      $                   FERR( * ), S( * ), WORK( * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DPPSVX uses the Cholesky factorization A = U**T*U or A = L*L**T to
 *> compute the solution to a real system of linear equations
@@ -46,9 +46,12 @@
 *>
 *> Error bounds on the solution and a condition estimate are also
 *> provided.
+*> \endverbatim
+*
+*> \par Description:
+*  =================
 *>
-*> Description
-*> ===========
+*> \verbatim
 *>
 *> The following steps are performed:
 *>
@@ -84,11 +87,10 @@
 *> 6. If equilibration was used, the matrix X is premultiplied by
 *>    diag(S) so that it solves the original system before
 *>    equilibration.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] FACT
 *> \verbatim
@@ -273,10 +275,9 @@
 *>                       computed solution can be more accurate than the
 *>                       value of RCOND would suggest.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -287,10 +288,9 @@
 *
 *> \ingroup doubleOTHERsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The packed storage scheme is illustrated by the following example
@@ -306,7 +306,6 @@
 *>  Packed storage of the upper triangle of A:
 *>
 *>  AP = [ a11, a12, a22, a13, a23, a33, a14, a24, a34, a44 ]
-*>
 *> \endverbatim
 *>
 *  =====================================================================

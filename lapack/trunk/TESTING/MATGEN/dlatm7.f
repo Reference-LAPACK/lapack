@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
 *                          RANK, INFO )
@@ -20,21 +20,20 @@
 *       INTEGER            ISEED( 4 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DLATM7 computes the entries of D as specified by MODE
 *>    COND and IRSIGN. IDIST and ISEED determine the generation
 *>    of random numbers. DLATM7 is called by DLATMT to generate
 *>    random test matrices.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  MODE   - INTEGER
@@ -106,10 +105,9 @@
 *>           -4  => if MODE equals 6 or -6 and IDIST not in range 1 to 3
 *>           -7  => if N negative
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

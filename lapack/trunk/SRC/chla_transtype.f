@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       CHARACTER*1 FUNCTION CHLA_TRANSTYPE( TRANS )
 * 
@@ -24,11 +24,11 @@
 *       INTEGER            TRANS
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This subroutine translates from a BLAST-specified integer constant to
 *> the character string specifying a transposition operation.
@@ -37,15 +37,14 @@
 *> then input is not an integer indicating a transposition operator.
 *> Otherwise CHLA_TRANSTYPE returns the constant value corresponding to
 *> TRANS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

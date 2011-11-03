@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGEGS( JOBVSL, JOBVSR, N, A, LDA, B, LDB, ALPHAR,
 *                         ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR, WORK,
@@ -32,11 +32,11 @@
 *      $                   VSR( LDVSR, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This routine is deprecated and has been replaced by routine DGGES.
 *>
@@ -57,11 +57,10 @@
 *> DGEGV should be used instead.  See DGEGV for a description of the
 *> eigenvalues of the generalized nonsymmetric eigenvalue problem
 *> (GNEP).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVSL
 *> \verbatim
@@ -210,10 +209,9 @@
 *>                =N+8: error return from DGGBAK (computing VSR)
 *>                =N+9: error return from DLASCL (various places)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

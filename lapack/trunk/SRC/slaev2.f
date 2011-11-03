@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAEV2( A, B, C, RT1, RT2, CS1, SN1 )
 * 
@@ -24,11 +24,11 @@
 *       REAL               A, B, C, CS1, RT1, RT2, SN1
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAEV2 computes the eigendecomposition of a 2-by-2 symmetric matrix
 *>    [  A   B  ]
@@ -39,11 +39,10 @@
 *>
 *>    [ CS1  SN1 ] [  A   B  ] [ CS1 -SN1 ]  =  [ RT1  0  ]
 *>    [-SN1  CS1 ] [  B   C  ] [ SN1  CS1 ]     [  0  RT2 ].
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] A
 *> \verbatim
@@ -86,10 +85,9 @@
 *>          SN1 is REAL
 *>          The vector (CS1, SN1) is a unit right eigenvector for RT1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -100,10 +98,9 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  RT1 is accurate to a few ulps barring over/underflow.
@@ -118,7 +115,6 @@
 *>  Overflow is possible only if RT1 is within a factor of 5 of overflow.
 *>  Underflow is harmless if the input data is 0 or exceeds
 *>     underflow_threshold / macheps.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

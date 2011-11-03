@@ -5,23 +5,22 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *      DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAMCH determines double precision machine parameters.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] CMACH
 *> \verbatim
@@ -49,8 +48,8 @@
 *>          rmax  = overflow threshold  - (base**emax)*(1-eps)
 *> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -148,15 +147,13 @@
       END
 ************************************************************************
 *> \brief \b DLAMC3
-*>\details
+*> \details
 *> \b Purpose:
-*>\verbatim
-*>
+*> \verbatim
 *> DLAMC3  is intended to force  A  and  B  to be stored prior to doing
 *> the addition of  A  and  B ,  for use in situations where optimizers
 *> might hold one of these in a register.
-*>
-*>\endverbatim
+*> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *> \date November 2011
 *> \ingroup auxOTHERauxiliary

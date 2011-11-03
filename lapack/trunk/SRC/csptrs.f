@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSPTRS( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO )
 * 
@@ -29,20 +29,19 @@
 *       COMPLEX            AP( * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CSPTRS solves a system of linear equations A*X = B with a complex
 *> symmetric matrix A stored in packed format using the factorization
 *> A = U*D*U**T or A = L*D*L**T computed by CSPTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -100,10 +99,9 @@
 *>          = 0:  successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

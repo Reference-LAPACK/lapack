@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLATZM( SIDE, M, N, V, INCV, TAU, C1, C2, LDC, WORK )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX*16         C1( LDC, * ), C2( LDC, * ), V( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This routine is deprecated and has been replaced by routine ZUNMRZ.
 *>
@@ -54,11 +54,10 @@
 *>        C = [ C1, C2 ] m
 *>               1  n-1
 *> Then C is overwritten by C*P.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -137,10 +136,9 @@
 *>                      (N) if SIDE = 'L'
 *>                      (M) if SIDE = 'R'
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

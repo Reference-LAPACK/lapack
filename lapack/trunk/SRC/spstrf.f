@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPSTRF( UPLO, N, A, LDA, PIV, RANK, TOL, WORK, INFO )
 * 
@@ -30,11 +30,11 @@
 *       INTEGER            PIV( N )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPSTRF computes the Cholesky factorization with complete
 *> pivoting of a real symmetric positive semidefinite matrix A.
@@ -47,11 +47,10 @@
 *>
 *> This algorithm does not attempt to check that A is positive
 *> semidefinite. This version of the algorithm calls level 3 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -125,10 +124,9 @@
 *>               as returned in RANK, or is indefinite.  See Section 7 of
 *>               LAPACK Working Note #161 for further information.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

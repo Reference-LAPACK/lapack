@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION ILASLR( M, N, A, LDA )
 * 
@@ -27,18 +27,17 @@
 *       REAL               A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ILASLR scans A for its last non-zero row.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -63,10 +62,9 @@
 *>          LDA is INTEGER
 *>          The leading dimension of the array A. LDA >= max(1,M).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

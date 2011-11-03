@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       COMPLEX FUNCTION CLATM2( M, N, I, J, KL, KU, IDIST, ISEED, D,
 *                                IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
@@ -23,11 +23,11 @@
 *       COMPLEX            D( * ), DL( * ), DR( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    CLATM2 returns the (I,J) entry of a random matrix of dimension
 *>    (M, N) described by the other paramters. It is called by the
@@ -65,11 +65,10 @@
 *>         bandwidth KU.
 *>
 *>      Set random entries to zero as specified by SPARSE.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -196,10 +195,9 @@
 *>           entries will be set to zero.
 *>           Not modified.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

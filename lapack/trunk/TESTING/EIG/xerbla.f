@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE XERBLA( SRNAME, INFO )
 * 
@@ -15,21 +15,20 @@
 *       INTEGER            INFO
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This is a special version of XERBLA to be used only as part of
 *> the test program for testing error exits from the LAPACK routines.
 *> Error messages are printed if INFO.NE.INFOT or if SRNAME.NE.SRNAMT,
 *> where INFOT and SRNAMT are values stored in COMMON.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SRNAME
 *> \verbatim
@@ -44,10 +43,9 @@
 *>          The error return code from the calling subroutine.  INFO
 *>          should equal the COMMON variable INFOT.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -58,10 +56,9 @@
 *
 *> \ingroup aux_eig
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The following variables are passed via the common blocks INFOC and
@@ -73,7 +70,6 @@
 *>                       SRNAME = SRNAMT, otherwise set to .FALSE.
 *>  LERR    LOGICAL      Set to .TRUE., indicating that XERBLA was called
 *>  SRNAMT  CHARACTER*(*) Expected name of calling subroutine
-*>
 *> \endverbatim
 *>
 *  =====================================================================

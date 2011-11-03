@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLACN2( N, V, X, EST, KASE, ISAVE )
 * 
@@ -29,19 +29,18 @@
 *       COMPLEX            V( * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLACN2 estimates the 1-norm of a square, complex matrix A.
 *> Reverse communication is used for evaluating matrix-vector products.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -88,10 +87,9 @@
 *>          ISAVE is INTEGER array, dimension (3)
 *>         ISAVE is used to save variables between calls to SLACN2
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -102,18 +100,12 @@
 *
 *> \ingroup complexOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
-*>  Contributed by Nick Higham, University of Manchester.
 *>  Originally named CONEST, dated March 16, 1988.
-*>
-*>  Reference: N.J. Higham, "FORTRAN codes for estimating the one-norm of
-*>  a real or complex matrix, with applications to condition estimation",
-*>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
 *>
 *>  Last modified:  April, 1999
 *>
@@ -124,8 +116,19 @@
 *>      JUMP     ISAVE(1)
 *>      J        ISAVE(2)
 *>      ITER     ISAVE(3)
-*>
 *> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Nick Higham, University of Manchester
+*
+*> \par References:
+*  ================
+*>
+*>  N.J. Higham, "FORTRAN codes for estimating the one-norm of
+*>  a real or complex matrix, with applications to condition estimation",
+*>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
 *>
 *  =====================================================================
       SUBROUTINE CLACN2( N, V, X, EST, KASE, ISAVE )

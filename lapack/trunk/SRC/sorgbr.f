@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SORGBR( VECT, M, N, K, A, LDA, TAU, WORK, LWORK, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SORGBR generates one of the real orthogonal matrices Q or P**T
 *> determined by SGEBRD when reducing a real matrix A to bidiagonal
@@ -52,11 +52,10 @@
 *> rows of P**T, where n >= m >= k;
 *> if k >= n, P**T = G(n-1) . . . G(2) G(1) and SORGBR returns P**T as
 *> an N-by-N matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] VECT
 *> \verbatim
@@ -142,10 +141,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

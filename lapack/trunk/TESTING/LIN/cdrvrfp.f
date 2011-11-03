@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CDRVRFP( NOUT, NN, NVAL, NNS, NSVAL, NNT, NTVAL,
 *      +              THRESH, A, ASAV, AFAC, AINV, B,
@@ -41,11 +41,11 @@
 *       REAL               S_WORK_CPOT03( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CDRVRFP tests the LAPACK RFP routines:
 *>     CPFTRF, CPFTRS, and CPFTRI.
@@ -79,11 +79,10 @@
 *> norm( . ) the 1-norm for (1,2,3) and the inf-norm for (4).
 *> Errors occur when INFO parameter is not as expected. Failures occur when
 *> a test ratios is greater than THRES.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NOUT
 *> \verbatim
@@ -224,10 +223,9 @@
 *> \verbatim
 *>          S_WORK_CPOT03 is REAL array, dimension ( NMAX )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

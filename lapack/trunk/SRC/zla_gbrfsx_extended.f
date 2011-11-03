@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLA_GBRFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, KL, KU,
 *                                       NRHS, AB, LDAB, AFB, LDAFB, IPIV,
@@ -41,11 +41,11 @@
 *      $                   ERR_BNDS_COMP( NRHS, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLA_GBRFSX_EXTENDED improves the computed solution to a system of
 *> linear equations by performing extra-precise iterative refinement
@@ -56,11 +56,10 @@
 *> and ERR_BNDS_COMP for details of the error bounds. Note that this
 *> subroutine is only resonsible for setting the second fields of
 *> ERR_BNDS_NORM and ERR_BNDS_COMP.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PREC_TYPE
 *> \verbatim
@@ -391,10 +390,9 @@
 *>       < 0:  if INFO = -i, the ith argument to ZGBTRS had an illegal
 *>             value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE STPRFB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, 
 *                          V, LDV, T, LDT, A, LDA, B, LDB, WORK, LDWORK )
@@ -30,20 +30,20 @@
 *      $          V( LDV, * ), WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> STPRFB applies a real "triangular-pentagonal" block reflector H or its 
 *> conjugate transpose H^H to a real matrix C, which is composed of two 
 *> blocks A and B, either from the left or right.
 *> 
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -185,10 +185,9 @@
 *>          If SIDE = 'L', LDWORK >= K; 
 *>          if SIDE = 'R', LDWORK >= M.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -199,10 +198,9 @@
 *
 *> \ingroup realOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix C is a composite matrix formed from blocks A and B.
@@ -247,7 +245,6 @@
 *>  If STOREV = 'R' and SIDE = 'L', V is K-by-M with V2 K-by-L.
 *>
 *>  If STOREV = 'R' and SIDE = 'R', V is K-by-N with V2 K-by-L.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

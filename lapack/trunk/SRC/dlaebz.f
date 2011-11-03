@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAEBZ( IJOB, NITMAX, N, MMAX, MINP, NBMIN, ABSTOL,
 *                          RELTOL, PIVMIN, D, E, E2, NVAL, AB, C, MOUT,
@@ -32,11 +32,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAEBZ contains the iteration loops which compute and use the
 *> function N(w), which is the count of eigenvalues of a symmetric
@@ -75,11 +75,10 @@
 *>
 *> Note: the arguments are, in general, *not* checked for unreasonable
 *> values.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IJOB
 *> \verbatim
@@ -265,10 +264,9 @@
 *>          = 1--MMAX: The last INFO intervals did not converge.
 *>          = MMAX+1:  More than MMAX intervals were generated.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -279,10 +277,9 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>      This routine is intended to be called only by other LAPACK
@@ -315,7 +312,6 @@
 *>      >= 0, then the interval will have  N(AB(j,1))=NAB(j,1)=f-k and
 *>      N(AB(j,2))=NAB(j,2)=f+r.  The cases w(l) < w(l+1) and
 *>      w(l-r)=...=w(l+k) are handled similarly.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

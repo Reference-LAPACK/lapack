@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
 *                          LDC, SCALE, INFO )
@@ -30,11 +30,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), C( LDC, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTRSYL solves the real Sylvester matrix equation:
 *>
@@ -50,11 +50,10 @@
 *> is, block upper triangular with 1-by-1 and 2-by-2 diagonal blocks;
 *> each 2-by-2 diagonal block has its diagonal elements equal and its
 *> off-diagonal elements of opposite sign.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANA
 *> \verbatim
@@ -148,10 +147,9 @@
 *>               values were used to solve the equation (but the matrices
 *>               A and B are unchanged).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

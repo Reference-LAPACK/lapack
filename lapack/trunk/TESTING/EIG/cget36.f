@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGET36( RMAX, LMAX, NINFO, KNT, NIN )
 * 
@@ -15,11 +15,11 @@
 *       REAL               RMAX
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGET36 tests CTREXC, a routine for reordering diagonal entries of a
 *> matrix in complex Schur form. Thus, CLAEXC computes a unitary matrix
@@ -35,11 +35,10 @@
 *> ILST.
 *>
 *> The test matrices are read from a file with logical unit number NIN.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -70,10 +69,9 @@
 *>          NIN is INTEGER
 *>          Input logical unit number.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

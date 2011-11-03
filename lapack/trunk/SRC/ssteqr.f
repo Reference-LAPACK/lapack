@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 * 
@@ -28,22 +28,21 @@
 *       REAL               D( * ), E( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSTEQR computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric tridiagonal matrix using the implicit QL or QR method.
 *> The eigenvectors of a full or band symmetric matrix can also be found
 *> if SSYTRD or SSPTRD or SSBTRD has been used to reduce this matrix to
 *> tridiagonal form.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMPZ
 *> \verbatim
@@ -116,10 +115,9 @@
 *>                matrix which is orthogonally similar to the original
 *>                matrix.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

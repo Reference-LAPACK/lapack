@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION ILADIAG( DIAG )
 * 
@@ -24,11 +24,11 @@
 *       CHARACTER          DIAG
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This subroutine translated from a character string specifying if a
 *> matrix has unit diagonal or not to the relevant BLAST-specified
@@ -37,15 +37,14 @@
 *> ILADIAG returns an INTEGER.  If ILADIAG < 0, then the input is not a
 *> character indicating a unit or non-unit diagonal.  Otherwise ILADIAG
 *> returns the constant value corresponding to DIAG.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

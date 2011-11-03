@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
 *                          Z, LDZ, WORK, LWORK, IWORK, LIWORK, INFO )
@@ -31,11 +31,11 @@
 *      $                   WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSBGVD computes all the eigenvalues, and optionally, the eigenvectors
 *> of a real generalized symmetric-definite banded eigenproblem, of the
@@ -49,11 +49,10 @@
 *> digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
 *> Cray-2. It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -206,10 +205,9 @@
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -220,17 +218,11 @@
 *
 *> \ingroup doubleOTHEReigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
-*>
-*> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE DSBGVD( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, W,
      $                   Z, LDZ, WORK, LWORK, IWORK, LIWORK, INFO )

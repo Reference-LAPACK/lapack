@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSYTRI2( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 * 
@@ -29,21 +29,20 @@
 *       DOUBLE PRECISION   A( LDA, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSYTRI2 computes the inverse of a DOUBLE PRECISION hermitian indefinite matrix
 *> A using the factorization A = U*D*U**T or A = L*D*L**T computed by
 *> DSYTRF. DSYTRI2 sets the LEADING DIMENSION of the workspace
 *> before calling DSYTRI2X that actually computes the inverse.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -112,10 +111,9 @@
 *>          > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
 *>               inverse could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

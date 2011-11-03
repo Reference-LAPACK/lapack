@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAGSY( N, K, D, A, LDA, ISEED, WORK, INFO )
 * 
@@ -19,21 +19,20 @@
 *       COMPLEX            A( LDA, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAGSY generates a complex symmetric matrix A, by pre- and post-
 *> multiplying a real diagonal matrix D with a random unitary matrix:
 *> A = U*D*U**T. The semi-bandwidth may then be reduced to k by
 *> additional unitary transformations.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -87,10 +86,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

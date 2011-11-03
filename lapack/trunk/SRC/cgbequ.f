@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGBEQU( M, N, KL, KU, AB, LDAB, R, C, ROWCND, COLCND,
 *                          AMAX, INFO )
@@ -30,11 +30,11 @@
 *       COMPLEX            AB( LDAB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGBEQU computes row and column scalings intended to equilibrate an
 *> M-by-N band matrix A and reduce its condition number.  R returns the
@@ -46,11 +46,10 @@
 *> number and BIGNUM = largest safe number.  Use of these scaling
 *> factors is not guaranteed to reduce the condition number of A but
 *> works well in practice.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -138,10 +137,9 @@
 *>                <= M:  the i-th row of A is exactly zero
 *>                >  M:  the (i-M)-th column of A is exactly zero
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

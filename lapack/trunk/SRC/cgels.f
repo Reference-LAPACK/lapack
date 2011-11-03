@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGELS( TRANS, M, N, NRHS, A, LDA, B, LDB, WORK, LWORK,
 *                         INFO )
@@ -29,11 +29,11 @@
 *       COMPLEX            A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGELS solves overdetermined or underdetermined complex linear systems
 *> involving an M-by-N matrix A, or its conjugate-transpose, using a QR
@@ -59,11 +59,10 @@
 *> handled in a single call; they are stored as the columns of the
 *> M-by-NRHS right hand side matrix B and the N-by-NRHS solution
 *> matrix X.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -166,10 +165,9 @@
 *>                full rank; the least squares solution could not be
 *>                computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

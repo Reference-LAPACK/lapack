@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSYT03( UPLO, N, A, LDA, AINV, LDAINV, WORK, LDWORK,
 *                          RWORK, RCOND, RESID )
@@ -22,21 +22,20 @@
 *      $                   WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CSYT03 computes the residual for a complex symmetric matrix times
 *> its inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS )
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -110,10 +109,9 @@
 *>          RESID is REAL
 *>          norm(I - A*AINV) / ( N * norm(A) * norm(AINV) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

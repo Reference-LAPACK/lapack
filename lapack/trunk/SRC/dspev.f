@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSPEV( JOBZ, UPLO, N, AP, W, Z, LDZ, WORK, INFO )
 * 
@@ -28,19 +28,18 @@
 *       DOUBLE PRECISION   AP( * ), W( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSPEV computes all the eigenvalues and, optionally, eigenvectors of a
 *> real symmetric matrix A in packed storage.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -115,10 +114,9 @@
 *>                off-diagonal elements of an intermediate tridiagonal
 *>                form did not converge to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGET54( N, A, LDA, B, LDB, S, LDS, T, LDT, U, LDU, V,
 *                          LDV, WORK, RESULT )
@@ -21,11 +21,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGET54 checks a generalized decomposition of the form
 *>
@@ -36,11 +36,10 @@
 *> Specifically,
 *>
 *>   RESULT = ||( A - U*S*V', B - U*T*V' )|| / (||( A, B )||*n*ulp )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -140,10 +139,9 @@
 *>          The value RESULT, It is currently limited to 1/ulp, to
 *>          avoid overflow. Errors are flagged by RESULT=10/ulp.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

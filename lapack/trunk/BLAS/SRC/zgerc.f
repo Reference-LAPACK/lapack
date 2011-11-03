@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)
 * 
@@ -18,11 +18,11 @@
 *       COMPLEX*16 A(LDA,*),X(*),Y(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGERC  performs the rank 1 operation
 *>
@@ -30,11 +30,10 @@
 *>
 *> where alpha is a scalar, x is an m element vector, y is an n element
 *> vector and A is an m by n matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -101,10 +100,9 @@
 *>           in the calling (sub) program. LDA must be at least
 *>           max( 1, m ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -115,10 +113,9 @@
 *
 *> \ingroup complex16_blas_level2
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 2 Blas routine.
@@ -128,7 +125,6 @@
 *>     Jeremy Du Croz, Nag Central Office.
 *>     Sven Hammarling, Nag Central Office.
 *>     Richard Hanson, Sandia National Labs.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZCHKGL( NIN, NOUT )
 * 
@@ -14,18 +14,17 @@
 *       INTEGER            NIN, NOUT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZCHKGL tests ZGGBAL, a routine for balancing a matrix pair (A, B).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NIN
 *> \verbatim
@@ -38,10 +37,9 @@
 *>          NOUT is INTEGER
 *>          The logical unit number for output.  NOUT > 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

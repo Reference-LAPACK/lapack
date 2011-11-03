@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAED7( N, CUTPNT, QSIZ, TLVLS, CURLVL, CURPBM, D, Q,
 *                          LDQ, RHO, INDXQ, QSTORE, QPTR, PRMPTR, PERM,
@@ -35,11 +35,11 @@
 *       COMPLEX*16         Q( LDQ, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLAED7 computes the updated eigensystem of a diagonal
 *> matrix after modification by a rank-one symmetric matrix. This
@@ -71,11 +71,10 @@
 *>       directly using the updated eigenvalues.  The eigenvectors for
 *>       the current problem are multiplied with the eigenvectors from
 *>       the overall problem.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -231,10 +230,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, an eigenvalue did not converge
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

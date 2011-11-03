@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPPT01( UPLO, N, A, AFAC, RWORK, RESID )
 * 
@@ -19,22 +19,21 @@
 *       REAL               A( * ), AFAC( * ), RWORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPPT01 reconstructs a symmetric positive definite packed matrix A
 *> from its L*L' or U'*U factorization and computes the residual
 *>    norm( L*L' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( U'*U - A ) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -78,10 +77,9 @@
 *>          If UPLO = 'L', norm(L*L' - A) / ( N * norm(A) * EPS )
 *>          If UPLO = 'U', norm(U'*U - A) / ( N * norm(A) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

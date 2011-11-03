@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZPBSV( UPLO, N, KD, NRHS, AB, LDAB, B, LDB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         AB( LDAB, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZPBSV computes the solution to a complex system of linear equations
 *>    A * X = B,
@@ -46,11 +46,10 @@
 *> triangular band matrix, with the same number of superdiagonals or
 *> subdiagonals as A.  The factored form of A is then used to solve the
 *> system of equations A * X = B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -124,10 +123,9 @@
 *>                positive definite, so the factorization could not be
 *>                completed, and the solution has not been computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -138,10 +136,9 @@
 *
 *> \ingroup complex16OTHERsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The band storage scheme is illustrated by the following example, when
@@ -162,7 +159,6 @@
 *>     a31  a42  a53  a64   *    *      l31  l42  l53  l64   *    *
 *>
 *>  Array elements marked * are not used by the routine.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

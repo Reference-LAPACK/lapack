@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
 *                          VN2, AUXV, F, LDF )
@@ -30,11 +30,11 @@
 *      $                   VN1( * ), VN2( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAQPS computes a step of QR factorization with column pivoting
 *> of a real M-by-N matrix A by using Blas-3.  It tries to factorize
@@ -46,11 +46,10 @@
 *> columns is returned in KB.
 *>
 *> Block A(1:OFFSET,1:N) is accordingly pivoted, but not factorized.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -142,10 +141,9 @@
 *>          LDF is INTEGER
 *>          The leading dimension of the array F. LDF >= max(1,N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -156,23 +154,25 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain
 *>    X. Sun, Computer Science Dept., Duke University, USA
-*>
-*>  Partial column norm updating strategy modified by
+*> \n
+*>  Partial column norm updating strategy modified on April 2011
 *>    Z. Drmac and Z. Bujanovic, Dept. of Mathematics,
 *>    University of Zagreb, Croatia.
-*>  -- April 2011                                                      --
-*>  For more details see LAPACK Working Note 176.
-*> \endverbatim
+*
+*> \par References:
+*  ================
 *>
+*> LAPACK Working Note 176
+*
+*> \htmlonly
+*> <a href="http://www.netlib.org/lapack/lawnspdf/lawn176.pdf">[PDF]</a> 
+*> \endhtmlonly 
+*
 *  =====================================================================
       SUBROUTINE DLAQPS( M, N, OFFSET, NB, KB, A, LDA, JPVT, TAU, VN1,
      $                   VN2, AUXV, F, LDF )

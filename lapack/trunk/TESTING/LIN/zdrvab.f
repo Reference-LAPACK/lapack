@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZDRVAB( DOTYPE, NM, MVAL, NNS,
 *                          NSVAL, THRESH, NMAX, A, AFAC, B,
@@ -25,18 +25,17 @@
 *      $                   WORK( * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZDRVAB tests ZCGESV
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] DOTYPE
 *> \verbatim
@@ -135,10 +134,9 @@
 *>          NOUT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

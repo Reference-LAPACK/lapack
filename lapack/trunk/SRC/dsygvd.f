@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSYGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
 *                          LWORK, IWORK, LIWORK, INFO )
@@ -30,11 +30,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), W( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSYGVD computes all the eigenvalues, and optionally, the eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
@@ -48,11 +48,10 @@
 *> digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
 *> Cray-2. It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -195,10 +194,9 @@
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -209,20 +207,21 @@
 *
 *> \ingroup doubleSYeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Further Details:
+*  =====================
 *>
-*>  Based on contributions by
-*>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
+*> \verbatim
 *>
 *>  Modified so that no backsubstitution is performed if DSYEVD fails to
 *>  converge (NEIG in old code could be greater than N causing out of
 *>  bounds reference to A - reported by Ralf Meyer).  Also corrected the
 *>  description of INFO and the test on ITYPE. Sven, 16 Feb 05.
 *> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *>
 *  =====================================================================
       SUBROUTINE DSYGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,

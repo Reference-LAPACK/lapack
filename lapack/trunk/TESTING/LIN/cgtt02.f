@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGTT02( TRANS, N, NRHS, DL, D, DU, X, LDX, B, LDB,
 *                          RESID )
@@ -21,21 +21,20 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGTT02 computes the residual for the solution to a tridiagonal
 *> system of equations:
 *>    RESID = norm(B - op(A)*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -108,10 +107,9 @@
 *>          RESID is REAL
 *>          norm(B - op(A)*X) / (norm(A) * norm(X) * EPS)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGET03( N, A, LDA, AINV, LDAINV, WORK, LDWORK, RWORK,
 *                          RCOND, RESID )
@@ -20,20 +20,19 @@
 *      $                   WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGET03 computes the residual for a general matrix times its inverse:
 *>    norm( I - AINV*A ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -93,10 +92,9 @@
 *>          RESID is DOUBLE PRECISION
 *>          norm(I - AINV*A) / ( N * norm(A) * norm(AINV) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

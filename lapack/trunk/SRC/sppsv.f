@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPPSV( UPLO, N, NRHS, AP, B, LDB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               AP( * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPPSV computes the solution to a real system of linear equations
 *>    A * X = B,
@@ -45,11 +45,10 @@
 *> where U is an upper triangular matrix and L is a lower triangular
 *> matrix.  The factored form of A is then used to solve the system of
 *> equations A * X = B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -109,10 +108,9 @@
 *>                positive definite, so the factorization could not be
 *>                completed, and the solution has not been computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -123,10 +121,9 @@
 *
 *> \ingroup realOTHERsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The packed storage scheme is illustrated by the following example
@@ -142,7 +139,6 @@
 *>  Packed storage of the upper triangle of A:
 *>
 *>  AP = [ a11, a12, a22, a13, a23, a33, a14, a24, a34, a44 ]
-*>
 *> \endverbatim
 *>
 *  =====================================================================

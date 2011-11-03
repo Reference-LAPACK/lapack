@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGTT01( N, DL, D, DU, DLF, DF, DUF, DU2, IPIV, WORK,
 *                          LDWORK, RWORK, RESID )
@@ -22,21 +22,20 @@
 *      $                   WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGTT01 reconstructs a tridiagonal matrix A from its LU factorization
 *> and computes the residual
 *>    norm(L*U - A) / ( norm(A) * EPS ),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -118,10 +117,9 @@
 *>          RESID is REAL
 *>          The scaled residual:  norm(L*U - A) / (norm(A) * EPS)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

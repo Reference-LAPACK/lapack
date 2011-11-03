@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL FUNCTION SISNAN( SIN )
 * 
@@ -24,30 +24,28 @@
 *       REAL               SIN
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SISNAN returns .TRUE. if its argument is NaN, and .FALSE.
 *> otherwise.  To be replaced by the Fortran 2003 intrinsic in the
 *> future.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIN
 *> \verbatim
 *>          SIN is REAL
 *>          Input to test for NaN.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
 *                          RWORK, RESID )
@@ -22,22 +22,21 @@
 *       COMPLEX*16         A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZSYT01 reconstructs a complex symmetric indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
 *> L' is the transpose of L, and U' is the transpose of U.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -109,10 +108,9 @@
 *>          If UPLO = 'L', norm(L*D*L' - A) / ( N * norm(A) * EPS )
 *>          If UPLO = 'U', norm(U*D*U' - A) / ( N * norm(A) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

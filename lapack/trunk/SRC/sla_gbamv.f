@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLA_GBAMV( TRANS, M, N, KL, KU, ALPHA, AB, LDAB, X,
 *                             INCX, BETA, Y, INCY )
@@ -29,11 +29,11 @@
 *       REAL               AB( LDAB, * ), X( * ), Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLA_GBAMV  performs one of the matrix-vector operations
 *>
@@ -51,11 +51,10 @@
 *> "symbolically" zero components are not perturbed.  A zero
 *> entry is considered "symbolic" if all multiplications involved
 *> in computing that entry have at least one zero multiplicand.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -169,10 +168,9 @@
 *>
 *>  Level 2 Blas routine.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -201,7 +199,6 @@
 *     ..
 *
 *  =====================================================================
-
 *     .. Parameters ..
       REAL               ONE, ZERO
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
 *                          TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
@@ -34,11 +34,11 @@
 *      $                   TAU( * ), U( LDU, * ), V( LDV, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGGSVP computes unitary matrices U, V and Q such that
 *>
@@ -63,11 +63,10 @@
 *> This decomposition is the preprocessing step for computing the
 *> Generalized Singular Value Decomposition (GSVD), see subroutine
 *> CGGSVD.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBU
 *> \verbatim
@@ -236,10 +235,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -250,17 +248,12 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Further Details:
+*  =====================
 *>
 *>  The subroutine uses LAPACK subroutine CGEQPF for the QR factorization
 *>  with column pivoting to detect the effective numerical rank of the
 *>  a matrix. It may be replaced by a better rank determination strategy.
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE CGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,

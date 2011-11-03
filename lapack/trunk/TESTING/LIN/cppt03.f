@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPPT03( UPLO, N, A, AINV, WORK, LDWORK, RWORK, RCOND,
 *                          RESID )
@@ -21,21 +21,20 @@
 *       COMPLEX            A( * ), AINV( * ), WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPPT03 computes the residual for a Hermitian packed matrix times its
 *> inverse:
 *>    norm( I - A*AINV ) / ( N * norm(A) * norm(AINV) * EPS ),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -94,10 +93,9 @@
 *>          RESID is REAL
 *>          norm(I - A*AINV) / ( N * norm(A) * norm(AINV) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

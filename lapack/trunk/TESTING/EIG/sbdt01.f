@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SBDT01( M, N, KD, A, LDA, Q, LDQ, D, E, PT, LDPT, WORK,
 *                          RESID )
@@ -20,11 +20,11 @@
 *      $                   Q( LDQ, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SBDT01 reconstructs a general matrix A from its bidiagonal form
 *>    A = Q * B * P'
@@ -34,11 +34,10 @@
 *> The test ratio to test the reduction is
 *>    RESID = norm( A - Q * B * PT ) / ( n * norm(A) * EPS )
 *> where PT = P' and EPS is the machine precision.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -124,10 +123,9 @@
 *>          RESID is REAL
 *>          The test ratio:  norm(A - Q * B * P') / ( n * norm(A) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

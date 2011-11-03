@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTBTRS( UPLO, TRANS, DIAG, N, KD, NRHS, AB, LDAB, B,
 *                          LDB, INFO )
@@ -29,11 +29,11 @@
 *       DOUBLE PRECISION   AB( LDAB, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTBTRS solves a triangular system of the form
 *>
@@ -41,11 +41,10 @@
 *>
 *> where A is a triangular band matrix of order N, and B is an
 *> N-by NRHS matrix.  A check is made to verify that A is nonsingular.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -130,10 +129,9 @@
 *>                indicating that the matrix is singular and the
 *>                solutions X have not been computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

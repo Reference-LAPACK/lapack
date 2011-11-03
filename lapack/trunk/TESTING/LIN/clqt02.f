@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLQT02( M, N, K, A, AF, Q, L, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,11 +20,11 @@
 *      $                   Q( LDA, * ), TAU( * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLQT02 tests CUNGLQ, which generates an m-by-n matrix Q with
 *> orthonornmal rows that is defined as the product of k elementary
@@ -34,11 +34,10 @@
 *> the orthogonal matrix Q defined by the factorization of the first k
 *> rows of A; it compares L(1:k,1:m) with A(1:k,1:n)*Q(1:m,1:n)', and
 *> checks that the rows of Q are orthonormal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -119,10 +118,9 @@
 *>          RESULT(1) = norm( L - A*Q' ) / ( N * norm(A) * EPS )
 *>          RESULT(2) = norm( I - Q*Q' ) / ( N * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

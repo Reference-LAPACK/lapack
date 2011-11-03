@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLATRD( UPLO, N, NB, A, LDA, E, TAU, W, LDW )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), E( * ), TAU( * ), W( LDW, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLATRD reduces NB rows and columns of a real symmetric matrix A to
 *> symmetric tridiagonal form by an orthogonal similarity
@@ -45,11 +45,10 @@
 *> matrix, of which the lower triangle is supplied.
 *>
 *> This is an auxiliary routine called by DSYTRD.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -131,10 +130,9 @@
 *>          LDW is INTEGER
 *>          The leading dimension of the array W. LDW >= max(1,N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -145,10 +143,9 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  If UPLO = 'U', the matrix Q is represented as a product of elementary
@@ -196,7 +193,6 @@
 *>  where d denotes a diagonal element of the reduced matrix, a denotes
 *>  an element of the original matrix that is unchanged, and vi denotes
 *>  an element of the vector defining H(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

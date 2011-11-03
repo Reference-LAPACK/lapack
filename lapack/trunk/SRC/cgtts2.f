@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGTTS2( ITRANS, N, NRHS, DL, D, DU, DU2, IPIV, B, LDB )
 * 
@@ -28,21 +28,20 @@
 *       COMPLEX            B( LDB, * ), D( * ), DL( * ), DU( * ), DU2( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGTTS2 solves one of the systems of equations
 *>    A * X = B,  A**T * X = B,  or  A**H * X = B,
 *> with a tridiagonal matrix A using the LU factorization computed
 *> by CGTTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITRANS
 *> \verbatim
@@ -113,10 +112,9 @@
 *>          LDB is INTEGER
 *>          The leading dimension of the array B.  LDB >= max(1,N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

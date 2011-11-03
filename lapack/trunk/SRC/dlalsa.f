@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
 *                          LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,
@@ -37,11 +37,11 @@
 *      $                   Z( LDU, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLALSA is an itermediate step in solving the least squares problem
 *> by computing the SVD of the coefficient matrix in compact form (The
@@ -53,11 +53,10 @@
 *> ICOMPQ = 1, DLALSA applies the right singular vector matrix to the
 *> right hand side. The singular vector matrices were generated in
 *> compact form by DLALSA.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ICOMPQ
 *> \verbatim
@@ -244,10 +243,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -258,19 +256,13 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ming Gu and Ren-Cang Li, Computer Science Division, University of
-*>       California at Berkeley, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>
-*> \endverbatim
-*>
+*>       California at Berkeley, USA \n
+*>     Osni Marques, LBNL/NERSC, USA \n
+*
 *  =====================================================================
       SUBROUTINE DLALSA( ICOMPQ, SMLSIZ, N, NRHS, B, LDB, BX, LDBX, U,
      $                   LDU, VT, K, DIFL, DIFR, Z, POLES, GIVPTR,

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHETF2( UPLO, N, A, LDA, IPIV, INFO )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX*16         A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHETF2 computes the factorization of a complex Hermitian matrix A
 *> using the Bunch-Kaufman diagonal pivoting method:
@@ -45,11 +45,10 @@
 *> Hermitian and block diagonal with 1-by-1 and 2-by-2 diagonal blocks.
 *>
 *> This is the unblocked version of the algorithm, calling Level 2 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -110,10 +109,9 @@
 *>               exactly singular, and division by zero will occur if it
 *>               is used to solve a system of equations.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -124,23 +122,10 @@
 *
 *> \ingroup complex16HEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
-*>
-*>  09-29-06 - patch from
-*>    Bobby Cheng, MathWorks
-*>
-*>    Replace l.210 and l.393
-*>         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
-*>    by
-*>         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. DISNAN(ABSAKK) ) THEN
-*>
-*>  01-01-96 - Based on modifications by
-*>    J. Lewis, Boeing Computer Services Company
-*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
 *>
 *>  If UPLO = 'U', then A = U*D*U**H, where
 *>     U = P(n)*U(n)* ... *P(k)U(k)* ...,
@@ -175,9 +160,25 @@
 *>  If s = 1, D(k) overwrites A(k,k), and v overwrites A(k+1:n,k).
 *>  If s = 2, the lower triangle of D(k) overwrites A(k,k), A(k+1,k),
 *>  and A(k+1,k+1), and v overwrites A(k+2:n,k:k+1).
-*>
 *> \endverbatim
+*
+*> \par Contributors:
+*  ==================
 *>
+*> \verbatim
+*>  09-29-06 - patch from
+*>    Bobby Cheng, MathWorks
+*>
+*>    Replace l.210 and l.393
+*>         IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
+*>    by
+*>         IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. DISNAN(ABSAKK) ) THEN
+*>
+*>  01-01-96 - Based on modifications by
+*>    J. Lewis, Boeing Computer Services Company
+*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
+*> \endverbatim
+*
 *  =====================================================================
       SUBROUTINE ZHETF2( UPLO, N, A, LDA, IPIV, INFO )
 *

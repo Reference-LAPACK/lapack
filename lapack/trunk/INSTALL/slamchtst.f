@@ -6,8 +6,8 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -18,8 +18,7 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*  =====================================================================
-      PROGRAM SLAMCHTST
+*  =====================================================================      PROGRAM SLAMCHTST
 *
 *  -- LAPACK test routine (version 3.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

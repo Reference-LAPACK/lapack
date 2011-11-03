@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGEEV( JOBVL, JOBVR, N, A, LDA, W, VL, LDVL, VR, LDVR,
 *                         WORK, LWORK, RWORK, INFO )
@@ -31,11 +31,11 @@
 *      $                   W( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGEEV computes for an N-by-N complex nonsymmetric matrix A, the
 *> eigenvalues and, optionally, the left and/or right eigenvectors.
@@ -49,11 +49,10 @@
 *>
 *> The computed eigenvectors are normalized to have Euclidean norm
 *> equal to 1 and largest component real.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVL
 *> \verbatim
@@ -161,10 +160,9 @@
 *>                elements and i+1:N of W contain eigenvalues which have
 *>                converged.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DDRVRF4( NOUT, NN, NVAL, THRESH, C1, C2, LDC, CRF, A,
 *      +                    LDA, D_WORK_DLANGE )
@@ -21,19 +21,18 @@
 *      +                   CRF( * ), D_WORK_DLANGE( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DDRVRF4 tests the LAPACK RFP routines:
 *>     DSFRK
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NOUT
 *> \verbatim
@@ -102,10 +101,9 @@
 *> \verbatim
 *>          D_WORK_DLANGE is DOUBLE PRECISION array, dimension (NMAX)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

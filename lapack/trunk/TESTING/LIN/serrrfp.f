@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SERRRFP( NUNIT )
 * 
@@ -14,11 +14,11 @@
 *       INTEGER            NUNIT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SERRRFP tests the error exits for the REAL driver routines
 *> for solving linear systems of equations.
@@ -26,21 +26,19 @@
 *> SDRVRFP tests the REAL LAPACK RFP routines:
 *>     STFSM, STFTRI, SSFRK, STFTTP, STFTTR, SPFTRF, SPFTRS, STPTTF,
 *>     STPTTR, STRTTF, and STRTTP
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NUNIT
 *> \verbatim
 *>          NUNIT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

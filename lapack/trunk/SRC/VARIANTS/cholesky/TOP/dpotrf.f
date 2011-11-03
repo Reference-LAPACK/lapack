@@ -5,8 +5,8 @@ C> \brief \b DPOTRF VARIANT: top-looking block version of the algorithm, calling
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DPOTRF ( UPLO, N, A, LDA, INFO )
 * 
@@ -36,8 +36,8 @@ C> This is the top-looking block version of the algorithm, calling Level 3 BLAS.
 C>
 C>\endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 C> \param[in] UPLO
 C> \verbatim
@@ -85,8 +85,8 @@ C>                completed.
 C> \endverbatim
 C>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 C> \author Univ. of Tennessee 
 C> \author Univ. of California Berkeley 

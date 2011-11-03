@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLARRE( RANGE, N, VL, VU, IL, IU, D, E, E2,
 *                           RTOL1, RTOL2, SPLTOL, NSPLIT, ISPLIT, M,
@@ -35,11 +35,11 @@
 *      $                   W( * ),WERR( * ), WGAP( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> To find the desired eigenvalues of a given real symmetric
 *> tridiagonal matrix T, SLARRE sets any "small" off-diagonal
@@ -54,11 +54,10 @@
 *> conpute all and then discard any unwanted one.
 *> As an added benefit, SLARRE also outputs the n
 *> Gerschgorin intervals for the matrices L_i D_i L_i^T.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] RANGE
 *> \verbatim
@@ -260,10 +259,9 @@
 *>          =-5:  Problem in SLASQ2.
 *>          =-6:  Problem in SLASQ2.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -274,24 +272,24 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The base representations are required to suffer very little
 *>  element growth and consequently define all their eigenvalues to
 *>  high relative accuracy.
-*>
-*>  Based on contributions by
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>
 *> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Beresford Parlett, University of California, Berkeley, USA \n
+*>     Jim Demmel, University of California, Berkeley, USA \n
+*>     Inderjit Dhillon, University of Texas, Austin, USA \n
+*>     Osni Marques, LBNL/NERSC, USA \n
+*>     Christof Voemel, University of California, Berkeley, USA \n
 *>
 *  =====================================================================
       SUBROUTINE SLARRE( RANGE, N, VL, VU, IL, IU, D, E, E2,

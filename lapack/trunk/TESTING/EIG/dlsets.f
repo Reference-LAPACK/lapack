@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLSETS( M, P, N, A, AF, LDA, B, BF, LDB, C, CF, D, DF,
 *                          X, WORK, LWORK, RWORK, RESULT )
@@ -16,19 +16,18 @@
 *       ..
 *       .. Array Arguments ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLSETS tests DGGLSE - a subroutine for solving linear equality
 *> constrained least square problem (LSE).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -135,10 +134,9 @@
 *>            RESULT(1) = norm( A*x - c )/ norm(A)*norm(X)*EPS
 *>            RESULT(2) = norm( B*x - d )/ norm(B)*norm(X)*EPS
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

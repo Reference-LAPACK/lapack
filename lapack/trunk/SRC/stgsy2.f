@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE STGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
 *                          LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,
@@ -34,11 +34,11 @@
 *      $                   D( LDD, * ), E( LDE, * ), F( LDF, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> STGSY2 solves the generalized Sylvester equation:
 *>
@@ -77,11 +77,10 @@
 *> of an upper bound on the separation between to matrix pairs. Then
 *> the input (A, D), (B, E) are sub-pencils of the matrix pair in
 *> STGSYL. See STGSYL for details.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -251,10 +250,9 @@
 *>            >0: The matrix pairs (A, D) and (B, E) have common or very
 *>                close eigenvalues.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -265,18 +263,12 @@
 *
 *> \ingroup realSYauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
 *>     Umea University, S-901 87 Umea, Sweden.
-*>
-*> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE STGSY2( TRANS, IJOB, M, N, A, LDA, B, LDB, C, LDC, D,
      $                   LDD, E, LDE, F, LDF, SCALE, RDSUM, RDSCAL,

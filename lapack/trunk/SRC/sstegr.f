@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSTEGR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
 *                  ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,
@@ -33,11 +33,11 @@
 *       REAL               Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSTEGR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T. Any such unreduced matrix has
@@ -59,11 +59,10 @@
 *> NaNs.  Normal execution may create these exceptiona values and hence
 *> may abort due to a floating point exception in environments which
 *> do not conform to the IEEE-754 standard.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -232,10 +231,9 @@
 *>                the nonzero error code returned by SLARRE or
 *>                SLARRV, respectively.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -246,19 +244,13 @@
 *
 *> \ingroup realOTHERcomputational
 *
+*> \par Contributors:
+*  ==================
+*>
+*> Inderjit Dhillon, IBM Almaden, USA \n
+*> Osni Marques, LBNL/NERSC, USA \n
+*> Christof Voemel, LBNL/NERSC, USA \n
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Inderjit Dhillon, IBM Almaden, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, LBNL/NERSC, USA
-*>
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE SSTEGR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $           ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK, IWORK,

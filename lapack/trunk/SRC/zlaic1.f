@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX*16         W( J ), X( J )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLAIC1 applies one step of incremental condition estimation in
 *> its simplest version:
@@ -60,11 +60,10 @@
 *>                                           [ conjg(gamma) ]
 *>
 *> where  alpha =  x**H * w.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -120,10 +119,9 @@
 *>          C is COMPLEX*16
 *>          Cosine needed in forming xhat.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

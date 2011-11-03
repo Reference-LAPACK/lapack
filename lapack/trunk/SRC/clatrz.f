@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLATRZ( M, N, L, A, LDA, TAU, WORK )
 * 
@@ -27,21 +27,20 @@
 *       COMPLEX            A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLATRZ factors the M-by-(M+L) complex upper trapezoidal matrix
 *> [ A1 A2 ] = [ A(1:M,1:M) A(1:M,N-L+1:N) ] as ( R  0 ) * Z by means
 *> of unitary transformations, where  Z is an (M+L)-by-(M+L) unitary
 *> matrix and, R and A1 are M-by-M upper triangular matrices.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -89,10 +88,9 @@
 *> \verbatim
 *>          WORK is COMPLEX array, dimension (M)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -103,14 +101,15 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
+*
+*> \par Further Details:
+*  =====================
+*>
+*> \verbatim
 *>
 *>  The factorization is obtained by Householder's method.  The kth
 *>  transformation matrix, Z( k ), which is used to introduce zeros into
@@ -136,7 +135,6 @@
 *>  Z is given by
 *>
 *>     Z =  Z( 1 ) * Z( 2 ) * ... * Z( m ).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

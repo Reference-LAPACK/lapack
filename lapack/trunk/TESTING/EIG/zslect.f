@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL          FUNCTION ZSLECT( Z )
 * 
@@ -14,11 +14,11 @@
 *       COMPLEX*16         Z
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZSLECT returns .TRUE. if the eigenvalue Z is to be selected,
 *> otherwise it returns .FALSE.
@@ -30,21 +30,19 @@
 *> zero, and .FALSE. otherwise.
 *> If SELOPT is at least 1, ZSLECT returns SELVAL(SELOPT) and adds 1
 *> to SELOPT, cycling back to 1 at SELMAX.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] Z
 *> \verbatim
 *>          Z is COMPLEX*16
 *>          The eigenvalue Z.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

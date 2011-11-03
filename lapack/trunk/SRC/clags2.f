@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
 *                          SNV, CSQ, SNQ )
@@ -27,11 +27,11 @@
 *       COMPLEX            A2, B2, SNQ, SNU, SNV
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAGS2 computes 2-by-2 unitary matrices U, V and Q, such
 *> that if ( UPPER ) then
@@ -63,11 +63,10 @@
 *> then the transformed (2,2) element of B is not zero, except when the
 *> first rows of input A and B are parallel and the second rows are
 *> zero.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPPER
 *> \verbatim
@@ -142,10 +141,9 @@
 *>          SNQ is COMPLEX
 *>          The desired unitary matrix Q.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

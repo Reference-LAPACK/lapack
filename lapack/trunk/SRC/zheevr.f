@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,
 *                          ABSTOL, M, W, Z, LDZ, ISUPPZ, WORK, LWORK,
@@ -34,11 +34,11 @@
 *       COMPLEX*16         A( LDA, * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHEEVR computes selected eigenvalues and, optionally, eigenvectors
 *> of a complex Hermitian matrix A.  Eigenvalues and eigenvectors can
@@ -97,11 +97,10 @@
 *> hence may abort due to a floating point exception in environments
 *> which do not handle NaNs and infinities in the ieee standard default
 *> manner.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -321,10 +320,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *>          > 0:  Internal error
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -335,21 +333,15 @@
 *
 *> \ingroup complex16HEeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>     Inderjit Dhillon, IBM Almaden, USA
-*>     Osni Marques, LBNL/NERSC, USA
+*>     Inderjit Dhillon, IBM Almaden, USA \n
+*>     Osni Marques, LBNL/NERSC, USA \n
 *>     Ken Stanley, Computer Science Division, University of
-*>       California at Berkeley, USA
+*>       California at Berkeley, USA \n
 *>     Jason Riedy, Computer Science Division, University of
-*>       California at Berkeley, USA
-*>
-*> \endverbatim
+*>       California at Berkeley, USA \n
 *>
 *  =====================================================================
       SUBROUTINE ZHEEVR( JOBZ, RANGE, UPLO, N, A, LDA, VL, VU, IL, IU,

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CCKGQR( NM, MVAL, NP, PVAL, NN, NVAL, NMATS, ISEED,
 *                          THRESH, NMAX, A, AF, AQ, AR, TAUA, B, BF, BZ,
@@ -24,20 +24,19 @@
 *      $                   TAUB( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CCKGQR tests
 *> CGGQRF: GQR factorization for N-by-M matrix A and N-by-P matrix B,
 *> CGGRQF: GRQ factorization for M-by-N matrix A and P-by-N matrix B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NM
 *> \verbatim
@@ -194,10 +193,9 @@
 *>          > 0 :  If CLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

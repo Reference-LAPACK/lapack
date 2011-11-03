@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 * 
@@ -19,21 +19,20 @@
 *       COMPLEX*16         D( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZLATM1 computes the entries of D(1..N) as specified by
 *>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
 *>    of random numbers. ZLATM1 is called by CLATMR to generate
 *>    random test matrices for LAPACK programs.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] MODE
 *> \verbatim
@@ -122,10 +121,9 @@
 *>           -4  => if MODE equals 6 or -6 and IDIST not in range 1 to 4
 *>           -7  => if N negative
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

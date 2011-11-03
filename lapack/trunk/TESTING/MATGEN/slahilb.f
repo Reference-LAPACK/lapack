@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK, INFO)
 * 
@@ -16,11 +16,11 @@
 *       REAL A(LDA, N), X(LDX, NRHS), B(LDB, NRHS), WORK(N)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAHILB generates an N by N scaled Hilbert matrix in A along with
 *> NRHS right-hand sides in B and solutions in X such that A*X=B.
@@ -40,11 +40,10 @@
 *>
 *> In single, the generated solution is exact for N <= 6 and has
 *> small componentwise error for 7 <= N <= 11.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -109,10 +108,9 @@
 *>               be not exact.
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -138,7 +136,6 @@
 *     ..
 *
 *  =====================================================================
-
 *     .. Local Scalars ..
       INTEGER TM, TI, R
       INTEGER M

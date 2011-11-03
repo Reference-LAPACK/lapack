@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZCHKBD( NSIZES, MVAL, NVAL, NTYPES, DOTYPE, NRHS,
 *                          ISEED, THRESH, A, LDA, BD, BE, S1, S2, X, LDX,
@@ -27,11 +27,11 @@
 *      $                   X( LDX, * ), Y( LDX, * ), Z( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZCHKBD checks the singular value decomposition (SVD) routines.
 *>
@@ -152,11 +152,10 @@
 *>
 *> A subset of the full set of matrix types may be selected through
 *> the logical array DOTYPE.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -397,10 +396,9 @@
 *>     KMAGN(j)        The order of magnitude ( O(1),
 *>                     O(overflow^(1/2) ), O(underflow^(1/2) )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

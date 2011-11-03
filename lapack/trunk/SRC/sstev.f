@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSTEV( JOBZ, N, D, E, Z, LDZ, WORK, INFO )
 * 
@@ -28,19 +28,18 @@
 *       REAL               D( * ), E( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSTEV computes all eigenvalues and, optionally, eigenvectors of a
 *> real symmetric tridiagonal matrix A.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -101,10 +100,9 @@
 *>          > 0:  if INFO = i, the algorithm failed to converge; i
 *>                off-diagonal elements of E did not converge to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHPT01( UPLO, N, A, AFAC, IPIV, C, LDC, RWORK, RESID )
 * 
@@ -21,11 +21,11 @@
 *       COMPLEX            A( * ), AFAC( * ), C( LDC, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHPT01 reconstructs a Hermitian indefinite packed matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
@@ -33,11 +33,10 @@
 *> where C is the reconstructed matrix, EPS is the machine epsilon,
 *> L' is the conjugate transpose of L, and U' is the conjugate transpose
 *> of U.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -98,10 +97,9 @@
 *>          If UPLO = 'L', norm(L*D*L' - A) / ( N * norm(A) * EPS )
 *>          If UPLO = 'U', norm(U*D*U' - A) / ( N * norm(A) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

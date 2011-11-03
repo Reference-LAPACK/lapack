@@ -5,25 +5,24 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *     SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
 *
 *     INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>  This subroutine returns the LAPACK version.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *>  \param[out] VERS_MAJOR
 *>      return the lapack major version
@@ -34,8 +33,8 @@
 *>  \param[out] VERS_PATCH
 *>      return the lapack patch version from the minor version
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -57,8 +56,7 @@
 *  =====================================================================
 *
       INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH
-*  =====================================================================
-      VERS_MAJOR = 3
+*  =====================================================================      VERS_MAJOR = 3
       VERS_MINOR = 3
       VERS_PATCH = 1
 *  =====================================================================

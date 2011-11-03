@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )
 * 
@@ -28,11 +28,11 @@
 *      $                   Y( LDY, NB )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAHR2 reduces the first NB columns of A complex general n-BY-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
@@ -41,11 +41,10 @@
 *> Q as a block reflector I - V*T*v**H, and also the matrix Y = A * V * T.
 *>
 *> This is an auxiliary routine called by CGEHRD.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -115,10 +114,9 @@
 *>          LDY is INTEGER
 *>          The leading dimension of the array Y. LDY >= N.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -129,10 +127,9 @@
 *
 *> \ingroup complexOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix Q is represented as a product of nb elementary reflectors
@@ -172,15 +169,14 @@
 *>  Gejin. Note that the entries of A(1:K,2:NB) differ from those
 *>  returned by the original LAPACK-3.0's DLAHRD routine. (This
 *>  subroutine is not backward compatible with LAPACK-3.0's DLAHRD.)
-*>
-*>  References
-*>  ==========
+*> \endverbatim
+*
+*> \par References:
+*  ================
 *>
 *>  Gregorio Quintana-Orti and Robert van de Geijn, "Improving the
 *>  performance of reduction to Hessenberg form," ACM Transactions on
 *>  Mathematical Software, 32(2):180-194, June 2006.
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE CLAHR2( N, K, NB, A, LDA, TAU, T, LDT, Y, LDY )

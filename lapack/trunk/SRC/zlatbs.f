@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLATBS( UPLO, TRANS, DIAG, NORMIN, N, KD, AB, LDAB, X,
 *                          SCALE, CNORM, INFO )
@@ -31,11 +31,11 @@
 *       COMPLEX*16         AB( LDAB, * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLATBS solves one of the triangular systems
 *>
@@ -49,11 +49,10 @@
 *> overflow, the Level 2 BLAS routine ZTBSV is called.  If the matrix A
 *> is singular (A(j,j) = 0 for some j), then s is set to 0 and a
 *> non-trivial solution to A*x = 0 is returned.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -155,10 +154,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -k, the k-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -169,10 +167,9 @@
 *
 *> \ingroup complex16OTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  A rough bound on x is computed; if that is less than overflow, ZTBSV
@@ -240,7 +237,6 @@
 *>
 *>  and we can safely call ZTBSV if 1/M(n) and 1/G(n) are both greater
 *>  than max(underflow, 1/overflow).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

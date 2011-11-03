@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DLAPY3( X, Y, Z )
 * 
@@ -24,19 +24,18 @@
 *       DOUBLE PRECISION   X, Y, Z
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAPY3 returns sqrt(x**2+y**2+z**2), taking care not to cause
 *> unnecessary overflow.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] X
 *> \verbatim
@@ -53,10 +52,9 @@
 *>          Z is DOUBLE PRECISION
 *>          X, Y and Z specify the values x, y and z.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

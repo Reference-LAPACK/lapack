@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DDRVRF1( NOUT, NN, NVAL, THRESH, A, LDA, ARF, WORK )
 * 
@@ -19,19 +19,18 @@
 *       DOUBLE PRECISION   A( LDA, * ), ARF( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DDRVRF1 tests the LAPACK RFP routines:
 *>     DLANSF
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NOUT
 *> \verbatim
@@ -79,10 +78,9 @@
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension ( NMAX )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

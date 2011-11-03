@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGESVJ( JOBA, JOBU, JOBV, M, N, A, LDA, SVA, MV, V,
 *                          LDV, WORK, LWORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGESVJ computes the singular value decomposition (SVD) of a real
 *> M-by-N matrix A, where M >= N. The SVD of A is written as
@@ -45,11 +45,10 @@
 *> matrix, and V is an N-by-N orthogonal matrix. The diagonal elements
 *> of SIGMA are the singular values of A. The columns of U and V are the
 *> left and the right singular vectors of A, respectively.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBA
 *> \verbatim
@@ -250,10 +249,9 @@
 *>                of sweeps. The output may still be useful. See the
 *>                description of WORK.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -264,10 +262,9 @@
 *
 *> \ingroup doubleGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The orthogonal N-by-N matrix V is obtained as a product of Jacobi plane
@@ -288,14 +285,22 @@
 *>  number interval ( UNDERFLOW , OVERFLOW ). In extreme cases, even
 *>  denormalized singular values can be computed with the corresponding
 *>  gradual loss of accurate digits.
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
 *>
-*>  Contributors
+*> \verbatim
+*>
 *>  ============
 *>
 *>  Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
+*> \endverbatim
+*
+*> \par References:
+*  ================
 *>
-*>  References
-*>  ==========
+*> \verbatim
 *>
 *> [1] A. A. Anda and H. Park: Fast plane rotations with dynamic scaling.
 *>     SIAM J. matrix Anal. Appl., Vol. 15 (1994), pp. 162-174.
@@ -315,12 +320,15 @@
 *> [7] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
 *>     QSVD, (H,K)-SVD computations.
 *>     Department of Mathematics, University of Zagreb, 2008.
+*> \endverbatim
+*
+*>  \par Bugs, examples and comments:
+*   =================================
 *>
-*>  Bugs, Examples and Comments
+*> \verbatim
 *>  ===========================
 *>  Please report all bugs and send interesting test examples and comments to
 *>  drmac@math.hr. Thank you.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

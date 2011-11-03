@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
 *                          RANK, WORK, RWORK, IWORK, INFO )
@@ -32,11 +32,11 @@
 *       COMPLEX            B( LDB, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLALSD uses the singular value decomposition of A to solve the least
 *> squares problem of finding X to minimize the Euclidean norm of each
@@ -54,11 +54,10 @@
 *> which subtract like the Cray XMP, Cray YMP, Cray C 90, or Cray 2.
 *> It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -163,10 +162,9 @@
 *>               working on the submatrix lying in rows and columns
 *>               INFO/(N+1) through MOD(INFO,N+1).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -177,19 +175,13 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ming Gu and Ren-Cang Li, Computer Science Division, University of
-*>       California at Berkeley, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>
-*> \endverbatim
-*>
+*>       California at Berkeley, USA \n
+*>     Osni Marques, LBNL/NERSC, USA \n
+*
 *  =====================================================================
       SUBROUTINE CLALSD( UPLO, SMLSIZ, N, NRHS, D, E, B, LDB, RCOND,
      $                   RANK, WORK, RWORK, IWORK, INFO )

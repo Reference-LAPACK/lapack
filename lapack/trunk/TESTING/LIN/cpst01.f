@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
 *                          PIV, RWORK, RESID, RANK )
@@ -23,11 +23,11 @@
 *       INTEGER            PIV( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPST01 reconstructs an Hermitian positive semidefinite matrix A
 *> from its L or U factors and the permutation matrix P and computes
@@ -36,11 +36,10 @@
 *>    norm( P*U'*U*P' - A ) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon, L' is the conjugate transpose of L,
 *> and U' is the conjugate transpose of U.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -120,10 +119,9 @@
 *>          RANK is INTEGER
 *>          number of nonzero singular values of A.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLACRM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 * 
@@ -28,21 +28,20 @@
 *       COMPLEX            A( LDA, * ), C( LDC, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLACRM performs a very simple matrix-matrix multiplication:
 *>          C := A * B,
 *> where A is M by N and complex; B is N by N and real;
 *> C is M by N and complex.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -99,10 +98,9 @@
 *> \verbatim
 *>          RWORK is REAL array, dimension (2*M*N)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAQGE( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                          EQUED )
@@ -31,19 +31,18 @@
 *       COMPLEX*16         A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLAQGE equilibrates a general M by N matrix A using the row and
 *> column scaling factors in the vectors R and C.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -112,10 +111,12 @@
 *>                  by diag(C).
 *>          = 'B':  Both row and column equilibration, i.e., A has been
 *>                  replaced by diag(R) * A * diag(C).
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  THRESH is a threshold value used to decide if row or column scaling
 *>  should be done based on the ratio of the row or column scaling
 *>  factors.  If ROWCND < THRESH, row scaling is done, and if
@@ -125,10 +126,9 @@
 *>  should be done based on the absolute size of the largest matrix
 *>  element.  If AMAX > LARGE or AMAX < SMALL, row scaling is done.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

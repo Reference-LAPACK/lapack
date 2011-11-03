@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGETRF( M, N, A, LDA, IPIV, INFO )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGETRF computes an LU factorization of a general M-by-N matrix A
 *> using partial pivoting with row interchanges.
@@ -44,11 +44,10 @@
 *> triangular (upper trapezoidal if m < n).
 *>
 *> This is the right-looking Level 3 BLAS version of the algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -93,10 +92,9 @@
 *>                singular, and division by zero will occur if it is used
 *>                to solve a system of equations.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

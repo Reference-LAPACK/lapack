@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND,
 *                          RANK, WORK, LWORK, IWORK, INFO )
@@ -30,11 +30,11 @@
 *       REAL               A( LDA, * ), B( LDB, * ), S( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGELSD computes the minimum-norm solution to a real linear least
 *> squares problem:
@@ -65,11 +65,10 @@
 *> digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
 *> Cray-2. It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -187,10 +186,9 @@
 *>                if INFO = i, i off-diagonal elements of an intermediate
 *>                bidiagonal form did not converge to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -201,19 +199,13 @@
 *
 *> \ingroup realGEsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ming Gu and Ren-Cang Li, Computer Science Division, University of
-*>       California at Berkeley, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>
-*> \endverbatim
-*>
+*>       California at Berkeley, USA \n
+*>     Osni Marques, LBNL/NERSC, USA \n
+*
 *  =====================================================================
       SUBROUTINE SGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND,
      $                   RANK, WORK, LWORK, IWORK, INFO )

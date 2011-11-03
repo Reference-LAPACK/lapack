@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
 *                          M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
@@ -34,11 +34,11 @@
 *       COMPLEX*16         Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZSTEMR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T. Any such unreduced matrix has
@@ -107,11 +107,10 @@
 *> Since LAPACK drivers overwrite the matrix data with the eigenvectors,
 *> ZSTEMR accepts complex workspace to facilitate interoperability
 *> with ZUNMTR or ZUPMTR.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -303,10 +302,9 @@
 *>                the nonzero error code returned by DLARRE or
 *>                ZLARRV, respectively.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -317,21 +315,15 @@
 *
 *> \ingroup complex16OTHERcomputational
 *
+*> \par Contributors:
+*  ==================
+*>
+*> Beresford Parlett, University of California, Berkeley, USA \n
+*> Jim Demmel, University of California, Berkeley, USA \n
+*> Inderjit Dhillon, University of Texas, Austin, USA \n
+*> Osni Marques, LBNL/NERSC, USA \n
+*> Christof Voemel, University of California, Berkeley, USA \n
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE ZSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                   M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,

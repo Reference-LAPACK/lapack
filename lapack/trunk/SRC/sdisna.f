@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SDISNA( JOB, M, N, D, SEP, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               D( * ), SEP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SDISNA computes the reciprocal condition numbers for the eigenvectors
 *> of a real symmetric or complex Hermitian matrix or for the left or
@@ -51,11 +51,10 @@
 *>
 *> SDISNA may also be used to compute error bounds for eigenvectors of
 *> the generalized symmetric definite eigenproblem.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -102,10 +101,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

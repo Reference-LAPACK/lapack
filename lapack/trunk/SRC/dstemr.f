@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
 *                          M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,
@@ -34,11 +34,11 @@
 *       DOUBLE PRECISION   Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSTEMR computes selected eigenvalues and, optionally, eigenvectors
 *> of a real symmetric tridiagonal matrix T. Any such unreduced matrix has
@@ -90,11 +90,10 @@
 *> floating-point standard in their handling of infinities and NaNs.
 *> This permits the use of efficient inner loops avoiding a check for
 *> zero divisors.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -286,10 +285,9 @@
 *>                the nonzero error code returned by DLARRE or
 *>                DLARRV, respectively.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -300,21 +298,15 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
+*> \par Contributors:
+*  ==================
+*>
+*> Beresford Parlett, University of California, Berkeley, USA \n
+*> Jim Demmel, University of California, Berkeley, USA \n
+*> Inderjit Dhillon, University of Texas, Austin, USA \n
+*> Osni Marques, LBNL/NERSC, USA \n
+*> Christof Voemel, University of California, Berkeley, USA
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE DSTEMR( JOBZ, RANGE, N, D, E, VL, VU, IL, IU,
      $                   M, W, Z, LDZ, NZC, ISUPPZ, TRYRAC, WORK, LWORK,

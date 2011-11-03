@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION ZLANHB( NORM, UPLO, N, K, AB, LDAB,
 *                        WORK )
@@ -30,20 +30,19 @@
 *       COMPLEX*16         AB( LDAB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLANHB  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the element of  largest absolute value  of an
 *> n by n hermitian band matrix A,  with k super-diagonals.
+*> \endverbatim
 *>
-*> Description
-*> ===========
-*>
-*> ZLANHB returns the value
+*> \return ZLANHB
+*> \verbatim
 *>
 *>    ZLANHB = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
@@ -57,11 +56,10 @@
 *> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
 *> normF  denotes the  Frobenius norm of a matrix (square root of sum of
 *> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NORM
 *> \verbatim
@@ -117,10 +115,9 @@
 *>          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
 *>          WORK is not referenced.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

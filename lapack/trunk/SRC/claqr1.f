@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAQR1( N, H, LDH, S1, S2, V )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            H( LDH, * ), V( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>      Given a 2-by-2 or 3-by-3 matrix H, CLAQR1 sets v to a
 *>      scalar multiple of the first column of the product
@@ -43,11 +43,10 @@
 *>
 *>      This is useful for starting double implicit shift bulges
 *>      in the QR algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -86,10 +85,9 @@
 *>              A scalar multiple of the first column of the
 *>              matrix K in (*).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -100,17 +98,11 @@
 *
 *> \ingroup complexOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>     Based on contributions by
-*>        Karen Braman and Ralph Byers, Department of Mathematics,
-*>        University of Kansas, USA
-*>
-*> \endverbatim
+*>       Karen Braman and Ralph Byers, Department of Mathematics,
+*>       University of Kansas, USA
 *>
 *  =====================================================================
       SUBROUTINE CLAQR1( N, H, LDH, S1, S2, V )

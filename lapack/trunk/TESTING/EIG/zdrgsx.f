@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZDRGSX( NSIZE, NCMAX, THRESH, NIN, NOUT, A, LDA, B, AI,
 *                          BI, Z, Q, ALPHA, BETA, C, LDC, S, WORK, LWORK,
@@ -27,11 +27,11 @@
 *      $                   Z( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZDRGSX checks the nonsymmetric generalized eigenvalue (Schur form)
 *> problem expert driver ZGGESX.
@@ -109,7 +109,7 @@
 *> and DIF_l when testing the built-in test problems.
 *>
 *> Built-in Test Matrices
-*> ======================
+*  ======================
 *>
 *> All built-in test matrices are the 2 by 2 block of triangular
 *> matrices
@@ -168,11 +168,10 @@
 *>                  |                              1-d |
 *>          and matrix B are chosen as identity matrices (see DLATM5).
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZE
 *> \verbatim
@@ -332,10 +331,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  A routine returned an error code.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

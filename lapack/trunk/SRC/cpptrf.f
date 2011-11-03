@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPPTRF( UPLO, N, AP, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            AP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPPTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A stored in packed format.
@@ -41,11 +41,10 @@
 *>    A = U**H * U,  if UPLO = 'U', or
 *>    A = L  * L**H,  if UPLO = 'L',
 *> where U is an upper triangular matrix and L is lower triangular.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -84,10 +83,9 @@
 *>                positive definite, and the factorization could not be
 *>                completed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -98,10 +96,9 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The packed storage scheme is illustrated by the following example
@@ -117,7 +114,6 @@
 *>  Packed storage of the upper triangle of A:
 *>
 *>  AP = [ a11, a12, a22, a13, a23, a33, a14, a24, a34, a44 ]
-*>
 *> \endverbatim
 *>
 *  =====================================================================

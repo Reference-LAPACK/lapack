@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CTRSNA( JOB, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
 *                          LDVR, S, SEP, MM, M, WORK, LDWORK, RWORK,
@@ -33,20 +33,19 @@
 *      $                   WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CTRSNA estimates reciprocal condition numbers for specified
 *> eigenvalues and/or right eigenvectors of a complex upper triangular
 *> matrix T (or of any matrix Q*T*Q**H with Q unitary).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -189,10 +188,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -203,10 +201,9 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The reciprocal of the condition number of an eigenvalue lambda is
@@ -245,7 +242,6 @@
 *>  is given by
 *>
 *>                      EPS * norm(T) / SEP(i)
-*>
 *> \endverbatim
 *>
 *  =====================================================================

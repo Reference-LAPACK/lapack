@@ -5,13 +5,13 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *      PROGRAM DSECNDTST
 *  
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -22,8 +22,7 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*  =====================================================================
-      PROGRAM DSECNDTST
+*  =====================================================================      PROGRAM DSECNDTST
 *
 *  -- LAPACK test routine (version 3.3.1) --
 *

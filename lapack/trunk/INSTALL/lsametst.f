@@ -5,13 +5,13 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *      PROGRAM LSAMETST
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -22,8 +22,7 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*  =====================================================================
-      PROGRAM LSAMETST
+*  =====================================================================      PROGRAM LSAMETST
 *
 *  -- LAPACK test routine (version 3.2) --
 *

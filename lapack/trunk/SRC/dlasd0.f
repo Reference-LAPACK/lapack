@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLASD0( N, SQRE, D, E, U, LDU, VT, LDVT, SMLSIZ, IWORK,
 *                          WORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Using a divide and conquer approach, DLASD0 computes the singular
 *> value decomposition (SVD) of a real upper bidiagonal N-by-M
@@ -44,11 +44,10 @@
 *>
 *> A related subroutine, DLASDA, computes only the singular values,
 *> and optionally, the singular vectors in compact form.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -130,10 +129,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, a singular value did not converge
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -144,17 +142,11 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE DLASD0( N, SQRE, D, E, U, LDU, VT, LDVT, SMLSIZ, IWORK,

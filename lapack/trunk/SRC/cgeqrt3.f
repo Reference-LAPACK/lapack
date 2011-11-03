@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       RECURSIVE SUBROUTINE CGEQRT3( M, N, A, LDA, T, LDT, INFO )
 * 
@@ -27,22 +27,21 @@
 *       COMPLEX   A( LDA, * ), T( LDT, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGEQRT3 recursively computes a QR factorization of a complex M-by-N matrix A, 
 *> using the compact WY representation of Q. 
 *>
 *> Based on the algorithm of Elmroth and Gustavson, 
 *> IBM J. Res. Develop. Vol 44 No. 4 July 2000.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -92,10 +91,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -106,10 +104,9 @@
 *
 *> \ingroup complexGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix V stores the elementary reflectors H(i) in the i-th column
@@ -130,7 +127,6 @@
 *>  where V**H is the conjugate transpose of V.
 *>
 *>  For details of the algorithm, see Elmroth and Gustavson (cited above).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

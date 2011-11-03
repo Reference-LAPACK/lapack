@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARGV( N, X, INCX, Y, INCY, C, INCC )
 * 
@@ -27,22 +27,21 @@
 *       DOUBLE PRECISION   C( * ), X( * ), Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARGV generates a vector of real plane rotations, determined by
 *> elements of the real vectors x and y. For i = 1,2,...,n
 *>
 *>    (  c(i)  s(i) ) ( x(i) ) = ( a(i) )
 *>    ( -s(i)  c(i) ) ( y(i) ) = (   0  )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -89,10 +88,9 @@
 *>          INCC is INTEGER
 *>          The increment between elements of C. INCC > 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

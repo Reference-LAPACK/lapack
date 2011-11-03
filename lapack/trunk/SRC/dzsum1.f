@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DZSUM1( N, CX, INCX )
 * 
@@ -27,24 +27,21 @@
 *       COMPLEX*16         CX( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DZSUM1 takes the sum of the absolute values of a complex
 *> vector and returns a double precision result.
 *>
 *> Based on DZASUM from the Level 1 BLAS.
 *> The change is to use the 'genuine' absolute value.
-*>
-*> Contributed by Nick Higham for use with ZLACON.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -63,10 +60,9 @@
 *>          INCX is INTEGER
 *>          The spacing between successive values of CX.  INCX > 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -76,6 +72,11 @@
 *> \date November 2011
 *
 *> \ingroup complex16OTHERauxiliary
+*
+*> \par Contributors:
+*  ==================
+*>
+*> Nick Higham for use with ZLACON.
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DZSUM1( N, CX, INCX )

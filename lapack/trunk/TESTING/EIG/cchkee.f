@@ -5,16 +5,16 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       PROGRAM CCHKEE
 * 
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CCHKEE tests the COMPLEX LAPACK subroutines for the matrix
 *> eigenvalue problem.  The test paths in this version are
@@ -1012,15 +1012,14 @@
 *> precomputed examples, and LWORK = NMAX*(5*NMAX+20) in the parameter
 *> statements below.  For SVD, we assume NRHS may be as big as N.  The
 *> parameter NEED is set to 14 to allow for 14 N-by-N matrices for CGG.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -1031,8 +1030,7 @@
 *
 *> \ingroup complex_eig
 *
-*  =====================================================================
-      PROGRAM CCHKEE
+*  =====================================================================      PROGRAM CCHKEE
 *
 *  -- LAPACK test routine (version 3.1.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

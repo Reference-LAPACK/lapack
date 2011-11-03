@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
 *                          RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,
@@ -32,11 +32,11 @@
 *      $                   WERR( * ), WGAP( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Given the relatively robust representation(RRR) L D L^T, DLARRB
 *> does "limited" bisection to refine the eigenvalues of L D L^T,
@@ -46,11 +46,10 @@
 *> and WGAP, respectively. During bisection, intervals
 *> [left, right] are maintained by storing their mid-points and
 *> semi-widths in the arrays W and WERR respectively.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -170,10 +169,9 @@
 *>          INFO is INTEGER
 *>          Error flag.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -184,21 +182,15 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
+*> \par Contributors:
+*  ==================
+*>
+*> Beresford Parlett, University of California, Berkeley, USA \n
+*> Jim Demmel, University of California, Berkeley, USA \n
+*> Inderjit Dhillon, University of Texas, Austin, USA \n
+*> Osni Marques, LBNL/NERSC, USA \n
+*> Christof Voemel, University of California, Berkeley, USA
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE DLARRB( N, D, LLD, IFIRST, ILAST, RTOL1,
      $                   RTOL2, OFFSET, W, WGAP, WERR, WORK, IWORK,

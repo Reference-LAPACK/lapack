@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CRQT01( M, N, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,22 +20,21 @@
 *      $                   R( LDA, * ), TAU( * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CRQT01 tests CGERQF, which computes the RQ factorization of an m-by-n
 *> matrix A, and partially tests CUNGRQ which forms the n-by-n
 *> orthogonal matrix Q.
 *>
 *> CRQT01 compares R with A*Q', and checks that Q is orthogonal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -110,10 +109,9 @@
 *>          RESULT(1) = norm( R - A*Q' ) / ( N * norm(A) * EPS )
 *>          RESULT(2) = norm( I - Q*Q' ) / ( N * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

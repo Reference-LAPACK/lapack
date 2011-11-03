@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DQRT17( TRANS, IRESID, M, N, NRHS, A,
 *                        LDA, X, LDX, B, LDB, C, WORK, LWORK )
@@ -20,11 +20,11 @@
 *      $                   WORK( LWORK ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DQRT17 computes the ratio
 *>
@@ -34,11 +34,10 @@
 *>
 *>    alpha = ||B|| if IRESID = 1 (zero-residual problem)
 *>    alpha = ||R|| if IRESID = 2 (otherwise).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -134,10 +133,9 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= NRHS*(M+N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

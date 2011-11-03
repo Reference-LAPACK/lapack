@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSVDCH( N, S, E, SVD, TOL, INFO )
 * 
@@ -18,11 +18,11 @@
 *       REAL               E( * ), S( * ), SVD( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSVDCH checks to see if SVD(1) ,..., SVD(N) are accurate singular
 *> values of the bidiagonal matrix B with diagonal entries
@@ -37,11 +37,10 @@
 *> contains the correct number of singular values, INFO = 0 is returned,
 *> otherwise INFO is the index of the first singular value in the first
 *> bad interval.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -82,10 +81,9 @@
 *>          >0 if the interval containing the INFO-th singular value
 *>             contains the incorrect number of singular values.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

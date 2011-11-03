@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGGRQF( M, P, N, A, LDA, TAUA, B, LDB, TAUB, WORK,
 *                          LWORK, INFO )
@@ -29,11 +29,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGGRQF computes a generalized RQ factorization of an M-by-N matrix A
 *> and a P-by-N matrix B:
@@ -62,11 +62,10 @@
 *>
 *> where inv(B) denotes the inverse of the matrix B, and Z**H denotes the
 *> conjugate transpose of the matrix Z.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -164,10 +163,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO=-i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -178,10 +176,9 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix Q is represented as a product of elementary reflectors
@@ -211,7 +208,6 @@
 *>  and taub in TAUB(i).
 *>  To form Z explicitly, use LAPACK subroutine CUNGQR.
 *>  To use Z to update another matrix, use LAPACK subroutine CUNMQR.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

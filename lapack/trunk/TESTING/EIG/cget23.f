@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGET23( COMP, ISRT, BALANC, JTYPE, THRESH, ISEED,
 *                          NOUNIT, N, A, LDA, H, W, W1, VL, LDVL, VR,
@@ -32,11 +32,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    CGET23  checks the nonsymmetric eigenvalue problem driver CGEEVX.
 *>    If COMP = .FALSE., the first 8 of the following tests will be
@@ -113,11 +113,10 @@
 *>      of RCONDE, and takes errors in computing RCONDE into account,
 *>      so that the resulting quantity should be O(ULP). cond(RCONDE)
 *>      is essentially given by norm(A)/RCONDV.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMP
 *> \verbatim
@@ -349,10 +348,9 @@
 *>          If >0, CGEEVX returned an error code, the absolute
 *>                 value of which is returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

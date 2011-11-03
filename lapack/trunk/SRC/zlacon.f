@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLACON( N, V, X, EST, KASE )
 * 
@@ -28,19 +28,18 @@
 *       COMPLEX*16         V( N ), X( N )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLACON estimates the 1-norm of a square, complex matrix A.
 *> Reverse communication is used for evaluating matrix-vector products.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -81,10 +80,9 @@
 *>         whether X should be overwritten by A * X  or A**H * X.
 *>         On the final return from ZLACON, KASE will again be 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -95,22 +93,23 @@
 *
 *> \ingroup complex16OTHERauxiliary
 *
+*> \par Further Details:
+*  =====================
+*>
+*>  Originally named CONEST, dated March 16, 1988. \n
+*>  Last modified:  April, 1999
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Contributed by Nick Higham, University of Manchester.
-*>  Originally named CONEST, dated March 16, 1988.
+*>     Nick Higham, University of Manchester
+*
+*> \par References:
+*  ================
 *>
-*>  Reference: N.J. Higham, "FORTRAN codes for estimating the one-norm of
+*>  N.J. Higham, "FORTRAN codes for estimating the one-norm of
 *>  a real or complex matrix, with applications to condition estimation",
 *>  ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988.
-*>
-*>  Last modified:  April, 1999
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE ZLACON( N, V, X, EST, KASE )

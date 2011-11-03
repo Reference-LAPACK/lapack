@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL             FUNCTION SQRT12( M, N, A, LDA, S, WORK, LWORK )
 * 
@@ -17,21 +17,20 @@
 *       REAL               A( LDA, * ), S( * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SQRT12 computes the singular values `svlues' of the upper trapezoid
 *> of A(1:M,1:N) and returns the ratio
 *>
 *>      || s - svlues||/(||svlues||*eps*max(M,N))
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -74,10 +73,9 @@
 *>          The length of the array WORK. LWORK >= max(M*N + 4*min(M,N) +
 *>          max(M,N), M*N+2*MIN( M, N )+4*N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

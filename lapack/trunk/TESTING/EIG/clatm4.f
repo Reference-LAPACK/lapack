@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
 *                          TRIANG, IDIST, ISEED, A, LDA )
@@ -21,11 +21,11 @@
 *       COMPLEX            A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLATM4 generates basic square matrices, which may later be
 *> multiplied by others in order to produce test matrices.  It is
@@ -36,11 +36,10 @@
 *> according to the value of ITYPE, NZ1, NZ2, RSIGN, AMAGN, and RCOND.
 *> It then fills in the upper triangle with random numbers, if TRIANG is
 *> non-zero.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -155,10 +154,9 @@
 *>          LDA is INTEGER
 *>          Leading dimension of A.  Must be at least 1 and at least N.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

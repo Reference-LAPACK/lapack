@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
 *                          PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,
@@ -34,11 +34,11 @@
 *      $                   POLES( LDGNUM, * ), WORK( * ), Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLALS0 applies back the multiplying factors of either the left or the
 *> right singular vector matrix of a diagonal matrix appended by a row
@@ -69,11 +69,10 @@
 *> (3R) The inverse transformation of (2L).
 *>
 *> (4R) The inverse transformation of (1L).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ICOMPQ
 *> \verbatim
@@ -244,10 +243,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -258,19 +256,13 @@
 *
 *> \ingroup realOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ming Gu and Ren-Cang Li, Computer Science Division, University of
-*>       California at Berkeley, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>
-*> \endverbatim
-*>
+*>       California at Berkeley, USA \n
+*>     Osni Marques, LBNL/NERSC, USA \n
+*
 *  =====================================================================
       SUBROUTINE SLALS0( ICOMPQ, NL, NR, SQRE, NRHS, B, LDB, BX, LDBX,
      $                   PERM, GIVPTR, GIVCOL, LDGCOL, GIVNUM, LDGNUM,

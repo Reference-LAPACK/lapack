@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DDRVST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, D1, D2, D3, D4, EVEIGS, WA1,
@@ -27,11 +27,11 @@
 *      $                   WA3( * ), WORK( * ), Z( LDU, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>      DDRVST  checks the symmetric eigenvalue problem drivers.
 *>
@@ -140,11 +140,10 @@
 *>           with random signs.
 *>      (17) Same as (16), but multiplied by SQRT( overflow threshold )
 *>      (18) Same as (16), but multiplied by SQRT( underflow threshold )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  NSIZES  INTEGER
@@ -435,10 +434,9 @@
 *>    95= | I - U U' | / ( n ulp )              DSBEVR('L','V','V', ... )
 *>    96= |D(with Z) - D(w/o Z)| / (|D| ulp)    DSBEVR('L','N','V', ... )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

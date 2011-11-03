@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO )
 * 
@@ -27,19 +27,18 @@
 *       DOUBLE PRECISION   A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGEHD2 reduces a real general matrix A to upper Hessenberg form H by
 *> an orthogonal similarity transformation:  Q**T * A * Q = H .
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -98,10 +97,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -112,10 +110,9 @@
 *
 *> \ingroup doubleGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix Q is represented as a product of (ihi-ilo) elementary
@@ -147,7 +144,6 @@
 *>  where a denotes an element of the original matrix A, h denotes a
 *>  modified element of the upper Hessenberg matrix H, and vi denotes an
 *>  element of the vector defining H(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

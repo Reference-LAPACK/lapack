@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLASWP( N, A, LDA, K1, K2, IPIV, INCX )
 * 
@@ -28,19 +28,18 @@
 *       COMPLEX            A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLASWP performs a series of row interchanges on the matrix A.
 *> One row interchange is initiated for each of rows K1 through K2 of A.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -90,10 +89,9 @@
 *>          The increment between successive values of IPIV.  If IPIV
 *>          is negative, the pivots are applied in reverse order.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -104,15 +102,13 @@
 *
 *> \ingroup complexOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Modified by
 *>   R. C. Whaley, Computer Science Dept., Univ. of Tenn., Knoxville, USA
-*>
 *> \endverbatim
 *>
 *  =====================================================================

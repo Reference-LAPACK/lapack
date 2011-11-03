@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHEGS2( ITYPE, UPLO, N, A, LDA, B, LDB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            A( LDA, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHEGS2 reduces a complex Hermitian-definite generalized
 *> eigenproblem to standard form.
@@ -44,11 +44,10 @@
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**H or L**H *A*L.
 *>
 *> B must have been previously factorized as U**H *U or L*L**H by ZPOTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -112,10 +111,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

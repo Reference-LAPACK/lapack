@@ -5,16 +5,16 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       PROGRAM ZCHKAB
 * 
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZCHKAB is the test program for the COMPLEX*16 LAPACK
 *> ZCGESV/ZCPOSV routine
@@ -35,11 +35,10 @@
 *> T                      Put T to test the error exits
 *> DGE    11              List types on next line if 0 < NTYPES < 11
 *> DPO    9               List types on next line if 0 < NTYPES <  9
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  NMAX    INTEGER
@@ -58,10 +57,9 @@
 *>  NOUT    INTEGER
 *>          The unit number for output
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -72,8 +70,7 @@
 *
 *> \ingroup complex16_lin
 *
-*  =====================================================================
-      PROGRAM ZCHKAB
+*  =====================================================================      PROGRAM ZCHKAB
 *
 *  -- LAPACK test routine (version 3.2.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

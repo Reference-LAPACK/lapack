@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZSTT22( N, M, KBAND, AD, AE, SD, SE, U, LDU, WORK,
 *                          LDWORK, RWORK, RESULT )
@@ -20,11 +20,11 @@
 *       COMPLEX*16         U( LDU, * ), WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZSTT22  checks a set of M eigenvalues and eigenvectors,
 *>
@@ -37,11 +37,10 @@
 *>    RESULT(1) = | U* A U - S | / ( |A| m ulp )
 *>
 *>    RESULT(2) = | I - U*U | / ( m ulp )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -129,10 +128,9 @@
 *>          The values computed by the two tests described above.  The
 *>          values are currently limited to 1/ulp, to avoid overflow.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

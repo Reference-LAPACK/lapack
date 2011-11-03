@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLA_GERFSX_EXTENDED( PREC_TYPE, TRANS_TYPE, N, NRHS, A,
 *                                       LDA, AF, LDAF, IPIV, COLEQU, C, B,
@@ -40,11 +40,12 @@
 *      $                   ERRS_N( NRHS, * ), ERRS_C( NRHS, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
 *> 
 *> CLA_GERFSX_EXTENDED improves the computed solution to a system of
 *> linear equations by performing extra-precise iterative refinement
@@ -55,11 +56,10 @@
 *> and ERRS_C for details of the error bounds. Note that this
 *> subroutine is only resonsible for setting the second fields of
 *> ERRS_N and ERRS_C.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PREC_TYPE
 *> \verbatim
@@ -376,10 +376,9 @@
 *>       < 0:  if INFO = -i, the ith argument to CGETRS had an illegal
 *>             value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

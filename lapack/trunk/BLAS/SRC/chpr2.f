@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHPR2(UPLO,N,ALPHA,X,INCX,Y,INCY,AP)
 * 
@@ -19,11 +19,11 @@
 *       COMPLEX AP(*),X(*),Y(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHPR2  performs the hermitian rank 2 operation
 *>
@@ -31,11 +31,10 @@
 *>
 *> where alpha is a scalar, x and y are n element vectors and A is an
 *> n by n hermitian matrix, supplied in packed form.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -116,10 +115,9 @@
 *>           not be set, they are assumed to be zero, and on exit they
 *>           are set to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -130,10 +128,9 @@
 *
 *> \ingroup complex_blas_level2
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 2 Blas routine.
@@ -143,7 +140,6 @@
 *>     Jeremy Du Croz, Nag Central Office.
 *>     Sven Hammarling, Nag Central Office.
 *>     Richard Hanson, Sandia National Labs.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, RWORK,
 *                          INFO )
@@ -30,19 +30,18 @@
 *       COMPLEX*16         A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGEQP3 computes a QR factorization with column pivoting of a
 *> matrix A:  A*P = Q*R  using Level 3 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -119,10 +118,9 @@
 *>          = 0: successful exit.
 *>          < 0: if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -133,10 +131,9 @@
 *
 *> \ingroup complex16GEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix Q is represented as a product of elementary reflectors
@@ -150,12 +147,13 @@
 *>  where tau is a real/complex scalar, and v is a real/complex vector
 *>  with v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in
 *>  A(i+1:m,i), and tau in TAU(i).
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>    G. Quintana-Orti, Depto. de Informatica, Universidad Jaime I, Spain
 *>    X. Sun, Computer Science Dept., Duke University, USA
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE ZGEQP3( M, N, A, LDA, JPVT, TAU, WORK, LWORK, RWORK,

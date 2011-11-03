@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGEMV(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 * 
@@ -19,11 +19,11 @@
 *       DOUBLE PRECISION A(LDA,*),X(*),Y(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGEMV  performs one of the matrix-vector operations
 *>
@@ -31,11 +31,10 @@
 *>
 *> where alpha and beta are scalars, x and y are vectors and A is an
 *> m by n matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -126,10 +125,9 @@
 *>           On entry, INCY specifies the increment for the elements of
 *>           Y. INCY must not be zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -140,10 +138,9 @@
 *
 *> \ingroup double_blas_level2
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 2 Blas routine.
@@ -154,7 +151,6 @@
 *>     Jeremy Du Croz, Nag Central Office.
 *>     Sven Hammarling, Nag Central Office.
 *>     Richard Hanson, Sandia National Labs.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

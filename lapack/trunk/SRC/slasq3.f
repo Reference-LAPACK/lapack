@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASQ3( I0, N0, Z, PP, DMIN, SIGMA, DESIG, QMAX, NFAIL,
 *                          ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
@@ -32,20 +32,19 @@
 *       REAL               Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLASQ3 checks for deflation, computes a shift (TAU) and calls dqds.
 *> In case of failure it changes shifts, and tries again until output
 *> is positive.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] I0
 *> \verbatim
@@ -165,10 +164,9 @@
 *>         These are passed as arguments in order to save their values
 *>         between calls to SLASQ3.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

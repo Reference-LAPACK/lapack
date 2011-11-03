@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGGESX( JOBVSL, JOBVSR, SORT, SELCTG, SENSE, N, A, LDA,
 *                          B, LDB, SDIM, ALPHA, BETA, VSL, LDVSL, VSR,
@@ -41,11 +41,11 @@
 *       EXTERNAL           SELCTG
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGGESX computes for a pair of N-by-N complex nonsymmetric matrices
 *> (A,B), the generalized eigenvalues, the complex Schur form (S,T),
@@ -74,11 +74,10 @@
 *> A pair of matrices (S,T) is in generalized complex Schur form if T is
 *> upper triangular with non-negative diagonal and S is upper
 *> triangular.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVSL
 *> \verbatim
@@ -312,10 +311,9 @@
 *>                      be caused due to scaling.
 *>                =N+3: reordering failed in ZTGSEN.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

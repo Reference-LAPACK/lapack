@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAGS2( UPPER, A1, A2, A3, B1, B2, B3, CSU, SNU, CSV,
 *                          SNV, CSQ, SNQ )
@@ -27,11 +27,11 @@
 *      $                   SNU, SNV
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAGS2 computes 2-by-2 orthogonal matrices U, V and Q, such
 *> that if ( UPPER ) then
@@ -57,11 +57,10 @@
 *>
 *> Z**T denotes the transpose of Z.
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPPER
 *> \verbatim
@@ -136,10 +135,9 @@
 *>          SNQ is REAL
 *>          The desired orthogonal matrix Q.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

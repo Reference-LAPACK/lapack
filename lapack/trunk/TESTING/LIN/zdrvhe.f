@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZDRVHE( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
@@ -25,18 +25,17 @@
 *      $                   WORK( * ), X( * ), XACT( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZDRVHE tests the driver routines ZHESV and -SVX.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] DOTYPE
 *> \verbatim
@@ -137,10 +136,9 @@
 *>          NOUT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

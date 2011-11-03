@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
 *                          INFO )
@@ -31,11 +31,11 @@
 *       COMPLEX            A( LDA, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGECON estimates the reciprocal of the condition number of a general
 *> complex matrix A, in either the 1-norm or the infinity-norm, using
@@ -44,11 +44,10 @@
 *> An estimate is obtained for norm(inv(A)), and the reciprocal of the
 *> condition number is computed as
 *>    RCOND = 1 / ( norm(A) * norm(inv(A)) ).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NORM
 *> \verbatim
@@ -108,10 +107,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

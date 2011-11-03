@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSROT( N, CX, INCX, CY, INCY, C, S )
 * 
@@ -18,20 +18,19 @@
 *       COMPLEX           CX( * ), CY( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CSROT applies a plane rotation, where the cos and sin (c and s) are real
 *> and the vectors cx and cy are complex.
 *> jack dongarra, linpack, 3/11/78.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -83,10 +82,9 @@
 *>          S is REAL
 *>           On entry, S specifies the sine, sin.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

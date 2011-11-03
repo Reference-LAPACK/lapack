@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSYR2K(UPLO,TRANS,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 * 
@@ -19,11 +19,11 @@
 *       COMPLEX A(LDA,*),B(LDB,*),C(LDC,*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CSYR2K  performs one of the symmetric rank 2k operations
 *>
@@ -36,11 +36,10 @@
 *> where  alpha and beta  are scalars,  C is an  n by n symmetric matrix
 *> and  A and B  are  n by k  matrices  in the  first  case  and  k by n
 *> matrices in the second case.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -159,10 +158,9 @@
 *>           in  the  calling  (sub)  program.   LDC  must  be  at  least
 *>           max( 1, n ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -173,10 +171,9 @@
 *
 *> \ingroup complex_blas_level3
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 3 Blas routine.
@@ -186,7 +183,6 @@
 *>     Iain Duff, AERE Harwell.
 *>     Jeremy Du Croz, Numerical Algorithms Group Ltd.
 *>     Sven Hammarling, Numerical Algorithms Group Ltd.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

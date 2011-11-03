@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGGEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, B, LDB,
 *                          ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR, ILO,
@@ -37,11 +37,11 @@
 *      $                   VL( LDVL, * ), VR( LDVR, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGGEVX computes for a pair of N-by-N real nonsymmetric matrices (A,B)
 *> the generalized eigenvalues, and optionally, the left and/or right
@@ -71,11 +71,10 @@
 *>
 *> where u(j)**H is the conjugate-transpose of u(j).
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] BALANC
 *> \verbatim
@@ -344,10 +343,9 @@
 *>          > N:  =N+1: other than QZ iteration failed in DHGEQZ.
 *>                =N+2: error return from DTGEVC.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -358,10 +356,9 @@
 *
 *> \ingroup doubleGEeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Balancing a matrix pair (A,B) includes, first, permuting rows and
@@ -386,7 +383,6 @@
 *>
 *>  For further explanation of the reciprocal condition numbers RCONDE
 *>  and RCONDV, see section 4.11 of LAPACK User's Guide.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

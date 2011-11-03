@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLARTG( F, G, CS, SN, R )
 * 
@@ -25,11 +25,11 @@
 *       COMPLEX            F, G, R, SN
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLARTG generates a plane rotation so that
 *>
@@ -42,11 +42,10 @@
 *>    F and G are unchanged on return.
 *>    If G=0, then CS=1 and SN=0.
 *>    If F=0, then CS=0 and SN is chosen so that R is real.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] F
 *> \verbatim
@@ -77,10 +76,9 @@
 *>          R is COMPLEX
 *>          The nonzero component of the rotated vector.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -91,17 +89,15 @@
 *
 *> \ingroup complexOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  3-5-96 - Modified with a new algorithm by W. Kahan and J. Demmel
 *>
 *>  This version has a few statements commented out for thread safety
 *>  (machine parameters are computed on each entry). 10 feb 03, SJH.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

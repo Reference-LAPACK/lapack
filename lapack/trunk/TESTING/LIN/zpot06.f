@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZPOT06( UPLO, N, NRHS, A, LDA, X, LDX, B, LDB,
 *                          RWORK, RESID )
@@ -21,21 +21,20 @@
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZPOT06 computes the residual for a solution of a system of linear
 *> equations  A*x = b :
 *>    RESID = norm(B - A*X,inf) / ( norm(A,inf) * norm(X,inf) * EPS ),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -111,10 +110,9 @@
 *>          The maximum over the number of right hand sides of
 *>          norm(B - A*X) / ( norm(A) * norm(X) * EPS ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

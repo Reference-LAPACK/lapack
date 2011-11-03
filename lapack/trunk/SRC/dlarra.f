@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARRA( N, D, E, E2, SPLTOL, TNRM,
 *                           NSPLIT, ISPLIT, INFO )
@@ -30,19 +30,18 @@
 *       DOUBLE PRECISION   D( * ), E( * ), E2( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Compute the splitting points with threshold SPLTOL.
 *> DLARRA sets any "small" off-diagonal elements to zero.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -111,10 +110,9 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -125,21 +123,15 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
+*> \par Contributors:
+*  ==================
+*>
+*> Beresford Parlett, University of California, Berkeley, USA \n
+*> Jim Demmel, University of California, Berkeley, USA \n
+*> Inderjit Dhillon, University of Texas, Austin, USA \n
+*> Osni Marques, LBNL/NERSC, USA \n
+*> Christof Voemel, University of California, Berkeley, USA
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE DLARRA( N, D, E, E2, SPLTOL, TNRM,
      $                    NSPLIT, ISPLIT, INFO )

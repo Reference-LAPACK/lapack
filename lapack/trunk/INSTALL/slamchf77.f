@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *      REAL FUNCTION SLAMCH( CMACH )
 *
@@ -14,18 +14,17 @@
 *      CHARACTER          CMACH
 *     ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAMCH determines single precision machine parameters.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] CMACH
 *> \verbatim
@@ -52,10 +51,9 @@
 *>          emax  = largest exponent before overflow
 *>          rmax  = overflow threshold  - (base**emax)*(1-eps)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -191,14 +189,12 @@
 ************************************************************************
 *
 *> \brief \b SLAMC1
-*>\details
+*> \details
 *> \b Purpose:
-*>\verbatim
-*>
+*> \verbatim
 *> SLAMC1 determines the machine parameters given by BETA, T, RND, and
 *> IEEE1.
-*>
-*>\endverbatim
+*> \endverbatim
 *>
 *> \param[out] BETA
 *> \verbatim
@@ -222,13 +218,12 @@
 *> \verbatim
 *>          Specifies whether rounding appears to be done in the IEEE
 *>          'round to nearest' style.
-*>
-*>\endverbatim
+*> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *> \date November 2011
 *> \ingroup auxOTHERauxiliary
 *>
-*>\details \b Further \b Details
+*> \details \b Further \b Details
 *> \verbatim
 *>
 *>  The routine is based on the routine  ENVRON  by Malcolm and
@@ -390,14 +385,12 @@
 ************************************************************************
 *
 *> \brief \b SLAMC2
-*>\details
+*> \details
 *> \b Purpose:
-*>\verbatim
-*>
+*> \verbatim
 *> SLAMC2 determines the machine parameters specified in its argument
 *> list.
-*>
-*>\endverbatim
+*> \endverbatim
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *> \date November 2011
 *> \ingroup auxOTHERauxiliary
@@ -451,12 +444,11 @@
 *>          value of BETA.
 *> \endverbatim
 *>
-*>\details \b Further \b Details
+*> \details \b Further \b Details
 *> \verbatim
 *>
 *>  The computation of  EPS  is based on a routine PARANOIA by
 *>  W. Kahan of the University of California at Berkeley.
-*>
 *> \endverbatim
       SUBROUTINE SLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
 *
@@ -666,14 +658,13 @@
 ************************************************************************
 *
 *> \brief \b SLAMC3
-*>\details
+*> \details
 *> \b Purpose:
-*>\verbatim
-*>
+*> \verbatim
 *> SLAMC3  is intended to force  A  and  B  to be stored prior to doing
 *> the addition of  A  and  B ,  for use in situations where optimizers
 *> might hold one of these in a register.
-*>\endverbatim
+*> \endverbatim
 *>
 *> \param[in] A
 *>
@@ -706,13 +697,11 @@
 ************************************************************************
 *
 *> \brief \b SLAMC4
-*>\details
+*> \details
 *> \b Purpose:
-*>\verbatim
-*>
+*> \verbatim
 *> SLAMC4 is a service routine for SLAMC2.
-*>
-*>\endverbatim
+*> \endverbatim
 *>
 *> \param[out] EMIN
 *> \verbatim
@@ -796,18 +785,16 @@
 ************************************************************************
 *
 *> \brief \b SLAMC5
-*>\details
+*> \details
 *> \b Purpose:
-*>\verbatim
-*>
+*> \verbatim
 *> SLAMC5 attempts to compute RMAX, the largest machine floating-point
 *> number, without overflow.  It assumes that EMAX + abs(EMIN) sum
 *> approximately to a power of 2.  It will fail on machines where this
 *> assumption does not hold, for example, the Cyber 205 (EMIN = -28625,
 *> EMAX = 28718).  It will also fail if the value supplied for EMIN is
 *> too large (i.e. too close to zero), probably with overflow.
-*>
-*>\endverbatim
+*> \endverbatim
 *>
 *> \param[in] BETA
 *> \verbatim

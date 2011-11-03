@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SAXPY(N,SA,SX,INCX,SY,INCY)
 * 
@@ -18,19 +18,18 @@
 *       REAL SX(*),SY(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    SAXPY constant times a vector plus a vector.
 *>    uses unrolled loops for increments equal to one.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -41,15 +40,13 @@
 *
 *> \ingroup single_blas_level1
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>     jack dongarra, linpack, 3/11/78.
 *>     modified 12/3/93, array(1) declarations changed to array(*)
-*>
 *> \endverbatim
 *>
 *  =====================================================================

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAGTF( N, A, LAMBDA, B, C, TOL, D, IN, INFO )
 * 
@@ -29,11 +29,11 @@
 *       REAL               A( * ), B( * ), C( * ), D( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAGTF factorizes the matrix (T - lambda*I), where T is an n by n
 *> tridiagonal matrix and lambda is a scalar, as
@@ -51,11 +51,10 @@
 *> The parameter LAMBDA is included in the routine so that SLAGTF may
 *> be used, in conjunction with SLAGTS, to obtain eigenvectors of T by
 *> inverse iteration.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -141,10 +140,9 @@
 *>          = 0   : successful exit
 *>          .lt. 0: if INFO = -k, the kth argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

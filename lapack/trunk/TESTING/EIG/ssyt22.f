@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSYT22( ITYPE, UPLO, N, M, KBAND, A, LDA, D, E, U, LDU,
 *                          V, LDV, TAU, WORK, RESULT )
@@ -20,11 +20,11 @@
 *      $                   TAU( * ), U( LDU, * ), V( LDV, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>      SSYT22  generally checks a decomposition of the form
 *>
@@ -42,11 +42,10 @@
 *>      Specifically, if ITYPE=1, then:
 *>
 *>              RESULT(1) = | U' A U - S | / ( |A| m ulp ) *andC>              RESULT(2) = | I - U'U | / ( m ulp )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  ITYPE   INTEGER
@@ -139,10 +138,9 @@
 *>          if LDU is at least N.
 *>          Modified.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

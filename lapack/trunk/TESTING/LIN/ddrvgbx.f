@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DDRVGB( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, LA,
 *                          AFB, LAFB, ASAV, B, BSAV, X, XACT, S, WORK,
@@ -25,21 +25,20 @@
 *      $                   XACT( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DDRVGB tests the driver routines DGBSV, -SVX, and -SVXX.
 *>
 *> Note that this file is used only when the XBLAS are available,
 *> otherwise ddrvgb.f defines this subroutine.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] DOTYPE
 *> \verbatim
@@ -158,10 +157,9 @@
 *>          NOUT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

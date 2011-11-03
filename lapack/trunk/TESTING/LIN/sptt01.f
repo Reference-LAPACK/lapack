@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPTT01( N, D, E, DF, EF, WORK, RESID )
 * 
@@ -18,21 +18,20 @@
 *       REAL               D( * ), DF( * ), E( * ), EF( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPTT01 reconstructs a tridiagonal matrix A from its L*D*L'
 *> factorization and computes the residual
 *>    norm(L*D*L' - A) / ( n * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -76,10 +75,9 @@
 *>          RESID is REAL
 *>          norm(L*D*L' - A) / (n * norm(A) * EPS)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

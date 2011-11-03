@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE STPMQRT( SIDE, TRANS, M, N, K, L, NB, V, LDV, T, LDT,
 *                           A, LDA, B, LDB, WORK, INFO )
@@ -30,20 +30,19 @@
 *      $          WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> STPMQRT applies a real orthogonal matrix Q obtained from a 
 *> "triangular-pentagonal" real block reflector H to a general
 *> real matrix C, which consists of two blocks A and B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -167,10 +166,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -181,10 +179,9 @@
 *
 *> \ingroup realOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The columns of the pentagonal matrix V contain the elementary reflectors
@@ -213,7 +210,6 @@
 *>  If TRANS='N' and SIDE='R', C is on exit replaced with C * Q.
 *>
 *>  If TRANS='C' and SIDE='R', C is on exit replaced with C * Q^H.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

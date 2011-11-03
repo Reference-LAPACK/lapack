@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHETRI2X( UPLO, N, A, LDA, IPIV, WORK, NB, INFO )
 * 
@@ -29,20 +29,19 @@
 *       COMPLEX*16            A( LDA, * ), WORK( N+NB+1,* )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHETRI2X computes the inverse of a COMPLEX*16 Hermitian indefinite matrix
 *> A using the factorization A = U*D*U**H or A = L*D*L**H computed by
 *> ZHETRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -105,10 +104,9 @@
 *>          > 0: if INFO = i, D(i,i) = 0; the matrix is singular and its
 *>               inverse could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

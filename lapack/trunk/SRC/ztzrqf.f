@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZTZRQF( M, N, A, LDA, TAU, INFO )
 * 
@@ -27,11 +27,11 @@
 *       COMPLEX*16         A( LDA, * ), TAU( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This routine is deprecated and has been replaced by routine ZTZRZF.
 *>
@@ -44,11 +44,10 @@
 *>
 *> where Z is an N-by-N unitary matrix and R is an M-by-M upper
 *> triangular matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -91,10 +90,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -105,10 +103,9 @@
 *
 *> \ingroup complex16OTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The  factorization is obtained by Householder's method.  The kth
@@ -136,7 +133,6 @@
 *>  Z is given by
 *>
 *>     Z =  Z( 1 ) * Z( 2 ) * ... * Z( m ).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

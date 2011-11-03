@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGET33( RMAX, LMAX, NINFO, KNT )
 * 
@@ -15,11 +15,11 @@
 *       DOUBLE PRECISION   RMAX
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGET33 tests DLANV2, a routine for putting 2 by 2 blocks into
 *> standard form.  In other words, it computes a two by two rotation
@@ -32,11 +32,10 @@
 *>    1) T21=0 (real eigenvalues), or
 *>    2) T11=T22 and T21*T12<0 (complex conjugate eigenvalues).
 *> We also  verify that the residual is small.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -61,10 +60,9 @@
 *>          KNT is INTEGER
 *>          Total number of examples tested.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

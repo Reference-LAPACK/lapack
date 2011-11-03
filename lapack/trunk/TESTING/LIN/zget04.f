@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGET04( N, NRHS, X, LDX, XACT, LDXACT, RCOND, RESID )
 * 
@@ -18,11 +18,11 @@
 *       COMPLEX*16         X( LDX, * ), XACT( LDXACT, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGET04 computes the difference between a computed solution and the
 *> true solution to a system of linear equations.
@@ -30,11 +30,10 @@
 *> RESID =  ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS ),
 *> where RCOND is the reciprocal of the condition number and EPS is the
 *> machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -87,10 +86,9 @@
 *>          The maximum over the NRHS solution vectors of
 *>          ( norm(X-XACT) * RCOND ) / ( norm(XACT) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

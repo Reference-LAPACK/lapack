@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSYSV( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                         LWORK, INFO )
@@ -30,11 +30,11 @@
 *       COMPLEX            A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CSYSV computes the solution to a complex system of linear equations
 *>    A * X = B,
@@ -48,11 +48,10 @@
 *> triangular matrices, and D is symmetric and block diagonal with
 *> 1-by-1 and 2-by-2 diagonal blocks.  The factored form of A is then
 *> used to solve the system of equations A * X = B.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -155,10 +154,9 @@
 *>               has been completed, but the block diagonal matrix D is
 *>               exactly singular, so the solution could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

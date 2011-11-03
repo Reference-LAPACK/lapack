@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL             FUNCTION CQPT01( M, N, K, A, AF, LDA, TAU, JPVT,
 *                        WORK, LWORK )
@@ -20,11 +20,11 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CQPT01 tests the QR-factorization with pivoting of a matrix A.  The
 *> array AF contains the (possibly partial) QR-factorization of A, where
@@ -34,11 +34,10 @@
 *> matrix.
 *>
 *> This function returns ||A*P - Q*R||/(||norm(A)||*eps*M)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -104,10 +103,9 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= M*N+N.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLARFG( N, ALPHA, X, INCX, TAU )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLARFG generates a complex elementary reflector H of order n, such
 *> that
@@ -53,11 +53,10 @@
 *> and H is taken to be the unit matrix.
 *>
 *> Otherwise  1 <= real(tau) <= 2  and  abs(tau-1) <= 1 .
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -91,10 +90,9 @@
 *>          TAU is COMPLEX*16
 *>          The value tau.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

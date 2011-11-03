@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL FUNCTION DISNAN( DIN )
 * 
@@ -24,30 +24,28 @@
 *       DOUBLE PRECISION   DIN
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DISNAN returns .TRUE. if its argument is NaN, and .FALSE.
 *> otherwise.  To be replaced by the Fortran 2003 intrinsic in the
 *> future.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] DIN
 *> \verbatim
 *>          DIN is DOUBLE PRECISION
 *>          Input to test for NaN.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

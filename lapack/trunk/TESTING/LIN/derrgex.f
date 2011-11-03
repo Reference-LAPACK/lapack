@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DERRGE( PATH, NUNIT )
 * 
@@ -15,22 +15,21 @@
 *       INTEGER            NUNIT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DERRGE tests the error exits for the DOUBLE PRECISION routines
 *> for general matrices.
 *>
 *> Note that this file is used only when the XBLAS are available,
 *> otherwise derrge.f defines this subroutine.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PATH
 *> \verbatim
@@ -43,10 +42,9 @@
 *>          NUNIT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

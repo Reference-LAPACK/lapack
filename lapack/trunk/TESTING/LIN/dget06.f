@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION DGET06( RCOND, RCONDC )
 * 
@@ -14,18 +14,17 @@
 *       DOUBLE PRECISION   RCOND, RCONDC
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGET06 computes a test ratio to compare two values for RCOND.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] RCOND
 *> \verbatim
@@ -40,10 +39,9 @@
 *>          The reciprocal of the condition number of A, computed as
 *>          ( 1/norm(A) ) / norm(inv(A)).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

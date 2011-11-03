@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 * 
@@ -27,22 +27,21 @@
 *       DOUBLE PRECISION   C( * ), S( * ), X( * ), Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARTV applies a vector of real plane rotations to elements of the
 *> real vectors x and y. For i = 1,2,...,n
 *>
 *>    ( x(i) ) := (  c(i)  s(i) ) ( x(i) )
 *>    ( y(i) )    ( -s(i)  c(i) ) ( y(i) )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -93,10 +92,9 @@
 *>          INCC is INTEGER
 *>          The increment between elements of C and S. INCC > 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

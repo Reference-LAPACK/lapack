@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLA_WWADDW( N, X, Y, W )
 * 
@@ -27,23 +27,20 @@
 *       COMPLEX*16         X( * ), Y( * ), W( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
-*> Purpose
-*>    =======
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZLA_WWADDW adds a vector W into a doubled-single vector (X, Y).
 *>
 *>    This works for all extant IBM's hex and binary floating point
 *>    arithmetics, but not for decimal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -68,10 +65,9 @@
 *>          W is COMPLEX*16 array, dimension (N)
 *>            The vector to be added.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

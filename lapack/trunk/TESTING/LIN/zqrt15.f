@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZQRT15( SCALE, RKSEL, M, N, NRHS, A, LDA, B, LDB, S,
 *                          RANK, NORMA, NORMB, ISEED, WORK, LWORK )
@@ -21,19 +21,18 @@
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZQRT15 generates a matrix with full or deficient rank and of various
 *> norms.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SCALE
 *> \verbatim
@@ -133,10 +132,9 @@
 *>          length of work space required.
 *>          LWORK >= MAX(M+MIN(M,N),NRHS*MIN(M,N),2*N+M)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

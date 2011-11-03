@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,
 *                          CTOT, W, S, INFO )
@@ -31,11 +31,11 @@
 *      $                   S( * ), W( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAED3 finds the roots of the secular equation, as defined by the
 *> values in D, W, and RHO, between 1 and K.  It makes the
@@ -50,11 +50,10 @@
 *> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
 *> It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] K
 *> \verbatim
@@ -162,10 +161,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, an eigenvalue did not converge
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -176,18 +174,12 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>     Jeff Rutter, Computer Science Division, University of California
-*>     at Berkeley, USA
-*>  Modified by Francoise Tisseur, University of Tennessee.
-*>
-*> \endverbatim
+*> Jeff Rutter, Computer Science Division, University of California
+*> at Berkeley, USA \n
+*>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
       SUBROUTINE SLAED3( K, N, N1, D, Q, LDQ, RHO, DLAMDA, Q2, INDX,

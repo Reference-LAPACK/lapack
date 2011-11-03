@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL FUNCTION SLAISNAN( SIN1, SIN2 )
 * 
@@ -24,11 +24,11 @@
 *       REAL               SIN1, SIN2
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This routine is not for general use.  It exists solely to avoid
 *> over-optimization in SISNAN.
@@ -43,11 +43,10 @@
 *> Interprocedural or whole-program optimization may delete this
 *> test.  The ISNAN functions will be replaced by the correct
 *> Fortran 03 intrinsic once the intrinsic is widely available.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIN1
 *> \verbatim
@@ -59,10 +58,9 @@
 *>          SIN2 is REAL
 *>          Two numbers to compare for inequality.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
 * 
@@ -15,19 +15,19 @@
 *       CHARACTER*(*)      SRNAMT
 *       INTEGER            INFOT, NOUT
 *
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
-*>\endverbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

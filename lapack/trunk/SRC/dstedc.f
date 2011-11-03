@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,
 *                          LIWORK, INFO )
@@ -30,11 +30,11 @@
 *       DOUBLE PRECISION   D( * ), E( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSTEDC computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric tridiagonal matrix using the divide and conquer method.
@@ -48,11 +48,10 @@
 *> which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or Cray-2.
 *> It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.  See DLAED3 for details.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMPZ
 *> \verbatim
@@ -166,10 +165,9 @@
 *>                working on the submatrix lying in rows and columns
 *>                INFO/(N+1) through mod(INFO,N+1).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -180,18 +178,12 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>     Jeff Rutter, Computer Science Division, University of California
-*>     at Berkeley, USA
-*>  Modified by Francoise Tisseur, University of Tennessee.
-*>
-*> \endverbatim
+*> Jeff Rutter, Computer Science Division, University of California
+*> at Berkeley, USA \n
+*>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
       SUBROUTINE DSTEDC( COMPZ, N, D, E, Z, LDZ, WORK, LWORK, IWORK,

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLABRD( M, N, NB, A, LDA, D, E, TAUQ, TAUP, X, LDX, Y,
 *                          LDY )
@@ -29,11 +29,11 @@
 *      $                   TAUQ( * ), X( LDX, * ), Y( LDY, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLABRD reduces the first NB rows and columns of a real general
 *> m by n matrix A to upper or lower bidiagonal form by an orthogonal
@@ -44,11 +44,10 @@
 *> bidiagonal form.
 *>
 *> This is an auxiliary routine called by SGEBRD
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -148,10 +147,9 @@
 *>          LDY is INTEGER
 *>          The leading dimension of the array Y. LDY >= max(1,N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -162,10 +160,9 @@
 *
 *> \ingroup realOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrices Q and P are represented as products of elementary
@@ -207,7 +204,6 @@
 *>  where a denotes an element of the original matrix which is unchanged,
 *>  vi denotes an element of the vector defining H(i), and ui an element
 *>  of the vector defining G(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

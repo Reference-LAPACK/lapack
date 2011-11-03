@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAESY( A, B, C, RT1, RT2, EVSCAL, CS1, SN1 )
 * 
@@ -24,11 +24,11 @@
 *       COMPLEX            A, B, C, CS1, EVSCAL, RT1, RT2, SN1
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAESY computes the eigendecomposition of a 2-by-2 symmetric matrix
 *>    ( ( A, B );( B, C ) )
@@ -41,11 +41,10 @@
 *>
 *> [  CS1     SN1   ] . [ A  B ] . [ CS1    -SN1   ] = [ RT1  0  ]
 *> [ -SN1     CS1   ]   [ B  C ]   [ SN1     CS1   ]   [  0  RT2 ]
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] A
 *> \verbatim
@@ -100,10 +99,9 @@
 *>          If EVSCAL .NE. 0,  ( CS1, SN1 ) is the unit right eigenvector
 *>          for RT1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

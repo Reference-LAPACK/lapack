@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,
 *                          DSIGMA, WORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLASD8 finds the square roots of the roots of the secular equation,
 *> as defined by the values in DSIGMA and Z. It makes the appropriate
@@ -44,11 +44,10 @@
 *> right singular vectors of the original bidiagonal matrix.
 *>
 *> DLASD8 is called from DLASD6.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ICOMPQ
 *> \verbatim
@@ -144,10 +143,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, a singular value did not converge
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -158,17 +156,11 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE DLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDDIFR,

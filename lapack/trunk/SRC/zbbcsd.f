@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZBBCSD( JOBU1, JOBU2, JOBV1T, JOBV2T, TRANS, M, P, Q,
 *                          THETA, PHI, U1, LDU1, U2, LDU2, V1T, LDV1T,
@@ -35,11 +35,11 @@
 *      $                   V2T( LDV2T, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZBBCSD computes the CS decomposition of a unitary matrix in
 *> bidiagonal-block form,
@@ -68,11 +68,10 @@
 *> The unitary matrices U1, U2, V1T, and V2T are input/output.
 *> The input matrices are pre- or post-multiplied by the appropriate
 *> singular vector matrices.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBU1
 *> \verbatim
@@ -297,25 +296,26 @@
 *>          > 0:  if ZBBCSD did not converge, INFO specifies the number
 *>                of nonzero entries in PHI, and B11D, B11E, etc.,
 *>                contain the partially reduced matrix.
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Reference
-*>  =========
-*>
-*>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
-*>      Algorithms, 50(1):33-65, 2009.
-*>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  TOLMUL  DOUBLE PRECISION, default = MAX(10,MIN(100,EPS**(-1/8)))
 *>          TOLMUL controls the convergence criterion of the QR loop.
 *>          Angles THETA(i), PHI(i) are rounded to 0 or PI/2 when they
 *>          are within TOLMUL*EPS of either bound.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*> \par References:
+*  ================
+*>
+*>  [1] Brian D. Sutton. Computing the complete CS decomposition. Numer.
+*>      Algorithms, 50(1):33-65, 2009.
+*
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

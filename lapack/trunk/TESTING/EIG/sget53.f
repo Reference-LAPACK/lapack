@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGET53( A, LDA, B, LDB, SCALE, WR, WI, RESULT, INFO )
 * 
@@ -18,11 +18,11 @@
 *       REAL               A( LDA, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGET53  checks the generalized eigenvalues computed by SLAG2.
 *>
@@ -43,11 +43,10 @@
 *>
 *> If these tests are not passed, then  s  and  w  are scaled and
 *> tested anyway, if this is possible.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] A
 *> \verbatim
@@ -111,10 +110,9 @@
 *>          =3:  same as INFO=2, but  s  and  w  could not be scaled so
 *>               as to compute the test.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

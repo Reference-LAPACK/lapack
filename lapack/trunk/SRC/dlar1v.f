@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAR1V( N, B1, BN, LAMBDA, D, L, LD, LLD,
 *                  PIVMIN, GAPTOL, Z, WANTNC, NEGCNT, ZTZ, MINGMA,
@@ -35,11 +35,11 @@
 *       DOUBLE PRECISION Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAR1V computes the (scaled) r-th column of the inverse of
 *> the sumbmatrix in rows B1 through BN of the tridiagonal matrix
@@ -56,11 +56,10 @@
 *> (d) Computation of the (scaled) r-th column of the inverse using the
 *>     twisted factorization obtained by combining the top part of the
 *>     the stationary and the bottom part of the progressive transform.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -204,10 +203,9 @@
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension (4*N)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -218,21 +216,15 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
+*> \par Contributors:
+*  ==================
+*>
+*> Beresford Parlett, University of California, Berkeley, USA \n
+*> Jim Demmel, University of California, Berkeley, USA \n
+*> Inderjit Dhillon, University of Texas, Austin, USA \n
+*> Osni Marques, LBNL/NERSC, USA \n
+*> Christof Voemel, University of California, Berkeley, USA
 *
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
-*>
-*> \endverbatim
-*>
 *  =====================================================================
       SUBROUTINE DLAR1V( N, B1, BN, LAMBDA, D, L, LD, LLD,
      $           PIVMIN, GAPTOL, Z, WANTNC, NEGCNT, ZTZ, MINGMA,

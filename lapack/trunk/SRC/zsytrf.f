@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZSYTRF( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX*16         A( LDA, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZSYTRF computes the factorization of a complex symmetric matrix A
 *> using the Bunch-Kaufman diagonal pivoting method.  The form of the
@@ -46,11 +46,10 @@
 *> with 1-by-1 and 2-by-2 diagonal blocks.
 *>
 *> This is the blocked version of the algorithm, calling Level 3 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -127,10 +126,9 @@
 *>                exactly singular, and division by zero will occur if it
 *>                is used to solve a system of equations.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -141,10 +139,9 @@
 *
 *> \ingroup complex16SYcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  If UPLO = 'U', then A = U*D*U**T, where
@@ -180,7 +177,6 @@
 *>  If s = 1, D(k) overwrites A(k,k), and v overwrites A(k+1:n,k).
 *>  If s = 2, the lower triangle of D(k) overwrites A(k,k), A(k+1,k),
 *>  and A(k+1,k+1), and v overwrites A(k+2:n,k:k+1).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

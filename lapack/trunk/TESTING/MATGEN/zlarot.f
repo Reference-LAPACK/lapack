@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAROT( LROWS, LLEFT, LRIGHT, NL, C, S, A, LDA, XLEFT,
 *                          XRIGHT )
@@ -20,11 +20,11 @@
 *       COMPLEX*16         A( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZLAROT applies a (Givens) rotation to two adjacent rows or
 *>    columns, where one element of the first and/or last column/row
@@ -125,11 +125,10 @@
 *>
 *>                   . . . . . .
 *>                      A(1,i),LDA-1, XTOP, XBOTTM )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  LROWS  - LOGICAL
@@ -213,10 +212,9 @@
 *>           (if LROWS=.FALSE.).
 *>           Read and modified.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

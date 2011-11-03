@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAVSY( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
 *                          LDB, INFO )
@@ -20,11 +20,11 @@
 *       COMPLEX            A( LDA, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    CLAVSY  performs one of the matrix-vector operations
 *>       x := A*x  or  x := A'*x,
@@ -44,11 +44,10 @@
 *>    (or L or L * D).
 *>    If TRANS = 'T' or 't', CLAVSY multiplies either by U' or D * U'
 *>    (or L' or D * L' ).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  UPLO   - CHARACTER*1
@@ -122,10 +121,9 @@
 *>           A negative value, say -K, indicates that the K-th argument
 *>           has an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLATM1( MODE, COND, IRSIGN, IDIST, ISEED, D, N, INFO )
 * 
@@ -19,21 +19,20 @@
 *       REAL               D( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    SLATM1 computes the entries of D(1..N) as specified by
 *>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
 *>    of random numbers. SLATM1 is called by SLATMR to generate
 *>    random test matrices for LAPACK programs.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] MODE
 *> \verbatim
@@ -120,10 +119,9 @@
 *>           -4  => if MODE equals 6 or -6 and IDIST not in range 1 to 3
 *>           -7  => if N negative
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

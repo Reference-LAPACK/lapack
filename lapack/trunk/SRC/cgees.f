@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGEES( JOBVS, SORT, SELECT, N, A, LDA, SDIM, W, VS,
 *                         LDVS, WORK, LWORK, RWORK, BWORK, INFO )
@@ -35,11 +35,11 @@
 *       EXTERNAL           SELECT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGEES computes for an N-by-N complex nonsymmetric matrix A, the
 *> eigenvalues, the Schur form T, and, optionally, the matrix of Schur
@@ -51,11 +51,10 @@
 *> invariant subspace corresponding to the selected eigenvalues.
 *>
 *> A complex matrix is in Schur form if it is upper triangular.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVS
 *> \verbatim
@@ -181,10 +180,9 @@
 *>                      SELECT = .TRUE..  This could also be caused by
 *>                      underflow due to scaling.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

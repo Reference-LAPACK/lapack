@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       LOGICAL          FUNCTION DSLECT( ZR, ZI )
 * 
@@ -14,11 +14,11 @@
 *       DOUBLE PRECISION   ZI, ZR
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
 *> selected, and otherwise it returns .FALSE.
@@ -30,11 +30,10 @@
 *> and .FALSE. otherwise.
 *> If SELOPT is at least 1, DSLECT returns SELVAL(SELOPT) and adds 1
 *> to SELOPT, cycling back to 1 at SELMAX.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ZR
 *> \verbatim
@@ -47,10 +46,9 @@
 *>          ZI is DOUBLE PRECISION
 *>          The imaginary part of a complex eigenvalue ZR + i*ZI.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

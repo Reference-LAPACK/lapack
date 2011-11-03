@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLASCL2 ( M, N, D, X, LDX )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLASCL2 performs a diagonal scaling on a vector:
 *>   x <-- D * x
@@ -40,11 +40,10 @@
 *>
 *> Eventually to be replaced by BLAS_zge_diag_scale in the new BLAS
 *> standard.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -76,10 +75,9 @@
 *>          LDX is INTEGER
 *>     The leading dimension of the vector X. LDX >= 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

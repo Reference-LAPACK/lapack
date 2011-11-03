@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
 *                         BETA, VL, LDVL, VR, LDVR, WORK, LWORK, INFO )
@@ -31,11 +31,11 @@
 *      $                   VR( LDVR, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This routine is deprecated and has been replaced by routine SGGEV.
 *>
@@ -67,11 +67,10 @@
 *> are left eigenvectors of (A,B).
 *>
 *> Note: this routine performs "full balancing" on A and B
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVL
 *> \verbatim
@@ -257,10 +256,9 @@
 *>                =N+9: error return from SGGBAK (computing VR)
 *>                =N+10: error return from SLASCL (various calls)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -271,10 +269,9 @@
 *
 *> \ingroup realGEeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Balancing
@@ -303,7 +300,6 @@
 *>
 *>  [*] See SHGEQZ, SGEGS, or read the book "Matrix Computations",
 *>      by Golub & van Loan, pub. by Johns Hopkins U. Press.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

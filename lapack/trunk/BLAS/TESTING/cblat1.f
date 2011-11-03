@@ -5,26 +5,25 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       PROGRAM CBLAT1
 * 
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    Test program for the COMPLEX Level 1 BLAS.
 *>    Based upon the original BLAS test routine together with:
 *>
 *>    F06GAF Example Program Text
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -35,8 +34,7 @@
 *
 *> \ingroup complex_blas_testing
 *
-*  =====================================================================
-      PROGRAM CBLAT1
+*  =====================================================================      PROGRAM CBLAT1
 *
 *  -- Reference BLAS test routine (version 3.4.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

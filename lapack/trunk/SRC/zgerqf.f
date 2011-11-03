@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGERQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 * 
@@ -27,19 +27,18 @@
 *       COMPLEX*16         A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGERQF computes an RQ factorization of a complex M-by-N matrix A:
 *> A = R * Q.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -105,10 +104,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -119,10 +117,9 @@
 *
 *> \ingroup complex16GEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix Q is represented as a product of elementary reflectors
@@ -136,7 +133,6 @@
 *>  where tau is a complex scalar, and v is a complex vector with
 *>  v(n-k+i+1:n) = 0 and v(n-k+i) = 1; conjg(v(1:n-k+i-1)) is stored on
 *>  exit in A(m-k+i,1:n-k+i-1), and tau in TAU(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

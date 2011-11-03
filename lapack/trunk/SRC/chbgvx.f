@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, BB,
 *                          LDBB, Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,
@@ -35,11 +35,11 @@
 *      $                   WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHBGVX computes all the eigenvalues, and optionally, the eigenvectors
 *> of a complex generalized Hermitian-definite banded eigenproblem, of
@@ -47,11 +47,10 @@
 *> and banded, and B is also positive definite.  Eigenvalues and
 *> eigenvectors can be selected by specifying either all eigenvalues,
 *> a range of values or a range of indices for the desired eigenvalues.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBZ
 *> \verbatim
@@ -269,10 +268,9 @@
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -283,17 +281,11 @@
 *
 *> \ingroup complexOTHEReigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
-*>
-*> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE CHBGVX( JOBZ, RANGE, UPLO, N, KA, KB, AB, LDAB, BB,
      $                   LDBB, Q, LDQ, VL, VU, IL, IU, ABSTOL, M, W, Z,

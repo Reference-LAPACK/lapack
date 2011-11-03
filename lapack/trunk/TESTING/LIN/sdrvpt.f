@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SDRVPT( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, A, D,
 *                          E, B, X, XACT, WORK, RWORK, NOUT )
@@ -23,18 +23,17 @@
 *      $                   WORK( * ), X( * ), XACT( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SDRVPT tests SPTSV and -SVX.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] DOTYPE
 *> \verbatim
@@ -124,10 +123,9 @@
 *>          NOUT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

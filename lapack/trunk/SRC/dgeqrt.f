@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 * 
@@ -27,19 +27,18 @@
 *       DOUBLE PRECISION A( LDA, * ), T( LDT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGEQRT computes a blocked QR factorization of a real M-by-N matrix A
 *> using the compact WY representation of Q.  
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -100,10 +99,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -114,11 +112,11 @@
 *
 *> \ingroup doubleGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
+*>
 *>  The matrix V stores the elementary reflectors H(i) in the i-th column
 *>  below the diagonal. For example, if M=5 and N=3, the matrix V is
 *>
@@ -138,7 +136,6 @@
 *>  for the last block) T's are stored in the NB-by-N matrix T as
 *>
 *>               T = (T1 T2 ... TB).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

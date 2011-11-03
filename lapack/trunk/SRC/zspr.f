@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZSPR( UPLO, N, ALPHA, X, INCX, AP )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX*16         AP( * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZSPR    performs the symmetric rank 1 operation
 *>
@@ -41,11 +41,10 @@
 *>
 *> where alpha is a complex scalar, x is an n element vector and A is an
 *> n by n symmetric matrix, supplied in packed form.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -117,10 +116,9 @@
 *>           not be set, they are assumed to be zero, and on exit they
 *>           are set to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGEGV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
 *                         VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
@@ -32,11 +32,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This routine is deprecated and has been replaced by routine ZGGEV.
 *>
@@ -64,11 +64,10 @@
 *> are left eigenvectors of (A,B).
 *>
 *> Note: this routine performs "full balancing" on A and B
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVL
 *> \verbatim
@@ -234,10 +233,9 @@
 *>                =N+9: error return from ZGGBAK (computing VR)
 *>                =N+10: error return from ZLASCL (various calls)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -248,10 +246,9 @@
 *
 *> \ingroup complex16GEeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Balancing
@@ -279,7 +276,6 @@
 *>  are computed, then only the diagonal blocks will be correct.
 *>
 *>  [*] In other words, upper triangular form.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

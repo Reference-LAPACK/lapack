@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZTPTRI( UPLO, DIAG, N, AP, INFO )
 * 
@@ -28,19 +28,18 @@
 *       COMPLEX*16         AP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZTPTRI computes the inverse of a complex upper or lower triangular
 *> matrix A stored in packed format.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -83,10 +82,9 @@
 *>          > 0:  if INFO = i, A(i,i) is exactly zero.  The triangular
 *>                matrix is singular and its inverse can not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -97,10 +95,9 @@
 *
 *> \ingroup complex16OTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  A triangular matrix A can be transferred to packed storage using one
@@ -115,7 +112,6 @@
 *>      1    CONTINUE                    1    CONTINUE
 *>           JC = JC + J                      JC = JC + N - J + 1
 *>      2 CONTINUE                       2 CONTINUE
-*>
 *> \endverbatim
 *>
 *  =====================================================================

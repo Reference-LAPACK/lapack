@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPTT02( N, NRHS, D, E, X, LDX, B, LDB, RESID )
 * 
@@ -18,21 +18,20 @@
 *       REAL               B( LDB, * ), D( * ), E( * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPTT02 computes the residual for the solution to a symmetric
 *> tridiagonal system of equations:
 *>    RESID = norm(B - A*X) / (norm(A) * norm(X) * EPS),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -89,10 +88,9 @@
 *>          RESID is REAL
 *>          norm(B - A*X) / (norm(A) * norm(X) * EPS)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

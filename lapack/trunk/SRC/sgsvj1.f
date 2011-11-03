@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGSVJ1( JOBV, M, N, N1, A, LDA, D, SVA, MV, V, LDV,
 *                          EPS, SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
@@ -31,11 +31,11 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGSVJ1 is called from SGESVJ as a pre-processor and that is its main
 *> purpose. It applies Jacobi rotations in the same way as SGESVJ does, but
@@ -64,15 +64,10 @@
 *> tiled using quadratic tiles of side KBL. Here, KBL is a tunning parmeter.
 *> The number of sweeps is given in NSWEEP and the orthogonality threshold
 *> is given in TOL.
-*>
-*> Contributors
-*> ~~~~~~~~~~~~
-*> Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBV
 *> \verbatim
@@ -219,10 +214,9 @@
 *>          = 0 : successful exit.
 *>          < 0 : if INFO = -i, then the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -232,6 +226,11 @@
 *> \date November 2011
 *
 *> \ingroup realOTHERcomputational
+*
+*> \par Contributors:
+*  ==================
+*>
+*> Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
 *
 *  =====================================================================
       SUBROUTINE SGSVJ1( JOBV, M, N, N1, A, LDA, D, SVA, MV, V, LDV,

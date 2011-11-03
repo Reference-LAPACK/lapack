@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE XERBLA_ARRAY( SRNAME_ARRAY, SRNAME_LEN, INFO)
 * 
@@ -27,11 +27,11 @@
 *       CHARACTER(1) SRNAME_ARRAY(SRNAME_LEN)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> XERBLA_ARRAY assists other languages in calling XERBLA, the LAPACK
 *> and BLAS error handler.  Rather than taking a Fortran string argument
@@ -51,11 +51,10 @@
 *>
 *> Providing XERBLA_ARRAY is not necessary for intercepting LAPACK
 *> errors.  XERBLA_ARRAY calls XERBLA.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SRNAME_ARRAY
 *> \verbatim
@@ -75,10 +74,9 @@
 *>          The position of the invalid parameter in the parameter list
 *>          of the calling routine.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

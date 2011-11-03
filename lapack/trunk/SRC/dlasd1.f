@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,
 *                          IDXQ, IWORK, WORK, INFO )
@@ -30,11 +30,11 @@
 *       DOUBLE PRECISION   D( * ), U( LDU, * ), VT( LDVT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLASD1 computes the SVD of an upper bidiagonal N-by-M matrix B,
 *> where N = NL + NR + 1 and M = N + SQRE. DLASD1 is called from DLASD0.
@@ -74,11 +74,10 @@
 *>    directly using the updated singular values.  The singular vectors
 *>    for the current problem are multiplied with the singular vectors
 *>    from the overall problem.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NL
 *> \verbatim
@@ -182,10 +181,9 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, a singular value did not converge
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -196,17 +194,11 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE DLASD1( NL, NR, SQRE, D, ALPHA, BETA, U, LDU, VT, LDVT,

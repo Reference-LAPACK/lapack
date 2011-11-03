@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGRQTS( M, P, N, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
 *                          BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
@@ -23,19 +23,18 @@
 *      $                   RESULT( 4 ), RWORK( * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGRQTS tests SGGRQF, which computes the GRQ factorization of an
 *> M-by-N matrix A and a P-by-N matrix B: A = R*Q and B = Z*T*Q.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -161,10 +160,9 @@
 *>            RESULT(3) = norm( I - Q'*Q ) / ( N*ULP )
 *>            RESULT(4) = norm( I - Z'*Z ) / ( P*ULP )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

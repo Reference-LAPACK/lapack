@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSTECT( N, A, B, SHIFT, NUM )
 * 
@@ -18,11 +18,11 @@
 *       DOUBLE PRECISION   A( * ), B( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DSTECT counts the number NUM of eigenvalues of a tridiagonal
 *>    matrix T which are less than or equal to SHIFT. T has
@@ -31,11 +31,10 @@
 *>    See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
 *>    Matrix", Report CS41, Computer Science Dept., Stanford
 *>    University, July 21, 1966
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -67,10 +66,9 @@
 *>          The number of eigenvalues of T less than or equal
 *>          to SHIFT.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

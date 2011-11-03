@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
 *      +                    D_WORK_DLANGE, D_WORK_DGEQRF, TAU )
@@ -22,19 +22,18 @@
 *      +                   D_WORK_DLANGE( * ), TAU( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DDRVRF3 tests the LAPACK RFP routines:
 *>     DTFSM
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NOUT
 *> \verbatim
@@ -102,10 +101,9 @@
 *> \verbatim
 *>          TAU is DOUBLE PRECISION array, dimension (NMAX)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

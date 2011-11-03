@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPBSTF( UPLO, N, KD, AB, LDAB, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               AB( LDAB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPBSTF computes a split Cholesky factorization of a real
 *> symmetric positive definite band matrix A.
@@ -47,11 +47,10 @@
 *>
 *> where U is upper triangular of order m = (n+kd)/2, and L is lower
 *> triangular of order n-m.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -102,10 +101,9 @@
 *>               because the updated element a(i,i) was negative; the
 *>               matrix A is not positive definite.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -116,10 +114,9 @@
 *
 *> \ingroup realOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The band storage scheme is illustrated by the following example, when
@@ -150,7 +147,6 @@
 *>  a31  a42  a53  a64  a64   *    *   s13  s24  s53  s64  s75   *    *
 *>
 *>  Array elements marked * are not used by the routine.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

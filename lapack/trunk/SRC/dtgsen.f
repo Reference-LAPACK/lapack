@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTGSEN( IJOB, WANTQ, WANTZ, SELECT, N, A, LDA, B, LDB,
 *                          ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, M, PL,
@@ -36,11 +36,11 @@
 *      $                   WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTGSEN reorders the generalized real Schur decomposition of a real
 *> matrix pair (A, B) (in terms of an orthonormal equivalence trans-
@@ -66,11 +66,10 @@
 *> the selected cluster and the eigenvalues outside the cluster, resp.,
 *> and norms of "projections" onto left and right eigenspaces w.r.t.
 *> the selected cluster in the (1,1)-block.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IJOB
 *> \verbatim
@@ -297,10 +296,9 @@
 *>                (A, B) may have been partially reordered.
 *>                If requested, 0 is returned in DIF(*), PL and PR.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -311,10 +309,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  DTGSEN first collects the selected eigenvalues by computing
@@ -416,13 +413,18 @@
 *>  based estimate DIF is not wanted (see DLATDF), then the parameter
 *>  IDIFJB (see below) should be changed from 3 to 4 (routine DLATDF
 *>  (IJOB = 2 will be used)). See DTGSYL for more details.
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
 *>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
 *>
-*>  References
-*>  ==========
+*> \verbatim
 *>
 *>  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
 *>      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
@@ -443,7 +445,6 @@
 *>      Sweden, December 1993, Revised April 1994, Also as LAPACK Working
 *>      Note 75. To appear in ACM Trans. on Math. Software, Vol 22, No 1,
 *>      1996.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

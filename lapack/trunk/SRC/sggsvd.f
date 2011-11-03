@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
 *                          LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
@@ -33,11 +33,11 @@
 *      $                   V( LDV, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGGSVD computes the generalized singular value decomposition (GSVD)
 *> of an M-by-N real matrix A and P-by-N real matrix B:
@@ -117,11 +117,10 @@
 *>
 *>                      X = Q*( I   0    )
 *>                            ( 0 inv(R) ).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBU
 *> \verbatim
@@ -294,10 +293,12 @@
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, the Jacobi-type procedure failed to
 *>                converge.  For further details, see subroutine STGSJA.
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  TOLA    REAL
 *>  TOLB    REAL
 *>          TOLA and TOLB are the thresholds to determine the effective
@@ -307,10 +308,9 @@
 *>          The size of TOLA and TOLB may affect the size of backward
 *>          errors of the decomposition.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -321,17 +321,11 @@
 *
 *> \ingroup realOTHERsing
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  2-96 Based on modifications by
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DQRT02( M, N, K, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,11 +20,11 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DQRT02 tests DORGQR, which generates an m-by-n matrix Q with
 *> orthonornmal columns that is defined as the product of k elementary
@@ -34,11 +34,10 @@
 *> the orthogonal matrix Q defined by the factorization of the first k
 *> columns of A; it compares R(1:n,1:k) with Q(1:m,1:n)'*A(1:m,1:k),
 *> and checks that the columns of Q are orthonormal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -119,10 +118,9 @@
 *>          RESULT(1) = norm( R - Q'*A ) / ( M * norm(A) * EPS )
 *>          RESULT(2) = norm( I - Q'*Q ) / ( M * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

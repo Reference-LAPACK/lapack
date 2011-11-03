@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLABAD( SMALL, LARGE )
 * 
@@ -24,11 +24,11 @@
 *       REAL               LARGE, SMALL
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLABAD takes as input the values computed by SLAMCH for underflow and
 *> overflow, and returns the square root of each of these values if the
@@ -38,11 +38,10 @@
 *> the values computed by SLAMCH.  This subroutine is needed because
 *> SLAMCH does not compensate for poor arithmetic in the upper half of
 *> the exponent range, as is found on a Cray.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in,out] SMALL
 *> \verbatim
@@ -59,10 +58,9 @@
 *>          On exit, if LOG10(LARGE) is sufficiently large, the square
 *>          root of LARGE, otherwise unchanged.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

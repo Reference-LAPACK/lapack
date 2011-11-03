@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLARFGP( N, ALPHA, X, INCX, TAU )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLARFGP generates a complex elementary reflector H of order n, such
 *> that
@@ -51,11 +51,10 @@
 *>
 *> If the elements of x are all zero and alpha is real, then tau = 0
 *> and H is taken to be the unit matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -89,10 +88,9 @@
 *>          TAU is COMPLEX
 *>          The value tau.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

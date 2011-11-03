@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTPQRT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
 * 
@@ -27,20 +27,19 @@
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), T( LDT, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTPQRT2 computes a QR factorization of a real "triangular-pentagonal"
 *> matrix C, which is composed of a triangular block A and pentagonal block B, 
 *> using the compact WY representation for Q.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -111,10 +110,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -125,10 +123,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The input matrix C is a (N+M)-by-N matrix  
@@ -171,7 +168,6 @@
 *>
 *>  where W^H is the conjugate transpose of W and T is the upper triangular
 *>  factor of the block reflector.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

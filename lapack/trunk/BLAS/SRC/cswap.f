@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSWAP(N,CX,INCX,CY,INCY)
 * 
@@ -17,18 +17,17 @@
 *       COMPLEX CX(*),CY(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>   CSWAP interchanges two vectors.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -39,15 +38,13 @@
 *
 *> \ingroup complex_blas_level1
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>     jack dongarra, linpack, 3/11/78.
 *>     modified 12/3/93, array(1) declarations changed to array(*)
-*>
 *> \endverbatim
 *>
 *  =====================================================================

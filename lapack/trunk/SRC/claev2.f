@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAEV2( A, B, C, RT1, RT2, CS1, SN1 )
 * 
@@ -25,11 +25,11 @@
 *       COMPLEX            A, B, C, SN1
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAEV2 computes the eigendecomposition of a 2-by-2 Hermitian matrix
 *>    [  A         B  ]
@@ -40,11 +40,10 @@
 *>
 *> [ CS1  CONJG(SN1) ] [    A     B ] [ CS1 -CONJG(SN1) ] = [ RT1  0  ]
 *> [-SN1     CS1     ] [ CONJG(B) C ] [ SN1     CS1     ]   [  0  RT2 ].
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] A
 *> \verbatim
@@ -87,10 +86,9 @@
 *>          SN1 is COMPLEX
 *>         The vector (CS1, SN1) is a unit right eigenvector for RT1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -101,10 +99,9 @@
 *
 *> \ingroup complexOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  RT1 is accurate to a few ulps barring over/underflow.
@@ -119,7 +116,6 @@
 *>  Overflow is possible only if RT1 is within a factor of 5 of overflow.
 *>  Underflow is harmless if the input data is 0 or exceeds
 *>     underflow_threshold / macheps.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

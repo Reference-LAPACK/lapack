@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SORGR2( M, N, K, A, LDA, TAU, WORK, INFO )
 * 
@@ -27,11 +27,11 @@
 *       REAL               A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SORGR2 generates an m by n real matrix Q with orthonormal rows,
 *> which is defined as the last m rows of a product of k elementary
@@ -40,11 +40,10 @@
 *>       Q  =  H(1) H(2) . . . H(k)
 *>
 *> as returned by SGERQF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -99,10 +98,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument has an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

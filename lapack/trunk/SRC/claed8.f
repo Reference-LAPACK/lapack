@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAED8( K, N, QSIZ, Q, LDQ, D, RHO, CUTPNT, Z, DLAMDA,
 *                          Q2, LDQ2, W, INDXP, INDX, INDXQ, PERM, GIVPTR,
@@ -34,11 +34,11 @@
 *       COMPLEX            Q( LDQ, * ), Q2( LDQ2, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAED8 merges the two sets of eigenvalues together into a single
 *> sorted set.  Then it tries to deflate the size of the problem.
@@ -46,11 +46,10 @@
 *> eigenvalues are close together or if there is a tiny element in the
 *> Z vector.  For each such occurrence the order of the related secular
 *> equation problem is reduced by one.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] K
 *> \verbatim
@@ -211,10 +210,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

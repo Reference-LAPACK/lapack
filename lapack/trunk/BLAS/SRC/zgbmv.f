@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGBMV(TRANS,M,N,KL,KU,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
 * 
@@ -19,11 +19,11 @@
 *       COMPLEX*16 A(LDA,*),X(*),Y(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGBMV  performs one of the matrix-vector operations
 *>
@@ -33,11 +33,10 @@
 *>
 *> where alpha and beta are scalars, x and y are vectors and A is an
 *> m by n band matrix, with kl sub-diagonals and ku super-diagonals.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -157,10 +156,9 @@
 *>           On entry, INCY specifies the increment for the elements of
 *>           Y. INCY must not be zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -171,10 +169,9 @@
 *
 *> \ingroup complex16_blas_level2
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 2 Blas routine.
@@ -185,7 +182,6 @@
 *>     Jeremy Du Croz, Nag Central Office.
 *>     Sven Hammarling, Nag Central Office.
 *>     Richard Hanson, Sandia National Labs.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

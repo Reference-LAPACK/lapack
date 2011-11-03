@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CTGEVC( SIDE, HOWMNY, SELECT, N, S, LDS, P, LDP, VL,
 *                          LDVL, VR, LDVR, MM, M, WORK, RWORK, INFO )
@@ -33,11 +33,11 @@
 *       ..
 *  
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CTGEVC computes some or all of the right and/or left eigenvectors of
 *> a pair of complex matrices (S,P), where S and P are upper triangular.
@@ -63,11 +63,10 @@
 *> If Q and Z are the unitary factors from the generalized Schur
 *> factorization of a matrix pair (A,B), then Z*X and Q*Y
 *> are the matrices of right and left eigenvectors of (A,B).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -203,10 +202,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

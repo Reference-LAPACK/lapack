@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGEEQUB( M, N, A, LDA, R, C, ROWCND, COLCND, AMAX,
 *                           INFO )
@@ -30,11 +30,11 @@
 *       COMPLEX*16         A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGEEQUB computes row and column scalings intended to equilibrate an
 *> M-by-N matrix A and reduce its condition number.  R returns the row
@@ -53,11 +53,10 @@
 *> these factors introduces no additional rounding errors.  However, the
 *> scaled entries' magnitured are no longer approximately 1 but lie
 *> between sqrt(radix) and 1/sqrt(radix).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -131,10 +130,9 @@
 *>                <= M:  the i-th row of A is exactly zero
 *>                >  M:  the (i-M)-th column of A is exactly zero
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, WR,
 *                          WI, WORK, RESULT )
@@ -20,11 +20,11 @@
 *      $                   WORK( * ), WR( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGET22 does an eigenvector check.
 *>
@@ -58,11 +58,10 @@
 *> To handle various schemes for storage of left eigenvectors, there are
 *> options to use A-transpose instead of A, E-transpose instead of E,
 *> and/or W-transpose instead of W.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSA
 *> \verbatim
@@ -151,10 +150,9 @@
 *>          RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
 *>          RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

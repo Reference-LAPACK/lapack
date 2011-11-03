@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAPMT( FORWRD, M, N, X, LDX, K )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX            X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLAPMT rearranges the columns of the M by N matrix X as specified
 *> by the permutation K(1),K(2),...,K(N) of the integers 1,...,N.
@@ -44,11 +44,10 @@
 *> If FORWRD = .FALSE., backward permutation:
 *>
 *>      X(*,J) is moved to X(*,K(J)) for J = 1,2,...,N.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] FORWRD
 *> \verbatim
@@ -89,10 +88,9 @@
 *>          internal workspace, but reset to its original value on
 *>          output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

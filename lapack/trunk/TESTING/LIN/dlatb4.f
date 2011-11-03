@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
 *                          CNDNUM, DIST )
@@ -18,19 +18,18 @@
 *       DOUBLE PRECISION   ANORM, CNDNUM
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLATB4 sets parameters for the matrix generator based on the type of
 *> matrix to be generated.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PATH
 *> \verbatim
@@ -104,10 +103,9 @@
 *>          The type of distribution to be used by the random number
 *>          generator.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

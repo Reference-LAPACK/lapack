@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSFRK( TRANSR, UPLO, TRANS, N, K, ALPHA, A, LDA, BETA,
 *                         C )
@@ -30,11 +30,11 @@
 *       REAL               A( LDA, * ), C( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> Level 3 BLAS like routine for C in RFP Format.
 *>
@@ -49,11 +49,10 @@
 *> where alpha and beta are real scalars, C is an n--by--n symmetric
 *> matrix and A is an n--by--k matrix in the first case and a k--by--n
 *> matrix in the second case.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSR
 *> \verbatim
@@ -150,10 +149,9 @@
 *>           NT = N*(N+1)/2. On entry, the symmetric matrix C in RFP
 *>           Format. RFP Format is described by TRANSR, UPLO and N.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

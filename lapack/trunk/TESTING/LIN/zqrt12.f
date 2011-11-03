@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       DOUBLE PRECISION FUNCTION ZQRT12( M, N, A, LDA, S, WORK, LWORK,
 *                        RWORK )
@@ -19,21 +19,20 @@
 *       COMPLEX*16         A( LDA, * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZQRT12 computes the singular values `svlues' of the upper trapezoid
 *> of A(1:M,1:N) and returns the ratio
 *>
 *>      || s - svlues||/(||svlues||*eps*max(M,N))
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -81,10 +80,9 @@
 *> \verbatim
 *>          RWORK is DOUBLE PRECISION array, dimension (2*min(M,N))
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

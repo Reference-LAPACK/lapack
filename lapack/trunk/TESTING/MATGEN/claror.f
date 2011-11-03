@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLAROR( SIDE, INIT, M, N, A, LDA, ISEED, X, INFO )
 * 
@@ -19,11 +19,11 @@
 *       COMPLEX            A( LDA, * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    CLAROR pre- or post-multiplies an M by N matrix A by a random
 *>    unitary matrix U, overwriting A. A may optionally be
@@ -31,11 +31,10 @@
 *>    U is generated using the method of G.W. Stewart
 *>    ( SIAM J. Numer. Anal. 17, 1980, pp. 403-409 ).
 *>    (BLAS-2 version)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -143,10 +142,9 @@
 *>               to M.
 *>           -6  if LDA is less than M.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

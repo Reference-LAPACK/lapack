@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,
 *                          Q2, INDX, INDXC, INDXP, COLTYP, INFO )
@@ -32,11 +32,11 @@
 *      $                   W( * ), Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAED2 merges the two sets of eigenvalues together into a single
 *> sorted set.  Then it tries to deflate the size of the problem.
@@ -44,11 +44,10 @@
 *> eigenvalues are close together or if there is a tiny entry in the
 *> Z vector.  For each such occurrence the order of the related secular
 *> equation problem is reduced by one.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] K
 *> \verbatim
@@ -189,10 +188,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -203,18 +201,12 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
-*>     Jeff Rutter, Computer Science Division, University of California
-*>     at Berkeley, USA
-*>  Modified by Francoise Tisseur, University of Tennessee.
-*>
-*> \endverbatim
+*> Jeff Rutter, Computer Science Division, University of California
+*> at Berkeley, USA \n
+*>  Modified by Francoise Tisseur, University of Tennessee
 *>
 *  =====================================================================
       SUBROUTINE SLAED2( K, N, N1, D, Q, LDQ, INDXQ, RHO, Z, DLAMDA, W,

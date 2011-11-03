@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            Q( LDQ, * ), T( LDT, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CTREXC reorders the Schur factorization of a complex matrix
 *> A = Q*T*Q**H, so that the diagonal element of T with row index IFST
@@ -41,11 +41,10 @@
 *> The Schur form T is reordered by a unitary similarity transformation
 *> Z**H*T*Z, and optionally the matrix Q of Schur vectors is updated by
 *> postmultplying it with Z.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMPQ
 *> \verbatim
@@ -109,10 +108,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLASET( UPLO, M, N, ALPHA, BETA, A, LDA )
 * 
@@ -29,19 +29,18 @@
 *       DOUBLE PRECISION   A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLASET initializes an m-by-n matrix A to BETA on the diagonal and
 *> ALPHA on the offdiagonals.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -95,10 +94,9 @@
 *>          LDA is INTEGER
 *>          The leading dimension of the array A.  LDA >= max(1,M).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

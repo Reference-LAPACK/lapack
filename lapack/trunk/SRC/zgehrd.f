@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO )
 * 
@@ -27,19 +27,18 @@
 *       COMPLEX*16        A( LDA, * ), TAU( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGEHRD reduces a complex general matrix A to upper Hessenberg form H by
 *> an unitary similarity transformation:  Q**H * A * Q = H .
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -113,10 +112,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -127,10 +125,9 @@
 *
 *> \ingroup complex16GEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The matrix Q is represented as a product of (ihi-ilo) elementary
@@ -166,7 +163,6 @@
 *>  This file is a slight modification of LAPACK-3.0's DGEHRD
 *>  subroutine incorporating improvements proposed by Quintana-Orti and
 *>  Van de Geijn (2006). (See DLAHR2.)
-*>
 *> \endverbatim
 *>
 *  =====================================================================

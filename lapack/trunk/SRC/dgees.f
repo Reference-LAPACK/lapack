@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGEES( JOBVS, SORT, SELECT, N, A, LDA, SDIM, WR, WI,
 *                         VS, LDVS, WORK, LWORK, BWORK, INFO )
@@ -35,11 +35,11 @@
 *       EXTERNAL           SELECT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGEES computes for an N-by-N real nonsymmetric matrix A, the
 *> eigenvalues, the real Schur form T, and, optionally, the matrix of
@@ -57,11 +57,10 @@
 *>         [  c  a  ]
 *>
 *> where b*c < 0. The eigenvalues of such a block are a +- sqrt(bc).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVS
 *> \verbatim
@@ -200,10 +199,9 @@
 *>                   the Schur form no longer satisfy SELECT=.TRUE.  This
 *>                   could also be caused by underflow due to scaling.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

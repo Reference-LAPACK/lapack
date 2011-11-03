@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION ILATRANS( TRANS )
 * 
@@ -24,11 +24,11 @@
 *       CHARACTER          TRANS
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This subroutine translates from a character string specifying a
 *> transposition operation to the relevant BLAST-specified integer
@@ -37,15 +37,14 @@
 *> ILATRANS returns an INTEGER.  If ILATRANS < 0, then the input is not
 *> a character indicating a transposition operator.  Otherwise ILATRANS
 *> returns the constant value corresponding to TRANS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

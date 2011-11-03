@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLARHS( PATH, XTYPE, UPLO, TRANS, M, N, KL, KU, NRHS,
 *                          A, LDA, X, LDX, B, LDB, ISEED, INFO )
@@ -21,22 +21,21 @@
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLARHS chooses a set of NRHS random solution vectors and sets
 *> up the right hand sides for the linear system
 *>    op( A ) * X = B,
 *> where op( A ) may be A, A**T (transpose of A), or A**H (conjugate
 *> transpose of A).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PATH
 *> \verbatim
@@ -193,10 +192,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

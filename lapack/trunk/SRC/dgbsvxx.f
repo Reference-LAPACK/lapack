@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGBSVXX( FACT, TRANS, N, KL, KU, NRHS, AB, LDAB, AFB,
 *                           LDAFB, IPIV, EQUED, R, C, B, LDB, X, LDX,
@@ -39,11 +39,11 @@
 *      $                   ERR_BNDS_COMP( NRHS, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DGBSVXX uses the LU factorization to compute the solution to a
 *>    double precision system of linear equations  A * X = B,  where A is an
@@ -63,9 +63,12 @@
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
 *>    differ from what DGBSVXX would itself produce.
+*> \endverbatim
+*
+*> \par Description:
+*  =================
 *>
-*> Description
-*> ===========
+*> \verbatim
 *>
 *>    The following steps are performed:
 *>
@@ -107,11 +110,10 @@
 *>    6. If equilibration was used, the matrix X is premultiplied by
 *>    diag(C) (if TRANS = 'N') or diag(R) (if TRANS = 'T' or 'C') so
 *>    that it solves the original system before equilibration.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>     Some optional parameters are bundled in the PARAMS array.  These
@@ -538,10 +540,9 @@
 *>         about all of the right-hand sides check ERR_BNDS_NORM or
 *>         ERR_BNDS_COMP.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SDRVES( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, HT, WR, WI, WRT, WIT, VS,
@@ -24,11 +24,11 @@
 *      $                   WORK( * ), WR( * ), WRT( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    SDRVES checks the nonsymmetric eigenvalue (Schur form) problem
 *>    driver SGEES.
@@ -161,11 +161,10 @@
 *>         near the overflow threshold
 *>    (21) Same as (19), but multiplied by a constant
 *>         near the underflow threshold
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -371,10 +370,9 @@
 *>     KCONDS(j)       Selectw whether CONDS is to be 1 or
 *>                     1/sqrt(ulp).  (0 means irrelevant.)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

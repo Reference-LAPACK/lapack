@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTREXC( COMPQ, N, T, LDT, Q, LDQ, IFST, ILST, WORK,
 *                          INFO )
@@ -29,11 +29,11 @@
 *       DOUBLE PRECISION   Q( LDQ, * ), T( LDT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTREXC reorders the real Schur factorization of a real matrix
 *> A = Q*T*Q**T, so that the diagonal block of T with row index IFST is
@@ -47,11 +47,10 @@
 *> block upper triangular with 1-by-1 and 2-by-2 diagonal blocks; each
 *> 2-by-2 diagonal block has its diagonal elements equal and its
 *> off-diagonal elements of opposite sign.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMPQ
 *> \verbatim
@@ -130,10 +129,9 @@
 *>                reordered, and ILST points to the first row of the
 *>                current position of the block being moved.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

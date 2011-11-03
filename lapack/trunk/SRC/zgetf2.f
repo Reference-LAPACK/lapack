@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGETF2( M, N, A, LDA, IPIV, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGETF2 computes an LU factorization of a general m-by-n matrix A
 *> using partial pivoting with row interchanges.
@@ -44,11 +44,10 @@
 *> triangular (upper trapezoidal if m < n).
 *>
 *> This is the right-looking Level 2 BLAS version of the algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -93,10 +92,9 @@
 *>               singular, and division by zero will occur if it is used
 *>               to solve a system of equations.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

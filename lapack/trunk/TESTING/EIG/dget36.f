@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGET36( RMAX, LMAX, NINFO, KNT, NIN )
 * 
@@ -18,11 +18,11 @@
 *       INTEGER            NINFO( 3 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGET36 tests DTREXC, a routine for moving blocks (either 1 by 1 or
 *> 2 by 2) on the diagonal of a matrix in real Schur form.  Thus, DLAEXC
@@ -38,11 +38,10 @@
 *> ILST (within +-1).
 *>
 *> The test matrices are read from a file with logical unit number NIN.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -73,10 +72,9 @@
 *>          NIN is INTEGER
 *>          Input logical unit number.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

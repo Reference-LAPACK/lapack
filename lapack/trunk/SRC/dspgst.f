@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSPGST( ITYPE, UPLO, N, AP, BP, INFO )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   AP( * ), BP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSPGST reduces a real symmetric-definite generalized eigenproblem
 *> to standard form, using packed storage.
@@ -44,11 +44,10 @@
 *> B*A*x = lambda*x, and A is overwritten by U*A*U**T or L**T*A*L.
 *>
 *> B must have been previously factorized as U**T*U or L*L**T by DPPTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -98,10 +97,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

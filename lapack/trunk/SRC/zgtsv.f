@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
 * 
@@ -27,11 +27,11 @@
 *       COMPLEX*16         B( LDB, * ), D( * ), DL( * ), DU( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGTSV  solves the equation
 *>
@@ -42,11 +42,10 @@
 *>
 *> Note that the equation  A**T *X = B  may be solved by interchanging the
 *> order of the arguments DU and DL.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -109,10 +108,9 @@
 *>                has not been computed.  The factorization has not been
 *>                completed unless i = N.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

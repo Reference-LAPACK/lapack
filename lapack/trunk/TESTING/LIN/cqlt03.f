@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CQLT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,22 +20,21 @@
 *      $                   Q( LDA, * ), TAU( * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CQLT03 tests CUNMQL, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
 *> CQLT03 compares the results of a call to CUNMQL with the results of
 *> forming Q explicitly by a call to CUNGQL and then performing matrix
 *> multiplication by a call to CGEMM.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -120,10 +119,9 @@
 *>          RESULT(3) = norm( Q'*C - Q'*C )/ ( M * norm(C) * EPS )
 *>          RESULT(4) = norm( C*Q' - C*Q' )/ ( M * norm(C) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

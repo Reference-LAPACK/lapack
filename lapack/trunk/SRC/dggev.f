@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHAR, ALPHAI,
 *                         BETA, VL, LDVL, VR, LDVR, WORK, LWORK, INFO )
@@ -31,11 +31,11 @@
 *      $                   VR( LDVR, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGGEV computes for a pair of N-by-N real nonsymmetric matrices (A,B)
 *> the generalized eigenvalues, and optionally, the left and/or right
@@ -59,11 +59,10 @@
 *>
 *> where u(j)**H is the conjugate-transpose of u(j).
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVL
 *> \verbatim
@@ -210,10 +209,9 @@
 *>          > N:  =N+1: other than QZ iteration failed in DHGEQZ.
 *>                =N+2: error return from DTGEVC.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

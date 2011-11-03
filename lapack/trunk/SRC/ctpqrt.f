@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CTPQRT( M, N, L, NB, A, LDA, B, LDB, T, LDT, WORK,
 *                          INFO )
@@ -28,21 +28,20 @@
 *       COMPLEX A( LDA, * ), B( LDB, * ), T( LDT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CTPQRT computes a blocked QR factorization of a complex 
 *> "triangular-pentagonal" matrix C, which is composed of a 
 *> triangular block A and pentagonal block B, using the compact 
 *> WY representation for Q.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -124,10 +123,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -138,11 +136,11 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
+*>
 *>  The input matrix C is a (N+M)-by-N matrix  
 *>
 *>               C = [ A ]
@@ -185,7 +183,6 @@
 *>  for the last block) T's are stored in the NB-by-N matrix T as
 *>
 *>               T = [T1 T2 ... TB].
-*>
 *> \endverbatim
 *>
 *  =====================================================================

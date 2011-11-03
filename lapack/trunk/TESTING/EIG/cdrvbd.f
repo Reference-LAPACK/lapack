@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CDRVBD( NSIZES, MM, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          A, LDA, U, LDU, VT, LDVT, ASAV, USAV, VTSAV, S,
@@ -27,11 +27,11 @@
 *      $                   VTSAV( LDVT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CDRVBD checks the singular value decomposition (SVD) driver CGESVD
 *> and CGESDD.
@@ -105,11 +105,10 @@
 *>      on the diagonal.
 *> (4)  Same as (3), but multiplied by the underflow-threshold / ULP.
 *> (5)  Same as (3), but multiplied by the overflow-threshold * ULP.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -313,10 +312,9 @@
 *>          If  CLATMS, or CGESVD returns an error code, the
 *>              absolute value of it is returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

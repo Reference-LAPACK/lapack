@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLARTV( N, X, INCX, Y, INCY, C, S, INCC )
 * 
@@ -28,22 +28,21 @@
 *       COMPLEX            S( * ), X( * ), Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLARTV applies a vector of complex plane rotations with real cosines
 *> to elements of the complex vectors x and y. For i = 1,2,...,n
 *>
 *>    ( x(i) ) := (        c(i)   s(i) ) ( x(i) )
 *>    ( y(i) )    ( -conjg(s(i))  c(i) ) ( y(i) )
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -92,10 +91,9 @@
 *>          INCC is INTEGER
 *>          The increment between elements of C and S. INCC > 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

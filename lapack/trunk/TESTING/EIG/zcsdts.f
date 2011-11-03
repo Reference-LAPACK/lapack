@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZCSDTS( M, P, Q, X, XF, LDX, U1, LDU1, U2, LDU2, V1T,
 *                          LDV1T, V2T, LDV2T, THETA, IWORK, WORK, LWORK,
@@ -23,11 +23,11 @@
 *      $                   XF( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZCSDTS tests ZUNCSD, which, given an M-by-M partitioned unitary
 *> matrix X,
@@ -47,11 +47,10 @@
 *>                             [  0  0  0 |  I  0  0 ]   [ D21 D22 ]
 *>                             [  0  S  0 |  0  C  0 ]
 *>                             [  0  0  I |  0  0  0 ]
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -187,10 +186,9 @@
 *>                    = ULPINV   otherwise.
 *>          ( EPS2 = MAX( norm( I - X'*X ) / M, ULP ). )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

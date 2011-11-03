@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSGESV( N, NRHS, A, LDA, IPIV, B, LDB, X, LDX, WORK,
 *                          SWORK, ITER, INFO )
@@ -31,11 +31,11 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSGESV computes the solution to a real system of linear equations
 *>    A * X = B,
@@ -67,11 +67,10 @@
 *>     o EPS is the machine epsilon returned by DLAMCH('Epsilon')
 *> The value ITERMAX and BWDMAX are fixed to 30 and 1.0D+00
 *> respectively.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -179,10 +178,9 @@
 *>                but the factor U is exactly singular, so the solution
 *>                could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

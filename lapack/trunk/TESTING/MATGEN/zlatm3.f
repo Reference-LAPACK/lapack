@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       COMPLEX*16   FUNCTION ZLATM3( M, N, I, J, ISUB, JSUB, KL, KU,
 *                        IDIST, ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK,
@@ -25,11 +25,11 @@
 *       COMPLEX*16         D( * ), DL( * ), DR( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZLATM3 returns the (ISUB,JSUB) entry of a random matrix of
 *>    dimension (M, N) described by the other paramters. (ISUB,JSUB)
@@ -70,11 +70,10 @@
 *>         bandwidth KU.
 *>
 *>      Set random entries to zero as specified by SPARSE.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -212,10 +211,9 @@
 *>           entries will be set to zero.
 *>           Not modified.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

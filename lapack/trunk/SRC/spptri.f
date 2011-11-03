@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPPTRI( UPLO, N, AP, INFO )
 * 
@@ -28,20 +28,19 @@
 *       REAL               AP( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPPTRI computes the inverse of a real symmetric positive definite
 *> matrix A using the Cholesky factorization A = U**T*U or A = L*L**T
 *> computed by SPPTRF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -78,10 +77,9 @@
 *>          > 0:  if INFO = i, the (i,i) element of the factor U or L is
 *>                zero, and the inverse could not be computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

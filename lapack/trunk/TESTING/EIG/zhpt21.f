@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHPT21( ITYPE, UPLO, N, KBAND, AP, D, E, U, LDU, VP,
 *                          TAU, WORK, RWORK, RESULT )
@@ -21,11 +21,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHPT21  generally checks a decomposition of the form
 *>
@@ -81,11 +81,10 @@
 *>    and the first j elements of v(j) are 0, the (j+1)-st is 1, and the
 *>    (j+2)-nd through n-th elements are stored in V(j+2:n,j) (i.e.,
 *>    in VP( (2*n-j)*(j-1)/2 + j+2 : (2*n-j)*(j-1)/2 + n ) .)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -207,10 +206,9 @@
 *>          RESULT(1) is always modified.  RESULT(2) is modified only
 *>          if ITYPE=1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

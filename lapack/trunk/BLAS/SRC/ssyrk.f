@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSYRK(UPLO,TRANS,N,K,ALPHA,A,LDA,BETA,C,LDC)
 * 
@@ -19,11 +19,11 @@
 *       REAL A(LDA,*),C(LDC,*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSYRK  performs one of the symmetric rank k operations
 *>
@@ -36,11 +36,10 @@
 *> where  alpha and beta  are scalars, C is an  n by n  symmetric matrix
 *> and  A  is an  n by k  matrix in the first case and a  k by n  matrix
 *> in the second case.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -140,10 +139,9 @@
 *>           in  the  calling  (sub)  program.   LDC  must  be  at  least
 *>           max( 1, n ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -154,10 +152,9 @@
 *
 *> \ingroup single_blas_level3
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 3 Blas routine.
@@ -167,7 +164,6 @@
 *>     Iain Duff, AERE Harwell.
 *>     Jeremy Du Croz, Numerical Algorithms Group Ltd.
 *>     Sven Hammarling, Numerical Algorithms Group Ltd.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

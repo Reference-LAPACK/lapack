@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHEMM(SIDE,UPLO,M,N,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 * 
@@ -19,11 +19,11 @@
 *       COMPLEX*16 A(LDA,*),B(LDB,*),C(LDC,*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHEMM  performs one of the matrix-matrix operations
 *>
@@ -35,11 +35,10 @@
 *>
 *> where alpha and beta are scalars, A is an hermitian matrix and  B and
 *> C are m by n matrices.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -162,10 +161,9 @@
 *>           in  the  calling  (sub)  program.   LDC  must  be  at  least
 *>           max( 1, m ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -176,10 +174,9 @@
 *
 *> \ingroup complex16_blas_level3
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 3 Blas routine.
@@ -189,7 +186,6 @@
 *>     Iain Duff, AERE Harwell.
 *>     Jeremy Du Croz, Numerical Algorithms Group Ltd.
 *>     Sven Hammarling, Numerical Algorithms Group Ltd.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

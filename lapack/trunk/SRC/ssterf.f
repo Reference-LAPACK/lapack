@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSTERF( N, D, E, INFO )
 * 
@@ -27,19 +27,18 @@
 *       REAL               D( * ), E( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSTERF computes all eigenvalues of a symmetric tridiagonal matrix
 *> using the Pal-Walker-Kahan variant of the QL or QR algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -71,10 +70,9 @@
 *>                a total of 30*N iterations; if INFO = i, then i
 *>                elements of E have not converged to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

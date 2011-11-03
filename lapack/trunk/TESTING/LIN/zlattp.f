@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLATTP( IMAT, UPLO, TRANS, DIAG, ISEED, N, AP, B, WORK,
 *                          RWORK, INFO )
@@ -21,20 +21,19 @@
 *       COMPLEX*16         AP( * ), B( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZLATTP generates a triangular test matrix in packed storage.
 *> IMAT and UPLO uniquely specify the properties of the test matrix,
 *> which is returned in the array AP.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IMAT
 *> \verbatim
@@ -115,10 +114,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

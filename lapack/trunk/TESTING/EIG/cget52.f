@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGET52( LEFT, N, A, LDA, B, LDB, E, LDE, ALPHA, BETA,
 *                          WORK, RWORK, RESULT )
@@ -21,11 +21,11 @@
 *      $                   BETA( * ), E( LDE, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGET52  does an eigenvector check for the generalized eigenvalue
 *> problem.
@@ -53,11 +53,10 @@
 *>
 *>         RESULT(2) =      max       | M(v(i)) - 1 | / ( n ulp )
 *>                    eigenvectors v(i)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] LEFT
 *> \verbatim
@@ -145,10 +144,9 @@
 *>          B E is likely to overflow, then RESULT(1:2) is set to
 *>          10 / ulp.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

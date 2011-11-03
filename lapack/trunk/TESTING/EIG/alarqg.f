@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ALARQG( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 * 
@@ -18,11 +18,11 @@
 *       LOGICAL            DOTYPE( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ALARQG handles input for the LAPACK test program.  It is called
 *> to evaluate the input line which requested NMATS matrix types for
@@ -34,11 +34,10 @@
 *>    Read the next input line for NMATS matrix types
 *>    Set DOTYPE(I) = .TRUE. for each valid type I
 *> endif
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PATH
 *> \verbatim
@@ -75,10 +74,9 @@
 *>          NOUT is INTEGER
 *>          The unit number for output.  NOUT >= 1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

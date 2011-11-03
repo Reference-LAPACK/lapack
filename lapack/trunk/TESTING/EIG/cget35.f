@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGET35( RMAX, LMAX, NINFO, KNT, NIN )
 * 
@@ -15,11 +15,11 @@
 *       REAL               RMAX
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGET35 tests CTRSYL, a routine for solving the Sylvester matrix
 *> equation
@@ -34,11 +34,10 @@
 *>
 *>    norm(op(A)*X + ISGN*X*op(B) - scale*C) /
 *>        (EPS*max(norm(A),norm(B))*norm(X))
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -69,10 +68,9 @@
 *>          NIN is INTEGER
 *>          Input logical unit number.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

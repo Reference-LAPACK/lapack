@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPBSVX( FACT, UPLO, N, KD, NRHS, AB, LDAB, AFB, LDAFB,
 *                          EQUED, S, B, LDB, X, LDX, RCOND, FERR, BERR,
@@ -34,11 +34,11 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPBSVX uses the Cholesky factorization A = U**T*U or A = L*L**T to
 *> compute the solution to a real system of linear equations
@@ -48,9 +48,12 @@
 *>
 *> Error bounds on the solution and a condition estimate are also
 *> provided.
+*> \endverbatim
+*
+*> \par Description:
+*  =================
 *>
-*> Description
-*> ===========
+*> \verbatim
 *>
 *> The following steps are performed:
 *>
@@ -86,11 +89,10 @@
 *> 6. If equilibration was used, the matrix X is premultiplied by
 *>    diag(S) so that it solves the original system before
 *>    equilibration.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] FACT
 *> \verbatim
@@ -291,10 +293,9 @@
 *>                       computed solution can be more accurate than the
 *>                       value of RCOND would suggest.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -305,10 +306,9 @@
 *
 *> \ingroup realOTHERsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The band storage scheme is illustrated by the following example, when
@@ -336,7 +336,6 @@
 *>     a31  a42  a53  a64   *    *
 *>
 *>  Array elements marked * are not used by the routine.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

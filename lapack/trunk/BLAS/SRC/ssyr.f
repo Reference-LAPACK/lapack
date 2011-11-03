@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSYR(UPLO,N,ALPHA,X,INCX,A,LDA)
 * 
@@ -19,11 +19,11 @@
 *       REAL A(LDA,*),X(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSYR   performs the symmetric rank 1 operation
 *>
@@ -31,11 +31,10 @@
 *>
 *> where alpha is a real scalar, x is an n element vector and A is an
 *> n by n symmetric matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -103,10 +102,9 @@
 *>           in the calling (sub) program. LDA must be at least
 *>           max( 1, n ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -117,10 +115,9 @@
 *
 *> \ingroup single_blas_level2
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Level 2 Blas routine.
@@ -130,7 +127,6 @@
 *>     Jeremy Du Croz, Nag Central Office.
 *>     Sven Hammarling, Nag Central Office.
 *>     Richard Hanson, Sandia National Labs.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

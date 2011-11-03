@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CCHKST( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, AP, SD, SE, D1, D2, D3, D4, D5,
@@ -29,11 +29,11 @@
 *      $                   V( LDU, * ), VP( * ), WORK( * ), Z( LDU, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CCHKST  checks the Hermitian eigenvalue problem routines.
 *>
@@ -244,11 +244,10 @@
 *> (20) Same as (16), but multiplied by SQRT( underflow threshold )
 *> (21) A diagonally dominant tridiagonal matrix with geometrically
 *>      spaced diagonal entries 1, ..., ULP.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -585,10 +584,9 @@
 *>       KMAGN(j)        The order of magnitude ( O(1),
 *>                       O(overflow^(1/2) ), O(underflow^(1/2) )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGGEV( JOBVL, JOBVR, N, A, LDA, B, LDB, ALPHA, BETA,
 *                         VL, LDVL, VR, LDVR, WORK, LWORK, RWORK, INFO )
@@ -32,11 +32,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGGEV computes for a pair of N-by-N complex nonsymmetric matrices
 *> (A,B), the generalized eigenvalues, and optionally, the left and/or
@@ -59,11 +59,10 @@
 *>              u(j)**H * A = lambda(j) * u(j)**H * B
 *>
 *> where u(j)**H is the conjugate-transpose of u(j).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVL
 *> \verbatim
@@ -201,10 +200,9 @@
 *>          > N:  =N+1: other then QZ iteration failed in SHGEQZ,
 *>                =N+2: error return from STGEVC.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

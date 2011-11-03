@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
 *                          LDV, T, LDT, C, LDC, WORK, LDWORK )
@@ -30,21 +30,20 @@
 *      $                   WORK( LDWORK, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLARZB applies a complex block reflector H or its transpose H**H
 *> to a complex distributed M-by-N  C from the left or the right.
 *>
 *> Currently, only STOREV = 'R' and DIRECT = 'B' are supported.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -156,10 +155,9 @@
 *>          If SIDE = 'L', LDWORK >= max(1,N);
 *>          if SIDE = 'R', LDWORK >= max(1,M).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -170,15 +168,15 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
+*
+*> \par Further Details:
+*  =====================
 *>
+*> \verbatim
 *> \endverbatim
 *>
 *  =====================================================================

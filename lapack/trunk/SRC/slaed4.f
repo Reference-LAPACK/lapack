@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               D( * ), DELTA( * ), Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This subroutine computes the I-th updated eigenvalue of a symmetric
 *> rank-one modification to a diagonal matrix whose elements are
@@ -49,11 +49,10 @@
 *>
 *> The method consists of approximating the rational functions in the
 *> secular equation by simpler interpolating rational functions.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -106,10 +105,12 @@
 *>          INFO is INTEGER
 *>         = 0:  successful exit
 *>         > 0:  if INFO = 1, the updating process failed.
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  Logical variable ORGATI (origin-at-i?) is used for distinguishing
 *>  whether D(i) or D(i+1) is treated as the origin.
 *>
@@ -122,10 +123,9 @@
 *>   MAXIT is the maximum number of iterations allowed for each
 *>   eigenvalue.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -136,17 +136,11 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ren-Cang Li, Computer Science Division, University of California
 *>     at Berkeley, USA
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SLAED4( N, I, D, Z, DELTA, RHO, DLAM, INFO )

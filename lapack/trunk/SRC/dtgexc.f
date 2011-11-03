@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTGEXC( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, IFST, ILST, WORK, LWORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTGEXC reorders the generalized real Schur decomposition of a real
 *> matrix pair (A,B) using an orthogonal equivalence transformation
@@ -54,11 +54,10 @@
 *>        Q(in) * A(in) * Z(in)**T = Q(out) * A(out) * Z(out)**T
 *>        Q(in) * B(in) * Z(in)**T = Q(out) * B(out) * Z(out)**T
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTQ
 *> \verbatim
@@ -187,10 +186,9 @@
 *>                and ILST points to the first row of the current
 *>                position of the block being moved.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -201,21 +199,21 @@
 *
 *> \ingroup doubleGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
 *>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
+*>
+*> \verbatim
 *>
 *>  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
 *>      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
 *>      M.S. Moonen et al (eds), Linear Algebra for Large Scale and
 *>      Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

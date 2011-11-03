@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DQLT01( M, N, A, AF, Q, L, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,22 +20,21 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DQLT01 tests DGEQLF, which computes the QL factorization of an m-by-n
 *> matrix A, and partially tests DORGQL which forms the m-by-m
 *> orthogonal matrix Q.
 *>
 *> DQLT01 compares L with Q'*A, and checks that Q is orthogonal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -110,10 +109,9 @@
 *>          RESULT(1) = norm( L - Q'*A ) / ( M * norm(A) * EPS )
 *>          RESULT(2) = norm( I - Q'*Q ) / ( M * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

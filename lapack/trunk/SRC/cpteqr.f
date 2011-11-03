@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX            Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPTEQR computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric positive definite tridiagonal matrix by first factoring the
@@ -52,11 +52,10 @@
 *> tridiagonal form, however, may preclude the possibility of obtaining
 *> high relative accuracy in the small eigenvalues of the original
 *> matrix, if these eigenvalues range over many orders of magnitude.)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMPZ
 *> \verbatim
@@ -130,10 +129,9 @@
 *>                      if INFO = N+i, i off-diagonal elements of the
 *>                      bidiagonal factor did not converge to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

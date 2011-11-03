@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL, VR,
 *                         LDVR, WORK, LWORK, INFO )
@@ -30,11 +30,11 @@
 *      $                   WI( * ), WORK( * ), WR( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGEEV computes for an N-by-N real nonsymmetric matrix A, the
 *> eigenvalues and, optionally, the left and/or right eigenvectors.
@@ -48,11 +48,10 @@
 *>
 *> The computed eigenvectors are normalized to have Euclidean norm
 *> equal to 1 and largest component real.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBVL
 *> \verbatim
@@ -173,10 +172,9 @@
 *>                elements i+1:N of WR and WI contain eigenvalues which
 *>                have converged.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

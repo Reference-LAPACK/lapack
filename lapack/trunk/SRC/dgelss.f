@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGELSS( M, N, NRHS, A, LDA, B, LDB, S, RCOND, RANK,
 *                          WORK, LWORK, INFO )
@@ -29,11 +29,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), S( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGELSS computes the minimum norm solution to a real linear least
 *> squares problem:
@@ -51,11 +51,10 @@
 *> The effective rank of A is determined by treating as zero those
 *> singular values which are less than RCOND times the largest singular
 *> value.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -156,10 +155,9 @@
 *>                if INFO = i, i off-diagonal elements of an intermediate
 *>                bidiagonal form did not converge to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

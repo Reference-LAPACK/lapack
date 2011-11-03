@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL             FUNCTION CRZT01( M, N, A, AF, LDA, TAU, WORK,
 *                        LWORK )
@@ -19,20 +19,19 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CRZT01 returns
 *>      || A - R*Q || / ( M * eps * ||A|| )
 *> for an upper trapezoidal A that was factored with CTZRZF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -82,10 +81,9 @@
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= m*n + m.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

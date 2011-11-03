@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAIC1( JOB, J, X, SEST, W, GAMMA, SESTPR, S, C )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   W( J ), X( J )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAIC1 applies one step of incremental condition estimation in
 *> its simplest version:
@@ -59,11 +59,10 @@
 *>                                           [ gamma ]
 *>
 *> where  alpha =  x**T*w.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOB
 *> \verbatim
@@ -119,10 +118,9 @@
 *>          C is DOUBLE PRECISION
 *>          Cosine needed in forming xhat.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

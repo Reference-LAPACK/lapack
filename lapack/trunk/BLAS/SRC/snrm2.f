@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL FUNCTION SNRM2(N,X,INCX)
 * 
@@ -17,21 +17,20 @@
 *       REAL X(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SNRM2 returns the euclidean norm of a vector via the function
 *> name, so that
 *>
 *>    SNRM2 := sqrt( x'*x ).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -42,16 +41,14 @@
 *
 *> \ingroup single_blas_level1
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  -- This version written on 25-October-1982.
 *>     Modified on 14-October-1993 to inline the call to SLASSQ.
 *>     Sven Hammarling, Nag Ltd.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

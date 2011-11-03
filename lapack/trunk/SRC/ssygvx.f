@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
 *                          VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,
@@ -33,11 +33,11 @@
 *      $                   Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSYGVX computes selected eigenvalues, and optionally, eigenvectors
 *> of a real generalized symmetric-definite eigenproblem, of the form
@@ -45,11 +45,10 @@
 *> and B are assumed to be symmetric and B is also positive definite.
 *> Eigenvalues and eigenvectors can be selected by specifying either a
 *> range of values or a range of indices for the desired eigenvalues.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -268,10 +267,9 @@
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -282,17 +280,11 @@
 *
 *> \ingroup realSYeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
-*>
-*> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE SSYGVX( ITYPE, JOBZ, RANGE, UPLO, N, A, LDA, B, LDB,
      $                   VL, VU, IL, IU, ABSTOL, M, W, Z, LDZ, WORK,

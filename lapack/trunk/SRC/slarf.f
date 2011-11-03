@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK )
 * 
@@ -29,11 +29,11 @@
 *       REAL               C( LDC, * ), V( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLARF applies a real elementary reflector H to a real m by n matrix
 *> C, from either the left or the right. H is represented in the form
@@ -43,11 +43,10 @@
 *> where tau is a real scalar and v is a real vector.
 *>
 *> If tau = 0, then H is taken to be the unit matrix.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -109,10 +108,9 @@
 *>                         (N) if SIDE = 'L'
 *>                      or (M) if SIDE = 'R'
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

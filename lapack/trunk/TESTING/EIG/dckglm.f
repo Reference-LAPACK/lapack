@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DCKGLM( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
 *                          NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
@@ -22,19 +22,18 @@
 *      $                   WORK( * ), X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DCKGLM tests DGGGLM - subroutine for solving generalized linear
 *>                       model problem.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NN
 *> \verbatim
@@ -150,10 +149,9 @@
 *>          > 0 :  If DLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

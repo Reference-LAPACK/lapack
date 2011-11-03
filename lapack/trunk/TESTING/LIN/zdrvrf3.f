@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
 *      +                    D_WORK_ZLANGE, Z_WORK_ZGEQRF, TAU )
@@ -23,19 +23,18 @@
 *       COMPLEX*16         Z_WORK_ZGEQRF( * ), TAU( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZDRVRF3 tests the LAPACK RFP routines:
 *>     ZTFSM
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NOUT
 *> \verbatim
@@ -103,10 +102,9 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (NMAX)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

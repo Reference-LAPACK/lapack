@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,
 *                          LDZ, J1, INFO )
@@ -30,11 +30,11 @@
 *      $                   Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZTGEX2 swaps adjacent diagonal 1 by 1 blocks (A11,B11) and (A22,B22)
 *> in an upper triangular matrix pair (A, B) by an unitary equivalence
@@ -49,11 +49,10 @@
 *>        Q(in) * A(in) * Z(in)**H = Q(out) * A(out) * Z(out)**H
 *>        Q(in) * B(in) * Z(in)**H = Q(out) * B(out) * Z(out)**H
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTQ
 *> \verbatim
@@ -145,10 +144,9 @@
 *>                from generalized Schur form; the problem is ill-
 *>                conditioned. 
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -159,34 +157,34 @@
 *
 *> \ingroup complex16GEauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
-*>
-*>  Based on contributions by
-*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
-*>     Umea University, S-901 87 Umea, Sweden.
+*> \par Further Details:
+*  =====================
 *>
 *>  In the current code both weak and strong stability tests are
 *>  performed. The user can omit the strong stability test by changing
 *>  the internal logical parameter WANDS to .FALSE.. See ref. [2] for
 *>  details.
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
+*>     Umea University, S-901 87 Umea, Sweden.
+*
+*> \par References:
+*  ================
 *>
 *>  [1] B. Kagstrom; A Direct Method for Reordering Eigenvalues in the
 *>      Generalized Real Schur Form of a Regular Matrix Pair (A, B), in
 *>      M.S. Moonen et al (eds), Linear Algebra for Large Scale and
 *>      Real-Time Applications, Kluwer Academic Publ. 1993, pp 195-218.
-*>
+*> \n
 *>  [2] B. Kagstrom and P. Poromaa; Computing Eigenspaces with Specified
 *>      Eigenvalues of a Regular Matrix Pair (A, B) and Condition
 *>      Estimation: Theory, Algorithms and Software, Report UMINF-94.04,
 *>      Department of Computing Science, Umea University, S-901 87 Umea,
 *>      Sweden, 1994. Also as LAPACK Working Note 87. To appear in
 *>      Numerical Algorithms, 1996.
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE ZTGEX2( WANTQ, WANTZ, N, A, LDA, B, LDB, Q, LDQ, Z,

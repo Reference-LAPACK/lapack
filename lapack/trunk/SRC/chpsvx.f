@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CHPSVX( FACT, UPLO, N, NRHS, AP, AFP, IPIV, B, LDB, X,
 *                          LDX, RCOND, FERR, BERR, WORK, RWORK, INFO )
@@ -33,11 +33,11 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CHPSVX uses the diagonal pivoting factorization A = U*D*U**H or
 *> A = L*D*L**H to compute the solution to a complex system of linear
@@ -46,9 +46,12 @@
 *>
 *> Error bounds on the solution and a condition estimate are also
 *> provided.
+*> \endverbatim
+*
+*> \par Description:
+*  =================
 *>
-*> Description
-*> ===========
+*> \verbatim
 *>
 *> The following steps are performed:
 *>
@@ -72,11 +75,10 @@
 *> 4. Iterative refinement is applied to improve the computed solution
 *>    matrix and calculate error bounds and backward error estimates
 *>    for it.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] FACT
 *> \verbatim
@@ -238,10 +240,9 @@
 *>                       computed solution can be more accurate than the
 *>                       value of RCOND would suggest.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -252,10 +253,9 @@
 *
 *> \ingroup complexOTHERsolve
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  The packed storage scheme is illustrated by the following example
@@ -271,7 +271,6 @@
 *>  Packed storage of the upper triangle of A:
 *>
 *>  AP = [ a11, a12, a22, a13, a23, a33, a14, a24, a34, a44 ]
-*>
 *> \endverbatim
 *>
 *  =====================================================================

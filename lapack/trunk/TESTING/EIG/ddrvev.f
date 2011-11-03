@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DDRVEV( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          NOUNIT, A, LDA, H, WR, WI, WR1, WI1, VL, LDVL,
@@ -26,11 +26,11 @@
 *      $                   WI( * ), WI1( * ), WORK( * ), WR( * ), WR1( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DDRVEV  checks the nonsymmetric eigenvalue problem driver DGEEV.
 *>
@@ -162,11 +162,10 @@
 *>         near the overflow threshold
 *>    (21) Same as (19), but multiplied by a constant
 *>         near the underflow threshold
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -388,10 +387,9 @@
 *>     KCONDS(j)       Selectw whether CONDS is to be 1 or
 *>                     1/sqrt(ulp).  (0 means irrelevant.)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

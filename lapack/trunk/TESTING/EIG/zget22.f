@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZGET22( TRANSA, TRANSE, TRANSW, N, A, LDA, E, LDE, W,
 *                          WORK, RWORK, RESULT )
@@ -20,11 +20,11 @@
 *       COMPLEX*16         A( LDA, * ), E( LDE, * ), W( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZGET22 does an eigenvector check.
 *>
@@ -40,11 +40,10 @@
 *> where E(j) is the j-th eigenvector, and m-norm is the max-norm of a
 *> vector.  The max-norm of a complex n-vector x in this case is the
 *> maximum of |re(x(i)| + |im(x(i)| over i = 1, ..., n.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSA
 *> \verbatim
@@ -127,10 +126,9 @@
 *>          RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
 *>          RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

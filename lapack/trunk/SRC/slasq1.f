@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASQ1( N, D, E, WORK, INFO )
 * 
@@ -27,11 +27,11 @@
 *       REAL               D( * ), E( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLASQ1 computes the singular values of a real N-by-N bidiagonal
 *> matrix with diagonal D and off-diagonal E. The singular values
@@ -45,11 +45,10 @@
 *>
 *> and the present implementation is described in "An implementation of
 *> the dqds Algorithm (Positive Case)", LAPACK Working Note.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -93,10 +92,9 @@
 *>             = 3, termination criterion of outer while loop not met 
 *>                  (program created more than N unreduced blocks)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,
 *                          LWORK, RWORK, LRWORK, IWORK, LIWORK, INFO )
@@ -31,11 +31,11 @@
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHEGVD computes all the eigenvalues, and optionally, the eigenvectors
 *> of a complex generalized Hermitian-definite eigenproblem, of the form
@@ -49,11 +49,10 @@
 *> digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or
 *> Cray-2. It could conceivably fail on hexadecimal or decimal machines
 *> without guard digits, but we know of none.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ITYPE
 *> \verbatim
@@ -217,10 +216,9 @@
 *>                    The factorization of B could not be completed and
 *>                    no eigenvalues or eigenvectors were computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -231,20 +229,21 @@
 *
 *> \ingroup complex16HEeigen
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Further Details:
+*  =====================
 *>
-*>  Based on contributions by
-*>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
+*> \verbatim
 *>
 *>  Modified so that no backsubstitution is performed if ZHEEVD fails to
 *>  converge (NEIG in old code could be greater than N causing out of
 *>  bounds reference to A - reported by Ralf Meyer).  Also corrected the
 *>  description of INFO and the test on ITYPE. Sven, 16 Feb 05.
 *> \endverbatim
+*
+*> \par Contributors:
+*  ==================
+*>
+*>     Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA
 *>
 *  =====================================================================
       SUBROUTINE ZHEGVD( ITYPE, JOBZ, UPLO, N, A, LDA, B, LDB, W, WORK,

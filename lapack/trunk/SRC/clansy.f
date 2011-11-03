@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL             FUNCTION CLANSY( NORM, UPLO, N, A, LDA, WORK )
 * 
@@ -29,20 +29,19 @@
 *       COMPLEX            A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLANSY  returns the value of the one norm,  or the Frobenius norm, or
 *> the  infinity norm,  or the  element of  largest absolute value  of a
 *> complex symmetric matrix A.
+*> \endverbatim
 *>
-*> Description
-*> ===========
-*>
-*> CLANSY returns the value
+*> \return CLANSY
+*> \verbatim
 *>
 *>    CLANSY = ( max(abs(A(i,j))), NORM = 'M' or 'm'
 *>             (
@@ -56,11 +55,10 @@
 *> normI  denotes the  infinity norm  of a matrix  (maximum row sum) and
 *> normF  denotes the  Frobenius norm of a matrix (square root of sum of
 *> squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NORM
 *> \verbatim
@@ -109,10 +107,9 @@
 *>          where LWORK >= N when NORM = 'I' or '1' or 'O'; otherwise,
 *>          WORK is not referenced.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

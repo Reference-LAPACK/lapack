@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPTTRF( N, D, E, INFO )
 * 
@@ -27,20 +27,19 @@
 *       REAL               D( * ), E( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SPTTRF computes the L*D*L**T factorization of a real symmetric
 *> positive definite tridiagonal matrix A.  The factorization may also
 *> be regarded as having the form A = U**T*D*U.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -76,10 +75,9 @@
 *>               be completed, while if k = N, the factorization was
 *>               completed, but D(N) <= 0.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

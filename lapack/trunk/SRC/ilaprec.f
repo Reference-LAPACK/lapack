@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER FUNCTION ILAPREC( PREC )
 * 
@@ -24,11 +24,11 @@
 *       CHARACTER          PREC
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> This subroutine translated from a character string specifying an
 *> intermediate precision to the relevant BLAST-specified integer
@@ -37,15 +37,14 @@
 *> ILAPREC returns an INTEGER.  If ILAPREC < 0, then the input is not a
 *> character indicating a supported intermediate precision.  Otherwise
 *> ILAPREC returns the constant value corresponding to PREC.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

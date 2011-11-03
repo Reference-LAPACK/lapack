@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPOSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, EQUED,
 *                           S, B, LDB, X, LDX, RCOND, RPVGRW, BERR,
@@ -37,13 +37,11 @@
 *      $                   ERR_BNDS_COMP( NRHS, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
-*> Purpose
-*>    =======
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    CPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
 *>    to compute the solution to a complex system of linear equations
@@ -64,9 +62,12 @@
 *>    errors or warnings, but we cannot make that claim for general
 *>    user-provided factorizations and equilibration factors if they
 *>    differ from what CPOSVXX would itself produce.
+*> \endverbatim
+*
+*> \par Description:
+*  =================
 *>
-*> Description
-*> ===========
+*> \verbatim
 *>
 *>    The following steps are performed:
 *>
@@ -104,11 +105,10 @@
 *>    6. If equilibration was used, the matrix X is premultiplied by
 *>    diag(S) so that it solves the original system before
 *>    equilibration.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>     Some optional parameters are bundled in the PARAMS array.  These
@@ -477,10 +477,9 @@
 *>         about all of the right-hand sides check ERR_BNDS_NORM or
 *>         ERR_BNDS_COMP.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

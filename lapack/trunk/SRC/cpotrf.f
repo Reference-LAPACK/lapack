@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CPOTRF( UPLO, N, A, LDA, INFO )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CPOTRF computes the Cholesky factorization of a complex Hermitian
 *> positive definite matrix A.
@@ -43,11 +43,10 @@
 *> where U is an upper triangular matrix and L is lower triangular.
 *>
 *> This is the block version of the algorithm, calling Level 3 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -92,10 +91,9 @@
 *>                positive definite, and the factorization could not be
 *>                completed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DDRVGG( NSIZES, NN, NTYPES, DOTYPE, ISEED, THRESH,
 *                          THRSHN, NOUNIT, A, LDA, B, S, T, S2, T2, Q,
@@ -28,11 +28,11 @@
 *      $                   VR( LDQ, * ), WORK( * ), Z( LDQ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DDRVGG  checks the nonsymmetric generalized eigenvalue driver
 *> routines.
@@ -188,11 +188,10 @@
 *>
 *> (26) Q ( T1, T2 ) Z     where T1 and T2 are random upper-triangular
 *>                         matrices.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NSIZES
 *> \verbatim
@@ -434,10 +433,9 @@
 *>          > 0:  A routine returned an error code.  INFO is the
 *>                absolute value of the INFO value returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

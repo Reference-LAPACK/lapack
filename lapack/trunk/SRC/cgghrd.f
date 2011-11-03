@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGGHRD( COMPQ, COMPZ, N, ILO, IHI, A, LDA, B, LDB, Q,
 *                          LDQ, Z, LDZ, INFO )
@@ -30,11 +30,11 @@
 *      $                   Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGGHRD reduces a pair of complex matrices (A,B) to generalized upper
 *> Hessenberg form using unitary transformations, where A is a
@@ -61,11 +61,10 @@
 *> If Q1 is the unitary matrix from the QR factorization of B in the
 *> original equation A*x = lambda*B*x, then CGGHRD reduces the original
 *> problem to generalized Hessenberg form.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMPQ
 *> \verbatim
@@ -178,10 +177,9 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -192,16 +190,14 @@
 *
 *> \ingroup complexOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  This routine reduces A to Hessenberg and B to triangular form by
 *>  an unblocked reduction, as described in _Matrix_Computations_,
 *>  by Golub and van Loan (Johns Hopkins Press).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

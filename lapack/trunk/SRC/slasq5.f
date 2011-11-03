@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLASQ5( I0, N0, Z, PP, TAU, DMIN, DMIN1, DMIN2, DN,
 *                          DNM1, DNM2, IEEE )
@@ -30,19 +30,18 @@
 *       REAL               Z( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLASQ5 computes one dqds transform in ping-pong form, one
 *> version for IEEE machines another for non IEEE machines.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] I0
 *> \verbatim
@@ -116,10 +115,9 @@
 *>          IEEE is LOGICAL
 *>        Flag for IEEE or non IEEE arithmetic.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

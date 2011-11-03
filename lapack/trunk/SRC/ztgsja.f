@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B,
 *                          LDB, TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV,
@@ -34,11 +34,11 @@
 *      $                   U( LDU, * ), V( LDV, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZTGSJA computes the generalized singular value decomposition (GSVD)
 *> of two complex upper triangular (or trapezoidal) matrices A and B.
@@ -124,11 +124,10 @@
 *> The computation of the unitary transformation matrices U, V or Q
 *> is optional.  These matrices may either be formed explicitly, or they
 *> may be postmultiplied into input matrices U1, V1, or Q1.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBU
 *> \verbatim
@@ -332,19 +331,20 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          = 1:  the procedure does not converge after MAXIT cycles.
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  MAXIT   INTEGER
 *>          MAXIT specifies the total loops that the iterative procedure
 *>          may take. If after MAXIT cycles, the routine fails to
 *>          converge, we return INFO = 1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -355,10 +355,9 @@
 *
 *> \ingroup complex16OTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  ZTGSJA essentially uses a variant of Kogbetliantz algorithm to reduce
@@ -373,7 +372,6 @@
 *>                C1**2 + S1**2 = I,
 *>
 *>  and R1 is an L-by-L nonsingular upper triangular matrix.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

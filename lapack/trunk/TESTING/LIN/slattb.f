@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLATTB( IMAT, UPLO, TRANS, DIAG, ISEED, N, KD, AB,
 *                          LDAB, B, WORK, INFO )
@@ -20,20 +20,19 @@
 *       REAL               AB( LDAB, * ), B( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLATTB generates a triangular test matrix in 2-dimensional storage.
 *> IMAT and UPLO uniquely specify the properties of the test matrix,
 *> which is returned in the array A.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IMAT
 *> \verbatim
@@ -119,10 +118,9 @@
 *>          = 0:  successful exit
 *>          < 0: if INFO = -k, the k-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

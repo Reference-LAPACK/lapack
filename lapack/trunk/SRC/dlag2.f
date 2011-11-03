@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAG2( A, LDA, B, LDB, SAFMIN, SCALE1, SCALE2, WR1,
 *                         WR2, WI )
@@ -29,11 +29,11 @@
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAG2 computes the eigenvalues of a 2 x 2 generalized eigenvalue
 *> problem  A - w B, with scaling as necessary to avoid over-/underflow.
@@ -44,11 +44,10 @@
 *>
 *> where  s  is a non-negative scaling factor chosen so that  w,  w B,
 *> and  s A  do not overflow and, if possible, do not underflow, either.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] A
 *> \verbatim
@@ -140,10 +139,9 @@
 *>          eigenvalue is complex, then WI is SCALE1 times the imaginary
 *>          part of the eigenvalues.  WI will always be non-negative.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

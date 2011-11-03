@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CSTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 * 
@@ -29,22 +29,21 @@
 *       COMPLEX            Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CSTEQR computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric tridiagonal matrix using the implicit QL or QR method.
 *> The eigenvectors of a full or band complex Hermitian matrix can also
 *> be found if CHETRD or CHPTRD or CHBTRD has been used to reduce this
 *> matrix to tridiagonal form.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMPZ
 *> \verbatim
@@ -117,10 +116,9 @@
 *>                matrix which is unitarily similar to the original
 *>                matrix.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

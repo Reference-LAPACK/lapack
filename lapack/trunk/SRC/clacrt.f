@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLACRT( N, CX, INCX, CY, INCY, C, S )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX            CX( * ), CY( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLACRT performs the operation
 *>
@@ -40,11 +40,10 @@
 *>    ( -s  c )( y )      ( y )
 *>
 *> where c and s are complex and the vectors x and y are complex.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -90,10 +89,9 @@
 *>             [  C   S  ].
 *>             [ -S   C  ]
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       INTEGER          FUNCTION ICMAX1( N, CX, INCX )
 * 
@@ -27,24 +27,21 @@
 *       COMPLEX            CX( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ICMAX1 finds the index of the element whose real part has maximum
 *> absolute value.
 *>
 *> Based on ICAMAX from Level 1 BLAS.
 *> The change is to use the 'genuine' absolute value.
-*>
-*> Contributed by Nick Higham for use with CLACON.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -63,10 +60,9 @@
 *>          INCX is INTEGER
 *>          The spacing between successive values of CX.  INCX >= 1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -76,6 +72,11 @@
 *> \date November 2011
 *
 *> \ingroup complexOTHERauxiliary
+*
+*> \par Contributors:
+*  ==================
+*>
+*> Nick Higham for use with CLACON.
 *
 *  =====================================================================
       INTEGER          FUNCTION ICMAX1( N, CX, INCX )

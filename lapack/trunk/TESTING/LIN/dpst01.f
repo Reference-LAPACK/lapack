@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DPST01( UPLO, N, A, LDA, AFAC, LDAFAC, PERM, LDPERM,
 *                          PIV, RWORK, RESID, RANK )
@@ -22,11 +22,11 @@
 *       INTEGER            PIV( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DPST01 reconstructs a symmetric positive semidefinite matrix A
 *> from its L or U factors and the permutation matrix P and computes
@@ -34,11 +34,10 @@
 *>    norm( P*L*L'*P' - A ) / ( N * norm(A) * EPS ) or
 *>    norm( P*U'*U*P' - A ) / ( N * norm(A) * EPS ),
 *> where EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -118,10 +117,9 @@
 *>          RANK is INTEGER
 *>          number of nonzero singular values of A.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

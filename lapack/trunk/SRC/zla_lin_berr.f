@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
 * 
@@ -28,22 +28,21 @@
 *       COMPLEX*16         RES( N, NRHS )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZLA_LIN_BERR computes componentwise relative backward error from
 *>    the formula
 *>        max(i) ( abs(R(i)) / ( abs(op(A_s))*abs(Y) + abs(B_s) )(i) )
 *>    where abs(Z) is the componentwise absolute value of the matrix
 *>    or vector Z.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -86,10 +85,9 @@
 *>          BERR is COMPLEX*16 array, dimension (NRHS)
 *>     The componentwise relative backward error from the formula above.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

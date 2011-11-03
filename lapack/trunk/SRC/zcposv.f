@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZCPOSV( UPLO, N, NRHS, A, LDA, B, LDB, X, LDX, WORK,
 *                          SWORK, RWORK, ITER, INFO )
@@ -32,11 +32,11 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZCPOSV computes the solution to a complex system of linear equations
 *>    A * X = B,
@@ -69,11 +69,10 @@
 *>     o EPS is the machine epsilon returned by DLAMCH('Epsilon')
 *> The value ITERMAX and BWDMAX are fixed to 30 and 1.0D+00
 *> respectively.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -193,10 +192,9 @@
 *>                factorization could not be completed, and the solution
 *>                has not been computed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

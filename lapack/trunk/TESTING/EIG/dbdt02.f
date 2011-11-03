@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DBDT02( M, N, B, LDB, C, LDC, U, LDU, WORK, RESID )
 * 
@@ -19,11 +19,11 @@
 *      $                   WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DBDT02 tests the change of basis C = U' * B by computing the residual
 *>
@@ -31,11 +31,10 @@
 *>
 *> where B and C are M by N matrices, U is an M by M orthogonal matrix,
 *> and EPS is the machine precision.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -96,10 +95,9 @@
 *>          RESID is DOUBLE PRECISION
 *>          RESID = norm( B - U * C ) / ( max(m,n) * norm(B) * EPS ),
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

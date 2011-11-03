@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGEJSV( JOBA, JOBU, JOBV, JOBR, JOBT, JOBP,
 *                          M, N, A, LDA, SVA, U, LDU, V, LDV,
@@ -33,11 +33,11 @@
 *       CHARACTER*1 JOBA, JOBP, JOBR, JOBT, JOBU, JOBV
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGEJSV computes the singular value decomposition (SVD) of a real M-by-N
 *> matrix [A], where M >= N. The SVD of [A] is written as
@@ -51,11 +51,10 @@
 *> the right singular vectors of [A], respectively. The matrices [U] and [V]
 *> are computed and stored in the arrays U and V, respectively. The diagonal
 *> of [SIGMA] is computed and stored in the array SVA.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] JOBA
 *> \verbatim
@@ -381,10 +380,9 @@
 *>           > 0 :  SGEJSV  did not converge in the maximal allowed number
 *>                  of sweeps. The computed values may be inaccurate.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -395,10 +393,9 @@
 *
 *> \ingroup realGEcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  SGEJSV implements a preconditioned Jacobi SVD algorithm. It uses SGEQP3,
@@ -439,12 +436,17 @@
 *>  this extra QRF step easily. The implementer can also improve data movement
 *>  (matrix transpose, matrix copy, matrix transposed copy) - this
 *>  implementation of SGEJSV uses only the simplest, naive data movement.
-*>
-*>  Contributors
+*> \endverbatim
+*
+*> \par Contributors:
+*  ==================
 *>
 *>  Zlatko Drmac (Zagreb, Croatia) and Kresimir Veselic (Hagen, Germany)
+*
+*> \par References:
+*  ================
 *>
-*>  References
+*> \verbatim
 *>
 *> [1] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm I.
 *>     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1322-1342.
@@ -459,13 +461,13 @@
 *> [4] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
 *>     QSVD, (H,K)-SVD computations.
 *>     Department of Mathematics, University of Zagreb, 2008.
-*>
-*>  Bugs, examples and comments
+*> \endverbatim
+*
+*>  \par Bugs, examples and comments:
+*   =================================
 *>
 *>  Please report all bugs and send interesting examples and/or comments to
 *>  drmac@math.hr. Thank you.
-*>
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SGEJSV( JOBA, JOBU, JOBV, JOBR, JOBT, JOBP,

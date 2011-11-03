@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DSYTD2( UPLO, N, A, LDA, D, E, TAU, INFO )
 * 
@@ -28,19 +28,18 @@
 *       DOUBLE PRECISION   A( LDA, * ), D( * ), E( * ), TAU( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DSYTD2 reduces a real symmetric matrix A to symmetric tridiagonal
 *> form T by an orthogonal similarity transformation: Q**T * A * Q = T.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -112,10 +111,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -126,10 +124,9 @@
 *
 *> \ingroup doubleSYcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  If UPLO = 'U', the matrix Q is represented as a product of elementary
@@ -171,7 +168,6 @@
 *>
 *>  where d and e denote diagonal and off-diagonal elements of T, and vi
 *>  denotes an element of the vector defining H(i).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

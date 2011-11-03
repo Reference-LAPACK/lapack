@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CLATSP( UPLO, N, X, ISEED )
 * 
@@ -19,11 +19,11 @@
 *       COMPLEX            X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CLATSP generates a special test matrix for the complex symmetric
 *> (indefinite) factorization for packed matrices.  The pivot blocks of
@@ -33,11 +33,10 @@
 *>    2x2 pivot block, diagonalizable
 *>    (cycle repeats)
 *> A row interchange is required for each non-diagonalizable 2x2 block.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -69,10 +68,9 @@
 *>          On entry, the seed for the random number generator.  The last
 *>          of the four integers must be odd.  (modified on exit)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

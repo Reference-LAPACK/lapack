@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DERRGG( PATH, NUNIT )
 * 
@@ -15,20 +15,19 @@
 *       INTEGER            NUNIT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DERRGG tests the error exits for DGGES, DGGESX, DGGEV, DGGEVX,
 *> DGGGLM, DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD, DGGSVP, DHGEQZ,
 *> DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA, and DTGSYL.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PATH
 *> \verbatim
@@ -41,10 +40,9 @@
 *>          NUNIT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

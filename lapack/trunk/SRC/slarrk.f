@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLARRK( N, IW, GL, GU,
 *                           D, E2, PIVMIN, RELTOL, W, WERR, INFO)
@@ -29,11 +29,11 @@
 *       REAL               D( * ), E2( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLARRK computes one eigenvalue of a symmetric tridiagonal
 *> matrix T to suitable accuracy. This is an auxiliary code to be
@@ -46,11 +46,10 @@
 *> See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
 *> Matrix", Report CS41, Computer Science Dept., Stanford
 *> University, July 21, 1966.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -120,17 +119,18 @@
 *>          INFO is INTEGER
 *>          = 0:       Eigenvalue converged
 *>          = -1:      Eigenvalue did NOT converge
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  FUDGE   REAL            , default = 2
 *>          A "fudge factor" to widen the Gershgorin intervals.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAUU2( UPLO, N, A, LDA, INFO )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLAUU2 computes the product U * U**T or L**T * L, where the triangular
 *> factor U or L is stored in the upper or lower triangular part of
@@ -44,11 +44,10 @@
 *> overwriting the factor L in A.
 *>
 *> This is the unblocked form of the algorithm, calling Level 2 BLAS.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -87,10 +86,9 @@
 *>          = 0: successful exit
 *>          < 0: if INFO = -k, the k-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

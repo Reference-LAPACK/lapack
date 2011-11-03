@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, KU,
 *                          N5, IMAT, NFAIL, NERRS, NOUT )
@@ -19,22 +19,21 @@
 *      $                   NFAIL, NOUT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ALAERH is an error handler for the LAPACK routines.  It prints the
 *> header if this is the first error message and prints the error code
 *> and form of recovery, if any.  The character evaluations in this
 *> routine may make it slow, but it should not be called once the LAPACK
 *> routines are fully debugged.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] PATH
 *> \verbatim
@@ -131,10 +130,9 @@
 *>          NOUT is INTEGER
 *>          The unit number on which results are to be printed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

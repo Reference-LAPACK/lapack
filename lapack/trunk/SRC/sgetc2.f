@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGETC2( N, A, LDA, IPIV, JPIV, INFO )
 * 
@@ -28,11 +28,11 @@
 *       REAL               A( LDA, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGETC2 computes an LU factorization with complete pivoting of the
 *> n-by-n matrix A. The factorization has the form A = P * L * U * Q,
@@ -40,11 +40,10 @@
 *> unit diagonal elements and U is upper triangular.
 *>
 *> This is the Level 2 BLAS algorithm.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -90,10 +89,9 @@
 *>                we try to solve for x in Ax = b. So U is perturbed to
 *>                avoid the overflow.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -104,18 +102,12 @@
 *
 *> \ingroup realGEauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
 *>     Umea University, S-901 87 Umea, Sweden.
-*>
-*> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE SGETC2( N, A, LDA, IPIV, JPIV, INFO )
 *

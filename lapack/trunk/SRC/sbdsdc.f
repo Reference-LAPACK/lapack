@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SBDSDC( UPLO, COMPQ, N, D, E, U, LDU, VT, LDVT, Q, IQ,
 *                          WORK, IWORK, INFO )
@@ -31,11 +31,11 @@
 *      $                   VT( LDVT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SBDSDC computes the singular value decomposition (SVD) of a real
 *> N-by-N (upper or lower) bidiagonal matrix B:  B = U * S * VT,
@@ -55,11 +55,10 @@
 *> The code currently calls SLASDQ if singular values only are desired.
 *> However, it can be slightly modified to compute singular values
 *> using the divide and conquer method.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -183,10 +182,9 @@
 *>          > 0:  The algorithm failed to compute a singular value.
 *>                The update process of divide and conquer failed.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -197,16 +195,11 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
-*> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SBDSDC( UPLO, COMPQ, N, D, E, U, LDU, VT, LDVT, Q, IQ,

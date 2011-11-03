@@ -5,8 +5,8 @@ C> \brief \b DGETRF VARIANT: left-looking Level 3 BLAS version of the algorithm.
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGETRF ( M, N, A, LDA, IPIV, INFO)
 * 
@@ -37,8 +37,8 @@ C> This is the left-looking Level 3 BLAS version of the algorithm.
 C>
 C>\endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 C> \param[in] M
 C> \verbatim
@@ -85,8 +85,8 @@ C>                to solve a system of equations.
 C> \endverbatim
 C>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 C> \author Univ. of Tennessee 
 C> \author Univ. of California Berkeley 

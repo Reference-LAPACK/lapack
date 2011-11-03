@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARRD( RANGE, ORDER, N, VL, VU, IL, IU, GERS,
 *                           RELTOL, D, E, E2, PIVMIN, NSPLIT, ISPLIT,
@@ -35,11 +35,11 @@
 *      $                   GERS( * ), W( * ), WERR( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARRD computes the eigenvalues of a symmetric tridiagonal
 *> matrix T to suitable accuracy. This is an auxiliary code to be
@@ -55,11 +55,10 @@
 *> See W. Kahan "Accurate Eigenvalues of a Symmetric Tridiagonal
 *> Matrix", Report CS41, Computer Science Dept., Stanford
 *> University, July 21, 1966.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] RANGE
 *> \verbatim
@@ -279,10 +278,12 @@
 *>                                        floating-point arithmetic.
 *>                        Cure: Increase the PARAMETER "FUDGE",
 *>                              recompile, and try again.
+*> \endverbatim
+*
+*> \par Internal Parameters:
+*  =========================
 *>
-*>  Internal Parameters
-*>  ===================
-*>
+*> \verbatim
 *>  FUDGE   DOUBLE PRECISION, default = 2
 *>          A "fudge factor" to widen the Gershgorin intervals.  Ideally,
 *>          a value of 1 should work, but on machines with sloppy
@@ -290,19 +291,20 @@
 *>          publicly released versions should be large enough to handle
 *>          the worst machine around.  Note that this has no effect
 *>          on accuracy of the solution.
-*>
-*>  Based on contributions by
-*>     W. Kahan, University of California, Berkeley, USA
-*>     Beresford Parlett, University of California, Berkeley, USA
-*>     Jim Demmel, University of California, Berkeley, USA
-*>     Inderjit Dhillon, University of Texas, Austin, USA
-*>     Osni Marques, LBNL/NERSC, USA
-*>     Christof Voemel, University of California, Berkeley, USA
 *> \endverbatim
 *>
+*> \par Contributors:
+*  ==================
+*>
+*>     W. Kahan, University of California, Berkeley, USA \n
+*>     Beresford Parlett, University of California, Berkeley, USA \n
+*>     Jim Demmel, University of California, Berkeley, USA \n
+*>     Inderjit Dhillon, University of Texas, Austin, USA \n
+*>     Osni Marques, LBNL/NERSC, USA \n
+*>     Christof Voemel, University of California, Berkeley, USA \n
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

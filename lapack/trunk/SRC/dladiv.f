@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLADIV( A, B, C, D, P, Q )
 * 
@@ -24,11 +24,11 @@
 *       DOUBLE PRECISION   A, B, C, D, P, Q
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLADIV performs complex division in  real arithmetic
 *>
@@ -38,11 +38,10 @@
 *>
 *> The algorithm is due to Robert L. Smith and can be found
 *> in D. Knuth, The art of Computer Programming, Vol.2, p.195
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] A
 *> \verbatim
@@ -75,10 +74,9 @@
 *>          Q is DOUBLE PRECISION
 *>          The scalars p and q in the above expression.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

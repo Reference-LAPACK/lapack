@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZQRT04(M,N,NB,RESULT)
 * 
@@ -15,18 +15,17 @@
 *       .. Return values ..
 *       DOUBLE PRECISION RESULT(6)
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZQRT04 tests ZGEQRT and ZGEMQRT.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -58,10 +57,9 @@
 *>          RESULT(5) = | C Q - C Q | 
 *>          RESULT(6) = | C Q^H - C Q^H |
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

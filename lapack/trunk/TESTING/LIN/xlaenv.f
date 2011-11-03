@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE XLAENV( ISPEC, NVALUE )
 * 
@@ -14,19 +14,18 @@
 *       INTEGER            ISPEC, NVALUE
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> XLAENV sets certain machine- and problem-dependent quantities
 *> which will later be retrieved by ILAENV.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] ISPEC
 *> \verbatim
@@ -63,10 +62,9 @@
 *>          NVALUE is INTEGER
 *>          The value of the parameter specified by ISPEC.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

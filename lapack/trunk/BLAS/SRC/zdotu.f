@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       COMPLEX*16 FUNCTION ZDOTU(N,ZX,INCX,ZY,INCY)
 * 
@@ -17,18 +17,17 @@
 *       COMPLEX*16 ZX(*),ZY(*)
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZDOTU forms the dot product of two vectors.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -39,15 +38,13 @@
 *
 *> \ingroup complex16_blas_level1
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>     jack dongarra, 3/11/78.
 *>     modified 12/3/93, array(1) declarations changed to array(*)
-*>
 *> \endverbatim
 *>
 *  =====================================================================

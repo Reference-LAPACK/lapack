@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGQRTS( N, M, P, A, AF, Q, R, LDA, TAUA, B, BF, Z, T,
 *                          BWK, LDB, TAUB, WORK, LWORK, RWORK, RESULT )
@@ -22,19 +22,18 @@
 *      $                   WORK( LWORK ), Z( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGQRTS tests DGGQRF, which computes the GQR factorization of an
 *> N-by-M matrix A and a N-by-P matrix B: A = Q*R and B = Q*T*Z.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -160,10 +159,9 @@
 *>            RESULT(3) = norm( I - Q'*Q ) / ( M*ULP )
 *>            RESULT(4) = norm( I - Z'*Z ) / ( P*ULP )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

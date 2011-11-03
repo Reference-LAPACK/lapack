@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 * 
@@ -29,11 +29,11 @@
 *       COMPLEX            A( LDA, * ), RHS( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CGESC2 solves a system of linear equations
 *>
@@ -42,11 +42,10 @@
 *> with a general N-by-N matrix A using the LU factorization with
 *> complete pivoting computed by CGETC2.
 *>
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -94,10 +93,9 @@
 *>           On exit, SCALE contains the scale factor. SCALE is chosen
 *>           0 <= SCALE <= 1 to prevent owerflow in the solution.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -108,18 +106,12 @@
 *
 *> \ingroup complexGEauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>     Bo Kagstrom and Peter Poromaa, Department of Computing Science,
 *>     Umea University, S-901 87 Umea, Sweden.
-*>
-*> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE CGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE )
 *

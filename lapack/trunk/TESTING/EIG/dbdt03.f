@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
 *                          RESID )
@@ -21,11 +21,11 @@
 *      $                   VT( LDVT, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DBDT03 reconstructs a bidiagonal matrix B from its SVD:
 *>    S = U' * B * V
@@ -34,11 +34,10 @@
 *> The test ratio to test the singular value decomposition is
 *>    RESID = norm( B - U * S * VT ) / ( n * norm(B) * EPS )
 *> where VT = V' and EPS is the machine precision.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -119,10 +118,9 @@
 *>          RESID is DOUBLE PRECISION
 *>          The test ratio:  norm(B - U * S * V') / ( n * norm(A) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

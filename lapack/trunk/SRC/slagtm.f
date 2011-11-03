@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAGTM( TRANS, N, NRHS, ALPHA, DL, D, DU, X, LDX, BETA,
 *                          B, LDB )
@@ -31,11 +31,11 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAGTM performs a matrix-vector product of the form
 *>
@@ -44,11 +44,10 @@
 *> where A is a tridiagonal matrix of order N, B and X are N by NRHS
 *> matrices, and alpha and beta are real scalars, each of which may be
 *> 0., 1., or -1.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANS
 *> \verbatim
@@ -129,10 +128,9 @@
 *>          LDB is INTEGER
 *>          The leading dimension of the array B.  LDB >= max(N,1).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

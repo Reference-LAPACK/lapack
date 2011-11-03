@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DERRRFP( NUNIT )
 * 
@@ -14,11 +14,11 @@
 *       INTEGER            NUNIT
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DERRRFP tests the error exits for the DOUBLE PRECISION driver routines
 *> for solving linear systems of equations.
@@ -26,21 +26,19 @@
 *> DDRVRFP tests the DOUBLE PRECISION LAPACK RFP routines:
 *>     DTFSM, DTFTRI, DSFRK, DTFTTP, DTFTTR, DPFTRF, DPFTRS, DTPTTF,
 *>     DTPTTR, DTRTTF, and DTRTTP
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NUNIT
 *> \verbatim
 *>          NUNIT is INTEGER
 *>          The unit number for output.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

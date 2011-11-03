@@ -1,11 +1,9 @@
 *> \brief \b ILAVER returns the LAPACK version.
-*>\details
+*> \details
 *> \b Purpose:
-*>\verbatim
-*>
+*> \verbatim
 *>  This subroutine returns the LAPACK version.
-*>
-*>\endverbatim
+*> \endverbatim
 *>
 *> \author LAPACK is a software package provided by Univ. of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..
 *> \date November 2011

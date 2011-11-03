@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZPTTS2( IUPLO, N, NRHS, D, E, B, LDB )
 * 
@@ -28,11 +28,11 @@
 *       COMPLEX*16         B( LDB, * ), E( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZPTTS2 solves a tridiagonal system of the form
 *>    A * X = B
@@ -40,11 +40,10 @@
 *> D is a diagonal matrix specified in the vector D, U (or L) is a unit
 *> bidiagonal matrix whose superdiagonal (subdiagonal) is specified in
 *> the vector E, and X and B are N by NRHS matrices.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IUPLO
 *> \verbatim
@@ -98,10 +97,9 @@
 *>          LDB is INTEGER
 *>          The leading dimension of the array B.  LDB >= max(1,N).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

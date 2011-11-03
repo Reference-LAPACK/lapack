@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLATME( N, DIST, ISEED, D, MODE, COND, DMAX, EI, 
 *         RSIGN, 
@@ -25,11 +25,11 @@
 *       REAL               A( LDA, * ), D( * ), DS( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    SLATME generates random non-symmetric square matrices with
 *>    specified eigenvalues for testing LAPACK programs.
@@ -63,11 +63,10 @@
 *>
 *>    (Note: since the matrix cannot be reduced beyond Hessenberg form,
 *>     no packing options are available.)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N
 *> \verbatim
@@ -313,10 +312,9 @@
 *>            4  => Error return from SLARGE
 *>            5  => Zero singular value from SLATM1.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZLAVSP( UPLO, TRANS, DIAG, N, NRHS, A, IPIV, B, LDB,
 *                          INFO )
@@ -20,11 +20,11 @@
 *       COMPLEX*16         A( * ), B( LDB, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    ZLAVSP  performs one of the matrix-vector operations
 *>       x := A*x  or  x := A^T*x,
@@ -43,11 +43,10 @@
 *>    (or L or L * D).
 *>    If TRANS = 'C' or 'c', ZLAVSP multiplies either by U^T or D * U^T
 *>    (or L^T or D * L^T ).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  UPLO   - CHARACTER*1
@@ -115,10 +114,9 @@
 *>           A negative value, say -K, indicates that the K-th argument
 *>           has an illegal value.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

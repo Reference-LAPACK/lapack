@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CCKLSE( NN, MVAL, PVAL, NVAL, NMATS, ISEED, THRESH,
 *                          NMAX, A, AF, B, BF, X, WORK, RWORK, NIN, NOUT,
@@ -23,19 +23,18 @@
 *      $                   X( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CCKLSE tests CGGLSE - a subroutine for solving linear equality
 *> constrained least square problem (LSE).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NN
 *> \verbatim
@@ -151,10 +150,9 @@
 *>          > 0 :  If CLATMS returns an error code, the absolute value
 *>                 of it is returned.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       REAL             FUNCTION SSXT1( IJOB, D1, N1, D2, N2, ABSTOL,
 *                        ULP, UNFL )
@@ -19,11 +19,11 @@
 *       REAL               D1( * ), D2( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SSXT1  computes the difference between a set of eigenvalues.
 *> The result is returned as the function value.
@@ -34,11 +34,10 @@
 *> IJOB = 2:   Computes   max { min | D1(i)-D2(j) | /
 *>                         i     j
 *>                              ( ABSTOL + |D1(i)|*ULP ) }
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] IJOB
 *> \verbatim
@@ -90,10 +89,9 @@
 *>          The smallest positive number whose reciprocal does not
 *>          overflow.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -6,8 +6,8 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -18,8 +18,7 @@
 *
 *> \ingroup auxOTHERcomputational
 *
-*  =====================================================================
-      PROGRAM SECONDTST
+*  =====================================================================      PROGRAM SECONDTST
 *
 *  -- LAPACK test routine (version 3.3.1) --
 *

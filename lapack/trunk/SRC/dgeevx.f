@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, WR, WI,
 *                          VL, LDVL, VR, LDVR, ILO, IHI, SCALE, ABNRM,
@@ -34,11 +34,11 @@
 *      $                   WI( * ), WORK( * ), WR( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DGEEVX computes for an N-by-N real nonsymmetric matrix A, the
 *> eigenvalues and, optionally, the left and/or right eigenvectors.
@@ -69,11 +69,10 @@
 *> (in exact arithmetic) but diagonal scaling will.  For further
 *> explanation of balancing, see section 4.10.2 of the LAPACK
 *> Users' Guide.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] BALANC
 *> \verbatim
@@ -286,10 +285,9 @@
 *>                have been computed; elements 1:ILO-1 and i+1:N of WR
 *>                and WI contain eigenvalues which have converged.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

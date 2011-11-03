@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DTRTTF( TRANSR, UPLO, N, A, LDA, ARF, INFO )
 * 
@@ -28,19 +28,18 @@
 *       DOUBLE PRECISION   A( 0: LDA-1, 0: * ), ARF( 0: * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DTRTTF copies a triangular matrix A from standard full format (TR)
 *> to rectangular full packed format (TF) .
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANSR
 *> \verbatim
@@ -92,10 +91,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -106,10 +104,9 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  We first consider Rectangular Full Packed (RFP) Format when N is
@@ -192,12 +189,8 @@
 *>     02 12 22 00 01             00 10 20 30 40 50
 *>     03 13 23 33 11             33 11 21 31 41 51
 *>     04 14 24 34 44             43 44 22 32 42 52
-*>
-*>  Reference
-*>  =========
-*>
 *> \endverbatim
-*>
+*
 *  =====================================================================
       SUBROUTINE DTRTTF( TRANSR, UPLO, N, A, LDA, ARF, INFO )
 *

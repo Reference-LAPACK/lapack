@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZSBMV( UPLO, N, K, ALPHA, A, LDA, X, INCX, BETA, Y,
 *                         INCY )
@@ -20,11 +20,11 @@
 *       COMPLEX*16         A( LDA, * ), X( * ), Y( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZSBMV  performs the matrix-vector  operation
 *>
@@ -32,11 +32,10 @@
 *>
 *> where alpha and beta are scalars, x and y are n element vectors and
 *> A is an n by n symmetric band matrix, with k super-diagonals.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>  UPLO   - CHARACTER*1
@@ -136,10 +135,9 @@
 *>           Y. INCY must not be zero.
 *>           Unchanged on exit.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

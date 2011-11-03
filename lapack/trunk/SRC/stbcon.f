@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE STBCON( NORM, UPLO, DIAG, N, KD, AB, LDAB, RCOND, WORK,
 *                          IWORK, INFO )
@@ -31,11 +31,11 @@
 *       REAL               AB( LDAB, * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> STBCON estimates the reciprocal of the condition number of a
 *> triangular band matrix A, in either the 1-norm or the infinity-norm.
@@ -44,11 +44,10 @@
 *> norm(inv(A)), then the reciprocal of the condition number is
 *> computed as
 *>    RCOND = 1 / ( norm(A) * norm(inv(A)) ).
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] NORM
 *> \verbatim
@@ -127,10 +126,9 @@
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

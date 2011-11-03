@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZHSEIN( SIDE, EIGSRC, INITV, SELECT, N, H, LDH, W, VL,
 *                          LDVL, VR, LDVR, MM, M, WORK, RWORK, IFAILL,
@@ -34,11 +34,11 @@
 *      $                   W( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZHSEIN uses inverse iteration to find specified right and/or left
 *> eigenvectors of a complex upper Hessenberg matrix H.
@@ -49,11 +49,10 @@
 *>              H * x = w * x,     y**h * H = w * y**h
 *>
 *> where y**h denotes the conjugate transpose of the vector y.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -217,10 +216,9 @@
 *>                failed to converge; see IFAILL and IFAILR for further
 *>                details.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -231,16 +229,14 @@
 *
 *> \ingroup complex16OTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>  Each eigenvector is normalized so that the element of largest
 *>  magnitude has magnitude 1; here the magnitude of a complex number
 *>  (x,y) is taken to be |x|+|y|.
-*>
 *> \endverbatim
 *>
 *  =====================================================================

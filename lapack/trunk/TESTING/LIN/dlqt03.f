@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLQT03( M, N, K, AF, C, CC, Q, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,22 +20,21 @@
 *      $                   WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLQT03 tests DORMLQ, which computes Q*C, Q'*C, C*Q or C*Q'.
 *>
 *> DLQT03 compares the results of a call to DORMLQ with the results of
 *> forming Q explicitly by a call to DORGLQ and then performing matrix
 *> multiplication by a call to DGEMM.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -120,10 +119,9 @@
 *>          RESULT(3) = norm( Q'*C - Q'*C )/ ( N * norm(C) * EPS )
 *>          RESULT(4) = norm( C*Q' - C*Q' )/ ( N * norm(C) * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

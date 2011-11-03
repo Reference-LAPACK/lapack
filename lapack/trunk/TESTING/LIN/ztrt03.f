@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZTRT03( UPLO, TRANS, DIAG, N, NRHS, A, LDA, SCALE,
 *                          CNORM, TSCAL, X, LDX, B, LDB, WORK, RESID )
@@ -22,11 +22,11 @@
 *      $                   X( LDX, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZTRT03 computes the residual for the solution to a scaled triangular
 *> system of equations A*x = s*b,  A**T *x = s*b,  or  A**H *x = s*b.
@@ -36,11 +36,10 @@
 *> right hand sides of
 *>    norm(s*b - op(A)*x) / ( norm(op(A)) * norm(x) * EPS ),
 *> where op(A) denotes A, A**T, or A**H, and EPS is the machine epsilon.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] UPLO
 *> \verbatim
@@ -155,10 +154,9 @@
 *>          The maximum over the number of right hand sides of
 *>          norm(op(A)*x - s*b) / ( norm(op(A)) * norm(x) * EPS ).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

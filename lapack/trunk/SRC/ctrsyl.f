@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE CTRSYL( TRANA, TRANB, ISGN, M, N, A, LDA, B, LDB, C,
 *                          LDC, SCALE, INFO )
@@ -30,11 +30,11 @@
 *       COMPLEX            A( LDA, * ), B( LDB, * ), C( LDC, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> CTRSYL solves the complex Sylvester matrix equation:
 *>
@@ -45,11 +45,10 @@
 *> M-by-M and B is N-by-N; the right hand side C and the solution X are
 *> M-by-N; and scale is an output scale factor, set <= 1 to avoid
 *> overflow in X.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] TRANA
 *> \verbatim
@@ -141,10 +140,9 @@
 *>               values were used to solve the equation (but the matrices
 *>               A and B are unchanged).
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

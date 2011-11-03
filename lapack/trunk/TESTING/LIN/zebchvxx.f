@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *      SUBROUTINE ZEBCHVXX( THRESH, PATH )
 *
@@ -18,8 +18,9 @@
 *  Purpose
 *  ======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \details \b Purpose:
+*> \verbatim
+*>
 *>  ZEBCHVXX will run Z**SVXX on a series of Hilbert matrices and then
 *>  compare the error bounds returned by Z**SVXX to see if the returned
 *>  answer indeed falls within those bounds.
@@ -79,10 +80,9 @@
 *>     type used plus one, which is 24 for single precision.
 *>     NMAX should be 6 for single and 11 for double.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

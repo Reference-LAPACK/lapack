@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGET38( RMAX, LMAX, NINFO, KNT, NIN )
 * 
@@ -18,21 +18,20 @@
 *       REAL               RMAX( 3 )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SGET38 tests STRSEN, a routine for estimating condition numbers of a
 *> cluster of eigenvalues and/or its associated right invariant subspace
 *>
 *> The test matrices are read from a file with logical unit number NIN.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[out] RMAX
 *> \verbatim
@@ -76,10 +75,9 @@
 *>          NIN is INTEGER
 *>          Input logical unit number.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

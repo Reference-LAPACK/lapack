@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )
 * 
@@ -28,11 +28,11 @@
 *       DOUBLE PRECISION   D( * ), E( * ), WORK( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DPTEQR computes all eigenvalues and, optionally, eigenvectors of a
 *> symmetric positive definite tridiagonal matrix by first factoring the
@@ -51,11 +51,10 @@
 *> form, however, may preclude the possibility of obtaining high
 *> relative accuracy in the small eigenvalues of the original matrix, if
 *> these eigenvalues range over many orders of magnitude.)
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] COMPZ
 *> \verbatim
@@ -130,10 +129,9 @@
 *>                      if INFO = N+i, i off-diagonal elements of the
 *>                      bidiagonal factor did not converge to zero.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

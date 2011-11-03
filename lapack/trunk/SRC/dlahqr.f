@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLAHQR( WANTT, WANTZ, N, ILO, IHI, H, LDH, WR, WI,
 *                          ILOZ, IHIZ, Z, LDZ, INFO )
@@ -29,23 +29,20 @@
 *       DOUBLE PRECISION   H( LDH, * ), WI( * ), WR( * ), Z( LDZ, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
-*> Purpose
-*>    =======
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    DLAHQR is an auxiliary routine called by DHSEQR to update the
 *>    eigenvalues and Schur decomposition already computed by DHSEQR, by
 *>    dealing with the Hessenberg submatrix in rows and columns ILO to
 *>    IHI.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] WANTT
 *> \verbatim
@@ -177,10 +174,9 @@
 *>                  where U is the orthogonal matrix in (*)
 *>                  (regardless of the value of WANTT.)
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -191,10 +187,9 @@
 *
 *> \ingroup doubleOTHERauxiliary
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
+*> \par Further Details:
+*  =====================
+*>
 *> \verbatim
 *>
 *>     02-96 Based on modifications by
@@ -206,7 +201,6 @@
 *>     It is (1) more robust against overflow and underflow and
 *>     (2) adopts the more conservative Ahues & Tisseur stopping
 *>     criterion (LAWN 122, 1997).
-*>
 *> \endverbatim
 *>
 *  =====================================================================

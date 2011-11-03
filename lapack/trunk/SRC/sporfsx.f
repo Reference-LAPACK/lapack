@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SPORFSX( UPLO, EQUED, N, NRHS, A, LDA, AF, LDAF, S, B,
 *                           LDB, X, LDX, RCOND, BERR, N_ERR_BNDS,
@@ -38,13 +38,11 @@
 *      $                   ERR_BNDS_COMP( NRHS, * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
-*> Purpose
-*>    =======
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *>    SPORFSX improves the computed solution to a system of linear
 *>    equations when the coefficient matrix is symmetric positive
@@ -58,11 +56,10 @@
 *>    before calling this routine, as described by arguments EQUED and S
 *>    below. In this case, the solution and error bounds returned are
 *>    for the original unequilibrated system.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \verbatim
 *>     Some optional parameters are bundled in the PARAMS array.  These
@@ -378,10 +375,9 @@
 *>         about all of the right-hand sides check ERR_BNDS_NORM or
 *>         ERR_BNDS_COMP.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SLAMRG( N1, N2, A, STRD1, STRD2, INDEX )
 * 
@@ -28,20 +28,19 @@
 *       REAL               A( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> SLAMRG will create a permutation list which will merge the elements
 *> of A (which is composed of two independently sorted sets) into a
 *> single set which is sorted in ascending order.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] N1
 *> \verbatim
@@ -84,10 +83,9 @@
 *>         if B( I ) = A( INDEX( I ) ) for I=1,N1+N2, then B will be
 *>         sorted in ascending order.
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 

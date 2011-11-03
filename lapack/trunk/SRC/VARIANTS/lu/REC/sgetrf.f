@@ -5,8 +5,8 @@ C> \brief \b SGETRF VARIANT: iterative version of Sivan Toledo's recursive LU al
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE SGETRF( M, N, A, LDA, IPIV, INFO )
 * 
@@ -71,8 +71,8 @@ C> 1065-1081. http://dx.doi.org/10.1137/S0895479896297744
 C>
 C>\endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 C> \param[in] M
 C> \verbatim
@@ -119,8 +119,8 @@ C>                to solve a system of equations.
 C> \endverbatim
 C>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 C> \author Univ. of Tennessee 
 C> \author Univ. of California Berkeley 

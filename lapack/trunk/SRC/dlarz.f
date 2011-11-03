@@ -15,8 +15,8 @@
 *> [TXT]</a>
 *> \endhtmlonly 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE DLARZ( SIDE, M, N, L, V, INCV, TAU, C, LDC, WORK )
 * 
@@ -29,11 +29,11 @@
 *       DOUBLE PRECISION   C( LDC, * ), V( * ), WORK( * )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> DLARZ applies a real elementary reflector H to a real M-by-N
 *> matrix C, from either the left or the right. H is represented in the
@@ -47,11 +47,10 @@
 *>
 *>
 *> H is a product of k elementary reflectors as returned by DTZRZF.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
@@ -119,10 +118,9 @@
 *>                         (N) if SIDE = 'L'
 *>                      or (M) if SIDE = 'R'
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
@@ -133,15 +131,15 @@
 *
 *> \ingroup doubleOTHERcomputational
 *
-*
-*  Further Details
-*  ===============
-*>\details \b Further \b Details
-*> \verbatim
+*> \par Contributors:
+*  ==================
 *>
-*>  Based on contributions by
 *>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
+*
+*> \par Further Details:
+*  =====================
 *>
+*> \verbatim
 *> \endverbatim
 *>
 *  =====================================================================

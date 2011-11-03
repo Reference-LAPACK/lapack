@@ -5,8 +5,8 @@
 * Online html documentation available at 
 *            http://www.netlib.org/lapack/explore-html/ 
 *
-*  Definition
-*  ==========
+*  Definition:
+*  ===========
 *
 *       SUBROUTINE ZQRT01P( M, N, A, AF, Q, R, LDA, TAU, WORK, LWORK,
 *                          RWORK, RESULT )
@@ -20,22 +20,21 @@
 *      $                   R( LDA, * ), TAU( * ), WORK( LWORK )
 *       ..
 *  
-*  Purpose
-*  =======
 *
-*>\details \b Purpose:
-*>\verbatim
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
 *>
 *> ZQRT01P tests ZGEQRFP, which computes the QR factorization of an m-by-n
 *> matrix A, and partially tests ZUNGQR which forms the m-by-m
 *> orthogonal matrix Q.
 *>
 *> ZQRT01P compares R with Q'*A, and checks that Q is orthogonal.
-*>
-*>\endverbatim
+*> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] M
 *> \verbatim
@@ -110,10 +109,9 @@
 *>          RESULT(1) = norm( R - Q'*A ) / ( M * norm(A) * EPS )
 *>          RESULT(2) = norm( I - Q'*Q ) / ( M * EPS )
 *> \endverbatim
-*>
 *
-*  Authors
-*  =======
+*  Authors:
+*  ========
 *
 *> \author Univ. of Tennessee 
 *> \author Univ. of California Berkeley 
