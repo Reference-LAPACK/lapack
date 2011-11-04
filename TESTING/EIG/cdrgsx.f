@@ -109,7 +109,7 @@
 *> and DIF_l when testing the built-in test problems.
 *>
 *> Built-in Test Matrices
-*  ======================
+*> ======================
 *>
 *> All built-in test matrices are the 2 by 2 block of triangular
 *> matrices
