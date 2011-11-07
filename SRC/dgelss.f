@@ -196,10 +196,13 @@
       INTEGER            BDSPAC, BL, CHUNK, I, IASCL, IBSCL, IE, IL,
      $                   ITAU, ITAUP, ITAUQ, IWORK, LDWORK, MAXMN,
      $                   MAXWRK, MINMN, MINWRK, MM, MNTHR
+      INTEGER            LWORK_DGEQRF, LWORK_DORMQR, LWORK_DGEBRD,
+     $                   LWORK_DORMBR, LWORK_DORGBR, LWORK_DORMLQ,
+     $                   LWORK_DGELQF
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM, THR
 *     ..
 *     .. Local Arrays ..
-      DOUBLE PRECISION   VDUM( 1 )
+      DOUBLE PRECISION   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DBDSQR, DCOPY, DGEBRD, DGELQF, DGEMM, DGEMV,
@@ -252,11 +255,16 @@
 *              Path 1a - overdetermined, with many more rows than
 *                        columns
 *
+*              Compute space needed for DGEQRF
+               CALL DGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO )
+               LWORK_DGEQRF=DUM(1)
+*              Compute space needed for DORMQR
+               CALL DORMQR( 'L', 'T', M, NRHS, N, A, LDA, DUM(1), B,
+     $                   LDB, DUM(1), -1, INFO )
+               LWORK_DORMQR=DUM(1)
                MM = N
-               MAXWRK = MAX( MAXWRK, N + N*ILAENV( 1, 'DGEQRF', ' ', M,
-     $                       N, -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, N + NRHS*ILAENV( 1, 'DORMQR', 'LT',
-     $                       M, NRHS, N, -1 ) )
+               MAXWRK = MAX( MAXWRK, N + LWORK_DGEQRF )
+               MAXWRK = MAX( MAXWRK, N + LWORK_DORMQR )
             END IF
             IF( M.GE.N ) THEN
 *
@@ -265,12 +273,22 @@
 *              Compute workspace needed for DBDSQR
 *
                BDSPAC = MAX( 1, 5*N )
-               MAXWRK = MAX( MAXWRK, 3*N + ( MM + N )*ILAENV( 1,
-     $                       'DGEBRD', ' ', MM, N, -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, 3*N + NRHS*ILAENV( 1, 'DORMBR',
-     $                       'QLT', MM, NRHS, N, -1 ) )
-               MAXWRK = MAX( MAXWRK, 3*N + ( N - 1 )*ILAENV( 1,
-     $                       'DORGBR', 'P', N, N, N, -1 ) )
+*              Compute space needed for DGEBRD
+               CALL DGEBRD( MM, N, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+               LWORK_DGEBRD=DUM(1)
+*              Compute space needed for DORMBR
+               CALL DORMBR( 'Q', 'L', 'T', MM, NRHS, N, A, LDA, DUM(1),
+     $                B, LDB, DUM(1), -1, INFO )
+               LWORK_DORMBR=DUM(1)
+*              Compute space needed for DORGBR
+               CALL DORGBR( 'P', N, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+               LWORK_DORGBR=DUM(1)
+*              Compute total workspace needed 
+               MAXWRK = MAX( MAXWRK, 3*N + LWORK_DGEBRD )
+               MAXWRK = MAX( MAXWRK, 3*N + LWORK_DORMBR )
+               MAXWRK = MAX( MAXWRK, 3*N + LWORK_DORGBR )
                MAXWRK = MAX( MAXWRK, BDSPAC )
                MAXWRK = MAX( MAXWRK, N*NRHS )
                MINWRK = MAX( 3*N + MM, 3*N + NRHS, BDSPAC )
@@ -287,33 +305,57 @@
 *                 Path 2a - underdetermined, with many more columns
 *                 than rows
 *
-                  MAXWRK = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1,
-     $                                  -1 )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + 2*M*ILAENV( 1,
-     $                          'DGEBRD', ' ', M, M, -1, -1 ) )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M + NRHS*ILAENV( 1,
-     $                          'DORMBR', 'QLT', M, NRHS, M, -1 ) )
-                  MAXWRK = MAX( MAXWRK, M*M + 4*M +
-     $                          ( M - 1 )*ILAENV( 1, 'DORGBR', 'P', M,
-     $                          M, M, -1 ) )
+*                 Compute space needed for DGELQF
+                  CALL DGELQF( M, N, A, LDA, DUM(1), DUM(1),
+     $                -1, INFO )
+                  LWORK_DGELQF=DUM(1)
+*                 Compute space needed for DGEBRD
+                  CALL DGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+                  LWORK_DGEBRD=DUM(1)
+*                 Compute space needed for DORMBR
+                  CALL DORMBR( 'Q', 'L', 'T', M, NRHS, N, A, LDA, 
+     $                DUM(1), B, LDB, DUM(1), -1, INFO )
+                  LWORK_DORMBR=DUM(1)
+*                 Compute space needed for DORGBR
+                  CALL DORGBR( 'P', M, M, M, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+                  LWORK_DORGBR=DUM(1)
+*                 Compute space needed for DORMLQ
+                  CALL DORMLQ( 'L', 'T', N, NRHS, M, A, LDA, DUM(1),
+     $                 B, LDB, DUM(1), -1, INFO )
+                  LWORK_DORMLQ=DUM(1)
+*                 Compute total workspace needed 
+                  MAXWRK = M + LWORK_DGELQF
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_DGEBRD )
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_DORMBR )
+                  MAXWRK = MAX( MAXWRK, M*M + 4*M + LWORK_DORGBR )
                   MAXWRK = MAX( MAXWRK, M*M + M + BDSPAC )
                   IF( NRHS.GT.1 ) THEN
                      MAXWRK = MAX( MAXWRK, M*M + M + M*NRHS )
                   ELSE
                      MAXWRK = MAX( MAXWRK, M*M + 2*M )
                   END IF
-                  MAXWRK = MAX( MAXWRK, M + NRHS*ILAENV( 1, 'DORMLQ',
-     $                          'LT', N, NRHS, M, -1 ) )
+                  MAXWRK = MAX( MAXWRK, M + LWORK_DORMLQ )
                ELSE
 *
 *                 Path 2 - underdetermined
 *
-                  MAXWRK = 3*M + ( N + M )*ILAENV( 1, 'DGEBRD', ' ', M,
-     $                     N, -1, -1 )
-                  MAXWRK = MAX( MAXWRK, 3*M + NRHS*ILAENV( 1, 'DORMBR',
-     $                          'QLT', M, NRHS, M, -1 ) )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*ILAENV( 1, 'DORGBR',
-     $                          'P', M, N, M, -1 ) )
+*                 Compute space needed for DGEBRD
+                  CALL DGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+                  LWORK_DGEBRD=DUM(1)
+*                 Compute space needed for DORMBR
+                  CALL DORMBR( 'Q', 'L', 'T', M, NRHS, M, A, LDA, 
+     $                DUM(1), B, LDB, DUM(1), -1, INFO )
+                  LWORK_DORMBR=DUM(1)
+*                 Compute space needed for DORGBR
+                  CALL DORGBR( 'P', M, N, M, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+                  LWORK_DORGBR=DUM(1)
+                  MAXWRK = 3*M + LWORK_DGEBRD
+                  MAXWRK = MAX( MAXWRK, 3*M + LWORK_DORMBR )
+                  MAXWRK = MAX( MAXWRK, 3*M + LWORK_DORGBR )
                   MAXWRK = MAX( MAXWRK, BDSPAC )
                   MAXWRK = MAX( MAXWRK, N*NRHS )
                END IF
@@ -455,7 +497,7 @@
 *          compute right singular vectors in A
 *        (Workspace: need BDSPAC)
 *
-         CALL DBDSQR( 'U', N, N, 0, NRHS, S, WORK( IE ), A, LDA, VDUM,
+         CALL DBDSQR( 'U', N, N, 0, NRHS, S, WORK( IE ), A, LDA, DUM,
      $                1, B, LDB, WORK( IWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -638,7 +680,7 @@
 *           multiplying B by transpose of left singular vectors
 *        (Workspace: need BDSPAC)
 *
-         CALL DBDSQR( 'L', M, N, 0, NRHS, S, WORK( IE ), A, LDA, VDUM,
+         CALL DBDSQR( 'L', M, N, 0, NRHS, S, WORK( IE ), A, LDA, DUM,
      $                1, B, LDB, WORK( IWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70

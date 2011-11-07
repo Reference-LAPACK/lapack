@@ -208,8 +208,8 @@
 *> \ingroup doubleGEsing
 *
 *  =====================================================================
-      SUBROUTINE DGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,
-     $                   WORK, LWORK, INFO )
+      SUBROUTINE DGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU,
+     $                   VT, LDVT, WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -238,6 +238,9 @@
      $                   ITAU, ITAUP, ITAUQ, IU, IWORK, LDWRKR, LDWRKU,
      $                   MAXWRK, MINMN, MINWRK, MNTHR, NCU, NCVT, NRU,
      $                   NRVT, WRKBL
+      INTEGER            LWORK_DGEQRF, LWORK_DORGQR_N, LWORK_DORGQR_M,
+     $                   LWORK_DGEBRD, LWORK_DORGBR_P, LWORK_DORGBR_Q,
+     $                   LWORK_DGELQF, LWORK_DORGLQ_N, LWORK_DORGLQ_M
       DOUBLE PRECISION   ANRM, BIGNUM, EPS, SMLNUM
 *     ..
 *     .. Local Arrays ..
@@ -309,31 +312,46 @@
 *
             MNTHR = ILAENV( 6, 'DGESVD', JOBU // JOBVT, M, N, 0, 0 )
             BDSPAC = 5*N
+*           Compute space needed for DGEQRF
+            CALL DGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_DGEQRF=DUM(1)
+*           Compute space needed for DORGQR
+            CALL DORGQR( M, N, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_DORGQR_N=DUM(1)
+            CALL DORGQR( M, M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_DORGQR_M=DUM(1)
+*           Compute space needed for DGEBRD
+            CALL DGEBRD( N, N, A, LDA, S, DUM(1), DUM(1),
+     $                   DUM(1), DUM(1), -1, IERR )
+            LWORK_DGEBRD=DUM(1)
+*           Compute space needed for DORGBR P
+            CALL DORGBR( 'P', N, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, IERR )
+            LWORK_DORGBR_P=DUM(1)
+*           Compute space needed for DORGBR Q
+            CALL DORGBR( 'Q', N, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, IERR )
+            LWORK_DORGBR_Q=DUM(1)
+*
             IF( M.GE.MNTHR ) THEN
                IF( WNTUN ) THEN
 *
 *                 Path 1 (M much larger than N, JOBU='N')
 *
-                  MAXWRK = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1,
-     $                     -1 )
-                  MAXWRK = MAX( MAXWRK, 3*N+2*N*
-     $                     ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
+                  MAXWRK = N + LWORK_DGEQRF
+                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_DGEBRD )
                   IF( WNTVO .OR. WNTVAS )
-     $               MAXWRK = MAX( MAXWRK, 3*N+( N-1 )*
-     $                        ILAENV( 1, 'DORGBR', 'P', N, N, N, -1 ) )
+     $               MAXWRK = MAX( MAXWRK, 3*N+LWORK_DORGBR_P )
                   MAXWRK = MAX( MAXWRK, BDSPAC )
                   MINWRK = MAX( 4*N, BDSPAC )
                ELSE IF( WNTUO .AND. WNTVN ) THEN
 *
 *                 Path 2 (M much larger than N, JOBU='O', JOBVT='N')
 *
-                  WRKBL = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'DORGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+2*N*
-     $                    ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+N*
-     $                    ILAENV( 1, 'DORGBR', 'Q', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_DGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_DORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = MAX( N*N+WRKBL, N*N+M*N+N )
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -342,15 +360,11 @@
 *                 Path 3 (M much larger than N, JOBU='O', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'DORGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+2*N*
-     $                    ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+N*
-     $                    ILAENV( 1, 'DORGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+( N-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_DGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_DORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = MAX( N*N+WRKBL, N*N+M*N+N )
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -358,13 +372,10 @@
 *
 *                 Path 4 (M much larger than N, JOBU='S', JOBVT='N')
 *
-                  WRKBL = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'DORGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+2*N*
-     $                    ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+N*
-     $                    ILAENV( 1, 'DORGBR', 'Q', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_DGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_DORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -372,15 +383,11 @@
 *
 *                 Path 5 (M much larger than N, JOBU='S', JOBVT='O')
 *
-                  WRKBL = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'DORGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+2*N*
-     $                    ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+N*
-     $                    ILAENV( 1, 'DORGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+( N-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_DGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_DORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = 2*N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -389,15 +396,11 @@
 *                 Path 6 (M much larger than N, JOBU='S', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'DORGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+2*N*
-     $                    ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+N*
-     $                    ILAENV( 1, 'DORGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+( N-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_DGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_DORGQR_N )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -405,13 +408,10 @@
 *
 *                 Path 7 (M much larger than N, JOBU='A', JOBVT='N')
 *
-                  WRKBL = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+M*ILAENV( 1, 'DORGQR', ' ', M,
-     $                    M, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+2*N*
-     $                    ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+N*
-     $                    ILAENV( 1, 'DORGBR', 'Q', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_DGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_DORGQR_M )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -419,15 +419,11 @@
 *
 *                 Path 8 (M much larger than N, JOBU='A', JOBVT='O')
 *
-                  WRKBL = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+M*ILAENV( 1, 'DORGQR', ' ', M,
-     $                    M, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+2*N*
-     $                    ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+N*
-     $                    ILAENV( 1, 'DORGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+( N-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_DGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_DORGQR_M )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = 2*N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -436,15 +432,11 @@
 *                 Path 9 (M much larger than N, JOBU='A', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + N*ILAENV( 1, 'DGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+M*ILAENV( 1, 'DORGQR', ' ', M,
-     $                    M, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+2*N*
-     $                    ILAENV( 1, 'DGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+N*
-     $                    ILAENV( 1, 'DORGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*N+( N-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_DGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_DORGQR_M )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_Q )
+                  WRKBL = MAX( WRKBL, 3*N+LWORK_DORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = N*N + WRKBL
                   MINWRK = MAX( 3*N+M, BDSPAC )
@@ -453,17 +445,25 @@
 *
 *              Path 10 (M at least N, but not much larger)
 *
-               MAXWRK = 3*N + ( M+N )*ILAENV( 1, 'DGEBRD', ' ', M, N,
-     $                  -1, -1 )
-               IF( WNTUS .OR. WNTUO )
-     $            MAXWRK = MAX( MAXWRK, 3*N+N*
-     $                     ILAENV( 1, 'DORGBR', 'Q', M, N, N, -1 ) )
-               IF( WNTUA )
-     $            MAXWRK = MAX( MAXWRK, 3*N+M*
-     $                     ILAENV( 1, 'DORGBR', 'Q', M, M, N, -1 ) )
-               IF( .NOT.WNTVN )
-     $            MAXWRK = MAX( MAXWRK, 3*N+( N-1 )*
-     $                     ILAENV( 1, 'DORGBR', 'P', N, N, N, -1 ) )
+               CALL DGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+     $                   DUM(1), DUM(1), -1, IERR )
+               LWORK_DGEBRD=DUM(1)
+               MAXWRK = 3*N + LWORK_DGEBRD
+               IF( WNTUS .OR. WNTUO ) THEN
+                  CALL DORGBR( 'Q', M, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, IERR )
+                  LWORK_DORGBR_Q=DUM(1)
+                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_DORGBR_Q )
+               END IF
+               IF( WNTUA ) THEN
+                  CALL DORGBR( 'Q', M, M, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, IERR )
+                  LWORK_DORGBR_Q=DUM(1)
+                  MAXWRK = MAX( MAXWRK, 3*N+LWORK_DORGBR_Q )
+               END IF
+               IF( .NOT.WNTVN ) THEN
+                 MAXWRK = MAX( MAXWRK, 3*N+LWORK_DORGBR_P )
+               END IF
                MAXWRK = MAX( MAXWRK, BDSPAC )
                MINWRK = MAX( 3*N+M, BDSPAC )
             END IF
@@ -473,31 +473,45 @@
 *
             MNTHR = ILAENV( 6, 'DGESVD', JOBU // JOBVT, M, N, 0, 0 )
             BDSPAC = 5*M
+*           Compute space needed for DGELQF
+            CALL DGELQF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_DGELQF=DUM(1)
+*           Compute space needed for DORGLQ
+            CALL DORGLQ( N, N, M, VT, LDVT, DUM(1), DUM(1), -1, IERR )
+            LWORK_DORGLQ_N=DUM(1)
+            CALL DORGLQ( M, N, M, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_DORGLQ_M=DUM(1)
+*           Compute space needed for DGEBRD
+            CALL DGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
+     $                   DUM(1), DUM(1), -1, IERR )
+            LWORK_DGEBRD=DUM(1)
+*            Compute space needed for DORGBR P
+            CALL DORGBR( 'P', M, M, M, A, N, DUM(1),
+     $                   DUM(1), -1, IERR )
+            LWORK_DORGBR_P=DUM(1)
+*           Compute space needed for DORGBR Q
+            CALL DORGBR( 'Q', M, M, M, A, N, DUM(1),
+     $                   DUM(1), -1, IERR )
+            LWORK_DORGBR_Q=DUM(1)
             IF( N.GE.MNTHR ) THEN
                IF( WNTVN ) THEN
 *
 *                 Path 1t(N much larger than M, JOBVT='N')
 *
-                  MAXWRK = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1,
-     $                     -1 )
-                  MAXWRK = MAX( MAXWRK, 3*M+2*M*
-     $                     ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
+                  MAXWRK = M + LWORK_DGELQF
+                  MAXWRK = MAX( MAXWRK, 3*M+LWORK_DGEBRD )
                   IF( WNTUO .OR. WNTUAS )
-     $               MAXWRK = MAX( MAXWRK, 3*M+M*
-     $                        ILAENV( 1, 'DORGBR', 'Q', M, M, M, -1 ) )
+     $               MAXWRK = MAX( MAXWRK, 3*M+LWORK_DORGBR_Q )
                   MAXWRK = MAX( MAXWRK, BDSPAC )
                   MINWRK = MAX( 4*M, BDSPAC )
                ELSE IF( WNTVO .AND. WNTUN ) THEN
 *
 *                 Path 2t(N much larger than M, JOBU='N', JOBVT='O')
 *
-                  WRKBL = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'DORGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+2*M*
-     $                    ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+( M-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_DGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_DORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = MAX( M*M+WRKBL, M*M+M*N+M )
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -506,15 +520,11 @@
 *                 Path 3t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='O')
 *
-                  WRKBL = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'DORGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+2*M*
-     $                    ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+( M-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+M*
-     $                    ILAENV( 1, 'DORGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_DGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_DORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = MAX( M*M+WRKBL, M*M+M*N+M )
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -522,13 +532,10 @@
 *
 *                 Path 4t(N much larger than M, JOBU='N', JOBVT='S')
 *
-                  WRKBL = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'DORGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+2*M*
-     $                    ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+( M-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_DGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_DORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -536,15 +543,11 @@
 *
 *                 Path 5t(N much larger than M, JOBU='O', JOBVT='S')
 *
-                  WRKBL = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'DORGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+2*M*
-     $                    ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+( M-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+M*
-     $                    ILAENV( 1, 'DORGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_DGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_DORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = 2*M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -553,15 +556,11 @@
 *                 Path 6t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='S')
 *
-                  WRKBL = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'DORGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+2*M*
-     $                    ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+( M-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+M*
-     $                    ILAENV( 1, 'DORGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_DGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_DORGLQ_M )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -569,13 +568,10 @@
 *
 *                 Path 7t(N much larger than M, JOBU='N', JOBVT='A')
 *
-                  WRKBL = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+N*ILAENV( 1, 'DORGLQ', ' ', N,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+2*M*
-     $                    ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+( M-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_DGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_DORGLQ_N )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_P )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -583,15 +579,11 @@
 *
 *                 Path 8t(N much larger than M, JOBU='O', JOBVT='A')
 *
-                  WRKBL = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+N*ILAENV( 1, 'DORGLQ', ' ', N,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+2*M*
-     $                    ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+( M-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+M*
-     $                    ILAENV( 1, 'DORGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_DGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_DORGLQ_N )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = 2*M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -600,15 +592,11 @@
 *                 Path 9t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='A')
 *
-                  WRKBL = M + M*ILAENV( 1, 'DGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+N*ILAENV( 1, 'DORGLQ', ' ', N,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+2*M*
-     $                    ILAENV( 1, 'DGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+( M-1 )*
-     $                    ILAENV( 1, 'DORGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 3*M+M*
-     $                    ILAENV( 1, 'DORGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_DGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_DORGLQ_N )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DGEBRD )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_P )
+                  WRKBL = MAX( WRKBL, 3*M+LWORK_DORGBR_Q )
                   WRKBL = MAX( WRKBL, BDSPAC )
                   MAXWRK = M*M + WRKBL
                   MINWRK = MAX( 3*M+N, BDSPAC )
@@ -617,17 +605,26 @@
 *
 *              Path 10t(N greater than M, but not much larger)
 *
-               MAXWRK = 3*M + ( M+N )*ILAENV( 1, 'DGEBRD', ' ', M, N,
-     $                  -1, -1 )
-               IF( WNTVS .OR. WNTVO )
-     $            MAXWRK = MAX( MAXWRK, 3*M+M*
-     $                     ILAENV( 1, 'DORGBR', 'P', M, N, M, -1 ) )
-               IF( WNTVA )
-     $            MAXWRK = MAX( MAXWRK, 3*M+N*
-     $                     ILAENV( 1, 'DORGBR', 'P', N, N, M, -1 ) )
-               IF( .NOT.WNTUN )
-     $            MAXWRK = MAX( MAXWRK, 3*M+( M-1 )*
-     $                     ILAENV( 1, 'DORGBR', 'Q', M, M, M, -1 ) )
+               CALL DGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+     $                   DUM(1), DUM(1), -1, IERR )
+               LWORK_DGEBRD=DUM(1)
+               MAXWRK = 3*M + LWORK_DGEBRD
+               IF( WNTVS .OR. WNTVO ) THEN
+*                Compute space needed for DORGBR P
+                 CALL DORGBR( 'P', M, N, M, A, N, DUM(1),
+     $                   DUM(1), -1, IERR )
+                 LWORK_DORGBR_P=DUM(1)
+                 MAXWRK = MAX( MAXWRK, 3*M+LWORK_DORGBR_P )
+               END IF
+               IF( WNTVA ) THEN
+                 CALL DORGBR( 'P', N, N, M, A, N, DUM(1),
+     $                   DUM(1), -1, IERR )
+                 LWORK_DORGBR_P=DUM(1)
+                 MAXWRK = MAX( MAXWRK, 3*M+LWORK_DORGBR_P )
+               END IF
+               IF( .NOT.WNTUN ) THEN
+                  MAXWRK = MAX( MAXWRK, 3*M+LWORK_DORGBR_Q )
+               END IF
                MAXWRK = MAX( MAXWRK, BDSPAC )
                MINWRK = MAX( 3*M+N, BDSPAC )
             END IF

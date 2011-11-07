@@ -217,12 +217,21 @@
 *
       IF( INFO.EQ.0 ) THEN
          IF( WANTQ ) THEN
-            NB = ILAENV( 1, 'SORGQR', ' ', M, N, K, -1 )
+            IF( M.GE.K ) THEN
+               CALL SORGQR( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
+            ELSE
+               CALL SORGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
+     $                      -1, IINFO )
+            END IF
          ELSE
-            NB = ILAENV( 1, 'SORGLQ', ' ', M, N, K, -1 )
+            IF( K.LT.N ) THEN
+               CALL SORGLQ( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
+            ELSE
+               CALL SORGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
+     $                      -1, IINFO )
+            END IF
          END IF
-         LWKOPT = MAX( 1, MN )*NB
-         WORK( 1 ) = LWKOPT
+         LWKOPT = WORK( 1 )
       END IF
 *
       IF( INFO.NE.0 ) THEN
