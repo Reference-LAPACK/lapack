@@ -206,10 +206,13 @@
       INTEGER            BL, CHUNK, I, IASCL, IBSCL, IE, IL, IRWORK,
      $                   ITAU, ITAUP, ITAUQ, IWORK, LDWORK, MAXMN,
      $                   MAXWRK, MINMN, MINWRK, MM, MNTHR
+      INTEGER            LWORK_ZGEQRF, LWORK_ZUNMQR, LWORK_ZGEBRD,
+     $                   LWORK_ZUNMBR, LWORK_ZUNGBR, LWORK_ZUNMLQ,
+     $                   LWORK_ZGELQF
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM, THR
 *     ..
 *     .. Local Arrays ..
-      COMPLEX*16         VDUM( 1 )
+      COMPLEX*16         DUM( 1 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLABAD, DLASCL, DLASET, XERBLA, ZBDSQR, ZCOPY,
@@ -264,6 +267,13 @@
 *              Path 1a - overdetermined, with many more rows than
 *                        columns
 *
+*              Compute space needed for ZGEQRF
+               CALL ZGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO )
+               LWORK_ZGEQRF=DUM(1)
+*              Compute space needed for ZUNMQR
+               CALL ZUNMQR( 'L', 'C', M, NRHS, N, A, LDA, DUM(1), B,
+     $                   LDB, DUM(1), -1, INFO )
+               LWORK_ZUNMQR=DUM(1)
                MM = N
                MAXWRK = MAX( MAXWRK, N + N*ILAENV( 1, 'ZGEQRF', ' ', M,
      $                       N, -1, -1 ) )
@@ -274,12 +284,22 @@
 *
 *              Path 1 - overdetermined or exactly determined
 *
-               MAXWRK = MAX( MAXWRK, 2*N + ( MM + N )*ILAENV( 1,
-     $                       'ZGEBRD', ' ', MM, N, -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, 2*N + NRHS*ILAENV( 1, 'ZUNMBR',
-     $                       'QLC', MM, NRHS, N, -1 ) )
-               MAXWRK = MAX( MAXWRK, 2*N + ( N - 1 )*ILAENV( 1,
-     $                       'ZUNGBR', 'P', N, N, N, -1 ) )
+*              Compute space needed for ZGEBRD
+               CALL ZGEBRD( MM, N, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+               LWORK_ZGEBRD=DUM(1)
+*              Compute space needed for ZUNMBR
+               CALL ZUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, DUM(1),
+     $                B, LDB, DUM(1), -1, INFO )
+               LWORK_ZUNMBR=DUM(1)
+*              Compute space needed for ZUNGBR
+               CALL ZUNGBR( 'P', N, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+               LWORK_ZUNGBR=DUM(1)
+*              Compute total workspace needed 
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_ZGEBRD )
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_ZUNMBR )
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_ZUNGBR )
                MAXWRK = MAX( MAXWRK, N*NRHS )
                MINWRK = 2*N + MAX( NRHS, M )
             END IF
@@ -290,31 +310,56 @@
 *                 Path 2a - underdetermined, with many more columns
 *                 than rows
 *
-                  MAXWRK = M + M*ILAENV( 1, 'ZGELQF', ' ', M, N, -1,
-     $                     -1 )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + 2*M*ILAENV( 1,
-     $                          'ZGEBRD', ' ', M, M, -1, -1 ) )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + NRHS*ILAENV( 1,
-     $                          'ZUNMBR', 'QLC', M, NRHS, M, -1 ) )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + ( M - 1 )*ILAENV( 1,
-     $                          'ZUNGBR', 'P', M, M, M, -1 ) )
+*                 Compute space needed for ZGELQF
+                  CALL ZGELQF( M, N, A, LDA, DUM(1), DUM(1),
+     $                -1, INFO )
+                  LWORK_ZGELQF=DUM(1)
+*                 Compute space needed for ZGEBRD
+                  CALL ZGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+                  LWORK_ZGEBRD=DUM(1)
+*                 Compute space needed for ZUNMBR
+                  CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, 
+     $                DUM(1), B, LDB, DUM(1), -1, INFO )
+                  LWORK_ZUNMBR=DUM(1)
+*                 Compute space needed for ZUNGBR
+                  CALL ZUNGBR( 'P', M, M, M, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+                  LWORK_ZUNGBR=DUM(1)
+*                 Compute space needed for ZUNMLQ
+                  CALL ZUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, DUM(1),
+     $                 B, LDB, DUM(1), -1, INFO )
+                  LWORK_ZUNMLQ=DUM(1)
+*                 Compute total workspace needed 
+                  MAXWRK = M + LWORK_ZGELQF
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_ZGEBRD )
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_ZUNMBR )
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_ZUNGBR )
                   IF( NRHS.GT.1 ) THEN
                      MAXWRK = MAX( MAXWRK, M*M + M + M*NRHS )
                   ELSE
                      MAXWRK = MAX( MAXWRK, M*M + 2*M )
                   END IF
-                  MAXWRK = MAX( MAXWRK, M + NRHS*ILAENV( 1, 'ZUNMLQ',
-     $                          'LC', N, NRHS, M, -1 ) )
+                  MAXWRK = MAX( MAXWRK, M + LWORK_ZUNMLQ )
                ELSE
 *
 *                 Path 2 - underdetermined
 *
-                  MAXWRK = 2*M + ( N + M )*ILAENV( 1, 'ZGEBRD', ' ', M,
-     $                     N, -1, -1 )
-                  MAXWRK = MAX( MAXWRK, 2*M + NRHS*ILAENV( 1, 'ZUNMBR',
-     $                          'QLC', M, NRHS, M, -1 ) )
-                  MAXWRK = MAX( MAXWRK, 2*M + M*ILAENV( 1, 'ZUNGBR',
-     $                          'P', M, N, M, -1 ) )
+*                 Compute space needed for ZGEBRD
+                  CALL ZGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+                  LWORK_ZGEBRD=DUM(1)
+*                 Compute space needed for ZUNMBR
+                  CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, M, A, LDA, 
+     $                DUM(1), B, LDB, DUM(1), -1, INFO )
+                  LWORK_ZUNMBR=DUM(1)
+*                 Compute space needed for ZUNGBR
+                  CALL ZUNGBR( 'P', M, N, M, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+                  LWORK_ZUNGBR=DUM(1)
+                  MAXWRK = 2*M + LWORK_ZGEBRD
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_ZUNMBR )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_ZUNGBR )
                   MAXWRK = MAX( MAXWRK, N*NRHS )
                END IF
             END IF
@@ -462,7 +507,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL ZBDSQR( 'U', N, N, 0, NRHS, S, RWORK( IE ), A, LDA, VDUM,
+         CALL ZBDSQR( 'U', N, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM,
      $                1, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -659,7 +704,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL ZBDSQR( 'L', M, N, 0, NRHS, S, RWORK( IE ), A, LDA, VDUM,
+         CALL ZBDSQR( 'L', M, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM,
      $                1, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70

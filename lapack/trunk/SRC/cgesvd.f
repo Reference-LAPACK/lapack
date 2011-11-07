@@ -245,6 +245,9 @@
      $                   ITAU, ITAUP, ITAUQ, IU, IWORK, LDWRKR, LDWRKU,
      $                   MAXWRK, MINMN, MINWRK, MNTHR, NCU, NCVT, NRU,
      $                   NRVT, WRKBL
+      INTEGER            LWORK_CGEQRF, LWORK_CUNGQR_N, LWORK_CUNGQR_M,
+     $                   LWORK_CGEBRD, LWORK_CUNGBR_P, LWORK_CUNGBR_Q,
+     $                   LWORK_CGELQF, LWORK_CUNGLQ_N, LWORK_CUNGLQ_M
       REAL               ANRM, BIGNUM, EPS, SMLNUM
 *     ..
 *     .. Local Arrays ..
@@ -314,7 +317,28 @@
          MAXWRK = 1
          IF( M.GE.N .AND. MINMN.GT.0 ) THEN
 *
-*           Space needed for CBDSQR is BDSPAC = 5*N
+*           Space needed for ZBDSQR is BDSPAC = 5*N
+*
+            MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0, 0 )
+*           Compute space needed for CGEQRF
+            CALL CGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_CGEQRF=DUM(1)
+*           Compute space needed for CUNGQR
+            CALL CUNGQR( M, N, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_CUNGQR_N=DUM(1)
+            CALL CUNGQR( M, M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_CUNGQR_M=DUM(1)
+*           Compute space needed for CGEBRD
+            CALL CGEBRD( N, N, A, LDA, S, DUM(1), DUM(1),
+     $                   DUM(1), DUM(1), -1, IERR )
+            LWORK_CGEBRD=DUM(1)
+*           Compute space needed for CUNGBR
+            CALL CUNGBR( 'P', N, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, IERR )
+            LWORK_CUNGBR_P=DUM(1)
+            CALL CUNGBR( 'Q', N, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, IERR )
+            LWORK_CUNGBR_Q=DUM(1)
 *
             MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0, 0 )
             IF( M.GE.MNTHR ) THEN
@@ -322,25 +346,19 @@
 *
 *                 Path 1 (M much larger than N, JOBU='N')
 *
-                  MAXWRK = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1,
-     $                     -1 )
-                  MAXWRK = MAX( MAXWRK, 2*N+2*N*
-     $                     ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
+                  MAXWRK = N + LWORK_CGEQRF
+                  MAXWRK = MAX( MAXWRK, 2*N+LWORK_CGEBRD )
                   IF( WNTVO .OR. WNTVAS )
-     $               MAXWRK = MAX( MAXWRK, 2*N+( N-1 )*
-     $                        ILAENV( 1, 'CUNGBR', 'P', N, N, N, -1 ) )
+     $               MAXWRK = MAX( MAXWRK, 2*N+LWORK_CUNGBR_P )
                   MINWRK = 3*N
                ELSE IF( WNTUO .AND. WNTVN ) THEN
 *
 *                 Path 2 (M much larger than N, JOBU='O', JOBVT='N')
 *
-                  WRKBL = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'CUNGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+2*N*
-     $                    ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+N*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_CGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_CUNGQR_N )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_Q )
                   MAXWRK = MAX( N*N+WRKBL, N*N+M*N )
                   MINWRK = 2*N + M
                ELSE IF( WNTUO .AND. WNTVAS ) THEN
@@ -348,43 +366,32 @@
 *                 Path 3 (M much larger than N, JOBU='O', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'CUNGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+2*N*
-     $                    ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+N*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+( N-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_CGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_CUNGQR_N )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_Q )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_P )
                   MAXWRK = MAX( N*N+WRKBL, N*N+M*N )
                   MINWRK = 2*N + M
                ELSE IF( WNTUS .AND. WNTVN ) THEN
 *
 *                 Path 4 (M much larger than N, JOBU='S', JOBVT='N')
 *
-                  WRKBL = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'CUNGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+2*N*
-     $                    ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+N*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_CGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_CUNGQR_N )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_Q )
                   MAXWRK = N*N + WRKBL
                   MINWRK = 2*N + M
                ELSE IF( WNTUS .AND. WNTVO ) THEN
 *
 *                 Path 5 (M much larger than N, JOBU='S', JOBVT='O')
 *
-                  WRKBL = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'CUNGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+2*N*
-     $                    ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+N*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+( N-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_CGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_CUNGQR_N )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_Q )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_P )
                   MAXWRK = 2*N*N + WRKBL
                   MINWRK = 2*N + M
                ELSE IF( WNTUS .AND. WNTVAS ) THEN
@@ -392,43 +399,32 @@
 *                 Path 6 (M much larger than N, JOBU='S', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+N*ILAENV( 1, 'CUNGQR', ' ', M,
-     $                    N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+2*N*
-     $                    ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+N*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+( N-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_CGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_CUNGQR_N )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_Q )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_P )
                   MAXWRK = N*N + WRKBL
                   MINWRK = 2*N + M
                ELSE IF( WNTUA .AND. WNTVN ) THEN
 *
 *                 Path 7 (M much larger than N, JOBU='A', JOBVT='N')
 *
-                  WRKBL = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+M*ILAENV( 1, 'CUNGQR', ' ', M,
-     $                    M, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+2*N*
-     $                    ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+N*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_CGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_CUNGQR_M )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_Q )
                   MAXWRK = N*N + WRKBL
                   MINWRK = 2*N + M
                ELSE IF( WNTUA .AND. WNTVO ) THEN
 *
 *                 Path 8 (M much larger than N, JOBU='A', JOBVT='O')
 *
-                  WRKBL = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+M*ILAENV( 1, 'CUNGQR', ' ', M,
-     $                    M, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+2*N*
-     $                    ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+N*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+( N-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_CGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_CUNGQR_M )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_Q )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_P )
                   MAXWRK = 2*N*N + WRKBL
                   MINWRK = 2*N + M
                ELSE IF( WNTUA .AND. WNTVAS ) THEN
@@ -436,15 +432,11 @@
 *                 Path 9 (M much larger than N, JOBU='A', JOBVT='S' or
 *                 'A')
 *
-                  WRKBL = N + N*ILAENV( 1, 'CGEQRF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, N+M*ILAENV( 1, 'CUNGQR', ' ', M,
-     $                    M, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+2*N*
-     $                    ILAENV( 1, 'CGEBRD', ' ', N, N, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+N*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', N, N, N, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*N+( N-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', N, N, N, -1 ) )
+                  WRKBL = N + LWORK_CGEQRF
+                  WRKBL = MAX( WRKBL, N+LWORK_CUNGQR_M )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_Q )
+                  WRKBL = MAX( WRKBL, 2*N+LWORK_CUNGBR_P )
                   MAXWRK = N*N + WRKBL
                   MINWRK = 2*N + M
                END IF
@@ -452,48 +444,70 @@
 *
 *              Path 10 (M at least N, but not much larger)
 *
-               MAXWRK = 2*N + ( M+N )*ILAENV( 1, 'CGEBRD', ' ', M, N,
-     $                  -1, -1 )
-               IF( WNTUS .OR. WNTUO )
-     $            MAXWRK = MAX( MAXWRK, 2*N+N*
-     $                     ILAENV( 1, 'CUNGBR', 'Q', M, N, N, -1 ) )
-               IF( WNTUA )
-     $            MAXWRK = MAX( MAXWRK, 2*N+M*
-     $                     ILAENV( 1, 'CUNGBR', 'Q', M, M, N, -1 ) )
-               IF( .NOT.WNTVN )
-     $            MAXWRK = MAX( MAXWRK, 2*N+( N-1 )*
-     $                     ILAENV( 1, 'CUNGBR', 'P', N, N, N, -1 ) )
+               CALL CGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+     $                   DUM(1), DUM(1), -1, IERR )
+               LWORK_CGEBRD=DUM(1)
+               MAXWRK = 2*N + LWORK_CGEBRD
+               IF( WNTUS .OR. WNTUO ) THEN
+                  CALL CUNGBR( 'Q', M, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, IERR )
+                  LWORK_CUNGBR_Q=DUM(1)
+                  MAXWRK = MAX( MAXWRK, 2*N+LWORK_CUNGBR_Q )
+               END IF
+               IF( WNTUA ) THEN
+                  CALL CUNGBR( 'Q', M, M, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, IERR )
+                  LWORK_CUNGBR_Q=DUM(1)
+                  MAXWRK = MAX( MAXWRK, 2*N+LWORK_CUNGBR_Q )
+               END IF
+               IF( .NOT.WNTVN ) THEN
+                  MAXWRK = MAX( MAXWRK, 2*N+LWORK_CUNGBR_P )
                MINWRK = 2*N + M
+               END IF
             END IF
          ELSE IF( MINMN.GT.0 ) THEN
 *
 *           Space needed for CBDSQR is BDSPAC = 5*M
 *
             MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0, 0 )
+*           Compute space needed for CGELQF
+            CALL CGELQF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_CGELQF=DUM(1)
+*           Compute space needed for CUNGLQ
+            CALL CUNGLQ( N, N, M, VT, LDVT, DUM(1), DUM(1), -1, IERR )
+            LWORK_CUNGLQ_N=DUM(1)
+            CALL CUNGLQ( M, N, M, A, LDA, DUM(1), DUM(1), -1, IERR )
+            LWORK_CUNGLQ_M=DUM(1)
+*           Compute space needed for CGEBRD
+            CALL CGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
+     $                   DUM(1), DUM(1), -1, IERR )
+            LWORK_CGEBRD=DUM(1)
+*            Compute space needed for CUNGBR P
+            CALL CUNGBR( 'P', M, M, M, A, N, DUM(1),
+     $                   DUM(1), -1, IERR )
+            LWORK_CUNGBR_P=DUM(1)
+*           Compute space needed for CUNGBR Q
+            CALL CUNGBR( 'Q', M, M, M, A, N, DUM(1),
+     $                   DUM(1), -1, IERR )
+            LWORK_CUNGBR_Q=DUM(1)
             IF( N.GE.MNTHR ) THEN
                IF( WNTVN ) THEN
 *
 *                 Path 1t(N much larger than M, JOBVT='N')
 *
-                  MAXWRK = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1,
-     $                     -1 )
-                  MAXWRK = MAX( MAXWRK, 2*M+2*M*
-     $                     ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
+                  MAXWRK = M + LWORK_CGELQF
+                  MAXWRK = MAX( MAXWRK, 2*M+LWORK_CGEBRD )
                   IF( WNTUO .OR. WNTUAS )
-     $               MAXWRK = MAX( MAXWRK, 2*M+M*
-     $                        ILAENV( 1, 'CUNGBR', 'Q', M, M, M, -1 ) )
+     $               MAXWRK = MAX( MAXWRK, 2*M+LWORK_CUNGBR_Q )
                   MINWRK = 3*M
                ELSE IF( WNTVO .AND. WNTUN ) THEN
 *
 *                 Path 2t(N much larger than M, JOBU='N', JOBVT='O')
 *
-                  WRKBL = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'CUNGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+2*M*
-     $                    ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+( M-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_CGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_CUNGLQ_M )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_P )
                   MAXWRK = MAX( M*M+WRKBL, M*M+M*N )
                   MINWRK = 2*M + N
                ELSE IF( WNTVO .AND. WNTUAS ) THEN
@@ -501,43 +515,32 @@
 *                 Path 3t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='O')
 *
-                  WRKBL = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'CUNGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+2*M*
-     $                    ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+( M-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+M*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_CGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_CUNGLQ_M )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_P )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_Q )
                   MAXWRK = MAX( M*M+WRKBL, M*M+M*N )
                   MINWRK = 2*M + N
                ELSE IF( WNTVS .AND. WNTUN ) THEN
 *
 *                 Path 4t(N much larger than M, JOBU='N', JOBVT='S')
 *
-                  WRKBL = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'CUNGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+2*M*
-     $                    ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+( M-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_CGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_CUNGLQ_M )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_P )
                   MAXWRK = M*M + WRKBL
                   MINWRK = 2*M + N
                ELSE IF( WNTVS .AND. WNTUO ) THEN
 *
 *                 Path 5t(N much larger than M, JOBU='O', JOBVT='S')
 *
-                  WRKBL = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'CUNGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+2*M*
-     $                    ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+( M-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+M*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_CGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_CUNGLQ_M )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_P )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_Q )
                   MAXWRK = 2*M*M + WRKBL
                   MINWRK = 2*M + N
                ELSE IF( WNTVS .AND. WNTUAS ) THEN
@@ -545,43 +548,32 @@
 *                 Path 6t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='S')
 *
-                  WRKBL = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+M*ILAENV( 1, 'CUNGLQ', ' ', M,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+2*M*
-     $                    ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+( M-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+M*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_CGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_CUNGLQ_M )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_P )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_Q )
                   MAXWRK = M*M + WRKBL
                   MINWRK = 2*M + N
                ELSE IF( WNTVA .AND. WNTUN ) THEN
 *
 *                 Path 7t(N much larger than M, JOBU='N', JOBVT='A')
 *
-                  WRKBL = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+N*ILAENV( 1, 'CUNGLQ', ' ', N,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+2*M*
-     $                    ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+( M-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_CGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_CUNGLQ_N )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_P )
                   MAXWRK = M*M + WRKBL
                   MINWRK = 2*M + N
                ELSE IF( WNTVA .AND. WNTUO ) THEN
 *
 *                 Path 8t(N much larger than M, JOBU='O', JOBVT='A')
 *
-                  WRKBL = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+N*ILAENV( 1, 'CUNGLQ', ' ', N,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+2*M*
-     $                    ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+( M-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+M*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_CGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_CUNGLQ_N )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_P )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_Q )
                   MAXWRK = 2*M*M + WRKBL
                   MINWRK = 2*M + N
                ELSE IF( WNTVA .AND. WNTUAS ) THEN
@@ -589,15 +581,11 @@
 *                 Path 9t(N much larger than M, JOBU='S' or 'A',
 *                 JOBVT='A')
 *
-                  WRKBL = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1, -1 )
-                  WRKBL = MAX( WRKBL, M+N*ILAENV( 1, 'CUNGLQ', ' ', N,
-     $                    N, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+2*M*
-     $                    ILAENV( 1, 'CGEBRD', ' ', M, M, -1, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+( M-1 )*
-     $                    ILAENV( 1, 'CUNGBR', 'P', M, M, M, -1 ) )
-                  WRKBL = MAX( WRKBL, 2*M+M*
-     $                    ILAENV( 1, 'CUNGBR', 'Q', M, M, M, -1 ) )
+                  WRKBL = M + LWORK_CGELQF
+                  WRKBL = MAX( WRKBL, M+LWORK_CUNGLQ_N )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CGEBRD )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_P )
+                  WRKBL = MAX( WRKBL, 2*M+LWORK_CUNGBR_Q )
                   MAXWRK = M*M + WRKBL
                   MINWRK = 2*M + N
                END IF
@@ -605,18 +593,27 @@
 *
 *              Path 10t(N greater than M, but not much larger)
 *
-               MAXWRK = 2*M + ( M+N )*ILAENV( 1, 'CGEBRD', ' ', M, N,
-     $                  -1, -1 )
-               IF( WNTVS .OR. WNTVO )
-     $            MAXWRK = MAX( MAXWRK, 2*M+M*
-     $                     ILAENV( 1, 'CUNGBR', 'P', M, N, M, -1 ) )
-               IF( WNTVA )
-     $            MAXWRK = MAX( MAXWRK, 2*M+N*
-     $                     ILAENV( 1, 'CUNGBR', 'P', N, N, M, -1 ) )
-               IF( .NOT.WNTUN )
-     $            MAXWRK = MAX( MAXWRK, 2*M+( M-1 )*
-     $                     ILAENV( 1, 'CUNGBR', 'Q', M, M, M, -1 ) )
+               CALL CGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+     $                   DUM(1), DUM(1), -1, IERR )
+               LWORK_CGEBRD=DUM(1)
+               MAXWRK = 2*M + LWORK_CGEBRD
+               IF( WNTVS .OR. WNTVO ) THEN
+*                Compute space needed for CUNGBR P
+                 CALL CUNGBR( 'P', M, N, M, A, N, DUM(1),
+     $                   DUM(1), -1, IERR )
+                 LWORK_CUNGBR_P=DUM(1)
+                 MAXWRK = MAX( MAXWRK, 2*M+LWORK_CUNGBR_P )
+               END IF
+               IF( WNTVA ) THEN
+                 CALL CUNGBR( 'P', N,  N, M, A, N, DUM(1),
+     $                   DUM(1), -1, IERR )
+                 LWORK_CUNGBR_P=DUM(1)
+                 MAXWRK = MAX( MAXWRK, 2*M+LWORK_CUNGBR_P )
+               END IF
+               IF( .NOT.WNTUN ) THEN
+                  MAXWRK = MAX( MAXWRK, 2*M+LWORK_CUNGBR_Q )
                MINWRK = 2*M + N
+               END IF
             END IF
          END IF
          MAXWRK = MAX( MINWRK, MAXWRK )

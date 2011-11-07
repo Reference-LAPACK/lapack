@@ -206,10 +206,13 @@
       INTEGER            BL, CHUNK, I, IASCL, IBSCL, IE, IL, IRWORK,
      $                   ITAU, ITAUP, ITAUQ, IWORK, LDWORK, MAXMN,
      $                   MAXWRK, MINMN, MINWRK, MM, MNTHR
+      INTEGER            LWORK_CGEQRF, LWORK_CUNMQR, LWORK_CGEBRD,
+     $                   LWORK_CUNMBR, LWORK_CUNGBR, LWORK_CUNMLQ,
+     $                   LWORK_CGELQF
       REAL               ANRM, BIGNUM, BNRM, EPS, SFMIN, SMLNUM, THR
 *     ..
 *     .. Local Arrays ..
-      COMPLEX            VDUM( 1 )
+      COMPLEX            DUM( 1 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CBDSQR, CCOPY, CGEBRD, CGELQF, CGEMM, CGEMV,
@@ -264,6 +267,13 @@
 *              Path 1a - overdetermined, with many more rows than
 *                        columns
 *
+*              Compute space needed for CGEQRF
+               CALL CGEQRF( M, N, A, LDA, DUM(1), DUM(1), -1, INFO )
+               LWORK_CGEQRF=DUM(1)
+*              Compute space needed for CUNMQR
+               CALL CUNMQR( 'L', 'C', M, NRHS, N, A, LDA, DUM(1), B,
+     $                   LDB, DUM(1), -1, INFO )
+               LWORK_CUNMQR=DUM(1)
                MM = N
                MAXWRK = MAX( MAXWRK, N + N*ILAENV( 1, 'CGEQRF', ' ', M,
      $                       N, -1, -1 ) )
@@ -274,12 +284,22 @@
 *
 *              Path 1 - overdetermined or exactly determined
 *
-               MAXWRK = MAX( MAXWRK, 2*N + ( MM + N )*ILAENV( 1,
-     $                       'CGEBRD', ' ', MM, N, -1, -1 ) )
-               MAXWRK = MAX( MAXWRK, 2*N + NRHS*ILAENV( 1, 'CUNMBR',
-     $                       'QLC', MM, NRHS, N, -1 ) )
-               MAXWRK = MAX( MAXWRK, 2*N + ( N - 1 )*ILAENV( 1,
-     $                       'CUNGBR', 'P', N, N, N, -1 ) )
+*              Compute space needed for CGEBRD
+               CALL CGEBRD( MM, N, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+               LWORK_CGEBRD=DUM(1)
+*              Compute space needed for CUNMBR
+               CALL CUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, DUM(1),
+     $                B, LDB, DUM(1), -1, INFO )
+               LWORK_CUNMBR=DUM(1)
+*              Compute space needed for CUNGBR
+               CALL CUNGBR( 'P', N, N, N, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+               LWORK_CUNGBR=DUM(1)
+*              Compute total workspace needed 
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_CGEBRD )
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR )
+               MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNGBR )
                MAXWRK = MAX( MAXWRK, N*NRHS )
                MINWRK = 2*N + MAX( NRHS, M )
             END IF
@@ -290,31 +310,56 @@
 *                 Path 2a - underdetermined, with many more columns
 *                 than rows
 *
-                  MAXWRK = M + M*ILAENV( 1, 'CGELQF', ' ', M, N, -1,
-     $                     -1 )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + 2*M*ILAENV( 1,
-     $                          'CGEBRD', ' ', M, M, -1, -1 ) )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + NRHS*ILAENV( 1,
-     $                          'CUNMBR', 'QLC', M, NRHS, M, -1 ) )
-                  MAXWRK = MAX( MAXWRK, 3*M + M*M + ( M - 1 )*ILAENV( 1,
-     $                          'CUNGBR', 'P', M, M, M, -1 ) )
+*                 Compute space needed for CGELQF
+                  CALL CGELQF( M, N, A, LDA, DUM(1), DUM(1),
+     $                -1, INFO )
+                  LWORK_CGELQF=DUM(1)
+*                 Compute space needed for CGEBRD
+                  CALL CGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+                  LWORK_CGEBRD=DUM(1)
+*                 Compute space needed for CUNMBR
+                  CALL CUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, 
+     $                DUM(1), B, LDB, DUM(1), -1, INFO )
+                  LWORK_CUNMBR=DUM(1)
+*                 Compute space needed for CUNGBR
+                  CALL CUNGBR( 'P', M, M, M, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+                  LWORK_CUNGBR=DUM(1)
+*                 Compute space needed for CUNMLQ
+                  CALL CUNMLQ( 'L', 'C', N, NRHS, M, A, LDA, DUM(1),
+     $                 B, LDB, DUM(1), -1, INFO )
+                  LWORK_CUNMLQ=DUM(1)
+*                 Compute total workspace needed 
+                  MAXWRK = M + LWORK_CGELQF
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_CGEBRD )
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_CUNMBR )
+                  MAXWRK = MAX( MAXWRK, 3*M + M*M + LWORK_CUNGBR )
                   IF( NRHS.GT.1 ) THEN
                      MAXWRK = MAX( MAXWRK, M*M + M + M*NRHS )
                   ELSE
                      MAXWRK = MAX( MAXWRK, M*M + 2*M )
                   END IF
-                  MAXWRK = MAX( MAXWRK, M + NRHS*ILAENV( 1, 'CUNMLQ',
-     $                          'LC', N, NRHS, M, -1 ) )
+                  MAXWRK = MAX( MAXWRK, M + LWORK_CUNMLQ )
                ELSE
 *
 *                 Path 2 - underdetermined
 *
-                  MAXWRK = 2*M + ( N + M )*ILAENV( 1, 'CGEBRD', ' ', M,
-     $                     N, -1, -1 )
-                  MAXWRK = MAX( MAXWRK, 2*M + NRHS*ILAENV( 1, 'CUNMBR',
-     $                          'QLC', M, NRHS, M, -1 ) )
-                  MAXWRK = MAX( MAXWRK, 2*M + M*ILAENV( 1, 'CUNGBR',
-     $                          'P', M, N, M, -1 ) )
+*                 Compute space needed for CGEBRD
+                  CALL CGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
+     $                      DUM(1), DUM(1), -1, INFO )
+                  LWORK_CGEBRD=DUM(1)
+*                 Compute space needed for CUNMBR
+                  CALL CUNMBR( 'Q', 'L', 'C', M, NRHS, M, A, LDA, 
+     $                DUM(1), B, LDB, DUM(1), -1, INFO )
+                  LWORK_CUNMBR=DUM(1)
+*                 Compute space needed for CUNGBR
+                  CALL CUNGBR( 'P', M, N, M, A, LDA, DUM(1),
+     $                   DUM(1), -1, INFO )
+                  LWORK_CUNGBR=DUM(1)
+                  MAXWRK = 2*M + LWORK_CGEBRD
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNMBR )
+                  MAXWRK = MAX( MAXWRK, 2*M + LWORK_CUNGBR )
                   MAXWRK = MAX( MAXWRK, N*NRHS )
                END IF
             END IF
@@ -462,7 +507,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL CBDSQR( 'U', N, N, 0, NRHS, S, RWORK( IE ), A, LDA, VDUM,
+         CALL CBDSQR( 'U', N, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM,
      $                1, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
@@ -659,7 +704,7 @@
 *        (CWorkspace: none)
 *        (RWorkspace: need BDSPAC)
 *
-         CALL CBDSQR( 'L', M, N, 0, NRHS, S, RWORK( IE ), A, LDA, VDUM,
+         CALL CBDSQR( 'L', M, N, 0, NRHS, S, RWORK( IE ), A, LDA, DUM,
      $                1, B, LDB, RWORK( IRWORK ), INFO )
          IF( INFO.NE.0 )
      $      GO TO 70
