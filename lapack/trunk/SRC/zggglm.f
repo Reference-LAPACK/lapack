@@ -185,7 +185,7 @@
       SUBROUTINE ZGGGLM( N, M, P, A, LDA, B, LDB, D, X, Y, WORK, LWORK,
      $                   INFO )
 *
-*  -- LAPACK driver routine (version 3.3.1) --
+*  -- LAPACK driver routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

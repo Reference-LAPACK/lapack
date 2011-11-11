@@ -332,7 +332,7 @@
      $                   V2T, LDV2T, B11D, B11E, B12D, B12E, B21D, B21E,
      $                   B22D, B22E, RWORK, LRWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.3.0) --
+*  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

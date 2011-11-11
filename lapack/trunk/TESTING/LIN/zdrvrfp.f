@@ -244,7 +244,7 @@
      +              Z_WORK_ZPOT03, D_WORK_ZLATMS, D_WORK_ZLANHE,
      +              D_WORK_ZPOT01, D_WORK_ZPOT02, D_WORK_ZPOT03 )
 *
-*  -- LAPACK test routine (version 3.2.0) --
+*  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

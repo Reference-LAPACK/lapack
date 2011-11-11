@@ -98,7 +98,7 @@
 *  =====================================================================
       REAL FUNCTION CLA_GERPVGRW( N, NCOLS, A, LDA, AF, LDAF )
 *
-*  -- LAPACK computational routine (version 3.2.2) --
+*  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

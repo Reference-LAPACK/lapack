@@ -135,7 +135,7 @@
       SUBROUTINE CBDT03( UPLO, N, KD, D, E, U, LDU, S, VT, LDVT, WORK,
      $                   RESID )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

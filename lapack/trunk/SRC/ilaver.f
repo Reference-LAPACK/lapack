@@ -48,7 +48,7 @@
 *  =====================================================================
       SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
 *
-*  -- LAPACK computational routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011
@@ -58,8 +58,8 @@
       INTEGER VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *  =====================================================================
       VERS_MAJOR = 3
-      VERS_MINOR = 3
-      VERS_PATCH = 1
+      VERS_MINOR = 4
+      VERS_PATCH = 0
 *  =====================================================================
 *
       RETURN

@@ -63,7 +63,7 @@
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLAMCH( CMACH )
 *
-*  -- LAPACK auxiliary routine (version 3.3.0) --
+*  -- LAPACK auxiliary routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011
@@ -234,7 +234,7 @@
 *>
       SUBROUTINE DLAMC1( BETA, T, RND, IEEE1 )
 *
-*  -- LAPACK auxiliary routine (version 3.3.0) --
+*  -- LAPACK auxiliary routine (version 3.4.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2010
 *
@@ -447,7 +447,7 @@
 *> \endverbatim
       SUBROUTINE DLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX )
 *
-*  -- LAPACK auxiliary routine (version 3.3.0) --
+*  -- LAPACK auxiliary routine (version 3.4.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2010
 *
@@ -670,7 +670,7 @@
 
       DOUBLE PRECISION FUNCTION DLAMC3( A, B )
 *
-*  -- LAPACK auxiliary routine (version 3.3.0) --
+*  -- LAPACK auxiliary routine (version 3.4.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2010
 *
@@ -717,7 +717,7 @@
 *>
       SUBROUTINE DLAMC4( EMIN, START, BASE )
 *
-*  -- LAPACK auxiliary routine (version 3.3.0) --
+*  -- LAPACK auxiliary routine (version 3.4.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2010
 *
@@ -824,7 +824,7 @@
 *>
       SUBROUTINE DLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX )
 *
-*  -- LAPACK auxiliary routine (version 3.3.0) --
+*  -- LAPACK auxiliary routine (version 3.4.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     November 2010
 *

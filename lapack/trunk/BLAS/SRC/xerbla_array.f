@@ -80,7 +80,7 @@
 *  =====================================================================
       SUBROUTINE XERBLA_ARRAY(SRNAME_ARRAY, SRNAME_LEN, INFO)
 *
-*  -- Reference BLAS level1 routine (version 3.0) --
+*  -- Reference BLAS level1 routine (version 3.4.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

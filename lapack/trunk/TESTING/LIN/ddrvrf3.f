@@ -118,7 +118,7 @@
       SUBROUTINE DDRVRF3( NOUT, NN, NVAL, THRESH, A, LDA, ARF, B1, B2,
      +                    D_WORK_DLANGE, D_WORK_DGEQRF, TAU )
 *
-*  -- LAPACK test routine (version 3.2.0) --
+*  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

@@ -312,7 +312,7 @@
       SUBROUTINE SPPSVX( FACT, UPLO, N, NRHS, AP, AFP, EQUED, S, B, LDB,
      $                   X, LDX, RCOND, FERR, BERR, WORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.3.1) --
+*  -- LAPACK driver routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011
