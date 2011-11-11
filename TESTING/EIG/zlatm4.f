@@ -171,7 +171,7 @@
       SUBROUTINE ZLATM4( ITYPE, N, NZ1, NZ2, RSIGN, AMAGN, RCOND,
      $                   TRIANG, IDIST, ISEED, A, LDA )
 *
-*  -- LAPACK test routine (version 3.1) --
+*  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

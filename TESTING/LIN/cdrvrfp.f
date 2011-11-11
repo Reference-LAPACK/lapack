@@ -244,7 +244,7 @@
      +              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
      +              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
 *
-*  -- LAPACK test routine (version 3.2.0) --
+*  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

@@ -103,7 +103,7 @@
 *  =====================================================================
       SUBROUTINE CLAG2Z( M, N, SA, LDSA, A, LDA, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.3.1) --
+*  -- LAPACK auxiliary routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

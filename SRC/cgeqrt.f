@@ -141,7 +141,7 @@
 *  =====================================================================
       SUBROUTINE CGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.?) --
+*  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

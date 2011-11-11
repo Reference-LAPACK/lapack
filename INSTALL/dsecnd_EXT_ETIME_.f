@@ -35,7 +35,7 @@
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DSECND( )
 *
-*  -- LAPACK auxiliary routine (version 3.2) --
+*  -- LAPACK auxiliary routine (version 3.4.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley and NAG Ltd..
 *     February 2007
 * =====================================================================

@@ -183,7 +183,7 @@
       SUBROUTINE DLARZB( SIDE, TRANS, DIRECT, STOREV, M, N, K, L, V,
      $                   LDV, T, LDT, C, LDC, WORK, LDWORK )
 *
-*  -- LAPACK computational routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011
