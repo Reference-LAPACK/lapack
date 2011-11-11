@@ -1,14 +1,10 @@
 ####################################################################
 #  LAPACK make include file.                                       #
-#  LAPACK, Version 3.2.1                                           #
-#  April 2009                                                      #
+#  LAPACK, Version 3.4.0                                           #
+#  November 2011                                                   #
 ####################################################################
 #
 SHELL = /bin/sh
-#
-#  The machine (platform) identifier to append to the library names
-#
-PLAT = _pghpf_SUNMP
 #  
 #  Modify the FORTRAN and OPTS definitions to refer to the
 #  compiler and desired compiler options for your machine.  NOOPT
@@ -57,9 +53,7 @@ XBLASLIB     =
 #  machine-specific, optimized BLAS library should be used whenever
 #  possible.)
 #
-BLASLIB      = ../../blas$(PLAT).a
 #BLASLIB     = -lessl
-LAPACKLIB    = lapack$(PLAT).a
-TMGLIB       = tmglib$(PLAT).a
-EIGSRCLIB    = eigsrc$(PLAT).a
-LINSRCLIB    = linsrc$(PLAT).a
+BLASLIB      = ../../librefblas.a
+LAPACKLIB    = liblapack.a
+TMGLIB       = libtmglib.a
