@@ -36,10 +36,6 @@ The installation directory of this package has the following structure:
 src                - C interface source files
 utils              - C interface auxiliary files
 include            - header files for C interface
-testing            - testing directory
-   interface       - source files for interface tests
-   utils           - auxiliary testing source files
-   include         - header files required by tests
 
 -------------------------------------------------------------------------------
 Installation
@@ -58,42 +54,6 @@ examples of make.inc are provided.
 After setting up the make.inc, you can build C interface to LAPACK by typing
 
 make lapacke
-
--------------------------------------------------------------------------------
-Testing
--------------------------------------------------------------------------------
-
-The interfaces require LAPACK and BLAS libraries. You need to specify LAPACK
-and BLAS libraries in make.inc, as they are seen from the testing/interface
-directory. The standard LAPACK-3.2.1 package available at www.netlib.org/lapack
-is suitable for this purpose - build LAPACK, BLAS libraries, and provide them
-in the make.inc file for the C interfaces.
-
-After setting up the make.inc, you can test this interface by typing
-
-make lapacke_testing
-
-Alternatively, you can both build and test the interface by typing
-
-make
-
-If you use a Fortran compiler to build LAPACK, BLAS libraries, you may need to
-set the Fortran compiler as a linker (LINKER macro) in make.inc, or
-alternatively, provide necessary Fortran run-time libraries as linker flags
-(LDFLAGS macro).
-
-The current C interface testing system does not test any LAPACK functionality.
-It only tests the accuracy of the C interface. The tests compare the results 
-obtained with LAPACK routines against those obtained with the C interface 
-to LAPACK in four combinations:
-
-1) row-major layout, high-level interface
-
-2) column-major layout, high-level interface
-
-3) row-major layout, middle-level interface
-
-4) column-major layout, middle-level interface
 
 -------------------------------------------------------------------------------
 Handling Complex Types
@@ -243,6 +203,6 @@ Intel Corporation in the U.S. and other countries.
 
 * Other names and brands may be claimed as the property of others.
 
-Copyright (C) 2010, Intel Corporation. All rights reserved.
+Copyright (C) 2011, Intel Corporation. All rights reserved.
 
 
