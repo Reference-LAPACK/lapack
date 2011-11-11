@@ -216,19 +216,24 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
+         WORK( 1 ) = 1
          IF( WANTQ ) THEN
             IF( M.GE.K ) THEN
                CALL DORGQR( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
             ELSE
-               CALL DORGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
-     $                      -1, IINFO )
+               IF( M.GT.1 ) THEN
+                  CALL DORGQR( M-1, M-1, M-1, A( 2, 2 ), LDA, TAU, WORK,
+     $                         -1, IINFO )
+               END IF
             END IF
          ELSE
             IF( K.LT.N ) THEN
                CALL DORGLQ( M, N, K, A, LDA, TAU, WORK, -1, IINFO )
             ELSE
-               CALL DORGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
-     $                      -1, IINFO )
+               IF( N.GT.1 ) THEN
+                  CALL DORGLQ( N-1, N-1, N-1, A( 2, 2 ), LDA, TAU, WORK,
+     $                         -1, IINFO )
+               END IF
             END IF
          END IF
          LWKOPT = WORK( 1 )
