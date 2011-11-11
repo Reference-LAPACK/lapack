@@ -1,7 +1,7 @@
 #
 #  Top Level Makefile for LAPACK
-#  Version 3.2.2
-#  June 2010
+#  Version 3.4.0
+#  November 2011
 #
 
 include make.inc
@@ -63,6 +63,23 @@ blas_testing:
 	           ./xblat3d < dblat3.in     ; \
 	           ./xblat3c < cblat3.in     ; \
 	           ./xblat3z < zblat3.in     ) 
+html:
+	@echo "LAPACK HTML PAGES GENRATION with Doxygen"
+	doxygen DOCS/Doxyfile
+	@echo "=================="	
+	@echo "LAPACK HTML PAGES GENRATED in DOCS/explore-html"
+	@echo "Usage: open DOCS/explore-html/index.html"
+	@echo "Online version available at http://www.netlib.org/lapack/explore-html/"
+	@echo "=================="
+
+man:
+	@echo "LAPACK MAN PAGES GENRATION with Doxygen"
+	doxygen DOCS/Doxyfile_man
+	@echo "=================="
+	@echo "LAPACK MAN PAGES GENRATED in DOCS/MAN"
+	@echo "Set your MANPATH env variable accordingly"
+	@echo "Usage: man dgetrf.f"
+	@echo "=================="
 
 cleanlib:
 	( cd INSTALL; $(MAKE) clean )
