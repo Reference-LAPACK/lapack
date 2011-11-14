@@ -238,7 +238,7 @@
 *
 *        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
 *
-         CALL DSYTRS( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
+         CALL DSYTRS_ROOK( UPLO, N, 1, A, LDA, IPIV, WORK, N, INFO )
          GO TO 30
       END IF
 *
