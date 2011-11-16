@@ -280,7 +280,7 @@
       EXTERNAL  LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  CCOPY, CGEMM, CLACGV, CTRMM
+      EXTERNAL  CGEMM, CTRMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG

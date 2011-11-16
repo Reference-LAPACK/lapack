@@ -280,7 +280,7 @@
       EXTERNAL  LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  ZCOPY, ZGEMM, ZLACGV, ZTRMM
+      EXTERNAL  ZGEMM, ZTRMM
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC CONJG

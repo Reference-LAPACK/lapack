@@ -280,7 +280,7 @@
       EXTERNAL  LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL  SCOPY, SGEMM, SLACGV, STRMM
+      EXTERNAL  SGEMM, STRMM
 *     ..
 *     .. Executable Statements ..
 *
