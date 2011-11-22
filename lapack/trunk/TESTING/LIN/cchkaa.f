@@ -99,7 +99,8 @@
 *
 *> \ingroup complex_lin
 *
-*  =====================================================================      PROGRAM CCHKAA
+*  =====================================================================
+      PROGRAM CCHKAA
 *
 *  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
