@@ -56,7 +56,8 @@
 *
 *> \ingroup single_lin
 *
-*  =====================================================================      PROGRAM SCHKRFP
+*  =====================================================================
+      PROGRAM SCHKRFP
 *
 *  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
