@@ -34,7 +34,8 @@
 *
 *> \ingroup double_blas_testing
 *
-*  =====================================================================      PROGRAM DBLAT1
+*  =====================================================================
+      PROGRAM DBLAT1
 *
 *  -- Reference BLAS test routine (version 3.4.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

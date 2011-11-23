@@ -100,7 +100,8 @@
 *
 *> \ingroup complex_blas_testing
 *
-*  =====================================================================      PROGRAM CBLAT2
+*  =====================================================================
+      PROGRAM CBLAT2
 *
 *  -- Reference BLAS test routine (version 3.4.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
