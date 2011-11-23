@@ -79,7 +79,8 @@
 *
 *> \ingroup single_blas_testing
 *
-*  =====================================================================      PROGRAM SBLAT3
+*  =====================================================================
+      PROGRAM SBLAT3
 *
 *  -- Reference BLAS test routine (version 3.4.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

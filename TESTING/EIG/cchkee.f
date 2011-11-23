@@ -1030,7 +1030,8 @@
 *
 *> \ingroup complex_eig
 *
-*  =====================================================================      PROGRAM CCHKEE
+*  =====================================================================
+      PROGRAM CCHKEE
 *
 *  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
