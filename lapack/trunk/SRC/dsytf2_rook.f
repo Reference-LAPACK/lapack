@@ -178,9 +178,13 @@
 *>
 *> \verbatim
 *>
-*>  November 2011, Igor Kozachenko, University of California Berkeley
+*>   November 2011, Igor Kozachenko,
+*>                  Computer Science Division,
+*>                  University of California, Berkeley
 *>
-*>  September 2007, Craig Lucas, University of Manchester
+*>  September 2007, Sven Hammarling, Nicholas J. Higham, Craig Lucas,
+*>                  School of Mathematics,
+*>                  University of Manchester
 *>
 *>  01-01-96 - Based on modifications by
 *>    J. Lewis, Boeing Computer Services Company
@@ -380,8 +384,9 @@
 *              submatrix A(1:k,1:k) if we have a 2-by-2 pivot
 *
                IF( P.GT.1 )
-     $            CALL DSWAP( P-1, A( 1, KK ), 1, A( 1, P ), 1 )
-               CALL DSWAP( KK-P-1, A( K+1, KK ), 1, A( P, KP+1 ),
+     $            CALL DSWAP( P-1, A( 1, K ), 1, A( 1, P ), 1 )
+               IF( P.LT.(K-1) )
+     $            CALL DSWAP( K-P-1, A( P+1, K ), 1, A( P, P+1 ),
      $                     LDA )
                T = A( K, K )
                A( K, K ) = A( P, P )
@@ -398,7 +403,7 @@
 *
                IF( KP.GT.1 )
      $            CALL DSWAP( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
-               IF( KK.GT.1 )
+               IF( ( KK.GT.1 ) .AND. ( KP.LT.(KK-1) ) )
      $            CALL DSWAP( KK-KP-1, A( KP+1, KK ), 1, A( KP, KP+1 ),
      $                     LDA )
                T = A( KK, KK )
@@ -636,7 +641,8 @@
 *
                IF( P.LT.N )
      $            CALL DSWAP( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
-               CALL DSWAP( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA )
+               IF( P.GT.(K+1) )
+     $            CALL DSWAP( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA )
                T = A( K, K )
                A( K, K ) = A( P, P )
                A( P, P ) = T
@@ -652,7 +658,7 @@
 *
                IF( KP.LT.N )
      $            CALL DSWAP( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
-               IF( KK.LT.N )
+               IF( ( KK.LT.N ) .AND. ( KP.GT.(KK+1) ) )
      $            CALL DSWAP( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
      $                     LDA )
                T = A( KK, KK )
