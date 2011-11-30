@@ -111,12 +111,9 @@
          ILAZLR = 0
          DO J = 1, N
             I=M
-            DO WHILE ((A(I,J).NE.ZERO).AND.(I.GE.1))
-              I=I-1
-              IF (I.EQ.0) THEN
-                 EXIT
-              END IF
-            ENDDO         
+            DO WHILE((A(MAX(I,1),J).EQ.ZERO).AND.(I.GE.1))
+               I=I-1
+            ENDDO
             ILAZLR = MAX( ILAZLR, I )
          END DO
       END IF
