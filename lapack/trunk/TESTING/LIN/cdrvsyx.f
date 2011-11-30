@@ -620,7 +620,7 @@
      $                 LDA, IWORK, EQUED, WORK( N+1 ), B, LDA, X,
      $                 LDA, RCOND, RPVGRW_SVXX, BERR, N_ERR_BNDS,
      $                 ERRBNDS_N, ERRBNDS_C, 0, ZERO, WORK,
-     $                 IWORK( N+1 ), INFO )
+     $                 RWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
 *                 pivoting.
