@@ -170,9 +170,13 @@
 *>
 *> \verbatim
 *>
-*>  November 2011, Igor Kozachenko, University of California Berkeley
+*>   November 2011, Igor Kozachenko,
+*>                  Computer Science Division,
+*>                  University of California, Berkeley
 *>
-*>  September 2007, Craig Lucas, University of Manchester
+*>  September 2007, Sven Hammarling, Nicholas J. Higham, Craig Lucas,
+*>                  School of Mathematics,
+*>                  University of Manchester
 *>
 *> \endverbatim
 *
@@ -320,7 +324,7 @@
 *
                   IF( K.LT.N )
      $               CALL DGEMV( 'No transpose', K, N-K, -ONE,
-     $                           A( 1, K+1 ), LDA, W( IMAX, KW+1 ), LDW
+     $                           A( 1, K+1 ), LDA, W( IMAX, KW+1 ), LDW,
      $                           ONE,W( 1, KW-1 ), 1 )
 *
 *                 JMAX is the column-index of the largest off-diagonal
@@ -399,13 +403,13 @@
 *
             IF( ( KSTEP.EQ.2 ) .AND. ( P.NE.K ) ) THEN
 *
-*              Copy non-updated column KK+1 to column P
+*              Copy non-updated column K to column P
 *
-               CALL DCOPY( P-K, A( K, K ), 1, A( P, K ), LDA )
-               CALL DCOPY( N-P+1, A( P, K ), 1, A( P, P ), 1 )
+               CALL DCOPY( K-P, A( P+1, K ), 1, A( P, P+1 ), LDA )
+               CALL DCOPY( P, A( 1, K ), 1, A( 1, P ), 1 )
 *
-*              Interchange rows K and P in last K columns of A
-*              and last KK columns of W
+*              Interchange rows K and P in last N-K+1 columns of A
+*              and last N-K+2 columns of W
 *
                CALL DSWAP( N-K+1, A( K, K ), LDA, A( P, K ), LDA )
                CALL DSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ), LDW )
@@ -422,7 +426,8 @@
      $                     LDA )
                CALL DCOPY( KP, A( 1, KK ), 1, A( 1, KP ), 1 )
 *
-*              Interchange rows KK and KP in last KK columns of A and W
+*              Interchange rows KK and KP in last N-KK+1 columns
+*              of A and W
 *
                CALL DSWAP( N-KK+1, A( KK, KK ), LDA, A( KP, KK ), LDA )
                CALL DSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
@@ -712,13 +717,13 @@
 *
             IF( ( KSTEP.EQ.2 ) .AND. ( P.NE.K ) ) THEN
 *
-*              Copy non-updated column KK-1 to column P
+*              Copy non-updated column K to column P
 *
                CALL DCOPY( P-K, A( K, K ), 1, A( P, K ), LDA )
                CALL DCOPY( N-P+1, A( P, K ), 1, A( P, P ), 1 )
 *
 *              Interchange rows K and P in first K columns of A
-*              and first KK columns of W
+*              and first K+1 columns of W
 *
                CALL DSWAP( K, A( K, 1 ), LDA, A( P, 1 ), LDA )
                CALL DSWAP( KK, W( K, 1 ), LDW, W( P, 1 ), LDW )
