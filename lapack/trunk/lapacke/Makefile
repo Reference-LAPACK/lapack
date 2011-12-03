@@ -40,7 +40,7 @@
 # To clean everything including lapacke library type
 # 'make cleanall'
 #
-include make.inc
+include ../make.inc
 
 all: lapacke 
 
@@ -48,6 +48,9 @@ lapacke:
 	cd src && $(MAKE)
 	cd utils && $(MAKE)
 
+example:
+	cd example && $(MAKE)
+	
 clean: cleanlib
 
 cleanlib:
@@ -56,4 +59,5 @@ cleanlib:
 
 cleanall: clean
 	rm -f $(LAPACKE)
+	cd example && $(MAKE) clean
 
