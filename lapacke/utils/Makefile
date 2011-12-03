@@ -32,7 +32,7 @@
 ##############################################################################
 # makefile for LAPACKE, used to build lapacke binary.
 #
-include ../make.inc
+include ../../make.inc
 
 OBJ = lapacke_cgb_nancheck.o \
       lapacke_cgb_trans.o \
@@ -186,8 +186,8 @@ OBJ = lapacke_cgb_nancheck.o \
 all: lib
 
 lib: $(OBJ)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKE) $(OBJ)
-	$(RANLIB) ../$(LAPACKE)
+	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(OBJ)
+	$(RANLIB) ../../$(LAPACKELIB)
 
 .c.o:
 	$(CC) -c $(CFLAGS) -I ../include -o $@ $<

@@ -84,7 +84,7 @@ extern "C" {
 #endif
 
 #ifndef lapack_complex_float_imag
-#define lapack_complex_float_imag(z)       (imag(z))
+#define lapack_complex_float_imag(z)       (cimag(z))
 #endif
 
 lapack_complex_float lapack_make_complex_float( float re, float im );
@@ -100,7 +100,7 @@ lapack_complex_float lapack_make_complex_float( float re, float im );
 #endif
 
 #ifndef lapack_complex_double_imag
-#define lapack_complex_double_imag(z)       (imag(z))
+#define lapack_complex_double_imag(z)       (cimag(z))
 #endif
 
 lapack_complex_double lapack_make_complex_double( double re, double im );

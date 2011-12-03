@@ -32,7 +32,7 @@
 ##############################################################################
 # makefile for LAPACKE, used to build lapacke binary.
 #
-include ../make.inc
+include ../../make.inc
 
 C_FILES := $(wildcard *.c)
 OBJ_FILES := $(C_FILES:.c=.o)
@@ -40,8 +40,8 @@ OBJ_FILES := $(C_FILES:.c=.o)
 all: lib
 
 lib: $(OBJ_FILES)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKE) $(OBJ_FILES)
-	$(RANLIB) ../$(LAPACKE)
+	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(OBJ_FILES)
+	$(RANLIB) ../../$(LAPACKELIB)
 
 .c.o:
 	$(CC) -c $(CFLAGS) -I ../include -o $@ $<

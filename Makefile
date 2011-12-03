@@ -23,6 +23,12 @@ blaslib:
 lapacklib:	lapack_install
 	( cd SRC; $(MAKE) )
 
+lapackelib: lapacklib
+	( cd lapacke; $(MAKE) )
+
+lapacke_example: lapackelib
+	( cd lapacke/example; $(MAKE) )
+
 variants:
 	( cd SRC/VARIANTS ; $(MAKE))
 	
@@ -87,6 +93,8 @@ cleanlib:
 	( cd SRC; $(MAKE) clean )
 	( cd SRC/VARIANTS; $(MAKE) clean )
 	( cd TESTING/MATGEN; $(MAKE) clean )
+	( cd lapacke; $(MAKE) clean )
+	
 
 cleanblas_testing:	
 	( cd BLAS/TESTING; $(MAKE) -f Makeblat1 clean )
