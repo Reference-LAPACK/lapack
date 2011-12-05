@@ -130,9 +130,13 @@
 *  ==================
 *> \verbatim
 *>
-*>  November 2011, Igor Kozachenko, University of California Berkeley
+*>   November 2011, Igor Kozachenko,
+*>                  Computer Science Division,
+*>                  University of California, Berkeley
 *>
-*>  September 2007, Craig Lucas, University of Manchester
+*>  September 2007, Sven Hammarling, Nicholas J. Higham, Craig Lucas,
+*>                  School of Mathematics,
+*>                  University of Manchester
 *>
 *> \endverbatim
 *
