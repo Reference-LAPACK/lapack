@@ -195,9 +195,13 @@
 *>
 *> \verbatim
 *>
-*>  November 2011, Igor Kozachenko, University of California Berkeley
+*>   November 2011, Igor Kozachenko,
+*>                  Computer Science Division,
+*>                  University of California, Berkeley
 *>
-*>  September 2007, Craig Lucas, University of Manchester
+*>  September 2007, Sven Hammarling, Nicholas J. Higham, Craig Lucas,
+*>                  School of Mathematics,
+*>                  University of Manchester
 *>
 *> \endverbatim
 *
@@ -319,15 +323,7 @@
          IF( INFO.EQ.0 .AND. IINFO.GT.0 )
      $      INFO = IINFO     
 *
-*        Adjust IPIV
-*
-         DO 14 J = K, K - KB + 1
-            IF( IPIV( J ).GT.0 ) THEN
-               IPIV( J ) = IPIV( J ) - K + 1
-            ELSE
-               IPIV( J ) = IPIV( J ) + K - 1
-            END IF
-   14    CONTINUE
+*        No need to adjust IPIV
 *
 *        Decrease K and return to the start of the main loop
 *
