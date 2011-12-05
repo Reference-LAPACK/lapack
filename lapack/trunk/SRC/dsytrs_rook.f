@@ -69,7 +69,7 @@
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by DSYTRF.
+*>          obtain the factor U or L as computed by DSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +82,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D
-*>          as determined by DSYTRF.
+*>          as determined by DSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -122,9 +122,13 @@
 *>
 *> \verbatim
 *>
-*>  November 2011, Igor Kozachenko, University of California Berkeley
+*>   November 2011, Igor Kozachenko,
+*>                  Computer Science Division,
+*>                  University of California, Berkeley
 *>
-*>  September 2007, Craig Lucas, University of Manchester
+*>  September 2007, Sven Hammarling, Nicholas J. Higham, Craig Lucas,
+*>                  School of Mathematics,
+*>                  University of Manchester
 *>
 *> \endverbatim
 *
