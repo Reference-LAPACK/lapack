@@ -223,7 +223,7 @@
       INTEGER            I, IMAX, J, JMAX, ITEMP, K, KK, KP, KSTEP,
      $                   P, II
       REAL               ABSAKK, ALPHA, COLMAX, D11, D12, D21, D22,
-     $                   ROWMAX, DTEMP, T, WK, WKM1, WKP1, SFMIN
+     $                   ROWMAX, STEMP, T, WK, WKM1, WKP1, SFMIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -340,9 +340,9 @@
 *
                   IF( IMAX.GT.1 ) THEN
                      ITEMP = ISAMAX( IMAX-1, A( 1, IMAX ), 1 )
-                     DTEMP = ABS( A( ITEMP, IMAX ) )
-                     IF( DTEMP.GT.ROWMAX ) THEN
-                        ROWMAX = DTEMP
+                     STEMP = ABS( A( ITEMP, IMAX ) )
+                     IF( STEMP.GT.ROWMAX ) THEN
+                        ROWMAX = STEMP
                         JMAX = ITEMP
                      END IF
                   END IF
@@ -607,9 +607,9 @@
                   IF( IMAX.LT.N ) THEN
                      ITEMP = IMAX + ISAMAX( N-IMAX, A( IMAX+1, IMAX ),
      $                                     1 )
-                     DTEMP = ABS( A( ITEMP, IMAX ) )
-                     IF( DTEMP.GT.ROWMAX ) THEN
-                        ROWMAX = DTEMP
+                     STEMP = ABS( A( ITEMP, IMAX ) )
+                     IF( STEMP.GT.ROWMAX ) THEN
+                        ROWMAX = STEMP
                         JMAX = ITEMP
                      END IF
                   END IF
