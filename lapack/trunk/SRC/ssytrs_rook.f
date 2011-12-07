@@ -35,8 +35,8 @@
 *>
 *> \verbatim
 *>
-*> SSYTRS_ROOK solves a system of linear equations A*X = B with a real
-*> symmetric matrix A using the factorization A = U*D*U**T or
+*> SSYTRS_ROOK solves a system of linear equations A*X = B with
+*> a real symmetric matrix A using the factorization A = U*D*U**T or
 *> A = L*D*L**T computed by SSYTRF_ROOK.
 *> \endverbatim
 *
