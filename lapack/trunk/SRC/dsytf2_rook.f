@@ -327,8 +327,8 @@
 *                 Begin pivot search loop body
 *
 *                 JMAX is the column-index of the largest off-diagonal
-*                 element in row IMAX, and ROWMAX is its absolute value
-*                 Determine only ROWMAX.
+*                 element in row IMAX, and ROWMAX is its absolute value.
+*                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
                      JMAX = IMAX + IDAMAX( K-IMAX, A( IMAX, IMAX+1 ),
