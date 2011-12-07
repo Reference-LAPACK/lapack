@@ -294,9 +294,9 @@
          ELSE
 * =====================================================================          
 *
-*           Test for interchange and handle NaN and Inf
+*           Test for interchange
 *
-*           Equivalent to testing for
+*           Equivalent to testing for (used to handle NaN and Inf)
 *           ABSAKK.GE.ALPHA*COLMAX
 *           
             IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
@@ -328,7 +328,8 @@
      $                           ONE,W( 1, KW-1 ), 1 )
 *
 *                 JMAX is the column-index of the largest off-diagonal
-*                 element in row IMAX, and ROWMAX is its absolute value
+*                 element in row IMAX, and ROWMAX is its absolute value.
+*                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
                      JMAX = IMAX + IDAMAX( K-IMAX, W( IMAX+1, KW-1 ),
@@ -347,7 +348,7 @@
                      END IF
                   END IF
 *
-*                 Equivalent to testing for
+*                 Equivalent to testing for (used to handle NaN and Inf)
 *                 ABS( W( IMAX, KW-1 ) ).GE.ALPHA*ROWMAX
 *
                   IF( .NOT.(ABS( W( IMAX, KW-1 ) ).LT.ALPHA*ROWMAX ) )
@@ -364,7 +365,8 @@
 *
                      DONE = .TRUE.
 *
-*                 Equivalent to testing for ROWMAX .EQ. COLMAX
+*                 Equivalent to testing for ROWMAX .EQ. COLMAX,
+*                 used to handle NaN and Inf
 *
                   ELSE IF( ( P.EQ.JMAX ) .OR. ( ROWMAX.LE.COLMAX ) )
      $               THEN
@@ -614,9 +616,9 @@
          ELSE
 * =====================================================================          
 *
-*           Test for interchange and handle NaN and Inf
+*           Test for interchange
 *
-*           Equivalent to testing for
+*           Equivalent to testing for (used to handle NaN and Inf)
 *           ABSAKK.GE.ALPHA*COLMAX
 *           
             IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
@@ -647,7 +649,8 @@
      $                          ONE, W( K, K+1 ), 1 )
 *
 *                 JMAX is the column-index of the largest off-diagonal
-*                 element in row IMAX, and ROWMAX is its absolute value
+*                 element in row IMAX, and ROWMAX is its absolute value.
+*                 Determine both ROWMAX and JMAX.
 *
                   IF( IMAX.NE.K ) THEN
                      JMAX = K - 1 + IDAMAX( IMAX-K, W( K, K+1 ), 1 )
@@ -665,7 +668,7 @@
                      END IF
                   END IF
 *
-*                 Equivalent to testing for
+*                 Equivalent to testing for (used to handle NaN and Inf)
 *                 ABS( W( IMAX, K+1 ) ).GE.ALPHA*ROWMAX
 *
                   IF( .NOT.( ABS( W( IMAX, K+1 ) ).LT.ALPHA*ROWMAX ) )
@@ -682,7 +685,8 @@
 *
                      DONE = .TRUE.
 *
-*                 Equivalent to testing for ROWMAX .EQ. COLMAX
+*                 Equivalent to testing for ROWMAX .EQ. COLMAX,
+*                 used to handle NaN and Inf
 *
                   ELSE IF( ( P.EQ.JMAX ) .OR. ( ROWMAX.LE.COLMAX ) ) 
      $               THEN

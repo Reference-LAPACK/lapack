@@ -286,7 +286,8 @@
          ABSAKK = ABS( A( K, K ) )
 *
 *        IMAX is the row-index of the largest off-diagonal element in
-*        column K, and COLMAX is its absolute value
+*        column K, and COLMAX is its absolute value.
+*        Determine both COLMAX and IMAX.
 *
          IF( K.GT.1 ) THEN
             IMAX = IDAMAX( K-1, A( 1, K ), 1 )
@@ -303,7 +304,13 @@
      $         INFO = K
             KP = K
          ELSE
-            IF( ABSAKK.GE.ALPHA*COLMAX ) THEN
+*
+*           Test for interchange
+*
+*           Equivalent to testing for (used to handle NaN and Inf)
+*           ABSAKK.GE.ALPHA*COLMAX
+*
+            IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
 *
 *              no interchange,
 *              use 1-by-1 pivot block
@@ -340,7 +347,7 @@
                      END IF
                   END IF
 *
-*                 Equivalent to testing for 
+*                 Equivalent to testing for (used to handle NaN and Inf)
 *                 ABS( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX
 *
                   IF( .NOT.( ABS( A( IMAX, IMAX ) ).LT.ALPHA*ROWMAX ) )
@@ -351,7 +358,11 @@
 *
                      KP = IMAX
                      DONE = .TRUE.
-                  ELSE IF( COLMAX.EQ.ROWMAX ) THEN
+*
+*                 Equivalent to testing for ROWMAX .EQ. COLMAX,
+*                 used to handle NaN and Inf
+*
+                  ELSE IF( ( P.EQ.JMAX ).OR.( ROWMAX.LE.COLMAX ) ) THEN
 *
 *                    interchange rows and columns K+1 and IMAX,
 *                    use 2-by-2 pivot block
@@ -361,7 +372,7 @@
                      DONE = .TRUE.
                   ELSE
 *
-*                    Pivot NOT found set variables and repeat
+*                    Pivot NOT found, set variables and repeat
 *
                      P = IMAX
                      COLMAX = ROWMAX
@@ -543,7 +554,8 @@
          ABSAKK = ABS( A( K, K ) )
 *
 *        IMAX is the row-index of the largest off-diagonal element in
-*        column K, and COLMAX is its absolute value
+*        column K, and COLMAX is its absolute value.
+*        Determine both COLMAX and IMAX.
 *
          IF( K.LT.N ) THEN
             IMAX = K + IDAMAX( N-K, A( K+1, K ), 1 )
@@ -560,7 +572,13 @@
      $         INFO = K
             KP = K
          ELSE
-            IF( ABSAKK.GE.ALPHA*COLMAX ) THEN
+*
+*           Test for interchange
+*
+*           Equivalent to testing for (used to handle NaN and Inf)
+*           ABSAKK.GE.ALPHA*COLMAX
+*
+            IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
 *
@@ -596,7 +614,7 @@
                      END IF
                   END IF
 *
-*                 Equivalent to testing for 
+*                 Equivalent to testing for (used to handle NaN and Inf) 
 *                 ABS( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX
 *
                   IF( .NOT.( ABS( A( IMAX, IMAX ) ).LT.ALPHA*ROWMAX ) )
@@ -607,7 +625,11 @@
 *
                      KP = IMAX
                      DONE = .TRUE.
-                  ELSE IF( COLMAX.EQ.ROWMAX) THEN
+*
+*                 Equivalent to testing for ROWMAX .EQ. COLMAX,
+*                 used to handle NaN and Inf
+*
+                  ELSE IF( ( P.EQ.JMAX ).OR.( ROWMAX.LE.COLMAX ) ) THEN
 *
 *                    interchange rows and columns K+1 and IMAX,
 *                    use 2-by-2 pivot block
@@ -617,7 +639,7 @@
                      DONE = .TRUE.
                   ELSE
 *
-*                    Pivot NOT found set variables and repeat
+*                    Pivot NOT found, set variables and repeat
 *
                      P = IMAX
                      COLMAX = ROWMAX
