@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE CSYCON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND,
-*                               WORK, IWORK, INFO )
+*                               WORK, INFO )
 * 
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -27,7 +27,7 @@
 *       REAL               ANORM, RCOND
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            IPIV( * ), IWORK( * )
+*       INTEGER            IPIV( * )
 *       COMPLEX            A( LDA, * ), WORK( * )
 *       ..
 *  
@@ -102,11 +102,6 @@
 *>          WORK is COMPLEX array, dimension (2*N)
 *> \endverbatim
 *>
-*> \param[out] IWORK
-*> \verbatim
-*>          IWORK is INTEGER array, dimension (N)
-*> \endverbatim
-*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
@@ -142,7 +137,7 @@
 *
 *  =====================================================================
       SUBROUTINE CSYCON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
-     $                   IWORK, INFO )
+     $                        INFO )
 *
 *  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -155,7 +150,7 @@
       REAL               ANORM, RCOND
 *     ..
 *     .. Array Arguments ..
-      INTEGER            IPIV( * ), IWORK( * )
+      INTEGER            IPIV( * )
       COMPLEX            A( LDA, * ), WORK( * )
 *     ..
 *
@@ -239,7 +234,7 @@
 *
       KASE = 0
    30 CONTINUE
-      CALL CLACN2( N, WORK( N+1 ), WORK, IWORK, AINVNM, KASE, ISAVE )
+      CALL CLACN2( N, WORK( N+1 ), WORK, AINVNM, KASE, ISAVE )
       IF( KASE.NE.0 ) THEN
 *
 *        Multiply by inv(L*D*L**T) or inv(U*D*U**T).
