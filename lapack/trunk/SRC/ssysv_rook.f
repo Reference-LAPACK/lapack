@@ -258,7 +258,7 @@
          IF( N.EQ.0 ) THEN
             LWKOPT = 1
          ELSE
-            CALL DSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
+            CALL SSYTRF_ROOK( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
             LWKOPT = WORK(1)
          END IF
          WORK( 1 ) = LWKOPT
