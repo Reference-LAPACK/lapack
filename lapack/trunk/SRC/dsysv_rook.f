@@ -36,7 +36,8 @@
 *>
 *> \verbatim
 *>
-*> DSYSV_ROOK computes the solution to a real system of linear equations
+*> DSYSV_ROOK computes the solution to a real system of linear
+*> equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *> matrices.
@@ -46,8 +47,14 @@
 *>    A = L * D * L**T,  if UPLO = 'L',
 *> where U (or L) is a product of permutation and unit upper (lower)
 *> triangular matrices, and D is symmetric and block diagonal with
-*> 1-by-1 and 2-by-2 diagonal blocks.  The factored form of A is then
-*> used to solve the system of equations A * X = B.
+*> 1-by-1 and 2-by-2 diagonal blocks.
+*>
+*> DSYTRF_ROOK is called to compute the factorization of a real
+*> symmetric matrix A using the bounded Bunch-Kaufman ("rook") diagonal
+*> pivoting method.
+*>
+*> The factored form of A is then used to solve the system 
+*> of equations A * X = B by calling DSYTRS_ROOK.
 *> \endverbatim
 *
 *  Arguments:
