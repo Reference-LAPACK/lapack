@@ -214,8 +214,7 @@
       INTEGER            IMAX, ITEMP, J, JB, JJ, JMAX, JP1, JP2, K, KK,
      $                   KW, KKW, KP, KSTEP, P, II
       REAL               ABSAKK, ALPHA, COLMAX, ROWMAX, STEMP, SFMIN
-      COMPLEX            D11, D12, D21, D22, R1
-     $                   T, Z
+      COMPLEX            D11, D12, D21, D22, R1, T, Z
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
