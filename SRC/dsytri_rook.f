@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> DSYTRI_ROOK computes the inverse of a real symmetric indefinite matrix
-*> A using the factorization A = U*D*U**T or A = L*D*L**T computed by
-*> DSYTRF_ROOK.
+*> DSYTRI_ROOK computes the inverse of a real symmetric
+*> matrix A using the factorization A = U*D*U**T or A = L*D*L**T
+*> computed by DSYTRF_ROOK.
 *> \endverbatim
 *
 *  Arguments:
