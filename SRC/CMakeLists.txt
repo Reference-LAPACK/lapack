@@ -133,7 +133,10 @@ set(SLASRC
    sstevx.f ssycon.f ssyev.f  ssyevd.f ssyevr.f ssyevx.f ssygs2.f 
    ssygst.f ssygv.f  ssygvd.f ssygvx.f ssyrfs.f ssysv.f  ssysvx.f 
    ssytd2.f ssytf2.f ssytrd.f ssytrf.f ssytri.f ssytri2.f ssytri2x.f
-   ssyswapr.f ssytrs.f ssytrs2.f ssyconv.f stbcon.f 
+   ssyswapr.f ssytrs.f ssytrs2.f ssyconv.f 
+   ssytf2_rook.f slasyf_rook.f ssytrf_rook.f ssytrs_rook.f
+   ssytri_rook.f ssycon_rook.f ssysv_rook.f
+   stbcon.f 
    stbrfs.f stbtrs.f stgevc.f stgex2.f stgexc.f stgsen.f 
    stgsja.f stgsna.f stgsy2.f stgsyl.f stpcon.f stprfs.f stptri.f 
    stptrs.f 
@@ -202,7 +205,10 @@ set(CLASRC
    cstegr.f cstein.f csteqr.f csycon.f csymv.f  
    csyr.f   csyrfs.f csysv.f  csysvx.f csytf2.f csytrf.f csytri.f 
    csytri2.f csytri2x.f csyswapr.f
-   csytrs.f csytrs2.f csyconv.f ctbcon.f ctbrfs.f ctbtrs.f ctgevc.f ctgex2.f 
+   csytrs.f csytrs2.f csyconv.f 
+   csytf2_rook.f clasyf_rook.f csytrf_rook.f csytrs_rook.f
+   csytri_rook.f csycon_rook.f csysv_rook.f
+   ctbcon.f ctbrfs.f ctbtrs.f ctgevc.f ctgex2.f 
    ctgexc.f ctgsen.f ctgsja.f ctgsna.f ctgsy2.f ctgsyl.f ctpcon.f 
    ctprfs.f ctptri.f 
    ctptrs.f ctrcon.f ctrevc.f ctrexc.f ctrrfs.f ctrsen.f ctrsna.f 
@@ -275,7 +281,10 @@ set(DLASRC
    dsyevx.f dsygs2.f dsygst.f dsygv.f  dsygvd.f dsygvx.f dsyrfs.f 
    dsysv.f  dsysvx.f 
    dsytd2.f dsytf2.f dsytrd.f dsytrf.f dsytri.f dsytrs.f dsytrs2.f 
-   dsytri2.f dsytri2x.f dsyswapr.f dsyconv.f dtbcon.f 
+   dsytri2.f dsytri2x.f dsyswapr.f dsyconv.f
+   dsytf2_rook.f dlasyf_rook.f dsytrf_rook.f dsytrs_rook.f
+   dsytri_rook.f dsycon_rook.f dsysv_rook.f
+   dtbcon.f 
    dtbrfs.f dtbtrs.f dtgevc.f dtgex2.f dtgexc.f dtgsen.f 
    dtgsja.f dtgsna.f dtgsy2.f dtgsyl.f dtpcon.f dtprfs.f dtptri.f 
    dtptrs.f 
@@ -346,7 +355,10 @@ set(ZLASRC
    zstegr.f zstein.f zsteqr.f zsycon.f zsymv.f  
    zsyr.f   zsyrfs.f zsysv.f  zsysvx.f zsytf2.f zsytrf.f zsytri.f 
    zsytri2.f zsytri2x.f zsyswapr.f
-   zsytrs.f zsytrs2.f zsyconv.f ztbcon.f ztbrfs.f ztbtrs.f ztgevc.f ztgex2.f 
+   zsytrs.f zsytrs2.f zsyconv.f
+   zsytf2_rook.f zlasyf_rook.f zsytrf_rook.f zsytrs_rook.f
+   zsytri_rook.f zsycon_rook.f zsysv_rook.f
+   ztbcon.f ztbrfs.f ztbtrs.f ztgevc.f ztgex2.f 
    ztgexc.f ztgsen.f ztgsja.f ztgsna.f ztgsy2.f ztgsyl.f ztpcon.f 
    ztprfs.f ztptri.f 
    ztptrs.f ztrcon.f ztrevc.f ztrexc.f ztrrfs.f ztrsen.f ztrsna.f 
