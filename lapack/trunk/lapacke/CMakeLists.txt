@@ -1,5 +1,9 @@
 message(STATUS "LAPACKE enable")
 enable_language(C)
+if (WIN32 AND NOT UNIX)
+ ADD_DEFINITIONS(-DHAVE_LAPACK_CONFIG_H -DLAPACK_COMPLEX_STRUCTURE -DLAPACK_NAME_PATTERN_UC)
+ MESSAGE (STATUS "Windows BUILD")
+endif (WIN32 AND NOT UNIX)
 
 include_directories( include )
 #add_subdirectory(include)

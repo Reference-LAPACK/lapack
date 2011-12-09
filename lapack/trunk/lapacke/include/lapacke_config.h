@@ -1368,6 +1368,31 @@ lapack_complex_double lapack_make_complex_double( double re, double im );
 #define LAPACKE_cupmtr   LAPACKE_NAME(cupmtr,CUPMTR)
 #define LAPACKE_zupmtr   LAPACKE_NAME(zupmtr,ZUPMTR)
 
+#define LAPACKE_claghe   LAPACKE_NAME(claghe,CLAGHE)
+#define LAPACKE_zlaghe   LAPACKE_NAME(zlaghe,ZLAGHE)
+
+#define LAPACKE_slagsy   LAPACKE_NAME(slagsy,SLAGSY)
+#define LAPACKE_dlagsy   LAPACKE_NAME(dlagsy,DLAGSY)
+#define LAPACKE_clagsy   LAPACKE_NAME(clagsy,CLAGSY)
+#define LAPACKE_zlagsy   LAPACKE_NAME(zlagsy,ZLAGSY)
+
+#define LAPACKE_slapmr   LAPACKE_NAME(slapmr,SLAPMR)
+#define LAPACKE_dlapmr   LAPACKE_NAME(dlapmr,DLAPMR)
+#define LAPACKE_clapmr   LAPACKE_NAME(clapmr,CLAPMR)
+#define LAPACKE_zlapmr   LAPACKE_NAME(zlapmr,ZLAPMR)
+
+#define LAPACKE_slapy2   LAPACKE_NAME(slapy2,SLAPY2)
+#define LAPACKE_dlapy2   LAPACKE_NAME(dlapy2,DLAPY2)
+
+#define LAPACKE_slapy3   LAPACKE_NAME(slapy3,SLAPY3)
+#define LAPACKE_dlapy3   LAPACKE_NAME(dlapy3,DLAPY3)
+
+#define LAPACKE_slartgp   LAPACKE_NAME(slartgp,SLARTGP)
+#define LAPACKE_dlartgp   LAPACKE_NAME(dlartgp,DLARTGP)
+
+#define LAPACKE_slartgs   LAPACKE_NAME(slartgs,SLARTGS)
+#define LAPACKE_dlartgs   LAPACKE_NAME(dlartgs,DLARTGS)
+
 #define LAPACKE_sbdsdc_work   LAPACKE_NAME(sbdsdc_work,SBDSDC_WORK)
 #define LAPACKE_dbdsdc_work   LAPACKE_NAME(dbdsdc_work,DBDSDC_WORK)
 
@@ -2601,30 +2626,30 @@ lapack_complex_double lapack_make_complex_double( double re, double im );
 #define LAPACKE_cupmtr_work   LAPACKE_NAME(cupmtr_work,CUPMTR_WORK)
 #define LAPACKE_zupmtr_work   LAPACKE_NAME(zupmtr_work,ZUPMTR_WORK)
 
-#define LAPACKE_claghe   LAPACKE_NAME(claghe,CLAGHE)
-#define LAPACKE_zlaghe   LAPACKE_NAME(zlaghe,ZLAGHE)
+#define LAPACKE_claghe_work   LAPACKE_NAME(claghe_work,CLAGHE_WORK)
+#define LAPACKE_zlaghe_work   LAPACKE_NAME(zlaghe_work,ZLAGHE_WORK)
 
-#define LAPACKE_slagsy   LAPACKE_NAME(slagsy,SLAGSY)
-#define LAPACKE_dlagsy   LAPACKE_NAME(dlagsy,DLAGSY)
-#define LAPACKE_clagsy   LAPACKE_NAME(clagsy,CLAGSY)
-#define LAPACKE_zlagsy   LAPACKE_NAME(zlagsy,ZLAGSY)
+#define LAPACKE_slagsy_work   LAPACKE_NAME(slagsy_work,SLAGSY_WORK)
+#define LAPACKE_dlagsy_work   LAPACKE_NAME(dlagsy_work,DLAGSY_WORK)
+#define LAPACKE_clagsy_work   LAPACKE_NAME(clagsy_work,CLAGSY_WORK)
+#define LAPACKE_zlagsy_work   LAPACKE_NAME(zlagsy_work,ZLAGSY_WORK)
 
-#define LAPACKE_slapmr   LAPACKE_NAME(slapmr,SLAPMR)
-#define LAPACKE_dlapmr   LAPACKE_NAME(dlapmr,DLAPMR)
-#define LAPACKE_clapmr   LAPACKE_NAME(clapmr,CLAPMR)
-#define LAPACKE_zlapmr   LAPACKE_NAME(zlapmr,ZLAPMR)
+#define LAPACKE_slapmr_work   LAPACKE_NAME(slapmr_work,SLAPMR_WORK)
+#define LAPACKE_dlapmr_work   LAPACKE_NAME(dlapmr_work,DLAPMR_WORK)
+#define LAPACKE_clapmr_work   LAPACKE_NAME(clapmr_work,CLAPMR_WORK)
+#define LAPACKE_zlapmr_work   LAPACKE_NAME(zlapmr_work,ZLAPMR_WORK)
 
-#define LAPACKE_slapy2   LAPACKE_NAME(slapy2,SLAPY2)
-#define LAPACKE_dlapy2   LAPACKE_NAME(dlapy2,DLAPY2)
+#define LAPACKE_slapy2_work   LAPACKE_NAME(slapy2_work,SLAPY2_WORK)
+#define LAPACKE_dlapy2_work   LAPACKE_NAME(dlapy2_work,DLAPY2_WORK)
 
-#define LAPACKE_slapy3   LAPACKE_NAME(slapy3,SLAPY3)
-#define LAPACKE_dlapy3   LAPACKE_NAME(dlapy3,DLAPY3)
+#define LAPACKE_slapy3_work   LAPACKE_NAME(slapy3_work,SLAPY3_WORK)
+#define LAPACKE_dlapy3_work   LAPACKE_NAME(dlapy3_work,DLAPY3_WORK)
 
-#define LAPACKE_slartgp   LAPACKE_NAME(slartgp,SLARTGP)
-#define LAPACKE_dlartgp   LAPACKE_NAME(dlartgp,DLARTGP)
+#define LAPACKE_slartgp_work   LAPACKE_NAME(slartgp_work,SLARTGP_WORK)
+#define LAPACKE_dlartgp_work   LAPACKE_NAME(dlartgp_work,DLARTGP_WORK)
 
-#define LAPACKE_slartgs   LAPACKE_NAME(slartgs,SLARTGS)
-#define LAPACKE_dlartgs   LAPACKE_NAME(dlartgs,DLARTGS)
+#define LAPACKE_slartgs_work   LAPACKE_NAME(slartgs_work,SLARTGS_WORK)
+#define LAPACKE_dlartgs_work   LAPACKE_NAME(dlartgs_work,DLARTGS_WORK)
 
 //LAPACK 3.3.0
 #define LAPACKE_cbbcsd_work LAPACKE_NAME(cbbcsd_work,CBBCSD_WORK)
