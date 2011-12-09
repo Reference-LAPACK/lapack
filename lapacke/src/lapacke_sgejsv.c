@@ -75,14 +75,15 @@ lapack_int LAPACKE_sgejsv( int matrix_order, char joba, char jobu, char jobv,
     lapack_int* iwork = NULL;
     float* work = NULL;
     lapack_int i;
+    lapack_int nu, nv;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sgejsv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int nu = LAPACKE_lsame( jobu, 'n' ) ? 1 : m;
-    lapack_int nv = LAPACKE_lsame( jobv, 'n' ) ? 1 : n;
+    nu = LAPACKE_lsame( jobu, 'n' ) ? 1 : m;
+    nv = LAPACKE_lsame( jobv, 'n' ) ? 1 : n;
     if( LAPACKE_sge_nancheck( matrix_order, m, n, a, lda ) ) {
         return -10;
     }

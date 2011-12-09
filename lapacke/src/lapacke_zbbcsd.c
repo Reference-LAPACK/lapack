@@ -49,16 +49,17 @@ lapack_int LAPACKE_zbbcsd( int matrix_order, char jobu1, char jobu2,
     lapack_int lrwork = -1;
     double* rwork = NULL;
     double rwork_query;
+    lapack_int nrows_u1, nrows_u2, nrows_v1t, nrows_v2t
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zbbcsd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int nrows_u1 = ( LAPACKE_lsame( jobu1, 'y' ) ? p : 1);
-    lapack_int nrows_u2 = ( LAPACKE_lsame( jobu2, 'y' ) ? m-p : 1);
-    lapack_int nrows_v1t = ( LAPACKE_lsame( jobv1t, 'y' ) ? q : 1);
-    lapack_int nrows_v2t = ( LAPACKE_lsame( jobv2t, 'y' ) ? m-q : 1);
+    nrows_u1 = ( LAPACKE_lsame( jobu1, 'y' ) ? p : 1);
+    nrows_u2 = ( LAPACKE_lsame( jobu2, 'y' ) ? m-p : 1);
+    nrows_v1t = ( LAPACKE_lsame( jobv1t, 'y' ) ? q : 1);
+    nrows_v2t = ( LAPACKE_lsame( jobv2t, 'y' ) ? m-q : 1);
     if( LAPACKE_d_nancheck( q-1, phi, 1 ) ) {
         return -11;
     }

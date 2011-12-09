@@ -43,13 +43,14 @@ lapack_int LAPACKE_dgesvj( int matrix_order, char joba, char jobu, char jobv,
     lapack_int lwork = MAX(6,m+n);
     double* work = NULL;
     lapack_int i;
+    lapack_int nrows_v;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgesvj", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int nrows_v = LAPACKE_lsame( jobv, 'v' ) ? n :
+    nrows_v = LAPACKE_lsame( jobv, 'v' ) ? n :
                          ( LAPACKE_lsame( jobv, 'a' ) ? mv : 1);
     if( LAPACKE_dge_nancheck( matrix_order, m, n, a, lda ) ) {
         return -7;

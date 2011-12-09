@@ -46,16 +46,17 @@ lapack_int LAPACKE_dorbdb( int matrix_order, char trans, char signs,
     lapack_int lwork = -1;
     double* work = NULL;
     double work_query;
+    lapack_int nrows_x11, nrows_x12, nrows_x21, nrows_x22;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dorbdb", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int nrows_x11 = ( LAPACKE_lsame( trans, 'n' ) ? p : q);
-    lapack_int nrows_x12 = ( LAPACKE_lsame( trans, 'n' ) ? p : m-q);
-    lapack_int nrows_x21 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : q);
-    lapack_int nrows_x22 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : m-q);
+    nrows_x11 = ( LAPACKE_lsame( trans, 'n' ) ? p : q);
+    nrows_x12 = ( LAPACKE_lsame( trans, 'n' ) ? p : m-q);
+    nrows_x21 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : q);
+    nrows_x22 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : m-q);
     if( LAPACKE_dge_nancheck( matrix_order, nrows_x11, q, x11, ldx11 ) ) {
         return -7;
     }

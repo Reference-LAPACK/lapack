@@ -41,6 +41,9 @@ lapack_int LAPACKE_dormbr_work( int matrix_order, char vect, char side,
                                 double* work, lapack_int lwork )
 {
     lapack_int info = 0;
+    lapack_int nq, r;
+    lapack_int lda_t, ldc_t;
+    double *a_t = NULL, *c_t = NULL;
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dormbr( &vect, &side, &trans, &m, &n, &k, a, &lda, tau, c, &ldc,
@@ -49,12 +52,10 @@ lapack_int LAPACKE_dormbr_work( int matrix_order, char vect, char side,
             info = info - 1;
         }
     } else if( matrix_order == LAPACK_ROW_MAJOR ) {
-        lapack_int nq = LAPACKE_lsame( side, 'l' ) ? m : n;
-        lapack_int r = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
-        lapack_int lda_t = MAX(1,r);
-        lapack_int ldc_t = MAX(1,m);
-        double* a_t = NULL;
-        double* c_t = NULL;
+        nq = LAPACKE_lsame( side, 'l' ) ? m : n;
+        r = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
+        lda_t = MAX(1,r);
+        ldc_t = MAX(1,m);
         /* Check leading dimension(s) */
         if( lda < MIN(nq,k) ) {
             info = -9;

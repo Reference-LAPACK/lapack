@@ -42,6 +42,9 @@ lapack_int LAPACKE_slarfb_work( int matrix_order, char side, char trans,
                                 lapack_int ldwork )
 {
     lapack_int info = 0;
+    lapack_int nrows_v, ncols_v;
+    lapack_int ldc_t, ldt_t, ldv_t;
+    float* v_t, t_t, c_t; 
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_slarfb( &side, &trans, &direct, &storev, &m, &n, &k, v, &ldv, t,
@@ -50,22 +53,22 @@ lapack_int LAPACKE_slarfb_work( int matrix_order, char side, char trans,
             info = info - 1;
         }
     } else if( matrix_order == LAPACK_ROW_MAJOR ) {
-        lapack_int nrows_v = ( LAPACKE_lsame( storev, 'c' ) &&
+        nrows_v = ( LAPACKE_lsame( storev, 'c' ) &&
                              LAPACKE_lsame( side, 'l' ) ) ? m :
                              ( ( LAPACKE_lsame( storev, 'c' ) &&
                              LAPACKE_lsame( side, 'r' ) ) ? n :
                              ( LAPACKE_lsame( storev, 'r' ) ? k : 1) );
-        lapack_int ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
+        ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
                              ( ( LAPACKE_lsame( storev, 'r' ) &&
                              LAPACKE_lsame( side, 'l' ) ) ? m :
                              ( ( LAPACKE_lsame( storev, 'r' ) &&
                              LAPACKE_lsame( side, 'r' ) ) ? n : 1) );
-        lapack_int ldc_t = MAX(1,m);
-        lapack_int ldt_t = MAX(1,k);
-        lapack_int ldv_t = MAX(1,nrows_v);
-        float* v_t = NULL;
-        float* t_t = NULL;
-        float* c_t = NULL;
+        ldc_t = MAX(1,m);
+        ldt_t = MAX(1,k);
+        ldv_t = MAX(1,nrows_v);
+        v_t = NULL;
+        t_t = NULL;
+        c_t = NULL;
         /* Check leading dimension(s) */
         if( ldc < n ) {
             info = -14;
