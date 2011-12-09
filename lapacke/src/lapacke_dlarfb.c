@@ -43,18 +43,19 @@ lapack_int LAPACKE_dlarfb( int matrix_order, char side, char trans, char direct,
     lapack_int info = 0;
     lapack_int ldwork = ( side=='l')?n:(( side=='r')?m:1);
     double* work = NULL;
+    lapack_int ncols_v, nrows_v;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dlarfb", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
+    ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
                          ( ( LAPACKE_lsame( storev, 'r' ) &&
                          LAPACKE_lsame( side, 'l' ) ) ? m :
                          ( ( LAPACKE_lsame( storev, 'r' ) &&
                          LAPACKE_lsame( side, 'r' ) ) ? n : 1) );
-    lapack_int nrows_v = ( LAPACKE_lsame( storev, 'c' ) &&
+    nrows_v = ( LAPACKE_lsame( storev, 'c' ) &&
                          LAPACKE_lsame( side, 'l' ) ) ? m :
                          ( ( LAPACKE_lsame( storev, 'c' ) &&
                          LAPACKE_lsame( side, 'r' ) ) ? n :

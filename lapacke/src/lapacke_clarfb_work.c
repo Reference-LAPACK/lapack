@@ -45,7 +45,7 @@ lapack_int LAPACKE_clarfb_work( int matrix_order, char side, char trans,
     lapack_int info = 0;
     lapack_int nrows_v, ncols_v;
     lapack_int ldc_t, ldt_t, ldv_t;
-    lapack_complex_float* v_t, t_t, c_t; 
+    lapack_complex_float *v_t = NULL, *t_t = NULL, *c_t = NULL; 
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_clarfb( &side, &trans, &direct, &storev, &m, &n, &k, v, &ldv, t,
@@ -67,9 +67,6 @@ lapack_int LAPACKE_clarfb_work( int matrix_order, char side, char trans,
         ldc_t = MAX(1,m);
         ldt_t = MAX(1,k);
         ldv_t = MAX(1,nrows_v);
-        v_t = NULL;
-        t_t = NULL;
-        c_t = NULL;
         /* Check leading dimension(s) */
         if( ldc < n ) {
             info = -14;

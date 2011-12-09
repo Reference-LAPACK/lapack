@@ -42,7 +42,7 @@ lapack_int LAPACKE_chfrk_work( int matrix_order, char transr, char uplo,
 {
     lapack_int info = 0;
     lapack_int na, ka, lda_t;
-    lapack_complex_float* a_t,c_t;
+    lapack_complex_float *a_t = NULL, *c_t = NULL;
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_chfrk( &transr, &uplo, &trans, &n, &k, &alpha, a, &lda, &beta,
@@ -54,8 +54,6 @@ lapack_int LAPACKE_chfrk_work( int matrix_order, char transr, char uplo,
         na = LAPACKE_lsame( trans, 'n' ) ? n : k;
         ka = LAPACKE_lsame( trans, 'n' ) ? k : n;
         lda_t = MAX(1,na);
-        a_t = NULL;
-        c_t = NULL;
         /* Check leading dimension(s) */
         if( lda < ka ) {
             info = -9;
