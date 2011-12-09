@@ -49,7 +49,7 @@ lapack_int LAPACKE_zbbcsd( int matrix_order, char jobu1, char jobu2,
     lapack_int lrwork = -1;
     double* rwork = NULL;
     double rwork_query;
-    lapack_int nrows_u1, nrows_u2, nrows_v1t, nrows_v2t
+    lapack_int nrows_u1, nrows_u2, nrows_v1t, nrows_v2t;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zbbcsd", -1 );
         return -1;

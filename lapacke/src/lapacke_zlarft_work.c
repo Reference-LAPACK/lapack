@@ -55,8 +55,8 @@ lapack_int LAPACKE_zlarft_work( int matrix_order, char direct, char storev,
                              ( LAPACKE_lsame( storev, 'r' ) ? k : 1);
         ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
                              ( LAPACKE_lsame( storev, 'r' ) ? n : 1);
-        lapack_int ldt_t = MAX(1,k);
-        lapack_int ldv_t = MAX(1,nrows_v);
+        ldt_t = MAX(1,k);
+        ldv_t = MAX(1,nrows_v);
         /* Check leading dimension(s) */
         if( ldt < k ) {
             info = -10;
