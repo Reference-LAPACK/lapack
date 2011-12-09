@@ -40,15 +40,16 @@ lapack_int LAPACKE_clarft( int matrix_order, char direct, char storev,
                            const lapack_complex_float* tau,
                            lapack_complex_float* t, lapack_int ldt )
 {
+    lapack_int ncols_v, nrows_v;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_clarft", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
+    ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
                          ( LAPACKE_lsame( storev, 'r' ) ? n : 1);
-    lapack_int nrows_v = LAPACKE_lsame( storev, 'c' ) ? n :
+    nrows_v = LAPACKE_lsame( storev, 'c' ) ? n :
                          ( LAPACKE_lsame( storev, 'r' ) ? k : 1);
     if( LAPACKE_c_nancheck( k, tau, 1 ) ) {
         return -8;

@@ -43,13 +43,14 @@ lapack_int LAPACKE_dormqr( int matrix_order, char side, char trans,
     lapack_int lwork = -1;
     double* work = NULL;
     double work_query;
+    lapack_int r;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dormqr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int r = LAPACKE_lsame( side, 'l' ) ? m : n;
+    r = LAPACKE_lsame( side, 'l' ) ? m : n;
     if( LAPACKE_dge_nancheck( matrix_order, r, k, a, lda ) ) {
         return -7;
     }

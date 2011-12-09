@@ -64,11 +64,8 @@ float LAPACKE_slantr_work( int matrix_order, char norm, char uplo,
         /* Transpose input matrices */
         LAPACKE_str_trans( matrix_order, uplo, diag, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_slantr( &norm, &uplo, &diag, &m, &n, a_t, &lda_t, work );
+        res = LAPACK_slantr( &norm, &uplo, &diag, &m, &n, a_t, &lda_t, work );
         info = 0;  /* LAPACK call is ok! */
-        /* Transpose output matrices */
-        LAPACKE_str_trans( LAPACK_COL_MAJOR, uplo, diag, n, a_t, lda_t, a,
-                           lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:

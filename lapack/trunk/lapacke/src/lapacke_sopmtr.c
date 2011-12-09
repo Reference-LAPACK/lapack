@@ -42,13 +42,14 @@ lapack_int LAPACKE_sopmtr( int matrix_order, char side, char uplo, char trans,
     /* Additional scalars declarations for work arrays */
     lapack_int lwork;
     float* work = NULL;
+    lapack_int r;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sopmtr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int r = LAPACKE_lsame( side, 'l' ) ? m : n;
+    r = LAPACKE_lsame( side, 'l' ) ? m : n;
     if( LAPACKE_ssp_nancheck( r, ap ) ) {
         return -7;
     }

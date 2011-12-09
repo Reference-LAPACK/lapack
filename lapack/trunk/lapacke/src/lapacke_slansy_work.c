@@ -66,8 +66,6 @@ float LAPACKE_slansy_work( int matrix_order, char norm, char uplo,
         /* Call LAPACK function and adjust info */
         res = LAPACK_slansy( &norm, &uplo, &n, a_t, &lda_t, work );
         info = 0;  /* LAPACK call is ok! */
-        /* Transpose output matrices */
-        LAPACKE_ssy_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
         LAPACKE_free( a_t );
 exit_level_0:

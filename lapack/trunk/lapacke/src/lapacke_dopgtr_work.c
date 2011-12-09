@@ -39,6 +39,8 @@ lapack_int LAPACKE_dopgtr_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_int ldq, double* work )
 {
     lapack_int info = 0;
+    lapack_int ldq_t;
+    double *q_t = NULL, *ap_t = NULL;
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dopgtr( &uplo, &n, ap, tau, q, &ldq, work, &info );
@@ -46,9 +48,7 @@ lapack_int LAPACKE_dopgtr_work( int matrix_order, char uplo, lapack_int n,
             info = info - 1;
         }
     } else if( matrix_order == LAPACK_ROW_MAJOR ) {
-        lapack_int ldq_t = MAX(1,n);
-        double* q_t = NULL;
-        double* ap_t = NULL;
+        ldq_t = MAX(1,n);
         /* Check leading dimension(s) */
         if( ldq < n ) {
             info = -7;

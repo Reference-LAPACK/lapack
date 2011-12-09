@@ -43,6 +43,7 @@ lapack_int LAPACKE_zunmql( int matrix_order, char side, char trans,
     lapack_int info = 0;
     lapack_int lwork = -1;
     lapack_complex_double* work = NULL;
+    lapack_int r;
     lapack_complex_double work_query;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zunmql", -1 );
@@ -50,7 +51,7 @@ lapack_int LAPACKE_zunmql( int matrix_order, char side, char trans,
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int r = LAPACKE_lsame( side, 'l' ) ? m : n;
+    r = LAPACKE_lsame( side, 'l' ) ? m : n;
     if( LAPACKE_zge_nancheck( matrix_order, r, k, a, lda ) ) {
         return -7;
     }
