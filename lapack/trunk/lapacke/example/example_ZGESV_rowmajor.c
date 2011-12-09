@@ -88,18 +88,34 @@ int main() {
         lapack_int n = N, nrhs = NRHS, lda = LDA, ldb = LDB, info;
         /* Local arrays */
         lapack_int ipiv[N];
-        lapack_complex_double a[LDA*N] = {
-           lapack_make_complex_double( 1.23, -5.50), lapack_make_complex_double( 7.91, -5.38), lapack_make_complex_double(-9.80, -4.86), lapack_make_complex_double(-7.32,  7.57),
-           lapack_make_complex_double(-2.14, -1.12), lapack_make_complex_double(-9.92, -0.79), lapack_make_complex_double(-9.18, -1.12), lapack_make_complex_double( 1.37,  0.43),
-           lapack_make_complex_double(-4.30, -7.10), lapack_make_complex_double(-6.47,  2.52), lapack_make_complex_double(-6.51, -2.67), lapack_make_complex_double(-5.86,  7.38),
-           lapack_make_complex_double( 1.27,  7.29), lapack_make_complex_double( 8.90,  6.92), lapack_make_complex_double(-8.82,  1.25), lapack_make_complex_double( 5.41,  5.37)
-        };
-        lapack_complex_double b[LDB*N] = {
-           lapack_make_complex_double( 8.33, -7.32), lapack_make_complex_double(-6.11, -3.81),
-           lapack_make_complex_double(-6.18, -4.80), lapack_make_complex_double( 0.14, -7.71),
-           lapack_make_complex_double(-5.71, -2.80), lapack_make_complex_double( 1.41,  3.40),
-           lapack_make_complex_double(-1.60,  3.08), lapack_make_complex_double( 8.54, -4.05)
-        };
+        lapack_complex_double a[LDA*N];
+        lapack_complex_double b[LDB*N];
+		a[0] = lapack_make_complex_double( 1.23, -5.50);
+		a[1] = lapack_make_complex_double( 7.91, -5.38);
+		a[2] = lapack_make_complex_double(-9.80, -4.86);
+		a[3] = lapack_make_complex_double(-7.32,  7.57);
+		a[4] = lapack_make_complex_double(-2.14, -1.12);
+		a[5] = lapack_make_complex_double(-9.92, -0.79);
+		a[6] = lapack_make_complex_double(-9.18, -1.12);
+		a[7] = lapack_make_complex_double( 1.37,  0.43);
+		a[8] = lapack_make_complex_double(-4.30, -7.10);
+		a[9] = lapack_make_complex_double(-6.47,  2.52);
+		a[10] = lapack_make_complex_double(-6.51, -2.67);
+		a[11] = lapack_make_complex_double(-5.86,  7.38);
+		a[12] = lapack_make_complex_double( 1.27,  7.29);
+		a[13] = lapack_make_complex_double( 8.90,  6.92);
+		a[14] = lapack_make_complex_double(-8.82,  1.25);
+		a[15] = lapack_make_complex_double( 5.41,  5.37);
+		
+		b[0] = lapack_make_complex_double( 8.33, -7.32);
+		b[1] = lapack_make_complex_double(-6.11, -3.81);
+		b[2] = lapack_make_complex_double(-6.18, -4.80);
+		b[3] = lapack_make_complex_double( 0.14, -7.71);
+        b[4] = lapack_make_complex_double(-5.71, -2.80);
+		b[5] = lapack_make_complex_double( 1.41,  3.40);
+        b[6] = lapack_make_complex_double(-1.60,  3.08);
+		b[7] = lapack_make_complex_double( 8.54, -4.05);
+     
         /* Print Entry Matrix */
         print_matrix( "Entry Matrix A", n, n, a, lda );
         /* Print Right Rand Side */
