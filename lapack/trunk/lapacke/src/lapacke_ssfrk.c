@@ -38,14 +38,15 @@ lapack_int LAPACKE_ssfrk( int matrix_order, char transr, char uplo, char trans,
                           lapack_int n, lapack_int k, float alpha,
                           const float* a, lapack_int lda, float beta, float* c )
 {
+    lapack_int ka, na;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_ssfrk", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    lapack_int ka = LAPACKE_lsame( trans, 'n' ) ? k : n;
-    lapack_int na = LAPACKE_lsame( trans, 'n' ) ? n : k;
+    ka = LAPACKE_lsame( trans, 'n' ) ? k : n;
+    na = LAPACKE_lsame( trans, 'n' ) ? n : k;
     if( LAPACKE_sge_nancheck( matrix_order, na, ka, a, lda ) ) {
         return -8;
     }
