@@ -312,7 +312,7 @@
 *>
 *> \param[in,out] PARAMS
 *> \verbatim
-*>          PARAMS is / output) DOUBLE PRECISION array, dimension NPARAMS
+*>          PARAMS is DOUBLE PRECISION array, dimension NPARAMS
 *>     Specifies algorithm parameters.  If an entry is .LT. 0.0, then
 *>     that entry will be filled with default value used for that
 *>     parameter.  Only positions up to NPARAMS are accessed; defaults
@@ -446,7 +446,7 @@
 *     .. Local Scalars ..
       CHARACTER(1)       NORM
       LOGICAL            RCEQU
-      INTEGER            J, PREC_TYPE, REF_TYPE
+      INTEGER            IINFO, J, PREC_TYPE, REF_TYPE
       INTEGER            N_NORMS
       DOUBLE PRECISION   ANORM, RCOND_TMP
       DOUBLE PRECISION   ILLRCOND_THRESH, ERR_LBND, CWISE_WRONG
@@ -589,7 +589,7 @@
       NORM = 'I'
       ANORM = ZLANHE( NORM, UPLO, N, A, LDA, RWORK )
       CALL ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
-     $     INFO )
+     $     IINFO )
 *
 *     Perform refinement on each right-hand side
 *
@@ -603,7 +603,7 @@
      $        WORK, RWORK, WORK(N+1),
      $        TRANSFER (RWORK(1:2*N), (/ (ZERO, ZERO) /), N), RCOND,
      $        ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
-     $        INFO )
+     $        IINFO )
       END IF
 
       ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
@@ -613,10 +613,10 @@
 *
          IF ( RCEQU ) THEN
             RCOND_TMP = ZLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
-     $           S, .TRUE., INFO, WORK, RWORK )
+     $           S, .TRUE., IINFO, WORK, RWORK )
          ELSE
             RCOND_TMP = ZLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
-     $           S, .FALSE., INFO, WORK, RWORK )
+     $           S, .FALSE., IINFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS
 *
@@ -661,7 +661,7 @@
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
                RCOND_TMP = ZLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF,
-     $         IPIV, X( 1, J ), INFO, WORK, RWORK )
+     $         IPIV, X( 1, J ), IINFO, WORK, RWORK )
             ELSE
                RCOND_TMP = 0.0D+0
             END IF
@@ -677,8 +677,8 @@
             IF ( RCOND_TMP .LT. ILLRCOND_THRESH ) THEN
                ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) = 1.0D+0
                ERR_BNDS_COMP( J, LA_LINRX_TRUST_I ) = 0.0D+0
-               IF ( PARAMS( LA_LINRX_CWISE_I ) .EQ. 1.0D+0
-     $              .AND. INFO.LT.N + J ) INFO = N + J
+               IF ( .NOT. IGNORE_CWISE 
+     $               .AND. INFO.LT.N + J ) INFO = N + J
             ELSE IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I )
      $              .LT. ERR_LBND ) THEN
                ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) = ERR_LBND
