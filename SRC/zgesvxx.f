@@ -581,9 +581,9 @@
      $                   ROWCND, SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, DLAMCH, ZLA_RPVGRW
+      EXTERNAL           LSAME, DLAMCH, ZLA_GERPVGRW
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLAMCH, ZLA_RPVGRW
+      DOUBLE PRECISION   DLAMCH, ZLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEEQUB, ZGETRF, ZGETRS, ZLACPY, ZLAQGE,
@@ -732,14 +732,14 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = ZLA_RPVGRW( N, INFO, A, LDA, AF, LDAF )
+            RPVGRW = ZLA_GERPVGRW( N, INFO, A, LDA, AF, LDAF )
             RETURN
          END IF
       END IF
 *
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
-      RPVGRW = ZLA_RPVGRW( N, N, A, LDA, AF, LDAF )
+      RPVGRW = ZLA_GERPVGRW( N, N, A, LDA, AF, LDAF )
 *
 *     Compute the solution matrix X.
 *

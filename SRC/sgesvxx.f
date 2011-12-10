@@ -584,9 +584,9 @@
      $                   SMLNUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, SLAMCH, SLA_RPVGRW
+      EXTERNAL           LSAME, SLAMCH, SLA_GERPVGRW
       LOGICAL            LSAME
-      REAL               SLAMCH, SLA_RPVGRW
+      REAL               SLAMCH, SLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEEQUB, SGETRF, SGETRS, SLACPY, SLAQGE,
@@ -735,14 +735,14 @@
 *           Compute the reciprocal pivot growth factor of the
 *           leading rank-deficient INFO columns of A.
 *
-            RPVGRW = SLA_RPVGRW( N, INFO, A, LDA, AF, LDAF )
+            RPVGRW = SLA_GERPVGRW( N, INFO, A, LDA, AF, LDAF )
             RETURN
          END IF
       END IF
 *
 *     Compute the reciprocal pivot growth factor RPVGRW.
 *
-      RPVGRW = SLA_RPVGRW( N, N, A, LDA, AF, LDAF )
+      RPVGRW = SLA_GERPVGRW( N, N, A, LDA, AF, LDAF )
 *
 *     Compute the solution matrix X.
 *
