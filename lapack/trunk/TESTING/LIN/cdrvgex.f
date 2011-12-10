@@ -217,9 +217,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, CLANTR, SGET06, SLAMCH, CLA_RPVGRW
+      REAL               CLANGE, CLANTR, SGET06, SLAMCH, CLA_GERPVGRW
       EXTERNAL           LSAME, CLANGE, CLANTR, SGET06, SLAMCH,
-     $                   CLA_RPVGRW
+     $                   CLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, CERRVX, CGEEQU, CGESV,
@@ -745,9 +745,11 @@
 *
 
                      IF ( INFO .GT. 0 .AND. INFO .LT. N+1 ) THEN
-                        RPVGRW = CLA_RPVGRW(N, INFO, A, LDA, AFAC, LDA)
+                        RPVGRW = CLA_GERPVGRW
+     $                               (N, INFO, A, LDA, AFAC, LDA)
                      ELSE
-                        RPVGRW = CLA_RPVGRW(N, N, A, LDA, AFAC, LDA)
+                        RPVGRW = CLA_GERPVGRW
+     $                               (N, N, A, LDA, AFAC, LDA)
                      ENDIF
 
                      RESULT( 7 ) = ABS( RPVGRW-rpvgrw_svxx ) /

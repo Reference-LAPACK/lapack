@@ -217,9 +217,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DGET06, DLAMCH, ZLANGE, ZLANTR, ZLA_RPVGRW
+      DOUBLE PRECISION   DGET06, DLAMCH, ZLANGE, ZLANTR, ZLA_GERPVGRW
       EXTERNAL           LSAME, DGET06, DLAMCH, ZLANGE, ZLANTR,
-     $                   ZLA_RPVGRW
+     $                   ZLA_GERPVGRW
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGEEQU,
@@ -745,9 +745,11 @@
 *
 
                      IF ( INFO .GT. 0 .AND. INFO .LT. N+1 ) THEN
-                        RPVGRW = ZLA_RPVGRW(N, INFO, A, LDA, AFAC, LDA)
+                        RPVGRW = ZLA_GERPVGRW
+     $                               (N, INFO, A, LDA, AFAC, LDA)
                      ELSE
-                        RPVGRW = ZLA_RPVGRW(N, N, A, LDA, AFAC, LDA)
+                        RPVGRW = ZLA_GERPVGRW
+     $                               (N, N, A, LDA, AFAC, LDA)
                      ENDIF
 
                      RESULT( 7 ) = ABS( RPVGRW-rpvgrw_svxx ) /
