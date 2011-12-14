@@ -126,7 +126,7 @@ set(CTEST_TEST_TIMEOUT           "36000")
 # CVS command and the checkout command
 if(NOT EXISTS "${CTEST_DASHBOARD_ROOT}/${CTEST_DIR_NAME}")
   set(CTEST_CHECKOUT_COMMAND     
-    "\"${CTEST_UPDATE_COMMAND}\" co https://icl.eecs.utk.edu/svn/lapack-dev/lapack/trunk ${CTEST_DIR_NAME}")
+    "\"${CTEST_UPDATE_COMMAND}\" co https://icl.cs.utk.edu/svn/lapack-dev/lapack/trunk ${CTEST_DIR_NAME}")
 endif(NOT EXISTS "${CTEST_DASHBOARD_ROOT}/${CTEST_DIR_NAME}")
 
 # Set the generator and build configuration
