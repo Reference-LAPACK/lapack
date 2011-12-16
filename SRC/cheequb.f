@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CSYEQUB computes row and column scalings intended to equilibrate a
+*> CHEEQUB computes row and column scalings intended to equilibrate a
 *> symmetric matrix A and reduce its condition number
 *> (with respect to the two-norm).  S contains the scale factors,
 *> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
