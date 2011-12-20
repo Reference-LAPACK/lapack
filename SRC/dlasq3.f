@@ -331,15 +331,15 @@
 *
    70 CONTINUE
 *
-      CALL DLASQ5( I0, N0, Z, PP, TAU, DMIN, DMIN1, DMIN2, DN,
-     $             DN1, DN2, IEEE )
+      CALL DLASQ5( I0, N0, Z, PP, TAU, SIGMA, DMIN, DMIN1, DMIN2, DN,
+     $             DN1, DN2, IEEE, EPS )
 *
       NDIV = NDIV + ( N0-I0+2 )
       ITER = ITER + 1
 *
 *     Check status.
 *
-      IF( DMIN.GE.ZERO .AND. DMIN1.GT.ZERO ) THEN
+      IF( DMIN.GE.ZERO .AND. DMIN1.GE.ZERO ) THEN
 *
 *        Success.
 *
