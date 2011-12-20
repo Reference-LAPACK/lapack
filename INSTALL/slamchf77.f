@@ -75,36 +75,6 @@
 *     .. Scalar Arguments ..
       CHARACTER          CMACH
 *     ..
-*
-*     .. Scalar Arguments ..
-      LOGICAL            IEEE1, RND
-      INTEGER            BETA, T
-*     ..
-*
-*     .. Scalar Arguments ..
-      LOGICAL            RND
-      INTEGER            BETA, EMAX, EMIN, T
-      REAL               EPS, RMAX, RMIN
-*     ..
-*
-*     .. Scalar Arguments ..
-      REAL               A, B
-*     ..
-*
-*     .. Scalar Arguments ..
-      INTEGER            BASE
-      INTEGER            EMIN
-      REAL               START
-*     ..
-*
-*     .. Scalar Arguments ..
-      LOGICAL            IEEE
-      INTEGER            BETA, EMAX, EMIN, P
-      REAL               RMAX
-*     ..
-*
-* =====================================================================
-*
 *     .. Parameters ..
       REAL               ONE, ZERO
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
