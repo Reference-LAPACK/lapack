@@ -15,6 +15,9 @@ if (UNIX)
    if ( "${CMAKE_Fortran_COMPILER}" MATCHES "ifort" )
   set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
    endif ()
+# Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
+# This library is not present in the Sun package SolarisStudio13.3-linux-x86-bin
+  STRING(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
 endif ()
 
 
