@@ -69,3 +69,4 @@ XBLASLIB     =
 BLASLIB     = -ldxml
 LAPACKLIB    = liblapack.a
 TMGLIB       = libtmglib.a
+LAPACKELIB   = liblapacke.a

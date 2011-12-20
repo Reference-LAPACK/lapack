@@ -74,3 +74,4 @@ XBLASLIB     =
 BLASLIB     = -xlic_lib=sunperf
 LAPACKLIB    = liblapack.a
 TMGLIB       = libtmglib.a
+LAPACKELIB   = liblapacke.a
