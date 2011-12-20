@@ -71,35 +71,6 @@
 *     .. Scalar Arguments ..
       CHARACTER          CMACH
 *     ..
-*
-*     .. Scalar Arguments ..
-      LOGICAL            IEEE1, RND
-      INTEGER            BETA, T
-*     ..
-*
-*     .. Scalar Arguments ..
-      LOGICAL            RND
-      INTEGER            BETA, EMAX, EMIN, T
-      DOUBLE PRECISION   EPS, RMAX, RMIN
-*     ..
-*
-*     .. Scalar Arguments ..
-      DOUBLE PRECISION   A, B
-*     ..
-*
-*     .. Scalar Arguments ..
-      INTEGER            BASE, EMIN
-      DOUBLE PRECISION   START
-*     ..
-*
-*     .. Scalar Arguments ..
-      LOGICAL            IEEE
-      INTEGER            BETA, EMAX, EMIN, P
-      DOUBLE PRECISION   RMAX
-*     ..
-*
-* =====================================================================
-*
 *     .. Parameters ..
       DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
