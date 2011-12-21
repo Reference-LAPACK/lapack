@@ -274,6 +274,9 @@
      $      NIMAT = 1
 *
          IZERO = 0
+*
+*        Do for each value of matrix type IMAT
+*
          DO 170 IMAT = 1, NIMAT
 *
 *           Do the tests only if DOTYPE( IMAT ) is true.
