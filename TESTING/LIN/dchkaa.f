@@ -64,19 +64,22 @@
 *> DEQ
 *> \endverbatim
 *
-*  Arguments:
+*  Parameters:
 *  ==========
 *
 *> \verbatim
 *>  NMAX    INTEGER
-*>          The maximum allowable value for N
+*>          The maximum allowable value for M and N.
 *>
 *>  MAXIN   INTEGER
 *>          The number of different values that can be used for each of
-*>          M, N, NRHS, NB, and NX
+*>          M, N, NRHS, NB, NX and RANK
 *>
 *>  MAXRHS  INTEGER
 *>          The maximum number of right hand sides
+*>
+*>  MATMAX  INTEGER
+*>          The maximum number of matrix types to use for testing
 *>
 *>  NIN     INTEGER
 *>          The unit number for input
