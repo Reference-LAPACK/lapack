@@ -19,12 +19,12 @@
 *> ZCHKAA is the main test program for the COMPLEX*16 linear equation
 *> routines.
 *>
-*> The program must be driven by a short data file. The first 14 records
-*> specify problem dimensions and program options using list-directed
-*> input.  The remaining lines specify the LAPACK test paths and the
-*> number of matrix types to use in testing.  An annotated example of a
-*> data file can be obtained by deleting the first 3 characters from the
-*> following 38 lines:
+*> The program must be driven by a short data file. The first 15 records
+*> (not including the first comment  line) specify problem dimensions
+*> and program options using list-directed input. The remaining lines
+*> specify the LAPACK test paths and the number of matrix types to use
+*> in testing.  An annotated example of a data file can be obtained by
+*> deleting the first 3 characters from the following 39 lines:
 *> Data file for testing COMPLEX*16 LAPACK linear equation routines
 *> 7                      Number of values of M
 *> 0 1 2 3 5 10 16        Values of M (row dimension)
