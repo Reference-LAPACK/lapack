@@ -255,7 +255,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL pwd( PATH, NOUT )
+     $   CALL DERRSY( PATH, NOUT )
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
