@@ -1,4 +1,4 @@
-*> \brief \b DLAVSY_ROOK
+*> \brief \b ZLAVSY_ROOK
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
+*       SUBROUTINE ZLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
 *                          LDB, INFO )
 * 
 *       .. Scalar Arguments ..
@@ -17,7 +17,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       DOUBLE PRECISION   A( LDA, * ), B( LDB, * )
+*       COMPLEX*16         A( LDA, * ), B( LDB, * )
 *       ..
 *  
 *
@@ -26,14 +26,13 @@
 *>
 *> \verbatim
 *>
-*> DLAVSY_ROOK  performs one of the matrix-vector operations
+*> ZLAVSY_ROOK  performs one of the matrix-vector operations
 *>    x := A*x  or  x := A'*x,
-*> where x is an N element vector and A is one of the factors
-*> from the block U*D*U' or L*D*L' factorization computed by DSYTRF_ROOK.
+*> where x is an N element vector and  A is one of the factors
+*> from the block U*D*U' or L*D*L' factorization computed by ZSYTRF_ROOK.
 *>
 *> If TRANS = 'N', multiplies by U  or U * D  (or L  or L * D)
 *> If TRANS = 'T', multiplies by U' or D * U' (or L' or D * L')
-*> If TRANS = 'C', multiplies by U' or D * U' (or L' or D * L')
 *> \endverbatim
 *
 *  Arguments:
@@ -54,7 +53,6 @@
 *>          Specifies the operation to be performed:
 *>          = 'N':  x := A*x
 *>          = 'T':  x := A'*x
-*>          = 'C':  x := A'*x
 *> \endverbatim
 *>
 *> \param[in] DIAG
@@ -82,9 +80,9 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by DSYTRF_ROOK.
+*>          obtain the factor U or L as computed by ZSYTRF_ROOK.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -97,7 +95,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D,
-*>          as determined by DSYTRF_ROOK.
+*>          as determined by ZSYTRF_ROOK or ZHETRF_ROOK.
 *>
 *>          If UPLO = 'U':
 *>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
@@ -122,7 +120,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, B contains NRHS vectors of length N.
 *>          On exit, B is overwritten with the product A * B.
 *> \endverbatim
@@ -150,10 +148,10 @@
 *
 *> \date November 2011
 *
-*> \ingroup double_lin
+*> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE DLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV,
+      SUBROUTINE ZLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV,
      $                    B, LDB, INFO )
 *
 *  -- LAPACK test routine (version 3.4.0) --
@@ -167,26 +165,26 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * ), B( LDB, * )
+      COMPLEX*16         A( LDA, * ), B( LDB, * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ONE
-      PARAMETER          ( ONE = 1.0D+0 )
+      COMPLEX*16         CONE
+      PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            NOUNIT
       INTEGER            J, K, KP
-      DOUBLE PRECISION   D11, D12, D21, D22, T1, T2
+      COMPLEX*16         D11, D12, D21, D22, T1, T2
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMV, DGER, DSCAL, DSWAP, XERBLA
+      EXTERNAL           XERBLA, ZGEMV, ZGERU, ZSCAL, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
@@ -198,8 +196,8 @@
       INFO = 0
       IF( .NOT.LSAME( UPLO, 'U' ) .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
-      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.
-     $         LSAME( TRANS, 'T' ) .AND. .NOT.LSAME( TRANS, 'C' ) ) THEN
+      ELSE IF( .NOT.LSAME( TRANS, 'N' ) .AND. .NOT.LSAME( TRANS, 'T' ) )
+     $          THEN
          INFO = -2
       ELSE IF( .NOT.LSAME( DIAG, 'U' ) .AND. .NOT.LSAME( DIAG, 'N' ) )
      $          THEN
@@ -212,7 +210,7 @@
          INFO = -9
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAVSY_ROOK ', -INFO )
+         CALL XERBLA( 'ZLAVSY_ROOK ', -INFO )
          RETURN
       END IF
 *
@@ -247,7 +245,7 @@
 *              Multiply by the diagonal element if forming U * D.
 *
                IF( NOUNIT )
-     $            CALL DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL ZSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
 *
 *              Multiply by  P(K) * inv(U(K))  if K > 1.
 *
@@ -255,14 +253,14 @@
 *
 *                 Apply the transformation.
 *
-                  CALL DGER( K-1, NRHS, ONE, A( 1, K ), 1, B( K, 1 ),
-     $                       LDB, B( 1, 1 ), LDB )
+                  CALL ZGERU( K-1, NRHS, CONE, A( 1, K ), 1, B( K, 1 ),
+     $                        LDB, B( 1, 1 ), LDB )
 *
-*                 Interchange if P(K) .ne. I.
+*                 Interchange if P(K) != I.
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
                END IF
                K = K + 1
             ELSE
@@ -290,10 +288,10 @@
 *
 *                 Apply the transformations.
 *
-                  CALL DGER( K-1, NRHS, ONE, A( 1, K ), 1, B( K, 1 ),
-     $                       LDB, B( 1, 1 ), LDB )
-                  CALL DGER( K-1, NRHS, ONE, A( 1, K+1 ), 1,
-     $                       B( K+1, 1 ), LDB, B( 1, 1 ), LDB )
+                  CALL ZGERU( K-1, NRHS, CONE, A( 1, K ), 1, B( K, 1 ),
+     $                        LDB, B( 1, 1 ), LDB )
+                  CALL ZGERU( K-1, NRHS, CONE, A( 1, K+1 ), 1,
+     $                        B( K+1, 1 ), LDB, B( 1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
 *                 K-th step of the factorization.
@@ -302,13 +300,13 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 NOW swap the first of pair with Pth
 *
                   KP = ABS( IPIV( K+1 ) )
                   IF( KP.NE.K+1 )
-     $               CALL DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
+     $               CALL ZSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
                END IF
                K = K + 2
@@ -338,7 +336,7 @@
 *              Multiply by the diagonal element if forming L * D.
 *
                IF( NOUNIT )
-     $            CALL DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL ZSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
 *
 *              Multiply by  P(K) * inv(L(K))  if K < N.
 *
@@ -347,14 +345,14 @@
 *
 *                 Apply the transformation.
 *
-                  CALL DGER( N-K, NRHS, ONE, A( K+1, K ), 1, B( K, 1 ),
-     $                       LDB, B( K+1, 1 ), LDB )
+                  CALL ZGERU( N-K, NRHS, CONE, A( K+1, K ), 1,
+     $                        B( K, 1 ), LDB, B( K+1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
 *                 K-th step of the factorization.
 *
                   IF( KP.NE.K )
-     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
                END IF
                K = K - 1
 *
@@ -383,10 +381,10 @@
 *
 *                 Apply the transformation.
 *
-                  CALL DGER( N-K, NRHS, ONE, A( K+1, K ), 1, B( K, 1 ),
-     $                       LDB, B( K+1, 1 ), LDB )
-                  CALL DGER( N-K, NRHS, ONE, A( K+1, K-1 ), 1,
-     $                       B( K-1, 1 ), LDB, B( K+1, 1 ), LDB )
+                  CALL ZGERU( N-K, NRHS, CONE, A( K+1, K ), 1,
+     $                        B( K, 1 ), LDB, B( K+1, 1 ), LDB )
+                  CALL ZGERU( N-K, NRHS, CONE, A( K+1, K-1 ), 1,
+     $                        B( K-1, 1 ), LDB, B( K+1, 1 ), LDB )
 *
 *                 Interchange if a permutation was applied at the
 *                 K-th step of the factorization.
@@ -395,13 +393,13 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 NOW swap the first of pair with Pth
 *
                   KP = ABS( IPIV( K-1 ) )
                   IF( KP.NE.K-1 )
-     $               CALL DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
+     $               CALL ZSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
                END IF
                K = K - 2
@@ -414,7 +412,7 @@
 *     Compute  B := A' * B  (transpose)
 *
 *----------------------------------------
-      ELSE
+      ELSE IF( LSAME( TRANS, 'T' ) ) THEN
 *
 *        Form  B := U'*B
 *        where U  = P(m)*inv(U(m))* ... *P(1)*inv(U(1))
@@ -434,19 +432,19 @@
             IF( IPIV( K ).GT.0 ) THEN
                IF( K.GT.1 ) THEN
 *
-*                 Interchange if P(K) .ne. I.
+*                 Interchange if P(K) != I.
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Apply the transformation
 *
-                  CALL DGEMV( 'Transpose', K-1, NRHS, ONE, B, LDB,
-     $                        A( 1, K ), 1, ONE, B( K, 1 ), LDB )
+                  CALL ZGEMV( 'Transpose', K-1, NRHS, CONE, B, LDB,
+     $                        A( 1, K ), 1, CONE, B( K, 1 ), LDB )
                END IF
                IF( NOUNIT )
-     $            CALL DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL ZSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
                K = K - 1
 *
 *           2 x 2 pivot block.
@@ -458,21 +456,21 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Now swap the first of pair with IMAX(r)th
 *
                   KP = ABS( IPIV( K-1 ) )
                   IF( KP.NE.K-1 )
-     $               CALL DSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
+     $               CALL ZSWAP( NRHS, B( K-1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
 *                 Apply the transformations
 *
-                  CALL DGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
-     $                        A( 1, K ), 1, ONE, B( K, 1 ), LDB )
-                  CALL DGEMV( 'Transpose', K-2, NRHS, ONE, B, LDB,
-     $                        A( 1, K-1 ), 1, ONE, B( K-1, 1 ), LDB )
+                  CALL ZGEMV( 'Transpose', K-2, NRHS, CONE, B, LDB,
+     $                        A( 1, K ), 1, CONE, B( K, 1 ), LDB )
+                  CALL ZGEMV( 'Transpose', K-2, NRHS, CONE, B, LDB,
+     $                        A( 1, K-1 ), 1, CONE, B( K-1, 1 ), LDB )
                END IF
 *
 *              Multiply by the diagonal block if non-unit.
@@ -512,19 +510,19 @@
             IF( IPIV( K ).GT.0 ) THEN
                IF( K.LT.N ) THEN
 *
-*                 Interchange if P(K) .ne. I.
+*                 Interchange if P(K) != I.
 *
                   KP = IPIV( K )
                   IF( KP.NE.K )
-     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Apply the transformation
 *
-                  CALL DGEMV( 'Transpose', N-K, NRHS, ONE, B( K+1, 1 ),
-     $                        LDB, A( K+1, K ), 1, ONE, B( K, 1 ), LDB )
+                  CALL ZGEMV( 'Transpose', N-K, NRHS, CONE, B( K+1, 1 ),
+     $                       LDB, A( K+1, K ), 1, CONE, B( K, 1 ), LDB )
                END IF
                IF( NOUNIT )
-     $            CALL DSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
+     $            CALL ZSCAL( NRHS, A( K, K ), B( K, 1 ), LDB )
                K = K + 1
 *
 *           2 x 2 pivot block.
@@ -536,22 +534,22 @@
 *
                   KP = ABS( IPIV( K ) )
                   IF( KP.NE.K )
-     $               CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
+     $               CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
 *
 *                 Now swap the second of pair with IMAX(r)th
 *
                   KP = ABS( IPIV( K+1 ) )
                   IF( KP.NE.K+1 )
-     $               CALL DSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
+     $               CALL ZSWAP( NRHS, B( K+1, 1 ), LDB, B( KP, 1 ),
      $                           LDB )
 *
 *                 Apply the transformation
 *
-                  CALL DGEMV( 'Transpose', N-K-1, NRHS, ONE,
-     $                        B( K+2, 1 ), LDB, A( K+2, K+1 ), 1, ONE,
+                  CALL ZGEMV( 'Transpose', N-K-1, NRHS, CONE,
+     $                        B( K+2, 1 ), LDB, A( K+2, K+1 ), 1, CONE,
      $                        B( K+1, 1 ), LDB )
-                  CALL DGEMV( 'Transpose', N-K-1, NRHS, ONE,
-     $                        B( K+2, 1 ), LDB, A( K+2, K ), 1, ONE,
+                  CALL ZGEMV( 'Transpose', N-K-1, NRHS, CONE,
+     $                        B( K+2, 1 ), LDB, A( K+2, K ), 1, CONE,
      $                        B( K, 1 ), LDB )
                END IF
 *
@@ -574,10 +572,9 @@
             GO TO 100
   120       CONTINUE
          END IF
-*
       END IF
       RETURN
 *
-*     End of DLAVSY_ROOK
+*     End of ZLAVSY_ROOK
 *
       END
