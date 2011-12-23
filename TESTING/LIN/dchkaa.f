@@ -24,7 +24,7 @@
 *> and program options using list-directed input. The remaining lines
 *> specify the LAPACK test paths and the number of matrix types to use
 *> in testing.  An annotated example of a data file can be obtained by
-*> deleting the first 3 characters from the following 37 lines:
+*> deleting the first 3 characters from the following 38 lines:
 *> Data file for testing DOUBLE PRECISION LAPACK linear eqn. routines
 *> 7                      Number of values of M
 *> 0 1 2 3 5 10 16        Values of M (row dimension)
@@ -50,6 +50,7 @@
 *> DPB    8               List types on next line if 0 < NTYPES <  8
 *> DPT   12               List types on next line if 0 < NTYPES < 12
 *> DSY   10               List types on next line if 0 < NTYPES < 10
+*> DSR   10               List types on next line if 0 < NTYPES < 10
 *> DSP   10               List types on next line if 0 < NTYPES < 10
 *> DTR   18               List types on next line if 0 < NTYPES < 18
 *> DTP   18               List types on next line if 0 < NTYPES < 18
@@ -155,9 +156,9 @@
       EXTERNAL           ALAREQ, DCHKEQ, DCHKGB, DCHKGE, DCHKGT, DCHKLQ,
      $                   DCHKPB, DCHKPO, DCHKPS, DCHKPP, DCHKPT, DCHKQ3,
      $                   DCHKQL, DCHKQP, DCHKQR, DCHKRQ, DCHKSP, DCHKSY,
-     $                   DCHKTB, DCHKTP, DCHKTR, DCHKTZ, DDRVGB, DDRVGE,
-     $                   DDRVGT, DDRVLS, DDRVPB, DDRVPO, DDRVPP, DDRVPT,
-     $                   DDRVSP, DDRVSY, ILAVER
+     $                   DCHKSY_ROOK, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
+     $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
+     $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, ILAVER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -632,6 +633,26 @@
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+*
+*        SR:  symmetric indefinite matrices with Rook pivoting
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL DCHKSY_ROOK(DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                       THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                       A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                       WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+*        Test for drivers has not been implemented yet.
+*
+         WRITE( NOUT, FMT = 9988 )PATH
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
