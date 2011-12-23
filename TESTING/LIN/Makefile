@@ -62,7 +62,7 @@ SLINTST = schkaa.o \
    sgerqs.o sget01.o sget02.o \
    sget03.o sget04.o sget06.o sget07.o sgtt01.o sgtt02.o \
    sgtt05.o slaptm.o slarhs.o slatb4.o slatb5.o slattb.o slattp.o \
-   slattr.o slavsp.o slavsy.o slqt01.o slqt02.o \
+   slattr.o slavsp.o slavsy.o slavsy_rook.o slqt01.o slqt02.o \
    slqt03.o spbt01.o spbt02.o spbt05.o spot01.o \
    spot02.o spot03.o spot05.o spst01.o sppt01.o \
    sppt02.o sppt03.o sppt05.o sptt01.o sptt02.o \
@@ -70,7 +70,7 @@ SLINTST = schkaa.o \
    sqrt01.o sqrt01p.o sqrt02.o sqrt03.o sqrt11.o sqrt12.o \
    sqrt13.o sqrt14.o sqrt15.o sqrt16.o sqrt17.o \
    srqt01.o srqt02.o srqt03.o srzt01.o srzt02.o \
-   sspt01.o ssyt01.o \
+   sspt01.o ssyt01.o ssyt01_rook.o \
    stbt02.o stbt03.o stbt05.o stbt06.o stpt01.o \
    stpt02.o stpt03.o stpt05.o stpt06.o strt01.o \
    strt02.o strt03.o strt05.o strt06.o \
@@ -101,7 +101,7 @@ CLINTST = cchkaa.o \
    cget03.o cget04.o cget07.o cgtt01.o cgtt02.o \
    cgtt05.o chet01.o chpt01.o claipd.o claptm.o clarhs.o clatb4.o clatb5.o \
    clatsp.o clatsy.o clattb.o clattp.o clattr.o \
-   clavhe.o clavhp.o clavsp.o clavsy.o clqt01.o \
+   clavhe.o clavhp.o clavsp.o clavsy.o clavsy_rook.o clqt01.o \
    clqt02.o clqt03.o cpbt01.o cpbt02.o cpbt05.o \
    cpot01.o cpot02.o cpot03.o cpot05.o cpst01.o \
    cppt01.o cppt02.o cppt03.o cppt05.o cptt01.o \
@@ -110,7 +110,7 @@ CLINTST = cchkaa.o \
    cqrt12.o cqrt13.o cqrt14.o cqrt15.o cqrt16.o \
    cqrt17.o crqt01.o crqt02.o crqt03.o crzt01.o crzt02.o \
    csbmv.o  cspt01.o \
-   cspt02.o cspt03.o csyt01.o csyt02.o csyt03.o \
+   cspt02.o cspt03.o csyt01.o csyt01_rook.o csyt02.o csyt03.o \
    ctbt02.o ctbt03.o ctbt05.o ctbt06.o ctpt01.o \
    ctpt02.o ctpt03.o ctpt05.o ctpt06.o ctrt01.o \
    ctrt02.o ctrt03.o ctrt05.o ctrt06.o \
@@ -139,7 +139,7 @@ DLINTST = dchkaa.o \
    dgerqs.o dget01.o dget02.o \
    dget03.o dget04.o dget06.o dget07.o dgtt01.o dgtt02.o \
    dgtt05.o dlaptm.o dlarhs.o dlatb4.o dlatb5.o dlattb.o dlattp.o \
-   dlattr.o dlavsp.o dlavsy.o dlqt01.o dlqt02.o \
+   dlattr.o dlavsp.o dlavsy.o dlavsy_rook.o dlqt01.o dlqt02.o \
    dlqt03.o dpbt01.o dpbt02.o dpbt05.o dpot01.o \
    dpot02.o dpot03.o dpot05.o dpst01.o dppt01.o \
    dppt02.o dppt03.o dppt05.o dptt01.o dptt02.o \
@@ -147,7 +147,7 @@ DLINTST = dchkaa.o \
    dqrt01.o dqrt01p.o  dqrt02.o dqrt03.o dqrt11.o dqrt12.o \
    dqrt13.o dqrt14.o dqrt15.o dqrt16.o dqrt17.o \
    drqt01.o drqt02.o drqt03.o drzt01.o drzt02.o \
-   dspt01.o dsyt01.o \
+   dspt01.o dsyt01.o dsyt01_rook.o \
    dtbt02.o dtbt03.o dtbt05.o dtbt06.o dtpt01.o \
    dtpt02.o dtpt03.o dtpt05.o dtpt06.o dtrt01.o \
    dtrt02.o dtrt03.o dtrt05.o dtrt06.o \
@@ -178,7 +178,7 @@ ZLINTST = zchkaa.o \
    zget03.o zget04.o zget07.o zgtt01.o zgtt02.o \
    zgtt05.o zhet01.o zhpt01.o zlaipd.o zlaptm.o zlarhs.o zlatb4.o zlatb5.o \
    zlatsp.o zlatsy.o zlattb.o zlattp.o zlattr.o \
-   zlavhe.o zlavhp.o zlavsp.o zlavsy.o zlqt01.o \
+   zlavhe.o zlavhp.o zlavsp.o zlavsy.o zlavsy_rook.o zlqt01.o \
    zlqt02.o zlqt03.o zpbt01.o zpbt02.o zpbt05.o \
    zpot01.o zpot02.o zpot03.o zpot05.o zpst01.o \
    zppt01.o zppt02.o zppt03.o zppt05.o zptt01.o \
@@ -187,7 +187,7 @@ ZLINTST = zchkaa.o \
    zqrt12.o zqrt13.o zqrt14.o zqrt15.o zqrt16.o \
    zqrt17.o zrqt01.o zrqt02.o zrqt03.o zrzt01.o zrzt02.o \
    zsbmv.o  zspt01.o \
-   zspt02.o zspt03.o zsyt01.o zsyt02.o zsyt03.o \
+   zspt02.o zspt03.o zsyt01.o zsyt01_rook.o zsyt02.o zsyt03.o \
    ztbt02.o ztbt03.o ztbt05.o ztbt06.o ztpt01.o \
    ztpt02.o ztpt03.o ztpt05.o ztpt06.o ztrt01.o \
    ztrt02.o ztrt03.o ztrt05.o ztrt06.o \
