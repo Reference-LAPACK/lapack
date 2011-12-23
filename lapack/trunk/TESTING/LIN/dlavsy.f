@@ -96,7 +96,26 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from DSYTRF.
+*>          Details of the interchanges and the block structure of D,
+*>          as determined by DSYTRF.
+*>
+*>          If UPLO = 'U':
+*>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
+*>               were interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>               (If IPIV( k ) = k, no interchange was done).
+*>
+*>               If IPIV(k) = IPIV(k-1) < 0, then rows and
+*>               columns k-1 and -IPIV(k) were interchanged,
+*>               D(k-1:k,k-1:k) is a 2-by-2 diagonal block.
+*>
+*>          If UPLO = 'L':
+*>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
+*>               were interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>               (If IPIV( k ) = k, no interchange was done).
+*>
+*>               If IPIV(k) = IPIV(k+1) < 0, then rows and
+*>               columns k+1 and -IPIV(k) were interchanged,
+*>               D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
 *> \endverbatim
 *>
 *> \param[in,out] B
