@@ -128,7 +128,7 @@ DLINTST = dchkaa.o \
    dchkeq.o dchkgb.o dchkge.o dchkgt.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
    dchkpt.o dchkq3.o dchkql.o dchkqp.o dchkqr.o dchkrq.o \
-   dchksp.o dchksy.o dchktb.o dchktp.o dchktr.o \
+   dchksp.o dchksy.o dchksy_rook.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
    ddrvpp.o ddrvpt.o ddrvsp.o \
