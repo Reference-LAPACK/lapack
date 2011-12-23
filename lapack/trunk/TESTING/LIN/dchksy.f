@@ -445,15 +445,22 @@
                      TRFCON = .FALSE.
                   END IF
 *
+*                 Set the test type counter
+*
+                  NT = 0
+*
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
                   CALL DSYT01( UPLO, N, A, LDA, AFAC, LDA, IWORK, AINV,
      $                         LDA, RWORK, RESULT( 1 ) )
-                  NT = 1
+                  NT = NT + 1
 *
 *+    TEST 2
-*                 Form the inverse and compute the residual.
+*                 Form the inverse and compute the residual,
+*                 if the factorization was competed without INFO > 0
+*                 (i.e. there is no zero rows and columns).
+*                 Do it only for the first block size.
 *
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
@@ -462,7 +469,7 @@
                      CALL DSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
      $                            LWORK, INFO )
 *
-*                 Check error code from DSYTRI2.
+*                    Check error code from DSYTRI2 and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'DSYTRI2', INFO, -1, UPLO, N,
@@ -471,7 +478,7 @@
 *
                      CALL DPOT03( UPLO, N, A, LDA, AINV, LDA, WORK, LDA,
      $                            RWORK, RCONDC, RESULT( 2 ) )
-                     NT = 2
+                     NT = NT + 1
                   END IF
 *
 *                 Print information about the tests that did not pass
