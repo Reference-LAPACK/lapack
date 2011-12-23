@@ -294,18 +294,22 @@
 *
                IF( IMAT.NE.NTYPES ) THEN
 *
-*                 Set up parameters with CLATB4 and generate a test
-*                 matrix with CLATMS.
+*                 Begin generate the test matrix A.
+*
+*                 Set up parameters with DLATB4 for the matrix generator
+*                 based on the type of matrix to be generated.
 *
                   CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
+*
+*                 Generate a matrix with CLATMS.
 *
                   SRNAMT = 'CLATMS'
                   CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, KL, KU, 'N', A, LDA, WORK,
      $                         INFO )
 *
-*                 Check error code from CLATMS.
+*                 Check error code from CLATMS and handle error.
 *
                   IF( INFO.NE.0 ) THEN
                      CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N,
@@ -313,8 +317,9 @@
                      GO TO 160
                   END IF
 *
-*                 For types 3-6, zero one or more rows and columns of
-*                 the matrix to test that INFO is returned correctly.
+*                 For matrix types 3-6, zero one or more rows and
+*                 columns of the matrix to test that INFO is returned
+*                 correctly.
 *
                   IF( ZEROT ) THEN
                      IF( IMAT.EQ.3 ) THEN
@@ -380,6 +385,9 @@
                   ELSE
                      IZERO = 0
                   END IF
+*
+*                 End generate the test matrix A.
+*
                ELSE
 *
 *                 Use a special block diagonal matrix to test alternate
@@ -391,13 +399,24 @@
 *              Do for each value of NB in NBVAL
 *
                DO 150 INB = 1, NNB
+*
+*                 Set the optimal blocksize, which will be later
+*                 returned by ILAENV.
+*
                   NB = NBVAL( INB )
                   CALL XLAENV( 1, NB )
 *
-*                 Compute the L*D*L' or U*D*U' factorization of the
-*                 matrix.
+*                 Copy the test matrix A into matrix AFAC which
+*                 will be factorized in place. This is needed to
+*                 preserve the test matrix A for subsequent tests.
 *
                   CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+*
+*                 Compute the L*D*L**T or U*D*U**T factorization of the
+*                 matrix. IWORK stores details of the interchanges and
+*                 the block structure of D. AINV is a work array for
+*                 block factorization, LWORK is the length of AINV.
+*
                   LWORK = MAX( 2, NB )*LDA
                   SRNAMT = 'CSYTRF'
                   CALL CSYTRF( UPLO, N, AFAC, LDA, IWORK, AINV, LWORK,
@@ -420,11 +439,14 @@
                      END IF
                   END IF
 *
-*                 Check error code from CSYTRF.
+*                 Check error code from CSYTRF and handle error.
 *
                   IF( INFO.NE.K )
      $               CALL ALAERH( PATH, 'CSYTRF', INFO, K, UPLO, N, N,
      $                            -1, -1, NB, IMAT, NFAIL, NERRS, NOUT )
+*
+*                 Set the condition estimate flag if the INFO is not 0.
+*
                   IF( INFO.NE.0 ) THEN
                      TRFCON = .TRUE.
                   ELSE
