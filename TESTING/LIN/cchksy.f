@@ -484,6 +484,9 @@
      $                               N, -1, -1, -1, IMAT, NFAIL, NERRS,
      $                               NOUT )
 *
+*                    Compute the residual for a symmetric matrix times
+*                    its inverse.
+*
                      CALL CSYT03( UPLO, N, A, LDA, AINV, LDA, WORK, LDA,
      $                            RWORK, RCONDC, RESULT( 2 ) )
                      NT = NT + 1
