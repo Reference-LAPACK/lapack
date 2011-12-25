@@ -513,6 +513,9 @@
 *+    TEST 3 (Using DSYTRS)
 *                 Solve and compute residual for  A * X = B.
 *
+*                    Choose a set of NRHS random solution vectors
+*                    stored in XACT and set up the right hand side B
+*
                      SRNAMT = 'SLARHS'
                      CALL SLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                            NRHS, A, LDA, XACT, LDA, B, LDA,
@@ -523,7 +526,7 @@
                      CALL SSYTRS( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, INFO )
 *
-*                 Check error code from SSYTRS.
+*                    Check error code from SSYTRS and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'SSYTRS', INFO, 0, UPLO, N,
@@ -531,11 +534,17 @@
      $                               NERRS, NOUT )
 *
                      CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+*
+*                    Compute the residual for the solution
+*
                      CALL SPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 3 ) )
 *
 *+    TEST 4 (Using DSYTRS2)
 *                 Solve and compute residual for  A * X = B.
+*
+*                    Choose a set of NRHS random solution vectors
+*                    stored in XACT and set up the right hand side B
 *
                      SRNAMT = 'SLARHS'
                      CALL SLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
@@ -547,7 +556,7 @@
                      CALL SSYTRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
 *
-*                 Check error code from SSYTRS2.
+*                    Check error code from SSYTRS2 and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'SSYTRS2', INFO, 0, UPLO, N,
@@ -555,6 +564,9 @@
      $                               NERRS, NOUT )
 *
                      CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+*
+*                    Compute the residual for the solution
+*
                      CALL SPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 4 ) )
 *
@@ -610,11 +622,13 @@
                   CALL SSYCON( UPLO, N, AFAC, LDA, IWORK, ANORM, RCOND,
      $                         WORK, IWORK( N+1 ), INFO )
 *
-*                 Check error code from SSYCON.
+*                 Check error code from SSYCON and handle error.
 *
                   IF( INFO.NE.0 )
      $               CALL ALAERH( PATH, 'SSYCON', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*
+*                 Compute the test ratio to compare to values of RCOND
 *
                   RESULT( 9 ) = SGET06( RCOND, RCONDC )
 *

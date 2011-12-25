@@ -513,6 +513,9 @@
 *+    TEST 3 ( Using TRS)
 *                 Solve and compute residual for  A * X = B.
 *
+*                    Choose a set of NRHS random solution vectors
+*                    stored in XACT and set up the right hand side B
+*
                      SRNAMT = 'DLARHS'
                      CALL DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                            NRHS, A, LDA, XACT, LDA, B, LDA,
@@ -523,7 +526,7 @@
                      CALL DSYTRS( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, INFO )
 *
-*                 Check error code from DSYTRS.
+*                    Check error code from DSYTRS and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'DSYTRS', INFO, 0, UPLO, N,
@@ -531,12 +534,18 @@
      $                               NERRS, NOUT )
 *
                      CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+*
+*                    Compute the residual for the solution
+*
                      CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 3 ) )
 *
 *+    TEST 4 (Using TRS2)
 *
 *                 Solve and compute residual for  A * X = B.
+*
+*                    Choose a set of NRHS random solution vectors
+*                    stored in XACT and set up the right hand side B
 *
                      SRNAMT = 'DLARHS'
                      CALL DLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
@@ -548,7 +557,7 @@
                      CALL DSYTRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
 *
-*                 Check error code from DSYTRS2.
+*                    Check error code from DSYTRS2 and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'DSYTRS2', INFO, 0, UPLO, N,
@@ -556,6 +565,9 @@
      $                               NERRS, NOUT )
 *
                      CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+*
+*                    Compute the residual for the solution
+*
                      CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 4 ) )
 *
@@ -611,11 +623,13 @@
                   CALL DSYCON( UPLO, N, AFAC, LDA, IWORK, ANORM, RCOND,
      $                         WORK, IWORK( N+1 ), INFO )
 *
-*                 Check error code from DSYCON.
+*                 Check error code from DSYCON and handle error.
 *
                   IF( INFO.NE.0 )
      $               CALL ALAERH( PATH, 'DSYCON', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*
+*                 Compute the test ratio to compare to values of RCOND
 *
                   RESULT( 9 ) = DGET06( RCOND, RCONDC )
 *

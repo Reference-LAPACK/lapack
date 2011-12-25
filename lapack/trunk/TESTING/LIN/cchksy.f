@@ -518,8 +518,11 @@
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
-*+    TEST 3
+*+    TEST 3 (Using CSYTRS)
 *                 Solve and compute residual for  A * X = B.
+*
+*                    Choose a set of NRHS random solution vectors
+*                    stored in XACT and set up the right hand side B
 *
                      SRNAMT = 'CLARHS'
                      CALL CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
@@ -531,7 +534,7 @@
                      CALL CSYTRS( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, INFO )
 *
-*                 Check error code from CSYTRS.
+*                    Check error code from CSYTRS and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'CSYTRS', INFO, 0, UPLO, N,
@@ -539,11 +542,17 @@
      $                               NERRS, NOUT )
 *
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+*
+*                    Compute the residual for the solution
+*
                      CALL CSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 3 ) )
 *
-*+    TEST 4
+*+    TEST 4 (Using CSYTRS2)
 *                 Solve and compute residual for  A * X = B.
+*
+*                    Choose a set of NRHS random solution vectors
+*                    stored in XACT and set up the right hand side B
 *
                      SRNAMT = 'CLARHS'
                      CALL CLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
@@ -555,7 +564,7 @@
                      CALL CSYTRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
 *
-*                 Check error code from CSYTRS2.
+*                    Check error code from CSYTRS2 and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'CSYTRS2', INFO, 0, UPLO, N,
@@ -563,6 +572,9 @@
      $                               NERRS, NOUT )
 *
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+*
+*                    Compute the residual for the solution
+*
                      CALL CSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 4 ) )
 *
@@ -618,11 +630,13 @@
                   CALL CSYCON( UPLO, N, AFAC, LDA, IWORK, ANORM, RCOND,
      $                         WORK, INFO )
 *
-*                 Check error code from CSYCON.
+*                 Check error code from CSYCON and handle error.
 *
                   IF( INFO.NE.0 )
      $               CALL ALAERH( PATH, 'CSYCON', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*
+*                 Compute the test ratio to compare to values of RCOND
 *
                   RESULT( 9 ) = SGET06( RCOND, RCONDC )
 *

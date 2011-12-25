@@ -519,6 +519,9 @@
 *+    TEST 3 (Using ZSYTRS)
 *                 Solve and compute residual for  A * X = B.
 *
+*                    Choose a set of NRHS random solution vectors
+*                    stored in XACT and set up the right hand side B
+*
                      SRNAMT = 'ZLARHS'
                      CALL ZLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                            NRHS, A, LDA, XACT, LDA, B, LDA,
@@ -529,7 +532,7 @@
                      CALL ZSYTRS( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, INFO )
 *
-*                 Check error code from ZSYTRS.
+*                    Check error code from ZSYTRS and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'ZSYTRS', INFO, 0, UPLO, N,
@@ -537,11 +540,17 @@
      $                               NERRS, NOUT )
 *
                      CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+*
+*                    Compute the residual for the solution
+*
                      CALL ZSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 3 ) )
 *
 *+    TEST 4 (Using ZSYTRS2)
 *                 Solve and compute residual for  A * X = B.
+*
+*                    Choose a set of NRHS random solution vectors
+*                    stored in XACT and set up the right hand side B
 *
                      SRNAMT = 'ZLARHS'
                      CALL ZLARHS( PATH, XTYPE, UPLO, ' ', N, N, KL, KU,
@@ -553,7 +562,7 @@
                      CALL ZSYTRS2( UPLO, N, NRHS, AFAC, LDA, IWORK, X,
      $                            LDA, WORK, INFO )
 *
-*                 Check error code from ZSYTRS.
+*                    Check error code from ZSYTRS2 and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'ZSYTRS', INFO, 0, UPLO, N,
@@ -561,6 +570,9 @@
      $                               NERRS, NOUT )
 *
                      CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+*
+*                    Compute the residual for the solution
+*
                      CALL ZSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 4 ) )
 *
@@ -617,11 +629,13 @@
                   CALL ZSYCON( UPLO, N, AFAC, LDA, IWORK, ANORM, RCOND,
      $                         WORK, INFO )
 *
-*                 Check error code from ZSYCON.
+*                 Check error code from ZSYCON and handle error.
 *
                   IF( INFO.NE.0 )
      $               CALL ALAERH( PATH, 'ZSYCON', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*
+*                 Compute the test ratio to compare to values of RCOND
 *
                   RESULT( 9 ) = DGET06( RCOND, RCONDC )
 *
