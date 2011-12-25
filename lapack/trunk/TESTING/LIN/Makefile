@@ -1,4 +1,4 @@
-include ../../make.inc
+ktbinclude ../../make.inc
 
 #######################################################################
 #  This makefile creates the test programs for the linear equation
@@ -51,7 +51,7 @@ SLINTST = schkaa.o \
    schkeq.o schkgb.o schkge.o schkgt.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
    schkpt.o schkq3.o schkql.o schkqp.o schkqr.o schkrq.o \
-   schksp.o schksy.o schksy_rook.o chktb.o schktp.o schktr.o \
+   schksp.o schksy.o schksy_rook.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
    sdrvpp.o sdrvpt.o sdrvsp.o \
