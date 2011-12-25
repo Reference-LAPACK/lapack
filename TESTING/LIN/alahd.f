@@ -303,7 +303,7 @@
 *        SR: Symmetric indefinite full,
 *            with "rook" (bounded Bunch-Kaufman) pivoting algorithm
 *
-         WRITE( IOUNIT, FMT = 9982 )PATH, 'Symmetric'
+         WRITE( IOUNIT, FMT = 9892 )PATH, 'Symmetric'
 *
          WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
          IF( SORD ) THEN
