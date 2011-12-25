@@ -210,8 +210,8 @@
      $                   ITEMP, IUPLO, IZERO, J, K, KL, KU, LDA, LWORK,
      $                   MODE, N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN,
      $                   NT
-      REAL               ALPHA, ANORM, CNDNUM, CONST, STEMP, LAM_MAX,
-     $                   LAM_MIN, RCOND, RCONDC
+      REAL               ALPHA, ANORM, CNDNUM, CONST, LAM_MAX, LAM_MIN,
+     $                   RCOND, RCONDC, STEMP
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
