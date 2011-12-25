@@ -216,7 +216,7 @@
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
       INTEGER            IDUMMY( 1 ), ISEED( 4 ), ISEEDY( 4 )
-      REAL               DDUMMY( 1 ), RESULT( NTESTS )
+      REAL               RESULT( NTESTS ), SDUMMY( 1 )
 *     ..
 *     .. External Functions ..
       REAL               SGET06, SLANGE, SLANSY
@@ -625,7 +625,7 @@
                         CALL SSYEVX( 'N', 'A', UPLO, 2,
      $                              AINV( ( K-2 )*LDA+K-1 ), LDA, STEMP,
      $                              STEMP, ITEMP, ITEMP, ZERO, ITEMP,
-     $                              RWORK, DDUMMY, 1, WORK, 16,
+     $                              RWORK, SDUMMY, 1, WORK, 16,
      $                              IWORK( N+1 ), IDUMMY, INFO )
 *
                         LAM_MAX = MAX( ABS( RWORK( 1 ) ),
@@ -663,7 +663,7 @@
                         CALL SSYEVX( 'N', 'A', UPLO, 2,
      $                              AINV( ( K-1 )*LDA+K ), LDA, STEMP,
      $                              STEMP, ITEMP, ITEMP, ZERO, ITEMP,
-     $                              RWORK, DDUMMY, 1, WORK, 16,
+     $                              RWORK, SDUMMY, 1, WORK, 16,
      $                              IWORK( N+1 ), IDUMMY, INFO )
 *
                         LAM_MAX = MAX( ABS( RWORK( 1 ) ),
