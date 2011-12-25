@@ -196,6 +196,8 @@
 *     .. Parameters ..
       REAL               ZERO
       PARAMETER          ( ZERO = 0.0E+0 )
+      COMPLEX            CZERO
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 )  )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
@@ -216,8 +218,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CLANSY, SGET06
-      EXTERNAL           CLANSY, SGET06
+      REAL               SGET06, CLANSY
+      EXTERNAL           SGET06, CLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, CERRSY, CGET04, CLACPY,
@@ -296,7 +298,7 @@
 *
 *                 Begin generate the test matrix A.
 *
-*                 Set up parameters with DLATB4 for the matrix generator
+*                 Set up parameters with CLATB4 for the matrix generator
 *                 based on the type of matrix to be generated.
 *
                   CALL CLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM,
@@ -337,22 +339,22 @@
                         IF( IUPLO.EQ.1 ) THEN
                            IOFF = ( IZERO-1 )*LDA
                            DO 20 I = 1, IZERO - 1
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    20                      CONTINUE
                            IOFF = IOFF + IZERO
                            DO 30 I = IZERO, N
-                              A( IOFF ) = ZERO
+                              A( IOFF ) = CZERO
                               IOFF = IOFF + LDA
    30                      CONTINUE
                         ELSE
                            IOFF = IZERO
                            DO 40 I = 1, IZERO - 1
-                              A( IOFF ) = ZERO
+                              A( IOFF ) = CZERO
                               IOFF = IOFF + LDA
    40                      CONTINUE
                            IOFF = IOFF - IZERO
                            DO 50 I = IZERO, N
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    50                      CONTINUE
                         END IF
                      ELSE
@@ -364,7 +366,7 @@
                            DO 70 J = 1, N
                               I2 = MIN( J, IZERO )
                               DO 60 I = 1, I2
-                                 A( IOFF+I ) = ZERO
+                                 A( IOFF+I ) = CZERO
    60                         CONTINUE
                               IOFF = IOFF + LDA
    70                      CONTINUE
@@ -376,7 +378,7 @@
                            DO 90 J = 1, N
                               I1 = MAX( J, IZERO )
                               DO 80 I = I1, N
-                                 A( IOFF+I ) = ZERO
+                                 A( IOFF+I ) = CZERO
    80                         CONTINUE
                               IOFF = IOFF + LDA
    90                      CONTINUE
@@ -518,7 +520,7 @@
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
-*+    TEST 3 (Using CSYTRS)
+*+    TEST 3 (Using TRS)
 *                 Solve and compute residual for  A * X = B.
 *
 *                    Choose a set of NRHS random solution vectors
@@ -548,7 +550,7 @@
                      CALL CSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 3 ) )
 *
-*+    TEST 4 (Using CSYTRS2)
+*+    TEST 4 (Using TRS2)
 *                 Solve and compute residual for  A * X = B.
 *
 *                    Choose a set of NRHS random solution vectors
