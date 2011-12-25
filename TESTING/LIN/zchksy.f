@@ -197,7 +197,7 @@
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D+0 )
       COMPLEX*16         CZERO
-      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 )  )
+      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 )  )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
