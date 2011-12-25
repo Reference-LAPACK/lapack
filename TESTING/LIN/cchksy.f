@@ -453,16 +453,12 @@
                      TRFCON = .FALSE.
                   END IF
 *
-*                 Set the test type counter
-*
-                  NT = 0
-*
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
                   CALL CSYT01( UPLO, N, A, LDA, AFAC, LDA, IWORK, AINV,
      $                         LDA, RWORK, RESULT( 1 ) )
-                  NT = NT + 1
+                  NT = 1
 *
 *+    TEST 2
 *                 Form the inverse and compute the residual,
@@ -489,7 +485,7 @@
 *
                      CALL CSYT03( UPLO, N, A, LDA, AINV, LDA, WORK, LDA,
      $                            RWORK, RCONDC, RESULT( 2 ) )
-                     NT = NT + 1
+                     NT = 2
                   END IF
 *
 *                 Print information about the tests that did not pass
@@ -610,7 +606,7 @@
                            NFAIL = NFAIL + 1
                         END IF
   120                CONTINUE
-                     NRUN = NRUN + 5
+                     NRUN = NRUN + 6
   130             CONTINUE
 *
 *+    TEST 9
