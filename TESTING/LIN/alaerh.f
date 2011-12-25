@@ -487,9 +487,16 @@
             WRITE( NOUT, FMT = 9955 )SUBNAM, INFO, UPLO, M, N5, IMAT
          END IF
 *
-      ELSE IF( LSAMEN( 2, P2, 'SY' ) .OR. LSAMEN( 2, P2, 'HE' ) ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'SY' )
+     $         .OR. LSAMEN( 2, P2, 'SR' )
+     $         .OR. LSAMEN( 2, P2, 'HE' ) ) THEN
 *
-*        xHE, or xSY:  Symmetric or Hermitian indefinite matrices
+*        xSY: symmetric indefinite matrices
+*             with partial (Bunch-Kaufman) pivoting;
+*        xSR: symmetric indefinite matrices
+*             with rook (bounded Bunch-Kaufman) pivoting;
+*        xHE: Hermitian indefinite matrices
+*             with partial (Bunch-Kaufman) pivoting.
 *
          UPLO = OPTS( 1: 1 )
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN
