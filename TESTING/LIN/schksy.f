@@ -259,7 +259,7 @@
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
-*     be used, which will be later returned by ILAENV
+*     be used to 2, which will be later returned by ILAENV
 *
       CALL XLAENV( 2, 2 )
 *
