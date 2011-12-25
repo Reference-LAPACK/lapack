@@ -89,7 +89,8 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, ZSPCON, ZSPRFS, ZSPTRF, ZSPTRI,
      $                   ZSPTRS, ZSYCON, ZSYRFS, ZSYTF2, ZSYTRF, ZSYTRI,
-     $                   ZSYTRI2, ZSYTRS
+     $                   ZSYTRI2, ZSYTRS, ZSYCON_ROOK, ZSYTF2_ROOK,
+     $                   ZSYTRF_ROOK, ZSYTRI_ROOK, ZSYTRS_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -128,10 +129,11 @@
       ANRM = 1.0D0
       OK = .TRUE.
 *
-*     Test error exits of the routines that use the diagonal pivoting
-*     factorization of a symmetric indefinite matrix.
-*
       IF( LSAMEN( 2, C2, 'SY' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with patrial
+*        (Bunch-Kaufman) pivoting.
 *
 *        ZSYTRF
 *
@@ -252,10 +254,91 @@
          CALL ZSYCON( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'ZSYCON', INFOT, NOUT, LERR, OK )
 *
-*     Test error exits of the routines that use the diagonal pivoting
-*     factorization of a symmetric indefinite packed matrix.
+      IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with rook
+*        (bounded Bunch-Kaufman) pivoting.
+*
+*        ZSYTRF_ROOK
+*
+         SRNAMT = 'ZSYTRF_ROOK'
+         INFOT = 1
+         CALL ZSYTRF_ROOK( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTRF_ROOK( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZSYTRF_ROOK( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'ZSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        ZSYTF2_ROOK
+*
+         SRNAMT = 'ZSYTF2_ROOK'
+         INFOT = 1
+         CALL ZSYTF2_ROOK( '/', 0, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTF2_ROOK( 'U', -1, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZSYTF2_ROOK( 'U', 2, A, 1, IP, INFO )
+         CALL CHKXER( 'ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        ZSYTRI_ROOK
+*
+         SRNAMT = 'ZSYTRI_ROOK'
+         INFOT = 1
+         CALL ZSYTRI_ROOK( '/', 0, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTRI_ROOK( 'U', -1, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZSYTRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
+         CALL CHKXER( 'ZSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        ZSYTRS_ROOK
+*
+         SRNAMT = 'ZSYTRS_ROOK'
+         INFOT = 1
+         CALL ZSYTRS_ROOK( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTRS_ROOK( 'U', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZSYTRS_ROOK( 'U', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZSYTRS_ROOK( 'U', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL ZSYTRS_ROOK( 'U', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        ZSYCON_ROOK
+*
+         SRNAMT = 'ZSYCON_ROOK'
+         INFOT = 1
+         CALL ZSYCON_ROOK( '/', 0, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYCON_ROOK( 'U', -1, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZSYCON_ROOK( 'U', 2, A, 1, IP, ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL ZSYCON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
+         CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite packed matrix with patrial
+*        (Bunch-Kaufman) pivoting.
 *
 *        ZSPTRF
 *

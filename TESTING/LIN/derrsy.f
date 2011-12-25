@@ -88,7 +88,8 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, DSPCON, DSPRFS, DSPTRF, DSPTRI,
      $                   DSPTRS, DSYCON, DSYRFS, DSYTF2, DSYTRF, DSYTRI,
-     $                   DSYTRI2, DSYTRS
+     $                   DSYTRI2, DSYTRS, DSYCON_ROOK, DSYTF2_ROOK,
+     $                   DSYTRF_ROOK, DSYTRI_ROOK, DSYTRS_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -129,8 +130,9 @@
 *
       IF( LSAMEN( 2, C2, 'SY' ) ) THEN
 *
-*        Test error exits of the routines that use the Bunch-Kaufman
-*        factorization of a symmetric indefinite matrix.
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with patrial
+*        (Bunch-Kaufman) pivoting.
 *
 *        DSYTRF
 *
@@ -251,10 +253,91 @@
          CALL DSYCON( 'U', 1, A, 1, IP, -1.0D0, RCOND, W, IW, INFO )
          CALL CHKXER( 'DSYCON', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with rook
+*        (bounded Bunch-Kaufman) pivoting.
+*
+*        DSYTRF_ROOK
+*
+         SRNAMT = 'DSYTRF_ROOK'
+         INFOT = 1
+         CALL DSYTRF_ROOK( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DSYTRF_ROOK( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DSYTRF_ROOK( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'DSYTRF_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        DSYTF2_ROOK
+*
+         SRNAMT = 'DSYTF2_ROOK'
+         INFOT = 1
+         CALL DSYTF2_ROOK( '/', 0, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DSYTF2_ROOK( 'U', -1, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DSYTF2_ROOK( 'U', 2, A, 1, IP, INFO )
+         CALL CHKXER( 'DSYTF2_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        DSYTRI_ROOK
+*
+         SRNAMT = 'DSYTRI_ROOK'
+         INFOT = 1
+         CALL DSYTRI_ROOK( '/', 0, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DSYTRI_ROOK( 'U', -1, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DSYTRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
+         CALL CHKXER( 'DSYTRI_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        DSYTRS_ROOK
+*
+         SRNAMT = 'DSYTRS_ROOK'
+         INFOT = 1
+         CALL DSYTRS_ROOK( '/', 0, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DSYTRS_ROOK( 'U', -1, 0, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DSYTRS_ROOK( 'U', 0, -1, A, 1, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DSYTRS_ROOK( 'U', 2, 1, A, 1, IP, B, 2, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DSYTRS_ROOK( 'U', 2, 1, A, 2, IP, B, 1, INFO )
+         CALL CHKXER( 'DSYTRS_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        DSYCON_ROOK
+*
+         SRNAMT = 'DSYCON_ROOK'
+         INFOT = 1
+         CALL DSYCON_ROOK( '/', 0, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DSYCON_ROOK( 'U', -1, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DSYCON_ROOK( 'U', 2, A, 1, IP, ANRM, RCOND, W, IW, INFO )
+         CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DSYCON_ROOK( 'U', 1, A, 1, IP, -1.0D0, RCOND, W, IW, INFO)
+         CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
+*
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
-*        Test error exits of the routines that use the Bunch-Kaufman
-*        factorization of a symmetric indefinite packed matrix.
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite packed matrix with patrial
+*        (Bunch-Kaufman) pivoting.
 *
 *        DSPTRF
 *
