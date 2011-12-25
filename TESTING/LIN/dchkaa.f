@@ -611,7 +611,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'SY' ) ) THEN
 *
-*        SY:  symmetric indefinite matrices
+*        SY:  symmetric indefinite matrices,
+*             with partial (Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -636,7 +637,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
-*        SR:  symmetric indefinite matrices with Rook pivoting
+*        SR:  symmetric indefinite matrices with Rook pivoting,
+*             with "rook" (bounded Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -656,7 +658,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
-*        SP:  symmetric indefinite packed matrices
+*        SP:  symmetric indefinite packed matrices,
+*             with partial (Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
