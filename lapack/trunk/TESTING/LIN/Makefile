@@ -1,4 +1,4 @@
-ktbinclude ../../make.inc
+include ../../make.inc
 
 #######################################################################
 #  This makefile creates the test programs for the linear equation
