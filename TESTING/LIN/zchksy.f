@@ -196,6 +196,8 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D+0 )
+      COMPLEX*16         CZERO
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 )  )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
@@ -335,22 +337,22 @@
                         IF( IUPLO.EQ.1 ) THEN
                            IOFF = ( IZERO-1 )*LDA
                            DO 20 I = 1, IZERO - 1
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    20                      CONTINUE
                            IOFF = IOFF + IZERO
                            DO 30 I = IZERO, N
-                              A( IOFF ) = ZERO
+                              A( IOFF ) = CZERO
                               IOFF = IOFF + LDA
    30                      CONTINUE
                         ELSE
                            IOFF = IZERO
                            DO 40 I = 1, IZERO - 1
-                              A( IOFF ) = ZERO
+                              A( IOFF ) = CZERO
                               IOFF = IOFF + LDA
    40                      CONTINUE
                            IOFF = IOFF - IZERO
                            DO 50 I = IZERO, N
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    50                      CONTINUE
                         END IF
                      ELSE
@@ -362,7 +364,7 @@
                            DO 70 J = 1, N
                               I2 = MIN( J, IZERO )
                               DO 60 I = 1, I2
-                                 A( IOFF+I ) = ZERO
+                                 A( IOFF+I ) = CZERO
    60                         CONTINUE
                               IOFF = IOFF + LDA
    70                      CONTINUE
@@ -374,7 +376,7 @@
                            DO 90 J = 1, N
                               I1 = MAX( J, IZERO )
                               DO 80 I = I1, N
-                                 A( IOFF+I ) = ZERO
+                                 A( IOFF+I ) = CZERO
    80                         CONTINUE
                               IOFF = IOFF + LDA
    90                      CONTINUE
@@ -516,7 +518,7 @@
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
-*+    TEST 3 (Using ZSYTRS)
+*+    TEST 3 (Using TRS)
 *                 Solve and compute residual for  A * X = B.
 *
 *                    Choose a set of NRHS random solution vectors
@@ -546,7 +548,7 @@
                      CALL ZSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 3 ) )
 *
-*+    TEST 4 (Using ZSYTRS2)
+*+    TEST 4 (Using TRS2)
 *                 Solve and compute residual for  A * X = B.
 *
 *                    Choose a set of NRHS random solution vectors
@@ -592,7 +594,7 @@
      $                            RWORK( NRHS+1 ), WORK,
      $                            RWORK( 2*NRHS+1 ), INFO )
 *
-*                 Check error code from ZSYRFS.
+*                    Check error code from ZSYRFS and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'ZSYRFS', INFO, 0, UPLO, N,
