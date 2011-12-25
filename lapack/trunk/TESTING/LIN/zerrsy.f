@@ -254,7 +254,7 @@
          CALL ZSYCON( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'ZSYCON', INFOT, NOUT, LERR, OK )
 *
-      IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with rook
@@ -277,7 +277,7 @@
 *
          SRNAMT = 'ZSYTF2_ROOK'
          INFOT = 1
-         CALL ZSYTF2_ROOK( '/', 0, A, 1, IP, INFO )
+ 
          CALL CHKXER( 'ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
          CALL ZSYTF2_ROOK( 'U', -1, A, 1, IP, INFO )

@@ -253,7 +253,7 @@
          CALL SSYCON( 'U', 1, A, 1, IP, -1.0, RCOND, W, IW, INFO )
          CALL CHKXER( 'SSYCON', INFOT, NOUT, LERR, OK )
 *
-      IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with rook
