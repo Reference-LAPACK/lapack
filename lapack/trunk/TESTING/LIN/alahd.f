@@ -47,10 +47,16 @@
 *>             _PP:  Symmetric or Hermitian positive definite packed
 *>             _PB:  Symmetric or Hermitian positive definite band
 *>             _PT:  Symmetric or Hermitian positive definite tridiagonal
-*>             _SY:  Symmetric indefinite
-*>             _SP:  Symmetric indefinite packed
-*>             _HE:  (complex) Hermitian indefinite
-*>             _HP:  (complex) Hermitian indefinite packed
+*>             _SY:  Symmetric indefinite,
+*>                     with partial (Bunch-Kaufman) pivoting
+*>             _SR:  Symmetric indefinite,
+*>                     with "rook" (bounded Bunch-Kaufman) pivoting
+*>             _SP:  Symmetric indefinite packed,
+*>                     with partial (Bunch-Kaufman) pivoting
+*>             _HE:  (complex) Hermitian indefinite,
+*>                     with partial (Bunch-Kaufman) pivoting
+*>             _HP:  (complex) Hermitian indefinite packed,
+*>                     with partial (Bunch-Kaufman) pivoting
 *>             _TR:  Triangular
 *>             _TP:  Triangular packed
 *>             _TB:  Triangular band
@@ -266,7 +272,8 @@
 *
       ELSE IF( LSAMEN( 2, P2, 'SY' )  ) THEN
 *
-*        SY: Symmetric indefinite full
+*        SY: Symmetric indefinite full,
+*            with partial (Bunch-Kaufman) pivoting algorithm
 *
          IF( LSAME( C3, 'Y' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Symmetric'
@@ -291,9 +298,36 @@
          WRITE( IOUNIT, FMT = 9955 )9
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
+      ELSE IF( LSAMEN( 2, P2, 'SR' )  ) THEN
+*
+*        SR: Symmetric indefinite full,
+*            with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*
+         WRITE( IOUNIT, FMT = 9982 )PATH, 'Symmetric'
+*
+         WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
+         IF( SORD ) THEN
+            WRITE( IOUNIT, FMT = 9972 )
+         ELSE
+            WRITE( IOUNIT, FMT = 9971 )
+         END IF
+*
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 9953 )1
+         WRITE( IOUNIT, FMT = 9961 )2
+         WRITE( IOUNIT, FMT = 9927 )3
+         WRITE( IOUNIT, FMT = 9928 )
+         WRITE( IOUNIT, FMT = 9926 )4
+         WRITE( IOUNIT, FMT = 9928 )
+         WRITE( IOUNIT, FMT = 9960 )5
+         WRITE( IOUNIT, FMT = 9959 )6
+         WRITE( IOUNIT, FMT = 9955 )7
+         WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
+*
       ELSE IF( LSAMEN( 2, P2, 'SP' ) ) THEN
 *
-*        SP: Symmetric indefinite packed
+*        SP: Symmetric indefinite packed,
+*            with partial (Bunch-Kaufman) pivoting algorithm
 *
          IF( LSAME( C3, 'Y' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Symmetric'
@@ -319,7 +353,8 @@
 *
       ELSE IF( LSAMEN( 2, P2, 'HE' )  ) THEN
 *
-*        HE: Hermitian indefinite full
+*        HE: Hermitian indefinite full,
+*            with partial (Bunch-Kaufman) pivoting algorithm
 *
          IF( LSAME( C3, 'E' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
@@ -346,7 +381,8 @@
 *
       ELSE IF( LSAMEN( 2, P2, 'HP' ) ) THEN
 *
-*        HP: Hermitian indefinite packed
+*        HP: Hermitian indefinite packed,
+*            with partial (Bunch-Kaufman) pivoting algorithm
 *
          IF( LSAME( C3, 'E' ) ) THEN
             WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
@@ -572,8 +608,14 @@
      $       )
  9994 FORMAT( / 1X, A3, ':  ', A9, ' positive definite band matrices' )
  9993 FORMAT( / 1X, A3, ':  ', A9, ' positive definite tridiagonal' )
- 9992 FORMAT( / 1X, A3, ':  ', A9, ' indefinite matrices' )
- 9991 FORMAT( / 1X, A3, ':  ', A9, ' indefinite packed matrices' )
+ 9992 FORMAT( / 1X, A3, ':  ', A9, ' indefinite matrices',
+     $        ', partial (Bunch-Kaufman) pivoting' )
+ 9991 FORMAT( / 1X, A3, ':  ', A9, ' indefinite packed matrices'
+     $        ', partial (Bunch-Kaufman) pivoting' )
+ 9892 FORMAT( / 1X, A3, ':  ', A9, ' indefinite matrices',
+     $        ', rook (bounded Bunch-Kaufman) pivoting' )
+ 9891 FORMAT( / 1X, A3, ':  ', A9, ' indefinite packed matrices',
+     $        ', rook (bounded Bunch-Kaufman) pivoting' )
  9990 FORMAT( / 1X, A3, ':  Triangular matrices' )
  9989 FORMAT( / 1X, A3, ':  Triangular packed matrices' )
  9988 FORMAT( / 1X, A3, ':  Triangular band matrices' )
@@ -686,7 +728,7 @@
      $      '(* - tests error exits from ', A3,
      $      'TRF, no test ratios are computed)' )
 *
-*     SSY, SSP, CHE, CHP matrix types
+*     SSY, SSR, SSP, CHE, CHP matrix types
 *
  9972 FORMAT( 4X, '1. Diagonal', 24X,
      $      '6. Last n/2 rows and columns zero', / 4X,
@@ -699,7 +741,7 @@
      $      '5. Middle row and column zero', 5X,
      $      '10. Scaled near overflow' )
 *
-*     CSY, CSP matrix types
+*     CSY, CSR, CSP matrix types
 *
  9971 FORMAT( 4X, '1. Diagonal', 24X,
      $      '7. Random, CNDNUM = sqrt(0.1/EPS)', / 4X,
@@ -862,6 +904,11 @@
  9921 FORMAT( ' Test ratios:', / '    (1-2: ', A1, 'GELS, 3-6: ', A1,
      $      'GELSX, 7-10: ', A1, 'GELSY, 11-14: ', A1, 'GELSS, 15-18: ',
      $      A1, 'GELSD)' )
+ 9928 FORMAT( 7X, 'where ALPHA = ( 1 + SQRT( 17 ) ) / 8' )
+ 9927 FORMAT( 3X, I2, ': ABS( Largest element in L )', / 12X,
+     $      ' - ( 1 / ( 1 - ALPHA ) ) + THRESH' )
+ 9926 FORMAT( 3X, I2, ': Largest 2-Norm of 2-by-2 pivots', / 12X,
+     $      ' - ( ( 1 + ALPHA ) / ( 1 - ALPHA ) ) + THRESH' )
 *
       RETURN
 *
