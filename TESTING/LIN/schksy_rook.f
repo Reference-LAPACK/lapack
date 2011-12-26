@@ -453,7 +453,7 @@
 *
                   IF( INFO.NE.K)
      $               CALL ALAERH( PATH, 'SSYTRF_ROOK', INFO, K,
-     $                            UPLO,N, N, -1, -1, NB, IMAT,
+     $                            UPLO, N, N, -1, -1, NB, IMAT,
      $                            NFAIL, NERRS, NOUT )
 *
 *                 Set the condition estimate flag if the INFO is not 0.
@@ -480,9 +480,8 @@
                   IF( INB.EQ.1 .AND. .NOT.TRFCON ) THEN
                      CALL SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
                      SRNAMT = 'SSYTRI_ROOK'
-                     LWORK = (N+NB+1)*(NB+3)
                      CALL SSYTRI_ROOK( UPLO, N, AINV, LDA, IWORK, WORK,
-     $                            LWORK, INFO )
+     $                                 INFO )
 *
 *                    Check error code from SSYTRI_ROOK and handle error.
 *
