@@ -725,8 +725,8 @@
 *
                      SRNAMT = 'SLARHS'
                      CALL SLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
-     $                            KL, KU,NRHS, A, LDA, XACT, LDA,
-     $                            B, LDA,ISEED, INFO )
+     $                            KL, KU, NRHS, A, LDA, XACT, LDA,
+     $                            B, LDA, ISEED, INFO )
                      CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'SSYTRS_ROOK'
