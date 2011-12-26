@@ -259,12 +259,12 @@
 *
 *     Test path
 *
-      PATH( 1: 1 ) = 'Complex precision'
+      PATH( 1: 1 ) = 'Zomplex precision'
       PATH( 2: 3 ) = 'SR'
 *
 *     Path to generate matrices
 *
-      MATPATH( 1: 1 ) = 'Complex precision'
+      MATPATH( 1: 1 ) = 'Zomplex precision'
       MATPATH( 2: 3 ) = 'SY'
 *
       NRUN = 0
