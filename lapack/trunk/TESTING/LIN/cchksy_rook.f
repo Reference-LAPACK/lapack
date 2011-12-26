@@ -206,7 +206,7 @@
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 8 )
+      PARAMETER          ( NTESTS = 7 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            TRFCON, ZEROT
@@ -715,8 +715,6 @@
                      END IF
   200             CONTINUE
                   NRUN = NRUN + NT
-*STUB
-      GO TO 240
 *
 *                 Skip the other tests if this is not the first block
 *                 size.
@@ -745,8 +743,8 @@
 *
                      SRNAMT = 'CLARHS'
                      CALL CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
-     $                            KL, KU,NRHS, A, LDA, XACT, LDA,
-     $                            B, LDA,ISEED, INFO )
+     $                            KL, KU, NRHS, A, LDA, XACT, LDA,
+     $                            B, LDA, ISEED, INFO )
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'CSYTRS_ROOK'
@@ -798,7 +796,7 @@
                   ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
                   SRNAMT = 'CSYCON_ROOK'
                   CALL CSYCON_ROOK( UPLO, N, AFAC, LDA, IWORK, ANORM,
-     $                              RCOND, WORK, IWORK( N+1 ), INFO )
+     $                              RCOND, WORK, INFO )
 *
 *                 Check error code from CSYCON_ROOK and handle error.
 *
