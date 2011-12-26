@@ -165,7 +165,7 @@ ZLINTST = zchkaa.o \
    zchkeq.o zchkgb.o zchkge.o zchkgt.o \
    zchkhe.o zchkhp.o zchklq.o zchkpb.o \
    zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkql.o zchkqp.o \
-   zchkqr.o zchkrq.o zchksp.o zchksy.o zchktb.o \
+   zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
    zdrvgt.o zdrvhp.o \
    zdrvls.o zdrvpb.o zdrvpp.o zdrvpt.o \
