@@ -52,7 +52,7 @@
 *> CHE   10               List types on next line if 0 < NTYPES < 10
 *> CHP   10               List types on next line if 0 < NTYPES < 10
 *> CSY   11               List types on next line if 0 < NTYPES < 11
-*> CSR   11               List types on next line if 0 < NTYPES < 10
+*> CSR   10               List types on next line if 0 < NTYPES < 10
 *> CSP   11               List types on next line if 0 < NTYPES < 11
 *> CTR   18               List types on next line if 0 < NTYPES < 18
 *> CTP   18               List types on next line if 0 < NTYPES < 18
