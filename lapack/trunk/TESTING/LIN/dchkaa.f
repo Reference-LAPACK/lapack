@@ -638,7 +638,7 @@
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        SR:  symmetric indefinite matrices with Rook pivoting,
-*             with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*             with rook (bounded Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
