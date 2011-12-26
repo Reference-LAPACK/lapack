@@ -277,7 +277,7 @@
 *
          SRNAMT = 'ZSYTF2_ROOK'
          INFOT = 1
- 
+         CALL ZSYTF2_ROOK( '/', 0, A, 1, IP, INFO )
          CALL CHKXER( 'ZSYTF2_ROOK', INFOT, NOUT, LERR, OK )
          INFOT = 2
          CALL ZSYTF2_ROOK( 'U', -1, A, 1, IP, INFO )
