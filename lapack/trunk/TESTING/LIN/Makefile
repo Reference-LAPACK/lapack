@@ -88,7 +88,7 @@ CLINTST = cchkaa.o \
    cchkeq.o cchkgb.o cchkge.o cchkgt.o \
    cchkhe.o cchkhp.o cchklq.o cchkpb.o \
    cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o cchkqp.o \
-   cchkqr.o cchkrq.o cchksp.o cchksy.o cchktb.o \
+   cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
    cdrvgt.o cdrvhp.o \
    cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o \
