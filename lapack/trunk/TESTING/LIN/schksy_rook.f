@@ -449,7 +449,7 @@
                      END IF
                   END IF
 *
-*                 Check error code from DSYTRF and handle error.
+*                 Check error code from SSYTRF and handle error.
 *
                   IF( INFO.NE.K)
      $               CALL ALAERH( PATH, 'SSYTRF_ROOK', INFO, K,
