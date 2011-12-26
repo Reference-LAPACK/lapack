@@ -24,7 +24,7 @@
 *> and program options using list-directed input. The remaining lines
 *> specify the LAPACK test paths and the number of matrix types to use
 *> in testing.  An annotated example of a data file can be obtained by
-*> deleting the first 3 characters from the following 39 lines:
+*> deleting the first 3 characters from the following 40 lines:
 *> Data file for testing COMPLEX*16 LAPACK linear equation routines
 *> 7                      Number of values of M
 *> 0 1 2 3 5 10 16        Values of M (row dimension)
@@ -52,6 +52,7 @@
 *> ZHE   10               List types on next line if 0 < NTYPES < 10
 *> ZHP   10               List types on next line if 0 < NTYPES < 10
 *> ZSY   11               List types on next line if 0 < NTYPES < 11
+*> ZSR   10               List types on next line if 0 < NTYPES < 10
 *> ZSP   11               List types on next line if 0 < NTYPES < 11
 *> ZTR   18               List types on next line if 0 < NTYPES < 18
 *> ZTP   18               List types on next line if 0 < NTYPES < 18
@@ -157,10 +158,10 @@
       EXTERNAL           ALAREQ, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
      $                   ZCHKHP, ZCHKLQ, ZCHKPB, ZCHKPO, ZCHKPS, ZCHKPP,
      $                   ZCHKPT, ZCHKQ3, ZCHKQL, ZCHKQP, ZCHKQR, ZCHKRQ,
-     $                   ZCHKSP, ZCHKSY, ZCHKTB, ZCHKTP, ZCHKTR, ZCHKTZ,
-     $                   ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE, ZDRVHP, ZDRVLS,
-     $                   ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
-     $                   ILAVER
+     $                   ZCHKSP, ZCHKSY, CCHKSY_ROOK, ZCHKTB, ZCHKTP,
+     $                   ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE,
+     $                   ZDRVHP, ZDRVLS, ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT,
+     $                   ZDRVSP, ZDRVSY, ILAVER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -661,7 +662,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'SY' ) ) THEN
 *
-*        SY:  symmetric indefinite matrices
+*        SY:  symmetric indefinite matrices,
+*             with partial (Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -684,9 +686,31 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+*
+*        SR:  symmetric indefinite matrices with Rook pivoting,
+*             with rook (bounded Bunch-Kaufman) pivoting algorithm
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKSY_ROOK(DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                       THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                       A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                       WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+*        Test for drivers has not been implemented yet.
+*
+         WRITE( NOUT, FMT = 9988 )PATH
+*
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
-*        SP:  symmetric indefinite packed matrices
+*        SP:  symmetric indefinite packed matrices,
+*             with partial (Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
