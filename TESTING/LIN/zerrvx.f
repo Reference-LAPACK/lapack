@@ -92,7 +92,8 @@
       EXTERNAL           CHKXER, ZGBSV, ZGBSVX, ZGESV, ZGESVX, ZGTSV,
      $                   ZGTSVX, ZHESV, ZHESVX, ZHPSV, ZHPSVX, ZPBSV,
      $                   ZPBSVX, ZPOSV, ZPOSVX, ZPPSV, ZPPSVX, ZPTSV,
-     $                   ZPTSVX, ZSPSV, ZSPSVX, ZSYSV, ZSYSVX
+     $                   ZPTSVX, ZSPSV, ZSPSVX, ZSYSV, ZSYSV_ROOK,
+     $                   ZSYSVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -736,6 +737,24 @@
          CALL ZSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 3, RW, INFO )
          CALL CHKXER( 'ZSYSVX', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+*
+*        ZSYSV_ROOK
+*
+         SRNAMT = 'ZSYSV_ROOK'
+         INFOT = 1
+         CALL ZSYSV_ROOK( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYSV_ROOK( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZSYSV_ROOK( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL ZSYSV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYSV_ROOK', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
