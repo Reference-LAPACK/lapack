@@ -52,7 +52,7 @@
 *> CHE   10               List types on next line if 0 < NTYPES < 10
 *> CHP   10               List types on next line if 0 < NTYPES < 10
 *> CSY   11               List types on next line if 0 < NTYPES < 11
-*> CSR   10               List types on next line if 0 < NTYPES < 10
+*> CSR   11               List types on next line if 0 < NTYPES < 11
 *> CSP   11               List types on next line if 0 < NTYPES < 11
 *> CTR   18               List types on next line if 0 < NTYPES < 18
 *> CTP   18               List types on next line if 0 < NTYPES < 18
@@ -691,7 +691,7 @@
 *        SR:  symmetric indefinite matrices with Rook pivoting,
 *             with rook (bounded Bunch-Kaufman) pivoting algorithm
 *
-         NTYPES = 10
+         NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN

@@ -396,6 +396,7 @@
 *                 code for the 2 x 2 blocks.
 *
                   CALL CLATSY( UPLO, N, A, LDA, ISEED )
+*
                END IF
 *
 *              Do for each value of NB in NBVAL
