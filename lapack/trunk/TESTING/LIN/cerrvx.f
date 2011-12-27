@@ -92,7 +92,8 @@
       EXTERNAL           CGBSV, CGBSVX, CGESV, CGESVX, CGTSV, CGTSVX,
      $                   CHESV, CHESVX, CHKXER, CHPSV, CHPSVX, CPBSV,
      $                   CPBSVX, CPOSV, CPOSVX, CPPSV, CPPSVX, CPTSV,
-     $                   CPTSVX, CSPSV, CSPSVX, CSYSV, CSYSVX
+     $                   CPTSVX, CSPSV, CSPSVX, CSYSV, CSYSV_ROOK,
+     $                   CSYSVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -734,6 +735,24 @@
          CALL CSYSVX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, B, 2, X, 2,
      $                RCOND, R1, R2, W, 3, RW, INFO )
          CALL CHKXER( 'CSYSVX', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+*
+*        CSYSV_ROOK
+*
+         SRNAMT = 'CSYSV_ROOK'
+         INFOT = 1
+         CALL CSYSV_ROOK( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CSYSV_ROOK( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL CSYSV_ROOK( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL CSYSV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
