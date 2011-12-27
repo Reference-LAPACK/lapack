@@ -204,7 +204,7 @@
       COMPLEX*16         CZERO
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 )  )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 10 )
+      PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 7 )
 *     ..
@@ -231,8 +231,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRSY, ZGEEVX, ZGET04,
-     $                   ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZSYT02, ZSYT03,
-     $                   ZSYCON_ROOK, ZSYT01_ROOK, ZSYTRF_ROOK,
+     $                   ZLACPY, ZLARHS, ZLATB4, ZLATMS, ZLATSY,ZSYT02,
+     $                   ZSYT03, ZSYCON_ROOK, ZSYT01_ROOK, ZSYTRF_ROOK,
      $                   ZSYTRI_ROOK, ZSYTRS_ROOK, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
@@ -317,101 +317,112 @@
             DO 250 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Begin generate the test matrix A.
+               IF( IMAT.NE.NTYPES ) THEN
 *
-*              Set up parameters with ZLATB4 for the matrix generator
-*              based on the type of matrix to be generated.
+*                 Begin generate the test matrix A.
 *
-               CALL ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
-     $                      MODE, CNDNUM, DIST )
+*                 Set up parameters with ZLATB4 for the matrix generator
+*                 based on the type of matrix to be generated.
 *
-*              Generate a matrix with ZLATMS.
+                  CALL ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+     $                         MODE, CNDNUM, DIST )
 *
-               SRNAMT = 'ZLATMS'
-               CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
-     $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
-     $                      INFO )
+*                 Generate a matrix with ZLATMS.
 *
-*              Check error code from ZLATMS and handle error.
+                  SRNAMT = 'ZLATMS'
+                  CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+     $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
+     $                         WORK, INFO )
 *
-               IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N, -1,
-     $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*                 Check error code from ZLATMS and handle error.
 *
-*                 Skip all tests for this generated matrix
+                  IF( INFO.NE.0 ) THEN
+                     CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N,
+     $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-                  GO TO 250
-               END IF
+*                    Skip all tests for this generated matrix
 *
-*              For matrix types 3-6, zero one or more rows and
-*              columns of the matrix to test that INFO is returned
-*              correctly.
-*
-               IF( ZEROT ) THEN
-                  IF( IMAT.EQ.3 ) THEN
-                     IZERO = 1
-                  ELSE IF( IMAT.EQ.4 ) THEN
-                     IZERO = N
-                  ELSE
-                     IZERO = N / 2 + 1
+                     GO TO 250
                   END IF
 *
-                  IF( IMAT.LT.6 ) THEN
+*                 For matrix types 3-6, zero one or more rows and
+*                 columns of the matrix to test that INFO is returned
+*                 correctly.
+*
+                  IF( ZEROT ) THEN
+                     IF( IMAT.EQ.3 ) THEN
+                        IZERO = 1
+                     ELSE IF( IMAT.EQ.4 ) THEN
+                        IZERO = N
+                     ELSE
+                        IZERO = N / 2 + 1
+                     END IF
+*
+                     IF( IMAT.LT.6 ) THEN
 *
 *                    Set row and column IZERO to zero.
 *
-                     IF( IUPLO.EQ.1 ) THEN
-                        IOFF = ( IZERO-1 )*LDA
-                        DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = CZERO
-   20                   CONTINUE
-                        IOFF = IOFF + IZERO
-                        DO 30 I = IZERO, N
-                           A( IOFF ) = CZERO
-                           IOFF = IOFF + LDA
-   30                   CONTINUE
+                        IF( IUPLO.EQ.1 ) THEN
+                           IOFF = ( IZERO-1 )*LDA
+                           DO 20 I = 1, IZERO - 1
+                              A( IOFF+I ) = CZERO
+   20                      CONTINUE
+                           IOFF = IOFF + IZERO
+                           DO 30 I = IZERO, N
+                              A( IOFF ) = CZERO
+                              IOFF = IOFF + LDA
+   30                      CONTINUE
+                        ELSE
+                           IOFF = IZERO
+                           DO 40 I = 1, IZERO - 1
+                              A( IOFF ) = CZERO
+                              IOFF = IOFF + LDA
+   40                      CONTINUE
+                           IOFF = IOFF - IZERO
+                           DO 50 I = IZERO, N
+                              A( IOFF+I ) = CZERO
+   50                      CONTINUE
+                        END IF
                      ELSE
-                        IOFF = IZERO
-                        DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = CZERO
-                           IOFF = IOFF + LDA
-   40                   CONTINUE
-                        IOFF = IOFF - IZERO
-                        DO 50 I = IZERO, N
-                           A( IOFF+I ) = CZERO
-   50                   CONTINUE
+                        IOFF = 0
+                        IF( IUPLO.EQ.1 ) THEN
+*
+*                          Set the first IZERO rows and columns to zero.
+*
+                           DO 70 J = 1, N
+                              I2 = MIN( J, IZERO )
+                              DO 60 I = 1, I2
+                                 A( IOFF+I ) = CZERO
+   60                         CONTINUE
+                              IOFF = IOFF + LDA
+   70                      CONTINUE
+                        ELSE
+*
+*                          Set the last IZERO rows and columns to zero.
+*
+                           DO 90 J = 1, N
+                              I1 = MAX( J, IZERO )
+                              DO 80 I = I1, N
+                                 A( IOFF+I ) = CZERO
+   80                         CONTINUE
+                              IOFF = IOFF + LDA
+   90                      CONTINUE
+                        END IF
                      END IF
                   ELSE
-                     IOFF = 0
-                     IF( IUPLO.EQ.1 ) THEN
-*
-*                       Set the first IZERO rows and columns to zero.
-*
-                        DO 70 J = 1, N
-                           I2 = MIN( J, IZERO )
-                           DO 60 I = 1, I2
-                              A( IOFF+I ) = CZERO
-   60                      CONTINUE
-                           IOFF = IOFF + LDA
-   70                   CONTINUE
-                     ELSE
-*
-*                       Set the last IZERO rows and columns to zero.
-*
-                        DO 90 J = 1, N
-                           I1 = MAX( J, IZERO )
-                           DO 80 I = I1, N
-                              A( IOFF+I ) = CZERO
-   80                      CONTINUE
-                           IOFF = IOFF + LDA
-   90                   CONTINUE
-                     END IF
+                     IZERO = 0
                   END IF
-               ELSE
-                  IZERO = 0
-               END IF
 *
-*              End generate the test matrix A.
+*                 End generate the test matrix A.
+*
+               ELSE
+*
+*                 Use a special block diagonal matrix to test alternate
+*                 code for the 2 x 2 blocks.
+*
+                  CALL ZLATSY( UPLO, N, A, LDA, ISEED )
+*
+               END IF
 *
 *              Do for each value of NB in NBVAL
 *
