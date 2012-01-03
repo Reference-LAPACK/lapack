@@ -371,7 +371,7 @@
  * @defgroup single_blas_level2 real
  *   @ingroup level2
  *   This is the group of real LEVEL 2 BLAS routines.
- * @defgroup double_blas_level1 double
+ * @defgroup double_blas_level2 double
  *   @ingroup level2 
  *   This is the group of double LEVEL 2 BLAS routines.
  * @defgroup complex_blas_level2 complex
