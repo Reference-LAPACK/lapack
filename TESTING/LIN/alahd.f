@@ -609,13 +609,13 @@
  9994 FORMAT( / 1X, A3, ':  ', A9, ' positive definite band matrices' )
  9993 FORMAT( / 1X, A3, ':  ', A9, ' positive definite tridiagonal' )
  9992 FORMAT( / 1X, A3, ':  ', A9, ' indefinite matrices',
-     $        ', partial (Bunch-Kaufman) pivoting' )
+     $      ', partial (Bunch-Kaufman) pivoting' )
  9991 FORMAT( / 1X, A3, ':  ', A9, ' indefinite packed matrices'
-     $        ', partial (Bunch-Kaufman) pivoting' )
+     $      ', partial (Bunch-Kaufman) pivoting' )
  9892 FORMAT( / 1X, A3, ':  ', A9, ' indefinite matrices',
-     $        ', rook (bounded Bunch-Kaufman) pivoting' )
+     $      ', rook (bounded Bunch-Kaufman) pivoting' )
  9891 FORMAT( / 1X, A3, ':  ', A9, ' indefinite packed matrices',
-     $        ', rook (bounded Bunch-Kaufman) pivoting' )
+     $      ', rook (bounded Bunch-Kaufman) pivoting' )
  9990 FORMAT( / 1X, A3, ':  Triangular matrices' )
  9989 FORMAT( / 1X, A3, ':  Triangular packed matrices' )
  9988 FORMAT( / 1X, A3, ':  Triangular band matrices' )
