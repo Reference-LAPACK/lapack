@@ -464,7 +464,7 @@
 *                    Check error code from DSYSV_ROOK and handle error.
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'DSYSV_ROOK',INFO, K, UPLO,
+                        CALL ALAERH( PATH, 'DSYSV_ROOK', INFO, K, UPLO,
      $                               N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                               NERRS, NOUT )
                         GO TO 120
