@@ -158,7 +158,8 @@
      $                   DCHKQL, DCHKQP, DCHKQR, DCHKRQ, DCHKSP, DCHKSY,
      $                   DCHKSY_ROOK, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
      $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
-     $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, ILAVER
+     $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
+     $                   ILAVER
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -652,9 +653,14 @@
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
-*        Test for drivers has not been implemented yet.
-*
-         WRITE( NOUT, FMT = 9988 )PATH
+         IF( TSTDRV ) THEN
+            CALL DDRVSY_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                        LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                        WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
