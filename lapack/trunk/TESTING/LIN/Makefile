@@ -157,7 +157,7 @@ ifdef USEXBLAS
 DLINTST += derrvxx.o ddrvgex.o ddrvsyx.o ddrvgbx.o derrgex.o ddrvpox.o derrpox.o \
 	debchvxx.o derrsyx.o
 else
-DLINTST += derrvx.o ddrvge.o ddrvsy.o ddrvgb.o derrge.o ddrvpo.o derrpo.o \
+DLINTST += derrvx.o ddrvge.o ddrvsy.o ddrvsy_rook.o ddrvgb.o derrge.o ddrvpo.o derrpo.o \
 	derrsy.o
 endif
 
