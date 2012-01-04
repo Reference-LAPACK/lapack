@@ -511,7 +511,7 @@
             IF( INFO.NE.0 )
      $         WRITE( NOUT, FMT = 9949 )
 *
-         ELSE IF( LSAMEN( 3, C3, 'SV ' ) ) THEN
+         ELSE IF( LSAMEN( 2, C3, 'SV' ) ) THEN
 *
             IF( INFO.NE.INFOE .AND. INFOE.NE.0 ) THEN
                WRITE( NOUT, FMT = 9979 )
