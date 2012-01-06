@@ -131,7 +131,7 @@ DLINTST = dchkaa.o \
    dchksp.o dchksy.o dchksy_rook.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
-   ddrvpp.o ddrvpt.o ddrvsp.o \
+   ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o \
    derrgt.o derrlq.o derrls.o \
    derrps.o derrql.o derrqp.o derrqr.o \
    derrrq.o derrtr.o derrtz.o \
@@ -157,7 +157,7 @@ ifdef USEXBLAS
 DLINTST += derrvxx.o ddrvgex.o ddrvsyx.o ddrvgbx.o derrgex.o ddrvpox.o derrpox.o \
 	debchvxx.o derrsyx.o
 else
-DLINTST += derrvx.o ddrvge.o ddrvsy.o ddrvsy_rook.o ddrvgb.o derrge.o ddrvpo.o derrpo.o \
+DLINTST += derrvx.o ddrvge.o ddrvsy.o ddrvgb.o derrge.o ddrvpo.o derrpo.o \
 	derrsy.o
 endif
 

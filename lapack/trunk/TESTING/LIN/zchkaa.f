@@ -158,7 +158,7 @@
       EXTERNAL           ALAREQ, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
      $                   ZCHKHP, ZCHKLQ, ZCHKPB, ZCHKPO, ZCHKPS, ZCHKPP,
      $                   ZCHKPT, ZCHKQ3, ZCHKQL, ZCHKQP, ZCHKQR, ZCHKRQ,
-     $                   ZCHKSP, ZCHKSY, CCHKSY_ROOK, ZCHKTB, ZCHKTP,
+     $                   ZCHKSP, ZCHKSY, ZCHKSY_ROOK, ZCHKTB, ZCHKTP,
      $                   ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE,
      $                   ZDRVHP, ZDRVLS, ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT,
      $                   ZDRVSP, ZDRVSY, ILAVER
