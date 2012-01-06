@@ -165,11 +165,11 @@ typedef lapack_logical (*LAPACK_Z_SELECT2)
     ( const lapack_complex_double*, const lapack_complex_double* );
 
 #ifndef LAPACK_NAME
-#if defined(LAPACK_NAME_PATTERN_LC)
+#if defined(LAPACK_NAME_PATTERN_LC) || defined(ADD_)
 #define LAPACK_NAME(lcname,UCNAME)  lcname##_
-#elif defined(LAPACK_NAME_PATTERN_UC)
+#elif defined(LAPACK_NAME_PATTERN_UC) || defined(UPPER)
 #define LAPACK_NAME(lcname,UCNAME)  UCNAME
-#elif defined(LAPACK_NAME_PATTERN_MC)
+#elif defined(LAPACK_NAME_PATTERN_MC) || defined(NOCHANGE)
 #define LAPACK_NAME(lcname,UCNAME)  lcname
 #else
 #define LAPACK_NAME(lcname,UCNAME)  lcname##_

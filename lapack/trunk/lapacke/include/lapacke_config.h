@@ -113,11 +113,11 @@ lapack_complex_double lapack_make_complex_double( double re, double im );
 #endif
 
 #ifndef LAPACKE_NAME
-#if defined(LAPACK_NAME_PATTERN_LC)
+#if defined(LAPACK_NAME_PATTERN_LC) || defined(ADD_)
 #define LAPACKE_NAME(lcname,UCNAME)  lapacke_##lcname
-#elif defined(LAPACK_NAME_PATTERN_UC)
+#elif defined(LAPACK_NAME_PATTERN_UC) || defined(UPPER)
 #define LAPACKE_NAME(lcname,UCNAME)  LAPACKE_##UCNAME
-#elif defined(LAPACK_NAME_PATTERN_MC)
+#elif defined(LAPACK_NAME_PATTERN_MC) || defined(NOCHANGE)
 #define LAPACKE_NAME(lcname,UCNAME)  LAPACKE_##lcname
 #elif defined(LAPACK_NAME_PATTERN_LC_SHORT)
 #define LAPACKE_NAME(lcname,UCNAME)  c##lcname
