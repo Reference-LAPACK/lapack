@@ -2772,6 +2772,18 @@ lapack_complex_double lapack_make_complex_double( double re, double im );
 #define LAPACKE_ctprfb_work   LAPACKE_NAME(ctprfb_work,CTPRFB_WORK)
 #define LAPACKE_ztprfb_work   LAPACKE_NAME(ztprfb_work,ZTPRFB_WORK)
 
+//LAPACK 3.X.X
+#define LAPACKE_ssysv_rook   LAPACKE_NAME(ssysv_rook,SSYSV_ROOK)
+#define LAPACKE_dsysv_rook   LAPACKE_NAME(dsysv_rook,DSYSV_ROOK)
+#define LAPACKE_csysv_rook   LAPACKE_NAME(csysv_rook,CSYSV_ROOK)
+#define LAPACKE_zsysv_rook   LAPACKE_NAME(zsysv_rook,ZSYSV_ROOK)
+
+#define LAPACKE_ssysv_rook_work   LAPACKE_NAME(ssysv_rook_work,SSYSV_ROOK_WORK)
+#define LAPACKE_dsysv_rook_work   LAPACKE_NAME(dsysv_rook_work,DSYSV_ROOK_WORK)
+#define LAPACKE_csysv_rook_work   LAPACKE_NAME(csysv_rook_work,CSYSV_ROOK_WORK)
+#define LAPACKE_zsysv_rook_work   LAPACKE_NAME(zsysv_rook_work,ZSYSV_ROOK_WORK)
+
+
 #define LAPACKE_cgb_trans LAPACKE_NAME(cgb_trans,CGB_TRANS)
 #define LAPACKE_cge_trans LAPACKE_NAME(cge_trans,CGE_TRANS)
 #define LAPACKE_cgg_trans LAPACKE_NAME(cgg_trans,CGG_TRANS)
