@@ -35,7 +35,7 @@
 
 lapack_logical LAPACKE_lsame( char ca,  char cb )
 {
-    return (lapack_logical) lsame_( &ca, &cb, 1, 1 );
+    return (lapack_logical) LAPACK_lsame( &ca, &cb, 1, 1 );
 }
 
 
