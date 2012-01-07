@@ -474,7 +474,7 @@
             CALL CGELQF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
             LWORK_CGELQF=DUM(1)
 *           Compute space needed for CUNGLQ
-            CALL CUNGLQ( N, N, M, VT, LDVT, DUM(1), DUM(1), -1, IERR )
+            CALL CUNGLQ( N, N, M, DUM(1), N, DUM(1), DUM(1), -1, IERR )
             LWORK_CUNGLQ_N=DUM(1)
             CALL CUNGLQ( M, N, M, A, LDA, DUM(1), DUM(1), -1, IERR )
             LWORK_CUNGLQ_M=DUM(1)
