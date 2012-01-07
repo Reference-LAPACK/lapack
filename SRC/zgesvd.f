@@ -473,7 +473,7 @@
             CALL ZGELQF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
             LWORK_ZGELQF=DUM(1)
 *           Compute space needed for ZUNGLQ
-            CALL ZUNGLQ( N, N, M, VT, LDVT, DUM(1), DUM(1), -1, IERR )
+            CALL ZUNGLQ( N, N, M, DUM(1), N, DUM(1), DUM(1), -1, IERR )
             LWORK_ZUNGLQ_N=DUM(1)
             CALL ZUNGLQ( M, N, M, A, LDA, DUM(1), DUM(1), -1, IERR )
             LWORK_ZUNGLQ_M=DUM(1)

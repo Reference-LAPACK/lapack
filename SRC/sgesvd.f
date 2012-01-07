@@ -477,7 +477,7 @@
             CALL SGELQF( M, N, A, LDA, DUM(1), DUM(1), -1, IERR )
             LWORK_SGELQF=DUM(1)
 *           Compute space needed for SORGLQ
-            CALL SORGLQ( N, N, M, VT, LDVT, DUM(1), DUM(1), -1, IERR )
+            CALL SORGLQ( N, N, M, DUM(1), N, DUM(1), DUM(1), -1, IERR )
             LWORK_SORGLQ_N=DUM(1)
             CALL SORGLQ( M, N, M, A, LDA, DUM(1), DUM(1), -1, IERR )
             LWORK_SORGLQ_M=DUM(1)
