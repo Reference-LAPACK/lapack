@@ -116,7 +116,7 @@
 *>
 *> \param[in,out] DF
 *> \verbatim
-*>          DF is or output) REAL array, dimension (N)
+*>          DF is REAL array, dimension (N)
 *>          If FACT = 'F', then DF is an input argument and on entry
 *>          contains the n diagonal elements of the diagonal matrix D
 *>          from the L*D*L**T factorization of A.
@@ -127,7 +127,7 @@
 *>
 *> \param[in,out] EF
 *> \verbatim
-*>          EF is or output) REAL array, dimension (N-1)
+*>          EF is REAL array, dimension (N-1)
 *>          If FACT = 'F', then EF is an input argument and on entry
 *>          contains the (n-1) subdiagonal elements of the unit
 *>          bidiagonal factor L from the L*D*L**T factorization of A.

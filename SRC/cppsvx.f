@@ -147,7 +147,7 @@
 *>
 *> \param[in,out] AFP
 *> \verbatim
-*>          AFP is or output) COMPLEX array, dimension (N*(N+1)/2)
+*>          AFP is COMPLEX array, dimension (N*(N+1)/2)
 *>          If FACT = 'F', then AFP is an input argument and on entry
 *>          contains the triangular factor U or L from the Cholesky
 *>          factorization A = U**H*U or A = L*L**H, in the same storage
@@ -168,7 +168,7 @@
 *>
 *> \param[in,out] EQUED
 *> \verbatim
-*>          EQUED is or output) CHARACTER*1
+*>          EQUED is CHARACTER*1
 *>          Specifies the form of equilibration that was done.
 *>          = 'N':  No equilibration (always true if FACT = 'N').
 *>          = 'Y':  Equilibration was done, i.e., A has been replaced by
@@ -179,7 +179,7 @@
 *>
 *> \param[in,out] S
 *> \verbatim
-*>          S is or output) REAL array, dimension (N)
+*>          S is REAL array, dimension (N)
 *>          The scale factors for A; not accessed if EQUED = 'N'.  S is
 *>          an input argument if FACT = 'F'; otherwise, S is an output
 *>          argument.  If FACT = 'F' and EQUED = 'Y', each element of S

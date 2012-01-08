@@ -130,7 +130,7 @@
 *>
 *> \param[in,out] CNORM
 *> \verbatim
-*>          CNORM is or output) DOUBLE PRECISION array, dimension (N)
+*>          CNORM is DOUBLE PRECISION array, dimension (N)
 *>
 *>          If NORMIN = 'Y', CNORM is an input argument and CNORM(j)
 *>          contains the norm of the off-diagonal part of the j-th column

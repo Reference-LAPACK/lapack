@@ -154,7 +154,7 @@
 *>
 *> \param[in,out] AF
 *> \verbatim
-*>          AF is or output) REAL array, dimension (LDAF,N)
+*>          AF is REAL array, dimension (LDAF,N)
 *>          If FACT = 'F', then AF is an input argument and on entry
 *>          contains the factors L and U from the factorization
 *>          A = P*L*U as computed by SGETRF.  If EQUED .ne. 'N', then
@@ -178,7 +178,7 @@
 *>
 *> \param[in,out] IPIV
 *> \verbatim
-*>          IPIV is or output) INTEGER array, dimension (N)
+*>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the factorization A = P*L*U
 *>          as computed by SGETRF; row i of the matrix was interchanged
@@ -195,7 +195,7 @@
 *>
 *> \param[in,out] EQUED
 *> \verbatim
-*>          EQUED is or output) CHARACTER*1
+*>          EQUED is CHARACTER*1
 *>          Specifies the form of equilibration that was done.
 *>          = 'N':  No equilibration (always true if FACT = 'N').
 *>          = 'R':  Row equilibration, i.e., A has been premultiplied by
@@ -210,7 +210,7 @@
 *>
 *> \param[in,out] R
 *> \verbatim
-*>          R is or output) REAL array, dimension (N)
+*>          R is REAL array, dimension (N)
 *>          The row scale factors for A.  If EQUED = 'R' or 'B', A is
 *>          multiplied on the left by diag(R); if EQUED = 'N' or 'C', R
 *>          is not accessed.  R is an input argument if FACT = 'F';
@@ -220,7 +220,7 @@
 *>
 *> \param[in,out] C
 *> \verbatim
-*>          C is or output) REAL array, dimension (N)
+*>          C is REAL array, dimension (N)
 *>          The column scale factors for A.  If EQUED = 'C' or 'B', A is
 *>          multiplied on the right by diag(C); if EQUED = 'N' or 'R', C
 *>          is not accessed.  C is an input argument if FACT = 'F';

@@ -124,7 +124,7 @@
 *>
 *> \param[in,out] AFP
 *> \verbatim
-*>          AFP is or output) COMPLEX array, dimension (N*(N+1)/2)
+*>          AFP is COMPLEX array, dimension (N*(N+1)/2)
 *>          If FACT = 'F', then AFP is an input argument and on entry
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
@@ -140,7 +140,7 @@
 *>
 *> \param[in,out] IPIV
 *> \verbatim
-*>          IPIV is or output) INTEGER array, dimension (N)
+*>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains details of the interchanges and the block structure
 *>          of D, as determined by CSPTRF.
