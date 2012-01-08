@@ -142,7 +142,7 @@
 *>
 *> \param[in,out] S
 *> \verbatim
-*>          S is or output) DOUBLE PRECISION array, dimension (N)
+*>          S is DOUBLE PRECISION array, dimension (N)
 *>     The scale factors for A.  If EQUED = 'Y', A is multiplied on
 *>     the left and right by diag(S).  S is an input argument if FACT =
 *>     'F'; otherwise, S is an output argument.  If FACT = 'F' and EQUED

@@ -134,7 +134,7 @@
 *>
 *> \param[in,out] DLF
 *> \verbatim
-*>          DLF is or output) COMPLEX*16 array, dimension (N-1)
+*>          DLF is COMPLEX*16 array, dimension (N-1)
 *>          If FACT = 'F', then DLF is an input argument and on entry
 *>          contains the (n-1) multipliers that define the matrix L from
 *>          the LU factorization of A as computed by ZGTTRF.
@@ -146,7 +146,7 @@
 *>
 *> \param[in,out] DF
 *> \verbatim
-*>          DF is or output) COMPLEX*16 array, dimension (N)
+*>          DF is COMPLEX*16 array, dimension (N)
 *>          If FACT = 'F', then DF is an input argument and on entry
 *>          contains the n diagonal elements of the upper triangular
 *>          matrix U from the LU factorization of A.
@@ -158,7 +158,7 @@
 *>
 *> \param[in,out] DUF
 *> \verbatim
-*>          DUF is or output) COMPLEX*16 array, dimension (N-1)
+*>          DUF is COMPLEX*16 array, dimension (N-1)
 *>          If FACT = 'F', then DUF is an input argument and on entry
 *>          contains the (n-1) elements of the first superdiagonal of U.
 *>
@@ -168,7 +168,7 @@
 *>
 *> \param[in,out] DU2
 *> \verbatim
-*>          DU2 is or output) COMPLEX*16 array, dimension (N-2)
+*>          DU2 is COMPLEX*16 array, dimension (N-2)
 *>          If FACT = 'F', then DU2 is an input argument and on entry
 *>          contains the (n-2) elements of the second superdiagonal of
 *>          U.
@@ -180,7 +180,7 @@
 *>
 *> \param[in,out] IPIV
 *> \verbatim
-*>          IPIV is or output) INTEGER array, dimension (N)
+*>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains the pivot indices from the LU factorization of A as
 *>          computed by ZGTTRF.

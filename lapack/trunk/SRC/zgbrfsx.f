@@ -159,7 +159,7 @@
 *>
 *> \param[in,out] R
 *> \verbatim
-*>          R is or output) DOUBLE PRECISION array, dimension (N)
+*>          R is DOUBLE PRECISION array, dimension (N)
 *>     The row scale factors for A.  If EQUED = 'R' or 'B', A is
 *>     multiplied on the left by diag(R); if EQUED = 'N' or 'C', R
 *>     is not accessed.  R is an input argument if FACT = 'F';
@@ -177,7 +177,7 @@
 *>
 *> \param[in,out] C
 *> \verbatim
-*>          C is or output) DOUBLE PRECISION array, dimension (N)
+*>          C is DOUBLE PRECISION array, dimension (N)
 *>     The column scale factors for A.  If EQUED = 'C' or 'B', A is
 *>     multiplied on the right by diag(C); if EQUED = 'N' or 'R', C
 *>     is not accessed.  C is an input argument if FACT = 'F';

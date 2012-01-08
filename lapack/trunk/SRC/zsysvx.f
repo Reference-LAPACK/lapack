@@ -133,7 +133,7 @@
 *>
 *> \param[in,out] AF
 *> \verbatim
-*>          AF is or output) COMPLEX*16 array, dimension (LDAF,N)
+*>          AF is COMPLEX*16 array, dimension (LDAF,N)
 *>          If FACT = 'F', then AF is an input argument and on entry
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
@@ -153,7 +153,7 @@
 *>
 *> \param[in,out] IPIV
 *> \verbatim
-*>          IPIV is or output) INTEGER array, dimension (N)
+*>          IPIV is INTEGER array, dimension (N)
 *>          If FACT = 'F', then IPIV is an input argument and on entry
 *>          contains details of the interchanges and the block structure
 *>          of D, as determined by ZSYTRF.

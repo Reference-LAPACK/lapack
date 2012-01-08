@@ -180,7 +180,7 @@
 *>
 *> \param[in,out] AF
 *> \verbatim
-*>          AF is or output) REAL array, dimension (LDAF,N)
+*>          AF is REAL array, dimension (LDAF,N)
 *>     If FACT = 'F', then AF is an input argument and on entry
 *>     contains the block diagonal matrix D and the multipliers
 *>     used to obtain the factor U or L from the factorization A =
@@ -200,7 +200,7 @@
 *>
 *> \param[in,out] IPIV
 *> \verbatim
-*>          IPIV is or output) INTEGER array, dimension (N)
+*>          IPIV is INTEGER array, dimension (N)
 *>     If FACT = 'F', then IPIV is an input argument and on entry
 *>     contains details of the interchanges and the block
 *>     structure of D, as determined by SSYTRF.  If IPIV(k) > 0,
@@ -219,7 +219,7 @@
 *>
 *> \param[in,out] EQUED
 *> \verbatim
-*>          EQUED is or output) CHARACTER*1
+*>          EQUED is CHARACTER*1
 *>     Specifies the form of equilibration that was done.
 *>       = 'N':  No equilibration (always true if FACT = 'N').
 *>       = 'Y':  Both row and column equilibration, i.e., A has been
@@ -230,7 +230,7 @@
 *>
 *> \param[in,out] S
 *> \verbatim
-*>          S is or output) REAL array, dimension (N)
+*>          S is REAL array, dimension (N)
 *>     The scale factors for A.  If EQUED = 'Y', A is multiplied on
 *>     the left and right by diag(S).  S is an input argument if FACT =
 *>     'F'; otherwise, S is an output argument.  If FACT = 'F' and EQUED

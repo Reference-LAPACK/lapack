@@ -117,7 +117,7 @@
 *>
 *> \param[in,out] DF
 *> \verbatim
-*>          DF is or output) DOUBLE PRECISION array, dimension (N)
+*>          DF is DOUBLE PRECISION array, dimension (N)
 *>          If FACT = 'F', then DF is an input argument and on entry
 *>          contains the n diagonal elements of the diagonal matrix D
 *>          from the L*D*L**H factorization of A.
@@ -128,7 +128,7 @@
 *>
 *> \param[in,out] EF
 *> \verbatim
-*>          EF is or output) COMPLEX*16 array, dimension (N-1)
+*>          EF is COMPLEX*16 array, dimension (N-1)
 *>          If FACT = 'F', then EF is an input argument and on entry
 *>          contains the (n-1) subdiagonal elements of the unit
 *>          bidiagonal factor L from the L*D*L**H factorization of A.
