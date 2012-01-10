@@ -16,8 +16,8 @@ if (UNIX)
   set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
    endif ()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
-# This library is not present in the Sun package SolarisStudio13.3-linux-x86-bin
-  STRING(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
+# This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
+   STRING(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
 endif ()
 
 
@@ -149,6 +149,7 @@ endif(BUILD_TESTING)
 option(LAPACKE "Build LAPACKE" OFF)
 if(LAPACKE)
   add_subdirectory(lapacke)
+  
 endif(LAPACKE)
 
 # --------------------------------------------------
@@ -188,17 +189,27 @@ OPTION(BUILD_STATIC_LIBS "Build static libraries" ON )
 #OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
 
 if( NOT BLAS_FOUND )
-  export(TARGETS blas lapack FILE lapack-targets.cmake)
+  if(LAPACKE)
+     export(TARGETS blas lapack tmglib lapacke FILE lapack-targets.cmake)
+  else (LAPACKE)
+     export(TARGETS blas lapack tmglib FILE lapack-targets.cmake)
+  endif(LAPACKE)
 else( NOT BLAS_FOUND )
-  export(TARGETS lapack FILE lapack-targets.cmake)
+  if(LAPACKE)
+     export(TARGETS lapack tmglib lapacke FILE lapack-targets.cmake)
+  else (LAPACKE)
+     export(TARGETS lapack tmglib FILE lapack-targets.cmake)
+  endif(LAPACKE)
 endif( NOT BLAS_FOUND )
+
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-build.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
 
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc)
- install(FILES
+  install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc
   DESTINATION ${PKG_CONFIG_DIR}
    )
@@ -211,5 +222,6 @@ install(FILES
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
   DESTINATION lib/cmake/lapack-${LAPACK_VERSION}
   )
+
 install(EXPORT lapack-targets
   DESTINATION lib/cmake/lapack-${LAPACK_VERSION})

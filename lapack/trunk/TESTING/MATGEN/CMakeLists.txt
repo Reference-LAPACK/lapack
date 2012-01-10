@@ -72,3 +72,4 @@ set(ALLOBJ ${SMATGEN} ${CMATGEN} ${SCATGEN} ${DMATGEN} ${ZMATGEN}
 endif()
 add_library(tmglib ${ALLOBJ} )
 target_link_libraries(tmglib lapack)
+lapack_install_library(tmglib)

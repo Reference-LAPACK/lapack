@@ -1,6 +1,3 @@
-ADD_CUSTOM_TARGET( include ALL DEPENDS 
-    lapacke.h lapacke_config.h lapacke_utils.h )
+SET (LAPACKE_INCLUDE lapacke.h lapacke_config.h lapacke_utils.h)
 
-INSTALL(
-  FILES lapacke.h lapacke_config.h
-  DESTINATION include )
+file(COPY ${LAPACKE_INCLUDE} DESTINATION ${LAPACK_BINARY_DIR}/include)

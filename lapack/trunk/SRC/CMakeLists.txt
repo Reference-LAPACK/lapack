@@ -146,7 +146,10 @@ set(SLASRC
    stfttr.f stpttf.f stpttr.f strttf.f strttp.f 
    sgejsv.f  sgesvj.f  sgsvj0.f  sgsvj1.f 
    sgeequb.f ssyequb.f spoequb.f sgbequb.f
-   sbbcsd.f slapmr.f sorbdb.f sorcsd.f )
+   sbbcsd.f slapmr.f sorbdb.f sorcsd.f 
+   sgeqrt.f sgeqrt2.f sgeqrt3.f sgemqrt.f
+   stpqrt.f stpqrt2.f stpmqrt.f stprfb.f
+  )
 
 set(DSLASRC spotrs.f sgetrs.f spotrf.f sgetrf.f) 
 
@@ -220,7 +223,9 @@ set(CLASRC
    chfrk.f ctfttp.f clanhf.f cpftrf.f cpftri.f cpftrs.f ctfsm.f ctftri.f 
    ctfttr.f ctpttf.f ctpttr.f ctrttf.f ctrttp.f 
    cgeequb.f cgbequb.f csyequb.f cpoequb.f cheequb.f
-   cbbcsd.f clapmr.f cunbdb.f cuncsd.f )
+   cbbcsd.f clapmr.f cunbdb.f cuncsd.f  
+   cgeqrt.f cgeqrt2.f cgeqrt3.f cgemqrt.f
+   ctpqrt.f ctpqrt2.f ctpmqrt.f ctprfb.f)
 
 set(CXLASRC     cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f 
    cla_gercond_c.f cla_gercond_x.f cla_gerpvgrw.f 
@@ -295,7 +300,9 @@ set(DLASRC
    dtfttr.f dtpttf.f dtpttr.f dtrttf.f dtrttp.f 
    dgejsv.f  dgesvj.f  dgsvj0.f  dgsvj1.f 
    dgeequb.f dsyequb.f dpoequb.f dgbequb.f
-   dbbcsd.f dlapmr.f dorbdb.f dorcsd.f )
+   dbbcsd.f dlapmr.f dorbdb.f dorcsd.f 
+   dgeqrt.f dgeqrt2.f dgeqrt3.f dgemqrt.f
+   dtpqrt.f dtpqrt2.f dtpmqrt.f dtprfb.f )
 
 set(DXLASRC dgesvxx.f dgerfsx.f dla_gerfsx_extended.f dla_geamv.f		
    dla_gercond.f dla_gerpvgrw.f dsysvxx.f dsyrfsx.f			
@@ -372,7 +379,9 @@ set(ZLASRC
    zhfrk.f ztfttp.f zlanhf.f zpftrf.f zpftri.f zpftrs.f ztfsm.f ztftri.f 
    ztfttr.f ztpttf.f ztpttr.f ztrttf.f ztrttp.f 
    zgeequb.f zgbequb.f zsyequb.f zpoequb.f zheequb.f
-   zbbcsd.f zlapmr.f zunbdb.f zuncsd.f )
+   zbbcsd.f zlapmr.f zunbdb.f zuncsd.f  
+   zgeqrt.f zgeqrt2.f zgeqrt3.f zgemqrt.f
+   ztpqrt.f ztpqrt2.f ztpmqrt.f ztprfb.f)
 
 set(ZXLASRC  zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f		
    zla_gercond_c.f zla_gercond_x.f zla_gerpvgrw.f zsysvxx.f zsyrfsx.f	
