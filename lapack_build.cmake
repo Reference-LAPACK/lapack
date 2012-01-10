@@ -171,6 +171,16 @@ if(parallel GREATER 1)
   message("CTEST_CONFIGURE_COMMAND: ${CTEST_CONFIGURE_COMMAND}")
 endif(parallel GREATER 1)
 
+###################################################################
+# Values for the cmake build
+###################################################################
+
+set( CACHE_CONTENTS "
+# Enable LAPACKE
+LAPACKE:OPTION=ON
+" )
+
+
 ##########################################################################
 # wipe the binary dir
 message("Remove binary directory...")
