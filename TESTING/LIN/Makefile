@@ -80,7 +80,7 @@ ifdef USEXBLAS
 SLINTST += serrvxx.o sdrvgex.o sdrvsyx.o serrgex.o sdrvgbx.o sdrvpox.o \
 	sebchvxx.o serrsyx.o serrpox.o
 else
-SLINTST += serrvx.o sdrvge.o sdrvsy.o serrge.o sdrvgb.o sdrvpo.o \
+SLINTST += serrvx.o sdrvge.o sdrvsy.o sdrvsy_rook.o serrge.o sdrvgb.o sdrvpo.o \
 	serrsy.o serrpo.o
 endif
 
