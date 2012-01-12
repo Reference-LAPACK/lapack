@@ -185,9 +185,9 @@
       CHARACTER          DIST, FACT, TYPE, UPLO, XTYPE
       CHARACTER*3        PATH, MATPATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
-     $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
+     $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
@@ -195,8 +195,8 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, DLANSY
-      EXTERNAL           DGET06, DLANSY
+      DOUBLE PRECISION   DLANSY
+      EXTERNAL           DLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGET04, DLACPY,
