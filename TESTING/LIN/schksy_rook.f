@@ -547,7 +547,7 @@
 *
                      END IF
 *
-*                    STEMP should be bounded CONST
+*                    STEMP should be bounded by CONST
 *
                      STEMP = STEMP - CONST + THRESH
                      IF( STEMP.GT.RESULT( 3 ) )
@@ -585,7 +585,7 @@
 *
                      END IF
 *
-*                    STEMP should be bounded CONST
+*                    STEMP should be bounded by CONST
 *
                      STEMP = STEMP - CONST + THRESH
                      IF( STEMP.GT.RESULT( 3 ) )
@@ -633,6 +633,9 @@
      $                            ABS( RWORK( 2 ) ) )
 *
                         STEMP = LAM_MAX / LAM_MIN
+*
+*                       STEMP should be bounded by CONST
+*
                         STEMP = ABS( STEMP ) - CONST + THRESH
                         IF( STEMP.GT.RESULT( 4 ) )
      $                     RESULT( 4 ) = STEMP
@@ -671,6 +674,9 @@
      $                            ABS( RWORK( 2 ) ) )
 *
                         STEMP = LAM_MAX / LAM_MIN
+*
+*                       STEMP should be bounded by CONST
+*
                         STEMP = ABS( STEMP ) - CONST + THRESH
                         IF( STEMP.GT.RESULT( 4 ) )
      $                     RESULT( 4 ) = STEMP

@@ -547,7 +547,7 @@
 *
                      END IF
 *
-*                    DTEMP should be bounded CONST
+*                    DTEMP should be bounded by CONST
 *
                      DTEMP = DTEMP - CONST + THRESH
                      IF( DTEMP.GT.RESULT( 3 ) )
@@ -585,7 +585,7 @@
 *
                      END IF
 *
-*                    DTEMP should be bounded CONST
+*                    DTEMP should be bounded by CONST
 *
                      DTEMP = DTEMP - CONST + THRESH
                      IF( DTEMP.GT.RESULT( 3 ) )
@@ -633,6 +633,9 @@
      $                            ABS( RWORK( 2 ) ) )
 *
                         DTEMP = LAM_MAX / LAM_MIN
+*
+*                    DTEMP should be bounded by CONST
+*
                         DTEMP = ABS( DTEMP ) - CONST + THRESH
                         IF( DTEMP.GT.RESULT( 4 ) )
      $                     RESULT( 4 ) = DTEMP
@@ -671,6 +674,9 @@
      $                            ABS( RWORK( 2 ) ) )
 *
                         DTEMP = LAM_MAX / LAM_MIN
+*
+*                    DTEMP should be bounded by CONST
+*
                         DTEMP = ABS( DTEMP ) - CONST + THRESH
                         IF( DTEMP.GT.RESULT( 4 ) )
      $                     RESULT( 4 ) = DTEMP
