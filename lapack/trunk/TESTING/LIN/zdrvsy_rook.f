@@ -187,9 +187,9 @@
       CHARACTER          DIST, FACT, TYPE, UPLO, XTYPE
       CHARACTER*3        MATPATH, PATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
-     $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
+     $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
@@ -198,8 +198,8 @@
 
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, ZLANSY
-      EXTERNAL           DGET06, ZLANSY
+      DOUBLE PRECISION   ZLANSY
+      EXTERNAL           ZLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
@@ -217,7 +217,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DCMPLX, MAX, MIN
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /

@@ -185,9 +185,9 @@
       CHARACTER          DIST, FACT, TYPE, UPLO, XTYPE
       CHARACTER*3        PATH, MATPATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
-     $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
+     $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      REAL               AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      REAL               AINVNM, ANORM, CNDNUM, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
@@ -195,8 +195,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SGET06, SLANSY
-      EXTERNAL           SGET06, SLANSY
+      REAL               SLANSY
+      EXTERNAL           SLANSY
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, SERRVX, SGET04, SLACPY,
