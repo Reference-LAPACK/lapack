@@ -120,7 +120,7 @@ ifdef USEXBLAS
 CLINTST += cerrvxx.o cdrvgex.o cdrvsyx.o cdrvgbx.o cerrgex.o cdrvpox.o cdrvhex.o \
 	cerrpox.o cebchvxx.o cerrsyx.o cerrhex.o
 else
-CLINTST += cerrvx.o cdrvge.o cdrvsy.o cdrvgb.o cerrge.o cdrvpo.o cdrvhe.o \
+CLINTST += cerrvx.o cdrvge.o cdrvsy.o cdrvsy_rook.o cdrvgb.o cerrge.o cdrvpo.o cdrvhe.o \
 	cerrpo.o cerrsy.o cerrhe.o
 endif
 
