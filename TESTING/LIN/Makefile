@@ -197,7 +197,7 @@ ifdef USEXBLAS
 ZLINTST += zerrvxx.o zdrvgex.o zdrvsyx.o zdrvgbx.o zerrgex.o zdrvpox.o zdrvhex.o \
 	zerrpox.o zebchvxx.o zerrsyx.o zerrhex.o
 else
-ZLINTST += zerrvx.o zdrvge.o zdrvsy.o zdrvgb.o zerrge.o zdrvpo.o zdrvhe.o \
+ZLINTST += zerrvx.o zdrvge.o zdrvsy.o zdrvsy_rook.o zdrvgb.o zerrge.o zdrvpo.o zdrvhe.o \
 	zerrpo.o zerrsy.o zerrhe.o
 endif
 

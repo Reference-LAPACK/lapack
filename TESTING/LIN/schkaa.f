@@ -156,9 +156,9 @@
       EXTERNAL           ALAREQ, SCHKEQ, SCHKGB, SCHKGE, SCHKGT, SCHKLQ,
      $                   SCHKPB, SCHKPO, SCHKPS, SCHKPP, SCHKPT, SCHKQ3,
      $                   SCHKQL, SCHKQP, SCHKQR, SCHKRQ, SCHKSP, SCHKSY,
-     $                   SCHKSY_ROOK, SDRVSY_ROOK, SCHKTB, SCHKTP,
-     $                   SCHKTR, SCHKTZ, SDRVGB, SDRVGE, SDRVGT, SDRVLS,
-     $                   SDRVPB, SDRVPO, SDRVPP, SDRVPT, SDRVSP, SDRVSY,
+     $                   SCHKSY_ROOK, SCHKTB, SCHKTP, SCHKTR, SCHKTZ,
+     $                   SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB, SDRVPO,
+     $                   SDRVPP, SDRVPT, SDRVSP, SDRVSY, SDRVSY_ROOK,
      $                   ILAVER
 *     ..
 *     .. Scalars in Common ..
