@@ -147,9 +147,15 @@ endif(BUILD_TESTING)
 # --------------------------------------------------
 # LAPACKE
 option(LAPACKE "Build LAPACKE" OFF)
+# LAPACKE has also the interface to some routines from tmglib,
+# if LAPACKE_WITH_TMG is selected, we need to add those routines to LAPACKE
+option(LAPACKE_WITH_TMG "Build LAPACKE with tmglib routines" OFF)
+if (LAPACKE_WITH_TMG)
+  option(LAPACKE "Build LAPACKE" ON)
+endif(LAPACKE_WITH_TMG)
+
 if(LAPACKE)
   add_subdirectory(lapacke)
-  
 endif(LAPACKE)
 
 # --------------------------------------------------

@@ -49,6 +49,10 @@ TIMER    = EXT_ETIME
 CC = cc
 CFLAGS = -O3
 #
+# LAPACKE has also the interface to some routines from tmglib,
+# if LAPACKE_WITH_TMG is selected, we need to add those routines to LAPACKE
+#LAPACKE_WITH_TMG = Yes
+#
 #  The archiver and the flag(s) to use when building archive (library)
 #  If you system has no ranlib, set RANLIB = echo.
 #
