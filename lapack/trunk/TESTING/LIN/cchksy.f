@@ -262,6 +262,11 @@
      $   CALL CERRSY( PATH, NOUT )
       INFOT = 0
 *
+*     Set the minimum block size for which the block routine should
+*     be used, which will be later returned by ILAENV
+*
+      CALL XLAENV( 2, 2 )
+*
 *     Do for each value of N in NVAL
 *
       DO 180 IN = 1, NN
