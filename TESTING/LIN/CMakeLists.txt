@@ -49,7 +49,7 @@ set(CLINTST  cchkaa.f
    cchktp.f cchktr.f cchktz.f 
    cdrvgt.f cdrvhe.f cdrvhp.f 
    cdrvls.f cdrvpb.f cdrvpp.f cdrvpt.f 
-   cdrvsp.f cdrvsy.f 
+   cdrvsp.f cdrvsy.f cdrvsy_rook.f
    cerrgt.f cerrhe.f cerrlq.f 
    cerrls.f cerrps.f cerrql.f cerrqp.f 
    cerrqr.f cerrrq.f cerrsy.f cerrtr.f cerrtz.f 
@@ -126,7 +126,7 @@ set(ZLINTST  zchkaa.f
    zchktp.f zchktr.f zchktz.f 
    zdrvgt.f zdrvhe.f zdrvhp.f 
    zdrvls.f zdrvpb.f zdrvpp.f zdrvpt.f 
-   zdrvsp.f zdrvsy.f 
+   zdrvsp.f zdrvsy.f zdrvsy_rook.f 
    zerrgt.f zerrhe.f zerrlq.f 
    zerrls.f zerrps.f zerrql.f zerrqp.f 
    zerrqr.f zerrrq.f zerrsy.f zerrtr.f zerrtz.f 
