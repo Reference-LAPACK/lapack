@@ -13,7 +13,7 @@ set(SLINTST  schkaa.f
    schksp.f schksy.f schksy_rook.f schktb.f schktp.f schktr.f 
    schktz.f 
    sdrvgt.f sdrvls.f sdrvpb.f 
-   sdrvpp.f sdrvpt.f sdrvsp.f sdrvsy.f 
+   sdrvpp.f sdrvpt.f sdrvsp.f sdrvsy.f sdrvsy_rook.f
    serrgt.f serrlq.f serrls.f 
    serrpo.f serrps.f serrql.f serrqp.f serrqr.f 
    serrrq.f serrsy.f serrtr.f serrtz.f serrvx.f 
