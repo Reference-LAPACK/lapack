@@ -50,7 +50,7 @@
 *>
 *> T must be in Schur canonical form (as returned by DHSEQR), that is,
 *> block upper triangular with 1-by-1 and 2-by-2 diagonal blocks; each
-*> 2-by-2 diagonal block has its diagonal elemnts equal and its
+*> 2-by-2 diagonal block has its diagonal elements equal and its
 *> off-diagonal elements of opposite sign.
 *> \endverbatim
 *
