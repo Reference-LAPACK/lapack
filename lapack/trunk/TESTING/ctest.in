@@ -38,3 +38,5 @@ CQP    6               List types on next line if 0 < NTYPES <  6
 CTZ    3               List types on next line if 0 < NTYPES <  3
 CLS    6               List types on next line if 0 < NTYPES <  6
 CEQ
+CQT
+CQX

@@ -24,7 +24,7 @@
 *> and program options using list-directed input. The remaining lines
 *> specify the LAPACK test paths and the number of matrix types to use
 *> in testing.  An annotated example of a data file can be obtained by
-*> deleting the first 3 characters from the following 38 lines:
+*> deleting the first 3 characters from the following 40 lines:
 *> Data file for testing REAL LAPACK linear eqn. routines
 *> 7                      Number of values of M
 *> 0 1 2 3 5 10 16        Values of M (row dimension)
@@ -63,6 +63,8 @@
 *> STZ    3               List types on next line if 0 < NTYPES <  3
 *> SLS    6               List types on next line if 0 < NTYPES <  6
 *> SEQ
+*> SQT
+*> SQX
 *> \endverbatim
 *
 *  Parameters:
@@ -159,7 +161,7 @@
      $                   SCHKSY_ROOK, SCHKTB, SCHKTP, SCHKTR, SCHKTZ,
      $                   SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB, SDRVPO,
      $                   SDRVPP, SDRVPT, SDRVSP, SDRVSY, SDRVSY_ROOK,
-     $                   ILAVER
+     $                   ILAVER, SCHKQRT, SCHKQRTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -860,6 +862,28 @@
 *
          IF( TSTCHK ) THEN
             CALL SCHKEQ( THREQ, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'QT' ) ) THEN
+*
+*        QT:  QRT routines for general matrices
+*
+         IF( TSTCHK ) THEN
+            CALL SCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                    NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'QX' ) ) THEN
+*
+*        QX:  QRT routines for triangular-pentagonal matrices
+*
+         IF( TSTCHK ) THEN
+            CALL SCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF

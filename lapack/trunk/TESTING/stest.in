@@ -36,3 +36,5 @@ SQP    6               List types on next line if 0 < NTYPES <  6
 STZ    3               List types on next line if 0 < NTYPES <  3
 SLS    6               List types on next line if 0 < NTYPES <  6
 SEQ
+SQT
+SQX

@@ -79,6 +79,7 @@
 *
 *  =====================================================================
       SUBROUTINE SQRT05(M,N,L,NB,RESULT)
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -103,7 +104,7 @@
       PARAMETER( ZERO = 0.0, ONE = 1.0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER INFO, J, K, M2
+      INTEGER INFO, J, K, M2, NP1
       REAL   ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
@@ -121,6 +122,11 @@
       EPS = SLAMCH( 'Epsilon' )
       K = N
       M2 = M+N
+      IF( M.GT.0 ) THEN
+         NP1 = N+1
+      ELSE
+         NP1 = 1
+      END IF
       LWORK = M2*M2*NB
 *
 *     Dynamically allocate all arrays
@@ -133,11 +139,20 @@
 *
       LDT=NB
       CALL SLASET( 'Full', M2, N, ZERO, ZERO, A, M2 )
+      CALL SLASET( 'Full', NB, N, ZERO, ZERO, T, NB )
       DO J=1,N
          CALL SLARNV( 2, ISEED, J, A( 1, J ) )
-         CALL SLARNV( 2, ISEED, M-L, A( MIN(N+M,N+1), J ) )
-         CALL SLARNV( 2, ISEED, MIN(J,L), A( MIN(N+M,N+M-L+1), J ) )
       END DO
+      IF( M.GT.0 ) THEN
+         DO J=1,N
+            CALL SLARNV( 2, ISEED, M-L, A( N+1, J ) )
+         END DO
+      END IF
+      IF( L.GT.0 ) THEN
+         DO J=1,N
+            CALL SLARNV( 2, ISEED, MIN(J,L), A( N+M-L+1, J ) )
+         END DO
+      END IF
 *
 *     Copy the matrix A to the array AF.
 *
@@ -145,7 +160,7 @@
 *
 *     Factor the matrix A in the array AF.
 *
-      CALL STPQRT( M,N,L,NB,AF,M2,AF(N+1,1),M2,T,LDT,WORK,INFO)
+      CALL STPQRT( M,N,L,NB,AF,M2,AF(NP1,1),M2,T,LDT,WORK,INFO)
 *
 *     Generate the (M+N)-by-(M+N) matrix Q by applying H to I
 *
@@ -187,12 +202,12 @@
 *
 *     Apply Q to C as Q*C
 *
-      CALL STPMQRT( 'L','N', M,N,K,L,NB,AF(N+1,1),M2,T,LDT,CF,M2,
-     $               CF(N+1,1),M2,WORK,INFO)
+      CALL STPMQRT( 'L','N', M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,
+     $ M2,CF(NP1,1),M2,WORK,INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
 *
-      CALL SGEMM( 'N', 'N', M2, N, M2, -ONE, Q, M2, C, M2, ONE, CF, M2 )
+      CALL SGEMM( 'N', 'N', M2, N, M2, -ONE, Q,M2,C,M2,ONE,CF,M2)
       RESID = SLANGE( '1', M2, N, CF, M2, RWORK )
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 3 ) = RESID / (EPS*MAX(1,M2)*CNORM)
@@ -206,8 +221,8 @@
 *
 *     Apply Q to C as QT*C
 *
-      CALL STPMQRT( 'L','T',M,N,K,L,NB,AF(N+1,1),M2,T,LDT,CF,M2,
-     $              CF(N+1,1),M2,WORK,INFO) 
+      CALL STPMQRT('L','T',M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
+     $              CF(NP1,1),M2,WORK,INFO) 
 *
 *     Compute |QT*C - QT*C| / |C|
 *
@@ -229,8 +244,8 @@
 *
 *     Apply Q to D as D*Q
 *
-      CALL STPMQRT('R','N',N,M,N,L,NB,AF(N+1,1),M2,T,LDT,DF,N,
-     $             DF(1,N+1),N,WORK,INFO)
+      CALL STPMQRT('R','N',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
+     $             DF(1,NP1),N,WORK,INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
 *
@@ -248,8 +263,8 @@
 *
 *     Apply Q to D as D*QT
 *
-      CALL STPMQRT('R','T',N,M,N,L,NB,AF(N+1,1),M2,T,LDT,DF,N,
-     $             DF(1,N+1),N,WORK,INFO)     
+      CALL STPMQRT('R','T',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
+     $             DF(1,NP1),N,WORK,INFO)     
        
 *
 *     Compute |D*QT - D*QT| / |D|

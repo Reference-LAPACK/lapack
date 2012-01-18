@@ -38,3 +38,5 @@ ZQP    6               List types on next line if 0 < NTYPES <  6
 ZTZ    3               List types on next line if 0 < NTYPES <  3
 ZLS    6               List types on next line if 0 < NTYPES <  6
 ZEQ
+ZQT
+ZQX

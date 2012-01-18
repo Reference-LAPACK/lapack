@@ -79,6 +79,7 @@
 *
 *  =====================================================================
       SUBROUTINE DQRT05(M,N,L,NB,RESULT)
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -103,7 +104,7 @@
       PARAMETER( ZERO = 0.0, ONE = 1.0 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER INFO, J, K, M2
+      INTEGER INFO, J, K, M2, NP1
       DOUBLE PRECISION   ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
@@ -120,6 +121,11 @@
       EPS = DLAMCH( 'Epsilon' )
       K = N
       M2 = M+N
+      IF( M.GT.0 ) THEN
+         NP1 = N+1
+      ELSE
+         NP1 = 1
+      END IF
       LWORK = M2*M2*NB
 *
 *     Dynamically allocate all arrays
@@ -132,11 +138,20 @@
 *
       LDT=NB
       CALL DLASET( 'Full', M2, N, ZERO, ZERO, A, M2 )
+      CALL DLASET( 'Full', NB, N, ZERO, ZERO, T, NB )
       DO J=1,N
          CALL DLARNV( 2, ISEED, J, A( 1, J ) )
-         CALL DLARNV( 2, ISEED, M-L, A( MIN(N+M,N+1), J ) )
-         CALL DLARNV( 2, ISEED, MIN(J,L), A( MIN(N+M,N+M-L+1), J ) )
       END DO
+      IF( M.GT.0 ) THEN
+         DO J=1,N
+            CALL DLARNV( 2, ISEED, M-L, A( MIN(N+M,N+1), J ) )
+         END DO
+      END IF
+      IF( L.GT.0 ) THEN
+         DO J=1,N
+            CALL DLARNV( 2, ISEED, MIN(J,L), A( MIN(N+M,N+M-L+1), J ) )
+         END DO
+      END IF
 *
 *     Copy the matrix A to the array AF.
 *
@@ -144,7 +159,7 @@
 *
 *     Factor the matrix A in the array AF.
 *
-      CALL DTPQRT( M,N,L,NB,AF,M2,AF(N+1,1),M2,T,LDT,WORK,INFO)
+      CALL DTPQRT( M,N,L,NB,AF,M2,AF(NP1,1),M2,T,LDT,WORK,INFO)
 *
 *     Generate the (M+N)-by-(M+N) matrix Q by applying H to I
 *
@@ -185,8 +200,8 @@
 *
 *     Apply Q to C as Q*C
 *
-      CALL DTPMQRT( 'L','N', M,N,K,L,NB,AF(N+1,1),M2,T,LDT,CF,M2,
-     $               CF(N+1,1),M2,WORK,INFO)
+      CALL DTPMQRT( 'L','N', M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
+     $               CF(NP1,1),M2,WORK,INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
 *
@@ -204,8 +219,8 @@
 *
 *     Apply Q to C as QT*C
 *
-      CALL DTPMQRT( 'L','T',M,N,K,L,NB,AF(N+1,1),M2,T,LDT,CF,M2,
-     $              CF(N+1,1),M2,WORK,INFO) 
+      CALL DTPMQRT( 'L','T',M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
+     $              CF(NP1,1),M2,WORK,INFO) 
 *
 *     Compute |QT*C - QT*C| / |C|
 *
@@ -227,8 +242,8 @@
 *
 *     Apply Q to D as D*Q
 *
-      CALL DTPMQRT('R','N',N,M,N,L,NB,AF(N+1,1),M2,T,LDT,DF,N,
-     $             DF(1,N+1),N,WORK,INFO)
+      CALL DTPMQRT('R','N',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
+     $             DF(1,NP1),N,WORK,INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
 *
@@ -246,8 +261,8 @@
 *
 *     Apply Q to D as D*QT
 *
-      CALL DTPMQRT('R','T',N,M,N,L,NB,AF(N+1,1),M2,T,LDT,DF,N,
-     $             DF(1,N+1),N,WORK,INFO)     
+      CALL DTPMQRT('R','T',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
+     $             DF(1,NP1),N,WORK,INFO)     
        
 *
 *     Compute |D*QT - D*QT| / |D|

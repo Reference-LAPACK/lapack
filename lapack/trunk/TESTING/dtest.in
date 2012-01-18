@@ -36,3 +36,5 @@ DQP    6               List types on next line if 0 < NTYPES <  6
 DTZ    3               List types on next line if 0 < NTYPES <  3
 DLS    6               List types on next line if 0 < NTYPES <  6
 DEQ
+DQT
+DQX

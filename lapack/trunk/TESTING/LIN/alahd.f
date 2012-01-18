@@ -70,6 +70,8 @@
 *>             _LU:  LU variants
 *>             _CH:  Cholesky variants
 *>             _QS:  QR variants
+*>             _QT:  QRT (general matrices)
+*>             _QX:  QRT (triangular-pentagonal matrices)
 *>          The first character must be one of S, D, C, or Z (C or Z only
 *>          if complex).
 *> \endverbatim
@@ -591,6 +593,32 @@
          WRITE( IOUNIT, FMT = 9970 )
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
 *
+      ELSE IF( LSAMEN( 2, P2, 'QT' ) ) THEN
+*
+*        QRT (general matrices)
+*
+         WRITE( IOUNIT, FMT = 8000 ) PATH
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 8011 ) 1
+         WRITE( IOUNIT, FMT = 8012 ) 2
+         WRITE( IOUNIT, FMT = 8013 ) 3
+         WRITE( IOUNIT, FMT = 8014 ) 4
+         WRITE( IOUNIT, FMT = 8015 ) 5
+         WRITE( IOUNIT, FMT = 8016 ) 6
+*
+      ELSE IF( LSAMEN( 2, P2, 'QX' ) ) THEN
+*
+*        QRT (triangular-pentagonal)
+*
+         WRITE( IOUNIT, FMT = 8001 ) PATH
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 8017 ) 1
+         WRITE( IOUNIT, FMT = 8018 ) 2
+         WRITE( IOUNIT, FMT = 8019 ) 3
+         WRITE( IOUNIT, FMT = 8020 ) 4
+         WRITE( IOUNIT, FMT = 8021 ) 5
+         WRITE( IOUNIT, FMT = 8022 ) 6
+*
       ELSE
 *
 *        Print error message if no header is available.
@@ -628,6 +656,10 @@
  9982 FORMAT( / 1X, A3, ':  Cholesky factorization variants' )
  9981 FORMAT( / 1X, A3, ':  QR factorization variants' )
  9980 FORMAT( / 1X, A3, ':  No header available' )
+ 8000 FORMAT( / 1X, A3, ':  QRT factorization for general matrices' )
+ 8001 FORMAT( / 1X, A3, ':  QRT factorization for ',
+     $       'triangular-pentagonal matrices' )
+ 
 *
 *     GE matrix types
 *
@@ -909,6 +941,20 @@
      $      ' - ( 1 / ( 1 - ALPHA ) ) + THRESH' )
  9926 FORMAT( 3X, I2, ': Largest 2-Norm of 2-by-2 pivots', / 12X,
      $      ' - ( ( 1 + ALPHA ) / ( 1 - ALPHA ) ) + THRESH' )
+ 8011 FORMAT(3X,I2,': norm( R - Q''*A ) / ( M * norm(A) * EPS )' )
+ 8012 FORMAT(3X,I2,': norm( I - Q''*Q ) / ( M * EPS )' )
+ 8013 FORMAT(3X,I2,': norm( Q*C - Q*C ) / ( M * norm(C) * EPS )' )
+ 8014 FORMAT(3X,I2,': norm( Q''*C - Q''*C ) / ( M * norm(C) * EPS )')
+ 8015 FORMAT(3X,I2,': norm( C*Q - C*Q ) / ( M * norm(C) * EPS )' )
+ 8016 FORMAT(3X,I2,': norm( C*Q'' - C*Q'' ) / ( M * norm(C) * EPS )')   
+ 8017 FORMAT(3X,I2,': norm( R - Q''*A ) / ( (M+N) * norm(A) * EPS )' )
+ 8018 FORMAT(3X,I2,': norm( I - Q''*Q ) / ( (M+N) * EPS )' )
+ 8019 FORMAT(3X,I2,': norm( Q*C - Q*C ) / ( (M+N) * norm(C) * EPS )' )
+ 8020 FORMAT(3X,I2,
+     $ ': norm( Q''*C - Q''*C ) / ( (M+N) * norm(C) * EPS )')
+ 8021 FORMAT(3X,I2,': norm( C*Q - C*Q ) / ( (M+N) * norm(C) * EPS )' )
+ 8022 FORMAT(3X,I2,
+     $ ': norm( C*Q'' - C*Q'' ) / ( (M+N) * norm(C) * EPS )') 
 *
       RETURN
 *

@@ -79,6 +79,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZQRT05(M,N,L,NB,RESULT)
+      IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -104,7 +105,7 @@
       PARAMETER( ZERO = 0.0, ONE = (1.0,0.0), CZERO=(0.0,0.0) )
 *     ..
 *     .. Local Scalars ..
-      INTEGER INFO, J, K, M2
+      INTEGER INFO, J, K, M2, NP1
       DOUBLE PRECISION ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
@@ -122,6 +123,11 @@
       EPS = DLAMCH( 'Epsilon' )
       K = N
       M2 = M+N
+      IF( M.GT.0 ) THEN
+         NP1 = N+1
+      ELSE
+         NP1 = 1
+      END IF
       LWORK = M2*M2*NB
 *
 *     Dynamically allocate all arrays
@@ -134,11 +140,20 @@
 *
       LDT=NB
       CALL ZLASET( 'Full', M2, N, CZERO, CZERO, A, M2 )
+      CALL ZLASET( 'Full', NB, N, CZERO, CZERO, T, NB )
       DO J=1,N
          CALL ZLARNV( 2, ISEED, J, A( 1, J ) )
-         CALL ZLARNV( 2, ISEED, M-L, A( MIN(N+M,N+1), J ) )
-         CALL ZLARNV( 2, ISEED, MIN(J,L), A( MIN(N+M,N+M-L+1), J ) )
       END DO
+      IF( M.GT.0 ) THEN
+         DO J=1,N
+            CALL ZLARNV( 2, ISEED, M-L, A( MIN(N+M,N+1), J ) )
+         END DO
+      END IF
+      IF( L.GT.0 ) THEN
+         DO J=1,N
+            CALL ZLARNV( 2, ISEED, MIN(J,L), A( MIN(N+M,N+M-L+1), J ) )
+         END DO
+      END IF
 *
 *     Copy the matrix A to the array AF.
 *
@@ -146,7 +161,7 @@
 *
 *     Factor the matrix A in the array AF.
 *
-      CALL ZTPQRT( M,N,L,NB,AF,M2,AF(N+1,1),M2,T,LDT,WORK,INFO)
+      CALL ZTPQRT( M,N,L,NB,AF,M2,AF(NP1,1),M2,T,LDT,WORK,INFO)
 *
 *     Generate the (M+N)-by-(M+N) matrix Q by applying H to I
 *
@@ -188,8 +203,8 @@
 *
 *     Apply Q to C as Q*C
 *
-      CALL ZTPMQRT( 'L','N', M,N,K,L,NB,AF(N+1,1),M2,T,LDT,CF,M2,
-     $               CF(N+1,1),M2,WORK,INFO)
+      CALL ZTPMQRT( 'L','N', M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
+     $               CF(NP1,1),M2,WORK,INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
 *
@@ -207,8 +222,8 @@
 *
 *     Apply Q to C as QT*C
 *
-      CALL ZTPMQRT( 'L','C',M,N,K,L,NB,AF(N+1,1),M2,T,LDT,CF,M2,
-     $              CF(N+1,1),M2,WORK,INFO) 
+      CALL ZTPMQRT( 'L','C',M,N,K,L,NB,AF(NP1,1),M2,T,LDT,CF,M2,
+     $              CF(NP1,1),M2,WORK,INFO) 
 *
 *     Compute |QT*C - QT*C| / |C|
 *
@@ -230,8 +245,8 @@
 *
 *     Apply Q to D as D*Q
 *
-      CALL ZTPMQRT('R','N',N,M,N,L,NB,AF(N+1,1),M2,T,LDT,DF,N,
-     $             DF(1,N+1),N,WORK,INFO)
+      CALL ZTPMQRT('R','N',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
+     $             DF(1,NP1),N,WORK,INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
 *
@@ -249,8 +264,8 @@
 *
 *     Apply Q to D as D*QT
 *
-      CALL ZTPMQRT('R','C',N,M,N,L,NB,AF(N+1,1),M2,T,LDT,DF,N,
-     $             DF(1,N+1),N,WORK,INFO)     
+      CALL ZTPMQRT('R','C',N,M,N,L,NB,AF(NP1,1),M2,T,LDT,DF,N,
+     $             DF(1,NP1),N,WORK,INFO)     
        
 *
 *     Compute |D*QT - D*QT| / |D|

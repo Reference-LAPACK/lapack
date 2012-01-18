@@ -215,9 +215,9 @@
 *     Test the input arguments
 *
       INFO = 0
-      IF( N.LT.0 ) THEN
+      IF( M.LT.0 ) THEN
          INFO = -1
-      ELSE IF( M.LT.0 ) THEN
+      ELSE IF( N.LT.0 ) THEN
          INFO = -2
       ELSE IF( L.LT.0 .OR. L.GT.MIN(M,N) ) THEN
          INFO = -3
