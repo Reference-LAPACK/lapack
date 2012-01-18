@@ -24,7 +24,7 @@
 *> and program options using list-directed input. The remaining lines
 *> specify the LAPACK test paths and the number of matrix types to use
 *> in testing.  An annotated example of a data file can be obtained by
-*> deleting the first 3 characters from the following 40 lines:
+*> deleting the first 3 characters from the following 42 lines:
 *> Data file for testing COMPLEX*16 LAPACK linear equation routines
 *> 7                      Number of values of M
 *> 0 1 2 3 5 10 16        Values of M (row dimension)
@@ -65,6 +65,8 @@
 *> ZTZ    3               List types on next line if 0 < NTYPES <  3
 *> ZLS    6               List types on next line if 0 < NTYPES <  6
 *> ZEQ
+*> ZQT
+*> ZQX
 *> \endverbatim
 *
 *  Parameters:
@@ -161,7 +163,8 @@
      $                   ZCHKSP, ZCHKSY, ZCHKSY_ROOK, ZCHKTB, ZCHKTP,
      $                   ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE,
      $                   ZDRVHP, ZDRVLS, ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT,
-     $                   ZDRVSP, ZDRVSY, ZDRVSY_ROOK, ILAVER
+     $                   ZDRVSP, ZDRVSY, ZDRVSY_ROOK, ILAVER, ZCHKQRT,
+     $                   ZCHKQRTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -910,6 +913,29 @@
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   S( 1 ), S( NMAX+1 ), WORK, RWORK, IWORK,
      $                   NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+*
+      ELSE IF( LSAMEN( 2, C2, 'QT' ) ) THEN
+*
+*        QT:  QRT routines for general matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                    NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'QX' ) ) THEN
+*
+*        QX:  QRT routines for triangular-pentagonal matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF

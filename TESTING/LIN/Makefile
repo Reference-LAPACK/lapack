@@ -74,7 +74,7 @@ SLINTST = schkaa.o \
    stbt02.o stbt03.o stbt05.o stbt06.o stpt01.o \
    stpt02.o stpt03.o stpt05.o stpt06.o strt01.o \
    strt02.o strt03.o strt05.o strt06.o \
-   stzt01.o stzt02.o sgennd.o
+   stzt01.o stzt02.o sgennd.o sqrt04.o sqrt05.o schkqrt.o serrqrt.o schkqrtp.o serrqrtp.o
 
 ifdef USEXBLAS
 SLINTST += serrvxx.o sdrvgex.o sdrvsyx.o serrgex.o sdrvgbx.o sdrvpox.o \
@@ -114,7 +114,8 @@ CLINTST = cchkaa.o \
    ctbt02.o ctbt03.o ctbt05.o ctbt06.o ctpt01.o \
    ctpt02.o ctpt03.o ctpt05.o ctpt06.o ctrt01.o \
    ctrt02.o ctrt03.o ctrt05.o ctrt06.o \
-   ctzt01.o ctzt02.o sget06.o cgennd.o
+   ctzt01.o ctzt02.o sget06.o cgennd.o \
+   cqrt04.o cqrt05.o cchkqrt.o cerrqrt.o cchkqrtp.o cerrqrtp.o
 
 ifdef USEXBLAS
 CLINTST += cerrvxx.o cdrvgex.o cdrvsyx.o cdrvgbx.o cerrgex.o cdrvpox.o cdrvhex.o \
@@ -151,7 +152,8 @@ DLINTST = dchkaa.o \
    dtbt02.o dtbt03.o dtbt05.o dtbt06.o dtpt01.o \
    dtpt02.o dtpt03.o dtpt05.o dtpt06.o dtrt01.o \
    dtrt02.o dtrt03.o dtrt05.o dtrt06.o \
-   dtzt01.o dtzt02.o dgennd.o
+   dtzt01.o dtzt02.o dgennd.o \
+   dqrt04.o dqrt05.o dchkqrt.o derrqrt.o dchkqrtp.o derrqrtp.o
 
 ifdef USEXBLAS
 DLINTST += derrvxx.o ddrvgex.o ddrvsyx.o ddrvgbx.o derrgex.o ddrvpox.o derrpox.o \
@@ -191,7 +193,8 @@ ZLINTST = zchkaa.o \
    ztbt02.o ztbt03.o ztbt05.o ztbt06.o ztpt01.o \
    ztpt02.o ztpt03.o ztpt05.o ztpt06.o ztrt01.o \
    ztrt02.o ztrt03.o ztrt05.o ztrt06.o \
-   ztzt01.o ztzt02.o dget06.o zgennd.o
+   ztzt01.o ztzt02.o dget06.o zgennd.o \
+   zqrt04.o zqrt05.o zchkqrt.o zerrqrt.o zchkqrtp.o zerrqrtp.o
 
 ifdef USEXBLAS
 ZLINTST += zerrvxx.o zdrvgex.o zdrvsyx.o zdrvgbx.o zerrgex.o zdrvpox.o zdrvhex.o \
@@ -232,7 +235,7 @@ ZLINTSTRFP = zchkrfp.o zdrvrfp.o zdrvrf1.o zdrvrf2.o zdrvrf3.o zdrvrf4.o zerrrfp
 all:  single double complex complex16 proto-single proto-double proto-complex proto-complex16
 
 single: ../xlintsts
-double: ../xlintstd
+double: ../xlintstd 
 complex: ../xlintstc
 complex16: ../xlintstz 
 

@@ -24,7 +24,7 @@
 *> and program options using list-directed input. The remaining lines
 *> specify the LAPACK test paths and the number of matrix types to use
 *> in testing.  An annotated example of a data file can be obtained by
-*> deleting the first 3 characters from the following 40 lines:
+*> deleting the first 3 characters from the following 42 lines:
 *> Data file for testing COMPLEX LAPACK linear equation routines
 *> 7                      Number of values of M
 *> 0 1 2 3 5 10 16        Values of M (row dimension)
@@ -65,6 +65,8 @@
 *> CTZ    3               List types on next line if 0 < NTYPES <  3
 *> CLS    6               List types on next line if 0 < NTYPES <  6
 *> CEQ
+*> CQT
+*> CQX
 *> \endverbatim
 *
 *  Parameters:
@@ -161,7 +163,8 @@
      $                   CCHKSP, CCHKSY, CCHKSY_ROOK, CCHKTB, CCHKTP,
      $                   CCHKTR, CCHKTZ, CDRVGB, CDRVGE, CDRVGT, CDRVHE,
      $                   CDRVHP, CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT,
-     $                   CDRVSP, CDRVSY, CDRVSY_ROOK, ILAVER
+     $                   CDRVSP, CDRVSY, CDRVSY_ROOK, ILAVER, CCHKQRT,
+     $                   CCHKQRTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -915,11 +918,32 @@
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
 *
+      ELSE IF( LSAMEN( 2, C2, 'QT' ) ) THEN
+*
+*        QT:  QRT routines for general matrices
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                    NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'QX' ) ) THEN
+*
+*        QX:  QRT routines for triangular-pentagonal matrices
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
       ELSE
 *
          WRITE( NOUT, FMT = 9990 )PATH
       END IF
-
 *
 *     Go back to get another input line.
 *

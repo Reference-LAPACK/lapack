@@ -277,13 +277,13 @@
       ELSE IF( NB.LT.1 .OR. NB.GT.K ) THEN
          INFO = -7
       ELSE IF( LDV.LT.MAX( 1, Q ) ) THEN
-         INFO = -8
+         INFO = -9
       ELSE IF( LDT.LT.NB ) THEN
-         INFO = -10
+         INFO = -11
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -12
+         INFO = -13
       ELSE IF( LDB.LT.MAX( 1, M ) ) THEN
-         INFO = -12
+         INFO = -15
       END IF
 *
       IF( INFO.NE.0 ) THEN
