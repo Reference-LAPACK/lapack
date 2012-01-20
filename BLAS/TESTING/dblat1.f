@@ -894,7 +894,8 @@
 *
 *     .. Parameters ..
       INTEGER          NOUT
-      PARAMETER        (NOUT=6)
+      DOUBLE PRECISION ZERO
+      PARAMETER        (NOUT=6, ZERO=0.0D0)
 *     .. Scalar Arguments ..
       DOUBLE PRECISION SFAC
       INTEGER          LEN
@@ -917,7 +918,7 @@
 *
       DO 40 I = 1, LEN
          SD = SCOMP(I) - STRUE(I)
-         IF (SDIFF(ABS(SSIZE(I))+ABS(SFAC*SD),ABS(SSIZE(I))).EQ.0.0D0)
+         IF (ABS(SFAC*SD) .LE. ABS(SSIZE(I))*EPSILON(ZERO))
      +       GO TO 40
 *
 *                             HERE    SCOMP(I) IS NOT CLOSE TO STRUE(I).
@@ -949,7 +950,8 @@
 *
 *     .. Parameters ..
       INTEGER          NOUT
-      PARAMETER        (NOUT=6)
+      REAL             ZERO
+      PARAMETER        (NOUT=6, ZERO=0.0E0)
 *     .. Scalar Arguments ..
       REAL             SFAC, SCOMP, SSIZE, STRUE
 *     .. Scalars in Common ..
@@ -964,7 +966,7 @@
 *     .. Executable Statements ..
 *
          SD = SCOMP - STRUE
-         IF ((ABS(SSIZE)+ABS(SFAC*SD)-ABS(SSIZE)).EQ.0.0E0)
+         IF (ABS(SFAC*SD) .LE. ABS(SSIZE) * EPSILON(ZERO))
      +       GO TO 40
 *
 *                             HERE    SCOMP(I) IS NOT CLOSE TO STRUE(I).
