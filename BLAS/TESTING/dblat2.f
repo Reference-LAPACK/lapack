@@ -281,14 +281,7 @@
 *
 *     Compute EPS (the machine precision).
 *
-      EPS = ONE
-   90 CONTINUE
-      IF( DDIFF( ONE + EPS, ONE ).EQ.ZERO )
-     $   GO TO 100
-      EPS = HALF*EPS
-      GO TO 90
-  100 CONTINUE
-      EPS = EPS + EPS
+      EPS = EPSILON(ZERO)
       WRITE( NOUT, FMT = 9998 )EPS
 *
 *     Check the reliability of DMVCH using exact data.

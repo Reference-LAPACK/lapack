@@ -287,14 +287,7 @@
 *
 *     Compute EPS (the machine precision).
 *
-      EPS = RONE
-   90 CONTINUE
-      IF( DDIFF( RONE + EPS, RONE ).EQ.RZERO )
-     $   GO TO 100
-      EPS = RHALF*EPS
-      GO TO 90
-  100 CONTINUE
-      EPS = EPS + EPS
+      EPS = EPSILON(RZERO)
       WRITE( NOUT, FMT = 9998 )EPS
 *
 *     Check the reliability of ZMVCH using exact data.
