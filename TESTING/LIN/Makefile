@@ -54,7 +54,7 @@ SLINTST = schkaa.o \
    schksp.o schksy.o schksy_rook.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
-   sdrvpp.o sdrvpt.o sdrvsp.o \
+   sdrvpp.o sdrvpt.o sdrvsp.o  sdrvsy_rook.o\
    serrgt.o serrlq.o serrls.o \
    serrps.o serrql.o serrqp.o serrqr.o \
    serrrq.o serrtr.o serrtz.o \
@@ -80,7 +80,7 @@ ifdef USEXBLAS
 SLINTST += serrvxx.o sdrvgex.o sdrvsyx.o serrgex.o sdrvgbx.o sdrvpox.o \
 	sebchvxx.o serrsyx.o serrpox.o
 else
-SLINTST += serrvx.o sdrvge.o sdrvsy.o sdrvsy_rook.o serrge.o sdrvgb.o sdrvpo.o \
+SLINTST += serrvx.o sdrvge.o sdrvsy.o serrge.o sdrvgb.o sdrvpo.o \
 	serrsy.o serrpo.o
 endif
 
@@ -92,7 +92,7 @@ CLINTST = cchkaa.o \
    cchktp.o cchktr.o cchktz.o \
    cdrvgt.o cdrvhp.o \
    cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o \
-   cdrvsp.o \
+   cdrvsp.o  cdrvsy_rook.o\
    cerrgt.o cerrlq.o \
    cerrls.o cerrps.o cerrql.o cerrqp.o \
    cerrqr.o cerrrq.o cerrtr.o cerrtz.o \
@@ -121,7 +121,7 @@ ifdef USEXBLAS
 CLINTST += cerrvxx.o cdrvgex.o cdrvsyx.o cdrvgbx.o cerrgex.o cdrvpox.o cdrvhex.o \
 	cerrpox.o cebchvxx.o cerrsyx.o cerrhex.o
 else
-CLINTST += cerrvx.o cdrvge.o cdrvsy.o cdrvsy_rook.o cdrvgb.o cerrge.o cdrvpo.o cdrvhe.o \
+CLINTST += cerrvx.o cdrvge.o cdrvsy.o cdrvgb.o cerrge.o cdrvpo.o cdrvhe.o \
 	cerrpo.o cerrsy.o cerrhe.o
 endif
 
@@ -171,7 +171,7 @@ ZLINTST = zchkaa.o \
    zchktp.o zchktr.o zchktz.o \
    zdrvgt.o zdrvhp.o \
    zdrvls.o zdrvpb.o zdrvpp.o zdrvpt.o \
-   zdrvsp.o \
+   zdrvsp.o  zdrvsy_rook.o\
    zerrgt.o zerrlq.o \
    zerrls.o zerrps.o zerrql.o zerrqp.o \
    zerrqr.o zerrrq.o zerrtr.o zerrtz.o \
@@ -200,7 +200,7 @@ ifdef USEXBLAS
 ZLINTST += zerrvxx.o zdrvgex.o zdrvsyx.o zdrvgbx.o zerrgex.o zdrvpox.o zdrvhex.o \
 	zerrpox.o zebchvxx.o zerrsyx.o zerrhex.o
 else
-ZLINTST += zerrvx.o zdrvge.o zdrvsy.o zdrvsy_rook.o zdrvgb.o zerrge.o zdrvpo.o zdrvhe.o \
+ZLINTST += zerrvx.o zdrvge.o zdrvsy.o zdrvgb.o zerrge.o zdrvpo.o zdrvhe.o \
 	zerrpo.o zerrsy.o zerrhe.o
 endif
 
