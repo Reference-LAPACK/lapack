@@ -45,6 +45,7 @@ include ../make.inc
 all: lapacke 
 
 lapacke:
+	cd include && cp lapacke_mangling_with_flags.h lapacke_mangling.h
 	cd src && $(MAKE)
 	cd utils && $(MAKE)
 

@@ -1,14 +1,21 @@
 message(STATUS "LAPACKE enable")
 enable_language(C)
 
-include(FortranMangling)
-FORTRAN_MANGLING(CDEFS)
-set(CDEFS ${CDEFS} CACHE STRING "Fortran Mangling" FORCE)
-MESSAGE(STATUS "=========")
+# Create a header file netlib.h for the routines called in my C programs
+include(FortranCInterface)
+FortranCInterface_HEADER( ${CMAKE_CURRENT_SOURCE_DIR}/include/lapacke_mangling.h 
+                          MACRO_NAMESPACE "LAPACK_"
+                          SYMBOL_NAMESPACE "LAPACK_" )
+
+# Old way to detect mangling
+#include(FortranMangling)
+#FORTRAN_MANGLING(CDEFS)
+#set(CDEFS ${CDEFS} CACHE STRING "Fortran Mangling" FORCE)
+#MESSAGE(STATUS "=========")
 
 # --------------------------------------------------
 # Compiler Flags
-ADD_DEFINITIONS( "-D${CDEFS}")
+#ADD_DEFINITIONS( "-D${CDEFS}")
 
 if (WIN32 AND NOT UNIX)
  ADD_DEFINITIONS(-DHAVE_LAPACK_CONFIG_H -DLAPACK_COMPLEX_STRUCTURE)
