@@ -1963,6 +1963,10 @@ lapacke_zupgtr.c
 lapacke_zupgtr_work.c
 lapacke_zupmtr.c
 lapacke_zupmtr_work.c
+lapacke_zsyr.c
+lapacke_csyr.c
+lapacke_zsyr_work.c
+lapacke_csyr_work.c
 )
 
 SET(SRCX_OBJ 
