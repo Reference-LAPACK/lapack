@@ -542,15 +542,15 @@
 *
 *     Undo scaling if necessary
 *
+   70 CONTINUE
+*
       IF( ILASCL )
      $   CALL CLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR )
 *
       IF( ILBSCL )
      $   CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
 *
-   70 CONTINUE
       WORK( 1 ) = LWKOPT
-*
       RETURN
 *
 *     End of CGGEV

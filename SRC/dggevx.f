@@ -849,6 +849,8 @@
 *
 *     Undo scaling if necessary
 *
+  130 CONTINUE
+*
       IF( ILASCL ) THEN
          CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N, IERR )
          CALL DLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N, IERR )
@@ -858,9 +860,7 @@
          CALL DLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
       END IF
 *
-  130 CONTINUE
       WORK( 1 ) = MAXWRK
-*
       RETURN
 *
 *     End of DGGEVX
