@@ -1996,7 +1996,11 @@ lapacke_zunmtr_work.o \
 lapacke_zupgtr.o \
 lapacke_zupgtr_work.o \
 lapacke_zupmtr.o \
-lapacke_zupmtr_work.o 
+lapacke_zupmtr_work.o \
+lapacke_zsyr.o \
+lapacke_csyr.o \
+lapacke_zsyr_work.o \
+lapacke_csyr_work.o
 
 SRCX_OBJ = \
 lapacke_cgbrfsx.o       lapacke_cporfsx.o       lapacke_dgerfsx.o       lapacke_sgbrfsx.o       lapacke_ssyrfsx.o       lapacke_zherfsx.o \
