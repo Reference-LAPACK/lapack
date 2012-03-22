@@ -237,12 +237,14 @@
             END IF
          END IF
          LWKOPT = WORK( 1 )
+         LWKOPT = MAX (LWKOPT, MN)
       END IF
 *
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DORGBR', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
+         WORK( 1 ) = LWKOPT
          RETURN
       END IF
 *
