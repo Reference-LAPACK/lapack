@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_cgtcon_work( char norm, lapack_int n,
                                 const lapack_complex_float* dl,

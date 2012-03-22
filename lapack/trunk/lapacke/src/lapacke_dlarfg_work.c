@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_dlarfg_work( lapack_int n, double* alpha, double* x,
                                 lapack_int incx, double* tau )

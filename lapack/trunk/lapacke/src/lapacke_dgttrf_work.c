@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_dgttrf_work( lapack_int n, double* dl, double* d, double* du,
                                 double* du2, lapack_int* ipiv )

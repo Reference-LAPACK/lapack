@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_sstebz_work( char range, char order, lapack_int n, float vl,
                                 float vu, lapack_int il, lapack_int iu,

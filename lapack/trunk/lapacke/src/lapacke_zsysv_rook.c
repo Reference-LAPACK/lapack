@@ -31,7 +31,6 @@
 * Generated January, 2012
 *****************************************************************************/
 
-#include "lapacke.h"
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_zsysv_rook( int matrix_order, char uplo, lapack_int n,

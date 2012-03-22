@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_slarnv_work( lapack_int idist, lapack_int* iseed,
                                 lapack_int n, float* x )

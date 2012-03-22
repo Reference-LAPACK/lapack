@@ -31,7 +31,7 @@
 * Generated May, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_dlasrt_work( char id, lapack_int n, double* d )
 {

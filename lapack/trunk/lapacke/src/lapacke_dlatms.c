@@ -31,7 +31,6 @@
 * Generated April, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_dlatms( int matrix_order, lapack_int m, lapack_int n,

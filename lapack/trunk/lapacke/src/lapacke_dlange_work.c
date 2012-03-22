@@ -31,7 +31,6 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
 #include "lapacke_utils.h"
 
 double LAPACKE_dlange_work( int matrix_order, char norm, lapack_int m,

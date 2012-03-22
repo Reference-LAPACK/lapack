@@ -31,7 +31,6 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
 
 double LAPACKE_dlamch( char cmach )
 {
