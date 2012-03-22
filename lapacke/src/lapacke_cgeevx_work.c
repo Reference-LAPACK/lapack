@@ -31,7 +31,6 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_cgeevx_work( int matrix_order, char balanc, char jobvl,

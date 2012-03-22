@@ -31,7 +31,6 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_cgebal( int matrix_order, char job, lapack_int n,

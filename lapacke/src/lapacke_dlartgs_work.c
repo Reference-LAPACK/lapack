@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_dlartgs_work( double x, double y, double sigma, double* cs,
                                  double* sn )

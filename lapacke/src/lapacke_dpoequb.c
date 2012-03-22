@@ -31,7 +31,6 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_dpoequb( int matrix_order, lapack_int n, const double* a,

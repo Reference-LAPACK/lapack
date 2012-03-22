@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_slartgs_work( float x, float y, float sigma, float* cs,
                                  float* sn )

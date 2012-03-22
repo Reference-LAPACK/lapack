@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_zlacgv_work( lapack_int n, lapack_complex_double* x,
                                 lapack_int incx )

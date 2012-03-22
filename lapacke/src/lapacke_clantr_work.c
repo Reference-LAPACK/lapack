@@ -31,7 +31,6 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
 #include "lapacke_utils.h"
 
 float LAPACKE_clantr_work( int matrix_order, char norm, char uplo,

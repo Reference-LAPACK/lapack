@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_sgtcon_work( char norm, lapack_int n, const float* dl,
                                 const float* d, const float* du,

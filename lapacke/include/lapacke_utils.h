@@ -40,6 +40,29 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#ifndef ABS
+#define ABS(x) (((x) < 0) ? -(x) : (x))
+#endif
+#ifndef MAX
+#define MAX(x,y) (((x) > (y)) ? (x) : (y))
+#endif
+#ifndef MIN
+#define MIN(x,y) (((x) < (y)) ? (x) : (y))
+#endif
+#ifndef MAX3
+#define MAX3(x,y,z) (((x) > MAX(y,z)) ? (x) : MAX(y,z))
+#endif
+#ifndef MIN3
+#define MIN3(x,y,z) (((x) < MIN(y,z)) ? (x) : MIN(y,z))
+#endif
+
+#define IS_S_NONZERO(x) ( (x) < 0 || (x) > 0 )
+#define IS_D_NONZERO(x) ( (x) < 0 || (x) > 0 )
+#define IS_C_NONZERO(x) ( IS_S_NONZERO(*((float*)&x)) ||  \
+                          IS_S_NONZERO(*(((float*)&x)+1)) )
+#define IS_Z_NONZERO(x) ( IS_D_NONZERO(*((double*)&x)) || \
+                          IS_D_NONZERO(*(((double*)&x)+1)) )
+
 /* Error handler */
 void LAPACKE_xerbla( const char *name, lapack_int info );
 

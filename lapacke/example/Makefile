@@ -14,3 +14,6 @@ xexample_ZGESV_rowmajor: example_ZGESV_rowmajor.o ../../$(LAPACKLIB) ../../$(LAP
 
 .c.o:
 	$(CC) -c $(CFLAGS) -I ../include -o $@ $<
+
+clean:
+	rm -f *.o xexample_DGESV_rowmajor xexample_ZGESV_rowmajor

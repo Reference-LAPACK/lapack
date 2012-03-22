@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_dptcon_work( lapack_int n, const double* d, const double* e,
                                 double anorm, double* rcond, double* work )

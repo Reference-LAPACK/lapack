@@ -31,7 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
-#include "lapacke.h"
+#include "lapacke_utils.h"
 
 lapack_int LAPACKE_clarfg_work( lapack_int n, lapack_complex_float* alpha,
                                 lapack_complex_float* x, lapack_int incx,
