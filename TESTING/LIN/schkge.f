@@ -9,17 +9,20 @@
 *  ===========
 *
 *       SUBROUTINE SCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
-*                          NSVAL, THRESH, TSTERR, NOUT )
+*                          NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
+*                          X, XACT, WORK, RWORK, IWORK, NOUT )
 * 
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
-*       INTEGER            NM, NN, NNB, NNS, NOUT
+*       INTEGER            NM, NMAX, NN, NNB, NNS, NOUT
 *       REAL               THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
 *      $                   NVAL( * )
+*       REAL               A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
 *       ..
 *  
 *
@@ -179,7 +182,8 @@
 *
 *  =====================================================================
       SUBROUTINE SCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NNS,
-     $                   NSVAL, THRESH, TSTERR, NOUT )
+     $                   NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
+     $                   X, XACT, WORK, RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -188,13 +192,15 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
-      INTEGER            NM, NN, NNB, NNS, NOUT
+      INTEGER            NM, NMAX, NN, NNB, NNS, NOUT
       REAL               THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
-      INTEGER            MVAL( * ), NBVAL( * ), NSVAL( * ),
+      INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
      $                   NVAL( * )
+      REAL               A( * ), AFAC( * ), AINV( * ), B( * ),
+     $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
@@ -215,18 +221,14 @@
       CHARACTER*3        PATH
       INTEGER            I, IM, IMAT, IN, INB, INFO, IOFF, IRHS, ITRAN,
      $                   IZERO, K, KL, KU, LDA, LWORK, M, MODE, N, NB,
-     $                   NERRS, NFAIL, NIMAT, NMAX, NRHS, NRUN, NSMAX,
-     $                   NT
+     $                   NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
       REAL               AINVNM, ANORM, ANORMI, ANORMO, CNDNUM, DUMMY,
      $                   RCOND, RCONDC, RCONDI, RCONDO
 *     ..
 *     .. Local Arrays ..
       CHARACTER          TRANSS( NTRAN )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      INTEGER, allocatable, dimension (:) :: IWORK
       REAL               RESULT( NTESTS )
-      REAL, allocatable, dimension(:) :: A, AFAC, AINV, B, X, XACT
-      REAL, allocatable, dimension(:) :: RWORK, WORK
 *     ..
 *     .. External Functions ..
       REAL               SGET06, SLANGE
@@ -258,7 +260,6 @@
 *
 *     Initialize constants and the random number seed.
 *
-         WRITE (*,*) "*** SGE ***"
       PATH( 1: 1 ) = 'Single precision'
       PATH( 2: 3 ) = 'GE'
       NRUN = 0
@@ -271,36 +272,10 @@
 *     Test the error exits
 *
       CALL XLAENV( 1, 1 )
-      IF( TSTERR ) THEN
-        CALL SERRGE( PATH, NOUT )
-      ENDIF
+      IF( TSTERR )
+     $   CALL SERRGE( PATH, NOUT )
       INFOT = 0
       CALL XLAENV( 2, 2 )
-
-      NMAX=0
-      DO IM = 1, NM
-         NMAX = MAX(NMAX,MVAL( IM ))
-      END DO
-      DO IN = 1, NN
-         NMAX = MAX(NMAX,NVAL( IN ))
-      END DO
-      NSMAX=0
-      DO IRHS = 1, NNS
-         NSMAX = MAX(NSMAX,NSVAL( IRHS ))
-      END DO        
-*     
-*     ALLOCATION
-*
-      ALLOCATE(A(NMAX*NMAX))
-      ALLOCATE(AFAC(NMAX*NMAX))
-      ALLOCATE(AINV(NMAX*NMAX))
-      LWORK=NMAX*max(3,NSMAX)
-      ALLOCATE(WORK(LWORK))
-      ALLOCATE(RWORK(max(2*NMAX,2*NSMAX+LWORK)))
-      ALLOCATE(IWORK(2*NMAX))
-      ALLOCATE (B(NMAX*NSMAX))
-      ALLOCATE (X(NMAX*NSMAX))
-      ALLOCATE (XACT(NMAX*NSMAX))      
 *
 *     Do for each value of M in MVAL
 *
@@ -317,7 +292,6 @@
             IF( M.LE.0 .OR. N.LE.0 )
      $         NIMAT = 1
 *
-
             DO 100 IMAT = 1, NIMAT
 *
 *              Do the tests only if DOTYPE( IMAT ) is true.
@@ -337,7 +311,7 @@
                CALL SLATB4( PATH, IMAT, M, N, TYPE, KL, KU, ANORM, MODE,
      $                      CNDNUM, DIST )
 *
-               SRNAMT = 'SLATMS'               
+               SRNAMT = 'SLATMS'
                CALL SLATMS( M, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, 'No packing', A, LDA,
      $                      WORK, INFO )
@@ -416,7 +390,7 @@
                      CALL SLACPY( 'Full', N, N, AFAC, LDA, AINV, LDA )
                      SRNAMT = 'SGETRI'
                      NRHS = NSVAL( 1 )
-                     LWORK = MAX(1, N*MAX( 3, NRHS ))
+                     LWORK = NMAX*MAX( 3, NRHS )
                      CALL SGETRI( N, AINV, LDA, IWORK, WORK, LWORK,
      $                            INFO )
 *
@@ -477,11 +451,10 @@
                   IF( INB.GT.1 .OR. M.NE.N )
      $               GO TO 90
                   IF( TRFCON )
-     $                GO TO 70
+     $               GO TO 70
 *
                   DO 60 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
-                     
                      XTYPE = 'N'
 *
                      DO 50 ITRAN = 1, NTRAN
@@ -610,20 +583,6 @@
   100       CONTINUE
   110    CONTINUE
   120 CONTINUE
-
-*
-*   DEALLOCATING
-* 
-      DEALLOCATE(A)
-      DEALLOCATE(AFAC)
-      DEALLOCATE(AINV)
-      DEALLOCATE(WORK)
-      DEALLOCATE(RWORK)
-      DEALLOCATE(IWORK)
-      DEALLOCATE (B)
-      DEALLOCATE (X)
-      DEALLOCATE (XACT)
-      
 *
 *     Print a summary of the results.
 *
