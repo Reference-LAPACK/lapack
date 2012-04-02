@@ -509,6 +509,7 @@
                         RATIO2 = MAX( ABS( DIFTRU( 5 ) / DIF( 5 ) ),
      $                           ABS( DIF( 5 ) / DIFTRU( 5 ) ) )
                         RESULT( 4 ) = MAX( RATIO1, RATIO2 )
+                        WRITE(*,*) " COUCOU"
                      END IF
 *
                      NTESTT = NTESTT + 4

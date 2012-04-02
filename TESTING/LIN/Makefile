@@ -47,8 +47,7 @@ SCLNTST= slaord.o
 
 DZLNTST= dlaord.o 
 
-SLINTST = schkaa.o \
-   schkeq.o schkgb.o schkge.o schkgt.o \
+SLINTST = schkeq.o schkgb.o schkge.o schkgt.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
    schkpt.o schkq3.o schkql.o schkqp.o schkqr.o schkrq.o \
    schksp.o schksy.o schksy_rook.o schktb.o schktp.o schktr.o \
@@ -244,8 +243,8 @@ proto-double: ../xlintstds ../xlintstrfd
 proto-complex: ../xlintstrfc
 proto-complex16: ../xlintstzc ../xlintstrfz
 
-xlintsts : $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(ALINTST) $(SCLNTST) $(SLINTST) \
+xlintsts : schkaa.o $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS)  schkaa.o  $(ALINTST) $(SCLNTST) $(SLINTST) \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB)  $(BLASLIB) -o $@
 
 xlintstc : $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(LAPACKLIB)
@@ -284,6 +283,10 @@ xlintstrfz : $(ZLINTSTRFP) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS)  $(ZLINTSTRFP) \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
  
+../LAPACK_test: LAPACK_test.o ../../$(LAPACKLIB) $(ALINTST) $(SLINTST) $(SCLNTST)
+	$(LOADER) $(LOADOPTS)  LAPACK_test.o  $(ALINTST) $(SLINTST) $(SCLNTST) \
+../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)  -o $@
+
 ../xlintsts: xlintsts
 	mv xlintsts $@
 
@@ -336,6 +339,11 @@ cchkaa.o: cchkaa.f
 	$(FORTRAN) $(DRVOPTS) -c $< -o $@
 zchkaa.o: zchkaa.f
 	$(FORTRAN) $(DRVOPTS) -c $< -o $@
+
+.SUFFIXES: .f90 .f .o
+ 
+.f90.o:
+	$(FORTRAN)  -c -g $<
  
 .f.o: 
 	$(FORTRAN) $(OPTS) -c $< -o $@

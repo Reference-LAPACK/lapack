@@ -431,9 +431,7 @@
 *
          IF( TSTCHK ) THEN
             CALL SCHKGE( DOTYPE, NM, MVAL, NN, NVAL, NNB2, NBVAL2, NNS,
-     $                   NSVAL, THRESH, TSTERR, LDA, A( 1, 1 ),
-     $                   A( 1, 2 ), A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
-     $                   B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+     $                   NSVAL, THRESH, TSTERR, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF

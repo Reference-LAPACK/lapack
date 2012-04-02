@@ -31,6 +31,7 @@
 * Generated November, 2011
 *****************************************************************************/
 
+#include "lapacke_utils.h"
 
 float LAPACKE_slapy3_work( float x, float y, float z )
 {
