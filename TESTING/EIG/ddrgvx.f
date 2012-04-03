@@ -323,9 +323,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE, TEN, TNTH
+      DOUBLE PRECISION   ZERO, ONE, TEN, TNTH, HALF
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0, TEN = 1.0D+1,
-     $                   TNTH = 1.0D-1 )
+     $                   TNTH = 1.0D-1, HALF = 0.5D+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, IPTYPE, IWA, IWB, IWX, IWY, J, LINFO,
@@ -406,8 +406,8 @@
 *
 *     Parameters used for generating test matrices.
 *
-      WEIGHT( 1 ) = SQRT( SQRT( ULP ) )
-      WEIGHT( 2 ) = TNTH
+      WEIGHT( 1 ) = TNTH
+      WEIGHT( 2 ) = HALF
       WEIGHT( 3 ) = ONE
       WEIGHT( 4 ) = ONE / WEIGHT( 2 )
       WEIGHT( 5 ) = ONE / WEIGHT( 1 )
