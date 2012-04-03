@@ -322,9 +322,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO, ONE, TEN, TNTH
+      REAL               ZERO, ONE, TEN, TNTH, HALF
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0, TEN = 1.0E+1,
-     $                   TNTH = 1.0E-1 )
+     $                   TNTH = 1.0E-1, HALF = 0.5E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, IPTYPE, IWA, IWB, IWX, IWY, J, LINFO,
@@ -405,8 +405,8 @@
 *
 *     Parameters used for generating test matrices.
 *
-      WEIGHT( 1 ) = CMPLX( SQRT( SQRT( ULP ) ), ZERO )
-      WEIGHT( 2 ) = CMPLX( TNTH, ZERO )
+      WEIGHT( 1 ) = CMPLX( TNTH, ZERO )
+      WEIGHT( 2 ) = CMPLX( HALF, ZERO )
       WEIGHT( 3 ) = ONE
       WEIGHT( 4 ) = ONE / WEIGHT( 2 )
       WEIGHT( 5 ) = ONE / WEIGHT( 1 )
