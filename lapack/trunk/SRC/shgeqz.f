@@ -920,6 +920,7 @@
                      Z( J, ILAST ) = -Z( J, ILAST )
   220             CONTINUE
                END IF
+               B22 = -B22
             END IF
 *
 *           Step 2: Compute ALPHAR, ALPHAI, and BETA (see refs.)
