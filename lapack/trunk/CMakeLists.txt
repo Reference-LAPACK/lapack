@@ -20,7 +20,12 @@ if (UNIX)
    STRING(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
 endif ()
 
-
+# Get Python
+find_package(PythonInterp)
+message(STATUS "Looking for Python found - ${PYTHONINTERP_FOUND}")
+if (PYTHONINTERP_FOUND)
+   message(STATUS "Using Python version ${PYTHON_VERSION_STRING}")
+endif()
 # --------------------------------------------------
 
 # On Windows-GNU builds try to provide MS import libraries too.
