@@ -101,8 +101,8 @@
       COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0D0, 0.0D0 ),
      $                   ONE = ( 1.0D0, 0.0D0 ) )
-      DOUBLE PRECISION   RZERO, RHALF, RONE
-      PARAMETER          ( RZERO = 0.0D0, RHALF = 0.5D0, RONE = 1.0D0 )
+      DOUBLE PRECISION   RZERO
+      PARAMETER          ( RZERO = 0.0D0 )
       INTEGER            NMAX
       PARAMETER          ( NMAX = 65 )
       INTEGER            NIDMAX, NALMAX, NBEMAX

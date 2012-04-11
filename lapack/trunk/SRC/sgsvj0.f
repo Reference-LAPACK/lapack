@@ -236,9 +236,8 @@
 *  =====================================================================
 *
 *     .. Local Parameters ..
-      REAL               ZERO, HALF, ONE, TWO
-      PARAMETER          ( ZERO = 0.0E0, HALF = 0.5E0, ONE = 1.0E0,
-     $                   TWO = 2.0E0 )
+      REAL               ZERO, HALF, ONE
+      PARAMETER          ( ZERO = 0.0E0, HALF = 0.5E0, ONE = 1.0E0)
 *     ..
 *     .. Local Scalars ..
       REAL               AAPP, AAPP0, AAPQ, AAQQ, APOAQ, AQOAP, BIG,

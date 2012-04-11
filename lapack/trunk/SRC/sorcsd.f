@@ -322,11 +322,8 @@
 *  ===================================================================
 *
 *     .. Parameters ..
-      REAL               REALONE
-      PARAMETER          ( REALONE = 1.0E+0 )
-      REAL               NEGONE, ONE, PIOVER2, ZERO
-      PARAMETER          ( NEGONE = -1.0E+0, ONE = 1.0E+0,
-     $                     PIOVER2 = 1.57079632679489662E0,
+      REAL               ONE, ZERO
+      PARAMETER          ( ONE = 1.0E+0,
      $                     ZERO = 0.0E+0 )
 *     ..
 *     .. Local Arrays ..

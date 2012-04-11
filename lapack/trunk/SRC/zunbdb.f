@@ -309,9 +309,8 @@
 *     .. Parameters ..
       DOUBLE PRECISION   REALONE
       PARAMETER          ( REALONE = 1.0D0 )
-      COMPLEX*16         NEGONE, ONE
-      PARAMETER          ( NEGONE = (-1.0D0,0.0D0),
-     $                     ONE = (1.0D0,0.0D0) )
+      COMPLEX*16         ONE
+      PARAMETER          ( ONE = (1.0D0,0.0D0) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            COLMAJOR, LQUERY

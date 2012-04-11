@@ -210,10 +210,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   FOUR, MAXGROWTH1, MAXGROWTH2, ONE, QUART, TWO,
-     $                   ZERO
-      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0, TWO = 2.0D0,
-     $                     FOUR = 4.0D0, QUART = 0.25D0,
+      DOUBLE PRECISION   MAXGROWTH1, MAXGROWTH2, ONE, QUART, TWO
+      PARAMETER          ( ONE = 1.0D0, TWO = 2.0D0,
+     $                     QUART = 0.25D0,
      $                     MAXGROWTH1 = 8.D0,
      $                     MAXGROWTH2 = 8.D0 )
 *     ..

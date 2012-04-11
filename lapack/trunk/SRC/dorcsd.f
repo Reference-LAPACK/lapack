@@ -322,11 +322,8 @@
 *  ===================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   REALONE
-      PARAMETER          ( REALONE = 1.0D0 )
-      DOUBLE PRECISION   NEGONE, ONE, PIOVER2, ZERO
-      PARAMETER          ( NEGONE = -1.0D0, ONE = 1.0D0,
-     $                     PIOVER2 = 1.57079632679489662D0,
+      DOUBLE PRECISION   ONE, ZERO
+      PARAMETER          ( ONE = 1.0D0,
      $                     ZERO = 0.0D0 )
 *     ..
 *     .. Local Scalars ..

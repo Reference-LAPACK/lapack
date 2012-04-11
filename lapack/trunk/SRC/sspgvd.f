@@ -227,10 +227,6 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      REAL               TWO
-      PARAMETER          ( TWO = 2.0E+0 )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, UPPER, WANTZ
       CHARACTER          TRANS

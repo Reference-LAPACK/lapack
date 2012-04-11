@@ -212,8 +212,6 @@
       PARAMETER          ( GAPDIGIT = 18.0D0, ORTH = 1.0D-12,
      $                     PIOVER2 = 1.57079632679489662D0,
      $                     TEN = 10.0D0 )
-      COMPLEX*16         ZERO, ONE
-      PARAMETER          ( ZERO = (0.0D0,0.0D0), ONE = (1.0D0,0.0D0) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            FIRSTT

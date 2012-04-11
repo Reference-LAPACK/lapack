@@ -212,8 +212,6 @@
       PARAMETER          ( GAPDIGIT = 10.0E0, ORTH = 1.0E-4,
      $                     PIOVER2 = 1.57079632679489662E0,
      $                     TEN = 10.0D0 )
-      REAL               ZERO, ONE
-      PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            FIRSTT

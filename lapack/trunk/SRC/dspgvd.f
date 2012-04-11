@@ -227,10 +227,6 @@
 *
 *  =====================================================================
 *
-*     .. Parameters ..
-      DOUBLE PRECISION   TWO
-      PARAMETER          ( TWO = 2.0D+0 )
-*     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, UPPER, WANTZ
       CHARACTER          TRANS
