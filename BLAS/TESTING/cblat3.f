@@ -99,8 +99,8 @@
       PARAMETER          ( NSUBS = 9 )
       COMPLEX            ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0, 0.0 ), ONE = ( 1.0, 0.0 ) )
-      REAL               RZERO, RHALF, RONE
-      PARAMETER          ( RZERO = 0.0, RHALF = 0.5, RONE = 1.0 )
+      REAL               RZERO
+      PARAMETER          ( RZERO = 0.0 )
       INTEGER            NMAX
       PARAMETER          ( NMAX = 65 )
       INTEGER            NIDMAX, NALMAX, NBEMAX

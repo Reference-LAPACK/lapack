@@ -309,9 +309,8 @@
 *     .. Parameters ..
       REAL               REALONE
       PARAMETER          ( REALONE = 1.0E0 )
-      COMPLEX            NEGONE, ONE
-      PARAMETER          ( NEGONE = (-1.0E0,0.0E0),
-     $                     ONE = (1.0E0,0.0E0) )
+      COMPLEX            ONE
+      PARAMETER          ( ONE = (1.0E0,0.0E0) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            COLMAJOR, LQUERY

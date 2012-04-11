@@ -114,8 +114,8 @@
       PARAMETER          ( NIN = 5 )
       INTEGER            NSUBS
       PARAMETER          ( NSUBS = 16 )
-      REAL               ZERO, HALF, ONE
-      PARAMETER          ( ZERO = 0.0, HALF = 0.5, ONE = 1.0 )
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0, ONE = 1.0 )
       INTEGER            NMAX, INCMAX
       PARAMETER          ( NMAX = 65, INCMAX = 2 )
       INTEGER            NINMAX, NIDMAX, NKBMAX, NALMAX, NBEMAX

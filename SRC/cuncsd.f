@@ -343,11 +343,8 @@
 *  ===================================================================
 *
 *     .. Parameters ..
-      REAL               REALONE
-      PARAMETER          ( REALONE = 1.0E0 )
-      COMPLEX            NEGONE, ONE, PIOVER2, ZERO
-      PARAMETER          ( NEGONE = (-1.0E0,0.0E0), ONE = (1.0E0,0.0E0),
-     $                     PIOVER2 = 1.57079632679489662E0,
+      COMPLEX            ONE, ZERO
+      PARAMETER          ( ONE = (1.0E0,0.0E0),
      $                     ZERO = (0.0E0,0.0E0) )
 *     ..
 *     .. Local Scalars ..

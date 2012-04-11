@@ -210,10 +210,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               FOUR, MAXGROWTH1, MAXGROWTH2, ONE, QUART, TWO,
-     $                   ZERO
-      PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0, TWO = 2.0E0,
-     $                     FOUR = 4.0E0, QUART = 0.25E0,
+      REAL               MAXGROWTH1, MAXGROWTH2, ONE, QUART, TWO
+      PARAMETER          ( ONE = 1.0E0, TWO = 2.0E0,
+     $                     QUART = 0.25E0,
      $                     MAXGROWTH1 = 8.E0,
      $                     MAXGROWTH2 = 8.E0 )
 *     ..

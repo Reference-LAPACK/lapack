@@ -94,8 +94,8 @@
       PARAMETER          ( NIN = 5 )
       INTEGER            NSUBS
       PARAMETER          ( NSUBS = 6 )
-      DOUBLE PRECISION   ZERO, HALF, ONE
-      PARAMETER          ( ZERO = 0.0D0, HALF = 0.5D0, ONE = 1.0D0 )
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
       INTEGER            NMAX
       PARAMETER          ( NMAX = 65 )
       INTEGER            NIDMAX, NALMAX, NBEMAX

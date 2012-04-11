@@ -145,9 +145,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE, NEGONE
+      DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
-      PARAMETER          ( NEGONE = -1.0D+0 )
       COMPLEX*16         CONE, NEGCONE
       PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
       PARAMETER          ( NEGCONE = ( -1.0D+0, 0.0D+0 ) )

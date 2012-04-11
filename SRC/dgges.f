@@ -106,7 +106,7 @@
 *>
 *> \param[in] SELCTG
 *> \verbatim
-*>          SELCTG is procedure) LOGICAL FUNCTION of three DOUBLE PRECISION arguments
+*>          SELCTG is a LOGICAL FUNCTION of three DOUBLE PRECISION arguments
 *>          SELCTG must be declared EXTERNAL in the calling subroutine.
 *>          If SORT = 'N', SELCTG is not referenced.
 *>          If SORT = 'S', SELCTG is used to select eigenvalues to sort
