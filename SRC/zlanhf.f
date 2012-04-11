@@ -286,6 +286,9 @@
       IF( N.EQ.0 ) THEN
          ZLANHF = ZERO
          RETURN
+      ELSE IF( N.EQ.1 ) THEN
+         ZLANHF = ABS( A(0) )
+         RETURN
       END IF
 *
 *     set noe = 1 if n is odd. if n is even set noe=0
