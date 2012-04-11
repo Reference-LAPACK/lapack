@@ -179,7 +179,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, WANTQ
-      INTEGER            I, IINFO, J, LWKOPT, MN, NB
+      INTEGER            I, IINFO, J, LWKOPT, MN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
