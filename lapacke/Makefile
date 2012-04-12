@@ -49,7 +49,7 @@ lapacke:
 	cd src && $(MAKE)
 	cd utils && $(MAKE)
 
-example:
+lapacke_example:
 	cd example && $(MAKE)
 	
 clean: cleanlib
