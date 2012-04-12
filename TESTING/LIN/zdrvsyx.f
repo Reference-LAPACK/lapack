@@ -641,7 +641,7 @@
 *
 *                 Check the error code from ZSYSVXX.
 *
-                  IF( INFO.NE.K ) THEN
+                  IF( INFO.NE.K .AND. INFO.LE.N ) THEN
                      CALL ALAERH( PATH, 'ZSYSVXX', INFO, K,
      $                    FACT // UPLO, N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                    NERRS, NOUT )

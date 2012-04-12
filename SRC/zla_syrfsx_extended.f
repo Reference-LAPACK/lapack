@@ -373,7 +373,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>       = 0:  Successful exit.
-*>       < 0:  if INFO = -i, the ith argument to ZSYTRS had an illegal
+*>       < 0:  if INFO = -i, the ith argument to ZLA_HERFSX_EXTENDED had an illegal
 *>             value
 *> \endverbatim
 *
@@ -428,7 +428,7 @@
      $                   DZRAT, PREVNORMDX, PREV_DZ_Z, DXRATMAX,
      $                   DZRATMAX, DX_X, DZ_Z, FINAL_DX_X, FINAL_DZ_Z,
      $                   EPS, HUGEVAL, INCR_THRESH
-      LOGICAL            INCR_PREC
+      LOGICAL            INCR_PREC, UPPER
       COMPLEX*16         ZDUM
 *     ..
 *     .. Parameters ..
@@ -479,7 +479,27 @@
 *     ..
 *     .. Executable Statements ..
 *
-      IF ( INFO.NE.0 ) RETURN
+      INFO = 0
+      UPPER = LSAME( UPLO, 'U' )
+      IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
+         INFO = -2
+      ELSE IF( N.LT.0 ) THEN
+         INFO = -3
+      ELSE IF( NRHS.LT.0 ) THEN
+         INFO = -4
+      ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
+         INFO = -6
+      ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
+         INFO = -8
+      ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
+         INFO = -13
+      ELSE IF( LDY.LT.MAX( 1, N ) ) THEN
+         INFO = -15
+      END IF
+      IF( INFO.NE.0 ) THEN
+         CALL XERBLA( 'ZLA_HERFSX_EXTENDED', -INFO )
+         RETURN
+      END IF
       EPS = DLAMCH( 'Epsilon' )
       HUGEVAL = DLAMCH( 'Overflow' )
 *     Force HUGEVAL to Inf

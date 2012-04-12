@@ -635,7 +635,7 @@
 *
 *                 Check the error code from CHESVXX.
 *
-                  IF( INFO.NE.K ) THEN
+                  IF( INFO.NE.K .AND. INFO.LE.N ) THEN
                      CALL ALAERH( PATH, 'CHESVXX', INFO, K,
      $                    FACT // UPLO, N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                    NERRS, NOUT )

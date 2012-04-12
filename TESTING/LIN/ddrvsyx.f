@@ -625,7 +625,7 @@
 *
 *                 Check the error code from DSYSVXX.
 *
-                  IF( INFO.NE.K ) THEN
+                  IF( INFO.NE.K .AND. INFO.LE.N ) THEN
                      CALL ALAERH( PATH, 'DSYSVXX', INFO, K,
      $                    FACT // UPLO, N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                    NERRS, NOUT )
