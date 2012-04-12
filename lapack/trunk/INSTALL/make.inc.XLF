@@ -13,11 +13,11 @@ SHELL = /bin/sh
 #  desired load options for your machine.
 #
 FORTRAN  = xlf
-OPTS     = -O3 -qmaxmem=-1
+OPTS     = -O2 -qfixed -qnosave
 DRVOPTS  = $(OPTS)
-NOOPT    =
+NOOPT    = -O0 -qfixed -qnosave
 LOADER   = xlf
-LOADOPTS =
+LOADOPTS = -qnosave
 #
 # Timer for the SECOND and DSECND routines
 #
@@ -43,7 +43,7 @@ TIMER    = EXT_ETIME_
 # CC is the C compiler, normally invoked with options CFLAGS.
 #
 CC = xlc
-CFLAGS = -O3 -qmaxmem=-1
+CFLAGS = -O3 -qnosave
 #
 # LAPACKE has also the interface to some routines from tmglib,
 # if LAPACKE_WITH_TMG is selected, we need to add those routines to LAPACKE
