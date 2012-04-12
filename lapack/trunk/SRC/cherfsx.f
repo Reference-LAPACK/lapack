@@ -533,9 +533,9 @@
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
         INFO = -8
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
-        INFO = -11
+        INFO = -12
       ELSE IF( LDX.LT.MAX( 1, N ) ) THEN
-        INFO = -13
+        INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CHERFSX', -INFO )
@@ -677,7 +677,7 @@
             IF ( RCOND_TMP .LT. ILLRCOND_THRESH ) THEN
                ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) = 1.0
                ERR_BNDS_COMP( J, LA_LINRX_TRUST_I ) = 0.0
-               IF ( PARAMS( LA_LINRX_CWISE_I ) .EQ. 1.0
+               IF ( .NOT. IGNORE_CWISE
      $              .AND. INFO.LT.N + J ) INFO = N + J
             ELSE IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I )
      $              .LT. ERR_LBND ) THEN

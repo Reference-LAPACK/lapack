@@ -641,7 +641,7 @@
 *
 *                 Check the error code from CSYSVXX.
 *
-                  IF( INFO.NE.K ) THEN
+                  IF( INFO.NE.K .AND. INFO.LE.N ) THEN
                      CALL ALAERH( PATH, 'CSYSVXX', INFO, K,
      $                    FACT // UPLO, N, N, -1, -1, NRHS, IMAT, NFAIL,
      $                    NERRS, NOUT )

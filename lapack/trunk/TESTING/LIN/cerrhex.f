@@ -294,12 +294,12 @@
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
          CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         INFOT = 11
+         INFOT = 12
          CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 1, X, 2,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
          CALL CHKXER( 'CHERFSX', INFOT, NOUT, LERR, OK )
-         INFOT = 13
+         INFOT = 14
          CALL CHERFSX( 'U', EQ, 2, 1, A, 2, AF, 2, IP, S, B, 2, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )

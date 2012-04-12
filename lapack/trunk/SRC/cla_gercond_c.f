@@ -192,8 +192,13 @@
       NOTRANS = LSAME( TRANS, 'N' )
       IF ( .NOT. NOTRANS .AND. .NOT. LSAME( TRANS, 'T' ) .AND. .NOT.
      $     LSAME( TRANS, 'C' ) ) THEN
+         INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
+      ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
+         INFO = -4
+      ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
+         INFO = -6
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'CLA_GERCOND_C', -INFO )

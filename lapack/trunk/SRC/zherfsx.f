@@ -446,7 +446,7 @@
 *     .. Local Scalars ..
       CHARACTER(1)       NORM
       LOGICAL            RCEQU
-      INTEGER            IINFO, J, PREC_TYPE, REF_TYPE
+      INTEGER            J, PREC_TYPE, REF_TYPE
       INTEGER            N_NORMS
       DOUBLE PRECISION   ANORM, RCOND_TMP
       DOUBLE PRECISION   ILLRCOND_THRESH, ERR_LBND, CWISE_WRONG
@@ -533,9 +533,9 @@
       ELSE IF( LDAF.LT.MAX( 1, N ) ) THEN
         INFO = -8
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
-        INFO = -11
+        INFO = -12
       ELSE IF( LDX.LT.MAX( 1, N ) ) THEN
-        INFO = -13
+        INFO = -14
       END IF
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'ZHERFSX', -INFO )
@@ -589,7 +589,7 @@
       NORM = 'I'
       ANORM = ZLANHE( NORM, UPLO, N, A, LDA, RWORK )
       CALL ZHECON( UPLO, N, AF, LDAF, IPIV, ANORM, RCOND, WORK,
-     $     IINFO )
+     $     INFO )
 *
 *     Perform refinement on each right-hand side
 *
@@ -603,7 +603,7 @@
      $        WORK, RWORK, WORK(N+1),
      $        TRANSFER (RWORK(1:2*N), (/ (ZERO, ZERO) /), N), RCOND,
      $        ITHRESH, RTHRESH, UNSTABLE_THRESH, IGNORE_CWISE,
-     $        IINFO )
+     $        INFO )
       END IF
 
       ERR_LBND = MAX( 10.0D+0, SQRT( DBLE( N ) ) ) * DLAMCH( 'Epsilon' )
@@ -613,10 +613,10 @@
 *
          IF ( RCEQU ) THEN
             RCOND_TMP = ZLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
-     $           S, .TRUE., IINFO, WORK, RWORK )
+     $           S, .TRUE., INFO, WORK, RWORK )
          ELSE
             RCOND_TMP = ZLA_HERCOND_C( UPLO, N, A, LDA, AF, LDAF, IPIV,
-     $           S, .FALSE., IINFO, WORK, RWORK )
+     $           S, .FALSE., INFO, WORK, RWORK )
          END IF
          DO J = 1, NRHS
 *
@@ -661,7 +661,7 @@
             IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) .LT. CWISE_WRONG )
      $     THEN
                RCOND_TMP = ZLA_HERCOND_X( UPLO, N, A, LDA, AF, LDAF,
-     $         IPIV, X( 1, J ), IINFO, WORK, RWORK )
+     $         IPIV, X( 1, J ), INFO, WORK, RWORK )
             ELSE
                RCOND_TMP = 0.0D+0
             END IF
@@ -677,8 +677,8 @@
             IF ( RCOND_TMP .LT. ILLRCOND_THRESH ) THEN
                ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) = 1.0D+0
                ERR_BNDS_COMP( J, LA_LINRX_TRUST_I ) = 0.0D+0
-               IF ( .NOT. IGNORE_CWISE 
-     $               .AND. INFO.LT.N + J ) INFO = N + J
+               IF ( .NOT. IGNORE_CWISE
+     $              .AND. INFO.LT.N + J ) INFO = N + J
             ELSE IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I )
      $              .LT. ERR_LBND ) THEN
                ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) = ERR_LBND
