@@ -1,7 +1,7 @@
 #
 #  Top Level Makefile for LAPACK
-#  Version 3.4.0
-#  November 2011
+#  Version 3.4.1
+#  April 2012
 #
 
 include make.inc
