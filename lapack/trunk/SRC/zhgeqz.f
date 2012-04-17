@@ -744,8 +744,7 @@
 *
 *           Exceptional shift.  Chosen for no particularly good reason.
 *
-            ESHIFT = ESHIFT + DCONJG( ( ASCALE*H( ILAST-1, ILAST ) ) /
-     $               ( BSCALE*T( ILAST-1, ILAST-1 ) ) )
+            ESHIFT = ESHIFT + H(ILAST,ILAST-1)/T(ILAST-1,ILAST-1)
             SHIFT = ESHIFT
          END IF
 *
