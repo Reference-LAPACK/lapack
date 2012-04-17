@@ -741,7 +741,7 @@
 *
             IF( ( REAL( MAXIT )*SAFMIN )*ABS( H( ILAST-1, ILAST ) ).LT.
      $          ABS( T( ILAST-1, ILAST-1 ) ) ) THEN
-               ESHIFT = ESHIFT + H( ILAST-1, ILAST ) /
+               ESHIFT = ESHIFT + H( ILAST, ILAST-1 ) /
      $                  T( ILAST-1, ILAST-1 )
             ELSE
                ESHIFT = ESHIFT + ONE / ( SAFMIN*REAL( MAXIT ) )
