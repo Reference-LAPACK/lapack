@@ -370,7 +370,7 @@
          DF = ZERO
          DDF = ZERO
          DO 40 I = 1, 3
-            IF (DSCALE( I ).NE.TAU) THEN
+            IF ( ( DSCALE( I )-TAU ).NE.ZERO ) THEN
                TEMP = ONE / ( DSCALE( I )-TAU )
                TEMP1 = ZSCALE( I )*TEMP
                TEMP2 = TEMP1*TEMP
