@@ -115,7 +115,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date April 2012
 *
 *> \ingroup auxOTHERcomputational
 *
@@ -140,10 +140,10 @@
 *  =====================================================================
       SUBROUTINE SLAED6( KNITER, ORGATI, RHO, D, Z, FINIT, TAU, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.4.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     April 2012
 *
 *     .. Scalar Arguments ..
       LOGICAL            ORGATI
@@ -370,15 +370,19 @@
          DF = ZERO
          DDF = ZERO
          DO 40 I = 1, 3
-            TEMP = ONE / ( DSCALE( I )-TAU )
-            TEMP1 = ZSCALE( I )*TEMP
-            TEMP2 = TEMP1*TEMP
-            TEMP3 = TEMP2*TEMP
-            TEMP4 = TEMP1 / DSCALE( I )
-            FC = FC + TEMP4
-            ERRETM = ERRETM + ABS( TEMP4 )
-            DF = DF + TEMP2
-            DDF = DDF + TEMP3
+            IF (DSCALE( I ).NE.TAU) THEN
+               TEMP = ONE / ( DSCALE( I )-TAU )
+               TEMP1 = ZSCALE( I )*TEMP
+               TEMP2 = TEMP1*TEMP
+               TEMP3 = TEMP2*TEMP
+               TEMP4 = TEMP1 / DSCALE( I )
+               FC = FC + TEMP4
+               ERRETM = ERRETM + ABS( TEMP4 )
+               DF = DF + TEMP2
+               DDF = DDF + TEMP3
+            ELSE
+               GO TO 60
+            END IF
    40    CONTINUE
          F = FINIT + TAU*FC
          ERRETM = EIGHT*( ABS( FINIT )+ABS( TAU )*ERRETM ) +
