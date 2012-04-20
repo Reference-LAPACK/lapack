@@ -13,7 +13,8 @@ SHELL = /bin/sh
 #  desired load options for your machine.
 #
 FORTRAN  = xlf
-OPTS     = -O2 -qfixed -qnosave
+OPTS     = -O3 -qfixed -qnosave
+# For -O2, add -qstrict=none
 DRVOPTS  = $(OPTS)
 NOOPT    = -O0 -qfixed -qnosave
 LOADER   = xlf

@@ -16,7 +16,7 @@ if (UNIX)
   set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
    endif ()
    if ( "${CMAKE_Fortran_COMPILER}" MATCHES "xlf" )
-  set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave" )
+  set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave -qstrict=none" )
    endif ()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
