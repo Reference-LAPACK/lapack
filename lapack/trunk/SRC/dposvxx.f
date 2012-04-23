@@ -408,7 +408,7 @@
 *>
 *> \param[in,out] PARAMS
 *> \verbatim
-*>          PARAMS is / output) DOUBLE PRECISION array, dimension NPARAMS
+*>          PARAMS is DOUBLE PRECISION array, dimension NPARAMS
 *>     Specifies algorithm parameters.  If an entry is .LT. 0.0, then
 *>     that entry will be filled with default value used for that
 *>     parameter.  Only positions up to NPARAMS are accessed; defaults

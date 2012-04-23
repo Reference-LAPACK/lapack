@@ -100,7 +100,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (3*N)
+*>          WORK is COMPLEX*16 array, dimension (3*N)
 *> \endverbatim
 *>
 *> \param[out] INFO

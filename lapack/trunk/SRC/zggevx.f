@@ -296,7 +296,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (lrwork)
+*>          RWORK is DOUBLE PRECISION array, dimension (lrwork)
 *>          lrwork must be at least max(1,6*N) if BALANC = 'S' or 'B',
 *>          and at least max(1,2*N) otherwise.
 *>          Real workspace.

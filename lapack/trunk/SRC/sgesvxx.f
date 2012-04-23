@@ -453,7 +453,7 @@
 *>
 *> \param[in,out] PARAMS
 *> \verbatim
-*>          PARAMS is / output) REAL array, dimension NPARAMS
+*>          PARAMS is REAL array, dimension NPARAMS
 *>     Specifies algorithm parameters.  If an entry is .LT. 0.0, then
 *>     that entry will be filled with default value used for that
 *>     parameter.  Only positions up to NPARAMS are accessed; defaults

@@ -98,7 +98,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX*16 array, dimension ( N*(N+1)/2 );
+*>          A is COMPLEX array, dimension ( N*(N+1)/2 );
 *>            On entry, the matrix A in RFP Format.
 *>            RFP Format is described by TRANSR, UPLO and N as follows:
 *>            If TRANSR='N' then RFP A is (0:N,0:K-1) when N is even;
