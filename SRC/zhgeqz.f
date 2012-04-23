@@ -744,7 +744,8 @@
 *
 *           Exceptional shift.  Chosen for no particularly good reason.
 *
-            ESHIFT = ESHIFT + H(ILAST,ILAST-1)/T(ILAST-1,ILAST-1)
+            ESHIFT = ESHIFT + (ASCALE*H(ILAST,ILAST-1))/
+     $                        (BSCALE*T(ILAST-1,ILAST-1))
             SHIFT = ESHIFT
          END IF
 *
