@@ -124,7 +124,7 @@
 *>
 *> \param[in,out] X12
 *> \verbatim
-*>          X12 is CMPLX array, dimension (LDX12,M-Q)
+*>          X12 is COMPLEX array, dimension (LDX12,M-Q)
 *>          On entry, the top-right block of the unitary matrix to
 *>          be reduced. On exit, the form depends on TRANS:
 *>          If TRANS = 'N', then

@@ -175,7 +175,7 @@
 *>
 *> \param[in,out] AB
 *> \verbatim
-*>          AB is REAL array, dimension (LDAB,N)
+*>          AB is COMPLEX array, dimension (LDAB,N)
 *>     On entry, the matrix A in band storage, in rows 1 to KL+KU+1.
 *>     The j-th column of A is stored in the j-th column of the
 *>     array AB as follows:
@@ -200,7 +200,7 @@
 *>
 *> \param[in,out] AFB
 *> \verbatim
-*>          AFB is REAL array, dimension (LDAFB,N)
+*>          AFB is COMPLEX array, dimension (LDAFB,N)
 *>     If FACT = 'F', then AFB is an input argument and on entry
 *>     contains details of the LU factorization of the band matrix
 *>     A, as computed by CGBTRF.  U is stored as an upper triangular
@@ -295,7 +295,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, dimension (LDB,NRHS)
+*>          B is COMPLEX array, dimension (LDB,NRHS)
 *>     On entry, the N-by-NRHS right hand side matrix B.
 *>     On exit,
 *>     if EQUED = 'N', B is not modified;
@@ -313,7 +313,7 @@
 *>
 *> \param[out] X
 *> \verbatim
-*>          X is REAL array, dimension (LDX,NRHS)
+*>          X is COMPLEX array, dimension (LDX,NRHS)
 *>     If INFO = 0, the N-by-NRHS solution matrix X to the original
 *>     system of equations.  Note that A and B are modified on exit
 *>     if EQUED .ne. 'N', and the solution to the equilibrated system is
@@ -473,7 +473,7 @@
 *>
 *> \param[in,out] PARAMS
 *> \verbatim
-*>          PARAMS is / output) REAL array, dimension NPARAMS
+*>          PARAMS is REAL array, dimension NPARAMS
 *>     Specifies algorithm parameters.  If an entry is .LT. 0.0, then
 *>     that entry will be filled with default value used for that
 *>     parameter.  Only positions up to NPARAMS are accessed; defaults
