@@ -326,7 +326,6 @@
 *
       CALL DSYTRD( UPLO, N, A, LDA, W, WORK( INDE ), WORK( INDTAU ),
      $             WORK( INDWRK ), LLWORK, IINFO )
-      LOPT = 2*N + WORK( INDWRK )
 *
 *     For eigenvalues only, call DSTERF.  For eigenvectors, first call
 *     DSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the
@@ -341,7 +340,6 @@
          CALL DORMTR( 'L', UPLO, 'N', N, N, A, LDA, WORK( INDTAU ),
      $                WORK( INDWRK ), N, WORK( INDWK2 ), LLWRK2, IINFO )
          CALL DLACPY( 'A', N, N, WORK( INDWRK ), N, A, LDA )
-         LOPT = MAX( LOPT, 1+6*N+2*N**2 )
       END IF
 *
 *     If matrix was scaled, then rescale eigenvalues appropriately.
