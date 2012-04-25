@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 ###################################################################
 # The values in this section must always be provided
 ###################################################################
@@ -176,8 +176,16 @@ endif(parallel GREATER 1)
 ###################################################################
 
 set( CACHE_CONTENTS "
+SITE:STRING=${hostname}
+BUILDNAME:STRING=${BUILDNAME}
+DART_ROOT:PATH=
+SVNCOMMAND:FILEPATH=${CTEST_UPDATE_COMMAND}
+DROP_METHOD:STRING=https
+DART_TESTING_TIMEOUT:STRING=${CTEST_TEST_TIMEOUT}
 # Enable LAPACKE
 LAPACKE:OPTION=ON
+# Use Reference BLAS by default
+USE_OPTIMIZED_BLAS:OPTION=OFF
 " )
 
 
@@ -193,14 +201,7 @@ message("CTest command: ${CTEST_COMMAND}")
 
 # this is the initial cache to use for the binary tree, be careful to escape
 # any quotes inside of this string if you use it
-file(WRITE "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" "
-SITE:STRING=${hostname}
-BUILDNAME:STRING=${BUILDNAME}
-DART_ROOT:PATH=
-SVNCOMMAND:FILEPATH=${CTEST_UPDATE_COMMAND}
-DROP_METHOD:STRING=https
-DART_TESTING_TIMEOUT:STRING=${CTEST_TEST_TIMEOUT}
-")
+file(WRITE "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" "${CACHE_CONTENTS}")
 
 message("Start dashboard...")
 ctest_start(Nightly)
