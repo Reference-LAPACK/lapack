@@ -94,10 +94,6 @@ set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 # Precision to build
 # By default all precisions are generated
 
-option(BUILD_SINGLE "Build LAPACK Single Precision" ON)
-option(BUILD_DOUBLE "Build LAPACK Double Precision" ON)
-option(BUILD_COMPLEX "Build LAPACK Complex Precision" ON)
-option(BUILD_COMPLEX16 "Build LAPACK Double Complex Precision" ON)
 
 # --------------------------------------------------
 # Subdirectories that need to be processed
@@ -147,7 +143,51 @@ if (USE_XBLAS)
   find_library(XBLAS_LIBRARY NAMES xblas)
 endif(USE_XBLAS)
    
-add_subdirectory(SRC)
+option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)
+
+# User did not provide a LAPACK Library but specified to search for one
+if( USE_OPTIMIZED_LAPACK )
+  find_package( LAPACK )
+endif (USE_OPTIMIZED_LAPACK)
+
+# Check the usage of the user provided or automatically found LAPACK libraries
+if(LAPACK_LIBRARIES)
+  include(CheckFortranFunctionExists)
+  set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
+  # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
+  CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LATESTLAPACK_FOUND)
+  unset( CMAKE_REQUIRED_LIBRARIES )
+  if(LATESTLAPACK_FOUND)
+    message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
+  else(LAPACK_FOUND)
+    message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, 	CANNOT USE ${LAPACK_LIBRARIES}.")
+    message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
+    message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
+    message(ERROR "-->     Or Consider checking USE_OPTIMIZED_LAPACK")
+  endif(LATESTLAPACK_FOUND)
+endif (LAPACK_LIBRARIES)
+
+# Neither user specified or optimized LAPACK libraries can be used
+if(NOT LATESTLAPACK_FOUND)
+  message(STATUS "Using supplied NETLIB LAPACK implementation")
+  set( LAPACK_LIBRARIES lapack )
+  option(BUILD_SINGLE "Build LAPACK Single Precision" ON)
+  option(BUILD_DOUBLE "Build LAPACK Double Precision" ON)
+  option(BUILD_COMPLEX "Build LAPACK Complex Precision" ON)
+  option(BUILD_COMPLEX16 "Build LAPACK Double Complex Precision" ON)
+  add_subdirectory(SRC)
+else()
+  set( CMAKE_EXE_LINKER_FLAGS 
+    "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}" 
+    CACHE STRING "Linker flags for executables" FORCE)
+  set( CMAKE_MODULE_LINKER_FLAGS 
+    "${CMAKE_MODULE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}" 
+    CACHE STRING "Linker flags for modules" FORCE)
+  set( CMAKE_SHARED_LINKER_FLAGS 
+    "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}" 
+    CACHE STRING "Linker flags for shared libs" FORCE)
+endif( NOT LATESTLAPACK_FOUND )
+
 if(BUILD_TESTING)
   add_subdirectory(TESTING)
 endif(BUILD_TESTING)
@@ -155,11 +195,15 @@ endif(BUILD_TESTING)
 # --------------------------------------------------
 # LAPACKE
 option(LAPACKE "Build LAPACKE" OFF)
+
 # LAPACKE has also the interface to some routines from tmglib,
 # if LAPACKE_WITH_TMG is selected, we need to add those routines to LAPACKE
 option(LAPACKE_WITH_TMG "Build LAPACKE with tmglib routines" OFF)
 if (LAPACKE_WITH_TMG)
   option(LAPACKE "Build LAPACKE" ON)
+  if(NOT BUILD_TESTING)
+     add_subdirectory(TESTING/MATGEN)
+   endif(NOT BUILD_TESTING)
 endif(LAPACKE_WITH_TMG)
 
 if(LAPACKE)
@@ -202,19 +246,23 @@ OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF )
 OPTION(BUILD_STATIC_LIBS "Build static libraries" ON )
 #OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
 
-if( NOT BLAS_FOUND )
-  if(LAPACKE)
-     export(TARGETS blas lapack tmglib lapacke FILE lapack-targets.cmake)
-  else (LAPACKE)
-     export(TARGETS blas lapack tmglib FILE lapack-targets.cmake)
-  endif(LAPACKE)
-else( NOT BLAS_FOUND )
-  if(LAPACKE)
-     export(TARGETS lapack tmglib lapacke FILE lapack-targets.cmake)
-  else (LAPACKE)
-     export(TARGETS lapack tmglib FILE lapack-targets.cmake)
-  endif(LAPACKE)
-endif( NOT BLAS_FOUND )
+if(NOT BLAS_FOUND)
+  set(ALL_TARGETS ${ALL_TARGETS} blas)
+endif(NOT BLAS_FOUND)
+
+if(NOT LATESTLAPACK_FOUND)
+  set(ALL_TARGETS ${ALL_TARGETS} lapack)
+endif(NOT LATESTLAPACK_FOUND)
+
+if(BUILD_TESTING OR LAPACKE_WITH_TMG)
+  set(ALL_TARGETS ${ALL_TARGETS} tmglib)
+endif(BUILD_TESTING OR LAPACKE_WITH_TMG)
+
+if(LAPACKE)
+  set(ALL_TARGETS ${ALL_TARGETS} lapacke)
+endif(LAPACKE)
+
+export(TARGETS ${ALL_TARGETS} FILE lapack-targets.cmake)
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)

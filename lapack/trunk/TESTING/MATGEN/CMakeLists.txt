@@ -64,12 +64,12 @@ if(BUILD_COMPLEX16)
   set(ALLOBJ ${ALLOBJ} ${ZMATGEN} ${DZATGEN})
 endif()
 
-list(REMOVE_DUPLICATES ALLOBJ)
-
 if (NOT ALLOBJ)
 set(ALLOBJ ${SMATGEN} ${CMATGEN} ${SCATGEN} ${DMATGEN} ${ZMATGEN}
   ${DZATGEN})
+else()
+  list(REMOVE_DUPLICATES ALLOBJ)
 endif()
 add_library(tmglib ${ALLOBJ} )
-target_link_libraries(tmglib lapack)
+target_link_libraries(tmglib ${LAPACK_LIBRARIES})
 lapack_install_library(tmglib)
