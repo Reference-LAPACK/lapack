@@ -51,7 +51,7 @@ float LAPACKE_clange( int matrix_order, char norm, lapack_int m,
     }
 #endif
     /* Allocate memory for working array(s) */
-    if( LAPACKE_lsame( norm, 'e' ) || LAPACKE_lsame( norm, 'f' ) ) {
+    if( LAPACKE_lsame( norm, 'i' ) ) {
         work = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,m) );
         if( work == NULL ) {
             info = LAPACK_WORK_MEMORY_ERROR;
@@ -61,7 +61,7 @@ float LAPACKE_clange( int matrix_order, char norm, lapack_int m,
     /* Call middle-level interface */
     res = LAPACKE_clange_work( matrix_order, norm, m, n, a, lda, work );
     /* Release memory and exit */
-    if( LAPACKE_lsame( norm, 'e' ) || LAPACKE_lsame( norm, 'f' ) ) {
+    if( LAPACKE_lsame( norm, 'i' ) ) {
         LAPACKE_free( work );
     }
 exit_level_0:
