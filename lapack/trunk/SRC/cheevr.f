@@ -579,7 +579,7 @@
 *     returns INFO > 0.
       INDIFL = INDISP + N
 *     INDIWO is the offset of the remaining integer workspace.
-      INDIWO = INDISP + N
+      INDIWO = INDIFL + N
 
 *
 *     Call CHETRD to reduce Hermitian matrix to tridiagonal form.
