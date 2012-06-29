@@ -267,8 +267,8 @@
          Z( NN-3 ) = Z( NN-7 )
          Z( NN-7 ) = S
       END IF
-      IF( Z( NN-5 ).GT.Z( NN-3 )*TOL2 ) THEN
-         T = HALF*( ( Z( NN-7 )-Z( NN-3 ) )+Z( NN-5 ) )
+      T = HALF*( ( Z( NN-7 )-Z( NN-3 ) )+Z( NN-5 ) )
+      IF( Z( NN-5 ).GT.Z( NN-3 )*TOL2.AND.T.NE.ZERO ) THEN
          S = Z( NN-3 )*( Z( NN-5 ) / T )
          IF( S.LE.T ) THEN
             S = Z( NN-3 )*( Z( NN-5 ) /
