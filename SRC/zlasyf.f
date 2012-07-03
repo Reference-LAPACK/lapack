@@ -1,4 +1,4 @@
-*> \brief \b ZLASYF
+*> \brief \b ZLASYF computes a partial factorization of a complex symmetric matrix, using the diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *

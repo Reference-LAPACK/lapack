@@ -1,4 +1,4 @@
-*> \brief \b SLASD6
+*> \brief \b SLASD6 computes the SVD of an updated upper bidiagonal matrix obtained by merging two smaller ones by appending a row. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

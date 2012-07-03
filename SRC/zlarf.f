@@ -1,4 +1,4 @@
-*> \brief \b ZLARF
+*> \brief \b ZLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

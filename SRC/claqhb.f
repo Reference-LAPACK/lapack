@@ -1,4 +1,4 @@
-*> \brief \b CLAQHB
+*> \brief \b CLAQHB scales a Hermitian band matrix, using scaling factors computed by cpbequ.
 *
 *  =========== DOCUMENTATION ===========
 *

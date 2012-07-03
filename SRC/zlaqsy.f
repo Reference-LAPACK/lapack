@@ -1,4 +1,4 @@
-*> \brief \b ZLAQSY
+*> \brief \b ZLAQSY scales a symmetric/Hermitian matrix, using scaling factors computed by spoequ.
 *
 *  =========== DOCUMENTATION ===========
 *

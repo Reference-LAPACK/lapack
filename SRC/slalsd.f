@@ -1,4 +1,4 @@
-*> \brief \b SLALSD
+*> \brief \b SLALSD uses the singular value decomposition of A to solve the least squares problem.
 *
 *  =========== DOCUMENTATION ===========
 *

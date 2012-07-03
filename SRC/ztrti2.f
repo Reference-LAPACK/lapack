@@ -1,4 +1,4 @@
-*> \brief \b ZTRTI2
+*> \brief \b ZTRTI2 computes the inverse of a triangular matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

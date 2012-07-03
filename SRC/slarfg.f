@@ -1,4 +1,4 @@
-*> \brief \b SLARFG
+*> \brief \b SLARFG generates an elementary reflector (Householder matrix).
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZUNM2R
+*> \brief \b ZUNM2R multiplies a general matrix by the unitary matrix from a QR factorization determined by cgeqrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

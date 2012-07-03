@@ -1,4 +1,4 @@
-*> \brief \b SRSCL
+*> \brief \b SRSCL multiplies a vector by the reciprocal of a real scalar.
 *
 *  =========== DOCUMENTATION ===========
 *

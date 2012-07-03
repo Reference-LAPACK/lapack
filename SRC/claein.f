@@ -1,4 +1,4 @@
-*> \brief \b CLAEIN
+*> \brief \b CLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
 *
 *  =========== DOCUMENTATION ===========
 *

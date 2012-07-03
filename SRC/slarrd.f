@@ -1,4 +1,4 @@
-*> \brief \b SLARRD
+*> \brief \b SLARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable accuracy.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b CSYR
+*> \brief \b CSYR performs the symmetric rank-1 update of a complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

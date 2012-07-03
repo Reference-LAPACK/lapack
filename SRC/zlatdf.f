@@ -1,4 +1,4 @@
-*> \brief \b ZLATDF
+*> \brief \b ZLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contribution to the reciprocal Dif-estimate.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZLAQHP
+*> \brief \b ZLAQHP scales a Hermitian matrix stored in packed form.
 *
 *  =========== DOCUMENTATION ===========
 *

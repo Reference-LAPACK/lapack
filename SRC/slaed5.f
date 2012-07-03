@@ -1,4 +1,4 @@
-*> \brief \b SLAED5
+*> \brief \b SLAED5 used by sstedc. Solves the 2-by-2 secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *

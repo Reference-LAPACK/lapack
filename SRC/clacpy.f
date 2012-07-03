@@ -1,4 +1,4 @@
-*> \brief \b CLACPY
+*> \brief \b CLACPY copies all or part of one two-dimensional array to another.
 *
 *  =========== DOCUMENTATION ===========
 *

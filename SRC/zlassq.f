@@ -1,4 +1,4 @@
-*> \brief \b ZLASSQ
+*> \brief \b ZLASSQ updates a sum of squares represented in scaled form.
 *
 *  =========== DOCUMENTATION ===========
 *

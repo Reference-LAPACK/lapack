@@ -1,4 +1,4 @@
-*> \brief \b ZLACRM
+*> \brief \b ZLACRM multiplies a complex matrix by a square real matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

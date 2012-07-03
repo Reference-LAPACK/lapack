@@ -1,4 +1,4 @@
-*> \brief \b DLA_PORPVGRW
+*> \brief \b DLA_PORPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric or Hermitian positive-definite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

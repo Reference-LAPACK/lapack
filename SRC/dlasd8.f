@@ -1,4 +1,4 @@
-*> \brief \b DLASD8
+*> \brief \b DLASD8 finds the square roots of the roots of the secular equation, and stores, for each element in D, the distance to its two nearest poles. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

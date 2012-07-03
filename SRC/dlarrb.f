@@ -1,4 +1,4 @@
-*> \brief \b DLARRB
+*> \brief \b DLARRB provides limited bisection to locate eigenvalues for more accuracy.
 *
 *  =========== DOCUMENTATION ===========
 *

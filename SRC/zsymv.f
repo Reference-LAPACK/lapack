@@ -1,4 +1,4 @@
-*> \brief \b ZSYMV
+*> \brief \b ZSYMV computes a matrix-vector product for a complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

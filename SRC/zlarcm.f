@@ -1,4 +1,4 @@
-*> \brief \b ZLARCM
+*> \brief \b ZLARCM copies all or part of a real two-dimensional array to a complex array.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLAE2
+*> \brief \b SLAE2 computes the eigenvalues of a 2-by-2 symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

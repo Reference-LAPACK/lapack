@@ -1,4 +1,4 @@
-*> \brief \b ZLACGV
+*> \brief \b ZLACGV conjugates a complex vector.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLASCL2
+*> \brief \b SLASCL2 performs diagonal scaling on a vector.
 *
 *  =========== DOCUMENTATION ===========
 *

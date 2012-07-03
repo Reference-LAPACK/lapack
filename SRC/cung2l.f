@@ -1,4 +1,4 @@
-*> \brief \b CUNG2L
+*> \brief \b CUNG2L generates all or part of the unitary matrix Q from a QL factorization determined by cgeqlf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

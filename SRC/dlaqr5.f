@@ -1,4 +1,4 @@
-*> \brief \b DLAQR5
+*> \brief \b DLAQR5 performs a single small-bulge multi-shift QR sweep.
 *
 *  =========== DOCUMENTATION ===========
 *

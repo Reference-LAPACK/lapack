@@ -1,4 +1,4 @@
-*> \brief \b ZLAQGE
+*> \brief \b ZLAQGE scales a general rectangular matrix, using row and column scaling factors computed by sgeequ.
 *
 *  =========== DOCUMENTATION ===========
 *

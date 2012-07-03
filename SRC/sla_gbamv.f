@@ -1,4 +1,4 @@
-*> \brief \b SLA_GBAMV
+*> \brief \b SLA_GBAMV performs a matrix-vector operation to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *

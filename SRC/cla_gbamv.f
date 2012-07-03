@@ -1,4 +1,4 @@
-*> \brief \b CLA_GBAMV
+*> \brief \b CLA_GBAMV performs a matrix-vector operation to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *

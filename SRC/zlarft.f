@@ -1,4 +1,4 @@
-*> \brief \b ZLARFT
+*> \brief \b ZLARFT forms the triangular factor T of a block reflector H = I - vtvH
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b CTRTI2
+*> \brief \b CTRTI2 computes the inverse of a triangular matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

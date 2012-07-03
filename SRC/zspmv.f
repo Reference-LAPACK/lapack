@@ -1,4 +1,4 @@
-*> \brief \b ZSPMV
+*> \brief \b ZSPMV computes a matrix-vector product for complex vectors using a complex symmetric packed matrix
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLAQSP
+*> \brief \b SLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by sppequ.
 *
 *  =========== DOCUMENTATION ===========
 *

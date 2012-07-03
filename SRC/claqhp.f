@@ -1,4 +1,4 @@
-*> \brief \b CLAQHP
+*> \brief \b CLAQHP scales a Hermitian matrix stored in packed form.
 *
 *  =========== DOCUMENTATION ===========
 *

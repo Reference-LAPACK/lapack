@@ -1,4 +1,4 @@
-*> \brief \b DGERQ2
+*> \brief \b DGERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

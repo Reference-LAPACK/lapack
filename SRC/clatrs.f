@@ -1,4 +1,4 @@
-*> \brief \b CLATRS
+*> \brief \b CLATRS solves a triangular system of equations with the scale factor set to prevent overflow.
 *
 *  =========== DOCUMENTATION ===========
 *

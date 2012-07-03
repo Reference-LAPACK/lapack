@@ -1,4 +1,4 @@
-*> \brief \b CTFSM
+*> \brief \b CTFSM solves a matrix equation (one operand is a triangular matrix in RFP format).
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DLAGS2
+*> \brief \b DLAGS2 computes 2-by-2 orthogonal matrices U, V, and Q, and applies them to matrices A and B such that the rows of the transformed A and B are parallel.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZLA_SYAMV
+*> \brief \b ZLA_SYAMV computes a matrix-vector product using a symmetric indefinite matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *

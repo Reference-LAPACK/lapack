@@ -1,4 +1,4 @@
-*> \brief \b SLAR2V
+*> \brief \b SLAR2V applies a vector of plane rotations with real cosines and real sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices.
 *
 *  =========== DOCUMENTATION ===========
 *

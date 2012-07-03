@@ -1,4 +1,4 @@
-*> \brief \b ZTFSM
+*> \brief \b ZTFSM solves a matrix equation (one operand is a triangular matrix in RFP format).
 *
 *  =========== DOCUMENTATION ===========
 *

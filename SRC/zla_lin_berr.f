@@ -1,4 +1,4 @@
-*> \brief \b ZLA_LIN_BERR
+*> \brief \b ZLA_LIN_BERR computes a component-wise relative backward error.
 *
 *  =========== DOCUMENTATION ===========
 *

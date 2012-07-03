@@ -1,4 +1,4 @@
-*> \brief \b CTGSY2
+*> \brief \b CTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

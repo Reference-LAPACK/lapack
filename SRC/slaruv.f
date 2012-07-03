@@ -1,4 +1,4 @@
-*> \brief \b SLARUV
+*> \brief \b SLARUV returns a vector of n random real numbers from a uniform distribution.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DPOTF2
+*> \brief \b DPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

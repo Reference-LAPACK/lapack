@@ -1,4 +1,4 @@
-*> \brief \b SLAGV2
+*> \brief \b SLAGV2 computes the Generalized Schur factorization of a real 2-by-2 matrix pencil (A,B) where B is upper triangular.
 *
 *  =========== DOCUMENTATION ===========
 *

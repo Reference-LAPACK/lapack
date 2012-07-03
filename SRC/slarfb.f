@@ -1,4 +1,4 @@
-*> \brief \b SLARFB
+*> \brief \b SLARFB applies a block reflector or its transpose to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

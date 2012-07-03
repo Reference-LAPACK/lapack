@@ -1,4 +1,4 @@
-*> \brief \b DLAQSY
+*> \brief \b DLAQSY scales a symmetric/Hermitian matrix, using scaling factors computed by spoequ.
 *
 *  =========== DOCUMENTATION ===========
 *

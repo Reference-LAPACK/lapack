@@ -1,4 +1,4 @@
-*> \brief \b SLAPMT
+*> \brief \b SLAPMT performs a forward or backward permutation of the columns of a matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

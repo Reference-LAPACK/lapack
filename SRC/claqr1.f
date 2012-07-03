@@ -1,4 +1,4 @@
-*> \brief \b CLAQR1
+*> \brief \b CLAQR1 sets a scalar multiple of the first column of the product of 2-by-2 or 3-by-3 matrix H and specified shifts.
 *
 *  =========== DOCUMENTATION ===========
 *

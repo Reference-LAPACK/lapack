@@ -1,4 +1,4 @@
-*> \brief \b STRTI2
+*> \brief \b STRTI2 computes the inverse of a triangular matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZTRTTF
+*> \brief \b ZTRTTF copies a triangular matrix from the standard full format (TR) to the rectangular full packed format (TF).
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLANGE
+*> \brief \b SLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

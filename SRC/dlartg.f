@@ -1,4 +1,4 @@
-*> \brief \b DLARTG
+*> \brief \b DLARTG generates a plane rotation with real cosine and real sine.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZHETD2
+*> \brief \b ZHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary similarity transformation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZLA_HEAMV
+*> \brief \b ZLA_HEAMV computes a matrix-vector product using a Hermitian indefinite matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DLARFB
+*> \brief \b DLARFB applies a block reflector or its transpose to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

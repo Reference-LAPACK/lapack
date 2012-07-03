@@ -1,4 +1,4 @@
-*> \brief \b SISNAN
+*> \brief \b SISNAN tests input for NaN.
 *
 *  =========== DOCUMENTATION ===========
 *

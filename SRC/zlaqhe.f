@@ -1,4 +1,4 @@
-*> \brief \b ZLAQHE
+*> \brief \b ZLAQHE scales a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

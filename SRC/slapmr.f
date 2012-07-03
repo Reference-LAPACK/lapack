@@ -1,4 +1,4 @@
-*> \brief \b SLAPMR
+*> \brief \b SLAPMR rearranges rows of a matrix as specified by a permutation vector.
 *
 *  =========== DOCUMENTATION ===========
 *

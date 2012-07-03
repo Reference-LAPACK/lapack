@@ -1,4 +1,4 @@
-*> \brief \b DLARRA
+*> \brief \b DLARRA computes the splitting points with the specified threshold.
 *
 *  =========== DOCUMENTATION ===========
 *

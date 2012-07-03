@@ -1,4 +1,4 @@
-*> \brief \b SLASCL
+*> \brief \b SLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom.
 *
 *  =========== DOCUMENTATION ===========
 *

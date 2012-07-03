@@ -1,4 +1,4 @@
-*> \brief \b DLASD3
+*> \brief \b DLASD3 finds all square roots of the roots of the secular equation, as defined by the values in D and Z, and then updates the singular vectors by matrix multiplication. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

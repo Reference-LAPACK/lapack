@@ -1,4 +1,4 @@
-*> \brief \b SORMR3
+*> \brief \b SORMR3 multiplies a general matrix by the orthogonal matrix from a RZ factorization determined by stzrzf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

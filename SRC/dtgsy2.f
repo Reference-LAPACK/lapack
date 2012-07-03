@@ -1,4 +1,4 @@
-*> \brief \b DTGSY2
+*> \brief \b DTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

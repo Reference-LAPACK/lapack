@@ -1,4 +1,4 @@
-*> \brief \b SORM2R
+*> \brief \b SORM2R multiplies a general matrix by the orthogonal matrix from a QR factorization determined by sgeqrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

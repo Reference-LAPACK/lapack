@@ -1,4 +1,4 @@
-*> \brief \b ZLAR1V
+*> \brief \b ZLAR1V computes the (scaled) r-th column of the inverse of the submatrix in rows b1 through bn of the tridiagonal matrix LDLT - λI.
 *
 *  =========== DOCUMENTATION ===========
 *

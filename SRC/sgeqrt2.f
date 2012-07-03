@@ -1,4 +1,4 @@
-*> \brief \b SGEQRT2
+*> \brief \b SGEQRT2 computes a QR factorization of a general real or complex matrix using the compact WY representation of Q.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZLADIV
+*> \brief \b ZLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========
 *

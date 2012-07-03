@@ -1,4 +1,4 @@
-*> \brief \b DLAQPS
+*> \brief \b DLAQPS computes a step of QR factorization with column pivoting of a real m-by-n matrix A by using BLAS level 3.
 *
 *  =========== DOCUMENTATION ===========
 *

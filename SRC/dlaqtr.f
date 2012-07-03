@@ -1,4 +1,4 @@
-*> \brief \b DLAQTR
+*> \brief \b DLAQTR solves a real quasi-triangular system of equations, or a complex quasi-triangular system of special form, in real arithmetic.
 *
 *  =========== DOCUMENTATION ===========
 *

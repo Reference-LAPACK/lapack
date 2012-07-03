@@ -1,4 +1,4 @@
-*> \brief \b ZLA_HERCOND_C
+*> \brief \b ZLA_HERCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for Hermitian indefinite matrices.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DLARGV
+*> \brief \b DLARGV generates a vector of plane rotations with real cosines and real sines.
 *
 *  =========== DOCUMENTATION ===========
 *

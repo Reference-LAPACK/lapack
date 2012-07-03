@@ -1,4 +1,4 @@
-*> \brief \b ZLA_GBAMV
+*> \brief \b ZLA_GBAMV performs a matrix-vector operation to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *

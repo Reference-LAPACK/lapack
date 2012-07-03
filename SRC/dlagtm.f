@@ -1,4 +1,4 @@
-*> \brief \b DLAGTM
+*> \brief \b DLAGTM performs a matrix-matrix product of the form C = αAB+βC, where A is a tridiagonal matrix, B and C are rectangular matrices, and α and β are scalars, which may be 0, 1, or -1.
 *
 *  =========== DOCUMENTATION ===========
 *

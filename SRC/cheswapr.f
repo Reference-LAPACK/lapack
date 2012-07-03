@@ -1,4 +1,4 @@
-*> \brief \b CHESWAPR
+*> \brief \b CHESWAPR applies an elementary permutation on the rows and columns of a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

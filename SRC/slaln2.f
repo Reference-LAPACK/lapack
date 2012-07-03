@@ -1,4 +1,4 @@
-*> \brief \b SLALN2
+*> \brief \b SLALN2 solves a 1-by-1 or 2-by-2 linear system of equations of the specified form.
 *
 *  =========== DOCUMENTATION ===========
 *

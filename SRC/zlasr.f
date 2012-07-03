@@ -1,4 +1,4 @@
-*> \brief \b ZLASR
+*> \brief \b ZLASR applies a sequence of plane rotations to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

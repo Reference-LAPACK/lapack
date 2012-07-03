@@ -1,4 +1,4 @@
-*> \brief \b SLAQP2
+*> \brief \b SLAQP2 computes a QR factorization with column pivoting of the matrix block.
 *
 *  =========== DOCUMENTATION ===========
 *

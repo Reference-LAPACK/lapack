@@ -1,4 +1,4 @@
-*> \brief \b DGBTF2
+*> \brief \b DGBTF2 computes the LU factorization of a general band matrix using the unblocked version of the algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

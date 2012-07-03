@@ -1,4 +1,4 @@
-*> \brief \b STFSM
+*> \brief \b STFSM solves a matrix equation (one operand is a triangular matrix in RFP format).
 *
 *  =========== DOCUMENTATION ===========
 *

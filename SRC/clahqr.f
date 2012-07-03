@@ -1,4 +1,4 @@
-*> \brief \b CLAHQR
+*> \brief \b CLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, using the double-shift/single-shift QR algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

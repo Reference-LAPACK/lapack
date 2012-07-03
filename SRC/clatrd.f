@@ -1,4 +1,4 @@
-*> \brief \b CLATRD
+*> \brief \b CLATRD reduces the first nb rows and columns of a symmetric/Hermitian matrix A to real tridiagonal form by an unitary similarity transformation.
 *
 *  =========== DOCUMENTATION ===========
 *

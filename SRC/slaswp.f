@@ -1,4 +1,4 @@
-*> \brief \b SLASWP
+*> \brief \b SLASWP performs a series of row interchanges on a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

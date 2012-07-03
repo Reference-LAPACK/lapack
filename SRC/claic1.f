@@ -1,4 +1,4 @@
-*> \brief \b CLAIC1
+*> \brief \b CLAIC1 applies one step of incremental condition estimation.
 *
 *  =========== DOCUMENTATION ===========
 *

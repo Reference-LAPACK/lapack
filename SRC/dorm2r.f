@@ -1,4 +1,4 @@
-*> \brief \b DORM2R
+*> \brief \b DORM2R multiplies a general matrix by the orthogonal matrix from a QR factorization determined by sgeqrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

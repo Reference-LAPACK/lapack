@@ -1,4 +1,4 @@
-*> \brief \b DGEBD2
+*> \brief \b DGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

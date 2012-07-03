@@ -1,4 +1,4 @@
-*> \brief \b CLASET
+*> \brief \b CLASET initializes the off-diagonal elements and the diagonal elements of a matrix to given values.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b CLAPMT
+*> \brief \b CLAPMT performs a forward or backward permutation of the columns of a matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

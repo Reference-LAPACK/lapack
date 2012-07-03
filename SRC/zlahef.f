@@ -1,4 +1,4 @@
-*> \brief \b ZLAHEF
+*> \brief \b ZLAHEF computes a partial factorization of a complex Hermitian indefinite matrix, using the diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *

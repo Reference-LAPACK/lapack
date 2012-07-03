@@ -1,4 +1,4 @@
-*> \brief \b SLASQ5
+*> \brief \b SLASQ5 computes one dqds transform in ping-pong form. Used by sbdsqr and sstegr.
 *
 *  =========== DOCUMENTATION ===========
 *

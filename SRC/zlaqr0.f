@@ -1,4 +1,4 @@
-*> \brief \b ZLAQR0
+*> \brief \b ZLAQR0 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZLA_HERFSX_EXTENDED
+*> \brief \b ZLA_HERFSX_EXTENDED improves the computed solution to a system of linear equations for Hermitian indefinite matrices by performing extra-precise iterative refinement and provides error bounds and backward error estimates for the solution.
 *
 *  =========== DOCUMENTATION ===========
 *

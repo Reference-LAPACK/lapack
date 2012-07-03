@@ -1,4 +1,4 @@
-*> \brief \b CGELQ2
+*> \brief \b CGELQ2 computes the LQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

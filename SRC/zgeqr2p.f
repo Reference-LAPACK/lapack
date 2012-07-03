@@ -1,4 +1,4 @@
-*> \brief \b ZGEQR2P
+*> \brief \b ZGEQR2P computes the QR factorization of a general rectangular matrix with non-negative diagonal elements using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

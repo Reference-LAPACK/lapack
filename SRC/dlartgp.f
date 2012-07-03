@@ -1,4 +1,4 @@
-*> \brief \b DLARTGP
+*> \brief \b DLARTGP generates a plane rotation so that the diagonal is nonnegative.
 *
 *  =========== DOCUMENTATION ===========
 *

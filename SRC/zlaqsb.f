@@ -1,4 +1,4 @@
-*> \brief \b ZLAQSB
+*> \brief \b ZLAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by spbequ.
 *
 *  =========== DOCUMENTATION ===========
 *

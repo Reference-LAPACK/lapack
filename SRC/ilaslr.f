@@ -1,4 +1,4 @@
-*> \brief \b ILASLR
+*> \brief \b ILASLR scans a matrix for its last non-zero row.
 *
 *  =========== DOCUMENTATION ===========
 *

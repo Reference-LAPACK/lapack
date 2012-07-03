@@ -1,4 +1,4 @@
-*> \brief \b DLAUU2
+*> \brief \b DLAUU2 computes the product UUH or LHL, where U and L are upper or lower triangular matrices (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

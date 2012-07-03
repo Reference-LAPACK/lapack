@@ -1,4 +1,4 @@
-*> \brief \b DGETF2
+*> \brief \b DGETF2 computes the LU factorization of a general m-by-n matrix using partial pivoting with row interchanges (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b CPBTF2
+*> \brief \b CPBTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite band matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

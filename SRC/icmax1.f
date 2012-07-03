@@ -1,4 +1,4 @@
-*> \brief \b ICMAX1
+*> \brief \b ICMAX1 finds the index of the vector element whose real part has maximum absolute value.
 *
 *  =========== DOCUMENTATION ===========
 *

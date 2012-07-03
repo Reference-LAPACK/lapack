@@ -1,4 +1,4 @@
-*> \brief \b DLAED3
+*> \brief \b DLAED3 used by sstedc. Finds the roots of the secular equation and updates the eigenvectors. Used when the original matrix is tridiagonal.
 *
 *  =========== DOCUMENTATION ===========
 *

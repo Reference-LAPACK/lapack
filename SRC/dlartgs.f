@@ -1,4 +1,4 @@
-*> \brief \b DLARTGS
+*> \brief \b DLARTGS generates a plane rotation designed to introduce a bulge in implicit QR iteration for the bidiagonal SVD problem.
 *
 *  =========== DOCUMENTATION ===========
 *

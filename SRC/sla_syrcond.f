@@ -1,4 +1,4 @@
-*> \brief \b SLA_SYRCOND
+*> \brief \b SLA_SYRCOND estimates the Skeel condition number for a symmetric indefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

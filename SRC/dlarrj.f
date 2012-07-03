@@ -1,4 +1,4 @@
-*> \brief \b DLARRJ
+*> \brief \b DLARRJ performs refinement of the initial estimates of the eigenvalues of the matrix T.
 *
 *  =========== DOCUMENTATION ===========
 *

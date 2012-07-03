@@ -1,4 +1,4 @@
-*> \brief \b DLASD5
+*> \brief \b DLASD5 computes the square root of the i-th eigenvalue of a positive symmetric rank-one modification of a 2-by-2 diagonal matrix. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

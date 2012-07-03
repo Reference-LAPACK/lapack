@@ -1,4 +1,4 @@
-*> \brief \b ZPOTF2
+*> \brief \b ZPOTF2 computes the Cholesky factorization of a symmetric/Hermitian positive definite matrix (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

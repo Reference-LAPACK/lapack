@@ -1,4 +1,4 @@
-*> \brief \b CLANGT
+*> \brief \b CLANGT returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest absolute value of any element of a general tridiagonal matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

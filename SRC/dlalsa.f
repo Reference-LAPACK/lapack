@@ -1,4 +1,4 @@
-*> \brief \b DLALSA
+*> \brief \b DLALSA computes the SVD of the coefficient matrix in compact form. Used by sgelsd.
 *
 *  =========== DOCUMENTATION ===========
 *

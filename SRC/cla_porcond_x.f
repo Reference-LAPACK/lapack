@@ -1,4 +1,4 @@
-*> \brief \b CLA_PORCOND_X
+*> \brief \b CLA_PORCOND_X computes the infinity norm condition number of op(A)*diag(x) for Hermitian positive-definite matrices.
 *
 *  =========== DOCUMENTATION ===========
 *

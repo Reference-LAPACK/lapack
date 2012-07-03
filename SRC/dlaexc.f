@@ -1,4 +1,4 @@
-*> \brief \b DLAEXC
+*> \brief \b DLAEXC swaps adjacent diagonal blocks of a real upper quasi-triangular matrix in Schur canonical form, by an orthogonal similarity transformation.
 *
 *  =========== DOCUMENTATION ===========
 *

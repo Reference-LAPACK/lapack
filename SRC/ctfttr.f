@@ -1,4 +1,4 @@
-*> \brief \b CTFTTR
+*> \brief \b CTFTTR copies a triangular matrix from the rectangular full packed format (TF) to the standard full format (TR).
 *
 *  =========== DOCUMENTATION ===========
 *

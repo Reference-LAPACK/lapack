@@ -1,4 +1,4 @@
-*> \brief \b CGEQR2
+*> \brief \b CGEQR2 computes the QR factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

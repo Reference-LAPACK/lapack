@@ -1,4 +1,4 @@
-*> \brief \b DLASRT
+*> \brief \b DLASRT sorts numbers in increasing or decreasing order.
 *
 *  =========== DOCUMENTATION ===========
 *

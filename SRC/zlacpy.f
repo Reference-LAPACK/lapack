@@ -1,4 +1,4 @@
-*> \brief \b ZLACPY
+*> \brief \b ZLACPY copies all or part of one two-dimensional array to another.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZGBTF2
+*> \brief \b ZGBTF2 computes the LU factorization of a general band matrix using the unblocked version of the algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

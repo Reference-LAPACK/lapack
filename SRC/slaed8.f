@@ -1,4 +1,4 @@
-*> \brief \b SLAED8
+*> \brief \b SLAED8 used by sstedc. Merges eigenvalues and deflates secular equation. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *

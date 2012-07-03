@@ -1,4 +1,4 @@
-*> \brief \b DTGEX2
+*> \brief \b DTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an orthogonal equivalence transformation.
 *
 *  =========== DOCUMENTATION ===========
 *

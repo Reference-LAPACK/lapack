@@ -1,4 +1,4 @@
-*> \brief \b DORMR2
+*> \brief \b DORMR2 multiplies a general matrix by the orthogonal matrix from a RQ factorization determined by sgerqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

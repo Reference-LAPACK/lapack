@@ -1,4 +1,4 @@
-*> \brief \b ZLACRT
+*> \brief \b ZLACRT performs a linear transformation of a pair of complex vectors.
 *
 *  =========== DOCUMENTATION ===========
 *

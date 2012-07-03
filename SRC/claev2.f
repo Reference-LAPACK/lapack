@@ -1,4 +1,4 @@
-*> \brief \b CLAEV2
+*> \brief \b CLAEV2 computes the eigenvalues and eigenvectors of a 2-by-2 symmetric/Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

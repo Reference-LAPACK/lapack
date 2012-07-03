@@ -1,4 +1,4 @@
-*> \brief \b SLAQR2
+*> \brief \b SLAQR2 performs the orthogonal similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
 *
 *  =========== DOCUMENTATION ===========
 *

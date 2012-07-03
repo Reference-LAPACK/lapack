@@ -1,4 +1,4 @@
-*> \brief \b DLALN2
+*> \brief \b DLALN2 solves a 1-by-1 or 2-by-2 linear system of equations of the specified form.
 *
 *  =========== DOCUMENTATION ===========
 *

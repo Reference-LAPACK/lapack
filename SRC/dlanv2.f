@@ -1,4 +1,4 @@
-*> \brief \b DLANV2
+*> \brief \b DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in standard form.
 *
 *  =========== DOCUMENTATION ===========
 *

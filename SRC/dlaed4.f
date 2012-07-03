@@ -1,4 +1,4 @@
-*> \brief \b DLAED4
+*> \brief \b DLAED4 used by sstedc. Finds a single root of the secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *

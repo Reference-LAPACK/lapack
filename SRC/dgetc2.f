@@ -1,4 +1,4 @@
-*> \brief \b DGETC2
+*> \brief \b DGETC2 computes the LU factorization with complete pivoting of the general n-by-n matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

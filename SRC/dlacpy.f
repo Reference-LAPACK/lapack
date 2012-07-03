@@ -1,4 +1,4 @@
-*> \brief \b DLACPY
+*> \brief \b DLACPY copies all or part of one two-dimensional array to another.
 *
 *  =========== DOCUMENTATION ===========
 *

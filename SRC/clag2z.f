@@ -1,4 +1,4 @@
-*> \brief \b CLAG2Z
+*> \brief \b CLAG2Z converts a complex single precision matrix to a complex double precision matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

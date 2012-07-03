@@ -1,4 +1,4 @@
-*> \brief \b CLA_GBRCOND_C
+*> \brief \b CLA_GBRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for general banded matrices.
 *
 *  =========== DOCUMENTATION ===========
 *

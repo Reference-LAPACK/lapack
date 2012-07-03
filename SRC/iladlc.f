@@ -1,4 +1,4 @@
-*> \brief \b ILADLC
+*> \brief \b ILADLC scans a matrix for its last non-zero column.
 *
 *  =========== DOCUMENTATION ===========
 *

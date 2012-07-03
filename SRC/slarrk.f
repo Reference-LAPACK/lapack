@@ -1,4 +1,4 @@
-*> \brief \b SLARRK
+*> \brief \b SLARRK computes one eigenvalue of a symmetric tridiagonal matrix T to suitable accuracy.
 *
 *  =========== DOCUMENTATION ===========
 *

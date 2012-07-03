@@ -1,4 +1,4 @@
-*> \brief \b DGSVJ0
+*> \brief \b DGSVJ0 pre-processor for the routine sgesvj.
 *
 *  =========== DOCUMENTATION ===========
 *

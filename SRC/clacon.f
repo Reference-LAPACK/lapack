@@ -1,4 +1,4 @@
-*> \brief \b CLACON
+*> \brief \b CLACON estimates the 1-norm of a square matrix, using reverse communication for evaluating matrix-vector products.
 *
 *  =========== DOCUMENTATION ===========
 *

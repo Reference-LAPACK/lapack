@@ -1,4 +1,4 @@
-*> \brief \b CLAQP2
+*> \brief \b CLAQP2 computes a QR factorization with column pivoting of the matrix block.
 *
 *  =========== DOCUMENTATION ===========
 *

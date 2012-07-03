@@ -1,4 +1,4 @@
-*> \brief \b CLAQGB
+*> \brief \b CLAQGB scales a general band matrix, using row and column scaling factors computed by sgbequ.
 *
 *  =========== DOCUMENTATION ===========
 *

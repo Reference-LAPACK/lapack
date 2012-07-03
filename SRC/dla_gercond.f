@@ -1,4 +1,4 @@
-*> \brief \b DLA_GERCOND
+*> \brief \b DLA_GERCOND estimates the Skeel condition number for a general matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

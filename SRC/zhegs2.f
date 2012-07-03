@@ -1,4 +1,4 @@
-*> \brief \b ZHEGS2
+*> \brief \b ZHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using the factorization results obtained from cpotrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

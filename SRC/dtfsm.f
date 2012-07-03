@@ -1,4 +1,4 @@
-*> \brief \b DTFSM
+*> \brief \b DTFSM solves a matrix equation (one operand is a triangular matrix in RFP format).
 *
 *  =========== DOCUMENTATION ===========
 *

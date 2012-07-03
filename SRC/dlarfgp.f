@@ -1,4 +1,4 @@
-*> \brief \b DLARFGP
+*> \brief \b DLARFGP generates an elementary reflector (Householder matrix) with non-negatibe beta.
 *
 *  =========== DOCUMENTATION ===========
 *

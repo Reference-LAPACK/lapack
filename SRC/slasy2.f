@@ -1,4 +1,4 @@
-*> \brief \b SLASY2
+*> \brief \b SLASY2 solves the Sylvester matrix equation where the matrices are of order 1 or 2.
 *
 *  =========== DOCUMENTATION ===========
 *

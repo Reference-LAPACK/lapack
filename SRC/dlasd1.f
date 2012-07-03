@@ -1,4 +1,4 @@
-*> \brief \b DLASD1
+*> \brief \b DLASD1 computes the SVD of an upper bidiagonal matrix B of the specified size. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

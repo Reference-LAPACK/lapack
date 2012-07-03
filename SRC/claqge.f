@@ -1,4 +1,4 @@
-*> \brief \b CLAQGE
+*> \brief \b CLAQGE scales a general rectangular matrix, using row and column scaling factors computed by sgeequ.
 *
 *  =========== DOCUMENTATION ===========
 *

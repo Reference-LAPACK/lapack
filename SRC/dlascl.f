@@ -1,4 +1,4 @@
-*> \brief \b DLASCL
+*> \brief \b DLASCL multiplies a general rectangular matrix by a real scalar defined as cto/cfrom.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZGTTS2
+*> \brief \b ZGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by sgttrf.
 *
 *  =========== DOCUMENTATION ===========
 *

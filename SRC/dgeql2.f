@@ -1,4 +1,4 @@
-*> \brief \b DGEQL2
+*> \brief \b DGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

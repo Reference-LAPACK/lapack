@@ -1,4 +1,4 @@
-*> \brief \b CLARGV
+*> \brief \b CLARGV generates a vector of plane rotations with real cosines and complex sines.
 *
 *  =========== DOCUMENTATION ===========
 *

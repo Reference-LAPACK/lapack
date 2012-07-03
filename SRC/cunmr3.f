@@ -1,4 +1,4 @@
-*> \brief \b CUNMR3
+*> \brief \b CUNMR3 multiplies a general matrix by the unitary matrix from a RZ factorization determined by ctzrzf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

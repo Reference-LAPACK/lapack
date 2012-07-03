@@ -1,4 +1,4 @@
-*> \brief \b DZSUM1
+*> \brief \b DZSUM1 forms the 1-norm of the complex vector using the true absolute value.
 *
 *  =========== DOCUMENTATION ===========
 *

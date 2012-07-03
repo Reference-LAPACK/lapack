@@ -1,4 +1,4 @@
-*> \brief \b ZLARFB
+*> \brief \b ZLARFB applies a block reflector or its conjugate-transpose to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
