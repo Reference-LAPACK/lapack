@@ -1,4 +1,4 @@
-*> \brief \b CLALSA
+*> \brief \b CLALSA computes the SVD of the coefficient matrix in compact form. Used by sgelsd.
 *
 *  =========== DOCUMENTATION ===========
 *

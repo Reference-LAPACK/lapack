@@ -1,4 +1,4 @@
-*> \brief \b CLAQSY
+*> \brief \b CLAQSY scales a symmetric/Hermitian matrix, using scaling factors computed by spoequ.
 *
 *  =========== DOCUMENTATION ===========
 *

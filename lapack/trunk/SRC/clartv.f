@@ -1,4 +1,4 @@
-*> \brief \b CLARTV
+*> \brief \b CLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors.
 *
 *  =========== DOCUMENTATION ===========
 *

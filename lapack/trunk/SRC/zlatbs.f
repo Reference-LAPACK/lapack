@@ -1,4 +1,4 @@
-*> \brief \b ZLATBS
+*> \brief \b ZLATBS solves a triangular banded system of equations.
 *
 *  =========== DOCUMENTATION ===========
 *

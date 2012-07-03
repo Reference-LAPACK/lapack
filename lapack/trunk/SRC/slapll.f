@@ -1,4 +1,4 @@
-*> \brief \b SLAPLL
+*> \brief \b SLAPLL measures the linear dependence of two vectors.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DLAPMT
+*> \brief \b DLAPMT performs a forward or backward permutation of the columns of a matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

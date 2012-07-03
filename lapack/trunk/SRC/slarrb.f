@@ -1,4 +1,4 @@
-*> \brief \b SLARRB
+*> \brief \b SLARRB provides limited bisection to locate eigenvalues for more accuracy.
 *
 *  =========== DOCUMENTATION ===========
 *

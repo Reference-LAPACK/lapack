@@ -1,4 +1,4 @@
-*> \brief \b DLASV2
+*> \brief \b DLASV2 computes the singular value decomposition of a 2-by-2 triangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

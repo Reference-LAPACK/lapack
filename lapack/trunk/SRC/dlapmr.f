@@ -1,4 +1,4 @@
-*> \brief \b DLAPMR
+*> \brief \b DLAPMR rearranges rows of a matrix as specified by a permutation vector.
 *
 *  =========== DOCUMENTATION ===========
 *

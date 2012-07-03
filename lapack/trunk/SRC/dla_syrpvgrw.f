@@ -1,4 +1,4 @@
-*> \brief \b DLA_SYRPVGRW
+*> \brief \b DLA_SYRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric indefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

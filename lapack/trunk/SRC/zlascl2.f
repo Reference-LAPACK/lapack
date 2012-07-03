@@ -1,4 +1,4 @@
-*> \brief \b ZLASCL2
+*> \brief \b ZLASCL2 performs diagonal scaling on a vector.
 *
 *  =========== DOCUMENTATION ===========
 *

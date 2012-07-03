@@ -1,4 +1,4 @@
-*> \brief \b CLACRM
+*> \brief \b CLACRM multiplies a complex matrix by a square real matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b CLASSQ
+*> \brief \b CLASSQ updates a sum of squares represented in scaled form.
 *
 *  =========== DOCUMENTATION ===========
 *

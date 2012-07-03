@@ -1,4 +1,4 @@
-*> \brief \b CLACGV
+*> \brief \b CLACGV conjugates a complex vector.
 *
 *  =========== DOCUMENTATION ===========
 *

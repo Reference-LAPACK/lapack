@@ -1,4 +1,4 @@
-*> \brief \b DLA_GEAMV
+*> \brief \b DLA_GEAMV computes a matrix-vector product using a general matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *

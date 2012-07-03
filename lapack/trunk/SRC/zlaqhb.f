@@ -1,4 +1,4 @@
-*> \brief \b ZLAQHB
+*> \brief \b ZLAQHB scales a Hermitian band matrix, using scaling factors computed by cpbequ.
 *
 *  =========== DOCUMENTATION ===========
 *

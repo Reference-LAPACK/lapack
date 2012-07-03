@@ -1,4 +1,4 @@
-*> \brief \b SGSVJ1
+*> \brief \b SGSVJ1 pre-processor for the routine sgesvj, applies Jacobi rotations targeting only particular pivots.
 *
 *  =========== DOCUMENTATION ===========
 *

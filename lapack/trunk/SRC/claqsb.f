@@ -1,4 +1,4 @@
-*> \brief \b CLAQSB
+*> \brief \b CLAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by spbequ.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SGESC2
+*> \brief \b SGESC2 solves a system of linear equations using the LU factorization with complete pivoting computed by sgetc2.
 *
 *  =========== DOCUMENTATION ===========
 *

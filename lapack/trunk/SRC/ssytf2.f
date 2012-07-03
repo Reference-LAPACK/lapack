@@ -1,4 +1,4 @@
-*> \brief \b SSYTF2
+*> \brief \b SSYTF2 computes the factorization of a real symmetric indefinite matrix, using the diagonal pivoting method (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

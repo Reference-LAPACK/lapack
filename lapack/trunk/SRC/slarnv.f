@@ -1,4 +1,4 @@
-*> \brief \b SLARNV
+*> \brief \b SLARNV returns a vector of random numbers from a uniform or normal distribution.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLARGV
+*> \brief \b SLARGV generates a vector of plane rotations with real cosines and real sines.
 *
 *  =========== DOCUMENTATION ===========
 *

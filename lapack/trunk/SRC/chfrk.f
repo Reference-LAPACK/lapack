@@ -1,4 +1,4 @@
-*> \brief \b CHFRK
+*> \brief \b CHFRK performs a Hermitian rank-k operation for matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZUNMR2
+*> \brief \b ZUNMR2 multiplies a general matrix by the unitary matrix from a RQ factorization determined by cgerqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

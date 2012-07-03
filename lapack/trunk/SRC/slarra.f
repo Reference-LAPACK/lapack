@@ -1,4 +1,4 @@
-*> \brief \b SLARRA
+*> \brief \b SLARRA computes the splitting points with the specified threshold.
 *
 *  =========== DOCUMENTATION ===========
 *

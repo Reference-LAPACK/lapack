@@ -1,4 +1,4 @@
-*> \brief \b SLARSCL2
+*> \brief \b SLARSCL2 performs reciprocal diagonal scaling on a vector.
 *
 *  =========== DOCUMENTATION ===========
 *

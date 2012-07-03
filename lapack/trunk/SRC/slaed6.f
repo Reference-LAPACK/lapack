@@ -1,4 +1,4 @@
-*> \brief \b SLAED6
+*> \brief \b SLAED6 used by sstedc. Computes one Newton step in solution of the secular equation.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DLAQSB
+*> \brief \b DLAQSB scales a symmetric/Hermitian band matrix, using scaling factors computed by spbequ.
 *
 *  =========== DOCUMENTATION ===========
 *

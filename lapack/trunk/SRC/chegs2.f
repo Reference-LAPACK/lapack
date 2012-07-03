@@ -1,4 +1,4 @@
-*> \brief \b CHEGS2
+*> \brief \b CHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using the factorization results obtained from cpotrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

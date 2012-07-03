@@ -1,4 +1,4 @@
-*> \brief \b CUNM2L
+*> \brief \b CUNM2L multiplies a general matrix by the unitary matrix from a QL factorization determined by cgeqlf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

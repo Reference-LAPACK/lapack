@@ -1,4 +1,4 @@
-*> \brief \b ZLARTG
+*> \brief \b ZLARTG generates a plane rotation with real cosine and complex sine.
 *
 *  =========== DOCUMENTATION ===========
 *

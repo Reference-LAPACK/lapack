@@ -1,4 +1,4 @@
-*> \brief \b CLARSCL2
+*> \brief \b CLARSCL2 performs reciprocal diagonal scaling on a vector.
 *
 *  =========== DOCUMENTATION ===========
 *

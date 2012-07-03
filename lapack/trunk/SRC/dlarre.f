@@ -1,4 +1,4 @@
-*> \brief \b DLARRE
+*> \brief \b DLARRE given the tridiagonal matrix T, sets small off-diagonal elements to zero and for each unreduced block Ti, finds base representations and eigenvalues.
 *
 *  =========== DOCUMENTATION ===========
 *

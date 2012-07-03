@@ -1,4 +1,4 @@
-*> \brief \b DLATBS
+*> \brief \b DLATBS solves a triangular banded system of equations.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DLARF
+*> \brief \b DLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

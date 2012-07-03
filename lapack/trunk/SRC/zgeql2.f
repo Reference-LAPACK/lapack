@@ -1,4 +1,4 @@
-*> \brief \b ZGEQL2
+*> \brief \b ZGEQL2 computes the QL factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLANEG
+*> \brief \b SLANEG computes the Sturm count.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLAEDA
+*> \brief \b SLAEDA used by sstedc. Computes the Z vector determining the rank-one modification of the diagonal matrix. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b CLAHEF
+*> \brief \b CLAHEF computes a partial factorization of a complex Hermitian indefinite matrix, using the diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *

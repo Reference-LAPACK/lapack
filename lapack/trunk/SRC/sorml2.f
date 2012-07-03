@@ -1,4 +1,4 @@
-*> \brief \b SORML2
+*> \brief \b SORML2 multiplies a general matrix by the orthogonal matrix from a LQ factorization determined by sgelqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

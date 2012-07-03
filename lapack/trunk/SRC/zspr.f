@@ -1,4 +1,4 @@
-*> \brief \b ZSPR
+*> \brief \b ZSPR performs the symmetrical rank-1 update of a complex symmetric packed matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZHETF2
+*> \brief \b ZHETF2 computes the factorization of a complex Hermitian matrix, using the diagonal pivoting method (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

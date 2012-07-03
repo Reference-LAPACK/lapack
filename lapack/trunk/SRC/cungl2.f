@@ -1,4 +1,4 @@
-*> \brief \b CUNGL2
+*> \brief \b CUNGL2 generates all or part of the unitary matrix Q from an LQ factorization determined by cgelqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

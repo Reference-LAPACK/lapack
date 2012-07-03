@@ -1,4 +1,4 @@
-*> \brief \b CLASYF
+*> \brief \b CLASYF computes a partial factorization of a complex symmetric matrix, using the diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZLAED0
+*> \brief \b ZLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an unreduced symmetric tridiagonal matrix using the divide and conquer method.
 *
 *  =========== DOCUMENTATION ===========
 *

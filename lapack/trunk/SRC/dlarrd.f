@@ -1,4 +1,4 @@
-*> \brief \b DLARRD
+*> \brief \b DLARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable accuracy.
 *
 *  =========== DOCUMENTATION ===========
 *

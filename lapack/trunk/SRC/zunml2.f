@@ -1,4 +1,4 @@
-*> \brief \b ZUNML2
+*> \brief \b ZUNML2 multiplies a general matrix by the unitary matrix from a LQ factorization determined by cgelqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

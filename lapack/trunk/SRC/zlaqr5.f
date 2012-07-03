@@ -1,4 +1,4 @@
-*> \brief \b ZLAQR5
+*> \brief \b ZLAQR5 performs a single small-bulge multi-shift QR sweep.
 *
 *  =========== DOCUMENTATION ===========
 *

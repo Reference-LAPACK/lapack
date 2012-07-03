@@ -1,4 +1,4 @@
-*> \brief \b ZTGEX2
+*> \brief \b ZTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an unitary equivalence transformation.
 *
 *  =========== DOCUMENTATION ===========
 *

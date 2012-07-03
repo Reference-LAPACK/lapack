@@ -1,4 +1,4 @@
-*> \brief \b DORG2L
+*> \brief \b DORG2L generates all or part of the orthogonal matrix Q from a QL factorization determined by sgeqlf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

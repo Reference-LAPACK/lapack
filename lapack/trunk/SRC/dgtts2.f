@@ -1,4 +1,4 @@
-*> \brief \b DGTTS2
+*> \brief \b DGTTS2 solves a system of linear equations with a tridiagonal matrix using the LU factorization computed by sgttrf.
 *
 *  =========== DOCUMENTATION ===========
 *

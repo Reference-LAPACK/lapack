@@ -1,4 +1,4 @@
-*> \brief \b CLAQHE
+*> \brief \b CLAQHE scales a Hermitian matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

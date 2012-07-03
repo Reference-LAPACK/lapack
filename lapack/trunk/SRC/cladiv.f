@@ -1,4 +1,4 @@
-*> \brief \b CLADIV
+*> \brief \b CLADIV performs complex division in real arithmetic, avoiding unnecessary overflow.
 *
 *  =========== DOCUMENTATION ===========
 *

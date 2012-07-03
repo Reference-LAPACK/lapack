@@ -1,4 +1,4 @@
-*> \brief \b CLARZT
+*> \brief \b CLARZT forms the triangular factor T of a block reflector H = I - vtvH.
 *
 *  =========== DOCUMENTATION ===========
 *

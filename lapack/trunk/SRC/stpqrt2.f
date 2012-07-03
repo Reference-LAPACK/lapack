@@ -1,4 +1,4 @@
-*> \brief \b STPQRT2
+*> \brief \b STPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal" matrix, which is composed of a triangular block and a pentagonal block, using the compact WY representation for Q.
 *
 *  =========== DOCUMENTATION ===========
 *

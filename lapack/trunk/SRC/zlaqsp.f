@@ -1,4 +1,4 @@
-*> \brief \b ZLAQSP
+*> \brief \b ZLAQSP scales a symmetric/Hermitian matrix in packed storage, using scaling factors computed by sppequ.
 *
 *  =========== DOCUMENTATION ===========
 *

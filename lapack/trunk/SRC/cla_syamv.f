@@ -1,4 +1,4 @@
-*> \brief \b CLA_SYAMV
+*> \brief \b CLA_SYAMV computes a matrix-vector product using a symmetric indefinite matrix to calculate error bounds.
 *
 *  =========== DOCUMENTATION ===========
 *

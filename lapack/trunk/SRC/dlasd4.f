@@ -1,4 +1,4 @@
-*> \brief \b DLASD4
+*> \brief \b DLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

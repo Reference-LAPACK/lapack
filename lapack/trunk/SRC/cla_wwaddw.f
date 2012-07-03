@@ -1,4 +1,4 @@
-*> \brief \b CLA_WWADDW
+*> \brief \b CLA_WWADDW adds a vector into a doubled-single vector.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLATBS
+*> \brief \b SLATBS solves a triangular banded system of equations.
 *
 *  =========== DOCUMENTATION ===========
 *

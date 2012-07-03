@@ -1,4 +1,4 @@
-*> \brief \b DLATDF
+*> \brief \b DLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes a contribution to the reciprocal Dif-estimate.
 *
 *  =========== DOCUMENTATION ===========
 *

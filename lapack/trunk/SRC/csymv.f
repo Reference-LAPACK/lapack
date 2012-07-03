@@ -1,4 +1,4 @@
-*> \brief \b CSYMV
+*> \brief \b CSYMV computes a matrix-vector product for a complex symmetric matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZGERQ2
+*> \brief \b ZGERQ2 computes the RQ factorization of a general rectangular matrix using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

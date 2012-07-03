@@ -1,4 +1,4 @@
-*> \brief \b DLANSB
+*> \brief \b DLANSB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a symmetric band matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SLASDQ
+*> \brief \b SLASDQ computes the SVD of a real bidiagonal matrix with diagonal d and off-diagonal e. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

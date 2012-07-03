@@ -1,4 +1,4 @@
-*> \brief \b SLARF
+*> \brief \b SLARF applies an elementary reflector to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

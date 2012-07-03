@@ -1,4 +1,4 @@
-*> \brief \b ZLAUUM
+*> \brief \b ZLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

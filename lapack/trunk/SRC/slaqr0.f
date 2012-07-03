@@ -1,4 +1,4 @@
-*> \brief \b SLAQR0
+*> \brief \b SLAQR0 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices from the Schur decomposition.
 *
 *  =========== DOCUMENTATION ===========
 *

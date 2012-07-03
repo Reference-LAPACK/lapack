@@ -1,4 +1,4 @@
-*> \brief \b SLAPY2
+*> \brief \b SLAPY2 returns sqrt(x2+y2).
 *
 *  =========== DOCUMENTATION ===========
 *

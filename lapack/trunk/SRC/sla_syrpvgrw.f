@@ -1,4 +1,4 @@
-*> \brief \b SLA_SYRPVGRW
+*> \brief \b SLA_SYRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a symmetric indefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

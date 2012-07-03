@@ -1,4 +1,4 @@
-*> \brief \b SLAIC1
+*> \brief \b SLAIC1 applies one step of incremental condition estimation.
 *
 *  =========== DOCUMENTATION ===========
 *

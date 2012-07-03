@@ -1,4 +1,4 @@
-*> \brief \b CTPRFB
+*> \brief \b CTPRFB applies a real or complex "triangular-pentagonal" blocked reflector to a real or complex matrix, which is composed of two blocks.
 *
 *  =========== DOCUMENTATION ===========
 *

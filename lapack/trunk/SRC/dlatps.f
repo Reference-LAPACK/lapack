@@ -1,4 +1,4 @@
-*> \brief \b DLATPS
+*> \brief \b DLATPS solves a triangular system of equations with the matrix held in packed storage.
 *
 *  =========== DOCUMENTATION ===========
 *

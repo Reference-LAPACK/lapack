@@ -1,4 +1,4 @@
-*> \brief \b DLASYF
+*> \brief \b DLASYF computes a partial factorization of a real symmetric matrix, using the diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *

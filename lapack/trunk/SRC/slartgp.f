@@ -1,4 +1,4 @@
-*> \brief \b SLARTGP
+*> \brief \b SLARTGP generates a plane rotation so that the diagonal is nonnegative.
 *
 *  =========== DOCUMENTATION ===========
 *

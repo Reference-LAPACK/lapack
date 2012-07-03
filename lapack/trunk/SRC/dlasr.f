@@ -1,4 +1,4 @@
-*> \brief \b DLASR
+*> \brief \b DLASR applies a sequence of plane rotations to a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

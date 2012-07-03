@@ -1,4 +1,4 @@
-*> \brief \b SLASQ3
+*> \brief \b SLASQ3 checks for deflation, computes a shift and calls dqds. Used by sbdsqr.
 *
 *  =========== DOCUMENTATION ===========
 *

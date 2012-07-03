@@ -1,4 +1,4 @@
-*> \brief \b DLAPLL
+*> \brief \b DLAPLL measures the linear dependence of two vectors.
 *
 *  =========== DOCUMENTATION ===========
 *

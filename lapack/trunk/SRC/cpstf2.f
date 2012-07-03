@@ -1,4 +1,4 @@
-*> \brief \b CPSTF2
+*> \brief \b CPSTF2 computes the Cholesky factorization with complete pivoting of a real symmetric or complex Hermitian positive semi-definite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

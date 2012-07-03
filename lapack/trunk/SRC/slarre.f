@@ -1,4 +1,4 @@
-*> \brief \b SLARRE
+*> \brief \b SLARRE given the tridiagonal matrix T, sets small off-diagonal elements to zero and for each unreduced block Ti, finds base representations and eigenvalues.
 *
 *  =========== DOCUMENTATION ===========
 *

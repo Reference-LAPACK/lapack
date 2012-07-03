@@ -1,4 +1,4 @@
-*> \brief \b DLAPY3
+*> \brief \b DLAPY3 returns sqrt(x2+y2+z2).
 *
 *  =========== DOCUMENTATION ===========
 *

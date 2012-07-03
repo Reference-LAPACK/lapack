@@ -1,4 +1,4 @@
-*> \brief \b SCSUM1
+*> \brief \b SCSUM1 forms the 1-norm of the complex vector using the true absolute value.
 *
 *  =========== DOCUMENTATION ===========
 *

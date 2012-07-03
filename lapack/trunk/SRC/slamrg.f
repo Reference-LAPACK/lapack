@@ -1,4 +1,4 @@
-*> \brief \b SLAMRG
+*> \brief \b SLAMRG creates a permutation list to merge the entries of two independently sorted sets into a single set sorted in ascending order.
 *
 *  =========== DOCUMENTATION ===========
 *

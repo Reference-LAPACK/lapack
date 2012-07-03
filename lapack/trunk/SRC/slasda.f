@@ -1,4 +1,4 @@
-*> \brief \b SLASDA
+*> \brief \b SLASDA computes the singular value decomposition (SVD) of a real upper bidiagonal matrix with diagonal d and off-diagonal e. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

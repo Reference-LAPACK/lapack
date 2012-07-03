@@ -1,4 +1,4 @@
-*> \brief \b SLASD2
+*> \brief \b SLASD2 merges the two sets of singular values together into a single sorted set. Used by sbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *

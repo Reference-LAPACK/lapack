@@ -1,4 +1,4 @@
-*> \brief \b ZLASWP
+*> \brief \b ZLASWP performs a series of row interchanges on a general rectangular matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

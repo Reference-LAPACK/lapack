@@ -1,4 +1,4 @@
-*> \brief \b CLAQR2
+*> \brief \b CLAQR2 performs the unitary similarity transformation of a Hessenberg matrix to detect and deflate fully converged eigenvalues from a trailing principal submatrix (aggressive early deflation).
 *
 *  =========== DOCUMENTATION ===========
 *

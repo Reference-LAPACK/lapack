@@ -1,4 +1,4 @@
-*> \brief \b SLARTG
+*> \brief \b SLARTG generates a plane rotation with real cosine and real sine.
 *
 *  =========== DOCUMENTATION ===========
 *

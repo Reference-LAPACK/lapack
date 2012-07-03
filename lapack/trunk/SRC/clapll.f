@@ -1,4 +1,4 @@
-*> \brief \b CLAPLL
+*> \brief \b CLAPLL measures the linear dependence of two vectors.
 *
 *  =========== DOCUMENTATION ===========
 *

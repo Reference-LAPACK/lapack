@@ -1,4 +1,4 @@
-*> \brief \b CLATBS
+*> \brief \b CLATBS solves a triangular banded system of equations.
 *
 *  =========== DOCUMENTATION ===========
 *

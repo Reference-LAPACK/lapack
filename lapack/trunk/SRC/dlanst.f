@@ -1,4 +1,4 @@
-*> \brief \b DLANST
+*> \brief \b DLANST returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a real symmetric tridiagonal matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

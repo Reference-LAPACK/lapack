@@ -1,4 +1,4 @@
-*> \brief \b STGEX2
+*> \brief \b STGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by an orthogonal equivalence transformation.
 *
 *  =========== DOCUMENTATION ===========
 *

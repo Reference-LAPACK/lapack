@@ -1,4 +1,4 @@
-*> \brief \b CLATRZ
+*> \brief \b CLATRZ factors an upper trapezoidal matrix by means of unitary transformations.
 *
 *  =========== DOCUMENTATION ===========
 *

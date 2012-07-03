@@ -1,4 +1,4 @@
-*> \brief \b SLAISNAN
+*> \brief \b SLAISNAN tests input for NaN by comparing two arguments for inequality.
 *
 *  =========== DOCUMENTATION ===========
 *

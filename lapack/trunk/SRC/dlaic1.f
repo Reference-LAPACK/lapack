@@ -1,4 +1,4 @@
-*> \brief \b DLAIC1
+*> \brief \b DLAIC1 applies one step of incremental condition estimation.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZLARSCL2
+*> \brief \b ZLARSCL2 performs reciprocal diagonal scaling on a vector.
 *
 *  =========== DOCUMENTATION ===========
 *

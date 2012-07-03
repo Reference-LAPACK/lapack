@@ -1,4 +1,4 @@
-*> \brief \b DLA_GBRPVGRW
+*> \brief \b DLA_GBRPVGRW computes the reciprocal pivot growth factor norm(A)/norm(U) for a general banded matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

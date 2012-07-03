@@ -1,4 +1,4 @@
-*> \brief \b ZHFRK
+*> \brief \b ZHFRK performs a Hermitian rank-k operation for matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *

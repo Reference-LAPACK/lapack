@@ -1,4 +1,4 @@
-*> \brief \b SLAG2D
+*> \brief \b SLAG2D converts a single precision matrix to a double precision matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

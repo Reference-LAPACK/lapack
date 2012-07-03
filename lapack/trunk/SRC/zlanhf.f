@@ -1,4 +1,4 @@
-*> \brief \b ZLANHF
+*> \brief \b ZLANHF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm, or the element of largest absolute value of a Hermitian matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DLARRR
+*> \brief \b DLARRR performs tests to decide whether the symmetric tridiagonal matrix T warrants expensive computations which guarantee high relative accuracy in the eigenvalues.
 *
 *  =========== DOCUMENTATION ===========
 *

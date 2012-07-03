@@ -1,4 +1,4 @@
-*> \brief \b CLA_GERPVGRW
+*> \brief \b CLA_GERPVGRW multiplies a square real matrix by a complex matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b DORG2R
+*> \brief \b DORG2R generates all or part of the orthogonal matrix Q from a QR factorization determined by sgeqrf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

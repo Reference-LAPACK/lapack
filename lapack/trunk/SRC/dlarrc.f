@@ -1,4 +1,4 @@
-*> \brief \b DLARRC
+*> \brief \b DLARRC computes the number of eigenvalues of the symmetric tridiagonal matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

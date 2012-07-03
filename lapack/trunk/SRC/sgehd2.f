@@ -1,4 +1,4 @@
-*> \brief \b SGEHD2
+*> \brief \b SGEHD2 reduces a general square matrix to upper Hessenberg form using an unblocked algorithm.
 *
 *  =========== DOCUMENTATION ===========
 *

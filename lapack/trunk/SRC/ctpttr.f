@@ -1,4 +1,4 @@
-*> \brief \b CTPTTR
+*> \brief \b CTPTTR copies a triangular matrix from the standard packed format (TP) to the standard full format (TR).
 *
 *  =========== DOCUMENTATION ===========
 *

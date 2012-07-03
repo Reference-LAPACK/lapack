@@ -1,4 +1,4 @@
-*> \brief \b SLAED7
+*> \brief \b SLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after modification by a rank-one symmetric matrix. Used when the original matrix is dense.
 *
 *  =========== DOCUMENTATION ===========
 *

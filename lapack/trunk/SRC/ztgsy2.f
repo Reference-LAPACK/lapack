@@ -1,4 +1,4 @@
-*> \brief \b ZTGSY2
+*> \brief \b ZTGSY2 solves the generalized Sylvester equation (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

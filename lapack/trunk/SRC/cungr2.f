@@ -1,4 +1,4 @@
-*> \brief \b CUNGR2
+*> \brief \b CUNGR2 generates all or part of the unitary matrix Q from an RQ factorization determined by cgerqf (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

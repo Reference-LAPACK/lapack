@@ -1,4 +1,4 @@
-*> \brief \b SLATRZ
+*> \brief \b SLATRZ factors an upper trapezoidal matrix by means of orthogonal transformations.
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -1,4 +1,4 @@
-*> \brief \b SSFRK
+*> \brief \b SSFRK performs a symmetric rank-k operation for matrix in RFP format.
 *
 *  =========== DOCUMENTATION ===========
 *

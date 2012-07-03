@@ -1,4 +1,4 @@
-*> \brief \b SLARZT
+*> \brief \b SLARZT forms the triangular factor T of a block reflector H = I - vtvH.
 *
 *  =========== DOCUMENTATION ===========
 *

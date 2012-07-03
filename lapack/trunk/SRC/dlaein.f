@@ -1,4 +1,4 @@
-*> \brief \b DLAEIN
+*> \brief \b DLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix by inverse iteration.
 *
 *  =========== DOCUMENTATION ===========
 *

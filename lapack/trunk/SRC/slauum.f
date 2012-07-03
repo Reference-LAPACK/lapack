@@ -1,4 +1,4 @@
-*> \brief \b SLAUUM
+*> \brief \b SLAUUM computes the product UUH or LHL, where U and L are upper or lower triangular matrices (blocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *

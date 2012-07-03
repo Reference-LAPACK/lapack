@@ -1,4 +1,4 @@
-*> \brief \b DLASSQ
+*> \brief \b DLASSQ updates a sum of squares represented in scaled form.
 *
 *  =========== DOCUMENTATION ===========
 *

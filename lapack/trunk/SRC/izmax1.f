@@ -1,4 +1,4 @@
-*> \brief \b IZMAX1
+*> \brief \b IZMAX1 finds the index of the vector element whose real part has maximum absolute value.
 *
 *  =========== DOCUMENTATION ===========
 *

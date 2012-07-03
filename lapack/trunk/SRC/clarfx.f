@@ -1,4 +1,4 @@
-*> \brief \b CLARFX
+*> \brief \b CLARFX applies an elementary reflector to a general rectangular matrix, with loop unrolling when the reflector has order ≤ 10.
 *
 *  =========== DOCUMENTATION ===========
 *

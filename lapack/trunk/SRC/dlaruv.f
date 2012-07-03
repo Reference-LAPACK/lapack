@@ -1,4 +1,4 @@
-*> \brief \b DLARUV
+*> \brief \b DLARUV returns a vector of n random real numbers from a uniform distribution.
 *
 *  =========== DOCUMENTATION ===========
 *

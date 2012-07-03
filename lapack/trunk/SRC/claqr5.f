@@ -1,4 +1,4 @@
-*> \brief \b CLAQR5
+*> \brief \b CLAQR5 performs a single small-bulge multi-shift QR sweep.
 *
 *  =========== DOCUMENTATION ===========
 *

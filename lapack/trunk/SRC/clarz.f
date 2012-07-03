@@ -1,4 +1,4 @@
-*> \brief \b CLARZ
+*> \brief \b CLARZ applies an elementary reflector (as returned by stzrzf) to a general matrix.
 *
 *  =========== DOCUMENTATION ===========
 *

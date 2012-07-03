@@ -1,4 +1,4 @@
-*> \brief \b DLABRD
+*> \brief \b DLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal form.
 *
 *  =========== DOCUMENTATION ===========
 *

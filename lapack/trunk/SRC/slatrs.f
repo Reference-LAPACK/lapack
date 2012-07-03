@@ -1,4 +1,4 @@
-*> \brief \b SLATRS
+*> \brief \b SLATRS solves a triangular system of equations with the scale factor set to prevent overflow.
 *
 *  =========== DOCUMENTATION ===========
 *

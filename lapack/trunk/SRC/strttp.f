@@ -1,4 +1,4 @@
-*> \brief \b STRTTP
+*> \brief \b STRTTP copies a triangular matrix from the standard full format (TR) to the standard packed format (TP).
 *
 *  =========== DOCUMENTATION ===========
 *
