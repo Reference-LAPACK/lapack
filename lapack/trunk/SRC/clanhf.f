@@ -268,18 +268,17 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J, IFM, ILU, NOE, N1, K, L, LDA
-      REAL               SCALE, S, VALUE, AA
+      REAL               SCALE, S, VALUE, AA, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            ISAMAX
-      EXTERNAL           LSAME, ISAMAX
+      LOGICAL            LSAME, SISNAN
+      EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASSQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, REAL, MAX, SQRT
+      INTRINSIC          ABS, REAL, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -339,46 +338,70 @@
 *                 uplo ='L'
                   J = 0
 *                 -> L(0,0)
-                  VALUE = MAX( VALUE, ABS( REAL( A( J+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( J+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) ) 
+     $                 VALUE = TEMP
                   DO I = 1, N - 1
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
                   END DO
                   DO J = 1, K - 1
                      DO I = 0, J - 2
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                      I = J - 1
 *                    L(k+j,k+j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      I = J
 *                    -> L(j,j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      DO I = J + 1, N - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                ELSE
 *                 uplo = 'U'
                   DO J = 0, K - 2
                      DO I = 0, K + J - 2
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                      I = K + J - 1
 *                    -> U(i,i)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      I = I + 1
 *                    =k+j; i -> U(j,j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      DO I = K + J + 1, N - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                   DO I = 0, N - 2
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
 *                    j=k-1
                   END DO
 *                 i=n-1 -> U(n-1,n-1)
-                  VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                 VALUE = TEMP
                END IF
             ELSE
 *              xpose case; A is k by n
@@ -386,55 +409,83 @@
 *                 uplo ='L'
                   DO J = 0, K - 2
                      DO I = 0, J - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                      I = J
 *                    L(i,i)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      I = J + 1
 *                    L(j+k,j+k)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      DO I = J + 2, K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                   J = K - 1
                   DO I = 0, K - 2
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   END DO
                   I = K - 1
 *                 -> L(i,i) is at A(i,j)
-                  VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   DO J = K, N - 1
                      DO I = 0, K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                ELSE
 *                 uplo = 'U'
                   DO J = 0, K - 2
                      DO I = 0, K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                   J = K - 1
 *                 -> U(j,j) is at A(0,j)
-                  VALUE = MAX( VALUE, ABS( REAL( A( 0+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( 0+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   DO I = 1, K - 1
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   END DO
                   DO J = K, N - 1
                      DO I = 0, J - K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                      I = J - K
 *                    -> U(i,i) at A(i,j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      I = J - K + 1
 *                    U(j,j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      DO I = J - K + 2, K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                END IF
@@ -447,50 +498,78 @@
 *                 uplo ='L'
                   J = 0
 *                 -> L(k,k) & j=1 -> L(0,0)
-                  VALUE = MAX( VALUE, ABS( REAL( A( J+J*LDA ) ) ) )
-                  VALUE = MAX( VALUE, ABS( REAL( A( J+1+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( J+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                 VALUE = TEMP
+                  TEMP = ABS( REAL( A( J+1+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                 VALUE = TEMP
                   DO I = 2, N
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   END DO
                   DO J = 1, K - 1
                      DO I = 0, J - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                      I = J
 *                    L(k+j,k+j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      I = J + 1
 *                    -> L(j,j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      DO I = J + 2, N
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                ELSE
 *                 uplo = 'U'
                   DO J = 0, K - 2
                      DO I = 0, K + J - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                      I = K + J
 *                    -> U(i,i)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      I = I + 1
 *                    =k+j+1; i -> U(j,j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      DO I = K + J + 2, N
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                   DO I = 0, N - 2
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
-*                    j=k-1
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
+*                 j=k-1
                   END DO
 *                 i=n-1 -> U(n-1,n-1)
-                  VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   I = N
 *                 -> U(k-1,k-1)
-                  VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                END IF
             ELSE
 *              xpose case; A is k by n+1
@@ -498,70 +577,106 @@
 *                 uplo ='L'
                   J = 0
 *                 -> L(k,k) at A(0,0)
-                  VALUE = MAX( VALUE, ABS( REAL( A( J+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( J+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   DO I = 1, K - 1
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   END DO
                   DO J = 1, K - 1
                      DO I = 0, J - 2
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                      I = J - 1
 *                    L(i,i)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      I = J
 *                    L(j+k,j+k)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      DO I = J + 1, K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                   J = K
                   DO I = 0, K - 2
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   END DO
                   I = K - 1
 *                 -> L(i,i) is at A(i,j)
-                  VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                 VALUE = TEMP
                   DO J = K + 1, N
                      DO I = 0, K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                ELSE
 *                 uplo = 'U'
                   DO J = 0, K - 1
                      DO I = 0, K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                   J = K
 *                 -> U(j,j) is at A(0,j)
-                  VALUE = MAX( VALUE, ABS( REAL( A( 0+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( 0+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                 VALUE = TEMP
                   DO I = 1, K - 1
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   END DO
                   DO J = K + 1, N - 1
                      DO I = 0, J - K - 2
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                      I = J - K - 1
 *                    -> U(i,i) at A(i,j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      I = J - K
 *                    U(j,j)
-                     VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                     TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                      DO I = J - K + 1, K - 1
-                        VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                        TEMP = ABS( A( I+J*LDA ) )
+                        IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                       VALUE = TEMP
                      END DO
                   END DO
                   J = N
                   DO I = 0, K - 2
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
                   END DO
                   I = K - 1
 *                 U(k,k) at A(i,j)
-                  VALUE = MAX( VALUE, ABS( REAL( A( I+J*LDA ) ) ) )
+                  TEMP = ABS( REAL( A( I+J*LDA ) ) )
+                  IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                 VALUE = TEMP
                END IF
             END IF
          END IF
@@ -608,8 +723,12 @@
                      WORK( J ) = WORK( J ) + S
                   END DO
    10             CONTINUE
-                  I = ISAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                ELSE
 *                 ilu = 1 & uplo = 'L'
                   K = K + 1
@@ -646,8 +765,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = ISAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
+                  END DO
                END IF
             ELSE
 *              n is even & A is n+1 by k = n/2
@@ -681,8 +804,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = ISAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
+                  END DO
                ELSE
 *                 ilu = 1 & uplo = 'L'
                   DO I = K, N - 1
@@ -715,8 +842,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = ISAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
+                  END DO
                END IF
             END IF
          ELSE
@@ -778,8 +909,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = ISAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
+                  END DO
                ELSE
 *                 ilu=1 & uplo = 'L'
                   K = K + 1
@@ -839,8 +974,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = ISAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
+                  END DO
                END IF
             ELSE
 *              n is even & A is k=n/2 by n+1
@@ -909,8 +1048,12 @@
 *                 A(k-1,k-1)
                   S = S + AA
                   WORK( I ) = WORK( I ) + S
-                  I = ISAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
+                  END DO
                ELSE
 *                 ilu=1 & uplo = 'L'
                   DO I = K, N - 1
@@ -980,8 +1123,12 @@
                      END DO
                      WORK( J-1 ) = WORK( J-1 ) + S
                   END DO
-                  I = ISAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. SISNAN( TEMP ) )
+     $                    VALUE = TEMP
+                  END DO
                END IF
             END IF
          END IF

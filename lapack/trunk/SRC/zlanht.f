@@ -126,8 +126,8 @@
       DOUBLE PRECISION   ANORM, SCALE, SUM
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASSQ, ZLASSQ
@@ -145,8 +145,10 @@
 *
          ANORM = ABS( D( N ) )
          DO 10 I = 1, N - 1
-            ANORM = MAX( ANORM, ABS( D( I ) ) )
-            ANORM = MAX( ANORM, ABS( E( I ) ) )
+            SUM =  ABS( D( I ) )
+            IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
+            SUM = ABS( E( I ) )
+            IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
    10    CONTINUE
       ELSE IF( LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' .OR.
      $         LSAME( NORM, 'I' ) ) THEN
@@ -156,11 +158,12 @@
          IF( N.EQ.1 ) THEN
             ANORM = ABS( D( 1 ) )
          ELSE
-            ANORM = MAX( ABS( D( 1 ) )+ABS( E( 1 ) ),
-     $              ABS( E( N-1 ) )+ABS( D( N ) ) )
+            ANORM = ABS( D( 1 ) )+ABS( E( 1 ) )
+            SUM = ABS( E( N-1 ) )+ABS( D( N ) )
+            IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
             DO 20 I = 2, N - 1
-               ANORM = MAX( ANORM, ABS( D( I ) )+ABS( E( I ) )+
-     $                 ABS( E( I-1 ) ) )
+               SUM = ABS( D( I ) )+ABS( E( I ) )+ABS( E( I-1 ) )
+               IF( ANORM .LT. SUM .OR. DISNAN( SUM ) ) ANORM = SUM
    20       CONTINUE
          END IF
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN

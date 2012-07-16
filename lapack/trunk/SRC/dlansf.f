@@ -230,12 +230,11 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J, IFM, ILU, NOE, N1, K, L, LDA
-      DOUBLE PRECISION   SCALE, S, VALUE, AA
+      DOUBLE PRECISION   SCALE, S, VALUE, AA, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      INTEGER            IDAMAX
-      EXTERNAL           LSAME, IDAMAX
+      LOGICAL            LSAME, DISNAN
+      EXTERNAL           LSAME, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLASSQ
@@ -299,14 +298,18 @@
 *           A is n by k
                DO J = 0, K - 1
                   DO I = 0, N - 1
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
                   END DO
                END DO
             ELSE
 *              xpose case; A is k by n
                DO J = 0, N - 1
                   DO I = 0, K - 1
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
                   END DO
                END DO
             END IF
@@ -316,14 +319,18 @@
 *              A is n+1 by k
                DO J = 0, K - 1
                   DO I = 0, N
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
                   END DO
                END DO
             ELSE
 *              xpose case; A is k by n+1
                DO J = 0, N
                   DO I = 0, K - 1
-                     VALUE = MAX( VALUE, ABS( A( I+J*LDA ) ) )
+                     TEMP = ABS( A( I+J*LDA ) )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
                   END DO
                END DO
             END IF
@@ -369,8 +376,12 @@
                      WORK( J ) = WORK( J ) + S
                   END DO
    10             CONTINUE
-                  I = IDAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                ELSE
 *                 ilu = 1
                   K = K + 1
@@ -407,8 +418,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = IDAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                END IF
             ELSE
 *              n is even
@@ -441,8 +456,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = IDAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                ELSE
 *                 ilu = 1
                   DO I = K, N - 1
@@ -475,8 +494,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = IDAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                END IF
             END IF
          ELSE
@@ -537,8 +560,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = IDAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                ELSE
 *                 ilu=1
                   K = K + 1
@@ -598,8 +625,12 @@
                      END DO
                      WORK( J ) = WORK( J ) + S
                   END DO
-                  I = IDAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                END IF
             ELSE
 *              n is even
@@ -667,8 +698,12 @@
 *                 A(k-1,k-1)
                   S = S + AA
                   WORK( I ) = WORK( I ) + S
-                  I = IDAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                ELSE
 *                 ilu=1
                   DO I = K, N - 1
@@ -736,8 +771,12 @@
                      END DO
                      WORK( J-1 ) = WORK( J-1 ) + S
                   END DO
-                  I = IDAMAX( N, WORK, 1 )
-                  VALUE = WORK( I-1 )
+                  VALUE = WORK( 0 )
+                  DO I = 1, N-1
+                     TEMP = WORK( I )
+                     IF( VALUE .LT. TEMP .OR. DISNAN( TEMP ) ) 
+     $                    VALUE = TEMP
+                  END DO
                END IF
             END IF
          END IF

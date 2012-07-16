@@ -127,17 +127,17 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I
-      REAL               ANORM, SCALE, SUM
+      REAL               ANORM, SCALE, SUM, TEMP
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            LSAME, SISNAN
+      EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASSQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, SQRT
+      INTRINSIC          ABS, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -149,9 +149,12 @@
 *
          ANORM = ABS( D( N ) )
          DO 10 I = 1, N - 1
-            ANORM = MAX( ANORM, ABS( DL( I ) ) )
-            ANORM = MAX( ANORM, ABS( D( I ) ) )
-            ANORM = MAX( ANORM, ABS( DU( I ) ) )
+            IF( ANORM.LT.ABS( DL( I ) ) .OR. SISNAN( ABS( DL( I ) ) ) ) 
+     $           ANORM = ABS(DL(I))
+            IF( ANORM.LT.ABS( D( I ) ) .OR. SISNAN( ABS( D( I ) ) ) ) 
+     $           ANORM = ABS(D(I))
+            IF( ANORM.LT.ABS( DU( I ) ) .OR. SISNAN (ABS( DU( I ) ) ) ) 
+     $           ANORM = ABS(DU(I))
    10    CONTINUE
       ELSE IF( LSAME( NORM, 'O' ) .OR. NORM.EQ.'1' ) THEN
 *
@@ -160,11 +163,12 @@
          IF( N.EQ.1 ) THEN
             ANORM = ABS( D( 1 ) )
          ELSE
-            ANORM = MAX( ABS( D( 1 ) )+ABS( DL( 1 ) ),
-     $              ABS( D( N ) )+ABS( DU( N-1 ) ) )
+            ANORM = ABS( D( 1 ) )+ABS( DL( 1 ) )
+            TEMP = ABS( D( N ) )+ABS( DU( N-1 ) ) 
+            IF( ANORM .LT. TEMP .OR. SISNAN( TEMP ) ) ANORM = TEMP
             DO 20 I = 2, N - 1
-               ANORM = MAX( ANORM, ABS( D( I ) )+ABS( DL( I ) )+
-     $                 ABS( DU( I-1 ) ) )
+               TEMP = ABS( D( I ) )+ABS( DL( I ) )+ABS( DU( I-1 ) )
+               IF( ANORM .LT. TEMP .OR. SISNAN( TEMP ) ) ANORM = TEMP
    20       CONTINUE
          END IF
       ELSE IF( LSAME( NORM, 'I' ) ) THEN
@@ -174,11 +178,12 @@
          IF( N.EQ.1 ) THEN
             ANORM = ABS( D( 1 ) )
          ELSE
-            ANORM = MAX( ABS( D( 1 ) )+ABS( DU( 1 ) ),
-     $              ABS( D( N ) )+ABS( DL( N-1 ) ) )
+            ANORM = ABS( D( 1 ) )+ABS( DU( 1 ) )
+            TEMP = ABS( D( N ) )+ABS( DL( N-1 ) )
+            IF( ANORM .LT. TEMP .OR. SISNAN( TEMP ) ) ANORM = TEMP
             DO 30 I = 2, N - 1
-               ANORM = MAX( ANORM, ABS( D( I ) )+ABS( DU( I ) )+
-     $                 ABS( DL( I-1 ) ) )
+               TEMP = ABS( D( I ) )+ABS( DU( I ) )+ABS( DL( I-1 ) )
+               IF( ANORM .LT. TEMP .OR. SISNAN( TEMP ) ) ANORM = TEMP
    30       CONTINUE
          END IF
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN

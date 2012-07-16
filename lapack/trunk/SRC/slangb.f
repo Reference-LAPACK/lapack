@@ -146,14 +146,14 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J, K, L
-      REAL               SCALE, SUM, VALUE
+      REAL               SCALE, SUM, VALUE, TEMP
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLASSQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            LSAME, SISNAN
+      EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, SQRT
@@ -169,7 +169,8 @@
          VALUE = ZERO
          DO 20 J = 1, N
             DO 10 I = MAX( KU+2-J, 1 ), MIN( N+KU+1-J, KL+KU+1 )
-               VALUE = MAX( VALUE, ABS( AB( I, J ) ) )
+               TEMP = ABS( AB( I, J ) ) 
+               IF( VALUE.LT.TEMP .OR. SISNAN( TEMP ) ) VALUE = TEMP
    10       CONTINUE
    20    CONTINUE
       ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
@@ -182,7 +183,7 @@
             DO 30 I = MAX( KU+2-J, 1 ), MIN( N+KU+1-J, KL+KU+1 )
                SUM = SUM + ABS( AB( I, J ) )
    30       CONTINUE
-            VALUE = MAX( VALUE, SUM )
+            IF( VALUE.LT.SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    40    CONTINUE
       ELSE IF( LSAME( NORM, 'I' ) ) THEN
 *
@@ -199,7 +200,8 @@
    70    CONTINUE
          VALUE = ZERO
          DO 80 I = 1, N
-            VALUE = MAX( VALUE, WORK( I ) )
+            TEMP = WORK( I )
+            IF( VALUE.LT.TEMP .OR. SISNAN( TEMP ) ) VALUE = TEMP
    80    CONTINUE
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
