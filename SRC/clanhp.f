@@ -142,14 +142,14 @@
       REAL               ABSA, SCALE, SUM, VALUE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            LSAME, SISNAN
+      EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASSQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, REAL, SQRT
+      INTRINSIC          ABS, REAL, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -164,17 +164,21 @@
             K = 0
             DO 20 J = 1, N
                DO 10 I = K + 1, K + J - 1
-                  VALUE = MAX( VALUE, ABS( AP( I ) ) )
+                  SUM = ABS( AP( I ) )
+                  IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    10          CONTINUE
                K = K + J
-               VALUE = MAX( VALUE, ABS( REAL( AP( K ) ) ) )
+               SUM = ABS( REAL( AP( K ) ) )
+               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    20       CONTINUE
          ELSE
             K = 1
             DO 40 J = 1, N
-               VALUE = MAX( VALUE, ABS( REAL( AP( K ) ) ) )
+               SUM = ABS( REAL( AP( K ) ) )
+               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
                DO 30 I = K + 1, K + N - J
-                  VALUE = MAX( VALUE, ABS( AP( I ) ) )
+                  SUM = ABS( AP( I ) )
+                  IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    30          CONTINUE
                K = K + N - J + 1
    40       CONTINUE
@@ -199,7 +203,8 @@
                K = K + 1
    60       CONTINUE
             DO 70 I = 1, N
-               VALUE = MAX( VALUE, WORK( I ) )
+               SUM = WORK( I )
+               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    70       CONTINUE
          ELSE
             DO 80 I = 1, N
@@ -214,7 +219,7 @@
                   WORK( I ) = WORK( I ) + ABSA
                   K = K + 1
    90          CONTINUE
-               VALUE = MAX( VALUE, SUM )
+               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
   100       CONTINUE
          END IF
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN

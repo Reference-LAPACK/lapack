@@ -149,11 +149,11 @@
       EXTERNAL           SLASSQ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            LSAME, SISNAN
+      EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, SQRT
+      INTRINSIC          ABS, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -167,13 +167,15 @@
          IF( LSAME( UPLO, 'U' ) ) THEN
             DO 20 J = 1, N
                DO 10 I = 1, J
-                  VALUE = MAX( VALUE, ABS( A( I, J ) ) )
+                  SUM = ABS( A( I, J ) )
+                  IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    10          CONTINUE
    20       CONTINUE
          ELSE
             DO 40 J = 1, N
                DO 30 I = J, N
-                  VALUE = MAX( VALUE, ABS( A( I, J ) ) )
+                  SUM = ABS( A( I, J ) )
+                  IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    30          CONTINUE
    40       CONTINUE
          END IF
@@ -194,7 +196,8 @@
                WORK( J ) = SUM + ABS( A( J, J ) )
    60       CONTINUE
             DO 70 I = 1, N
-               VALUE = MAX( VALUE, WORK( I ) )
+               SUM = WORK( I )
+               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    70       CONTINUE
          ELSE
             DO 80 I = 1, N
@@ -207,7 +210,7 @@
                   SUM = SUM + ABSA
                   WORK( I ) = WORK( I ) + ABSA
    90          CONTINUE
-               VALUE = MAX( VALUE, SUM )
+               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
   100       CONTINUE
          END IF
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN

@@ -134,14 +134,14 @@
       REAL               SCALE, SUM, VALUE
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            LSAME, SISNAN
+      EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLASSQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, SQRT
+      INTRINSIC          ABS, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -154,7 +154,8 @@
          VALUE = ZERO
          DO 20 J = 1, N
             DO 10 I = 1, MIN( N, J+1 )
-               VALUE = MAX( VALUE, ABS( A( I, J ) ) )
+               SUM = ABS( A( I, J ) )
+               IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    10       CONTINUE
    20    CONTINUE
       ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN
@@ -167,7 +168,7 @@
             DO 30 I = 1, MIN( N, J+1 )
                SUM = SUM + ABS( A( I, J ) )
    30       CONTINUE
-            VALUE = MAX( VALUE, SUM )
+            IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    40    CONTINUE
       ELSE IF( LSAME( NORM, 'I' ) ) THEN
 *
@@ -183,7 +184,8 @@
    70    CONTINUE
          VALUE = ZERO
          DO 80 I = 1, N
-            VALUE = MAX( VALUE, WORK( I ) )
+            SUM = WORK( I )
+            IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
    80    CONTINUE
       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN
 *
