@@ -126,6 +126,10 @@
       INTEGER            IX
       REAL               ABSXI
 *     ..
+*     .. External Functions ..
+      LOGICAL            SISNAN
+      EXTERNAL           SISNAN
+*     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
 *     ..
@@ -133,8 +137,8 @@
 *
       IF( N.GT.0 ) THEN
          DO 10 IX = 1, 1 + ( N-1 )*INCX, INCX
-            IF( X( IX ).NE.ZERO ) THEN
-               ABSXI = ABS( X( IX ) )
+            ABSXI = ABS( X( IX ) )
+            IF( ABSXI.GT.ZERO.OR.SISNAN( ABSXI ) ) THEN
                IF( SCALE.LT.ABSXI ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / ABSXI )**2
                   SCALE = ABSXI

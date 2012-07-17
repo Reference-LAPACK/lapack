@@ -129,6 +129,10 @@
       INTEGER            IX
       DOUBLE PRECISION   TEMP1
 *     ..
+*     .. External Functions ..
+      LOGICAL            DISNAN
+      EXTERNAL           DISNAN
+*     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG
 *     ..
@@ -136,8 +140,8 @@
 *
       IF( N.GT.0 ) THEN
          DO 10 IX = 1, 1 + ( N-1 )*INCX, INCX
-            IF( DBLE( X( IX ) ).NE.ZERO ) THEN
-               TEMP1 = ABS( DBLE( X( IX ) ) )
+            TEMP1 = ABS( DBLE( X( IX ) ) )
+            IF( TEMP1.GT.ZERO.OR.DISNAN( TEMP1 ) ) THEN
                IF( SCALE.LT.TEMP1 ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / TEMP1 )**2
                   SCALE = TEMP1
@@ -145,8 +149,8 @@
                   SUMSQ = SUMSQ + ( TEMP1 / SCALE )**2
                END IF
             END IF
-            IF( DIMAG( X( IX ) ).NE.ZERO ) THEN
-               TEMP1 = ABS( DIMAG( X( IX ) ) )
+            TEMP1 = ABS( DIMAG( X( IX ) ) )
+            IF( TEMP1.GT.ZERO.OR.DISNAN( TEMP1 ) ) THEN
                IF( SCALE.LT.TEMP1 ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / TEMP1 )**2
                   SCALE = TEMP1
