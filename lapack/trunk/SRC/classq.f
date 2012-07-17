@@ -129,6 +129,10 @@
       INTEGER            IX
       REAL               TEMP1
 *     ..
+*     .. External Functions ..
+      LOGICAL            SISNAN
+      EXTERNAL           SISNAN
+*     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, REAL
 *     ..
@@ -136,8 +140,8 @@
 *
       IF( N.GT.0 ) THEN
          DO 10 IX = 1, 1 + ( N-1 )*INCX, INCX
-            IF( REAL( X( IX ) ).NE.ZERO ) THEN
-               TEMP1 = ABS( REAL( X( IX ) ) )
+            TEMP1 = ABS( REAL( X( IX ) ) )
+            IF( TEMP1.GT.ZERO.OR.SISNAN( TEMP1 ) ) THEN
                IF( SCALE.LT.TEMP1 ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / TEMP1 )**2
                   SCALE = TEMP1
@@ -145,9 +149,9 @@
                   SUMSQ = SUMSQ + ( TEMP1 / SCALE )**2
                END IF
             END IF
-            IF( AIMAG( X( IX ) ).NE.ZERO ) THEN
-               TEMP1 = ABS( AIMAG( X( IX ) ) )
-               IF( SCALE.LT.TEMP1 ) THEN
+            TEMP1 = ABS( AIMAG( X( IX ) ) )
+            IF( TEMP1.GT.ZERO.OR.SISNAN( TEMP1 ) ) THEN
+               IF( SCALE.LT.TEMP1 .OR. SISNAN( TEMP1 ) ) THEN
                   SUMSQ = 1 + SUMSQ*( SCALE / TEMP1 )**2
                   SCALE = TEMP1
                ELSE
