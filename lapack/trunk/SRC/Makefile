@@ -152,7 +152,8 @@ SLASRC = \
    stfttr.o stpttf.o stpttr.o strttf.o strttp.o \
    sgejsv.o  sgesvj.o  sgsvj0.o  sgsvj1.o \
    sgeequb.o ssyequb.o spoequb.o sgbequb.o \
-   sbbcsd.o slapmr.o sorbdb.o sorcsd.o \
+   sbbcsd.o slapmr.o sorbdb.o sorbdb1.o sorbdb2.o sorbdb3.o sorbdb4.o \
+   sorbdb5.o sorbdb6.o sorcsd.o sorcsd2by1.o \
    sgeqrt.o sgeqrt2.o sgeqrt3.o sgemqrt.o \
    stpqrt.o stpqrt2.o stpmqrt.o stprfb.o
 
@@ -230,7 +231,8 @@ CLASRC = \
    chfrk.o ctfttp.o clanhf.o cpftrf.o cpftri.o cpftrs.o ctfsm.o ctftri.o \
    ctfttr.o ctpttf.o ctpttr.o ctrttf.o ctrttp.o \
    cgeequb.o cgbequb.o csyequb.o cpoequb.o cheequb.o \
-   cbbcsd.o clapmr.o cunbdb.o cuncsd.o \
+   cbbcsd.o clapmr.o cunbdb.o cunbdb1.o cunbdb2.o cunbdb3.o cunbdb4.o \
+   cunbdb5.o cunbdb6.o cuncsd.o cuncsd2by1.o \
    cgeqrt.o cgeqrt2.o cgeqrt3.o cgemqrt.o \
    ctpqrt.o ctpqrt2.o ctpmqrt.o ctprfb.o
 
@@ -309,7 +311,8 @@ DLASRC = \
    dtfttr.o dtpttf.o dtpttr.o dtrttf.o dtrttp.o \
    dgejsv.o  dgesvj.o  dgsvj0.o  dgsvj1.o \
    dgeequb.o dsyequb.o dpoequb.o dgbequb.o \
-   dbbcsd.o dlapmr.o dorbdb.o dorcsd.o \
+   dbbcsd.o dlapmr.o dorbdb.o dorbdb1.o dorbdb2.o dorbdb3.o dorbdb4.o \
+   dorbdb5.o dorbdb6.o dorcsd.o dorcsd2by1.o \
    dgeqrt.o dgeqrt2.o dgeqrt3.o dgemqrt.o \
    dtpqrt.o dtpqrt2.o dtpmqrt.o dtprfb.o
 
@@ -390,7 +393,8 @@ ZLASRC = \
    zhfrk.o ztfttp.o zlanhf.o zpftrf.o zpftri.o zpftrs.o ztfsm.o ztftri.o \
    ztfttr.o ztpttf.o ztpttr.o ztrttf.o ztrttp.o \
    zgeequb.o zgbequb.o zsyequb.o zpoequb.o zheequb.o \
-   zbbcsd.o zlapmr.o zunbdb.o zuncsd.o \
+   zbbcsd.o zlapmr.o zunbdb.o zunbdb1.o zunbdb2.o zunbdb3.o zunbdb4.o \
+   zunbdb5.o zunbdb6.o zuncsd.o zuncsd2by1.o \
    zgeqrt.o zgeqrt2.o zgeqrt3.o zgemqrt.o \
    ztpqrt.o ztpqrt2.o ztpmqrt.o ztprfb.o
 
