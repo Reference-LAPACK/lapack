@@ -92,7 +92,7 @@
 *>          The leading dimension of the array A.  LDA >= max(1,N).
 *> \endverbatim
 *>
-*> \param[in] B
+*> \param[in,out] B
 *> \verbatim
 *>          B is COMPLEX*16 array, dimension (LDB,N)
 *>          The triangular factor from the Cholesky factorization of B,
