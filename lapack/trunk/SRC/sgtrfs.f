@@ -202,7 +202,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup realGTcomputational
 *
 *  =====================================================================
       SUBROUTINE SGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,

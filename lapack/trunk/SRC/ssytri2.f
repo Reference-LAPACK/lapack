@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> SSYTRI2 computes the inverse of a REAL hermitian indefinite matrix
+*> SSYTRI2 computes the inverse of a REAL symmetric indefinite matrix
 *> A using the factorization A = U*D*U**T or A = L*D*L**T computed by
 *> SSYTRF. SSYTRI2 sets the LEADING DIMENSION of the workspace
 *> before calling SSYTRI2X that actually computes the inverse.

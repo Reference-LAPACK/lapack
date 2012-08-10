@@ -157,7 +157,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup doublePTcomputational
 *
 *  =====================================================================
       SUBROUTINE DPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,

@@ -140,7 +140,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup doubleGTcomputational
 *
 *  =====================================================================
       SUBROUTINE DGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,

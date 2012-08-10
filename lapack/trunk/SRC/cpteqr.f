@@ -140,7 +140,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup complexPTcomputational
 *
 *  =====================================================================
       SUBROUTINE CPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )

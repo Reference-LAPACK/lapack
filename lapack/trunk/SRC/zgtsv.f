@@ -1,4 +1,4 @@
-*> \brief \b ZGTSV
+*> \brief <b> ZGTSV computes the solution to system of linear equations A * X = B for GT matrices <b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -119,12 +119,12 @@
 *
 *> \date November 2011
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup complex16GTsolve
 *
 *  =====================================================================
       SUBROUTINE ZGTSV( N, NRHS, DL, D, DU, B, LDB, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK driver routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2011

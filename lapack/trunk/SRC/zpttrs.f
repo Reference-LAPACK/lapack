@@ -116,7 +116,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup complex16PTcomputational
 *
 *  =====================================================================
       SUBROUTINE ZPTTRS( UPLO, N, NRHS, D, E, B, LDB, INFO )

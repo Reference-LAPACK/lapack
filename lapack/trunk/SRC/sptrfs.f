@@ -157,7 +157,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup realPTcomputational
 *
 *  =====================================================================
       SUBROUTINE SPTRFS( N, NRHS, D, E, DF, EF, B, LDB, X, LDX, FERR,

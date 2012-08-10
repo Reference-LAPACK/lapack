@@ -103,7 +103,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup doublePTcomputational
 *
 *> \par Further Details:
 *  =====================

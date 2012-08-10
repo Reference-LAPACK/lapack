@@ -203,7 +203,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup complex16GTcomputational
 *
 *  =====================================================================
       SUBROUTINE ZGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,

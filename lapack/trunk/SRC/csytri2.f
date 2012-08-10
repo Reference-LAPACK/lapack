@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CSYTRI2 computes the inverse of a COMPLEX hermitian indefinite matrix
+*> CSYTRI2 computes the inverse of a COMPLEX symmetric indefinite matrix
 *> A using the factorization A = U*D*U**T or A = L*D*L**T computed by
 *> CSYTRF. CSYTRI2 sets the LEADING DIMENSION of the workspace
 *> before calling CSYTRI2X that actually computes the inverse.

@@ -203,7 +203,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup complexGTcomputational
 *
 *  =====================================================================
       SUBROUTINE CGTRFS( TRANS, N, NRHS, DL, D, DU, DLF, DF, DUF, DU2,

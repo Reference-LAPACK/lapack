@@ -500,7 +500,7 @@
 *
 *> \date April 2012
 *
-*> \ingroup realSYcomputational
+*> \ingroup realSYdriver
 *
 *  =====================================================================
       SUBROUTINE SSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,
@@ -508,7 +508,7 @@
      $                    N_ERR_BNDS, ERR_BNDS_NORM, ERR_BNDS_COMP,
      $                    NPARAMS, PARAMS, WORK, IWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.1) --
+*  -- LAPACK driver routine (version 3.4.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     April 2012

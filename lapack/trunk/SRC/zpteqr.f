@@ -140,7 +140,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup complex16PTcomputational
 *
 *  =====================================================================
       SUBROUTINE ZPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )

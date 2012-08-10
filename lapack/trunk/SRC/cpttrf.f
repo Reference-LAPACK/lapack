@@ -87,7 +87,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup complexPTcomputational
 *
 *  =====================================================================
       SUBROUTINE CPTTRF( N, D, E, INFO )

@@ -104,7 +104,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup doublePTcomputational
 *
 *  =====================================================================
       SUBROUTINE DPTTRS( N, NRHS, D, E, B, LDB, INFO )
