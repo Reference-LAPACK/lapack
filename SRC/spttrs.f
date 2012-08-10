@@ -104,7 +104,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup realPTcomputational
 *
 *  =====================================================================
       SUBROUTINE SPTTRS( N, NRHS, D, E, B, LDB, INFO )

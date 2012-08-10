@@ -97,7 +97,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup doublePTcomputational
 *
 *  =====================================================================
       SUBROUTINE DPTTS2( N, NRHS, D, E, B, LDB )

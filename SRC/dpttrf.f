@@ -86,7 +86,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup auxOTHERcomputational
+*> \ingroup doublePTcomputational
 *
 *  =====================================================================
       SUBROUTINE DPTTRF( N, D, E, INFO )

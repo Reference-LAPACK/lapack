@@ -135,7 +135,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup complexGTcomputational
 *
 *  =====================================================================
       SUBROUTINE CGTCON( NORM, N, DL, D, DU, DU2, IPIV, ANORM, RCOND,

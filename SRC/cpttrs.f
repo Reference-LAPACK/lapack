@@ -116,7 +116,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup complexPTcomputational
 *
 *  =====================================================================
       SUBROUTINE CPTTRS( UPLO, N, NRHS, D, E, B, LDB, INFO )

@@ -119,7 +119,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup realGTcomputational
 *
 *  =====================================================================
       SUBROUTINE SGTTRF( N, DL, D, DU, DU2, IPIV, INFO )

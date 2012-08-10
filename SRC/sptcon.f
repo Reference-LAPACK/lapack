@@ -103,7 +103,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup realPTcomputational
 *
 *> \par Further Details:
 *  =====================

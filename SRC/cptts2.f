@@ -108,7 +108,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup complexPTcomputational
 *
 *  =====================================================================
       SUBROUTINE CPTTS2( IUPLO, N, NRHS, D, E, B, LDB )

@@ -1,4 +1,4 @@
-*> \brief \b CPTSVX
+*> \brief <b> CPTSVX computes the solution to system of linear equations A * X = B for PT matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -228,13 +228,13 @@
 *
 *> \date April 2012
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup complexPTsolve
 *
 *  =====================================================================
       SUBROUTINE CPTSVX( FACT, N, NRHS, D, E, DF, EF, B, LDB, X, LDX,
      $                   RCOND, FERR, BERR, WORK, RWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.1) --
+*  -- LAPACK driver routine (version 3.4.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     April 2012

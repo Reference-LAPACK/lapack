@@ -97,7 +97,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup realPTcomputational
 *
 *  =====================================================================
       SUBROUTINE SPTTS2( N, NRHS, D, E, B, LDB )

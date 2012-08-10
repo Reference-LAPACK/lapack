@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DSYTRI2 computes the inverse of a DOUBLE PRECISION hermitian indefinite matrix
+*> DSYTRI2 computes the inverse of a DOUBLE PRECISION symmetric indefinite matrix
 *> A using the factorization A = U*D*U**T or A = L*D*L**T computed by
 *> DSYTRF. DSYTRI2 sets the LEADING DIMENSION of the workspace
 *> before calling DSYTRI2X that actually computes the inverse.

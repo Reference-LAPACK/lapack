@@ -104,7 +104,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup complex16PTcomputational
 *
 *> \par Further Details:
 *  =====================

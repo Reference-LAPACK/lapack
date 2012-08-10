@@ -119,7 +119,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complexOTHERcomputational
+*> \ingroup complexGTcomputational
 *
 *  =====================================================================
       SUBROUTINE CGTTRF( N, DL, D, DU, DU2, IPIV, INFO )

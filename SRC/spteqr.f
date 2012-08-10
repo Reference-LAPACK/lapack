@@ -140,7 +140,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup realOTHERcomputational
+*> \ingroup realPTcomputational
 *
 *  =====================================================================
       SUBROUTINE SPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )

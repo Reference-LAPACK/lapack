@@ -140,7 +140,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup doublePTcomputational
 *
 *  =====================================================================
       SUBROUTINE DPTEQR( COMPZ, N, D, E, Z, LDZ, WORK, INFO )

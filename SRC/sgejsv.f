@@ -391,7 +391,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup realGEcomputational
+*> \ingroup realGEsing
 *
 *> \par Further Details:
 *  =====================

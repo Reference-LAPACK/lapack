@@ -17,6 +17,12 @@
  * @defgroup PO  Positive Definite Matrix
  *   @ingroup lapack
  *   This is the group of Positive Definite routines
+ * @defgroup GT  General tridiagonal Matrix
+ *   @ingroup lapack
+ *   This is the group of General tridiagonal routines
+ * @defgroup PT  Positive Definite tridiagonal Matrix
+ *   @ingroup lapack
+ *   This is the group of Positive Definite tridiagonal routines
  * @defgroup auxOTHERauxiliary  Other Auxiliary Routines
  *   @ingroup lapack
  *   This is the group of Other Auxiliary routines
@@ -34,6 +40,12 @@
  *   This is the group of Linear Solve Driver routines
  * @defgroup solvePO  Linear Solve
  *   @ingroup PO
+ *   This is the group of Linear Solve Driver routines
+ * @defgroup solveGT  Linear Solve
+ *   @ingroup GT
+ *   This is the group of Linear Solve Driver routines
+ * @defgroup solvePT  Linear Solve
+ *   @ingroup PT
  *   This is the group of Linear Solve Driver routines
  * @defgroup eigenGE  Eigenvalue
  *   @ingroup GE
@@ -56,6 +68,12 @@
  * @defgroup computationalPO  Computational routines
  *   @ingroup PO
  *   This is the group of Computational routines
+ * @defgroup computationalGT  Computational routines
+ *   @ingroup GT
+ *   This is the group of Computational routines
+ * @defgroup computationalPT  Computational routines
+ *   @ingroup PT
+ *   This is the group of Computational routines
  * @defgroup auxiliaryGE  Auxiliary routines
  *   @ingroup GE
  *   This is the group of Auxiliary routines
@@ -67,6 +85,12 @@
  *   This is the group of Auxiliary routines
  * @defgroup auxiliaryPO  Auxiliary routines
  *   @ingroup PO
+ *   This is the group of Auxiliary routines
+ * @defgroup auxiliaryGT  Auxiliary routines
+ *   @ingroup GT
+ *   This is the group of Auxiliary routines
+ * @defgroup auxiliaryPT  Auxiliary routines
+ *   @ingroup PT
  *   This is the group of Auxiliary routines
  *
  ****
@@ -83,6 +107,12 @@
  * @defgroup doubleGBsolve double
  *   @ingroup solveGB
  *   This is the group of double solve driver functions for GB matrices
+ * @defgroup doubleGTsolve double
+ *   @ingroup solveGT
+ *   This is the group of double solve driver functions for GT matrices
+ * @defgroup doublePTsolve double
+ *   @ingroup solvePT
+ *   This is the group of double solve driver functions for PT matrices
  * @defgroup doubleGEeigen double
  *   @ingroup eigenGE 
  *   This is the group of double eigenvalue driver functions for GE matrices
@@ -104,6 +134,12 @@
  * @defgroup doubleGBcomputational double
  *   @ingroup computationalGB
  *   This is the group of double computational functions for GB matrices
+ * @defgroup doubleGTcomputational double
+ *   @ingroup computationalGT
+ *   This is the group of double computational functions for GT matrices
+ * @defgroup doublePTcomputational double
+ *   @ingroup computationalPT
+ *   This is the group of double computational functions for PT matrices
  * @defgroup doubleGEauxiliary double
  *   @ingroup auxiliaryGE 
  *   This is the group of double auxiliary functions for GE matrices
@@ -116,6 +152,12 @@
  * @defgroup doubleGBauxiliary double
  *   @ingroup auxiliaryGB 
  *   This is the group of double auxiliary functions for GB matrices
+ * @defgroup doublePTauxiliary double
+ *   @ingroup auxiliaryPT 
+ *   This is the group of double auxiliary functions for PT matrices
+ * @defgroup doubleGTauxiliary double
+ *   @ingroup auxiliaryGT 
+ *   This is the group of double auxiliary functions for GT matrices
  *
  ****
  *
@@ -131,6 +173,12 @@
  * @defgroup realGBsolve real
  *   @ingroup solveGB
  *   This is the group of real solve driver functions for GB matrices
+ * @defgroup realGTsolve real
+ *   @ingroup solveGT
+ *   This is the group of real solve driver functions for GT matrices
+ * @defgroup realPTsolve real
+ *   @ingroup solvePT
+ *   This is the group of real solve driver functions for PT matrices
  * @defgroup realGEeigen real
  *   @ingroup eigenGE 
  *   This is the group of real eigenvalue driver functions for GE matrices
@@ -152,6 +200,12 @@
  * @defgroup realGBcomputational real
  *   @ingroup computationalGB
  *   This is the group of real computational functions for GB matrices
+ * @defgroup realPTcomputational real
+ *   @ingroup computationalPT
+ *   This is the group of real computational functions for PT matrices
+ * @defgroup realGTcomputational real
+ *   @ingroup computationalGT
+ *   This is the group of real computational functions for GT matrices
  * @defgroup realGEauxiliary real
  *   @ingroup auxiliaryGE 
  *   This is the group of real auxiliary functions for GE matrices
@@ -164,6 +218,12 @@
  * @defgroup realGBauxiliary real
  *   @ingroup auxiliaryGB 
  *   This is the group of real auxiliary functions for GB matrices
+ * @defgroup realGTauxiliary real
+ *   @ingroup auxiliaryGT
+ *   This is the group of real auxiliary functions for GT matrices
+ * @defgroup realPTauxiliary real
+ *   @ingroup auxiliaryPT
+ *   This is the group of real auxiliary functions for PT matrices
  *
  ****
  *
@@ -179,6 +239,12 @@
  * @defgroup complexGBsolve complex
  *   @ingroup solveGB
  *   This is the group of complex solve driver functions for GB matrices
+ * @defgroup complexGTsolve complex
+ *   @ingroup solveGT
+ *   This is the group of complex solve driver functions for GT matrices
+ * @defgroup complexPTsolve complex
+ *   @ingroup solvePT
+ *   This is the group of complex solve driver functions for PT matrices
  * @defgroup complexGEeigen complex
  *   @ingroup eigenGE 
  *   This is the group of complex eigenvalue driver functions for GE matrices
@@ -200,6 +266,12 @@
  * @defgroup complexGBcomputational complex
  *   @ingroup computationalGB
  *   This is the group of complex computational functions for GB matrices
+ * @defgroup complexGTcomputational complex
+ *   @ingroup computationalGT
+ *   This is the group of complex computational functions for GT matrices
+ * @defgroup complexPTcomputational complex
+ *   @ingroup computationalPT
+ *   This is the group of complex computational functions for PT matrices
  * @defgroup complexGEauxiliary complex
  *   @ingroup auxiliaryGE 
  *   This is the group of complex auxiliary functions for GE matrices
@@ -227,6 +299,12 @@
  * @defgroup complex16GBsolve complex16
  *   @ingroup solveGB
  *   This is the group of complex16 solve driver functions for GB matrices
+ * @defgroup complex16GTsolve complex16
+ *   @ingroup solveGT
+ *   This is the group of complex16 solve driver functions for GT matrices
+ * @defgroup complex16PTsolve complex16
+ *   @ingroup solvePT
+ *   This is the group of complex16 solve driver functions for PT matrices
  * @defgroup complex16GEeigen complex16
  *   @ingroup eigenGE 
  *   This is the group of complex16 eigenvalue driver functions for GE matrices
@@ -248,6 +326,12 @@
  * @defgroup complex16GBcomputational complex16
  *   @ingroup computationalGB
  *   This is the group of complex16 computational functions for GB matrices
+ * @defgroup complex16GTcomputational complex16
+ *   @ingroup computationalGT
+ *   This is the group of complex16 computational functions for GT matrices
+ * @defgroup complex16PTcomputational complex16
+ *   @ingroup computationalPT
+ *   This is the group of complex16 computational functions for PT matrices
  * @defgroup complex16GEauxiliary complex16
  *   @ingroup auxiliaryGE 
  *   This is the group of complex16 auxiliary functions for GE matrices

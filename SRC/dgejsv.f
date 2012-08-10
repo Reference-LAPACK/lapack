@@ -391,7 +391,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup doubleGEsing
 *
 *> \par Further Details:
 *  =====================

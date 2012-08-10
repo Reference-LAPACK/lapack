@@ -87,7 +87,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup complex16PTcomputational
 *
 *  =====================================================================
       SUBROUTINE ZPTTRF( N, D, E, INFO )

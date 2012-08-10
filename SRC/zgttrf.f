@@ -119,7 +119,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup complex16OTHERcomputational
+*> \ingroup complex16GTcomputational
 *
 *  =====================================================================
       SUBROUTINE ZGTTRF( N, DL, D, DU, DU2, IPIV, INFO )
