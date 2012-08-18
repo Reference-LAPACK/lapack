@@ -217,7 +217,7 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER          TRANST
-      INTEGER            I, J, LASTV, LASTC
+      INTEGER            I, J, LASTV, LASTC, lastv2
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -379,29 +379,28 @@
 *              Form  H * C  or  H**T * C  where  C = ( C1 )
 *                                                    ( C2 )
 *
-               LASTV = MAX( K, ILADLR( M, K, V, LDV ) )
-               LASTC = ILADLC( LASTV, N, C, LDC )
+               LASTC = ILADLC( M, N, C, LDC )
 *
 *              W := C**T * V  =  (C1**T * V1 + C2**T * V2)  (stored in WORK)
 *
 *              W := C2**T
 *
                DO 70 J = 1, K
-                  CALL DCOPY( LASTC, C( LASTV-K+J, 1 ), LDC,
+                  CALL DCOPY( LASTC, C( M-K+J, 1 ), LDC,
      $                 WORK( 1, J ), 1 )
    70          CONTINUE
 *
 *              W := W * V2
 *
                CALL DTRMM( 'Right', 'Upper', 'No transpose', 'Unit',
-     $              LASTC, K, ONE, V( LASTV-K+1, 1 ), LDV,
+     $              LASTC, K, ONE, V( M-K+1, 1 ), LDV,
      $              WORK, LDWORK )
-               IF( LASTV.GT.K ) THEN
+               IF( M.GT.K ) THEN
 *
 *                 W := W + C1**T*V1
 *
                   CALL DGEMM( 'Transpose', 'No transpose',
-     $                 LASTC, K, LASTV-K, ONE, C, LDC, V, LDV,
+     $                 LASTC, K, M-K, ONE, C, LDC, V, LDV,
      $                 ONE, WORK, LDWORK )
                END IF
 *
@@ -412,26 +411,26 @@
 *
 *              C := C - V * W**T
 *
-               IF( LASTV.GT.K ) THEN
+               IF( M.GT.K ) THEN
 *
 *                 C1 := C1 - V1 * W**T
 *
                   CALL DGEMM( 'No transpose', 'Transpose',
-     $                 LASTV-K, LASTC, K, -ONE, V, LDV, WORK, LDWORK,
+     $                 M-K, LASTC, K, -ONE, V, LDV, WORK, LDWORK,
      $                 ONE, C, LDC )
                END IF
 *
 *              W := W * V2**T
 *
                CALL DTRMM( 'Right', 'Upper', 'Transpose', 'Unit',
-     $              LASTC, K, ONE, V( LASTV-K+1, 1 ), LDV,
+     $              LASTC, K, ONE, V( M-K+1, 1 ), LDV,
      $              WORK, LDWORK )
 *
 *              C2 := C2 - W**T
 *
                DO 90 J = 1, K
                   DO 80 I = 1, LASTC
-                     C( LASTV-K+J, I ) = C( LASTV-K+J, I ) - WORK(I, J)
+                     C( M-K+J, I ) = C( M-K+J, I ) - WORK(I, J)
    80             CONTINUE
    90          CONTINUE
 *
@@ -439,8 +438,7 @@
 *
 *              Form  C * H  or  C * H**T  where  C = ( C1  C2 )
 *
-               LASTV = MAX( K, ILADLR( N, K, V, LDV ) )
-               LASTC = ILADLR( M, LASTV, C, LDC )
+               LASTC = ILADLR( M, N, C, LDC )
 *
 *              W := C * V  =  (C1*V1 + C2*V2)  (stored in WORK)
 *
@@ -453,14 +451,14 @@
 *              W := W * V2
 *
                CALL DTRMM( 'Right', 'Upper', 'No transpose', 'Unit',
-     $              LASTC, K, ONE, V( LASTV-K+1, 1 ), LDV,
+     $              LASTC, K, ONE, V( N-K+1, 1 ), LDV,
      $              WORK, LDWORK )
-               IF( LASTV.GT.K ) THEN
+               IF( N.GT.K ) THEN
 *
 *                 W := W + C1 * V1
 *
                   CALL DGEMM( 'No transpose', 'No transpose',
-     $                 LASTC, K, LASTV-K, ONE, C, LDC, V, LDV,
+     $                 LASTC, K, N-K, ONE, C, LDC, V, LDV,
      $                 ONE, WORK, LDWORK )
                END IF
 *
@@ -471,26 +469,26 @@
 *
 *              C := C - W * V**T
 *
-               IF( LASTV.GT.K ) THEN
+               IF( N.GT.K ) THEN
 *
 *                 C1 := C1 - W * V1**T
 *
                   CALL DGEMM( 'No transpose', 'Transpose',
-     $                 LASTC, LASTV-K, K, -ONE, WORK, LDWORK, V, LDV,
+     $                 LASTC, N-K, K, -ONE, WORK, LDWORK, V, LDV,
      $                 ONE, C, LDC )
                END IF
 *
 *              W := W * V2**T
 *
                CALL DTRMM( 'Right', 'Upper', 'Transpose', 'Unit',
-     $              LASTC, K, ONE, V( LASTV-K+1, 1 ), LDV,
+     $              LASTC, K, ONE, V( N-K+1, 1 ), LDV,
      $              WORK, LDWORK )
 *
 *              C2 := C2 - W
 *
                DO 120 J = 1, K
                   DO 110 I = 1, LASTC
-                     C( I, LASTV-K+J ) = C( I, LASTV-K+J ) - WORK(I, J)
+                     C( I, N-K+J ) = C( I, N-K+J ) - WORK(I, J)
   110             CONTINUE
   120          CONTINUE
             END IF
@@ -634,29 +632,28 @@
 *              Form  H * C  or  H**T * C  where  C = ( C1 )
 *                                                    ( C2 )
 *
-               LASTV = MAX( K, ILADLC( K, M, V, LDV ) )
-               LASTC = ILADLC( LASTV, N, C, LDC )
+               LASTC = ILADLC( M, N, C, LDC )
 *
 *              W := C**T * V**T  =  (C1**T * V1**T + C2**T * V2**T) (stored in WORK)
 *
 *              W := C2**T
 *
                DO 190 J = 1, K
-                  CALL DCOPY( LASTC, C( LASTV-K+J, 1 ), LDC,
+                  CALL DCOPY( LASTC, C( M-K+J, 1 ), LDC,
      $                 WORK( 1, J ), 1 )
   190          CONTINUE
 *
 *              W := W * V2**T
 *
                CALL DTRMM( 'Right', 'Lower', 'Transpose', 'Unit',
-     $              LASTC, K, ONE, V( 1, LASTV-K+1 ), LDV,
+     $              LASTC, K, ONE, V( 1, M-K+1 ), LDV,
      $              WORK, LDWORK )
-               IF( LASTV.GT.K ) THEN
+               IF( M.GT.K ) THEN
 *
 *                 W := W + C1**T * V1**T
 *
                   CALL DGEMM( 'Transpose', 'Transpose',
-     $                 LASTC, K, LASTV-K, ONE, C, LDC, V, LDV,
+     $                 LASTC, K, M-K, ONE, C, LDC, V, LDV,
      $                 ONE, WORK, LDWORK )
                END IF
 *
@@ -667,26 +664,26 @@
 *
 *              C := C - V**T * W**T
 *
-               IF( LASTV.GT.K ) THEN
+               IF( M.GT.K ) THEN
 *
 *                 C1 := C1 - V1**T * W**T
 *
                   CALL DGEMM( 'Transpose', 'Transpose',
-     $                 LASTV-K, LASTC, K, -ONE, V, LDV, WORK, LDWORK,
+     $                 M-K, LASTC, K, -ONE, V, LDV, WORK, LDWORK,
      $                 ONE, C, LDC )
                END IF
 *
 *              W := W * V2
 *
                CALL DTRMM( 'Right', 'Lower', 'No transpose', 'Unit',
-     $              LASTC, K, ONE, V( 1, LASTV-K+1 ), LDV,
+     $              LASTC, K, ONE, V( 1, M-K+1 ), LDV,
      $              WORK, LDWORK )
 *
 *              C2 := C2 - W**T
 *
                DO 210 J = 1, K
                   DO 200 I = 1, LASTC
-                     C( LASTV-K+J, I ) = C( LASTV-K+J, I ) - WORK(I, J)
+                     C( M-K+J, I ) = C( M-K+J, I ) - WORK(I, J)
   200             CONTINUE
   210          CONTINUE
 *
@@ -694,29 +691,28 @@
 *
 *              Form  C * H  or  C * H**T  where  C = ( C1  C2 )
 *
-               LASTV = MAX( K, ILADLC( K, N, V, LDV ) )
-               LASTC = ILADLR( M, LASTV, C, LDC )
+               LASTC = ILADLR( M, N, C, LDC )
 *
 *              W := C * V**T  =  (C1*V1**T + C2*V2**T)  (stored in WORK)
 *
 *              W := C2
 *
                DO 220 J = 1, K
-                  CALL DCOPY( LASTC, C( 1, LASTV-K+J ), 1,
+                  CALL DCOPY( LASTC, C( 1, N-K+J ), 1,
      $                 WORK( 1, J ), 1 )
   220          CONTINUE
 *
 *              W := W * V2**T
 *
                CALL DTRMM( 'Right', 'Lower', 'Transpose', 'Unit',
-     $              LASTC, K, ONE, V( 1, LASTV-K+1 ), LDV,
+     $              LASTC, K, ONE, V( 1, N-K+1 ), LDV,
      $              WORK, LDWORK )
-               IF( LASTV.GT.K ) THEN
+               IF( N.GT.K ) THEN
 *
 *                 W := W + C1 * V1**T
 *
                   CALL DGEMM( 'No transpose', 'Transpose',
-     $                 LASTC, K, LASTV-K, ONE, C, LDC, V, LDV,
+     $                 LASTC, K, N-K, ONE, C, LDC, V, LDV,
      $                 ONE, WORK, LDWORK )
                END IF
 *
@@ -727,26 +723,26 @@
 *
 *              C := C - W * V
 *
-               IF( LASTV.GT.K ) THEN
+               IF( N.GT.K ) THEN
 *
 *                 C1 := C1 - W * V1
 *
                   CALL DGEMM( 'No transpose', 'No transpose',
-     $                 LASTC, LASTV-K, K, -ONE, WORK, LDWORK, V, LDV,
+     $                 LASTC, N-K, K, -ONE, WORK, LDWORK, V, LDV,
      $                 ONE, C, LDC )
                END IF
 *
 *              W := W * V2
 *
                CALL DTRMM( 'Right', 'Lower', 'No transpose', 'Unit',
-     $              LASTC, K, ONE, V( 1, LASTV-K+1 ), LDV,
+     $              LASTC, K, ONE, V( 1, N-K+1 ), LDV,
      $              WORK, LDWORK )
 *
 *              C1 := C1 - W
 *
                DO 240 J = 1, K
                   DO 230 I = 1, LASTC
-                     C( I, LASTV-K+J ) = C( I, LASTV-K+J ) - WORK(I, J)
+                     C( I, N-K+J ) = C( I, N-K+J ) - WORK(I, J)
   230             CONTINUE
   240          CONTINUE
 *
