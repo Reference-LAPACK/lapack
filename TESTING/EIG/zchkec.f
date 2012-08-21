@@ -166,7 +166,7 @@
  9995 FORMAT( / 1X, 'All tests for ', A3,
      $      ' routines passed the threshold ( ', I6, ' tests run)' )
  9994 FORMAT( ' Tests of the Nonsymmetric eigenproblem condition',
-     $      ' estimation routines', / ' ZTRSYL, CTREXC, CTRSNA, CTRSEN',
+     $      ' estimation routines', / ' ZTRSYL, ZTREXC, ZTRSNA, ZTRSEN',
      $      / )
  9993 FORMAT( ' Relative machine precision (EPS) = ', D16.6,
      $      / ' Safe minimum (SFMIN)             = ', D16.6, / )
