@@ -1559,13 +1559,18 @@
       END IF
 *
 *     Undo scaling, if necessary (and possible).
-      IF( ( ( SKL.GT.ONE ) .AND. ( SVA( 1 ).LT.( BIG /
-     $    SKL ) ) ) .OR. ( ( SKL.LT.ONE ) .AND. ( SVA( N2 ).GT.
-     $    ( SFMIN / SKL ) ) ) ) THEN
-         DO 2400 p = 1, N
-            SVA( p ) = SKL*SVA( p )
- 2400    CONTINUE
+      IF( ( SKL.GT.ONE ).AND.( SVA( 1 ).LT.BIG/SKL ) ) THEN
+         DO P = 1, N
+            SVA( P ) = SKL*SVA( P )
+         END DO
          SKL = ONE
+      ELSE IF( N2.GT.0 ) THEN
+         IF( ( SKL.LT.ONE ).AND.( SVA( N2 ).GT.SFMIN/SKL ) ) THEN
+            DO P = 1, N
+               SVA( P ) = SKL*SVA( P )
+            END DO
+            SKL = ONE
+         END IF
       END IF
 *
       WORK( 1 ) = SKL
