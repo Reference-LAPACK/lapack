@@ -10659,7 +10659,9 @@ lapack_int LAPACKE_zsyr_work( int matrix_order, char uplo, lapack_int n,
                                   const lapack_complex_double* x,
                                   lapack_int incx, lapack_complex_double* a,
                                   lapack_int lda );
-
+void LAPACKE_ilaver( const lapack_int* vers_major,
+                     const lapack_int* vers_minor,
+                     const lapack_int* vers_patch );
 
 
 #define LAPACK_sgetrf LAPACK_GLOBAL(sgetrf,SGETRF)
@@ -11698,7 +11700,7 @@ lapack_int LAPACKE_zsyr_work( int matrix_order, char uplo, lapack_int n,
 #define LAPACK_zsysv_rook LAPACK_GLOBAL(zsysv_rook,ZSYSV_ROOK)
 #define LAPACK_csyr LAPACK_GLOBAL(csyr,CSYR)
 #define LAPACK_zsyr LAPACK_GLOBAL(zsyr,ZSYR)
-
+#define LAPACK_ilaver LAPACK_GLOBAL(ilaver,ILAVER)
 
 void LAPACK_sgetrf( lapack_int* m, lapack_int* n, float* a, lapack_int* lda,
                     lapack_int* ipiv, lapack_int *info );
@@ -16331,7 +16333,7 @@ void LAPACK_ztprfb( char* side, char* trans, char* direct, char* storev,
                     lapack_complex_double* a, lapack_int* lda,
                     lapack_complex_double* b, lapack_int* ldb,
                     const double* mywork, lapack_int* myldwork );
-// LAPACK 3.X.X
+// LAPACK 3.5.0
 void LAPACK_ssysv_rook( char* uplo, lapack_int* n, lapack_int* nrhs, float* a,
                         lapack_int* lda, lapack_int* ipiv, float* b,
                         lapack_int* ldb, float* work, lapack_int* lwork,
@@ -16356,6 +16358,8 @@ void LAPACK_csyr( char* uplo, lapack_int* n, lapack_complex_float* alpha,
 void LAPACK_zsyr( char* uplo, lapack_int* n, lapack_complex_double* alpha,
                       const lapack_complex_double* x, lapack_int* incx,
                       lapack_complex_double* a, lapack_int* lda );
+void LAPACK_ilaver( const lapack_int* vers_major, const lapack_int* vers_minor,
+                     const lapack_int* vers_patch );
 
 #ifdef __cplusplus
 }
