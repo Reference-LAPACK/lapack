@@ -2000,7 +2000,8 @@ lapacke_zupmtr_work.o \
 lapacke_zsyr.o \
 lapacke_csyr.o \
 lapacke_zsyr_work.o \
-lapacke_csyr_work.o
+lapacke_csyr_work.o \
+lapacke_ilaver.o
 
 SRCX_OBJ = \
 lapacke_cgbrfsx.o       lapacke_cporfsx.o       lapacke_dgerfsx.o       lapacke_sgbrfsx.o       lapacke_ssyrfsx.o       lapacke_zherfsx.o \
