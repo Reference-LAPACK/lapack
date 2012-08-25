@@ -4,7 +4,7 @@ if(MINGW OR MSYS OR CYGWIN)
 endif()
 
 # Replace each imported target's import library.
-foreach(lib blas lapack tmglib lapacke)
+foreach(lib ${ALL_TARGETS})
   # Replace for all imported build configurations.
   get_property(configs TARGET ${lib} PROPERTY IMPORTED_CONFIGURATIONS)
   foreach(config ${configs})
