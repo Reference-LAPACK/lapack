@@ -251,7 +251,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2012
 *
 *> \ingroup complex16OTHERcomputational
 *
@@ -268,10 +268,10 @@
      $                   GIVCOL, LDGCOL, PERM, GIVNUM, C, S, RWORK,
      $                   IWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2012
 *
 *     .. Scalar Arguments ..
       INTEGER            ICOMPQ, INFO, LDB, LDBX, LDGCOL, LDU, N, NRHS,

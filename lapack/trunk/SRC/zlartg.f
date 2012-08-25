@@ -85,7 +85,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2012
 *
 *> \ingroup complex16OTHERauxiliary
 *
@@ -103,10 +103,10 @@
 *  =====================================================================
       SUBROUTINE ZLARTG( F, G, CS, SN, R )
 *
-*  -- LAPACK auxiliary routine (version 3.4.0) --
+*  -- LAPACK auxiliary routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2012
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   CS

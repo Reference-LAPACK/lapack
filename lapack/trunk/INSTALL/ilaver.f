@@ -41,7 +41,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date April 2012
+*> \date August 2012
 *
 *> \ingroup auxOTHERauxiliary
 *

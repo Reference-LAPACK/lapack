@@ -212,7 +212,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2012
 *
 *> \ingroup realOTHERauxiliary
 *
@@ -230,10 +230,10 @@
      $           PIVMIN, GAPTOL, Z, WANTNC, NEGCNT, ZTZ, MINGMA,
      $           R, ISUPPZ, NRMINV, RESID, RQCORR, WORK )
 *
-*  -- LAPACK auxiliary routine (version 3.4.0) --
+*  -- LAPACK auxiliary routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2012
 *
 *     .. Scalar Arguments ..
       LOGICAL            WANTNC

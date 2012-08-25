@@ -145,7 +145,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2012
 *
 *> \ingroup complexGBcomputational
 *
@@ -153,10 +153,10 @@
       REAL FUNCTION CLA_GBRCOND_X( TRANS, N, KL, KU, AB, LDAB, AFB,
      $                             LDAFB, IPIV, X, INFO, WORK, RWORK )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2012
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS

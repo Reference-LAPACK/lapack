@@ -173,7 +173,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date April 2012
+*> \date August 2012
 *
 *> \ingroup auxOTHERcomputational
 *
@@ -182,10 +182,10 @@
      $                   ITER, NDIV, IEEE, TTYPE, DMIN1, DMIN2, DN, DN1,
      $                   DN2, G, TAU )
 *
-*  -- LAPACK computational routine (version 3.4.1) --
+*  -- LAPACK computational routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     April 2012
+*     August 2012
 *
 *     .. Scalar Arguments ..
       LOGICAL            IEEE

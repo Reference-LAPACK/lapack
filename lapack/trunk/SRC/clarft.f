@@ -130,7 +130,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date April 2012
+*> \date August 2012
 *
 *> \ingroup complexOTHERauxiliary
 *
@@ -163,10 +163,10 @@
 *  =====================================================================
       SUBROUTINE CLARFT( DIRECT, STOREV, N, K, V, LDV, TAU, T, LDT )
 *
-*  -- LAPACK auxiliary routine (version 3.4.1) --
+*  -- LAPACK auxiliary routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     April 2012
+*     August 2012
 *
 *     .. Scalar Arguments ..
       CHARACTER          DIRECT, STOREV
