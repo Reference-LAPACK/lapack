@@ -170,7 +170,8 @@
 *
 *     .. Parameters ..
       INTEGER            MAXIT
-      PARAMETER          ( MAXIT = 64 )
+*     set MAXIT to 40 from 64. RCL 8/26/2012
+      PARAMETER          ( MAXIT = 40 )
       REAL               ZERO, ONE, TWO, THREE, FOUR, EIGHT, TEN
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0, TWO = 2.0E+0,
      $                   THREE = 3.0E+0, FOUR = 4.0E+0, EIGHT = 8.0E+0,
@@ -943,12 +944,12 @@
      $               THREE*ABS( TEMP ) + ABS( TAU )*DW
             IF( W*PREW.GT.ZERO .AND. ABS( W ).GT.ABS( PREW ) / TEN )
      $         SWTCH = .NOT.SWTCH
-*
-            IF( W.LE.ZERO ) THEN
-               SG2LB = MAX( SG2LB, TAU )
-            ELSE
-               SG2UB = MIN( SG2UB, TAU )
-            END IF
+*           I don't understand the following 5 lines in the first place. RCL 8/26/2012
+*            IF( W.LE.ZERO ) THEN
+*               SG2LB = MAX( SG2LB, TAU )
+*            ELSE
+*               SG2UB = MIN( SG2UB, TAU )
+*            END IF
 *
   230    CONTINUE
 *
