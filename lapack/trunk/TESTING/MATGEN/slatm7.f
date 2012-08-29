@@ -114,7 +114,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2012
 *
 *> \ingroup real_matgen
 *
@@ -122,10 +122,10 @@
       SUBROUTINE SLATM7( MODE, COND, IRSIGN, IDIST, ISEED, D, N,
      $                   RANK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2012
 *
 *     .. Scalar Arguments ..
       REAL               COND
@@ -226,7 +226,7 @@
 *
   160    CONTINUE
          D( 1 ) = ONE
-         IF( N.GT.1 ) THEN
+         IF( N.GT.1  .AND. RANK.GT.1 ) THEN
             ALPHA = COND**( -ONE / REAL( RANK-1 ) )
             DO 170 I = 2, RANK
                D( I ) = ALPHA**( I-1 )
