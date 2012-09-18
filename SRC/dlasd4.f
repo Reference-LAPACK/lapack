@@ -1,4 +1,4 @@
-*> \brief \b DLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by sbdsdc.
+*> \brief \b DLASD4 computes the square root of the i-th updated eigenvalue of a positive symmetric rank-one modification to a positive diagonal matrix. Used by dbdsdc.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -305,8 +305,8 @@
 *
          SIGMA = D( N ) + TAU
          DO 30 J = 1, N
-            DELTA( J ) = ( D( J )-D( I ) ) - TAU
-            WORK( J ) = D( J ) + D( I ) + TAU
+            DELTA( J ) = ( D( J )-D( N ) ) - TAU
+            WORK( J ) = D( J ) + D( N ) + TAU
    30    CONTINUE
 *
 *        Evaluate PSI and the derivative DPSI
@@ -327,8 +327,8 @@
          TEMP = Z( N ) / ( DELTA( N )*WORK( N ) )
          PHI = Z( N )*TEMP
          DPHI = TEMP*TEMP
-         ERRETM = EIGHT*( -PHI-PSI ) + ERRETM - PHI + RHOINV +
-     $            ABS( TAU2 )*( DPSI+DPHI )
+         ERRETM = EIGHT*( -PHI-PSI ) + ERRETM - PHI + RHOINV  
+*    $          + ABS( TAU2 )*( DPSI+DPHI )
 *
          W = RHOINV + PHI + PSI
 *
@@ -396,8 +396,8 @@
          TEMP = Z( N ) / TAU2
          PHI = Z( N )*TEMP
          DPHI = TEMP*TEMP
-         ERRETM = EIGHT*( -PHI-PSI ) + ERRETM - PHI + RHOINV +
-     $            ABS( TAU2 )*( DPSI+DPHI )
+         ERRETM = EIGHT*( -PHI-PSI ) + ERRETM - PHI + RHOINV  
+*    $          + ABS( TAU2 )*( DPSI+DPHI )
 *
          W = RHOINV + PHI + PSI
 *
@@ -466,8 +466,8 @@
             TEMP = Z( N ) / TAU2
             PHI = Z( N )*TEMP
             DPHI = TEMP*TEMP
-            ERRETM = EIGHT*( -PHI-PSI ) + ERRETM - PHI + RHOINV +
-     $               ABS( TAU2 )*( DPSI+DPHI )
+            ERRETM = EIGHT*( -PHI-PSI ) + ERRETM - PHI + RHOINV  
+*    $             + ABS( TAU2 )*( DPSI+DPHI )
 *
             W = RHOINV + PHI + PSI
    90    CONTINUE
@@ -618,8 +618,9 @@
          DW = DPSI + DPHI + TEMP*TEMP
          TEMP = Z( II )*TEMP
          W = W + TEMP
-         ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV +
-     $            THREE*ABS( TEMP ) + ABS( TAU2 )*DW
+         ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV 
+     $          + THREE*ABS( TEMP ) 
+*    $          + ABS( TAU2 )*DW
 *
 *        Test for convergence
 *
@@ -698,7 +699,8 @@
 *
             IF( INFO.NE.0 ) THEN
 *
-*              If INFO is not 0, i.e., DLAED6 failed, switch back to 2 pole interpolation.
+*              If INFO is not 0, i.e., DLAED6 failed, switch back 
+*              to 2 pole interpolation.
 *
                SWTCH3 = .FALSE.
                INFO = 0
@@ -797,8 +799,9 @@
          DW = DPSI + DPHI + TEMP*TEMP
          TEMP = Z( II )*TEMP
          W = RHOINV + PHI + PSI + TEMP
-         ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV +
-     $            THREE*ABS( TEMP ) + ABS( TAU2 )*DW
+         ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV 
+     $          + THREE*ABS( TEMP ) 
+*    $          + ABS( TAU2 )*DW
 *
          SWTCH = .FALSE.
          IF( ORGATI ) THEN
@@ -915,7 +918,8 @@
 *
                IF( INFO.NE.0 ) THEN
 *
-*                 If INFO is not 0, i.e., DLAED6 failed, switch back to two pole interpolation
+*                 If INFO is not 0, i.e., DLAED6 failed, switch 
+*                 back to two pole interpolation
 *
                   SWTCH3 = .FALSE.
                   INFO = 0
@@ -1030,8 +1034,9 @@
             DW = DPSI + DPHI + TEMP*TEMP
             TEMP = Z( II )*TEMP
             W = RHOINV + PHI + PSI + TEMP
-            ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV +
-     $               THREE*ABS( TEMP ) + ABS( TAU2 )*DW
+            ERRETM = EIGHT*( PHI-PSI ) + ERRETM + TWO*RHOINV 
+     $             + THREE*ABS( TEMP ) 
+*    $             + ABS( TAU2 )*DW
 *
             IF( W*PREW.GT.ZERO .AND. ABS( W ).GT.ABS( PREW ) / TEN )
      $         SWTCH = .NOT.SWTCH
