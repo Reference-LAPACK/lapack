@@ -156,7 +156,7 @@
 *> \param[in] LIWORK
 *> \verbatim
 *>          LIWORK is INTEGER
-*>          The dimension of the array LIWORK.
+*>          The dimension of the array IWORK.
 *>          If JOBZ  = 'N' or N <= 1, LIWORK must be at least 1.
 *>          If JOBZ  = 'V' and N > 2, LIWORK must be at least 3 + 5*N.
 *>
