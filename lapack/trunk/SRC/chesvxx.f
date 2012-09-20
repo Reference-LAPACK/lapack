@@ -456,7 +456,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (2*N)
+*>          WORK is COMPLEX array, dimension (5*N)
 *> \endverbatim
 *>
 *> \param[out] RWORK
