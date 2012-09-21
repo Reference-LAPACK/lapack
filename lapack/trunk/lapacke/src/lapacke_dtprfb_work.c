@@ -39,13 +39,13 @@ lapack_int LAPACKE_dtprfb_work( int matrix_order, char side, char trans,
                                 const double* v, lapack_int ldv,
                                 const double* t, lapack_int ldt, double* a,
                                 lapack_int lda, double* b, lapack_int ldb,
-                                const double* mywork, lapack_int myldwork )
+                                const double* work, lapack_int ldwork )
 {
     lapack_int info = 0;
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dtprfb( &side, &trans, &direct, &storev, &m, &n, &k, &l, v, &ldv,
-                       t, &ldt, a, &lda, b, &ldb, mywork, &myldwork );
+                       t, &ldt, a, &lda, b, &ldb, work, &ldwork );
         if( info < 0 ) {
             info = info - 1;
         }
@@ -108,8 +108,8 @@ lapack_int LAPACKE_dtprfb_work( int matrix_order, char side, char trans,
         LAPACKE_dge_trans( matrix_order, m, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dtprfb( &side, &trans, &direct, &storev, &m, &n, &k, &l, v_t,
-                       &ldv_t, t_t, &ldt_t, a_t, &lda_t, b_t, &ldb_t, mywork,
-                       &myldwork );
+                       &ldv_t, t_t, &ldt_t, a_t, &lda_t, b_t, &ldb_t, work,
+                       &ldwork );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
         LAPACKE_dge_trans( LAPACK_COL_MAJOR, k, m, a_t, lda_t, a, lda );

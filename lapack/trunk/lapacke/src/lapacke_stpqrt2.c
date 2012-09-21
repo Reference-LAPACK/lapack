@@ -33,7 +33,8 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stpqrt2( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_stpqrt2( int matrix_order,
+                            lapack_int m, lapack_int n, lapack_int l,
                             float* a, lapack_int lda, float* b, lapack_int ldb,
                             float* t, lapack_int ldt )
 {
@@ -50,5 +51,5 @@ lapack_int LAPACKE_stpqrt2( int matrix_order, lapack_int m, lapack_int n,
         return -6;
     }
 #endif
-    return LAPACKE_stpqrt2_work( matrix_order, m, n, a, lda, b, ldb, t, ldt );
+    return LAPACKE_stpqrt2_work( matrix_order, m, n, l, a, lda, b, ldb, t, ldt );
 }

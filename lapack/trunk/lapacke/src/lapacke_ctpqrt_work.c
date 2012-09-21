@@ -36,14 +36,14 @@
 lapack_int LAPACKE_ctpqrt_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_int l, lapack_int nb,
                                 lapack_complex_float* a, lapack_int lda,
-                                lapack_complex_float* t,
                                 lapack_complex_float* b, lapack_int ldb,
-                                lapack_int ldt, lapack_complex_float* work )
+                                lapack_complex_float* t, lapack_int ldt,
+                                lapack_complex_float* work )
 {
     lapack_int info = 0;
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_ctpqrt( &m, &n, &l, &nb, a, &lda, t, b, &ldb, &ldt, work,
+        LAPACK_ctpqrt( &m, &n, &l, &nb, a, &lda, b, &ldb, t, &ldt, work,
                        &info );
         if( info < 0 ) {
             info = info - 1;
@@ -94,7 +94,7 @@ lapack_int LAPACKE_ctpqrt_work( int matrix_order, lapack_int m, lapack_int n,
         LAPACKE_cge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
         LAPACKE_cge_trans( matrix_order, m, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_ctpqrt( &m, &n, &l, &nb, a_t, &lda_t, t_t, b_t, &ldb_t, &ldt_t,
+        LAPACK_ctpqrt( &m, &n, &l, &nb, a_t, &lda_t, b_t, &ldb_t, t_t, &ldt_t,
                        work, &info );
         if( info < 0 ) {
             info = info - 1;

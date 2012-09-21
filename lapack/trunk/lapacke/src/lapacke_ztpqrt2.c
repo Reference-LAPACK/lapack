@@ -33,7 +33,8 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztpqrt2( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_ztpqrt2( int matrix_order,
+                            lapack_int m, lapack_int n, lapack_int l,
                             lapack_complex_double* a, lapack_int lda,
                             lapack_complex_double* b, lapack_int ldb,
                             lapack_complex_double* t, lapack_int ldt )
@@ -51,5 +52,5 @@ lapack_int LAPACKE_ztpqrt2( int matrix_order, lapack_int m, lapack_int n,
         return -6;
     }
 #endif
-    return LAPACKE_ztpqrt2_work( matrix_order, m, n, a, lda, b, ldb, t, ldt );
+    return LAPACKE_ztpqrt2_work( matrix_order, m, n, l, a, lda, b, ldb, t, ldt );
 }

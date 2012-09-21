@@ -33,14 +33,15 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stpqrt2_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_stpqrt2_work( int matrix_order,
+                                 lapack_int m, lapack_int n, lapack_int l,
                                  float* a, lapack_int lda, float* b,
                                  lapack_int ldb, float* t, lapack_int ldt )
 {
     lapack_int info = 0;
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_stpqrt2( &m, &n, a, &lda, b, &ldb, t, &ldt, &info );
+        LAPACK_stpqrt2( &m, &n, &l, a, &lda, b, &ldb, t, &ldt, &info );
         if( info < 0 ) {
             info = info - 1;
         }
@@ -87,7 +88,7 @@ lapack_int LAPACKE_stpqrt2_work( int matrix_order, lapack_int m, lapack_int n,
         LAPACKE_sge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
         LAPACKE_sge_trans( matrix_order, m, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_stpqrt2( &m, &n, a_t, &lda_t, b_t, &ldb_t, t_t, &ldt_t, &info );
+        LAPACK_stpqrt2( &m, &n, &l, a_t, &lda_t, b_t, &ldb_t, t_t, &ldt_t, &info );
         if( info < 0 ) {
             info = info - 1;
         }
