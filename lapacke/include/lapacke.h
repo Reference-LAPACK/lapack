@@ -10396,27 +10396,33 @@ lapack_int LAPACKE_dtpqrt( int matrix_order, lapack_int m, lapack_int n,
                            lapack_int lda, double* b, lapack_int ldb, double* t,
                            lapack_int ldt );
 lapack_int LAPACKE_ctpqrt( int matrix_order, lapack_int m, lapack_int n,
-                           lapack_int l, lapack_int nb, lapack_complex_float* a,
-                           lapack_int lda, lapack_complex_float* t,
+                           lapack_int l, lapack_int nb,
+                           lapack_complex_float* a, lapack_int lda, 
                            lapack_complex_float* b, lapack_int ldb,
-                           lapack_int ldt );
+                           lapack_complex_float* t, lapack_int ldt );
 lapack_int LAPACKE_ztpqrt( int matrix_order, lapack_int m, lapack_int n,
                            lapack_int l, lapack_int nb,
                            lapack_complex_double* a, lapack_int lda,
                            lapack_complex_double* b, lapack_int ldb,
                            lapack_complex_double* t, lapack_int ldt );
 
-lapack_int LAPACKE_stpqrt2( int matrix_order, lapack_int m, lapack_int n,
-                            float* a, lapack_int lda, float* b, lapack_int ldb,
+lapack_int LAPACKE_stpqrt2( int matrix_order,
+                            lapack_int m, lapack_int n, lapack_int l,
+                            float* a, lapack_int lda,
+                            float* b, lapack_int ldb,
                             float* t, lapack_int ldt );
-lapack_int LAPACKE_dtpqrt2( int matrix_order, lapack_int m, lapack_int n,
-                            double* a, lapack_int lda, double* b,
-                            lapack_int ldb, double* t, lapack_int ldt );
-lapack_int LAPACKE_ctpqrt2( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_dtpqrt2( int matrix_order,
+                            lapack_int m, lapack_int n, lapack_int l,
+                            double* a, lapack_int lda,
+                            double* b, lapack_int ldb,
+                            double* t, lapack_int ldt );
+lapack_int LAPACKE_ctpqrt2( int matrix_order, 
+                            lapack_int m, lapack_int n, lapack_int l,
                             lapack_complex_float* a, lapack_int lda,
                             lapack_complex_float* b, lapack_int ldb,
                             lapack_complex_float* t, lapack_int ldt );
-lapack_int LAPACKE_ztpqrt2( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_ztpqrt2( int matrix_order,
+                            lapack_int m, lapack_int n, lapack_int l,
                             lapack_complex_double* a, lapack_int lda,
                             lapack_complex_double* b, lapack_int ldb,
                             lapack_complex_double* t, lapack_int ldt );
@@ -10425,30 +10431,26 @@ lapack_int LAPACKE_stprfb( int matrix_order, char side, char trans, char direct,
                            char storev, lapack_int m, lapack_int n,
                            lapack_int k, lapack_int l, const float* v,
                            lapack_int ldv, const float* t, lapack_int ldt,
-                           float* a, lapack_int lda, float* b, lapack_int ldb,
-                           lapack_int myldwork );
+                           float* a, lapack_int lda, float* b, lapack_int ldb );
 lapack_int LAPACKE_dtprfb( int matrix_order, char side, char trans, char direct,
                            char storev, lapack_int m, lapack_int n,
                            lapack_int k, lapack_int l, const double* v,
                            lapack_int ldv, const double* t, lapack_int ldt,
-                           double* a, lapack_int lda, double* b, lapack_int ldb,
-                           lapack_int myldwork );
+                           double* a, lapack_int lda, double* b, lapack_int ldb );
 lapack_int LAPACKE_ctprfb( int matrix_order, char side, char trans, char direct,
                            char storev, lapack_int m, lapack_int n,
                            lapack_int k, lapack_int l,
                            const lapack_complex_float* v, lapack_int ldv,
                            const lapack_complex_float* t, lapack_int ldt,
                            lapack_complex_float* a, lapack_int lda,
-                           lapack_complex_float* b, lapack_int ldb,
-                           lapack_int myldwork );
+                           lapack_complex_float* b, lapack_int ldb );
 lapack_int LAPACKE_ztprfb( int matrix_order, char side, char trans, char direct,
                            char storev, lapack_int m, lapack_int n,
                            lapack_int k, lapack_int l,
                            const lapack_complex_double* v, lapack_int ldv,
                            const lapack_complex_double* t, lapack_int ldt,
                            lapack_complex_double* a, lapack_int lda,
-                           lapack_complex_double* b, lapack_int ldb,
-                           lapack_int myldwork );
+                           lapack_complex_double* b, lapack_int ldb );
 
 lapack_int LAPACKE_sgemqrt_work( int matrix_order, char side, char trans,
                                  lapack_int m, lapack_int n, lapack_int k,
@@ -10550,9 +10552,9 @@ lapack_int LAPACKE_dtpqrt_work( int matrix_order, lapack_int m, lapack_int n,
 lapack_int LAPACKE_ctpqrt_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_int l, lapack_int nb,
                                 lapack_complex_float* a, lapack_int lda,
-                                lapack_complex_float* t,
                                 lapack_complex_float* b, lapack_int ldb,
-                                lapack_int ldt, lapack_complex_float* work );
+                                lapack_complex_float* t, lapack_int ldt,
+                                lapack_complex_float* work );
 lapack_int LAPACKE_ztpqrt_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_int l, lapack_int nb,
                                 lapack_complex_double* a, lapack_int lda,
@@ -10560,17 +10562,23 @@ lapack_int LAPACKE_ztpqrt_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_complex_double* t, lapack_int ldt,
                                 lapack_complex_double* work );
 
-lapack_int LAPACKE_stpqrt2_work( int matrix_order, lapack_int m, lapack_int n,
-                                 float* a, lapack_int lda, float* b,
-                                 lapack_int ldb, float* t, lapack_int ldt );
-lapack_int LAPACKE_dtpqrt2_work( int matrix_order, lapack_int m, lapack_int n,
-                                 double* a, lapack_int lda, double* b,
-                                 lapack_int ldb, double* t, lapack_int ldt );
-lapack_int LAPACKE_ctpqrt2_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_stpqrt2_work( int matrix_order,
+                                 lapack_int m, lapack_int n, lapack_int l,
+                                 float* a, lapack_int lda,
+                                 float* b, lapack_int ldb,
+                                 float* t, lapack_int ldt );
+lapack_int LAPACKE_dtpqrt2_work( int matrix_order,
+                                 lapack_int m, lapack_int n, lapack_int l,
+                                 double* a, lapack_int lda,
+                                 double* b, lapack_int ldb,
+                                 double* t, lapack_int ldt );
+lapack_int LAPACKE_ctpqrt2_work( int matrix_order,
+                                 lapack_int m, lapack_int n, lapack_int l,
                                  lapack_complex_float* a, lapack_int lda,
                                  lapack_complex_float* b, lapack_int ldb,
                                  lapack_complex_float* t, lapack_int ldt );
-lapack_int LAPACKE_ztpqrt2_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_ztpqrt2_work( int matrix_order,
+                                 lapack_int m, lapack_int n, lapack_int l,
                                  lapack_complex_double* a, lapack_int lda,
                                  lapack_complex_double* b, lapack_int ldb,
                                  lapack_complex_double* t, lapack_int ldt );
@@ -10580,15 +10588,15 @@ lapack_int LAPACKE_stprfb_work( int matrix_order, char side, char trans,
                                 lapack_int n, lapack_int k, lapack_int l,
                                 const float* v, lapack_int ldv, const float* t,
                                 lapack_int ldt, float* a, lapack_int lda,
-                                float* b, lapack_int ldb, const float* mywork,
-                                lapack_int myldwork );
+                                float* b, lapack_int ldb, const float* work,
+                                lapack_int ldwork );
 lapack_int LAPACKE_dtprfb_work( int matrix_order, char side, char trans,
                                 char direct, char storev, lapack_int m,
                                 lapack_int n, lapack_int k, lapack_int l,
                                 const double* v, lapack_int ldv,
                                 const double* t, lapack_int ldt, double* a,
                                 lapack_int lda, double* b, lapack_int ldb,
-                                const double* mywork, lapack_int myldwork );
+                                const double* work, lapack_int ldwork );
 lapack_int LAPACKE_ctprfb_work( int matrix_order, char side, char trans,
                                 char direct, char storev, lapack_int m,
                                 lapack_int n, lapack_int k, lapack_int l,
@@ -10596,7 +10604,7 @@ lapack_int LAPACKE_ctprfb_work( int matrix_order, char side, char trans,
                                 const lapack_complex_float* t, lapack_int ldt,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_complex_float* b, lapack_int ldb,
-                                const float* mywork, lapack_int myldwork );
+                                const float* work, lapack_int ldwork );
 lapack_int LAPACKE_ztprfb_work( int matrix_order, char side, char trans,
                                 char direct, char storev, lapack_int m,
                                 lapack_int n, lapack_int k, lapack_int l,
@@ -10604,7 +10612,7 @@ lapack_int LAPACKE_ztprfb_work( int matrix_order, char side, char trans,
                                 const lapack_complex_double* t, lapack_int ldt,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_complex_double* b, lapack_int ldb,
-                                const double* mywork, lapack_int myldwork );
+                                const double* work, lapack_int ldwork );
 //LAPACK 3.X.X
 lapack_int LAPACKE_ssysv_rook( int matrix_order, char uplo, lapack_int n,
                                lapack_int nrhs, float* a, lapack_int lda,
@@ -16285,54 +16293,60 @@ void LAPACK_dtpqrt( lapack_int* m, lapack_int* n, lapack_int* l, lapack_int* nb,
                     lapack_int *info );
 void LAPACK_ctpqrt( lapack_int* m, lapack_int* n, lapack_int* l, lapack_int* nb,
                     lapack_complex_float* a, lapack_int* lda,
-                    lapack_complex_float* t, lapack_complex_float* b,
-                    lapack_int* ldb, lapack_int* ldt,
+                    lapack_complex_float* b, lapack_int* ldb,
+                    lapack_complex_float* t, lapack_int* ldt,
                     lapack_complex_float* work, lapack_int *info );
 void LAPACK_ztpqrt( lapack_int* m, lapack_int* n, lapack_int* l, lapack_int* nb,
                     lapack_complex_double* a, lapack_int* lda,
                     lapack_complex_double* b, lapack_int* ldb,
                     lapack_complex_double* t, lapack_int* ldt,
                     lapack_complex_double* work, lapack_int *info );
-void LAPACK_stpqrt2( lapack_int* m, lapack_int* n, float* a, lapack_int* lda,
-                     float* b, lapack_int* ldb, float* t, lapack_int* ldt,
+void LAPACK_stpqrt2( lapack_int* m, lapack_int* n, lapack_int* l,
+                     float* a, lapack_int* lda,
+                     float* b, lapack_int* ldb,
+                     float* t, lapack_int* ldt,
                      lapack_int *info );
-void LAPACK_dtpqrt2( lapack_int* m, lapack_int* n, double* a, lapack_int* lda,
-                     double* b, lapack_int* ldb, double* t, lapack_int* ldt,
+void LAPACK_dtpqrt2( lapack_int* m, lapack_int* n, lapack_int* l,
+                     double* a, lapack_int* lda,
+                     double* b, lapack_int* ldb,
+                     double* t, lapack_int* ldt,
                      lapack_int *info );
-void LAPACK_ctpqrt2( lapack_int* m, lapack_int* n, lapack_complex_float* a,
-                     lapack_int* lda, lapack_complex_float* b, lapack_int* ldb,
+void LAPACK_ctpqrt2( lapack_int* m, lapack_int* n, lapack_int* l,
+                     lapack_complex_float* a, lapack_int* lda,
+                     lapack_complex_float* b, lapack_int* ldb,
                      lapack_complex_float* t, lapack_int* ldt,
                      lapack_int *info );
-void LAPACK_ztpqrt2( lapack_int* m, lapack_int* n, lapack_complex_double* a,
-                     lapack_int* lda, lapack_complex_double* b, lapack_int* ldb,
+void LAPACK_ztpqrt2( lapack_int* m, lapack_int* n, lapack_int* l,
+                     lapack_complex_double* a, lapack_int* lda,
+                     lapack_complex_double* b, lapack_int* ldb,
                      lapack_complex_double* t, lapack_int* ldt,
                      lapack_int *info );
 void LAPACK_stprfb( char* side, char* trans, char* direct, char* storev,
                     lapack_int* m, lapack_int* n, lapack_int* k, lapack_int* l,
                     const float* v, lapack_int* ldv, const float* t,
                     lapack_int* ldt, float* a, lapack_int* lda, float* b,
-                    lapack_int* ldb, const float* mywork,
-                    lapack_int* myldwork );
+                    lapack_int* ldb, const float* work,
+                    lapack_int* ldwork );
 void LAPACK_dtprfb( char* side, char* trans, char* direct, char* storev,
                     lapack_int* m, lapack_int* n, lapack_int* k, lapack_int* l,
                     const double* v, lapack_int* ldv, const double* t,
                     lapack_int* ldt, double* a, lapack_int* lda, double* b,
-                    lapack_int* ldb, const double* mywork,
-                    lapack_int* myldwork );
+                    lapack_int* ldb, const double* work,
+                    lapack_int* ldwork );
 void LAPACK_ctprfb( char* side, char* trans, char* direct, char* storev,
                     lapack_int* m, lapack_int* n, lapack_int* k, lapack_int* l,
                     const lapack_complex_float* v, lapack_int* ldv,
                     const lapack_complex_float* t, lapack_int* ldt,
                     lapack_complex_float* a, lapack_int* lda,
                     lapack_complex_float* b, lapack_int* ldb,
-                    const float* mywork, lapack_int* myldwork );
+                    const float* work, lapack_int* ldwork );
 void LAPACK_ztprfb( char* side, char* trans, char* direct, char* storev,
                     lapack_int* m, lapack_int* n, lapack_int* k, lapack_int* l,
                     const lapack_complex_double* v, lapack_int* ldv,
                     const lapack_complex_double* t, lapack_int* ldt,
                     lapack_complex_double* a, lapack_int* lda,
                     lapack_complex_double* b, lapack_int* ldb,
-                    const double* mywork, lapack_int* myldwork );
+                    const double* work, lapack_int* ldwork );
 // LAPACK 3.5.0
 void LAPACK_ssysv_rook( char* uplo, lapack_int* n, lapack_int* nrhs, float* a,
                         lapack_int* lda, lapack_int* ipiv, float* b,

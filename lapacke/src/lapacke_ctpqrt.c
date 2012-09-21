@@ -34,10 +34,10 @@
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_ctpqrt( int matrix_order, lapack_int m, lapack_int n,
-                           lapack_int l, lapack_int nb, lapack_complex_float* a,
-                           lapack_int lda, lapack_complex_float* t,
+                           lapack_int l, lapack_int nb, 
+                           lapack_complex_float* a, lapack_int lda, 
                            lapack_complex_float* b, lapack_int ldb,
-                           lapack_int ldt )
+                           lapack_complex_float* t, lapack_int ldt )
 {
     lapack_int info = 0;
     lapack_complex_float* work = NULL;
@@ -62,8 +62,8 @@ lapack_int LAPACKE_ctpqrt( int matrix_order, lapack_int m, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ctpqrt_work( matrix_order, m, n, l, nb, a, lda, t, b, ldb,
-                                ldt, work );
+    info = LAPACKE_ctpqrt_work( matrix_order, m, n, l, nb, a, lda, b, ldb,
+                                t, ldt, work );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:

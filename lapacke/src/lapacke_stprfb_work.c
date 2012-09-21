@@ -38,14 +38,14 @@ lapack_int LAPACKE_stprfb_work( int matrix_order, char side, char trans,
                                 lapack_int n, lapack_int k, lapack_int l,
                                 const float* v, lapack_int ldv, const float* t,
                                 lapack_int ldt, float* a, lapack_int lda,
-                                float* b, lapack_int ldb, const float* mywork,
-                                lapack_int myldwork )
+                                float* b, lapack_int ldb, const float* work,
+                                lapack_int ldwork )
 {
     lapack_int info = 0;
     if( matrix_order == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_stprfb( &side, &trans, &direct, &storev, &m, &n, &k, &l, v, &ldv,
-                       t, &ldt, a, &lda, b, &ldb, mywork, &myldwork );
+                       t, &ldt, a, &lda, b, &ldb, work, &ldwork );
         if( info < 0 ) {
             info = info - 1;
         }
@@ -108,8 +108,8 @@ lapack_int LAPACKE_stprfb_work( int matrix_order, char side, char trans,
         LAPACKE_sge_trans( matrix_order, m, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_stprfb( &side, &trans, &direct, &storev, &m, &n, &k, &l, v_t,
-                       &ldv_t, t_t, &ldt_t, a_t, &lda_t, b_t, &ldb_t, mywork,
-                       &myldwork );
+                       &ldv_t, t_t, &ldt_t, a_t, &lda_t, b_t, &ldb_t, work,
+                       &ldwork );
         info = 0;  /* LAPACK call is ok! */
         /* Transpose output matrices */
         LAPACKE_sge_trans( LAPACK_COL_MAJOR, k, m, a_t, lda_t, a, lda );
