@@ -40,9 +40,9 @@ lapack_int LAPACKE_stprfb( int matrix_order, char side, char trans, char direct,
                            float* a, lapack_int lda, float* b, lapack_int ldb)
 {
     lapack_int info = 0;
-    lapack_int ldwork = -1;
+    lapack_int ldwork;
+    lapack_int work_size;
     float* work = NULL;
-    float work_query;
     if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_stprfb", -1 );
         return -1;
@@ -62,15 +62,15 @@ lapack_int LAPACKE_stprfb( int matrix_order, char side, char trans, char direct,
         return -10;
     }
 #endif
-    /* Query optimal working array(s) size */
-    info = LAPACKE_stprfb_work( matrix_order, side, trans, direct, storev, m, n,
-                                k, l, v, ldv, t, ldt, a, lda, b, ldb, 
-                                &work_query, ldwork );
-    if( info != 0 ) {
-        goto exit_level_0;
-    }
-    ldwork = (lapack_int)work_query;
-    /* Allocate memory for working array(s) */
+    if (side=='l' ||  side=='L') {
+       ldwork = k;
+       work_size = MAX(1,ldwork) * MAX(1,n);
+       }
+    else {
+       ldwork = m;
+       work_size = MAX(1,ldwork) * MAX(1,k);
+       }    
+        /* Allocate memory for working array(s) */
     work = (float*)
         LAPACKE_malloc( sizeof(float) * MAX(1,ldwork) * MAX(n,k) );
     if( work == NULL ) {

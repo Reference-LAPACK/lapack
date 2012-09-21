@@ -184,11 +184,6 @@
 *>          The leading dimension of the array WORK.
 *>          If SIDE = 'L', LDWORK >= K; 
 *>          if SIDE = 'R', LDWORK >= M.
-*>
-*>          If LDWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of 2nd dimension of the WORK array,
-*>          returns this value as the first entry of the WORK array, and no 
-*>          error message related to LDWORK is issued by XERBLA.
 *> \endverbatim
 *
 *  Authors:
@@ -278,7 +273,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER   I, J, MP, NP, KP
-      LOGICAL   LEFT, LQUERY, FORWARD, COLUMN, RIGHT, BACKWARD, ROW
+      LOGICAL   LEFT, FORWARD, COLUMN, RIGHT, BACKWARD, ROW
 *     ..
 *     .. External Functions ..
       LOGICAL   LSAME
@@ -292,7 +287,6 @@
 *     ..
 *     .. Executable Statements ..
 *
-      LQUERY = ( LDWORK.EQ.-1 )
 *     Quick return if possible
 *
       IF( M.LE.0 .OR. N.LE.0 .OR. K.LE.0 .OR. L.LT.0 ) RETURN
@@ -328,19 +322,6 @@
       ELSE
          FORWARD = .FALSE.
          BACKWARD = .FALSE.
-      END IF
-* ---------------------------------------------------------------------------
-*      
-*     Workspace Query
-*
-      IF( LQUERY .AND. LEFT  ) THEN
-         LDWORK=MAX(1,K)
-      ELSE IF ( LQUERY .AND. RIGHT  ) THEN
-         LDWORK=MAX(1,M)
-      END IF
-          
-      IF( LQUERY ) THEN
-         RETURN
       END IF
 *
 * ---------------------------------------------------------------------------
