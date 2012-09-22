@@ -648,7 +648,7 @@
 *                          Compare RWORK(2*NRHS+1) from CGBSVX with the
 *                          computed reciprocal pivot growth RPVGRW
 *
-                           IF( INFO.NE.0 ) THEN
+                           IF( INFO.NE.0 .AND. INFO.LE.N) THEN
                               ANRMPV = ZERO
                               DO 70 J = 1, INFO
                                  DO 60 I = MAX( KU+2-J, 1 ),
