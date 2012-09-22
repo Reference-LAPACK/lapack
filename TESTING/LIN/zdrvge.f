@@ -553,7 +553,7 @@
 *                    Compare RWORK(2*NRHS+1) from ZGESVX with the
 *                    computed reciprocal pivot growth factor RPVGRW
 *
-                     IF( INFO.NE.0 ) THEN
+                     IF( INFO.NE.0 .AND. INFO.LE.N) THEN
                         RPVGRW = ZLANTR( 'M', 'U', 'N', INFO, INFO,
      $                           AFAC, LDA, RDUM )
                         IF( RPVGRW.EQ.ZERO ) THEN

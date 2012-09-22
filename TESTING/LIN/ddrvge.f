@@ -552,7 +552,7 @@
 *                    Compare WORK(1) from DGESVX with the computed
 *                    reciprocal pivot growth factor RPVGRW
 *
-                     IF( INFO.NE.0 ) THEN
+                     IF( INFO.NE.0 .AND. INFO.LE.N) THEN
                         RPVGRW = DLANTR( 'M', 'U', 'N', INFO, INFO,
      $                           AFAC, LDA, WORK )
                         IF( RPVGRW.EQ.ZERO ) THEN
