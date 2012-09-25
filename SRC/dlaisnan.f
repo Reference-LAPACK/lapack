@@ -67,7 +67,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date August 2012
+*> \date September 2012
 *
 *> \ingroup auxOTHERauxiliary
 *
@@ -77,7 +77,7 @@
 *  -- LAPACK auxiliary routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     August 2012
+*     September 2012
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   DIN1, DIN2

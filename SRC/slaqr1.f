@@ -108,7 +108,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date August 2012
+*> \date September 2012
 *
 *> \ingroup realOTHERauxiliary
 *
@@ -124,7 +124,7 @@
 *  -- LAPACK auxiliary routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     August 2012
+*     September 2012
 *
 *     .. Scalar Arguments ..
       REAL               SI1, SI2, SR1, SR2
