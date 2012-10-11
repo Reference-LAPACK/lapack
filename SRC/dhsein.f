@@ -108,6 +108,7 @@
 *> \verbatim
 *>          H is DOUBLE PRECISION array, dimension (LDH,N)
 *>          The upper Hessenberg matrix H.
+*>          If a NaN is detected in H, the routine will return with INFO=-6.
 *> \endverbatim
 *>
 *> \param[in] LDH
@@ -291,9 +292,9 @@
      $                   WKR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       DOUBLE PRECISION   DLAMCH, DLANHS
-      EXTERNAL           LSAME, DLAMCH, DLANHS
+      EXTERNAL           LSAME, DLAMCH, DLANHS, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLAEIN, XERBLA
@@ -423,7 +424,10 @@
 *              has not ben computed before.
 *
                HNORM = DLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, WORK )
-               IF( HNORM.GT.ZERO ) THEN
+               IF( DISNAN( HNORM ) ) THEN
+                  INFO = -6
+                  RETURN
+               ELSE IF( HNORM.GT.ZERO ) THEN
                   EPS3 = HNORM*ULP
                ELSE
                   EPS3 = SMLNUM

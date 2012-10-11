@@ -104,6 +104,7 @@
 *> \verbatim
 *>          H is COMPLEX*16 array, dimension (LDH,N)
 *>          The upper Hessenberg matrix H.
+*>          If a NaN is detected in H, the routine will return with INFO=-6.
 *> \endverbatim
 *>
 *> \param[in] LDH
@@ -276,9 +277,9 @@
       COMPLEX*16         CDUM, WK
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       DOUBLE PRECISION   DLAMCH, ZLANHS
-      EXTERNAL           LSAME, DLAMCH, ZLANHS
+      EXTERNAL           LSAME, DLAMCH, ZLANHS, DISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZLAEIN
@@ -399,7 +400,10 @@
 *              has not ben computed before.
 *
                HNORM = ZLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, RWORK )
-               IF( HNORM.GT.RZERO ) THEN
+               IF( DISNAN( HNORM ) ) THEN
+                  INFO = -6
+                  RETURN
+               ELSE IF( HNORM.GT.RZERO ) THEN
                   EPS3 = HNORM*ULP
                ELSE
                   EPS3 = SMLNUM
