@@ -104,6 +104,7 @@
 *> \verbatim
 *>          H is COMPLEX array, dimension (LDH,N)
 *>          The upper Hessenberg matrix H.
+*>          If a NaN is detected in H, the routine will return with INFO=-6.
 *> \endverbatim
 *>
 *> \param[in] LDH
@@ -276,9 +277,9 @@
       COMPLEX            CDUM, WK
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       REAL               CLANHS, SLAMCH
-      EXTERNAL           LSAME, CLANHS, SLAMCH
+      EXTERNAL           LSAME, CLANHS, SLAMCH, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLAEIN, XERBLA
@@ -399,7 +400,10 @@
 *              has not ben computed before.
 *
                HNORM = CLANHS( 'I', KR-KL+1, H( KL, KL ), LDH, RWORK )
-               IF( HNORM.GT.RZERO ) THEN
+               IF( SISNAN( HNORM ) ) THEN
+                  INFO = -6
+                  RETURN
+               ELSE IF( (HNORM.GT.RZERO) ) THEN
                   EPS3 = HNORM*ULP
                ELSE
                   EPS3 = SMLNUM
