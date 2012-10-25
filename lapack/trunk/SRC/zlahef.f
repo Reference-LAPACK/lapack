@@ -1,4 +1,4 @@
-*> \brief \b ZLAHEF computes a partial factorization of a complex Hermitian indefinite matrix, using the diagonal pivoting method.
+*> \brief \b ZLAHEF computes a partial factorization of a complex Hermitian indefinite matrix using the Bunch-Kaufman diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -110,16 +110,26 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D.
-*>          If UPLO = 'U', only the last KB elements of IPIV are set;
-*>          if UPLO = 'L', only the first KB elements are set.
 *>
-*>          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
-*>          interchanged and D(k,k) is a 1-by-1 diagonal block.
-*>          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and
-*>          columns k-1 and -IPIV(k) were interchanged and D(k-1:k,k-1:k)
-*>          is a 2-by-2 diagonal block.  If UPLO = 'L' and IPIV(k) =
-*>          IPIV(k+1) < 0, then rows and columns k+1 and -IPIV(k) were
-*>          interchanged and D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
+*>          If UPLO = 'U':
+*>             Only the last KB elements of IPIV are set.
+*>
+*>             If IPIV(k) > 0, then rows and columns k and IPIV(k) were
+*>             interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>
+*>             If IPIV(k) = IPIV(k-1) < 0, then rows and columns
+*>             k-1 and -IPIV(k) were interchanged and D(k-1:k,k-1:k)
+*>             is a 2-by-2 diagonal block.
+*>
+*>          If UPLO = 'L':
+*>             Only the first KB elements of IPIV are set.
+*>
+*>             If IPIV(k) > 0, then rows and columns k and IPIV(k) were
+*>             interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>
+*>             If IPIV(k) = IPIV(k+1) < 0, then rows and columns
+*>             k+1 and -IPIV(k) were interchanged and D(k:k+1,k:k+1)
+*>             is a 2-by-2 diagonal block.
 *> \endverbatim
 *>
 *> \param[out] W
