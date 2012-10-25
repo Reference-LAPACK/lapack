@@ -1,25 +1,25 @@
-*> \brief \b CLASYF_ROOK
+*> \brief \b CLASYF_ROOK computes a partial factorization of a complex symmetric matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLASYF_ROOK + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasyf_rook.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clasyf_rook.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasyf_rook.f"> 
+*> Download CLASYF_ROOK + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clasyf_rook.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clasyf_rook.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clasyf_rook.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CLASYF_ROOK( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            INFO, KB, LDA, LDW, N, NB
@@ -28,7 +28,7 @@
 *       INTEGER            IPIV( * )
 *       COMPLEX            A( LDA, * ), W( LDW, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -49,7 +49,7 @@
 *> the argument KB, and is either NB or NB-1, or N if N <= NB.
 *>
 *> CLASYF_ROOK is an auxiliary routine called by CSYTRF_ROOK. It uses
-*> blocked code (calling Level 3 BLAS) to update the submatrix 
+*> blocked code (calling Level 3 BLAS) to update the submatrix
 *> A11 (if UPLO = 'U') or A22 (if UPLO = 'L').
 *> \endverbatim
 *
@@ -111,26 +111,26 @@
 *>          Details of the interchanges and the block structure of D.
 *>
 *>          If UPLO = 'U':
-*>               Only the last KB elements of IPIV are set
+*>             Only the last KB elements of IPIV are set.
 *>
-*>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
-*>               were interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>             If IPIV(k) > 0, then rows and columns k and IPIV(k) were
+*>             interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>
-*>               If IPIV(k) < 0 and IPIV(k-1) < 0, then rows and
-*>               columns k and -IPIV(k) were interchanged and rows and
-*>               columns k-1 and -IPIV(k-1) were inerchaged,
-*>               D(k-1:k,k-1:k) is a 2-by-2 diagonal block.
+*>             If IPIV(k) < 0 and IPIV(k-1) < 0, then rows and
+*>             columns k and -IPIV(k) were interchanged and rows and
+*>             columns k-1 and -IPIV(k-1) were inerchaged,
+*>             D(k-1:k,k-1:k) is a 2-by-2 diagonal block.
 *>
 *>          If UPLO = 'L':
-*>               Only the first KB elements are set.
+*>             Only the first KB elements of IPIV are set.
 *>
-*>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
-*>               were interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>             If IPIV(k) > 0, then rows and columns k and IPIV(k)
+*>             were interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>
-*>               If IPIV(k) < 0 and IPIV(k+1) < 0, then rows and
-*>               columns k and -IPIV(k) were interchanged and rows and
-*>               columns k+1 and -IPIV(k+1) were inerchaged,
-*>               D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
+*>             If IPIV(k) < 0 and IPIV(k+1) < 0, then rows and
+*>             columns k and -IPIV(k) were interchanged and rows and
+*>             columns k+1 and -IPIV(k+1) were inerchaged,
+*>             D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -156,10 +156,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2012
 *
@@ -170,7 +170,7 @@
 *>
 *> \verbatim
 *>
-*>   April 2012, Igor Kozachenko,
+*>  April 2012,     Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -301,13 +301,13 @@
             KP = K
             CALL CCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
          ELSE
-* =====================================================================          
+* =====================================================================
 *
 *           Test for interchange
 *
 *           Equivalent to testing for (used to handle NaN and Inf)
 *           ABSAKK.GE.ALPHA*COLMAX
-*           
+*
             IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
@@ -315,14 +315,14 @@
                KP = K
 *
             ELSE
-*                
-               DONE = .FALSE.                
+*
+               DONE = .FALSE.
 *
 *              Loop until pivot found
 *
    12          CONTINUE
 *
-*                 Begin pivot search loop body 
+*                 Begin pivot search loop body
 *
 *
 *                 Copy column IMAX to column KW-1 of W and update it
@@ -396,11 +396,11 @@
 *
 *                    Copy updated JMAXth (next IMAXth) column to Kth of W
 *
-                     CALL CCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 ) 
+                     CALL CCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
 *
                   END IF
 *
-*                 End pivot search loop body 
+*                 End pivot search loop body
 *
                IF( .NOT. DONE ) GOTO 12
 * =====================================================================
@@ -424,7 +424,7 @@
 *
                CALL CSWAP( N-K+1, A( K, K ), LDA, A( P, K ), LDA )
                CALL CSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ), LDW )
-            END IF  
+            END IF
 *
 *           Updated column KP is already stored in column KKW of W
 *
@@ -487,7 +487,7 @@
                   T = CONE / ( D11*D22-CONE )
                   DO 20 J = 1, K - 2
                      A( J, K-1 ) = T*( (D11*W( J, KW-1 )-W( J, KW ) ) /
-     $                             D12 )                    
+     $                             D12 )
                      A( J, K ) = T*( ( D22*W( J, KW )-W( J, KW-1 ) ) /
      $                           D12 )
    20             CONTINUE
@@ -622,15 +622,15 @@
      $         INFO = K
             KP = K
             CALL CCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
-*            
+*
          ELSE
-* =====================================================================          
+* =====================================================================
 *
 *           Test for interchange
 *
 *           Equivalent to testing for (used to handle NaN and Inf)
 *           ABSAKK.GE.ALPHA*COLMAX
-*           
+*
             IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
@@ -638,14 +638,14 @@
                KP = K
 *
             ELSE
-*                
-               DONE = .FALSE.                
+*
+               DONE = .FALSE.
 *
 *              Loop until pivot found
 *
    72          CONTINUE
 *
-*                 Begin pivot search loop body 
+*                 Begin pivot search loop body
 *
 *
 *                 Copy column IMAX to column K+1 of W and update it
@@ -698,7 +698,7 @@
 *                 Equivalent to testing for ROWMAX .EQ. COLMAX,
 *                 used to handle NaN and Inf
 *
-                  ELSE IF( ( P.EQ.JMAX ) .OR. ( ROWMAX.LE.COLMAX ) ) 
+                  ELSE IF( ( P.EQ.JMAX ) .OR. ( ROWMAX.LE.COLMAX ) )
      $               THEN
 *
 *                    interchange rows and columns K+1 and IMAX,
@@ -721,10 +721,10 @@
 *
                   END IF
 *
-*                 End pivot search loop body 
+*                 End pivot search loop body
 *
                IF( .NOT. DONE ) GOTO 72
-* =====================================================================              
+* =====================================================================
             END IF
 *
             KK = K + KSTEP - 1
