@@ -233,6 +233,8 @@ lapacke_chseqr.c
 lapacke_chseqr_work.c
 lapacke_clacgv.c
 lapacke_clacgv_work.c
+lapacke_clacn2.c
+lapacke_clacn2_work.c
 lapacke_clacpy.c
 lapacke_clacpy_work.c
 lapacke_clag2z.c
@@ -643,6 +645,8 @@ lapacke_dhsein.c
 lapacke_dhsein_work.c
 lapacke_dhseqr.c
 lapacke_dhseqr_work.c
+lapacke_dlacn2.c
+lapacke_dlacn2_work.c
 lapacke_dlacpy.c
 lapacke_dlacpy_work.c
 lapacke_dlag2s.c
@@ -1131,6 +1135,8 @@ lapacke_shsein.c
 lapacke_shsein_work.c
 lapacke_shseqr.c
 lapacke_shseqr_work.c
+lapacke_slacn2.c
+lapacke_slacn2_work.c
 lapacke_slacpy.c
 lapacke_slacpy_work.c
 lapacke_slag2d.c
@@ -1701,6 +1707,8 @@ lapacke_zhseqr.c
 lapacke_zhseqr_work.c
 lapacke_zlacgv.c
 lapacke_zlacgv_work.c
+lapacke_zlacn2.c
+lapacke_zlacn2_work.c
 lapacke_zlacpy.c
 lapacke_zlacpy_work.c
 lapacke_zlag2c.c
