@@ -281,7 +281,7 @@
             IMAX = ISAMAX( K-1, W( 1, KW ), 1 )
             COLMAX = ABS( W( IMAX, KW ) )
          ELSE
-            COLMAX = ZEROea
+            COLMAX = ZERO
          END IF
 *
          IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
