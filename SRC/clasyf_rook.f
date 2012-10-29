@@ -266,6 +266,7 @@
 *
          IF( ( K.LE.N-NB+1 .AND. NB.LT.N ) .OR. K.LT.1 )
      $      GO TO 30
+*
          KSTEP = 1
          P = K
 *
@@ -590,6 +591,7 @@
 *
          IF( ( K.GE.NB .AND. NB.LT.N ) .OR. K.GT.N )
      $      GO TO 90
+*
          KSTEP = 1
          P = K
 *
