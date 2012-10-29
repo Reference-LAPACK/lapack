@@ -254,7 +254,6 @@
 *
 *        K is the main loop index, decreasing from N in steps of 1 or 2
 *
-
          K = N
    10    CONTINUE
 *
@@ -266,6 +265,7 @@
 *
          IF( ( K.LE.N-NB+1 .AND. NB.LT.N ) .OR. K.LT.1 )
      $      GO TO 30
+*
          KSTEP = 1
          P = K
 *
@@ -590,6 +590,7 @@
 *
          IF( ( K.GE.NB .AND. NB.LT.N ) .OR. K.GT.N )
      $      GO TO 90
+*
          KSTEP = 1
          P = K
 *
@@ -599,7 +600,6 @@
          IF( K.GT.1 )
      $      CALL ZGEMV( 'No transpose', N-K+1, K-1, -CONE,
      $             A( K, 1 ), LDA, W( K, 1 ), LDW, CONE, W( K, K ), 1 )
-
 *
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used

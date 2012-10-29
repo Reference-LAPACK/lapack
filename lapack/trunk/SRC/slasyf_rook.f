@@ -591,7 +591,6 @@
          IF( K.GT.1 )
      $      CALL SGEMV( 'No transpose', N-K+1, K-1, -ONE,
      $               A( K, 1 ), LDA, W( K, 1 ), LDW, ONE, W( K, K ), 1 )
-
 *
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used
