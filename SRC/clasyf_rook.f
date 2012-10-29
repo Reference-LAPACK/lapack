@@ -599,7 +599,6 @@
          IF( K.GT.1 )
      $      CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE,
      $             A( K, 1 ), LDA, W( K, 1 ), LDW, CONE, W( K, K ), 1 )
-
 *
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used
