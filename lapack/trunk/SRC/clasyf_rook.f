@@ -274,8 +274,8 @@
 *
          CALL CCOPY( K, A( 1, K ), 1, W( 1, KW ), 1 )
          IF( K.LT.N )
-     $      CALL CGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ), LDA,
-     $                  W( K, KW+1 ), LDW, CONE, W( 1, KW ), 1 )
+     $      CALL CGEMV( 'No transpose', K, N-K, -CONE, A( 1, K+1 ),
+     $                  LDA, W( K, KW+1 ), LDW, CONE, W( 1, KW ), 1 )
 *
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used
@@ -307,8 +307,8 @@
 *
 *           Test for interchange
 *
-*           Equivalent to testing for (used to handle NaN and Inf)
-*           ABSAKK.GE.ALPHA*COLMAX
+*           Equivalent to testing for ABSAKK.GE.ALPHA*COLMAX
+*           (used to handle NaN and Inf)
 *
             IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
 *
@@ -331,12 +331,12 @@
 *
                   CALL CCOPY( IMAX, A( 1, IMAX ), 1, W( 1, KW-1 ), 1 )
                   CALL CCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
-     $                     W( IMAX+1, KW-1 ), 1 )
+     $                        W( IMAX+1, KW-1 ), 1 )
 *
                   IF( K.LT.N )
      $               CALL CGEMV( 'No transpose', K, N-K, -CONE,
      $                           A( 1, K+1 ), LDA, W( IMAX, KW+1 ), LDW,
-     $                           CONE,W( 1, KW-1 ), 1 )
+     $                           CONE, W( 1, KW-1 ), 1 )
 *
 *                 JMAX is the column-index of the largest off-diagonal
 *                 element in row IMAX, and ROWMAX is its absolute value.
@@ -359,11 +359,12 @@
                      END IF
                   END IF
 *
-*                 Equivalent to testing for (used to handle NaN and Inf)
+*                 Equivalent to testing for
 *                 CABS1( W( IMAX, KW-1 ) ).GE.ALPHA*ROWMAX
+*                 (used to handle NaN and Inf)
 *
                   IF( .NOT.(CABS1( W( IMAX, KW-1 ) ).LT.ALPHA*ROWMAX ) )
-     $               THEN
+     $            THEN
 *
 *                    interchange rows and columns K and IMAX,
 *                    use 1-by-1 pivot block
@@ -376,11 +377,11 @@
 *
                      DONE = .TRUE.
 *
-*                 Equivalent to testing for ROWMAX .EQ. COLMAX,
-*                 used to handle NaN and Inf
+*                 Equivalent to testing for ROWMAX.EQ.COLMAX,
+*                 (used to handle NaN and Inf)
 *
                   ELSE IF( ( P.EQ.JMAX ) .OR. ( ROWMAX.LE.COLMAX ) )
-     $               THEN
+     $            THEN
 *
 *                    interchange rows and columns K-1 and IMAX,
 *                    use 2-by-2 pivot block
@@ -599,8 +600,8 @@
 *
          CALL CCOPY( N-K+1, A( K, K ), 1, W( K, K ), 1 )
          IF( K.GT.1 )
-     $      CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE,
-     $             A( K, 1 ), LDA, W( K, 1 ), LDW, CONE, W( K, K ), 1 )
+     $      CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ),
+     $                  LDA, W( K, 1 ), LDW, CONE, W( K, K ), 1 )
 *
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used
@@ -626,15 +627,14 @@
      $         INFO = K
             KP = K
             CALL CCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
-*
          ELSE
 *
 *           ============================================================
 *
 *           Test for interchange
 *
-*           Equivalent to testing for (used to handle NaN and Inf)
-*           ABSAKK.GE.ALPHA*COLMAX
+*           Equivalent to testing for ABSAKK.GE.ALPHA*COLMAX
+*           (used to handle NaN and Inf)
 *
             IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
 *
@@ -660,8 +660,8 @@
      $                        W( IMAX, K+1 ), 1 )
                   IF( K.GT.1 )
      $               CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE,
-     $                          A( K, 1 ), LDA, W( IMAX, 1 ), LDW,
-     $                          CONE, W( K, K+1 ), 1 )
+     $                           A( K, 1 ), LDA, W( IMAX, 1 ), LDW,
+     $                           CONE, W( K, K+1 ), 1 )
 *
 *                 JMAX is the column-index of the largest off-diagonal
 *                 element in row IMAX, and ROWMAX is its absolute value.
@@ -683,8 +683,9 @@
                      END IF
                   END IF
 *
-*                 Equivalent to testing for (used to handle NaN and Inf)
+*                 Equivalent to testing for
 *                 CABS1( W( IMAX, K+1 ) ).GE.ALPHA*ROWMAX
+*                 (used to handle NaN and Inf)
 *
                   IF( .NOT.( CABS1( W( IMAX, K+1 ) ).LT.ALPHA*ROWMAX ) )
      $            THEN
@@ -700,11 +701,11 @@
 *
                      DONE = .TRUE.
 *
-*                 Equivalent to testing for ROWMAX .EQ. COLMAX,
-*                 used to handle NaN and Inf
+*                 Equivalent to testing for ROWMAX.EQ.COLMAX,
+*                 (used to handle NaN and Inf)
 *
                   ELSE IF( ( P.EQ.JMAX ) .OR. ( ROWMAX.LE.COLMAX ) )
-     $               THEN
+     $            THEN
 *
 *                    interchange rows and columns K+1 and IMAX,
 *                    use 2-by-2 pivot block
