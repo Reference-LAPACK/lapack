@@ -350,10 +350,13 @@
                IF( KP.GT.1 )
      $            CALL ZCOPY( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
 *
-*              Interchange rows KK and KP in last KK columns of A and W
+*              Interchange rows KK and KP in last K+1 to N columns of A
+*              (columns K (or K and K-1) of A will be later overwritten)
+*              and interchange rows KK and KP in last KKW to NB columns
+*              of W
 *
-               IF( KK.LT.N )
-     $            CALL ZSWAP( N-KK, A( KK, KK+1 ), LDA, A( KP, KK+1 ),
+               IF( K.LT.N )
+     $            CALL ZSWAP( N-K, A( KK, K+1 ), LDA, A( KP, K+1 ),
      $                        LDA )
                CALL ZSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
      $                     LDW )
@@ -601,9 +604,12 @@
                IF( KP.LT.N )
      $            CALL ZCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
 *
-*              Interchange rows KK and KP in first KK columns of A and W
+*              Interchange rows KK and KP in first K-1 columns of A
+*              (columns K (or K and K+1) of A will be later overwritten)
+*              and interchange rows KK and KP in first KK columns of W
 *
-               CALL ZSWAP( KK-1, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
+               IF( K.GT.1 )
+     $            CALL ZSWAP( K-1, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
                CALL ZSWAP( KK, W( KK, 1 ), LDW, W( KP, 1 ), LDW )
             END IF
 *
