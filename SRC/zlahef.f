@@ -347,7 +347,8 @@
                CALL ZCOPY( KK-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
      $                     LDA )
                CALL ZLACGV( KK-1-KP, A( KP, KP+1 ), LDA )
-               CALL ZCOPY( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
+               IF( KP.GT.1 )
+     $            CALL ZCOPY( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
 *
 *              Interchange rows KK and KP in last KK columns of A and W
 *
