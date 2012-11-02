@@ -343,8 +343,8 @@
 *
 *              Copy non-updated column KK to column KP of submatrix A
 *              at step K. No need to copy element into column K
-*              (or K and K-1) of A, since these columns will be later
-*              overwritten.
+*              (or K and K-1 for 2x2 pivot) of A, since these columns
+*              will be later overwritten.
 *
                A( KP, KP ) = REAL( A( KK, KK ) )
                CALL CCOPY( KK-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
@@ -354,9 +354,9 @@
      $            CALL CCOPY( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
 *
 *              Interchange rows KK and KP in last K+1 to N columns of A
-*              (columns K (or K and K-1) of A will be later overwritten)
-*              and interchange rows KK and KP in last KKW to NB columns
-*              of W
+*              (columns K (or K and K-1 for 2x2 pivot) of A will be
+*              later overwritten). Interchange rows KK and KP
+*              in last KKW to NB columns of W.
 *
                IF( K.LT.N )
      $            CALL CSWAP( N-K, A( KK, K+1 ), LDA, A( KP, K+1 ),
@@ -600,8 +600,8 @@
 *
 *              Copy non-updated column KK to column KP of submatrix A
 *              at step K. No need to copy element into column K
-*              (or K and K+1) of A, since these columns will be later
-*              overwritten.
+*              (or K and K+1 for 2x2 pivot) of A, since these columns
+*              will be later overwritten.
 *
                A( KP, KP ) = REAL( A( KK, KK ) )
                CALL CCOPY( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
@@ -611,8 +611,9 @@
      $            CALL CCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
-*              (columns K (or K and K+1) of A will be later overwritten)
-*              and interchange rows KK and KP in first KK columns of W
+*              (columns K (or K and K+1 for 2x2 pivot) of A will be
+*              later overwritten). Interchange rows KK and KP
+*              in first KK columns of W.
 *
                IF( K.GT.1 )
      $            CALL CSWAP( K-1, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
