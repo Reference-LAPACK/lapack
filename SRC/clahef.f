@@ -341,7 +341,10 @@
 *
             IF( KP.NE.KK ) THEN
 *
-*              Copy non-updated column KK to column KP
+*              Copy non-updated column KK to column KP of submatrix A
+*              at step K. No need to copy element into column K
+*              (or K and K-1) of A, since these columns will be later
+*              overwritten.
 *
                A( KP, KP ) = REAL( A( KK, KK ) )
                CALL CCOPY( KK-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
@@ -595,7 +598,10 @@
 *
             IF( KP.NE.KK ) THEN
 *
-*              Copy non-updated column KK to column KP
+*              Copy non-updated column KK to column KP of submatrix A
+*              at step K. No need to copy element into column K
+*              (or K and K+1) of A, since these columns will be later
+*              overwritten.
 *
                A( KP, KP ) = REAL( A( KK, KK ) )
                CALL CCOPY( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
