@@ -323,16 +323,25 @@
 *
             IF( KP.NE.KK ) THEN
 *
-*              Copy non-updated column KK to column KP
+*              Copy non-updated column KK to column KP of submatrix A
+*              at step K. No need to copy element into column K
+*              (or K and K-1) of A, since these columns will be later
+*              overwritten.
 *
-               A( KP, K ) = A( KK, K )
-               CALL SCOPY( K-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
+               A( KP, KP ) = A( KK, KK )
+               CALL SCOPY( KK-1-KP, A( KP+1, KK ), 1, A( KP, KP+1 ),
      $                     LDA )
-               CALL SCOPY( KP, A( 1, KK ), 1, A( 1, KP ), 1 )
+               IF( KP.GT.1 )
+     $            CALL SCOPY( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
 *
-*              Interchange rows KK and KP in last KK columns of A and W
+*              Interchange rows KK and KP in last K+1 to N columns of A
+*              (columns K (or K and K-1) of A will be later overwritten)
+*              and interchange rows KK and KP in last KKW to NB columns
+*              of W
 *
-               CALL SSWAP( N-KK+1, A( KK, KK ), LDA, A( KP, KK ), LDA )
+               IF( K.LT.N )
+     $            CALL SSWAP( N-K, A( KK, K+1 ), LDA, A( KP, K+1 ),
+     $                        LDA )
                CALL SSWAP( N-KK+1, W( KK, KKW ), LDW, W( KP, KKW ),
      $                     LDW )
             END IF
@@ -547,15 +556,23 @@
 *
             IF( KP.NE.KK ) THEN
 *
-*              Copy non-updated column KK to column KP
+*              Copy non-updated column KK to column KP of submatrix A
+*              at step K. No need to copy element into column K
+*              (or K and K+1) of A, since these columns will be later
+*              overwritten.
 *
-               A( KP, K ) = A( KK, K )
-               CALL SCOPY( KP-K-1, A( K+1, KK ), 1, A( KP, K+1 ), LDA )
-               CALL SCOPY( N-KP+1, A( KP, KK ), 1, A( KP, KP ), 1 )
+               A( KP, KP ) = A( KK, KK )
+               CALL SCOPY( KP-KK-1, A( KK+1, KK ), 1, A( KP, KK+1 ),
+     $                     LDA )
+               IF( KP.LT.N )
+     $            CALL SCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
 *
-*              Interchange rows KK and KP in first KK columns of A and W
+*              Interchange rows KK and KP in first K-1 columns of A
+*              (columns K (or K and K+1) of A will be later overwritten)
+*              and interchange rows KK and KP in first KK columns of W
 *
-               CALL SSWAP( KK, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
+               IF( K.GT.1 )
+     $            CALL SSWAP( K-1, A( KK, 1 ), LDA, A( KP, 1 ), LDA )
                CALL SSWAP( KK, W( KK, 1 ), LDW, W( KP, 1 ), LDW )
             END IF
 *
