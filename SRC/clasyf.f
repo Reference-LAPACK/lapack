@@ -562,7 +562,8 @@
 *
             KK = K + KSTEP - 1
 *
-*           Updated column KP is already stored in column KK of W
+*           Interchange rows and columns KP and KK.
+*           Updated column KP is already stored in column KK of W.
 *
             IF( KP.NE.KK ) THEN
 *
