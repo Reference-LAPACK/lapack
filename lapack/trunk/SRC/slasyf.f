@@ -319,7 +319,8 @@
             KK = K - KSTEP + 1
             KKW = NB + KK - N
 *
-*           Updated column KP is already stored in column KKW of W
+*           Interchange rows and columns KP and KK.
+*           Updated column KP is already stored in column KK of W.
 *
             IF( KP.NE.KK ) THEN
 *
@@ -552,7 +553,8 @@
 *
             KK = K + KSTEP - 1
 *
-*           Updated column KP is already stored in column KK of W
+*           Interchange rows and columns KP and KK.
+*           Updated column KP is already stored in column KK of W.
 *
             IF( KP.NE.KK ) THEN
 *
