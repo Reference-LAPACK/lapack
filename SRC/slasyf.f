@@ -303,7 +303,7 @@
 *
                   KP = IMAX
 *
-*                 copy column KW-1 of W to column KW
+*                 copy column KW-1 of W to column KW of W
 *
                   CALL SCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
                ELSE
@@ -320,13 +320,13 @@
             KKW = NB + KK - N
 *
 *           Interchange rows and columns KP and KK.
-*           Updated column KP is already stored in column KK of W.
+*           Updated column KP is already stored in column KKW of W.
 *
             IF( KP.NE.KK ) THEN
 *
 *              Copy non-updated column KK to column KP of submatrix A
 *              at step K. No need to copy element into column K
-*              (or K and K-1 for 2x2 pivot) of A, since these columns
+*              (or K and K-1 for 2-by-2 pivot) of A, since these columns
 *              will be later overwritten.
 *
                A( KP, KP ) = A( KK, KK )
@@ -336,7 +336,7 @@
      $            CALL SCOPY( KP-1, A( 1, KK ), 1, A( 1, KP ), 1 )
 *
 *              Interchange rows KK and KP in last K+1 to N columns of A
-*              (columns K (or K and K-1 for 2x2 pivot) of A will be
+*              (columns K (or K and K-1 for 2-by-2 pivot) of A will be
 *              later overwritten). Interchange rows KK and KP
 *              in last KKW to NB columns of W.
 *
@@ -538,7 +538,7 @@
 *
                   KP = IMAX
 *
-*                 copy column K+1 of W to column K
+*                 copy column K+1 of W to column K of W
 *
                   CALL SCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
                ELSE
@@ -560,7 +560,7 @@
 *
 *              Copy non-updated column KK to column KP of submatrix A
 *              at step K. No need to copy element into column K
-*              (or K and K+1 for 2x2 pivot) of A, since these columns
+*              (or K and K+1 for 2-by-2 pivot) of A, since these columns
 *              will be later overwritten.
 *
                A( KP, KP ) = A( KK, KK )
@@ -570,7 +570,7 @@
      $            CALL SCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
-*              (columns K (or K and K+1 for 2x2 pivot) of A will be
+*              (columns K (or K and K+1 for 2-by-2 pivot) of A will be
 *              later overwritten). Interchange rows KK and KP
 *              in first KK columns of W.
 *
