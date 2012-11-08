@@ -316,7 +316,12 @@
                END IF
             END IF
 *
+*           KK is the column of A where pivoting step stopped
+*
             KK = K - KSTEP + 1
+*
+*           KKW is the column of W which corresponds to column KK of A
+*
             KKW = NB + KK - N
 *
 *           Interchange rows and columns KP and KK.
@@ -349,36 +354,77 @@
 *
             IF( KSTEP.EQ.1 ) THEN
 *
-*              1-by-1 pivot block D(k): column KW of W now holds
+*              1-by-1 pivot block D(k): column kw of W now holds
 *
-*              W(k) = U(k)*D(k)
+*              W(kw) = U(k)*D(k),
 *
 *              where U(k) is the k-th column of U
 *
-*              Store U(k) in column k of A
+*              Store subdiag. elements of column U(k)
+*              and 1-by-1 block D(k) in column k of A.
+*              NOTE: Diagonal element U(k,k) is a UNIT element
+*              and not stored.
+*                 A(k,k) := D(k,k) = W(k,kw)
+*                 A(1:k-1,k) := U(1:k-1,k) = W(1:k-1,kw)/D(k,k)
 *
                CALL SCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
                R1 = ONE / A( K, K )
                CALL SSCAL( K-1, R1, A( 1, K ), 1 )
+*
             ELSE
 *
-*              2-by-2 pivot block D(k): columns KW and KW-1 of W now
-*              hold
+*              2-by-2 pivot block D(k): columns kw and kw-1 of W now hold
 *
-*              ( W(k-1) W(k) ) = ( U(k-1) U(k) )*D(k)
+*              ( W(kw-1) W(kw) ) = ( U(k-1) U(k) )*D(k)
 *
 *              where U(k) and U(k-1) are the k-th and (k-1)-th columns
 *              of U
 *
+*              Store U(1:k-2,k-1) and U(1:k-2,k) and 2-by-2
+*              block D(k-1:k,k-1:k) in columns k-1 and k of A.
+*              NOTE: 2-by-2 diagonal block U(k-1:k,k-1:k) is a UNIT
+*              block and not stored.
+*                 A(k-1:k,k-1:k) := D(k-1:k,k-1:k) = W(k-1:k,kw-1:kw)
+*                 A(1:k-2,k-1:k) := U(1:k-2,k:k-1:k) =
+*                 = W(1:k-2,kw-1:kw) * ( D(k-1:k,k-1:k)**(-1) )
+*
                IF( K.GT.2 ) THEN
 *
-*                 Store U(k) and U(k-1) in columns k and k-1 of A
+*                 Compose the columns of the inverse of 2-by-2 pivot
+*                 block D in the following way to reduce the number
+*                 of FLOPS when we myltiply panel ( W(kw-1) W(kw) ) by
+*                 this inverse
+*
+*                 D**(-1) = ( d11 d21 )**(-1) =
+*                           ( d21 d22 )
+*
+*                 = 1/(d11*d22-d21**2) * ( ( d22 ) (-d21 ) ) =
+*                                        ( (-d21 ) ( d11 ) )
+*
+*                 = 1/d21 * 1/((d11/d21)*(d22/d21)-1) *
+*
+*                   * ( ( d22/d21 ) (      -1 ) ) =
+*                     ( (      -1 ) ( d11/d21 ) )
+*
+*                 = 1/d21 * 1/(D22*D11-1) * ( ( D11 ) (  -1 ) ) =
+*                                           ( ( -1  ) ( D22 ) )
+*
+*                 = 1/d21 * T * ( ( D11 ) (  -1 ) )
+*                               ( (  -1 ) ( D22 ) )
+*
+*                 = D21 * ( ( D11 ) (  -1 ) )
+*                         ( (  -1 ) ( D22 ) )
 *
                   D21 = W( K-1, KW )
                   D11 = W( K, KW ) / D21
                   D22 = W( K-1, KW-1 ) / D21
                   T = ONE / ( D11*D22-ONE )
                   D21 = T / D21
+*
+*                 Update elements in columns A(k-1) and A(k) as
+*                 dot products of rows of ( W(kw-1) W(kw) ) and columns
+*                 of D**(-1)
+*
                   DO 20 J = 1, K - 2
                      A( J, K-1 ) = D21*( D11*W( J, KW-1 )-W( J, KW ) )
                      A( J, K ) = D21*( D22*W( J, KW )-W( J, KW-1 ) )
@@ -390,7 +436,9 @@
                A( K-1, K-1 ) = W( K-1, KW-1 )
                A( K-1, K ) = W( K-1, KW )
                A( K, K ) = W( K, KW )
+*
             END IF
+*
          END IF
 *
 *        Store details of the interchanges in IPIV
@@ -551,6 +599,8 @@
                END IF
             END IF
 *
+*           KK is the column of A where pivoting step stopped
+*
             KK = K + KSTEP - 1
 *
 *           Interchange rows and columns KP and KK.
@@ -583,17 +633,23 @@
 *
 *              1-by-1 pivot block D(k): column k of W now holds
 *
-*              W(k) = L(k)*D(k)
+*              W(k) = L(k)*D(k),
 *
 *              where L(k) is the k-th column of L
 *
-*              Store L(k) in column k of A
+*              Store subdiag. elements of column L(k)
+*              and 1-by-1 block D(k) in column k of A.
+*              (NOTE: Diagonal element L(k,k) is a UNIT element
+*              and not stored)
+*                 A(k,k) := D(k,k) = W(k,k)
+*                 A(k+1:N,k) := L(k+1:N,k) = W(k+1:N,k)/D(k,k)
 *
                CALL SCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
                IF( K.LT.N ) THEN
                   R1 = ONE / A( K, K )
                   CALL SSCAL( N-K, R1, A( K+1, K ), 1 )
                END IF
+*
             ELSE
 *
 *              2-by-2 pivot block D(k): columns k and k+1 of W now hold
@@ -603,15 +659,51 @@
 *              where L(k) and L(k+1) are the k-th and (k+1)-th columns
 *              of L
 *
+*              Store L(k+2:N,k) and L(k+2:N,k+1) and 2-by-2
+*              block D(k:k+1,k:k+1) in columns k and k+1 of A.
+*              (NOTE: 2-by-2 diagonal block L(k:k+1,k:k+1) is a UNIT
+*              block and not stored)
+*                 A(k:k+1,k:k+1) := D(k:k+1,k:k+1) = W(k:k+1,k:k+1)
+*                 A(k+2:N,k:k+1) := L(k+2:N,k:k+1) =
+*                 = W(k+2:N,k:k+1) * ( D(k:k+1,k:k+1)**(-1) )
+*
                IF( K.LT.N-1 ) THEN
 *
-*                 Store L(k) and L(k+1) in columns k and k+1 of A
+*                 Compose the columns of the inverse of 2-by-2 pivot
+*                 block D in the following way to reduce the number
+*                 of FLOPS when we myltiply panel ( W(k) W(k+1) ) by
+*                 this inverse
+*
+*                 D**(-1) = ( d11 d21 )**(-1) =
+*                           ( d21 d22 )
+*
+*                 = 1/(d11*d22-d21**2) * ( ( d22 ) (-d21 ) ) =
+*                                        ( (-d21 ) ( d11 ) )
+*
+*                 = 1/d21 * 1/((d11/d21)*(d22/d21)-1) *
+*
+*                   * ( ( d22/d21 ) (      -1 ) ) =
+*                     ( (      -1 ) ( d11/d21 ) )
+*
+*                 = 1/d21 * 1/(D22*D11-1) * ( ( D11 ) (  -1 ) ) =
+*                                           ( ( -1  ) ( D22 ) )
+*
+*                 = 1/d21 * T * ( ( D11 ) (  -1 ) )
+*                               ( (  -1 ) ( D22 ) )
+*
+*                 = D21 * ( ( D11 ) (  -1 ) )
+*                         ( (  -1 ) ( D22 ) )
 *
                   D21 = W( K+1, K )
                   D11 = W( K+1, K+1 ) / D21
                   D22 = W( K, K ) / D21
                   T = ONE / ( D11*D22-ONE )
                   D21 = T / D21
+*
+*                 Update elements in columns A(k) and A(k+1) as
+*                 dot products of rows of ( W(k) W(k+1) ) and columns
+*                 of D**(-1)
+*
                   DO 80 J = K + 2, N
                      A( J, K ) = D21*( D11*W( J, K )-W( J, K+1 ) )
                      A( J, K+1 ) = D21*( D22*W( J, K+1 )-W( J, K ) )
@@ -623,7 +715,9 @@
                A( K, K ) = W( K, K )
                A( K+1, K ) = W( K+1, K )
                A( K+1, K+1 ) = W( K+1, K+1 )
+*
             END IF
+*
          END IF
 *
 *        Store details of the interchanges in IPIV
