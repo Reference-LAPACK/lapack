@@ -655,7 +655,7 @@
    50    CONTINUE
 *
 *        Put U12 in standard form by partially undoing the interchanges
-*        in of rows in columns k+1:n looping backwards from k+1 to 1
+*        in of rows in columns k+1:n looping backwards from k+1 to n
 *
          J = K + 1
    60    CONTINUE
