@@ -164,6 +164,16 @@
 *
 *> \ingroup complex16HEcomputational
 *
+*> \par Contributors:
+*  ==================
+*>
+*> \verbatim
+*>
+*>  November 2012,  Igor Kozachenko,
+*>                  Computer Science Division,
+*>                  University of California, Berkeley
+*> \endverbatim
+*
 *  =====================================================================
       SUBROUTINE ZLAHEF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
 *
@@ -333,6 +343,8 @@
                   KSTEP = 2
                END IF
             END IF
+*
+*           ============================================================
 *
 *           KK is the column of A where pivoting step stopped
 *
@@ -519,20 +531,28 @@
    50    CONTINUE
 *
 *        Put U12 in standard form by partially undoing the interchanges
-*        in columns k+1:n
+*        in columns k+1:n looping backwards from k+1 to n
 *
          J = K + 1
    60    CONTINUE
-         JJ = J
-         JP = IPIV( J )
-         IF( JP.LT.0 ) THEN
-            JP = -JP
+*
+*           Undo the interchanges (if any) of rows JJ and JP at each
+*           step J
+*
+*           (Here, J is a diagonal index)
+            JJ = J
+            JP = IPIV( J )
+            IF( JP.LT.0 ) THEN
+               JP = -JP
+*              (Here, J is a diagonal index)
+               J = J + 1
+            END IF
+*           (NOTE: Here, J is used to determine row length. Length N-J+1
+*           of the rows to swap back doesn't include diagonal element)
             J = J + 1
-         END IF
-         J = J + 1
-         IF( JP.NE.JJ .AND. J.LE.N )
-     $      CALL ZSWAP( N-J+1, A( JP, J ), LDA, A( JJ, J ), LDA )
-         IF( J.LE.N )
+            IF( JP.NE.JJ .AND. J.LE.N )
+     $         CALL ZSWAP( N-J+1, A( JP, J ), LDA, A( JJ, J ), LDA )
+         IF( J.LT.N )
      $      GO TO 60
 *
 *        Set KB to the number of columns factorized
@@ -645,6 +665,8 @@
                   KSTEP = 2
                END IF
             END IF
+*
+*           ============================================================
 *
 *           KK is the column of A where pivoting step stopped
 *
@@ -828,20 +850,28 @@
   110    CONTINUE
 *
 *        Put L21 in standard form by partially undoing the interchanges
-*        in columns 1:k-1
+*        of rows in columns 1:k-1 looping backwards from k-1 to 1
 *
          J = K - 1
   120    CONTINUE
-         JJ = J
-         JP = IPIV( J )
-         IF( JP.LT.0 ) THEN
-            JP = -JP
+*
+*           Undo the interchanges (if any) of rows JJ and JP at each
+*           step J
+*
+*           (Here, J is a diagonal index)
+            JJ = J
+            JP = IPIV( J )
+            IF( JP.LT.0 ) THEN
+               JP = -JP
+*              (Here, J is a diagonal index)
+               J = J - 1
+            END IF
+*           (NOTE: Here, J is used to determine row length. Length J
+*           of the rows to swap back doesn't include diagonal element)
             J = J - 1
-         END IF
-         J = J - 1
-         IF( JP.NE.JJ .AND. J.GE.1 )
-     $      CALL ZSWAP( J, A( JP, 1 ), LDA, A( JJ, 1 ), LDA )
-         IF( J.GE.1 )
+            IF( JP.NE.JJ .AND. J.GE.1 )
+     $         CALL ZSWAP( J, A( JP, 1 ), LDA, A( JJ, 1 ), LDA )
+         IF( J.GT.1 )
      $      GO TO 120
 *
 *        Set KB to the number of columns factorized
