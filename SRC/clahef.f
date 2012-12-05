@@ -164,6 +164,16 @@
 *
 *> \ingroup complexHEcomputational
 *
+*> \par Contributors:
+*  ==================
+*>
+*> \verbatim
+*>
+*>  November 2012,  Igor Kozachenko,
+*>                  Computer Science Division,
+*>                  University of California, Berkeley
+*> \endverbatim
+*
 *  =====================================================================
       SUBROUTINE CLAHEF( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW, INFO )
 *
@@ -333,6 +343,8 @@
                   KSTEP = 2
                END IF
             END IF
+*
+*           ============================================================
 *
 *           KK is the column of A where pivoting step stopped
 *
@@ -645,6 +657,8 @@
                   KSTEP = 2
                END IF
             END IF
+*
+*           ============================================================
 *
 *           KK is the column of A where pivoting step stopped
 *
