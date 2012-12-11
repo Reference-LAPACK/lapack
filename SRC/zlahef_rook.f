@@ -178,7 +178,6 @@
 *>  September 2007, Sven Hammarling, Nicholas J. Higham, Craig Lucas,
 *>                  School of Mathematics,
 *>                  University of Manchester
-*>
 *> \endverbatim
 *
 *  =====================================================================
