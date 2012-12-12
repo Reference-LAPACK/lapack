@@ -451,7 +451,7 @@
                   IF( CABS1( A( K, K ) ).GE.SFMIN ) THEN
 *
 *                    Perform a rank-1 update of A(1:k-1,1:k-1) as
-*                    A := A - U(k)*D(k)*U(k)**T 
+*                    A := A - U(k)*D(k)*U(k)**T
 *                       = A - W(k)*1/D(k)*W(k)**T
 *
                      D11 = CONE / A( K, K )
@@ -620,7 +620,7 @@
                      END IF
                   END IF
 *
-*                 Equivalent to testing for (used to handle NaN and Inf) 
+*                 Equivalent to testing for (used to handle NaN and Inf)
 *                 CABS1( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX
 *
                   IF( .NOT.( CABS1(A( IMAX, IMAX )).LT.ALPHA*ROWMAX ) )
@@ -717,7 +717,7 @@
                   IF( CABS1( A( K, K ) ).GE.SFMIN ) THEN
 *
 *                    Perform a rank-1 update of A(k+1:n,k+1:n) as
-*                    A := A - L(k)*D(k)*L(k)**T 
+*                    A := A - L(k)*D(k)*L(k)**T
 *                       = A - W(k)*(1/D(k))*W(k)**T
 *
                      D11 = CONE / A( K, K )
