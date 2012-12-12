@@ -257,7 +257,8 @@
          ABSAKK = ABS( W( K, KW ) )
 *
 *        IMAX is the row-index of the largest off-diagonal element in
-*        column K, and COLMAX is its absolute value
+*        column K, and COLMAX is its absolute value.
+*        Determine both COLMAX and IMAX.
 *
          IF( K.GT.1 ) THEN
             IMAX = IDAMAX( K-1, W( 1, KW ), 1 )
@@ -268,7 +269,7 @@
 *
          IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
 *
-*           Column K is zero: set INFO and continue
+*           Column K is zero or underflow: set INFO and continue
 *
             IF( INFO.EQ.0 )
      $         INFO = K
@@ -552,7 +553,8 @@
          ABSAKK = ABS( W( K, K ) )
 *
 *        IMAX is the row-index of the largest off-diagonal element in
-*        column K, and COLMAX is its absolute value
+*        column K, and COLMAX is its absolute value.
+*        Determine both COLMAX and IMAX.
 *
          IF( K.LT.N ) THEN
             IMAX = K + IDAMAX( N-K, W( K+1, K ), 1 )
@@ -563,7 +565,7 @@
 *
          IF( MAX( ABSAKK, COLMAX ).EQ.ZERO ) THEN
 *
-*           Column K is zero: set INFO and continue
+*           Column K is zero or underflow: set INFO and continue
 *
             IF( INFO.EQ.0 )
      $         INFO = K
