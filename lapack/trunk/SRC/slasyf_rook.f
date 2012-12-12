@@ -246,7 +246,6 @@
 *
 *        K is the main loop index, decreasing from N in steps of 1 or 2
 *
-
          K = N
    10    CONTINUE
 *
@@ -363,7 +362,7 @@
 *
                      KP = IMAX
 *
-*                    copy column KW-1 of W to column KW
+*                    copy column KW-1 of W to column KW of W
 *
                      CALL SCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
 *
@@ -687,7 +686,7 @@
 *
                      KP = IMAX
 *
-*                    copy column K+1 of W to column K
+*                    copy column K+1 of W to column K of W
 *
                      CALL SCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
 *
