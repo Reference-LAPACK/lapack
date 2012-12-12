@@ -90,13 +90,22 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D.
-*>          If IPIV(k) > 0, then rows and columns k and IPIV(k) were
-*>          interchanged and D(k,k) is a 1-by-1 diagonal block.
-*>          If UPLO = 'U' and IPIV(k) = IPIV(k-1) < 0, then rows and
-*>          columns k-1 and -IPIV(k) were interchanged and D(k-1:k,k-1:k)
-*>          is a 2-by-2 diagonal block.  If UPLO = 'L' and IPIV(k) =
-*>          IPIV(k+1) < 0, then rows and columns k+1 and -IPIV(k) were
-*>          interchanged and D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
+*>
+*>          If UPLO = 'U':
+*>             If IPIV(k) > 0, then rows and columns k and IPIV(k) were
+*>             interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>
+*>             If IPIV(k) = IPIV(k-1) < 0, then rows and columns
+*>             k-1 and -IPIV(k) were interchanged and D(k-1:k,k-1:k)
+*>             is a 2-by-2 diagonal block.
+*>
+*>          If UPLO = 'L':
+*>             If IPIV(k) > 0, then rows and columns k and IPIV(k) were
+*>             interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>
+*>             If IPIV(k) = IPIV(k+1) < 0, then rows and columns
+*>             k+1 and -IPIV(k) were interchanged and D(k:k+1,k:k+1)
+*>             is a 2-by-2 diagonal block.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -269,7 +278,8 @@
          ABSAKK = ABS( A( K, K ) )
 *
 *        IMAX is the row-index of the largest off-diagonal element in
-*        column K, and COLMAX is its absolute value
+*        column K, and COLMAX is its absolute value.
+*        Determine both COLMAX and IMAX.
 *
          IF( K.GT.1 ) THEN
             IMAX = ISAMAX( K-1, A( 1, K ), 1 )
@@ -280,7 +290,8 @@
 *
          IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. SISNAN(ABSAKK) ) THEN
 *
-*           Column K is zero or contains a NaN: set INFO and continue
+*           Column K is zero or underflow, or contains a NaN:
+*           set INFO and continue
 *
             IF( INFO.EQ.0 )
      $         INFO = K
@@ -437,7 +448,8 @@
          ABSAKK = ABS( A( K, K ) )
 *
 *        IMAX is the row-index of the largest off-diagonal element in
-*        column K, and COLMAX is its absolute value
+*        column K, and COLMAX is its absolute value.
+*        Determine both COLMAX and IMAX.
 *
          IF( K.LT.N ) THEN
             IMAX = K + ISAMAX( N-K, A( K+1, K ), 1 )
@@ -448,7 +460,8 @@
 *
          IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) .OR. SISNAN(ABSAKK) ) THEN
 *
-*           Column K is zero or contains a NaN: set INFO and continue
+*           Column K is zero or underflow, or contains a NaN:
+*           set INFO and continue
 *
             IF( INFO.EQ.0 )
      $         INFO = K
