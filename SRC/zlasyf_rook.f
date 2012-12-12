@@ -370,7 +370,7 @@
 *
                      KP = IMAX
 *
-*                    copy column KW-1 of W to column KW
+*                    copy column KW-1 of W to column KW of W
 *
                      CALL ZCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
 *
@@ -694,7 +694,7 @@
 *
                      KP = IMAX
 *
-*                    copy column K+1 of W to column K
+*                    copy column K+1 of W to column K of W
 *
                      CALL ZCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
 *
