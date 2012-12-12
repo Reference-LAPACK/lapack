@@ -1,4 +1,4 @@
-*> \brief \b SSYTF2_ROOK
+*> \brief \b SSYTF2_ROOK computes the factorization of a real symmetric indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -92,22 +92,22 @@
 *>          Details of the interchanges and the block structure of D.
 *>
 *>          If UPLO = 'U':
-*>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
-*>               were interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>             If IPIV(k) > 0, then rows and columns k and IPIV(k)
+*>             were interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>
-*>               If IPIV(k) < 0 and IPIV(k-1) < 0, then rows and
-*>               columns k and -IPIV(k) were interchanged and rows and
-*>               columns k-1 and -IPIV(k-1) were inerchaged,
-*>               D(k-1:k,k-1:k) is a 2-by-2 diagonal block.
+*>             If IPIV(k) < 0 and IPIV(k-1) < 0, then rows and
+*>             columns k and -IPIV(k) were interchanged and rows and
+*>             columns k-1 and -IPIV(k-1) were inerchaged,
+*>             D(k-1:k,k-1:k) is a 2-by-2 diagonal block.
 *>
 *>          If UPLO = 'L':
-*>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
-*>               were interchanged and D(k,k) is a 1-by-1 diagonal block.
+*>             If IPIV(k) > 0, then rows and columns k and IPIV(k)
+*>             were interchanged and D(k,k) is a 1-by-1 diagonal block.
 *>
-*>               If IPIV(k) < 0 and IPIV(k+1) < 0, then rows and
-*>               columns k and -IPIV(k) were interchanged and rows and
-*>               columns k+1 and -IPIV(k+1) were inerchaged,
-*>               D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
+*>             If IPIV(k) < 0 and IPIV(k+1) < 0, then rows and
+*>             columns k and -IPIV(k) were interchanged and rows and
+*>             columns k+1 and -IPIV(k+1) were inerchaged,
+*>             D(k:k+1,k:k+1) is a 2-by-2 diagonal block.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -178,7 +178,7 @@
 *>
 *> \verbatim
 *>
-*>   April 2012, Igor Kozachenko,
+*>  April 2012,     Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -188,9 +188,7 @@
 *>
 *>  01-01-96 - Based on modifications by
 *>    J. Lewis, Boeing Computer Services Company
-*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville, USA
-*>  1-96 - Based on modifications by J. Lewis, Boeing Computer Services
-*>         Company
+*>    A. Petitet, Computer Science Dept., Univ. of Tenn., Knoxville abd , USA
 *> \endverbatim
 *
 *  =====================================================================
@@ -298,7 +296,7 @@
 *
          IF( (MAX( ABSAKK, COLMAX ).EQ.ZERO) ) THEN
 *
-*           Column K is zero: set INFO and continue
+*           Column K is zero or underflow: set INFO and continue
 *
             IF( INFO.EQ.0 )
      $         INFO = K
@@ -566,7 +564,7 @@
 *
          IF( ( MAX( ABSAKK, COLMAX ).EQ.ZERO ) ) THEN
 *
-*           Column K is zero: set INFO and continue
+*           Column K is zero or underflow: set INFO and continue
 *
             IF( INFO.EQ.0 )
      $         INFO = K
