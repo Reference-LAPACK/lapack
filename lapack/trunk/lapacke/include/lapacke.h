@@ -2128,6 +2128,13 @@ lapack_int LAPACKE_zlacpy( int matrix_order, char uplo, lapack_int m,
                            lapack_int lda, lapack_complex_double* b,
                            lapack_int ldb );
 
+lapack_int LAPACKE_clacp2( int matrix_order, char uplo, lapack_int m,
+                           lapack_int n, const float* a, lapack_int lda,
+                           lapack_complex_float* b, lapack_int ldb );
+lapack_int LAPACKE_zlacp2( int matrix_order, char uplo, lapack_int m,
+                           lapack_int n, const double* a, lapack_int lda,
+                           lapack_complex_double* b, lapack_int ldb );
+
 lapack_int LAPACKE_zlag2c( int matrix_order, lapack_int m, lapack_int n,
                            const lapack_complex_double* a, lapack_int lda,
                            lapack_complex_float* sa, lapack_int ldsa );
@@ -6924,6 +6931,13 @@ lapack_int LAPACKE_zlacpy_work( int matrix_order, char uplo, lapack_int m,
                                 lapack_int lda, lapack_complex_double* b,
                                 lapack_int ldb );
 
+lapack_int LAPACKE_clacp2_work( int matrix_order, char uplo, lapack_int m,
+                                lapack_int n, const float* a, lapack_int lda,
+                                lapack_complex_float* b, lapack_int ldb );
+lapack_int LAPACKE_zlacp2_work( int matrix_order, char uplo, lapack_int m,
+                                lapack_int n, const double* a, lapack_int lda,
+                                lapack_complex_double* b, lapack_int ldb );
+
 lapack_int LAPACKE_zlag2c_work( int matrix_order, lapack_int m, lapack_int n,
                                 const lapack_complex_double* a, lapack_int lda,
                                 lapack_complex_float* sa, lapack_int ldsa );
@@ -11574,6 +11588,8 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_dlacpy LAPACK_GLOBAL(dlacpy,DLACPY)
 #define LAPACK_clacpy LAPACK_GLOBAL(clacpy,CLACPY)
 #define LAPACK_zlacpy LAPACK_GLOBAL(zlacpy,ZLACPY)
+#define LAPACK_clacp2 LAPACK_GLOBAL(clacp2,CLACP2)
+#define LAPACK_zlacp2 LAPACK_GLOBAL(zlacp2,ZLACP2)
 #define LAPACK_sgetf2 LAPACK_GLOBAL(sgetf2,SGETF2)
 #define LAPACK_dgetf2 LAPACK_GLOBAL(dgetf2,DGETF2)
 #define LAPACK_cgetf2 LAPACK_GLOBAL(cgetf2,CGETF2)
@@ -15781,6 +15797,13 @@ void LAPACK_clacpy( char* uplo, lapack_int* m, lapack_int* n,
 void LAPACK_zlacpy( char* uplo, lapack_int* m, lapack_int* n,
                     const lapack_complex_double* a, lapack_int* lda,
                     lapack_complex_double* b, lapack_int* ldb );
+
+void LAPACK_clacp2( char* uplo, lapack_int* m, lapack_int* n, const float* a,
+                    lapack_int* lda, lapack_complex_float* b, lapack_int* ldb );
+void LAPACK_zlacp2( char* uplo, lapack_int* m, lapack_int* n, const double* a,
+                    lapack_int* lda, lapack_complex_double* b,
+                    lapack_int* ldb );
+
 void LAPACK_sgetf2( lapack_int* m, lapack_int* n, float* a, lapack_int* lda,
                     lapack_int* ipiv, lapack_int *info );
 void LAPACK_dgetf2( lapack_int* m, lapack_int* n, double* a, lapack_int* lda,

@@ -269,6 +269,8 @@ lapacke_clacgv.o \
 lapacke_clacgv_work.o \
 lapacke_clacn2.o \
 lapacke_clacn2_work.o \
+lapacke_clacp2.o \
+lapacke_clacp2_work.o \
 lapacke_clacpy.o \
 lapacke_clacpy_work.o \
 lapacke_clag2z.o \
@@ -1743,6 +1745,8 @@ lapacke_zlacgv.o \
 lapacke_zlacgv_work.o \
 lapacke_zlacn2.o \
 lapacke_zlacn2_work.o \
+lapacke_zlacp2.o \
+lapacke_zlacp2_work.o \
 lapacke_zlacpy.o \
 lapacke_zlacpy_work.o \
 lapacke_zlag2c.o \
