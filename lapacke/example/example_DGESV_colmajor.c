@@ -23,7 +23,7 @@
    LAPACKE Interface
    =================
 
-   LAPACKE_dgesv (row-major, high-level) Example Program Results
+   LAPACKE_dgesv (col-major, high-level) Example Program Results
 
   -- LAPACKE Example routine (version 3.5.0) --
   -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -31,9 +31,10 @@
      February 2012
 
 */
+/* Includes */
 #include <stdlib.h>
 #include <stdio.h>
-#include <lapacke.h>
+#include "lapacke.h"
 #include "lapacke_example_aux.h"
 
 /* Main program */
@@ -66,7 +67,7 @@ int main(int argc, char **argv) {
 		}
 		
         /* Initialization */
-        lda=n, ldb=nrhs;
+        lda=n, ldb=n;
 		A = (double *)malloc(n*n*sizeof(double)) ;
 		if (A==NULL){ printf("error of memory allocation\n"); exit(0); }
 		b = (double *)malloc(n*nrhs*sizeof(double)) ;
@@ -75,22 +76,24 @@ int main(int argc, char **argv) {
 		if (ipiv==NULL){ printf("error of memory allocation\n"); exit(0); }
 
         for( i = 0; i < n; i++ ) {
-                for( j = 0; j < n; j++ ) A[i*lda+j] = ((double) rand()) / ((double) RAND_MAX) - 0.5;
+                for( j = 0; j < n; j++ ) A[i+j*lda] = ((double) rand()) / ((double) RAND_MAX) - 0.5;
 		}
-
+		
 		for(i=0;i<n*nrhs;i++)
 			b[i] = ((double) rand()) / ((double) RAND_MAX) - 0.5;
 
         /* Print Entry Matrix */
-        print_matrix_rowmajor( "Entry Matrix A", n, n, A, lda );
+        print_matrix_colmajor( "Entry Matrix A", n, n, A, lda );
         /* Print Right Rand Side */
-        print_matrix_rowmajor( "Right Rand Side b", n, nrhs, b, ldb );
+        print_matrix_colmajor( "Right Rand Side b", n, nrhs, b, ldb );
         printf( "\n" );
+        
         /* Executable statements */
         printf( "LAPACKE_dgesv (row-major, high-level) Example Program Results\n" );
         /* Solve the equations A*X = B */
-        info = LAPACKE_dgesv( LAPACK_ROW_MAJOR, n, nrhs, A, lda, ipiv,
+        info = LAPACKE_dgesv( LAPACK_COL_MAJOR, n, nrhs, A, lda, ipiv,
                         b, ldb );
+                        
         /* Check for the exact singularity */
         if( info > 0 ) {
                 printf( "The diagonal element of the triangular factor of A,\n" );
@@ -100,9 +103,9 @@ int main(int argc, char **argv) {
         }
         if (info <0) exit( 1 );
         /* Print solution */
-        print_matrix_rowmajor( "Solution", n, nrhs, b, ldb );
+        print_matrix_colmajor( "Solution", n, nrhs, b, ldb );
         /* Print details of LU factorization */
-        print_matrix_rowmajor( "Details of LU factorization", n, n, A, lda );
+        print_matrix_colmajor( "Details of LU factorization", n, n, A, lda );
         /* Print pivot indices */
         print_vector( "Pivot indices", n, ipiv );
         exit( 0 );
