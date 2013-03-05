@@ -204,6 +204,11 @@
          A( N, N ) = SMIN
       END IF
 *
+*     Set last pivots to N
+*
+      IPIV( N ) = N
+      JPIV( N ) = N
+*
       RETURN
 *
 *     End of DGETC2

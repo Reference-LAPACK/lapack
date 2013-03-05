@@ -203,6 +203,12 @@
          INFO = N
          A( N, N ) = DCMPLX( SMIN, ZERO )
       END IF
+*
+*     Set last pivots to N
+*
+      IPIV( N ) = N
+      JPIV( N ) = N
+*
       RETURN
 *
 *     End of ZGETC2
