@@ -203,6 +203,12 @@
          INFO = N
          A( N, N ) = CMPLX( SMIN, ZERO )
       END IF
+*
+*     Set last pivots to N
+*
+      IPIV( N ) = N
+      JPIV( N ) = N
+*
       RETURN
 *
 *     End of CGETC2
