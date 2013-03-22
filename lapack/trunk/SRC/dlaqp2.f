@@ -217,7 +217,7 @@
             CALL DLARFG( 1, A( M, I ), A( M, I ), 1, TAU( I ) )
          END IF
 *
-         IF( I.LE.N ) THEN
+         IF( I.LT.N ) THEN
 *
 *           Apply H(i)**T to A(offset+i:m,i+1:n) from the left.
 *
