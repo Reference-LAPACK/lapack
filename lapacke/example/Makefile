@@ -3,9 +3,8 @@ include ../../make.inc
 all: xexample_DGESV_rowmajor \
      xexample_DGESV_colmajor \
      xexample_DGELS_rowmajor \
-     xexample_DGELS_colmajor \
-     xexample_ZGESV_rowmajor
-     
+     xexample_DGELS_colmajor 
+
 LIBRAIRIES= ../../$(LAPACKELIB) ../../$(LAPACKLIB) $(BLASLIB) 
 
 # Double Precision Examples
@@ -26,15 +25,6 @@ xexample_DGELS_rowmajor: example_DGELS_rowmajor.o lapacke_example_aux.o $(LIBRAI
 
 xexample_DGELS_colmajor: example_DGELS_colmajor.o lapacke_example_aux.o $(LIBRAIRIES)
 	$(LOADER) $(LOADOPTS)  example_DGELS_colmajor.o lapacke_example_aux.o \
-	$(LIBRAIRIES) -o $@
-	./$@
-
-
-
-
-# Double Complex Precision Examples
-xexample_ZGESV_rowmajor: example_ZGESV_rowmajor.o lapacke_example_aux.o $(LIBRAIRIES)
-	$(LOADER) $(LOADOPTS)  example_ZGESV_rowmajor.o lapacke_example_aux.o \
 	$(LIBRAIRIES) -o $@
 	./$@
 
