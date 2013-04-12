@@ -299,9 +299,9 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-               IF( IMAT.NE.NTYPES ) THEN
+*              Begin generate test matrix A.
 *
-*                 Begin generate the test matrix A.
+               IF( IMAT.NE.NTYPES ) THEN
 *
 *                 Set up parameters with CLATB4 for the matrix generator
 *                 based on the type of matrix to be generated.
@@ -393,16 +393,18 @@
                      IZERO = 0
                   END IF
 *
-*                 End generate the test matrix A.
-*
                ELSE
 *
-*                 Use a special block diagonal matrix to test alternate
-*                 code for the 2 x 2 blocks.
+*                 For matrix kind IMAT = 11, generate special block
+*                 diagonal matrix to test alternate code
+*                 for the 2 x 2 blocks.
 *
                   CALL CLATSY( UPLO, N, A, LDA, ISEED )
 *
                END IF
+*
+*              End generate test matrix A.
+*
 *
 *              Do for each value of NB in NBVAL
 *
