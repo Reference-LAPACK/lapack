@@ -303,8 +303,8 @@
 *
                IF( IMAT.NE.NTYPES ) THEN
 *
-*                 Set up parameters with ZLATB4 and generate a test
-*                 matrix with ZLATMS.
+*                 Set up parameters with ZLATB4 for the matrix generator
+*                 based on the type of matrix to be generated.
 *
                   CALL ZLATB4( PATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
@@ -321,6 +321,9 @@
                   IF( INFO.NE.0 ) THEN
                      CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*
+*                    Skip all tests for this generated matrix
+*
                      GO TO 160
                   END IF
 *
@@ -525,6 +528,8 @@
                      GO TO 140
                   END IF
 *
+*                 Do for each value of NRHS in NSVAL.
+*
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
@@ -630,6 +635,9 @@
                         END IF
   120                CONTINUE
                      NRUN = NRUN + 6
+*
+*                 End do for each value of NRHS in NSVAL.
+*
   130             CONTINUE
 *
 *+    TEST 9
@@ -647,7 +655,7 @@
      $               CALL ALAERH( PATH, 'ZSYCON', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-*                 Compute the test ratio to compare to values of RCOND
+*                 Compute the test ratio to compare values of RCOND
 *
                   RESULT( 9 ) = DGET06( RCOND, RCONDC )
 *

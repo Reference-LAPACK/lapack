@@ -384,11 +384,11 @@
    50                      CONTINUE
                         END IF
                      ELSE
-                        IOFF = 0
                         IF( IUPLO.EQ.1 ) THEN
 *
 *                          Set the first IZERO rows and columns to zero.
 *
+                           IOFF = 0
                            DO 70 J = 1, N
                               I2 = MIN( J, IZERO )
                               DO 60 I = 1, I2
@@ -400,6 +400,7 @@
 *
 *                          Set the last IZERO rows and columns to zero.
 *
+                           IOFF = 0
                            DO 90 J = 1, N
                               I1 = MAX( J, IZERO )
                               DO 80 I = I1, N
@@ -733,7 +734,7 @@
                         NFAIL = NFAIL + 1
                      END IF
   200             CONTINUE
-                  NRUN = NRUN + NT
+                  NRUN = NRUN + 2
 *
 *                 Skip the other tests if this is not the first block
 *                 size.
@@ -748,11 +749,10 @@
                      GO TO 230
                   END IF
 *
+*                 Do for each value of NRHS in NSVAL.
+*
                   DO 220 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
-*
-*                    Begin loop over NRHS values
-*
 *
 *+    TEST 5 ( Using TRS_ROOK)
 *                 Solve and compute residual for  A * X = B.
@@ -804,7 +804,7 @@
   210                CONTINUE
                      NRUN = NRUN + 2
 *
-*                    End loop over NRHS values
+*                 End do for each value of NRHS in NSVAL.
 *
   220             CONTINUE
 *
@@ -824,7 +824,7 @@
      $                             UPLO, N, N, -1, -1, -1, IMAT,
      $                             NFAIL, NERRS, NOUT )
 *
-*                 Compute the test ratio to compare to values of RCOND
+*                 Compute the test ratio to compare values of RCOND
 *
                   RESULT( 7 ) = SGET06( RCOND, RCONDC )
 *
