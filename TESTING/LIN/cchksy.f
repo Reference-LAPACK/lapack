@@ -321,6 +321,9 @@
                   IF( INFO.NE.0 ) THEN
                      CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*
+*                    Skip all tests for this generated matrix
+*
                      GO TO 160
                   END IF
 *
@@ -525,6 +528,8 @@
                      GO TO 140
                   END IF
 *
+*                 Do for each value of NRHS in NSVAL.
+*
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
@@ -603,7 +608,7 @@
      $                            RWORK( NRHS+1 ), WORK,
      $                            RWORK( 2*NRHS+1 ), INFO )
 *
-*                 Check error code from CSYRFS.
+*                    Check error code from CSYRFS.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'CSYRFS', INFO, 0, UPLO, N,
@@ -629,6 +634,9 @@
                         END IF
   120                CONTINUE
                      NRUN = NRUN + 6
+*
+*                 End do for each value of NRHS in NSVAL.
+*
   130             CONTINUE
 *
 *+    TEST 9
@@ -646,7 +654,7 @@
      $               CALL ALAERH( PATH, 'CSYCON', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-*                 Compute the test ratio to compare to values of RCOND
+*                 Compute the test ratio to compare values of RCOND
 *
                   RESULT( 9 ) = SGET06( RCOND, RCONDC )
 *
