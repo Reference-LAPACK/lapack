@@ -136,14 +136,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension
-*>                      (NMAX*max(3,NSMAX))
+*>          WORK is COMPLEX array, dimension (NMAX*max(3,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension
-*>                      (max(NMAX,2*NSMAX))
+*>          RWORK is REAL array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -202,7 +200,7 @@
       REAL               EIGHT, SEVTEN
       PARAMETER          ( EIGHT = 8.0E+0, SEVTEN = 17.0E+0 )
       COMPLEX            CZERO
-      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 )  )
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
