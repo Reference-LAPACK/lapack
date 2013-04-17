@@ -2,8 +2,8 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
@@ -11,7 +11,7 @@
 *       SUBROUTINE CDRVSY_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
 *                          NMAX, A, AFAC, AINV, B, X, XACT, WORK, RWORK,
 *                          IWORK, NOUT )
-* 
+*
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NMAX, NN, NOUT, NRHS
@@ -24,7 +24,7 @@
 *       COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
 *      $                   WORK( * ), X( * ), XACT( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -117,8 +117,6 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension
-*>                      (NMAX*max(2,NRHS))
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -140,10 +138,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2011
 *
@@ -289,22 +287,22 @@
 *
                IF( IMAT.NE.NTYPES ) THEN
 *
-*              Begin generate the test matrix A.
+*                 Begin generate the test matrix A.
 *
-*              Set up parameters with CLATB4 for the matrix generator
-*              based on the type of matrix to be generated.
+*                 Set up parameters with CLATB4 for the matrix generator
+*                 based on the type of matrix to be generated.
 *
                   CALL CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with CLATMS.
+*                 Generate a matrix with CLATMS.
 *
                   SRNAMT = 'CLATMS'
                   CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
      $                         WORK, INFO )
 *
-*              Check error code from DLATMS and handle error.
+*                 Check error code from CLATMS and handle error.
 *
                   IF( INFO.NE.0 ) THEN
                      CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N,
@@ -379,6 +377,9 @@
                   ELSE
                      IZERO = 0
                   END IF
+*
+*                 End generate the test matrix A.
+*
                ELSE
 *
 *                 IMAT = NTYPES:  Use a special block diagonal matrix to
@@ -394,7 +395,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by ZSYSVX_ROOK.
+*                 the value returned by CSYSVX_ROOK.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
