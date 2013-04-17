@@ -136,14 +136,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension
-*>                      (NMAX*max(3,NSMAX))
+*>          WORK is COMPLEX*16 array, dimension (NMAX*max(3,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension
-*>                      (max(NMAX,2*NSMAX))
+*>          RWORK is DOUBLE PRECISION array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -202,7 +200,7 @@
       DOUBLE PRECISION   EIGHT, SEVTEN
       PARAMETER          ( EIGHT = 8.0D+0, SEVTEN = 17.0D+0 )
       COMPLEX*16         CZERO
-      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 )  )
+      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS

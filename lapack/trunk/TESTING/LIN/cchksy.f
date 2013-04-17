@@ -135,14 +135,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension
-*>                      (NMAX*max(2,NSMAX))
+*>          WORK is COMPLEX array, dimension (NMAX*max(2,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array,
-*>                                 dimension (NMAX+2*NSMAX)
+*>          RWORK is REAL array, dimension (NMAX+2*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -197,7 +195,7 @@
       REAL               ZERO
       PARAMETER          ( ZERO = 0.0E+0 )
       COMPLEX            CZERO
-      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 )  )
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
@@ -608,7 +606,7 @@
      $                            RWORK( NRHS+1 ), WORK,
      $                            RWORK( 2*NRHS+1 ), INFO )
 *
-*                    Check error code from CSYRFS.
+*                    Check error code from CSYRFS and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'CSYRFS', INFO, 0, UPLO, N,
