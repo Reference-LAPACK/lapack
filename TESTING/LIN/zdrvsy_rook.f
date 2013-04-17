@@ -117,8 +117,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension
-*>                      (NMAX*max(2,NRHS))
+*>          WORK is COMPLEX*16 array, dimension (NMAX*max(2,NRHS))
 *> \endverbatim
 *>
 *> \param[out] RWORK

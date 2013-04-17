@@ -2,8 +2,8 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
@@ -11,7 +11,7 @@
 *       SUBROUTINE CDRVHE_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
 *                               NMAX, A, AFAC, AINV, B, X, XACT, WORK, RWORK,
 *                               IWORK, NOUT )
-* 
+*
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NMAX, NN, NOUT, NRHS
@@ -24,7 +24,7 @@
 *       COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
 *      $                   WORK( * ), X( * ), XACT( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -117,8 +117,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension
-*>                      (NMAX*max(2,NRHS))
+*>          WORK is COMPLEX array, dimension (NMAX*max(2,NRHS))
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -140,10 +139,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2013
 *
