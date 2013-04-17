@@ -136,14 +136,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension
-*>                      (NMAX*max(3,NSMAX))
+*>          WORK is COMPLEX array, dimension (NMAX*max(3,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension
-*>                      (max(NMAX,2*NSMAX))
+*>          RWORK is REAL array, dimension (max(NMAX,2*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -202,7 +200,7 @@
       REAL               EIGHT, SEVTEN
       PARAMETER          ( EIGHT = 8.0E+0, SEVTEN = 17.0E+0 )
       COMPLEX            CZERO
-      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 )  )
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
@@ -382,11 +380,11 @@
    50                      CONTINUE
                         END IF
                      ELSE
-                        IOFF = 0
                         IF( IUPLO.EQ.1 ) THEN
 *
 *                          Set the first IZERO rows and columns to zero.
 *
+                           IOFF = 0
                            DO 70 J = 1, N
                               I2 = MIN( J, IZERO )
                               DO 60 I = 1, I2
@@ -398,6 +396,7 @@
 *
 *                          Set the last IZERO rows and columns to zero.
 *
+                           IOFF = 0
                            DO 90 J = 1, N
                               I1 = MAX( J, IZERO )
                               DO 80 I = I1, N
@@ -412,6 +411,7 @@
                   END IF
 *
 *                 End generate the test matrix A.
+*
 *
 *              Do for each value of NB in NBVAL
 *
@@ -720,7 +720,7 @@
                         NFAIL = NFAIL + 1
                      END IF
   200             CONTINUE
-                  NRUN = NRUN + NT
+                  NRUN = NRUN + 2
 *
 *                 Skip the other tests if this is not the first block
 *                 size.
@@ -734,6 +734,8 @@
                      RCONDC = ZERO
                      GO TO 230
                   END IF
+*
+*                 Do for each value of NRHS in NSVAL.
 *
                   DO 220 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
@@ -791,7 +793,7 @@
   210                CONTINUE
                      NRUN = NRUN + 2
 *
-*                    End loop over NRHS values
+*                 End do for each value of NRHS in NSVAL.
 *
   220             CONTINUE
 *
@@ -811,7 +813,7 @@
      $                             UPLO, N, N, -1, -1, -1, IMAT,
      $                             NFAIL, NERRS, NOUT )
 *
-*                 Compute the test ratio to compare to values of RCOND
+*                 Compute the test ratio to compare values of RCOND
 *
                   RESULT( 7 ) = SGET06( RCOND, RCONDC )
 *

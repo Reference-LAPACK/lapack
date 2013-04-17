@@ -136,14 +136,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension
-*>                      (NMAX*max(3,NSMAX))
+*>          WORK is COMPLEX*16 array, dimension (NMAX*max(3,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension
-*>                      (max(NMAX,2*NSMAX))
+*>          RWORK is DOUBLE PRECISION array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -196,13 +194,13 @@
 *
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO, ONE
-      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
+      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       DOUBLE PRECISION   ONEHALF
-      PARAMETER          ( ONEHALF = 0.5E+0 )
+      PARAMETER          ( ONEHALF = 0.5D+0 )
       DOUBLE PRECISION   EIGHT, SEVTEN
-      PARAMETER          ( EIGHT = 8.0E+0, SEVTEN = 17.0E+0 )
+      PARAMETER          ( EIGHT = 8.0D+0, SEVTEN = 17.0D+0 )
       COMPLEX            CZERO
-      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 )  )
+      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
@@ -382,11 +380,11 @@
    50                      CONTINUE
                         END IF
                      ELSE
-                        IOFF = 0
                         IF( IUPLO.EQ.1 ) THEN
 *
 *                          Set the first IZERO rows and columns to zero.
 *
+                           IOFF = 0
                            DO 70 J = 1, N
                               I2 = MIN( J, IZERO )
                               DO 60 I = 1, I2
@@ -398,6 +396,7 @@
 *
 *                          Set the last IZERO rows and columns to zero.
 *
+                           IOFF = 0
                            DO 90 J = 1, N
                               I1 = MAX( J, IZERO )
                               DO 80 I = I1, N
@@ -721,7 +720,7 @@
                         NFAIL = NFAIL + 1
                      END IF
   200             CONTINUE
-                  NRUN = NRUN + NT
+                  NRUN = NRUN + 2
 *
 *                 Skip the other tests if this is not the first block
 *                 size.
@@ -736,11 +735,10 @@
                      GO TO 230
                   END IF
 *
+*                 Do for each value of NRHS in NSVAL.
+*
                   DO 220 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
-*
-*                    Begin loop over NRHS values
-*
 *
 *+    TEST 5 ( Using TRS_ROOK)
 *                 Solve and compute residual for  A * X = B.
@@ -792,7 +790,7 @@
   210                CONTINUE
                      NRUN = NRUN + 2
 *
-*                    End loop over NRHS values
+*                 End do for each value of NRHS in NSVAL.
 *
   220             CONTINUE
 *
