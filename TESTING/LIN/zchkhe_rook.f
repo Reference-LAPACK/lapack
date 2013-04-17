@@ -199,7 +199,7 @@
       PARAMETER          ( ONEHALF = 0.5D+0 )
       DOUBLE PRECISION   EIGHT, SEVTEN
       PARAMETER          ( EIGHT = 8.0D+0, SEVTEN = 17.0D+0 )
-      COMPLEX            CZERO
+      COMPLEX*16         CZERO
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 10 )
@@ -215,7 +215,7 @@
      $                   LWORK, MODE, N, NB, NERRS, NFAIL, NIMAT, NRHS,
      $                   NRUN, NT
       DOUBLE PRECISION   ALPHA, ANORM, CNDNUM, CONST, LAM_MAX, LAM_MIN,
-     $                   RCOND, RCONDC, STEMP
+     $                   RCOND, RCONDC, DTEMP
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -523,7 +523,7 @@
 *                 Compute largest element in U or L
 *
                   RESULT( 3 ) = ZERO
-                  STEMP = ZERO
+                  DTEMP = ZERO
 *
                   CONST = ( ( ALPHA**2-ONE ) / ( ALPHA**2-ONEHALF ) ) /
      $                    ( ONE-ALPHA )
@@ -542,24 +542,24 @@
 *                       Get max absolute value from elements
 *                       in column k in in U
 *
-                        STEMP = ZLANGE( 'M', K-1, 1,
+                        DTEMP = ZLANGE( 'M', K-1, 1,
      $                          AFAC( ( K-1 )*LDA+1 ), LDA, RWORK )
                      ELSE
 *
 *                       Get max absolute value from elements
 *                       in columns k and k-1 in U
 *
-                        STEMP = ZLANGE( 'M', K-2, 2,
+                        DTEMP = ZLANGE( 'M', K-2, 2,
      $                          AFAC( ( K-2 )*LDA+1 ), LDA, RWORK )
                         K = K - 1
 *
                      END IF
 *
-*                    STEMP should be bounded by CONST
+*                    DTEMP should be bounded by CONST
 *
-                     STEMP = STEMP - CONST + THRESH
-                     IF( STEMP.GT.RESULT( 3 ) )
-     $                  RESULT( 3 ) = STEMP
+                     DTEMP = DTEMP - CONST + THRESH
+                     IF( DTEMP.GT.RESULT( 3 ) )
+     $                  RESULT( 3 ) = DTEMP
 *
                      K = K - 1
 *
@@ -580,24 +580,24 @@
 *                       Get max absolute value from elements
 *                       in column k in L
 *
-                        STEMP = ZLANGE( 'M', N-K, 1,
+                        DTEMP = ZLANGE( 'M', N-K, 1,
      $                          AFAC( ( K-1 )*LDA+K+1 ), LDA, RWORK )
                      ELSE
 *
 *                       Get max absolute value from elements
 *                       in columns k and k+1 in L
 *
-                        STEMP = ZLANGE( 'M', N-K-1, 2,
+                        DTEMP = ZLANGE( 'M', N-K-1, 2,
      $                          AFAC( ( K-1 )*LDA+K+2 ), LDA, RWORK )
                         K = K + 1
 *
                      END IF
 *
-*                    STEMP should be bounded by CONST
+*                    DTEMP should be bounded by CONST
 *
-                     STEMP = STEMP - CONST + THRESH
-                     IF( STEMP.GT.RESULT( 3 ) )
-     $                  RESULT( 3 ) = STEMP
+                     DTEMP = DTEMP - CONST + THRESH
+                     IF( DTEMP.GT.RESULT( 3 ) )
+     $                  RESULT( 3 ) = DTEMP
 *
                      K = K + 1
 *
@@ -610,7 +610,7 @@
 *                 Compute largest 2-Norm of 2-by-2 diag blocks
 *
                   RESULT( 4 ) = ZERO
-                  STEMP = ZERO
+                  DTEMP = ZERO
 *
                   CONST = ( ( ALPHA**2-ONE ) / ( ALPHA**2-ONEHALF ) )*
      $                    ( ( ONE + ALPHA ) / ( ONE - ALPHA ) )
@@ -636,7 +636,7 @@
 *
                         CALL ZHEEVX( 'N', 'N', 'N', 'N', 2, BLOCK,
      $                               2, WORK, CDUMMY, 1, CDUMMY, 1,
-     $                               ITEMP, ITEMP2, RWORK, STEMP,
+     $                               ITEMP, ITEMP2, RWORK, DTEMP,
      $                               RWORK( 3 ), RWORK( 5 ), WORK( 3 ),
      $                               4, RWORK( 7 ), INFO )
 *
@@ -645,13 +645,13 @@
                         LAM_MIN = MIN( ABS( WORK( 1 ) ),
      $                            ABS( WORK( 2 ) ) )
 *
-                        STEMP = LAM_MAX / LAM_MIN
+                        DTEMP = LAM_MAX / LAM_MIN
 *
-*                       STEMP should be bounded by CONST
+*                       DTEMP should be bounded by CONST
 *
-                        STEMP = ABS( STEMP ) - CONST + THRESH
-                        IF( STEMP.GT.RESULT( 4 ) )
-     $                     RESULT( 4 ) = STEMP
+                        DTEMP = ABS( DTEMP ) - CONST + THRESH
+                        IF( DTEMP.GT.RESULT( 4 ) )
+     $                     RESULT( 4 ) = DTEMP
                         K = K - 1
 *
                      END IF
@@ -682,7 +682,7 @@
 *
                         CALL ZHEEVX( 'N', 'N', 'N', 'N', 2, BLOCK,
      $                               2, WORK, CDUMMY, 1, CDUMMY, 1,
-     $                               ITEMP, ITEMP2, RWORK, STEMP,
+     $                               ITEMP, ITEMP2, RWORK, DTEMP,
      $                               RWORK( 3 ), RWORK( 5 ), WORK( 3 ),
      $                               4, RWORK( 7 ), INFO )
 *
@@ -691,13 +691,13 @@
                         LAM_MIN = MIN( ABS( WORK( 1 ) ),
      $                            ABS( WORK( 2 ) ) )
 *
-                        STEMP = LAM_MAX / LAM_MIN
+                        DTEMP = LAM_MAX / LAM_MIN
 *
-*                       STEMP should be bounded by CONST
+*                       DTEMP should be bounded by CONST
 *
-                        STEMP = ABS( STEMP ) - CONST + THRESH
-                        IF( STEMP.GT.RESULT( 4 ) )
-     $                     RESULT( 4 ) = STEMP
+                        DTEMP = ABS( DTEMP ) - CONST + THRESH
+                        IF( DTEMP.GT.RESULT( 4 ) )
+     $                     RESULT( 4 ) = DTEMP
                         K = K + 1
 *
                      END IF

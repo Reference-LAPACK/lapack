@@ -135,14 +135,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension
-*>                      (NMAX*max(3,NSMAX))
+*>          WORK is DOUBLE PRECISION array, dimension (NMAX*max(3,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension
-*>                      (max(NMAX,2*NSMAX))
+*>          RWORK is DOUBLE PRECISION array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -375,11 +373,11 @@
    50                   CONTINUE
                      END IF
                   ELSE
-                     IOFF = 0
                      IF( IUPLO.EQ.1 ) THEN
 *
 *                       Set the first IZERO rows and columns to zero.
 *
+                        IOFF = 0
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
@@ -391,6 +389,7 @@
 *
 *                       Set the last IZERO rows and columns to zero.
 *
+                        IOFF = 0
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
@@ -405,6 +404,7 @@
                END IF
 *
 *              End generate the test matrix A.
+*
 *
 *              Do for each value of NB in NBVAL
 *
@@ -449,7 +449,7 @@
                      END IF
                   END IF
 *
-*                 Check error code from DSYTRF and handle error.
+*                 Check error code from DSYTRF_ROOK and handle error.
 *
                   IF( INFO.NE.K)
      $               CALL ALAERH( PATH, 'DSYTRF_ROOK', INFO, K,
@@ -634,7 +634,7 @@
 *
                         DTEMP = LAM_MAX / LAM_MIN
 *
-*                    DTEMP should be bounded by CONST
+*                       DTEMP should be bounded by CONST
 *
                         DTEMP = ABS( DTEMP ) - CONST + THRESH
                         IF( DTEMP.GT.RESULT( 4 ) )
@@ -675,7 +675,7 @@
 *
                         DTEMP = LAM_MAX / LAM_MIN
 *
-*                    DTEMP should be bounded by CONST
+*                       DTEMP should be bounded by CONST
 *
                         DTEMP = ABS( DTEMP ) - CONST + THRESH
                         IF( DTEMP.GT.RESULT( 4 ) )
@@ -702,7 +702,7 @@
                         NFAIL = NFAIL + 1
                      END IF
   200             CONTINUE
-                  NRUN = NRUN + NT
+                  NRUN = NRUN + 2
 *
 *                 Skip the other tests if this is not the first block
 *                 size.
@@ -717,11 +717,10 @@
                      GO TO 230
                   END IF
 *
+*                 Do for each value of NRHS in NSVAL.
+*
                   DO 220 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
-*
-*                    Begin loop over NRHS values
-*
 *
 *+    TEST 5 ( Using TRS_ROOK)
 *                 Solve and compute residual for  A * X = B.
@@ -773,7 +772,7 @@
   210                CONTINUE
                      NRUN = NRUN + 2
 *
-*                    End loop over NRHS values
+*                 End do for each value of NRHS in NSVAL.
 *
   220             CONTINUE
 *

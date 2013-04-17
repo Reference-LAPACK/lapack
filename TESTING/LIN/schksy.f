@@ -134,14 +134,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension
-*>                      (NMAX*max(3,NSMAX))
+*>          WORK is REAL array, dimension (NMAX*max(3,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension
-*>                      (max(NMAX,2*NSMAX))
+*>          RWORK is REAL array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -315,6 +313,9 @@
                IF( INFO.NE.0 ) THEN
                   CALL ALAERH( PATH, 'SLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
+*
+*                 Skip all tests for this generated matrix
+*
                   GO TO 160
                END IF
 *
@@ -357,11 +358,11 @@
    50                   CONTINUE
                      END IF
                   ELSE
-                     IOFF = 0
                      IF( IUPLO.EQ.1 ) THEN
 *
 *                       Set the first IZERO rows and columns to zero.
 *
+                        IOFF = 0
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
@@ -373,6 +374,7 @@
 *
 *                       Set the last IZERO rows and columns to zero.
 *
+                        IOFF = 0
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
@@ -387,6 +389,7 @@
                END IF
 *
 *              End generate the test matrix A.
+*
 *
 *              Do for each value of NB in NBVAL
 *
@@ -507,6 +510,8 @@
                      GO TO 140
                   END IF
 *
+*                 Do for each value of NRHS in NSVAL.
+*
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
@@ -585,7 +590,7 @@
      $                            RWORK( NRHS+1 ), WORK, IWORK( N+1 ),
      $                            INFO )
 *
-*                 Check error code from SSYRFS.
+*                    Check error code from SSYRFS and handle error.
 *
                      IF( INFO.NE.0 )
      $                  CALL ALAERH( PATH, 'SSYRFS', INFO, 0, UPLO, N,
@@ -611,6 +616,9 @@
                         END IF
   120                CONTINUE
                      NRUN = NRUN + 6
+*
+*                 End do for each value of NRHS in NSVAL.
+*
   130             CONTINUE
 *
 *+    TEST 9
