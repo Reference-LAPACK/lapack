@@ -2,15 +2,15 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZLAVSY( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
 *                          LDB, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, TRANS, UPLO
 *       INTEGER            INFO, LDA, LDB, N, NRHS
@@ -19,17 +19,17 @@
 *       INTEGER            IPIV( * )
 *       COMPLEX*16         A( LDA, * ), B( LDB, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> ZLAVSY_ROOK  performs one of the matrix-vector operations
+*> ZLAVSY performs one of the matrix-vector operations
 *>    x := A*x  or  x := A'*x,
 *> where x is an N element vector and  A is one of the factors
-*> from the block U*D*U' or L*D*L' factorization computed by ZSYTRF_ROOK.
+*> from the block U*D*U' or L*D*L' factorization computed by ZSYTRF.
 *>
 *> If TRANS = 'N', multiplies by U  or U * D  (or L  or L * D)
 *> If TRANS = 'T', multiplies by U' or D * U' (or L' or D * L')
@@ -82,7 +82,8 @@
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
-*>          obtain the factor U or L as computed by ZSYTRF_ROOK.
+*>          obtain the factor U or L as computed by ZSYTRF.
+*>          Stored as a 2-D triangular matrix.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -95,7 +96,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D,
-*>          as determined by ZSYTRF_ROOK or ZHETRF_ROOK.
+*>          as determined by ZSYTRF.
 *>
 *>          If UPLO = 'U':
 *>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
@@ -139,10 +140,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2012
 *

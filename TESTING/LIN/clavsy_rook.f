@@ -2,15 +2,15 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
-*                          LDB, INFO )
-* 
+*                               LDB, INFO )
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, TRANS, UPLO
 *       INTEGER            INFO, LDA, LDB, N, NRHS
@@ -19,14 +19,14 @@
 *       INTEGER            IPIV( * )
 *       COMPLEX            A( LDA, * ), B( LDB, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> CLAVSY_ROOK  performs one of the matrix-vector operations
+*> CLAVSY_ROOK performs one of the matrix-vector operations
 *>    x := A*x  or  x := A'*x,
 *> where x is an N element vector and  A is one of the factors
 *> from the block U*D*U' or L*D*L' factorization computed by CSYTRF_ROOK.
@@ -83,6 +83,7 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
 *>          obtain the factor U or L as computed by CSYTRF_ROOK.
+*>          Stored as a 2-D triangular matrix.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -95,7 +96,7 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges and the block structure of D,
-*>          as determined by CSYTRF_ROOK or CHETRF_ROOK.
+*>          as determined by CSYTRF_ROOK.
 *>
 *>          If UPLO = 'U':
 *>               If IPIV(k) > 0, then rows and columns k and IPIV(k)
@@ -141,10 +142,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2011
 *
@@ -152,7 +153,7 @@
 *
 *  =====================================================================
       SUBROUTINE CLAVSY_ROOK( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV,
-     $                    B, LDB, INFO )
+     $                        B, LDB, INFO )
 *
 *  -- LAPACK test routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
