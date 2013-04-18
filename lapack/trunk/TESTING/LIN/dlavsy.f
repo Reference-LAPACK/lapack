@@ -2,15 +2,15 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE DLAVSY( UPLO, TRANS, DIAG, N, NRHS, A, LDA, IPIV, B,
 *                          LDB, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          DIAG, TRANS, UPLO
 *       INTEGER            INFO, LDA, LDB, N, NRHS
@@ -19,7 +19,7 @@
 *       INTEGER            IPIV( * )
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -85,6 +85,7 @@
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
 *>          obtain the factor U or L as computed by DSYTRF.
+*>          Stored as a 2-D triangular matrix.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -141,10 +142,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2012
 *
