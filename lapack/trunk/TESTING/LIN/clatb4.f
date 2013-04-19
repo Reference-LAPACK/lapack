@@ -61,7 +61,8 @@
 *>          TYPE is CHARACTER*1
 *>          The type of the matrix to be generated:
 *>          = 'S':  symmetric matrix
-*>          = 'P':  symmetric positive (semi)definite matrix
+*>          = 'H':  Hermitian matrix
+*>          = 'P':  Hermitian positive (semi)definite matrix
 *>          = 'N':  nonsymmetric matrix
 *> \endverbatim
 *>
