@@ -55,6 +55,8 @@
 *>                     with partial (Bunch-Kaufman) pivoting
 *>             _HE:  (complex) Hermitian indefinite,
 *>                     with partial (Bunch-Kaufman) pivoting
+*>             _HR:  (complex) Hermitian indefinite,
+*>                     with "rook" (bounded Bunch-Kaufman) pivoting
 *>             _HP:  (complex) Hermitian indefinite packed,
 *>                     with partial (Bunch-Kaufman) pivoting
 *>          The first character must be one of S, D, C, or Z (C or Z only
@@ -69,7 +71,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date April 2012
+*> \date April 2013
 *
 *> \ingroup aux_lin
 *
@@ -294,6 +296,26 @@
          WRITE( IOUNIT, FMT = 9977 )4
          WRITE( IOUNIT, FMT = 9978 )5
          WRITE( IOUNIT, FMT = 9976 )6
+         WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
+*
+      ELSE IF( LSAMEN( 2, P2, 'HR' )  ) THEN
+*
+*        HR: Hermitian indefinite full,
+*            with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*
+         WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
+*
+         WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
+         IF( SORD ) THEN
+            WRITE( IOUNIT, FMT = 9983 )
+         ELSE
+            WRITE( IOUNIT, FMT = 9982 )
+         END IF
+*
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 9974 )1
+         WRITE( IOUNIT, FMT = 9980 )2
+         WRITE( IOUNIT, FMT = 9979 )3
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
       ELSE
