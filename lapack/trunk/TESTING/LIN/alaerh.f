@@ -489,7 +489,8 @@
 *
       ELSE IF( LSAMEN( 2, P2, 'SY' )
      $         .OR. LSAMEN( 2, P2, 'SR' )
-     $         .OR. LSAMEN( 2, P2, 'HE' ) ) THEN
+     $         .OR. LSAMEN( 2, P2, 'HE' )
+     $         .OR. LSAMEN( 2, P2, 'HR' ) ) THEN
 *
 *        xSY: symmetric indefinite matrices
 *             with partial (Bunch-Kaufman) pivoting;
@@ -497,6 +498,8 @@
 *             with rook (bounded Bunch-Kaufman) pivoting;
 *        xHE: Hermitian indefinite matrices
 *             with partial (Bunch-Kaufman) pivoting.
+*        xHR: Hermitian indefinite matrices
+*             with rook (bounded Bunch-Kaufman) pivoting;
 *
          UPLO = OPTS( 1: 1 )
          IF( LSAMEN( 3, C3, 'TRF' ) ) THEN

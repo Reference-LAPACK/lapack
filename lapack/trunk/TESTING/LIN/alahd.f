@@ -55,6 +55,8 @@
 *>                     with partial (Bunch-Kaufman) pivoting
 *>             _HE:  (complex) Hermitian indefinite,
 *>                     with partial (Bunch-Kaufman) pivoting
+*>             _HR:  Symmetric indefinite,
+*>                     with "rook" (bounded Bunch-Kaufman) pivoting
 *>             _HP:  (complex) Hermitian indefinite packed,
 *>                     with partial (Bunch-Kaufman) pivoting
 *>             _TR:  Triangular
@@ -379,6 +381,32 @@
          WRITE( IOUNIT, FMT = 9956 )7
          WRITE( IOUNIT, FMT = 9957 )8
          WRITE( IOUNIT, FMT = 9955 )9
+         WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
+*
+      ELSE IF( LSAMEN( 2, P2, 'HR' )  ) THEN
+*
+*        SR: Symmetric indefinite full,
+*            with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*
+         WRITE( IOUNIT, FMT = 9892 )PATH, 'Symmetric'
+*
+         WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
+         IF( SORD ) THEN
+            WRITE( IOUNIT, FMT = 9972 )
+         ELSE
+            WRITE( IOUNIT, FMT = 9971 )
+         END IF
+*
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 9953 )1
+         WRITE( IOUNIT, FMT = 9961 )2
+         WRITE( IOUNIT, FMT = 9927 )3
+         WRITE( IOUNIT, FMT = 9928 )
+         WRITE( IOUNIT, FMT = 9926 )4
+         WRITE( IOUNIT, FMT = 9928 )
+         WRITE( IOUNIT, FMT = 9960 )5
+         WRITE( IOUNIT, FMT = 9959 )6
+         WRITE( IOUNIT, FMT = 9955 )7
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
       ELSE IF( LSAMEN( 2, P2, 'HP' ) ) THEN
@@ -760,7 +788,7 @@
      $      '(* - tests error exits from ', A3,
      $      'TRF, no test ratios are computed)' )
 *
-*     SSY, SSR, SSP, CHE, CHP matrix types
+*     SSY, SSR, SSP, CHE, CHR, CHP matrix types
 *
  9972 FORMAT( 4X, '1. Diagonal', 24X,
      $      '6. Last n/2 rows and columns zero', / 4X,
