@@ -1,4 +1,4 @@
-* \brief \b CLAHEF_ROOK computes a partial factorization of a complex Hermitian indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method.
+* \brief \b CLAHEF_ROOK computes a partial factorization of a complex Hermitian indefinite matrix using the bounded Bunch-Kaufman ("rook") diagonal pivoting method (blocked algorithm, calling Level 3 BLAS).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -171,7 +171,7 @@
 *>
 *> \verbatim
 *>
-*>  November 2012,  Igor Kozachenko,
+*>  November 2012, Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -548,7 +548,7 @@
 *
 *                 Compose the columns of the inverse of 2-by-2 pivot
 *                 block D in the following way to reduce the number
-*                 of FLOPS when we myltiply panel ( W(kw-1) W(kw) ) by
+*                 of FLOPS when we multiply panel ( W(kw-1) W(kw) ) by
 *                 this inverse
 *
 *                 D**(-1) = ( d11 cj(d21) )**(-1) =
@@ -975,7 +975,7 @@
 *
 *                 Compose the columns of the inverse of 2-by-2 pivot
 *                 block D in the following way to reduce the number
-*                 of FLOPS when we myltiply panel ( W(k) W(k+1) ) by
+*                 of FLOPS when we multiply panel ( W(k) W(k+1) ) by
 *                 this inverse
 *
 *                 D**(-1) = ( d11 cj(d21) )**(-1) =

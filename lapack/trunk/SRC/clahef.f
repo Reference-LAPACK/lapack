@@ -1,4 +1,4 @@
-*> \brief \b CLAHEF computes a partial factorization of a complex Hermitian indefinite matrix using the Bunch-Kaufman diagonal pivoting method.
+*> \brief \b CLAHEF computes a partial factorization of a complex Hermitian indefinite matrix using the Bunch-Kaufman diagonal pivoting method (blocked algorithm, calling Level 3 BLAS).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -428,7 +428,7 @@
 *
 *                 Compose the columns of the inverse of 2-by-2 pivot
 *                 block D in the following way to reduce the number
-*                 of FLOPS when we myltiply panel ( W(kw-1) W(kw) ) by
+*                 of FLOPS when we multiply panel ( W(kw-1) W(kw) ) by
 *                 this inverse
 *
 *                 D**(-1) = ( d11 cj(d21) )**(-1) =
@@ -739,7 +739,7 @@
 *
 *                 Compose the columns of the inverse of 2-by-2 pivot
 *                 block D in the following way to reduce the number
-*                 of FLOPS when we myltiply panel ( W(kw-1) W(kw) ) by
+*                 of FLOPS when we multiply panel ( W(kw-1) W(kw) ) by
 *                 this inverse
 *
 *                 D**(-1) = ( d11 cj(d21) )**(-1) =
