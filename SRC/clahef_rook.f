@@ -417,6 +417,7 @@
 *
                   END IF
 *
+*
 *                 END pivot search loop body
 *
                IF( .NOT.DONE ) GOTO 12
