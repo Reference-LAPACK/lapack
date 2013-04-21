@@ -202,11 +202,11 @@
 *
 *     .. Parameters ..
       REAL               ZERO, ONE
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       COMPLEX            CONE
-      PARAMETER          ( CONE = ( 1.0D+0, 0.0D+0 ) )
+      PARAMETER          ( CONE = ( 1.0E+0, 0.0E+0 ) )
       REAL               EIGHT, SEVTEN
-      PARAMETER          ( EIGHT = 8.0D+0, SEVTEN = 17.0D+0 )
+      PARAMETER          ( EIGHT = 8.0E+0, SEVTEN = 17.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            DONE
@@ -250,7 +250,7 @@
 *
 *        Factorize the trailing columns of A using the upper triangle
 *        of A and working backwards, and compute the matrix W = U12*D
-*        for use in updating A11
+*        for use in updating A11 (note that conjg(W) is actually stored)
 *
 *        K is the main loop index, decreasing from N in steps of 1 or 2
 *
@@ -310,11 +310,11 @@
 *
 *           ============================================================
 *
-*           Test for interchange
+*           BEGIN pivot search
 *
+*           Case(1)
 *           Equivalent to testing for ABSAKK.GE.ALPHA*COLMAX
 *           (used to handle NaN and Inf)
-*
             IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
@@ -323,13 +323,13 @@
 *
             ELSE
 *
-               DONE = .FALSE.
+*              Lop until pivot found
 *
-*              Loop until pivot found
+               DONE = .FALSE.
 *
    12          CONTINUE
 *
-*                 Begin pivot search loop body
+*                 BEGIN pivot search loop body
 *
 *
 *                 Copy column IMAX to column KW-1 of W and update it
@@ -369,6 +369,7 @@
                      END IF
                   END IF
 *
+*                 Case(2)
 *                 Equivalent to testing for
 *                 ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
 *                 (used to handle NaN and Inf)
@@ -387,6 +388,7 @@
 *
                      DONE = .TRUE.
 *
+*                 Case(3)
 *                 Equivalent to testing for ROWMAX.EQ.COLMAX,
 *                 (used to handle NaN and Inf)
 *
@@ -399,6 +401,8 @@
                      KP = IMAX
                      KSTEP = 2
                      DONE = .TRUE.
+*
+*                 Case(4)
                   ELSE
 *
 *                    Pivot not found: set params and repeat
@@ -413,11 +417,13 @@
 *
                   END IF
 *
-*                 End pivot search loop body
+*                 END pivot search loop body
 *
                IF( .NOT.DONE ) GOTO 12
 *
             END IF
+*
+*           END pivot search
 *
 *           ============================================================
 *
@@ -508,6 +514,10 @@
                CALL CCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
                IF( K.GT.1 ) THEN
 *
+*                 (NOTE: No need to check if A(k,k) is NOT ZERO,
+*                  since that was ensured earlier in pivot search:
+*                  case A(k,k) = 0 falls into 2x2 pivot case(3))
+*
 *                 Handle division by a small number
 *
                   T = REAL( A( K, K ) )
@@ -515,8 +525,6 @@
                      R1 = ONE / T
                      CALL CSSCAL( K-1, R1, A( 1, K ), 1 )
                   ELSE
-*                    (NOTE: No need to check if T=D(k,k) is NOT ZERO,
-*                    since that was ensured earlier in pivot search)
                      DO 14 II = 1, K-1
                         A( II, K ) = A( II, K ) / T
    14                CONTINUE
@@ -546,10 +554,10 @@
 *
                IF( K.GT.2 ) THEN
 *
-*                 Compose the columns of the inverse of 2-by-2 pivot
-*                 block D in the following way to reduce the number
-*                 of FLOPS when we multiply panel ( W(kw-1) W(kw) ) by
-*                 this inverse
+*                 Factor out the columns of the inverse of 2-by-2 pivot
+*                 block D, so that each column contains 1, to reduce the
+*                 number of FLOPS when we multiply panel
+*                 ( W(kw-1) W(kw) ) by this inverse, i.e. by D**(-1).
 *
 *                 D**(-1) = ( d11 cj(d21) )**(-1) =
 *                           ( d21    d22 )
@@ -577,7 +585,19 @@
 *                 operations is important)
 *
 *                 = ( T*(( D11 )/conj(D21)) T*((  -1 )/D21 ) )
-*                   (   ((  -1 )          )   (( D22 )     ) )
+*                   (   ((  -1 )          )   (( D22 )     ) ),
+*
+*                 where D11 = d22/d21,
+*                       D22 = d11/conj(d21),
+*                       D21 = d21,
+*                       T = 1/(D22*D11-1).
+*
+*                 (NOTE: No need to check for division by ZERO,
+*                  since that was ensured earlier in pivot search:
+*                  (a) d21 != 0 in 2x2 pivot case(4),
+*                      since |d21| should be larger than |d11| and |d22|;
+*                  (b) (D22*D11 - 1) != 0, since from (a),
+*                      both |D11| < 1, |D22| < 1, hence |D22*D11| << 1.)
 *
                   D21 = W( K-1, KW )
                   D11 = W( K, KW ) / CONJG( D21 )
@@ -701,6 +721,8 @@
          K = 1
    70    CONTINUE
 *
+*        Exit from loop
+*
          IF( ( K.GE.NB .AND. NB.LT.N ) .OR. K.GT.N )
      $      GO TO 90
 *
@@ -748,8 +770,9 @@
 *
 *           ============================================================
 *
-*           Test for interchange
+*           BEGIN pivot search
 *
+*           Case(1)
 *           Equivalent to testing for ABSAKK.GE.ALPHA*COLMAX
 *           (used to handle NaN and Inf)
 *
@@ -767,7 +790,7 @@
 *
    72          CONTINUE
 *
-*                 Begin pivot search loop body
+*                 BEGIN pivot search loop body
 *
 *
 *                 Copy column IMAX to column k+1 of W and update it
@@ -805,6 +828,7 @@
                      END IF
                   END IF
 *
+*                 Case(2)
 *                 Equivalent to testing for
 *                 ABS( REAL( W( IMAX,K+1 ) ) ).GE.ALPHA*ROWMAX
 *                 (used to handle NaN and Inf)
@@ -823,6 +847,7 @@
 *
                      DONE = .TRUE.
 *
+*                 Case(3)
 *                 Equivalent to testing for ROWMAX.EQ.COLMAX,
 *                 (used to handle NaN and Inf)
 *
@@ -835,6 +860,8 @@
                      KP = IMAX
                      KSTEP = 2
                      DONE = .TRUE.
+*
+*                 Case(4)
                   ELSE
 *
 *                    Pivot not found: set params and repeat
@@ -849,11 +876,14 @@
 *
                   END IF
 *
+*
 *                 End pivot search loop body
 *
                IF( .NOT.DONE ) GOTO 72
 *
             END IF
+*
+*           END pivot search
 *
 *           ============================================================
 *
@@ -935,6 +965,10 @@
                CALL CCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
                IF( K.LT.N ) THEN
 *
+*                 (NOTE: No need to check if A(k,k) is NOT ZERO,
+*                  since that was ensured earlier in pivot search:
+*                  case A(k,k) = 0 falls into 2x2 pivot case(3))
+*
 *                 Handle division by a small number
 *
                   T = REAL( A( K, K ) )
@@ -942,8 +976,6 @@
                      R1 = ONE / T
                      CALL CSSCAL( N-K, R1, A( K+1, K ), 1 )
                   ELSE
-*                    (NOTE: No need to check if T=D(k,k) is NOT ZERO,
-*                    since that was ensured earlier in pivot search)
                      DO 74 II = K + 1, N
                         A( II, K ) = A( II, K ) / T
    74                CONTINUE
@@ -973,10 +1005,10 @@
 *
                IF( K.LT.N-1 ) THEN
 *
-*                 Compose the columns of the inverse of 2-by-2 pivot
-*                 block D in the following way to reduce the number
-*                 of FLOPS when we multiply panel ( W(k) W(k+1) ) by
-*                 this inverse
+*                 Factor out the columns of the inverse of 2-by-2 pivot
+*                 block D, so that each column contains 1, to reduce the
+*                 number of FLOPS when we multiply panel
+*                 ( W(kw-1) W(kw) ) by this inverse, i.e. by D**(-1).
 *
 *                 D**(-1) = ( d11 cj(d21) )**(-1) =
 *                           ( d21    d22 )
@@ -1004,7 +1036,19 @@
 *                 operations is important)
 *
 *                 = ( T*(( D11 )/conj(D21)) T*((  -1 )/D21 ) )
-*                   (   ((  -1 )          )   (( D22 )     ) )
+*                   (   ((  -1 )          )   (( D22 )     ) ),
+*
+*                 where D11 = d22/d21,
+*                       D22 = d11/conj(d21),
+*                       D21 = d21,
+*                       T = 1/(D22*D11-1).
+*
+*                 (NOTE: No need to check for division by ZERO,
+*                  since that was ensured earlier in pivot search:
+*                  (a) d21 != 0 in 2x2 pivot case(4),
+*                      since |d21| should be larger than |d11| and |d22|;
+*                  (b) (D22*D11 - 1) != 0, since from (a),
+*                      both |D11| < 1, |D22| < 1, hence |D22*D11| << 1.)
 *
                   D21 = W( K+1, K )
                   D11 = W( K+1, K+1 ) / D21
