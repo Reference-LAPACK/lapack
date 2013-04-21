@@ -240,16 +240,19 @@
 *
 *        K is the main loop index, decreasing from N in steps of 1 or 2
 *
-*        KW is the column of W which corresponds to column K of A
-*
          K = N
    10    CONTINUE
+*
+*        KW is the column of W which corresponds to column K of A
+*
          KW = NB + K - N
 *
 *        Exit from loop
 *
          IF( ( K.LE.N-NB+1 .AND. NB.LT.N ) .OR. K.LT.1 )
      $      GO TO 30
+*
+         KSTEP = 1
 *
 *        Copy column K of A to column KW of W and update it
 *
@@ -260,8 +263,6 @@
      $                  W( K, KW+1 ), LDW, CONE, W( 1, KW ), 1 )
             W( K, KW ) = REAL( W( K, KW ) )
          END IF
-*
-         KSTEP = 1
 *
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used
@@ -288,12 +289,21 @@
             KP = K
             A( K, K ) = REAL( A( K, K ) )
          ELSE
+*
+*           ============================================================
+*
+*           BEGIN pivot search
+*
+*           Case(1)
             IF( ABSAKK.GE.ALPHA*COLMAX ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
 *
                KP = K
             ELSE
+*
+*              BEGIN pivot search along IMAX row
+*
 *
 *              Copy column IMAX to column KW-1 of W and update it
 *
@@ -310,7 +320,8 @@
                END IF
 *
 *              JMAX is the column-index of the largest off-diagonal
-*              element in row IMAX, and ROWMAX is its absolute value
+*              element in row IMAX, and ROWMAX is its absolute value.
+*              Determine only ROWMAX.
 *
                JMAX = IMAX + ICAMAX( K-IMAX, W( IMAX+1, KW-1 ), 1 )
                ROWMAX = CABS1( W( JMAX, KW-1 ) )
@@ -319,11 +330,14 @@
                   ROWMAX = MAX( ROWMAX, CABS1( W( JMAX, KW-1 ) ) )
                END IF
 *
+*              Case(2)
                IF( ABSAKK.GE.ALPHA*COLMAX*( COLMAX / ROWMAX ) ) THEN
 *
 *                 no interchange, use 1-by-1 pivot block
 *
                   KP = K
+*
+*              Case(3)
                ELSE IF( ABS( REAL( W( IMAX, KW-1 ) ) ).GE.ALPHA*ROWMAX )
      $                   THEN
 *
@@ -335,6 +349,8 @@
 *                 copy column KW-1 of W to column KW of W
 *
                   CALL CCOPY( K, W( 1, KW-1 ), 1, W( 1, KW ), 1 )
+*
+*              Case(4)
                ELSE
 *
 *                 interchange rows and columns K-1 and IMAX, use 2-by-2
@@ -343,7 +359,13 @@
                   KP = IMAX
                   KSTEP = 2
                END IF
+*
+*
+*              END pivot search along IMAX row
+*
             END IF
+*
+*           END pivot search
 *
 *           ============================================================
 *
@@ -399,13 +421,23 @@
 *                 A(k,k) := D(k,k) = W(k,kw)
 *                 A(1:k-1,k) := U(1:k-1,k) = W(1:k-1,kw)/D(k,k)
 *
+*              (NOTE: No need to use for Hermitian matrix
+*              A( K, K ) = DBLE( W( K, K) ) to separately copy diagonal
+*              element D(k,k) from W (potentially saves only one load))
                CALL CCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
-               R1 = ONE / REAL( A( K, K ) )
-               CALL CSSCAL( K-1, R1, A( 1, K ), 1 )
+               IF( K.GT.1 ) THEN
 *
-*              (2) Conjugate column W(kw)
+*                 (NOTE: No need to check if A(k,k) is NOT ZERO,
+*                  since that was ensured earlier in pivot search:
+*                  case A(k,k) = 0 falls into 2x2 pivot case(4))
 *
-               CALL CLACGV( K-1, W( 1, KW ), 1 )
+                  R1 = ONE / REAL( A( K, K ) )
+                  CALL CSSCAL( K-1, R1, A( 1, K ), 1 )
+*
+*                 (2) Conjugate column W(kw)
+*
+                  CALL CLACGV( K-1, W( 1, KW ), 1 )
+               END IF
 *
             ELSE
 *
@@ -426,10 +458,10 @@
 *
                IF( K.GT.2 ) THEN
 *
-*                 Compose the columns of the inverse of 2-by-2 pivot
-*                 block D in the following way to reduce the number
-*                 of FLOPS when we multiply panel ( W(kw-1) W(kw) ) by
-*                 this inverse
+*                 Factor out the columns of the inverse of 2-by-2 pivot
+*                 block D, so that each column contains 1, to reduce the
+*                 number of FLOPS when we multiply panel
+*                 ( W(kw-1) W(kw) ) by this inverse, i.e. by D**(-1).
 *
 *                 D**(-1) = ( d11 cj(d21) )**(-1) =
 *                           ( d21    d22 )
@@ -454,7 +486,19 @@
 *                   (               (  -1 )         ( D22 ) )
 *
 *                 = ( conj(D21)*( D11 ) D21*(  -1 ) )
-*                   (           (  -1 )     ( D22 ) )
+*                   (           (  -1 )     ( D22 ) ),
+*
+*                 where D11 = d22/d21,
+*                       D22 = d11/conj(d21),
+*                       D21 = T/d21,
+*                       T = 1/(D22*D11-1).
+*
+*                 (NOTE: No need to check for division by ZERO,
+*                  since that was ensured earlier in pivot search:
+*                  (a) d21 != 0, since in 2x2 pivot case(4)
+*                      |d21| should be larger than |d11| and |d22|;
+*                  (b) (D22*D11 - 1) != 0, since from (a),
+*                      both |D11| < 1, |D22| < 1, hence |D22*D11| << 1.)
 *
                   D21 = W( K-1, KW )
                   D11 = W( K, KW ) / CONJG( D21 )
@@ -532,19 +576,27 @@
    50    CONTINUE
 *
 *        Put U12 in standard form by partially undoing the interchanges
-*        in columns k+1:n
+*        in of rows in columns k+1:n looping backwards from k+1 to n
 *
          J = K + 1
    60    CONTINUE
-         JJ = J
-         JP = IPIV( J )
-         IF( JP.LT.0 ) THEN
-            JP = -JP
+*
+*           Undo the interchanges (if any) of rows J and JP
+*           at each step J
+*
+*           (Here, J is a diagonal index)
+            JJ = J
+            JP = IPIV( J )
+            IF( JP.LT.0 ) THEN
+               JP = -JP
+*              (Here, J is a diagonal index)
+               J = J + 1
+            END IF
+*           (NOTE: Here, J is used to determine row length. Length N-J+1
+*           of the rows to swap back doesn't include diagonal element)
             J = J + 1
-         END IF
-         J = J + 1
-         IF( JP.NE.JJ .AND. J.LE.N )
-     $      CALL CSWAP( N-J+1, A( JP, J ), LDA, A( JJ, J ), LDA )
+            IF( JP.NE.JJ .AND. J.LE.N )
+     $         CALL CSWAP( N-J+1, A( JP, J ), LDA, A( JJ, J ), LDA )
          IF( J.LE.N )
      $      GO TO 60
 *
@@ -568,6 +620,8 @@
          IF( ( K.GE.NB .AND. NB.LT.N ) .OR. K.GT.N )
      $      GO TO 90
 *
+         KSTEP = 1
+*
 *        Copy column K of A to column K of W and update it
 *
          W( K, K ) = REAL( A( K, K ) )
@@ -576,8 +630,6 @@
          CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE, A( K, 1 ), LDA,
      $               W( K, 1 ), LDW, CONE, W( K, K ), 1 )
          W( K, K ) = REAL( W( K, K ) )
-*
-         KSTEP = 1
 *
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used
@@ -604,12 +656,21 @@
             KP = K
             A( K, K ) = REAL( A( K, K ) )
          ELSE
+*
+*           ============================================================
+*
+*           BEGIN pivot search
+*
+*           Case(1)
             IF( ABSAKK.GE.ALPHA*COLMAX ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
 *
                KP = K
             ELSE
+*
+*              BEGIN pivot search along IMAX row
+*
 *
 *              Copy column IMAX to column K+1 of W and update it
 *
@@ -625,7 +686,8 @@
                W( IMAX, K+1 ) = REAL( W( IMAX, K+1 ) )
 *
 *              JMAX is the column-index of the largest off-diagonal
-*              element in row IMAX, and ROWMAX is its absolute value
+*              element in row IMAX, and ROWMAX is its absolute value.
+*              Determine only ROWMAX.
 *
                JMAX = K - 1 + ICAMAX( IMAX-K, W( K, K+1 ), 1 )
                ROWMAX = CABS1( W( JMAX, K+1 ) )
@@ -634,11 +696,14 @@
                   ROWMAX = MAX( ROWMAX, CABS1( W( JMAX, K+1 ) ) )
                END IF
 *
+*              Case(2)
                IF( ABSAKK.GE.ALPHA*COLMAX*( COLMAX / ROWMAX ) ) THEN
 *
 *                 no interchange, use 1-by-1 pivot block
 *
                   KP = K
+*
+*              Case(3)
                ELSE IF( ABS( REAL( W( IMAX, K+1 ) ) ).GE.ALPHA*ROWMAX )
      $                   THEN
 *
@@ -650,6 +715,8 @@
 *                 copy column K+1 of W to column K of W
 *
                   CALL CCOPY( N-K+1, W( K, K+1 ), 1, W( K, K ), 1 )
+*
+*              Case(4)
                ELSE
 *
 *                 interchange rows and columns K+1 and IMAX, use 2-by-2
@@ -658,7 +725,13 @@
                   KP = IMAX
                   KSTEP = 2
                END IF
+*
+*
+*              END pivot search along IMAX row
+*
             END IF
+*
+*           END pivot search
 *
 *           ============================================================
 *
@@ -708,8 +781,16 @@
 *                 A(k,k) := D(k,k) = W(k,k)
 *                 A(k+1:N,k) := L(k+1:N,k) = W(k+1:N,k)/D(k,k)
 *
+*              (NOTE: No need to use for Hermitian matrix
+*              A( K, K ) = DBLE( W( K, K) ) to separately copy diagonal
+*              element D(k,k) from W (potentially saves only one load))
                CALL CCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
                IF( K.LT.N ) THEN
+*
+*                 (NOTE: No need to check if A(k,k) is NOT ZERO,
+*                  since that was ensured earlier in pivot search:
+*                  case A(k,k) = 0 falls into 2x2 pivot case(4))
+*
                   R1 = ONE / REAL( A( K, K ) )
                   CALL CSSCAL( N-K, R1, A( K+1, K ), 1 )
 *
@@ -737,10 +818,10 @@
 *
                IF( K.LT.N-1 ) THEN
 *
-*                 Compose the columns of the inverse of 2-by-2 pivot
-*                 block D in the following way to reduce the number
-*                 of FLOPS when we multiply panel ( W(kw-1) W(kw) ) by
-*                 this inverse
+*                 Factor out the columns of the inverse of 2-by-2 pivot
+*                 block D, so that each column contains 1, to reduce the
+*                 number of FLOPS when we multiply panel
+*                 ( W(kw-1) W(kw) ) by this inverse, i.e. by D**(-1).
 *
 *                 D**(-1) = ( d11 cj(d21) )**(-1) =
 *                           ( d21    d22 )
@@ -766,6 +847,18 @@
 *
 *                 = ( conj(D21)*( D11 ) D21*(  -1 ) )
 *                   (           (  -1 )     ( D22 ) )
+*
+*                 where D11 = d22/d21,
+*                       D22 = d11/conj(d21),
+*                       D21 = T/d21,
+*                       T = 1/(D22*D11-1).
+*
+*                 (NOTE: No need to check for division by ZERO,
+*                  since that was ensured earlier in pivot search:
+*                  (a) d21 != 0, since in 2x2 pivot case(4)
+*                      |d21| should be larger than |d11| and |d22|;
+*                  (b) (D22*D11 - 1) != 0, since from (a),
+*                      both |D11| < 1, |D22| < 1, hence |D22*D11| << 1.)
 *
                   D21 = W( K+1, K )
                   D11 = W( K+1, K+1 ) / D21
@@ -844,19 +937,27 @@
   110    CONTINUE
 *
 *        Put L21 in standard form by partially undoing the interchanges
-*        in columns 1:k-1
+*        of rows in columns 1:k-1 looping backwards from k-1 to 1
 *
          J = K - 1
   120    CONTINUE
-         JJ = J
-         JP = IPIV( J )
-         IF( JP.LT.0 ) THEN
-            JP = -JP
+*
+*           Undo the interchanges (if any) of rows J and JP
+*           at each step J
+*
+*           (Here, J is a diagonal index)
+            JJ = J
+            JP = IPIV( J )
+            IF( JP.LT.0 ) THEN
+               JP = -JP
+*              (Here, J is a diagonal index)
+               J = J - 1
+            END IF
+*           (NOTE: Here, J is used to determine row length. Length J
+*           of the rows to swap back doesn't include diagonal element)
             J = J - 1
-         END IF
-         J = J - 1
-         IF( JP.NE.JJ .AND. J.GE.1 )
-     $      CALL CSWAP( J, A( JP, 1 ), LDA, A( JJ, 1 ), LDA )
+            IF( JP.NE.JJ .AND. J.GE.1 )
+     $         CALL CSWAP( J, A( JP, 1 ), LDA, A( JJ, 1 ), LDA )
          IF( J.GE.1 )
      $      GO TO 120
 *
