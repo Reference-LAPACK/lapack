@@ -127,11 +127,11 @@
       ANRM = 1.0
       OK = .TRUE.
 *
-      IF( LSAMEN( 2, C2, 'SY' ) ) THEN
+*     Test error exits of the routines that use factorization
+*     of a symmetric indefinite matrix with patrial
+*     (Bunch-Kaufman) diagonal pivoting method.
 *
-*        Test error exits of the routines that use factorization
-*        of a symmetric indefinite matrix with patrial
-*        (Bunch-Kaufman) pivoting.
+      IF( LSAMEN( 2, C2, 'SY' ) ) THEN
 *
 *        CSYTRF
 *
@@ -252,11 +252,11 @@
          CALL CSYCON( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'CSYCON', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+*     Test error exits of the routines that use factorization
+*     of a symmetric indefinite matrix with "rook"
+*     (bounded Bunch-Kaufman) diagonal pivoting method.
 *
-*        Test error exits of the routines that use factorization
-*        of a symmetric indefinite matrix with rook
-*        (bounded Bunch-Kaufman) pivoting.
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        CSYTRF_ROOK
 *
@@ -297,7 +297,7 @@
          CALL CSYTRI_ROOK( 'U', 2, A, 1, IP, W, INFO )
          CALL CHKXER( 'CSYTRI_ROOK', INFOT, NOUT, LERR, OK )
 *
-*        CSYTRS
+*        CSYTRS_ROOK
 *
          SRNAMT = 'CSYTRS_ROOK'
          INFOT = 1
