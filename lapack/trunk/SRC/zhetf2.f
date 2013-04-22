@@ -1,4 +1,4 @@
-*> \brief \b ZHETF2 computes the factorization of a complex Hermitian matrix, using the diagonal pivoting method (unblocked algorithm).
+*> \brief \b ZHETF2 computes the factorization of a complex Hermitian matrix, using the diagonal pivoting method (unblocked algorithm, calling Level 2 BLAS).
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -302,6 +302,11 @@
             KP = K
             A( K, K ) = DBLE( A( K, K ) )
          ELSE
+*
+*           ============================================================
+*
+*           Test for interchange
+*
             IF( ABSAKK.GE.ALPHA*COLMAX ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
@@ -310,7 +315,8 @@
             ELSE
 *
 *              JMAX is the column-index of the largest off-diagonal
-*              element in row IMAX, and ROWMAX is its absolute value
+*              element in row IMAX, and ROWMAX is its absolute value.
+*              Determine only ROWMAX.
 *
                JMAX = IMAX + IZAMAX( K-IMAX, A( IMAX, IMAX+1 ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
@@ -324,6 +330,7 @@
 *                 no interchange, use 1-by-1 pivot block
 *
                   KP = K
+*
                ELSE IF( ABS( DBLE( A( IMAX, IMAX ) ) ).GE.ALPHA*ROWMAX )
      $                   THEN
 *
@@ -339,7 +346,10 @@
                   KP = IMAX
                   KSTEP = 2
                END IF
+*
             END IF
+*
+*           ============================================================
 *
             KK = K - KSTEP + 1
             IF( KP.NE.KK ) THEN
@@ -487,6 +497,11 @@
             KP = K
             A( K, K ) = DBLE( A( K, K ) )
          ELSE
+*
+*           ============================================================
+*
+*           Test for interchange
+*
             IF( ABSAKK.GE.ALPHA*COLMAX ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
@@ -495,7 +510,8 @@
             ELSE
 *
 *              JMAX is the column-index of the largest off-diagonal
-*              element in row IMAX, and ROWMAX is its absolute value
+*              element in row IMAX, and ROWMAX is its absolute value.
+*              Determine only ROWMAX.
 *
                JMAX = K - 1 + IZAMAX( IMAX-K, A( IMAX, K ), LDA )
                ROWMAX = CABS1( A( IMAX, JMAX ) )
@@ -509,6 +525,7 @@
 *                 no interchange, use 1-by-1 pivot block
 *
                   KP = K
+*
                ELSE IF( ABS( DBLE( A( IMAX, IMAX ) ) ).GE.ALPHA*ROWMAX )
      $                   THEN
 *
@@ -524,7 +541,10 @@
                   KP = IMAX
                   KSTEP = 2
                END IF
+*
             END IF
+*
+*           ============================================================
 *
             KK = K + KSTEP - 1
             IF( KP.NE.KK ) THEN
