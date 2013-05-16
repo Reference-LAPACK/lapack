@@ -195,8 +195,8 @@
 *     .. External Functions ..
       LOGICAL            SISNAN, LSAME
       INTEGER            ICAMAX
-      REAL               SLAMCH
-      EXTERNAL           SISNAN, LSAME, ICAMAX, SLAMCH
+      REAL               SLAMCH, SCNRM2
+      EXTERNAL           SISNAN, LSAME, ICAMAX, SLAMCH, SCNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSSCAL, CSWAP, XERBLA
@@ -325,15 +325,9 @@
       NOCONV = .FALSE.
 *
       DO 200 I = K, L
-         C = ZERO
-         R = ZERO
 *
-         DO 150 J = K, L
-            IF( J.EQ.I )
-     $         GO TO 150
-            C = C + CABS1( A( J, I ) )
-            R = R + CABS1( A( I, J ) )
-  150    CONTINUE
+         C = SCNRM2( L-K+1, A( K, I ), 1 )
+         R = SCNRM2( L-K+1, A( I , K ), LDA )
          ICA = ICAMAX( L, A( 1, I ), 1 )
          CA = ABS( A( ICA, I ) )
          IRA = ICAMAX( N-K+1, A( I, K ), LDA )

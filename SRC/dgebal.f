@@ -192,8 +192,8 @@
 *     .. External Functions ..
       LOGICAL            DISNAN, LSAME
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DISNAN, LSAME, IDAMAX, DLAMCH
+      DOUBLE PRECISION   DLAMCH, DNRM2
+      EXTERNAL           DISNAN, LSAME, IDAMAX, DLAMCH, DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL, DSWAP, XERBLA
@@ -312,19 +312,14 @@
       SFMAX1 = ONE / SFMIN1
       SFMIN2 = SFMIN1*SCLFAC
       SFMAX2 = ONE / SFMIN2
+*
   140 CONTINUE
       NOCONV = .FALSE.
 *
       DO 200 I = K, L
-         C = ZERO
-         R = ZERO
 *
-         DO 150 J = K, L
-            IF( J.EQ.I )
-     $         GO TO 150
-            C = C + ABS( A( J, I ) )
-            R = R + ABS( A( I, J ) )
-  150    CONTINUE
+         C = DNRM2( L-K+1, A( K, I ), 1 )
+         R = DNRM2( L-K+1, A( I, K ), LDA )
          ICA = IDAMAX( L, A( 1, I ), 1 )
          CA = ABS( A( ICA, I ) )
          IRA = IDAMAX( N-K+1, A( I, K ), LDA )
