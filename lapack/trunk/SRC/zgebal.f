@@ -194,8 +194,8 @@
 *     .. External Functions ..
       LOGICAL            DISNAN, LSAME
       INTEGER            IZAMAX
-      DOUBLE PRECISION   DLAMCH
-      EXTERNAL           DISNAN, LSAME, IZAMAX, DLAMCH
+      DOUBLE PRECISION   DLAMCH, DZNRM2
+      EXTERNAL           DISNAN, LSAME, IZAMAX, DLAMCH, DZNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZDSCAL, ZSWAP
@@ -324,15 +324,9 @@
       NOCONV = .FALSE.
 *
       DO 200 I = K, L
-         C = ZERO
-         R = ZERO
 *
-         DO 150 J = K, L
-            IF( J.EQ.I )
-     $         GO TO 150
-            C = C + CABS1( A( J, I ) )
-            R = R + CABS1( A( I, J ) )
-  150    CONTINUE
+         C = DZNRM2( L-K+1, A( K, I ), 1 )
+         R = DZNRM2( L-K+1, A( I, K ), LDA )
          ICA = IZAMAX( L, A( 1, I ), 1 )
          CA = ABS( A( ICA, I ) )
          IRA = IZAMAX( N-K+1, A( I, K ), LDA )
