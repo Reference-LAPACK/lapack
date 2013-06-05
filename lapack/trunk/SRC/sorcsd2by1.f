@@ -329,14 +329,14 @@
       IF( INFO .EQ. 0 ) THEN
          IPHI = 2
          IB11D = IPHI + MAX( 1, R-1 )
-         IB11E = IB11D + R
-         IB12D = IB11E + R - 1
-         IB12E = IB12D + R
-         IB21D = IB12E + R - 1
-         IB21E = IB21D + R
-         IB22D = IB21E + R - 1
-         IB22E = IB22D + R
-         IBBCSD = IB22E + R - 1
+         IB11E = IB11D + MAX( 1, R )
+         IB12D = IB11E + MAX( 1, R - 1 )
+         IB12E = IB12D + MAX( 1, R )
+         IB21D = IB12E + MAX( 1, R - 1 )
+         IB21E = IB21D + MAX( 1, R )
+         IB22D = IB21E + MAX( 1, R - 1 )
+         IB22E = IB22D + MAX( 1, R )
+         IBBCSD = IB22E + MAX( 1, R - 1 )
          ITAUP1 = IPHI + MAX( 1, R-1 )
          ITAUP2 = ITAUP1 + MAX( 1, P )
          ITAUQ1 = ITAUP2 + MAX( 1, M-P )

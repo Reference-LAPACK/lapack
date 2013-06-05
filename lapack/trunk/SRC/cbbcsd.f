@@ -477,7 +477,7 @@
 *     Initial deflation
 *
       IMAX = Q
-      DO WHILE( ( IMAX .GT. 1 ) .AND. ( PHI(IMAX-1) .EQ. ZERO ) )
+      DO WHILE((IMAX.GT.1).AND.(PHI(MAX(IMAX-1,1)).EQ.ZERO))
          IMAX = IMAX - 1
       END DO
       IMIN = IMAX - 1
