@@ -342,7 +342,7 @@
 *
 *              If N.EQ.0, only consider the first type
 *
-               IF( N.EQ.0 .AND. IIT.GT.1 ) GO TO 120
+               IF( N.EQ.0 .AND. IIT.GE.1 ) GO TO 120
 *
 *              Skip types 3, 4, or 5 if the matrix size is too small.
 *
