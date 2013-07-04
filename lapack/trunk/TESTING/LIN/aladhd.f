@@ -2,19 +2,19 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ALADHD( IOUNIT, PATH )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
 *       INTEGER            IOUNIT
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -66,10 +66,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2013
 *
@@ -287,8 +287,10 @@
          ELSE
             WRITE( IOUNIT, FMT = 9991 )PATH, 'Hermitian'
          END IF
+*
          WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
          WRITE( IOUNIT, FMT = 9983 )
+*
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
          WRITE( IOUNIT, FMT = 9974 )1
          WRITE( IOUNIT, FMT = 9980 )2
@@ -306,11 +308,7 @@
          WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
 *
          WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
-         IF( SORD ) THEN
-            WRITE( IOUNIT, FMT = 9983 )
-         ELSE
-            WRITE( IOUNIT, FMT = 9982 )
-         END IF
+         WRITE( IOUNIT, FMT = 9983 )
 *
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
          WRITE( IOUNIT, FMT = 9974 )1
@@ -344,10 +342,10 @@
      $      ' indefinite packed matrices',
      $      ', partial (Bunch-Kaufman) pivoting' )
  9892 FORMAT( / 1X, A3, ' drivers:  ', A9, ' indefinite matrices',
-     $      ', rook (bounded Bunch-Kaufman) pivoting' )
+     $      ', "rook" (bounded Bunch-Kaufman) pivoting' )
  9891 FORMAT( / 1X, A3, ' drivers:  ', A9,
      $      ' indefinite packed matrices',
-     $      ', rook (bounded Bunch-Kaufman) pivoting' )
+     $      ', "rook" (bounded Bunch-Kaufman) pivoting' )
  9990 FORMAT( / 1X, A3, ':  No header available' )
 *
 *     GE matrix types

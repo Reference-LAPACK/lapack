@@ -2,19 +2,19 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ALAHD( IOUNIT, PATH )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
 *       INTEGER            IOUNIT
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -81,10 +81,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2012
 *
@@ -360,17 +360,11 @@
 *        HE: Hermitian indefinite full,
 *            with partial (Bunch-Kaufman) pivoting algorithm
 *
-         IF( LSAME( C3, 'E' ) ) THEN
-            WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
-         ELSE
-            WRITE( IOUNIT, FMT = 9991 )PATH, 'Hermitian'
-         END IF
+         WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
+*
          WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
-         IF( SORD ) THEN
-            WRITE( IOUNIT, FMT = 9972 )
-         ELSE
-            WRITE( IOUNIT, FMT = 9971 )
-         END IF
+         WRITE( IOUNIT, FMT = 9972 )
+*
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
          WRITE( IOUNIT, FMT = 9953 )1
          WRITE( IOUNIT, FMT = 9961 )2
@@ -385,17 +379,13 @@
 *
       ELSE IF( LSAMEN( 2, P2, 'HR' )  ) THEN
 *
-*        SR: Symmetric indefinite full,
+*        HR: Symmetric indefinite full,
 *            with "rook" (bounded Bunch-Kaufman) pivoting algorithm
 *
-         WRITE( IOUNIT, FMT = 9892 )PATH, 'Symmetric'
+         WRITE( IOUNIT, FMT = 9892 )PATH, 'Hermitian'
 *
          WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
-         IF( SORD ) THEN
-            WRITE( IOUNIT, FMT = 9972 )
-         ELSE
-            WRITE( IOUNIT, FMT = 9971 )
-         END IF
+         WRITE( IOUNIT, FMT = 9972 )
 *
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
          WRITE( IOUNIT, FMT = 9953 )1
@@ -669,9 +659,9 @@
  9991 FORMAT( / 1X, A3, ':  ', A9, ' indefinite packed matrices',
      $      ', partial (Bunch-Kaufman) pivoting' )
  9892 FORMAT( / 1X, A3, ':  ', A9, ' indefinite matrices',
-     $      ', rook (bounded Bunch-Kaufman) pivoting' )
+     $      ', "rook" (bounded Bunch-Kaufman) pivoting' )
  9891 FORMAT( / 1X, A3, ':  ', A9, ' indefinite packed matrices',
-     $      ', rook (bounded Bunch-Kaufman) pivoting' )
+     $      ', "rook" (bounded Bunch-Kaufman) pivoting' )
  9990 FORMAT( / 1X, A3, ':  Triangular matrices' )
  9989 FORMAT( / 1X, A3, ':  Triangular packed matrices' )
  9988 FORMAT( / 1X, A3, ':  Triangular band matrices' )
@@ -687,7 +677,6 @@
  8000 FORMAT( / 1X, A3, ':  QRT factorization for general matrices' )
  8001 FORMAT( / 1X, A3, ':  QRT factorization for ',
      $       'triangular-pentagonal matrices' )
- 
 *
 *     GE matrix types
 *
@@ -974,7 +963,7 @@
  8013 FORMAT(3X,I2,': norm( Q*C - Q*C ) / ( M * norm(C) * EPS )' )
  8014 FORMAT(3X,I2,': norm( Q''*C - Q''*C ) / ( M * norm(C) * EPS )')
  8015 FORMAT(3X,I2,': norm( C*Q - C*Q ) / ( M * norm(C) * EPS )' )
- 8016 FORMAT(3X,I2,': norm( C*Q'' - C*Q'' ) / ( M * norm(C) * EPS )')   
+ 8016 FORMAT(3X,I2,': norm( C*Q'' - C*Q'' ) / ( M * norm(C) * EPS )')
  8017 FORMAT(3X,I2,': norm( R - Q''*A ) / ( (M+N) * norm(A) * EPS )' )
  8018 FORMAT(3X,I2,': norm( I - Q''*Q ) / ( (M+N) * EPS )' )
  8019 FORMAT(3X,I2,': norm( Q*C - Q*C ) / ( (M+N) * norm(C) * EPS )' )
@@ -982,7 +971,7 @@
      $ ': norm( Q''*C - Q''*C ) / ( (M+N) * norm(C) * EPS )')
  8021 FORMAT(3X,I2,': norm( C*Q - C*Q ) / ( (M+N) * norm(C) * EPS )' )
  8022 FORMAT(3X,I2,
-     $ ': norm( C*Q'' - C*Q'' ) / ( (M+N) * norm(C) * EPS )') 
+     $ ': norm( C*Q'' - C*Q'' ) / ( (M+N) * norm(C) * EPS )')
 *
       RETURN
 *
