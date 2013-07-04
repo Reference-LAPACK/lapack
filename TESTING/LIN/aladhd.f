@@ -337,12 +337,10 @@
  9993 FORMAT( / 1X, A3, ' drivers:  ', A9,
      $      ' positive definite tridiagonal' )
  9992 FORMAT( / 1X, A3, ' drivers:  ', A9, ' indefinite matrices',
-     $     ', rook (bounded Bunch-Kaufman) pivoting' )
+     $     ', "rook" (bounded Bunch-Kaufman) pivoting' )
  9991 FORMAT( / 1X, A3, ' drivers:  ', A9,
      $      ' indefinite packed matrices',
      $      ', partial (Bunch-Kaufman) pivoting' )
- 9892 FORMAT( / 1X, A3, ' drivers:  ', A9, ' indefinite matrices',
-     $      ', "rook" (bounded Bunch-Kaufman) pivoting' )
  9891 FORMAT( / 1X, A3, ' drivers:  ', A9,
      $      ' indefinite packed matrices',
      $      ', "rook" (bounded Bunch-Kaufman) pivoting' )
