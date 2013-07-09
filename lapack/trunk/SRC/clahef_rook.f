@@ -283,7 +283,7 @@
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used
 *
-         ABSAKK = ABS( REAL( W( K, K ) ) )
+         ABSAKK = ABS( REAL( W( K, KW ) ) )
 *
 *        IMAX is the row-index of the largest off-diagonal element in
 *        column K, and COLMAX is its absolute value.
@@ -303,9 +303,9 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            A( K, K ) = REAL( W( K, KW ) )
             IF( K.GT.1 )
-     $         CALL CCOPY( K-1, W( 1, K ), 1, A( 1, KW ), 1 )
-            A( K, K ) = REAL( A( K, K ) )
+     $         CALL CCOPY( K-1, W( 1, KW ), 1, A( 1, K ), 1 )
          ELSE
 *
 *           ============================================================
@@ -338,9 +338,11 @@
      $               CALL CCOPY( IMAX-1, A( 1, IMAX ), 1, W( 1, KW-1 ),
      $                           1 )
                   W( IMAX, KW-1 ) = REAL( A( IMAX, IMAX ) )
+*
                   CALL CCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
      $                        W( IMAX+1, KW-1 ), 1 )
                   CALL CLACGV( K-IMAX, W( IMAX+1, KW-1 ), 1 )
+*
                   IF( K.LT.N ) THEN
                      CALL CGEMV( 'No transpose', K, N-K, -CONE,
      $                           A( 1, K+1 ), LDA, W( IMAX, KW+1 ), LDW,
@@ -441,7 +443,7 @@
 *
             IF( ( KSTEP.EQ.2 ) .AND. ( P.NE.K ) ) THEN
 *
-*              Copy non-updated column KK+1 to column P of submatrix A
+*              Copy non-updated column K to column P of submatrix A
 *              at step K. No need to copy element into columns
 *              K and K-1 of A for 2-by-2 pivot, since these columns
 *              will be later overwritten.
@@ -453,15 +455,15 @@
                IF( P.GT.1 )
      $            CALL CCOPY( P-1, A( 1, K ), 1, A( 1, P ), 1 )
 *
-*              Interchange rows KK and KP in first K-1 columns of A
+*              Interchange rows K and P in the last K+1 to N columns of A
 *              (columns K and K-1 of A for 2-by-2 pivot will be
-*              later overwritten). Interchange rows KK and KP
-*              in last KW to NB columns of W.
+*              later overwritten). Interchange rows K and P
+*              in last KKW to NB columns of W.
 *
                IF( K.LT.N )
      $            CALL CSWAP( N-K, A( K, K+1 ), LDA, A( P, K+1 ),
      $                        LDA )
-               CALL CSWAP( N-K+1, W( K, KW ), LDW, W( P, KW ),
+               CALL CSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ),
      $                     LDW )
             END IF
 *
@@ -670,9 +672,10 @@
 *
 *           Update the rectangular superdiagonal block
 *
-            CALL CGEMM( 'No transpose', 'Transpose', J-1, JB, N-K,
-     $                  -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ), LDW,
-     $                  CONE, A( 1, J ), LDA )
+            IF( J.GE.2 )
+     $         CALL CGEMM( 'No transpose', 'Transpose', J-1, JB, N-K,
+     $                     -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ), LDW,
+     $                     CONE, A( 1, J ), LDA )
    50    CONTINUE
 *
 *        Put U12 in standard form by partially undoing the interchanges
@@ -702,7 +705,7 @@
             IF( JP2.NE.JJ .AND. J.LE.N )
      $         CALL CSWAP( N-J+1, A( JP2, J ), LDA, A( JJ, J ), LDA )
             JJ = JJ + 1
-            IF( JP1.NE.JJ .AND. KSTEP.EQ.2 .AND. J.LE.N )
+            IF( KSTEP.EQ.2 .AND. JP1.NE.JJ .AND. J.LE.N )
      $         CALL CSWAP( N-J+1, A( JP1, J ), LDA, A( JJ, J ), LDA )
          IF( J.LT.N )
      $      GO TO 60
@@ -715,7 +718,7 @@
 *
 *        Factorize the leading columns of A using the lower triangle
 *        of A and working forwards, and compute the matrix W = L21*D
-*        for use in updating A22
+*        for use in updating A22 (note that conjg(W) is actually stored)
 *
 *        K is the main loop index, increasing from 1 in steps of 1 or 2
 *
@@ -764,7 +767,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
-            A( K, K ) = REAL( A( K, K ) )
+            A( K, K ) = REAL( W( K, K ) )
             IF( K.LT.N )
      $         CALL CCOPY( N-K, W( K+1, K ), 1, A( K+1, K ), 1 )
          ELSE
@@ -799,9 +802,11 @@
                   CALL CCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1)
                   CALL CLACGV( IMAX-K, W( K, K+1 ), 1 )
                   W( IMAX, K+1 ) = REAL( A( IMAX, IMAX ) )
+*
                   IF( IMAX.LT.N )
      $               CALL CCOPY( N-IMAX, A( IMAX+1, IMAX ), 1,
      $                           W( IMAX+1, K+1 ), 1 )
+*
                   IF( K.GT.1 ) THEN
                      CALL CGEMV( 'No transpose', N-K+1, K-1, -CONE,
      $                            A( K, 1 ), LDA, W( IMAX, 1 ), LDW,
@@ -903,19 +908,19 @@
 *              will be later overwritten.
 *
                A( P, P ) = REAL( A( K, K ) )
-               CALL CCOPY( P-K-2, A( K+2, K ), 1, A( P, K+2 ), LDA )
+               CALL CCOPY( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA )
                CALL CLACGV( P-K-1, A( P, K+1 ), LDA )
                IF( P.LT.N )
      $            CALL CCOPY( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
 *
-*              Interchange rows KK and KP in first K-1 columns of A
+*              Interchange rows K and P in first K-1 columns of A
 *              (columns K and K+1 of A for 2-by-2 pivot will be
-*              later overwritten). Interchange rows KK and KP
+*              later overwritten). Interchange rows K and P
 *              in first KK columns of W.
 *
                IF( K.GT.1 )
      $            CALL CSWAP( K-1, A( K, 1 ), LDA, A( P, 1 ), LDA )
-               CALL CSWAP( K, W( K, 1 ), LDW, W( P, 1 ), LDW )
+               CALL CSWAP( KK, W( K, 1 ), LDW, W( P, 1 ), LDW )
             END IF
 *
 *           Interchange rows and columns KP and KK.
@@ -936,7 +941,7 @@
      $            CALL CCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
-*              (columns K (or K and K+1 for 2-by-2 pivot) of A will be
+*              (column K (or K and K+1 for 2-by-2 pivot) of A will be
 *              later overwritten). Interchange rows KK and KP
 *              in first KK columns of W.
 *
@@ -1153,7 +1158,7 @@
             J = J - 1
             IF( JP2.NE.JJ .AND. J.GE.1 )
      $         CALL CSWAP( J, A( JP2, 1 ), LDA, A( JJ, 1 ), LDA )
-            JJ = JJ - 1
+            JJ = JJ -1
             IF( KSTEP.EQ.2 .AND. JP1.NE.JJ .AND. J.GE.1 )
      $         CALL CSWAP( J, A( JP1, 1 ), LDA, A( JJ, 1 ), LDA )
          IF( J.GT.1 )
