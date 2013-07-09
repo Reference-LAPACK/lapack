@@ -201,7 +201,7 @@
       EXTERNAL           ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, CERRVX,
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX,
      $                   ZGET04, ZLACPY, ZLARHS, ZLATB4, ZLATMS,
      $                   ZHESV_ROOK, ZHET01_ROOK, ZPOT02,
      $                   ZHETRF_ROOK, ZHETRI_ROOK
@@ -247,7 +247,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRVX( PATH, NOUT )
+     $   CALL ZERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for which the block

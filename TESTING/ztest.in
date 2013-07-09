@@ -23,6 +23,7 @@ ZPP    9               List types on next line if 0 < NTYPES <  9
 ZPB    8               List types on next line if 0 < NTYPES <  8
 ZPT   12               List types on next line if 0 < NTYPES < 12
 ZHE   10               List types on next line if 0 < NTYPES < 10
+ZHR   10               List types on next line if 0 < NTYPES < 10
 ZHP   10               List types on next line if 0 < NTYPES < 10
 ZSY   11               List types on next line if 0 < NTYPES < 11
 ZSR   11               List types on next line if 0 < NTYPES < 11

@@ -402,7 +402,6 @@
 *
 *                    Factor the matrix A.
 *
-
                      CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
                      CALL CHETRF_ROOK( UPLO, N, AFAC, LDA, IWORK, WORK,
      $                                 LWORK, INFO )

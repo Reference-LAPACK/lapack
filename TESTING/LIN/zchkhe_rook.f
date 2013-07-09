@@ -105,7 +105,7 @@
 *>
 *> \param[out] A
 *> \verbatim
-*>          A is COMPLEX*16 array, dimension (NMAX*NMAX)
+*>          A is CCOMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AFAC
@@ -120,7 +120,7 @@
 *>
 *> \param[out] B
 *> \verbatim
-*>          B is COMPLEX*16 array, dimension (NMAX*NSMAX)
+*>          B is CCOMPLEX*16 array, dimension (NMAX*NSMAX)
 *>          where NSMAX is the largest entry in NSVAL.
 *> \endverbatim
 *>
@@ -141,7 +141,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension (max(NMAX,2*NSMAX))
+*>          RWORK is DOUBLE PRECISION array, dimension (max(NMAX,2*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -219,9 +219,9 @@
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
-      INTEGER            ISEED( 4 ), ISEEDY( 4 )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IDUMMY( 1 )
       DOUBLE PRECISION   RESULT( NTESTS )
-      COMPLEX*16         BLOCK( 2, 2 ), CDUMMY( 1 )
+      COMPLEX*16         CDUMMY( 1 )
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   ZLANGE, ZLANHE, DGET06
@@ -540,7 +540,7 @@
                      IF( IWORK( K ).GT.ZERO ) THEN
 *
 *                       Get max absolute value from elements
-*                       in column k in in U
+*                       in column k in U
 *
                         DTEMP = ZLANGE( 'M', K-1, 1,
      $                          AFAC( ( K-1 )*LDA+1 ), LDA, RWORK )
@@ -614,6 +614,7 @@
 *
                   CONST = ( ( ALPHA**2-ONE ) / ( ALPHA**2-ONEHALF ) )*
      $                    ( ( ONE + ALPHA ) / ( ONE - ALPHA ) )
+                  CALL ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
 *
                   IF( IUPLO.EQ.1 ) THEN
 *
@@ -629,21 +630,17 @@
 *                       Get the two eigenvalues of a 2-by-2 block,
 *                       store them in WORK array
 *
-                        BLOCK( 1, 1 ) = AFAC( ( K-2 )*LDA+K-1 )
-                        BLOCK( 2, 1 ) = AFAC( ( K-2 )*LDA+K )
-                        BLOCK( 1, 2 ) = BLOCK( 2, 1 )
-                        BLOCK( 2, 2 ) = AFAC( (K-1)*LDA+K )
+                        CALL ZHEEVX( 'N', 'A', UPLO, 2,
+     $                               AINV( ( K-2 )*LDA+K-1 ), LDA,DTEMP,
+     $                               DTEMP, ITEMP, ITEMP, ZERO, ITEMP,
+     $                               RWORK, CDUMMY, 1, WORK, 16,
+     $                               RWORK( 3 ), IWORK( N+1 ), IDUMMY,
+     $                               INFO )
 *
-                        CALL ZHEEVX( 'N', 'N', 'N', 'N', 2, BLOCK,
-     $                               2, WORK, CDUMMY, 1, CDUMMY, 1,
-     $                               ITEMP, ITEMP2, RWORK, DTEMP,
-     $                               RWORK( 3 ), RWORK( 5 ), WORK( 3 ),
-     $                               4, RWORK( 7 ), INFO )
-*
-                        LAM_MAX = MAX( ABS( WORK( 1 ) ),
-     $                            ABS( WORK( 2 ) ) )
-                        LAM_MIN = MIN( ABS( WORK( 1 ) ),
-     $                            ABS( WORK( 2 ) ) )
+                        LAM_MAX = MAX( ABS( RWORK( 1 ) ),
+     $                            ABS( RWORK( 2 ) ) )
+                        LAM_MIN = MIN( ABS( RWORK( 1 ) ),
+     $                            ABS( RWORK( 2 ) ) )
 *
                         DTEMP = LAM_MAX / LAM_MIN
 *
@@ -675,21 +672,17 @@
 *                       Get the two eigenvalues of a 2-by-2 block,
 *                       store them in WORK array
 *
-                        BLOCK( 1, 1 ) = AFAC( ( K-1 )*LDA+K )
-                        BLOCK( 2, 1 ) = AFAC( ( K-1 )*LDA+K+1 )
-                        BLOCK( 1, 2 ) = BLOCK( 2, 1 )
-                        BLOCK( 2, 2 ) = AFAC( K*LDA+K+1 )
+                        CALL ZHEEVX( 'N', 'A', UPLO, 2,
+     $                               AINV( ( K-1 )*LDA+K ), LDA, DTEMP,
+     $                               DTEMP, ITEMP, ITEMP, ZERO, ITEMP,
+     $                               RWORK, CDUMMY, 1, WORK, 16,
+     $                               RWORK( 3 ), IWORK( N+1 ), IDUMMY,
+     $                               INFO )
 *
-                        CALL ZHEEVX( 'N', 'N', 'N', 'N', 2, BLOCK,
-     $                               2, WORK, CDUMMY, 1, CDUMMY, 1,
-     $                               ITEMP, ITEMP2, RWORK, DTEMP,
-     $                               RWORK( 3 ), RWORK( 5 ), WORK( 3 ),
-     $                               4, RWORK( 7 ), INFO )
-*
-                        LAM_MAX = MAX( ABS( WORK( 1 ) ),
-     $                            ABS( WORK( 2 ) ) )
-                        LAM_MIN = MIN( ABS( WORK( 1 ) ),
-     $                            ABS( WORK( 2 ) ) )
+                        LAM_MAX = MAX( ABS( RWORK( 1 ) ),
+     $                            ABS( RWORK( 2 ) ) )
+                        LAM_MIN = MIN( ABS( RWORK( 1 ) ),
+     $                            ABS( RWORK( 2 ) ) )
 *
                         DTEMP = LAM_MAX / LAM_MIN
 *
@@ -739,6 +732,9 @@
 *
                   DO 220 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
+*
+*                    Begin loop over NRHS values
+*
 *
 *+    TEST 5 ( Using TRS_ROOK)
 *                 Solve and compute residual for  A * X = B.
@@ -810,7 +806,7 @@
      $                             UPLO, N, N, -1, -1, -1, IMAT,
      $                             NFAIL, NERRS, NOUT )
 *
-*                 Compute the test ratio to compare to values of RCOND
+*                 Compute the test ratio to compare values of RCOND
 *
                   RESULT( 7 ) = DGET06( RCOND, RCONDC )
 *
@@ -838,9 +834,9 @@
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
  9998 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NRHS=', I3, ', type ',
-     $      I2, ', test(', I2, ') =', G12.5 )
+     $      I2, ', test ', I2, ', ratio =', G12.5 )
  9997 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ',', 10X, ' type ', I2,
-     $      ', test(', I2, ') =', G12.5 )
+     $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
 *     End of ZCHKHE_ROOK
