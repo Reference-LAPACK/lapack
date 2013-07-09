@@ -86,22 +86,22 @@ endif
 
 CLINTST = cchkaa.o \
    cchkeq.o cchkgb.o cchkge.o cchkgt.o \
-   cchkhe.o cchkhp.o cchklq.o cchkpb.o \
+   cchkhe.o cchkhe_rook.o cchkhp.o cchklq.o cchkpb.o \
    cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o cchkqp.o \
    cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
    cdrvgt.o cdrvhp.o \
    cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o \
-   cdrvsp.o  cdrvsy_rook.o\
+   cdrvsp.o \
    cerrgt.o cerrlq.o \
    cerrls.o cerrps.o cerrql.o cerrqp.o \
    cerrqr.o cerrrq.o cerrtr.o cerrtz.o \
    cgbt01.o cgbt02.o cgbt05.o cgelqs.o cgeqls.o cgeqrs.o \
    cgerqs.o cget01.o cget02.o \
    cget03.o cget04.o cget07.o cgtt01.o cgtt02.o \
-   cgtt05.o chet01.o chpt01.o claipd.o claptm.o clarhs.o clatb4.o clatb5.o \
+   cgtt05.o chet01.o chet01_rook.o chpt01.o claipd.o claptm.o clarhs.o clatb4.o clatb5.o \
    clatsp.o clatsy.o clattb.o clattp.o clattr.o \
-   clavhe.o clavhp.o clavsp.o clavsy.o clavsy_rook.o clqt01.o \
+   clavhe.o clavhe_rook.o clavhp.o clavsp.o clavsy.o clavsy_rook.o clqt01.o \
    clqt02.o clqt03.o cpbt01.o cpbt02.o cpbt05.o \
    cpot01.o cpot02.o cpot03.o cpot05.o cpst01.o \
    cppt01.o cppt02.o cppt03.o cppt05.o cptt01.o \
@@ -121,8 +121,8 @@ ifdef USEXBLAS
 CLINTST += cerrvxx.o cdrvgex.o cdrvsyx.o cdrvgbx.o cerrgex.o cdrvpox.o cdrvhex.o \
 	cerrpox.o cebchvxx.o cerrsyx.o cerrhex.o
 else
-CLINTST += cerrvx.o cdrvge.o cdrvsy.o cdrvgb.o cerrge.o cdrvpo.o cdrvhe.o \
-	cerrpo.o cerrsy.o cerrhe.o
+CLINTST += cerrvx.o cdrvge.o cdrvsy.o cdrvsy_rook.o cdrvgb.o cerrge.o cdrvpo.o \
+	cdrvhe.o cdrvhe_rook.o cerrpo.o cerrsy.o cerrhe.o
 endif
 
 DLINTST = dchkaa.o \
@@ -165,22 +165,22 @@ endif
 
 ZLINTST = zchkaa.o \
    zchkeq.o zchkgb.o zchkge.o zchkgt.o \
-   zchkhe.o zchkhp.o zchklq.o zchkpb.o \
+   zchkhe.o zchkhe_rook.o zchkhp.o zchklq.o zchkpb.o \
    zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkql.o zchkqp.o \
    zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
    zdrvgt.o zdrvhp.o \
    zdrvls.o zdrvpb.o zdrvpp.o zdrvpt.o \
-   zdrvsp.o  zdrvsy_rook.o\
+   zdrvsp.o \
    zerrgt.o zerrlq.o \
    zerrls.o zerrps.o zerrql.o zerrqp.o \
    zerrqr.o zerrrq.o zerrtr.o zerrtz.o \
    zgbt01.o zgbt02.o zgbt05.o zgelqs.o zgeqls.o zgeqrs.o \
    zgerqs.o zget01.o zget02.o \
    zget03.o zget04.o zget07.o zgtt01.o zgtt02.o \
-   zgtt05.o zhet01.o zhpt01.o zlaipd.o zlaptm.o zlarhs.o zlatb4.o zlatb5.o \
+   zgtt05.o zhet01.o zhet01_rook.o zhpt01.o zlaipd.o zlaptm.o zlarhs.o zlatb4.o zlatb5.o \
    zlatsp.o zlatsy.o zlattb.o zlattp.o zlattr.o \
-   zlavhe.o zlavhp.o zlavsp.o zlavsy.o zlavsy_rook.o zlqt01.o \
+   zlavhe.o zlavhe_rook.o zlavhp.o zlavsp.o zlavsy.o zlavsy_rook.o zlqt01.o \
    zlqt02.o zlqt03.o zpbt01.o zpbt02.o zpbt05.o \
    zpot01.o zpot02.o zpot03.o zpot05.o zpst01.o \
    zppt01.o zppt02.o zppt03.o zppt05.o zptt01.o \
@@ -200,8 +200,8 @@ ifdef USEXBLAS
 ZLINTST += zerrvxx.o zdrvgex.o zdrvsyx.o zdrvgbx.o zerrgex.o zdrvpox.o zdrvhex.o \
 	zerrpox.o zebchvxx.o zerrsyx.o zerrhex.o
 else
-ZLINTST += zerrvx.o zdrvge.o zdrvsy.o zdrvgb.o zerrge.o zdrvpo.o zdrvhe.o \
-	zerrpo.o zerrsy.o zerrhe.o
+ZLINTST += zerrvx.o zdrvge.o zdrvsy.o zdrvsy_rook.o zdrvgb.o zerrge.o zdrvpo.o \
+	zdrvhe.o zdrvhe_rook.o zerrpo.o zerrsy.o zerrhe.o
 endif
 
 DSLINTST = dchkab.o \

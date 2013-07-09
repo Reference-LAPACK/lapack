@@ -44,11 +44,11 @@ endif()
 
 set(CLINTST  cchkaa.f 
    cchkeq.f cchkgb.f cchkge.f cchkgt.f 
-   cchkhe.f cchkhp.f cchklq.f cchkpb.f 
+   cchkhe.f cchkhe_rook.f cchkhp.f cchklq.f cchkpb.f 
    cchkpo.f cchkps.f cchkpp.f cchkpt.f cchkq3.f cchkql.f cchkqp.f 
    cchkqr.f cchkrq.f cchksp.f cchksy.f cchksy_rook.f cchktb.f 
    cchktp.f cchktr.f cchktz.f 
-   cdrvgt.f cdrvhe.f cdrvhp.f 
+   cdrvgt.f cdrvhe.f cdrvhe_rook.f cdrvhp.f 
    cdrvls.f cdrvpb.f cdrvpp.f cdrvpt.f 
    cdrvsp.f cdrvsy.f cdrvsy_rook.f
    cerrgt.f cerrhe.f cerrlq.f 
@@ -58,9 +58,9 @@ set(CLINTST  cchkaa.f
    cgbt01.f cgbt02.f cgbt05.f cgelqs.f cgeqls.f cgeqrs.f 
    cgerqs.f cget01.f cget02.f 
    cget03.f cget04.f cget07.f cgtt01.f cgtt02.f 
-   cgtt05.f chet01.f chpt01.f claipd.f claptm.f clarhs.f clatb4.f clatb5.f 
+   cgtt05.f chet01.f chet01_rook.f chpt01.f claipd.f claptm.f clarhs.f clatb4.f clatb5.f 
    clatsp.f clatsy.f clattb.f clattp.f clattr.f 
-   clavhe.f clavhp.f clavsp.f clavsy.f clavsy_rook.f clqt01.f 
+   clavhe.f clavhe_rook.f clavhp.f clavsp.f clavsy.f clavsy_rook.f clqt01.f 
    clqt02.f clqt03.f cpbt01.f cpbt02.f cpbt05.f 
    cpot01.f cpot02.f cpot03.f cpot05.f cpst01.f 
    cppt01.f cppt02.f cppt03.f cppt05.f cptt01.f 
@@ -123,11 +123,11 @@ endif()
 
 set(ZLINTST  zchkaa.f 
    zchkeq.f zchkgb.f zchkge.f zchkgt.f 
-   zchkhe.f zchkhp.f zchklq.f zchkpb.f 
+   zchkhe.f zchkhe_rook.f zchkhp.f zchklq.f zchkpb.f 
    zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkql.f zchkqp.f 
    zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchktb.f 
    zchktp.f zchktr.f zchktz.f 
-   zdrvgt.f zdrvhe.f zdrvhp.f 
+   zdrvgt.f zdrvhe.f zdrvhe_rook.f zdrvhp.f 
    zdrvls.f zdrvpb.f zdrvpp.f zdrvpt.f 
    zdrvsp.f zdrvsy.f zdrvsy_rook.f 
    zerrgt.f zerrhe.f zerrlq.f 
@@ -137,9 +137,9 @@ set(ZLINTST  zchkaa.f
    zgbt01.f zgbt02.f zgbt05.f zgelqs.f zgeqls.f zgeqrs.f 
    zgerqs.f zget01.f zget02.f 
    zget03.f zget04.f zget07.f zgtt01.f zgtt02.f 
-   zgtt05.f zhet01.f zhpt01.f zlaipd.f zlaptm.f zlarhs.f zlatb4.f zlatb5.f 
+   zgtt05.f zhet01.f zhet01.f zhpt01.f zlaipd.f zlaptm.f zlarhs.f zlatb4.f zlatb5.f 
    zlatsp.f zlatsy.f zlattb.f zlattp.f zlattr.f 
-   zlavhe.f zlavhp.f zlavsp.f zlavsy.f zlavsy_rook.f zlqt01.f 
+   zlavhe.f zlavhe_rook.f zlavhp.f zlavsp.f zlavsy.f zlavsy_rook.f zlqt01.f 
    zlqt02.f zlqt03.f zpbt01.f zpbt02.f zpbt05.f 
    zpot01.f zpot02.f zpot03.f zpot05.f zpst01.f 
    zppt01.f zppt02.f zppt03.f zppt05.f zptt01.f 
