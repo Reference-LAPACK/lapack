@@ -305,7 +305,7 @@
          ELSE
 *
 *           Interchange rows and columns K and K+1 with -IPIV(K) and
-*           -IPIV(K+1) in the trailing submatrix A(k+1:n,k+1:n)
+*           -IPIV(K+1) in the leading submatrix A(k+1:n,k+1:n)
 *
 *           (1) Interchange rows and columns K and -IPIV(K)
 *
@@ -331,7 +331,6 @@
                A( K, K+1 ) = A( KP, K+1 )
                A( KP, K+1 ) = TEMP
             END IF
-         END IF
 *
 *           (2) Interchange rows and columns K+1 and -IPIV(K+1)
 *
@@ -354,6 +353,7 @@
                A( K, K ) = A( KP, KP )
                A( KP, KP ) = TEMP
             END IF
+         END IF
 *
          K = K + 1
          GO TO 30

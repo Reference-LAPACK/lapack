@@ -408,7 +408,7 @@
 *
 *           KK is the column of A where pivoting step stopped
 *
-            KK = K + KSTEP - 1
+            KK = K - KSTEP + 1
 *
 *           For only a 2x2 pivot, interchange rows and columns K and P
 *           in the leading submatrix A(1:k,1:k)
@@ -492,7 +492,7 @@
 *
 *                    Store U(k) in column k
 *
-                     CALL ZSCAL( K-1, D11, A( 1, K ), 1 )
+                     CALL CSSCAL( K-1, D11, A( 1, K ), 1 )
                   ELSE
 *
 *                    Store L(k) in column K
