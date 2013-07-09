@@ -219,9 +219,9 @@
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
-      INTEGER            ISEED( 4 ), ISEEDY( 4 )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IDUMMY( 1 )
       REAL               RESULT( NTESTS )
-      COMPLEX            BLOCK( 2, 2 ), CDUMMY( 1 )
+      COMPLEX            CDUMMY( 1 )
 *     ..
 *     .. External Functions ..
       REAL               CLANGE, CLANHE, SGET06
@@ -540,7 +540,7 @@
                      IF( IWORK( K ).GT.ZERO ) THEN
 *
 *                       Get max absolute value from elements
-*                       in column k in in U
+*                       in column k in U
 *
                         STEMP = CLANGE( 'M', K-1, 1,
      $                          AFAC( ( K-1 )*LDA+1 ), LDA, RWORK )
@@ -614,6 +614,7 @@
 *
                   CONST = ( ( ALPHA**2-ONE ) / ( ALPHA**2-ONEHALF ) )*
      $                    ( ( ONE + ALPHA ) / ( ONE - ALPHA ) )
+                  CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
 *
                   IF( IUPLO.EQ.1 ) THEN
 *
@@ -629,21 +630,17 @@
 *                       Get the two eigenvalues of a 2-by-2 block,
 *                       store them in WORK array
 *
-                        BLOCK( 1, 1 ) = AFAC( ( K-2 )*LDA+K-1 )
-                        BLOCK( 2, 1 ) = AFAC( ( K-2 )*LDA+K )
-                        BLOCK( 1, 2 ) = BLOCK( 2, 1 )
-                        BLOCK( 2, 2 ) = AFAC( (K-1)*LDA+K )
+                        CALL CHEEVX( 'N', 'A', UPLO, 2,
+     $                               AINV( ( K-2 )*LDA+K-1 ), LDA,STEMP,
+     $                               STEMP, ITEMP, ITEMP, ZERO, ITEMP,
+     $                               RWORK, CDUMMY, 1, WORK, 16,
+     $                               RWORK( 3 ), IWORK( N+1 ), IDUMMY,
+     $                               INFO )
 *
-                        CALL CHEEVX( 'N', 'N', 'N', 'N', 2, BLOCK,
-     $                               2, WORK, CDUMMY, 1, CDUMMY, 1,
-     $                               ITEMP, ITEMP2, RWORK, STEMP,
-     $                               RWORK( 3 ), RWORK( 5 ), WORK( 3 ),
-     $                               4, RWORK( 7 ), INFO )
-*
-                        LAM_MAX = MAX( ABS( WORK( 1 ) ),
-     $                            ABS( WORK( 2 ) ) )
-                        LAM_MIN = MIN( ABS( WORK( 1 ) ),
-     $                            ABS( WORK( 2 ) ) )
+                        LAM_MAX = MAX( ABS( RWORK( 1 ) ),
+     $                            ABS( RWORK( 2 ) ) )
+                        LAM_MIN = MIN( ABS( RWORK( 1 ) ),
+     $                            ABS( RWORK( 2 ) ) )
 *
                         STEMP = LAM_MAX / LAM_MIN
 *
@@ -675,21 +672,17 @@
 *                       Get the two eigenvalues of a 2-by-2 block,
 *                       store them in WORK array
 *
-                        BLOCK( 1, 1 ) = AFAC( ( K-1 )*LDA+K )
-                        BLOCK( 2, 1 ) = AFAC( ( K-1 )*LDA+K+1 )
-                        BLOCK( 1, 2 ) = BLOCK( 2, 1 )
-                        BLOCK( 2, 2 ) = AFAC( K*LDA+K+1 )
+                        CALL CHEEVX( 'N', 'A', UPLO, 2,
+     $                               AINV( ( K-1 )*LDA+K ), LDA, STEMP,
+     $                               STEMP, ITEMP, ITEMP, ZERO, ITEMP,
+     $                               RWORK, CDUMMY, 1, WORK, 16,
+     $                               RWORK( 3 ), IWORK( N+1 ), IDUMMY,
+     $                               INFO )
 *
-                        CALL CHEEVX( 'N', 'N', 'N', 'N', 2, BLOCK,
-     $                               2, WORK, CDUMMY, 1, CDUMMY, 1,
-     $                               ITEMP, ITEMP2, RWORK, STEMP,
-     $                               RWORK( 3 ), RWORK( 5 ), WORK( 3 ),
-     $                               4, RWORK( 7 ), INFO )
-*
-                        LAM_MAX = MAX( ABS( WORK( 1 ) ),
-     $                            ABS( WORK( 2 ) ) )
-                        LAM_MIN = MIN( ABS( WORK( 1 ) ),
-     $                            ABS( WORK( 2 ) ) )
+                        LAM_MAX = MAX( ABS( RWORK( 1 ) ),
+     $                            ABS( RWORK( 2 ) ) )
+                        LAM_MIN = MIN( ABS( RWORK( 1 ) ),
+     $                            ABS( RWORK( 2 ) ) )
 *
                         STEMP = LAM_MAX / LAM_MIN
 *
@@ -841,9 +834,9 @@
  9999 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NB =', I4, ', type ',
      $      I2, ', test ', I2, ', ratio =', G12.5 )
  9998 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NRHS=', I3, ', type ',
-     $      I2, ', test(', I2, ') =', G12.5 )
+     $      I2, ', test ', I2, ', ratio =', G12.5 )
  9997 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ',', 10X, ' type ', I2,
-     $      ', test(', I2, ') =', G12.5 )
+     $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
 *     End of CCHKHE_ROOK

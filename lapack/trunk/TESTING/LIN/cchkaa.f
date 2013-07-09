@@ -50,6 +50,7 @@
 *> CPB    8               List types on next line if 0 < NTYPES <  8
 *> CPT   12               List types on next line if 0 < NTYPES < 12
 *> CHE   10               List types on next line if 0 < NTYPES < 10
+*> CHR   10               List types on next line if 0 < NTYPES < 10
 *> CHP   10               List types on next line if 0 < NTYPES < 10
 *> CSY   11               List types on next line if 0 < NTYPES < 11
 *> CSR   11               List types on next line if 0 < NTYPES < 11
@@ -158,13 +159,14 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, CCHKEQ, CCHKGB, CCHKGE, CCHKGT, CCHKHE,
-     $                   CCHKHP, CCHKLQ, CCHKPB, CCHKPO, CCHKPS, CCHKPP,
-     $                   CCHKPT, CCHKQ3, CCHKQL, CCHKQP, CCHKQR, CCHKRQ,
-     $                   CCHKSP, CCHKSY, CCHKSY_ROOK, CCHKTB, CCHKTP,
-     $                   CCHKTR, CCHKTZ, CDRVGB, CDRVGE, CDRVGT, CDRVHE,
-     $                   CDRVHP, CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT,
-     $                   CDRVSP, CDRVSY, CDRVSY_ROOK, ILAVER, CCHKQRT,
-     $                   CCHKQRTP
+     $                   CCHKHE_ROOK, CCHKHP, CCHKLQ, CCHKPB, CCHKPO,
+     $                   CCHKPS, CCHKPP, CCHKPT, CCHKQ3, CCHKQL, CCHKQP,
+     $                   CCHKQR, CCHKRQ, CCHKSP, CCHKSY, CCHKSY_ROOK,
+     $                   CCHKTB, CCHKTP, CCHKTR, CCHKTZ, CDRVGB, CDRVGE,
+     $                   CDRVGT, CDRVHE, CDRVHE_ROOK, CDRVHP, CDRVLS,
+     $                   CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP, CDRVSY,
+     $                   CDRVSY_ROOK, ILAVER, CCHKQRT, CCHKQRTP
+
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -615,7 +617,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'HE' ) ) THEN
 *
-*        HE:  Hermitian indefinite matrices
+*        HE:  Hermitian indefinite matrices,
+*             with partial (Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -638,9 +641,36 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
+      ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
+*
+*        HR:  Hermitian indefinite matrices,
+*             with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKHE_ROOK(DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                       THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                       A( 1, 3 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                       WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL CDRVHE_ROOK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                        LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
+     $                        RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
       ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
 *
-*        HP:  Hermitian indefinite packed matrices
+*        HP:  Hermitian indefinite packed matrices,
+*             with partial (Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -691,8 +721,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
-*        SR:  symmetric indefinite matrices with Rook pivoting,
-*             with rook (bounded Bunch-Kaufman) pivoting algorithm
+*        SR:  symmetric indefinite matrices,
+*             with "rook" (bounded Bunch-Kaufman) pivoting algorithm
 *
          NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
