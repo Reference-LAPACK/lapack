@@ -250,7 +250,7 @@
 *
 *        Factorize the trailing columns of A using the upper triangle
 *        of A and working backwards, and compute the matrix W = U12*D
-*        for use in updating A11
+*        for use in updating A11 (note that conjg(W) is actually stored)
 *
 *        K is the main loop index, decreasing from N in steps of 1 or 2
 *
@@ -283,7 +283,7 @@
 *        Determine rows and columns to be interchanged and whether
 *        a 1-by-1 or 2-by-2 pivot block will be used
 *
-         ABSAKK = ABS( DBLE( W( K, K ) ) )
+         ABSAKK = ABS( DBLE( W( K, KW ) ) )
 *
 *        IMAX is the row-index of the largest off-diagonal element in
 *        column K, and COLMAX is its absolute value.
@@ -303,9 +303,9 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
+            A( K, K ) = DBLE( W( K, KW ) )
             IF( K.GT.1 )
-     $         CALL ZCOPY( K-1, W( 1, K ), 1, A( 1, KW ), 1 )
-            A( K, K ) = DBLE( A( K, K ) )
+     $         CALL ZCOPY( K-1, W( 1, KW ), 1, A( 1, K ), 1 )
          ELSE
 *
 *           ============================================================
@@ -315,7 +315,6 @@
 *           Case(1)
 *           Equivalent to testing for ABSAKK.GE.ALPHA*COLMAX
 *           (used to handle NaN and Inf)
-*
             IF( .NOT.( ABSAKK.LT.ALPHA*COLMAX ) ) THEN
 *
 *              no interchange, use 1-by-1 pivot block
@@ -324,9 +323,9 @@
 *
             ELSE
 *
-               DONE = .FALSE.
+*              Lop until pivot found
 *
-*              Loop until pivot found
+               DONE = .FALSE.
 *
    12          CONTINUE
 *
@@ -339,9 +338,11 @@
      $               CALL ZCOPY( IMAX-1, A( 1, IMAX ), 1, W( 1, KW-1 ),
      $                           1 )
                   W( IMAX, KW-1 ) = DBLE( A( IMAX, IMAX ) )
+*
                   CALL ZCOPY( K-IMAX, A( IMAX, IMAX+1 ), LDA,
      $                        W( IMAX+1, KW-1 ), 1 )
                   CALL ZLACGV( K-IMAX, W( IMAX+1, KW-1 ), 1 )
+*
                   IF( K.LT.N ) THEN
                      CALL ZGEMV( 'No transpose', K, N-K, -CONE,
      $                           A( 1, K+1 ), LDA, W( IMAX, KW+1 ), LDW,
@@ -372,7 +373,7 @@
 *
 *                 Case(2)
 *                 Equivalent to testing for
-*                 ABS( DBLE( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
+*                 ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
 *                 (used to handle NaN and Inf)
 *
                   IF( .NOT.( ABS( DBLE( W( IMAX,KW-1 ) ) )
@@ -442,7 +443,7 @@
 *
             IF( ( KSTEP.EQ.2 ) .AND. ( P.NE.K ) ) THEN
 *
-*              Copy non-updated column KK+1 to column P of submatrix A
+*              Copy non-updated column K to column P of submatrix A
 *              at step K. No need to copy element into columns
 *              K and K-1 of A for 2-by-2 pivot, since these columns
 *              will be later overwritten.
@@ -454,15 +455,15 @@
                IF( P.GT.1 )
      $            CALL ZCOPY( P-1, A( 1, K ), 1, A( 1, P ), 1 )
 *
-*              Interchange rows KK and KP in first K-1 columns of A
+*              Interchange rows K and P in the last K+1 to N columns of A
 *              (columns K and K-1 of A for 2-by-2 pivot will be
-*              later overwritten). Interchange rows KK and KP
-*              in last KW to NB columns of W.
+*              later overwritten). Interchange rows K and P
+*              in last KKW to NB columns of W.
 *
                IF( K.LT.N )
      $            CALL ZSWAP( N-K, A( K, K+1 ), LDA, A( P, K+1 ),
      $                        LDA )
-               CALL ZSWAP( N-K+1, W( K, KW ), LDW, W( P, KW ),
+               CALL ZSWAP( N-KK+1, W( K, KKW ), LDW, W( P, KKW ),
      $                     LDW )
             END IF
 *
@@ -511,7 +512,7 @@
 *                 A(1:k-1,k) := U(1:k-1,k) = W(1:k-1,kw)/D(k,k)
 *
 *              (NOTE: No need to use for Hermitian matrix
-*              A( K, K ) = DBLE( W( K, K) ) to separately copy diagonal
+*              A( K, K ) = REAL( W( K, K) ) to separately copy diagonal
 *              element D(k,k) from W (potentially saves only one load))
                CALL ZCOPY( K, W( 1, KW ), 1, A( 1, K ), 1 )
                IF( K.GT.1 ) THEN
@@ -671,9 +672,10 @@
 *
 *           Update the rectangular superdiagonal block
 *
-            CALL ZGEMM( 'No transpose', 'Transpose', J-1, JB, N-K,
-     $                  -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ), LDW,
-     $                  CONE, A( 1, J ), LDA )
+            IF( J.GE.2 )
+     $         CALL ZGEMM( 'No transpose', 'Transpose', J-1, JB, N-K,
+     $                     -CONE, A( 1, K+1 ), LDA, W( J, KW+1 ), LDW,
+     $                     CONE, A( 1, J ), LDA )
    50    CONTINUE
 *
 *        Put U12 in standard form by partially undoing the interchanges
@@ -703,7 +705,7 @@
             IF( JP2.NE.JJ .AND. J.LE.N )
      $         CALL ZSWAP( N-J+1, A( JP2, J ), LDA, A( JJ, J ), LDA )
             JJ = JJ + 1
-            IF( JP1.NE.JJ .AND. KSTEP.EQ.2 .AND. J.LE.N )
+            IF( KSTEP.EQ.2 .AND. JP1.NE.JJ .AND. J.LE.N )
      $         CALL ZSWAP( N-J+1, A( JP1, J ), LDA, A( JJ, J ), LDA )
          IF( J.LT.N )
      $      GO TO 60
@@ -716,12 +718,14 @@
 *
 *        Factorize the leading columns of A using the lower triangle
 *        of A and working forwards, and compute the matrix W = L21*D
-*        for use in updating A22
+*        for use in updating A22 (note that conjg(W) is actually stored)
 *
 *        K is the main loop index, increasing from 1 in steps of 1 or 2
 *
          K = 1
    70    CONTINUE
+*
+*        Exit from loop
 *
          IF( ( K.GE.NB .AND. NB.LT.N ) .OR. K.GT.N )
      $      GO TO 90
@@ -763,7 +767,7 @@
             IF( INFO.EQ.0 )
      $         INFO = K
             KP = K
-            A( K, K ) = DBLE( A( K, K ) )
+            A( K, K ) = DBLE( W( K, K ) )
             IF( K.LT.N )
      $         CALL ZCOPY( N-K, W( K+1, K ), 1, A( K+1, K ), 1 )
          ELSE
@@ -798,9 +802,11 @@
                   CALL ZCOPY( IMAX-K, A( IMAX, K ), LDA, W( K, K+1 ), 1)
                   CALL ZLACGV( IMAX-K, W( K, K+1 ), 1 )
                   W( IMAX, K+1 ) = DBLE( A( IMAX, IMAX ) )
+*
                   IF( IMAX.LT.N )
      $               CALL ZCOPY( N-IMAX, A( IMAX+1, IMAX ), 1,
      $                           W( IMAX+1, K+1 ), 1 )
+*
                   IF( K.GT.1 ) THEN
                      CALL ZGEMV( 'No transpose', N-K+1, K-1, -CONE,
      $                            A( K, 1 ), LDA, W( IMAX, 1 ), LDW,
@@ -830,7 +836,7 @@
 *
 *                 Case(2)
 *                 Equivalent to testing for
-*                 ABS( DBLE( W( IMAX,K+1 ) ) ).GE.ALPHA*ROWMAX
+*                 ABS( REAL( W( IMAX,K+1 ) ) ).GE.ALPHA*ROWMAX
 *                 (used to handle NaN and Inf)
 *
                   IF( .NOT.( ABS( DBLE( W( IMAX,K+1 ) ) )
@@ -902,19 +908,19 @@
 *              will be later overwritten.
 *
                A( P, P ) = DBLE( A( K, K ) )
-               CALL ZCOPY( P-K-2, A( K+2, K ), 1, A( P, K+2 ), LDA )
+               CALL ZCOPY( P-K-1, A( K+1, K ), 1, A( P, K+1 ), LDA )
                CALL ZLACGV( P-K-1, A( P, K+1 ), LDA )
                IF( P.LT.N )
      $            CALL ZCOPY( N-P, A( P+1, K ), 1, A( P+1, P ), 1 )
 *
-*              Interchange rows KK and KP in first K-1 columns of A
+*              Interchange rows K and P in first K-1 columns of A
 *              (columns K and K+1 of A for 2-by-2 pivot will be
-*              later overwritten). Interchange rows KK and KP
+*              later overwritten). Interchange rows K and P
 *              in first KK columns of W.
 *
                IF( K.GT.1 )
      $            CALL ZSWAP( K-1, A( K, 1 ), LDA, A( P, 1 ), LDA )
-               CALL ZSWAP( K, W( K, 1 ), LDW, W( P, 1 ), LDW )
+               CALL ZSWAP( KK, W( K, 1 ), LDW, W( P, 1 ), LDW )
             END IF
 *
 *           Interchange rows and columns KP and KK.
@@ -935,7 +941,7 @@
      $            CALL ZCOPY( N-KP, A( KP+1, KK ), 1, A( KP+1, KP ), 1 )
 *
 *              Interchange rows KK and KP in first K-1 columns of A
-*              (columns K (or K and K+1 for 2-by-2 pivot) of A will be
+*              (column K (or K and K+1 for 2-by-2 pivot) of A will be
 *              later overwritten). Interchange rows KK and KP
 *              in first KK columns of W.
 *
@@ -960,7 +966,7 @@
 *                 A(k+1:N,k) := L(k+1:N,k) = W(k+1:N,k)/D(k,k)
 *
 *              (NOTE: No need to use for Hermitian matrix
-*              A( K, K ) = DBLE( W( K, K) ) to separately copy diagonal
+*              A( K, K ) = REAL( W( K, K) ) to separately copy diagonal
 *              element D(k,k) from W (potentially saves only one load))
                CALL ZCOPY( N-K+1, W( K, K ), 1, A( K, K ), 1 )
                IF( K.LT.N ) THEN
@@ -1152,7 +1158,7 @@
             J = J - 1
             IF( JP2.NE.JJ .AND. J.GE.1 )
      $         CALL ZSWAP( J, A( JP2, 1 ), LDA, A( JJ, 1 ), LDA )
-            JJ = JJ - 1
+            JJ = JJ -1
             IF( KSTEP.EQ.2 .AND. JP1.NE.JJ .AND. J.GE.1 )
      $         CALL ZSWAP( J, A( JP1, 1 ), LDA, A( JJ, 1 ), LDA )
          IF( J.GT.1 )

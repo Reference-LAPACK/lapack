@@ -26,7 +26,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       COMPLEX*16         A( LDA, * )
+*       COMPLEX*16            A( LDA, * )
 *       ..
 *
 *
@@ -360,7 +360,7 @@
 *
 *                 Case(2)
 *                 Equivalent to testing for
-*                 ABS( DBLE( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
+*                 ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
 *                 (used to handle NaN and Inf)
 *
                   IF( .NOT.( ABS( DBLE( A( IMAX, IMAX ) ) )
@@ -408,7 +408,7 @@
 *
 *           KK is the column of A where pivoting step stopped
 *
-            KK = K + KSTEP - 1
+            KK = K - KSTEP + 1
 *
 *           For only a 2x2 pivot, interchange rows and columns K and P
 *           in the leading submatrix A(1:k,1:k)
@@ -492,7 +492,7 @@
 *
 *                    Store U(k) in column k
 *
-                     CALL ZSCAL( K-1, D11, A( 1, K ), 1 )
+                     CALL ZDSCAL( K-1, D11, A( 1, K ), 1 )
                   ELSE
 *
 *                    Store L(k) in column K
@@ -672,7 +672,7 @@
 *
 *                 Case(2)
 *                 Equivalent to testing for
-*                 ABS( DBLE( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
+*                 ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX
 *                 (used to handle NaN and Inf)
 *
                   IF( .NOT.( ABS( DBLE( A( IMAX, IMAX ) ) )
