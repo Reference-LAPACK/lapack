@@ -137,7 +137,7 @@ set(ZLINTST  zchkaa.f
    zgbt01.f zgbt02.f zgbt05.f zgelqs.f zgeqls.f zgeqrs.f 
    zgerqs.f zget01.f zget02.f 
    zget03.f zget04.f zget07.f zgtt01.f zgtt02.f 
-   zgtt05.f zhet01.f zhet01.f zhpt01.f zlaipd.f zlaptm.f zlarhs.f zlatb4.f zlatb5.f 
+   zgtt05.f zhet01.f zhet01.f zhet01_rook.f zhpt01.f zlaipd.f zlaptm.f zlarhs.f zlatb4.f zlatb5.f 
    zlatsp.f zlatsy.f zlattb.f zlattp.f zlattr.f 
    zlavhe.f zlavhe_rook.f zlavhp.f zlavsp.f zlavsy.f zlavsy_rook.f zlqt01.f 
    zlqt02.f zlqt03.f zpbt01.f zpbt02.f zpbt05.f 
