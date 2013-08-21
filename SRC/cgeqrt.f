@@ -173,7 +173,7 @@
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
-      ELSE IF( NB.LT.1 .OR. ( NB.GT.MIN(M,N) .AND. MIN(M,N).LT.0 ) )THEN
+      ELSE IF( NB.LT.1 .OR. ( NB.GT.MIN(M,N) .AND. MIN(M,N).GT.0 ) )THEN
          INFO = -3
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -5
