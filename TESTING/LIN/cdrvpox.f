@@ -530,11 +530,12 @@
 *
 *                    Check the error code from CPOSVX.
 *
-                     IF( INFO.NE.IZERO )
-     $                  CALL ALAERH( PATH, 'CPOSVX', INFO, IZERO,
+                     IF( INFO.NE.IZERO ) THEN
+                        CALL ALAERH( PATH, 'CPOSVX', INFO, IZERO,
      $                               FACT // UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 90
+                     END IF
 *
                      IF( INFO.EQ.0 ) THEN
                         IF( .NOT.PREFAC ) THEN
