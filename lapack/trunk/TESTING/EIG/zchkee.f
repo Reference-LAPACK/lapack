@@ -1129,6 +1129,10 @@
 *     ..
 *     .. Executable Statements ..
 *
+      A = 0.0
+      B = 0.0
+      C = 0.0
+      DC = 0.0
       S1 = DSECND( )
       FATAL = .FALSE.
       NUNIT = NOUT

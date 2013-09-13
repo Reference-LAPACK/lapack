@@ -391,6 +391,7 @@
       WU = ZERO
       IIL = 0
       IIU = 0
+      NSPLIT = 0
 
       IF( VALEIG ) THEN
 *        We do not reference VL, VU in the cases RANGE = 'I','A'
