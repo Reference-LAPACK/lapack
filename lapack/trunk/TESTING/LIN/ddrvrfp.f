@@ -442,16 +442,20 @@
 *                       Form the inverse of A.
 *
                         CALL DPOTRI( UPLO, N, A, LDA, INFO )
+
+      					IF ( N .NE. 0 ) THEN
+
 *
-*                       Compute the 1-norm condition number of A.
+*                          Compute the 1-norm condition number of A.
 *
-                        AINVNM = DLANSY( '1', UPLO, N, A, LDA,
+                           AINVNM = DLANSY( '1', UPLO, N, A, LDA,
      +                           D_WORK_DLANSY )
-                        RCONDC = ( ONE / ANORM ) / AINVNM
+                           RCONDC = ( ONE / ANORM ) / AINVNM
 *
-*                       Restore the matrix A.
+*                          Restore the matrix A.
 *
-                        CALL DLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
+                           CALL DLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
+                        END IF
 *
                      END IF
 *

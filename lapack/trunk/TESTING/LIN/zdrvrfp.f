@@ -449,16 +449,19 @@
 *                       Form the inverse of A.
 *
                         CALL ZPOTRI( UPLO, N, A, LDA, INFO )
+
+      					IF ( N .NE. 0 ) THEN
 *
-*                       Compute the 1-norm condition number of A.
+*                          Compute the 1-norm condition number of A.
 *
-                        AINVNM = ZLANHE( '1', UPLO, N, A, LDA,
+                           AINVNM = ZLANHE( '1', UPLO, N, A, LDA,
      +                           D_WORK_ZLANHE )
-                        RCONDC = ( ONE / ANORM ) / AINVNM
+                           RCONDC = ( ONE / ANORM ) / AINVNM
 *
-*                       Restore the matrix A.
+*                          Restore the matrix A.
 *
-                        CALL ZLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
+                           CALL ZLACPY( UPLO, N, N, ASAV, LDA, A, LDA )
+                        END IF
 *
                      END IF
 *
