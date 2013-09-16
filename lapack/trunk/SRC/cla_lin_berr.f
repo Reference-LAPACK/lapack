@@ -67,14 +67,14 @@
 *>
 *> \param[in] RES
 *> \verbatim
-*>          RES is DOUBLE PRECISION array, dimension (N,NRHS)
+*>          RES is REAL array, dimension (N,NRHS)
 *>     The residual matrix, i.e., the matrix R in the relative backward
 *>     error formula above.
 *> \endverbatim
 *>
 *> \param[in] AYB
 *> \verbatim
-*>          AYB is DOUBLE PRECISION array, dimension (N, NRHS)
+*>          AYB is REAL array, dimension (N, NRHS)
 *>     The denominator in the relative backward error formula above, i.e.,
 *>     the matrix abs(op(A_s))*abs(Y) + abs(B_s). The matrices A, Y, and B
 *>     are from iterative refinement (see cla_gerfsx_extended.f).
