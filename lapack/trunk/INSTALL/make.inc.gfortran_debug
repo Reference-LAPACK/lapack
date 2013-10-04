@@ -12,10 +12,10 @@ SHELL = /bin/sh
 #  selected.  Define LOADER and LOADOPTS to refer to the loader
 #  and desired load options for your machine.
 #
-FORTRAN  = gfortran -fimplicit-none -g
+FORTRAN  = gfortran -fimplicit-none -g -frecursive
 OPTS     =
 DRVOPTS  = $(OPTS)
-NOOPT    = -g -O0
+NOOPT    = -g -O0 -frecursive
 LOADER   = gfortran -g
 LOADOPTS =
 #
