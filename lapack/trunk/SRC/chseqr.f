@@ -43,7 +43,7 @@
 *>    Optionally Z may be postmultiplied into an input unitary
 *>    matrix Q so that this routine can give the Schur factorization
 *>    of a matrix A which has been reduced to the Hessenberg form H
-*>    by the unitary matrix Q:  A = Q*H*Q**H = (QZ)*H*(QZ)**H.
+*>    by the unitary matrix Q:  A = Q*H*Q**H = (QZ)*T*(QZ)**H.
 *> \endverbatim
 *
 *  Arguments:
