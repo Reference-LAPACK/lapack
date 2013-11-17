@@ -232,7 +232,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date November 2013
 *
 *> \ingroup complex_lin
 *
@@ -244,10 +244,10 @@
      +              C_WORK_CPOT03, S_WORK_CLATMS, S_WORK_CLANHE,
      +              S_WORK_CPOT01, S_WORK_CPOT02, S_WORK_CPOT03 )
 *
-*  -- LAPACK test routine (version 3.4.0) --
+*  -- LAPACK test routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     November 2013
 *
 *     .. Scalar Arguments ..
       INTEGER            NN, NNS, NNT, NOUT

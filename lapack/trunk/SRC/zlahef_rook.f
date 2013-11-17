@@ -162,7 +162,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2012
+*> \date November 2013
 *
 *> \ingroup complex16HEcomputational
 *
@@ -171,7 +171,7 @@
 *>
 *> \verbatim
 *>
-*>  November 2012,  Igor Kozachenko,
+*>  November 2013,  Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -184,10 +184,10 @@
       SUBROUTINE ZLAHEF_ROOK( UPLO, N, NB, KB, A, LDA, IPIV, W, LDW,
      $                        INFO )
 *
-*  -- LAPACK computational routine (version 3.4.2) --
+*  -- LAPACK computational routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     November 2013
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO

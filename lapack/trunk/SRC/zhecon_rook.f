@@ -117,7 +117,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2012
+*> \date November 2013
 *
 *> \ingroup complex16HEcomputational
 *
@@ -125,7 +125,7 @@
 *  ==================
 *> \verbatim
 *>
-*>  November 2012,  Igor Kozachenko,
+*>  November 2013,  Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -139,10 +139,10 @@
       SUBROUTINE ZHECON_ROOK( UPLO, N, A, LDA, IPIV, ANORM, RCOND, WORK,
      $                        INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2012
+*     November 2013
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
