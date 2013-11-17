@@ -225,7 +225,7 @@
          INFO = -4
       ELSE IF( K.LT.0 .OR. K.GT.Q ) THEN
          INFO = -5
-      ELSE IF( NB.LT.1 .OR. NB.GT.K ) THEN
+      ELSE IF( NB.LT.1 .OR. (NB.GT.K .AND. K.GT.0)) THEN
          INFO = -6
       ELSE IF( LDV.LT.MAX( 1, Q ) ) THEN
          INFO = -8

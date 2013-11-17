@@ -219,9 +219,9 @@
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
-      ELSE IF( L.LT.0 .OR. L.GT.MIN(M,N) ) THEN
+      ELSE IF( L.LT.0 .OR. (L.GT.MIN(M,N) .AND. MIN(M,N).GT.0)) THEN
          INFO = -3
-      ELSE IF( NB.LT.1 .OR. NB.GT.N ) THEN
+      ELSE IF( NB.LT.1 .OR. (NB.GT.N .AND. N.GT.0)) THEN
          INFO = -4
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -6
