@@ -129,7 +129,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date April 2012
+*> \date November 2013
 *
 *> \ingroup doubleSYcomputational
 *
@@ -178,7 +178,7 @@
 *>
 *> \verbatim
 *>
-*>  April 2012,     Igor Kozachenko,
+*>  November 2013,     Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -194,10 +194,10 @@
 *  =====================================================================
       SUBROUTINE DSYTF2_ROOK( UPLO, N, A, LDA, IPIV, INFO )
 *
-*  -- LAPACK computational routine (version 3.3.1) --
+*  -- LAPACK computational routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     April 2012
+*     November 2013
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO
