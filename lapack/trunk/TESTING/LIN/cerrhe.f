@@ -333,8 +333,9 @@
          CALL CHECON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'CHECON_ROOK', INFOT, NOUT, LERR, OK )
 *
-*     Test error exits of the routines that use the diagonal pivoting
-*     factorization of a Hermitian indefinite packed matrix.
+*        Test error exits of the routines that use factorization
+*        of a Hermitian indefinite packed matrix with patrial
+*        (Bunch-Kaufman) diagonal pivoting method.
 *
       ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
 *

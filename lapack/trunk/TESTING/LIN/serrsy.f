@@ -86,10 +86,10 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, SSPCON, SSPRFS, SSPTRF, SSPTRI,
-     $                   SSPTRS, SSYCON, SSYRFS, SSYTF2, SSYTRF, SSYTRI,
-     $                   SSYTRI2, SSYTRS, SSYCON_ROOK, SSYTF2_ROOK,
-     $                   SSYTRF_ROOK, SSYTRI_ROOK, SSYTRS_ROOK
+      EXTERNAL           ALAESM, CHKXER, SSPCON, SSYCON_ROOK, SSPRFS,
+     $                   SSPTRF, SSPTRI, SSPTRS, SSYCON, SSYRFS, SSYTF2,
+     $                   SSYTF2_ROOK, SSYTRF, SSYTRF_ROOK, SSYTRI,
+     $                   SSYTRI_ROOK, SSYTRI2, SSYTRS, SSYTRS_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -333,11 +333,11 @@
          CALL SSYCON_ROOK( 'U', 1, A, 1, IP, -1.0, RCOND, W, IW, INFO )
          CALL CHKXER( 'SSYCON_ROOK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
-*
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite packed matrix with patrial
 *        (Bunch-Kaufman) pivoting.
+*
+      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        SSPTRF
 *

@@ -91,10 +91,11 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGBSV, CGBSVX, CGESV, CGESVX, CGTSV, CGTSVX,
-     $                   CHESV, CHESVX, CHKXER, CHPSV, CHPSVX, CPBSV,
-     $                   CPBSVX, CPOSV, CPOSVX, CPPSV, CPPSVX, CPTSV,
-     $                   CPTSVX, CSPSV, CSPSVX, CSYSV, CSYSVX, CGESVXX,
-     $                   CPOSVXX, CSYSVXX, CHESVXX, CGBSVXX
+     $                   CHESV, CHESV_ROOK, CHESVX, CHKXER, CHPSV,
+     $                   CHPSVX, CPBSV, CPBSVX, CPOSV, CPOSVX, CPPSV,
+     $                   CPPSVX, CPTSV, CPTSVX, CSPSV, CSPSVX, CSYSV,
+     $                   CSYSV_ROOK, CSYSVX, CGESVXX, CPOSVXX, CSYSVXX,
+     $                   CHESVXX, CGBSVXX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -900,6 +901,24 @@
      $                ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
          CALL CHKXER( 'CHESVXX', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
+*
+*        CHESV_ROOK
+*
+        SRNAMT = 'CHESV_ROOK'
+        INFOT = 1
+        CALL CHESV_ROOK( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+        INFOT = 2
+        CALL CHESV_ROOK( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+        INFOT = 3
+        CALL CHESV_ROOK( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+        INFOT = 8
+        CALL CHESV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_ROOK', INFOT, NOUT, LERR, OK )
+*
       ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
 *
 *        CHPSV
@@ -1053,6 +1072,24 @@
      $        1, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
      $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
          CALL CHKXER( 'CSYSVXX', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
+*
+*        CSYSV_ROOK
+*
+         SRNAMT = 'CSYSV_ROOK'
+         INFOT = 1
+         CALL CSYSV_ROOK( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CSYSV_ROOK( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL CSYSV_ROOK( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL CSYSV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYSV_ROOK', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
