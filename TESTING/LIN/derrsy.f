@@ -87,9 +87,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, DSPCON, DSPRFS, DSPTRF, DSPTRI,
-     $                   DSPTRS, DSYCON, DSYRFS, DSYTF2, DSYTRF, DSYTRI,
-     $                   DSYTRI2, DSYTRS, DSYCON_ROOK, DSYTF2_ROOK,
-     $                   DSYTRF_ROOK, DSYTRI_ROOK, DSYTRS_ROOK
+     $                   DSPTRS, DSYCON, DSYCON_ROOK, DSYRFS, DSYTF2,
+     $                   DSYTF2_ROOK, DSYTRF, DSYTRF_ROOK, DSYTRI,
+     $                   DSYTRI_ROOK, DSYTRI2, DSYTRS, DSYTRS_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

@@ -88,9 +88,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, ZSPCON, ZSPRFS, ZSPTRF, ZSPTRI,
-     $                   ZSPTRS, ZSYCON, ZSYRFS, ZSYTF2, ZSYTRF, ZSYTRI,
-     $                   ZSYTRI2, ZSYTRS, ZSYCON_ROOK, ZSYTF2_ROOK,
-     $                   ZSYTRF_ROOK, ZSYTRI_ROOK, ZSYTRS_ROOK
+     $                   ZSPTRS, ZSYCON, ZSYCON_ROOK, ZSYRFS, ZSYTF2,
+     $                   ZSYTF2_ROOK, ZSYTRF, ZSYTRF_ROOK, ZSYTRI,
+     $                   ZSYTRI_ROOK, ZSYTRI2, ZSYTRS, ZSYTRS_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -334,11 +334,11 @@
          CALL ZSYCON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'ZSYCON_ROOK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
-*
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite packed matrix with patrial
 *        (Bunch-Kaufman) pivoting.
+*
+      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        ZSPTRF
 *

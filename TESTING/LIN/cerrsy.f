@@ -88,9 +88,9 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, CSPCON, CSPRFS, CSPTRF, CSPTRI,
-     $                   CSPTRS, CSYCON, CSYRFS, CSYTF2, CSYTRF, CSYTRI,
-     $                   CSYTRI2, CSYTRS, CSYCON_ROOK, CSYTF2_ROOK,
-     $                   CSYTRF_ROOK, CSYTRI_ROOK, CSYTRS_ROOK
+     $                   CSPTRS, CSYCON, CSYCON_ROOK, CSYRFS, CSYTF2,
+     $                   CSYTF2_ROOK, CSYTRF, CSYTRF_ROOK, CSYTRI,
+     $                   CSYTRI_ROOK, CSYTRI2, CSYTRS, CSYTRS_ROOK
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -332,11 +332,11 @@
          CALL CSYCON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'CSYCON_ROOK', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
+*     Test error exits of the routines that use factorization
+*     of a symmetric indefinite packed matrix with patrial
+*     (Bunch-Kaufman) diagonal pivoting method.
 *
-*        Test error exits of the routines that use factorization
-*        of a symmetric indefinite packed matrix with patrial
-*        (Bunch-Kaufman) pivoting.
+      ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        CSPTRF
 *
