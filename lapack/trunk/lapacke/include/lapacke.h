@@ -2107,10 +2107,10 @@ lapack_int LAPACKE_slacn2( lapack_int n, float* v, float* x, lapack_int* isgn,
 lapack_int LAPACKE_dlacn2( lapack_int n, double* v, double* x, lapack_int* isgn,
                            double* est, lapack_int* kase, lapack_int* isave );
 lapack_int LAPACKE_clacn2( lapack_int n, lapack_complex_float* v,
-                           lapack_complex_float* x, lapack_int* isgn,
+                           lapack_complex_float* x,
                            float* est, lapack_int* kase, lapack_int* isave );
 lapack_int LAPACKE_zlacn2( lapack_int n, lapack_complex_double* v,
-                           lapack_complex_double* x, lapack_int* isgn,
+                           lapack_complex_double* x,
                            double* est, lapack_int* kase, lapack_int* isave );
 
 lapack_int LAPACKE_slacpy( int matrix_order, char uplo, lapack_int m,
@@ -6908,11 +6908,11 @@ lapack_int LAPACKE_dlacn2_work( lapack_int n, double* v, double* x,
                                 lapack_int* isgn, double* est, lapack_int* kase,
                                 lapack_int* isave );
 lapack_int LAPACKE_clacn2_work( lapack_int n, lapack_complex_float* v,
-                                lapack_complex_float* x, lapack_int* isgn,
+                                lapack_complex_float* x,
                                 float* est, lapack_int* kase,
                                 lapack_int* isave );
 lapack_int LAPACKE_zlacn2_work( lapack_int n, lapack_complex_double* v,
-                                lapack_complex_double* x, lapack_int* isgn,
+                                lapack_complex_double* x,
                                 double* est, lapack_int* kase,
                                 lapack_int* isave );
 

@@ -34,6 +34,7 @@
 /* Includes */
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "lapacke.h"
 #include "lapacke_example_aux.h"
 

@@ -34,7 +34,7 @@
 #include "lapacke_utils.h"
 
 lapack_int LAPACKE_clacn2( lapack_int n, lapack_complex_float* v,
-                           lapack_complex_float* x, lapack_int* isgn,
+                           lapack_complex_float* x,
                            float* est, lapack_int* kase, lapack_int* isave )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -46,5 +46,5 @@ lapack_int LAPACKE_clacn2( lapack_int n, lapack_complex_float* v,
         return -3;
     }
 #endif
-    return LAPACKE_clacn2_work( n, v, x, isgn, est, kase, isave );
+    return LAPACKE_clacn2_work( n, v, x, est, kase, isave );
 }
