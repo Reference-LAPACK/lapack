@@ -1,4 +1,5 @@
 #include <lapacke.h>
+#include <stdio.h>
 
 /* Auxiliary routine: printing a matrix */
 void print_matrix_rowmajor( char* desc, lapack_int m, lapack_int n, double* mat, lapack_int ldm ) {
