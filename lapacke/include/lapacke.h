@@ -15782,10 +15782,10 @@ void LAPACK_slacn2( lapack_int* n, float* v, float* x, lapack_int* isgn,
 void LAPACK_dlacn2( lapack_int* n, double* v, double* x, lapack_int* isgn,
                     double* est, lapack_int* kase, lapack_int* isave );
 void LAPACK_clacn2( lapack_int* n, lapack_complex_float* v,
-                    lapack_complex_float* x, lapack_int* isgn, float* est,
+                    lapack_complex_float* x, float* est,
                     lapack_int* kase, lapack_int* isave );
 void LAPACK_zlacn2( lapack_int* n, lapack_complex_double* v,
-                    lapack_complex_double* x, lapack_int* isgn, double* est,
+                    lapack_complex_double* x, double* est,
                     lapack_int* kase, lapack_int* isave );
 void LAPACK_slacpy( char* uplo, lapack_int* m, lapack_int* n, const float* a,
                     lapack_int* lda, float* b, lapack_int* ldb );
