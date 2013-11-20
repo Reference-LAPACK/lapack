@@ -342,7 +342,7 @@
          ELSE IF( N.LE.0 ) THEN
             INFO = -4
          ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-            INFO = -5
+            INFO = -6
          ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
             INFO = -8
          ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
