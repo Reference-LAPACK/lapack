@@ -57,7 +57,7 @@ lapack_int LAPACKE_zgesdd_work( int matrix_order, char jobz, lapack_int m,
                              ( LAPACKE_lsame( jobz, 'o' ) && m<n) ) ? m :
                              ( LAPACKE_lsame( jobz, 's' ) ? MIN(m,n) : 1);
         lapack_int nrows_vt = ( LAPACKE_lsame( jobz, 'a' ) ||
-                              ( LAPACKE_lsame( jobz, 'o' ) && m<n) ) ? n :
+                              ( LAPACKE_lsame( jobz, 'o' ) && m>=n) ) ? n :
                               ( LAPACKE_lsame( jobz, 's' ) ? MIN(m,n) : 1);
         lapack_int lda_t = MAX(1,m);
         lapack_int ldu_t = MAX(1,nrows_u);
