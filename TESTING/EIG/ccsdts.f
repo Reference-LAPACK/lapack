@@ -263,7 +263,8 @@
       EXTERNAL           SLAMCH, CLANGE, CLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CHERK, CLACPY, CLASET, CUNCSD, CUNCSD2BY1
+      EXTERNAL           CGEMM, CHERK, CLACPY, CLASET, CUNCSD,
+     $                   CUNCSD2BY1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CMPLX, COS, MAX, MIN, REAL, SIN
