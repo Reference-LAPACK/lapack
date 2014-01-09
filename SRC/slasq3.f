@@ -58,7 +58,7 @@
 *>         Last index.
 *> \endverbatim
 *>
-*> \param[in] Z
+*> \param[in,out] Z
 *> \verbatim
 *>          Z is REAL array, dimension ( 4*N )
 *>         Z holds the qd array.
