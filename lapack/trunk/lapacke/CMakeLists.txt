@@ -1,6 +1,8 @@
 message(STATUS "LAPACKE enable")
 enable_language(C)
 
+set(LAPACK_INSTALL_EXPORT_NAME lapacke-targets)
+
 # Create a header file netlib.h for the routines called in my C programs
 include(FortranCInterface)
 FortranCInterface_HEADER( ${CMAKE_CURRENT_SOURCE_DIR}/include/lapacke_mangling.h 
@@ -69,3 +71,19 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapacke.pc.in ${CMAKE_CURRENT_BINARY_
   ${CMAKE_CURRENT_BINARY_DIR}/lapacke.pc
   DESTINATION ${PKG_CONFIG_DIR}
    )
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/lapacke-config-version.cmake.in
+  ${LAPACK_BINARY_DIR}/lapacke-config-version.cmake @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/lapacke-config-build.cmake.in
+  ${LAPACK_BINARY_DIR}/lapacke-config.cmake @ONLY)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/lapacke-config-install.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/lapacke-config.cmake @ONLY)
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/lapacke-config.cmake
+  ${LAPACK_BINARY_DIR}/lapacke-config-version.cmake
+  DESTINATION lib/cmake/lapacke-${LAPACK_VERSION}
+  )
+
+install(EXPORT lapacke-targets
+  DESTINATION lib/cmake/lapacke-${LAPACK_VERSION})
