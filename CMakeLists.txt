@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 2.8.10)
 project(LAPACK Fortran)
+
+set(LAPACK_VERSION 3.4.2)
 
 # Configure the warning and code coverage suppression file
 configure_file( 
@@ -31,8 +33,11 @@ if (PYTHONINTERP_FOUND)
 endif()
 # --------------------------------------------------
 
+set(LAPACK_INSTALL_EXPORT_NAME lapack-targets)
+
 macro(lapack_install_library lib)
-  install(TARGETS ${lib} EXPORT lapack-targets
+  install(TARGETS ${lib}
+    EXPORT ${LAPACK_INSTALL_EXPORT_NAME}
     ARCHIVE DESTINATION lib${LIB_SUFFIX}
     LIBRARY DESTINATION lib${LIB_SUFFIX}
     RUNTIME DESTINATION bin
@@ -203,7 +208,6 @@ endif(LAPACKE)
 SET(CPACK_PACKAGE_NAME "LAPACK")
 SET(CPACK_PACKAGE_VENDOR "University of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "LAPACK- Linear Algebra Package")
-set(LAPACK_VERSION 3.4.2)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 4)
 set(CPACK_PACKAGE_VERSION_PATCH 2)
@@ -245,11 +249,32 @@ if(BUILD_TESTING OR LAPACKE_WITH_TMG)
   set(ALL_TARGETS ${ALL_TARGETS} tmglib)
 endif(BUILD_TESTING OR LAPACKE_WITH_TMG)
 
+# Export lapack targets, not including lapacke, from the
+# install tree, if any.
+set(_lapack_config_install_guard_target "")
+if(ALL_TARGETS)
+  install(EXPORT lapack-targets
+    DESTINATION lib/cmake/lapack-${LAPACK_VERSION})
+
+  # Choose one of the lapack targets to use as a guard for
+  # lapack-config.cmake to load targets from the install tree.
+  list(GET ALL_TARGETS 0 _lapack_config_install_guard_target)
+endif()
+
+# Include lapacke in targets exported from the build tree.
 if(LAPACKE)
   set(ALL_TARGETS ${ALL_TARGETS} lapacke)
 endif(LAPACKE)
 
-export(TARGETS ${ALL_TARGETS} FILE lapack-targets.cmake)
+# Export lapack and lapacke targets from the build tree, if any.
+set(_lapack_config_build_guard_target "")
+if(ALL_TARGETS)
+  export(TARGETS ${ALL_TARGETS} FILE lapack-targets.cmake)
+
+  # Choose one of the lapack or lapacke targets to use as a guard
+  # for lapack-config.cmake to load targets from the build tree.
+  list(GET ALL_TARGETS 0 _lapack_config_build_guard_target)
+endif()
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
@@ -270,6 +295,3 @@ install(FILES
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
   DESTINATION lib/cmake/lapack-${LAPACK_VERSION}
   )
-
-install(EXPORT lapack-targets
-  DESTINATION lib/cmake/lapack-${LAPACK_VERSION})
