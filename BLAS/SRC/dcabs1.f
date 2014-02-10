@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DCABS1 computes absolute value of a double complex number 
+*> DCABS1 computes |Re(.)| + |Im(.)| of a double complex number 
 *> \endverbatim
 *
 *  Authors:

@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    ICAMAX finds the index of element having max. absolute value.
+*>    ICAMAX finds the index of the first element having maximum |Re(.)| + |Im(.)|
 *> \endverbatim
 *
 *  Authors:
