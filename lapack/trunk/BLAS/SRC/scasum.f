@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    SCASUM takes the sum of the absolute values of a complex vector and
+*>    SCASUM takes the sum of the (|Re(.)| + |Im(.)|)'s of a complex vector and
 *>    returns a single precision result.
 *> \endverbatim
 *

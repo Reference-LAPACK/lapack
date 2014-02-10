@@ -23,7 +23,7 @@
 *>
 *> \verbatim
 *>
-*>    IDAMAX finds the index of element having max. absolute value.
+*>    IDAMAX finds the index of the first element having maximum absolute value.
 *> \endverbatim
 *
 *  Authors:

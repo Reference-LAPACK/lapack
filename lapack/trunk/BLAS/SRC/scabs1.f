@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> SCABS1 computes absolute value of a complex number
+*> SCABS1 computes |Re(.)| + |Im(.)| of a complex number
 *> \endverbatim
 *
 *  Authors:
