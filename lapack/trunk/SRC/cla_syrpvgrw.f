@@ -104,7 +104,7 @@
 *>
 *> \param[in] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (2*N)
+*>          WORK is REAL array, dimension (2*N)
 *> \endverbatim
 *
 *  Authors:
