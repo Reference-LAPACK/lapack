@@ -104,7 +104,7 @@
 *>
 *> \param[in] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (2*N)
+*>          WORK is DOUBLE PRECISION array, dimension (2*N)
 *> \endverbatim
 *
 *  Authors:
