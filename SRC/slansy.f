@@ -185,24 +185,24 @@
 *        Find normI(A) ( = norm1(A), since A is symmetric).
 *
          VALUE = ZERO
+         DO 50 I = 1, N
+            WORK( I ) = ZERO
+   50    CONTINUE 
          IF( LSAME( UPLO, 'U' ) ) THEN
-            DO 60 J = 1, N
+            DO 70 J = 1, N
                SUM = ZERO
-               DO 50 I = 1, J - 1
+               DO 60 I = 1, J - 1
                   ABSA = ABS( A( I, J ) )
                   SUM = SUM + ABSA
                   WORK( I ) = WORK( I ) + ABSA
-   50          CONTINUE
+   60          CONTINUE
                WORK( J ) = SUM + ABS( A( J, J ) )
-   60       CONTINUE
-            DO 70 I = 1, N
+   70       CONTINUE
+            DO 80 I = 1, N
                SUM = WORK( I )
                IF( VALUE .LT. SUM .OR. SISNAN( SUM ) ) VALUE = SUM
-   70       CONTINUE
-         ELSE
-            DO 80 I = 1, N
-               WORK( I ) = ZERO
    80       CONTINUE
+         ELSE
             DO 100 J = 1, N
                SUM = WORK( J ) + ABS( A( J, J ) )
                DO 90 I = J + 1, N
