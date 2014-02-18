@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -37,14 +37,14 @@
  * column-major(Fortran) layout or vice versa.
  */
 
-void LAPACKE_chb_trans( int matrix_order, char uplo, lapack_int n,
+void LAPACKE_chb_trans( int matrix_layout, char uplo, lapack_int n,
                         lapack_int kd,
                         const lapack_complex_float *in, lapack_int ldin,
                         lapack_complex_float *out, lapack_int ldout )
 {
     if( LAPACKE_lsame( uplo, 'u' ) ) {
-        LAPACKE_cgb_trans( matrix_order, n, n, 0, kd, in, ldin, out, ldout );
+        LAPACKE_cgb_trans( matrix_layout, n, n, 0, kd, in, ldin, out, ldout );
     } else if( LAPACKE_lsame( uplo, 'l' ) ) {
-        LAPACKE_cgb_trans( matrix_order, n, n, kd, 0, in, ldin, out, ldout );
+        LAPACKE_cgb_trans( matrix_layout, n, n, kd, 0, in, ldin, out, ldout );
     }
 }

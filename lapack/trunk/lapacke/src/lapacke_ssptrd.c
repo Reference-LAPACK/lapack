@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,10 +33,10 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssptrd( int matrix_order, char uplo, lapack_int n, float* ap,
+lapack_int LAPACKE_ssptrd( int matrix_layout, char uplo, lapack_int n, float* ap,
                            float* d, float* e, float* tau )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_ssptrd", -1 );
         return -1;
     }
@@ -46,5 +46,5 @@ lapack_int LAPACKE_ssptrd( int matrix_order, char uplo, lapack_int n, float* ap,
         return -4;
     }
 #endif
-    return LAPACKE_ssptrd_work( matrix_order, uplo, n, ap, d, e, tau );
+    return LAPACKE_ssptrd_work( matrix_layout, uplo, n, ap, d, e, tau );
 }

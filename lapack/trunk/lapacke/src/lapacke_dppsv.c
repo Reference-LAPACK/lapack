@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,11 +33,11 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dppsv( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dppsv( int matrix_layout, char uplo, lapack_int n,
                           lapack_int nrhs, double* ap, double* b,
                           lapack_int ldb )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dppsv", -1 );
         return -1;
     }
@@ -46,9 +46,9 @@ lapack_int LAPACKE_dppsv( int matrix_order, char uplo, lapack_int n,
     if( LAPACKE_dpp_nancheck( n, ap ) ) {
         return -5;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -6;
     }
 #endif
-    return LAPACKE_dppsv_work( matrix_order, uplo, n, nrhs, ap, b, ldb );
+    return LAPACKE_dppsv_work( matrix_layout, uplo, n, nrhs, ap, b, ldb );
 }

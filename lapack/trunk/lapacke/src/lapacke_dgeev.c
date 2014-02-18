@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgeev( int matrix_order, char jobvl, char jobvr,
+lapack_int LAPACKE_dgeev( int matrix_layout, char jobvl, char jobvr,
                           lapack_int n, double* a, lapack_int lda, double* wr,
                           double* wi, double* vl, lapack_int ldvl, double* vr,
                           lapack_int ldvr )
@@ -42,18 +42,18 @@ lapack_int LAPACKE_dgeev( int matrix_order, char jobvl, char jobvr,
     lapack_int lwork = -1;
     double* work = NULL;
     double work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgeev", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -5;
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_dgeev_work( matrix_order, jobvl, jobvr, n, a, lda, wr, wi,
+    info = LAPACKE_dgeev_work( matrix_layout, jobvl, jobvr, n, a, lda, wr, wi,
                                vl, ldvl, vr, ldvr, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -66,7 +66,7 @@ lapack_int LAPACKE_dgeev( int matrix_order, char jobvl, char jobvr,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgeev_work( matrix_order, jobvl, jobvr, n, a, lda, wr, wi,
+    info = LAPACKE_dgeev_work( matrix_layout, jobvl, jobvr, n, a, lda, wr, wi,
                                vl, ldvl, vr, ldvr, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

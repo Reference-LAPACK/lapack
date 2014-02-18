@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_spbsvx_work( int matrix_order, char fact, char uplo,
+lapack_int LAPACKE_spbsvx_work( int matrix_layout, char fact, char uplo,
                                 lapack_int n, lapack_int kd, lapack_int nrhs,
                                 float* ab, lapack_int ldab, float* afb,
                                 lapack_int ldafb, char* equed, float* s,
@@ -42,7 +42,7 @@ lapack_int LAPACKE_spbsvx_work( int matrix_order, char fact, char uplo,
                                 float* berr, float* work, lapack_int* iwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_spbsvx( &fact, &uplo, &n, &kd, &nrhs, ab, &ldab, afb, &ldafb,
                        equed, s, b, &ldb, x, &ldx, rcond, ferr, berr, work,
@@ -50,7 +50,7 @@ lapack_int LAPACKE_spbsvx_work( int matrix_order, char fact, char uplo,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,kd+1);
         lapack_int ldafb_t = MAX(1,kd+1);
         lapack_int ldb_t = MAX(1,n);
@@ -102,12 +102,12 @@ lapack_int LAPACKE_spbsvx_work( int matrix_order, char fact, char uplo,
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        LAPACKE_spb_trans( matrix_order, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        LAPACKE_spb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
         if( LAPACKE_lsame( fact, 'f' ) ) {
-            LAPACKE_spb_trans( matrix_order, uplo, n, kd, afb, ldafb, afb_t,
+            LAPACKE_spb_trans( matrix_layout, uplo, n, kd, afb, ldafb, afb_t,
                                ldafb_t );
         }
-        LAPACKE_sge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_spbsvx( &fact, &uplo, &n, &kd, &nrhs, ab_t, &ldab_t, afb_t,
                        &ldafb_t, equed, s, b_t, &ldb_t, x_t, &ldx_t, rcond,

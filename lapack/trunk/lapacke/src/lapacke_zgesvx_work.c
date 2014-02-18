@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zgesvx_work( int matrix_order, char fact, char trans,
+lapack_int LAPACKE_zgesvx_work( int matrix_layout, char fact, char trans,
                                 lapack_int n, lapack_int nrhs,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_complex_double* af, lapack_int ldaf,
@@ -45,7 +45,7 @@ lapack_int LAPACKE_zgesvx_work( int matrix_order, char fact, char trans,
                                 double* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zgesvx( &fact, &trans, &n, &nrhs, a, &lda, af, &ldaf, ipiv,
                        equed, r, c, b, &ldb, x, &ldx, rcond, ferr, berr, work,
@@ -53,7 +53,7 @@ lapack_int LAPACKE_zgesvx_work( int matrix_order, char fact, char trans,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldaf_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
@@ -111,11 +111,11 @@ lapack_int LAPACKE_zgesvx_work( int matrix_order, char fact, char trans,
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
         if( LAPACKE_lsame( fact, 'f' ) ) {
-            LAPACKE_zge_trans( matrix_order, n, n, af, ldaf, af_t, ldaf_t );
+            LAPACKE_zge_trans( matrix_layout, n, n, af, ldaf, af_t, ldaf_t );
         }
-        LAPACKE_zge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zgesvx( &fact, &trans, &n, &nrhs, a_t, &lda_t, af_t, &ldaf_t,
                        ipiv, equed, r, c, b_t, &ldb_t, x_t, &ldx_t, rcond, ferr,

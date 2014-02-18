@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,21 +33,21 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_strsyl_work( int matrix_order, char trana, char tranb,
+lapack_int LAPACKE_strsyl_work( int matrix_layout, char trana, char tranb,
                                 lapack_int isgn, lapack_int m, lapack_int n,
                                 const float* a, lapack_int lda, const float* b,
                                 lapack_int ldb, float* c, lapack_int ldc,
                                 float* scale )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_strsyl( &trana, &tranb, &isgn, &m, &n, a, &lda, b, &ldb, c, &ldc,
                        scale, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldc_t = MAX(1,m);
@@ -87,9 +87,9 @@ lapack_int LAPACKE_strsyl_work( int matrix_order, char trana, char tranb,
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_order, m, m, a, lda, a_t, lda_t );
-        LAPACKE_sge_trans( matrix_order, n, n, b, ldb, b_t, ldb_t );
-        LAPACKE_sge_trans( matrix_order, m, n, c, ldc, c_t, ldc_t );
+        LAPACKE_sge_trans( matrix_layout, m, m, a, lda, a_t, lda_t );
+        LAPACKE_sge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_sge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
         /* Call LAPACK function and adjust info */
         LAPACK_strsyl( &trana, &tranb, &isgn, &m, &n, a_t, &lda_t, b_t, &ldb_t,
                        c_t, &ldc_t, scale, &info );

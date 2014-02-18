@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dggesx( int matrix_order, char jobvsl, char jobvsr,
+lapack_int LAPACKE_dggesx( int matrix_layout, char jobvsl, char jobvsr,
                            char sort, LAPACK_D_SELECT3 selctg, char sense,
                            lapack_int n, double* a, lapack_int lda, double* b,
                            lapack_int ldb, lapack_int* sdim, double* alphar,
@@ -49,16 +49,16 @@ lapack_int LAPACKE_dggesx( int matrix_order, char jobvsl, char jobvsr,
     double* work = NULL;
     lapack_int iwork_query;
     double work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dggesx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -8;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, n, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, n, b, ldb ) ) {
         return -10;
     }
 #endif
@@ -72,7 +72,7 @@ lapack_int LAPACKE_dggesx( int matrix_order, char jobvsl, char jobvsr,
         }
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_dggesx_work( matrix_order, jobvsl, jobvsr, sort, selctg,
+    info = LAPACKE_dggesx_work( matrix_layout, jobvsl, jobvsr, sort, selctg,
                                 sense, n, a, lda, b, ldb, sdim, alphar, alphai,
                                 beta, vsl, ldvsl, vsr, ldvsr, rconde, rcondv,
                                 &work_query, lwork, &iwork_query, liwork,
@@ -94,7 +94,7 @@ lapack_int LAPACKE_dggesx( int matrix_order, char jobvsl, char jobvsr,
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dggesx_work( matrix_order, jobvsl, jobvsr, sort, selctg,
+    info = LAPACKE_dggesx_work( matrix_layout, jobvsl, jobvsr, sort, selctg,
                                 sense, n, a, lda, b, ldb, sdim, alphar, alphai,
                                 beta, vsl, ldvsl, vsr, ldvsr, rconde, rcondv,
                                 work, lwork, iwork, liwork, bwork );

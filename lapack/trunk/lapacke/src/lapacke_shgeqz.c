@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_shgeqz( int matrix_order, char job, char compq, char compz,
+lapack_int LAPACKE_shgeqz( int matrix_layout, char job, char compq, char compz,
                            lapack_int n, lapack_int ilo, lapack_int ihi,
                            float* h, lapack_int ldh, float* t, lapack_int ldt,
                            float* alphar, float* alphai, float* beta, float* q,
@@ -43,31 +43,31 @@ lapack_int LAPACKE_shgeqz( int matrix_order, char job, char compq, char compz,
     lapack_int lwork = -1;
     float* work = NULL;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_shgeqz", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, h, ldh ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, h, ldh ) ) {
         return -8;
     }
     if( LAPACKE_lsame( compq, 'i' ) || LAPACKE_lsame( compq, 'v' ) ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, n, q, ldq ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, q, ldq ) ) {
             return -15;
         }
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, t, ldt ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, t, ldt ) ) {
         return -10;
     }
     if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, n, z, ldz ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, z, ldz ) ) {
             return -17;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_shgeqz_work( matrix_order, job, compq, compz, n, ilo, ihi, h,
+    info = LAPACKE_shgeqz_work( matrix_layout, job, compq, compz, n, ilo, ihi, h,
                                 ldh, t, ldt, alphar, alphai, beta, q, ldq, z,
                                 ldz, &work_query, lwork );
     if( info != 0 ) {
@@ -81,7 +81,7 @@ lapack_int LAPACKE_shgeqz( int matrix_order, char job, char compq, char compz,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_shgeqz_work( matrix_order, job, compq, compz, n, ilo, ihi, h,
+    info = LAPACKE_shgeqz_work( matrix_layout, job, compq, compz, n, ilo, ihi, h,
                                 ldh, t, ldt, alphar, alphai, beta, q, ldq, z,
                                 ldz, work, lwork );
     /* Release memory and exit */

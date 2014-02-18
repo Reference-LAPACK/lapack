@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zgesvd_work( int matrix_order, char jobu, char jobvt,
+lapack_int LAPACKE_zgesvd_work( int matrix_layout, char jobu, char jobvt,
                                 lapack_int m, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 double* s, lapack_complex_double* u,
@@ -42,14 +42,14 @@ lapack_int LAPACKE_zgesvd_work( int matrix_order, char jobu, char jobvt,
                                 lapack_int lwork, double* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zgesvd( &jobu, &jobvt, &m, &n, a, &lda, s, u, &ldu, vt, &ldvt,
                        work, &lwork, rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int nrows_u = ( LAPACKE_lsame( jobu, 'a' ) ||
                              LAPACKE_lsame( jobu, 's' ) ) ? m : 1;
         lapack_int ncols_u = LAPACKE_lsame( jobu, 'a' ) ? m :
@@ -110,7 +110,7 @@ lapack_int LAPACKE_zgesvd_work( int matrix_order, char jobu, char jobvt,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_order, m, n, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zgesvd( &jobu, &jobvt, &m, &n, a_t, &lda_t, s, u_t, &ldu_t, vt_t,
                        &ldvt_t, work, &lwork, rwork, &info );

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zupmtr_work( int matrix_order, char side, char uplo,
+lapack_int LAPACKE_zupmtr_work( int matrix_layout, char side, char uplo,
                                 char trans, lapack_int m, lapack_int n,
                                 const lapack_complex_double* ap,
                                 const lapack_complex_double* tau,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_zupmtr_work( int matrix_order, char side, char uplo,
                                 lapack_complex_double* work )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zupmtr( &side, &uplo, &trans, &m, &n, ap, tau, c, &ldc, work,
                        &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int r = LAPACKE_lsame( side, 'l' ) ? m : n;
         lapack_int ldc_t = MAX(1,m);
         lapack_complex_double* c_t = NULL;
@@ -74,8 +74,8 @@ lapack_int LAPACKE_zupmtr_work( int matrix_order, char side, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_order, m, n, c, ldc, c_t, ldc_t );
-        LAPACKE_zpp_trans( matrix_order, uplo, r, ap, ap_t );
+        LAPACKE_zge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        LAPACKE_zpp_trans( matrix_layout, uplo, r, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zupmtr( &side, &uplo, &trans, &m, &n, ap_t, tau, c_t, &ldc_t,
                        work, &info );

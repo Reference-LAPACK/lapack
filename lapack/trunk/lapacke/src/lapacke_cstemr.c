@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cstemr( int matrix_order, char jobz, char range,
+lapack_int LAPACKE_cstemr( int matrix_layout, char jobz, char range,
                            lapack_int n, float* d, float* e, float vl, float vu,
                            lapack_int il, lapack_int iu, lapack_int* m,
                            float* w, lapack_complex_float* z, lapack_int ldz,
@@ -47,7 +47,7 @@ lapack_int LAPACKE_cstemr( int matrix_order, char jobz, char range,
     float* work = NULL;
     lapack_int iwork_query;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_cstemr", -1 );
         return -1;
     }
@@ -67,7 +67,7 @@ lapack_int LAPACKE_cstemr( int matrix_order, char jobz, char range,
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_cstemr_work( matrix_order, jobz, range, n, d, e, vl, vu, il,
+    info = LAPACKE_cstemr_work( matrix_layout, jobz, range, n, d, e, vl, vu, il,
                                 iu, m, w, z, ldz, nzc, isuppz, tryrac,
                                 &work_query, lwork, &iwork_query, liwork );
     if( info != 0 ) {
@@ -87,7 +87,7 @@ lapack_int LAPACKE_cstemr( int matrix_order, char jobz, char range,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cstemr_work( matrix_order, jobz, range, n, d, e, vl, vu, il,
+    info = LAPACKE_cstemr_work( matrix_layout, jobz, range, n, d, e, vl, vu, il,
                                 iu, m, w, z, ldz, nzc, isuppz, tryrac, work,
                                 lwork, iwork, liwork );
     /* Release memory and exit */

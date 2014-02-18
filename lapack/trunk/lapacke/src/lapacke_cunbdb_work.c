@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cunbdb_work( int matrix_order, char trans, char signs,
+lapack_int LAPACKE_cunbdb_work( int matrix_layout, char trans, char signs,
                                 lapack_int m, lapack_int p, lapack_int q,
                                 lapack_complex_float* x11, lapack_int ldx11,
                                 lapack_complex_float* x12, lapack_int ldx12,
@@ -47,7 +47,7 @@ lapack_int LAPACKE_cunbdb_work( int matrix_order, char trans, char signs,
                                 lapack_complex_float* work, lapack_int lwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_cunbdb( &trans, &signs, &m, &p, &q, x11, &ldx11, x12, &ldx12,
                        x21, &ldx21, x22, &ldx22, theta, phi, taup1, taup2,
@@ -55,7 +55,7 @@ lapack_int LAPACKE_cunbdb_work( int matrix_order, char trans, char signs,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int nrows_x11 = ( LAPACKE_lsame( trans, 'n' ) ? p : q);
         lapack_int nrows_x12 = ( LAPACKE_lsame( trans, 'n' ) ? p : m-q);
         lapack_int nrows_x21 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : q);
@@ -124,13 +124,13 @@ lapack_int LAPACKE_cunbdb_work( int matrix_order, char trans, char signs,
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, nrows_x11, q, x11, ldx11, x11_t,
+        LAPACKE_cge_trans( matrix_layout, nrows_x11, q, x11, ldx11, x11_t,
                            ldx11_t );
-        LAPACKE_cge_trans( matrix_order, nrows_x12, m-q, x12, ldx12, x12_t,
+        LAPACKE_cge_trans( matrix_layout, nrows_x12, m-q, x12, ldx12, x12_t,
                            ldx12_t );
-        LAPACKE_cge_trans( matrix_order, nrows_x21, q, x21, ldx21, x21_t,
+        LAPACKE_cge_trans( matrix_layout, nrows_x21, q, x21, ldx21, x21_t,
                            ldx21_t );
-        LAPACKE_cge_trans( matrix_order, nrows_x22, m-q, x22, ldx22, x22_t,
+        LAPACKE_cge_trans( matrix_layout, nrows_x22, m-q, x22, ldx22, x22_t,
                            ldx22_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cunbdb( &trans, &signs, &m, &p, &q, x11_t, &ldx11_t, x12_t,

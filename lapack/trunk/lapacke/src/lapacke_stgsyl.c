@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stgsyl( int matrix_order, char trans, lapack_int ijob,
+lapack_int LAPACKE_stgsyl( int matrix_layout, char trans, lapack_int ijob,
                            lapack_int m, lapack_int n, const float* a,
                            lapack_int lda, const float* b, lapack_int ldb,
                            float* c, lapack_int ldc, const float* d,
@@ -45,28 +45,28 @@ lapack_int LAPACKE_stgsyl( int matrix_order, char trans, lapack_int ijob,
     lapack_int* iwork = NULL;
     float* work = NULL;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_stgsyl", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, m, m, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, m, m, a, lda ) ) {
         return -6;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, b, ldb ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, b, ldb ) ) {
         return -8;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, m, n, c, ldc ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, m, n, c, ldc ) ) {
         return -10;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, m, m, d, ldd ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, m, m, d, ldd ) ) {
         return -12;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, e, lde ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, e, lde ) ) {
         return -14;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, m, n, f, ldf ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, m, n, f, ldf ) ) {
         return -16;
     }
 #endif
@@ -77,7 +77,7 @@ lapack_int LAPACKE_stgsyl( int matrix_order, char trans, lapack_int ijob,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_stgsyl_work( matrix_order, trans, ijob, m, n, a, lda, b, ldb,
+    info = LAPACKE_stgsyl_work( matrix_layout, trans, ijob, m, n, a, lda, b, ldb,
                                 c, ldc, d, ldd, e, lde, f, ldf, scale, dif,
                                 &work_query, lwork, iwork );
     if( info != 0 ) {
@@ -91,7 +91,7 @@ lapack_int LAPACKE_stgsyl( int matrix_order, char trans, lapack_int ijob,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_stgsyl_work( matrix_order, trans, ijob, m, n, a, lda, b, ldb,
+    info = LAPACKE_stgsyl_work( matrix_layout, trans, ijob, m, n, a, lda, b, ldb,
                                 c, ldc, d, ldd, e, lde, f, ldf, scale, dif,
                                 work, lwork, iwork );
     /* Release memory and exit */

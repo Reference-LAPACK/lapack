@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chpevd_work( int matrix_order, char jobz, char uplo,
+lapack_int LAPACKE_chpevd_work( int matrix_layout, char jobz, char uplo,
                                 lapack_int n, lapack_complex_float* ap,
                                 float* w, lapack_complex_float* z,
                                 lapack_int ldz, lapack_complex_float* work,
@@ -42,14 +42,14 @@ lapack_int LAPACKE_chpevd_work( int matrix_order, char jobz, char uplo,
                                 lapack_int liwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_chpevd( &jobz, &uplo, &n, ap, w, z, &ldz, work, &lwork, rwork,
                        &lrwork, iwork, &liwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldz_t = MAX(1,n);
         lapack_complex_float* z_t = NULL;
         lapack_complex_float* ap_t = NULL;
@@ -83,7 +83,7 @@ lapack_int LAPACKE_chpevd_work( int matrix_order, char jobz, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_chp_trans( matrix_order, uplo, n, ap, ap_t );
+        LAPACKE_chp_trans( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_chpevd( &jobz, &uplo, &n, ap_t, w, z_t, &ldz_t, work, &lwork,
                        rwork, &lrwork, iwork, &liwork, &info );

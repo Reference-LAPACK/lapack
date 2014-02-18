@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ctgsyl_work( int matrix_order, char trans, lapack_int ijob,
+lapack_int LAPACKE_ctgsyl_work( int matrix_layout, char trans, lapack_int ijob,
                                 lapack_int m, lapack_int n,
                                 const lapack_complex_float* a, lapack_int lda,
                                 const lapack_complex_float* b, lapack_int ldb,
@@ -46,7 +46,7 @@ lapack_int LAPACKE_ctgsyl_work( int matrix_order, char trans, lapack_int ijob,
                                 lapack_int* iwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ctgsyl( &trans, &ijob, &m, &n, a, &lda, b, &ldb, c, &ldc, d,
                        &ldd, e, &lde, f, &ldf, scale, dif, work, &lwork, iwork,
@@ -54,7 +54,7 @@ lapack_int LAPACKE_ctgsyl_work( int matrix_order, char trans, lapack_int ijob,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldc_t = MAX(1,m);
@@ -143,12 +143,12 @@ lapack_int LAPACKE_ctgsyl_work( int matrix_order, char trans, lapack_int ijob,
             goto exit_level_5;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, m, m, a, lda, a_t, lda_t );
-        LAPACKE_cge_trans( matrix_order, n, n, b, ldb, b_t, ldb_t );
-        LAPACKE_cge_trans( matrix_order, m, n, c, ldc, c_t, ldc_t );
-        LAPACKE_cge_trans( matrix_order, m, m, d, ldd, d_t, ldd_t );
-        LAPACKE_cge_trans( matrix_order, n, n, e, lde, e_t, lde_t );
-        LAPACKE_cge_trans( matrix_order, m, n, f, ldf, f_t, ldf_t );
+        LAPACKE_cge_trans( matrix_layout, m, m, a, lda, a_t, lda_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_cge_trans( matrix_layout, m, n, c, ldc, c_t, ldc_t );
+        LAPACKE_cge_trans( matrix_layout, m, m, d, ldd, d_t, ldd_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, e, lde, e_t, lde_t );
+        LAPACKE_cge_trans( matrix_layout, m, n, f, ldf, f_t, ldf_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ctgsyl( &trans, &ijob, &m, &n, a_t, &lda_t, b_t, &ldb_t, c_t,
                        &ldc_t, d_t, &ldd_t, e_t, &lde_t, f_t, &ldf_t, scale,

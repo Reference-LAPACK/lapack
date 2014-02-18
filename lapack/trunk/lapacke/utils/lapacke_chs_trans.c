@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -37,17 +37,17 @@
  * layout or vice versa.
  */
 
-void LAPACKE_chs_trans( int matrix_order, lapack_int n,
+void LAPACKE_chs_trans( int matrix_layout, lapack_int n,
                         const lapack_complex_float *in, lapack_int ldin,
                         lapack_complex_float *out, lapack_int ldout )
 {
     if( in == NULL || out == NULL ) return;
 
     /* Convert subdiagonal first */
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         LAPACKE_cge_trans( LAPACK_COL_MAJOR, 1, n-1, &in[1], ldin+1,
                            &out[ldout], ldout+1 );
-    } else if ( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if ( matrix_layout == LAPACK_ROW_MAJOR ) {
         LAPACKE_cge_trans( LAPACK_ROW_MAJOR, n-1, 1, &in[ldin], ldin+1,
                            &out[1], ldout+1 );
     } else {
@@ -55,5 +55,5 @@ void LAPACKE_chs_trans( int matrix_order, lapack_int n,
     }
 
     /* Convert upper triangular. */
-    LAPACKE_ctr_trans( matrix_order, 'u', 'n', n, in, ldin, out, ldout);
+    LAPACKE_ctr_trans( matrix_layout, 'u', 'n', n, in, ldin, out, ldout);
 }

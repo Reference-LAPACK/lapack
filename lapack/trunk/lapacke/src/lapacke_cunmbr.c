@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cunmbr( int matrix_order, char vect, char side, char trans,
+lapack_int LAPACKE_cunmbr( int matrix_layout, char vect, char side, char trans,
                            lapack_int m, lapack_int n, lapack_int k,
                            const lapack_complex_float* a, lapack_int lda,
                            const lapack_complex_float* tau,
@@ -44,7 +44,7 @@ lapack_int LAPACKE_cunmbr( int matrix_order, char vect, char side, char trans,
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
     lapack_int nq, r;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_cunmbr", -1 );
         return -1;
     }
@@ -52,10 +52,10 @@ lapack_int LAPACKE_cunmbr( int matrix_order, char vect, char side, char trans,
     /* Optionally check input matrices for NaNs */
     nq = LAPACKE_lsame( side, 'l' ) ? m : n;
     r = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);
-    if( LAPACKE_cge_nancheck( matrix_order, r, MIN(nq,k), a, lda ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, r, MIN(nq,k), a, lda ) ) {
         return -8;
     }
-    if( LAPACKE_cge_nancheck( matrix_order, m, n, c, ldc ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, m, n, c, ldc ) ) {
         return -11;
     }
     if( LAPACKE_c_nancheck( MIN(nq,k), tau, 1 ) ) {
@@ -63,7 +63,7 @@ lapack_int LAPACKE_cunmbr( int matrix_order, char vect, char side, char trans,
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_cunmbr_work( matrix_order, vect, side, trans, m, n, k, a,
+    info = LAPACKE_cunmbr_work( matrix_layout, vect, side, trans, m, n, k, a,
                                 lda, tau, c, ldc, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -77,7 +77,7 @@ lapack_int LAPACKE_cunmbr( int matrix_order, char vect, char side, char trans,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cunmbr_work( matrix_order, vect, side, trans, m, n, k, a,
+    info = LAPACKE_cunmbr_work( matrix_layout, vect, side, trans, m, n, k, a,
                                 lda, tau, c, ldc, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

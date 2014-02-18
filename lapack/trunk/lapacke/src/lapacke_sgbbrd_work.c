@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgbbrd_work( int matrix_order, char vect, lapack_int m,
+lapack_int LAPACKE_sgbbrd_work( int matrix_layout, char vect, lapack_int m,
                                 lapack_int n, lapack_int ncc, lapack_int kl,
                                 lapack_int ku, float* ab, lapack_int ldab,
                                 float* d, float* e, float* q, lapack_int ldq,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_sgbbrd_work( int matrix_order, char vect, lapack_int m,
                                 lapack_int ldc, float* work )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_sgbbrd( &vect, &m, &n, &ncc, &kl, &ku, ab, &ldab, d, e, q, &ldq,
                        pt, &ldpt, c, &ldc, work, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,kl+ku+1);
         lapack_int ldc_t = MAX(1,m);
         lapack_int ldpt_t = MAX(1,n);
@@ -106,9 +106,9 @@ lapack_int LAPACKE_sgbbrd_work( int matrix_order, char vect, lapack_int m,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_sgb_trans( matrix_order, m, n, kl, ku, ab, ldab, ab_t, ldab_t );
+        LAPACKE_sgb_trans( matrix_layout, m, n, kl, ku, ab, ldab, ab_t, ldab_t );
         if( ncc != 0 ) {
-            LAPACKE_sge_trans( matrix_order, m, ncc, c, ldc, c_t, ldc_t );
+            LAPACKE_sge_trans( matrix_layout, m, ncc, c, ldc, c_t, ldc_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_sgbbrd( &vect, &m, &n, &ncc, &kl, &ku, ab_t, &ldab_t, d, e, q_t,

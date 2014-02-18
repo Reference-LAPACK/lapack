@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zposvx( int matrix_order, char fact, char uplo, lapack_int n,
+lapack_int LAPACKE_zposvx( int matrix_layout, char fact, char uplo, lapack_int n,
                            lapack_int nrhs, lapack_complex_double* a,
                            lapack_int lda, lapack_complex_double* af,
                            lapack_int ldaf, char* equed, double* s,
@@ -44,21 +44,21 @@ lapack_int LAPACKE_zposvx( int matrix_order, char fact, char uplo, lapack_int n,
     lapack_int info = 0;
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zposvx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_zpo_nancheck( matrix_order, uplo, n, a, lda ) ) {
+    if( LAPACKE_zpo_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -6;
     }
     if( LAPACKE_lsame( fact, 'f' ) ) {
-        if( LAPACKE_zpo_nancheck( matrix_order, uplo, n, af, ldaf ) ) {
+        if( LAPACKE_zpo_nancheck( matrix_layout, uplo, n, af, ldaf ) ) {
             return -8;
         }
     }
-    if( LAPACKE_zge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -12;
     }
     if( LAPACKE_lsame( fact, 'f' ) && LAPACKE_lsame( *equed, 'y' ) ) {
@@ -80,7 +80,7 @@ lapack_int LAPACKE_zposvx( int matrix_order, char fact, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zposvx_work( matrix_order, fact, uplo, n, nrhs, a, lda, af,
+    info = LAPACKE_zposvx_work( matrix_layout, fact, uplo, n, nrhs, a, lda, af,
                                 ldaf, equed, s, b, ldb, x, ldx, rcond, ferr,
                                 berr, work, rwork );
     /* Release memory and exit */

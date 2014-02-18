@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zlaswp( int matrix_order, lapack_int n,
+lapack_int LAPACKE_zlaswp( int matrix_layout, lapack_int n,
                            lapack_complex_double* a, lapack_int lda,
                            lapack_int k1, lapack_int k2, const lapack_int* ipiv,
                            lapack_int incx )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zlaswp", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_zge_nancheck( matrix_order, lda, n, a, lda ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, lda, n, a, lda ) ) {
         return -3;
     }
 #endif
-    return LAPACKE_zlaswp_work( matrix_order, n, a, lda, k1, k2, ipiv, incx );
+    return LAPACKE_zlaswp_work( matrix_layout, n, a, lda, k1, k2, ipiv, incx );
 }

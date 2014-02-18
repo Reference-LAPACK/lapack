@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_claset( int matrix_order, char uplo, lapack_int m,
+lapack_int LAPACKE_claset( int matrix_layout, char uplo, lapack_int m,
                            lapack_int n, lapack_complex_float alpha,
                            lapack_complex_float beta, lapack_complex_float* a,
                            lapack_int lda )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_claset", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_cge_nancheck( matrix_order, m, n, a, lda ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -7;
     }
     if( LAPACKE_c_nancheck( 1, &alpha, 1 ) ) {
@@ -54,5 +54,5 @@ lapack_int LAPACKE_claset( int matrix_order, char uplo, lapack_int m,
         return -6;
     }
 #endif
-    return LAPACKE_claset_work( matrix_order, uplo, m, n, alpha, beta, a, lda );
+    return LAPACKE_claset_work( matrix_layout, uplo, m, n, alpha, beta, a, lda );
 }

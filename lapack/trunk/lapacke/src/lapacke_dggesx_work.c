@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dggesx_work( int matrix_order, char jobvsl, char jobvsr,
+lapack_int LAPACKE_dggesx_work( int matrix_layout, char jobvsl, char jobvsr,
                                 char sort, LAPACK_D_SELECT3 selctg, char sense,
                                 lapack_int n, double* a, lapack_int lda,
                                 double* b, lapack_int ldb, lapack_int* sdim,
@@ -45,7 +45,7 @@ lapack_int LAPACKE_dggesx_work( int matrix_order, char jobvsl, char jobvsr,
                                 lapack_logical* bwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dggesx( &jobvsl, &jobvsr, &sort, selctg, &sense, &n, a, &lda, b,
                        &ldb, sdim, alphar, alphai, beta, vsl, &ldvsl, vsr,
@@ -54,7 +54,7 @@ lapack_int LAPACKE_dggesx_work( int matrix_order, char jobvsl, char jobvsr,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldvsl_t = MAX(1,n);
@@ -120,8 +120,8 @@ lapack_int LAPACKE_dggesx_work( int matrix_order, char jobvsl, char jobvsr,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_dge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
-        LAPACKE_dge_trans( matrix_order, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dggesx( &jobvsl, &jobvsr, &sort, selctg, &sense, &n, a_t, &lda_t,
                        b_t, &ldb_t, sdim, alphar, alphai, beta, vsl_t, &ldvsl_t,

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,12 +33,12 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dstev( int matrix_order, char jobz, lapack_int n, double* d,
+lapack_int LAPACKE_dstev( int matrix_layout, char jobz, lapack_int n, double* d,
                           double* e, double* z, lapack_int ldz )
 {
     lapack_int info = 0;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dstev", -1 );
         return -1;
     }
@@ -60,7 +60,7 @@ lapack_int LAPACKE_dstev( int matrix_order, char jobz, lapack_int n, double* d,
         }
     }
     /* Call middle-level interface */
-    info = LAPACKE_dstev_work( matrix_order, jobz, n, d, e, z, ldz, work );
+    info = LAPACKE_dstev_work( matrix_layout, jobz, n, d, e, z, ldz, work );
     /* Release memory and exit */
     if( LAPACKE_lsame( jobz, 'v' ) ) {
         LAPACKE_free( work );

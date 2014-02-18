@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dbdsdc( int matrix_order, char uplo, char compq,
+lapack_int LAPACKE_dbdsdc( int matrix_layout, char uplo, char compq,
                            lapack_int n, double* d, double* e, double* u,
                            lapack_int ldu, double* vt, lapack_int ldvt,
                            double* q, lapack_int* iq )
@@ -43,7 +43,7 @@ lapack_int LAPACKE_dbdsdc( int matrix_order, char uplo, char compq,
     size_t lwork;
     lapack_int* iwork = NULL;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dbdsdc", -1 );
         return -1;
     }
@@ -78,7 +78,7 @@ lapack_int LAPACKE_dbdsdc( int matrix_order, char uplo, char compq,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dbdsdc_work( matrix_order, uplo, compq, n, d, e, u, ldu, vt,
+    info = LAPACKE_dbdsdc_work( matrix_layout, uplo, compq, n, d, e, u, ldu, vt,
                                 ldvt, q, iq, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );

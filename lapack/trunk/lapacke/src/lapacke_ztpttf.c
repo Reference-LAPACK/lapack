@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,11 +33,11 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztpttf( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_ztpttf( int matrix_layout, char transr, char uplo,
                            lapack_int n, const lapack_complex_double* ap,
                            lapack_complex_double* arf )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_ztpttf", -1 );
         return -1;
     }
@@ -47,5 +47,5 @@ lapack_int LAPACKE_ztpttf( int matrix_order, char transr, char uplo,
         return -5;
     }
 #endif
-    return LAPACKE_ztpttf_work( matrix_order, transr, uplo, n, ap, arf );
+    return LAPACKE_ztpttf_work( matrix_layout, transr, uplo, n, ap, arf );
 }

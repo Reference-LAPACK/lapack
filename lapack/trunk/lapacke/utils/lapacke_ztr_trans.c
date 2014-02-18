@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,7 @@
  * layout or vice versa.
  */
 
-void LAPACKE_ztr_trans( int matrix_order, char uplo, char diag, lapack_int n,
+void LAPACKE_ztr_trans( int matrix_layout, char uplo, char diag, lapack_int n,
                         const lapack_complex_double *in, lapack_int ldin,
                         lapack_complex_double *out, lapack_int ldout )
 {
@@ -46,11 +46,11 @@ void LAPACKE_ztr_trans( int matrix_order, char uplo, char diag, lapack_int n,
 
     if( in == NULL || out == NULL ) return ;
 
-    colmaj = ( matrix_order == LAPACK_COL_MAJOR );
+    colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
     lower  = LAPACKE_lsame( uplo, 'l' );
     unit   = LAPACKE_lsame( diag, 'u' );
 
-    if( ( !colmaj && ( matrix_order != LAPACK_ROW_MAJOR ) ) ||
+    if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
         ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
         ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgebrd( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgebrd( int matrix_layout, lapack_int m, lapack_int n,
                            lapack_complex_float* a, lapack_int lda, float* d,
                            float* e, lapack_complex_float* tauq,
                            lapack_complex_float* taup )
@@ -42,18 +42,18 @@ lapack_int LAPACKE_cgebrd( int matrix_order, lapack_int m, lapack_int n,
     lapack_int lwork = -1;
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_cgebrd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_cge_nancheck( matrix_order, m, n, a, lda ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -4;
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_cgebrd_work( matrix_order, m, n, a, lda, d, e, tauq, taup,
+    info = LAPACKE_cgebrd_work( matrix_layout, m, n, a, lda, d, e, tauq, taup,
                                 &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -67,7 +67,7 @@ lapack_int LAPACKE_cgebrd( int matrix_order, lapack_int m, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cgebrd_work( matrix_order, m, n, a, lda, d, e, tauq, taup,
+    info = LAPACKE_cgebrd_work( matrix_layout, m, n, a, lda, d, e, tauq, taup,
                                 work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

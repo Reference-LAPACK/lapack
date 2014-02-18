@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgeqp3( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgeqp3( int matrix_layout, lapack_int m, lapack_int n,
                            lapack_complex_float* a, lapack_int lda,
                            lapack_int* jpvt, lapack_complex_float* tau )
 {
@@ -42,13 +42,13 @@ lapack_int LAPACKE_cgeqp3( int matrix_order, lapack_int m, lapack_int n,
     float* rwork = NULL;
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_cgeqp3", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_cge_nancheck( matrix_order, m, n, a, lda ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -4;
     }
 #endif
@@ -59,7 +59,7 @@ lapack_int LAPACKE_cgeqp3( int matrix_order, lapack_int m, lapack_int n,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_cgeqp3_work( matrix_order, m, n, a, lda, jpvt, tau,
+    info = LAPACKE_cgeqp3_work( matrix_layout, m, n, a, lda, jpvt, tau,
                                 &work_query, lwork, rwork );
     if( info != 0 ) {
         goto exit_level_1;
@@ -73,7 +73,7 @@ lapack_int LAPACKE_cgeqp3( int matrix_order, lapack_int m, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cgeqp3_work( matrix_order, m, n, a, lda, jpvt, tau, work,
+    info = LAPACKE_cgeqp3_work( matrix_layout, m, n, a, lda, jpvt, tau, work,
                                 lwork, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stbcon( int matrix_order, char norm, char uplo, char diag,
+lapack_int LAPACKE_stbcon( int matrix_layout, char norm, char uplo, char diag,
                            lapack_int n, lapack_int kd, const float* ab,
                            lapack_int ldab, float* rcond )
 {
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_stbcon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_stb_nancheck( matrix_order, uplo, diag, n, kd, ab, ldab ) ) {
+    if( LAPACKE_stb_nancheck( matrix_layout, uplo, diag, n, kd, ab, ldab ) ) {
         return -7;
     }
 #endif
@@ -62,7 +62,7 @@ lapack_int LAPACKE_stbcon( int matrix_order, char norm, char uplo, char diag,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_stbcon_work( matrix_order, norm, uplo, diag, n, kd, ab, ldab,
+    info = LAPACKE_stbcon_work( matrix_layout, norm, uplo, diag, n, kd, ab, ldab,
                                 rcond, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );

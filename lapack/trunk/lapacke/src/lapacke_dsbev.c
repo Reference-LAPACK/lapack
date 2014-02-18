@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,19 +33,19 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsbev( int matrix_order, char jobz, char uplo, lapack_int n,
+lapack_int LAPACKE_dsbev( int matrix_layout, char jobz, char uplo, lapack_int n,
                           lapack_int kd, double* ab, lapack_int ldab, double* w,
                           double* z, lapack_int ldz )
 {
     lapack_int info = 0;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dsbev", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dsb_nancheck( matrix_order, uplo, n, kd, ab, ldab ) ) {
+    if( LAPACKE_dsb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
         return -6;
     }
 #endif
@@ -56,7 +56,7 @@ lapack_int LAPACKE_dsbev( int matrix_order, char jobz, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsbev_work( matrix_order, jobz, uplo, n, kd, ab, ldab, w, z,
+    info = LAPACKE_dsbev_work( matrix_layout, jobz, uplo, n, kd, ab, ldab, w, z,
                                ldz, work );
     /* Release memory and exit */
     LAPACKE_free( work );

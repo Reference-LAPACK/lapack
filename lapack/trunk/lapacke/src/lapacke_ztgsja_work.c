@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztgsja_work( int matrix_order, char jobu, char jobv,
+lapack_int LAPACKE_ztgsja_work( int matrix_layout, char jobu, char jobv,
                                 char jobq, lapack_int m, lapack_int p,
                                 lapack_int n, lapack_int k, lapack_int l,
                                 lapack_complex_double* a, lapack_int lda,
@@ -46,7 +46,7 @@ lapack_int LAPACKE_ztgsja_work( int matrix_order, char jobu, char jobv,
                                 lapack_int* ncycle )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ztgsja( &jobu, &jobv, &jobq, &m, &p, &n, &k, &l, a, &lda, b,
                        &ldb, &tola, &tolb, alpha, beta, u, &ldu, v, &ldv, q,
@@ -54,7 +54,7 @@ lapack_int LAPACKE_ztgsja_work( int matrix_order, char jobu, char jobv,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
         lapack_int ldb_t = MAX(1,p);
         lapack_int ldq_t = MAX(1,n);
@@ -132,16 +132,16 @@ lapack_int LAPACKE_ztgsja_work( int matrix_order, char jobu, char jobv,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_order, m, n, a, lda, a_t, lda_t );
-        LAPACKE_zge_trans( matrix_order, p, n, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, p, n, b, ldb, b_t, ldb_t );
         if( LAPACKE_lsame( jobu, 'u' ) ) {
-            LAPACKE_zge_trans( matrix_order, m, m, u, ldu, u_t, ldu_t );
+            LAPACKE_zge_trans( matrix_layout, m, m, u, ldu, u_t, ldu_t );
         }
         if( LAPACKE_lsame( jobv, 'v' ) ) {
-            LAPACKE_zge_trans( matrix_order, p, p, v, ldv, v_t, ldv_t );
+            LAPACKE_zge_trans( matrix_layout, p, p, v, ldv, v_t, ldv_t );
         }
         if( LAPACKE_lsame( jobq, 'q' ) ) {
-            LAPACKE_zge_trans( matrix_order, n, n, q, ldq, q_t, ldq_t );
+            LAPACKE_zge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_ztgsja( &jobu, &jobv, &jobq, &m, &p, &n, &k, &l, a_t, &lda_t,

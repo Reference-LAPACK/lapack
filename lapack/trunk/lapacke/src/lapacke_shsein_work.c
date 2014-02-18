@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_shsein_work( int matrix_order, char job, char eigsrc,
+lapack_int LAPACKE_shsein_work( int matrix_layout, char job, char eigsrc,
                                 char initv, lapack_logical* select,
                                 lapack_int n, const float* h, lapack_int ldh,
                                 float* wr, const float* wi, float* vl,
@@ -42,14 +42,14 @@ lapack_int LAPACKE_shsein_work( int matrix_order, char job, char eigsrc,
                                 lapack_int* ifaill, lapack_int* ifailr )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_shsein( &job, &eigsrc, &initv, select, &n, h, &ldh, wr, wi, vl,
                        &ldvl, vr, &ldvr, &mm, m, work, ifaill, ifailr, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldh_t = MAX(1,n);
         lapack_int ldvl_t = MAX(1,n);
         lapack_int ldvr_t = MAX(1,n);
@@ -93,14 +93,14 @@ lapack_int LAPACKE_shsein_work( int matrix_order, char job, char eigsrc,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_order, n, n, h, ldh, h_t, ldh_t );
+        LAPACKE_sge_trans( matrix_layout, n, n, h, ldh, h_t, ldh_t );
         if( ( LAPACKE_lsame( job, 'l' ) || LAPACKE_lsame( job, 'b' ) ) &&
             LAPACKE_lsame( initv, 'v' ) ) {
-            LAPACKE_sge_trans( matrix_order, n, mm, vl, ldvl, vl_t, ldvl_t );
+            LAPACKE_sge_trans( matrix_layout, n, mm, vl, ldvl, vl_t, ldvl_t );
         }
         if( ( LAPACKE_lsame( job, 'r' ) || LAPACKE_lsame( job, 'b' ) ) &&
             LAPACKE_lsame( initv, 'v' ) ) {
-            LAPACKE_sge_trans( matrix_order, n, mm, vr, ldvr, vr_t, ldvr_t );
+            LAPACKE_sge_trans( matrix_layout, n, mm, vr, ldvr, vr_t, ldvr_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_shsein( &job, &eigsrc, &initv, select, &n, h_t, &ldh_t, wr, wi,

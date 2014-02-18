@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zcposv_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zcposv_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int nrhs, lapack_complex_double* a,
                                 lapack_int lda, lapack_complex_double* b,
                                 lapack_int ldb, lapack_complex_double* x,
@@ -42,14 +42,14 @@ lapack_int LAPACKE_zcposv_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_int* iter )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zcposv( &uplo, &n, &nrhs, a, &lda, b, &ldb, x, &ldx, work, swork,
                        rwork, iter, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldx_t = MAX(1,n);
@@ -94,8 +94,8 @@ lapack_int LAPACKE_zcposv_work( int matrix_order, char uplo, lapack_int n,
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        LAPACKE_zpo_trans( matrix_order, uplo, n, a, lda, a_t, lda_t );
-        LAPACKE_zge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zpo_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zcposv( &uplo, &n, &nrhs, a_t, &lda_t, b_t, &ldb_t, x_t, &ldx_t,
                        work, swork, rwork, iter, &info );

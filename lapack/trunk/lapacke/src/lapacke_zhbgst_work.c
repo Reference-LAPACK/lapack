@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhbgst_work( int matrix_order, char vect, char uplo,
+lapack_int LAPACKE_zhbgst_work( int matrix_layout, char vect, char uplo,
                                 lapack_int n, lapack_int ka, lapack_int kb,
                                 lapack_complex_double* ab, lapack_int ldab,
                                 const lapack_complex_double* bb,
@@ -42,14 +42,14 @@ lapack_int LAPACKE_zhbgst_work( int matrix_order, char vect, char uplo,
                                 double* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zhbgst( &vect, &uplo, &n, &ka, &kb, ab, &ldab, bb, &ldbb, x,
                        &ldx, work, rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,ka+1);
         lapack_int ldbb_t = MAX(1,kb+1);
         lapack_int ldx_t = MAX(1,n);
@@ -95,8 +95,8 @@ lapack_int LAPACKE_zhbgst_work( int matrix_order, char vect, char uplo,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_zhb_trans( matrix_order, uplo, n, ka, ab, ldab, ab_t, ldab_t );
-        LAPACKE_zhb_trans( matrix_order, uplo, n, kb, bb, ldbb, bb_t, ldbb_t );
+        LAPACKE_zhb_trans( matrix_layout, uplo, n, ka, ab, ldab, ab_t, ldab_t );
+        LAPACKE_zhb_trans( matrix_layout, uplo, n, kb, bb, ldbb, bb_t, ldbb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zhbgst( &vect, &uplo, &n, &ka, &kb, ab_t, &ldab_t, bb_t, &ldbb_t,
                        x_t, &ldx_t, work, rwork, &info );

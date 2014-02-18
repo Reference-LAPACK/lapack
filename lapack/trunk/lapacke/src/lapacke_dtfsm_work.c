@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtfsm_work( int matrix_order, char transr, char side,
+lapack_int LAPACKE_dtfsm_work( int matrix_layout, char transr, char side,
                                char uplo, char trans, char diag, lapack_int m,
                                lapack_int n, double alpha, const double* a,
                                double* b, lapack_int ldb )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dtfsm( &transr, &side, &uplo, &trans, &diag, &m, &n, &alpha, a,
                       b, &ldb );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldb_t = MAX(1,m);
         double* b_t = NULL;
         double* a_t = NULL;
@@ -73,10 +73,10 @@ lapack_int LAPACKE_dtfsm_work( int matrix_order, char transr, char side,
         }
         /* Transpose input matrices */
         if( IS_D_NONZERO(alpha) ) {
-            LAPACKE_dge_trans( matrix_order, m, n, b, ldb, b_t, ldb_t );
+            LAPACKE_dge_trans( matrix_layout, m, n, b, ldb, b_t, ldb_t );
         }
         if( IS_D_NONZERO(alpha) ) {
-            LAPACKE_dtf_trans( matrix_order, transr, uplo, diag, n, a, a_t );
+            LAPACKE_dtf_trans( matrix_layout, transr, uplo, diag, n, a, a_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_dtfsm( &transr, &side, &uplo, &trans, &diag, &m, &n, &alpha, a_t,

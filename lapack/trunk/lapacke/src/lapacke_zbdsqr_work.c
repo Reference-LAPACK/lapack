@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zbdsqr_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zbdsqr_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int ncvt, lapack_int nru, lapack_int ncc,
                                 double* d, double* e, lapack_complex_double* vt,
                                 lapack_int ldvt, lapack_complex_double* u,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_zbdsqr_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_int ldc, double* work )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zbdsqr( &uplo, &n, &ncvt, &nru, &ncc, d, e, vt, &ldvt, u, &ldu,
                        c, &ldc, work, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldc_t = MAX(1,n);
         lapack_int ldu_t = MAX(1,nru);
         lapack_int ldvt_t = MAX(1,n);
@@ -101,13 +101,13 @@ lapack_int LAPACKE_zbdsqr_work( int matrix_order, char uplo, lapack_int n,
         }
         /* Transpose input matrices */
         if( ncvt != 0 ) {
-            LAPACKE_zge_trans( matrix_order, n, ncvt, vt, ldvt, vt_t, ldvt_t );
+            LAPACKE_zge_trans( matrix_layout, n, ncvt, vt, ldvt, vt_t, ldvt_t );
         }
         if( nru != 0 ) {
-            LAPACKE_zge_trans( matrix_order, nru, n, u, ldu, u_t, ldu_t );
+            LAPACKE_zge_trans( matrix_layout, nru, n, u, ldu, u_t, ldu_t );
         }
         if( ncc != 0 ) {
-            LAPACKE_zge_trans( matrix_order, n, ncc, c, ldc, c_t, ldc_t );
+            LAPACKE_zge_trans( matrix_layout, n, ncc, c, ldc, c_t, ldc_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_zbdsqr( &uplo, &n, &ncvt, &nru, &ncc, d, e, vt_t, &ldvt_t, u_t,

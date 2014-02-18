@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,19 +33,19 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgeequ_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_sgeequ_work( int matrix_layout, lapack_int m, lapack_int n,
                                 const float* a, lapack_int lda, float* r,
                                 float* c, float* rowcnd, float* colcnd,
                                 float* amax )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_sgeequ( &m, &n, a, &lda, r, c, rowcnd, colcnd, amax, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
         float* a_t = NULL;
         /* Check leading dimension(s) */
@@ -61,7 +61,7 @@ lapack_int LAPACKE_sgeequ_work( int matrix_order, lapack_int m, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_order, m, n, a, lda, a_t, lda_t );
+        LAPACKE_sge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sgeequ( &m, &n, a_t, &lda_t, r, c, rowcnd, colcnd, amax, &info );
         if( info < 0 ) {

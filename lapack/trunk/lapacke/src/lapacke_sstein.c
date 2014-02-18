@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sstein( int matrix_order, lapack_int n, const float* d,
+lapack_int LAPACKE_sstein( int matrix_layout, lapack_int n, const float* d,
                            const float* e, lapack_int m, const float* w,
                            const lapack_int* iblock, const lapack_int* isplit,
                            float* z, lapack_int ldz, lapack_int* ifailv )
@@ -41,7 +41,7 @@ lapack_int LAPACKE_sstein( int matrix_order, lapack_int n, const float* d,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sstein", -1 );
         return -1;
     }
@@ -69,7 +69,7 @@ lapack_int LAPACKE_sstein( int matrix_order, lapack_int n, const float* d,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sstein_work( matrix_order, n, d, e, m, w, iblock, isplit, z,
+    info = LAPACKE_sstein_work( matrix_layout, n, d, e, m, w, iblock, isplit, z,
                                 ldz, work, iwork, ifailv );
     /* Release memory and exit */
     LAPACKE_free( work );

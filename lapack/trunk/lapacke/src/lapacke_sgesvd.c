@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgesvd( int matrix_order, char jobu, char jobvt,
+lapack_int LAPACKE_sgesvd( int matrix_layout, char jobu, char jobvt,
                            lapack_int m, lapack_int n, float* a, lapack_int lda,
                            float* s, float* u, lapack_int ldu, float* vt,
                            lapack_int ldvt, float* superb )
@@ -43,18 +43,18 @@ lapack_int LAPACKE_sgesvd( int matrix_order, char jobu, char jobvt,
     float* work = NULL;
     float work_query;
     lapack_int i;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sgesvd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, m, n, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -6;
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_sgesvd_work( matrix_order, jobu, jobvt, m, n, a, lda, s, u,
+    info = LAPACKE_sgesvd_work( matrix_layout, jobu, jobvt, m, n, a, lda, s, u,
                                 ldu, vt, ldvt, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -67,7 +67,7 @@ lapack_int LAPACKE_sgesvd( int matrix_order, char jobu, char jobvt,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sgesvd_work( matrix_order, jobu, jobvt, m, n, a, lda, s, u,
+    info = LAPACKE_sgesvd_work( matrix_layout, jobu, jobvt, m, n, a, lda, s, u,
                                 ldu, vt, ldvt, work, lwork );
     /* Backup significant data from working array(s) */
     for( i=0; i<MIN(m,n)-1; i++ ) {

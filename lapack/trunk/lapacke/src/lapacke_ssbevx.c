@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssbevx( int matrix_order, char jobz, char range, char uplo,
+lapack_int LAPACKE_ssbevx( int matrix_layout, char jobz, char range, char uplo,
                            lapack_int n, lapack_int kd, float* ab,
                            lapack_int ldab, float* q, lapack_int ldq, float vl,
                            float vu, lapack_int il, lapack_int iu, float abstol,
@@ -43,13 +43,13 @@ lapack_int LAPACKE_ssbevx( int matrix_order, char jobz, char range, char uplo,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_ssbevx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_ssb_nancheck( matrix_order, uplo, n, kd, ab, ldab ) ) {
+    if( LAPACKE_ssb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
         return -7;
     }
     if( LAPACKE_s_nancheck( 1, &abstol, 1 ) ) {
@@ -78,7 +78,7 @@ lapack_int LAPACKE_ssbevx( int matrix_order, char jobz, char range, char uplo,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ssbevx_work( matrix_order, jobz, range, uplo, n, kd, ab,
+    info = LAPACKE_ssbevx_work( matrix_layout, jobz, range, uplo, n, kd, ab,
                                 ldab, q, ldq, vl, vu, il, iu, abstol, m, w, z,
                                 ldz, work, iwork, ifail );
     /* Release memory and exit */

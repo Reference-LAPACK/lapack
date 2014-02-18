@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgtrfs( int matrix_order, char trans, lapack_int n,
+lapack_int LAPACKE_dgtrfs( int matrix_layout, char trans, lapack_int n,
                            lapack_int nrhs, const double* dl, const double* d,
                            const double* du, const double* dlf,
                            const double* df, const double* duf,
@@ -44,13 +44,13 @@ lapack_int LAPACKE_dgtrfs( int matrix_order, char trans, lapack_int n,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgtrfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -13;
     }
     if( LAPACKE_d_nancheck( n, d, 1 ) ) {
@@ -74,7 +74,7 @@ lapack_int LAPACKE_dgtrfs( int matrix_order, char trans, lapack_int n,
     if( LAPACKE_d_nancheck( n-1, duf, 1 ) ) {
         return -10;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, x, ldx ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
         return -15;
     }
 #endif
@@ -90,7 +90,7 @@ lapack_int LAPACKE_dgtrfs( int matrix_order, char trans, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgtrfs_work( matrix_order, trans, n, nrhs, dl, d, du, dlf,
+    info = LAPACKE_dgtrfs_work( matrix_layout, trans, n, nrhs, dl, d, du, dlf,
                                 df, duf, du2, ipiv, b, ldb, x, ldx, ferr, berr,
                                 work, iwork );
     /* Release memory and exit */

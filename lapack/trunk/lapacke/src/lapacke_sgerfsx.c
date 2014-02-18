@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgerfsx( int matrix_order, char trans, char equed,
+lapack_int LAPACKE_sgerfsx( int matrix_layout, char trans, char equed,
                             lapack_int n, lapack_int nrhs, const float* a,
                             lapack_int lda, const float* af, lapack_int ldaf,
                             const lapack_int* ipiv, const float* r,
@@ -46,19 +46,19 @@ lapack_int LAPACKE_sgerfsx( int matrix_order, char trans, char equed,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sgerfsx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -6;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, af, ldaf ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, af, ldaf ) ) {
         return -8;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -13;
     }
     if( LAPACKE_lsame( equed, 'b' ) || LAPACKE_lsame( equed, 'c' ) ) {
@@ -76,7 +76,7 @@ lapack_int LAPACKE_sgerfsx( int matrix_order, char trans, char equed,
             return -11;
         }
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, nrhs, x, ldx ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
         return -15;
     }
 #endif
@@ -92,7 +92,7 @@ lapack_int LAPACKE_sgerfsx( int matrix_order, char trans, char equed,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sgerfsx_work( matrix_order, trans, equed, n, nrhs, a, lda,
+    info = LAPACKE_sgerfsx_work( matrix_layout, trans, equed, n, nrhs, a, lda,
                                  af, ldaf, ipiv, r, c, b, ldb, x, ldx, rcond,
                                  berr, n_err_bnds, err_bnds_norm, err_bnds_comp,
                                  nparams, params, work, iwork );

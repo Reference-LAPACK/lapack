@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,21 +33,21 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cggbak_work( int matrix_order, char job, char side,
+lapack_int LAPACKE_cggbak_work( int matrix_layout, char job, char side,
                                 lapack_int n, lapack_int ilo, lapack_int ihi,
                                 const float* lscale, const float* rscale,
                                 lapack_int m, lapack_complex_float* v,
                                 lapack_int ldv )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_cggbak( &job, &side, &n, &ilo, &ihi, lscale, rscale, &m, v, &ldv,
                        &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldv_t = MAX(1,n);
         lapack_complex_float* v_t = NULL;
         /* Check leading dimension(s) */
@@ -64,7 +64,7 @@ lapack_int LAPACKE_cggbak_work( int matrix_order, char job, char side,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, n, m, v, ldv, v_t, ldv_t );
+        LAPACKE_cge_trans( matrix_layout, n, m, v, ldv, v_t, ldv_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cggbak( &job, &side, &n, &ilo, &ihi, lscale, rscale, &m, v_t,
                        &ldv_t, &info );

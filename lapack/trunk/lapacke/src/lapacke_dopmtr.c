@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dopmtr( int matrix_order, char side, char uplo, char trans,
+lapack_int LAPACKE_dopmtr( int matrix_layout, char side, char uplo, char trans,
                            lapack_int m, lapack_int n, const double* ap,
                            const double* tau, double* c, lapack_int ldc )
 {
@@ -42,7 +42,7 @@ lapack_int LAPACKE_dopmtr( int matrix_order, char side, char uplo, char trans,
     lapack_int lwork;
     double* work = NULL;
     lapack_int r;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dopmtr", -1 );
         return -1;
     }
@@ -52,7 +52,7 @@ lapack_int LAPACKE_dopmtr( int matrix_order, char side, char uplo, char trans,
     if( LAPACKE_dsp_nancheck( r, ap ) ) {
         return -7;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, m, n, c, ldc ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, m, n, c, ldc ) ) {
         return -9;
     }
     if( LAPACKE_d_nancheck( m-1, tau, 1 ) ) {
@@ -74,7 +74,7 @@ lapack_int LAPACKE_dopmtr( int matrix_order, char side, char uplo, char trans,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dopmtr_work( matrix_order, side, uplo, trans, m, n, ap, tau,
+    info = LAPACKE_dopmtr_work( matrix_layout, side, uplo, trans, m, n, ap, tau,
                                 c, ldc, work );
     /* Release memory and exit */
     LAPACKE_free( work );

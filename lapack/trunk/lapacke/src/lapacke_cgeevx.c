@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgeevx( int matrix_order, char balanc, char jobvl,
+lapack_int LAPACKE_cgeevx( int matrix_layout, char balanc, char jobvl,
                            char jobvr, char sense, lapack_int n,
                            lapack_complex_float* a, lapack_int lda,
                            lapack_complex_float* w, lapack_complex_float* vl,
@@ -47,13 +47,13 @@ lapack_int LAPACKE_cgeevx( int matrix_order, char balanc, char jobvl,
     float* rwork = NULL;
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_cgeevx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_cge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -7;
     }
 #endif
@@ -64,7 +64,7 @@ lapack_int LAPACKE_cgeevx( int matrix_order, char balanc, char jobvl,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_cgeevx_work( matrix_order, balanc, jobvl, jobvr, sense, n, a,
+    info = LAPACKE_cgeevx_work( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
                                 lda, w, vl, ldvl, vr, ldvr, ilo, ihi, scale,
                                 abnrm, rconde, rcondv, &work_query, lwork,
                                 rwork );
@@ -80,7 +80,7 @@ lapack_int LAPACKE_cgeevx( int matrix_order, char balanc, char jobvl,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cgeevx_work( matrix_order, balanc, jobvl, jobvr, sense, n, a,
+    info = LAPACKE_cgeevx_work( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
                                 lda, w, vl, ldvl, vr, ldvr, ilo, ihi, scale,
                                 abnrm, rconde, rcondv, work, lwork, rwork );
     /* Release memory and exit */

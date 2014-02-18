@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgeevx( int matrix_order, char balanc, char jobvl,
+lapack_int LAPACKE_sgeevx( int matrix_layout, char balanc, char jobvl,
                            char jobvr, char sense, lapack_int n, float* a,
                            lapack_int lda, float* wr, float* wi, float* vl,
                            lapack_int ldvl, float* vr, lapack_int ldvr,
@@ -45,13 +45,13 @@ lapack_int LAPACKE_sgeevx( int matrix_order, char balanc, char jobvl,
     lapack_int* iwork = NULL;
     float* work = NULL;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sgeevx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -7;
     }
 #endif
@@ -65,7 +65,7 @@ lapack_int LAPACKE_sgeevx( int matrix_order, char balanc, char jobvl,
         }
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_sgeevx_work( matrix_order, balanc, jobvl, jobvr, sense, n, a,
+    info = LAPACKE_sgeevx_work( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
                                 lda, wr, wi, vl, ldvl, vr, ldvr, ilo, ihi,
                                 scale, abnrm, rconde, rcondv, &work_query,
                                 lwork, iwork );
@@ -80,7 +80,7 @@ lapack_int LAPACKE_sgeevx( int matrix_order, char balanc, char jobvl,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sgeevx_work( matrix_order, balanc, jobvl, jobvr, sense, n, a,
+    info = LAPACKE_sgeevx_work( matrix_layout, balanc, jobvl, jobvr, sense, n, a,
                                 lda, wr, wi, vl, ldvl, vr, ldvr, ilo, ihi,
                                 scale, abnrm, rconde, rcondv, work, lwork,
                                 iwork );

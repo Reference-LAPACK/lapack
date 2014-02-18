@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-double LAPACKE_zlange( int matrix_order, char norm, lapack_int m,
+double LAPACKE_zlange( int matrix_layout, char norm, lapack_int m,
                            lapack_int n, const lapack_complex_double* a,
                            lapack_int lda )
 {
     lapack_int info = 0;
 	double res = 0.;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zlange", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_zge_nancheck( matrix_order, m, n, a, lda ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -5;
     }
 #endif
@@ -59,7 +59,7 @@ double LAPACKE_zlange( int matrix_order, char norm, lapack_int m,
         }
     }
     /* Call middle-level interface */
-    res = LAPACKE_zlange_work( matrix_order, norm, m, n, a, lda, work );
+    res = LAPACKE_zlange_work( matrix_layout, norm, m, n, a, lda, work );
     /* Release memory and exit */
     if( LAPACKE_lsame( norm, 'i' ) ) {
         LAPACKE_free( work );

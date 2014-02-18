@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sptsvx_work( int matrix_order, char fact, lapack_int n,
+lapack_int LAPACKE_sptsvx_work( int matrix_layout, char fact, lapack_int n,
                                 lapack_int nrhs, const float* d, const float* e,
                                 float* df, float* ef, const float* b,
                                 lapack_int ldb, float* x, lapack_int ldx,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_sptsvx_work( int matrix_order, char fact, lapack_int n,
                                 float* work )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_sptsvx( &fact, &n, &nrhs, d, e, df, ef, b, &ldb, x, &ldx, rcond,
                        ferr, berr, work, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldx_t = MAX(1,n);
         float* b_t = NULL;
@@ -76,7 +76,7 @@ lapack_int LAPACKE_sptsvx_work( int matrix_order, char fact, lapack_int n,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sptsvx( &fact, &n, &nrhs, d, e, df, ef, b_t, &ldb_t, x_t, &ldx_t,
                        rcond, ferr, berr, work, &info );

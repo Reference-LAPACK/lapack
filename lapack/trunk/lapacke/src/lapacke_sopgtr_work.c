@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sopgtr_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_sopgtr_work( int matrix_layout, char uplo, lapack_int n,
                                 const float* ap, const float* tau, float* q,
                                 lapack_int ldq, float* work )
 {
     lapack_int info = 0;
     lapack_int ldq_t;
     float *q_t = NULL, *ap_t = NULL;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_sopgtr( &uplo, &n, ap, tau, q, &ldq, work, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         ldq_t = MAX(1,n);
         /* Check leading dimension(s) */
         if( ldq < n ) {
@@ -67,7 +67,7 @@ lapack_int LAPACKE_sopgtr_work( int matrix_order, char uplo, lapack_int n,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_ssp_trans( matrix_order, uplo, n, ap, ap_t );
+        LAPACKE_ssp_trans( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sopgtr( &uplo, &n, ap_t, tau, q_t, &ldq_t, work, &info );
         if( info < 0 ) {

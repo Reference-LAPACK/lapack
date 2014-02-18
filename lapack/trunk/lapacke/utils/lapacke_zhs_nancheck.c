@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical LAPACKE_zhs_nancheck( int matrix_order, lapack_int n,
+lapack_logical LAPACKE_zhs_nancheck( int matrix_layout, lapack_int n,
                                       const lapack_complex_double *a,
                                       lapack_int lda )
 {
@@ -43,15 +43,15 @@ lapack_logical LAPACKE_zhs_nancheck( int matrix_order, lapack_int n,
     if( a == NULL ) return (lapack_logical) 0;
 
     /* Check subdiagonal first */
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         subdiag_nans = LAPACKE_z_nancheck( n-1, &a[1], lda+1 );
-    } else if ( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if ( matrix_layout == LAPACK_ROW_MAJOR ) {
         subdiag_nans = LAPACKE_z_nancheck( n-1, &a[lda], lda+1 );
     } else {
         return (lapack_logical) 0;
     }
 
     /* Check upper triangular if subdiagonal has no NaNs. */
-    return subdiag_nans || LAPACKE_ztr_nancheck( matrix_order, 'u', 'n',
+    return subdiag_nans || LAPACKE_ztr_nancheck( matrix_layout, 'u', 'n',
                                                  n, a, lda);
 }

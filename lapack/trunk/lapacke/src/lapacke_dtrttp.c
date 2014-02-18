@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtrttp( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dtrttp( int matrix_layout, char uplo, lapack_int n,
                            const double* a, lapack_int lda, double* ap )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dtrttp", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -4;
     }
 #endif
-    return LAPACKE_dtrttp_work( matrix_order, uplo, n, a, lda, ap );
+    return LAPACKE_dtrttp_work( matrix_layout, uplo, n, a, lda, ap );
 }

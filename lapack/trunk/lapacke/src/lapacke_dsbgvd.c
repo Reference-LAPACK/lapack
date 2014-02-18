@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsbgvd( int matrix_order, char jobz, char uplo, lapack_int n,
+lapack_int LAPACKE_dsbgvd( int matrix_layout, char jobz, char uplo, lapack_int n,
                            lapack_int ka, lapack_int kb, double* ab,
                            lapack_int ldab, double* bb, lapack_int ldbb,
                            double* w, double* z, lapack_int ldz )
@@ -45,21 +45,21 @@ lapack_int LAPACKE_dsbgvd( int matrix_order, char jobz, char uplo, lapack_int n,
     double* work = NULL;
     lapack_int iwork_query;
     double work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dsbgvd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dsb_nancheck( matrix_order, uplo, n, ka, ab, ldab ) ) {
+    if( LAPACKE_dsb_nancheck( matrix_layout, uplo, n, ka, ab, ldab ) ) {
         return -7;
     }
-    if( LAPACKE_dsb_nancheck( matrix_order, uplo, n, kb, bb, ldbb ) ) {
+    if( LAPACKE_dsb_nancheck( matrix_layout, uplo, n, kb, bb, ldbb ) ) {
         return -9;
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_dsbgvd_work( matrix_order, jobz, uplo, n, ka, kb, ab, ldab,
+    info = LAPACKE_dsbgvd_work( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
                                 bb, ldbb, w, z, ldz, &work_query, lwork,
                                 &iwork_query, liwork );
     if( info != 0 ) {
@@ -79,7 +79,7 @@ lapack_int LAPACKE_dsbgvd( int matrix_order, char jobz, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsbgvd_work( matrix_order, jobz, uplo, n, ka, kb, ab, ldab,
+    info = LAPACKE_dsbgvd_work( matrix_layout, jobz, uplo, n, ka, kb, ab, ldab,
                                 bb, ldbb, w, z, ldz, work, lwork, iwork,
                                 liwork );
     /* Release memory and exit */

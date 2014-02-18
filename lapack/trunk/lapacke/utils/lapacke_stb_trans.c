@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,7 @@
  * column-major(Fortran) layout or vice versa.
  */
 
-void LAPACKE_stb_trans( int matrix_order, char uplo, char diag,
+void LAPACKE_stb_trans( int matrix_layout, char uplo, char diag,
                         lapack_int n, lapack_int kd,
                         const float *in, lapack_int ldin,
                         float *out, lapack_int ldout )
@@ -46,11 +46,11 @@ void LAPACKE_stb_trans( int matrix_order, char uplo, char diag,
 
     if( in == NULL || out == NULL ) return;
 
-    colmaj = ( matrix_order == LAPACK_COL_MAJOR );
+    colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
     upper  = LAPACKE_lsame( uplo, 'u' );
     unit   = LAPACKE_lsame( diag, 'u' );
 
-    if( ( !colmaj && ( matrix_order != LAPACK_ROW_MAJOR ) ) ||
+    if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
         ( !upper  && !LAPACKE_lsame( uplo, 'l' ) ) ||
         ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */
@@ -61,28 +61,28 @@ void LAPACKE_stb_trans( int matrix_order, char uplo, char diag,
         /* Unit case, diagonal excluded from transposition */
         if( colmaj ) {
             if( upper ) {
-                LAPACKE_sgb_trans( matrix_order, n-1, n-1, 0, kd-1,
+                LAPACKE_sgb_trans( matrix_layout, n-1, n-1, 0, kd-1,
                                    &in[ldin], ldin, &out[1], ldout );
             } else {
-                LAPACKE_sgb_trans( matrix_order, n-1, n-1, kd-1, 0,
+                LAPACKE_sgb_trans( matrix_layout, n-1, n-1, kd-1, 0,
                                    &in[1], ldin, &out[ldout], ldout );
             }
         } else {
             if( upper ) {
-                LAPACKE_sgb_trans( matrix_order, n-1, n-1, 0, kd-1,
+                LAPACKE_sgb_trans( matrix_layout, n-1, n-1, 0, kd-1,
                                    &in[1], ldin, &out[ldout], ldout );
             } else {
-                LAPACKE_sgb_trans( matrix_order, n-1, n-1, kd-1, 0,
+                LAPACKE_sgb_trans( matrix_layout, n-1, n-1, kd-1, 0,
                                    &in[ldin], ldin, &out[1], ldout );
             }
         }
     } else {
         /* Non-unit case */
         if( upper ) {
-            LAPACKE_sgb_trans( matrix_order, n, n, 0, kd, in, ldin, out,
+            LAPACKE_sgb_trans( matrix_layout, n, n, 0, kd, in, ldin, out,
                                ldout );
         } else {
-            LAPACKE_sgb_trans( matrix_order, n, n, kd, 0, in, ldin, out,
+            LAPACKE_sgb_trans( matrix_layout, n, n, kd, 0, in, ldin, out,
                                ldout );
         }
     }

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_strsen( int matrix_order, char job, char compq,
+lapack_int LAPACKE_strsen( int matrix_layout, char job, char compq,
                            const lapack_logical* select, lapack_int n, float* t,
                            lapack_int ldt, float* q, lapack_int ldq, float* wr,
                            float* wi, lapack_int* m, float* s, float* sep )
@@ -45,23 +45,23 @@ lapack_int LAPACKE_strsen( int matrix_order, char job, char compq,
     float* work = NULL;
     lapack_int iwork_query;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_strsen", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
     if( LAPACKE_lsame( compq, 'v' ) ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, n, q, ldq ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, q, ldq ) ) {
             return -8;
         }
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, t, ldt ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, t, ldt ) ) {
         return -6;
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_strsen_work( matrix_order, job, compq, select, n, t, ldt, q,
+    info = LAPACKE_strsen_work( matrix_layout, job, compq, select, n, t, ldt, q,
                                 ldq, wr, wi, m, s, sep, &work_query, lwork,
                                 &iwork_query, liwork );
     if( info != 0 ) {
@@ -83,7 +83,7 @@ lapack_int LAPACKE_strsen( int matrix_order, char job, char compq,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_strsen_work( matrix_order, job, compq, select, n, t, ldt, q,
+    info = LAPACKE_strsen_work( matrix_layout, job, compq, select, n, t, ldt, q,
                                 ldq, wr, wi, m, s, sep, work, lwork, iwork,
                                 liwork );
     /* Release memory and exit */

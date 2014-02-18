@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,17 +33,17 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgtsv( int matrix_order, lapack_int n, lapack_int nrhs,
+lapack_int LAPACKE_sgtsv( int matrix_layout, lapack_int n, lapack_int nrhs,
                           float* dl, float* d, float* du, float* b,
                           lapack_int ldb )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sgtsv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -7;
     }
     if( LAPACKE_s_nancheck( n, d, 1 ) ) {
@@ -56,5 +56,5 @@ lapack_int LAPACKE_sgtsv( int matrix_order, lapack_int n, lapack_int nrhs,
         return -6;
     }
 #endif
-    return LAPACKE_sgtsv_work( matrix_order, n, nrhs, dl, d, du, b, ldb );
+    return LAPACKE_sgtsv_work( matrix_layout, n, nrhs, dl, d, du, b, ldb );
 }

@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2010, Intel Corp.
+# Copyright (c) 2014, Intel Corp.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -1469,6 +1469,8 @@ lapacke_stpcon.o \
 lapacke_stpcon_work.o \
 lapacke_stpmqrt.o \
 lapacke_stpmqrt_work.o \
+lapacke_stpqrt.o \
+lapacke_stpqrt_work.o \
 lapacke_stpqrt2.o \
 lapacke_stpqrt2_work.o \
 lapacke_stprfb.o \

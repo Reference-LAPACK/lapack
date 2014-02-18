@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtrsna( int matrix_order, char job, char howmny,
+lapack_int LAPACKE_dtrsna( int matrix_layout, char job, char howmny,
                            const lapack_logical* select, lapack_int n,
                            const double* t, lapack_int ldt, const double* vl,
                            lapack_int ldvl, const double* vr, lapack_int ldvr,
@@ -44,22 +44,22 @@ lapack_int LAPACKE_dtrsna( int matrix_order, char job, char howmny,
     lapack_int ldwork =  LAPACKE_lsame( job, 'e' ) ? 1 : MAX(1,n) ;
     lapack_int* iwork = NULL;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dtrsna", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, n, n, t, ldt ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, n, t, ldt ) ) {
         return -6;
     }
     if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'e' ) ) {
-        if( LAPACKE_dge_nancheck( matrix_order, n, mm, vl, ldvl ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, mm, vl, ldvl ) ) {
             return -8;
         }
     }
     if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'e' ) ) {
-        if( LAPACKE_dge_nancheck( matrix_order, n, mm, vr, ldvr ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, n, mm, vr, ldvr ) ) {
             return -10;
         }
     }
@@ -81,7 +81,7 @@ lapack_int LAPACKE_dtrsna( int matrix_order, char job, char howmny,
         }
     }
     /* Call middle-level interface */
-    info = LAPACKE_dtrsna_work( matrix_order, job, howmny, select, n, t, ldt,
+    info = LAPACKE_dtrsna_work( matrix_layout, job, howmny, select, n, t, ldt,
                                 vl, ldvl, vr, ldvr, s, sep, mm, m, work, ldwork,
                                 iwork );
     /* Release memory and exit */

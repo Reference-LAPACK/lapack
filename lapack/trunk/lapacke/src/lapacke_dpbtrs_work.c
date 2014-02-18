@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,19 +33,19 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dpbtrs_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dpbtrs_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int kd, lapack_int nrhs,
                                 const double* ab, lapack_int ldab, double* b,
                                 lapack_int ldb )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dpbtrs( &uplo, &n, &kd, &nrhs, ab, &ldab, b, &ldb, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,kd+1);
         lapack_int ldb_t = MAX(1,n);
         double* ab_t = NULL;
@@ -73,8 +73,8 @@ lapack_int LAPACKE_dpbtrs_work( int matrix_order, char uplo, lapack_int n,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_dpb_trans( matrix_order, uplo, n, kd, ab, ldab, ab_t, ldab_t );
-        LAPACKE_dge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_dpb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        LAPACKE_dge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dpbtrs( &uplo, &n, &kd, &nrhs, ab_t, &ldab_t, b_t, &ldb_t,
                        &info );

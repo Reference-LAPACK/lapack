@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,17 +33,17 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsyswapr_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dsyswapr_work( int matrix_layout, char uplo, lapack_int n,
                                   double* a, lapack_int i1, lapack_int i2 )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dsyswapr( &uplo, &n, a, &i1, &i2 );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         double* a_t = NULL;
         /* Allocate memory for temporary array(s) */
         a_t = (double*)LAPACKE_malloc( sizeof(double) * n * MAX(1,n) );
@@ -52,7 +52,7 @@ lapack_int LAPACKE_dsyswapr_work( int matrix_order, char uplo, lapack_int n,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_dsy_trans( matrix_order, uplo, n, a, n, a_t, n );
+        LAPACKE_dsy_trans( matrix_layout, uplo, n, a, n, a_t, n );
         /* Call LAPACK function and adjust info */
         LAPACK_dsyswapr( &uplo, &n, a_t, &i1, &i2 );
         info = 0;  /* LAPACK call is ok! */

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,21 +33,21 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sspgvd_work( int matrix_order, lapack_int itype, char jobz,
+lapack_int LAPACKE_sspgvd_work( int matrix_layout, lapack_int itype, char jobz,
                                 char uplo, lapack_int n, float* ap, float* bp,
                                 float* w, float* z, lapack_int ldz, float* work,
                                 lapack_int lwork, lapack_int* iwork,
                                 lapack_int liwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_sspgvd( &itype, &jobz, &uplo, &n, ap, bp, w, z, &ldz, work,
                        &lwork, iwork, &liwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldz_t = MAX(1,n);
         float* z_t = NULL;
         float* ap_t = NULL;
@@ -85,8 +85,8 @@ lapack_int LAPACKE_sspgvd_work( int matrix_order, lapack_int itype, char jobz,
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        LAPACKE_ssp_trans( matrix_order, uplo, n, ap, ap_t );
-        LAPACKE_ssp_trans( matrix_order, uplo, n, bp, bp_t );
+        LAPACKE_ssp_trans( matrix_layout, uplo, n, ap, ap_t );
+        LAPACKE_ssp_trans( matrix_layout, uplo, n, bp, bp_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sspgvd( &itype, &jobz, &uplo, &n, ap_t, bp_t, w, z_t, &ldz_t,
                        work, &lwork, iwork, &liwork, &info );

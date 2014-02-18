@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical LAPACKE_dtr_nancheck( int matrix_order, char uplo, char diag,
+lapack_logical LAPACKE_dtr_nancheck( int matrix_layout, char uplo, char diag,
                                       lapack_int n,
                                       const double *a,
                                       lapack_int lda )
@@ -44,11 +44,11 @@ lapack_logical LAPACKE_dtr_nancheck( int matrix_order, char uplo, char diag,
 
     if( a == NULL ) return (lapack_logical) 0;
 
-    colmaj = ( matrix_order == LAPACK_COL_MAJOR );
+    colmaj = ( matrix_layout == LAPACK_COL_MAJOR );
     lower  = LAPACKE_lsame( uplo, 'l' );
     unit   = LAPACKE_lsame( diag, 'u' );
 
-    if( ( !colmaj && ( matrix_order != LAPACK_ROW_MAJOR ) ) ||
+    if( ( !colmaj && ( matrix_layout != LAPACK_ROW_MAJOR ) ) ||
         ( !lower  && !LAPACKE_lsame( uplo, 'u' ) ) ||
         ( !unit   && !LAPACKE_lsame( diag, 'n' ) ) ) {
         /* Just exit if any of input parameters are wrong */

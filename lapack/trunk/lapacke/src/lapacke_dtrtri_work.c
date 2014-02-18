@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,17 +33,17 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtrtri_work( int matrix_order, char uplo, char diag,
+lapack_int LAPACKE_dtrtri_work( int matrix_layout, char uplo, char diag,
                                 lapack_int n, double* a, lapack_int lda )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dtrtri( &uplo, &diag, &n, a, &lda, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         double* a_t = NULL;
         /* Check leading dimension(s) */
@@ -59,7 +59,7 @@ lapack_int LAPACKE_dtrtri_work( int matrix_order, char uplo, char diag,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_dtr_trans( matrix_order, uplo, diag, n, a, lda, a_t, lda_t );
+        LAPACKE_dtr_trans( matrix_layout, uplo, diag, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dtrtri( &uplo, &diag, &n, a_t, &lda_t, &info );
         if( info < 0 ) {

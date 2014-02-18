@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgbbrd( int matrix_order, char vect, lapack_int m,
+lapack_int LAPACKE_dgbbrd( int matrix_layout, char vect, lapack_int m,
                            lapack_int n, lapack_int ncc, lapack_int kl,
                            lapack_int ku, double* ab, lapack_int ldab,
                            double* d, double* e, double* q, lapack_int ldq,
@@ -42,17 +42,17 @@ lapack_int LAPACKE_dgbbrd( int matrix_order, char vect, lapack_int m,
 {
     lapack_int info = 0;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgbbrd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dgb_nancheck( matrix_order, m, n, kl, ku, ab, ldab ) ) {
+    if( LAPACKE_dgb_nancheck( matrix_layout, m, n, kl, ku, ab, ldab ) ) {
         return -8;
     }
     if( ncc != 0 ) {
-        if( LAPACKE_dge_nancheck( matrix_order, m, ncc, c, ldc ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, m, ncc, c, ldc ) ) {
             return -16;
         }
     }
@@ -64,7 +64,7 @@ lapack_int LAPACKE_dgbbrd( int matrix_order, char vect, lapack_int m,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgbbrd_work( matrix_order, vect, m, n, ncc, kl, ku, ab, ldab,
+    info = LAPACKE_dgbbrd_work( matrix_layout, vect, m, n, ncc, kl, ku, ab, ldab,
                                 d, e, q, ldq, pt, ldpt, c, ldc, work );
     /* Release memory and exit */
     LAPACKE_free( work );

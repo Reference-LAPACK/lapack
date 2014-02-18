@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,11 +33,11 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chpgst( int matrix_order, lapack_int itype, char uplo,
+lapack_int LAPACKE_chpgst( int matrix_layout, lapack_int itype, char uplo,
                            lapack_int n, lapack_complex_float* ap,
                            const lapack_complex_float* bp )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_chpgst", -1 );
         return -1;
     }
@@ -50,5 +50,5 @@ lapack_int LAPACKE_chpgst( int matrix_order, lapack_int itype, char uplo,
         return -6;
     }
 #endif
-    return LAPACKE_chpgst_work( matrix_order, itype, uplo, n, ap, bp );
+    return LAPACKE_chpgst_work( matrix_layout, itype, uplo, n, ap, bp );
 }

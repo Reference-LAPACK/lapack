@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sormhr( int matrix_order, char side, char trans,
+lapack_int LAPACKE_sormhr( int matrix_layout, char side, char trans,
                            lapack_int m, lapack_int n, lapack_int ilo,
                            lapack_int ihi, const float* a, lapack_int lda,
                            const float* tau, float* c, lapack_int ldc )
@@ -43,17 +43,17 @@ lapack_int LAPACKE_sormhr( int matrix_order, char side, char trans,
     float* work = NULL;
     float work_query;
     lapack_int r;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sormhr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
     r = LAPACKE_lsame( side, 'l' ) ? m : n;
-    if( LAPACKE_sge_nancheck( matrix_order, r, r, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, r, r, a, lda ) ) {
         return -8;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, m, n, c, ldc ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, m, n, c, ldc ) ) {
         return -11;
     }
     if( LAPACKE_s_nancheck( m-1, tau, 1 ) ) {
@@ -61,7 +61,7 @@ lapack_int LAPACKE_sormhr( int matrix_order, char side, char trans,
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_sormhr_work( matrix_order, side, trans, m, n, ilo, ihi, a,
+    info = LAPACKE_sormhr_work( matrix_layout, side, trans, m, n, ilo, ihi, a,
                                 lda, tau, c, ldc, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -74,7 +74,7 @@ lapack_int LAPACKE_sormhr( int matrix_order, char side, char trans,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sormhr_work( matrix_order, side, trans, m, n, ilo, ihi, a,
+    info = LAPACKE_sormhr_work( matrix_layout, side, trans, m, n, ilo, ihi, a,
                                 lda, tau, c, ldc, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

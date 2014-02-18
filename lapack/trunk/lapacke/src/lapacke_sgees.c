@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgees( int matrix_order, char jobvs, char sort,
+lapack_int LAPACKE_sgees( int matrix_layout, char jobvs, char sort,
                           LAPACK_S_SELECT2 select, lapack_int n, float* a,
                           lapack_int lda, lapack_int* sdim, float* wr,
                           float* wi, float* vs, lapack_int ldvs )
@@ -43,13 +43,13 @@ lapack_int LAPACKE_sgees( int matrix_order, char jobvs, char sort,
     lapack_logical* bwork = NULL;
     float* work = NULL;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sgees", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -6;
     }
 #endif
@@ -63,7 +63,7 @@ lapack_int LAPACKE_sgees( int matrix_order, char jobvs, char sort,
         }
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_sgees_work( matrix_order, jobvs, sort, select, n, a, lda,
+    info = LAPACKE_sgees_work( matrix_layout, jobvs, sort, select, n, a, lda,
                                sdim, wr, wi, vs, ldvs, &work_query, lwork,
                                bwork );
     if( info != 0 ) {
@@ -77,7 +77,7 @@ lapack_int LAPACKE_sgees( int matrix_order, char jobvs, char sort,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sgees_work( matrix_order, jobvs, sort, select, n, a, lda,
+    info = LAPACKE_sgees_work( matrix_layout, jobvs, sort, select, n, a, lda,
                                sdim, wr, wi, vs, ldvs, work, lwork, bwork );
     /* Release memory and exit */
     LAPACKE_free( work );

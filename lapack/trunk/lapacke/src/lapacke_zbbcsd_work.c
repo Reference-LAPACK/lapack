@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zbbcsd_work( int matrix_order, char jobu1, char jobu2,
+lapack_int LAPACKE_zbbcsd_work( int matrix_layout, char jobu1, char jobu2,
                                 char jobv1t, char jobv2t, char trans,
                                 lapack_int m, lapack_int p, lapack_int q,
                                 double* theta, double* phi,
@@ -47,7 +47,7 @@ lapack_int LAPACKE_zbbcsd_work( int matrix_order, char jobu1, char jobu2,
                                 lapack_int lrwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zbbcsd( &jobu1, &jobu2, &jobv1t, &jobv2t, &trans, &m, &p, &q,
                        theta, phi, u1, &ldu1, u2, &ldu2, v1t, &ldv1t, v2t,
@@ -56,7 +56,7 @@ lapack_int LAPACKE_zbbcsd_work( int matrix_order, char jobu1, char jobu2,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int nrows_u1 = ( LAPACKE_lsame( jobu1, 'y' ) ? p : 1);
         lapack_int nrows_u2 = ( LAPACKE_lsame( jobu2, 'y' ) ? m-p : 1);
         lapack_int nrows_v1t = ( LAPACKE_lsame( jobv1t, 'y' ) ? q : 1);
@@ -137,19 +137,19 @@ lapack_int LAPACKE_zbbcsd_work( int matrix_order, char jobu1, char jobu2,
         }
         /* Transpose input matrices */
         if( LAPACKE_lsame( jobu1, 'y' ) ) {
-            LAPACKE_zge_trans( matrix_order, nrows_u1, p, u1, ldu1, u1_t,
+            LAPACKE_zge_trans( matrix_layout, nrows_u1, p, u1, ldu1, u1_t,
                                ldu1_t );
         }
         if( LAPACKE_lsame( jobu2, 'y' ) ) {
-            LAPACKE_zge_trans( matrix_order, nrows_u2, m-p, u2, ldu2, u2_t,
+            LAPACKE_zge_trans( matrix_layout, nrows_u2, m-p, u2, ldu2, u2_t,
                                ldu2_t );
         }
         if( LAPACKE_lsame( jobv1t, 'y' ) ) {
-            LAPACKE_zge_trans( matrix_order, nrows_v1t, q, v1t, ldv1t, v1t_t,
+            LAPACKE_zge_trans( matrix_layout, nrows_v1t, q, v1t, ldv1t, v1t_t,
                                ldv1t_t );
         }
         if( LAPACKE_lsame( jobv2t, 'y' ) ) {
-            LAPACKE_zge_trans( matrix_order, nrows_v2t, m-q, v2t, ldv2t, v2t_t,
+            LAPACKE_zge_trans( matrix_layout, nrows_v2t, m-q, v2t, ldv2t, v2t_t,
                                ldv2t_t );
         }
         /* Call LAPACK function and adjust info */

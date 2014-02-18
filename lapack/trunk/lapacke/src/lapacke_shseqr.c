@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_shseqr( int matrix_order, char job, char compz, lapack_int n,
+lapack_int LAPACKE_shseqr( int matrix_layout, char job, char compz, lapack_int n,
                            lapack_int ilo, lapack_int ihi, float* h,
                            lapack_int ldh, float* wr, float* wi, float* z,
                            lapack_int ldz )
@@ -42,23 +42,23 @@ lapack_int LAPACKE_shseqr( int matrix_order, char job, char compz, lapack_int n,
     lapack_int lwork = -1;
     float* work = NULL;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_shseqr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, h, ldh ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, h, ldh ) ) {
         return -7;
     }
     if( LAPACKE_lsame( compz, 'i' ) || LAPACKE_lsame( compz, 'v' ) ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, n, z, ldz ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, z, ldz ) ) {
             return -11;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_shseqr_work( matrix_order, job, compz, n, ilo, ihi, h, ldh,
+    info = LAPACKE_shseqr_work( matrix_layout, job, compz, n, ilo, ihi, h, ldh,
                                 wr, wi, z, ldz, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -71,7 +71,7 @@ lapack_int LAPACKE_shseqr( int matrix_order, char job, char compz, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_shseqr_work( matrix_order, job, compz, n, ilo, ihi, h, ldh,
+    info = LAPACKE_shseqr_work( matrix_layout, job, compz, n, ilo, ihi, h, ldh,
                                 wr, wi, z, ldz, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

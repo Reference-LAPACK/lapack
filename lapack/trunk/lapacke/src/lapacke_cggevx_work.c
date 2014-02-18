@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cggevx_work( int matrix_order, char balanc, char jobvl,
+lapack_int LAPACKE_cggevx_work( int matrix_layout, char balanc, char jobvl,
                                 char jobvr, char sense, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_complex_float* b, lapack_int ldb,
@@ -49,7 +49,7 @@ lapack_int LAPACKE_cggevx_work( int matrix_order, char balanc, char jobvl,
                                 lapack_logical* bwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_cggevx( &balanc, &jobvl, &jobvr, &sense, &n, a, &lda, b, &ldb,
                        alpha, beta, vl, &ldvl, vr, &ldvr, ilo, ihi, lscale,
@@ -58,7 +58,7 @@ lapack_int LAPACKE_cggevx_work( int matrix_order, char balanc, char jobvl,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldvl_t = MAX(1,n);
@@ -128,8 +128,8 @@ lapack_int LAPACKE_cggevx_work( int matrix_order, char balanc, char jobvl,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
-        LAPACKE_cge_trans( matrix_order, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cggevx( &balanc, &jobvl, &jobvr, &sense, &n, a_t, &lda_t, b_t,
                        &ldb_t, alpha, beta, vl_t, &ldvl_t, vr_t, &ldvr_t, ilo,

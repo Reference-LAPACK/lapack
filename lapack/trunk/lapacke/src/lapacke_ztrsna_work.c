@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztrsna_work( int matrix_order, char job, char howmny,
+lapack_int LAPACKE_ztrsna_work( int matrix_layout, char job, char howmny,
                                 const lapack_logical* select, lapack_int n,
                                 const lapack_complex_double* t, lapack_int ldt,
                                 const lapack_complex_double* vl,
@@ -45,14 +45,14 @@ lapack_int LAPACKE_ztrsna_work( int matrix_order, char job, char howmny,
                                 double* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ztrsna( &job, &howmny, select, &n, t, &ldt, vl, &ldvl, vr, &ldvr,
                        s, sep, &mm, m, work, &ldwork, rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldt_t = MAX(1,n);
         lapack_int ldvl_t = MAX(1,n);
         lapack_int ldvr_t = MAX(1,n);
@@ -101,12 +101,12 @@ lapack_int LAPACKE_ztrsna_work( int matrix_order, char job, char howmny,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_order, n, n, t, ldt, t_t, ldt_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, t, ldt, t_t, ldt_t );
         if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'e' ) ) {
-            LAPACKE_zge_trans( matrix_order, n, mm, vl, ldvl, vl_t, ldvl_t );
+            LAPACKE_zge_trans( matrix_layout, n, mm, vl, ldvl, vl_t, ldvl_t );
         }
         if( LAPACKE_lsame( job, 'b' ) || LAPACKE_lsame( job, 'e' ) ) {
-            LAPACKE_zge_trans( matrix_order, n, mm, vr, ldvr, vr_t, ldvr_t );
+            LAPACKE_zge_trans( matrix_layout, n, mm, vr, ldvr, vr_t, ldvr_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_ztrsna( &job, &howmny, select, &n, t_t, &ldt_t, vl_t, &ldvl_t,

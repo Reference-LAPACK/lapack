@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgejsv( int matrix_order, char joba, char jobu, char jobv,
+lapack_int LAPACKE_dgejsv( int matrix_layout, char joba, char jobu, char jobv,
                            char jobr, char jobt, char jobp, lapack_int m,
                            lapack_int n, double* a, lapack_int lda, double* sva,
                            double* u, lapack_int ldu, double* v, lapack_int ldv,
@@ -75,7 +75,7 @@ lapack_int LAPACKE_dgejsv( int matrix_order, char joba, char jobu, char jobv,
     double* work = NULL;
     lapack_int i;
     lapack_int nu, nv;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgejsv", -1 );
         return -1;
     }
@@ -83,18 +83,18 @@ lapack_int LAPACKE_dgejsv( int matrix_order, char joba, char jobu, char jobv,
     /* Optionally check input matrices for NaNs */
     nu = LAPACKE_lsame( jobu, 'n' ) ? 1 : m;
     nv = LAPACKE_lsame( jobv, 'n' ) ? 1 : n;
-    if( LAPACKE_dge_nancheck( matrix_order, m, n, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -10;
     }
     if( LAPACKE_lsame( jobu, 'f' ) || LAPACKE_lsame( jobu, 'u' ) ||
         LAPACKE_lsame( jobu, 'w' ) ) {
-        if( LAPACKE_dge_nancheck( matrix_order, nu, n, u, ldu ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, nu, n, u, ldu ) ) {
             return -13;
         }
     }
     if( LAPACKE_lsame( jobv, 'j' ) || LAPACKE_lsame( jobv, 'v' ) ||
         LAPACKE_lsame( jobv, 'w' ) ) {
-        if( LAPACKE_dge_nancheck( matrix_order, nv, n, v, ldv ) ) {
+        if( LAPACKE_dge_nancheck( matrix_layout, nv, n, v, ldv ) ) {
             return -15;
         }
     }
@@ -111,7 +111,7 @@ lapack_int LAPACKE_dgejsv( int matrix_order, char joba, char jobu, char jobv,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgejsv_work( matrix_order, joba, jobu, jobv, jobr, jobt,
+    info = LAPACKE_dgejsv_work( matrix_layout, joba, jobu, jobv, jobr, jobt,
                                 jobp, m, n, a, lda, sva, u, ldu, v, ldv, work,
                                 lwork, iwork );
     /* Backup significant data from working array(s) */
