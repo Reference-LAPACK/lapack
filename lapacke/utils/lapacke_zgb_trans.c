@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,7 @@
  * column-major(Fortran) layout or vice versa.
  */
 
-void LAPACKE_zgb_trans( int matrix_order, lapack_int m, lapack_int n,
+void LAPACKE_zgb_trans( int matrix_layout, lapack_int m, lapack_int n,
                         lapack_int kl, lapack_int ku,
                         const lapack_complex_double *in, lapack_int ldin,
                         lapack_complex_double *out, lapack_int ldout )
@@ -46,14 +46,14 @@ void LAPACKE_zgb_trans( int matrix_order, lapack_int m, lapack_int n,
 
     if( in == NULL || out == NULL ) return;
 
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         for( j = 0; j < MIN( ldout, n ); j++ ) {
             for( i = MAX( ku-j, 0 ); i < MIN3( ldin, m+ku-j, kl+ku+1 );
                  i++ ) {
                 out[(size_t)i*ldout+j] = in[i+(size_t)j*ldin];
             }
         }
-    } else if ( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if ( matrix_layout == LAPACK_ROW_MAJOR ) {
         /* TODO: interchange loops for performance.
          * This is just reference impemeltation
          */

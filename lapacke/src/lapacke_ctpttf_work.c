@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ctpttf_work( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_ctpttf_work( int matrix_layout, char transr, char uplo,
                                 lapack_int n, const lapack_complex_float* ap,
                                 lapack_complex_float* arf )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ctpttf( &transr, &uplo, &n, ap, arf, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_complex_float* ap_t = NULL;
         lapack_complex_float* arf_t = NULL;
         /* Allocate memory for temporary array(s) */
@@ -63,7 +63,7 @@ lapack_int LAPACKE_ctpttf_work( int matrix_order, char transr, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_cpp_trans( matrix_order, uplo, n, ap, ap_t );
+        LAPACKE_cpp_trans( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ctpttf( &transr, &uplo, &n, ap_t, arf_t, &info );
         if( info < 0 ) {

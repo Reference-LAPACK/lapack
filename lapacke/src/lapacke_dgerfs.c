@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgerfs( int matrix_order, char trans, lapack_int n,
+lapack_int LAPACKE_dgerfs( int matrix_layout, char trans, lapack_int n,
                            lapack_int nrhs, const double* a, lapack_int lda,
                            const double* af, lapack_int ldaf,
                            const lapack_int* ipiv, const double* b,
@@ -43,22 +43,22 @@ lapack_int LAPACKE_dgerfs( int matrix_order, char trans, lapack_int n,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgerfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -5;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, n, af, ldaf ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, n, af, ldaf ) ) {
         return -7;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -10;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, x, ldx ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
         return -12;
     }
 #endif
@@ -74,7 +74,7 @@ lapack_int LAPACKE_dgerfs( int matrix_order, char trans, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgerfs_work( matrix_order, trans, n, nrhs, a, lda, af, ldaf,
+    info = LAPACKE_dgerfs_work( matrix_layout, trans, n, nrhs, a, lda, af, ldaf,
                                 ipiv, b, ldb, x, ldx, ferr, berr, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );

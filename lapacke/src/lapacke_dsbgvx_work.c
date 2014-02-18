@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsbgvx_work( int matrix_order, char jobz, char range,
+lapack_int LAPACKE_dsbgvx_work( int matrix_layout, char jobz, char range,
                                 char uplo, lapack_int n, lapack_int ka,
                                 lapack_int kb, double* ab, lapack_int ldab,
                                 double* bb, lapack_int ldbb, double* q,
@@ -44,7 +44,7 @@ lapack_int LAPACKE_dsbgvx_work( int matrix_order, char jobz, char range,
                                 lapack_int* ifail )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dsbgvx( &jobz, &range, &uplo, &n, &ka, &kb, ab, &ldab, bb, &ldbb,
                        q, &ldq, &vl, &vu, &il, &iu, &abstol, m, w, z, &ldz,
@@ -52,7 +52,7 @@ lapack_int LAPACKE_dsbgvx_work( int matrix_order, char jobz, char range,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,ka+1);
         lapack_int ldbb_t = MAX(1,kb+1);
         lapack_int ldq_t = MAX(1,n);
@@ -108,8 +108,8 @@ lapack_int LAPACKE_dsbgvx_work( int matrix_order, char jobz, char range,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_dsb_trans( matrix_order, uplo, n, ka, ab, ldab, ab_t, ldab_t );
-        LAPACKE_dsb_trans( matrix_order, uplo, n, kb, bb, ldbb, bb_t, ldbb_t );
+        LAPACKE_dsb_trans( matrix_layout, uplo, n, ka, ab, ldab, ab_t, ldab_t );
+        LAPACKE_dsb_trans( matrix_layout, uplo, n, kb, bb, ldbb, bb_t, ldbb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dsbgvx( &jobz, &range, &uplo, &n, &ka, &kb, ab_t, &ldab_t, bb_t,
                        &ldbb_t, q_t, &ldq_t, &vl, &vu, &il, &iu, &abstol, m, w,

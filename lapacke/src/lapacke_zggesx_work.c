@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zggesx_work( int matrix_order, char jobvsl, char jobvsr,
+lapack_int LAPACKE_zggesx_work( int matrix_layout, char jobvsl, char jobvsr,
                                 char sort, LAPACK_Z_SELECT2 selctg, char sense,
                                 lapack_int n, lapack_complex_double* a,
                                 lapack_int lda, lapack_complex_double* b,
@@ -48,7 +48,7 @@ lapack_int LAPACKE_zggesx_work( int matrix_order, char jobvsl, char jobvsr,
                                 lapack_int liwork, lapack_logical* bwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zggesx( &jobvsl, &jobvsr, &sort, selctg, &sense, &n, a, &lda, b,
                        &ldb, sdim, alpha, beta, vsl, &ldvsl, vsr, &ldvsr,
@@ -57,7 +57,7 @@ lapack_int LAPACKE_zggesx_work( int matrix_order, char jobvsl, char jobvsr,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldvsl_t = MAX(1,n);
@@ -127,8 +127,8 @@ lapack_int LAPACKE_zggesx_work( int matrix_order, char jobvsl, char jobvsr,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
-        LAPACKE_zge_trans( matrix_order, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zggesx( &jobvsl, &jobvsr, &sort, selctg, &sense, &n, a_t, &lda_t,
                        b_t, &ldb_t, sdim, alpha, beta, vsl_t, &ldvsl_t, vsr_t,

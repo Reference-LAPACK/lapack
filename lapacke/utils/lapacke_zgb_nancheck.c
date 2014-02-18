@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@
 
 /* Check a matrix for NaN entries. */
 
-lapack_logical LAPACKE_zgb_nancheck( int matrix_order, lapack_int m,
+lapack_logical LAPACKE_zgb_nancheck( int matrix_layout, lapack_int m,
                                       lapack_int n, lapack_int kl,
                                       lapack_int ku,
                                       const lapack_complex_double *ab,
@@ -44,7 +44,7 @@ lapack_logical LAPACKE_zgb_nancheck( int matrix_order, lapack_int m,
 
     if( ab == NULL ) return (lapack_logical) 0;
 
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         for( j = 0; j < n; j++ ) {
             for( i = MAX( ku-j, 0 ); i < MIN3( ldab, m+ku-j, kl+ku+1 );
                  i++ ) {
@@ -52,7 +52,7 @@ lapack_logical LAPACKE_zgb_nancheck( int matrix_order, lapack_int m,
                      return (lapack_logical) 1;
             }
         }
-    } else if ( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if ( matrix_layout == LAPACK_ROW_MAJOR ) {
         for( j = 0; j < MIN( n, ldab ); j++ ) {
             for( i = MAX( ku-j, 0 ); i < MIN( m+ku-j, kl+ku+1 ); i++ ) {
                 if( LAPACK_ZISNAN( ab[(size_t)i*ldab+j] ) )

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chpevx_work( int matrix_order, char jobz, char range,
+lapack_int LAPACKE_chpevx_work( int matrix_layout, char jobz, char range,
                                 char uplo, lapack_int n,
                                 lapack_complex_float* ap, float vl, float vu,
                                 lapack_int il, lapack_int iu, float abstol,
@@ -43,7 +43,7 @@ lapack_int LAPACKE_chpevx_work( int matrix_order, char jobz, char range,
                                 lapack_int* iwork, lapack_int* ifail )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_chpevx( &jobz, &range, &uplo, &n, ap, &vl, &vu, &il, &iu,
                        &abstol, m, w, z, &ldz, work, rwork, iwork, ifail,
@@ -51,7 +51,7 @@ lapack_int LAPACKE_chpevx_work( int matrix_order, char jobz, char range,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ncols_z = ( LAPACKE_lsame( range, 'a' ) ||
                              LAPACKE_lsame( range, 'v' ) ) ? n :
                              ( LAPACKE_lsame( range, 'i' ) ? (iu-il+1) : 1);
@@ -82,7 +82,7 @@ lapack_int LAPACKE_chpevx_work( int matrix_order, char jobz, char range,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_chp_trans( matrix_order, uplo, n, ap, ap_t );
+        LAPACKE_chp_trans( matrix_layout, uplo, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_chpevx( &jobz, &range, &uplo, &n, ap_t, &vl, &vu, &il, &iu,
                        &abstol, m, w, z_t, &ldz_t, work, rwork, iwork, ifail,

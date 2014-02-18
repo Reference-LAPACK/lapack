@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_strevc( int matrix_order, char side, char howmny,
+lapack_int LAPACKE_strevc( int matrix_layout, char side, char howmny,
                            lapack_logical* select, lapack_int n, const float* t,
                            lapack_int ldt, float* vl, lapack_int ldvl,
                            float* vr, lapack_int ldvr, lapack_int mm,
@@ -41,22 +41,22 @@ lapack_int LAPACKE_strevc( int matrix_order, char side, char howmny,
 {
     lapack_int info = 0;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_strevc", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, t, ldt ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, t, ldt ) ) {
         return -6;
     }
     if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'l' ) ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, mm, vl, ldvl ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, mm, vl, ldvl ) ) {
             return -8;
         }
     }
     if( LAPACKE_lsame( side, 'b' ) || LAPACKE_lsame( side, 'r' ) ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, mm, vr, ldvr ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, mm, vr, ldvr ) ) {
             return -10;
         }
     }
@@ -68,7 +68,7 @@ lapack_int LAPACKE_strevc( int matrix_order, char side, char howmny,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_strevc_work( matrix_order, side, howmny, select, n, t, ldt,
+    info = LAPACKE_strevc_work( matrix_layout, side, howmny, select, n, t, ldt,
                                 vl, ldvl, vr, ldvr, mm, m, work );
     /* Release memory and exit */
     LAPACKE_free( work );

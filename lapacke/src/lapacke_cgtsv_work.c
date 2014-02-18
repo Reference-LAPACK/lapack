@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgtsv_work( int matrix_order, lapack_int n, lapack_int nrhs,
+lapack_int LAPACKE_cgtsv_work( int matrix_layout, lapack_int n, lapack_int nrhs,
                                lapack_complex_float* dl,
                                lapack_complex_float* d,
                                lapack_complex_float* du,
                                lapack_complex_float* b, lapack_int ldb )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_cgtsv( &n, &nrhs, dl, d, du, b, &ldb, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldb_t = MAX(1,n);
         lapack_complex_float* b_t = NULL;
         /* Check leading dimension(s) */
@@ -64,7 +64,7 @@ lapack_int LAPACKE_cgtsv_work( int matrix_order, lapack_int n, lapack_int nrhs,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_cge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgtsv( &n, &nrhs, dl, d, du, b_t, &ldb_t, &info );
         if( info < 0 ) {

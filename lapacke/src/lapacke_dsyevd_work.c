@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsyevd_work( int matrix_order, char jobz, char uplo,
+lapack_int LAPACKE_dsyevd_work( int matrix_layout, char jobz, char uplo,
                                 lapack_int n, double* a, lapack_int lda,
                                 double* w, double* work, lapack_int lwork,
                                 lapack_int* iwork, lapack_int liwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dsyevd( &jobz, &uplo, &n, a, &lda, w, work, &lwork, iwork,
                        &liwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         double* a_t = NULL;
         /* Check leading dimension(s) */
@@ -68,7 +68,7 @@ lapack_int LAPACKE_dsyevd_work( int matrix_order, char jobz, char uplo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_dge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dsyevd( &jobz, &uplo, &n, a_t, &lda_t, w, work, &lwork, iwork,
                        &liwork, &info );

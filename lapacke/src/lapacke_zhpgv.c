@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhpgv( int matrix_order, lapack_int itype, char jobz,
+lapack_int LAPACKE_zhpgv( int matrix_layout, lapack_int itype, char jobz,
                           char uplo, lapack_int n, lapack_complex_double* ap,
                           lapack_complex_double* bp, double* w,
                           lapack_complex_double* z, lapack_int ldz )
@@ -41,7 +41,7 @@ lapack_int LAPACKE_zhpgv( int matrix_order, lapack_int itype, char jobz,
     lapack_int info = 0;
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zhpgv", -1 );
         return -1;
     }
@@ -67,7 +67,7 @@ lapack_int LAPACKE_zhpgv( int matrix_order, lapack_int itype, char jobz,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zhpgv_work( matrix_order, itype, jobz, uplo, n, ap, bp, w, z,
+    info = LAPACKE_zhpgv_work( matrix_layout, itype, jobz, uplo, n, ap, bp, w, z,
                                ldz, work, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );

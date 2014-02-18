@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,21 +33,21 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ctbcon_work( int matrix_order, char norm, char uplo,
+lapack_int LAPACKE_ctbcon_work( int matrix_layout, char norm, char uplo,
                                 char diag, lapack_int n, lapack_int kd,
                                 const lapack_complex_float* ab, lapack_int ldab,
                                 float* rcond, lapack_complex_float* work,
                                 float* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ctbcon( &norm, &uplo, &diag, &n, &kd, ab, &ldab, rcond, work,
                        rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,kd+1);
         lapack_complex_float* ab_t = NULL;
         /* Check leading dimension(s) */
@@ -64,7 +64,7 @@ lapack_int LAPACKE_ctbcon_work( int matrix_order, char norm, char uplo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_ctb_trans( matrix_order, uplo, diag, n, kd, ab, ldab, ab_t,
+        LAPACKE_ctb_trans( matrix_layout, uplo, diag, n, kd, ab, ldab, ab_t,
                            ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ctbcon( &norm, &uplo, &diag, &n, &kd, ab_t, &ldab_t, rcond, work,

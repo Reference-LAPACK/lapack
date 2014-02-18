@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zggev_work( int matrix_order, char jobvl, char jobvr,
+lapack_int LAPACKE_zggev_work( int matrix_layout, char jobvl, char jobvr,
                                lapack_int n, lapack_complex_double* a,
                                lapack_int lda, lapack_complex_double* b,
                                lapack_int ldb, lapack_complex_double* alpha,
@@ -44,14 +44,14 @@ lapack_int LAPACKE_zggev_work( int matrix_order, char jobvl, char jobvr,
                                double* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zggev( &jobvl, &jobvr, &n, a, &lda, b, &ldb, alpha, beta, vl,
                       &ldvl, vr, &ldvr, work, &lwork, rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int nrows_vl = LAPACKE_lsame( jobvl, 'v' ) ? n : 1;
         lapack_int ncols_vl = LAPACKE_lsame( jobvl, 'v' ) ? n : 1;
         lapack_int nrows_vr = LAPACKE_lsame( jobvr, 'v' ) ? n : 1;
@@ -124,8 +124,8 @@ lapack_int LAPACKE_zggev_work( int matrix_order, char jobvl, char jobvr,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
-        LAPACKE_zge_trans( matrix_order, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zggev( &jobvl, &jobvr, &n, a_t, &lda_t, b_t, &ldb_t, alpha, beta,
                       vl_t, &ldvl_t, vr_t, &ldvr_t, work, &lwork, rwork,

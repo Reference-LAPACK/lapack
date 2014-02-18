@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sspsvx( int matrix_order, char fact, char uplo, lapack_int n,
+lapack_int LAPACKE_sspsvx( int matrix_layout, char fact, char uplo, lapack_int n,
                            lapack_int nrhs, const float* ap, float* afp,
                            lapack_int* ipiv, const float* b, lapack_int ldb,
                            float* x, lapack_int ldx, float* rcond, float* ferr,
@@ -42,7 +42,7 @@ lapack_int LAPACKE_sspsvx( int matrix_order, char fact, char uplo, lapack_int n,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sspsvx", -1 );
         return -1;
     }
@@ -56,7 +56,7 @@ lapack_int LAPACKE_sspsvx( int matrix_order, char fact, char uplo, lapack_int n,
     if( LAPACKE_ssp_nancheck( n, ap ) ) {
         return -6;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -9;
     }
 #endif
@@ -72,7 +72,7 @@ lapack_int LAPACKE_sspsvx( int matrix_order, char fact, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sspsvx_work( matrix_order, fact, uplo, n, nrhs, ap, afp,
+    info = LAPACKE_sspsvx_work( matrix_layout, fact, uplo, n, nrhs, ap, afp,
                                 ipiv, b, ldb, x, ldx, rcond, ferr, berr, work,
                                 iwork );
     /* Release memory and exit */

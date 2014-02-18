@@ -1435,6 +1435,8 @@ lapacke_stpcon.c
 lapacke_stpcon_work.c
 lapacke_stpmqrt.c
 lapacke_stpmqrt_work.c
+lapacke_stpqrt.c
+lapacke_stpqrt_work.c
 lapacke_stpqrt2.c
 lapacke_stpqrt2_work.c
 lapacke_stprfb.c

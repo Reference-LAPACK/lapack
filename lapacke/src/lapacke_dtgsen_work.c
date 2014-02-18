@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtgsen_work( int matrix_order, lapack_int ijob,
+lapack_int LAPACKE_dtgsen_work( int matrix_layout, lapack_int ijob,
                                 lapack_logical wantq, lapack_logical wantz,
                                 const lapack_logical* select, lapack_int n,
                                 double* a, lapack_int lda, double* b,
@@ -45,7 +45,7 @@ lapack_int LAPACKE_dtgsen_work( int matrix_order, lapack_int ijob,
                                 lapack_int* iwork, lapack_int liwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dtgsen( &ijob, &wantq, &wantz, select, &n, a, &lda, b, &ldb,
                        alphar, alphai, beta, q, &ldq, z, &ldz, m, pl, pr, dif,
@@ -53,7 +53,7 @@ lapack_int LAPACKE_dtgsen_work( int matrix_order, lapack_int ijob,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldq_t = MAX(1,n);
@@ -117,13 +117,13 @@ lapack_int LAPACKE_dtgsen_work( int matrix_order, lapack_int ijob,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_dge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
-        LAPACKE_dge_trans( matrix_order, n, n, b, ldb, b_t, ldb_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         if( wantq ) {
-            LAPACKE_dge_trans( matrix_order, n, n, q, ldq, q_t, ldq_t );
+            LAPACKE_dge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         if( wantz ) {
-            LAPACKE_dge_trans( matrix_order, n, n, z, ldz, z_t, ldz_t );
+            LAPACKE_dge_trans( matrix_layout, n, n, z, ldz, z_t, ldz_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_dtgsen( &ijob, &wantq, &wantz, select, &n, a_t, &lda_t, b_t,

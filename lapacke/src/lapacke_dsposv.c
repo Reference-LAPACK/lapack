@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsposv( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_dsposv( int matrix_layout, char uplo, lapack_int n,
                            lapack_int nrhs, double* a, lapack_int lda,
                            double* b, lapack_int ldb, double* x, lapack_int ldx,
                            lapack_int* iter )
@@ -41,16 +41,16 @@ lapack_int LAPACKE_dsposv( int matrix_order, char uplo, lapack_int n,
     lapack_int info = 0;
     float* swork = NULL;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dsposv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dpo_nancheck( matrix_order, uplo, n, a, lda ) ) {
+    if( LAPACKE_dpo_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -5;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -7;
     }
 #endif
@@ -66,7 +66,7 @@ lapack_int LAPACKE_dsposv( int matrix_order, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsposv_work( matrix_order, uplo, n, nrhs, a, lda, b, ldb, x,
+    info = LAPACKE_dsposv_work( matrix_layout, uplo, n, nrhs, a, lda, b, ldb, x,
                                 ldx, work, swork, iter );
     /* Release memory and exit */
     LAPACKE_free( work );

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dstevx_work( int matrix_order, char jobz, char range,
+lapack_int LAPACKE_dstevx_work( int matrix_layout, char jobz, char range,
                                 lapack_int n, double* d, double* e, double vl,
                                 double vu, lapack_int il, lapack_int iu,
                                 double abstol, lapack_int* m, double* w,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_dstevx_work( int matrix_order, char jobz, char range,
                                 lapack_int* iwork, lapack_int* ifail )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dstevx( &jobz, &range, &n, d, e, &vl, &vu, &il, &iu, &abstol, m,
                        w, z, &ldz, work, iwork, ifail, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ncols_z = ( LAPACKE_lsame( range, 'a' ) ||
                              LAPACKE_lsame( range, 'v' ) ) ? n :
                              ( LAPACKE_lsame( range, 'i' ) ? (iu-il+1) : 1);

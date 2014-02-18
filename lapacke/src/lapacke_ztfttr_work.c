@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztfttr_work( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_ztfttr_work( int matrix_layout, char transr, char uplo,
                                 lapack_int n, const lapack_complex_double* arf,
                                 lapack_complex_double* a, lapack_int lda )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ztfttr( &transr, &uplo, &n, arf, a, &lda, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_complex_double* a_t = NULL;
         lapack_complex_double* arf_t = NULL;
@@ -69,7 +69,7 @@ lapack_int LAPACKE_ztfttr_work( int matrix_order, char transr, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_zpf_trans( matrix_order, transr, uplo, n, arf, arf_t );
+        LAPACKE_zpf_trans( matrix_layout, transr, uplo, n, arf, arf_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ztfttr( &transr, &uplo, &n, arf_t, a_t, &lda_t, &info );
         if( info < 0 ) {

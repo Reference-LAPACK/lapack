@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgeqrt3_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_sgeqrt3_work( int matrix_layout, lapack_int m, lapack_int n,
                                  float* a, lapack_int lda, float* t,
                                  lapack_int ldt )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_sgeqrt3( &m, &n, a, &lda, t, &ldt, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
         lapack_int ldt_t = MAX(1,n);
         float* a_t = NULL;
@@ -72,7 +72,7 @@ lapack_int LAPACKE_sgeqrt3_work( int matrix_order, lapack_int m, lapack_int n,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_order, m, n, a, lda, a_t, lda_t );
+        LAPACKE_sge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_sgeqrt3( &m, &n, a_t, &lda_t, t_t, &ldt_t, &info );
         if( info < 0 ) {

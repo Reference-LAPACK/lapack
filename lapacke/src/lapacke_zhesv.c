@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhesv( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zhesv( int matrix_layout, char uplo, lapack_int n,
                           lapack_int nrhs, lapack_complex_double* a,
                           lapack_int lda, lapack_int* ipiv,
                           lapack_complex_double* b, lapack_int ldb )
@@ -42,21 +42,21 @@ lapack_int LAPACKE_zhesv( int matrix_order, char uplo, lapack_int n,
     lapack_int lwork = -1;
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zhesv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_zhe_nancheck( matrix_order, uplo, n, a, lda ) ) {
+    if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -5;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -8;
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_zhesv_work( matrix_order, uplo, n, nrhs, a, lda, ipiv, b,
+    info = LAPACKE_zhesv_work( matrix_layout, uplo, n, nrhs, a, lda, ipiv, b,
                                ldb, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -70,7 +70,7 @@ lapack_int LAPACKE_zhesv( int matrix_order, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zhesv_work( matrix_order, uplo, n, nrhs, a, lda, ipiv, b,
+    info = LAPACKE_zhesv_work( matrix_layout, uplo, n, nrhs, a, lda, ipiv, b,
                                ldb, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

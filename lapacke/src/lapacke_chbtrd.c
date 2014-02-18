@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,24 +33,24 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chbtrd( int matrix_order, char vect, char uplo, lapack_int n,
+lapack_int LAPACKE_chbtrd( int matrix_layout, char vect, char uplo, lapack_int n,
                            lapack_int kd, lapack_complex_float* ab,
                            lapack_int ldab, float* d, float* e,
                            lapack_complex_float* q, lapack_int ldq )
 {
     lapack_int info = 0;
     lapack_complex_float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_chbtrd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_chb_nancheck( matrix_order, uplo, n, kd, ab, ldab ) ) {
+    if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
         return -6;
     }
     if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
-        if( LAPACKE_cge_nancheck( matrix_order, n, n, q, ldq ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, n, n, q, ldq ) ) {
             return -10;
         }
     }
@@ -63,7 +63,7 @@ lapack_int LAPACKE_chbtrd( int matrix_order, char vect, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_chbtrd_work( matrix_order, vect, uplo, n, kd, ab, ldab, d, e,
+    info = LAPACKE_chbtrd_work( matrix_layout, vect, uplo, n, kd, ab, ldab, d, e,
                                 q, ldq, work );
     /* Release memory and exit */
     LAPACKE_free( work );

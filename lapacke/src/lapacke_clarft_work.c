@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_clarft_work( int matrix_order, char direct, char storev,
+lapack_int LAPACKE_clarft_work( int matrix_layout, char direct, char storev,
                                 lapack_int n, lapack_int k,
                                 const lapack_complex_float* v, lapack_int ldv,
                                 const lapack_complex_float* tau,
@@ -43,13 +43,13 @@ lapack_int LAPACKE_clarft_work( int matrix_order, char direct, char storev,
     lapack_int nrows_v, ncols_v;
     lapack_int ldt_t, ldv_t;
     lapack_complex_float *v_t= NULL, *t_t= NULL;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_clarft( &direct, &storev, &n, &k, v, &ldv, tau, t, &ldt );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         nrows_v = LAPACKE_lsame( storev, 'c' ) ? n :
                              ( LAPACKE_lsame( storev, 'r' ) ? k : 1);
         ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
@@ -82,7 +82,7 @@ lapack_int LAPACKE_clarft_work( int matrix_order, char direct, char storev,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, nrows_v, ncols_v, v, ldv, v_t, ldv_t );
+        LAPACKE_cge_trans( matrix_layout, nrows_v, ncols_v, v, ldv, v_t, ldv_t );
         /* Call LAPACK function and adjust info */
         LAPACK_clarft( &direct, &storev, &n, &k, v_t, &ldv_t, tau, t_t,
                        &ldt_t );

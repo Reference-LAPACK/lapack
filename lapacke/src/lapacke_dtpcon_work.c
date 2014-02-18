@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtpcon_work( int matrix_order, char norm, char uplo,
+lapack_int LAPACKE_dtpcon_work( int matrix_layout, char norm, char uplo,
                                 char diag, lapack_int n, const double* ap,
                                 double* rcond, double* work, lapack_int* iwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dtpcon( &norm, &uplo, &diag, &n, ap, rcond, work, iwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         double* ap_t = NULL;
         /* Allocate memory for temporary array(s) */
         ap_t = (double*)
@@ -54,7 +54,7 @@ lapack_int LAPACKE_dtpcon_work( int matrix_order, char norm, char uplo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_dtp_trans( matrix_order, uplo, diag, n, ap, ap_t );
+        LAPACKE_dtp_trans( matrix_layout, uplo, diag, n, ap, ap_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dtpcon( &norm, &uplo, &diag, &n, ap_t, rcond, work, iwork,
                        &info );

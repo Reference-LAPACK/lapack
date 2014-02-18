@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssfrk_work( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_ssfrk_work( int matrix_layout, char transr, char uplo,
                                char trans, lapack_int n, lapack_int k,
                                float alpha, const float* a, lapack_int lda,
                                float beta, float* c )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ssfrk( &transr, &uplo, &trans, &n, &k, &alpha, a, &lda, &beta,
                       c );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int na = LAPACKE_lsame( trans, 'n' ) ? n : k;
         lapack_int ka = LAPACKE_lsame( trans, 'n' ) ? k : n;
         lapack_int lda_t = MAX(1,na);
@@ -71,8 +71,8 @@ lapack_int LAPACKE_ssfrk_work( int matrix_order, char transr, char uplo,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_order, na, ka, a, lda, a_t, lda_t );
-        LAPACKE_spf_trans( matrix_order, transr, uplo, n, c, c_t );
+        LAPACKE_sge_trans( matrix_layout, na, ka, a, lda, a_t, lda_t );
+        LAPACKE_spf_trans( matrix_layout, transr, uplo, n, c, c_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ssfrk( &transr, &uplo, &trans, &n, &k, &alpha, a_t, &lda_t,
                       &beta, c_t );

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dporfsx( int matrix_order, char uplo, char equed,
+lapack_int LAPACKE_dporfsx( int matrix_layout, char uplo, char equed,
                             lapack_int n, lapack_int nrhs, const double* a,
                             lapack_int lda, const double* af, lapack_int ldaf,
                             const double* s, const double* b, lapack_int ldb,
@@ -45,19 +45,19 @@ lapack_int LAPACKE_dporfsx( int matrix_order, char uplo, char equed,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dporfsx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dsy_nancheck( matrix_order, uplo, n, a, lda ) ) {
+    if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -6;
     }
-    if( LAPACKE_dsy_nancheck( matrix_order, uplo, n, af, ldaf ) ) {
+    if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, af, ldaf ) ) {
         return -8;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -11;
     }
     if( nparams>0 ) {
@@ -70,7 +70,7 @@ lapack_int LAPACKE_dporfsx( int matrix_order, char uplo, char equed,
             return -10;
         }
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, x, ldx ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
         return -13;
     }
 #endif
@@ -86,7 +86,7 @@ lapack_int LAPACKE_dporfsx( int matrix_order, char uplo, char equed,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dporfsx_work( matrix_order, uplo, equed, n, nrhs, a, lda, af,
+    info = LAPACKE_dporfsx_work( matrix_layout, uplo, equed, n, nrhs, a, lda, af,
                                  ldaf, s, b, ldb, x, ldx, rcond, berr,
                                  n_err_bnds, err_bnds_norm, err_bnds_comp,
                                  nparams, params, work, iwork );

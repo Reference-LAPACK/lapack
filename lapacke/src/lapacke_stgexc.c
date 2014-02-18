@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stgexc( int matrix_order, lapack_logical wantq,
+lapack_int LAPACKE_stgexc( int matrix_layout, lapack_logical wantq,
                            lapack_logical wantz, lapack_int n, float* a,
                            lapack_int lda, float* b, lapack_int ldb, float* q,
                            lapack_int ldq, float* z, lapack_int ldz,
@@ -43,31 +43,31 @@ lapack_int LAPACKE_stgexc( int matrix_order, lapack_logical wantq,
     lapack_int lwork = -1;
     float* work = NULL;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_stgexc", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -5;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, b, ldb ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, b, ldb ) ) {
         return -7;
     }
     if( wantq ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, n, q, ldq ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, q, ldq ) ) {
             return -9;
         }
     }
     if( wantz ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, n, z, ldz ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, z, ldz ) ) {
             return -11;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_stgexc_work( matrix_order, wantq, wantz, n, a, lda, b, ldb,
+    info = LAPACKE_stgexc_work( matrix_layout, wantq, wantz, n, a, lda, b, ldb,
                                 q, ldq, z, ldz, ifst, ilst, &work_query,
                                 lwork );
     if( info != 0 ) {
@@ -81,7 +81,7 @@ lapack_int LAPACKE_stgexc( int matrix_order, lapack_logical wantq,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_stgexc_work( matrix_order, wantq, wantz, n, a, lda, b, ldb,
+    info = LAPACKE_stgexc_work( matrix_layout, wantq, wantz, n, a, lda, b, ldb,
                                 q, ldq, z, ldz, ifst, ilst, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cpbcon( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_cpbcon( int matrix_layout, char uplo, lapack_int n,
                            lapack_int kd, const lapack_complex_float* ab,
                            lapack_int ldab, float anorm, float* rcond )
 {
     lapack_int info = 0;
     float* rwork = NULL;
     lapack_complex_float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_cpbcon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_cpb_nancheck( matrix_order, uplo, n, kd, ab, ldab ) ) {
+    if( LAPACKE_cpb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
         return -5;
     }
     if( LAPACKE_s_nancheck( 1, &anorm, 1 ) ) {
@@ -66,7 +66,7 @@ lapack_int LAPACKE_cpbcon( int matrix_order, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cpbcon_work( matrix_order, uplo, n, kd, ab, ldab, anorm,
+    info = LAPACKE_cpbcon_work( matrix_layout, uplo, n, kd, ab, ldab, anorm,
                                 rcond, work, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );

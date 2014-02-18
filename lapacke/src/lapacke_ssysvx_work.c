@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssysvx_work( int matrix_order, char fact, char uplo,
+lapack_int LAPACKE_ssysvx_work( int matrix_layout, char fact, char uplo,
                                 lapack_int n, lapack_int nrhs, const float* a,
                                 lapack_int lda, float* af, lapack_int ldaf,
                                 lapack_int* ipiv, const float* b,
@@ -43,7 +43,7 @@ lapack_int LAPACKE_ssysvx_work( int matrix_order, char fact, char uplo,
                                 lapack_int* iwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ssysvx( &fact, &uplo, &n, &nrhs, a, &lda, af, &ldaf, ipiv, b,
                        &ldb, x, &ldx, rcond, ferr, berr, work, &lwork, iwork,
@@ -51,7 +51,7 @@ lapack_int LAPACKE_ssysvx_work( int matrix_order, char fact, char uplo,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldaf_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
@@ -110,11 +110,11 @@ lapack_int LAPACKE_ssysvx_work( int matrix_order, char fact, char uplo,
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        LAPACKE_ssy_trans( matrix_order, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_ssy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         if( LAPACKE_lsame( fact, 'f' ) ) {
-            LAPACKE_ssy_trans( matrix_order, uplo, n, af, ldaf, af_t, ldaf_t );
+            LAPACKE_ssy_trans( matrix_layout, uplo, n, af, ldaf, af_t, ldaf_t );
         }
-        LAPACKE_sge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ssysvx( &fact, &uplo, &n, &nrhs, a_t, &lda_t, af_t, &ldaf_t,
                        ipiv, b_t, &ldb_t, x_t, &ldx_t, rcond, ferr, berr, work,

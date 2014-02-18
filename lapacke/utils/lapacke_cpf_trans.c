@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,9 @@
  * layout or vice versa.
  */
 
-void LAPACKE_cpf_trans( int matrix_order, char transr, char uplo,
+void LAPACKE_cpf_trans( int matrix_layout, char transr, char uplo,
                         lapack_int n, const lapack_complex_float *in,
                         lapack_complex_float *out )
 {
-    LAPACKE_ctf_trans( matrix_order, transr, uplo, 'n', n, in, out );
+    LAPACKE_ctf_trans( matrix_layout, transr, uplo, 'n', n, in, out );
 }

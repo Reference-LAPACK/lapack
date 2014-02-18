@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,19 +33,19 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_slagge_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_slagge_work( int matrix_layout, lapack_int m, lapack_int n,
                                 lapack_int kl, lapack_int ku, const float* d,
                                 float* a, lapack_int lda, lapack_int* iseed,
                                 float* work )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_slagge( &m, &n, &kl, &ku, d, a, &lda, iseed, work, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
         float* a_t = NULL;
         /* Check leading dimension(s) */

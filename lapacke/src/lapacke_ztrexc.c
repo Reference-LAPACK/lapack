@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,26 +33,26 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztrexc( int matrix_order, char compq, lapack_int n,
+lapack_int LAPACKE_ztrexc( int matrix_layout, char compq, lapack_int n,
                            lapack_complex_double* t, lapack_int ldt,
                            lapack_complex_double* q, lapack_int ldq,
                            lapack_int ifst, lapack_int ilst )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_ztrexc", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
     if( LAPACKE_lsame( compq, 'v' ) ) {
-        if( LAPACKE_zge_nancheck( matrix_order, n, n, q, ldq ) ) {
+        if( LAPACKE_zge_nancheck( matrix_layout, n, n, q, ldq ) ) {
             return -6;
         }
     }
-    if( LAPACKE_zge_nancheck( matrix_order, n, n, t, ldt ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, n, n, t, ldt ) ) {
         return -4;
     }
 #endif
-    return LAPACKE_ztrexc_work( matrix_order, compq, n, t, ldt, q, ldq, ifst,
+    return LAPACKE_ztrexc_work( matrix_layout, compq, n, t, ldt, q, ldq, ifst,
                                 ilst );
 }

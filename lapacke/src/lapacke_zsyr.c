@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zsyr( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zsyr( int matrix_layout, char uplo, lapack_int n,
                              lapack_complex_double alpha,
                              const lapack_complex_double* x, lapack_int incx,
                              lapack_complex_double* a, lapack_int lda )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zsyr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_zsy_nancheck( matrix_order, uplo, n, a, lda ) ) {
+    if( LAPACKE_zsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -7;
     }
     if( LAPACKE_z_nancheck( 1, &alpha, 1 ) ) {
@@ -54,6 +54,6 @@ lapack_int LAPACKE_zsyr( int matrix_order, char uplo, lapack_int n,
         return -5;
     }
 #endif
-    return LAPACKE_zsyr_work( matrix_order, uplo, n, alpha, x, incx, a,
+    return LAPACKE_zsyr_work( matrix_layout, uplo, n, alpha, x, incx, a,
                                   lda );
 }

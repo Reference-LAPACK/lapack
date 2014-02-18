@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,14 +33,14 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zlarft( int matrix_order, char direct, char storev,
+lapack_int LAPACKE_zlarft( int matrix_layout, char direct, char storev,
                            lapack_int n, lapack_int k,
                            const lapack_complex_double* v, lapack_int ldv,
                            const lapack_complex_double* tau,
                            lapack_complex_double* t, lapack_int ldt )
 {
     lapack_int ncols_v, nrows_v;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zlarft", -1 );
         return -1;
     }
@@ -53,10 +53,10 @@ lapack_int LAPACKE_zlarft( int matrix_order, char direct, char storev,
     if( LAPACKE_z_nancheck( k, tau, 1 ) ) {
         return -8;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, nrows_v, ncols_v, v, ldv ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, nrows_v, ncols_v, v, ldv ) ) {
         return -6;
     }
 #endif
-    return LAPACKE_zlarft_work( matrix_order, direct, storev, n, k, v, ldv, tau,
+    return LAPACKE_zlarft_work( matrix_layout, direct, storev, n, k, v, ldv, tau,
                                 t, ldt );
 }

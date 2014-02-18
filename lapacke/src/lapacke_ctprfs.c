@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ctprfs( int matrix_order, char uplo, char trans, char diag,
+lapack_int LAPACKE_ctprfs( int matrix_layout, char uplo, char trans, char diag,
                            lapack_int n, lapack_int nrhs,
                            const lapack_complex_float* ap,
                            const lapack_complex_float* b, lapack_int ldb,
@@ -43,19 +43,19 @@ lapack_int LAPACKE_ctprfs( int matrix_order, char uplo, char trans, char diag,
     lapack_int info = 0;
     float* rwork = NULL;
     lapack_complex_float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_ctprfs", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_ctp_nancheck( matrix_order, uplo, diag, n, ap ) ) {
+    if( LAPACKE_ctp_nancheck( matrix_layout, uplo, diag, n, ap ) ) {
         return -7;
     }
-    if( LAPACKE_cge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -8;
     }
-    if( LAPACKE_cge_nancheck( matrix_order, n, nrhs, x, ldx ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, x, ldx ) ) {
         return -10;
     }
 #endif
@@ -72,7 +72,7 @@ lapack_int LAPACKE_ctprfs( int matrix_order, char uplo, char trans, char diag,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ctprfs_work( matrix_order, uplo, trans, diag, n, nrhs, ap, b,
+    info = LAPACKE_ctprfs_work( matrix_layout, uplo, trans, diag, n, nrhs, ap, b,
                                 ldb, x, ldx, ferr, berr, work, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );

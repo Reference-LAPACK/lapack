@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,21 +33,21 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dbdsdc_work( int matrix_order, char uplo, char compq,
+lapack_int LAPACKE_dbdsdc_work( int matrix_layout, char uplo, char compq,
                                 lapack_int n, double* d, double* e, double* u,
                                 lapack_int ldu, double* vt, lapack_int ldvt,
                                 double* q, lapack_int* iq, double* work,
                                 lapack_int* iwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dbdsdc( &uplo, &compq, &n, d, e, u, &ldu, vt, &ldvt, q, iq, work,
                        iwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldu_t = MAX(1,n);
         lapack_int ldvt_t = MAX(1,n);
         double* u_t = NULL;

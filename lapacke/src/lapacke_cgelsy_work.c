@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgelsy_work( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_cgelsy_work( int matrix_layout, lapack_int m, lapack_int n,
                                 lapack_int nrhs, lapack_complex_float* a,
                                 lapack_int lda, lapack_complex_float* b,
                                 lapack_int ldb, lapack_int* jpvt, float rcond,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_cgelsy_work( int matrix_order, lapack_int m, lapack_int n,
                                 lapack_int lwork, float* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_cgelsy( &m, &n, &nrhs, a, &lda, b, &ldb, jpvt, &rcond, rank,
                        work, &lwork, rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
         lapack_int ldb_t = MAX(1,MAX(m,n));
         lapack_complex_float* a_t = NULL;
@@ -85,8 +85,8 @@ lapack_int LAPACKE_cgelsy_work( int matrix_order, lapack_int m, lapack_int n,
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, m, n, a, lda, a_t, lda_t );
-        LAPACKE_cge_trans( matrix_order, MAX(m,n), nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_cge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
+        LAPACKE_cge_trans( matrix_layout, MAX(m,n), nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgelsy( &m, &n, &nrhs, a_t, &lda_t, b_t, &ldb_t, jpvt, &rcond,
                        rank, work, &lwork, rwork, &info );

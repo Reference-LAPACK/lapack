@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztbrfs_work( int matrix_order, char uplo, char trans,
+lapack_int LAPACKE_ztbrfs_work( int matrix_layout, char uplo, char trans,
                                 char diag, lapack_int n, lapack_int kd,
                                 lapack_int nrhs,
                                 const lapack_complex_double* ab,
@@ -43,14 +43,14 @@ lapack_int LAPACKE_ztbrfs_work( int matrix_order, char uplo, char trans,
                                 lapack_complex_double* work, double* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_ztbrfs( &uplo, &trans, &diag, &n, &kd, &nrhs, ab, &ldab, b, &ldb,
                        x, &ldx, ferr, berr, work, rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,kd+1);
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldx_t = MAX(1,n);
@@ -95,10 +95,10 @@ lapack_int LAPACKE_ztbrfs_work( int matrix_order, char uplo, char trans,
             goto exit_level_2;
         }
         /* Transpose input matrices */
-        LAPACKE_ztb_trans( matrix_order, uplo, diag, n, kd, ab, ldab, ab_t,
+        LAPACKE_ztb_trans( matrix_layout, uplo, diag, n, kd, ab, ldab, ab_t,
                            ldab_t );
-        LAPACKE_zge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_zge_trans( matrix_order, n, nrhs, x, ldx, x_t, ldx_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
         /* Call LAPACK function and adjust info */
         LAPACK_ztbrfs( &uplo, &trans, &diag, &n, &kd, &nrhs, ab_t, &ldab_t, b_t,
                        &ldb_t, x_t, &ldx_t, ferr, berr, work, rwork, &info );

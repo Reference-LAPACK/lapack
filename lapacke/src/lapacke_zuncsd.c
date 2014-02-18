@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zuncsd( int matrix_order, char jobu1, char jobu2,
+lapack_int LAPACKE_zuncsd( int matrix_layout, char jobu1, char jobu2,
                            char jobv1t, char jobv2t, char trans, char signs,
                            lapack_int m, lapack_int p, lapack_int q,
                            lapack_complex_double* x11, lapack_int ldx11,
@@ -55,7 +55,7 @@ lapack_int LAPACKE_zuncsd( int matrix_order, char jobu1, char jobu2,
     double rwork_query;
     lapack_complex_double work_query;
     lapack_int nrows_x11, nrows_x12, nrows_x21, nrows_x22;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zuncsd", -1 );
         return -1;
     }
@@ -65,27 +65,27 @@ lapack_int LAPACKE_zuncsd( int matrix_order, char jobu1, char jobu2,
     nrows_x12 = ( LAPACKE_lsame( trans, 'n' ) ? p : m-q);
     nrows_x21 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : q);
     nrows_x22 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : m-q);
-    if( LAPACKE_zge_nancheck( matrix_order, nrows_x11, q, x11, ldx11 ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, nrows_x11, q, x11, ldx11 ) ) {
         return -11;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, nrows_x12, m-q, x12, ldx12 ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, nrows_x12, m-q, x12, ldx12 ) ) {
         return -13;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, nrows_x21, q, x21, ldx21 ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, nrows_x21, q, x21, ldx21 ) ) {
         return -15;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, nrows_x22, m-q, x22, ldx22 ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, nrows_x22, m-q, x22, ldx22 ) ) {
         return -17;
     }
 #endif
     /* Allocate memory for working array(s) */
-    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,m-q) );
+    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,m-MIN(MIN(p,m-p),MIN(q,m-q))) );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_zuncsd_work( matrix_order, jobu1, jobu2, jobv1t, jobv2t,
+    info = LAPACKE_zuncsd_work( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
                                 trans, signs, m, p, q, x11, ldx11, x12, ldx12,
                                 x21, ldx21, x22, ldx22, theta, u1, ldu1, u2,
                                 ldu2, v1t, ldv1t, v2t, ldv2t, &work_query,
@@ -108,7 +108,7 @@ lapack_int LAPACKE_zuncsd( int matrix_order, char jobu1, char jobu2,
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zuncsd_work( matrix_order, jobu1, jobu2, jobv1t, jobv2t,
+    info = LAPACKE_zuncsd_work( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
                                 trans, signs, m, p, q, x11, ldx11, x12, ldx12,
                                 x21, ldx21, x22, ldx22, theta, u1, ldu1, u2,
                                 ldu2, v1t, ldv1t, v2t, ldv2t, work, lwork,

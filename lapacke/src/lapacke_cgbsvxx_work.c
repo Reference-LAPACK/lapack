@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgbsvxx_work( int matrix_order, char fact, char trans,
+lapack_int LAPACKE_cgbsvxx_work( int matrix_layout, char fact, char trans,
                                  lapack_int n, lapack_int kl, lapack_int ku,
                                  lapack_int nrhs, lapack_complex_float* ab,
                                  lapack_int ldab, lapack_complex_float* afb,
@@ -48,7 +48,7 @@ lapack_int LAPACKE_cgbsvxx_work( int matrix_order, char fact, char trans,
                                  float* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_cgbsvxx( &fact, &trans, &n, &kl, &ku, &nrhs, ab, &ldab, afb,
                         &ldafb, ipiv, equed, r, c, b, &ldb, x, &ldx, rcond,
@@ -57,7 +57,7 @@ lapack_int LAPACKE_cgbsvxx_work( int matrix_order, char fact, char trans,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,kl+ku+1);
         lapack_int ldafb_t = MAX(1,2*kl+ku+1);
         lapack_int ldb_t = MAX(1,n);
@@ -129,12 +129,12 @@ lapack_int LAPACKE_cgbsvxx_work( int matrix_order, char fact, char trans,
             goto exit_level_5;
         }
         /* Transpose input matrices */
-        LAPACKE_cgb_trans( matrix_order, n, n, kl, ku, ab, ldab, ab_t, ldab_t );
+        LAPACKE_cgb_trans( matrix_layout, n, n, kl, ku, ab, ldab, ab_t, ldab_t );
         if( LAPACKE_lsame( fact, 'f' ) ) {
-            LAPACKE_cgb_trans( matrix_order, n, n, kl, kl+ku, afb, ldafb, afb_t,
+            LAPACKE_cgb_trans( matrix_layout, n, n, kl, kl+ku, afb, ldafb, afb_t,
                                ldafb_t );
         }
-        LAPACKE_cge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_cge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgbsvxx( &fact, &trans, &n, &kl, &ku, &nrhs, ab_t, &ldab_t,
                         afb_t, &ldafb_t, ipiv, equed, r, c, b_t, &ldb_t, x_t,
@@ -160,9 +160,9 @@ lapack_int LAPACKE_cgbsvxx_work( int matrix_order, char fact, char trans,
         }
         LAPACKE_cge_trans( LAPACK_COL_MAJOR, n, nrhs, x_t, ldx_t, x, ldx );
         LAPACKE_sge_trans( LAPACK_COL_MAJOR, nrhs, n_err_bnds, err_bnds_norm_t,
-                           nrhs, err_bnds_norm, nrhs );
+                           nrhs, err_bnds_norm, n_err_bnds );
         LAPACKE_sge_trans( LAPACK_COL_MAJOR, nrhs, n_err_bnds, err_bnds_comp_t,
-                           nrhs, err_bnds_comp, nrhs );
+                           nrhs, err_bnds_comp, n_err_bnds );
         /* Release memory and exit */
         LAPACKE_free( err_bnds_comp_t );
 exit_level_5:

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgbrfsx_work( int matrix_order, char trans, char equed,
+lapack_int LAPACKE_dgbrfsx_work( int matrix_layout, char trans, char equed,
                                  lapack_int n, lapack_int kl, lapack_int ku,
                                  lapack_int nrhs, const double* ab,
                                  lapack_int ldab, const double* afb,
@@ -47,7 +47,7 @@ lapack_int LAPACKE_dgbrfsx_work( int matrix_order, char trans, char equed,
                                  lapack_int* iwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dgbrfsx( &trans, &equed, &n, &kl, &ku, &nrhs, ab, &ldab, afb,
                         &ldafb, ipiv, r, c, b, &ldb, x, &ldx, rcond, berr,
@@ -56,7 +56,7 @@ lapack_int LAPACKE_dgbrfsx_work( int matrix_order, char trans, char equed,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,kl+ku+1);
         lapack_int ldafb_t = MAX(1,2*kl+ku+1);
         lapack_int ldb_t = MAX(1,n);
@@ -122,11 +122,11 @@ lapack_int LAPACKE_dgbrfsx_work( int matrix_order, char trans, char equed,
             goto exit_level_5;
         }
         /* Transpose input matrices */
-        LAPACKE_dgb_trans( matrix_order, n, n, kl, ku, ab, ldab, ab_t, ldab_t );
-        LAPACKE_dgb_trans( matrix_order, n, n, kl, kl+ku, afb, ldafb, afb_t,
+        LAPACKE_dgb_trans( matrix_layout, n, n, kl, ku, ab, ldab, ab_t, ldab_t );
+        LAPACKE_dgb_trans( matrix_layout, n, n, kl, kl+ku, afb, ldafb, afb_t,
                            ldafb_t );
-        LAPACKE_dge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_dge_trans( matrix_order, n, nrhs, x, ldx, x_t, ldx_t );
+        LAPACKE_dge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_dge_trans( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgbrfsx( &trans, &equed, &n, &kl, &ku, &nrhs, ab_t, &ldab_t,
                         afb_t, &ldafb_t, ipiv, r, c, b_t, &ldb_t, x_t, &ldx_t,

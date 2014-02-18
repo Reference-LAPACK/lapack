@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@
  * This functions does copy diagonal for both unit and non-unit cases.
  */
 
-void LAPACKE_dtf_trans( int matrix_order, char transr, char uplo, char diag,
+void LAPACKE_dtf_trans( int matrix_layout, char transr, char uplo, char diag,
                         lapack_int n, const double *in,
                         double *out )
 {
@@ -47,12 +47,12 @@ void LAPACKE_dtf_trans( int matrix_order, char transr, char uplo, char diag,
 
     if( in == NULL || out == NULL ) return ;
 
-    rowmaj = (matrix_order == LAPACK_ROW_MAJOR);
+    rowmaj = (matrix_layout == LAPACK_ROW_MAJOR);
     ntr    = LAPACKE_lsame( transr, 'n' );
     lower  = LAPACKE_lsame( uplo,   'l' );
     unit   = LAPACKE_lsame( diag,   'u' );
 
-    if( ( !rowmaj && ( matrix_order != LAPACK_COL_MAJOR ) ) ||
+    if( ( !rowmaj && ( matrix_layout != LAPACK_COL_MAJOR ) ) ||
         ( !ntr    && !LAPACKE_lsame( transr, 't' ) &&
                      !LAPACKE_lsame( transr, 'c' ) ) ||
         ( !lower  && !LAPACKE_lsame( uplo,   'u' ) ) ||

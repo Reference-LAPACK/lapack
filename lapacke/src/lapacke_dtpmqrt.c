@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dtpmqrt( int matrix_order, char side, char trans,
+lapack_int LAPACKE_dtpmqrt( int matrix_layout, char side, char trans,
                             lapack_int m, lapack_int n, lapack_int k,
                             lapack_int l, lapack_int nb, const double* v,
                             lapack_int ldv, const double* t, lapack_int ldt,
@@ -42,22 +42,22 @@ lapack_int LAPACKE_dtpmqrt( int matrix_order, char side, char trans,
 {
     lapack_int info = 0;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dtpmqrt", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, k, m, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, k, m, a, lda ) ) {
         return -13;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, m, n, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, m, n, b, ldb ) ) {
         return -15;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, ldt, nb, t, ldt ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, ldt, nb, t, ldt ) ) {
         return -11;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, ldv, k, v, ldv ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, ldv, k, v, ldv ) ) {
         return -9;
     }
 #endif
@@ -68,7 +68,7 @@ lapack_int LAPACKE_dtpmqrt( int matrix_order, char side, char trans,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dtpmqrt_work( matrix_order, side, trans, m, n, k, l, nb, v,
+    info = LAPACKE_dtpmqrt_work( matrix_layout, side, trans, m, n, k, l, nb, v,
                                  ldv, t, ldt, a, lda, b, ldb, work );
     /* Release memory and exit */
     LAPACKE_free( work );

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sppsvx_work( int matrix_order, char fact, char uplo,
+lapack_int LAPACKE_sppsvx_work( int matrix_layout, char fact, char uplo,
                                 lapack_int n, lapack_int nrhs, float* ap,
                                 float* afp, char* equed, float* s, float* b,
                                 lapack_int ldb, float* x, lapack_int ldx,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_sppsvx_work( int matrix_order, char fact, char uplo,
                                 float* work, lapack_int* iwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_sppsvx( &fact, &uplo, &n, &nrhs, ap, afp, equed, s, b, &ldb, x,
                        &ldx, rcond, ferr, berr, work, iwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldx_t = MAX(1,n);
         float* b_t = NULL;
@@ -90,10 +90,10 @@ lapack_int LAPACKE_sppsvx_work( int matrix_order, char fact, char uplo,
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        LAPACKE_sge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_spp_trans( matrix_order, uplo, n, ap, ap_t );
+        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_spp_trans( matrix_layout, uplo, n, ap, ap_t );
         if( LAPACKE_lsame( fact, 'f' ) ) {
-            LAPACKE_spp_trans( matrix_order, uplo, n, afp, afp_t );
+            LAPACKE_spp_trans( matrix_layout, uplo, n, afp, afp_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_sppsvx( &fact, &uplo, &n, &nrhs, ap_t, afp_t, equed, s, b_t,

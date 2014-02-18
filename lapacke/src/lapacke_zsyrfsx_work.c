@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zsyrfsx_work( int matrix_order, char uplo, char equed,
+lapack_int LAPACKE_zsyrfsx_work( int matrix_layout, char uplo, char equed,
                                  lapack_int n, lapack_int nrhs,
                                  const lapack_complex_double* a, lapack_int lda,
                                  const lapack_complex_double* af,
@@ -48,7 +48,7 @@ lapack_int LAPACKE_zsyrfsx_work( int matrix_order, char uplo, char equed,
                                  double* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zsyrfsx( &uplo, &equed, &n, &nrhs, a, &lda, af, &ldaf, ipiv, s,
                         b, &ldb, x, &ldx, rcond, berr, &n_err_bnds,
@@ -57,7 +57,7 @@ lapack_int LAPACKE_zsyrfsx_work( int matrix_order, char uplo, char equed,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldaf_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
@@ -129,10 +129,10 @@ lapack_int LAPACKE_zsyrfsx_work( int matrix_order, char uplo, char equed,
             goto exit_level_5;
         }
         /* Transpose input matrices */
-        LAPACKE_zsy_trans( matrix_order, uplo, n, a, lda, a_t, lda_t );
-        LAPACKE_zsy_trans( matrix_order, uplo, n, af, ldaf, af_t, ldaf_t );
-        LAPACKE_zge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_zge_trans( matrix_order, n, nrhs, x, ldx, x_t, ldx_t );
+        LAPACKE_zsy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_zsy_trans( matrix_layout, uplo, n, af, ldaf, af_t, ldaf_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zsyrfsx( &uplo, &equed, &n, &nrhs, a_t, &lda_t, af_t, &ldaf_t,
                         ipiv, s, b_t, &ldb_t, x_t, &ldx_t, rcond, berr,

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cbbcsd( int matrix_order, char jobu1, char jobu2,
+lapack_int LAPACKE_cbbcsd( int matrix_layout, char jobu1, char jobu2,
                            char jobv1t, char jobv2t, char trans, lapack_int m,
                            lapack_int p, lapack_int q, float* theta, float* phi,
                            lapack_complex_float* u1, lapack_int ldu1,
@@ -48,7 +48,7 @@ lapack_int LAPACKE_cbbcsd( int matrix_order, char jobu1, char jobu2,
     float* rwork = NULL;
     float rwork_query;
     lapack_int nrows_u1, nrows_u2, nrows_v1t, nrows_v2t;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_cbbcsd", -1 );
         return -1;
     }
@@ -65,28 +65,28 @@ lapack_int LAPACKE_cbbcsd( int matrix_order, char jobu1, char jobu2,
         return -10;
     }
     if( LAPACKE_lsame( jobu1, 'y' ) ) {
-        if( LAPACKE_cge_nancheck( matrix_order, nrows_u1, p, u1, ldu1 ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, nrows_u1, p, u1, ldu1 ) ) {
             return -12;
         }
     }
     if( LAPACKE_lsame( jobu2, 'y' ) ) {
-        if( LAPACKE_cge_nancheck( matrix_order, nrows_u2, m-p, u2, ldu2 ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, nrows_u2, m-p, u2, ldu2 ) ) {
             return -14;
         }
     }
     if( LAPACKE_lsame( jobv1t, 'y' ) ) {
-        if( LAPACKE_cge_nancheck( matrix_order, nrows_v1t, q, v1t, ldv1t ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, nrows_v1t, q, v1t, ldv1t ) ) {
             return -16;
         }
     }
     if( LAPACKE_lsame( jobv2t, 'y' ) ) {
-        if( LAPACKE_cge_nancheck( matrix_order, nrows_v2t, m-q, v2t, ldv2t ) ) {
+        if( LAPACKE_cge_nancheck( matrix_layout, nrows_v2t, m-q, v2t, ldv2t ) ) {
             return -18;
         }
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_cbbcsd_work( matrix_order, jobu1, jobu2, jobv1t, jobv2t,
+    info = LAPACKE_cbbcsd_work( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
                                 trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
                                 v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e,
                                 b21d, b21e, b22d, b22e, &rwork_query, lrwork );
@@ -101,7 +101,7 @@ lapack_int LAPACKE_cbbcsd( int matrix_order, char jobu1, char jobu2,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_cbbcsd_work( matrix_order, jobu1, jobu2, jobv1t, jobv2t,
+    info = LAPACKE_cbbcsd_work( matrix_layout, jobu1, jobu2, jobv1t, jobv2t,
                                 trans, m, p, q, theta, phi, u1, ldu1, u2, ldu2,
                                 v1t, ldv1t, v2t, ldv2t, b11d, b11e, b12d, b12e,
                                 b21d, b21e, b22d, b22e, rwork, lrwork );

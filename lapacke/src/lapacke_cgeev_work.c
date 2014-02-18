@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cgeev_work( int matrix_order, char jobvl, char jobvr,
+lapack_int LAPACKE_cgeev_work( int matrix_layout, char jobvl, char jobvr,
                                lapack_int n, lapack_complex_float* a,
                                lapack_int lda, lapack_complex_float* w,
                                lapack_complex_float* vl, lapack_int ldvl,
@@ -42,14 +42,14 @@ lapack_int LAPACKE_cgeev_work( int matrix_order, char jobvl, char jobvr,
                                float* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_cgeev( &jobvl, &jobvr, &n, a, &lda, w, vl, &ldvl, vr, &ldvr,
                       work, &lwork, rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldvl_t = MAX(1,n);
         lapack_int ldvr_t = MAX(1,n);
@@ -104,7 +104,7 @@ lapack_int LAPACKE_cgeev_work( int matrix_order, char jobvl, char jobvr,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_cgeev( &jobvl, &jobvr, &n, a_t, &lda_t, w, vl_t, &ldvl_t, vr_t,
                       &ldvr_t, work, &lwork, rwork, &info );

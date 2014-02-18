@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chbev_work( int matrix_order, char jobz, char uplo,
+lapack_int LAPACKE_chbev_work( int matrix_layout, char jobz, char uplo,
                                lapack_int n, lapack_int kd,
                                lapack_complex_float* ab, lapack_int ldab,
                                float* w, lapack_complex_float* z,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_chbev_work( int matrix_order, char jobz, char uplo,
                                float* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_chbev( &jobz, &uplo, &n, &kd, ab, &ldab, w, z, &ldz, work, rwork,
                       &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldab_t = MAX(1,kd+1);
         lapack_int ldz_t = MAX(1,n);
         lapack_complex_float* ab_t = NULL;
@@ -81,7 +81,7 @@ lapack_int LAPACKE_chbev_work( int matrix_order, char jobz, char uplo,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_chb_trans( matrix_order, uplo, n, kd, ab, ldab, ab_t, ldab_t );
+        LAPACKE_chb_trans( matrix_layout, uplo, n, kd, ab, ldab, ab_t, ldab_t );
         /* Call LAPACK function and adjust info */
         LAPACK_chbev( &jobz, &uplo, &n, &kd, ab_t, &ldab_t, w, z_t, &ldz_t,
                       work, rwork, &info );

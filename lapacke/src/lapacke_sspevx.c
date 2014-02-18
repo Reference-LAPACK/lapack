@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sspevx( int matrix_order, char jobz, char range, char uplo,
+lapack_int LAPACKE_sspevx( int matrix_layout, char jobz, char range, char uplo,
                            lapack_int n, float* ap, float vl, float vu,
                            lapack_int il, lapack_int iu, float abstol,
                            lapack_int* m, float* w, float* z, lapack_int ldz,
@@ -42,7 +42,7 @@ lapack_int LAPACKE_sspevx( int matrix_order, char jobz, char range, char uplo,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sspevx", -1 );
         return -1;
     }
@@ -77,7 +77,7 @@ lapack_int LAPACKE_sspevx( int matrix_order, char jobz, char range, char uplo,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sspevx_work( matrix_order, jobz, range, uplo, n, ap, vl, vu,
+    info = LAPACKE_sspevx_work( matrix_layout, jobz, range, uplo, n, ap, vl, vu,
                                 il, iu, abstol, m, w, z, ldz, work, iwork,
                                 ifail );
     /* Release memory and exit */

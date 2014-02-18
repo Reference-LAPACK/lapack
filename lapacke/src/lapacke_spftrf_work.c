@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,17 +33,17 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_spftrf_work( int matrix_order, char transr, char uplo,
+lapack_int LAPACKE_spftrf_work( int matrix_layout, char transr, char uplo,
                                 lapack_int n, float* a )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_spftrf( &transr, &uplo, &n, a, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         float* a_t = NULL;
         /* Allocate memory for temporary array(s) */
         a_t = (float*)
@@ -53,7 +53,7 @@ lapack_int LAPACKE_spftrf_work( int matrix_order, char transr, char uplo,
             goto exit_level_0;
         }
         /* Transpose input matrices */
-        LAPACKE_spf_trans( matrix_order, transr, uplo, n, a, a_t );
+        LAPACKE_spf_trans( matrix_layout, transr, uplo, n, a, a_t );
         /* Call LAPACK function and adjust info */
         LAPACK_spftrf( &transr, &uplo, &n, a_t, &info );
         if( info < 0 ) {

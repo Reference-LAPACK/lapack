@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgbcon( int matrix_order, char norm, lapack_int n,
+lapack_int LAPACKE_dgbcon( int matrix_layout, char norm, lapack_int n,
                            lapack_int kl, lapack_int ku, const double* ab,
                            lapack_int ldab, const lapack_int* ipiv,
                            double anorm, double* rcond )
@@ -41,13 +41,13 @@ lapack_int LAPACKE_dgbcon( int matrix_order, char norm, lapack_int n,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgbcon", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dgb_nancheck( matrix_order, n, n, kl, kl+ku, ab, ldab ) ) {
+    if( LAPACKE_dgb_nancheck( matrix_layout, n, n, kl, kl+ku, ab, ldab ) ) {
         return -6;
     }
     if( LAPACKE_d_nancheck( 1, &anorm, 1 ) ) {
@@ -66,7 +66,7 @@ lapack_int LAPACKE_dgbcon( int matrix_order, char norm, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgbcon_work( matrix_order, norm, n, kl, ku, ab, ldab, ipiv,
+    info = LAPACKE_dgbcon_work( matrix_layout, norm, n, kl, ku, ab, ldab, ipiv,
                                 anorm, rcond, work, iwork );
     /* Release memory and exit */
     LAPACKE_free( work );

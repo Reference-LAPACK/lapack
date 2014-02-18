@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sptsvx( int matrix_order, char fact, lapack_int n,
+lapack_int LAPACKE_sptsvx( int matrix_layout, char fact, lapack_int n,
                            lapack_int nrhs, const float* d, const float* e,
                            float* df, float* ef, const float* b, lapack_int ldb,
                            float* x, lapack_int ldx, float* rcond, float* ferr,
@@ -41,13 +41,13 @@ lapack_int LAPACKE_sptsvx( int matrix_order, char fact, lapack_int n,
 {
     lapack_int info = 0;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sptsvx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -9;
     }
     if( LAPACKE_s_nancheck( n, d, 1 ) ) {
@@ -74,7 +74,7 @@ lapack_int LAPACKE_sptsvx( int matrix_order, char fact, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sptsvx_work( matrix_order, fact, n, nrhs, d, e, df, ef, b,
+    info = LAPACKE_sptsvx_work( matrix_layout, fact, n, nrhs, d, e, df, ef, b,
                                 ldb, x, ldx, rcond, ferr, berr, work );
     /* Release memory and exit */
     LAPACKE_free( work );

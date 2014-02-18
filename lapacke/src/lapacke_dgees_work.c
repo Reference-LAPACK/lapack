@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgees_work( int matrix_order, char jobvs, char sort,
+lapack_int LAPACKE_dgees_work( int matrix_layout, char jobvs, char sort,
                                LAPACK_D_SELECT2 select, lapack_int n, double* a,
                                lapack_int lda, lapack_int* sdim, double* wr,
                                double* wi, double* vs, lapack_int ldvs,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_dgees_work( int matrix_order, char jobvs, char sort,
                                lapack_logical* bwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_dgees( &jobvs, &sort, select, &n, a, &lda, sdim, wr, wi, vs,
                       &ldvs, work, &lwork, bwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldvs_t = MAX(1,n);
         double* a_t = NULL;
@@ -85,7 +85,7 @@ lapack_int LAPACKE_dgees_work( int matrix_order, char jobvs, char sort,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_dge_trans( matrix_order, n, n, a, lda, a_t, lda_t );
+        LAPACKE_dge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         LAPACK_dgees( &jobvs, &sort, select, &n, a_t, &lda_t, sdim, wr, wi,
                       vs_t, &ldvs_t, work, &lwork, bwork, &info );

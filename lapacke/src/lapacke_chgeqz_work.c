@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chgeqz_work( int matrix_order, char job, char compq,
+lapack_int LAPACKE_chgeqz_work( int matrix_layout, char job, char compq,
                                 char compz, lapack_int n, lapack_int ilo,
                                 lapack_int ihi, lapack_complex_float* h,
                                 lapack_int ldh, lapack_complex_float* t,
@@ -45,7 +45,7 @@ lapack_int LAPACKE_chgeqz_work( int matrix_order, char job, char compq,
                                 float* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_chgeqz( &job, &compq, &compz, &n, &ilo, &ihi, h, &ldh, t, &ldt,
                        alpha, beta, q, &ldq, z, &ldz, work, &lwork, rwork,
@@ -53,7 +53,7 @@ lapack_int LAPACKE_chgeqz_work( int matrix_order, char job, char compq,
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldh_t = MAX(1,n);
         lapack_int ldq_t = MAX(1,n);
         lapack_int ldt_t = MAX(1,n);
@@ -122,13 +122,13 @@ lapack_int LAPACKE_chgeqz_work( int matrix_order, char job, char compq,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_cge_trans( matrix_order, n, n, h, ldh, h_t, ldh_t );
-        LAPACKE_cge_trans( matrix_order, n, n, t, ldt, t_t, ldt_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, h, ldh, h_t, ldh_t );
+        LAPACKE_cge_trans( matrix_layout, n, n, t, ldt, t_t, ldt_t );
         if( LAPACKE_lsame( compq, 'v' ) ) {
-            LAPACKE_cge_trans( matrix_order, n, n, q, ldq, q_t, ldq_t );
+            LAPACKE_cge_trans( matrix_layout, n, n, q, ldq, q_t, ldq_t );
         }
         if( LAPACKE_lsame( compz, 'v' ) ) {
-            LAPACKE_cge_trans( matrix_order, n, n, z, ldz, z_t, ldz_t );
+            LAPACKE_cge_trans( matrix_layout, n, n, z, ldz, z_t, ldz_t );
         }
         /* Call LAPACK function and adjust info */
         LAPACK_chgeqz( &job, &compq, &compz, &n, &ilo, &ihi, h_t, &ldh_t, t_t,

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zppsvx( int matrix_order, char fact, char uplo, lapack_int n,
+lapack_int LAPACKE_zppsvx( int matrix_layout, char fact, char uplo, lapack_int n,
                            lapack_int nrhs, lapack_complex_double* ap,
                            lapack_complex_double* afp, char* equed, double* s,
                            lapack_complex_double* b, lapack_int ldb,
@@ -43,7 +43,7 @@ lapack_int LAPACKE_zppsvx( int matrix_order, char fact, char uplo, lapack_int n,
     lapack_int info = 0;
     double* rwork = NULL;
     lapack_complex_double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zppsvx", -1 );
         return -1;
     }
@@ -57,7 +57,7 @@ lapack_int LAPACKE_zppsvx( int matrix_order, char fact, char uplo, lapack_int n,
     if( LAPACKE_zpp_nancheck( n, ap ) ) {
         return -6;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -10;
     }
     if( LAPACKE_lsame( fact, 'f' ) && LAPACKE_lsame( *equed, 'y' ) ) {
@@ -79,7 +79,7 @@ lapack_int LAPACKE_zppsvx( int matrix_order, char fact, char uplo, lapack_int n,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zppsvx_work( matrix_order, fact, uplo, n, nrhs, ap, afp,
+    info = LAPACKE_zppsvx_work( matrix_layout, fact, uplo, n, nrhs, ap, afp,
                                 equed, s, b, ldb, x, ldx, rcond, ferr, berr,
                                 work, rwork );
     /* Release memory and exit */

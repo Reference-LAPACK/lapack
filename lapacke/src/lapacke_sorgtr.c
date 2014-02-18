@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,20 +33,20 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sorgtr( int matrix_order, char uplo, lapack_int n, float* a,
+lapack_int LAPACKE_sorgtr( int matrix_layout, char uplo, lapack_int n, float* a,
                            lapack_int lda, const float* tau )
 {
     lapack_int info = 0;
     lapack_int lwork = -1;
     float* work = NULL;
     float work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_sorgtr", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -4;
     }
     if( LAPACKE_s_nancheck( n-1, tau, 1 ) ) {
@@ -54,7 +54,7 @@ lapack_int LAPACKE_sorgtr( int matrix_order, char uplo, lapack_int n, float* a,
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_sorgtr_work( matrix_order, uplo, n, a, lda, tau, &work_query,
+    info = LAPACKE_sorgtr_work( matrix_layout, uplo, n, a, lda, tau, &work_query,
                                 lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -67,7 +67,7 @@ lapack_int LAPACKE_sorgtr( int matrix_order, char uplo, lapack_int n, float* a,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_sorgtr_work( matrix_order, uplo, n, a, lda, tau, work,
+    info = LAPACKE_sorgtr_work( matrix_layout, uplo, n, a, lda, tau, work,
                                 lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

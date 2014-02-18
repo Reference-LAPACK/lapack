@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zpprfs_work( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zpprfs_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_int nrhs,
                                 const lapack_complex_double* ap,
                                 const lapack_complex_double* afp,
@@ -43,14 +43,14 @@ lapack_int LAPACKE_zpprfs_work( int matrix_order, char uplo, lapack_int n,
                                 lapack_complex_double* work, double* rwork )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_zpprfs( &uplo, &n, &nrhs, ap, afp, b, &ldb, x, &ldx, ferr, berr,
                        work, rwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldb_t = MAX(1,n);
         lapack_int ldx_t = MAX(1,n);
         lapack_complex_double* b_t = NULL;
@@ -98,10 +98,10 @@ lapack_int LAPACKE_zpprfs_work( int matrix_order, char uplo, lapack_int n,
             goto exit_level_3;
         }
         /* Transpose input matrices */
-        LAPACKE_zge_trans( matrix_order, n, nrhs, b, ldb, b_t, ldb_t );
-        LAPACKE_zge_trans( matrix_order, n, nrhs, x, ldx, x_t, ldx_t );
-        LAPACKE_zpp_trans( matrix_order, uplo, n, ap, ap_t );
-        LAPACKE_zpp_trans( matrix_order, uplo, n, afp, afp_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, x, ldx, x_t, ldx_t );
+        LAPACKE_zpp_trans( matrix_layout, uplo, n, ap, ap_t );
+        LAPACKE_zpp_trans( matrix_layout, uplo, n, afp, afp_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zpprfs( &uplo, &n, &nrhs, ap_t, afp_t, b_t, &ldb_t, x_t, &ldx_t,
                        ferr, berr, work, rwork, &info );

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zggqrf( int matrix_order, lapack_int n, lapack_int m,
+lapack_int LAPACKE_zggqrf( int matrix_layout, lapack_int n, lapack_int m,
                            lapack_int p, lapack_complex_double* a,
                            lapack_int lda, lapack_complex_double* taua,
                            lapack_complex_double* b, lapack_int ldb,
@@ -43,21 +43,21 @@ lapack_int LAPACKE_zggqrf( int matrix_order, lapack_int n, lapack_int m,
     lapack_int lwork = -1;
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zggqrf", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_zge_nancheck( matrix_order, n, m, a, lda ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, n, m, a, lda ) ) {
         return -5;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, n, p, b, ldb ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, n, p, b, ldb ) ) {
         return -8;
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_zggqrf_work( matrix_order, n, m, p, a, lda, taua, b, ldb,
+    info = LAPACKE_zggqrf_work( matrix_layout, n, m, p, a, lda, taua, b, ldb,
                                 taub, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -71,7 +71,7 @@ lapack_int LAPACKE_zggqrf( int matrix_order, lapack_int n, lapack_int m,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zggqrf_work( matrix_order, n, m, p, a, lda, taua, b, ldb,
+    info = LAPACKE_zggqrf_work( matrix_layout, n, m, p, a, lda, taua, b, ldb,
                                 taub, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

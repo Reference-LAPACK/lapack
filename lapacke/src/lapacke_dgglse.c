@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dgglse( int matrix_order, lapack_int m, lapack_int n,
+lapack_int LAPACKE_dgglse( int matrix_layout, lapack_int m, lapack_int n,
                            lapack_int p, double* a, lapack_int lda, double* b,
                            lapack_int ldb, double* c, double* d, double* x )
 {
@@ -41,16 +41,16 @@ lapack_int LAPACKE_dgglse( int matrix_order, lapack_int m, lapack_int n,
     lapack_int lwork = -1;
     double* work = NULL;
     double work_query;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dgglse", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, m, n, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -5;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, p, n, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, p, n, b, ldb ) ) {
         return -7;
     }
     if( LAPACKE_d_nancheck( m, c, 1 ) ) {
@@ -61,7 +61,7 @@ lapack_int LAPACKE_dgglse( int matrix_order, lapack_int m, lapack_int n,
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_dgglse_work( matrix_order, m, n, p, a, lda, b, ldb, c, d, x,
+    info = LAPACKE_dgglse_work( matrix_layout, m, n, p, a, lda, b, ldb, c, d, x,
                                 &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -74,7 +74,7 @@ lapack_int LAPACKE_dgglse( int matrix_order, lapack_int m, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dgglse_work( matrix_order, m, n, p, a, lda, b, ldb, c, d, x,
+    info = LAPACKE_dgglse_work( matrix_layout, m, n, p, a, lda, b, ldb, c, d, x,
                                 work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );

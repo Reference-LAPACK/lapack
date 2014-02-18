@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsysvxx( int matrix_order, char fact, char uplo,
+lapack_int LAPACKE_dsysvxx( int matrix_layout, char fact, char uplo,
                             lapack_int n, lapack_int nrhs, double* a,
                             lapack_int lda, double* af, lapack_int ldaf,
                             lapack_int* ipiv, char* equed, double* s, double* b,
@@ -46,21 +46,21 @@ lapack_int LAPACKE_dsysvxx( int matrix_order, char fact, char uplo,
     lapack_int info = 0;
     lapack_int* iwork = NULL;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dsysvxx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dsy_nancheck( matrix_order, uplo, n, a, lda ) ) {
+    if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -6;
     }
     if( LAPACKE_lsame( fact, 'f' ) ) {
-        if( LAPACKE_dsy_nancheck( matrix_order, uplo, n, af, ldaf ) ) {
+        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, af, ldaf ) ) {
             return -8;
         }
     }
-    if( LAPACKE_dge_nancheck( matrix_order, n, nrhs, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -13;
     }
     if( nparams>0 ) {
@@ -86,7 +86,7 @@ lapack_int LAPACKE_dsysvxx( int matrix_order, char fact, char uplo,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsysvxx_work( matrix_order, fact, uplo, n, nrhs, a, lda, af,
+    info = LAPACKE_dsysvxx_work( matrix_layout, fact, uplo, n, nrhs, a, lda, af,
                                  ldaf, ipiv, equed, s, b, ldb, x, ldx, rcond,
                                  rpvgrw, berr, n_err_bnds, err_bnds_norm,
                                  err_bnds_comp, nparams, params, work, iwork );

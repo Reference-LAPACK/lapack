@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,24 +33,24 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_strexc( int matrix_order, char compq, lapack_int n, float* t,
+lapack_int LAPACKE_strexc( int matrix_layout, char compq, lapack_int n, float* t,
                            lapack_int ldt, float* q, lapack_int ldq,
                            lapack_int* ifst, lapack_int* ilst )
 {
     lapack_int info = 0;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_strexc", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
     if( LAPACKE_lsame( compq, 'v' ) ) {
-        if( LAPACKE_sge_nancheck( matrix_order, n, n, q, ldq ) ) {
+        if( LAPACKE_sge_nancheck( matrix_layout, n, n, q, ldq ) ) {
             return -6;
         }
     }
-    if( LAPACKE_sge_nancheck( matrix_order, n, n, t, ldt ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, n, n, t, ldt ) ) {
         return -4;
     }
 #endif
@@ -61,7 +61,7 @@ lapack_int LAPACKE_strexc( int matrix_order, char compq, lapack_int n, float* t,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_strexc_work( matrix_order, compq, n, t, ldt, q, ldq, ifst,
+    info = LAPACKE_strexc_work( matrix_layout, compq, n, t, ldt, q, ldq, ifst,
                                 ilst, work );
     /* Release memory and exit */
     LAPACKE_free( work );

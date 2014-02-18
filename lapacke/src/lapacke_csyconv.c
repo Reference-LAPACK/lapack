@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,19 +33,19 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_csyconv( int matrix_order, char uplo, char way, lapack_int n,
+lapack_int LAPACKE_csyconv( int matrix_layout, char uplo, char way, lapack_int n,
                             lapack_complex_float* a, lapack_int lda,
                             const lapack_int* ipiv )
 {
     lapack_int info = 0;
     lapack_complex_float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_csyconv", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_cge_nancheck( matrix_order, lda, n, a, lda ) ) {
+    if( LAPACKE_cge_nancheck( matrix_layout, lda, n, a, lda ) ) {
         return -5;
     }
 #endif
@@ -57,7 +57,7 @@ lapack_int LAPACKE_csyconv( int matrix_order, char uplo, char way, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_csyconv_work( matrix_order, uplo, way, n, a, lda, ipiv,
+    info = LAPACKE_csyconv_work( matrix_layout, uplo, way, n, a, lda, ipiv,
                                  work );
     /* Release memory and exit */
     LAPACKE_free( work );

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sstein_work( int matrix_order, lapack_int n, const float* d,
+lapack_int LAPACKE_sstein_work( int matrix_layout, lapack_int n, const float* d,
                                 const float* e, lapack_int m, const float* w,
                                 const lapack_int* iblock,
                                 const lapack_int* isplit, float* z,
@@ -41,14 +41,14 @@ lapack_int LAPACKE_sstein_work( int matrix_order, lapack_int n, const float* d,
                                 lapack_int* ifailv )
 {
     lapack_int info = 0;
-    if( matrix_order == LAPACK_COL_MAJOR ) {
+    if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         LAPACK_sstein( &n, d, e, &m, w, iblock, isplit, z, &ldz, work, iwork,
                        ifailv, &info );
         if( info < 0 ) {
             info = info - 1;
         }
-    } else if( matrix_order == LAPACK_ROW_MAJOR ) {
+    } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int ldz_t = MAX(1,n);
         float* z_t = NULL;
         /* Check leading dimension(s) */

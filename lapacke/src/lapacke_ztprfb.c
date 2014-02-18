@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ztprfb( int matrix_order, char side, char trans, char direct,
+lapack_int LAPACKE_ztprfb( int matrix_layout, char side, char trans, char direct,
                            char storev, lapack_int m, lapack_int n,
                            lapack_int k, lapack_int l,
                            const lapack_complex_double* v, lapack_int ldv,
@@ -44,23 +44,23 @@ lapack_int LAPACKE_ztprfb( int matrix_order, char side, char trans, char direct,
     lapack_int info = 0;
     lapack_int ldwork;
     lapack_int work_size;
-    double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    lapack_complex_double* work = NULL;
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_ztprfb", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_zge_nancheck( matrix_order, k, m, a, lda ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, k, m, a, lda ) ) {
         return -14;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, m, n, b, ldb ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, m, n, b, ldb ) ) {
         return -16;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, ldt, k, t, ldt ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, ldt, k, t, ldt ) ) {
         return -12;
     }
-    if( LAPACKE_zge_nancheck( matrix_order, ldv, k, v, ldv ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, ldv, k, v, ldv ) ) {
         return -10;
     }
 #endif
@@ -74,14 +74,14 @@ lapack_int LAPACKE_ztprfb( int matrix_order, char side, char trans, char direct,
        }    
     
     /* Allocate memory for working array(s) */
-    work = (double*)
-    LAPACKE_malloc( sizeof(double) * work_size ); 
+    work = (lapack_complex_double*)
+    LAPACKE_malloc( sizeof(lapack_complex_double) * work_size ); 
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ztprfb_work( matrix_order, side, trans, direct, storev, m, n,
+    info = LAPACKE_ztprfb_work( matrix_layout, side, trans, direct, storev, m, n,
                                 k, l, v, ldv, t, ldt, a, lda, b, ldb, work,
                                 ldwork );
     /* Release memory and exit */

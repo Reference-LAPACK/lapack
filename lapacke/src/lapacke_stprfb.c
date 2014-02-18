@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2010, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_stprfb( int matrix_order, char side, char trans, char direct,
+lapack_int LAPACKE_stprfb( int matrix_layout, char side, char trans, char direct,
                            char storev, lapack_int m, lapack_int n,
                            lapack_int k, lapack_int l, const float* v,
                            lapack_int ldv, const float* t, lapack_int ldt,
@@ -43,22 +43,22 @@ lapack_int LAPACKE_stprfb( int matrix_order, char side, char trans, char direct,
     lapack_int ldwork;
     lapack_int work_size;
     float* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_stprfb", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_order, k, m, a, lda ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, k, m, a, lda ) ) {
         return -14;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, m, n, b, ldb ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, m, n, b, ldb ) ) {
         return -16;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, ldt, k, t, ldt ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, ldt, k, t, ldt ) ) {
         return -12;
     }
-    if( LAPACKE_sge_nancheck( matrix_order, ldv, k, v, ldv ) ) {
+    if( LAPACKE_sge_nancheck( matrix_layout, ldv, k, v, ldv ) ) {
         return -10;
     }
 #endif
@@ -72,13 +72,13 @@ lapack_int LAPACKE_stprfb( int matrix_order, char side, char trans, char direct,
        }    
         /* Allocate memory for working array(s) */
     work = (float*)
-        LAPACKE_malloc( sizeof(float) * MAX(1,ldwork) * MAX(n,k) );
+        LAPACKE_malloc( sizeof(float) * work_size );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_stprfb_work( matrix_order, side, trans, direct, storev, m, n,
+    info = LAPACKE_stprfb_work( matrix_layout, side, trans, direct, storev, m, n,
                                 k, l, v, ldv, t, ldt, a, lda, b, ldb, work,
                                 ldwork );
     /* Release memory and exit */

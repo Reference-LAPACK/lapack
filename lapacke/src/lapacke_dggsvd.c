@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dggsvd( int matrix_order, char jobu, char jobv, char jobq,
+lapack_int LAPACKE_dggsvd( int matrix_layout, char jobu, char jobv, char jobq,
                            lapack_int m, lapack_int n, lapack_int p,
                            lapack_int* k, lapack_int* l, double* a,
                            lapack_int lda, double* b, lapack_int ldb,
@@ -43,16 +43,16 @@ lapack_int LAPACKE_dggsvd( int matrix_order, char jobu, char jobv, char jobq,
 {
     lapack_int info = 0;
     double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dggsvd", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_order, m, n, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -10;
     }
-    if( LAPACKE_dge_nancheck( matrix_order, p, n, b, ldb ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, p, n, b, ldb ) ) {
         return -12;
     }
 #endif
@@ -63,7 +63,7 @@ lapack_int LAPACKE_dggsvd( int matrix_order, char jobu, char jobv, char jobq,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dggsvd_work( matrix_order, jobu, jobv, jobq, m, n, p, k, l,
+    info = LAPACKE_dggsvd_work( matrix_layout, jobu, jobv, jobq, m, n, p, k, l,
                                 a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q,
                                 ldq, work, iwork );
     /* Release memory and exit */

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,13 +33,13 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhpcon( int matrix_order, char uplo, lapack_int n,
+lapack_int LAPACKE_zhpcon( int matrix_layout, char uplo, lapack_int n,
                            const lapack_complex_double* ap,
                            const lapack_int* ipiv, double anorm, double* rcond )
 {
     lapack_int info = 0;
     lapack_complex_double* work = NULL;
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zhpcon", -1 );
         return -1;
     }
@@ -60,7 +60,7 @@ lapack_int LAPACKE_zhpcon( int matrix_order, char uplo, lapack_int n,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zhpcon_work( matrix_order, uplo, n, ap, ipiv, anorm, rcond,
+    info = LAPACKE_zhpcon_work( matrix_layout, uplo, n, ap, ipiv, anorm, rcond,
                                 work );
     /* Release memory and exit */
     LAPACKE_free( work );

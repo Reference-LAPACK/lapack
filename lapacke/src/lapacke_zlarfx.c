@@ -1,5 +1,5 @@
 /*****************************************************************************
-  Copyright (c) 2011, Intel Corp.
+  Copyright (c) 2014, Intel Corp.
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,18 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zlarfx( int matrix_order, char side, lapack_int m,
+lapack_int LAPACKE_zlarfx( int matrix_layout, char side, lapack_int m,
                            lapack_int n, const lapack_complex_double* v,
                            lapack_complex_double tau, lapack_complex_double* c,
                            lapack_int ldc, lapack_complex_double* work )
 {
-    if( matrix_order != LAPACK_COL_MAJOR && matrix_order != LAPACK_ROW_MAJOR ) {
+    if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zlarfx", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_zge_nancheck( matrix_order, m, n, c, ldc ) ) {
+    if( LAPACKE_zge_nancheck( matrix_layout, m, n, c, ldc ) ) {
         return -7;
     }
     if( LAPACKE_z_nancheck( 1, &tau, 1 ) ) {
@@ -54,6 +54,6 @@ lapack_int LAPACKE_zlarfx( int matrix_order, char side, lapack_int m,
         return -5;
     }
 #endif
-    return LAPACKE_zlarfx_work( matrix_order, side, m, n, v, tau, c, ldc,
+    return LAPACKE_zlarfx_work( matrix_layout, side, m, n, v, tau, c, ldc,
                                 work );
 }
