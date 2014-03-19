@@ -784,7 +784,7 @@
      $                   NRHS, THRESH, TSTERR, NMAX, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
      $                   B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), B( 1, 4 ),
-     $                   WORK, RWORK, IWORK, NOUT )
+     $                   WORK, RWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
