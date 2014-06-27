@@ -166,8 +166,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension (2*N)
-*>          if NCVT = NRU = NCC = 0, (max(1, 4*N-4)) otherwise
+*>          RWORK is DOUBLE PRECISION array, dimension (4*N)
 *> \endverbatim
 *>
 *> \param[out] INFO
