@@ -319,26 +319,22 @@
           JX = KX
           IF (INCY.EQ.1) THEN
               DO 60 J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      K = KUP1 - J
-                      DO 50 I = MAX(1,J-KU),MIN(M,J+KL)
-                          Y(I) = Y(I) + TEMP*A(K+I,J)
-   50                 CONTINUE
-                  END IF
+                  TEMP = ALPHA*X(JX)
+                  K = KUP1 - J
+                  DO 50 I = MAX(1,J-KU),MIN(M,J+KL)
+                      Y(I) = Y(I) + TEMP*A(K+I,J)
+   50             CONTINUE
                   JX = JX + INCX
    60         CONTINUE
           ELSE
               DO 80 J = 1,N
-                  IF (X(JX).NE.ZERO) THEN
-                      TEMP = ALPHA*X(JX)
-                      IY = KY
-                      K = KUP1 - J
-                      DO 70 I = MAX(1,J-KU),MIN(M,J+KL)
-                          Y(IY) = Y(IY) + TEMP*A(K+I,J)
-                          IY = IY + INCY
-   70                 CONTINUE
-                  END IF
+                  TEMP = ALPHA*X(JX)
+                  IY = KY
+                  K = KUP1 - J
+                  DO 70 I = MAX(1,J-KU),MIN(M,J+KL)
+                      Y(IY) = Y(IY) + TEMP*A(K+I,J)
+                      IY = IY + INCY
+   70             CONTINUE
                   JX = JX + INCX
                   IF (J.GT.KU) KY = KY + INCY
    80         CONTINUE
