@@ -435,8 +435,10 @@
 *     Scale matrix to allowable range, if necessary.
 *
       ISCALE = 0
-      VLL = VL
-      VUU = VU
+      IF( VALEIG ) THEN
+         VLL = VL
+         VUU = VU
+      END IF
 *
       TNRM = DLANST( 'M', N, D, E )
       IF( TNRM.GT.ZERO .AND. TNRM.LT.RMIN ) THEN
