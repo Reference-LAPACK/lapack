@@ -311,12 +311,10 @@
    60                 CONTINUE
                   END IF
                   DO 80 L = 1,K
-                      IF (B(L,J).NE.ZERO) THEN
-                          TEMP = ALPHA*B(L,J)
-                          DO 70 I = 1,M
-                              C(I,J) = C(I,J) + TEMP*A(I,L)
-   70                     CONTINUE
-                      END IF
+                      TEMP = ALPHA*B(L,J)
+                      DO 70 I = 1,M
+                          C(I,J) = C(I,J) + TEMP*A(I,L)
+   70                 CONTINUE
    80             CONTINUE
    90         CONTINUE
           ELSE
@@ -353,12 +351,10 @@
   140                 CONTINUE
                   END IF
                   DO 160 L = 1,K
-                      IF (B(J,L).NE.ZERO) THEN
-                          TEMP = ALPHA*B(J,L)
-                          DO 150 I = 1,M
-                              C(I,J) = C(I,J) + TEMP*A(I,L)
-  150                     CONTINUE
-                      END IF
+                      TEMP = ALPHA*B(J,L)
+                      DO 150 I = 1,M
+                          C(I,J) = C(I,J) + TEMP*A(I,L)
+  150                 CONTINUE
   160             CONTINUE
   170         CONTINUE
           ELSE
