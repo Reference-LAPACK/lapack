@@ -1,0 +1,62 @@
+INSTALLATION
+
+   Please execute the following first:
+      
+      prompt> ln -s Makefile.ARCH Makefile.in
+
+   where ARCH is one of ALPHA, HPPA, LINUX, SGI64, SUN4, SUN4SOL2, or
+   your own version (which should be trivial to do for other architectures).
+   Make sure to set these variables appropriately in your Makefile.ARCH:
+
+      CBDIR  is the directory where you unpacked the tar file
+      BLLIB  is your Legacy BLAS library
+
+   Then type:
+      
+      prompt> make help
+      
+   which will give you a detailed listing of targets to make.
+
+EXECUTING THE TESTERS
+
+   Type: 
+
+./testing/xscblat1
+./testing/xdcblat1
+./testing/xccblat1
+./testing/xzcblat1
+./testing/xscblat2 < testing/sin2
+./testing/xdcblat2 < testing/din2
+./testing/xccblat2 < testing/cin2
+./testing/xzcblat2 < testing/zin2
+./testing/xscblat3 < testing/sin3
+./testing/xdcblat3 < testing/din3
+./testing/xccblat3 < testing/cin3
+./testing/xzcblat3 < testing/zin3
+_______________________________________________________________________________
+
+   This package contains C interface to Legacy BLAS.
+   If you want to know how to use makefile, type 'make help.'
+
+Written by Keita Teranishi (5/20/98)
+_______________________________________________________________________________
+
+   This release updates an inconsistency between the BLAST document and
+   the interface. According to the document, the enumerated types for
+   the C interface to the BLAS are not typedef'ed. 
+
+   It also updates the Level 2 and 3 testers which check for correct
+   exiting of routines when called with bad arguments. This is done by
+   overriding the Legacy BLAS library's implementation of xerbla().  If
+   this cannot be done ( for instance one cannot override some calls
+   to xerbla() in Sun's Performance library), then correct error
+   exiting cannot be checked.
+
+Updated by Jeff Horner (3/15/99)
+_______________________________________________________________________________
+
+Updated by R. Clint Whaley (2/23/03):
+
+Fixed the i?amax error that I reported three years ago: standard dictates
+IAMAX return vals in range 0 <= iamax < N, but reference was mistakenly
+returning like F77: 0 < iamax <= N.
