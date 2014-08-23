@@ -25,7 +25,6 @@ if (WIN32 AND NOT UNIX)
 endif (WIN32 AND NOT UNIX)
 
 get_directory_property( DirDefs COMPILE_DEFINITIONS )
-message( "COMPILE_DEFINITIONS = ${DirDefs}" )
 
 include_directories( include )
 add_subdirectory(include)
