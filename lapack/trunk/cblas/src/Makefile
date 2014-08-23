@@ -1,11 +1,12 @@
 # This Makefile compiles the CBLAS routines
 #
-dlvl = ../.
-include $(dlvl)/Makefile.in
+include ../../make.inc
 
 #
 # Erase all object and archive files
 #
+all: cblaslib
+
 clean:
 	rm -f *.o a.out core 
 
@@ -72,28 +73,28 @@ alev1 = $(slev1) $(dlev1) $(clev1) $(zlev1) $(sclev1)
 
 # Single real precision
 slib1: $(slev1) $(sclev1)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(slev1) $(sclev1)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(slev1) $(sclev1)
+	$(RANLIB) $(CBLASLIB)
 
 # Double real precision
 dlib1: $(dlev1) 
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(dlev1)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(dlev1)
+	$(RANLIB) $(CBLASLIB)
 
 # Single complex precision
 clib1: $(clev1) $(sclev1)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(clev1) $(sclev1)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(clev1) $(sclev1)
+	$(RANLIB) $(CBLASLIB)
 
 # Double complex precision
 zlib1: $(zlev1)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(zlev1)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(zlev1)
+	$(RANLIB) $(CBLASLIB)
 
 # All precisions
 all1:  $(alev1)
-	$(ARCH) $(ARCHFLAGS)  $(CBLIB) $(alev1)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS)  $(CBLASLIB) $(alev1)
+	$(RANLIB) $(CBLASLIB)
 
 #
 #
@@ -145,28 +146,28 @@ alev2 = $(slev2) $(dlev2) $(clev2) $(zlev2)
 
 # Single real precision
 slib2: $(slev2) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(slev2) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(slev2) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 
 # Double real  precision
 dlib2: $(dlev2) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(dlev2) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(dlev2) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 
 # Single complex precision
 clib2: $(clev2) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(clev2) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(clev2) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 
 # Double complex precision
 zlib2: $(zlev2) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(zlev2) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(zlev2) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 
 # All precisions
 all2:  $(alev2) $(errhand)
-	$(ARCH) $(ARCHFLAGS)  $(CBLIB) $(alev2) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS)  $(CBLASLIB) $(alev2) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 #
 #
 # CBLAS routines
@@ -210,38 +211,39 @@ alev3 = $(slev3) $(dlev3) $(clev3) $(zlev3)
 
 # Single real precision
 slib3: $(slev3) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(slev3) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(slev3) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 
 # Double real precision
 dlib3: $(dlev3) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(dlev3) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(dlev3) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 
 # Single complex precision
 clib3: $(clev3) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(clev3) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(clev3) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 
 # Single complex precision
 zlib3: $(zlev3) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(zlev3) $(errhand)
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(zlev3) $(errhand)
+	$(RANLIB) $(CBLASLIB)
 
 # All precisions
 all3:  $(alev3) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLIB) $(alev3) 
-	$(RANLIB) $(CBLIB)
+	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(alev3) 
+	$(RANLIB) $(CBLASLIB)
 
 # All levels and precisions
-all: $(alev)  
-	$(ARCH) $(ARCHFLAGS)  $(CBLIB) $(alev) 
-	$(RANLIB) $(CBLIB)
+cblaslib: $(alev)  
+	$(ARCH) $(ARCHFLAGS)  $(CBLASLIB) $(alev) 
+	$(RANLIB) $(CBLASLIB)
 
-
-.SUFFIXES: .o .c .f
+FRC:
+	@FRC=$(FRC)
 
 .c.o:
-	$(CC) $(CFLAGS) -I../include -c $*.c
-.f.o:
-	$(FC) $(FFLAGS) -c $*.f
+	$(CC) -c $(CFLAGS) -I ../include -o $@ $<
+	
+.f.o: 
+	$(FORTRAN) $(OPTS) -c $< -o $@

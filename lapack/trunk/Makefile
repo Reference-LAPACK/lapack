@@ -11,7 +11,7 @@ all: lapack_install lib blas_testing lapack_testing
 lib: lapacklib tmglib
 #lib: blaslib variants lapacklib tmglib
 
-clean: cleanlib cleantesting cleanblas_testing 
+clean: cleanlib cleantesting cleanblas_testing cleancblas_testing
 
 lapack_install:
 	( cd INSTALL; $(MAKE); ./testlsame; ./testslamch; ./testdlamch; \
@@ -20,11 +20,17 @@ lapack_install:
 blaslib:
 	( cd BLAS/SRC; $(MAKE) )
 
+cblaslib:
+	( cd cblas/src; $(MAKE) )
+	
 lapacklib:	lapack_install
 	( cd SRC; $(MAKE) )
 
 lapackelib: lapacklib
 	( cd lapacke; $(MAKE) )
+
+cblas_example: cblaslib blaslib
+	( cd cblas/examples; $(MAKE) )
 
 lapacke_example: lapackelib
 	( cd lapacke/example; $(MAKE) )
@@ -69,6 +75,13 @@ blas_testing:
 	           ./xblat3d < dblat3.in     ; \
 	           ./xblat3c < cblat3.in     ; \
 	           ./xblat3z < zblat3.in     ) 
+
+cblas_testing: blaslib
+	( cd cblas ; $(MAKE) cblas_testing)
+	( cd cblas ; $(MAKE) runtst)
+
+
+
 html:
 	@echo "LAPACK HTML PAGES GENRATION with Doxygen"
 	doxygen DOCS/Doxyfile
@@ -90,6 +103,7 @@ man:
 cleanlib:
 	( cd INSTALL; $(MAKE) clean )
 	( cd BLAS/SRC; $(MAKE) clean )
+	( cd CBLAS; $(MAKE) clean )
 	( cd SRC; $(MAKE) clean )
 	( cd SRC/VARIANTS; $(MAKE) clean )
 	( cd TESTING/MATGEN; $(MAKE) clean )
@@ -102,11 +116,14 @@ cleanblas_testing:
 	( cd BLAS/TESTING; $(MAKE) -f Makeblat3 clean )
 	( cd BLAS; rm -f xblat* )
 
+cleancblas_testing:
+	( cd CBLAS; $(MAKE) cleanexe )
+
 cleantesting:
 	( cd TESTING/LIN; $(MAKE) clean )
 	( cd TESTING/EIG; $(MAKE) clean )
 	( cd TESTING; rm -f xlin* xeig* )
 
-cleanall: cleanlib cleanblas_testing cleantesting 
+cleanall: cleanlib cleanblas_testing cleancblas_testing cleantesting 
 	rm -f *.a TESTING/*.out INSTALL/test*  BLAS/*.out
 

@@ -129,6 +129,18 @@ else()
     CACHE STRING "Linker flags for shared libs" FORCE)
 endif( NOT BLAS_FOUND )
 
+
+# --------------------------------------------------
+# CBLAS
+option(CBLAS "Build CBLAS" OFF)
+
+if(CBLAS)
+  add_subdirectory(cblas)
+endif(CBLAS)
+
+# --------------------------------------------------
+# XBLAS
+
 option(USE_XBLAS "Build extended precision (needs XBLAS)" OFF)
 if (USE_XBLAS)
   find_library(XBLAS_LIBRARY NAMES xblas)
@@ -136,6 +148,8 @@ endif(USE_XBLAS)
    
 option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)
 
+# --------------------------------------------------
+# LAPACK
 # User did not provide a LAPACK Library but specified to search for one
 if( USE_OPTIMIZED_LAPACK )
   find_package( LAPACK )
@@ -260,6 +274,11 @@ if(ALL_TARGETS)
   # lapack-config.cmake to load targets from the install tree.
   list(GET ALL_TARGETS 0 _lapack_config_install_guard_target)
 endif()
+
+# Include cblas in targets exported from the build tree.
+if(CBLAS)
+  set(ALL_TARGETS ${ALL_TARGETS} cblas)
+endif(CBLAS)
 
 # Include lapacke in targets exported from the build tree.
 if(LAPACKE)
