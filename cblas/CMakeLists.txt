@@ -35,14 +35,10 @@ append_subdir_files(CBLAS_INCLUDE "include")
 INSTALL( FILES ${CBLAS_INCLUDE} DESTINATION include )
 
 # --------------------------------------------------
-message(STATUS "BUILD TESTING : ${BUILD_TESTING}" )
 if(BUILD_TESTING)
    add_subdirectory(testing)
    add_subdirectory(examples)
 endif(BUILD_TESTING)
-
-INSTALL( FILES ${CBLAS_INCLUDE} DESTINATION include )
-
 
 if(NOT BLAS_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} blas)
