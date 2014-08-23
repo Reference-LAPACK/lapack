@@ -65,5 +65,5 @@ int main ( )
    free(a);
    free(x);
    free(y);
-   return 1;
+   return 0;
 }

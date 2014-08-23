@@ -1,42 +1,33 @@
 INSTALLATION
 
-   Please execute the following first:
-      
-      prompt> ln -s Makefile.ARCH Makefile.in
+   Make sure to set these variables appropriately in your Make.inc in the LAPACK folder:
 
-   where ARCH is one of ALPHA, HPPA, LINUX, SGI64, SUN4, SUN4SOL2, or
-   your own version (which should be trivial to do for other architectures).
-   Make sure to set these variables appropriately in your Makefile.ARCH:
-
-      CBDIR  is the directory where you unpacked the tar file
-      BLLIB  is your Legacy BLAS library
+      CBLASLIB is your CBLAS library
+      BLASLIB  is your Legacy BLAS library (by default the Reference BLAS shipped within LAPACK)
 
    Then type:
       
-      prompt> make help
+      prompt> make
       
-   which will give you a detailed listing of targets to make.
+   which will create the CBLAS library.
+
+CREATING THE TESTERS
+
+    type:
+      
+      prompt> make cblas_testing
+      
+   This will create the BLAS library if necessary, then compile the CBLAS testings.
 
 EXECUTING THE TESTERS
 
-   Type: 
-
-./testing/xscblat1
-./testing/xdcblat1
-./testing/xccblat1
-./testing/xzcblat1
-./testing/xscblat2 < testing/sin2
-./testing/xdcblat2 < testing/din2
-./testing/xccblat2 < testing/cin2
-./testing/xzcblat2 < testing/zin2
-./testing/xscblat3 < testing/sin3
-./testing/xdcblat3 < testing/din3
-./testing/xccblat3 < testing/cin3
-./testing/xzcblat3 < testing/zin3
-_______________________________________________________________________________
+    type:
+      
+      prompt> make runtst
+      
+ _______________________________________________________________________________
 
    This package contains C interface to Legacy BLAS.
-   If you want to know how to use makefile, type 'make help.'
 
 Written by Keita Teranishi (5/20/98)
 _______________________________________________________________________________
@@ -60,3 +51,9 @@ Updated by R. Clint Whaley (2/23/03):
 Fixed the i?amax error that I reported three years ago: standard dictates
 IAMAX return vals in range 0 <= iamax < N, but reference was mistakenly
 returning like F77: 0 < iamax <= N.
+_______________________________________________________________________________
+
+Updated by Julie Langou (08/22/2014):
+
+Integrate CBLAS package into LAPACK
+Improve headers for mangling 

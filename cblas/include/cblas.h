@@ -20,6 +20,8 @@ typedef enum {CblasLeft=141, CblasRight=142} CBLAS_SIDE;
 
 typedef CBLAS_LAYOUT CBLAS_ORDER; /* this for backward compatibility with CBLAS_ORDER */
 
+#include "cblas_mangling.h"
+
 /*
  * ===========================================================================
  * Prototypes for level 1 BLAS functions (complex are recast as routines)

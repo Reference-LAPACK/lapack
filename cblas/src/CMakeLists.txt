@@ -163,10 +163,9 @@ if (CBLAS_COMPLEX16)
  set(ALLOBJ  ${ZLEV1} ${ZLEV2} ${ZLEV3} ${ERRHAND})
 endif(CBLAS_COMPLEX16)
 
+message(STATUS "Include CBLAS_INCLUDE = ${CBLAS_INCLUDE}")
+
 
 add_library(cblas ${ALLOBJ})
-if(UNIX)
-  target_link_libraries(cblas m)
-endif()
-target_link_libraries(cblas)
-install(TARGETS cblas DESTINATION lib)
+target_link_libraries(cblas ${BLAS_LIBRARIES} )
+lapack_install_library(cblas)
