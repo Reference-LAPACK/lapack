@@ -55,7 +55,7 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
-*>          = 'C':  Transpose, apply Q**T.
+*>          = 'T':  Transpose, apply Q**T.
 *> \endverbatim
 *>
 *> \param[in] M
