@@ -175,7 +175,7 @@
 *>            LWORK >= 3*min(M,N) + 
 *>                     max(max(M,N),5*min(M,N)*min(M,N)+4*min(M,N)).
 *>          If JOBZ = 'S' or 'A'
-*>            LWORK >= min(M,N)*(6+4*min(M,N))+max(M,N)
+*>            LWORK >= min(M,N)*(7+4*min(M,N))
 *>          For good performance, LWORK should generally be larger.
 *>          If LWORK = -1 but other input arguments are legal, WORK(1)
 *>          returns the optimal LWORK.
