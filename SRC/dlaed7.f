@@ -304,7 +304,7 @@
       ELSE IF( N.LT.0 ) THEN
          INFO = -2
       ELSE IF( ICOMPQ.EQ.1 .AND. QSIZ.LT.N ) THEN
-         INFO = -4
+         INFO = -3
       ELSE IF( LDQ.LT.MAX( 1, N ) ) THEN
          INFO = -9
       ELSE IF( MIN( 1, N ).GT.CUTPNT .OR. N.LT.CUTPNT ) THEN
