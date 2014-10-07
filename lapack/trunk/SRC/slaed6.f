@@ -387,7 +387,8 @@
          F = FINIT + TAU*FC
          ERRETM = EIGHT*( ABS( FINIT )+ABS( TAU )*ERRETM ) +
      $            ABS( TAU )*DF
-         IF( ABS( F ).LE.EPS*ERRETM )
+         IF( ( ABS( F ).LE.FOUR*EPS*ERRETM ) .OR.
+     $      ( (UBD-LBD).LE.FOUR*EPS*ABS(TAU) )  )
      $      GO TO 60
          IF( F .LE. ZERO )THEN
             LBD = TAU
