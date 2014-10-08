@@ -21,19 +21,19 @@ blaslib:
 	( cd BLAS/SRC; $(MAKE) )
 
 cblaslib:
-	( cd cblas/src; $(MAKE) )
+	( cd CBLAS/src; $(MAKE) )
 	
 lapacklib:	lapack_install
 	( cd SRC; $(MAKE) )
 
 lapackelib: lapacklib
-	( cd lapacke; $(MAKE) )
+	( cd LAPACKE; $(MAKE) )
 
 cblas_example: cblaslib blaslib
-	( cd cblas/examples; $(MAKE) )
+	( cd CBLAS/examples; $(MAKE) )
 
 lapacke_example: lapackelib
-	( cd lapacke/example; $(MAKE) )
+	( cd LAPACKE/example; $(MAKE) )
 
 variants:
 	( cd SRC/VARIANTS ; $(MAKE))
@@ -77,8 +77,8 @@ blas_testing:
 	           ./xblat3z < zblat3.in     ) 
 
 cblas_testing: blaslib
-	( cd cblas ; $(MAKE) cblas_testing)
-	( cd cblas ; $(MAKE) runtst)
+	( cd CBLAs ; $(MAKE) cblas_testing)
+	( cd CBLAS ; $(MAKE) runtst)
 
 
 
@@ -107,7 +107,7 @@ cleanlib:
 	( cd SRC; $(MAKE) clean )
 	( cd SRC/VARIANTS; $(MAKE) clean )
 	( cd TESTING/MATGEN; $(MAKE) clean )
-	( cd lapacke; $(MAKE) clean )
+	( cd LAPACKE; $(MAKE) clean )
 	
 
 cleanblas_testing:	
