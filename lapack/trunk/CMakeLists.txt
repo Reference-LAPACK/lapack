@@ -135,7 +135,7 @@ endif( NOT BLAS_FOUND )
 option(CBLAS "Build CBLAS" OFF)
 
 if(CBLAS)
-  add_subdirectory(cblas)
+  add_subdirectory(CBLAS)
 endif(CBLAS)
 
 # --------------------------------------------------
@@ -213,7 +213,7 @@ if (LAPACKE_WITH_TMG)
 endif(LAPACKE_WITH_TMG)
 
 if(LAPACKE)
-  add_subdirectory(lapacke)
+  add_subdirectory(LAPACKE)
 endif(LAPACKE)
 
 # --------------------------------------------------
