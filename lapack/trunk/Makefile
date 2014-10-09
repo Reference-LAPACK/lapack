@@ -77,7 +77,7 @@ blas_testing:
 	           ./xblat3z < zblat3.in     ) 
 
 cblas_testing: blaslib
-	( cd CBLAs ; $(MAKE) cblas_testing)
+	( cd CBLAS ; $(MAKE) cblas_testing)
 	( cd CBLAS ; $(MAKE) runtst)
 
 
