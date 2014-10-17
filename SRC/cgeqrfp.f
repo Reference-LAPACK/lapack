@@ -34,7 +34,7 @@
 *> \verbatim
 *>
 *> CGEQRFP computes a QR factorization of a complex M-by-N matrix A:
-*> A = Q * R.
+*> A = Q * R. The diagonal entries of R are real and nonnegative.
 *> \endverbatim
 *
 *  Arguments:
@@ -58,7 +58,8 @@
 *>          On entry, the M-by-N matrix A.
 *>          On exit, the elements on and above the diagonal of the array
 *>          contain the min(M,N)-by-N upper trapezoidal matrix R (R is
-*>          upper triangular if m >= n); the elements below the diagonal,
+*>          upper triangular if m >= n). The diagonal entries of R
+*>          are real and nonnegative; the elements below the diagonal,
 *>          with the array TAU, represent the unitary matrix Q as a
 *>          product of min(m,n) elementary reflectors (see Further
 *>          Details).
@@ -131,6 +132,8 @@
 *>  where tau is a complex scalar, and v is a complex vector with
 *>  v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
 *>  and tau in TAU(i).
+*>
+*> See Lapack Working Note 203 for details
 *> \endverbatim
 *>
 *  =====================================================================
