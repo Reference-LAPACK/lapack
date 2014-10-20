@@ -51,7 +51,8 @@
 *> the right singular vectors of [A], respectively. The matrices [U] and [V]
 *> are computed and stored in the arrays U and V, respectively. The diagonal
 *> of [SIGMA] is computed and stored in the array SVA.
-*> \endverbatim
+*> DGEJSV can sometimes compute tiny singular values and their singular vectors much
+*> more accurately than other SVD routines, see below under Further Details.*> \endverbatim
 *
 *  Arguments:
 *  ==========
