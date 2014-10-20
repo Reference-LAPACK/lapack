@@ -65,7 +65,7 @@
 *>          The order of the matrix A.  N >= 0.
 *> \endverbatim
 *>
-*> \param[in] A
+*> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
