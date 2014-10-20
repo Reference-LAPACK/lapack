@@ -45,6 +45,8 @@
 *> matrix, and V is an N-by-N orthogonal matrix. The diagonal elements
 *> of SIGMA are the singular values of A. The columns of U and V are the
 *> left and the right singular vectors of A, respectively.
+*> DGESVJ can sometimes compute tiny singular values and their singular vectors much
+*> more accurately than other SVD routines, see below under Further Details.
 *> \endverbatim
 *
 *  Arguments:
