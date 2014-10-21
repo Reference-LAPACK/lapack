@@ -1,0 +1,913 @@
+\chapter{Indices of Auxiliary Routines}\label{chapindexauxil}\index{index!auxiliary routines}
+
+Notes:
+
+\begin{enumerate}
+
+\item These four indices list routines which are {\bf not} expected to be called by users.
+They are listed here primarily to help investigate errors in the users' programs or in the LAPACK routines.
+
+\item The first index lists the unblocked versions of routines, for which the blocked versions
+are intended to be called by the users' programs or by higher-level LAPACK routines. The blocked
+versions are listed in Appendix~\ref{chapindexuser}.
+
+\item The second index lists the bulk of the auxiliary routines, most, but not all, having names
+ beginning xLA-.
+
+\item The third index lists a few routines whose names are not type or precision-dependent.
+
+\item The fourth index lists routines which ideally should have been included in the BLAS,
+but the need for them was not realized until after the BLAS were standardized.
+
+\item These indices 
+list related pairs of real and complex routines together,
+in the same style as in Appendix~\ref{chapindexuser}.
+
+\item Routines are listed in alphanumeric order
+of the real (single precision) routine name (which always begins with S-).
+(See subsection~\ref{subsecnaming} for details of the LAPACK naming scheme.)
+
+\item Double precision versions of routines have names beginning
+D- instead of S-, and Z- instead of C-.
+
+\item This index gives only a brief description of the purpose of each
+routine. For a precise description consult the leading comments in the code,
+which have been written in the same style as for the driver and
+computational routines.
+
+\end{enumerate}
+
+\newpage
+
+\section{Index of Unblocked Routines}\label{secindexauxilunblocked}
+\index{index!unblocked routines}
+
+\begin{center}
+\begin{tabular}{| l   l | p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SGBTF2&CGBTF2&
+Computes an $LU$ factorization of a general band matrix,
+using partial pivoting with row interchanges.\\
+SGEBD2&CGEBD2&
+Reduces a general rectangular matrix to  real bidiagonal form 
+by an orthogonal/unitary transformation.\\
+SGEHD2&CGEHD2& 
+Reduces a general matrix to upper Hessenberg form 
+by an orthogonal/unitary similarity transformation.\\
+SGELQ2&CGELQ2&
+Computes an $LQ$ factorization of a general rectangular matrix.\\
+SGEQL2&CGEQL2&
+Computes a $QL$ factorization of a general rectangular matrix.\\
+SGEQR2&CGEQR2&
+Computes a $QR$ factorization of a general rectangular matrix.\\
+SGEQR2P&CGEQR2P&
+Computes a $QR$ factorization of a general rectangular matrix,
+ensuring that $R$ has a non-negative diagonal.\\
+SGEQRT2&CGEQRT2&
+Computes a $QR$ factorization of a general rectangular matrix,
+using the compact WY representation for $Q$.\\
+SGERQ2&CGERQ2&
+Computes an $RQ$ factorization of a general rectangular matrix.\\
+SGESC2&CGESC2&
+Solves a system of linear equations $A X = \alpha B$, using
+the $LU$ factorization with complete pivoting computed by xGETC2.\\
+SGETC2&CGETC2&
+Computes an $LU$ factorization with complete pivoting of the
+general matrix $A$.\\
+SGETF2&CGETF2&
+Computes an $LU$ factorization of a general matrix,
+using partial pivoting with row interchanges.\\
+SGTTS2&CGTTS2&
+Solves one of the systems of equations $A X = B$ or  $A^H  X = B$,
+where $A$ is a tridiagonal matrix, using the $LU$ factorization computed
+by SGTTRF/CGTTRF. \\
+SORG2L&CUNG2L&
+Generates all or part of the orthogonal/unitary matrix $Q$ 
+from a $QL$ factorization determined by SGEQLF/CGEQLF.\\
+SORG2R&CUNG2R&
+Generates all or part of the orthogonal/unitary matrix $Q$ 
+from a $QR$ factorization determined by SGEQRF/CGEQRF.\\
+SORGL2&CUNGL2&
+Generates all or part of the orthogonal/unitary matrix $Q$ 
+from an $LQ$ factorization determined by SGELQF/CGELQF.\\
+SORGR2&CUNGR2&
+Generates all or part of the orthogonal/unitary matrix $Q$ 
+from an $RQ$ factorization determined by SGERQF/CGERQF.\\
+SORM2L&CUNM2L&
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from a $QL$ factorization determined by SGEQLF/CGEQLF.\\
+SORM2R&CUNM2R&
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from a $QR$ factorization determined by SGEQRF/CGEQRF.\\
+SORML2&CUNML2&
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from an $LQ$ factorization determined by SGELQF/CGELQF.\\
+SORMR2&CUNMR2&
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from an $RQ$ factorization determined by SGERQF/CGERQF.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   p{1.2in} | p{4.1in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SORMR3&CUNMR3&
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from an $RZ$ factorization determined by STZRZF/CTZRZF.\\
+SPBTF2&CPBTF2&
+Computes the Cholesky factorization of 
+a symmetric/Hermitian positive definite band matrix.\\
+SPOTF2&CPOTF2&
+Computes the Cholesky factorization of 
+a symmetric/Hermitian positive definite matrix.\\
+SPSTF2&CPSTF2&
+Computes the Cholesky factorization with complete
+pivoting of a symmetric/Hermitian positive semidefinite matrix.\\
+SPTTS2&CPTTS2&
+Solves a tridiagonal system of the form
+$A X = B$, using the $L D L^H$ factorization of $A$ computed by
+SPTTRF/CPTTRF.\\
+SSYGS2&CHEGS2&
+Reduces a symmetric/Hermitian definite generalized eigenproblem 
+to standard form, where $B$ has been factorized by SPOTRF/CPOTRF.\\
+SSYTD2&CHETD2&
+Reduces a symmetric/Hermitian matrix to 
+real symmetric tridiagonal form 
+by an orthogonal/unitary similarity transformation.\\
+SSYTF2&CSYTF2 CHETF2&
+Computes the factorization of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the diagonal pivoting method.\\
+SSYTF2\_ROOK&CSYTF2\_ROOK CHETF2\_ROOK&
+Computes the factorization of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the bounded Bunch-Kaufman rook pivoting method.\\
+SSYTM2&CHETM2& 
+Computes the product $U  U^H$ or $L^H L$, 
+where $U$ and $L$ are upper or lower triangular matrices.\\
+STGEX2&CTGEX2&
+Swaps adjacent diagonal blocks $(A_{11}, B_{11})$ and $(A_{22}, B_{22})$
+of size 1-by-1 or 2-by-2 in an upper (quasi) triangular matrix pair
+$(A, B)$ by an orthogonal/unitary equivalence transformation.\\
+STGSY2&CTGSY2&
+Solves the generalized Sylvester equation.\\
+STPQRT2&CTPQRT2&
+Computes a $QR$ factorization of a triangular-pentagonal matrix,
+using the compact WY representation for $Q$.\\
+STRTI2&CTRTI2&
+Computes the inverse of a triangular matrix.\\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\section{Index of Miscellaneous Auxiliary Routines}\label{secindexauxilmisc}
+\index{index!miscellaneous auxiliary routines}
+
+\begin{center}
+\begin{tabular}{| l  p{1.9in} | p{2.8in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+&CLACGV&
+Conjugates a complex vector.\\
+&CLACRM &
+Performs a matrix multiplication $C = A B$, where $A$ is complex and $B$ is real. \\
+&CLACRT&
+Performs the transformation $\bmat{cc} c & s \\ -s & c \emat \; \bmat{c} x \\ y \emat$, where $c$, $s$, $x$ and $y$ are complex. \\
+&CLAESY&
+Computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric matrix,
+and checks that the norm of the matrix of eigenvectors is larger than
+a threshold value.\\
+&CLARCM&
+Performs a matrix multiplication $C = AB$, where $A$ is real and $B$ is complex. \\
+ILASLC&ILACLC&
+Returns the index of the last nonzero column of a matrix. \\
+ILASLR&ILACLR&
+Returns the index of the last nonzero row of a matrix. \\
+SGSVJ0&&
+Used by SGESVJ to apply Jacobi rotations in a pre-processing phase, 
+but not to check for convergence.\\
+SGSVJ1&&
+Used by SGESVJ to apply Jacobi rotations in a pre-processing phase to target particular pivots,
+but not to check for convergence.\\ 
+SLA\_GBAMV&CLA\_GBAMV&
+Performs a matrix-vector operation where the absolute value of all
+elements is used, for a general band matrix. \\
+SLA\_GBRCOND&CLA\_GBRCOND\_C CLA\_GBRCOND\_X&
+Estimates the Skeel condition number for a general band matrix. \\
+SLA\_GBRFSX\_EXTENDED&CLA\_GBRFSX\_EXTENDED&
+Improves the solution to a system of linear equations for a general band matrix
+by performing extra-precise iterative refinement and provides error bounds and
+backward error estimates for the solution. \\
+SLA\_GBRPVGRW&CLA\_GBRPVGRW&
+Computes the reciprocal pivot growth factor for a general band matrix. \\
+SLA\_GEAMV&CLA\_GEAMV&
+Performs a matrix-vector operation where the absolute value of all
+elements is used, for a general matrix. \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l  p{1.9in} | p{2.8in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLA\_GERCOND&CLA\_GERCOND\_C CLA\_GERCOND\_X&
+Estimates the Skeel condition number for a general matrix. \\
+SLA\_GERFSX\_EXTENDED&CLA\_GERFSX\_EXTENDED&
+Improves the solution to a system of linear equations for a general matrix
+by performing extra-precise iterative refinement and provides error bounds and
+backward error estimates for the solution. \\
+SLA\_GERPVGRW&CLA\_GERPVGRW&
+Computes the reciprocal pivot growth factor for a general matrix. \\
+SLA\_LIN\_BERR&CLA\_LIN\_BERR&
+Computes a componentwise relative backward error. \\
+SLA\_PORCOND&CLA\_PORCOND\_C CLA\_PORCOND\_X&
+Estimates the Skeel condition number for a symmetric/Hermitian positive definite matrix. \\
+SLA\_PORFSX\_EXTENDED&CLA\_PORFSX\_EXTENDED&
+Improves the solution to a system of linear equations for a symmetric/Hermitian positive definite matrix
+by performing extra-precise iterative refinement and provides error bounds and
+backward error estimates for the solution. \\
+SLA\_PORPVGRW&CLA\_PORPVGRW&
+Computes the reciprocal pivot growth factor for a symmetric/Hermitian positive definite matrix. \\
+SLA\_SYAMV&CLA\_SYAMV CLA\_HEAMV&
+Performs a matrix-vector operation where the absolute value of all
+elements is used, for a real symmetric/complex symmetric/complex Hermitianl matrix. \\
+SLA\_SYRCOND&CLA\_SYRCOND\_C CLA\_SYRCOND\_X CLA\_HERCOND\_C CLA\_HERCOND\_X&
+Estimates the Skeel condition number for a real symmetric/complex symmetric/complex Hermitian matrix. \\
+SLA\_SYRFSX\_EXTENDED&CLA\_SYRFSX\_EXTENDED CLA\_HERFSX\_EXTENDED&
+Improves the solution to a system of linear equations for a real symmetric/complex symmetric/complex Hermitian matrix
+by performing extra-precise iterative refinement and provides error bounds and
+backward error estimates for the solution. \\
+SLA\_SYRPVGRW&CLA\_SYRPVGRW CLA\_HERPVGRW&
+Computes the reciprocal pivot growth factor for a real symmetric/complex symmetric/complex Hermitian matrix. \\
+SLA\_WWADDW&CLA\_WWADDW&
+Adds a vecor into a doubled-single vector. \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l  p{0.75in} | p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLABAD&& 
+Returns the square root of the underflow and overflow thresholds
+if the exponent-range is very large.\\
+SLABRD&CLABRD&
+Reduces the first $nb$ rows and columns of a general rectangular matrix $A$
+to real bidiagonal form by an orthogonal/unitary transformation,
+and returns auxiliary matrices 
+which are needed to apply the transformation to the unreduced part of $A$.\\
+SLACON&CLACON&
+Estimates the 1-norm of a square matrix,
+using reverse communication for evaluating matrix-vector products. \emph{Not thread safe.}\\
+SLACN2&CLACN2&
+Estimates the 1-norm of a square matrix,
+using reverse communication for evaluating matrix-vector products.  Thread-safe.\\
+SLACPY&CLACPY CLACP2& 
+Copies all or part of one 2-dimensional array to another.\\
+SLADIV&CLADIV&
+Performs complex division in real arithmetic, 
+avoiding unnecessary overflow.\\
+SLAE2&& 
+Computes the eigenvalues of a 2-by-2 symmetric matrix.\\
+SLAEBZ&&
+Computes the number of eigenvalues of a real symmetric tridiagonal matrix 
+which are less than or equal to a given value,
+and performs other tasks required by the routine SSTEBZ.\\
+SLAED0&CLAED0&
+Used by xSTEDC.
+Computes all eigenvalues and corresponding eigenvectors of an
+unreduced symmetric tridiagonal matrix, using the divide and conquer
+method.\\
+SLAED1& &
+Used by SSTEDC.
+Computes the updated eigensystem of a diagonal
+matrix after modification by a rank-1 symmetric matrix.
+Used when the original matrix is tridiagonal. \\
+SLAED2& &
+Used by SSTEDC.
+Merges eigenvalues and deflates secular equation.
+Used when the original matrix is tridiagonal. \\
+SLAED3& &
+Used by SSTEDC.
+Finds the roots of the secular equation and updates the eigenvectors.
+Used when the original matrix is tridiagonal. \\
+SLAED4& &
+Used by SSTEDC.
+Finds a single root of the secular equation. \\
+SLAED5& &
+Used by SSTEDC.
+Solves the 2-by-2 secular equation. \\
+SLAED6& &
+Used by SSTEDC.
+Computes one Newton step in solution of secular equation. \\
+SLAED7&CLAED7&
+Used by SSTEDC.
+Computes the updated eigensystem of a diagonal
+matrix after modification by a rank-1 symmetric matrix.
+Used when the original matrix is dense.  \\
+SLAED8&CLAED8&
+Used by xSTEDC.
+Merges eigenvalues and deflates secular equation.
+Used when the original matrix is dense.  \\
+SLAED9& &
+Used by SSTEDC.
+Finds the roots of the secular equation and updates the eigenvectors.
+Used when the original matrix is dense. \\
+SLAEDA& &
+Used by SSTEDC.
+Computes the $z$ vector determining the rank-1 modification of the
+diagonal matrix.
+Used when the original matrix is dense. \\
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{| l   p{0.75in} |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLAEIN&CLAEIN&
+Computes a specified right or left eigenvector of an upper Hessenberg matrix
+by inverse iteration.\\
+SLAEV2&CLAEV2&
+Computes the eigenvalues and eigenvectors of a 2-by-2 symmetric/Hermitian 
+matrix.\\
+SLAEXC&&
+Swaps adjacent diagonal blocks of a real upper quasi-triangular matrix 
+in Schur canonical form,
+by an orthogonal similarity transformation.\\
+SLAG2&&
+Computes the eigenvalues of a 2-by-2 generalized eigenvalue problem
+$A - \lambda B$, with scaling as necessary to avoid over-/underflow.  \\
+SLAGBU&CLAGBU&
+Restores to band form the matrix $A$ of a generalized symmetric band eigenproblem
+by generating and applying a vector of plane rotations.\\
+SLAGS2&CLAGS2&
+Computes 2-by-2 orthogonal (unitary) matrices $U$, $V$ and $Q$, and applies
+them to matrices $A$ and $B$ such that the rows of the transformed
+$A$ and $B$ are parallel.\\
+SLAGTF&&
+Computes an $LU$ factorization of a matrix $T - \lambda I$, 
+where $T$ is a general tridiagonal matrix and $\lambda$ a scalar,
+using partial pivoting with row interchanges.\\
+SLAGTM&CLAGTM&
+Performs a matrix-matrix product of the form $C = \alpha A B + \beta C$,
+where $A$ is a tridiagonal matrix, 
+$B$ and $C$ are rectangular matrices
+and $\alpha$ and $\beta$ are scalars, which may be 0, 1, or $-1$.\\
+SLAGTS&&
+Solves the system of equations 
+$(T~-~\lambda I) x~=~y$ or $(T~-~\lambda I)^T x~=~y$,
+where $T$ is a general tridiagonal matrix and $\lambda$ a scalar,
+using the $LU$ factorization computed by SLAGTF.\\
+SLAGV2&&
+Computes the generalized Schur factorization of a real 2-by-2
+matrix pencil $(A,B)$ where $B$ is upper triangular.\\
+SLAHQR&CLAHQR&
+Computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, 
+using the double-shift/single-shift $QR$ algorithm.\\
+SLAHRD&CLAHRD&
+Reduces the first $nb$ columns of a general rectangular matrix $A$
+so that elements below the $k^{th}$ subdiagonal are zero,
+by an orthogonal/unitary transformation,
+and returns auxiliary matrices 
+which are needed to apply the transformation to the unreduced part of $A$.\\
+SLAIC1&CLAIC1&
+Applies one step of incremental condition estimation.\\
+SLALN2&&
+Solves a 1-by-1 or 2-by-2 system of equations of the form  
+$(\gamma A~-~\lambda D ) x~=~\sigma b$
+or $(\gamma A^T~-~\lambda D) x~=~\sigma b$,
+where $D$ is a diagonal matrix,
+$\lambda$, $b$ and $x$ may be complex, 
+and $\sigma$ is a scale factor set to avoid overflow.\\
+SLALS0&CLALS0&
+Used by xGELSD.
+Applies back the multiplying factors of either the left or the right
+singular vector matrix of a diagonal matrix appended by a row to
+the right hand side matrix $B$ in solving the least squares problem,
+using the divide and conquer SVD approach.\\
+SLALSA&CLALSA&
+Used by xGELSD.
+An intermediate step in solving the least squares problem
+by computing the SVD of the coefficient matrix in compact form. \\
+SLALSD&CLALSD&
+Used by xGELSD.
+Uses the singular value decomposition of $A$ to solve the least
+squares problem of finding $X$ to minimize the Euclidean norm of each
+column of $A  X - B$. \\
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{| l p{0.75in} |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLAMCH&& 
+Determines machine parameters for floating-point arithmetic.\\
+SLAMRG& &
+Creates a permutation list which will merge the entries of
+two independently sorted sets into a single set which is sorted
+in ascending order. \\
+SLANEG& &
+Returns the Sturm count, the number of negative pivots encountered while
+factoring $T - \sigma I = L D L^T$. \\
+SLANGB&CLANGB& 
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a general square band matrix.\\
+SLANGC&CLANGC&
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a general rectangular band matrix.\\
+SLANGE&CLANGE& 
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a general rectangular matrix.\\
+SLANGT&CLANGT& 
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element, 
+of a general tridiagonal matrix.\\
+SLANHS&CLANHS&  
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of an upper Hessenberg matrix.\\ 
+SLANSB&CLANSB CLANHB&
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a real symmetric/complex symmetric/complex Hermitian band matrix.\\
+SLANSF & CLANHF &
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a symmetric/Hermitian matrix, stored in RFP format.\\
+SLANSP&CLANSP CLANHP&
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a real symmetric/complex symmetric/complex Hermitian matrix
+in packed storage.\\
+SLANST&CLANHT&  
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a symmetric/Hermitian tridiagonal matrix.\\
+SLANSY&CLANSY CLANHE&
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a real symmetric/complex symmetric/complex Hermitian matrix.\\
+SLANTB&CLANTB&  
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a triangular band matrix.\\
+SLANTP&CLANTP&  
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a triangular matrix in packed storage.\\
+SLANTR&CLANTR&  
+Returns the value of the 1-norm, Frobenius norm, $\infty$-norm,  
+or the largest absolute value of any element,
+of a triangular matrix.\\
+SLANV2&&
+Computes the Schur factorization of a real 2-by-2 nonsymmetric matrix 
+in Schur canonical form.\\
+SLAPLL&CLAPLL&
+Measures the linear dependence of two vectors $x$ and $y$.\\
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{| l p{0.75in} |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLAPMR&CLAPMR&
+Performs a forward or backward permutation of the rows of a matrix. \\
+SLAPMT&CLAPMT&
+Performs a forward or backward permutation of the columns of a matrix. \\
+SLAPY2&& 
+Returns $ \sqrt{x^2 + y^2}$, 
+avoiding unnecessary overflow or harmful underflow.\\
+SLAPY3&& Returns $ \sqrt{x^2 + y^2 + z^2}$, 
+avoiding unnecessary overflow or harmful underflow.\\
+SLAQGB&CLAQGB& 
+Scales a general band matrix,
+using row and column scaling factors computed by SGBEQU/CGBEQU.\\
+SLAQGE&CLAQGE& 
+Scales a general rectangular matrix, 
+using row and column scaling factors computed by SGEEQU/CGEEQU.\\
+SLAQP2&CLAQP2&
+Computes a $QR$ factorization with column pivoting of rows 
+OFFSET+1 to M 
+of a general rectangular matrix $A$. Rows 1 to 
+OFFSET are accordingly pivoted
+but not factorized.\\
+SLAQPS&CLAQPS&
+Computes a step of $QR$ factorization with column pivoting
+of a general rectangular matrix $A$. \\
+SLAQSB&CLAQSB CLAQHB& 
+Scales a symmetric/Hermitian band matrix,
+using scaling factors computed by SPBEQU/CPBEQU.\\
+SLAQSP&CLAQSP CLAQHP& 
+Scales a symmetric/Hermitian matrix in packed storage,
+using scaling factors computed by SPPEQU/CPPEQU.\\
+SLAQSY&CLAQSY CLAQHE& 
+Scales a symmetric/Hermitian matrix,
+using scaling factors computed by SPOEQU/CPOEQU.\\
+SLAQTR&&
+Solves a real quasi-triangular system of equations,
+or a complex quasi-triangular system of special form,
+in real arithmetic.\\
+SLAR1V&CLAR1V&
+Computes the (scaled) $r^{\mbox{th}}$ column of the inverse of
+the submatrix in rows $b_{1}$ through $b_{n}$ of the tridiagonal matrix
+$L D L^T - \sigma I$. \\
+SLAR2V&CLAR2V& 
+Applies a vector of plane rotations with real cosines and real/complex sines
+from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices.\\
+SLARF&CLARF&
+Applies an elementary reflector to a general rectangular matrix.\\
+SLARFB&CLARFB& 
+Multiplies a matrix by a block reflector or its transpose/conjugate-transpose, from either
+the left or the right, stored in the compact WY representation.\\
+SLARFG&CLARFG& 
+Generates an elementary reflector (Householder matrix).\\
+SLARFGP&CLARFGP&
+Generates an elementary reflector (Householder matrix),
+ensuring that $\beta \geq 0$.\\
+SLARFT&CLARFT&
+Forms the triangular factor $T$ of a block reflector $H = I - V T V^H$.\\
+SLARFX&CLARFX& 
+Applies an elementary reflector to a general rectangular matrix,
+with loop unrolling when the reflector has order $\leq 10$.\\
+SLARGV&CLARGV& 
+Generates a vector of plane rotations with real cosines and real/complex 
+sines.\\
+SLARNV&CLARNV& 
+Returns a vector of random numbers from a uniform or normal distribution.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   p{0.75in} |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLARRA& &
+Computes the splitting points with the specified threshold,
+at which $T$ breaks up into blocks. \\
+SLARRB& &
+Given the relatively robust representation (RRR) $L D L^T$, SLARRB
+does ``limited'' bisection to locate the eigenvalues of $L D L^T$ to more accuracy. \\
+SLARRC& &
+Computes the number of eigenvalues of $T$, either in a specified interval
+or of its factorization $L D L^T$. \\
+SLARRD& &
+Computes eigenvalues of $T$ to a suitable accuracy, either all eigenvalues
+or those within a specified interval or those within a specified range of indices. \\ 
+SLARRE& &
+Given the tridiagonal matrix $T$, SLARRE sets ``small'' off-diagonal
+elements to zero, and for each unreduced block $T_i$, it finds
+a suitable shift $\sigma_i$, the base representation $T_i - \sigma_i I~=~L_i D_i L_i^T$ 
+and the eigenvalues of each $L_i D_i L_i^T$. \\
+SLARRF& &
+Finds a new relatively robust representation
+$L D L^T~-~\sigma_i  I~=~L(+) D(+) L(+)^T$ such that at least one of its
+eigenvalues is relatively isolated. \\
+SLARRJ& &
+Does bisection to refine estimates of the eigenvalues of $T$ to greater accuracy. \\
+SLARRK& &
+Computes one eigenvalue of $T$ to a suitable accuracy. \\
+SLARRR& &
+Performs tests to decide if $T$ warrants expensive computations
+which guarantee high relative accuracy in its eigenvalues. \\
+SLARRV& CLARRV&
+Computes the eigenvectors of the tridiagonal matrix
+$T~=~L D L^T$ given $L$, $D$ and the eigenvalues of $L D L^T$.\\
+SLARTA&CLARTA&
+Applies a vector of plane rotations to the rows or columns of a general band matrix.\\
+SLARTB&CLARTB&
+Applies a vector of plane rotations to the rows or columns of a symmetric/Hermitian band matrix.\\
+SLARTC&CLARTC&
+Applies a vector of plane rotations to the rows or columns of a symmetric/Hermitian band matrix,
+working either forward down the matrix or backward up the matrix.\\
+SLARTG&CLARTG&
+Generates a plane rotation with real cosine and real/complex sine.\\
+SLARTGP&&
+Generates a plane rotation (more accurate variant of Level 1 BLAS routine SROTG).\\
+SLARTGS&&
+Generates a plane rotation designed to introduce a bulge in the implicit QR iteration
+for the bidiagonal SVD problem.\\
+SLARTV&CLARTV& 
+Applies a vector of plane rotations with real cosines and real/complex sines
+to the elements of a pair of vectors.\\
+SLARTW&CLARTW&
+Updates the matrix of left or right singular vectors of a general band eigenproblem
+by applying a vector of plane rotations.\\
+SLARTX&CLARTX&
+Updates the matrix of eigenvectors of a symmetric/Hermitian band eigenproblem 
+by applying a vector of plane rotations.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   p{0.75in} |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLARTY&CLARTY&
+With xLARTZ,
+updates the matrix of eigenvectors of a generalized symmetric/Hermitian band eigenproblem,
+either applying the inverse of the split Cholesky factor or simply copying the split Cholesky factor.\\
+SLARTZ&CLARTZ&
+With xLARTY, 
+updates the matrix of eigenvectors of a generalized symmetric/Hermitian band eigenproblem 
+by applying a vector of plane rotations, 
+working either forward down the matrix or backward up the matrix.\\
+SLARUV&&
+Returns a vector of $n$ random real numbers from a uniform (0,1) distribution 
+($n \leq 128$).\\
+SLARZ&CLARZ&
+Applies an elementary reflector (as returned by xTZRZF) to a general
+matrix.\\
+SLARZB&CLARZB&
+Applies a block reflector or its transpose/conjugate-transpose to a 
+general matrix.\\
+SLARZT&CLARZT&
+Forms the triangular factor $T$ of a block reflector $H = I - V T V^H$.\\
+SLAS2&&
+Computes the singular values of a 2-by-2 triangular matrix.\\
+SLASCL&CLASCL& 
+Multiplies a general rectangular matrix by a real scalar defined as
+$c_{to}/c_{from}$.\\
+SLASCL2&CLASCL2&
+Multiplies a vector by a scalar.\\
+SLASD0&&
+Used by SBDSDC.  Computes via a divide and conquer method the singular values
+of a real upper bidiagonal $n$-by-$m$ matrix with diagonal $D$ and off-diagonal
+$E$, where M = N + SQRE. \\
+SLASD1&&
+Used by SBDSDC.  Computes the SVD of an upper bidiagonal $n$-by-$m$ matrix,
+where N = NL + NR + 1 and M = N + SQRE. \\
+SLASD2&&
+Used by SBDSDC.  Merges the two sets of singular values together into a
+single sorted set, and then it tries to deflate the size of the problem. \\ 
+SLASD3&&
+Used by SBDSDC.  Finds all the square roots of the roots of the secular
+equation, as defined by the values in $D$ and $Z$, and then
+updates the singular vectors by matrix multiplication. \\
+SLASD4&&
+Used by SBDSDC.  Computes the square root of the $i^{th}$ updated
+eigenvalue of a positive symmetric rank-1 modification to
+a positive diagonal matrix. \\
+SLASD5&&
+Used by SBDSDC.  Computes the square root of the $i^{th}$ eigenvalue
+of a positive symmetric rank-1 modification of a 2-by-2 diagonal matrix.\\
+SLASD6&&
+Used by SBDSDC.  Computes the SVD of an updated upper bidiagonal matrix
+obtained by merging two smaller ones by appending a row. \\
+SLASD7&&
+Used by SBDSDC.  Merges the two sets of singular values together into a
+single sorted set, and then tries to deflate the size of the problem.\\
+SSLASD8&&
+Used by SBDSDC.  Finds the square roots of the roots of the secular
+equation, and stores, for each element in $D$, the distance to its two
+nearest poles (elements in DSIGMA). \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   p{1.15in} |p{4.1in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLASD9&&
+Used by SBDSDC.  Finds the square roots of the roots of the secular
+equation, and stores, for each element in $D$, the distance to its two
+nearest poles (elements in DSIGMA). \\
+SLASDA&&
+Used by SBDSDC.  Computes the singular value decomposition (SVD) of a
+real upper bidiagonal $n$-by-$m$ matrix with diagonal $D$ and off-diagonal $E$,
+where M = N + SQRE. \\
+SLASDQ&&
+Used by SBDSDC.  Computes the singular value decomposition (SVD) of a real
+(upper or lower) bidiagonal matrix with diagonal $D$ and
+off-diagonal $E$, accumulating the transformations if desired. \\
+SLASDT&&
+Used by SBDSDC.  Creates a tree of subproblems for bidiagonal divide and
+conquer.\\
+SLASET&CLASET& 
+Initializes the off-diagonal elements of a matrix to $\alpha$
+and the diagonal elements to $\beta$.\\
+SLASQ1& &
+Used by SBDSQR.
+Computes the singular values of a real bidiagonal
+matrix with diagonal $D$ and off-diagonal $E$.   \\
+SLASQ2& &
+Used by SBDSQR and SSTEMR.
+Computes all the eigenvalues of the symmetric positive
+definite tridiagonal matrix associated with the QD array $Z$ to high
+relative accuracy.\\ 
+SLASQ3& &
+Used by SBDSQR.
+Checks for deflation, computes a shift (TAU) and calls dqds.\\
+SLASQ4& &
+Used by SBDSQR.
+Computes an approximation TAU to the smallest eigenvalue
+using values of d from the previous transform.\\
+SLASQ5& &
+Used by SBDSQR.
+Computes one dqds transform in ping-pong form. \\
+SLASQ6& &
+Used by SBDSQR.
+Computes one dqds transform with zero shift in ping-pong form. \\
+SLASR&CLASR&
+Applies a sequence of plane rotations to a general rectangular
+matrix.\\
+SLASRT& &
+Sorts numbers in increasing or decreasing order using Quick Sort,
+reverting to Insertion Sort on arrays of size $\leq$ 20.  \\
+SLASSQ&CLASSQ& 
+Updates a sum of squares represented in scaled form.\\
+SLASV2&&
+Computes the singular value decomposition of a 2-by-2 triangular matrix.\\
+SLASWP&CLASWP& 
+Performs a sequence of row interchanges on a general rectangular matrix.\\
+SLASY2&&
+Solves the Sylvester matrix equation $A X \pm X B = \sigma C$
+where $A$ and $B$ are of order 1 or 2, 
+and may be transposed,
+and $\sigma$ is a scale factor.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   p{1.15in} |p{4.1in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+SLASYF&CLASYF \mbox{CLAHEF}&
+Computes a partial factorization of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the diagonal pivoting method.\\
+SLASYF\_ROOK&CLASYF\_ROOK CLAHEF\_ROOK&
+Computes a partial factorization of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the bounded Bunch-Kaufman rook pivoting method.\\
+SLATBS&CLATBS& 
+Solves a triangular banded system of equations
+$A  x = \sigma b$,  $A^T  x = \sigma b$,  or  $A^H  x = \sigma b$,
+where $\sigma$ is a scale factor set to prevent overflow.\\
+SLATDF&CLATDF&
+Uses the $LU$ factorization of the matrix computed by
+SGETC2 and computes a contribution to the reciprocal Dif-estimate. \\
+SLATPS&CLATPS& 
+Solves a triangular system of equations
+$A  x = \sigma b$,  $A^T  x = \sigma b$,  or  $A^H  x = \sigma b$,
+where $A$ is held in packed storage,
+and $\sigma$ is a scale factor set to prevent overflow.\\
+SLATRD&CLATRD& 
+Reduces the first $nb$ rows and columns of a symmetric/Hermitian matrix $A$
+to real tridiagonal form by an orthogonal/unitary similarity transformation,
+and returns auxiliary matrices
+which are needed to apply the transformation to the unreduced part of $A$.\\
+SLATRS&CLATRS& 
+Solves a triangular system of equations
+$A  x = \sigma b$,  $A^T  x = \sigma b$,  or  $A^H  x = \sigma b$,
+where $\sigma$ is a scale factor set to prevent overflow.\\
+SLATRZ&CLATRZ&
+Factors an upper trapezoidal matrix by means of orthogonal/unitary
+transformations.\\
+SORBDB5&CUNBDB5&
+Orthogonalizes the column vector $x$ with respect to the columns of $Q$,
+whose columns must be orthonormal.\\
+SORBDB6&CUNBDB6&
+Orthogonalizes the column vector $x$ with respect to the columns of $Q$,
+whose columns must be orthonormal (lower level routine).\\
+SRSCL&CSRSCL&
+Multiplies a vector by the reciprocal of a real scalar.\\
+SSYCONV&CSYCONV&
+Applies the permutations forward or backward to the 
+real symmetric/complex symmetric/complex Hermitian factorization determined by
+SSYTRF/CSYTRF/CHETRF.\\
+SSYSWAPR&CSYSWAPR CHESWAPR&
+Applies an elementary permutation to the rows and columns of 
+a real symmetric/complex symmetric/complex Hermitian
+matrix of which only the upper or lower triangle is stored. \\
+STPRFB&CTPRFB& 
+Multiplies a matrix which is composed of two blocks, by a triangular-pentagonal
+block reflector or its transpose/conjugate-transpose, from either the left or the right,
+stored in the compact WY representation.\\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\section{Index of Utility Routines}\label{secindexauxilutility}
+\index{index!utility routines}
+
+\begin{center}
+\begin{tabular}{| l | p{5.5in}    |}
+\hline \multicolumn{1}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\hline \hline
+CHLA\_TRANSTYPE&
+Translates from a BLAST-specified integer to a character specifying
+transposition.\\
+IEEECK& 
+Called by ILAENV to verify that Infinity and possibly NaN arithmetic is safe.\\
+ILADIAG&
+Translates from a character specifying unit or non-unit diagonal to a BLAST-specified integer.\\
+ILAENV &
+Environmental enquiry function which returns values for tuning
+algorithmic performance.\\
+ILAPREC& 
+Translates from a character specifying precision to a BLAST-specified integer.\\
+ILATRANS&
+Translates from a character specifying transposition to a BLAST-specified integer.\\
+ILAUPLO&
+Translates from a character specifying upper or lower triangular to a BLAST-specified integer.\\
+ILAVER&
+Returns the LAPACK version number.\\
+IPARMQ&
+Called by ILAENV to set problem- and machine-dependent parameters useful for xHSEQR.\\
+LSAME&
+Tests two characters for equality regardless of case.\\
+LSAMEN&
+Tests two character strings for equality regardless of case.\\
+XERBLA&
+Error handling routine called by LAPACK routines 
+if an input parameter has an invalid value.\\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\section{Index of Extensions to the BLAS}\label{secindexauxilblasext}
+\index{index!extensions to the BLAS}
+
+\begin{center}
+\begin{tabular}{| l   l | p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex&\\
+\hline \hline
+& CROT&
+Applies a plane rotation with real cosine and complex sine
+to a pair of complex vectors.\\
+& CSPMV &
+Computes the matrix-vector product $y = \alpha Ax + \beta y$,
+where $\alpha$ and $\beta$ are complex scalars, 
+$x$ and $y$ are complex vectors and
+$A$ is a complex symmetric matrix in packed storage.\\
+& CSPR &
+Performs the symmetric rank-1 update $A = \alpha x x^T  + A$,
+where $\alpha$ is a complex scalar, 
+$x$ is a complex vector and 
+$A$ is a complex symmetric matrix in packed storage.\\
+& CSROT &
+Applies a plane rotation with real cosine and sine
+to a pair of complex vectors.\\
+& CSYMV &
+Computes the matrix-vector product $y = \alpha Ax + \beta y$,
+where $\alpha$ and $\beta$ are complex scalars, 
+$x$ and $y$ are complex vectors and
+$A$ is a complex symmetric matrix.\\
+& CSYR &
+Performs the symmetric rank-1 update $A = \alpha x x^T  + A$,
+where $\alpha$ is a complex scalar, 
+$x$ is a complex vector and 
+$A$ is a complex symmetric matrix.\\
+& ICMAX1 &
+Finds the index of the element whose real part has maximum absolute value 
+(similar to the Level 1 BLAS ICAMAX,
+but using the absolute value of the real part).\\
+& SCSUM1 &
+Forms the 1-norm of a complex vector 
+(similar to the Level 1 BLAS SCASUM,
+but using the true absolute value).\\
+SSFRK&CHFRK&
+Performs a rank-{k} update of a symmetric/Hermitian matrix 
+$C= \alpha AA^{T}+\beta C$ or $C= \alpha A^{T}A+\beta C$,
+where $C$ is stored in RFP format.\\
+STFSM&CTFSM&
+Solves a triangular system of equations $X=\alpha A^{-1} B$, $X=\alpha B A^{-1}$, 
+$X=\alpha A^{-T} B$ or $X=\alpha B A^{-T}$, 
+where $A$ is stored in RFP format.\\
+\hline
+\end{tabular}
+\end{center}

@@ -1,0 +1,1041 @@
+\chapter{Indices of User-callable Routines}\label{chapindexuser}
+\index{user-callable routines, index of}
+\index{index!user-callable routines}
+
+Notes:
+
+\begin{enumerate}
+
+\item This index is divided in two: Appendix~\ref{secindexdrivers} is an index of {\bf driver} routines;
+Appendix~\ref{secindexcomp}  is an index of {\bf computational} routines. This division in two
+corresponds with the division in Chapter~\ref{chapcontents}.
+
+\item These two indices list related pairs of real and complex routines together,
+for example, {\bf SGBSV} and {\bf CGBSV}. 
+
+\item Routines are listed in alphanumeric order
+of the real (single precision) routine name (which always begins with S-).
+(See subsection~\ref{subsecnaming} for details of the LAPACK naming scheme.)
+
+\item Double precision versions of routines have names beginning
+D- instead of S-, and Z- instead of C-.
+
+\item Four routines which depend on mixed precision, are listed separately at the end of
+Appendix A.1. They require the data to be supplied, and the solution to be returned, in
+double precision, but perform much of the computation internally in single precision
+for greater speed.
+
+\item These indices give only a brief description of the purpose of each
+routine.
+
+\item The text of the descriptions applies to both real and complex routines,
+except where alternative words or phrases are indicated, for example
+``symmetric/Hermitian'', ``orthogonal/unitary''
+or ``quasi-triangular/triangular''. For the real routines $A^H$ is equivalent
+to $A^T$.
+
+\item In a few cases, three routines are listed together, one for
+real symmetric, one for complex symmetric, and one for complex Hermitian
+matrices (for example {\bf SSYSV}, {\bf CSYSV} and {\bf CHESV}). 
+
+\item A few routines for real matrices have no complex equivalent (for example
+{\bf SSTEV}).
+
+\end{enumerate}
+
+\newpage
+
+\section{Index of Driver Routines}\label{secindexdrivers}
+\index{index!driver routines}
+
+\begin{center}
+\begin{tabular}{| l   l | p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+{\bf SGBSV\indexR{SGBSV}}&{\bf CGBSV\indexR{CGBSV}}&
+Solves a general banded system of linear equations
+$AX=B$.\\
+{\bf SGBSVD\indexR{SGBSVD}}&{\bf CGBSVD\indexR{CGBSVD}}&
+Computes the singular value decomposition (SVD) of a general banded 
+matrix.\\
+{\bf SGBSVX\indexR{SGBSVX}}&{\bf CGBSVX\indexR{CGBSVX}}& 
+Solves a general banded system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides an estimate of the condition number 
+and error bounds on the solution.\\
+{\bf SGBSVXX\indexR{SGBSVXx}}&{\bf CGBSVXX\indexR{CGBSVXX}}& 
+Solves a general banded system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides an estimate of the condition number 
+and error bounds on the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+{\bf SGEES\indexR{SGEES}}&{\bf CGEES\indexR{CGEES}}& 
+Computes the eigenvalues and Schur factorization of a general matrix, 
+and orders the factorization so that selected eigenvalues are at the top left 
+of the Schur form.\\
+{\bf SGEESX\indexR{SGEESX}}&{\bf CGEESX\indexR{CGEESX}}& 
+Computes the eigenvalues and Schur factorization of a general matrix, 
+orders the factorization so that selected eigenvalues are at the top left 
+of the Schur form, 
+and computes reciprocal condition numbers for the average of the selected
+eigenvalues, 
+and for the associated right invariant subspace.\\
+{\bf SGEEV\indexR{SGEEV} }&{\bf CGEEV\indexR{CGEEV}}&
+Computes the eigenvalues and left and right eigenvectors of a general matrix.\\
+{\bf SGEEVX\indexR{SGEEVX}}&{\bf CGEEVX\indexR{CGEEVX}}& 
+Computes the eigenvalues and left and right eigenvectors of a general matrix, 
+with preliminary balancing of the matrix, 
+and computes reciprocal condition numbers for the eigenvalues and right 
+eigenvectors.\\
+{\bf SGEJSV\indexR{SGEJSV}}&&
+Computes the singular value decomposition (SVD) of a
+rectangular $m$-by-$n$ matrix, where $m \geq n$, using a one-sided Jacobi method
+with preprocessing.\\
+{\bf SGELS\indexR{SGELS} }&{\bf CGELS\indexR{CGELS}}& 
+Computes the least squares solution to an overdetermined system of linear
+equations, $A X=B$ or $A^H X=B$, 
+or the minimum norm solution of an underdetermined system,
+where $A$ is a general rectangular matrix of full rank, 
+using a $QR$ or $LQ$ factorization of $A$.\\
+{\bf SGELSD\indexR{SGELSD}}&{\bf CGELSD\indexR{CGELSD}}& 
+Computes the minimum norm least squares solution
+to an over- or underdetermined system of linear equations $A X=B$, 
+using the singular value decomposition of $A$ and a divide and 
+conquer method.\\
+{\bf SGELSS\indexR{SGELSS}}&{\bf CGELSS\indexR{CGELSS}}& 
+Computes the minimum norm least squares solution
+to an over- or underdetermined system of linear equations $A X=B$, 
+using the singular value decomposition of $A$.\\
+{\bf SGELSY\indexR{SGELSY}}&{\bf CGELSY\indexR{CGELSY}}& 
+Computes the minimum norm least squares solution
+to an over- or underdetermined system of linear equations $A X=B$,
+using a complete orthogonal factorization of $A$ via a $QR$ factorization with column pivoting.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   l | p{4.2in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+{\bf SGESDD\indexR{SGESDD}}&{\bf CGESDD\indexR{CGESDD}}& 
+Computes the singular value decomposition (SVD) of a general rectangular 
+matrix, using a divide and conquer method.\\
+{\bf SGESV\indexR{SGESV}}&{\bf CGESV\indexR{CGESV}}&
+Solves a general system of linear equations $AX=B$.\\
+{\bf SGESVD\indexR{SGESVD}}&{\bf CGESVD\indexR{CGESVD}}& 
+Computes the singular value decomposition (SVD) of a general rectangular 
+matrix.\\
+{\bf SGESVX\indexR{SGESVX}}&{\bf CGESVX\indexR{CGESVX}}& 
+Solves a general system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides an estimate of the condition number 
+and error bounds on the solution.\\
+{\bf SGESVXX\indexR{SGESVXX}}&{\bf CGESVXX\indexR{CGESVXX}}& 
+Solves a general system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides an estimate of the condition number and error bounds on the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+{\bf SGGES\indexR{SGGES}}&{\bf CGGES\indexR{CGGES}}&
+Computes the generalized eigenvalues, Schur form, and the left
+and/or right Schur vectors, for a pair of nonsymmetric matrices. \\
+{\bf SGGESX\indexR{SGGESX}}&{\bf CGGESX\indexR{CGGESX}}&
+Computes the generalized eigenvalues, Schur form and optionally the left
+and/or right matrices of Schur vectors, for a pair of nonsymmetric matrices.\\
+{\bf SGGEV\indexR{SGGEV}}&{\bf CGGEV\indexR{CGGEV}}&
+Computes the generalized eigenvalues and the left and/or right
+generalized eigenvectors, for a pair of nonsymmetric matrices. \\
+{\bf SGGEVX\indexR{SGGEVX}}&{\bf CGGEVX\indexR{CGGEVX}}&
+Computes the generalized eigenvalues and optionally the left and/or right
+generalized eigenvectors, for a pair of nonsymmetric matrices.\\
+{\bf SGGGLM\indexR{SGGGLM}}&{\bf CGGGLM\indexR{CGGGLM}}&
+Solves a general Gauss-Markov linear model (GLM) problem, using a generalized QR
+factorization.   \\
+{\bf SGGLSE\indexR{SGGLSE}}&{\bf CGGLSE\indexR{CGGLSE}}&
+Solves the linear equality-constrained least squares (LSE) problem, using a
+generalized RQ factorization. \\
+{\bf SGGSVD\indexR{SGGSVD}}&{\bf CGGSVD\indexR{CGGSVD}}&
+Computes the generalized singular value decomposition (GSVD) of a pair
+of general rectangular matrices. \\
+{\bf SGTSV\indexR{SGTSV}}&{\bf CGTSV\indexR{CGTSV}}&
+Solves a general tridiagonal system of linear equations $AX=B$.\\
+{\bf SGTSVX\indexR{SGTSVX}}&{\bf CGTSVX\indexR{CGTSVX}}& 
+Solves a general tridiagonal system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides an estimate of the condition number 
+and error bounds on the solution.\\
+{\bf SORCSD\indexR{SORCSD}}&{\bf CUNCSD\indexR{CUNCSD}}&
+Recursively computes the complete CS decomposition of a square partitioned 2-by-2 orthogonal/unitary matrix.\\
+{\bf SORCSD2BY1\indexR{SORCSD2BY1}}&{\bf CUNCSD2BY1\indexR{CUNCSD2BY1}}&
+Computes the CS decomposition (thin version) of a partitioned 2-by-1 matrix with orthogonal/unitary columns.\\
+{\bf SPBSV\indexR{SPBSV}}&{\bf CPBSV\indexR{CPBSV}}&
+Solves a symmetric/Hermitian positive definite banded system of linear 
+equations $A X=B$.\\
+{\bf SPBSVX\indexR{SPBSVX}}&{\bf CPBSVX\indexR{CPBSVX}}& 
+Solves a symmetric/Hermitian positive definite banded system of linear 
+equations $A X=B$,
+and provides an estimate of the condition number 
+and error bounds on the solution.\\
+{\bf SPOSV\indexR{SPOSV}}&{\bf CPOSV\indexR{CPOSV}}&
+Solves a symmetric/Hermitian positive definite system of linear equations
+$A X=B$.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   l | p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+{\bf SPOSVX\indexR{SPOSVX}}&{\bf CPOSVX\indexR{CPOSVX}}& 
+Solves a symmetric/Hermitian positive definite system of linear equations
+$A X=B$,
+and provides an estimate of the condition number 
+and error bounds on the solution.\\
+{\bf SPOSVXX\indexR{SPOSVXX}}&{\bf CPOSVXX\indexR{CPOSVXX}}& 
+Solves a symmetric/Hermitian positive definite system of linear equations
+$A X=B$,
+and provides an estimate of the condition number and error bounds on the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+{\bf SPPSV\indexR{SPPSV}}&{\bf CPPSV\indexR{CPPSV}}&
+Solves a symmetric/Hermitian positive definite system of linear equations
+$A X=B$,
+where $A$ is held in packed storage.\\
+{\bf SPPSVX\indexR{SPPSVX}}&{\bf CPPSVX\indexR{CPPSVX}}& 
+Solves a symmetric/Hermitian positive definite system of linear equations
+$A X=B$,
+where $A$ is held in packed storage,
+and provides an estimate of the condition number 
+and error bounds on the solution.\\
+{\bf SPTSV\indexR{SPTSV}}&{\bf CPTSV\indexR{CPTSV}}&
+Solves a symmetric/Hermitian positive definite tridiagonal system of linear 
+equations
+$A X=B$.\\
+{\bf SPTSVX\indexR{SPTSVX}}&{\bf CPTSVX\indexR{CPTSVX}}& 
+Solves a symmetric/Hermitian positive definite tridiagonal system of linear 
+equations
+$A X=B$,
+and provides an estimate of the condition number 
+and error bounds on the solution.\\
+{\bf SSBEV\indexR{SSBEV}}&{\bf CHBEV\indexR{CHBEV}}&
+Computes all eigenvalues and optionally eigenvectors of 
+a symmetric/Hermitian band matrix.\\
+{\bf SSBEVD\indexR{SSBEVD}}&{\bf CHBEVD\indexR{CHBEVD}}&  
+Computes all eigenvalues and optionally eigenvectors of 
+a symmetric/Hermitian band matrix.  If eigenvectors are desired, it uses
+a divide and conquer algorithm. \\
+{\bf SSBEVX\indexR{SSBEVX}}&{\bf CHBEVX\indexR{CHBEVX}}&  
+Computes selected eigenvalues and eigenvectors of 
+a symmetric/Hermitian band matrix.\\
+{\bf SSBGV3\indexR{SSBGV3}}&{\bf CHBGV3\indexR{CHBGV3}}&
+Computes all eigenvalues and optionally eigenvectors
+of a generalized symmetric/Hermitian definite banded 
+eigenproblem.\\
+{\bf SSBGVD3\indexR{SSBGVD3}}&{\bf CHBGVD3\indexR{CHBGVD3}}&
+Computes all eigenvalues and optionally eigenvectors 
+of a generalized symmetric/Hermitian definite banded 
+eigenproblem.  If eigenvectors are desired,
+it uses a divide and conquer algorithm.\\
+{\bf SSBGVX3\indexR{SSBGVX3}}&{\bf CHBGVX3\indexR{CHBGVX3}}&
+Computes selected eigenvalues and optionally eigenvectors 
+of a generalized symmetric/Hermitian definite banded 
+eigenproblem.\\
+{\bf SSPEV\indexR{SSPEV}}&{\bf CHPEV\indexR{CHPEV}}&
+Computes all eigenvalues and optionally eigenvectors of 
+a symmetric/Hermitian matrix in packed storage.\\
+{\bf SSPEVD\indexR{SSPEVD}}&{\bf CHPEVD\indexR{CHPEVD}}& 
+Computes all eigenvalues and optionally eigenvectors of 
+a symmetric/Hermitian matrix in packed storage.  If eigenvectors are
+desired, it uses a divide and conquer algorithm.\\
+{\bf SSPEVX\indexR{SSPEVX}}&{\bf CHPEVX\indexR{CHPEVX}}& 
+Computes selected eigenvalues and eigenvectors of 
+a symmetric/Hermitian matrix in packed storage.\\
+{\bf SSPGV\indexR{SSPGV}}&{\bf CHPGV\indexR{CHPGV}}& 
+Computes all eigenvalues and optionally eigenvectors of 
+a generalized symmetric/Hermitian definite generalized eigenproblem,
+where $A$ and $B$ are held in packed storage.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   p{0.75in} | p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+{\bf SSPGVD\indexR{SSPGVD}}&{\bf CHPGVD\indexR{CHPGVD}}& 
+Computes all eigenvalues and optionally eigenvectors of 
+a generalized symmetric/Hermitian definite generalized eigenproblem,
+where $A$ and $B$ are held in packed storage.  If eigenvectors are
+desired, it uses a divide and conquer algorithm.\\
+{\bf SSPGVX\indexR{SSPGVX}}&{\bf CHPGVX\indexR{CHPGVX}}& 
+Computes selected eigenvalues and optionally eigenvectors of 
+a generalized symmetric/Hermitian definite generalized eigenproblem, 
+where $A$ and $B$ are held in packed storage.\\
+{\bf SSPSV\indexR{SSPSV}}&{\bf CSPSV\indexR{CSPSV}} {\bf  CHPSV\indexR{CHPSV}}& 
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations
+$A X=B$,
+where $A$ is held in packed storage.\\
+{\bf SSPSVX\indexR{SSPSVX}}&{\bf CSPSVX\indexR{CSPSVX}} {\bf  CHPSVX\indexR{CHPSVX}}& 
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations
+$A X=B$,
+where $A$ is held in packed storage,
+and provides an estimate of the condition number 
+and error bounds on the solution.\\
+{\bf SSTEV\indexR{SSTEV}}&&  
+Computes all eigenvalues and optionally eigenvectors of 
+a real symmetric tridiagonal matrix.\\
+{\bf SSTEVD\indexR{SSTEVD}}&&  
+Computes all eigenvalues and optionally eigenvectors of 
+a real symmetric tridiagonal matrix.  If eigenvectors are desired, it
+uses a divide and conquer algorithm.\\
+{\bf SSTEVR\indexR{SSTEVR}}&&  
+Computes selected eigenvalues and optionally eigenvectors of 
+a real symmetric tridiagonal matrix, using the Relatively Robust
+Representations.\\
+{\bf SSTEVX\indexR{SSTEVX}}&&  
+Computes selected eigenvalues and eigenvectors of 
+a real symmetric tridiagonal matrix.\\
+{\bf SSYEV\indexR{SSYEV} }&{\bf CHEEV\indexR{CHEEV}}&
+Computes all eigenvalues and optionally eigenvectors of 
+a symmetric/Hermitian matrix.\\
+{\bf SSYEVD\indexR{SSYEVD} }&{\bf CHEEVD\indexR{CHEEVD}}&
+Computes all eigenvalues and optionally eigenvectors of 
+a symmetric/Hermitian matrix.  If eigenvectors are desired, it
+uses a divide and conquer algorithm.\\
+{\bf SSYEVR\indexR{SSYEVR}}&{\bf CHEEVR\indexR{CHEEVR}}&
+Computes selected eigenvalues and optionally eigenvectors of 
+a symmetric/Hermitian matrix using the Relatively Robust
+Representations.\\
+{\bf SSYEVX\indexR{SSYEVX}}&{\bf CHEEVX\indexR{CHEEVX}}& 
+Computes selected eigenvalues and optionally eigenvectors of 
+a symmetric/Hermitian matrix.\\
+{\bf SSYGV\indexR{SSYGV}}&{\bf CHEGV\indexR{CHEGV}}& 
+Computes all eigenvalues and optionally eigenvectors of 
+a generalized symmetric/Hermitian definite generalized eigenproblem.\\
+{\bf SSYGVD\indexR{SSYGVD}}&{\bf CHEGVD\indexR{CHEGVD}}& 
+Computes all eigenvalues and optionally eigenvectors of 
+a generalized symmetric/Hermitian definite generalized eigenproblem.  If eigenvectors
+are desired, it uses a divide and conquer algorithm.\\
+{\bf SSYGVX\indexR{SSYGVX}}&{\bf CHEGVX\indexR{CHEGVX}}& 
+Computes selected eigenvalues and optionally eigenvectors of 
+a generalized symmetric/Hermitian definite generalized eigenproblem.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l  p{1.2in} | p{4.1in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+{\bf SSYSV\indexR{SSYSV} }&{\bf CSYSV\indexR{CSYSV}} {\bf CHESV\indexR{CHESV}}&
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations $A X=B$.\\
+{\bf SSYSV\_ROOK\indexR{SSYSV\_ROOK} }&{\bf CSYSV\_ROOK\indexR{CSYSV\_ROOK}} {\bf CHESV\_ROOK\indexR{CHESV\_ROOK}}&
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations $A X=B$, using the bounded Bunch-Kaufman rook pivoting method.\\
+{\bf SSYSVX\indexR{SSYSVX}}&{\bf CSYSVX\indexR{CSYSVX}} {\bf CHESVX\indexR{CHESVX}}&
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations $A X=B$,
+and provides an estimate of the condition number and error bounds on the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+{\bf SSYSVXX\indexR{SSYSVXX}}&{\bf CSYSVXX\indexR{CSYSVXX}} {\bf CHESVXX\indexR{CHESVXX}}&
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations $A X=B$,
+and provides an estimate of the condition number and error bounds on the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{1cm}
+
+{\bf Mixed Precision}\\
+
+\begin{center}
+\begin{tabular}{| l   l | p{5.0in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+{\bf DSGESV\indexR{DSGESV}}&{\bf ZCGESV\indexR{ZCGESV}}&
+Solves a general system of linear equations $AX=B$.\\
+{\bf DSPOSV\indexR{DSPOSV}}&{\bf ZCPOSV\indexR{ZCPOSV}}&
+Solves a symmetric/Hermitian positive definite system of linear equations $A X=B$.\\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\section{Index of Computational Routines}\label{secindexcomp}
+\index{index!computational routines}
+
+\begin{center}
+\begin{tabular}{| l   l | p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+SBBCSD\indexR{SBBCSD}&CBBCSD\indexR{CBBCSD}&
+Computes the CS decomposition of an orthogonal/unitary matrix in bidiagonal-block form.\\
+SBDSDC\indexR{SBDSDC}&& 
+Computes the singular value decomposition (SVD) of a real bidiagonal matrix,
+using a divide and conquer method.\\
+SBDSQR\indexR{SBDSQR}&CBDSQR\indexR{CBDSQR}& 
+Computes the singular value decomposition (SVD) of a real bidiagonal matrix,
+using the bidiagonal $QR$ algorithm.\\
+SDISNA&&
+Computes the reciprocal condition numbers for the eigenvectors of a
+real symmetric or complex Hermitian matrix, for the left or right
+singular vectors of a general matrix or for the eigenvectors of a 
+real symmetric/complex Hermitian generalized symmetric definite eigenproblem. \\
+SGBBRD\indexR{SGBBRD}&CGBBRD\indexR{CGBBRD}&
+Reduces a general band matrix to real upper bidiagonal form
+by an orthogonal/unitary transformation. \\
+SGBCON\indexR{SGBCON}&CGBCON\indexR{CGBCON}& 
+Estimates the reciprocal of the condition number
+of a general band matrix, 
+in either the 1-norm or the $\infty$-norm,
+using the $LU$ factorization computed by SGBTRF/CGBTRF.\\
+SGBEQU\indexR{SGBEQU}&CGBEQU\indexR{CGBEQU}& 
+Computes row and column scalings to equilibrate a general band matrix 
+and reduce its condition number.\\
+SGBEQUB\indexR{SGBEQUB}&CGBEQUB\indexR{CGBEQUB}& 
+Computes row and column scalings to equilibrate a general band matrix 
+and reduce its condition number, restricting the scalings to a power of the radix.\\
+SGBRFS\indexR{SGBRFS}&CGBRFS\indexR{CGBRFS}& 
+Improves the computed solution to a general banded system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides error bounds and backward error estimates for the solution.\\
+SGBRFSX\indexR{SGBRFSX}&CGBRFSX\indexR{CGBRFSX}& 
+Improves the computed solution to a general banded system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides error bounds and backward error estimates for the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+SGBTRF\indexR{SGBTRF}&CGBTRF\indexR{CGBTRF}& 
+Computes an $LU$ factorization of a general band matrix,
+using partial pivoting with row interchanges.\\
+SGBTRS\indexR{SGBTRS}&CGBTRS\indexR{CGBTRS}& 
+Solves a general banded system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+using the $LU$ factorization computed by SGBTRF/CGBTRF.\\
+SGEBAK\indexR{SGEBAK}&CGEBAK\indexR{CGEBAK}& 
+Transforms eigenvectors of a balanced matrix to those of the original matrix 
+supplied to SGEBAL/CGEBAL.\\
+SGEBAL\indexR{SGEBAL}&CGEBAL\indexR{CGEBAL}& 
+Balances a general matrix
+in order to improve the accuracy of computed eigenvalues.\\
+SGEBRD\indexR{SGEBRD}&CGEBRD\indexR{CGEBRD}& 
+Reduces a general rectangular matrix to  real bidiagonal form 
+by an orthogonal/unitary transformation.\\
+SGECON\indexR{SGECON}&CGECON\indexR{CGECON}& 
+Estimates the reciprocal of the condition number
+of a general matrix, 
+in either the 1-norm or the $\infty$-norm,
+using the $LU$ factorization computed by SGETRF/CGETRF.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   l |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+SGEEQU\indexR{SGEEQU}&CGEEQU\indexR{CGEEQU}&  
+Computes row and column scalings to equilibrate a general rectangular matrix 
+and reduce its condition number.\\
+SGEEQUB\indexR{SGEEQUB}&CGEEQUB\indexR{CGEEQUB}&  
+Computes row and column scalings to equilibrate a general rectangular matrix 
+and reduce its condition number, restricting the scalings to a power of the radix.\\
+SGEHRD\indexR{SGEHRD}&CGEHRD\indexR{CGEHRD}& 
+Reduces a general matrix to upper Hessenberg form 
+by an orthogonal/unitary similarity transformation.\\
+SGELQF\indexR{SGELQF}&CGELQF\indexR{CGELQF}& 
+Computes an $LQ$ factorization of a general rectangular matrix.\\
+SGEMQRT\indexR{SGEMQRT}&CGEMQRT\indexR{CGEMQRT}&
+Overwrites the general matrix $C$ with $QC$, $Q^{T}C$, $CQ$ or $CQ^{T}$,
+using the compact WY representation for $Q$ determined by SGEQRT/CGEQRT.\\
+SGEQLF\indexR{SGEQLF}&CGEQLF\indexR{CGEQLF}& 
+Computes a $QL$ factorization of a general rectangular matrix.\\
+SGEQP3\indexR{SGEQP3}&CGEQP3\indexR{CGEQP3}& 
+Computes a $QR$ factorization with column pivoting of a general rectangular 
+matrix.\\
+SGEQRF\indexR{SGEQRF}&CGEQRF\indexR{CGEQRF}& 
+Computes a $QR$ factorization of a general rectangular matrix.\\
+SGEQRFP\indexR{SGEQRFP}&CGEQRFP\indexR{CGEQRFP}&
+Computes a $QR$ factorization of a general rectangular matrix,
+ensuring that $R$ has a non-negative diagonal.\\
+SGEQRT\indexR{SGEQRT}&CGEQRT\indexR{CGEQRT}&
+Computes a $QR$ factorization of a general rectangular matrix,
+using the compact WY representation for $Q$.\\
+SGEQRT3\indexR{SGEQRT3}&CGEQRT3\indexR{CGEQRT3}&
+Recursively computes a $QR$ factorization of a general rectangular matrix,
+using the compact WY representation of $Q$.\\
+SGERFS\indexR{SGERFS}&CGERFS\indexR{CGERFS}& 
+Improves the computed solution to a general system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides forward and backward error bounds for the solution.\\
+SGERFSX\indexR{SGERFSX}&CGERFSX\indexR{CGERFSX}& 
+Improves the computed solution to a general system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides forward and backward error bounds for the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+SGERQF\indexR{SGERQF}&CGERQF\indexR{CGERQF}& 
+Computes an $RQ$ factorization of a general rectangular matrix.\\
+SGESVJ\indexR{SGESVJ}&& 
+Computes the singular value decomposition (SVD) of a general
+$m$-by-$n$ matrix, where $m \geq n$, using a one-sided Jacobi method.\\
+SGETRF\indexR{SGETRF}&CGETRF\indexR{CGETRF}& 
+Computes an $LU$ factorization of a general matrix,
+using partial pivoting with row interchanges.\\
+SGETRI\indexR{SGETRI}&CGETRI\indexR{CGETRI}& 
+Computes the inverse of a general matrix, 
+using the $LU$ factorization computed by SGETRF/CGETRF.\\
+SGETRS\indexR{SGETRS}&CGETRS\indexR{CGETRS}& 
+Solves a general system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+using the $LU$ factorization computed by SGETRF/CGETRF.\\
+SGGBAK\indexR{SGGBAK}&CGGBAK\indexR{CGGBAK}&
+Forms the right or left eigenvectors of a generalized
+eigenvalue problem $Ax=\lambda Bx$, by backward transformation on
+the computed eigenvectors of the balanced pair of matrices output by
+SGGBAL/CGGBAL.\\
+SGGBAL\indexR{SGGBAL}&CGGBAL\indexR{CGGBAL}&
+Balances a pair of general matrices
+to improve the accuracy of computed eigenvalues and/or
+eigenvectors.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   l |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+SGGHRD\indexR{SGGHRD}&CGGHRD\indexR{CGGHRD}&
+Reduces a pair of matrices to generalized upper Hessenberg form,
+using orthogonal/unitary transformations. \\
+SGGQRF\indexR{SGGQRF}&CGGQRF\indexR{CGGQRF}&
+Computes a generalized QR factorization of a pair of matrices. \\
+SGGRQF\indexR{SGGRQF}&CGGRQF\indexR{CGGRQF}&
+Computes a generalized RQ factorization of a pair of matrices. \\
+SGGSVP\indexR{SGGSVP}&CGGSVP\indexR{CGGSVP}&
+Computes orthogonal/unitary matrices U, V, and Q as the preprocessing
+step for computing the generalized singular value decomposition (GSVD). \\
+SGTCON\indexR{SGTCON}&CGTCON\indexR{CGTCON}& 
+Estimates the reciprocal of the condition number of a general tridiagonal 
+matrix, 
+in either the 1-norm or the $\infty$-norm,
+using the $LU$ factorization computed by SGTTRF/CGTTRF.\\
+SGTRFS\indexR{SGTRFS}&CGTRFS\indexR{CGTRFS}& 
+Improves the computed solution to a general tridiagonal system of linear 
+equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+and provides forward and backward error bounds for the solution.\\
+SGTTRF\indexR{SGTTRF}&CGTTRF\indexR{CGTTRF}& 
+Computes an $LU$ factorization of a general tridiagonal matrix,
+using partial pivoting with row interchanges.\\
+SGTTRS\indexR{SGTTRS}&CGTTRS\indexR{CGTTRS}& 
+Solves a general tridiagonal system of linear equations
+$AX=B$, $A^T X=B$ or $A^H X=B$,
+using the $LU$ factorization computed by SGTTRF/CGTTRF.\\
+SHGEQZ\indexR{SHGEQZ}&CHGEQZ\indexR{CHGEQZ}&
+Implements a single-/double-shift version of the QZ
+method for finding the generalized eigenvalues of a pair of general
+matrices, which can simultaneously be reduced to generalized Schur form,
+using orthogonal/unitary transformations. \\
+SHSEIN\indexR{SHSEIN}&CHSEIN\indexR{CHSEIN}& 
+Computes specified right and/or left eigenvectors of an upper Hessenberg matrix 
+by inverse iteration.\\
+SHSEQR\indexR{SHSEQR}&CHSEQR\indexR{CHSEQR}& 
+Computes the eigenvalues and Schur factorization of an upper Hessenberg matrix, 
+using the multishift $QR$ algorithm.\\
+SOPGTR\indexR{SOPGTR}&CUPGTR\indexR{CUPGTR}& 
+Generates the orthogonal/unitary transformation matrix
+from a reduction to tridiagonal form determined by SSPTRD/CHPTRD.\\
+SOPMTR\indexR{SOPMTR}&CUPMTR\indexR{CUPMTR}& 
+Multiplies a general matrix by the orthogonal/unitary transformation matrix
+from a reduction to tridiagonal form determined by SSPTRD/CHPTRD.\\
+SORBDB\indexR{SORBDB}&CUNBDB\indexR{CUNBDB}&
+Simultaneously bidiagonalizes the blocks of a square partitioned orthogonal/unitary matrix.\\
+SORBDB1\indexR{SORBDB1}&CUNBDB1\indexR{CUNBDB1}&
+Simultaneously bidiagonalizes the blocks of an $m$-by-$q$ partitioned matrix with orthogonal/unitary columns,
+where $X_11$ is $p$-by-$q$ and $q$ = $\min(p,q,m-p,m-q)$.\\
+SORBDB2\indexR{SORBDB2}&CUNBDB2\indexR{CUNBDB2}&
+Simultaneously bidiagonalizes the blocks of an $m$-by-$q$ partitioned matrix with orthogonal/unitary columns,
+where $X_11$ is $p$-by-$q$ and $p$ = $\min(p,q,m-p,m-q)$.\\
+SORBDB3\indexR{SORBDB3}&CUNBDB3\indexR{CUNBDB3}&
+Simultaneously bidiagonalizes the blocks of an $m$-by-$q$ partitioned matrix with orthogonal/unitary columns,
+where $X_11$ is $p$-by-$q$ and $m-p$ = $\min(p,q,m-p,m-q)$.\\
+SORBDB4\indexR{SORBDB4}&CUNBDB4\indexR{CUNBDB4}&
+Simultaneously bidiagonalizes the blocks of an $m$-by-$q$ partitioned matrix with orthogonal/unitary columns,
+where $X_11$ is $p$-by-$q$ and $m-q$ = $\min(p,q,m-p,m-q)$.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   l |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline 
+SORGBR\indexR{SORGBR}&CUNGBR\indexR{CUNGBR}& 
+Generates the orthogonal/unitary transformation matrices
+from a reduction to bidiagonal form determined by SGEBRD/CGEBRD.\\
+SORGHR\indexR{SORGHR}&CUNGHR\indexR{CUNGHR}& 
+Generates the orthogonal/unitary transformation matrix
+from a reduction to Hessenberg form determined by SGEHRD/CGEHRD.\\
+SORGLQ\indexR{SORGLQ}&CUNGLQ\indexR{CUNGLQ}& 
+Generates all or part of the orthogonal/unitary matrix $Q$ 
+from an $LQ$ factorization determined by SGELQF/CGELQF.\\
+SORGQL\indexR{SORGQL}&CUNGQL\indexR{CUNGQL}& 
+Generates all or part of the orthogonal/unitary matrix $Q$ 
+from a $QL$ factorization determined by SGEQLF/CGEQLF.\\
+SORGQR\indexR{SORGQR}&CUNGQR\indexR{CUNGQR}& 
+Generates all or part of the orthogonal/unitary matrix $Q$ 
+from a $QR$ factorization determined by SGEQRF/CGEQRF,
+by SGEQRFP/CGEQRFP
+or, with column pivoting, by SGEQP3/CGEQP3.\\
+SORGRQ\indexR{SORGRQ}&CUNGRQ\indexR{CUNGRQ}& 
+Generates all or part of the orthogonal/unitary matrix $Q$ 
+from an $RQ$ factorization determined by SGERQF/CGERQF.\\
+SORGTR\indexR{SORGTR}&CUNGTR\indexR{CUNGTR}& 
+Generates the orthogonal/unitary transformation matrix 
+from a reduction to tridiagonal form determined by SSYTRD/CHETRD.\\
+SORMBR\indexR{SORMBR}&CUNMBR\indexR{CUNMBR}& 
+Multiplies a general matrix by one of the orthogonal/unitary transformation 
+matrices 
+from a reduction to bidiagonal form determined by SGEBR/CGEBRD.\\
+SORMHR\indexR{SORMHR}&CUNMHR\indexR{CUNMHR}& 
+Multiplies a general matrix by the orthogonal/unitary transformation matrix
+from a reduction to Hessenberg form determined by SGEHRD/CGEHRD.\\
+SORMLQ\indexR{SORMLQ}&CUNMLQ\indexR{CUNMLQ}& 
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from an $LQ$ factorization determined by SGELQF/CGELQF.\\
+SORMQL\indexR{SORMQL}&CUNMQL\indexR{CUNMQL}& 
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from a $QL$ factorization determined by SGEQLF/CGEQLF.\\
+SORMQR\indexR{SORMQR}&CUNMQR\indexR{CUNMQR}& 
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from a $QR$ factorization determined by SGEQRF/CGEQRF,
+by SGEQRFP/CGEQRFP
+or, with column pivoting, by SGEQP3/CGEQP3.\\
+SORMRQ\indexR{SORMRQ}&CUNMRQ\indexR{CUNMRQ}& 
+Multiplies a general matrix by the orthogonal/unitary matrix 
+from an $RQ$ factorization determined by SGERQF/CGERQF.\\
+SORMRZ\indexR{SORMRZ}&CUNMRZ\indexR{CUNMRZ}&
+Multiplies a general matrix by the orthogonal/unitary matrix
+from an $RZ$ factorization determined by STZRZF/CTZRZF.\\
+SORMTR\indexR{SORMTR}&CUNMTR\indexR{CUNMTR}& 
+Multiplies a general matrix by the orthogonal/unitary transformation matrix
+from a reduction to tridiagonal form determined by SSYTRD/CHETRD.\\
+SPBCON\indexR{SPBCON}&CPBCON\indexR{CPBCON}&  
+Estimates the reciprocal of the condition number of 
+a symmetric/Hermitian positive definite band matrix,
+using the Cholesky factorization computed by SPBTRF/CPBTRF.\\
+SPBEQU\indexR{SPBEQU}&CPBEQU\indexR{CPBEQU}&
+Computes row and column scalings to equilibrate 
+a symmetric/Hermitian positive definite band matrix 
+and reduce its condition number.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   l |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+SPBRFS\indexR{SPBRFS}&CPBRFS\indexR{CPBRFS}&
+Improves the computed solution to 
+a symmetric/Hermitian positive definite banded system of linear equations
+$A X=B$,
+and provides forward and backward error bounds for the solution.\\
+SPBSTF\indexR{SPBSTF}&CPBSTF\indexR{CPBSTF}&
+Computes a split Cholesky factorization of a
+symmetric/Hermitian positive definite band matrix.\\
+SPBTRF\indexR{SPBTRF}&CPBTRF\indexR{CPBTRF}&
+Computes the Cholesky factorization of 
+a symmetric/Hermitian positive definite band matrix.\\
+SPBTRS\indexR{SPBTRS}&CPBTRS\indexR{CPBTRS}&
+Solves a symmetric/Hermitian positive definite banded system of linear 
+equations $A X=B$, 
+using the Cholesky factorization computed by SPBTRF/CPBTRF.\\
+SPFTRF\indexR{SPFTRF}&CPFTRF\indexR{CPFTRF}&
+Computes the Cholesky factorization of a symmetric/Hermitian positive definite matix,
+stored in RFP format.\\
+SPFTRI\indexR{SPFTRI}&CPFTRI\indexR{CPFTRI}&
+Computes the inverse of a symmetric/Hermitian positive definite matix,
+stored in RFP format, using the Cholesky factorization computed by SPFTRF/CPFTRF.\\
+SPFTRS\indexR{SPFTRS}&CPFTRS\indexR{CPFTRS}&
+Solves a symmetric/Hermitian positive definite system of linear equations $AX=B$,
+with $A$ stored in RFP format, using the Cholesky factorization computed by SPFTRF/CPFTRF.\\
+SPOCON\indexR{SPOCON}&CPOCON\indexR{CPOCON}&
+Estimates the reciprocal of the condition number of 
+a symmetric/Hermitian positive definite matrix,
+using the Cholesky factorization computed by SPOTRF/CPOTRF.\\
+SPOEQU\indexR{SPOEQU}&CPOEQU\indexR{CPOEQU}&
+Computes row and column scalings to equilibrate 
+a symmetric/Hermitian positive definite matrix 
+and reduce its condition number.\\
+SPOEQUB\indexR{SPOEQUB}&CPOEQUB\indexR{CPOEQUB}&
+Computes row and column scalings to equilibrate 
+a symmetric/Hermitian positive definite matrix 
+and reduce its condition number, restricting the scalings to a power of the radix.\\
+SPORFS\indexR{SPORFS}&CPORFS\indexR{CPORFS}&
+Improves the computed solution to 
+a symmetric/Hermitian positive definite system of linear equations $A X=B$,
+and provides forward and backward error bounds for the solution.\\
+SPORFSX\indexR{SPORFSX}&CPORFSX\indexR{CPORFSX}&
+Improves the computed solution to 
+a symmetric/Hermitian positive definite system of linear equations $A X=B$,
+and provides forward and backward error bounds for the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+SPOTRF\indexR{SPOTRF}&CPOTRF\indexR{CPOTRF}&
+Computes the Cholesky factorization of 
+a symmetric/Hermitian positive definite matrix.\\
+SPOTRI\indexR{SPOTRI}&CPOTRI\indexR{CPOTRI}&
+Computes the inverse of 
+a symmetric/Hermitian positive definite matrix,
+using the Cholesky factorization computed by SPOTRF/CPOTRF.\\
+SPOTRS\indexR{SPOTRS}&CPOTRS\indexR{CPOTRS}&
+Solves a symmetric/Hermitian positive definite system of linear equations
+$A X=B$,
+using the Cholesky factorization computed by SPOTRF/CPOTRF.\\
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+
+\begin{tabular}{| l  p{0.75in} |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+SPPCON\indexR{SPPCON}&CPPCON\indexR{CPPCON}&
+Estimates the reciprocal of the condition number of 
+a symmetric/Hermitian positive definite matrix in packed storage,
+using the Cholesky factorization computed by SPPTRF/CPPTRF.\\
+SPPEQU\indexR{SPPEQU}&CPPEQU\indexR{CPPEQU}&
+Computes row and column scalings to equilibrate 
+a symmetric/Hermitian positive definite matrix in packed storage
+and reduce its condition number.\\
+SPPRFS\indexR{SPPRFS}&CPPRFS\indexR{CPPRFS}&
+Improves the computed solution to 
+a symmetric/Hermitian positive definite system of linear equations $A X=B$,
+where $A$ is held in packed storage,
+and provides forward and backward error bounds for the solution.\\
+SPPTRF\indexR{SPPTRF}&CPPTRF\indexR{CPPTRF}&
+Computes the Cholesky factorization of 
+a symmetric/Hermitian positive definite matrix in packed storage.\\
+SPPTRI\indexR{SPPTRI}&CPPTRI\indexR{CPPTRI}&
+Computes the inverse of 
+a symmetric/Hermitian positive definite matrix in packed storage,
+using the Cholesky factorization computed by SPPTRF/CPPTRF.\\
+SPPTRS\indexR{SPPTRS}&CPPTRS\indexR{CPPTRS}&
+Solves a symmetric/Hermitian positive definite system of linear equations
+$A X=B$,
+where $A$ is held in packed storage,
+using the Cholesky factorization computed by SPPTRF/CPPTRF.\\
+SPSTRF\indexR{SPSTRF}&CPSTRF\indexR{CPSTRF}&
+Computes the Cholesky factorization with complete
+pivoting of a symmetric/Hermitian positive semidefinite matrix.\\
+SPTCON\indexR{SPTCON}&CPTCON\indexR{CPTCON}& 
+Computes the reciprocal of the condition number of 
+a symmetric/Hermitian positive definite tridiagonal matrix,
+using the $LDL^H$ factorization computed by SPTTRF/CPTTRF.\\
+SPTEQR\indexR{SPTEQR}&CPTEQR\indexR{CPTEQR}& 
+Computes all eigenvalues and eigenvectors of 
+a real symmetric positive definite tridiagonal matrix,
+by computing the SVD of its bidiagonal Cholesky factor.\\
+SPTRFS\indexR{SPTRFS}&CPTRFS\indexR{CPTRFS}& 
+Improves the computed solution to 
+a symmetric/Hermitian positive definite tridiagonal system of linear equations
+$A X=B$,
+and provides forward and backward error bounds for the solution.\\
+SPTTRF\indexR{SPTTRF}&CPTTRF\indexR{CPTTRF}& 
+Computes the $LDL^H$ factorization of 
+a symmetric/Hermitian positive definite tridiagonal matrix.\\
+SPTTRS\indexR{SPTTRS}&CPTTRS\indexR{CPTTRS}& 
+Solves a symmetric/Hermitian positive definite tridiagonal system of linear 
+equations, 
+using the $LDL^H$ factorization computed by SPTTRF/CPTTRF.\\
+SSBGS3\indexR{SSBGS3}&CHBGS3\indexR{CHBGS3}&
+Reduces a symmetric/Hermitian definite banded
+generalized eigenproblem to standard form,
+where $B$ has been factorized by SPBSTF/CPBSTF. \\
+SSBTRD\indexR{SSBTRD}&CHBTRD\indexR{CHBTRD}&  
+Reduces a symmetric/Hermitian band matrix 
+to real symmetric tridiagonal form
+by an orthogonal/unitary similarity transformation.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l p{0.75in} |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+SSPCON\indexR{SSPCON}&CSPCON\indexR{CSPCON} CHPCON\indexR{CHPCON}& 
+Estimates the reciprocal of the condition number of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix in 
+packed storage,
+using the factorization computed by SSPTRF/CSPTRF/CHPTRF.\\
+SSPGST\indexR{SSPGST}&CHPGST\indexR{CHPGST}& 
+Reduces a symmetric/Hermitian definite generalized eigenproblem 
+to standard form, 
+where $A$ and $B$ are held in packed storage,
+and $B$ has been factorized by SPPTRF/CPPTRF.\\
+SSPRFS\indexR{SSPRFS}&CSPRFS\indexR{CSPRFS}   CHPRFS\indexR{CHPRFS}& 
+Improves the computed solution to 
+a real symmetric/complex symmetric/complex Hermitian indefinite system of linear
+equations
+$A X=B$,
+where $A$ is held in packed storage,
+and provides forward and backward error bounds for the solution.\\
+SSPTRD\indexR{SSPTRD}&CHPTRD\indexR{CHPTRD}& 
+Reduces a symmetric/Hermitian matrix in packed storage
+to real symmetric tridiagonal form 
+by an orthogonal/unitary similarity transformation.\\
+SSPTRF\indexR{SSPTRF}&CSPTRF\indexR{CSPTRF} CHPTRF\indexR{CHPTRF}& 
+Computes the factorization of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix in 
+packed storage,
+using the diagonal pivoting method.\\
+SSPTRI\indexR{SSPTRI}&CSPTRI\indexR{CSPTRI} CHPTRI\indexR{CHPTRI}&
+Computes the inverse of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix in 
+packed storage,
+using the factorization computed by SSPTRF/CSPTRF/CHPTRF.\\
+SSPTRS\indexR{SSPTRS}&CSPTRS\indexR{CSPTRS} CHPTRS\indexR{CHPTRS}& 
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations
+$A X=B$,
+where $A$ is held in packed storage,
+using the factorization computed by SSPTRF/CSPTRF/CHPTRF.\\
+SSTEBZ\indexR{SSTEBZ}&&
+Computes selected eigenvalues of a real symmetric tridiagonal matrix 
+by bisection.\\
+SSTEDC\indexR{SSTEDC}&CSTEDC\indexR{CSTEDC}&
+Computes all eigenvalues and optionally eigenvectors of a
+real symmetric tridiagonal matrix, using the divide and conquer algorithm.\\
+SSTEIN\indexR{SSTEIN}&CSTEIN\indexR{CSTEIN}&
+Computes selected eigenvectors of a symmetric tridiagonal matrix 
+by inverse iteration.\\
+SSTEMR\indexR{SSTEMR}&CSTEMR\indexR{CSTEMR}&
+Computes selected eigenvalues and optionally eigenvectors of
+a real symmetric tridiagonal matrix, using the Relatively Robust
+Representations.\\
+SSTEQR\indexR{SSTEQR}&CSTEQR\indexR{CSTEQR}&
+Computes all eigenvalues and optionally eigenvectors of 
+a real symmetric tridiagonal matrix,
+using the implicit $QL$ or $QR$ algorithm.\\
+SSTERF\indexR{SSTERF}&& 
+Computes all eigenvalues of a real symmetric tridiagonal matrix,
+using a root-free variant of the $QL$ or $QR$ algorithm.\\
+SSYCON\indexR{SSYCON}&CSYCON\indexR{CSYCON} CHECON\indexR{CHECON}& 
+Estimates the reciprocal of the condition number of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the factorization computed by SSYTRF/CSYTRF/CHETRF.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l  p{1.2in} |p{4.1in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+SSYCON\_ROOK\indexR{SSYCON\_ROOK}&CSYCON\_ROOK\indexR{CSYCON\_ROOK} CHECON\_ROOK\indexR{CHECON\_ROOK}& 
+Estimates the reciprocal of the condition number of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the factorization computed by 
+SSYTRF\_ROOK/CSYTRF\_ROOK/CHETRF\_ROOK.\\
+SSYEQUB\indexR{SSYEQUB}&CSYEQUB\indexR{CSYEQUB} CHEEQUB\indexR{CHEEQUB}&
+Computes row and column scalings to equilibrate 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix 
+and reduce its condition number, restricting the scalings to a power of the radix.\\
+SSYGST\indexR{SSYGST}&CHEGST\indexR{CHEGST}& 
+Reduces a symmetric/Hermitian definite generalized eigenproblem 
+to standard form, 
+where $B$ has been factorized by SPOTRF/CPOTRF.\\
+SSYRFS\indexR{SSYRFS}&CSYRFS\indexR{CSYRFS} CHERFS\indexR{CHERFS}& 
+Improves the computed solution to 
+a real symmetric/complex symmetric/complex Hermitian indefinite system of linear
+equations
+$A X=B$,
+and provides forward and backward error bounds for the solution.\\
+SSYRFSX\indexR{SSYRFSX}&CSYRFSX\indexR{CSYRFSX} CHERFSX\indexR{CHERFSX}& 
+Improves the computed solution to 
+a real symmetric/complex symmetric/complex Hermitian indefinite system of linear equations
+$A X=B$,
+and provides forward and backward error bounds for the solution,
+computing the error bounds in twice the normal precision (uses XBLAS routines).\\
+SSYTRD\indexR{SSYTRD}&CHETRD\indexR{CHETRD}& 
+Reduces a symmetric/Hermitian matrix to 
+real symmetric tridiagonal form 
+by an orthogonal/unitary similarity transformation.\\
+SSYTRF\indexR{SSYTRF}&CSYTRF\indexR{CSYTRF} CHETRF\indexR{CHETRF}& 
+Computes the factorization of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the diagonal pivoting method.\\
+SSYTRF\_ROOK\indexR{SSYTRF\_ROOK}&CSYTRF\_ROOK\indexR{CSYTRF\_ROOK} CHETRF\_ROOK\indexR{CHETRF\_ROOK}& 
+Computes the factorization of 
+a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the bounded Bunch-Kaufman rook pivoting\indexR{rook pivoting method} method.\\
+SSYTRI\indexR{SSYTRI}&CSYTRI\indexR{CSYTRI} CHETRI\indexR{CHETRI}& 
+Computes the inverse of a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the factorization computed by SSYTRF/CSYTRF/CHETRF.\\
+SSYTRI2\indexR{SSYTRI2}&CSYTRI2\indexR{CSYTRI2} CHETRI2\indexR{CHETRI2}& 
+Computes the inverse of a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the factorization computed by SSYTRF/CSYTRF/CHETRF.\\
+SSYTRI\_ROOK\indexR{SSYTRI\_ROOK}&CSYTRI\_ROOK\indexR{CSYTRI\_ROOK} CHETRI\_ROOK\indexR{CHETRI\_ROOK}& 
+Computes the inverse of a real symmetric/complex symmetric/complex Hermitian indefinite matrix,
+using the factorization computed by
+SSYTRF\_ROOK/CSYTRF\_ROOK/CHETRF\_ROOK.\\
+SSYTRM&CHETRM& 
+Computes the product $U  U^H$ or $L^H L$, 
+where $U$ and $L$ are upper or lower triangular matrices.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l  p{1.2in} |p{4.1in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+SSYTRS\indexR{SSYTRS}&CSYTRS\indexR{CSYTRS} CHETRS\indexR{CHETRS}& 
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations $A X=B$,
+using the factorization computed by
+SSYTRF/CSYTRF/CHETRF.\\
+SSYTRS2\indexR{SSYTRS2}&CSYTRS2\indexR{CSYTRS2} CHETRS2\indexR{CHETRS2}&
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system 
+of linear equations $A X=B$,
+using the factorization computed by SSYTRF/CSYTRF/CHETRF.\\
+SSYTRS\_ROOK\indexR{SSYTRS\_ROOK}&CSYTRS\_ROOK\indexR{CSYTRS\_ROOK} CHETRS\_ROOK\indexR{CHETRS\_ROOK}& 
+Solves a real symmetric/complex symmetric/complex Hermitian indefinite system of linear equations $A X=B$,
+using the factorization computed by 
+SSYTRF\_ROOK/CSYTRF\_ROOK/CHETRF\_ROOK.\\
+STBCON\indexR{STBCON}&CTBCON\indexR{CTBCON}& 
+Estimates the reciprocal of the condition number of a triangular band matrix,
+in either the 1-norm or the $\infty$-norm.\\
+STBRFS\indexR{STBRFS}&CTBRFS\indexR{CTBRFS}& 
+Provides forward and backward error bounds for the solution of
+a triangular banded system of linear equations
+$A X=B$, $A^T X=B$ or $A^H X=B$.\\
+STBTRS\indexR{STBTRS}&CTBTRS\indexR{CTBTRS}& 
+Solves a triangular banded system of linear equations
+$A X=B$, $A^T X=B$ or $A^H X=B$.\\
+STFTRI\indexR{STFTRI}&CTFTRI\indexR{CTFTRI}&
+Computes the inverse of a triangular matrix in RFP storage.\\
+STFTTP\indexR{STFTTP}&CTFTTP\indexR{CTFTTP}&
+Copies a triangular matrix from RFP (TF) storage to triangular packed (TP) storage.\\
+STFTTR\indexR{STFTTR}&CTFTTR\indexR{CTFTTR}&
+Copies a triangular matrix from RFP (TF) storage to standard (TR) storage.\\
+STGEVC\indexR{STGEVC}&CTGEVC\indexR{CTGEVC}&
+Computes some or all of the right and/or left generalized eigenvectors of a
+pair of upper triangular matrices. \\
+STGEXC\indexR{STGEXC}&CTGEXC\indexR{CTGEXC}&
+Reorders the generalized real-Schur/Schur decomposition of a matrix pair $(A,B)$
+using an orthogonal/unitary equivalence transformation so that the
+diagonal block of $(A,B)$ with row index $IFST$ is moved to row $ILST$.\\
+STGSEN\indexR{STGSEN}&CTGSEN\indexR{CTGSEN}&
+Reorders the generalized real-Schur/Schur decomposition of a matrix pair
+$(A,B)$, computes the generalized eigenvalues of the reordered matrix
+pair, and optionally computes the estimates of reciprocal condition
+numbers for eigenvalues and eigenspaces.\\
+STGSJA\indexR{STGSJA}&CTGSJA\indexR{CTGSJA}&
+Computes the generalized singular value decomposition (GSVD) of a pair
+of upper triangular (or trapezoidal) matrices, which may be obtained by
+the preprocessing subroutine SGGSVP/CGGSVP. \\
+STGSNA\indexR{STGSNA}&CTGSNA\indexR{CTGSNA}&
+Estimates reciprocal condition numbers for specified
+eigenvalues and/or eigenvectors of a matrix pair $(A,B)$ in
+generalized real-Schur/Schur canonical form.\\
+STGSYL\indexR{STGSYL}&CTGSYL\indexR{CTGSYL}&
+Solves the generalized Sylvester equation.\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{| l   l |p{4.5in}    |}
+\hline \multicolumn{2}{|c|}{Routine}&\multicolumn{1}{c|}{Description} \\ 
+\cline{1-2} real&complex& \\
+\hline \hline
+STPCON\indexR{STPCON}&CTPCON\indexR{CTPCON}& 
+Estimates the reciprocal of the condition number of a triangular matrix
+in packed storage,
+in either the 1-norm or the $\infty$-norm.\\
+STPMQRT\indexR{STPMQRT}&CTPMQRT\indexR{CTPMQRT}& 
+Overwrites the matrix $C$ which is composed of two blocks,
+with $QC$, $Q^{T}C$, $CQ$ or $CQ^{T}$,
+using the compact WY representation for $Q$ determined by STPQRT/CTPQRT.\\
+STPQRT\indexR{STPQRT}&CTPQRT\indexR{CTPQRT}& 
+Computes a $QR$ factorization of a triangular-pentagonal matrix,
+using the compact WY representation for $Q$.\\
+STPRFS\indexR{STPRFS}&CTPRFS\indexR{CTPRFS}& 
+Provides forward and backward error bounds for the solution of
+a triangular system of linear equations
+$A X=B$, $A^T X=B$ or $A^H X=B$,
+where $A$ is held in packed storage.\\
+STPTRI\indexR{STPTRI}&CTPTRI\indexR{CTPTRI}& 
+Computes the inverse of a triangular matrix in packed storage.\\
+STPTRS\indexR{STPTRS}&CTPTRS\indexR{CTPTRS}& 
+Solves a triangular system of linear equations
+$A X=B$, $A^T X=B$ or $A^H X=B$,
+where $A$ is held in packed storage.\\
+STPTTF\indexR{STPTTF}&CTPTTF\indexR{CTPTTF}&
+Copies a triangular matrix from triangular packed (TP) storage to RFP (TF) storage.\\
+STPTTR\indexR{STPTTR}&CTPTTR\indexR{CTPTTR}&
+Copies a triangular matrix from triangular packed (TP) storage to standard (TR) storage.\\
+STRCON\indexR{STRCON}&CTRCON\indexR{CTRCON}& 
+Estimates the reciprocal of the condition number of a triangular matrix,
+in either the 1-norm or the $\infty$-norm.\\
+STREVC\indexR{STREVC}&CTREVC\indexR{CTREVC}& 
+Computes some or all of the right and/or left eigenvectors of 
+an upper quasi-triangular/triangular matrix.\\
+STREXC\indexR{STREXC}&CTREXC\indexR{CTREXC}&  
+Reorders the Schur factorization of a matrix
+by an orthogonal/unitary similarity transformation.\\
+STRRFS\indexR{STRRFS}&CTRRFS\indexR{CTRRFS}& 
+Provides forward and backward error bounds for the solution of
+a triangular system of linear equations
+$A X=B$, $A^T X=B$ or $A^H X=B$.\\
+STRSEN\indexR{STRSEN}&CTRSEN\indexR{CTRSEN}& 
+Reorders the Schur factorization of a matrix 
+in order to find an orthonormal basis of a right invariant subspace
+corresponding to selected eigenvalues,
+and returns reciprocal condition numbers (sensitivities)
+of the average of the cluster of eigenvalues and of the invariant subspace.\\
+STRSNA\indexR{STRSNA}&CTRSNA\indexR{CTRSNA}& 
+Estimates the reciprocal condition numbers (sensitivities) of 
+selected eigenvalues and eigenvectors
+of an upper quasi-triangular/triangular matrix.\\
+STRSYL\indexR{STRSYL}&CTRSYL\indexR{CTRSYL}& 
+Solves the Sylvester matrix equation $A X \pm X B=C$
+where $A$ and $B$ are upper quasi-triangular/triangular, 
+and may be transposed.\\
+STRTRI\indexR{STRTRI}&CTRTRI\indexR{CTRTRI}& 
+Computes the inverse of a triangular matrix.\\
+STRTRS\indexR{STRTRS}&CTRTRS\indexR{CTRTRS}& 
+Solves a triangular system of linear equations
+$A X=B$, $A^T X=B$ or $A^H X=B$.\\
+STRTTF\indexR{STRTTF}&CTRTTF\indexR{CTRTTF}&
+Copies a triangular matrix from standard (TR) storage to RFP (TF) storage.\\
+STRTTP\indexR{STRTTP}&CTRTTP\indexR{CTRTTP}&
+Copies a triangular matrix from standard (TR) storage to triangular packed (TP) storage.\\
+STZRZF\indexR{STZRZF}&CTZRZF\indexR{CTZRZF}& 
+Computes an $RZ$ factorization of an upper trapezoidal matrix.\\
+\hline
+\end{tabular}
+\end{center}

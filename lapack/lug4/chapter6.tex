@@ -1,0 +1,170 @@
+\chapter{Installing LAPACK Routines}\label{chapinstall}
+
+\section{Points to Note}\label{chapinstallsec1}
+
+For anyone who obtains the complete LAPACK package from {\em netlib}
+(see Chapter~\ref{chapessentials}), a
+comprehensive installation\index{installation!LAPACK} 
+guide\index{installation guide} is provided. We recommend
+installation of the complete package as the most convenient and reliable
+way to make LAPACK available.
+
+People who obtain copies of a few LAPACK routines from {\em netlib} need to be
+aware of the following points:
+
+\begin{enumerate}
+
+\item 
+For optimal performance, a small set of tuning parameters must be set
+for each machine, or even for each configuration of a given machine
+(for example, different parameters may be optimal for different numbers
+of processors).
+These values\index{machine parameters}, such as the block size, minimum block size, crossover
+point below which an unblocked routine should be used, and others,
+are set by calls to an inquiry function ILAENV.
+The default version of ILAENV\indexR{ILAENV} provided with LAPACK uses generic values
+which often give satisfactory performance, but
+users who are particularly interested in performance may wish to
+modify this subprogram or substitute their own version.
+Further details on setting ILAENV for a particular environment
+are provided in section~\ref{secilaenv}.
+
+\item 
+xLAMCH\index{installation!xLAMCH}\indexR{SLAMCH}
+determines properties of the 
+floating-point arithmetic at run-time, such as the machine epsilon,
+underflow threshold,
+overflow threshold, and related parameters. It works satisfactorily on
+all commercially important machines of which we are aware, but will necessarily
+be updated from time to time as new machines and compilers are produced.
+
+\end{enumerate}
+
+\section{Installing ILAENV}\label{secilaenv}
+
+Machine-dependent\index{installation!ILAENV}\indexR{ILAENV}
+parameters\index{machine parameters} such as the block size are set
+by calls to an inquiry function which may be set with different
+values on each machine.
+The declaration of the environment inquiry function is:
+\begin{verbatim}
+      INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+\end{verbatim}
+where ISPEC, N1, N2, N3, and N4 are integer variables and
+NAME and OPTS are CHARACTER*(*).  NAME specifies the subroutine name;
+OPTS is a character string of options to the subroutine; and N1, N2, N3 and N4 are
+the problem dimensions.
+ISPEC specifies the parameter to be returned; the following values are
+currently used in LAPACK:
+
+\begin{verbatim}
+*          ISPEC is INTEGER
+*          Specifies the parameter to be returned as the value of
+*          ILAENV.
+*          = 1: the optimal blocksize; if this value is 1, an unblocked
+*               algorithm will give the best performance.
+*          = 2: the minimum block size for which the block routine
+*               should be used; if the usable block size is less than
+*               this value, an unblocked routine should be used.
+*          = 3: the crossover point (in a block routine, for N less
+*               than this value, an unblocked routine should be used)
+*          = 5: the minimum column dimension for blocking to be used;
+*               rectangular blocks must have dimension at least k by m,
+*               where k is given by ILAENV(2,...) and m by ILAENV(5,...)
+*          = 6: the crossover point for the SVD (when reducing an m by n
+*               matrix to bidiagonal form, if max(m,n)/min(m,n) exceeds
+*               this value, a QR factorization is used first to reduce
+*               the matrix to a triangular form.)
+*          = 9: maximum size of the subproblems at the bottom of the
+*               computation tree in the divide-and-conquer algorithm
+*               (used by xBDSDC, xGELSD and xSTEDC)
+*          =10: IEEE NaN and Infinity arithmetic can be trusted not to trap
+*          12 <= ISPEC <= 16: used by xHSEQR or one of its subroutines,
+*               see IPARMQ for detailed explanation
+\end{verbatim}
+
+The three block size parameters, NB (ISPEC = 1), NBMIN (ISPEC = 2) and NX (ISPEC = 3), 
+are used in many different\index{tuning!block size: NB, NBMIN, and NX}
+subroutines (see Table~\ref{nbnx.tab}).
+The parameter ISPEC = 5 is used in the same way as NBMIN (ISPEC = 2) by xTGSYL for a
+different dimension.
+This table only lists those routines which take direct action depending on the value of the
+parameters; other routines may call ILAENV, but only to determine the size of work arrays,
+and set the value of NAME (parameter number 2) to one of the routines in the table.
+For example, SORGHR calls ILAENV with 'SORQRF' as parameter,
+to determine the size of its work array,
+and then calls SORQRF; SORQRF again calls ILAENV, this time with 'SORQRF' as parameter,
+to determine the course of its computation.
+
+ISPEC= 6 is used\index{tuning!SVD} in the driver 
+routines xGELSD, xGELSS and xGESVD.
+\indexR{SGELSD}\indexR{CGELSD}
+\indexR{SGELSS}\indexR{CGELSS}
+\indexR{SGESVD}\indexR{CGESVD}
+ISPEC = 9 is used\index{tuning!divide and conquer} in the
+divide and conquer routines xBDSDC, xGELSD and xSTEDC.
+\indexR{SBDSDC}\indexR{CBDSDC}
+\indexR{SGELSD}\indexR{CGELSD}
+\indexR{SSTEDC}\indexR{CSTEDC}
+ISPEC = 10 is used in the driver routines
+xSTEVR and xSYEVR/xHEEVR to check for IEEE-754 compliance
+in the parameters NaN and Infinity;  if so, these driver routines call xSTEMR;
+otherwise, a slower algorithm is selected. 
+\indexR{SSTEVR}
+\indexR{SSYEVR}\indexR{CHEEVR}
+\indexR{SSTEMR}\indexR{CSTEMR}
+ISPEC = 12 to 16 is used\index{tuning!block multishift QR}  in the 
+block multishift $QR$ algorithm, xHSEQR, and its auxiliaries
+\indexR{SHSEQR}\indexR{CHSEQR}
+
+The LAPACK test programs use a special version of ILAENV
+\indexR{ILAENV}
+where the parameters are set via a COMMON block interface.
+This is convenient for experimenting with different values of, say,
+the block size in order to exercise different parts of the code
+and to compare the relative performance of different parameter values.
+
+\begin{table}[tbh]\centering
+\newcommand{\x}{$\bullet$}
+\newcommand{\1}{{\small\raisebox{1ex}{\dag}}}
+\begin{tabular}{|l|l|c|c|c|} \hline
+real & complex & NB & NBMIN & NX \\ \hline\hline
+SGBTRF\indexR{SGBTRF} & CGBTRF\indexR{CGBTRF} & \x & & \\
+SGEBRD\indexR{SGEBRD} & CGEBRD\indexR{CGEBRD} & \x & \x & \x \\ 
+SGEHRD\indexR{SGEHRD} & CGEHRD\indexR{CGEHRD} & \x & \x & \x \\
+SGELQF\indexR{SGELQF} & CGELQF\indexR{CGELQF} & \x & \x & \x \\
+SGEQLF\indexR{SGEQLF} & CGEQLF\indexR{CGEQLF} & \x & \x & \x \\
+SGEQP3\indexR{SGEQP3} & CGEQP3\indexR{CGEQP3} & \x & \x & \x \\
+SGEQRF\indexR{SGEQRF} & CGEQRF\indexR{CGEQRF} & \x & \x & \x \\
+SGERQF\indexR{SGERQF} & CGERQF\indexR{CGERQF} & \x & \x & \x \\
+SGETRF\indexR{SGETRF} & CGETRF\indexR{CGETRF} & \x & & \\
+SGETRI\indexR{SGETRI} & CGETRI\indexR{CGETRI} & \x & \x & \\
+SLAUUM\indexR{SLAUUM}&CLAUUM\indexR{CLAUUM} & \x & & \\
+SORGLQ\indexR{SORGLQ} & CUNGLQ\indexR{CUNGLQ} & \x & \x & \x \\
+SORGQL\indexR{SORGQL} & CUNGQL\indexR{CUNGQL} & \x & \x & \x \\
+SORGQR\indexR{SORGQR} & CUNGQR\indexR{CUNGQR} & \x & \x & \x \\
+SORGRQ\indexR{SORGRQ} & CUNGRQ\indexR{CUNGRQ} & \x & \x & \x \\
+SORMLQ\indexR{SORMLQ} & CUNMLQ\indexR{CUNMLQ} & \x & \x & \\
+SORMQL\indexR{SORMQL} & CUNMQL\indexR{CUNMQL} & \x & \x & \\
+SORMQR\indexR{SORMQR} & CUNMQR\indexR{CUNMQR} & \x & \x & \\
+SORMRQ\indexR{SORMRQ} & CUNMRQ\indexR{CUNMRQ} & \x & \x & \\
+SORMRZ\indexR{SORMRZ} & CUNMRZ\indexR{CUNMRZ} & \x & \x & \\
+SPBTRF\indexR{SPBTRF} & CPBTRF\indexR{CPBTRF} & \x & & \\
+SPOTRF\indexR{SPOTRF} & CPOTRF\indexR{CPOTRF} & \x & & \\
+%SPOTRI\indexR{SPOTRI} & CPOTRI\indexR{CPOTRI} & \x & & \\
+SSTEBZ\indexR{SSTEBZ} &        & \x &    &    \\
+SSYGST\indexR{SSYGST} & CHEGST\indexR{CHEGST} & \x & & \\
+SSYTRD\indexR{SSYTRD} & CHETRD\indexR{CHETRD} & \x & \x & \x \\
+SSYTRF\indexR{SSYTRF} & CHETRF\indexR{CHETRF} & \x & \x & \\
+       & CSYTRF\indexR{CSYTRF} & \x & \x & \\
+SSYTRF\_ROOK\indexR{SSYTRF\_ROOK}
+       & CHETRF\_ROOK\indexR{CHETRF\_ROOK} & \x & \x & \\
+       & CSYTRF\_ROOK\indexR{CSYTRF\_ROOK} & \x & \x & \\
+STGSYL\indexR{STGSYL} & CTGSYL\indexR{CTGSYL} &  & \x & \\
+STRTRI\indexR{STRTRI} & CTRTRI\indexR{CTRTRI} & \x & & \\
+STZRQF\indexR{STZRQF} & CTZRQF\indexR{CTZRQF} & \x & & \\ \hline
+\end{tabular}
+\caption{Use of the block parameters NB, NBMIN, and NX in LAPACK}
+\label{nbnx.tab}
+\end{table}
+

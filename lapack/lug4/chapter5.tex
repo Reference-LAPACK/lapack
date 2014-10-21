@@ -1,0 +1,900 @@
+\chapter{Documentation and Software Conventions}\label{chapdocsoftware}
+
+\section{Design and Documentation of Argument Lists}\label{secdesdoc}
+
+The argument lists of all LAPACK routines conform to a single
+set of conventions for their design and documentation. 
+
+\subsection{Structure of the Documentation}\label{subsecstructdoc}
+
+The documentation\index{documentation, structure}  of each LAPACK 
+routine includes:
+
+\begin{itemize}
+
+\item the SUBROUTINE or FUNCTION statement, followed by statements
+declaring the type and dimensions of the arguments;
+
+\item a summary of the {\bf Purpose} of the routine;
+
+\item descriptions of each of the {\bf Arguments} in the order of
+the argument list;
+
+\item (optionally) {\bf Further Details}
+
+\item (optionally) {\bf Internal Parameters}
+
+\end{itemize}
+
+\subsection{Order of Arguments}\label{subsecargorder}
+ 
+Arguments\index{arguments!order of} of an LAPACK routine appear 
+in the following order:
+
+\begin{itemize}
+
+\item arguments specifying options;
+
+\item problem dimensions;
+
+\item array or scalar arguments defining the input data; some of them may be 
+overwritten by results;
+
+\item other array or scalar arguments returning results;
+
+\item work arrays (and associated array dimensions);
+
+\item diagnostic argument INFO.
+ 
+\end{itemize}
+
+\subsection{Argument Descriptions}\label{subsecargdesc}
+
+The style of the argument\index{arguments!description conventions}  
+descriptions is illustrated by the following example:
+
+\begin{verbatim}
+*          N is INTEGER
+*          The number of linear equations, i.e., the order of the
+*          matrix A.  N >= 0.
+
+*          A is REAL array, dimension (LDA,N)
+*          On entry, the N-by-N coefficient matrix A.
+*          On exit, the factors L and U from the factorization
+*          A = P*L*U; the unit diagonal elements of L are not stored.
+\end{verbatim}
+
+The description of each argument gives:
+
+\begin{itemize}
+
+\item a classification of the argument as (input), (output),
+(input/output), (input or output), (workspace) or (workspace/output);
+(Input or output) means that the argument may be either an input argument or
+an output argument, depending on the values of other arguments;
+for example, in the xyySVX driver routines, some arguments are used either
+as output arguments to return details of a factorization, or as input
+arguments to supply details of a previously computed factorization.
+(Workspace/output) means that the argument is used principally as a work
+array, but may also return some useful information (in its first 
+element);
+
+\item the type of the argument;
+
+\item (for an array) its dimension(s);
+
+\item a specification of the value(s) that must be supplied for the
+argument (if it's an input argument), or of the value(s) returned
+by the routine (if it's an output argument), or both (if it's an
+input/output argument). In the last case, the two parts of the
+description are introduced by the phrases ``On entry'' and
+``On exit''.
+
+\item (for a scalar input argument) any constraints that the
+supplied values must satisfy (such as  ``N $\geq$ 0'' in the
+example above).
+
+\end{itemize}
+
+\subsection{Option Arguments}\label{subsecoptionargs}
+
+Arguments\index{arguments!options} specifying options are 
+usually of type CHARACTER*1.
+The meaning of each valid value is given\index{arguments!UPLO}, as in this 
+example:
+
+\begin{verbatim}
+*          UPLO is CHARACTER*1
+*         = 'U':  Upper triangle of A is stored;
+*         = 'L':  Lower triangle of A is stored.
+\end{verbatim}
+
+The corresponding lower-case characters
+may be supplied (with the same meaning), but any other value is illegal
+(see subsection~\ref{subsecinfo}).
+
+A longer
+character string can be passed as the actual argument, making the calling
+program more readable, but only the first character is significant;
+this is a standard feature of Fortran.
+For example:
+
+\begin{verbatim}
+       CALL SPOTRS('upper', . . . )
+\end{verbatim}
+
+\subsection{Problem Dimensions}\label{subsecdims}
+
+It is permissible for the problem\index{arguments!dimensions} dimensions 
+to be passed as zero, in
+which case the computation (or part of it) is skipped. 
+Negative dimensions are regarded as erroneous.
+
+\subsection{Array Arguments}\label{subsecarrayargs}
+
+Each two-dimensional array argument\index{arguments!arrays} is 
+immediately followed in the
+argument list by its leading dimension\index{arguments!LDA}, whose 
+name has the form LD$<$array-name$>$. For example:
+
+\begin{verbatim}
+*          A is REAL array, dimension (LDA,N)
+
+*          LDA is INTEGER
+*          The leading dimension of the array A.  LDA >= max(1,N).
+\end{verbatim}
+
+It should be assumed, unless stated otherwise, that vectors and
+matrices are stored in one- and two-dimensional arrays in the
+conventional manner. That is, if an array X of dimension (N) holds
+a vector $x$, then X(i) holds $x_{i}$ for $i = 1, \ldots, n$.
+If a two-dimensional array A of dimension (LDA,N) holds an $m$-by-$n$
+matrix $A$, 
+then A($i,j$) holds $a_{ij}$ for $i = 1, \ldots, m$ and
+$j = 1, \ldots, n$ (LDA must be at least $m$). 
+See Section~\ref{secstorage} for more about
+storage of matrices.
+
+Note that\index{arguments!arrays}
+array arguments are usually declared in the software as assumed-size arrays 
+(last dimension *), for example:
+\begin{verbatim}
+      REAL A( LDA, * )
+\end{verbatim}
+although the documentation gives the dimensions as (LDA,N). The latter
+form is more informative since it specifies the required minimum value of 
+the last dimension. However
+an assumed-size array declaration has been used in the software,
+in order to overcome some
+limitations in the Fortran 77 standard. In particular it allows the
+routine to be called when the relevant dimension (N, in this case) is zero.
+However actual array dimensions in the calling program must be at
+least 1 (LDA in this example).
+
+\subsection{Work Arrays}\label{subsecworkspace}
+
+Many LAPACK routines require one or more work 
+arrays\index{arguments!work space} to be passed as
+arguments. The name of a work array is usually WORK --- sometimes
+IWORK, RWORK or BWORK to distinguish work arrays of
+integer, real or logical (Boolean) type.
+
+Occasionally the first element of a work array is used to return some
+useful information: in such cases, the argument is described as
+(workspace/output) instead of simply (workspace).
+
+A number of routines implementing block algorithms require workspace
+sufficient to hold one block of rows or columns of the matrix, 
+for example, workspace
+of size $n$-by-$nb$, where $nb$ is the block size. 
+In such cases, the actual declared length of the work array
+must be passed as a separate argument LWORK\index{arguments!LWORK}, 
+which immediately follows WORK in the argument list.
+
+See Section~\ref{secblocksize} for further explanation.
+
+\subsection{LWORK Query}                               \label{lworkquery}
+ 
+If in doubt about the amount of workspace to supply to an LAPACK
+routine, the user may choose to supply $LWORK=-1$\index{LWORK}
+and use the returned value in $WORK(1)$ as the correct value
+for $LWORK$.  Setting $LWORK=-1$ does not invoke an error message
+from {\tt XERBLA} and is defined as a global
+query\index{LWORK query}\index{workspace query}\index{query}.
+
+The routines xGEESX and xGGESX are the only exceptions to this rule.
+For these routines, the value of LWORK is dependent upon the dimension
+of the invariant subspace (SDIM), and is not known on entry to the routine.
+
+\subsection{Error Handling and the Diagnostic Argument INFO}\label{subsecinfo}
+
+All\index{failures!error handling} documented routines\index{arguments!INFO} have a 
+diagnostic argument INFO\index{failures!INFO}\index{INFO} that
+indicates the success or failure of the computation, as follows:
+
+\begin{itemize}
+\item INFO = 0: successful termination
+
+\item INFO $<$ 0: illegal value of one or more arguments --- no computation
+performed
+
+\item INFO $>$ 0: failure in the course of computation
+\end{itemize}
+
+All driver and auxiliary routines
+check that input arguments such as N or LDA or
+option arguments of type CHARACTER
+have permitted values.
+If an illegal value of the $i^{th}$ argument is detected, the routine
+sets INFO = $-i$, and then calls the error-handling routine XERBLA.
+\index{error handler, XERBLA}\indexR{XERBLA}
+
+The standard version of XERBLA issues an error message and halts execution,
+\index{error handler, XERBLA}
+so that no LAPACK routine would ever return to the calling program with
+INFO $<$ 0. However, this might occur if a non-standard version of XERBLA
+is used.
+
+\section{Determining the Block Size for Block Algorithms}\label{secblocksize}
+
+LAPACK routines that implement block algorithms need to determine
+what block size\index{block size!determination of} to use.
+The intention behind the design of LAPACK is that the choice of block size
+should be hidden from users as much as possible, but at the same time
+easily accessible to installers of the package 
+when tuning LAPACK for a particular machine.
+
+LAPACK routines call an auxiliary enquiry function ILAENV\indexR{ILAENV}, which returns
+the optimal block size to be used, as well as other parameters.
+The version of ILAENV\index{block size!from ILAENV} supplied with the 
+package contains
+default values that led to good behavior over a reasonable
+number of our test machines, but to achieve optimal 
+performance, it may be beneficial to 
+tune ILAENV\index{block size!tuning ILAENV} for your
+particular machine environment.
+Ideally a distinct implementation of ILAENV is needed for each
+machine environment (see also Chapter~\ref{chapinstall}).
+The optimal block size may also depend on the routine, the combination of
+option arguments (if any), and the problem dimensions. 
+
+If ILAENV\indexR{ILAENV} returns a block size
+of 1, then the routine performs the unblocked algorithm, calling Level 2 BLAS,
+and makes no calls to Level 3 BLAS.
+
+Some LAPACK routines require a work array whose size is proportional to
+the block size (see subsection~\ref{subsecworkspace}). The actual length
+of the work array is supplied as an argument LWORK. The description of
+the arguments WORK and LWORK typically goes as follows:
+
+\begin{verbatim}
+*          WORK is REAL array, dimension (MAX(1,LWORK))
+*          On exit, if INFO=0, then WORK(1) returns the optimal LWORK.
+
+*          LWORK is INTEGER
+*          The dimension of the array WORK.  LWORK >= max(1,N).
+*          For optimal performance LWORK >= N*NB, where NB is
+*          the optimal blocksize returned by ILAENV.
+\end{verbatim}
+
+The routine determines the block size to be used by the following steps:
+
+\begin{enumerate}
+
+\item the optimal block size is determined by calling ILAENV;
+
+\item if the value of LWORK indicates that enough workspace has been
+supplied, the routine uses the optimal block size;
+
+\item otherwise, the routine determines the largest block size that
+can be used with the supplied amount of workspace;
+
+\item if this new block size does not fall below a
+threshold value (also returned by ILAENV), the routine uses the new
+value;
+
+\item otherwise, the routine uses the unblocked algorithm.
+\end{enumerate}
+
+The minimum value of LWORK that would be needed to use
+the optimal block size, is returned in WORK(1).
+
+Thus, the routine uses the largest block size allowed by the amount
+of workspace supplied, as long as this is likely to
+give better performance than the unblocked algorithm.
+WORK(1) is not always a simple formula in terms of N and NB.
+
+The specification of LWORK gives the minimum value for the
+routine to return correct results. If the supplied value is less than
+the minimum --- indicating that there is insufficient workspace to perform
+the unblocked algorithm --- the value of LWORK is regarded as an illegal value,
+and is treated like any other illegal argument value
+(see subsection~\ref{subsecinfo}).
+
+If in doubt about how much workspace to supply, users should supply a generous
+amount (assume a block size of 64, say), 
+and then examine the value of WORK(1) on exit.
+
+\section{Matrix Storage Schemes}\label{secstorage}
+
+LAPACK allows the following different storage schemes\index{storage scheme} 
+for matrices:
+
+\begin{itemize}
+
+\item conventional storage in a two-dimensional array;
+
+\item packed storage for symmetric, Hermitian or triangular matrices;
+
+\item band storage for band matrices; 
+
+\item Rectangular Full Packed format\index{rectangular full packed format}
+\index{RFP format} for positive definite matrices;
+
+\item the use of two or three
+one-dimensional arrays to store bidiagonal or tridiagonal
+matrices.
+
+\end{itemize}
+
+These storage schemes are compatible with those
+used in the BLAS.
+
+In the examples below, $\ast$ indicates an array element that need not be set
+and is not referenced by LAPACK routines. Elements that ``need not be
+set'' are never read, written to, or otherwise accessed by the LAPACK
+routines.  The examples illustrate only the
+relevant part of the arrays; array arguments may of course have additional
+rows or columns, according to the usual rules for passing array arguments
+in Fortran.
+
+\subsection{Conventional Storage}\label{subsecconventional}
+
+The default scheme for storing matrices\index{storage scheme!conventional}
+is the obvious one described in subsection~\ref{subsecarrayargs}:
+a matrix $A$ is stored in a two-dimensional array A, with
+matrix element $a_{ij}$ stored in array element A($i,j$).
+
+If a matrix is {\bf triangular}\index{storage scheme!triangular}
+(upper or lower, as specified by
+the argument UPLO), only the elements of the relevant triangle
+are accessed. The remaining elements of the array need not be set.
+Such elements are indicated by $\ast$ in the examples below.
+For example, when $n = 4$:
+
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+UPLO & Triangular matrix $A$ & Storage in array A \\ \hline
+`U' &
+$
+\left( \begin{array}{cccc}
+a_{11} & a_{12} & a_{13} & a_{14} \\
+       & a_{22} & a_{23} & a_{24} \\
+       &        & a_{33} & a_{34} \\
+       &        &        & a_{44}
+\end{array} \right)
+$
+&
+$
+\begin{array}{cccc}
+a_{11} & a_{12} & a_{13} & a_{14} \\
+ \ast  & a_{22} & a_{23} & a_{24} \\
+ \ast  &  \ast  & a_{33} & a_{34} \\
+ \ast  &  \ast  &  \ast  & a_{44}
+\end{array}
+$
+\\ \hline
+`L' &
+$
+\left( \begin{array}{cccc}
+a_{11} &        &        &       \\
+a_{21} & a_{22} &        &       \\
+a_{31} & a_{32} & a_{33} &       \\
+a_{41} & a_{42} & a_{43} & a_{44}
+\end{array} \right)
+$
+&
+$
+\begin{array}{cccc}
+a_{11} &  \ast  &  \ast  &  \ast  \\
+a_{21} & a_{22} &  \ast  &  \ast  \\
+a_{31} & a_{32} & a_{33} &  \ast  \\
+a_{41} & a_{42} & a_{43} & a_{44}
+\end{array}
+$ 
+\\ \hline
+\end{tabular}
+\end{center}
+
+Similarly, if the matrix is upper Hessenberg, elements below the
+first subdiagonal need not be set.
+
+Routines that handle {\bf symmetric}\index{storage scheme!symmetric} 
+or {\bf Hermitian}\index{storage scheme!Hermitian} matrices
+allow for either the upper or lower triangle of the matrix 
+(as specified by UPLO) to
+be stored in the corresponding elements of the array; the remaining
+elements of the array need not be set.
+For example, when $n = 4$:
+
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+UPLO & Hermitian matrix $A$ & Storage in array A \\ \hline
+`U' &
+$
+\left( \begin{array}{cccc}
+a_{11}       & a_{12}       & a_{13}       & a_{14} \\
+\bar{a}_{12} & a_{22}       & a_{23}       & a_{24} \\
+\bar{a}_{13} & \bar{a}_{23} & a_{33}       & a_{34} \\
+\bar{a}_{14} & \bar{a}_{24} & \bar{a}_{34} & a_{44}
+\end{array} \right)
+$
+&
+$
+\begin{array}{cccc}
+a_{11} & a_{12} & a_{13} & a_{14} \\
+ \ast  & a_{22} & a_{23} & a_{24} \\
+ \ast  &  \ast  & a_{33} & a_{34} \\
+ \ast  &  \ast  &  \ast  & a_{44}
+\end{array}
+$
+\\ \hline
+`L' &
+$
+\left( \begin{array}{cccc}
+a_{11} & \bar{a}_{21} & \bar{a}_{31} & \bar{a}_{41} \\
+a_{21} & a_{22}       & \bar{a}_{32} & \bar{a}_{42} \\
+a_{31} & a_{32}       & a_{33}       & \bar{a}_{43} \\
+a_{41} & a_{42}       & a_{43}       & a_{44}
+\end{array} \right)
+$
+&
+$
+\begin{array}{cccc}
+a_{11} &  \ast  &  \ast  &  \ast  \\
+a_{21} & a_{22} &  \ast  &  \ast  \\
+a_{31} & a_{32} & a_{33} &  \ast  \\
+a_{41} & a_{42} & a_{43} & a_{44}
+\end{array}
+$ 
+\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Packed Storage}\label{subsecpacked}
+
+Symmetric, Hermitian or triangular matrices may be stored more
+compactly\index{storage scheme!packed}, if the relevant 
+triangle (again as specified by UPLO) is packed
+{\bf by columns} in a one-dimensional array. In LAPACK, arrays that hold
+matrices in packed storage, have names ending in `P'. So:
+
+\begin {itemize}
+
+\item if UPLO = `U', $a_{ij}$ is stored in AP($i+j(j-1)/2$) for $i \leq j$;
+
+\item if UPLO = `L', $a_{ij}$ is stored in AP($i+(2n-j)(j-1)/2$) for 
+$j \leq i$.
+
+\end{itemize}
+
+For example:
+
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+UPLO & Triangular matrix $A$ & Packed storage in array AP \\ \hline
+`U' &
+$
+\left( \begin{array}{cccc}
+a_{11} & a_{12} & a_{13} & a_{14} \\
+       & a_{22} & a_{23} & a_{24} \\
+       &        & a_{33} & a_{34} \\
+       &        &        & a_{44}
+\end{array} \right)
+$
+&
+$
+a_{11} \; \underbrace{a_{12} \: a_{22}} \;
+\underbrace{a_{13} \: a_{23} \: a_{33}} \;
+\underbrace{a_{14} \: a_{24} \: a_{34} \: a_{44}}
+$
+\\ \hline
+`L' &
+$
+\left( \begin{array}{cccc}
+a_{11} &        &        &        \\
+a_{21} & a_{22} &        &        \\
+a_{31} & a_{32} & a_{33} &        \\
+a_{41} & a_{42} & a_{43} & a_{44}
+\end{array} \right)
+$
+&
+$
+\underbrace{a_{11} \: a_{21} \: a_{31} \: a_{41}} \;
+\underbrace{a_{22} \: a_{32} \: a_{42}} \;
+\underbrace{a_{33} \: a_{43}} \; a_{44}
+$ 
+\\ \hline
+\end{tabular}
+\end{center}
+
+Note that for real or complex symmetric matrices, 
+packing the upper triangle
+by columns is equivalent to packing the lower triangle by rows;
+packing the lower triangle by columns is equivalent to packing
+the upper triangle by rows. 
+For complex Hermitian matrices,
+packing the upper triangle
+by columns is equivalent to packing the conjugate of the lower triangle by rows;
+packing the lower triangle by columns is equivalent to packing
+the conjugate of the upper triangle by rows.
+ 
+The routines xTRTTP\indexR{STRTTP}\indexR{CTRTTP} 
+convert a matrix in standard square format to one in packed format;
+xTPTTR\indexR{STPTTR}\indexR{CTPTTR} convert in the opposite direction.
+
+\subsection{Band Storage}\label{subsecband}
+
+An $m$-by-$n$ band matrix\index{storage scheme!band} with $kl$ subdiagonals
+and $ku$ superdiagonals may be
+stored compactly in a two-dimensional array with $kl+ku+1$ rows and $n$ columns.
+Columns of the matrix are stored in corresponding columns of the
+array, and diagonals of the matrix are stored in rows of the array.
+This storage scheme should be used in practice only if $kl, ku \ll \min(m,n)$,
+although LAPACK routines work correctly for all values of $kl$ and $ku$.
+In LAPACK, arrays that hold matrices in band storage have names
+ending in `B'.
+
+To be precise, $a_{ij}$ is stored in AB($ku+1+i-j,j$) for
+$\max(1,j-ku) \leq i \leq \min(m,j+kl)$.
+For example, when $m = n = 5$, $kl = 2$ and $ku = 1$:
+
+\begin{center}
+\begin{tabular}{|c|c|} \hline
+Band matrix $A$ & Band storage in array AB \\ \hline
+$
+\left( \begin{array}{ccccc}
+a_{11} & a_{12} &        &        &        \\
+a_{21} & a_{22} & a_{23} &        &        \\
+a_{31} & a_{32} & a_{33} & a_{34} &        \\
+       & a_{42} & a_{43} & a_{44} & a_{45} \\
+       &        & a_{53} & a_{54} & a_{55} 
+\end{array} \right)
+$
+&
+$
+\begin{array}{ccccc}
+ \ast  & a_{12} & a_{23} & a_{34} & a_{45} \\
+a_{11} & a_{22} & a_{33} & a_{44} & a_{55} \\
+a_{21} & a_{32} & a_{43} & a_{54} &  \ast  \\
+a_{31} & a_{42} & a_{53} &  \ast  &  \ast 
+\end{array}
+$
+\\ \hline
+\end{tabular}
+\end{center}
+
+The elements marked $\ast$ in the upper left and lower right
+corners of the array AB need not be set, and are not referenced by
+LAPACK routines.
+
+{\bf Note:} when a band matrix is supplied for $LU$ factorization,
+space\index{storage scheme!band LU} must be allowed to store an 
+additional $kl$ superdiagonals,
+generated by fill-in as a result of row interchanges.
+This means that the matrix is stored according to the above scheme,
+but with $kl + ku$ superdiagonals.
+
+Triangular band matrices are stored in the same format, with either
+$kl = 0$ if upper triangular, or $ku = 0$ if
+lower triangular.
+
+For symmetric or Hermitian band matrices with $kd$ subdiagonals or 
+superdiagonals, only the upper or lower triangle (as specified by
+UPLO) need be stored:
+
+\begin {itemize}
+
+\item if UPLO = `U', $a_{ij}$ is stored in AB($kd+1+i-j,j$) for 
+$\max(1,j-kd) \leq i \leq j$;
+
+\item if UPLO = `L', $a_{ij}$ is stored in AB($1+i-j,j$) for 
+$j \leq i \leq \min(n,j+kd)$.
+
+\end{itemize}
+
+For example, when $n = 5$ and $kd = 2$:
+
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+UPLO & Hermitian band matrix $A$ & Band storage in array AB \\ \hline
+`U' &
+$
+\left( \begin{array}{ccccc}
+a_{11}       & a_{12}       & a_{13}       &              &        \\
+\bar{a}_{12} & a_{22}       & a_{23}       & a_{24}       &        \\
+\bar{a}_{13} & \bar{a}_{23} & a_{33}       & a_{34}       & a_{35} \\
+             & \bar{a}_{24} & \bar{a}_{34} & a_{44}       & a_{45} \\
+             &              & \bar{a}_{35} & \bar{a}_{45} & a_{55}
+\end{array} \right)
+$
+&
+$
+\begin{array}{ccccc}
+ \ast  &  \ast  & a_{13} & a_{24} & a_{35} \\
+ \ast  & a_{12} & a_{23} & a_{34} & a_{45} \\
+a_{11} & a_{22} & a_{33} & a_{44} & a_{55}
+\end{array}
+$
+\\ \hline
+`L' &
+$
+\left( \begin{array}{ccccc}
+a_{11} & \bar{a}_{21} & \bar{a}_{31} &              &              \\
+a_{21} & a_{22}       & \bar{a}_{32} & \bar{a}_{42} &              \\
+a_{31} & a_{32}       & a_{33}       & \bar{a}_{43} & \bar{a}_{53} \\
+       & a_{42}       & a_{43}       & a_{44}       & \bar{a}_{54} \\
+       &              & a_{53}       & a_{54}       & a_{55}
+\end{array} \right)
+$
+&
+$
+\begin{array}{ccccc}
+a_{11} & a_{22} & a_{33} & a_{44} & a_{55} \\
+a_{21} & a_{32} & a_{43} & a_{54} &  \ast  \\
+a_{31} & a_{42} & a_{53} &  \ast  &  \ast 
+\end{array}
+$ 
+\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Rectangular Full Packed Format}\label{subsecrfp}
+
+Conventional storage leaves unused almost half the $n^2$ elements ofa triangular matrix or a
+symmetric/Hermitian matrix; packed storage uses all the $n(n+1)/2$ elements, but cannot achieve
+anything like the speed of conventional storage. 
+Rectangular Full Packed (RFP) format avoids both these
+disadvantages, at a cost of a little more complexity in the rules assigning elements to their positions
+in the arrays (see subsection~\ref{subseccomplineq} and \cite{gustavsonetal08})
+\index{storage scheme!RFP format}.
+The routines xTRTTF\indexR{STRTTF}\indexR{CTRTTF} convert a matrix from standard square format to one in RFP format;
+xTPTTF\indexR{STPTTF}\indexR{CTPTTF} 
+convert a matrix from packed format to one in RFP format;
+xTFTTR\indexR{STFTTR}\indexR{CTFTTR} and xTFTTP\indexR{STFTTP}\indexR{CTFTTP} convert in the opposite direction. 
+Thus a typical user need not know the details.
+
+But for those who do, the rules are as follows; they differ according to whether $n$ is odd or even.
+(Here $i, j$ run from $0$ to $n-1$.) 
+
+When $n$ is odd:
+\begin {itemize}
+\item if UPLO = `U', 
+$a_{ij}$ is stored in AR($i,j-(n-1)/2$) when $(n-1)/2 \leq j \leq n-1$ and $0 \leq i \leq j$,
+and in AR($j+(n+1)/2,i$) when $0 \leq j \leq (n-3)/2$ and $0 \leq i \leq j$;
+\item if UPLO = `L',
+$a_{ij}$ is stored in AR($i,j$) when $0 \leq j \leq (n-1)/2$ and $j \leq i \leq n-1$,
+and in AR($j+1,i-(n+1)/2$) when $(n+1)/2 \leq j \leq n-1$) and $j \leq i \leq n-1$.
+\end{itemize}
+
+For example, when $n = 5$:
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+UPLO & Triangular matrix $A$ & RFP storage \\ \hline
+`U' &
+$
+\begin{array}{ccccc}
+  a_{00} & a_{01} & a_{02} & a_{03} & a_{04} \\
+   \ast     & a_{11} & a_{12} & a_{13} & a_{14} \\   
+   \ast     & \ast      & a_{22} & a_{23} & a_{24} \\      
+   \ast     & \ast      & \ast      & a_{33} & a_{34} \\      
+   \ast     & \ast      & \ast      & \ast      & a_{44}      
+\end{array}
+$
+&
+$
+\begin{array}{ccc}
+a_{02} & a_{03} & a_{04} \\
+a_{12} & a_{13} & a_{14} \\
+a_{22} & a_{23} & a_{24} \\
+a_{00} & a_{33} & a_{34} \\
+a_{01} & a_{11} & a_{44}
+\end{array} 
+$
+\\ \hline
+`L' &
+$
+\begin{array}{ccccc}     
+  a_{00} & \ast      & \ast      & \ast      & \ast      \\
+  a_{10} & a_{11} & \ast      & \ast      & \ast      \\
+  a_{20} & a_{21} & a_{22} & \ast      & \ast      \\
+  a_{30} & a_{31} & a_{32} & a_{33} & \ast      \\
+  a_{40} & a_{41} & a_{42} & a_{43} & a_{44} 
+\end{array}
+$ 
+&
+$
+\begin{array}{ccc}
+  a_{00} & a_{33} & a_{43} \\ 
+  a_{10} & a_{11} & a_{44} \\
+  a_{20} & a_{21} & a_{22} \\
+  a_{30} & a_{31} & a_{32} \\
+  a_{40} & a_{41} & a_{42} 
+\end{array}
+$
+\\ \hline
+\end{tabular}
+\end{center}
+
+For $n$ even:
+
+\begin {itemize}
+\item if UPLO = `U',
+$a_{ij}$ is stored in AR($i,j - n/2$) when $n/2 \leq j \leq n-1$ and $0 \leq i \leq j$,
+and in AR($j+n/2,i$) when $0 \leq j \leq (n-2)/2$ and $0 \leq i \leq j$;
+\item if UPLO = `L',
+$a_{ij}$ is stored in AR($i,j$) when $0 \leq j \leq  (n-2)/2$ and $j \leq i \leq n-1$,
+and in AR($j+1,i-n/2$) when $n/2 \leq j \leq n-1$ and $j \leq i \leq n-1$.
+\end{itemize}
+
+For example, when $n = 6$:
+\begin{center}
+\begin{tabular}{|c|c|c|} \hline
+UPLO & Triangular matrix $A$ & RFP storage \\ \hline
+`U' &
+$
+\begin{array}{cccccc}
+  a_{00} & a_{01} & a_{02} & a_{03} & a_{04} & a_{05} \\
+   \ast     & a_{11} & a_{12} & a_{13} & a_{14} & a_{15} \\   
+   \ast     & \ast      & a_{22} & a_{23} & a_{24} & a_{25} \\      
+   \ast     & \ast      & \ast      & a_{33} & a_{34} & a_{35} \\      
+   \ast     & \ast      & \ast      & \ast      & a_{44} & a_{45} \\      
+   \ast     & \ast      & \ast      & \ast      & \ast      & a_{55}
+\end{array}
+$
+&
+$
+\begin{array}{ccc}
+a_{03} & a_{04} & a_{05} \\
+a_{13} & a_{14} & a_{15} \\
+a_{23} & a_{24} & a_{25} \\
+a_{33} & a_{34} & a_{35} \\
+a_{00} & a_{44} & a_{45} \\
+a_{01} & a_{11} & a_{55} \\
+a_{02} & a_{12} & a_{22}
+\end{array} 
+$
+\\ \hline
+`L' &
+$
+\begin{array}{cccccc}     
+  a_{00} & \ast      & \ast      & \ast      & \ast      & \ast \\
+  a_{10} & a_{11} & \ast      & \ast      & \ast      & \ast \\
+  a_{20} & a_{21} & a_{22} & \ast      & \ast      & \ast \\
+  a_{30} & a_{31} & a_{32} & a_{33} & \ast      & \ast \\
+  a_{40} & a_{41} & a_{42} & a_{43} & a_{44} & \ast \\
+  a_{50} & a_{51} & a_{52} & a_{53} & a_{54} & a_{55}
+\end{array}
+$ 
+&
+$
+\begin{array}{ccc}
+  a_{33} & a_{43} & a_{53} \\
+  a_{00} & a_{44} & a_{54} \\ 
+  a_{10} & a_{11} & a_{55} \\
+  a_{20} & a_{21} & a_{22} \\
+  a_{30} & a_{31} & a_{32} \\
+  a_{40} & a_{41} & a_{42} \\
+  a_{50} & a_{51} & a_{52}
+\end{array}
+$
+\\ \hline
+\end{tabular}
+\end{center}
+
+All this is when TRANSR = 'N'; when TRANSR = 'T', the elements in RFP storage
+are transposed (or when TRANSR = 'C', conjugated and transposed).
+
+
+\subsection{Tridiagonal and Bidiagonal Matrices}\label{subsectribi} 
+
+A nonsymmetric\index{storage scheme!nonsymmetric tridiagonal} 
+tridiagonal matrix of order $n$ is stored in
+three one-dimensional arrays, one of length $n$ containing the
+diagonal elements, and two of length $n-1$ containing the
+subdiagonal and superdiagonal elements in elements $1:n-1$.
+
+A symmetric\index{storage scheme!symmetric tridiagonal} tridiagonal or 
+bidiagonal\index{storage scheme!bidiagonal}  matrix is stored in
+two one-dimensional arrays, one of length $n$ containing the
+diagonal elements, and one of length $n-1$ containing the
+off-diagonal elements.
+
+\subsection{Unit Triangular Matrices}\label{subsecunittri}
+
+Some LAPACK routines have an option to handle unit triangular matrices
+(that is, triangular matrices with diagonal elements = 1). This option
+is specified by an argument DIAG\index{arguments!DIAG}. If DIAG = 'U' (Unit triangular),
+the diagonal elements of the matrix need not be stored, and the
+corresponding array elements are not referenced by the LAPACK routines.
+The storage scheme for the rest of the matrix (whether conventional, 
+packed or band) remains unchanged, as described in 
+subsections~\ref{subsecconventional}, \ref{subsecpacked} and
+\ref{subsecband}.
+
+\subsection{Real Diagonal Elements of Complex Matrices}\label{subsecrealdiag}
+
+Complex Hermitian\index{storage scheme!diagonal of Hermitian matrix} matrices 
+have diagonal matrices that are by definition
+purely real. In addition, some complex triangular matrices computed by
+LAPACK routines are defined by the algorithm to have real diagonal elements
+--- in Cholesky or QR factorization, for example.
+
+If such matrices are supplied as input to LAPACK routines,
+the imaginary parts of the diagonal elements are not referenced, 
+but are assumed to be zero. If such matrices are returned as output by LAPACK
+routines, the computed imaginary parts are explicitly set to zero.
+
+\section{Representation of Orthogonal or Unitary Matrices}\label{secorthog}
+
+A real orthogonal or complex unitary matrix (usually denoted $Q$) is often 
+represented\index{storage scheme!orthogonal or unitary matrices} in
+LAPACK as a product of {\bf elementary reflectors} --- also referred to as
+\index{elementary Householder matrix, see Householder matrix}
+\index{elementary reflector, see Householder matrix}
+{\bf elementary Householder matrices} (usually denoted $H_{i}$). For example,
+\[ Q = H_{1} H_{2} \ldots H_{k}. \]
+Most users need not be aware
+of the details, because LAPACK routines are provided to work with this
+representation:
+
+\begin{itemize}
+
+\item routines whose names begin SORG- (real) or CUNG- (complex), can generate
+all or part of $Q$ explicitly;
+
+\item routines whose name begin SORM- (real) or CUNM- (complex), can multiply
+a given matrix by $Q$ or $Q^{H}$ without forming $Q$ explicitly.
+
+\end{itemize}
+
+The following further details may occasionally be useful.
+
+An elementary reflector (or elementary Householder matrix) $H$ of order
+$n$ is a
+unitary matrix\index{Householder matrix} of the form
+\index{elementary reflector, see Householder matrix}
+\index{elementary Householder matrix, see Householder matrix}
+\begin{equation}
+H = I - \tau v v^{H} \label{Hdef}
+\end{equation}
+where $\tau$ is a scalar, and $v$ is an $n$-vector, with
+$| \tau | ^2   || v || _2 ^2 = 2 \rm{Re}(\tau$);  $v$ is often referred to
+as the {\bf Householder vector}\index{Householder vector} .
+Often $v$ has several leading or trailing zero elements, but for the
+purpose of this discussion assume that $H$ has no such special structure.
+
+There is some redundancy in the representation (\ref{Hdef}), which can be 
+removed in
+various ways. The representation used in LAPACK sets $v_1 = 1$; hence $v_1$ need not
+be stored. In real arithmetic, $1 \leq \tau \leq 2$, except that
+$\tau = 0$ implies $H = I$.
+
+In complex arithmetic\index{Householder matrix!complex}, $\tau$ may be 
+complex, and satisfies
+$1 \leq \rm{Re}(\tau) \leq 2$ and $| \tau - 1 | \leq 1$.
+Thus a complex $H$ is
+not Hermitian (as it is in other representations), but it is unitary,
+which is the important property. The advantage of allowing $\tau$ to be
+complex is that, given an arbitrary complex vector $x$, $H$ can be computed
+so that \[ H^H x = \beta (1, 0, \ldots , 0)^T \]
+with {\it real} $\beta$. This is useful, for example,
+when reducing a complex Hermitian matrix to real symmetric tridiagonal form\index{tridiagonal form},
+or a complex rectangular matrix to real bidiagonal form\index{bidiagonal
+form}.
+
+For further details, see Lehoucq~\cite{lawn72}.
+
+Occasionally it is necessary to remove the redundancy in a different way, by ensuring that
+$\beta \geq 0$; an alternative routine 
+xGEQRFP\indexR{SGEQRFP}\indexR{CGEQRFP} achieves this; see~\cite{lawn203}.

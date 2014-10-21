@@ -1,0 +1,740 @@
+\chapter*{Preface to the Fourth Edition}
+\markboth{Preface to the Fourth Edition}{Preface to the Fourth Edition}
+\addcontentsline{toc}{chapter}{Preface to the Fourth Edition}
+
+Release 4.0 of LAPACK presents a number of new routines, and makes some changes
+in the way this Users' Guide is presented.
+
+The following new routines have been introduced at intermediate updates to the software
+(3.1, 3.2, 3.3, 3.4, 3.5):
+
+\begin{enumerate}
+
+\item routines for computing bounds on the error in the computed solution
+to linear equations in the -GE-, -GB-, -SY-, -HE- and -PO- formats,
+and refining the solution,
+which is computed in twice the standard precision, resulting in errors of  only $O(\epsilon)$
+(xyySVXX, xyyEQUB, xyyRFSX);
+the routines call auxiliaries from the XBLAS package to achieve this
+
+\item mixed precision routines (DSGESV, ZCGESV, DSPOSV, ZCPOSV) 
+which require the problem to be presented and the solution to be returned in double precision,
+but perform much of the computation internally in single precision
+
+\item routines for the solution of symmetric or Hermitian linear equations,
+using the bounded Bunch-Kaufman rook-pivoting method
+which ensures greater stability
+(\mbox{xSYSV\_ROOK}, \linebreak
+ \mbox{xHESV\_ROOK}, 
+ \mbox{xSYTRF\_ROOK}, 
+ \mbox{xHETRF\_ROOK},
+ \mbox{xSYCON\_ROOK}, 
+ \mbox{xHECON\_ROOK}, \linebreak
+ \mbox{xSYTRS\_ROOK}, 
+ \mbox{xHETRS\_ROOK},
+ \mbox{xSYTRI\_ROOK}, 
+ \mbox{xHETRI\_ROOK})
+
+\item routines which call Level 3 BLAS to solve symmetric or Hermitian linear equations
+ or invert the matrix, thereby markedly increasing their speed
+(xSYTRS2, xHETRS2, xSYTRI2, xHETRI2)
+
+\item a routine which computes the Cholesky factorization
+of a positive semi-definite matrix with complete pivoting
+(xPSTRF)
+
+\item routines for solving symmetric or Hermitian positive definite linear equations,
+where the matrix is stored in Rectangular Full Packed format
+in only half as much storage, but still using Level 3 BLAS
+(xPFTRF, xPFTRS, xPFTRI, xTFTRI)
+and routines for converting to and from Rectangular Full Packed format
+(xTFTTP, xTFTTR, xTPTTF, xTPTTR, xTRTTF, xTRTTP)
+
+\item a routine which computes a Householder $QR$ transformation 
+with non-negative diagonal of $R$ (xGEQRFP)
+
+\item routines using the compact WY representation of Householder matrices
+(xGEQRT, xGEQRT3, xGEMQRT, xTPQRT, xTPMQRT)
+
+\item routines to compute the singular values and vectors of a real matrix
+by a one-sided Jacobi method, which in some cases, but not all, is faster than other routines
+(SGEJSV, SGESVJ)
+
+\item a new routine which computes some or all of the eigenvalues, and optionally the eigenvectors,
+of a symmetric tridiagonal matrix, using the relatively robust representation (xSTEMR)
+
+\item routines to compute the complete CS decomposition of an orthogonal matrix
+or the 2-by-1 CS decomposition of a matrix with orthonormal columns
+(\mbox{xORCSD/xUNCSD}, \linebreak
+ \mbox{xORCSD2BY1/xUNCSD2BY1}, 
+ \mbox{xORBDBn/xUNBDBn} where $n$ is blank, 1, 2, 3 or 4, \linebreak
+ \mbox{xBBCSD})
+
+\end{enumerate}
+
+The following major additions/modifications to this Users' Guide have been made.
+
+Chapter 1 (Essentials) now states that LAPACK subroutines can be called from programs written
+in either Fortran 90 or C. For programs written in C, an extra header file {\tt lapack.h} must be 
+included. Full details and examples are given in a new Chapter~\ref{chapcinterface}.
+
+Chapter 2 (Contents of LAPACK) has been expanded to discuss the new routines.
+
+Chapter 3 (Performance of LAPACK) has been shortened in that it no longer presents
+timings from specific hardware. The timing programs are no longer made available for
+distribution.
+
+Chapter 4 (Accuracy and Stability) has been extended to include a discussion of the new
+routines.
+
+Chapter 5 (Documentation and Software Conventions) now includes a section on
+Rectangular Full Packed format. 
+
+Chapter 6 (Installing LAPACK Routines) has been shortened,
+like Chapter~\ref{chapperformance}, by excluding
+timings from specific hardware.
+
+Chaper 8 (The LAPACKE C Interface to LAPACK) is a new chapter which describes how LAPACK
+routines may be called from programs written in C with the aid of a header file {\tt lapacke.h},
+and presents some examples.
+ 
+Appendix A (Index of Driver and Computational Routines) has been divided in two:
+\ref{secindexdrivers} an Index of Driver Routines;
+and \ref{secindexcomp} an Index of Computational Routines.
+
+Appendix B (Index of Auxiliary Routines) has been divided in four:
+\ref{secindexauxilunblocked} an Index of Unblocked Routines (the blocked routines are listed in Appendix~\ref{secindexdrivers} or \ref{secindexcomp});
+\ref{secindexauxilmisc} an Index of Miscellaneous Auxiliary Routines; this is the great majority,
+most (but not quite all)  having names with the 2nd  and 3rd characters -LA-:
+\ref{secindexauxilutility} an Index of Utility Routines, not dependent on precision;
+and \ref{secindexauxilblasext} an Index of Extensions to the BLAS.
+
+Appendix D (Converting from LINPACK or EISPACK) has been deleted.
+
+Appendix E (LAPACK Working Notes) has also been deleted;
+all Working Notes that are relevant to the current edition of LAPACK
+are mentioned in the bibliography.
+
+Throughout this Users' Guide, any mention of a single precision routine with name beginning S-
+must be understood to apply also to the double precision routine with name beginning D-;
+any mention of a single precision complex routine with name beginning C-
+must be understood to apply also to the double precision complex routine with name beginning Z-.
+
+There is just one exception to this rule: the routines DSGESV and DSPOSV and
+their complex analogues ZCGESV and ZCPOSV are {\bf mixed precision} routines:
+they require the problem to be presented in double precision and the solution to be returned in
+double precision, but within the routines computation is done in single precision with
+iterative refinement (unless that fails, in which case a double precision solution is computed).
+
+We would like to thank the following people, who have made signification contributions to
+the software and to this edition of the Users' Guide:
+
+Michael Baudin,
+Karen Braman,
+Zvonimir Bujanovi\'{c},
+Alfredo Buttari,
+Ralph Byers,
+Bobby Cheng,
+Zlatko Drma\v{c},
+Fred Gustavson,
+Deaglan Halligan,
+Yozo Hida,
+Rodney James,
+Igor Kozachenko,
+Daniel Kressner,
+Jakub Kurzak,
+Julie Langou,
+Julien Langou,
+Bradley Lowery,
+Craig Lucas,
+Piotr Luszczek,
+Osni Marques,
+Beresford Parlett,
+Jason Riedy,
+Robert L. Smith,
+Brian Sutton,
+Kresimir Veseli\'{c},
+Christof V\"{o}mel,
+Jerzy Wasniewski.
+  
+\chapter*{Preface to the Third Edition}
+\markboth{Preface to the Third Edition}{Preface to the Third Edition}
+\addcontentsline{toc}{chapter}{Preface to the Third Edition}
+
+Since the release of version 2.0 of the LAPACK software and the second edition
+of the Users' Guide in 1994, LAPACK has been expanded further and has become an
+even wider community effort.
+The publication of this third edition of the
+Users' Guide coincides with the release of version 3.0
+of the LAPACK software.  Some of the software contributors to this release
+were not original LAPACK authors, and thus their names have been
+credited in the routines to which they contributed.
+
+Version 3.0 of LAPACK introduces new routines, as well as extending
+the functionality of existing routines.  The most significant
+new routines and functions are:
+\begin{enumerate}
+ \item a faster singular value decomposition (SVD),
+    computed by divide and conquer (xGESDD)
+ \item faster routines for solving rank-deficient least squares problems:
+    \begin{itemize}
+     \item  using QR with column pivoting (xGELSY, based on xGEQP3)
+     \item  using the SVD, based on divide and conquer (xGELSD)
+    \end{itemize}
+ \item new routines for the generalized symmetric eigenproblem:
+     \begin{itemize}
+      \item faster routines based on divide and conquer
+         (xHEGVD/xSYGVD, xHPGVD/xSPGVD, xHBGVD/xSBGVD) 
+      \item routines based on
+         bisection/inverse iteration to compute more efficiently
+         a subset of the spectrum
+        (xHEGVX/xSYGVX, xHPGVX/xSPGVX, xHBGVX/xSBGVX)
+      \end{itemize}
+\item  faster routines for the symmetric eigenproblem using the
+     ``relative robust representation'' algorithm
+     (xSYEVR/xHEEVR, SSTEVR, xSTEGR)
+ \item new simple and expert drivers for the generalized nonsymmetric
+    eigenproblem, including error bounds (xGGES, xGGEV, xGGESX, xGGEVX)
+ \item a solver for the generalized Sylvester equation (xTGSYL)
+ \item computational routines (xTGEXC, xTGSEN, xTGSNA)
+ \item a blocked version of xTZRQF and associated routines (xTZRZF, xORMRZ/xUNMRZ)
+\end{enumerate}
+
+One of the primary design features of the LAPACK library is that all
+releases are backward compatible.  A user's program calling LAPACK will
+never fail because of a new release of the library.  As a result,
+however, the calling sequences (or amount of workspace required) to existing
+routines cannot be altered.  Therefore, if a performance enhancement requires a
+modification of this type, a new routine must be created.  There are
+several routines included in LAPACK, version 3.0, that fall into this
+category.  Specifically,
+\begin{itemize}
+\item xGEGS is deprecated and replaced by routine xGGES
+\item xGEGV is deprecated and replaced by routine xGGEV
+\item xGELSX is deprecated and replaced by routine xGELSY
+\item xGEQPF is deprecated and replaced by routine xGEQP3
+\item xTZRQF is deprecated and replaced by routine xTZRZF
+\item xLATZM is deprecated and replaced by routines xORMRZ/xUNMRZ
+\end{itemize}
+The ``old'' version of the routine is still included in the
+library but the user is advised to upgrade to the ``new'' faster
+version.  References to the ``old'' versions are removed from this
+users' guide.
+
+In addition to replacing the above list of routines, there are a number of
+other significantly faster new driver routines that we recommend in place of
+their older counterparts listed below. We continue to include the older drivers
+in this users' guide because the old drivers may use less workspace than the
+new drivers, and because the old drivers may be faster in certain special cases
+(we will continue to improve the new drivers in a future release until they
+completely replace their older counterparts):
+\begin{itemize}
+\item xSYEV/xHEEV and xSYEVD/xHEEVD should be replaced by xSYEVR/xHEEVR
+\item xSTEV and xSTEVD should be replaced by xSTEVR
+\item xSPEV/xHPEV should be replaced by xSPEVD/xHPEVD
+\item xSBEV/xHBEV should be replaced by xSBEVD/xHBEVD
+\item xGESVD should be replaced by xGESDD
+\item xSYGV/xHEGV should be replaced by xSYGVD/xHEGVD
+\item xSPGV/xHPGV should be replaced by xSPGVD/xHPGVD
+\item xSBGV/xHBGV should be replaced by xSBGVD/xHBGVD
+\end{itemize}
+
+This release of LAPACK introduces routines that exploit IEEE arithmetic.
+We have a prototype running of a new algorithm (xSTEGR), which may be the
+ultimate solution for the symmetric eigenproblem on both parallel and serial
+machines.
+This algorithm has been incorporated into the drivers xSYEVR, xHEEVR and xSTEVR
+for the symmetric eigenproblem, and will be propagated into the generalized
+symmetric definite eigenvalue problems, the SVD, the generalized SVD and the
+SVD-based least squares solver.
+Refer to section~\ref{subseccompsep} for further information.
+We expect to also propagate this algorithm into ScaLAPACK.
+
+We have also incorporated the {\tt LWORK=-1} query capability into this
+release of LAPACK, whereby a user can request the amount of workspace required
+for a routine.  For complete details, refer to section~\ref{lworkquery}.
+
+All LAPACK routines reflect the current version number with the
+date on the routine indicating when it was last modified.
+For more information on revisions to the LAPACK software or this Users'
+Guide please refer to the LAPACK {\tt release\_notes} file on netlib.
+Instructions for obtaining this file can be found in
+Chapter~\ref{chapessentials}.
+
+The following additions/modifications have been made to this third edition
+of the Users' Guide:
+
+Chapter~\ref{chapessentials} (Essentials) 
+includes updated information on accessing LAPACK and related projects 
+via the World Wide Web.
+
+Chapter~\ref{chapcontents} (Contents of LAPACK) has been expanded to discuss
+the new routines.
+
+Chapter~\ref{chapperformance} (Performance of LAPACK) has been updated
+with performance results for version 3.0 of LAPACK.
+
+Chapter~\ref{chapaccstab} (Accuracy and Stability) has been extended
+to include error bounds for generalized least squares.
+
+Appendices~\ref{chapindexuser} and~\ref{chapindexauxil} have
+been expanded to cover the new routines.
+
+Appendix~E (LAPACK Working Notes) lists a number of new
+Working Notes, written during the LAPACK~2 and ScaLAPACK 
+projects (see below) and published by the University of Tennessee.
+The Bibliography has been updated to give
+the most recent published references.
+
+The Specifications of Routines have been extended and updated to cover
+the new routines and revisions to existing routines.
+
+The original LAPACK project was funded by the NSF. Since its completion,
+four follow-up projects, LAPACK~2, ScaLAPACK, ScaLAPACK~2 and LAPACK~3 have
+been funded in the U.S. by the NSF and ARPA in 1990--1994, 1991--1995,
+1995--1998, and 1998--2001, respectively.  
+
+In addition to making possible
+the additions and extensions in this release, these grants have 
+supported the following closely related activities.
+
+A major effort is underway
+to implement LAPACK-type algorithms for distributed memory
+\index{distributed memory} machines.
+As a result of these efforts,
+several new software items are now available on netlib.  The new
+items that have been introduced are distributed memory versions of the
+core routines from LAPACK; sparse Gaussian elimination -- SuperLU, SuperLU\_MT,
+and distributed-memory SuperLU; a fully parallel package to solve a symmetric
+positive definite sparse linear system on a message passing
+multiprocessor using Cholesky factorization\index{CAPSS}; a package based on
+Arnoldi's method for solving large-scale nonsymmetric, symmetric, and
+generalized algebraic eigenvalue problems\index{ARPACK}; 
+and templates for sparse
+iterative methods for solving $Ax=b$\index{ParPre}.
+For more information on the
+availability of each of these packages, consult the following URLs:
+\begin{quote}
+{\tt http://www.netlib.org/scalapack/} \\
+{\tt http://www.netlib.org/linalg/}
+\end{quote}
+
+Alternative language interfaces to LAPACK (or translations/conversions
+of LAPACK) are available in Fortran~95, C, and Java. 
+For more information consult Section~\ref{relsoftware} or the following URLs:
+\begin{quote}
+{\tt http://www.netlib.org/lapack90/} \\
+{\tt http://www.netlib.org/clapack/} \\
+{\tt http://www.netlib.org/java/f2j/}
+\end{quote}
+
+The performance results presented in this book were obtained using
+computer resources at various sites:
+\begin{itemize}
+
+\item
+Compaq AlphaServer DS-20, donated by Compaq Corporation, and
+located at the Innovative Computing Laboratory, in
+the Department of Computer Science, University of Tennessee, Knoxville.
+
+\item
+IBM Power~3, donated by IBM, and located at the Innovative Computing
+Laboratory, in the Department of Computer Science, University of
+Tennessee, Knoxville.
+
+\item
+Intel Pentium III, donated by Intel Corporation, and
+located at the Innovative Computing Laboratory, in
+the Department of Computer Science, University of Tennessee, Knoxville.
+
+\item
+Clusters of Pentium IIs, PowerPCs, and Alpha EV56s, located at the LIP
+(Laboratoire de l'Informatique du Parall\'{e}lisme), ENS (\'{E}cole
+Normale Sup\'{e}rieure), Lyon, France.
+
+\item
+SGI Origin 2000, located at the Army Research Laboratory
+in Aberdeen Proving Ground, Maryland, and supported by the DoD High
+Performance Computing Modernization Program ARL Major Shared Resource Center
+through Programming Environment and Training (PET) under Contract Number
+DAHC-94-96-C-0010, Raytheon E-Systems, subcontract no. AA23.
+
+\end{itemize}
+
+
+We would like to thank the following people, who were either not
+acknowledged in previous editions, or who have made significant
+additional contributions to this edition:
+ 
+Henri Casanova,
+Tzu-Yi Chen,
+David Day,
+Inderjit Dhillon,
+Mark Fahey,
+Patrick Geoffray,
+Ming Gu,
+Greg Henry,
+Nick Higham,
+Bo K{\aa}gstr\"{o}m,
+Linda Kaufman,
+John Lewis,
+Ren-Cang Li,
+Osni Marques,
+Rolf Neubert,
+Beresford Parlett,
+Antoine Petitet,
+Peter Poromaa,
+Gregorio Quintana,
+Huan Ren,
+Jeff Rutter,
+Keith Seymour,
+Vasile Sima,
+Ken Stanley,
+Xiaobai Sun,
+Fran\c{c}oise Tisseur,
+Zachary Walker, and
+Clint Whaley. \\
+
+\vspace{1in}
+
+\chapter*{Preface to the Second Edition}
+\markboth{Preface to the Second Edition}{Preface to the Second Edition}
+\addcontentsline{toc}{chapter}{Preface to the Second Edition}
+
+Since its initial public release in February 1992, LAPACK has expanded
+in both depth and breadth.  LAPACK is now available in both Fortran and C.
+The publication of this second edition of the
+Users' Guide coincides with the release of version 2.0
+of the LAPACK software.
+
+This release of LAPACK introduces
+new routines and extends the functionality of 
+existing routines.  Prominent among the new routines are 
+driver and computational routines for 
+the generalized nonsymmetric eigenproblem, 
+generalized linear least squares problems, 
+the generalized singular value decomposition, 
+a generalized banded symmetric definite eigenproblem,
+and divide and conquer methods for symmetric eigenproblems.  
+Additional computational routines include 
+the generalized QR and RQ factorizations and
+reduction of a band matrix to bidiagonal form.
+
+Added functionality has been incorporated into the expert driver
+routines that involve equilibration (xGESVX, xGBSVX, xPOSVX, xPPSVX,
+and xPBSVX).  The option FACT = 'F' now permits the user to input a
+prefactored, pre-equilibrated matrix.  The expert drivers xGESVX and xGBSVX
+now return the reciprocal of the pivot growth from Gaussian
+elimination.  xBDSQR has been modified to compute singular values of
+bidiagonal matrices much more quickly than before, provided singular
+vectors are not also wanted.
+The least squares driver
+routines xGELS, xGELSS, and xGELSX now make available the residual 
+root-sum-squares for each right hand side.  
+
+All LAPACK routines reflect the current version number with the
+date on the routine indicating when it was last modified.
+For more information on revisions to the LAPACK software or this Users'
+Guide please refer to the LAPACK {\tt release\_notes} file on netlib.
+Instructions for obtaining this file can be found in
+Chapter~\ref{chapessentials}.
+
+On-line manpages (troff files) for LAPACK routines, as well as for most of 
+the BLAS routines, are available on netlib.  Refer to
+Section~\ref{documentation} for further details.
+
+We hope that future releases of LAPACK will include routines for reordering
+eigenvalues in the generalized Schur factorization; 
+solving the generalized Sylvester
+equation; computing condition numbers for the generalized eigenproblem
+(for eigenvalues, eigenvectors, clusters of eigenvalues, and deflating
+subspaces);
+fast algorithms for the singular value decomposition based on 
+divide and conquer;
+high accuracy methods for symmetric eigenproblems and the SVD based
+on Jacobi's algorithm;
+updating and/or downdating for linear least squares problems; 
+computing singular values by bidiagonal
+bisection; and computing singular vectors by bidiagonal inverse iteration.
+
+The following additions/modifications have been made to this second edition
+of the Users' Guide:
+
+Chapter~\ref{chapessentials} (Essentials) 
+now includes information on accessing LAPACK via the World
+Wide Web.
+
+Chapter~\ref{chapcontents} (Contents of LAPACK) has been expanded to discuss
+new routines.
+
+Chapter~\ref{chapperformance} (Performance of LAPACK) has been updated
+with performance results from version 2.0 of LAPACK.  In addition,
+a new section entitled ``LAPACK Benchmark'' has been introduced to
+present timings for several driver routines.
+
+Chapter~\ref{chapaccstab} (Accuracy and Stability) has been simplified and
+rewritten.
+Much of the theory and other details have been separated into
+``Further Details'' sections.  Example Fortran code segments are
+included to demonstrate the calculation of error bounds using LAPACK.
+
+Appendices~\ref{chapindexuser},~\ref{chapindexauxil} and D have
+been expanded to cover the new routines.
+
+Appendix~E (LAPACK Working Notes) lists a number of new
+Working Notes, written during the LAPACK~2 and ScaLAPACK 
+projects (see below) and published by the University of Tennessee.
+The Bibliography has been updated to give
+the most recent published references.
+
+The Specifications of Routines have been extended and updated to cover
+the new routines and revisions to existing routines.
+
+The Bibliography and Index have been moved to the end of the book.
+The Index has been expanded into two indexes:  Index by Keyword and
+Index by Routine Name.  Occurrences of LAPACK, LINPACK, and EISPACK
+routine names have been cited in the latter index.
+
+The original LAPACK project was funded by the NSF. Since its completion,
+two follow-up projects, LAPACK~2 and ScaLAPACK, have been funded in the
+U.S. by the NSF and ARPA in 1990--1994 and 1991--1995, respectively.  
+In addition to making possible
+the additions and extensions in this release, these grants have 
+supported the following closely related activities.
+
+A major effort is underway
+to implement LAPACK-type algorithms for distributed memory
+\index{distributed memory} machines.
+As a result of these efforts,
+several new software items are now available on netlib.  The new
+items that have been introduced are distributed memory versions of the
+core routines from LAPACK; a fully parallel package to solve a symmetric
+positive definite sparse linear system on a message passing
+multiprocessor using Cholesky factorization\index{CAPSS}; a package based on
+Arnoldi's method for solving large-scale nonsymmetric, symmetric, and
+generalized algebraic eigenvalue problems\index{ARPACK}; 
+and templates for sparse
+iterative methods for solving $Ax=b$.
+For more information on the
+availability of each of these packages, consult the {\tt scalapack}
+and {\tt linalg} indexes on netlib via {\tt netlib@www.netlib.org}.
+
+We have also explored the advantages of IEEE floating point arithmetic
+\cite{ieee754} 
+in implementing linear algebra routines. The accurate rounding properties
+and ``friendly'' exception handling capabilities of IEEE arithmetic
+permit us to write faster, more robust versions of several algorithms in
+LAPACK. Since all machines do not yet implement IEEE arithmetic, these
+algorithms are not currently part of the library \cite{demmelli93},
+although we expect them to be in the future.  For more information,
+please refer to Section ~\ref{relsoftware}.
+
+LAPACK has been translated from Fortran into C and, in addition,
+a subset of the LAPACK routines has been implemented in C++\index{LAPACK++}.
+For more information on obtaining the C or C++ versions of LAPACK, consult 
+Section ~\ref{relsoftware} or the 
+{\tt clapack} or {\tt c++} indexes on netlib via {\tt netlib@www.netlib.org}. 
+
+We deeply appreciate the careful scrutiny of those individuals who
+reported mistakes, typographical errors, or shortcomings in the first
+edition.
+
+We acknowledge with gratitude the support which we have received from the
+following organizations and the help of individual members of their staff:
+Cray Research Inc.;
+NAG Ltd.
+
+We would additionally like to thank the following people, who were not
+acknowledged in the first edition, for their contributions:
+
+Fran\c{c}oise Chatelin,
+Inderjit Dhillon,
+Stan Eisenstat,
+Vince Fernando,
+Ming Gu,
+Rencang Li,
+Xiaoye Li,
+George Ostrouchov,
+Antoine Petitet,
+Chris Puscasiu,
+Huan Ren,
+Jeff Rutter,
+Ken Stanley,
+Steve Timson,
+and Clint Whaley.
+
+\vspace{1in}
+
+\chapter*{Preface to the First Edition}
+\markboth{Preface to the First Edition}{Preface to the First Edition}
+\addcontentsline{toc}{chapter}{Preface to the First Edition}
+
+The development of LAPACK was a natural step after specifications of
+the Level 2 and 3 BLAS were drawn up in 1984--86 and 1987--88.
+Research on block algorithms had been ongoing for several years,
+but agreement on the BLAS made it possible to construct a new
+software package to take the place of LINPACK and EISPACK,
+which would achieve much greater efficiency on modern high-performance
+computers.
+This also seemed to be a good time to implement a number of
+algorithmic advances that had been made since LINPACK and EISPACK
+were written in the 1970's.
+The proposal for LAPACK was submitted while the Level 3 BLAS were
+still being developed and funding was obtained from the National 
+Science Foundation (NSF) beginning in 1987.
+
+LAPACK is more than just a more efficient update of its popular predecessors.
+It extends the functionality of LINPACK and EISPACK by including:
+driver routines for linear systems;
+equilibration, iterative 
+refinement and error 
+bounds for linear systems; 
+routines for computing and re-ordering the Schur 
+factorization;
+and condition estimation routines for eigenvalue problems.
+LAPACK improves on the accuracy of the standard algorithms in EISPACK
+by including high accuracy algorithms for finding singular values and
+eigenvalues of bidiagonal and tridiagonal matrices, respectively,
+that arise in SVD and symmetric eigenvalue problems.
+
+We have tried to be consistent with our documentation and
+coding style throughout LAPACK in the hope that LAPACK will serve
+as a model for other software development efforts.
+In particular, we hope that LAPACK and this guide will
+be of value in the classroom.
+But above all, LAPACK has been designed to be used for serious
+computation, especially
+as a source of building blocks for larger applications.
+
+The LAPACK project has been a research project on achieving good
+performance in a portable way over a large class of modern computers.
+This goal has been achieved, subject to the following qualifications.
+For optimal performance, it is necessary, first, that 
+the BLAS are implemented efficiently on the
+target machine, and second, that a small number of tuning parameters
+(such as the block size) have been set to suitable values
+(reasonable default values are provided). 
+Most of the LAPACK code is written in standard Fortran 77,
+but the double precision complex data type is not part of the standard,
+so we have had to make some assumptions about the names of intrinsic
+functions that do not hold on all machines (see section~\ref{chapinstallsec1}).
+Finally, our rigorous testing suite included test problems scaled
+at the extremes of the arithmetic range,
+which can vary greatly from machine to machine.
+On some machines, we have had to restrict the range more than on others.
+
+Since most of the performance improvements in LAPACK come from
+restructuring the algorithms to use the Level 2 and 3 BLAS,
+we benefited greatly by having access from the early stages of the
+project to a complete set of BLAS developed for the CRAY machines
+by Cray Research.  Later, the BLAS library developed by IBM for the
+IBM RISC/6000 was very helpful in proving the worth of block algorithms
+and LAPACK on ``super-scalar'' workstations.  Many of our test sites, both
+computer vendors and research institutions, also worked on optimizing
+the BLAS and thus helped to get good performance from LAPACK.
+We are very pleased at the extent to which the user community has
+embraced the BLAS, not only for performance reasons, but also because
+we feel developing software around a core set of common routines
+like the BLAS is good software engineering practice.
+
+A number of technical reports were written during the development of
+LAPACK and published as LAPACK Working Notes, initially by Argonne
+National Laboratory and later by the University of Tennessee.
+Many of these reports later appeared as journal articles. 
+Appendix~E lists the LAPACK Working Notes,
+and the Bibliography gives the
+most recent published reference.
+
+A follow-on project, LAPACK~2, has been funded in the U.S. by the NSF
+and DARPA.
+One of its aims will be to add a modest amount of additional
+functionality to the current LAPACK package --- for example, 
+routines for the generalized SVD and additional routines for 
+generalized eigenproblems. These routines will be included in a future
+release of LAPACK when they are available.
+LAPACK~2 will also produce routines which implement LAPACK-type
+algorithms for distributed memory machines, routines which take special 
+advantage of IEEE arithmetic, and versions of parts of LAPACK in
+C and Fortran 90.
+The precise form of these other software packages which will
+result from LAPACK 2 has not yet been decided.
+
+As the successor to LINPACK and EISPACK, LAPACK has drawn
+heavily on both the software and documentation from those collections.
+The test and timing software for the Level 2 and 3 BLAS was
+used as a model for the LAPACK test and timing software, and in
+fact the LAPACK timing software includes the BLAS timing software
+as a subset.
+Formatting of the software and conversion from single to double
+precision was done using Toolpack/1~\cite{Toolpack}, which was
+indispensable to the project.
+We owe a great debt to our colleagues
+who have helped create the infrastructure of scientific computing on
+which LAPACK has been built.
+
+The development of LAPACK was primarily supported by NSF grant 
+ASC--8715728. 
+Zhaojun Bai
+had partial support from DARPA grant F49620--87--C0065;
+Christian Bischof was supported by the Applied
+Mathematical Sciences subprogram of the Office of Energy Research,
+U.S. Department of Energy, under contract W--31--109--Eng--38; James
+Demmel had partial support from NSF grant DCR--8552474;
+and
+Jack Dongarra had partial support from the
+Applied Mathematical Sciences subprogram
+of the Office of Energy Research, U.S.
+Department of Energy, under Contract
+DE--AC05--84OR21400.
+
+The cover was designed by Alan Edelman at UC Berkeley who discovered the matrix
+by performing Gaussian elimination on a certain 20-by-20 Hadamard matrix.
+
+We acknowledge with gratitude the support which we have received from the
+following organizations, and the help of individual members of their staff:
+Cornell Theory Center;
+Cray Research Inc.;
+IBM ECSEC Rome;
+IBM Scientific Center, Bergen;
+NAG Ltd.
+
+We also thank many, many people who have contributed code,
+criticism, ideas and encouragement.
+We wish especially to acknowledge the contributions of:
+Mario Arioli,
+Mir Assadullah,
+Jesse Barlow,
+Mel Ciment,
+Percy Deift,
+Augustin Dubrulle,
+Iain Duff,
+Alan Edelman,
+Victor Eijkhout,
+Sam Figueroa,
+Pat Gaffney,
+Nick Higham,
+Liz Jessup,
+Bo K\aa gstr\"{o}m,
+Velvel Kahan,
+Linda Kaufman,
+L.-C. Li,
+Bob Manchek,
+Peter Mayes,
+Cleve Moler,
+Beresford Parlett,
+Mick Pont,
+Giuseppe Radicati,
+Tom Rowan,
+Pete Stewart,
+Peter Tang,
+Carlos Tomei,
+Charlie Van Loan,
+Kre\v{s}imir Veseli\'{c},
+Phuong Vu,
+and Reed Wade.
+
+Finally we thank all the test sites who received three preliminary
+distributions of LAPACK software and who ran an extensive series of
+test programs and timing programs for us; their efforts have influenced
+the final version of the package in numerous ways.
+

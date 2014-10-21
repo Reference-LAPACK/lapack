@@ -1,0 +1,333 @@
+\chapter{Troubleshooting}\label{troubleshooting}\index{troubleshooting}
+
+\index{test suites}\index{reliability, see test suites}
+
+\section{Locating Source of Trouble}
+
+Successful use of LAPACK relies heavily on proper installation
+and testing of LAPACK and the BLAS.  Frequently Asked Questions (FAQ) lists
+are maintained in the {\em blas} and {\em lapack} directories on {\em netlib}
+to answer some of the most common user questions.  For the user's convenience,
+prebuilt LAPACK libraries are provided for a variety of computer
+architectures in the following URL:
+\begin{quote}
+{\tt http://www.netlib.org/lapack/archives/}
+\end{quote}
+ 
+Test suites are provided for the BLAS and LAPACK.
+It is highly recommended that each of these respective test
+suites be run prior to the use of the library.
+A comprehensive installation guide\index{documentation!installation guide} is
+provided for LAPACK.  Refer to the {\em lapack} directory on {\em netlib} for
+further information.
+
+We begin this chapter by discussing a set of first-step debugging
+hints to pinpoint where the problem is occurring.
+Following these debugging hints, we discuss the types of
+error messages that can be encountered during the execution of an LAPACK
+routine.
+ 
+If these suggestions do not help evaluate specific difficulties,
+we suggest that the user review the following ``bug report checklist'' and then
+feel free to contact the authors at {\tt lapack@cs.utk.edu}\index{bug
+reports!mailing alias}\index{reporting bugs, see bug reports}.
+The user should tell us the type of machine
+on which the tests were run, the compiler and compiler options that were
+used, and details of the BLAS library; also, the user should send a copy of
+the input file, if appropriate.
+
+\section{Bug Report Checklist}
+\label{checklist}\index{bug reports!checklist}
+ 
+When the user sends e-mail to our mailing alias, some of the first questions
+we will ask are the following:
+\begin{enumerate}
+\item Have you run the BLAS and LAPACK test suites?
+\item Have you checked the errata list ({\tt release\_notes}) on {\em netlib}?
+\begin{quote}
+{\tt http://www.netlib.org/lapack/release\_notes}
+\end{quote}
+ 
+\item If you are using an optimized BLAS library, have you
+tried using the reference implementation from {\em netlib}?
+ \begin{quote}
+ {\tt http://www.netlib.org/blas/}
+ \end{quote}
+\item Have you attempted to replicate this error using the appropriate
+LAPACK test code?
+\end{enumerate}
+ 
+\section{Installation Debugging Hints}
+\index{debugging hints!installation}
+ 
+If the user encounters difficulty in the installation process, we
+suggest the following:
+\begin{itemize}
+ \item Obtain prebuilt LAPACK library on {\em netlib}
+       for a variety of architectures.
+       \begin{quote}
+       {\tt http://www.netlib.org/lapack/archives/}
+       \end{quote}
+ \item Obtain sample {\tt make.inc} files for a variety of architectures
+       in the {\tt LAPACK/INSTALL} directory in the lapack
+       distribution tar file.
+ \item Consult the LAPACK FAQ list on {\em netlib}.
+ \item Consult the {\tt release\_notes} file in the {\em lapack} directory
+       on {\em netlib}.  This file contains a list of known difficulties
+       that have been diagnosed and corrected (or will be
+       corrected in the next release), or reported to the vendor as in the case
+       of optimized BLAS\index{debugging!release\_notes}.
+ \item Always run the BLAS test suite to ensure that
+       this library has been properly installed.  If a problem
+       is detected in the BLAS library, try linking to the reference
+       implementation in the {\em blas} directory on {\em netlib}.
+\end{itemize}
+ 
+\section{Common Errors in Calling LAPACK Routines}\label{seccommonerrors}
+
+As a first step, the user should always carefully read the leading
+comments of the LAPACK routine.  The leading comments give a detailed
+description of all input/output arguments and can be viewed in the source
+code, on the LAPACK webpage, or in this users' guide.
+
+For the benefit of less experienced programmers, we list the most
+common programming errors in calling an LAPACK routine.
+These errors may cause the LAPACK routine to report a failure,
+as described in Section~\ref{secfailures}\index{failures!common causes};
+they may cause an error to be reported by the system;
+or they may lead to wrong results --- see also
+Section~\ref{secwrongresults}.
+
+\begin{itemize}
+\item wrong number of arguments
+\item arguments in the wrong order
+\item an argument of the wrong type (especially real and complex 
+arguments of the wrong precision)
+\item wrong dimensions for an array argument
+\item insufficient space in a workspace argument
+\item failure to assign a value to an input argument
+\end{itemize}
+
+Some modern compilation systems, as well as
+software tools such as the portability checker in 
+Toolpack~\cite{Toolpack}, can check that arguments agree in number and type;
+and many compilation systems offer run-time detection
+of errors such as an array element out-of-bounds or use of an
+unassigned variable.
+
+\section{Failures Detected by LAPACK Routines}\label{secfailures}
+\index{failures}
+
+There are two ways in which an LAPACK routine may report a failure to
+complete a computation successfully.
+
+\subsection{Invalid Arguments and XERBLA}
+\index{error handler, XERBLA}\indexR{XERBLA}
+If an illegal value is supplied for one of the input arguments to
+an LAPACK routine, it will call the error handler XERBLA to write
+a message to the standard output unit of the form:
+\begin{verbatim}
+ ** On entry to SGESV  parameter number  4 had an illegal value
+\end{verbatim}
+This particular message would be caused by passing to SGESV\indexR{SGESV} a value of LDA 
+which was less than the value of the argument N.
+The documentation for SGESV states the set of acceptable input values:
+``LDA $\geq$ max(1,N).'' This is required in order that the
+\index{arguments!LDA}
+array A with leading dimension LDA can store an $n$-by-$n$ 
+matrix.
+The requirement is stated ``LDA $\geq$ max(1,N)'' 
+rather than simply
+``LDA $\geq$ N'' because LDA must always be at least 1, even if N = 0, 
+to satisfy the 
+requirements of standard Fortran; on some systems,
+a zero or negative value of LDA would cause a run-time fault.
+The arguments are checked in order, beginning with the first.
+In the above example, it may --- from the user's point of view --- be the
+value of N which is in fact wrong. 
+Invalid arguments are often caused by the kind of error listed in 
+Section~\ref{seccommonerrors}.
+
+In the model implementation of XERBLA\indexR{XERBLA} which is supplied with LAPACK,
+execution stops after the
+message; but the call to XERBLA is followed by a RETURN statement
+in the LAPACK routine, so that if the installer removes the
+STOP statement in XERBLA, the result will be an immediate exit from the
+LAPACK routine with a negative value of INFO.
+It is good practice always to check for a nonzero value of INFO
+on return from an LAPACK routine.
+\index{arguments!INFO}
+(We recommend however that XERBLA should not be modified to return control
+to the calling routine, unless absolutely
+necessary, since this would remove one of the built-in safety-features
+of LAPACK.)
+
+\subsection{Computational Failures and INFO $>$ 0}
+\index{arguments!INFO}\index{INFO}
+A positive value of INFO on return from an LAPACK routine indicates a
+failure in the course of the algorithm. Common causes are:
+\begin{itemize}
+\item a matrix is singular (to working precision);
+\item a symmetric matrix is not positive definite;
+\item an iterative algorithm for computing eigenvalues or eigenvectors
+fails to converge in the permitted number of iterations.
+\end{itemize}
+For example, if SGESVX\indexR{SGESVX} is called to solve a system of equations 
+with a coefficient matrix that is approximately singular,
+it may detect exact singularity at the $i^{th}$ stage of the $LU$
+factorization, in which case it returns INFO = $i$;
+or (more probably) it may compute an estimate of the reciprocal condition number
+that is less than machine precision, in which case it returns INFO = $n$+1.
+Again, the documentation should be consulted for a 
+description of the error.  
+
+When a failure with INFO $>$ 0 occurs, control is {\em always} returned
+to the calling program; XERBLA is {\em not} called, and no error message
+is written. 
+It is worth repeating that it is good practice always to check for
+a nonzero value of INFO on return from an LAPACK routine.
+
+A failure with INFO $>$ 0 may indicate any of the following:
+
+\begin{itemize}
+
+\item an inappropriate routine was used: 
+for example, if a routine fails because a symmetric matrix turns out not to be 
+positive definite, consider using a routine for symmetric indefinite matrices.
+
+\item a single precision routine was used when double precision was needed:
+for example, if SGESVX\indexR{SGESVX} reports approximate singularity
+(as illustrated above), the corresponding double precision routine DGESVX
+may be able to solve the problem (but nevertheless the problem is
+ill-conditioned).
+
+\item a programming error occurred in generating the data supplied
+to a routine: for example, even though theoretically a matrix should be
+well-conditioned and positive definite, a programming error in generating
+the matrix could easily destroy either of those properties.
+
+\item a programming error occurred in calling the routine, of the kind 
+listed in Section~\ref{seccommonerrors}.
+
+\end{itemize}
+
+\section{Wrong Results}\label{secwrongresults}\index{wrong results}
+
+Wrong results from LAPACK routines are most often caused by incorrect usage.
+
+It is also possible that wrong results are caused by a bug
+outside of LAPACK, in the compiler or in one of the library routines,
+such as the BLAS, that are linked with LAPACK.
+Test procedures are available for both LAPACK and the BLAS, and
+the LAPACK installation guide \cite{lawn41} should be consulted
+for descriptions of the tests and for advice on resolving problems.
+
+A list of known problems, compiler errors, and bugs in LAPACK routines is
+maintained on {\em netlib}; see Chapter~\ref{chapessentials}.
+
+Users who suspect they have found a new bug in an LAPACK routine are
+encouraged to report it promptly to the developers as directed in
+Chapter~\ref{chapessentials}.
+The bug report should include a test case, a description of
+the problem and expected results, and the actions, if any,
+that the user has already taken to fix the bug.
+
+\section{Poor Performance}
+
+LAPACK relies on an efficient implementation of the BLAS\index{BLAS}.
+We have tried to make
+the performance of LAPACK ``transportable'' by performing most of
+the computation within the Level 1, 2, and 3 BLAS, and by isolating
+all of the machine-dependent tuning parameters
+in a single integer function ILAENV\indexR{ILAENV}.
+
+To avoid poor performance\index{avoiding poor performance} from LAPACK 
+routines, note the
+following recommendations\index{performance!recommendations}:
+
+\begin{description}
+\item[BLAS:]
+One should use machine-specific optimized BLAS if they are available.
+Many manufacturers and research institutions have developed, or are
+developing, efficient versions of the BLAS for particular machines.
+The BLAS enable LAPACK routines to achieve high performance
+with transportable software.  Users are urged to determine whether such an
+implementation of the BLAS exists for their platform. When
+such an optimized implementation of the BLAS is available, it
+should be used to ensure
+optimal performance.
+If such a
+machine-specific implementation of the BLAS does not exist for a particular
+platform, one should consider installing a publicly available
+set of BLAS that requires only an efficient implementation of the
+matrix-matrix multiply BLAS routine xGEMM.  Examples of such
+implementations are \cite{dayde94a,kagstrom95b}.  A machine-specific and
+efficient implementation of the routine GEMM can be automatically
+generated by publicly available software such as \cite{atlas_sc98} and
+\cite{lawn111}.
+Although a reference implementation of the Fortran~77 BLAS is available
+from the {\em blas} directory on {\em netlib}, these routines are not
+expected to
+perform as well as a specially tuned implementation on most high-performance
+computers -- on some machines it may give much worse performance
+-- but it allows users to run LAPACK software on machines
+that do not offer any other implementation of the BLAS.
+
+\item[ILAENV:]\indexR{ILAENV} For best performance, the LAPACK routine ILAENV
+should be set with optimal tuning parameters for the machine being used.
+The version of ILAENV provided with LAPACK supplies default values
+for these parameters that give good, but not optimal, average
+case performance on a range of existing machines.
+In particular, the performance of xHSEQR is particularly sensitive to
+\indexR{SHSEQR}\indexR{CHSEQR}
+\index{performance!sensitivity}
+the correct choice of block parameters; the same applies to the driver
+routines which call xHSEQR, namely xGEES, xGEESX, xGEEV and xGEEVX.
+\indexR{SGEES}\indexR{CGEES}
+\indexR{SGEESX}\indexR{CGEESX}
+\indexR{SGEEV}\indexR{CGEEV}
+\indexR{SGEEVX}\indexR{CGEEVX}
+Further details on setting parameters in ILAENV are found in
+Section~\ref{secilaenv}.
+
+\item[LWORK $\geq$ WORK(1):]
+The performance of some routines depends on the amount of workspace
+supplied. In such cases,
+an argument, usually called WORK, is
+provided, accompanied by an integer argument LWORK specifying its
+length as a linear array. 
+On exit, WORK(1) returns the amount of workspace required to use
+the optimal tuning parameters.
+If LWORK $<$ WORK(1), then insufficient workspace was provided
+to use the optimal parameters, and the performance may be less
+than possible.
+One should check LWORK $\geq$ WORK(1) on return from
+an LAPACK routine requiring user-supplied workspace to see if
+enough workspace has been provided.
+\index{performance!LWORK}
+Note that the computation is performed correctly, even if the amount of
+workspace is less than optimal, unless LWORK is reported as an
+invalid value by a call to XERBLA as described in Section~\ref{secfailures}.
+
+\item[xLAMCH:]\indexR{SLAMCH} Users should beware of the high cost of the {\em first}
+call to the LAPACK auxiliary routine xLAMCH,
+\index{installation!xLAMCH!cost of}
+which computes
+machine characteristics such as epsilon and the
+smallest invertible number.
+The first call dynamically determines a set of parameters defining
+the machine's arithmetic, but these values are saved and subsequent
+calls incur only a trivial cost.
+For performance testing, the initial cost can be hidden by 
+including a call to xLAMCH in the main program, before any calls to
+LAPACK routines that will be timed.  A sample use of SLAMCH\indexR{SLAMCH} is
+\begin{verbatim}
+      XXXXXX = SLAMCH( 'P' )
+\end{verbatim}
+A cleaner but less portable solution is for the installer to
+save the values computed by xLAMCH for a specific machine
+and create a new version of xLAMCH with these constants set in
+DATA statements, taking care that no accuracy is lost in the
+translation.
+\end{description}
+

@@ -1,0 +1,282 @@
+\chapter{Quick Reference\index{BLAS!quick reference guide} 
+Guide to the BLAS}\label{chapqrefblas}
+\markboth{Appendix C:  Quick Reference Guide to the BLAS}{Appendix C:  Quick Reference Guide to the BLAS}
+
+\footnotesize
+
+\newpage
+{\bf Level 1 BLAS}
+\begin{verbatim}
+                   dim scalar vector   vector   scalars              5-element prefixes
+                                                                     array
+
+SUBROUTINE _ROTG (                                      A, B, C, S )          S, D
+SUBROUTINE _ROTMG(                              D1, D2, A, B,        PARAM )  S, D
+SUBROUTINE _ROT  ( N,         X, INCX, Y, INCY,               C, S )          S, D
+SUBROUTINE _ROTM ( N,         X, INCX, Y, INCY,                      PARAM )  S, D
+SUBROUTINE _SWAP ( N,         X, INCX, Y, INCY )                              S, D, C, Z
+SUBROUTINE _SCAL ( N,  ALPHA, X, INCX )                                       S, D, C, Z, CS, ZD
+SUBROUTINE _COPY ( N,         X, INCX, Y, INCY )                              S, D, C, Z
+SUBROUTINE _AXPY ( N,  ALPHA, X, INCX, Y, INCY )                              S, D, C, Z
+FUNCTION   _DOT  ( N,         X, INCX, Y, INCY )                              S, D, DS
+FUNCTION   _DOTU ( N,         X, INCX, Y, INCY )                              C, Z
+FUNCTION   _DOTC ( N,         X, INCX, Y, INCY )                              C, Z
+FUNCTION   __DOT ( N,  ALPHA, X, INCX, Y, INCY )                              SDS
+FUNCTION   _NRM2 ( N,         X, INCX )                                       S, D, SC, DZ
+FUNCTION   _ASUM ( N,         X, INCX )                                       S, D, SC, DZ
+FUNCTION   I_AMAX( N,         X, INCX )                                       S, D, C, Z
+\end{verbatim}
+
+\vspace{0.2in}
+
+\begin{tabular}{l l|l}
+Name   &Operation                     & Prefixes \\
+\hline
+\_ROTG & Generate plane rotation 
+   & S, D \\
+\_ROTMG & Generate modified plane rotation
+   & S, D \\
+\_ROT & Apply plane rotation
+   & S, D \\
+\_ROTM & Apply modified plane rotation
+   & S, D \\
+\_SWAP & $ x \leftrightarrow y $
+   & S, D, C, Z \\
+\_SCAL & $ x \leftarrow \alpha x $
+   & S, D, C, Z, CS, ZD \\
+\_COPY & $ y \leftarrow x $
+   & S, D, C, Z \\
+\_AXPY & $ y \leftarrow \alpha x + y $
+   & S, D, C, Z \\
+\_DOT & $ dot \leftarrow x ^ {T} y $
+   & S, D, DS \\
+\_DOTU & $ dot \leftarrow x ^ {T} y $
+   & C, Z \\
+\_DOTC & $ dot \leftarrow x ^ {H} y $
+   & C, Z \\
+\_\_DOT & $ dot \leftarrow \alpha + x ^ {T} y $
+   & SDS \\
+\_NRM2 & $ nrm2 \leftarrow || x || _ {2} $
+   & S, D, SC, DZ \\
+\_ASUM & $ asum \leftarrow || re( x ) || _ {1}  + || im( x ) || _ {1} $
+   & S, D, SC, DZ \\
+I\_AMAX & $ amax \leftarrow 1^{st} k \ni | re( x _ {k} ) |  + | im( x _ {k} ) | $
+   & S, D, C, Z \\
+\vspace{.33in}
+& \verb+            + $ = max( | re( x _ {i} ) |  + | im( x _ {i} ) | ) $ \\
+\end{tabular}
+
+\vspace*{\fill}
+\pagebreak 
+
+{\bf Level 2 BLAS}
+\begin{verbatim}
+        options            dim   b-width scalar matrix  vector   scalar vector   prefixes
+
+_GEMV (        TRANS,      M, N,         ALPHA, A, LDA, X, INCX, BETA,  Y, INCY ) S, D, C, Z
+_GBMV (        TRANS,      M, N, KL, KU, ALPHA, A, LDA, X, INCX, BETA,  Y, INCY ) S, D, C, Z
+_HEMV ( UPLO,                 N,         ALPHA, A, LDA, X, INCX, BETA,  Y, INCY ) C, Z
+_HBMV ( UPLO,                 N, K,      ALPHA, A, LDA, X, INCX, BETA,  Y, INCY ) C, Z
+_HPMV ( UPLO,                 N,         ALPHA, AP,     X, INCX, BETA,  Y, INCY ) C, Z
+_SYMV ( UPLO,                 N,         ALPHA, A, LDA, X, INCX, BETA,  Y, INCY ) S, D
+_SBMV ( UPLO,                 N, K,      ALPHA, A, LDA, X, INCX, BETA,  Y, INCY ) S, D
+_SPMV ( UPLO,                 N,         ALPHA, AP,     X, INCX, BETA,  Y, INCY ) S, D
+_TRMV ( UPLO, TRANS, DIAG,    N,                A, LDA, X, INCX )                 S, D, C, Z
+_TBMV ( UPLO, TRANS, DIAG,    N, K,             A, LDA, X, INCX )                 S, D, C, Z
+_TPMV ( UPLO, TRANS, DIAG,    N,                AP,     X, INCX )                 S, D, C, Z
+_TRSV ( UPLO, TRANS, DIAG,    N,                A, LDA, X, INCX )                 S, D, C, Z
+_TBSV ( UPLO, TRANS, DIAG,    N, K,             A, LDA, X, INCX )                 S, D, C, Z
+_TPSV ( UPLO, TRANS, DIAG,    N,                AP,     X, INCX )                 S, D, C, Z
+
+        options            dim   scalar vector   vector   matrix  prefixes
+
+_GER  (                    M, N, ALPHA, X, INCX, Y, INCY, A, LDA ) S, D
+_GERU (                    M, N, ALPHA, X, INCX, Y, INCY, A, LDA ) C, Z
+_GERC (                    M, N, ALPHA, X, INCX, Y, INCY, A, LDA ) C, Z
+_HER  ( UPLO,                 N, ALPHA, X, INCX,          A, LDA ) C, Z
+_HPR  ( UPLO,                 N, ALPHA, X, INCX,          AP )     C, Z
+_HER2 ( UPLO,                 N, ALPHA, X, INCX, Y, INCY, A, LDA ) C, Z
+_HPR2 ( UPLO,                 N, ALPHA, X, INCX, Y, INCY, AP )     C, Z
+_SYR  ( UPLO,                 N, ALPHA, X, INCX,          A, LDA ) S, D
+_SPR  ( UPLO,                 N, ALPHA, X, INCX,          AP )     S, D
+_SYR2 ( UPLO,                 N, ALPHA, X, INCX, Y, INCY, A, LDA ) S, D
+_SPR2 ( UPLO,                 N, ALPHA, X, INCX, Y, INCY, AP )     S, D
+\end{verbatim}
+
+{\bf Level 3 BLAS}
+\begin{verbatim}
+        options                          dim      scalar matrix  matrix  scalar matrix  prefixes
+
+_GEMM (             TRANSA, TRANSB,      M, N, K, ALPHA, A, LDA, B, LDB, BETA,  C, LDC ) S, D, C, Z
+_SYMM ( SIDE, UPLO,                      M, N,    ALPHA, A, LDA, B, LDB, BETA,  C, LDC ) S, D, C, Z
+_HEMM ( SIDE, UPLO,                      M, N,    ALPHA, A, LDA, B, LDB, BETA,  C, LDC ) C, Z
+_SYRK (       UPLO, TRANS,                  N, K, ALPHA, A, LDA,         BETA,  C, LDC ) S, D, C, Z
+_HERK (       UPLO, TRANS,                  N, K, ALPHA, A, LDA,         BETA,  C, LDC ) C, Z
+_SYR2K(       UPLO, TRANS,                  N, K, ALPHA, A, LDA, B, LDB, BETA,  C, LDC ) S, D, C, Z
+_HER2K(       UPLO, TRANS,                  N, K, ALPHA, A, LDA, B, LDB, BETA,  C, LDC ) C, Z
+_TRMM ( SIDE, UPLO, TRANSA,        DIAG, M, N,    ALPHA, A, LDA, B, LDB )                S, D, C, Z
+_TRSM ( SIDE, UPLO, TRANSA,        DIAG, M, N,    ALPHA, A, LDA, B, LDB )                S, D, C, Z
+\end{verbatim}
+
+\vspace*{\fill}
+\pagebreak 
+\begin{tabular}{l l|l}
+Name   &Operation                     & Prefixes \\
+\hline
+\_GEMV & $ y \leftarrow \alpha A x + \beta y , y \leftarrow \alpha A ^ {T} x + \beta y , y \leftarrow \alpha A ^{H} x + \beta y , A - m \times n $
+   & S, D, C, Z \\
+\_GBMV & $ y \leftarrow \alpha A x + \beta y , y \leftarrow \alpha A ^ {T} x + \beta y , y \leftarrow \alpha A ^{H} x + \beta y , A - m \times n $
+   & S, D, C, Z \\
+\_HEMV & $ y \leftarrow \alpha A x + \beta y $
+   & C, Z \\
+\_HBMV & $ y \leftarrow \alpha A x + \beta y $
+   & C, Z \\
+\_HPMV & $ y \leftarrow \alpha A x + \beta y $
+   & C, Z \\
+\_SYMV & $ y \leftarrow \alpha A x + \beta y $
+   & S, D \\
+\_SBMV & $ y \leftarrow \alpha A x + \beta y $
+   & S, D \\
+\_SPMV & $ y \leftarrow \alpha A x + \beta y $
+   & S, D \\
+\_TRMV & $ x \leftarrow A x, x \leftarrow A ^{T} x, x \leftarrow A ^ {H} x $
+   & S, D, C, Z \\
+\_TBMV & $ x \leftarrow A x, x \leftarrow A ^{T} x, x \leftarrow A ^ {H} x $
+   & S, D, C, Z \\
+\_TPMV & $ x \leftarrow A x, x \leftarrow A ^{T} x, x \leftarrow A ^ {H} x $
+   & S, D, C, Z \\
+\_TRSV & $ x \leftarrow A ^{-1} x, x \leftarrow A ^{-T} x, x \leftarrow A ^ {-H} x $
+   & S, D, C, Z \\
+\_TBSV & $ x \leftarrow A ^{-1} x, x \leftarrow A ^{-T} x, x \leftarrow A ^ {-H} x $
+   & S, D, C, Z \\
+\vspace{.25in}
+\_TPSV & $ x \leftarrow A ^{-1} x, x \leftarrow A ^{-T} x, x \leftarrow A ^ {-H} x $
+   & S, D, C, Z \\
+
+\_GER & $ A \leftarrow \alpha x y ^{T} + A , A - m \times n $
+   & S, D \\
+\_GERU & $ A \leftarrow \alpha x y ^{T} + A , A - m \times n $
+   & C, Z \\
+\_GERC & $ A \leftarrow \alpha x y ^{H} + A , A - m \times n $
+   & C, Z \\
+\_HER & $ A \leftarrow \alpha x x ^{H} + A $
+   & C, Z \\
+\_HPR & $ A \leftarrow \alpha x x ^{H} + A $
+   & C, Z \\
+\_HER2 & $ A \leftarrow \alpha x y ^{H} + y ( \alpha x ) ^ {H} + A $
+   & C, Z \\
+\_HPR2 & $ A \leftarrow \alpha x y ^{H} + y ( \alpha x ) ^ {H} + A $
+   & C, Z \\
+\_SYR & $ A \leftarrow \alpha x x ^{T} + A $
+   & S, D \\
+\_SPR & $ A \leftarrow \alpha x x ^{T} + A $
+   & S, D \\
+\_SYR2 & $ A \leftarrow \alpha x y ^{T} + \alpha y x ^ {T} + A $
+   & S, D \\
+\vspace{.49in}
+\_SPR2 & $ A \leftarrow \alpha x y ^{T} + \alpha y x ^ {T} + A $
+   & S, D \\
+\end{tabular}
+
+\begin{tabular}{l l|l}
+Name   &Operation                     & Prefixes \\
+\hline
+\_GEMM & $ C \leftarrow \alpha op(A)op(B) + \beta C, op(X) = X, X ^{T}, X ^{H}, C - m \times n $
+   & S, D, C, Z \\
+\_SYMM & $ C \leftarrow \alpha AB + \beta C, C \leftarrow \alpha BA + \beta C, C - m \times n, A = A ^{T} $
+   & S, D, C, Z \\
+\_HEMM & $ C \leftarrow \alpha AB + \beta C, C \leftarrow \alpha BA + \beta C, C - m \times n, A = A ^{H} $
+   & C, Z \\
+\_SYRK & $ C \leftarrow \alpha AA ^{T} + \beta C, C \leftarrow \alpha A ^{T} A + \beta C, C - n \times n $
+   & S, D, C, Z \\
+\_HERK & $ C \leftarrow \alpha AA ^{H} + \beta C, C \leftarrow \alpha A ^{H} A + \beta C, C - n \times n $
+   & C, Z \\
+\_SYR2K & $ C \leftarrow \alpha AB ^{T} + \alpha BA ^{T} + \beta C, C \leftarrow \alpha A ^{T} B + \alpha B ^{T} A + \beta C, C - n \times n $
+   & S, D, C, Z \\
+\_HER2K & $ C \leftarrow \alpha AB ^{H} + \bar{\alpha} BA ^{H} + \beta C, C \leftarrow \alpha A ^{H} B + \bar{\alpha} B ^{H} A + \beta C, C - n \times n $
+   & C, Z \\
+\_TRMM & $ B \leftarrow \alpha op(A)B, B \leftarrow \alpha B op(A), op(A) = A, A ^{T}, A ^{H}, B - m \times n $
+   & S, D, C, Z \\
+\_TRSM & $ B \leftarrow \alpha op(A ^{-1} )B, B \leftarrow \alpha B op(A ^{-1} ), op(A) = A, A ^{T}, A ^{H}, B - m \times n $
+   & S, D, C, Z \\
+
+\end{tabular}
+
+\vspace*{\fill}
+\pagebreak 
+
+{\setlength{\textwidth}{4.0in}}
+
+\vspace{.5in}
+{\bf Notes}
+
+\vspace{.25in}
+
+{\bf Meaning of prefixes}
+
+\vspace{.25in}
+
+\begin{tabular}{l l l}
+S - REAL              &  C - COMPLEX \\
+D - DOUBLE PRECISION  &  Z - COMPLEX*16    & (this may not be supported \\
+                      &                    & by all machines) \\
+\end{tabular}
+
+\vspace{.25in}
+\noindent
+
+For the Level 2 BLAS a set of extended-precision routines with the prefixes
+ES, ED, EC, EZ may also be available.
+
+\vspace{.25in}
+
+{\bf Level 1 BLAS }
+
+\vspace{.25in}
+\noindent
+
+In addition to the listed routines there are two further 
+extended-precision dot product routines DQDOTI and \mbox{DQDOTA}.
+
+\vspace{.25in}
+
+{\bf Level 2 and Level 3 BLAS }
+
+\vspace{.25in}
+
+{\it Matrix types}
+
+\vspace{.25in}
+
+\begin {tabular}{l l l}
+GE - GEneral     &  GB - General Band \\
+SY - SYmmetric   &  SB - Symmetric Band    &  SP - Symmetric Packed \\
+HE - HErmitian   &  HB - Hermitian Band    &  HP - Hermitian Packed \\
+TR - TRiangular  &  TB - Triangular Band   &  TP - Triangular Packed \\
+\end {tabular}
+
+
+{\it Options}
+
+\vspace{.25in}
+\noindent
+
+Arguments describing options are declared as CHARACTER*1 and may be passed as character strings.
+
+\begin{tabular}{l l}
+TRANS  &  = `{\bf N}o transpose',  `{\bf T}ranspose',  `{\bf C}onjugate transpose' $( X, X ^{T}, X^{C} )$ \\
+UPLO  &  = `{\bf U}pper triangular',  `{\bf L}ower triangular'\\
+DIAG  &  = `{\bf N}on-unit triangular',  `{\bf U}nit triangular'\\
+SIDE  &  = `{\bf L}eft',  `{\bf R}ight' (A or op(A) on the left, or A or op(A)
+on the right) \\
+\end{tabular}
+
+\vspace{.25in}
+\noindent
+\begin{flushleft}
+For real matrices, TRANS = `T' and TRANS = `C' have the same meaning.\\
+For Hermitian matrices, TRANS = `T' is not allowed.\\
+For complex symmetric matrices, TRANS = `H' is not allowed.\\
+\end{flushleft}
+
+\normalsize

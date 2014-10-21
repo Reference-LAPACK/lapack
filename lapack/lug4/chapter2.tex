@@ -1,0 +1,3560 @@
+\chapter{Contents of LAPACK}\label{chapcontents}
+
+\section{Structure of LAPACK}\label{secstruct}
+
+\subsection{Levels of Routines}\label{subseclevels}
+
+The subroutines in LAPACK are classified as follows:
+
+\begin{itemize}
+
+\item {\bf driver} routines\index{driver routines}, each of which solves a complete problem,
+for example solving a system of linear equations, or computing the
+eigenvalues of a real symmetric matrix.
+Users are recommended to use a driver routine if there is one that
+meets their requirements. They are described in Section~\ref{secdrivers},
+and an index is provided in Appendix~\ref{secindexdrivers}.
+
+\item {\bf computational} routines\index{computational routines}, each of which performs a distinct
+computational task, for example an $LU$ factorization,
+or the reduction of a real symmetric matrix to tridiagonal form.
+Each driver routine calls a
+sequence of computational routines. Users (especially software developers)
+may need to call
+computational routines directly to perform tasks, or sequences of tasks,
+that cannot conveniently
+be performed by the driver routines. They are described in Section~\ref{seccomp},
+and an index is provided in Appendix~\ref{secindexcomp}.
+
+\item {\bf auxiliary} routines\index{auxiliary routines}.
+
+\end{itemize}
+
+Both driver routines and computational routines are fully described in
+this Users' Guide, but not the auxiliary routines.
+A list of the auxiliary routines, with brief descriptions
+of their functions, is given in Appendix~\ref{chapindexauxil}.
+
+All routines are thread-safe\index{thread-safety}.
+
+\subsection{Data Types and Precision}
+
+LAPACK provides the same range of functionality for {\bf real}
+and {\bf complex} data.
+For most computations there are matching
+routines, one for real and one for complex data,
+but there are a few exceptions. For example, corresponding to the routines
+for real symmetric indefinite systems of linear equations, there are
+routines for complex Hermitian and complex symmetric systems,
+because both types of complex systems occur in practical applications.
+However, there is no complex analogue of the routine for finding
+selected eigenvalues of a real symmetric tridiagonal matrix,
+because a complex Hermitian matrix can always be reduced to
+a real symmetric tridiagonal matrix.
+Matching routines for real and complex data have been coded
+to maintain a close correspondence between the two, wherever possible.
+However, in some areas (especially the nonsymmetric eigenproblem) the
+correspondence is necessarily weaker.
+
+All routines in LAPACK are provided in both {\bf single} and
+{\bf double} precision versions. The double precision versions have
+been generated automatically, using Toolpack/1~\cite{Toolpack}.
+For the sole exception to this rule, see subsection~\ref{subsecdrivelineq}.
+
+\subsection{Naming Scheme}\label{subsecnaming}\index{naming scheme}
+
+The name of each LAPACK routine is a coded specification of
+its function.
+
+All driver and computational routines\index{naming scheme!driver and
+computational} have names
+of the form {\bf XYYZZ} or {\bf XYYZZZ}, or for some more recent routines
+{\bf XYYZZZZ ... }.
+
+The first letter, {\bf X}, indicates the data type as follows:
+
+\begin{quote}
+\begin{tabular} { l l l l }
+S & REAL                      & D & DOUBLE PRECISION \\
+C & COMPLEX               & Z & DOUBLE COMPLEX \\
+\end{tabular}
+\end{quote}
+
+When we wish to refer to an LAPACK routine generically, regardless
+of data type, we replace the first letter by ``x''. Thus xGESV refers
+to either of the routines SGESV or CGESV. We ask readers who choose to work in 
+double precision, to translate S- to D- and C- to Z-.
+
+The next two letters, {\bf YY}, indicate the type of matrix (or
+of the most significant matrix)\index{type of matrix}.
+Most of these two-letter codes apply to both real and complex matrices;
+a few apply specifically to one or the other, as indicated in Table
+\ref{tabtypes}.
+
+\begin{table}[h]
+\caption{Matrix types in the LAPACK naming scheme}
+\label{tabtypes}
+\begin{center}
+\begin{tabular} { l l }
+BB  &  block bidiagonal \\
+BD  &  bidiagonal \\
+DI  &  diagonal \\
+GB  &  general band \\
+GE  &  general (i.e. unsymmetric, in some cases rectangular) \\
+GG  &  general matrices, generalized problem (i.e. a pair of general matrices) \\
+GT  &  general tridiagonal \\
+HB  &  (complex) Hermitian band \\
+HE  &  (complex) Hermitian \\
+HG  &  upper Hessenberg matrix, generalized problem (i.e. a Hessenberg and a \\
+    &  triangular matrix) \\
+HP  &  (complex) Hermitian, packed storage \\
+HS  &  upper Hessenberg \\
+OP  &  (real) orthogonal, packed storage \\
+OR  &  (real) orthogonal \\
+PB  &  symmetric or Hermitian positive definite band \\
+PF  &  symmetric or Hermitian positive definite in RFP format \\
+PO  &  symmetric or Hermitian positive definite \\
+PP  &  symmetric or Hermitian positive definite, packed storage \\
+PS  &  symmetric or Hermitian positive semi-definite \\
+PT  &  symmetric or Hermitian positive definite tridiagonal \\
+SB  &  (real) symmetric band \\
+SP  &  symmetric, packed storage \\
+ST  &  (real) symmetric tridiagonal \\
+SY  &  symmetric \\
+TB  &  triangular band \\
+TF  &  triangular in RFP format \\
+TG  &  triangular matrices, generalized problem (i.e. a pair of triangular matrices) \\
+TP  &  triangular, packed storage , or\\
+      &  triangular-pentagonal \\
+TR  &  triangular (or in some cases quasi-triangular)\\
+TZ  &  trapezoidal \\
+UN  &  (complex) unitary \\
+UP  &  (complex) unitary, packed storage \\
+\end{tabular}
+\end{center}
+\end{table}
+
+When we wish to refer to a class of routines that performs the
+same function on different types of matrices, we replace the first three
+letters by ``xyy''. Thus xyySVX refers to all the expert driver routines for
+systems of linear equations that are listed in Table~\ref{tabdrivelineq}.
+
+The last two, three or more letters indicate the computation performed\index{type of computation}.
+Their meanings will be explained in Section~\ref{seccomp}.
+For example, SGEBRD is a single precision routine that performs a
+bidiagonal reduction (BRD) of a real general matrix.
+
+All the rest of the routines are {\bf auxiliary} routines, the great majority having the
+2nd and 3rd characters -LA- (listed in Appendix~\ref{secindexauxilmisc}).
+There are three kinds of exception:
+
+\begin{itemize}
+
+\item Auxiliary routines that implement an unblocked version of a block
+algorithm have similar names to the routines that perform
+the blocked algorithm, with the 5th or 6th character (or occasionally more than 6th) being ``2''
+(listed in Appendix~\ref{secindexauxilunblocked}); for example, 
+SGETF2\indexR{SGETF2} is the unblocked version of SGETRF\indexR{SGETRF}.
+
+\item A few utility routines (listed in Appendix~\ref{secindexauxilutility}); 
+for example, the routine XERBLA\indexR{XERBLA} which prints out an error message.
+
+\item A few routines that may be
+regarded as extensions to the BLAS and are named according to the BLAS
+naming schemes (listed in Appendix~\ref{secindexauxilblasext}); for example, 
+CROT\indexR{CROT}, CSYR\indexR{CSYR}.
+
+\end{itemize}
+
+\section{Driver Routines}\label{secdrivers}
+
+This section describes the driver routines\index{driver routines}
+ in LAPACK. Further details on
+the terminology and the numerical operations they perform
+are given in
+Section~\ref{seccomp}, which describes the computational routines.
+
+\subsection{Linear Equations}\label{subsecdrivelineq}
+
+Three types of driver routines are provided for solving systems of linear
+equations\index{driver routines!linear equations}:
+
+\begin{itemize}
+
+\item a {\bf simple} driver (name ending -SV)\index{driver routines!simple},
+which solves the system
+$AX = B$ by
+factorizing $A$ and overwriting $B$ with the solution $X$;
+
+\item an {\bf expert} driver (name ending -SVX)\index{driver routines!expert},
+which can also perform the
+following functions (some of them optionally):
+
+\begin{itemize}
+
+\item solve $A^T X = B$ or $A^H X = B$ (unless $A$ is symmetric or Hermitian);
+
+\item estimate the condition number of $A$, check for
+near-singularity and pivot growth;
+
+\item refine the solution and compute forward and backward error bounds;
+
+\item equilibrate\index{equilibration} the system if $A$ is poorly scaled.
+
+\end{itemize}
+
+The expert driver requires roughly twice as much storage as the simple
+driver in order to perform these extra functions.
+
+\item an {\bf alternative expert} driver (name ending -SVXX)\index{driver routines!alternative expert},
+(only for matrix types GE, GB, SY, HE and PO), which return a solution with a guaranteed tiny
+error $O(\epsilon)$, unless the matrix is very ill-conditioned, in which case a warning is returned.
+Refinement of the solution involves calculating the residual to at least twice the working precision,
+using routines from the XBLAS package\index{XBLAS}. 
+
+\end{itemize}
+
+All types of driver routines can handle multiple right hand sides
+(the columns of $B$).
+Different driver routines are provided to take advantage of special
+properties or storage schemes of the matrix $A$, as shown in
+Table~\ref{tabdrivelineq}.
+For symmetric/Hermitian matrices, there is an additional driver routine
+xSYSV\_ROOK\indexR{SSYSV\_ROOK}\indexR{CSYSV\_ROOK} or
+CHESV\_ROOK\index{CHESV\_ROOK},
+which performs rook pivoting\index{rook pivoting} (bounded Bunch-Kaufman method, to be precise), 
+providing greater stability at only a small decrease in speed.
+
+The routines --GESV and --POSV are in
+{\bf mixed precision}\index{mixed precision}. Routines 
+DSGESV\indexR{DSGESV}/ZCGESV\indexR{ZCGESV} and 
+DSPOSV\indexR{DSPOSV}/ZCPOSV\indexR{ZCPOSV}
+require the problem to be presented in double precision, and return the solution
+in double precision, but do much of the internal computation in single precision;
+hence two characters denote the precision: DS- and ZC-.
+
+The driver routines cover all the functionality of the computational
+routines for linear systems\index{linear systems, solution of}, except matrix
+inversion\index{matrix inversion}. It is seldom
+necessary to compute the inverse of a matrix explicitly, and it is
+certainly not recommended as a means of solving linear systems.
+
+\begin{table}[ht]
+\caption{Driver routines for linear equations}
+\label{tabdrivelineq}
+\begin{center}
+\begin{tabular}{||l|l||l|l||      } \hline
+Type of matrix & Operation & real & complex \\ 
+and storage scheme &       &  &  \\ \hline
+general
+& simple driver                    & SGESV\indexR{SGESV}         & CGESV\indexR{CGESV}  \\
+& expert driver                   & SGESVX\indexR{SGESVX}     & CGESVX\indexR{CGESVX} \\
+& alternative expert driver & SGESVXX\indexR{SGESVXX} & CGESVXX\indexR{CGESVXX} \\
+\hline
+general band
+& simple driver                    & SGBSV\indexR{SGBSV}         & CGBSV\indexR{CGBSV}  \\
+& expert driver                   & SGBSVX\indexR{SGBSVX}     & CGBSVX\indexR{CGBSVX} \\
+& alternative expert driver & SGBSVXX\indexR{SGBSVXX} & CGBSVXX\indexR{CGBSVXX} \\
+\hline
+general tridiagonal
+& simple driver                    & SGTSV\indexR{SGTSV}          & CGTSV\indexR{CGTSV}  \\
+& expert driver                   & SGTSVX\indexR{SGTSVX}      & CGTSVX\indexR{CGTSVX} \\
+\hline
+symmetric/Hermitian
+& simple driver                    & SSYSV\indexR{SSYSV}           & CHESV\indexR{CHESV} \\
+indefinite
+& expert driver                   & SSYSVX\indexR{SSYSVX}       & CHESVX\indexR{CHESVX}  \\
+& alternative expert driver & SSYSVXX\indexR{SSYSVXX}   & CHESVXX\indexR{CHESVXX} \\
+\hline
+complex symmetric
+& simple driver                  &                                                & CSYSV\indexR{CSYSV}   \\
+& expert driver                 &                                                & CSYSVX\indexR{CSYSVX}  \\
+& alternative expert driver &                                              & CSYSVXX\indexR{CSYSVXX} \\
+\hline
+symmetric/Hermitian 
+& simple driver                  & SSYSV\_ROOK\indexR{SSYSV\_ROOK} & CHESV\_ROOK\indexR{CHESV\_ROOK}  \\
+indefinite, rook pivoting   &                                                                 & & \\
+\hline
+complex symmetric
+& simple driver                  &                                                             & CSYSV\_ROOK\indexR{CSYSV\_ROOK}  \\
+indefinite, rook pivoting    &                                                             & & \\
+\hline
+symmetric/Hermitian
+& simple driver                 & SSPSV\indexR{SSPSV}           & CHPSV\indexR{CHPSV}  \\
+indefinite (packed storage)
+& expert driver                & SSPSVX\indexR{SSPSVX}       & CHPSVX\indexR{CHPSVX} \\
+\hline
+complex symmetric
+& simple driver                &                                                & CSPSV\indexR{CSPSV}  \\
+(packed storage)
+& expert driver               &                                                & CSPSVX\indexR{CSPSVX} \\
+\hline
+symmetric/Hermitian
+& simple driver                    & SPOSV\indexR{SPOSV}         & CPOSV\indexR{CPOSV} \\
+positive definite
+& expert driver                   & SPOSVX\indexR{SPOSVX}     & CPOSVX\indexR{CPOSVX} \\
+& alternative expert driver & SPOSVXX\indexR{SPOSVXX} & CPOSVXX\indexR{CPOSVXX} \\
+\hline
+symmetric/Hermitian
+& simple driver                    & SPPSV\indexR{SPPSV}           & CPPSV\indexR{CPPSV}  \\
+positive definite (packed storage)
+& expert driver                   & SPPSVX\indexR{SPPSVX}       & CPPSVX\indexR{CPPSVX} \\
+\hline
+symmetric/Hermitian
+& simple driver                    & SPBSV\indexR{SPBSV}           & CPBSV\indexR{CPBSV}  \\
+positive definite band
+& expert driver                   & SPBSVX\indexR{SPBSVX}       & CPBSVX\indexR{CPBSVX} \\
+\hline
+symmetric/Hermitian
+& simple driver                    & SPTSV\indexR{SPTSV}          & CPTSV\indexR{CPTSV}  \\
+positive definite tridiagonal
+& expert driver                   & SPTSVX\indexR{SPTSVX}      & CPTSVX\indexR{CPTSVX}  \\
+\hline
+general
+& mixed precision driver        & DSGESV\indexR{DSGESV}     & ZCGESV\indexR{ZCGESV} \\
+\hline
+symmetric/Hermitian
+& mixed precision driver       & DSPOSV\indexR{DSPOSV}    & ZCPOSV\indexR{ZCPOSV} \\
+positive definite
+&                                       &                                               &                                            \\
+\hline  
+\end{tabular}
+\end{center}
+\end{table}
+
+\clearpage
+
+\subsection{Linear Least Squares (LLS) Problems}\label{subsecdrivellsq}
+\index{LLS}
+
+The {\bf linear least squares problem}\index{linear least squares
+problem} is:
+\begin{equation}
+\label{llsq}
+\mathop{\mbox{minimize }}_{x} \| b - A x {\|}_2
+\end{equation}
+where $A$ is an $m$-by-$n$ matrix, $b$ is a given $m$ element vector
+and $x$ is the $n$ element solution vector.
+
+In the most usual case $m \ge n$ and $\mbox{rank}(A) = n$, and in this case the
+solution to problem (\ref{llsq}) is unique,
+and the problem is also
+referred to as finding a {\bf least squares solution} to an
+{\bf overdetermined}\index{overdetermined system} system of linear equations.
+When $m < n$ and $\mbox{rank}(A) = m$, there are an infinite number
+ of solutions $x$
+which exactly satisfy $b-Ax=0$. In this case it is often useful to find
+the unique solution $x$ which minimizes $\|x\|_2$,
+and the problem
+is referred to as finding a {\bf minimum norm solution}\index{minimum
+norm solution} to an
+{\bf underdetermined}\index{underdetermined system} system of linear equations.
+
+The driver routine xGELS\indexR{SGELS}\indexR{CGELS}\index{driver routines!linear least squares}
+solves problem (\ref{llsq}) on the assumption that
+$\mbox{rank}(A) = \min(m,n)$ --- in other words, $A$ has {\bf full rank} ---
+finding a least squares solution of an overdetermined\index{overdetermined system} system
+when $m > n$, and a minimum norm solution of an underdetermined\index{underdetermined system} system
+when $m < n$.
+xGELS\indexR{SGELS}\indexR{CGELS} uses a $QR$ or $LQ$ factorization of $A$, and also allows $A$ to be
+replaced by $A^T$ in the statement of the problem (or by $A^H$ if $A$ is
+complex).
+In the general case when we may have
+$\mbox{rank}(A) < \min(m,n)$ --- in other words,
+$A$ may be {\bf rank-deficient} ---
+we seek the {\bf minimum norm least squares} solution\index{minimum norm
+least squares solution} $x$
+which minimizes both $\|x\|_2$ and $\|b - Ax{\|}_2$.
+
+The driver routines
+xGELSY\indexR{SGELSY}\indexR{CGELSY},
+xGELSS\indexR{SGELSS}\indexR{CGELSS},
+and xGELSD\indexR{SGELSD}\indexR{CGELSD},
+\index{driver routines!divide and conquer}\index{divide and conquer!least squares}
+solve this general formulation of problem~\ref{llsq},
+allowing for the possibility that $A$ is rank-deficient;
+xGELSY\indexR{SGELSY}\indexR{CGELSY} uses a
+{\bf complete orthogonal factorization} of $A$,
+while xGELSS\indexR{SGELSS}\indexR{CGELSS} uses
+the {\bf singular value decomposition} of $A$,
+and xGELSD\indexR{SGELSD}\indexR{CGELSD} uses
+the {\bf singular value decomposition} of $A$ with an algorithm based on
+divide and conquer\index{divide and conquer!least squares}.
+The subroutine xGELSD\indexR{SGELSD}\indexR{CGELSD} is significantly faster than its older counterpart xGELSS\indexR{SGELSS}\indexR{CGELSS},
+especially for large problems, but may require somewhat more workspace depending
+on the matrix dimensions.
+
+%The LLS\index{LLS} driver routines are listed in Table~\ref{tabdrivellsq}.
+
+All four routines allow several right hand side vectors $b$ and corresponding
+solutions $x$ to be handled in a single call, storing these vectors as columns
+of matrices $B$ and $X$, respectively.
+Note however that problem~\ref{llsq} is solved for
+each right hand side vector independently; this is {\it not} the same as
+finding a matrix $X$ which minimizes $\| B - A X \|_2$.
+
+\begin{table}[ht]
+\caption{Driver routines for linear least squares problems}
+\label{tabdrivellsq}
+\begin{center}
+\begin{tabular}{||l||l|l||} \hline
+Operation                                         & real & complex \\
+\hline
+solve LLS using $QR$ or $LQ$ factorization           & SGELS\indexR{SGELS}  & CGELS\indexR{CGELS}  \\
+solve LLS using complete orthogonal factorization & SGELSY\indexR{SGELSY} & CGELSY\indexR{CGELSY} \\
+solve LLS using SVD                                                 & SGELSS\indexR{SGELSS} & CGELSS\indexR{CGELSS} \\
+solve LLS using divide and conquer SVD                 & SGELSD\indexR{SGELSD} & CGELSD\indexR{CGELSD} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\clearpage
+
+\subsection{Generalized Linear Least Squares (LSE and GLM) Problems}\label{subsecdrivegllsq}
+
+Driver routines are provided for two types of generalized linear least squares
+problems.\index{linear least squares problem!generalized}
+\index{generalized linear least squares}
+\index{driver routines!generalized linear least squares}
+
+The first is
+\begin{equation}\label{eqnLSE}
+\min _{x} \|c - Ax\|_2 \;\;\; \mbox{subject to} \;\;\; B x = d
+\end{equation}
+where $A$ is an $m$-by-$n$ matrix and $B$ is a $p$-by-$n$ matrix,
+$c$ is a given $m$-vector, and $d$ is a given $p$-vector,
+with $p \leq n \leq m+p$.
+This is
+called a {\bf linear equality-constrained least squares problem (LSE)}.
+The routine xGGLSE\index{linear least squares problem!generalized!equality-constrained (LSE)}\index{equality-constrained least squares}\index{LSE}
+\indexR{SGGLSE}\indexR{CGGLSE}
+solves this problem using the generalized $RQ$
+(GRQ) factorization,\index{RQ factorization!generalized (GRQ)}\index{GRQ} on the
+assumptions that $B$ has full row rank $p$ and
+the matrix $ \left( \begin{array}{c}
+                         A \\
+                         B
+                   \end{array} \right) $ has full column rank $n$.
+Under these assumptions, the problem LSE\index{LSE} has a unique solution.
+
+The second generalized linear least squares problem is
+\begin{equation}\label{eqnGLM}
+\min _{x} \|y\|_2 \;\;\; \mbox{subject to} \;\;\; d = A x + B y
+                        \label{glm3}
+\end{equation}
+where $A$ is an $n$-by-$m$ matrix, $B$ is an $n$-by-$p$ matrix,
+and $d$ is a given $n$-vector,
+with $m \leq n \leq m+p$.
+This is sometimes called a {\bf general} (Gauss-Markov) {\bf linear model problem (GLM)}.
+\index{linear least squares problem!generalized!regression model (GLM)}
+\index{regression, generalized linear}\index{GLM}
+When $B = I$, the problem reduces to an ordinary linear least squares problem.
+When $B$ is square and nonsingular, the GLM problem is equivalent to the
+{\bf weighted linear least squares problem}:\index{linear least squares problem!weighted}
+\[ \min_x \|B^{-1}(d-Ax) \|_2 \]
+The routine xGGGLM\indexR{SGGGLM}\indexR{CGGGLM}
+solves this problem using the generalized $QR$ (GQR)
+factorization,\index{QR factorization!generalized (GQR)}\index{GQR} on the
+assumptions that $A$ has full column rank $m$, and the
+matrix $( A, B )$ has full row rank $n$. Under these assumptions, the
+problem is always consistent, and there are unique solutions $x$ and $y$.
+%The driver routines for generalized linear least squares problems are listed
+%in Table~\ref{tabdrivegllsq}.
+
+\begin{table}[ht]
+\caption{Driver routines for generalized linear least squares problems}
+\label{tabdrivegllsq}
+\begin{center}
+\begin{tabular}{||l||l|l||} \hline
+Operation  & real & complex \\
+\hline
+solve LSE problem using GRQ  & SGGLSE\indexR{SGGLSE}  & CGGLSE\indexR{CGGLSE} \\
+solve GLM problem using GQR & SGGGLM\indexR{SGGGLM} & CGGGLM\indexR{CGGGLM} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\subsection{Standard Eigenvalue and Singular Value Problems}
+%\label{subsecdriveeig}
+
+\subsection{Symmetric Eigenproblems (SEP)}\label{subsecdriveeigSEP}
+\index{driver routines!symmetric eigenproblems}
+\index{SEP!symmetric eigenproblems}
+
+The {\bf symmetric eigenvalue problem} is to find the {\bf eigenvalues}\index{eigenvalue},
+$\lambda$, and corresponding {\bf eigenvectors}\index{eigenvector}, $z \ne 0$, such that
+\[
+Az = \lambda z, \quad A = A^T, \mbox{  where } A \mbox{ is real}.
+\]
+For the {\bf Hermitian eigenvalue problem} we have
+\[
+Az = \lambda z, \quad A = A^H, \mbox{ where } A \mbox{ is complex}.
+\]
+For both problems the eigenvalues $\lambda$ are real.
+
+When all eigenvalues and eigenvectors have been computed, we write:
+\[
+A = Z \Lambda Z^T  \mbox{ or } A Z = Z \Lambda
+\]
+where $\Lambda$ is a diagonal matrix whose diagonal elements are the
+eigenvalues\index{eigenvalue}, and $Z$ is an orthogonal (or unitary) matrix whose columns
+are the eigenvectors.  This is the classical {\bf spectral factorization}
+\index{spectral factorization} of $A$.
+
+There are four types of driver routines for symmetric and Hermitian eigenproblems.
+Originally LAPACK had just the simple and expert drivers described below, and
+the other two were added after improved algorithms were discovered.
+
+\begin{itemize}
+
+\item A {\bf simple} driver (name ending -EV) computes all the eigenvalues and
+      (optionally) eigenvectors.
+
+\item An {\bf expert} driver (name ending -EVX) computes all or a selected subset
+      of the eigenvalues and (optionally) eigenvectors. If few enough
+      eigenvalues or eigenvectors are desired, the expert driver is faster
+      than the simple driver.
+
+\item A {\bf divide and conquer} driver (name ending -EVD) solves the same problem
+      as the simple driver.  It is much faster than the simple driver
+      for large matrices, but uses more workspace. The name `divide and conquer'
+      refers to the underlying algorithm (see sections \ref{subseccompsep}
+      and \ref{subsecblockeig}).
+
+\item A {\bf relatively robust representation} (RRR) driver (name ending -EVR) computes
+      all or a subset of the eigenvalues and (optionally)
+      eigenvectors. It is the fastest algorithm of all (except for a few cases),
+      but achieves not quite as much accuracy. The name RRR refers to the underlying
+      algorithm (see sections \ref{subseccompsep} and \ref{subsecblockeig}).
+
+\end{itemize}
+
+Different driver routines are provided to take advantage of special
+structure or storage of the matrix $A$, as shown in
+Table~\ref{tabdrivesep}.
+
+\begin{table}[ht]
+\caption{Driver routines for the symmetric eigenproblem}
+\label{tabdrivesep}
+\begin{center}
+\begin{tabular}{||l||l|l|l||} \hline
+Function and storage scheme & real & complex \\
+\hline
+\hline
+simple driver
+& SSYEV\indexR{SSYEV}  & CHEEV\indexR{CHEEV}   \\ 
+divide and conquer driver
+& SSYEVD\indexR{SSYEVD} & CHEEVD\indexR{CHEEVD} \\
+expert driver
+& SSYEVX\indexR{SSYEVX} & CHEEVX\indexR{CHEEVX} \\
+RRR driver
+& SSYEVR\indexR{SSYEVR} & CHEEVR\indexR{CHEEVR} \\
+\hline
+simple driver (packed storage)
+& SSPEV\indexR{SSPEV}  & CHPEV\indexR{CHPEV}  \\
+divide and conquer driver (packed storage)
+& SSPEVD\indexR{SSPEVD} & CHPEVD\indexR{CHPEVD} \\
+expert driver (packed storage)
+& SSPEVX\indexR{SSPEVX} & CHPEVX\indexR{CHPEVX} \\
+\hline
+simple driver (band matrix)
+& SSBEV\indexR{SSBEV}  & CHBEV\indexR{CHBEV} \\
+divide and conquer driver (band matrix)
+& SSBEVD\indexR{SSBEVD} & CHBEVD\indexR{CHBEVD} \\
+expert driver (band matrix)
+& SSBEVX\indexR{SSBEVX} & CHBEVX\indexR{CHBEVX} \\
+\hline
+simple driver (tridiagonal matrix)
+& SSTEV\indexR{SSTEV}  &  \\
+divide and conquer driver (tridiagonal matrix)
+& SSTEVD\indexR{SSTEVD} & \\
+expert driver (tridiagonal matrix)
+& SSTEVX\indexR{SSTEVX} & \\
+RRR driver (tridiagonal matrix)
+& SSTEVR\indexR{SSTEVR} & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\pagebreak
+%\clearpage
+
+\subsection{Nonsymmetric Eigenproblems (NEP)}\label{subsecdriveeigNEP}
+
+The {\bf nonsymmetric eigenvalue problem} is to find the {\bf eigenvalues}\index{eigenvalue!NEP}\index{NEP},
+$\lambda$, and corresponding {\bf eigenvectors}\index{eigenvector!NEP}, $v \ne 0$, such that
+\[
+Av = \lambda v.
+\]
+A real matrix $A$ may have complex eigenvalues, occurring as complex conjugate
+pairs. More precisely, the vector $v$ is called a {\bf right
+eigenvector}\index{eigenvector!right} of $A$, and a vector $u\neq 0$ satisfying
+\[
+u^HA = \lambda u^H
+\]
+is called a {\bf left eigenvector}\index{eigenvector!left} of $A$.
+
+This problem can be solved
+via the {\bf Schur decomposition}\index{Schur decomposition}
+\index{Schur factorization!see Schur decomposition} of $A$,
+defined in the real case as
+\[
+A = ZTZ^T,
+\]
+where $Z$ is an orthogonal matrix and $T$ is an upper quasi-triangular matrix
+with $1$-by-$1$ and $2$-by-$2$ diagonal blocks, the $2$-by-$2$ blocks
+corresponding to complex conjugate pairs of eigenvalues of $A$. In the complex
+case the Schur decomposition is
+\[
+A = ZTZ^H,
+\]
+where $Z$ is unitary and $T$ is a complex upper triangular matrix.
+
+The columns of $Z$ are called the {\bf Schur vectors}\index{Schur vectors}.
+For each $k$
+$(1 \leq k \leq n)$, the first $k$ columns of $Z$ form an orthonormal
+\index{basis, orthonormal}
+basis for the {\bf invariant subspace} corresponding to the
+first $k$ eigenvalues on the diagonal of $T$. Because this
+basis is orthonormal, it is preferable in many
+applications to compute Schur vectors rather than
+eigenvectors. It is possible to order the Schur
+factorization so that any desired set of $k$ eigenvalues
+occupy the $k$ leading positions on the diagonal of $T$.
+
+Two pairs of drivers\index{driver routines!nonsymmetric eigenproblems} 
+are provided, one pair focusing on the Schur
+factorization, and the other pair on the eigenvalues and eigenvectors
+as shown in Table~\ref{tabdrivenep}:
+
+\begin{itemize}
+
+\item xGEES\indexR{SGEES}\indexR{CGEES}: a simple driver that computes all or part of the Schur
+factorization of $A$, with optional ordering of the eigenvalues;
+\index{eigenvalue!ordering of}
+
+\item xGEESX\indexR{SGEESX}\indexR{CGEESX}: an expert driver that can additionally compute condition
+numbers for the average of a selected subset of the eigenvalues, and for
+the corresponding right invariant subspace;
+
+\item xGEEV\indexR{SGEEV}\indexR{CGEEV}: a simple driver that computes all the eigenvalues of $A$,
+and (optionally) the right or left eigenvectors (or both);
+
+\item xGEEVX\indexR{SGEEVX}\indexR{CGEEVX}: an expert driver that can additionally balance the
+matrix to improve the conditioning of the eigenvalues and eigenvectors,
+and compute condition numbers for the eigenvalues or right eigenvectors
+(or both).
+
+\end{itemize}
+
+\begin{table}[ht]
+\caption{Driver routines for the nonsymmetric eigenproblem}
+\label{tabdrivenep}
+\begin{center}
+\begin{tabular}{||l||l|l|l||} \hline
+Function & real & complex \\
+\hline
+simple driver for Schur decomposition
+& SGEES\indexR{SGEES}  & CGEES\indexR{CGEES} \\
+expert driver for Schur decomposition
+& SGEESX\indexR{SGEESX} & CGEESX\indexR{CGEESX} \\
+simple driver for eigenvalues/vectors
+& SGEEV\indexR{SGEEV}  & CGEEV\indexR{CGEEV} \\
+expert driver for eigenvalues/vectors
+& SGEEVX\indexR{SGEEVX} & CGEEVX\indexR{CGEEVX} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{Singular Value Decomposition (SVD)}\label{subsecdriveeigSVD}
+\index{singular value decomposition (SVD)}\index{SVD}
+\index{driver routines!singular value decomposition}
+
+The {\bf singular value decomposition} of an $m$-by-$n$ matrix $A$ is given by
+\[
+A = U \Sigma V ^T, \quad (A=U\Sigma V ^H \quad \mbox{in the complex case})
+\]
+where $U$ and $V$ are orthogonal (unitary)
+and $\Sigma$ is an $m$-by-$n$ diagonal matrix with real
+diagonal elements, $\sigma _ i $, such that
+\[
+\sigma_1 \ge \sigma_2 \ge \ldots \ge \sigma_{\min (m,n)} \ge 0 .
+\]
+The $\sigma_i$ are the {\bf singular values} of $A$ and the
+first min($m,n$) columns of $U$ and $V$
+are the {\bf left} and {\bf right singular vectors} of $A$.
+\index{singular vectors!left}\index{singular vectors!right}
+
+The singular values and singular vectors satisfy:
+\[
+A v_i = \sigma_i u_i \quad \mbox{and} \quad
+A^T u_i = \sigma_i v_i \quad ({\rm or} \quad
+A^H u_i = \sigma_i v_i \quad )
+\]
+where $u_i$ and $v_i$ are the $i^{th}$ columns of $U$ and $V$ respectively.
+
+There are three types of driver routines for the SVD.  Originally LAPACK had
+just the simple driver described below, and the other two were added after
+improved algorithms were discovered.
+
+\begin{itemize}
+
+\item a {\bf simple} driver
+xGESVD\indexR{SGESVD}\indexR{CGESVD}
+computes all the singular values and (optionally) left and/or right singular vectors.
+
+\item a {\bf divide and conquer} driver \index{driver routines!divide and conquer}
+xGESDD\indexR{SGESDD}\indexR{CGESDD} \index{divide and conquer!SVD} 
+solves the same problem as the simple driver.  It is much faster than the simple driver
+for large matrices, but uses more workspace. The name `divide and conquer'
+refers to the underlying algorithm
+(see sections \ref{subseccompsep} and \ref{subsecblockeig}).
+
+\item a {\bf one-sided Jacobi} driver SGEJSV\indexR{SGEJSV}\index{one-sided Jacobi method!SVD}
+also solves the same problem, sometimes appreciably faster, sometimes appreciably slower than the other two.
+This routine is only available for real matrices, and for $m \geq n$.
+See \cite{drmacveselic1,drmacveselic2}.
+
+\end{itemize}
+
+\begin{table}[ht]
+\caption{Driver routines for the singular value decomposition}
+\label{tabdrivesvd}
+\begin{center}
+\begin{tabular}{||l||l|l||} \hline
+Function and storage scheme & real & complex \\
+\hline
+\hline
+simple driver
+& SGESVD\indexR{SGESVD} & CGESVD\indexR{CGESVD} \\
+divide and conquer driver
+& SGESDD\indexR{SGESDD} & CGESDD\indexR{CGESDD} \\
+one-sided Jacobi driver
+& SGEJSV\indexR{SGEJSV} & \\
+\hline
+simple driver (band matrix)
+& SGBSVD\indexR{SGBSVD} & CGBSVD\indexR{CGBSVD} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\clearpage
+%\pagebreak
+
+%\subsection{Generalized Eigenvalue, Singular Value and CS
+%Problems}\label{subsecdrivegeig}
+
+\subsection{Generalized Symmetric Definite Eigenproblems (GSEP)}
+\label{secGSEP}
+\index{driver routines!generalized symmetric definite eigenproblems}
+\index{GSEP!generalized symmetric definite eigenproblems}
+
+The most common type of the generalized symmetric definite eigenproblem is 
+\[
+        A z = \lambda B z ,
+\]
+where $A$ and $B$ are symmetric or Hermitian and $B$ is positive definite;
+or when all eigenvalues and eigenvectors are required:
+\[
+       A Z = B Z \Lambda,
+\]
+where $\Lambda = diag( \lambda_1, \lambda_2, ... , \lambda_n )$.
+The eigenvalues\index{eigenvalue!GSEP} $\lambda$ are always real,
+whether the problem is real or complex.
+
+The full range of types is shown in Table~\ref{tabgstdriver}, distinguished by different
+values of the argument ITYPE:
+
+\begin{table}[h]
+\caption{Generalized symmetric definite eigenproblems}
+\label{tabgstdriver}
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|} \hline
+& Type          & Equivalent type & Eigenvectors & Eigenvectors \\
+& of problem & of problem        &  and $A$        & and $B$         \\
+\hline
+ITYPE = 1 & $AZ = BZ\Lambda $                           & $ B^{-1}AZ = Z\Lambda$ &
+ $Z^T A Z = \Lambda$             & $Z^T B Z = I$ \\
+ITYPE = 2 & $AZ^{-T} = B^{-1}Z^{-T}\Lambda$ & $ABZ = Z\Lambda$         &
+ $Z^{-1}AZ^{-T} = \Lambda$ & $Z^T B Z = I$ \\
+ITYPE = 3 & $AZ = B^{-1}Z\Lambda$                   & $BAZ = Z\Lambda$         &
+ $Z^T A Z = \Lambda$            & $Z^T B^{-1} Z = I$ \\
+ITYPE = 4 & $AZ^{-T} = BZ^{-T}\Lambda$          & $AB^{-1}Z = Z\Lambda$ &
+ $Z^{-1}AZ^{-T} = \Lambda$ & $Z^T B^{-1} Z = I$ \\                                        
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+There are three types of driver routines for generalized symmetric and
+Hermitian eigenproblems.  Originally LAPACK had just the simple and expert
+drivers described below, and the other one was added after an improved algorithm
+was discovered.
+
+\begin{itemize}
+
+\item a {\bf simple} driver (name ending -GV)\index{driver routines!simple}
+      computes all the eigenvalues and (optionally) eigenvectors.
+
+\item an {\bf expert} driver
+      (name ending -GVX)\index{driver routines!expert} computes
+      all or a selected subset of the eigenvalues and (optionally) eigenvectors.
+      If few enough eigenvalues or eigenvectors are desired, the expert driver
+      is faster than the simple driver.
+
+\item a {\bf divide and conquer} driver
+      (name ending -GVD)\index{driver routines!divide and conquer} solves the
+      same problem as the simple driver. It is much faster than the simple
+      driver for large matrices, but uses more workspace. The name
+      `divide and conquer'\index{divide and conquer} refers to the underlying
+      algorithm (see sections \ref{subseccompsep} and \ref{subsecblockeig}).
+
+\end{itemize}
+
+Different driver routines are provided to take advantage of special
+structure or storage of the matrices $A$ and $B$, as shown in
+Table~\ref{tabdrivegsep}.
+
+\begin{table}[ht]
+\caption{Driver routines for the generalized symmetric definite eigenproblem}
+\label{tabdrivegsep}
+\begin{center}
+\begin{tabular}{||l||l|l||} \hline
+Function and storage scheme & real & complex \\
+\hline
+\hline
+simple driver
+& SSYGV\indexR{SSYGV}  & CHEGV\indexR{CHEGV}  \\
+divide and conquer driver
+& SSYGVD\indexR{SSYGVD}  & CHEGVD\indexR{CHEGVD} \\
+expert driver
+& SSYGVX\indexR{SSYGVX}  & CHEGVX\indexR{CHEGVX} \\ 
+\hline
+simple driver (packed storage)
+& SSPGV\indexR{SSPGV}  & CHPGV\indexR{CHPGV} \\
+divide and conquer driver (packed storage)
+& SSPGVD\indexR{SSPGVD}  & CHPGVD\indexR{CHPGVD} \\
+expert driver (packed storage)
+& SSPGVX\indexR{SSPGVX}  & CHPGVX\indexR{CHPGVX}  \\ 
+\hline
+simple driver (band matrices)
+& SSBGV3\indexR{SSBGV3}  & CHBGV3\indexR{CHBGV3} \\
+divide and conquer driver (band matrices)
+& SSBGVD3\indexR{SSBGVD3}  & CHBGVD3\indexR{CHBGVD3} \\
+expert driver (band matrices)
+& SSBGVX3\indexR{SSBGVX3}  & CHBGVX3\indexR{CHBGVX3} \\ 
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{Generalized Nonsymmetric Eigenproblems (GNEP)}
+\label{sec_gnep_driver}
+\index{driver routines!generalized nonsymmetric eigenproblems}
+\index{GNEP!generalized nonsymmetric eigenproblems}
+\index{nonsymmetric eigenproblems!generalized}\index{generalized eigenproblems!nonsymmetric}
+
+Given a matrix pair $(A, B)$, where $A$ and $B$ are square $n \times n$
+matrices, the {\bf generalized nonsymmetric eigenvalue problem} is to find
+the {\bf eigenvalues} $\lambda$ \index{eigenvalue!GNEP} and corresponding
+{\bf eigenvectors} \index{eigenvector!GNEP}
+$x \not= 0$ such that
+\[
+        A x = \lambda B x ,
+\]
+{\it or} to find the eigenvalues $\mu$ and corresponding eigenvectors
+$y \not= 0$ such that
+\[
+        \mu A y = B y.
+\]
+Note that these problems are equivalent with $\mu = 1/\lambda$ and $x=y$
+if neither $\lambda$ nor $\mu$ is zero.  In order to deal with the case
+that $\lambda$ or $\mu$ is zero, or nearly so, the LAPACK routines return
+two values, $\alpha$ and $\beta$, for each eigenvalue, such that
+$\lambda = \alpha/\beta$ and $\mu = \beta/\alpha$.
+More precisely, $x$ and $y$ are called {\bf right eigenvectors}.
+\index{eigenvector!GNEP!right}
+Vectors $u \not= 0$ or $v \not= 0$ satisfying
+\[
+        u^H A = \lambda u^H B \quad\mbox{or}\quad \mu v^H A = v^H B
+\]
+are called {\bf left eigenvectors}.
+\index{eigenvector!GNEP!left}
+
+Sometimes the following equivalent notation is used to refer to the
+generalized eigenproblem for the pair $(A,B)$: The object $A - \lambda B$,
+where $\lambda$ is an indeterminate, is called a {\bf matrix pencil}, or
+just {\bf pencil}\index{pencil}.
+So one can also refer to the generalized eigenvalues
+and eigenvectors of the pencil $A - \lambda B$.
+
+If the determinant of $A - \lambda B$ is identically
+zero for all values of $\lambda$,
+the eigenvalue problem is called {\bf singular}; otherwise it is {\bf regular}.
+\index{eigenvalue problem!singular}
+Singularity of $(A,B)$ is signaled by some $\alpha = \beta = 0$
+(in the presence of roundoff, $\alpha$ and $\beta$ may be very small).
+In this case, the eigenvalue problem is very ill-conditioned,
+\index{eigenvalue problem!ill-conditioned}
+and in fact some of the other nonzero values of $\alpha$
+and $\beta$ may be indeterminate (see section \ref{sec_singular} for further
+discussion) \cite{stewart72,wilkinson79,demmelkagstrom87}.
+The current routines in LAPACK are intended only for regular matrix pencils.
+
+The generalized nonsymmetric eigenvalue problem can be solved via the
+{\bf generalized Schur decomposition}
+\index{Schur decomposition!generalized}
+ of the matrix pair $(A, B)$, defined in the {\it real case} as
+\[
+A = Q S Z^T, \quad B = Q T Z^T
+\]
+where $Q$ and $Z$ are orthogonal matrices, $T$ is upper triangular,
+and $S$ is an upper quasi-triangular matrix with 1-by-1 and 2-by-2 diagonal
+blocks, the 2-by-2 blocks corresponding to complex conjugate pairs of eigenvalues
+of $(A, B)$.  In the {\it complex case}, the generalized Schur decomposition is
+\[
+        A = Q S Z^H, \quad B = Q T Z^H
+\]
+where $Q$ and $Z$ are unitary and $S$ and $T$ are both upper triangular. \\
+
+The columns of $Q$ and $Z$ are called {\bf left and right generalized Schur
+vectors}
+\index{Schur vectors!generalized}\index{generalized Schur vectors}
+and span pairs of {\bf deflating subspaces} of $A$ and $B$
+\cite{stewart72}.
+\index{deflating subspaces}\index{subspaces!deflating}
+Deflating subspaces are a generalization of invariant subspaces:
+\index{subspaces!invariant}\index{invariant subspaces}
+for each $k$ $(1\leq k \leq n)$, the first $k$ columns of $Z$ span a right
+deflating subspace mapped by both $A$ and $B$ into a left deflating subspace
+spanned by the first $k$ columns of $Q$.
+
+More formally, let $Q = (Q_1,\,Q_2)$ and $Z = (Z_1,\,Z_2)$ be a conformal
+partitioning with respect to the cluster of $k$ eigenvalues in the
+(1,1)-block of $(S, T)$, i.e. where $Q_1$ and $Z_1$ both have $k$ columns,
+and $S_{11}$ and $T_{11}$ below are both $k$-by-$k$,
+\[
+        \left( \begin{array}{c} Q^H_1 \\ Q^H_2 \end{array} \right)
+            (A - \lambda B) \left( \,\, Z_1 \,\,\, Z_2 \,\, \right)
+            = S - \lambda T \equiv
+        \left( \begin{array}{cc} S_{11} & S_{12} \\
+                                     0  & S_{22} \end{array} \right)
+        - \lambda \left( \begin{array}{cc} T_{11} & T_{12} \\
+                                               0  & T_{22} \end{array} \right).
+\]
+Then subspaces ${\cal{L}} = \mbox{span}(Q_1)$ and ${\cal{R}} = \mbox{span}(Z_1)$
+form a pair of (left and right) deflating subspaces associated with the
+cluster of $(S_{11},T_{11})$, satisfying ${\cal{L}} = A{\cal{R}} + B{\cal{R}}$
+and $\mbox{dim}(\cal{L}) = \mbox{dim}(\cal{R})$ \cite{stewart73,stewartsun90}.
+It is possible to order the generalized Schur form so that
+$(S_{11}, T_{11})$ has any desired subset of $k$ eigenvalues,
+taken from the set of $n$ eigenvalues of $(S,T)$.
+
+\index{driver routines!generalized nonsymmetric eigenproblems}
+As for the standard nonsymmetric eigenproblem,
+two pairs of drivers are provided,
+one pair focusing on the generalized Schur decomposition, and the other pair
+on the eigenvalues and eigenvectors as shown in Table \ref{tabdrivegnep}:
+
+\begin{itemize}
+   \item xGGES\indexR{SGGES}\indexR{CGGES}:
+         a simple driver that computes all or part of the
+         generalized Schur decomposition of $(A, B)$, with optional
+         ordering of the eigenvalues; \index{eigenvalue!generalized!ordering of}
+
+   \item xGGESX\indexR{SGGESX}\indexR{CGGESX}:
+         an expert driver that can additionally compute condition
+         numbers for the average of a selected subset of eigenvalues,
+         and for the corresponding pair of deflating subspaces;
+
+   \item xGGEV\indexR{SGGEV}\indexR{CGGEV}:
+         a simple driver that computes all the generalized
+         eigenvalues of $(A, B)$, and optionally the left or right
+         eigenvectors (or both);
+
+   \item xGGEVX\indexR{SGGEVX}\indexR{CGGEVX}:
+         an expert driver that can additionally balance the
+         matrix pair to improve the conditioning of the eigenvalues and
+         eigenvectors, and compute condition numbers for the
+         eigenvalues and/or left and right eigenvectors (or both).
+
+\end{itemize}
+
+\begin{table}[ht]
+\caption{Driver routines for the generalized nonsymmetric eigenproblem}
+\label{tabdrivegnep}
+\begin{center}
+\begin{tabular}{||l||l|l||} \hline
+Function & real & complex \\
+\hline
+\hline
+simple driver for generalized Schur decomposition
+& SGGES\indexR{SGGES}  & CGGES\indexR{CGGES} \\
+expert driver for generalized Schur decomposition
+& SGGESX\indexR{SGGESX} & CGGESX\indexR{CGGESX} \\
+simple driver for generalized eigenvalues/vectors
+& SGGEV\indexR{SGGEV}  & CGGEV\indexR{CGGEV} \\
+expert driver for generalized eigenvalues/vectors
+& SGGEVX\indexR{SGGEVX}& CGGEVX\indexR{CGGEVX} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\nopagebreak
+
+\subsection{Generalized Singular Value Decomposition (GSVD)}\label{sectionGSVDdriver}
+\index{driver routines!generalized singular value decomposition}
+\index{GSVD!generalized singular value decomposition}
+\index{generalized singular value decomposition}
+\index{singular value decomposition!generalized}
+\index{quotient singular value decomposition}
+
+The {\bf generalized (or quotient) singular value decomposition}
+of an $m$-by-$n$ matrix $A$ and a
+$p$-by-$n$ matrix $B$ is given by the pair of factorizations
+\[
+A = U \Sigma_1 [0,\; R ] Q^T
+\;\;\; {\rm and} \;\;\;
+B = V \Sigma_2 [0, \; R ] Q^T \;.
+\]
+The matrices in these factorizations have the following properties:
+\begin{itemize}
+\item $U$ is $m$-by-$m$, V is $p$-by-$p$, $Q$ is $n$-by-$n$, and
+all three matrices are orthogonal. If $A$ and
+$B$ are complex, these matrices are unitary instead of
+orthogonal, and $Q^T$ should be
+replaced by $Q^H$ in the pair of factorizations.
+\item $R$ is $r$-by-$r$, upper triangular and nonsingular.
+$[0,R]$ is $r$-by-$n$ (in other words, the $0$ is an $r$-by-$(n-r)$
+zero matrix).
+The integer $r$ is the rank of
+$\bmat{c} A \\ B \emat$, and satisfies $r \leq n$.
+\item $\Sigma_1$ is $m$-by-$r$,
+$\Sigma_2$ is $p$-by-$r$, both are real, nonnegative  and diagonal, and
+$\Sigma_1^T \Sigma_1 + \Sigma_2^T \Sigma_2 = I$.
+Write
+$\Sigma_1^T \Sigma_1 = {\rm diag} ( \alpha_1^2 , \ldots , \alpha_r^2 )$ and
+$\Sigma_2^T \Sigma_2 = {\rm diag} ( \beta_1^2 , \ldots , \beta_r^2 )$,
+where $\alpha_i$ and $\beta_i$ lie in the interval from 0 to 1.
+The ratios
+$\alpha_1 / \beta_1 , \ldots ,  \alpha_r / \beta_r$
+are called the {\bf generalized singular values} of the pair $A$, $B$.
+If $\beta_i = 0$, then the generalized singular value
+\index{singular value!generalized}
+\index{generalized singular value}
+$\alpha_i / \beta_i$ is {\bf infinite}.
+\end{itemize}
+
+$\Sigma_1$ and $\Sigma_2$ have the following detailed
+structures, depending on whether $m-r \geq 0$ or
+$m-r < 0$. In the first case, $m-r \geq 0$, then
+\[
+\Sigma_1 = \bordermatrix{ & k & l \cr
+                 \hfill k & I & 0 \cr
+                 \hfill l & 0 & C \cr
+                    m-k-l & 0 & 0 }
+                 \; \; \; {\rm and} \; \; \;
+\Sigma_2 = \bordermatrix{ & k & l \cr
+                 \hfill l & 0 & S \cr
+                      p-l & 0 & 0 } \; .
+\]
+Here $l$ is the rank of $B$, $k=r-l$, $C$ and $S$ are diagonal
+matrices satisfying $C^2  + S^2 = I$, and $S$ is nonsingular.
+We may also identify
+$\alpha_1 = \cdots = \alpha_k = 1$,
+$\alpha_{k+i} = c_{ii}$ for $i=1, \ldots , l$,
+$\beta_1 = \cdots = \beta_k = 0$, and
+$\beta_{k+i} = s_{ii}$ for $i=1, \ldots , l$.
+Thus, the first $k$ generalized singular values
+$\alpha_1 / \beta_1 , \ldots , \alpha_k / \beta_k$
+are infinite, and the remaining $l$ generalized singular values
+are finite.
+
+In the second case, when $m-r < 0$,
+\[
+\Sigma_1 = \bordermatrix{ & k & m-k & k+l-m \cr
+                 \hfill k & I &  0  &   0   \cr
+                      m-k & 0 &  C  &   0   }
+\]
+and
+\[
+\Sigma_2 = \bordermatrix{ & k & m-k & k+l-m \cr
+               \hfill m-k & 0 &  S  &   0   \cr
+                    k+l-m & 0 &  0  &   I   \cr
+               \hfill p-l & 0 &  0  &   0   } \; .
+\]
+Again, $l$ is the rank of $B$, $k=r-l$, $C$ and $S$ are diagonal
+matrices satisfying $C^2 + S^2 = I$, $S$ is nonsingular,
+and we may identify
+$\alpha_1 = \cdots = \alpha_k = 1$,
+$\alpha_{k+i} = c_{ii}$ for $i=1, \ldots , m-k$,
+$\alpha_{m+1} = \cdots = \alpha_r = 0$,
+$\beta_1 = \cdots = \beta_k = 0$,
+$\beta_{k+i} = s_{ii}$ for $i=1, \ldots , m-k$, and
+$\beta_{m+1} = \cdots = \beta_r = 1$.
+Thus, the first $k$ generalized singular values
+$\alpha_1 / \beta_1 , \ldots , \alpha_k / \beta_k$
+are infinite, and the remaining $l$ generalized singular values
+are finite.
+
+Here are some important special cases of the generalized singular value
+decomposition.
+\index{generalized singular value decomposition!special cases}
+\index{singular value decomposition!generalized!special cases}
+
+\begin{enumerate}
+
+\item If $B$ is square and nonsingular, then $r=n$ and the
+generalized singular value decomposition of $A$ and $B$ is equivalent
+to the singular value decomposition of $AB^{-1}$, where the singular
+values of $AB^{-1}$ are equal to the generalized singular values of the
+pair $A$, $B$:
+\[
+AB^{-1} = (U \Sigma_1 R Q^T)(V \Sigma_2 R Q^T)^{-1} =
+U ( \Sigma_1 \Sigma_2^{-1} ) V^T \; \; .
+\]
+
+\item If the columns of $(A^T \; B^T)^T$ are orthonormal, then $r=n$, $R=I$ and the
+generalized
+singular value decomposition of $A$ and $B$ is equivalent to the CS
+(Cosine-Sine) decomposition of $(A^T \; B^T)^T$ \cite{GVL2} (see section~\ref{secCSdriver}):
+\index{CS decomposition}
+\[
+\bmat{c} A \\ B \emat = \bmat{cc} U & 0 \\ 0 & V \emat
+\bmat{c} \Sigma_1 \\ \Sigma_2 \emat Q^T \; \; .
+\]
+
+\item The generalized eigenvalues and eigenvectors of $A^TA - \lambda B^TB$
+can be expressed in terms of the generalized singular value decomposition:
+Let
+\[
+X = Q \bmat{cc} I & 0 \\ 0 & R^{-1} \emat \; \; .
+\]
+Then
+\[
+X^T A^T A X = \left( \begin{array}{cc}
+                       0 & 0   \\
+                       0 & \Sigma^T_1 \Sigma_1
+                       \end{array} \right) \;\; {\rm and} \;\;
+X^T B^T B X = \left( \begin{array}{cc}
+                       0 & 0   \\
+                       0 & \Sigma^T_2 \Sigma_2
+                       \end{array} \right).
+\]
+Therefore, the columns of $X$ are the eigenvectors of
+$A^T A - \lambda  B^T B$, and the ``nontrivial'' eigenvalues are the
+squares of the generalized singular values (see also section~\ref{secGSEP}).
+``Trivial'' eigenvalues
+are those corresponding to the leading $n-r$ columns of $X$,
+which span the common null space of $A^T A$ and $B^T B$.
+\index{eigenvalue!nontrivial}
+\index{eigenvalue!trivial}
+The ``trivial eigenvalues'' are not well defined. (If we tried
+to compute the trivial eigenvalues in the same way as the nontrivial
+ones, that is by taking ratios of the leading $n-r$ diagonal entries
+of $X^T A^T AX$ and $X^T B^T B X$, we would get 0/0. For a detailed
+mathematical discussion of this decomposition, see the discussion of
+the Kronecker Canonical Form in \cite{gantmacher}.)
+
+\end{enumerate}
+
+A single driver routine xGGSVD\indexR{SGGSVD}\indexR{CGGSVD} computes the generalized
+singular value decomposition\index{singular value
+decomposition!generalized} of $A$ and $B$ (see Table~\ref{tabdrivegsvd}).
+The method is based on the method described in
+\cite{paige86a,baidemmel92b,baizha93}.
+
+\begin{table}[ht]
+\caption{Driver routines for the generalized singular value decomposition}
+\label{tabdrivegsvd}
+\begin{center}
+\begin{tabular}{||l||l|l||} \hline
+Function & real & complex \\
+\hline
+\hline
+generalized singular values/vectors
+& SGGSVD\indexR{SGGSVD} & CGGSVD\indexR{CGGSVD} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{CS Decomposition}\label{secCSdriver}
+\index{driver routines!CS decomposition}
+\index{CS decomposition}
+
+Let $X$ be a real orthogonal (or complex unitary) matrix of order $m$, 
+that has been partitioned into a 2-by-2 block structure.
+Then $X$ has a {\bf complete CS decomposition}\index{CS decomposition!complete}:
+
+
+\begin{eqnarray*}
+X 
+=  \bordermatrix{         &     q      &   m-q   \cr
+                         \hfill   p   & X_{11} & X_{12} \cr
+                         \hfill m-p & X_{21} & X_{22} }
+\end{eqnarray*}
+\begin{eqnarray*}
+=  \bordermatrix{         &    p     &    m-p   \cr
+                         \hfill   p   & U_{1} &             \cr
+                         \hfill m-p &            & U_{2}  }
+     \bordermatrix{           &     & r  &    &    &  r  &      \cr
+                       \hfill          &   I & 0 & 0 & 0 &  0  &  0  \cr 
+                       \hfill     r    &  0 & C & 0 & 0 & -S &  0  \cr 
+                       \hfill          &  0 & 0 & 0 &  0 &  0 &  -I  \cr 
+                       \hfill          &  0 & 0 & 0 &  I &   0 &   0 \cr
+                       \hfill     r    &  0 & S & 0 & 0 &   C &  0 \cr
+                       \hfill          &  0 & 0 & I  & 0 &   0 &  0 }
+        \bordermatrix{        &     q         &    m-q   \cr
+                         \hfill   q   & V_{1}^* &             \cr
+                         \hfill m-q &                & V_{2}^*  }
+ \end{eqnarray*}
+
+Here $0 \leq p \leq m$, $0 \leq q \leq m$ and $r = \min(p,q,m-p,m-q)$;
+$U_{1}$, $U_{2}$, $V_{1}$ and $V_{2}$ are orthogonal (or complex unitary);
+$C = {\rm diag}(\cos(\theta_{1}), \ldots , \cos(\theta_{r}) $ and
+$S = {\rm diag}(\sin(\theta_{1}), \ldots , \sin(\theta_{r}) $,
+where $\theta_{1}, \ldots , \theta_{r} \in [0,\pi/2]$.
+
+Most commonly available CS algorithms compute the {\bf 2-by-1 CS decomposition}
+\index{CS decomposition!2-by-1}
+of a matrix $X$ with orthonormal columns, partitioned into a 2-by-1 block stucture:
+
+\begin{eqnarray*}
+X
+=  \bordermatrix{         &     q      \cr
+                         \hfill   p   & X_{11} \cr
+                         \hfill m-p & X_{21} } 
+=  \bordermatrix{         &    p     &    m-p   \cr
+                         \hfill   p   & U_{1} &             \cr
+                         \hfill m-p &            & U_{2}  }
+     \bordermatrix{           &     & r  &     \cr
+                       \hfill          &   I & 0 & 0  \cr 
+                       \hfill     r    &  0 & C & 0 \cr 
+                       \hfill          &  0 & 0 & 0  \cr 
+                       \hfill          &  0 & 0 & 0 \cr
+                       \hfill     r    &  0 & S & 0 \cr
+                       \hfill          &  0 & 0 & I  }
+        \bordermatrix{        &     q     \cr
+                         \hfill   q   &     V^*     }
+ \end{eqnarray*}
+ 
+\begin{table}[ht]
+\caption{Driver routines for the CS decomposition}
+\label{tabdrivecs}
+\begin{center}
+\begin{tabular}{||l||l|l||} \hline
+Function & real & complex \\
+\hline
+\hline
+complete decomposition 
+& SORCSD\indexR{SORCSD} & CUNCSD\indexR{CUNCSD} \\
+2-by-1 decomposition
+& SORCSD2BY1\indexR{SORCSD2BY1} & CUNCSD2BY1\indexR{CUNCSD2BY1} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\clearpage
+
+\section{Computational Routines}\label{seccomp}\index{computational routines}
+
+\subsection{Linear Equations}\label{subseccomplineq}
+\index{computational routines!linear equations}
+
+We use the standard notation for a system of simultaneous linear\index{linear systems, solution of}
+equations\index{linear equations}:
+\begin{equation}
+  A x = b        \label{Axb1}
+\end{equation}
+where $A$ is the {\bf coefficient matrix}, $b$ is the {\bf right hand side}, and $x$ is the {\bf solution}.
+In (\ref{Axb1}) $A$ is assumed tobe a square matrix of order $n$,
+but some of the individual routines allow $A$ to be rectangular.
+If there are several right hand sides, we write
+\begin{equation}
+  A X = B        \label{AXB}
+\end{equation}
+where the columns of $B$ are the individual right hand sides,
+and the columns of $X$ are the corresponding solutions.
+The basic task is to compute $X$, given $A$ and $B$.
+
+If $A$ is upper or lower {\bf triangular}, -TR-, -TP- or -TB- routines, (\ref{Axb1}) can be solved by a straightforward
+process of backward or forward substitution.
+
+Otherwise, the solution is obtained after first factorizing $A$ as a product of
+triangular matrices (and possibly also a diagonal matrix or permutation matrix).
+The form of the factorization depends on the properties of the matrix $A$.
+LAPACK provides routines for the following types of matrices, based on
+the stated\index{LU factorization!matrix types} factorizations:
+
+\begin{itemize}
+
+\item {\bf general} matrices\index{LU factorization} , -GE- routines ($LU$ factorization with partial pivoting):
+\[ A = PLU \]
+where $P$ is a permutation matrix, $L$ is lower triangular with unit
+diagonal elements (lower trapezoidal if $m > n$), and U is upper
+triangular (upper trapezoidal if $m < n$).
+
+\item {\bf general band} matrices, -GB- routines ($LU$ factorization with partial pivoting):
+If $A$ is $m$-by-$n$ with $kl$ subdiagonals and $ku$ superdiagonals,
+the factorization is
+\[ A = LU \]
+where $L$ is a product of permutation and unit lower triangular
+matrices with $kl$ subdiagonals, and $U$ is upper triangular with
+$kl+ku$ superdiagonals.
+
+\item {\bf general tridiagonal} matrices, -GT- routines ($LU$ factorization with partial pivoting):
+If $A$ has 1 subdiagonal and 1 superdiagonal, the factorization is
+\[ A = LU \]
+where $L$ is a product of permutation and unit lower bidiagonal matrices,
+and $U$ is upper triangular with 2 superdiagonals.
+
+\item {\bf symmetric and Hermitian} indefinite matrices, -SY- and -HE- routines (symmetric indefinite
+factorization)\index{symmetric indefinite factorization}:
+\[ A = U D U^T \; \; {\rm or} \; \; A = L D L^T \mbox{(in the symmetric case)}\]
+\[ A = U D U^H \; \; {\rm or} \; \; A = L D L^H \mbox{(in the Hermitian case)}\]
+where $U$ or $L$ is a product of permutation and unit upper or lower
+triangular matrices, and $D$ is symmetric and block diagonal with diagonal
+blocks of order 1 or 2.
+
+\item {\bf symmetric and Hermitian} indefinite matrices with {\bf rook pivoting}, -SY---\_ROOK
+and -HE---\_ROOK routines\index{rook pivoting}\index{bounded Bunch-Kaufman pivoting}:
+similar to the item on -SY- and -HE- routines, but with the added precaution of bounded Bunch-Kaufman pivoting in the
+factorization which yields greater stability;
+symmetric rook pivoting usually costs only $O(n^{2})$ comparisons
+(although matrices can be constructed which require $O(n^{3})$).
+See \cite{ashcraftetal98,higham02}.
+ 
+\item {\bf symmetric and Hermitian} indefinite matrices in {\bf packed} storage, -SP- and -HP- routines
+(symmetric indefinite factorization).
+Similar to the item on -SY- and -HE- routines: they use only half as much storage, but can only use Level 2 BLAS,
+so typically run much more slowly.
+See section~\ref{subsecpacked} for details of the storage scheme.
+
+\item {\bf symmetric and Hermitian positive definite} matrices, -PO- routines (Cholesky factorization)
+\index{positive definite matrices}\index{Cholesky factorization}:
+\[ A = U^{T}U \; \; {\rm or}\; \; A = LL^{T} \mbox{(in the symmetric case)}\]
+\[ A = U^{H}U \; \; {\rm or}\; \; A = LL^{H} \mbox{(in the Hermitian case)}\]
+where $U$ is an upper triangular matrix and $L$ is lower triangular.
+
+\item {\bf symmetric and Hermitian positive definite} matrices in {\bf packed} storage, -PP- routines
+(Cholesky factorization).
+Similar to the preceding item on -PO- routines: they use only half as much storage, but can only use Level 2 BLAS,
+so typically run much more slowly.
+See section~\ref{subsecpacked} for details of the storage scheme.
+
+\item {\bf symmetric and Hermitian positive definite} matrices with the matrix $A$
+stored in {\bf Rectangular Full Packed} format\index{rectangular full packed format}
+\index{RFP format}, -PF- routines
+(Cholesky factorisation).
+They use only half as much storage, but because of the more complicated way in which the matrices are stored,
+they can use Level 3 BLAS, and so run almost as fast as the xPO- routines.
+See section~\ref{subsecrfp} for details of the storage scheme,
+and \cite{gustavsonetal08} for details of the computations.
+
+\item {\bf symmetric and Hermitian positive definite band} matrices, -PB- routines (Cholesky factorization):
+\[ A = U^{T}U \; \; {\rm or}\; \; A = LL^{T} \mbox{(in the symmetric case)}\]
+\[ A = U^{H}U \; \; {\rm or}\; \; A = LL^{H} \mbox{(in the Hermitian case)}\]
+where $A$ has $k$ superdiagonals and $k$ subdiagonals, 
+$U$ is upper triangular with $k$ superdiagonals, and $L$ is lower triangular with $k$ subdiagonals.
+
+\item {\bf symmetric and Hermitian positive definite tridiagonal} matrices, -PT- routines ($L D
+L^{T}$ factorization)\index{LDL$^T$ factorization}:
+\[ A = U^{T} D U \; \; {\rm or}\; \; A = L D L^{T} \mbox{(in the symmetric case)}\]
+\[ A = U^{H} D U \; \; {\rm or}\; \; A = L D L^{H} \mbox{(in the Hermitian case)}\]
+where $U$ is a unit upper bidiagonal matrix, $L$ is unit lower
+bidiagonal, and $D$ is diagonal.
+
+\end{itemize}
+
+While the primary use of a matrix factorization is to solve a system
+of equations, other related tasks are provided as well.
+Wherever possible, LAPACK provides routines to perform each of these
+tasks for each type of matrix and storage scheme 
+(see Tables~\ref{tabcomplineq1},~\ref{tabcomplineq2} and \ref{tabcomplineq3}).
+The following list relates the tasks  to characters 4, 5 and 6 (and > 6 in routines added recently)
+of the name of the corresponding computational routine.
+
+\begin{description}
+
+\item[xyyTRF:] factorize (obviously not needed for triangular matrices);
+\indexR{SGBTRF}\indexR{CGBTRF}
+\indexR{SGETRF}\indexR{CGETRF}
+\indexR{SGTTRF}\indexR{CGTTRF}
+\indexR{CHETRF}
+\indexR{CHETRF_ROOK}
+\indexR{CHPTRF}
+\indexR{SPBTRF}\indexR{CPBTRF}
+\indexR{SPFTRF}\indexR{CPFTRF}
+\indexR{SPOTRF}\indexR{CPOTRF}
+\indexR{SPPTRF}\indexR{CPPTRF}
+\indexR{SPSTRF}\indexR{CPSTRF}
+\indexR{SPTTRF}\indexR{CPTTRF}
+\indexR{SSPTRF}\indexR{CSPTRF}
+\indexR{SSYTRF}\indexR{CSYTRF}
+\indexR{SSYTRF_ROOK}\indexR{CSYTRF_ROOK}
+
+\item[xyyTRS:] use the factorization (or the matrix $A$ itself if it is triangular) 
+to solve (\ref{AXB}) by forward or backward substitution;
+\indexR{SGBTRS}\indexR{CGBTRS}
+\indexR{SGETRS}\indexR{CGETRS}
+\indexR{SGTTRS}\indexR{CGTTRS}
+\indexR{CHETRS}
+\indexR{CHETRS_ROOK}
+\indexR{CHPTRS}
+\indexR{SPBTRS}\indexR{CPBTRS}
+\indexR{SPFTRS}\indexR{CPFTRS}
+\indexR{SPOTRS}\indexR{CPOTRS}
+\indexR{SPPTRS}\indexR{CPPTRS}
+\indexR{SPTTRS}\indexR{CPTTRS}
+\indexR{SSPTRS}\indexR{CSPTRS}
+\indexR{SSYTRS}\indexR{CSYTRS}
+\indexR{SSYTRS_ROOK}\indexR{CSYTRS_ROOK}
+\indexR{STBTRS}\indexR{CTBTRS}
+\indexR{STPTRS}\indexR{CTPTRS}
+\indexR{STRTRS}\indexR{CTRTRS}
+
+\item[xyyCON:] estimate the reciprocal of the condition number $\kappa(A) = \|A\| . \|A^{-1} \|$;
+Higham's modification~\cite{nick2} of Hager's method~\cite{hager84} is used to 
+estimate $\|A^{-1}\|$,
+except for symmetric positive definite tridiagonal matrices
+for which it is computed directly with comparable efficiency~\cite{higham3};
+\indexR{SGBCON}\indexR{CGBCON}
+\indexR{SGECON}\indexR{CGECON}
+\indexR{SGTCON}\indexR{CGTCON}
+\indexR{CHECON}
+\indexR{CHECON_ROOK}
+\indexR{CHPCON}
+\indexR{SPBCON}\indexR{CPBCON}
+\indexR{SPOCON}\indexR{CPOCON}
+\indexR{SPPCON}\indexR{CPPCON}
+\indexR{SPTCON}\indexR{CPTCON}
+\indexR{SSPCON}\indexR{CSPCON}
+\indexR{SSYCON}\indexR{CSYCON}
+\indexR{SSYCON_ROOK}\indexR{CSYCON_ROOK}
+\indexR{STBCON}\indexR{CTBCON}
+\indexR{STPCON}\indexR{CTPCON}
+\indexR{STRCON}\indexR{CTRCON}
+
+\item[xyyRFS:] compute bounds on the error in the computed solution (returned
+by the xyyTRS routine), and refine the solution to reduce the backward error (see below)
+in the same precision as the input data;
+in particular, the residual is {\em not} computed with extra precision,
+as has been traditionally done.
+The benefit of this procedure is discussed in Section~\ref{secAx=b}.
+\indexR{SGBRFS}\indexR{CGBRFS}
+\indexR{SGERFS}\indexR{CGERFS}
+\indexR{SGTRFS}\indexR{CGTRFS}
+\indexR{CHERFS}
+\indexR{CHPRFS}
+\indexR{SPBRFS}\indexR{CPBRFS}
+\indexR{SPORFS}\indexR{CPORFS}
+\indexR{SPPRFS}\indexR{CPPRFS}
+\indexR{SPTRFS}\indexR{CPTRFS}
+\indexR{SSPRFS}\indexR{CSPRFS}
+\indexR{SSYRFS}\indexR{CSYRFS}
+\indexR{STBRFS}\indexR{CTBRFS}
+\indexR{STPRFS}\indexR{CTPRFS}
+\indexR{STRRFS}\indexR{CTRRFS}
+
+\item[xyyRFSX:] compute bounds on the error in the computed solution (returned
+by the xyyTRS routine), and refine the solution to reduce the backward error,
+in {\bf twice} the standard precision, resulting in errors of  only $O(\epsilon)$ ;
+the routines call auxiliaries from the XBLAS package to achieve this.
+See \cite{lietal02, demmeletal06}.
+\indexR{SGBRFSX}\indexR{CGBRFSX}
+\indexR{SGERFSX}\indexR{CGERFSX}
+\indexR{CHERFSX}
+\indexR{SPORFSX}\indexR{CPORFX}
+\indexR{SSYRFSX}\indexR{CSYRFSX}
+
+\item[xyyTRI:] use the factorization (or the matrix $A$ itself if it is triangular)
+to compute $A^{-1}$ (not provided for band matrices, because the inverse
+does not in general preserve bandedness);
+\indexR{SGETRI}\indexR{CGETRI}
+\indexR{CHETRI}
+\indexR{CHETRI_ROOK}
+\indexR{CHPTRI}
+\indexR{SPFTRI}\indexR{CPFTRI}
+\indexR{SPOTRI}\indexR{CPOTRI}
+\indexR{SPPTRI}\indexR{CPPTRI}
+\indexR{SSPTRI}\indexR{CSPTRI}
+\indexR{SSYTRI}\indexR{CSYTRI}
+\indexR{SSYTRI_ROOK}\indexR{CSYTRI_ROOK}
+\indexR{STFTRI}\indexR{CTFTRI}
+\indexR{STPTRI}\indexR{CTPTRI}
+\indexR{STRTRI}\indexR{CTRTRI}
+
+\item[xyyEQU:] compute scaling factors to equilibrate\index{equilibration} $A$
+(not provided for tridiagonal, symmetric indefinite, or triangular matrices). 
+These routines do not actually scale the matrices: auxiliary routines xLAQyy may be used 
+for that purpose ---
+see the code of the driver routines xyySVX for sample usage.
+\indexR{SGBEQU}\indexR{CGBEQU}
+\indexR{SGEEQU}\indexR{CGEEQU}
+\indexR{SPBEQU}\indexR{CPBEQU}
+\indexR{SPOEQU}\indexR{CPOEQU}
+\indexR{SPPEQU}\indexR{CPPEQU}
+
+\item[xyyEQUB:] compute scaling factors as in the previous item,
+but they are restricted to be powers of the base,
+and so cause no rounding errors when applied.
+\indexR{SGBEQUB}\indexR{CGBEQUB}
+\indexR{SGEEQUB}\indexR{CGEEQUB}
+\indexR{CHEEQUB}
+\indexR{SPOEQUB}\indexR{CPOEQUB}
+\indexR{SSYEQUB}\indexR{CSYEQUB}
+
+\end{description}
+
+Note that some of the above routines depend on the output of others:
+
+\begin{description}
+
+\item[xyyTRF:] may work on an equilibrated matrix produced by
+xyyEQU and xLAQyy, if yy is one of \{GE, GB, PO, PP, PB\};
+
+\item[xyyTRS:] requires the factorization returned by xyyTRF;
+
+\item[xyyCON:] requires the norm of the original matrix $A$, and the
+factorization returned by xyyTRF;
+
+\item[xyyRFS:] requires the original matrices $A$ and $B$, the factorization
+returned by xyyTRF, and the solution $X$ returned by xyyTRS;
+
+\item[xyyRFSX:] requires the same;
+
+\item[xyyTRI:] requires the factorization returned by xyyTRF.
+
+\end{description}
+
+The routine {\bf xPSTRF}\indexR{SPSTRF}\indexR{CPSTRF} computes the Cholesky factorization
+of a {\bf positive semi-definite} matrix with complete pivoting (\cite{lucas04}).
+
+\begin{table}[ht]
+\caption{Computational routines for linear equations}
+\label{tabcomplineq1}
+\begin{center}
+\begin{tabular}{||l|l||l|l||} \hline
+Type of matrix                        & Operation                             & real                                       & complex \\ 
+and storage scheme               &                                             &                                               &               \\ 
+\hline
+general                                   & factorize                               & SGETRF\indexR{SGETRF}    & CGETRF\indexR{CGETRF} \\
+                                               & solve using factorization      & SGETRS\indexR{SGETRS}    & CGETRS\indexR{CGETRS} \\
+                                               & estimate condition number   & SGECON\indexR{SGECON}  & CGECON\indexR{CGECON} \\
+                                               & error bounds for solution     & SGERFS\indexR{SGERFS}    & CGERFS\indexR{CGERFS} \\
+                                               & invert using factorization     & SGETRI\indexR{SGETRI}     & CGETRI\indexR{CGETRI} \\
+                                               & equilibrate                           & SGEEQU\indexR{SGEEQU}   & CGEEQU\indexR{CGEEQU}  \\
+                                               & error bounds in double precision
+                                                                                              & SGERFSX\indexR{SGERFSX} & CGERFSX\indexR{CGERFSX} \\
+                                               & equilibrate by powers of base
+                                                                                              & SGEEQUB\indexR{SGEEQUB}   & CGEEQUB\indexR{CGEEQUB}  \\
+\hline
+general band                          & factorize                              & SGBTRF\indexR{SGBTRF}    & CGBTRF\indexR{CGBTRF} \\
+                                               & solve using factorization     & SGBTRS\indexR{SGBTRS}    & CGBTRS\indexR{CGBTRS} \\
+                                               & estimate condition number  & SGBCON\indexR{SGBCON}  & CGBCON\indexR{CGBCON} \\
+                                               & error bounds for solution    & SGBRFS\indexR{SGBRFS}    & CGBRFS\indexR{CGBRFS} \\
+                                               & equilibrate                          & SGBEQU\indexR{SGBEQU}   & CGBEQU\indexR{CGBEQU} \\
+                                               & error bounds in double precision
+                                                                                             & SGBRFSX\indexR{SGBRFSX} & CGBRFSX\indexR{CGBRFSX} \\
+                                               & equilibrate by powers of base
+                                                                                             & SGBEQUB\indexR{SGBEQUB} & CGBEQUB\indexR{CGBEQUB} \\
+\hline
+general tridiagonal                 & factorize                              & SGTTRF\indexR{SGTTRF}    & CGTTRF\indexR{CGTTRF} \\
+                                               & solve using factorization     & SGTTRS\indexR{SGTTRS}    & CGTTRS\indexR{CGTTRS} \\
+                                               & estimate condition number  & SGTCON\indexR{SGTCON} & CGTCON\indexR{CGTCON} \\
+                                               & error bounds for solution    & SGTRFS\indexR{SGTRFS}   & CGTRFS\indexR{CGTRFS}  \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\clearpage
+
+\begin{table}[ht]
+\caption{Computational routines for linear equations (continued)}
+\label{tabcomplineq3}
+\begin{center}
+\begin{tabular}{||l|l||l|l||} \hline
+Type of matrix                        & Operation                             & real                                       & complex \\ 
+and storage scheme               &                                             &                                               &               \\ 
+\hline
+symmetric/Hermitian              & factorize                              & SSYTRF\indexR{SSYTRF}    & CHETRF\indexR{CHETRF} \\
+                                              & solve using factorization      & SSYTRS\indexR{SSYTRS}    & CHETRS\indexR{CHETRS} \\
+                                              & solve using factorization (2) & SSYTRS2\indexR{SSYTRS2} & CHETRS2\indexR{CHETRS2} \\
+                                              & estimate condition number  & SSYCON\indexR{SSYCON}   & CHECON\indexR{CHECON} \\
+                                              & error bounds for solution     & SSYRFS\indexR{SSYRFS}    & CHERFS\indexR{CHERFS} \\
+                                              & invert using factorization     & SSYTRI\indexR{SSYTRI}      & CHETRI\indexR{CHETRI}  \\
+                                              & invert using factorization (2) & SSYTRI2\indexR{SSYTRI2}  & CHETRI2\indexR{CHETRI2}  \\
+                                              & error bounds in double precision
+                                                                                             & SSYRFSX\indexR{SSYRFSX}  & CHERFSX\indexR{CHERFSX} \\
+                                              & equilibrate by powers of base
+                                                                                             & SSYEQUB\indexR{SSYEQUB} & CHEEQUB\indexR{CHEEQUB} \\
+                                             & product of triangular matrices & SSYTRM\indexR{SSYTRM} &
+CHETRM\indexR{CHETRM} \\
+\hline
+complex symmetric                & factorize                              &                                              & CSYTRF\indexR{CSYTRF} \\
+                                              & solve using factorization     &                                              & CSYTRS\indexR{CSYTRS} \\
+                                              & solve using factorization (2) &                                              & CSYTRS2\indexR{CSYTRS2} \\
+                                              & estimate condition number  &                                              & CSYCON\indexR{CSYCON} \\
+                                             & error bounds for solution     &                                              & CSYRFS\indexR{CSYRFS} \\
+                                             & invert using factorization     &                                              & CSYTRI\indexR{CSYTRI} \\
+                                             & invert using factorization (2) &                                             & CSYTRI2\indexR{CSYTRI2} \\
+                                              & error bounds in double precision
+                                                                                             &                                               & CSYRFSX\indexR{CSYRFSX} \\
+                                              & equilibrate by powers of base
+                                                                                             &                                               & CSYEQUB\indexR{CSYEQUB} \\
+\hline
+symmetric/Hermitian             & factorize                              & SSPTRF\indexR{SSPTRF}       & CHPTRF\indexR{CHPTRF} \\
+(packed storage)                  & solve using factorization     & SSPTRS\indexR{SSPTRS}       & CHPTRS\indexR{CHPTRS}  \\
+                                             & estimate condition number  & SSPCON\indexR{SSPCON}     & CHPCON\indexR{CHPCON} \\
+                                             & error bounds for solution    & SSPRFS\indexR{SSPRFS}       & CHPRFS\indexR{CHPRFS} \\
+                                             & invert using factorization    & SSPTRI\indexR{SSPTRI}        & CHPTRI\indexR{CHPTRI} \\
+\hline
+complex symmetric               & factorize                             &                                                 & CSPTRF\indexR{CSPTRF} \\
+(packed storage)                 & solve using factorization     &                                                 & CSPTRS\indexR{CSPTRS} \\
+                                            & estimate condition number  &                                                 & CSPCON\indexR{CSPCON} \\
+                                            & error bounds for solution    &                                                 & CSPRFS\indexR{CSPRFS} \\
+                                            & invert using factorization    &                                                 & CSPTRI\indexR{CSPTRI} \\
+\hline
+symmetric/Hermitian with      & factorize                              & SSYTRF\_ROOK\indexR{SSYTRF\_ROOK}
+                                                                                                                     & CHETRF\_ROOK\indexR{CHETRF\_ROOK} \\
+rook pivoting                          & solve using factorization      & SSYTRS\_ROOK\indexR{SSYTRS\_ROOK}
+                                                                                                                     & CHETRS\_ROOK\indexR{CHETRS\_ROOK} \\
+                                              & estimate condition number  & SSYCON\_ROOK\indexR{SSYCON\_ROOK}
+                                                                                                                     & CHECON\_ROOK\indexR{CHECON\_ROOK} \\
+                                              & invert using factorization     & 
+SSYTRI\_ROOK\indexR{SSYTRI\_ROOK}
+                                                                                                                     & CHETRI\_ROOK\indexR{CHETRI\_ROOK}  \\
+\hline
+complex symmetric with        & factorize                              &                     & CSYTRF\_ROOK\indexR{CSYTRF\_ROOK} \\
+rook pivoting                         & solve using factorization     &                     & CSYTRS\_ROOK\indexR{CSYTRS\_ROOK} \\
+                                              & estimate condition number  &                     & CSYCON\_ROOK\indexR{CSYCON\_ROOK} \\
+                                             & invert using factorization     &                     & CSYTRI\_ROOK\indexR{CSYTRI\_ROOK} \\
+\hline
+symmetric/Hermitian          & factorize                               & SPSTRF\indexR{SPSTRF}         & CPSTRF\indexR{CPSTRF} \\
+positive semi-definite         &                                              &                                                  &                                           \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\clearpage
+
+\begin{table}[ht]
+\caption{Computational routines for linear equations (continued)}
+\label{tabcomplineq2}
+\begin{center}
+\begin{tabular}{||l|l||l|l||} \hline
+Type of matrix                        & Operation                             & real                                       & complex \\ 
+and storage scheme               &                                             &                                               &               \\ 
+\hline
+symmetric/Hermitian           & factorize                               & SPOTRF\indexR{SPOTRF}      & CPOTRF\indexR{CPOTRF} \\
+positive definite                  & solve using factorization      & SPOTRS\indexR{SPOTRS}      & CPOTRS\indexR{CPOTRS} \\
+                                           & estimate condition number   & SPOCON\indexR{SPOCON}    & CPOCON\indexR{CPOCON} \\
+                                          & error bounds for solution      & SPORFS\indexR{SPORFS}      & CPORFS\indexR{CPORFS} \\
+                                          & invert using factorization      & SPOTRI\indexR{SPOTRI}       & CPOTRI\indexR{CPOTRI} \\
+                                          & equilibrate                             & SPOEQU\indexR{SPOEQU}     & CPOEQU\indexR{CPOEQU} \\
+                                          & error bounds in double precision
+                                                                                          & SPORFSX\indexR{SPORFSX}    & CPORFSX\indexR{CPORFSX} \\
+                                          & equilibrate by powers of base
+                                                                                          & SPOEQUB\indexR{SPOEQUB}     & CPOEQUB\indexR{CPOEQUB} \\
+\hline
+symmetric/Hermitian          & factorize                               & SPPTRF\indexR{SPPTRF}        & CPPTRF\indexR{CPPTRF} \\
+positive definite                 & solve using factorization      & SPPTRS\indexR{SPPTRS}        & CPPTRS\indexR{CPPTRS}  \\
+(packed storage)               & estimate condition number  & SPPCON\indexR{SPPCON}       & CPPCON\indexR{CPPCON} \\
+                                          & error bounds for solution     & SPPRFS\indexR{SPPRFS}         & CPPRFS\indexR{CPPRFS} \\
+                                          & invert using factorization     & SPPTRI\indexR{SPPTRI}          & CPPTRI\indexR{CPPTRI} \\
+                                          & equilibrate                            & SPPEQU\indexR{SPPEQU}        & CPPEQU\indexR{CPPEQU} \\
+\hline
+symmetric/Hermitian         & factorize                               & SPFTRF\indexR{SPFTRF}          & CPFTRF\indexR{CPFTRF} \\
+positive definite                & solve using factorization       & SPFTRS\indexR{SPFTRS}         & CPFTRS\indexR{CPFTRS} \\
+(RFP format)                     & invert using factorization     & SPFTRI\indexR{SPFTRI}           & CPFTRI\indexR{CPFTRI} \\
+\hline
+symmetric/Hermitian         & factorize                               & SPBTRF\indexR{SPBTRF}          & CPBTRF\indexR{CPBTRF} \\
+positive definite band       & solve using factorization      & SPBTRS\indexR{SPBTRS}           & CPBTRS\indexR{CPBTRS} \\
+                                         & estimate condition number   & SPBCON\indexR{SPBCON}         & CPBCON\indexR{CPBCON} \\
+                                         & error bounds for solution      & SPBRFS\indexR{SPBRFS}          & CPBRFS\indexR{CPBRFS} \\
+                                         & equilibrate                             & SPBEQU\indexR{SPBEQU}         & CPBEQU\indexR{CPBEQU} \\
+\hline
+symmetric/Hermitian        & factorize                                & SPTTRF\indexR{SPTTRF}            & CPTTRF\indexR{CPTTRF} \\
+positive definite               & solve using factorization       & SPTTRS\indexR{SPTTRS}             & CPTTRS\indexR{CPTTRS} \\
+tridiagonal                       & compute condition number     & SPTCON\indexR{SPTCON}         & CPTCON\indexR{CPTCON} \\
+                                       & error bounds for solution        & SPTRFS\indexR{SPTRFS}           & CPTRFS\indexR{CPTRFS} \\
+\hline
+triangular                        & solve                                      & STRTRS\indexR{STRTRS}           & CTRTRS\indexR{CTRTRS} \\
+                                       & estimate condition number    & STRCON\indexR{STRCON}          & CTRCON\indexR{CTRCON} \\
+                                       & error bounds for solution      & STRRFS\indexR{STRRFS}            & CTRRFS\indexR{CTRRFS} \\
+                                       & invert                                    & STRTRI\indexR{STRTRI}              & CTRTRI\indexR{CTRTRI} \\
+\hline
+triangular                       & solve                                      & STPTRS\indexR{STPTRS}             & CTPTRS\indexR{CTPTRS} \\
+(packed storage)           & estimate condition number    & STPCON\indexR{STPCON}           & CTPCON\indexR{CTPCON} \\
+                                      & error bounds for solution       & STPRFS\indexR{STPRFS}             & CTPRFS\indexR{CTPRFS}  \\
+                                      & invert                                     & STPTRI\indexR{STPTRI}               & CTPTRI\indexR{CTPTRI}  \\
+\hline
+triangular                       & invert                                    & STFTRI\indexR{STFTRI}               & CTFTRI\indexR{CTFTRI} \\
+(RFP format)                 &                                               &                                                       &                                          \\
+\hline
+triangular band              & solve                                      & STBTRS\indexR{STBTRS}               & CTBTRS\indexR{CTBTRS} \\
+                                      & estimate condition number     & STBCON\indexR{STBCON}            & CTBCON\indexR{CTBCON} \\
+                                      & error bounds for solution       & STBRFS\indexR{STBRFS}              & CTBRFS\indexR{CTBRFS} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\clearpage
+
+\subsection{Orthogonal Factorizations and Linear Least Squares Problems}
+\label{subseccomporthog}\index{computational routines!linear least squares}
+\index{computational routines!orthogonal factorizations}
+
+LAPACK provides a number of routines for factorizing a general
+rectangular $m$-by-$n$ matrix $A$,
+as the product of an {\bf orthogonal} matrix ({\bf unitary} if complex)
+and a {\bf triangular} (or possibly trapezoidal) matrix.
+
+A real matrix $Q$ is {\bf orthogonal} if $Q^{T} Q = I$;
+a complex matrix $Q$ is {\bf unitary} if $Q^{H} Q = I$.
+Orthogonal or unitary matrices have the important property that they leave the
+2-norm of a vector invariant:
+\[
+\|x||_2 = \|Qx\|_2, \quad \mbox{if $Q$ is orthogonal or unitary.}
+\]
+As a result, they help to maintain numerical stability because they do not
+\index{stability} amplify rounding errors.
+
+Orthogonal factorizations\index{orthogonal (unitary) factorizations} are used in
+the solution of linear least squares problems\index{linear least squares problem}.
+They may also be used to perform preliminary steps in the solution of eigenvalue or
+singular value problems.
+ 
+\subsubsection{$QR$ Factorization}
+
+The most common, and best known, of the factorizations
+is the {\boldmath $QR$}~{\bf factorization}\index{QR factorization}
+given by
+\[
+A = Q\left( \begin{array}{c}R\\0\end{array}\right), \quad \mbox{if $m \ge n$,}
+\]
+where $R$ is an $n$-by-$n$ upper triangular matrix and $Q$ is an $m$-by-$m$
+orthogonal (or unitary) matrix. If $A$ is of full rank $n$, then $R$ is
+nonsingular.
+It is sometimes convenient to write the factorization as
+\[
+A = \left( \begin{array}{cc} Q_1 & Q_2\end{array} \right)
+    \left( \begin{array}{c}R\\0\end{array}\right)
+\]
+which reduces to
+\[
+A = Q_1 R ,
+\]
+where $Q_1$ consists of the first $n$ columns of $Q$, and $Q_2$ the
+remaining $m-n$ columns.
+
+If $m < n$, $R$ is trapezoidal, and the factorization can be written
+\[
+A = Q\left( \begin{array}{cc}R_1 & R_2\end{array}\right), \quad
+    \mbox{if $m < n$,}
+\]
+where $R_1$ is upper triangular and $R_2$ is rectangular.
+
+The routine xGEQRF\indexR{SGEQRF}\indexR{CGEQRF}
+computes the $QR$ factorization. The matrix $Q$ is not
+formed explicitly, but is represented as a product of elementary reflectors,
+\index{elementary Householder matrix, see Householder matrix}
+\index{elementary reflector, see Householder matrix}
+as described in section~\ref{secorthog}.
+Users need not be aware of the details of this representation,
+because associated routines are provided to work with~$Q$:
+xORGQR\indexR{SORGQR} (or xUNGQR\indexR{CUNGQR}
+in the complex case) can generate all or part of $Q$,
+while xORMQR\indexR{SORMQR} (or xUNMQR\indexR{CUNMQR}) can pre- or post-multiply
+a given matrix by $Q$ or $Q^T$ ($Q^H$ if complex).
+
+Sometimes it is necessary to ensure that $r_{ii} \geq 0$ for all $i$ (for example,
+when using $QR$ to generate a random, uniformly distributed unitary operator $Q$):
+the routine xGEQRFP\indexR{SGEQRFP}\indexR{CGEQRFP} achieves this; see~\cite{demmeletal10}.
+ 
+The $QR$ factorization can be used to solve the linear least squares
+problem~(\ref{llsq})\index{linear least squares problem} when $m \geq n$ and
+$A$ is of full rank, since
+\[
+\|b - Ax\|_2 = \| Q^T b - Q^T A x\|_2 =
+\left\|\begin{array}{c} c_1 - Rx \\ c_2 \end{array}\right \|_2, \quad
+\mbox{where } c \equiv
+\left( \begin{array}{c} c_1 \\ c_2 \end{array} \right) =
+\left( \begin{array}{c} Q_1^T b \\ Q_2^T b \end{array} \right) =
+Q^T b;
+\]
+$c$ can be computed by xORMQR\indexR{SORMQR} (or xUNMQR
+\indexR{CUNMQR}), and $c_1$ consists of its first
+$n$ elements. Then
+$x$ is the solution of the upper triangular system
+\[
+Rx = c_1
+\]
+which can be computed by xTRTRS\indexR{STRTRS}\indexR{CTRTRS}.
+The residual vector $r$ is given by
+\[
+r = b - A x = Q \left( \begin{array}{c} 0 \\ c_2 \end{array} \right) ,
+\]
+and may be computed using xORMQR\indexR{SORMQR} (or xUNMQR
+\indexR{CUNMQR}).
+The residual sum of squares $\|r\|_2^2$ may be computed without forming $r$
+explicitly, since
+\[
+\|r\|_2 = \|b - Ax\|_2 = \|c_2\|_2.
+\]
+
+\subsubsection{$LQ$ Factorization}
+
+The {\boldmath $LQ$}~{\bf factorization}\index{LQ factorization}
+is given by
+\[
+A = \left( \begin{array}{cc} L & 0 \end{array}\right) Q
+  = \left( \begin{array}{cc} L & 0 \end{array}\right)
+    \left( \begin{array}{c} Q_1 \\ Q_2 \end{array} \right)
+  = L Q_1, \quad \mbox{if $ m \le n$,}
+\]
+where $L$ is $m$-by-$m$ lower triangular, $Q$ is $n$-by-$n$
+orthogonal (or unitary), $Q_1$ consists of the first $m$ rows of $Q$,
+and $Q_2$ the remaining $n-m$ rows.
+
+This factorization is computed by the routine xGELQF, and again $Q$ is
+\indexR{SGELQF}\indexR{CGELQF}
+represented as a product of elementary reflectors; xORGLQ
+\indexR{SORGLQ}
+\index{elementary Householder matrix, see Householder matrix}
+(or xUNGLQ\indexR{CUNGLQ} in the complex case) can generate
+all or part of $Q$, and xORMLQ\indexR{SORMLQ} (or xUNMLQ
+\indexR{CUNMLQ}) can pre- or post-multiply a given
+matrix
+by $Q$ or $Q^T$ ($Q^H$ if $Q$ is complex).
+
+The $LQ$ factorization of $A$ is essentially the same as the $QR$ factorization
+of $A^T$ ($A^H$ if $A$ is complex), since
+\[
+A = \left( \begin{array}{cc} L & 0 \end{array}\right) Q
+\quad \Longleftrightarrow
+\quad
+A^T = Q^T \left( \begin{array}{c} L^T \\0\end{array}\right) .
+\]
+
+The $LQ$ factorization may be used to find a minimum norm solution\index{minimum norm solution} of
+an underdetermined\index{underdetermined system} system of linear equations $A x = b$ where $A$ is
+$m$-by-$n$ with $m < n$ and has rank $m$. The solution is given by
+\[
+x = Q^T \left( \begin{array}{c} L^{-1} b \\ 0 \end{array} \right)
+\]
+and may be computed by calls to xTRTRS\indexR{STRTRS}\indexR{CTRTRS}
+and xORMLQ\indexR{SORMLQ} or xUNMLQ\indexR{CUNMLQ}.
+
+\subsubsection{$QR$ Factorization with Column Pivoting}
+
+To solve a linear least squares problem~(\ref{llsq})\index{linear least
+squares problem}\index{linear least squares problem!rank-deficient}
+when $A$ is not of full rank, or the rank of $A$ is in doubt, we can
+perform either a $QR$ factorization with column pivoting
+\index{QR factorization!with pivoting} or a singular value
+decomposition (see subsection \ref{subseccompsvd}).
+
+The {\boldmath $QR$}~{\bf factorization with column pivoting} is given by
+\[
+A = Q\left( \begin{array}{c}R\\0\end{array}\right)P^T, \quad m \ge n,
+\]
+where $Q$ and $R$ are as before and $P$ is a permutation matrix, chosen
+(in general) so that
+\[
+|r_{11}| \ge |r_{22}| \ge \ldots \ge |r_{nn}|
+\]
+and moreover, for each $k$,
+\[
+|r_{kk}| \ge \|R_{k:j,j}\|_2 \quad \mbox{for $j = k+1, \ldots, n$.}
+\]
+In exact arithmetic, if $\mbox{rank}(A) = k$, then the whole of the submatrix
+$R_{22}$ in rows and columns $k+1$ to $n$
+would be zero. In numerical computation, the aim must be to
+determine an index $k$, such that the leading submatrix $R_{11}$ in the first
+$k$ rows and columns is well-conditioned, and $R_{22}$ is negligible:
+\[
+R = \left( \begin{array}{cc}R_{11} & R_{12} \\ 0 & R_{22} \end{array}\right)
+\simeq \left( \begin{array}{cc}R_{11} & R_{12} \\ 0 & 0\end{array}\right) .
+\]
+Then $k$ is the effective rank of $A$. See Golub and Van Loan~\cite{GVL2}
+for a further discussion of numerical rank determination.
+\index{rank!numerical determination of}\index{effective rank}
+
+The so-called basic solution to the linear least squares
+problem~(\ref{llsq})\index{linear least squares problem} can be obtained from this factorization as
+\[
+x = P \left( \begin{array}{c} R_{11}^{-1} \hat{c}_1 \\ 0 \end{array} \right),
+\]
+where $\hat{c}_1$ consists of just the first $k$ elements of $c = Q^T b$.
+
+The $QR$ factorization with column pivoting is computed
+by subroutine xGEQP3.\indexR{SGEQP3}\indexR{CGEQP3}
+This subroutine computes the factorization but does not attempt to
+determine the rank of $A$.  xGEQP3 is a Level~3 BLAS version of $QR$ with
+column pivoting. For further details, see~\cite{drmacbujanovic08}.
+The matrix $Q$ is represented in exactly the same way as after a call of
+xGEQRF\indexR{SGEQRF}\indexR{CGEQRF}, and so the
+routines xORGQR and xORMQR can be used to work with $Q$
+(xUNGQR and xUNMQR if $Q$ is complex).
+\indexR{SORGQR}\indexR{SORMQR}
+\indexR{CUNGQR}\indexR{CUNMQR}
+
+\subsubsection{Complete Orthogonal Factorization}
+
+The $QR$ factorization with column pivoting does not enable us to compute
+a {\it minimum norm} solution to a rank-deficient linear least squares problem,
+\index{linear least squares problem!rank-deficient}
+unless $R_{12} = 0$. However,
+by applying further orthogonal (or unitary) transformations\index{orthogonal
+(unitary) transformation}
+from the right to the upper trapezoidal matrix
+$\left( \begin{array}{cc}R_{11} & R_{12}\end{array} \right)$,
+using the routine xTZRZF\indexR{STZRZF}\indexR{CTZRZF}, $R_{12}$ can be eliminated:
+\[
+\left( \begin{array}{cc}R_{11} & R_{12}\end{array}\right) Z =
+\left( \begin{array}{cc}T_{11} & 0\end{array}\right) .
+\]
+This gives the {\bf complete orthogonal factorization}\index{complete orthogonal factorization}
+\[
+A P = Q \left(
+\begin{array}{cc}T_{11} & 0 \\ 0 & 0\end{array}
+\right) Z^{T}
+\]
+from which the minimum norm solution\index{minimum norm solution} can be obtained as
+\[
+x = P Z \left( \begin{array}{c} T_{11}^{-1} \hat{c}_1 \\ 0\end{array}\right) .
+\]
+
+The matrix $Z$ is not formed explicitly, but is represented as a product of elementary
+reflectors,\index{elementary Householder matrix, see Householder matrix}
+\index{elementary reflector, see Householder matrix} as described in section~\ref{secorthog}.
+Users need not be aware of the details of this representation,
+because associated routines are provided to work with~$Z$:
+xORMRZ\indexR{SORMRZ} (or xUNMRZ\indexR{CUNMRZ}) can pre- or post-multiply
+a given matrix by $Z$ or $Z^T$ ($Z^H$ if complex).
+
+\subsubsection{Other Factorizations}
+
+The {\boldmath $QL$} and {\boldmath $RQ$}~{\bf factorizations}
+\index{QL factorization}\index{RQ factorization} are given by
+\[
+A = Q \left( \begin{array}{c} 0 \\ L \end{array} \right) ,
+\quad \mbox{if $m \geq n$,}
+\]
+and
+\[
+A = \left( \begin{array}{cc} 0 & R \end{array} \right) Q,
+\quad \mbox{if $m \leq n$.}
+\]
+These factorizations are computed by xGEQLF and xGERQF, respectively; they are
+\indexR{SGEQLF}\indexR{CGEQLF}
+\indexR{SGERQF}\indexR{CGERQF}
+less commonly used than either the $QR$ or $LQ$ factorizations
+described above, but have applications in, for example, the
+computation of generalized $QR$ factorizations~\cite{lawn31}.
+\index{QR factorization!generalized (GQR)}\index{GQR}
+
+All the factorization routines discussed here (except xTZRZF) allow
+arbitrary $m$ and $n$, so that in some cases the matrices $R$ or $L$ are
+trapezoidal rather than triangular.
+A routine that performs pivoting is provided only for the $QR$ factorization.
+
+\subsubsection{Compact WY Representation}
+
+The {\bf compact WY representation} is an alternative representation for Householder matrices
+which is not compatible with the representation used so far\index{compact WY representation}.
+See~\cite{Schreiber87a}.
+
+xGEQRT\indexR{SGEQRT}\indexR{CGEQRT} forms the $QR$ factorization
+of a rectanguler matrix, corresponding to xGEQRF,
+and xGEMQRT\indexR{SGEMQRT}\indexR{CGEMQRT} applies the factorization to a
+rectangular matrix, corresponding to xORMQR/xUNMQR.
+xGEQRT3\indexR{SGEQRT3}\indexR{CGEQRT3} is called by xGEQRT recursively.
+ 
+xTPQRT\indexR{STPQRT}\indexR{CTPQRT} forms the $QR$ factorization
+of a triangular-pentagonal matrix,
+and xTPMQRT\indexR{STPMQRT}\indexR{CTPMQRT} applies the factorization
+to a matrix $C$ which is formed by 2 blocks: a rectangular matrix $V_{1}$ and
+a trapezoidal matrix $V_{2}$.
+
+\begin{table}[ht]
+\caption{Computational routines for orthogonal factorizations}
+\label{tabcompof}
+\begin{center}
+\begin{tabular}{||l|l||l|l||} \hline
+Type of factorization and matrix & Operation & real & complex \\ \hline
+$QR$, general
+& factorize with pivoting     & SGEQP3\indexR{SGEQP3} & CGEQP3\indexR{CGEQP3} \\
+& factorize, no pivoting      & SGEQRF\indexR{SGEQRF} & CGEQRF\indexR{CGEQRF} \\
+& factorize, no pivoting, $r_{ii} \geq 0$
+                                            & SGEQRFP\indexR{SGEQRFP} & CGEQRFP\indexR{CGEQRFP} \\
+& generate $Q$                  & SORGQR\indexR{SORGQR} & CUNGQR\indexR{CUNGQR} \\
+& multiply matrix by $Q$     & SORMQR\indexR{SORMQR} & CUNMQR\indexR{CUNMQR} \\
+\hline
+$LQ$, general
+& factorize, no pivoting       & SGELQF\indexR{SGELQF} & CGELQF\indexR{CGELQF} \\
+& generate $Q$                  & SORGLQ\indexR{SORGLQ} & CUNGLQ\indexR{CUNGLQ} \\
+& multiply matrix by $Q$     & SORMLQ\indexR{SORMLQ} & CUNMLQ\indexR{CUNMLQ} \\
+\hline
+$QL$, general
+& factorize, no pivoting      & SGEQLF\indexR{SGEQLF} & CGEQLF\indexR{CGEQLF} \\
+& generate $Q$                  & SORGQL\indexR{SORGQL} & CUNGQL\indexR{CUNGQL} \\
+& multiply matrix by $Q$     & SORMQL\indexR{SORMQL} & CUNMQL\indexR{CUNMQL} \\
+\hline
+$RQ$, general
+& factorize, no pivoting      & SGERQF\indexR{SGERQF} & CGERQF\indexR{CGERQF} \\
+& generate $Q$                  & SORGRQ\indexR{SORGRQ} & CUNGRQ\indexR{CUNGRQ} \\
+& multiply matrix by $Q$     & SORMRQ\indexR{SORMRQ} & CUNMRQ\indexR{CUNMRQ} \\
+\hline
+$RZ$, trapezoidal
+& factorize, no pivoting       & STZRZF\indexR{STZRZF} & CTZRZF\indexR{CTZRZF} \\
+& multiply matrix by $Q$     & SORMRZ\indexR{SORMRZ} & CUNMRZ\indexR{CUNMRZ} \\
+\hline
+compact WY
+& factorize, no pivoting      & SGEQRT\indexR{SGEQRT} & CGEQRT\indexR{CGEQRT} \\
+& factorize recursively       & SGEQRT3\indexR{SGEQRT3} & CGEQRT3\indexR{CGEQRT3} \\
+& multiply matrix by $Q$   & SGEMQRT\indexR{SGEMQRT} & CGEMQRT\indexR{CGEMQRT} \\
+\hline
+compact WY, triangular-pentagonal
+& factorize, no pivoting     & STPQRT\indexR{STPQRT} & CTPQRT\indexR{CTPQRT} \\
+& multiply matrix by $Q$   & STPMQRT\indexR{STPMQRT} & CTPMQRT\indexR{CTPMQRT} \\ 
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\clearpage
+
+\subsection{Generalized Orthogonal Factorizations and Linear Least Squares Problems}
+\label{subseccompGENorthog}
+\index{orthogonal factorization!generalized}
+\index{generalized orthogonal factorization}
+\index{computational routines!generalized linear least squares}
+\index{computational routines!generalized orthogonal factorizations}
+
+\subsubsection{Generalized $QR$ Factorization}
+
+\index{QR factorization!generalized (GQR)}\index{GQR}
+The {\bf generalized}~{\boldmath $QR$}~{\bf (GQR) factorization} of an $n$-by-$m$ matrix $A$ and
+an $n$-by-$p$ matrix $B$ is given by the pair of factorizations
+\[
+A = Q R \quad  \mbox{and} \quad B = Q T Z
+\]
+where $Q$ and $Z$ are respectively $n$-by-$n$ and $p$-by-$p$ orthogonal matrices
+(or unitary matrices if $A$ and $B$ are complex). $R$ has the form:
+\[
+R = \bordermatrix{    & m   \cr
+        \hfill    m   & R_{11} \cr
+                  n-m & 0      },   \quad \mbox{if} \quad n \geq m
+\]
+or
+\[
+R = \bordermatrix{    & n      &   m-n    \cr
+                  n   & R_{11} &  R_{12}  }, \quad \mbox{if} \quad n < m
+\]
+where $R_{11}$ is upper triangular. $T$ has the form
+\[
+T = \bordermatrix{    & p-n    &   n    \cr
+                  n   & 0      &  T_{12}  }, \quad \mbox{if} \quad n \leq p
+\]
+or
+\[
+T = \bordermatrix{    & p   \cr
+                  n-p & T_{11} \cr
+         \hfill   p   & T_{21} },   \quad \mbox{if} \quad n > p
+\]
+where $T_{12}$ or $T_{21}$ is upper triangular.
+
+Note that if $B$ is square and nonsingular, the GQR factorization
+of $A$ and $B$ implicitly gives the $QR$ factorization of the matrix $B^{-1}A$:
+\[
+B^{-1} A = Z^T ( T^{-1} R )
+\]
+without explicitly computing the matrix inverse $B^{-1}$ or the product $B^{-1}A$.
+
+The routine xGGQRF computes the GQR\index{GQR factorization} by\indexR{SGGQRF}\indexR{CGGQRF}
+first computing the $QR$ factorization of $A$ and then
+the $RQ$ factorization of $Q^TB$.
+The orthogonal (or unitary) matrices $Q$ and $Z$
+can either be formed explicitly or just used to multiply another given matrix
+in the same way as the
+orthogonal (or unitary) matrix in the $QR$ factorization
+(see section~\ref{subseccomporthog}).
+
+The GQR factorization was introduced in \cite{hammarling86,paige90}.
+The implementation of the GQR factorization here follows \cite{lawn31}.
+Further generalizations of the GQR\index{GQR} factorization can be found in
+\cite{demoorvandooren92}.
+
+The GQR factorization can be used to solve the general (Gauss-Markov) linear\index{general linear model problem}\index{GLM}
+model problem (GLM) (see (\ref{eqnGLM}) and
+\cite{paige79}\cite[page 252]{GVL2}).
+Using the GQR factorization of $A$ and $B$, we rewrite the equation
+$d = A x + B y$ from (\ref{eqnGLM}) as
+\begin{eqnarray*}
+Q^T d & = & Q^T A x + Q^T B y \\
+      & = & R x + T Z y.
+\end{eqnarray*}
+We partition this as
+\[
+\bmat{c}
+   d_1 \\
+   d_2
+   \emat =
+\bordermatrix{    &  m  \cr
+       \hfill  m  & R_{11}   \cr
+               n-m & 0     } x +
+\bordermatrix{      & p-n+m  & n-m   \cr
+       \hfill  m    & T_{11} & T_{12}   \cr
+               n-m  &   0    & T_{22}   } \bmat{c}
+                                            y_1 \\
+                                            y_2 \\
+                                            \emat
+\]
+where
+\[
+\bmat{c}
+            d_1  \\
+            d_2 \\
+            \emat \equiv Q^T d, \; \; \; {\rm and} \; \; \;
+\bmat{c}
+            y_1  \\
+            y_2 \\
+            \emat  \equiv Z y \; ;
+\]
+$\bmat{c} d_1 \\  d_2 \emat$ can be computed by xORMQR (or xUNMQR).\indexR{SORMQR}\indexR{CUNMQR}
+
+The GLM problem is solved by setting
+\[
+y_1 = 0 \quad \mbox{and} \quad y_2 = T^{-1}_{22} d_2
+\]
+from which we obtain the desired solutions
+\[
+x = R^{-1}_{11}(d_1 - T_{12} y_2) \quad \mbox{and} \quad
+y = Z^T \bmat{c}
+            0  \\
+            y_2 \\
+            \emat,
+\]
+which can be computed by xTRSV, xGEMV and xORMRQ (or xUNMRQ).
+\indexR{STRSV}\indexR{CTRSV}
+\indexR{SGEMV}\indexR{CGEMV}
+\indexR{SORMRQ}\indexR{CUNMRQ}
+
+\subsubsection{Generalized $RQ$ Factorization}
+
+\index{RQ factorization!generalized (GRQ)}\index{GRQ}
+The {\bf generalized}~{\boldmath $RQ$}~{\bf (GRQ) factorization} of an $m$-by-$n$ matrix $A$ and
+a $p$-by-$n$ matrix $B$ is given by the pair of factorizations
+\[
+A = R Q \quad \mbox{and} \quad B = Z T Q
+\]
+where $Q$ and $Z$ are respectively $n$-by-$n$ and $p$-by-$p$ orthogonal
+matrices (or unitary matrices if $A$ and $B$ are complex).
+$R$ has the form
+\[
+R = \bordermatrix{    & n-m    &   m    \cr
+                  m   & 0      &  R_{12}  }, \quad \mbox{if} \quad m \leq n
+\]
+or
+\[
+R = \bordermatrix{    & n   \cr
+                  m-n & R_{11} \cr
+         \hfill   n   & R_{21} },   \quad \mbox{if} \quad m > n,
+\]
+where $R_{12}$ or $R_{21}$ is upper triangular. $T$ has the form
+\[
+T = \bordermatrix{    & n   \cr
+         \hfill   n   & T_{11} \cr
+                  p-n & 0      }, \quad \mbox{if} \quad p \geq n
+\]
+or
+\[
+T = \bordermatrix{    & p      &  n-p    \cr
+                  p   & T_{11} &  T_{12} }, \quad \mbox{if} \quad p < n
+\]
+where $T_{11}$  is upper triangular.
+
+Note that if $B$ is square and nonsingular, the GRQ factorization of
+$A$ and $B$ implicitly gives the $RQ$ factorization of the matrix $AB^{-1}$:
+\[
+A B^{-1} = ( R T^{-1} ) Z^T
+\]
+without explicitly computing the matrix inverse $B^{-1}$ or the product
+$AB^{-1}$.
+
+The routine xGGRQF computes the GRQ factorization\index{RQ factorization!generalized (GRQ)}\indexR{SGGRQF}\indexR{CGGRQF}\index{GRQ}
+by first computing the $RQ$ factorization of $A$ and then
+the $QR$ factorization of $BQ^T$.
+The orthogonal (or unitary) matrices $Q$ and $Z$
+can either be formed explicitly or
+just used to multiply another given matrix in the same way as the
+orthogonal (or unitary) matrix
+in the $RQ$ factorization
+(see section~\ref{subseccomporthog}).
+
+The GRQ factorization can be used to solve the linear
+equality-con\-strain\-ed least squares problem (LSE) (see (\ref{eqnLSE}) and
+\index{linear least squares problem!generalized!equality-constrained
+(LSE)}\index{LSE}
+\cite[page 585]{GVL2}).
+We use the GRQ factorization of $B$ and $A$ (note that $B$ and $A$ have
+swapped roles), written as
+\[
+B = T Q \quad \mbox{and} \quad A = Z R Q.
+\]
+We write the linear equality constraints $Bx = d$ as:
+\[
+T Q x = d
+\]
+which we partition as:
+\[
+\bordermatrix{    & n-p    &   p    \cr
+              p   & 0      &  T_{12}  }
+\bmat{c} x_1 \\ x_2 \emat = d   \quad
+\mbox{where}  \quad \bmat{c} x_1 \\ x_2 \emat \equiv Q x.
+\]
+Therefore $x_2$ is the solution of the upper triangular system
+\[
+T_{12} x_2 = d
+\]
+Furthermore,
+\begin{eqnarray*}
+\|A x - c \|_2 & = & \| Z^T A x - Z^T c \|_2 \\
+               & = & \| R Q x - Z^T c \|_2.
+\end{eqnarray*}
+We partition this expression as:
+\[
+\bordermatrix{        &  n-p   & p   \cr
+      \hfill   n-p    & R_{11} & R_{12}   \cr
+               p+m-n  &   0    & R_{22}   }
+\bmat{c} x_1 \\ x_2 \emat - \bmat{c} c_1 \\ c_2 \emat
+\]
+where $\bmat{c} c_1 \\ c_2 \emat \equiv Z^T c$, which
+can be computed by xORMQR (or xUNMQR).\indexR{SORMQR}\indexR{CUNMQR}
+
+To solve the LSE problem, we set
+\[
+R_{11} x_1 + R_{12} x_2 - c_1 = 0
+\]
+which gives $x_1$ as the solution of the upper triangular system
+\[
+R_{11} x_1 = c_1 - R_{12} x_2.
+\]
+Finally, the desired solution is given by
+\[
+x = Q^T \bmat{c} x_1 \\ x_2 \emat,
+\]
+which can be computed
+by xORMRQ (or xUNMRQ).\indexR{SORMRQ}\indexR{CUNMRQ}
+
+\begin{table}[ht]
+\caption{Computational routines for generalized orthogonal factorizations}
+\label{tabcompgof}
+\begin{center}
+\begin{tabular}{||l|l||l|l||} \hline
+Type of factorization & Operation & real & complex \\ \hline
+Generalized $QR$     & $QR$ and $RQ$ factorization & SGGQRF\indexR{SGGQRF} & CGGQRF\indexR{CGGQRF} \\
+\hline
+Generalized $RQ$     & $RQ$ and $QR$ factorization & SGGRQF\indexR{SGGRQF} & CGGRQF\indexR{CGGRQF} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\clearpage
+
+\subsection{Symmetric Eigenproblems}\label{subseccompsep}
+\index{computational routines!symmetric eigenproblems}
+\index{SEP!symmetric eigenproblems}
+\index{symmetric eigenproblems}
+
+Let $A$ be a real symmetric
+or complex Hermitian $n$-by-$n$ matrix.
+A scalar $\lambda$ is called an {\bf eigenvalue}\index{eigenvalue!SEP} and a nonzero column vector
+$z$ the corresponding {\bf eigenvector}\index{eigenvector!SEP} if $Az = \lambda z$. $\lambda$ is
+always real when $A$ is real symmetric or complex Hermitian.
+
+The basic task of the symmetric eigenproblem routines is to compute values of $\lambda$
+and, optionally, corresponding vectors $z$ for a given matrix $A$.
+
+This computation proceeds in the following stages:
+
+\begin{enumerate}
+\item The real symmetric or complex Hermitian matrix $A$ is reduced to
+{\bf real tridiagonal form}\index{tridiagonal form}
+\index{reduction!tridiagonal}$T$.
+If $A$ is real symmetric this decomposition is $A=QTQ^T$ with $Q$ orthogonal
+and $T$ symmetric tridiagonal.
+If $A$ is complex Hermitian, the
+decomposition is $A=QTQ^H$ with $Q$ unitary and $T$, as before,
+{\it real} symmetric tridiagonal\index{tridiagonal form}.
+
+\item Eigenvalues and eigenvectors of the real symmetric tridiagonal matrix
+$T$ are computed.
+If all eigenvalues and eigenvectors are computed, this is equivalent to
+factorizing $T$ as
+$T = S \Lambda S^T$, where $S$ is orthogonal and $\Lambda$ is diagonal.
+The diagonal entries of $\Lambda$ are the eigenvalues of $T$, which are also
+the eigenvalues of $A$, and the
+columns of $S$ are the eigenvectors of $T$; the eigenvectors of $A$ are
+the columns of $Z=QS$, so that $A=Z \Lambda Z^T$ ($Z \Lambda Z^H$ when
+$A$ is complex Hermitian).
+
+\end{enumerate}
+
+In the real case, the decomposition $A = Q T Q^T$ is computed by one
+of the routines xSYTRD, xSPTRD, or xSBTRD,
+\indexR{SSYTRD}\indexR{SSPTRD}\indexR{SSBTRD}
+depending on how the matrix is
+stored (see Table~\ref{tabcompeig}). The complex analogues of these routines
+are called xHETRD, xHPTRD, and xHBTRD.
+\indexR{CHETRD}\indexR{CHPTRD}\indexR{CHBTRD}
+The routine xSYTRD (or xHETRD) represents the
+matrix $Q$ as a product of elementary reflectors,
+as described in section~\ref{secorthog}.
+The routine xORGTR\indexR{SORGTR} (or in the complex case xUNMTR)\indexR{CUNMTR} is
+provided to form $Q$ explicitly;
+this is needed in particular
+before calling xSTEQR\indexR{SSTEQR}\indexR{CSTEQR} to compute all the eigenvectors of $A$
+by the $QR$ algorithm.
+The routine xORMTR\indexR{SORMTR} (or in the complex case xUNMTR)
+\indexR{CUNMTR}
+is provided to multiply another matrix by $Q$
+without forming $Q$ explicitly; this can be used to transform
+eigenvectors of $T$ computed by xSTEIN, back to eigenvectors of $A$.
+\indexR{SSTEIN}\indexR{CSTEIN}
+
+When packed storage is used, the corresponding routines for forming $Q$
+or multiplying another matrix by $Q$ are xOPGTR and xOPMTR
+\indexR{SOPGTR}\indexR{SOPMTR}
+(in the complex case, xUPGTR and xUPMTR).
+\indexR{CUPGTR}\indexR{CUPMTR}
+
+When $A$ is banded and xSBTRD\indexR{SSBTRD} (or xHBTRD)
+\indexR{CHBTRD} is used to reduce it to
+tridiagonal form\index{tridiagonal form}\index{reduction!tridiagonal}, $Q$ is determined as a product of Givens rotations\index{Givens rotation}, not
+as a product of elementary reflectors; if $Q$ is required, it must be formed
+explicitly by the reduction routine.
+xSBTRD is based on the vectorizable algorithm due to Kaufman ~\cite{vbandr}.
+
+There are several routines for computing eigenvalues\index{eigenvalue} and eigenvectors\index{eigenvector} of $T$,
+to cover the cases of computing some or all of the eigenvalues, and some or
+all of the eigenvectors. In addition, some routines run faster in some
+computing environments or for some matrices than for others. Also,
+some routines are more accurate than other routines.
+
+See section \ref{subsecdriveeigSEP} for a discussion.
+
+\begin{description}
+
+\item[xSTEQR]\indexR{SSTEQR}\indexR{CSTEQR}
+This routine uses the implicitly shifted $QR$ algorithm.
+\index{QR factorization!implicit}\index{QL factorization!implicit}
+It switches between the $QR$ and $QL$ variants in order to
+handle graded matrices more effectively than the simple $QL$ variant that
+is provided by the EISPACK routines IMTQL1 and IMTQL2.
+It computes all eigenvalues and eigenvectors to an observed accuracy of $O(\sqrt{n}\epsilon)$.
+and requires $2n$ elements of workspace. 
+It is used by drivers with names ending in -EV and -EVX to compute
+all the eigenvalues and eigenvectors (see section \ref{subsecdriveeigSEP}).
+See \cite{greenbaumdongarra} for details.
+
+\item[xSTERF]\indexR{SSTERF}
+This routine uses a square-root free version of the $QR$
+algorithm, also switching between $QR$ and $QL$ variants, and can only
+compute all the eigenvalues. It computes them to an observed accuracy of $O(\sqrt{n}\epsilon)$.
+and requires no extra workspace.
+It is used by drivers with names ending in -EV,-EVX and -EVD to compute
+all the eigenvalues and no eigenvectors (see section \ref{subsecdriveeigSEP}).
+See \cite{greenbaumdongarra} for details.
+
+\item[xSTEDC]\indexR{SSTEDC}\indexR{CSTEDC}
+This routine uses Cuppen's divide and conquer algorithm
+\index{Cuppen's divide and conquer algorithm}
+to find all eigenvalues and eigenvectors (if only eigenvalues
+are desired, xSTEDC calls xSTERF). 
+ It computes them to an observed accuracy of $ O(\sqrt{n}\epsilon)$.
+xSTEDC can be much faster than xSTEQR for large matrices,
+but needs more workspace ($n^2$ or $4n^2$ plus terms of lower order).
+It is used by drivers with names ending in -EVD to compute all the
+eigenvalues and eigenvectors (see section \ref{subsecdriveeigSEP}).
+See \cite{cuppen,gueisenstat,rutter} and section \ref{subsecblockeig}
+for details.
+
+\item[xSTEMR]\indexR{SSTEMR}\indexR{CSTEMR}
+This routine uses the relatively robust representation (RRR) algorithm to
+find some or all of the eigenvalues, and optionally eigenvectors. 
+Options provide for computing all the eigenvalues in a real interval or
+all the eigenvalues from the $i^{th}$ to the $j^{th}$ largest.
+This routine uses an $LDL^T$ factorization
+of a number of translates $T - \sigma I$ of $T$, for one shift $\sigma$ near each cluster
+of eigenvalues.
+It computes them to a slightly lesser accuracy of $O(n\epsilon)$.
+It requires $12n$ real elements and $8n$ integer elements of workspace for eigenvalues only,
+$18n$ real elements and $10n$ integer elements for eigenvalues and eigenvectors.
+It is the fastest algorithm on most matrices, but not all, where xSTEDC takes over.
+See \cite{parlettdhillon00,parlettmarques00,dhillonparlett03,
+dhillonparlett04,marquesetal05,dhillonetal06} 
+and section \ref{subsecblockeig} for details.
+This routine is used by drivers with names ending in -EVR (see section \ref{subsecdriveeigSEP}).
+
+\item[xSTEBZ]\indexR{SSTEBZ}
+This routine uses bisection to compute some or all of the eigenvalues.
+Options provide for computing all the eigenvalues in a real interval or
+all the eigenvalues from the $i^{th}$ to the $j^{th}$ largest.
+It requires $4n$ real elements and $3n$ integer elements of workspace.
+It can be highly accurate, but usually has an observed accuracy of $O(n\epsilon)$;
+it may be adjusted to run faster if lower accuracy is acceptable.
+It is used by drivers with names ending in -EVX.
+
+\item[xSTEIN]\indexR{SSTEIN}\indexR{CSTEIN}
+Given accurate eigenvalues, this routine uses inverse iteration\index{inverse iteration} 
+to compute the corresponding eigenvectors (typically computed by xSTEBZ).
+It requires $5n$ real elements and $n$ integer elements of workspace.
+It is used by drivers with names ending in -EVX.
+
+\item[xPTEQR]\indexR{SPTEQR}\indexR{CPTEQR}
+This routine applies to symmetric {\bf positive definite} tridiagonal
+matrices only. It uses a combination of Cholesky factorization and bidiagonal $QR$ iteration
+(see xBDSQR) and may be significantly more accurate than the other routines.
+See \cite{barlowdemmel,demmelkahan,deiftdemmellitomei,fernandoparlett} for details.
+
+\end{description}
+
+%See Table \ref{tabcompeig}.
+         
+\begin{table}[ht]
+\caption{Computational routines for the symmetric eigenproblem}
+\label{tabcompeig}
+\begin{center}
+\begin{tabular}{||l|l|l|l||} \hline
+Type of matrix & Operation & real & complex \\
+and storage scheme & & & \\ \hline
+symmetric or Hermitian & tridiagonal reduction & SSYTRD\indexR{SSYTRD} & CHETRD\indexR{CHETRD} \\ \hline
+symmetric or Hermitian & tridiagonal reduction & SSPTRD\indexR{SSPTRD} & CHPTRD\indexR{CHPTRD} \\
+(packed storage) & & & \\ \hline
+symmetric or Hermitian band & tridiagonal reduction & SSBTRD\indexR{SSBTRD} & CHBTRD\indexR{CHBTRD} \\
+\hline
+orthogonal/unitary
+& generate matrix after reduction & SORGTR\indexR{SORGTR} & CUNGTR\indexR{CUNGTR} \\
+& by xSYTRD & & \\
+& multiply matrix after reduction & SORMTR\indexR{SORMTR} & CUNMTR\indexR{CUNMTR} \\
+& by xSYTRD & & \\ \hline
+orthogonal/unitary 
+& generate matrix after reduction & SOPGTR\indexR{SOPGTR} & CUPGTR\indexR{CUPGTR} \\
+(packed storage)   
+& by xSPTRD & & \\
+& multiply matrix after reduction & SOPMTR\indexR{SOPMTR} & CUPMTR\indexR{CUPMTR} \\
+& by xSPTRD & & \\ \hline
+symmetric tridiagonal 
+& eigenvalues/eigenvectors via $QR$  & SSTEQR\indexR{SSTEQR} & CSTEQR\indexR{CSTEQR} \\
+& eigenvalues only via root-free $QR$ & SSTERF\indexR{SSTERF} &  \\
+& eigenvalues/eigenvectors via  & SSTEDC\indexR{SSTEDC} & CSTEDC\indexR{CSTEDC} \\ 
+& divide and conquer & & \\
+& eigenvalues/ eigenvectors via RRR & SSTEMR\indexR{SSTEMR} & CSTEMR\indexR{CSTEMR} \\
+& eigenvalues only via bisection  & SSTEBZ\indexR{SSTEBZ} & \\
+& eigenvectors by inverse iteration & SSTEIN\indexR{SSTEIN} & CSTEIN\indexR{CSTEIN} \\ \hline
+symmetric tridiagonal
+& eigenvalues/eigenvectors & SPTEQR\indexR{SPTEQR} & CPTEQR\indexR{CPTEQR} \\
+positive definite     &    & & \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\clearpage
+
+\subsection{Nonsymmetric Eigenproblems}\label{subseccompnep}
+\index{nonsymmetric eigenproblems}
+\index{computational routines!nonsymmetric eigenproblems}
+
+\subsubsection{Eigenvalues, Eigenvectors and Schur Decomposition}
+Let $A$ be a square $n$-by-$n$ matrix. A scalar $\lambda$ is called
+an {\bf eigenvalue}\index{eigenvalue} and a nonzero column vector $v$ the corresponding
+{\bf right eigenvector}\index{eigenvector!right} if $Av = \lambda v$. A nonzero column vector $u$
+satisfying $u^H A = \lambda u^H$
+is called the {\bf left eigenvector}\index{eigenvector!left}.
+
+The first basic task
+of the routines described in this section
+is to compute, for a given matrix $A$,  all $n$ values of $\lambda$ and,
+if desired, their associated right eigenvectors $v$ and/or
+left eigenvectors $u$.
+
+A second basic task is to compute the {\bf Schur decomposition} of a matrix $A$.
+\index{Schur decomposition}
+If $A$ is complex, then its Schur decomposition is $A=ZTZ^H$, where
+$Z$ is unitary and $T$ is upper triangular. If $A$ is real, its
+Schur decomposition is $A=ZTZ^T$, where $Z$ is orthogonal.
+and $T$ is upper quasi-triangular ($1$-by-$1$ and $2$-by-$2$ blocks on
+its diagonal).
+The columns of $Z$ are called the {\bf Schur vectors } of $A$.
+\index{Schur vectors}
+The eigenvalues of $A$ appear on the diagonal of $T$; complex conjugate
+eigenvalues of a real $A$ correspond to $2$-by-$2$ blocks on the diagonal of $T$.
+
+These two basic tasks can be performed in the following stages:
+
+\begin{enumerate}
+
+\item A general matrix $A$ is reduced to {\bf upper Hessenberg form}\index{Hessenberg form!upper} $H$
+\index{upper Hessenberg form}
+\index{reduction!upper Hessenberg}
+which is zero below the first subdiagonal. The reduction may be written
+$A=QHQ^T$ with $Q$ orthogonal if $A$ is real, or
+$A=QHQ^H$ with $Q$ unitary if $A$ is complex.
+The reduction is performed by subroutine xGEHRD, \indexR{SGEHRD}\indexR{CGEHRD}
+which represents $Q$ in a factored form, as described in section~\ref{secorthog}.
+The routine xORGHR\indexR{SORGHR} (or in the complex case xUNGHR\indexR{CUNGHR}) is provided to
+form $Q$ explicitly.
+The routine xORMHR\indexR{SORMHR} (or in the complex case xUNMHR\indexR{CUNMHR}) is provided to
+multiply another matrix by $Q$ without forming $Q$ explicitly.
+For latest details, see~\cite{ortigeijn06}.
+
+\item The upper Hessenberg matrix $H$ is reduced to Schur form $T$,
+\index{Schur form}
+giving the Schur decomposition $H=STS^T$
+(for $H$ real) or $H=STS^H$ (for $H$ complex). The matrix $S$ (the Schur vectors
+of $H$) may
+optionally be computed as well. Alternatively $S$ may be postmultiplied
+into the matrix $Q$ determined in stage 1, to give the matrix $Z = Q S$, the
+Schur vectors of $A$. The eigenvalues\index{eigenvalue} are obtained from the
+diagonal of $T$. All this is done by subroutine xHSEQR.
+\indexR{SHSEQR}\indexR{CHSEQR}
+For latest details, see~\cite{bramanetal02a, bramanetal02b}.
+
+\item Given the eigenvalues, the eigenvectors  may be computed in
+two different ways. xHSEIN\indexR{SHSEIN}\indexR{CHSEIN}
+ performs inverse iteration\index{inverse iteration} on $H$ to compute
+the eigenvectors of $H$;
+xORMHR\indexR{SORMHR} (or in the complex case xUNMHR\indexR{CUNMHR})
+ can then be used to multiply the eigenvectors by the matrix $Q$
+in order to transform them to eigenvectors of $A$.
+xTREVC\indexR{STREVC}\indexR{CTREVC} computes the eigenvectors of $T$, and optionally transforms them
+to those of $H$ or $A$ if the matrix $S$ or $Z$ is supplied.
+Both xHSEIN and xTREVC allow selected left and/or right eigenvectors
+to be computed.
+
+\end{enumerate}
+
+Other subsidiary tasks may be performed before or after those just described.
+
+\subsubsection{Balancing}
+
+The routine xGEBAL\indexR{SGEBAL}\indexR{CGEBAL}
+may be used to {\bf balance} the
+matrix $A$ prior to reduction to Hessenberg form\index{Hessenberg form}. Balancing involves two
+steps, either of which is optional:
+
+\begin{enumerate}
+
+\item xGEBAL\indexR{SGEBAL}\indexR{CGEBAL}
+attempts to permute $A$ by a similarity transformation\index{similarity transformation} to
+block upper triangular form:
+\[
+P A P^T = A'
+ = \left( \begin{array}{ccc} A'_{11} & A'_{12} & A'_{13} \\
+                              0    &  A'_{22} & A'_{23} \\
+                              0   &   0     & A'_{33} \end{array} \right)
+\]
+where $P$ is a permutation matrix and $A'_{11}$ and $A'_{33}$ are
+{\em upper triangular}.
+Thus the matrix is already in Schur form\index{Schur form} outside the
+central diagonal block $A'_{22}$ in rows and columns ILO to IHI.
+\index{arguments!ILO and IHI}
+Subsequent operations by xGEBAL, xGEHRD or xHSEQR need only be applied to
+these rows and columns; therefore ILO and IHI are passed as arguments to
+xGEHRD\indexR{SGEHRD}\indexR{CGEHRD} and
+xHSEQR\indexR{SHSEQR}\indexR{CHSEQR}. This can save a significant amount of
+work if ILO $>$ 1 or IHI $< n$.
+If no suitable permutation can be found (as is very often the case),
+xGEBAL sets ILO = 1 and IHI = $n$, and $A'_{22}$ is
+the whole of $A$.
+
+\item xGEBAL\indexR{SGEBAL}\indexR{CGEBAL} 
+applies a diagonal similarity transformation to $A'$
+to make the rows and columns of $A'_{22}$
+as close in norm in possible:
+\[
+A'' = D A' D^{-1} = \left( \begin{array}{ccc} I & 0 & 0 \\
+                                        0 & D_{22} & 0 \\
+                                        0 & 0 & I \end{array} \right)
+              \left( \begin{array}{ccc} A'_{11} & A'_{12} & A'_{13} \\
+                                        0    &  A'_{22} & A'_{23} \\
+                                        0   &   0  & A'_{33} \end{array} \right)
+              \left( \begin{array}{ccc} I & 0 & 0 \\
+                                        0 & D_{22}^{-1} & 0 \\
+                                        0 & 0 & I \end{array} \right)
+\]
+This can improve the
+accuracy of later processing in some cases; see subsection~\ref{secbalance}.
+
+\end{enumerate}
+
+If $A$ was balanced by xGEBAL, then eigenvectors computed by subsequent
+operations are eigenvectors of the balanced matrix $A''$;
+xGEBAK\indexR{SGEBAK}\indexR{CGEBAK} must then be called
+to transform them back to eigenvectors of the original matrix $A$.
+
+\subsubsection{Invariant Subspaces and Condition Numbers}
+
+The Schur form\index{Schur form} depends on the order of the eigenvalues on the diagonal
+of $T$ and this may optionally be chosen by the user. Suppose the user chooses
+that $\lambda_1 , \ldots , \lambda_j$, $1 \leq j \leq n$, appear in the upper left
+corner of $T$. Then the first $j$ columns of $Z$ span the {\bf right invariant
+subspace} of $A$ corresponding to $\lambda_1 , \ldots , \lambda_j$.
+\index{subspaces!invariant}\index{invariant subspaces}
+
+The following routines perform this re-ordering and also
+\index{eigenvalue!ordering of}
+compute condition numbers for eigenvalues, eigenvectors,
+and invariant subspaces:
+
+\begin{enumerate}
+
+\item xTREXC\indexR{STREXC}\indexR{CTREXC} will move an eigenvalue (or $2$-by-$2$ block) on the diagonal of
+the Schur form\index{Schur form} from its original position to any other position. It may be used to
+choose the order in which eigenvalues appear in the Schur form.
+
+\item xTRSYL\indexR{STRSYL}\indexR{CTRSYL} solves
+the Sylvester matrix equation\index{Sylvester equation} $AX \pm XB=C$ for $X$, given
+matrices $A$, $B$ and $C$, with $A$ and $B$ (quasi) triangular.
+It is used in the routines xTRSNA and xTRSEN, but it is also of independent
+interest.
+
+\item xTRSNA\indexR{STRSNA}\indexR{CTRSNA} computes the condition numbers of the eigenvalues and/or
+right eigenvectors of a matrix $T$ in Schur form.
+\index{eigenvalue!sensitivity of}
+These are the same as the condition\index{condition number}
+numbers of the eigenvalues and right eigenvectors of the original matrix
+$A$ from which $T$ is derived. The user may compute these condition numbers
+for all eigenvalue/eigenvector pairs, or for any selected subset.
+For more details, see section~\ref{secnonsym} and \cite{baidemmelmckenney}.
+
+\item xTRSEN\indexR{STRSEN}\indexR{CTRSEN} moves
+\index{eigenvalue!sensitivity of}
+a selected subset of the eigenvalues of a matrix $T$
+in Schur form to the upper left corner of $T$, and optionally computes
+the condition numbers\index{condition number} of their average value and of their right
+invariant subspace. These are the same as the condition numbers of the
+average eigenvalue and right invariant subspace of the original matrix $A$
+from which $T$ is derived.
+For more details, see section~\ref{secnonsym} and
+\cite{baidemmelmckenney}
+
+\end{enumerate}
+
+%See Table \ref{tabcompeig2} for a complete list of the routines.
+
+\begin{table}[ht]
+\caption{Computational routines for the nonsymmetric eigenproblem}
+\label{tabcompeig2}
+\begin{center}
+\begin{tabular}{||l|l|l|l||} \hline
+Type of matrix          & Operation & real & complex \\
+\hline
+general                   & Hessenberg reduction & SGEHRD\indexR{SGEHRD} & CGEHRD\indexR{CGEHRD} \\
+                               & balancing                     & SGEBAL\indexR{SGEBAL}   & CGEBAL\indexR{CGEBAL} \\
+                               & backtransforming        & SGEBAK\indexR{SGEBAK} & CGEBAK\indexR{CGEBAK}  \\ \hline
+orthogonal/unitary
+& generate matrix after Hessenberg reduction & SORGHR\indexR{SORGHR} & CUNGHR\indexR{CUNGHR} \\
+& multiply matrix after Hessenberg reduction    & SORMHR\indexR{SORMHR} &
+CUNMHR\indexR{CUNMHR} \\ \hline
+Hessenberg            
+& Schur decomposition      & SHSEQR\indexR{SHSEQR} & CHSEQR\indexR{CHSEQR} \\
+& eigenvectors by inverse iteration & SHSEIN\indexR{SHSEIN} & CHSEIN\indexR{CHSEIN} \\ \hline
+(quasi)triangular    
+& eigenvectors                & STREVC\indexR{STREVC} & CTREVC\indexR{CTREVC} \\ 
+& reordering Schur decomposition & STREXC\indexR{STREXC} & CTREXC\indexR{CTREXC} \\
+& Sylvester equation      & STRSYL\indexR{STRSYL} & CTRSYL\indexR{CTRSYL} \\
+& condition numbers of eigenvalues/vectors  & STRSNA\indexR{STRSNA} & CTRSNA\indexR{CTRSNA} \\
+& condition numbers of eigenvalue cluster/  & STRSEN\indexR{STRSEN} & CTRSEN\indexR{CTRSEN} \\
+& invariant subspace      & & \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\clearpage
+
+\subsection{Singular Value Decomposition}\label{subseccompsvd}
+\index{computational routines!singular value decomposition}
+\index{singular value decomposition (SVD)}
+
+Let $A$ be a general real $m$-by-$n$ matrix. The {\bf singular value
+decomposition (SVD)} of $A$ is the factorization  $A=U \Sigma V^T$, where
+$U$ and $V$ are orthogonal, and
+$\Sigma = \diag ( \sigma_1 , \ldots , \sigma_r )$, $r = \min (m,n)$,
+with $\sigma_1 \geq \cdots \geq \sigma_r \geq 0$. If $A$ is complex, then
+its SVD is $A=U \Sigma V^H$ where $U$ and $V$ are unitary,
+and $\Sigma$ is as before with real
+diagonal elements.
+The $\sigma_i$ are called the {\bf singular values}\index{singular value},
+the first $r$ columns of $V$
+the {\bf right singular vectors}\index{singular vectors!right} and
+the first $r$ columns of $U$
+the {\bf left singular vectors}\index{singular vectors!left}.
+
+The routines described in this section, and listed in Table \ref{tabcompsvd},
+are used to compute this decomposition.
+The computation proceeds in the following stages,
+except for the routine SGESVJ (see below)\indexR{SGESVJ}.
+
+\begin{enumerate}
+
+\item The matrix $A$ is reduced to bidiagonal\index{bidiagonal form}
+form: $A=U_1 B V_1^T$ if
+$A$ is real ($A=U_1 B V_1^H$ if $A$ is complex), where $U_1$ and $V_1$
+are orthogonal (unitary if $A$ is complex), and $B$ is real and
+upper-bidiagonal when $m \geq n$ and lower bidiagonal when $m < n$, so
+that $B$ is nonzero only on the main diagonal and either on the first
+superdiagonal (if $m \geq n$) or the first subdiagonal (if $m<n$).
+
+\item The SVD of the bidiagonal matrix $B$ is computed: $B=U_2 \Sigma V_2^T$,
+where $U_2$ and $V_2$ are orthogonal and $\Sigma$ is diagonal as described
+above. The singular vectors of $A$ are then $U = U_1 U_2$ and
+$V = V_1 V_2$.
+
+\end{enumerate}
+
+The reduction to bidiagonal form is performed by the subroutine xGEBRD,
+\index{reduction!bidiagonal}
+\indexR{SGEBRD}\indexR{CGEBRD}
+ or by xGBBRD
+\indexR{SGBBRD}\indexR{CGBBRD}
+for a band matrix.
+
+The routine xGEBRD represents
+$U_1$ and $V_1$ in factored form as products of elementary reflectors,
+\index{elementary Householder matrix, see Householder matrix}
+\index{elementary reflector, see Householder matrix}
+as described in section~\ref{secorthog}.
+If $A$ is real,
+the matrices $U_1$ and $V_1$ may be computed explicitly using routine xORGBR,
+\indexR{SORGBR}
+or multiplied by other matrices without forming $U_1$ and $V_1$ using routine xORMBR\indexR{SORMBR}.
+If $A$ is complex, one instead uses xUNGBR\indexR{CUNGBR}
+and xUNMBR\indexR{CUNMBR}, respectively.
+
+If $A$ is banded and xGBBRD is used to reduce it to bidiagonal form,
+$U_1$ and $V_1$ are determined as products of Givens rotations
+\index{Givens rotation}, rather than
+as products of elementary reflectors. If $U_1$ or $V_1$ is required, it
+must be formed explicitly by xGBBRD. xGBBRD uses a vectorizable
+algorithm, similar to that used by xSBTRD (see Kaufman~\cite{vbandr}).
+xGBBRD may be much faster than xGEBRD when the bandwidth is narrow.
+
+The SVD of the bidiagonal matrix is computed either by subroutine
+xBDSQR\indexR{SBDSQR}\indexR{CBDSQR}
+or by subroutine
+xBDSDC\indexR{SBDSDC}.
+xBDSQR uses QR iteration when singular vectors are desired
+\cite{demmelkahan,deiftdemmellitomei},
+and otherwise uses the dqds algorithm \cite{fernandoparlett}.
+xBDSQR is more accurate than its counterparts in LINPACK and EISPACK:
+barring underflow and overflow, it computes all the singular values of
+$B$ to nearly full relative precision, independent of their magnitudes.
+It also computes the singular vectors much more accurately. See
+section~\ref{secsvd} and
+\cite{demmelkahan,deiftdemmellitomei,fernandoparlett} for details.
+
+xBDSDC\indexR{SBDSDC}\indexR{CBDSDC} 
+uses a variation of Cuppen's divide and conquer algorithm to find
+singular values and singular vectors \cite{jessupsorensen,gueisenstat3}.
+It is much faster than xBDSQR if singular vectors of large matrices are desired.
+When singular values only are desired, it uses the same dqds algorithm as xBDSQR
+\cite{fernandoparlett}.
+Divide and conquer is not guaranteed to compute singular values to nearly
+full relative precision, but in practice xBDSDC is often at least as
+accurate as xBDSQR.
+xBDSDC represents the singular vector matrices $U_2$ and $V_2$
+in a compressed format requiring only $O(n \log n)$ space instead
+of $n^2$. $U_2$ and $V_2$ may subsequently be generated explicitly
+using routine xLASDQ, or multiplied by vectors without forming
+them explicitly using routine xLASD0.
+
+SGESVJ\indexR{SGESVJ}, the one-sided Jacobi routine\index{one-sided Jacobi method!SVD},
+does not call separate routines for the reduction
+to bidiagonal form and the SVD of the bidiagonal matrix. Instead, the matrix $V$ is
+obtained as a product of Jacobi plane rotations, which are implemented as fast scaled
+rotations of Anda and Park. Pivot strategy uses column interchanges due to de Rijk.
+The relative accuracy of the computed singular values is guaranteed by the theory
+of Demmel and Veselic.
+See \cite{andapark94,derijk,Demmelveselic} for details.
+SGESVJ treats as special cases the input matrix $A$ being upper or
+lower triangular (or trapezoidal if $m > n$).
+
+If $m \gg n$, it may be more efficient to first perform a $QR$ factorization
+of $A$, using the routine xGEQRF\indexR{SGEQRF}\indexR{CGEQRF},
+and then to compute the SVD of the $n$-by-$n$ matrix $R$, since
+if $A = QR$ and $R = U \Sigma V^T$, then the SVD of $A$ is given by
+$A = (QU) \Sigma V^T$.
+Similarly, if $m \ll n$, it may be more efficient to first perform an
+$LQ$ factorization of $A$, using xGELQF. These preliminary $QR$ and $LQ$
+\indexR{SGELQF}\indexR{CGELQF}
+factorizations are performed by the drivers
+xGESVD \indexR{SGESVD}\indexR{CGESVD}and
+xGESDD\indexR{SGESDD}\indexR{CGESDD},
+and in addition $QR$ factorization with pivoting is performed
+by the driver routine SGEJSV\indexR{SGEJSV}.
+
+The SVD may be used to find a minimum norm solution\index{minimum norm
+solution} to a (possibly)
+rank-deficient linear least squares
+\index{linear least squares problem!rank-deficient}
+problem (\ref{llsq}). The effective rank, $k$, of $A$ can be determined as the
+number of singular values which exceed a suitable threshold.
+Let $\hat{\Sigma}$ be the leading $k$-by-$k$ submatrix of $\Sigma$, and
+$\hat{V}$ be the matrix consisting of the first $k$ columns of $V$.
+Then the solution is given by:
+\[
+x = \hat{V} \hat{\Sigma}^{-1} \hat{c}_1
+\]
+where $\hat{c}_1$ consists of the first $k$ elements of $c = U^T b =
+U_{2}^T U_{1}^T b$. $U_{1}^T b$ can be computed using xORMBR\indexR{SORMBR}, and
+xBDSQR has an option to multiply a vector by $U_{2}^T$.
+\indexR{SBDSQR}\indexR{CBDSQR}
+
+\begin{table}[ht]
+\caption{Computational routines for the singular value decomposition}
+\label{tabcompsvd}
+\begin{center}
+\begin{tabular}{||l|l|l|l||} \hline
+Type of matrix           & Operation & real & complex \\
+and storage scheme & & & \\ \hline
+general ($m \geq n$) & SVD using one-sided Jacobi & SGESVJ\indexR{SGESVJ} & 
+\\ \hline
+general                      & bidiagonal reduction & SGEBRD\indexR{SGEBRD} & CGEBRD\indexR{CGEBRD} \\ \hline
+general band             & bidiagonal reduction & SGBBRD\indexR{SGBBRD} & CGBBRD\indexR{CGBBRD} \\ \hline
+orthogonal/unitary    
+& generate matrix after bidiagonal reduction & SORGBR\indexR{SORGBR} & CUNGBR\indexR{CUNGBR} \\
+& multiply matrix after bidiagonal reduction & SORMBR\indexR{SORMBR} & CUNMBR\indexR{CUNMBR} \\ \hline
+bidiagonal                  & SVD using QR or dqds               & SBDSQR\indexR{SBDSQR} & CBDSQR\indexR{CBDSQR} \\
+                                  & SVD using divide and conquer                & SBDSDC\indexR{SBDSDC} &  \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\clearpage
+
+\subsection{Generalized Symmetric Definite Eigenproblems}\label{gsdeproblems}
+\index{generalized eigenproblems!symmetric definite}
+\index{GSEP!generalized symmetric definite eigenproblems}
+\index{computational routines!generalized symmetric definite eigenproblems}
+
+This section is concerned with the solution of the generalized symmetric definite eigenvalue
+problem, of which the most common form is
+\[
+ Az=\lambda Bz
+\]
+or when all the eigenvalues and eigenvectors are required:
+\[
+A Z = B Z \Lambda
+\]
+where $A$ and $B$ are symmetric and $B$ is positive definite.
+This can be reduced to a standard symmetric eigenproblem,
+using a Cholesky factorization of $B$ as either $B = U^T U$ or $B = L L^T$.
+For example, with $B = L L^T$ we have:
+\[
+A Z = B Z \Lambda \Leftrightarrow A (L^{-T} L^T) Z = (L L^T ) Z \Lambda \Leftrightarrow
+( L^{-1} A L^{-T} )  (L^T Z) = (L^T Z) \Lambda.
+\]
+Hence the eigenvalues of $AZ = BZ\Lambda$ are the same as those of $L^{-1} A L^{-T}$.
+The eigenvalues are always real, whether the problem is real or complex.
+
+Table~\ref{tabgstcomp} summarizes how each of the four types of problem
+(denoted by different values of the argument ITYPE) may be reduced to
+standard form, and how the eigenvectors of the original problem may be recovered
+from those of the reduced problem. The table applies to real problems; for complex problems,
+transposed matrices must be replaced by conjugate-transposes.
+
+\begin{table}[ht]
+\caption{Reduction of generalized symmetric definite eigenproblems to standard problems}
+\label{tabgstcomp}
+\begin{center}
+\begin{tabular}{|l|c|c|l|l|l|} \hline
+& Type of    & & Factorization & Reduction & Recovery of \\
+& problem   & & of $B$           &                  & eigenvectors \\
+\hline
+ITYPE = 1 & $AZ = BZ\Lambda$ &  $B^{-1}AZ = Z\Lambda$ &
+$B = U^TU$ & $C = U^{-T} A U^{-1}$ & $Z = U^{-1} Y$ \\
+ & & &
+$B = LL^T$  & $C = L^{-1} A L^{-T}$   & $Z = L^{-T} Y$ \\                  
+\hline
+ITYPE = 2 & $AZ^{-T} = B^{-1}Z^{-T}\Lambda$ & $ABZ = Z\Lambda$ & 
+$B = U^TU$ & $C = U A U^T$         & $Z = U^{-1} Y$ \\
+ & & &
+$B = LL^T$  & $C = L^T A L$           & $Z = L^{-T} Y$ \\
+ \hline
+ITYPE = 3 & $AZ = B^{-1}Z\Lambda$                  & $BAZ = Z\Lambda$ &
+ $B = U^TU$ & $C = U A U^T$         & $Z = U^T Y$ \\
+ & & &
+ $B = LL^T$  & $C = L^T A L$           & $Z = L Y$ \\
+\hline
+ITYPE = 4 & $AZ^{-T} = BZ^{-T}\Lambda$ &  $AB^{-1}Z = Z\Lambda$ &
+$B = U^TU$ & $C = U^{-T} A U^{-1}$ & $Z = U^T Y$ \\
+  & & &
+$B = LL^T$  & $C = L^{-1} A L^{-T}$   & $Z = L Y$ \\                  
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Given $A$ and a Cholesky factorization of $B$,
+the routines xyyGST overwrite $A$
+with the matrix $C$ of the corresponding standard problem
+$ Cy = \lambda y$ (see Table \ref{tabcompgeig}).
+This may then be solved using the routines described in
+subsection~\ref{subseccompsep}.
+No special routines are needed
+to recover the eigenvectors $z$ of the generalized problem from
+the eigenvectors $y$ of the standard problem, because these
+computations are simple applications of Level 3 or Level 2 BLAS.
+
+If the matrices $A$ and $B$ are banded,
+the matrix $C$ as defined above is, in general, full.
+We can reduce the problem to a banded standard problem by modifying the
+definition of $C$ thus:
+\[
+C = X^T A X, \quad \mbox{ where } X = U^{-1} Q \quad \mbox{or} \quad L^{-T} Q,
+\]
+where $Q$ is an orthogonal matrix chosen to ensure that $C$ has bandwidth
+no greater than that of $A$.
+$Q$ is determined as a product of Givens rotations.
+\index{Givens rotation}
+This is known as Crawford's algorithm\index{Crawford's algorithm}
+\index{generalized eigenproblem!symmetric definite banded}
+(see Crawford~\cite{crawford}).
+If $X$ is required, it must be formed explicitly by the reduction routine.
+A further refinement is possible which halves
+the amount of work required to form $C$ (see Wilkinson~\cite{wilkinsona}).
+Instead of the standard Cholesky factorization of $B$ as $U^T U$ or $L L^T$,
+we use a ``split Cholesky'' factorization $B = S^T S$
+\index{Cholesky factorization!split}
+\index{split Cholesky factorization}
+($S^H S$ if $B$ is complex), where:
+\[
+S = \left( \begin{array}{ccccccc}
+x & x & x &    &    &    &    \\
+   & x & x & x &    &    &    \\
+   &    & x & x &    &    &    \\
+   &    &    & x &    &    &    \\
+   &    & x & x & x &    &    \\
+   &    &    & x & x & x &    \\
+   &    &    &    & x & x & x \\
+\end{array} \right)
+\]
+$S$ has the same bandwidth as $B$. After $B$ has been factorized in this way
+by the routine
+xPBSTF\indexR{SPBSTF}\indexR{CPBSTF},
+the reduction of the banded generalized
+problem $A Z = B Z \Lambda $ to a banded standard problem $C Y = Y \Lambda$
+is performed by the routine xSBGS3\indexR{SSBGS3}
+(or xHBGS3\indexR{CHBGS3} for complex matrices).
+This routine implements a vectorizable form of the algorithm, suggested by
+Kaufman~\cite{vbandr}.
+
+\begin{table}[ht]
+\caption{Computational routines for the generalized symmetric definite eigenproblem}
+\label{tabcompgeig}
+\begin{center}
+\begin{tabular}{||l|l|l|l||} \hline
+Type of matrix & Operation  & real & complex \\
+and storage scheme & & & \\ \hline
+symmetric/Hermitian & reduction  & SSYGST\indexR{SSYGST} & CHEGST\indexR{CHEGST} \\ \hline
+symmetric/Hermitian & reduction  & SSPGST\indexR{SSPGST} & CHPGST\indexR{CHPGST} \\
+(packed storage)    &            &        &          \\
+\hline
+symmetric/Hermtian band & reduction     & SSBGS3\indexR{SSBGS3}  & CHBGS3\indexR{CHBST3} \\ & split Cholesky factorization & SPBSTF\indexR{SPBSTF} & CPBSTF\indexR{CPBSTF} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\clearpage
+
+\subsection{Generalized Nonsymmetric Eigenproblems} \label{sec_gnep_comp}
+\index{computational routines!generalized nonsymmetric eigenproblems}
+\index{GNEP!generalized nonsymmetric eigenproblems}
+
+\subsubsection{Eigenvalues, Eigenvectors and Generalized Schur Decomposition}
+
+Let $A$ and $B$ be $n$-by-$n$ matrices.
+\index{nonsymmetric eigenproblems!generalized}
+\index{GNEP!generalized nonsymmetric eigenproblems}
+A scalar $\lambda$ is called
+a {\bf generalized eigenvalue} \index{eigenvalue!generalized}
+and a nonzero column vector $x$ the
+corresponding {\bf right generalized eigenvector}
+\index{eigenvector!right!generalized} of the pair $(A,B)$,
+if $Ax = \lambda Bx$.
+A nonzero column vector $y$ satisfying $y^H A = \lambda y^H B$ is called the
+{\bf left generalized eigenvector} \index{eigenvector!left!generalized}
+corresponding to $\lambda$. (For
+simplicity, we will usually omit the word ``generalized'' when no
+confusion is likely to arise.)  If $B$ is singular, we can have the
+{\bf infinite eigenvalue} \index{eigenvalue!infinite}
+$\lambda = \infty$, by which we mean
+$Bx = 0$.  Note that if $A$ is nonsingular, then the equivalent
+problem $\mu Ax = Bx$ is perfectly well-defined, and the infinite
+eigenvalue corresponds to $\mu = 0$.
+The generalized symmetric definite eigenproblem in section~\ref{gsdeproblems}
+has only finite real eigenvalues. The generalized nonsymmetric
+eigenvalue problem can have real, complex or infinite eigenvalues.
+To deal with both finite (including zero) and infinite
+eigenvalues, the LAPACK routines return two values, $\alpha$ and $\beta$.
+If $\beta$ is nonzero then $\lambda = \alpha/\beta$ is an eigenvalue.
+If $\beta$ is zero then
+$\lambda = \infty$ is an eigenvalue of $(A, B)$.
+(Round off may change an exactly zero $\beta$ to a small nonzero value,
+changing the eigenvalue $\lambda = \infty$ to some very large value;
+see section~\ref{sec_GNEPErrorBounds} for details.)
+A basic task of these
+routines is to compute all $n$ pairs $(\alpha,\beta)$ and $x$ and/or
+$y$ for a given pair of matrices $(A,B)$.
+
+If the determinant of $A - \lambda B$ is identically
+zero for all values of $\lambda$,
+the eigenvalue problem is called {\bf singular}; otherwise it is {\bf regular}.
+Singularity of $(A,B)$ is signaled by some
+$\alpha = \beta = 0$ (in the presence of roundoff, $\alpha$ and $\beta$
+may be very small).  In this case, the eigenvalue problem is very
+ill-conditioned, and in fact some of the other nonzero values of $\alpha$
+and $\beta$ may be indeterminate (see section \ref{sec_singular} for further
+discussion)
+\cite{stewart72,wilkinson79,demmelkagstrom87,gantmacher}.
+
+Another basic task is to compute the {\bf generalized Schur decomposition}
+\index{Schur decomposition!generalized}
+of the pair $(A,B)$.  If $A$ and $B$ are complex, then their generalized
+Schur decomposition is $A = QSZ^H$ and $B = QTZ^H$, where $Q$ and $Z$ are
+unitary and $S$ and $T$ are upper triangular.  The LAPACK routines
+normalize $T$ to have real non-negative diagonal entries. \index{normalization}
+Note that in this
+form, the eigenvalues can be easily computed from the diagonals:
+$\lambda_i = s_{ii}/t_{ii}$ (if $t_{ii} \neq 0$) and
+$\lambda_i = \infty$ (if $t_{ii} = 0$), and so the LAPACK
+routines return  $\alpha_i = s_{ii}$ and $\beta_i = t_{ii}$.
+
+The generalized Schur form depends on the order of the eigenvalues on the
+diagonal of $(S,T)$. This order may optionally be chosen by the user.
+
+If $A$ and $B$ are real, then their generalized Schur decomposition
+is $A = QSZ^T$ and $B = QTZ^T$, where $Q$ and $Z$ are orthogonal,
+$S$ is quasi-upper triangular with 1-by-1 and 2-by-2 blocks on the
+diagonal, and $T$ is upper triangular with non-negative diagonal entries.
+The structure of a typical pair of $(S,T)$ is illustrated below for $n=6$:
+\[
+S = \left( \begin{array}{cccccc}
+  \times  & \times  & \times  & \times  & \times  & \times   \\
+  0 & \times  & \times  & \times  & \times  & \times   \\
+  0 & \times  & \times  & \times  & \times  & \times   \\
+  0 & 0 & 0 & \times  & \times  & \times   \\
+  0 & 0 & 0 & 0 & \times  & \times   \\
+  0 & 0 & 0 & 0 & \times  & \times
+\end{array} \right), \quad\quad\quad
+T = \left( \begin{array}{cccccc}
+  \times  & \times  & \times  & \times  & \times  & \times   \\
+  0 & \times  & 0  & \times  & \times  & \times   \\
+  0 &  0      & \times  & \times  & \times  & \times   \\
+  0 & 0 & 0 & \times  & \times  & \times   \\
+  0 & 0 & 0 & 0 & \times  & 0        \\
+  0 & 0 & 0 & 0 & 0       & \times
+\end{array} \right)
+\]
+The $1 \times 1$ diagonal blocks of $(S,T)$
+(those in the (1,1) and (4,4) positions)
+contain the real eigenvalues of $(A,B)$ and
+the $2 \times 2$ diagonal blocks of $(S,T)$
+(those in the (2:3,2:3) and (5:6,5:6) positions)
+contain conjugate pairs of complex eigenvalues of $(A,B)$.
+The $2 \times 2$ diagonal blocks of $T$ corresponding to 2-by-2
+blocks of $S$ are made diagonal.
+This arrangement enables us to work entirely with real numbers, even when
+some of the eigenvalues of $(A,B)$ are complex.
+Note that for real eigenvalues, as for all eigenvalues in the complex case,
+the $\alpha_i$ and $\beta_i$ values corresponding to real eigenvalues may be
+easily computed from the diagonals of $S$ and $T$.  The $\alpha_i$ and
+$\beta_i$ values corresponding to complex eigenvalues
+of a 2-by-2 diagonal block of $(S,T)$
+are computed by first
+computing the complex conjugate eigenvalues $\lambda$ and $\bar{\lambda}$
+of the block,
+then computing the values of $\beta_i$ and $\beta_{i+1}$ that would
+result if the block were put into {\em complex} generalized
+Schur form, and finally multiplying to get
+$\alpha_i = \lambda \beta_i$ and $\alpha_{i+1}=\bar{\lambda}\beta_{i+1}$.\\
+
+The columns of $Q$ and $Z$ are called {\bf generalized Schur vectors}
+\index{Schur vectors!generalized}
+and span pairs of {\bf deflating subspaces} of $A$ and $B$ \cite{stewart73}.
+\index{deflating subspaces}\index{subspaces!deflating}
+Deflating subspaces are a generalization of invariant subspaces: the first $k$
+columns of $Z$ span a right deflating subspace mapped by both $A$ and
+$B$ into a left deflating subspace spanned by the first $k$ columns of
+$Q$.  This pair of deflating subspaces corresponds to the first $k$
+eigenvalues appearing at the top left corner of $S$ and $T$ as explained
+in section \ref{sec_gnep_driver}. \\
+
+The computations proceed in the following stages:
+
+\begin{enumerate}
+
+\item The pair $(A,B)$ is reduced to {\bf generalized upper Hessenberg form}.
+      \index{generalized Hessenberg form!reduction to}
+      If $A$ and $B$ are real, this decomposition is $A = UHV^T$
+      and $B = U R V^T$ where $H$ is upper Hessenberg (zero below the
+      first subdiagonal), $R$ is upper triangular, and $U$ and $V$
+      are orthogonal.  If $A$ and $B$ are complex, the decomposition is
+      $A = UHV^H$ and $B = URV^H$ with $U$ and $V$ unitary, and $H$
+      and $R$ as before.  This decomposition is performed by the
+      subroutine xGGHRD,
+      \indexR{SGGHRD}\indexR{CGGHRD}
+      which computes $H$ and $R$, and optionally
+      $U$ and/or $V$.  Note that in contrast to xGEHRD (for the standard
+      nonsymmetric eigenvalue problem), xGGHRD does not compute $U$ and
+      $V$ in a factored form.
+
+\item The pair $(H,R)$ is reduced to generalized Schur form
+      \index{Schur form!generalized}
+      $H = QSZ^T$ and $R = QTZ^T$ (for $H$ and $R$ real) or
+      $H = QSZ^H$ and $R = QTZ^H$ (for $H$ and $R$ complex)
+      by subroutine xHGEQZ.
+      \index{QZ method}
+      \indexR{SHGEQZ}\indexR{CHGEQZ}
+      The values $\alpha_i$ and $\beta_i$ are also
+      computed, where $\lambda_i = \alpha_i / \beta_i$ are the
+      eigenvalues. The matrices $Z$ and $Q$ are optionally computed.
+
+\item The left and/or right eigenvectors of the pair $(S,T)$ are
+      computed by xTGEVC.
+      \index{eigenvector!right}\index{eigenvector!left}
+      One may optionally transform the right
+      eigenvectors of $(S,T)$ to the right eigenvectors of $(A,B)$
+      (or of $(H,R)$) by passing $(UQ,VZ)$ (or $(Q,Z)$) to xTGEVC.
+      \indexR{STGEVC}\indexR{CTGEVC}
+
+\end{enumerate}
+
+Other subsidiary tasks may be performed before or after
+those described.
+
+\subsubsection{Balancing}
+
+The routine xGGBAL \indexR{SGGBAL}\indexR{CGGBAL}
+may be used to {\bf balance} the matrix pair $(A,B)$
+prior to reduction to generalized Hessenberg form.
+\index{balancing and conditioning, eigenproblems}
+Balancing involves two steps, either of which is optional:
+
+\begin{enumerate}
+
+\item First, xGGBAL attempts to permute \index{permutation} $(A,B)$
+      by an equivalence transformation
+      to block upper triangular form:
+      \[ P_1(A,B)P_2 = (A^\prime,B^\prime) = \left(
+        \left[
+        \begin{array}{ccc}
+          A^\prime_{11} & A^\prime_{12} & A^\prime_{13} \\
+          0             & A^\prime_{22} & A^\prime_{23} \\
+          0             &      0        & A^\prime_{33} \\
+        \end{array}\right],\;\;
+        \left[
+        \begin{array}{ccc}
+          B^\prime_{11} & B^\prime_{12} & B^\prime_{13} \\
+          0             & B^\prime_{22} & B^\prime_{23} \\
+          0             &      0        & B^\prime_{33} \\
+        \end{array}  \right]
+        \right)
+      \]
+      where $P_1$ and $P_2$ are permutation matrices and $A^\prime_{11}$,
+      $A^\prime_{33}$, $B^\prime_{11}$ and $B^\prime_{33}$ are {\it upper
+      triangular}.  Thus the matrix pair is already in generalized Schur
+      form outside the central diagonal blocks $A^\prime_{22}$ and
+      $B^\prime_{22}$ in rows and columns ILO to IHI.  Subsequent operations
+      by xGGBAL, xGGHRD or xHGEQZ need only be applied to these rows and
+      columns; therefore ILO and IHI are passed as arguments to xGGHRD and
+      xHGEQZ.  This can save a significant amount of work if ILO $> 1$
+      or IHI $< n$.  If no suitable permutations can be found (as is very
+      often the case), xGGBAL sets ILO $= 1$ and IHI $= n$, and
+      $A^\prime_{22}$ is the whole of $A$ and $B^\prime_{22}$ is the whole
+      of $B$.
+
+\item Secondly, xGGBAL applies diagonal equivalence transformations
+      to $(A^\prime,B^\prime)$ to attempt to make the matrix norm smaller
+      with respect
+      to the eigenvalues and tries to reduce the inaccuracy contributed by
+      roundoff \cite{ward81}:
+      \begin{eqnarray*}
+      (A^{\prime\prime},B^{\prime\prime}) & =  &
+              D_1(A^\prime,B^\prime)D_2  \\
+       & = &
+      \left[ \begin{array}{ccc}
+          I &    0   & 0 \\
+          0 & D'_1 & 0 \\
+          0 &    0   & I \\ \end{array} \right] \left(
+       \left[
+      \begin{array}{ccc}
+          A^\prime_{11} & A^\prime_{12} & A^\prime_{13} \\
+          0             & A^\prime_{22} & A^\prime_{23} \\
+          0             &      0        & A^\prime_{33} \\ \end{array}
+       \right] , \;\;
+       \left[
+      \begin{array}{ccc}
+          B^\prime_{11} & B^\prime_{12} & B^\prime_{13} \\
+          0             & B^\prime_{22} & B^\prime_{23} \\
+          0             &      0        & B^\prime_{33} \\
+      \end{array} \right] \right) \left[
+      \begin{array}{ccc}
+          I &    0   & 0 \\
+          0 & D'_2 & 0 \\
+          0 &    0   & I \\ \end{array} \right]
+      \end{eqnarray*}
+      This can improve the accuracy of later processing in some cases; see
+      subsection \ref{GENP32}.
+
+\end{enumerate}
+
+If the matrix pair $(A,B)$ was balanced by xGGBAL, then eigenvectors
+computed by subsequent operations are eigenvectors of the balanced
+matrix pair $(A^{\prime\prime},B^{\prime\prime})$. xGGBAK
+\indexR{SGGBAK}\indexR{CGGBAK}
+must then
+be called to transform them back to eigenvectors of the original matrix
+pair $(A,B)$.
+Note that these transformations can improve the speed and accuracy of
+later processing in some cases; however, the diagonal transformation
+step can occasionally make the norm of the pencil $(A^\prime,B^\prime)$ larger
+and hence degrade the accuracy.
+
+\subsubsection{Deflating Subspaces and Condition Numbers}
+
+The generalized Schur \index{Schur form!generalized}
+form depends on the order of the eigenvalues on the
+diagonal of $(S,T)$ and this may optionally be chosen by the user.  Suppose
+the user chooses that $(\alpha_1,\beta_1),\ldots,(\alpha_j,\beta_j),
+1 \leq j \leq n$, appear in the upper left corner of $(S,T)$.  Then the
+first $j$ columns of $UQ$ and $VZ$ span the {\bf left and right deflating
+subspaces}  \index{deflating subspaces}\index{subspaces!deflating}
+of $(A,B)$ corresponding to $(\alpha_1,\beta_1),\ldots, (\alpha_j,\beta_j)$.
+
+The following routines perform this reordering
+\index{eigenvalue!ordering of}
+and also compute condition
+numbers for eigenvalues, eigenvectors and deflating subspaces:
+
+\begin{enumerate}
+
+\item xTGEXC\indexR{STGEXC}\indexR{CTGEXC}
+      will move an eigenvalue pair (or a pair of 2-by-2 blocks)
+      on the diagonal of the generalized Schur form $(S,T)$
+      \index{Schur form!generalized}
+      from its
+      original position to any other position.  It may be used to choose
+      the order in which eigenvalues appear in the generalized Schur
+      form.  The reordering is performed with orthogonal (unitary)
+      transformation matrices.  For more details see
+      \cite{kagstrom93,kagstromporomaa94a}.
+
+\item xTGSYL\indexR{STGSYL}\indexR{CTGSYL}
+      solves the generalized Sylvester equations
+      \index{Sylvester equation!generalized}
+      $AR - LB = sC$ and $DR - LE =sF$ for $L$ and $R$, given $A$ and $B$
+      upper (quasi-)triangular and $D$ and $E$ upper triangular.  It
+      is also possible to solve a transposed system (conjugate transposed
+      system in the complex case) $A^T X + D^T Y = sC$ and
+      $-X B^T - Y E^T = sF$
+      for $X$ and $Y$.  The scaling factor $s$ is set during the
+      computations to avoid overflow.  Optionally, xTGSYL computes a
+      Frobenius norm-based estimate of the ``separation'' between the two
+      matrix pairs $(A,B)$ and $(D,E)$.  xTGSYL is used by the routines
+      xTGSNA and xTGSEN, but it is also of independent interest.
+      For more details see \cite{kagstrom94,kagstromporomaa93a,
+      kagstromwestin89}.
+
+\item xTGSNA\indexR{STGSNA}\indexR{CTGSNA}
+      computes condition numbers of the
+      eigenvalues and/or left and right eigenvectors of a matrix pair
+      $(S,T)$ in generalized Schur form.
+      \index{eigenvalue!sensitivity of!generalized}
+      These are the same as the
+      condition numbers of the eigenvalues and eigenvectors of the
+      original matrix pair $(A,B)$, from which $(S,T)$ is derived. The
+      user may compute these condition numbers for all eigenvalues and
+      associated eigenvectors, or for any selected subset.  For more
+      details see section~\ref{sec_GNEPErrorBounds} and
+      \cite{kagstromporomaa94a}.
+
+\item xTGSEN\indexR{STGSEN}\indexR{CTGSEN}
+      \index{eigenvalue!sensitivity of!generalized}
+      moves a selected subset of the eigenvalues of a matrix pair
+      $(S,T)$ in generalized Schur form to the upper left corner of
+      $(S,T)$, and optionally computes condition numbers
+      \index{condition number}
+      of their average value and their associated pair of (left
+      and right) deflating subspaces.  These are the same as the condition
+      numbers of the average eigenvalue and the deflating subspace pair
+      of the original matrix pair $(A,B)$, from which $(S,T)$ is derived.
+      For more details see section~\ref{sec_GNEPErrorBounds} and
+      \cite{kagstromporomaa94a}.
+
+\end{enumerate}
+
+\begin{table}[ht]
+\begin{center}
+\caption{Computational routines for the generalized nonsymmetric eigenproblem}
+\label{tabcompgeneig2}
+\begin{tabular}{||l|l|l|l||} \hline
+Type of matrix & Operation & real & complex \\ \hline
+general              
+& generalized Hessenberg reduction & SGGHRD\indexR{SGGHRD} & CGGHRD\indexR{CGGHRD} \\
+& balancing                                        & SGGBAL\indexR{SGGBAL} & CGGBAL\indexR{CGGBAL} \\                            & back transforming                          & SGGBAK\indexR{SGGBAK} & CGGBAK\indexR{CGGBAK} \\
+\hline
+Hessenberg, triangular        
+& generalized Schur decomposition      & SHGEQZ\indexR{SHGEQZ} & CHGEQZ\indexR{CHGEQZ} \\ \hline
+(quasi)triangular 
+& generalized eigenvectors                & STGEVC\indexR{STGEVC} & CTGEVC\indexR{CTGEVC} \\
+& reordering Schur decomposition     & STGEXC\indexR{STGEXC} & CTGEXC\indexR{CTGEXC} \\
+& Sylvester equation                         & STGSYL\indexR{STGSYL} & CTGSYL\indexR{CTGSYL} \\
+& condition numbers of eigenvalues/vectors    
+                                                          & STGSNA\indexR{STGSNA} & CTGSNA\indexR{CTGSNA} \\
+& condition numbers of eigenvalue cluster/   
+                                                          & STGSEN\indexR{STGSEN} & CTGSEN\indexR{CTGSEN} \\
+& deflating subspaces      & & \\ 
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%\clearpage
+\pagebreak
+
+\subsection{Generalized (or Quotient) Singular Value Decomposition}\label{sectionGSVDcomputational}
+\index{generalized singular value decomposition}
+\index{GSVD!generalized singular value decomposition}
+\index{quotient singular value decomposition}
+\index{singular value decomposition!generalized}
+\index{computational routines!generalized singular value decomposition}
+
+The {\bf generalized (or quotient) singular value decomposition}
+of an $m$-by-$n$ matrix $A$ and a $p$-by-$n$ matrix $B$ is described
+in section~\ref{subsecdrivegeig}.
+The routines described in this section, are used
+to compute the decomposition. The computation proceeds in the following
+two stages:
+
+\begin{enumerate}
+
+\item xGGSVP\indexR{SGGSVP}\indexR{CGGSVP} is used to reduce the matrices $A$ and $B$ to triangular form:
+\begin{eqnarray*}
+U^T_1 A Q_1 & = & \bordermatrix{    &   n-k-l   & k   &  l   \cr
+                 \hfill  k  & 0         & A_{12}  & A_{13}  \cr
+                 \hfill  l  & 0         &  0      & A_{23}   \cr
+                         m-k-l & 0      & 0       & 0       } \\
+V^T_1 B Q_1 & = & \bordermatrix{    &   n-k-l   & k   &  l   \cr
+                 \hfill  l  & 0         & 0       & B_{13}  \cr
+                        p-l & 0         &  0      & 0 }
+\end{eqnarray*}
+where $A_{12}$ and $B_{13}$ are nonsingular upper triangular, and
+$A_{23}$ is upper triangular.
+If $m-k-l < 0$, the bottom zero block of $U_1^T A Q_1$ does not appear,
+and $A_{23}$ is upper trapezoidal.
+$U_1$, $V_1$ and $Q_1$ are
+orthogonal matrices (or unitary matrices if $A$ and $B$ are complex).
+$l$ is the rank of $B$, and
+$k+l$  is the rank of $\bmat{c}  A  \\ B \emat$.
+
+\item The generalized singular value decomposition of two $l$-by-$l$
+upper triangular matrices $A_{23}$ and $B_{13}$ is computed using
+xTGSJA (if $m-k-l < 0$, we may add some zero rows to $A_{23}$ to make
+it upper triangular):
+\indexR{STGSJA}\indexR{CTGSJA}
+\[
+ A_{23} =  U_2 C R Q^T_2  \quad  \mbox{and} \quad
+ B_{13} =  V_2 S R Q^T_2  \; \; .
+\]
+Here $U_2$, $V_2$ and $Q_2$ are orthogonal or unitary) matrices,
+$C$ and $S$ are both real
+nonnegative diagonal matrices satisfying $C^2 + S^2 = I$, $S$ is nonsingular,
+and $R$ is upper triangular and nonsingular.
+
+\end{enumerate}
+
+The reduction to triangular form, performed by
+xGGSVP, uses $QR$ decomposition with column pivoting
+\index{QR decomposition!with pivoting}
+for numerical rank determination.  See \cite{baizha93} for details.
+\index{rank!numerical determination of}
+
+The generalized singular value decomposition of two
+triangular matrices, performed by xTGSJA, is done
+using a Jacobi-like method as described in \cite{paige86a,baidemmel92b}.
+
+\begin{table}[ht]
+\caption{Computational routines for the generalized singular value decomposition}
+\label{tabcompGSVD}
+\begin{center}
+\begin{tabular}{||l||l|l||} \hline
+Operation &  real & complex \\ \hline
+triangular reduction of $A$ and $B$   & SGGSVP\indexR{SGGSVP} & CGGSVP\indexR{CGGSVP} \\
+GSVD of a pair of triangular matrices  & STGSJA\indexR{STGSJA} & CTGSJA\indexR{CTGSJA} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{CS Decomposition}\label{sectionCScomputational}
+\index{computational routines!CS decomposition}
+
+The CS decomposition is performed in two stages (see \cite{sutton09}).
+We first state the formulae for the complete CS decomposition of a square $m$-by-$m$ 
+orthogonal/unitary matrix {X}\index{CS decomposition!complete}.
+We assume that $q \leq p$, $q \leq m-p$ and $q \leq m-q$; 
+if not, this can be achieved by the TRANS and SIGNS parameters.
+
+\begin{enumerate}
+
+\item First the matrix is reduced to bidiagonal block form:
+
+\begin{eqnarray*}
+X  =  \bordermatrix{        &     q           &    m-q   \cr
+                              \hfill   p   & X_{11} & X_{12} \cr
+                              \hfill m-p & X_{21} & X_{22} }
+\end{eqnarray*}
+\begin{eqnarray*} 
+     = \bordermatrix{         &    p     &    m-p   \cr
+                              \hfill   p   & P_{1} &             \cr
+                              \hfill m-p &            & P_{2}  }
+            \bordermatrix{            &       q      &      q      &  p-q  & m-p-q \cr
+                              \hfill     q    &   B_{11} & B_{12} &    0   &      0    \cr 
+                              \hfill   p-q  &    0          & 0          &   -I    &      0   \cr 
+                              \hfill     q    &  B_{21}  & B_{22} &    0   &      0   \cr
+                              \hfill m-p-q &  0           & 0           &    0   &      I }
+           \bordermatrix{        &     q            &    m-q   \cr
+                              \hfill   q   & Q_{1}^* &             \cr
+                              \hfill m-q &                 & Q_{2}^*  }
+ \end{eqnarray*}
+
+where $B_{11}$ and $B_{21}$ are upper bidiagonal, $B_{12}$ and $B_{22}$ are lower bidiagonal, 
+and $P_{1}$, $P_{2}$, $Q_{1}$ and $Q_{2}$ are orthonormal.
+The middle factor is a real orthogonal matrix in {\bf bidiagonal block form}.
+This is performed by xORBDB/xUNBDB\indexR{SORBDB}\indexR{CUNBDB}.
+
+\item Second, each bidiagonal block is reduced to a diagonal matrix in an iterative procedure:
+
+\begin{eqnarray*}
+            \bordermatrix{            &       q      &      q      &  p-q  & m-p-q \cr
+                              \hfill     q    &   B_{11} & B_{12} &    0   &      0    \cr 
+                              \hfill   p-q  &    0          & 0          &   -I    &      0   \cr 
+                              \hfill     q    &  B_{21}  & B_{22} &    0   &      0   \cr
+                              \hfill m-p-q &  0           & 0           &    0   &      I }
+\end{eqnarray*}
+\begin{eqnarray*}
+     =  \bordermatrix{         &    p     &    m-p   \cr
+                              \hfill   p   & U_{1} &             \cr
+                              \hfill m-p &            & U_{2}  }
+            \bordermatrix{            &   q  &  q   &  p-q  & m-p-q \cr
+                              \hfill     q    &   C  & -S  &    0   &      0    \cr 
+                              \hfill   p-q   &   0  &  0  &   -I    &      0   \cr 
+                              \hfill     q    &   S  &  C  &    0   &      0   \cr
+                              \hfill m-p-q &   0  &  0  &    0   &      I }
+           \bordermatrix{        &     q           &    m-q   \cr
+                              \hfill   q   & V_{1}^* &                 \cr
+                              \hfill m-q &                & V_{2}^*  }
+ \end{eqnarray*}
+
+where $C = {\rm diag}(\cos(\theta_{1}), \ldots , \cos(\theta_{q}) $,
+$S = {\rm diag}(\sin(\theta_{1}), \ldots , \sin(\theta_{q}) $ and
+ $\theta_{1}, \ldots , \theta_{q} \in [0,\pi/2]$.
+This is performed by xBBCSD\indexR{SBBCSD}\indexR{CBBCSD}.
+
+\end{enumerate}
+
+Now we state the formulae for the 2-by-1 CS decomposition\index{CS decomposition!2-by-1}.
+
+\begin{enumerate}
+
+\item First, bidiagonalization:.
+
+\begin{eqnarray*}
+X = \bordermatrix{        &     q      \cr
+                              \hfill   p   & X_{11} \cr
+                              \hfill m-p & X_{21} } &
+     =  \bordermatrix{         &    p     &    m-p   \cr
+                              \hfill   p   & P_{1} &             \cr
+                              \hfill m-p &            & P_{2}  }
+            \bordermatrix{            &       q      \cr
+                              \hfill     q    &   B_{11} \cr 
+                              \hfill   p-q  &    0          \cr 
+                              \hfill     q    &  B_{21}  \cr
+                              \hfill m-p-q &  0           }
+           \bordermatrix{         &   q     \cr
+                              \hfill   q   & Q^* }
+ \end{eqnarray*}
+This is performed by one of xORBDBn/xUNBDBn,
+\indexR{SORBDB1}\indexR{CUNBDB1}
+\indexR{SORBDB2}\indexR{CUNBDB2}
+\indexR{SORBDB3}\indexR{CUNBDB3}
+\indexR{SORBDB4}\indexR{CUNBDB4}
+where $n$ = 1, 2, 3 or 4, depending on whether $p$, $q$, $m-q$ or $m-p$
+= $\min(p,q,m-p,m-q)$.
+ 
+\item Second, diagonalization:
+
+\begin{eqnarray*}
+            \bordermatrix{            &       q      \cr
+                              \hfill     q    &   B_{11} \cr 
+                              \hfill   p-q  &    0          \cr 
+                              \hfill     q    &  B_{21}  \cr
+                              \hfill m-p-q &  0           }
+     = \bordermatrix{         &    p     &    m-p   \cr
+                              \hfill   p   & U_{1} &             \cr
+                              \hfill m-p &            & U_{2}  }
+            \bordermatrix{            &   q  \cr
+                              \hfill     q    &   C  \cr 
+                              \hfill   p-q   &   0  \cr 
+                              \hfill     q    &   S  \cr
+                              \hfill m-p-q &   0  }
+           \bordermatrix{        &     q      \cr
+                              \hfill   q   &   V^* }
+ \end{eqnarray*}
+
+This is performed by xBBCSD\indexR{SBBCSD}\indexR{CBBCSD}.
+
+\end{enumerate}
+
+\begin{table}[ht]
+\caption{Computational routines for the CS decomposition}
+\label{tabcompcs}
+\begin{center}
+\begin{tabular}{||c|l|l||} \hline
+Operation & real & complex \\
+\hline
+reduction to bidiagonal block form (complete)
+& SORBDB\indexR{SORBDB} & CUNBDB\indexR{CUNBDB} \\
+reduction to bidiagonal block form (2-by-1, $q$ = $\min(p,q,m-p,m-q)$
+& SORBDB1\indexR{SORBDB1} & CUNBDB1\indexR{CUNBDB1} \\
+reduction to bidiagonal block form (2-by-1, $p$ = $\min(p,q,m-p,m-q)$
+& SORBDB2\indexR{SORBDB2} & CUNBDB2\indexR{CUNBDB2} \\
+reduction to bidiagonal block form (2-by-1, $m-p$ = $\min(p,q,m-p,m-q)$
+& SORBDB3\indexR{SORBDB3} & CUNBDB3\indexR{CUNBDB3} \\
+reduction to bidiagonal block form (2-by-1, $m-q$ = $\min(p,q,m-p,m-q)$
+& SORBDB4\indexR{SORBDB4} & CUNBDB4\indexR{CUNBDB4} \\
+\hline
+CS decomposition of bidiagonal block form
+& SBBCSD\indexR{SBBCSD} & CBBCSD\indexR{CBBCSD} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+

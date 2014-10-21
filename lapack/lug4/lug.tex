@@ -1,0 +1,324 @@
+\makeatletter
+
+\def\makeindexR{\if@filesw \newwrite\@indexfileR
+  \immediate\openout\@indexfileR=\jobname.idxR
+  \def\indexR{\@bsphack\begingroup
+             \def\protect####1{\string####1\space}\@sanitize
+             \@wrindexR}\typeout
+  {Writing index file \jobname.idxR }\fi}
+
+\def\@wrindexR#1{\let\thepage\relax
+   \edef\@tempa{\write\@indexfileR{\string
+      \indexentry{#1}{\thepage}}}\expandafter\endgroup\@tempa
+   \if@nobreak \ifvmode\nobreak\fi\fi\@esphack}
+
+\def\indexR{\@bsphack\begingroup \@sanitize\@index}
+
+\def\printindexR{\@input{\jobname.indR}}
+
+\makeatother
+
+\makeindexR
+
+\makeindex
+
+\documentclass[11pt,twoside]{report}
+
+\usepackage{graphicx}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{0.1in}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+\oddsidemargin=-.15in
+\evensidemargin=-.15in
+\setlength{\textwidth}{6.5in}
+\topmargin=0.in
+\setlength{\textheight}{8.5in}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\textfraction}{0.1}
+\newcommand{\ignore}[1]{}
+\newcommand{\sep}{{\rm sep}}
+\newcommand{\infnorm}{\|_{\infty}}
+\newcommand{\norm}[2]{{\| #1 \|}_{#2}}
+\newcommand{\kappai}{\kappa_{\infty}}
+\newcommand{\kappac}{\kappa_{c}}
+\newcommand{\omegai}{\omega_{\infty}}
+\newcommand{\omegac}{\omega_{c}}
+\newcommand{\diag}{{\mbox {\rm diag}}}
+\newcommand{\bmat}{\left( \begin{array}}
+\newcommand{\emat}{\end{array} \right) }
+\newcommand{\bq}{\begin{equation}}
+\newcommand{\eq}{\end{equation}}
+\newcommand{\tr}{\mbox{trace}}
+\newcommand{\sigmahat}{\hat{\sigma}}
+\newcommand{\vhat}{\hat{v}}
+\newcommand{\uhat}{\hat{u}}
+\newcommand{\zhat}{\hat{z}}
+\newcommand{\lambdahat}{\hat{\lambda}}
+\newcommand{\gap}{{\rm gap}}
+\newcommand{\relgap}{{\rm relgap}}
+\newcommand{\ltapprox}{\stackrel{<}{\approx}}
+\renewcommand{\thepart}{\arabic{part}}
+\newcounter{footnoteapproxerrorbound}
+\newcounter{footnoteDEC5000}
+
+\def\atleastlabelwidth#1{\setbox0\hbox{#1}\ifdim\wd0<\labelwidth
+    \hbox to \labelwidth{#1\hfil}\else\box0 \fi}
+
+\newcommand{\startspec}[1]{\section*{\footnotesize\bf {#1}}
+                           \vspace{-0.05in}}
+\setlength{\columnsep}{0.5in}
+\newlength{\colwidth}
+\setlength{\colwidth}{4.25in}
+
+\newcommand{\finishspec}[1]{\rule{\colwidth}{0.01in}
+                            \vspace{-0.2in}}
+
+\newcommand{\purpose}{\vspace{-0.15in}
+                      \subsection*{\scriptsize\bf Purpose}
+                      \vspace{-0.1in}}
+
+\newenvironment{arguments}{\vspace{-0.15in}
+                           \subsection*{\scriptsize\bf Arguments}
+                           \begin{list}{}{
+                             \setlength{\labelwidth}{0.5in}
+                             \setlength{\labelsep}{0.1in}
+                             \setlength{\leftmargin}{0.6in}
+                             \setlength{\parsep}{0in}
+                             \setlength{\topsep}{0in}
+                             \renewcommand{\makelabel}{\makebox[\labelwidth][l]}
+                                         }
+                          }{\end{list}}
+
+\newcounter{descitem}
+\newenvironment{describe}{\vspace{-0.15in}
+                           \subsection*{\scriptsize\bf Description}
+                           \vspace{-0.1in}
+                      The following steps are performed:
+                           \begin{list}{\arabic{descitem}.}
+                           {\usecounter{descitem}
+                             \setlength{\labelwidth}{0.15in}
+                             \setlength{\labelsep}{0.05in}
+                             \setlength{\leftmargin}{0.2in}
+                             \setlength{\itemsep}{0in}
+                             \setlength{\parsep}{0.08in}
+                             \setlength{\topsep}{0in}
+                                         }
+                          }{\end{list}}
+\renewcommand{\makelabel}{\makebox[\labelwidth][l]
+}
+
+\newenvironment{optionarg}{\vspace{-0.13in}
+                           \begin{list}{}{
+                             \setlength{\labelwidth}{0.40in}
+                             \setlength{\labelsep}{0.5em}
+                             \setlength{\leftmargin}{0.45in}
+                             \setlength{\itemsep}{0in}
+                             \setlength{\parsep}{0in}
+                             \setlength{\topsep}{0in}
+                             \renewcommand{\makelabel}{\atleastlabelwidth}
+                                         }
+                          }{\end{list}}
+\newenvironment{infoarg}{\vspace{-0.13in}
+                         \begin{list}{}{
+                             \setlength{\labelwidth}{0.30in}
+                             \setlength{\labelsep}{0.5em}
+                             \setlength{\leftmargin}{0.35in}
+                             \setlength{\itemsep}{0in}
+                             \setlength{\parsep}{0in}
+                             \setlength{\topsep}{0in}
+                             \renewcommand{\makelabel}{\atleastlabelwidth}
+                                         }
+                        }{\end{list}}
+
+\newcommand{\dent}{\hspace*{0.24in}}
+%\newcommand{\nh}[1]{\hyphenation{#1}}
+
+\def\normf#1{\|#1\|_F}
+\def\normt#1{\|#1\|_2}
+\def\normi#1{\|#1\|_1}
+
+\def\stacksymbols #1#2#3#4{\def\theguybelow{#2}
+    \def\verticalposition{\lower#3pt}
+    \def\spacingwithinsymbol{\baselineskip0pt\lineskip#4pt}
+    \mathrel{\mathpalette\intermediary#1}}
+\def\intermediary#1#2{\verticalposition\vbox{\spacingwithinsymbol
+      \everycr={}\tabskip0pt
+      \halign{$\mathsurround0pt#1\hfil##\hfil$\crcr#2\crcr
+               \theguybelow\crcr}}}
+\def\lapproxeq{\stacksymbols{<}{\sim}{2.5}{.2}}
+\def\gapproxeq{\stacksymbols{>}{\sim}{3}{.5}}
+
+\title{LAPACK Users' Guide \\
+       Release 4.0 (?)}
+\author{E. Anderson, Z. Bai, C. Bischof, S. Blackford, J. Demmel, J. Dongarra,\\
+J. Du Croz, A. Greenbaum, S. Hammarling, A. McKenney, D. Sorensen} 
+\date{UPDATED: 31 Dec 2014}
+
+\begin{document}
+\pagestyle{empty}
+\maketitle
+
+\newcommand{\insertplot}[3]{
+\par
+  \hbox{ %
+        \hskip #3
+          \vbox to #2{
+                \vfil
+                \centerline{\includegraphics{#1.ps}}
+%                 \special{ps: plotfile #1}
+      }%
+  }
+}
+
+\newcommand{\mgraph}[1]{\centerline{\includegraphics[height=3in,width=4in]{figure=#1.ps}}}
+
+\newpage
+\vspace{2.5in}
+\begin{center}
+{\large\bf Dedication \\}
+\end{center}
+
+\vspace{0.2in}
+This work is dedicated to Jim Wilkinson whose ideas and
+spirit have given us inspiration and influenced the project
+at every turn.
+
+\vspace{1in}
+
+\fbox{\parbox{\textwidth}{
+The royalties from the sales of this book are being placed in a fund to
+help students attend SIAM meetings and other SIAM related activities.
+This fund is administered by SIAM and qualified individuals are
+encouraged to write directly to SIAM for guidelines. }}
+
+\newpage
+\begin{center}
+\Large
+Authors' Affiliations:
+\end{center}
+\vspace{0.15in}
+\begin{center}
+\large
+E. Anderson \\
+{\it University of Tennessee, Knoxville} \\
+\vspace{0.15in}
+Z. Bai \\
+{\it University of Kentucky and \\ 
+University of California, Davis} \\
+\vspace{0.15in}
+C. Bischof \\
+{\it Institute of Scientific Computing, Technical University Aachen, Germany} \\ 
+\vspace{0.15in}
+L. S. Blackford (formerly L. S. Ostrouchov)\\
+{\it University of Tennessee, Knoxville} \\ 
+\vspace{0.15in}
+J. Demmel \\
+{\it University of California, Berkeley} \\ 
+\vspace{0.15in}
+J. Dongarra \\
+{\it University of Tennessee, Knoxville and \\ 
+Oak Ridge National Laboratory} \\
+\vspace{0.15in}
+J. Du Croz \\
+{\it Numerical Algorithms Group Ltd. (retired)} \\ 
+\vspace{0.15in}
+A. Greenbaum \\
+{\it University of Washington} \\ 
+\vspace{0.15in}
+S. Hammarling \\
+{\it Numerical Algorithms Group Ltd.} \\ 
+\vspace{0.15in}
+A. McKenney \\
+%{\it Courant Institute of Mathematical Sciences, \\
+% New York University} \\ 
+\vspace{0.15in}
+D. Sorensen \\
+{\it Rice University} \\
+\end{center}
+\newpage
+
+\pagestyle{headings}
+\pagenumbering{roman}
+
+\tableofcontents
+
+\listoftables
+
+\input{preface}
+
+\newpage
+\cleardoublepage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{chapter1}
+
+\input{chapter2}
+
+\input{chapter3}
+
+\input{chapter4}
+
+\input{chapter5}
+
+\input{chapter6}
+
+\input{chapter7}
+
+\input{chapter8}
+
+\appendix
+
+\input{appendixA}
+
+\input{appendixB}
+
+\input{appendixC}
+
+%
+%  The Bibliography
+%
+\special{papersize=8.5in,11in}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+\hoffset=0in
+\voffset=0in
+\oddsidemargin=-.15in
+\evensidemargin=-.15in
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+\topmargin=0.in
+\onecolumn
+\makeatletter
+\@colht\textheight  \@colroom\textheight \vsize\textheight
+\makeatother
+\pagestyle{headings}
+\flushbottom
+\normalsize
+
+\bibliographystyle{siam}
+
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\bibliography{lug}
+
+\vfill
+\clearpage
+
+\renewcommand{\indexname}{Index by Keyword}
+\addcontentsline{toc}{chapter}{Index by Keyword}
+\markboth{Index by Keyword}{Index by Keyword}
+
+\input{lug.ind}
+
+\clearpage
+
+\renewcommand{\indexname}{Index by Routine Name}
+\addcontentsline{toc}{chapter}{Index by Routine Name}
+\markboth{Index by Routine Name}{Index by Routine Name}
+
+%\input{lug.indR}
+
+\end{document}

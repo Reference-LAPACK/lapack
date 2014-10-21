@@ -1,0 +1,669 @@
+\chapter{Performance of LAPACK}\label{chapperformance}\index{performance}
+
+\section{Factors that Affect Performance}\label{secperf}
+
+Can we provide {\bf portable}\index{portability} software for computations
+in dense linear algebra
+that is {\bf efficient} on a wide range of modern high-performance
+computers?
+If so, how?
+Answering these questions --- and providing
+the desired software --- has been the goal of the LAPACK project.
+
+LINPACK~\cite{dongarra79}
+and EISPACK~\cite{Smith76,Garbow77} have for many years provided
+high-quality portable software for linear algebra; but
+on modern high-performance computers they often
+achieve only a small fraction of the peak performance of the machines.
+Therefore, LAPACK has been designed to supersede LINPACK and EISPACK,
+principally by achieving much greater efficiency --- but at the same time
+also adding extra functionality, using some new or improved algorithms,
+and integrating the two sets of algorithms into a single package.
+
+LAPACK was originally targeted to achieve good performance on
+single-processor
+vector machines and on shared memory multiprocessor
+machines\index{shared memory} with a modest
+number of powerful processors. Since the start of the project,
+another class of machines has
+emerged for which LAPACK software is equally well-suited---the
+high-performance
+``super-scalar'' workstations\index{workstation, super-scalar}.
+(LAPACK is intended to be used across the whole spectrum of modern
+computers,
+but when considering performance, the emphasis is on machines at the more
+powerful end of the spectrum.)
+
+Here we discuss the main factors that affect the performance of linear
+algebra software on these classes of machines.
+
+\subsection{Vectorization}\label{subsecvectorize}\index{vectorization}
+
+Designing vectorizable algorithms in linear algebra is usually
+straightforward.
+Indeed, for many computations there are several variants, all vectorizable,
+but
+with different characteristics in performance (see, for example,
+\cite{Dongarra84a}).
+Linear algebra algorithms can come close to the peak performance of
+many machines --- principally because peak performance depends on some form
+of
+chaining of vector addition and multiplication operations, and this is just
+what the algorithms require.
+
+However, when the algorithms are realized in straightforward Fortran
+code,
+the performance may fall well short of the expected level, usually because
+vectorizing Fortran compilers fail to minimize the number of memory
+references
+--- that is, the number of vector load and store operations. This brings us
+to
+the next factor.
+
+\subsection{Data Movement}\label{subsecdata}\index{data movement}
+
+What often limits the actual performance of a vector---or scalar---
+floating-point unit is the rate of transfer of data between different levels
+of memory in the machine. Examples include: the transfer of vector operands
+in and out of vector registers\index{vector registers}, the transfer of
+scalar operands in and out of a
+high-speed scalar processor, the movement of data between main memory and a
+high-speed cache\index{cache} or local memory\index{local memory}, and
+paging between
+actual memory and disk storage in a virtual memory system.
+
+It is desirable to maximize the ratio of floating-point operations to memory
+references, and to re-use data as much as possible while it is stored in the
+higher levels of the memory hierarchy (for example, vector registers or
+high-speed cache).
+
+A Fortran programmer has no explicit control over these types of data
+movement,
+although one can often influence them by imposing a suitable structure on an
+algorithm.
+
+\subsection{Parallelism}\label{subsecparallel}\index{parallelism!loop-based}
+
+The nested loop structure of most linear algebra algorithms offers
+considerable scope for loop-based parallelism on shared memory
+machines. This is the principal type of parallelism that LAPACK at present
+aims to exploit.
+It can sometimes be generated automatically
+by a compiler, but often requires the insertion of compiler
+directives\index{parallelism!compiler directives}.
+
+\section{The BLAS as the Key to Portability}\label{secblasport}\index{BLAS}
+
+How then can we hope to be able to achieve sufficient control over
+vectorization, data movement, and parallelism in portable Fortran code,
+to obtain the levels of performance that machines can offer?
+
+The LAPACK strategy for combining
+efficiency with portability\index{portability} is to construct the software
+as much as possible
+out of calls to the BLAS (Basic Linear Algebra Subprograms); the BLAS are
+used
+as building blocks.
+
+The efficiency\index{efficiency} of LAPACK software depends on efficient
+implementations
+of the BLAS being provided by computer vendors (or others) for their
+machines.
+Thus the BLAS form a low-level interface between LAPACK software and
+different machine architectures.
+Above this level, almost all of the LAPACK software is truly portable.
+
+There are now three levels of BLAS:
+
+\begin{description}
+
+\item[Level 1 BLAS \cite{blas1}:] for vector operations, such as
+$y \leftarrow \alpha x + y$
+
+\item[Level 2 BLAS \cite{blas2}:] for matrix-vector operations, such as
+$y \leftarrow \alpha A x + \beta y$
+
+\item[Level 3 BLAS \cite{blas3}:] for matrix-matrix operations, such as
+$C \leftarrow \alpha A B + \beta C$
+
+\end{description}
+
+Here, $A$, $B$ and $C$ are matrices, $x$ and $y$ are vectors, and $\alpha$
+and
+$\beta$ are scalars.
+
+The Level 1 BLAS\index{BLAS!Level 1} are used in LAPACK,
+but for convenience rather than
+for performance: they perform an insignificant fraction of the computation,
+and they cannot achieve high efficiency on most modern supercomputers.
+
+The Level 2 BLAS\index{BLAS!Level 2} can achieve near-peak performance
+on many vector processors.
+However, on other machines
+their performance is limited by the rate of data movement between different
+levels of memory.
+
+This limitation is overcome by the Level 3 BLAS\index{BLAS!Level 3},
+which perform $O(n^3)$
+floating-point operations on $O(n^2)$ data, whereas the Level 2 BLAS
+perform only $O(n^2)$ operations on $O(n^2)$ data.
+
+The BLAS also allow us to exploit parallelism in a way that is transparent
+to the software that calls them.
+
+\section{Block Algorithms and their
+Derivation}\label{secblockalg}\index{block algorithm}
+
+It is comparatively straightforward to recode many of the algorithms in
+LINPACK and EISPACK so that they call Level 2 BLAS\index{BLAS!Level 2}.
+Indeed, in the simplest
+cases the same floating-point operations are performed, possibly even in
+the same order: it is just a matter of reorganizing the software. To
+illustrate
+this point we derive the Cholesky factorization algorithm that is used in
+the
+LINPACK\index{LINPACK} routine SPOFA\indexR{SPOFA (LINPACK)}, which
+factorizes a symmetric positive definite matrix
+as $A = U^T U$. Writing these equations as:
+
+$$
+\left( \begin{array}{ccc}
+A_{11}   & a_j     & A_{13}       \\
+.        & a_{jj}  & \alpha_{j}^T \\
+.        & .       & A_{33}       \\
+\end{array} \right) =
+\left( \begin{array}{ccc}
+U_{11}^T & 0       & 0            \\
+u_{j}^T  & u_{jj}  & 0            \\
+U_{13}^T & \mu_j   & U_{33}^T     \\
+\end{array} \right)
+\left( \begin{array}{ccc}
+U_{11}   & u_j     & U_{13}       \\
+0        & u_{jj}  & \mu_{j}^T    \\
+0        & 0       & U_{33}   \\
+\end{array} \right)
+$$
+
+and equating coefficients of the $j^{th}$ column, we obtain:
+\begin{eqnarray*}
+a_j    & = & U_{11}^T u_j \\
+a_{jj} & = & u_{j}^T u_j + u_{jj}^2.
+\end{eqnarray*}
+
+Hence, if $U_{11}$ has already been computed, we can compute $u_j$ and
+$u_{jj}$
+from the equations:
+\begin{eqnarray*}
+U_{11}^T u_j & = & a_j \\
+u_{jj}^2     & = & a_{jj} - u_{j}^T u_j.
+\end{eqnarray*}
+
+Here is the body of the code of the LINPACK routine SPOFA\indexR{SPOFA
+(LINPACK)},
+which implements the above method:
+
+\begin{verbatim}
+         DO 30 J = 1, N
+            INFO = J
+            S = 0.0E0
+            JM1 = J - 1
+            IF (JM1 .LT. 1) GO TO 20
+            DO 10 K = 1, JM1
+               T = A(K,J) - SDOT(K-1,A(1,K),1,A(1,J),1)
+               T = T/A(K,K)
+               A(K,J) = T
+               S = S + T*T
+   10       CONTINUE
+   20       CONTINUE
+            S = A(J,J) - S
+C     ......EXIT
+            IF (S .LE. 0.0E0) GO TO 40
+            A(J,J) = SQRT(S)
+   30    CONTINUE
+\end{verbatim}
+
+And here is the same computation recoded in ``LAPACK-style''
+to use the Level 2 BLAS\index{BLAS!Level 2} routine
+STRSV (which solves a triangular system of equations). The call to STRSV
+has replaced the loop over K which made several calls to the
+Level 1 BLAS routine SDOT. (For reasons given below, this is not the actual
+code used in LAPACK --- hence the term ``LAPACK-style''.)
+
+\begin{verbatim}
+      DO 10 J = 1, N
+         CALL STRSV( 'Upper', 'Transpose', 'Non-unit', J-1, A, LDA,
+     $               A(1,J), 1 )
+         S = A(J,J) - SDOT( J-1, A(1,J), 1, A(1,J), 1 )
+         IF( S.LE.ZERO ) GO TO 20
+         A(J,J) = SQRT( S )
+   10 CONTINUE
+\end{verbatim}
+
+This change by itself is sufficient to make big gains in performance
+on many machines.
+But on many other machines
+there is virtually no difference in performance between
+the LINPACK-style and the LAPACK Level 2 BLAS style code.
+Both styles run at a megaflop rate far below its peak performance for
+matrix-matrix multiplication.
+To exploit the faster speed of Level 3 BLAS\index{BLAS!Level 3}, the
+algorithms must undergo a deeper level of restructuring, and be re-cast as a
+{\bf block algorithm} --- that is, an algorithm that operates on {\bf blocks}
+or submatrices of the original matrix.
+
+To derive a block form of Cholesky
+factorization\index{Cholesky factorization!blocked form}, we write the
+defining equation in partitioned form thus:
+$$
+\left( \begin{array}{ccc}
+A_{11} & A_{12} & A_{13}\\
+.      & A_{22} & A_{23}\\
+.      & .      & A_{33}\\
+\end{array} \right) =
+\left( \begin{array}{ccc}
+U_{11}^T & 0 & 0\\
+U_{12}^T & U_{22}^T & 0\\
+U_{13}^T & U_{23}^T & U_{33}^T\\
+\end{array} \right)
+\left( \begin{array}{ccc}
+U_{11} & U_{12} & U_{13}\\
+0 & U_{22} & U_{23}\\
+0 & 0 & U_{33}\\
+\end{array} \right).
+$$
+
+Equating submatrices in the second block of columns, we obtain:
+\begin{eqnarray*}
+A_{12} & = & U_{11}^T U_{12} \\
+A_{22} & = & U_{12}^T U_{12} + U_{22}^T U_{22}.
+\end{eqnarray*}
+
+Hence, if $U_{11}$ has already been computed, we can compute $U_{12}$ as
+the solution to the equation
+\begin{eqnarray*}
+U_{11}^T U_{12} = A_{12}
+\end{eqnarray*}
+by a call to the Level 3 BLAS routine STRSM; and then we can compute
+$U_{22}$
+from
+\begin{eqnarray*}
+U_{22}^T U_{22} = A_{22} - U_{12}^T U_{12}.
+\end{eqnarray*}
+This involves first updating the symmetric submatrix $A_{22}$ by a call to
+the
+Level 3 BLAS routine SSYRK, and then computing its Cholesky factorization.
+Since Fortran does not allow recursion, a separate routine must be called
+(using Level 2 BLAS rather than Level 3), named SPOTF2 in the code below.
+In this way successive blocks of columns of $U$ are computed.
+Here is LAPACK-style code for the block algorithm. In this code-fragment
+{\tt NB} denotes the width\index{block width} of the blocks.
+
+\begin{verbatim}
+      DO 10 J = 1, N, NB
+         JB = MIN( NB, N-J+1 )
+         CALL STRSM( 'Left', 'Upper', 'Transpose', 'Non-unit', J-1, JB,
+     $               ONE, A, LDA, A( 1, J ), LDA )
+         CALL SSYRK( 'Upper', 'Transpose', JB, J-1, -ONE, A( 1, J ), LDA,
+     $               ONE, A( J, J ), LDA )
+         CALL SPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+         IF( INFO.NE.0 ) GO TO 20
+   10 CONTINUE
+\end{verbatim}
+
+But that is not the end of the story, and the code given above is
+not the code that is actually used in the LAPACK routine
+xPOTRF\indexR{SPOTRF}\indexR{CPOTRF}.
+We mentioned in subsection~\ref{subsecvectorize} that for many
+linear algebra computations there
+are several vectorizable variants, often referred to as $i$-, $j$- and
+$k$-variants, according to a convention introduced in \cite{Dongarra84a}
+and used
+in \cite{GVL2}. The same is true of the corresponding block algorithms.
+
+It turns out that the $j$-variant
+that was chosen for LINPACK, and used in the above
+examples, is not the fastest on many machines, because it is based on
+solving triangular
+systems of equations, which can be significantly slower than matrix-matrix
+multiplication.
+The variant actually used in LAPACK is the $i$-variant, which does
+rely on matrix-matrix multiplication.
+
+\section{Examples of Block Algorithms in LAPACK}\label{secblock}
+
+Having discussed in detail the derivation of one particular block algorithm,
+we now describe examples of the performance that has been achieved with
+a variety of block algorithms.
+
+See Gallivan {\it et al.}~\cite{gallivanetal} and Dongarra {\it et
+al.}~\cite{dongarraetal2}
+for an alternative survey of
+algorithms for dense linear\index{block algorithms, performance} algebra
+on high-performance computers.
+
+\subsection{Factorizations for Solving Linear Equations}
+\label{subsecblocklineq}
+
+The well-known $LU$ and Cholesky factorizations are the simplest block
+algorithms to derive. No extra floating-point operations nor extra
+working storage are required.
+
+LAPACK, like LINPACK, provides a factorization for symmetric
+indefinite\index{symmetric indefinite factorization!blocked form}
+matrices,  so that $A$ is factorized as $P U D U^T P^T$, where $P$ is a
+permutation matrix, and $D$ is block diagonal with blocks of order 1
+or 2. A block form of this algorithm has been derived,
+and is implemented in the LAPACK routine
+xSYTRF\indexR{SSYTRF}\indexR{CHETRF}\indexR{CSYTRF}.
+It has to duplicate a little of the computation in order
+to ``look ahead''
+to determine the necessary row and column interchanges, but the extra work
+can be more than compensated for by the greater speed of updating the matrix
+by blocks,
+provided that $n$ is large enough.
+
+LAPACK, like LINPACK, provides $LU$ and Cholesky factorizations of
+band matrices. The LINPACK algorithms can easily be restructured to use
+Level 2 BLAS, though that has little effect on performance for
+matrices of very narrow bandwidth. It is also possible to use Level 3 BLAS,
+at the price of doing some extra work with zero elements outside the band
+\cite{lapwn21}. This becomes worthwhile for matrices of large order and
+semi-bandwidth greater than 100 or so.
+
+\subsection{$QR$ Factorization}\label{subsecblockqr}
+
+The traditional algorithm for $QR$
+factorization\index{QR factorization!blocked form}  is based on the use of
+elementary Householder\index{Householder transformation!blocked form}
+matrices of the general form
+$$
+H = I - \tau v v^T
+$$
+where $v$ is a column vector and $\tau$ is a scalar.
+This leads to an algorithm with very good vector performance, especially
+if coded to use Level 2 BLAS.
+
+The key to developing a block form of this algorithm is to represent a
+product
+of $b$ elementary Householder matrices of order $n$ as a block
+form of a Householder matrix\index{Householder matrix}. This can be done in
+various ways.
+LAPACK uses the following form~\cite{Schreiber87a}:
+$$
+        H_1 H_2 \ldots H_b = I - V T V^T
+$$
+where $V$ is an $n$-by-$b$ matrix whose columns are the individual vectors
+$v_1, v_2, \ldots , v_b$ associated with the Householder matrices $H_1, H_2,
+\ldots , H_b$, and $T$ is an upper triangular matrix of order $b$.
+Extra work is required to compute the elements of $T$, but once again this
+is compensated for by the greater speed of applying the block form.
+
+\subsection{Eigenvalue Problems}\label{subsecblockeig}
+
+Eigenvalue\index{eigendecomposition!blocked form} problems have also
+provided a fertile ground for the development of higher performance
+algorithms. These algorithms generally all consist of three phases:
+
+\begin{enumerate}
+
+\item reduction of the original dense matrix to a condensed form
+by orthogonal transformations,
+\item solution of condensed form, and
+\item optional backtransformation of the solution of the condensed form
+to the solution of the original matrix.
+
+\end{enumerate}
+
+In addition to block versions of algorithms for phases 1 and 3,
+a number of entirely new algorithms for phase 2 have recently
+been discovered.
+In particular,
+the latest version of LAPACK includes new block algorithms for the singular
+value decomposition (SVD) and SVD-based least squares solver,
+as well as a new algorithm
+xSTEMR\cite{holygrail,parlettdhillon00,parlettmarques00,dhillonparlett03},
+\indexR{SSTEMR}\indexR{CSTEMR}
+for the symmetric eigenproblem.
+
+The first step in solving many types of eigenvalue problems is to reduce
+the original matrix to a condensed form by orthogonal
+transformations\index{orthogonal (unitary) transformation}.
+\index{condensed form!reduction to}
+In the reduction to condensed forms, the unblocked algorithms all use
+elementary
+Householder matrices and have good vector performance.
+Block forms of these algorithms have been developed \cite{lapwn2},
+but all require additional operations, and a significant proportion of the
+work
+must still be performed by Level 2 BLAS, so there is less possibility of
+compensating for the extra operations.
+
+The algorithms concerned are:
+
+\begin{itemize}
+
+\item reduction of a symmetric matrix to tridiagonal form\index{tridiagonal
+form} to solve a
+symmetric eigenvalue problem: LAPACK routine xSYTRD
+\indexR{SSYTRD}\indexR{CSYTRD}
+applies a symmetric block
+update of the form
+\[A \leftarrow A - U X^T - X U^T\]
+ using the Level 3
+BLAS routine xSYR2K;
+Level 3 BLAS account for at most half the work.
+
+\item reduction of a rectangular matrix to bidiagonal form\index{bidiagonal
+form} to compute
+a singular value decomposition: LAPACK routine xGEBRD
+\indexR{SGEBRD}\indexR{CGEBRD}
+applies a block update
+of the form
+\[A \leftarrow A - U X^T - Y V^T\]
+using two calls to the
+Level 3 BLAS routine xGEMM; Level 3 BLAS account for at most half the
+work.
+
+\item reduction of a nonsymmetric matrix to Hessenberg form\index{Hessenberg
+form}\index{Hessenberg form!reduction to} to solve a
+nonsymmetric eigenvalue problem: LAPACK routine xGEHRD
+\indexR{SGEHRD}\indexR{CGEHRD}
+applies a block update
+of the form
+\[A \leftarrow (I - V T^T V^T)(A - X V^T).\]
+Level 3 BLAS
+account for at most three-quarters of the work.
+
+\end{itemize}
+
+Note that only in the reduction to Hessenberg form\index{Hessenberg
+form} is it possible to
+use the block Householder representation described in
+subsection~\ref{subsecblockqr}.
+Extra work must be performed to compute the $n$-by-$b$ matrices $X$ and $Y$
+that are required for the block updates ($b$ is the block size)
+--- and extra workspace is needed to
+store them.
+
+Nevertheless, the performance gains can be worthwhile on some machines
+for large enough matrices.
+
+Following the reduction of a dense (or band) symmetric matrix to tridiagonal
+form $T$,
+we must compute the eigenvalues and (optionally) eigenvectors of $T$.
+Computing the eigenvalues of $T$ alone (using LAPACK routine
+xSTERF\indexR{SSTERF}) requires
+$O(n^2)$ flops, whereas the reduction routine
+xSYTRD\indexR{SSYTRD} does $\frac{4}{3}n^3 + O(n^2)$
+flops. So eventually the cost of finding eigenvalues
+alone becomes small compared to the cost of reduction. However, xSTERF
+does only scalar floating point operations, without scope for the BLAS,
+so $n$ may have to be large before xSYTRD is slower than xSTERF.
+
+Version 2.0 of LAPACK introduced a new algorithm,
+xSTEDC\indexR{SSTEDC}\indexR{CSTEDC},
+for finding all eigenvalues and
+eigenvectors of $T$. The new algorithm can exploit Level 2 and 3 BLAS,
+whereas
+the previous algorithm,
+xSTEQR\indexR{SSTEQR}\indexR{CSTEQR},
+could not. Furthermore, xSTEDC usually does
+many
+fewer flops than xSTEQR, so the speedup is compounded. Briefly, xSTEDC works
+as follows
+(for details, see \cite{gueisenstat,rutter}). The tridiagonal matrix $T$ is
+written as
+\[
+T = \bmat{cc} T_1 & 0 \\ 0 & T_2 \emat + H
+\]
+where $T_1$ and $T_2$ are tridiagonal, and $H$ is a very simple rank-1
+matrix.
+Then the eigenvalues and eigenvectors of $T_1$ and $T_2$ are found by
+applying
+the algorithm recursively; this yields $T_1 = Q_1 \Lambda_1 Q_1^T$ and
+$T_2 = Q_2 \Lambda_2 Q_2^T$, where $\Lambda_i$ is a diagonal matrix of
+eigenvalues,
+and the columns of $Q_i$ are orthonormal eigenvectors. Thus
+\[
+T = \bmat{cc} Q_1 \Lambda_1 Q_1^T & 0 \\ 0 &  Q_2 \Lambda_2 Q_2^T \emat + H
+=
+\bmat{cc} Q_1 & 0 \\ 0 & Q_2 \emat \cdot
+\left( \bmat{cc} \Lambda_1 & 0 \\ 0 & \Lambda_2 \emat + H' \right) \cdot
+\bmat{cc} Q_1^T & 0 \\ 0 & Q_2^T \emat
+\]
+where $H'$ is again a simple rank-1 matrix. The eigenvalues and
+eigenvectors
+of $\bmat{cc} \Lambda_1 & 0 \\ 0 & \Lambda_2 \emat + H'$ may be found
+using $O(n^2)$ scalar operations, yielding
+$
+\bmat{cc} \Lambda_1 & 0 \\ 0 & \Lambda_2 \emat + H' =
+\hat{Q} \Lambda \hat{Q}^T \; .
+$
+Substituting this into the last displayed expression yields
+\[
+T =
+\bmat{cc} Q_1 & 0 \\ 0 & Q_2 \emat
+\left( \hat{Q} {\Lambda} \hat{Q}^T \right) \bmat{cc} Q_1^T & 0 \\ 0 & Q_2^T
+\emat =
+\left( \bmat{cc} Q_1 & 0 \\ 0 & Q_2 \emat \hat{Q} \right)
+{\Lambda}
+\left( \hat{Q}^T \bmat{cc} Q_1^T & 0 \\ 0 & Q_2^T \emat \right) =
+Q \Lambda Q^T \; ,
+\]
+where the diagonals of $\Lambda$ are the desired eigenvalues of $T$, and the
+columns
+of $Q = \bmat{cc} Q_1 & 0 \\ 0 & Q_2 \emat \hat{Q}$ are the eigenvectors.
+Almost all the work is done in the two matrix multiplies of $Q_1$ and $Q_2$
+times
+$\hat{Q}$, which is done using the Level 3 BLAS.
+
+The same recursive algorithm has been developed for the singular value
+decomposition
+of the bidiagonal matrix resulting from reducing a dense matrix with
+xGEBRD.
+\indexR{SGEBRD}\indexR{CGEBRD}
+The SVD driver using this algorithm is called xGESDD.
+\indexR{SGESDD}\indexR{CGESDD}
+This recursive algorithm is also used for the SVD-based linear least
+squares solver xGELSD;
+\indexR{SGELSD}\indexR{CGELSD}.
+
+The latest version of LAPACK introduced another new algorithm, xSTEMR,
+\indexR{SSTEMR}\indexR{CSTEMR}
+for finding all the eigenvalues and eigenvectors of a symmetric
+tridiagonal matrix.
+It is usually even faster
+than xSTEDC
+\indexR{SSTEDC}\indexR{CSTEDC}
+above.
+Here is a rough description of how it works; for
+details see
+\cite{holygrail,parlettdhillon00,parlettmarques00,dhillonparlett03}.
+
+It is easiest to think of xSTEMR as a variation on xSTEIN,
+\indexR{SSTEIN}\indexR{CSTEIN}
+inverse iteration.
+If all the eigenvalues were well separated, xSTEIN would
+run in $O(n^2)$ time.
+But it is difficult for xSTEIN to compute accurate eigenvectors
+belonging to close eigenvalues, those that have four or
+more decimals in common with their neighbors. Indeed, xSTEIN
+slows down because it reorthogonalizes the corresponding eigenvectors.
+xSTEMR escapes this difficulty by exploiting the invariance of
+eigenvectors under translation.
+
+For each cluster $\cal C$ of close eigenvalues the algorithm chooses
+a shift $s$ at one end of $\cal C$, or just outside, with the property
+that $T - sI$ permits triangular factorization $LDL^T = T - sI$
+such that the small shifted eigenvalues
+($\lambda - s$ for $\lambda \in {\cal C}$)
+are determined to high relative accuracy by the
+entries in $L$ and $D$.  Note that the small shifted eigenvalues
+will have fewer digits in common than those in $\cal C$.  The algorithm
+computes these small shifted eigenvalues to high relative
+accuracy, either by xLASQ2
+or by refining earlier approximations
+using bisection.  This means that each computed $\hat{\lambda}$
+approximating a $\lambda - s$ has error bounded by $O( \varepsilon )
+|\hat{\lambda}|$.
+
+The next task is to compute an eigenvector for $\lambda - s$.  For each
+$\hat{\lambda}$ the algorithm computes, with care, an optimal
+{\em twisted factorization}
+\begin{eqnarray*}
+      LDL^T - \hat{\lambda} I &=& N_r \Delta_r N_r^T \\
+         \Delta_r             &=& {\rm diag}(\delta_1,\delta_2, ...
+,\delta_n)
+\end{eqnarray*}
+obtained by implementing triangular factorization both from top
+down and bottom up and joining them at a well chosen index $r$.
+An approximate eigenvector $z$ is obtained by solving $N_r^T z = e_r$
+where $e_r$ is column $r$ of $I$.  It turns out that
+$N_r \Delta_r N_r^T = e_r \delta_r$ and
+\[
+    \| LDL^T - \hat{\lambda} I \| =
+     | {\rm error\ in\ } \hat{\lambda}| / \|u\|_{\infty} + ...
+\]
+where ... indicates smaller terms and $Tu = \lambda u$, $u^Tu = 1$.
+>From the basic gap theorem \cite{parlett}
+\[
+   |\sin \theta(u,z)| <= O(\epsilon)
+) |\hat{\lambda}| / (\|u\|_{\infty}
+|\hat{\lambda} - \hat{\mu}| ) + ...
+\]
+where $\hat{\mu}$ is $\hat{\lambda}$'s neighbor in the shifted spectrum.
+Given
+this nice bound the algorithm computes $z$ for all $\lambda$ such that the
+relative gap $|\lambda - \mu|/|\lambda - s| > 10^{-3}$.  These $z$'s have an
+error
+that is $O(\epsilon)$.
+
+The procedure described above is repeated for any eigenvalues that
+remain without eigenvectors.  It can be shown that all the computed
+$z$'s are very close to eigenvectors of small relative perturbations of
+one global Cholesky factorization $GG^T$ of a translate $T - \sigma I$
+of $T$.  A key
+component of the algorithm is the use of recently discovered
+differential qd algorithms to ensure that the twisted factorizations
+described above are computed without ever forming the indicated
+matrix products such as $LDL^T$ \cite{fernandoparlett}.
+
+For computing the eigenvalues and eigenvectors of a Hessenberg
+matrix---or rather for computing its Schur decomposition--- yet another
+flavor of block algorithm has been developed: a {\bf multishift}
+$QR$ iteration\index{eigendecomposition!multishift QR iteration}
+\cite{baidemmel89}. 
+The multishift algorithm uses block shifts of
+higher order. It has been found that often the total number of operations
+{\em decreases} as the order of shift is increased until a minimum
+is reached typically between 4 and 8; for higher orders the number of
+operations increases quite rapidly. On many machines
+the speed of applying the shift
+increases steadily with the order, and the optimum order of shift is
+typically in the range 8--16. Note however that the performance can be
+very sensitive to the choice of the order of shift; it also depends on
+the numerical properties of the matrix. Dubrulle~\cite{dubrulle} has
+studied the practical performance of the algorithm, while Watkins and
+Elsner~\cite{watkinselsner} discuss its theoretical asymptotic convergence
+rate.
+

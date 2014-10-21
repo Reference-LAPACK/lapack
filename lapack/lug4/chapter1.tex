@@ -1,0 +1,281 @@
+\chapter{Essentials}\label{chapessentials}
+\pagestyle{headings}
+
+\section{LAPACK}
+
+LAPACK is a library of Fortran~90 subroutines for solving the most commonly
+occurring problems in numerical linear algebra\index{Fortran~90 subroutines}
+\index{numerical linear algebra}.
+It has been designed to be efficient on a wide range of modern
+high-performance computers. The name LAPACK is an acronym for Linear
+Algebra PACKage. 
+\begin{center}
+\begin{quote}
+{\tt http://www.netlib.org/lapack/}
+\end{quote}
+\end{center}
+A list of LAPACK Frequently Asked Questions (FAQ)\index{FAQ!LAPACK}
+is maintained on this webpage.
+
+LAPACK routines can be called by programs written in either Fortran~90 or C.
+For C programs a file of C interfaces, {\tt lapack.e}, must be called; this is described in 
+Chapter~\ref{chapcinterface}\index{C interface}.
+
+\section{Problems that LAPACK can Solve}
+
+LAPACK can solve systems of linear equations, linear least squares
+problems (LSE), symmetric eigenvalue problems (SEP),
+nonsymmetric eigenvalue problems (NEP), singular value problems (SVD),
+generalized problems of the same kind (GLSE, GSEP, GNEP, GSVD), and CS decomposition.
+LAPACK can also handle many
+associated computations such as matrix factorizations
+or estimating condition numbers.
+
+LAPACK contains {\bf driver routines} for solving standard types of
+problems\index{driver routines},
+{\bf computational routines} to perform a distinct
+computational task\index{computational routines}, and {\bf auxiliary routines} to perform a certain
+subtask or common low-level computation.  Each driver routine
+typically calls a sequence of computational routines. Taken as a whole, the computational routines
+can perform a wider range of tasks than are covered by the driver routines.
+Many of the auxiliary routines may be of use to numerical analysts
+or software developers, so we have documented the Fortran source for
+these routines with the same level of detail used for the LAPACK
+routines and driver routines.
+
+Dense and band matrices are provided for, but not general sparse matrices. 
+In all areas, similar functionality is provided for real and complex matrices.
+See Chapter~\ref{chapcontents} for a complete summary of the contents.
+
+\section{Computers for which LAPACK is Suitable}
+
+LAPACK is designed to give high efficiency\index{performance} on vector processors,
+high-performance ``super-scalar'' workstations, and shared memory multiprocessors.
+It can also be used satisfactorily on all types of scalar machines (PC's, workstations, mainframes).
+
+\section{LAPACK Compared with LINPACK and EISPACK}
+
+LAPACK has been designed to supersede LINPACK~\cite{dongarra79}\index{LINPACK}
+and EISPACK~\cite{Smith76,Garbow77}\index{EISPACK}, principally by restructuring the 
+software to achieve much greater efficiency, where possible, on modern
+high-performance computers; also by adding extra functionality,
+by using some new or improved algorithms, and by integrating the two sets
+of algorithms into a unified package.
+
+\section{LAPACK and the BLAS}
+
+LAPACK routines are written so that as much as possible of the
+computation is performed by calls to the
+Basic Linear Algebra Subprograms (BLAS)~\cite{blas1,blas2,blas3}\index{BLAS}.
+Highly efficient machine-specific implementations of the BLAS are
+available for many modern high-performance computers. The BLAS
+enable LAPACK routines to achieve high performance with portable code.
+The methodology for constructing LAPACK routines in terms of calls to the BLAS
+is described in Chapter~\ref{chapperformance}. 
+
+The BLAS are not strictly speaking part of LAPACK, but Fortran~90 code
+for the BLAS is distributed with LAPACK, or can be obtained separately
+from {\em netlib}.  This code constitutes the ``model implementation''~\cite{blas2alg,blas3alg}.
+\begin{quote}
+{\tt http://www.netlib.org/blas/blas.tgz}
+\end{quote}
+
+The model implementation is not expected to perform as well as a specially tuned implementation
+on most high-performance computers --- on some machines it may give {\it much}
+worse performance ---  but it allows users to run LAPACK codes on machines that do not offer
+any other implementation of the BLAS.
+
+For information on available optimized BLAS libraries, as well as
+other BLAS-related questions, please refer to the BLAS FAQ\index{FAQ!BLAS}:
+\begin{quote}
+{\tt http://www.netlib.org/blas/faq.html}
+\end{quote}
+
+\section{Availability of LAPACK}
+
+The complete LAPACK package or individual routines from LAPACK\index{source code} are
+freely available on {\em netlib}~\cite{Dongarra87e}\index{netlib} and can be obtained
+via the World Wide Web or anonymous ftp.
+
+The LAPACK homepage can be accessed on the World Wide Web via the URL address:
+\begin{quote}
+{\tt http://www.netlib.org/lapack/}
+\end{quote}
+
+Prebuilt LAPACK libraries\index{prebuilt libraries!lapack}\index{LAPACK!prebuilt libraries, availability of} are available on {\em netlib} for a variety of architectures:
+\begin{quote}
+{\tt http://www.netlib.org/lapack/archives/}
+\end{quote}
+
+The main {\em netlib} servers are:
+\begin{center}
+\begin{tabular}{l l}
+Tennessee, U.S.A.  & {\tt http://www.netlib.org/} \\
+New Jersey, U.S.A. & {\tt http://netlib.bell-labs.com/} \\
+Kent, UK  & {\tt http://www.mirror.ac.uk/sites/netlib.bell-labs.com/netlib/master/} \\
+Bergen, Norway     & {\tt http://www.netlib.no/}
+\end{tabular}
+\end{center}
+Each of these sites is the master location for some significant part
+of the netlib collection of software; a distributed replication facility
+keeps them synchronized nightly.
+
+There are also a number of mirror repositories\index{netlib!mirror
+repositories} located around the world, and a list of these sites is maintained on {\em netlib}:
+\begin{quote}
+{\tt http://www.netlib.org/bib/mirrors.html}
+\end{quote}
+
+Most of the sites provide both ftp and http access.  If ftp and http
+are difficult, a user may wish to send e-mail.  E.g.,
+\begin{quote}
+{\tt echo ``send index from lapack'' | mail netlib@www.netlib.org}
+\end{quote}
+
+General information about LAPACK can be obtained by contacting any of
+the URLs listed above.  If additional information is desired, feel free
+to contact the authors at {\tt lapack@cs.utk.edu}.
+
+The complete package, including test code, in four
+different Fortran data types, constitutes some 805,000 lines of Fortran
+source and comments.
+
+\section{Commercial Use of LAPACK}\index{commercial use}\index{LAPACK!commercial use of}
+
+LAPACK is a freely available software package provided on the World Wide Web
+via {\em netlib,} anonymous ftp, and http access.  Thus it can be included in commercial
+packages (and has been).  We ask only that proper credit be given to
+the authors by citing this users' guide as the official reference for LAPACK.
+
+Like all software, this package is copyrighted.  It is not trademarked; however,
+if modifications are made that affect the interface, functionality, or accuracy of the resulting 
+software, the name of the routine should be changed.  Any modification to our software
+should be noted in the modifier's documentation.
+
+We will gladly answer questions regarding our software.
+If modifications are made to the software, however, it is the
+responsibility of the individuals/company who modified the routine to provide support.
+
+\section{Installation of LAPACK}\index{installation}
+
+To ease the installation process, prebuilt LAPACK libraries
+are available on {\em netlib} for a variety of architectures:
+\begin{quote}
+{\tt http://www.netlib.org/lapack/archives/}
+\end{quote}
+Included with each prebuilt library archive is the make include
+file {\tt make.inc} detailing the compiler options, and so on, used
+to compile the library.
+If a prebuilt library is not available for the specific architecture,
+the user will need to download the source code from {\em netlib}:
+\begin{quote}
+{\tt http://www.netlib.org/lapack/lapack.tgz} \\
+{\tt http://www.netlib.org/lapack/lapack-pc.zip}
+\end{quote}
+and build the library as instructed in the LAPACK Installation
+Guide~\cite{lawn41,lawn81}.  Note that separate distribution tar/zip files
+are provided for Unix/Linux and Windows 98/NT installations.
+Sample {\tt make.inc} files for various
+architectures are included in the distribution tar/zip file and will
+require only limited modifications to customize for a specific
+architecture.
+
+Machine-specific installation hints are contained in the {\tt release\_notes}
+file on {\em netlib}:
+\begin{quote}
+{\tt http://www.netlib.org/lapack/release\_notes}
+\end{quote}
+
+A comprehensive test suite\index{test suites}\index{reliability, see test suites} for the BLAS is provided in the LAPACK distribution and on
+{\em netlib}, and it is highly recommended that this test suite, as well
+as the LAPACK test suite, be run to ensure proper installation of the package.
+
+Two installations guides are available for LAPACK.
+A Quick Installation Guide (LAPACK Working Note 81)~\cite{lawn81} is
+distributed with the complete package.  This Quick Installation Guide
+provides installation instructions for Unix/Linux systems.  A comprehensive
+Installation Guide (LAPACK Working Note 41)~\cite{lawn41}, which contains
+descriptions of the testing and timings programs, as well as detailed non-Unix
+installation instructions, is also available.
+See also Chapter~\ref{chapinstall}.
+
+\section{Documentation for LAPACK}\label{documentation}
+
+This {\bf Users' Guide} gives an informal introduction to
+the design of the package, and a detailed description of its contents.
+Chapter~\ref{chapdocsoftware} explains the conventions used in the
+software and documentation.
+
+On-line manpages (troff files) for LAPACK routines, as well as for most of
+the BLAS routines, are available on netlib.  These files are
+automatically generated at the time of each release.  For more
+information, see the {\tt manpages.tgz} entry on the {\tt lapack}
+index on netlib.
+
+\section{Support for LAPACK}\index{support}
+
+LAPACK has been thoroughly tested before release, on many different
+types of computers.
+The LAPACK project supports the package in the sense that reports
+of errors or poor performance will gain immediate attention from the
+developers\index{bug reports}. 
+Such reports --- and also descriptions of interesting 
+applications and other comments --- should be sent to:
+\begin{quote}
+LAPACK Project\\
+c/o J. J. Dongarra\\
+Computer Science Department\\
+University of Tennessee\\   
+Knoxville, TN 37996-1301\\
+USA\\   
+Email: lapack@cs.utk.edu\\   
+\end{quote}
+
+\section{Errata in LAPACK}
+
+A list of known problems, bugs, and compiler errors\index{errata} for LAPACK,
+as well as an errata list for this guide, is maintained on {\em netlib}:
+\begin{quote}
+{\tt http://www.netlib.org/lapack/release\_notes}
+\end{quote}
+
+This errata file, as well as an FAQ (Frequently Asked Questions) file,
+can be accessed via the LAPACK homepage.
+
+\section{Other Related Software}\label{relsoftware}
+
+As previously mentioned in the Preface, many LAPACK-related software
+projects are currently available on netlib.
+
+The ScaLAPACK (or Scalable LAPACK)\index{ScaLAPACK} library includes
+a subset of LAPACK routines redesigned for distributed memory
+message-passing MIMD computers and networks of workstations supporting
+PVM and/or MPI.  It is written in a Single-Program-Multiple-Data (SPMD)
+style using explicit message passing for interprocessor communication.
+The goal is to have ScaLAPACK routines resemble their LAPACK
+equivalents as much as possible.  Just as LAPACK
+is built on top of the BLAS, ScaLAPACK relies on the PBLAS 
+(Parallel Basic Linear Algebra Subprograms)\index{PBLAS} and the
+BLACS (Basic Linear Algebra Communication Subprograms).
+The PBLAS perform computations analogous to the BLAS but on matrices
+distributed across multiple processors.
+The PBLAS rely on the communication protocols of the BLACS.
+The BLACS are designed for linear
+algebra applications and provide portable communication across a wide variety
+of distributed-memory architectures.  ScaLAPACK is portable on any
+computer that supports MPI or PVM.  Clusters of computers that have MPI
+or PVM can use the ScaLAPACK software.  In addition, a BLACS interface exists
+for the Intel series (NX), and IBM SP series (MPL).
+
+For more detailed information please refer to the ScaLAPACK Users' Guide~\cite{slug} or the ScaLAPACK homepage:
+\begin{quote}
+{\tt http://www.netlib.org/scalapack/}
+\end{quote}
+All questions/comments can be directed to {\tt scalapack@cs.utk.edu}.
+
+Alternative language interfaces to earlier versions of LAPACK (or translations/conversions
+of LAPACK) are available in Fortran~90 and Java.
+\begin{quote}
+{\tt http://www.netlib.org/lapack90/} \\ \index{LAPACK90}
+{\tt http://www.netlib.org/java/f2j/} \index{JLAPACK}
+\end{quote}
