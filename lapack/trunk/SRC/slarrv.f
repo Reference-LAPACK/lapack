@@ -340,6 +340,7 @@
 *     .. Executable Statements ..
 *     ..
 
+      INFO = 0
 *     The first N entries of WORK are reserved for the eigenvalues
       INDLD = N+1
       INDLLD= 2*N+1
