@@ -144,7 +144,7 @@
 *
       INFO = 0
       IF( N.LT.0 ) THEN
-         INFO = -2
+         INFO = -1
          CALL XERBLA( 'SLASQ1', -INFO )
          RETURN
       ELSE IF( N.EQ.0 ) THEN
