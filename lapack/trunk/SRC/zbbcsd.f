@@ -240,8 +240,8 @@
 *> \param[out] B21D
 *> \verbatim
 *>          B21D is DOUBLE PRECISION array, dimension (Q)
-*>          When CBBCSD converges, B21D contains the negative sines of
-*>          THETA(1), ..., THETA(Q). If CBBCSD fails to converge, then
+*>          When ZBBCSD converges, B21D contains the negative sines of
+*>          THETA(1), ..., THETA(Q). If ZBBCSD fails to converge, then
 *>          B21D contains the diagonal of the partially reduced bottom-left
 *>          block.
 *> \endverbatim
@@ -249,7 +249,7 @@
 *> \param[out] B21E
 *> \verbatim
 *>          B21E is DOUBLE PRECISION array, dimension (Q-1)
-*>          When CBBCSD converges, B21E contains zeros. If CBBCSD fails
+*>          When ZBBCSD converges, B21E contains zeros. If ZBBCSD fails
 *>          to converge, then B21E contains the subdiagonal of the
 *>          partially reduced bottom-left block.
 *> \endverbatim
@@ -257,8 +257,8 @@
 *> \param[out] B22D
 *> \verbatim
 *>          B22D is DOUBLE PRECISION array, dimension (Q)
-*>          When CBBCSD converges, B22D contains the negative sines of
-*>          THETA(1), ..., THETA(Q). If CBBCSD fails to converge, then
+*>          When ZBBCSD converges, B22D contains the negative sines of
+*>          THETA(1), ..., THETA(Q). If ZBBCSD fails to converge, then
 *>          B22D contains the diagonal of the partially reduced bottom-right
 *>          block.
 *> \endverbatim
@@ -266,7 +266,7 @@
 *> \param[out] B22E
 *> \verbatim
 *>          B22E is DOUBLE PRECISION array, dimension (Q-1)
-*>          When CBBCSD converges, B22E contains zeros. If CBBCSD fails
+*>          When ZBBCSD converges, B22E contains zeros. If ZBBCSD fails
 *>          to converge, then B22E contains the subdiagonal of the
 *>          partially reduced bottom-right block.
 *> \endverbatim
