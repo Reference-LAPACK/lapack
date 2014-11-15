@@ -238,7 +238,7 @@
      $        PARAMS, W, R, INFO )
          CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
          INFOT = 2
-         CALL CPORFSX( 'U', EQ, -1, 0, A, 1, AF, 1, S, B, 1, X, 1,
+         CALL CPORFSX( 'U', '/', -1, 0, A, 1, AF, 1, S, B, 1, X, 1,
      $        RCOND, BERR, N_ERR_BNDS, ERR_BNDS_N, ERR_BNDS_C, NPARAMS,
      $        PARAMS, W, R, INFO )
          CALL CHKXER( 'CPORFSX', INFOT, NOUT, LERR, OK )
