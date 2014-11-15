@@ -314,6 +314,7 @@
 *     Test the input parameters.
 *
       INFO = 0
+      N = NL + NR + 1
 *
       IF( ( ICOMPQ.LT.0 ) .OR. ( ICOMPQ.GT.1 ) ) THEN
          INFO = -1
@@ -323,11 +324,7 @@
          INFO = -3
       ELSE IF( ( SQRE.LT.0 ) .OR. ( SQRE.GT.1 ) ) THEN
          INFO = -4
-      END IF
-*
-      N = NL + NR + 1
-*
-      IF( NRHS.LT.1 ) THEN
+      ELSE IF( NRHS.LT.1 ) THEN
          INFO = -5
       ELSE IF( LDB.LT.N ) THEN
          INFO = -7
