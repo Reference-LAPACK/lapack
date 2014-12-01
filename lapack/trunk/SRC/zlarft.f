@@ -187,7 +187,7 @@
       INTEGER            I, J, PREVLASTV, LASTV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMV, ZLACGV, ZTRMV
+      EXTERNAL           ZGEMV, ZLACGV, ZTRMV, ZGEMM
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

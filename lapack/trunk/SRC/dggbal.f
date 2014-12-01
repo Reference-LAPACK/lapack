@@ -525,7 +525,7 @@
          IRAB = IDAMAX( N-ILO+1, B( I, ILO ), LDB )
          RAB = MAX( RAB, ABS( B( I, IRAB+ILO-1 ) ) )
          LRAB = INT( LOG10( RAB+SFMIN ) / BASL+ONE )
-         IR = LSCALE( I ) + SIGN( HALF, LSCALE( I ) )
+         IR = INT(LSCALE( I ) + SIGN( HALF, LSCALE( I ) ))
          IR = MIN( MAX( IR, LSFMIN ), LSFMAX, LSFMAX-LRAB )
          LSCALE( I ) = SCLFAC**IR
          ICAB = IDAMAX( IHI, A( 1, I ), 1 )
@@ -533,7 +533,7 @@
          ICAB = IDAMAX( IHI, B( 1, I ), 1 )
          CAB = MAX( CAB, ABS( B( ICAB, I ) ) )
          LCAB = INT( LOG10( CAB+SFMIN ) / BASL+ONE )
-         JC = RSCALE( I ) + SIGN( HALF, RSCALE( I ) )
+         JC = INT(RSCALE( I ) + SIGN( HALF, RSCALE( I ) ))
          JC = MIN( MAX( JC, LSFMIN ), LSFMAX, LSFMAX-LCAB )
          RSCALE( I ) = SCLFAC**JC
   360 CONTINUE
