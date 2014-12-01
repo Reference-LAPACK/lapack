@@ -176,7 +176,7 @@
       EXTERNAL           XERBLA, ZDSCAL, ZSWAP
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          MAX, INT
 *     ..
 *     .. Executable Statements ..
 *
@@ -256,7 +256,7 @@
             IF( ILO.EQ.1 )
      $         GO TO 50
             DO 40 I = ILO - 1, 1, -1
-               K = RSCALE( I )
+               K = INT(RSCALE( I ))
                IF( K.EQ.I )
      $            GO TO 40
                CALL ZSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
@@ -266,7 +266,7 @@
             IF( IHI.EQ.N )
      $         GO TO 70
             DO 60 I = IHI + 1, N
-               K = RSCALE( I )
+               K = INT(RSCALE( I ))
                IF( K.EQ.I )
      $            GO TO 60
                CALL ZSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
@@ -280,7 +280,7 @@
             IF( ILO.EQ.1 )
      $         GO TO 90
             DO 80 I = ILO - 1, 1, -1
-               K = LSCALE( I )
+               K = INT(LSCALE( I ))
                IF( K.EQ.I )
      $            GO TO 80
                CALL ZSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )
@@ -290,7 +290,7 @@
             IF( IHI.EQ.N )
      $         GO TO 110
             DO 100 I = IHI + 1, N
-               K = LSCALE( I )
+               K = INT(LSCALE( I ))
                IF( K.EQ.I )
      $            GO TO 100
                CALL ZSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV )

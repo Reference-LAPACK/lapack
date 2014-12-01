@@ -237,7 +237,7 @@
 *
       IF( R.NE.ZERO ) THEN
          BR = B * R
-         if( BR.NE.ZERO ) THEN
+         IF( BR.NE.ZERO ) THEN
             DLADIV2 = (A + BR) * T
          ELSE
             DLADIV2 = A * T + (B * T) * R
