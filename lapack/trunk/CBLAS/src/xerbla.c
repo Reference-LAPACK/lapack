@@ -19,13 +19,8 @@ void F77_xerbla(char *srname, void *vinfo)
 
    char rout[] = {'c','b','l','a','s','_','\0','\0','\0','\0','\0','\0','\0'};
 
-#ifdef F77_INT
-   F77_INT *info=vinfo;
-   F77_INT i;
-#else
    int *info=vinfo;
    int i;
-#endif
 
    extern int CBLAS_CallFromC;
 

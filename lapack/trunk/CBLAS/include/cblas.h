@@ -10,7 +10,11 @@ extern "C" {            /* Assume C declarations for C++ */
 /*
  * Enumerated and derived types
  */
-#define CBLAS_INDEX size_t  /* this may vary between platforms */
+#ifdef WeirdNEC
+   #define CBLAS_INDEX long
+#else
+    #define CBLAS_INDEX int
+#endif
 
 typedef enum {CblasRowMajor=101, CblasColMajor=102} CBLAS_LAYOUT;
 typedef enum {CblasNoTrans=111, CblasTrans=112, CblasConjTrans=113} CBLAS_TRANSPOSE;
