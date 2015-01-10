@@ -27,7 +27,7 @@ void cblas_strsm(const CBLAS_LAYOUT layout, const CBLAS_SIDE Side,
 #endif
 
 #ifdef F77_INT
-   F77_INT F77_N=M, F77_N=N, F77_lda=lda, F77_ldb=ldb;
+   F77_INT F77_M=M, F77_N=N, F77_lda=lda, F77_ldb=ldb;
 #else
    #define F77_M M
    #define F77_N N

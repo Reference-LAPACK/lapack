@@ -1,7 +1,7 @@
 /*
  * cblas_cscal.c
  *
- * The program is a C interface to cscal.f.
+ * The program is a C interface to cscal.
  *
  * Written by Keita Teranishi.  2/11/1998
  *

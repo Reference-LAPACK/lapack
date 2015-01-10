@@ -22,7 +22,7 @@ void cblas_dsyr2(const CBLAS_LAYOUT layout, const CBLAS_UPLO Uplo,
 #endif
 
 #ifdef F77_INT
-   F77_INT F77_N=N, F77_incX=incX, F77_incY=incY, F77__lda=lda;
+   F77_INT F77_N=N, F77_incX=incX, F77_incY=incY, F77_lda=lda;
 #else
    #define F77_N N
    #define F77_incX incX
