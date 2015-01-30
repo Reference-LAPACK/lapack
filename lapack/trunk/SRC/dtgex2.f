@@ -595,9 +595,7 @@
 *
 *        Standardize existing 2-by-2 blocks.
 *
-         DO 50 I = 1, M*M
-            WORK(I) = ZERO
-   50    CONTINUE
+         CALL DLASET( 'Full', M, M, ZERO, ZERO, WORK, M )
          WORK( 1 ) = ONE
          T( 1, 1 ) = ONE
          IDUM = LWORK - M*M - 2
@@ -668,7 +666,7 @@
      $                  A( J1, I ), LDA, ZERO, WORK, M )
             CALL DLACPY( 'Full', M, N-I+1, WORK, M, A( J1, I ), LDA )
             CALL DGEMM( 'T', 'N', M, N-I+1, M, ONE, LI, LDST,
-     $                  B( J1, I ), LDA, ZERO, WORK, M )
+     $                  B( J1, I ), LDB, ZERO, WORK, M )
             CALL DLACPY( 'Full', M, N-I+1, WORK, M, B( J1, I ), LDB )
          END IF
          I = J1 - 1
