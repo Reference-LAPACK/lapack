@@ -439,7 +439,7 @@
                            NFAIL = NFAIL + 1
                         END IF
    20                CONTINUE
-                     NRUN = NRUN + NT
+                     NRUN = NRUN + NTESTS
    30             CONTINUE
    40          CONTINUE
    50       CONTINUE
