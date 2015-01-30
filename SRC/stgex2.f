@@ -595,9 +595,7 @@
 *
 *        Standardize existing 2-by-2 blocks.
 *
-         DO 50 I = 1, M*M
-            WORK(I) = ZERO
-   50    CONTINUE
+         CALL SLASET( 'Full', M, M, ZERO, ZERO, WORK, M )
          WORK( 1 ) = ONE
          T( 1, 1 ) = ONE
          IDUM = LWORK - M*M - 2
