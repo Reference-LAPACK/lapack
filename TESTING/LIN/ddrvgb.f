@@ -758,7 +758,7 @@
                                     NFAIL = NFAIL + 1
                                  END IF
    80                         CONTINUE
-                              NRUN = NRUN + 7 - K1
+                              NRUN = NRUN + NTESTS - K1 + 1
                            ELSE
                               IF( RESULT( 1 ).GE.THRESH .AND. .NOT.
      $                            PREFAC ) THEN
