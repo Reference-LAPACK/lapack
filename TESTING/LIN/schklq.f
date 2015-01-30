@@ -411,7 +411,7 @@
 *                    Print information about the tests that did not
 *                    pass the threshold.
 *
-                     DO 20 I = 1, NTESTS
+                     DO 20 I = 1, NT
                         IF( RESULT( I ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALAHD( NOUT, PATH )
