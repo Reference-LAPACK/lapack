@@ -351,7 +351,7 @@
          CALL SLASD4( K, J, DSIGMA, Z, U( 1, J ), RHO, D( J ),
      $                VT( 1, J ), INFO )
 *
-*        If the zero finder fails, report convergence the failure.
+*        If the zero finder fails, report the convergence failure.
 *
          IF( INFO.NE.0 ) THEN
             RETURN
