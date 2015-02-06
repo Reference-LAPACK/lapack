@@ -302,6 +302,9 @@
      $             U, LDU, WORK( IU2 ), LDU2, VT, LDVT, WORK( IVT2 ),
      $             LDVT2, IWORK( IDXC ), IWORK( COLTYP ), WORK( IZ ),
      $             INFO )
+*
+*     Report the convergence failure.
+*
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF

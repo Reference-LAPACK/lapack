@@ -300,6 +300,9 @@
             CALL SLASD1( NL, NR, SQREI, D( NLF ), ALPHA, BETA,
      $                   U( NLF, NLF ), LDU, VT( NLF, NLF ), LDVT,
      $                   IWORK( IDXQC ), IWORK( IWK ), WORK, INFO )
+*
+*     Report the possible convergence failure.
+*
             IF( INFO.NE.0 ) THEN
                RETURN
             END IF
