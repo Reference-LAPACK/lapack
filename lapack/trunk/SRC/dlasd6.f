@@ -414,10 +414,9 @@
       CALL DLASD8( ICOMPQ, K, D, Z, VF, VL, DIFL, DIFR, LDGNUM,
      $             WORK( ISIGMA ), WORK( IW ), INFO )
 *
-*     Handle error returned
+*     Report the possible convergence failure.
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLASD8', -INFO )
          RETURN
       END IF
 *

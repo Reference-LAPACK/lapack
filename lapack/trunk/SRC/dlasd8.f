@@ -276,10 +276,9 @@
          CALL DLASD4( K, J, DSIGMA, Z, WORK( IWK1 ), RHO, D( J ),
      $                WORK( IWK2 ), INFO )
 *
-*        If the root finder fails, the computation is terminated.
+*        If the root finder fails, report the convergence failure.
 *
          IF( INFO.NE.0 ) THEN
-            CALL XERBLA( 'DLASD4', -INFO )
             RETURN
          END IF
          WORK( IWK3I+J ) = WORK( IWK3I+J )*WORK( J )*WORK( IWK2I+J )
