@@ -250,7 +250,7 @@
 *>                      eigenvalues in the Generalized Schur form no
 *>                      longer satisfy SELCTG=.TRUE.  This could also
 *>                      be caused due to scaling.
-*>                =N+3: reordering falied in CTGSEN.
+*>                =N+3: reordering failed in CTGSEN.
 *> \endverbatim
 *
 *  Authors:

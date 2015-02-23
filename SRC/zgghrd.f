@@ -79,11 +79,11 @@
 *> \param[in] COMPZ
 *> \verbatim
 *>          COMPZ is CHARACTER*1
-*>          = 'N': do not compute Q;
-*>          = 'I': Q is initialized to the unit matrix, and the
-*>                 unitary matrix Q is returned;
-*>          = 'V': Q must contain a unitary matrix Q1 on entry,
-*>                 and the product Q1*Q is returned.
+*>          = 'N': do not compute Z;
+*>          = 'I': Z is initialized to the unit matrix, and the
+*>                 unitary matrix Z is returned;
+*>          = 'V': Z must contain a unitary matrix Z1 on entry,
+*>                 and the product Z1*Z is returned.
 *> \endverbatim
 *>
 *> \param[in] N
