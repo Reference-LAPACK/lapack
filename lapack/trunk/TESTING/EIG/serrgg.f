@@ -2,19 +2,19 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE SERRGG( PATH, NUNIT )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
 *       INTEGER            NUNIT
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -22,8 +22,9 @@
 *> \verbatim
 *>
 *> SERRGG tests the error exits for SGGES, SGGESX, SGGEV, SGGEVX,
-*> SGGGLM, SGGHRD, SGGLSE, SGGQRF, SGGRQF, SGGSVD, SGGSVP, SHGEQZ,
-*> SORCSD, STGEVC, STGEXC, STGSEN, STGSJA, STGSNA, and STGSYL.
+*> SGGES3, SGGEV3, SGGGLM, SGGHRD, SGGLSE, SGGQRF, SGGRQF, SGGSVD,
+*> SGGSVP, SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN, STGSJA, STGSNA,
+*> and STGSYL.
 *> \endverbatim
 *
 *  Arguments:
@@ -44,10 +45,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2011
 *
@@ -97,7 +98,7 @@
       EXTERNAL           CHKXER, SGGES, SGGESX, SGGEV, SGGEVX, SGGGLM,
      $                   SGGHRD, SGGLSE, SGGQRF, SGGRQF, SGGSVD, SGGSVP,
      $                   SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN, STGSJA,
-     $                   STGSNA, STGSYL
+     $                   STGSNA, STGSYL, SGGES3, SGGEV3, SGGHD3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -168,6 +169,47 @@
          INFOT = 13
          CALL SGGHRD( 'N', 'V', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, INFO )
          CALL CHKXER( 'SGGHRD', INFOT, NOUT, LERR, OK )
+         NT = NT + 9
+*
+*        SGGHD3
+*
+         SRNAMT = 'SGGHD3'
+         INFOT = 1
+         CALL SGGHD3( '/', 'N', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SGGHD3( 'N', '/', 0, 1, 0, A, 1, B, 1, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SGGHD3( 'N', 'N', -1, 0, 0, A, 1, B, 1, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SGGHD3( 'N', 'N', 0, 0, 0, A, 1, B, 1, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SGGHD3( 'N', 'N', 0, 1, 1, A, 1, B, 1, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SGGHD3( 'N', 'N', 2, 1, 1, A, 1, B, 2, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL SGGHD3( 'N', 'N', 2, 1, 1, A, 2, B, 1, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL SGGHD3( 'V', 'N', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
+         INFOT = 13
+         CALL SGGHD3( 'N', 'V', 2, 1, 1, A, 2, B, 2, Q, 1, Z, 1, W, LW,
+     $                INFO )
+         CALL CHKXER( 'SGGHD3', INFOT, NOUT, LERR, OK )
          NT = NT + 9
 *
 *        SHGEQZ
@@ -503,56 +545,56 @@
      $                 -1, 0, 0, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
-     $                 1, W, LW, IW, INFO )      
+     $                 1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 8
          CALL SORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, -1, 0, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
-     $                 1, W, LW, IW, INFO )      
+     $                 1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 9
          CALL SORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, -1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
-     $                 1, W, LW, IW, INFO )      
+     $                 1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 11
          CALL SORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, -1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
-     $                 1, W, LW, IW, INFO )      
+     $                 1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 20
          CALL SORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, -1, A, 1, A, 1, A,
-     $                 1, W, LW, IW, INFO )      
+     $                 1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 22
          CALL SORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, -1, A, 1, A,
-     $                 1, W, LW, IW, INFO )      
+     $                 1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 24
          CALL SORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, -1, A,
-     $                 1, W, LW, IW, INFO )      
+     $                 1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          INFOT = 26
          CALL SORCSD( 'Y', 'Y', 'Y', 'Y', 'N', 'N',
      $                 1, 1, 1, A, 1, A,
      $                 1, A, 1, A, 1, A,
      $                 A, 1, A, 1, A, 1, A,
-     $                 -1, W, LW, IW, INFO )      
+     $                 -1, W, LW, IW, INFO )
          CALL CHKXER( 'SORCSD', INFOT, NOUT, LERR, OK )
          NT = NT + 8
 *
@@ -660,6 +702,55 @@
          CALL SGGES( 'V', 'V', 'S', SLCTES, 2, A, 2, B, 2, SDIM, R1, R2,
      $               R3, Q, 2, U, 2, W, 1, BW, INFO )
          CALL CHKXER( 'SGGES ', INFOT, NOUT, LERR, OK )
+         NT = NT + 11
+*
+*        SGGES3
+*
+         SRNAMT = 'SGGES3'
+         INFOT = 1
+         CALL SGGES3( '/', 'N', 'S', SLCTES, 1, A, 1, B, 1, SDIM, R1,
+     $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SGGES3( 'N', '/', 'S', SLCTES, 1, A, 1, B, 1, SDIM, R1,
+     $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SGGES3( 'N', 'V', '/', SLCTES, 1, A, 1, B, 1, SDIM, R1,
+     $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SGGES3( 'N', 'V', 'S', SLCTES, -1, A, 1, B, 1, SDIM, R1,
+     $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SGGES3( 'N', 'V', 'S', SLCTES, 1, A, 0, B, 1, SDIM, R1,
+     $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL SGGES3( 'N', 'V', 'S', SLCTES, 1, A, 1, B, 0, SDIM, R1,
+     $                R2, R3, Q, 1, U, 1, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 15
+         CALL SGGES3( 'N', 'V', 'S', SLCTES, 1, A, 1, B, 1, SDIM, R1,
+     $                R2, R3, Q, 0, U, 1, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 15
+         CALL SGGES3( 'V', 'V', 'S', SLCTES, 2, A, 2, B, 2, SDIM, R1,
+     $                R2, R3, Q, 1, U, 2, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 17
+         CALL SGGES3( 'N', 'V', 'S', SLCTES, 1, A, 1, B, 1, SDIM, R1,
+     $                R2, R3, Q, 1, U, 0, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 17
+         CALL SGGES3( 'V', 'V', 'S', SLCTES, 2, A, 2, B, 2, SDIM, R1,
+     $                R2, R3, Q, 2, U, 1, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 19
+         CALL SGGES3( 'V', 'V', 'S', SLCTES, 2, A, 2, B, 2, SDIM, R1,
+     $                R2, R3, Q, 2, U, 2, W, 1, BW, INFO )
+         CALL CHKXER( 'SGGES3 ', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
 *        SGGESX
@@ -775,6 +866,51 @@
          CALL SGGEV( 'V', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1, W,
      $               1, INFO )
          CALL CHKXER( 'SGGEV ', INFOT, NOUT, LERR, OK )
+         NT = NT + 10
+*
+*        SGGEV3
+*
+         SRNAMT = 'SGGEV3 '
+         INFOT = 1
+         CALL SGGEV3( '/', 'N', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SGGEV3( 'N', '/', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SGGEV3( 'V', 'V', -1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
+     $               W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SGGEV3( 'V', 'V', 1, A, 0, B, 1, R1, R2, R3, Q, 1, U, 1,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SGGEV3( 'V', 'V', 1, A, 1, B, 0, R1, R2, R3, Q, 1, U, 1,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 12
+         CALL SGGEV3( 'N', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 0, U, 1,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 12
+         CALL SGGEV3( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 1, U, 2,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 14
+         CALL SGGEV3( 'V', 'N', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U, 0,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 14
+         CALL SGGEV3( 'V', 'V', 2, A, 2, B, 2, R1, R2, R3, Q, 2, U, 1,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
+         INFOT = 16
+         CALL SGGEV3( 'V', 'V', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
+     $                W, 1, INFO )
+         CALL CHKXER( 'SGGEV3 ', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
 *        SGGEVX
