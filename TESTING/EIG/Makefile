@@ -53,7 +53,7 @@ SEIGTST = schkee.o \
    schkbb.o schkbd.o schkbk.o schkbl.o schkec.o \
    schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o \
    sckcsd.o sckglm.o sckgqr.o sckgsv.o scklse.o scsdts.o \
-   sdrges.o sdrgev.o sdrgsx.o sdrgvx.o \
+   sdrges.o sdrgev.o sdrges3.o sdrgev3.o sdrgsx.o sdrgvx.o \
    sdrvbd.o sdrves.o sdrvev.o sdrvgg.o sdrvsg.o \
    sdrvst.o sdrvsx.o sdrvvx.o \
    serrbd.o serrec.o serred.o serrgg.o serrhs.o serrst.o \
@@ -70,7 +70,7 @@ CEIGTST = cchkee.o \
    cchkbb.o cchkbd.o cchkbk.o cchkbl.o cchkec.o \
    cchkgg.o cchkgk.o cchkgl.o cchkhb.o cchkhs.o cchkst.o \
    cckcsd.o cckglm.o cckgqr.o cckgsv.o ccklse.o ccsdts.o \
-   cdrges.o cdrgev.o cdrgsx.o cdrgvx.o \
+   cdrges.o cdrgev.o cdrges3.o cdrgev3.o cdrgsx.o cdrgvx.o \
    cdrvbd.o cdrves.o cdrvev.o cdrvgg.o cdrvsg.o \
    cdrvst.o cdrvsx.o cdrvvx.o \
    cerrbd.o cerrec.o cerred.o cerrgg.o cerrhs.o cerrst.o \
@@ -90,7 +90,7 @@ DEIGTST = dchkee.o \
    dchkbb.o dchkbd.o dchkbk.o dchkbl.o dchkec.o \
    dchkgg.o dchkgk.o dchkgl.o dchkhs.o dchksb.o dchkst.o \
    dckcsd.o dckglm.o dckgqr.o dckgsv.o dcklse.o dcsdts.o \
-   ddrges.o ddrgev.o ddrgsx.o ddrgvx.o \
+   ddrges.o ddrgev.o ddrges3.o ddrgev3.o ddrgsx.o ddrgvx.o \
    ddrvbd.o ddrves.o ddrvev.o ddrvgg.o ddrvsg.o \
    ddrvst.o ddrvsx.o ddrvvx.o \
    derrbd.o derrec.o derred.o derrgg.o derrhs.o derrst.o \
@@ -107,7 +107,7 @@ ZEIGTST = zchkee.o \
    zchkbb.o zchkbd.o zchkbk.o zchkbl.o zchkec.o \
    zchkgg.o zchkgk.o zchkgl.o zchkhb.o zchkhs.o zchkst.o \
    zckcsd.o zckglm.o zckgqr.o zckgsv.o zcklse.o zcsdts.o \
-   zdrges.o zdrgev.o zdrgsx.o zdrgvx.o \
+   zdrges.o zdrgev.o zdrges3.o zdrgev3.o zdrgsx.o zdrgvx.o \
    zdrvbd.o zdrves.o zdrvev.o zdrvgg.o zdrvsg.o \
    zdrvst.o zdrvsx.o zdrvvx.o \
    zerrbd.o zerrec.o zerred.o zerrgg.o zerrhs.o zerrst.o \

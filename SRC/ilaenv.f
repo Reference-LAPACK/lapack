@@ -82,7 +82,7 @@
 *>          =10: ieee NaN arithmetic can be trusted not to trap
 *>          =11: infinity arithmetic can be trusted not to trap
 *>          12 <= ISPEC <= 16:
-*>               xHSEQR or one of its subroutines,
+*>               xHSEQR or related subroutines,
 *>               see IPARMQ for detailed explanation
 *> \endverbatim
 *>
@@ -410,6 +410,15 @@
          IF( C3.EQ.'EBZ' ) THEN
             NB = 1
          END IF
+      ELSE IF( C2.EQ.'GG' ) THEN
+         NB = 32
+         IF( C3.EQ.'HD3' ) THEN
+            IF( SNAME ) THEN
+               NB = 32
+            ELSE
+               NB = 32
+            END IF
+         END IF
       END IF
       ILAENV = NB
       RETURN
@@ -488,6 +497,11 @@
                NBMIN = 2
             END IF
          END IF
+      ELSE IF( C2.EQ.'GG' ) THEN
+         NBMIN = 2
+         IF( C3.EQ.'HD3' ) THEN
+            NBMIN = 2
+         END IF
       END IF
       ILAENV = NBMIN
       RETURN
@@ -541,6 +555,11 @@
      $           THEN
                NX = 128
             END IF
+         END IF
+      ELSE IF( C2.EQ.'GG' ) THEN
+         NX = 128
+         IF( C3.EQ.'HD3' ) THEN
+            NX = 128
          END IF
       END IF
       ILAENV = NX
@@ -614,7 +633,7 @@
 *
   160 CONTINUE
 *
-*     12 <= ISPEC <= 16: xHSEQR or one of its subroutines. 
+*     12 <= ISPEC <= 16: xHSEQR or related subroutines.
 *
       ILAENV = IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
       RETURN
