@@ -43,7 +43,7 @@
 *>
 *> A generalized eigenvalue for a pair of matrices (A,B) is a scalar w
 *> or a ratio  alpha/beta = w, such that A - w*B is singular.  It is
-*> usually represented as the pair (alpha,beta), as there is reasonalbe
+*> usually represented as the pair (alpha,beta), as there is reasonable
 *> interpretation for beta=0, and even for both being zero.
 *>
 *> A right generalized eigenvector corresponding to a generalized
