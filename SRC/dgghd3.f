@@ -751,13 +751,11 @@
                   END DO
                END DO
             ELSE
-
-               DO J = ILO, ILO+NNB
-                  DO I = J+2, IHI
-                     A( I, J ) = ZERO
-                     B( I, J ) = ZERO
-                  END DO
-               END DO
+*
+               CALL DLASET( 'Lower', IHI - JCOL + 1, NNB, ZERO, ZERO,
+     $                      A( JCOL + 2, JCOL ), LDA )
+               CALL DLASET( 'Lower', IHI - JCOL + 1, NNB, ZERO, ZERO,
+     $                      B( JCOL + 2, JCOL ), LDB )
             END IF
 *
 *           Apply accumulated orthogonal matrices to A and B.

@@ -754,13 +754,11 @@
                   END DO
                END DO
             ELSE
-
-               DO J = ILO, ILO+NNB
-                  DO I = J+2, IHI
-                     A( I, J ) = CZERO
-                     B( I, J ) = CZERO
-                  END DO
-               END DO
+*
+               CALL CLASET( 'Lower', IHI - JCOL + 1, NNB, CZERO, CZERO,
+     $                      A( JCOL + 2, JCOL ), LDA )
+               CALL CLASET( 'Lower', IHI - JCOL + 1, NNB, CZERO, CZERO,
+     $                      B( JCOL + 2, JCOL ), LDB )
             END IF
 *
 *           Apply accumulated unitary matrices to A and B.
