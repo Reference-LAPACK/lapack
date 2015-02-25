@@ -180,7 +180,7 @@ CLASRC = \
    cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  \
    cgesvx.o cgetc2.o cgetf2.o cgetri.o \
    cggbak.o cggbal.o cgges.o  cgges3.o cggesx.o \
-   cggev.o  cggev3.o cggevx.o \
+   cggev.o  cggev3.o cggevx.o cggglm.o\
    cgghrd.o cgghd3.o cgglse.o cggqrf.o cggrqf.o \
    cggsvd.o cggsvp.o \
    cgtcon.o cgtrfs.o cgtsv.o  cgtsvx.o cgttrf.o cgttrs.o cgtts2.o chbev.o  \
