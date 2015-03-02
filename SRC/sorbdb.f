@@ -512,7 +512,7 @@
             END IF
             X12(I,I) = ONE
 *
-            IF ( P. GT. I ) THEN
+            IF ( P .GT. I ) THEN
                CALL SLARF( 'R', P-I, M-Q-I+1, X12(I,I), LDX12, TAUQ2(I),
      $                     X12(I+1,I), LDX12, WORK )
             END IF
