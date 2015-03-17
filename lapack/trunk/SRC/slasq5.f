@@ -18,13 +18,13 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLASQ5( I0, N0, Z, PP, TAU, DMIN, DMIN1, DMIN2, DN,
-*                          DNM1, DNM2, IEEE )
+*       SUBROUTINE SLASQ5( I0, N0, Z, PP, TAU, SIGMA, DMIN, DMIN1, DMIN2, DN,
+*                          DNM1, DNM2, IEEE, EPS )
 * 
 *       .. Scalar Arguments ..
 *       LOGICAL            IEEE
 *       INTEGER            I0, N0, PP
-*       REAL               DMIN, DMIN1, DMIN2, DN, DNM1, DNM2, TAU
+*       REAL               EPS, DMIN, DMIN1, DMIN2, DN, DNM1, DNM2, SIGMA, TAU
 *       ..
 *       .. Array Arguments ..
 *       REAL               Z( * )
@@ -74,6 +74,11 @@
 *>        This is the shift.
 *> \endverbatim
 *>
+*> \param[in] SIGMA
+*>          SIGMA is REAL
+*>        This is the accumulated shift up to this step.
+*> \endverbatim
+*>
 *> \param[out] DMIN
 *> \verbatim
 *>          DMIN is REAL
@@ -114,6 +119,12 @@
 *> \verbatim
 *>          IEEE is LOGICAL
 *>        Flag for IEEE or non IEEE arithmetic.
+*> \endverbatim
+*>
+*> \param[in] EPS
+*> \verbatim
+*>         EPS is REAL
+*>        This is the value of epsilon used.
 *> \endverbatim
 *
 *  Authors:
