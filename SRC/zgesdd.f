@@ -182,7 +182,7 @@
 *> \param[out] RWORK
 *> \verbatim
 *>          RWORK is DOUBLE PRECISION array, dimension (MAX(1,LRWORK))
-*>          If JOBZ = 'N', LRWORK >= 5*min(M,N).
+*>          If JOBZ = 'N', LRWORK >= 7*min(M,N).
 *>          Otherwise,
 *>          LRWORK >= min(M,N)*max(5*min(M,N)+7,2*max(M,N)+2*min(M,N)+1)
 *> \endverbatim
