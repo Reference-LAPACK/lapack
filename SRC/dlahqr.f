@@ -223,8 +223,6 @@
 *  =========================================================
 *
 *     .. Parameters ..
-      INTEGER            ITMAX
-      PARAMETER          ( ITMAX = 30 )
       DOUBLE PRECISION   ZERO, ONE, TWO
       PARAMETER          ( ZERO = 0.0d0, ONE = 1.0d0, TWO = 2.0d0 )
       DOUBLE PRECISION   DAT1, DAT2
@@ -235,7 +233,7 @@
      $                   H22, RT1I, RT1R, RT2I, RT2R, RTDISC, S, SAFMAX,
      $                   SAFMIN, SMLNUM, SN, SUM, T1, T2, T3, TR, TST,
      $                   ULP, V2, V3
-      INTEGER            I, I1, I2, ITS, J, K, L, M, NH, NR, NZ
+      INTEGER            I, I1, I2, ITS, ITMAX, J, K, L, M, NH, NR, NZ
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   V( 3 )
@@ -291,6 +289,10 @@
          I1 = 1
          I2 = N
       END IF
+*
+*     ITMAX is the total number of QR iterations allowed.
+*
+      ITMAX = 30 * MAX( 10, NH ) 
 *
 *     The main loop begins here. I is the loop index and decreases from
 *     IHI to ILO in steps of 1 or 2. Each iteration of the loop works

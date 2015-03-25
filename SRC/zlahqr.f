@@ -211,8 +211,6 @@
 *  =========================================================
 *
 *     .. Parameters ..
-      INTEGER            ITMAX
-      PARAMETER          ( ITMAX = 30 )
       COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0d0, 0.0d0 ),
      $                   ONE = ( 1.0d0, 0.0d0 ) )
@@ -226,7 +224,8 @@
      $                   V2, X, Y
       DOUBLE PRECISION   AA, AB, BA, BB, H10, H21, RTEMP, S, SAFMAX,
      $                   SAFMIN, SMLNUM, SX, T2, TST, ULP
-      INTEGER            I, I1, I2, ITS, J, JHI, JLO, K, L, M, NH, NZ
+      INTEGER            I, I1, I2, ITS, ITMAX, J, JHI, JLO, K, L, M,
+     $                   NH, NZ
 *     ..
 *     .. Local Arrays ..
       COMPLEX*16         V( 2 )
@@ -311,6 +310,10 @@
          I1 = 1
          I2 = N
       END IF
+*
+*     ITMAX is the total number of QR iterations allowed.
+*
+      ITMAX = 30 * MAX( 10, NH ) 
 *
 *     The main loop begins here. I is the loop index and decreases from
 *     IHI to ILO in steps of 1. Each iteration of the loop works
