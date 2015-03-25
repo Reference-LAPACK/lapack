@@ -1,4 +1,4 @@
-*> \brief \b ZPSTRF
+*> \brief \b ZPSTRF computes the Cholesky factorization with complete pivoting of a complex Hermitian positive semidefinite matrix.
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -122,8 +122,9 @@
 *>          < 0: If INFO = -K, the K-th argument had an illegal value,
 *>          = 0: algorithm completed successfully, and
 *>          > 0: the matrix A is either rank deficient with computed rank
-*>               as returned in RANK, or is indefinite.  See Section 7 of
-*>               LAPACK Working Note #161 for further information.
+*>               as returned in RANK, or is not positive semidefinite. See
+*>               Section 7 of LAPACK Working Note #161 for further
+*>               information.
 *> \endverbatim
 *
 *  Authors:
@@ -233,7 +234,7 @@
   110    CONTINUE
          PVT = MAXLOC( WORK( 1:N ), 1 )
          AJJ = DBLE( A( PVT, PVT ) )
-         IF( AJJ.EQ.ZERO.OR.DISNAN( AJJ ) ) THEN
+         IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
             RANK = 0
             INFO = 1
             GO TO 230

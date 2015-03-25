@@ -1,4 +1,5 @@
-*> \brief \b DPSTRF
+*> \brief \b DPSTRF computes the Cholesky factorization with complete pivoting of a real symmetric positive semidefinite matrix.
+*
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -121,8 +122,9 @@
 *>          < 0: If INFO = -K, the K-th argument had an illegal value,
 *>          = 0: algorithm completed successfully, and
 *>          > 0: the matrix A is either rank deficient with computed rank
-*>               as returned in RANK, or is indefinite.  See Section 7 of
-*>               LAPACK Working Note #161 for further information.
+*>               as returned in RANK, or is not positive semidefinite. See
+*>               Section 7 of LAPACK Working Note #161 for further
+*>               information.
 *> \endverbatim
 *
 *  Authors:
@@ -230,7 +232,7 @@
                AJJ = A( PVT, PVT )
             END IF
          END DO
-         IF( AJJ.EQ.ZERO.OR.DISNAN( AJJ ) ) THEN
+         IF( AJJ.LE.ZERO.OR.DISNAN( AJJ ) ) THEN
             RANK = 0
             INFO = 1
             GO TO 200
