@@ -1092,18 +1092,17 @@
      $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
      $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
          CALL CHKXER( 'ZSYSVXX', INFOT, NOUT, LERR, OK )
-         INFOT = 12
+         INFOT = 13
          EQ = 'N'
          CALL ZSYSVXX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, EQ, R, B, 1, X,
      $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
      $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
          CALL CHKXER( 'ZSYSVXX', INFOT, NOUT, LERR, OK )
-         INFOT = 14
+         INFOT = 15
          CALL ZSYSVXX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, EQ, R, B, 2, X,
      $        1, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
      $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
          CALL CHKXER( 'ZSYSVXX', INFOT, NOUT, LERR, OK )
-         CALL CHKXER( 'ZSYSVX', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
