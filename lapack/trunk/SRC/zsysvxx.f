@@ -595,7 +595,7 @@
          INFO = -8
       ELSE IF( LSAME( FACT, 'F' ) .AND. .NOT.
      $        ( RCEQU .OR. LSAME( EQUED, 'N' ) ) ) THEN
-         INFO = -9
+         INFO = -10
       ELSE
          IF ( RCEQU ) THEN
             SMIN = BIGNUM
@@ -614,9 +614,9 @@
          END IF
          IF( INFO.EQ.0 ) THEN
             IF( LDB.LT.MAX( 1, N ) ) THEN
-               INFO = -12
+               INFO = -13
             ELSE IF( LDX.LT.MAX( 1, N ) ) THEN
-               INFO = -14
+               INFO = -15
             END IF
          END IF
       END IF
