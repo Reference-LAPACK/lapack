@@ -605,7 +605,7 @@
                SMAX = MAX( SMAX, S( J ) )
  10         CONTINUE
             IF( SMIN.LE.ZERO ) THEN
-               INFO = -10
+               INFO = -11
             ELSE IF( N.GT.0 ) THEN
                SCOND = MAX( SMIN, SMLNUM ) / MIN( SMAX, BIGNUM )
             ELSE

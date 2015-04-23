@@ -602,12 +602,12 @@
          IF ( RCEQU ) THEN
             SMIN = BIGNUM
             SMAX = ZERO
-            DO 10 J = 1, N
+            DO 10 J = 1, N 
                SMIN = MIN( SMIN, S( J ) )
                SMAX = MAX( SMAX, S( J ) )
  10         CONTINUE
             IF( SMIN.LE.ZERO ) THEN
-               INFO = -10
+               INFO = -11
             ELSE IF( N.GT.0 ) THEN
                SCOND = MAX( SMIN, SMLNUM ) / MIN( SMAX, BIGNUM )
             ELSE
