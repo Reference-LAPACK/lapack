@@ -1092,7 +1092,18 @@
      $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
      $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
          CALL CHKXER( 'ZSYSVXX', INFOT, NOUT, LERR, OK )
-         INFOT = 13
+         INFOT = 10
+         CALL ZSYSVXX( 'F', 'U', 2, 0, A, 2, AF, 2, IP, 'A', R, B, 2, X,
+     $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
+         CALL CHKXER( 'ZSYSVXX', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         EQ='Y'
+         CALL ZSYSVXX( 'F', 'U', 2, 0, A, 2, AF, 2, IP, EQ, R, B, 2, X,
+     $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
+         CALL CHKXER( 'ZSYSVXX', INFOT, NOUT, LERR, OK )
+	     INFOT = 13
          EQ = 'N'
          CALL ZSYSVXX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, EQ, R, B, 1, X,
      $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
