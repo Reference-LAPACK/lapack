@@ -308,7 +308,7 @@
          BLKSIZ = BN - B1 + 1
          IF( BLKSIZ.EQ.1 )
      $      GO TO 60
-         GPIND = B1
+         GPIND = J1
 *
 *        Compute reorthogonalization criterion and stopping criterion.
 *
@@ -381,9 +381,10 @@
 *
 *           Normalize and scale the righthand side vector Pb.
 *
+            JMAX = IDAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
             SCL = BLKSIZ*ONENRM*MAX( EPS,
      $            ABS( WORK( INDRV4+BLKSIZ ) ) ) /
-     $            DASUM( BLKSIZ, WORK( INDRV1+1 ), 1 )
+     $            ABS( WORK( INDRV1+JMAX ) )
             CALL DSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
 *
 *           Solve the system LU = Pb.
