@@ -35,8 +35,7 @@
 
 float LAPACKE_slamch_work( char cmach )
 {
-    lapack_int info = 0;
-	float res;
+    float res;
     /* Call LAPACK function and adjust info */
     res = LAPACK_slamch( &cmach );
     return res;

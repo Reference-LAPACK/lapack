@@ -44,9 +44,8 @@ int main(int argc, char **argv) {
         /* Locals */
         lapack_int n, nrhs, lda, ldb, info;
 		int i, j;
-		double normr, normb;
         /* Local arrays */
-		double *A, *b, *Acopy, *bcopy;
+		double *A, *b;
 		lapack_int *ipiv;
 		
         /* Default Value */

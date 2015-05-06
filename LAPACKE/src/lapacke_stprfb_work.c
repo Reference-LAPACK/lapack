@@ -50,7 +50,6 @@ lapack_int LAPACKE_stprfb_work( int matrix_layout, char side, char trans,
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
-        lapack_int r = LAPACKE_lsame( side, 'r' ) ? k : k;
         lapack_int lda_t = MAX(1,k);
         lapack_int ldb_t = MAX(1,m);
         lapack_int ldt_t = MAX(1,ldt);
