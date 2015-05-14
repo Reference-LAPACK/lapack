@@ -97,8 +97,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The length of the array WORK.  LWORK >= max(1,N).
-*>          For optimum performance LWORK >= N*NB, where NB is the
-*>          optimal blocksize.
+*>          For good performance, LWORK should generally be larger.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -183,20 +182,18 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      INTEGER            NBMAX, LDT
-      PARAMETER          ( NBMAX = 64, LDT = NBMAX+1 )
+      INTEGER            NBMAX, LDT, TSIZE
+      PARAMETER          ( NBMAX = 64, LDT = NBMAX+1,
+     $                     TSIZE = LDT*NBMAX )
       DOUBLE PRECISION  ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, 
      $                     ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            I, IB, IINFO, IWS, J, LDWORK, LWKOPT, NB,
+      INTEGER            I, IB, IINFO, IWT, J, LDWORK, LWKOPT, NB,
      $                   NBMIN, NH, NX
       DOUBLE PRECISION  EI
-*     ..
-*     .. Local Arrays ..
-      DOUBLE PRECISION  T( LDT, NBMAX )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DGEHD2, DGEMM, DLAHR2, DLARFB, DTRMM,
@@ -214,9 +211,6 @@
 *     Test the input parameters
 *
       INFO = 0
-      NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI, -1 ) )
-      LWKOPT = N*NB
-      WORK( 1 ) = LWKOPT
       LQUERY = ( LWORK.EQ.-1 )
       IF( N.LT.0 ) THEN
          INFO = -1
@@ -229,6 +223,16 @@
       ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN
          INFO = -8
       END IF
+*
+      IF( INFO.EQ.0 ) THEN
+*
+*        Compute the workspace requirements
+*
+         NB = MIN( NBMAX, ILAENV( 1, 'DGEHRD', ' ', N, ILO, IHI, -1 ) )
+         LWKOPT = N*NB + TSIZE
+         WORK( 1 ) = LWKOPT
+      END IF
+*      
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DGEHRD', -INFO )
          RETURN
@@ -268,8 +272,7 @@
 *
 *           Determine if workspace is large enough for blocked code
 *
-            IWS = N*NB
-            IF( LWORK.LT.IWS ) THEN
+            IF( LWORK.LT.N*NB+TSIZE ) THEN
 *
 *              Not enough workspace to use optimal NB:  determine the
 *              minimum value of NB, and reduce NB or force use of
@@ -277,8 +280,8 @@
 *
                NBMIN = MAX( 2, ILAENV( 2, 'DGEHRD', ' ', N, ILO, IHI,
      $                 -1 ) )
-               IF( LWORK.GE.N*NBMIN ) THEN
-                  NB = LWORK / N
+               IF( LWORK.GE.(N*NBMIN + TSIZE) ) THEN
+                  NB = (LWORK-TSIZE) / N
                ELSE
                   NB = 1
                END IF
@@ -297,6 +300,7 @@
 *
 *        Use blocked code
 *
+         IWT = 1 + N*NB
          DO 40 I = ILO, IHI - 1 - NX, NB
             IB = MIN( NB, IHI-I )
 *
@@ -304,8 +308,8 @@
 *           matrices V and T of the block reflector H = I - V*T*V**T
 *           which performs the reduction, and also the matrix Y = A*V*T
 *
-            CALL DLAHR2( IHI, I, IB, A( 1, I ), LDA, TAU( I ), T, LDT,
-     $                   WORK, LDWORK )
+            CALL DLAHR2( IHI, I, IB, A( 1, I ), LDA, TAU( I ),
+     $                   WORK( IWT ), LDT, WORK, LDWORK )
 *
 *           Apply the block reflector H to A(1:ihi,i+ib:ihi) from the
 *           right, computing  A := A - Y * V**T. V(i+ib,ib-1) must be set
@@ -335,15 +339,16 @@
 *
             CALL DLARFB( 'Left', 'Transpose', 'Forward',
      $                   'Columnwise',
-     $                   IHI-I, N-I-IB+1, IB, A( I+1, I ), LDA, T, LDT,
-     $                   A( I+1, I+IB ), LDA, WORK, LDWORK )
+     $                   IHI-I, N-I-IB+1, IB, A( I+1, I ), LDA,
+     $                   WORK( IWT ), LDT, A( I+1, I+IB ), LDA,
+     $                   WORK, LDWORK )
    40    CONTINUE
       END IF
 *
 *     Use unblocked code to reduce the rest of the matrix
 *
       CALL DGEHD2( N, I, IHI, A, LDA, TAU, WORK, IINFO )
-      WORK( 1 ) = IWS
+      WORK( 1 ) = LWKOPT
 *
       RETURN
 *
