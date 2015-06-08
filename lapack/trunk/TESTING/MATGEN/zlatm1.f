@@ -27,7 +27,7 @@
 *>
 *>    ZLATM1 computes the entries of D(1..N) as specified by
 *>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
-*>    of random numbers. ZLATM1 is called by CLATMR to generate
+*>    of random numbers. ZLATM1 is called by ZLATMR to generate
 *>    random test matrices for LAPACK programs.
 *> \endverbatim
 *

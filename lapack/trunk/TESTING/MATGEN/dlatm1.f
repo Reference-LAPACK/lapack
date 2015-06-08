@@ -27,7 +27,7 @@
 *>
 *>    DLATM1 computes the entries of D(1..N) as specified by
 *>    MODE, COND and IRSIGN. IDIST and ISEED determine the generation
-*>    of random numbers. DLATM1 is called by SLATMR to generate
+*>    of random numbers. DLATM1 is called by DLATMR to generate
 *>    random test matrices for LAPACK programs.
 *> \endverbatim
 *
