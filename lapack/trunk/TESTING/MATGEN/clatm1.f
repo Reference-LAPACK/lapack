@@ -74,7 +74,7 @@
 *>
 *> \param[in] IDIST
 *> \verbatim
-*>          IDIST is CHARACTER*1
+*>          IDIST is INTEGER
 *>           On entry, IDIST specifies the type of distribution to be
 *>           used to generate a random matrix .
 *>           1 => real and imaginary parts each UNIFORM( 0, 1 )
