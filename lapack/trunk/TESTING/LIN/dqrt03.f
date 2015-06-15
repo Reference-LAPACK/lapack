@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is DOUBLE PRECISION array, dimension (LDA,N)
 *>          Details of the QR factorization of an m-by-n matrix, as
-*>          returnedby DGEQRF. See SGEQRF for further details.
+*>          returned by DGEQRF. See DGEQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] C

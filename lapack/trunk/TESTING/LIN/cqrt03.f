@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is COMPLEX array, dimension (LDA,N)
 *>          Details of the QR factorization of an m-by-n matrix, as
-*>          returnedby CGEQRF. See CGEQRF for further details.
+*>          returned by CGEQRF. See CGEQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] C

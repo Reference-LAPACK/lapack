@@ -61,7 +61,7 @@
 *> \verbatim
 *>          AF is REAL array, dimension (LDA,N)
 *>          Details of the QR factorization of an m-by-n matrix, as
-*>          returnedby SGEQRF. See SGEQRF for further details.
+*>          returned by SGEQRF. See SGEQRF for further details.
 *> \endverbatim
 *>
 *> \param[out] C
