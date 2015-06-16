@@ -1,4 +1,4 @@
-*> \brief \b DSTEBZ
+*> \brief \b DSTEDC
 *
 *  =========== DOCUMENTATION ===========
 *
