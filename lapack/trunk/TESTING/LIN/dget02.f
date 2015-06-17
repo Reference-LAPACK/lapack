@@ -189,7 +189,7 @@
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
       EPS = DLAMCH( 'Epsilon' )
-      ANORM = DLANGE( '1', N1, N2, A, LDA, RWORK )
+      ANORM = DLANGE( '1', M, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
