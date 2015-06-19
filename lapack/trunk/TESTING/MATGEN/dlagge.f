@@ -178,6 +178,10 @@
          A( I, I ) = D( I )
    30 CONTINUE
 *
+*     Quick exit if the user wants a diagonal matrix
+*
+      IF(( KL .EQ. 0 ).AND.( KU .EQ. 0)) RETURN
+*
 *     pre- and post-multiply A by random orthogonal matrices
 *
       DO 40 I = MIN( M, N ), 1, -1
@@ -342,13 +346,17 @@
             END IF
          END IF
 *
-         DO 50 J = KL + I + 1, M
-            A( J, I ) = ZERO
-   50    CONTINUE
+         IF (I .LE. N) THEN
+            DO 50 J = KL + I + 1, M
+               A( J, I ) = ZERO
+   50       CONTINUE
+         END IF
 *
-         DO 60 J = KU + I + 1, N
-            A( I, J ) = ZERO
-   60    CONTINUE
+         IF (I .LE. M) THEN
+            DO 60 J = KU + I + 1, N
+               A( I, J ) = ZERO
+   60       CONTINUE
+         END IF
    70 CONTINUE
       RETURN
 *
