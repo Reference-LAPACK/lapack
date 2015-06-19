@@ -99,7 +99,7 @@
 *>
 *> \param[in,out] D
 *> \verbatim
-*>          D is COMPLEX*16 array, dimension ( MIN( M , N ) )
+*>          D is COMPLEX*16 array, dimension ( N )
 *>           Array to be computed according to MODE, COND and IRSIGN.
 *>           May be changed on exit if MODE is nonzero.
 *> \endverbatim
