@@ -250,9 +250,8 @@
          IF( NORMB.NE.ZERO )
      $      ERR = ERR / NORMB
       ELSE
-         NORMX = ZLANGE( 'One-norm', NCOLS, NRHS, X, LDX, RWORK )
-         IF( NORMX.NE.ZERO )
-     $      ERR = ERR / NORMX
+         IF( NORMRS.NE.ZERO )
+     $      ERR = ERR / NORMRS
       END IF
 *
       ZQRT17 = ERR / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS ) ) )
