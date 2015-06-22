@@ -249,9 +249,8 @@
          IF( NORMB.NE.ZERO )
      $      ERR = ERR / NORMB
       ELSE
-         NORMX = DLANGE( 'One-norm', NCOLS, NRHS, X, LDX, RWORK )
-         IF( NORMX.NE.ZERO )
-     $      ERR = ERR / NORMX
+         IF( NORMRS.NE.ZERO )
+     $      ERR = ERR / NORMRS
       END IF
 *
       DQRT17 = ERR / ( DLAMCH( 'Epsilon' )*DBLE( MAX( M, N, NRHS ) ) )
