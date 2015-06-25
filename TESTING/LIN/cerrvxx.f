@@ -1072,6 +1072,13 @@
      $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
      $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
          CALL CHKXER( 'CSYSVXX', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         EQ='Y'
+         R(1) = -ONE
+         CALL CSYSVXX( 'F', 'U', 2, 0, A, 2, AF, 2, IP, EQ, R, B, 2, X,
+     $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
+     $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
+         CALL CHKXER( 'CSYSVXX', INFOT, NOUT, LERR, OK )
          INFOT = 13
          EQ = 'N'
          CALL CSYSVXX( 'N', 'U', 2, 0, A, 2, AF, 2, IP, EQ, R, B, 1, X,
