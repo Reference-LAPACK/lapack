@@ -666,7 +666,7 @@
                CALL ZSCAL( ILAST+1-IFRSTM, SIGNBC, H( IFRSTM, ILAST ),
      $                     1 )
             ELSE
-               CALL ZSCAL( ILAST, SIGNBC, H( ILAST, ILAST ), 1 )
+               CALL ZSCAL( 1, SIGNBC, H( ILAST, ILAST ), 1 )
             END IF
             IF( ILZ )
      $         CALL ZSCAL( N, SIGNBC, Z( 1, ILAST ), 1 )

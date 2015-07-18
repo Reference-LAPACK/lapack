@@ -665,7 +665,7 @@
                CALL CSCAL( ILAST+1-IFRSTM, SIGNBC, H( IFRSTM, ILAST ),
      $                     1 )
             ELSE
-               CALL CSCAL( ILAST, SIGNBC, H( ILAST, ILAST ), 1 )
+               CALL CSCAL( 1, SIGNBC, H( ILAST, ILAST ), 1 )
             END IF
             IF( ILZ )
      $         CALL CSCAL( N, SIGNBC, Z( 1, ILAST ), 1 )
