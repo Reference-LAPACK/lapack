@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DERRQP tests the error exits for DGEQPF and DGEQP3.
+*> DERRQP tests the error exits for DGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +83,7 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, DGEQP3, DGEQPF
+      EXTERNAL           ALAESM, CHKXER, DGEQP3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -109,19 +109,6 @@
       IF( LSAMEN( 2, C2, 'QP' ) ) THEN
 *
 *        Test error exits for QR factorization with pivoting
-*
-*        DGEQPF
-*
-         SRNAMT = 'DGEQPF'
-         INFOT = 1
-         CALL DGEQPF( -1, 0, A, 1, IP, TAU, W, INFO )
-         CALL CHKXER( 'DGEQPF', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL DGEQPF( 0, -1, A, 1, IP, TAU, W, INFO )
-         CALL CHKXER( 'DGEQPF', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL DGEQPF( 2, 0, A, 1, IP, TAU, W, INFO )
-         CALL CHKXER( 'DGEQPF', INFOT, NOUT, LERR, OK )
 *
 *        DGEQP3
 *

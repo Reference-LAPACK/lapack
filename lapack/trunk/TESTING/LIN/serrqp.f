@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> SERRQP tests the error exits for SGEQPF and SGEQP3.
+*> SERRQP tests the error exits for SGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +83,7 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, SGEQP3, SGEQPF
+      EXTERNAL           ALAESM, CHKXER, SGEQP3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -109,19 +109,6 @@
       IF( LSAMEN( 2, C2, 'QP' ) ) THEN
 *
 *        Test error exits for QR factorization with pivoting
-*
-*        SGEQPF
-*
-         SRNAMT = 'SGEQPF'
-         INFOT = 1
-         CALL SGEQPF( -1, 0, A, 1, IP, TAU, W, INFO )
-         CALL CHKXER( 'SGEQPF', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL SGEQPF( 0, -1, A, 1, IP, TAU, W, INFO )
-         CALL CHKXER( 'SGEQPF', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL SGEQPF( 2, 0, A, 1, IP, TAU, W, INFO )
-         CALL CHKXER( 'SGEQPF', INFOT, NOUT, LERR, OK )
 *
 *        SGEQP3
 *
