@@ -50,7 +50,7 @@ DZLNTST= dlaord.o
 SLINTST = schkaa.o \
    schkeq.o schkgb.o schkge.o schkgt.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
-   schkpt.o schkq3.o schkql.o schkqp.o schkqr.o schkrq.o \
+   schkpt.o schkq3.o schkql.o schkqr.o schkrq.o \
    schksp.o schksy.o schksy_rook.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
@@ -87,7 +87,7 @@ endif
 CLINTST = cchkaa.o \
    cchkeq.o cchkgb.o cchkge.o cchkgt.o \
    cchkhe.o cchkhe_rook.o cchkhp.o cchklq.o cchkpb.o \
-   cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o cchkqp.o \
+   cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o \
    cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
    cdrvgt.o cdrvhe_rook.o cdrvhp.o \
@@ -128,7 +128,7 @@ endif
 DLINTST = dchkaa.o \
    dchkeq.o dchkgb.o dchkge.o dchkgt.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
-   dchkpt.o dchkq3.o dchkql.o dchkqp.o dchkqr.o dchkrq.o \
+   dchkpt.o dchkq3.o dchkql.o dchkqr.o dchkrq.o \
    dchksp.o dchksy.o dchksy_rook.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
@@ -166,7 +166,7 @@ endif
 ZLINTST = zchkaa.o \
    zchkeq.o zchkgb.o zchkge.o zchkgt.o \
    zchkhe.o zchkhe_rook.o zchkhp.o zchklq.o zchkpb.o \
-   zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkql.o zchkqp.o \
+   zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkql.o \
    zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
    zdrvgt.o zdrvhe_rook.o zdrvhp.o \

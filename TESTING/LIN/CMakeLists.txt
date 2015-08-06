@@ -9,7 +9,7 @@ set(DZLNTST dlaord.f )
 set(SLINTST  schkaa.f 
    schkeq.f schkgb.f schkge.f schkgt.f 
    schklq.f schkpb.f schkpo.f schkps.f schkpp.f 
-   schkpt.f schkq3.f schkql.f schkqp.f schkqr.f schkrq.f 
+   schkpt.f schkq3.f schkql.f schkqr.f schkrq.f 
    schksp.f schksy.f schksy_rook.f schktb.f schktp.f schktr.f 
    schktz.f 
    sdrvgt.f sdrvls.f sdrvpb.f 
@@ -45,7 +45,7 @@ endif()
 set(CLINTST  cchkaa.f 
    cchkeq.f cchkgb.f cchkge.f cchkgt.f 
    cchkhe.f cchkhe_rook.f cchkhp.f cchklq.f cchkpb.f 
-   cchkpo.f cchkps.f cchkpp.f cchkpt.f cchkq3.f cchkql.f cchkqp.f 
+   cchkpo.f cchkps.f cchkpp.f cchkpt.f cchkq3.f cchkql.f 
    cchkqr.f cchkrq.f cchksp.f cchksy.f cchksy_rook.f cchktb.f 
    cchktp.f cchktr.f cchktz.f 
    cdrvgt.f cdrvhe.f cdrvhe_rook.f cdrvhp.f 
@@ -86,7 +86,7 @@ endif()
 set(DLINTST  dchkaa.f 
    dchkeq.f dchkgb.f dchkge.f dchkgt.f 
    dchklq.f dchkpb.f dchkpo.f dchkps.f dchkpp.f 
-   dchkpt.f dchkq3.f dchkql.f dchkqp.f dchkqr.f dchkrq.f 
+   dchkpt.f dchkq3.f dchkql.f dchkqr.f dchkrq.f 
    dchksp.f dchksy.f dchksy_rook.f dchktb.f dchktp.f dchktr.f 
    dchktz.f 
    ddrvgt.f ddrvls.f ddrvpb.f 
@@ -124,7 +124,7 @@ endif()
 set(ZLINTST  zchkaa.f 
    zchkeq.f zchkgb.f zchkge.f zchkgt.f 
    zchkhe.f zchkhe_rook.f zchkhp.f zchklq.f zchkpb.f 
-   zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkql.f zchkqp.f 
+   zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkql.f 
    zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchktb.f 
    zchktp.f zchktr.f zchktz.f 
    zdrvgt.f zdrvhe.f zdrvhe_rook.f zdrvhp.f 

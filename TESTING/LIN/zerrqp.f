@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> ZERRQP tests the error exits for ZGEQPF and CGEQP3.
+*> ZERRQP tests the error exits for ZGEQP3.
 *> \endverbatim
 *
 *  Arguments:
@@ -85,7 +85,7 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, ZGEQP3, ZGEQPF
+      EXTERNAL           ALAESM, CHKXER, ZGEQP3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -114,19 +114,6 @@
 *     Test error exits for QR factorization with pivoting
 *
       IF( LSAMEN( 2, C2, 'QP' ) ) THEN
-*
-*        ZGEQPF
-*
-         SRNAMT = 'ZGEQPF'
-         INFOT = 1
-         CALL ZGEQPF( -1, 0, A, 1, IP, TAU, W, RW, INFO )
-         CALL CHKXER( 'ZGEQPF', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL ZGEQPF( 0, -1, A, 1, IP, TAU, W, RW, INFO )
-         CALL CHKXER( 'ZGEQPF', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL ZGEQPF( 2, 0, A, 1, IP, TAU, W, RW, INFO )
-         CALL CHKXER( 'ZGEQPF', INFOT, NOUT, LERR, OK )
 *
 *        ZGEQP3
 *

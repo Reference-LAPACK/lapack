@@ -157,7 +157,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, DCHKEQ, DCHKGB, DCHKGE, DCHKGT, DCHKLQ,
      $                   DCHKPB, DCHKPO, DCHKPS, DCHKPP, DCHKPT, DCHKQ3,
-     $                   DCHKQL, DCHKQP, DCHKQR, DCHKRQ, DCHKSP, DCHKSY,
+     $                   DCHKQL, DCHKQR, DCHKRQ, DCHKSP, DCHKSY,
      $                   DCHKSY_ROOK, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
      $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
      $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
@@ -814,9 +814,6 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL DCHKQP( DOTYPE, NM, MVAL, NN, NVAL, THRESH, TSTERR,
-     $                   A( 1, 1 ), A( 1, 2 ), B( 1, 1 ),
-     $                   B( 1, 3 ), WORK, IWORK, NOUT )
             CALL DCHKQ3( DOTYPE, NM, MVAL, NN, NVAL, NNB, NBVAL, NXVAL,
      $                   THRESH, A( 1, 1 ), A( 1, 2 ), B( 1, 1 ),
      $                   B( 1, 3 ), WORK, IWORK, NOUT )
