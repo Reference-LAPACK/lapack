@@ -54,7 +54,7 @@ SEIGTST = schkee.o \
    schkgg.o schkgk.o schkgl.o schkhs.o schksb.o schkst.o \
    sckcsd.o sckglm.o sckgqr.o sckgsv.o scklse.o scsdts.o \
    sdrges.o sdrgev.o sdrges3.o sdrgev3.o sdrgsx.o sdrgvx.o \
-   sdrvbd.o sdrves.o sdrvev.o sdrvgg.o sdrvsg.o \
+   sdrvbd.o sdrves.o sdrvev.o sdrvsg.o \
    sdrvst.o sdrvsx.o sdrvvx.o \
    serrbd.o serrec.o serred.o serrgg.o serrhs.o serrst.o \
    sget02.o sget10.o sget22.o sget23.o sget24.o sget31.o \
@@ -71,7 +71,7 @@ CEIGTST = cchkee.o \
    cchkgg.o cchkgk.o cchkgl.o cchkhb.o cchkhs.o cchkst.o \
    cckcsd.o cckglm.o cckgqr.o cckgsv.o ccklse.o ccsdts.o \
    cdrges.o cdrgev.o cdrges3.o cdrgev3.o cdrgsx.o cdrgvx.o \
-   cdrvbd.o cdrves.o cdrvev.o cdrvgg.o cdrvsg.o \
+   cdrvbd.o cdrves.o cdrvev.o cdrvsg.o \
    cdrvst.o cdrvsx.o cdrvvx.o \
    cerrbd.o cerrec.o cerred.o cerrgg.o cerrhs.o cerrst.o \
    cget02.o cget10.o cget22.o cget23.o cget24.o \
@@ -91,7 +91,7 @@ DEIGTST = dchkee.o \
    dchkgg.o dchkgk.o dchkgl.o dchkhs.o dchksb.o dchkst.o \
    dckcsd.o dckglm.o dckgqr.o dckgsv.o dcklse.o dcsdts.o \
    ddrges.o ddrgev.o ddrges3.o ddrgev3.o ddrgsx.o ddrgvx.o \
-   ddrvbd.o ddrves.o ddrvev.o ddrvgg.o ddrvsg.o \
+   ddrvbd.o ddrves.o ddrvev.o ddrvsg.o \
    ddrvst.o ddrvsx.o ddrvvx.o \
    derrbd.o derrec.o derred.o derrgg.o derrhs.o derrst.o \
    dget02.o dget10.o dget22.o dget23.o dget24.o dget31.o \
@@ -108,7 +108,7 @@ ZEIGTST = zchkee.o \
    zchkgg.o zchkgk.o zchkgl.o zchkhb.o zchkhs.o zchkst.o \
    zckcsd.o zckglm.o zckgqr.o zckgsv.o zcklse.o zcsdts.o \
    zdrges.o zdrgev.o zdrges3.o zdrgev3.o zdrgsx.o zdrgvx.o \
-   zdrvbd.o zdrves.o zdrvev.o zdrvgg.o zdrvsg.o \
+   zdrvbd.o zdrves.o zdrvev.o zdrvsg.o \
    zdrvst.o zdrvsx.o zdrvvx.o \
    zerrbd.o zerrec.o zerred.o zerrgg.o zerrhs.o zerrst.o \
    zget02.o zget10.o zget22.o zget23.o zget24.o \

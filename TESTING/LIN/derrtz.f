@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> DERRTZ tests the error exits for DTZRQF and STZRZF.
+*> DERRTZ tests the error exits for STZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -82,7 +82,7 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, DTZRQF, DTZRZF
+      EXTERNAL           ALAESM, CHKXER, DTZRZF
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -109,19 +109,6 @@
       IF( LSAMEN( 2, C2, 'TZ' ) ) THEN
 *
 *        Test error exits for the trapezoidal routines.
-*
-*        DTZRQF
-*
-         SRNAMT = 'DTZRQF'
-         INFOT = 1
-         CALL DTZRQF( -1, 0, A, 1, TAU, INFO )
-         CALL CHKXER( 'DTZRQF', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL DTZRQF( 1, 0, A, 1, TAU, INFO )
-         CALL CHKXER( 'DTZRQF', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL DTZRQF( 2, 2, A, 1, TAU, INFO )
-         CALL CHKXER( 'DTZRQF', INFOT, NOUT, LERR, OK )
 *
 *        DTZRZF
 *

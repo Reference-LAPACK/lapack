@@ -52,7 +52,7 @@ set(SEIGTST  schkee.f
    schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f 
    sckcsd.f sckglm.f sckgqr.f sckgsv.f scklse.f scsdts.f
    sdrges.f sdrgev.f sdrges3.f sdrgev3.f sdrgsx.f sdrgvx.f
-   sdrvbd.f sdrves.f sdrvev.f sdrvgg.f sdrvsg.f
+   sdrvbd.f sdrves.f sdrvev.f sdrvsg.f
    sdrvst.f sdrvsx.f sdrvvx.f
    serrbd.f serrec.f serred.f serrgg.f serrhs.f serrst.f
    sget02.f sget10.f sget22.f sget23.f sget24.f sget31.f
@@ -69,7 +69,7 @@ set(CEIGTST  cchkee.f
    cchkgg.f cchkgk.f cchkgl.f cchkhb.f cchkhs.f cchkst.f 
    cckcsd.f cckglm.f cckgqr.f cckgsv.f ccklse.f ccsdts.f
    cdrges.f cdrgev.f cdrges3.f cdrgev3.f cdrgsx.f cdrgvx.f
-   cdrvbd.f cdrves.f cdrvev.f cdrvgg.f cdrvsg.f
+   cdrvbd.f cdrves.f cdrvev.f cdrvsg.f
    cdrvst.f cdrvsx.f cdrvvx.f
    cerrbd.f cerrec.f cerred.f cerrgg.f cerrhs.f cerrst.f
    cget02.f cget10.f cget22.f cget23.f cget24.f
@@ -89,7 +89,7 @@ set(DEIGTST  dchkee.f
    dchkgg.f dchkgk.f dchkgl.f dchkhs.f dchksb.f dchkst.f 
    dckcsd.f dckglm.f dckgqr.f dckgsv.f dcklse.f dcsdts.f
    ddrges.f ddrgev.f ddrges3.f ddrgev3.f ddrgsx.f ddrgvx.f
-   ddrvbd.f ddrves.f ddrvev.f ddrvgg.f ddrvsg.f
+   ddrvbd.f ddrves.f ddrvev.f ddrvsg.f
    ddrvst.f ddrvsx.f ddrvvx.f
    derrbd.f derrec.f derred.f derrgg.f derrhs.f derrst.f
    dget02.f dget10.f dget22.f dget23.f dget24.f dget31.f
@@ -106,7 +106,7 @@ set(ZEIGTST  zchkee.f
    zchkgg.f zchkgk.f zchkgl.f zchkhb.f zchkhs.f zchkst.f 
    zckcsd.f zckglm.f zckgqr.f zckgsv.f zcklse.f zcsdts.f
    zdrges.f zdrgev.f zdrges3.f zdrgev3.f zdrgsx.f zdrgvx.f
-   zdrvbd.f zdrves.f zdrvev.f zdrvgg.f zdrvsg.f
+   zdrvbd.f zdrves.f zdrvev.f zdrvsg.f
    zdrvst.f zdrvsx.f zdrvvx.f
    zerrbd.f zerrec.f zerred.f zerrgg.f zerrhs.f zerrst.f
    zget02.f zget10.f zget22.f zget23.f zget24.f

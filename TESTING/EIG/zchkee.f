@@ -45,7 +45,6 @@
 *>
 *> ZGG (Generalized Nonsymmetric Eigenvalue Problem):
 *>     Test ZGGHD3, ZGGBAL, ZGGBAK, ZHGEQZ, and ZTGEVC
-*>     and the driver routines ZGEGS and ZGEGV
 *>
 *> ZGS (Generalized Nonsymmetric Schur form Driver):
 *>     Test ZGGES
@@ -121,7 +120,6 @@
 *> ZVX             21     ZDRVVX
 *> ZSX             21     ZDRVSX
 *> ZGG             26     ZCHKGG (routines)
-*>                 26     ZDRVGG (drivers)
 *> ZGS             26     ZDRGES
 *> ZGX              5     ZDRGSX
 *> ZGV             26     ZDRGEV
@@ -1102,7 +1100,7 @@
      $                   ZCHKEC, ZCHKGG, ZCHKGK, ZCHKGL, ZCHKHB, ZCHKHS,
      $                   ZCHKST, ZCKCSD, ZCKGLM, ZCKGQR, ZCKGSV, ZCKLSE,
      $                   ZDRGES, ZDRGEV, ZDRGSX, ZDRGVX, ZDRVBD, ZDRVES,
-     $                   ZDRVEV, ZDRVGG, ZDRVSG, ZDRVST, ZDRVSX, ZDRVVX,
+     $                   ZDRVEV, ZDRVSG, ZDRVST, ZDRVSX, ZDRVVX,
      $                   ZERRBD, ZERRED, ZERRGG, ZERRHS, ZERRST, ILAVER,
      $                   ZDRGES3, ZDRGEV3
 *     ..
@@ -2130,18 +2128,6 @@
      $                      LWORK, RWORK, LOGWRK, RESULT, INFO )
                IF( INFO.NE.0 )
      $            WRITE( NOUT, FMT = 9980 )'ZCHKGG', INFO
-            END IF
-            CALL XLAENV( 1, 1 )
-            IF( TSTDRV ) THEN
-               CALL ZDRVGG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
-     $                      THRSHN, NOUT, A( 1, 1 ), NMAX, A( 1, 2 ),
-     $                      A( 1, 3 ), A( 1, 4 ), A( 1, 5 ), A( 1, 6 ),
-     $                      A( 1, 7 ), NMAX, A( 1, 8 ), DC( 1, 1 ),
-     $                      DC( 1, 2 ), DC( 1, 3 ), DC( 1, 4 ),
-     $                      A( 1, 8 ), A( 1, 9 ), WORK, LWORK, RWORK,
-     $                      RESULT, INFO )
-               IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'ZDRVGG', INFO
             END IF
   350    CONTINUE
 *
