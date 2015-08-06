@@ -45,7 +45,6 @@
 *>
 *> SGG (Generalized Nonsymmetric Eigenvalue Problem):
 *>     Test SGGHD3, SGGBAL, SGGBAK, SHGEQZ, and STGEVC
-*>     and the driver routines SGEGS and SGEGV
 *>
 *> SGS (Generalized Nonsymmetric Schur form Driver):
 *>     Test SGGES
@@ -122,7 +121,6 @@
 *> SVX             21     SDRVVX
 *> SSX             21     SDRVSX
 *> SGG             26     SCHKGG (routines)
-*>                 26     SDRVGG (drivers)
 *> SGS             26     SDRGES
 *> SGX              5     SDRGSX
 *> SGV             26     SDRGEV
@@ -1106,7 +1104,7 @@
      $                   SCHKGG, SCHKGK, SCHKGL, SCHKHS, SCHKSB, SCHKST,
      $                   SCKCSD, SCKGLM, SCKGQR, SCKGSV, SCKLSE, SDRGES,
      $                   SDRGEV, SDRGSX, SDRGVX, SDRVBD, SDRVES, SDRVEV,
-     $                   SDRVGG, SDRVSG, SDRVST, SDRVSX, SDRVVX, SERRBD,
+     $                   SDRVSG, SDRVST, SDRVSX, SDRVVX, SERRBD,
      $                   SERRED, SERRGG, SERRHS, SERRST, ILAVER, XLAENV,
      $                   SDRGES3, SDRGEV3
 *     ..
@@ -2138,18 +2136,6 @@
      $                      INFO )
                IF( INFO.NE.0 )
      $            WRITE( NOUT, FMT = 9980 )'SCHKGG', INFO
-            END IF
-            CALL XLAENV( 1, 1 )
-            IF( TSTDRV ) THEN
-               CALL SDRVGG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
-     $                      THRSHN, NOUT, A( 1, 1 ), NMAX, A( 1, 2 ),
-     $                      A( 1, 3 ), A( 1, 4 ), A( 1, 5 ), A( 1, 6 ),
-     $                      A( 1, 7 ), NMAX, A( 1, 8 ), D( 1, 1 ),
-     $                      D( 1, 2 ), D( 1, 3 ), D( 1, 4 ), D( 1, 5 ),
-     $                      D( 1, 6 ), A( 1, 13 ), A( 1, 14 ), WORK,
-     $                      LWORK, RESULT, INFO )
-               IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'SDRVGG', INFO
             END IF
   350    CONTINUE
 *

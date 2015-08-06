@@ -22,7 +22,7 @@
 *> \verbatim
 *>
 *> SERRLS tests the error exits for the REAL least squares
-*> driver routines (SGELS, SGELSS, SGELSX, SGELSY, SGELSD).
+*> driver routines (SGELS, SGELSS, SGELSY, SGELSD).
 *> \endverbatim
 *
 *  Arguments:
@@ -86,8 +86,7 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, SGELS, SGELSD, SGELSS, SGELSX,
-     $                   SGELSY
+      EXTERNAL           ALAESM, CHKXER, SGELS, SGELSD, SGELSS, SGELSY
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -156,25 +155,6 @@
          INFOT = 7
          CALL SGELSS( 2, 0, 0, A, 2, B, 1, S, RCOND, IRNK, W, 2, INFO )
          CALL CHKXER( 'SGELSS', INFOT, NOUT, LERR, OK )
-*
-*        SGELSX
-*
-         SRNAMT = 'SGELSX'
-         INFOT = 1
-         CALL SGELSX( -1, 0, 0, A, 1, B, 1, IP, RCOND, IRNK, W, INFO )
-         CALL CHKXER( 'SGELSX', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL SGELSX( 0, -1, 0, A, 1, B, 1, IP, RCOND, IRNK, W, INFO )
-         CALL CHKXER( 'SGELSX', INFOT, NOUT, LERR, OK )
-         INFOT = 3
-         CALL SGELSX( 0, 0, -1, A, 1, B, 1, IP, RCOND, IRNK, W, INFO )
-         CALL CHKXER( 'SGELSX', INFOT, NOUT, LERR, OK )
-         INFOT = 5
-         CALL SGELSX( 2, 0, 0, A, 1, B, 2, IP, RCOND, IRNK, W, INFO )
-         CALL CHKXER( 'SGELSX', INFOT, NOUT, LERR, OK )
-         INFOT = 7
-         CALL SGELSX( 2, 0, 0, A, 2, B, 1, IP, RCOND, IRNK, W, INFO )
-         CALL CHKXER( 'SGELSX', INFOT, NOUT, LERR, OK )
 *
 *        SGELSY
 *

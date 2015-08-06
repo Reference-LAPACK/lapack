@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*> CERRTZ tests the error exits for CTZRQF and CTZRZF.
+*> CERRTZ tests the error exits for CTZRZF.
 *> \endverbatim
 *
 *  Arguments:
@@ -82,7 +82,7 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, CTZRQF, CTZRZF
+      EXTERNAL           ALAESM, CHKXER, CTZRZF
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -112,19 +112,6 @@
 *
       WRITE( NOUT, FMT = * )
       IF( LSAMEN( 2, C2, 'TZ' ) ) THEN
-*
-*        CTZRQF
-*
-         SRNAMT = 'CTZRQF'
-         INFOT = 1
-         CALL CTZRQF( -1, 0, A, 1, TAU, INFO )
-         CALL CHKXER( 'CTZRQF', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL CTZRQF( 1, 0, A, 1, TAU, INFO )
-         CALL CHKXER( 'CTZRQF', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL CTZRQF( 2, 2, A, 1, TAU, INFO )
-         CALL CHKXER( 'CTZRQF', INFOT, NOUT, LERR, OK )
 *
 *        CTZRZF
 *

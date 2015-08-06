@@ -45,7 +45,6 @@
 *>
 *> CGG (Generalized Nonsymmetric Eigenvalue Problem):
 *>     Test CGGHD3, CGGBAL, CGGBAK, CHGEQZ, and CTGEVC
-*>     and the driver routines CGEGS and CGEGV
 *>
 *> CGS (Generalized Nonsymmetric Schur form Driver):
 *>     Test CGGES
@@ -121,7 +120,6 @@
 *> CVX             21     CDRVVX
 *> CSX             21     CDRVSX
 *> CGG             26     CCHKGG (routines)
-*>                 26     CDRVGG (drivers)
 *> CGS             26     CDRGES
 *> CGX              5     CDRGSX
 *> CGV             26     CDRGEV
@@ -1102,7 +1100,7 @@
      $                   CCHKGG, CCHKGK, CCHKGL, CCHKHB, CCHKHS, CCHKST,
      $                   CCKCSD, CCKGLM, CCKGQR, CCKGSV, CCKLSE, CDRGES,
      $                   CDRGEV, CDRGSX, CDRGVX, CDRVBD, CDRVES, CDRVEV,
-     $                   CDRVGG, CDRVSG, CDRVST, CDRVSX, CDRVVX, CERRBD,
+     $                   CDRVSG, CDRVST, CDRVSX, CDRVVX, CERRBD,
      $                   CERRED, CERRGG, CERRHS, CERRST, ILAVER, XLAENV,
      $                   CDRGES3, CDRGEV3
 *     ..
@@ -2130,18 +2128,6 @@
      $                      LWORK, RWORK, LOGWRK, RESULT, INFO )
                IF( INFO.NE.0 )
      $            WRITE( NOUT, FMT = 9980 )'CCHKGG', INFO
-            END IF
-            CALL XLAENV( 1, 1 )
-            IF( TSTDRV ) THEN
-               CALL CDRVGG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
-     $                      THRSHN, NOUT, A( 1, 1 ), NMAX, A( 1, 2 ),
-     $                      A( 1, 3 ), A( 1, 4 ), A( 1, 5 ), A( 1, 6 ),
-     $                      A( 1, 7 ), NMAX, A( 1, 8 ), DC( 1, 1 ),
-     $                      DC( 1, 2 ), DC( 1, 3 ), DC( 1, 4 ),
-     $                      A( 1, 8 ), A( 1, 9 ), WORK, LWORK, RWORK,
-     $                      RESULT, INFO )
-               IF( INFO.NE.0 )
-     $            WRITE( NOUT, FMT = 9980 )'CDRVGG', INFO
             END IF
   350    CONTINUE
 *
