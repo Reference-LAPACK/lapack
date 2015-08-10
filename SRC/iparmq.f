@@ -33,7 +33,7 @@
 *>      This program sets problem and machine dependent parameters
 *>      useful for xHSEQR and related subroutines for eigenvalue
 *>      problems. It is called whenever
-*>      ILAENV is called with 12 <= ISPEC <= 16
+*>      IPARMQ is called with 12 <= ISPEC <= 16
 *> \endverbatim
 *
 *  Arguments:
@@ -318,7 +318,7 @@
 *
 *        Convert NAME to upper case if the first character is lower case.
 *
-         ILAENV = 0
+         IPARMQ = 0
          SUBNAM = NAME
          IC = ICHAR( SUBNAM( 1: 1 ) )
          IZ = ICHAR( 'Z' )
