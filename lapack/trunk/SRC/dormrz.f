@@ -299,8 +299,6 @@
             NBMIN = MAX( 2, ILAENV( 2, 'DORMRQ', SIDE // TRANS, M, N, K,
      $              -1 ) )
          END IF
-      ELSE
-         IWS = NW
       END IF
 *
       IF( NB.LT.NBMIN .OR. NB.GE.K ) THEN
