@@ -1,0 +1,9 @@
+
+Here is a (temporary and incomplete) list of contributors and thanks for the next release.
+
+== Contributors:
+* Philippe Theveny, University of Colorado Denver
+* Rodney James, Colorado College
+
+== Thanks for bugs report to:
+* Vittorio Zecca 
