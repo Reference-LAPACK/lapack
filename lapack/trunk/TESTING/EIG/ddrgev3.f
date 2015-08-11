@@ -895,10 +895,10 @@
  9999 FORMAT( ' DDRGEV3: ', A, ' returned INFO=', I6, '.', / 3X, 'N=',
      $      I6, ', JTYPE=', I6, ', ISEED=(', 4( I4, ',' ), I5, ')' )
 *
- 9998 FORMAT( ' DDRGEV3: ', A, ' Eigenvectors from ', A, ' incorrectly ',
-     $      'normalized.', / ' Bits of error=', 0P, G10.3, ',', 3X,
-     $      'N=', I4, ', JTYPE=', I3, ', ISEED=(', 4( I4, ',' ), I5,
-     $      ')' )
+ 9998 FORMAT( ' DDRGEV3: ', A, ' Eigenvectors from ', A,
+     $      ' incorrectly normalized.', / ' Bits of error=', 0P, G10.3,
+     $      ',', 3X, 'N=', I4, ', JTYPE=', I3, ', ISEED=(',
+     $       4( I4, ',' ), I5, ')' )
 *
  9997 FORMAT( / 1X, A3, ' -- Real Generalized eigenvalue problem driver'
      $       )

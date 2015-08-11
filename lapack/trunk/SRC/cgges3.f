@@ -397,7 +397,7 @@
      $                WORK, IERR )
          LWKOPT = MAX( LWKOPT, INT ( WORK( 1 ) ) )
          IF( WANTST ) THEN
-            CALL CTGSEN( 0, ILVSL, ILVSR, WORK, N, A, LDA, B, LDB,
+            CALL CTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
      $                   ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, SDIM,
      $                   PVSL, PVSR, DIF, WORK, -1, IDUM, 1, IERR )
             LWKOPT = MAX( LWKOPT, INT ( WORK( 1 ) ) )
