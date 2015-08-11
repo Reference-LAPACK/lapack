@@ -224,7 +224,7 @@
          INFO = -8
       END IF
 *
-      IF( INFO.NE.0 ) THEN
+      IF( INFO.EQ.0 ) THEN
 *
 *        Compute the workspace requirements
 *
