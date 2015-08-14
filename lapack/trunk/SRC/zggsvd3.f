@@ -1,4 +1,4 @@
-*> \brief <b> CGGSVD computes the singular value decomposition (SVD) for OTHER matrices</b>
+*> \brief <b> ZGGSVD3 computes the singular value decomposition (SVD) for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,30 +6,30 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download CGGSVD + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> Download ZGGSVD3 + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zggsvd3.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zggsvd3.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zggsvd3.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
-*                          LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
-*                          RWORK, IWORK, INFO )
+*       SUBROUTINE ZGGSVD3( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
+*                           LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
+*                           LWORK, RWORK, IWORK, INFO )
 * 
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBQ, JOBU, JOBV
-*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P, LWORK
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
-*       REAL               ALPHA( * ), BETA( * ), RWORK( * )
-*       COMPLEX            A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+*       DOUBLE PRECISION   ALPHA( * ), BETA( * ), RWORK( * )
+*       COMPLEX*16         A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
 *      $                   U( LDU, * ), V( LDV, * ), WORK( * )
 *       ..
 *  
@@ -39,9 +39,7 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine CGGSVD3.
-*>
-*> CGGSVD computes the generalized singular value decomposition (GSVD)
+*> ZGGSVD3 computes the generalized singular value decomposition (GSVD)
 *> of an M-by-N complex matrix A and P-by-N complex matrix B:
 *>
 *>       U**H*A*Q = D1*( 0 R ),    V**H*B*Q = D2*( 0 R )
@@ -66,7 +64,6 @@
 *>                 N-K-L  K    L
 *>   ( 0 R ) = K (  0   R11  R12 )
 *>             L (  0    0   R22 )
-*>
 *> where
 *>
 *>   C = diag( ALPHA(K+1), ... , ALPHA(K+L) ),
@@ -107,7 +104,7 @@
 *> In particular, if B is an N-by-N nonsingular matrix, then the GSVD of
 *> A and B implicitly gives the SVD of A*inv(B):
 *>                      A*inv(B) = U*(D1*inv(D2))*V**H.
-*> If ( A**H,B**H)**H has orthnormal columns, then the GSVD of A and B is also
+*> If ( A**H,B**H)**H has orthonormal columns, then the GSVD of A and B is also
 *> equal to the CS decomposition of A and B. Furthermore, the GSVD can
 *> be used to derive the solution of the eigenvalue problem:
 *>                      A**H*A x = lambda* B**H*B x.
@@ -179,7 +176,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
 *>          On exit, A contains the triangular matrix R, or part of R.
 *>          See Purpose for details.
@@ -193,7 +190,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (LDB,N)
+*>          B is COMPLEX*16 array, dimension (LDB,N)
 *>          On entry, the P-by-N matrix B.
 *>          On exit, B contains part of the triangular matrix R if
 *>          M-K-L < 0.  See Purpose for details.
@@ -207,12 +204,12 @@
 *>
 *> \param[out] ALPHA
 *> \verbatim
-*>          ALPHA is REAL array, dimension (N)
+*>          ALPHA is DOUBLE PRECISION array, dimension (N)
 *> \endverbatim
 *>
 *> \param[out] BETA
 *> \verbatim
-*>          BETA is REAL array, dimension (N)
+*>          BETA is DOUBLE PRECISION array, dimension (N)
 *>
 *>          On exit, ALPHA and BETA contain the generalized singular
 *>          value pairs of A and B;
@@ -231,7 +228,7 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is COMPLEX array, dimension (LDU,M)
+*>          U is COMPLEX*16 array, dimension (LDU,M)
 *>          If JOBU = 'U', U contains the M-by-M unitary matrix U.
 *>          If JOBU = 'N', U is not referenced.
 *> \endverbatim
@@ -245,7 +242,7 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is COMPLEX array, dimension (LDV,P)
+*>          V is COMPLEX*16 array, dimension (LDV,P)
 *>          If JOBV = 'V', V contains the P-by-P unitary matrix V.
 *>          If JOBV = 'N', V is not referenced.
 *> \endverbatim
@@ -259,7 +256,7 @@
 *>
 *> \param[out] Q
 *> \verbatim
-*>          Q is COMPLEX array, dimension (LDQ,N)
+*>          Q is COMPLEX*16 array, dimension (LDQ,N)
 *>          If JOBQ = 'Q', Q contains the N-by-N unitary matrix Q.
 *>          If JOBQ = 'N', Q is not referenced.
 *> \endverbatim
@@ -273,12 +270,24 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (max(3*N,M,P)+N)
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (2*N)
+*>          RWORK is DOUBLE PRECISION array, dimension (2*N)
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -298,15 +307,15 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, the Jacobi-type procedure failed to
-*>                converge.  For further details, see subroutine CTGSJA.
+*>                converge.  For further details, see subroutine ZTGSJA.
 *> \endverbatim
 *
 *> \par Internal Parameters:
 *  =========================
 *>
 *> \verbatim
-*>  TOLA    REAL
-*>  TOLB    REAL
+*>  TOLA    DOUBLE PRECISION
+*>  TOLB    DOUBLE PRECISION
 *>          TOLA and TOLB are the thresholds to determine the effective
 *>          rank of (A**H,B**H)**H. Generally, they are set to
 *>                   TOLA = MAX(M,N)*norm(A)*MACHEPS,
@@ -323,9 +332,9 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2015
 *
-*> \ingroup complexOTHERsing
+*> \ingroup complex16OTHERsing
 *
 *> \par Contributors:
 *  ==================
@@ -333,41 +342,48 @@
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
 *>
-*  =====================================================================
-      SUBROUTINE CGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
-     $                   LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
-     $                   RWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.4.0) --
+*> \par Further Details:
+*  =====================
+*>
+*>  ZGGSVD3 replaces the deprecated subroutine ZGGSVD.
+*>
+*  =====================================================================
+      SUBROUTINE ZGGSVD3( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
+     $                    LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
+     $                    WORK, LWORK, RWORK, IWORK, INFO )
+*
+*  -- LAPACK driver routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2015
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBQ, JOBU, JOBV
-      INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+      INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P,
+     $                   LWORK
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
-      REAL               ALPHA( * ), BETA( * ), RWORK( * )
-      COMPLEX            A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
+      DOUBLE PRECISION   ALPHA( * ), BETA( * ), RWORK( * )
+      COMPLEX*16         A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
      $                   U( LDU, * ), V( LDV, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      LOGICAL            WANTQ, WANTU, WANTV
-      INTEGER            I, IBND, ISUB, J, NCYCLE
-      REAL               ANORM, BNORM, SMAX, TEMP, TOLA, TOLB, ULP, UNFL
+      LOGICAL            WANTQ, WANTU, WANTV, LQUERY
+      INTEGER            I, IBND, ISUB, J, NCYCLE, LWKOPT
+      DOUBLE PRECISION   ANORM, BNORM, SMAX, TEMP, TOLA, TOLB, ULP, UNFL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      DOUBLE PRECISION   DLAMCH, ZLANGE
+      EXTERNAL           LSAME, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGGSVP, CTGSJA, SCOPY, XERBLA
+      EXTERNAL           DCOPY, XERBLA, ZGGSVP, ZTGSJA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -379,6 +395,10 @@
       WANTU = LSAME( JOBU, 'U' )
       WANTV = LSAME( JOBV, 'V' )
       WANTQ = LSAME( JOBQ, 'Q' )
+      LQUERY = ( LWORK.EQ.-1 )
+      LWKOPT = 1
+*
+*     Test the input arguments
 *
       INFO = 0
       IF( .NOT.( WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
@@ -403,39 +423,57 @@
          INFO = -18
       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN
          INFO = -20
+      ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
+         INFO = -24
       END IF
+*
+*     Compute workspace
+*
+      IF( INFO.EQ.0 ) THEN
+         CALL ZGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+     $                 TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, RWORK,
+     $                 WORK, WORK, -1, INFO )
+         LWKOPT = N + INT( WORK( 1 ) )
+         LWKOPT = MAX( 2*N, LWKOPT )
+         LWKOPT = MAX( 1, LWKOPT )
+         WORK( 1 ) = DCMPLX( LWKOPT )
+      END IF
+*
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGGSVD', -INFO )
+         CALL XERBLA( 'ZGGSVD3', -INFO )
          RETURN
       END IF
+      IF( LQUERY ) THEN
+         RETURN
+      ENDIF
 *
 *     Compute the Frobenius norm of matrices A and B
 *
-      ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
-      BNORM = CLANGE( '1', P, N, B, LDB, RWORK )
+      ANORM = ZLANGE( '1', M, N, A, LDA, RWORK )
+      BNORM = ZLANGE( '1', P, N, B, LDB, RWORK )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrices A and B.
 *
-      ULP = SLAMCH( 'Precision' )
-      UNFL = SLAMCH( 'Safe Minimum' )
+      ULP = DLAMCH( 'Precision' )
+      UNFL = DLAMCH( 'Safe Minimum' )
       TOLA = MAX( M, N )*MAX( ANORM, UNFL )*ULP
       TOLB = MAX( P, N )*MAX( BNORM, UNFL )*ULP
 *
-      CALL CGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
-     $             TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, RWORK,
-     $             WORK, WORK( N+1 ), INFO )
+      CALL ZGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+     $              TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, RWORK,
+     $              WORK, WORK( N+1 ), LWORK-N, INFO )
 *
 *     Compute the GSVD of two upper "triangular" matrices
 *
-      CALL CTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B, LDB,
+      CALL ZTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B, LDB,
      $             TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
      $             WORK, NCYCLE, INFO )
 *
 *     Sort the singular values and store the pivot indices in IWORK
 *     Copy ALPHA to RWORK, then sort ALPHA in RWORK
 *
-      CALL SCOPY( N, ALPHA, 1, RWORK, 1 )
+      CALL DCOPY( N, ALPHA, 1, RWORK, 1 )
       IBND = MIN( L, M-K )
       DO 20 I = 1, IBND
 *
@@ -459,8 +497,9 @@
          END IF
    20 CONTINUE
 *
+      WORK( 1 ) = DCMPLX( LWKOPT )
       RETURN
 *
-*     End of CGGSVD
+*     End of ZGGSVD3
 *
       END

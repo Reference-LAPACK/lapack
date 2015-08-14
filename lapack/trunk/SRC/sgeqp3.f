@@ -185,8 +185,8 @@
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN
-*     ..
-*     .. Executable Statements ..
+*     Test input arguments
+*  ====================
 *
       INFO = 0
       LQUERY = ( LWORK.EQ.-1 )
@@ -219,12 +219,6 @@
          CALL XERBLA( 'SGEQP3', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
-         RETURN
-      END IF
-*
-*     Quick return if possible.
-*
-      IF( MINMN.EQ.0 ) THEN
          RETURN
       END IF
 *

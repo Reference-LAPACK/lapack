@@ -1,4 +1,4 @@
-*> \brief \b SGGSVP
+*> \brief \b SGGSVP3
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,25 +6,25 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download SGGSVP + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggsvp.f"> 
+*> Download SGGSVP3 + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggsvp3.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sggsvp.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sggsvp3.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggsvp.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggsvp3.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
-*                          TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
-*                          IWORK, TAU, WORK, INFO )
+*       SUBROUTINE SGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
+*                           TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
+*                           IWORK, TAU, WORK, LWORK, INFO )
 * 
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBQ, JOBU, JOBV
-*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P, LWORK
 *       REAL               TOLA, TOLB
 *       ..
 *       .. Array Arguments ..
@@ -39,9 +39,7 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine SGGSVP3.
-*>
-*> SGGSVP computes orthogonal matrices U, V and Q such that
+*> SGGSVP3 computes orthogonal matrices U, V and Q such that
 *>
 *>                    N-K-L  K    L
 *>  U**T*A*Q =     K ( 0    A12  A13 )  if M-K-L >= 0;
@@ -63,7 +61,7 @@
 *>
 *> This decomposition is the preprocessing step for computing the
 *> Generalized Singular Value Decomposition (GSVD), see subroutine
-*> SGGSVD.
+*> SGGSVD3.
 *> \endverbatim
 *
 *  Arguments:
@@ -222,7 +220,19 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (max(3*N,M,P))
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -240,30 +250,39 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2015
 *
 *> \ingroup realOTHERcomputational
 *
 *> \par Further Details:
 *  =====================
 *>
-*>  The subroutine uses LAPACK subroutine SGEQPF for the QR factorization
+*> \verbatim
+*>
+*>  The subroutine uses LAPACK subroutine SGEQP3 for the QR factorization
 *>  with column pivoting to detect the effective numerical rank of the
 *>  a matrix. It may be replaced by a better rank determination strategy.
 *>
+*>  SGGSVP3 replaces the deprecated subroutine SGGSVP.
+*>
+*> \endverbatim
+*>
 *  =====================================================================
-      SUBROUTINE SGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
-     $                   TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
-     $                   IWORK, TAU, WORK, INFO )
+      SUBROUTINE SGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB,
+     $                    TOLA, TOLB, K, L, U, LDU, V, LDV, Q, LDQ,
+     $                    IWORK, TAU, WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2015
+*
+      IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBQ, JOBU, JOBV
-      INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+      INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P,
+     $                   LWORK
       REAL               TOLA, TOLB
 *     ..
 *     .. Array Arguments ..
@@ -279,16 +298,16 @@
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            FORWRD, WANTQ, WANTU, WANTV
-      INTEGER            I, J
+      LOGICAL            FORWRD, WANTQ, WANTU, WANTV, LQUERY
+      INTEGER            I, J, LWKOPT
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQPF, SGEQR2, SGERQ2, SLACPY, SLAPMT, SLASET,
-     $                   SORG2R, SORM2R, SORMR2, XERBLA
+      EXTERNAL           SGEQP3, SGEQR2, SGERQ2, SLACPY, SLAPMT,
+     $                   SLASET, SORG2R, SORM2R, SORMR2, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -301,6 +320,10 @@
       WANTV = LSAME( JOBV, 'V' )
       WANTQ = LSAME( JOBQ, 'Q' )
       FORWRD = .TRUE.
+      LQUERY = ( LWORK.EQ.-1 )
+      LWKOPT = 1
+*
+*     Test the input arguments
 *
       INFO = 0
       IF( .NOT.( WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
@@ -325,11 +348,36 @@
          INFO = -18
       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN
          INFO = -20
+      ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
+         INFO = -24
       END IF
+*
+*     Compute workspace
+*
+      IF( INFO.EQ.0 ) THEN
+         CALL SGEQP3( P, N, B, LDB, IWORK, TAU, WORK, -1, INFO )
+         LWKOPT = INT( WORK ( 1 ) )
+         IF( WANTV ) THEN
+            LWKOPT = MAX( LWKOPT, P )
+         END IF
+         LWKOPT = MAX( LWKOPT, MIN( N, P ) )
+         LWKOPT = MAX( LWKOPT, M )
+         IF( WANTQ ) THEN
+            LWKOPT = MAX( LWKOPT, N )
+         END IF
+         CALL SGEQP3( M, N, A, LDA, IWORK, TAU, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK ( 1 ) ) )
+         LWKOPT = MAX( 1, LWKOPT )
+         WORK( 1 ) = REAL( LWKOPT )
+      END IF
+*
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SGGSVP', -INFO )
+         CALL XERBLA( 'SGGSVP3', -INFO )
          RETURN
       END IF
+      IF( LQUERY ) THEN
+         RETURN
+      ENDIF
 *
 *     QR with column pivoting of B: B*P = V*( S11 S12 )
 *                                           (  0   0  )
@@ -337,7 +385,7 @@
       DO 10 I = 1, N
          IWORK( I ) = 0
    10 CONTINUE
-      CALL SGEQPF( P, N, B, LDB, IWORK, TAU, WORK, INFO )
+      CALL SGEQP3( P, N, B, LDB, IWORK, TAU, WORK, LWORK, INFO )
 *
 *     Update A := A*P
 *
@@ -421,7 +469,7 @@
       DO 70 I = 1, N - L
          IWORK( I ) = 0
    70 CONTINUE
-      CALL SGEQPF( M, N-L, A, LDA, IWORK, TAU, WORK, INFO )
+      CALL SGEQP3( M, N-L, A, LDA, IWORK, TAU, WORK, LWORK, INFO )
 *
 *     Determine the effective rank of A11
 *
@@ -515,8 +563,9 @@
 *
       END IF
 *
+      WORK( 1 ) = REAL( LWKOPT )
       RETURN
 *
-*     End of SGGSVP
+*     End of SGGSVP3
 *
       END

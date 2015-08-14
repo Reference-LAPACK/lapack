@@ -219,7 +219,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 7 )
+      PARAMETER          ( NTESTS = 12 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 8 )
 *     ..
@@ -237,7 +237,8 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, CGSVTS, CLATMS, SLATB9
+      EXTERNAL           ALAHDG, ALAREQ, ALASUM, CLATMS, SLATB9, CGSVTS,
+     $                   CGSVTS3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -308,6 +309,12 @@
             CALL CGSVTS( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
      $                   LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
      $                   LWORK, RWORK, RESULT )
+*
+            CALL CGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
+     $                    LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
+     $                    LWORK, RWORK, RESULT( NT+1 ) )
+*
+            NT = NT + 6
 *
 *           Print information about the tests that did not
 *           pass the threshold.

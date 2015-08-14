@@ -22,9 +22,9 @@
 *> \verbatim
 *>
 *> DERRGG tests the error exits for DGGES, DGGESX, DGGEV,  DGGEVX,
-*> DGGGLM, DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD, DGGSVP, DHGEQZ,
-*> DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA, DGGES3, DGGEV3,
-*> and DTGSYL.
+*> DGGGLM, DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD, DGGSVD3, DGGSVP,
+*> DGGSVP3, DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA, DTGSNA,
+*> DGGES3, DGGEV3, and DTGSYL.
 *> \endverbatim
 *
 *  Arguments:
@@ -78,7 +78,7 @@
 *     .. Local Scalars ..
       CHARACTER*2        C2
       INTEGER            DUMMYK, DUMMYL, I, IFST, ILO, IHI, ILST, INFO,
-     $                   J, M, NCYCLE, NT, SDIM
+     $                   J, M, NCYCLE, NT, SDIM, LWORK
       DOUBLE PRECISION   ANRM, BNRM, DIF, SCALE, TOLA, TOLB
 *     ..
 *     .. Local Arrays ..
@@ -98,7 +98,8 @@
       EXTERNAL           CHKXER, DGGES, DGGESX, DGGEV, DGGEVX, DGGGLM,
      $                   DGGHRD, DGGLSE, DGGQRF, DGGRQF, DGGSVD, DGGSVP,
      $                   DHGEQZ, DORCSD, DTGEVC, DTGEXC, DTGSEN, DTGSJA,
-     $                   DTGSNA, DTGSYL, DGGHD3, DGGES3, DGGEV3
+     $                   DTGSNA, DTGSYL, DGGHD3, DGGES3, DGGEV3,
+     $                   DGGSVD3, DGGSVP3
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -134,6 +135,7 @@
       IFST = 1
       ILST = 1
       NT = 0
+      LWORK = 1
 *
 *     Test error exits for the GG path.
 *
@@ -347,6 +349,55 @@
          CALL CHKXER( 'DGGSVD', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
+*        DGGSVD3
+*
+         SRNAMT = 'DGGSVD3'
+         INFOT = 1
+         CALL DGGSVD3( '/', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DGGSVD3( 'N', '/', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DGGSVD3( 'N', 'N', '/', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DGGSVD3( 'N', 'N', 'N', -1, 0, 0, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DGGSVD3( 'N', 'N', 'N', 0, -1, 0, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DGGSVD3( 'N', 'N', 'N', 0, 0, -1, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DGGSVD3( 'N', 'N', 'N', 2, 1, 1, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 12
+         CALL DGGSVD3( 'N', 'N', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 16
+         CALL DGGSVD3( 'U', 'N', 'N', 2, 2, 2, DUMMYK, DUMMYL, A, 2, B,
+     $                 2, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 18
+         CALL DGGSVD3( 'N', 'V', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 1, B,
+     $                 2, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         INFOT = 20
+         CALL DGGSVD3( 'N', 'N', 'Q', 1, 2, 1, DUMMYK, DUMMYL, A, 1, B,
+     $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
+         CALL CHKXER( 'DGGSVD3', INFOT, NOUT, LERR, OK )
+         NT = NT + 11
+*
 *        DGGSVP
 *
          SRNAMT = 'DGGSVP'
@@ -405,6 +456,66 @@
      $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
      $                INFO )
          CALL CHKXER( 'DGGSVP', INFOT, NOUT, LERR, OK )
+         NT = NT + 11
+*
+*        DGGSVP3
+*
+         SRNAMT = 'DGGSVP3'
+         INFOT = 1
+         CALL DGGSVP3( '/', 'N', 'N', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DGGSVP3( 'N', '/', 'N', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DGGSVP3( 'N', 'N', '/', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DGGSVP3( 'N', 'N', 'N', -1, 0, 0, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DGGSVP3( 'N', 'N', 'N', 0, -1, 0, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL DGGSVP3( 'N', 'N', 'N', 0, 0, -1, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DGGSVP3( 'N', 'N', 'N', 2, 1, 1, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DGGSVP3( 'N', 'N', 'N', 1, 2, 1, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 16
+         CALL DGGSVP3( 'U', 'N', 'N', 2, 2, 2, A, 2, B, 2, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 18
+         CALL DGGSVP3( 'N', 'V', 'N', 1, 2, 1, A, 1, B, 2, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
+         INFOT = 20
+         CALL DGGSVP3( 'N', 'N', 'Q', 1, 1, 2, A, 1, B, 1, TOLA, TOLB,
+     $                 DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
+     $                 LWORK, INFO )
+         CALL CHKXER( 'DGGSVP3', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
 *        DTGSJA

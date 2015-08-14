@@ -39,6 +39,8 @@
 *>
 *> \verbatim
 *>
+*> This routine is deprecated and has been replaced by routine DGGSVP3.
+*>
 *> DGGSVP computes orthogonal matrices U, V and Q such that
 *>
 *>                    N-K-L  K    L

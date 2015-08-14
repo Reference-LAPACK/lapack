@@ -39,6 +39,8 @@
 *>
 *> \verbatim
 *>
+*> This routine is deprecated and has been replaced by routine DGGSVD3.
+*>
 *> DGGSVD computes the generalized singular value decomposition (GSVD)
 *> of an M-by-N real matrix A and P-by-N real matrix B:
 *>

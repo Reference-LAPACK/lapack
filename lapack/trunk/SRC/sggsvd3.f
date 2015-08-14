@@ -1,4 +1,4 @@
-*> \brief <b> CGGSVD computes the singular value decomposition (SVD) for OTHER matrices</b>
+*> \brief <b> SGGSVD3 computes the singular value decomposition (SVD) for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,31 +6,31 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download CGGSVD + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> Download SGGSVD3 + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sggsvd3.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sggsvd3.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sggsvd3.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
-*                          LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
-*                          RWORK, IWORK, INFO )
+*       SUBROUTINE SGGSVD3( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
+*                           LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
+*                           LWORK, IWORK, INFO )
 * 
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBQ, JOBU, JOBV
-*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P, LWORK
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
-*       REAL               ALPHA( * ), BETA( * ), RWORK( * )
-*       COMPLEX            A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
-*      $                   U( LDU, * ), V( LDV, * ), WORK( * )
+*       REAL               A( LDA, * ), ALPHA( * ), B( LDB, * ),
+*      $                   BETA( * ), Q( LDQ, * ), U( LDU, * ),
+*      $                   V( LDV, * ), WORK( * )
 *       ..
 *  
 *
@@ -39,18 +39,16 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine CGGSVD3.
+*> SGGSVD3 computes the generalized singular value decomposition (GSVD)
+*> of an M-by-N real matrix A and P-by-N real matrix B:
 *>
-*> CGGSVD computes the generalized singular value decomposition (GSVD)
-*> of an M-by-N complex matrix A and P-by-N complex matrix B:
+*>       U**T*A*Q = D1*( 0 R ),    V**T*B*Q = D2*( 0 R )
 *>
-*>       U**H*A*Q = D1*( 0 R ),    V**H*B*Q = D2*( 0 R )
-*>
-*> where U, V and Q are unitary matrices.
-*> Let K+L = the effective numerical rank of the
-*> matrix (A**H,B**H)**H, then R is a (K+L)-by-(K+L) nonsingular upper
-*> triangular matrix, D1 and D2 are M-by-(K+L) and P-by-(K+L) "diagonal"
-*> matrices and of the following structures, respectively:
+*> where U, V and Q are orthogonal matrices.
+*> Let K+L = the effective numerical rank of the matrix (A**T,B**T)**T,
+*> then R is a K+L-by-K+L nonsingular upper triangular matrix, D1 and
+*> D2 are M-by-(K+L) and P-by-(K+L) "diagonal" matrices and of the
+*> following structures, respectively:
 *>
 *> If M-K-L >= 0,
 *>
@@ -101,24 +99,24 @@
 *>   ( 0  R22 R23 )
 *>   in B(M-K+1:L,N+M-K-L+1:N) on exit.
 *>
-*> The routine computes C, S, R, and optionally the unitary
+*> The routine computes C, S, R, and optionally the orthogonal
 *> transformation matrices U, V and Q.
 *>
 *> In particular, if B is an N-by-N nonsingular matrix, then the GSVD of
 *> A and B implicitly gives the SVD of A*inv(B):
-*>                      A*inv(B) = U*(D1*inv(D2))*V**H.
-*> If ( A**H,B**H)**H has orthnormal columns, then the GSVD of A and B is also
-*> equal to the CS decomposition of A and B. Furthermore, the GSVD can
-*> be used to derive the solution of the eigenvalue problem:
-*>                      A**H*A x = lambda* B**H*B x.
+*>                      A*inv(B) = U*(D1*inv(D2))*V**T.
+*> If ( A**T,B**T)**T  has orthonormal columns, then the GSVD of A and B is
+*> also equal to the CS decomposition of A and B. Furthermore, the GSVD
+*> can be used to derive the solution of the eigenvalue problem:
+*>                      A**T*A x = lambda* B**T*B x.
 *> In some literature, the GSVD of A and B is presented in the form
-*>                  U**H*A*X = ( 0 D1 ),   V**H*B*X = ( 0 D2 )
-*> where U and V are orthogonal and X is nonsingular, and D1 and D2 are
+*>                  U**T*A*X = ( 0 D1 ),   V**T*B*X = ( 0 D2 )
+*> where U and V are orthogonal and X is nonsingular, D1 and D2 are
 *> ``diagonal''.  The former GSVD form can be converted to the latter
 *> form by taking the nonsingular matrix X as
 *>
-*>                       X = Q*(  I   0    )
-*>                             (  0 inv(R) )
+*>                      X = Q*( I   0    )
+*>                            ( 0 inv(R) ).
 *> \endverbatim
 *
 *  Arguments:
@@ -127,21 +125,21 @@
 *> \param[in] JOBU
 *> \verbatim
 *>          JOBU is CHARACTER*1
-*>          = 'U':  Unitary matrix U is computed;
+*>          = 'U':  Orthogonal matrix U is computed;
 *>          = 'N':  U is not computed.
 *> \endverbatim
 *>
 *> \param[in] JOBV
 *> \verbatim
 *>          JOBV is CHARACTER*1
-*>          = 'V':  Unitary matrix V is computed;
+*>          = 'V':  Orthogonal matrix V is computed;
 *>          = 'N':  V is not computed.
 *> \endverbatim
 *>
 *> \param[in] JOBQ
 *> \verbatim
 *>          JOBQ is CHARACTER*1
-*>          = 'Q':  Unitary matrix Q is computed;
+*>          = 'Q':  Orthogonal matrix Q is computed;
 *>          = 'N':  Q is not computed.
 *> \endverbatim
 *>
@@ -174,12 +172,12 @@
 *>
 *>          On exit, K and L specify the dimension of the subblocks
 *>          described in Purpose.
-*>          K + L = effective numerical rank of (A**H,B**H)**H.
+*>          K + L = effective numerical rank of (A**T,B**T)**T.
 *> \endverbatim
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (LDA,N)
+*>          A is REAL array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
 *>          On exit, A contains the triangular matrix R, or part of R.
 *>          See Purpose for details.
@@ -193,10 +191,10 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (LDB,N)
+*>          B is REAL array, dimension (LDB,N)
 *>          On entry, the P-by-N matrix B.
-*>          On exit, B contains part of the triangular matrix R if
-*>          M-K-L < 0.  See Purpose for details.
+*>          On exit, B contains the triangular matrix R if M-K-L < 0.
+*>          See Purpose for details.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -231,8 +229,8 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is COMPLEX array, dimension (LDU,M)
-*>          If JOBU = 'U', U contains the M-by-M unitary matrix U.
+*>          U is REAL array, dimension (LDU,M)
+*>          If JOBU = 'U', U contains the M-by-M orthogonal matrix U.
 *>          If JOBU = 'N', U is not referenced.
 *> \endverbatim
 *>
@@ -245,8 +243,8 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is COMPLEX array, dimension (LDV,P)
-*>          If JOBV = 'V', V contains the P-by-P unitary matrix V.
+*>          V is REAL array, dimension (LDV,P)
+*>          If JOBV = 'V', V contains the P-by-P orthogonal matrix V.
 *>          If JOBV = 'N', V is not referenced.
 *> \endverbatim
 *>
@@ -259,8 +257,8 @@
 *>
 *> \param[out] Q
 *> \verbatim
-*>          Q is COMPLEX array, dimension (LDQ,N)
-*>          If JOBQ = 'Q', Q contains the N-by-N unitary matrix Q.
+*>          Q is REAL array, dimension (LDQ,N)
+*>          If JOBQ = 'Q', Q contains the N-by-N orthogonal matrix Q.
 *>          If JOBQ = 'N', Q is not referenced.
 *> \endverbatim
 *>
@@ -273,12 +271,19 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (max(3*N,M,P)+N)
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
-*> \param[out] RWORK
+*> \param[in] LWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (2*N)
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -298,7 +303,7 @@
 *>          = 0:  successful exit.
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
 *>          > 0:  if INFO = 1, the Jacobi-type procedure failed to
-*>                converge.  For further details, see subroutine CTGSJA.
+*>                converge.  For further details, see subroutine STGSJA.
 *> \endverbatim
 *
 *> \par Internal Parameters:
@@ -308,7 +313,7 @@
 *>  TOLA    REAL
 *>  TOLB    REAL
 *>          TOLA and TOLB are the thresholds to determine the effective
-*>          rank of (A**H,B**H)**H. Generally, they are set to
+*>          rank of (A**T,B**T)**T. Generally, they are set to
 *>                   TOLA = MAX(M,N)*norm(A)*MACHEPS,
 *>                   TOLB = MAX(P,N)*norm(B)*MACHEPS.
 *>          The size of TOLA and TOLB may affect the size of backward
@@ -323,9 +328,9 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2015
 *
-*> \ingroup complexOTHERsing
+*> \ingroup realOTHERsing
 *
 *> \par Contributors:
 *  ==================
@@ -333,41 +338,48 @@
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
 *>
-*  =====================================================================
-      SUBROUTINE CGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
-     $                   LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
-     $                   RWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.4.0) --
+*> \par Further Details:
+*  =====================
+*>
+*>  SGGSVD3 replaces the deprecated subroutine SGGSVD.
+*>
+*  =====================================================================
+      SUBROUTINE SGGSVD3( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
+     $                    LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
+     $                    WORK, LWORK, IWORK, INFO )
+*
+*  -- LAPACK driver routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2015
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBQ, JOBU, JOBV
-      INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+      INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P,
+     $                   LWORK
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
-      REAL               ALPHA( * ), BETA( * ), RWORK( * )
-      COMPLEX            A( LDA, * ), B( LDB, * ), Q( LDQ, * ),
-     $                   U( LDU, * ), V( LDV, * ), WORK( * )
+      REAL               A( LDA, * ), ALPHA( * ), B( LDB, * ),
+     $                   BETA( * ), Q( LDQ, * ), U( LDU, * ),
+     $                   V( LDV, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      LOGICAL            WANTQ, WANTU, WANTV
-      INTEGER            I, IBND, ISUB, J, NCYCLE
+      LOGICAL            WANTQ, WANTU, WANTV, LQUERY
+      INTEGER            I, IBND, ISUB, J, NCYCLE, LWKOPT
       REAL               ANORM, BNORM, SMAX, TEMP, TOLA, TOLB, ULP, UNFL
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               CLANGE, SLAMCH
-      EXTERNAL           LSAME, CLANGE, SLAMCH
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           LSAME, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGGSVP, CTGSJA, SCOPY, XERBLA
+      EXTERNAL           SCOPY, SGGSVP3, STGSJA, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -379,6 +391,10 @@
       WANTU = LSAME( JOBU, 'U' )
       WANTV = LSAME( JOBV, 'V' )
       WANTQ = LSAME( JOBQ, 'Q' )
+      LQUERY = ( LWORK.EQ.-1 )
+      LWKOPT = 1
+*
+*     Test the input arguments
 *
       INFO = 0
       IF( .NOT.( WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
@@ -403,16 +419,34 @@
          INFO = -18
       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN
          INFO = -20
+      ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
+         INFO = -24
       END IF
+*
+*     Compute workspace
+*
+      IF( INFO.EQ.0 ) THEN
+         CALL SGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+     $                 TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, WORK,
+     $                 WORK, -1, INFO )
+         LWKOPT = N + INT( WORK( 1 ) )
+         LWKOPT = MAX( 2*N, LWKOPT )
+         LWKOPT = MAX( 1, LWKOPT )
+         WORK( 1 ) = REAL( LWKOPT )
+      END IF
+*
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGGSVD', -INFO )
+         CALL XERBLA( 'SGGSVD3', -INFO )
          RETURN
       END IF
+      IF( LQUERY ) THEN
+         RETURN
+      ENDIF
 *
 *     Compute the Frobenius norm of matrices A and B
 *
-      ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
-      BNORM = CLANGE( '1', P, N, B, LDB, RWORK )
+      ANORM = SLANGE( '1', M, N, A, LDA, WORK )
+      BNORM = SLANGE( '1', P, N, B, LDB, WORK )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrices A and B.
@@ -422,45 +456,48 @@
       TOLA = MAX( M, N )*MAX( ANORM, UNFL )*ULP
       TOLB = MAX( P, N )*MAX( BNORM, UNFL )*ULP
 *
-      CALL CGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
-     $             TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, RWORK,
-     $             WORK, WORK( N+1 ), INFO )
+*     Preprocessing
+*
+      CALL SGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+     $              TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, WORK,
+     $              WORK( N+1 ), LWORK-N, INFO )
 *
 *     Compute the GSVD of two upper "triangular" matrices
 *
-      CALL CTGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B, LDB,
+      CALL STGSJA( JOBU, JOBV, JOBQ, M, P, N, K, L, A, LDA, B, LDB,
      $             TOLA, TOLB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
      $             WORK, NCYCLE, INFO )
 *
 *     Sort the singular values and store the pivot indices in IWORK
-*     Copy ALPHA to RWORK, then sort ALPHA in RWORK
+*     Copy ALPHA to WORK, then sort ALPHA in WORK
 *
-      CALL SCOPY( N, ALPHA, 1, RWORK, 1 )
+      CALL SCOPY( N, ALPHA, 1, WORK, 1 )
       IBND = MIN( L, M-K )
       DO 20 I = 1, IBND
 *
 *        Scan for largest ALPHA(K+I)
 *
          ISUB = I
-         SMAX = RWORK( K+I )
+         SMAX = WORK( K+I )
          DO 10 J = I + 1, IBND
-            TEMP = RWORK( K+J )
+            TEMP = WORK( K+J )
             IF( TEMP.GT.SMAX ) THEN
                ISUB = J
                SMAX = TEMP
             END IF
    10    CONTINUE
          IF( ISUB.NE.I ) THEN
-            RWORK( K+ISUB ) = RWORK( K+I )
-            RWORK( K+I ) = SMAX
+            WORK( K+ISUB ) = WORK( K+I )
+            WORK( K+I ) = SMAX
             IWORK( K+I ) = K + ISUB
          ELSE
             IWORK( K+I ) = K + I
          END IF
    20 CONTINUE
 *
+      WORK( 1 ) = REAL( LWKOPT )
       RETURN
 *
-*     End of CGGSVD
+*     End of SGGSVD3
 *
       END
