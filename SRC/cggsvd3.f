@@ -1,4 +1,4 @@
-*> \brief <b> CGGSVD computes the singular value decomposition (SVD) for OTHER matrices</b>
+*> \brief <b> CGGSVD3 computes the singular value decomposition (SVD) for OTHER matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,25 +6,25 @@
 *            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download CGGSVD + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> Download CGGSVD3 + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cggsvd3.f"> 
 *> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cggsvd3.f"> 
 *> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggsvd.f"> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cggsvd3.f"> 
 *> [TXT]</a>
 *> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
-*                          LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
-*                          RWORK, IWORK, INFO )
+*       SUBROUTINE CGGSVD3( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
+*                           LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
+*                           LWORK, RWORK, IWORK, INFO )
 * 
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBQ, JOBU, JOBV
-*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+*       INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P, LWORK
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
@@ -39,9 +39,7 @@
 *>
 *> \verbatim
 *>
-*> This routine is deprecated and has been replaced by routine CGGSVD3.
-*>
-*> CGGSVD computes the generalized singular value decomposition (GSVD)
+*> CGGSVD3 computes the generalized singular value decomposition (GSVD)
 *> of an M-by-N complex matrix A and P-by-N complex matrix B:
 *>
 *>       U**H*A*Q = D1*( 0 R ),    V**H*B*Q = D2*( 0 R )
@@ -107,7 +105,7 @@
 *> In particular, if B is an N-by-N nonsingular matrix, then the GSVD of
 *> A and B implicitly gives the SVD of A*inv(B):
 *>                      A*inv(B) = U*(D1*inv(D2))*V**H.
-*> If ( A**H,B**H)**H has orthnormal columns, then the GSVD of A and B is also
+*> If ( A**H,B**H)**H has orthonormal columns, then the GSVD of A and B is also
 *> equal to the CS decomposition of A and B. Furthermore, the GSVD can
 *> be used to derive the solution of the eigenvalue problem:
 *>                      A**H*A x = lambda* B**H*B x.
@@ -273,7 +271,19 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (max(3*N,M,P)+N)
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*> \endverbatim
+*>
+*> \param[in] LWORK
+*> \verbatim
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>
+*>          If LWORK = -1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK array, returns
+*>          this value as the first entry of the WORK array, and no error
+*>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -323,7 +333,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date August 2015
 *
 *> \ingroup complexOTHERsing
 *
@@ -333,19 +343,26 @@
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
 *>
-*  =====================================================================
-      SUBROUTINE CGGSVD( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
-     $                   LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
-     $                   RWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.4.0) --
+*> \par Further Details:
+*  =====================
+*>
+*>  CGGSVD3 replaces the deprecated subroutine CGGSVD.
+*>
+*  =====================================================================
+      SUBROUTINE CGGSVD3( JOBU, JOBV, JOBQ, M, N, P, K, L, A, LDA, B,
+     $                    LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
+     $                    WORK, LWORK, RWORK, IWORK, INFO )
+*
+*  -- LAPACK driver routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     August 2015
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBQ, JOBU, JOBV
-      INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P
+      INTEGER            INFO, K, L, LDA, LDB, LDQ, LDU, LDV, M, N, P,
+     $                   LWORK
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
@@ -357,8 +374,8 @@
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      LOGICAL            WANTQ, WANTU, WANTV
-      INTEGER            I, IBND, ISUB, J, NCYCLE
+      LOGICAL            WANTQ, WANTU, WANTV, LQUERY
+      INTEGER            I, IBND, ISUB, J, NCYCLE, LWKOPT
       REAL               ANORM, BNORM, SMAX, TEMP, TOLA, TOLB, ULP, UNFL
 *     ..
 *     .. External Functions ..
@@ -367,7 +384,7 @@
       EXTERNAL           LSAME, CLANGE, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGGSVP, CTGSJA, SCOPY, XERBLA
+      EXTERNAL           CGGSVP3, CTGSJA, SCOPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -379,6 +396,10 @@
       WANTU = LSAME( JOBU, 'U' )
       WANTV = LSAME( JOBV, 'V' )
       WANTQ = LSAME( JOBQ, 'Q' )
+      LQUERY = ( LWORK.EQ.-1 )
+      LWKOPT = 1
+*
+*     Test the input arguments
 *
       INFO = 0
       IF( .NOT.( WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN
@@ -403,11 +424,29 @@
          INFO = -18
       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN
          INFO = -20
+      ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
+         INFO = -24
       END IF
+*
+*     Compute workspace
+*
+      IF( INFO.EQ.0 ) THEN
+         CALL CGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+     $                 TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, RWORK,
+     $                 WORK, WORK, -1, INFO )
+         LWKOPT = N + INT( WORK( 1 ) )
+         LWKOPT = MAX( 2*N, LWKOPT )
+         LWKOPT = MAX( 1, LWKOPT )
+         WORK( 1 ) = CMPLX( LWKOPT )
+      END IF
+*
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CGGSVD', -INFO )
+         CALL XERBLA( 'CGGSVD3', -INFO )
          RETURN
       END IF
+      IF( LQUERY ) THEN
+         RETURN
+      ENDIF
 *
 *     Compute the Frobenius norm of matrices A and B
 *
@@ -422,9 +461,9 @@
       TOLA = MAX( M, N )*MAX( ANORM, UNFL )*ULP
       TOLB = MAX( P, N )*MAX( BNORM, UNFL )*ULP
 *
-      CALL CGGSVP( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
-     $             TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, RWORK,
-     $             WORK, WORK( N+1 ), INFO )
+      CALL CGGSVP3( JOBU, JOBV, JOBQ, M, P, N, A, LDA, B, LDB, TOLA,
+     $              TOLB, K, L, U, LDU, V, LDV, Q, LDQ, IWORK, RWORK,
+     $              WORK, WORK( N+1 ), LWORK-N, INFO )
 *
 *     Compute the GSVD of two upper "triangular" matrices
 *
@@ -459,8 +498,9 @@
          END IF
    20 CONTINUE
 *
+      WORK( 1 ) = CMPLX( LWKOPT )
       RETURN
 *
-*     End of CGGSVD
+*     End of CGGSVD3
 *
       END

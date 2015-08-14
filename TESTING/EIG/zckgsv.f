@@ -219,7 +219,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 7 )
+      PARAMETER          ( NTESTS = 12 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 8 )
 *     ..
@@ -237,7 +237,8 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DLATB9, ZGSVTS, ZLATMS
+      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DLATB9, ZGSVTS, ZLATMS,
+     $                   ZGSVTS3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -308,6 +309,12 @@
             CALL ZGSVTS( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
      $                   LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
      $                   LWORK, RWORK, RESULT )
+*
+            CALL ZGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
+     $                    LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
+     $                    LWORK, RWORK, RESULT( NT+1 ) )
+*
+            NT = NT + 6
 *
 *           Print information about the tests that did not
 *           pass the threshold.

@@ -39,6 +39,8 @@
 *>
 *> \verbatim
 *>
+*> This routine is deprecated and has been replaced by routine ZGGSVD3.
+*>
 *> ZGGSVD computes the generalized singular value decomposition (GSVD)
 *> of an M-by-N complex matrix A and P-by-N complex matrix B:
 *>

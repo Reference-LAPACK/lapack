@@ -225,12 +225,6 @@
          RETURN
       END IF
 *
-*     Quick return if possible.
-*
-      IF( MINMN.EQ.0 ) THEN
-         RETURN
-      END IF
-*
 *     Move initial columns up front.
 *
       NFXD = 1

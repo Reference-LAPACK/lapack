@@ -60,7 +60,7 @@ SEIGTST = schkee.o \
    sget02.o sget10.o sget22.o sget23.o sget24.o sget31.o \
    sget32.o sget33.o sget34.o sget35.o sget36.o \
    sget37.o sget38.o sget39.o sget51.o sget52.o sget53.o \
-   sget54.o sglmts.o sgqrts.o sgrqts.o sgsvts.o \
+   sget54.o sglmts.o sgqrts.o sgrqts.o sgsvts.o sgsvts3.o \
    shst01.o slarfy.o slarhs.o slatm4.o slctes.o slctsx.o slsets.o sort01.o \
    sort03.o ssbt21.o ssgt01.o sslect.o sspt21.o sstt21.o \
    sstt22.o ssyt21.o ssyt22.o
@@ -76,7 +76,7 @@ CEIGTST = cchkee.o \
    cerrbd.o cerrec.o cerred.o cerrgg.o cerrhs.o cerrst.o \
    cget02.o cget10.o cget22.o cget23.o cget24.o \
    cget35.o cget36.o cget37.o cget38.o cget51.o cget52.o \
-   cget54.o cglmts.o cgqrts.o cgrqts.o cgsvts.o \
+   cget54.o cglmts.o cgqrts.o cgrqts.o cgsvts.o cgsvts3.o \
    chbt21.o chet21.o chet22.o chpt21.o chst01.o \
    clarfy.o clarhs.o clatm4.o clctes.o clctsx.o clsets.o csbmv.o \
    csgt01.o cslect.o \
@@ -97,7 +97,7 @@ DEIGTST = dchkee.o \
    dget02.o dget10.o dget22.o dget23.o dget24.o dget31.o \
    dget32.o dget33.o dget34.o dget35.o dget36.o \
    dget37.o dget38.o dget39.o dget51.o dget52.o dget53.o \
-   dget54.o dglmts.o dgqrts.o dgrqts.o dgsvts.o \
+   dget54.o dglmts.o dgqrts.o dgrqts.o dgsvts.o dgsvts3.o \
    dhst01.o dlarfy.o dlarhs.o dlatm4.o dlctes.o dlctsx.o dlsets.o dort01.o \
    dort03.o dsbt21.o dsgt01.o dslect.o dspt21.o dstt21.o \
    dstt22.o dsyt21.o dsyt22.o
@@ -113,7 +113,7 @@ ZEIGTST = zchkee.o \
    zerrbd.o zerrec.o zerred.o zerrgg.o zerrhs.o zerrst.o \
    zget02.o zget10.o zget22.o zget23.o zget24.o \
    zget35.o zget36.o zget37.o zget38.o zget51.o zget52.o \
-   zget54.o zglmts.o zgqrts.o zgrqts.o zgsvts.o \
+   zget54.o zglmts.o zgqrts.o zgrqts.o zgsvts.o zgsvts3.o \
    zhbt21.o zhet21.o zhet22.o zhpt21.o zhst01.o \
    zlarfy.o zlarhs.o zlatm4.o zlctes.o zlctsx.o zlsets.o zsbmv.o \
    zsgt01.o zslect.o \

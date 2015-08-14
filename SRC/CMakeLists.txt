@@ -101,7 +101,7 @@ set(SLASRC
    sgetrs.f sggbak.f sggbal.f
    sgges.f  sgges3.f sggesx.f sggev.f  sggev3.f sggevx.f
    sggglm.f sgghrd.f sgghd3.f sgglse.f sggqrf.f 
-   sggrqf.f sggsvd.f sggsvp.f sgtcon.f sgtrfs.f sgtsv.f  
+   sggrqf.f sggsvd.f sggsvp.f sggsvd3.f sggsvp3.f sgtcon.f sgtrfs.f sgtsv.f  
    sgtsvx.f sgttrf.f sgttrs.f sgtts2.f shgeqz.f 
    shsein.f shseqr.f slabrd.f slacon.f slacn2.f 
    slaein.f slaexc.f slag2.f  slags2.f slagtm.f slagv2.f slahqr.f 
@@ -175,7 +175,7 @@ set(CLASRC
    cggbak.f cggbal.f
    cgges.f  cgges3.f cggesx.f cggev.f  cggev3.f cggevx.f
    cggglm.f cgghrd.f cgghd3.f cgglse.f cggqrf.f cggrqf.f 
-   cggsvd.f cggsvp.f 
+   cggsvd.f cggsvp.f cggsvd3.f cggsvp3.f 
    cgtcon.f cgtrfs.f cgtsv.f  cgtsvx.f cgttrf.f cgttrs.f cgtts2.f chbev.f  
    chbevd.f chbevx.f chbgst.f chbgv.f  chbgvd.f chbgvx.f chbtrd.f 
    checon.f cheev.f  cheevd.f cheevr.f cheevx.f chegs2.f chegst.f 
@@ -259,7 +259,7 @@ set(DLASRC
    dgetrs.f dggbak.f dggbal.f
    dgges.f  dgges3.f dggesx.f dggev.f  dggev3.f dggevx.f
    dggglm.f dgghrd.f dgghd3.f dgglse.f dggqrf.f 
-   dggrqf.f dggsvd.f dggsvp.f dgtcon.f dgtrfs.f dgtsv.f  
+   dggrqf.f dggsvd.f dggsvp.f dggsvd3.f dggsvp3.f dgtcon.f dgtrfs.f dgtsv.f  
    dgtsvx.f dgttrf.f dgttrs.f dgtts2.f dhgeqz.f 
    dhsein.f dhseqr.f dlabrd.f dlacon.f dlacn2.f 
    dlaein.f dlaexc.f dlag2.f  dlags2.f dlagtm.f dlagv2.f dlahqr.f 
@@ -332,7 +332,7 @@ set(ZLASRC
    zggbak.f zggbal.f
    zgges.f  zgges3.f zggesx.f zggev.f  zggev3.f zggevx.f
    zggglm.f zgghrd.f zgghd3.f zgglse.f zggqrf.f zggrqf.f 
-   zggsvd.f zggsvp.f 
+   zggsvd.f zggsvp.f zggsvd3.f zggsvp3.f 
    zgtcon.f zgtrfs.f zgtsv.f  zgtsvx.f zgttrf.f zgttrs.f zgtts2.f zhbev.f  
    zhbevd.f zhbevx.f zhbgst.f zhbgv.f  zhbgvd.f zhbgvx.f zhbtrd.f 
    zhecon.f zheev.f  zheevd.f zheevr.f zheevx.f zhegs2.f zhegst.f 
