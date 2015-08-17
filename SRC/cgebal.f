@@ -203,14 +203,6 @@
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, MAX, MIN, REAL
-*     ..
-*     .. Statement Functions ..
-      REAL               CABS1
-*     ..
-*     .. Statement Function definitions ..
-      CABS1( CDUM ) = ABS( REAL( CDUM ) ) + ABS( AIMAG( CDUM ) )
-*     ..
-*     .. Executable Statements ..
 *
 *     Test the input parameters
 *
