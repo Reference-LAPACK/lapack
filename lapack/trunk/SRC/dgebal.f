@@ -201,8 +201,6 @@
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
 *     ..
-*     .. Executable Statements ..
-*
 *     Test the input parameters
 *
       INFO = 0
