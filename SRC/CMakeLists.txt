@@ -95,13 +95,13 @@ set(SLASRC
    sgebrd.f sgecon.f sgeequ.f sgees.f  sgeesx.f sgeev.f  sgeevx.f 
    sgehd2.f sgehrd.f sgelq2.f sgelqf.f 
    sgels.f  sgelsd.f sgelss.f sgelsy.f sgeql2.f sgeqlf.f 
-   sgeqp3.f sgeqpf.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f 
+   sgeqp3.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f 
    sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvx.f sgetc2.f sgetf2.f 
    sgetrf.f sgetri.f 
    sgetrs.f sggbak.f sggbal.f
    sgges.f  sgges3.f sggesx.f sggev.f  sggev3.f sggevx.f
    sggglm.f sgghrd.f sgghd3.f sgglse.f sggqrf.f 
-   sggrqf.f sggsvd.f sggsvp.f sggsvd3.f sggsvp3.f sgtcon.f sgtrfs.f sgtsv.f  
+   sggrqf.f sggsvd3.f sggsvp3.f sgtcon.f sgtrfs.f sgtsv.f  
    sgtsvx.f sgttrf.f sgttrs.f sgtts2.f shgeqz.f 
    shsein.f shseqr.f slabrd.f slacon.f slacn2.f 
    slaein.f slaexc.f slag2.f  slags2.f slagtm.f slagv2.f slahqr.f 
@@ -169,13 +169,13 @@ set(CLASRC
    cgecon.f cgeequ.f cgees.f  cgeesx.f cgeev.f  cgeevx.f 
    cgehd2.f cgehrd.f cgelq2.f cgelqf.f 
    cgels.f  cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f cgeqp3.f 
-   cgeqpf.f cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f 
+   cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f 
    cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvx.f cgetc2.f cgetf2.f cgetrf.f 
    cgetri.f cgetrs.f 
    cggbak.f cggbal.f
    cgges.f  cgges3.f cggesx.f cggev.f  cggev3.f cggevx.f
    cggglm.f cgghrd.f cgghd3.f cgglse.f cggqrf.f cggrqf.f 
-   cggsvd.f cggsvp.f cggsvd3.f cggsvp3.f 
+   cggsvd3.f cggsvp3.f 
    cgtcon.f cgtrfs.f cgtsv.f  cgtsvx.f cgttrf.f cgttrs.f cgtts2.f chbev.f  
    chbevd.f chbevx.f chbgst.f chbgv.f  chbgvd.f chbgvx.f chbtrd.f 
    checon.f cheev.f  cheevd.f cheevr.f cheevx.f chegs2.f chegst.f 
@@ -253,13 +253,13 @@ set(DLASRC
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f 
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f 
    dgels.f  dgelsd.f dgelss.f dgelsy.f dgeql2.f dgeqlf.f 
-   dgeqp3.f dgeqpf.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f 
+   dgeqp3.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f 
    dgesc2.f dgesdd.f dgesv.f  dgesvd.f dgesvx.f dgetc2.f dgetf2.f 
    dgetrf.f dgetri.f 
    dgetrs.f dggbak.f dggbal.f
    dgges.f  dgges3.f dggesx.f dggev.f  dggev3.f dggevx.f
    dggglm.f dgghrd.f dgghd3.f dgglse.f dggqrf.f 
-   dggrqf.f dggsvd.f dggsvp.f dggsvd3.f dggsvp3.f dgtcon.f dgtrfs.f dgtsv.f  
+   dggrqf.f dggsvd3.f dggsvp3.f dgtcon.f dgtrfs.f dgtsv.f  
    dgtsvx.f dgttrf.f dgttrs.f dgtts2.f dhgeqz.f 
    dhsein.f dhseqr.f dlabrd.f dlacon.f dlacn2.f 
    dlaein.f dlaexc.f dlag2.f  dlags2.f dlagtm.f dlagv2.f dlahqr.f 
@@ -326,13 +326,13 @@ set(ZLASRC
    zgecon.f zgeequ.f zgees.f  zgeesx.f zgeev.f  zgeevx.f 
    zgehd2.f zgehrd.f zgelq2.f zgelqf.f 
    zgels.f  zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f zgeqp3.f 
-   zgeqpf.f zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f 
+   zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f 
    zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvx.f zgetc2.f zgetf2.f zgetrf.f 
    zgetri.f zgetrs.f 
    zggbak.f zggbal.f
    zgges.f  zgges3.f zggesx.f zggev.f  zggev3.f zggevx.f
    zggglm.f zgghrd.f zgghd3.f zgglse.f zggqrf.f zggrqf.f 
-   zggsvd.f zggsvp.f zggsvd3.f zggsvp3.f 
+   zggsvd3.f zggsvp3.f 
    zgtcon.f zgtrfs.f zgtsv.f  zgtsvx.f zgttrf.f zgttrs.f zgtts2.f zhbev.f  
    zhbevd.f zhbevx.f zhbgst.f zhbgv.f  zhbgvd.f zhbgvx.f zhbtrd.f 
    zhecon.f zheev.f  zheevd.f zheevr.f zheevx.f zhegs2.f zhegst.f 
@@ -408,6 +408,22 @@ set(ZXLASRC  zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
 
 if( USE_XBLAS)
   set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC} ${ALLXAUX})
+endif()
+
+if(BUILD_DEPRECATED)
+	LIST(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
+    DEPRECATED/sgeqpf.f DEPRECATED/sgelsx.f DEPRECATED/sggsvd.f
+    DEPRECATED/sggsvp.f DEPRECATED/slatzm.f DEPRECATED/stzrqf.f)
+	LIST(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f
+    DEPRECATED/dgeqpf.f DEPRECATED/dgelsx.f DEPRECATED/dggsvd.f
+    DEPRECATED/dggsvp.f DEPRECATED/dlatzm.f DEPRECATED/dtzrqf.f )
+  LIST(APPEND CLASRC DEPRECATED/cgegs.f DEPRECATED/cgegv.f
+    DEPRECATED/cgeqpf.f DEPRECATED/cgelsx.f DEPRECATED/cggsvd.f
+    DEPRECATED/cggsvp.f DEPRECATED/clatzm.f DEPRECATED/ctzrqf.f)
+  LIST(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
+    DEPRECATED/zgeqpf.f DEPRECATED/zgelsx.f DEPRECATED/zggsvd.f
+    DEPRECATED/zggsvp.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
+	message(STATUS "Building deprecated routines")
 endif()
 
 if(BUILD_SINGLE)

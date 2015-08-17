@@ -22,8 +22,8 @@
 *> \verbatim
 *>
 *> SERRGG tests the error exits for SGGES, SGGESX, SGGEV, SGGEVX,
-*> SGGES3, SGGEV3, SGGGLM, SGGHRD, SGGLSE, SGGQRF, SGGRQF, SGGSVD,
-*> SGGSVD3, SGGSVP, SGGSVP3, SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN,
+*> SGGES3, SGGEV3, SGGGLM, SGGHRD, SGGLSE, SGGQRF, SGGRQF,
+*> SGGSVD3, SGGSVP3, SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN,
 *> STGSJA, STGSNA, and STGSYL.
 *> \endverbatim
 *
@@ -96,7 +96,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, SGGES, SGGESX, SGGEV, SGGEVX, SGGGLM,
-     $                   SGGHRD, SGGLSE, SGGQRF, SGGRQF, SGGSVD, SGGSVP,
+     $                   SGGHRD, SGGLSE, SGGQRF, SGGRQF,
      $                   SHGEQZ, SORCSD, STGEVC, STGEXC, STGSEN, STGSJA,
      $                   STGSNA, STGSYL, SGGES3, SGGEV3, SGGHD3,
      $                   SGGSVD3, SGGSVP3
@@ -300,55 +300,6 @@
 *
       ELSE IF( LSAMEN( 3, PATH, 'GSV' ) ) THEN
 *
-*        SGGSVD
-*
-         SRNAMT = 'SGGSVD'
-         INFOT = 1
-         CALL SGGSVD( '/', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL SGGSVD( 'N', '/', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 3
-         CALL SGGSVD( 'N', 'N', '/', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL SGGSVD( 'N', 'N', 'N', -1, 0, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 5
-         CALL SGGSVD( 'N', 'N', 'N', 0, -1, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 6
-         CALL SGGSVD( 'N', 'N', 'N', 0, 0, -1, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 10
-         CALL SGGSVD( 'N', 'N', 'N', 2, 1, 1, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 12
-         CALL SGGSVD( 'N', 'N', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 16
-         CALL SGGSVD( 'U', 'N', 'N', 2, 2, 2, DUMMYK, DUMMYL, A, 2, B,
-     $                2, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 18
-         CALL SGGSVD( 'N', 'V', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 1, B,
-     $                2, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 20
-         CALL SGGSVD( 'N', 'N', 'Q', 1, 2, 1, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, IW, INFO )
-         CALL CHKXER( 'SGGSVD', INFOT, NOUT, LERR, OK )
-         NT = NT + 11
-*
 *        SGGSVD3
 *
          SRNAMT = 'SGGSVD3'
@@ -396,66 +347,6 @@
          CALL SGGSVD3( 'N', 'N', 'Q', 1, 2, 1, DUMMYK, DUMMYL, A, 1, B,
      $                 1, R1, R2, U, 1, V, 1, Q, 1, W, IW, LWORK, INFO )
          CALL CHKXER( 'SGGSVD3', INFOT, NOUT, LERR, OK )
-         NT = NT + 11
-*
-*        SGGSVP
-*
-         SRNAMT = 'SGGSVP'
-         INFOT = 1
-         CALL SGGSVP( '/', 'N', 'N', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL SGGSVP( 'N', '/', 'N', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 3
-         CALL SGGSVP( 'N', 'N', '/', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL SGGSVP( 'N', 'N', 'N', -1, 0, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 5
-         CALL SGGSVP( 'N', 'N', 'N', 0, -1, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 6
-         CALL SGGSVP( 'N', 'N', 'N', 0, 0, -1, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 8
-         CALL SGGSVP( 'N', 'N', 'N', 2, 1, 1, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 10
-         CALL SGGSVP( 'N', 'N', 'N', 1, 2, 1, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 16
-         CALL SGGSVP( 'U', 'N', 'N', 2, 2, 2, A, 2, B, 2, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 18
-         CALL SGGSVP( 'N', 'V', 'N', 1, 2, 1, A, 1, B, 2, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 20
-         CALL SGGSVP( 'N', 'N', 'Q', 1, 1, 2, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'SGGSVP', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
 *        SGGSVP3

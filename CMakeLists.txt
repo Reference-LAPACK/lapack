@@ -198,6 +198,9 @@ if(BUILD_TESTING)
   add_subdirectory(TESTING)
 endif(BUILD_TESTING)
 
+# deprecated LAPACK routines
+option(BUILD_DEPRECATED "Build deprecated routines" OFF)
+
 # --------------------------------------------------
 # LAPACKE
 option(LAPACKE "Build LAPACKE" OFF)
