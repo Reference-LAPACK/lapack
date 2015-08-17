@@ -237,8 +237,7 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DGSVTS, DLATB9, DLATMS,
-     $                   DGSVTS3
+      EXTERNAL           ALAHDG, ALAREQ, ALASUM, DGSVTS3, DLATB9, DLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS
@@ -304,15 +303,9 @@
 *
             NT = 6
 *
-            CALL DGSVTS( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
-     $                   LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
-     $                   LWORK, RWORK, RESULT )
-*
             CALL DGSVTS3( M, P, N, A, AF, LDA, B, BF, LDB, U, LDU, V,
      $                    LDV, Q, LDQ, ALPHA, BETA, R, LDR, IWORK, WORK,
-     $                    LWORK, RWORK, RESULT( NT+1 ) )
-*
-            NT = NT + 6
+     $                    LWORK, RWORK, RESULT )
 *
 *           Print information about the tests that did not
 *           pass the threshold.

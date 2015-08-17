@@ -22,8 +22,8 @@
 *> \verbatim
 *>
 *> ZERRGG tests the error exits for ZGGES, ZGGESX, ZGGEV, ZGGEVX,
-*> ZGGES3, ZGGEV3, ZGGGLM, ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF, ZGGSVD,
-*> ZGGSVD3, ZGGSVP, ZGGSVP3, ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA,
+*> ZGGES3, ZGGEV3, ZGGGLM, ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
+*> ZGGSVD3, ZGGSVP3, ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA,
 *> ZTGSNA, ZTGSYL, and ZUNCSD.
 *> \endverbatim
 *
@@ -97,7 +97,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, ZGGES,  ZGGESX, ZGGEV,  ZGGEVX, ZGGGLM,
-     $                   ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF, ZGGSVD, ZGGSVP,
+     $                   ZGGHRD, ZGGLSE, ZGGQRF, ZGGRQF,
      $                   ZHGEQZ, ZTGEVC, ZTGEXC, ZTGSEN, ZTGSJA, ZTGSNA,
      $                   ZTGSYL, ZUNCSD, ZGGES3, ZGGEV3, ZGGHD3,
      $                   ZGGSVD3, ZGGSVP3
@@ -301,55 +301,6 @@
 *
       ELSE IF( LSAMEN( 3, PATH, 'GSV' ) ) THEN
 *
-*        ZGGSVD
-*
-         SRNAMT = 'ZGGSVD'
-         INFOT = 1
-         CALL ZGGSVD( '/', 'N', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL ZGGSVD( 'N', '/', 'N', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 3
-         CALL ZGGSVD( 'N', 'N', '/', 0, 0, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL ZGGSVD( 'N', 'N', 'N', -1, 0, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 5
-         CALL ZGGSVD( 'N', 'N', 'N', 0, -1, 0, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 6
-         CALL ZGGSVD( 'N', 'N', 'N', 0, 0, -1, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 10
-         CALL ZGGSVD( 'N', 'N', 'N', 2, 1, 1, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 12
-         CALL ZGGSVD( 'N', 'N', 'N', 1, 1, 2, DUMMYK, DUMMYL, A, 1, B,
-     $                1, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 16
-         CALL ZGGSVD( 'U', 'N', 'N', 2, 2, 2, DUMMYK, DUMMYL, A, 2, B,
-     $                2, R1, R2, U, 1, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 18
-         CALL ZGGSVD( 'N', 'V', 'N', 2, 2, 2, DUMMYK, DUMMYL, A, 2, B,
-     $                2, R1, R2, U, 2, V, 1, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         INFOT = 20
-         CALL ZGGSVD( 'N', 'N', 'Q', 2, 2, 2, DUMMYK, DUMMYL, A, 2, B,
-     $                2, R1, R2, U, 2, V, 2, Q, 1, W, RW, IW, INFO )
-         CALL CHKXER( 'ZGGSVD', INFOT, NOUT, LERR, OK )
-         NT = NT + 11
-*
 *        ZGGSVD3
 *
          SRNAMT = 'ZGGSVD3'
@@ -408,66 +359,6 @@
      $                 2, R1, R2, U, 2, V, 2, Q, 1, W, RW, IW, LWORK,
      $                 INFO )
          CALL CHKXER( 'ZGGSVD3', INFOT, NOUT, LERR, OK )
-         NT = NT + 11
-*
-*        ZGGSVP
-*
-         SRNAMT = 'ZGGSVP'
-         INFOT = 1
-         CALL ZGGSVP( '/', 'N', 'N', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 2
-         CALL ZGGSVP( 'N', '/', 'N', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 3
-         CALL ZGGSVP( 'N', 'N', '/', 0, 0, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 4
-         CALL ZGGSVP( 'N', 'N', 'N', -1, 0, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 5
-         CALL ZGGSVP( 'N', 'N', 'N', 0, -1, 0, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 6
-         CALL ZGGSVP( 'N', 'N', 'N', 0, 0, -1, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 8
-         CALL ZGGSVP( 'N', 'N', 'N', 2, 1, 1, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 10
-         CALL ZGGSVP( 'N', 'N', 'N', 1, 2, 1, A, 1, B, 1, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 16
-         CALL ZGGSVP( 'U', 'N', 'N', 2, 2, 2, A, 2, B, 2, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 1, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 18
-         CALL ZGGSVP( 'N', 'V', 'N', 2, 2, 2, A, 2, B, 2, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 2, V, 1, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
-         INFOT = 20
-         CALL ZGGSVP( 'N', 'N', 'Q', 2, 2, 2, A, 2, B, 2, TOLA, TOLB,
-     $                DUMMYK, DUMMYL, U, 2, V, 2, Q, 1, IW, RW, TAU, W,
-     $                INFO )
-         CALL CHKXER( 'ZGGSVP', INFOT, NOUT, LERR, OK )
          NT = NT + 11
 *
 *        ZGGSVP3
