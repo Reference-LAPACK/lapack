@@ -214,8 +214,8 @@
      $                   ITEMP, ITEMP2, IUPLO, IZERO, J, K, KL, KU, LDA,
      $                   LWORK, MODE, N, NB, NERRS, NFAIL, NIMAT, NRHS,
      $                   NRUN, NT
-      REAL               ALPHA, ANORM, CNDNUM, CONST, LAM_MAX, LAM_MIN,
-     $                   RCOND, RCONDC, STEMP
+      REAL               ALPHA, ANORM, CNDNUM, CONST, SING_MAX,
+     $                   SING_MIN, RCOND, RCONDC, STEMP
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -653,10 +653,10 @@
      $                               WORK, 6, RWORK( 3 ), INFO )
 *
 *
-                        LAM_MAX = RWORK( 1 )
-                        LAM_MIN = RWORK( 2 )
+                        SING_MAX = RWORK( 1 )
+                        SING_MIN = RWORK( 2 )
 *
-                        STEMP = LAM_MAX / LAM_MIN
+                        STEMP = SING_MAX / SING_MIN
 *
 *                       STEMP should be bounded by CONST
 *
@@ -696,10 +696,10 @@
      $                               CDUMMY, 1, CDUMMY, 1,
      $                               WORK, 6, RWORK(3), INFO )
 *
-                        LAM_MAX = RWORK( 1 )
-                        LAM_MIN = RWORK( 2 )
+                        SING_MAX = RWORK( 1 )
+                        SING_MIN = RWORK( 2 )
 *
-                        STEMP = LAM_MAX / LAM_MIN
+                        STEMP = SING_MAX / SING_MIN
 *
 *                       STEMP should be bounded by CONST
 *

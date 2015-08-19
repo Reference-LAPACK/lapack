@@ -214,8 +214,8 @@
      $                   ITEMP, ITEMP2, IUPLO, IZERO, J, K, KL, KU, LDA,
      $                   LWORK, MODE, N, NB, NERRS, NFAIL, NIMAT, NRHS,
      $                   NRUN, NT
-      DOUBLE PRECISION   ALPHA, ANORM, CNDNUM, CONST, LAM_MAX, LAM_MIN,
-     $                   RCOND, RCONDC, DTEMP
+      DOUBLE PRECISION   ALPHA, ANORM, CNDNUM, CONST, SING_MAX,
+     $                   SING_MIN, RCOND, RCONDC, DTEMP
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -234,7 +234,7 @@
      $                   ZHETRI_ROOK, ZHETRS_ROOK, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN, SQRT
+      INTRINSIC          CONJG, MAX, MIN, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -634,7 +634,7 @@
 *
                         BLOCK( 1, 1 ) = AFAC( ( K-2 )*LDA+K-1 )
                         BLOCK( 1, 2 ) = AFAC( (K-1)*LDA+K-1 )
-                        BLOCK( 2, 1 ) = BLOCK( 1, 2 )
+                        BLOCK( 2, 1 ) = CONJG( BLOCK( 1, 2 ) )
                         BLOCK( 2, 2 ) = AFAC( (K-1)*LDA+K )
 *
                         CALL ZGESVD( 'N', 'N', 2, 2, BLOCK, 2, RWORK,
@@ -642,10 +642,10 @@
      $                               WORK, 6, RWORK( 3 ), INFO )
 *
 *
-                        LAM_MAX = RWORK( 1 )
-                        LAM_MIN = RWORK( 2 )
+                        SING_MAX = RWORK( 1 )
+                        SING_MIN = RWORK( 2 )
 *
-                        DTEMP = LAM_MAX / LAM_MIN
+                        DTEMP = SING_MAX / SING_MIN
 *
 *                       DTEMP should be bounded by CONST
 *
@@ -678,17 +678,17 @@
 *
                         BLOCK( 1, 1 ) = AFAC( ( K-1 )*LDA+K )
                         BLOCK( 2, 1 ) = AFAC( ( K-1 )*LDA+K+1 )
-                        BLOCK( 1, 2 ) = BLOCK( 2, 1 )
+                        BLOCK( 1, 2 ) = CONJG( BLOCK( 2, 1 ) )
                         BLOCK( 2, 2 ) = AFAC( K*LDA+K+1 )
 *
                         CALL ZGESVD( 'N', 'N', 2, 2, BLOCK, 2, RWORK,
      $                               ZDUMMY, 1, ZDUMMY, 1,
      $                               WORK, 6, RWORK(3), INFO )
 *
-                        LAM_MAX = RWORK( 1 )
-                        LAM_MIN = RWORK( 2 )
+                        SING_MAX = RWORK( 1 )
+                        SING_MIN = RWORK( 2 )
 *
-                        DTEMP = LAM_MAX / LAM_MIN
+                        DTEMP = SING_MAX / SING_MIN
 *
 *                       DTEMP should be bounded by CONST
 *
