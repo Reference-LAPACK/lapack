@@ -208,8 +208,8 @@
      $                   ITEMP, IUPLO, IZERO, J, K, KL, KU, LDA, LWORK,
      $                   MODE, N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN,
      $                   NT
-      DOUBLE PRECISION   ALPHA, ANORM, CNDNUM, CONST, DTEMP, LAM_MAX,
-     $                   LAM_MIN, RCOND, RCONDC
+      DOUBLE PRECISION   ALPHA, ANORM, CNDNUM, CONST, DTEMP, SING_MAX,
+     $                   SING_MIN, RCOND, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -632,10 +632,10 @@
      $                               DDUMMY, 1, DDUMMY, 1,
      $                               WORK, 10, INFO )
 *
-                        LAM_MAX = RWORK( 1 )
-                        LAM_MIN = RWORK( 2 )
+                        SING_MAX = RWORK( 1 )
+                        SING_MIN = RWORK( 2 )
 *
-                        DTEMP = LAM_MAX / LAM_MIN
+                        DTEMP = SING_MAX / SING_MIN
 *
 *                       DTEMP should be bounded by CONST
 *
@@ -676,10 +676,10 @@
      $                               WORK, 10, INFO )
 *
 *
-                        LAM_MAX = RWORK( 1 )
-                        LAM_MIN = RWORK( 2 )
+                        SING_MAX = RWORK( 1 )
+                        SING_MIN = RWORK( 2 )
 *
-                        DTEMP = LAM_MAX / LAM_MIN
+                        DTEMP = SING_MAX / SING_MIN
 *
 *                       DTEMP should be bounded by CONST
 *
