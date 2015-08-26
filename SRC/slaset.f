@@ -77,7 +77,7 @@
 *>          The constant to which the diagonal elements are to be set.
 *> \endverbatim
 *>
-*> \param[in,out] A
+*> \param[out] A
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On exit, the leading m-by-n submatrix of A is set as follows:

@@ -77,7 +77,7 @@
 *>          All the diagonal array elements are set to BETA.
 *> \endverbatim
 *>
-*> \param[in,out] A
+*> \param[out] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the m by n matrix A.

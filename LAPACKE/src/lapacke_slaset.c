@@ -37,15 +37,19 @@ lapack_int LAPACKE_slaset( int matrix_layout, char uplo, lapack_int m,
                            lapack_int n, float alpha, float beta, float* a,
                            lapack_int lda )
 {
+
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_slaset", -1 );
         return -1;
     }
+
+/*****************************************************************************
+*  Note: we do not check NaNs in A since the goal of this subroutine is to 
+*  initialized A. It is OK if A has NaNs in input. 
+*****************************************************************************/
+
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
-        return -7;
-    }
     if( LAPACKE_s_nancheck( 1, &alpha, 1 ) ) {
         return -5;
     }
@@ -53,5 +57,6 @@ lapack_int LAPACKE_slaset( int matrix_layout, char uplo, lapack_int m,
         return -6;
     }
 #endif
+
     return LAPACKE_slaset_work( matrix_layout, uplo, m, n, alpha, beta, a, lda );
 }
