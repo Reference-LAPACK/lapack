@@ -10291,7 +10291,7 @@ lapack_int LAPACKE_chetrs2_work( int matrix_layout, char uplo, lapack_int n,
                                  lapack_complex_float* work );
 lapack_int LAPACKE_csyconv( int matrix_layout, char uplo, char way, lapack_int n,
                             lapack_complex_float* a, lapack_int lda,
-                            const lapack_int* ipiv );
+                            const lapack_int* ipiv, lapack_complex_float* work  );
 lapack_int LAPACKE_csyconv_work( int matrix_layout, char uplo, char way,
                                  lapack_int n, lapack_complex_float* a,
                                  lapack_int lda, const lapack_int* ipiv,
@@ -10430,7 +10430,7 @@ lapack_int LAPACKE_dorcsd_work( int matrix_layout, char jobu1, char jobu2,
                                 double* work, lapack_int lwork,
                                 lapack_int* iwork );
 lapack_int LAPACKE_dsyconv( int matrix_layout, char uplo, char way, lapack_int n,
-                            double* a, lapack_int lda, const lapack_int* ipiv );
+                            double* a, lapack_int lda, const lapack_int* ipiv, double* work);
 lapack_int LAPACKE_dsyconv_work( int matrix_layout, char uplo, char way,
                                  lapack_int n, double* a, lapack_int lda,
                                  const lapack_int* ipiv, double* work );
@@ -10512,7 +10512,7 @@ lapack_int LAPACKE_sorcsd_work( int matrix_layout, char jobu1, char jobu2,
                                 float* work, lapack_int lwork,
                                 lapack_int* iwork );
 lapack_int LAPACKE_ssyconv( int matrix_layout, char uplo, char way, lapack_int n,
-                            float* a, lapack_int lda, const lapack_int* ipiv );
+                            float* a, lapack_int lda, const lapack_int* ipiv, float* work );
 lapack_int LAPACKE_ssyconv_work( int matrix_layout, char uplo, char way,
                                  lapack_int n, float* a, lapack_int lda,
                                  const lapack_int* ipiv, float* work );
@@ -10593,7 +10593,7 @@ lapack_int LAPACKE_zhetrs2_work( int matrix_layout, char uplo, lapack_int n,
                                  lapack_complex_double* work );
 lapack_int LAPACKE_zsyconv( int matrix_layout, char uplo, char way, lapack_int n,
                             lapack_complex_double* a, lapack_int lda,
-                            const lapack_int* ipiv );
+                            const lapack_int* ipiv, lapack_complex_double* work );
 lapack_int LAPACKE_zsyconv_work( int matrix_layout, char uplo, char way,
                                  lapack_int n, lapack_complex_double* a,
                                  lapack_int lda, const lapack_int* ipiv,
