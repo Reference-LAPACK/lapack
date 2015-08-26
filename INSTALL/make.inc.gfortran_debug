@@ -12,6 +12,10 @@ SHELL = /bin/sh
 #  selected.  Define LOADER and LOADOPTS to refer to the loader
 #  and desired load options for your machine.
 #
+#  Note: During a regular execution, LAPACK might create NaN and Inf
+#  and handle these quantities appropriately. As a consequence, one 
+#  should not compile LAPACK with flags such as -ffpe-trap=overflow.
+#
 FORTRAN  = gfortran -fimplicit-none -g -frecursive
 OPTS     =
 DRVOPTS  = $(OPTS)
