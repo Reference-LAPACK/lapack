@@ -66,11 +66,16 @@
 *>          of the matrix B.  NRHS >= 0.
 *> \endverbatim
 *>
-*> \param[in] A
+*> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          The block diagonal matrix D and the multipliers used to
 *>          obtain the factor U or L as computed by ZSYTRF.
+*>          Note that A is input / output. This might be counter-intuitive,
+*>          and one may think that A is input only. A is input / output. This
+*>          is because, at the start of the subroutine, we permute A in a
+*>          "better" form and then we permute A back to its original form at
+*>          the end.
 *> \endverbatim
 *>
 *> \param[in] LDA
