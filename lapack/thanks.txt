@@ -6,4 +6,8 @@ Here is a (temporary and incomplete) list of contributors and thanks for the nex
 * Rodney James, Colorado College
 
 == Thanks for bugs report to:
+
 * Vittorio Zecca 
+
+* Alex Zotkevich (Intel), bug number 123, 
+http://icl.cs.utk.edu/lapack-forum/viewtopic.php?t=4590
