@@ -1,10 +1,32 @@
 cmake_minimum_required(VERSION 2.8.10)
 project(LAPACK Fortran)
 
-set(LAPACK_VERSION 3.5.0)
+set(LAPACK_MAJOR_VERSION 3)
+set(LAPACK_MINOR_VERSION 5)
+set(LAPACK_PATCH_VERSION 0)
+set(
+  LAPACK_VERSION
+  ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
+  )
+
+# Updated OSX RPATH settings
+# In response to CMake 3.0 generating warnings regarding policy CMP0042,
+# the OSX RPATH settings have been updated per recommendations found
+# in the CMake Wiki:
+#  http://www.cmake.org/Wiki/CMake_RPATH_handling#Mac_OS_X_and_the_RPATH
+    set(CMAKE_MACOSX_RPATH ON)
+    set(CMAKE_SKIP_BUILD_RPATH FALSE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+    list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+    if("${isSystemDir}" STREQUAL "-1")
+        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    endif()
+
 
 # Configure the warning and code coverage suppression file
-configure_file( 
+configure_file(
   "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
   "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
   COPYONLY
@@ -35,12 +57,23 @@ endif()
 
 set(LAPACK_INSTALL_EXPORT_NAME lapack-targets)
 
+if (UNIX)
+  include(GNUInstallDirs)
+  set(ARCHIVE_DIR ${CMAKE_INSTALL_LIBDIR})
+  set(LIBRARY_DIR ${CMAKE_INSTALL_LIBDIR})
+  set(RUNTIME_DIR ${CMAKE_INSTALL_BINDIR})
+else()
+  set(ARCHIVE_DIR lib${LIB_SUFFIX})
+  set(LIBRARY_DIR lib${LIB_SUFFIX})
+  set(RUNTIME_DIR bin)
+endif()
+
 macro(lapack_install_library lib)
   install(TARGETS ${lib}
     EXPORT ${LAPACK_INSTALL_EXPORT_NAME}
-    ARCHIVE DESTINATION lib${LIB_SUFFIX}
-    LIBRARY DESTINATION lib${LIB_SUFFIX}
-    RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION ${ARCHIVE_DIR}
+    LIBRARY DESTINATION ${LIBRARY_DIR}
+    RUNTIME DESTINATION ${RUNTIME_DIR}
   )
 endmacro()
 
@@ -77,9 +110,7 @@ message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as 
 
 set(SECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
 set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
-set(prefix ${CMAKE_INSTALL_PREFIX})
-set(libdir ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
-set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
+set(PKG_CONFIG_DIR ${LIBRARY_DIR}/pkgconfig)
 
 # --------------------------------------------------
 # Precision to build
@@ -271,7 +302,7 @@ endif(BUILD_TESTING OR LAPACKE_WITH_TMG)
 set(_lapack_config_install_guard_target "")
 if(ALL_TARGETS)
   install(EXPORT lapack-targets
-    DESTINATION lib/cmake/lapack-${LAPACK_VERSION})
+    DESTINATION ${LIBRARY_DIR}/cmake/lapack-${LAPACK_VERSION})
 
   # Choose one of the lapack targets to use as a guard for
   # lapack-config.cmake to load targets from the install tree.
@@ -298,8 +329,6 @@ if(ALL_TARGETS)
   list(GET ALL_TARGETS 0 _lapack_config_build_guard_target)
 endif()
 
-configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-version.cmake.in
-  ${LAPACK_BINARY_DIR}/lapack-config-version.cmake @ONLY)
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-build.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
 
@@ -312,8 +341,16 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_D
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
+  VERSION ${LAPACK_VERSION}
+  COMPATIBILITY SameMajorVersion
+  )
+
 install(FILES
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
-  DESTINATION lib/cmake/lapack-${LAPACK_VERSION}
+  DESTINATION ${LIBRARY_DIR}/cmake/lapack-${LAPACK_VERSION}
   )
