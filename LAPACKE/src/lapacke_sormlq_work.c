@@ -40,6 +40,7 @@ lapack_int LAPACKE_sormlq_work( int matrix_layout, char side, char trans,
                                 float* work, lapack_int lwork )
 {
     lapack_int info = 0;
+    lapack_int r;
     lapack_int lda_t, ldc_t;
     float *a_t = NULL, *c_t = NULL;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
@@ -50,10 +51,11 @@ lapack_int LAPACKE_sormlq_work( int matrix_layout, char side, char trans,
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
+        r = LAPACKE_lsame( side, 'l' ) ? m : n;
         lda_t = MAX(1,k);
         ldc_t = MAX(1,m);
         /* Check leading dimension(s) */
-        if( lda < m ) {
+        if( lda < r ) {
             info = -8;
             LAPACKE_xerbla( "LAPACKE_sormlq_work", info );
             return info;
