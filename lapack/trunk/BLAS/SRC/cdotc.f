@@ -23,8 +23,9 @@
 *>
 *> \verbatim
 *>
-*>    forms the dot product of two vectors, conjugating the first
-*>    vector.
+*> CDOTC forms the dot product of two complex vectors
+*>      CDOTC = X^H * Y
+*>
 *> \endverbatim
 *
 *  Authors:

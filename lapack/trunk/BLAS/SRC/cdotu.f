@@ -23,7 +23,9 @@
 *>
 *> \verbatim
 *>
-*>    CDOTU forms the dot product of two vectors.
+*> CDOTU forms the dot product of two complex vectors
+*>      CDOTU = X^T * Y
+*>
 *> \endverbatim
 *
 *  Authors:

@@ -23,7 +23,9 @@
 *>
 *> \verbatim
 *>
-*> ZDOTC forms the dot product of a vector.
+*> ZDOTC forms the dot product of two complex vectors
+*>      ZDOTC = X^H * Y
+*>
 *> \endverbatim
 *
 *  Authors:
