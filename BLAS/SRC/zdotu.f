@@ -23,7 +23,9 @@
 *>
 *> \verbatim
 *>
-*>    ZDOTU forms the dot product of two vectors.
+*> ZDOTU forms the dot product of two complex vectors
+*>      ZDOTU = X^T * Y
+*>
 *> \endverbatim
 *
 *  Authors:
