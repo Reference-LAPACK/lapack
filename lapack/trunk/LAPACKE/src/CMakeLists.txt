@@ -63,8 +63,6 @@ lapacke_cgeqlf.c
 lapacke_cgeqlf_work.c
 lapacke_cgeqp3.c
 lapacke_cgeqp3_work.c
-lapacke_cgeqpf.c
-lapacke_cgeqpf_work.c
 lapacke_cgeqr2.c
 lapacke_cgeqr2_work.c
 lapacke_cgeqrf.c
@@ -125,12 +123,8 @@ lapacke_cggqrf.c
 lapacke_cggqrf_work.c
 lapacke_cggrqf.c
 lapacke_cggrqf_work.c
-lapacke_cggsvd.c
-lapacke_cggsvd_work.c
 lapacke_cggsvd3.c
 lapacke_cggsvd3_work.c
-lapacke_cggsvp.c
-lapacke_cggsvp_work.c
 lapacke_cggsvp3.c
 lapacke_cggsvp3_work.c
 lapacke_cgtcon.c
@@ -577,8 +571,6 @@ lapacke_dgeqlf.c
 lapacke_dgeqlf_work.c
 lapacke_dgeqp3.c
 lapacke_dgeqp3_work.c
-lapacke_dgeqpf.c
-lapacke_dgeqpf_work.c
 lapacke_dgeqr2.c
 lapacke_dgeqr2_work.c
 lapacke_dgeqrf.c
@@ -643,8 +635,6 @@ lapacke_dggrqf.c
 lapacke_dggrqf_work.c
 lapacke_dggsvd3.c
 lapacke_dggsvd3_work.c
-lapacke_dggsvp.c
-lapacke_dggsvp_work.c
 lapacke_dggsvp3.c
 lapacke_dggsvp3_work.c
 lapacke_dgtcon.c
@@ -1075,8 +1065,6 @@ lapacke_sgeqlf.c
 lapacke_sgeqlf_work.c
 lapacke_sgeqp3.c
 lapacke_sgeqp3_work.c
-lapacke_sgeqpf.c
-lapacke_sgeqpf_work.c
 lapacke_sgeqr2.c
 lapacke_sgeqr2_work.c
 lapacke_sgeqrf.c
@@ -1139,12 +1127,8 @@ lapacke_sggqrf.c
 lapacke_sggqrf_work.c
 lapacke_sggrqf.c
 lapacke_sggrqf_work.c
-lapacke_sggsvd.c
-lapacke_sggsvd_work.c
 lapacke_sggsvd3.c
 lapacke_sggsvd3_work.c
-lapacke_sggsvp.c
-lapacke_sggsvp_work.c
 lapacke_sggsvp3.c
 lapacke_sggsvp3_work.c
 lapacke_sgtcon.c
@@ -1569,8 +1553,6 @@ lapacke_zgeqlf.c
 lapacke_zgeqlf_work.c
 lapacke_zgeqp3.c
 lapacke_zgeqp3_work.c
-lapacke_zgeqpf.c
-lapacke_zgeqpf_work.c
 lapacke_zgeqr2.c
 lapacke_zgeqr2_work.c
 lapacke_zgeqrf.c
@@ -1631,12 +1613,8 @@ lapacke_zggqrf.c
 lapacke_zggqrf_work.c
 lapacke_zggrqf.c
 lapacke_zggrqf_work.c
-lapacke_zggsvd.c
-lapacke_zggsvd_work.c
 lapacke_zggsvd3.c
 lapacke_zggsvd3_work.c
-lapacke_zggsvp.c
-lapacke_zggsvp_work.c
 lapacke_zggsvp3.c
 lapacke_zggsvp3_work.c
 lapacke_zgtcon.c
@@ -2021,6 +1999,35 @@ lapacke_zsyr_work.c
 lapacke_csyr_work.c
 lapacke_ilaver.c
 )
+
+if(BUILD_DEPRECATED)
+	LIST(APPEND SRC_OBJ  
+	lapacke_cggsvp.c
+	lapacke_cggsvp_work.c
+	lapacke_dggsvp.c
+	lapacke_dggsvp_work.c
+	lapacke_sggsvp.c
+	lapacke_sggsvp_work.c
+	lapacke_zggsvp.c
+	lapacke_zggsvp_work.c
+	lapacke_cggsvd.c
+	lapacke_cggsvd_work.c
+	lapacke_dggsvd.c
+	lapacke_dggsvd_work.c
+	lapacke_sggsvd.c
+	lapacke_sggsvd_work.c
+	lapacke_zggsvd.c
+	lapacke_zggsvd_work.c
+	lapacke_cgeqpf.c
+	lapacke_cgeqpf_work.c
+	lapacke_dgeqpf.c
+	lapacke_dgeqpf_work.c
+	lapacke_sgeqpf.c
+	lapacke_sgeqpf_work.c
+	lapacke_zgeqpf.c
+	lapacke_zgeqpf_work.c)
+	message(STATUS "Building LAPACKE deprecated routines")
+endif()
 
 SET(SRCX_OBJ 
 lapacke_cgbrfsx.c       lapacke_cporfsx.c       lapacke_dgerfsx.c       lapacke_sgbrfsx.c       lapacke_ssyrfsx.c       lapacke_zherfsx.c

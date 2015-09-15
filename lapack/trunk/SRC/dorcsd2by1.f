@@ -88,13 +88,13 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>           The number of rows and columns in X.
+*>           The number of rows in X.
 *> \endverbatim
 *>
 *> \param[in] P
 *> \verbatim
 *>          P is INTEGER
-*>           The number of rows in X11 and X12. 0 <= P <= M.
+*>           The number of rows in X11. 0 <= P <= M.
 *> \endverbatim
 *>
 *> \param[in] Q

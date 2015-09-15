@@ -11837,10 +11837,6 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_dggsvd LAPACK_GLOBAL(dggsvd,DGGSVD)
 #define LAPACK_cggsvd LAPACK_GLOBAL(cggsvd,CGGSVD)
 #define LAPACK_zggsvd LAPACK_GLOBAL(zggsvd,ZGGSVD)
-#define LAPACK_sggsvd3 LAPACK_GLOBAL(sggsvd3,SGGSVD3)
-#define LAPACK_dggsvd3 LAPACK_GLOBAL(dggsvd3,DGGSVD3)
-#define LAPACK_cggsvd3 LAPACK_GLOBAL(cggsvd3,CGGSVD3)
-#define LAPACK_zggsvd3 LAPACK_GLOBAL(zggsvd3,ZGGSVD3)
 #define LAPACK_ssygv LAPACK_GLOBAL(ssygv,SSYGV)
 #define LAPACK_dsygv LAPACK_GLOBAL(dsygv,DSYGV)
 #define LAPACK_chegv LAPACK_GLOBAL(chegv,CHEGV)
@@ -12115,7 +12111,7 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_dtprfb LAPACK_GLOBAL(dtprfb,DTPRFB)
 #define LAPACK_ctprfb LAPACK_GLOBAL(ctprfb,CTPRFB)
 #define LAPACK_ztprfb LAPACK_GLOBAL(ztprfb,ZTPRFB)
-// LAPACK 3.X.X
+// LAPACK 3.5.0
 #define LAPACK_ssysv_rook LAPACK_GLOBAL(ssysv_rook,SSYSV_ROOK)
 #define LAPACK_dsysv_rook LAPACK_GLOBAL(dsysv_rook,DSYSV_ROOK)
 #define LAPACK_csysv_rook LAPACK_GLOBAL(csysv_rook,CSYSV_ROOK)
@@ -12123,6 +12119,13 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_csyr LAPACK_GLOBAL(csyr,CSYR)
 #define LAPACK_zsyr LAPACK_GLOBAL(zsyr,ZSYR)
 #define LAPACK_ilaver LAPACK_GLOBAL(ilaver,ILAVER)
+// LAPACK 3.6.0
+#define LAPACK_sggsvd3 LAPACK_GLOBAL(sggsvd3,SGGSVD3)
+#define LAPACK_dggsvd3 LAPACK_GLOBAL(dggsvd3,DGGSVD3)
+#define LAPACK_cggsvd3 LAPACK_GLOBAL(cggsvd3,CGGSVD3)
+#define LAPACK_zggsvd3 LAPACK_GLOBAL(zggsvd3,ZGGSVD3)
+
+
 
 void LAPACK_sgetrf( lapack_int* m, lapack_int* n, float* a, lapack_int* lda,
                     lapack_int* ipiv, lapack_int *info );
