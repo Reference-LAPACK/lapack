@@ -97,8 +97,6 @@ lapacke_cgeqlf.o \
 lapacke_cgeqlf_work.o \
 lapacke_cgeqp3.o \
 lapacke_cgeqp3_work.o \
-lapacke_cgeqpf.o \
-lapacke_cgeqpf_work.o \
 lapacke_cgeqr2.o \
 lapacke_cgeqr2_work.o \
 lapacke_cgeqrf.o \
@@ -159,12 +157,8 @@ lapacke_cggqrf.o \
 lapacke_cggqrf_work.o \
 lapacke_cggrqf.o \
 lapacke_cggrqf_work.o \
-lapacke_cggsvd.o \
-lapacke_cggsvd_work.o \
 lapacke_cggsvd3.o \
 lapacke_cggsvd3_work.o \
-lapacke_cggsvp.o \
-lapacke_cggsvp_work.o \
 lapacke_cggsvp3.o \
 lapacke_cggsvp3_work.o \
 lapacke_cgtcon.o \
@@ -611,8 +605,6 @@ lapacke_dgeqlf.o \
 lapacke_dgeqlf_work.o \
 lapacke_dgeqp3.o \
 lapacke_dgeqp3_work.o \
-lapacke_dgeqpf.o \
-lapacke_dgeqpf_work.o \
 lapacke_dgeqr2.o \
 lapacke_dgeqr2_work.o \
 lapacke_dgeqrf.o \
@@ -675,12 +667,8 @@ lapacke_dggqrf.o \
 lapacke_dggqrf_work.o \
 lapacke_dggrqf.o \
 lapacke_dggrqf_work.o \
-lapacke_dggsvd.o \
-lapacke_dggsvd_work.o \
 lapacke_dggsvd3.o \
 lapacke_dggsvd3_work.o \
-lapacke_dggsvp.o \
-lapacke_dggsvp_work.o \
 lapacke_dggsvp3.o \
 lapacke_dggsvp3_work.o \
 lapacke_dgtcon.o \
@@ -1111,8 +1099,6 @@ lapacke_sgeqlf.o \
 lapacke_sgeqlf_work.o \
 lapacke_sgeqp3.o \
 lapacke_sgeqp3_work.o \
-lapacke_sgeqpf.o \
-lapacke_sgeqpf_work.o \
 lapacke_sgeqr2.o \
 lapacke_sgeqr2_work.o \
 lapacke_sgeqrf.o \
@@ -1175,12 +1161,8 @@ lapacke_sggqrf.o \
 lapacke_sggqrf_work.o \
 lapacke_sggrqf.o \
 lapacke_sggrqf_work.o \
-lapacke_sggsvd.o \
-lapacke_sggsvd_work.o \
 lapacke_sggsvd3.o \
 lapacke_sggsvd3_work.o \
-lapacke_sggsvp.o \
-lapacke_sggsvp_work.o \
 lapacke_sggsvp3.o \
 lapacke_sggsvp3_work.o \
 lapacke_sgtcon.o \
@@ -1605,8 +1587,6 @@ lapacke_zgeqlf.o \
 lapacke_zgeqlf_work.o \
 lapacke_zgeqp3.o \
 lapacke_zgeqp3_work.o \
-lapacke_zgeqpf.o \
-lapacke_zgeqpf_work.o \
 lapacke_zgeqr2.o \
 lapacke_zgeqr2_work.o \
 lapacke_zgeqrf.o \
@@ -1667,12 +1647,8 @@ lapacke_zggqrf.o \
 lapacke_zggqrf_work.o \
 lapacke_zggrqf.o \
 lapacke_zggrqf_work.o \
-lapacke_zggsvd.o \
-lapacke_zggsvd_work.o \
 lapacke_zggsvd3.o \
 lapacke_zggsvd3_work.o \
-lapacke_zggsvp.o \
-lapacke_zggsvp_work.o \
 lapacke_zggsvp3.o \
 lapacke_zggsvp3_work.o \
 lapacke_zgtcon.o \
@@ -2057,6 +2033,32 @@ lapacke_zsyr_work.o \
 lapacke_csyr_work.o \
 lapacke_ilaver.o
 
+DEPRECSRC = \
+lapacke_cggsvp.o \
+lapacke_cggsvp_work.o \
+lapacke_dggsvp.o \
+lapacke_dggsvp_work.o \
+lapacke_sggsvp.o \
+lapacke_sggsvp_work.o \
+lapacke_zggsvp.o \
+lapacke_zggsvp_work.o \
+lapacke_cggsvd.o \
+lapacke_cggsvd_work.o \
+lapacke_dggsvd.o \
+lapacke_dggsvd_work.o \
+lapacke_sggsvd.o \
+lapacke_sggsvd_work.o \
+lapacke_zggsvd.o \
+lapacke_zggsvd_work.o \
+lapacke_cgeqpf.o \
+lapacke_cgeqpf_work.o \
+lapacke_dgeqpf.o \
+lapacke_dgeqpf_work.o \
+lapacke_sgeqpf.o \
+lapacke_sgeqpf_work.o \
+lapacke_zgeqpf.o \
+lapacke_zgeqpf_work.o
+
 SRCX_OBJ = \
 lapacke_cgbrfsx.o       lapacke_cporfsx.o       lapacke_dgerfsx.o       lapacke_sgbrfsx.o       lapacke_ssyrfsx.o       lapacke_zherfsx.o \
 lapacke_cgbrfsx_work.o  lapacke_cporfsx_work.o  lapacke_dgerfsx_work.o  lapacke_sgbrfsx_work.o  lapacke_ssyrfsx_work.o  lapacke_zherfsx_work.o \
@@ -2109,13 +2111,16 @@ ifdef USEXBLAS
 ALLXOBJ = $(SXLASRC) $(DXLASRC) $(CXLASRC) $(ZXLASRC)
 endif
 
+ifdef BUILD_DEPRECATED
+DEPRECATED = $(DEPRECSRC)
+endif
 
 OBJ_FILES := $(C_FILES:.o=.o)
 
 all: ../../$(LAPACKELIB)
 
-../../$(LAPACKELIB): $(ALLOBJ) $(ALLXOBJ)
-	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(ALLOBJ) $(ALLXOBJ)
+../../$(LAPACKELIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
 	$(RANLIB) ../../$(LAPACKELIB)
 
 .c.o:
