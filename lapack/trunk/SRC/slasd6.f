@@ -164,7 +164,7 @@
 *>         row.
 *> \endverbatim
 *>
-*> \param[out] IDXQ
+*> \param[in,out] IDXQ
 *> \verbatim
 *>          IDXQ is INTEGER array, dimension (N)
 *>         This contains the permutation which will reintegrate the
