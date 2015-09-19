@@ -422,15 +422,16 @@ endif
 
 DEPRECSRC = DEPRECATED/cgegs.o DEPRECATED/cgegv.o DEPRECATED/cgelsx.o	\
     DEPRECATED/cgeqpf.o DEPRECATED/cggsvd.o DEPRECATED/cggsvp.o				\
-    DEPRECATED/clatzm.o DEPRECATED/ctzrqf.o DEPRECATED/dgegs.o				\
-    DEPRECATED/dgegv.o DEPRECATED/dgelsx.o DEPRECATED/dgeqpf.o				\
-    DEPRECATED/dggsvd.o DEPRECATED/dggsvp.o DEPRECATED/dlatzm.o				\
-    DEPRECATED/dtzrqf.o DEPRECATED/sgegs.o DEPRECATED/sgegv.o					\
-    DEPRECATED/sgelsx.o DEPRECATED/sgeqpf.o DEPRECATED/sggsvd.o				\
-    DEPRECATED/sggsvp.o DEPRECATED/slatzm.o DEPRECATED/stzrqf.o				\
-    DEPRECATED/zgegs.o DEPRECATED/zgegv.o DEPRECATED/zgelsx.o					\
-    DEPRECATED/zgeqpf.o DEPRECATED/zggsvd.o DEPRECATED/zggsvp.o				\
-    DEPRECATED/zlatzm.o DEPRECATED/ztzrqf.o
+    DEPRECATED/clahrd.o DEPRECATED/clatzm.o DEPRECATED/ctzrqf.o \
+    DEPRECATED/dgegs.o	DEPRECATED/dgegv.o DEPRECATED/dgelsx.o \
+    DEPRECATED/dgeqpf.o	DEPRECATED/dggsvd.o DEPRECATED/dggsvp.o \
+    DEPRECATED/dlahrd.o DEPRECATED/dlatzm.o	DEPRECATED/dtzrqf.o \
+    DEPRECATED/sgegs.o DEPRECATED/sgegv.o DEPRECATED/sgelsx.o \
+    DEPRECATED/sgeqpf.o DEPRECATED/sggsvd.o	DEPRECATED/sggsvp.o \
+    DEPRECATED/slahrd.o DEPRECATED/slatzm.o DEPRECATED/stzrqf.o	\
+    DEPRECATED/zgegs.o DEPRECATED/zgegv.o DEPRECATED/zgelsx.o \
+    DEPRECATED/zgeqpf.o DEPRECATED/zggsvd.o DEPRECATED/zggsvp.o	\
+	DEPRECATED/zlahrd.o  DEPRECATED/zlatzm.o DEPRECATED/ztzrqf.o
 
 ALLOBJ = $(SLASRC) $(DLASRC) $(DSLASRC) $(CLASRC) $(ZLASRC) $(ZCLASRC) \
    $(SCLAUX) $(DZLAUX) $(ALLAUX)
