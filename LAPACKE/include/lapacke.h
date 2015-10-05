@@ -10389,6 +10389,23 @@ lapack_int LAPACKE_cuncsd_work( int matrix_layout, char jobu1, char jobu2,
                                 lapack_complex_float* work, lapack_int lwork,
                                 float* rwork, lapack_int lrwork,
                                 lapack_int* iwork );
+lapack_int LAPACKE_cuncsd2by1( int matrix_layout, char jobu1, char jobu2,
+                           char jobv1t, lapack_int m, lapack_int p, lapack_int q,
+                           lapack_complex_float* x11, lapack_int ldx11,
+                           lapack_complex_float* x21, lapack_int ldx21,
+                           lapack_complex_float* theta, lapack_complex_float* u1,
+                           lapack_int ldu1, lapack_complex_float* u2,
+                           lapack_int ldu2, lapack_complex_float* v1t, lapack_int ldv1t );
+lapack_int LAPACKE_cuncsd2by1_work( int matrix_layout, char jobu1, char jobu2,
+                                char jobv1t, lapack_int m, lapack_int p,
+                                lapack_int q, lapack_complex_float* x11, lapack_int ldx11,
+                                lapack_complex_float* x21, lapack_int ldx21,
+                                lapack_complex_float* theta, lapack_complex_float* u1,
+                                lapack_int ldu1, lapack_complex_float* u2, 
+                                lapack_int ldu2, lapack_complex_float* v1t,
+                                lapack_int ldv1t, lapack_complex_float* work, 
+                                lapack_int lwork, float* rwork, lapack_int lrwork,
+                                lapack_int* iwork );
 lapack_int LAPACKE_dbbcsd( int matrix_layout, char jobu1, char jobu2,
                            char jobv1t, char jobv2t, char trans, lapack_int m,
                            lapack_int p, lapack_int q, double* theta,
@@ -10443,6 +10460,17 @@ lapack_int LAPACKE_dorcsd_work( int matrix_layout, char jobu1, char jobu2,
                                 lapack_int ldv1t, double* v2t, lapack_int ldv2t,
                                 double* work, lapack_int lwork,
                                 lapack_int* iwork );
+lapack_int LAPACKE_dorcsd2by1( int matrix_layout, char jobu1, char jobu2,
+                           char jobv1t, lapack_int m, lapack_int p, lapack_int q,
+                           double* x11, lapack_int ldx11, double* x21, lapack_int ldx21,
+                           double* theta, double* u1, lapack_int ldu1, double* u2,
+                           lapack_int ldu2, double* v1t, lapack_int ldv1t);
+lapack_int LAPACKE_dorcsd2by1_work( int matrix_layout, char jobu1, char jobu2,
+                           char jobv1t, lapack_int m, lapack_int p, lapack_int q,
+                           double* x11, lapack_int ldx11, double* x21, lapack_int ldx21,
+                           double* theta, double* u1, lapack_int ldu1, double* u2,
+                           lapack_int ldu2, double* v1t, lapack_int ldv1t,
+                           double* work, lapack_int lwork, lapack_int* iwork );
 lapack_int LAPACKE_dsyconv( int matrix_layout, char uplo, char way, lapack_int n,
                             double* a, lapack_int lda, const lapack_int* ipiv, double* work);
 lapack_int LAPACKE_dsyconv_work( int matrix_layout, char uplo, char way,
@@ -10525,6 +10553,17 @@ lapack_int LAPACKE_sorcsd_work( int matrix_layout, char jobu1, char jobu2,
                                 lapack_int ldv1t, float* v2t, lapack_int ldv2t,
                                 float* work, lapack_int lwork,
                                 lapack_int* iwork );
+lapack_int LAPACKE_sorcsd2by1( int matrix_layout, char jobu1, char jobu2,
+                           char jobv1t, lapack_int m, lapack_int p, lapack_int q,
+                           float* x11, lapack_int ldx11, float* x21, lapack_int ldx21,
+                           float* theta, float* u1, lapack_int ldu1, float* u2,
+                           lapack_int ldu2, float* v1t, lapack_int ldv1t);
+lapack_int LAPACKE_sorcsd2by1_work( int matrix_layout, char jobu1, char jobu2,
+                           char jobv1t, lapack_int m, lapack_int p, lapack_int q,
+                           float* x11, lapack_int ldx11, float* x21, lapack_int ldx21,
+                           float* theta, float* u1, lapack_int ldu1, float* u2,
+                           lapack_int ldu2, float* v1t, lapack_int ldv1t,
+                           float* work, lapack_int lwork, lapack_int* iwork );
 lapack_int LAPACKE_ssyconv( int matrix_layout, char uplo, char way, lapack_int n,
                             float* a, lapack_int lda, const lapack_int* ipiv, float* work );
 lapack_int LAPACKE_ssyconv_work( int matrix_layout, char uplo, char way,
@@ -10691,6 +10730,24 @@ lapack_int LAPACKE_zuncsd_work( int matrix_layout, char jobu1, char jobu2,
                                 lapack_complex_double* work, lapack_int lwork,
                                 double* rwork, lapack_int lrwork,
                                 lapack_int* iwork );
+lapack_int LAPACKE_zuncsd2by1( int matrix_layout, char jobu1, char jobu2,
+                           char jobv1t, lapack_int m, lapack_int p, lapack_int q,
+                           lapack_complex_double* x11, lapack_int ldx11,
+                           lapack_complex_double* x21, lapack_int ldx21,
+                           lapack_complex_double* theta, lapack_complex_double* u1,
+                           lapack_int ldu1, lapack_complex_double* u2,
+                           lapack_int ldu2, lapack_complex_double* v1t, lapack_int ldv1t );
+lapack_int LAPACKE_zuncsd2by1_work( int matrix_layout, char jobu1, char jobu2,
+                                char jobv1t, lapack_int m, lapack_int p,
+                                lapack_int q, lapack_complex_double* x11, lapack_int ldx11,
+                                lapack_complex_double* x21, lapack_int ldx21,
+                                lapack_complex_double* theta, lapack_complex_double* u1,
+                                lapack_int ldu1, lapack_complex_double* u2, 
+                                lapack_int ldu2, lapack_complex_double* v1t,
+                                lapack_int ldv1t, lapack_complex_double* work, 
+                                lapack_int lwork, double* rwork, lapack_int lrwork,
+                                lapack_int* iwork );
+
 //LAPACK 3.4.0
 lapack_int LAPACKE_sgemqrt( int matrix_layout, char side, char trans,
                             lapack_int m, lapack_int n, lapack_int k,
@@ -12175,9 +12232,11 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_csytrs2 LAPACK_GLOBAL(csytrs2,CSYTRS2)
 #define LAPACK_cunbdb LAPACK_GLOBAL(cunbdb,CUNBDB)
 #define LAPACK_cuncsd LAPACK_GLOBAL(cuncsd,CUNCSD)
+#define LAPACK_cuncsd2by1 LAPACK_GLOBAL(cuncsd2by1,CUNCSD2BY1)
 #define LAPACK_dbbcsd LAPACK_GLOBAL(dbbcsd,DBBCSD)
 #define LAPACK_dorbdb LAPACK_GLOBAL(dorbdb,DORBDB)
 #define LAPACK_dorcsd LAPACK_GLOBAL(dorcsd,DORCSD)
+#define LAPACK_dorcsd2by1 LAPACK_GLOBAL(dorcsd2by1,DORCSD2BY1)
 #define LAPACK_dsyconv LAPACK_GLOBAL(dsyconv,DSYCONV)
 #define LAPACK_dsyswapr LAPACK_GLOBAL(dsyswapr,DSYSWAPR)
 #define LAPACK_dsytri2 LAPACK_GLOBAL(dsytri2,DSYTRI2)
@@ -12186,6 +12245,7 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_sbbcsd LAPACK_GLOBAL(sbbcsd,SBBCSD)
 #define LAPACK_sorbdb LAPACK_GLOBAL(sorbdb,SORBDB)
 #define LAPACK_sorcsd LAPACK_GLOBAL(sorcsd,SORCSD)
+#define LAPACK_sorcsd2by1 LAPACK_GLOBAL(sorcsd2by1,SORCSD2BY1)
 #define LAPACK_ssyconv LAPACK_GLOBAL(ssyconv,SSYCONV)
 #define LAPACK_ssyswapr LAPACK_GLOBAL(ssyswapr,SSYSWAPR)
 #define LAPACK_ssytri2 LAPACK_GLOBAL(ssytri2,SSYTRI2)
@@ -12203,6 +12263,7 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_zsytrs2 LAPACK_GLOBAL(zsytrs2,ZSYTRS2)
 #define LAPACK_zunbdb LAPACK_GLOBAL(zunbdb,ZUNBDB)
 #define LAPACK_zuncsd LAPACK_GLOBAL(zuncsd,ZUNCSD)
+#define LAPACK_zuncsd2by1 LAPACK_GLOBAL(zuncsd2by1,ZUNCSD2BY1)
 // LAPACK 3.4.0
 #define LAPACK_sgemqrt LAPACK_GLOBAL(sgemqrt,SGEMQRT)
 #define LAPACK_dgemqrt LAPACK_GLOBAL(dgemqrt,DGEMQRT)
@@ -16761,6 +16822,17 @@ void LAPACK_cuncsd( char* jobu1, char* jobu2,
                     lapack_complex_float* work, lapack_int* lwork,
                     float* rwork, lapack_int* lrwork,
                     lapack_int* iwork , lapack_int *info );
+void LAPACK_cuncsd2by1( char* jobu1, char* jobu2,
+                    char* jobv1t, lapack_int* m, lapack_int* p,
+                    lapack_int* q, lapack_complex_float* x11,
+                    lapack_int* ldx11, lapack_complex_float* x21,
+                    lapack_int* ldx21, lapack_complex_float* theta,
+                    lapack_complex_float* u1, lapack_int* ldu1,
+                    lapack_complex_float* u2, lapack_int* ldu2,
+                    lapack_complex_float* v1t, lapack_int* ldv1t,
+                    lapack_complex_float* work, lapack_int* lwork,
+                    float* rwork, lapack_int* lrwork,
+                    lapack_int* iwork , lapack_int *info );
 void LAPACK_dbbcsd( char* jobu1, char* jobu2,
                     char* jobv1t, char* jobv2t, char* trans,
                     lapack_int* m, lapack_int* p, lapack_int* q,
@@ -16789,6 +16861,14 @@ void LAPACK_dorcsd( char* jobu1, char* jobu2,
                     double* u2, lapack_int* ldu2, double* v1t,
                     lapack_int* ldv1t, double* v2t, lapack_int* ldv2t,
                     double* work, lapack_int* lwork,
+                    lapack_int* iwork , lapack_int *info );
+void LAPACK_dorcsd2by1( char* jobu1, char* jobu2,
+                    char* jobv1t, lapack_int* m, lapack_int* p,
+                    lapack_int* q, double* x11, lapack_int* ldx11,
+                    double* x21, lapack_int* ldx21,
+                    double* theta, double* u1, lapack_int* ldu1,
+                    double* u2, lapack_int* ldu2, double* v1t,
+                    lapack_int* ldv1t, double* work, lapack_int* lwork,
                     lapack_int* iwork , lapack_int *info );
 void LAPACK_dsyconv( char* uplo, char* way,
                      lapack_int* n, double* a, lapack_int* lda,
@@ -16835,6 +16915,14 @@ void LAPACK_sorcsd( char* jobu1, char* jobu2,
                     float* u2, lapack_int* ldu2, float* v1t,
                     lapack_int* ldv1t, float* v2t, lapack_int* ldv2t,
                     float* work, lapack_int* lwork,
+                    lapack_int* iwork , lapack_int *info );
+void LAPACK_sorcsd2by1( char* jobu1, char* jobu2,
+                    char* jobv1t, lapack_int* m, lapack_int* p,
+                    lapack_int* q, float* x11, lapack_int* ldx11,
+                    float* x21, lapack_int* ldx21,
+                    float* theta, float* u1, lapack_int* ldu1,
+                    float* u2, lapack_int* ldu2, float* v1t,
+                    lapack_int* ldv1t, float* work, lapack_int* lwork,
                     lapack_int* iwork , lapack_int *info );
 void LAPACK_ssyconv( char* uplo, char* way,
                      lapack_int* n, float* a, lapack_int* lda,
@@ -16927,6 +17015,17 @@ void LAPACK_zuncsd( char* jobu1, char* jobu2,
                     lapack_complex_double* u2, lapack_int* ldu2,
                     lapack_complex_double* v1t, lapack_int* ldv1t,
                     lapack_complex_double* v2t, lapack_int* ldv2t,
+                    lapack_complex_double* work, lapack_int* lwork,
+                    double* rwork, lapack_int* lrwork,
+                    lapack_int* iwork , lapack_int *info );
+void LAPACK_zuncsd2by1( char* jobu1, char* jobu2,
+                    char* jobv1t, lapack_int* m, lapack_int* p,
+                    lapack_int* q, lapack_complex_double* x11,
+                    lapack_int* ldx11, lapack_complex_double* x21,
+                    lapack_int* ldx21, lapack_complex_double* theta,
+                    lapack_complex_double* u1, lapack_int* ldu1,
+                    lapack_complex_double* u2, lapack_int* ldu2,
+                    lapack_complex_double* v1t, lapack_int* ldv1t,
                     lapack_complex_double* work, lapack_int* lwork,
                     double* rwork, lapack_int* lrwork,
                     lapack_int* iwork , lapack_int *info );
