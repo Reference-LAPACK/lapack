@@ -303,6 +303,8 @@ lapacke_clarfx.o \
 lapacke_clarfx_work.o \
 lapacke_clarnv.o \
 lapacke_clarnv_work.o \
+lapacke_clascl.o \
+lapacke_clascl_work.o \
 lapacke_claset.o \
 lapacke_claset_work.o \
 lapacke_claswp.o \
@@ -731,6 +733,8 @@ lapacke_dlartgp.o \
 lapacke_dlartgp_work.o \
 lapacke_dlartgs.o \
 lapacke_dlartgs_work.o \
+lapacke_dlascl.o \
+lapacke_dlascl_work.o \
 lapacke_dlaset.o \
 lapacke_dlaset_work.o \
 lapacke_dlasrt.o \
@@ -1229,6 +1233,8 @@ lapacke_slartgp.o \
 lapacke_slartgp_work.o \
 lapacke_slartgs.o \
 lapacke_slartgs_work.o \
+lapacke_slascl.o \
+lapacke_slascl_work.o \
 lapacke_slaset.o \
 lapacke_slaset_work.o \
 lapacke_slasrt.o \
@@ -1809,6 +1815,8 @@ lapacke_zlarfx.o \
 lapacke_zlarfx_work.o \
 lapacke_zlarnv.o \
 lapacke_zlarnv_work.o \
+lapacke_zlascl.o \
+lapacke_zlascl_work.o \
 lapacke_zlaset.o \
 lapacke_zlaset_work.o \
 lapacke_zlaswp.o \
