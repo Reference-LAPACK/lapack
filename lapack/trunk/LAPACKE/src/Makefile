@@ -513,6 +513,8 @@ lapacke_cunbdb.o \
 lapacke_cunbdb_work.o \
 lapacke_cuncsd.o \
 lapacke_cuncsd_work.o \
+lapacke_cuncsd2by1.o \
+lapacke_cuncsd2by1_work.o \
 lapacke_cungbr.o \
 lapacke_cungbr_work.o \
 lapacke_cunghr.o \
@@ -751,6 +753,8 @@ lapacke_dorbdb.o \
 lapacke_dorbdb_work.o \
 lapacke_dorcsd.o \
 lapacke_dorcsd_work.o \
+lapacke_dorcsd2by1.o \
+lapacke_dorcsd2by1_work.o \
 lapacke_dorgbr.o \
 lapacke_dorgbr_work.o \
 lapacke_dorghr.o \
@@ -1251,6 +1255,8 @@ lapacke_sorbdb.o \
 lapacke_sorbdb_work.o \
 lapacke_sorcsd.o \
 lapacke_sorcsd_work.o \
+lapacke_sorcsd2by1.o \
+lapacke_sorcsd2by1_work.o \
 lapacke_sorgbr.o \
 lapacke_sorgbr_work.o \
 lapacke_sorghr.o \
@@ -2025,6 +2031,8 @@ lapacke_zunbdb.o \
 lapacke_zunbdb_work.o \
 lapacke_zuncsd.o \
 lapacke_zuncsd_work.o \
+lapacke_zuncsd2by1.o \
+lapacke_zuncsd2by1_work.o \
 lapacke_zungbr.o \
 lapacke_zungbr_work.o \
 lapacke_zunghr.o \
