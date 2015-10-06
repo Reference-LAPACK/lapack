@@ -46,7 +46,7 @@ float LAPACKE_clantr( int matrix_layout, char norm, char uplo, char diag,
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_ctr_nancheck( matrix_layout, uplo, diag, n, a, lda ) ) {
+    if( LAPACKE_ctr_nancheck( matrix_layout, uplo, diag, MIN(m,n), a, lda ) ) {
         return -7;
     }
 #endif
