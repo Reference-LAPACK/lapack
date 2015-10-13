@@ -752,9 +752,9 @@
                END DO
             ELSE
 *
-               CALL DLASET( 'Lower', IHI - JCOL + 1, NNB, ZERO, ZERO,
+               CALL DLASET( 'Lower', IHI - JCOL - 1, NNB, ZERO, ZERO,
      $                      A( JCOL + 2, JCOL ), LDA )
-               CALL DLASET( 'Lower', IHI - JCOL + 1, NNB, ZERO, ZERO,
+               CALL DLASET( 'Lower', IHI - JCOL - 1, NNB, ZERO, ZERO,
      $                      B( JCOL + 2, JCOL ), LDB )
             END IF
 *
@@ -807,7 +807,7 @@
 *
                      CALL DORM22( 'Right', 'No Transpose', TOP, 2*NNB,
      $                            NNB, NNB, WORK( PPWO ), 2*NNB,
-     $                            B( 1, J ), LDA, WORK( PW ),
+     $                            B( 1, J ), LDB, WORK( PW ),
      $                            LWORK-PW+1, IERR )
                   ELSE
 *
