@@ -453,31 +453,25 @@
 *
 *        endwhile
 *
-*        If the problem split any number of times, then the eigenvalues
-*        will not be properly ordered.  Here we permute the eigenvalues
-*        (and the associated eigenvectors) into ascending order.
 *
-         IF( M.NE.N ) THEN
+*        Use Selection Sort to minimize swaps of eigenvectors
 *
-*           Use Selection Sort to minimize swaps of eigenvectors
-*
-            DO 60 II = 2, N
-               I = II - 1
-               K = I
-               P = D( I )
-               DO 50 J = II, N
-                  IF( D( J ).LT.P ) THEN
-                     K = J
-                     P = D( J )
-                  END IF
-   50          CONTINUE
-               IF( K.NE.I ) THEN
-                  D( K ) = D( I )
-                  D( I ) = P
-                  CALL CSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
-               END IF
-   60       CONTINUE
-         END IF
+         DO 60 II = 2, N
+           I = II - 1
+           K = I
+           P = D( I )
+           DO 50 J = II, N
+              IF( D( J ).LT.P ) THEN
+                 K = J
+                 P = D( J )
+              END IF
+   50      CONTINUE
+           IF( K.NE.I ) THEN
+              D( K ) = D( I )
+              D( I ) = P
+              CALL CSWAP( N, Z( 1, I ), 1, Z( 1, K ), 1 )
+           END IF
+   60    CONTINUE
       END IF
 *
    70 CONTINUE
