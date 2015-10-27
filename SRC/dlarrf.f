@@ -257,7 +257,8 @@
 
 *     Decide whether the code should accept the best among all
 *     representations despite large element growth or signal INFO=1
-      NOFAIL = .TRUE.
+*     Setting NOFAIL to .FALSE. for quick fix for bug 113
+      NOFAIL = .FALSE.
 *
 
 *     Compute the average gap length of the cluster
