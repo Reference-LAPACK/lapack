@@ -21,6 +21,9 @@ http://icl.cs.utk.edu/lapack-forum/viewtopic.php?t=4746
 * zerothi
 http://icl.cs.utk.edu/lapack-forum/viewtopic.php?t=4786
 
+* Dmitry Baksheev (INTEL)
+http://icl.cs.utk.edu/lapack-forum/viewtopic.php?t=4827 
+
 * Alexander Kobotov (INTEL)
 * Sergey Kuznetsov (INTEL)
 * Eugene Chereshnev (INTEL)
@@ -59,7 +62,3 @@ http://icl.cs.utk.edu/lapack-forum/viewtopic.php?t=4786
 * hrautila
 * forswg
 * Don Fike
-
-	
-
-
