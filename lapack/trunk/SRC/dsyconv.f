@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYCONV( UPLO, WAY, N, A, LDA, IPIV, WORK, INFO )
+*       SUBROUTINE DSYCONV( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
 * 
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY
@@ -26,7 +26,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       DOUBLE PRECISION   A( LDA, * ), WORK( * )
+*       DOUBLE PRECISION   A( LDA, * ), E( * )
 *       ..
 *  
 *
@@ -85,9 +85,11 @@
 *>          as determined by DSYTRF.
 *> \endverbatim
 *>
-*> \param[out] WORK
+*> \param[out] E
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (N)
+*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          E stores the supdiagonal/subdiagonal of the symmetric 1-by-1
+*>          or 2-by-2 block diagonal matrix D in LDLT.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -110,7 +112,7 @@
 *> \ingroup doubleSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE DSYCONV( UPLO, WAY, N, A, LDA, IPIV, WORK, INFO )
+      SUBROUTINE DSYCONV( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
 *
 *  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -123,7 +125,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * ), WORK( * )
+      DOUBLE PRECISION   A( LDA, * ), E( * )
 *     ..
 *
 *  =====================================================================
@@ -178,15 +180,15 @@
 *
          IF ( CONVERT ) THEN
             I=N
-            WORK(1)=ZERO
+            E(1)=ZERO
             DO WHILE ( I .GT. 1 )
                IF( IPIV(I) .LT. 0 ) THEN
-                  WORK(I)=A(I-1,I)
-                  WORK(I-1)=ZERO
+                  E(I)=A(I-1,I)
+                  E(I-1)=ZERO
                   A(I-1,I)=ZERO
                   I=I-1
                ELSE
-                  WORK(I)=ZERO
+                  E(I)=ZERO
                ENDIF
                I=I-1
             END DO
@@ -255,7 +257,7 @@
             I=N
             DO WHILE ( I .GT. 1 )
                IF( IPIV(I) .LT. 0 ) THEN
-                  A(I-1,I)=WORK(I)
+                  A(I-1,I)=E(I)
                   I=I-1
                ENDIF
                I=I-1
@@ -273,15 +275,15 @@
 *        Convert VALUE
 *
             I=1
-            WORK(N)=ZERO
+            E(N)=ZERO
             DO WHILE ( I .LE. N )
                IF( I.LT.N .AND. IPIV(I) .LT. 0 ) THEN
-                  WORK(I)=A(I+1,I)
-                  WORK(I+1)=ZERO
+                  E(I)=A(I+1,I)
+                  E(I+1)=ZERO
                   A(I+1,I)=ZERO
                   I=I+1
                ELSE
-                  WORK(I)=ZERO
+                  E(I)=ZERO
                ENDIF
                I=I+1
             END DO
@@ -349,7 +351,7 @@
             I=1
             DO WHILE ( I .LE. N-1 )
                IF( IPIV(I) .LT. 0 ) THEN
-                  A(I+1,I)=WORK(I)
+                  A(I+1,I)=E(I)
                   I=I+1
                ENDIF
                I=I+1
