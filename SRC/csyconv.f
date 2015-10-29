@@ -182,6 +182,7 @@
             DO WHILE ( I .GT. 1 )
                IF( IPIV(I) .LT. 0 ) THEN
                   WORK(I)=A(I-1,I)
+                  WORK(I-1)=ZERO
                   A(I-1,I)=ZERO
                   I=I-1
                ELSE
@@ -276,6 +277,7 @@
             DO WHILE ( I .LE. N )
                IF( I.LT.N .AND. IPIV(I) .LT. 0 ) THEN
                   WORK(I)=A(I+1,I)
+                  WORK(I+1)=ZERO
                   A(I+1,I)=ZERO
                   I=I+1
                ELSE
@@ -299,7 +301,7 @@
                ENDIF
             ELSE
               IP=-IPIV(I)
-              IF ( I .GT. 1 ) THEN
+              IF (I .GT. 1) THEN
               DO 23 J= 1,I-1
                  TEMP=A(IP,J)
                  A(IP,J)=A(I+1,J)

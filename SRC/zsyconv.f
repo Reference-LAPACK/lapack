@@ -183,6 +183,7 @@
             DO WHILE ( I .GT. 1 )
                IF( IPIV(I) .LT. 0 ) THEN
                   WORK(I)=A(I-1,I)
+                  WORK(I-1)=ZERO
                   A(I-1,I)=ZERO
                   I=I-1
                ELSE
@@ -276,6 +277,7 @@
             DO WHILE ( I .LE. N )
                IF( I.LT.N .AND. IPIV(I) .LT. 0 ) THEN
                   WORK(I)=A(I+1,I)
+                  WORK(I+1)=ZERO
                   A(I+1,I)=ZERO
                   I=I+1
                ELSE
