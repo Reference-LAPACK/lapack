@@ -22,7 +22,7 @@ blaslib:
 
 cblaslib:
 	( cd CBLAS/src; $(MAKE) )
-	
+
 lapacklib:	lapack_install
 	( cd SRC; $(MAKE) )
 
@@ -37,7 +37,7 @@ lapacke_example: lapackelib
 
 variants:
 	( cd SRC/VARIANTS ; $(MAKE))
-	
+
 tmglib:
 	( cd TESTING/MATGEN; $(MAKE) )
 
@@ -58,7 +58,7 @@ variants_testing: lib variants
 	mv stest.out stest_lurec.out ; mv dtest.out dtest_lurec.out ; mv ctest.out ctest_lurec.out ; mv ztest.out ztest_lurec.out )
 	( cd TESTING ;  rm -f xlintst* ; $(MAKE)  VARLIB='SRC/VARIANTS/LIB/qrll.a' ; \
 	mv stest.out stest_qrll.out ; mv dtest.out dtest_qrll.out ; mv ctest.out ctest_qrll.out ; mv ztest.out ztest_qrll.out )
-		
+	
 blas_testing:
 	( cd BLAS/TESTING; $(MAKE) -f Makeblat1 )
 	( cd BLAS; ./xblat1s > sblat1.out    ; \
@@ -108,7 +108,7 @@ cleanlib:
 	( cd SRC/VARIANTS; $(MAKE) clean )
 	( cd TESTING/MATGEN; $(MAKE) clean )
 	( cd LAPACKE; $(MAKE) clean )
-	
+
 
 cleanblas_testing:	
 	( cd BLAS/TESTING; $(MAKE) -f Makeblat1 clean )
