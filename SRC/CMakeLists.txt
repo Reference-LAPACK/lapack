@@ -90,13 +90,13 @@ set(DZLAUX
    ../INSTALL/dlamch.f ${DSECOND_SRC})
 
 set(SLASRC  
-   sgbbrd.f sgbcon.f sgbequ.f sgbrfs.f sgbsv.f  
+   sbdsvdx.f sgbbrd.f sgbcon.f sgbequ.f sgbrfs.f sgbsv.f  
    sgbsvx.f sgbtf2.f sgbtrf.f sgbtrs.f sgebak.f sgebal.f sgebd2.f 
    sgebrd.f sgecon.f sgeequ.f sgees.f  sgeesx.f sgeev.f  sgeevx.f 
    sgehd2.f sgehrd.f sgelq2.f sgelqf.f 
    sgels.f  sgelsd.f sgelss.f sgelsy.f sgeql2.f sgeqlf.f 
    sgeqp3.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f 
-   sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvx.f sgetc2.f sgetf2.f 
+   sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvdx.f sgesvx.f sgetc2.f sgetf2.f 
    sgetrf.f sgetri.f 
    sgetrs.f sggbak.f sggbal.f
    sgges.f  sgges3.f sggesx.f sggev.f  sggev3.f sggevx.f
@@ -170,7 +170,7 @@ set(CLASRC
    cgehd2.f cgehrd.f cgelq2.f cgelqf.f 
    cgels.f  cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f cgeqp3.f 
    cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f 
-   cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvx.f cgetc2.f cgetf2.f cgetrf.f 
+   cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvdx.f cgesvx.f cgetc2.f cgetf2.f cgetrf.f 
    cgetri.f cgetrs.f 
    cggbak.f cggbal.f
    cgges.f  cgges3.f cggesx.f cggev.f  cggev3.f cggevx.f
@@ -248,13 +248,13 @@ set(CXLASRC     cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f
 set(ZCLASRC cpotrs.f cgetrs.f cpotrf.f cgetrf.f) 
 
 set(DLASRC 
-   dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f  
+   dbdsvdx.f dgbbrd.f dgbcon.f dgbequ.f dgbrfs.f dgbsv.f  
    dgbsvx.f dgbtf2.f dgbtrf.f dgbtrs.f dgebak.f dgebal.f dgebd2.f 
    dgebrd.f dgecon.f dgeequ.f dgees.f  dgeesx.f dgeev.f  dgeevx.f 
    dgehd2.f dgehrd.f dgelq2.f dgelqf.f 
    dgels.f  dgelsd.f dgelss.f dgelsy.f dgeql2.f dgeqlf.f 
    dgeqp3.f dgeqr2.f dgeqr2p.f dgeqrf.f dgeqrfp.f dgerfs.f dgerq2.f dgerqf.f 
-   dgesc2.f dgesdd.f dgesv.f  dgesvd.f dgesvx.f dgetc2.f dgetf2.f 
+   dgesc2.f dgesdd.f dgesv.f  dgesvd.f dgesvdx.f dgesvx.f dgetc2.f dgetf2.f 
    dgetrf.f dgetri.f 
    dgetrs.f dggbak.f dggbal.f
    dgges.f  dgges3.f dggesx.f dggev.f  dggev3.f dggevx.f
@@ -327,7 +327,7 @@ set(ZLASRC
    zgehd2.f zgehrd.f zgelq2.f zgelqf.f 
    zgels.f  zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f zgeqp3.f 
    zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f 
-   zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvx.f zgetc2.f zgetf2.f zgetrf.f 
+   zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvdx.f zgesvx.f zgetc2.f zgetf2.f zgetrf.f 
    zgetri.f zgetrs.f 
    zggbak.f zggbal.f
    zgges.f  zgges3.f zggesx.f zggev.f  zggev3.f zggevx.f

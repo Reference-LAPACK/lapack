@@ -97,13 +97,14 @@ DZLAUX = \
    ../INSTALL/dlamch.o ../INSTALL/dsecnd_$(TIMER).o
 
 SLASRC = \
+   sbdsvdx.o \
    sgbbrd.o sgbcon.o sgbequ.o sgbrfs.o sgbsv.o  \
    sgbsvx.o sgbtf2.o sgbtrf.o sgbtrs.o sgebak.o sgebal.o sgebd2.o \
    sgebrd.o sgecon.o sgeequ.o sgees.o  sgeesx.o sgeev.o  sgeevx.o \
    sgehd2.o sgehrd.o sgelq2.o sgelqf.o \
    sgels.o  sgelsd.o sgelss.o sgelsy.o sgeql2.o sgeqlf.o \
    sgeqp3.o sgeqr2.o sgeqr2p.o sgeqrf.o sgeqrfp.o sgerfs.o \
-   sgerq2.o sgerqf.o sgesc2.o sgesdd.o sgesv.o  sgesvd.o sgesvx.o \
+   sgerq2.o sgerqf.o sgesc2.o sgesdd.o sgesv.o  sgesvd.o sgesvdx.o sgesvx.o \
    sgetc2.o sgetf2.o sgetri.o \
    sggbak.o sggbal.o sgges.o  sgges3.o sggesx.o \
    sggev.o  sggev3.o sggevx.o \
@@ -179,7 +180,7 @@ CLASRC = \
    cgehd2.o cgehrd.o cgelq2.o cgelqf.o \
    cgels.o  cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o cgeqp3.o \
    cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
-   cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  \
+   cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  cgesvdx.o\
    cgesvx.o cgetc2.o cgetf2.o cgetri.o \
    cggbak.o cggbal.o cgges.o  cgges3.o cggesx.o \
    cggev.o  cggev3.o cggevx.o cggglm.o\
@@ -259,13 +260,14 @@ endif
 ZCLASRC = cpotrs.o cgetrs.o cpotrf.o cgetrf.o 
 
 DLASRC = \
+   dbdsvdx.o \
    dgbbrd.o dgbcon.o dgbequ.o dgbrfs.o dgbsv.o  \
    dgbsvx.o dgbtf2.o dgbtrf.o dgbtrs.o dgebak.o dgebal.o dgebd2.o \
    dgebrd.o dgecon.o dgeequ.o dgees.o  dgeesx.o dgeev.o  dgeevx.o \
    dgehd2.o dgehrd.o dgelq2.o dgelqf.o \
    dgels.o  dgelsd.o dgelss.o dgelsy.o dgeql2.o dgeqlf.o \
    dgeqp3.o dgeqr2.o dgeqr2p.o dgeqrf.o dgeqrfp.o dgerfs.o \
-   dgerq2.o dgerqf.o dgesc2.o dgesdd.o dgesv.o  dgesvd.o dgesvx.o  \
+   dgerq2.o dgerqf.o dgesc2.o dgesdd.o dgesv.o  dgesvd.o dgesvdx.o dgesvx.o  \
    dgetc2.o dgetf2.o dgetrf.o dgetri.o \
    dgetrs.o dggbak.o dggbal.o dgges.o  dgges3.o dggesx.o \
    dggev.o  dggev3.o dggevx.o \
@@ -340,7 +342,7 @@ ZLASRC = \
    zgehd2.o zgehrd.o zgelq2.o zgelqf.o \
    zgels.o  zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o zgeqp3.o \
    zgeqr2.o zgeqr2p.o zgeqrf.o zgeqrfp.o zgerfs.o zgerq2.o zgerqf.o \
-   zgesc2.o zgesdd.o zgesv.o  zgesvd.o zgesvx.o zgetc2.o zgetf2.o zgetrf.o \
+   zgesc2.o zgesdd.o zgesv.o  zgesvd.o zgesvdx.o zgesvx.o zgetc2.o zgetf2.o zgetrf.o \
    zgetri.o zgetrs.o \
    zggbak.o zggbal.o zgges.o  zgges3.o zggesx.o  \
    zggev.o  zggev3.o zggevx.o zggglm.o \

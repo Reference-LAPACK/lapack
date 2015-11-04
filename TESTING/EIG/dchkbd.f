@@ -63,6 +63,25 @@
 *>    2) Same as 1), but the singular values are stored in S2 and the
 *>        singular vectors are not computed.
 *>
+*>  DBDSVDX computes the singular value decomposition of the bidiagonal
+*>  matrix B as B = U S V' using bisection and inverse iteration. It is 
+*>  called six times to compute
+*>     1) B = U S1 V', RANGE='A', where S1 is the diagonal matrix of singular
+*>         values and the columns of the matrices U and V are the left
+*>         and right singular vectors, respectively, of B.
+*>     2) Same as 1), but the singular values are stored in S2 and the
+*>         singular vectors are not computed.
+*>     3) B = U S1 V', RANGE='I', with where S1 is the diagonal matrix of singular
+*>         values and the columns of the matrices U and V are the left
+*>         and right singular vectors, respectively, of B
+*>     4) Same as 3), but the singular values are stored in S2 and the
+*>         singular vectors are not computed.
+*>     5) B = U S1 V', RANGE='V', with where S1 is the diagonal matrix of singular
+*>         values and the columns of the matrices U and V are the left
+*>         and right singular vectors, respectively, of B
+*>     6) Same as 5), but the singular values are stored in S2 and the
+*>         singular vectors are not computed.
+*>
 *> For each pair of matrix dimensions (M,N) and each selected matrix
 *> type, an M by N matrix A and an M by NRHS matrix X are generated.
 *> The problem dimensions are as follows
@@ -127,6 +146,44 @@
 *>
 *> (19)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
 *>                                   computing U and V.
+*>  Test DBDSVDX on bidiagonal matrix B
+*> 
+*>  (20)  | B - U S1 VT | / ( |B| min(M,N) ulp ), VT = V'
+*> 
+*>  (21)  | I - U' U | / ( min(M,N) ulp )
+*> 
+*>  (22)  | I - VT VT' | / ( min(M,N) ulp )
+*> 
+*>  (23)  S1 contains min(M,N) nonnegative values in decreasing order.
+*>        (Return 0 if true, 1/ULP if false.)
+*> 
+*>  (24)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
+*>                                    computing U and V.
+*> 
+*>  (25)  | S1 - U' B VT' | / ( |S| n ulp )    DBDSVDX('V', 'I')
+*> 
+*>  (26)  | I - U' U | / ( min(M,N) ulp )
+*> 
+*>  (27)  | I - VT VT' | / ( min(M,N) ulp )
+*>
+*>  (28)  S1 contains min(M,N) nonnegative values in decreasing order.
+*>        (Return 0 if true, 1/ULP if false.)
+*> 
+*>  (29)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
+*>                                    computing U and V.
+*> 
+*>  (30)  | S1 - U' B VT' | / ( |S1| n ulp )   DBDSVDX('V', 'V')
+*> 
+*>  (31)  | I - U' U | / ( min(M,N) ulp )
+*> 
+*>  (32)  | I - VT VT' | / ( min(M,N) ulp )
+*>
+*>  (33)  S1 contains min(M,N) nonnegative values in decreasing order.
+*>        (Return 0 if true, 1/ULP if false.)
+*> 
+*>  (34)  | S1 - S2 | / ( |S1| ulp ), where S2 is computed without
+*>                                    computing U and V.
+*> 
 *> The possible matrix types are
 *>
 *> (1)  The zero matrix.
