@@ -140,9 +140,9 @@ lapack_int LAPACKE_zuncsd2by1_work( int matrix_layout, char jobu1, char jobu2,
             }
         }
         /* Transpose input matrices */
-        LAPACKE_Zge_trans( matrix_layout, nrows_x11, q, x11, ldx11, x11_t,
+        LAPACKE_zge_trans( matrix_layout, nrows_x11, q, x11, ldx11, x11_t,
                            ldx11_t );
-        LAPACKE_Zge_trans( matrix_layout, nrows_x21, q, x21, ldx21, x21_t,
+        LAPACKE_zge_trans( matrix_layout, nrows_x21, q, x21, ldx21, x21_t,
                            ldx21_t );
         /* Call LAPACK function and adjust info */
         LAPACK_zuncsd2by1( &jobu1, &jobu2, &jobv1t, &m, &p,
@@ -153,20 +153,20 @@ lapack_int LAPACKE_zuncsd2by1_work( int matrix_layout, char jobu1, char jobu2,
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_Zge_trans( LAPACK_COL_MAJOR, nrows_x11, q, x11_t, ldx11_t, x11,
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, nrows_x11, q, x11_t, ldx11_t, x11,
                            ldx11 );
-        LAPACKE_Zge_trans( LAPACK_COL_MAJOR, nrows_x21, q, x21_t, ldx21_t, x21,
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, nrows_x21, q, x21_t, ldx21_t, x21,
                            ldx21 );
         if( LAPACKE_lsame( jobu1, 'y' ) ) {
-            LAPACKE_Zge_trans( LAPACK_COL_MAJOR, nrows_u1, p, u1_t, ldu1_t, u1,
+            LAPACKE_zge_trans( LAPACK_COL_MAJOR, nrows_u1, p, u1_t, ldu1_t, u1,
                                ldu1 );
         }
         if( LAPACKE_lsame( jobu2, 'y' ) ) {
-            LAPACKE_Zge_trans( LAPACK_COL_MAJOR, nrows_u2, m-p, u2_t, ldu2_t,
+            LAPACKE_zge_trans( LAPACK_COL_MAJOR, nrows_u2, m-p, u2_t, ldu2_t,
                                u2, ldu2 );
         }
         if( LAPACKE_lsame( jobv1t, 'y' ) ) {
-            LAPACKE_Zge_trans( LAPACK_COL_MAJOR, nrows_v1t, q, v1t_t, ldv1t_t,
+            LAPACKE_zge_trans( LAPACK_COL_MAJOR, nrows_v1t, q, v1t_t, ldv1t_t,
                                v1t, ldv1t );
         }
         /* Release memory and exit */

@@ -72,7 +72,7 @@ lapack_int LAPACKE_zlascl( int matrix_layout, char type, lapack_int kl,
        // TYPE = 'B' - A is a symmetric band matrix with lower bandwidth KL
        //             and upper bandwidth KU and with the only the lower
        //             half stored.   
-       if( LAPACKE_zsb_nancheck( matrix_layout, 'L', n, kl, a, lda ) ) {
+       if( LAPACKE_zhb_nancheck( matrix_layout, 'L', n, kl, a, lda ) ) {
            return -9;
            }
          break;
@@ -80,7 +80,7 @@ lapack_int LAPACKE_zlascl( int matrix_layout, char type, lapack_int kl,
        // TYPE = 'Q' - A is a symmetric band matrix with lower bandwidth KL
        //             and upper bandwidth KU and with the only the upper
        //             half stored.   
-       if( LAPACKE_zsb_nancheck( matrix_layout, 'U', n, ku, a, lda ) ) {
+       if( LAPACKE_zhb_nancheck( matrix_layout, 'U', n, ku, a, lda ) ) {
            return -9;
            }
         break;
