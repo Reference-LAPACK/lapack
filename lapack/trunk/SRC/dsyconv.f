@@ -87,7 +87,7 @@
 *>
 *> \param[out] E
 *> \verbatim
-*>          E is DOUBLE PRECISION array, dimension (N-1)
+*>          E is DOUBLE PRECISION array, dimension (N)
 *>          E stores the supdiagonal/subdiagonal of the symmetric 1-by-1
 *>          or 2-by-2 block diagonal matrix D in LDLT.
 *> \endverbatim
