@@ -33,6 +33,8 @@
 *> CBD   CGESVD   compute SVD of an M-by-N matrix A
 *>       CGESDD   compute SVD of an M-by-N matrix A(by divide and
 *>                conquer)
+*>       CGESVDX  compute SVD of an M-by-N matrix A(by bisection
+*>                and inverse iteration)
 *> \endverbatim
 *
 *  Arguments:
@@ -85,7 +87,7 @@
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
-      INTEGER            I, IHI, ILO, INFO, J, NT, SDIM
+      INTEGER            I, IHI, ILO, INFO, J, NS, NT, SDIM
       REAL               ABNRM
 *     ..
 *     .. Local Arrays ..
@@ -94,15 +96,15 @@
       REAL               R1( NMAX ), R2( NMAX ), RW( LW ), S( NMAX )
       COMPLEX            A( NMAX, NMAX ), U( NMAX, NMAX ),
      $                   VL( NMAX, NMAX ), VR( NMAX, NMAX ),
-     $                   VT( NMAX, NMAX ), W( 4*NMAX ), X( NMAX )
+     $                   VT( NMAX, NMAX ), W( 10*NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEES, CGEESX, CGEEV, CGEEVX, CGESDD, CGESVD,
-     $                   CHKXER
+      EXTERNAL           CHKXER, CGEES, CGEESX, CGEEV, CGEEVX, CGESDD,
+     $                   CGESVD
 *     ..
 *     .. External Functions ..
-      LOGICAL            CSLECT, LSAMEN
-      EXTERNAL           CSLECT, LSAMEN
+      LOGICAL            LSAMEN, CSLECT
+      EXTERNAL           LSAMEN, CSLECT
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN_TRIM
@@ -361,6 +363,65 @@
      $                INFO )
          CALL CHKXER( 'CGESDD', INFOT, NOUT, LERR, OK )
          NT = NT - 2
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )
+         END IF
+*
+*        Test CGESVDX
+*
+         SRNAMT = 'CGESVDX'
+         INFOT = 1
+         CALL CGESVDX( 'X', 'N', 'A', 0, 0, A, 1, ZERO, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CGESVDX( 'N', 'X', 'A', 0, 0, A, 1, ZERO, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL CGESVDX( 'N', 'N', 'X', 0, 0, A, 1, ZERO, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL CGESVDX( 'N', 'N', 'A', -1, 0, A, 1, ZERO, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL CGESVDX( 'N', 'N', 'A', 0, -1, A, 1, ZERO, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL CGESVDX( 'N', 'N', 'A', 2, 1, A, 1, ZERO, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL CGESVDX( 'N', 'N', 'V', 2, 1, A, 2, -ONE, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL CGESVDX( 'N', 'N', 'V', 2, 1, A, 2, ONE, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL CGESVDX( 'N', 'N', 'I', 2, 2, A, 2, ZERO, ZERO, 
+     $                 0, 1, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL CGESVDX( 'V', 'N', 'I', 2, 2, A, 2, ZERO, ZERO, 
+     $                 1, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 15
+         CALL CGESVDX( 'V', 'N', 'A', 2, 2, A, 2, ZERO, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         INFOT = 16
+         CALL CGESVDX( 'N', 'V', 'A', 2, 2, A, 2, ZERO, ZERO, 
+     $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
+         CALL CHKXER( 'CGESVDX', INFOT, NOUT, LERR, OK )
+         NT = 12
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT

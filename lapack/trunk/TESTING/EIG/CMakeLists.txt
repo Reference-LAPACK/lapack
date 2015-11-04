@@ -47,7 +47,7 @@ set(SCIGTST  slafts.f slahd2.f slasum.f slatb9.f sstech.f sstect.f
    ssvdch.f ssvdct.f ssxt1.f)
 
 set(SEIGTST  schkee.f 
-   sbdt01.f sbdt02.f sbdt03.f 
+   sbdt01.f sbdt02.f sbdt03.f sbdt04.f sbdt05.f
    schkbb.f schkbd.f schkbk.f schkbl.f schkec.f 
    schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f 
    sckcsd.f sckglm.f sckgqr.f sckgsv.f scklse.f scsdts.f
@@ -64,7 +64,7 @@ set(SEIGTST  schkee.f
    sstt22.f ssyt21.f ssyt22.f)
 
 set(CEIGTST  cchkee.f 
-   cbdt01.f cbdt02.f cbdt03.f 
+   cbdt01.f cbdt02.f cbdt03.f cbdt05.f
    cchkbb.f cchkbd.f cchkbk.f cchkbl.f cchkec.f 
    cchkgg.f cchkgk.f cchkgl.f cchkhb.f cchkhs.f cchkst.f 
    cckcsd.f cckglm.f cckgqr.f cckgsv.f ccklse.f ccsdts.f
@@ -84,7 +84,7 @@ set(DZIGTST  dlafts.f dlahd2.f dlasum.f dlatb9.f dstech.f dstect.f
    dsvdch.f dsvdct.f dsxt1.f)
 
 set(DEIGTST  dchkee.f 
-   dbdt01.f dbdt02.f dbdt03.f 
+   dbdt01.f dbdt02.f dbdt03.f dbdt04.f dbdt05.f 
    dchkbb.f dchkbd.f dchkbk.f dchkbl.f dchkec.f 
    dchkgg.f dchkgk.f dchkgl.f dchkhs.f dchksb.f dchkst.f 
    dckcsd.f dckglm.f dckgqr.f dckgsv.f dcklse.f dcsdts.f
@@ -101,7 +101,7 @@ set(DEIGTST  dchkee.f
    dstt22.f dsyt21.f dsyt22.f)
 
 set(ZEIGTST  zchkee.f 
-   zbdt01.f zbdt02.f zbdt03.f 
+   zbdt01.f zbdt02.f zbdt03.f zbdt05.f 
    zchkbb.f zchkbd.f zchkbk.f zchkbl.f zchkec.f 
    zchkgg.f zchkgk.f zchkgl.f zchkhb.f zchkhs.f zchkst.f 
    zckcsd.f zckglm.f zckgqr.f zckgsv.f zcklse.f zcsdts.f
