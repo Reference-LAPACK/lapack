@@ -102,7 +102,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE
+      INTRINSIC          REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -114,7 +114,7 @@
 *
       DO 20 J = 1, NMAX
          DO 10 I = 1, NMAX
-            A( I, J ) = 1.D0 / DBLE( I+J )
+            A( I, J ) = 1.D0 / REAL( I+J )
    10    CONTINUE
    20 CONTINUE
       OK = .TRUE.
