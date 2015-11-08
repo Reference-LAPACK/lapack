@@ -180,7 +180,8 @@ CLASRC = \
    cgehd2.o cgehrd.o cgelq2.o cgelqf.o \
    cgels.o  cgelsd.o cgelss.o cgelsy.o cgeql2.o cgeqlf.o cgeqp3.o \
    cgeqr2.o cgeqr2p.o cgeqrf.o cgeqrfp.o cgerfs.o \
-   cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  cgesvdx.o\
+   cgerq2.o cgerqf.o cgesc2.o cgesdd.o cgesv.o  cgesvd.o  cgesvdx.o \
+   cgesvj.o cgsvj0.o cgsvj1.o \
    cgesvx.o cgetc2.o cgetf2.o cgetri.o \
    cggbak.o cggbal.o cgges.o  cgges3.o cggesx.o \
    cggev.o  cggev3.o cggevx.o cggglm.o\
@@ -342,7 +343,9 @@ ZLASRC = \
    zgehd2.o zgehrd.o zgelq2.o zgelqf.o \
    zgels.o  zgelsd.o zgelss.o zgelsy.o zgeql2.o zgeqlf.o zgeqp3.o \
    zgeqr2.o zgeqr2p.o zgeqrf.o zgeqrfp.o zgerfs.o zgerq2.o zgerqf.o \
-   zgesc2.o zgesdd.o zgesv.o  zgesvd.o zgesvdx.o zgesvx.o zgetc2.o zgetf2.o zgetrf.o \
+   zgesc2.o zgesdd.o zgesv.o  zgesvd.o zgesvdx.o \
+   zgesvj.o zgsvj0.o zgsvj1.o \
+   zgesvx.o zgetc2.o zgetf2.o zgetrf.o \
    zgetri.o zgetrs.o \
    zggbak.o zggbal.o zgges.o  zgges3.o zggesx.o  \
    zggev.o  zggev3.o zggevx.o zggglm.o \
