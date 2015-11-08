@@ -170,7 +170,9 @@ set(CLASRC
    cgehd2.f cgehrd.f cgelq2.f cgelqf.f 
    cgels.f  cgelsd.f cgelss.f cgelsy.f cgeql2.f cgeqlf.f cgeqp3.f 
    cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f 
-   cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvdx.f cgesvx.f cgetc2.f cgetf2.f cgetrf.f 
+   cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvdx.f
+   cgesvj.f cgsvj0.f cgsvj1.f
+   cgesvx.f cgetc2.f cgetf2.f cgetrf.f 
    cgetri.f cgetrs.f 
    cggbak.f cggbal.f
    cgges.f  cgges3.f cggesx.f cggev.f  cggev3.f cggevx.f
@@ -327,7 +329,9 @@ set(ZLASRC
    zgehd2.f zgehrd.f zgelq2.f zgelqf.f 
    zgels.f  zgelsd.f zgelss.f zgelsy.f zgeql2.f zgeqlf.f zgeqp3.f 
    zgeqr2.f zgeqr2p.f zgeqrf.f zgeqrfp.f zgerfs.f zgerq2.f zgerqf.f 
-   zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvdx.f zgesvx.f zgetc2.f zgetf2.f zgetrf.f 
+   zgesc2.f zgesdd.f zgesv.f  zgesvd.f zgesvdx.f zgesvx.f
+   zgesvj.f zgsvj0.f zgsvj1.f
+   zgetc2.f zgetf2.f zgetrf.f 
    zgetri.f zgetrs.f 
    zggbak.f zggbal.f
    zgges.f  zgges3.f zggesx.f zggev.f  zggev3.f zggevx.f
