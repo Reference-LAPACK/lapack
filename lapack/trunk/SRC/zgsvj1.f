@@ -241,6 +241,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2015
 *
+      IMPLICIT NONE 
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   EPS, SFMIN, TOL
       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, N1, NSWEEP
@@ -255,7 +256,7 @@
 *
 *     .. Local Parameters ..
       DOUBLE PRECISION   ZERO, HALF, ONE
-      PARAMETER          ( ZERO = 0.0E0, HALF = 0.5E0, ONE = 1.0E0)
+      PARAMETER          ( ZERO = 0.0D0, HALF = 0.5D0, ONE = 1.0D0)
 *     ..
 *     .. Local Scalars ..
       COMPLEX*16         AAPQ, OMPQ
@@ -268,22 +269,20 @@
      $                   p, PSKIPPED, q, ROWSKIP, SWBAND
       LOGICAL            APPLV, ROTOK, RSVEC
 *     ..
-*     .. Local Arrays ..
-      DOUBLE PRECISION   FASTR( 5 )
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, AMAX1, DBLE, MIN0, SIGN, SQRT
+      INTRINSIC          ABS, DCONJG, DMAX1, DFLOAT, MIN0, DSIGN, DSQRT
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DZNRM2
       COMPLEX*16         ZDOTC
-      INTEGER            IZAMAX
+      INTEGER            IDAMAX
       LOGICAL            LSAME
-      EXTERNAL           IZAMAX, LSAME, ZDOTC, DZNRM2
+      EXTERNAL           IDAMAX, LSAME, ZDOTC, DZNRM2
 *     ..
 *     .. External Subroutines ..
 *     .. from BLAS      
-      EXTERNAL           ZCOPY, ZDROT, ZDSCAL, ZSWAP
+      EXTERNAL           ZCOPY, ZROT, ZSWAP
 *     .. from LAPACK
       EXTERNAL           ZLASCL, ZLASSQ, XERBLA
 *     ..
@@ -331,14 +330,14 @@
       END IF
       RSVEC = RSVEC .OR. APPLV
 
-      ROOTEPS = SQRT( EPS )
-      ROOTSFMIN = SQRT( SFMIN )
+      ROOTEPS = DSQRT( EPS )
+      ROOTSFMIN = DSQRT( SFMIN )
       SMALL = SFMIN / EPS
       BIG = ONE / SFMIN
       ROOTBIG = ONE / ROOTSFMIN
-      LARGE = BIG / SQRT( DBLE( M*N ) )
+      LARGE = BIG / DSQRT( DFLOAT( M*N ) )
       BIGTHETA = ONE / ROOTEPS
-      ROOTTOL = SQRT( TOL )
+      ROOTTOL = DSQRT( TOL )
 *
 *     .. Initialize the right singular vector matrix ..
 *
@@ -346,7 +345,6 @@
 *
       EMPTSW = N1*( N-N1 )
       NOTROT = 0
-      FASTR( 1 ) = ZERO
 *
 *     .. Row-cyclic pivot strategy with de Rijk's pivoting ..
 *
@@ -469,7 +467,7 @@
                            OMPQ = AAPQ / ABS(AAPQ) 
 *                           AAPQ = AAPQ * DCONJG(CWORK(p))*CWORK(q)   
                            AAPQ1  = -ABS(AAPQ)
-                           MXAAPQ = AMAX1( MXAAPQ, -AAPQ1 )
+                           MXAAPQ = DMAX1( MXAAPQ, -AAPQ1 )
 *
 *        TO rotate or NOT to rotate, THAT is the question ...
 *
@@ -489,37 +487,37 @@
                                  IF( ABS( THETA ).GT.BIGTHETA ) THEN
                                     T  = HALF / THETA
                                     CS = ONE 
-                                    CALL CROT( M, A(1,p), 1, A(1,q), 1,
+                                    CALL ZROT( M, A(1,p), 1, A(1,q), 1,
      $                                          CS, DCONJG(OMPQ)*T )
                                     IF( RSVEC ) THEN
-                                        CALL CROT( MVL, V(1,p), 1, 
+                                        CALL ZROT( MVL, V(1,p), 1, 
      $                                  V(1,q), 1, CS, DCONJG(OMPQ)*T )
                                     END IF
-                                    SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
+                                    SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      $                                         ONE+T*APOAQ*AAPQ1 ) )
-                                    AAPP = AAPP*SQRT( AMAX1( ZERO,
+                                    AAPP = AAPP*DSQRT( DMAX1( ZERO,
      $                                     ONE-T*AQOAP*AAPQ1 ) )
-                                    MXSINJ = AMAX1( MXSINJ, ABS( T ) )
+                                    MXSINJ = DMAX1( MXSINJ, ABS( T ) )
                                  ELSE
 *
 *                 .. choose correct signum for THETA and rotate
 *
-                                    THSIGN = -SIGN( ONE, AAPQ1 )
+                                    THSIGN = -DSIGN( ONE, AAPQ1 )
                                     IF( AAQQ.GT.AAPP0 )THSIGN = -THSIGN
                                     T = ONE / ( THETA+THSIGN*
-     $                                  SQRT( ONE+THETA*THETA ) )
-                                    CS = SQRT( ONE / ( ONE+T*T ) )
+     $                                  DSQRT( ONE+THETA*THETA ) )
+                                    CS = DSQRT( ONE / ( ONE+T*T ) )
                                     SN = T*CS
-                                    MXSINJ = AMAX1( MXSINJ, ABS( SN ) )
-                                    SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
+                                    MXSINJ = DMAX1( MXSINJ, ABS( SN ) )
+                                    SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      $                                         ONE+T*APOAQ*AAPQ1 ) )
-                                    AAPP = AAPP*SQRT( AMAX1( ZERO,  
+                                    AAPP = AAPP*DSQRT( DMAX1( ZERO,  
      $                                         ONE-T*AQOAP*AAPQ1 ) )
 *
-                                    CALL CROT( M, A(1,p), 1, A(1,q), 1,
+                                    CALL ZROT( M, A(1,p), 1, A(1,q), 1,
      $                                          CS, DCONJG(OMPQ)*SN ) 
                                     IF( RSVEC ) THEN
-                                        CALL CROT( MVL, V(1,p), 1, 
+                                        CALL ZROT( MVL, V(1,p), 1, 
      $                                  V(1,q), 1, CS, DCONJG(OMPQ)*SN )
                                     END IF
                                  END IF
@@ -536,14 +534,14 @@
                                     CALL ZLASCL( 'G', 0, 0, AAQQ, ONE,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
-                                    CALL CAXPY( M, -AAPQ, WORK,
+                                    CALL ZAXPY( M, -AAPQ, WORK,
      $                                          1, A( 1, q ), 1 )
                                     CALL ZLASCL( 'G', 0, 0, ONE, AAQQ,
      $                                           M, 1, A( 1, q ), LDA,
      $                                           IERR )
-                                    SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
+                                    SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      $                                         ONE-AAPQ1*AAPQ1 ) )
-                                    MXSINJ = AMAX1( MXSINJ, SFMIN )
+                                    MXSINJ = DMAX1( MXSINJ, SFMIN )
                                ELSE
                                    CALL ZCOPY( M, A( 1, q ), 1,
      $                                          WORK, 1 )
@@ -553,14 +551,14 @@
                                     CALL ZLASCL( 'G', 0, 0, AAPP, ONE,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
-                                    CALL CAXPY( M, -DCONJG(AAPQ), 
+                                    CALL ZAXPY( M, -DCONJG(AAPQ), 
      $                                   WORK, 1, A( 1, p ), 1 )
                                     CALL ZLASCL( 'G', 0, 0, ONE, AAPP,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
-                                    SVA( p ) = AAPP*SQRT( AMAX1( ZERO,
+                                    SVA( p ) = AAPP*DSQRT( DMAX1( ZERO,
      $                                         ONE-AAPQ1*AAPQ1 ) )
-                                    MXSINJ = AMAX1( MXSINJ, SFMIN )
+                                    MXSINJ = DMAX1( MXSINJ, SFMIN )
                                END IF
                               END IF
 *           END IF ROTOK THEN ... ELSE
@@ -577,7 +575,7 @@
                                     AAQQ = ONE
                                     CALL ZLASSQ( M, A( 1, q ), 1, T,
      $                                           AAQQ )
-                                    SVA( q ) = T*SQRT( AAQQ )
+                                    SVA( q ) = T*DSQRT( AAQQ )
                                  END IF
                               END IF
                               IF( ( AAPP / AAPP0 )**2.LE.ROOTEPS ) THEN
@@ -589,7 +587,7 @@
                                     AAPP = ONE
                                     CALL ZLASSQ( M, A( 1, p ), 1, T,
      $                                           AAPP )
-                                    AAPP = T*SQRT( AAPP )
+                                    AAPP = T*DSQRT( AAPP )
                                  END IF
                                  SVA( p ) = AAPP
                               END IF
@@ -654,7 +652,7 @@
             T = ZERO
             AAPP = ONE
             CALL ZLASSQ( M, A( 1, N ), 1, T, AAPP )
-            SVA( N ) = T*SQRT( AAPP )
+            SVA( N ) = T*DSQRT( AAPP )
          END IF
 *
 *     Additional steering devices
@@ -662,8 +660,8 @@
          IF( ( i.LT.SWBAND ) .AND. ( ( MXAAPQ.LE.ROOTTOL ) .OR.
      $       ( ISWROT.LE.N ) ) )SWBAND = i
 *
-         IF( ( i.GT.SWBAND+1 ) .AND. ( MXAAPQ.LT.SQRT( DBLE( N ) )*
-     $       TOL ) .AND. ( DBLE( N )*MXAAPQ*MXSINJ.LT.TOL ) ) THEN
+         IF( ( i.GT.SWBAND+1 ) .AND. ( MXAAPQ.LT.DSQRT( DFLOAT( N ) )*
+     $       TOL ) .AND. ( DFLOAT( N )*MXAAPQ*MXSINJ.LT.TOL ) ) THEN
             GO TO 1994
          END IF
 *
@@ -686,7 +684,7 @@
 *
 *     Sort the vector SVA() of column norms.
       DO 5991 p = 1, N - 1
-         q = IZAMAX( N-p+1, SVA( p ), 1 ) + p - 1
+         q = IDAMAX( N-p+1, SVA( p ), 1 ) + p - 1
          IF( p.NE.q ) THEN
             TEMP1 = SVA( p )
             SVA( p ) = SVA( q )

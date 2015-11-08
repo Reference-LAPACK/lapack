@@ -255,7 +255,7 @@
 *     ..
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC ABS, AMAX1, CONJG, FLOAT, MIN0, MAX0, SIGN, SQRT
+      INTRINSIC ABS, AMAX1, CONJG, FLOAT, MIN0, SIGN, SQRT
 *     ..
 *     .. External Functions ..
       REAL               SCNRM2
@@ -268,7 +268,7 @@
 *     .. External Subroutines ..
 *     ..
 *     from BLAS
-      EXTERNAL           CCOPY, CSROT, CSSCAL, CSWAP
+      EXTERNAL           CCOPY, CROT, CSSCAL, CSWAP
 *     from LAPACK
       EXTERNAL           CLASCL, CLASSQ, XERBLA
 *     ..

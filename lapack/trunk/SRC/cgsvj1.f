@@ -268,11 +268,9 @@
      $                   p, PSKIPPED, q, ROWSKIP, SWBAND
       LOGICAL            APPLV, ROTOK, RSVEC
 *     ..
-*     .. Local Arrays ..
-      REAL               FASTR( 5 )
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, AMAX1, FLOAT, MIN0, SIGN, SQRT
+      INTRINSIC          ABS, AMAX1, CONJG, FLOAT, MIN0, SIGN, SQRT
 *     ..
 *     .. External Functions ..
       REAL               SCNRM2
@@ -283,7 +281,7 @@
 *     ..
 *     .. External Subroutines ..
 *     .. from BLAS      
-      EXTERNAL           CCOPY, CSROT, CSSCAL, CSWAP
+      EXTERNAL           CCOPY, CROT, CSSCAL, CSWAP
 *     .. from LAPACK
       EXTERNAL           CLASCL, CLASSQ, XERBLA
 *     ..
@@ -346,7 +344,6 @@
 *
       EMPTSW = N1*( N-N1 )
       NOTROT = 0
-      FASTR( 1 ) = ZERO
 *
 *     .. Row-cyclic pivot strategy with de Rijk's pivoting ..
 *
