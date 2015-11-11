@@ -1,4 +1,4 @@
-*> \brief \b CHPGST
+*> \brief \b CHPGVD
 *
 *  =========== DOCUMENTATION ===========
 *

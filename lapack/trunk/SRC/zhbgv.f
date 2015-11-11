@@ -1,4 +1,4 @@
-*> \brief \b ZHBGST
+*> \brief \b ZHBGV
 *
 *  =========== DOCUMENTATION ===========
 *
