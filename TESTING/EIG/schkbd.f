@@ -1180,6 +1180,14 @@
 *           Use SBDSVDX to compute only the singular values of the
 *           bidiagonal matrix B;  U and VT should not be modified.
 *
+            IF( JTYPE.EQ.9 ) THEN
+*              =================================
+*              Matrix types temporarily disabled
+*              =================================
+               RESULT( 24 ) = ZERO
+               GO TO 270
+            END IF
+*
             CALL SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
             IF( MNMIN.GT.0 )
      $         CALL SCOPY( MNMIN-1, BE, 1, WORK( IWBE ), 1 ) 
