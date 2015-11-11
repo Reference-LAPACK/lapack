@@ -34,15 +34,13 @@
 *>
 *> \verbatim
 *>
+*> This routine is deprecated and has been replaced by routine ZLAHR2.
+*>
 *> ZLAHRD reduces the first NB columns of a complex general n-by-(n-k+1)
 *> matrix A so that elements below the k-th subdiagonal are zero. The
 *> reduction is performed by a unitary similarity transformation
 *> Q**H * A * Q. The routine returns the matrices V and T which determine
 *> Q as a block reflector I - V*T*V**H, and also the matrix Y = A * V * T.
-*>
-*> This is an OBSOLETE auxiliary routine. 
-*> This routine will be 'deprecated' in a  future release.
-*> Please use the new routine ZLAHR2 instead.
 *> \endverbatim
 *
 *  Arguments:

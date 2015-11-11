@@ -1,4 +1,4 @@
-*> \brief \b CHEGST
+*> \brief \b CHEGV
 *
 *  =========== DOCUMENTATION ===========
 *

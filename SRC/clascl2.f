@@ -54,7 +54,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>     The number of columns of D and X. N >= 0.
+*>     The number of columns of X. N >= 0.
 *> \endverbatim
 *>
 *> \param[in] D

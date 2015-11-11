@@ -1,4 +1,4 @@
-*> \brief \b DSPGST
+*> \brief \b DSPGV
 *
 *  =========== DOCUMENTATION ===========
 *

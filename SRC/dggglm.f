@@ -1,4 +1,4 @@
-*> \brief <b> DGGEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors for GE matrices</b>
+*> \brief \b DGGGLM
 *
 *  =========== DOCUMENTATION ===========
 *
