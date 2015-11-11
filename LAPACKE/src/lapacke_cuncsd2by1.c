@@ -82,7 +82,7 @@ lapack_int LAPACKE_cuncsd2by1( int matrix_layout, char jobu1, char jobu2,
         goto exit_level_2;
     }
     lrwork = (lapack_int)rwork_query;
-    lwork = (lapack_int)work_query;
+    lwork = LAPACK_C2INT( work_query );
     /* Allocate memory for work arrays */
     rwork = (float*)LAPACKE_malloc( sizeof(float) * lrwork );
     if( rwork == NULL ) {
