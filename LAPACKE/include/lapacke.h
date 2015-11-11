@@ -7366,6 +7366,21 @@ lapack_int LAPACKE_zlapmr_work( int matrix_layout, lapack_logical forwrd,
                                 lapack_complex_double* x, lapack_int ldx,
                                 lapack_int* k );
 
+lapack_int LAPACKE_slapmt_work( int matrix_layout, lapack_logical forwrd,
+                                lapack_int m, lapack_int n, float* x,
+                                lapack_int ldx, lapack_int* k );
+lapack_int LAPACKE_dlapmt_work( int matrix_layout, lapack_logical forwrd,
+                                lapack_int m, lapack_int n, double* x,
+                                lapack_int ldx, lapack_int* k );
+lapack_int LAPACKE_clapmt_work( int matrix_layout, lapack_logical forwrd,
+                                lapack_int m, lapack_int n,
+                                lapack_complex_float* x, lapack_int ldx,
+                                lapack_int* k );
+lapack_int LAPACKE_zlapmt_work( int matrix_layout, lapack_logical forwrd,
+                                lapack_int m, lapack_int n,
+                                lapack_complex_double* x, lapack_int ldx,
+                                lapack_int* k );
+
 lapack_int LAPACKE_slartgp_work( float f, float g, float* cs, float* sn,
                                  float* r );
 lapack_int LAPACKE_dlartgp_work( double f, double g, double* cs, double* sn,
@@ -10235,6 +10250,18 @@ lapack_int LAPACKE_zlapmr( int matrix_layout, lapack_logical forwrd,
                            lapack_int m, lapack_int n, lapack_complex_double* x,
                            lapack_int ldx, lapack_int* k );
 
+lapack_int LAPACKE_slapmt( int matrix_layout, lapack_logical forwrd,
+                           lapack_int m, lapack_int n, float* x, lapack_int ldx,
+                           lapack_int* k );
+lapack_int LAPACKE_dlapmt( int matrix_layout, lapack_logical forwrd,
+                           lapack_int m, lapack_int n, double* x,
+                           lapack_int ldx, lapack_int* k );
+lapack_int LAPACKE_clapmt( int matrix_layout, lapack_logical forwrd,
+                           lapack_int m, lapack_int n, lapack_complex_float* x,
+                           lapack_int ldx, lapack_int* k );
+lapack_int LAPACKE_zlapmt( int matrix_layout, lapack_logical forwrd,
+                           lapack_int m, lapack_int n, lapack_complex_double* x,
+                           lapack_int ldx, lapack_int* k );
 
 float LAPACKE_slapy2( float x, float y );
 double LAPACKE_dlapy2( double x, double y );
@@ -12211,6 +12238,10 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_dlapmr LAPACK_GLOBAL(dlapmr,DLAPMR)
 #define LAPACK_clapmr LAPACK_GLOBAL(clapmr,CLAPMR)
 #define LAPACK_zlapmr LAPACK_GLOBAL(zlapmr,ZLAPMR)
+#define LAPACK_slapmt LAPACK_GLOBAL(slapmt,SLAPMT)
+#define LAPACK_dlapmt LAPACK_GLOBAL(dlapmt,DLAPMT)
+#define LAPACK_clapmt LAPACK_GLOBAL(clapmt,CLAPMT)
+#define LAPACK_zlapmt LAPACK_GLOBAL(zlapmt,ZLAPMT)
 #define LAPACK_slapy2 LAPACK_GLOBAL(slapy2,SLAPY2)
 #define LAPACK_dlapy2 LAPACK_GLOBAL(dlapy2,DLAPY2)
 #define LAPACK_slapy3 LAPACK_GLOBAL(slapy3,SLAPY3)
@@ -16736,6 +16767,14 @@ void LAPACK_dlapmr( lapack_logical* forwrd, lapack_int* m, lapack_int* n,
 void LAPACK_clapmr( lapack_logical* forwrd, lapack_int* m, lapack_int* n,
                     lapack_complex_float* x, lapack_int* ldx, lapack_int* k );
 void LAPACK_zlapmr( lapack_logical* forwrd, lapack_int* m, lapack_int* n,
+                    lapack_complex_double* x, lapack_int* ldx, lapack_int* k );
+void LAPACK_slapmt( lapack_logical* forwrd, lapack_int* m, lapack_int* n,
+                    float* x, lapack_int* ldx, lapack_int* k );
+void LAPACK_dlapmt( lapack_logical* forwrd, lapack_int* m, lapack_int* n,
+                    double* x, lapack_int* ldx, lapack_int* k );
+void LAPACK_clapmt( lapack_logical* forwrd, lapack_int* m, lapack_int* n,
+                    lapack_complex_float* x, lapack_int* ldx, lapack_int* k );
+void LAPACK_zlapmt( lapack_logical* forwrd, lapack_int* m, lapack_int* n,
                     lapack_complex_double* x, lapack_int* ldx, lapack_int* k );
 float LAPACK_slapy2( float* x, float* y );
 double LAPACK_dlapy2( double* x, double* y );
