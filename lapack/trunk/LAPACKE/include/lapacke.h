@@ -11196,7 +11196,7 @@ lapack_int LAPACKE_csytrf_rook_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_int* ipiv, lapack_complex_float* work,
                                 lapack_int lwork );
-lapack_int LAPACKE_zsytrf_roook_work( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_zsytrf_rook_work( int matrix_layout, char uplo, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_int* ipiv, lapack_complex_double* work,
                                 lapack_int lwork );
