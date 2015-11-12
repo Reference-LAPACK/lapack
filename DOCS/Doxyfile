@@ -1,4 +1,4 @@
-# Doxyfile 1.8.9.1
+# Doxyfile 1.8.10
 
 # This file describes the settings to be used by the documentation system
 # doxygen (www.doxygen.org) for a project.
@@ -343,6 +343,13 @@ IDL_PROPERTY_SUPPORT   = YES
 
 DISTRIBUTE_GROUP_DOC   = YES
 
+# If one adds a struct or class to a group and this option is enabled, then also
+# any nested class or struct is added to the same group. By default this option
+# is disabled and one has to add nested compounds explicitly via \ingroup.
+# The default value is: NO.
+
+GROUP_NESTED_COMPOUNDS = NO
+
 # Set the SUBGROUPING tag to YES to allow class member groups of the same type
 # (for instance a group of public functions) to be put as a subgroup of that
 # type (e.g. under the Public Functions section). Set it to NO to prevent
@@ -409,7 +416,7 @@ LOOKUP_CACHE_SIZE      = 0
 # normally produced when WARNINGS is set to YES.
 # The default value is: NO.
 
-EXTRACT_ALL            = NO
+EXTRACT_ALL            = YES
 
 # If the EXTRACT_PRIVATE tag is set to YES, all private members of a class will
 # be included in the documentation.
@@ -698,7 +705,7 @@ CITE_BIB_FILES         =
 # messages are off.
 # The default value is: NO.
 
-QUIET                  = NO
+QUIET                  = YES
 
 # The WARNINGS tag can be used to turn on/off the warning messages that are
 # generated to standard error (stderr) by doxygen. If WARNINGS is set to YES
@@ -758,8 +765,8 @@ WARN_LOGFILE           = output_err
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = DOCS/groups-usr.dox \
-                         .
+INPUT                  = . \
+                         DOCS/groups-usr.dox
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -772,14 +779,21 @@ INPUT_ENCODING         = UTF-8
 
 # If the value of the INPUT tag contains directories, you can use the
 # FILE_PATTERNS tag to specify one or more wildcard patterns (like *.cpp and
-# *.h) to filter out the source-files in the directories. If left blank the
-# following patterns are tested:*.c, *.cc, *.cxx, *.cpp, *.c++, *.java, *.ii,
-# *.ixx, *.ipp, *.i++, *.inl, *.idl, *.ddl, *.odl, *.h, *.hh, *.hxx, *.hpp,
-# *.h++, *.cs, *.d, *.php, *.php4, *.php5, *.phtml, *.inc, *.m, *.markdown,
-# *.md, *.mm, *.dox, *.py, *.f90, *.f, *.for, *.tcl, *.vhd, *.vhdl, *.ucf,
-# *.qsf, *.as and *.js.
+# *.h) to filter out the source-files in the directories.
+#
+# Note that for custom extensions or not directly supported extensions you also
+# need to set EXTENSION_MAPPING for the extension otherwise the files are not
+# read by doxygen.
+#
+# If left blank the following patterns are tested:*.c, *.cc, *.cxx, *.cpp,
+# *.c++, *.java, *.ii, *.ixx, *.ipp, *.i++, *.inl, *.idl, *.ddl, *.odl, *.h,
+# *.hh, *.hxx, *.hpp, *.h++, *.cs, *.d, *.php, *.php4, *.php5, *.phtml, *.inc,
+# *.m, *.markdown, *.md, *.mm, *.dox, *.py, *.f90, *.f, *.for, *.tcl, *.vhd,
+# *.vhdl, *.ucf, *.qsf, *.as and *.js.
 
-FILE_PATTERNS          = *.f *.c *.h
+FILE_PATTERNS          = *.c \
+                         *.f \
+                         *.h
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
@@ -816,10 +830,7 @@ EXCLUDE                = CMAKE \
                          TESTING/.svn \
                          TESTING/EIG/.svn \
                          TESTING/MATGEN/.svn \
-                         TESTING/LIN/.svn \
-                         TIMING \
-                         TIMING-PLASMA \
-                         ED-MODIF
+                         TESTING/LIN/.svn
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -1012,6 +1023,25 @@ USE_HTAGS              = NO
 
 VERBATIM_HEADERS       = YES
 
+# If the CLANG_ASSISTED_PARSING tag is set to YES then doxygen will use the
+# clang parser (see: http://clang.llvm.org/) for more accurate parsing at the
+# cost of reduced performance. This can be particularly helpful with template
+# rich C++ code for which doxygen's built-in parser lacks the necessary type
+# information.
+# Note: The availability of this option depends on whether or not doxygen was
+# compiled with the --with-libclang option.
+# The default value is: NO.
+
+CLANG_ASSISTED_PARSING = NO
+
+# If clang assisted parsing is enabled you can provide the compiler with command
+# line options that you would normally use when invoking the compiler. Note that
+# the include paths will already be set by doxygen for the files and directories
+# specified with INPUT and INCLUDE_PATH.
+# This tag requires that the tag CLANG_ASSISTED_PARSING is set to YES.
+
+CLANG_OPTIONS          = 
+
 #---------------------------------------------------------------------------
 # Configuration options related to the alphabetical class index
 #---------------------------------------------------------------------------
@@ -1159,8 +1189,9 @@ HTML_COLORSTYLE_GAMMA  = 80
 
 # If the HTML_TIMESTAMP tag is set to YES then the footer of each generated HTML
 # page will contain the date and time when the page was generated. Setting this
-# to NO can help when comparing the output of multiple runs.
-# The default value is: YES.
+# to YES can help to show when doxygen was last run and thus if the
+# documentation is up to date.
+# The default value is: NO.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
 HTML_TIMESTAMP         = YES
@@ -1634,9 +1665,12 @@ COMPACT_LATEX          = NO
 PAPER_TYPE             = a4
 
 # The EXTRA_PACKAGES tag can be used to specify one or more LaTeX package names
-# that should be included in the LaTeX output. To get the times font for
-# instance you can specify
-# EXTRA_PACKAGES=times
+# that should be included in the LaTeX output. The package can be specified just
+# by its name or with the correct syntax as to be used with the LaTeX
+# \usepackage command. To get the times font for instance you can specify :
+# EXTRA_PACKAGES=times or EXTRA_PACKAGES={times}
+# To use the option intlimits with the amsmath package you can specify:
+# EXTRA_PACKAGES=[intlimits]{amsmath}
 # If left blank no extra packages will be included.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
@@ -2145,7 +2179,7 @@ DOT_NUM_THREADS        = 0
 # The default value is: Helvetica.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-DOT_FONTNAME           =
+DOT_FONTNAME           = Helvetica
 
 # The DOT_FONTSIZE tag can be used to set the size (in points) of the font of
 # dot graphs.
@@ -2167,7 +2201,7 @@ DOT_FONTPATH           =
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-CLASS_GRAPH            = NO
+CLASS_GRAPH            = YES
 
 # If the COLLABORATION_GRAPH tag is set to YES then doxygen will generate a
 # graph for each documented class showing the direct and indirect implementation
@@ -2176,7 +2210,7 @@ CLASS_GRAPH            = NO
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-COLLABORATION_GRAPH    = NO
+COLLABORATION_GRAPH    = YES
 
 # If the GROUP_GRAPHS tag is set to YES then doxygen will generate a graph for
 # groups, showing the direct groups dependencies.
@@ -2237,7 +2271,8 @@ INCLUDED_BY_GRAPH      = YES
 #
 # Note that enabling this option will significantly increase the time of a run.
 # So in most cases it will be better to enable call graphs for selected
-# functions only using the \callgraph command.
+# functions only using the \callgraph command. Disabling a call graph can be
+# accomplished by means of the command \hidecallgraph.
 # The default value is: NO.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
@@ -2248,7 +2283,8 @@ CALL_GRAPH             = YES
 #
 # Note that enabling this option will significantly increase the time of a run.
 # So in most cases it will be better to enable caller graphs for selected
-# functions only using the \callergraph command.
+# functions only using the \callergraph command. Disabling a caller graph can be
+# accomplished by means of the command \hidecallergraph.
 # The default value is: NO.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
@@ -2271,11 +2307,15 @@ GRAPHICAL_HIERARCHY    = YES
 DIRECTORY_GRAPH        = YES
 
 # The DOT_IMAGE_FORMAT tag can be used to set the image format of the images
-# generated by dot.
+# generated by dot. For an explanation of the image formats see the section
+# output formats in the documentation of the dot tool (Graphviz (see:
+# http://www.graphviz.org/)).
 # Note: If you choose svg you need to set HTML_FILE_EXTENSION to xhtml in order
 # to make the SVG files visible in IE 9+ (other browsers do not have this
 # requirement).
-# Possible values are: png, jpg, gif and svg.
+# Possible values are: png, jpg, gif, svg, png:gd, png:gd:gd, png:cairo,
+# png:cairo:gd, png:cairo:cairo, png:cairo:gdiplus, png:gdiplus and
+# png:gdiplus:gdiplus.
 # The default value is: png.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
