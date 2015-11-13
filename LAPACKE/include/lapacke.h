@@ -670,6 +670,16 @@ lapack_int LAPACKE_dgejsv( int matrix_layout, char joba, char jobu, char jobv,
                            lapack_int n, double* a, lapack_int lda, double* sva,
                            double* u, lapack_int ldu, double* v, lapack_int ldv,
                            double* stat, lapack_int* istat );
+lapack_int LAPACKE_cgejsv( int matrix_layout, char joba, char jobu, char jobv,
+                           char jobr, char jobt, char jobp, lapack_int m,
+                           lapack_int n, lapack_complex_float* a, lapack_int lda, float* sva,
+                           lapack_complex_float* u, lapack_int ldu, lapack_complex_float* v, lapack_int ldv,
+                           float* stat, lapack_int* istat );
+lapack_int LAPACKE_zgejsv( int matrix_layout, char joba, char jobu, char jobv,
+                           char jobr, char jobt, char jobp, lapack_int m,
+                           lapack_int n, lapack_complex_double* a, lapack_int lda, double* sva,
+                           lapack_complex_double* u, lapack_int ldu, lapack_complex_double* v, lapack_int ldv,
+                           double* stat, lapack_int* istat );
 
 lapack_int LAPACKE_sgelq2( int matrix_layout, lapack_int m, lapack_int n,
                            float* a, lapack_int lda, float* tau );
@@ -984,6 +994,14 @@ lapack_int LAPACKE_dgesvj( int matrix_layout, char joba, char jobu, char jobv,
                            lapack_int m, lapack_int n, double* a,
                            lapack_int lda, double* sva, lapack_int mv,
                            double* v, lapack_int ldv, double* stat );
+lapack_int LAPACKE_cgesvj( int matrix_layout, char joba, char jobu, char jobv,
+                           lapack_int m, lapack_int n, lapack_complex_float* a,
+                           lapack_int lda, float* sva, lapack_int mv,
+                           lapack_complex_float* v, lapack_int ldv, float* stat );
+lapack_int LAPACKE_zgesvj( int matrix_layout, char joba, char jobu, char jobv,
+                           lapack_int m, lapack_int n, lapack_complex_double* a,
+                           lapack_int lda, double* sva, lapack_int mv,
+                           lapack_complex_double* v, lapack_int ldv, double* stat );
 
 lapack_int LAPACKE_sgesvx( int matrix_layout, char fact, char trans,
                            lapack_int n, lapack_int nrhs, float* a,
@@ -5265,6 +5283,22 @@ lapack_int LAPACKE_dgejsv_work( int matrix_layout, char joba, char jobu,
                                 lapack_int ldu, double* v, lapack_int ldv,
                                 double* work, lapack_int lwork,
                                 lapack_int* iwork );
+lapack_int LAPACKE_cgejsv_work( int matrix_layout, char joba, char jobu,
+                                char jobv, char jobr, char jobt, char jobp,
+                                lapack_int m, lapack_int n, lapack_complex_float* a,
+                                lapack_int lda, float* sva, lapack_complex_float* u,
+                                lapack_int ldu, lapack_complex_float* v, lapack_int ldv,
+                                lapack_complex_float* cwork, lapack_int lwork,
+                                float* work, lapack_int lrwork,
+                                lapack_int* iwork );
+lapack_int LAPACKE_zgejsv_work( int matrix_layout, char joba, char jobu,
+                                char jobv, char jobr, char jobt, char jobp,
+                                lapack_int m, lapack_int n, lapack_complex_double* a,
+                                lapack_int lda, double* sva, lapack_complex_double* u,
+                                lapack_int ldu, lapack_complex_double* v, lapack_int ldv,
+                                lapack_complex_double* cwork, lapack_int lwork,
+                                double* work, lapack_int lrwork,
+                                lapack_int* iwork );
 
 lapack_int LAPACKE_sgelq2_work( int matrix_layout, lapack_int m, lapack_int n,
                                 float* a, lapack_int lda, float* tau,
@@ -5661,6 +5695,18 @@ lapack_int LAPACKE_dgesvj_work( int matrix_layout, char joba, char jobu,
                                 double* a, lapack_int lda, double* sva,
                                 lapack_int mv, double* v, lapack_int ldv,
                                 double* work, lapack_int lwork );
+lapack_int LAPACKE_cgesvj_work( int matrix_layout, char joba, char jobu,
+                                char jobv, lapack_int m, lapack_int n, lapack_complex_float* a,
+                                lapack_int lda, float* sva, lapack_int mv,
+                                lapack_complex_float* v, lapack_int ldv,
+                                lapack_complex_float* cwork, lapack_int lwork,
+ 								float* rwork,lapack_int lrwork );
+lapack_int LAPACKE_zgesvj_work( int matrix_layout, char joba, char jobu,
+                                char jobv, lapack_int m, lapack_int n,
+                                lapack_complex_double* a, lapack_int lda, double* sva,
+                                lapack_int mv, lapack_complex_double* v, lapack_int ldv,
+                                lapack_complex_double* cwork, lapack_int lwork,
+                                double* rwork, lapack_int lrwork );
 
 lapack_int LAPACKE_sgesvx_work( int matrix_layout, char fact, char trans,
                                 lapack_int n, lapack_int nrhs, float* a,
@@ -12034,10 +12080,14 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_dgesdd LAPACK_GLOBAL(dgesdd,DGESDD)
 #define LAPACK_cgesdd LAPACK_GLOBAL(cgesdd,CGESDD)
 #define LAPACK_zgesdd LAPACK_GLOBAL(zgesdd,ZGESDD)
-#define LAPACK_dgejsv LAPACK_GLOBAL(dgejsv,DGEJSV)
 #define LAPACK_sgejsv LAPACK_GLOBAL(sgejsv,SGEJSV)
-#define LAPACK_dgesvj LAPACK_GLOBAL(dgesvj,DGESVJ)
+#define LAPACK_dgejsv LAPACK_GLOBAL(dgejsv,DGEJSV)
+#define LAPACK_cgejsv LAPACK_GLOBAL(cgejsv,CGEJSV)
+#define LAPACK_zgejsv LAPACK_GLOBAL(zgejsv,ZGEJSV)
 #define LAPACK_sgesvj LAPACK_GLOBAL(sgesvj,SGESVJ)
+#define LAPACK_dgesvj LAPACK_GLOBAL(dgesvj,DGESVJ)
+#define LAPACK_cgesvj LAPACK_GLOBAL(cgesvj,CGESVJ)
+#define LAPACK_zgesvj LAPACK_GLOBAL(zgesvj,ZGESVJ)
 #define LAPACK_sggsvd LAPACK_GLOBAL(sggsvd,SGGSVD)
 #define LAPACK_dggsvd LAPACK_GLOBAL(dggsvd,DGGSVD)
 #define LAPACK_cggsvd LAPACK_GLOBAL(cggsvd,CGGSVD)
@@ -15928,6 +15978,18 @@ void LAPACK_sgejsv( char* joba, char* jobu, char* jobv, char* jobr, char* jobt,
                     lapack_int* lda, float* sva, float* u, lapack_int* ldu,
                     float* v, lapack_int* ldv, float* work, lapack_int* lwork,
                     lapack_int* iwork, lapack_int *info );
+void LAPACK_cgejsv( char* joba, char* jobu, char* jobv, char* jobr, char* jobt,
+                    char* jobp, lapack_int* m, lapack_int* n, lapack_complex_float* a,
+                    lapack_int* lda, float* sva, lapack_complex_float* u, lapack_int* ldu,
+                    lapack_complex_float* v, lapack_int* ldv, lapack_complex_float* cwork, 
+                    lapack_int* lwork, float* work, lapack_int* lrwork,
+                    lapack_int* iwork, lapack_int *info );
+void LAPACK_zgejsv( char* joba, char* jobu, char* jobv, char* jobr, char* jobt,
+                    char* jobp, lapack_int* m, lapack_int* n, lapack_complex_double* a,
+                    lapack_int* lda, double* sva, lapack_complex_double* u, lapack_int* ldu,
+                    lapack_complex_double* v, lapack_int* ldv, lapack_complex_double* cwork, 
+                    lapack_int* lwork, double* work, lapack_int* lrwork,
+                    lapack_int* iwork, lapack_int *info );
 void LAPACK_dgesvj( char* joba, char* jobu, char* jobv, lapack_int* m,
                     lapack_int* n, double* a, lapack_int* lda, double* sva,
                     lapack_int* mv, double* v, lapack_int* ldv, double* work,
@@ -15936,6 +15998,16 @@ void LAPACK_sgesvj( char* joba, char* jobu, char* jobv, lapack_int* m,
                     lapack_int* n, float* a, lapack_int* lda, float* sva,
                     lapack_int* mv, float* v, lapack_int* ldv, float* work,
                     lapack_int* lwork, lapack_int *info );
+void LAPACK_cgesvj( char* joba, char* jobu, char* jobv, lapack_int* m,
+                    lapack_int* n, lapack_complex_float* a, lapack_int* lda, float* sva,
+                    lapack_int* mv, lapack_complex_float* v, lapack_int* ldv, 
+                    lapack_complex_float* cwork, lapack_int* lwork, float* rwork, 
+                    lapack_int* lrwork, lapack_int *info );
+void LAPACK_zgesvj( char* joba, char* jobu, char* jobv, lapack_int* m,
+                    lapack_int* n, lapack_complex_double* a, lapack_int* lda, double* sva,
+                    lapack_int* mv, lapack_complex_double* v, lapack_int* ldv, 
+                    lapack_complex_double* cwork, lapack_int* lwork, double* rwork,
+                    lapack_int* lrwork, lapack_int *info );
 void LAPACK_sggsvd( char* jobu, char* jobv, char* jobq, lapack_int* m,
                     lapack_int* n, lapack_int* p, lapack_int* k, lapack_int* l,
                     float* a, lapack_int* lda, float* b, lapack_int* ldb,
