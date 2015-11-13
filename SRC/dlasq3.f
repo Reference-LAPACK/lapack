@@ -97,22 +97,22 @@
 *>         Maximum value of q.
 *> \endverbatim
 *>
-*> \param[out] NFAIL
+*> \param[in,out] NFAIL
 *> \verbatim
 *>          NFAIL is INTEGER
-*>         Number of times shift was too big.
+*>         Increment NFAIL by 1 each time the shift was too big.
 *> \endverbatim
 *>
-*> \param[out] ITER
+*> \param[in,out] ITER
 *> \verbatim
 *>          ITER is INTEGER
-*>         Number of iterations.
+*>         Increment ITER by 1 for each iteration.
 *> \endverbatim
 *>
-*> \param[out] NDIV
+*> \param[in,out] NDIV
 *> \verbatim
 *>          NDIV is INTEGER
-*>         Number of divisions.
+*>         Increment NDIV by 1 for each division.
 *> \endverbatim
 *>
 *> \param[in] IEEE
