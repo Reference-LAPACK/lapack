@@ -66,7 +66,7 @@ lapack_int LAPACKE_cgesvdx( int matrix_layout, char jobu, char jobvt, char range
     if( info != 0 ) {
         goto exit_level_0;
     }
-    lwork = (lapack_int)work_query;
+    lwork = LAPACK_C2INT (work_query);
     /* Allocate memory for work arrays */
     rwork = (float*)LAPACKE_malloc( sizeof(float) * lwork );
     if( work == NULL ) {
