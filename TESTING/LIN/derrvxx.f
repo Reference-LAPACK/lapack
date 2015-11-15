@@ -893,7 +893,7 @@
          R(1) = -ONE
          CALL DSYSVXX( 'F', 'U', 2, 0, A, 2, AF, 2, IP, EQ, R, B, 2, X,
      $        2, RCOND, RPVGRW, BERR, N_ERR_BNDS, ERR_BNDS_N,
-     $        ERR_BNDS_C, NPARAMS, PARAMS, W, RW, INFO )
+     $        ERR_BNDS_C, NPARAMS, PARAMS, W, IW, INFO )
          CALL CHKXER( 'DSYSVXX', INFOT, NOUT, LERR, OK )
          INFOT = 13
          EQ = 'N'
