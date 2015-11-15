@@ -355,6 +355,8 @@ lapacke_cposvx.o \
 lapacke_cposvx_work.o \
 lapacke_cpotrf.o \
 lapacke_cpotrf_work.o \
+lapacke_cpotrf2.o \
+lapacke_cpotrf2_work.o \
 lapacke_cpotri.o \
 lapacke_cpotri_work.o \
 lapacke_cpotrs.o \
@@ -835,6 +837,8 @@ lapacke_dposvx.o \
 lapacke_dposvx_work.o \
 lapacke_dpotrf.o \
 lapacke_dpotrf_work.o \
+lapacke_dpotrf2.o \
+lapacke_dpotrf2_work.o \
 lapacke_dpotri.o \
 lapacke_dpotri_work.o \
 lapacke_dpotrs.o \
@@ -1343,6 +1347,8 @@ lapacke_sposvx.o \
 lapacke_sposvx_work.o \
 lapacke_spotrf.o \
 lapacke_spotrf_work.o \
+lapacke_spotrf2.o \
+lapacke_spotrf2_work.o \
 lapacke_spotri.o \
 lapacke_spotri_work.o \
 lapacke_spotrs.o \
@@ -1893,6 +1899,8 @@ lapacke_zposvx.o \
 lapacke_zposvx_work.o \
 lapacke_zpotrf.o \
 lapacke_zpotrf_work.o \
+lapacke_zpotrf2.o \
+lapacke_zpotrf2_work.o \
 lapacke_zpotri.o \
 lapacke_zpotri_work.o \
 lapacke_zpotrs.o \
