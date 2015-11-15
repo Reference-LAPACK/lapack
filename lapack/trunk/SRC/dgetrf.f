@@ -131,7 +131,7 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DGETF2, DLASWP, DTRSM, XERBLA
+      EXTERNAL           DGEMM, DGETRF2, DLASWP, DTRSM, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -169,7 +169,7 @@
 *
 *        Use unblocked code.
 *
-         CALL DGETF2( M, N, A, LDA, IPIV, INFO )
+         CALL DGETRF2( M, N, A, LDA, IPIV, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -180,7 +180,7 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL DGETF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
+            CALL DGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
 *
 *           Adjust INFO and the pivot indices.
 *
