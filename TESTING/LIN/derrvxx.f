@@ -70,6 +70,8 @@
 *     .. Parameters ..
       INTEGER            NMAX
       PARAMETER          ( NMAX = 4 )
+      REAL               ONE
+      PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER          EQ
