@@ -97,6 +97,8 @@ lapacke_cgetf2.c
 lapacke_cgetf2_work.c
 lapacke_cgetrf.c
 lapacke_cgetrf_work.c
+lapacke_cgetrf2.c
+lapacke_cgetrf2_work.c
 lapacke_cgetri.c
 lapacke_cgetri_work.c
 lapacke_cgetrs.c
@@ -321,6 +323,8 @@ lapacke_cposvx.c
 lapacke_cposvx_work.c
 lapacke_cpotrf.c
 lapacke_cpotrf_work.c
+lapacke_cpotrf2.c
+lapacke_cpotrf2_work.c
 lapacke_cpotri.c
 lapacke_cpotri_work.c
 lapacke_cpotrs.c
@@ -625,6 +629,8 @@ lapacke_dgetf2.c
 lapacke_dgetf2_work.c
 lapacke_dgetrf.c
 lapacke_dgetrf_work.c
+lapacke_dgetrf2.c
+lapacke_dgetrf2_work.c
 lapacke_dgetri.c
 lapacke_dgetri_work.c
 lapacke_dgetrs.c
@@ -801,6 +807,8 @@ lapacke_dposvx.c
 lapacke_dposvx_work.c
 lapacke_dpotrf.c
 lapacke_dpotrf_work.c
+lapacke_dpotrf2.c
+lapacke_dpotrf2_work.c
 lapacke_dpotri.c
 lapacke_dpotri_work.c
 lapacke_dpotrs.c
@@ -1133,6 +1141,8 @@ lapacke_sgetf2.c
 lapacke_sgetf2_work.c
 lapacke_sgetrf.c
 lapacke_sgetrf_work.c
+lapacke_sgetrf2.c
+lapacke_sgetrf2_work.c
 lapacke_sgetri.c
 lapacke_sgetri_work.c
 lapacke_sgetrs.c
@@ -1309,6 +1319,8 @@ lapacke_sposvx.c
 lapacke_sposvx_work.c
 lapacke_spotrf.c
 lapacke_spotrf_work.c
+lapacke_spotrf2.c
+lapacke_spotrf2_work.c
 lapacke_spotri.c
 lapacke_spotri_work.c
 lapacke_spotrs.c
@@ -1635,6 +1647,8 @@ lapacke_zgetf2.c
 lapacke_zgetf2_work.c
 lapacke_zgetrf.c
 lapacke_zgetrf_work.c
+lapacke_zgetrf2.c
+lapacke_zgetrf2_work.c
 lapacke_zgetri.c
 lapacke_zgetri_work.c
 lapacke_zgetrs.c
@@ -1859,6 +1873,8 @@ lapacke_zposvx.c
 lapacke_zposvx_work.c
 lapacke_zpotrf.c
 lapacke_zpotrf_work.c
+lapacke_zpotrf2.c
+lapacke_zpotrf2_work.c
 lapacke_zpotri.c
 lapacke_zpotri_work.c
 lapacke_zpotrs.c
