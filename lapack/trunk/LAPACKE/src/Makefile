@@ -131,6 +131,8 @@ lapacke_cgetf2.o \
 lapacke_cgetf2_work.o \
 lapacke_cgetrf.o \
 lapacke_cgetrf_work.o \
+lapacke_cgetrf2.o \
+lapacke_cgetrf2_work.o \
 lapacke_cgetri.o \
 lapacke_cgetri_work.o \
 lapacke_cgetrs.o \
@@ -661,6 +663,8 @@ lapacke_dgetf2.o \
 lapacke_dgetf2_work.o \
 lapacke_dgetrf.o \
 lapacke_dgetrf_work.o \
+lapacke_dgetrf2.o \
+lapacke_dgetrf2_work.o \
 lapacke_dgetri.o \
 lapacke_dgetri_work.o \
 lapacke_dgetrs.o \
@@ -1171,6 +1175,8 @@ lapacke_sgetf2.o \
 lapacke_sgetf2_work.o \
 lapacke_sgetrf.o \
 lapacke_sgetrf_work.o \
+lapacke_sgetrf2.o \
+lapacke_sgetrf2_work.o \
 lapacke_sgetri.o \
 lapacke_sgetri_work.o \
 lapacke_sgetrs.o \
@@ -1675,6 +1681,8 @@ lapacke_zgetf2.o \
 lapacke_zgetf2_work.o \
 lapacke_zgetrf.o \
 lapacke_zgetrf_work.o \
+lapacke_zgetrf2.o \
+lapacke_zgetrf2_work.o \
 lapacke_zgetri.o \
 lapacke_zgetri_work.o \
 lapacke_zgetrs.o \
