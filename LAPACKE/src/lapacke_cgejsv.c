@@ -79,7 +79,7 @@ lapack_int LAPACKE_cgejsv( int matrix_layout, char joba, char jobu, char jobv,
      (  (       ( LAPACKE_lsame( jobu, 'u' ) ||  LAPACKE_lsame( jobu, 'f' ) ) &&
                ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) ) &&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? 4*n*n: 
-                       1) ) ) ) ) ) );  
+                       1) ) ) ) ) ) ) );  
     lapack_int lrwork = (
     			// 1.1	   
     	(	     LAPACKE_lsame( jobu, 'n' ) &&  LAPACKE_lsame( jobv, 'n' ) &&
@@ -119,7 +119,7 @@ lapack_int LAPACKE_cgejsv( int matrix_layout, char joba, char jobu, char jobv,
      (  (       ( LAPACKE_lsame( jobu, 'u' ) ||  LAPACKE_lsame( jobu, 'f' ) ) &&
                ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) ) &&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? MAX(7,2*n) :
-                       1) ) ) ) ) ) );  
+                       1 ))))))));  
     lapack_int* iwork = NULL;
     float* rwork = NULL;
     lapack_complex_float* cwork = NULL;
