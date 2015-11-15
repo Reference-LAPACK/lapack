@@ -33,6 +33,7 @@
 *> CBD   CGESVD   compute SVD of an M-by-N matrix A
 *>       CGESDD   compute SVD of an M-by-N matrix A(by divide and
 *>                conquer)
+*>       CGEJSV   compute SVD of an M-by-N matrix A where M >= N
 *>       CGESVDX  compute SVD of an M-by-N matrix A(by bisection
 *>                and inverse iteration)
 *> \endverbatim
@@ -99,8 +100,8 @@
      $                   VT( NMAX, NMAX ), W( 10*NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, CGEES, CGEESX, CGEEV, CGEEVX, CGESDD,
-     $                   CGESVD
+      EXTERNAL           CHKXER, CGEES, CGEESX, CGEEV, CGEEVX, CGEJSV
+     $                   CGESDD, CGESVD
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN, CSLECT
@@ -363,6 +364,72 @@
      $                INFO )
          CALL CHKXER( 'CGESDD', INFOT, NOUT, LERR, OK )
          NT = NT - 2
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )
+         END IF
+*
+*        Test CGEJSV
+*
+         SRNAMT = 'CGEJSV'
+         INFOT = 1
+         CALL CGEJSV( 'X', 'U', 'V', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CGEJSV( 'G', 'X', 'V', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL CGEJSV( 'G', 'U', 'X', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL CGEJSV( 'G', 'U', 'V', 'X', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL CGEJSV( 'G', 'U', 'V', 'R', 'X', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL CGEJSV( 'G', 'U', 'V', 'R', 'N', 'X',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL CGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 -1, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL CGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 0, -1, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL CGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 1, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 13
+         CALL CGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 2, A, 2, S, U, 1, VT, 2,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 15
+         CALL CGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 2, A, 2, S, U, 2, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'CGEJSV', INFOT, NOUT, LERR, OK )
+         NT = 11
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT

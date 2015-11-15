@@ -33,6 +33,7 @@
 *> ZBD   ZGESVD   compute SVD of an M-by-N matrix A
 *>       ZGESDD   compute SVD of an M-by-N matrix A(by divide and
 *>                conquer)
+*>       ZGEJSV   compute SVD of an M-by-N matrix A where M >= N
 *>       ZGESVDX  compute SVD of an M-by-N matrix A(by bisection
 *>                and inverse iteration)
 *> \endverbatim
@@ -99,8 +100,8 @@
      $                   VT( NMAX, NMAX ), W( 10*NMAX ), X( NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, ZGEES, ZGEESX, ZGEEV, ZGEEVX, ZGESDD,
-     $                   ZGESVD
+      EXTERNAL           CHKXER, ZGEES, ZGEESX, ZGEEV, ZGEEVX, ZGESVJ, 
+     $                   ZGESDD, ZGESVD
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN, ZSLECT
@@ -363,6 +364,72 @@
      $                INFO )
          CALL CHKXER( 'ZGESDD', INFOT, NOUT, LERR, OK )
          NT = NT - 2
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )
+         END IF
+*
+*        Test ZGEJSV
+*
+         SRNAMT = 'ZGEJSV'
+         INFOT = 1
+         CALL ZGEJSV( 'X', 'U', 'V', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZGEJSV( 'G', 'X', 'V', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZGEJSV( 'G', 'U', 'X', 'R', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZGEJSV( 'G', 'U', 'V', 'X', 'N', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZGEJSV( 'G', 'U', 'V', 'R', 'X', 'N',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL ZGEJSV( 'G', 'U', 'V', 'R', 'N', 'X',
+     $                 0, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL ZGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 -1, 0, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL ZGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 0, -1, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL ZGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 1, A, 1, S, U, 1, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 13
+         CALL ZGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 2, A, 2, S, U, 1, VT, 2,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         INFOT = 15
+         CALL ZGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     $                 2, 2, A, 2, S, U, 2, VT, 1,
+     $                 W, 1, RW, 1, IW, INFO)
+         CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
+         NT = 11
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
