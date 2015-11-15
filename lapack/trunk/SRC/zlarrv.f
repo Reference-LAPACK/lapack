@@ -263,7 +263,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date September 2012
+*> \date November 2015
 *
 *> \ingroup complex16OTHERauxiliary
 *
@@ -283,10 +283,10 @@
      $                   IBLOCK, INDEXW, GERS, Z, LDZ, ISUPPZ,
      $                   WORK, IWORK, INFO )
 *
-*  -- LAPACK auxiliary routine (version 3.4.2) --
+*  -- LAPACK auxiliary routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     September 2012
+*     November 2015
 *
 *     .. Scalar Arguments ..
       INTEGER            DOL, DOU, INFO, LDZ, M, N

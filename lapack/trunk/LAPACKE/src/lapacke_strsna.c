@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function strsna
 * Author: Intel Corporation
-* Generated November, 2011
+* Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"

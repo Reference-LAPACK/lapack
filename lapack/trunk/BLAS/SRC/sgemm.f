@@ -166,7 +166,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date November 2015
 *
 *> \ingroup single_blas_level3
 *
@@ -187,10 +187,10 @@
 *  =====================================================================
       SUBROUTINE SGEMM(TRANSA,TRANSB,M,N,K,ALPHA,A,LDA,B,LDB,BETA,C,LDC)
 *
-*  -- Reference BLAS level3 routine (version 3.4.0) --
+*  -- Reference BLAS level3 routine (version 3.6.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     November 2015
 *
 *     .. Scalar Arguments ..
       REAL ALPHA,BETA
