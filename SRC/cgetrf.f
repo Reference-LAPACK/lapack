@@ -131,7 +131,7 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEMM, CGETF2, CLASWP, CTRSM, XERBLA
+      EXTERNAL           CGEMM, CGETRF2, CLASWP, CTRSM, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -169,7 +169,7 @@
 *
 *        Use unblocked code.
 *
-         CALL CGETF2( M, N, A, LDA, IPIV, INFO )
+         CALL CGETRF2( M, N, A, LDA, IPIV, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -180,7 +180,7 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL CGETF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
+            CALL CGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
 *
 *           Adjust INFO and the pivot indices.
 *

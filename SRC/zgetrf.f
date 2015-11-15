@@ -131,7 +131,7 @@
       INTEGER            I, IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZGEMM, ZGETF2, ZLASWP, ZTRSM
+      EXTERNAL           XERBLA, ZGEMM, ZGETRF2, ZLASWP, ZTRSM
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -169,7 +169,7 @@
 *
 *        Use unblocked code.
 *
-         CALL ZGETF2( M, N, A, LDA, IPIV, INFO )
+         CALL ZGETRF2( M, N, A, LDA, IPIV, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -180,7 +180,7 @@
 *           Factor diagonal and subdiagonal blocks and test for exact
 *           singularity.
 *
-            CALL ZGETF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
+            CALL ZGETRF2( M-J+1, JB, A( J, J ), LDA, IPIV( J ), IINFO )
 *
 *           Adjust INFO and the pivot indices.
 *
