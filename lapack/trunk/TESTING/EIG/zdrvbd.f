@@ -866,7 +866,7 @@
 *
                   DO J=1,N
                      DO I=1,N
-                        VTSAV(J,I) = A(I,J)
+                        VTSAV(J,I) = CONJG (A(I,J))
                      END DO
                   END DO
 *
@@ -879,9 +879,8 @@
 *
 *                 Do tests 15--18
 *
-* TEST 15 NOT PASSING THE THREASHOLD
-*                  CALL ZBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
-*     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 15 ) )
+                  CALL ZBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 15 ) )
                   IF( M.NE.0 .AND. N.NE.0 ) THEN
                      CALL ZUNT01( 'Columns', M, M, USAV, LDU, WORK,
      $                            LWORK, RWORK, RESULT( 16 ) )
@@ -929,7 +928,7 @@
 *
                   DO 133 J=1,N
                      DO 132 I=1,N
-                        VTSAV(J,I) = A(I,J)
+                        VTSAV(J,I) = CONJG (A(I,J))
   132                END DO
   133             END DO
 *
@@ -942,9 +941,8 @@
 *
 *                 Do tests 19--22
 *
-* TEST 19 NOT PASSING THE THREASHOLD
-*                  CALL ZBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
-*     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 19 ) )
+                  CALL ZBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 19 ) )
                   IF( M.NE.0 .AND. N.NE.0 ) THEN
                      CALL ZUNT01( 'Columns', M, M, USAV, LDU, WORK,
      $                            LWORK, RWORK, RESULT( 20 ) )

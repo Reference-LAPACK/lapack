@@ -866,7 +866,7 @@
 *
                   DO J=1,N
                      DO I=1,N
-                        VTSAV(J,I) = A(I,J)
+                        VTSAV(J,I) = CONJG (A(I,J))
                      END DO
                   END DO
 *
@@ -879,9 +879,8 @@
 *
 *                 Do tests 15--18
 *
-* TEST 15 NOT PASSING THE THREASHOLD
-*                  CALL CBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
-*     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 15 ) )
+                  CALL CBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 15 ) )
                   IF( M.NE.0 .AND. N.NE.0 ) THEN
                      CALL CUNT01( 'Columns', M, M, USAV, LDU, WORK,
      $                            LWORK, RWORK, RESULT( 16 ) )
@@ -917,7 +916,7 @@
      $            LSWORK = LWORK
                LRWORK = MAX( 7, N + 2*M)
 *
-                  CALL CLACPY( 'F', M, N, ASAV, LDA, VTSAV, LDA )
+                 CALL CLACPY( 'F', M, N, ASAV, LDA, VTSAV, LDA )
                   SRNAMT = 'CGEJSV'
                   CALL CGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
      &                   M, N, VTSAV, LDA, SSAV, USAV, LDU, A, LDVT,
@@ -929,7 +928,7 @@
 *
                   DO 133 J=1,N
                      DO 132 I=1,N
-                        VTSAV(J,I) = A(I,J)
+                        VTSAV(J,I) = CONJG (A(I,J))
   132                END DO
   133             END DO
 *
@@ -942,9 +941,8 @@
 *
 *                 Do tests 19--22
 *
-* TEST 19 NOT PASSING THE THREASHOLD
-*                  CALL CBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
-*     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 19 ) )
+                  CALL CBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 19 ) )
                   IF( M.NE.0 .AND. N.NE.0 ) THEN
                      CALL CUNT01( 'Columns', M, M, USAV, LDU, WORK,
      $                            LWORK, RWORK, RESULT( 20 ) )
