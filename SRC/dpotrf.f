@@ -136,7 +136,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DPOTF2, DSYRK, DTRSM, XERBLA
+      EXTERNAL           DGEMM, DPOTRF2, DSYRK, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -171,7 +171,7 @@
 *
 *        Use unblocked code.
 *
-         CALL DPOTF2( UPLO, N, A, LDA, INFO )
+         CALL DPOTRF2( UPLO, N, A, LDA, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -188,7 +188,7 @@
                JB = MIN( NB, N-J+1 )
                CALL DSYRK( 'Upper', 'Transpose', JB, J-1, -ONE,
      $                     A( 1, J ), LDA, ONE, A( J, J ), LDA )
-               CALL DPOTF2( 'Upper', JB, A( J, J ), LDA, INFO )
+               CALL DPOTRF2( 'Upper', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
@@ -216,7 +216,7 @@
                JB = MIN( NB, N-J+1 )
                CALL DSYRK( 'Lower', 'No transpose', JB, J-1, -ONE,
      $                     A( J, 1 ), LDA, ONE, A( J, J ), LDA )
-               CALL DPOTF2( 'Lower', JB, A( J, J ), LDA, INFO )
+               CALL DPOTRF2( 'Lower', JB, A( J, J ), LDA, INFO )
                IF( INFO.NE.0 )
      $            GO TO 30
                IF( J+JB.LE.N ) THEN
