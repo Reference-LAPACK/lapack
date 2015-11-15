@@ -811,6 +811,11 @@ RECURSIVE              = YES
 EXCLUDE                = CMAKE \
                          DOCS \
                          .svn \
+                         CBLAS/.svn \
+                         CBLAS/src/.svn \
+                         CBLAS/testing/.svn \
+                         CBLAS/example/.svn \
+                         CBLAS/include/.svn \
                          BLAS/.svn \
                          BLAS/SRC/.svn \
                          BLAS/TESTING/.svn \

@@ -202,7 +202,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2013
+*> \date November 2015
 *
 *> \ingroup doubleGEsing
 *
@@ -216,10 +216,10 @@
       SUBROUTINE DGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT, WORK,
      $                   LWORK, IWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.5.0) --
+*  -- LAPACK driver routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2013
+*     November 2015
 *
 *     .. Scalar Arguments ..
       CHARACTER          JOBZ

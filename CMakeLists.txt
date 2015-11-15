@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.10)
 project(LAPACK Fortran)
 
 set(LAPACK_MAJOR_VERSION 3)
-set(LAPACK_MINOR_VERSION 5)
+set(LAPACK_MINOR_VERSION 6)
 set(LAPACK_PATCH_VERSION 0)
 set(
   LAPACK_VERSION
