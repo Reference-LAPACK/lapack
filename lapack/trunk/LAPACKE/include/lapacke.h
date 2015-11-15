@@ -3052,6 +3052,15 @@ lapack_int LAPACKE_zposvxx( int matrix_layout, char fact, char uplo,
                             double* err_bnds_norm, double* err_bnds_comp,
                             lapack_int nparams, double* params );
 
+lapack_int LAPACKE_spotrf2( int matrix_layout, char uplo, lapack_int n, float* a,
+                           lapack_int lda );
+lapack_int LAPACKE_dpotrf2( int matrix_layout, char uplo, lapack_int n, double* a,
+                           lapack_int lda );
+lapack_int LAPACKE_cpotrf2( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_float* a, lapack_int lda );
+lapack_int LAPACKE_zpotrf2( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_double* a, lapack_int lda );
+
 lapack_int LAPACKE_spotrf( int matrix_layout, char uplo, lapack_int n, float* a,
                            lapack_int lda );
 lapack_int LAPACKE_dpotrf( int matrix_layout, char uplo, lapack_int n, double* a,
@@ -8317,6 +8326,15 @@ lapack_int LAPACKE_zposvxx_work( int matrix_layout, char fact, char uplo,
                                  double* params, lapack_complex_double* work,
                                  double* rwork );
 
+lapack_int LAPACKE_spotrf2_work( int matrix_layout, char uplo, lapack_int n,
+                                float* a, lapack_int lda );
+lapack_int LAPACKE_dpotrf2_work( int matrix_layout, char uplo, lapack_int n,
+                                double* a, lapack_int lda );
+lapack_int LAPACKE_cpotrf2_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_complex_float* a, lapack_int lda );
+lapack_int LAPACKE_zpotrf2_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_complex_double* a, lapack_int lda );
+
 lapack_int LAPACKE_spotrf_work( int matrix_layout, char uplo, lapack_int n,
                                 float* a, lapack_int lda );
 lapack_int LAPACKE_dpotrf_work( int matrix_layout, char uplo, lapack_int n,
@@ -11398,6 +11416,10 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_dpotrf LAPACK_GLOBAL(dpotrf,DPOTRF)
 #define LAPACK_cpotrf LAPACK_GLOBAL(cpotrf,CPOTRF)
 #define LAPACK_zpotrf LAPACK_GLOBAL(zpotrf,ZPOTRF)
+#define LAPACK_spotrf2 LAPACK_GLOBAL(spotrf2,SPOTRF2)
+#define LAPACK_dpotrf2 LAPACK_GLOBAL(dpotrf2,DPOTRF2)
+#define LAPACK_cpotrf2 LAPACK_GLOBAL(cpotrf2,CPOTRF2)
+#define LAPACK_zpotrf2 LAPACK_GLOBAL(zpotrf2,ZPOTRF2)
 #define LAPACK_dpstrf LAPACK_GLOBAL(dpstrf,DPSTRF)
 #define LAPACK_spstrf LAPACK_GLOBAL(spstrf,SPSTRF)
 #define LAPACK_zpstrf LAPACK_GLOBAL(zpstrf,ZPSTRF)
@@ -12516,6 +12538,14 @@ void LAPACK_zgttrf( lapack_int* n, lapack_complex_double* dl,
                     lapack_complex_double* d, lapack_complex_double* du,
                     lapack_complex_double* du2, lapack_int* ipiv,
                     lapack_int *info );
+void LAPACK_spotrf2( char* uplo, lapack_int* n, float* a, lapack_int* lda,
+                    lapack_int *info );
+void LAPACK_dpotrf2( char* uplo, lapack_int* n, double* a, lapack_int* lda,
+                    lapack_int *info );
+void LAPACK_cpotrf2( char* uplo, lapack_int* n, lapack_complex_float* a,
+                    lapack_int* lda, lapack_int *info );
+void LAPACK_zpotrf2( char* uplo, lapack_int* n, lapack_complex_double* a,
+                    lapack_int* lda, lapack_int *info );
 void LAPACK_spotrf( char* uplo, lapack_int* n, float* a, lapack_int* lda,
                     lapack_int *info );
 void LAPACK_dpotrf( char* uplo, lapack_int* n, double* a, lapack_int* lda,
