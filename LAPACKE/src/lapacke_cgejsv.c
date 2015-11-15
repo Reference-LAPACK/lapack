@@ -51,7 +51,7 @@ lapack_int LAPACKE_cgejsv( int matrix_layout, char joba, char jobu, char jobv,
 
                 //2.1
     (	(	   ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) )  &&
-              !( LAPACKE_lsame( jobu, 'u' ))||  LAPACKE_lsame( jobu, 'f' ) ) &&
+              !( LAPACKE_lsame( jobu, 'u' ) ||  LAPACKE_lsame( jobu, 'f' ) ) &&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? 3*n :
     
     
@@ -91,7 +91,7 @@ lapack_int LAPACKE_cgejsv( int matrix_layout, char joba, char jobu, char jobv,
 
                 //2.1
     (	(	   ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) )  &&
-              !( LAPACKE_lsame( jobu, 'u' ))||  LAPACKE_lsame( jobu, 'f' ) ) &&
+              !( LAPACKE_lsame( jobu, 'u' ) ||  LAPACKE_lsame( jobu, 'f' ) ) &&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? MAX( 7, n+ 2*m ) :
     
     
