@@ -1141,8 +1141,8 @@
      $      / '21 = | S - Spartial | / ( min(M,N) ulp |S| )', 
      $      / '22 = 0 if S contains min(M,N) nonnegative values in',
      $      ' decreasing order, else 1/ulp',
-     $      / '23 = | A - U diag(S) VT | / ( |A| max(M,N) ulp ),'
      $      ' SGESVDX(V,V,A) ',
+     $      / '23 = | A - U diag(S) VT | / ( |A| max(M,N) ulp ),'
      $      / '24 = | I - U**T U | / ( M ulp ) ',
      $      / '25 = | I - VT VT**T | / ( N ulp ) ',
      $      / '26 = 0 if S contains min(M,N) nonnegative values in',

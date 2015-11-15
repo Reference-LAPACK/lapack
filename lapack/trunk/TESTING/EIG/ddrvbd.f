@@ -90,7 +90,7 @@
 *> (14)   | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
 *>        vector of singular values from the partial SVD
 *>
-*> Test for SGESVJ:
+*> Test for DGESVJ:
 *>
 *> (15)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
 *>
@@ -101,7 +101,7 @@
 *> (18)   S contains MNMIN nonnegative values in decreasing order.
 *>        (Return 0 if true, 1/ULP if false.)
 *>
-*> Test for SGEJSV:
+*> Test for DGEJSV:
 *>
 *> (19)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
 *>

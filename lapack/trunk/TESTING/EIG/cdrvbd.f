@@ -91,6 +91,28 @@
 *> (7)   | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
 *>       vector of singular values from the partial SVD
 *>
+*> Test for CGESVJ:
+*>
+*> (1)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*>
+*> (2)   | I - U'U | / ( M ulp )
+*>
+*> (3)   | I - VT VT' | / ( N ulp )
+*>
+*> (4)   S contains MNMIN nonnegative values in decreasing order.
+*>       (Return 0 if true, 1/ULP if false.)
+*>
+*> Test for CGEJSV:
+*>
+*> (1)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*>
+*> (2)   | I - U'U | / ( M ulp )
+*>
+*> (3)   | I - VT VT' | / ( N ulp )
+*>
+*> (4)   S contains MNMIN nonnegative values in decreasing order.
+*>        (Return 0 if true, 1/ULP if false.)
+*>
 *> Test for CGESVDX( 'V', 'V', 'A' )/CGESVDX( 'N', 'N', 'A' )
 *>
 *> (1)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
@@ -344,7 +366,7 @@
 *>          -10: LDA < 1 or LDA < MMAX, where MMAX is max( MM(j) ).
 *>          -12: LDU < 1 or LDU < MMAX.
 *>          -14: LDVT < 1 or LDVT < NMAX, where NMAX is max( NN(j) ).
-*>          -21: LWORK too small.
+*>          -29: LWORK too small.
 *>          If  CLATMS, or CGESVD returns an error code, the
 *>              absolute value of it is returned.
 *> \endverbatim
@@ -404,14 +426,15 @@
       INTEGER            I, IINFO, IJQ, IJU, IJVT, IL, IU, ITEMP, IWSPC,
      $                   IWTMP, J, JSIZE, JTYPE, LSWORK, M, MINWRK,
      $                   MMAX, MNMAX, MNMIN, MTYPES, N, NERRS, NFAIL,
-     $                   NMAX, NS, NSI, NSV, NTEST, NTESTF, NTESTT
+     $                   NMAX, NS, NSI, NSV, NTEST, NTESTF, NTESTT,
+     $                   LRWORK
       REAL               ANORM, DIF, DIV, OVFL, RTUNFL, ULP, ULPINV, 
      $                   UNFL, VL, VU
 *     ..
 *     .. Local Arrays ..
       CHARACTER          CJOB( 4 ), CJOBR( 3 ), CJOBV( 2 )
       INTEGER            IOLDSD( 4 ), ISEED2( 4 )
-      REAL               RESULT( 27 )
+      REAL               RESULT( 35 )
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH, SLARND
@@ -419,11 +442,17 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, XERBLA, CBDT01, CBDT05, CGESDD, CGESVD,
-     $                   CGESVDX, CLACPY, CLASET, CLATMS, CUNT01, 
-     $                   CUNT03
+     $                   CGESVJ, CGEJSV, CGESVDX, CLACPY, CLASET, CLATMS, 
+     $                   CUNT01, CUNT03
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN
+*     ..
+*     .. Scalars in Common ..
+      CHARACTER*32       SRNAMT
+*     ..
+*     .. Common blocks ..
+      COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Data statements ..
       DATA               CJOB / 'N', 'O', 'S', 'A' /
@@ -502,7 +531,7 @@
 *
       NERRS = 0
 *
-      DO 230 JSIZE = 1, NSIZES
+      DO 310 JSIZE = 1, NSIZES
          M = MM( JSIZE )
          N = NN( JSIZE )
          MNMIN = MIN( M, N )
@@ -513,9 +542,9 @@
             MTYPES = MIN( MAXTYP+1, NTYPES )
          END IF
 *
-         DO 220 JTYPE = 1, MTYPES
+         DO 300 JTYPE = 1, MTYPES
             IF( .NOT.DOTYPE( JTYPE ) )
-     $         GO TO 220
+     $         GO TO 300
             NTEST = 0
 *
             DO 20 J = 1, 4
@@ -570,7 +599,7 @@
 *
 *           Do for minimal and adequate (for blocking) workspace
 *
-            DO 210 IWSPC = 1, 4
+            DO 290 IWSPC = 1, 4
 *
 *              Test for CGESVD
 *
@@ -581,7 +610,7 @@
                IF( IWSPC.EQ.4 )
      $            LSWORK = LWORK
 *
-               DO 60 J = 1, 27
+               DO 60 J = 1, 35
                   RESULT( J ) = -ONE
    60          CONTINUE
 *
@@ -589,6 +618,7 @@
 *
                IF( IWSPC.GT.1 )
      $            CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               SRNAMT = 'CGESVD'
                CALL CGESVD( 'A', 'A', M, N, A, LDA, SSAV, USAV, LDU,
      $                      VTSAV, LDVT, WORK, LSWORK, RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
@@ -632,6 +662,7 @@
                      JOBU = CJOB( IJU+1 )
                      JOBVT = CJOB( IJVT+1 )
                      CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+                     SRNAMT = 'CGESVD'
                      CALL CGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU,
      $                            VT, LDVT, WORK, LSWORK, RWORK, IINFO )
 *
@@ -703,6 +734,7 @@
 *              Factorize A
 *
                CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               SRNAMT = 'CGESDD'
                CALL CGESDD( 'A', M, N, A, LDA, SSAV, USAV, LDU, VTSAV,
      $                      LDVT, WORK, LSWORK, RWORK, IWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
@@ -742,6 +774,7 @@
                DO 130 IJQ = 0, 2
                   JOBQ = CJOB( IJQ+1 )
                   CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+                  SRNAMT = 'CGESDD'
                   CALL CGESDD( JOBQ, M, N, A, LDA, S, U, LDU, VT, LDVT,
      $                         WORK, LSWORK, RWORK, IWORK, IINFO )
 *
@@ -803,12 +836,140 @@
   120             CONTINUE
                   RESULT( 14 ) = MAX( RESULT( 14 ), DIF )
   130          CONTINUE
+
+*
+*              Test CGESVJ: Factorize A
+*              Note: CGESVJ does not work for M < N
+*
+               RESULT( 15 ) = ZERO
+               RESULT( 16 ) = ZERO
+               RESULT( 17 ) = ZERO
+               RESULT( 18 ) = ZERO
+*
+               IF( M.GE.N ) THEN
+               IWTMP = 2*MNMIN*MNMIN + 2*MNMIN + MAX( M, N )
+               LSWORK = IWTMP + ( IWSPC-1 )*( LWORK-IWTMP ) / 3
+               LSWORK = MIN( LSWORK, LWORK )
+               LSWORK = MAX( LSWORK, 1 )
+               LRWORK = MAX(6,N)
+               IF( IWSPC.EQ.4 )
+     $            LSWORK = LWORK
+*
+                  CALL CLACPY( 'F', M, N, ASAV, LDA, USAV, LDA )
+                  SRNAMT = 'CGESVJ'
+                  CALL CGESVJ( 'G', 'U', 'V', M, N, USAV, LDA, SSAV,
+     &                        0, A, LDVT, WORK, LWORK, RWORK, 
+     &                        LRWORK, IINFO )
+*
+*                 CGESVJ retuns V not VT, so we transpose to use the same
+*                 test suite.
+*
+                  DO J=1,N
+                     DO I=1,N
+                        VTSAV(J,I) = A(I,J)
+                     END DO
+                  END DO
+*
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9995 )'GESVJ', IINFO, M, N,
+     $               JTYPE, LSWORK, IOLDSD
+                     INFO = ABS( IINFO )
+                     RETURN
+                  END IF
+*
+*                 Do tests 15--18
+*
+* TEST 15 NOT PASSING THE THREASHOLD
+*                  CALL CBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+*     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 15 ) )
+                  IF( M.NE.0 .AND. N.NE.0 ) THEN
+                     CALL CUNT01( 'Columns', M, M, USAV, LDU, WORK,
+     $                            LWORK, RWORK, RESULT( 16 ) )
+                     CALL CUNT01( 'Rows', N, N, VTSAV, LDVT, WORK,
+     $                            LWORK, RWORK, RESULT( 17 ) )
+                  END IF
+                  RESULT( 18 ) = ZERO
+                  DO 131 I = 1, MNMIN - 1
+                     IF( SSAV( I ).LT.SSAV( I+1 ) )
+     $                  RESULT( 18 ) = ULPINV
+                     IF( SSAV( I ).LT.ZERO )
+     $                  RESULT( 18 ) = ULPINV
+  131             CONTINUE
+                  IF( MNMIN.GE.1 ) THEN
+                     IF( SSAV( MNMIN ).LT.ZERO )
+     $                  RESULT( 18 ) = ULPINV
+                  END IF
+               END IF
+*
+*              Test CGEJSV: Factorize A
+*              Note: CGEJSV does not work for M < N
+*
+               RESULT( 19 ) = ZERO
+               RESULT( 20 ) = ZERO
+               RESULT( 21 ) = ZERO
+               RESULT( 22 ) = ZERO
+               IF( M.GE.N ) THEN
+               IWTMP = 2*MNMIN*MNMIN + 2*MNMIN + MAX( M, N )
+               LSWORK = IWTMP + ( IWSPC-1 )*( LWORK-IWTMP ) / 3
+               LSWORK = MIN( LSWORK, LWORK )
+               LSWORK = MAX( LSWORK, 1 )
+               IF( IWSPC.EQ.4 )
+     $            LSWORK = LWORK
+               LRWORK = MAX( 7, N + 2*M)
+*
+                  CALL CLACPY( 'F', M, N, ASAV, LDA, VTSAV, LDA )
+                  SRNAMT = 'CGEJSV'
+                  CALL CGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
+     &                   M, N, VTSAV, LDA, SSAV, USAV, LDU, A, LDVT,
+     &                   WORK, LWORK, RWORK, 
+     &                   LRWORK, IWORK, IINFO )
+*
+*                 CGEJSV retuns V not VT, so we transpose to use the same
+*                 test suite.
+*
+                  DO 133 J=1,N
+                     DO 132 I=1,N
+                        VTSAV(J,I) = A(I,J)
+  132                END DO
+  133             END DO
+*
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUNIT, FMT = 9995 )'GESVJ', IINFO, M, N,
+     $               JTYPE, LSWORK, IOLDSD
+                     INFO = ABS( IINFO )
+                     RETURN
+                  END IF
+*
+*                 Do tests 19--22
+*
+* TEST 19 NOT PASSING THE THREASHOLD
+*                  CALL CBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
+*     $                         VTSAV, LDVT, WORK, RWORK, RESULT( 19 ) )
+                  IF( M.NE.0 .AND. N.NE.0 ) THEN
+                     CALL CUNT01( 'Columns', M, M, USAV, LDU, WORK,
+     $                            LWORK, RWORK, RESULT( 20 ) )
+                     CALL CUNT01( 'Rows', N, N, VTSAV, LDVT, WORK,
+     $                            LWORK, RWORK, RESULT( 21 ) )
+                  END IF
+                  RESULT( 22 ) = ZERO
+                  DO 134 I = 1, MNMIN - 1
+                     IF( SSAV( I ).LT.SSAV( I+1 ) )
+     $                  RESULT( 22 ) = ULPINV
+                     IF( SSAV( I ).LT.ZERO )
+     $                  RESULT( 22 ) = ULPINV
+  134             CONTINUE
+                  IF( MNMIN.GE.1 ) THEN
+                     IF( SSAV( MNMIN ).LT.ZERO )
+     $                  RESULT( 22 ) = ULPINV
+                  END IF
+               END IF
 *
 *              Test CGESVDX
 *
 *              Factorize A
 *
                CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               SRNAMT = 'CGESVDX'
                CALL CGESVDX( 'V', 'V', 'A', M, N, A, LDA, 
      $                       VL, VU, IL, IU, NS, SSAV, USAV, LDU, 
      $                       VTSAV, LDVT, WORK, LWORK, RWORK,
@@ -822,34 +983,34 @@
 *
 *              Do tests 1--4
 *
-               RESULT( 15 ) = ZERO
-               RESULT( 16 ) = ZERO
-               RESULT( 17 ) = ZERO
+               RESULT( 23 ) = ZERO
+               RESULT( 24 ) = ZERO
+               RESULT( 25 ) = ZERO
                CALL CBDT01( M, N, 0, ASAV, LDA, USAV, LDU, SSAV, E,
-     $                      VTSAV, LDVT, WORK, RWORK, RESULT( 15 ) )
+     $                      VTSAV, LDVT, WORK, RWORK, RESULT( 23 ) )
                IF( M.NE.0 .AND. N.NE.0 ) THEN
                   CALL CUNT01( 'Columns', MNMIN, M, USAV, LDU, WORK,
-     $                         LWORK, RWORK, RESULT( 16 ) )
+     $                         LWORK, RWORK, RESULT( 24 ) )
                   CALL CUNT01( 'Rows', MNMIN, N, VTSAV, LDVT, WORK,
-     $                         LWORK, RWORK, RESULT( 17 ) )
+     $                         LWORK, RWORK, RESULT( 25 ) )
                END IF
-               RESULT( 18 ) = ZERO
+               RESULT( 26 ) = ZERO
                DO 140 I = 1, MNMIN - 1
                   IF( SSAV( I ).LT.SSAV( I+1 ) )
-     $               RESULT( 18 ) = ULPINV
+     $               RESULT( 26 ) = ULPINV
                   IF( SSAV( I ).LT.ZERO )
-     $               RESULT( 18 ) = ULPINV
+     $               RESULT( 26 ) = ULPINV
   140          CONTINUE
                IF( MNMIN.GE.1 ) THEN
                   IF( SSAV( MNMIN ).LT.ZERO )
-     $               RESULT( 18 ) = ULPINV
+     $               RESULT( 26 ) = ULPINV
                END IF
 *
 *              Do partial SVDs, comparing to SSAV, USAV, and VTSAV
 *
-               RESULT( 19 ) = ZERO
-               RESULT( 20 ) = ZERO
-               RESULT( 21 ) = ZERO
+               RESULT( 27 ) = ZERO
+               RESULT( 28 ) = ZERO
+               RESULT( 29 ) = ZERO
                DO 170 IJU = 0, 1
                   DO 160 IJVT = 0, 1
                      IF( ( IJU.EQ.0 .AND. IJVT.EQ.0 ) .OR.
@@ -858,6 +1019,7 @@
                      JOBVT = CJOBV( IJVT+1 )
                      RANGE = CJOBR( 1 )
                      CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+                     SRNAMT = 'CGESVDX'
                      CALL CGESVDX( JOBU, JOBVT, 'A', M, N, A, LDA, 
      $                            VL, VU, IL, IU, NS, SSAV, U, LDU, 
      $                            VT, LDVT, WORK, LWORK, RWORK,
@@ -873,7 +1035,7 @@
      $                                  DIF, IINFO )
                         END IF
                      END IF
-                     RESULT( 19 ) = MAX( RESULT( 19 ), DIF )
+                     RESULT( 27 ) = MAX( RESULT( 27 ), DIF )
 *
 *                    Compare VT
 *
@@ -885,7 +1047,7 @@
      $                                  RWORK, DIF, IINFO )
                         END IF
                      END IF
-                     RESULT( 20 ) = MAX( RESULT( 20 ), DIF )
+                     RESULT( 28 ) = MAX( RESULT( 28 ), DIF )
 *
 *                    Compare S
 *
@@ -899,7 +1061,7 @@
      $                     DIF = ULPINV
                         DIF = MAX( DIF, ABS( SSAV( I )-S( I ) ) / DIV )
   150                CONTINUE
-                     RESULT( 21) = MAX( RESULT( 21 ), DIF )
+                     RESULT( 29) = MAX( RESULT( 29 ), DIF )
   160             CONTINUE
   170          CONTINUE
 *
@@ -921,6 +1083,7 @@
                   END IF
                END IF  
                CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               SRNAMT = 'CGESVDX'
                CALL CGESVDX( 'V', 'V', 'I', M, N, A, LDA, 
      $                       VL, VU, IL, IU, NSI, S, U, LDU, 
      $                       VT, LDVT, WORK, LWORK, RWORK,
@@ -932,16 +1095,16 @@
                   RETURN
                END IF
 *
-               RESULT( 22 ) = ZERO
-               RESULT( 23 ) = ZERO
-               RESULT( 24 ) = ZERO
+               RESULT( 30 ) = ZERO
+               RESULT( 31 ) = ZERO
+               RESULT( 32 ) = ZERO
                CALL CBDT05( M, N, ASAV, LDA, S, NSI, U, LDU,
-     $                      VT, LDVT, WORK, RESULT( 22 ) )
+     $                      VT, LDVT, WORK, RESULT( 30 ) )
                IF( M.NE.0 .AND. N.NE.0 ) THEN
                   CALL CUNT01( 'Columns', M, NSI, U, LDU, WORK,
-     $                         LWORK, RWORK, RESULT( 23 ) )
+     $                         LWORK, RWORK, RESULT( 31 ) )
                   CALL CUNT01( 'Rows', NSI, N, VT, LDVT, WORK,
-     $                         LWORK, RWORK, RESULT( 24 ) )
+     $                         LWORK, RWORK, RESULT( 32 ) )
                END IF
 *
 *              Do tests 11--13
@@ -971,6 +1134,7 @@
                   VU = ONE
                END IF 
                CALL CLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+               SRNAMT = 'CGESVDX'
                CALL CGESVDX( 'V', 'V', 'V', M, N, A, LDA, 
      $                       VL, VU, IL, IU, NSV, S, U, LDU, 
      $                       VT, LDVT, WORK, LWORK, RWORK,
@@ -982,23 +1146,23 @@
                   RETURN
                END IF
 *
-               RESULT( 25 ) = ZERO
-               RESULT( 26 ) = ZERO
-               RESULT( 27 ) = ZERO
+               RESULT( 33 ) = ZERO
+               RESULT( 34 ) = ZERO
+               RESULT( 35 ) = ZERO
                CALL CBDT05( M, N, ASAV, LDA, S, NSV, U, LDU,
-     $                      VT, LDVT, WORK, RESULT( 25 ) )
+     $                      VT, LDVT, WORK, RESULT( 33 ) )
                IF( M.NE.0 .AND. N.NE.0 ) THEN
                   CALL CUNT01( 'Columns', M, NSV, U, LDU, WORK,
-     $                         LWORK, RWORK, RESULT( 26 ) )
+     $                         LWORK, RWORK, RESULT( 34 ) )
                   CALL CUNT01( 'Rows', NSV, N, VT, LDVT, WORK,
-     $                         LWORK, RWORK, RESULT( 27 ) )
+     $                         LWORK, RWORK, RESULT( 35 ) )
                END IF
 *
 *              End of Loop -- Check for RESULT(j) > THRESH
 *
                NTEST = 0
                NFAIL = 0
-               DO 190 J = 1, 27
+               DO 190 J = 1, 35
                   IF( RESULT( J ).GE.ZERO )
      $               NTEST = NTEST + 1
                   IF( RESULT( J ).GE.THRESH )
@@ -1013,7 +1177,7 @@
                   NTESTF = 2
                END IF
 *
-               DO 200 J = 1, 27
+               DO 200 J = 1, 35
                   IF( RESULT( J ).GE.THRESH ) THEN
                      WRITE( NOUNIT, FMT = 9997 )M, N, JTYPE, IWSPC,
      $                  IOLDSD, J, RESULT( J )
@@ -1023,10 +1187,10 @@
                NERRS = NERRS + NFAIL
                NTESTT = NTESTT + NTEST
 *
-  210       CONTINUE
+  290       CONTINUE
 *
-  220    CONTINUE
-  230 CONTINUE
+  300    CONTINUE
+  310 CONTINUE
 *
 *     Summary
 *
@@ -1060,23 +1224,35 @@
      $      / '12 = | U - Upartial | / ( M ulp )',
      $      / '13 = | VT - VTpartial | / ( N ulp )',
      $      / '14 = | S - Spartial | / ( min(M,N) ulp |S| )', 
-     $      / ' CGESVDX(V,V,A): ', /
-     $        '15 = | A - U diag(S) VT | / ( |A| max(M,N) ulp ) ',
+     $      / ' CGESVJ: ', /
+     $      / '15 = | A - U diag(S) VT | / ( |A| max(M,N) ulp ) ',
      $      / '16 = | I - U**T U | / ( M ulp ) ',
      $      / '17 = | I - VT VT**T | / ( N ulp ) ',
      $      / '18 = 0 if S contains min(M,N) nonnegative values in',
      $      ' decreasing order, else 1/ulp',
-     $      / '19 = | U - Upartial | / ( M ulp )',
-     $      / '20 = | VT - VTpartial | / ( N ulp )',
-     $      / '21 = | S - Spartial | / ( min(M,N) ulp |S| )',
+     $      / ' CGESJV: ', /
+     $      / '19 = | A - U diag(S) VT | / ( |A| max(M,N) ulp )',
+     $      / '20 = | I - U**T U | / ( M ulp ) ',
+     $      / '21 = | I - VT VT**T | / ( N ulp ) ', 
+     $      / '22 = 0 if S contains min(M,N) nonnegative values in',
+     $      ' decreasing order, else 1/ulp',
+     $      / ' CGESVDX(V,V,A): ', /
+     $        '23 = | A - U diag(S) VT | / ( |A| max(M,N) ulp ) ',
+     $      / '24 = | I - U**T U | / ( M ulp ) ',
+     $      / '25 = | I - VT VT**T | / ( N ulp ) ',
+     $      / '26 = 0 if S contains min(M,N) nonnegative values in',
+     $      ' decreasing order, else 1/ulp',
+     $      / '27 = | U - Upartial | / ( M ulp )',
+     $      / '28 = | VT - VTpartial | / ( N ulp )',
+     $      / '29 = | S - Spartial | / ( min(M,N) ulp |S| )',
      $      / ' CGESVDX(V,V,I): ',
-     $      / '22 = | U**T A VT**T - diag(S) | / ( |A| max(M,N) ulp )',
-     $      / '23 = | I - U**T U | / ( M ulp ) ',
-     $      / '24 = | I - VT VT**T | / ( N ulp ) ',
-     $      / ' SGESVDX(V,V,V) ',
-     $      / '25 = | U**T A VT**T - diag(S) | / ( |A| max(M,N) ulp )',
-     $      / '26 = | I - U**T U | / ( M ulp ) ',
-     $      / '27 = | I - VT VT**T | / ( N ulp ) ',  
+     $      / '30 = | U**T A VT**T - diag(S) | / ( |A| max(M,N) ulp )',
+     $      / '31 = | I - U**T U | / ( M ulp ) ',
+     $      / '32 = | I - VT VT**T | / ( N ulp ) ',
+     $      / ' CGESVDX(V,V,V) ',
+     $      / '33 = | U**T A VT**T - diag(S) | / ( |A| max(M,N) ulp )',
+     $      / '34 = | I - U**T U | / ( M ulp ) ',
+     $      / '35 = | I - VT VT**T | / ( N ulp ) ',  
      $      / / )
  9997 FORMAT( ' M=', I5, ', N=', I5, ', type ', I1, ', IWS=', I1,
      $      ', seed=', 4( I4, ',' ), ' test(', I2, ')=', G11.4 )
