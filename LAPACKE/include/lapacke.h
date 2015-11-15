@@ -1139,6 +1139,17 @@ lapack_int LAPACKE_zgetrf( int matrix_layout, lapack_int m, lapack_int n,
                            lapack_complex_double* a, lapack_int lda,
                            lapack_int* ipiv );
 
+lapack_int LAPACKE_sgetrf2( int matrix_layout, lapack_int m, lapack_int n,
+                           float* a, lapack_int lda, lapack_int* ipiv );
+lapack_int LAPACKE_dgetrf2( int matrix_layout, lapack_int m, lapack_int n,
+                           double* a, lapack_int lda, lapack_int* ipiv );
+lapack_int LAPACKE_cgetrf2( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_complex_float* a, lapack_int lda,
+                           lapack_int* ipiv );
+lapack_int LAPACKE_zgetrf2( int matrix_layout, lapack_int m, lapack_int n,
+                           lapack_complex_double* a, lapack_int lda,
+                           lapack_int* ipiv );
+
 lapack_int LAPACKE_sgetri( int matrix_layout, lapack_int n, float* a,
                            lapack_int lda, const lapack_int* ipiv );
 lapack_int LAPACKE_dgetri( int matrix_layout, lapack_int n, double* a,
@@ -5901,6 +5912,17 @@ lapack_int LAPACKE_cgetrf_work( int matrix_layout, lapack_int m, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 lapack_int* ipiv );
 lapack_int LAPACKE_zgetrf_work( int matrix_layout, lapack_int m, lapack_int n,
+                                lapack_complex_double* a, lapack_int lda,
+                                lapack_int* ipiv );
+
+lapack_int LAPACKE_sgetrf2_work( int matrix_layout, lapack_int m, lapack_int n,
+                                float* a, lapack_int lda, lapack_int* ipiv );
+lapack_int LAPACKE_dgetrf2_work( int matrix_layout, lapack_int m, lapack_int n,
+                                double* a, lapack_int lda, lapack_int* ipiv );
+lapack_int LAPACKE_cgetrf2_work( int matrix_layout, lapack_int m, lapack_int n,
+                                lapack_complex_float* a, lapack_int lda,
+                                lapack_int* ipiv );
+lapack_int LAPACKE_zgetrf2_work( int matrix_layout, lapack_int m, lapack_int n,
                                 lapack_complex_double* a, lapack_int lda,
                                 lapack_int* ipiv );
 
@@ -11404,6 +11426,10 @@ void LAPACKE_ilaver( const lapack_int* vers_major,
 #define LAPACK_dgetrf LAPACK_GLOBAL(dgetrf,DGETRF)
 #define LAPACK_cgetrf LAPACK_GLOBAL(cgetrf,CGETRF)
 #define LAPACK_zgetrf LAPACK_GLOBAL(zgetrf,ZGETRF)
+#define LAPACK_sgetrf2 LAPACK_GLOBAL(sgetrf2,SGETRF2)
+#define LAPACK_dgetrf2 LAPACK_GLOBAL(dgetrf2,DGETRF2)
+#define LAPACK_cgetrf2 LAPACK_GLOBAL(cgetrf2,CGETRF2)
+#define LAPACK_zgetrf2 LAPACK_GLOBAL(zgetrf2,ZGETRF2)
 #define LAPACK_sgbtrf LAPACK_GLOBAL(sgbtrf,SGBTRF)
 #define LAPACK_dgbtrf LAPACK_GLOBAL(dgbtrf,DGBTRF)
 #define LAPACK_cgbtrf LAPACK_GLOBAL(cgbtrf,CGBTRF)
@@ -12513,6 +12539,14 @@ void LAPACK_dgetrf( lapack_int* m, lapack_int* n, double* a, lapack_int* lda,
 void LAPACK_cgetrf( lapack_int* m, lapack_int* n, lapack_complex_float* a,
                     lapack_int* lda, lapack_int* ipiv, lapack_int *info );
 void LAPACK_zgetrf( lapack_int* m, lapack_int* n, lapack_complex_double* a,
+                    lapack_int* lda, lapack_int* ipiv, lapack_int *info );
+void LAPACK_sgetrf2( lapack_int* m, lapack_int* n, float* a, lapack_int* lda,
+                    lapack_int* ipiv, lapack_int *info );
+void LAPACK_dgetrf2( lapack_int* m, lapack_int* n, double* a, lapack_int* lda,
+                    lapack_int* ipiv, lapack_int *info );
+void LAPACK_cgetrf2( lapack_int* m, lapack_int* n, lapack_complex_float* a,
+                    lapack_int* lda, lapack_int* ipiv, lapack_int *info );
+void LAPACK_zgetrf2( lapack_int* m, lapack_int* n, lapack_complex_double* a,
                     lapack_int* lda, lapack_int* ipiv, lapack_int *info );
 void LAPACK_sgbtrf( lapack_int* m, lapack_int* n, lapack_int* kl,
                     lapack_int* ku, float* ab, lapack_int* ldab,
