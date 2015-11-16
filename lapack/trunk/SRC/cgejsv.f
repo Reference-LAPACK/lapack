@@ -556,13 +556,13 @@
 *     ..
 *     .. External Functions ..
       REAL      SLAMCH, SCNRM2
-      INTEGER   ISAMAX
+      INTEGER   ISAMAX, ICAMAX
       LOGICAL   LSAME
-      EXTERNAL  ISAMAX, LSAME, SLAMCH, SCNRM2
+      EXTERNAL  ISAMAX, ICAMAX, LSAME, SLAMCH, SCNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL  CCOPY,  CGELQF, CGEQP3, CGEQRF, CLACPY, CLASCL,
-     $          CLASET, CLASSQ, CLASWP, CUNGQR, CUNMLQ,
+     $          SLASCL, CLASET, CLASSQ, SLASSQ, CLASWP, CUNGQR, CUNMLQ,
      $          CUNMQR, CPOCON, SSCAL, CSSCAL, CSWAP,  CTRSM,  XERBLA
 *
       EXTERNAL  CGESVJ
@@ -803,7 +803,7 @@
  1950       CONTINUE
          ELSE
             DO 1904 p = 1, M
-               RWORK(M+N+p) = SCALEM*ABS( A(p,ISAMAX(N,A(p,1),LDA)) )
+               RWORK(M+N+p) = SCALEM*ABS( A(p,ICAMAX(N,A(p,1),LDA)) )
                AATMAX = AMAX1( AATMAX, RWORK(M+N+p) )
                AATMIN = AMIN1( AATMIN, RWORK(M+N+p) )
  1904       CONTINUE
@@ -824,7 +824,7 @@
 *
          XSC   = ZERO
          TEMP1 = ONE
-         CALL CLASSQ( N, SVA, 1, XSC, TEMP1 )
+         CALL SLASSQ( N, SVA, 1, XSC, TEMP1 )
          TEMP1 = ONE / TEMP1
 *
          ENTRA = ZERO
@@ -903,7 +903,7 @@
       BIG1   = SQRT( BIG )
       TEMP1  = SQRT( BIG / FLOAT(N) )
 *
-      CALL CLASCL( 'G', 0, 0, AAPP, TEMP1, N, 1, SVA, N, IERR )
+      CALL SLASCL( 'G', 0, 0, AAPP, TEMP1, N, 1, SVA, N, IERR )
       IF ( AAQQ .GT. (AAPP * SFMIN) ) THEN
           AAQQ = ( AAQQ / AAPP ) * TEMP1
       ELSE
@@ -1221,7 +1221,7 @@
                CALL CCOPY( NR-p+1, V(p,p), LDV, V(p,p), 1 )
                CALL CLACGV( NR-p+1, V(p,p), 1 ) 
  8998       CONTINUE
-            CALL CLASET( 'Upper', NR-1, NR-1, ZERO, ZERO, V(1,2), LDV )
+            CALL CLASET('Upper', NR-1, NR-1, CZERO, CZERO, V(1,2), LDV)
 *
             CALL CGESVJ( 'Lower', 'U','N', NR, NR, V,LDV, SVA, NR, U,
      $                  LDU, CWORK(N+1), LWORK-N, RWORK, LRWORK, INFO )
@@ -1517,9 +1517,9 @@
                   CALL CTRSM('L','U','C','N',NR,NR,CONE,CWORK(2*N+1),
      $                 N,V,LDV)
                   IF ( NR .LT. N ) THEN
-                   CALL CLASET('A',N-NR,NR,ZERO,CZERO,V(NR+1,1),LDV)
-                   CALL CLASET('A',NR,N-NR,ZERO,CZERO,V(1,NR+1),LDV)
-                   CALL CLASET('A',N-NR,N-NR,ZERO,CONE,V(NR+1,NR+1),LDV)
+                  CALL CLASET('A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV)
+                  CALL CLASET('A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV)
+                  CALL CLASET('A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV)
                   END IF
                   CALL CUNMQR('L','N',N,N,NR,CWORK(2*N+1),N,CWORK(N+1),
      $                V,LDV,CWORK(2*N+N*NR+NR+1),LWORK-2*N-N*NR-NR,IERR)
@@ -1775,9 +1775,9 @@
          NUMRANK = NINT(RWORK(2))
 
          IF ( NR .LT. N ) THEN
-            CALL CLASET( 'A',N-NR,NR,ZERO,ZERO,V(NR+1,1),LDV )
-            CALL CLASET( 'A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV )
-            CALL CLASET( 'A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),LDV )
+            CALL CLASET( 'A',N-NR,NR,CZERO,CZERO,V(NR+1,1),LDV )
+            CALL CLASET( 'A',NR,N-NR,CZERO,CZERO,V(1,NR+1),LDV )
+            CALL CLASET( 'A',N-NR,N-NR,CZERO,CONE,V(NR+1,NR+1),LDV )
          END IF
 
          CALL CUNMQR( 'L','N',N,N,NR,CWORK(2*N+1),N,CWORK(N+1),
@@ -1832,7 +1832,7 @@
 *     Undo scaling, if necessary (and possible)
 *
       IF ( USCAL2 .LE. (BIG/SVA(1))*USCAL1 ) THEN
-         CALL CLASCL( 'G', 0, 0, USCAL1, USCAL2, NR, 1, SVA, N, IERR )
+         CALL SLASCL( 'G', 0, 0, USCAL1, USCAL2, NR, 1, SVA, N, IERR )
          USCAL1 = ONE
          USCAL2 = ONE
       END IF
