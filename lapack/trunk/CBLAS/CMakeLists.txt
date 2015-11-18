@@ -65,7 +65,7 @@ if(ALL_TARGETS)
   list(GET ALL_TARGETS 0 _cblas_config_build_guard_target)
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}//cmake//cblas-config-version.cmake.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/cblas-config-version.cmake @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-build.cmake.in
   ${LAPACK_BINARY_DIR}/cblas-config.cmake @ONLY)
