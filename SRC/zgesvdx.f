@@ -365,7 +365,7 @@
             IF( WANTU .AND. LDU.LT.M ) THEN
                INFO = -15
             ELSE IF( WANTVT .AND. LDVT.LT.MINMN ) THEN
-               INFO = -16
+               INFO = -17
             END IF
          END IF
       END IF
