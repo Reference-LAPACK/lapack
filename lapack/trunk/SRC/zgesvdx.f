@@ -388,37 +388,37 @@
 *                 Path 1 (M much larger than N)
 *
                   MINWRK = N*(N+5)
-                  MAXWRK = N + N*ILAENV(1,'CGEQRF',' ',M,N,-1,-1)
+                  MAXWRK = N + N*ILAENV(1,'ZGEQRF',' ',M,N,-1,-1)
                   MAXWRK = MAX(MAXWRK,
-     $                     N*N+2*N+2*N*ILAENV(1,'CGEBRD',' ',N,N,-1,-1))
+     $                     N*N+2*N+2*N*ILAENV(1,'ZGEBRD',' ',N,N,-1,-1))
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                       N*N+2*N+N*ILAENV(1,'CUNMQR','LN',N,N,N,-1))
+     $                       N*N+2*N+N*ILAENV(1,'ZUNMQR','LN',N,N,N,-1))
                   END IF
                ELSE
 *
 *                 Path 2 (M at least N, but not much larger)
 *
                   MINWRK = 3*N + M
-                  MAXWRK = 2*N + (M+N)*ILAENV(1,'CGEBRD',' ',M,N,-1,-1)
+                  MAXWRK = 2*N + (M+N)*ILAENV(1,'ZGEBRD',' ',M,N,-1,-1)
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                        2*N+N*ILAENV(1,'CUNMQR','LN',N,N,N,-1))
+     $                        2*N+N*ILAENV(1,'ZUNMQR','LN',N,N,N,-1))
                   END IF
                END IF
             ELSE
-               MNTHR = ILAENV( 6, 'CGESVD', JOBU // JOBVT, M, N, 0, 0 )
+               MNTHR = ILAENV( 6, 'ZGESVD', JOBU // JOBVT, M, N, 0, 0 )
                IF( N.GE.MNTHR ) THEN
 *
 *                 Path 1t (N much larger than M)
 *
                   MINWRK = M*(M+5)
-                  MAXWRK = M + M*ILAENV(1,'CGELQF',' ',M,N,-1,-1)
+                  MAXWRK = M + M*ILAENV(1,'ZGELQF',' ',M,N,-1,-1)
                   MAXWRK = MAX(MAXWRK,
-     $                     M*M+2*M+2*M*ILAENV(1,'CGEBRD',' ',M,M,-1,-1))
+     $                     M*M+2*M+2*M*ILAENV(1,'ZGEBRD',' ',M,M,-1,-1))
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                       M*M+2*M+M*ILAENV(1,'CUNMQR','LN',M,M,M,-1))
+     $                       M*M+2*M+M*ILAENV(1,'ZUNMQR','LN',M,M,M,-1))
                   END IF
                ELSE
 *
@@ -426,10 +426,10 @@
 *
 *
                   MINWRK = 3*M + N
-                  MAXWRK = 2*M + (M+N)*ILAENV(1,'CGEBRD',' ',M,N,-1,-1)
+                  MAXWRK = 2*M + (M+N)*ILAENV(1,'ZGEBRD',' ',M,N,-1,-1)
                   IF (WANTU .OR. WANTVT) THEN
                      MAXWRK = MAX(MAXWRK,
-     $                        2*M+M*ILAENV(1,'CUNMQR','LN',M,M,M,-1))
+     $                        2*M+M*ILAENV(1,'ZUNMQR','LN',M,M,M,-1))
                   END IF
                END IF
             END IF
