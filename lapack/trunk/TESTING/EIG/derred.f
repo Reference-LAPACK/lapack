@@ -475,7 +475,7 @@
          CALL DGESVDX( 'V', 'N', 'A', 2, 2, A, 2, ZERO, ZERO, 
      $                 0, 0, NS, S, U, 1, VT, 1, W, 1, IW, INFO )
          CALL CHKXER( 'DGESVDX', INFOT, NOUT, LERR, OK )
-         INFOT = 16
+         INFOT = 17
          CALL DGESVDX( 'N', 'V', 'A', 2, 2, A, 2, ZERO, ZERO, 
      $                 0, 0, NS, S, U, 1, VT, 1, W, 1, IW, INFO )
          CALL CHKXER( 'DGESVDX', INFOT, NOUT, LERR, OK )
