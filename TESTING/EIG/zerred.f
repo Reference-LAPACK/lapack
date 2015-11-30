@@ -484,7 +484,7 @@
          CALL ZGESVDX( 'V', 'N', 'A', 2, 2, A, 2, ZERO, ZERO, 
      $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
          CALL CHKXER( 'ZGESVDX', INFOT, NOUT, LERR, OK )
-         INFOT = 16
+         INFOT = 17
          CALL ZGESVDX( 'N', 'V', 'A', 2, 2, A, 2, ZERO, ZERO, 
      $                 0, 0, NS, S, U, 1, VT, 1, W, 1, RW, IW, INFO )
          CALL CHKXER( 'ZGESVDX', INFOT, NOUT, LERR, OK )
