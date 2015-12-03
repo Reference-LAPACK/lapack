@@ -48,7 +48,7 @@ lapack_int LAPACKE_dsbtrd( int matrix_layout, char vect, char uplo, lapack_int n
     if( LAPACKE_dsb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
         return -6;
     }
-    if( LAPACKE_lsame( vect, 'u' ) || LAPACKE_lsame( vect, 'v' ) ) {
+    if( LAPACKE_lsame( vect, 'u' ) ) {
         if( LAPACKE_dge_nancheck( matrix_layout, n, n, q, ldq ) ) {
             return -10;
         }
