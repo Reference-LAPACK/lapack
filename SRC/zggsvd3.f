@@ -383,7 +383,7 @@
       EXTERNAL           LSAME, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, XERBLA, ZGGSVP, ZTGSJA
+      EXTERNAL           DCOPY, XERBLA, ZGGSVP3, ZTGSJA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
