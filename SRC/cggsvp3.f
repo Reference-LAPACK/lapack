@@ -308,7 +308,6 @@
 *     .. Local Scalars ..
       LOGICAL            FORWRD, WANTQ, WANTU, WANTV, LQUERY
       INTEGER            I, J, LWKOPT
-      COMPLEX            T
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
