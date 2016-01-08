@@ -58,7 +58,7 @@
 *>              Zx = +-e - f with the sign giving the greater value
 *>              of 2-norm(x). About 5 times as expensive as Default.
 *>          IJOB .ne. 2: Local look ahead strategy where all entries of
-*>              the r.h.s. b is choosen as either +1 or -1 (Default).
+*>              the r.h.s. b is chosen as either +1 or -1 (Default).
 *> \endverbatim
 *>
 *> \param[in] N

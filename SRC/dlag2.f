@@ -99,7 +99,7 @@
 *>          will always be positive.  If the eigenvalues are real, then
 *>          the first (real) eigenvalue is  WR1 / SCALE1 , but this may
 *>          overflow or underflow, and in fact, SCALE1 may be zero or
-*>          less than the underflow threshhold if the exact eigenvalue
+*>          less than the underflow threshold if the exact eigenvalue
 *>          is sufficiently large.
 *> \endverbatim
 *>
@@ -112,7 +112,7 @@
 *>          eigenvalues are real, then the second (real) eigenvalue is
 *>          WR2 / SCALE2 , but this may overflow or underflow, and in
 *>          fact, SCALE2 may be zero or less than the underflow
-*>          threshhold if the exact eigenvalue is sufficiently large.
+*>          threshold if the exact eigenvalue is sufficiently large.
 *> \endverbatim
 *>
 *> \param[out] WR1
@@ -266,8 +266,8 @@
 *     Note: the test of R in the following IF is to cover the case when
 *           DISCR is small and negative and is flushed to zero during
 *           the calculation of R.  On machines which have a consistent
-*           flush-to-zero threshhold and handle numbers above that
-*           threshhold correctly, it would not be necessary.
+*           flush-to-zero threshold and handle numbers above that
+*           threshold correctly, it would not be necessary.
 *
       IF( DISCR.GE.ZERO .OR. R.EQ.ZERO ) THEN
          SUM = PP + SIGN( R, PP )

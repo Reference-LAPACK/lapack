@@ -26,7 +26,7 @@
 *> .FALSE..
 *>
 *> It is used by the test routine SDRGES to test whether the driver
-*> routine SGGES succesfully sorts eigenvalues.
+*> routine SGGES successfully sorts eigenvalues.
 *> \endverbatim
 *
 *  Arguments:

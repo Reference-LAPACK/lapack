@@ -22,8 +22,8 @@
 *>
 *> ZSLECT returns .TRUE. if the eigenvalue Z is to be selected,
 *> otherwise it returns .FALSE.
-*> It is used by ZCHK41 to test if ZGEES succesfully sorts eigenvalues,
-*> and by ZCHK43 to test if ZGEESX succesfully sorts eigenvalues.
+*> It is used by ZCHK41 to test if ZGEES successfully sorts eigenvalues,
+*> and by ZCHK43 to test if ZGEESX successfully sorts eigenvalues.
 *>
 *> The common block /SSLCT/ controls how eigenvalues are selected.
 *> If SELOPT = 0, then ZSLECT return .TRUE. when real(Z) is less than

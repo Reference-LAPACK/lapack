@@ -446,7 +446,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          If 0,  then successful exit.
-*>          If <0, then input paramter -INFO is incorrect.
+*>          If <0, then input parameter -INFO is incorrect.
 *>          If >0, ZLATMR, CLATMS, CLATME or ZGET23 returned an error
 *>                 code, and INFO is its absolute value.
 *>

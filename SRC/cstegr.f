@@ -48,7 +48,7 @@
 *> either an interval (VL,VU] or a range of indices IL:IU for the desired
 *> eigenvalues.
 *>
-*> CSTEGR is a compatability wrapper around the improved CSTEMR routine.
+*> CSTEGR is a compatibility wrapper around the improved CSTEMR routine.
 *> See SSTEMR for further details.
 *>
 *> One important change is that the ABSTOL parameter no longer provides any

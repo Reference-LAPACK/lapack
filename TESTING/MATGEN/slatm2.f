@@ -30,7 +30,7 @@
 *> \verbatim
 *>
 *>    SLATM2 returns the (I,J) entry of a random matrix of dimension
-*>    (M, N) described by the other paramters. It is called by the
+*>    (M, N) described by the other parameters. It is called by the
 *>    SLATMR routine in order to build random test matrices. No error
 *>    checking on parameters is done, because this routine is called in
 *>    a tight loop by SLATMR which has already checked the parameters.

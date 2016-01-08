@@ -51,7 +51,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix (subblock, if the matrix splitted).
+*>          The order of the matrix (subblock, if the matrix split).
 *> \endverbatim
 *>
 *> \param[in] D

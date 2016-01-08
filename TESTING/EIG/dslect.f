@@ -22,8 +22,8 @@
 *>
 *> DSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
 *> selected, and otherwise it returns .FALSE.
-*> It is used by DCHK41 to test if DGEES succesfully sorts eigenvalues,
-*> and by DCHK43 to test if DGEESX succesfully sorts eigenvalues.
+*> It is used by DCHK41 to test if DGEES successfully sorts eigenvalues,
+*> and by DCHK43 to test if DGEESX successfully sorts eigenvalues.
 *>
 *> The common block /SSLCT/ controls how eigenvalues are selected.
 *> If SELOPT = 0, then DSLECT return .TRUE. when ZR is less than zero,

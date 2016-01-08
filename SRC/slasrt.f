@@ -123,7 +123,7 @@
 *     ..
 *     .. Executable Statements ..
 *
-*     Test the input paramters.
+*     Test the input parameters.
 *
       INFO = 0
       DIR = -1

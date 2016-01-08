@@ -81,7 +81,7 @@
 *>          L is REAL array, dimension (N)
 *>          On entry, the (N-1) subdiagonal elements of the unit
 *>          bidiagonal matrix L are in elements 1 to N-1 of L
-*>          (if the matrix is not splitted.) At the end of each block
+*>          (if the matrix is not split.) At the end of each block
 *>          is stored the corresponding shift as given by SLARRE.
 *>          On exit, L is overwritten.
 *> \endverbatim
@@ -236,7 +236,7 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>
-*>          > 0:  A problem occured in CLARRV.
+*>          > 0:  A problem occurred in CLARRV.
 *>          < 0:  One of the called subroutines signaled an internal problem.
 *>                Needs inspection of the corresponding parameter IINFO
 *>                for further information.

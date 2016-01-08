@@ -59,7 +59,7 @@
 *> (need more details on what kind of read-in data are needed).
 *>
 *> For each matrix pair, the following tests will be performed and
-*> compared with the threshhold THRESH except for the tests (7) and (9):
+*> compared with the threshold THRESH except for the tests (7) and (9):
 *>
 *> (1)   | A - Q S Z' | / ( |A| n ulp )
 *>

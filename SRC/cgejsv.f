@@ -317,7 +317,7 @@
 *>               the minimal requirement is LWORK >= 5*N+2*N*N. 
 *>            4.2. if JOBV.EQ.'J' the minimal requirement is 
 *>               LWORK >= 4*N+N*N.
-*>            In both cases, the allocated CWORK can accomodate blocked runs
+*>            In both cases, the allocated CWORK can accommodate blocked runs
 *>            of CGEQP3, CGEQRF, CGELQF, SUNMQR, CUNMLQ.
 *> \endverbatim
 *>

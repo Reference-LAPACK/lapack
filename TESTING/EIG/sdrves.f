@@ -948,7 +948,7 @@
      $      '  1/ulp otherwise', /
      $      ' 12 = 0 if WR, WI same no matter if VS computed (sort),',
      $      '  1/ulp otherwise', /
-     $      ' 13 = 0 if sorting succesful, 1/ulp otherwise', / )
+     $      ' 13 = 0 if sorting successful, 1/ulp otherwise', / )
  9993 FORMAT( ' N=', I5, ', IWK=', I2, ', seed=', 4( I4, ',' ),
      $      ' type ', I2, ', test(', I2, ')=', G10.3 )
  9992 FORMAT( ' SDRVES: ', A, ' returned INFO=', I6, '.', / 9X, 'N=',

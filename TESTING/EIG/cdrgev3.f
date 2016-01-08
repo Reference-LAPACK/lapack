@@ -55,7 +55,7 @@
 *> number of matrix "types" are specified.  For each size ("n")
 *> and each type of matrix, a pair of matrices (A, B) will be generated
 *> and used for testing.  For each matrix pair, the following tests
-*> will be performed and compared with the threshhold THRESH.
+*> will be performed and compared with the threshold THRESH.
 *>
 *> Results from CGGEV3:
 *>

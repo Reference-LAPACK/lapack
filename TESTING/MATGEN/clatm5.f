@@ -48,7 +48,7 @@
 *> \param[in] PRTYPE
 *> \verbatim
 *>          PRTYPE is INTEGER
-*>          "Points" to a certian type of the matrices to generate
+*>          "Points" to a certain type of the matrices to generate
 *>          (see futher details).
 *> \endverbatim
 *>

@@ -50,7 +50,7 @@
 *> corresponding the first and last eigenvalues are also know
 *> ``exactly'' (see CLATM6).
 *> For each matrix pair, the following tests will be performed and
-*> compared with the threshhold THRESH.
+*> compared with the threshold THRESH.
 *>
 *> (1) max over all left eigenvalue/-vector pairs (beta/alpha,l) of
 *>
