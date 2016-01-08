@@ -52,7 +52,7 @@
 *> number of matrix "TYPES" are specified.  For each size ("N")
 *> and each TYPE of matrix, a pair of matrices (A, B) will be generated
 *> and used for testing. For each matrix pair, the following 13 tests
-*> will be performed and compared with the threshhold THRESH except
+*> will be performed and compared with the threshold THRESH except
 *> the tests (5), (11) and (13).
 *>
 *>

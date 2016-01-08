@@ -60,7 +60,7 @@
 *>
 *>    The first stage consists of deflating the size of the problem
 *>    when there are multiple singular values or when there are zeros in
-*>    the Z vector.  For each such occurence the dimension of the
+*>    the Z vector.  For each such occurrence the dimension of the
 *>    secular equation problem is reduced by one.  This stage is
 *>    performed by the routine DLASD2.
 *>

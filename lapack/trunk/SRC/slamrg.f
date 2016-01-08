@@ -50,7 +50,7 @@
 *> \param[in] N2
 *> \verbatim
 *>          N2 is INTEGER
-*>         These arguements contain the respective lengths of the two
+*>         These arguments contain the respective lengths of the two
 *>         sorted lists to be merged.
 *> \endverbatim
 *>

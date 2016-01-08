@@ -22,8 +22,8 @@
 *>
 *> SSLECT returns .TRUE. if the eigenvalue ZR+sqrt(-1)*ZI is to be
 *> selected, and otherwise it returns .FALSE.
-*> It is used by SCHK41 to test if SGEES succesfully sorts eigenvalues,
-*> and by SCHK43 to test if SGEESX succesfully sorts eigenvalues.
+*> It is used by SCHK41 to test if SGEES successfully sorts eigenvalues,
+*> and by SCHK43 to test if SGEESX successfully sorts eigenvalues.
 *>
 *> The common block /SSLCT/ controls how eigenvalues are selected.
 *> If SELOPT = 0, then SSLECT return .TRUE. when ZR is less than zero,

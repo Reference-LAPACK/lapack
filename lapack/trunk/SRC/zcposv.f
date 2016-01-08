@@ -178,7 +178,7 @@
 *>               -3 : failure of CPOTRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
-*>          > 0: iterative refinement has been sucessfully used.
+*>          > 0: iterative refinement has been successfully used.
 *>               Returns the number of iterations
 *> \endverbatim
 *>

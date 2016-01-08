@@ -244,7 +244,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
-*>          > 0:  A problem occured in SLARRE.
+*>          > 0:  A problem occurred in SLARRE.
 *>          < 0:  One of the called subroutines signaled an internal problem.
 *>                Needs inspection of the corresponding parameter IINFO
 *>                for further information.

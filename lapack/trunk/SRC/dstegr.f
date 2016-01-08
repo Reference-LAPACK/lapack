@@ -48,7 +48,7 @@
 *> either an interval (VL,VU] or a range of indices IL:IU for the desired
 *> eigenvalues.
 *>
-*> DSTEGR is a compatability wrapper around the improved DSTEMR routine.
+*> DSTEGR is a compatibility wrapper around the improved DSTEMR routine.
 *> See DSTEMR for further details.
 *>
 *> One important change is that the ABSTOL parameter no longer provides any

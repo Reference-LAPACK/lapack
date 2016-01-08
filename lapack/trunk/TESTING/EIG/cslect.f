@@ -22,8 +22,8 @@
 *>
 *> CSLECT returns .TRUE. if the eigenvalue Z is to be selected,
 *> otherwise it returns .FALSE.
-*> It is used by CCHK41 to test if CGEES succesfully sorts eigenvalues,
-*> and by CCHK43 to test if CGEESX succesfully sorts eigenvalues.
+*> It is used by CCHK41 to test if CGEES successfully sorts eigenvalues,
+*> and by CCHK43 to test if CGEESX successfully sorts eigenvalues.
 *>
 *> The common block /SSLCT/ controls how eigenvalues are selected.
 *> If SELOPT = 0, then CSLECT return .TRUE. when real(Z) is less than

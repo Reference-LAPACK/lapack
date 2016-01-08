@@ -32,7 +32,7 @@
 *> \verbatim
 *>
 *>    SLATM3 returns the (ISUB,JSUB) entry of a random matrix of
-*>    dimension (M, N) described by the other paramters. (ISUB,JSUB)
+*>    dimension (M, N) described by the other parameters. (ISUB,JSUB)
 *>    is the final position of the (I,J) entry after pivoting
 *>    according to IPVTNG and IWORK. SLATM3 is called by the
 *>    SLATMR routine in order to build random test matrices. No error

@@ -933,7 +933,7 @@
      $      '  1/ulp otherwise', /
      $      ' 12 = 0 if WR, WI same no matter what else computed ',
      $      '(sort), 1/ulp otherwise', /
-     $      ' 13 = 0 if sorting succesful, 1/ulp otherwise',
+     $      ' 13 = 0 if sorting successful, 1/ulp otherwise',
      $      / ' 14 = 0 if RCONDE same no matter what else computed,',
      $      ' 1/ulp otherwise', /
      $      ' 15 = 0 if RCONDv same no matter what else computed,',

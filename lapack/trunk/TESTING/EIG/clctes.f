@@ -25,7 +25,7 @@
 *> eigenvalue is negative), and otherwise it returns .FALSE..
 *>
 *> It is used by the test routine CDRGES to test whether the driver
-*> routine CGGES succesfully sorts eigenvalues.
+*> routine CGGES successfully sorts eigenvalues.
 *> \endverbatim
 *
 *  Arguments:

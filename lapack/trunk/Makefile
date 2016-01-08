@@ -21,7 +21,7 @@ blaslib:
 	( cd BLAS/SRC; $(MAKE) )
 
 cblaslib:
-	( cd CBLAS/src; $(MAKE) )
+	( cd CBLAS; $(MAKE) )
 
 lapacklib:	lapack_install
 	( cd SRC; $(MAKE) )
@@ -117,7 +117,7 @@ cleanblas_testing:
 	( cd BLAS; rm -f xblat* )
 
 cleancblas_testing:
-	( cd CBLAS; $(MAKE) cleanexe )
+	( cd CBLAS/testing; $(MAKE) clean )
 
 cleantesting:
 	( cd TESTING/LIN; $(MAKE) clean )

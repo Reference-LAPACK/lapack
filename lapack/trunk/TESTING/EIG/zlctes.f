@@ -25,7 +25,7 @@
 *> eigenvalue is negative), and otherwise it returns .FALSE..
 *>
 *> It is used by the test routine ZDRGES to test whether the driver
-*> routine ZGGES succesfully sorts eigenvalues.
+*> routine ZGGES successfully sorts eigenvalues.
 *> \endverbatim
 *
 *  Arguments:

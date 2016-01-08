@@ -26,7 +26,7 @@
 *> .FALSE..
 *>
 *> It is used by the test routine DDRGES to test whether the driver
-*> routine DGGES succesfully sorts eigenvalues.
+*> routine DGGES successfully sorts eigenvalues.
 *> \endverbatim
 *
 *  Arguments:
