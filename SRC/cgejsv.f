@@ -278,7 +278,7 @@
 *>          LWORK depends on the job:
 *>
 *>          1. If only SIGMA is needed ( JOBU.EQ.'N', JOBV.EQ.'N' ) and
-*>            1.1 .. no scaled condition estimate required (JOBE.EQ.'N'):
+*>            1.1 .. no scaled condition estimate required (JOBA.EQ.'N'):
 *>               LWORK >= 2*N+1. This is the minimal requirement.
 *>               ->> For optimal performance (blocked code) the optimal value
 *>               is LWORK >= N + (N+1)*NB. Here NB is the optimal
@@ -298,7 +298,7 @@
 *>             (JOBU.EQ.'N')
 *>            -> the minimal requirement is LWORK >= 3*N.
 *>            -> For optimal performance, LWORK >= max(N+(N+1)*NB, 3*N,2*N+N*NB),
-*>               where NB is the optimal block size for CGEQP3, CGEQRF, CGELQ,
+*>               where NB is the optimal block size for CGEQP3, CGEQRF, CGELQF,
 *>               CUNMLQ. In general, the optimal length LWORK is computed as
 *>               LWORK >= max(N+LWORK(CGEQP3), N+LWORK(CPOCON), N+LWORK(CGESVJ),
 *>                       N+LWORK(CGELQF), 2*N+LWORK(CGEQRF), N+LWORK(CUNMLQ)).

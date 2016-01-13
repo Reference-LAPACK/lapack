@@ -293,25 +293,25 @@
 *>               is LWORK >= max(N+(N+1)*NB, N*N+3*N).
 *>               In general, the optimal length LWORK is computed as
 *>               LWORK >= max(N+LWORK(ZGEQP3),N+LWORK(ZGEQRF), 
-*>                                                     N+N*N+LWORK(CPOCON)).
+*>                                                     N+N*N+LWORK(ZPOCON)).
 *>
 *>          2. If SIGMA and the right singular vectors are needed (JOBV.EQ.'V'),
 *>             (JOBU.EQ.'N')
 *>            -> the minimal requirement is LWORK >= 3*N.
 *>            -> For optimal performance, LWORK >= max(N+(N+1)*NB, 3*N,2*N+N*NB),
 *>               where NB is the optimal block size for ZGEQP3, ZGEQRF, ZGELQ,
-*>               CUNMLQ. In general, the optimal length LWORK is computed as
-*>               LWORK >= max(N+LWORK(ZGEQP3), N+LWORK(CPOCON), N+LWORK(ZGESVJ),
-*>                       N+LWORK(ZGELQF), 2*N+LWORK(ZGEQRF), N+LWORK(CUNMLQ)).
+*>               ZUNMLQ. In general, the optimal length LWORK is computed as
+*>               LWORK >= max(N+LWORK(ZGEQP3), N+LWORK(ZPOCON), N+LWORK(ZGESVJ),
+*>                       N+LWORK(ZGELQF), 2*N+LWORK(ZGEQRF), N+LWORK(ZUNMLQ)).
 *>
 *>          3. If SIGMA and the left singular vectors are needed
 *>            -> the minimal requirement is LWORK >= 3*N.
 *>            -> For optimal performance:
 *>               if JOBU.EQ.'U' :: LWORK >= max(3*N, N+(N+1)*NB, 2*N+N*NB),
-*>               where NB is the optimal block size for ZGEQP3, ZGEQRF, CUNMQR.
+*>               where NB is the optimal block size for ZGEQP3, ZGEQRF, ZUNMQR.
 *>               In general, the optimal length LWORK is computed as
-*>               LWORK >= max(N+LWORK(ZGEQP3),N+LWORK(CPOCON),
-*>                        2*N+LWORK(ZGEQRF), N+LWORK(CUNMQR)). 
+*>               LWORK >= max(N+LWORK(ZGEQP3),N+LWORK(ZPOCON),
+*>                        2*N+LWORK(ZGEQRF), N+LWORK(ZUNMQR)). 
 *>               
 *>          4. If the full SVD is needed: (JOBU.EQ.'U' or JOBU.EQ.'F') and 
 *>            4.1. if JOBV.EQ.'V'  
@@ -319,7 +319,7 @@
 *>            4.2. if JOBV.EQ.'J' the minimal requirement is 
 *>               LWORK >= 4*N+N*N.
 *>            In both cases, the allocated CWORK can accommodate blocked runs
-*>            of ZGEQP3, ZGEQRF, ZGELQF, SUNMQR, CUNMLQ.
+*>            of ZGEQP3, ZGEQRF, ZGELQF, ZUNMQR, ZUNMLQ.
 *> \endverbatim
 *>
 *> \param[out] RWORK
