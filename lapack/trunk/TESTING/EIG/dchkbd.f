@@ -545,10 +545,10 @@
       EXTERNAL           DLAMCH, DLARND, DSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASUM, DBDSDC, DBDSQR, DBDSVDX, DBDT01, DBDT02, 
-     $                   DBDT03, DBDT04, DCOPY, DGEBRD, DGEMM, DLABAD, 
-     $                   DLACPY, DLAHD2, DLASET, DLATMR, DLATMS,
-     $                   DORGBR, DORT01, XERBLA
+      EXTERNAL           ALASUM, DBDSDC, DBDSQR, DBDSVDX, DBDT01,  
+     $                   DBDT02, DBDT03, DBDT04, DCOPY, DGEBRD,
+     $                   DGEMM, DLABAD, DLACPY, DLAHD2, DLASET, 
+     $                   DLATMR, DLATMS, DORGBR, DORT01, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -563,10 +563,10 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Data statements ..
-      DATA               KTYPE / 1, 2, 5*4, 5*6, 3*9, 10 /
-      DATA               KMAGN / 2*1, 3*1, 2, 3, 3*1, 2, 3, 1, 2, 3, 0 /
-      DATA               KMODE / 2*0, 4, 3, 1, 4, 4, 4, 3, 1, 4, 4, 0,
-     $                   0, 0, 0 /
+      DATA            KTYPE / 1, 2, 5*4, 5*6, 3*9, 10 /
+      DATA            KMAGN / 2*1, 3*1, 2, 3, 3*1, 2, 3, 1, 2, 3, 0 /
+      DATA            KMODE / 2*0, 4, 3, 1, 4, 4, 4, 3, 1, 4, 4, 0,
+     $                0, 0, 0 /
 *     ..
 *     .. Executable Statements ..
 *

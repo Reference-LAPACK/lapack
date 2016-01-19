@@ -89,8 +89,8 @@
       EXTERNAL           LSAMEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHKXER, SBDSDC, SBDSQR, SBDSVDX, SGEBD2, SGEBRD, SORGBR,
-     $                   SORMBR
+      EXTERNAL           CHKXER, SBDSDC, SBDSQR, SBDSVDX, SGEBD2,
+     $                   SGEBRD, SORGBR, SORMBR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

@@ -423,11 +423,11 @@
 *     .. Local Scalars ..
       LOGICAL            BADMM, BADNN
       CHARACTER          JOBQ, JOBU, JOBVT, RANGE
-      INTEGER            I, IINFO, IJQ, IJU, IJVT, IL, IU, ITEMP, IWSPC,
-     $                   IWTMP, J, JSIZE, JTYPE, LSWORK, M, MINWRK,
-     $                   MMAX, MNMAX, MNMIN, MTYPES, N, NERRS, NFAIL,
-     $                   NMAX, NS, NSI, NSV, NTEST, NTESTF, NTESTT,
-     $                   LRWORK
+      INTEGER            I, IINFO, IJQ, IJU, IJVT, IL, IU, ITEMP,
+     $                   IWSPC, IWTMP, J, JSIZE, JTYPE, LSWORK, M,
+     $                   MINWRK, MMAX, MNMAX, MNMIN, MTYPES, N,
+     $                   NERRS, NFAIL, NMAX, NS, NSI, NSV, NTEST,
+     $                   NTESTF, NTESTT, LRWORK
       REAL               ANORM, DIF, DIV, OVFL, RTUNFL, ULP, ULPINV, 
      $                   UNFL, VL, VU
 *     ..
@@ -441,9 +441,9 @@
       EXTERNAL           SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASVM, XERBLA, CBDT01, CBDT05, CGESDD, CGESVD,
-     $                   CGESVJ, CGEJSV, CGESVDX, CLACPY, CLASET, CLATMS, 
-     $                   CUNT01, CUNT03
+      EXTERNAL           ALASVM, XERBLA, CBDT01, CBDT05, CGESDD,
+     $                   CGESVD, CGESVJ, CGEJSV, CGESVDX, CLACPY,
+     $                   CLASET, CLATMS, CUNT01, CUNT03
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, MAX, MIN

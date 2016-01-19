@@ -404,8 +404,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, SBDT01, SGEJSV, SGESDD, SGESVD, 
-     $                   SGESVDX, SGESVJ, SLABAD, SLACPY, SLASET, SLATMS,
-     $                   SORT01, SORT03, XERBLA
+     $                   SGESVDX, SGESVJ, SLABAD, SLACPY, SLASET,
+     $                   SLATMS, SORT01, SORT03, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, INT, MAX, MIN
