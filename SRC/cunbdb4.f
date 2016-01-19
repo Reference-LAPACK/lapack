@@ -345,7 +345,7 @@
          CALL CLACGV( Q-I+1, X21(I,I), LDX21 )
          IF( I .LT. M-Q ) THEN
             S = SQRT( SCNRM2( P-I, X11(I+1,I), 1 )**2
-     $              + SCNRM2( M-P-I, X21(I+1,I), 1 )**2
+     $              + SCNRM2( M-P-I, X21(I+1,I), 1 )**2 )
             PHI(I) = ATAN2( S, C )
          END IF
 *
