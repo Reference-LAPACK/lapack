@@ -342,7 +342,7 @@
      $               X21(I+1,I), LDX21, WORK(ILARF) )
          IF( I .LT. M-Q ) THEN
             S = SQRT( DNRM2( P-I, X11(I+1,I), 1 )**2
-     $              + DNRM2( M-P-I, X21(I+1,I), 1 )**2
+     $              + DNRM2( M-P-I, X21(I+1,I), 1 )**2 )
             PHI(I) = ATAN2( S, C )
          END IF
 *
