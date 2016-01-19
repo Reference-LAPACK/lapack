@@ -295,8 +295,8 @@
          CALL ZLARF( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $               X21(I,I), LDX21, WORK(ILARF) )
          CALL ZLACGV( Q-I+1, X11(I,I), LDX11 )
-         S = SQRT( DZNRM2( P-I, X11(I+1,I), 1, X11(I+1,I),
-     $       1 )**2 + DZNRM2( M-P-I+1, X21(I,I), 1, X21(I,I), 1 )**2 )
+         S = SQRT( DZNRM2( P-I, X11(I+1,I), 1 )**2
+     $           + DZNRM2( M-P-I+1, X21(I,I), 1 )**2 )
          THETA(I) = ATAN2( S, C )
 *
          CALL ZUNBDB5( P-I, M-P-I+1, Q-I, X11(I+1,I), 1, X21(I,I), 1,

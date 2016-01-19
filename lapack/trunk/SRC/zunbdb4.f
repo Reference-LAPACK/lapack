@@ -344,9 +344,8 @@
      $               X21(I+1,I), LDX21, WORK(ILARF) )
          CALL ZLACGV( Q-I+1, X21(I,I), LDX21 )
          IF( I .LT. M-Q ) THEN
-            S = SQRT( DZNRM2( P-I, X11(I+1,I), 1, X11(I+1,I),
-     $          1 )**2 + DZNRM2( M-P-I, X21(I+1,I), 1, X21(I+1,I),
-     $          1 )**2 )
+            S = SQRT( DZNRM2( P-I, X11(I+1,I), 1 )**2
+     $              + DZNRM2( M-P-I, X21(I+1,I), 1 )**2
             PHI(I) = ATAN2( S, C )
          END IF
 *

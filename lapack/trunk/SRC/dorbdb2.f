@@ -292,8 +292,8 @@
      $               X11(I+1,I), LDX11, WORK(ILARF) )
          CALL DLARF( 'R', M-P-I+1, Q-I+1, X11(I,I), LDX11, TAUQ1(I),
      $               X21(I,I), LDX21, WORK(ILARF) )
-         S = SQRT( DNRM2( P-I, X11(I+1,I), 1, X11(I+1,I),
-     $       1 )**2 + DNRM2( M-P-I+1, X21(I,I), 1, X21(I,I), 1 )**2 )
+         S = SQRT( DNRM2( P-I, X11(I+1,I), 1 )**2
+     $           + DNRM2( M-P-I+1, X21(I,I), 1 )**2 )
          THETA(I) = ATAN2( S, C )
 *
          CALL DORBDB5( P-I, M-P-I+1, Q-I, X11(I+1,I), 1, X21(I,I), 1,

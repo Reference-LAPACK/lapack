@@ -308,9 +308,8 @@
             CALL ZLARF( 'R', M-P-I, Q-I, X21(I,I+1), LDX21, TAUQ1(I),
      $                  X21(I+1,I+1), LDX21, WORK(ILARF) )
             CALL ZLACGV( Q-I, X21(I,I+1), LDX21 )
-            C = SQRT( DZNRM2( P-I, X11(I+1,I+1), 1, X11(I+1,I+1),
-     $          1 )**2 + DZNRM2( M-P-I, X21(I+1,I+1), 1, X21(I+1,I+1),
-     $          1 )**2 )
+            C = SQRT( DZNRM2( P-I, X11(I+1,I+1), 1 )**2 
+     $          + DZNRM2( M-P-I, X21(I+1,I+1), 1 )**2 )
             PHI(I) = ATAN2( S, C )
             CALL ZUNBDB5( P-I, M-P-I, Q-I-1, X11(I+1,I+1), 1,
      $                    X21(I+1,I+1), 1, X11(I+1,I+2), LDX11,
