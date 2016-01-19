@@ -527,7 +527,7 @@
       CHARACTER*3        PATH
       INTEGER            I, IINFO, IL, IMODE, ITEMP, ITYPE, IU, IWBD, 
      $                   IWBE, IWBS, IWBZ, IWWORK, J, JCOL, JSIZE,
-     $                   JTYPE, LOG2UI, M, MINWRK, MMAX, MNMAX, MNMIN, 
+     $                   JTYPE, LOG2UI, M, MINWRK, MMAX, MNMAX, MNMIN,
      $                   MNMIN2, MQ, MTYPES, N, NFAIL, NMAX, 
      $                   NS1, NS2, NTEST
       REAL               ABSTOL, AMNINV, ANORM, COND, OVFL, RTOVFL, 
@@ -545,10 +545,10 @@
       EXTERNAL           SLAMCH, SLARND, SSXT1
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASUM, SBDSDC, SBDSQR, SBDSVDX, SBDT01, SBDT02, 
-     $                   SBDT03, SBDT04, SCOPY, SGEBRD, SGEMM, SLABAD, 
-     $                   SLACPY, SLAHD2, SLASET, SLATMR, SLATMS,
-     $                   SORGBR, SORT01, XERBLA
+      EXTERNAL           ALASUM, SBDSDC, SBDSQR, SBDSVDX, SBDT01,  
+     $                   SBDT02, SBDT03, SBDT04, SCOPY, SGEBRD, 
+     $                   SGEMM, SLABAD, SLACPY, SLAHD2, SLASET,
+     $                   SLATMR, SLATMS, SORGBR, SORT01, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -563,9 +563,9 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Data statements ..
-      DATA               KTYPE / 1, 2, 5*4, 5*6, 3*9, 10 /
-      DATA               KMAGN / 2*1, 3*1, 2, 3, 3*1, 2, 3, 1, 2, 3, 0 /
-      DATA               KMODE / 2*0, 4, 3, 1, 4, 4, 4, 3, 1, 4, 4, 0,
+      DATA            KTYPE / 1, 2, 5*4, 5*6, 3*9, 10 /
+      DATA            KMAGN / 2*1, 3*1, 2, 3, 3*1, 2, 3, 1, 2, 3, 0 /
+      DATA            KMODE / 2*0, 4, 3, 1, 4, 4, 4, 3, 1, 4, 4, 0,
      $                   0, 0, 0 /
 *     ..
 *     .. Executable Statements ..

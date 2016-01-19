@@ -466,9 +466,10 @@
       EXTERNAL           SLAMCH, SLARND
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALASUM, CBDSQR, CBDT01, CBDT02, CBDT03, CGEBRD,
-     $                   CGEMM, CLACPY, CLASET, CLATMR, CLATMS, CUNGBR,
-     $                   CUNT01, SCOPY, SLABAD, SLAHD2, SSVDCH, XERBLA
+      EXTERNAL           ALASUM, CBDSQR, CBDT01, CBDT02, CBDT03,
+     $                   CGEBRD, CGEMM, CLACPY, CLASET, CLATMR, 
+     $                   CLATMS, CUNGBR, CUNT01, SCOPY, SLABAD,
+     $                   SLAHD2, SSVDCH, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, EXP, INT, LOG, MAX, MIN, SQRT
@@ -483,9 +484,9 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Data statements ..
-      DATA               KTYPE / 1, 2, 5*4, 5*6, 3*9, 10 /
-      DATA               KMAGN / 2*1, 3*1, 2, 3, 3*1, 2, 3, 1, 2, 3, 0 /
-      DATA               KMODE / 2*0, 4, 3, 1, 4, 4, 4, 3, 1, 4, 4, 0,
+      DATA            KTYPE / 1, 2, 5*4, 5*6, 3*9, 10 /
+      DATA            KMAGN / 2*1, 3*1, 2, 3, 3*1, 2, 3, 1, 2, 3, 0 /
+      DATA            KMODE / 2*0, 4, 3, 1, 4, 4, 4, 3, 1, 4, 4, 0,
      $                   0, 0, 0 /
 *     ..
 *     .. Executable Statements ..
