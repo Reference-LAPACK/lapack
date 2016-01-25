@@ -13,9 +13,9 @@ SHELL = /bin/sh
 #  and desired load options for your machine.
 #
 FORTRAN  = ifort
-OPTS     = -O3 
+OPTS     = -O3 -fp-model strict
 DRVOPTS  = $(OPTS)
-NOOPT    = -O3 -fltconsistency -fp_port 
+NOOPT    = -O0 -fp-model strict
 LOADER   = ifort
 LOADOPTS = 
 #
