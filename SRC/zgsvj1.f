@@ -271,7 +271,7 @@
 *     ..
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DCONJG, DMAX1, DFLOAT, MIN0, DSIGN, DSQRT
+      INTRINSIC          ABS, DCONJG, DMAX1, DBLE, MIN0, DSIGN, DSQRT
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DZNRM2
@@ -335,7 +335,7 @@
       SMALL = SFMIN / EPS
       BIG = ONE / SFMIN
       ROOTBIG = ONE / ROOTSFMIN
-      LARGE = BIG / DSQRT( DFLOAT( M*N ) )
+      LARGE = BIG / DSQRT( DBLE( M*N ) )
       BIGTHETA = ONE / ROOTEPS
       ROOTTOL = DSQRT( TOL )
 *
@@ -660,8 +660,8 @@
          IF( ( i.LT.SWBAND ) .AND. ( ( MXAAPQ.LE.ROOTTOL ) .OR.
      $       ( ISWROT.LE.N ) ) )SWBAND = i
 *
-         IF( ( i.GT.SWBAND+1 ) .AND. ( MXAAPQ.LT.DSQRT( DFLOAT( N ) )*
-     $       TOL ) .AND. ( DFLOAT( N )*MXAAPQ*MXSINJ.LT.TOL ) ) THEN
+         IF( ( i.GT.SWBAND+1 ) .AND. ( MXAAPQ.LT.DSQRT( DBLE( N ) )*
+     $       TOL ) .AND. ( DBLE( N )*MXAAPQ*MXSINJ.LT.TOL ) ) THEN
             GO TO 1994
          END IF
 *
