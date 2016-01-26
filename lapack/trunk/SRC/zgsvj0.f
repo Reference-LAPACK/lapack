@@ -254,7 +254,7 @@
 *     ..
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC ABS, DMAX1, DCONJG, DFLOAT, MIN0, DSIGN, DSQRT
+      INTRINSIC ABS, DMAX1, DCONJG, DBLE, MIN0, DSIGN, DSQRT
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DZNRM2
@@ -889,8 +889,8 @@
          IF( ( i.LT.SWBAND ) .AND. ( ( MXAAPQ.LE.ROOTTOL ) .OR.
      $       ( ISWROT.LE.N ) ) )SWBAND = i
 *
-         IF( ( i.GT.SWBAND+1 ) .AND. ( MXAAPQ.LT.DSQRT( DFLOAT( N ) )*
-     $       TOL ) .AND. ( DFLOAT( N )*MXAAPQ*MXSINJ.LT.TOL ) ) THEN
+         IF( ( i.GT.SWBAND+1 ) .AND. ( MXAAPQ.LT.DSQRT( DBLE( N ) )*
+     $       TOL ) .AND. ( DBLE( N )*MXAAPQ*MXSINJ.LT.TOL ) ) THEN
             GO TO 1994
          END IF
 *
