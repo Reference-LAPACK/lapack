@@ -1143,7 +1143,7 @@
             IWBD = IWBS + MNMIN
             IWBE = IWBD + MNMIN
             IWBZ = IWBE + MNMIN
-            IWWORK = IWBZ + MNMIN*(MNMIN*2+1)
+            IWWORK = IWBZ + 2*MNMIN*(MNMIN+1)
             MNMIN2 = MAX( 1,MNMIN*2 )
 *
             CALL SCOPY( MNMIN, BD, 1, WORK( IWBD ), 1 )
