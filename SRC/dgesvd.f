@@ -692,7 +692,10 @@
 *
 *              Zero out below R
 *
-               CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ), LDA )
+               IF( N .GT. 1 ) THEN
+                  CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
+     $                         LDA )
+               END IF
                IE = 1
                ITAUQ = IE + N
                ITAUP = ITAUQ + N
@@ -1121,8 +1124,10 @@
 *
 *                    Zero out below R in A
 *
-                     CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
-     $                            LDA )
+                     IF( N .GT. 1 ) THEN
+                        CALL DLASET( 'L', N-1, N-1, ZERO, ZERO,
+     $                               A( 2, 1 ), LDA )
+                     END IF
 *
 *                    Bidiagonalize R in A
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
@@ -1284,8 +1289,10 @@
 *
 *                    Zero out below R in A
 *
-                     CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
-     $                            LDA )
+                     IF( N .GT. 1 ) THEN
+                        CALL DLASET( 'L', N-1, N-1, ZERO, ZERO,
+     $                               A( 2, 1 ), LDA )
+                     END IF
 *
 *                    Bidiagonalize R in A
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
@@ -1587,8 +1594,10 @@
 *
 *                    Zero out below R in A
 *
-                     CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
-     $                            LDA )
+                     IF( N .GT. 1 ) THEN
+                        CALL DLASET( 'L', N-1, N-1, ZERO, ZERO,
+     $                                A( 2, 1 ), LDA )
+                     END IF
 *
 *                    Bidiagonalize R in A
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
@@ -1755,8 +1764,10 @@
 *
 *                    Zero out below R in A
 *
-                     CALL DLASET( 'L', N-1, N-1, ZERO, ZERO, A( 2, 1 ),
-     $                            LDA )
+                     IF( N .GT. 1 ) THEN
+                        CALL DLASET( 'L', N-1, N-1, ZERO, ZERO,
+     $                                A( 2, 1 ), LDA )
+                     END IF
 *
 *                    Bidiagonalize R in A
 *                    (Workspace: need 4*N, prefer 3*N+2*N*NB)
