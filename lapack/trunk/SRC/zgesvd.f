@@ -680,8 +680,10 @@
 *
 *              Zero out below R
 *
-               CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
-     $                      LDA )
+               IF( N .GT. 1 ) THEN
+                  CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO, A( 2, 1 ),
+     $                         LDA )
+               END IF
                IE = 1
                ITAUQ = 1
                ITAUP = ITAUQ + N
@@ -1144,8 +1146,10 @@
 *
 *                    Zero out below R in A
 *
-                     CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
-     $                            A( 2, 1 ), LDA )
+                     IF( N .GT. 1 ) THEN
+                        CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
+     $                               A( 2, 1 ), LDA )
+                     END IF
 *
 *                    Bidiagonalize R in A
 *                    (CWorkspace: need 3*N, prefer 2*N+2*N*NB)
@@ -1321,8 +1325,10 @@
 *
 *                    Zero out below R in A
 *
-                     CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
-     $                            A( 2, 1 ), LDA )
+                     IF( N .GT. 1 ) THEN
+                        CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
+     $                               A( 2, 1 ), LDA )
+                     END IF
 *
 *                    Bidiagonalize R in A
 *                    (CWorkspace: need 3*N, prefer 2*N+2*N*NB)
@@ -1649,8 +1655,10 @@
 *
 *                    Zero out below R in A
 *
-                     CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
-     $                            A( 2, 1 ), LDA )
+                     IF( N .GT. 1 ) THEN
+                        CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
+     $                               A( 2, 1 ), LDA )
+                     END IF
 *
 *                    Bidiagonalize R in A
 *                    (CWorkspace: need 3*N, prefer 2*N+2*N*NB)
@@ -1830,8 +1838,10 @@
 *
 *                    Zero out below R in A
 *
-                     CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
-     $                            A( 2, 1 ), LDA )
+                     IF( N .GT. 1 ) THEN
+                        CALL ZLASET( 'L', N-1, N-1, CZERO, CZERO,
+     $                               A( 2, 1 ), LDA )
+                     END IF
 *
 *                    Bidiagonalize R in A
 *                    (CWorkspace: need 3*N, prefer 2*N+2*N*NB)
