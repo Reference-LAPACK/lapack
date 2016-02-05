@@ -238,7 +238,7 @@
 *>                         copied back to the V array. This 'W' option is just
 *>                         a reminder to the caller that in this case U is
 *>                         reserved as workspace of length N*N.
-*>          If JOBU = 'N'  U is not referenced.
+*>          If JOBU = 'N'  U is not referenced, unless JOBT='T'.
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -260,7 +260,7 @@
 *>                         copied back to the U array. This 'W' option is just
 *>                         a reminder to the caller that in this case V is
 *>                         reserved as workspace of length N*N.
-*>          If JOBV = 'N'  V is not referenced.
+*>          If JOBV = 'N'  V is not referenced, unless JOBT='T'.
 *> \endverbatim
 *>
 *> \param[in] LDV
