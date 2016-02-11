@@ -541,6 +541,7 @@
 *
       M = 0
       PAIR = .FALSE.
+      IF( .NOT.LQUERY .OR. IJOB.NE.0 ) THEN
       DO 10 K = 1, N
          IF( PAIR ) THEN
             PAIR = .FALSE.
@@ -560,6 +561,7 @@
             END IF
          END IF
    10 CONTINUE
+      END IF
 *
       IF( IJOB.EQ.1 .OR. IJOB.EQ.2 .OR. IJOB.EQ.4 ) THEN
          LWMIN = MAX( 1, 4*N+16, 2*M*(N-M) )
