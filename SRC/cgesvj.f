@@ -889,7 +889,6 @@
                               END IF
                            END IF
 *
-                           OMPQ = AAPQ / ABS(AAPQ) 
 *                           AAPQ = AAPQ * CONJG( CWORK(p) ) * CWORK(q) 
                            AAPQ1  = -ABS(AAPQ) 
                            MXAAPQ = AMAX1( MXAAPQ, -AAPQ1 )
@@ -909,6 +908,7 @@
 *
                               IF( ROTOK ) THEN
 *
+                                 OMPQ = AAPQ / ABS(AAPQ) 
                                  AQOAP = AAQQ / AAPP
                                  APOAQ = AAPP / AAQQ
                                  THETA = -HALF*ABS( AQOAP-APOAQ )/AAPQ1
@@ -1110,7 +1110,6 @@
                               END IF
                            END IF
 *
-                           OMPQ = AAPQ / ABS(AAPQ) 
 *                           AAPQ = AAPQ * CONJG(CWORK(p))*CWORK(q)   
                            AAPQ1  = -ABS(AAPQ)
                            MXAAPQ = AMAX1( MXAAPQ, -AAPQ1 )
@@ -1125,6 +1124,7 @@
 *
                               IF( ROTOK ) THEN
 *
+                                 OMPQ = AAPQ / ABS(AAPQ) 
                                  AQOAP = AAQQ / AAPP
                                  APOAQ = AAPP / AAQQ
                                  THETA = -HALF*ABS( AQOAP-APOAQ )/ AAPQ1
