@@ -105,7 +105,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is REAL array, dimension (LDA,N)
+*>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, M-by-N matrix A, such that A*diag(D) represents
 *>          the input matrix.
 *>          On exit,
@@ -124,7 +124,7 @@
 *>
 *> \param[in,out] D
 *> \verbatim
-*>          D is REAL array, dimension (N)
+*>          D is COMPLEX array, dimension (N)
 *>          The array D accumulates the scaling factors from the fast scaled
 *>          Jacobi rotations.
 *>          On entry, A*diag(D) represents the input matrix.
@@ -154,7 +154,7 @@
 *>
 *> \param[in,out] V
 *> \verbatim
-*>          V is REAL array, dimension (LDV,N)
+*>          V is COMPLEX array, dimension (LDV,N)
 *>          If JOBV .EQ. 'V' then N rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
 *>          If JOBV .EQ. 'A' then MV rows of V are post-multipled by a
