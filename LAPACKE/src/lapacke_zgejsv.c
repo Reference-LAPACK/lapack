@@ -119,7 +119,7 @@ lapack_int LAPACKE_zgejsv( int matrix_layout, char joba, char jobu, char jobv,
      (  (       ( LAPACKE_lsame( jobu, 'u' ) ||  LAPACKE_lsame( jobu, 'f' ) ) &&
                ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) ) &&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? MAX(7,2*n) :
-                       1) ) ) ) ) ) ) ) );  
+                       7) ) ) ) ) ) ) ) );
     lapack_int* iwork = NULL;
     double* rwork = NULL;
     lapack_complex_double* cwork = NULL;
@@ -138,16 +138,27 @@ lapack_int LAPACKE_zgejsv( int matrix_layout, char joba, char jobu, char jobv,
     }
 #endif
     /* Allocate memory for working array(s) */
-    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,m+3*n) );
+    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(3,m+2*n) );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
+    }
+    lwork = MAX( lwork, 1 );
+    { /* FIXUP LWORK */
+        int want_u = LAPACKE_lsame( jobu, 'u' ) || LAPACKE_lsame( jobu, 'f' );
+        int want_v = LAPACKE_lsame( jobv, 'v' ) || LAPACKE_lsame( jobv, 'j' );
+        int want_sce = LAPACKE_lsame( joba, 'e' ) || LAPACKE_lsame( joba, 'g' );
+        if( !want_u && !want_v && !want_sce )  lwork = MAX( lwork, 2*n+1 ); // 1.1
+        if( !want_u && !want_v && want_sce )   lwork = MAX( lwork, n*n+3*n ); // 1.2
+        if( want_u && LAPACKE_lsame( jobv, 'v' ) ) lwork = MAX( lwork, 5*n+2*n*n ); // 4.1
+        if( want_u && LAPACKE_lsame( jobv, 'j' ) ) lwork = MAX( lwork, 4*n+n*n ); // 4.2
     }
     cwork = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * lwork );
     if( cwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_1;
     }
+    lrwork = MAX3( lrwork, 7, n+2*m );
     rwork = (double*)LAPACKE_malloc( sizeof(double) * lrwork );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
