@@ -403,7 +403,7 @@
 *     from BLAS
       EXTERNAL           ZCOPY, ZROT, ZDSCAL, ZSWAP
 *     from LAPACK
-      EXTERNAL           ZLASCL, ZLASET, ZLASSQ, XERBLA
+      EXTERNAL           DLASCL, ZLASCL, ZLASET, ZLASSQ, XERBLA
       EXTERNAL           ZGSVJ0, ZGSVJ1
 *     ..
 *     .. Executable Statements ..
@@ -668,7 +668,7 @@
 *     Scale, if necessary
 *
       IF( TEMP1.NE.ONE ) THEN
-         CALL ZLASCL( 'G', 0, 0, ONE, TEMP1, N, 1, SVA, N, IERR )
+         CALL DLASCL( 'G', 0, 0, ONE, TEMP1, N, 1, SVA, N, IERR )
       END IF
       SKL = TEMP1*SKL
       IF( SKL.NE.ONE ) THEN
