@@ -105,7 +105,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, M-by-N matrix A, such that A*diag(D) represents
 *>          the input matrix.
 *>          On exit,
@@ -124,7 +124,7 @@
 *>
 *> \param[in,out] D
 *> \verbatim
-*>          D is DOUBLE PRECISION array, dimension (N)
+*>          D is COMPLEX*16 array, dimension (N)
 *>          The array D accumulates the scaling factors from the fast scaled
 *>          Jacobi rotations.
 *>          On entry, A*diag(D) represents the input matrix.
@@ -154,7 +154,7 @@
 *>
 *> \param[in,out] V
 *> \verbatim
-*>          V is DOUBLE PRECISION array, dimension (LDV,N)
+*>          V is COMPLEX*16 array, dimension (LDV,N)
 *>          If JOBV .EQ. 'V' then N rows of V are post-multipled by a
 *>                           sequence of Jacobi rotations.
 *>          If JOBV .EQ. 'A' then MV rows of V are post-multipled by a
@@ -199,7 +199,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
 *> \endverbatim
 *>
 *> \param[in] LWORK
