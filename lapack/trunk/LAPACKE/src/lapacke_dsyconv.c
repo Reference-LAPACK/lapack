@@ -43,7 +43,7 @@ lapack_int LAPACKE_dsyconv( int matrix_layout, char uplo, char way, lapack_int n
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dge_nancheck( matrix_layout, lda, n, a, lda ) ) {
+    if( LAPACKE_dge_nancheck( matrix_layout, n, n, a, lda ) ) {
         return -5;
     }
 #endif
