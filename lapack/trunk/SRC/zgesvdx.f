@@ -36,27 +36,30 @@
 *     ..
 *
 *
-*  Purpose
-*  =======
-*
-*  ZGESVDX computes the singular value decomposition (SVD) of a complex
-*  M-by-N matrix A, optionally computing the left and/or right singular
-*  vectors. The SVD is written
-* 
-*       A = U * SIGMA * transpose(V)
-* 
-*  where SIGMA is an M-by-N matrix which is zero except for its
-*  min(m,n) diagonal elements, U is an M-by-M unitary matrix, and
-*  V is an N-by-N unitary matrix.  The diagonal elements of SIGMA
-*  are the singular values of A; they are real and non-negative, and
-*  are returned in descending order.  The first min(m,n) columns of
-*  U and V are the left and right singular vectors of A.
-* 
-*  ZGESVDX uses an eigenvalue problem for obtaining the SVD, which 
-*  allows for the computation of a subset of singular values and 
-*  vectors. See DBDSVDX for details.
-* 
-*  Note that the routine returns V**T, not V.
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
+*>  ZGESVDX computes the singular value decomposition (SVD) of a complex
+*>  M-by-N matrix A, optionally computing the left and/or right singular
+*>  vectors. The SVD is written
+*>
+*>      A = U * SIGMA * transpose(V)
+*>
+*>  where SIGMA is an M-by-N matrix which is zero except for its
+*>  min(m,n) diagonal elements, U is an M-by-M unitary matrix, and
+*>  V is an N-by-N unitary matrix.  The diagonal elements of SIGMA
+*>  are the singular values of A; they are real and non-negative, and
+*>  are returned in descending order.  The first min(m,n) columns of
+*>  U and V are the left and right singular vectors of A.
+*>
+*>  ZGESVDX uses an eigenvalue problem for obtaining the SVD, which
+*>  allows for the computation of a subset of singular values and
+*>  vectors. See DBDSVDX for details.
+*>
+*>  Note that the routine returns V**T, not V.
+*> \endverbatim
 *   
 *  Arguments:
 *  ==========
@@ -107,7 +110,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
 *>          On exit, the contents of A are destroyed.
 *> \endverbatim
@@ -167,7 +170,7 @@
 *>          vectors, stored columnwise) as specified by RANGE; if 
 *>          JOBU = 'N', U is not referenced.
 *>          Note: The user must ensure that UCOL >= NS; if RANGE = 'V', 
-*>          the exact value of NS is not known ILQFin advance and an upper 
+*>          the exact value of NS is not known in advance and an upper
 *>          bound must be used.
 *> \endverbatim
 *>
@@ -364,8 +367,14 @@
          IF( INFO.EQ.0 ) THEN
             IF( WANTU .AND. LDU.LT.M ) THEN
                INFO = -15
-            ELSE IF( WANTVT .AND. LDVT.LT.MINMN ) THEN
-               INFO = -17
+            ELSE IF( WANTVT ) THEN
+               IF( INDS ) THEN
+                   IF( LDVT.LT.IU-IL+1 ) THEN
+                       INFO = -17
+                   END IF
+               ELSE IF( LDVT.LT.MINMN ) THEN
+                   INFO = -17
+               END IF
             END IF
          END IF
       END IF
@@ -549,7 +558,7 @@
                   END DO
                   K = K + N
                END DO
-               CALL ZLASET( 'A', M-N, N, CZERO, CZERO, U( N+1,1 ), LDU )
+               CALL ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU )
 *
 *              Call ZUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -625,7 +634,7 @@
                   END DO
                   K = K + N
                END DO
-               CALL ZLASET( 'A', M-N, N, CZERO, CZERO, U( N+1,1 ), LDU )
+               CALL ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU )
 *
 *              Call ZUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -732,7 +741,7 @@
                   END DO
                   K = K + M
                END DO
-               CALL ZLASET( 'A', M, N-M, CZERO, CZERO, 
+               CALL ZLASET( 'A', NS, N-M, CZERO, CZERO,
      $                      VT( 1,M+1 ), LDVT )
 *
 *              Call ZUNMBR to compute (VB**T)*(PB**T)
@@ -809,7 +818,7 @@
                   END DO
                   K = K + M
                END DO
-               CALL ZLASET( 'A', M, N-M, CZERO, CZERO, 
+               CALL ZLASET( 'A', NS, N-M, CZERO, CZERO,
      $                      VT( 1,M+1 ), LDVT )
 *
 *              Call ZUNMBR to compute VB**T * PB**T
