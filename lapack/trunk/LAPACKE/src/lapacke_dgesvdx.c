@@ -35,8 +35,8 @@
 
 lapack_int LAPACKE_dgesvdx( int matrix_layout, char jobu, char jobvt, char range,
                            lapack_int m, lapack_int n, double* a,
-                           lapack_int lda, lapack_int vl, lapack_int vu,
-                           lapack_int il, lapack_int iu, lapack_int ns,
+                           lapack_int lda, double vl, double vu,
+                           lapack_int il, lapack_int iu, lapack_int* ns,
                            double* s, double* u, lapack_int ldu,
                            double* vt, lapack_int ldvt,
                            lapack_int* superb )
@@ -71,7 +71,7 @@ lapack_int LAPACKE_dgesvdx( int matrix_layout, char jobu, char jobvt, char range
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
-    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * (12*MIN(m,n)) );
+    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,(12*MIN(m,n))) );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_1;
