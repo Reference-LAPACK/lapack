@@ -558,7 +558,7 @@
                   END DO
                   K = K + N
                END DO
-               CALL ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU )
+               CALL ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU)
 *
 *              Call ZUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -634,7 +634,7 @@
                   END DO
                   K = K + N
                END DO
-               CALL ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU )
+               CALL ZLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU)
 *
 *              Call ZUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)

@@ -725,7 +725,7 @@
                   CALL SCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT )
+               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
 *
 *              Call SORMBR to compute (VB**T)*(PB**T)
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
@@ -794,7 +794,7 @@
                   CALL SCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT )
+               CALL SLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
 *
 *              Call SORMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
