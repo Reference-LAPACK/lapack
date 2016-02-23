@@ -73,7 +73,7 @@
 *> \param[in] LDX
 *> \verbatim
 *>          LDX is INTEGER
-*>     The leading dimension of the vector X. LDX >= 0.
+*>     The leading dimension of the vector X. LDX >= M.
 *> \endverbatim
 *
 *  Authors:
