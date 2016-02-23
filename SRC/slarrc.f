@@ -59,25 +59,25 @@
 *>
 *> \param[in] VL
 *> \verbatim
-*>          VL is DOUBLE PRECISION
+*>          VL is REAL
 *> \endverbatim
 *>
 *> \param[in] VU
 *> \verbatim
-*>          VU is DOUBLE PRECISION
+*>          VU is REAL
 *>          The lower and upper bounds for the eigenvalues.
 *> \endverbatim
 *>
 *> \param[in] D
 *> \verbatim
-*>          D is DOUBLE PRECISION array, dimension (N)
+*>          D is REAL array, dimension (N)
 *>          JOBT = 'T': The N diagonal elements of the tridiagonal matrix T.
 *>          JOBT = 'L': The N diagonal elements of the diagonal matrix D.
 *> \endverbatim
 *>
 *> \param[in] E
 *> \verbatim
-*>          E is DOUBLE PRECISION array, dimension (N)
+*>          E is REAL array, dimension (N)
 *>          JOBT = 'T': The N-1 offdiagonal elements of the matrix T.
 *>          JOBT = 'L': The N-1 offdiagonal elements of the matrix L.
 *> \endverbatim
