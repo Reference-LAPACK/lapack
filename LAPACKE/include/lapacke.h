@@ -11417,9 +11417,9 @@ lapack_int LAPACKE_zsyr_work( int matrix_layout, char uplo, lapack_int n,
                                   const lapack_complex_double* x,
                                   lapack_int incx, lapack_complex_double* a,
                                   lapack_int lda );
-void LAPACKE_ilaver( const lapack_int* vers_major,
-                     const lapack_int* vers_minor,
-                     const lapack_int* vers_patch );
+void LAPACKE_ilaver( lapack_int* vers_major,
+                     lapack_int* vers_minor,
+                     lapack_int* vers_patch );
 
 
 #define LAPACK_sgetrf LAPACK_GLOBAL(sgetrf,SGETRF)
