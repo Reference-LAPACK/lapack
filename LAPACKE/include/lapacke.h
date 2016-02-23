@@ -10682,7 +10682,7 @@ lapack_int LAPACKE_dsytri2( int matrix_layout, char uplo, lapack_int n,
 lapack_int LAPACKE_dsytri2_work( int matrix_layout, char uplo, lapack_int n,
                                  double* a, lapack_int lda,
                                  const lapack_int* ipiv,
-                                 lapack_complex_double* work, lapack_int lwork );
+                                 double* work, lapack_int lwork );
 lapack_int LAPACKE_dsytri2x( int matrix_layout, char uplo, lapack_int n,
                              double* a, lapack_int lda, const lapack_int* ipiv,
                              lapack_int nb );
@@ -10775,7 +10775,7 @@ lapack_int LAPACKE_ssytri2( int matrix_layout, char uplo, lapack_int n, float* a
 lapack_int LAPACKE_ssytri2_work( int matrix_layout, char uplo, lapack_int n,
                                  float* a, lapack_int lda,
                                  const lapack_int* ipiv,
-                                 lapack_complex_float* work, lapack_int lwork );
+                                 float* work, lapack_int lwork );
 lapack_int LAPACKE_ssytri2x( int matrix_layout, char uplo, lapack_int n,
                              float* a, lapack_int lda, const lapack_int* ipiv,
                              lapack_int nb );
@@ -17179,7 +17179,7 @@ void LAPACK_dsyswapr( char* uplo, lapack_int* n,
 void LAPACK_dsytri2( char* uplo, lapack_int* n,
                      double* a, lapack_int* lda,
                      const lapack_int* ipiv,
-                     lapack_complex_double* work, lapack_int* lwork , lapack_int *info );
+                     double* work, lapack_int* lwork , lapack_int *info );
 void LAPACK_dsytri2x( char* uplo, lapack_int* n,
                       double* a, lapack_int* lda,
                       const lapack_int* ipiv, double* work,
@@ -17233,7 +17233,7 @@ void LAPACK_ssyswapr( char* uplo, lapack_int* n,
 void LAPACK_ssytri2( char* uplo, lapack_int* n,
                      float* a, lapack_int* lda,
                      const lapack_int* ipiv,
-                     lapack_complex_float* work, lapack_int* lwork , lapack_int *info );
+                     float* work, lapack_int* lwork , lapack_int *info );
 void LAPACK_ssytri2x( char* uplo, lapack_int* n,
                       float* a, lapack_int* lda,
                       const lapack_int* ipiv, float* work,
