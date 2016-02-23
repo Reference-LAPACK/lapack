@@ -195,7 +195,7 @@
 *>
 *> \param[in] B
 *> \verbatim
-*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>     The right hand side matrix B.
 *> \endverbatim
 *>
@@ -232,7 +232,7 @@
 *>
 *> \param[out] BERR
 *> \verbatim
-*>          BERR is COMPLEX*16 array, dimension (NRHS)
+*>          BERR is DOUBLE PRECISION array, dimension (NRHS)
 *>     Componentwise relative backward error.  This is the
 *>     componentwise relative backward error of each solution vector X(j)
 *>     (i.e., the smallest relative change in any element of A or B that
@@ -642,7 +642,7 @@
 *
 *     Perform refinement on each right-hand side
 *
-      IF ( REF_TYPE .NE. 0 ) THEN
+      IF ( REF_TYPE .NE. 0 .AND. INFO .EQ. 0 ) THEN
 
          PREC_TYPE = ILAPREC( 'E' )
 

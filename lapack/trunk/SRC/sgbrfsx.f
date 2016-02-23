@@ -646,7 +646,7 @@
 *
 *     Perform refinement on each right-hand side
 *
-      IF (REF_TYPE .NE. 0) THEN
+      IF ( REF_TYPE .NE. 0 .AND. INFO .EQ. 0 ) THEN
 
          PREC_TYPE = ILAPREC( 'D' )
 
