@@ -121,7 +121,7 @@
 *>
 *> \param[in] AB
 *> \verbatim
-*>          AB is DOUBLE PRECISION array, dimension (LDAB,N)
+*>          AB is REAL array, dimension (LDAB,N)
 *>     The original band matrix A, stored in rows 1 to KL+KU+1.
 *>     The j-th column of A is stored in the j-th column of the
 *>     array AB as follows:
@@ -136,7 +136,7 @@
 *>
 *> \param[in] AFB
 *> \verbatim
-*>          AFB is DOUBLE PRECISION array, dimension (LDAFB,N)
+*>          AFB is REAL array, dimension (LDAFB,N)
 *>     Details of the LU factorization of the band matrix A, as
 *>     computed by DGBTRF.  U is stored as an upper triangular band
 *>     matrix with KL+KU superdiagonals in rows 1 to KL+KU+1, and
