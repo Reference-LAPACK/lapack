@@ -11243,7 +11243,7 @@ lapack_int LAPACKE_stprfb_work( int matrix_layout, char side, char trans,
                                 lapack_int n, lapack_int k, lapack_int l,
                                 const float* v, lapack_int ldv, const float* t,
                                 lapack_int ldt, float* a, lapack_int lda,
-                                float* b, lapack_int ldb, const float* work,
+                                float* b, lapack_int ldb, float* work,
                                 lapack_int ldwork );
 lapack_int LAPACKE_dtprfb_work( int matrix_layout, char side, char trans,
                                 char direct, char storev, lapack_int m,
@@ -11251,7 +11251,7 @@ lapack_int LAPACKE_dtprfb_work( int matrix_layout, char side, char trans,
                                 const double* v, lapack_int ldv,
                                 const double* t, lapack_int ldt, double* a,
                                 lapack_int lda, double* b, lapack_int ldb,
-                                const double* work, lapack_int ldwork );
+                                double* work, lapack_int ldwork );
 lapack_int LAPACKE_ctprfb_work( int matrix_layout, char side, char trans,
                                 char direct, char storev, lapack_int m,
                                 lapack_int n, lapack_int k, lapack_int l,
