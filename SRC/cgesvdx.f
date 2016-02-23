@@ -170,7 +170,7 @@
 *>          vectors, stored columnwise) as specified by RANGE; if 
 *>          JOBU = 'N', U is not referenced.
 *>          Note: The user must ensure that UCOL >= NS; if RANGE = 'V', 
-*>          the exact value of NS is not known ILQFin advance and an upper 
+*>          the exact value of NS is not known in advance and an upper
 *>          bound must be used.
 *> \endverbatim
 *>
@@ -367,8 +367,14 @@
          IF( INFO.EQ.0 ) THEN
             IF( WANTU .AND. LDU.LT.M ) THEN
                INFO = -15
-            ELSE IF( WANTVT .AND. LDVT.LT.MINMN ) THEN
-               INFO = -17
+            ELSE IF( WANTVT ) THEN
+               IF( INDS ) THEN
+                   IF( LDVT.LT.IU-IL+1 ) THEN
+                       INFO = -17
+                   END IF
+               ELSE IF( LDVT.LT.MINMN ) THEN
+                   INFO = -17
+               END IF
             END IF
          END IF
       END IF
@@ -552,7 +558,7 @@
                   END DO
                   K = K + N
                END DO
-               CALL CLASET( 'A', M-N, N, CZERO, CZERO, U( N+1,1 ), LDU )
+               CALL CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU )
 *
 *              Call CUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -628,7 +634,7 @@
                   END DO
                   K = K + N
                END DO
-               CALL CLASET( 'A', M-N, N, CZERO, CZERO, U( N+1,1 ), LDU )
+               CALL CLASET( 'A', M-N, NS, CZERO, CZERO, U( N+1,1 ), LDU )
 *
 *              Call CUNMBR to compute QB*UB.
 *              (Workspace in WORK( ITEMP ): need N, prefer N*NB)
@@ -735,7 +741,7 @@
                   END DO
                   K = K + M
                END DO
-               CALL CLASET( 'A', M, N-M, CZERO, CZERO, 
+               CALL CLASET( 'A', NS, N-M, CZERO, CZERO,
      $                      VT( 1,M+1 ), LDVT )
 *
 *              Call CUNMBR to compute (VB**T)*(PB**T)
@@ -812,7 +818,7 @@
                   END DO
                   K = K + M
                END DO
-               CALL CLASET( 'A', M, N-M, CZERO, CZERO, 
+               CALL CLASET( 'A', NS, N-M, CZERO, CZERO,
      $                      VT( 1,M+1 ), LDVT )
 *
 *              Call CUNMBR to compute VB**T * PB**T
