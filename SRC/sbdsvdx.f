@@ -80,7 +80,7 @@
 *>          = 'L':  B is lower bidiagonal.
 *> \endverbatim
 *>
-*> \param[in] JOBXZ
+*> \param[in] JOBZ
 *> \verbatim
 *>          JOBZ is CHARACTER*1
 *>          = 'N':  Compute singular values only;
@@ -190,7 +190,10 @@
 *>          If JOBZ = 'V', then if INFO = 0, the first NS elements of
 *>          IWORK are zero. If INFO > 0, then IWORK contains the indices 
 *>          of the eigenvectors that failed to converge in DSTEVX.
+*> \endverbatim
 *>
+*> \param[out] IWORK
+*> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value
@@ -371,7 +374,6 @@
          IF( ABS( E( I ) ).LE.THRESH ) E( I ) = ZERO
       END DO
       IF( ABS( D( N ) ).LE.THRESH ) D( N ) = ZERO
-      E( N ) = ZERO
 *
 *     Pointers for arrays used by SSTEVX.
 *
@@ -398,7 +400,7 @@
 *        of the active submatrix.
 *
          RNGVX = 'I'
-         CALL SLASET( 'F', N*2, N+1, ZERO, ZERO, Z, LDZ )
+         IF( WANTZ ) CALL SLASET( 'F', N*2, N+1, ZERO, ZERO, Z, LDZ )
       ELSE IF( VALSV ) THEN
 *
 *        Find singular values in a half-open interval. We aim
@@ -418,7 +420,7 @@
          IF( NS.EQ.0 ) THEN
             RETURN
          ELSE
-            CALL SLASET( 'F', N*2, NS, ZERO, ZERO, Z, LDZ )
+            IF( WANTZ ) CALL SLASET( 'F', N*2, NS, ZERO, ZERO, Z, LDZ )
          END IF
       ELSE IF( INDSV ) THEN
 *
@@ -455,7 +457,7 @@
 *
          IF( VLTGK.EQ.VUTGK ) VLTGK = VLTGK - TOL
 *
-         CALL SLASET( 'F', N*2, IU-IL+1, ZERO, ZERO, Z, LDZ )
+         IF( WANTZ ) CALL SLASET( 'F', N*2, IU-IL+1, ZERO, ZERO, Z, LDZ)
       END IF             
 *
 *     Initialize variables and pointers for S, Z, and WORK.
@@ -709,9 +711,11 @@
                   NRU = 0
                   NRV = 0       
                END IF !** NTGK.GT.0 **! 
-               IF( IROWZ.LT.N*2 )  Z( 1:IROWZ-1, ICOLZ ) = ZERO           
+               IF( IROWZ.LT.N*2 .AND. WANTZ ) THEN
+                  Z( 1:IROWZ-1, ICOLZ ) = ZERO
+               END IF
             END DO !** IDPTR loop **!
-            IF( SPLIT ) THEN
+            IF( SPLIT .AND. WANTZ ) THEN
 *
 *              Bring back eigenvector corresponding
 *              to eigenvalue equal to zero.
@@ -744,7 +748,7 @@
          IF( K.NE.NS+1-I ) THEN
             S( K ) = S( NS+1-I )
             S( NS+1-I ) = SMIN
-            CALL SSWAP( N*2, Z( 1,K ), 1, Z( 1,NS+1-I ), 1 )
+            IF( WANTZ ) CALL SSWAP( N*2, Z( 1,K ), 1, Z( 1,NS+1-I ), 1 )
          END IF
       END DO
 *   
@@ -754,7 +758,7 @@
          K = IU - IL + 1
          IF( K.LT.NS ) THEN
             S( K+1:NS ) = ZERO
-            Z( 1:N*2,K+1:NS ) = ZERO
+            IF( WANTZ ) Z( 1:N*2,K+1:NS ) = ZERO
             NS = K
          END IF
       END IF 
@@ -762,6 +766,7 @@
 *     Reorder Z: U = Z( 1:N,1:NS ), V = Z( N+1:N*2,1:NS ).
 *     If B is a lower diagonal, swap U and V.
 *
+      IF( WANTZ ) THEN
       DO I = 1, NS
          CALL SCOPY( N*2, Z( 1,I ), 1, WORK, 1 )
          IF( LOWER ) THEN
@@ -772,6 +777,7 @@
             CALL SCOPY( N, WORK( 1 ), 2, Z( N+1,I ), 1 )
          END IF
       END DO
+      END IF
 *
       RETURN
 *
