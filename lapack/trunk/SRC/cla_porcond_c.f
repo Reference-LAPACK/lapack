@@ -38,7 +38,7 @@
 *> \verbatim
 *>
 *>    CLA_PORCOND_C Computes the infinity norm condition number of
-*>    op(A) * inv(diag(C)) where C is a DOUBLE PRECISION vector
+*>    op(A) * inv(diag(C)) where C is a REAL vector
 *> \endverbatim
 *
 *  Arguments:
