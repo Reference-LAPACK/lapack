@@ -136,18 +136,6 @@ lapack_int LAPACKE_cgejsv( int matrix_layout, char joba, char jobu, char jobv,
     if( LAPACKE_cge_nancheck( matrix_layout, m, n, a, lda ) ) {
         return -10;
     }
-    if( LAPACKE_lsame( jobu, 'f' ) || LAPACKE_lsame( jobu, 'u' ) ||
-        LAPACKE_lsame( jobu, 'w' ) ) {
-        if( LAPACKE_cge_nancheck( matrix_layout, nu, n, u, ldu ) ) {
-            return -13;
-        }
-    }
-    if( LAPACKE_lsame( jobv, 'j' ) || LAPACKE_lsame( jobv, 'v' ) ||
-        LAPACKE_lsame( jobv, 'w' ) ) {
-        if( LAPACKE_cge_nancheck( matrix_layout, nv, n, v, ldv ) ) {
-            return -15;
-        }
-    }
 #endif
     /* Allocate memory for working array(s) */
     iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,m+3*n) );
