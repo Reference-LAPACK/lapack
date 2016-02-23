@@ -211,12 +211,12 @@
 *> \param[in,out] Q
 *> \verbatim
 *>          Q is DOUBLE PRECISION array, dimension (LDQ, N)
-*>          On entry, if COMPZ = 'V', the orthogonal matrix Q1 used in
+*>          On entry, if COMPQ = 'V', the orthogonal matrix Q1 used in
 *>          the reduction of (A,B) to generalized Hessenberg form.
-*>          On exit, if COMPZ = 'I', the orthogonal matrix of left Schur
-*>          vectors of (H,T), and if COMPZ = 'V', the orthogonal matrix
+*>          On exit, if COMPQ = 'I', the orthogonal matrix of left Schur
+*>          vectors of (H,T), and if COMPQ = 'V', the orthogonal matrix
 *>          of left Schur vectors of (A,B).
-*>          Not referenced if COMPZ = 'N'.
+*>          Not referenced if COMPQ = 'N'.
 *> \endverbatim
 *>
 *> \param[in] LDQ
