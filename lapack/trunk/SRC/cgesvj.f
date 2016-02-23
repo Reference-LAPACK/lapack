@@ -387,7 +387,7 @@
 *     from BLAS
       EXTERNAL           CCOPY, CROT, CSSCAL, CSWAP
 *     from LAPACK
-      EXTERNAL           CLASCL, CLASET, CLASSQ, XERBLA
+      EXTERNAL           CLASCL, CLASET, CLASSQ, SLASCL, XERBLA
       EXTERNAL           CGSVJ0, CGSVJ1
 *     ..
 *     .. Executable Statements ..
