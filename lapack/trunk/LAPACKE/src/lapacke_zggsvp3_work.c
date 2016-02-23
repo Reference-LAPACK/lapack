@@ -87,7 +87,7 @@ lapack_int LAPACKE_zggsvp3_work( int matrix_layout, char jobu, char jobv,
             LAPACKE_xerbla( "LAPACKE_zggsvp3_work", info );
             return info;
         }
-        if( ldv < m ) {
+        if( ldv < p ) {
             info = -19;
             LAPACKE_xerbla( "LAPACKE_zggsvp3_work", info );
             return info;
@@ -125,7 +125,7 @@ lapack_int LAPACKE_zggsvp3_work( int matrix_layout, char jobu, char jobv,
         if( LAPACKE_lsame( jobv, 'v' ) ) {
             v_t = (lapack_complex_double*)
                 LAPACKE_malloc( sizeof(lapack_complex_double) *
-                                ldv_t * MAX(1,m) );
+                                ldv_t * MAX(1,p) );
             if( v_t == NULL ) {
                 info = LAPACK_TRANSPOSE_MEMORY_ERROR;
                 goto exit_level_3;
@@ -157,7 +157,7 @@ lapack_int LAPACKE_zggsvp3_work( int matrix_layout, char jobu, char jobv,
             LAPACKE_zge_trans( LAPACK_COL_MAJOR, m, m, u_t, ldu_t, u, ldu );
         }
         if( LAPACKE_lsame( jobv, 'v' ) ) {
-            LAPACKE_zge_trans( LAPACK_COL_MAJOR, p, m, v_t, ldv_t, v, ldv );
+            LAPACKE_zge_trans( LAPACK_COL_MAJOR, p, p, v_t, ldv_t, v, ldv );
         }
         if( LAPACKE_lsame( jobq, 'q' ) ) {
             LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, n, q_t, ldq_t, q, ldq );
