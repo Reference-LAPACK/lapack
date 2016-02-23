@@ -103,14 +103,6 @@ lapack_int LAPACKE_cgejsv_work( int matrix_layout, char joba, char jobu,
         }
         /* Transpose input matrices */
         LAPACKE_cge_trans( matrix_layout, m, n, a, lda, a_t, lda_t );
-        if( LAPACKE_lsame( jobu, 'f' ) || LAPACKE_lsame( jobu, 'u' ) ||
-            LAPACKE_lsame( jobu, 'w' ) ) {
-            LAPACKE_cge_trans( matrix_layout, nu, n, u, ldu, u_t, ldu_t );
-        }
-        if( LAPACKE_lsame( jobv, 'j' ) || LAPACKE_lsame( jobv, 'v' ) ||
-            LAPACKE_lsame( jobv, 'w' ) ) {
-            LAPACKE_cge_trans( matrix_layout, nv, n, v, ldv, v_t, ldv_t );
-        }
         /* Call LAPACK function and adjust info */
         LAPACK_cgejsv( &joba, &jobu, &jobv, &jobr, &jobt, &jobp, &m, &n, a_t,
                        &lda_t, sva, u_t, &ldu_t, v_t, &ldv_t, cwork, &lwork,
