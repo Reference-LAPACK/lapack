@@ -277,7 +277,7 @@
 *
       INFO = 0
       NB = ILAENV( 1, 'DGGHD3', ' ', N, ILO, IHI, -1 )
-      LWKOPT = 6*N*NB
+      LWKOPT = MAX( 6*N*NB, 1 )
       WORK( 1 ) = DBLE( LWKOPT )
       INITQ = LSAME( COMPQ, 'I' )
       WANTQ = INITQ .OR. LSAME( COMPQ, 'V' )
