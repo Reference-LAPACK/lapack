@@ -69,7 +69,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension ( N*(N+1)/2 );
+*>          A is COMPLEX*16 array, dimension ( N*(N+1)/2 );
 *>          On entry, the Hermitian matrix A in RFP format. RFP format is
 *>          described by TRANSR, UPLO, and N as follows: If TRANSR = 'N'
 *>          then RFP A is (0:N,0:k-1) when N is even; k=N/2. RFP A is
