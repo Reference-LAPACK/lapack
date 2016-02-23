@@ -84,7 +84,7 @@
 *>
 *> \param[in] AB
 *> \verbatim
-*>          AB is DOUBLE PRECISION array, dimension (LDAB,N)
+*>          AB is COMPLEX array, dimension (LDAB,N)
 *>          On entry, the matrix A in band storage, in rows 1 to KL+KU+1.
 *>          The j-th column of A is stored in the j-th column of the
 *>          array AB as follows:
