@@ -39,14 +39,14 @@
 *>
 *> \verbatim
 *>
-*> CGEJSV computes the singular value decomposition (SVD) of a real M-by-N
+*> CGEJSV computes the singular value decomposition (SVD) of a complex M-by-N
 *> matrix [A], where M >= N. The SVD of [A] is written as
 *>
 *>              [A] = [U] * [SIGMA] * [V]^*,
 *>
 *> where [SIGMA] is an N-by-N (M-by-N) matrix which is zero except for its N
-*> diagonal elements, [U] is an M-by-N (or M-by-M) orthonormal matrix, and
-*> [V] is an N-by-N orthogonal matrix. The diagonal elements of [SIGMA] are
+*> diagonal elements, [U] is an M-by-N (or M-by-M) unitary matrix, and
+*> [V] is an N-by-N unitary matrix. The diagonal elements of [SIGMA] are
 *> the singular values of [A]. The columns of [U] and [V] are the left and
 *> the right singular vectors of [A], respectively. The matrices [U] and [V]
 *> are computed and stored in the arrays U and V, respectively. The diagonal
@@ -221,7 +221,7 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is COMPLEX array, dimension ( LDU, N )
+*>          U is COMPLEX array, dimension ( LDU, N ) or ( LDU, M )
 *>          If JOBU = 'U', then U contains on exit the M-by-N matrix of
 *>                         the left singular vectors.
 *>          If JOBU = 'F', then U contains on exit the M-by-M matrix of
@@ -278,7 +278,7 @@
 *>          LWORK depends on the job:
 *>
 *>          1. If only SIGMA is needed ( JOBU.EQ.'N', JOBV.EQ.'N' ) and
-*>            1.1 .. no scaled condition estimate required (JOBA.EQ.'N'):
+*>            1.1 .. no scaled condition estimate required (JOBA.NE.'E'.AND.JOBA.NE.'G'):
 *>               LWORK >= 2*N+1. This is the minimal requirement.
 *>               ->> For optimal performance (blocked code) the optimal value
 *>               is LWORK >= N + (N+1)*NB. Here NB is the optimal
@@ -318,7 +318,7 @@
 *>            4.2. if JOBV.EQ.'J' the minimal requirement is 
 *>               LWORK >= 4*N+N*N.
 *>            In both cases, the allocated CWORK can accommodate blocked runs
-*>            of CGEQP3, CGEQRF, CGELQF, SUNMQR, CUNMLQ.
+*>            of CGEQP3, CGEQRF, CGELQF, CUNMQR, CUNMLQ.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -498,7 +498,7 @@
 *>     LAPACK Working note 170.
 *> [3] Z. Drmac and Z. Bujanovic: On the failure of rank-revealing QR
 *>     factorization software - a case study.
-*>     ACM Trans. math. Softw. Vol. 35, No 2 (2008), pp. 1-28.
+*>     ACM Trans. Math. Softw. Vol. 35, No 2 (2008), pp. 1-28.
 *>     LAPACK Working note 176.
 *> [4] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
 *>     QSVD, (H,K)-SVD computations.
@@ -636,7 +636,11 @@
 *
 *     Quick return for void matrix (Y3K safe)
 * #:)
-      IF ( ( M .EQ. 0 ) .OR. ( N .EQ. 0 ) ) RETURN
+      IF ( ( M .EQ. 0 ) .OR. ( N .EQ. 0 ) ) THEN
+         IWORK(1:3) = 0
+         RWORK(1:7) = 0
+         RETURN
+      ENDIF
 *
 *     Determine whether the matrix U should be M x N or M x M
 *

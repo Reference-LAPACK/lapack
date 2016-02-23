@@ -39,21 +39,21 @@
 *>
 *> \verbatim
 *>
-* ZGEJSV computes the singular value decomposition (SVD) of a real M-by-N
-* matrix [A], where M >= N. The SVD of [A] is written as
-*
-*              [A] = [U] * [SIGMA] * [V]^*,
-*
-* where [SIGMA] is an N-by-N (M-by-N) matrix which is zero except for its N
-* diagonal elements, [U] is an M-by-N (or M-by-M) orthonormal matrix, and
-* [V] is an N-by-N orthogonal matrix. The diagonal elements of [SIGMA] are
-* the singular values of [A]. The columns of [U] and [V] are the left and
-* the right singular vectors of [A], respectively. The matrices [U] and [V]
-* are computed and stored in the arrays U and V, respectively. The diagonal
-* of [SIGMA] is computed and stored in the array SVA.
-*
-*  Arguments:
-*  ==========
+*> ZGEJSV computes the singular value decomposition (SVD) of a complex M-by-N
+*> matrix [A], where M >= N. The SVD of [A] is written as
+*>
+*>              [A] = [U] * [SIGMA] * [V]^*,
+*>
+*> where [SIGMA] is an N-by-N (M-by-N) matrix which is zero except for its N
+*> diagonal elements, [U] is an M-by-N (or M-by-M) unitary matrix, and
+*> [V] is an N-by-N unitary matrix. The diagonal elements of [SIGMA] are
+*> the singular values of [A]. The columns of [U] and [V] are the left and
+*> the right singular vectors of [A], respectively. The matrices [U] and [V]
+*> are computed and stored in the arrays U and V, respectively. The diagonal
+*> of [SIGMA] is computed and stored in the array SVA.
+*>
+*>  Arguments:
+*>  ==========
 *>
 *> \param[in] JOBA
 *> \verbatim
@@ -268,7 +268,6 @@
 *>
 *> \param[out] CWORK
 *> \verbatim
-*> CWORK (workspace)
 *>          CWORK is DOUBLE COMPLEX array, dimension at least LWORK.     
 *> \endverbatim
 *>
@@ -279,7 +278,7 @@
 *>          LWORK depends on the job:
 *>
 *>          1. If only SIGMA is needed ( JOBU.EQ.'N', JOBV.EQ.'N' ) and
-*>            1.1 .. no scaled condition estimate required (JOBE.EQ.'N'):
+*>            1.1 .. no scaled condition estimate required (JOBA.NE.'E'.AND.JOBA.NE.'G'):
 *>               LWORK >= 2*N+1. This is the minimal requirement.
 *>               ->> For optimal performance (blocked code) the optimal value
 *>               is LWORK >= N + (N+1)*NB. Here NB is the optimal
@@ -299,7 +298,7 @@
 *>             (JOBU.EQ.'N')
 *>            -> the minimal requirement is LWORK >= 3*N.
 *>            -> For optimal performance, LWORK >= max(N+(N+1)*NB, 3*N,2*N+N*NB),
-*>               where NB is the optimal block size for ZGEQP3, ZGEQRF, ZGELQ,
+*>               where NB is the optimal block size for ZGEQP3, ZGEQRF, ZGELQF,
 *>               ZUNMLQ. In general, the optimal length LWORK is computed as
 *>               LWORK >= max(N+LWORK(ZGEQP3), N+LWORK(ZPOCON), N+LWORK(ZGESVJ),
 *>                       N+LWORK(ZGELQF), 2*N+LWORK(ZGEQRF), N+LWORK(ZUNMLQ)).
@@ -491,19 +490,19 @@
 *>
 *> \verbatim
 *>
-* [1] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm I.
-*     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1322-1342.
-*     LAPACK Working note 169.
-* [2] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm II.
-*     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1343-1362.
-*     LAPACK Working note 170.
-* [3] Z. Drmac and Z. Bujanovic: On the failure of rank-revealing QR
-*     factorization software - a case study.
-*     ACM Trans. math. Softw. Vol. 35, No 2 (2008), pp. 1-28.
-*     LAPACK Working note 176.
-* [4] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
-*     QSVD, (H,K)-SVD computations.
-*     Department of Mathematics, University of Zagreb, 2008.
+*> [1] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm I.
+*>     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1322-1342.
+*>     LAPACK Working note 169.
+*> [2] Z. Drmac and K. Veselic: New fast and accurate Jacobi SVD algorithm II.
+*>     SIAM J. Matrix Anal. Appl. Vol. 35, No. 2 (2008), pp. 1343-1362.
+*>     LAPACK Working note 170.
+*> [3] Z. Drmac and Z. Bujanovic: On the failure of rank-revealing QR
+*>     factorization software - a case study.
+*>     ACM Trans. Math. Softw. Vol. 35, No 2 (2008), pp. 1-28.
+*>     LAPACK Working note 176.
+*> [4] Z. Drmac: SIGMA - mathematical software library for accurate SVD, PSV,
+*>     QSVD, (H,K)-SVD computations.
+*>     Department of Mathematics, University of Zagreb, 2008.
 *> \endverbatim
 *
 *>  \par Bugs, examples and comments:
@@ -640,7 +639,11 @@
 *
 *     Quick return for void matrix (Y3K safe)
 * #:)
-      IF ( ( M .EQ. 0 ) .OR. ( N .EQ. 0 ) ) RETURN
+      IF ( ( M .EQ. 0 ) .OR. ( N .EQ. 0 ) ) THEN
+         IWORK(1:3) = 0
+         RWORK(1:7) = 0
+         RETURN
+      ENDIF
 *
 *     Determine whether the matrix U should be M x N or M x M
 *
