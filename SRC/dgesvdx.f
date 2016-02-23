@@ -725,7 +725,7 @@
                   CALL DCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL DLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT )
+               CALL DLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
 *
 *              Call DORMBR to compute (VB**T)*(PB**T)
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
@@ -794,7 +794,7 @@
                   CALL DCOPY( M, WORK( J ), 1, VT( I,1 ), LDVT )
                   J = J + M*2
                END DO
-               CALL DLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT )
+               CALL DLASET( 'A', NS, N-M, ZERO, ZERO, VT( 1,M+1 ), LDVT)
 *
 *              Call DORMBR to compute VB**T * PB**T
 *              (Workspace in WORK( ITEMP ): need M, prefer M*NB)
