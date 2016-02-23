@@ -36,7 +36,7 @@
 lapack_int LAPACKE_ssytri2_work( int matrix_layout, char uplo, lapack_int n,
                                  float* a, lapack_int lda,
                                  const lapack_int* ipiv,
-                                 lapack_complex_float* work, lapack_int lwork )
+                                 float* work, lapack_int lwork )
 {
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
