@@ -62,7 +62,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
