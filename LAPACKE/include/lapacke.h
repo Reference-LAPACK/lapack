@@ -17084,7 +17084,7 @@ void LAPACK_csyconv( char* uplo, char* way,
                      lapack_int* lda, const lapack_int* ipiv,
                      lapack_complex_float* e , lapack_int *info );
 void LAPACK_csyswapr( char* uplo, lapack_int* n,
-                      lapack_complex_float* a, , lapack_int lda,
+                      lapack_complex_float* a, lapack_int lda,
                       lapack_int* i1, lapack_int* i2 );
 void LAPACK_csytri2( char* uplo, lapack_int* n,
                      lapack_complex_float* a, lapack_int* lda,
@@ -17177,7 +17177,7 @@ void LAPACK_dorcsd2by1( char* jobu1, char* jobu2,
 void LAPACK_dsyconv( char* uplo, char* way,
                      lapack_int* n, double* a, lapack_int* lda,
                      const lapack_int* ipiv, double* e , lapack_int *info );
-void LAPACK_dsyswapr( char* uplo, lapack_int* n, , lapack_int lda,
+void LAPACK_dsyswapr( char* uplo, lapack_int* n, lapack_int lda,
                       double* a, lapack_int* i1, lapack_int* i2 );
 void LAPACK_dsytri2( char* uplo, lapack_int* n,
                      double* a, lapack_int* lda,
