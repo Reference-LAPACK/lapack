@@ -17277,7 +17277,7 @@ void LAPACK_zsyconv( char* uplo, char* way,
                      lapack_int* n, lapack_complex_double* a,
                      lapack_int* lda, const lapack_int* ipiv,
                      lapack_complex_double* e , lapack_int *info );
-void LAPACK_zsyswapr( char* uplo, lapack_int* n, , lapack_int lda,
+void LAPACK_zsyswapr( char* uplo, lapack_int* n, lapack_int lda,
                       lapack_complex_double* a, lapack_int* i1,
                       lapack_int* i2 );
 void LAPACK_zsytri2( char* uplo, lapack_int* n,
