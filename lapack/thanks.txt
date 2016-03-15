@@ -1,4 +1,19 @@
 
+====================
+From 3.6.0 and up
+====================
+* Edward Smyth (NAG): r1683, r1684
+* Tim Hopkins (University of Kent): r1734, r1735
+
+
+
+====================
+Before 3.6.0
+====================
+
+
+
+
 Here is a (temporary and incomplete) list of contributors and thanks for the next release.
 
 == Contributors:
@@ -57,7 +72,7 @@ http://icl.cs.utk.edu/lapack-forum/viewtopic.php?t=4827
 * Andreas Noack Jensen 
 * Allan Wollaber
 * zhaowei
-* btracey
+* Tracey Brendan
 * osirpt
 * hrautila
 * forswg
