@@ -303,7 +303,7 @@
 *
                      CALL ZGEMM( 'N', 'C', K-I, 1, N-K+I-J, -TAU( I ),
      $                           V( I+1, J ), LDV, V( I, J ), LDV,
-     $                           ONE, T( I+1, I ), LDT )                     
+     $                           ONE, T( I+1, I ), LDT )
                   END IF
 *
 *                 T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i)
