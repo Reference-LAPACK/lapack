@@ -4,6 +4,7 @@ From 3.6.0 and up
 ====================
 * Edward Smyth (NAG): r1683, r1684
 * Tim Hopkins (University of Kent): r1734, r1735
+* Eugene Chereshnev (Intel): r1737
 
 
 
