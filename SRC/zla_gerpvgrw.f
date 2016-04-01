@@ -61,7 +61,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>     On entry, the N-by-N matrix A.
 *> \endverbatim
 *>
@@ -73,7 +73,7 @@
 *>
 *> \param[in] AF
 *> \verbatim
-*>          AF is DOUBLE PRECISION array, dimension (LDAF,N)
+*>          AF is COMPLEX*16 array, dimension (LDAF,N)
 *>     The factors L and U from the factorization
 *>     A = P*L*U as computed by ZGETRF.
 *> \endverbatim

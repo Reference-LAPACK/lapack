@@ -81,7 +81,7 @@
 *>
 *> \param[out] ARF
 *> \verbatim
-*>          ARF is COMPLEX*16 array, dimension ( N*(N+1)/2 ),
+*>          ARF is COMPLEX array, dimension ( N*(N+1)/2 ),
 *>          On exit, the upper or lower triangular matrix A stored in
 *>          RFP format. For a further discussion see Notes below.
 *> \endverbatim

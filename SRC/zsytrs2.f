@@ -106,7 +106,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (N)
+*>          WORK is COMPLEX*16 array, dimension (N)
 *> \endverbatim
 *>
 *> \param[out] INFO

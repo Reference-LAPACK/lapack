@@ -122,7 +122,7 @@
 *>
 *> \param[in,out] G
 *> \verbatim
-*>          G is REAL
+*>          G is DOUBLE PRECISION
 *>        G is passed as an argument in order to save its value between
 *>        calls to DLASQ4.
 *> \endverbatim

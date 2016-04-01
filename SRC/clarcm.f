@@ -72,7 +72,7 @@
 *>
 *> \param[in] B
 *> \verbatim
-*>          B is REAL array, dimension (LDB, N)
+*>          B is COMPLEX array, dimension (LDB, N)
 *>          B contains the M by N matrix B.
 *> \endverbatim
 *>
