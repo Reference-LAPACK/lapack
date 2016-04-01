@@ -86,7 +86,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, dimension (LDB,NRHS)
+*>          B is COMPLEX array, dimension (LDB,NRHS)
 *>          On entry, the right hand side vectors B for the system of
 *>          linear equations.
 *>          On exit, the solution vectors, X.

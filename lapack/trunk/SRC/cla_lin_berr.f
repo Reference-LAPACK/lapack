@@ -67,7 +67,7 @@
 *>
 *> \param[in] RES
 *> \verbatim
-*>          RES is REAL array, dimension (N,NRHS)
+*>          RES is COMPLEX array, dimension (N,NRHS)
 *>     The residual matrix, i.e., the matrix R in the relative backward
 *>     error formula above.
 *> \endverbatim
@@ -82,7 +82,7 @@
 *>     
 *> \param[out] BERR
 *> \verbatim
-*>          BERR is COMPLEX array, dimension (NRHS)
+*>          BERR is REAL array, dimension (NRHS)
 *>     The componentwise relative backward error from the formula above.
 *> \endverbatim
 *

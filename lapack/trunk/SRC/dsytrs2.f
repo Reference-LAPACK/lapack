@@ -106,7 +106,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (N)
+*>          WORK is DOUBLE PRECISION array, dimension (N)
 *> \endverbatim
 *>
 *> \param[out] INFO

@@ -87,7 +87,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, the right hand side vectors B for the system of
 *>          linear equations.
 *>          On exit, the solution vectors, X.

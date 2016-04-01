@@ -140,7 +140,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (lwork)
+*>          WORK is DOUBLE PRECISION array, dimension (lwork)
 *>          lwork must be at least max(1,6*N) when JOB = 'S' or 'B', and
 *>          at least 1 when JOB = 'N' or 'P'.
 *> \endverbatim

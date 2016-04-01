@@ -70,7 +70,7 @@
 *>
 *> \param[in] Z
 *> \verbatim
-*>          Z is DOUBLE PRECISION array, dimension (LDZ, N)
+*>          Z is COMPLEX*16 array, dimension (LDZ, N)
 *>          On entry, the LU part of the factorization of the n-by-n
 *>          matrix Z computed by ZGETC2:  Z = P * L * U * Q
 *> \endverbatim
@@ -83,7 +83,7 @@
 *>
 *> \param[in,out] RHS
 *> \verbatim
-*>          RHS is DOUBLE PRECISION array, dimension (N).
+*>          RHS is COMPLEX*16 array, dimension (N).
 *>          On entry, RHS contains contributions from other subsystems.
 *>          On exit, RHS contains the solution of the subsystem with
 *>          entries according to the value of IJOB (see above).

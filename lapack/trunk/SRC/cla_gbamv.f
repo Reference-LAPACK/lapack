@@ -107,7 +107,7 @@
 *>
 *> \param[in] AB
 *> \verbatim
-*>          AB is REAL array, dimension (LDAB,n)
+*>          AB is COMPLEX array, dimension (LDAB,n)
 *>           Before entry, the leading m by n part of the array AB must
 *>           contain the matrix of coefficients.
 *>           Unchanged on exit.
@@ -124,7 +124,7 @@
 *>
 *> \param[in] X
 *> \verbatim
-*>          X is REAL array, dimension
+*>          X is COMPLEX array, dimension
 *>           ( 1 + ( n - 1 )*abs( INCX ) ) when TRANS = 'N' or 'n'
 *>           and at least
 *>           ( 1 + ( m - 1 )*abs( INCX ) ) otherwise.

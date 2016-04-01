@@ -72,7 +72,7 @@
 *>
 *> \param[in] B
 *> \verbatim
-*>          B is DOUBLE PRECISION array, dimension (LDB, N)
+*>          B is COMPLEX*16 array, dimension (LDB, N)
 *>          B contains the M by N matrix B.
 *> \endverbatim
 *>

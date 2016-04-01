@@ -75,7 +75,7 @@
 *>
 *> \param[in] AB
 *> \verbatim
-*>          AB is DOUBLE PRECISION array, dimension (LDAB,N)
+*>          AB is COMPLEX*16 array, dimension (LDAB,N)
 *>          The upper or lower triangle of the Hermitian band matrix A,
 *>          stored in the first KD+1 rows of the array.  The j-th column
 *>          of A is stored in the j-th column of the array AB as follows:

@@ -70,7 +70,7 @@
 *>
 *> \param[in] Z
 *> \verbatim
-*>          Z is REAL array, dimension (LDZ, N)
+*>          Z is COMPLEX array, dimension (LDZ, N)
 *>          On entry, the LU part of the factorization of the n-by-n
 *>          matrix Z computed by CGETC2:  Z = P * L * U * Q
 *> \endverbatim
@@ -83,7 +83,7 @@
 *>
 *> \param[in,out] RHS
 *> \verbatim
-*>          RHS is REAL array, dimension (N).
+*>          RHS is COMPLEX array, dimension (N).
 *>          On entry, RHS contains contributions from other subsystems.
 *>          On exit, RHS contains the solution of the subsystem with
 *>          entries according to the value of IJOB (see above).
