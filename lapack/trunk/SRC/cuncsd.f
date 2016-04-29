@@ -488,12 +488,12 @@
          ITAUQ1 = ITAUP2 + MAX( 1, M - P )
          ITAUQ2 = ITAUQ1 + MAX( 1, Q )
          IORGQR = ITAUQ2 + MAX( 1, M - Q )
-         CALL CUNGQR( M-Q, M-Q, M-Q, 0, MAX(1,M-Q), U1, WORK, -1,
+         CALL CUNGQR( M-Q, M-Q, M-Q, U1, MAX(1,M-Q), U1, WORK, -1,
      $                CHILDINFO )
          LORGQRWORKOPT = INT( WORK(1) )
          LORGQRWORKMIN = MAX( 1, M - Q )
          IORGLQ = ITAUQ2 + MAX( 1, M - Q )
-         CALL CUNGLQ( M-Q, M-Q, M-Q, 0, MAX(1,M-Q), U1, WORK, -1,
+         CALL CUNGLQ( M-Q, M-Q, M-Q, U1, MAX(1,M-Q), U1, WORK, -1,
      $                CHILDINFO )
          LORGLQWORKOPT = INT( WORK(1) )
          LORGLQWORKMIN = MAX( 1, M - Q )
