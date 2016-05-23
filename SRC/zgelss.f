@@ -285,8 +285,8 @@
 *              Path 1 - overdetermined or exactly determined
 *
 *              Compute space needed for ZGEBRD
-               CALL ZGEBRD( MM, N, A, LDA, S, DUM(1), DUM(1),
-     $                      DUM(1), DUM(1), -1, INFO )
+               CALL ZGEBRD( MM, N, A, LDA, S, S, DUM(1), DUM(1), DUM(1),
+     $                      -1, INFO )
                LWORK_ZGEBRD=DUM(1)
 *              Compute space needed for ZUNMBR
                CALL ZUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, DUM(1),
@@ -315,8 +315,8 @@
      $                -1, INFO )
                   LWORK_ZGELQF=DUM(1)
 *                 Compute space needed for ZGEBRD
-                  CALL ZGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
-     $                      DUM(1), DUM(1), -1, INFO )
+                  CALL ZGEBRD( M, M, A, LDA, S, S, DUM(1), DUM(1),
+     $                         DUM(1), -1, INFO )
                   LWORK_ZGEBRD=DUM(1)
 *                 Compute space needed for ZUNMBR
                   CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, 
@@ -346,8 +346,8 @@
 *                 Path 2 - underdetermined
 *
 *                 Compute space needed for ZGEBRD
-                  CALL ZGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
-     $                      DUM(1), DUM(1), -1, INFO )
+                  CALL ZGEBRD( M, N, A, LDA, S, S, DUM(1), DUM(1),
+     $                         DUM(1), -1, INFO )
                   LWORK_ZGEBRD=DUM(1)
 *                 Compute space needed for ZUNMBR
                   CALL ZUNMBR( 'Q', 'L', 'C', M, NRHS, M, A, LDA, 

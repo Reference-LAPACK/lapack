@@ -285,8 +285,8 @@
 *              Path 1 - overdetermined or exactly determined
 *
 *              Compute space needed for CGEBRD
-               CALL CGEBRD( MM, N, A, LDA, S, DUM(1), DUM(1),
-     $                      DUM(1), DUM(1), -1, INFO )
+               CALL CGEBRD( MM, N, A, LDA, S, S, DUM(1), DUM(1), DUM(1),
+     $                      -1, INFO )
                LWORK_CGEBRD=DUM(1)
 *              Compute space needed for CUNMBR
                CALL CUNMBR( 'Q', 'L', 'C', MM, NRHS, N, A, LDA, DUM(1),
@@ -315,8 +315,8 @@
      $                -1, INFO )
                   LWORK_CGELQF=DUM(1)
 *                 Compute space needed for CGEBRD
-                  CALL CGEBRD( M, M, A, LDA, S, DUM(1), DUM(1),
-     $                      DUM(1), DUM(1), -1, INFO )
+                  CALL CGEBRD( M, M, A, LDA, S, S, DUM(1), DUM(1),
+     $                         DUM(1), -1, INFO )
                   LWORK_CGEBRD=DUM(1)
 *                 Compute space needed for CUNMBR
                   CALL CUNMBR( 'Q', 'L', 'C', M, NRHS, N, A, LDA, 
@@ -346,8 +346,8 @@
 *                 Path 2 - underdetermined
 *
 *                 Compute space needed for CGEBRD
-                  CALL CGEBRD( M, N, A, LDA, S, DUM(1), DUM(1),
-     $                      DUM(1), DUM(1), -1, INFO )
+                  CALL CGEBRD( M, N, A, LDA, S, S, DUM(1), DUM(1),
+     $                         DUM(1), -1, INFO )
                   LWORK_CGEBRD=DUM(1)
 *                 Compute space needed for CUNMBR
                   CALL CUNMBR( 'Q', 'L', 'C', M, NRHS, M, A, LDA, 

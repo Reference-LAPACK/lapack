@@ -392,8 +392,8 @@
      $                LDVSL, VSR, LDVSR, WORK, -1, IERR )
          LWKOPT = MAX( LWKOPT, N + INT ( WORK( 1 ) ) )
          CALL ZHGEQZ( 'S', JOBVSL, JOBVSR, N, 1, N, A, LDA, B, LDB,
-     $                ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK,
-     $        -1, RWORK, IERR )
+     $                ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK, -1,
+     $                RWORK, IERR )
          LWKOPT = MAX( LWKOPT, INT ( WORK( 1 ) ) )
          IF( WANTST ) THEN
             CALL ZTGSEN( 0, ILVSL, ILVSR, BWORK, N, A, LDA, B, LDB,
