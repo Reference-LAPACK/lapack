@@ -338,7 +338,7 @@
       INDWK2 = INDWRK + N*N
       LLWRK2 = LWORK - INDWK2 + 1
       CALL DSBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
-     $             WORK( INDWRK ), IINFO )
+     $             WORK, IINFO )
 *
 *     Reduce to tridiagonal form.
 *
