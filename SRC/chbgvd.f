@@ -372,7 +372,7 @@
       LLWK2 = LWORK - INDWK2 + 2
       LLRWK = LRWORK - INDWRK + 2
       CALL CHBGST( JOBZ, UPLO, N, KA, KB, AB, LDAB, BB, LDBB, Z, LDZ,
-     $             WORK, RWORK( INDWRK ), IINFO )
+     $             WORK, RWORK, IINFO )
 *
 *     Reduce Hermitian band matrix to tridiagonal form.
 *
