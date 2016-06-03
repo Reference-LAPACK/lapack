@@ -1,0 +1,16 @@
+# ignore objects and archives, anywhere in the tree.
+    *.[oa]
+# test in INSTALL
+INSTALL/test*
+
+# local make.inc
+make.inc
+
+# BLAS testing
+BLAS/*.out
+BLAS/x*
+
+# LAPACK testing
+TESTING/x*
+TESTING/*.out
+TESTING/*.txt
