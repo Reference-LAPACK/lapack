@@ -1,0 +1,18 @@
+language: cpp
+
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports # cmake
+    packages:
+      - cmake
+      - cmake-data
+      - gfortran
+
+os:
+  - linux
+  - osx
+
+script:
+  - cmake -DCMAKE_INSTALL_PREFIX=~/.local -DLAPACKE=ON -DCBLAS=ON .
+  - make install -j2 && ctest -j2 --output-on-failure --timeout 100
