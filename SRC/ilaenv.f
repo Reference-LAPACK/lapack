@@ -397,6 +397,12 @@
             ELSE
                NB = 64
             END IF
+         ELSE IF ( C3.EQ.'EVC' ) THEN
+            IF( SNAME ) THEN
+               NB = 64
+            ELSE
+               NB = 64
+            END IF
          END IF
       ELSE IF( C2.EQ.'LA' ) THEN
          IF( C3.EQ.'UUM' ) THEN

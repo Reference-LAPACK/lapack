@@ -284,6 +284,7 @@
       SUBROUTINE CGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, W, VL,
      $                   LDVL, VR, LDVR, ILO, IHI, SCALE, ABNRM, RCONDE,
      $                   RCONDV, WORK, LWORK, RWORK, INFO )
+      implicit none
 *
 *  -- LAPACK driver routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -312,8 +313,8 @@
       LOGICAL            LQUERY, SCALEA, WANTVL, WANTVR, WNTSNB, WNTSNE,
      $                   WNTSNN, WNTSNV
       CHARACTER          JOB, SIDE
-      INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K, MAXWRK,
-     $                   MINWRK, NOUT
+      INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K, 
+     $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
       REAL               ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
       COMPLEX            TMP
 *     ..
@@ -323,7 +324,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEBAK, CGEBAL, CGEHRD, CHSEQR, CLACPY, CLASCL,
-     $                   CSCAL, CSSCAL, CTREVC, CTRSNA, CUNGHR, SLABAD,
+     $                   CSCAL, CSSCAL, CTREVC3, CTRSNA, CUNGHR, SLABAD,
      $                   SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
@@ -387,9 +388,19 @@
             MAXWRK = N + N*ILAENV( 1, 'CGEHRD', ' ', N, 1, N, 0 )
 *
             IF( WANTVL ) THEN
+               CALL CTREVC3( 'L', 'B', SELECT, N, A, LDA,
+     $                       VL, LDVL, VR, LDVR,
+     $                       N, NOUT, WORK, -1, RWORK, -1, IERR )
+               LWORK_TREVC = INT( WORK(1) )
+               MAXWRK = MAX( MAXWRK, LWORK_TREVC )
                CALL CHSEQR( 'S', 'V', N, 1, N, A, LDA, W, VL, LDVL,
      $                WORK, -1, INFO )
             ELSE IF( WANTVR ) THEN
+               CALL CTREVC3( 'R', 'B', SELECT, N, A, LDA,
+     $                       VL, LDVL, VR, LDVR,
+     $                       N, NOUT, WORK, -1, RWORK, -1, IERR )
+               LWORK_TREVC = INT( WORK(1) )
+               MAXWRK = MAX( MAXWRK, LWORK_TREVC )
                CALL CHSEQR( 'S', 'V', N, 1, N, A, LDA, W, VR, LDVR,
      $                WORK, -1, INFO )
             ELSE
@@ -401,7 +412,7 @@
      $                WORK, -1, INFO )
                END IF
             END IF
-            HSWORK = WORK( 1 )
+            HSWORK = INT( WORK(1) )
 *
             IF( ( .NOT.WANTVL ) .AND. ( .NOT.WANTVR ) ) THEN
                MINWRK = 2*N
@@ -567,11 +578,12 @@
       IF( WANTVL .OR. WANTVR ) THEN
 *
 *        Compute left and/or right eigenvectors
-*        (CWorkspace: need 2*N)
+*        (CWorkspace: need 2*N, prefer N + 2*N*NB)
 *        (RWorkspace: need N)
 *
-         CALL CTREVC( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
-     $                N, NOUT, WORK( IWRK ), RWORK, IERR )
+         CALL CTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+     $                 N, NOUT, WORK( IWRK ), LWORK-IWRK+1,
+     $                 RWORK, N, IERR )
       END IF
 *
 *     Compute condition numbers if desired

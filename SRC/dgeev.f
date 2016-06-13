@@ -188,6 +188,7 @@
 *  =====================================================================
       SUBROUTINE DGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL, VR,
      $                  LDVR, WORK, LWORK, INFO )
+      implicit none
 *
 *  -- LAPACK driver routine (version 3.4.2) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -213,7 +214,7 @@
       LOGICAL            LQUERY, SCALEA, WANTVL, WANTVR
       CHARACTER          SIDE
       INTEGER            HSWORK, I, IBAL, IERR, IHI, ILO, ITAU, IWRK, K,
-     $                   MAXWRK, MINWRK, NOUT
+     $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
       DOUBLE PRECISION   ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
      $                   SN
 *     ..
@@ -223,7 +224,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEBAK, DGEBAL, DGEHRD, DHSEQR, DLABAD, DLACPY,
-     $                   DLARTG, DLASCL, DORGHR, DROT, DSCAL, DTREVC,
+     $                   DLARTG, DLASCL, DORGHR, DROT, DSCAL, DTREVC3,
      $                   XERBLA
 *     ..
 *     .. External Functions ..
@@ -279,24 +280,34 @@
                MAXWRK = MAX( MAXWRK, 2*N + ( N - 1 )*ILAENV( 1,
      $                       'DORGHR', ' ', N, 1, N, -1 ) )
                CALL DHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VL, LDVL,
-     $                WORK, -1, INFO )
-               HSWORK = WORK( 1 )
+     $                      WORK, -1, INFO )
+               HSWORK = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + 1, N + HSWORK )
+               CALL DTREVC3( 'L', 'B', SELECT, N, A, LDA,
+     $                       VL, LDVL, VR, LDVR, N, NOUT,
+     $                       WORK, -1, IERR )
+               LWORK_TREVC = INT( WORK(1) )
+               MAXWRK = MAX( MAXWRK, N + LWORK_TREVC )
                MAXWRK = MAX( MAXWRK, 4*N )
             ELSE IF( WANTVR ) THEN
                MINWRK = 4*N
                MAXWRK = MAX( MAXWRK, 2*N + ( N - 1 )*ILAENV( 1,
      $                       'DORGHR', ' ', N, 1, N, -1 ) )
                CALL DHSEQR( 'S', 'V', N, 1, N, A, LDA, WR, WI, VR, LDVR,
-     $                WORK, -1, INFO )
-               HSWORK = WORK( 1 )
+     $                      WORK, -1, INFO )
+               HSWORK = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + 1, N + HSWORK )
+               CALL DTREVC3( 'R', 'B', SELECT, N, A, LDA,
+     $                       VL, LDVL, VR, LDVR, N, NOUT,
+     $                       WORK, -1, IERR )
+               LWORK_TREVC = INT( WORK(1) )
+               MAXWRK = MAX( MAXWRK, N + LWORK_TREVC )
                MAXWRK = MAX( MAXWRK, 4*N )
             ELSE 
                MINWRK = 3*N
                CALL DHSEQR( 'E', 'N', N, 1, N, A, LDA, WR, WI, VR, LDVR,
-     $                WORK, -1, INFO )
-               HSWORK = WORK( 1 )
+     $                      WORK, -1, INFO )
+               HSWORK = INT( WORK(1) )
                MAXWRK = MAX( MAXWRK, N + 1, N + HSWORK )
             END IF
             MAXWRK = MAX( MAXWRK, MINWRK )
@@ -426,10 +437,10 @@
       IF( WANTVL .OR. WANTVR ) THEN
 *
 *        Compute left and/or right eigenvectors
-*        (Workspace: need 4*N)
+*        (Workspace: need 4*N, prefer N + N + 2*N*NB)
 *
-         CALL DTREVC( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
-     $                N, NOUT, WORK( IWRK ), IERR )
+         CALL DTREVC3( SIDE, 'B', SELECT, N, A, LDA, VL, LDVL, VR, LDVR,
+     $                 N, NOUT, WORK( IWRK ), LWORK-IWRK+1, IERR )
       END IF
 *
       IF( WANTVL ) THEN
