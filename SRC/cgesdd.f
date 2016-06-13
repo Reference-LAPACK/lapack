@@ -340,11 +340,11 @@
 *           not including e, RU, and RVT matrices.
 *
 *           Compute space preferred for each routine
-            CALL CGEBRD( M, N, CDUM(1), M, CDUM(1), DUM(1), CDUM(1),
+            CALL CGEBRD( M, N, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_CGEBRD_MN = INT( CDUM(1) )
 *
-            CALL CGEBRD( N, N, CDUM(1), N, CDUM(1), DUM(1), CDUM(1),
+            CALL CGEBRD( N, N, CDUM(1), N, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_CGEBRD_NN = INT( CDUM(1) )
 *
@@ -481,11 +481,11 @@
 *           not including e, RU, and RVT matrices.
 *
 *           Compute space preferred for each routine
-            CALL CGEBRD( M, N, CDUM(1), M, CDUM(1), DUM(1), CDUM(1),
+            CALL CGEBRD( M, N, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_CGEBRD_MN = INT( CDUM(1) )
 *
-            CALL CGEBRD( M, M, CDUM(1), M, CDUM(1), DUM(1), CDUM(1),
+            CALL CGEBRD( M, M, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_CGEBRD_MM = INT( CDUM(1) )
 *

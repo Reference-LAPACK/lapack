@@ -264,6 +264,9 @@
      $                   LWORKMIN, LWORKOPT, R
       LOGICAL            LQUERY, WANTU1, WANTU2, WANTV1T
 *     ..
+*     .. Local Arrays ..
+      REAL               DUM( 1 )
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           SBBCSD, SCOPY, SLACPY, SLAPMR, SLAPMT, SORBDB1,
      $                   SORBDB2, SORBDB3, SORBDB4, SORGLQ, SORGQR,
@@ -347,109 +350,119 @@
          LORGLQMIN = 1
          LORGLQOPT = 1
          IF( R .EQ. Q ) THEN
-            CALL SORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA, 0, 0,
-     $                    0, 0, WORK, -1, CHILDINFO )
+            CALL SORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    DUM, DUM, DUM, DUM, WORK, -1,
+     $                    CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL SORGQR( P, P, Q, U1, LDU1, 0, WORK(1), -1,
+               CALL SORGQR( P, P, Q, U1, LDU1, DUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             ENDIF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL SORGQR( M-P, M-P, Q, U2, LDU2, 0, WORK(1), -1,
+               CALL SORGQR( M-P, M-P, Q, U2, LDU2, DUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
                CALL SORGLQ( Q-1, Q-1, Q-1, V1T, LDV1T,
-     $                      0, WORK(1), -1, CHILDINFO )
+     $                      DUM, WORK(1), -1, CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q-1 )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
             CALL SBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THETA,
-     $                   0, U1, LDU1, U2, LDU2, V1T, LDV1T, 0, 1, 0, 0,
-     $                   0, 0, 0, 0, 0, 0, WORK(1), -1, CHILDINFO )
+     $                   DUM, U1, LDU1, U2, LDU2, V1T, LDV1T, DUM,
+     $                   1, DUM, DUM, DUM, DUM, DUM,
+     $                   DUM, DUM, DUM, WORK(1), -1, CHILDINFO
+     $                 )
             LBBCSD = INT( WORK(1) )
          ELSE IF( R .EQ. P ) THEN
-            CALL SORBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA, 0, 0,
-     $                    0, 0, WORK(1), -1, CHILDINFO )
+            CALL SORBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    DUM, DUM, DUM, DUM, WORK(1), -1,
+     $                    CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL SORGQR( P-1, P-1, P-1, U1(2,2), LDU1, 0, WORK(1),
-     $                      -1, CHILDINFO )
+               CALL SORGQR( P-1, P-1, P-1, U1(2,2), LDU1, DUM,
+     $                      WORK(1), -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P-1 )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL SORGQR( M-P, M-P, Q, U2, LDU2, 0, WORK(1), -1,
+               CALL SORGQR( M-P, M-P, Q, U2, LDU2, DUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL SORGLQ( Q, Q, R, V1T, LDV1T, 0, WORK(1), -1,
+               CALL SORGLQ( Q, Q, R, V1T, LDV1T, DUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
             CALL SBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THETA,
-     $                   0, V1T, LDV1T, 0, 1, U1, LDU1, U2, LDU2, 0, 0,
-     $                   0, 0, 0, 0, 0, 0, WORK(1), -1, CHILDINFO )
+     $                   DUM, V1T, LDV1T, DUM, 1, U1, LDU1, U2,
+     $                   LDU2, DUM, DUM, DUM, DUM, DUM,
+     $                   DUM, DUM, DUM, WORK(1), -1, CHILDINFO
+     $                 )
             LBBCSD = INT( WORK(1) )
          ELSE IF( R .EQ. M-P ) THEN
-            CALL SORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA, 0, 0,
-     $                    0, 0, WORK(1), -1, CHILDINFO )
+            CALL SORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    DUM, DUM, DUM, DUM, WORK(1), -1,
+     $                    CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL SORGQR( P, P, Q, U1, LDU1, 0, WORK(1), -1,
+               CALL SORGQR( P, P, Q, U1, LDU1, DUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL SORGQR( M-P-1, M-P-1, M-P-1, U2(2,2), LDU2, 0,
+               CALL SORGQR( M-P-1, M-P-1, M-P-1, U2(2,2), LDU2, DUM,
      $                      WORK(1), -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P-1 )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL SORGLQ( Q, Q, R, V1T, LDV1T, 0, WORK(1), -1,
+               CALL SORGLQ( Q, Q, R, V1T, LDV1T, DUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
             CALL SBBCSD( 'N', JOBV1T, JOBU2, JOBU1, 'T', M, M-Q, M-P,
-     $                   THETA, 0, 0, 1, V1T, LDV1T, U2, LDU2, U1, LDU1,
-     $                   0, 0, 0, 0, 0, 0, 0, 0, WORK(1), -1,
+     $                   THETA, DUM, DUM, 1, V1T, LDV1T, U2, LDU2,
+     $                   U1, LDU1, DUM, DUM, DUM, DUM,
+     $                   DUM, DUM, DUM, DUM, WORK(1), -1,
      $                   CHILDINFO )
             LBBCSD = INT( WORK(1) )
          ELSE
-            CALL SORBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA, 0, 0,
-     $                    0, 0, 0, WORK(1), -1, CHILDINFO )
+            CALL SORBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA,
+     $                    DUM, DUM, DUM, DUM, DUM,
+     $                    WORK(1), -1, CHILDINFO )
             LORBDB = M + INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL SORGQR( P, P, M-Q, U1, LDU1, 0, WORK(1), -1,
+               CALL SORGQR( P, P, M-Q, U1, LDU1, DUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL SORGQR( M-P, M-P, M-Q, U2, LDU2, 0, WORK(1), -1,
-     $                      CHILDINFO )
+               CALL SORGQR( M-P, M-P, M-Q, U2, LDU2, DUM, WORK(1),
+     $                      -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL SORGLQ( Q, Q, Q, V1T, LDV1T, 0, WORK(1), -1,
+               CALL SORGLQ( Q, Q, Q, V1T, LDV1T, DUM, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
             CALL SBBCSD( JOBU2, JOBU1, 'N', JOBV1T, 'N', M, M-P, M-Q,
-     $                   THETA, 0, U2, LDU2, U1, LDU1, 0, 1, V1T, LDV1T,
-     $                   0, 0, 0, 0, 0, 0, 0, 0, WORK(1), -1,
+     $                   THETA, DUM, U2, LDU2, U1, LDU1, DUM, 1,
+     $                   V1T, LDV1T, DUM, DUM, DUM, DUM,
+     $                   DUM, DUM, DUM, DUM, WORK(1), -1,
      $                   CHILDINFO )
             LBBCSD = INT( WORK(1) )
          END IF
@@ -515,8 +528,8 @@
 *        Simultaneously diagonalize X11 and X21.
 *   
          CALL SBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THETA,
-     $                WORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T, 0, 1,
-     $                WORK(IB11D), WORK(IB11E), WORK(IB12D),
+     $                WORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T,
+     $                DUM, 1, WORK(IB11D), WORK(IB11E), WORK(IB12D),
      $                WORK(IB12E), WORK(IB21D), WORK(IB21E),
      $                WORK(IB22D), WORK(IB22E), WORK(IBBCSD), LBBCSD,
      $                CHILDINFO )
@@ -569,8 +582,8 @@
 *        Simultaneously diagonalize X11 and X21.
 *   
          CALL SBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THETA,
-     $                WORK(IPHI), V1T, LDV1T, 0, 1, U1, LDU1, U2, LDU2,
-     $                WORK(IB11D), WORK(IB11E), WORK(IB12D),
+     $                WORK(IPHI), V1T, LDV1T, DUM, 1, U1, LDU1, U2,
+     $                LDU2, WORK(IB11D), WORK(IB11E), WORK(IB12D),
      $                WORK(IB12E), WORK(IB21D), WORK(IB21E),
      $                WORK(IB22D), WORK(IB22E), WORK(IBBCSD), LBBCSD,
      $                CHILDINFO )
@@ -624,11 +637,11 @@
 *        Simultaneously diagonalize X11 and X21.
 *   
          CALL SBBCSD( 'N', JOBV1T, JOBU2, JOBU1, 'T', M, M-Q, M-P,
-     $                THETA, WORK(IPHI), 0, 1, V1T, LDV1T, U2, LDU2, U1,
-     $                LDU1, WORK(IB11D), WORK(IB11E), WORK(IB12D),
-     $                WORK(IB12E), WORK(IB21D), WORK(IB21E),
-     $                WORK(IB22D), WORK(IB22E), WORK(IBBCSD), LBBCSD,
-     $                CHILDINFO )
+     $                THETA, WORK(IPHI), DUM, 1, V1T, LDV1T, U2,
+     $                LDU2, U1, LDU1, WORK(IB11D), WORK(IB11E),
+     $                WORK(IB12D), WORK(IB12E), WORK(IB21D),
+     $                WORK(IB21E), WORK(IB22D), WORK(IB22E),
+     $                WORK(IBBCSD), LBBCSD, CHILDINFO )
 *   
 *        Permute rows and columns to place identity submatrices in
 *        preferred positions
@@ -693,8 +706,8 @@
 *        Simultaneously diagonalize X11 and X21.
 *   
          CALL SBBCSD( JOBU2, JOBU1, 'N', JOBV1T, 'N', M, M-P, M-Q,
-     $                THETA, WORK(IPHI), U2, LDU2, U1, LDU1, 0, 1, V1T,
-     $                LDV1T, WORK(IB11D), WORK(IB11E), WORK(IB12D),
+     $                THETA, WORK(IPHI), U2, LDU2, U1, LDU1, DUM, 1,
+     $                V1T, LDV1T, WORK(IB11D), WORK(IB11E), WORK(IB12D),
      $                WORK(IB12E), WORK(IB21D), WORK(IB21E),
      $                WORK(IB22D), WORK(IB22E), WORK(IBBCSD), LBBCSD,
      $                CHILDINFO )

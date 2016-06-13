@@ -341,11 +341,11 @@
 *           not including e, RU, and RVT matrices.
 *
 *           Compute space preferred for each routine
-            CALL ZGEBRD( M, N, CDUM(1), M, CDUM(1), DUM(1), CDUM(1),
+            CALL ZGEBRD( M, N, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_ZGEBRD_MN = INT( CDUM(1) )
 *
-            CALL ZGEBRD( N, N, CDUM(1), N, CDUM(1), DUM(1), CDUM(1),
+            CALL ZGEBRD( N, N, CDUM(1), N, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_ZGEBRD_NN = INT( CDUM(1) )
 *
@@ -482,11 +482,11 @@
 *           not including e, RU, and RVT matrices.
 *
 *           Compute space preferred for each routine
-            CALL ZGEBRD( M, N, CDUM(1), M, CDUM(1), DUM(1), CDUM(1),
+            CALL ZGEBRD( M, N, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_ZGEBRD_MN = INT( CDUM(1) )
 *
-            CALL ZGEBRD( M, M, CDUM(1), M, CDUM(1), DUM(1), CDUM(1),
+            CALL ZGEBRD( M, M, CDUM(1), M, DUM(1), DUM(1), CDUM(1),
      $                   CDUM(1), CDUM(1), -1, IERR )
             LWORK_ZGEBRD_MM = INT( CDUM(1) )
 *
