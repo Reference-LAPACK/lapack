@@ -438,8 +438,10 @@
    80       CONTINUE
    90    CONTINUE
   100 CONTINUE
-      IF( ABS( T16( 4, 4 ) ).LT.SMIN )
-     $   T16( 4, 4 ) = SMIN
+      IF( ABS( T16( 4, 4 ) ).LT.SMIN ) THEN
+         INFO = 1
+         T16( 4, 4 ) = SMIN
+      END IF
       SCALE = ONE
       IF( ( EIGHT*SMLNUM )*ABS( BTMP( 1 ) ).GT.ABS( T16( 1, 1 ) ) .OR.
      $    ( EIGHT*SMLNUM )*ABS( BTMP( 2 ) ).GT.ABS( T16( 2, 2 ) ) .OR.
