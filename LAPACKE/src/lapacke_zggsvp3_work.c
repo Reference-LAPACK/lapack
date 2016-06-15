@@ -94,9 +94,9 @@ lapack_int LAPACKE_zggsvp3_work( int matrix_layout, char jobu, char jobv,
         }
         /* Query optimal working array(s) size if requested */
         if( lwork == -1 ) {
-          LAPACK_zggsvp3( &jobu, &jobv, &jobq, &m, &p, &n, a_t, &lda_t, b_t,
-                          &ldb_t, &tola, &tolb, k, l, u_t, &ldu_t, v_t,
-                          &ldv_t, q_t, &ldq_t, iwork, rwork, tau, work,
+          LAPACK_zggsvp3( &jobu, &jobv, &jobq, &m, &p, &n, a, &lda_t, b,
+                          &ldb_t, &tola, &tolb, k, l, u, &ldu_t, v,
+                          &ldv_t, q, &ldq_t, iwork, rwork, tau, work,
                           &lwork, &info );
           return (info < 0) ? (info - 1) : info;
         }
