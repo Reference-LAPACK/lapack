@@ -60,12 +60,13 @@
 *> \param[in] VL
 *> \verbatim
 *>          VL is DOUBLE PRECISION
+*>          The lower bound for the eigenvalues.
 *> \endverbatim
 *>
 *> \param[in] VU
 *> \verbatim
 *>          VU is DOUBLE PRECISION
-*>          The lower and upper bounds for the eigenvalues.
+*>          The upper bound for the eigenvalues.
 *> \endverbatim
 *>
 *> \param[in] D

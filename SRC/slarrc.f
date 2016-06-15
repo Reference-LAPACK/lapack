@@ -60,12 +60,13 @@
 *> \param[in] VL
 *> \verbatim
 *>          VL is REAL
+*>          The lower bound for the eigenvalues.
 *> \endverbatim
 *>
 *> \param[in] VU
 *> \verbatim
 *>          VU is REAL
-*>          The lower and upper bounds for the eigenvalues.
+*>          The upper bound for the eigenvalues.
 *> \endverbatim
 *>
 *> \param[in] D

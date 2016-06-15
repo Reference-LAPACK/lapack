@@ -59,12 +59,15 @@
 *> \param[in] VL
 *> \verbatim
 *>          VL is REAL
+*>          Lower bound of the interval that contains the desired
+*>          eigenvalues. VL < VU. Needed to compute gaps on the left or right
+*>          end of the extremal eigenvalues in the desired RANGE.
 *> \endverbatim
 *>
 *> \param[in] VU
 *> \verbatim
 *>          VU is REAL
-*>          Lower and upper bounds of the interval that contains the desired
+*>          Upper bound of the interval that contains the desired
 *>          eigenvalues. VL < VU. Needed to compute gaps on the left or right
 *>          end of the extremal eigenvalues in the desired RANGE.
 *> \endverbatim

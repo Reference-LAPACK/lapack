@@ -117,14 +117,16 @@
 *>
 *> \param[in] VL
 *> \verbatim
-*>          VL is REAL
-*>          VL >=0.
+*>         VL is REAL
+*>          If RANGE='V', the lower bound of the interval to
+*>          be searched for singular values. VU > VL.
+*>          Not referenced if RANGE = 'A' or 'I'.
 *> \endverbatim
 *>
 *> \param[in] VU
 *> \verbatim
 *>         VU is REAL
-*>          If RANGE='V', the lower and upper bounds of the interval to
+*>          If RANGE='V', the upper bound of the interval to
 *>          be searched for singular values. VU > VL.
 *>          Not referenced if RANGE = 'A' or 'I'.
 *> \endverbatim
@@ -132,13 +134,17 @@
 *> \param[in] IL
 *> \verbatim
 *>          IL is INTEGER
+*>          If RANGE='I', the index of the
+*>          smallest singular value to be returned.
+*>          1 <= IL <= IU <= min(M,N), if min(M,N) > 0.
+*>          Not referenced if RANGE = 'A' or 'V'.
 *> \endverbatim
 *>
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
-*>          If RANGE='I', the indices (in ascending order) of the
-*>          smallest and largest singular values to be returned.
+*>          If RANGE='I', the index of the
+*>          largest singular value to be returned.
 *>          1 <= IL <= IU <= min(M,N), if min(M,N) > 0.
 *>          Not referenced if RANGE = 'A' or 'V'.
 *> \endverbatim

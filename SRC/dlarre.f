@@ -78,12 +78,17 @@
 *> \param[in,out] VL
 *> \verbatim
 *>          VL is DOUBLE PRECISION
+*>          If RANGE='V', the lower bound for the eigenvalues.
+*>          Eigenvalues less than or equal to VL, or greater than VU,
+*>          will not be returned.  VL < VU.
+*>          If RANGE='I' or ='A', DLARRE computes bounds on the desired
+*>          part of the spectrum.
 *> \endverbatim
 *>
 *> \param[in,out] VU
 *> \verbatim
 *>          VU is DOUBLE PRECISION
-*>          If RANGE='V', the lower and upper bounds for the eigenvalues.
+*>          If RANGE='V', the upper bound for the eigenvalues.
 *>          Eigenvalues less than or equal to VL, or greater than VU,
 *>          will not be returned.  VL < VU.
 *>          If RANGE='I' or ='A', DLARRE computes bounds on the desired
@@ -93,13 +98,16 @@
 *> \param[in] IL
 *> \verbatim
 *>          IL is INTEGER
+*>          If RANGE='I', the index of the
+*>          smallest eigenvalue to be returned.
+*>          1 <= IL <= IU <= N.
 *> \endverbatim
 *>
 *> \param[in] IU
 *> \verbatim
 *>          IU is INTEGER
-*>          If RANGE='I', the indices (in ascending order) of the
-*>          smallest and largest eigenvalues to be returned.
+*>          If RANGE='I', the index of the
+*>          largest eigenvalue to be returned.
 *>          1 <= IL <= IU <= N.
 *> \endverbatim
 *>
