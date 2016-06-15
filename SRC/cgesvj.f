@@ -205,6 +205,7 @@
 *> \endverbatim
 *>
 *> \param[in,out] CWORK
+*> \verbatim
 *>          CWORK is COMPLEX array, dimension M+N.
 *>          Used as work space.
 *> \endverbatim
@@ -213,8 +214,10 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          Length of CWORK, LWORK >= M+N.
+*> \endverbatim
 *>
 *> \param[in,out] RWORK
+*> \verbatim
 *>          RWORK is REAL array, dimension max(6,M+N).
 *>          On entry,
 *>          If JOBU .EQ. 'C' :
@@ -244,6 +247,7 @@
 *> \endverbatim
 *>
 *> \param[in] LRWORK
+*> \verbatim
 *>          LRWORK is INTEGER
 *>         Length of RWORK, LRWORK >= MAX(6,N).
 *> \endverbatim

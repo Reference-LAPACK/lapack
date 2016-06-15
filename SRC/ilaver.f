@@ -25,13 +25,19 @@
 *  ==========
 *
 *>  \param[out] VERS_MAJOR
+*>  \verbatim
 *>      return the lapack major version
+*>  \endverbatim
 *>
 *>  \param[out] VERS_MINOR
+*>  \verbatim
 *>      return the lapack minor version from the major version
+*>  \endverbatim
 *>
 *>  \param[out] VERS_PATCH
+*>  \verbatim
 *>      return the lapack patch version from the minor version
+*>  \endverbatim
 *
 *  Authors:
 *  ========
