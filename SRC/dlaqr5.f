@@ -150,10 +150,10 @@
 *>
 *> \param[in,out] Z
 *> \verbatim
-*>          Z is DOUBLE PRECISION array of size (LDZ,IHI)
+*>          Z is DOUBLE PRECISION array of size (LDZ,IHIZ)
 *>             If WANTZ = .TRUE., then the QR Sweep orthogonal
 *>             similarity transformation is accumulated into
-*>             Z(ILOZ:IHIZ,ILO:IHI) from the right.
+*>             Z(ILOZ:IHIZ,ILOZ:IHIZ) from the right.
 *>             If WANTZ = .FALSE., then Z is unreferenced.
 *> \endverbatim
 *>

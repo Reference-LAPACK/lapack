@@ -142,10 +142,10 @@
 *>
 *> \param[in,out] Z
 *> \verbatim
-*>          Z is COMPLEX array of size (LDZ,IHI)
+*>          Z is COMPLEX array of size (LDZ,IHIZ)
 *>             If WANTZ = .TRUE., then the QR Sweep unitary
 *>             similarity transformation is accumulated into
-*>             Z(ILOZ:IHIZ,ILO:IHI) from the right.
+*>             Z(ILOZ:IHIZ,ILOZ:IHIZ) from the right.
 *>             If WANTZ = .FALSE., then Z is unreferenced.
 *> \endverbatim
 *>

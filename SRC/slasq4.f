@@ -56,7 +56,7 @@
 *>
 *> \param[in] Z
 *> \verbatim
-*>          Z is REAL array, dimension ( 4*N )
+*>          Z is REAL array, dimension ( 4*N0 )
 *>        Z holds the qd array.
 *> \endverbatim
 *>

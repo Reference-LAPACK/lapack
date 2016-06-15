@@ -137,7 +137,7 @@
 *>          Z is COMPLEX array, dimension (LDZ,N)
 *>          IF WANTZ is .TRUE., then on output, the unitary
 *>          similarity transformation mentioned above has been
-*>          accumulated into Z(ILOZ:IHIZ,ILO:IHI) from the right.
+*>          accumulated into Z(ILOZ:IHIZ,ILOZ:IHIZ) from the right.
 *>          If WANTZ is .FALSE., then Z is unreferenced.
 *> \endverbatim
 *>

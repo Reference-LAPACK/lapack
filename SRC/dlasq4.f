@@ -56,7 +56,7 @@
 *>
 *> \param[in] Z
 *> \verbatim
-*>          Z is DOUBLE PRECISION array, dimension ( 4*N )
+*>          Z is DOUBLE PRECISION array, dimension ( 4*N0 )
 *>        Z holds the qd array.
 *> \endverbatim
 *>
