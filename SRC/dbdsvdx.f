@@ -198,7 +198,7 @@
 *>          of the eigenvectors that failed to converge in DSTEVX.
 *> \endverbatim
 *>
-*> \param[out] IWORK
+*> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
 *>          = 0:  successful exit
