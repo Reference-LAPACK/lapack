@@ -232,14 +232,13 @@
 *> \param[out] DIFR
 *> \verbatim
 *>          DIFR is DOUBLE PRECISION array,
-*>                  dimension ( LDGNUM, 2 ) if ICOMPQ = 1 and
-*>                  dimension ( N ) if ICOMPQ = 0.
-*>         On exit, DIFR(I, 1) is the distance between I-th updated
-*>         (undeflated) singular value and the I+1-th (undeflated) old
-*>         singular value.
+*>                   dimension ( LDDIFR, 2 ) if ICOMPQ = 1 and
+*>                   dimension ( K ) if ICOMPQ = 0.
+*>          On exit, DIFR(I,1) = D(I) - DSIGMA(I+1), DIFR(K,1) is not
+*>          defined and will not be referenced.
 *>
-*>         If ICOMPQ = 1, DIFR(1:K,2) is an array containing the
-*>         normalizing factors for the right singular vector matrix.
+*>          If ICOMPQ = 1, DIFR(1:K,2) is an array containing the
+*>          normalizing factors for the right singular vector matrix.
 *>
 *>         See DLASD8 for details on DIFL and DIFR.
 *> \endverbatim
