@@ -472,8 +472,6 @@
 *
 *     Set singular values indices accord to RANGE='A'.
 *
-      ALLS = LSAME( RANGE, 'A' )
-      INDS = LSAME( RANGE, 'I' )
       IF( ALLS ) THEN
          RNGTGK = 'I'
          ILTGK = 1
