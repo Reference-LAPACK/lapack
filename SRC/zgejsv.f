@@ -27,7 +27,7 @@
 *     INTEGER     INFO, LDA, LDU, LDV, LWORK, M, N
 *     ..
 *     .. Array Arguments ..
-*     DOUBLE COMPLEX     A( LDA, * ),  U( LDU, * ), V( LDV, * ), CWORK( LWORK )
+*     COMPLEX*16     A( LDA, * ),  U( LDU, * ), V( LDV, * ), CWORK( LWORK )
 *     DOUBLE PRECISION   SVA( N ), RWORK( LRWORK )      
 *     INTEGER     IWORK( * )
 *     CHARACTER*1 JOBA, JOBP, JOBR, JOBT, JOBU, JOBV
@@ -194,7 +194,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE COMPLEX array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
 *> \endverbatim
 *>
@@ -222,7 +222,7 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is DOUBLE COMPLEX array, dimension ( LDU, N )
+*>          U is COMPLEX*16 array, dimension ( LDU, N )
 *>          If JOBU = 'U', then U contains on exit the M-by-N matrix of
 *>                         the left singular vectors.
 *>          If JOBU = 'F', then U contains on exit the M-by-M matrix of
@@ -247,7 +247,7 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is DOUBLE COMPLEX array, dimension ( LDV, N )
+*>          V is COMPLEX*16 array, dimension ( LDV, N )
 *>          If JOBV = 'V', 'J' then V contains on exit the N-by-N matrix of
 *>                         the right singular vectors;
 *>          If JOBV = 'W', AND (JOBU.EQ.'U' AND JOBT.EQ.'T' AND M.EQ.N),
@@ -269,7 +269,7 @@
 *>
 *> \param[out] CWORK
 *> \verbatim
-*>          CWORK is DOUBLE COMPLEX array, dimension at least LWORK.     
+*>          CWORK is COMPLEX*16 array, dimension at least LWORK.     
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -527,7 +527,7 @@
       INTEGER     INFO, LDA, LDU, LDV, LWORK, LRWORK, M, N
 *     ..
 *     .. Array Arguments ..
-      DOUBLE COMPLEX   A( LDA, * ), U( LDU, * ), V( LDV, * ), 
+      COMPLEX*16       A( LDA, * ), U( LDU, * ), V( LDV, * ), 
      $                 CWORK( LWORK )
       DOUBLE PRECISION SVA( N ), RWORK( * )
       INTEGER          IWORK( * )
@@ -539,11 +539,11 @@
 *     .. Local Parameters ..
       DOUBLE PRECISION ZERO,         ONE
       PARAMETER ( ZERO = 0.0D0, ONE = 1.0D0 )
-      DOUBLE COMPLEX            CZERO,       CONE
+      COMPLEX*16                CZERO,       CONE
       PARAMETER  ( CZERO = ( 0.0D0, 0.0D0 ), CONE = ( 1.0D0, 0.0D0 ) )
 *     ..
 *     .. Local Scalars ..
-      DOUBLE COMPLEX   CTEMP
+      COMPLEX*16       CTEMP
       DOUBLE PRECISION AAPP,    AAQQ,   AATMAX, AATMIN, BIG,    BIG1,   
      $                 COND_OK, CONDR1, CONDR2, ENTRA,  ENTRAT, EPSLN,  
      $                 MAXPRJ,  SCALEM, SCONDA, SFMIN,  SMALL,  TEMP1,  
