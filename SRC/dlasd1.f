@@ -156,7 +156,7 @@
 *>         The leading dimension of the array VT.  LDVT >= max( 1, M ).
 *> \endverbatim
 *>
-*> \param[out] IDXQ
+*> \param[in,out] IDXQ
 *> \verbatim
 *>          IDXQ is INTEGER array, dimension(N)
 *>         This contains the permutation which will reintegrate the
