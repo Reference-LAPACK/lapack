@@ -290,7 +290,7 @@
 *     ..
 *     .. Local Arrays ..
       REAL               DUM( 1 )
-      COMPLEX            CDUM( 1 )
+      COMPLEX            CDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CBBCSD, CCOPY, CLACPY, CLAPMR, CLAPMT, CUNBDB1,

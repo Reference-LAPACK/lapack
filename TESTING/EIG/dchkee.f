@@ -2105,6 +2105,7 @@
          MAXTYP = 26
          NTYPES = MIN( MAXTYP, NTYPES )
          CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
+         CALL XLAENV(1,1)
          IF( TSTCHK .AND. TSTERR )
      $      CALL DERRGG( C3, NOUT )
          DO 350 I = 1, NPARMS
@@ -2164,6 +2165,7 @@
 *
 *     Blocked version
 *
+            CALL XLAENV(16, 2)
             CALL DDRGES3( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH, NOUT,
      $                    A( 1, 1 ), NMAX, A( 1, 2 ), A( 1, 3 ),
      $                    A( 1, 4 ), A( 1, 7 ), NMAX, A( 1, 8 ),
@@ -2351,6 +2353,7 @@
 *        GSV:  Generalized Singular Value Decomposition
 *        ----------------------------------------------
 *
+         CALL XLAENV(1,1)
          IF( TSTERR )
      $      CALL DERRGG( 'GSV', NOUT )
          CALL DCKGSV( NN, MVAL, PVAL, NVAL, NTYPES, ISEED, THRESH, NMAX,

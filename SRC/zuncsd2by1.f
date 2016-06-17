@@ -289,7 +289,7 @@
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   DUM( 1 )
-      COMPLEX*16         CDUM( 1 )
+      COMPLEX*16         CDUM( 1, 1 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZBBCSD, ZCOPY, ZLACPY, ZLAPMR, ZLAPMT, ZUNBDB1,

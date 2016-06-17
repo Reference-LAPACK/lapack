@@ -296,6 +296,8 @@
 *
 *> \date September 2012
 *
+*  @precisions fortran d -> s
+*
 *> \ingroup doubleGEeigen
 *
 *  =====================================================================
@@ -331,7 +333,7 @@
       LOGICAL            LQUERY, SCALEA, WANTVL, WANTVR, WNTSNB, WNTSNE,
      $                   WNTSNN, WNTSNV
       CHARACTER          JOB, SIDE
-      INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K, 
+      INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K,
      $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
       DOUBLE PRECISION   ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
      $                   SN

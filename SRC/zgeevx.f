@@ -278,6 +278,8 @@
 *
 *> \date November 2011
 *
+*  @precisions fortran z -> c
+*
 *> \ingroup complex16GEeigen
 *
 *  =====================================================================
@@ -313,7 +315,7 @@
       LOGICAL            LQUERY, SCALEA, WANTVL, WANTVR, WNTSNB, WNTSNE,
      $                   WNTSNN, WNTSNV
       CHARACTER          JOB, SIDE
-      INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K, 
+      INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K,
      $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
       DOUBLE PRECISION   ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
       COMPLEX*16         TMP
@@ -334,7 +336,7 @@
       EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DZNRM2, ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCMPLX, DCONJG, DIMAG, MAX, SQRT
+      INTRINSIC          DBLE, DCMPLX, CONJG, AIMAG, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -610,10 +612,10 @@
             CALL ZDSCAL( N, SCL, VL( 1, I ), 1 )
             DO 10 K = 1, N
                RWORK( K ) = DBLE( VL( K, I ) )**2 +
-     $                      DIMAG( VL( K, I ) )**2
+     $                      AIMAG( VL( K, I ) )**2
    10       CONTINUE
             K = IDAMAX( N, RWORK, 1 )
-            TMP = DCONJG( VL( K, I ) ) / SQRT( RWORK( K ) )
+            TMP = CONJG( VL( K, I ) ) / SQRT( RWORK( K ) )
             CALL ZSCAL( N, TMP, VL( 1, I ), 1 )
             VL( K, I ) = DCMPLX( DBLE( VL( K, I ) ), ZERO )
    20    CONTINUE
@@ -633,10 +635,10 @@
             CALL ZDSCAL( N, SCL, VR( 1, I ), 1 )
             DO 30 K = 1, N
                RWORK( K ) = DBLE( VR( K, I ) )**2 +
-     $                      DIMAG( VR( K, I ) )**2
+     $                      AIMAG( VR( K, I ) )**2
    30       CONTINUE
             K = IDAMAX( N, RWORK, 1 )
-            TMP = DCONJG( VR( K, I ) ) / SQRT( RWORK( K ) )
+            TMP = CONJG( VR( K, I ) ) / SQRT( RWORK( K ) )
             CALL ZSCAL( N, TMP, VR( 1, I ), 1 )
             VR( K, I ) = DCMPLX( DBLE( VR( K, I ) ), ZERO )
    40    CONTINUE

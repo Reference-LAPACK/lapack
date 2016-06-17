@@ -26,8 +26,8 @@
 *       INTEGER            INFO, LDA, LDVL, LDVR, LWORK, N
 *       ..
 *       .. Array Arguments ..
-*       REAL               RWORK( * )
-*       COMPLEX            A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
+*       REAL   RWORK( * )
+*       COMPLEX         A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
 *      $                   W( * ), WORK( * )
 *       ..
 *  
@@ -171,6 +171,8 @@
 *
 *> \date November 2011
 *
+*  @generated from zgeev.f, fortran z -> c, Tue Apr 19 01:47:44 2016
+*
 *> \ingroup complexGEeigen
 *
 *  =====================================================================
@@ -188,15 +190,15 @@
       INTEGER            INFO, LDA, LDVL, LDVR, LWORK, N
 *     ..
 *     .. Array Arguments ..
-      REAL               RWORK( * )
-      COMPLEX            A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
+      REAL   RWORK( * )
+      COMPLEX         A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   W( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO, ONE
+      REAL   ZERO, ONE
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
@@ -204,25 +206,25 @@
       CHARACTER          SIDE
       INTEGER            HSWORK, I, IBAL, IERR, IHI, ILO, IRWORK, ITAU,
      $                   IWRK, K, LWORK_TREVC, MAXWRK, MINWRK, NOUT
-      REAL               ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
-      COMPLEX            TMP
+      REAL   ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
+      COMPLEX         TMP
 *     ..
 *     .. Local Arrays ..
       LOGICAL            SELECT( 1 )
-      REAL               DUM( 1 )
+      REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEBAK, CGEBAL, CGEHRD, CHSEQR, CLACPY, CLASCL,
-     $                   CSCAL, CSSCAL, CTREVC3, CUNGHR, SLABAD, XERBLA
+      EXTERNAL           SLABAD, XERBLA, CSSCAL, CGEBAK, CGEBAL, CGEHRD,
+     $                   CHSEQR, CLACPY, CLASCL, CSCAL, CTREVC3, CUNGHR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV, ISAMAX
-      REAL               CLANGE, SCNRM2, SLAMCH
-      EXTERNAL           LSAME, ILAENV, ISAMAX, CLANGE, SCNRM2, SLAMCH
+      INTEGER            ISAMAX, ILAENV
+      REAL   SLAMCH, SCNRM2, CLANGE
+      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SCNRM2, CLANGE
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          AIMAG, CMPLX, CONJG, MAX, REAL, SQRT
+      INTRINSIC          REAL, CMPLX, CONJG, AIMAG, MAX, SQRT
 *     ..
 *     .. Executable Statements ..
 *

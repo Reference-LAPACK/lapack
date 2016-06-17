@@ -25,11 +25,11 @@
 *       .. Scalar Arguments ..
 *       CHARACTER          BALANC, JOBVL, JOBVR, SENSE
 *       INTEGER            IHI, ILO, INFO, LDA, LDVL, LDVR, LWORK, N
-*       REAL               ABNRM
+*       REAL   ABNRM
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
-*       REAL               A( LDA, * ), RCONDE( * ), RCONDV( * ),
+*       REAL   A( LDA, * ), RCONDE( * ), RCONDV( * ),
 *      $                   SCALE( * ), VL( LDVL, * ), VR( LDVR, * ),
 *      $                   WI( * ), WORK( * ), WR( * )
 *       ..
@@ -210,7 +210,7 @@
 *> \verbatim
 *>          IHI is INTEGER
 *>          ILO and IHI are integer values determined when A was
-*>          balanced.  The balanced A(i,j) = 0 if I > J and 
+*>          balanced.  The balanced A(i,j) = 0 if I > J and
 *>          J = 1,...,ILO-1 or I = IHI+1,...,N.
 *> \endverbatim
 *>
@@ -296,6 +296,8 @@
 *
 *> \date September 2012
 *
+*  @generated from dgeevx.f, fortran d -> s, Tue Apr 19 01:47:44 2016
+*
 *> \ingroup realGEeigen
 *
 *  =====================================================================
@@ -312,11 +314,11 @@
 *     .. Scalar Arguments ..
       CHARACTER          BALANC, JOBVL, JOBVR, SENSE
       INTEGER            IHI, ILO, INFO, LDA, LDVL, LDVR, LWORK, N
-      REAL               ABNRM
+      REAL   ABNRM
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
-      REAL               A( LDA, * ), RCONDE( * ), RCONDV( * ),
+      REAL   A( LDA, * ), RCONDE( * ), RCONDV( * ),
      $                   SCALE( * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   WI( * ), WORK( * ), WR( * )
 *     ..
@@ -324,21 +326,21 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO, ONE
+      REAL   ZERO, ONE
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, SCALEA, WANTVL, WANTVR, WNTSNB, WNTSNE,
      $                   WNTSNN, WNTSNV
       CHARACTER          JOB, SIDE
-      INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K, 
+      INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K,
      $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
-      REAL               ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
+      REAL   ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
      $                   SN
 *     ..
 *     .. Local Arrays ..
       LOGICAL            SELECT( 1 )
-      REAL               DUM( 1 )
+      REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEBAK, SGEBAL, SGEHRD, SHSEQR, SLABAD, SLACPY,
@@ -347,9 +349,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV, ISAMAX
-      REAL               SLAMCH, SLANGE, SLAPY2, SNRM2
-      EXTERNAL           LSAME, ILAENV, ISAMAX, SLAMCH, SLANGE, SLAPY2,
+      INTEGER            ISAMAX, ILAENV
+      REAL   SLAMCH, SLANGE, SLAPY2, SNRM2
+      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SLANGE, SLAPY2,
      $                   SNRM2
 *     ..
 *     .. Intrinsic Functions ..

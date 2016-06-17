@@ -26,7 +26,7 @@
 *       INTEGER            INFO, LDA, LDVL, LDVR, LWORK, N
 *       ..
 *       .. Array Arguments ..
-*       REAL               A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
+*       REAL   A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
 *      $                   WI( * ), WORK( * ), WR( * )
 *       ..
 *  
@@ -183,6 +183,8 @@
 *
 *> \date September 2012
 *
+*  @generated from dgeev.f, fortran d -> s, Tue Apr 19 01:47:44 2016
+*
 *> \ingroup realGEeigen
 *
 *  =====================================================================
@@ -200,14 +202,14 @@
       INTEGER            INFO, LDA, LDVL, LDVR, LWORK, N
 *     ..
 *     .. Array Arguments ..
-      REAL               A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
+      REAL   A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   WI( * ), WORK( * ), WR( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO, ONE
+      REAL   ZERO, ONE
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
@@ -215,12 +217,12 @@
       CHARACTER          SIDE
       INTEGER            HSWORK, I, IBAL, IERR, IHI, ILO, ITAU, IWRK, K,
      $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
-      REAL               ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
+      REAL   ANRM, BIGNUM, CS, CSCALE, EPS, R, SCL, SMLNUM,
      $                   SN
 *     ..
 *     .. Local Arrays ..
       LOGICAL            SELECT( 1 )
-      REAL               DUM( 1 )
+      REAL   DUM( 1 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEBAK, SGEBAL, SGEHRD, SHSEQR, SLABAD, SLACPY,
@@ -229,9 +231,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV, ISAMAX
-      REAL               SLAMCH, SLANGE, SLAPY2, SNRM2
-      EXTERNAL           LSAME, ILAENV, ISAMAX, SLAMCH, SLANGE, SLAPY2,
+      INTEGER            ISAMAX, ILAENV
+      REAL   SLAMCH, SLANGE, SLAPY2, SNRM2
+      EXTERNAL           LSAME, ISAMAX, ILAENV, SLAMCH, SLANGE, SLAPY2,
      $                   SNRM2
 *     ..
 *     .. Intrinsic Functions ..

@@ -267,7 +267,7 @@
       LOGICAL            LQUERY, WANTU1, WANTU2, WANTV1T
 *     ..
 *     .. Local Arrays ..
-      DOUBLE PRECISION   DUM( 1 )
+      DOUBLE PRECISION   DUM1(1), DUM2(1,1)
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DBBCSD, DCOPY, DLACPY, DLAPMR, DLAPMT, DORBDB1,
@@ -353,119 +353,119 @@
          LORGLQOPT = 1
          IF( R .EQ. Q ) THEN
             CALL DORBDB1( M, P, Q, X11, LDX11, X21, LDX21, THETA,
-     $                    DUM, DUM, DUM, DUM, WORK,
+     $                    DUM1, DUM1, DUM1, DUM1, WORK,
      $                    -1, CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL DORGQR( P, P, Q, U1, LDU1, DUM, WORK(1), -1,
+               CALL DORGQR( P, P, Q, U1, LDU1, DUM1, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             ENDIF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL DORGQR( M-P, M-P, Q, U2, LDU2, DUM, WORK(1),
+               CALL DORGQR( M-P, M-P, Q, U2, LDU2, DUM1, WORK(1),
      $                      -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
                CALL DORGLQ( Q-1, Q-1, Q-1, V1T, LDV1T,
-     $                      DUM, WORK(1), -1, CHILDINFO )
+     $                      DUM1, WORK(1), -1, CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q-1 )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
             CALL DBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THETA,
-     $                   DUM, U1, LDU1, U2, LDU2, V1T, LDV1T,
-     $                   DUM, 1, DUM, DUM, DUM,
-     $                   DUM, DUM, DUM, DUM,
-     $                   DUM, WORK(1), -1, CHILDINFO )
+     $                   DUM1, U1, LDU1, U2, LDU2, V1T, LDV1T,
+     $                   DUM2, 1, DUM1, DUM1, DUM1,
+     $                   DUM1, DUM1, DUM1, DUM1,
+     $                   DUM1, WORK(1), -1, CHILDINFO )
             LBBCSD = INT( WORK(1) )
          ELSE IF( R .EQ. P ) THEN
             CALL DORBDB2( M, P, Q, X11, LDX11, X21, LDX21, THETA,
-     $                    DUM, DUM, DUM, DUM,
+     $                    DUM1, DUM1, DUM1, DUM1,
      $                    WORK(1), -1, CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL DORGQR( P-1, P-1, P-1, U1(2,2), LDU1, DUM,
+               CALL DORGQR( P-1, P-1, P-1, U1(2,2), LDU1, DUM1,
      $                      WORK(1), -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P-1 )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL DORGQR( M-P, M-P, Q, U2, LDU2, DUM, WORK(1),
+               CALL DORGQR( M-P, M-P, Q, U2, LDU2, DUM1, WORK(1),
      $                      -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL DORGLQ( Q, Q, R, V1T, LDV1T, DUM, WORK(1), -1,
+               CALL DORGLQ( Q, Q, R, V1T, LDV1T, DUM1, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
             CALL DBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THETA,
-     $                   DUM, V1T, LDV1T, DUM, 1, U1, LDU1,
-     $                   U2, LDU2, DUM, DUM, DUM,
-     $                   DUM, DUM, DUM, DUM,
-     $                   DUM, WORK(1), -1, CHILDINFO )
+     $                   DUM1, V1T, LDV1T, DUM2, 1, U1, LDU1,
+     $                   U2, LDU2, DUM1, DUM1, DUM1,
+     $                   DUM1, DUM1, DUM1, DUM1,
+     $                   DUM1, WORK(1), -1, CHILDINFO )
             LBBCSD = INT( WORK(1) )
          ELSE IF( R .EQ. M-P ) THEN
             CALL DORBDB3( M, P, Q, X11, LDX11, X21, LDX21, THETA,
-     $                    DUM, DUM, DUM, DUM,
+     $                    DUM1, DUM1, DUM1, DUM1,
      $                    WORK(1), -1, CHILDINFO )
             LORBDB = INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL DORGQR( P, P, Q, U1, LDU1, DUM, WORK(1), -1,
+               CALL DORGQR( P, P, Q, U1, LDU1, DUM1, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
                CALL DORGQR( M-P-1, M-P-1, M-P-1, U2(2,2), LDU2,
-     $                      DUM, WORK(1), -1, CHILDINFO )
+     $                      DUM1, WORK(1), -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P-1 )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL DORGLQ( Q, Q, R, V1T, LDV1T, DUM, WORK(1), -1,
+               CALL DORGLQ( Q, Q, R, V1T, LDV1T, DUM1, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
             CALL DBBCSD( 'N', JOBV1T, JOBU2, JOBU1, 'T', M, M-Q, M-P,
-     $                   THETA, DUM, DUM, 1, V1T, LDV1T, U2,
-     $                   LDU2, U1, LDU1, DUM, DUM, DUM,
-     $                   DUM, DUM, DUM, DUM,
-     $                   DUM, WORK(1), -1, CHILDINFO )
+     $                   THETA, DUM1, DUM2, 1, V1T, LDV1T, U2,
+     $                   LDU2, U1, LDU1, DUM1, DUM1, DUM1,
+     $                   DUM1, DUM1, DUM1, DUM1,
+     $                   DUM1, WORK(1), -1, CHILDINFO )
             LBBCSD = INT( WORK(1) )
          ELSE
             CALL DORBDB4( M, P, Q, X11, LDX11, X21, LDX21, THETA,
-     $                    DUM, DUM, DUM, DUM,
-     $                    DUM, WORK(1), -1, CHILDINFO )
+     $                    DUM1, DUM1, DUM1, DUM1,
+     $                    DUM1, WORK(1), -1, CHILDINFO )
             LORBDB = M + INT( WORK(1) )
             IF( WANTU1 .AND. P .GT. 0 ) THEN
-               CALL DORGQR( P, P, M-Q, U1, LDU1, DUM, WORK(1), -1,
+               CALL DORGQR( P, P, M-Q, U1, LDU1, DUM1, WORK(1), -1,
      $                      CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTU2 .AND. M-P .GT. 0 ) THEN
-               CALL DORGQR( M-P, M-P, M-Q, U2, LDU2, DUM, WORK(1),
+               CALL DORGQR( M-P, M-P, M-Q, U2, LDU2, DUM1, WORK(1),
      $                      -1, CHILDINFO )
                LORGQRMIN = MAX( LORGQRMIN, M-P )
                LORGQROPT = MAX( LORGQROPT, INT( WORK(1) ) )
             END IF
             IF( WANTV1T .AND. Q .GT. 0 ) THEN
-               CALL DORGLQ( Q, Q, Q, V1T, LDV1T, DUM, WORK(1), -1,
+               CALL DORGLQ( Q, Q, Q, V1T, LDV1T, DUM1, WORK(1), -1,
      $                      CHILDINFO )
                LORGLQMIN = MAX( LORGLQMIN, Q )
                LORGLQOPT = MAX( LORGLQOPT, INT( WORK(1) ) )
             END IF
             CALL DBBCSD( JOBU2, JOBU1, 'N', JOBV1T, 'N', M, M-P, M-Q,
-     $                   THETA, DUM, U2, LDU2, U1, LDU1, DUM,
-     $                   1, V1T, LDV1T, DUM, DUM, DUM,
-     $                   DUM, DUM, DUM, DUM,
-     $                   DUM, WORK(1), -1, CHILDINFO )
+     $                   THETA, DUM1, U2, LDU2, U1, LDU1, DUM2,
+     $                   1, V1T, LDV1T, DUM1, DUM1, DUM1,
+     $                   DUM1, DUM1, DUM1, DUM1,
+     $                   DUM1, WORK(1), -1, CHILDINFO )
             LBBCSD = INT( WORK(1) )
          END IF
          LWORKMIN = MAX( IORBDB+LORBDB-1,
@@ -531,7 +531,7 @@
 *   
          CALL DBBCSD( JOBU1, JOBU2, JOBV1T, 'N', 'N', M, P, Q, THETA,
      $                WORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T,
-     $                DUM, 1, WORK(IB11D), WORK(IB11E),
+     $                DUM2, 1, WORK(IB11D), WORK(IB11E),
      $                WORK(IB12D), WORK(IB12E), WORK(IB21D),
      $                WORK(IB21E), WORK(IB22D), WORK(IB22E),
      $                WORK(IBBCSD), LBBCSD, CHILDINFO )
@@ -584,7 +584,7 @@
 *        Simultaneously diagonalize X11 and X21.
 *   
          CALL DBBCSD( JOBV1T, 'N', JOBU1, JOBU2, 'T', M, Q, P, THETA,
-     $                WORK(IPHI), V1T, LDV1T, DUM, 1, U1, LDU1, U2,
+     $                WORK(IPHI), V1T, LDV1T, DUM2, 1, U1, LDU1, U2,
      $                LDU2, WORK(IB11D), WORK(IB11E), WORK(IB12D),
      $                WORK(IB12E), WORK(IB21D), WORK(IB21E),
      $                WORK(IB22D), WORK(IB22E), WORK(IBBCSD), LBBCSD,
@@ -639,7 +639,7 @@
 *        Simultaneously diagonalize X11 and X21.
 *   
          CALL DBBCSD( 'N', JOBV1T, JOBU2, JOBU1, 'T', M, M-Q, M-P,
-     $                THETA, WORK(IPHI), DUM, 1, V1T, LDV1T, U2,
+     $                THETA, WORK(IPHI), DUM2, 1, V1T, LDV1T, U2,
      $                LDU2, U1, LDU1, WORK(IB11D), WORK(IB11E),
      $                WORK(IB12D), WORK(IB12E), WORK(IB21D),
      $                WORK(IB21E), WORK(IB22D), WORK(IB22E),
@@ -708,7 +708,7 @@
 *        Simultaneously diagonalize X11 and X21.
 *   
          CALL DBBCSD( JOBU2, JOBU1, 'N', JOBV1T, 'N', M, M-P, M-Q,
-     $                THETA, WORK(IPHI), U2, LDU2, U1, LDU1, DUM,
+     $                THETA, WORK(IPHI), U2, LDU2, U1, LDU1, DUM2,
      $                1, V1T, LDV1T, WORK(IB11D), WORK(IB11E),
      $                WORK(IB12D), WORK(IB12E), WORK(IB21D),
      $                WORK(IB21E), WORK(IB22D), WORK(IB22E),

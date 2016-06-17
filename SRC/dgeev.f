@@ -183,6 +183,8 @@
 *
 *> \date September 2012
 *
+*  @precisions fortran d -> s
+*
 *> \ingroup doubleGEeigen
 *
 *  =====================================================================
