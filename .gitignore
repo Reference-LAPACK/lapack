@@ -15,3 +15,6 @@ BLAS/x*
 TESTING/x*
 TESTING/*.out
 TESTING/*.txt
+
+# LAPACKE example
+LAPACKE/example/xexample*

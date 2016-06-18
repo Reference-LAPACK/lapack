@@ -200,7 +200,7 @@
 *> \author Univ. of Colorado Denver 
 *> \author NAG Ltd. 
 *
-*> \date November 2011
+*> \date June 2016
 *
 *> \ingroup real_matgen
 *
@@ -208,10 +208,10 @@
       REAL             FUNCTION SLATM2( M, N, I, J, KL, KU, IDIST,
      $                 ISEED, D, IGRADE, DL, DR, IPVTNG, IWORK, SPARSE )
 *
-*  -- LAPACK auxiliary routine (version 3.4.0) --
+*  -- LAPACK auxiliary routine (version 3.6.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     June 2016
 *
 *     .. Scalar Arguments ..
 *
