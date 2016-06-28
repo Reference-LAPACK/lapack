@@ -145,7 +145,7 @@
 *>          (LDA,N) if SIDE = 'L' or (LDA,K) if SIDE = 'R'
 *>          On entry, the K-by-N or M-by-K matrix A.
 *>          On exit, A is overwritten by the corresponding block of 
-*>          H*C or H**T*C or C*H or C*H**T.  See Futher Details.
+*>          H*C or H**T*C or C*H or C*H**T.  See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDA

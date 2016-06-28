@@ -378,7 +378,7 @@
 *> \verbatim
 *>          INFO is INTEGER
 *>           < 0  : if INFO = -i, then the i-th argument had an illegal value.
-*>           = 0 :  successfull exit;
+*>           = 0 :  successful exit;
 *>           > 0 :  SGEJSV  did not converge in the maximal allowed number
 *>                  of sweeps. The computed values may be inaccurate.
 *> \endverbatim
@@ -429,7 +429,7 @@
 *>  implemented as in [3]. We have a new version of SGEQP3 under development
 *>  that is more robust than the current one in LAPACK, with a cleaner cut in
 *>  rank defficient cases. It will be available in the SIGMA library [4].
-*>  If M is much larger than N, it is obvious that the inital QRF with
+*>  If M is much larger than N, it is obvious that the initial QRF with
 *>  column pivoting can be preprocessed by the QRF without pivoting. That
 *>  well known trick is not used in SGEJSV because in some cases heavy row
 *>  weighting can be treated with complete pivoting. The overhead in cases

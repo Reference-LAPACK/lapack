@@ -251,7 +251,7 @@
       CALL SDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
      +              S_WORK_SLANSY )
 *
-*     Test the convertion routines:
+*     Test the conversion routines:
 *       stfttp, stpttf, stfttr, strttf, strttp and stpttr.
 *
       CALL SDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,

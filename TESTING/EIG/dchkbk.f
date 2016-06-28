@@ -21,7 +21,7 @@
 *> \verbatim
 *>
 *> DCHKBK tests DGEBAK, a routine for backward transformation of
-*> the computed right or left eigenvectors if the orginal matrix
+*> the computed right or left eigenvectors if the original matrix
 *> was preprocessed by balance subroutine DGEBAL.
 *> \endverbatim
 *

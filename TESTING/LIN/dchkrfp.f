@@ -252,7 +252,7 @@
       CALL DDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
      +              D_WORK_DLANSY )
 *
-*     Test the convertion routines:
+*     Test the conversion routines:
 *       dtfttp, dtpttf, dtfttr, dtrttf, dtrttp and dtpttr.
 *
       CALL DDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,

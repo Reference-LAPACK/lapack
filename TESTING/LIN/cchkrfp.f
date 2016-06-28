@@ -253,7 +253,7 @@
       CALL CDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
      +              S_WORK_CLANHE )
 *
-*    Test the convertion routines:
+*    Test the conversion routines:
 *       chfttp, ctpthf, ctfttr, ctrttf, ctrttp and ctpttr.
 *
       CALL CDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,

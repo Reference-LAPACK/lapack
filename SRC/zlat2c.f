@@ -40,7 +40,7 @@
 *>
 *> RMAX is the overflow for the SINGLE PRECISION arithmetic
 *> ZLAT2C checks that all the entries of A are between -RMAX and
-*> RMAX. If not the convertion is aborted and a flag is raised.
+*> RMAX. If not the conversion is aborted and a flag is raised.
 *>
 *> This is an auxiliary routine so there is no argument checking.
 *> \endverbatim

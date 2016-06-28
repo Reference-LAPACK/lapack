@@ -49,7 +49,7 @@
 *> \verbatim
 *>          PRTYPE is INTEGER
 *>          "Points" to a certain type of the matrices to generate
-*>          (see futher details).
+*>          (see further details).
 *> \endverbatim
 *>
 *> \param[in] M

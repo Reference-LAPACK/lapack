@@ -73,7 +73,7 @@
 *> \param[in] TYPE
 *> \verbatim
 *>          TYPE is INTEGER
-*>          Specifies the problem type (see futher details).
+*>          Specifies the problem type (see further details).
 *> \endverbatim
 *>
 *> \param[in] N

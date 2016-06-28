@@ -52,7 +52,7 @@
 *>     Householder transformations, reducing the original problem
 *>     into a "bidiagonal least squares problem" (BLS)
 *> (2) Solve the BLS using a divide and conquer approach.
-*> (3) Apply back all the Householder tranformations to solve
+*> (3) Apply back all the Householder transformations to solve
 *>     the original least squares problem.
 *>
 *> The effective rank of A is determined by treating as zero those

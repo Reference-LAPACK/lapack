@@ -53,7 +53,7 @@
 *> This testing routine follow the same tests as CDRVPO (test for the full
 *> format Symmetric Positive Definite solver).
 *>
-*> The tests are performed in Full Format, convertion back and forth from
+*> The tests are performed in Full Format, conversion back and forth from
 *> full format to RFP format are performed using the routines CTRTTF and
 *> CTFTTR.
 *>

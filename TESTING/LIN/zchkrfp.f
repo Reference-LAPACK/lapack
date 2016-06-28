@@ -253,7 +253,7 @@
       CALL ZDRVRF1( NOUT, NN, NVAL, THRESH, WORKA, NMAX, WORKARF,
      +              D_WORK_ZLANHE )
 *
-*    Test the convertion routines:
+*    Test the conversion routines:
 *       zhfttp, ztpthf, ztfttr, ztrttf, ztrttp and ztpttr.
 *
       CALL ZDRVRF2( NOUT, NN, NVAL, WORKA, NMAX, WORKARF,
