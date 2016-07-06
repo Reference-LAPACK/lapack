@@ -1,7 +1,7 @@
 include ../make.inc
 
 all:
-	cd include && cp cblas_mangling_with_flags.h cblas_mangling.h
+	cd include && cp cblas_mangling_with_flags.h.in cblas_mangling.h
 	cd src && $(MAKE) all
 
 

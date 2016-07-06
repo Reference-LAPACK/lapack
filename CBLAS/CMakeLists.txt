@@ -5,22 +5,18 @@ set(LAPACK_INSTALL_EXPORT_NAME cblas-targets)
 
 # Create a header file cblas.h for the routines called in my C programs
 include(FortranCInterface)
-FortranCInterface_HEADER( ${CMAKE_CURRENT_SOURCE_DIR}/include/cblas_mangling.h 
+## Ensure that the fortran compiler and c compiler specified are compatible
+FortranCInterface_VERIFY()
+FortranCInterface_HEADER( ${LAPACK_BINARY_DIR}/include/cblas_mangling.h 
                           MACRO_NAMESPACE "F77_"
                           SYMBOL_NAMESPACE "F77_" )
+if( NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
+  message(WARNING "Reverting to pre-defined include/lapacke_mangling.h")
+  configure_file( include/lapacke_mangling_with_flags.h.in
+                  ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h )
+endif ()
 
-# Old way to detect mangling
-#include(FortranMangling)
-#FORTRAN_MANGLING(CDEFS)
-#set(CDEFS ${CDEFS} CACHE STRING "Fortran Mangling" FORCE)
-#MESSAGE(STATUS "=========")
-
-# --------------------------------------------------
-# Compiler Flags
-#ADD_DEFINITIONS( "-D${CDEFS}")
-
-
-include_directories( include )
+include_directories( include ${LAPACK_BINARY_DIR}/include )
 add_subdirectory(include)
 add_subdirectory(src)
 
@@ -32,7 +28,7 @@ endforeach()
 endmacro()
 
 append_subdir_files(CBLAS_INCLUDE "include")
-INSTALL( FILES ${CBLAS_INCLUDE} DESTINATION include )
+INSTALL( FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h DESTINATION include )
 
 # --------------------------------------------------
 if(BUILD_TESTING)
