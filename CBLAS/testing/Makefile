@@ -1,11 +1,11 @@
 #
-# The Makefile compiles c wrappers and testers for CBLAS.  
+# The Makefile compiles c wrappers and testers for CBLAS.
 #
 
 include ../../make.inc
 
 # Archive files necessary to compile
-LIB = $(CBLASLIB) $(BLASLIB) 
+LIB = $(CBLASLIB) $(BLASLIB)
 
 # Object files for single real precision
 stestl1o = c_sblas1.o
@@ -29,23 +29,23 @@ ctestl2o = c_cblas2.o c_c2chke.o auxiliary.o c_xerbla.o
 ctestl3o = c_cblas3.o c_c3chke.o auxiliary.o c_xerbla.o
 
 # Object files for double complex precision
-ztestl1o = c_zblas1.o 
+ztestl1o = c_zblas1.o
 
 ztestl2o = c_zblas2.o c_z2chke.o auxiliary.o c_xerbla.o
 
 ztestl3o = c_zblas3.o c_z3chke.o auxiliary.o c_xerbla.o
 
-all: all1 all2 all3 
-all1: stest1 dtest1 ctest1 ztest1 
+all: all1 all2 all3
+all1: stest1 dtest1 ctest1 ztest1
 all2: stest2 dtest2 ctest2 ztest2
 all3: stest3 dtest3 ctest3 ztest3
 
 clean:
 	rm -f core *.o *.out x*
 cleanobj:
-	rm -f core *.o a.out 
+	rm -f core *.o a.out
 cleanexe:
-	rm -f x* 
+	rm -f x*
 
 stest1: xscblat1
 dtest1: xdcblat1
@@ -80,7 +80,7 @@ xdcblat2: $(dtestl2o) c_dblat2.o
 	$(LOADER) $(LOADOPTS) -o xdcblat2 c_dblat2.o $(dtestl2o) $(LIB)
 xdcblat3: $(dtestl3o) c_dblat3.o
 	$(LOADER) $(LOADOPTS) -o xdcblat3 c_dblat3.o $(dtestl3o) $(LIB)
- 
+
 # Single complex
 xccblat1: $(ctestl1o) c_cblat1.o
 	$(LOADER) $(LOADOPTS) -o xccblat1 c_cblat1.o $(ctestl1o) $(LIB)
@@ -89,14 +89,14 @@ xccblat2: $(ctestl2o) c_cblat2.o
 xccblat3: $(ctestl3o) c_cblat3.o
 	$(LOADER) $(LOADOPTS) -o xccblat3 c_cblat3.o $(ctestl3o) $(LIB)
 
-# Double complex 
+# Double complex
 xzcblat1: $(ztestl1o) c_zblat1.o
 	$(LOADER) $(LOADOPTS) -o xzcblat1 c_zblat1.o $(ztestl1o) $(LIB)
 xzcblat2: $(ztestl2o) c_zblat2.o
 	$(LOADER) $(LOADOPTS) -o xzcblat2 c_zblat2.o $(ztestl2o) $(LIB)
 xzcblat3: $(ztestl3o) c_zblat3.o
 	$(LOADER) $(LOADOPTS) -o xzcblat3 c_zblat3.o $(ztestl3o) $(LIB)
-   
+
 
 # RUN TESTS
 run:
@@ -123,12 +123,12 @@ run:
 	@echo "--> TESTING CBLAS 3 - COMPLEX PRECISION <--"
 	@./xccblat3 < cin3 > ctest3.out
 	@echo "--> TESTING CBLAS 3 - DOUBLE COMPLEX PRECISION <--"
-	@./xzcblat3	< zin3 > ztest3.out	
-	
+	@./xzcblat3	< zin3 > ztest3.out
+
 .SUFFIXES: .o .f .c
 
 .c.o:
 	$(CC) -c $(CFLAGS) -I ../include -o $@ $<
-	
-.f.o: 
+
+.f.o:
 	$(FORTRAN) $(OPTS) -c $< -o $@
