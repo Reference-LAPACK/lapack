@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZGSVJ0 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgsvj0.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgsvj0.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgsvj0.f"> 
+*> Download ZGSVJ0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgsvj0.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgsvj0.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zgsvj0.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
 *                          SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, NSWEEP
 *       DOUBLE PRECISION   EPS, SFMIN, TOL
@@ -30,7 +30,7 @@
 *       COMPLEX*16         A( LDA, * ), D( N ), V( LDV, * ), WORK( LWORK )
 *       DOUBLE PRECISION   SVA( N )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -187,10 +187,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date June 2016
 *
@@ -230,7 +230,7 @@
 *     ..
 *     .. Array Arguments ..
       COMPLEX*16         A( LDA, * ), D( N ), V( LDV, * ), WORK( LWORK )
-      DOUBLE PRECISION   SVA( N ) 
+      DOUBLE PRECISION   SVA( N )
 *     ..
 *
 *  =====================================================================
@@ -287,7 +287,7 @@
          INFO = -5
       ELSE IF( ( RSVEC.OR.APPLV ) .AND. ( MV.LT.0 ) ) THEN
          INFO = -8
-      ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR. 
+      ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR.
      $         ( APPLV.AND.( LDV.LT.MV ) ) ) THEN
          INFO = -10
       ELSE IF( TOL.LE.EPS ) THEN
@@ -394,7 +394,7 @@
                   q = IDAMAX( N-p+1, SVA( p ), 1 ) + p - 1
                   IF( p.NE.q ) THEN
                      CALL ZSWAP( M, A( 1, p ), 1, A( 1, q ), 1 )
-                     IF( RSVEC )CALL ZSWAP( MVL, V( 1, p ), 1,  
+                     IF( RSVEC )CALL ZSWAP( MVL, V( 1, p ), 1,
      $                                           V( 1, q ), 1 )
                      TEMP1 = SVA( p )
                      SVA( p ) = SVA( q )
@@ -418,7 +418,7 @@
 *        If properly implemented DZNRM2 is available, the IF-THEN-ELSE-END IF
 *        below should be replaced with "AAPP = DZNRM2( M, A(1,p), 1 )".
 *
-                     IF( ( SVA( p ).LT.ROOTBIG ) .AND.     
+                     IF( ( SVA( p ).LT.ROOTBIG ) .AND.
      $                    ( SVA( p ).GT.ROOTSFMIN ) ) THEN
                         SVA( p ) = DZNRM2( M, A( 1, p ), 1 )
                      ELSE
@@ -446,12 +446,12 @@
                            IF( AAQQ.GE.ONE ) THEN
                               ROTOK = ( SMALL*AAPP ).LE.AAQQ
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
-                                 AAPQ = ( ZDOTC( M, A( 1, p ), 1, 
+                                 AAPQ = ( ZDOTC( M, A( 1, p ), 1,
      $                                   A( 1, q ), 1 ) / AAQQ ) / AAPP
                               ELSE
-                                 CALL ZCOPY( M, A( 1, p ), 1,   
+                                 CALL ZCOPY( M, A( 1, p ), 1,
      $                                        WORK, 1 )
-                                 CALL ZLASCL( 'G', 0, 0, AAPP, ONE, 
+                                 CALL ZLASCL( 'G', 0, 0, AAPP, ONE,
      $                                M, 1, WORK, LDA, IERR )
                                  AAPQ = ZDOTC( M, WORK, 1,
      $                                   A( 1, q ), 1 ) / AAQQ
@@ -459,22 +459,22 @@
                            ELSE
                               ROTOK = AAPP.LE.( AAQQ / SMALL )
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
-                                 AAPQ = ( ZDOTC( M, A( 1, p ), 1, 
+                                 AAPQ = ( ZDOTC( M, A( 1, p ), 1,
      $                                    A( 1, q ), 1 ) / AAQQ ) / AAPP
                               ELSE
-                                 CALL ZCOPY( M, A( 1, q ), 1,   
+                                 CALL ZCOPY( M, A( 1, q ), 1,
      $                                        WORK, 1 )
                                  CALL ZLASCL( 'G', 0, 0, AAQQ,
      $                                         ONE, M, 1,
      $                                         WORK, LDA, IERR )
-                                 AAPQ = ZDOTC( M, A( 1, p ), 1,   
+                                 AAPQ = ZDOTC( M, A( 1, p ), 1,
      $                                   WORK, 1 ) / AAPP
                               END IF
                            END IF
 *
-                           OMPQ = AAPQ / ABS(AAPQ) 
-*                           AAPQ = AAPQ * DCONJG( CWORK(p) ) * CWORK(q) 
-                           AAPQ1  = -ABS(AAPQ) 
+                           OMPQ = AAPQ / ABS(AAPQ)
+*                           AAPQ = AAPQ * DCONJG( CWORK(p) ) * CWORK(q)
+                           AAPQ1  = -ABS(AAPQ)
                            MXAAPQ = DMAX1( MXAAPQ, -AAPQ1 )
 *
 *        TO rotate or NOT to rotate, THAT is the question ...
@@ -497,18 +497,18 @@
                                  THETA = -HALF*ABS( AQOAP-APOAQ )/AAPQ1
 *
                                  IF( ABS( THETA ).GT.BIGTHETA ) THEN
-* 
+*
                                     T  = HALF / THETA
                                     CS = ONE
 
                                     CALL ZROT( M, A(1,p), 1, A(1,q), 1,
      $                                          CS, DCONJG(OMPQ)*T )
                                     IF ( RSVEC ) THEN
-                                        CALL ZROT( MVL, V(1,p), 1, 
+                                        CALL ZROT( MVL, V(1,p), 1,
      $                                  V(1,q), 1, CS, DCONJG(OMPQ)*T )
                                     END IF
-                                    
-                                    SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO, 
+
+                                    SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      $                                          ONE+T*APOAQ*AAPQ1 ) )
                                     AAPP = AAPP*DSQRT( DMAX1( ZERO,
      $                                          ONE-T*AQOAP*AAPQ1 ) )
@@ -519,7 +519,7 @@
 *                 .. choose correct signum for THETA and rotate
 *
                                     THSIGN = -DSIGN( ONE, AAPQ1 )
-                                    T = ONE / ( THETA+THSIGN*       
+                                    T = ONE / ( THETA+THSIGN*
      $                                   DSQRT( ONE+THETA*THETA ) )
                                     CS = DSQRT( ONE / ( ONE+T*T ) )
                                     SN = T*CS
@@ -527,17 +527,17 @@
                                     MXSINJ = DMAX1( MXSINJ, ABS( SN ) )
                                     SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      $                                          ONE+T*APOAQ*AAPQ1 ) )
-                                    AAPP = AAPP*DSQRT( DMAX1( ZERO,  
+                                    AAPP = AAPP*DSQRT( DMAX1( ZERO,
      $                                      ONE-T*AQOAP*AAPQ1 ) )
 *
                                     CALL ZROT( M, A(1,p), 1, A(1,q), 1,
      $                                          CS, DCONJG(OMPQ)*SN )
                                     IF ( RSVEC ) THEN
-                                        CALL ZROT( MVL, V(1,p), 1, 
+                                        CALL ZROT( MVL, V(1,p), 1,
      $                                  V(1,q), 1, CS, DCONJG(OMPQ)*SN )
-                                    END IF   
-                                 END IF 
-                                 D(p) = -D(q) * OMPQ 
+                                    END IF
+                                 END IF
+                                 D(p) = -D(q) * OMPQ
 *
                                  ELSE
 *              .. have to use modified Gram-Schmidt like transformation
@@ -662,7 +662,7 @@
                                  ROTOK = ( SMALL*AAQQ ).LE.AAPP
                               END IF
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
-                                 AAPQ = ( ZDOTC( M, A( 1, p ), 1, 
+                                 AAPQ = ( ZDOTC( M, A( 1, p ), 1,
      $                                  A( 1, q ), 1 ) / AAQQ ) / AAPP
                               ELSE
                                  CALL ZCOPY( M, A( 1, p ), 1,
@@ -680,7 +680,7 @@
                                  ROTOK = AAQQ.LE.( AAPP / SMALL )
                               END IF
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
-                                 AAPQ = ( ZDOTC( M, A( 1, p ), 1, 
+                                 AAPQ = ( ZDOTC( M, A( 1, p ), 1,
      $                                   A( 1, q ), 1 ) / AAQQ ) / AAPP
                               ELSE
                                  CALL ZCOPY( M, A( 1, q ), 1,
@@ -693,8 +693,8 @@
                               END IF
                            END IF
 *
-                           OMPQ = AAPQ / ABS(AAPQ) 
-*                           AAPQ = AAPQ * DCONJG(CWORK(p))*CWORK(q)   
+                           OMPQ = AAPQ / ABS(AAPQ)
+*                           AAPQ = AAPQ * DCONJG(CWORK(p))*CWORK(q)
                            AAPQ1  = -ABS(AAPQ)
                            MXAAPQ = DMAX1( MXAAPQ, -AAPQ1 )
 *
@@ -715,11 +715,11 @@
 *
                                  IF( ABS( THETA ).GT.BIGTHETA ) THEN
                                     T  = HALF / THETA
-                                    CS = ONE 
+                                    CS = ONE
                                     CALL ZROT( M, A(1,p), 1, A(1,q), 1,
      $                                          CS, DCONJG(OMPQ)*T )
                                     IF( RSVEC ) THEN
-                                        CALL ZROT( MVL, V(1,p), 1, 
+                                        CALL ZROT( MVL, V(1,p), 1,
      $                                  V(1,q), 1, CS, DCONJG(OMPQ)*T )
                                     END IF
                                     SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
@@ -740,13 +740,13 @@
                                     MXSINJ = DMAX1( MXSINJ, ABS( SN ) )
                                     SVA( q ) = AAQQ*DSQRT( DMAX1( ZERO,
      $                                         ONE+T*APOAQ*AAPQ1 ) )
-                                    AAPP = AAPP*DSQRT( DMAX1( ZERO,  
+                                    AAPP = AAPP*DSQRT( DMAX1( ZERO,
      $                                         ONE-T*AQOAP*AAPQ1 ) )
 *
                                     CALL ZROT( M, A(1,p), 1, A(1,q), 1,
-     $                                          CS, DCONJG(OMPQ)*SN ) 
+     $                                          CS, DCONJG(OMPQ)*SN )
                                     IF( RSVEC ) THEN
-                                        CALL ZROT( MVL, V(1,p), 1, 
+                                        CALL ZROT( MVL, V(1,p), 1,
      $                                  V(1,q), 1, CS, DCONJG(OMPQ)*SN )
                                     END IF
                                  END IF
@@ -780,7 +780,7 @@
                                     CALL ZLASCL( 'G', 0, 0, AAPP, ONE,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
-                                    CALL ZAXPY( M, -DCONJG(AAPQ), 
+                                    CALL ZAXPY( M, -DCONJG(AAPQ),
      $                                   WORK, 1, A( 1, p ), 1 )
                                     CALL ZLASCL( 'G', 0, 0, ONE, AAPP,
      $                                           M, 1, A( 1, p ), LDA,

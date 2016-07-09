@@ -1,14 +1,14 @@
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZBDT05( M, N, A, LDA, S, NS, U, LDU, 
-*                          VT, LDVT, WORK, RESID )                
-* 
+*       SUBROUTINE ZBDT05( M, N, A, LDA, S, NS, U, LDU,
+*                          VT, LDVT, WORK, RESID )
+*
 *       .. Scalar Arguments ..
 *       INTEGER            LDA, LDU, LDVT, N, NS
 *       DOUBLE PRECISION   RESID
@@ -61,14 +61,14 @@
 *> \param[in] S
 *> \verbatim
 *>          S is DOUBLE PRECISION array, dimension (NS)
-*>          The singular values from the (partial) SVD of B, sorted in 
+*>          The singular values from the (partial) SVD of B, sorted in
 *>          decreasing order.
 *> \endverbatim
 *>
 *> \param[in] NS
 *> \verbatim
 *>          NS is INTEGER
-*>          The number of singular values/vectors from the (partial) 
+*>          The number of singular values/vectors from the (partial)
 *>          SVD of B.
 *> \endverbatim
 *>
@@ -110,17 +110,17 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2011
 *
 *> \ingroup double_eig
 *
 *  =====================================================================
-      SUBROUTINE ZBDT05( M, N, A, LDA, S, NS, U, LDU, 
+      SUBROUTINE ZBDT05( M, N, A, LDA, S, NS, U, LDU,
      $                    VT, LDVT, WORK, RESID )
 *
 *  -- LAPACK test routine (version 3.4.0) --
