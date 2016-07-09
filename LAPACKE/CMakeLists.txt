@@ -82,4 +82,4 @@ install(FILES
   )
 
 install(EXPORT lapacke-targets
-  DESTINATION lib/cmake/lapacke-${LAPACK_VERSION})
+  DESTINATION ${LIBRARY_DIR}/cmake/lapacke-${LAPACK_VERSION})
