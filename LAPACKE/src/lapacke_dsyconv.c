@@ -47,7 +47,7 @@ lapack_int LAPACKE_dsyconv( int matrix_layout, char uplo, char way, lapack_int n
         return -5;
     }
 #endif
-  
+
     /* Call middle-level interface */
     info = LAPACKE_dsyconv_work( matrix_layout, uplo, way, n, a, lda, ipiv,
                                  e );

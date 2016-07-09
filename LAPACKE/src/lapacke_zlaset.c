@@ -45,8 +45,8 @@ lapack_int LAPACKE_zlaset( int matrix_layout, char uplo, lapack_int m,
     }
 
 /*****************************************************************************
-*  Note: we do not check NaNs in A since the goal of this subroutine is to 
-*  initialized A. It is OK if A has NaNs in input. 
+*  Note: we do not check NaNs in A since the goal of this subroutine is to
+*  initialized A. It is OK if A has NaNs in input.
 *****************************************************************************/
 
 
