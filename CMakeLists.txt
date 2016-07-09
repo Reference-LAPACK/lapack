@@ -51,9 +51,9 @@ if ( CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq" )
       if (CMAKE_GENERATOR STREQUAL "NMake Makefiles")
          get_filename_component(CMAKE_Fortran_COMPILER_CMDNAM ${CMAKE_Fortran_COMPILER} NAME_WE)
          message(STATUS "Using Compaq Fortran compiler with command name ${CMAKE_Fortran_COMPILER_CMDNAM}")
-         set( cmd ${CMAKE_Fortran_COMPILER_CMDNAM} )  
+         set( cmd ${CMAKE_Fortran_COMPILER_CMDNAM} )
          string( TOLOWER "${cmd}" cmdlc )
-         if ( cmdlc STREQUAL "df" )      
+         if ( cmdlc STREQUAL "df" )
             message(STATUS "Assume the Compaq Visual Fortran Compiler is being used")
             set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_OBJECTS 1)
             set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_INCLUDES 1)
@@ -62,7 +62,7 @@ if ( CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq" )
             #introducing compiler command options
           if (${BUILD_SHARED_LIBS})
                message(FATAL_ERROR "Making of shared libraries with CVF has not been tested.")
-            endif()   
+            endif()
             set(str "NMake version 9 or later should be used. NMake version 6.0 which is\n")
             set(str "${str}   included with the CVF distribution fails to build Lapack because\n")
             set(str "${str}   the number of source files exceeds the limit for NMake v6.0\n")
@@ -70,7 +70,7 @@ if ( CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq" )
             set(CMAKE_Fortran_LINK_EXECUTABLE "LINK /out:<TARGET> <LINK_FLAGS> <LINK_LIBRARIES> <OBJECTS>")
          endif()
       endif()
-   endif()         
+   endif()
 endif()
 
 # Get Python
@@ -175,14 +175,14 @@ if(NOT BLAS_FOUND)
   add_subdirectory(BLAS)
   set( BLAS_LIBRARIES blas )
 else()
-  set( CMAKE_EXE_LINKER_FLAGS 
-    "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}" 
+  set( CMAKE_EXE_LINKER_FLAGS
+    "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
     CACHE STRING "Linker flags for executables" FORCE)
-  set( CMAKE_MODULE_LINKER_FLAGS 
-    "${CMAKE_MODULE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}" 
+  set( CMAKE_MODULE_LINKER_FLAGS
+    "${CMAKE_MODULE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
     CACHE STRING "Linker flags for modules" FORCE)
-  set( CMAKE_SHARED_LINKER_FLAGS 
-    "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}" 
+  set( CMAKE_SHARED_LINKER_FLAGS
+    "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
     CACHE STRING "Linker flags for shared libs" FORCE)
 endif( NOT BLAS_FOUND )
 
@@ -202,7 +202,7 @@ option(USE_XBLAS "Build extended precision (needs XBLAS)" OFF)
 if (USE_XBLAS)
   find_library(XBLAS_LIBRARY NAMES xblas)
 endif(USE_XBLAS)
-   
+
 option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)
 
 # --------------------------------------------------
@@ -239,14 +239,14 @@ if(NOT LATESTLAPACK_FOUND)
   option(BUILD_COMPLEX16 "Build LAPACK Double Complex Precision" ON)
   add_subdirectory(SRC)
 else()
-  set( CMAKE_EXE_LINKER_FLAGS 
-    "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}" 
+  set( CMAKE_EXE_LINKER_FLAGS
+    "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for executables" FORCE)
-  set( CMAKE_MODULE_LINKER_FLAGS 
-    "${CMAKE_MODULE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}" 
+  set( CMAKE_MODULE_LINKER_FLAGS
+    "${CMAKE_MODULE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for modules" FORCE)
-  set( CMAKE_SHARED_LINKER_FLAGS 
-    "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}" 
+  set( CMAKE_SHARED_LINKER_FLAGS
+    "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for shared libs" FORCE)
 endif( NOT LATESTLAPACK_FOUND )
 
@@ -277,7 +277,7 @@ if(LAPACKE)
 endif(LAPACKE)
 
 # --------------------------------------------------
-# CPACK Packaging 
+# CPACK Packaging
 
 SET(CPACK_PACKAGE_NAME "LAPACK")
 SET(CPACK_PACKAGE_VENDOR "University of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd")
