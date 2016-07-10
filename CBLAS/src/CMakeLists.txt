@@ -146,22 +146,22 @@ set(ALLOBJ ${SCLEV1} ${SLEV1} ${SLEV2} ${SLEV3} ${ERRHAND}
 # Single real precision
 if(CBLAS_SINGLE)
  set(ALLOBJ ${SCLEV1} ${SLEV1} ${SLEV2} ${SLEV3} ${ERRHAND})
-endif(CBLAS_SINGLE)
+endif()
 
 # Double real precision
 if(CBLAS_DOUBLE)
  set(ALLOBJ  ${DLEV1} ${DLEV2} ${DLEV3} ${ERRHAND})
-endif(CBLAS_DOUBLE)
+endif()
 
 # Single complex precision
 if (CBLAS_COMPLEX)
  set(ALLOBJ  ${CLEV1} ${SCLEV1} ${CLEV2} ${CLEV3} ${ERRHAND})
-endif(CBLAS_COMPLEX)
+endif()
 
 # Double complex precision
 if (CBLAS_COMPLEX16)
  set(ALLOBJ  ${ZLEV1} ${ZLEV2} ${ZLEV3} ${ERRHAND})
-endif(CBLAS_COMPLEX16)
+endif()
 
 add_library(cblas ${ALLOBJ})
 target_link_libraries(cblas ${BLAS_LIBRARIES} )

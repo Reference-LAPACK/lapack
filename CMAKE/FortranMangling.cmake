@@ -23,7 +23,7 @@ message(STATUS "=========")
       "Fortran compiler option for setting object file name.")
     set(F77_OUTPUT_EXE "/Fe" CACHE INTERNAL
       "Fortran compiler option for setting executable file name.")
-  else(${F77} STREQUAL "ifort.exe")
+  else()
     # in other case, let user specify their fortran configrations.
     set(F77_OPTION_COMPILE "-c" CACHE STRING
       "Fortran compiler option for compiling without linking.")
@@ -35,7 +35,7 @@ message(STATUS "=========")
       "Library path for the fortran compiler")
     set(F77_INCLUDE_PATH "" CACHE PATH
       "Include path for the fortran compiler")
-  endif(${F77} STREQUAL "ifort.exe")
+  endif()
 
 
 message(STATUS "Testing FORTRAN_MANGLING")
@@ -102,4 +102,4 @@ message(STATUS "Running ./xintface...")
           message(FATAL_ERROR "FORTRAN_MANGLING:ERROR ${xintface_ERR}")
       endif()
 
-endmacro(FORTRAN_MANGLING)
+endmacro()

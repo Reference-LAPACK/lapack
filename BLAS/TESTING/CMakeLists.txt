@@ -43,7 +43,7 @@ macro(add_blas_test name src)
         -DINTDIR=${CMAKE_CFG_INTDIR}
         -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
     endif()
-endmacro(add_blas_test)
+endmacro()
 
 if(BUILD_SINGLE)
   add_blas_test(xblat1s sblat1.f)

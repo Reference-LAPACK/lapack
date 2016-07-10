@@ -22,7 +22,7 @@ macro(add_cblas_test output input target)
         -DINTDIR=${CMAKE_CFG_INTDIR}
         -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
     endif()
-endmacro(add_cblas_test)
+endmacro()
 
 
 # Object files for single real precision

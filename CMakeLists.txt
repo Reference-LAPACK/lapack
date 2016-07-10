@@ -157,17 +157,17 @@ if(BLAS_LIBRARIES)
   unset( CMAKE_REQUIRED_LIBRARIES )
   if(BLAS_FOUND)
     message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
-  else(BLAS_FOUND)
+  else()
     message(ERROR "--> BLAS supplied by user is not WORKING, CANNOT USE ${BLAS_LIBRARIES}.")
     message(ERROR "-->     Will use REFERENCE BLAS (by default)")
     message(ERROR "-->     Or Correct your BLAS_LIBRARIES entry ")
     message(ERROR "-->     Or Consider checking USE_OPTIMIZED_BLAS")
-  endif(BLAS_FOUND)
+  endif()
 
 # User did not provide a BLAS Library but specified to search for one
 elseif( USE_OPTIMIZED_BLAS )
   find_package( BLAS )
-endif (BLAS_LIBRARIES)
+endif ()
 
 # Neither user specified or optimized BLAS libraries can be used
 if(NOT BLAS_FOUND)
@@ -184,7 +184,7 @@ else()
   set( CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
     CACHE STRING "Linker flags for shared libs" FORCE)
-endif( NOT BLAS_FOUND )
+endif()
 
 
 # --------------------------------------------------
@@ -193,7 +193,7 @@ option(CBLAS "Build CBLAS" OFF)
 
 if(CBLAS)
   add_subdirectory(CBLAS)
-endif(CBLAS)
+endif()
 
 # --------------------------------------------------
 # XBLAS
@@ -201,7 +201,7 @@ endif(CBLAS)
 option(USE_XBLAS "Build extended precision (needs XBLAS)" OFF)
 if (USE_XBLAS)
   find_library(XBLAS_LIBRARY NAMES xblas)
-endif(USE_XBLAS)
+endif()
 
 option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library instead of included netlib LAPACK" OFF)
 
@@ -210,7 +210,7 @@ option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library i
 # User did not provide a LAPACK Library but specified to search for one
 if( USE_OPTIMIZED_LAPACK )
   find_package( LAPACK )
-endif (USE_OPTIMIZED_LAPACK)
+endif ()
 
 # Check the usage of the user provided or automatically found LAPACK libraries
 if(LAPACK_LIBRARIES)
@@ -221,13 +221,13 @@ if(LAPACK_LIBRARIES)
   unset( CMAKE_REQUIRED_LIBRARIES )
   if(LATESTLAPACK_FOUND)
     message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
-  else(LAPACK_FOUND)
+  else()
     message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, 	CANNOT USE ${LAPACK_LIBRARIES}.")
     message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
     message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
     message(ERROR "-->     Or Consider checking USE_OPTIMIZED_LAPACK")
-  endif(LATESTLAPACK_FOUND)
-endif (LAPACK_LIBRARIES)
+  endif()
+endif ()
 
 # Neither user specified or optimized LAPACK libraries can be used
 if(NOT LATESTLAPACK_FOUND)
@@ -248,12 +248,12 @@ else()
   set( CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for shared libs" FORCE)
-endif( NOT LATESTLAPACK_FOUND )
+endif()
 
 message(STATUS "BUILD TESTING : ${BUILD_TESTING}" )
 if(BUILD_TESTING)
   add_subdirectory(TESTING)
-endif(BUILD_TESTING)
+endif()
 
 # deprecated LAPACK routines
 option(BUILD_DEPRECATED "Build deprecated routines" OFF)
@@ -269,12 +269,12 @@ if (LAPACKE_WITH_TMG)
   set(LAPACKE ON)
   if(NOT BUILD_TESTING)
      add_subdirectory(TESTING/MATGEN)
-   endif(NOT BUILD_TESTING)
-endif(LAPACKE_WITH_TMG)
+   endif()
+endif()
 
 if(LAPACKE)
   add_subdirectory(LAPACKE)
-endif(LAPACKE)
+endif()
 
 # --------------------------------------------------
 # CPACK Packaging
@@ -296,12 +296,12 @@ if(WIN32 AND NOT UNIX)
   set(CPACK_NSIS_MODIFY_PATH ON)
   set(CPACK_NSIS_DISPLAY_NAME "LAPACK-${LAPACK_VERSION}")
   set(CPACK_PACKAGE_RELOCATABLE "true")
-else(WIN32 AND NOT UNIX)
+else()
   set(CPACK_GENERATOR "TGZ")
   set(CPACK_SOURCE_GENERATOR TGZ)
   set(CPACK_SOURCE_PACKAGE_FILE_NAME "lapack-${LAPACK_VERSION}" )
   set(CPACK_SOURCE_IGNORE_FILES ~$ .svn ${CPACK_SOURCE_IGNORE_FILES} )
-endif(WIN32 AND NOT UNIX)
+endif()
 include(CPack)
 
 
@@ -313,15 +313,15 @@ option(BUILD_STATIC_LIBS "Build static libraries" ON )
 
 if(NOT BLAS_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} blas)
-endif(NOT BLAS_FOUND)
+endif()
 
 if(NOT LATESTLAPACK_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} lapack)
-endif(NOT LATESTLAPACK_FOUND)
+endif()
 
 if(BUILD_TESTING OR LAPACKE_WITH_TMG)
   set(ALL_TARGETS ${ALL_TARGETS} tmglib)
-endif(BUILD_TESTING OR LAPACKE_WITH_TMG)
+endif()
 
 # Export lapack targets, not including lapacke, from the
 # install tree, if any.
@@ -338,12 +338,12 @@ endif()
 # Include cblas in targets exported from the build tree.
 if(CBLAS)
   set(ALL_TARGETS ${ALL_TARGETS} cblas)
-endif(CBLAS)
+endif()
 
 # Include lapacke in targets exported from the build tree.
 if(LAPACKE)
   set(ALL_TARGETS ${ALL_TARGETS} lapacke)
-endif(LAPACKE)
+endif()
 
 # Export lapack and lapacke targets from the build tree, if any.
 set(_lapack_config_build_guard_target "")
