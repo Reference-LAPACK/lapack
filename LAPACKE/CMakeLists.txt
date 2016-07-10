@@ -17,8 +17,8 @@ if( NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
 endif ()
 
 if (WIN32 AND NOT UNIX)
- ADD_DEFINITIONS(-DHAVE_LAPACK_CONFIG_H -DLAPACK_COMPLEX_STRUCTURE)
- MESSAGE (STATUS "Windows BUILD")
+ add_definitions(-DHAVE_LAPACK_CONFIG_H -DLAPACK_COMPLEX_STRUCTURE)
+ message (STATUS "Windows BUILD")
 endif (WIN32 AND NOT UNIX)
 
 get_directory_property( DirDefs COMPILE_DEFINITIONS )
@@ -55,7 +55,7 @@ else (USE_XBLAS)
 endif(USE_XBLAS)
 
 lapack_install_library(lapacke)
-INSTALL( FILES ${LAPACKE_INCLUDE} ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h DESTINATION include )
+install( FILES ${LAPACKE_INCLUDE} ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h DESTINATION include )
 
 if(BUILD_TESTING)
    add_subdirectory(example)

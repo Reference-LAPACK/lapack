@@ -43,7 +43,7 @@ if (UNIX)
    endif ()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
-   STRING(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
+   string(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
 endif ()
 
 if ( CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq" )
@@ -279,37 +279,37 @@ endif(LAPACKE)
 # --------------------------------------------------
 # CPACK Packaging
 
-SET(CPACK_PACKAGE_NAME "LAPACK")
-SET(CPACK_PACKAGE_VENDOR "University of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd")
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "LAPACK- Linear Algebra Package")
+set(CPACK_PACKAGE_NAME "LAPACK")
+set(CPACK_PACKAGE_VENDOR "University of Tennessee, Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "LAPACK- Linear Algebra Package")
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 5)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "LAPACK")
-IF(WIN32 AND NOT UNIX)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "LAPACK")
+if(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
   # sure there is at least one set of four (4) backlasshes.
-  SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\http://icl.cs.utk.edu/lapack-forum")
-  SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.netlib.org/lapack")
-  SET(CPACK_NSIS_CONTACT "lapack@eecs.utk.edu")
-  SET(CPACK_NSIS_MODIFY_PATH ON)
-  SET(CPACK_NSIS_DISPLAY_NAME "LAPACK-${LAPACK_VERSION}")
+  set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\http://icl.cs.utk.edu/lapack-forum")
+  set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.netlib.org/lapack")
+  set(CPACK_NSIS_CONTACT "lapack@eecs.utk.edu")
+  set(CPACK_NSIS_MODIFY_PATH ON)
+  set(CPACK_NSIS_DISPLAY_NAME "LAPACK-${LAPACK_VERSION}")
   set(CPACK_PACKAGE_RELOCATABLE "true")
-ELSE(WIN32 AND NOT UNIX)
-  SET(CPACK_GENERATOR "TGZ")
-  SET(CPACK_SOURCE_GENERATOR TGZ)
-  SET(CPACK_SOURCE_PACKAGE_FILE_NAME "lapack-${LAPACK_VERSION}" )
-  SET(CPACK_SOURCE_IGNORE_FILES ~$ .svn ${CPACK_SOURCE_IGNORE_FILES} )
-ENDIF(WIN32 AND NOT UNIX)
-INCLUDE(CPack)
+else(WIN32 AND NOT UNIX)
+  set(CPACK_GENERATOR "TGZ")
+  set(CPACK_SOURCE_GENERATOR TGZ)
+  set(CPACK_SOURCE_PACKAGE_FILE_NAME "lapack-${LAPACK_VERSION}" )
+  set(CPACK_SOURCE_IGNORE_FILES ~$ .svn ${CPACK_SOURCE_IGNORE_FILES} )
+endif(WIN32 AND NOT UNIX)
+include(CPack)
 
 
 # --------------------------------------------------
 # By default static library
-OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF )
-OPTION(BUILD_STATIC_LIBS "Build static libraries" ON )
-#OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF )
+option(BUILD_STATIC_LIBS "Build static libraries" ON )
+#option(BUILD_SHARED_LIBS "Build shared libraries" ON )
 
 if(NOT BLAS_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} blas)

@@ -28,7 +28,7 @@ endforeach()
 endmacro()
 
 append_subdir_files(CBLAS_INCLUDE "include")
-INSTALL( FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h DESTINATION include )
+install( FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h DESTINATION include )
 
 # --------------------------------------------------
 if(BUILD_TESTING)

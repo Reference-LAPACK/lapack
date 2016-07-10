@@ -26,26 +26,26 @@ endmacro(add_cblas_test)
 
 
 # Object files for single real precision
-SET( STESTL1O c_sblas1.c)
+set( STESTL1O c_sblas1.c)
 
-SET( STESTL2O c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
-SET( STESTL2O c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
-SET( STESTL3O c_sblas3.c c_s3chke.c auxiliary.c c_xerbla.c)
+set( STESTL2O c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
+set( STESTL2O c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
+set( STESTL3O c_sblas3.c c_s3chke.c auxiliary.c c_xerbla.c)
 
 # Object files for double real precision
-SET( DTESTL1O  c_dblas1.c)
-SET( DTESTL2O  c_dblas2.c c_d2chke.c auxiliary.c c_xerbla.c)
-SET( DTESTL3O  c_dblas3.c c_d3chke.c auxiliary.c c_xerbla.c)
+set( DTESTL1O  c_dblas1.c)
+set( DTESTL2O  c_dblas2.c c_d2chke.c auxiliary.c c_xerbla.c)
+set( DTESTL3O  c_dblas3.c c_d3chke.c auxiliary.c c_xerbla.c)
 
 # Object files for single complex precision
-SET( CTESTL1O  c_cblat1.f c_cblas1.c)
-SET( CTESTL2O  c_cblas2.c c_c2chke.c auxiliary.c c_xerbla.c)
-SET( CTESTL3O  c_cblas3.c c_c3chke.c auxiliary.c c_xerbla.c)
+set( CTESTL1O  c_cblat1.f c_cblas1.c)
+set( CTESTL2O  c_cblas2.c c_c2chke.c auxiliary.c c_xerbla.c)
+set( CTESTL3O  c_cblas3.c c_c3chke.c auxiliary.c c_xerbla.c)
 
 # Object files for double complex precision
-SET( ZTESTL1O  c_zblas1.c)
-SET( ZTESTL2O  c_zblas2.c c_z2chke.c auxiliary.c c_xerbla.c)
-SET( ZTESTL3O  c_zblas3.c c_z3chke.c auxiliary.c c_xerbla.c)
+set( ZTESTL1O  c_zblas1.c)
+set( ZTESTL2O  c_zblas2.c c_z2chke.c auxiliary.c c_xerbla.c)
+set( ZTESTL3O  c_zblas3.c c_z3chke.c auxiliary.c c_xerbla.c)
 
 
 
