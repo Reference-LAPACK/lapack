@@ -2158,7 +2158,7 @@ lapacke_chesvxx.o       lapacke_dgbsvxx.o       lapacke_dsysvxx.o       lapacke_
 lapacke_chesvxx_work.o  lapacke_dgbsvxx_work.o  lapacke_dsysvxx_work.o  lapacke_sposvxx_work.o  lapacke_zgesvxx_work.o  lapacke_zsysvxx_work.o
 
 
-# FILE PARTS OF TMGLIB 
+# FILE PARTS OF TMGLIB
 MATGEN_OBJ = \
 lapacke_clatms.o \
 lapacke_clatms_work.o \
@@ -2189,7 +2189,7 @@ lapacke_slagsy_work.o \
 lapacke_zlagsy.o \
 lapacke_zlagsy_work.o
 
-ALLOBJ = $(SRC_OBJ) $(MATGEN_OBJ) 
+ALLOBJ = $(SRC_OBJ) $(MATGEN_OBJ)
 
 ifdef USEXBLAS
 ALLXOBJ = $(SXLASRC) $(DXLASRC) $(CXLASRC) $(ZXLASRC)

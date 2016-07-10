@@ -22,6 +22,6 @@ cblas_testing:
 
 runtst:
 	cd testing && $(MAKE) run
-	
+
 example: all
 	cd examples && make all

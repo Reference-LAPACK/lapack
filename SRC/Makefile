@@ -26,7 +26,7 @@ include ../make.inc
 #                  precision.
 #       ZLASRC  -- Double precision complex LAPACK routines
 #       ZXLASRC -- Double precision complex LAPACK routines using extra
-#                  precision.   
+#                  precision.
 #
 #	      DEPRECATED -- Deprecated routines in all precisions
 #
@@ -161,7 +161,7 @@ SLASRC = \
    sgeqrt.o sgeqrt2.o sgeqrt3.o sgemqrt.o \
    stpqrt.o stpqrt2.o stpmqrt.o stprfb.o
 
-DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o 
+DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o
 
 ifdef USEXBLAS
 SXLASRC = sgesvxx.o sgerfsx.o sla_gerfsx_extended.o sla_geamv.o		\
@@ -259,7 +259,7 @@ CXLASRC = cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
    cla_lin_berr.o clarscl2.o clascl2.o cla_wwaddw.o
 endif
 
-ZCLASRC = cpotrs.o cgetrs.o cpotrf.o cgetrf.o 
+ZCLASRC = cpotrs.o cgetrs.o cpotrf.o cgetrf.o
 
 DLASRC = \
    dpotrf2.o dgetrf2.o \
@@ -500,7 +500,7 @@ FRC:
 clean:
 	rm -f *.o DEPRECATED/*.o
 
-.f.o: 
+.f.o:
 	$(FORTRAN) $(OPTS) -c $< -o $@
 
 slaruv.o: slaruv.f ; $(FORTRAN) $(NOOPT) -c $< -o $@

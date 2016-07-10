@@ -2,18 +2,18 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGEJSV + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgejsv.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgejsv.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgejsv.f"> 
+*> Download CGEJSV + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgejsv.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgejsv.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgejsv.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
@@ -21,18 +21,18 @@
 *     SUBROUTINE CGEJSV( JOBA, JOBU, JOBV, JOBR, JOBT, JOBP,
 *                         M, N, A, LDA, SVA, U, LDU, V, LDV,
 *                         CWORK, LWORK, RWORK, LRWORK, IWORK, INFO )
-* 
+*
 *     .. Scalar Arguments ..
 *     IMPLICIT    NONE
 *     INTEGER     INFO, LDA, LDU, LDV, LWORK, M, N
 *     ..
 *     .. Array Arguments ..
 *     COMPLEX     A( LDA, * ),  U( LDU, * ), V( LDV, * ), CWORK( LWORK )
-*     REAL        SVA( N ), RWORK( LRWORK )      
+*     REAL        SVA( N ), RWORK( LRWORK )
 *     INTEGER     IWORK( * )
 *     CHARACTER*1 JOBA, JOBP, JOBR, JOBT, JOBU, JOBV
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -97,7 +97,7 @@
 *>              numerical RANK is declared to be r. The SVD is computed with
 *>              absolute error bounds, but more accurately than with 'A'.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBU
 *> \verbatim
 *>          JOBU is CHARACTER*1
@@ -108,7 +108,7 @@
 *>              of U.
 *>       = 'N': U is not computed.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBV
 *> \verbatim
 *>          JOBV is CHARACTER*1
@@ -122,7 +122,7 @@
 *>              of V.
 *>       = 'N': V is not computed.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBR
 *> \verbatim
 *>          JOBR is CHARACTER*1
@@ -143,7 +143,7 @@
 *>         For computing the singular values in the FULL range [SFMIN,BIG]
 *>         use CGESVJ.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBT
 *> \verbatim
 *>          JOBT is CHARACTER*1
@@ -164,7 +164,7 @@
 *>         The implementer can easily remove this constraint and make the
 *>         code more complicated. See the descriptions of U and V.
 *> \endverbatim
-*> 
+*>
 *> \param[in] JOBP
 *> \verbatim
 *>          JOBP is CHARACTER*1
@@ -269,7 +269,7 @@
 *>
 *> \param[out] CWORK
 *> \verbatim
-*>          CWORK is COMPLEX array, dimension at least LWORK.     
+*>          CWORK is COMPLEX array, dimension at least LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -284,15 +284,15 @@
 *>               ->> For optimal performance (blocked code) the optimal value
 *>               is LWORK >= N + (N+1)*NB. Here NB is the optimal
 *>               block size for CGEQP3 and CGEQRF.
-*>               In general, optimal LWORK is computed as 
-*>               LWORK >= max(N+LWORK(CGEQP3),N+LWORK(CGEQRF)).        
+*>               In general, optimal LWORK is computed as
+*>               LWORK >= max(N+LWORK(CGEQP3),N+LWORK(CGEQRF)).
 *>            1.2. .. an estimate of the scaled condition number of A is
 *>               required (JOBA='E', or 'G'). In this case, LWORK the minimal
 *>               requirement is LWORK >= N*N + 3*N.
-*>               ->> For optimal performance (blocked code) the optimal value 
+*>               ->> For optimal performance (blocked code) the optimal value
 *>               is LWORK >= max(N+(N+1)*NB, N*N+3*N).
 *>               In general, the optimal length LWORK is computed as
-*>               LWORK >= max(N+LWORK(CGEQP3),N+LWORK(CGEQRF), 
+*>               LWORK >= max(N+LWORK(CGEQP3),N+LWORK(CGEQRF),
 *>                                                     N+N*N+LWORK(CPOCON)).
 *>
 *>          2. If SIGMA and the right singular vectors are needed (JOBV.EQ.'V'),
@@ -311,12 +311,12 @@
 *>               where NB is the optimal block size for CGEQP3, CGEQRF, CUNMQR.
 *>               In general, the optimal length LWORK is computed as
 *>               LWORK >= max(N+LWORK(CGEQP3),N+LWORK(CPOCON),
-*>                        2*N+LWORK(CGEQRF), N+LWORK(CUNMQR)). 
-*>               
-*>          4. If the full SVD is needed: (JOBU.EQ.'U' or JOBU.EQ.'F') and 
-*>            4.1. if JOBV.EQ.'V'  
-*>               the minimal requirement is LWORK >= 5*N+2*N*N. 
-*>            4.2. if JOBV.EQ.'J' the minimal requirement is 
+*>                        2*N+LWORK(CGEQRF), N+LWORK(CUNMQR)).
+*>
+*>          4. If the full SVD is needed: (JOBU.EQ.'U' or JOBU.EQ.'F') and
+*>            4.1. if JOBV.EQ.'V'
+*>               the minimal requirement is LWORK >= 5*N+2*N*N.
+*>            4.2. if JOBV.EQ.'J' the minimal requirement is
 *>               LWORK >= 4*N+N*N.
 *>            In both cases, the allocated CWORK can accommodate blocked runs
 *>            of CGEQP3, CGEQRF, CGELQF, CUNMQR, CUNMLQ.
@@ -365,43 +365,43 @@
 *>          Length of RWORK to confirm proper allocation of workspace.
 *>          LRWORK depends on the job:
 *>
-*>       1. If only singular values are requested i.e. if 
-*>          LSAME(JOBU,'N') .AND. LSAME(JOBV,'N') 
+*>       1. If only singular values are requested i.e. if
+*>          LSAME(JOBU,'N') .AND. LSAME(JOBV,'N')
 *>          then:
 *>          1.1. If LSAME(JOBT,'T') .OR. LSAME(JOBA,'F') .OR. LSAME(JOBA,'G'),
-*>          then LRWORK = max( 7, N + 2 * M ). 
+*>          then LRWORK = max( 7, N + 2 * M ).
 *>          1.2. Otherwise, LRWORK  = max( 7, 2 * N ).
 *>       2. If singular values with the right singular vectors are requested
-*>          i.e. if 
-*>          (LSAME(JOBV,'V').OR.LSAME(JOBV,'J')) .AND. 
+*>          i.e. if
+*>          (LSAME(JOBV,'V').OR.LSAME(JOBV,'J')) .AND.
 *>          .NOT.(LSAME(JOBU,'U').OR.LSAME(JOBU,'F'))
 *>          then:
 *>          2.1. If LSAME(JOBT,'T') .OR. LSAME(JOBA,'F') .OR. LSAME(JOBA,'G'),
-*>          then LRWORK = max( 7, N + 2 * M ). 
-*>          2.2. Otherwise, LRWORK  = max( 7, 2 * N ).      
-*>       3. If singular values with the left singular vectors are requested, i.e. if    
+*>          then LRWORK = max( 7, N + 2 * M ).
+*>          2.2. Otherwise, LRWORK  = max( 7, 2 * N ).
+*>       3. If singular values with the left singular vectors are requested, i.e. if
 *>          (LSAME(JOBU,'U').OR.LSAME(JOBU,'F')) .AND.
 *>          .NOT.(LSAME(JOBV,'V').OR.LSAME(JOBV,'J'))
 *>          then:
 *>          3.1. If LSAME(JOBT,'T') .OR. LSAME(JOBA,'F') .OR. LSAME(JOBA,'G'),
-*>          then LRWORK = max( 7, N + 2 * M ). 
-*>          3.2. Otherwise, LRWORK  = max( 7, 2 * N ).    
-*>       4. If singular values with both the left and the right singular vectors 
-*>          are requested, i.e. if     
+*>          then LRWORK = max( 7, N + 2 * M ).
+*>          3.2. Otherwise, LRWORK  = max( 7, 2 * N ).
+*>       4. If singular values with both the left and the right singular vectors
+*>          are requested, i.e. if
 *>          (LSAME(JOBU,'U').OR.LSAME(JOBU,'F')) .AND.
 *>          (LSAME(JOBV,'V').OR.LSAME(JOBV,'J'))
 *>          then:
 *>          4.1. If LSAME(JOBT,'T') .OR. LSAME(JOBA,'F') .OR. LSAME(JOBA,'G'),
-*>          then LRWORK = max( 7, N + 2 * M ). 
-*>          4.2. Otherwise, LRWORK  = max( 7, 2 * N ).    
+*>          then LRWORK = max( 7, N + 2 * M ).
+*>          4.2. Otherwise, LRWORK  = max( 7, 2 * N ).
 *> \endverbatim
-*>          
+*>
 *> \param[out] IWORK
 *> \verbatim
 *>          IWORK is INTEGER array, of dimension:
-*>                If LSAME(JOBA,'F') .OR. LSAME(JOBA,'G'), then 
+*>                If LSAME(JOBA,'F') .OR. LSAME(JOBA,'G'), then
 *>                the dimension of IWORK is max( 3, 2 * N + M ).
-*>                Otherwise, the dimension of IWORK is 
+*>                Otherwise, the dimension of IWORK is
 *>                -> max( 3, 2*N ) for full SVD
 *>                -> max( 3, N ) for singular values only or singular
 *>                   values with one set of singular vectors (left or right)
@@ -428,10 +428,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date June 2016
 *
@@ -616,14 +616,14 @@
      $ .OR.
      $ (RSVEC .AND. (.NOT.LSVEC) .AND. (LWORK .LT. 3*N))
      $ .OR.
-     $ (LSVEC .AND. RSVEC .AND. (.NOT.JRACC) .AND. 
+     $ (LSVEC .AND. RSVEC .AND. (.NOT.JRACC) .AND.
      $                          (LWORK.LT.5*N+2*N*N))
      $ .OR. (LSVEC .AND. RSVEC .AND. JRACC .AND.
      $                          LWORK.LT.4*N+N*N))
      $   THEN
          INFO = - 17
       ELSE IF ( LRWORK.LT. MAX0(N+2*M,7)) THEN
-         INFO = -19 
+         INFO = -19
       ELSE
 *        #:)
          INFO = 0
@@ -767,7 +767,7 @@
             IWORK(1) = 0
             IWORK(2) = 0
          END IF
-         IWORK(3) = 0 
+         IWORK(3) = 0
          IF ( ERREST ) RWORK(3) = ONE
          IF ( LSVEC .AND. RSVEC ) THEN
             RWORK(4) = ONE
@@ -803,7 +803,7 @@
                RWORK(M+N+p)  = XSC * SCALEM
                RWORK(N+p)    = XSC * (SCALEM*SQRT(TEMP1))
                AATMAX = AMAX1( AATMAX, RWORK(N+p) )
-               IF (RWORK(N+p) .NE. ZERO) 
+               IF (RWORK(N+p) .NE. ZERO)
      $            AATMIN = AMIN1(AATMIN,RWORK(N+p))
  1950       CONTINUE
          ELSE
@@ -864,7 +864,7 @@
 *           In an optimal implementation, this trivial transpose
 *           should be replaced with faster transpose.
             DO 1115 p = 1, N - 1
-               A(p,p) = CONJG(A(p,p)) 
+               A(p,p) = CONJG(A(p,p))
                DO 1116 q = p + 1, N
                    CTEMP = CONJG(A(q,p))
                   A(q,p) = CONJG(A(p,q))
@@ -875,8 +875,8 @@
             DO 1117 p = 1, N
                RWORK(M+N+p) = SVA(p)
                SVA(p)      = RWORK(N+p)
-*              previously computed row 2-norms are now column 2-norms 
-*              of the transposed matrix               
+*              previously computed row 2-norms are now column 2-norms
+*              of the transposed matrix
  1117       CONTINUE
             TEMP1  = AAPP
             AAPP   = AATMAX
@@ -887,7 +887,7 @@
             KILL   = LSVEC
             LSVEC  = RSVEC
             RSVEC  = KILL
-            IF ( LSVEC ) N1 = N 
+            IF ( LSVEC ) N1 = N
 *
             ROWPIV = .TRUE.
          END IF
@@ -992,7 +992,7 @@
 *        .. all columns are free columns
          IWORK(p) = 0
  1963 CONTINUE
-      CALL CGEQP3( M, N, A, LDA, IWORK, CWORK, CWORK(N+1), LWORK-N, 
+      CALL CGEQP3( M, N, A, LDA, IWORK, CWORK, CWORK(N+1), LWORK-N,
      $             RWORK, IERR )
 *
 *     The upper triangular matrix R1 from the first QRF is inspected for
@@ -1075,7 +1075,7 @@
  3053          CONTINUE
                CALL CPOCON( 'U', N, V, LDV, ONE, TEMP1,
      $              CWORK(N+1), RWORK, IERR )
-*          
+*
             ELSE IF ( LSVEC ) THEN
 *              .. U is available as workspace
                CALL CLACPY( 'U', N, N, A, LDA, U, LDU )
@@ -1094,7 +1094,7 @@
 *           .. the columns of R are scaled to have unit Euclidean lengths.
                CALL CPOCON( 'U', N, CWORK(N+1), N, ONE, TEMP1,
      $              CWORK(N+N*N+1), RWORK, IERR )
-*              
+*
             END IF
             SCONDA = ONE / SQRT(TEMP1)
 *           SCONDA is an estimate of SQRT(||(R^* * R)^(-1)||_1).
@@ -1118,7 +1118,7 @@
             CALL CCOPY( N-p, A(p,p+1), LDA, A(p+1,p), 1 )
             CALL CLACGV( N-p+1, A(p,p), 1 )
  1946    CONTINUE
-         IF ( NR .EQ. N ) A(N,N) = CONJG(A(N,N))        
+         IF ( NR .EQ. N ) A(N,N) = CONJG(A(N,N))
 *
 *        The following two DO-loops introduce small relative perturbation
 *        into the strict upper triangle of the lower triangular matrix.
@@ -1175,7 +1175,7 @@
                      IF ( ( (p.GT.q) .AND. (ABS(A(p,q)).LE.TEMP1) )
      $                       .OR. ( p .LT. q ) )
 *     $                   A(p,q) = TEMP1 * ( A(p,q) / ABS(A(p,q)) )
-     $                   A(p,q) = CTEMP 
+     $                   A(p,q) = CTEMP
  1949             CONTINUE
  1947          CONTINUE
             ELSE
@@ -1224,7 +1224,7 @@
      $                   LWORK-2*N, IERR )
             DO 8998 p = 1, NR
                CALL CCOPY( NR-p+1, V(p,p), LDV, V(p,p), 1 )
-               CALL CLACGV( NR-p+1, V(p,p), 1 ) 
+               CALL CLACGV( NR-p+1, V(p,p), 1 )
  8998       CONTINUE
             CALL CLASET('Upper', NR-1, NR-1, CZERO, CZERO, V(1,2), LDV)
 *
@@ -1269,7 +1269,7 @@
 *
          DO 1967 p = 1, NR - 1
             CALL CCOPY( NR-p, U(p,p+1), LDU, U(p+1,p), 1 )
-            CALL CLACGV( N-p+1, U(p,p), 1 )            
+            CALL CLACGV( N-p+1, U(p,p), 1 )
  1967    CONTINUE
          CALL CLASET( 'Upper', NR-1, NR-1, CZERO, CZERO, U(1,2), LDU )
 *
@@ -1341,7 +1341,7 @@
                      IF ( ( p .GT. q ) .AND. ( ABS(V(p,q)) .LE. TEMP1 )
      $                   .OR. ( p .LT. q ) )
 *     $                   V(p,q) = TEMP1 * ( V(p,q) / ABS(V(p,q)) )
-     $                   V(p,q) = CTEMP      
+     $                   V(p,q) = CTEMP
                      IF ( p .LT. q ) V(p,q) = - V(p,q)
  2968             CONTINUE
  2969          CONTINUE
@@ -1385,7 +1385,7 @@
      $                              ZERO)
                         IF ( ABS(V(q,p)) .LE. TEMP1 )
 *     $                     V(q,p) = TEMP1 * ( V(q,p) / ABS(V(q,p)) )
-     $                     V(q,p) = CTEMP    
+     $                     V(q,p) = CTEMP
  3958                CONTINUE
  3959             CONTINUE
                END IF
@@ -1399,7 +1399,7 @@
                   CALL CCOPY( NR-p, V(p,p+1), LDV, V(p+1,p), 1 )
                   CALL CLACGV(NR-p+1, V(p,p), 1 )
  1969          CONTINUE
-               V(NR,NR)=CONJG(V(NR,NR))   
+               V(NR,NR)=CONJG(V(NR,NR))
 *
                CONDR2 = CONDR1
 *
@@ -1428,7 +1428,7 @@
      $                               ZERO)
                         IF ( ABS(V(q,p)) .LE. TEMP1 )
 *     $                     V(q,p) = TEMP1 * ( V(q,p) / ABS(V(q,p)) )
-     $                     V(q,p) = CTEMP                     
+     $                     V(q,p) = CTEMP
  3968                CONTINUE
  3969             CONTINUE
                END IF
@@ -1442,7 +1442,7 @@
                         CTEMP=CMPLX(XSC*AMIN1(ABS(V(p,p)),ABS(V(q,q))),
      $                               ZERO)
 *                        V(p,q) = - TEMP1*( V(q,p) / ABS(V(q,p)) )
-                        V(p,q) = - CTEMP      
+                        V(p,q) = - CTEMP
  8971                CONTINUE
  8970             CONTINUE
                ELSE
@@ -1458,7 +1458,7 @@
                   CALL CSSCAL( p, ONE/TEMP1, CWORK(2*N+N*NR+NR+p), NR )
  4950          CONTINUE
                CALL CPOCON( 'L',NR,CWORK(2*N+N*NR+NR+1),NR,ONE,TEMP1,
-     $              CWORK(2*N+N*NR+NR+NR*NR+1),RWORK,IERR ) 
+     $              CWORK(2*N+N*NR+NR+NR*NR+1),RWORK,IERR )
                CONDR2 = ONE / SQRT(TEMP1)
 *
 *
@@ -1537,7 +1537,7 @@
 *              the lower triangular L3 from the LQ factorization of
 *              R2=L3*Q3), pre-multiplied with the transposed Q3.
                CALL CGESVJ( 'L', 'U', 'N', NR, NR, V, LDV, SVA, NR, U,
-     $              LDU, CWORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR, 
+     $              LDU, CWORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR,
      $          RWORK, LRWORK, INFO )
                SCALEM  = RWORK(1)
                NUMRANK = NINT(RWORK(2))
@@ -1576,7 +1576,7 @@
 *              Compute the full SVD of L3 using CGESVJ with explicit
 *              accumulation of Jacobi rotations.
                CALL CGESVJ( 'L', 'U', 'V', NR, NR, V, LDV, SVA, NR, U,
-     $              LDU, CWORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR, 
+     $              LDU, CWORK(2*N+N*NR+NR+1), LWORK-2*N-N*NR-NR,
      $                         RWORK, LRWORK, INFO )
                SCALEM  = RWORK(1)
                NUMRANK = NINT(RWORK(2))
@@ -1662,7 +1662,7 @@
                   DO 5971 q = 1, p - 1
 *                     CWORK(N+(q-1)*N+p)=-TEMP1 * ( CWORK(N+(p-1)*N+q) /
 *     $                                        ABS(CWORK(N+(p-1)*N+q)) )
-                     CWORK(N+(q-1)*N+p)=-CTEMP           
+                     CWORK(N+(q-1)*N+p)=-CTEMP
  5971             CONTINUE
  5970          CONTINUE
             ELSE
@@ -1670,7 +1670,7 @@
             END IF
 *
             CALL CGESVJ( 'Upper', 'U', 'N', N, N, CWORK(N+1), N, SVA,
-     $           N, U, LDU, CWORK(N+N*N+1), LWORK-N-N*N, RWORK, LRWORK, 
+     $           N, U, LDU, CWORK(N+N*N+1), LWORK-N-N*N, RWORK, LRWORK,
      $       INFO )
 *
             SCALEM  = RWORK(1)
@@ -1742,7 +1742,7 @@
                   IF ( ( p .GT. q ) .AND. ( ABS(V(p,q)) .LE. TEMP1 )
      $                .OR. ( p .LT. q ) )
 *     $                V(p,q) = TEMP1 * ( V(p,q) / ABS(V(p,q)) )
-     $                V(p,q) = CTEMP        
+     $                V(p,q) = CTEMP
                   IF ( p .LT. q ) V(p,q) = - V(p,q)
  5968          CONTINUE
  5969       CONTINUE
@@ -1766,7 +1766,7 @@
                   CTEMP = CMPLX(XSC * AMIN1(ABS(U(p,p)),ABS(U(q,q))),
      $                           ZERO)
 *                  U(p,q) = - TEMP1 * ( U(q,p) / ABS(U(q,p)) )
-                  U(p,q) = - CTEMP     
+                  U(p,q) = - CTEMP
  9971          CONTINUE
  9970       CONTINUE
          ELSE
@@ -1774,7 +1774,7 @@
          END IF
 
          CALL CGESVJ( 'L', 'U', 'V', NR, NR, U, LDU, SVA,
-     $        N, V, LDV, CWORK(2*N+N*NR+1), LWORK-2*N-N*NR, 
+     $        N, V, LDV, CWORK(2*N+N*NR+1), LWORK-2*N-N*NR,
      $         RWORK, LRWORK, INFO )
          SCALEM  = RWORK(1)
          NUMRANK = NINT(RWORK(2))

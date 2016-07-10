@@ -214,7 +214,7 @@
      $                INFO )
          CALL CHKXER( 'ZGGHD3', INFOT, NOUT, LERR, OK )
          NT = NT + 9
-*     
+*
 *        ZHGEQZ
 *
          SRNAMT = 'ZHGEQZ'

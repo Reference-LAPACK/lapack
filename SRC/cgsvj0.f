@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CGSVJ0 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgsvj0.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgsvj0.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgsvj0.f"> 
+*> Download CGSVJ0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/cgsvj0.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/cgsvj0.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/cgsvj0.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CGSVJ0( JOBV, M, N, A, LDA, D, SVA, MV, V, LDV, EPS,
 *                          SFMIN, TOL, NSWEEP, WORK, LWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, LDV, LWORK, M, MV, N, NSWEEP
 *       REAL               EPS, SFMIN, TOL
@@ -30,7 +30,7 @@
 *       COMPLEX            A( LDA, * ), D( N ), V( LDV, * ), WORK( LWORK )
 *       REAL               SVA( N )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -188,10 +188,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date June 2016
 *
@@ -231,7 +231,7 @@
 *     ..
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * ), D( N ), V( LDV, * ), WORK( LWORK )
-      REAL               SVA( N ) 
+      REAL               SVA( N )
 *     ..
 *
 *  =====================================================================
@@ -288,7 +288,7 @@
          INFO = -5
       ELSE IF( ( RSVEC.OR.APPLV ) .AND. ( MV.LT.0 ) ) THEN
          INFO = -8
-      ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR. 
+      ELSE IF( ( RSVEC.AND.( LDV.LT.N ) ).OR.
      $         ( APPLV.AND.( LDV.LT.MV ) ) ) THEN
          INFO = -10
       ELSE IF( TOL.LE.EPS ) THEN
@@ -395,7 +395,7 @@
                   q = ISAMAX( N-p+1, SVA( p ), 1 ) + p - 1
                   IF( p.NE.q ) THEN
                      CALL CSWAP( M, A( 1, p ), 1, A( 1, q ), 1 )
-                     IF( RSVEC )CALL CSWAP( MVL, V( 1, p ), 1,  
+                     IF( RSVEC )CALL CSWAP( MVL, V( 1, p ), 1,
      $                                           V( 1, q ), 1 )
                      TEMP1 = SVA( p )
                      SVA( p ) = SVA( q )
@@ -419,7 +419,7 @@
 *        If properly implemented SCNRM2 is available, the IF-THEN-ELSE-END IF
 *        below should be replaced with "AAPP = SCNRM2( M, A(1,p), 1 )".
 *
-                     IF( ( SVA( p ).LT.ROOTBIG ) .AND.     
+                     IF( ( SVA( p ).LT.ROOTBIG ) .AND.
      $                    ( SVA( p ).GT.ROOTSFMIN ) ) THEN
                         SVA( p ) = SCNRM2( M, A( 1, p ), 1 )
                      ELSE
@@ -447,12 +447,12 @@
                            IF( AAQQ.GE.ONE ) THEN
                               ROTOK = ( SMALL*AAPP ).LE.AAQQ
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
-                                 AAPQ = ( CDOTC( M, A( 1, p ), 1, 
+                                 AAPQ = ( CDOTC( M, A( 1, p ), 1,
      $                                   A( 1, q ), 1 ) / AAQQ ) / AAPP
                               ELSE
-                                 CALL CCOPY( M, A( 1, p ), 1,   
+                                 CALL CCOPY( M, A( 1, p ), 1,
      $                                        WORK, 1 )
-                                 CALL CLASCL( 'G', 0, 0, AAPP, ONE, 
+                                 CALL CLASCL( 'G', 0, 0, AAPP, ONE,
      $                                M, 1, WORK, LDA, IERR )
                                  AAPQ = CDOTC( M, WORK, 1,
      $                                   A( 1, q ), 1 ) / AAQQ
@@ -460,22 +460,22 @@
                            ELSE
                               ROTOK = AAPP.LE.( AAQQ / SMALL )
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
-                                 AAPQ = ( CDOTC( M, A( 1, p ), 1, 
+                                 AAPQ = ( CDOTC( M, A( 1, p ), 1,
      $                                    A( 1, q ), 1 ) / AAQQ ) / AAPP
                               ELSE
-                                 CALL CCOPY( M, A( 1, q ), 1,   
+                                 CALL CCOPY( M, A( 1, q ), 1,
      $                                        WORK, 1 )
                                  CALL CLASCL( 'G', 0, 0, AAQQ,
      $                                         ONE, M, 1,
      $                                         WORK, LDA, IERR )
-                                 AAPQ = CDOTC( M, A( 1, p ), 1,   
+                                 AAPQ = CDOTC( M, A( 1, p ), 1,
      $                                   WORK, 1 ) / AAPP
                               END IF
                            END IF
 *
-                           OMPQ = AAPQ / ABS(AAPQ) 
-*                           AAPQ = AAPQ * CONJG( CWORK(p) ) * CWORK(q) 
-                           AAPQ1  = -ABS(AAPQ) 
+                           OMPQ = AAPQ / ABS(AAPQ)
+*                           AAPQ = AAPQ * CONJG( CWORK(p) ) * CWORK(q)
+                           AAPQ1  = -ABS(AAPQ)
                            MXAAPQ = AMAX1( MXAAPQ, -AAPQ1 )
 *
 *        TO rotate or NOT to rotate, THAT is the question ...
@@ -498,18 +498,18 @@
                                  THETA = -HALF*ABS( AQOAP-APOAQ )/AAPQ1
 *
                                  IF( ABS( THETA ).GT.BIGTHETA ) THEN
-* 
+*
                                     T  = HALF / THETA
                                     CS = ONE
 
                                     CALL CROT( M, A(1,p), 1, A(1,q), 1,
      $                                          CS, CONJG(OMPQ)*T )
                                     IF ( RSVEC ) THEN
-                                        CALL CROT( MVL, V(1,p), 1, 
+                                        CALL CROT( MVL, V(1,p), 1,
      $                                  V(1,q), 1, CS, CONJG(OMPQ)*T )
                                     END IF
-                                    
-                                    SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,  
+
+                                    SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
      $                                          ONE+T*APOAQ*AAPQ1 ) )
                                     AAPP = AAPP*SQRT( AMAX1( ZERO,
      $                                          ONE-T*AQOAP*AAPQ1 ) )
@@ -520,7 +520,7 @@
 *                 .. choose correct signum for THETA and rotate
 *
                                     THSIGN = -SIGN( ONE, AAPQ1 )
-                                    T = ONE / ( THETA+THSIGN*       
+                                    T = ONE / ( THETA+THSIGN*
      $                                   SQRT( ONE+THETA*THETA ) )
                                     CS = SQRT( ONE / ( ONE+T*T ) )
                                     SN = T*CS
@@ -528,17 +528,17 @@
                                     MXSINJ = AMAX1( MXSINJ, ABS( SN ) )
                                     SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
      $                                          ONE+T*APOAQ*AAPQ1 ) )
-                                    AAPP = AAPP*SQRT( AMAX1( ZERO,  
+                                    AAPP = AAPP*SQRT( AMAX1( ZERO,
      $                                      ONE-T*AQOAP*AAPQ1 ) )
 *
                                     CALL CROT( M, A(1,p), 1, A(1,q), 1,
      $                                          CS, CONJG(OMPQ)*SN )
                                     IF ( RSVEC ) THEN
-                                        CALL CROT( MVL, V(1,p), 1, 
+                                        CALL CROT( MVL, V(1,p), 1,
      $                                  V(1,q), 1, CS, CONJG(OMPQ)*SN )
-                                    END IF   
-                                 END IF 
-                                 D(p) = -D(q) * OMPQ 
+                                    END IF
+                                 END IF
+                                 D(p) = -D(q) * OMPQ
 *
                                  ELSE
 *              .. have to use modified Gram-Schmidt like transformation
@@ -663,7 +663,7 @@
                                  ROTOK = ( SMALL*AAQQ ).LE.AAPP
                               END IF
                               IF( AAPP.LT.( BIG / AAQQ ) ) THEN
-                                 AAPQ = ( CDOTC( M, A( 1, p ), 1, 
+                                 AAPQ = ( CDOTC( M, A( 1, p ), 1,
      $                                  A( 1, q ), 1 ) / AAQQ ) / AAPP
                               ELSE
                                  CALL CCOPY( M, A( 1, p ), 1,
@@ -681,7 +681,7 @@
                                  ROTOK = AAQQ.LE.( AAPP / SMALL )
                               END IF
                               IF( AAPP.GT.( SMALL / AAQQ ) ) THEN
-                                 AAPQ = ( CDOTC( M, A( 1, p ), 1, 
+                                 AAPQ = ( CDOTC( M, A( 1, p ), 1,
      $                                   A( 1, q ), 1 ) / AAQQ ) / AAPP
                               ELSE
                                  CALL CCOPY( M, A( 1, q ), 1,
@@ -694,8 +694,8 @@
                               END IF
                            END IF
 *
-                           OMPQ = AAPQ / ABS(AAPQ) 
-*                           AAPQ = AAPQ * CONJG(CWORK(p))*CWORK(q)   
+                           OMPQ = AAPQ / ABS(AAPQ)
+*                           AAPQ = AAPQ * CONJG(CWORK(p))*CWORK(q)
                            AAPQ1  = -ABS(AAPQ)
                            MXAAPQ = AMAX1( MXAAPQ, -AAPQ1 )
 *
@@ -716,11 +716,11 @@
 *
                                  IF( ABS( THETA ).GT.BIGTHETA ) THEN
                                     T  = HALF / THETA
-                                    CS = ONE 
+                                    CS = ONE
                                     CALL CROT( M, A(1,p), 1, A(1,q), 1,
      $                                          CS, CONJG(OMPQ)*T )
                                     IF( RSVEC ) THEN
-                                        CALL CROT( MVL, V(1,p), 1, 
+                                        CALL CROT( MVL, V(1,p), 1,
      $                                  V(1,q), 1, CS, CONJG(OMPQ)*T )
                                     END IF
                                     SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
@@ -741,13 +741,13 @@
                                     MXSINJ = AMAX1( MXSINJ, ABS( SN ) )
                                     SVA( q ) = AAQQ*SQRT( AMAX1( ZERO,
      $                                         ONE+T*APOAQ*AAPQ1 ) )
-                                    AAPP = AAPP*SQRT( AMAX1( ZERO,  
+                                    AAPP = AAPP*SQRT( AMAX1( ZERO,
      $                                         ONE-T*AQOAP*AAPQ1 ) )
 *
                                     CALL CROT( M, A(1,p), 1, A(1,q), 1,
-     $                                          CS, CONJG(OMPQ)*SN ) 
+     $                                          CS, CONJG(OMPQ)*SN )
                                     IF( RSVEC ) THEN
-                                        CALL CROT( MVL, V(1,p), 1, 
+                                        CALL CROT( MVL, V(1,p), 1,
      $                                  V(1,q), 1, CS, CONJG(OMPQ)*SN )
                                     END IF
                                  END IF
@@ -781,7 +781,7 @@
                                     CALL CLASCL( 'G', 0, 0, AAPP, ONE,
      $                                           M, 1, A( 1, p ), LDA,
      $                                           IERR )
-                                    CALL CAXPY( M, -CONJG(AAPQ), 
+                                    CALL CAXPY( M, -CONJG(AAPQ),
      $                                   WORK, 1, A( 1, p ), 1 )
                                     CALL CLASCL( 'G', 0, 0, ONE, AAPP,
      $                                           M, 1, A( 1, p ), LDA,

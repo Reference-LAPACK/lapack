@@ -7,7 +7,7 @@ set(LAPACK_INSTALL_EXPORT_NAME cblas-targets)
 include(FortranCInterface)
 ## Ensure that the fortran compiler and c compiler specified are compatible
 FortranCInterface_VERIFY()
-FortranCInterface_HEADER( ${LAPACK_BINARY_DIR}/include/cblas_mangling.h 
+FortranCInterface_HEADER( ${LAPACK_BINARY_DIR}/include/cblas_mangling.h
                           MACRO_NAMESPACE "F77_"
                           SYMBOL_NAMESPACE "F77_" )
 if( NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)

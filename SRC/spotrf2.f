@@ -2,14 +2,14 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       RECURSIVE SUBROUTINE SPOTRF2( UPLO, N, A, LDA, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            INFO, LDA, N
@@ -17,7 +17,7 @@
 *       .. Array Arguments ..
 *       REAL               A( LDA, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -41,7 +41,7 @@
 *>
 *> The subroutine calls itself to factor A11. Update and scale A21
 *> or A12, update A22 then call itself to factor A22.
-*> 
+*>
 *> \endverbatim
 *
 *  Arguments:
@@ -94,10 +94,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2015
 *
@@ -126,7 +126,7 @@
       PARAMETER          ( ONE = 1.0E+0, ZERO=0.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            UPPER            
+      LOGICAL            UPPER
       INTEGER            N1, N2, IINFO
 *     ..
 *     .. External Functions ..
@@ -189,7 +189,7 @@
          IF ( IINFO.NE.0 ) THEN
             INFO = IINFO
             RETURN
-         END IF    
+         END IF
 *
 *        Compute the Cholesky factorization A = U**T*U
 *
@@ -201,7 +201,7 @@
      $                  A( 1, 1 ), LDA, A( 1, N1+1 ), LDA )
 *
 *           Update and factor A22
-*          
+*
             CALL SSYRK( UPLO, 'T', N2, N1, -ONE, A( 1, N1+1 ), LDA,
      $                  ONE, A( N1+1, N1+1 ), LDA )
             CALL SPOTRF2( UPLO, N2, A( N1+1, N1+1 ), LDA, IINFO )
