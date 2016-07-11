@@ -20,7 +20,7 @@ macro(add_lapack_test output input target)
       -DINTDIR=${CMAKE_CFG_INTDIR}
       -P "${LAPACK_SOURCE_DIR}/TESTING/runtest.cmake")
   endif()
-endmacro(add_lapack_test)
+endmacro()
 
 if (BUILD_SINGLE)
 add_lapack_test(stest.out stest.in xlintsts)

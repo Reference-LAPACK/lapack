@@ -415,16 +415,16 @@ if( USE_XBLAS)
 endif()
 
 if(BUILD_DEPRECATED)
-	LIST(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
+	list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
     DEPRECATED/sgeqpf.f DEPRECATED/sgelsx.f DEPRECATED/sggsvd.f
     DEPRECATED/sggsvp.f DEPRECATED/slahrd.f DEPRECATED/slatzm.f DEPRECATED/stzrqf.f)
-	LIST(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f
+	list(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f
     DEPRECATED/dgeqpf.f DEPRECATED/dgelsx.f DEPRECATED/dggsvd.f
     DEPRECATED/dggsvp.f DEPRECATED/dlahrd.f DEPRECATED/dlatzm.f DEPRECATED/dtzrqf.f )
-  LIST(APPEND CLASRC DEPRECATED/cgegs.f DEPRECATED/cgegv.f
+  list(APPEND CLASRC DEPRECATED/cgegs.f DEPRECATED/cgegv.f
     DEPRECATED/cgeqpf.f DEPRECATED/cgelsx.f DEPRECATED/cggsvd.f
     DEPRECATED/cggsvp.f DEPRECATED/clahrd.f DEPRECATED/clatzm.f DEPRECATED/ctzrqf.f)
-  LIST(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
+  list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
     DEPRECATED/zgeqpf.f DEPRECATED/zgelsx.f DEPRECATED/zggsvd.f
     DEPRECATED/zggsvp.f DEPRECATED/zlahrd.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
 	message(STATUS "Building deprecated routines")

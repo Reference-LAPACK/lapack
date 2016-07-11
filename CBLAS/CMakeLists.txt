@@ -28,17 +28,17 @@ endforeach()
 endmacro()
 
 append_subdir_files(CBLAS_INCLUDE "include")
-INSTALL( FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h DESTINATION include )
+install( FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h DESTINATION include )
 
 # --------------------------------------------------
 if(BUILD_TESTING)
    add_subdirectory(testing)
    add_subdirectory(examples)
-endif(BUILD_TESTING)
+endif()
 
 if(NOT BLAS_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} blas)
-endif(NOT BLAS_FOUND)
+endif()
 
 # Export cblas targets from the
 # install tree, if any.
