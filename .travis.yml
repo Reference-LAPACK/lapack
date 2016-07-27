@@ -14,7 +14,14 @@ os:
   - osx
 
 script:
-  - cmake -DCMAKE_INSTALL_PREFIX=~/.local -DLAPACKE=ON -DCBLAS=ON .
+  - export SRC_DIR=$(pwd)
+  - export BLD_DIR=${SRC_DIR}/../lapack-travis-bld
+  - export INST_DIR=${SRC_DIR}/../lapack-travis-install
+  - mkdir -p ${BLD_DIR}
+  - cd ${BLD_DIR}
+# See issue #17 on github dashboard.  Once resolved, use -DCBLAS=ON
+#  - cmake -DCMAKE_INSTALL_PREFIX=${INST_DIR} -DLAPACKE=ON ${SRC_DIR}
+  - cmake -DCMAKE_INSTALL_PREFIX=${INST_DIR} -DLAPACKE=ON ${SRC_DIR}
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure
   - ctest -D ExperimentalBuild -j2
