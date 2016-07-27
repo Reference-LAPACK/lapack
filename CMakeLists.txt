@@ -42,6 +42,8 @@ configure_file(
 
 # Add the CMake directory for custon CMake modules
 set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
+include(PreventInSourceBuilds)
+include(PreventInBuildInstalls)
 
 if (UNIX)
    if ( "${CMAKE_Fortran_COMPILER}" MATCHES "ifort" )
