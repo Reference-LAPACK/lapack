@@ -15,4 +15,9 @@ os:
 
 script:
   - cmake -DCMAKE_INSTALL_PREFIX=~/.local -DLAPACKE=ON -DCBLAS=ON .
-  - make install -j2 && ctest -j2 --output-on-failure --timeout 100
+  - ctest -D ExperimentalStart
+  - ctest -D ExperimentalConfigure
+  - ctest -D ExperimentalBuild -j2
+  - ctest -D ExperimentalTest --schedule-random -j2 --output-on-failure --timeout 100
+  - ctest -D ExperimentalSubmit
+  - make install -j2
