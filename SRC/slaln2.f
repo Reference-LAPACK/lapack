@@ -127,7 +127,7 @@
 *> \param[in] D2
 *> \verbatim
 *>          D2 is REAL
-*>          The 2,2 element in the diagonal matrix D.  Not used if NW=1.
+*>          The 2,2 element in the diagonal matrix D.  Not used if NA=1.
 *> \endverbatim
 *>
 *> \param[in] B
