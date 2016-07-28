@@ -1,4 +1,10 @@
-cmake_minimum_required(VERSION 2.8.7)
+##
+## HINTS: ctest -Ddashboard_model=Continuous   -S $(pwd)/lapack/lapack_build.cmake
+## HINTS: ctest -Ddashboard_model=Experimental -S $(pwd)/lapack/lapack_build.cmake
+## HINTS: ctest -Ddashboard_model=Nightly      -S $(pwd)/lapack/lapack_build.cmake
+##
+
+cmake_minimum_required(VERSION 2.8.10)
 ###################################################################
 # The values in this section must always be provided
 ###################################################################
@@ -72,13 +78,10 @@ if(NOT DEFINED parallel)
   set(parallel 1)
 endif()
 
-# find CVS
-find_program(SVN svn PATHS $ENV{HOME}/bin /vol/local/bin)
-if(NOT SVN)
-  message(FATAL_ERROR "SVN not found")
-endif()
+find_package(Git REQUIRED)
 
-set(CTEST_UPDATE_COMMAND       ${SVN})
+set(CTEST_GIT_COMMAND     ${GIT_EXECUTABLE})
+set(CTEST_UPDATE_COMMAND  ${GIT_EXECUTABLE})
 macro(getuname name flag)
   exec_program("${UNAME}" ARGS "${flag}" OUTPUT_VARIABLE "${name}")
   string(REGEX REPLACE "[/\\\\+<> #]" "-" "${name}" "${${name}}")
@@ -108,9 +111,8 @@ endif()
 set(BUILDNAME "${osname}${osver}${osrel}${cpu}-${compiler}")
 message("BUILDNAME: ${BUILDNAME}")
 
-# this is the cvs module name that should be checked out
-set (CTEST_MODULE_NAME lapack)
-set (CTEST_DIR_NAME "${CTEST_MODULE_NAME}SVN")
+# this is the module name that should be checked out
+set (CTEST_DIR_NAME "lapackGIT")
 
 # Settings:
 message("NOSPACES = ${NOSPACES}")
@@ -123,11 +125,24 @@ set(CTEST_SITE              "${hostname}")
 set(CTEST_BUILD_NAME        "${BUILDNAME}")
 set(CTEST_TEST_TIMEOUT           "36000")
 
-# CVS command and the checkout command
+# GIT command and the checkout command
+# Select Git source to use.
+if(NOT DEFINED dashboard_git_url)
+  set(dashboard_git_url "https://github.com/Reference-LAPACK/lapack.git")
+endif()
+if(NOT DEFINED dashboard_git_branch)
+  set(dashboard_git_branch master)
+endif()
+
 if(NOT EXISTS "${CTEST_DASHBOARD_ROOT}/${CTEST_DIR_NAME}")
   set(CTEST_CHECKOUT_COMMAND
-    "\"${CTEST_UPDATE_COMMAND}\" co https://icl.cs.utk.edu/svn/lapack-dev/lapack/trunk ${CTEST_DIR_NAME}")
+    "\"${CTEST_UPDATE_COMMAND}\" clone ${dashboard_git_url} ${CTEST_DIR_NAME}")
 endif()
+
+# Explicitly specify the remote as "origin". This ensure we are pulling from
+# the correct remote and prevents command failures when the git tracking
+# branch has not been configured.
+set(CTEST_GIT_UPDATE_CUSTOM "${CTEST_GIT_COMMAND}" pull origin ${dashboard_git_branch})
 
 # Set the generator and build configuration
 if(NOT DEFINED CTEST_CMAKE_GENERATOR)
@@ -161,7 +176,7 @@ set(CTEST_NOTES_FILES  "${CTEST_NOTES_FILES}"
   )
 
 # check for parallel
-if(parallel GREATER 10)
+if(parallel GREATER 1 )
   if(NOT CTEST_BUILD_COMMAND)
     set(CTEST_BUILD_COMMAND "make -j${parallel} -i")
   endif()
@@ -179,13 +194,17 @@ set( CACHE_CONTENTS "
 SITE:STRING=${hostname}
 BUILDNAME:STRING=${BUILDNAME}
 DART_ROOT:PATH=
-SVNCOMMAND:FILEPATH=${CTEST_UPDATE_COMMAND}
+GITCOMMAND:FILEPATH=${CTEST_UPDATE_COMMAND}
 DROP_METHOD:STRING=https
 DART_TESTING_TIMEOUT:STRING=${CTEST_TEST_TIMEOUT}
+#Set build type to use optimized build
+CMAKE_BUILD_TYPE:STRING=Release
 # Enable LAPACKE
 LAPACKE:OPTION=ON
+CBLAS:OPTION=ON
 # Use Reference BLAS by default
 USE_OPTIMIZED_BLAS:OPTION=OFF
+USE_OPTIMIZED_LAPACK:OPTION=OFF
 " )
 
 
@@ -203,8 +222,16 @@ message("CTest command: ${CTEST_COMMAND}")
 # any quotes inside of this string if you use it
 file(WRITE "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" "${CACHE_CONTENTS}")
 
+# Select the model (Nightly, Experimental, Continuous).
+if(NOT DEFINED dashboard_model)
+  set(dashboard_model Nightly)
+endif()
+if(NOT "${dashboard_model}" MATCHES "^(Nightly|Experimental|Continuous)$")
+  message(FATAL_ERROR "dashboard_model must be Nightly, Experimental, or Continuous")
+endif()
+
 message("Start dashboard...")
-ctest_start(Nightly)
+ctest_start(${dashboard_model})
 #ctest_start(Experimental)
 message("  Update")
 ctest_update(SOURCE "${CTEST_SOURCE_DIRECTORY}" RETURN_VALUE res)
