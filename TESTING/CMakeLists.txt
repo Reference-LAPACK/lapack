@@ -307,10 +307,13 @@ if (BUILD_COMPLEX)
 endif()
 
 # ==============================================================================
-
-execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${LAPACK_SOURCE_DIR}/lapack_testing.py ${LAPACK_BINARY_DIR})
- add_test(
-  NAME LAPACK_Test_Summary
-  WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
-  COMMAND ${PYTHON_EXECUTABLE} "lapack_testing.py"
- )
+# Only run this test if python 2.7 or greater is found
+if(PYTHONINTERP_FOUND)
+  message(STATUS "Running Summary")
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${LAPACK_SOURCE_DIR}/lapack_testing.py ${LAPACK_BINARY_DIR})
+   add_test(
+    NAME LAPACK_Test_Summary
+    WORKING_DIRECTORY ${LAPACK_BINARY_DIR}
+    COMMAND ${PYTHON_EXECUTABLE} "lapack_testing.py"
+   )
+endif()

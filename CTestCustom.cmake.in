@@ -43,4 +43,10 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   "Character string truncated to length 1 on assignment"
 )
 
-set(CTEST_CUSTOM_POST_TEST "./lapack_testing.py -s -d TESTING")
+# Only rung post test if suitable python interpreter was found
+set(PYTHONINTERP_FOUND @PYTHONINTERP_FOUND@)
+set(PYTHON_EXECUTABLE  @PYTHON_EXECUTABLE@)
+if(PYTHONINTERP_FOUND)
+  set(CTEST_CUSTOM_POST_TEST "${PYTHON_EXECUTABLE} ./lapack_testing.py -s -d TESTING")
+endif()
+
