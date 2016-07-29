@@ -41,6 +41,9 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   # Warnings caused by string truncation in the test code.  The truncation is
   # intentional
   "Character string truncated to length 1 on assignment"
+
+  # Warnings caused by NFS build directories have out-of-sync times
+  "Warning: File .* has modification time .* in the future"
 )
 
 # Only rung post test if suitable python interpreter was found
