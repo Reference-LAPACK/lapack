@@ -92,7 +92,8 @@
 *> \param[in] LDQ
 *> \verbatim
 *>          LDQ is INTEGER
-*>          The leading dimension of the array Q.  LDQ >= max(1,N).
+*>          The leading dimension of the array Q.  LDQ >= 1, and if
+*>          COMPQ = 'V', LDQ >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in,out] IFST
