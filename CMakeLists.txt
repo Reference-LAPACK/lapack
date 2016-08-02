@@ -280,9 +280,9 @@ option(LAPACKE "Build LAPACKE" OFF)
 option(LAPACKE_WITH_TMG "Build LAPACKE with tmglib routines" OFF)
 if (LAPACKE_WITH_TMG)
   set(LAPACKE ON)
-  if(NOT BUILD_TESTING)
+endif()
+if(BUILD_TESTING OR LAPACKE_WITH_TMG) #already included, avoid double inclusion
      add_subdirectory(TESTING/MATGEN)
-   endif()
 endif()
 
 if(LAPACKE)
