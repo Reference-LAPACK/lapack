@@ -41,6 +41,15 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   # Warnings caused by string truncation in the test code.  The truncation is
   # intentional
   "Character string truncated to length 1 on assignment"
+
+  # Warnings caused by NFS build directories have out-of-sync times
+  "Warning: File .* has modification time .* in the future"
 )
 
-set(CTEST_CUSTOM_POST_TEST "./lapack_testing.py -s -d TESTING")
+# Only rung post test if suitable python interpreter was found
+set(PYTHONINTERP_FOUND @PYTHONINTERP_FOUND@)
+set(PYTHON_EXECUTABLE  @PYTHON_EXECUTABLE@)
+if(PYTHONINTERP_FOUND)
+  set(CTEST_CUSTOM_POST_TEST "${PYTHON_EXECUTABLE} ./lapack_testing.py -s -d TESTING")
+endif()
+

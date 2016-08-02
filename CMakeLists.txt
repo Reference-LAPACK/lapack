@@ -37,7 +37,7 @@ set(
 configure_file(
   "${LAPACK_SOURCE_DIR}/CTestCustom.cmake.in"
   "${LAPACK_BINARY_DIR}/CTestCustom.cmake"
-  COPYONLY
+  @ONLY
 )
 
 # Add the CMake directory for custon CMake modules
@@ -85,10 +85,12 @@ if ( CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq" )
 endif()
 
 # Get Python
-find_package(PythonInterp)
-message(STATUS "Looking for Python found - ${PYTHONINTERP_FOUND}")
+message(STATUS "Looking for Python greater than 2.6 - ${PYTHONINTERP_FOUND}")
+find_package(PythonInterp 2.7) # lapack_testing.py uses features from python 2.7 and greater
 if (PYTHONINTERP_FOUND)
    message(STATUS "Using Python version ${PYTHON_VERSION_STRING}")
+else()
+   message(STATUS "No suitable Python version found, so skipping summary tests.")
 endif()
 # --------------------------------------------------
 
