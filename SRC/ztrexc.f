@@ -170,9 +170,9 @@
          INFO = -4
       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.MAX( 1, N ) ) ) THEN
          INFO = -6
-      ELSE IF( IFST.LT.1 .OR. IFST.GT.N ) THEN
+      ELSE IF(( IFST.LT.1 .OR. IFST.GT.N ).AND.( N.GT.0 )) THEN
          INFO = -7
-      ELSE IF( ILST.LT.1 .OR. ILST.GT.N ) THEN
+      ELSE IF(( ILST.LT.1 .OR. ILST.GT.N ).AND.( N.GT.0 )) THEN
          INFO = -8
       END IF
       IF( INFO.NE.0 ) THEN
