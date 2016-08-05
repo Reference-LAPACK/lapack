@@ -51,7 +51,7 @@ lapack_int LAPACKE_ctrexc_work( int matrix_layout, char compq, lapack_int n,
         lapack_complex_float* t_t = NULL;
         lapack_complex_float* q_t = NULL;
         /* Check leading dimension(s) */
-        if( ldq < n ) {
+        if( ldq < n && LAPACKE_lsame( compq, 'v' ) ) {
             info = -7;
             LAPACKE_xerbla( "LAPACKE_ctrexc_work", info );
             return info;
