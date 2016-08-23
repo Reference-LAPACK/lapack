@@ -4,8 +4,8 @@
 #######################################################################
 
 macro(add_cblas_test output input target)
-  set(TEST_INPUT "${LAPACK_SOURCE_DIR}/cblas/testing/${input}")
-  set(TEST_OUTPUT "${LAPACK_BINARY_DIR}/cblas/testing/${output}")
+  set(TEST_INPUT "${CMAKE_CURRENT_SOURCE_DIR}/${input}")
+  set(TEST_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${output}")
   set(testName "${target}")
 
   if(EXISTS "${TEST_INPUT}")
