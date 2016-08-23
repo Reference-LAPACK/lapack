@@ -24,7 +24,7 @@ script:
   - cd ${BLD_DIR}
 # See issue #17 on github dashboard.  Once resolved, use -DCBLAS=ON
 #  - cmake -DCMAKE_INSTALL_PREFIX=${INST_DIR} -DLAPACKE=ON ${SRC_DIR}
-  - cmake -DBUILDNAME:STRING="travis-${TRAVIS_OS_NAME}-${BRANCH}" -DCMAKE_INSTALL_PREFIX=${INST_DIR} -DCBLAS:BOOL=ON -DLAPACKE:BOOL=ON -DLAPACKE_WITH_TMG:BOOL=ON ${SRC_DIR}
+  - cmake -DBUILDNAME:STRING="travis-${TRAVIS_OS_NAME}-${BRANCH}" -DCMAKE_INSTALL_PREFIX=${INST_DIR} -DCBLAS:BOOL=ON -DLAPACKE:BOOL=ON -DBUILD_TESTING=ON -DLAPACKE_WITH_TMG:BOOL=ON ${SRC_DIR}
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure
   - ctest -D ExperimentalBuild -j2
