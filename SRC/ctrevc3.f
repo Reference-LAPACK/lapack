@@ -593,7 +593,7 @@
 *              When the number of vectors stored reaches NB,
 *              or if this was last vector, do the GEMM
                IF( (IV.EQ.NB) .OR. (KI.EQ.N) ) THEN
-                  CALL CGEMM( 'N', 'N', N, IV, N-KI+IV, ONE,
+                  CALL CGEMM( 'N', 'N', N, IV, N-KI+IV, CONE,
      $                        VL( 1, KI-IV+1 ), LDVL,
      $                        WORK( KI-IV+1 + (1)*N ), N,
      $                        CZERO,
