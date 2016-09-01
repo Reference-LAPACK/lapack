@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> DGEQR2 computes a QR factorization of a real m by n matrix A:
+*> DGEQR2P computes a QR factorization of a real m by n matrix A:
 *> A = Q * R. The diagonal entries of R are nonnegative.
 *> \endverbatim
 *
