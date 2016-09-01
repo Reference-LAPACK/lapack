@@ -130,7 +130,7 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, ZLASET
+      EXTERNAL           LSAME
       LOGICAL            LSAME
 *     ..
 *     .. Intrinsic Functions ..
