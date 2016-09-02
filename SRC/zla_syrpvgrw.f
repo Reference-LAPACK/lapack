@@ -150,7 +150,7 @@
       INTRINSIC          ABS, REAL, DIMAG, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           LSAME, ZLASET
+      EXTERNAL           LSAME
       LOGICAL            LSAME
 *     ..
 *     .. Statement Functions ..

@@ -147,7 +147,7 @@
       COMPLEX*16         ZDUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, ZLASET
+      EXTERNAL           LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, DIMAG, MAX, MIN

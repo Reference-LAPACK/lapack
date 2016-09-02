@@ -128,7 +128,7 @@
       COMPLEX            ZDUM
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, CLASET
+      EXTERNAL           LSAME
       LOGICAL            LSAME
 *     ..
 *     .. Intrinsic Functions ..

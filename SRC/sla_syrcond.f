@@ -178,7 +178,7 @@
       EXTERNAL           LSAME, ISAMAX, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SLACN2, SLATRS, SRSCL, XERBLA, SSYTRS
+      EXTERNAL           SLACN2, XERBLA, SSYTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX

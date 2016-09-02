@@ -150,7 +150,7 @@
       INTRINSIC          ABS, REAL, AIMAG, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           LSAME, CLASET
+      EXTERNAL           LSAME
       LOGICAL            LSAME
 *     ..
 *     .. Statement Functions ..

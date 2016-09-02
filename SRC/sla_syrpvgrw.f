@@ -147,7 +147,7 @@
       INTRINSIC          ABS, MAX, MIN
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, SLASET
+      EXTERNAL           LSAME
       LOGICAL            LSAME
 *     ..
 *     .. Executable Statements ..
