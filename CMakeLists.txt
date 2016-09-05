@@ -151,16 +151,26 @@ set(SECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
 set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
 set(PKG_CONFIG_DIR ${LIBRARY_DIR}/pkgconfig)
 
+
+# By default static library
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF )
+
+option(BUILD_TESTING "Build tests" OFF)
+
+# deprecated LAPACK routines
+option(BUILD_DEPRECATED "Build deprecated routines" OFF)
+
 # --------------------------------------------------
 # Precision to build
 # By default all precisions are generated
-
+option(BUILD_SINGLE "Build LAPACK Single Precision" ON)
+option(BUILD_DOUBLE "Build LAPACK Double Precision" ON)
+option(BUILD_COMPLEX "Build LAPACK Complex Precision" ON)
+option(BUILD_COMPLEX16 "Build LAPACK Double Complex Precision" ON)
 
 # --------------------------------------------------
 # Subdirectories that need to be processed
-
 option(USE_OPTIMIZED_BLAS "Whether or not to use an optimized BLAS library instead of included netlib BLAS" OFF)
-
 
 # Check the usage of the user provided BLAS libraries
 if(BLAS_LIBRARIES)
@@ -246,10 +256,6 @@ endif ()
 if(NOT LATESTLAPACK_FOUND)
   message(STATUS "Using supplied NETLIB LAPACK implementation")
   set( LAPACK_LIBRARIES lapack )
-  option(BUILD_SINGLE "Build LAPACK Single Precision" ON)
-  option(BUILD_DOUBLE "Build LAPACK Double Precision" ON)
-  option(BUILD_COMPLEX "Build LAPACK Complex Precision" ON)
-  option(BUILD_COMPLEX16 "Build LAPACK Double Complex Precision" ON)
   add_subdirectory(SRC)
 else()
   set( CMAKE_EXE_LINKER_FLAGS
@@ -267,9 +273,6 @@ message(STATUS "BUILD TESTING : ${BUILD_TESTING}" )
 if(BUILD_TESTING)
   add_subdirectory(TESTING)
 endif()
-
-# deprecated LAPACK routines
-option(BUILD_DEPRECATED "Build deprecated routines" OFF)
 
 # --------------------------------------------------
 # LAPACKE
@@ -319,10 +322,6 @@ include(CPack)
 
 
 # --------------------------------------------------
-# By default static library
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF )
-option(BUILD_STATIC_LIBS "Build static libraries" ON )
-#option(BUILD_SHARED_LIBS "Build shared libraries" ON )
 
 if(NOT BLAS_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} blas)
