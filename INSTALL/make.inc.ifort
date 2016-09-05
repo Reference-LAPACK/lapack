@@ -13,9 +13,9 @@ SHELL = /bin/sh
 #  and desired load options for your machine.
 #
 FORTRAN  = ifort
-OPTS     = -O3 -fp-model strict
+OPTS     = -O3 -fp-model strict -assume protect_parens
 DRVOPTS  = $(OPTS)
-NOOPT    = -O0 -fp-model strict
+NOOPT    = -O0 -fp-model strict -assume protect_parens
 LOADER   = ifort
 LOADOPTS =
 #
