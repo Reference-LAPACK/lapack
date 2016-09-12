@@ -18,8 +18,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL,
-*                           VR, LDVR, MM, M, WORK, LWORK, RWORK, INFO )
+*       SUBROUTINE ZTREVC3( SIDE, HOWMNY, SELECT, N, T, LDT, VL, LDVL, VR,
+*      $                    LDVR, MM, M, WORK, LWORK, RWORK, LRWORK, INFO)
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          HOWMNY, SIDE
