@@ -190,7 +190,6 @@
       INTEGER            I, ICA, IEXC, IRA, J, K, L, M
       REAL               C, CA, F, G, R, RA, S, SFMAX1, SFMAX2, SFMIN1,
      $                   SFMIN2
-      COMPLEX            CDUM
 *     ..
 *     .. External Functions ..
       LOGICAL            SISNAN, LSAME

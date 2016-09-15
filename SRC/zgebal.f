@@ -189,7 +189,6 @@
       INTEGER            I, ICA, IEXC, IRA, J, K, L, M
       DOUBLE PRECISION   C, CA, F, G, R, RA, S, SFMAX1, SFMAX2, SFMIN1,
      $                   SFMIN2
-      COMPLEX*16         CDUM
 *     ..
 *     .. External Functions ..
       LOGICAL            DISNAN, LSAME
