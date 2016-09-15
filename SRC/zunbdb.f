@@ -314,7 +314,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            COLMAJOR, LQUERY
-      INTEGER            I, LWORKMIN, LWORKOPT, PI1, QI1
+      INTEGER            I, LWORKMIN, LWORKOPT
       DOUBLE PRECISION   Z1, Z2, Z3, Z4
 *     ..
 *     .. External Subroutines ..
