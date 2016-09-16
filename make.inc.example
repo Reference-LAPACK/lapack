@@ -26,7 +26,7 @@ LOADOPTS =
 #  Comment out the following line to include deprecated routines to the
 #  LAPACK library.
 #
-#MAKEDEPRECATED = Yes
+#BUILD_DEPRECATED = Yes
 #
 # Timer for the SECOND and DSECND routines
 #
