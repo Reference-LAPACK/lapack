@@ -95,7 +95,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION DLANST( NORM, N, D, E )

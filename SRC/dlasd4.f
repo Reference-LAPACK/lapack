@@ -142,7 +142,7 @@
 *
 *> \date November 2013
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *> \par Contributors:
 *  ==================

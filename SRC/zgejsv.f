@@ -480,6 +480,7 @@
 *>  this extra QRF step easily. The implementer can also improve data movement
 *>  (matrix transpose, matrix copy, matrix transposed copy) - this
 *>  implementation of ZGEJSV uses only the simplest, naive data movement.
+*> \endverbatim
 *
 *> \par Contributors:
 *  ==================

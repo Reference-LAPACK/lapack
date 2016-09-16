@@ -441,7 +441,6 @@
 *  =====================
 *>
 *> \verbatim
-*>
 *>  CGEJSV implements a preconditioned Jacobi SVD algorithm. It uses CGEQP3,
 *>  CGEQRF, and CGELQF as preprocessors and preconditioners. Optionally, an
 *>  additional row pivoting can be used as a preprocessor, which in some
@@ -480,6 +479,7 @@
 *>  this extra QRF step easily. The implementer can also improve data movement
 *>  (matrix transpose, matrix copy, matrix transposed copy) - this
 *>  implementation of CGEJSV uses only the simplest, naive data movement.
+*> \endverbatim
 *
 *> \par Contributors:
 *  ==================

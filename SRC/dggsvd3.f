@@ -330,7 +330,7 @@
 *
 *> \date August 2015
 *
-*> \ingroup doubleOTHERsing
+*> \ingroup doubleGEsing
 *
 *> \par Contributors:
 *  ==================

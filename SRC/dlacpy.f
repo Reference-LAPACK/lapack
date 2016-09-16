@@ -98,7 +98,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE DLACPY( UPLO, M, N, A, LDA, B, LDB )

@@ -63,7 +63,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       REAL             FUNCTION SLAPY3( X, Y, Z )

@@ -139,7 +139,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE DLARRK( N, IW, GL, GU,

@@ -69,7 +69,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       LOGICAL FUNCTION SLAISNAN( SIN1, SIN2 )

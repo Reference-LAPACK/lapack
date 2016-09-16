@@ -105,7 +105,7 @@
 *
 *> \date November 2015
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE DLASET( UPLO, M, N, ALPHA, BETA, A, LDA )

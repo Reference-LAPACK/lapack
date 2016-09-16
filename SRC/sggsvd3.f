@@ -330,7 +330,7 @@
 *
 *> \date August 2015
 *
-*> \ingroup realOTHERsing
+*> \ingroup realGEsing
 *
 *> \par Contributors:
 *  ==================

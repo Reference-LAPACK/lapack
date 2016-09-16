@@ -65,7 +65,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE XERBLA( SRNAME, INFO )

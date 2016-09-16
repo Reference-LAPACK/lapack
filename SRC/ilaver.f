@@ -49,7 +49,7 @@
 *
 *> \date June 2016
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )

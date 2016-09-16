@@ -1,4 +1,4 @@
-*> \brief <b> CGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (simple driver)
+*> \brief <b> CGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (simple driver) </b>
 *
 *  =========== DOCUMENTATION ===========
 *

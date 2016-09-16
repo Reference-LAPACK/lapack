@@ -98,7 +98,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE SLASSQ( N, X, INCX, SCALE, SUMSQ )

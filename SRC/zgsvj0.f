@@ -1,4 +1,4 @@
-*> \brief \b ZGSVJ0 pre-processor for the routine zgesvj.
+*> \brief <b> ZGSVJ0 pre-processor for the routine zgesvj. </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -112,6 +112,7 @@
 *>          the matrix A*diag(D).
 *>          On exit, SVA contains the Euclidean norms of the columns of
 *>          the matrix A_onexit*diag(D_onexit).
+*> \endverbatim
 *>
 *> \param[in] MV
 *> \verbatim

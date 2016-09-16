@@ -335,7 +335,7 @@
 *
 *> \date August 2015
 *
-*> \ingroup complexOTHERsing
+*> \ingroup complexGEsing
 *
 *> \par Contributors:
 *  ==================

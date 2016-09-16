@@ -497,7 +497,7 @@
 *
 *> \date November 2015
 *
-*> \ingroup doubleSYdriver
+*> \ingroup doubleSYsolve
 *
 *  =====================================================================
       SUBROUTINE DSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,

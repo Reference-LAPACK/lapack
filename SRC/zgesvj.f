@@ -1,4 +1,4 @@
-*> \brief \b ZGESVJ
+*> \brief <b> ZGESVJ </b>
 *
 *  =========== DOCUMENTATION ===========
 *

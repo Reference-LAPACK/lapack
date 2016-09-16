@@ -86,7 +86,7 @@
 *
 *> \date January 2013
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup realOTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE SLADIV( A, B, C, D, P, Q )
@@ -173,6 +173,7 @@
 *
       END
 
+*> \ingroup realOTHERauxiliary
 
 
       SUBROUTINE SLADIV1( A, B, C, D, P, Q )
@@ -212,6 +213,8 @@
 *     End of SLADIV1
 *
       END
+
+*> \ingroup realOTHERauxiliary
 
       REAL FUNCTION SLADIV2( A, B, C, D, R, T )
 *

@@ -500,7 +500,7 @@
 *
 *> \date November 2015
 *
-*> \ingroup realSYdriver
+*> \ingroup realSYsolve
 *
 *  =====================================================================
       SUBROUTINE SSYSVXX( FACT, UPLO, N, NRHS, A, LDA, AF, LDAF, IPIV,

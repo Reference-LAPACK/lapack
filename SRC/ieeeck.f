@@ -77,7 +77,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       INTEGER          FUNCTION IEEECK( ISPEC, ZERO, ONE )

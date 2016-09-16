@@ -95,7 +95,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       REAL             FUNCTION SLANST( NORM, N, D, E )

@@ -1,4 +1,4 @@
-*> \brief \b CSYCON_ROOK
+*> \brief <b> CSYCON_ROOK </b>
 *
 *  =========== DOCUMENTATION ===========
 *

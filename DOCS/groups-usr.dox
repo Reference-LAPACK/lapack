@@ -14,6 +14,9 @@
  * @defgroup SY  Symmetric Matrix
  *   @ingroup lapack
  *   This is the group of Symmetric Matrix routines
+ * @defgroup HE  Hermitian Matrix
+ *   @ingroup lapack
+ *   This is the group of Hermitian Matrix routines
  * @defgroup PO  Positive Definite Matrix
  *   @ingroup lapack
  *   This is the group of Positive Definite routines
@@ -23,9 +26,18 @@
  * @defgroup PT  Positive Definite tridiagonal Matrix
  *   @ingroup lapack
  *   This is the group of Positive Definite tridiagonal routines
- * @defgroup auxOTHERauxiliary  Other Auxiliary Routines
+ * @defgroup OTHEReigen  Eigenvalue
+ *   @ingroup lapack
+ *   This is the group of Other Eigenvalue routines
+ * @defgroup OTHERauxiliary  Other Auxiliary Routines
  *   @ingroup lapack
  *   This is the group of Other Auxiliary routines
+ * @defgroup OTHERcomputational  Other Computational Routines
+ *   @ingroup lapack
+ *   This is the group of Other Computational routines
+ * @defgroup OTHERsolve  Other Solve Routines
+ *   @ingroup lapack
+ *   This is the group of Other Solve routines
  *
  ****
  *
@@ -37,6 +49,9 @@
  *   This is the group of Linear Solve Driver routines
  * @defgroup solveSY  Linear Solve
  *   @ingroup SY
+ *   This is the group of Linear Solve Driver routines
+ * @defgroup solveHE  Linear Solve
+ *   @ingroup HE
  *   This is the group of Linear Solve Driver routines
  * @defgroup solvePO  Linear Solve
  *   @ingroup PO
@@ -53,27 +68,42 @@
  * @defgroup eigenSY  Eigenvalue
  *   @ingroup SY
  *   This is the group of Eigenvalue Driver routines
+ * @defgroup eigenHE  Eigenvalue
+ *   @ingroup HE
+ *   This is the group of Eigenvalue Driver routines
  * @defgroup singGE  Singular Value
  *   @ingroup GE
  *   This is the group of Singular Value Driver routines
  * @defgroup computationalGE  Computational routines
  *   @ingroup GE
  *   This is the group of Computational routines
+ * @defgroup variantsGEcomputational  Variants Computational routines
+ *   @ingroup GE
+ *   This is the group of Variants Computational routines
  * @defgroup computationalGB  Computational routines
  *   @ingroup GB
  *   This is the group of Computational routines
  * @defgroup computationalSY  Computational routines
  *   @ingroup SY
  *   This is the group of Computational routines
+ * @defgroup computationalHE  Computational routines
+ *   @ingroup HE
+ *   This is the group of Computational routines
  * @defgroup computationalPO  Computational routines
  *   @ingroup PO
  *   This is the group of Computational routines
+ * @defgroup variantsPOcomputational  Variants Computational routines
+ *   @ingroup PO
+ *   This is the group of Variants Computational routines
  * @defgroup computationalGT  Computational routines
  *   @ingroup GT
  *   This is the group of Computational routines
  * @defgroup computationalPT  Computational routines
  *   @ingroup PT
  *   This is the group of Computational routines
+ * @defgroup variantsOTHERcomputational  Variants Computational routines
+ *   @ingroup OTHERcomputational
+ *   This is the group of Variants Computational routines
  * @defgroup auxiliaryGE  Auxiliary routines
  *   @ingroup GE
  *   This is the group of Auxiliary routines
@@ -82,6 +112,9 @@
  *   This is the group of Auxiliary routines
  * @defgroup auxiliarySY  Auxiliary routines
  *   @ingroup SY
+ *   This is the group of Auxiliary routines
+ * @defgroup auxiliaryHE  Auxiliary routines
+ *   @ingroup HE
  *   This is the group of Auxiliary routines
  * @defgroup auxiliaryPO  Auxiliary routines
  *   @ingroup PO
@@ -158,6 +191,18 @@
  * @defgroup doubleGTauxiliary double
  *   @ingroup auxiliaryGT 
  *   This is the group of double auxiliary functions for GT matrices
+ * @defgroup doubleOTHERauxiliary  double
+ *   @ingroup OTHERauxiliary
+ *   This is the group of double other auxiliary routines
+ * @defgroup doubleOTHERcomputational  double
+ *   @ingroup OTHERcomputational
+ *   This is the group of double other Computational routines
+ * @defgroup doubleOTHERsolve  double Other Solve Routines
+ *   @ingroup OTHERsolve
+ *   This is the group of double Other Solve routines
+ * @defgroup doubleOTHEReigen  double
+ *   @ingroup OTHEReigen
+ *   This is the group of double Other Eigenvalue routines
  *
  ****
  *
@@ -224,6 +269,18 @@
  * @defgroup realPTauxiliary real
  *   @ingroup auxiliaryPT
  *   This is the group of real auxiliary functions for PT matrices
+ * @defgroup realOTHERauxiliary  real
+ *   @ingroup OTHERauxiliary
+ *   This is the group of real other auxiliary routines
+ * @defgroup realOTHERcomputational  real
+ *   @ingroup OTHERcomputational
+ *   This is the group of real other Computational routines
+ * @defgroup realOTHERsolve  real Other Solve Routines
+ *   @ingroup OTHERsolve
+ *   This is the group of real Other Solve routines
+ * @defgroup realOTHEReigen  real
+ *   @ingroup OTHEReigen
+ *   This is the group of real Other Eigenvalue routines
  *
  ****
  *
@@ -236,6 +293,9 @@
  * @defgroup complexSYsolve complex
  *   @ingroup solveSY
  *   This is the group of complex solve driver functions for SY matrices
+ * @defgroup complexHEsolve complex
+ *   @ingroup solveHE
+ *   This is the group of complex solve driver functions for HE matrices
  * @defgroup complexGBsolve complex
  *   @ingroup solveGB
  *   This is the group of complex solve driver functions for GB matrices
@@ -251,6 +311,9 @@
  * @defgroup complexSYeigen complex
  *   @ingroup eigenSY
  *   This is the group of complex eigenvalue driver functions for SY matrices
+ * @defgroup complexHEeigen complex
+ *   @ingroup eigenHE
+ *   This is the group of complex eigenvalue driver functions for HE matrices
  * @defgroup complexGEsing complex
  *   @ingroup singGE 
  *   This is the group of complex singular value driver functions for GE matrices
@@ -263,6 +326,9 @@
  * @defgroup complexSYcomputational complex
  *   @ingroup computationalSY 
  *   This is the group of complex computational functions for SY matrices
+ * @defgroup complexHEcomputational complex
+ *   @ingroup computationalHE 
+ *   This is the group of complex computational functions for HE matrices
  * @defgroup complexGBcomputational complex
  *   @ingroup computationalGB
  *   This is the group of complex computational functions for GB matrices
@@ -281,9 +347,24 @@
  * @defgroup complexSYauxiliary complex
  *   @ingroup auxiliarySY
  *   This is the group of complex auxiliary functions for SY matrices
+ * @defgroup complexHEauxiliary complex
+ *   @ingroup auxiliaryHE
+ *   This is the group of complex auxiliary functions for HE matrices
  * @defgroup complexGBauxiliary complex
  *   @ingroup auxiliaryGB 
  *   This is the group of complex auxiliary functions for GB matrices
+ * @defgroup complexOTHERauxiliary  complex
+ *   @ingroup OTHERauxiliary
+ *   This is the group of complex other auxiliary routines
+ * @defgroup complexOTHERcomputational  complex
+ *   @ingroup OTHERcomputational
+ *   This is the group of complex other Computational routines
+ * @defgroup complexOTHERsolve  complex Other Solve Routines
+ *   @ingroup OTHERsolve
+ *   This is the group of complex Other Solve routines
+ * @defgroup complexOTHEReigen  complex Other Eigenvalue routines
+ *   @ingroup OTHEReigen
+ *   This is the group of complex Other Eigenvalue routines
  *
  ****
  *
@@ -296,6 +377,9 @@
  * @defgroup complex16SYsolve complex16
  *   @ingroup solveSY
  *   This is the group of complex16 solve driver functions for SY matrices
+ * @defgroup complex16HEsolve complex16
+ *   @ingroup solveHE
+ *   This is the group of complex16 solve driver functions for HE matrices
  * @defgroup complex16GBsolve complex16
  *   @ingroup solveGB
  *   This is the group of complex16 solve driver functions for GB matrices
@@ -311,6 +395,9 @@
  * @defgroup complex16SYeigen complex16
  *   @ingroup eigenSY
  *   This is the group of complex16 eigenvalue driver functions for SY matrices
+ * @defgroup complex16HEeigen complex16
+ *   @ingroup eigenHE
+ *   This is the group of complex16 eigenvalue driver functions for HE matrices
  * @defgroup complex16GEsing complex16
  *   @ingroup singGE 
  *   This is the group of complex16 singular value driver functions for GE matrices
@@ -323,6 +410,9 @@
  * @defgroup complex16SYcomputational complex16
  *   @ingroup computationalSY 
  *   This is the group of complex16 computational functions for SY matrices
+ * @defgroup complex16HEcomputational complex16
+ *   @ingroup computationalHE 
+ *   This is the group of complex16 computational functions for HE matrices
  * @defgroup complex16GBcomputational complex16
  *   @ingroup computationalGB
  *   This is the group of complex16 computational functions for GB matrices
@@ -341,9 +431,27 @@
  * @defgroup complex16SYauxiliary complex16
  *   @ingroup auxiliarySY
  *   This is the group of complex16 auxiliary functions for SY matrices
+ * @defgroup complex16HEauxiliary complex16
+ *   @ingroup auxiliaryHE
+ *   This is the group of complex16 auxiliary functions for HE matrices
  * @defgroup complex16GBauxiliary complex16
  *   @ingroup auxiliaryGB 
  *   This is the group of complex16 auxiliary functions for GB matrices
+ * @defgroup complex16OTHERcomputational  complex16
+ *   @ingroup OTHERcomputational
+ *   This is the group of complex16 other Computational routines
+ * @defgroup complex16OTHERauxiliary  complex16
+ *   @ingroup OTHERauxiliary
+ *   This is the group of complex16 other auxiliary routines
+ * @defgroup auxOTHERcomputational  auxiliary Computational routines
+ *   @ingroup OTHERcomputational
+ *   This is the group of auxiliary Computational routines
+ * @defgroup complex16OTHERsolve  complex16 Other Solve Routines
+ *   @ingroup OTHERsolve
+ *   This is the group of complex16 Other Solve routines
+ * @defgroup complex16OTHEReigen  complex16 Other Eigenvalue routines
+ *   @ingroup OTHEReigen
+ *   This is the group of complex16 Other Eigenvalue routines
  *
  ****
  *
@@ -435,7 +543,10 @@
  * @defgroup level3 Level3
  *   @ingroup blas
  *   This is the group of LEVEL 3 BLAS routines.
- * @defgroup blastesting Testing
+  * @defgroup aux_blas Auxiliary BLAS 
+ *   @ingroup blas
+ *   This is the group of Auxiliary 3 BLAS routines.
+* @defgroup blastesting Testing
  *   @ingroup blas
  *   This is the group of BLAS TESTING routines.
  *

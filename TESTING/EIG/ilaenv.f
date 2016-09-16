@@ -124,7 +124,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup aux_eig
+*> \ingroup OTHERauxiliary
 *
 *> \par Further Details:
 *  =====================

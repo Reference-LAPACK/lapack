@@ -1,3 +1,4 @@
+*> \brief \b DBDT04
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at

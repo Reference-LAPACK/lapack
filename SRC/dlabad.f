@@ -69,7 +69,7 @@
 *
 *> \date November 2011
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE DLABAD( SMALL, LARGE )

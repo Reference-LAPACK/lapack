@@ -86,7 +86,7 @@
 *
 *> \date January 2013
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup doubleOTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE DLADIV( A, B, C, D, P, Q )
@@ -173,6 +173,7 @@
 *
       END
 
+*> \ingroup doubleOTHERauxiliary
 
 
       SUBROUTINE DLADIV1( A, B, C, D, P, Q )
@@ -212,6 +213,8 @@
 *     End of DLADIV1
 *
       END
+
+*> \ingroup doubleOTHERauxiliary
 
       DOUBLE PRECISION FUNCTION DLADIV2( A, B, C, D, R, T )
 *

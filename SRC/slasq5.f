@@ -1,4 +1,4 @@
-*> \brief \b SLASQ5 computes one dqds transform in ping-pong form. Used by sbdsqr and sstegr.
+*> \brief <b> SLASQ5 computes one dqds transform in ping-pong form. Used by sbdsqr and sstegr. </b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -75,6 +75,7 @@
 *> \endverbatim
 *>
 *> \param[in] SIGMA
+*> \verbatim
 *>          SIGMA is REAL
 *>        This is the accumulated shift up to this step.
 *> \endverbatim

@@ -1,4 +1,4 @@
-*> \brief <b> CGTSV computes the solution to system of linear equations A * X = B for GT matrices <b>
+*> \brief <b> CGTSV computes the solution to system of linear equations A * X = B for GT matrices </b>
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -321,7 +321,7 @@
 *
 *> \date June 2016
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE SLARRD( RANGE, ORDER, N, VL, VU, IL, IU, GERS,

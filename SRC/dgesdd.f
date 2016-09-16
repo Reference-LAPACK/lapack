@@ -214,7 +214,6 @@
 *>     Ming Gu and Huan Ren, Computer Science Division, University of
 *>     California at Berkeley, USA
 *>
-*> @precisions fortran d -> s
 *  =====================================================================
       SUBROUTINE DGESDD( JOBZ, M, N, A, LDA, S, U, LDU, VT, LDVT,
      $                   WORK, LWORK, IWORK, INFO )

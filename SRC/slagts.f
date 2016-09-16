@@ -156,7 +156,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       SUBROUTINE SLAGTS( JOB, N, A, B, C, D, IN, Y, TOL, INFO )

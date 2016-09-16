@@ -73,7 +73,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       INTEGER FUNCTION ILADLR( M, N, A, LDA )

@@ -58,7 +58,7 @@
 *
 *> \date September 2012
 *
-*> \ingroup auxOTHERauxiliary
+*> \ingroup OTHERauxiliary
 *
 *  =====================================================================
       REAL             FUNCTION SLAPY2( X, Y )
