@@ -45,9 +45,9 @@
 *> The right eigenvector x and the left eigenvector y of T corresponding
 *> to an eigenvalue w are defined by:
 *>
-*>    T*x = w*x,     (y**T)*T = w*(y**T)
+*>    T*x = w*x,     (y**H)*T = w*(y**H)
 *>
-*> where y**T denotes the transpose of y.
+*> where y**H denotes the conjugate transpose of y.
 *> The eigenvalues are not input to this routine, but are read directly
 *> from the diagonal blocks of T.
 *>
