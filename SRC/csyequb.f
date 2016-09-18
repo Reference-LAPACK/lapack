@@ -37,12 +37,11 @@
 *> \verbatim
 *>
 *> CSYEQUB computes row and column scalings intended to equilibrate a
-*> symmetric matrix A and reduce its condition number
-*> (with respect to the two-norm).  S contains the scale factors,
-*> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
-*> elements B(i,j) = S(i)*A(i,j)*S(j) has ones on the diagonal.  This
-*> choice of S puts the condition number of B within a factor N of the
-*> smallest possible condition number over all possible diagonal
+*> symmetric matrix A (with respect to the Euclidean norm) and reduce
+*> its condition number. The scale factors S are computed by the BIN
+*> algorithm (see references) so that the scaled matrix B with elements
+*> B(i,j) = S(i)*A(i,j)*S(j) has a condition number within a factor N of
+*> the smallest possible condition number over all possible diagonal
 *> scalings.
 *> \endverbatim
 *
@@ -52,30 +51,27 @@
 *> \param[in] UPLO
 *> \verbatim
 *>          UPLO is CHARACTER*1
-*>          Specifies whether the details of the factorization are stored
-*>          as an upper or lower triangular matrix.
-*>          = 'U':  Upper triangular, form is A = U*D*U**T;
-*>          = 'L':  Lower triangular, form is A = L*D*L**T.
+*>          = 'U':  Upper triangle of A is stored;
+*>          = 'L':  Lower triangle of A is stored.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The order of the matrix A.  N >= 0.
+*>          The order of the matrix A. N >= 0.
 *> \endverbatim
 *>
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
-*>          The N-by-N symmetric matrix whose scaling
-*>          factors are to be computed.  Only the diagonal elements of A
-*>          are referenced.
+*>          The N-by-N symmetric matrix whose scaling factors are to be
+*>          computed.
 *> \endverbatim
 *>
 *> \param[in] LDA
 *> \verbatim
 *>          LDA is INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
+*>          The leading dimension of the array A. LDA >= max(1,N).
 *> \endverbatim
 *>
 *> \param[out] S
@@ -88,16 +84,16 @@
 *> \verbatim
 *>          SCOND is REAL
 *>          If INFO = 0, S contains the ratio of the smallest S(i) to
-*>          the largest S(i).  If SCOND >= 0.1 and AMAX is neither too
+*>          the largest S(i). If SCOND >= 0.1 and AMAX is neither too
 *>          large nor too small, it is not worth scaling by S.
 *> \endverbatim
 *>
 *> \param[out] AMAX
 *> \verbatim
 *>          AMAX is REAL
-*>          Absolute value of largest matrix element.  If AMAX is very
-*>          close to overflow or very close to underflow, the matrix
-*>          should be scaled.
+*>          Largest absolute value of any matrix element. If AMAX is
+*>          very close to overflow or very close to underflow, the
+*>          matrix should be scaled.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -131,7 +127,7 @@
 *>  Livne, O.E. and Golub, G.H., "Scaling by Binormalization", \n
 *>  Numerical Algorithms, vol. 35, no. 1, pp. 97-120, January 2004. \n
 *>  DOI 10.1023/B:NUMA.0000016606.32820.69 \n
-*>  Tech report version: http://ruready.utah.edu/archive/papers/bin.pdf
+*>  Tech report version: http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.3.1679
 *>
 *  =====================================================================
       SUBROUTINE CSYEQUB( UPLO, N, A, LDA, S, SCOND, AMAX, WORK, INFO )
