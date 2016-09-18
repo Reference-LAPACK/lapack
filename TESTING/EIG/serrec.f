@@ -152,6 +152,9 @@
       INFOT = 1
       CALL STREXC( 'X', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
       CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
+      INFOT = 2
+      CALL STREXC( 'N', -1, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 4
       ILST = 2
       CALL STREXC( 'N', 2, A, 1, B, 1, IFST, ILST, WORK, INFO )
@@ -177,7 +180,7 @@
       ILST = 2
       CALL STREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
       CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
-      NT = NT + 7
+      NT = NT + 8
 *
 *     Test STRSNA
 *
