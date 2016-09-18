@@ -211,9 +211,8 @@
       CHARACTER          DIST, TYPE, UPLO, XTYPE
       CHARACTER*3        PATH, MATPATH
       INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
-     $                   ITEMP, ITEMP2, IUPLO, IZERO, J, K, KL, KU, LDA,
-     $                   LWORK, MODE, N, NB, NERRS, NFAIL, NIMAT, NRHS,
-     $                   NRUN, NT
+     $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
+     $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
       REAL               ALPHA, ANORM, CNDNUM, CONST, SING_MAX,
      $                   SING_MIN, RCOND, RCONDC, STEMP
 *     ..

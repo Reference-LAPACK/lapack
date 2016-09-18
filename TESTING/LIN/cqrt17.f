@@ -172,8 +172,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            INFO, ISCL, NCOLS, NROWS
-      REAL               BIGNUM, ERR, NORMA, NORMB, NORMRS, NORMX,
-     $                   SMLNUM
+      REAL               BIGNUM, ERR, NORMA, NORMB, NORMRS, SMLNUM
 *     ..
 *     .. Local Arrays ..
       REAL               RWORK( 1 )
