@@ -205,15 +205,14 @@
       CHARACTER          DIST, TYPE, UPLO, XTYPE
       CHARACTER*3        PATH, MATPATH
       INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
-     $                   ITEMP, IUPLO, IZERO, J, K, KL, KU, LDA, LWORK,
-     $                   MODE, N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN,
-     $                   NT
+     $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
+     $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
       DOUBLE PRECISION   ALPHA, ANORM, CNDNUM, CONST, DTEMP, SING_MAX,
      $                   SING_MIN, RCOND, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
-      INTEGER            IDUMMY( 1 ), ISEED( 4 ), ISEEDY( 4 )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 )
       DOUBLE PRECISION   BLOCK( 2, 2 ), DDUMMY( 1 ), RESULT( NTESTS )
 *     ..
 *     .. External Functions ..

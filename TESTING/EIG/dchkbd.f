@@ -531,8 +531,8 @@
      $                   MNMIN2, MQ, MTYPES, N, NFAIL, NMAX,
      $                   NS1, NS2, NTEST
       DOUBLE PRECISION   ABSTOL, AMNINV, ANORM, COND, OVFL, RTOVFL,
-     $                   RTUNFL, TEMP1, TEMP2, TEMP3, ULP, ULPINV,
-     $                   UNFL, VL, VU
+     $                   RTUNFL, TEMP1, TEMP2, ULP, ULPINV, UNFL,
+     $                   VL, VU
 *     ..
 *     .. Local Arrays ..
       INTEGER            IDUM( 1 ), IOLDSD( 4 ), ISEED2( 4 ),

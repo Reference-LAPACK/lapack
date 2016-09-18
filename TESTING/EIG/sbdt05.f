@@ -130,7 +130,6 @@
 *     November 2011
 *
 *     .. Scalar Arguments ..
-      CHARACTER          UPLO
       INTEGER            LDA, LDU, LDVT, M, N, NS
       REAL               RESID
 *     ..
