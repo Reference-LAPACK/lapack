@@ -182,7 +182,7 @@
 *
 *     Quick return if possible
 *
-      IF( N.EQ.1 .OR. IFST.EQ.ILST )
+      IF( N.LE.1 .OR. IFST.EQ.ILST )
      $   RETURN
 *
       IF( IFST.LT.ILST ) THEN

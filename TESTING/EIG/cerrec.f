@@ -152,9 +152,6 @@
       INFOT = 1
       CALL CTREXC( 'X', 1, A, 1, B, 1, IFST, ILST, INFO )
       CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
-      INFOT = 7
-      CALL CTREXC( 'N', 0, A, 1, B, 1, IFST, ILST, INFO )
-      CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 4
       ILST = 2
       CALL CTREXC( 'N', 2, A, 1, B, 1, IFST, ILST, INFO )
@@ -180,7 +177,7 @@
       ILST = 2
       CALL CTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, INFO )
       CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
-      NT = NT + 8
+      NT = NT + 7
 *
 *     Test CTRSNA
 *

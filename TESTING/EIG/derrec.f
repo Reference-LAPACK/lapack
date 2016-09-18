@@ -23,7 +23,7 @@
 *>
 *> DERREC tests the error exits for the routines for eigen- condition
 *> estimation for DOUBLE PRECISION matrices:
-*>    DTRSYL, STREXC, STRSNA and STRSEN.
+*>    DTRSYL, DTREXC, DTRSNA and DTRSEN.
 *> \endverbatim
 *
 *  Arguments:
@@ -152,9 +152,6 @@
       INFOT = 1
       CALL DTREXC( 'X', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
       CALL CHKXER( 'DTREXC', INFOT, NOUT, LERR, OK )
-      INFOT = 7
-      CALL DTREXC( 'N', 0, A, 1, B, 1, IFST, ILST, WORK, INFO )
-      CALL CHKXER( 'DTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 4
       ILST = 2
       CALL DTREXC( 'N', 2, A, 1, B, 1, IFST, ILST, WORK, INFO )
@@ -180,7 +177,7 @@
       ILST = 2
       CALL DTREXC( 'V', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
       CALL CHKXER( 'DTREXC', INFOT, NOUT, LERR, OK )
-      NT = NT + 8
+      NT = NT + 7
 *
 *     Test DTRSNA
 *
