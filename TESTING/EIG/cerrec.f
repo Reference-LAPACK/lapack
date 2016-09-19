@@ -152,8 +152,8 @@
       INFOT = 1
       CALL CTREXC( 'X', 1, A, 1, B, 1, IFST, ILST, INFO )
       CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
-      INFOT = 7
-      CALL CTREXC( 'N', 0, A, 1, B, 1, IFST, ILST, INFO )
+      INFOT = 2
+      CALL CTREXC( 'N', -1, A, 1, B, 1, IFST, ILST, INFO )
       CALL CHKXER( 'CTREXC', INFOT, NOUT, LERR, OK )
       INFOT = 4
       ILST = 2

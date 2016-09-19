@@ -57,6 +57,7 @@
 *> \verbatim
 *>          N is INTEGER
 *>          The order of the matrix T. N >= 0.
+*>          If N == 0 arguments ILST and IFST may be any value.
 *> \endverbatim
 *>
 *> \param[in,out] T
@@ -182,7 +183,7 @@
 *
 *     Quick return if possible
 *
-      IF( N.EQ.1 .OR. IFST.EQ.ILST )
+      IF( N.LE.1 .OR. IFST.EQ.ILST )
      $   RETURN
 *
       IF( IFST.LT.ILST ) THEN

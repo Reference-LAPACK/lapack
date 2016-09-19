@@ -152,8 +152,8 @@
       INFOT = 1
       CALL STREXC( 'X', 1, A, 1, B, 1, IFST, ILST, WORK, INFO )
       CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
-      INFOT = 7
-      CALL STREXC( 'N', 0, A, 1, B, 1, IFST, ILST, WORK, INFO )
+      INFOT = 2
+      CALL STREXC( 'N', -1, A, 1, B, 1, IFST, ILST, WORK, INFO )
       CALL CHKXER( 'STREXC', INFOT, NOUT, LERR, OK )
       INFOT = 4
       ILST = 2

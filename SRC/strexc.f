@@ -63,6 +63,7 @@
 *> \verbatim
 *>          N is INTEGER
 *>          The order of the matrix T. N >= 0.
+*>          If N == 0 arguments ILST and IFST may be any value.
 *> \endverbatim
 *>
 *> \param[in,out] T
