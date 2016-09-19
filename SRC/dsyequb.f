@@ -239,7 +239,6 @@
         IF ( UP ) THEN
            DO J = 1, N
               DO I = 1, J-1
-                 T = ABS( A( I, J ) )
                  WORK( I ) = WORK( I ) + ABS( A( I, J ) ) * S( J )
                  WORK( J ) = WORK( J ) + ABS( A( I, J ) ) * S( I )
               END DO
@@ -249,7 +248,6 @@
            DO J = 1, N
               WORK( J ) = WORK( J ) + ABS( A( J, J ) ) * S( J )
               DO I = J+1, N
-                 T = ABS( A( I, J ) )
                  WORK( I ) = WORK( I ) + ABS( A( I, J ) ) * S( J )
                  WORK( J ) = WORK( J ) + ABS( A( I, J ) ) * S( I )
               END DO

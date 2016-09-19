@@ -248,7 +248,6 @@
         IF ( UP ) THEN
            DO J = 1, N
               DO I = 1, J-1
-                 T = CABS1( A( I, J ) )
                  WORK( I ) = WORK( I ) + CABS1( A( I, J ) ) * S( J )
                  WORK( J ) = WORK( J ) + CABS1( A( I, J ) ) * S( I )
               END DO
@@ -258,7 +257,6 @@
            DO J = 1, N
               WORK( J ) = WORK( J ) + CABS1( A( J, J ) ) * S( J )
               DO I = J+1, N
-                 T = CABS1( A( I, J ) )
                  WORK( I ) = WORK( I ) + CABS1( A( I, J ) ) * S( J )
                  WORK( J ) = WORK( J ) + CABS1( A( I, J ) ) * S( I )
               END DO
