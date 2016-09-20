@@ -97,7 +97,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (3*N)
+*>          WORK is DOUBLE PRECISION array, dimension (2*N)
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -262,10 +262,10 @@
          AVG = AVG / N
 
          STD = 0.0D0
-         DO I = 2*N+1, 3*N
-            WORK( I ) = S( I-2*N ) * WORK( I-2*N ) - AVG
+         DO I = N+1, 2*N
+            WORK( I ) = S( I-N ) * WORK( I-N ) - AVG
          END DO
-         CALL DLASSQ( N, WORK( 2*N+1 ), 1, SCALE, SUMSQ )
+         CALL DLASSQ( N, WORK( N+1 ), 1, SCALE, SUMSQ )
          STD = SCALE * SQRT( SUMSQ / N )
 
          IF ( STD .LT. TOL * AVG ) GOTO 999
