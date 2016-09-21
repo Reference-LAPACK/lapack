@@ -36,13 +36,19 @@
 *> \verbatim
 *>
 *> ZPOEQUB computes row and column scalings intended to equilibrate a
-*> symmetric positive definite matrix A and reduce its condition number
+*> Hermitian positive definite matrix A and reduce its condition number
 *> (with respect to the two-norm).  S contains the scale factors,
 *> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
 *> elements B(i,j) = S(i)*A(i,j)*S(j) has ones on the diagonal.  This
 *> choice of S puts the condition number of B within a factor N of the
 *> smallest possible condition number over all possible diagonal
 *> scalings.
+*>
+*> This routine differs from ZPOEQU by restricting the scaling factors
+*> to a power of the radix.  Barring over- and underflow, scaling by
+*> these factors introduces no additional rounding errors.  However, the
+*> scaled diagonal entries are no longer approximately 1 but lie
+*> between sqrt(radix) and 1/sqrt(radix).
 *> \endverbatim
 *
 *  Arguments:
@@ -57,7 +63,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
-*>          The N-by-N symmetric positive definite matrix whose scaling
+*>          The N-by-N Hermitian positive definite matrix whose scaling
 *>          factors are to be computed.  Only the diagonal elements of A
 *>          are referenced.
 *> \endverbatim
