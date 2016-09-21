@@ -37,12 +37,12 @@
 *>
 *> CPOEQUB computes row and column scalings intended to equilibrate a
 *> symmetric positive definite matrix A and reduce its condition number
-*> (with respect to the spectral norm). S contains the scale factors,
-*> chosen so that the scaled matrix B with elements
-*> B(i,j) = S(i)*A(i,j)*S(j) has diagonal entries close to one. S(i) is
-*> a power of b nearest to but not exceeding 1/sqrt(A(i,i)), where b is
-*> the basis use for floating point numbers on this machine. This choice
-*> of S avoids round-off errors when computing B.
+*> (with respect to the two-norm).  S contains the scale factors,
+*> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
+*> elements B(i,j) = S(i)*A(i,j)*S(j) has ones on the diagonal.  This
+*> choice of S puts the condition number of B within a factor N of the
+*> smallest possible condition number over all possible diagonal
+*> scalings.
 *> \endverbatim
 *
 *  Arguments:
@@ -150,6 +150,8 @@
 *     .. Executable Statements ..
 *
 *     Test the input parameters.
+*
+*     Positive definite only performs 1 pass of equilibration.
 *
       INFO = 0
       IF( N.LT.0 ) THEN
