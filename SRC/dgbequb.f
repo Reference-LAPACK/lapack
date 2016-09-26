@@ -48,7 +48,7 @@
 *> number of A but works well in practice.
 *>
 *> This routine differs from DGEEQU by restricting the scaling factors
-*> to a power of the radix.  Baring over- and underflow, scaling by
+*> to a power of the radix.  Barring over- and underflow, scaling by
 *> these factors introduces no additional rounding errors.  However, the
 *> scaled entries' magnitudes are no longer approximately 1 but lie
 *> between sqrt(radix) and 1/sqrt(radix).
