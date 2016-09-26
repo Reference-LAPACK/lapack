@@ -77,7 +77,7 @@
 *>   C  = diag( COS(THETA(1)), ..., COS(THETA(K)) ),
 *>   S  = diag( SIN(THETA(1)), ..., SIN(THETA(K)) ), and
 *>   C^2 + S^2 = I.
-*
+*>
 *> The routine computes C, S, R, and optionally the orthogonal
 *> transformation matrices U, V and Q. If L <= M, then R is stored in
 *> A(1:L, :) on exit. Otherwise, the first M rows of R are stored in A
@@ -89,7 +89,7 @@
 *> If (A**T,B**T)**T  has orthonormal columns, then the GSVD of A and B
 *> is also equal to the CS decomposition of A and B. Furthermore, the
 *> GSVD can be used to derive the solution of the eigenvalue problem:
-*>                      A**T*A x = lambda* B**T*B x.
+*>                      A**T*A x = lambda * B**T*B x.
 *> In some literature, the GSVD of A and B is presented in the form
 *>                  U1**T*A*X = ( 0 D1 ),   U2**T*B*X = ( 0 D2 )
 *> where U1 and U2 are orthogonal and X is nonsingular, D1 and D2 are
@@ -306,7 +306,7 @@
 *>
 *  =====================================================================
       SUBROUTINE DGGQRCS( JOBU1, JOBU2, JOBQT, M, N, P, W, L,
-     $                    A, LDA, B, LDB
+     $                    A, LDA, B, LDB,
      $                    THETA, U1, LDU1, U2, LDU2, QT, LDQT,
      $                    WORK, LWORK, IWORK, INFO )
 *
@@ -333,7 +333,9 @@
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
       INTEGER            I, J, Z, R, LWKOPT
-      DOUBLE PRECISION   GNORM, FACTOR, TOL, ULP, UNFL
+      DOUBLE PRECISION   GNORM, FACTOR, TOL, ULP, UNFL, NORMA, NORMB
+*     .. Local Arrays ..
+      DOUBLE PRECISION   G( M + P, N )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -341,7 +343,7 @@
       EXTERNAL           LSAME, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DGEQP3, DORGQR, DGERQF, QORGRQ,
+      EXTERNAL           DLACPY, DLASCL, DGEQP3, DORGQR, DGERQF, QORGRQ,
      $                   DORCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
@@ -359,11 +361,10 @@
 *
 *     Initialize variables
 *
-      G = WORK
-      TAU = WORK
       L = MIN( M + P, N )
-      LDG = M + P
       Z = ( M + P ) * N
+      G = RESHAPE( WORK(1:Z), (/ M + P, N /) )
+      LDG = M + P
 *
 *     Test the input arguments
 *
@@ -409,13 +410,13 @@
      $                    THETA, U1, LDU1, U2, LDU2, QT, LDQT,
      $                    WORK( Z + 1 ), LWORK - Z, IWORK, -1 )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-         LWKOPT = (M + P)*N + LWKOPT
+         LWKOPT = Z + LWKOPT
 
 *        DGERQF stores L scalar factors for the elementary reflectors
-         CALL DGERQF( L, N, QT, LDQT, TAU, WORK( L ), LWORK, -1 )
+         CALL DGERQF( L, N, QT, LDQT, WORK, WORK, LWORK - L, -1 )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
 
-         CALL DORGRQ( N, N, L, QT, LDQT, TAU, WORK( L ), LWORK, -1 )
+         CALL DORGRQ( N, N, L, QT, LDQT, WORK, WORK, LWORK - L, -1 )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
 
          WORK( 1 ) = DBLE( LWKOPT )
@@ -438,15 +439,15 @@
       FACTOR = -0.5D0 / LOG ( BASE )
       W = BASE ** INT( FACTOR * LOG( NORMA / NORMB ) )
 *
-      DLASCL( 'G', -1, -1, ONE, W, P, N, B, LDB, INFO )
-      IF ( INFO.NE.0 )
+      CALL DLASCL( 'G', -1, -1, ONE, W, P, N, B, LDB, INFO )
+      IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
 *     Copy matrices A, B into the (M+P) x n matrix G
 *
-      DLACPY( 'A', M, N, A, LDA, G( P + 1, 1 ), LDG )
-      DLACPY( 'A', P, N, B, LDB, G( 1, 1 ), LDG )
+      CALL DLACPY( 'A', M, N, A, LDA, G( P + 1, 1 ), LDG )
+      CALL DLACPY( 'A', P, N, B, LDB, G( 1, 1 ), LDG )
 *
 *     Compute the Frobenius norm of matrix G
 *
@@ -457,7 +458,7 @@
 *
       ULP = DLAMCH( 'Precision' )
       UNFL = DLAMCH( 'Safe Minimum' )
-      TOL = MAX( M + P, N )*MAX( NORM, UNFL )*ULP
+      TOL = MAX( M + P, N ) * MAX( GNORM, UNFL ) * ULP
 *
 *     IWORK stores the column permutations computed by DGEQP3.
 *     Columns J where IWORK( J ) is non-zero are permuted to the front
@@ -469,9 +470,10 @@
 *
 *     Compute the QR factorization with column pivoting GΠ = Q1 R1
 *
-      CALL DGEQP3( M + P, N, G, LDG, IWORK, THETA, WORK2, LWORK2, INFO )
+      CALL DGEQP3( M + P, N, G, LDG, IWORK, THETA,
+     $             WORK( Z + 1 ), LWORK - Z, INFO )
       IF( INFO.NE.0 ) THEN
-         ERROR
+         RETURN
       END IF
 *
 *     Determine the rank of G
@@ -489,49 +491,47 @@
 *     Copy R1 into A
 *
       IF( R.LE.M ) THEN
-          DLACPY( 'U', R, N, G, LDG, A, LDA )
+          CALL DLACPY( 'U', R, N, G, LDG, A, LDA )
       ELSE
-          DLACPY( 'U', M, N, G, LDG, A, LDA )
-          DLACPY( 'A', R - M, N, G( M + 1, 1 ), LDG, B, LDB )
+          CALL DLACPY( 'U', M, N, G, LDG, A, LDA )
+          CALL DLACPY( 'A', R - M, N, G( M + 1, 1 ), LDG, B, LDB )
       END IF
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
 *
-      DORGQR( M + P, R, R, G, LDG, THETA, WORK2, LWORK2, INFO )
+      CALL DORGQR( M + P, R, R, G, LDG, THETA,
+     $             WORK( Z + 1 ), LWORK - Z, INFO )
 *
 *     Compute the CS decomposition of Q1( :, 1:R )
 *
-      DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, M, R,
+      CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, M, R,
      $            G( 1, 1 ), LDG, G( M + 1, 1 ), LDG, THETA,
      $            U2, LDU2, U1, LDU1, QT, LDQT,
-     $            WORK2, LWORK2, IWORK( N + 1 ), INFO )
-      IF( INFO.NE.0 )
+     $            WORK( Z + 1 ), LWORK - Z, IWORK( N + 1 ), INFO )
+      IF( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
 *     Copy V^T from QT to G
 *
-      DLACPY( 'A', R, R, QT, LDQT, G, R )
+      CALL DLACPY( 'A', R, R, QT, LDQT, G, R )
 *
 *     Compute V^T R1( 1:R, : )
 *
       IF ( R.LE.M ) THEN
-         DGEMM( 'N', 'N', R, N, R, 1.0D0, G, R,
+         CALL DGEMM( 'N', 'N', R, N, R, 1.0D0, G, R,
      $          A, LDA, 0.0D0, QT, LDQT )
       ELSE
-         DGEMM( 'N', 'N', R, N, M, 1.0D0, G( 1, 1 ), R,
+         CALL DGEMM( 'N', 'N', R, N, M, 1.0D0, G( 1, 1 ), R,
      $          A, LDA, 0.0D0, QT, LDQT )
-         DGEMM( 'N', 'N', R, N, R - M, 1.0D0, G( 1, M+1: ), R,
+         CALL DGEMM( 'N', 'N', R, N, R - M, 1.0D0, G( 1, M + 1 ), R,
      $          B, LDB, 1.0D0, QT, LDQT )
       END IF
 *
-*     Copy V^T R1( 1:R, : ) from G to QT
-*
-      DLACPY
-*
 *     Compute the RQ decomposition of V^T R1( 1:R, : )
 *
-      DGERQF( R, N, QT, LDQT, TAU, WORK2, LWORK2, INFO )
+      CALL DGERQF( R, N, QT, LDQT, WORK,
+     $             WORK( L + 1 ), LWORK - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
@@ -539,22 +539,23 @@
 *     Copy matrix R from QT( 1:R, N-R+1: ) to A, B
 *
       IF ( R.LE.M ) THEN
-         DLACPY( 'U', R, R, QT( 1, N-R+1: ), LDQT, A, LDA )
+         CALL DLACPY( 'U', R, R, QT( 1, N-R+1 ), LDQT, A, LDA )
       ELSE
-         DLACPY( 'U', M,     R, QT(     1, N-R+1: ), LDQT, A, LDA )
-         DLACPY( 'U', R - M, R, QT( M + 1, N-R+1: ), LDQT, B, LDB )
+         CALL DLACPY( 'U', M,     R, QT(     1, N-R+1 ), LDQT, A, LDA )
+         CALL DLACPY( 'U', R - M, R, QT( M + 1, N-R+1 ), LDQT, B, LDB )
       END IF
 *
 *     Explicitly form Q^T
 *
-      DORGRQ( N, N, R, QT, LDQT, TAU, WORK2, LWORK2, INFO )
+      CALL DORGRQ( N, N, R, QT, LDQT, WORK,
+     $             WORK( L + 1 ), LWORK - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
 *     Revert column permutation Π by permuting the rows of Q^T
 *
-      DLAPMT( .FALSE., N, N, QT, LDQT, IWORK )
+      CALL DLAPMT( .FALSE., N, N, QT, LDQT, IWORK )
 *
       WORK( 1 ) = DBLE( LWKOPT )
       RETURN
