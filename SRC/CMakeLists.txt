@@ -280,7 +280,7 @@ set(DLASRC
    dgetrf.f dgetrf2.f dgetri.f
    dgetrs.f dggbak.f dggbal.f
    dgges.f  dgges3.f dggesx.f dggev.f  dggev3.f dggevx.f
-   dggglm.f dgghrd.f dgghd3.f dgglse.f dggqrf.f
+   dggglm.f dgghrd.f dgghd3.f dgglse.f dggqrf.f dggqrcs.f
    dggrqf.f dggsvd3.f dggsvp3.f dgtcon.f dgtrfs.f dgtsv.f
    dgtsvx.f dgttrf.f dgttrs.f dgtts2.f dhgeqz.f
    dhsein.f dhseqr.f dlabrd.f dlacon.f dlacn2.f
