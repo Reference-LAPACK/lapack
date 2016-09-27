@@ -315,6 +315,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
 *     September 2016
 *
+      IMPLICIT NONE
 *     .. Scalar Arguments ..
       CHARACTER          JOBU1, JOBU2, JOBQT
       INTEGER            INFO, LDA, LDB, LDU1, LDU2, LDQT,
@@ -332,8 +333,9 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
-      INTEGER            I, J, Z, R, LWKOPT
-      DOUBLE PRECISION   GNORM, FACTOR, TOL, ULP, UNFL, NORMA, NORMB
+      INTEGER            I, J, Z, R, LDG, LWKOPT
+      DOUBLE PRECISION   GNORM, FACTOR, TOL, ULP, UNFL, NORMA, NORMB,
+     $                   BASE
 *     .. Local Arrays ..
       DOUBLE PRECISION   G( M + P, N )
 *     ..
@@ -399,24 +401,25 @@
 *
       IF( INFO.EQ.0 ) THEN
          CALL DGEQP3( M+P, N, G, LDG, IWORK,
-     $                THETA, WORK( Z + 1 ), LWORK - Z, -1 )
+     $                THETA, WORK( Z + 1 ), -1, INFO )
          LWKOPT = INT( WORK( 1 ) )
 
-         CALL DORGQR( M + P, L, L, G, LDG, THETA, WORK( Z + 1 ), -1 )
+         CALL DORGQR( M + P, L, L, G, LDG, THETA,
+     $                WORK( Z + 1 ), -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
          CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, M, N,
      $                    G, LDG, G, LDG,
      $                    THETA, U1, LDU1, U2, LDU2, QT, LDQT,
-     $                    WORK( Z + 1 ), LWORK - Z, IWORK, -1 )
+     $                    WORK( Z + 1 ), -1, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
          LWKOPT = Z + LWKOPT
 
 *        DGERQF stores L scalar factors for the elementary reflectors
-         CALL DGERQF( L, N, QT, LDQT, WORK, WORK, LWORK - L, -1 )
+         CALL DGERQF( L, N, QT, LDQT, WORK, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
 
-         CALL DORGRQ( N, N, L, QT, LDQT, WORK, WORK, LWORK - L, -1 )
+         CALL DORGRQ( N, N, L, QT, LDQT, WORK, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
 
          WORK( 1 ) = DBLE( LWKOPT )
@@ -432,14 +435,14 @@
 *
 *     Scale matrix B such that norm(A) \approx norm(B)
 *
-      NORMA = DLANGE( 'F', M, N, A, LDA, NULL )
-      NORMB = DLANGE( 'F', P, N, B, LDB, NULL )
+      NORMA = DLANGE( 'F', M, N, A, LDA, WORK )
+      NORMB = DLANGE( 'F', P, N, B, LDB, WORK )
 *
       BASE = DLAMCH( 'B' )
       FACTOR = -0.5D0 / LOG ( BASE )
       W = BASE ** INT( FACTOR * LOG( NORMA / NORMB ) )
 *
-      CALL DLASCL( 'G', -1, -1, ONE, W, P, N, B, LDB, INFO )
+      CALL DLASCL( 'G', -1, -1, 1.0D0, W, P, N, B, LDB, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
@@ -451,7 +454,7 @@
 *
 *     Compute the Frobenius norm of matrix G
 *
-      GNORM = DLANGE( 'F', M + P, N, G, LDG, NULL )
+      GNORM = DLANGE( 'F', M + P, N, G, LDG, WORK( Z ) )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrix G.
