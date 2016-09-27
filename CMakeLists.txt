@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.12)
 
-project(LAPACK Fortran C)
+project(LAPACK Fortran C CXX)
 
 set(LAPACK_MAJOR_VERSION 3)
 set(LAPACK_MINOR_VERSION 9)
