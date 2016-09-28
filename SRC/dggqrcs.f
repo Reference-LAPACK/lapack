@@ -410,7 +410,7 @@
          CALL DORGQR( M + P, L, L, G, LDG, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
-         CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, P, N,
+         CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, P, L,
      $                    G, LDG, G, LDG,
      $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
      $                    WORK, -1, IWORK, INFO )
