@@ -409,7 +409,7 @@
          CALL DORGQR( M + P, L, L, G, LDG, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
-         CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, P, L,
+         CALL DORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
      $                    G, LDG, G, LDG,
      $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
      $                    WORK, -1, IWORK, INFO )
@@ -529,7 +529,7 @@
 *
 *     Compute the CS decomposition of Q1( :, 1:R )
 *
-      CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, P, R,
+      CALL DORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, R,
      $                 G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
      $                 U2, LDU2, U1, LDU1, QT, LDQT,
      $                 WORK( Z + 1 ), LWORK - Z, IWORK( N + 1 ), INFO )
@@ -572,15 +572,17 @@
 *
 *     Explicitly form Q^T
 *
-      CALL DORGRQ( N, N, R, QT, LDQT, WORK,
-     $             WORK( L + 1 ), LWORK - L, INFO )
-      IF ( INFO.NE.0 ) THEN
-         RETURN
-      END IF
+      IF( WANTQT ) THEN
+         CALL DORGRQ( N, N, R, QT, LDQT, WORK,
+     $                WORK( L + 1 ), LWORK - L, INFO )
+         IF ( INFO.NE.0 ) THEN
+            RETURN
+         END IF
 *
 *     Revert column permutation Π by permuting the rows of Q^T
 *
-      CALL DLAPMT( .FALSE., N, N, QT, LDQT, IWORK )
+         CALL DLAPMT( .FALSE., N, N, QT, LDQT, IWORK )
+      END IF
 *
       WORK( 1 ) = DBLE( LWKOPT )
       RETURN
