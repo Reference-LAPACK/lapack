@@ -117,14 +117,14 @@ build_diagonals(
 
 	if(k2 > 0)
 	{
-		MatrixRange D2_33 = ublas::subrange(D2, m - k2, m, r - k2, r);
-		D2_33 = IdentityMatrix(k2);
+		MatrixRange D2_11 = ublas::subrange(D2, 0, k2, 0, k2);
+		D2_11 = IdentityMatrix(k2);
 	}
 
 	if(k > 0)
 	{
 		MatrixRange D1_22 = ublas::subrange(D1, m-k-k1, m-k1, r-k-k1, r-k1);
-		MatrixRange D2_22 = ublas::subrange(D2, p-k-k2, p-k2, r-k-k2, r-k2);
+		MatrixRange D2_22 = ublas::subrange(D2, k2, k2+k, k2, k2+k);
 
 		for(std::size_t i = 0; i < k; ++i)
 		{
