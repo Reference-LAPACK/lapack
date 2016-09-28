@@ -65,21 +65,23 @@ ublas::matrix<T, Storage> build_R(
 	const std::size_t m = X.size1();
 	const std::size_t n = X.size2();
 
-	Matrix R(r, n);
+	Matrix R(r, n, 0);
 
 	if(r <= m)
 	{
-		const auto& X1 = ublas::subrange(X, 0, r, 0, n);
-		R = X1;
+		MatrixRange R12 = ublas::subrange(R, 0, r, n-r, n);
+		const auto& X1 = ublas::subrange(X, 0, r, 0, r);
+		R12 = X1;
 	}
 	else
 	{
-		MatrixRange R1 = ublas::subrange(R, 0, m, 0, n);
-		MatrixRange R2 = ublas::subrange(R, m, r, 0, n);
-		const auto& Y1 = ublas::subrange(Y, 0, r-m, 0, n);
+		MatrixRange R12 = ublas::subrange(R, 0, m, n-r, n);
+		MatrixRange R22 = ublas::subrange(R, m, r, n-r, n);
+		const auto& X1 = ublas::subrange(X, 0, m, 0, r);
+		const auto& Y1 = ublas::subrange(Y, 0, r-m, 0, r);
 
-		R1 = X;
-		R2 = Y1;
+		R12 = X1;
+		R22 = Y1;
 	}
 
 	return R;
