@@ -539,21 +539,21 @@
 *
       CALL DLACPY( 'A', R, R, QT, LDQT, G, R )
 *
-*     Compute V^T R1( 1:R, : )
+*     Compute V^T R1( 1:R, : ) in the last R rows of QT
 *
       IF ( R.LE.M ) THEN
          CALL DGEMM( 'N', 'N', R, N, R, 1.0D0, G, R,
-     $          A, LDA, 0.0D0, QT, LDQT )
+     $          A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
       ELSE
          CALL DGEMM( 'N', 'N', R, N, M, 1.0D0, G( 1, 1 ), R,
-     $          A, LDA, 0.0D0, QT, LDQT )
+     $          A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
          CALL DGEMM( 'N', 'N', R, N, R - M, 1.0D0, G( 1, M + 1 ), R,
-     $          B, LDB, 1.0D0, QT, LDQT )
+     $          B, LDB, 1.0D0, QT( N-R+1, 1 ), LDQT )
       END IF
 *
 *     Compute the RQ decomposition of V^T R1( 1:R, : )
 *
-      CALL DGERQF( R, N, QT, LDQT, WORK,
+      CALL DGERQF( R, N, QT( N-R+1, 1 ), LDQT, WORK,
      $             WORK( L + 1 ), LWORK - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
@@ -562,10 +562,10 @@
 *     Copy matrix R from QT( 1:R, N-R+1: ) to A, B
 *
       IF ( R.LE.M ) THEN
-         CALL DLACPY( 'U', R, R, QT( 1, N-R+1 ), LDQT, A, LDA )
+         CALL DLACPY( 'U', R, R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
       ELSE
-         CALL DLACPY( 'U', M,     R, QT(     1, N-R+1 ), LDQT, A, LDA )
-         CALL DLACPY( 'U', R - M, R, QT( M + 1, N-R+1 ), LDQT, B, LDB )
+         CALL DLACPY( 'U', M,     R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
+         CALL DLACPY( 'U', R - M, R, QT( N-R+M+1, N-R+1 ), LDQT, B, LDB)
       END IF
 *
 *     Explicitly form Q^T
