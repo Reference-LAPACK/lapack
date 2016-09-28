@@ -334,8 +334,7 @@
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
       INTEGER            I, J, Z, R, LDG, LWKOPT
-      DOUBLE PRECISION   GNORM, FACTOR, TOL, ULP, UNFL, NORMA, NORMB,
-     $                   BASE
+      DOUBLE PRECISION   GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE
 *     .. Local Arrays ..
       DOUBLE PRECISION   G( M + P, N )
 *     ..
@@ -444,8 +443,7 @@
          W = 1.0D0
       ELSE
          BASE = DLAMCH( 'B' )
-         FACTOR = -0.5D0 / LOG ( BASE )
-         W = BASE ** INT( FACTOR * LOG( NORMA / NORMB ) )
+         W = BASE ** INT( LOG( NORMA / NORMB ) / LOG( BASE ) )
 *
          CALL DLASCL( 'G', -1, -1, 1.0D0, W, P, N, B, LDB, INFO )
          IF ( INFO.NE.0 ) THEN
