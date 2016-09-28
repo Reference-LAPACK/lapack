@@ -365,7 +365,11 @@
 *
       L = MIN( M + P, N )
       Z = ( M + P ) * N
-      G = RESHAPE( WORK(1:Z), (/ M + P, N /) )
+      IF ( LQUERY ) THEN
+         G = 0
+      ELSE
+         G = RESHAPE( WORK(1:Z), (/ M + P, N /) )
+      END IF
       LDG = M + P
 *
 *     Test the input arguments
