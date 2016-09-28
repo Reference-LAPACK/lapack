@@ -400,18 +400,16 @@
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
-         CALL DGEQP3( M+P, N, G, LDG, IWORK,
-     $                THETA, WORK( Z + 1 ), -1, INFO )
+         CALL DGEQP3( M+P, N, G, LDG, IWORK, THETA, WORK, -1, INFO )
          LWKOPT = INT( WORK( 1 ) )
 
-         CALL DORGQR( M + P, L, L, G, LDG, THETA,
-     $                WORK( Z + 1 ), -1, INFO )
+         CALL DORGQR( M + P, L, L, G, LDG, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
-         CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, M, N,
+         CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, P, N,
      $                    G, LDG, G, LDG,
-     $                    THETA, U1, LDU1, U2, LDU2, QT, LDQT,
-     $                    WORK( Z + 1 ), -1, IWORK, INFO )
+     $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
+     $                    WORK, -1, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
          LWKOPT = Z + LWKOPT
 
@@ -438,13 +436,17 @@
       NORMA = DLANGE( 'F', M, N, A, LDA, WORK )
       NORMB = DLANGE( 'F', P, N, B, LDB, WORK )
 *
-      BASE = DLAMCH( 'B' )
-      FACTOR = -0.5D0 / LOG ( BASE )
-      W = BASE ** INT( FACTOR * LOG( NORMA / NORMB ) )
+      IF ( NORMB.EQ.0 ) THEN
+         W = 1.0D0
+      ELSE
+         BASE = DLAMCH( 'B' )
+         FACTOR = -0.5D0 / LOG ( BASE )
+         W = BASE ** INT( FACTOR * LOG( NORMA / NORMB ) )
 *
-      CALL DLASCL( 'G', -1, -1, 1.0D0, W, P, N, B, LDB, INFO )
-      IF ( INFO.NE.0 ) THEN
-         RETURN
+         CALL DLASCL( 'G', -1, -1, 1.0D0, W, P, N, B, LDB, INFO )
+         IF ( INFO.NE.0 ) THEN
+            RETURN
+         END IF
       END IF
 *
 *     Copy matrices A, B into the (M+P) x n matrix G
@@ -491,6 +493,21 @@
 *
       L = R
 *
+*     Handle rank=0 case
+*
+      IF( L.EQ.0 ) THEN
+         IF( WANTU1 ) THEN
+            CALL DLASET( 'A', M, M, 0.0D0, 1.0D0, U1, LDU1 )
+         END IF
+         IF( WANTU2 ) THEN
+            CALL DLASET( 'A', P, P, 0.0D0, 1.0D0, U2, LDU2 )
+         END IF
+         IF( WANTQT ) THEN
+            CALL DLASET( 'A', N, N, 0.0D0, 1.0D0, QT, LDQT )
+         END IF
+         RETURN
+      END IF
+*
 *     Copy R1 into A
 *
       IF( R.LE.M ) THEN
@@ -504,13 +521,16 @@
 *
       CALL DORGQR( M + P, R, R, G, LDG, THETA,
      $             WORK( Z + 1 ), LWORK - Z, INFO )
+      IF ( INFO.NE.0 ) THEN
+         RETURN
+      END IF
 *
 *     Compute the CS decomposition of Q1( :, 1:R )
 *
-      CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, M, R,
-     $            G( 1, 1 ), LDG, G( M + 1, 1 ), LDG, THETA,
-     $            U2, LDU2, U1, LDU1, QT, LDQT,
-     $            WORK( Z + 1 ), LWORK - Z, IWORK( N + 1 ), INFO )
+      CALL DORCSD2BY1( JOBU1, JOBU2, JOBQT, M + P, P, R,
+     $                 G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
+     $                 U2, LDU2, U1, LDU1, QT, LDQT,
+     $                 WORK( Z + 1 ), LWORK - Z, IWORK( N + 1 ), INFO )
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF
