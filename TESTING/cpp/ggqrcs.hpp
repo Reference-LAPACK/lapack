@@ -283,7 +283,7 @@ struct Fixture
 		std::size_t lwork_opt = lwork_opt_f;
 		work.resize( lwork_opt );
 
-		std::fill( work.data().begin(), work.data().end(), NaN );
+		std::fill( work.begin(), work.end(), NaN );
 	}
 
 	Matrix A, B;
@@ -305,6 +305,86 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 {
 	const std::size_t m = 2;
 	const std::size_t n = 2;
+	const std::size_t p = 2;
+
+	Fixture<T> fixture(m, n, p);
+
+	auto A = fixture.A;
+	auto B = fixture.B;
+
+	A(0,0) = 1;
+	B(1,1) = 1;
+
+	fixture.A = A;
+	fixture.B = B;
+
+	auto& theta = fixture.theta;
+	auto& U1 = fixture.U1;
+	auto& U2 = fixture.U2;
+	auto& Qt = fixture.Qt;
+	auto& work = fixture.work;
+	auto& iwork = fixture.iwork;
+
+	const Integer lwork = work.size();
+	double w = -1;
+	Integer l = -1;
+
+	Integer ret = lapack::ggqrcs(
+		'Y', 'Y', 'Y', m, n, p, &w, &l,
+		&A(0, 0), m, &B(0, 0), p,
+		&theta(0),
+		&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+		&work(0), lwork, &iwork(0) );
+
+	check_results(ret, fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
+
+	BOOST_CHECK_EQUAL( w, 1 );
+	BOOST_CHECK_EQUAL( l, 2 );
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(
+	ggqrcs_zero_test, T, test_types)
+{
+	const std::size_t m = 4;
+	const std::size_t n = 3;
+	const std::size_t p = 2;
+
+	Fixture<T> fixture(m, n, p);
+
+	auto A = fixture.A;
+	auto B = fixture.B;
+
+	auto& theta = fixture.theta;
+	auto& U1 = fixture.U1;
+	auto& U2 = fixture.U2;
+	auto& Qt = fixture.Qt;
+	auto& work = fixture.work;
+	auto& iwork = fixture.iwork;
+
+	const Integer lwork = work.size();
+	double w = -1;
+	Integer l = -1;
+
+	Integer ret = lapack::ggqrcs(
+		'Y', 'Y', 'Y', m, n, p, &w, &l,
+		&A(0, 0), m, &B(0, 0), p,
+		&theta(0),
+		&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+		&work(0), lwork, &iwork(0) );
+
+	check_results(ret, fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
+
+	BOOST_CHECK_EQUAL( w, 1 );
+	BOOST_CHECK_EQUAL( l, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(
+	ggqrcs_rectangular_test, T, test_types)
+{
+	const std::size_t m = 4;
+	const std::size_t n = 3;
 	const std::size_t p = 2;
 
 	Fixture<T> fixture(m, n, p);
