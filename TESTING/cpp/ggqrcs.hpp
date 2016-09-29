@@ -61,6 +61,8 @@ ublas::matrix<T, Storage> build_R(
 
 	typedef ublas::matrix<T, Storage> Matrix;
 	typedef ublas::matrix_range<Matrix> MatrixRange;
+	typedef ublas::matrix_range<const Matrix> ConstMatrixRange;
+	typedef ublas::banded_adaptor<ConstMatrixRange> BandedAdaptor;
 
 	const std::size_t m = X.size1();
 	const std::size_t n = X.size2();
@@ -70,18 +72,24 @@ ublas::matrix<T, Storage> build_R(
 	if(r <= m)
 	{
 		MatrixRange R12 = ublas::subrange(R, 0, r, n-r, n);
-		const auto& X1 = ublas::subrange(X, 0, r, 0, r);
-		R12 = X1;
+		ConstMatrixRange X1 = ublas::subrange(X, 0, r, 0, r);
+		BandedAdaptor X1U(X1, 0, r);
+
+		R12 = X1U;
 	}
 	else
 	{
 		MatrixRange R12 = ublas::subrange(R, 0, m, n-r, n);
-		MatrixRange R22 = ublas::subrange(R, m, r, n-r, n);
-		const auto& X1 = ublas::subrange(X, 0, m, 0, r);
-		const auto& Y1 = ublas::subrange(Y, 0, r-m, 0, r);
+		MatrixRange R22 = ublas::subrange(R, m, r, n+m-r, n);
 
-		R12 = X1;
-		R22 = Y1;
+		ConstMatrixRange X1 = ublas::subrange(X, 0, m, 0, r);
+		ConstMatrixRange Y1 = ublas::subrange(Y, 0, r-m, 0, r-m);
+
+		BandedAdaptor X1U(X1, 0, r);
+		BandedAdaptor Y1U(Y1, 0, r);
+
+		R12 = X1U;
+		R22 = Y1U;
 	}
 
 	return R;
