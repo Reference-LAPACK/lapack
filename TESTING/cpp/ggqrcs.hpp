@@ -218,6 +218,18 @@ void check_results(
 		BOOST_REQUIRE( std::none_of( &theta(0), &theta(0)+k, is_nan) );
 
 
+	// check for infinity
+	bool(*is_inf)(T) = &std::isinf;
+	BOOST_REQUIRE( std::none_of( A.data().begin(), A.data().end(), is_inf) );
+	BOOST_REQUIRE( std::none_of( B.data().begin(), B.data().end(), is_inf) );
+	BOOST_REQUIRE( std::none_of( R.data().begin(), R.data().end(), is_inf) );
+	BOOST_REQUIRE( std::none_of( U1.data().begin(), U1.data().end(), is_inf) );
+	BOOST_REQUIRE( std::none_of( U2.data().begin(), U2.data().end(), is_inf) );
+	BOOST_REQUIRE( std::none_of( Qt.data().begin(), Qt.data().end(), is_inf) );
+	if( k > 0 )
+		BOOST_REQUIRE( std::none_of( &theta(0), &theta(0)+k, is_inf) );
+
+
 	// check that unitary matrices are indeed unitary
 	auto measure_unity = [] (const auto& U) -> double
 	{
