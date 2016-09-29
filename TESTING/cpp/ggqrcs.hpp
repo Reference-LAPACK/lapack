@@ -231,6 +231,9 @@ void check_results(
 
 
 	// check that unitary matrices are indeed unitary
+	// The bound is based on Inequality (19.13), Equation (3.8) in
+	// Higham: "Accuracy and Stability of Numerical Algorithms".
+	// Note that only Qt is the orthogonal factor of a QR decomposition.
 	auto measure_unity = [] (const auto& U) -> double
 	{
 		assert( U.size1() == U.size2() );
@@ -243,9 +246,9 @@ void check_results(
 		return ret;
 	};
 
-	BOOST_CHECK_LE( measure_unity(U1), eps );
-	BOOST_CHECK_LE( measure_unity(U2), eps );
-	BOOST_CHECK_LE( measure_unity(Qt), eps );
+	BOOST_CHECK_LE( measure_unity(U1), std::sqrt(m) * m * r * eps );
+	BOOST_CHECK_LE( measure_unity(U2), std::sqrt(p) * p * r * eps );
+	BOOST_CHECK_LE( measure_unity(Qt), std::sqrt(n) * n * r * eps );
 
 
 	// check the "singular values"
