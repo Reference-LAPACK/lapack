@@ -171,6 +171,10 @@ void check_results(
 	assert( B.size1() == U2.size1() );
 	assert( A.size2() == Qt.size1() );
 
+
+	typedef ublas::matrix<T, Storage> Matrix;
+
+
 	const std::size_t m = A.size1();
 	const std::size_t n = A.size2();
 	const std::size_t p = B.size1();
@@ -180,13 +184,30 @@ void check_results(
 	// check scalars
 	BOOST_CHECK_EQUAL( ret, 0 );
 
-	BOOST_CHECK( !std::isnan(w) );
-	BOOST_CHECK( std::isfinite(w) );
-	BOOST_CHECK_GT( w, 0 );
+	BOOST_REQUIRE( !std::isnan(w) );
+	BOOST_REQUIRE( std::isfinite(w) );
+	BOOST_REQUIRE_GT( w, 0 );
 
 	BOOST_CHECK_GE( l, 0 );
 	BOOST_CHECK_LE( l, std::min(m+p, n) );
 	const std::size_t r = l;
+	const std::size_t k = std::min( {m, p, r, m + p - r} );
+
+
+	// construct R
+	const Matrix R = build_R(r, X, Y);
+
+
+	// check for NaN
+	bool(*is_nan)(T) = &std::isnan;
+	BOOST_REQUIRE( std::none_of( A.data().begin(), A.data().end(), is_nan) );
+	BOOST_REQUIRE( std::none_of( B.data().begin(), B.data().end(), is_nan) );
+	BOOST_REQUIRE( std::none_of( R.data().begin(), R.data().end(), is_nan) );
+	BOOST_REQUIRE( std::none_of( U1.data().begin(), U1.data().end(), is_nan) );
+	BOOST_REQUIRE( std::none_of( U2.data().begin(), U2.data().end(), is_nan) );
+	BOOST_REQUIRE( std::none_of( Qt.data().begin(), Qt.data().end(), is_nan) );
+	if( k > 0 )
+		BOOST_REQUIRE( std::none_of( &theta(0), &theta(0)+k, is_nan) );
 
 
 	// check that unitary matrices are indeed unitary
@@ -208,7 +229,6 @@ void check_results(
 
 
 	// check the "singular values"
-	const std::size_t k = std::min( {m, p, r, m + p - r} );
 	BOOST_CHECK_GE( theta.size(), k );
 
 	for(std::size_t i = 0; i < k; ++i)
@@ -221,17 +241,6 @@ void check_results(
 	}
 
 
-	// construct R
-	typedef ublas::matrix<T, Storage> Matrix;
-	Matrix R = build_R(r, X, Y);
-
-	const T frob_R = ublas::norm_frobenius(R);
-	const T frob_A = ublas::norm_frobenius(A);
-	const T frob_B = ublas::norm_frobenius(B);
-	const T frob_G = std::sqrt( std::pow(frob_A, 2) + std::pow(frob_B, 2) );
-
-	BOOST_CHECK_CLOSE( frob_R, frob_G, frob_G * eps );
-
 	// reconstruct A, B from GSVD
 	const auto ds = build_diagonals(r, A, B, theta);
 	const Matrix& D1 = ds.first;
@@ -240,8 +249,13 @@ void check_results(
 	const Matrix almost_A = reconstruct_matrix(U1, D1, R, Qt);
 	const Matrix almost_B = reconstruct_matrix(U2, D2, R, Qt);
 
-	BOOST_CHECK_LE( ublas::norm_frobenius(A - almost_A), frob_A * eps );
-	BOOST_CHECK_LE( ublas::norm_frobenius(w*B - almost_B), frob_B * eps );
+	const T frob_A = ublas::norm_frobenius(A);
+	const T frob_B = ublas::norm_frobenius(B);
+
+	BOOST_CHECK_LE(
+		ublas::norm_frobenius(A - almost_A), frob_A * eps );
+	BOOST_CHECK_LE(
+		ublas::norm_frobenius(w*B - almost_B), w * frob_B * eps );
 }
 
 
