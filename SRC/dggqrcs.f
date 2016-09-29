@@ -547,12 +547,12 @@
 *
       IF ( R.LE.M ) THEN
          CALL DGEMM( 'N', 'N', R, N, R, 1.0D0, G, R,
-     $          A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
+     $               A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
       ELSE
          CALL DGEMM( 'N', 'N', R, N, M, 1.0D0, G( 1, 1 ), R,
-     $          A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
+     $               A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
          CALL DGEMM( 'N', 'N', R, N, R - M, 1.0D0, G( 1, M + 1 ), R,
-     $          B, LDB, 1.0D0, QT( N-R+1, 1 ), LDQT )
+     $               B, LDB, 1.0D0, QT( N-R+1, 1 ), LDQT )
       END IF
 *
 *     Compute the RQ decomposition of V^T R1( 1:R, : )
