@@ -458,7 +458,7 @@
 *
 *     Compute the Frobenius norm of matrix G
 *
-      GNORM = DLANGE( 'F', M + P, N, G, LDG, WORK( Z ) )
+      GNORM = DLANGE( 'F', M + P, N, G, LDG, WORK( Z + 1 ) )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrix G.
