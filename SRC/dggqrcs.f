@@ -507,6 +507,8 @@
          IF( WANTQT ) THEN
             CALL DLASET( 'A', N, N, 0.0D0, 1.0D0, QT, LDQT )
          END IF
+*
+         WORK( 1 ) = DBLE( LWKOPT )
          RETURN
       END IF
 *
