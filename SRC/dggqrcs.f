@@ -80,8 +80,9 @@
 *>
 *> The routine computes C, S, R, and optionally the orthogonal
 *> transformation matrices U, V and Q. If L <= M, then R is stored in
-*> A(1:L, :) on exit. Otherwise, the first M rows of R are stored in A
-*> and the last L-M rows are stored in B(1:L-M, :).
+*> A(1:L, 1:L) on exit. Otherwise, the first M rows of R are stored in
+*> A(:, 1:L) and R( M+1:, M+1: ) is stored in B(1:L-M, 1:L-M). In both
+*> cases, only the upper triangular part is stored.
 *>
 *> In particular, if B is an N-by-N nonsingular matrix, then the GSVD of
 *> A and B implicitly gives the SVD of A*inv(B):
@@ -570,10 +571,11 @@
 *     Copy matrix R from QT( 1:R, N-R+1: ) to A, B
 *
       IF ( R.LE.M ) THEN
-         CALL DLACPY( 'U', R, R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
+         CALL DLACPY( 'U', R, R, QT( 1, N-R+1 ), LDQT, A, LDA )
       ELSE
-         CALL DLACPY( 'U', M,     R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
-         CALL DLACPY( 'U', R - M, R, QT( N-R+M+1, N-R+1 ), LDQT, B, LDB)
+         CALL DLACPY( 'U', M,     R, QT( 1, N-R+1 ), LDQT, A, LDA )
+         CALL DLACPY( 'U', R - M, R - M, QT( M + 1, N-R+M+1 ), LDQT,
+     $                B, LDB )
       END IF
 *
 *     Explicitly form Q^T
