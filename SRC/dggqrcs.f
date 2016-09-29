@@ -597,10 +597,10 @@
 *     Copy matrix R from QT( 1:R, N-R+1: ) to A, B
 *
       IF ( R.LE.M ) THEN
-         CALL DLACPY( 'U', R, R, QT( 1, N-R+1 ), LDQT, A, LDA )
+         CALL DLACPY( 'U', R, R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
       ELSE
-         CALL DLACPY( 'U', M,     R, QT( 1, N-R+1 ), LDQT, A, LDA )
-         CALL DLACPY( 'U', R - M, R - M, QT( M + 1, N-R+M+1 ), LDQT,
+         CALL DLACPY( 'U', M,     R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
+         CALL DLACPY( 'U', R - M, R - M, QT( N-R+M+1, N-R+M+1 ), LDQT,
      $                B, LDB )
       END IF
 *
