@@ -335,7 +335,7 @@
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
       INTEGER            I, J, Z, R, LDG, LWKOPT
-      DOUBLE PRECISION   GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE
+      DOUBLE PRECISION   GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
 *     .. Local Arrays ..
       DOUBLE PRECISION   G( M + P, N )
 *     ..
@@ -371,6 +371,9 @@
          G = RESHAPE( WORK(1:Z), (/ M + P, N /) )
       END IF
       LDG = M + P
+*     Computing 0.0 / 0.0 directly causes compiler errors
+      NAN = 1.0D0
+      NAN = 0.0 / (NAN - 1.0D0)
 *
 *     Test the input arguments
 *
@@ -457,6 +460,11 @@
       CALL DLACPY( 'A', M, N, A, LDA, G( P + 1, 1 ), LDG )
       CALL DLACPY( 'A', P, N, B, LDB, G( 1, 1 ), LDG )
 *
+*     DEBUG
+*
+      CALL DLASET( 'A', M, N, NAN, NAN, A, LDA )
+      CALL DLASET( 'A', P, N, NAN, NAN, B, LDB )
+*
 *     Compute the Frobenius norm of matrix G
 *
       GNORM = DLANGE( 'F', M + P, N, G, LDG, WORK( Z + 1 ) )
@@ -534,6 +542,10 @@
          RETURN
       END IF
 *
+*     DEBUG
+*
+      THETA(1:N) = NAN
+*
 *     Compute the CS decomposition of Q1( :, 1:R )
 *
       CALL DORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, R,
@@ -544,9 +556,17 @@
          RETURN
       END IF
 *
+*     DEBUG
+*
+      WORK(1:LWORK) = NAN
+*
 *     Copy V^T from QT to G
 *
       CALL DLACPY( 'A', R, R, QT, LDQT, G, R )
+*
+*     DEBUG
+*
+      CALL DLASET( 'A', N, N, NAN, NAN, QT, LDQT )
 *
 *     Compute V^T R1( 1:R, : ) in the last R rows of QT
 *
@@ -559,6 +579,12 @@
          CALL DGEMM( 'N', 'N', R, N, R - M, 1.0D0, G( 1, M + 1 ), R,
      $               B, LDB, 1.0D0, QT( N-R+1, 1 ), LDQT )
       END IF
+*
+*     DEBUG
+*
+      CALL DLASET( 'A', M, N, NAN, NAN, A, LDA )
+      CALL DLASET( 'A', P, N, NAN, NAN, B, LDB )
+      WORK(1:LWORK) = NAN
 *
 *     Compute the RQ decomposition of V^T R1( 1:R, : )
 *
@@ -577,6 +603,11 @@
          CALL DLACPY( 'U', R - M, R - M, QT( M + 1, N-R+M+1 ), LDQT,
      $                B, LDB )
       END IF
+*
+*     DEBUG
+*
+      CALL DLASET( 'U', R, R, NAN, NAN, QT( 1, N-R+1 ), LDQT )
+      WORK( L+1:LWORK ) = NAN
 *
 *     Explicitly form Q^T
 *
