@@ -512,13 +512,17 @@
          RETURN
       END IF
 *
-*     Copy R1 into A
+*     Copy R1 into A and set lower triangular part of A to zero
 *
       IF( R.LE.M ) THEN
           CALL DLACPY( 'U', R, N, G, LDG, A, LDA )
+          CALL DLASET( 'L', R - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
       ELSE
           CALL DLACPY( 'U', M, N, G, LDG, A, LDA )
-          CALL DLACPY( 'A', R - M, N, G( M + 1, 1 ), LDG, B, LDB )
+          CALL DLACPY( 'U', R - M, N, G( M + 1, 1 ), LDG, B, LDB )
+*
+          CALL DLASET( 'L', M - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
+          CALL DLASET( 'L', R-M-1, N, 0.0D0, 0.0D0, B( 2, 1 ), LDB )
       END IF
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
