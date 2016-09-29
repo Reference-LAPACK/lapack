@@ -431,6 +431,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 				auto B = fixture.B;
 
 				A(0,0) = 1;
+				A(1,0) = 1;
+				B(0,1) = 1;
 				B(1,1) = 1;
 
 				fixture.A = A;
