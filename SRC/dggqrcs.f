@@ -562,7 +562,7 @@
 *
 *     Copy V^T from QT to G
 *
-      CALL DLACPY( 'A', R, R, QT, LDQT, G, R )
+      CALL DLACPY( 'A', R, R, QT, LDQT, G, LDG )
 *
 *     DEBUG
 *
@@ -571,12 +571,12 @@
 *     Compute V^T R1( 1:R, : ) in the last R rows of QT
 *
       IF ( R.LE.M ) THEN
-         CALL DGEMM( 'N', 'N', R, N, R, 1.0D0, G, R,
+         CALL DGEMM( 'N', 'N', R, N, R, 1.0D0, G, LDG,
      $               A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
       ELSE
-         CALL DGEMM( 'N', 'N', R, N, M, 1.0D0, G( 1, 1 ), R,
+         CALL DGEMM( 'N', 'N', R, N, M, 1.0D0, G( 1, 1 ), LDG,
      $               A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
-         CALL DGEMM( 'N', 'N', R, N, R - M, 1.0D0, G( 1, M + 1 ), R,
+         CALL DGEMM( 'N', 'N', R, N, R - M, 1.0D0, G( 1, M + 1 ), LDG,
      $               B, LDB, 1.0D0, QT( N-R+1, 1 ), LDQT )
       END IF
 *
