@@ -244,9 +244,9 @@ void check_results(
 		return ret;
 	};
 
-	BOOST_CHECK_LE( measure_unity(U1), std::sqrt(m) * m * r * eps );
-	BOOST_CHECK_LE( measure_unity(U2), std::sqrt(p) * p * r * eps );
-	BOOST_CHECK_LE( measure_unity(Qt), std::sqrt(n) * n * r * eps );
+	BOOST_CHECK_LE( measure_unity(U1), 2 * std::sqrt(m) * (m+p) * r * eps );
+	BOOST_CHECK_LE( measure_unity(U2), 2 * std::sqrt(p) * (m+p) * r * eps );
+	BOOST_CHECK_LE( measure_unity(Qt), 2 * std::sqrt(n) * n * r * eps );
 
 
 	// check the "singular values"
@@ -273,10 +273,13 @@ void check_results(
 	const T frob_A = ublas::norm_frobenius(A);
 	const T frob_B = ublas::norm_frobenius(B);
 
+	// The tolerance here is based on the backward error bounds for the QR
+	// factorization given in Theorem 19.4, Equation (3.8) in
+	// Higham: "Accuracy and Stability of Numerical Algorithms".
 	BOOST_CHECK_LE(
-		ublas::norm_frobenius(A - almost_A), frob_A * eps );
+		ublas::norm_frobenius(A - almost_A), 2 * (m+p) * n * frob_A * eps );
 	BOOST_CHECK_LE(
-		ublas::norm_frobenius(w*B - almost_B), w * frob_B * eps );
+		ublas::norm_frobenius(w*B - almost_B), 3*w * (m+p) * n * frob_B * eps );
 }
 
 
