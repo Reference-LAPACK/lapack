@@ -164,7 +164,7 @@ ublas::matrix<T, Storage> reconstruct_matrix(
 
 template<typename T, class Storage>
 void check_results(
-	Integer ret,
+	Integer ret, T lwkopt,
 	const ublas::matrix<T, Storage>& A, const ublas::matrix<T, Storage>& B,
 	T w, Integer l,
 	const ublas::vector<T> theta,
@@ -189,6 +189,9 @@ void check_results(
 
 	// check scalars
 	BOOST_CHECK_EQUAL( ret, 0 );
+	BOOST_REQUIRE( !std::isnan(lwkopt) );
+	BOOST_REQUIRE( std::isfinite(lwkopt) );
+	BOOST_CHECK_GT( lwkopt, (m+p) * n );
 
 	BOOST_REQUIRE( !std::isnan(w) );
 	BOOST_REQUIRE( std::isfinite(w) );
@@ -376,7 +379,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 		&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
 		&work(0), lwork, &iwork(0) );
 
-	check_results(ret, fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
+	check_results(
+		ret, work(0), fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
 
 	BOOST_CHECK_EQUAL( w, 1 );
 	BOOST_CHECK_EQUAL( l, 2 );
@@ -413,7 +417,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 		&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
 		&work(0), lwork, &iwork(0) );
 
-	check_results(ret, fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
+	check_results(
+		ret, work(0), fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
 
 	BOOST_CHECK_EQUAL( w, 1 );
 	BOOST_CHECK_EQUAL( l, 0 );
@@ -461,7 +466,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 					&work(0), lwork, &iwork(0) );
 
 				check_results(
-					ret, fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
+					ret, work(0), fixture.A, fixture.B,
+					w, l, theta, U1, U2, Qt, A, B);
 
 				BOOST_CHECK_EQUAL( w, 1 );
 			}
@@ -525,7 +531,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 						&work(0), lwork, &iwork(0) );
 
 					check_results(
-						ret, fixture.A, fixture.B,
+						ret, work(0), fixture.A, fixture.B,
 						w, l, theta, U1, U2, Qt, A, B);
 				}
 			}
