@@ -528,7 +528,7 @@
           CALL DLASET( 'L', R - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
       ELSE
           CALL DLACPY( 'U', M, N, G, LDG, A, LDA )
-          CALL DLACPY( 'U', R - M, N, G( M + 1, 1 ), LDG, B, LDB )
+          CALL DLACPY( 'U', R - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
 *
           CALL DLASET( 'L', M - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
           CALL DLASET( 'L', R-M-1, N, 0.0D0, 0.0D0, B( 2, 1 ), LDB )
@@ -576,8 +576,9 @@
       ELSE
          CALL DGEMM( 'N', 'N', R, N, M, 1.0D0, G( 1, 1 ), LDG,
      $               A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
-         CALL DGEMM( 'N', 'N', R, N, R - M, 1.0D0, G( 1, M + 1 ), LDG,
-     $               B, LDB, 1.0D0, QT( N-R+1, 1 ), LDQT )
+         CALL DGEMM( 'N', 'N', R, N - M, R - M, 1.0D0,
+     $               G( 1, M + 1 ), LDG, B, LDB,
+     $               1.0D0, QT( N-R+1, M+1 ), LDQT )
       END IF
 *
 *     DEBUG
