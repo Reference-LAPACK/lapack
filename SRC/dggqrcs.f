@@ -521,7 +521,7 @@
          RETURN
       END IF
 *
-*     Copy R1 into A and set lower triangular part of A to zero
+*     Copy R1( 1:R, : ) into A, B and set lower triangular part to zero
 *
       IF( R.LE.M ) THEN
           CALL DLACPY( 'U', R, N, G, LDG, A, LDA )
@@ -595,7 +595,7 @@
          RETURN
       END IF
 *
-*     Copy matrix R from QT( 1:R, N-R+1: ) to A, B
+*     Copy matrix R from QT( N-R+1:N, N-R+1:N ) to A, B
 *
       IF ( R.LE.M ) THEN
          CALL DLACPY( 'U', R, R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
