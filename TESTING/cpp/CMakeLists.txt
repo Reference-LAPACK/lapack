@@ -1,4 +1,10 @@
-find_package(Boost 1.48.0 REQUIRED COMPONENTS unit_test_framework timer)
+find_package(Boost 1.48.0 QUIET COMPONENTS unit_test_framework timer)
+
+if(NOT Boost_FOUND)
+	message("Boost libraries not found. C++ tests will not be build.")
+	return()
+endif(NOT Boost_FOUND)
+
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra -Wall -std=c++14 -pedantic")
