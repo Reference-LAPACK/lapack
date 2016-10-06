@@ -62,7 +62,7 @@ if(BUILD_TESTING)
 endif()
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapacke.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapacke.pc)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapacke.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapacke.pc @ONLY)
  install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/lapacke.pc
   DESTINATION ${PKG_CONFIG_DIR}
