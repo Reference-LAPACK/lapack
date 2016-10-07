@@ -27,8 +27,6 @@ endmacro()
 
 # Object files for single real precision
 set( STESTL1O c_sblas1.c)
-
-set( STESTL2O c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
 set( STESTL2O c_sblas2.c c_s2chke.c auxiliary.c c_xerbla.c)
 set( STESTL3O c_sblas3.c c_s3chke.c auxiliary.c c_xerbla.c)
 
