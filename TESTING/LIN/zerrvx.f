@@ -93,7 +93,7 @@
      $                   ZGTSVX, ZHESV, ZHESV_ROOK, ZHESVX, ZHPSV,
      $                   ZHPSVX, ZPBSV, ZPBSVX, ZPOSV, ZPOSVX, ZPPSV,
      $                   ZPPSVX, ZPTSV, ZPTSVX, ZSPSV, ZSPSVX, ZSYSV,
-     $                   ZSYSV_ROOK, ZSYSVX
+     $                   ZSYSV_AASEN, ZSYSV_ROOK, ZSYSVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -634,6 +634,25 @@
      $                RCOND, R1, R2, W, 3, RW, INFO )
          CALL CHKXER( 'ZHESVX', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
+*
+*        ZHESV_AASEN
+*
+        SRNAMT = 'ZHESV_AASEN'
+        INFOT = 1
+        CALL ZHESV_AASEN( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'ZHESV_AASEN', INFOT, NOUT, LERR, OK )
+        INFOT = 2
+        CALL ZHESV_AASEN( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'ZHESV_AASEN', INFOT, NOUT, LERR, OK )
+        INFOT = 3
+        CALL ZHESV_AASEN( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'ZHESV_AASEN', INFOT, NOUT, LERR, OK )
+        INFOT = 8
+        CALL ZHESV_AASEN( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'ZHESV_AASEN', INFOT, NOUT, LERR, OK )
+*
+
       ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
 *
 *        ZHESV_ROOK

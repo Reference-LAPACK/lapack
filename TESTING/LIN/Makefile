@@ -51,10 +51,10 @@ SLINTST = schkaa.o \
    schkeq.o schkgb.o schkge.o schkgt.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
    schkpt.o schkq3.o schkql.o schkqr.o schkrq.o \
-   schksp.o schksy.o schksy_rook.o schktb.o schktp.o schktr.o \
+   schksp.o schksy.o schksy_rook.o schksy_aasen.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
-   sdrvpp.o sdrvpt.o sdrvsp.o  sdrvsy_rook.o\
+   sdrvpp.o sdrvpt.o sdrvsp.o  sdrvsy_rook.o sdrvsy_aasen.o\
    serrgt.o serrlq.o serrls.o \
    serrps.o serrql.o serrqp.o serrqr.o \
    serrrq.o serrtr.o serrtz.o \
@@ -70,7 +70,7 @@ SLINTST = schkaa.o \
    sqrt01.o sqrt01p.o sqrt02.o sqrt03.o sqrt11.o sqrt12.o \
    sqrt13.o sqrt14.o sqrt15.o sqrt16.o sqrt17.o \
    srqt01.o srqt02.o srqt03.o srzt01.o srzt02.o \
-   sspt01.o ssyt01.o ssyt01_rook.o \
+   sspt01.o ssyt01.o ssyt01_rook.o ssyt01_aasen.o\
    stbt02.o stbt03.o stbt05.o stbt06.o stpt01.o \
    stpt02.o stpt03.o stpt05.o stpt06.o strt01.o \
    strt02.o strt03.o strt05.o strt06.o \
@@ -86,11 +86,11 @@ endif
 
 CLINTST = cchkaa.o \
    cchkeq.o cchkgb.o cchkge.o cchkgt.o \
-   cchkhe.o cchkhe_rook.o cchkhp.o cchklq.o cchkpb.o \
+   cchkhe.o cchkhe_rook.o cchkhe_aasen.o cchkhp.o cchklq.o cchkpb.o \
    cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o \
    cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
-   cdrvgt.o cdrvhe_rook.o cdrvhp.o \
+   cdrvgt.o cdrvhe_rook.o cdrvhe_aasen.o cdrvhp.o \
    cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o \
    cdrvsp.o cdrvsy_rook.o \
    cerrgt.o cerrlq.o \
@@ -99,7 +99,7 @@ CLINTST = cchkaa.o \
    cgbt01.o cgbt02.o cgbt05.o cgelqs.o cgeqls.o cgeqrs.o \
    cgerqs.o cget01.o cget02.o \
    cget03.o cget04.o cget07.o cgtt01.o cgtt02.o \
-   cgtt05.o chet01.o chet01_rook.o chpt01.o claipd.o claptm.o clarhs.o clatb4.o clatb5.o \
+   cgtt05.o chet01.o chet01_rook.o chet01_aasen.o chpt01.o claipd.o claptm.o clarhs.o clatb4.o clatb5.o \
    clatsp.o clatsy.o clattb.o clattp.o clattr.o \
    clavhe.o clavhe_rook.o clavhp.o clavsp.o clavsy.o clavsy_rook.o clqt01.o \
    clqt02.o clqt03.o cpbt01.o cpbt02.o cpbt05.o \
@@ -129,10 +129,10 @@ DLINTST = dchkaa.o \
    dchkeq.o dchkgb.o dchkge.o dchkgt.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
    dchkpt.o dchkq3.o dchkql.o dchkqr.o dchkrq.o \
-   dchksp.o dchksy.o dchksy_rook.o dchktb.o dchktp.o dchktr.o \
+   dchksp.o dchksy.o dchksy_rook.o dchksy_aasen.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
-   ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o \
+   ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o ddrvsy_aasen.o\
    derrgt.o derrlq.o derrls.o \
    derrps.o derrql.o derrqp.o derrqr.o \
    derrrq.o derrtr.o derrtz.o \
@@ -148,7 +148,7 @@ DLINTST = dchkaa.o \
    dqrt01.o dqrt01p.o  dqrt02.o dqrt03.o dqrt11.o dqrt12.o \
    dqrt13.o dqrt14.o dqrt15.o dqrt16.o dqrt17.o \
    drqt01.o drqt02.o drqt03.o drzt01.o drzt02.o \
-   dspt01.o dsyt01.o dsyt01_rook.o \
+   dspt01.o dsyt01.o dsyt01_rook.o dsyt01_aasen.o\
    dtbt02.o dtbt03.o dtbt05.o dtbt06.o dtpt01.o \
    dtpt02.o dtpt03.o dtpt05.o dtpt06.o dtrt01.o \
    dtrt02.o dtrt03.o dtrt05.o dtrt06.o \
@@ -165,11 +165,11 @@ endif
 
 ZLINTST = zchkaa.o \
    zchkeq.o zchkgb.o zchkge.o zchkgt.o \
-   zchkhe.o zchkhe_rook.o zchkhp.o zchklq.o zchkpb.o \
+   zchkhe.o zchkhe_rook.o zchkhe_aasen.o zchkhp.o zchklq.o zchkpb.o \
    zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkql.o \
    zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
-   zdrvgt.o zdrvhe_rook.o zdrvhp.o \
+   zdrvgt.o zdrvhe_rook.o zdrvhe_aasen.o zdrvhp.o \
    zdrvls.o zdrvpb.o zdrvpp.o zdrvpt.o \
    zdrvsp.o zdrvsy_rook.o \
    zerrgt.o zerrlq.o \
@@ -178,7 +178,7 @@ ZLINTST = zchkaa.o \
    zgbt01.o zgbt02.o zgbt05.o zgelqs.o zgeqls.o zgeqrs.o \
    zgerqs.o zget01.o zget02.o \
    zget03.o zget04.o zget07.o zgtt01.o zgtt02.o \
-   zgtt05.o zhet01.o zhet01_rook.o zhpt01.o zlaipd.o zlaptm.o zlarhs.o zlatb4.o zlatb5.o \
+   zgtt05.o zhet01.o zhet01_rook.o zhet01_aasen.o zhpt01.o zlaipd.o zlaptm.o zlarhs.o zlatb4.o zlatb5.o \
    zlatsp.o zlatsy.o zlattb.o zlattp.o zlattr.o \
    zlavhe.o zlavhe_rook.o zlavhp.o zlavsp.o zlavsy.o zlavsy_rook.o zlqt01.o \
    zlqt02.o zlqt03.o zpbt01.o zpbt02.o zpbt05.o \

@@ -93,7 +93,7 @@
      $                   CHESV, CHESV_ROOK, CHESVX, CHKXER, CHPSV,
      $                   CHPSVX, CPBSV, CPBSVX, CPOSV, CPOSVX, CPPSV,
      $                   CPPSVX, CPTSV, CPTSVX, CSPSV, CSPSVX, CSYSV,
-     $                   CSYSV_ROOK, CSYSVX
+     $                   CSYSV_AASEN, CSYSV_ROOK, CSYSVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -632,6 +632,25 @@
      $                RCOND, R1, R2, W, 3, RW, INFO )
          CALL CHKXER( 'CHESVX', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
+*
+*        CHESV_AASEN
+*
+        SRNAMT = 'CHESV_AASEN'
+        INFOT = 1
+        CALL CHESV_AASEN( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_AASEN', INFOT, NOUT, LERR, OK )
+        INFOT = 2
+        CALL CHESV_AASEN( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_AASEN', INFOT, NOUT, LERR, OK )
+        INFOT = 3
+        CALL CHESV_AASEN( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_AASEN', INFOT, NOUT, LERR, OK )
+        INFOT = 8
+        CALL CHESV_AASEN( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_AASEN', INFOT, NOUT, LERR, OK )
+*
+
       ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
 *
 *        CHESV_ROOK

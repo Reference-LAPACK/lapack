@@ -49,6 +49,7 @@
 *> DPP    9               List types on next line if 0 < NTYPES <  9
 *> DPB    8               List types on next line if 0 < NTYPES <  8
 *> DPT   12               List types on next line if 0 < NTYPES < 12
+*> DSA   10               List types on next line if 0 < NTYPES < 10
 *> DSY   10               List types on next line if 0 < NTYPES < 10
 *> DSR   10               List types on next line if 0 < NTYPES < 10
 *> DSP   10               List types on next line if 0 < NTYPES < 10
@@ -663,6 +664,34 @@
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        SY:  symmetric indefinite matrices,
+*             with partial (Aasen's) pivoting algorithm
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL DCHKSY_AASEN( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, 
+     $                         NSVAL, THRESH, TSTERR, LDA,
+     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),  
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL DDRVSY_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
