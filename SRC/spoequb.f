@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> SPOEQU computes row and column scalings intended to equilibrate a
+*> SPOEQUB computes row and column scalings intended to equilibrate a
 *> symmetric positive definite matrix A and reduce its condition number
 *> (with respect to the two-norm).  S contains the scale factors,
 *> S(i) = 1/sqrt(A(i,i)), chosen so that the scaled matrix B with
@@ -42,6 +42,12 @@
 *> choice of S puts the condition number of B within a factor N of the
 *> smallest possible condition number over all possible diagonal
 *> scalings.
+*>
+*> This routine differs from SPOEQU by restricting the scaling factors
+*> to a power of the radix.  Barring over- and underflow, scaling by
+*> these factors introduces no additional rounding errors.  However, the
+*> scaled diagonal entries are no longer approximately 1 but lie
+*> between sqrt(radix) and 1/sqrt(radix).
 *> \endverbatim
 *
 *  Arguments:
