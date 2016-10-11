@@ -44,18 +44,19 @@
 *> orthonormal columns that has been partitioned into a 2-by-1 block
 *> structure:
 *>
-*>                                [  I  0  0 ]
+*>                                [  I1 0  0 ]
 *>                                [  0  C  0 ]
 *>          [ X11 ]   [ U1 |    ] [  0  0  0 ]
 *>      X = [-----] = [---------] [----------] V1**T .
 *>          [ X21 ]   [    | U2 ] [  0  0  0 ]
 *>                                [  0  S  0 ]
-*>                                [  0  0  I ]
+*>                                [  0  0  I2]
 *>
 *> X11 is P-by-Q. The orthogonal matrices U1, U2, and V1 are P-by-P,
 *> (M-P)-by-(M-P), and Q-by-Q, respectively. C and S are R-by-R
 *> nonnegative diagonal matrices satisfying C^2 + S^2 = I, in which
-*> R = MIN(P,M-P,Q,M-Q).
+*> R = MIN(P,M-P,Q,M-Q). I1 is a K1-by-K1 identity matrix and I2 is a
+*> K2-by-K2 identity matrix, where K1 = MAX(Q+P-M,0), K2 = MAX(Q-P,0).
 *> \endverbatim
 *
 *  Arguments:
