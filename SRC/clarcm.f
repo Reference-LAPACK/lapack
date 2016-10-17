@@ -61,7 +61,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is REAL array, dimension (LDA, M)
-*>          A contains the M by M matrix A.
+*>          On entry, A contains the M by M matrix A.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -73,7 +73,7 @@
 *> \param[in] B
 *> \verbatim
 *>          B is COMPLEX array, dimension (LDB, N)
-*>          B contains the M by N matrix B.
+*>          On entry, B contains the M by N matrix B.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -85,7 +85,7 @@
 *> \param[out] C
 *> \verbatim
 *>          C is COMPLEX array, dimension (LDC, N)
-*>          C contains the M by N matrix C.
+*>          On exit, C contains the M by N matrix C.
 *> \endverbatim
 *>
 *> \param[in] LDC
