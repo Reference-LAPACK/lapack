@@ -82,7 +82,7 @@
 *>          The leading dimension of the array B. LDB >=max(1,M).
 *> \endverbatim
 *>
-*> \param[in] C
+*> \param[out] C
 *> \verbatim
 *>          C is COMPLEX array, dimension (LDC, N)
 *>          C contains the M by N matrix C.
