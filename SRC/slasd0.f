@@ -72,7 +72,7 @@
 *>         On exit D, if INFO = 0, contains its singular values.
 *> \endverbatim
 *>
-*> \param[in] E
+*> \param[in,out] E
 *> \verbatim
 *>          E is REAL array, dimension (M-1)
 *>         Contains the subdiagonal entries of the bidiagonal matrix.

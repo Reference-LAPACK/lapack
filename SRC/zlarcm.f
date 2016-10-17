@@ -61,7 +61,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA, M)
-*>          A contains the M by M matrix A.
+*>          On entry, A contains the M by M matrix A.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -73,7 +73,7 @@
 *> \param[in] B
 *> \verbatim
 *>          B is COMPLEX*16 array, dimension (LDB, N)
-*>          B contains the M by N matrix B.
+*>          On entry, B contains the M by N matrix B.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -82,10 +82,10 @@
 *>          The leading dimension of the array B. LDB >=max(1,M).
 *> \endverbatim
 *>
-*> \param[in] C
+*> \param[out] C
 *> \verbatim
 *>          C is COMPLEX*16 array, dimension (LDC, N)
-*>          C contains the M by N matrix C.
+*>          On exit, C contains the M by N matrix C.
 *> \endverbatim
 *>
 *> \param[in] LDC
