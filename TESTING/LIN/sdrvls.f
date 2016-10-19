@@ -2,8 +2,8 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at
-*            http://www.netlib.org/lapack/explore-html/
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
 *  Definition:
 *  ===========
@@ -11,7 +11,7 @@
 *       SUBROUTINE SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
 *                          NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
 *                          COPYB, C, S, COPYS, WORK, IWORK, NOUT )
-*
+* 
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NM, NN, NNB, NNS, NOUT
@@ -24,14 +24,14 @@
 *       REAL               A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
 *      $                   COPYS( * ), S( * ), WORK( * )
 *       ..
-*
+*  
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> SDRVLS tests the least squares driver routines SGELS, SGELSS, SGELSY
+*> SDRVLS tests the least squares driver routines SGELS, SGETSLS, SGELSS, SGELSY,
 *> and SGELSD.
 *> \endverbatim
 *
@@ -46,14 +46,14 @@
 *>          .TRUE.; if DOTYPE(j) = .FALSE., then type j is not used.
 *>          The matrix of type j is generated as follows:
 *>          j=1: A = U*D*V where U and V are random orthogonal matrices
-*>               and D has random entries (> 0.1) taken from a uniform
+*>               and D has random entries (> 0.1) taken from a uniform 
 *>               distribution (0,1). A is full rank.
 *>          j=2: The same of 1, but A is scaled up.
 *>          j=3: The same of 1, but A is scaled down.
 *>          j=4: A = U*D*V where U and V are random orthogonal matrices
 *>               and D has 3*min(M,N)/4 random entries (> 0.1) taken
 *>               from a uniform distribution (0,1) and the remaining
-*>               entries set to 0. A is rank-deficient.
+*>               entries set to 0. A is rank-deficient. 
 *>          j=5: The same of 4, but A is scaled up.
 *>          j=6: The same of 5, but A is scaled down.
 *> \endverbatim
@@ -189,14 +189,14 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee
-*> \author Univ. of California Berkeley
-*> \author Univ. of Colorado Denver
-*> \author NAG Ltd.
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
 *> \date November 2015
 *
-*> \ingroup single_lin
+*> \ingroup double_lin
 *
 *  =====================================================================
       SUBROUTINE SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
@@ -225,7 +225,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 14 )
+      PARAMETER          ( NTESTS = 16 )
       INTEGER            SMLSIZ
       PARAMETER          ( SMLSIZ = 25 )
       REAL               ONE, TWO, ZERO
@@ -234,10 +234,10 @@
 *     .. Local Scalars ..
       CHARACTER          TRANS
       CHARACTER*3        PATH
-      INTEGER            CRANK, I, IM, IN, INB, INFO, INS, IRANK,
-     $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK,
-     $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
-     $                   NFAIL, NLVL, NRHS, NROWS, NRUN, RANK
+      INTEGER            CRANK, I, IM, IN, INB, INFO, INS, IRANK, 
+     $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK, 
+     $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS, 
+     $                   NFAIL, NLVL, NRHS, NROWS, NRUN, RANK, MB, LWTS
       REAL               EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
@@ -251,11 +251,11 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASVM, SAXPY, SERRLS, SGELS,
      $                   SGELSD, SGELSS, SGELSY, SGEMM, SLACPY,
-     $                   SLARNV, SQRT13, SQRT15, SQRT16, SSCAL,
+     $                   SLARNV, SLASRT, SQRT13, SQRT15, SQRT16, SSCAL,
      $                   XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          INT, LOG, MAX, MIN, REAL, SQRT
+      INTRINSIC          REAL, INT, LOG, MAX, MIN, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -273,7 +273,7 @@
 *
 *     Initialize constants and the random number seed.
 *
-      PATH( 1: 1 ) = 'Single precision'
+      PATH( 1: 1 ) = 'SINGLE PRECISION'
       PATH( 2: 3 ) = 'LS'
       NRUN = 0
       NFAIL = 0
@@ -299,6 +299,8 @@
       IF( ( NM.EQ.0 .OR. NN.EQ.0 ) .AND. THRESH.EQ.ZERO )
      $   CALL ALAHD( NOUT, PATH )
       INFOT = 0
+      CALL XLAENV( 2, 2 )
+      CALL XLAENV( 9, SMLSIZ )
 *
       DO 150 IM = 1, NM
          M = MVAL( IM )
@@ -306,8 +308,14 @@
 *
          DO 140 IN = 1, NN
             N = NVAL( IN )
-            MNMIN = MIN( M, N )
+            MNMIN = MAX(MIN( M, N ),1)
             LDB = MAX( 1, M, N )
+            MB = (MNMIN+1)
+            IF(MINMN.NE.MB) THEN
+              LWTS = (((LDB-MB)/(MB-MNMIN))*MNMIN+MNMIN*2)*MB+5
+            ELSE
+              LWTS = 2*MINMN+5
+            END IF
 *
             DO 130 INS = 1, NNS
                NRHS = NSVAL( INS )
@@ -315,7 +323,8 @@
      $                REAL( SMLSIZ+1 ) ) / LOG( TWO ) ) + 1, 0 )
                LWORK = MAX( 1, ( M+NRHS )*( N+2 ), ( N+NRHS )*( M+2 ),
      $                 M*N+4*MNMIN+MAX( M, N ), 12*MNMIN+2*MNMIN*SMLSIZ+
-     $                 8*MNMIN*NLVL+MNMIN*NRHS+(SMLSIZ+1)**2 )
+     $                 8*MNMIN*NLVL+MNMIN*NRHS+(SMLSIZ+1)**2,LWTS)
+     $                 
 *
                DO 120 IRANK = 1, 2
                   DO 110 ISCALE = 1, 3
@@ -424,6 +433,110 @@
                               NRUN = NRUN + 2
    30                      CONTINUE
    40                   CONTINUE
+*
+*
+*                       Test SGETSLS
+*
+*                       Generate a matrix of scaling type ISCALE
+*
+                        CALL SQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
+     $                               ISEED )
+                        DO 65 INB = 1, NNB
+                             MB = NBVAL( INB )
+                             CALL XLAENV( 1, MB )
+                             DO 62 IMB = 1, NNB
+                               NB = NBVAL( IMB )
+                               CALL XLAENV( 2, NB ) 
+*
+                           DO 60 ITRAN = 1, 2
+                              IF( ITRAN.EQ.1 ) THEN
+                                 TRANS = 'N'
+                                 NROWS = M
+                                 NCOLS = N
+                              ELSE
+                                 TRANS = 'T'
+                                 NROWS = N
+                                 NCOLS = M
+                              END IF
+                              LDWORK = MAX( 1, NCOLS )
+*
+*                             Set up a consistent rhs
+*
+                              IF( NCOLS.GT.0 ) THEN
+                                 CALL SLARNV( 2, ISEED, NCOLS*NRHS,
+     $                                        WORK )
+                                 CALL SSCAL( NCOLS*NRHS,
+     $                                       ONE / REAL( NCOLS ), WORK,
+     $                                       1 )
+                              END IF
+                              CALL SGEMM( TRANS, 'No transpose', NROWS,
+     $                                    NRHS, NCOLS, ONE, COPYA, LDA,
+     $                                    WORK, LDWORK, ZERO, B, LDB )
+                              CALL SLACPY( 'Full', NROWS, NRHS, B, LDB,
+     $                                     COPYB, LDB )
+*
+*                             Solve LS or overdetermined system
+*
+                              IF( M.GT.0 .AND. N.GT.0 ) THEN
+                                 CALL SLACPY( 'Full', M, N, COPYA, LDA,
+     $                                        A, LDA )
+                                 CALL SLACPY( 'Full', NROWS, NRHS,
+     $                                        COPYB, LDB, B, LDB )
+                              END IF
+                              SRNAMT = 'SGETSLS '
+                              CALL SGETSLS( TRANS, M, N, NRHS, A, 
+     $                                 LDA, B, LDB, WORK, LWORK, INFO )
+                              IF( INFO.NE.0 )
+     $                           CALL ALAERH( PATH, 'SGETSLS ', INFO, 0,
+     $                                        TRANS, M, N, NRHS, -1, NB,
+     $                                        ITYPE, NFAIL, NERRS,
+     $                                        NOUT )
+*
+*                             Check correctness of results
+*
+                              LDWORK = MAX( 1, NROWS )
+                              IF( NROWS.GT.0 .AND. NRHS.GT.0 )
+     $                           CALL SLACPY( 'Full', NROWS, NRHS,
+     $                                        COPYB, LDB, C, LDB )
+                              CALL SQRT16( TRANS, M, N, NRHS, COPYA,
+     $                                     LDA, B, LDB, C, LDB, WORK,
+     $                                     RESULT( 15 ) )
+*
+                              IF( ( ITRAN.EQ.1 .AND. M.GE.N ) .OR.
+     $                            ( ITRAN.EQ.2 .AND. M.LT.N ) ) THEN
+*
+*                                Solving LS system
+*
+                                 RESULT( 16 ) = SQRT17( TRANS, 1, M, N,
+     $                                         NRHS, COPYA, LDA, B, LDB,
+     $                                         COPYB, LDB, C, WORK,
+     $                                         LWORK )
+                              ELSE
+*
+*                                Solving overdetermined system
+*
+                                 RESULT( 16 ) = SQRT14( TRANS, M, N,
+     $                                         NRHS, COPYA, LDA, B, LDB,
+     $                                         WORK, LWORK )
+                              END IF
+*
+*                             Print information about the tests that
+*                             did not pass the threshold.
+*
+                              DO 50 K = 15, 16
+                                 IF( RESULT( K ).GE.THRESH ) THEN
+                                    IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $                                 CALL ALAHD( NOUT, PATH )
+                                    WRITE( NOUT, FMT = 9997 )TRANS, M,
+     $                                 N, NRHS, MB, NB, ITYPE, K,
+     $                                 RESULT( K )
+                                    NFAIL = NFAIL + 1
+                                 END IF
+   50                         CONTINUE
+                              NRUN = NRUN + 2
+   60                      CONTINUE
+   62                      CONTINUE
+   65                   CONTINUE
                      END IF
 *
 *                    Generate a matrix of scaling type ISCALE and rank
@@ -626,7 +739,7 @@
 *                       Print information about the tests that did not
 *                       pass the threshold.
 *
-                        DO 90 K = 3, NTESTS
+                        DO 90 K = 3, 14
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                           CALL ALAHD( NOUT, PATH )
@@ -635,7 +748,7 @@
                               NFAIL = NFAIL + 1
                            END IF
    90                   CONTINUE
-                        NRUN = NRUN + 12
+                        NRUN = NRUN + 12 
 *
   100                CONTINUE
   110             CONTINUE
@@ -652,6 +765,9 @@
      $      ', NB=', I4, ', type', I2, ', test(', I2, ')=', G12.5 )
  9998 FORMAT( ' M=', I5, ', N=', I5, ', NRHS=', I4, ', NB=', I4,
      $      ', type', I2, ', test(', I2, ')=', G12.5 )
+ 9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,  
+     $      ', MB=', I4,', NB=', I4,', type', I2, 
+     $      ', test(', I2, ')=', G12.5 )
       RETURN
 *
 *     End of SDRVLS

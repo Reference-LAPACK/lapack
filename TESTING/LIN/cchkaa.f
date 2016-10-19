@@ -2,14 +2,14 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at
-*            http://www.netlib.org/lapack/explore-html/
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
 *  Definition:
 *  ===========
 *
 *       PROGRAM CCHKAA
-*
+* 
 *
 *> \par Purpose:
 *  =============
@@ -51,7 +51,6 @@
 *> CPT   12               List types on next line if 0 < NTYPES < 12
 *> CHE   10               List types on next line if 0 < NTYPES < 10
 *> CHR   10               List types on next line if 0 < NTYPES < 10
-*> CHA   10               List types on next line if 0 < NTYPES < 10
 *> CHP   10               List types on next line if 0 < NTYPES < 10
 *> CSY   11               List types on next line if 0 < NTYPES < 11
 *> CSR   11               List types on next line if 0 < NTYPES < 11
@@ -98,22 +97,22 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee
-*> \author Univ. of California Berkeley
-*> \author Univ. of Colorado Denver
-*> \author NAG Ltd.
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
-*> \date November 2016
+*> \date November 2015
 *
 *> \ingroup complex_lin
 *
 *  =====================================================================
       PROGRAM CCHKAA
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2016
+*     November 2015
 *
 *  =====================================================================
 *
@@ -642,33 +641,6 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
-*
-*        HA:  Hermitian matrices,
-*             Aasen Algorithm
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKHE_AASEN( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
-     $                         NSVAL, THRESH, TSTERR, LDA, 
-     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                         WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL CDRVHE_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, 
-     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), 
-     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), 
-     $                         WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
       ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
 *
 *        HR:  Hermitian indefinite matrices,
@@ -895,6 +867,7 @@
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
+
 *
       ELSE IF( LSAMEN( 2, C2, 'RQ' ) ) THEN
 *
@@ -953,6 +926,7 @@
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
+
 *
       ELSE IF( LSAMEN( 2, C2, 'LS' ) ) THEN
 *
@@ -976,7 +950,7 @@
 *        QT:  QRT routines for general matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL CCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
      $                    NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -987,7 +961,40 @@
 *        QX:  QRT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL CCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TQ' ) ) THEN
+*
+*        TQ:  LQT routines for general matrices
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                    NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'XQ' ) ) THEN
+*
+*        XQ:  LQT routines for triangular-pentagonal matrices
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TS' ) ) THEN
+*
+*        TS:  QR routines for tall-skinny matrices
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH

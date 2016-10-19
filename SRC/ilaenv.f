@@ -2,29 +2,29 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at
-*            http://www.netlib.org/lapack/explore-html/
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
 *> \htmlonly
-*> Download ILAENV + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaenv.f">
-*> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaenv.f">
-*> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaenv.f">
+*> Download ILAENV + dependencies 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ilaenv.f"> 
+*> [TGZ]</a> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ilaenv.f"> 
+*> [ZIP]</a> 
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ilaenv.f"> 
 *> [TXT]</a>
-*> \endhtmlonly
+*> \endhtmlonly 
 *
 *  Definition:
 *  ===========
 *
 *       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
-*
+* 
 *       .. Scalar Arguments ..
 *       CHARACTER*( * )    NAME, OPTS
 *       INTEGER            ISPEC, N1, N2, N3, N4
 *       ..
-*
+*  
 *
 *> \par Purpose:
 *  =============
@@ -127,14 +127,14 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee
-*> \author Univ. of California Berkeley
-*> \author Univ. of Colorado Denver
-*> \author NAG Ltd.
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
-*> \date June 2016
+*> \date November 2015
 *
-*> \ingroup OTHERauxiliary
+*> \ingroup auxOTHERauxiliary
 *
 *> \par Further Details:
 *  =====================
@@ -162,10 +162,10 @@
 *  =====================================================================
       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 *
-*  -- LAPACK auxiliary routine (version 3.6.1) --
+*  -- LAPACK auxiliary routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2016
+*     November 2015
 *
 *     .. Scalar Arguments ..
       CHARACTER*( * )    NAME, OPTS
@@ -283,6 +283,50 @@
             ELSE
                NB = 32
             END IF
+         ELSE IF( C3.EQ.'QR ') THEN
+            IF( N3 .EQ. 1) THEN
+               IF( SNAME ) THEN
+                  IF ((M*N.LE.131072).OR.(M.LE.8192)) THEN
+                     NB = N1
+                  ELSE
+                     NB = 32768/N2
+                  END IF
+               ELSE
+                  IF ((M*N.LE.131072).OR.(M.LE.8192)) THEN
+                     NB = N1
+                  ELSE
+                     NB = 32768/N2
+                  END IF  
+               END IF
+            ELSE
+               IF( SNAME ) THEN
+                  NB = 1
+               ELSE
+                  NB = 1
+               END IF
+            END IF
+         ELSE IF( C3.EQ.'LQ ') THEN
+            IF( N3 .EQ. 2) THEN
+               IF( SNAME ) THEN
+                  IF ((M*N.LE.131072).OR.(M.LE.8192)) THEN
+                     NB = N1
+                  ELSE
+                     NB = 32768/N2
+                  END IF
+               ELSE
+                  IF ((M*N.LE.131072).OR.(M.LE.8192)) THEN
+                     NB = N1
+                  ELSE
+                     NB = 32768/N2
+                  END IF  
+               END IF
+            ELSE
+               IF( SNAME ) THEN
+                  NB = 1
+               ELSE
+                  NB = 1
+               END IF
+            END IF
          ELSE IF( C3.EQ.'HRD' ) THEN
             IF( SNAME ) THEN
                NB = 32
@@ -392,12 +436,6 @@
          END IF
       ELSE IF( C2.EQ.'TR' ) THEN
          IF( C3.EQ.'TRI' ) THEN
-            IF( SNAME ) THEN
-               NB = 64
-            ELSE
-               NB = 64
-            END IF
-         ELSE IF ( C3.EQ.'EVC' ) THEN
             IF( SNAME ) THEN
                NB = 64
             ELSE

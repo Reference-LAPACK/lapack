@@ -2,15 +2,15 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at
-*            http://www.netlib.org/lapack/explore-html/
+* Online html documentation available at 
+*            http://www.netlib.org/lapack/explore-html/ 
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ALAERH( PATH, SUBNAM, INFO, INFOE, OPTS, M, N, KL, KU,
 *                          N5, IMAT, NFAIL, NERRS, NOUT )
-*
+* 
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
 *       CHARACTER*( * )    SUBNAM
@@ -18,7 +18,7 @@
 *       INTEGER            IMAT, INFO, INFOE, KL, KU, M, N, N5, NERRS,
 *      $                   NFAIL, NOUT
 *       ..
-*
+*  
 *
 *> \par Purpose:
 *  =============
@@ -134,10 +134,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee
-*> \author Univ. of California Berkeley
-*> \author Univ. of Colorado Denver
-*> \author NAG Ltd.
+*> \author Univ. of Tennessee 
+*> \author Univ. of California Berkeley 
+*> \author Univ. of Colorado Denver 
+*> \author NAG Ltd. 
 *
 *> \date November 2013
 *
@@ -490,7 +490,6 @@
       ELSE IF( LSAMEN( 2, P2, 'SY' )
      $         .OR. LSAMEN( 2, P2, 'SR' )
      $         .OR. LSAMEN( 2, P2, 'HE' )
-     $         .OR. LSAMEN( 2, P2, 'HA' )
      $         .OR. LSAMEN( 2, P2, 'HR' ) ) THEN
 *
 *        xSY: symmetric indefinite matrices
@@ -499,8 +498,6 @@
 *             with rook (bounded Bunch-Kaufman) pivoting;
 *        xHE: Hermitian indefinite matrices
 *             with partial (Bunch-Kaufman) pivoting.
-*        xHA: Hermitian matrices
-*             Aasen Algorithm
 *        xHR: Hermitian indefinite matrices
 *             with rook (bounded Bunch-Kaufman) pivoting;
 *
