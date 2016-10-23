@@ -116,6 +116,14 @@ macro(lapack_install_library lib)
   )
 endmacro()
 
+set(PKG_CONFIG_DIR ${LIBRARY_DIR}/pkgconfig)
+set(prefix ${CMAKE_INSTALL_PREFIX})
+if(NOT IS_ABSOLUTE ${LIBRARY_DIR})
+  set(libdir "\${prefix}/${LIBRARY_DIR}")
+else()
+  set(libdir "${LIBRARY_DIR}")
+endif()
+
 # --------------------------------------------------
 # Testing
 
@@ -149,8 +157,6 @@ message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as 
 
 set(SECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
 set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
-set(PKG_CONFIG_DIR ${LIBRARY_DIR}/pkgconfig)
-
 
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF )
@@ -371,7 +377,7 @@ configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-build.cmake.in
   ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc @ONLY)
   install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc
   DESTINATION ${PKG_CONFIG_DIR}
