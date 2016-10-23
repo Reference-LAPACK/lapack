@@ -26,7 +26,7 @@ include ../make.inc
 #                  precision.
 #       ZLASRC  -- Double precision complex LAPACK routines
 #       ZXLASRC -- Double precision complex LAPACK routines using extra
-#                  precision.
+#                  precision.   
 #
 #	      DEPRECATED -- Deprecated routines in all precisions
 #
@@ -145,7 +145,6 @@ SLASRC = \
    ssytd2.o ssytf2.o ssytrd.o ssytrf.o ssytri.o ssytri2.o ssytri2x.o \
    ssyswapr.o ssytrs.o ssytrs2.o ssyconv.o \
    ssytf2_rook.o ssytrf_rook.o ssytrs_rook.o \
-   slasyf_aasen.o ssysv_aasen.o ssytrf_aasen.o ssytrs_aasen.o \
    ssytri_rook.o ssycon_rook.o ssysv_rook.o \
    stbcon.o \
    stbrfs.o stbtrs.o stgevc.o stgex2.o stgexc.o stgsen.o \
@@ -160,9 +159,13 @@ SLASRC = \
    sbbcsd.o slapmr.o sorbdb.o sorbdb1.o sorbdb2.o sorbdb3.o sorbdb4.o \
    sorbdb5.o sorbdb6.o sorcsd.o sorcsd2by1.o \
    sgeqrt.o sgeqrt2.o sgeqrt3.o sgemqrt.o \
-   stpqrt.o stpqrt2.o stpmqrt.o stprfb.o
+   stpqrt.o stpqrt2.o stpmqrt.o stprfb.o \
+   sgelqt.o sgelqt3.o sgemlqt.o \
+   sgetsls.o sgeqr.o slatsqr.o slamtsqr.o sgemqr.o \
+   sgelq.o slaswlq.o slamswlq.o sgemlq.o \
+   stplqt.o stplqt2.o stpmlqt.o
 
-DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o
+DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o 
 
 ifdef USEXBLAS
 SXLASRC = sgesvxx.o sgerfsx.o sla_gerfsx_extended.o sla_geamv.o		\
@@ -197,7 +200,6 @@ CLASRC = \
    chetrf.o chetri.o chetri2.o chetri2x.o cheswapr.o \
    chetrs.o chetrs2.o \
    chetf2_rook.o chetrf_rook.o chetri_rook.o chetrs_rook.o checon_rook.o chesv_rook.o \
-   chesv_aasen.o chetrf_aasen.o chetrs_aasen.o clahef_aasen.o\
    chgeqz.o chpcon.o chpev.o  chpevd.o \
    chpevx.o chpgst.o chpgv.o  chpgvd.o chpgvx.o chprfs.o chpsv.o  \
    chpsvx.o \
@@ -245,7 +247,11 @@ CLASRC = \
    cbbcsd.o clapmr.o cunbdb.o cunbdb1.o cunbdb2.o cunbdb3.o cunbdb4.o \
    cunbdb5.o cunbdb6.o cuncsd.o cuncsd2by1.o \
    cgeqrt.o cgeqrt2.o cgeqrt3.o cgemqrt.o \
-   ctpqrt.o ctpqrt2.o ctpmqrt.o ctprfb.o
+   ctpqrt.o ctpqrt2.o ctpmqrt.o ctprfb.o \
+   cgelqt.o cgelqt3.o cgemlqt.o \
+   cgetsls.o cgeqr.o clatsqr.o clamtsqr.o cgemqr.o \
+   cgelq.o claswlq.o clamswlq.o cgemlq.o \
+   ctplqt.o ctplqt2.o ctpmlqt.o
 
 ifdef USEXBLAS
 CXLASRC = cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
@@ -261,7 +267,7 @@ CXLASRC = cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
    cla_lin_berr.o clarscl2.o clascl2.o cla_wwaddw.o
 endif
 
-ZCLASRC = cpotrs.o cgetrs.o cpotrf.o cgetrf.o
+ZCLASRC = cpotrs.o cgetrs.o cpotrf.o cgetrf.o 
 
 DLASRC = \
    dpotrf2.o dgetrf2.o \
@@ -314,7 +320,6 @@ DLASRC = \
    dsytd2.o dsytf2.o dsytrd.o dsytrf.o dsytri.o dsytri2.o dsytri2x.o \
    dsyswapr.o dsytrs.o dsytrs2.o dsyconv.o \
    dsytf2_rook.o dsytrf_rook.o dsytrs_rook.o \
-   dlasyf_aasen.o dsysv_aasen.o dsytrf_aasen.o dsytrs_aasen.o \
    dsytri_rook.o dsycon_rook.o dsysv_rook.o \
    dtbcon.o dtbrfs.o dtbtrs.o dtgevc.o dtgex2.o dtgexc.o dtgsen.o \
    dtgsja.o dtgsna.o dtgsy2.o dtgsyl.o dtpcon.o dtprfs.o dtptri.o \
@@ -329,7 +334,11 @@ DLASRC = \
    dbbcsd.o dlapmr.o dorbdb.o dorbdb1.o dorbdb2.o dorbdb3.o dorbdb4.o \
    dorbdb5.o dorbdb6.o dorcsd.o dorcsd2by1.o \
    dgeqrt.o dgeqrt2.o dgeqrt3.o dgemqrt.o \
-   dtpqrt.o dtpqrt2.o dtpmqrt.o dtprfb.o
+   dtpqrt.o dtpqrt2.o dtpmqrt.o dtprfb.o \
+   dgelqt.o dgelqt3.o dgemlqt.o \
+   dgetsls.o dgeqr.o dlatsqr.o dlamtsqr.o dgemqr.o \
+   dgelq.o dlaswlq.o dlamswlq.o dgemlq.o \
+   dtplqt.o dtplqt2.o dtpmlqt.o 
 
 ifdef USEXBLAS
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o		\
@@ -365,7 +374,6 @@ ZLASRC = \
    zhetrf.o zhetri.o zhetri2.o zhetri2x.o zheswapr.o \
    zhetrs.o zhetrs2.o \
    zhetf2_rook.o zhetrf_rook.o zhetri_rook.o zhetrs_rook.o zhecon_rook.o zhesv_rook.o \
-   zhesv_aasen.o zhetrf_aasen.o zhetrs_aasen.o zlahef_aasen.o \
    zhgeqz.o zhpcon.o zhpev.o  zhpevd.o \
    zhpevx.o zhpgst.o zhpgv.o  zhpgvd.o zhpgvx.o zhprfs.o zhpsv.o  \
    zhpsvx.o \
@@ -418,7 +426,12 @@ ZLASRC = \
    zbbcsd.o zlapmr.o zunbdb.o zunbdb1.o zunbdb2.o zunbdb3.o zunbdb4.o \
    zunbdb5.o zunbdb6.o zuncsd.o zuncsd2by1.o \
    zgeqrt.o zgeqrt2.o zgeqrt3.o zgemqrt.o \
-   ztpqrt.o ztpqrt2.o ztpmqrt.o ztprfb.o
+   ztpqrt.o ztpqrt2.o ztpmqrt.o ztprfb.o \
+   ztplqt.o ztplqt2.o ztpmlqt.o \
+   zgelqt.o zgelqt3.o zgemlqt.o \
+   zgetsls.o zgeqr.o zlatsqr.o zlamtsqr.o zgemqr.o \
+   zgelq.o zlaswlq.o zlamswlq.o zgemlq.o \
+   ztplqt.o ztplqt2.o ztpmlqt.o  
 
 ifdef USEXBLAS
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o		\
@@ -504,7 +517,7 @@ FRC:
 clean:
 	rm -f *.o DEPRECATED/*.o
 
-.f.o:
+.f.o: 
 	$(FORTRAN) $(OPTS) -c $< -o $@
 
 slaruv.o: slaruv.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
