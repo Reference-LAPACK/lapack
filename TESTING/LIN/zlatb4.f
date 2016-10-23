@@ -340,12 +340,10 @@
             ANORM = ONE
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'PO' ) .OR. LSAMEN( 2, C2, 'PP' ) .OR.
-     $         LSAMEN( 2, C2, 'HE' ) .OR. LSAMEN( 2, C2, 'HP' ) .OR.
-     $         LSAMEN( 2, C2, 'SY' ) .OR. LSAMEN( 2, C2, 'SP' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'PO' ) .OR. LSAMEN( 2, C2, 'PP' ) ) THEN
 *
-*        xPO, xPP, xHE, xHP, xSY, xSP: Set parameters to generate a
-*        symmetric or Hermitian matrix.
+*        xPO, xPP: Set parameters to generate a
+*        symmetric or Hermitian positive definite matrix.
 *
 *        Set TYPE, the type of matrix to be generated.
 *
@@ -373,6 +371,43 @@
          IF( IMAT.EQ.8 ) THEN
             ANORM = SMALL
          ELSE IF( IMAT.EQ.9 ) THEN
+            ANORM = LARGE
+         ELSE
+            ANORM = ONE
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'HE' ) .OR. LSAMEN( 2, C2, 'HP' ) .OR.
+     $         LSAMEN( 2, C2, 'SY' ) .OR. LSAMEN( 2, C2, 'SP' ) ) THEN
+*
+*        xHE, xHP, xSY, xSP: Set parameters to generate a
+*        symmetric or Hermitian matrix.
+*
+*        Set TYPE, the type of matrix to be generated.
+*
+         TYPE = C2( 1: 1 )
+*
+*        Set the lower and upper bandwidths.
+*
+         IF( IMAT.EQ.1 ) THEN
+            KL = 0
+         ELSE
+            KL = MAX( N-1, 0 )
+         END IF
+         KU = KL
+*
+*        Set the condition number and norm.
+*
+         IF( IMAT.EQ.7 ) THEN
+            CNDNUM = BADC1
+         ELSE IF( IMAT.EQ.8 ) THEN
+            CNDNUM = BADC2
+         ELSE
+            CNDNUM = TWO
+         END IF
+*
+         IF( IMAT.EQ.9 ) THEN
+            ANORM = SMALL
+         ELSE IF( IMAT.EQ.10 ) THEN
             ANORM = LARGE
          ELSE
             ANORM = ONE
