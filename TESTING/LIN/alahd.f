@@ -53,6 +53,8 @@
 *>                     with "rook" (bounded Bunch-Kaufman) pivoting
 *>             _SP:  Symmetric indefinite packed,
 *>                     with partial (Bunch-Kaufman) pivoting
+*>             _HA:  (complex) Hermitian ,
+*>                     with Aasen Algorithm
 *>             _HE:  (complex) Hermitian indefinite,
 *>                     with partial (Bunch-Kaufman) pivoting
 *>             _HR:  Symmetric indefinite,
@@ -355,6 +357,28 @@
          WRITE( IOUNIT, FMT = 9955 )8
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
+      ELSE IF( LSAMEN( 2, P2, 'HA' )  ) THEN
+*
+*        HA: Hermitian,
+*            with Assen Algorithm
+*
+         WRITE( IOUNIT, FMT = 9992 )PATH, 'Hermitian'
+*
+         WRITE( IOUNIT, FMT = '( '' Matrix types:'' )' )
+         WRITE( IOUNIT, FMT = 9972 )
+*
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 9953 )1
+         WRITE( IOUNIT, FMT = 9961 )2
+         WRITE( IOUNIT, FMT = 9960 )3
+         WRITE( IOUNIT, FMT = 9960 )4
+         WRITE( IOUNIT, FMT = 9959 )5
+         WRITE( IOUNIT, FMT = 9958 )6
+         WRITE( IOUNIT, FMT = 9956 )7
+         WRITE( IOUNIT, FMT = 9957 )8
+         WRITE( IOUNIT, FMT = 9955 )9
+         WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
+*
       ELSE IF( LSAMEN( 2, P2, 'HE' )  ) THEN
 *
 *        HE: Hermitian indefinite full,
@@ -567,7 +591,7 @@
 *
          WRITE( IOUNIT, FMT = 9984 )PATH
          WRITE( IOUNIT, FMT = 9967 )
-         WRITE( IOUNIT, FMT = 9921 )C1, C1, C1, C1, C1
+         WRITE( IOUNIT, FMT = 9921 )C1, C1, C1, C1
          WRITE( IOUNIT, FMT = 9935 )1
          WRITE( IOUNIT, FMT = 9931 )2
          WRITE( IOUNIT, FMT = 9933 )3

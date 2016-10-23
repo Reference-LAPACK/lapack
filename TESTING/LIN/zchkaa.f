@@ -2,14 +2,14 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       PROGRAM ZCHKAA
-* 
+*
 *
 *> \par Purpose:
 *  =============
@@ -50,6 +50,7 @@
 *> ZPB    8               List types on next line if 0 < NTYPES <  8
 *> ZPT   12               List types on next line if 0 < NTYPES < 12
 *> ZHE   10               List types on next line if 0 < NTYPES < 10
+*> ZHA   10               List types on next line if 0 < NTYPES < 10
 *> ZHR   10               List types on next line if 0 < NTYPES < 10
 *> ZHP   10               List types on next line if 0 < NTYPES < 10
 *> ZSY   11               List types on next line if 0 < NTYPES < 11
@@ -68,9 +69,6 @@
 *> ZEQ
 *> ZQT
 *> ZQX
-*> ZTQ
-*> ZXQ
-*> ZTS
 *> \endverbatim
 *
 *  Parameters:
@@ -100,22 +98,22 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
-*> \date November 2015
+*> \date November 2016
 *
 *> \ingroup complex16_lin
 *
 *  =====================================================================
       PROGRAM ZCHKAA
 *
-*  -- LAPACK test routine (version 3.6.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2015
+*     November 2016
 *
 *  =====================================================================
 *
@@ -643,6 +641,33 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
+      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
+*
+*        HA:  Hermitian indefinite matrices,
+*             with partial (Aasen's) pivoting algorithm
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKHE_AASEN( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
+     $                         NSVAL, THRESH, TSTERR, LDA, 
+     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL ZDRVHE_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), 
+     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), 
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
       ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
 *
 *        HR:  Hermitian indefinite matrices,
@@ -951,7 +976,7 @@
 *        QT:  QRT routines for general matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL ZCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                    NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -962,7 +987,7 @@
 *        QX:  QRT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL ZCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -973,7 +998,7 @@
 *        TQ:  LQT routines for general matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL ZCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                    NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -984,7 +1009,7 @@
 *        XQ:  LQT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL ZCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -995,7 +1020,7 @@
 *        TS:  QR routines for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1006,7 +1031,7 @@
 *        TQ:  LQT routines for general matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL ZCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                    NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH

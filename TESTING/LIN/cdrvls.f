@@ -2,30 +2,31 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
 *                          NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
-*                          COPYB, C, S, COPYS, WORK, RWORK, IWORK, NOUT )
-* 
+*                          COPYB, C, S, COPYS, WORK, RWORK, IWORK,
+*                          NOUT )
+*
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NM, NN, NNB, NNS, NOUT
-*       REAL   THRESH
+*       REAL               THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
 *      $                   NVAL( * ), NXVAL( * )
-*       REAL   COPYS( * ), RWORK( * ), S( * )
-*       COMPLEX         A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
+*       REAL               COPYS( * ), RWORK( * ), S( * )
+*       COMPLEX            A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
 *      $                   WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -195,19 +196,20 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2015
 *
-*> \ingroup complex16_lin
+*> \ingroup complex_lin
 *
 *  =====================================================================
       SUBROUTINE CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
-     $                   COPYB, C, S, COPYS, WORK, RWORK, IWORK, NOUT )
+     $                   COPYB, C, S, COPYS, WORK, RWORK, IWORK,
+     $                   NOUT )
 *
 *  -- LAPACK test routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -255,17 +257,17 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               SASUM, SLAMCH, CQRT12, CQRT14, CQRT17
-      EXTERNAL           SASUM, SLAMCH, CQRT12, CQRT14, CQRT17
+      REAL               CQRT12, CQRT14, CQRT17, SASUM, SLAMCH
+      EXTERNAL           CQRT12, CQRT14, CQRT17, SASUM, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASVM, SAXPY, SLASRT, XLAENV,
-     $                   CSSCAL, CERRLS, CGELS, CGELSD, CGELSS,
-     $                   CGELSY, CGEMM, CLACPY, CLARNV, CQRT13, CQRT15,
-     $                   CQRT16, CGETSLS
+      EXTERNAL           ALAERH, ALAHD, ALASVM, CERRLS, CGELS, CGELSD,
+     $                   CGELSS, CGELSY, CGEMM, CGETSLS, CLACPY, 
+     $                   CLARNV, CQRT13, CQRT15, CQRT16, CSSCAL, 
+     $                   SAXPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL, MAX, MIN, SQRT
+      INTRINSIC          MAX, MIN, REAL, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -656,8 +658,8 @@
                         IF( RANK.GT.0 ) THEN
                            CALL SAXPY( MNMIN, -ONE, COPYS, 1, S, 1 )
                            RESULT( 7 ) = SASUM( MNMIN, S, 1 ) /
-     $                                   SASUM( MNMIN, COPYS, 1 ) /
-     $                                   ( EPS*REAL( MNMIN ) )
+     $                                    SASUM( MNMIN, COPYS, 1 ) /
+     $                                    ( EPS*REAL( MNMIN ) )
                         ELSE
                            RESULT( 7 ) = ZERO
                         END IF
@@ -675,8 +677,8 @@
                         RESULT( 9 ) = ZERO
                         IF( M.GT.CRANK )
      $                     RESULT( 9 ) = CQRT17( 'No transpose', 1, M,
-     $                                   N, NRHS, COPYA, LDA, B, LDB,
-     $                                   COPYB, LDB, C, WORK, LWORK )
+     $                                    N, NRHS, COPYA, LDA, B, LDB,
+     $                                    COPYB, LDB, C, WORK, LWORK )
 *
 *                       Test 10:  Check if x is in the rowspace of A
 *

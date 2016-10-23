@@ -2,14 +2,14 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       PROGRAM SCHKAA
-* 
+*
 *
 *> \par Purpose:
 *  =============
@@ -94,10 +94,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2012
 *
@@ -161,7 +161,7 @@
      $                   SCHKSY_ROOK, SCHKTB, SCHKTP, SCHKTR, SCHKTZ,
      $                   SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB, SDRVPO,
      $                   SDRVPP, SDRVPT, SDRVSP, SDRVSY, SDRVSY_ROOK,
-     $                   ILAVER, SCHKQRT, SCHKQRTP
+     $                   ILAVER, SCHKLQTP, SCHKQRT, SCHKQRTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -664,6 +664,33 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        SY:  symmetric indefinite matrices,
+*             with partial (Aasen's) pivoting algorithm
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL SCHKSY_AASEN( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
+     $                         NSVAL, THRESH, TSTERR, LDA,
+     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL SDRVSY_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+        ELSE
+           WRITE( NOUT, FMT = 9988 )PATH
+        END IF
+*
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        SP:  symmetric indefinite packed matrices,
@@ -868,7 +895,7 @@
 *        QT:  QRT routines for general matrices
 *
          IF( TSTCHK ) THEN
-            CALL SCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL SCHKQRT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                    NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
