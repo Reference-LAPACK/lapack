@@ -151,8 +151,11 @@ set(SLASRC
    sbbcsd.f slapmr.f sorbdb.f sorbdb1.f sorbdb2.f sorbdb3.f sorbdb4.f
    sorbdb5.f sorbdb6.f sorcsd.f sorcsd2by1.f
    sgeqrt.f sgeqrt2.f sgeqrt3.f sgemqrt.f
-   stpqrt.f stpqrt2.f stpmqrt.f stprfb.f
-  )
+   stpqrt.f stpqrt2.f stpmqrt.f stprfb.f 
+   sgelqt.f sgelqt3.f sgemlqt.f
+   sgetsls.f sgeqr.f slatsqr.f slamtsqr.f sgemqr.f
+   sgelq.f slaswlq.f slamswlq.f sgemlq.f
+   stplqt.f stplqt2.f stpmlqt.f)
 
 set(DSLASRC spotrs.f sgetrs.f spotrf.f sgetrf.f)
 
@@ -235,7 +238,11 @@ set(CLASRC
    cbbcsd.f clapmr.f cunbdb.f cunbdb1.f cunbdb2.f cunbdb3.f cunbdb4.f
    cunbdb5.f cunbdb6.f cuncsd.f cuncsd2by1.f
    cgeqrt.f cgeqrt2.f cgeqrt3.f cgemqrt.f
-   ctpqrt.f ctpqrt2.f ctpmqrt.f ctprfb.f)
+   ctpqrt.f ctpqrt2.f ctpmqrt.f ctprfb.f
+   cgelqt.f cgelqt3.f cgemlqt.f
+   cgetsls.f cgeqr.f clatsqr.f clamtsqr.f cgemqr.f
+   cgelq.f claswlq.f clamswlq.f cgemlq.f
+   ctplqt.f ctplqt2.f ctpmlqt.f)
 
 set(CXLASRC     cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f
    cla_gercond_c.f cla_gercond_x.f cla_gerpvgrw.f
@@ -315,7 +322,11 @@ set(DLASRC
    dbbcsd.f dlapmr.f dorbdb.f dorbdb1.f dorbdb2.f dorbdb3.f dorbdb4.f
    dorbdb5.f dorbdb6.f dorcsd.f dorcsd2by1.f
    dgeqrt.f dgeqrt2.f dgeqrt3.f dgemqrt.f
-   dtpqrt.f dtpqrt2.f dtpmqrt.f dtprfb.f )
+   dtpqrt.f dtpqrt2.f dtpmqrt.f dtprfb.f 
+   dgelqt.f dgelqt3.f dgemlqt.f
+   dgetsls.f dgeqr.f dlatsqr.f dlamtsqr.f dgemqr.f
+   dgelq.f dlaswlq.f dlamswlq.f dgemlq.f
+   dtplqt.f dtplqt2.f dtpmlqt.f )
 
 set(DXLASRC dgesvxx.f dgerfsx.f dla_gerfsx_extended.f dla_geamv.f
    dla_gercond.f dla_gerpvgrw.f dsysvxx.f dsyrfsx.f
@@ -401,7 +412,12 @@ set(ZLASRC
    zbbcsd.f zlapmr.f zunbdb.f zunbdb1.f zunbdb2.f zunbdb3.f zunbdb4.f
    zunbdb5.f zunbdb6.f zuncsd.f zuncsd2by1.f
    zgeqrt.f zgeqrt2.f zgeqrt3.f zgemqrt.f
-   ztpqrt.f ztpqrt2.f ztpmqrt.f ztprfb.f)
+   ztpqrt.f ztpqrt2.f ztpmqrt.f ztprfb.f
+   ztplqt.f ztplqt2.f ztpmlqt.f
+   zgelqt.f zgelqt3.f zgemlqt.f
+   zgetsls.f zgeqr.f zlatsqr.f zlamtsqr.f zgemqr.f
+   zgelq.f zlaswlq.f zlamswlq.f zgemlq.f
+   ztplqt.f ztplqt2.f ztpmlqt.f)
 
 set(ZXLASRC  zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_gercond_c.f zla_gercond_x.f zla_gerpvgrw.f zsysvxx.f zsyrfsx.f
