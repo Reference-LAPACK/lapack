@@ -232,7 +232,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 14 )
+      PARAMETER          ( NTESTS = 16 )
       INTEGER            SMLSIZ
       PARAMETER          ( SMLSIZ = 25 )
       DOUBLE PRECISION   ONE, ZERO
@@ -244,10 +244,10 @@
 *     .. Local Scalars ..
       CHARACTER          TRANS
       CHARACTER*3        PATH
-      INTEGER            CRANK, I, IM, IN, INB, INFO, INS, IRANK,
+      INTEGER            CRANK, I, IM, IMB, IN, INB, INFO, INS, IRANK,
      $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK,
      $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
-     $                   NFAIL, NRHS, NROWS, NRUN, RANK
+     $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB, LWTS
       DOUBLE PRECISION   EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
@@ -262,7 +262,7 @@
       EXTERNAL           ALAERH, ALAHD, ALASVM, DAXPY, DLASRT, XLAENV,
      $                   ZDSCAL, ZERRLS, ZGELS, ZGELSD, ZGELSS,
      $                   ZGELSY, ZGEMM, ZLACPY, ZLARNV, ZQRT13, ZQRT15,
-     $                   ZQRT16
+     $                   ZQRT16, ZGETSLS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN, SQRT
@@ -315,13 +315,19 @@
 *
          DO 130 IN = 1, NN
             N = NVAL( IN )
-            MNMIN = MIN( M, N )
+            MNMIN = MAX(MIN( M, N ),1)
             LDB = MAX( 1, M, N )
+            MB = (MNMIN+1)
+            IF(MNMIN.NE.MB) THEN
+              LWTS = (((LDB-MB)/(MB-MNMIN))*MNMIN+LDB*2)*MB+5
+            ELSE
+              LWTS = 2*MNMIN+5
+            END IF
 *
             DO 120 INS = 1, NNS
                NRHS = NSVAL( INS )
                LWORK = MAX( 1, ( M+NRHS )*( N+2 ), ( N+NRHS )*( M+2 ),
-     $                 M*N+4*MNMIN+MAX( M, N ), 2*N+M )
+     $                 M*N+4*MNMIN+MAX( M, N ), 2*N+M, LWTS )
 *
                DO 110 IRANK = 1, 2
                   DO 100 ISCALE = 1, 3
@@ -431,6 +437,110 @@
                               NRUN = NRUN + 2
    30                      CONTINUE
    40                   CONTINUE
+*
+*
+*                       Test ZGETSLS
+*
+*                       Generate a matrix of scaling type ISCALE
+*
+                        CALL ZQRT13( ISCALE, M, N, COPYA, LDA, NORMA,
+     $                               ISEED )
+                        DO 65 INB = 1, NNB
+                            MB = NBVAL( INB )
+                            CALL XLAENV( 1, MB )
+                             DO 62 IMB = 1, NNB
+                              NB = NBVAL( IMB )
+                              CALL XLAENV( 2, NB )
+*
+                           DO 60 ITRAN = 1, 2
+                              IF( ITRAN.EQ.1 ) THEN
+                                 TRANS = 'N'
+                                 NROWS = M
+                                 NCOLS = N
+                              ELSE
+                                 TRANS = 'C'
+                                 NROWS = N
+                                 NCOLS = M
+                              END IF
+                              LDWORK = MAX( 1, NCOLS )
+*
+*                             Set up a consistent rhs
+*
+                              IF( NCOLS.GT.0 ) THEN
+                                 CALL ZLARNV( 2, ISEED, NCOLS*NRHS,
+     $                                        WORK )
+                                 CALL ZSCAL( NCOLS*NRHS,
+     $                                       ONE / DBLE( NCOLS ), WORK,
+     $                                       1 )
+                              END IF
+                              CALL ZGEMM( TRANS, 'No transpose', NROWS,
+     $                                    NRHS, NCOLS, CONE, COPYA, LDA,
+     $                                    WORK, LDWORK, CZERO, B, LDB )
+                              CALL ZLACPY( 'Full', NROWS, NRHS, B, LDB,
+     $                                     COPYB, LDB )
+*
+*                             Solve LS or overdetermined system
+*
+                              IF( M.GT.0 .AND. N.GT.0 ) THEN
+                                 CALL ZLACPY( 'Full', M, N, COPYA, LDA,
+     $                                        A, LDA )
+                                 CALL ZLACPY( 'Full', NROWS, NRHS,
+     $                                        COPYB, LDB, B, LDB )
+                              END IF
+                              SRNAMT = 'DGETSLS '
+                              CALL ZGETSLS( TRANS, M, N, NRHS, A, 
+     $                                 LDA, B, LDB, WORK, LWORK, INFO )
+                              IF( INFO.NE.0 )
+     $                           CALL ALAERH( PATH, 'ZGETSLS ', INFO, 0,
+     $                                        TRANS, M, N, NRHS, -1, NB,
+     $                                        ITYPE, NFAIL, NERRS,
+     $                                        NOUT )
+*
+*                             Check correctness of results
+*
+                              LDWORK = MAX( 1, NROWS )
+                              IF( NROWS.GT.0 .AND. NRHS.GT.0 )
+     $                           CALL ZLACPY( 'Full', NROWS, NRHS,
+     $                                        COPYB, LDB, C, LDB )
+                              CALL ZQRT16( TRANS, M, N, NRHS, COPYA,
+     $                                     LDA, B, LDB, C, LDB, WORK,
+     $                                     RESULT( 15 ) )
+*
+                              IF( ( ITRAN.EQ.1 .AND. M.GE.N ) .OR.
+     $                            ( ITRAN.EQ.2 .AND. M.LT.N ) ) THEN
+*
+*                                Solving LS system
+*
+                                 RESULT( 16 ) = ZQRT17( TRANS, 1, M, N,
+     $                                         NRHS, COPYA, LDA, B, LDB,
+     $                                         COPYB, LDB, C, WORK,
+     $                                         LWORK )
+                              ELSE
+*
+*                                Solving overdetermined system
+*
+                                 RESULT( 16 ) = ZQRT14( TRANS, M, N,
+     $                                         NRHS, COPYA, LDA, B, LDB,
+     $                                         WORK, LWORK )
+                              END IF
+*
+*                             Print information about the tests that
+*                             did not pass the threshold.
+*
+                              DO 50 K = 15, 16
+                                 IF( RESULT( K ).GE.THRESH ) THEN
+                                    IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $                                 CALL ALAHD( NOUT, PATH )
+                                    WRITE( NOUT, FMT = 9997 )TRANS, M,
+     $                                 N, NRHS, MB, NB, ITYPE, K,
+     $                                 RESULT( K )
+                                    NFAIL = NFAIL + 1
+                                 END IF
+   50                         CONTINUE
+                              NRUN = NRUN + 2
+   60                      CONTINUE
+   62                      CONTINUE
+   65                   CONTINUE
                      END IF
 *
 *                    Generate a matrix of scaling type ISCALE and rank
@@ -635,7 +745,7 @@
 *                       Print information about the tests that did not
 *                       pass the threshold.
 *
-                        DO 80 K = 3, NTESTS
+                        DO 80 K = 3, 14
                            IF( RESULT( K ).GE.THRESH ) THEN
                               IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                           CALL ALAHD( NOUT, PATH )
@@ -661,6 +771,9 @@
      $      ', NB=', I4, ', type', I2, ', test(', I2, ')=', G12.5 )
  9998 FORMAT( ' M=', I5, ', N=', I5, ', NRHS=', I4, ', NB=', I4,
      $      ', type', I2, ', test(', I2, ')=', G12.5 )
+ 9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,  
+     $      ', MB=', I4,', NB=', I4,', type', I2, 
+     $      ', test(', I2, ')=', G12.5 )
       RETURN
 *
 *     End of ZDRVLS

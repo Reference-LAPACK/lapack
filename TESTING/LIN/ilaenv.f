@@ -184,7 +184,21 @@
 *
 *        Return a value from the common block.
 *
-         ILAENV = IPARMS( ISPEC )
+         IF ( NAME(2:6).EQ.'GEQR ' ) THEN
+            IF (N3.EQ.2) THEN
+               ILAENV = IPARMS ( 2 )
+            ELSE
+               ILAENV = IPARMS ( 1 )
+            END IF
+         ELSE IF ( NAME(2:6).EQ.'GELQ ' ) THEN
+            IF (N3.EQ.2) THEN
+               ILAENV = IPARMS ( 2 )
+            ELSE
+               ILAENV = IPARMS ( 1 )
+            END IF
+         ELSE
+            ILAENV = IPARMS( ISPEC )
+         END IF
 *
       ELSE IF( ISPEC.EQ.6 ) THEN
 *

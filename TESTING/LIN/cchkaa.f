@@ -987,7 +987,40 @@
 *        QX:  QRT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL CCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TQ' ) ) THEN
+*
+*        TQ:  LQT routines for general matrices
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                    NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'XQ' ) ) THEN
+*
+*        XQ:  LQT routines for triangular-pentagonal matrices
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TS' ) ) THEN
+*
+*        TS:  QR routines for tall-skinny matrices
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH

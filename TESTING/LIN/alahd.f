@@ -658,6 +658,45 @@
          WRITE( IOUNIT, FMT = 8021 ) 5
          WRITE( IOUNIT, FMT = 8022 ) 6
 *
+      ELSE IF( LSAMEN( 2, P2, 'TQ' ) ) THEN
+*
+*        QRT (triangular-pentagonal)
+*
+         WRITE( IOUNIT, FMT = 8002 ) PATH
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 8023 ) 1
+         WRITE( IOUNIT, FMT = 8024 ) 2
+         WRITE( IOUNIT, FMT = 8025 ) 3
+         WRITE( IOUNIT, FMT = 8026 ) 4
+         WRITE( IOUNIT, FMT = 8027 ) 5
+         WRITE( IOUNIT, FMT = 8028 ) 6
+*
+      ELSE IF( LSAMEN( 2, P2, 'XQ' ) ) THEN
+*
+*        QRT (triangular-pentagonal)
+*
+         WRITE( IOUNIT, FMT = 8003 ) PATH
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 8029 ) 1
+         WRITE( IOUNIT, FMT = 8030 ) 2
+         WRITE( IOUNIT, FMT = 8031 ) 3
+         WRITE( IOUNIT, FMT = 8032 ) 4
+         WRITE( IOUNIT, FMT = 8033 ) 5
+         WRITE( IOUNIT, FMT = 8034 ) 6
+*
+      ELSE IF( LSAMEN( 2, P2, 'TS' ) ) THEN
+*
+*        QRT (triangular-pentagonal)
+*
+         WRITE( IOUNIT, FMT = 8004 ) PATH
+         WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
+         WRITE( IOUNIT, FMT = 8035 ) 1
+         WRITE( IOUNIT, FMT = 8036 ) 2
+         WRITE( IOUNIT, FMT = 8037 ) 3
+         WRITE( IOUNIT, FMT = 8038 ) 4
+         WRITE( IOUNIT, FMT = 8039 ) 5
+         WRITE( IOUNIT, FMT = 8040 ) 6
+*
       ELSE
 *
 *        Print error message if no header is available.
@@ -698,6 +737,11 @@
  8000 FORMAT( / 1X, A3, ':  QRT factorization for general matrices' )
  8001 FORMAT( / 1X, A3, ':  QRT factorization for ',
      $       'triangular-pentagonal matrices' )
+ 8002 FORMAT( / 1X, A3, ':  LQT factorization for general matrices' )
+ 8003 FORMAT( / 1X, A3, ':  LQT factorization for ',
+     $       'triangular-pentagonal matrices' )
+ 8004 FORMAT( / 1X, A3, ':  TS factorization for ',
+     $       'tall-skiny or short-wide matrices' )
 *
 *     GE matrix types
 *
@@ -970,7 +1014,8 @@
  9929 FORMAT( ' Test ratios (1-3: ', A1, 'TZRZF):' )
  9920 FORMAT( 3X, ' 7-10: same as 3-6', 3X, ' 11-14: same as 3-6' )
  9921 FORMAT( ' Test ratios:', / '    (1-2: ', A1, 'GELS, 3-6: ', A1,
-     $      'GELSY, 7-10: ', A1, 'GELSS, 11-14: ', A1, 'GELSD)' )
+     $      'GELSY, 7-10: ', A1, 'GELSS, 11-14: ', A1, 'GELSD, 15-16: '
+     $        A1, 'GETSLS)')
  9928 FORMAT( 7X, 'where ALPHA = ( 1 + SQRT( 17 ) ) / 8' )
  9927 FORMAT( 3X, I2, ': ABS( Largest element in L )', / 12X,
      $      ' - ( 1 / ( 1 - ALPHA ) ) + THRESH' )
@@ -989,6 +1034,30 @@
      $ ': norm( Q''*C - Q''*C ) / ( (M+N) * norm(C) * EPS )')
  8021 FORMAT(3X,I2,': norm( C*Q - C*Q ) / ( (M+N) * norm(C) * EPS )' )
  8022 FORMAT(3X,I2,
+     $ ': norm( C*Q'' - C*Q'' ) / ( (M+N) * norm(C) * EPS )')
+ 8023 FORMAT(3X,I2,': norm( L - A*Q'' ) / ( (M+N) * norm(A) * EPS )' )
+ 8024 FORMAT(3X,I2,': norm( I - Q*Q'' ) / ( (M+N) * EPS )' )
+ 8025 FORMAT(3X,I2,': norm( Q*C - Q*C ) / ( (M+N) * norm(C) * EPS )' )
+ 8026 FORMAT(3X,I2,
+     $ ': norm( Q''*C - Q''*C ) / ( (M+N) * norm(C) * EPS )')
+ 8027 FORMAT(3X,I2,': norm( C*Q - C*Q ) / ( (M+N) * norm(C) * EPS )' )
+ 8028 FORMAT(3X,I2,
+     $ ': norm( C*Q'' - C*Q'' ) / ( (M+N) * norm(C) * EPS )')
+ 8029 FORMAT(3X,I2,': norm( L - A*Q'' ) / ( (M+N) * norm(A) * EPS )' )
+ 8030 FORMAT(3X,I2,': norm( I - Q*Q'' ) / ( (M+N) * EPS )' )
+ 8031 FORMAT(3X,I2,': norm( Q*C - Q*C ) / ( (M+N) * norm(C) * EPS )' )
+ 8032 FORMAT(3X,I2,
+     $ ': norm( Q''*C - Q''*C ) / ( (M+N) * norm(C) * EPS )')
+ 8033 FORMAT(3X,I2,': norm( C*Q - C*Q ) / ( (M+N) * norm(C) * EPS )' )
+ 8034 FORMAT(3X,I2,
+     $ ': norm( C*Q'' - C*Q'' ) / ( (M+N) * norm(C) * EPS )')
+ 8035 FORMAT(3X,I2,': norm( R - Q''*A ) / ( (M+N) * norm(A) * EPS )' )
+ 8036 FORMAT(3X,I2,': norm( I - Q''*Q ) / ( (M+N) * EPS )' )
+ 8037 FORMAT(3X,I2,': norm( Q*C - Q*C ) / ( (M+N) * norm(C) * EPS )' )
+ 8038 FORMAT(3X,I2,
+     $ ': norm( Q''*C - Q''*C ) / ( (M+N) * norm(C) * EPS )')
+ 8039 FORMAT(3X,I2,': norm( C*Q - C*Q ) / ( (M+N) * norm(C) * EPS )' )
+ 8040 FORMAT(3X,I2,
      $ ': norm( C*Q'' - C*Q'' ) / ( (M+N) * norm(C) * EPS )')
 *
       RETURN

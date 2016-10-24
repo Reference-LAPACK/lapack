@@ -283,6 +283,52 @@
             ELSE
                NB = 32
             END IF
+         ELSE IF( C3.EQ.'QR ') THEN
+            IF( N3 .EQ. 1) THEN
+               IF( SNAME ) THEN
+*     M*N
+                  IF ((N1*N2.LE.131072).OR.(N1.LE.8192)) THEN
+                     NB = N1
+                  ELSE
+                     NB = 32768/N2
+                  END IF
+               ELSE
+                  IF ((N1*N2.LE.131072).OR.(N1.LE.8192)) THEN
+                     NB = N1
+                  ELSE
+                     NB = 32768/N2
+                  END IF  
+               END IF
+            ELSE
+               IF( SNAME ) THEN
+                  NB = 1
+               ELSE
+                  NB = 1
+               END IF
+            END IF
+         ELSE IF( C3.EQ.'LQ ') THEN
+            IF( N3 .EQ. 2) THEN
+               IF( SNAME ) THEN
+*     M*N
+                  IF ((N1*N2.LE.131072).OR.(N1.LE.8192)) THEN
+                     NB = N1
+                  ELSE
+                     NB = 32768/N2
+                  END IF
+               ELSE
+                  IF ((N1*N2.LE.131072).OR.(N1.LE.8192)) THEN
+                     NB = N1
+                  ELSE
+                     NB = 32768/N2
+                  END IF  
+               END IF
+            ELSE
+               IF( SNAME ) THEN
+                  NB = 1
+               ELSE
+                  NB = 1
+               END IF
+            END IF
          ELSE IF( C3.EQ.'HRD' ) THEN
             IF( SNAME ) THEN
                NB = 32

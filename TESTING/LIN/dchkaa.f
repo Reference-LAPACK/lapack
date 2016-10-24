@@ -162,7 +162,9 @@
      $                   DCHKSY_ROOK, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
      $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
      $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
-     $                   ILAVER, DCHKQRT, DCHKQRTP
+     $                   ILAVER, DCHKQRT, DCHKQRTP, DCHKLQTP, DCHKTSQR,
+     $                   DCHKLQT
+
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -908,7 +910,40 @@
 *        QX:  QRT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL DCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+            CALL DCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TQ' ) ) THEN
+*
+*        TQ:  LQT routines for general matrices
+*
+         IF( TSTCHK ) THEN
+            CALL DCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                    NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'XQ' ) ) THEN
+*
+*        XQ:  LQT routines for triangular-pentagonal matrices
+*
+         IF( TSTCHK ) THEN
+            CALL DCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TS' ) ) THEN
+*
+*        TS:  QR routines for tall-skinny matrices
+*
+         IF( TSTCHK ) THEN
+            CALL DCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH

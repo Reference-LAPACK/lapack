@@ -166,7 +166,8 @@
      $                   ZCHKTB, ZCHKTP, ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE,
      $                   ZDRVGT, ZDRVHE, ZDRVHE_ROOK, ZDRVHP, ZDRVLS,
      $                   ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
-     $                   ZDRVSY_ROOK, ILAVER, ZCHKQRT, ZCHKQRTP
+     $                   ZDRVSY_ROOK, ILAVER, ZCHKQRT, ZCHKQRTP,
+     $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -987,6 +988,72 @@
 *
          IF( TSTCHK ) THEN
             CALL ZCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TQ' ) ) THEN
+*
+*        TQ:  LQT routines for general matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                    NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'XQ' ) ) THEN
+*
+*        XQ:  LQT routines for triangular-pentagonal matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TS' ) ) THEN
+*
+*        TS:  QR routines for tall-skinny matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TQ' ) ) THEN
+*
+*        TQ:  LQT routines for general matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                    NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'XQ' ) ) THEN
+*
+*        XQ:  LQT routines for triangular-pentagonal matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'TS' ) ) THEN
+*
+*        TS:  QR routines for tall-skinny matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH

@@ -39,3 +39,6 @@ DLS    6               List types on next line if 0 < NTYPES <  6
 DEQ
 DQT
 DQX
+DXQ
+DTQ
+DTS
