@@ -286,13 +286,14 @@
          ELSE IF( C3.EQ.'QR ') THEN
             IF( N3 .EQ. 1) THEN
                IF( SNAME ) THEN
-                  IF ((M*N.LE.131072).OR.(M.LE.8192)) THEN
+*     M*N
+                  IF ((N1*N2.LE.131072).OR.(N1.LE.8192)) THEN
                      NB = N1
                   ELSE
                      NB = 32768/N2
                   END IF
                ELSE
-                  IF ((M*N.LE.131072).OR.(M.LE.8192)) THEN
+                  IF ((N1*N2.LE.131072).OR.(N1.LE.8192)) THEN
                      NB = N1
                   ELSE
                      NB = 32768/N2
@@ -308,13 +309,14 @@
          ELSE IF( C3.EQ.'LQ ') THEN
             IF( N3 .EQ. 2) THEN
                IF( SNAME ) THEN
-                  IF ((M*N.LE.131072).OR.(M.LE.8192)) THEN
+*     M*N
+                  IF ((N1*N2.LE.131072).OR.(N1.LE.8192)) THEN
                      NB = N1
                   ELSE
                      NB = 32768/N2
                   END IF
                ELSE
-                  IF ((M*N.LE.131072).OR.(M.LE.8192)) THEN
+                  IF ((N1*N2.LE.131072).OR.(N1.LE.8192)) THEN
                      NB = N1
                   ELSE
                      NB = 32768/N2

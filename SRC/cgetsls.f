@@ -4,7 +4,7 @@
 *       SUBROUTINE CGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
 *     $                   , WORK, LWORK, INFO )
 
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
 *       INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
@@ -12,7 +12,7 @@
 *       .. Array Arguments ..
 *       COMPLEX   A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -20,8 +20,8 @@
 *> \verbatim
 *>
 *> CGETSLS solves overdetermined or underdetermined real linear systems
-*> involving an M-by-N matrix A, or its transpose, using a tall skinny 
-*> QR or short wide LQfactorization of A.  It is assumed that A has 
+*> involving an M-by-N matrix A, or its transpose, using a tall skinny
+*> QR or short wide LQfactorization of A.  It is assumed that A has
 *> full rank.
 *>
 *> The following options are provided:
@@ -155,10 +155,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2011
 *
@@ -191,7 +191,8 @@
 *     .. Local Scalars ..
       LOGICAL            LQUERY, TRAN
       INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW, LW,
-     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2, INFO2
+     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2,
+     $                   INFO2, NB
       REAL               ANRM, BIGNUM, BNRM, SMLNUM
 *     ..
 *     .. External Functions ..
@@ -201,7 +202,7 @@
       EXTERNAL           LSAME, ILAENV, SLABAD, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQR, CGEMQR, CLASCL, CLASET, 
+      EXTERNAL           CGEQR, CGEMQR, CLASCL, CLASET,
      $                   CTRTRS, XERBLA, CGELQ, CGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
@@ -218,7 +219,7 @@
       TRAN  = LSAME( TRANS, 'C' )
 *
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.( LSAME( TRANS, 'N' ) .OR. 
+      IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
      $    LSAME( TRANS, 'C' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
@@ -236,9 +237,9 @@
       IF( INFO.EQ.0)  THEN
 *
 *     Determine the block size and minimum LWORK
-*       
+*
       IF ( M.GE.N ) THEN
-        CALL CGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1, 
+        CALL CGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
      $   INFO2)
         MB = INT(WORK(4))
         NB = INT(WORK(5))
@@ -247,8 +248,8 @@
      $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
         WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
         WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
-      ELSE 
-        CALL CGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1, 
+      ELSE
+        CALL CGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
      $   INFO2)
         MB = INT(WORK(4))
         NB = INT(WORK(5))
@@ -285,7 +286,7 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-           CALL CLASET( 'FULL', MAX( M, N ), NRHS, CZERO, CZERO, 
+           CALL CLASET( 'FULL', MAX( M, N ), NRHS, CZERO, CZERO,
      $       B, LDB )
            RETURN
       END IF
@@ -298,7 +299,7 @@
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = CLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = CLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
@@ -324,7 +325,7 @@
       IF ( TRAN ) THEN
         BROW = N
       END IF
-      BNRM = CLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
+      BNRM = CLANGE( 'M', BROW, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
@@ -354,7 +355,7 @@
 *
 *           B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-          CALL CGEMQR( 'L' , 'C', M, NRHS, N, A, LDA, 
+          CALL CGEMQR( 'L' , 'C', M, NRHS, N, A, LDA,
      $         WORK(LW2+1), LW1, B, LDB, WORK(1), LW2, INFO )
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
@@ -390,7 +391,7 @@
 *
             CALL CGEMQR( 'L', 'N', M, NRHS, N, A, LDA,
      $                   WORK( LW2+1), LW1, B, LDB, WORK( 1 ), LW2,
-     $                   INFO )       
+     $                   INFO )
 *
             SCLLEN = M
 *

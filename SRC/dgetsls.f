@@ -3,8 +3,7 @@
 *
 *       SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
 *     $                   , WORK, LWORK, INFO )
-
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
 *       INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
@@ -12,7 +11,7 @@
 *       .. Array Arguments ..
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -20,10 +19,10 @@
 *> \verbatim
 *>
 *> DGETSLS solves overdetermined or underdetermined real linear systems
-*> involving an M-by-N matrix A, using a tall skinny QR or short wide LQ 
+*> involving an M-by-N matrix A, using a tall skinny QR or short wide LQ
 *> factorization of A.  It is assumed that A has full rank.
 *>
-*> 
+*>
 *>
 *> The following options are provided:
 *>
@@ -121,7 +120,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          IF LWORK=-1, workspace query is assumed, and 
+*>          IF LWORK=-1, workspace query is assumed, and
 *>          WORK(1) returns the optimal LWORK,
 *>          and WORK(2) returns the minimum LWORK.
 *> \endverbatim
@@ -140,10 +139,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2011
 *
@@ -176,7 +175,8 @@
 *     .. Local Scalars ..
       LOGICAL            LQUERY, TRAN
       INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW, LW,
-     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2, INFO2
+     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2,
+     $                   INFO2, NB
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, SMLNUM
 *     ..
 *     .. External Functions ..
@@ -186,7 +186,7 @@
       EXTERNAL           LSAME, ILAENV, DLABAD, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQR, DGEMQR, DLASCL, DLASET, 
+      EXTERNAL           DGEQR, DGEMQR, DLASCL, DLASET,
      $                   DTRTRS, XERBLA, DGELQ, DGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
@@ -203,7 +203,7 @@
       TRAN  = LSAME( TRANS, 'T' )
 *
       LQUERY = ( LWORK.EQ.-1 )
-      IF( .NOT.( LSAME( TRANS, 'N' ) .OR. 
+      IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
      $    LSAME( TRANS, 'T' ) ) ) THEN
          INFO = -1
       ELSE IF( M.LT.0 ) THEN
@@ -221,9 +221,9 @@
       IF( INFO.EQ.0)  THEN
 *
 *     Determine the block size and minimum LWORK
-*       
+*
        IF ( M.GE.N ) THEN
-        CALL DGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1, 
+        CALL DGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
      $   INFO2)
         MB = INT(WORK(4))
         NB = INT(WORK(5))
@@ -232,8 +232,8 @@
      $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
         WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
         WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
-       ELSE 
-        CALL DGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1, 
+       ELSE
+        CALL DGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
      $   INFO2)
         MB = INT(WORK(4))
         NB = INT(WORK(5))
@@ -270,7 +270,7 @@
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
-           CALL DLASET( 'FULL', MAX( M, N ), NRHS, ZERO, ZERO, 
+           CALL DLASET( 'FULL', MAX( M, N ), NRHS, ZERO, ZERO,
      $       B, LDB )
            RETURN
       END IF
@@ -283,7 +283,7 @@
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = DLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = DLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
@@ -309,7 +309,7 @@
       IF ( TRAN ) THEN
         BROW = N
       END IF
-      BNRM = DLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
+      BNRM = DLANGE( 'M', BROW, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *
@@ -339,7 +339,7 @@
 *
 *           B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
-          CALL DGEMQR( 'L' , 'T', M, NRHS, N, A, LDA, 
+          CALL DGEMQR( 'L' , 'T', M, NRHS, N, A, LDA,
      $         WORK(LW2+1), LW1, B, LDB, WORK(1), LW2, INFO )
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
@@ -375,7 +375,7 @@
 *
             CALL DGEMQR( 'L', 'N', M, NRHS, N, A, LDA,
      $                   WORK( LW2+1), LW1, B, LDB, WORK( 1 ), LW2,
-     $                   INFO )       
+     $                   INFO )
 *
             SCLLEN = M
 *

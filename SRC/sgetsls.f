@@ -176,7 +176,8 @@
 *     .. Local Scalars ..
       LOGICAL            LQUERY, TRAN
       INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW, LW,
-     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2, INFO2
+     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2, INFO2,
+     $                   NB
       REAL               ANRM, BIGNUM, BNRM, SMLNUM
 *     ..
 *     .. External Functions ..
@@ -283,7 +284,7 @@
 *
 *     Scale A, B if max element outside range [SMLNUM,BIGNUM]
 *
-      ANRM = SLANGE( 'M', M, N, A, LDA, RWORK )
+      ANRM = SLANGE( 'M', M, N, A, LDA, WORK )
       IASCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
 *
@@ -309,7 +310,7 @@
       IF ( TRAN ) THEN
         BROW = N
       END IF
-      BNRM = SLANGE( 'M', BROW, NRHS, B, LDB, RWORK )
+      BNRM = SLANGE( 'M', BROW, NRHS, B, LDB, WORK )
       IBSCL = 0
       IF( BNRM.GT.ZERO .AND. BNRM.LT.SMLNUM ) THEN
 *

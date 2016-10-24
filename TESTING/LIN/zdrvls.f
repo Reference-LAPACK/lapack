@@ -244,7 +244,7 @@
 *     .. Local Scalars ..
       CHARACTER          TRANS
       CHARACTER*3        PATH
-      INTEGER            CRANK, I, IM, IN, INB, INFO, INS, IRANK,
+      INTEGER            CRANK, I, IM, IMB, IN, INB, INFO, INS, IRANK,
      $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK,
      $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
      $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB, LWTS
@@ -318,10 +318,10 @@
             MNMIN = MAX(MIN( M, N ),1)
             LDB = MAX( 1, M, N )
             MB = (MNMIN+1)
-            IF(MINMN.NE.MB) THEN
+            IF(MNMIN.NE.MB) THEN
               LWTS = (((LDB-MB)/(MB-MNMIN))*MNMIN+LDB*2)*MB+5
             ELSE
-              LWTS = 2*MINMN+5
+              LWTS = 2*MNMIN+5
             END IF
 *
             DO 120 INS = 1, NNS
