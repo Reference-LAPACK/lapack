@@ -2,41 +2,41 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTPQRT + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stplqt.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stplqt.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stplqt.f"> 
+*> Download DTPQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stplqt.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stplqt.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stplqt.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE STPLQT( M, N, L, MB, A, LDA, B, LDB, T, LDT, WORK,
 *                          INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER           INFO, LDA, LDB, LDT, N, M, L, MB
 *       ..
 *       .. Array Arguments ..
 *       REAL  A( LDA, * ), B( LDB, * ), T( LDT, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> DTPLQT computes a blocked LQ factorization of a real 
-*> "triangular-pentagonal" matrix C, which is composed of a 
-*> triangular block A and pentagonal block B, using the compact 
+*> DTPLQT computes a blocked LQ factorization of a real
+*> "triangular-pentagonal" matrix C, which is composed of a
+*> triangular block A and pentagonal block B, using the compact
 *> WY representation for Q.
 *> \endverbatim
 *
@@ -47,7 +47,7 @@
 *> \verbatim
 *>          M is INTEGER
 *>          The number of rows of the matrix B, and the order of the
-*>          triangular matrix A.  
+*>          triangular matrix A.
 *>          M >= 0.
 *> \endverbatim
 *>
@@ -88,7 +88,7 @@
 *> \param[in,out] B
 *> \verbatim
 *>          B is REAL array, dimension (LDB,N)
-*>          On entry, the pentagonal M-by-N matrix B.  The first N-L columns 
+*>          On entry, the pentagonal M-by-N matrix B.  The first N-L columns
 *>          are rectangular, and the last L columns are lower trapezoidal.
 *>          On exit, B contains the pentagonal matrix V.  See Further Details.
 *> \endverbatim
@@ -105,7 +105,7 @@
 *>          The lower triangular block reflectors stored in compact form
 *>          as a sequence of upper triangular blocks.  See Further Details.
 *> \endverbatim
-*>          
+*>
 *> \param[in] LDT
 *> \verbatim
 *>          LDT is INTEGER
@@ -127,10 +127,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2013
 *
@@ -141,45 +141,45 @@
 *>
 *> \verbatim
 *>
-*>  The input matrix C is a M-by-(M+N) matrix  
+*>  The input matrix C is a M-by-(M+N) matrix
 *>
 *>               C = [ A ] [ B ]
-*>                           
+*>
 *>
 *>  where A is an lower triangular N-by-N matrix, and B is M-by-N pentagonal
 *>  matrix consisting of a M-by-(N-L) rectangular matrix B1 on left of a M-by-L
 *>  upper trapezoidal matrix B2:
-*>          [ B ] = [ B1 ] [ B2 ] 
+*>          [ B ] = [ B1 ] [ B2 ]
 *>                   [ B1 ]  <- M-by-(N-L) rectangular
 *>                   [ B2 ]  <-     M-by-L upper trapezoidal.
 *>
 *>  The lower trapezoidal matrix B2 consists of the first L columns of a
-*>  N-by-N lower triangular matrix, where 0 <= L <= MIN(M,N).  If L=0, 
-*>  B is rectangular M-by-N; if M=L=N, B is lower triangular.  
+*>  N-by-N lower triangular matrix, where 0 <= L <= MIN(M,N).  If L=0,
+*>  B is rectangular M-by-N; if M=L=N, B is lower triangular.
 *>
 *>  The matrix W stores the elementary reflectors H(i) in the i-th row
 *>  above the diagonal (of A) in the M-by-(M+N) input matrix C
-*>            [ C ] = [ A ] [ B ] 
+*>            [ C ] = [ A ] [ B ]
 *>                   [ A ]  <- lower triangular N-by-N
 *>                   [ B ]  <- M-by-N pentagonal
 *>
 *>  so that W can be represented as
-*>            [ W ] = [ I ] [ V ] 
+*>            [ W ] = [ I ] [ V ]
 *>                   [ I ]  <- identity, N-by-N
 *>                   [ V ]  <- M-by-N, same form as B.
 *>
 *>  Thus, all of information needed for W is contained on exit in B, which
-*>  we call V above.  Note that V has the same form as B; that is, 
-*>            [ V ] = [ V1 ] [ V2 ] 
+*>  we call V above.  Note that V has the same form as B; that is,
+*>            [ V ] = [ V1 ] [ V2 ]
 *>                   [ V1 ] <- M-by-(N-L) rectangular
 *>                   [ V2 ] <-     M-by-L lower trapezoidal.
 *>
-*>  The rows of V represent the vectors which define the H(i)'s.  
+*>  The rows of V represent the vectors which define the H(i)'s.
 *>
 *>  The number of blocks is B = ceiling(M/MB), where each
-*>  block is of order MB except for the last block, which is of order 
+*>  block is of order MB except for the last block, which is of order
 *>  IB = M - (M-1)*MB.  For each of the B blocks, a upper triangular block
-*>  reflector factor is computed: T1, T2, ..., TB.  The MB-by-MB (and IB-by-IB 
+*>  reflector factor is computed: T1, T2, ..., TB.  The MB-by-MB (and IB-by-IB
 *>  for the last block) T's are stored in the MB-by-N matrix T as
 *>
 *>               T = [T1 T2 ... TB].
@@ -240,7 +240,7 @@
       IF( M.EQ.0 .OR. N.EQ.0 ) RETURN
 *
       DO I = 1, M, MB
-*     
+*
 *     Compute the QR factorization of the current block
 *
          IB = MIN( M-I+1, MB )
@@ -251,20 +251,20 @@
             LB = NB-N+L-I+1
          END IF
 *
-         CALL STPLQT2( IB, NB, LB, A(I,I), LDA, B( I, 1 ), LDB, 
+         CALL STPLQT2( IB, NB, LB, A(I,I), LDA, B( I, 1 ), LDB,
      $                 T(1, I ), LDT, IINFO )
 *
 *     Update by applying H**T to B(I+IB:M,:) from the right
 *
          IF( I+IB.LE.M ) THEN
             CALL STPRFB( 'R', 'N', 'F', 'R', M-I-IB+1, NB, IB, LB,
-     $                    B( I, 1 ), LDB, T( 1, I ), LDT, 
-     $                    A( I+IB, I ), LDA, B( I+IB, 1 ), LDB, 
+     $                    B( I, 1 ), LDB, T( 1, I ), LDT,
+     $                    A( I+IB, I ), LDA, B( I+IB, 1 ), LDB,
      $                    WORK, M-I-IB+1)
          END IF
       END DO
       RETURN
-*     
+*
 *     End of STPLQT
 *
       END

@@ -151,7 +151,7 @@ set(SLASRC
    sbbcsd.f slapmr.f sorbdb.f sorbdb1.f sorbdb2.f sorbdb3.f sorbdb4.f
    sorbdb5.f sorbdb6.f sorcsd.f sorcsd2by1.f
    sgeqrt.f sgeqrt2.f sgeqrt3.f sgemqrt.f
-   stpqrt.f stpqrt2.f stpmqrt.f stprfb.f 
+   stpqrt.f stpqrt2.f stpmqrt.f stprfb.f
    sgelqt.f sgelqt3.f sgemlqt.f
    sgetsls.f sgeqr.f slatsqr.f slamtsqr.f sgemqr.f
    sgelq.f slaswlq.f slamswlq.f sgemlq.f
@@ -322,7 +322,7 @@ set(DLASRC
    dbbcsd.f dlapmr.f dorbdb.f dorbdb1.f dorbdb2.f dorbdb3.f dorbdb4.f
    dorbdb5.f dorbdb6.f dorcsd.f dorcsd2by1.f
    dgeqrt.f dgeqrt2.f dgeqrt3.f dgemqrt.f
-   dtpqrt.f dtpqrt2.f dtpmqrt.f dtprfb.f 
+   dtpqrt.f dtpqrt2.f dtpmqrt.f dtprfb.f
    dgelqt.f dgelqt3.f dgemlqt.f
    dgetsls.f dgeqr.f dlatsqr.f dlamtsqr.f dgemqr.f
    dgelq.f dlaswlq.f dlamswlq.f dgemlq.f

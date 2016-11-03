@@ -467,7 +467,7 @@ c                     END IF
 *                    residual.
 *
                      CALL DSYT01_AASEN( UPLO, N, A, LDA, AFAC, LDA,
-     $                                  IWORK, AINV, LDA, RWORK, 
+     $                                  IWORK, AINV, LDA, RWORK,
      $                                  RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.

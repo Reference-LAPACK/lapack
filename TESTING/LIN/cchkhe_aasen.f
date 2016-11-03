@@ -225,7 +225,7 @@
 *     .. External Subroutines ..
       EXTERNAL     ALAERH, ALAHD, ALASUM, XLAENV, CERRHE, CGET04,
      $             ZHECON, CHERFS, CHET01, CHETRF_AASEN, ZHETRI2,
-     $             CHETRS_AASEN, CLACPY, CLAIPD, CLARHS, CLATB4, 
+     $             CHETRS_AASEN, CLACPY, CLAIPD, CLARHS, CLATB4,
      $             CLATMS, CPOT02, ZPOT03, ZPOT05
 *     ..
 *     .. Intrinsic Functions ..
@@ -433,7 +433,7 @@
 *
                   LWORK = ( NB+1 )*LDA
                   SRNAMT = 'CHETRF_AASEN'
-                  CALL CHETRF_AASEN( UPLO, N, AFAC, LDA, IWORK, AINV, 
+                  CALL CHETRF_AASEN( UPLO, N, AFAC, LDA, IWORK, AINV,
      $                               LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -459,8 +459,8 @@
 *                 Check error code from CHETRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'CHETRF_AASEN', INFO, K, UPLO, 
-     $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS, 
+                     CALL ALAERH( PATH, 'CHETRF_AASEN', INFO, K, UPLO,
+     $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
                   END IF
 *

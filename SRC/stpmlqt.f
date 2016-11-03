@@ -2,41 +2,41 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DTPMQRT + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpmlqt.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpmlqt.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpmlqt.f"> 
+*> Download DTPMQRT + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/stpmlqt.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/stpmlqt.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/stpmlqt.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE STPMLQT( SIDE, TRANS, M, N, K, L, MB, V, LDV, T, LDT,
 *                           A, LDA, B, LDB, WORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER SIDE, TRANS
 *       INTEGER   INFO, K, LDV, LDA, LDB, M, N, L, MB, LDT
 *       ..
 *       .. Array Arguments ..
-*       REAL               V( LDV, * ), A( LDA, * ), B( LDB, * ), 
+*       REAL               V( LDV, * ), A( LDA, * ), B( LDB, * ),
 *      $                   T( LDT, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> DTPMQRT applies a real orthogonal matrix Q obtained from a 
+*> DTPMQRT applies a real orthogonal matrix Q obtained from a
 *> "triangular-pentagonal" real block reflector H to a general
 *> real matrix C, which consists of two blocks A and B.
 *> \endverbatim
@@ -69,7 +69,7 @@
 *>          N is INTEGER
 *>          The number of columns of the matrix B. N >= 0.
 *> \endverbatim
-*> 
+*>
 *> \param[in] K
 *> \verbatim
 *>          K is INTEGER
@@ -80,7 +80,7 @@
 *> \param[in] L
 *> \verbatim
 *>          L is INTEGER
-*>          The order of the trapezoidal part of V.  
+*>          The order of the trapezoidal part of V.
 *>          K >= L >= 0.  See Further Details.
 *> \endverbatim
 *>
@@ -124,19 +124,19 @@
 *> \param[in,out] A
 *> \verbatim
 *>          A is REAL array, dimension
-*>          (LDA,N) if SIDE = 'L' or 
+*>          (LDA,N) if SIDE = 'L' or
 *>          (LDA,K) if SIDE = 'R'
 *>          On entry, the K-by-N or M-by-K matrix A.
-*>          On exit, A is overwritten by the corresponding block of 
+*>          On exit, A is overwritten by the corresponding block of
 *>          Q*C or Q**T*C or C*Q or C*Q**T.  See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDA
 *> \verbatim
 *>          LDA is INTEGER
-*>          The leading dimension of the array A. 
+*>          The leading dimension of the array A.
 *>          If SIDE = 'L', LDC >= max(1,K);
-*>          If SIDE = 'R', LDC >= max(1,M). 
+*>          If SIDE = 'R', LDC >= max(1,M).
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -150,7 +150,7 @@
 *> \param[in] LDB
 *> \verbatim
 *>          LDB is INTEGER
-*>          The leading dimension of the array B. 
+*>          The leading dimension of the array B.
 *>          LDB >= max(1,M).
 *> \endverbatim
 *>
@@ -170,10 +170,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2015
 *
@@ -185,20 +185,20 @@
 *> \verbatim
 *>
 *>  The columns of the pentagonal matrix V contain the elementary reflectors
-*>  H(1), H(2), ..., H(K); V is composed of a rectangular block V1 and a 
+*>  H(1), H(2), ..., H(K); V is composed of a rectangular block V1 and a
 *>  trapezoidal block V2:
 *>
 *>        V = [V1] [V2].
-*>            
 *>
-*>  The size of the trapezoidal block V2 is determined by the parameter L, 
+*>
+*>  The size of the trapezoidal block V2 is determined by the parameter L,
 *>  where 0 <= L <= K; V2 is lower trapezoidal, consisting of the first L
 *>  rows of a K-by-K upper triangular matrix.  If L=K, V2 is lower triangular;
 *>  if L=0, there is no trapezoidal block, hence V = V1 is rectangular.
 *>
-*>  If SIDE = 'L':  C = [A]  where A is K-by-N,  B is M-by-N and V is K-by-M. 
-*>                      [B]   
-*>  
+*>  If SIDE = 'L':  C = [A]  where A is K-by-N,  B is M-by-N and V is K-by-M.
+*>                      [B]
+*>
 *>  If SIDE = 'R':  C = [A B]  where A is M-by-K, B is M-by-N and V is K-by-N.
 *>
 *>  The real orthogonal matrix Q is formed from V and T.
@@ -226,7 +226,7 @@
       INTEGER   INFO, K, LDV, LDA, LDB, M, N, L, MB, LDT
 *     ..
 *     .. Array Arguments ..
-      REAL   V( LDV, * ), A( LDA, * ), B( LDB, * ), 
+      REAL   V( LDV, * ), A( LDA, * ), B( LDB, * ),
      $                   T( LDT, * ), WORK( * )
 *     ..
 *
@@ -256,7 +256,7 @@
       RIGHT  = LSAME( SIDE,  'R' )
       TRAN   = LSAME( TRANS, 'T' )
       NOTRAN = LSAME( TRANS, 'N' )
-*      
+*
       IF ( LEFT ) THEN
          LDAQ = MAX( 1, K )
       ELSE IF ( RIGHT ) THEN
@@ -273,7 +273,7 @@
       ELSE IF( K.LT.0 ) THEN
          INFO = -5
       ELSE IF( L.LT.0 .OR. L.GT.K ) THEN
-         INFO = -6         
+         INFO = -6
       ELSE IF( MB.LT.1 .OR. (MB.GT.K .AND. K.GT.0) ) THEN
          INFO = -7
       ELSE IF( LDV.LT.K ) THEN
@@ -305,11 +305,11 @@
             ELSE
                LB = 0
             END IF
-            CALL STPRFB( 'L', 'T', 'F', 'R', NB, N, IB, LB, 
-     $                   V( I, 1 ), LDV, T( 1, I ), LDT, 
+            CALL STPRFB( 'L', 'T', 'F', 'R', NB, N, IB, LB,
+     $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( I, 1 ), LDA, B, LDB, WORK, IB )
          END DO
-*         
+*
       ELSE IF( RIGHT .AND. TRAN ) THEN
 *
          DO I = 1, K, MB
@@ -320,8 +320,8 @@
             ELSE
                LB = NB-N+L-I+1
             END IF
-            CALL STPRFB( 'R', 'N', 'F', 'R', M, NB, IB, LB, 
-     $                   V( I, 1 ), LDV, T( 1, I ), LDT, 
+            CALL STPRFB( 'R', 'N', 'F', 'R', M, NB, IB, LB,
+     $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( 1, I ), LDA, B, LDB, WORK, M )
          END DO
 *
@@ -329,15 +329,15 @@
 *
          KF = ((K-1)/MB)*MB+1
          DO I = KF, 1, -MB
-            IB = MIN( MB, K-I+1 )  
+            IB = MIN( MB, K-I+1 )
             NB = MIN( M-L+I+IB-1, M )
             IF( I.GE.L ) THEN
                LB = 0
             ELSE
                LB = 0
-            END IF                   
+            END IF
             CALL STPRFB( 'L', 'N', 'F', 'R', NB, N, IB, LB,
-     $                   V( I, 1 ), LDV, T( 1, I ), LDT, 
+     $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( I, 1 ), LDA, B, LDB, WORK, IB )
          END DO
 *
@@ -345,7 +345,7 @@
 *
          KF = ((K-1)/MB)*MB+1
          DO I = KF, 1, -MB
-            IB = MIN( MB, K-I+1 )         
+            IB = MIN( MB, K-I+1 )
             NB = MIN( N-L+I+IB-1, N )
             IF( I.GE.L ) THEN
                LB = 0
@@ -353,7 +353,7 @@
                LB = NB-N+L-I+1
             END IF
             CALL STPRFB( 'R', 'T', 'F', 'R', M, NB, IB, LB,
-     $                   V( I, 1 ), LDV, T( 1, I ), LDT, 
+     $                   V( I, 1 ), LDV, T( 1, I ), LDT,
      $                   A( 1, I ), LDA, B, LDB, WORK, M )
          END DO
 *

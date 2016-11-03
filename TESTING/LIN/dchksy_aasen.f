@@ -430,7 +430,7 @@
 *
                   SRNAMT = 'DSYTRF_AASEN'
                   LWORK = N*NB + N
-                  CALL DSYTRF_AASEN( UPLO, N, AFAC, LDA, IWORK, AINV, 
+                  CALL DSYTRF_AASEN( UPLO, N, AFAC, LDA, IWORK, AINV,
      $                               LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -456,8 +456,8 @@
 *                 Check error code from DSYTRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'DSYTRF_AASEN', INFO, K, UPLO, 
-     $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS, 
+                     CALL ALAERH( PATH, 'DSYTRF_AASEN', INFO, K, UPLO,
+     $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
                   END IF
 *
@@ -517,7 +517,7 @@
 *
                      SRNAMT = 'DSYTRS_AASEN'
                      LWORK = 3*N-2
-                     CALL DSYTRS_AASEN( UPLO, N, NRHS, AFAC, LDA, 
+                     CALL DSYTRS_AASEN( UPLO, N, NRHS, AFAC, LDA,
      $                                  IWORK, X, LDA, WORK, LWORK,
      $                                  INFO )
 *

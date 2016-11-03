@@ -2,24 +2,24 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYTRF_AASEN + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrf_aasen.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrf_aasen.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrf_aasen.f"> 
+*> Download DSYTRF_AASEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrf_aasen.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrf_aasen.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrf_aasen.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE DSYTRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            N, LDA, LWORK, INFO
@@ -73,7 +73,7 @@
 *>          triangular part of A is not referenced.
 *>
 *>          On exit, the tridiagonal matrix is stored in the diagonals
-*>          and the subdiagonals of A just below (or above) the diagonals, 
+*>          and the subdiagonals of A just below (or above) the diagonals,
 *>          and L is stored below (or above) the subdiaonals, when UPLO
 *>          is 'L' (or 'U').
 *> \endverbatim
@@ -87,8 +87,8 @@
 *> \param[out] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          On exit, it contains the details of the interchanges, i.e., 
-*>          the row and column k of A were interchanged with the 
+*>          On exit, it contains the details of the interchanges, i.e.,
+*>          the row and column k of A were interchanged with the
 *>          row and column IPIV(k).
 *> \endverbatim
 *>
@@ -124,10 +124,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2016
 *
@@ -244,14 +244,14 @@
 *
          J = 0
  10      CONTINUE
-         IF( J.GE.N ) 
+         IF( J.GE.N )
      $      GO TO 20
 *
 *        each step of the main loop
 *         J is the last column of the previous panel
 *         J1 is the first column of the current panel
 *         K1 identifies if the previous column of the panel has been
-*          explicitly stored, e.g., K1=1 for the first panel, and 
+*          explicitly stored, e.g., K1=1 for the first panel, and
 *          K1=0 for the rest
 *
          J1 = J + 1
@@ -260,27 +260,27 @@
 *
 *        Panel factorization
 *
-         CALL DLASYF_AASEN( UPLO, 2-K1, N-J, JB, 
+         CALL DLASYF_AASEN( UPLO, 2-K1, N-J, JB,
      $                      A( MAX(1, J), J+1 ), LDA,
-     $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ), 
+     $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ),
      $                      IINFO )
          IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
              INFO = IINFO+J
-         ENDIF 
+         ENDIF
 *
 *        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL DSWAP( J1-K1-2, A( 1, J2 ), 1, 
+               CALL DSWAP( J1-K1-2, A( 1, J2 ), 1,
      $                              A( 1, IPIV(J2) ), 1 )
             END IF
          END DO
          J = J + JB
 *
 *        Trailing submatrix update, where
-*         the row A(J1-1, J2-1:N) stores U(J1, J2+1:N) and 
+*         the row A(J1-1, J2-1:N) stores U(J1, J2+1:N) and
 *         WORK stores the current block of the auxiriarly matrix H
 *
          IF( J.LT.N ) THEN
@@ -293,12 +293,12 @@
 *
                ALPHA = A( J, J+1 )
                A( J, J+1 ) = ONE
-               CALL DCOPY( N-J, A( J-1, J+1 ), LDA, 
+               CALL DCOPY( N-J, A( J-1, J+1 ), LDA,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
                CALL DSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
 *
 *              K1 identifies if the previous column of the panel has been
-*               explicitly stored, e.g., K1=1 and K2= 0 for the first panel, 
+*               explicitly stored, e.g., K1=1 and K2= 0 for the first panel,
 *               while K1=0 and K2=1 for the rest
 *
                IF( J1.GT.1 ) THEN
@@ -306,13 +306,13 @@
 *                 Not first panel
 *
                   K2 = 1
-               ELSE 
+               ELSE
 *
 *                 First panel
 *
                   K2 = 0
 *
-*                 First update skips the first column 
+*                 First update skips the first column
 *
                   JB = JB - 1
                END IF
@@ -333,7 +333,7 @@
 *
 *                 Update off-diagonal block of J2-th block row with DGEMM
 *
-                  CALL DGEMM( 'Transpose', 'Transpose', 
+                  CALL DGEMM( 'Transpose', 'Transpose',
      $                        NJ, N-J3+1, JB+1,
      $                       -ONE, A( J1-K2, J2 ), LDA,
      $                             WORK( J3-J1+1+K1*N ), N,
@@ -356,7 +356,7 @@
 *        Factorize A as L*D*L**T using the lower triangle of A
 *        .....................................................
 *
-*        copy first column A(1:N, 1) into H(1:N, 1) 
+*        copy first column A(1:N, 1) into H(1:N, 1)
 *         (stored in WORK(1:N))
 *
          CALL DCOPY( N, A( 1, 1 ), 1, WORK( 1 ), 1 )
@@ -367,14 +367,14 @@
 *
          J = 0
  11      CONTINUE
-         IF( J.GE.N ) 
+         IF( J.GE.N )
      $      GO TO 20
 *
 *        each step of the main loop
 *         J is the last column of the previous panel
 *         J1 is the first column of the current panel
 *         K1 identifies if the previous column of the panel has been
-*          explicitly stored, e.g., K1=1 for the first panel, and 
+*          explicitly stored, e.g., K1=1 for the first panel, and
 *          K1=0 for the rest
 *
          J1 = J+1
@@ -383,26 +383,26 @@
 *
 *        Panel factorization
 *
-         CALL DLASYF_AASEN( UPLO, 2-K1, N-J, JB, 
+         CALL DLASYF_AASEN( UPLO, 2-K1, N-J, JB,
      $                      A( J+1, MAX(1, J) ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ), IINFO)
          IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
             INFO = IINFO+J
-         ENDIF 
+         ENDIF
 *
 *        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL DSWAP( J1-K1-2, A( J2, 1 ), LDA, 
+               CALL DSWAP( J1-K1-2, A( J2, 1 ), LDA,
      $                              A( IPIV(J2), 1 ), LDA )
             END IF
          END DO
          J = J + JB
 *
 *        Trailing submatrix update, where
-*          A(J2+1, J1-1) stores L(J2+1, J1) and 
+*          A(J2+1, J1-1) stores L(J2+1, J1) and
 *          WORK(J2+1, 1) stores H(J2+1, 1)
 *
          IF( J.LT.N ) THEN
@@ -415,12 +415,12 @@
 *
                ALPHA = A( J+1, J )
                A( J+1, J ) = ONE
-               CALL DCOPY( N-J, A( J+1, J-1 ), 1, 
+               CALL DCOPY( N-J, A( J+1, J-1 ), 1,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
                CALL DSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
 *
 *              K1 identifies if the previous column of the panel has been
-*               explicitly stored, e.g., K1=1 and K2= 0 for the first panel, 
+*               explicitly stored, e.g., K1=1 and K2= 0 for the first panel,
 *               while K1=0 and K2=1 for the rest
 *
                IF( J1.GT.1 ) THEN
@@ -434,7 +434,7 @@
 *
                   K2 = 0
 *
-*                 First update skips the first column 
+*                 First update skips the first column
 *
                   JB = JB - 1
                END IF
@@ -455,7 +455,7 @@
 *
 *                 Update off-diagonal block in J2-th block column with DGEMM
 *
-                  CALL DGEMM( 'No transpose', 'Transpose', 
+                  CALL DGEMM( 'No transpose', 'Transpose',
      $                        N-J3+1, NJ, JB+1,
      $                       -ONE, WORK( J3-J1+1+K1*N ), N,
      $                             A( J2, J1-K2 ), LDA,

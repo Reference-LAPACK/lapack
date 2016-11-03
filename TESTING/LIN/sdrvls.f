@@ -234,9 +234,9 @@
 *     .. Local Scalars ..
       CHARACTER          TRANS
       CHARACTER*3        PATH
-      INTEGER            CRANK, I, IM, IMB, IN, INB, INFO, INS, IRANK, 
-     $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK, 
-     $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS, 
+      INTEGER            CRANK, I, IM, IMB, IN, INB, INFO, INS, IRANK,
+     $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK,
+     $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
      $                   NFAIL, NLVL, NRHS, NROWS, NRUN, RANK, MB, LWTS
       REAL               EPS, NORMA, NORMB, RCOND
 *     ..
@@ -324,7 +324,7 @@
                LWORK = MAX( 1, ( M+NRHS )*( N+2 ), ( N+NRHS )*( M+2 ),
      $                 M*N+4*MNMIN+MAX( M, N ), 12*MNMIN+2*MNMIN*SMLSIZ+
      $                 8*MNMIN*NLVL+MNMIN*NRHS+(SMLSIZ+1)**2,LWTS)
-     $                 
+     $
 *
                DO 120 IRANK = 1, 2
                   DO 110 ISCALE = 1, 3
@@ -446,7 +446,7 @@
                              CALL XLAENV( 1, MB )
                              DO 62 IMB = 1, NNB
                                NB = NBVAL( IMB )
-                               CALL XLAENV( 2, NB ) 
+                               CALL XLAENV( 2, NB )
 *
                            DO 60 ITRAN = 1, 2
                               IF( ITRAN.EQ.1 ) THEN
@@ -484,7 +484,7 @@
      $                                        COPYB, LDB, B, LDB )
                               END IF
                               SRNAMT = 'SGETSLS '
-                              CALL SGETSLS( TRANS, M, N, NRHS, A, 
+                              CALL SGETSLS( TRANS, M, N, NRHS, A,
      $                                 LDA, B, LDB, WORK, LWORK, INFO )
                               IF( INFO.NE.0 )
      $                           CALL ALAERH( PATH, 'SGETSLS ', INFO, 0,
@@ -765,8 +765,8 @@
      $      ', NB=', I4, ', type', I2, ', test(', I2, ')=', G12.5 )
  9998 FORMAT( ' M=', I5, ', N=', I5, ', NRHS=', I4, ', NB=', I4,
      $      ', type', I2, ', test(', I2, ')=', G12.5 )
- 9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,  
-     $      ', MB=', I4,', NB=', I4,', type', I2, 
+ 9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,
+     $      ', MB=', I4,', NB=', I4,', type', I2,
      $      ', test(', I2, ')=', G12.5 )
       RETURN
 *

@@ -1,8 +1,8 @@
-* 
+*
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T, 
+*      SUBROUTINE ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
 *     $                LDT, C, LDC, WORK, LWORK, INFO )
 *
 *
@@ -17,15 +17,15 @@
 *  =============
 *>
 *> \verbatim
-*> 
+*>
 *>    ZLAMQRTS overwrites the general real M-by-N matrix C with
 *>
-*>                     
+*>
 *>                    SIDE = 'L'     SIDE = 'R'
 *>    TRANS = 'N':      Q * C          C * Q
 *>    TRANS = 'T':      Q**T * C       C * Q**T
 *>    where Q is a real orthogonal matrix defined as the product of blocked
-*>    elementary reflectors computed by short wide LQ 
+*>    elementary reflectors computed by short wide LQ
 *>    factorization (ZLASWLQ)
 *> \endverbatim
 *
@@ -59,28 +59,28 @@
 *>          The number of elementary reflectors whose product defines
 *>          the matrix Q.
 *>          M >= K >= 0;
-*>          
+*>
 *> \endverbatim
 *> \param[in] MB
 *> \verbatim
 *>          MB is INTEGER
-*>          The row block size to be used in the blocked QR.  
-*>          M >= MB >= 1 
+*>          The row block size to be used in the blocked QR.
+*>          M >= MB >= 1
 *> \endverbatim
 *>
 *> \param[in] NB
 *> \verbatim
 *>          NB is INTEGER
-*>          The column block size to be used in the blocked QR.  
+*>          The column block size to be used in the blocked QR.
 *>          NB > M.
 *> \endverbatim
 *>
 *> \param[in] NB
 *> \verbatim
 *>          NB is INTEGER
-*>          The block size to be used in the blocked QR.  
+*>          The block size to be used in the blocked QR.
 *>                MB > M.
-*>         
+*>
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -101,7 +101,7 @@
 *>
 *> \param[in] T
 *> \verbatim
-*>          T is COMPLEX*16 array, dimension 
+*>          T is COMPLEX*16 array, dimension
 *>          ( M * Number of blocks(CEIL(N-K/NB-K)),
 *>          The blocked upper triangular block reflectors stored in compact form
 *>          as a sequence of upper triangular blocks.  See below
@@ -125,7 +125,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>         (workspace) COMPLEX*16 array, dimension (MAX(1,LWORK))
-*>        
+*>
 *> \endverbatim
 *> \param[in] LWORK
 *> \verbatim
@@ -177,7 +177,7 @@
 *> block reflectors, stored in array T(1:LDT,(i-1)*M+1:i*M).
 *> The last Q(k) may use fewer rows.
 *> For more information see Further Details in TPQRT.
-*> 
+*>
 *> For more details of the overall algorithm, see the description of
 *> Sequential TSQR in Section 2.2 of [1].
 *>
@@ -187,7 +187,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,  
+      SUBROUTINE ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
      $    LDT, C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
@@ -266,11 +266,11 @@
 *
       IF( MIN(M,N,K).EQ.0 ) THEN
         RETURN
-      END IF 
+      END IF
 *
       IF((NB.LE.K).OR.(NB.GE.MAX(M,N,K))) THEN
-        CALL ZGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA, 
-     $        T, LDT, C, LDC, WORK, INFO)  
+        CALL ZGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
+     $        T, LDT, C, LDC, WORK, INFO)
         RETURN
       END IF
 *
@@ -390,7 +390,7 @@
          IF(II.LE.N) THEN
 *
 *       Multiply Q to the last block of C
-*  
+*
           CALL ZTPMLQT('R','C',M , KK, K, 0,MB, A(1,II), LDA,
      $      T(1, CTR * K + 1),LDT, C(1,1), LDC,
      $      C(1,II), LDC, WORK, INFO )

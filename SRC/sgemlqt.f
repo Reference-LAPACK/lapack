@@ -1,9 +1,9 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT, 
+*       SUBROUTINE SGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
 *                          C, LDC, WORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER SIDE, TRANS
 *       INTEGER   INFO, K, LDV, LDC, M, N, MB, LDT
@@ -11,7 +11,7 @@
 *       .. Array Arguments ..
 *       REAL      V( LDV, * ), C( LDC, * ), T( LDT, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -29,7 +29,7 @@
 *>
 *>       Q = H(1) H(2) . . . H(K) = I - V T V**T
 *>
-*> generated using the compact WY representation as returned by DGELQT. 
+*> generated using the compact WY representation as returned by DGELQT.
 *>
 *> Q is of order M if SIDE = 'L' and of order N  if SIDE = 'R'.
 *> \endverbatim
@@ -138,17 +138,17 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2013
 *
 *> \ingroup doubleGEcomputational
 *
 *  =====================================================================
-      SUBROUTINE SGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT, 
+      SUBROUTINE SGEMLQT( SIDE, TRANS, M, N, K, MB, V, LDV, T, LDT,
      $                   C, LDC, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
@@ -190,7 +190,7 @@
       RIGHT  = LSAME( SIDE,  'R' )
       TRAN   = LSAME( TRANS, 'T' )
       NOTRAN = LSAME( TRANS, 'N' )
-*      
+*
       IF( LEFT ) THEN
          LDWORK = MAX( 1, N )
       ELSE IF ( RIGHT ) THEN
@@ -229,17 +229,17 @@
 *
          DO I = 1, K, MB
             IB = MIN( MB, K-I+1 )
-            CALL SLARFB( 'L', 'T', 'F', 'R', M-I+1, N, IB, 
-     $                   V( I, I ), LDV, T( 1, I ), LDT, 
+            CALL SLARFB( 'L', 'T', 'F', 'R', M-I+1, N, IB,
+     $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( I, 1 ), LDC, WORK, LDWORK )
          END DO
-*         
+*
       ELSE IF( RIGHT .AND. TRAN ) THEN
 *
          DO I = 1, K, MB
             IB = MIN( MB, K-I+1 )
-            CALL SLARFB( 'R', 'N', 'F', 'R', M, N-I+1, IB, 
-     $                   V( I, I ), LDV, T( 1, I ), LDT, 
+            CALL SLARFB( 'R', 'N', 'F', 'R', M, N-I+1, IB,
+     $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( 1, I ), LDC, WORK, LDWORK )
          END DO
 *
@@ -247,9 +247,9 @@
 *
          KF = ((K-1)/MB)*MB+1
          DO I = KF, 1, -MB
-            IB = MIN( MB, K-I+1 )         
-            CALL SLARFB( 'L', 'N', 'F', 'R', M-I+1, N, IB, 
-     $                   V( I, I ), LDV, T( 1, I ), LDT, 
+            IB = MIN( MB, K-I+1 )
+            CALL SLARFB( 'L', 'N', 'F', 'R', M-I+1, N, IB,
+     $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( I, 1 ), LDC, WORK, LDWORK )
          END DO
 *
@@ -257,9 +257,9 @@
 *
          KF = ((K-1)/MB)*MB+1
          DO I = KF, 1, -MB
-            IB = MIN( MB, K-I+1 )         
-            CALL SLARFB( 'R', 'T', 'F', 'R', M, N-I+1, IB, 
-     $                   V( I, I ), LDV, T( 1, I ), LDT, 
+            IB = MIN( MB, K-I+1 )
+            CALL SLARFB( 'R', 'T', 'F', 'R', M, N-I+1, IB,
+     $                   V( I, I ), LDV, T( 1, I ), LDT,
      $                   C( 1, I ), LDC, WORK, LDWORK )
          END DO
 *

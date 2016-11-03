@@ -2,19 +2,19 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CLQT04(M,N,NB,RESULT)
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER M, N, NB
 *       .. Return values ..
 *       REAL RESULT(6)
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -54,17 +54,17 @@
 *>          RESULT(2) = | I - Q Q^H |
 *>          RESULT(3) = | Q C - Q C |
 *>          RESULT(4) = | Q^H C - Q^H C |
-*>          RESULT(5) = | C Q - C Q | 
+*>          RESULT(5) = | C Q - C Q |
 *>          RESULT(6) = | C Q^H - C Q^H |
 *> \endverbatim
 *
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2012
 *
@@ -87,9 +87,9 @@
 *  =====================================================================
 *
 *     ..
-*     .. Local allocatable arrays 
+*     .. Local allocatable arrays
       COMPLEX, ALLOCATABLE :: AF(:,:), Q(:,:),
-     $  L(:,:), RWORK(:), WORK( : ), T(:,:), 
+     $  L(:,:), RWORK(:), WORK( : ), T(:,:),
      $  CF(:,:), DF(:,:), A(:,:), C(:,:), D(:,:)
 *
 *     .. Parameters ..
@@ -112,11 +112,11 @@
       EXTERNAL SLAMCH, CLANGE, CLANSY, LSAME
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC  MAX, MIN      
+      INTRINSIC  MAX, MIN
 *     ..
 *     .. Data statements ..
-      DATA ISEED / 1988, 1989, 1990, 1991 /      
-*      
+      DATA ISEED / 1988, 1989, 1990, 1991 /
+*
       EPS = SLAMCH( 'Epsilon' )
       K = MIN(M,N)
       LL = MAX(M,N)
@@ -124,8 +124,8 @@
 *
 *     Dynamically allocate local arrays
 *
-      ALLOCATE ( A(M,N), AF(M,N), Q(N,N), L(LL,N), RWORK(LL), 
-     $           WORK(LWORK), T(NB,N), C(M,N), CF(M,N), 
+      ALLOCATE ( A(M,N), AF(M,N), Q(N,N), L(LL,N), RWORK(LL),
+     $           WORK(LWORK), T(NB,N), C(M,N), CF(M,N),
      $           D(N,M), DF(N,M) )
 *
 *     Put random numbers into A and copy to AF
@@ -143,7 +143,7 @@
 *     Generate the n-by-n matrix Q
 *
       CALL CLASET( 'Full', N, N, CZERO, ONE, Q, N )
-      CALL CGEMLQT( 'R', 'N', N, N, K, NB, AF, M, T, LDT, Q, N, 
+      CALL CGEMLQT( 'R', 'N', N, N, K, NB, AF, M, T, LDT, Q, N,
      $              WORK, INFO )
 *
 *     Copy L
@@ -179,7 +179,7 @@
 *
 *     Apply Q to C as Q*C
 *
-      CALL CGEMLQT( 'L', 'N', N, M, K, NB, AF, M, T, NB, DF, N, 
+      CALL CGEMLQT( 'L', 'N', N, M, K, NB, AF, M, T, NB, DF, N,
      $             WORK, INFO)
 *
 *     Compute |Q*D - Q*D| / |D|
@@ -198,7 +198,7 @@
 *
 *     Apply Q to D as QT*D
 *
-      CALL CGEMLQT( 'L', 'C', N, M, K, NB, AF, M, T, NB, DF, N, 
+      CALL CGEMLQT( 'L', 'C', N, M, K, NB, AF, M, T, NB, DF, N,
      $             WORK, INFO)
 *
 *     Compute |QT*D - QT*D| / |D|
@@ -209,7 +209,7 @@
          RESULT( 4 ) = RESID / (EPS*MAX(1,M)*DNORM)
       ELSE
          RESULT( 4 ) = ZERO
-      END IF     
+      END IF
 *
 *     Generate random n-by-m matrix D and a copy DF
 *
@@ -221,8 +221,8 @@
 *
 *     Apply Q to C as C*Q
 *
-      CALL CGEMLQT( 'R', 'N', M, N, K, NB, AF, M, T, NB, CF, M, 
-     $             WORK, INFO)      
+      CALL CGEMLQT( 'R', 'N', M, N, K, NB, AF, M, T, NB, CF, M,
+     $             WORK, INFO)
 *
 *     Compute |C*Q - C*Q| / |C|
 *
@@ -240,8 +240,8 @@
 *
 *     Apply Q to D as D*QT
 *
-      CALL CGEMLQT( 'R', 'C', M, N, K, NB, AF, M, T, NB, CF, M, 
-     $             WORK, INFO)      
+      CALL CGEMLQT( 'R', 'C', M, N, K, NB, AF, M, T, NB, CF, M,
+     $             WORK, INFO)
 *
 *     Compute |C*QT - C*QT| / |C|
 *

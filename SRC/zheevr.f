@@ -258,7 +258,7 @@
 *>          indicating the nonzero elements in Z. The i-th eigenvector
 *>          is nonzero only in elements ISUPPZ( 2*i-1 ) through
 *>          ISUPPZ( 2*i ). This is an output of ZSTEMR (tridiagonal
-*>          matrix). The support of the eigenvectors of A is typically 
+*>          matrix). The support of the eigenvectors of A is typically
 *>          1:N because of the unitary transformations applied by ZUNMTR.
 *>          Implemented only for RANGE = 'A' or 'I' and IU - IL = N - 1
 *> \endverbatim

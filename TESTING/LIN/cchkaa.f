@@ -652,7 +652,7 @@
 *
          IF( TSTCHK ) THEN
             CALL CCHKHE_AASEN( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
-     $                         NSVAL, THRESH, TSTERR, LDA, 
+     $                         NSVAL, THRESH, TSTERR, LDA,
      $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
      $                         WORK, RWORK, IWORK, NOUT )
@@ -661,9 +661,9 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVHE_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, 
-     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), 
-     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), 
+            CALL CDRVHE_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
      $                         WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
@@ -987,7 +987,7 @@
 *        QX:  QRT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL CCHKQRTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -998,7 +998,7 @@
 *        TQ:  LQT routines for general matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL CCHKLQT( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                    NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1009,7 +1009,7 @@
 *        XQ:  LQT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL CCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1020,7 +1020,7 @@
 *        TS:  QR routines for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH

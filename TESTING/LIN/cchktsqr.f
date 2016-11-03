@@ -2,15 +2,15 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+*       SUBROUTINE CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
 *                           NBVAL, NOUT )
-* 
+*
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NM, NN, NNB, NOUT
@@ -89,17 +89,17 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2011
 *
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+      SUBROUTINE CCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
       IMPLICIT NONE
 *
@@ -132,11 +132,11 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRTSQR, 
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRTSQR,
      $                   CTSQR01, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN   
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -172,7 +172,7 @@
          DO J = 1, NN
             N = NVAL( J )
               IF (MIN(M,N).NE.0) THEN
-              DO INB = 1, NNB    
+              DO INB = 1, NNB
                 MB = NBVAL( INB )
                   CALL XLAENV( 1, MB )
                   DO IMB = 1, NNB
@@ -180,7 +180,7 @@
                     CALL XLAENV( 2, NB )
 *
 *                 Test DGEQR and DGEMQR
-*     
+*
                     CALL CTSQR01( 'TS', M, N, MB, NB, RESULT )
 *
 *                 Print information about the tests that did not
@@ -196,9 +196,9 @@
                       END IF
                     END DO
                     NRUN = NRUN + NTESTS
-                  END DO 
-              END DO   
-              END IF 
+                  END DO
+              END DO
+              END IF
          END DO
       END DO
 *
@@ -212,7 +212,7 @@
          DO J = 1, NN
             N = NVAL( J )
               IF (MIN(M,N).NE.0) THEN
-              DO INB = 1, NNB    
+              DO INB = 1, NNB
                 MB = NBVAL( INB )
                   CALL XLAENV( 1, MB )
                   DO IMB = 1, NNB
@@ -220,7 +220,7 @@
                     CALL XLAENV( 2, NB )
 *
 *                 Test DGEQR and DGEMQR
-*     
+*
                     CALL CTSQR01( 'SW', M, N, MB, NB, RESULT )
 *
 *                 Print information about the tests that did not
@@ -236,9 +236,9 @@
                       END IF
                     END DO
                     NRUN = NRUN + NTESTS
-                  END DO 
-              END DO   
-              END IF 
+                  END DO
+              END DO
+              END IF
          END DO
       END DO
 *

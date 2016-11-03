@@ -465,10 +465,10 @@ c                     END IF
                      END IF
 *
 *                    Check error code from CHESV_AASEN .
-*					 
+*
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'CHESV_AASEN', INFO, K, 
-     $                               UPLO, N, N, -1, -1, NRHS, 
+                        CALL ALAERH( PATH, 'CHESV_AASEN', INFO, K,
+     $                               UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 120
                      ELSE IF( INFO.NE.0 ) THEN
@@ -479,7 +479,7 @@ c                     END IF
 *                    residual.
 *
                      CALL CHET01_AASEN( UPLO, N, A, LDA, AFAC, LDA,
-     $                                  IWORK, AINV, LDA, RWORK, 
+     $                                  IWORK, AINV, LDA, RWORK,
      $                                  RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.

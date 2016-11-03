@@ -1,24 +1,24 @@
-* 
+*
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE SLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK,
 *                            LWORK, INFO)
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER           INFO, LDA, M, N, MB, NB, LDT, LWORK
 *       ..
 *       .. Array Arguments ..
 *       REAL              A( LDA, * ), T( LDT, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
-*> 
-*>          SLASWLQ computes a blocked Short-Wide LQ factorization of a 
+*>
+*>          SLASWLQ computes a blocked Short-Wide LQ factorization of a
 *>          M-by-N matrix A, where N >= M:
 *>          A = L * Q
 *> \endverbatim
@@ -41,13 +41,13 @@
 *> \param[in] MB
 *> \verbatim
 *>          MB is INTEGER
-*>          The row block size to be used in the blocked QR.  
-*>          M >= MB >= 1 
+*>          The row block size to be used in the blocked QR.
+*>          M >= MB >= 1
 *> \endverbatim
 *> \param[in] NB
 *> \verbatim
 *>          NB is INTEGER
-*>          The column block size to be used in the blocked QR.  
+*>          The column block size to be used in the blocked QR.
 *>          NB > M.
 *> \endverbatim
 *>
@@ -55,9 +55,9 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
-*>          On exit, the elements on and bleow the diagonal 
-*>          of the array contain the N-by-N lower triangular matrix L; 
-*>          the elements above the diagonal represent Q by the rows 
+*>          On exit, the elements on and bleow the diagonal
+*>          of the array contain the N-by-N lower triangular matrix L;
+*>          the elements above the diagonal represent Q by the rows
 *>          of blocked V (see Further Details).
 *>
 *> \endverbatim
@@ -70,11 +70,11 @@
 *>
 *> \param[out] T
 *> \verbatim
-*>          T is REAL array, 
-*>          dimension (LDT, N * Number_of_row_blocks) 
+*>          T is REAL array,
+*>          dimension (LDT, N * Number_of_row_blocks)
 *>          where Number_of_row_blocks = CEIL((N-M)/(NB-M))
 *>          The blocked upper triangular block reflectors stored in compact form
-*>          as a sequence of upper triangular blocks.  
+*>          as a sequence of upper triangular blocks.
 *>          See Further Details below.
 *> \endverbatim
 *>
@@ -88,7 +88,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>         (workspace) REAL array, dimension (MAX(1,LWORK))
-*>        
+*>
 *> \endverbatim
 *> \param[in] LWORK
 *> \verbatim
@@ -137,7 +137,7 @@
 *> block reflectors, stored in array T(1:LDT,(i-1)*M+1:i*M).
 *> The last Q(k) may use fewer rows.
 *> For more information see Further Details in TPQRT.
-*> 
+*>
 *> For more details of the overall algorithm, see the description of
 *> Sequential TSQR in Section 2.2 of [1].
 *>
@@ -147,7 +147,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE SLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK, 
+      SUBROUTINE SLASWLQ( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
      $                  INFO)
 *
 *  -- LAPACK computational routine (version 3.5.0) --
@@ -190,7 +190,7 @@
       ELSE IF( N.LT.0 .OR. N.LT.M ) THEN
         INFO = -2
       ELSE IF( MB.LT.1 .OR. ( MB.GT.M .AND. M.GT.0 )) THEN
-        INFO = -3  
+        INFO = -3
       ELSE IF( NB.LE.M ) THEN
         INFO = -4
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
@@ -198,9 +198,9 @@
       ELSE IF( LDT.LT.MB ) THEN
         INFO = -8
       ELSE IF( ( LWORK.LT.M*MB) .AND. (.NOT.LQUERY) ) THEN
-        INFO = -10 
-      END IF    
-      IF( INFO.EQ.0)  THEN   
+        INFO = -10
+      END IF
+      IF( INFO.EQ.0)  THEN
       WORK(1) = MB*M
       END IF
 *
@@ -222,10 +222,10 @@
        IF((M.GE.N).OR.(NB.LE.M).OR.(NB.GE.N)) THEN
         CALL SGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO)
         RETURN
-       END IF 
-* 
+       END IF
+*
        KK = MOD((N-M),(NB-M))
-       II=N-KK+1   
+       II=N-KK+1
 *
 *      Compute the LQ factorization of the first block A(1:M,1:NB)
 *
@@ -233,7 +233,7 @@
        CTR = 1
 *
        DO I = NB+1, II-NB+M , (NB-M)
-*     
+*
 *      Compute the QR factorization of the current block A(1:M,I:I+NB-M)
 *
          CALL STPLQT( M, NB-M, 0, MB, A(1,1), LDA, A( 1, I ),
@@ -248,11 +248,11 @@
         CALL STPLQT( M, KK, 0, MB, A(1,1), LDA, A( 1, II ),
      $                  LDA, T(1, CTR * M + 1), LDT,
      $                  WORK, INFO )
-       END IF  
+       END IF
 *
       WORK( 1 ) = M * MB
       RETURN
-*     
+*
 *     End of SLASWLQ
 *
       END

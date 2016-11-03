@@ -2,31 +2,31 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZTPLQT2 + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztplqt2.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztplqt2.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztplqt2.f"> 
+*> Download ZTPLQT2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ztplqt2.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ztplqt2.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ztplqt2.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZTPLQT2( M, N, L, A, LDA, B, LDB, T, LDT, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER   INFO, LDA, LDB, LDT, N, M, L
 *       ..
 *       .. Array Arguments ..
 *       COMPLEX*16   A( LDA, * ), B( LDB, * ), T( LDT, * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -34,7 +34,7 @@
 *> \verbatim
 *>
 *> ZTPLQT2 computes a LQ a factorization of a complex "triangular-pentagonal"
-*> matrix C, which is composed of a triangular block A and pentagonal block B, 
+*> matrix C, which is composed of a triangular block A and pentagonal block B,
 *> using the compact WY representation for Q.
 *> \endverbatim
 *
@@ -44,7 +44,7 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The total number of rows of the matrix B.  
+*>          The total number of rows of the matrix B.
 *>          M >= 0.
 *> \endverbatim
 *>
@@ -59,7 +59,7 @@
 *> \param[in] L
 *> \verbatim
 *>          L is INTEGER
-*>          The number of rows of the lower trapezoidal part of B.  
+*>          The number of rows of the lower trapezoidal part of B.
 *>          MIN(M,N) >= L >= 0.  See Further Details.
 *> \endverbatim
 *>
@@ -80,7 +80,7 @@
 *> \param[in,out] B
 *> \verbatim
 *>          B is COMPLEX*16 array, dimension (LDB,N)
-*>          On entry, the pentagonal M-by-N matrix B.  The first N-L columns 
+*>          On entry, the pentagonal M-by-N matrix B.  The first N-L columns
 *>          are rectangular, and the last L columns are lower trapezoidal.
 *>          On exit, B contains the pentagonal matrix V.  See Further Details.
 *> \endverbatim
@@ -114,10 +114,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date September 2012
 *
@@ -128,10 +128,10 @@
 *>
 *> \verbatim
 *>
-*>  The input matrix C is a M-by-(M+N) matrix  
+*>  The input matrix C is a M-by-(M+N) matrix
 *>
 *>               C = [ A ][ B ]
-*>                           
+*>
 *>
 *>  where A is an lower triangular N-by-N matrix, and B is M-by-N pentagonal
 *>  matrix consisting of a M-by-(N-L) rectangular matrix B1 left of a M-by-L
@@ -142,8 +142,8 @@
 *>                   [ B2 ]  <-     M-by-L lower trapezoidal.
 *>
 *>  The lower trapezoidal matrix B2 consists of the first L columns of a
-*>  N-by-N lower triangular matrix, where 0 <= L <= MIN(M,N).  If L=0, 
-*>  B is rectangular M-by-N; if M=L=N, B is lower triangular.  
+*>  N-by-N lower triangular matrix, where 0 <= L <= MIN(M,N).  If L=0,
+*>  B is rectangular M-by-N; if M=L=N, B is lower triangular.
 *>
 *>  The matrix W stores the elementary reflectors H(i) in the i-th row
 *>  above the diagonal (of A) in the M-by-(M+N) input matrix C
@@ -154,18 +154,18 @@
 *>
 *>  so that W can be represented as
 *>
-*>               W = [ I ][ V ] 
+*>               W = [ I ][ V ]
 *>                   [ I ]  <- identity, N-by-N
 *>                   [ V ]  <- M-by-N, same form as B.
 *>
 *>  Thus, all of information needed for W is contained on exit in B, which
-*>  we call V above.  Note that V has the same form as B; that is, 
+*>  we call V above.  Note that V has the same form as B; that is,
 *>
-*>               W = [ V1 ][ V2 ]               
+*>               W = [ V1 ][ V2 ]
 *>                   [ V1 ] <-     M-by-(N-L) rectangular
 *>                   [ V2 ] <-     M-by-L lower trapezoidal.
 *>
-*>  The rows of V represent the vectors which define the H(i)'s.  
+*>  The rows of V represent the vectors which define the H(i)'s.
 *>  The (M+N)-by-(M+N) block reflector H is then given by
 *>
 *>               H = I - W**T * T * W
@@ -231,7 +231,7 @@
 *     Quick return if possible
 *
       IF( N.EQ.0 .OR. M.EQ.0 ) RETURN
-*      
+*
       DO I = 1, M
 *
 *        Generate elementary reflector H(I) to annihilate B(I,:)
@@ -249,7 +249,7 @@
             DO J = 1, M-I
                T( M, J ) = (A( I+J, I ))
             END DO
-            CALL ZGEMV( 'N', M-I, P, ONE, B( I+1, 1 ), LDB, 
+            CALL ZGEMV( 'N', M-I, P, ONE, B( I+1, 1 ), LDB,
      $                  B( I, 1 ), LDB, ONE, T( M, 1 ), LDT )
 *
 *           C(I+1:M,I:N) = C(I+1:M,I:N) + alpha * C(I,I:N)*W(M-1:1)^H
@@ -291,16 +291,16 @@
 *
 *        Rectangular part of B2
 *
-         CALL ZGEMV( 'N', I-1-P, L,  ALPHA, B( MP, NP ), LDB, 
+         CALL ZGEMV( 'N', I-1-P, L,  ALPHA, B( MP, NP ), LDB,
      $               B( I, NP ), LDB, ZERO, T( I,MP ), LDT )
 *
 *        B1
 
 *
-         CALL ZGEMV( 'N', I-1, N-L, ALPHA, B, LDB, B( I, 1 ), LDB, 
-     $               ONE, T( I, 1 ), LDT )   
+         CALL ZGEMV( 'N', I-1, N-L, ALPHA, B, LDB, B( I, 1 ), LDB,
+     $               ONE, T( I, 1 ), LDT )
 *
-   
+
 *
 *        T(1:I-1,I) := T(1:I-1,1:I-1) * T(I,1:I-1)
 *
@@ -313,7 +313,7 @@
          END DO
          DO J = 1, N-L+P
             B(I,J)=CONJG(B(I,J))
-         END DO   
+         END DO
 *
 *        T(I,I) = tau(I)
 *
@@ -326,7 +326,7 @@
             T(J,I)=ZERO
          END DO
       END DO
-   
+
 *
 *     End of ZTPLQT2
 *

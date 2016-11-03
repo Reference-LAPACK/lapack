@@ -1,8 +1,8 @@
-* 
+*
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGEMQR( SIDE, TRANS, M, N, K, A, LDA, WORK1,  
+*       SUBROUTINE DGEMQR( SIDE, TRANS, M, N, K, A, LDA, WORK1,
 *     $                     LWORK1, C, LDC, WORK2, LWORK2, INFO )
 *
 *
@@ -14,21 +14,21 @@
 *      DOUBLE PRECISION  A( LDA, * ), WORK1( * ), C(LDC, * ),
 *     $                  WORK2( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
-*> 
+*>
 *>      SGEMQR overwrites the general real M-by-N matrix C with
 *>
-*>                     
+*>
 *>                      SIDE = 'L'     SIDE = 'R'
 *>      TRANS = 'N':      Q * C          C * Q
 *>      TRANS = 'T':      Q**T * C       C * Q**T
-*>      where Q is a real orthogonal matrix defined as the product 
-*>      of blocked elementary reflectors computed by tall skinny 
+*>      where Q is a real orthogonal matrix defined as the product
+*>      of blocked elementary reflectors computed by tall skinny
 *>      QR factorization (DGEQR)
 *> \endverbatim
 *
@@ -62,15 +62,15 @@
 *>          The number of elementary reflectors whose product defines
 *>          the matrix Q.
 *>          N >= K >= 0;
-*>          
+*>
 *> \endverbatim
 *>
 *> \param[in,out] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,K)
-*>          The i-th column must contain the vector which defines the 
-*>          blockedelementary reflector H(i), for i = 1,2,...,k, as 
-*>          returned by DGETSQR in the first k columns of 
+*>          The i-th column must contain the vector which defines the
+*>          blockedelementary reflector H(i), for i = 1,2,...,k, as
+*>          returned by DGETSQR in the first k columns of
 *>          its array argument A.
 *> \endverbatim
 *>
@@ -106,15 +106,15 @@
 *> \param[out] WORK2
 *> \verbatim
 *>         (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK2))
-*>        
+*>
 *> \endverbatim
 *> \param[in] LWORK2
 *> \verbatim
 *>          LWORK2 is INTEGER
-*>          The dimension of the array WORK2. 
+*>          The dimension of the array WORK2.
 *>          If LWORK2 = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK2 array, returns
-*>          this value as the third entry of the WORK2 array (WORK2(1)), 
+*>          this value as the third entry of the WORK2 array (WORK2(1)),
 *>          and no error message related to LWORK2 is issued by XERBLA.
 *>
 *> \endverbatim
@@ -140,19 +140,19 @@
 *>  Depending on the matrix dimensions M and N, and row and column
 *>  block sizes MB and NB returned by ILAENV, GEQR will use either
 *>  LATSQR (if the matrix is tall-and-skinny) or GEQRT to compute
-*>  the QR decomposition. 
+*>  the QR decomposition.
 *>  The output of LATSQR or GEQRT representing Q is stored in A and in
-*>  array WORK1(6:LWORK1) for later use. 
-*>  WORK1(2:5) contains the matrix dimensions M,N and block sizes MB,NB 
-*>  which are needed to interpret A and WORK1(6:LWORK1) for later use. 
-*>  WORK1(1)=1 indicates that the code needed to take WORK1(2:5) and 
-*>  decide whether LATSQR or GEQRT was used is the same as used below in 
+*>  array WORK1(6:LWORK1) for later use.
+*>  WORK1(2:5) contains the matrix dimensions M,N and block sizes MB,NB
+*>  which are needed to interpret A and WORK1(6:LWORK1) for later use.
+*>  WORK1(1)=1 indicates that the code needed to take WORK1(2:5) and
+*>  decide whether LATSQR or GEQRT was used is the same as used below in
 *>  GEQR. For a detailed description of A and WORK1(6:LWORK1), see
 *>  Further Details in LATSQR or GEQRT.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DGEMQR( SIDE, TRANS, M, N, K, A, LDA, WORK1, LWORK1, 
+      SUBROUTINE DGEMQR( SIDE, TRANS, M, N, K, A, LDA, WORK1, LWORK1,
      $        C, LDC, WORK2, LWORK2, INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
@@ -180,7 +180,7 @@
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     .. External Subroutines ..
-      EXTERNAL           DGEMQRT, DTPMQRT, XERBLA 
+      EXTERNAL           DGEMQRT, DTPMQRT, XERBLA
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, MOD
 *     ..
@@ -202,7 +202,7 @@
       ELSE IF(RIGHT) THEN
         LW = MB * NB
         MN = N
-      END IF 
+      END IF
 *
       IF ((MB.GT.K).AND.(MN.GT.K)) THEN
           IF(MOD(MN-K, MB-K).EQ.0) THEN
@@ -236,9 +236,9 @@
       END IF
 *
 *     Determine the block size if it is tall skinny or short and wide
-*    
+*
       IF( INFO.EQ.0)  THEN
-         WORK2(1) = LW  
+         WORK2(1) = LW
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -256,15 +256,15 @@
 *
       IF((LEFT.AND.M.LE.K).OR.(RIGHT.AND.N.LE.K).OR.(MB.LE.K).OR.
      $   (MB.GE.MAX(M,N,K))) THEN
-        CALL DGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA, 
-     $        WORK1(6), NB, C, LDC, WORK2, INFO)   
+        CALL DGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA,
+     $        WORK1(6), NB, C, LDC, WORK2, INFO)
       ELSE
         CALL DLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, WORK1(6),
      $      NB, C, LDC, WORK2, LWORK2, INFO )
-      END IF       
+      END IF
 *
       WORK2(1) = LW
-*  
+*
       RETURN
 *
 *     End of DGEMQR
