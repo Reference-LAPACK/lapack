@@ -208,7 +208,7 @@
 *>
 *> \param[in,out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension max(4,M+N).
+*>          WORK is REAL array, dimension MAX(6,M+N).
 *>          On entry,
 *>          If JOBU .EQ. 'C' :
 *>          WORK(1) = CTOL, where CTOL defines the threshold for convergence.
