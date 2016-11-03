@@ -551,7 +551,7 @@
       DOUBLE PRECISION   DLAMCH, ZLA_SYRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZSYCON, ZSYEQUB, ZSYTRF, ZSYTRS, ZLACPY,
+      EXTERNAL           ZSYEQUB, ZSYTRF, ZSYTRS, ZLACPY,
      $                   ZLAQSY, XERBLA, ZLASCL2, ZSYRFSX
 *     ..
 *     .. Intrinsic Functions ..

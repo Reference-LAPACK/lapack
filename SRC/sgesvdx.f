@@ -299,13 +299,13 @@
 *     .. External Subroutines ..
       EXTERNAL           SBDSVDX, SGEBRD, SGELQF, SGEQRF, SLACPY,
      $                   SLASCL, SLASET, SORMBR, SORMLQ, SORMQR,
-     $                   SSCAL, XERBLA
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      REAL               SLAMCH, SLANGE, SNRM2
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE, SNRM2
+      REAL               SLAMCH, SLANGE
+      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT

@@ -363,8 +363,8 @@
       LOGICAL            LRQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CBBCSD, CLACPY, CLAPMR, CLAPMT, CLASCL,
-     $                   CLASET, CUNBDB, CUNGLQ, CUNGQR
+      EXTERNAL           XERBLA, CBBCSD, CLACPY, CLAPMR, CLAPMT,
+     $                   CUNBDB, CUNGLQ, CUNGQR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

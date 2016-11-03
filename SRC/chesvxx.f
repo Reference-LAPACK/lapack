@@ -554,7 +554,7 @@
       REAL               SLAMCH, CLA_HERPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHECON, CHEEQUB, CHETRF, CHETRS, CLACPY,
+      EXTERNAL           CHEEQUB, CHETRF, CHETRS, CLACPY,
      $                   CLAQHE, XERBLA, CLASCL2, CHERFSX
 *     ..
 *     .. Intrinsic Functions ..

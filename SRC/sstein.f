@@ -209,8 +209,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
-      REAL               SASUM, SDOT, SLAMCH, SNRM2
-      EXTERNAL           ISAMAX, SASUM, SDOT, SLAMCH, SNRM2
+      REAL               SDOT, SLAMCH, SNRM2
+      EXTERNAL           ISAMAX, SDOT, SLAMCH, SNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY, SLAGTF, SLAGTS, SLARNV, SSCAL,

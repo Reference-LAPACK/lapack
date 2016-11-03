@@ -363,8 +363,8 @@
       LOGICAL            LRQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZBBCSD, ZLACPY, ZLAPMR, ZLAPMT, ZLASCL,
-     $                   ZLASET, ZUNBDB, ZUNGLQ, ZUNGQR
+      EXTERNAL           XERBLA, ZBBCSD, ZLACPY, ZLAPMR, ZLAPMT,
+     $                   ZUNBDB, ZUNGLQ, ZUNGQR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

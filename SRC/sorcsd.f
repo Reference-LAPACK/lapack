@@ -343,7 +343,7 @@
      $                   WANTV1T, WANTV2T
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SBBCSD, SLACPY, SLAPMR, SLAPMT, SLASCL, SLASET,
+      EXTERNAL           SBBCSD, SLACPY, SLAPMR, SLAPMT,
      $                   SORBDB, SORGLQ, SORGQR, XERBLA
 *     ..
 *     .. External Functions ..

@@ -158,7 +158,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSCAL, CSYCONV, CSWAP, CTRSM, XERBLA
+      EXTERNAL           CSSCAL, CSYCONV, CSWAP, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MAX, REAL

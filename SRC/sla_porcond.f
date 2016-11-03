@@ -167,8 +167,7 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ISAMAX
-      EXTERNAL           LSAME, ISAMAX
+      EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SLACN2, SPOTRS, XERBLA

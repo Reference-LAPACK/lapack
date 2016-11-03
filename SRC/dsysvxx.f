@@ -550,7 +550,7 @@
       DOUBLE PRECISION   DLAMCH, DLA_SYRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSYCON, DSYEQUB, DSYTRF, DSYTRS,
+      EXTERNAL           DSYEQUB, DSYTRF, DSYTRS,
      $                   DLACPY, DLAQSY, XERBLA, DLASCL2, DSYRFSX
 *     ..
 *     .. Intrinsic Functions ..

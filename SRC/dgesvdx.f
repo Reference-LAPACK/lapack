@@ -299,13 +299,13 @@
 *     .. External Subroutines ..
       EXTERNAL           DBDSVDX, DGEBRD, DGELQF, DGEQRF, DLACPY,
      $                   DLASCL, DLASET, DORMBR, DORMLQ, DORMQR,
-     $                   DSCAL, XERBLA
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
-      DOUBLE PRECISION   DLAMCH, DLANGE, DNRM2
-      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANGE, DNRM2
+      DOUBLE PRECISION   DLAMCH, DLANGE
+      EXTERNAL           LSAME, ILAENV, DLAMCH, DLANGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, SQRT

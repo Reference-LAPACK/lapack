@@ -453,12 +453,11 @@
       INTRINSIC          MAX, SQRT, TRANSFER
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, BLAS_FPINFO_X, ILATRANS, ILAPREC
+      EXTERNAL           LSAME, ILAPREC
       EXTERNAL           DLAMCH, ZLANHE, ZLA_PORCOND_X, ZLA_PORCOND_C
       DOUBLE PRECISION   DLAMCH, ZLANHE, ZLA_PORCOND_X, ZLA_PORCOND_C
       LOGICAL            LSAME
-      INTEGER            BLAS_FPINFO_X
-      INTEGER            ILATRANS, ILAPREC
+      INTEGER            ILAPREC
 *     ..
 *     .. Executable Statements ..
 *

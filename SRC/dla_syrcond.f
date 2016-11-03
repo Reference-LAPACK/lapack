@@ -175,12 +175,11 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            IDAMAX
       DOUBLE PRECISION   DLAMCH
-      EXTERNAL           LSAME, IDAMAX, DLAMCH
+      EXTERNAL           LSAME, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACN2, DLATRS, DRSCL, XERBLA, DSYTRS
+      EXTERNAL           DLACN2, XERBLA, DSYTRS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX

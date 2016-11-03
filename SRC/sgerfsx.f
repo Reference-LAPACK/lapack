@@ -475,11 +475,10 @@
       INTRINSIC          MAX, SQRT
 *     ..
 *     .. External Functions ..
-      EXTERNAL           LSAME, BLAS_FPINFO_X, ILATRANS, ILAPREC
+      EXTERNAL           LSAME, ILATRANS, ILAPREC
       EXTERNAL           SLAMCH, SLANGE, SLA_GERCOND
       REAL               SLAMCH, SLANGE, SLA_GERCOND
       LOGICAL            LSAME
-      INTEGER            BLAS_FPINFO_X
       INTEGER            ILATRANS, ILAPREC
 *     ..
 *     .. Executable Statements ..

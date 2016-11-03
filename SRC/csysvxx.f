@@ -554,7 +554,7 @@
       REAL               SLAMCH, CLA_SYRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSYCON, CSYEQUB, CSYTRF, CSYTRS, CLACPY,
+      EXTERNAL           CSYEQUB, CSYTRF, CSYTRS, CLACPY,
      $                   CLAQSY, XERBLA, CLASCL2, CSYRFSX
 *     ..
 *     .. Intrinsic Functions ..

@@ -537,7 +537,7 @@
       DOUBLE PRECISION   DLAMCH, ZLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZPOCON, ZPOEQUB, ZPOTRF, ZPOTRS, ZLACPY,
+      EXTERNAL           ZPOEQUB, ZPOTRF, ZPOTRS, ZLACPY,
      $                   ZLAQHE, XERBLA, ZLASCL2, ZPORFSX
 *     ..
 *     .. Intrinsic Functions ..

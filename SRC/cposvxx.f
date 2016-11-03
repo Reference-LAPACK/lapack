@@ -540,7 +540,7 @@
       REAL               SLAMCH, CLA_PORPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CPOCON, CPOEQUB, CPOTRF, CPOTRS, CLACPY,
+      EXTERNAL           CPOEQUB, CPOTRF, CPOTRS, CLACPY,
      $                   CLAQHE, XERBLA, CLASCL2, CPORFSX
 *     ..
 *     .. Intrinsic Functions ..

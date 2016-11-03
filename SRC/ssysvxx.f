@@ -553,7 +553,7 @@
       REAL               SLAMCH, SLA_SYRPVGRW
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSYCON, SSYEQUB, SSYTRF, SSYTRS,
+      EXTERNAL           SSYEQUB, SSYTRF, SSYTRS,
      $                   SLACPY, SLAQSY, XERBLA, SLASCL2, SSYRFSX
 *     ..
 *     .. Intrinsic Functions ..

@@ -221,8 +221,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DASUM, DLAMCH, DNRM2
-      EXTERNAL           IDAMAX, DASUM, DLAMCH, DNRM2
+      DOUBLE PRECISION   DLAMCH, DNRM2
+      EXTERNAL           IDAMAX, DLAMCH, DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DLAGTF, DLAGTS, DLARNV, DSCAL, XERBLA

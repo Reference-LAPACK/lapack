@@ -147,9 +147,8 @@
       EXTERNAL           SLASQ3, SLASRT, XERBLA
 *     ..
 *     .. External Functions ..
-      INTEGER            ILAENV
       REAL               SLAMCH
-      EXTERNAL           ILAENV, SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN, REAL, SQRT
