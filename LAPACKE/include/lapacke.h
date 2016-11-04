@@ -11424,6 +11424,74 @@ lapack_int LAPACKE_zsyr_work( int matrix_layout, char uplo, lapack_int n,
 void LAPACKE_ilaver( lapack_int* vers_major,
                      lapack_int* vers_minor,
                      lapack_int* vers_patch );
+// LAPACK 3.7.0
+lapack_int LAPACKE_ssysv_aasen( int matrix_layout, char uplo, lapack_int n,
+                          lapack_int nrhs, float* a, lapack_int lda,
+                          lapack_int* ipiv, float* b, lapack_int ldb );
+lapack_int LAPACKE_ssysv_aasen_work( int matrix_layout, char uplo, lapack_int n,
+                               lapack_int nrhs, float* a, lapack_int lda,
+                               lapack_int* ipiv, float* b, lapack_int ldb,
+                               float* work, lapack_int lwork );
+lapack_int LAPACKE_dsysv_aasen( int matrix_layout, char uplo, lapack_int n,
+                          lapack_int nrhs, double* a, lapack_int lda,
+                          lapack_int* ipiv, double* b, lapack_int ldb );
+lapack_int LAPACKE_dsysv_aasen_work( int matrix_layout, char uplo, lapack_int n,
+                               lapack_int nrhs, double* a, lapack_int lda,
+                               lapack_int* ipiv, double* b, lapack_int ldb,
+                               double* work, lapack_int lwork );
+lapack_int LAPACKE_chesv_aasen( int matrix_layout, char uplo, lapack_int n,
+                          lapack_int nrhs, lapack_complex_float* a,
+                          lapack_int lda, lapack_int* ipiv,
+                          lapack_complex_float* b, lapack_int ldb );
+lapack_int LAPACKE_chesv_aasen_work( int matrix_layout, char uplo, lapack_int n,
+                               lapack_int nrhs, lapack_complex_float* a,
+                               lapack_int lda, lapack_int* ipiv,
+                               lapack_complex_float* b, lapack_int ldb,
+                               lapack_complex_float* work, lapack_int lwork );
+lapack_int LAPACKE_zhesv_aasen( int matrix_layout, char uplo, lapack_int n,
+                          lapack_int nrhs, lapack_complex_double* a,
+                          lapack_int lda, lapack_int* ipiv,
+                          lapack_complex_double* b, lapack_int ldb );
+lapack_int LAPACKE_zhesv_aasen_work( int matrix_layout, char uplo, lapack_int n,
+                               lapack_int nrhs, lapack_complex_double* a,
+                               lapack_int lda, lapack_int* ipiv,
+                               lapack_complex_double* b, lapack_int ldb,
+                               lapack_complex_double* work, lapack_int lwork );
+
+
+
+lapack_int LAPACKE_chetrs_aasen( int matrix_layout, char uplo, lapack_int n,
+                            lapack_int nrhs, const lapack_complex_float* a,
+                            lapack_int lda, const lapack_int* ipiv,
+                            lapack_complex_float* b, lapack_int ldb );
+lapack_int LAPACKE_chetrs_aasen_work( int matrix_layout, char uplo, lapack_int n,
+                                 lapack_int nrhs, const lapack_complex_float* a,
+                                 lapack_int lda, const lapack_int* ipiv,
+                                 lapack_complex_float* b, lapack_int ldb,
+                                 lapack_complex_float* work, lapack_int lwork );
+lapack_int LAPACKE_dsytrs_aasen( int matrix_layout, char uplo, lapack_int n,
+                            lapack_int nrhs, const double* a, lapack_int lda,
+                            const lapack_int* ipiv, double* b, lapack_int ldb );
+lapack_int LAPACKE_dsytrs_aasen_work( int matrix_layout, char uplo, lapack_int n,
+                                 lapack_int nrhs, const double* a,
+                                 lapack_int lda, const lapack_int* ipiv,
+                                 double* b, lapack_int ldb, double* work, lapack_int lwork );
+lapack_int LAPACKE_ssytrs_aasen( int matrix_layout, char uplo, lapack_int n,
+                           lapack_int nrhs, const float* a, lapack_int lda,
+                           const lapack_int* ipiv, float* b, lapack_int ldb );
+lapack_int LAPACKE_ssytrs_aasen_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_int nrhs, const float* a, lapack_int lda,
+                                const lapack_int* ipiv, float* b,
+                                lapack_int ldb, float* work, lapack_int lwork );
+lapack_int LAPACKE_zhetrs_aasen( int matrix_layout, char uplo, lapack_int n,
+                            lapack_int nrhs, const lapack_complex_double* a,
+                            lapack_int lda, const lapack_int* ipiv,
+                            lapack_complex_double* b, lapack_int ldb );
+lapack_int LAPACKE_zhetrs_aasen_work( int matrix_layout, char uplo, lapack_int n,
+                                 lapack_int nrhs, const lapack_complex_double* a,
+                                 lapack_int lda, const lapack_int* ipiv,
+                                 lapack_complex_double* b, lapack_int ldb,
+                                 lapack_complex_double* work,  lapack_int lwork);
 
 
 #define LAPACK_sgetrf LAPACK_GLOBAL(sgetrf,SGETRF)
@@ -12533,6 +12601,15 @@ void LAPACKE_ilaver( lapack_int* vers_major,
 #define LAPACK_dggsvd3 LAPACK_GLOBAL(dggsvd3,DGGSVD3)
 #define LAPACK_cggsvd3 LAPACK_GLOBAL(cggsvd3,CGGSVD3)
 #define LAPACK_zggsvd3 LAPACK_GLOBAL(zggsvd3,ZGGSVD3)
+// LAPACK 3.7.0
+#define LAPACK_ssysv_aasen LAPACK_GLOBAL(ssysv_aasen,SSYSV_AASEN)
+#define LAPACK_dsysv_aasen LAPACK_GLOBAL(dsysv_aasen,DSYSV_AASEN)
+#define LAPACK_chesv_aasen LAPACK_GLOBAL(chesv_aasen,CHESV_AASEN)
+#define LAPACK_zhesv_aasen LAPACK_GLOBAL(zhesv_aasen,ZHESV_AASEN)
+#define LAPACK_ssytrs_aasen LAPACK_GLOBAL(ssytrs_aasen,SSYTRS_AASEN)
+#define LAPACK_dsytrs_aasen LAPACK_GLOBAL(dsytrs_aasen,DSYTRS_AASEN)
+#define LAPACK_chetrs_aasen LAPACK_GLOBAL(chetrs_aasen,CHETRS_AASEN)
+#define LAPACK_zhetrs_aasen LAPACK_GLOBAL(zhetrs_aasen,ZHETRS_AASEN)
 
 
 
@@ -17547,6 +17624,45 @@ void LAPACK_zsyr( char* uplo, lapack_int* n, lapack_complex_double* alpha,
                       lapack_complex_double* a, lapack_int* lda );
 void LAPACK_ilaver( const lapack_int* vers_major, const lapack_int* vers_minor,
                      const lapack_int* vers_patch );
+
+// LAPACK 3.7.0
+void LAPACK_ssysv_aasen( char* uplo, lapack_int* n, lapack_int* nrhs, float* a,
+                   lapack_int* lda, lapack_int* ipiv, float* b, lapack_int* ldb,
+                   float* work, lapack_int* lwork, lapack_int *info );
+void LAPACK_dsysv_aasen( char* uplo, lapack_int* n, lapack_int* nrhs, double* a,
+                   lapack_int* lda, lapack_int* ipiv, double* b,
+                   lapack_int* ldb, double* work, lapack_int* lwork,
+                   lapack_int *info );
+void LAPACK_chesv_aasen( char* uplo, lapack_int* n, lapack_int* nrhs,
+                   lapack_complex_float* a, lapack_int* lda, lapack_int* ipiv,
+                   lapack_complex_float* b, lapack_int* ldb,
+                   lapack_complex_float* work, lapack_int* lwork,
+                   lapack_int *info );
+void LAPACK_zhesv_aasen( char* uplo, lapack_int* n, lapack_int* nrhs,
+                   lapack_complex_double* a, lapack_int* lda, lapack_int* ipiv,
+                   lapack_complex_double* b, lapack_int* ldb,
+                   lapack_complex_double* work, lapack_int* lwork,
+                   lapack_int *info );
+
+void LAPACK_ssytrs_aasen( char* uplo, lapack_int* n,
+                     lapack_int* nrhs, const float* a,
+                     lapack_int* lda, const lapack_int* ipiv,
+                     float* b, lapack_int* ldb, float* work, lapack_int* lwork, lapack_int *info );
+void LAPACK_dsytrs_aasen( char* uplo, lapack_int* n,
+                     lapack_int* nrhs, const double* a,
+                     lapack_int* lda, const lapack_int* ipiv,
+                     double* b, lapack_int* ldb, double* work, lapack_int* lwork,  lapack_int *info );
+void LAPACK_chetrs_aasen( char* uplo, lapack_int* n,
+                     lapack_int* nrhs, const lapack_complex_float* a,
+                     lapack_int* lda, const lapack_int* ipiv,
+                     lapack_complex_float* b, lapack_int* ldb,
+                     lapack_complex_float* work , lapack_int* lwork, lapack_int *info );
+void LAPACK_zhetrs_aasen( char* uplo, lapack_int* n,
+                     lapack_int* nrhs,
+                     const lapack_complex_double* a, lapack_int* lda,
+                     const lapack_int* ipiv,
+                     lapack_complex_double* b, lapack_int* ldb,
+                     lapack_complex_double* work, lapack_int* lwork, lapack_int *info );
 
 #ifdef __cplusplus
 }
