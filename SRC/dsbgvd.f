@@ -161,7 +161,7 @@
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
 *>          If N <= 1,               LWORK >= 1.
-*>          If JOBZ = 'N' and N > 1, LWORK >= 3*N.
+*>          If JOBZ = 'N' and N > 1, LWORK >= 2*N.
 *>          If JOBZ = 'V' and N > 1, LWORK >= 1 + 5*N + 2*N**2.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
