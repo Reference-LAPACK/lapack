@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHESV_AASEN + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_aasen.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesv_aasen.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_aasen.f"> 
+*> Download ZHESV_AASEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_aasen.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesv_aasen.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_aasen.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZHESV_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                               LWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            INFO, LDA, LDB, LWORK, N, NRHS
@@ -29,7 +29,7 @@
 *       INTEGER            IPIV( * )
 *       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
-*  
+* 
 *
 *> \par Purpose:
 *  =============
@@ -45,7 +45,7 @@
 *>    A = U * T * U**H,  if UPLO = 'U', or
 *>    A = L * T * L**H,  if UPLO = 'L',
 *> where U (or L) is a product of permutation and unit upper (lower)
-*> triangular matrices, and T is Hermitian and tridiagonal. The factored form 
+*> triangular matrices, and T is Hermitian and tridiagonal. The factored form
 *> of A is then used to solve the system of equations A * X = B.
 *> \endverbatim
 *
@@ -99,8 +99,8 @@
 *> \param[out] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          On exit, it contains the details of the interchanges, i.e., 
-*>          the row and column k of A were interchanged with the 
+*>          On exit, it contains the details of the interchanges, i.e.,
+*>          the row and column k of A were interchanged with the
 *>          row and column IPIV(k).
 *> \endverbatim
 *>
@@ -151,22 +151,20 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2016
 *
 *> \ingroup complex16HEsolve
 *
-*  @precisions fortran z -> c
-*
 *  =====================================================================
       SUBROUTINE ZHESV_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                        LWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.4.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016

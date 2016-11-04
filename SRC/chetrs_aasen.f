@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
 *> Download CHETRS_AASEN + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_aasen.f">
-*> [TGZ]</a> 
+*> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrs_aasen.f">
-*> [ZIP]</a> 
+*> [ZIP]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_aasen.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CHETRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                                WORK, LWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            N, NRHS, LDA, LDB, LWORK, INFO
@@ -29,7 +29,7 @@
 *       INTEGER            IPIV( * )
 *       COMPLEX   A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
-*  
+* 
 *
 *> \par Purpose:
 *  =============
@@ -116,22 +116,20 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2016
 *
-*> \ingroup complexSYcomputational
-*
-*  @generated from zhetrs_aasen.f, fortran z -> c, Fri Sep 23 00:09:52 2016
+*> \ingroup complexHEcomputational
 *
 *  =====================================================================
       SUBROUTINE CHETRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                         WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016
@@ -153,8 +151,8 @@
       PARAMETER          ( ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            UPPER
-      INTEGER            K, KP
+      LOGICAL            LQUERY, UPPER
+      INTEGER            K, KP, LWKOPT
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -170,6 +168,7 @@
 *
       INFO = 0
       UPPER = LSAME( UPLO, 'U' )
+      LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
@@ -180,11 +179,15 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.(3*N-2) ) THEN
+      ELSE IF( LWORK.LT.(3*N-2) .AND. .NOT.LQUERY ) THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'CHETRS_AASEN', -INFO )
+         RETURN
+      ELSE IF( LQUERY ) THEN
+         LWKOPT = (3*N-2)
+         WORK( 1 ) = LWKOPT
          RETURN
       END IF
 *
@@ -254,7 +257,7 @@
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL CTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LDA, 
+         CALL CTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LDA,
      $               B(2, 1), LDB)
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
@@ -269,7 +272,7 @@
      $              INFO)
 *
 *        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
-* 
+*
          CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
      $              B( 2, 1 ), LDB)
 *

@@ -2,25 +2,25 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAHEF_AASEN + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahef_aasen.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahef_aasen.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahef_aasen.f"> 
+*> Download CLAHEF_AASEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahef_aasen.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahef_aasen.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahef_aasen.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAHEF_AASEN( UPLO, J1, M, NB, A, LDA, IPIV, 
+*       SUBROUTINE CLAHEF_AASEN( UPLO, J1, M, NB, A, LDA, IPIV,
 *                                H, LDH, WORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER    UPLO
 *       INTEGER      J1, M, NB, LDA, LDH, INFO
@@ -29,7 +29,7 @@
 *       INTEGER      IPIV( * )
 *       COMPLEX   A( LDA, * ), H( LDH, * ), WORK( * )
 *       ..
-*  
+* 
 *
 *> \par Purpose:
 *  =============
@@ -44,9 +44,9 @@
 *> last row, or column, of the previous panel. The first row, or column,
 *> of A is set to be the first row, or column, of an identity matrix,
 *> which is used to factorize the first panel.
-*> 
+*>
 *> The resulting J-th row of U, or J-th column of L, is stored in the
-*> (J-1)-th row, or column, of A (without the unit diatonals), while 
+*> (J-1)-th row, or column, of A (without the unit diatonals), while
 *> the diagonal and subdiagonal of A are overwritten by those of T.
 *>
 *> \endverbatim
@@ -141,22 +141,20 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2016
 *
 *> \ingroup complexSYcomputational
 *
-*  @generated from zlahef_aasen.f, fortran z -> c, Sun Oct  2 22:41:33 2016
-*
 *  =====================================================================
-      SUBROUTINE CLAHEF_AASEN( UPLO, J1, M, NB, A, LDA, IPIV, 
+      SUBROUTINE CLAHEF_AASEN( UPLO, J1, M, NB, A, LDA, IPIV,
      $                         H, LDH, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016
@@ -179,7 +177,7 @@
 *
 *     .. Local Scalars ..
       INTEGER      J, K, K1, I1, I2
-      COMPLEX   PIV, ALPHA 
+      COMPLEX   PIV, ALPHA
 *     ..
 *     .. External Functions ..
       LOGICAL      LSAME
@@ -255,14 +253,14 @@
 *
          A( K, J ) = REAL( WORK( 1 ) )
 *
-         IF( J.LT.M ) THEN 
+         IF( J.LT.M ) THEN
 *
 *           Compute WORK(2:N) = T(J, J) L(J, (J+1):N)
 *            where A(J, J) stores T(J, J) and A(J-1, (J+1):N) stores U(J, (J+1):N)
 *
             IF( (J1+J-1).GT.1 ) THEN
-               ALPHA = -A( K, J ) 
-               CALL CAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA, 
+               ALPHA = -A( K, J )
+               CALL CAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA,
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
@@ -285,14 +283,14 @@
 *
                I1 = I1+J-1
                I2 = I2+J-1
-               CALL CSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA, 
+               CALL CSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA,
      $                              A( J1+I1, I2 ), 1 )
                CALL CLACGV( I2-I1, A( J1+I1-1, I1+1 ), LDA )
                CALL CLACGV( I2-I1-1, A( J1+I1, I2 ), 1 )
 *
 *              Swap A(I1, I2+1:N) with A(I2, I2+1:N)
 *
-               CALL CSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA, 
+               CALL CSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA,
      $                           A( J1+I2-1, I2+1 ), LDA )
 *
 *              Swap A(I1, I1) with A(I2,I2)
@@ -311,17 +309,17 @@
 *                 Swap L(1:I1-1, I1) with L(1:I1-1, I2),
 *                  skipping the first column
 *
-                  CALL CSWAP( I1-K1+1, A( 1, I1 ), 1, 
+                  CALL CSWAP( I1-K1+1, A( 1, I1 ), 1,
      $                                 A( 1, I2 ), 1 )
                END IF
-            ELSE 
+            ELSE
                IPIV( J+1 ) = J+1
             ENDIF
 *
 *           Set A(J, J+1) = T(J, J+1)
 *
             A( K, J+1 ) = WORK( 2 )
-            IF( (A( K, J ).EQ.ZERO ) .AND. 
+            IF( (A( K, J ).EQ.ZERO ) .AND.
      $        ( (J.EQ.M) .OR. (A( K, J+1 ).EQ.ZERO))) THEN
                 IF(INFO .EQ. 0) THEN
                     INFO = J
@@ -330,9 +328,9 @@
 *
             IF( J.LT.NB ) THEN
 *
-*              Copy A(J+1:N, J+1) into H(J:N, J), 
+*              Copy A(J+1:N, J+1) into H(J:N, J),
 *
-               CALL CCOPY( M-J, A( K+1, J+1 ), LDA, 
+               CALL CCOPY( M-J, A( K+1, J+1 ), LDA,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
@@ -344,7 +342,7 @@
                CALL CCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
                CALL CSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
             ELSE
-               CALL CLASET( 'Full', 1, M-J-1, ZERO, ZERO, 
+               CALL CLASET( 'Full', 1, M-J-1, ZERO, ZERO,
      $                      A( K, J+2 ), LDA)
             END IF
          ELSE
@@ -409,14 +407,14 @@
 *
          A( J, K ) = REAL( WORK( 1 ) )
 *
-         IF( J.LT.M ) THEN 
+         IF( J.LT.M ) THEN
 *
 *           Compute WORK(2:N) = T(J, J) L((J+1):N, J)
 *            where A(J, J) = T(J, J) and A((J+1):N, J-1) = L((J+1):N, J)
 *
             IF( (J1+J-1).GT.1 ) THEN
                ALPHA = -A( J, K )
-               CALL CAXPY( M-J, ALPHA, A( J+1, K-1 ), 1, 
+               CALL CAXPY( M-J, ALPHA, A( J+1, K-1 ), 1,
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
@@ -439,14 +437,14 @@
 *
                I1 = I1+J-1
                I2 = I2+J-1
-               CALL CSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1, 
+               CALL CSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1,
      $                              A( I2, J1+I1 ), LDA )
                CALL CLACGV( I2-I1, A( I1+1, J1+I1-1 ), 1 )
                CALL CLACGV( I2-I1-1, A( I2, J1+I1 ), LDA )
 *
 *              Swap A(I2+1:N, I1) with A(I2+1:N, I2)
 *
-               CALL CSWAP( M-I2, A( I2+1, J1+I1-1 ), 1, 
+               CALL CSWAP( M-I2, A( I2+1, J1+I1-1 ), 1,
      $                           A( I2+1, J1+I2-1 ), 1 )
 *
 *              Swap A(I1, I1) with A(I2, I2)
@@ -465,27 +463,27 @@
 *                 Swap L(1:I1-1, I1) with L(1:I1-1, I2),
 *                  skipping the first column
 *
-                  CALL CSWAP( I1-K1+1, A( I1, 1 ), LDA, 
+                  CALL CSWAP( I1-K1+1, A( I1, 1 ), LDA,
      $                                 A( I2, 1 ), LDA )
                END IF
-            ELSE 
+            ELSE
                IPIV( J+1 ) = J+1
             ENDIF
 *
 *           Set A(J+1, J) = T(J+1, J)
 *
             A( J+1, K ) = WORK( 2 )
-            IF( (A( J, K ).EQ.ZERO) .AND. 
+            IF( (A( J, K ).EQ.ZERO) .AND.
      $        ( (J.EQ.M) .OR. (A( J+1, K ).EQ.ZERO)) ) THEN
-                IF (INFO .EQ. 0) 
+                IF (INFO .EQ. 0)
      $              INFO = J
             END IF
 *
             IF( J.LT.NB ) THEN
 *
-*              Copy A(J+1:N, J+1) into H(J+1:N, J), 
+*              Copy A(J+1:N, J+1) into H(J+1:N, J),
 *
-               CALL CCOPY( M-J, A( J+1, K+1 ), 1, 
+               CALL CCOPY( M-J, A( J+1, K+1 ), 1,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
@@ -497,11 +495,11 @@
                CALL CCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
                CALL CSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
             ELSE
-               CALL CLASET( 'Full', M-J-1, 1, ZERO, ZERO, 
+               CALL CLASET( 'Full', M-J-1, 1, ZERO, ZERO,
      $                      A( J+2, K ), LDA )
             END IF
          ELSE
-            IF( (A( J, K ).EQ.ZERO) .AND. (J.EQ.M) 
+            IF( (A( J, K ).EQ.ZERO) .AND. (J.EQ.M)
      $          .AND. (INFO.EQ.0) ) INFO = J
          END IF
          J = J + 1

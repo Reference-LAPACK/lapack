@@ -2,31 +2,31 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETRF_AASEN + dependencies 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_aasen.f"> 
-*> [TGZ]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrf_aasen.f"> 
-*> [ZIP]</a> 
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_aasen.f"> 
+*> Download CHETRF_AASEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_aasen.f">
+*> [TGZ]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrf_aasen.f">
+*> [ZIP]</a>
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_aasen.f">
 *> [TXT]</a>
-*> \endhtmlonly 
+*> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CHETRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       CHARACTER    UPLO
 *       INTEGER      N, LDA, LWORK, INFO
 *       ..
 *       .. Array Arguments ..
 *       INTEGER      IPIV( * )
-*       COMPLEX   A( LDA, * ), WORK( * )
+*       COMPLEX      A( LDA, * ), WORK( * )
 *       ..
 *
 *> \par Purpose:
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CHETRF_AASEN computes the factorization of a real hermitian matrix A
+*> CHETRF_AASEN computes the factorization of a complex hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**T  or  A = L*T*L**T
@@ -73,7 +73,7 @@
 *>          triangular part of A is not referenced.
 *>
 *>          On exit, the tridiagonal matrix is stored in the diagonals
-*>          and the subdiagonals of A just below (or above) the diagonals, 
+*>          and the subdiagonals of A just below (or above) the diagonals,
 *>          and L is stored below (or above) the subdiaonals, when UPLO
 *>          is 'L' (or 'U').
 *> \endverbatim
@@ -87,8 +87,8 @@
 *> \param[out] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          On exit, it contains the details of the interchanges, i.e., 
-*>          the row and column k of A were interchanged with the 
+*>          On exit, it contains the details of the interchanges, i.e.,
+*>          the row and column k of A were interchanged with the
 *>          row and column IPIV(k).
 *> \endverbatim
 *>
@@ -124,21 +124,19 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2016
 *
-*> \ingroup complexSYcomputational
-*
-*  @generated from zhetrf_aasen.f, fortran z -> c, Sun Oct  2 22:29:10 2016
+*> \ingroup complexHEcomputational
 *
 *  =====================================================================
       SUBROUTINE CHETRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016
@@ -151,19 +149,19 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER      IPIV( * )
-      COMPLEX   A( LDA, * ), WORK( * )
+      COMPLEX      A( LDA, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *     .. Parameters ..
-      COMPLEX   ZERO, ONE
+      COMPLEX      ZERO, ONE
       PARAMETER    ( ZERO = (0.0E+0, 0.0E+0), ONE = (1.0E+0, 0.0E+0) )
 *
 *     .. Local Scalars ..
       LOGICAL      LQUERY, UPPER
       INTEGER      J, LWKOPT, IINFO
       INTEGER      NB, MJ, NJ, K1, K2, J1, J2, J3, JB
-      COMPLEX   ALPHA
+      COMPLEX      ALPHA
 *     ..
 *     .. External Functions ..
       LOGICAL      LSAME
@@ -245,14 +243,14 @@
 *
          J = 0
  10      CONTINUE
-         IF( J.GE.N ) 
+         IF( J.GE.N )
      $      GO TO 20
 *
 *        each step of the main loop
 *         J is the last column of the previous panel
 *         J1 is the first column of the current panel
 *         K1 identifies if the previous column of the panel has been
-*          explicitly stored, e.g., K1=1 for the first panel, and 
+*          explicitly stored, e.g., K1=1 for the first panel, and
 *          K1=0 for the rest
 *
          J1 = J + 1
@@ -261,27 +259,27 @@
 *
 *        Panel factorization
 *
-         CALL CLAHEF_AASEN( UPLO, 2-K1, N-J, JB, 
+         CALL CLAHEF_AASEN( UPLO, 2-K1, N-J, JB,
      $                      A( MAX(1, J), J+1 ), LDA,
-     $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ), 
+     $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ),
      $                      IINFO )
          IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
              INFO = IINFO+J
-         ENDIF 
+         ENDIF
 *
 *        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL CSWAP( J1-K1-2, A( 1, J2 ), 1, 
+               CALL CSWAP( J1-K1-2, A( 1, J2 ), 1,
      $                              A( 1, IPIV(J2) ), 1 )
             END IF
          END DO
          J = J + JB
 *
 *        Trailing submatrix update, where
-*         the row A(J1-1, J2-1:N) stores U(J1, J2+1:N) and 
+*         the row A(J1-1, J2-1:N) stores U(J1, J2+1:N) and
 *         WORK stores the current block of the auxiriarly matrix H
 *
          IF( J.LT.N ) THEN
@@ -313,7 +311,7 @@
 *
                   K2 = 0
 *
-*                 First update skips the first column 
+*                 First update skips the first column
 *
                   JB = JB - 1
                END IF
@@ -335,7 +333,7 @@
 *
 *                 Update off-diagonal block of J2-th block row with CGEMM
 *
-                  CALL CGEMM( 'Conjugate transpose', 'Transpose', 
+                  CALL CGEMM( 'Conjugate transpose', 'Transpose',
      $                        NJ, N-J3+1, JB+1,
      $                       -ONE, A( J1-K2, J2 ), LDA,
      $                             WORK( (J3-J1+1)+K1*N ), N,
@@ -358,7 +356,7 @@
 *        Factorize A as L*D*L**T using the lower triangle of A
 *        .....................................................
 *
-*        copy first column A(1:N, 1) into H(1:N, 1) 
+*        copy first column A(1:N, 1) into H(1:N, 1)
 *         (stored in WORK(1:N))
 *
          CALL CCOPY( N, A( 1, 1 ), 1, WORK( 1 ), 1 )
@@ -369,14 +367,14 @@
 *
          J = 0
  11      CONTINUE
-         IF( J.GE.N ) 
+         IF( J.GE.N )
      $      GO TO 20
 *
 *        each step of the main loop
 *         J is the last column of the previous panel
 *         J1 is the first column of the current panel
 *         K1 identifies if the previous column of the panel has been
-*          explicitly stored, e.g., K1=1 for the first panel, and 
+*          explicitly stored, e.g., K1=1 for the first panel, and
 *          K1=0 for the rest
 *
          J1 = J+1
@@ -385,26 +383,26 @@
 *
 *        Panel factorization
 *
-         CALL CLAHEF_AASEN( UPLO, 2-K1, N-J, JB, 
+         CALL CLAHEF_AASEN( UPLO, 2-K1, N-J, JB,
      $                      A( J+1, MAX(1, J) ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ), IINFO)
          IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
             INFO = IINFO+J
-         ENDIF 
+         ENDIF
 *
 *        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL CSWAP( J1-K1-2, A( J2, 1 ), LDA, 
+               CALL CSWAP( J1-K1-2, A( J2, 1 ), LDA,
      $                              A( IPIV(J2), 1 ), LDA )
             END IF
          END DO
          J = J + JB
 *
 *        Trailing submatrix update, where
-*          A(J2+1, J1-1) stores L(J2+1, J1) and 
+*          A(J2+1, J1-1) stores L(J2+1, J1) and
 *          WORK(J2+1, 1) stores H(J2+1, 1)
 *
          IF( J.LT.N ) THEN
@@ -436,7 +434,7 @@
 *
                   K2 = 0
 *
-*                 First update skips the first column 
+*                 First update skips the first column
 *
                   JB = JB - 1
                END IF
@@ -458,7 +456,7 @@
 *
 *                 Update off-diagonal block of J2-th block column with CGEMM
 *
-                  CALL CGEMM( 'No transpose', 'Conjugate transpose', 
+                  CALL CGEMM( 'No transpose', 'Conjugate transpose',
      $                        N-J3+1, NJ, JB+1,
      $                       -ONE, WORK( (J3-J1+1)+K1*N ), N,
      $                             A( J2, J1-K2 ), LDA,
