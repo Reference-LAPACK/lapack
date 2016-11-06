@@ -49,9 +49,10 @@
 *> DPP    9               List types on next line if 0 < NTYPES <  9
 *> DPB    8               List types on next line if 0 < NTYPES <  8
 *> DPT   12               List types on next line if 0 < NTYPES < 12
-*> DSA   10               List types on next line if 0 < NTYPES < 10
 *> DSY   10               List types on next line if 0 < NTYPES < 10
 *> DSR   10               List types on next line if 0 < NTYPES < 10
+*> DSK   10               List types on next line if 0 < NTYPES < 10
+*> DSA   10               List types on next line if 0 < NTYPES < 10
 *> DSP   10               List types on next line if 0 < NTYPES < 10
 *> DTR   18               List types on next line if 0 < NTYPES < 18
 *> DTP   18               List types on next line if 0 < NTYPES < 18
@@ -147,8 +148,8 @@
      $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN ),
      $                   RANKVAL( MAXIN ), PIV( NMAX )
       DOUBLE PRECISION   A( ( KDMAX+1 )*NMAX, 7 ), B( NMAX*MAXRHS, 4 ),
-     $                   RWORK( 5*NMAX+2*MAXRHS ), S( 2*NMAX ),
-     $                   WORK( NMAX, NMAX+MAXRHS+30 )
+     $                   E( NMAX ), RWORK( 5*NMAX+2*MAXRHS ),
+     $                   S( 2*NMAX ), WORK( NMAX, NMAX+MAXRHS+30 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
@@ -159,11 +160,11 @@
       EXTERNAL           ALAREQ, DCHKEQ, DCHKGB, DCHKGE, DCHKGT, DCHKLQ,
      $                   DCHKPB, DCHKPO, DCHKPS, DCHKPP, DCHKPT, DCHKQ3,
      $                   DCHKQL, DCHKQR, DCHKRQ, DCHKSP, DCHKSY,
-     $                   DCHKSY_ROOK, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
-     $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
-     $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
-     $                   ILAVER, DCHKQRT, DCHKQRTP, DCHKLQTP, DCHKTSQR,
-     $                   DCHKLQT
+     $                   DCHKSY_ROOK, DCHKSY_RK, DCHKTB, DCHKTP, DCHKTR,
+     $                   DCHKTZ, DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB,
+     $                   DDRVPO, DDRVPP, DDRVPT, DDRVSP, DDRVSY,
+     $                   DDRVSY_ROOK, DDRVSY_RK, ILAVER, DCHKQRT,
+     $                   DCHKQRTP, DCHKLQTP, DCHKTSQR, DCHKLQT
 
 *     ..
 *     .. Scalars in Common ..
@@ -643,8 +644,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
-*        SR:  symmetric indefinite matrices with Rook pivoting,
-*             with rook (bounded Bunch-Kaufman) pivoting algorithm
+*        SR:  symmetric indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -667,9 +668,36 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
+      ELSE IF( LSAMEN( 2, C2, 'SK' ) ) THEN
+*
+*        SK:  symmetric indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
+*             differnet matrix storage format than SR path version.
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL DCHKSY_RK( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL DDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                      WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
       ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
 *
-*        SY:  symmetric indefinite matrices,
+*        SA:  symmetric indefinite matrices,
 *             with partial (Aasen's) pivoting algorithm
 *
          NTYPES = 10
