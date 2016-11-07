@@ -189,7 +189,8 @@
 *     .. Executable Statements ..
 *
       GO TO ( 10, 10, 10, 80, 90, 100, 110, 120,
-     $        130, 140, 150, 160, 160, 160, 160, 160 )ISPEC
+     $        130, 140, 150, 160, 160, 160, 160, 160,
+     $        170, 170, 170, 170, 170 )ISPEC
 *
 *     Invalid value for ISPEC
 *
@@ -688,6 +689,13 @@
 *     12 <= ISPEC <= 16: xHSEQR or related subroutines.
 *
       ILAENV = IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+      RETURN
+*
+  170 CONTINUE
+*
+*     17 <= ISPEC <= 21: 2stage eigenvalues and SVD or related subroutines.
+*
+      ILAENV = IPARAM2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
       RETURN
 *
 *     End of ILAENV

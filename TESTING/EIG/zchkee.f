@@ -1102,7 +1102,8 @@
      $                   ZDRGES, ZDRGEV, ZDRGSX, ZDRGVX, ZDRVBD, ZDRVES,
      $                   ZDRVEV, ZDRVSG, ZDRVST, ZDRVSX, ZDRVVX,
      $                   ZERRBD, ZERRED, ZERRGG, ZERRHS, ZERRST, ILAVER,
-     $                   ZDRGES3, ZDRGEV3
+     $                   ZDRGES3, ZDRGEV3, 
+     $                   ZCHKST2STG, ZDRVST2STG, ZCHKHB2STG
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          LEN, MIN
@@ -1149,7 +1150,7 @@
       PATH = LINE( 1: 3 )
       NEP = LSAMEN( 3, PATH, 'NEP' ) .OR. LSAMEN( 3, PATH, 'ZHS' )
       SEP = LSAMEN( 3, PATH, 'SEP' ) .OR. LSAMEN( 3, PATH, 'ZST' ) .OR.
-     $      LSAMEN( 3, PATH, 'ZSG' )
+     $      LSAMEN( 3, PATH, 'ZSG' ) .OR. LSAMEN( 3, PATH, 'SE2' )
       SVD = LSAMEN( 3, PATH, 'SVD' ) .OR. LSAMEN( 3, PATH, 'ZBD' )
       ZEV = LSAMEN( 3, PATH, 'ZEV' )
       ZES = LSAMEN( 3, PATH, 'ZES' )
@@ -1829,7 +1830,8 @@
      $         WRITE( NOUT, FMT = 9980 )'ZCHKHS', INFO
   270    CONTINUE
 *
-      ELSE IF( LSAMEN( 3, C3, 'ZST' ) .OR. LSAMEN( 3, C3, 'SEP' ) ) THEN
+      ELSE IF( LSAMEN( 3, C3, 'ZST' ) .OR. LSAMEN( 3, C3, 'SEP' ) 
+     $                                .OR. LSAMEN( 3, C3, 'SE2' ) ) THEN
 *
 *        ----------------------------------
 *        SEP:  Symmetric Eigenvalue Problem
@@ -1859,6 +1861,17 @@
             WRITE( NOUT, FMT = 9997 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I )
             IF( TSTCHK ) THEN
+               IF( LSAMEN( 3, C3, 'SE2' ) ) THEN
+               CALL ZCHKST2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ),
+     $                      DR( 1, 1 ), DR( 1, 2 ), DR( 1, 3 ),
+     $                      DR( 1, 4 ), DR( 1, 5 ), DR( 1, 6 ),
+     $                      DR( 1, 7 ), DR( 1, 8 ), DR( 1, 9 ),
+     $                      DR( 1, 10 ), DR( 1, 11 ), A( 1, 3 ), NMAX,
+     $                      A( 1, 4 ), A( 1, 5 ), DC( 1, 1 ), A( 1, 6 ),
+     $                      WORK, LWORK, RWORK, LWORK, IWORK, LIWORK,
+     $                      RESULT, INFO )
+               ELSE
                CALL ZCHKST( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
      $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ),
      $                      DR( 1, 1 ), DR( 1, 2 ), DR( 1, 3 ),
@@ -1868,16 +1881,26 @@
      $                      A( 1, 4 ), A( 1, 5 ), DC( 1, 1 ), A( 1, 6 ),
      $                      WORK, LWORK, RWORK, LWORK, IWORK, LIWORK,
      $                      RESULT, INFO )
+               ENDIF
                IF( INFO.NE.0 )
      $            WRITE( NOUT, FMT = 9980 )'ZCHKST', INFO
             END IF
             IF( TSTDRV ) THEN
+               IF( LSAMEN( 3, C3, 'SE2' ) ) THEN
+               CALL ZDRVST2STG( NN, NVAL, 18, DOTYPE, ISEED, THRESH,
+     $                    NOUT, A( 1, 1 ), NMAX, DR( 1, 3 ), DR( 1, 4 ),
+     $                    DR( 1, 5 ), DR( 1, 8 ), DR( 1, 9 ),
+     $                    DR( 1, 10 ), A( 1, 2 ), NMAX, A( 1, 3 ),
+     $                    DC( 1, 1 ), A( 1, 4 ), WORK, LWORK, RWORK,
+     $                    LWORK, IWORK, LIWORK, RESULT, INFO )
+           ELSE
                CALL ZDRVST( NN, NVAL, 18, DOTYPE, ISEED, THRESH, NOUT,
-     $                      A( 1, 1 ), NMAX, DR( 1, 3 ), DR( 1, 4 ),
-     $                      DR( 1, 5 ), DR( 1, 8 ), DR( 1, 9 ),
-     $                      DR( 1, 10 ), A( 1, 2 ), NMAX, A( 1, 3 ),
-     $                      DC( 1, 1 ), A( 1, 4 ), WORK, LWORK, RWORK,
-     $                      LWORK, IWORK, LIWORK, RESULT, INFO )
+     $                    A( 1, 1 ), NMAX, DR( 1, 3 ), DR( 1, 4 ),
+     $                    DR( 1, 5 ), DR( 1, 8 ), DR( 1, 9 ),
+     $                    DR( 1, 10 ), A( 1, 2 ), NMAX, A( 1, 3 ),
+     $                    DC( 1, 1 ), A( 1, 4 ), WORK, LWORK, RWORK,
+     $                    LWORK, IWORK, LIWORK, RESULT, INFO )
+               ENDIF
                IF( INFO.NE.0 )
      $            WRITE( NOUT, FMT = 9980 )'ZDRVST', INFO
             END IF
@@ -1910,12 +1933,18 @@
             WRITE( NOUT, FMT = 9997 )C3, NBVAL( I ), NBMIN( I ),
      $         NXVAL( I )
             IF( TSTCHK ) THEN
-               CALL ZDRVSG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
-     $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
-     $                      DR( 1, 3 ), A( 1, 3 ), NMAX, A( 1, 4 ),
-     $                      A( 1, 5 ), A( 1, 6 ), A( 1, 7 ), WORK,
-     $                      LWORK, RWORK, LWORK, IWORK, LIWORK, RESULT,
-     $                      INFO )
+*               CALL ZDRVSG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+*     $                      NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
+*     $                      DR( 1, 3 ), A( 1, 3 ), NMAX, A( 1, 4 ),
+*     $                      A( 1, 5 ), A( 1, 6 ), A( 1, 7 ), WORK,
+*     $                      LWORK, RWORK, LWORK, IWORK, LIWORK, RESULT,
+*     $                      INFO )
+               CALL ZDRVSG2STG( NN, NVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+     $                          NOUT, A( 1, 1 ), NMAX, A( 1, 2 ), NMAX,
+     $                          DR( 1, 3 ), DR( 1, 4 ), A( 1, 3 ), NMAX,
+     $                          A( 1, 4 ), A( 1, 5 ), A( 1, 6 ),
+     $                          A( 1, 7 ), WORK, LWORK, RWORK, LWORK,
+     $                          IWORK, LIWORK, RESULT, INFO )
                IF( INFO.NE.0 )
      $            WRITE( NOUT, FMT = 9980 )'ZDRVSG', INFO
             END IF
@@ -2276,10 +2305,15 @@
          CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
          IF( TSTERR )
      $      CALL ZERRST( 'ZHB', NOUT )
-         CALL ZCHKHB( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED, THRESH,
-     $                NOUT, A( 1, 1 ), NMAX, DR( 1, 1 ), DR( 1, 2 ),
-     $                A( 1, 2 ), NMAX, WORK, LWORK, RWORK, RESULT,
-     $                INFO )
+*         CALL ZCHKHB( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED, THRESH,
+*     $                NOUT, A( 1, 1 ), NMAX, DR( 1, 1 ), DR( 1, 2 ),
+*     $                A( 1, 2 ), NMAX, WORK, LWORK, RWORK, RESULT,
+*     $                INFO )
+         CALL ZCHKHB2STG( NN, NVAL, NK, KVAL, MAXTYP, DOTYPE, ISEED,
+     $                 THRESH, NOUT, A( 1, 1 ), NMAX, DR( 1, 1 ), 
+     $                 DR( 1, 2 ), DR( 1, 3 ), DR( 1, 4 ), DR( 1, 5 ),
+     $                 A( 1, 2 ), NMAX, WORK, LWORK, RWORK, RESULT, 
+     $                 INFO )
          IF( INFO.NE.0 )
      $      WRITE( NOUT, FMT = 9980 )'ZCHKHB', INFO
 *
