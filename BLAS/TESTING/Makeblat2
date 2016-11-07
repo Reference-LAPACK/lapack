@@ -41,16 +41,16 @@ complex: ../xblat2c
 complex16: ../xblat2z
 
 ../xblat2s: $(SBLAT2)
-	$(LOADER) $(LOADOPTS) -o ../xblat2s $(SBLAT2) $(BLASLIB)
+	$(LOADER) $(LOADOPTS) -o $@ $(SBLAT2) $(BLASLIB)
 
 ../xblat2c: $(CBLAT2)
-	$(LOADER) $(LOADOPTS) -o ../xblat2c $(CBLAT2) $(BLASLIB)
+	$(LOADER) $(LOADOPTS) -o $@ $(CBLAT2) $(BLASLIB)
 
 ../xblat2d: $(DBLAT2)
-	$(LOADER) $(LOADOPTS) -o ../xblat2d $(DBLAT2) $(BLASLIB)
+	$(LOADER) $(LOADOPTS) -o $@ $(DBLAT2) $(BLASLIB)
 
 ../xblat2z: $(ZBLAT2)
-	$(LOADER) $(LOADOPTS) -o ../xblat2z $(ZBLAT2) $(BLASLIB)
+	$(LOADER) $(LOADOPTS) -o $@ $(ZBLAT2) $(BLASLIB)
 
 $(SBLAT2): $(FRC)
 $(CBLAT2): $(FRC)

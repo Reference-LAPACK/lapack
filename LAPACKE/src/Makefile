@@ -2202,8 +2202,8 @@ endif
 all: ../../$(LAPACKELIB)
 
 ../../$(LAPACKELIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
-	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
-	$(RANLIB) ../../$(LAPACKELIB)
+	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+	$(RANLIB) $@
 
 .c.o:
 	$(CC) $(CFLAGS) -I../include -c -o $@ $<
