@@ -23,14 +23,14 @@ set(
 # the OSX RPATH settings have been updated per recommendations found
 # in the CMake Wiki:
 #  http://www.cmake.org/Wiki/CMake_RPATH_handling#Mac_OS_X_and_the_RPATH
-    set(CMAKE_MACOSX_RPATH ON)
-    set(CMAKE_SKIP_BUILD_RPATH FALSE)
-    set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-    list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" isSystemDir)
-    if("${isSystemDir}" STREQUAL "-1")
-        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}")
-        set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-    endif()
+set(CMAKE_MACOSX_RPATH ON)
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}")
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif()
 
 
 # Configure the warning and code coverage suppression file
@@ -45,58 +45,58 @@ set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 
-if (UNIX)
-   if ( "${CMAKE_Fortran_COMPILER}" MATCHES "ifort" )
-  set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fp-model strict" )
-   endif ()
-   if ( "${CMAKE_Fortran_COMPILER}" MATCHES "xlf" )
-  set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave -qstrict=none" )
-   endif ()
+if(UNIX)
+  if("${CMAKE_Fortran_COMPILER}" MATCHES "ifort")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fp-model strict")
+  endif()
+  if("${CMAKE_Fortran_COMPILER}" MATCHES "xlf")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qnosave -qstrict=none")
+  endif()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
-   string(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
-endif ()
+  string(REPLACE \;mtsk\; \; CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}")
+endif()
 
-if ( CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq" )
-   if ( WIN32 )
-      if (CMAKE_GENERATOR STREQUAL "NMake Makefiles")
-         get_filename_component(CMAKE_Fortran_COMPILER_CMDNAM ${CMAKE_Fortran_COMPILER} NAME_WE)
-         message(STATUS "Using Compaq Fortran compiler with command name ${CMAKE_Fortran_COMPILER_CMDNAM}")
-         set( cmd ${CMAKE_Fortran_COMPILER_CMDNAM} )
-         string( TOLOWER "${cmd}" cmdlc )
-         if ( cmdlc STREQUAL "df" )
-            message(STATUS "Assume the Compaq Visual Fortran Compiler is being used")
-            set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_OBJECTS 1)
-            set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_INCLUDES 1)
-            #This is a workaround that is needed to avoid forward-slashes in the
-            #filenames listed in response files from incorrectly being interpreted as
-            #introducing compiler command options
-          if (${BUILD_SHARED_LIBS})
-               message(FATAL_ERROR "Making of shared libraries with CVF has not been tested.")
-            endif()
-            set(str "NMake version 9 or later should be used. NMake version 6.0 which is\n")
-            set(str "${str}   included with the CVF distribution fails to build Lapack because\n")
-            set(str "${str}   the number of source files exceeds the limit for NMake v6.0\n")
-            message(STATUS ${str})
-            set(CMAKE_Fortran_LINK_EXECUTABLE "LINK /out:<TARGET> <LINK_FLAGS> <LINK_LIBRARIES> <OBJECTS>")
-         endif()
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq")
+  if(WIN32)
+    if(CMAKE_GENERATOR STREQUAL "NMake Makefiles")
+      get_filename_component(CMAKE_Fortran_COMPILER_CMDNAM ${CMAKE_Fortran_COMPILER} NAME_WE)
+      message(STATUS "Using Compaq Fortran compiler with command name ${CMAKE_Fortran_COMPILER_CMDNAM}")
+      set(cmd ${CMAKE_Fortran_COMPILER_CMDNAM})
+      string(TOLOWER "${cmd}" cmdlc)
+      if(cmdlc STREQUAL "df")
+        message(STATUS "Assume the Compaq Visual Fortran Compiler is being used")
+        set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_OBJECTS 1)
+        set(CMAKE_Fortran_USE_RESPONSE_FILE_FOR_INCLUDES 1)
+        #This is a workaround that is needed to avoid forward-slashes in the
+        #filenames listed in response files from incorrectly being interpreted as
+        #introducing compiler command options
+        if(${BUILD_SHARED_LIBS})
+          message(FATAL_ERROR "Making of shared libraries with CVF has not been tested.")
+        endif()
+        set(str "NMake version 9 or later should be used. NMake version 6.0 which is\n")
+        set(str "${str}   included with the CVF distribution fails to build Lapack because\n")
+        set(str "${str}   the number of source files exceeds the limit for NMake v6.0\n")
+        message(STATUS ${str})
+        set(CMAKE_Fortran_LINK_EXECUTABLE "LINK /out:<TARGET> <LINK_FLAGS> <LINK_LIBRARIES> <OBJECTS>")
       endif()
-   endif()
+    endif()
+  endif()
 endif()
 
 # Get Python
 message(STATUS "Looking for Python greater than 2.6 - ${PYTHONINTERP_FOUND}")
 find_package(PythonInterp 2.7) # lapack_testing.py uses features from python 2.7 and greater
-if (PYTHONINTERP_FOUND)
-   message(STATUS "Using Python version ${PYTHON_VERSION_STRING}")
+if(PYTHONINTERP_FOUND)
+  message(STATUS "Using Python version ${PYTHON_VERSION_STRING}")
 else()
-   message(STATUS "No suitable Python version found, so skipping summary tests.")
+  message(STATUS "No suitable Python version found, so skipping summary tests.")
 endif()
 # --------------------------------------------------
 
 set(LAPACK_INSTALL_EXPORT_NAME lapack-targets)
 
-if (UNIX)
+if(UNIX)
   include(GNUInstallDirs)
   set(ARCHIVE_DIR ${CMAKE_INSTALL_LIBDIR})
   set(LIBRARY_DIR ${CMAKE_INSTALL_LIBDIR})
@@ -140,7 +140,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
 
 # --------------------------------------------------
 # Check for any necessary platform specific compiler flags
-include( CheckLAPACKCompilerFlags )
+include(CheckLAPACKCompilerFlags)
 CheckLAPACKCompilerFlags()
 
 # --------------------------------------------------
@@ -155,11 +155,11 @@ CHECK_TIME_FUNCTION(EXT_ETIME_ TIME_FUNC)
 CHECK_TIME_FUNCTION(INT_ETIME TIME_FUNC)
 message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as timing function.")
 
-set(SECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
-set(DSECOND_SRC  ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
+set(SECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
+set(DSECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
 
 # By default static library
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF )
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 option(BUILD_TESTING "Build tests" OFF)
 
@@ -183,7 +183,7 @@ if(BLAS_LIBRARIES)
   include(CheckFortranFunctionExists)
   set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
   CHECK_FORTRAN_FUNCTION_EXISTS("dgemm" BLAS_FOUND)
-  unset( CMAKE_REQUIRED_LIBRARIES )
+  unset(CMAKE_REQUIRED_LIBRARIES)
   if(BLAS_FOUND)
     message(STATUS "--> BLAS supplied by user is WORKING, will use ${BLAS_LIBRARIES}.")
   else()
@@ -194,23 +194,23 @@ if(BLAS_LIBRARIES)
   endif()
 
 # User did not provide a BLAS Library but specified to search for one
-elseif( USE_OPTIMIZED_BLAS )
-  find_package( BLAS )
-endif ()
+elseif(USE_OPTIMIZED_BLAS)
+  find_package(BLAS)
+endif()
 
 # Neither user specified or optimized BLAS libraries can be used
 if(NOT BLAS_FOUND)
   message(STATUS "Using supplied NETLIB BLAS implementation")
   add_subdirectory(BLAS)
-  set( BLAS_LIBRARIES blas )
+  set(BLAS_LIBRARIES blas)
 else()
-  set( CMAKE_EXE_LINKER_FLAGS
+  set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
     CACHE STRING "Linker flags for executables" FORCE)
-  set( CMAKE_MODULE_LINKER_FLAGS
+  set(CMAKE_MODULE_LINKER_FLAGS
     "${CMAKE_MODULE_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
     CACHE STRING "Linker flags for modules" FORCE)
-  set( CMAKE_SHARED_LINKER_FLAGS
+  set(CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} ${BLAS_LINKER_FLAGS}"
     CACHE STRING "Linker flags for shared libs" FORCE)
 endif()
@@ -228,7 +228,7 @@ endif()
 # XBLAS
 
 option(USE_XBLAS "Build extended precision (needs XBLAS)" OFF)
-if (USE_XBLAS)
+if(USE_XBLAS)
   find_library(XBLAS_LIBRARY NAMES xblas)
 endif()
 
@@ -237,9 +237,9 @@ option(USE_OPTIMIZED_LAPACK "Whether or not to use an optimized LAPACK library i
 # --------------------------------------------------
 # LAPACK
 # User did not provide a LAPACK Library but specified to search for one
-if( USE_OPTIMIZED_LAPACK )
-  find_package( LAPACK )
-endif ()
+if(USE_OPTIMIZED_LAPACK)
+  find_package(LAPACK)
+endif()
 
 # Check the usage of the user provided or automatically found LAPACK libraries
 if(LAPACK_LIBRARIES)
@@ -247,35 +247,35 @@ if(LAPACK_LIBRARIES)
   set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
   # Check if new routine of 3.4.0 is in LAPACK_LIBRARIES
   CHECK_FORTRAN_FUNCTION_EXISTS("dgeqrt" LATESTLAPACK_FOUND)
-  unset( CMAKE_REQUIRED_LIBRARIES )
+  unset(CMAKE_REQUIRED_LIBRARIES)
   if(LATESTLAPACK_FOUND)
     message(STATUS "--> LAPACK supplied by user is WORKING, will use ${LAPACK_LIBRARIES}.")
   else()
-    message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, 	CANNOT USE ${LAPACK_LIBRARIES}.")
+    message(ERROR "--> LAPACK supplied by user is not WORKING or is older than LAPACK 3.4.0, CANNOT USE ${LAPACK_LIBRARIES}.")
     message(ERROR "-->     Will use REFERENCE LAPACK (by default)")
     message(ERROR "-->     Or Correct your LAPACK_LIBRARIES entry ")
     message(ERROR "-->     Or Consider checking USE_OPTIMIZED_LAPACK")
   endif()
-endif ()
+endif()
 
 # Neither user specified or optimized LAPACK libraries can be used
 if(NOT LATESTLAPACK_FOUND)
   message(STATUS "Using supplied NETLIB LAPACK implementation")
-  set( LAPACK_LIBRARIES lapack )
+  set(LAPACK_LIBRARIES lapack)
   add_subdirectory(SRC)
 else()
-  set( CMAKE_EXE_LINKER_FLAGS
+  set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for executables" FORCE)
-  set( CMAKE_MODULE_LINKER_FLAGS
+  set(CMAKE_MODULE_LINKER_FLAGS
     "${CMAKE_MODULE_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for modules" FORCE)
-  set( CMAKE_SHARED_LINKER_FLAGS
+  set(CMAKE_SHARED_LINKER_FLAGS
     "${CMAKE_SHARED_LINKER_FLAGS} ${LAPACK_LINKER_FLAGS}"
     CACHE STRING "Linker flags for shared libs" FORCE)
 endif()
 
-message(STATUS "BUILD TESTING : ${BUILD_TESTING}" )
+message(STATUS "BUILD TESTING : ${BUILD_TESTING}")
 if(BUILD_TESTING)
   add_subdirectory(TESTING)
 endif()
@@ -287,11 +287,11 @@ option(LAPACKE "Build LAPACKE" OFF)
 # LAPACKE has also the interface to some routines from tmglib,
 # if LAPACKE_WITH_TMG is selected, we need to add those routines to LAPACKE
 option(LAPACKE_WITH_TMG "Build LAPACKE with tmglib routines" OFF)
-if (LAPACKE_WITH_TMG)
+if(LAPACKE_WITH_TMG)
   set(LAPACKE ON)
 endif()
 if(BUILD_TESTING OR LAPACKE_WITH_TMG) #already included, avoid double inclusion
-     add_subdirectory(TESTING/MATGEN)
+  add_subdirectory(TESTING/MATGEN)
 endif()
 
 if(LAPACKE)
@@ -321,8 +321,8 @@ if(WIN32 AND NOT UNIX)
 else()
   set(CPACK_GENERATOR "TGZ")
   set(CPACK_SOURCE_GENERATOR TGZ)
-  set(CPACK_SOURCE_PACKAGE_FILE_NAME "lapack-${LAPACK_VERSION}" )
-  set(CPACK_SOURCE_IGNORE_FILES ~$ .svn ${CPACK_SOURCE_IGNORE_FILES} )
+  set(CPACK_SOURCE_PACKAGE_FILE_NAME "lapack-${LAPACK_VERSION}")
+  set(CPACK_SOURCE_IGNORE_FILES ~$ .svn ${CPACK_SOURCE_IGNORE_FILES})
 endif()
 include(CPack)
 
@@ -381,7 +381,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_D
   install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc
   DESTINATION ${PKG_CONFIG_DIR}
-   )
+  )
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)

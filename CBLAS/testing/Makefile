@@ -9,30 +9,22 @@ LIB = $(CBLASLIB) $(BLASLIB)
 
 # Object files for single real precision
 stestl1o = c_sblas1.o
-
 stestl2o = c_sblas2.o c_s2chke.o auxiliary.o c_xerbla.o
-
 stestl3o = c_sblas3.o c_s3chke.o auxiliary.o c_xerbla.o
 
 # Object files for double real precision
 dtestl1o = c_dblas1.o
-
 dtestl2o = c_dblas2.o c_d2chke.o auxiliary.o c_xerbla.o
-
 dtestl3o = c_dblas3.o c_d3chke.o auxiliary.o c_xerbla.o
 
 # Object files for single complex precision
 ctestl1o = c_cblas1.o
-
 ctestl2o = c_cblas2.o c_c2chke.o auxiliary.o c_xerbla.o
-
 ctestl3o = c_cblas3.o c_c3chke.o auxiliary.o c_xerbla.o
 
 # Object files for double complex precision
 ztestl1o = c_zblas1.o
-
 ztestl2o = c_zblas2.o c_z2chke.o auxiliary.o c_xerbla.o
-
 ztestl3o = c_zblas3.o c_z3chke.o auxiliary.o c_xerbla.o
 
 all: all1 all2 all3
@@ -103,11 +95,11 @@ run:
 	@echo "--> TESTING CBLAS 1 - SINGLE PRECISION <--"
 	@./xscblat1 > stest1.out
 	@echo "--> TESTING CBLAS 1 - DOUBLE PRECISION <--"
-	@./xdcblat1  > dtest1.out
+	@./xdcblat1 > dtest1.out
 	@echo "--> TESTING CBLAS 1 - COMPLEX PRECISION <--"
-	@./xccblat1  > ctest1.out
+	@./xccblat1 > ctest1.out
 	@echo "--> TESTING CBLAS 1 - DOUBLE COMPLEX PRECISION <--"
-	@./xzcblat1	 > ztest1.out
+	@./xzcblat1 > ztest1.out
 	@echo "--> TESTING CBLAS 2 - SINGLE PRECISION <--"
 	@./xscblat2 < sin2 > stest2.out
 	@echo "--> TESTING CBLAS 2 - DOUBLE PRECISION <--"
@@ -115,7 +107,7 @@ run:
 	@echo "--> TESTING CBLAS 2 - COMPLEX PRECISION <--"
 	@./xccblat2 < cin2 > ctest2.out
 	@echo "--> TESTING CBLAS 2 - DOUBLE COMPLEX PRECISION <--"
-	@./xzcblat2	< zin2	> ztest2.out
+	@./xzcblat2 < zin2 > ztest2.out
 	@echo "--> TESTING CBLAS 3 - SINGLE PRECISION <--"
 	@./xscblat3 < sin3 > stest3.out
 	@echo "--> TESTING CBLAS 3 - DOUBLE PRECISION <--"
@@ -123,7 +115,7 @@ run:
 	@echo "--> TESTING CBLAS 3 - COMPLEX PRECISION <--"
 	@./xccblat3 < cin3 > ctest3.out
 	@echo "--> TESTING CBLAS 3 - DOUBLE COMPLEX PRECISION <--"
-	@./xzcblat3	< zin3 > ztest3.out
+	@./xzcblat3 < zin3 > ztest3.out
 
 .SUFFIXES: .o .f .c
 

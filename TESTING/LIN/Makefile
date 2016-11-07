@@ -35,7 +35,7 @@ include ../../make.inc
 #######################################################################
 
 ifneq ($(strip $(VARLIB)),)
-    LAPACKLIB :=  $(VARLIB) ../../$(LAPACKLIB)
+    LAPACKLIB := $(VARLIB) ../../$(LAPACKLIB)
 endif
 
 
@@ -43,9 +43,9 @@ ALINTST = \
    aladhd.o alaerh.o alaesm.o alahd.o alareq.o \
    alasum.o alasvm.o chkxer.o icopy.o ilaenv.o xlaenv.o xerbla.o
 
-SCLNTST= slaord.o
+SCLNTST = slaord.o
 
-DZLNTST= dlaord.o
+DZLNTST = dlaord.o
 
 SLINTST = schkaa.o \
    schkeq.o schkgb.o schkge.o schkgt.o \
@@ -54,7 +54,7 @@ SLINTST = schkaa.o \
    schksp.o schksy.o schksy_rook.o schksy_aasen.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
-   sdrvpp.o sdrvpt.o sdrvsp.o  sdrvsy_rook.o sdrvsy_aasen.o\
+   sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy_rook.o sdrvsy_aasen.o \
    serrgt.o serrlq.o serrls.o \
    serrps.o serrql.o serrqp.o serrqr.o \
    serrrq.o serrtr.o serrtz.o \
@@ -70,7 +70,7 @@ SLINTST = schkaa.o \
    sqrt01.o sqrt01p.o sqrt02.o sqrt03.o sqrt11.o sqrt12.o \
    sqrt13.o sqrt14.o sqrt15.o sqrt16.o sqrt17.o \
    srqt01.o srqt02.o srqt03.o srzt01.o srzt02.o \
-   sspt01.o ssyt01.o ssyt01_rook.o ssyt01_aasen.o\
+   sspt01.o ssyt01.o ssyt01_rook.o ssyt01_aasen.o \
    stbt02.o stbt03.o stbt05.o stbt06.o stpt01.o \
    stpt02.o stpt03.o stpt05.o stpt06.o strt01.o \
    strt02.o strt03.o strt05.o strt06.o \
@@ -136,7 +136,7 @@ DLINTST = dchkaa.o \
    dchksp.o dchksy.o dchksy_rook.o dchksy_aasen.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
-   ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o ddrvsy_aasen.o\
+   ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o ddrvsy_aasen.o \
    derrgt.o derrlq.o derrls.o \
    derrps.o derrql.o derrqp.o derrqr.o \
    derrrq.o derrtr.o derrtz.o \
@@ -149,10 +149,10 @@ DLINTST = dchkaa.o \
    dpot02.o dpot03.o dpot05.o dpst01.o dppt01.o \
    dppt02.o dppt03.o dppt05.o dptt01.o dptt02.o \
    dptt05.o dqlt01.o dqlt02.o dqlt03.o dqpt01.o \
-   dqrt01.o dqrt01p.o  dqrt02.o dqrt03.o dqrt11.o dqrt12.o \
+   dqrt01.o dqrt01p.o dqrt02.o dqrt03.o dqrt11.o dqrt12.o \
    dqrt13.o dqrt14.o dqrt15.o dqrt16.o dqrt17.o \
    drqt01.o drqt02.o drqt03.o drzt01.o drzt02.o \
-   dspt01.o dsyt01.o dsyt01_rook.o dsyt01_aasen.o\
+   dspt01.o dsyt01.o dsyt01_rook.o dsyt01_aasen.o \
    dtbt02.o dtbt03.o dtbt05.o dtbt06.o dtpt01.o \
    dtpt02.o dtpt03.o dtpt05.o dtpt06.o dtrt01.o \
    dtrt02.o dtrt03.o dtrt05.o dtrt06.o \
@@ -213,13 +213,13 @@ ZLINTST += zerrvx.o zdrvge.o zdrvsy.o zdrvgb.o zerrge.o zdrvpo.o \
 endif
 
 DSLINTST = dchkab.o \
-	ddrvab.o ddrvac.o derrab.o derrac.o dget08.o          \
+	ddrvab.o ddrvac.o derrab.o derrac.o dget08.o \
 	alaerh.o alahd.o  aladhd.o alareq.o \
 	chkxer.o dlarhs.o dlatb4.o xerbla.o \
 	dget02.o dpot06.o
 
 ZCLINTST = zchkab.o \
-	zdrvab.o zdrvac.o zerrab.o zerrac.o zget08.o          \
+	zdrvab.o zdrvac.o zerrab.o zerrac.o zget08.o \
 	alaerh.o alahd.o  aladhd.o alareq.o \
 	chkxer.o zget02.o zlarhs.o zlatb4.o \
 	zsbmv.o  xerbla.o zpot06.o zlaipd.o
@@ -240,7 +240,7 @@ ZLINTSTRFP = zchkrfp.o zdrvrfp.o zdrvrf1.o zdrvrf2.o zdrvrf3.o zdrvrf4.o zerrrfp
 	zlatb4.o zlaipd.o zlarhs.o zsbmv.o zget04.o zpot01.o zpot03.o zpot02.o \
 	chkxer.o xerbla.o alaerh.o aladhd.o alahd.o alasvm.o
 
-all:  single double complex complex16 proto-single proto-double proto-complex proto-complex16
+all: single double complex complex16 proto-single proto-double proto-complex proto-complex16
 
 single: ../xlintsts
 double: ../xlintstd
@@ -252,44 +252,44 @@ proto-double: ../xlintstds ../xlintstrfd
 proto-complex: ../xlintstrfc
 proto-complex16: ../xlintstzc ../xlintstrfz
 
-xlintsts : $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(ALINTST) $(SCLNTST) $(SLINTST) \
-        ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB)  $(BLASLIB) -o $@
+xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(ALINTST) $(SCLNTST) $(SLINTST) \
+        ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB) -o $@
 
-xlintstc : $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(ALINTST) $(SCLNTST) $(CLINTST) \
-        ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB)  $(BLASLIB) -o $@
+xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(ALINTST) $(SCLNTST) $(CLINTST) \
+        ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB) -o $@
 
-xlintstd : $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(LAPACKLIB)
+xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) $^ \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB) -o $@
 
-xlintstz : $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(ALINTST) $(DZLNTST) $(ZLINTST) \
-        ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB)  $(BLASLIB) -o $@
+xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(ALINTST) $(DZLNTST) $(ZLINTST) \
+        ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB) -o $@
 
-xlintstds : $(DSLINTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(DSLINTST) \
+xlintstds: $(DSLINTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(DSLINTST) \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
 
-xlintstzc : $(ZCLINTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(ZCLINTST) \
+xlintstzc: $(ZCLINTST) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(ZCLINTST) \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
 
-xlintstrfs : $(SLINTSTRFP) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(SLINTSTRFP) \
+xlintstrfs: $(SLINTSTRFP) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(SLINTSTRFP) \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
 
-xlintstrfd : $(DLINTSTRFP) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(DLINTSTRFP) \
+xlintstrfd: $(DLINTSTRFP) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(DLINTSTRFP) \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
 
-xlintstrfc : $(CLINTSTRFP) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(CLINTSTRFP) \
+xlintstrfc: $(CLINTSTRFP) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(CLINTSTRFP) \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
 
-xlintstrfz : $(ZLINTSTRFP) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS)  $(ZLINTSTRFP) \
+xlintstrfz: $(ZLINTSTRFP) ../../$(LAPACKLIB)
+	$(LOADER) $(LOADOPTS) $(ZLINTSTRFP) \
         ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
 
 ../xlintsts: xlintsts

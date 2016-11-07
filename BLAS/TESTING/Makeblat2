@@ -29,14 +29,11 @@ include ../../make.inc
 #######################################################################
 
 SBLAT2 = sblat2.o
-
 CBLAT2 = cblat2.o
-
 DBLAT2 = dblat2.o
-
 ZBLAT2 = zblat2.o
 
-all:  single double complex complex16
+all: single double complex complex16
 
 single: ../xblat2s
 double: ../xblat2d
@@ -45,19 +42,19 @@ complex16: ../xblat2z
 
 ../xblat2s: $(SBLAT2)
 	$(LOADER) $(LOADOPTS) $(SBLAT2) \
-        $(BLASLIB)  -o ../xblat2s
+        $(BLASLIB) -o ../xblat2s
 
 ../xblat2c: $(CBLAT2)
 	$(LOADER) $(LOADOPTS) $(CBLAT2) \
-        $(BLASLIB)  -o ../xblat2c
+        $(BLASLIB) -o ../xblat2c
 
 ../xblat2d: $(DBLAT2)
 	$(LOADER) $(LOADOPTS) $(DBLAT2) \
-        $(BLASLIB)  -o ../xblat2d
+        $(BLASLIB) -o ../xblat2d
 
 ../xblat2z: $(ZBLAT2)
 	$(LOADER) $(LOADOPTS) $(ZBLAT2) \
-        $(BLASLIB)  -o ../xblat2z
+        $(BLASLIB) -o ../xblat2z
 
 $(SBLAT2): $(FRC)
 $(CBLAT2): $(FRC)

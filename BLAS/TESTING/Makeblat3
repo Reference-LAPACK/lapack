@@ -29,14 +29,11 @@ include ../../make.inc
 #######################################################################
 
 SBLAT3 = sblat3.o
-
 CBLAT3 = cblat3.o
-
 DBLAT3 = dblat3.o
-
 ZBLAT3 = zblat3.o
 
-all:  single double complex complex16
+all: single double complex complex16
 
 single: ../xblat3s
 double: ../xblat3d

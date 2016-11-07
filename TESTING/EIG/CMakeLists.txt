@@ -43,10 +43,10 @@ set(AEIGTST
    xlaenv.f
    chkxer.f)
 
-set(SCIGTST  slafts.f slahd2.f slasum.f slatb9.f sstech.f sstect.f
+set(SCIGTST slafts.f slahd2.f slasum.f slatb9.f sstech.f sstect.f
    ssvdch.f ssvdct.f ssxt1.f)
 
-set(SEIGTST  schkee.f
+set(SEIGTST schkee.f
    sbdt01.f sbdt02.f sbdt03.f sbdt04.f sbdt05.f
    schkbb.f schkbd.f schkbk.f schkbl.f schkec.f
    schkgg.f schkgk.f schkgl.f schkhs.f schksb.f schkst.f
@@ -63,7 +63,7 @@ set(SEIGTST  schkee.f
    sort03.f ssbt21.f ssgt01.f sslect.f sspt21.f sstt21.f
    sstt22.f ssyt21.f ssyt22.f)
 
-set(CEIGTST  cchkee.f
+set(CEIGTST cchkee.f
    cbdt01.f cbdt02.f cbdt03.f cbdt05.f
    cchkbb.f cchkbd.f cchkbk.f cchkbl.f cchkec.f
    cchkgg.f cchkgk.f cchkgl.f cchkhb.f cchkhs.f cchkst.f
@@ -80,10 +80,10 @@ set(CEIGTST  cchkee.f
    csgt01.f cslect.f
    cstt21.f cstt22.f cunt01.f cunt03.f)
 
-set(DZIGTST  dlafts.f dlahd2.f dlasum.f dlatb9.f dstech.f dstect.f
+set(DZIGTST dlafts.f dlahd2.f dlasum.f dlatb9.f dstech.f dstect.f
    dsvdch.f dsvdct.f dsxt1.f)
 
-set(DEIGTST  dchkee.f
+set(DEIGTST dchkee.f
    dbdt01.f dbdt02.f dbdt03.f dbdt04.f dbdt05.f
    dchkbb.f dchkbd.f dchkbk.f dchkbl.f dchkec.f
    dchkgg.f dchkgk.f dchkgl.f dchkhs.f dchksb.f dchkst.f
@@ -100,7 +100,7 @@ set(DEIGTST  dchkee.f
    dort03.f dsbt21.f dsgt01.f dslect.f dspt21.f dstt21.f
    dstt22.f dsyt21.f dsyt22.f)
 
-set(ZEIGTST  zchkee.f
+set(ZEIGTST zchkee.f
    zbdt01.f zbdt02.f zbdt03.f zbdt05.f
    zchkbb.f zchkbd.f zchkbk.f zchkbl.f zchkec.f
    zchkgg.f zchkgk.f zchkgl.f zchkhb.f zchkhs.f zchkst.f
@@ -117,27 +117,27 @@ set(ZEIGTST  zchkee.f
    zsgt01.f zslect.f
    zstt21.f zstt22.f zunt01.f zunt03.f)
 
-macro(add_eig_executable name )
+macro(add_eig_executable name)
   add_executable(${name} ${ARGN})
   target_link_libraries(${name} tmglib ${LAPACK_LIBRARIES})
 endmacro()
 
-if (BUILD_SINGLE)
+if(BUILD_SINGLE)
 add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST}
-  ${SECOND_SRC} )
+  ${SECOND_SRC})
 endif()
 
-if (BUILD_COMPLEX)
+if(BUILD_COMPLEX)
 add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST}
-  ${SECOND_SRC} )
+  ${SECOND_SRC})
 endif()
 
-if (BUILD_DOUBLE)
+if(BUILD_DOUBLE)
 add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST}
-  ${DSECOND_SRC} )
+  ${DSECOND_SRC})
 endif()
 
-if (BUILD_COMPLEX16)
+if(BUILD_COMPLEX16)
 add_eig_executable(xeigtstz ${ZEIGTST} ${DZIGTST} ${AEIGTST}
-  ${DSECOND_SRC} )
+  ${DSECOND_SRC})
 endif()

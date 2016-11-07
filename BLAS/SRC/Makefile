@@ -88,8 +88,8 @@ $(ZB1AUX): $(FRC)
 #  Level 2 and Level 3 BLAS.  Comment it out only if you already have
 #  both the Level 2 and 3 BLAS.
 #---------------------------------------------------------------------
-ALLBLAS  = lsame.o xerbla.o xerbla_array.o
-$(ALLBLAS) : $(FRC)
+ALLBLAS = lsame.o xerbla.o xerbla_array.o
+$(ALLBLAS): $(FRC)
 
 #---------------------------------------------------------
 #  Comment out the next 4 definitions if you already have
@@ -133,7 +133,7 @@ ZBLAS3 = zgemm.o zsymm.o zsyrk.o zsyr2k.o ztrmm.o ztrsm.o \
 	zhemm.o zherk.o zher2k.o
 $(ZBLAS3): $(FRC)
 
-ALLOBJ=$(SBLAS1) $(SBLAS2) $(SBLAS3) $(DBLAS1) $(DBLAS2) $(DBLAS3)	\
+ALLOBJ = $(SBLAS1) $(SBLAS2) $(SBLAS3) $(DBLAS1) $(DBLAS2) $(DBLAS3) \
 	$(CBLAS1) $(CBLAS2) $(CBLAS3) $(ZBLAS1) \
 	$(ZBLAS2) $(ZBLAS3) $(ALLBLAS)
 
