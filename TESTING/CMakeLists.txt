@@ -140,21 +140,17 @@ add_lapack_test(zlse.out lse.in xeigtstz)
 endif()
 
 
-if(BUILD_SIMPLE)
-  if(BUILD_DOUBLE)
+if(BUILD_SINGLE AND BUILD_DOUBLE)
 #
 # ======== SINGLE-DOUBLE PROTO LIN TESTS ==============
-    add_lapack_test(dstest.out dstest.in xlintstds)
-  endif()
+  add_lapack_test(dstest.out dstest.in xlintstds)
 endif()
 
 
-if(BUILD_COMPLEX)
-  if(BUILD_COMPLEX16)
+if(BUILD_COMPLEX AND BUILD_COMPLEX16)
 #
 # ======== COMPLEX-COMPLEX16 LIN TESTS ========================
-    add_lapack_test(zctest.out zctest.in xlintstzc)
-  endif()
+  add_lapack_test(zctest.out zctest.in xlintstzc)
 endif()
 
 # ==============================================================================
