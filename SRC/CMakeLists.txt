@@ -1,24 +1,32 @@
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
-#       ALLAUX -- Auxiliary routines called from all precisions
-#       ALLXAUX -- Auxiliary routines called from all precisions but
-#                  only from routines using extra precision.
-#       SCLAUX -- Auxiliary routines called from both REAL and COMPLEX
-#       DZLAUX -- Auxiliary routines called from both DOUBLE PRECISION
-#                 and COMPLEX*16
-#       SLASRC -- Single precision real LAPACK routines
+#       ALLAUX  -- Auxiliary routines called from all precisions
+#
+#       SCLAUX  -- Auxiliary routines called from both REAL and COMPLEX.
+#       DZLAUX  -- Auxiliary routines called from both DOUBLE and COMPLEX*16.
+#
+#       DSLASRC -- Double-single mixed precision real routines called from
+#                  single, single-extra and double precision real LAPACK
+#                  routines (i.e. from SLASRC, SXLASRC, DLASRC).
+#       ZCLASRC -- Double-single mixed precision complex routines called from
+#                  single, single-extra and double precision complex LAPACK
+#                  routines (i.e. from CLASRC, CXLASRC, ZLASRC).
+#
+#       SLASRC  -- Single precision real LAPACK routines
 #       SXLASRC -- Single precision real LAPACK routines using extra
 #                  precision.
-#       CLASRC -- Single precision complex LAPACK routines
+#       CLASRC  -- Single precision complex LAPACK routines
 #       CXLASRC -- Single precision complex LAPACK routines using extra
 #                  precision.
-#       DLASRC -- Double precision real LAPACK routines
+#       DLASRC  -- Double precision real LAPACK routines
 #       DXLASRC -- Double precision real LAPACK routines using extra
 #                  precision.
-#       ZLASRC -- Double precision complex LAPACK routines
+#       ZLASRC  -- Double precision complex LAPACK routines
 #       ZXLASRC -- Double precision complex LAPACK routines using extra
 #                  precision.
+#
+#    DEPRECATED -- Deprecated routines in all precisions
 #
 #  The library can be set up to include routines for any combination
 #  of the four precisions.  To create or add to the library, enter make
@@ -50,8 +58,6 @@ set(ALLAUX ilaenv.f ieeeck.f lsamen.f iparmq.f
    ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
    ../INSTALL/slamch.f)
-
-set(ALLXAUX)
 
 set(SCLAUX
    sbdsdc.f
@@ -431,7 +437,7 @@ set(ZXLASRC zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
 
 
 if(USE_XBLAS)
-  set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC} ${ALLXAUX})
+  set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC})
 endif()
 
 if(BUILD_DEPRECATED)
