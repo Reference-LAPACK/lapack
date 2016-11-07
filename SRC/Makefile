@@ -341,7 +341,7 @@ DLASRC = \
    dgelqt.o dgelqt3.o dgemlqt.o \
    dgetsls.o dgeqr.o dlatsqr.o dlamtsqr.o dgemqr.o \
    dgelq.o dlaswlq.o dlamswlq.o dgemlq.o \
-   dtplqt.o dtplqt2.o dtpmlqt.o 
+   dtplqt.o dtplqt2.o dtpmlqt.o
 
 ifdef USEXBLAS
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o		\
@@ -435,7 +435,7 @@ ZLASRC = \
    zgelqt.o zgelqt3.o zgemlqt.o \
    zgetsls.o zgeqr.o zlatsqr.o zlamtsqr.o zgemqr.o \
    zgelq.o zlaswlq.o zlamswlq.o zgemlq.o \
-   ztplqt.o ztplqt2.o ztpmlqt.o  
+   ztplqt.o ztplqt2.o ztpmlqt.o
 
 ifdef USEXBLAS
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o		\

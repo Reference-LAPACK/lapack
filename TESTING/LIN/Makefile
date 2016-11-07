@@ -76,7 +76,7 @@ SLINTST = schkaa.o \
    strt02.o strt03.o strt05.o strt06.o \
    sgennd.o sqrt04.o sqrt05.o schkqrt.o serrqrt.o schkqrtp.o serrqrtp.o \
    schklqt.o schklqtp.o schktsqr.o \
-   serrlqt.o serrlqtp.o serrtsqr.o stsqr01.o slqt04.o slqt05.o 
+   serrlqt.o serrlqtp.o serrtsqr.o stsqr01.o slqt04.o slqt05.o
 
 ifdef USEXBLAS
 SLINTST += serrvxx.o sdrvgex.o sdrvsyx.o serrgex.o sdrvgbx.o sdrvpox.o \
@@ -119,7 +119,7 @@ CLINTST = cchkaa.o \
    sget06.o cgennd.o \
    cqrt04.o cqrt05.o cchkqrt.o cerrqrt.o cchkqrtp.o cerrqrtp.o \
    cchklqt.o cchklqtp.o cchktsqr.o \
-   cerrlqt.o cerrlqtp.o cerrtsqr.o ctsqr01.o clqt04.o clqt05.o 
+   cerrlqt.o cerrlqtp.o cerrtsqr.o ctsqr01.o clqt04.o clqt05.o
 
 ifdef USEXBLAS
 CLINTST += cerrvxx.o cdrvgex.o cdrvsyx.o cdrvgbx.o cerrgex.o cdrvpox.o \
@@ -159,7 +159,7 @@ DLINTST = dchkaa.o \
    dgennd.o \
    dqrt04.o dqrt05.o dchkqrt.o derrqrt.o dchkqrtp.o derrqrtp.o \
    dchklq.o dchklqt.o dchklqtp.o dchktsqr.o \
-   derrlqt.o derrlqtp.o derrtsqr.o dtsqr01.o dlqt04.o dlqt05.o 
+   derrlqt.o derrlqtp.o derrtsqr.o dtsqr01.o dlqt04.o dlqt05.o
 
 ifdef USEXBLAS
 DLINTST += derrvxx.o ddrvgex.o ddrvsyx.o ddrvgbx.o derrgex.o ddrvpox.o derrpox.o \

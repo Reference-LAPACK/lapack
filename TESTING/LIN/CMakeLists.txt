@@ -29,7 +29,7 @@ set(SLINTST  schkaa.f
    sqrt01.f sqrt01p.f sqrt02.f sqrt03.f sqrt11.f sqrt12.f
    sqrt13.f sqrt14.f sqrt15.f sqrt16.f sqrt17.f
    srqt01.f srqt02.f srqt03.f srzt01.f srzt02.f
-   sspt01.f ssyt01.f ssyt01_rook.f ssyt01_aasen.f 
+   sspt01.f ssyt01.f ssyt01_rook.f ssyt01_aasen.f
    stbt02.f stbt03.f stbt05.f stbt06.f stpt01.f
    stpt02.f stpt03.f stpt05.f stpt06.f strt01.f
    strt02.f strt03.f strt05.f strt06.f
@@ -76,7 +76,7 @@ set(CLINTST  cchkaa.f
    ctpt02.f ctpt03.f ctpt05.f ctpt06.f ctrt01.f
    ctrt02.f ctrt03.f ctrt05.f ctrt06.f
    sget06.f cgennd.f
-   cqrt04.f cqrt05.f cchkqrt.f cerrqrt.f cchkqrtp.f cerrqrtp.f 
+   cqrt04.f cqrt05.f cchkqrt.f cerrqrt.f cchkqrtp.f cerrqrtp.f
    cchklqt.f cchklqtp.f cchktsqr.f
    cerrlqt.f cerrlqtp.f cerrtsqr.f ctsqr01.f clqt04.f clqt05.f )
 
