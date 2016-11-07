@@ -252,75 +252,45 @@ proto-double: ../xlintstds ../xlintstrfd
 proto-complex: ../xlintstrfc
 proto-complex16: ../xlintstzc ../xlintstrfz
 
-xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(LAPACKLIB)
+../xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(ALINTST) $(SCLNTST) $(SLINTST) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 
-xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(LAPACKLIB)
+../xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(ALINTST) $(SCLNTST) $(CLINTST) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 
-xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(LAPACKLIB)
+../xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^ \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 
-xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(LAPACKLIB)
+../xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(ALINTST) $(DZLNTST) $(ZLINTST) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 
-xlintstds: $(DSLINTST) ../../$(LAPACKLIB)
+../xlintstds: $(DSLINTST) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(DSLINTST) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
-xlintstzc: $(ZCLINTST) ../../$(LAPACKLIB)
+../xlintstzc: $(ZCLINTST) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(ZCLINTST) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
-xlintstrfs: $(SLINTSTRFP) ../../$(LAPACKLIB)
+../xlintstrfs: $(SLINTSTRFP) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(SLINTSTRFP) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
-xlintstrfd: $(DLINTSTRFP) ../../$(LAPACKLIB)
+../xlintstrfd: $(DLINTSTRFP) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(DLINTSTRFP) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
-xlintstrfc: $(CLINTSTRFP) ../../$(LAPACKLIB)
+../xlintstrfc: $(CLINTSTRFP) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(CLINTSTRFP) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
-xlintstrfz: $(ZLINTSTRFP) ../../$(LAPACKLIB)
+../xlintstrfz: $(ZLINTSTRFP) ../../$(LAPACKLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $(ZLINTSTRFP) \
 	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-
-../xlintsts: xlintsts
-	mv xlintsts $@
-
-../xlintstc: xlintstc
-	mv xlintstc $@
-
-../xlintstz: xlintstz
-	mv xlintstz $@
-
-../xlintstd: xlintstd
-	mv xlintstd $@
-
-../xlintstds: xlintstds
-	mv xlintstds $@
-
-../xlintstzc: xlintstzc
-	mv xlintstzc $@
-
-../xlintstrfs: xlintstrfs
-	mv xlintstrfs $@
-
-../xlintstrfc: xlintstrfc
-	mv xlintstrfc $@
-
-../xlintstrfd: xlintstrfd
-	mv xlintstrfd $@
-
-../xlintstrfz: xlintstrfz
-	mv xlintstrfz $@
 
 $(ALINTST): $(FRC)
 $(SCLNTST): $(FRC)

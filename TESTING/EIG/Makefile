@@ -127,24 +127,24 @@ double: ../xeigtstd
 complex16: ../xeigtstz
 
 ../xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) -o xeigtsts \
+	$(LOADER) $(LOADOPTS) -o $@ \
 	$(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) \
-	../../$(LAPACKLIB) $(BLASLIB) && mv xeigtsts $@
+	../../$(LAPACKLIB) $(BLASLIB)
 
 ../xeigtstc: $(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) -o xeigtstc \
+	$(LOADER) $(LOADOPTS) -o $@ \
 	$(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) \
-	../../$(LAPACKLIB) $(BLASLIB) && mv xeigtstc $@
+	../../$(LAPACKLIB) $(BLASLIB)
 
 ../xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) -o xeigtstd \
+	$(LOADER) $(LOADOPTS) -o $@ \
 	$(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) \
-	../../$(LAPACKLIB) $(BLASLIB) && mv xeigtstd $@
+	../../$(LAPACKLIB) $(BLASLIB)
 
 ../xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) -o xeigtstz \
+	$(LOADER) $(LOADOPTS) -o $@ \
 	$(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) \
-	../../$(LAPACKLIB) $(BLASLIB) && mv xeigtstz $@
+	../../$(LAPACKLIB) $(BLASLIB)
 
 $(AEIGTST): $(FRC)
 $(SCIGTST): $(FRC)
