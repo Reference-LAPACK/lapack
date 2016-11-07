@@ -38,11 +38,11 @@
 include ../make.inc
 
 ifneq ($(strip $(VARLIB)),)
-    LAPACKLIB :=  $(VARLIB) ../$(LAPACKLIB)
+    LAPACKLIB := $(VARLIB) ../$(LAPACKLIB)
 endif
 
 
-all:     single complex double complex16 singleproto doubleproto complexproto complex16proto
+all: single complex double complex16 singleproto doubleproto complexproto complex16proto
 
 SEIGTST= snep.out \
          ssep.out \
@@ -52,7 +52,7 @@ SEIGTST= snep.out \
          sgg.out \
          sgd.out \
          ssb.out \
-	 ssg.out \
+         ssg.out \
          sbal.out \
          sbak.out \
          sgbal.out \
@@ -72,7 +72,7 @@ CEIGTST= cnep.out \
          cgg.out \
          cgd.out \
          csb.out \
-	 csg.out \
+         csg.out \
          cbal.out \
          cbak.out \
          cgbal.out \
@@ -92,7 +92,7 @@ DEIGTST= dnep.out \
          dgg.out \
          dgd.out \
          dsb.out \
-	 dsg.out \
+         dsg.out \
          dbal.out \
          dbak.out \
          dgbal.out \
@@ -112,7 +112,7 @@ ZEIGTST= znep.out \
          zgg.out \
          zgd.out \
          zsb.out \
-	 zsg.out \
+         zsg.out \
          zbal.out \
          zbak.out \
          zgbal.out \
@@ -268,7 +268,7 @@ sgbak.out: sgbak.in xeigtsts
 	./xeigtsts < sgbak.in > $@ 2>&1
 
 sbb.out: sbb.in xeigtsts
-	@echo SBB:  Testing banded Singular Value Decomposition routines
+	@echo SBB: Testing banded Singular Value Decomposition routines
 	./xeigtsts < sbb.in > $@ 2>&1
 
 sglm.out: glm.in xeigtsts
@@ -346,7 +346,7 @@ cgbak.out: cgbak.in xeigtstc
 	./xeigtstc < cgbak.in > $@ 2>&1
 
 cbb.out: cbb.in xeigtstc
-	@echo CBB:  Testing banded Singular Value Decomposition routines
+	@echo CBB: Testing banded Singular Value Decomposition routines
 	./xeigtstc < cbb.in > $@ 2>&1
 
 cglm.out: glm.in xeigtstc
@@ -412,7 +412,7 @@ dbal.out: dbal.in xeigtstd
 	./xeigtstd < dbal.in > $@ 2>&1
 
 dbak.out: dbak.in xeigtstd
-	@echo DGEBAK:  Testing the back transformation of a DOUBLE PRECISION balanced matrix
+	@echo DGEBAK: Testing the back transformation of a DOUBLE PRECISION balanced matrix
 	./xeigtstd < dbak.in > $@ 2>&1
 
 dgbal.out: dgbal.in xeigtstd
@@ -424,7 +424,7 @@ dgbak.out: dgbak.in xeigtstd
 	./xeigtstd < dgbak.in > $@ 2>&1
 
 dbb.out: dbb.in xeigtstd
-	@echo DBB:  Testing banded Singular Value Decomposition routines
+	@echo DBB: Testing banded Singular Value Decomposition routines
 	./xeigtstd < dbb.in > $@ 2>&1
 
 dglm.out: glm.in xeigtstd
@@ -526,46 +526,46 @@ zlse.out: lse.in xeigtstz
 	./xeigtstz < lse.in > $@ 2>&1
 # ==============================================================================
 
-xlintsts:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintsts: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) single
 
-xlintstc:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstc: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) complex
 
-xlintstd:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstd: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) double
 
-xlintstz:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstz: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) complex16
 
-xlintstrfs:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstrfs: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) proto-single
 
-xlintstrfc:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstrfc: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) proto-complex
 
-xlintstrfd:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstrfd: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) proto-double
 
-xlintstrfz:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstrfz: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) proto-complex16
 
-xlintstds:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstds: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) proto-double
 
-xlintstzc:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
+xlintstzc: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCLIN) $(FRC)
 	cd LIN ; $(MAKE) proto-complex16
 
-xeigtsts:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
+xeigtsts: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
 	cd EIG ; $(MAKE) single
 
-xeigtstc:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
+xeigtstc: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
 	cd EIG ; $(MAKE) complex
 
-xeigtstd:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
+xeigtstd: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
 	cd EIG ; $(MAKE) double
 
-xeigtstz:	../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
+xeigtstz: ../$(LAPACKLIB) ../$(TMGLIB) $(FRCEIG) $(FRC)
 	cd EIG ; $(MAKE) complex16
 
 clean:

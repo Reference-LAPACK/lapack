@@ -61,4 +61,3 @@ cleanlib:
 cleanall: clean
 	rm -f $(LAPACKE)
 	cd example && $(MAKE) clean
-
