@@ -522,11 +522,11 @@ clean:
 	rm -f *.o DEPRECATED/*.o
 
 .f.o:
-	$(FORTRAN) $(OPTS) -c $< -o $@
+	$(FORTRAN) $(OPTS) -c -o $@ $<
 
-slaruv.o: slaruv.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
-dlaruv.o: dlaruv.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
-sla_wwaddw.o: sla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
-dla_wwaddw.o: dla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
-cla_wwaddw.o: cla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
-zla_wwaddw.o: zla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
+slaruv.o: slaruv.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
+dlaruv.o: dlaruv.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
+sla_wwaddw.o: sla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
+dla_wwaddw.o: dla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
+cla_wwaddw.o: cla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
+zla_wwaddw.o: zla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<

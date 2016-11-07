@@ -253,44 +253,44 @@ proto-complex: ../xlintstrfc
 proto-complex16: ../xlintstzc ../xlintstrfz
 
 xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(ALINTST) $(SCLNTST) $(SLINTST) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(ALINTST) $(SCLNTST) $(SLINTST) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 
 xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(ALINTST) $(SCLNTST) $(CLINTST) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(ALINTST) $(SCLNTST) $(CLINTST) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 
 xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $^ \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $^ \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 
 xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(ALINTST) $(DZLNTST) $(ZLINTST) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(ALINTST) $(DZLNTST) $(ZLINTST) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 
 xlintstds: $(DSLINTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(DSLINTST) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(DSLINTST) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
 xlintstzc: $(ZCLINTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(ZCLINTST) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(ZCLINTST) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
 xlintstrfs: $(SLINTSTRFP) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(SLINTSTRFP) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(SLINTSTRFP) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
 xlintstrfd: $(DLINTSTRFP) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(DLINTSTRFP) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(DLINTSTRFP) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
 xlintstrfc: $(CLINTSTRFP) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(CLINTSTRFP) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(CLINTSTRFP) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
 xlintstrfz: $(ZLINTSTRFP) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) $(ZLINTSTRFP) \
-	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB) -o $@
+	$(LOADER) $(LOADOPTS) -o $@ $(ZLINTSTRFP) \
+	../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 
 ../xlintsts: xlintsts
 	mv xlintsts $@
@@ -337,15 +337,15 @@ clean:
 	rm -f *.o
 
 schkaa.o: schkaa.f
-	$(FORTRAN) $(DRVOPTS) -c $< -o $@
+	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
 dchkaa.o: dchkaa.f
-	$(FORTRAN) $(DRVOPTS) -c $< -o $@
+	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
 cchkaa.o: cchkaa.f
-	$(FORTRAN) $(DRVOPTS) -c $< -o $@
+	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
 zchkaa.o: zchkaa.f
-	$(FORTRAN) $(DRVOPTS) -c $< -o $@
+	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
 
 .f.o:
-	$(FORTRAN) $(OPTS) -c $< -o $@
+	$(FORTRAN) $(OPTS) -c -o $@ $<
 
 .NOTPARALLEL:

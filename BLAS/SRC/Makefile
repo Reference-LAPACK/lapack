@@ -168,4 +168,4 @@ clean:
 	rm -f *.o
 
 .f.o:
-	$(FORTRAN) $(OPTS) -c $< -o $@
+	$(FORTRAN) $(OPTS) -c -o $@ $<

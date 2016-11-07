@@ -41,16 +41,16 @@ complex: ../xblat2c
 complex16: ../xblat2z
 
 ../xblat2s: $(SBLAT2)
-	$(LOADER) $(LOADOPTS) $(SBLAT2) $(BLASLIB) -o ../xblat2s
+	$(LOADER) $(LOADOPTS) -o ../xblat2s $(SBLAT2) $(BLASLIB)
 
 ../xblat2c: $(CBLAT2)
-	$(LOADER) $(LOADOPTS) $(CBLAT2) $(BLASLIB) -o ../xblat2c
+	$(LOADER) $(LOADOPTS) -o ../xblat2c $(CBLAT2) $(BLASLIB)
 
 ../xblat2d: $(DBLAT2)
-	$(LOADER) $(LOADOPTS) $(DBLAT2) $(BLASLIB) -o ../xblat2d
+	$(LOADER) $(LOADOPTS) -o ../xblat2d $(DBLAT2) $(BLASLIB)
 
 ../xblat2z: $(ZBLAT2)
-	$(LOADER) $(LOADOPTS) $(ZBLAT2) $(BLASLIB) -o ../xblat2z
+	$(LOADER) $(LOADOPTS) -o ../xblat2z $(ZBLAT2) $(BLASLIB)
 
 $(SBLAT2): $(FRC)
 $(CBLAT2): $(FRC)
@@ -64,4 +64,4 @@ clean:
 	rm -f *.o
 
 .f.o:
-	$(FORTRAN) $(OPTS) -c $< -o $@
+	$(FORTRAN) $(OPTS) -c -o $@ $<

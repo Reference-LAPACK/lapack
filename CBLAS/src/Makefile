@@ -248,7 +248,7 @@ FRC:
 	@FRC=$(FRC)
 
 .c.o:
-	$(CC) -c $(CFLAGS) -I ../include -o $@ $<
+	$(CC) $(CFLAGS) -I../include -c -o $@ $<
 
 .f.o:
-	$(FORTRAN) $(OPTS) -c $< -o $@
+	$(FORTRAN) $(OPTS) -c -o $@ $<

@@ -3,11 +3,11 @@ include ../../make.inc
 all: example1 example2
 
 example1:
-	$(CC) -c $(CFLAGS) -I../include cblas_example1.c
+	$(CC) $(CFLAGS) -I../include -c cblas_example1.c
 	$(LOADER) $(LOADOPTS) -o cblas_ex1 cblas_example1.o $(CBLASLIB) $(BLASLIB)
 
 example2:
-	$(CC) -c $(CFLAGS) -I../include cblas_example2.c
+	$(CC) $(CFLAGS) -I../include -c cblas_example2.c
 	$(LOADER) $(LOADOPTS) -o cblas_ex2 cblas_example2.o $(CBLASLIB) $(BLASLIB)
 
 cleanall:
