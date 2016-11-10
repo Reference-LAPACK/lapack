@@ -48,17 +48,17 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date April 2012
+*> \date November 2016
 *
 *> \ingroup single_lin
 *
 *  =====================================================================
       SUBROUTINE SERRVX( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.4.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     April 2012
+*     November 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
@@ -80,8 +80,8 @@
 *     .. Local Arrays ..
       INTEGER            IP( NMAX ), IW( NMAX )
       REAL               A( NMAX, NMAX ), AF( NMAX, NMAX ), B( NMAX ),
-     $                   C( NMAX ), R( NMAX ), R1( NMAX ), R2( NMAX ),
-     $                   W( 2*NMAX ), X( NMAX )
+     $                   C( NMAX ), E( NMAX ), R( NMAX ), R1( NMAX ),
+     $                   R2( NMAX ), W( 2*NMAX ), X( NMAX )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAMEN
@@ -91,7 +91,7 @@
       EXTERNAL           CHKXER, SGBSV, SGBSVX, SGESV, SGESVX, SGTSV,
      $                   SGTSVX, SPBSV, SPBSVX, SPOSV, SPOSVX, SPPSV,
      $                   SPPSVX, SPTSV, SPTSVX, SSPSV, SSPSVX, SSYSV,
-     $                   SSYSV_AASEN, SSYSV_ROOK, SSYSVX
+     $                   SSYSV_AASEN, SSYSV_RK, SSYSV_ROOK, SSYSVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -118,13 +118,14 @@
             A( I, J ) = 1. / REAL( I+J )
             AF( I, J ) = 1. / REAL( I+J )
    10    CONTINUE
-         B( J ) = 0.
-         R1( J ) = 0.
-         R2( J ) = 0.
-         W( J ) = 0.
-         X( J ) = 0.
-         C( J ) = 0.
-         R( J ) = 0.
+         B( J ) = 0.E+0
+         E( J ) = 0.E+0
+         R1( J ) = 0.E+0
+         R2( J ) = 0.E+0
+         W( J ) = 0.E+0
+         X( J ) = 0.E+0
+         C( J ) = 0.E+0
+         R( J ) = 0.E+0
          IP( J ) = J
    20 CONTINUE
       EQ = ' '
@@ -586,6 +587,12 @@
          INFOT = 8
          CALL SSYSV( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
          CALL CHKXER( 'SSYSV ', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SSYSV( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'SSYSV ', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SSYSV( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
+         CALL CHKXER( 'SSYSV ', INFOT, NOUT, LERR, OK )
 *
 *        SSYSVX
 *
@@ -627,24 +634,6 @@
      $                RCOND, R1, R2, W, 3, IW, INFO )
          CALL CHKXER( 'SSYSVX', INFOT, NOUT, LERR, OK )
 *
-      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
-*
-*        SSYSV_AASEN
-*
-        SRNAMT = 'SSYSV_AASEN'
-        INFOT = 1
-        CALL SSYSV_AASEN( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
-        INFOT = 2
-        CALL SSYSV_AASEN( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
-        INFOT = 3
-        CALL SSYSV_AASEN( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
-        INFOT = 8
-        CALL SSYSV_AASEN( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
-*
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        SSYSV_ROOK
@@ -662,6 +651,65 @@
          INFOT = 8
          CALL SSYSV_ROOK( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
          CALL CHKXER( 'SSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SSYSV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'SSYSV_ROOK', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SSYSV_ROOK( 'U', 0, 0, A, 1, IP, B, 1, W, -2, INFO )
+         CALL CHKXER( 'SSYSV_ROOK', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'SK' ) ) THEN
+*
+*        SSYSV_RK
+*
+*        Test error exits of the driver that uses factorization
+*        of a symmetric indefinite matrix with rook
+*        (bounded Bunch-Kaufman) pivoting with the new storage
+*        format for factors L ( or U) and D.
+*
+*        L (or U) is stored in A, diagonal of D is stored on the
+*        diagonal of A, subdiagonal of D is stored in a separate array E.
+*
+         SRNAMT = 'SSYSV_RK'
+         INFOT = 1
+         CALL SSYSV_RK( '/', 0, 0, A, 1, E, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_RK', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SSYSV_RK( 'U', -1, 0, A, 1, E, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_RK', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SSYSV_RK( 'U', 0, -1, A, 1, E, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_RK', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SSYSV_RK( 'U', 2, 0, A, 1, E, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_RK', INFOT, NOUT, LERR, OK )
+         INFOT = 9
+         CALL SSYSV_RK( 'U', 2, 0, A, 2, E, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_RK', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL SSYSV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'SSYSV_RK', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL SSYSV_RK( 'U', 0, 0, A, 1, E, IP, B, 1, W, -2, INFO )
+         CALL CHKXER( 'SSYSV_RK', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        SSYSV_AASEN
+*
+         SRNAMT = 'SSYSV_AASEN'
+         INFOT = 1
+         CALL SSYSV_AASEN( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SSYSV_AASEN( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SSYSV_AASEN( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SSYSV_AASEN( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
