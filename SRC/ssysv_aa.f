@@ -180,7 +180,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            LWKOPT
+      INTEGER            LWKOPT, LWKOPT_SYTRF, LWKOPT_SYTRS
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -213,10 +213,16 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL SSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
-         LWKOPT = WORK(1)
-         LWKOPT = MAX( 3*N-2, LWKOPT )
+         CALL SSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
+         LWKOPT_SYTRF = INT( WORK(1) )
+         CALL SSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+     $                   -1, INFO )
+         LWKOPT_SYTRS = INT( WORK(1) )
+         LWKOPT = MAX( LWKOPT_SYTRF, LWKOPT_SYTRS )
          WORK( 1 ) = LWKOPT
+         IF( LWORK.LT.LWKOPT .AND. .NOT.LQUERY ) THEN
+            INFO = -10
+         END IF
       END IF
 *
       IF( INFO.NE.0 ) THEN
