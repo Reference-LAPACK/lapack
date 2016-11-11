@@ -26,74 +26,64 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native middle-level C interface to LAPACK function dsytrs_aasen
+* Contents: Native middle-level C interface to LAPACK function chetrf
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsytrs_aasen_work( int matrix_layout, char uplo, lapack_int n,
-                                 lapack_int nrhs, const double* a,
-                                 lapack_int lda, const lapack_int* ipiv,
-                                 double* b, lapack_int ldb, double* work, lapack_int lwork )
+lapack_int LAPACKE_chetrf_aa_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_complex_float* a, lapack_int lda,
+                                lapack_int* ipiv, lapack_complex_float* work,
+                                lapack_int lwork )
 {
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_dsytrs_aasen( &uplo, &n, &nrhs, a, &lda, ipiv, b, &ldb, work, &lwork, &info );
+        LAPACK_chetrf( &uplo, &n, a, &lda, ipiv, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
-        lapack_int ldb_t = MAX(1,n);
-        double* a_t = NULL;
-        double* b_t = NULL;
+        lapack_complex_float* a_t = NULL;
         /* Check leading dimension(s) */
         if( lda < n ) {
-            info = -6;
-            LAPACKE_xerbla( "LAPACKE_dsytrs_aasen_work", info );
+            info = -5;
+            LAPACKE_xerbla( "LAPACKE_chetrf_aa_work", info );
             return info;
         }
-        if( ldb < nrhs ) {
-            info = -9;
-            LAPACKE_xerbla( "LAPACKE_dsytrs_aasen_work", info );
-            return info;
+        /* Query optimal working array(s) size if requested */
+        if( lwork == -1 ) {
+            LAPACK_chetrf( &uplo, &n, a, &lda_t, ipiv, work, &lwork, &info );
+            return (info < 0) ? (info - 1) : info;
         }
         /* Allocate memory for temporary array(s) */
-        a_t = (double*)LAPACKE_malloc( sizeof(double) * lda_t * MAX(1,n) );
+        a_t = (lapack_complex_float*)
+            LAPACKE_malloc( sizeof(lapack_complex_float) * lda_t * MAX(1,n) );
         if( a_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        b_t = (double*)LAPACKE_malloc( sizeof(double) * ldb_t * MAX(1,nrhs) );
-        if( b_t == NULL ) {
-            info = LAPACK_TRANSPOSE_MEMORY_ERROR;
-            goto exit_level_1;
-        }
         /* Transpose input matrices */
-        LAPACKE_dsy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
-        LAPACKE_dge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_che_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_dsytrs_aasen( &uplo, &n, &nrhs, a_t, &lda_t, ipiv, b_t, &ldb_t, work,
-                        &lwork, &info );
+        LAPACK_chetrf( &uplo, &n, a_t, &lda_t, ipiv, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_dge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_che_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
         /* Release memory and exit */
-        LAPACKE_free( b_t );
-exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_dsytrs_aasen_work", info );
+            LAPACKE_xerbla( "LAPACKE_chetrf_aa_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_dsytrs_aasen_work", info );
+        LAPACKE_xerbla( "LAPACKE_chetrf_aa_work", info );
     }
     return info;
 }

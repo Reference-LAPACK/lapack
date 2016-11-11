@@ -221,8 +221,8 @@ lapacke_cherfs.o \
 lapacke_cherfs_work.o \
 lapacke_chesv.o \
 lapacke_chesv_work.o \
-lapacke_chesv_aasen.o \
-lapacke_chesv_aasen_work.o \
+lapacke_chesv_aa.o \
+lapacke_chesv_aa_work.o \
 lapacke_chesvx.o \
 lapacke_chesvx_work.o \
 lapacke_cheswapr.o \
@@ -233,6 +233,8 @@ lapacke_chetrf.o \
 lapacke_chetrf_rook.o \
 lapacke_chetrf_work.o \
 lapacke_chetrf_rook_work.o \
+lapacke_chetrf_aa.o \
+lapacke_chetrf_aa_work.o \
 lapacke_chetri.o \
 lapacke_chetri2.o \
 lapacke_chetri2_work.o \
@@ -245,8 +247,8 @@ lapacke_chetrs2.o \
 lapacke_chetrs2_work.o \
 lapacke_chetrs_work.o \
 lapacke_chetrs_rook_work.o \
-lapacke_chetrs_aasen.o \
-lapacke_chetrs_aasen_work.o \
+lapacke_chetrs_aa.o \
+lapacke_chetrs_aa_work.o \
 lapacke_chfrk.o \
 lapacke_chfrk_work.o \
 lapacke_chgeqz.o \
@@ -985,8 +987,8 @@ lapacke_dsysv.o \
 lapacke_dsysv_rook.o \
 lapacke_dsysv_rook_work.o \
 lapacke_dsysv_work.o \
-lapacke_dsysv_aasen.o \
-lapacke_dsysv_aasen_work.o \
+lapacke_dsysv_aa.o \
+lapacke_dsysv_aa_work.o \
 lapacke_dsysvx.o \
 lapacke_dsysvx_work.o \
 lapacke_dsyswapr.o \
@@ -997,6 +999,8 @@ lapacke_dsytrf.o \
 lapacke_dsytrf_work.o \
 lapacke_dsytrf_rook.o \
 lapacke_dsytrf_rook_work.o \
+lapacke_dsytrf_aa.o \
+lapacke_dsytrf_aa_work.o \
 lapacke_dsytri.o \
 lapacke_dsytri2.o \
 lapacke_dsytri2_work.o \
@@ -1009,8 +1013,8 @@ lapacke_dsytrs2.o \
 lapacke_dsytrs2_work.o \
 lapacke_dsytrs_work.o \
 lapacke_dsytrs_rook_work.o \
-lapacke_dsytrs_aasen.o \
-lapacke_dsytrs_aasen_work.o \
+lapacke_dsytrs_aa.o \
+lapacke_dsytrs_aa_work.o \
 lapacke_dtbcon.o \
 lapacke_dtbcon_work.o \
 lapacke_dtbrfs.o \
@@ -1497,8 +1501,8 @@ lapacke_ssysv.o \
 lapacke_ssysv_rook.o \
 lapacke_ssysv_rook_work.o \
 lapacke_ssysv_work.o \
-lapacke_ssysv_aasen.o \
-lapacke_ssysv_aasen_work.o \
+lapacke_ssysv_aa.o \
+lapacke_ssysv_aa_work.o \
 lapacke_ssysvx.o \
 lapacke_ssysvx_work.o \
 lapacke_ssyswapr.o \
@@ -1509,6 +1513,8 @@ lapacke_ssytrf.o \
 lapacke_ssytrf_work.o \
 lapacke_ssytrf_rook.o \
 lapacke_ssytrf_rook_work.o \
+lapacke_ssytrf_aa.o \
+lapacke_ssytrf_aa_work.o \
 lapacke_ssytri.o \
 lapacke_ssytri2.o \
 lapacke_ssytri2_work.o \
@@ -1521,8 +1527,8 @@ lapacke_ssytrs2.o \
 lapacke_ssytrs2_work.o \
 lapacke_ssytrs_work.o \
 lapacke_ssytrs_rook_work.o \
-lapacke_ssytrs_aasen.o \
-lapacke_ssytrs_aasen_work.o \
+lapacke_ssytrs_aa.o \
+lapacke_ssytrs_aa_work.o \
 lapacke_stbcon.o \
 lapacke_stbcon_work.o \
 lapacke_stbrfs.o \
@@ -1783,8 +1789,8 @@ lapacke_zherfs.o \
 lapacke_zherfs_work.o \
 lapacke_zhesv.o \
 lapacke_zhesv_work.o \
-lapacke_zhesv_aasen.o \
-lapacke_zhesv_aasen_work.o \
+lapacke_zhesv_aa.o \
+lapacke_zhesv_aa_work.o \
 lapacke_zhesvx.o \
 lapacke_zhesvx_work.o \
 lapacke_zheswapr.o \
@@ -1795,6 +1801,8 @@ lapacke_zhetrf.o \
 lapacke_zhetrf_rook.o \
 lapacke_zhetrf_work.o \
 lapacke_zhetrf_rook_work.o \
+lapacke_zhetrf_aa.o \
+lapacke_zhetrf_aa_work.o \
 lapacke_zhetri.o \
 lapacke_zhetri2.o \
 lapacke_zhetri2_work.o \
@@ -1807,8 +1815,8 @@ lapacke_zhetrs2.o \
 lapacke_zhetrs2_work.o \
 lapacke_zhetrs_work.o \
 lapacke_zhetrs_rook_work.o \
-lapacke_zhetrs_aasen.o \
-lapacke_zhetrs_aasen_work.o \
+lapacke_zhetrs_aa.o \
+lapacke_zhetrs_aa_work.o \
 lapacke_zhfrk.o \
 lapacke_zhfrk_work.o \
 lapacke_zhgeqz.o \

@@ -26,74 +26,79 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native middle-level C interface to LAPACK function ssytrs_aasen
+* Contents: Native middle-level C interface to LAPACK function zhetrs_aa
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssytrs_aasen_work( int matrix_layout, char uplo, lapack_int n,
-                                 lapack_int nrhs, const float* a,
-                                 lapack_int lda, const lapack_int* ipiv,
-                                 float* b, lapack_int ldb, float* work, lapack_int lwork )
+lapack_int LAPACKE_zhetrs_aa_work( int matrix_layout, char uplo, lapack_int n,
+                                 lapack_int nrhs,
+                                 const lapack_complex_double* a, lapack_int lda,
+                                 const lapack_int* ipiv,
+                                 lapack_complex_double* b, lapack_int ldb,
+                                 lapack_complex_double* work, lapack_int lwork )
 {
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_ssytrs_aasen( &uplo, &n, &nrhs, a, &lda, ipiv, b, &ldb, work, &lwork, &info );
+        LAPACK_zhetrs_aa( &uplo, &n, &nrhs, a, &lda, ipiv, b, &ldb, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,n);
         lapack_int ldb_t = MAX(1,n);
-        float* a_t = NULL;
-        float* b_t = NULL;
+        lapack_complex_double* a_t = NULL;
+        lapack_complex_double* b_t = NULL;
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_ssytrs_aasen_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhetrs_aa_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_ssytrs_aasen_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhetrs_aa_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
-        a_t = (float*)LAPACKE_malloc( sizeof(float) * lda_t * MAX(1,n) );
+        a_t = (lapack_complex_double*)
+            LAPACKE_malloc( sizeof(lapack_complex_double) * lda_t * MAX(1,n) );
         if( a_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_0;
         }
-        b_t = (float*)LAPACKE_malloc( sizeof(float) * ldb_t * MAX(1,nrhs) );
+        b_t = (lapack_complex_double*)
+            LAPACKE_malloc( sizeof(lapack_complex_double) *
+                            ldb_t * MAX(1,nrhs) );
         if( b_t == NULL ) {
             info = LAPACK_TRANSPOSE_MEMORY_ERROR;
             goto exit_level_1;
         }
         /* Transpose input matrices */
-        LAPACKE_ssy_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
-        LAPACKE_sge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
+        LAPACKE_zhe_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
+        LAPACKE_zge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_ssytrs_aasen( &uplo, &n, &nrhs, a_t, &lda_t, ipiv, b_t, &ldb_t, work,
+        LAPACK_zhetrs_aa( &uplo, &n, &nrhs, a_t, &lda_t, ipiv, b_t, &ldb_t, work,
                         &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
         /* Transpose output matrices */
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ssytrs_aasen_work", info );
+            LAPACKE_xerbla( "LAPACKE_zhetrs_aa_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ssytrs_aasen_work", info );
+        LAPACKE_xerbla( "LAPACKE_zhetrs_aa_work", info );
     }
     return info;
 }

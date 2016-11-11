@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native middle-level C interface to LAPACK function chetrs_aasen
+* Contents: Native middle-level C interface to LAPACK function chetrs_aa
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_chetrs_aasen_work( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_chetrs_aa_work( int matrix_layout, char uplo, lapack_int n,
                                  lapack_int nrhs, const lapack_complex_float* a,
                                  lapack_int lda, const lapack_int* ipiv,
                                  lapack_complex_float* b, lapack_int ldb,
@@ -42,7 +42,7 @@ lapack_int LAPACKE_chetrs_aasen_work( int matrix_layout, char uplo, lapack_int n
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_chetrs_aasen( &uplo, &n, &nrhs, a, &lda, ipiv, b, &ldb, work, &lwork, &info );
+        LAPACK_chetrs_aa( &uplo, &n, &nrhs, a, &lda, ipiv, b, &ldb, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
@@ -54,12 +54,12 @@ lapack_int LAPACKE_chetrs_aasen_work( int matrix_layout, char uplo, lapack_int n
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_chetrs_aasen_work", info );
+            LAPACKE_xerbla( "LAPACKE_chetrs_aa_work", info );
             return info;
         }
         if( ldb < nrhs ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_chetrs_aasen_work", info );
+            LAPACKE_xerbla( "LAPACKE_chetrs_aa_work", info );
             return info;
         }
         /* Allocate memory for temporary array(s) */
@@ -80,7 +80,7 @@ lapack_int LAPACKE_chetrs_aasen_work( int matrix_layout, char uplo, lapack_int n
         LAPACKE_che_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         LAPACKE_cge_trans( matrix_layout, n, nrhs, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_chetrs_aasen( &uplo, &n, &nrhs, a_t, &lda_t, ipiv, b_t, &ldb_t, work,
+        LAPACK_chetrs_aa( &uplo, &n, &nrhs, a_t, &lda_t, ipiv, b_t, &ldb_t, work,
                          &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
@@ -93,11 +93,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_chetrs_aasen_work", info );
+            LAPACKE_xerbla( "LAPACKE_chetrs_aa_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_chetrs_aasen_work", info );
+        LAPACKE_xerbla( "LAPACKE_chetrs_aa_work", info );
     }
     return info;
 }

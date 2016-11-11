@@ -26,56 +26,53 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native high-level C interface to LAPACK function dsytrs_aasen
+* Contents: Native high-level C interface to LAPACK function zhetrf
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_dsytrs_aasen( int matrix_layout, char uplo, lapack_int n,
-                            lapack_int nrhs, const double* a, lapack_int lda,
-                            const lapack_int* ipiv, double* b, lapack_int ldb )
+lapack_int LAPACKE_zhetrf( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_double* a, lapack_int lda,
+                           lapack_int* ipiv )
 {
     lapack_int info = 0;
     lapack_int lwork = -1;
-    double* work = NULL;
-    double work_query;
+    lapack_complex_double* work = NULL;
+    lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_dsytrs_aasen", -1 );
+        LAPACKE_xerbla( "LAPACKE_zhetrf", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
-        return -5;
-    }
-    if( LAPACKE_dge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
-        return -8;
+    if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+        return -4;
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_dsytrs_aasen_work( matrix_layout, uplo, n, nrhs, a, lda, ipiv, b,
-                                 ldb, &work_query, lwork );
+    info = LAPACKE_zhetrf_aa_work( matrix_layout, uplo, n, a, lda, ipiv,
+                                &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
     }
-	lwork = (lapack_int)work_query;
+    lwork = LAPACK_Z2INT( work_query );
     /* Allocate memory for work arrays */
-    work = (double*)
-        LAPACKE_malloc( sizeof(double) * lwork );
+    work = (lapack_complex_double*)
+        LAPACKE_malloc( sizeof(lapack_complex_double) * lwork );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_dsytrs_aasen_work( matrix_layout, uplo, n, nrhs, a, lda, ipiv, b,
-                                 ldb, work, lwork );
+    info = LAPACKE_zhetrf_aa_work( matrix_layout, uplo, n, a, lda, ipiv, work,
+                                lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_dsytrs_aasen", info );
+        LAPACKE_xerbla( "LAPACKE_zhetrf", info );
     }
     return info;
 }
