@@ -182,7 +182,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            LWKOPT, NB
+      INTEGER            LWKOPT, LWKOPT_HETRF, LWKOPT_HETRS
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -211,14 +211,19 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.MAX(2*N, 3*N-2) .AND. .NOT.LQUERY ) THEN
-         INFO = -10
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = ILAENV( 1, 'CHETRF_AA', UPLO, N, -1, -1, -1 )
-         LWKOPT = MAX( 3*N-2, (1+NB)*N )
+         CALL CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
+         LWKOPT_HETRF = INT( WORK(1) )
+         CALL CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+     $                   -1, INFO )
+         LWKOPT_HETRS = INT( WORK(1) )
+         LWKOPT = MAX( LWKOPT_HETRF, LWKOPT_HETRS )
          WORK( 1 ) = LWKOPT
+         IF( LWORK.LT.LWKOPT .AND. .NOT.LQUERY ) THEN
+            INFO = -10
+         END IF
       END IF
 *
       IF( INFO.NE.0 ) THEN

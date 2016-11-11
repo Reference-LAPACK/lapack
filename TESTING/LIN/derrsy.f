@@ -88,8 +88,9 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, DSPCON, DSPRFS, DSPTRF, DSPTRI,
      $                   DSPTRS, DSYCON, DSYCON_ROOK, DSYRFS, DSYTF2,
-     $                   DSYTF2_ROOK, DSYTRF, DSYTRF_ROOK, DSYTRI,
-     $                   DSYTRI_ROOK, DSYTRI2, DSYTRS, DSYTRS_ROOK
+     $                   DSYTF2_ROOK, DSYTRF, DSYTRF_ROOK, DSYTRF_AA,
+     $                   DSYTRI, DSYTRI_ROOK, DSYTRI2, DSYTRS, 
+     $                   DSYTRS_ROOK, DSYTRS_AA
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -333,6 +334,42 @@
          CALL DSYCON_ROOK( 'U', 1, A, 1, IP, -1.0D0, RCOND, W, IW, INFO)
          CALL CHKXER( 'DSYCON_ROOK', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with Aasen's algorithm.
+*
+*        DSYTRF_AA
+*
+         SRNAMT = 'DSYTRF_AA'
+         INFOT = 1
+         CALL DSYTRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DSYTRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'DSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL DSYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'DSYTRF_AA', INFOT, NOUT, LERR, OK )
+*
+*        DSYTRS_AA
+*
+         SRNAMT = 'DSYTRS_AA'
+         INFOT = 1
+         CALL DSYTRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL DSYTRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL DSYTRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL DSYTRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL DSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        Test error exits of the routines that use factorization

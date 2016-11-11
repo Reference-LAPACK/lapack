@@ -9,8 +9,8 @@
 *  ===========
 *
 *       SUBROUTINE ZCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
-*                                THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
-*                                XACT, WORK, RWORK, IWORK, NOUT )
+*                             THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
+*                             XACT, WORK, RWORK, IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -169,8 +169,8 @@
 *
 *  =====================================================================
       SUBROUTINE ZCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
-     $                         THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
-     $                         X, XACT, WORK, RWORK, IWORK, NOUT )
+     $                      THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
+     $                      X, XACT, WORK, RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
