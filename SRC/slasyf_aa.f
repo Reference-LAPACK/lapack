@@ -256,7 +256,7 @@
 *           Compute WORK(2:N) = T(J, J) L(J, (J+1):N)
 *            where A(J, J) stores T(J, J) and A(J-1, (J+1):N) stores U(J, (J+1):N)
 *
-            IF( (J1+J-1).GT.1 ) THEN
+            IF( K.GT.1 ) THEN
                ALPHA = -A( K, J )
                CALL SAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA,
      $                                 WORK( 2 ), 1 )
@@ -406,7 +406,7 @@
 *           Compute WORK(2:N) = T(J, J) L((J+1):N, J)
 *            where A(J, J) = T(J, J) and A((J+1):N, J-1) = L((J+1):N, J)
 *
-            IF( (J1+J-1).GT.1 ) THEN
+            IF( K.GT.1 ) THEN
                ALPHA = -A( J, K )
                CALL SAXPY( M-J, ALPHA, A( J+1, K-1 ), 1,
      $                                 WORK( 2 ), 1 )
