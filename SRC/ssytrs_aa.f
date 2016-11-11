@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE SSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
-*                                WORK, LWORK, INFO )
+*                             WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -127,7 +127,7 @@
 *
 *  =====================================================================
       SUBROUTINE SSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
-     $                         WORK, LWORK, INFO )
+     $                      WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
