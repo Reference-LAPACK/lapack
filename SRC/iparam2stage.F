@@ -274,13 +274,21 @@
 *     Could be also dependent from N but for now it
 *     depend only on sequential or parallel
 *
-      IF( NTHREADS.GT.1 ) THEN
+      IF( NTHREADS.GT.4 ) THEN
           IF( CPREC ) THEN
               KD = 128
               IB = 32
           ELSE
               KD = 160
               IB = 40
+          ENDIF
+      ELSE IF( NTHREADS.GT.1 ) THEN
+          IF( CPREC ) THEN
+              KD = 64
+              IB = 32
+          ELSE
+              KD = 64
+              IB = 32
           ENDIF
       ELSE
           IF( CPREC ) THEN
