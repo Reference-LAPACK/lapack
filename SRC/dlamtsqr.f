@@ -1,8 +1,8 @@
-* 
+*
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE DLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,  
+*      SUBROUTINE DLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
 *     $                     LDT, C, LDC, WORK, LWORK, INFO )
 *
 *
@@ -17,15 +17,15 @@
 *  =============
 *>
 *> \verbatim
-*> 
+*>
 *>      DLAMTSQR overwrites the general real M-by-N matrix C with
 *>
-*>                     
+*>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q * C          C * Q
 *> TRANS = 'T':      Q**T * C       C * Q**T
-*>      where Q is a real orthogonal matrix defined as the product 
-*>      of blocked elementary reflectors computed by tall skinny 
+*>      where Q is a real orthogonal matrix defined as the product
+*>      of blocked elementary reflectors computed by tall skinny
 *>      QR factorization (DLATSQR)
 *> \endverbatim
 *
@@ -59,29 +59,29 @@
 *>          The number of elementary reflectors whose product defines
 *>          the matrix Q.
 *>          N >= K >= 0;
-*>          
+*>
 *> \endverbatim
 *>
 *> \param[in] MB
 *> \verbatim
 *>          MB is INTEGER
-*>          The block size to be used in the blocked QR.  
+*>          The block size to be used in the blocked QR.
 *>          MB > N. (must be the same as DLATSQR)
 *> \endverbatim
 *>
 *> \param[in] NB
 *> \verbatim
 *>          NB is INTEGER
-*>          The column block size to be used in the blocked QR.  
+*>          The column block size to be used in the blocked QR.
 *>          N >= NB >= 1.
 *> \endverbatim
 *>
 *> \param[in,out] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,K)
-*>          The i-th column must contain the vector which defines the 
-*>          blockedelementary reflector H(i), for i = 1,2,...,k, as 
-*>          returned by DLATSQR in the first k columns of 
+*>          The i-th column must contain the vector which defines the
+*>          blockedelementary reflector H(i), for i = 1,2,...,k, as
+*>          returned by DLATSQR in the first k columns of
 *>          its array argument A.
 *> \endverbatim
 *>
@@ -95,7 +95,7 @@
 *>
 *> \param[in] T
 *> \verbatim
-*>          T is DOUBLE PRECISION array, dimension 
+*>          T is DOUBLE PRECISION array, dimension
 *>          ( N * Number of blocks(CEIL(M-K/MB-K)),
 *>          The blocked upper triangular block reflectors stored in compact form
 *>          as a sequence of upper triangular blocks.  See below
@@ -119,13 +119,13 @@
 *> \param[out] WORK
 *> \verbatim
 *>         (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
-*>        
+*>
 *> \endverbatim
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          
+*>
 *>          If SIDE = 'L', LWORK >= max(1,N)*NB;
 *>          if SIDE = 'R', LWORK >= max(1,MB)*NB.
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -172,7 +172,7 @@
 *> block reflectors, stored in array T(1:LDT,(i-1)*N+1:i*N).
 *> The last Q(k) may use fewer rows.
 *> For more information see Further Details in TPQRT.
-*> 
+*>
 *> For more details of the overall algorithm, see the description of
 *> Sequential TSQR in Section 2.2 of [1].
 *>
@@ -182,7 +182,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE DLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T, 
+      SUBROUTINE DLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
      $        LDT, C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
@@ -210,7 +210,7 @@
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     .. External Subroutines ..
-      EXTERNAL           DGEMQRT, DTPMQRT, XERBLA 
+      EXTERNAL           DGEMQRT, DTPMQRT, XERBLA
 *     ..
 *     .. Executable Statements ..
 *
@@ -249,7 +249,7 @@
       END IF
 *
 *     Determine the block size if it is tall skinny or short and wide
-*    
+*
       IF( INFO.EQ.0)  THEN
           WORK(1) = LW
       END IF
@@ -267,10 +267,10 @@
       END IF
 *
       IF((MB.LE.K).OR.(MB.GE.MAX(M,N,K))) THEN
-        CALL DGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA, 
-     $        T, LDT, C, LDC, WORK, INFO)   
+        CALL DGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA,
+     $        T, LDT, C, LDC, WORK, INFO)
         RETURN
-       END IF       
+       END IF
 *
       IF(LEFT.AND.NOTRAN) THEN
 *
@@ -326,7 +326,7 @@
          IF(II.LE.M) THEN
 *
 *         Multiply Q to the last block of C
-*  
+*
           CALL DTPMQRT('L','T',KK , N, K, 0,NB, A(II,1), LDA,
      $      T(1,CTR * K + 1), LDT, C(1,1), LDC,
      $      C(II,1), LDC, WORK, INFO )
@@ -396,7 +396,7 @@
 *
       END IF
 *
-      WORK(1) = LW  
+      WORK(1) = LW
       RETURN
 *
 *     End of DLAMTSQR

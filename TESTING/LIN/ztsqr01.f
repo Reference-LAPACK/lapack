@@ -2,19 +2,19 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE ZTSQR01(TSSW, M,N, MB, NB, RESULT)
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER M, N, MB
 *       .. Return values ..
 *       DOUBLE PRECISION RESULT(6)
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -65,17 +65,17 @@
 *>          RESULT(2) = | I - Q^H Q | or | I - Q Q^H |
 *>          RESULT(3) = | Q C - Q C |
 *>          RESULT(4) = | Q^H C - Q^H C |
-*>          RESULT(5) = | C Q - C Q | 
+*>          RESULT(5) = | C Q - C Q |
 *>          RESULT(6) = | C Q^H - C Q^H |
 *> \endverbatim
 *
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2012
 *
@@ -97,9 +97,9 @@
 *  =====================================================================
 *
 *     ..
-*     .. Local allocatable arrays 
+*     .. Local allocatable arrays
       COMPLEX*16, ALLOCATABLE :: AF(:,:), Q(:,:),
-     $  R(:,:), RWORK(:), WORK( : ), T(:), 
+     $  R(:,:), RWORK(:), WORK( : ), T(:),
      $  CF(:,:), DF(:,:), A(:,:), C(:,:), D(:,:), LQ(:,:)
 *
 *     .. Parameters ..
@@ -122,24 +122,24 @@
       EXTERNAL DLAMCH, ZLANGE, ZLANSY, LSAME, ILAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC  MAX, MIN    
+      INTRINSIC  MAX, MIN
 *     .. Scalars in Common ..
       CHARACTER*32       srnamt
 *     ..
 *     .. Common blocks ..
-      COMMON             / srnamc / srnamt  
+      COMMON             / srnamc / srnamt
 *     ..
 *     .. Data statements ..
-      DATA ISEED / 1988, 1989, 1990, 1991 /   
+      DATA ISEED / 1988, 1989, 1990, 1991 /
 *
 *     TEST TALL SKINNY OR SHORT WIDE
 *
-      TS = LSAME(TSSW, 'TS')   
-*      
+      TS = LSAME(TSSW, 'TS')
+*
 *     TEST MATRICES WITH HALF OF MATRIX BEING ZEROS
 *
       TESTZEROS = .FALSE.
-*      
+*
       EPS = DLAMCH( 'Epsilon' )
       K = MIN(M,N)
       L = MAX(M,N,1)
@@ -148,14 +148,14 @@
       IF((K.GE.MNB).OR.(MNB.GE.L))THEN
          LT=MAX(1,L)*MNB+5
       ELSE
-         LT=MAX(1,(L-K)/(MNB-K)+1)*L*MNB+5   
+         LT=MAX(1,(L-K)/(MNB-K)+1)*L*MNB+5
       END IF
 
 *
 *     Dynamically allocate local arrays
 *
-      ALLOCATE ( A(M,N), AF(M,N), Q(L,L), R(M,L), RWORK(L), 
-     $           WORK(LWORK), T(LT), C(M,N), CF(M,N), 
+      ALLOCATE ( A(M,N), AF(M,N), Q(L,L), R(M,L), RWORK(L),
+     $           WORK(LWORK), T(LT), C(M,N), CF(M,N),
      $           D(N,M), DF(N,M), LQ(L,N) )
 *
 *     Put random numbers into A and copy to AF
@@ -183,7 +183,7 @@
 *
       CALL ZLASET( 'Full', M, M, CZERO, ONE, Q, M )
       srnamt = 'ZGEMQR'
-      CALL ZGEMQR( 'L', 'N', M, M, K, AF, M, T, LT, Q, M, 
+      CALL ZGEMQR( 'L', 'N', M, M, K, AF, M, T, LT, Q, M,
      $              WORK, LWORK, INFO )
 *
 *     Copy R
@@ -220,7 +220,7 @@
 *     Apply Q to C as Q*C
 *
       srnamt = 'ZGEMQR'
-      CALL ZGEMQR( 'L', 'N', M, N, K, AF, M, T, LT, CF, M, 
+      CALL ZGEMQR( 'L', 'N', M, N, K, AF, M, T, LT, CF, M,
      $             WORK, LWORK, INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
@@ -240,7 +240,7 @@
 *     Apply Q to C as QT*C
 *
       srnamt = 'ZGEMQR'
-      CALL ZGEMQR( 'L', 'C', M, N, K, AF, M, T, LT, CF, M, 
+      CALL ZGEMQR( 'L', 'C', M, N, K, AF, M, T, LT, CF, M,
      $             WORK, LWORK, INFO)
 *
 *     Compute |QT*C - QT*C| / |C|
@@ -251,7 +251,7 @@
          RESULT( 4 ) = RESID / (EPS*MAX(1,M)*CNORM)
       ELSE
          RESULT( 4 ) = ZERO
-      END IF     
+      END IF
 *
 *     Generate random n-by-m matrix D and a copy DF
 *
@@ -264,8 +264,8 @@
 *     Apply Q to D as D*Q
 *
       srnamt = 'ZGEMQR'
-      CALL ZGEMQR( 'R', 'N', N, M, K, AF, M, T, LT, DF, N, 
-     $             WORK, LWORK, INFO)      
+      CALL ZGEMQR( 'R', 'N', N, M, K, AF, M, T, LT, DF, N,
+     $             WORK, LWORK, INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
 *
@@ -283,8 +283,8 @@
 *
 *     Apply Q to D as D*QT
 *
-      CALL ZGEMQR( 'R', 'C', N, M, K, AF, M, T, LT, DF, N, 
-     $             WORK, LWORK, INFO)      
+      CALL ZGEMQR( 'R', 'C', N, M, K, AF, M, T, LT, DF, N,
+     $             WORK, LWORK, INFO)
 *
 *     Compute |D*QT - D*QT| / |D|
 *
@@ -307,7 +307,7 @@
 *
       CALL ZLASET( 'Full', N, N, CZERO, ONE, Q, N )
       srnamt = 'ZGEMLQ'
-      CALL ZGEMLQ( 'R', 'N', N, N, K, AF, M, T, LT, Q, N, 
+      CALL ZGEMLQ( 'R', 'N', N, N, K, AF, M, T, LT, Q, N,
      $              WORK, LWORK, INFO )
 *
 *     Copy R
@@ -343,7 +343,7 @@
 *
 *     Apply Q to C as Q*C
 *
-      CALL ZGEMLQ( 'L', 'N', N, M, K, AF, M, T, LT, DF, N, 
+      CALL ZGEMLQ( 'L', 'N', N, M, K, AF, M, T, LT, DF, N,
      $             WORK, LWORK, INFO)
 *
 *     Compute |Q*D - Q*D| / |D|
@@ -362,7 +362,7 @@
 *
 *     Apply Q to D as QT*D
 *
-      CALL ZGEMLQ( 'L', 'C', N, M, K, AF, M, T, LT, DF, N, 
+      CALL ZGEMLQ( 'L', 'C', N, M, K, AF, M, T, LT, DF, N,
      $             WORK, LWORK, INFO)
 *
 *     Compute |QT*D - QT*D| / |D|
@@ -373,7 +373,7 @@
          RESULT( 4 ) = RESID / (EPS*MAX(1,N)*DNORM)
       ELSE
          RESULT( 4 ) = ZERO
-      END IF     
+      END IF
 *
 *     Generate random n-by-m matrix D and a copy DF
 *
@@ -385,8 +385,8 @@
 *
 *     Apply Q to C as C*Q
 *
-      CALL ZGEMLQ( 'R', 'N', M, N, K, AF, M, T, LT, CF, M, 
-     $             WORK, LWORK, INFO)      
+      CALL ZGEMLQ( 'R', 'N', M, N, K, AF, M, T, LT, CF, M,
+     $             WORK, LWORK, INFO)
 *
 *     Compute |C*Q - C*Q| / |C|
 *
@@ -404,8 +404,8 @@
 *
 *     Apply Q to D as D*QT
 *
-      CALL ZGEMLQ( 'R', 'C', M, N, K, AF, M, T, LT, CF, M, 
-     $             WORK, LWORK, INFO)      
+      CALL ZGEMLQ( 'R', 'C', M, N, K, AF, M, T, LT, CF, M,
+     $             WORK, LWORK, INFO)
 *
 *     Compute |C*QT - C*QT| / |C|
 *

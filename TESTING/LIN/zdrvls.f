@@ -488,7 +488,7 @@
      $                                        COPYB, LDB, B, LDB )
                               END IF
                               SRNAMT = 'DGETSLS '
-                              CALL ZGETSLS( TRANS, M, N, NRHS, A, 
+                              CALL ZGETSLS( TRANS, M, N, NRHS, A,
      $                                 LDA, B, LDB, WORK, LWORK, INFO )
                               IF( INFO.NE.0 )
      $                           CALL ALAERH( PATH, 'ZGETSLS ', INFO, 0,
@@ -771,8 +771,8 @@
      $      ', NB=', I4, ', type', I2, ', test(', I2, ')=', G12.5 )
  9998 FORMAT( ' M=', I5, ', N=', I5, ', NRHS=', I4, ', NB=', I4,
      $      ', type', I2, ', test(', I2, ')=', G12.5 )
- 9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,  
-     $      ', MB=', I4,', NB=', I4,', type', I2, 
+ 9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,
+     $      ', MB=', I4,', NB=', I4,', type', I2,
      $      ', test(', I2, ')=', G12.5 )
       RETURN
 *

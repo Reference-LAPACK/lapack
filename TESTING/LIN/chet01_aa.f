@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, 
+*       SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
 *                          C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -145,7 +145,7 @@
 *
 *     .. Parameters ..
       COMPLEX         CZERO, CONE
-      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ), 
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ),
      $                     CONE  = ( 1.0E+0, 0.0E+0 ) )
       REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )

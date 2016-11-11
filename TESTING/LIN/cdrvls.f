@@ -262,8 +262,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASVM, CERRLS, CGELS, CGELSD,
-     $                   CGELSS, CGELSY, CGEMM, CGETSLS, CLACPY, 
-     $                   CLARNV, CQRT13, CQRT15, CQRT16, CSSCAL, 
+     $                   CGELSS, CGELSY, CGEMM, CGETSLS, CLACPY,
+     $                   CLARNV, CQRT13, CQRT15, CQRT16, CSSCAL,
      $                   SAXPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
@@ -490,7 +490,7 @@
      $                                        COPYB, LDB, B, LDB )
                               END IF
                               SRNAMT = 'DGETSLS '
-                              CALL CGETSLS( TRANS, M, N, NRHS, A, 
+                              CALL CGETSLS( TRANS, M, N, NRHS, A,
      $                                 LDA, B, LDB, WORK, LWORK, INFO )
                               IF( INFO.NE.0 )
      $                           CALL ALAERH( PATH, 'CGETSLS ', INFO, 0,
@@ -773,8 +773,8 @@
      $      ', NB=', I4, ', type', I2, ', test(', I2, ')=', G12.5 )
  9998 FORMAT( ' M=', I5, ', N=', I5, ', NRHS=', I4, ', NB=', I4,
      $      ', type', I2, ', test(', I2, ')=', G12.5 )
- 9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,  
-     $      ', MB=', I4,', NB=', I4,', type', I2, 
+ 9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,
+     $      ', MB=', I4,', NB=', I4,', type', I2,
      $      ', test(', I2, ')=', G12.5 )
       RETURN
 *

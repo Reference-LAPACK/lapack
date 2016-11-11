@@ -3,14 +3,14 @@
 *  ===========
 *
 *       SUBROUTINE CGELQT( M, N, MB, A, LDA, T, LDT, WORK, INFO )
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER INFO, LDA, LDT, M, N, MB
 *       ..
 *       .. Array Arguments ..
 *       COMPLEX A( LDA, * ), T( LDT, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -18,7 +18,7 @@
 *> \verbatim
 *>
 *> CGELQT computes a blocked LQ factorization of a complex M-by-N matrix A
-*> using the compact WY representation of Q.  
+*> using the compact WY representation of Q.
 *> \endverbatim
 *
 *  Arguments:
@@ -87,10 +87,10 @@
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date November 2013
 *
@@ -107,14 +107,14 @@
 *>               V = (  1  v1 v1 v1 v1 )
 *>                   (     1  v2 v2 v2 )
 *>                   (         1 v3 v3 )
-*>                   
+*>
 *>
 *>  where the vi's represent the vectors which define H(i), which are returned
-*>  in the matrix A.  The 1's along the diagonal of V are not stored in A.  
+*>  in the matrix A.  The 1's along the diagonal of V are not stored in A.
 *>  Let K=MIN(M,N).  The number of blocks is B = ceiling(K/NB), where each
-*>  block is of order NB except for the last block, which is of order 
+*>  block is of order NB except for the last block, which is of order
 *>  IB = K - (B-1)*NB.  For each of the B blocks, a upper triangular block
-*>  reflector factor is computed: T1, T2, ..., TB.  The NB-by-NB (and IB-by-IB 
+*>  reflector factor is computed: T1, T2, ..., TB.  The NB-by-NB (and IB-by-IB
 *>  for the last block) T's are stored in the NB-by-N matrix T as
 *>
 *>               T = (T1 T2 ... TB).
@@ -174,21 +174,21 @@
 *
       DO I = 1, K,  MB
          IB = MIN( K-I+1, MB )
-*     
+*
 *     Compute the LQ factorization of the current block A(I:M,I:I+IB-1)
-*       
+*
          CALL CGELQT3( IB, N-I+1, A(I,I), LDA, T(1,I), LDT, IINFO )
          IF( I+IB.LE.M ) THEN
 *
 *     Update by applying H**T to A(I:M,I+IB:N) from the right
 *
          CALL CLARFB( 'R', 'N', 'F', 'R', M-I-IB+1, N-I+1, IB,
-     $                   A( I, I ), LDA, T( 1, I ), LDT, 
+     $                   A( I, I ), LDA, T( 1, I ), LDT,
      $                   A( I+IB, I ), LDA, WORK , M-I-IB+1 )
          END IF
       END DO
       RETURN
-*     
+*
 *     End of CGELQT
 *
       END

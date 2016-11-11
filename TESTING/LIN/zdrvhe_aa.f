@@ -150,7 +150,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK, 
+     $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
      $                         RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -201,7 +201,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
-     $                   ZHESV_AA, ZHET01_AA, ZHETRF_AA, 
+     $                   ZHESV_AA, ZHET01_AA, ZHETRF_AA,
      $                   ZHETRI2, ZLACPY, ZLAIPD, ZLARHS, ZLATB4, ZLATMS,
      $                   ZPOT02
 *     ..
@@ -475,7 +475,7 @@ c                     END IF
 *                    residual.
 *
                      CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
-     $                                  IWORK, AINV, LDA, RWORK, 
+     $                                  IWORK, AINV, LDA, RWORK,
      $                                  RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.

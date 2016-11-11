@@ -29,7 +29,7 @@
 *       INTEGER            IPIV( * )
 *       REAL   A( LDA, * ), H( LDH, * ), WORK( * )
 *       ..
-* 
+*
 *
 *> \par Purpose:
 *  =============

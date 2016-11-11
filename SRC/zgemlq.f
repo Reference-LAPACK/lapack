@@ -1,8 +1,8 @@
-* 
+*
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE ZGEMLQ( SIDE, TRANS, M, N, K, A, LDA, WORK1, 
+*      SUBROUTINE ZGEMLQ( SIDE, TRANS, M, N, K, A, LDA, WORK1,
 *     $                LWORK1, C, LDC, WORK2, LWORK2, INFO )
 *
 *
@@ -17,15 +17,15 @@
 *  =============
 *>
 *> \verbatim
-*> 
+*>
 *>     ZGEMLQ overwrites the general real M-by-N matrix C with
 *>
-*>                     
+*>
 *>                    SIDE = 'L'     SIDE = 'R'
 *>    TRANS = 'N':      Q * C          C * Q
 *>    TRANS = 'T':      Q**T * C       C * Q**T
-*>    where Q is a complex orthogonal matrix defined as the product 
-*>    of blocked elementary reflectors computed by short wide LQ 
+*>    where Q is a complex orthogonal matrix defined as the product
+*>    of blocked elementary reflectors computed by short wide LQ
 *>    factorization (DGELQ)
 *> \endverbatim
 *
@@ -59,7 +59,7 @@
 *>          The number of elementary reflectors whose product defines
 *>          the matrix Q.
 *>          M >= K >= 0;
-*>          
+*>
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -101,15 +101,15 @@
 *> \param[out] WORK2
 *> \verbatim
 *>         (workspace) COMPLEX*16 array, dimension (MAX(1,LWORK2))
-*>        
+*>
 *> \endverbatim
 *> \param[in] LWORK2
 *> \verbatim
 *>          LWORK2 is INTEGER
-*>          The dimension of the array WORK2. 
+*>          The dimension of the array WORK2.
 *>          If LWORK2 = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK2 array, returns
-*>          this value as the third entry of the WORK2 array (WORK2(1)), 
+*>          this value as the third entry of the WORK2 array (WORK2(1)),
 *>          and no error message related to LWORK2 is issued by XERBLA.
 *>
 *> \endverbatim
@@ -135,19 +135,19 @@
 *>  Depending on the matrix dimensions M and N, and row and column
 *>  block sizes MB and NB returned by ILAENV, GELQ will use either
 *>  LASWLQ(if the matrix is short-and-wide) or GELQT to compute
-*>  the LQ decomposition. 
+*>  the LQ decomposition.
 *>  The output of LASWLQ or GELQT representing Q is stored in A and in
-*>  array WORK1(6:LWORK1) for later use. 
-*>  WORK1(2:5) contains the matrix dimensions M,N and block sizes MB, NB 
-*>  which are needed to interpret A and WORK1(6:LWORK1) for later use. 
-*>  WORK1(1)=1 indicates that the code needed to take WORK1(2:5) and 
+*>  array WORK1(6:LWORK1) for later use.
+*>  WORK1(2:5) contains the matrix dimensions M,N and block sizes MB, NB
+*>  which are needed to interpret A and WORK1(6:LWORK1) for later use.
+*>  WORK1(1)=1 indicates that the code needed to take WORK1(2:5) and
 *>  decide whether LASWLQ or GELQT was used is the same as used below in
-*>  GELQ. For a detailed description of A and WORK1(6:LWORK1), see 
+*>  GELQ. For a detailed description of A and WORK1(6:LWORK1), see
 *>  Further Details in LASWLQ or GELQT.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEMLQ( SIDE, TRANS, M, N, K, A, LDA, WORK1, LWORK1,  
+      SUBROUTINE ZGEMLQ( SIDE, TRANS, M, N, K, A, LDA, WORK1, LWORK1,
      $      C, LDC, WORK2, LWORK2, INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
@@ -242,12 +242,12 @@
 *
       IF( MIN(M,N,K).EQ.0 ) THEN
         RETURN
-      END IF 
+      END IF
 *
       IF((LEFT.AND.M.LE.K).OR.(RIGHT.AND.N.LE.K).OR.(NB.LE.K).OR.
      $   (NB.GE.MAX(M,N,K))) THEN
-        CALL ZGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA, 
-     $        WORK1(6), MB, C, LDC, WORK2, INFO)  
+        CALL ZGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
+     $        WORK1(6), MB, C, LDC, WORK2, INFO)
       ELSE
         CALL ZLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, WORK1(6),
      $    MB, C, LDC, WORK2, LWORK2, INFO )

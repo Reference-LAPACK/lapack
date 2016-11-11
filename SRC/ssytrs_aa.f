@@ -29,7 +29,7 @@
 *       INTEGER            IPIV( * )
 *       REAL   A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
-* 
+*
 *
 *> \par Purpose:
 *  =============
@@ -224,7 +224,7 @@
          END IF
          CALL SGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
-*      
+*     
 *
 *        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *

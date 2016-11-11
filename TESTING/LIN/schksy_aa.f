@@ -431,7 +431,7 @@
 *
                   SRNAMT = 'SSYTRF_AA'
                   LWORK = N*NB + N
-                  CALL SSYTRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV, 
+                  CALL SSYTRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
      $                               LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -457,8 +457,8 @@
 *                 Check error code from SSYTRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'SSYTRF_AA', INFO, K, UPLO, 
-     $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS, 
+                     CALL ALAERH( PATH, 'SSYTRF_AA', INFO, K, UPLO,
+     $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
                   END IF
 *
@@ -518,7 +518,7 @@
 *
                      SRNAMT = 'SSYTRS_AA'
                      LWORK = 3*N-2
-                     CALL SSYTRS_AA( UPLO, N, NRHS, AFAC, LDA, 
+                     CALL SSYTRS_AA( UPLO, N, NRHS, AFAC, LDA,
      $                                  IWORK, X, LDA, WORK, LWORK,
      $                                  INFO )
 *
@@ -526,7 +526,7 @@
 *
                      IF( INFO.NE.0 ) THEN
                         CALL ALAERH( PATH, 'SSYTRS_AA', INFO, 0,
-     $                               UPLO, N, N, -1, -1, NRHS, IMAT, 
+     $                               UPLO, N, N, -1, -1, NRHS, IMAT,
      $                               NFAIL, NERRS, NOUT )
                      END IF
 *

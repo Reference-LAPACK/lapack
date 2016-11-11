@@ -259,7 +259,7 @@
 *
 *        Panel factorization
 *
-         CALL CLAHEF_AA( UPLO, 2-K1, N-J, JB,
+         CALL CLAHEF_AASEN( UPLO, 2-K1, N-J, JB,
      $                      A( MAX(1, J), J+1 ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ),
      $                      IINFO )

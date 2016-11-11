@@ -29,7 +29,8 @@
 *       INTEGER            IPIV( * )
 *       COMPLEX*16   A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
-* 
+*
+*
 *
 *> \par Purpose:
 *  =============
@@ -214,7 +215,7 @@
      $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (U \P**T * B) ]
-*      
+*
          CALL ZLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
              CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1)
@@ -223,7 +224,7 @@
          END IF
          CALL ZGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
-*      
+*
 *        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *
          CALL ZTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
@@ -264,7 +265,7 @@
          END IF
          CALL ZGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
-*      
+*
 *        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
          CALL ZTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,

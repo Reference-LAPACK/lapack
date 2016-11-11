@@ -279,7 +279,7 @@
 *
       ELSE IF( LSAMEN( 2, P2, 'HA' ) ) THEN
 *
-*        HA: Hermitian 
+*        HA: Hermitian
 *            Aasen algorithm
          WRITE( IOUNIT, FMT = 9971 )PATH, 'Hermitian'
 *
@@ -294,9 +294,9 @@
          WRITE( IOUNIT, FMT = 9978 )5
          WRITE( IOUNIT, FMT = 9976 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
-      
-      
-      ELSE IF( LSAMEN( 2, P2, 'HE' ) .OR. 
+
+
+      ELSE IF( LSAMEN( 2, P2, 'HE' ) .OR.
      $         LSAMEN( 2, P2, 'HP' ) ) THEN
 *
 *        HE: Hermitian indefinite full

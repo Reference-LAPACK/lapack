@@ -297,7 +297,7 @@
                      NB = N1
                   ELSE
                      NB = 32768/N2
-                  END IF  
+                  END IF
                END IF
             ELSE
                IF( SNAME ) THEN
@@ -320,7 +320,7 @@
                      NB = N1
                   ELSE
                      NB = 32768/N2
-                  END IF  
+                  END IF
                END IF
             ELSE
                IF( SNAME ) THEN

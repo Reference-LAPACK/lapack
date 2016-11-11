@@ -651,7 +651,7 @@
 *
          IF( TSTCHK ) THEN
             CALL ZCHKHE_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
-     $                         NSVAL, THRESH, TSTERR, LDA, 
+     $                         NSVAL, THRESH, TSTERR, LDA,
      $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
      $                         WORK, RWORK, IWORK, NOUT )
@@ -661,8 +661,8 @@
 *
          IF( TSTDRV ) THEN
             CALL ZDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), 
-     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), 
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
      $                         WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
@@ -1042,7 +1042,7 @@
 *        XQ:  LQT routines for triangular-pentagonal matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL ZCHKLQTP( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
@@ -1053,7 +1053,7 @@
 *        TS:  QR routines for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB, 
+            CALL ZCHKTSQR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH

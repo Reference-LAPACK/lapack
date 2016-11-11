@@ -1,4 +1,4 @@
-*> \brief \b CHETRS_AA
+*> \brief \b CHETRS_AASEN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETRS_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> Download CHETRS_AASEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_aasen.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrs_aasen.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_aasen.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+*       SUBROUTINE CHETRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                                WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> CHETRS_AA solves a system of linear equations A*X = B with a real
+*> CHETRS_AASEN solves a system of linear equations A*X = B with a real
 *> hermitian matrix A using the factorization A = U*T*U**T or
-*> A = L*T*L**T computed by CHETRF_AA.
+*> A = L*T*L**T computed by CHETRF_AASEN.
 *> \endverbatim
 *
 *  Arguments:
@@ -69,7 +69,7 @@
 *> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
-*>          Details of factors computed by CHETRF_AA.
+*>          Details of factors computed by CHETRF_AASEN.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -81,7 +81,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          Details of the interchanges as computed by CHETRF_AA.
+*>          Details of the interchanges as computed by CHETRF_AASEN.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -123,13 +123,15 @@
 *
 *> \date November 2016
 *
-*> \ingroup complexHEcomputational
+*> \ingroup complexSYcomputational
+*
+*  @generated from zhetrs_aasen.f, fortran z -> c, Fri Sep 23 00:09:52 2016
 *
 *  =====================================================================
-      SUBROUTINE CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE CHETRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                         WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.0) --
+*  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016
@@ -151,8 +153,8 @@
       PARAMETER          ( ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            LQUERY, UPPER
-      INTEGER            K, KP, LWKOPT
+      LOGICAL            UPPER
+      INTEGER            K, KP
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -168,7 +170,6 @@
 *
       INFO = 0
       UPPER = LSAME( UPLO, 'U' )
-      LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
@@ -179,15 +180,11 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.(3*N-2) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.(3*N-2) ) THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETRS_AA', -INFO )
-         RETURN
-      ELSE IF( LQUERY ) THEN
-         LWKOPT = (3*N-2)
-         WORK( 1 ) = LWKOPT
+         CALL XERBLA( 'CHETRS_AASEN', -INFO )
          RETURN
       END IF
 *
@@ -290,6 +287,6 @@
 *
       RETURN
 *
-*     End of CHETRS_AA
+*     End of CHETRS_AASEN
 *
       END

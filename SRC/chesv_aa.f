@@ -29,7 +29,7 @@
 *       INTEGER            IPIV( * )
 *       COMPLEX         A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
-* 
+*
 *
 *> \par Purpose:
 *  =============

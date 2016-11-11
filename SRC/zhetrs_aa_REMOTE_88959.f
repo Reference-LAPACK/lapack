@@ -1,4 +1,4 @@
-*> \brief \b CHETRS_AA
+*> \brief \b ZHETRS_AASEN
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETRS_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> Download ZHETRS_AASEN + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrs_aasen.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrs_aasen.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrs_aasen.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+*       SUBROUTINE ZHETRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                                WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       COMPLEX   A( LDA, * ), B( LDB, * ), WORK( * )
+*       COMPLEX*16   A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *
 *
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> CHETRS_AA solves a system of linear equations A*X = B with a real
+*> ZHETRS_AASEN solves a system of linear equations A*X = B with a real
 *> hermitian matrix A using the factorization A = U*T*U**T or
-*> A = L*T*L**T computed by CHETRF_AA.
+*> A = L*T*L**T computed by ZHETRF_AASEN.
 *> \endverbatim
 *
 *  Arguments:
@@ -68,8 +68,8 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (LDA,N)
-*>          Details of factors computed by CHETRF_AA.
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          Details of factors computed by ZHETRF_AASEN.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -81,12 +81,12 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          Details of the interchanges as computed by CHETRF_AA.
+*>          Details of the interchanges as computed by ZHETRF_AASEN.
 *> \endverbatim
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, the right hand side matrix B.
 *>          On exit, the solution matrix X.
 *> \endverbatim
@@ -123,13 +123,15 @@
 *
 *> \date November 2016
 *
-*> \ingroup complexHEcomputational
+*> \ingroup complex16SYcomputational
+*
+*  @precisions fortran z -> c
 *
 *  =====================================================================
-      SUBROUTINE CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE ZHETRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                         WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.0) --
+*  -- LAPACK computational routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016
@@ -142,24 +144,24 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      COMPLEX   A( LDA, * ), B( LDB, * ), WORK( * )
+      COMPLEX*16   A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
-      COMPLEX   ONE
-      PARAMETER          ( ONE = 1.0E+0 )
+      COMPLEX*16   ONE
+      PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            LQUERY, UPPER
-      INTEGER            K, KP, LWKOPT
+      LOGICAL            UPPER
+      INTEGER            K, KP
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGTSV, CSWAP, CTRSM, XERBLA
+      EXTERNAL           ZGTSV, ZSWAP, ZTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -168,7 +170,6 @@
 *
       INFO = 0
       UPPER = LSAME( UPLO, 'U' )
-      LQUERY = ( LWORK.EQ.-1 )
       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN
          INFO = -1
       ELSE IF( N.LT.0 ) THEN
@@ -179,15 +180,11 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.(3*N-2) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.(3*N-2) ) THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETRS_AA', -INFO )
-         RETURN
-      ELSE IF( LQUERY ) THEN
-         LWKOPT = (3*N-2)
-         WORK( 1 ) = LWKOPT
+         CALL XERBLA( 'ZHETRS_AASEN', -INFO )
          RETURN
       END IF
 *
@@ -200,45 +197,41 @@
 *
 *        Solve A*X = B, where A = U*T*U**T.
 *
-*        P**T * B
+*        Pivot, P**T * B
 *
-         K = 1
-         DO WHILE ( K.LE.N )
+         DO K = 1, N
             KP = IPIV( K )
             IF( KP.NE.K )
-     $          CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            K = K + 1
+     $          CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
          END DO
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL CTRSM('L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+         CALL ZTRSM('L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
      $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (U \P**T * B) ]
 *
-         CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL ZLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1)
-             CALL CLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1)
-             CALL CLACGV( N-1, WORK( 1 ), 1 )
+             CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1)
+             CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1)
+             CALL ZLACGV( N-1, WORK( 1 ), 1 )
          END IF
-         CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
+         CALL ZGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *
 *        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *
-         CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+         CALL ZTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
      $               B(2, 1), LDB)
 *
 *        Pivot, P * B  [ P * (U**T \ (T \ (U \P**T * B) )) ]
 *
-         K = N
-         DO WHILE ( K.GE.1 )
+         DO K = N, 1, -1
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            K = K - 1
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
          END DO
 *
       ELSE
@@ -247,49 +240,45 @@
 *
 *        Pivot, P**T * B
 *
-         K = 1
-         DO WHILE ( K.LE.N )
+         DO K = 1, N
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            K = K + 1
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
          END DO
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL CTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LDA,
+         CALL ZTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
      $               B(2, 1), LDB)
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
-         CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL ZLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1)
-             CALL CLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1)
-             CALL CLACGV( N-1, WORK( 2*N ), 1 )
+             CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1)
+             CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1)
+             CALL ZLACGV( N-1, WORK( 2*N ), 1 )
          END IF
-         CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
+         CALL ZGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *
 *        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-         CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+         CALL ZTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
      $              B( 2, 1 ), LDB)
 *
 *        Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
 *
-         K = N
-         DO WHILE ( K.GE.1 )
+         DO K = N, 1, -1
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL CSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            K = K - 1
+     $         CALL ZSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
          END DO
 *
       END IF
 *
       RETURN
 *
-*     End of CHETRS_AA
+*     End of ZHETRS_AASEN
 *
       END

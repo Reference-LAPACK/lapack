@@ -2,19 +2,19 @@
 *
 *  =========== DOCUMENTATION ===========
 *
-* Online html documentation available at 
-*            http://www.netlib.org/lapack/explore-html/ 
+* Online html documentation available at
+*            http://www.netlib.org/lapack/explore-html/
 *
 *  Definition:
 *  ===========
 *
 *       SUBROUTINE CLQT05(M,N,L,NB,RESULT)
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER LWORK, M, N, L, NB, LDT
 *       .. Return values ..
 *       DOUBLE PRECISION RESULT(6)
-*  
+*
 *
 *> \par Purpose:
 *  =============
@@ -45,7 +45,7 @@
 *>          The number of rows of the upper trapezoidal part the
 *>          lower test matrix.  0 <= L <= M.
 *> \endverbatim
-*>          
+*>
 *> \param[in] NB
 *> \verbatim
 *>          NB is INTEGER
@@ -61,17 +61,17 @@
 *>          RESULT(2) = | I - Q^H Q |
 *>          RESULT(3) = | Q C - Q C |
 *>          RESULT(4) = | Q^H C - Q^H C |
-*>          RESULT(5) = | C Q - C Q | 
+*>          RESULT(5) = | C Q - C Q |
 *>          RESULT(6) = | C Q^H - C Q^H |
 *> \endverbatim
 *
 *  Authors:
 *  ========
 *
-*> \author Univ. of Tennessee 
-*> \author Univ. of California Berkeley 
-*> \author Univ. of Colorado Denver 
-*> \author NAG Ltd. 
+*> \author Univ. of Tennessee
+*> \author Univ. of California Berkeley
+*> \author Univ. of Colorado Denver
+*> \author NAG Ltd.
 *
 *> \date April 2012
 *
@@ -92,11 +92,11 @@
       REAL RESULT(6)
 *
 *  =====================================================================
-*      
+*
 *     ..
-*     .. Local allocatable arrays 
+*     .. Local allocatable arrays
       COMPLEX, ALLOCATABLE :: AF(:,:), Q(:,:),
-     $  R(:,:), RWORK(:), WORK( : ), T(:,:), 
+     $  R(:,:), RWORK(:), WORK( : ), T(:,:),
      $  CF(:,:), DF(:,:), A(:,:), C(:,:), D(:,:)
 *
 *     .. Parameters ..
@@ -119,7 +119,7 @@
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
-*      
+*
       EPS = SLAMCH( 'Epsilon' )
       K = M
       N2 = M+N
@@ -133,7 +133,7 @@
 *     Dynamically allocate all arrays
 *
       ALLOCATE(A(M,N2),AF(M,N2),Q(N2,N2),R(N2,N2),RWORK(N2),
-     $           WORK(LWORK),T(NB,M),C(N2,M),CF(N2,M), 
+     $           WORK(LWORK),T(NB,M),C(N2,M),CF(N2,M),
      $           D(M,N2),DF(M,N2) )
 *
 *     Put random stuff into A
@@ -151,7 +151,7 @@
       END IF
       IF( L.GT.0 ) THEN
          DO J=1,L
-            CALL CLARNV( 2, ISEED, M-J+1, A( J, MIN(N+M,N+M-L+1) 
+            CALL CLARNV( 2, ISEED, M-J+1, A( J, MIN(N+M,N+M-L+1)
      $          + J - 1 ) )
          END DO
       END IF
@@ -204,7 +204,7 @@
       CALL CLACPY( 'Full', N2, M, C, N2, CF, N2 )
 *
 *     Apply Q to C as Q*C
-* 
+*
       CALL CTPMLQT( 'L','N', N,M,K,L,NB,AF(1, NP1),M,T,LDT,CF,N2,
      $               CF(NP1,1),N2,WORK,INFO)
 *
@@ -226,18 +226,18 @@
 *     Apply Q to C as QT*C
 *
       CALL CTPMLQT( 'L','C',N,M,K,L,NB,AF(1,NP1),M,T,LDT,CF,N2,
-     $              CF(NP1,1),N2,WORK,INFO) 
+     $              CF(NP1,1),N2,WORK,INFO)
 *
 *     Compute |QT*C - QT*C| / |C|
 *
       CALL CGEMM('C','N',N2,M,N2,-ONE,Q,N2,C,N2,ONE,CF,N2)
       RESID = CLANGE( '1', N2, M, CF, N2, RWORK )
-      
+
       IF( CNORM.GT.ZERO ) THEN
          RESULT( 4 ) = RESID / (EPS*MAX(1,N2)*CNORM)
       ELSE
          RESULT( 4 ) = ZERO
-      END IF     
+      END IF
 *
 *     Generate random m-by-n matrix D and a copy DF
 *
@@ -269,8 +269,8 @@
 *     Apply Q to D as D*QT
 *
       CALL CTPMLQT('R','C',M,N,K,L,NB,AF(1,NP1),M,T,LDT,DF,M,
-     $             DF(1,NP1),M,WORK,INFO)     
-       
+     $             DF(1,NP1),M,WORK,INFO)
+
 *
 *     Compute |D*QT - D*QT| / |D|
 *

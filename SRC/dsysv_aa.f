@@ -29,7 +29,7 @@
 *       INTEGER            IPIV( * )
 *       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
-* 
+*
 *
 *> \par Purpose:
 *  =============

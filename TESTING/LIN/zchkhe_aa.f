@@ -225,7 +225,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRHE, ZGET04,
      $                   ZHECON, ZHERFS, ZHET01, ZHETRF_AA, ZHETRI2,
-     $                   ZHETRS_AA, ZLACPY, ZLAIPD, ZLARHS, ZLATB4, 
+     $                   ZHETRS_AA, ZLACPY, ZLAIPD, ZLARHS, ZLATB4,
      $                   ZLATMS, ZPOT02, ZPOT03, ZPOT05
 *     ..
 *     .. Intrinsic Functions ..
@@ -432,7 +432,7 @@
 *
                   LWORK = ( NB+1 )*LDA
                   SRNAMT = 'ZHETRF_AA'
-                  CALL ZHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV, 
+                  CALL ZHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
      $                               LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -458,8 +458,8 @@
 *                 Check error code from ZHETRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'ZHETRF_AA', INFO, K, UPLO, 
-     $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS, 
+                     CALL ALAERH( PATH, 'ZHETRF_AA', INFO, K, UPLO,
+     $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
                   END IF
 *
@@ -513,7 +513,7 @@
 *
                      SRNAMT = 'ZLARHS'
                      CALL ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
-     $                             KL, KU, NRHS, A, LDA, XACT, LDA, 
+     $                             KL, KU, NRHS, A, LDA, XACT, LDA,
      $                            B, LDA, ISEED, INFO )
                      CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *

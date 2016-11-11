@@ -1,26 +1,26 @@
-* 
+*
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK, 
+*       SUBROUTINE CLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
 *                           LWORK, INFO)
-* 
+*
 *       .. Scalar Arguments ..
 *       INTEGER           INFO, LDA, M, N, MB, NB, LDT, LWORK
 *       ..
 *       .. Array Arguments ..
 *       COMPLEX           A( LDA, * ), T( LDT, * ), WORK( * )
 *       ..
-*  
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
-*> 
-*> SLATSQR computes a blocked Tall-Skinny QR factorization of  
+*>
+*> SLATSQR computes a blocked Tall-Skinny QR factorization of
 *> an M-by-N matrix A, where M >= N:
-*> A = Q * R . 
+*> A = Q * R .
 *> \endverbatim
 *
 *  Arguments:
@@ -41,14 +41,14 @@
 *> \param[in] MB
 *> \verbatim
 *>          MB is INTEGER
-*>          The row block size to be used in the blocked QR.  
+*>          The row block size to be used in the blocked QR.
 *>          MB > N.
 *> \endverbatim
 *>
 *> \param[in] NB
 *> \verbatim
 *>          NB is INTEGER
-*>          The column block size to be used in the blocked QR.  
+*>          The column block size to be used in the blocked QR.
 *>          N >= NB >= 1.
 *> \endverbatim
 *>
@@ -56,9 +56,9 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
-*>          On exit, the elements on and above the diagonal 
-*>          of the array contain the N-by-N upper triangular matrix R; 
-*>          the elements below the diagonal represent Q by the columns 
+*>          On exit, the elements on and above the diagonal
+*>          of the array contain the N-by-N upper triangular matrix R;
+*>          the elements below the diagonal represent Q by the columns
 *>          of blocked V (see Further Details).
 *> \endverbatim
 *>
@@ -70,11 +70,11 @@
 *>
 *> \param[out] T
 *> \verbatim
-*>          T is COMPLEX array, 
-*>          dimension (LDT, N * Number_of_row_blocks) 
+*>          T is COMPLEX array,
+*>          dimension (LDT, N * Number_of_row_blocks)
 *>          where Number_of_row_blocks = CEIL((M-N)/(MB-N))
 *>          The blocked upper triangular block reflectors stored in compact form
-*>          as a sequence of upper triangular blocks.  
+*>          as a sequence of upper triangular blocks.
 *>          See Further Details below.
 *> \endverbatim
 *>
@@ -86,7 +86,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))       
+*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -136,7 +136,7 @@
 *> block reflectors, stored in array T(1:LDT,(i-1)*N+1:i*N).
 *> The last Q(k) may use fewer rows.
 *> For more information see Further Details in TPQRT.
-*> 
+*>
 *> For more details of the overall algorithm, see the description of
 *> Sequential TSQR in Section 2.2 of [1].
 *>
@@ -146,7 +146,7 @@
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK, 
+      SUBROUTINE CLATSQR( M, N, MB, NB, A, LDA, T, LDT, WORK,
      $                    LWORK, INFO)
 *
 *  -- LAPACK computational routine (version 3.5.0) --
@@ -189,7 +189,7 @@
       ELSE IF( N.LT.0 .OR. M.LT.N ) THEN
         INFO = -2
       ELSE IF( MB.LE.N ) THEN
-        INFO = -3  
+        INFO = -3
       ELSE IF( NB.LT.1 .OR. ( NB.GT.N .AND. N.GT.0 )) THEN
         INFO = -4
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
@@ -197,8 +197,8 @@
       ELSE IF( LDT.LT.NB ) THEN
         INFO = -8
       ELSE IF( LWORK.LT.(N*NB) .AND. (.NOT.LQUERY) ) THEN
-        INFO = -10 
-      END IF    
+        INFO = -10
+      END IF
       IF( INFO.EQ.0)  THEN
         WORK(1) = NB*N
       END IF
@@ -220,9 +220,9 @@
        IF ((MB.LE.N).OR.(MB.GE.M)) THEN
          CALL CGEQRT( M, N, NB, A, LDA, T, LDT, WORK, INFO)
          RETURN
-       END IF  
+       END IF
        KK = MOD((M-N),(MB-N))
-       II=M-KK+1   
+       II=M-KK+1
 *
 *      Compute the QR factorization of the first block A(1:MB,1:N)
 *
@@ -230,7 +230,7 @@
        CTR = 1
 *
        DO I = MB+1, II-MB+N ,  (MB-N)
-*     
+*
 *      Compute the QR factorization of the current block A(I:I+MB-N,1:N)
 *
          CALL CTPQRT( MB-N, N, 0, NB, A(1,1), LDA, A( I, 1 ), LDA,
@@ -245,11 +245,11 @@
          CALL CTPQRT( KK, N, 0, NB, A(1,1), LDA, A( II, 1 ), LDA,
      $                 T(1, CTR * N + 1), LDT,
      $                  WORK, INFO )
-       END IF  
+       END IF
 *
       work( 1 ) = N*NB
       RETURN
-*     
+*
 *     End of CLATSQR
 *
       END
