@@ -1,4 +1,4 @@
-*> \brief \b CCHKHE_AASEN
+*> \brief \b SCHKSY_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,21 +8,20 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKHE_AASEN( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
-*                                THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
-*                                XACT, WORK, RWORK, IWORK, NOUT )
+*       SUBROUTINE SCHKSY_AAEN( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*                               THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
+*                               XACT, WORK, RWORK, IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL    TSTERR
-*       INTEGER    NN, NNB, NNS, NOUT
+*       INTEGER    NMAX, NN, NNB, NNS, NOUT
 *       REAL       THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL    DOTYPE( * )
 *       INTEGER    IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-*       REAL       RWORK( * )
-*       COMPLEX    A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $           WORK( * ), X( * ), XACT( * )
+*       REAL       A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $           RWORK( * ), WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -31,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKHE_AASEN tests CHETRF_AASEN, -TRS_AASEN.
+*> SCHKSY_AA tests SSYTRF_AA, -TRS_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -104,38 +103,38 @@
 *>
 *> \param[out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (NMAX*NMAX)
+*>          A is REAL array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AFAC
 *> \verbatim
-*>          AFAC is COMPLEX array, dimension (NMAX*NMAX)
+*>          AFAC is REAL array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AINV
 *> \verbatim
-*>          AINV is COMPLEX array, dimension (NMAX*NMAX)
+*>          AINV is REAL array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (NMAX*NSMAX)
+*>          B is REAL array, dimension (NMAX*NSMAX)
 *>          where NSMAX is the largest entry in NSVAL.
 *> \endverbatim
 *>
 *> \param[out] X
 *> \verbatim
-*>          X is COMPLEX array, dimension (NMAX*NSMAX)
+*>          X is REAL array, dimension (NMAX*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] XACT
 *> \verbatim
-*>          XACT is COMPLEX array, dimension (NMAX*NSMAX)
+*>          XACT is REAL array, dimension (NMAX*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (NMAX*max(3,NSMAX))
+*>          WORK is REAL array, dimension (NMAX*max(3,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -145,7 +144,7 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (NMAX)
+*>          IWORK is INTEGER array, dimension (2*NMAX)
 *> \endverbatim
 *>
 *> \param[in] NOUT
@@ -165,10 +164,10 @@
 *> \date November 2016
 *
 *
-*> \ingroup complex_lin
+*> \ingroup real_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKHE_AASEN( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+      SUBROUTINE SCHKSY_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                         THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
      $                         X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -181,15 +180,14 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL      TSTERR
-      INTEGER      NMAX, NN, NNB, NNS, NOUT
+      INTEGER      NN, NNB, NNS, NMAX, NOUT
       REAL         THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL      DOTYPE( * )
       INTEGER      IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-      REAL         RWORK( * )
-      COMPLEX      A( * ), AFAC( * ), AINV( * ), B( * ),
-     $             WORK( * ), X( * ), XACT( * )
+      REAL         A( * ), AFAC( * ), AINV( * ), B( * ),
+     $             RWORK( * ), WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
@@ -197,8 +195,6 @@
 *     .. Parameters ..
       REAL         ZERO
       PARAMETER    ( ZERO = 0.0E+0 )
-      COMPLEX      CZERO
-      PARAMETER    ( CZERO = ( 0.0E+0, 0.0E+0 ) )
       INTEGER      NTYPES
       PARAMETER    ( NTYPES = 10 )
       INTEGER      NTESTS
@@ -211,7 +207,7 @@
       INTEGER      I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
      $             IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $             N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      REAL         ANORM, CNDNUM, RCOND, RCONDC
+      REAL         ANORM, CNDNUM, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER    UPLOS( 2 )
@@ -219,17 +215,17 @@
       REAL         RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL         DGET06, CLANHE
-      EXTERNAL     DGET06, CLANHE
+      REAL         DGET06, SLANSY
+      EXTERNAL     DGET06, SLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL     ALAERH, ALAHD, ALASUM, XLAENV, CERRHE, CGET04,
-     $             ZHECON, CHERFS, CHET01, CHETRF_AASEN, ZHETRI2,
-     $             CHETRS_AASEN, CLACPY, CLAIPD, CLARHS, CLATB4, 
-     $             CLATMS, CPOT02, ZPOT03, ZPOT05
+      EXTERNAL     ALAERH, ALAHD, ALASUM, SERRSY, SGET04, SLACPY,
+     $             SLARHS, SLATB4, SLATMS, SPOT02, DPOT03, DPOT05,
+     $             DSYCON, SSYRFS, SSYT01_AA, SSYTRF_AA,
+     $             DSYTRI2, SSYTRS_AA, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC    REAL, IMAG, MAX, MIN
+      INTRINSIC    MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL      LERR, OK
@@ -251,13 +247,13 @@
 *
 *     Test path
 *
-      PATH( 1: 1 ) = 'Complex precision'
-      PATH( 2: 3 ) = 'HA'
+      PATH( 1: 1 ) = 'Single precision'
+      PATH( 2: 3 ) = 'SA'
 *
 *     Path to generate matrices
 *
-      MATPATH( 1: 1 ) = 'Complex precision'
-      MATPATH( 2: 3 ) = 'HE'
+      MATPATH( 1: 1 ) = 'Single precision'
+      MATPATH( 2: 3 ) = 'SY'
       NRUN = 0
       NFAIL = 0
       NERRS = 0
@@ -268,7 +264,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRHE( PATH, NOUT )
+     $   CALL SERRSY( PATH, NOUT )
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
@@ -292,6 +288,9 @@
      $      NIMAT = 1
 *
          IZERO = 0
+*
+*        Do for each value of matrix type IMAT
+*
          DO 170 IMAT = 1, NIMAT
 *
 *           Do the tests only if DOTYPE( IMAT ) is true.
@@ -310,32 +309,36 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with CLATB4 for the matrix generator
+*              Begin generate the test matrix A.
+*
+*
+*              Set up parameters with SLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-               CALL CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
+               CALL SLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
      $                      ANORM, MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with CLATMS.
+*              Generate a matrix with SLATMS.
 *
-               SRNAMT = 'CLATMS'
-               CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'SLATMS'
+               CALL SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from CLATMS and handle error.
+*              Check error code from SLATMS and handle error.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL ALAERH( PATH, 'SLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-*                 Skip all tests for this generated matrix
+*                    Skip all tests for this generated matrix
 *
                   GO TO 160
                END IF
 *
-*              For types 3-6, zero one or more rows and columns of
-*              the matrix to test that INFO is returned correctly.
+*              For matrix types 3-6, zero one or more rows and
+*              columns of the matrix to test that INFO is returned
+*              correctly.
 *
                IF( ZEROT ) THEN
                   IF( IMAT.EQ.3 ) THEN
@@ -353,22 +356,22 @@
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDA
                         DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = CZERO
+                           A( IOFF+I ) = ZERO
    20                   CONTINUE
                         IOFF = IOFF + IZERO
                         DO 30 I = IZERO, N
-                           A( IOFF ) = CZERO
+                           A( IOFF ) = ZERO
                            IOFF = IOFF + LDA
    30                   CONTINUE
                      ELSE
                         IOFF = IZERO
                         DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = CZERO
+                           A( IOFF ) = ZERO
                            IOFF = IOFF + LDA
    40                   CONTINUE
                         IOFF = IOFF - IZERO
                         DO 50 I = IZERO, N
-                           A( IOFF+I ) = CZERO
+                           A( IOFF+I ) = ZERO
    50                   CONTINUE
                      END IF
                   ELSE
@@ -380,7 +383,7 @@
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
-                              A( IOFF+I ) = CZERO
+                              A( IOFF+I ) = ZERO
    60                      CONTINUE
                            IOFF = IOFF + LDA
    70                   CONTINUE
@@ -393,7 +396,7 @@
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
-                              A( IOFF+I ) = CZERO
+                              A( IOFF+I ) = ZERO
    80                      CONTINUE
                            IOFF = IOFF + LDA
    90                   CONTINUE
@@ -403,12 +406,7 @@
                   IZERO = 0
                END IF
 *
-*              End generate test matrix A.
-*
-*
-*              Set the imaginary part of the diagonals.
-*
-               CALL CLAIPD( N, A, LDA+1, 0 )
+*              End generate the test matrix A.
 *
 *              Do for each value of NB in NBVAL
 *
@@ -424,16 +422,16 @@
 *                 will be factorized in place. This is needed to
 *                 preserve the test matrix A for subsequent tests.
 *
-                  CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                  CALL SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
 *
 *                 Compute the L*D*L**T or U*D*U**T factorization of the
 *                 matrix. IWORK stores details of the interchanges and
 *                 the block structure of D. AINV is a work array for
 *                 block factorization, LWORK is the length of AINV.
 *
-                  LWORK = ( NB+1 )*LDA
-                  SRNAMT = 'CHETRF_AASEN'
-                  CALL CHETRF_AASEN( UPLO, N, AFAC, LDA, IWORK, AINV, 
+                  SRNAMT = 'SSYTRF_AA'
+                  LWORK = N*NB + N
+                  CALL SSYTRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV, 
      $                               LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -456,10 +454,10 @@
                      K = 0
                   END IF
 *
-*                 Check error code from CHETRF and handle error.
+*                 Check error code from SSYTRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'CHETRF_AASEN', INFO, K, UPLO, 
+                     CALL ALAERH( PATH, 'SSYTRF_AA', INFO, K, UPLO, 
      $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS, 
      $                            NOUT )
                   END IF
@@ -475,7 +473,7 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL CHET01_AASEN( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+                  CALL SSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
      $                               AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
@@ -506,37 +504,39 @@
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
-*+    TEST 3 (Using TRS)
+*+    TEST 3 ( Using TRS)
 *                 Solve and compute residual for  A * X = B.
 *
 *                    Choose a set of NRHS random solution vectors
 *                    stored in XACT and set up the right hand side B
 *
-                     SRNAMT = 'CLARHS'
-                     CALL CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
+                     SRNAMT = 'SLARHS'
+                     CALL SLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
      $                            KL, KU, NRHS, A, LDA, XACT, LDA,
      $                            B, LDA, ISEED, INFO )
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'CHETRS_AASEN'
+                     SRNAMT = 'SSYTRS_AA'
                      LWORK = 3*N-2
-                     CALL CHETRS_AASEN( UPLO, N, NRHS, AFAC, LDA, IWORK,
-     $                                  X, LDA, WORK, LWORK, INFO )
+                     CALL SSYTRS_AA( UPLO, N, NRHS, AFAC, LDA, 
+     $                                  IWORK, X, LDA, WORK, LWORK,
+     $                                  INFO )
 *
-*                    Check error code from CHETRS and handle error.
+*                    Check error code from SSYTRS and handle error.
 *
                      IF( INFO.NE.0 ) THEN
-                        CALL ALAERH( PATH, 'CHETRS_AASEN', INFO, 0,
-     $                                UPLO, N, N, -1, -1, NRHS, IMAT,
-     $                                NFAIL, NERRS, NOUT )
+                        CALL ALAERH( PATH, 'SSYTRS_AA', INFO, 0,
+     $                               UPLO, N, N, -1, -1, NRHS, IMAT, 
+     $                               NFAIL, NERRS, NOUT )
                      END IF
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
 *
 *                    Compute the residual for the solution
 *
-                     CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL SPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
+*
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -573,6 +573,6 @@
      $      I6 )
       RETURN
 *
-*     End of CCHKHE_AASEN
+*     End of SCHKSY_AA
 *
       END

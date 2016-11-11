@@ -1,4 +1,4 @@
-*> \brief \b DLASYF_AASEN
+*> \brief \b SLASYF_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLASYF_AASEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlasyf_aasen.f">
+*> Download SLASYF_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/slasyf_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlasyf_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/slasyf_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlasyf_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/slasyf_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLASYF_AASEN( UPLO, J1, M, NB, A, LDA, IPIV,
+*       SUBROUTINE SLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
 *                                H, LDH, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       DOUBLE PRECISION   A( LDA, * ), H( LDH, * ), WORK( * )
+*       REAL   A( LDA, * ), H( LDH, * ), WORK( * )
 *       ..
 * 
 *
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLATRF_AASEN factorizes a panel of a real symmetric matrix A using
+*> DLATRF_AA factorizes a panel of a real symmetric matrix A using
 *> the Aasen's algorithm. The panel consists of a set of NB rows of A
 *> when UPLO is U, or a set of NB columns when UPLO is L.
 *>
@@ -66,7 +66,7 @@
 *>          J1 is INTEGER
 *>          The location of the first row, or column, of the panel
 *>          within the submatrix of A, passed to this routine, e.g.,
-*>          when called by DSYTRF_AASEN, for the first panel, J1 is 1,
+*>          when called by SSYTRF_AA, for the first panel, J1 is 1,
 *>          while for the remaining panels, J1 is 2.
 *> \endverbatim
 *>
@@ -84,7 +84,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,M) for
+*>          A is REAL array, dimension (LDA,M) for
 *>          the first panel, while dimension (LDA,M+1) for the
 *>          remaining panels.
 *>
@@ -112,7 +112,7 @@
 *>
 *> \param[in,out] H
 *> \verbatim
-*>          H is DOUBLE PRECISION workspace, dimension (LDH,NB).
+*>          H is REAL workspace, dimension (LDH,NB).
 *>
 *> \endverbatim
 *>
@@ -124,7 +124,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION workspace, dimension (M).
+*>          WORK is REAL workspace, dimension (M).
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -148,10 +148,10 @@
 *
 *> \date November 2016
 *
-*> \ingroup doubleSYcomputational
+*> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE DLASYF_AASEN( UPLO, J1, M, NB, A, LDA, IPIV,
+      SUBROUTINE SLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
      $                         H, LDH, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -167,22 +167,22 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * ), H( LDH, * ), WORK( * )
+      REAL   A( LDA, * ), H( LDH, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      REAL   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *
 *     .. Local Scalars ..
       INTEGER            J, K, K1, I1, I2
-      DOUBLE PRECISION   PIV, ALPHA
+      REAL   PIV, ALPHA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            IDAMAX, ILAENV
-      EXTERNAL           LSAME, ILAENV, IDAMAX
+      INTEGER            ISAMAX, ILAENV
+      EXTERNAL           LSAME, ILAENV, ISAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA
@@ -211,7 +211,7 @@
      $      GO TO 20
 *
 *        K is the column to be factorized
-*         when being called from DSYTRF_AASEN,
+*         when being called from SSYTRF_AA,
 *         > for the first block column, J1 is 1, hence J1+J-1 is J,
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
@@ -228,7 +228,7 @@
 *         > for the rest of the columns, K is J+1, skipping only the
 *           first column
 *
-            CALL DGEMV( 'No transpose', M-J+1, J-K1,
+            CALL SGEMV( 'No transpose', M-J+1, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( 1, J ), 1,
      $                  ONE, H( J, J ), 1 )
@@ -236,7 +236,7 @@
 *
 *        Copy H(i:n, i) into WORK
 *
-         CALL DCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL SCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -244,7 +244,7 @@
 *            where A(J-1, J) stores T(J-1, J) and A(J-2, J:N) stores U(J-1, J:N)
 *
             ALPHA = -A( K-1, J )
-            CALL DAXPY( M-J+1, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
+            CALL SAXPY( M-J+1, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
@@ -258,13 +258,13 @@
 *
             IF( (J1+J-1).GT.1 ) THEN
                ALPHA = -A( K, J )
-               CALL DAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA,
+               CALL SAXPY( M-J, ALPHA, A( K-1, J+1 ), LDA,
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
 *           Find max(|WORK(2:n)|)
 *
-            I2 = IDAMAX( M-J, WORK( 2 ), 1 ) + 1
+            I2 = ISAMAX( M-J, WORK( 2 ), 1 ) + 1
             PIV = WORK( I2 )
 *
 *           Apply symmetric pivot
@@ -281,12 +281,12 @@
 *
                I1 = I1+J-1
                I2 = I2+J-1
-               CALL DSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA,
+               CALL SSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA,
      $                              A( J1+I1, I2 ), 1 )
 *
 *              Swap A(I1, I2+1:N) with A(I2, I2+1:N)
 *
-               CALL DSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA,
+               CALL SSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA,
      $                           A( J1+I2-1, I2+1 ), LDA )
 *
 *              Swap A(I1, I1) with A(I2,I2)
@@ -297,7 +297,7 @@
 *
 *              Swap H(I1, 1:J1) with H(I2, 1:J1)
 *
-               CALL DSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
+               CALL SSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
                IPIV( I1 ) = I2
 *
                IF( I1.GT.(K1-1) ) THEN
@@ -305,7 +305,7 @@
 *                 Swap L(1:I1-1, I1) with L(1:I1-1, I2),
 *                  skipping the first column
 *
-                  CALL DSWAP( I1-K1+1, A( 1, I1 ), 1,
+                  CALL SSWAP( I1-K1+1, A( 1, I1 ), 1,
      $                                 A( 1, I2 ), 1 )
                END IF
             ELSE
@@ -326,7 +326,7 @@
 *
 *              Copy A(J+1:N, J+1) into H(J:N, J),
 *
-               CALL DCOPY( M-J, A( K+1, J+1 ), LDA,
+               CALL SCOPY( M-J, A( K+1, J+1 ), LDA,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
@@ -335,10 +335,10 @@
 *
             IF( A( K, J+1 ).NE.ZERO ) THEN
                ALPHA = ONE / A( K, J+1 )
-               CALL DCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
-               CALL DSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+               CALL SCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
+               CALL SSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
             ELSE
-               CALL DLASET( 'Full', 1, M-J-1, ZERO, ZERO,
+               CALL SLASET( 'Full', 1, M-J-1, ZERO, ZERO,
      $                      A( K, J+2 ), LDA)
             END IF
          ELSE
@@ -361,7 +361,7 @@
      $      GO TO 40
 *
 *        K is the column to be factorized
-*         when being called from DSYTRF_AASEN,
+*         when being called from SSYTRF_AA,
 *         > for the first block column, J1 is 1, hence J1+J-1 is J,
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
@@ -378,7 +378,7 @@
 *         > for the rest of the columns, K is J+1, skipping only the
 *           first column
 *
-            CALL DGEMV( 'No transpose', M-J+1, J-K1,
+            CALL SGEMV( 'No transpose', M-J+1, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( J, 1 ), LDA,
      $                  ONE, H( J, J ), 1 )
@@ -386,7 +386,7 @@
 *
 *        Copy H(J:N, J) into WORK
 *
-         CALL DCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL SCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -394,7 +394,7 @@
 *            where A(J-1, J) = T(J-1, J) and A(J, J-2) = L(J, J-1)
 *
             ALPHA = -A( J, K-1 )
-            CALL DAXPY( M-J+1, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
+            CALL SAXPY( M-J+1, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
@@ -408,13 +408,13 @@
 *
             IF( (J1+J-1).GT.1 ) THEN
                ALPHA = -A( J, K )
-               CALL DAXPY( M-J, ALPHA, A( J+1, K-1 ), 1,
+               CALL SAXPY( M-J, ALPHA, A( J+1, K-1 ), 1,
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
 *           Find max(|WORK(2:n)|)
 *
-            I2 = IDAMAX( M-J, WORK( 2 ), 1 ) + 1
+            I2 = ISAMAX( M-J, WORK( 2 ), 1 ) + 1
             PIV = WORK( I2 )
 *
 *           Apply symmetric pivot
@@ -431,12 +431,12 @@
 *
                I1 = I1+J-1
                I2 = I2+J-1
-               CALL DSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1,
+               CALL SSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1,
      $                              A( I2, J1+I1 ), LDA )
 *
 *              Swap A(I2+1:N, I1) with A(I2+1:N, I2)
 *
-               CALL DSWAP( M-I2, A( I2+1, J1+I1-1 ), 1,
+               CALL SSWAP( M-I2, A( I2+1, J1+I1-1 ), 1,
      $                           A( I2+1, J1+I2-1 ), 1 )
 *
 *              Swap A(I1, I1) with A(I2, I2)
@@ -447,7 +447,7 @@
 *
 *              Swap H(I1, I1:J1) with H(I2, I2:J1)
 *
-               CALL DSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
+               CALL SSWAP( I1-1, H( I1, 1 ), LDH, H( I2, 1 ), LDH )
                IPIV( I1 ) = I2
 *
                IF( I1.GT.(K1-1) ) THEN
@@ -455,7 +455,7 @@
 *                 Swap L(1:I1-1, I1) with L(1:I1-1, I2),
 *                  skipping the first column
 *
-                  CALL DSWAP( I1-K1+1, A( I1, 1 ), LDA,
+                  CALL SSWAP( I1-K1+1, A( I1, 1 ), LDA,
      $                                 A( I2, 1 ), LDA )
                END IF
             ELSE
@@ -475,7 +475,7 @@
 *
 *              Copy A(J+1:N, J+1) into H(J+1:N, J),
 *
-               CALL DCOPY( M-J, A( J+1, K+1 ), 1,
+               CALL SCOPY( M-J, A( J+1, K+1 ), 1,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
@@ -484,10 +484,10 @@
 *
             IF( A( J+1, K ).NE.ZERO ) THEN
                ALPHA = ONE / A( J+1, K )
-               CALL DCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
-               CALL DSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+               CALL SCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
+               CALL SSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
             ELSE
-               CALL DLASET( 'Full', M-J-1, 1, ZERO, ZERO,
+               CALL SLASET( 'Full', M-J-1, 1, ZERO, ZERO,
      $                      A( J+2, K ), LDA )
             END IF
          ELSE
@@ -501,6 +501,6 @@
       END IF
       RETURN
 *
-*     End of DLASYF_AASEN
+*     End of SLASYF_AA
 *
       END

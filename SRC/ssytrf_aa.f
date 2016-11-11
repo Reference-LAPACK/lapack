@@ -1,4 +1,4 @@
-*> \brief \b DSYTRF_AASEN
+*> \brief \b SSYTRF_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYTRF_AASEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrf_aasen.f">
+*> Download SSYTRF_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrf_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrf_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrf_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrf_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrf_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYTRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE SSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -26,7 +26,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       DOUBLE PRECISION   A( LDA, * ), WORK( * )
+*       REAL   A( LDA, * ), WORK( * )
 *       ..
 *
 *> \par Purpose:
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DSYTRF_AASEN computes the factorization of a real symmetric matrix A
+*> SSYTRF_AA computes the factorization of a real symmetric matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**T  or  A = L*T*L**T
@@ -63,7 +63,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is REAL array, dimension (LDA,N)
 *>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
@@ -94,7 +94,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          WORK is REAL array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -131,10 +131,10 @@
 *
 *> \date November 2016
 *
-*> \ingroup doubleSYcomputational
+*> \ingroup realSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE DSYTRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
+      SUBROUTINE SSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -149,19 +149,19 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * ), WORK( * )
+      REAL   A( LDA, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      REAL   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY, UPPER
       INTEGER            J, LWKOPT, IINFO
       INTEGER            NB, MJ, NJ, K1, K2, J1, J2, J3, JB
-      DOUBLE PRECISION   ALPHA
+      REAL   ALPHA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -178,7 +178,7 @@
 *
 *     Determine the block size
 *
-      NB = ILAENV( 1, 'DSYTRF', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'SSYTRF', UPLO, N, -1, -1, -1 )
 *
 *     Test the input parameters.
 *
@@ -201,7 +201,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYTRF_AASEN', -INFO )
+         CALL XERBLA( 'SSYTRF_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -234,10 +234,10 @@
 *
 *        Copy first row A(1, 1:N) into H(1:n) (stored in WORK(1:N))
 *
-         CALL DCOPY( N, A( 1, 1 ), LDA, WORK( 1 ), 1 )
+         CALL SCOPY( N, A( 1, 1 ), LDA, WORK( 1 ), 1 )
 *
 *        J is the main loop index, increasing from 1 to N in steps of
-*        JB, where JB is the number of columns factorized by DLASYF;
+*        JB, where JB is the number of columns factorized by SLASYF;
 *        JB is either NB, or N-J+1 for the last block
 *
          J = 0
@@ -258,7 +258,7 @@
 *
 *        Panel factorization
 *
-         CALL DLASYF_AASEN( UPLO, 2-K1, N-J, JB,
+         CALL SLASYF_AA( UPLO, 2-K1, N-J, JB,
      $                      A( MAX(1, J), J+1 ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ),
      $                      IINFO )
@@ -271,7 +271,7 @@
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL DSWAP( J1-K1-2, A( 1, J2 ), 1,
+               CALL SSWAP( J1-K1-2, A( 1, J2 ), 1,
      $                              A( 1, IPIV(J2) ), 1 )
             END IF
          END DO
@@ -291,9 +291,9 @@
 *
                ALPHA = A( J, J+1 )
                A( J, J+1 ) = ONE
-               CALL DCOPY( N-J, A( J-1, J+1 ), LDA,
+               CALL SCOPY( N-J, A( J-1, J+1 ), LDA,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
-               CALL DSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
+               CALL SSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
 *
 *              K1 identifies if the previous column of the panel has been
 *               explicitly stored, e.g., K1=1 and K2= 0 for the first panel,
@@ -318,20 +318,20 @@
                DO J2 = J+1, N, NB
                   NJ = MIN( NB, N-J2+1 )
 *
-*                 Update (J2, J2) diagonal block with DGEMV
+*                 Update (J2, J2) diagonal block with SGEMV
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL DGEMV( 'No transpose', MJ, JB+1,
+                     CALL SGEMV( 'No transpose', MJ, JB+1,
      $                          -ONE, WORK( J3-J1+1+K1*N ), N,
      $                                A( J1-K2, J3 ), 1,
      $                           ONE, A( J3, J3 ), LDA )
                      J3 = J3 + 1
                   END DO
 *
-*                 Update off-diagonal block of J2-th block row with DGEMM
+*                 Update off-diagonal block of J2-th block row with SGEMM
 *
-                  CALL DGEMM( 'Transpose', 'Transpose',
+                  CALL SGEMM( 'Transpose', 'Transpose',
      $                        NJ, N-J3+1, JB+1,
      $                       -ONE, A( J1-K2, J2 ), LDA,
      $                             WORK( J3-J1+1+K1*N ), N,
@@ -345,7 +345,7 @@
 *
 *           WORK(J+1, 1) stores H(J+1, 1)
 *
-            CALL DCOPY( N-J, A( J+1, J+1 ), LDA, WORK( 1 ), 1 )
+            CALL SCOPY( N-J, A( J+1, J+1 ), LDA, WORK( 1 ), 1 )
          END IF
          GO TO 10
       ELSE
@@ -357,10 +357,10 @@
 *        copy first column A(1:N, 1) into H(1:N, 1)
 *         (stored in WORK(1:N))
 *
-         CALL DCOPY( N, A( 1, 1 ), 1, WORK( 1 ), 1 )
+         CALL SCOPY( N, A( 1, 1 ), 1, WORK( 1 ), 1 )
 *
 *        J is the main loop index, increasing from 1 to N in steps of
-*        JB, where JB is the number of columns factorized by DLASYF;
+*        JB, where JB is the number of columns factorized by SLASYF;
 *        JB is either NB, or N-J+1 for the last block
 *
          J = 0
@@ -381,7 +381,7 @@
 *
 *        Panel factorization
 *
-         CALL DLASYF_AASEN( UPLO, 2-K1, N-J, JB,
+         CALL SLASYF_AA( UPLO, 2-K1, N-J, JB,
      $                      A( J+1, MAX(1, J) ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ), IINFO)
          IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
@@ -393,7 +393,7 @@
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
             IF( (J2.NE.IPIV(J2)) .AND. ((J1-K1).GT.2) ) THEN
-               CALL DSWAP( J1-K1-2, A( J2, 1 ), LDA,
+               CALL SSWAP( J1-K1-2, A( J2, 1 ), LDA,
      $                              A( IPIV(J2), 1 ), LDA )
             END IF
          END DO
@@ -413,9 +413,9 @@
 *
                ALPHA = A( J+1, J )
                A( J+1, J ) = ONE
-               CALL DCOPY( N-J, A( J+1, J-1 ), 1,
+               CALL SCOPY( N-J, A( J+1, J-1 ), 1,
      $                          WORK( (J+1-J1+1)+JB*N ), 1 )
-               CALL DSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
+               CALL SSCAL( N-J, ALPHA, WORK( (J+1-J1+1)+JB*N ), 1 )
 *
 *              K1 identifies if the previous column of the panel has been
 *               explicitly stored, e.g., K1=1 and K2= 0 for the first panel,
@@ -440,20 +440,20 @@
                DO J2 = J+1, N, NB
                   NJ = MIN( NB, N-J2+1 )
 *
-*                 Update (J2, J2) diagonal block with DGEMV
+*                 Update (J2, J2) diagonal block with SGEMV
 *
                   J3 = J2
                   DO MJ = NJ-1, 1, -1
-                     CALL DGEMV( 'No transpose', MJ, JB+1,
+                     CALL SGEMV( 'No transpose', MJ, JB+1,
      $                          -ONE, WORK( J3-J1+1+K1*N ), N,
      $                                A( J3, J1-K2 ), LDA,
      $                           ONE, A( J3, J3 ), 1 )
                      J3 = J3 + 1
                   END DO
 *
-*                 Update off-diagonal block in J2-th block column with DGEMM
+*                 Update off-diagonal block in J2-th block column with SGEMM
 *
-                  CALL DGEMM( 'No transpose', 'Transpose',
+                  CALL SGEMM( 'No transpose', 'Transpose',
      $                        N-J3+1, NJ, JB+1,
      $                       -ONE, WORK( J3-J1+1+K1*N ), N,
      $                             A( J2, J1-K2 ), LDA,
@@ -467,7 +467,7 @@
 *
 *           WORK(J+1, 1) stores H(J+1, 1)
 *
-            CALL DCOPY( N-J, A( J+1, J+1 ), 1, WORK( 1 ), 1 )
+            CALL SCOPY( N-J, A( J+1, J+1 ), 1, WORK( 1 ), 1 )
          END IF
          GO TO 11
       END IF
@@ -475,6 +475,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of DSYTRF_AASEN
+*     End of SSYTRF_AA
 *
       END

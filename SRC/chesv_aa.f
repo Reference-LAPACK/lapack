@@ -1,4 +1,4 @@
-*> \brief <b> SSYSV_AASEN computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> CHESV_AA computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,28 +6,28 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYSV_AASEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssysv_aasen.f">
+*> Download CHESV_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chesv_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssysv_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chesv_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysv_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesv_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYSV_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE CHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                               LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
-*       INTEGER            N, NRHS, LDA, LDB, LWORK, INFO
+*       INTEGER            INFO, LDA, LDB, LWORK, N, NRHS
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       REAL   A( LDA, * ), B( LDB, * ), WORK( * )
+*       COMPLEX         A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 * 
 *
@@ -36,17 +36,17 @@
 *>
 *> \verbatim
 *>
-*> SSYSV computes the solution to a real system of linear equations
+*> CHESV_AA computes the solution to a complex system of linear equations
 *>    A * X = B,
-*> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
+*> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
 *> matrices.
 *>
 *> Aasen's algorithm is used to factor A as
-*>    A = U * T * U**T,  if UPLO = 'U', or
-*>    A = L * T * L**T,  if UPLO = 'L',
+*>    A = U * T * U**H,  if UPLO = 'U', or
+*>    A = L * T * L**H,  if UPLO = 'L',
 *> where U (or L) is a product of permutation and unit upper (lower)
-*> triangular matrices, and T is symmetric tridiagonal. The factored
-*> form of A is then used to solve the system of equations A * X = B.
+*> triangular matrices, and T is Hermitian and tridiagonal. The factored form
+*> of A is then used to solve the system of equations A * X = B.
 *> \endverbatim
 *
 *  Arguments:
@@ -75,8 +75,8 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is REAL array, dimension (LDA,N)
-*>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
+*>          A is COMPLEX array, dimension (LDA,N)
+*>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
 *>          triangular part of A is not referenced.  If UPLO = 'L', the
@@ -86,8 +86,8 @@
 *>
 *>          On exit, if INFO = 0, the tridiagonal matrix T and the
 *>          multipliers used to obtain the factor U or L from the
-*>          factorization A = U*T*U**T or A = L*T*L**T as computed by
-*>          SSYTRF.
+*>          factorization A = U*T*U**H or A = L*T*L**H as computed by
+*>          CHETRF_AA.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -106,7 +106,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, dimension (LDB,NRHS)
+*>          B is COMPLEX array, dimension (LDB,NRHS)
 *>          On entry, the N-by-NRHS right hand side matrix B.
 *>          On exit, if INFO = 0, the N-by-NRHS solution matrix X.
 *> \endverbatim
@@ -119,16 +119,18 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (MAX(1,LWORK))
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK.  LWORK >= MAX(2*N, 3*N-2), and for
-*>          the best performance, LWORK >= max(1,N*NB), where NB is
-*>          the optimal blocksize for SSYTRF_AASEN.
+*>          The length of WORK.  LWORK >= 1, and for best performance
+*>          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
+*>          CHETRF.
+*>          for LWORK < N, TRS will be done with Level BLAS 2
+*>          for LWORK >= N, TRS will be done with Level BLAS 3
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -156,10 +158,10 @@
 *
 *> \date November 2016
 *
-*> \ingroup realSYsolve
+*> \ingroup complexHEsolve
 *
 *  =====================================================================
-      SUBROUTINE SSYSV_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+      SUBROUTINE CHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                        LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -173,21 +175,22 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      REAL   A( LDA, * ), B( LDB, * ), WORK( * )
+      COMPLEX         A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY
-      INTEGER            LWKOPT
+      INTEGER            LWKOPT, NB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      EXTERNAL           LSAME
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, SSYTRF, SSYTRS, SSYTRS2
+      EXTERNAL           XERBLA, CHETRF, CHETRS, CHETRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -213,27 +216,26 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL SSYTRF( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
-         LWKOPT = WORK(1)
-         LWKOPT = MAX( 3*N-2, LWKOPT )
+         NB = ILAENV( 1, 'CHETRF_AA', UPLO, N, -1, -1, -1 )
+         LWKOPT = MAX( 3*N-2, (1+NB)*N )
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYSV_AASEN', -INFO )
+         CALL XERBLA( 'CHESV_AA ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
       END IF
 *
-*     Compute the factorization A = U*T*U**T or A = L*T*L**T.
+*     Compute the factorization A = U*T*U**H or A = L*T*L**H.
 *
-      CALL SSYTRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL SSYTRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+         CALL CHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                      LWORK, INFO )
 *
       END IF
@@ -242,6 +244,6 @@
 *
       RETURN
 *
-*     End of SSYSV_AASEN
+*     End of CHESV_AA
 *
       END

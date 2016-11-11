@@ -91,7 +91,7 @@
       EXTERNAL           CHKXER, SGBSV, SGBSVX, SGESV, SGESVX, SGTSV,
      $                   SGTSVX, SPBSV, SPBSVX, SPOSV, SPOSVX, SPPSV,
      $                   SPPSVX, SPTSV, SPTSVX, SSPSV, SSPSVX, SSYSV,
-     $                   SSYSV_AASEN, SSYSV_ROOK, SSYSVX
+     $                   SSYSV_AA, SSYSV_ROOK, SSYSVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -629,21 +629,21 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
 *
-*        SSYSV_AASEN
+*        SSYSV_AA
 *
-        SRNAMT = 'SSYSV_AASEN'
+        SRNAMT = 'SSYSV_AA'
         INFOT = 1
-        CALL SSYSV_AASEN( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
+        CALL SSYSV_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'SSYSV_AA', INFOT, NOUT, LERR, OK )
         INFOT = 2
-        CALL SSYSV_AASEN( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
+        CALL SSYSV_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'SSYSV_AA', INFOT, NOUT, LERR, OK )
         INFOT = 3
-        CALL SSYSV_AASEN( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
+        CALL SSYSV_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'SSYSV_AA', INFOT, NOUT, LERR, OK )
         INFOT = 8
-        CALL SSYSV_AASEN( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'SSYSV_AASEN', INFOT, NOUT, LERR, OK )
+        CALL SSYSV_AA( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'SSYSV_AA', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *

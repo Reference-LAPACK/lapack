@@ -93,7 +93,7 @@
      $                   CHESV, CHESV_ROOK, CHESVX, CHKXER, CHPSV,
      $                   CHPSVX, CPBSV, CPBSVX, CPOSV, CPOSVX, CPPSV,
      $                   CPPSVX, CPTSV, CPTSVX, CSPSV, CSPSVX, CSYSV,
-     $                   CSYSV_AASEN, CSYSV_ROOK, CSYSVX
+     $                   CSYSV_AA, CSYSV_ROOK, CSYSVX
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -634,21 +634,21 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
 *
-*        CHESV_AASEN
+*        CHESV_AA
 *
-        SRNAMT = 'CHESV_AASEN'
+        SRNAMT = 'CHESV_AA'
         INFOT = 1
-        CALL CHESV_AASEN( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'CHESV_AASEN', INFOT, NOUT, LERR, OK )
+        CALL CHESV_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_AA', INFOT, NOUT, LERR, OK )
         INFOT = 2
-        CALL CHESV_AASEN( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'CHESV_AASEN', INFOT, NOUT, LERR, OK )
+        CALL CHESV_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_AA', INFOT, NOUT, LERR, OK )
         INFOT = 3
-        CALL CHESV_AASEN( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'CHESV_AASEN', INFOT, NOUT, LERR, OK )
+        CALL CHESV_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_AA', INFOT, NOUT, LERR, OK )
         INFOT = 8
-        CALL CHESV_AASEN( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
-        CALL CHKXER( 'CHESV_AASEN', INFOT, NOUT, LERR, OK )
+        CALL CHESV_AA( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
+        CALL CHKXER( 'CHESV_AA', INFOT, NOUT, LERR, OK )
 *
 
       ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN

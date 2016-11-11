@@ -123,7 +123,7 @@
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DSYT01_AASEN( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE DSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
      $                         LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.5.0) --

@@ -1,4 +1,4 @@
-*> \brief \b CDRVHE_AASEN
+*> \brief \b DDRVSY_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,21 +8,20 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVHE_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
-*                                A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
-*                                NOUT )
+*       SUBROUTINE DDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
+*                          NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NMAX, NN, NOUT, NRHS
-*       REAL               THRESH
+*       DOUBLE PRECISION   THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NVAL( * )
-*       REAL               RWORK( * )
-*       COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   WORK( * ), X( * ), XACT( * )
+*       DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -31,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> CDRVHE_AASEN tests the driver routine CHESV_AASEN.
+*> DDRVSY_AA tests the driver routine DSYSV_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -66,7 +65,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is REAL
+*>          THRESH is DOUBLE PRECISION
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -87,47 +86,47 @@
 *>
 *> \param[out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (NMAX*NMAX)
+*>          A is DOUBLE PRECISION array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AFAC
 *> \verbatim
-*>          AFAC is COMPLEX array, dimension (NMAX*NMAX)
+*>          AFAC is DOUBLE PRECISION array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AINV
 *> \verbatim
-*>          AINV is COMPLEX array, dimension (NMAX*NMAX)
+*>          AINV is DOUBLE PRECISION array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (NMAX*NRHS)
+*>          B is DOUBLE PRECISION array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] X
 *> \verbatim
-*>          X is COMPLEX array, dimension (NMAX*NRHS)
+*>          X is DOUBLE PRECISION array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] XACT
 *> \verbatim
-*>          XACT is COMPLEX array, dimension (NMAX*NRHS)
+*>          XACT is DOUBLE PRECISION array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (NMAX*max(2,NRHS))
+*>          WORK is DOUBLE PRECISION array, dimension (NMAX*max(2,NRHS))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (NMAX+2*NRHS)
+*>          RWORK is DOUBLE PRECISION array, dimension (NMAX+2*NRHS)
 *> \endverbatim
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (NMAX)
+*>          IWORK is INTEGER array, dimension (2*NMAX)
 *> \endverbatim
 *>
 *> \param[in] NOUT
@@ -146,10 +145,10 @@
 *
 *> \date November 2016
 *
-*> \ingroup complex_lin
+*> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVHE_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+      SUBROUTINE DDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
      $                         RWORK, IWORK, NOUT )
 *
@@ -161,21 +160,20 @@
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
       INTEGER            NMAX, NN, NOUT, NRHS
-      REAL               THRESH
+      DOUBLE PRECISION   THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), NVAL( * )
-      REAL               RWORK( * )
-      COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
-     $                   WORK( * ), X( * ), XACT( * )
+      DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
+     $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
+      DOUBLE PRECISION   ONE, ZERO
+      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES, NTESTS
       PARAMETER          ( NTYPES = 10, NTESTS = 3 )
       INTEGER            NFACT
@@ -188,22 +186,21 @@
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
      $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      REAL               AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      REAL               RESULT( NTESTS )
+      DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CLANHE, SGET06
-      EXTERNAL           CLANHE, SGET06
+      DOUBLE PRECISION   DGET06, DLANSY
+      EXTERNAL           DGET06, DLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, CERRVX,
-     $                   CGET04, CLACPY, CLARHS, CLATB4, CLATMS,
-     $                   CHESV_AASEN, CHET01_AASEN, CPOT02,
-     $                   CHETRF_AASEN
+      EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGET04, DLACPY,
+     $                   DLARHS, DLASET, DLATB4, DLATMS, DPOT02, DPOT05,
+     $                   DSYSV_AA, DSYT01_AA, DSYTRF_AA, XLAENV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -215,7 +212,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CMPLX, MAX, MIN
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /
@@ -227,13 +224,13 @@
 *
 *     Test path
 *
-      PATH( 1: 1 ) = 'Complex precision'
-      PATH( 2: 3 ) = 'HA'
+      PATH( 1: 1 ) = 'Double precision'
+      PATH( 2: 3 ) = 'SA'
 *
 *     Path to generate matrices
 *
-      MATPATH( 1: 1 ) = 'Complex precision'
-      MATPATH( 2: 3 ) = 'HE'
+      MATPATH( 1: 1 ) = 'Double precision'
+      MATPATH( 2: 3 ) = 'SY'
 *
       NRUN = 0
       NFAIL = 0
@@ -246,7 +243,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRVX( PATH, NOUT )
+     $   CALL DERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
@@ -284,100 +281,92 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Begin generate the test matrix A.
+*              Set up parameters with DLATB4 and generate a test matrix
+*              with DLATMS.
 *
-*              Set up parameters with CLATB4 for the matrix generator
-*              based on the type of matrix to be generated.
+               CALL DLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+     $                      MODE, CNDNUM, DIST )
 *
-              CALL CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
-     $                         MODE, CNDNUM, DIST )
+               SRNAMT = 'DLATMS'
+               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+     $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
+     $                      INFO )
 *
-*              Generate a matrix with CLATMS.
+*              Check error code from DLATMS.
 *
-                  SRNAMT = 'CLATMS'
-                  CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
-     $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
-     $                         WORK, INFO )
+               IF( INFO.NE.0 ) THEN
+                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
+     $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
+                  GO TO 160
+               END IF
 *
-*                 Check error code from CLATMS and handle error.
+*              For types 3-6, zero one or more rows and columns of the
+*              matrix to test that INFO is returned correctly.
 *
-                  IF( INFO.NE.0 ) THEN
-                     CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N,
-     $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
-                     GO TO 160
+               IF( ZEROT ) THEN
+                  IF( IMAT.EQ.3 ) THEN
+                     IZERO = 1
+                  ELSE IF( IMAT.EQ.4 ) THEN
+                     IZERO = N
+                  ELSE
+                     IZERO = N / 2 + 1
                   END IF
 *
-*                 For types 3-6, zero one or more rows and columns of
-*                 the matrix to test that INFO is returned correctly.
+                  IF( IMAT.LT.6 ) THEN
 *
-                  IF( ZEROT ) THEN
-                     IF( IMAT.EQ.3 ) THEN
-                        IZERO = 1
-                     ELSE IF( IMAT.EQ.4 ) THEN
-                        IZERO = N
+*                    Set row and column IZERO to zero.
+*
+                     IF( IUPLO.EQ.1 ) THEN
+                        IOFF = ( IZERO-1 )*LDA
+                        DO 20 I = 1, IZERO - 1
+                           A( IOFF+I ) = ZERO
+   20                   CONTINUE
+                        IOFF = IOFF + IZERO
+                        DO 30 I = IZERO, N
+                           A( IOFF ) = ZERO
+                           IOFF = IOFF + LDA
+   30                   CONTINUE
                      ELSE
-                        IZERO = N / 2 + 1
-                     END IF
-*
-                     IF( IMAT.LT.6 ) THEN
-*
-*                       Set row and column IZERO to zero.
-*
-                        IF( IUPLO.EQ.1 ) THEN
-                           IOFF = ( IZERO-1 )*LDA
-                           DO 20 I = 1, IZERO - 1
-                              A( IOFF+I ) = ZERO
-   20                      CONTINUE
-                           IOFF = IOFF + IZERO
-                           DO 30 I = IZERO, N
-                              A( IOFF ) = ZERO
-                              IOFF = IOFF + LDA
-   30                      CONTINUE
-                        ELSE
-                           IOFF = IZERO
-                           DO 40 I = 1, IZERO - 1
-                              A( IOFF ) = ZERO
-                              IOFF = IOFF + LDA
-   40                      CONTINUE
-                           IOFF = IOFF - IZERO
-                           DO 50 I = IZERO, N
-                              A( IOFF+I ) = ZERO
-   50                      CONTINUE
-                        END IF
-                     ELSE
-                        IOFF = 0
-                        IF( IUPLO.EQ.1 ) THEN
-*
-*                       Set the first IZERO rows and columns to zero.
-*
-                           DO 70 J = 1, N
-                              I2 = MIN( J, IZERO )
-                              DO 60 I = 1, I2
-                                 A( IOFF+I ) = ZERO
-   60                         CONTINUE
-                              IOFF = IOFF + LDA
-   70                      CONTINUE
-                           IZERO = 1
-                        ELSE
-*
-*                       Set the first IZERO rows and columns to zero.
-*
-                           IOFF = 0
-                           DO 90 J = 1, N
-                              I1 = MAX( J, IZERO )
-                              DO 80 I = I1, N
-                                 A( IOFF+I ) = ZERO
-   80                         CONTINUE
-                              IOFF = IOFF + LDA
-   90                      CONTINUE
-                        END IF
+                        IOFF = IZERO
+                        DO 40 I = 1, IZERO - 1
+                           A( IOFF ) = ZERO
+                           IOFF = IOFF + LDA
+   40                   CONTINUE
+                        IOFF = IOFF - IZERO
+                        DO 50 I = IZERO, N
+                           A( IOFF+I ) = ZERO
+   50                   CONTINUE
                      END IF
                   ELSE
-                     IZERO = 0
+                     IOFF = 0
+                     IF( IUPLO.EQ.1 ) THEN
+*
+*                       Set the first IZERO rows and columns to zero.
+*
+                        DO 70 J = 1, N
+                           I2 = MIN( J, IZERO )
+                           DO 60 I = 1, I2
+                              A( IOFF+I ) = ZERO
+   60                      CONTINUE
+                           IOFF = IOFF + LDA
+   70                   CONTINUE
+                        IZERO = 1
+                     ELSE
+*
+*                       Set the last IZERO rows and columns to zero.
+*
+                        DO 90 J = 1, N
+                           I1 = MAX( J, IZERO )
+                           DO 80 I = I1, N
+                              A( IOFF+I ) = ZERO
+   80                      CONTINUE
+                           IOFF = IOFF + LDA
+   90                   CONTINUE
+                     END IF
                   END IF
-*
-*                 End generate the test matrix A.
-*
+               ELSE
+                  IZERO = 0
+               END IF
 *
                DO 150 IFACT = 1, NFACT
 *
@@ -386,7 +375,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by CHESVX.
+*                 the value returned by DSYSVX.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -397,23 +386,22 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
+                     ANORM = DLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *                    Factor the matrix A.
 *
-c                     CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-c                     SRNAMT = 'CHETRF_AASEN'
-c                     CALL CHETRF_AASEN( UPLO, N, AFAC, LDA, IWORK,
-c     $                            WORK, LWORK, INFO )
+c                     CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+c                     CALL DSYTRF( UPLO, N, AFAC, LDA, IWORK, WORK,
+c     $                            LWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-c                     CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+c                     CALL DLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
 c                     LWORK = (N+NB+1)*(NB+3)
-c                     SRNAMT = 'CHETRI2'
-c                     CALL CHETRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+c                     SRNAMT = 'DSYTRI2'
+c                     CALL DSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
 c     $                            LWORK, INFO )
-c                     AINVNM = CLANHE( '1', UPLO, N, AINV, LDA, RWORK )
+c                     AINVNM = DLANSY( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -426,22 +414,22 @@ c                     END IF
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'CLARHS'
-                  CALL CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'DLARHS'
+                  CALL DLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test CHESV_AASEN  ---
+*                 --- Test DSYSV_AA  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using CHESV_AASEN.
+*                    Factor the matrix and solve the system using DSYSV_AA.
 *
-                     SRNAMT = 'CHESV_AASEN '
-                     CALL CHESV_AASEN( UPLO, N, NRHS, AFAC, LDA, IWORK,
+                     SRNAMT = 'DSYSV_AA'
+                     CALL DSYSV_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
      $                                 X, LDA, WORK, LWORK, INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -464,11 +452,11 @@ c                     END IF
                         K = 0
                      END IF
 *
-*                    Check error code from CHESV_AASEN .
-*					 
+*                    Check error code from DSYSV_AA .
+*
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'CHESV_AASEN', INFO, K, 
-     $                               UPLO, N, N, -1, -1, NRHS, 
+                        CALL ALAERH( PATH, 'DSYSV_AA ', INFO, K,
+     $                               UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 120
                      ELSE IF( INFO.NE.0 ) THEN
@@ -478,19 +466,19 @@ c                     END IF
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL CHET01_AASEN( UPLO, N, A, LDA, AFAC, LDA,
+                     CALL DSYT01_AA( UPLO, N, A, LDA, AFAC, LDA,
      $                                  IWORK, AINV, LDA, RWORK, 
      $                                  RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL DGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -501,8 +489,8 @@ c                     END IF
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'CHESV_AASEN ',
-     $                         UPLO, N, IMAT, K, RESULT( K )
+                           WRITE( NOUT, FMT = 9999 )'DSYSV_AA ',
+     $                        UPLO, N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
   110                CONTINUE
@@ -524,6 +512,6 @@ c                     END IF
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of CDRVHE_AASEN
+*     End of DDRVSY_AA
 *
       END

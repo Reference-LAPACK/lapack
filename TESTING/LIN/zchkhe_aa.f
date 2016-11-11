@@ -1,4 +1,4 @@
-*> \brief \b DCHKSY_AASEN
+*> \brief \b ZCHKHE_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,20 +8,21 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKSY_AASEN( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*       SUBROUTINE ZCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
 *                                THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
 *                                XACT, WORK, RWORK, IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
-*       INTEGER            NMAX, NN, NNB, NNS, NOUT
+*       INTEGER            NN, NNB, NNS, NOUT
 *       DOUBLE PRECISION   THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-*       DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $                   WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -30,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> DCHKSY_AASEN tests DSYTRF_AASEN, -TRS_AASEN.
+*> ZCHKHE_AA tests ZHETRF_AA, -TRS_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -103,38 +104,38 @@
 *>
 *> \param[out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*>          A is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AFAC
 *> \verbatim
-*>          AFAC is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*>          AFAC is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AINV
 *> \verbatim
-*>          AINV is DOUBLE PRECISION array, dimension (NMAX*NMAX)
+*>          AINV is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] B
 *> \verbatim
-*>          B is DOUBLE PRECISION array, dimension (NMAX*NSMAX)
+*>          B is COMPLEX*16 array, dimension (NMAX*NSMAX)
 *>          where NSMAX is the largest entry in NSVAL.
 *> \endverbatim
 *>
 *> \param[out] X
 *> \verbatim
-*>          X is DOUBLE PRECISION array, dimension (NMAX*NSMAX)
+*>          X is COMPLEX*16 array, dimension (NMAX*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] XACT
 *> \verbatim
-*>          XACT is DOUBLE PRECISION array, dimension (NMAX*NSMAX)
+*>          XACT is COMPLEX*16 array, dimension (NMAX*NSMAX)
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (NMAX*max(3,NSMAX))
+*>          WORK is COMPLEX*16 array, dimension (NMAX*max(3,NSMAX))
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -144,7 +145,7 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (2*NMAX)
+*>          IWORK is INTEGER array, dimension (NMAX)
 *> \endverbatim
 *>
 *> \param[in] NOUT
@@ -164,10 +165,10 @@
 *> \date November 2016
 *
 *
-*> \ingroup double_lin
+*> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE DCHKSY_AASEN( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+      SUBROUTINE ZCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                         THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
      $                         X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -180,21 +181,24 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
-      INTEGER            NN, NNB, NNS, NMAX, NOUT
+      INTEGER            NMAX, NN, NNB, NNS, NOUT
       DOUBLE PRECISION   THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-      DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
-     $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+      DOUBLE PRECISION   RWORK( * )
+      COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
+     $                   WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      DOUBLE PRECISION   ZERO
+      PARAMETER          ( ZERO = 0.0D+0 )
+      COMPLEX*16         CZERO
+      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
@@ -207,7 +211,7 @@
       INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
      $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      DOUBLE PRECISION   ANORM, CNDNUM, RCONDC
+      DOUBLE PRECISION   ANORM, CNDNUM, RCOND, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -215,14 +219,14 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, DLANSY
-      EXTERNAL           DGET06, DLANSY
+      DOUBLE PRECISION   DGET06, ZLANHE
+      EXTERNAL           DGET06, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DGET04, DLACPY,
-     $                   DLARHS, DLATB4, DLATMS, DPOT02, DPOT03, DPOT05,
-     $                   DSYCON, DSYRFS, DSYT01, DSYTRF_AASEN,
-     $                   DSYTRI2, DSYTRS_AASEN, XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRHE, ZGET04,
+     $                   ZHECON, ZHERFS, ZHET01, ZHETRF_AA, ZHETRI2,
+     $                   ZHETRS_AA, ZLACPY, ZLAIPD, ZLARHS, ZLATB4, 
+     $                   ZLATMS, ZPOT02, ZPOT03, ZPOT05
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -246,13 +250,13 @@
 *
 *     Test path
 *
-      PATH( 1: 1 ) = 'Double precision'
-      PATH( 2: 3 ) = 'SA'
+      PATH( 1: 1 ) = 'Zomplex precision'
+      PATH( 2: 3 ) = 'HA'
 *
 *     Path to generate matrices
 *
-      MATPATH( 1: 1 ) = 'Double precision'
-      MATPATH( 2: 3 ) = 'SY'
+      MATPATH( 1: 1 ) = 'Zomplex precision'
+      MATPATH( 2: 3 ) = 'HE'
       NRUN = 0
       NFAIL = 0
       NERRS = 0
@@ -263,7 +267,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL DERRSY( PATH, NOUT )
+     $   CALL ZERRHE( PATH, NOUT )
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
@@ -287,9 +291,6 @@
      $      NIMAT = 1
 *
          IZERO = 0
-*
-*        Do for each value of matrix type IMAT
-*
          DO 170 IMAT = 1, NIMAT
 *
 *           Do the tests only if DOTYPE( IMAT ) is true.
@@ -308,36 +309,32 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Begin generate the test matrix A.
-*
-*
-*              Set up parameters with DLATB4 for the matrix generator
+*              Set up parameters with ZLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-               CALL DLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
-     $                      ANORM, MODE, CNDNUM, DIST )
+               CALL ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
+     $                       ANORM, MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with DLATMS.
+*              Generate a matrix with ZLATMS.
 *
-               SRNAMT = 'DLATMS'
-               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               SRNAMT = 'ZLATMS'
+               CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from DLATMS and handle error.
+*              Check error code from ZLATMS and handle error.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-*                    Skip all tests for this generated matrix
+*                 Skip all tests for this generated matrix
 *
                   GO TO 160
                END IF
 *
-*              For matrix types 3-6, zero one or more rows and
-*              columns of the matrix to test that INFO is returned
-*              correctly.
+*              For types 3-6, zero one or more rows and columns of
+*              the matrix to test that INFO is returned correctly.
 *
                IF( ZEROT ) THEN
                   IF( IMAT.EQ.3 ) THEN
@@ -355,22 +352,22 @@
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDA
                         DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    20                   CONTINUE
                         IOFF = IOFF + IZERO
                         DO 30 I = IZERO, N
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    30                   CONTINUE
                      ELSE
                         IOFF = IZERO
                         DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    40                   CONTINUE
                         IOFF = IOFF - IZERO
                         DO 50 I = IZERO, N
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    50                   CONTINUE
                      END IF
                   ELSE
@@ -382,7 +379,7 @@
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    60                      CONTINUE
                            IOFF = IOFF + LDA
    70                   CONTINUE
@@ -395,7 +392,7 @@
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    80                      CONTINUE
                            IOFF = IOFF + LDA
    90                   CONTINUE
@@ -405,7 +402,12 @@
                   IZERO = 0
                END IF
 *
-*              End generate the test matrix A.
+*              End generate test matrix A.
+*
+*
+*              Set the imaginary part of the diagonals.
+*
+               CALL ZLAIPD( N, A, LDA+1, 0 )
 *
 *              Do for each value of NB in NBVAL
 *
@@ -421,16 +423,16 @@
 *                 will be factorized in place. This is needed to
 *                 preserve the test matrix A for subsequent tests.
 *
-                  CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                  CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
 *
 *                 Compute the L*D*L**T or U*D*U**T factorization of the
 *                 matrix. IWORK stores details of the interchanges and
 *                 the block structure of D. AINV is a work array for
 *                 block factorization, LWORK is the length of AINV.
 *
-                  SRNAMT = 'DSYTRF_AASEN'
-                  LWORK = N*NB + N
-                  CALL DSYTRF_AASEN( UPLO, N, AFAC, LDA, IWORK, AINV, 
+                  LWORK = ( NB+1 )*LDA
+                  SRNAMT = 'ZHETRF_AA'
+                  CALL ZHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV, 
      $                               LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -453,10 +455,10 @@
                      K = 0
                   END IF
 *
-*                 Check error code from DSYTRF and handle error.
+*                 Check error code from ZHETRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'DSYTRF_AASEN', INFO, K, UPLO, 
+                     CALL ALAERH( PATH, 'ZHETRF_AA', INFO, K, UPLO, 
      $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS, 
      $                            NOUT )
                   END IF
@@ -472,7 +474,7 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL DSYT01_AASEN( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+                  CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
      $                               AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
@@ -503,39 +505,37 @@
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
-*+    TEST 3 ( Using TRS)
+*+    TEST 3 (Using TRS)
 *                 Solve and compute residual for  A * X = B.
 *
 *                    Choose a set of NRHS random solution vectors
 *                    stored in XACT and set up the right hand side B
 *
-                     SRNAMT = 'DLARHS'
-                     CALL DLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
-     $                            KL, KU, NRHS, A, LDA, XACT, LDA,
+                     SRNAMT = 'ZLARHS'
+                     CALL ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
+     $                             KL, KU, NRHS, A, LDA, XACT, LDA, 
      $                            B, LDA, ISEED, INFO )
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'DSYTRS_AASEN'
+                     SRNAMT = 'ZHETRS_AA'
                      LWORK = 3*N-2
-                     CALL DSYTRS_AASEN( UPLO, N, NRHS, AFAC, LDA, 
-     $                                  IWORK, X, LDA, WORK, LWORK,
-     $                                  INFO )
+                     CALL ZHETRS_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
+     $                                  X, LDA, WORK, LWORK, INFO )
 *
-*                    Check error code from DSYTRS and handle error.
+*                    Check error code from ZHETRS and handle error.
 *
                      IF( INFO.NE.0 ) THEN
-                        CALL ALAERH( PATH, 'DSYTRS_AASEN', INFO, 0,
-     $                               UPLO, N, N, -1, -1, NRHS, IMAT,
-     $                               NFAIL, NERRS, NOUT )
+                        CALL ALAERH( PATH, 'ZHETRS', INFO, 0, UPLO, N,
+     $                                N, -1, -1, NRHS, IMAT, NFAIL,
+     $                                NERRS, NOUT )
                      END IF
 *
-                     CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
 *
 *                    Compute the residual for the solution
 *
-                     CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
-*
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -568,10 +568,12 @@
      $      I2, ', test ', I2, ', ratio =', G12.5 )
  9998 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NRHS=', I3, ', type ',
      $      I2, ', test(', I2, ') =', G12.5 )
+c 9997 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ',', 10X, ' type ', I2,
+c     $      ', test(', I2, ') =', G12.5 )
  9995 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
       RETURN
 *
-*     End of DCHKSY_AASEN
+*     End of ZCHKHE_AA
 *
       END

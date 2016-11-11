@@ -1,4 +1,4 @@
-*> \brief \b SSYTRS_AASEN
+*> \brief \b DSYTRS_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYTRS_AASEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssytrs_aasen.f">
+*> Download DSYTRS_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrs_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssytrs_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrs_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssytrs_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrs_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYTRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+*       SUBROUTINE DSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                                WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       REAL   A( LDA, * ), B( LDB, * ), WORK( * )
+*       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 * 
 *
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> SSYTRS_AASEN solves a system of linear equations A*X = B with a real
+*> DSYTRS_AA solves a system of linear equations A*X = B with a real
 *> symmetric matrix A using the factorization A = U*T*U**T or
-*> A = L*T*L**T computed by SSYTRF_AASEN.
+*> A = L*T*L**T computed by DSYTRF_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -68,8 +68,8 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is REAL array, dimension (LDA,N)
-*>          Details of factors computed by SSYTRF_AASEN.
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          Details of factors computed by DSYTRF_AA.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -81,12 +81,12 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          Details of the interchanges as computed by SSYTRF_AASEN.
+*>          Details of the interchanges as computed by DSYTRF_AA.
 *> \endverbatim
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, dimension (LDB,NRHS)
+*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
 *>          On entry, the right hand side matrix B.
 *>          On exit, the solution matrix X.
 *> \endverbatim
@@ -123,10 +123,10 @@
 *
 *> \date November 2016
 *
-*> \ingroup realSYcomputational
+*> \ingroup doubleSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE SSYTRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE DSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                         WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -142,13 +142,13 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      REAL   A( LDA, * ), B( LDB, * ), WORK( * )
+      DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
-      REAL               ONE
-      PARAMETER          ( ONE = 1.0E+0 )
+      DOUBLE PRECISION   ONE
+      PARAMETER          ( ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, UPPER
@@ -159,7 +159,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGTSV, SSWAP, STRSM, XERBLA
+      EXTERNAL           DGTSV, DSWAP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -183,7 +183,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYTRS_AASEN', -INFO )
+         CALL XERBLA( 'DSYTRS_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          LWKOPT = (3*N-2)
@@ -202,43 +202,38 @@
 *
 *        Pivot, P**T * B
 *
-         K = 1
-         DO WHILE ( K.LE.N )
+         DO K = 1, N
             KP = IPIV( K )
             IF( KP.NE.K )
-     $          CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            K = K + 1
+     $          CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
          END DO
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL STRSM('L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+         CALL DTRSM('L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
      $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (U \P**T * B) ]
 *
-         CALL SLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL DLACPY( 'F', 1, N, A( 1, 1 ), LDA+1, WORK( N ), 1)
          IF( N.GT.1 ) THEN
-             CALL SLACPY( 'F', 1, N-1, A(1, 2), LDA+1, WORK(1), 1)
-             CALL SLACPY( 'F', 1, N-1, A(1, 2), LDA+1, WORK(2*N), 1)
+            CALL DLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1 )
+            CALL DLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1 )
          END IF
-         CALL SGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
-     $              INFO)
-*      
+         CALL DGTSV( N, NRHS, WORK( 1 ), WORK( N ), WORK( 2*N ), B, LDB,
+     $               INFO )
 *
 *        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *
-         CALL STRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
-     $               B(2, 1), LDB)
+         CALL DTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+     $               B( 2, 1 ), LDB)
 *
 *        Pivot, P * B  [ P * (U**T \ (T \ (U \P**T * B) )) ]
 *
-         K = N
-         DO WHILE ( K.GE.1 )
+         DO K = N, 1, -1
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            K = K - 1
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
          END DO
 *
       ELSE
@@ -247,48 +242,44 @@
 *
 *        Pivot, P**T * B
 *
-         K = 1
-         DO WHILE ( K.LE.N )
+         DO K = 1, N
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            K = K + 1
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
          END DO
 *
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-         CALL STRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1), LDA,
-     $               B(2, 1), LDB)
+         CALL DTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+     $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
-         CALL SLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL DLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL SLACPY( 'F', 1, N-1, A(2, 1), LDA+1, WORK(1), 1)
-             CALL SLACPY( 'F', 1, N-1, A(2, 1), LDA+1, WORK(2*N), 1)
+            CALL DLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1 )
+            CALL DLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1 )
          END IF
-         CALL SGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
-     $              INFO)
+         CALL DGTSV( N, NRHS, WORK( 1 ), WORK(N), WORK( 2*N ), B, LDB,
+     $               INFO)
 *
 *        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-         CALL STRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+         CALL DTRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
      $              B( 2, 1 ), LDB)
 *
 *        Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
 *
-         K = N
-         DO WHILE ( K.GE.1 )
+         DO K = N, 1, -1
             KP = IPIV( K )
             IF( KP.NE.K )
-     $         CALL SSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
-            K = K - 1
+     $         CALL DSWAP( NRHS, B( K, 1 ), LDB, B( KP, 1 ), LDB )
          END DO
 *
       END IF
 *
       RETURN
 *
-*     End of SSYTRS_AASEN
+*     End of DSYTRS_AA
 *
       END

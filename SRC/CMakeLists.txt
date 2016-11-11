@@ -114,7 +114,7 @@ set(SLASRC
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
    slarf.f  slarfb.f slarfg.f slarfgp.f slarft.f slarfx.f slargv.f
    slarrv.f slartv.f
-   slarz.f  slarzb.f slarzt.f slaswp.f slasy2.f slasyf.f slasyf_rook.f slasyf_aasen.f
+   slarz.f  slarzb.f slarzt.f slaswp.f slasy2.f slasyf.f slasyf_rook.f slasyf_aa.f
    slatbs.f slatdf.f slatps.f slatrd.f slatrs.f slatrz.f
    slauu2.f slauum.f sopgtr.f sopmtr.f sorg2l.f sorg2r.f
    sorgbr.f sorghr.f sorgl2.f sorglq.f sorgql.f sorgqr.f sorgr2.f
@@ -135,7 +135,7 @@ set(SLASRC
    ssygst.f ssygv.f  ssygvd.f ssygvx.f ssyrfs.f ssysv.f  ssysvx.f
    ssytd2.f ssytf2.f ssytrd.f ssytrf.f ssytri.f ssytri2.f ssytri2x.f
    ssyswapr.f ssytrs.f ssytrs2.f ssyconv.f
-   ssysv_aasen.f ssytrf_aasen.f ssytrs_aasen.f
+   ssysv_aa.f ssytrf_aa.f ssytrs_aa.f
    ssytf2_rook.f ssytrf_rook.f ssytrs_rook.f
    ssytri_rook.f ssycon_rook.f ssysv_rook.f
    stbcon.f
@@ -189,7 +189,7 @@ set(CLASRC
    chetf2.f chetrd.f
    chetrf.f chetri.f chetri2.f chetri2x.f cheswapr.f
    chetrs.f chetrs2.f
-   chesv_aasen.f chetrf_aasen.f chetrs_aasen.f
+   chesv_aa.f chetrf_aa.f chetrs_aa.f
    chetf2_rook.f chetrf_rook.f chetri_rook.f chetrs_rook.f checon_rook.f chesv_rook.f
    chgeqz.f chpcon.f chpev.f  chpevd.f
    chpevx.f chpgst.f chpgv.f  chpgvd.f chpgvx.f chprfs.f chpsv.f
@@ -198,7 +198,7 @@ set(CLASRC
    clacgv.f clacon.f clacn2.f clacp2.f clacpy.f clacrm.f clacrt.f cladiv.f
    claed0.f claed7.f claed8.f
    claein.f claesy.f claev2.f clags2.f clagtm.f
-   clahef.f clahef_rook.f clahef_aasen.f clahqr.f
+   clahef.f clahef_rook.f clahef_aa.f clahqr.f
    clahr2.f claic1.f clals0.f clalsa.f clalsd.f clangb.f clange.f clangt.f
    clanhb.f clanhe.f
    clanhp.f clanhs.f clanht.f clansb.f clansp.f clansy.f clantb.f
@@ -283,7 +283,7 @@ set(DLASRC
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
    dlarf.f  dlarfb.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlargv.f
    dlarrv.f dlartv.f
-   dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f dlasyf.f dlasyf_rook.f dlasyf_aasen.f
+   dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f dlasyf.f dlasyf_rook.f dlasyf_aa.f
    dlatbs.f dlatdf.f dlatps.f dlatrd.f dlatrs.f dlatrz.f dlauu2.f
    dlauum.f dopgtr.f dopmtr.f dorg2l.f dorg2r.f
    dorgbr.f dorghr.f dorgl2.f dorglq.f dorgql.f dorgqr.f dorgr2.f
@@ -305,7 +305,7 @@ set(DLASRC
    dsysv.f  dsysvx.f
    dsytd2.f dsytf2.f dsytrd.f dsytrf.f dsytri.f dsytrs.f dsytrs2.f
    dsytri2.f dsytri2x.f dsyswapr.f dsyconv.f
-   dsysv_aasen.f dsytrf_aasen.f dsytrs_aasen.f
+   dsysv_aa.f dsytrf_aa.f dsytrs_aa.f
    dsytf2_rook.f dsytrf_rook.f dsytrs_rook.f
    dsytri_rook.f dsycon_rook.f dsysv_rook.f
    dtbcon.f
@@ -358,7 +358,7 @@ set(ZLASRC
    zhetf2.f zhetrd.f
    zhetrf.f zhetri.f zhetri2.f zhetri2x.f zheswapr.f
    zhetrs.f zhetrs2.f
-   zhesv_aasen.f zhetrf_aasen.f zhetrs_aasen.f
+   zhesv_aa.f zhetrf_aa.f zhetrs_aa.f
    zhetf2_rook.f zhetrf_rook.f zhetri_rook.f zhetrs_rook.f zhecon_rook.f zhesv_rook.f
    zhgeqz.f zhpcon.f zhpev.f  zhpevd.f
    zhpevx.f zhpgst.f zhpgv.f  zhpgvd.f zhpgvx.f zhprfs.f zhpsv.f
@@ -367,7 +367,7 @@ set(ZLASRC
    zlacgv.f zlacon.f zlacn2.f zlacp2.f zlacpy.f zlacrm.f zlacrt.f zladiv.f
    zlaed0.f zlaed7.f zlaed8.f
    zlaein.f zlaesy.f zlaev2.f zlags2.f zlagtm.f
-   zlahef.f zlahef_rook.f zlahef_aasen.f zlahqr.f
+   zlahef.f zlahef_rook.f zlahef_aa.f zlahqr.f
    zlahr2.f zlaic1.f zlals0.f zlalsa.f zlalsd.f zlangb.f zlange.f
    zlangt.f zlanhb.f
    zlanhe.f

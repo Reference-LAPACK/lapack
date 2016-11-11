@@ -1,4 +1,4 @@
-*> \brief \b SDRVSY_AASEN
+*> \brief \b ZDRVHE_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,20 +8,21 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SDRVSY_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
-*                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
-*                          NOUT )
+*       SUBROUTINE ZDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*                                A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
+*                                NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NMAX, NN, NOUT, NRHS
-*       REAL               THRESH
+*       DOUBLE PRECISION   THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NVAL( * )
-*       REAL               A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $                   WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -30,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> SDRVSY_AASEN tests the driver routine SSYSV_AASEN.
+*> ZDRVHE_AA tests the driver routine ZHESV_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -65,7 +66,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is REAL
+*>          THRESH is DOUBLE PRECISION
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -86,47 +87,47 @@
 *>
 *> \param[out] A
 *> \verbatim
-*>          A is REAL array, dimension (NMAX*NMAX)
+*>          A is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AFAC
 *> \verbatim
-*>          AFAC is REAL array, dimension (NMAX*NMAX)
+*>          AFAC is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AINV
 *> \verbatim
-*>          AINV is REAL array, dimension (NMAX*NMAX)
+*>          AINV is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] B
 *> \verbatim
-*>          B is REAL array, dimension (NMAX*NRHS)
+*>          B is COMPLEX*16 array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] X
 *> \verbatim
-*>          X is REAL array, dimension (NMAX*NRHS)
+*>          X is COMPLEX*16 array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] XACT
 *> \verbatim
-*>          XACT is REAL array, dimension (NMAX*NRHS)
+*>          XACT is COMPLEX*16 array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (NMAX*max(2,NRHS))
+*>          WORK is COMPLEX*16 array, dimension (NMAX*max(2,NRHS))
 *> \endverbatim
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (NMAX+2*NRHS)
+*>          RWORK is DOUBLE PRECISION array, dimension (NMAX+2*NRHS)
 *> \endverbatim
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (2*NMAX)
+*>          IWORK is INTEGER array, dimension (NMAX)
 *> \endverbatim
 *>
 *> \param[in] NOUT
@@ -145,11 +146,11 @@
 *
 *> \date November 2016
 *
-*> \ingroup real_lin
+*> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE SDRVSY_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
+      SUBROUTINE ZDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK, 
      $                         RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -160,20 +161,21 @@
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
       INTEGER            NMAX, NN, NOUT, NRHS
-      REAL               THRESH
+      DOUBLE PRECISION   THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), NVAL( * )
-      REAL               A( * ), AFAC( * ), AINV( * ), B( * ),
-     $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+      DOUBLE PRECISION   RWORK( * )
+      COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
+     $                   WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
+      DOUBLE PRECISION   ONE, ZERO
+      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES, NTESTS
       PARAMETER          ( NTYPES = 10, NTESTS = 3 )
       INTEGER            NFACT
@@ -186,21 +188,22 @@
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
      $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      REAL               AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      REAL               RESULT( NTESTS )
+      DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               DGET06, SLANSY
-      EXTERNAL           DGET06, SLANSY
+      DOUBLE PRECISION   DGET06, ZLANHE
+      EXTERNAL           DGET06, ZLANHE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, SERRVX, SGET04, SLACPY,
-     $                   SLARHS, SLASET, SLATB4, SLATMS, SPOT02, DPOT05,
-     $                   SSYSV_AASEN, SSYT01_AASEN, SSYTRF_AASEN, XLAENV
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
+     $                   ZHESV_AA, ZHET01_AA, ZHETRF_AA, 
+     $                   ZHETRI2, ZLACPY, ZLAIPD, ZLARHS, ZLATB4, ZLATMS,
+     $                   ZPOT02
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -212,7 +215,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          DCMPLX, MAX, MIN
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /
@@ -224,13 +227,13 @@
 *
 *     Test path
 *
-      PATH( 1: 1 ) = 'Single precision'
-      PATH( 2: 3 ) = 'SA'
+      PATH( 1: 1 ) = 'Zomplex precision'
+      PATH( 2: 3 ) = 'HA'
 *
 *     Path to generate matrices
 *
-      MATPATH( 1: 1 ) = 'Single precision'
-      MATPATH( 2: 3 ) = 'SY'
+      MATPATH( 1: 1 ) = 'Zomplex precision'
+      MATPATH( 2: 3 ) = 'HE'
 *
       NRUN = 0
       NFAIL = 0
@@ -243,7 +246,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL SERRVX( PATH, NOUT )
+     $   CALL ZERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
@@ -281,21 +284,23 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with SLATB4 and generate a test matrix
-*              with SLATMS.
+*              Begin generate the test matrix A.
 *
-               CALL SLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
-     $                      MODE, CNDNUM, DIST )
+*              Set up parameters with ZLATB4 and generate a test matrix
+*              with ZLATMS.
 *
-               SRNAMT = 'SLATMS'
-               CALL SLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+               CALL ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+     $                       MODE, CNDNUM, DIST )
+*
+               SRNAMT = 'ZLATMS'
+               CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
      $                      INFO )
 *
-*              Check error code from SLATMS.
+*              Check error code from ZLATMS.
 *
                IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'SLATMS', INFO, 0, UPLO, N, N, -1,
+                  CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
                   GO TO 160
                END IF
@@ -368,6 +373,10 @@
                   IZERO = 0
                END IF
 *
+*              Set the imaginary part of the diagonals.
+*
+               CALL ZLAIPD( N, A, LDA+1, 0 )
+*
                DO 150 IFACT = 1, NFACT
 *
 *                 Do first for FACT = 'F', then for other values.
@@ -375,7 +384,7 @@
                   FACT = FACTS( IFACT )
 *
 *                 Compute the condition number for comparison with
-*                 the value returned by SSYSVX.
+*                 the value returned by ZHESVX.
 *
                   IF( ZEROT ) THEN
                      IF( IFACT.EQ.1 )
@@ -386,22 +395,21 @@
 *
 *                    Compute the 1-norm of A.
 *
-                     ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
+                     ANORM = ZLANHE( '1', UPLO, N, A, LDA, RWORK )
 *
 *                    Factor the matrix A.
 *
-c                     CALL SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-c                     CALL SSYTRF( UPLO, N, AFAC, LDA, IWORK, WORK,
+c                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+c                     CALL ZHETRF( UPLO, N, AFAC, LDA, IWORK, WORK,
 c     $                            LWORK, INFO )
 *
 *                    Compute inv(A) and take its norm.
 *
-c                     CALL SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
+c                     CALL ZLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
 c                     LWORK = (N+NB+1)*(NB+3)
-c                     SRNAMT = 'DSYTRI2'
-c                     CALL DSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
+c                     CALL ZHETRI2( UPLO, N, AINV, LDA, IWORK, WORK,
 c     $                            LWORK, INFO )
-c                     AINVNM = SLANSY( '1', UPLO, N, AINV, LDA, RWORK )
+c                     AINVNM = ZLANHE( '1', UPLO, N, AINV, LDA, RWORK )
 *
 *                    Compute the 1-norm condition number of A.
 *
@@ -414,22 +422,22 @@ c                     END IF
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'SLARHS'
-                  CALL SLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'ZLARHS'
+                  CALL ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test SSYSV_AASEN  ---
+*                 --- Test ZHESV_AA  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL SLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using SSYSV_AASEN.
+*                    Factor the matrix and solve the system using ZHESV.
 *
-                     SRNAMT = 'SSYSV_AASEN'
-                     CALL SSYSV_AASEN( UPLO, N, NRHS, AFAC, LDA, IWORK,
+                     SRNAMT = 'ZHESV_AA '
+                     CALL ZHESV_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
      $                                 X, LDA, WORK, LWORK, INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -452,12 +460,12 @@ c                     END IF
                         K = 0
                      END IF
 *
-*                    Check error code from SSYSV_AASEN .
+*                    Check error code from ZHESV .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'SSYSV_AASEN ', INFO, K, 
-     $                               UPLO, N, N, -1, -1, NRHS, 
-     $                               IMAT, NFAIL, NERRS, NOUT )
+                        CALL ALAERH( PATH, 'ZHESV_AA', INFO, K, UPLO, N,
+     $                               N, -1, -1, NRHS, IMAT, NFAIL,
+     $                               NERRS, NOUT )
                         GO TO 120
                      ELSE IF( INFO.NE.0 ) THEN
                         GO TO 120
@@ -466,19 +474,19 @@ c                     END IF
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL SSYT01_AASEN( UPLO, N, A, LDA, AFAC, LDA,
+                     CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
      $                                  IWORK, AINV, LDA, RWORK, 
      $                                  RESULT( 1 ) )
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL SPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
 *
 *                    Check solution from generated exact solution.
 *
-                     CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
+                     CALL ZGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
      $                            RESULT( 3 ) )
                      NT = 3
 *
@@ -489,8 +497,8 @@ c                     END IF
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'SSYSV_AASEN ',
-     $                        UPLO, N, IMAT, K, RESULT( K )
+                           WRITE( NOUT, FMT = 9999 )'ZHESV_AA', UPLO, N,
+     $                        IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
   110                CONTINUE
@@ -510,8 +518,8 @@ c                     END IF
 *
  9999 FORMAT( 1X, A, ', UPLO=''', A1, ''', N =', I5, ', type ', I2,
      $      ', test ', I2, ', ratio =', G12.5 )
-      RETURN
+       RETURN
 *
-*     End of SDRVSY_AASEN
+*     End of ZDRVHE_AA
 *
       END

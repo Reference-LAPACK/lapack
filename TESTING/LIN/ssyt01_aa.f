@@ -1,4 +1,4 @@
-*> \brief \b SSYT01_AASEN
+*> \brief \b SSYT01_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SSYT01_AASEN( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
+*       SUBROUTINE SSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
 *                          C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> SSYT01_AASEN reconstructs a symmetric indefinite matrix A from its
+*> SSYT01_AA reconstructs a symmetric indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -122,7 +122,7 @@
 *> \ingroup real_lin
 *
 *  =====================================================================
-      SUBROUTINE SSYT01_AASEN( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE SSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
      $                         LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -257,6 +257,6 @@
 *
       RETURN
 *
-*     End of SSYT01_AASEN
+*     End of SSYT01_AA
 *
       END

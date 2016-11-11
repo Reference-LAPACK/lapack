@@ -1,4 +1,4 @@
-*> \brief <b> CHESV_AASEN computes the solution to system of linear equations A * X = B for HE matrices</b>
+*> \brief <b> ZHESV_AA computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHESV_AASEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chesv_aasen.f">
+*> Download ZHESV_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chesv_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesv_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesv_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHESV_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE ZHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                               LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       COMPLEX         A( LDA, * ), B( LDB, * ), WORK( * )
+*       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 * 
 *
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CHESV_AASEN computes the solution to a complex system of linear equations
+*> ZHESV_AA computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
 *> matrices.
@@ -75,7 +75,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the Hermitian matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
@@ -87,7 +87,7 @@
 *>          On exit, if INFO = 0, the tridiagonal matrix T and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*T*U**H or A = L*T*L**H as computed by
-*>          CHETRF_AASEN.
+*>          ZHETRF_AA.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -106,7 +106,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, the N-by-NRHS right hand side matrix B.
 *>          On exit, if INFO = 0, the N-by-NRHS solution matrix X.
 *> \endverbatim
@@ -119,7 +119,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -128,7 +128,7 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= 1, and for best performance
 *>          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
-*>          CHETRF.
+*>          ZHETRF.
 *>          for LWORK < N, TRS will be done with Level BLAS 2
 *>          for LWORK >= N, TRS will be done with Level BLAS 3
 *>
@@ -158,10 +158,10 @@
 *
 *> \date November 2016
 *
-*> \ingroup complexHEsolve
+*> \ingroup complex16HEsolve
 *
 *  =====================================================================
-      SUBROUTINE CHESV_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+      SUBROUTINE ZHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                        LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -175,7 +175,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      COMPLEX         A( LDA, * ), B( LDB, * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -190,7 +190,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CHETRF, CHETRS, CHETRS2
+      EXTERNAL           XERBLA, ZHETRF, ZHETRS, ZHETRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -216,13 +216,13 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         NB = ILAENV( 1, 'CHETRF_AASEN', UPLO, N, -1, -1, -1 )
+         NB = ILAENV( 1, 'ZHETRF_AA', UPLO, N, -1, -1, -1 )
          LWKOPT = MAX( 3*N-2, (1+NB)*N )
          WORK( 1 ) = LWKOPT
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHESV_AASEN ', -INFO )
+         CALL XERBLA( 'ZHESV_AA ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -230,12 +230,12 @@
 *
 *     Compute the factorization A = U*T*U**H or A = L*T*L**H.
 *
-      CALL CHETRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL ZHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL CHETRS_AASEN( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+         CALL ZHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                      LWORK, INFO )
 *
       END IF
@@ -244,6 +244,6 @@
 *
       RETURN
 *
-*     End of CHESV_AASEN
+*     End of ZHESV_AA
 *
       END

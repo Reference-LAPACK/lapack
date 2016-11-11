@@ -651,7 +651,7 @@
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
-            CALL CCHKHE_AASEN( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
+            CALL CCHKHE_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
      $                         NSVAL, THRESH, TSTERR, LDA, 
      $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
@@ -661,7 +661,7 @@
          END IF
 *
          IF( TSTDRV ) THEN
-            CALL CDRVHE_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, 
+            CALL CDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, 
      $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), 
      $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), 
      $                         WORK, RWORK, IWORK, NOUT )

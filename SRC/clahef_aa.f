@@ -1,4 +1,4 @@
-*> \brief \b CLAHEF_AASEN
+*> \brief \b CLAHEF_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CLAHEF_AASEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahef_aasen.f">
+*> Download CLAHEF_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/clahef_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahef_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/clahef_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahef_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/clahef_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CLAHEF_AASEN( UPLO, J1, M, NB, A, LDA, IPIV,
+*       SUBROUTINE CLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
 *                                H, LDH, WORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLATRF_AASEN factorizes a panel of a real hermitian matrix A using
+*> DLATRF_AA factorizes a panel of a real hermitian matrix A using
 *> the Aasen's algorithm. The panel consists of a set of NB rows of A
 *> when UPLO is U, or a set of NB columns when UPLO is L.
 *>
@@ -66,7 +66,7 @@
 *>          J1 is INTEGER
 *>          The location of the first row, or column, of the panel
 *>          within the submatrix of A, passed to this routine, e.g.,
-*>          when called by CHETRF_AASEN, for the first panel, J1 is 1,
+*>          when called by CHETRF_AA, for the first panel, J1 is 1,
 *>          while for the remaining panels, J1 is 2.
 *> \endverbatim
 *>
@@ -151,7 +151,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE CLAHEF_AASEN( UPLO, J1, M, NB, A, LDA, IPIV,
+      SUBROUTINE CLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
      $                         H, LDH, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -211,7 +211,7 @@
      $      GO TO 20
 *
 *        K is the column to be factorized
-*         when being called from CHETRF_AASEN,
+*         when being called from CHETRF_AA,
 *         > for the first block column, J1 is 1, hence J1+J-1 is J,
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
@@ -365,7 +365,7 @@
      $      GO TO 40
 *
 *        K is the column to be factorized
-*         when being called from CHETRF_AASEN,
+*         when being called from CHETRF_AA,
 *         > for the first block column, J1 is 1, hence J1+J-1 is J,
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
@@ -508,6 +508,6 @@
       END IF
       RETURN
 *
-*     End of CLAHEF_AASEN
+*     End of CLAHEF_AA
 *
       END

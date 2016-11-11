@@ -1,4 +1,4 @@
-*> \brief \b CHET01_AASEN
+*> \brief \b CHET01_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHET01_AASEN( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, 
+*       SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, 
 *                          C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> CHET01_AASEN reconstructs a hermitian indefinite matrix A from its
+*> CHET01_AA reconstructs a hermitian indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -122,7 +122,7 @@
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CHET01_AASEN( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
      $                         LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
@@ -262,6 +262,6 @@
 *
       RETURN
 *
-*     End of CHET01_AASEN
+*     End of CHET01_AA
 *
       END

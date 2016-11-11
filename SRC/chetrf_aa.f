@@ -1,4 +1,4 @@
-*> \brief \b CHETRF_AASEN
+*> \brief \b CHETRF_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETRF_AASEN + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_aasen.f">
+*> Download CHETRF_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrf_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrf_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_aasen.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHETRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+*       SUBROUTINE CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER    UPLO
@@ -34,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> CHETRF_AASEN computes the factorization of a complex hermitian matrix A
+*> CHETRF_AA computes the factorization of a complex hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**T  or  A = L*T*L**T
@@ -134,7 +134,7 @@
 *> \ingroup complexHEcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHETRF_AASEN( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
+      SUBROUTINE CHETRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO)
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -201,7 +201,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETRF_AASEN', -INFO )
+         CALL XERBLA( 'CHETRF_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -259,7 +259,7 @@
 *
 *        Panel factorization
 *
-         CALL CLAHEF_AASEN( UPLO, 2-K1, N-J, JB,
+         CALL CLAHEF_AA( UPLO, 2-K1, N-J, JB,
      $                      A( MAX(1, J), J+1 ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ),
      $                      IINFO )
@@ -383,7 +383,7 @@
 *
 *        Panel factorization
 *
-         CALL CLAHEF_AASEN( UPLO, 2-K1, N-J, JB,
+         CALL CLAHEF_AA( UPLO, 2-K1, N-J, JB,
      $                      A( J+1, MAX(1, J) ), LDA,
      $                      IPIV( J+1 ), WORK, N, WORK( N*NB+1 ), IINFO)
          IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
@@ -478,6 +478,6 @@
    20 CONTINUE
       RETURN
 *
-*     End of CHETRF_AASEN
+*     End of CHETRF_AA
 *
       END
