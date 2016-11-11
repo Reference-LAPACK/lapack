@@ -88,8 +88,9 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, SSPCON, SSYCON_ROOK, SSPRFS,
      $                   SSPTRF, SSPTRI, SSPTRS, SSYCON, SSYRFS, SSYTF2,
-     $                   SSYTF2_ROOK, SSYTRF, SSYTRF_ROOK, SSYTRI,
-     $                   SSYTRI_ROOK, SSYTRI2, SSYTRS, SSYTRS_ROOK
+     $                   SSYTF2_ROOK, SSYTRF, SSYTRF_ROOK, SSYTRF_AA,
+     $                   SSYTRI, SSYTRI_ROOK, SSYTRI2, SSYTRS, 
+     $                   SSYTRS_ROOK, SSYTRS_AA
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -337,6 +338,42 @@
 *        of a symmetric indefinite packed matrix with patrial
 *        (Bunch-Kaufman) pivoting.
 *
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with Aasen's algorithm.
+*
+*        SSYTRF_AA
+*
+         SRNAMT = 'SSYTRF_AA'
+         INFOT = 1
+         CALL SSYTRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'SSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SSYTRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'SSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SSYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'SSYTRF_AA', INFOT, NOUT, LERR, OK )
+*
+*        SSYTRS_AA
+*
+         SRNAMT = 'SSYTRS_AA'
+         INFOT = 1
+         CALL SSYTRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SSYTRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SSYTRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SSYTRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL SSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *
 *        SSPTRF

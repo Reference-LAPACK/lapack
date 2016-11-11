@@ -90,9 +90,9 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, ZHECON, ZHECON_ROOK, ZHERFS,
      $                   ZHETF2, ZHETF2_ROOK, ZHETRF, ZHETRF_ROOK,
-     $                   ZHETRI, ZHETRI_ROOK, ZHETRI2, ZHETRS,
-     $                   ZHETRS_ROOK, ZHPCON, ZHPRFS, ZHPTRF, ZHPTRI,
-     $                   ZHPTRS
+     $                   ZHETRF_AA, ZHETRI, ZHETRI_ROOK, ZHETRI2, 
+     $                   ZHETRS, ZHETRS_ROOK, ZHETRS_AA, ZHPCON, ZHPRFS,
+     $                   ZHPTRF, ZHPTRI, ZHPTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -335,6 +335,43 @@
          INFOT = 6
          CALL ZHECON_ROOK( 'U', 1, A, 1, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'ZHECON_ROOK', INFOT, NOUT, LERR, OK )
+*
+*        Test error exits of the routines that use factorization
+*        of a Hermitian indefinite matrix with Aasen's algorithm.
+*
+      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
+*
+*        ZHETRF_AA
+*
+         SRNAMT = 'ZHETRF_AA'
+         INFOT = 1
+         CALL ZHETRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZHETRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZHETRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZHETRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZHETRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'ZHETRF_AA', INFOT, NOUT, LERR, OK )
+*
+*        ZHETRS_AA
+*
+         SRNAMT = 'ZHETRS_AA'
+         INFOT = 1
+         CALL ZHETRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZHETRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZHETRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZHETRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL ZHETRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
 *
 *        Test error exits of the routines that use factorization
 *        of a Hermitian indefinite packed matrix with patrial
