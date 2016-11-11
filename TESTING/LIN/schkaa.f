@@ -158,10 +158,11 @@
       EXTERNAL           ALAREQ, SCHKEQ, SCHKGB, SCHKGE, SCHKGT, SCHKLQ,
      $                   SCHKPB, SCHKPO, SCHKPS, SCHKPP, SCHKPT, SCHKQ3,
      $                   SCHKQL, SCHKQR, SCHKRQ, SCHKSP, SCHKSY,
-     $                   SCHKSY_ROOK, SCHKTB, SCHKTP, SCHKTR, SCHKTZ,
-     $                   SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB, SDRVPO,
-     $                   SDRVPP, SDRVPT, SDRVSP, SDRVSY, SDRVSY_ROOK,
-     $                   ILAVER, SCHKLQTP, SCHKQRT, SCHKQRTP
+     $                   SCHKSY_ROOK, SCHKSY_AA, SCHKTB, SCHKTP, SCHKTR,
+     $                   SCHKTZ, SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB,
+     $                   SDRVPO, SDRVPP, SDRVPT, SDRVSP, SDRVSY,
+     $                   SDRVSY_ROOK, SDRVSY_AA, ILAVER, SCHKLQTP,
+     $                   SCHKQRT, SCHKQRTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

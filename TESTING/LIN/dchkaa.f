@@ -159,11 +159,11 @@
       EXTERNAL           ALAREQ, DCHKEQ, DCHKGB, DCHKGE, DCHKGT, DCHKLQ,
      $                   DCHKPB, DCHKPO, DCHKPS, DCHKPP, DCHKPT, DCHKQ3,
      $                   DCHKQL, DCHKQR, DCHKRQ, DCHKSP, DCHKSY,
-     $                   DCHKSY_ROOK, DCHKTB, DCHKTP, DCHKTR, DCHKTZ,
-     $                   DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB, DDRVPO,
-     $                   DDRVPP, DDRVPT, DDRVSP, DDRVSY, DDRVSY_ROOK,
-     $                   ILAVER, DCHKQRT, DCHKQRTP, DCHKLQTP, DCHKTSQR,
-     $                   DCHKLQT
+     $                   DCHKSY_ROOK, DCHKSY_AA, DCHKTB, DCHKTP, DCHKTR,
+     $                   DCHKTZ, DDRVGB, DDRVGE, DDRVGT, DDRVLS, DDRVPB,
+     $                   DDRVPO, DDRVPP, DDRVPT, DDRVSP, DDRVSY, 
+     $                   DDRVSY_ROOK, DDRVSY_AA, ILAVER, DCHKQRT, 
+     $                   DCHKQRTP, DCHKLQTP, DCHKTSQR, DCHKLQT
 
 *     ..
 *     .. Scalars in Common ..

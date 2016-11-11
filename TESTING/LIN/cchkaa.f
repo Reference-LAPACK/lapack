@@ -160,13 +160,13 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, CCHKEQ, CCHKGB, CCHKGE, CCHKGT, CCHKHE,
-     $                   CCHKHE_ROOK, CCHKHP, CCHKLQ, CCHKPB, CCHKPO,
-     $                   CCHKPS, CCHKPP, CCHKPT, CCHKQ3, CCHKQL,
+     $                   CCHKHE_ROOK, CCHKHE_AA, CCHKHP, CCHKLQ, CCHKPB,
+     $                   CCHKPO, CCHKPS, CCHKPP, CCHKPT, CCHKQ3, CCHKQL,
      $                   CCHKQR, CCHKRQ, CCHKSP, CCHKSY, CCHKSY_ROOK,
      $                   CCHKTB, CCHKTP, CCHKTR, CCHKTZ, CDRVGB, CDRVGE,
-     $                   CDRVGT, CDRVHE, CDRVHE_ROOK, CDRVHP, CDRVLS,
-     $                   CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP, CDRVSY,
-     $                   CDRVSY_ROOK, ILAVER, CCHKQRT, CCHKQRTP
+     $                   CDRVGT, CDRVHE, CDRVHE_ROOK, CDRVHE_AA, CDRVHP,
+     $                   CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP,
+     $                   CDRVSY, CDRVSY_ROOK, ILAVER, CCHKQRT, CCHKQRTP
 
 *     ..
 *     .. Scalars in Common ..

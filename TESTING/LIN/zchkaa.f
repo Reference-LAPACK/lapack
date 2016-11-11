@@ -160,13 +160,13 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
-     $                   ZCHKHE_ROOK, ZCHKHP, ZCHKLQ, ZCHKPB, ZCHKPO,
-     $                   ZCHKPS, ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQL,
+     $                   ZCHKHE_ROOK, ZCHKHE_AA, ZCHKHP, ZCHKLQ, ZCHKPB,
+     $                   ZCHKPO, ZCHKPS, ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQL,
      $                   ZCHKQR, ZCHKRQ, ZCHKSP, ZCHKSY, ZCHKSY_ROOK,
      $                   ZCHKTB, ZCHKTP, ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE,
-     $                   ZDRVGT, ZDRVHE, ZDRVHE_ROOK, ZDRVHP, ZDRVLS,
-     $                   ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
-     $                   ZDRVSY_ROOK, ILAVER, ZCHKQRT, ZCHKQRTP,
+     $                   ZDRVGT, ZDRVHE, ZDRVHE_ROOK, ZDRVHE_AA, ZDRVHP,
+     $                   ZDRVLS, ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP,
+     $                   ZDRVSY, ZDRVSY_ROOK, ILAVER, ZCHKQRT, ZCHKQRTP,
      $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR
 *     ..
 *     .. Scalars in Common ..
