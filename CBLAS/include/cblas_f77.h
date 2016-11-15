@@ -135,7 +135,7 @@
 #define F77_dgbmv 		F77_GLOBAL(dgbmv,DGBMV)
 #define F77_dtrmv 		F77_GLOBAL(dtrmv,DTRMV)
 #define F77_dtbmv 		F77_GLOBAL(dtbmv,DTBMV)
-#define F77_dtpmv 		F77_GLOBAL(dtpmv,DTRMV)
+#define F77_dtpmv 		F77_GLOBAL(dtpmv,DTPMV)
 #define F77_dtrsv 		F77_GLOBAL(dtrsv,DTRSV)
 #define F77_dtbsv 		F77_GLOBAL(dtbsv,DTBSV)
 #define F77_dtpsv 		F77_GLOBAL(dtpsv,DTPSV)
