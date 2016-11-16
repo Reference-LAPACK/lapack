@@ -50,15 +50,25 @@
 *>             _SY:  Symmetric indefinite,
 *>                     with partial (Bunch-Kaufman) pivoting
 *>             _SR:  Symmetric indefinite,
-*>                     with "rook" (bounded Bunch-Kaufman) pivoting
+*>                     with rook (bounded Bunch-Kaufman) pivoting
+*>             _SK:  Symmetric indefinite,
+*>                     with rook (bounded Bunch-Kaufman) pivoting
+*>                     ( new storage format for factors:
+*>                       L and diagonal of D is stored in A,
+*>                       subdiagonal of D is stored in E )
 *>             _SP:  Symmetric indefinite packed,
 *>                     with partial (Bunch-Kaufman) pivoting
 *>             _HA:  (complex) Hermitian ,
 *>                     with Aasen Algorithm
 *>             _HE:  (complex) Hermitian indefinite,
 *>                     with partial (Bunch-Kaufman) pivoting
-*>             _HR:  Symmetric indefinite,
-*>                     with "rook" (bounded Bunch-Kaufman) pivoting
+*>             _HR:  (complex) Hermitian indefinite,
+*>                     with rook (bounded Bunch-Kaufman) pivoting
+*>             _HK:  (complex) Hermitian indefinite,
+*>                     with rook (bounded Bunch-Kaufman) pivoting
+*>                     ( new storage format for factors:
+*>                       L and diagonal of D is stored in A,
+*>                       subdiagonal of D is stored in E )
 *>             _HP:  (complex) Hermitian indefinite packed,
 *>                     with partial (Bunch-Kaufman) pivoting
 *>             _TR:  Triangular
@@ -88,17 +98,17 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2015
+*> \date November 2016
 *
 *> \ingroup aux_lin
 *
 *  =====================================================================
       SUBROUTINE ALAHD( IOUNIT, PATH )
 *
-*  -- LAPACK test routine (version 3.6.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2015
+*     November 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
@@ -304,10 +314,16 @@
          WRITE( IOUNIT, FMT = 9955 )9
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'SR' )  ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'SR' ) .OR. LSAMEN( 2, P2, 'SK') ) THEN
 *
 *        SR: Symmetric indefinite full,
-*            with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*            with rook (bounded Bunch-Kaufman) pivoting algorithm
+*
+*        SK: Symmetric indefinite full,
+*            with rook (bounded Bunch-Kaufman) pivoting algorithm,
+*            ( new storage format for factors:
+*              L and diagonal of D is stored in A,
+*              subdiagonal of D is stored in E )
 *
          WRITE( IOUNIT, FMT = 9892 )PATH, 'Symmetric'
 *
@@ -401,10 +417,16 @@
          WRITE( IOUNIT, FMT = 9955 )9
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 *
-      ELSE IF( LSAMEN( 2, P2, 'HR' )  ) THEN
+      ELSE IF( LSAMEN( 2, P2, 'HR' ) .OR. LSAMEN( 2, P2, 'HR' ) ) THEN
 *
-*        HR: Symmetric indefinite full,
-*            with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*        HR: Hermitian indefinite full,
+*            with rook (bounded Bunch-Kaufman) pivoting algorithm
+*
+*        HK: Hermitian indefinite full,
+*            with rook (bounded Bunch-Kaufman) pivoting algorithm,
+*            ( new storage format for factors:
+*              L and diagonal of D is stored in A,
+*              subdiagonal of D is stored in E )
 *
          WRITE( IOUNIT, FMT = 9892 )PATH, 'Hermitian'
 *
