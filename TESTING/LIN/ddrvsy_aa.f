@@ -145,6 +145,8 @@
 *
 *> \date November 2016
 *
+*  @precisions fortran d -> z c
+*
 *> \ingroup double_lin
 *
 *  =====================================================================

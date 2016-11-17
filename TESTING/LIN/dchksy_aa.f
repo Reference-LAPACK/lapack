@@ -163,6 +163,7 @@
 *
 *> \date November 2016
 *
+*  @precisions fortran d -> z c
 *
 *> \ingroup double_lin
 *
@@ -221,7 +222,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DGET04, DLACPY,
      $                   DLARHS, DLATB4, DLATMS, DPOT02, DPOT03, DPOT05,
-     $                   DSYCON, DSYRFS, DSYT01, DSYTRF_AA,
+     $                   DSYCON, DSYRFS, DSYT01_AA, DSYTRF_AA,
      $                   DSYTRI2, DSYTRS_AA, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
@@ -431,7 +432,7 @@
                   SRNAMT = 'DSYTRF_AA'
                   LWORK = N*NB + N
                   CALL DSYTRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
-     $                               LWORK, INFO )
+     $                            LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
 *                 pivoting.
@@ -473,7 +474,7 @@
 *                 Reconstruct matrix from factors and compute residual.
 *
                   CALL DSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
-     $                               AINV, LDA, RWORK, RESULT( 1 ) )
+     $                            AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
 *
@@ -518,8 +519,8 @@
                      SRNAMT = 'DSYTRS_AA'
                      LWORK = 3*N-2
                      CALL DSYTRS_AA( UPLO, N, NRHS, AFAC, LDA,
-     $                                  IWORK, X, LDA, WORK, LWORK,
-     $                                  INFO )
+     $                               IWORK, X, LDA, WORK, LWORK,
+     $                               INFO )
 *
 *                    Check error code from DSYTRS and handle error.
 *

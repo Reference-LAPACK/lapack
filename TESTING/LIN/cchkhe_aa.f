@@ -224,7 +224,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL     ALAERH, ALAHD, ALASUM, XLAENV, CERRHE, CGET04,
-     $             ZHECON, CHERFS, CHET01, CHETRF_AA, ZHETRI2,
+     $             ZHECON, CHERFS, CHET01_AA, CHETRF_AA, ZHETRI2,
      $             CHETRS_AA, CLACPY, CLAIPD, CLARHS, CLATB4, 
      $             CLATMS, CPOT02, ZPOT03, ZPOT05
 *     ..
@@ -434,7 +434,7 @@
                   LWORK = ( NB+1 )*LDA
                   SRNAMT = 'CHETRF_AA'
                   CALL CHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV, 
-     $                               LWORK, INFO )
+     $                            LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
 *                 pivoting.
@@ -476,7 +476,7 @@
 *                 Reconstruct matrix from factors and compute residual.
 *
                   CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
-     $                               AINV, LDA, RWORK, RESULT( 1 ) )
+     $                            AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
 *
@@ -521,7 +521,7 @@
                      SRNAMT = 'CHETRS_AA'
                      LWORK = 3*N-2
                      CALL CHETRS_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
-     $                                  X, LDA, WORK, LWORK, INFO )
+     $                               X, LDA, WORK, LWORK, INFO )
 *
 *                    Check error code from CHETRS and handle error.
 *

@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYT01( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
-*                          RWORK, RESID )
+*       SUBROUTINE DSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*                             RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -118,7 +118,7 @@
 *
 *> \date November 2016
 *
-*  @precisions fortran d -> s
+*  @precisions fortran d -> z c
 *
 *> \ingroup double_lin
 *

@@ -163,6 +163,7 @@
 *
 *> \date November 2016
 *
+*  @precisions fortran d -> z c
 *
 *> \ingroup real_lin
 *
@@ -432,7 +433,7 @@
                   SRNAMT = 'SSYTRF_AA'
                   LWORK = N*NB + N
                   CALL SSYTRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
-     $                               LWORK, INFO )
+     $                            LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
 *                 pivoting.
@@ -474,7 +475,7 @@
 *                 Reconstruct matrix from factors and compute residual.
 *
                   CALL SSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
-     $                               AINV, LDA, RWORK, RESULT( 1 ) )
+     $                            AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
 *
@@ -519,8 +520,8 @@
                      SRNAMT = 'SSYTRS_AA'
                      LWORK = 3*N-2
                      CALL SSYTRS_AA( UPLO, N, NRHS, AFAC, LDA,
-     $                                  IWORK, X, LDA, WORK, LWORK,
-     $                                  INFO )
+     $                               IWORK, X, LDA, WORK, LWORK,
+     $                               INFO )
 *
 *                    Check error code from SSYTRS and handle error.
 *

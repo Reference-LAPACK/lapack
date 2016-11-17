@@ -9,17 +9,17 @@
 *  ===========
 *
 *       SUBROUTINE ZHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
-*                          C, LDC, RWORK, RESID )
+*                             C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            LDA, LDAFAC, LDC, N
-*       COMPLEX*16   RESID
+*       DOUBLE PRECISION   RESID
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       COMPLEX*16   A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * ),
-*      $                   RWORK( * )
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * )
 *       ..
 *
 *
@@ -123,7 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
-     $                         LDC, RWORK, RESID )
+     $                      LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,8 +137,8 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      COMPLEX*16         A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * ),
-     $                   RWORK( * )
+      DOUBLE PRECISION   RWORK( * )
+      COMPLEX*16         A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * )
 *     ..
 *
 *  =====================================================================
