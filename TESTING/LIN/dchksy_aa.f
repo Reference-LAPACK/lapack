@@ -430,7 +430,7 @@
 *                 block factorization, LWORK is the length of AINV.
 *
                   SRNAMT = 'DSYTRF_AA'
-                  LWORK = N*NB + N
+                  LWORK = MAX( 1, N*NB + N )
                   CALL DSYTRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
      $                            LWORK, INFO )
 *
@@ -517,7 +517,7 @@
                      CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'DSYTRS_AA'
-                     LWORK = 3*N-2
+                     LWORK = MAX( 1, 3*N-2 )
                      CALL DSYTRS_AA( UPLO, N, NRHS, AFAC, LDA,
      $                               IWORK, X, LDA, WORK, LWORK,
      $                               INFO )

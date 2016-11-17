@@ -493,6 +493,12 @@
          INFOT = 4
          CALL DSYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
          CALL CHKXER( 'DSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DSYTRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'DSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL DSYTRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'DSYTRF_AA', INFOT, NOUT, LERR, OK )
 *
 *        DSYTRS_AA
 *
@@ -511,6 +517,12 @@
          CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
          INFOT = 8
          CALL DSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DSYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL DSYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, -2, INFO )
          CALL CHKXER( 'DSYTRS_AA', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN

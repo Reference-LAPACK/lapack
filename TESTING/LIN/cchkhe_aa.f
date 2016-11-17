@@ -211,7 +211,7 @@
       INTEGER      I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
      $             IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $             N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      REAL         ANORM, CNDNUM, RCOND, RCONDC
+      REAL         ANORM, CNDNUM, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER    UPLOS( 2 )
@@ -431,7 +431,7 @@
 *                 the block structure of D. AINV is a work array for
 *                 block factorization, LWORK is the length of AINV.
 *
-                  LWORK = ( NB+1 )*LDA
+                  LWORK = MAX( 1, ( NB+1 )*LDA )
                   SRNAMT = 'CHETRF_AA'
                   CALL CHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV, 
      $                            LWORK, INFO )
@@ -519,7 +519,7 @@
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'CHETRS_AA'
-                     LWORK = 3*N-2
+                     LWORK = MAX( 1, 3*N-2 )
                      CALL CHETRS_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
      $                               X, LDA, WORK, LWORK, INFO )
 *

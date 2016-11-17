@@ -93,7 +93,8 @@
      $                   ZHETRF_RK, ZHETRF_ROOK, ZHETRF_AA, ZHETRI,
      $                   ZHETRI_3, ZHETRI_3X, ZHETRI_ROOK, ZHETRI2,
      $                   ZHETRI2X, ZHETRS, ZHETRS_3, ZHETRS_ROOK,
-     $                   ZHETRS_AA, ZHPCON, ZHPRFS, ZHPTRF, ZHPTRI, ZHPTRS
+     $                   ZHETRS_AA, ZHPCON, ZHPRFS, ZHPTRF, ZHPTRI,
+     $                   ZHPTRS
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -489,6 +490,12 @@
          INFOT = 4
          CALL ZHETRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
          CALL CHKXER( 'ZHETRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL ZHETRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'ZHETRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL ZHETRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'ZHETRF_AA', INFOT, NOUT, LERR, OK )
 *
 *        ZHETRS_AA
 *
@@ -507,6 +514,12 @@
          CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
          INFOT = 8
          CALL ZHETRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL ZHETRS_AA( 'U', 0, 1, A, 1, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL ZHETRS_AA( 'U', 0, 1, A, 1, IP, B, 1, W, -2, INFO )
          CALL CHKXER( 'ZHETRS_AA', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN

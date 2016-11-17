@@ -488,6 +488,12 @@
          INFOT = 4
          CALL CHETRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
          CALL CHKXER( 'CHETRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL CHETRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'CHETRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL CHETRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'CHETRF_AA', INFOT, NOUT, LERR, OK )
 *
 *        CHETRS_AA
 *
@@ -506,6 +512,12 @@
          CALL CHKXER( 'CHETRS_AA', INFOT, NOUT, LERR, OK )
          INFOT = 8
          CALL CHETRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CHETRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL CHETRS_AA( 'U', 0, 1, A, 1, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'CHETRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL CHETRS_AA( 'U', 0, 1, A, 1, IP, B, 1, W, -2, INFO )
          CALL CHKXER( 'CHETRS_AA', INFOT, NOUT, LERR, OK )
 *
 *        Test error exits of the routines that use factorization

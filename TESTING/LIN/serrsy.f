@@ -92,7 +92,8 @@
      $                   SSYTF2_RK, SSYTF2_ROOK, SSYTRF, SSYTRF_RK,
      $                   SSYTRF_ROOK, SSYTRI, SSYTF2, SSYTRI_3,
      $                   SSYTRI_3X, SSYTRI_ROOK, SSYTRF_AA, SSYTRI2, 
-     $                   SYTRI2X, SSYTRS, SSYTRS_3, SSYTRS_ROOK, SSYTRS_AA
+     $                   SYTRI2X, SSYTRS, SSYTRS_3, SSYTRS_ROOK,
+     $                   SSYTRS_AA
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -492,6 +493,12 @@
          INFOT = 4
          CALL SSYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
          CALL CHKXER( 'SSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SSYTRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'SSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SSYTRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'SSYTRF_AA', INFOT, NOUT, LERR, OK )
 *
 *        SSYTRS_AA
 *
@@ -510,6 +517,12 @@
          CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
          INFOT = 8
          CALL SSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SSYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SSYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, -2, INFO )
          CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
