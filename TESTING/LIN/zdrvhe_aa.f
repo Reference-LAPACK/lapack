@@ -9,8 +9,8 @@
 *  ===========
 *
 *       SUBROUTINE ZDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
-*                                A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
-*                                NOUT )
+*                             A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
+*                             NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -186,9 +186,9 @@
       CHARACTER          DIST, FACT, TYPE, UPLO, XTYPE
       CHARACTER*3        MATPATH, PATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
-     $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
+     $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      DOUBLE PRECISION   ANORM, CNDNUM, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
@@ -202,8 +202,8 @@
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX, ZGET04,
      $                   ZHESV_AA, ZHET01_AA, ZHETRF_AA,
-     $                   ZHETRI2, ZLACPY, ZLAIPD, ZLARHS, ZLATB4, ZLATMS,
-     $                   ZPOT02
+     $                   ZHETRI2, ZLACPY, ZLAIPD, ZLARHS, ZLATB4, 
+     $                   ZLATMS, ZPOT02
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

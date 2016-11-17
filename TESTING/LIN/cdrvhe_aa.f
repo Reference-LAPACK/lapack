@@ -9,8 +9,8 @@
 *  ===========
 *
 *       SUBROUTINE CDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
-*                                A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
-*                                NOUT )
+*                             A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
+*                             NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -186,9 +186,9 @@
       CHARACTER          DIST, FACT, TYPE, UPLO, XTYPE
       CHARACTER*3        MATPATH, PATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
-     $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
+     $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      REAL               AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      REAL               ANORM, CNDNUM, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )

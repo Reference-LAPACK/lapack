@@ -9,8 +9,8 @@
 *  ===========
 *
 *       SUBROUTINE DDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
-*                          A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
-*                          NOUT )
+*                             A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
+*                             NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -151,8 +151,8 @@
 *
 *  =====================================================================
       SUBROUTINE DDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
-     $                         RWORK, IWORK, NOUT )
+     $                      NMAX, A, AFAC, AINV, B, X, XACT, WORK,
+     $                      RWORK, IWORK, NOUT )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -186,9 +186,9 @@
       CHARACTER          DIST, FACT, TYPE, UPLO, XTYPE
       CHARACTER*3        MATPATH, PATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
-     $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
+     $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      DOUBLE PRECISION   AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      DOUBLE PRECISION   ANORM, CNDNUM, RCONDC
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
