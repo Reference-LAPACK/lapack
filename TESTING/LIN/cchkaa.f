@@ -165,12 +165,12 @@
      $                   CCHKHE_ROOK, CCHKHE_RK, CCHKHE_AA, CCHKLQ,
      $                   CCHKPB,CCHKPO, CCHKPS, CCHKPP, CCHKPT, CCHKQ3,
      $                   CCHKQL, CCHKQR, CCHKRQ, CCHKSP, CCHKSY,
-     $                   CCHKSY_ROOK, CCHKSY_RK, CCHKTB, CCHKTP,
-     $                   CCHKTR, CCHKTZ, CDRVGB, CDRVGE, CDRVGT, CDRVHE,
-     $                   CDRVHE_ROOK, CDRVHE_RK, CDRVHE_AA, CDRVHP,
-     $                   CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP,
-     $                   CDRVSY, CDRVSY_ROOK, CDRVSY_RK, ILAVER, CCHKQRT,
-     $                   CCHKQRTP
+     $                   CCHKSY_ROOK, CCHKSY_RK, CCHKSY_AA, CCHKTB, 
+     $                   CCHKTP, CCHKTR, CCHKTZ, CDRVGB, CDRVGE, CDRVGT,
+     $                   CDRVHE, CDRVHE_ROOK, CDRVHE_RK, CDRVHE_AA, 
+     $                   CDRVHP, CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT,
+     $                   CDRVSP, CDRVSY, CDRVSY_ROOK, CDRVSY_RK,
+     $                   CDRVSY_AA, ILAVER, CCHKQRT, CCHKQRTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -824,6 +824,31 @@
          IF( TSTDRV ) THEN
             CALL CDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
+     $                      RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        SA:  symmetric indefinite matrices with Aasen's algorithm,
+*
+         NTYPES = 11
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKSY_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL CDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
      $                      RWORK, IWORK, NOUT )
          ELSE
