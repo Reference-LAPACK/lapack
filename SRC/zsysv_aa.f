@@ -126,8 +126,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK.  LWORK >= MAX(2*N, 3*N-2), and for
-*>          the best performance, LWORK >= max(1,N*NB), where NB is
+*>          The length of WORK.  LWORK >= MAX(1,2*N,3*N-2), and for
+*>          the best performance, LWORK >= MAX(1,N*NB), where NB is
 *>          the optimal blocksize for ZSYTRF_AA.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine

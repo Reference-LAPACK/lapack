@@ -101,7 +101,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK.  LWORK >= 2*N. For optimum performance
+*>          The length of WORK. LWORK >= MAX(1,2*N). For optimum performance
 *>          LWORK >= N*(1+NB), where NB is the optimal blocksize.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -191,7 +191,7 @@
          INFO = -2
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -4
-      ELSE IF( LWORK.LT.( 2*N ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.MAX( 1, 2*N ) .AND. .NOT.LQUERY ) THEN
          INFO = -7
       END IF
 *

@@ -104,7 +104,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER, LWORK >= 3*N-2.
+*>          LWORK is INTEGER, LWORK >= MAX(1,3*N-2).
 *>
 *> \param[out] INFO
 *> \verbatim
@@ -179,7 +179,7 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -8
-      ELSE IF( LWORK.LT.(3*N-2) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.MAX( 1, 3*N-2 ) .AND. .NOT.LQUERY ) THEN
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
