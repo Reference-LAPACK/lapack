@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE DSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
-*                               LWORK, INFO )
+*                            LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -156,11 +156,13 @@
 *
 *> \date November 2016
 *
+*  @precisions fortran d -> z c
+*
 *> \ingroup doubleSYsolve
 *
 *  =====================================================================
       SUBROUTINE DSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
-     $                        LWORK, INFO )
+     $                     LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

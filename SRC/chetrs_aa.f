@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       COMPLEX   A( LDA, * ), B( LDB, * ), WORK( * )
+*       COMPLEX            A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *
 *
@@ -36,9 +36,9 @@
 *>
 *> \verbatim
 *>
-*> CHETRS_AA solves a system of linear equations A*X = B with a real
-*> hermitian matrix A using the factorization A = U*T*U**T or
-*> A = L*T*L**T computed by CHETRF_AA.
+*> CHETRS_AA solves a system of linear equations A*X = B with a complex
+*> hermitian matrix A using the factorization A = U*T*U**H or
+*> A = L*T*L**H computed by CHETRF_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -49,8 +49,8 @@
 *>          UPLO is CHARACTER*1
 *>          Specifies whether the details of the factorization are stored
 *>          as an upper or lower triangular matrix.
-*>          = 'U':  Upper triangular, form is A = U*T*U**T;
-*>          = 'L':  Lower triangular, form is A = L*T*L**T.
+*>          = 'U':  Upper triangular, form is A = U*T*U**H;
+*>          = 'L':  Lower triangular, form is A = L*T*L**H.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -142,12 +142,12 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      COMPLEX   A( LDA, * ), B( LDB, * ), WORK( * )
+      COMPLEX            A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
-      COMPLEX   ONE
+      COMPLEX            ONE
       PARAMETER          ( ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..

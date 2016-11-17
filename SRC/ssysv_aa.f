@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE SSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
-*                               LWORK, INFO )
+*                            LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       REAL   A( LDA, * ), B( LDB, * ), WORK( * )
+*       REAL               A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *
 *
@@ -160,7 +160,7 @@
 *
 *  =====================================================================
       SUBROUTINE SSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
-     $                        LWORK, INFO )
+     $                     LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -173,7 +173,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      REAL   A( LDA, * ), B( LDB, * ), WORK( * )
+      REAL               A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
 *
 *  =====================================================================

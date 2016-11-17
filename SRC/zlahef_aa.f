@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE ZLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
-*                                H, LDH, WORK, INFO )
+*                             H, LDH, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER    UPLO
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DLATRF_AA factorizes a panel of a real hermitian matrix A using
+*> DLAHEF_AA factorizes a panel of a complex hermitian matrix A using
 *> the Aasen's algorithm. The panel consists of a set of NB rows of A
 *> when UPLO is U, or a set of NB columns when UPLO is L.
 *>
@@ -152,7 +152,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZLAHEF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
-     $                         H, LDH, WORK, INFO )
+     $                      H, LDH, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

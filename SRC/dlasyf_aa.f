@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE DLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
-*                                H, LDH, WORK, INFO )
+*                             H, LDH, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -152,7 +152,7 @@
 *
 *  =====================================================================
       SUBROUTINE DLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
-     $                         H, LDH, WORK, INFO )
+     $                      H, LDH, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

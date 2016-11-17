@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE SLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
-*                                H, LDH, WORK, INFO )
+*                             H, LDH, WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       REAL   A( LDA, * ), H( LDH, * ), WORK( * )
+*       REAL               A( LDA, * ), H( LDH, * ), WORK( * )
 *       ..
 *
 *
@@ -152,7 +152,7 @@
 *
 *  =====================================================================
       SUBROUTINE SLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
-     $                         H, LDH, WORK, INFO )
+     $                      H, LDH, WORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -167,7 +167,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      REAL   A( LDA, * ), H( LDH, * ), WORK( * )
+      REAL               A( LDA, * ), H( LDH, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -177,7 +177,7 @@
 *
 *     .. Local Scalars ..
       INTEGER            J, K, K1, I1, I2
-      REAL   PIV, ALPHA
+      REAL               PIV, ALPHA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
