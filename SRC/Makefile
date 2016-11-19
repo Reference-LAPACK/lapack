@@ -56,7 +56,7 @@ include ../make.inc
 #
 #######################################################################
 
-ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o iparmq.o iparam2stage.o	\
+ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o iparmq.o	\
     ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
     ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
@@ -120,7 +120,7 @@ SLASRC = \
    slaqgb.o slaqge.o slaqp2.o slaqps.o slaqsb.o slaqsp.o slaqsy.o \
    slaqr0.o slaqr1.o slaqr2.o slaqr3.o slaqr4.o slaqr5.o \
    slaqtr.o slar1v.o slar2v.o ilaslr.o ilaslc.o \
-   slarf.o  slarfb.o slarfg.o slarfgp.o slarft.o slarfx.o slarfy.o slargv.o \
+   slarf.o  slarfb.o slarfg.o slarfgp.o slarft.o slarfx.o slargv.o \
    slarrv.o slartv.o  \
    slarz.o  slarzb.o slarzt.o slaswp.o slasy2.o slasyf.o slasyf_rook.o \
    slasyf_rk.o \
@@ -167,10 +167,7 @@ SLASRC = \
    sgelqt.o sgelqt3.o sgemlqt.o \
    sgetsls.o sgeqr.o slatsqr.o slamtsqr.o sgemqr.o \
    sgelq.o slaswlq.o slamswlq.o sgemlq.o \
-   stplqt.o stplqt2.o stpmlqt.o \
-   ssytrd_2stage.o ssytrd_sy2sb.o ssytrd_sb2st.o ssb2st_kernels.o \
-   ssyevd_2stage.o ssyev_2stage.o ssyevx_2stage.o ssyevr_2stage.o \
-   ssbev_2stage.o ssbevx_2stage.o ssbevd_2stage.o ssygv_2stage.o
+   stplqt.o stplqt2.o stpmlqt.o
 
 DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o
 
@@ -227,7 +224,7 @@ CLASRC = \
    claqr0.o claqr1.o claqr2.o claqr3.o claqr4.o claqr5.o \
    claqsp.o claqsy.o clar1v.o clar2v.o ilaclr.o ilaclc.o \
    clarf.o  clarfb.o clarfg.o clarft.o clarfgp.o \
-   clarfx.o clarfy.o clargv.o clarnv.o clarrv.o clartg.o clartv.o \
+   clarfx.o clargv.o clarnv.o clarrv.o clartg.o clartv.o \
    clarz.o  clarzb.o clarzt.o clascl.o claset.o clasr.o  classq.o \
    claswp.o clasyf.o clasyf_rook.o clasyf_rk.o \
    clatbs.o clatdf.o clatps.o clatrd.o clatrs.o clatrz.o \
@@ -266,10 +263,7 @@ CLASRC = \
    cgelqt.o cgelqt3.o cgemlqt.o \
    cgetsls.o cgeqr.o clatsqr.o clamtsqr.o cgemqr.o \
    cgelq.o claswlq.o clamswlq.o cgemlq.o \
-   ctplqt.o ctplqt2.o ctpmlqt.o \
-   chetrd_2stage.o chetrd_he2hb.o chetrd_hb2st.o chb2st_kernels.o \
-   cheevd_2stage.o cheev_2stage.o cheevx_2stage.o cheevr_2stage.o \
-   chbev_2stage.o chbevx_2stage.o chbevd_2stage.o chegv_2stage.o
+   ctplqt.o ctplqt2.o ctpmlqt.o
 
 ifdef USEXBLAS
 CXLASRC = cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
@@ -312,7 +306,7 @@ DLASRC = \
    dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqsb.o dlaqsp.o dlaqsy.o \
    dlaqr0.o dlaqr1.o dlaqr2.o dlaqr3.o dlaqr4.o dlaqr5.o \
    dlaqtr.o dlar1v.o dlar2v.o iladlr.o iladlc.o \
-   dlarf.o  dlarfb.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o dlarfy.o \
+   dlarf.o  dlarfb.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o \
    dlargv.o dlarrv.o dlartv.o  \
    dlarz.o  dlarzb.o dlarzt.o dlaswp.o dlasy2.o \
    dlasyf.o dlasyf_rook.o dlasyf_rk.o \
@@ -361,10 +355,7 @@ DLASRC = \
    dgelqt.o dgelqt3.o dgemlqt.o \
    dgetsls.o dgeqr.o dlatsqr.o dlamtsqr.o dgemqr.o \
    dgelq.o dlaswlq.o dlamswlq.o dgemlq.o \
-   dtplqt.o dtplqt2.o dtpmlqt.o \
-   dsytrd_2stage.o dsytrd_sy2sb.o dsytrd_sb2st.o dsb2st_kernels.o \
-   dsyevd_2stage.o dsyev_2stage.o dsyevx_2stage.o dsyevr_2stage.o \
-   dsbev_2stage.o dsbevx_2stage.o dsbevd_2stage.o dsygv_2stage.o
+   dtplqt.o dtplqt2.o dtpmlqt.o 
 
 ifdef USEXBLAS
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o		\
@@ -422,7 +413,7 @@ ZLASRC = \
    zlaqsp.o zlaqsy.o zlar1v.o zlar2v.o ilazlr.o ilazlc.o \
    zlarcm.o zlarf.o  zlarfb.o \
    zlarfg.o zlarft.o zlarfgp.o \
-   zlarfx.o zlarfy.o zlargv.o zlarnv.o zlarrv.o zlartg.o zlartv.o \
+   zlarfx.o zlargv.o zlarnv.o zlarrv.o zlartg.o zlartv.o \
    zlarz.o  zlarzb.o zlarzt.o zlascl.o zlaset.o zlasr.o  \
    zlassq.o zlaswp.o zlasyf.o zlasyf_rook.o zlasyf_rk.o \
    zlatbs.o zlatdf.o zlatps.o zlatrd.o zlatrs.o zlatrz.o zlauu2.o \
@@ -464,10 +455,7 @@ ZLASRC = \
    zgelqt.o zgelqt3.o zgemlqt.o \
    zgetsls.o zgeqr.o zlatsqr.o zlamtsqr.o zgemqr.o \
    zgelq.o zlaswlq.o zlamswlq.o zgemlq.o \
-   ztplqt.o ztplqt2.o ztpmlqt.o \
-   zhetrd_2stage.o zhetrd_he2hb.o zhetrd_hb2st.o zhb2st_kernels.o \
-   zheevd_2stage.o zheev_2stage.o zheevx_2stage.o zheevr_2stage.o \
-   zhbev_2stage.o zhbevx_2stage.o zhbevd_2stage.o zhegv_2stage.o
+   ztplqt.o ztplqt2.o ztpmlqt.o  
 
 ifdef USEXBLAS
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o		\
