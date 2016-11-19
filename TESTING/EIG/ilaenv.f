@@ -229,6 +229,16 @@ C        ILAENV = 0
 *         WRITE(*,*) 'ISPEC = ',ISPEC,' ILAENV =',ILAENV
 *         ILAENV = IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 *
+      ELSE IF(( ISPEC.GE.17 ) .AND. (ISPEC.LE.21)) THEN
+*
+*     17 <= ISPEC <= 21: 2stage eigenvalues SVD routines. 
+*
+         IF( ISPEC.EQ.17 ) THEN
+             ILAENV = IPARMS( 1 )
+         ELSE
+             ILAENV = IPARAM2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N4 ) 
+         ENDIF
+*
       ELSE
 *
 *        Invalid value for ISPEC

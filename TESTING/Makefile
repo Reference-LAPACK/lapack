@@ -46,6 +46,7 @@ all:     single complex double complex16 singleproto doubleproto complexproto co
 
 SEIGTST= snep.out \
          ssep.out \
+         sse2.out \
          ssvd.out \
          sec.out \
          sed.out \
@@ -66,6 +67,7 @@ SEIGTST= snep.out \
 
 CEIGTST= cnep.out \
          csep.out \
+         cse2.out \
          csvd.out \
          cec.out \
          ced.out \
@@ -86,6 +88,7 @@ CEIGTST= cnep.out \
 
 DEIGTST= dnep.out \
          dsep.out \
+         dse2.out \
          dsvd.out \
          dec.out \
          ded.out \
@@ -106,6 +109,7 @@ DEIGTST= dnep.out \
 
 ZEIGTST= znep.out \
          zsep.out \
+         zse2.out \
          zsvd.out \
          zec.out \
          zed.out \
@@ -223,6 +227,10 @@ ssep.out: sep.in xeigtsts
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./xeigtsts < sep.in > $@ 2>&1
 
+sse2.out: se2.in xeigtsts
+	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+	./xeigtsts < se2.in > $@ 2>&1
+
 ssvd.out: svd.in xeigtsts
 	@echo SVD: Testing Singular Value Decomposition routines
 	./xeigtsts < svd.in > $@ 2>&1
@@ -300,6 +308,10 @@ cnep.out: nep.in xeigtstc
 csep.out: sep.in xeigtstc
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./xeigtstc < sep.in > $@ 2>&1
+
+cse2.out: se2.in xeigtstc
+	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+	./xeigtstc < se2.in > $@ 2>&1
 
 csvd.out: svd.in xeigtstc
 	@echo SVD: Testing Singular Value Decomposition routines
@@ -379,6 +391,10 @@ dsep.out: sep.in xeigtstd
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./xeigtstd < sep.in > $@ 2>&1
 
+dse2.out: se2.in xeigtstd
+	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+	./xeigtstd < se2.in > $@ 2>&1
+
 dsvd.out: svd.in xeigtstd
 	@echo SVD: Testing Singular Value Decomposition routines
 	./xeigtstd < svd.in > $@ 2>&1
@@ -456,6 +472,10 @@ znep.out: nep.in xeigtstz
 zsep.out: sep.in xeigtstz
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./xeigtstz < sep.in > $@ 2>&1
+
+zse2.out: se2.in xeigtstz
+	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+	./xeigtstz < se2.in > $@ 2>&1
 
 zsvd.out: svd.in xeigtstz
 	@echo SVD: Testing Singular Value Decomposition routines
