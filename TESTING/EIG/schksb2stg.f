@@ -1,7 +1,5 @@
 *> \brief \b SCHKSBSTG
 *
-*  @generated from dchksb2stg.f, fortran d -> s, Sun Nov  6 00:12:41 2016
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -309,7 +307,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date November 2016
 *
 *> \ingroup single_eig
 *
@@ -318,10 +316,10 @@
      $                   ISEED, THRESH, NOUNIT, A, LDA, SD, SE, D1,
      $                   D2, D3, U, LDU, WORK, LWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (version 3.4.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     November 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LWORK, NOUNIT, NSIZES, NTYPES,
@@ -350,8 +348,8 @@
 *     .. Local Scalars ..
       LOGICAL            BADNN, BADNNB
       INTEGER            I, IINFO, IMODE, ITYPE, J, JC, JCOL, JR, JSIZE,
-     $                   JTYPE, JWIDTH, K, KMAX, MTYPES, N, NERRS,
-     $                   NMATS, NMAX, NTEST, NTESTT
+     $                   JTYPE, JWIDTH, K, KMAX, LH, LW, MTYPES, N,
+     $                   NERRS, NMATS, NMAX, NTEST, NTESTT
       REAL               ANINV, ANORM, COND, OVFL, RTOVFL, RTUNFL,
      $                   TEMP1, TEMP2, TEMP3, TEMP4, ULP, ULPINV, UNFL
 *     ..

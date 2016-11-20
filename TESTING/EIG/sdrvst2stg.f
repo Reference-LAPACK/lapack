@@ -1,7 +1,5 @@
 *> \brief \b SDRVST2STG
 *
-*  @generated from ddrvst2stg.f, fortran d -> s, Sun Nov  6 00:06:01 2016
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -445,7 +443,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date November 2016
 *
 *> \ingroup single_eig
 *
@@ -455,10 +453,10 @@
      $                   WA2, WA3, U, LDU, V, TAU, Z, WORK, LWORK,
      $                   IWORK, LIWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (version 3.4.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     November 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LWORK, NOUNIT, NSIZES,

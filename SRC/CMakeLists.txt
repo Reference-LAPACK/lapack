@@ -46,7 +46,7 @@
 #
 #######################################################################
 
-set(ALLAUX  ilaenv.f ieeeck.f lsamen.f  iparmq.f
+set(ALLAUX  ilaenv.f ieeeck.f lsamen.f  iparmq.f iparam2stage.f
     ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
     ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
     ../INSTALL/slamch.f)
@@ -112,7 +112,7 @@ set(SLASRC
    slaqgb.f slaqge.f slaqp2.f slaqps.f slaqsb.f slaqsp.f slaqsy.f
    slaqr0.f slaqr1.f slaqr2.f slaqr3.f slaqr4.f slaqr5.f
    slaqtr.f slar1v.f slar2v.f ilaslr.f ilaslc.f
-   slarf.f  slarfb.f slarfg.f slarfgp.f slarft.f slarfx.f slargv.f
+   slarf.f  slarfb.f slarfg.f slarfgp.f slarft.f slarfx.f slarfy.f slargv.f
    slarrv.f slartv.f
    slarz.f  slarzb.f slarzt.f slaswp.f slasy2.f 
    slasyf.f slasyf_rook.f slasyf_rk.f slasyf_aa.f
@@ -160,7 +160,10 @@ set(SLASRC
    sgelqt.f sgelqt3.f sgemlqt.f
    sgetsls.f sgeqr.f slatsqr.f slamtsqr.f sgemqr.f
    sgelq.f slaswlq.f slamswlq.f sgemlq.f
-   stplqt.f stplqt2.f stpmlqt.f)
+   stplqt.f stplqt2.f stpmlqt.f
+   ssytrd_2stage.f ssytrd_sy2sb.f ssytrd_sb2st.f ssb2st_kernels.f
+   ssyevd_2stage.f ssyev_2stage.f ssyevx_2stage.f ssyevr_2stage.f
+   ssbev_2stage.f ssbevx_2stage.f ssbevd_2stage.f ssygv_2stage.f)
 
 set(DSLASRC spotrs.f sgetrs.f spotrf.f sgetrf.f)
 
@@ -215,7 +218,7 @@ set(CLASRC
    claqr0.f claqr1.f claqr2.f claqr3.f claqr4.f claqr5.f
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
    clarf.f  clarfb.f clarfg.f clarfgp.f clarft.f
-   clarfx.f clargv.f clarnv.f clarrv.f clartg.f clartv.f
+   clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f clartv.f
    clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f
    claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clatbs.f clatdf.f clatps.f clatrd.f clatrs.f clatrz.f
    clauu2.f clauum.f cpbcon.f cpbequ.f cpbrfs.f cpbstf.f cpbsv.f
@@ -253,7 +256,10 @@ set(CLASRC
    cgelqt.f cgelqt3.f cgemlqt.f
    cgetsls.f cgeqr.f clatsqr.f clamtsqr.f cgemqr.f
    cgelq.f claswlq.f clamswlq.f cgemlq.f
-   ctplqt.f ctplqt2.f ctpmlqt.f)
+   ctplqt.f ctplqt2.f ctpmlqt.f
+   chetrd_2stage.f chetrd_he2hb.f chetrd_hb2st.f chb2st_kernels.f
+   cheevd_2stage.f cheev_2stage.f cheevx_2stage.f cheevr_2stage.f
+   chbev_2stage.f chbevx_2stage.f chbevd_2stage.f chegv_2stage.f)
 
 set(CXLASRC     cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f
    cla_gercond_c.f cla_gercond_x.f cla_gerpvgrw.f
@@ -292,8 +298,8 @@ set(DLASRC
    dlaqgb.f dlaqge.f dlaqp2.f dlaqps.f dlaqsb.f dlaqsp.f dlaqsy.f
    dlaqr0.f dlaqr1.f dlaqr2.f dlaqr3.f dlaqr4.f dlaqr5.f
    dlaqtr.f dlar1v.f dlar2v.f iladlr.f iladlc.f
-   dlarf.f  dlarfb.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlargv.f
-   dlarrv.f dlartv.f
+   dlarf.f  dlarfb.f dlarfg.f dlarfgp.f dlarft.f dlarfx.f dlarfy.f
+   dlargv.f dlarrv.f dlartv.f
    dlarz.f  dlarzb.f dlarzt.f dlaswp.f dlasy2.f 
    dlasyf.f dlasyf_rook.f dlasyf_rk.f dlasyf_aa.f
    dlatbs.f dlatdf.f dlatps.f dlatrd.f dlatrs.f dlatrz.f dlauu2.f
@@ -341,7 +347,10 @@ set(DLASRC
    dgelqt.f dgelqt3.f dgemlqt.f
    dgetsls.f dgeqr.f dlatsqr.f dlamtsqr.f dgemqr.f
    dgelq.f dlaswlq.f dlamswlq.f dgemlq.f
-   dtplqt.f dtplqt2.f dtpmlqt.f )
+   dtplqt.f dtplqt2.f dtpmlqt.f
+   dsytrd_2stage.f dsytrd_sy2sb.f dsytrd_sb2st.f dsb2st_kernels.f
+   dsyevd_2stage.f dsyev_2stage.f dsyevx_2stage.f dsyevr_2stage.f
+   dsbev_2stage.f dsbevx_2stage.f dsbevd_2stage.f dsygv_2stage.f)
 
 set(DXLASRC dgesvxx.f dgerfsx.f dla_gerfsx_extended.f dla_geamv.f
    dla_gercond.f dla_gerpvgrw.f dsysvxx.f dsyrfsx.f
@@ -396,7 +405,7 @@ set(ZLASRC
    zlaqsp.f zlaqsy.f zlar1v.f zlar2v.f ilazlr.f ilazlc.f
    zlarcm.f zlarf.f  zlarfb.f
    zlarfg.f zlarfgp.f zlarft.f
-   zlarfx.f zlargv.f zlarnv.f zlarrv.f zlartg.f zlartv.f
+   zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f zlartv.f
    zlarz.f  zlarzb.f zlarzt.f zlascl.f zlaset.f zlasr.f
    zlassq.f zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f
    zlatbs.f zlatdf.f zlatps.f zlatrd.f zlatrs.f zlatrz.f zlauu2.f
@@ -438,7 +447,10 @@ set(ZLASRC
    zgelqt.f zgelqt3.f zgemlqt.f
    zgetsls.f zgeqr.f zlatsqr.f zlamtsqr.f zgemqr.f
    zgelq.f zlaswlq.f zlamswlq.f zgemlq.f
-   ztplqt.f ztplqt2.f ztpmlqt.f)
+   ztplqt.f ztplqt2.f ztpmlqt.f
+   zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.f zhb2st_kernels.f
+   zheevd_2stage.f zheev_2stage.f zheevx_2stage.f zheevr_2stage.f
+   zhbev_2stage.f zhbevx_2stage.f zhbevd_2stage.f zhegv_2stage.f)
 
 set(ZXLASRC  zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_gercond_c.f zla_gercond_x.f zla_gerpvgrw.f zsysvxx.f zsyrfsx.f

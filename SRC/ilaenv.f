@@ -132,7 +132,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2016
+*> \date November 2016
 *
 *> \ingroup OTHERauxiliary
 *
@@ -162,10 +162,10 @@
 *  =====================================================================
       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 *
-*  -- LAPACK auxiliary routine (version 3.6.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2016
+*     November 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER*( * )    NAME, OPTS
@@ -183,8 +183,8 @@
       INTRINSIC          CHAR, ICHAR, INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            IEEECK, IPARMQ
-      EXTERNAL           IEEECK, IPARMQ
+      INTEGER            IEEECK, IPARMQ, IPARAM2STAGE
+      EXTERNAL           IEEECK, IPARMQ, IPARAM2STAGE
 *     ..
 *     .. Executable Statements ..
 *

@@ -1,7 +1,5 @@
 *> \brief \b DCHKST2STG
 *
-*  @precisions fortran d -> s
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -604,7 +602,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date November 2016
 *
 *> \ingroup double_eig
 *
@@ -614,10 +612,10 @@
      $                   WA1, WA2, WA3, WR, U, LDU, V, VP, TAU, Z, WORK,
      $                   LWORK, IWORK, LIWORK, RESULT, INFO )
 *
-*  -- LAPACK test routine (version 3.4.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     November 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LDU, LIWORK, LWORK, NOUNIT, NSIZES,
@@ -1079,56 +1077,6 @@
 *
             RESULT( 3 ) = TEMP2 / MAX( UNFL, ULP*MAX( TEMP1, TEMP2 ) )
             RESULT( 4 ) = TEMP4 / MAX( UNFL, ULP*MAX( TEMP3, TEMP4 ) )
-*
-*           Skip the DSYTRD for lower that since we replaced its testing
-*           3 and 4 by the 2-stage one.
-            GOTO 101            
-*
-*           Call DSYTRD and DORGTR to compute S and U from
-*           lower triangle, do tests.
-*
-            CALL DLACPY( 'L', N, N, A, LDA, V, LDU )
-*
-            NTEST = 3
-            CALL DSYTRD( 'L', N, V, LDU, SD, SE, TAU, WORK, LWORK,
-     $                   IINFO )
-*
-            IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DSYTRD(L)', IINFO, N, JTYPE,
-     $            IOLDSD
-               INFO = ABS( IINFO )
-               IF( IINFO.LT.0 ) THEN
-                  RETURN
-               ELSE
-                  RESULT( 3 ) = ULPINV
-                  GO TO 280
-               END IF
-            END IF
-*
-            CALL DLACPY( 'L', N, N, V, LDU, U, LDU )
-*
-            NTEST = 4
-            CALL DORGTR( 'L', N, U, LDU, TAU, WORK, LWORK, IINFO )
-            IF( IINFO.NE.0 ) THEN
-               WRITE( NOUNIT, FMT = 9999 )'DORGTR(L)', IINFO, N, JTYPE,
-     $            IOLDSD
-               INFO = ABS( IINFO )
-               IF( IINFO.LT.0 ) THEN
-                  RETURN
-               ELSE
-                  RESULT( 4 ) = ULPINV
-                  GO TO 280
-               END IF
-            END IF
-*
-            CALL DSYT21( 2, 'Lower', N, 1, A, LDA, SD, SE, U, LDU, V,
-     $                   LDU, TAU, WORK, RESULT( 3 ) )
-            CALL DSYT21( 3, 'Lower', N, 1, A, LDA, SD, SE, U, LDU, V,
-     $                   LDU, TAU, WORK, RESULT( 4 ) )
-*
-*after skipping old tests 3 4 back to the normal 
-*
-  101       CONTINUE
 *
 *           Store the upper triangle of A in AP
 *

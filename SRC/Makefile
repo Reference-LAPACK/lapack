@@ -556,6 +556,9 @@ clean:
 .f.o:
 	$(FORTRAN) $(OPTS) -c $< -o $@
 
+.F.o:
+	$(FORTRAN) $(OPTS) -c $< -o $@
+	
 slaruv.o: slaruv.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
 dlaruv.o: dlaruv.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
 sla_wwaddw.o: sla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c $< -o $@

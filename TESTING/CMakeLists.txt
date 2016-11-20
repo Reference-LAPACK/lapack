@@ -37,6 +37,9 @@ add_lapack_test(snep.out nep.in xeigtsts)
 add_lapack_test(ssep.out sep.in xeigtsts)
 
 
+add_lapack_test(sse2.out se2.in xeigtsts)
+
+
 add_lapack_test(ssvd.out svd.in xeigtsts)
 
 
@@ -104,6 +107,9 @@ add_lapack_test(dnep.out nep.in xeigtstd)
 add_lapack_test(dsep.out sep.in xeigtstd)
 
 
+add_lapack_test(dse2.out se2.in xeigtstd)
+
+
 add_lapack_test(dsvd.out svd.in xeigtstd)
 
 
@@ -167,6 +173,9 @@ add_lapack_test(cnep.out nep.in xeigtstc)
 
 
 add_lapack_test(csep.out sep.in xeigtstc)
+
+
+add_lapack_test(cse2.out se2.in xeigtstc)
 
 
 add_lapack_test(csvd.out svd.in xeigtstc)
@@ -234,6 +243,9 @@ add_lapack_test(znep.out nep.in xeigtstz)
 
 
 add_lapack_test(zsep.out sep.in xeigtstz)
+
+
+add_lapack_test(zse2.out se2.in xeigtstz)
 
 
 add_lapack_test(zsvd.out svd.in xeigtstz)
