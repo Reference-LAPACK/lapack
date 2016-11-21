@@ -226,7 +226,7 @@ CLASRC = \
    clarf.o  clarfb.o clarfg.o clarft.o clarfgp.o \
    clarfx.o clargv.o clarnv.o clarrv.o clartg.o clartv.o \
    clarz.o  clarzb.o clarzt.o clascl.o claset.o clasr.o  classq.o \
-   claswp.o clasyf.o clasyf_rook.o clasyf_rk.o \
+   claswp.o clasyf.o clasyf_rook.o clasyf_rk.o clasyf_aa.o \
    clatbs.o clatdf.o clatps.o clatrd.o clatrs.o clatrz.o \
    clauu2.o clauum.o cpbcon.o cpbequ.o cpbrfs.o cpbstf.o cpbsv.o  \
    cpbsvx.o cpbtf2.o cpbtrf.o cpbtrs.o cpocon.o cpoequ.o cporfs.o \
@@ -242,8 +242,8 @@ CLASRC = \
    csyconv.o csyconvf.o csyconvf_rook.o \
    csytf2_rook.o csytrf_rook.o csytrs_rook.o \
    csytri_rook.o csycon_rook.o csysv_rook.o \
-   csytf2_rk.o csytrf_rk.o csytrs_3.o \
-   csytri_3.o csytri_3x.o csycon_3.o csysv_rk.o \
+   csytf2_rk.o csytrf_rk.o csytrf_aa.o csytrs_3.o csytrs_aa.o \
+   csytri_3.o csytri_3x.o csycon_3.o csysv_rk.o csysv_aa.o \
    ctbcon.o ctbrfs.o ctbtrs.o ctgevc.o ctgex2.o \
    ctgexc.o ctgsen.o ctgsja.o ctgsna.o ctgsy2.o ctgsyl.o ctpcon.o \
    ctprfs.o ctptri.o \
@@ -415,7 +415,7 @@ ZLASRC = \
    zlarfg.o zlarft.o zlarfgp.o \
    zlarfx.o zlargv.o zlarnv.o zlarrv.o zlartg.o zlartv.o \
    zlarz.o  zlarzb.o zlarzt.o zlascl.o zlaset.o zlasr.o  \
-   zlassq.o zlaswp.o zlasyf.o zlasyf_rook.o zlasyf_rk.o \
+   zlassq.o zlaswp.o zlasyf.o zlasyf_rook.o zlasyf_rk.o zlasyf_aa.o \
    zlatbs.o zlatdf.o zlatps.o zlatrd.o zlatrs.o zlatrz.o zlauu2.o \
    zlauum.o zpbcon.o zpbequ.o zpbrfs.o zpbstf.o zpbsv.o  \
    zpbsvx.o zpbtf2.o zpbtrf.o zpbtrs.o zpocon.o zpoequ.o zporfs.o \
@@ -429,10 +429,10 @@ ZLASRC = \
    zsyr.o zsyrfs.o zsysv.o  zsysvx.o zsytf2.o zsytrf.o zsytri.o zsytri2.o zsytri2x.o \
    zsyswapr.o zsytrs.o zsytrs2.o \
    zsyconv.o zsyconvf.o zsyconvf_rook.o \
-   zsytf2_rook.o zsytrf_rook.o zsytrs_rook.o \
+   zsytf2_rook.o zsytrf_rook.o zsytrs_rook.o zsytrs_aa.o \
    zsytri_rook.o zsycon_rook.o zsysv_rook.o \
-   zsytf2_rk.o zsytrf_rk.o zsytrs_3.o \
-   zsytri_3.o zsytri_3x.o zsycon_3.o zsysv_rk.o \
+   zsytf2_rk.o zsytrf_rk.o zsytrf_aa.o zsytrs_3.o \
+   zsytri_3.o zsytri_3x.o zsycon_3.o zsysv_rk.o zsysv_aa.o \
    ztbcon.o ztbrfs.o ztbtrs.o ztgevc.o ztgex2.o \
    ztgexc.o ztgsen.o ztgsja.o ztgsna.o ztgsy2.o ztgsyl.o ztpcon.o \
    ztprfs.o ztptri.o \
