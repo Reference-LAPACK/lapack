@@ -46,7 +46,7 @@
 *> which is used to factorize the first panel.
 *>
 *> The resulting J-th row of U, or J-th column of L, is stored in the
-*> (J-1)-th row, or column, of A (without the unit diatonals), while
+*> (J-1)-th row, or column, of A (without the unit diagonals), while
 *> the diagonal and subdiagonal of A are overwritten by those of T.
 *>
 *> \endverbatim
