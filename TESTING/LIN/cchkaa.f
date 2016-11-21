@@ -840,7 +840,7 @@
          IF( TSTCHK ) THEN
             CALL CCHKSY_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
      $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
-     $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
      $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH

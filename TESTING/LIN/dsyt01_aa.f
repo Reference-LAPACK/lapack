@@ -193,27 +193,27 @@
             CALL DLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
          ENDIF
+*
+*        Call DTRMM to form the product U' * D (or L * D ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL DTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
+     $                  ONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
+         ELSE
+            CALL DTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+     $                  ONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
+         END IF
+*
+*        Call DTRMM again to multiply by U (or L ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL DTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
+     $                  ONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
+         ELSE
+            CALL DTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
+     $                  ONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
+         END IF
       ENDIF
-*
-*     Call DTRMM to form the product U' * D (or L * D ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL DTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
-     $               ONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
-      ELSE
-         CALL DTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
-     $               ONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
-      END IF
-*
-*     Call DTRMM again to multiply by U (or L ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL DTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
-     $               ONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
-      ELSE
-         CALL DTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
-     $               ONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
-      END IF
 *
 *     Apply symmetric pivots
 *

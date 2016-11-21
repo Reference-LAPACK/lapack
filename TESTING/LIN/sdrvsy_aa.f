@@ -381,35 +381,6 @@
                      IF( IFACT.EQ.1 )
      $                  GO TO 150
                      RCONDC = ZERO
-*
-                  ELSE IF( IFACT.EQ.1 ) THEN
-*
-*                    Compute the 1-norm of A.
-*
-                     ANORM = SLANSY( '1', UPLO, N, A, LDA, RWORK )
-*
-*                    Factor the matrix A.
-*
-c                     CALL SLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-c                     CALL SSYTRF( UPLO, N, AFAC, LDA, IWORK, WORK,
-c     $                            LWORK, INFO )
-*
-*                    Compute inv(A) and take its norm.
-*
-c                     CALL SLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-c                     LWORK = (N+NB+1)*(NB+3)
-c                     SRNAMT = 'DSYTRI2'
-c                     CALL DSYTRI2( UPLO, N, AINV, LDA, IWORK, WORK,
-c     $                            LWORK, INFO )
-c                     AINVNM = SLANSY( '1', UPLO, N, AINV, LDA, RWORK )
-*
-*                    Compute the 1-norm condition number of A.
-*
-c                     IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
-c                        RCONDC = ONE
-c                     ELSE
-c                        RCONDC = ( ONE / ANORM ) / AINVNM
-c                     END IF
                   END IF
 *
 *                 Form an exact solution and set the right hand side.
@@ -475,12 +446,7 @@ c                     END IF
                      CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
                      CALL SPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
-*
-*                    Check solution from generated exact solution.
-*
-                     CALL SGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
-     $                            RESULT( 3 ) )
-                     NT = 3
+                     NT = 2
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.

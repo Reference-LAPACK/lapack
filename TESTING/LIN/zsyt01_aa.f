@@ -195,29 +195,29 @@
             CALL ZLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
          ENDIF
+*
+*        Call ZTRMM to form the product U' * D (or L * D ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL ZTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
+     $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
+         ELSE
+            CALL ZTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+     $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
+         END IF
+*
+*        Call ZTRMM again to multiply by U (or L ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL ZTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
+     $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
+         ELSE
+            CALL ZTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
+     $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
+         END IF
       ENDIF
 *
-*     Call ZTRMM to form the product U' * D (or L * D ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL ZTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
-     $               CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
-      ELSE
-         CALL ZTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
-     $               CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
-      END IF
-*
-*     Call ZTRMM again to multiply by U (or L ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL ZTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
-     $               CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
-      ELSE
-         CALL ZTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
-     $               CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
-      END IF
-*
-*     Apply hermitian pivots
+*     Apply symmetric pivots
 *
       DO J = N, 1, -1
          I = IPIV( J )
