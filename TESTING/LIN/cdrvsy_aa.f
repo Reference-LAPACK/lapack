@@ -192,7 +192,7 @@
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
      $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      REAL               ANORM, CNDNUM, RCONDC
+      REAL               ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
@@ -379,15 +379,6 @@
 *                 Do first for FACT = 'F', then for other values.
 *
                   FACT = FACTS( IFACT )
-*
-*                 Compute the condition number for comparison with
-*                 the value returned by CSYSVX.
-*
-                  IF( ZEROT ) THEN
-                     IF( IFACT.EQ.1 )
-     $                  GO TO 150
-                     RCONDC = ZERO
-                  END IF
 *
 *                 Form an exact solution and set the right hand side.
 *
