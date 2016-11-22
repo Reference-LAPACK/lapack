@@ -198,7 +198,7 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       DOUBLE PRECISION   DLAMCH, ZLANGE
-      EXTERNAL           LSAME, ILAENV, DLABAD, DLAMCH, DLANGE
+      EXTERNAL           LSAME, ILAENV, DLABAD, DLAMCH, ZLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEQR, ZGEMQR, ZLASCL, ZLASET,
