@@ -48,11 +48,11 @@ set(CLINTST  cchkaa.f
    cchkeq.f cchkgb.f cchkge.f cchkgt.f
    cchkhe.f cchkhe_rook.f cchkhe_rk.f cchkhe_aa.f cchkhp.f cchklq.f cchkpb.f
    cchkpo.f cchkps.f cchkpp.f cchkpt.f cchkq3.f cchkql.f
-   cchkqr.f cchkrq.f cchksp.f cchksy.f cchksy_rook.f cchksy_rk.f cchktb.f
+   cchkqr.f cchkrq.f cchksp.f cchksy.f cchksy_rook.f cchksy_rk.f cchksy_aa.f cchktb.f
    cchktp.f cchktr.f cchktz.f
    cdrvgt.f cdrvhe.f cdrvhe_rook.f cdrvhe_rk.f cdrvhe_aa.f cdrvhp.f
    cdrvls.f cdrvpb.f cdrvpp.f cdrvpt.f
-   cdrvsp.f cdrvsy.f cdrvsy_rook.f cdrvsy_rk.f
+   cdrvsp.f cdrvsy.f cdrvsy_rook.f cdrvsy_rk.f cdrvsy_aa.f
    cerrgt.f cerrhe.f cerrlq.f
    cerrls.f cerrps.f cerrql.f cerrqp.f
    cerrqr.f cerrrq.f cerrsy.f cerrtr.f cerrtz.f
@@ -72,7 +72,7 @@ set(CLINTST  cchkaa.f
    cqrt12.f cqrt13.f cqrt14.f cqrt15.f cqrt16.f
    cqrt17.f crqt01.f crqt02.f crqt03.f crzt01.f crzt02.f
    csbmv.f  cspt01.f
-   cspt02.f cspt03.f csyt01.f csyt01_rook.f csyt01_3.f csyt02.f csyt03.f
+   cspt02.f cspt03.f csyt01.f csyt01_rook.f csyt01_3.f csyt01_aa.f csyt02.f csyt03.f
    ctbt02.f ctbt03.f ctbt05.f ctbt06.f ctpt01.f
    ctpt02.f ctpt03.f ctpt05.f ctpt06.f ctrt01.f
    ctrt02.f ctrt03.f ctrt05.f ctrt06.f
@@ -132,11 +132,11 @@ set(ZLINTST  zchkaa.f
    zchkeq.f zchkgb.f zchkge.f zchkgt.f
    zchkhe.f zchkhe_rook.f zchkhe_rk.f zchkhe_aa.f zchkhp.f zchklq.f zchkpb.f
    zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkql.f
-   zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchksy_rk.f zchktb.f
+   zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchksy_rk.f zchksy_aa.f zchktb.f
    zchktp.f zchktr.f zchktz.f
    zdrvgt.f zdrvhe.f zdrvhe_rook.f zdrvhe_rk.f zdrvhe_aa.f zdrvhp.f
    zdrvls.f zdrvpb.f zdrvpp.f zdrvpt.f
-   zdrvsp.f zdrvsy.f zdrvsy_rook.f zdrvsy_rk.f
+   zdrvsp.f zdrvsy.f zdrvsy_rook.f zdrvsy_rk.f zdrvsy_aa.f
    zerrgt.f zerrhe.f zerrlq.f
    zerrls.f zerrps.f zerrql.f zerrqp.f
    zerrqr.f zerrrq.f zerrsy.f zerrtr.f zerrtz.f
@@ -156,7 +156,7 @@ set(ZLINTST  zchkaa.f
    zqrt12.f zqrt13.f zqrt14.f zqrt15.f zqrt16.f
    zqrt17.f zrqt01.f zrqt02.f zrqt03.f zrzt01.f zrzt02.f
    zsbmv.f  zspt01.f
-   zspt02.f zspt03.f zsyt01.f zsyt01_rook.f zsyt01_3.f zsyt02.f zsyt03.f
+   zspt02.f zspt03.f zsyt01.f zsyt01_rook.f zsyt01_3.f zsyt01_aa.f zsyt02.f zsyt03.f
    ztbt02.f ztbt03.f ztbt05.f ztbt06.f ztpt01.f
    ztpt02.f ztpt03.f ztpt05.f ztpt06.f ztrt01.f
    ztrt02.f ztrt03.f ztrt05.f ztrt06.f

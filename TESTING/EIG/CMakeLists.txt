@@ -106,8 +106,8 @@ set(ZEIGTST  zchkee.f
    zchkgg.f zchkgk.f zchkgl.f zchkhb.f zchkhs.f zchkst.f zchkst2stg.f zchkhb2stg.f
    zckcsd.f zckglm.f zckgqr.f zckgsv.f zcklse.f zcsdts.f
    zdrges.f zdrgev.f zdrges3.f zdrgev3.f zdrgsx.f zdrgvx.f
-   zdrvbd.f zdrves.f zdrvev.f zdrvsg.f ddrvsg2stg.f
-   zdrvst.f ddrvst2stg.f zdrvsx.f zdrvvx.f
+   zdrvbd.f zdrves.f zdrvev.f zdrvsg.f zdrvsg2stg.f
+   zdrvst.f zdrvst2stg.f zdrvsx.f zdrvvx.f
    zerrbd.f zerrec.f zerred.f zerrgg.f zerrhs.f zerrst.f
    zget02.f zget10.f zget22.f zget23.f zget24.f
    zget35.f zget36.f zget37.f zget38.f zget51.f zget52.f

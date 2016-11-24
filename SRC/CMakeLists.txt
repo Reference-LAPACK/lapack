@@ -46,7 +46,7 @@
 #
 #######################################################################
 
-set(ALLAUX  ilaenv.f ieeeck.f lsamen.f  iparmq.f iparam2stage.f
+set(ALLAUX  ilaenv.f ieeeck.f lsamen.f  iparmq.f iparam2stage.F
     ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
     ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
     ../INSTALL/slamch.f)
@@ -161,7 +161,7 @@ set(SLASRC
    sgetsls.f sgeqr.f slatsqr.f slamtsqr.f sgemqr.f
    sgelq.f slaswlq.f slamswlq.f sgemlq.f
    stplqt.f stplqt2.f stpmlqt.f
-   ssytrd_2stage.f ssytrd_sy2sb.f ssytrd_sb2st.f ssb2st_kernels.f
+   ssytrd_2stage.f ssytrd_sy2sb.f ssytrd_sb2st.F ssb2st_kernels.f
    ssyevd_2stage.f ssyev_2stage.f ssyevx_2stage.f ssyevr_2stage.f
    ssbev_2stage.f ssbevx_2stage.f ssbevd_2stage.f ssygv_2stage.f)
 
@@ -220,7 +220,8 @@ set(CLASRC
    clarf.f  clarfb.f clarfg.f clarfgp.f clarft.f
    clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f clartv.f
    clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f
-   claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clatbs.f clatdf.f clatps.f clatrd.f clatrs.f clatrz.f
+   claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clasyf_aa.f
+   clatbs.f clatdf.f clatps.f clatrd.f clatrs.f clatrz.f
    clauu2.f clauum.f cpbcon.f cpbequ.f cpbrfs.f cpbstf.f cpbsv.f
    cpbsvx.f cpbtf2.f cpbtrf.f cpbtrs.f cpocon.f cpoequ.f cporfs.f
    cposv.f  cposvx.f cpotf2.f cpotrf.f cpotrf2.f cpotri.f cpotrs.f cpstrf.f cpstf2.f
@@ -235,8 +236,8 @@ set(CLASRC
    csyconv.f csyconvf.f csyconvf_rook.f
    csytf2_rook.f csytrf_rook.f csytrs_rook.f
    csytri_rook.f csycon_rook.f csysv_rook.f
-   csytf2_rk.f csytrf_rk.f csytrs_3.f
-   csytri_3.f csytri_3x.f csycon_3.f csysv_rk.f
+   csytf2_rk.f csytrf_rk.f csytrf_aa.f csytrs_3.f csytrs_aa.f
+   csytri_3.f csytri_3x.f csycon_3.f csysv_rk.f csysv_aa.f
    ctbcon.f ctbrfs.f ctbtrs.f ctgevc.f ctgex2.f
    ctgexc.f ctgsen.f ctgsja.f ctgsna.f ctgsy2.f ctgsyl.f ctpcon.f
    ctprfs.f ctptri.f
@@ -257,7 +258,7 @@ set(CLASRC
    cgetsls.f cgeqr.f clatsqr.f clamtsqr.f cgemqr.f
    cgelq.f claswlq.f clamswlq.f cgemlq.f
    ctplqt.f ctplqt2.f ctpmlqt.f
-   chetrd_2stage.f chetrd_he2hb.f chetrd_hb2st.f chb2st_kernels.f
+   chetrd_2stage.f chetrd_he2hb.f chetrd_hb2st.F chb2st_kernels.f
    cheevd_2stage.f cheev_2stage.f cheevx_2stage.f cheevr_2stage.f
    chbev_2stage.f chbevx_2stage.f chbevd_2stage.f chegv_2stage.f)
 
@@ -348,7 +349,7 @@ set(DLASRC
    dgetsls.f dgeqr.f dlatsqr.f dlamtsqr.f dgemqr.f
    dgelq.f dlaswlq.f dlamswlq.f dgemlq.f
    dtplqt.f dtplqt2.f dtpmlqt.f
-   dsytrd_2stage.f dsytrd_sy2sb.f dsytrd_sb2st.f dsb2st_kernels.f
+   dsytrd_2stage.f dsytrd_sy2sb.f dsytrd_sb2st.F dsb2st_kernels.f
    dsyevd_2stage.f dsyev_2stage.f dsyevx_2stage.f dsyevr_2stage.f
    dsbev_2stage.f dsbevx_2stage.f dsbevd_2stage.f dsygv_2stage.f)
 
@@ -407,7 +408,7 @@ set(ZLASRC
    zlarfg.f zlarfgp.f zlarft.f
    zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f zlartv.f
    zlarz.f  zlarzb.f zlarzt.f zlascl.f zlaset.f zlasr.f
-   zlassq.f zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f
+   zlassq.f zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f zlasyf_aa.f
    zlatbs.f zlatdf.f zlatps.f zlatrd.f zlatrs.f zlatrz.f zlauu2.f
    zlauum.f zpbcon.f zpbequ.f zpbrfs.f zpbstf.f zpbsv.f
    zpbsvx.f zpbtf2.f zpbtrf.f zpbtrs.f zpocon.f zpoequ.f zporfs.f
@@ -421,10 +422,10 @@ set(ZLASRC
    zsytri2.f zsytri2x.f zsyswapr.f
    zsytrs.f zsytrs2.f
    zsyconv.f zsyconvf.f zsyconvf_rook.f
-   zsytf2_rook.f zsytrf_rook.f zsytrs_rook.f
+   zsytf2_rook.f zsytrf_rook.f zsytrs_rook.f zsytrs_aa.f
    zsytri_rook.f zsycon_rook.f zsysv_rook.f
-   zsytf2_rk.f zsytrf_rk.f zsytrs_3.f
-   zsytri_3.f zsytri_3x.f zsycon_3.f zsysv_rk.f
+   zsytf2_rk.f zsytrf_rk.f zsytrf_aa.f zsytrs_3.f
+   zsytri_3.f zsytri_3x.f zsycon_3.f zsysv_rk.f zsysv_aa.f
    ztbcon.f ztbrfs.f ztbtrs.f ztgevc.f ztgex2.f
    ztgexc.f ztgsen.f ztgsja.f ztgsna.f ztgsy2.f ztgsyl.f ztpcon.f
    ztprfs.f ztptri.f
@@ -448,7 +449,7 @@ set(ZLASRC
    zgetsls.f zgeqr.f zlatsqr.f zlamtsqr.f zgemqr.f
    zgelq.f zlaswlq.f zlamswlq.f zgemlq.f
    ztplqt.f ztplqt2.f ztpmlqt.f
-   zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.f zhb2st_kernels.f
+   zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.F zhb2st_kernels.f
    zheevd_2stage.f zheev_2stage.f zheevx_2stage.f zheevr_2stage.f
    zhbev_2stage.f zhbevx_2stage.f zhbevd_2stage.f zhegv_2stage.f)
 
