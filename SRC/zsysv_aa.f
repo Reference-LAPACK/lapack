@@ -1,4 +1,4 @@
-*> \brief <b> DSYSV_AA computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> ZSYSV_AA computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSYSV_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsysv_aa.f">
+*> Download ZSYSV_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsysv_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsysv_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsysv_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsysv_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsysv_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+*       SUBROUTINE ZSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
 *                            LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( * )
+*       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *
 *
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> DSYSV computes the solution to a real system of linear equations
+*> ZSYSV computes the solution to a complex system of linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *> matrices.
@@ -75,7 +75,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
@@ -87,7 +87,7 @@
 *>          On exit, if INFO = 0, the tridiagonal matrix T and the
 *>          multipliers used to obtain the factor U or L from the
 *>          factorization A = U*T*U**T or A = L*T*L**T as computed by
-*>          DSYTRF.
+*>          ZSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -106,7 +106,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is DOUBLE PRECISION array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, the N-by-NRHS right hand side matrix B.
 *>          On exit, if INFO = 0, the N-by-NRHS solution matrix X.
 *> \endverbatim
@@ -119,7 +119,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -128,7 +128,7 @@
 *>          LWORK is INTEGER
 *>          The length of WORK.  LWORK >= MAX(1,2*N,3*N-2), and for
 *>          the best performance, LWORK >= MAX(1,N*NB), where NB is
-*>          the optimal blocksize for DSYTRF_AA.
+*>          the optimal blocksize for ZSYTRF_AA.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -156,12 +156,10 @@
 *
 *> \date November 2016
 *
-*  @precisions fortran d -> z c
-*
-*> \ingroup doubleSYsolve
+*> \ingroup complex16SYsolve
 *
 *  =====================================================================
-      SUBROUTINE DSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+      SUBROUTINE ZSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                     LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -175,7 +173,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -190,7 +188,7 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DSYTRF, DSYTRS, DSYTRS2
+      EXTERNAL           XERBLA, ZSYTRF, ZSYTRS, ZSYTRS2
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -216,9 +214,9 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL DSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
+         CALL ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, -1, INFO )
          LWKOPT_SYTRF = INT( WORK(1) )
-         CALL DSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+         CALL ZSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                   -1, INFO )
          LWKOPT_SYTRS = INT( WORK(1) )
          LWKOPT = MAX( LWKOPT_SYTRF, LWKOPT_SYTRS )
@@ -229,7 +227,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DSYSV_AA ', -INFO )
+         CALL XERBLA( 'ZSYSV_AA ', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          RETURN
@@ -237,12 +235,12 @@
 *
 *     Compute the factorization A = U*T*U**T or A = L*T*L**T.
 *
-      CALL DSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
+      CALL ZSYTRF_AA( UPLO, N, A, LDA, IPIV, WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL DSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
+         CALL ZSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
      $                      LWORK, INFO )
 *
       END IF
@@ -251,6 +249,6 @@
 *
       RETURN
 *
-*     End of DSYSV_AA
+*     End of ZSYSV_AA
 *
       END

@@ -547,6 +547,56 @@
          INFOT = 5
          CALL CSPCON( 'U', 1, A, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'CSPCON', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with Aasen's algorithm
+*
+*        CSYTRF_AA
+*
+         SRNAMT = 'CSYTRF_AA'
+         INFOT = 1
+         CALL CSYTRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'CSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CSYTRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'CSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL CSYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'CSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL CSYTRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'CSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL CSYTRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'CSYTRF_AA', INFOT, NOUT, LERR, OK )
+*
+*        CSYTRS_AA
+*
+         SRNAMT = 'CSYTRS_AA'
+         INFOT = 1
+         CALL CSYTRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CSYTRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL CSYTRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL CSYTRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'CSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL CSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'CSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL CSYTRS_AA( 'U', 0, 1, A, 1, IP, B, 1, W, 0, INFO )
+         CALL CHKXER( 'CSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL CSYTRS_AA( 'U', 0, 1, A, 1, IP, B, 1, W, -2, INFO )
+         CALL CHKXER( 'CSYTRS_AA', INFOT, NOUT, LERR, OK )
+*
       END IF
 *
 *     Print a summary line.

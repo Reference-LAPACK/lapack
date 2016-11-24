@@ -37,7 +37,7 @@
 *> CHETRF_AA computes the factorization of a complex hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
-*>    A = U*T*U**T  or  A = L*T*L**T
+*>    A = U*T*U**H  or  A = L*T*L**H
 *>
 *> where U (or L) is a product of permutation and unit upper (lower)
 *> triangular matrices, and T is a hermitian tridiagonal matrix.
@@ -230,7 +230,7 @@
       IF( UPPER ) THEN
 *
 *        .....................................................
-*        Factorize A as L*D*L**T using the upper triangle of A
+*        Factorize A as L*D*L**H using the upper triangle of A
 *        .....................................................
 *
 *        copy first row A(1, 1:N) into H(1:n) (stored in WORK(1:N))
@@ -353,7 +353,7 @@
       ELSE
 *
 *        .....................................................
-*        Factorize A as L*D*L**T using the lower triangle of A
+*        Factorize A as L*D*L**H using the lower triangle of A
 *        .....................................................
 *
 *        copy first column A(1:N, 1) into H(1:N, 1)

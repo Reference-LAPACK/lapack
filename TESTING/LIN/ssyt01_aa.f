@@ -9,7 +9,7 @@
 *  ===========
 *
 *       SUBROUTINE SSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
-*                          C, LDC, RWORK, RESID )
+*                             C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -123,7 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE SSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
-     $                         LDC, RWORK, RESID )
+     $                      LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -144,7 +144,7 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL   ZERO, ONE
+      REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
@@ -192,27 +192,27 @@
             CALL SLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
          ENDIF
+*
+*        Call STRMM to form the product U' * D (or L * D ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL STRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
+     $                  ONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
+         ELSE
+            CALL STRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+     $                  ONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
+         END IF
+*
+*        Call STRMM again to multiply by U (or L ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL STRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
+     $                  ONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
+         ELSE
+            CALL STRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
+     $                  ONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
+         END IF
       ENDIF
-*
-*     Call STRMM to form the product U' * D (or L * D ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL STRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
-     $               ONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
-      ELSE
-         CALL STRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
-     $               ONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
-      END IF
-*
-*     Call STRMM again to multiply by U (or L ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL STRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
-     $               ONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
-      ELSE
-         CALL STRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
-     $               ONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
-      END IF
 *
 *     Apply symmetric pivots
 *

@@ -1,4 +1,4 @@
-*> \brief \b ZHETRS_AA
+*> \brief \b ZSYTRS_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHETRS_AA + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrs_aa.f">
+*> Download ZSYTRS_AA + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytrs_aa.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytrs_aa.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrs_aa.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrs_aa.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+*       SUBROUTINE ZSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
 *                             WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -31,15 +31,14 @@
 *       ..
 *
 *
-*
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> ZHETRS_AA solves a system of linear equations A*X = B with a complex
-*> hermitian matrix A using the factorization A = U*T*U**H or
-*> A = L*T*L**T computed by ZHETRF_AA.
+*> ZSYTRS_AA solves a system of linear equations A*X = B with a complex
+*> symmetric matrix A using the factorization A = U*T*U**T or
+*> A = L*T*L**T computed by ZSYTRF_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -50,8 +49,8 @@
 *>          UPLO is CHARACTER*1
 *>          Specifies whether the details of the factorization are stored
 *>          as an upper or lower triangular matrix.
-*>          = 'U':  Upper triangular, form is A = U*T*U**H;
-*>          = 'L':  Lower triangular, form is A = L*T*L**H.
+*>          = 'U':  Upper triangular, form is A = U*T*U**T;
+*>          = 'L':  Lower triangular, form is A = L*T*L**T.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -70,7 +69,7 @@
 *> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
-*>          Details of factors computed by ZHETRF_AA.
+*>          Details of factors computed by ZSYTRF_AA.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -82,7 +81,7 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          Details of the interchanges as computed by ZHETRF_AA.
+*>          Details of the interchanges as computed by ZSYTRF_AA.
 *> \endverbatim
 *>
 *> \param[in,out] B
@@ -124,10 +123,10 @@
 *
 *> \date November 2016
 *
-*> \ingroup complex16HEcomputational
+*> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZHETRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
+      SUBROUTINE ZSYTRS_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB,
      $                      WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -184,7 +183,7 @@
          INFO = -10
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZHETRS_AA', -INFO )
+         CALL XERBLA( 'ZSYTRS_AA', -INFO )
          RETURN
       ELSE IF( LQUERY ) THEN
          LWKOPT = (3*N-2)
@@ -211,24 +210,23 @@
 *
 *        Compute (U \P**T * B) -> B    [ (U \P**T * B) ]
 *
-         CALL ZTRSM('L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
+         CALL ZTRSM('L', 'U', 'T', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
      $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (U \P**T * B) ]
 *
-         CALL ZLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
+         CALL ZLACPY( 'F', 1, N, A( 1, 1 ), LDA+1, WORK( N ), 1)
          IF( N.GT.1 ) THEN
-             CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1)
-             CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1)
-             CALL ZLACGV( N-1, WORK( 1 ), 1 )
+            CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 1 ), 1 )
+            CALL ZLACPY( 'F', 1, N-1, A( 1, 2 ), LDA+1, WORK( 2*N ), 1 )
          END IF
-         CALL ZGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
-     $              INFO)
+         CALL ZGTSV( N, NRHS, WORK( 1 ), WORK( N ), WORK( 2*N ), B, LDB,
+     $               INFO )
 *
 *        Compute (U**T \ B) -> B   [ U**T \ (T \ (U \P**T * B) ) ]
 *
          CALL ZTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ), LDA,
-     $               B(2, 1), LDB)
+     $               B( 2, 1 ), LDB)
 *
 *        Pivot, P * B  [ P * (U**T \ (T \ (U \P**T * B) )) ]
 *
@@ -253,22 +251,21 @@
 *        Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
          CALL ZTRSM( 'L', 'L', 'N', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
-     $               B(2, 1), LDB)
+     $               B( 2, 1 ), LDB)
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
          CALL ZLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
-             CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1)
-             CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1)
-             CALL ZLACGV( N-1, WORK( 2*N ), 1 )
+            CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 1 ), 1 )
+            CALL ZLACPY( 'F', 1, N-1, A( 2, 1 ), LDA+1, WORK( 2*N ), 1 )
          END IF
-         CALL ZGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
-     $              INFO)
+         CALL ZGTSV( N, NRHS, WORK( 1 ), WORK(N), WORK( 2*N ), B, LDB,
+     $               INFO)
 *
 *        Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-         CALL ZTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
+         CALL ZTRSM( 'L', 'L', 'T', 'U', N-1, NRHS, ONE, A( 2, 1 ), LDA,
      $              B( 2, 1 ), LDB)
 *
 *        Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
@@ -283,6 +280,6 @@
 *
       RETURN
 *
-*     End of ZHETRS_AA
+*     End of ZSYTRS_AA
 *
       END

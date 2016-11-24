@@ -9,17 +9,17 @@
 *  ===========
 *
 *       SUBROUTINE ZHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
-*                          C, LDC, RWORK, RESID )
+*                             C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            LDA, LDAFAC, LDC, N
-*       COMPLEX*16   RESID
+*       DOUBLE PRECISION   RESID
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       COMPLEX*16   A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * ),
-*      $                   RWORK( * )
+*       DOUBLE PRECISION   RWORK( * )
+*       COMPLEX*16         A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * )
 *       ..
 *
 *
@@ -123,7 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
-     $                         LDC, RWORK, RESID )
+     $                      LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,8 +137,8 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      COMPLEX*16         A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * ),
-     $                   RWORK( * )
+      DOUBLE PRECISION   RWORK( * )
+      COMPLEX*16         A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * )
 *     ..
 *
 *  =====================================================================
@@ -197,40 +197,42 @@
      $                   LDC+1 )
             CALL ZLACGV( N-1, C( 1, 2 ), LDC+1 )
          ENDIF
+*
+*        Call ZTRMM to form the product U' * D (or L * D ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL ZTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit',
+     $                  N-1, N, CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ),
+     $                  LDC )
+         ELSE
+            CALL ZTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+     $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
+         END IF
+*
+*        Call ZTRMM again to multiply by U (or L ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL ZTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
+     $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
+         ELSE
+            CALL ZTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit', N,
+     $                  N-1, CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ),
+     $                  LDC )
+         END IF
+*
+*        Apply hermitian pivots
+*
+         DO J = N, 1, -1
+            I = IPIV( J )
+            IF( I.NE.J )
+     $         CALL ZSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
+         END DO
+         DO J = N, 1, -1
+            I = IPIV( J )
+            IF( I.NE.J )
+     $         CALL ZSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
+         END DO
       ENDIF
-*
-*     Call ZTRMM to form the product U' * D (or L * D ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL ZTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit', N-1,
-     $               N, CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
-      ELSE
-         CALL ZTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
-     $               CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
-      END IF
-*
-*     Call ZTRMM again to multiply by U (or L ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL ZTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
-     $               CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
-      ELSE
-         CALL ZTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit', N,
-     $               N-1, CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
-      END IF
-*
-*     Apply hermitian pivots
-*
-      DO J = N, 1, -1
-         I = IPIV( J )
-         IF( I.NE.J )
-     $      CALL ZSWAP( N, C( J, 1 ), LDC, C( I, 1 ), LDC )
-      END DO
-      DO J = N, 1, -1
-         I = IPIV( J )
-         IF( I.NE.J )
-     $      CALL ZSWAP( N, C( 1, J ), 1, C( 1, I ), 1 )
-      END DO
 *
 *
 *     Compute the difference  C - A .

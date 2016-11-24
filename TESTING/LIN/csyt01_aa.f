@@ -1,4 +1,4 @@
-*> \brief \b CHET01_AA
+*> \brief \b CSYT01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
-*                             C, LDC, RWORK, RESID )
+*       SUBROUTINE CSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C, LDC,
+*                             RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -28,7 +28,7 @@
 *>
 *> \verbatim
 *>
-*> CHET01_AA reconstructs a hermitian indefinite matrix A from its
+*> CSYT01 reconstructs a hermitian indefinite matrix A from its
 *> block L*D*L' or U*D*U' factorization and computes the residual
 *>    norm( C - A ) / ( N * norm(A) * EPS ),
 *> where C is the reconstructed matrix and EPS is the machine epsilon.
@@ -54,7 +54,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (LDA,N)
+*>          A is REAL array, dimension (LDA,N)
 *>          The original hermitian matrix A.
 *> \endverbatim
 *>
@@ -66,11 +66,11 @@
 *>
 *> \param[in] AFAC
 *> \verbatim
-*>          AFAC is COMPLEX array, dimension (LDAFAC,N)
+*>          AFAC is REAL array, dimension (LDAFAC,N)
 *>          The factored form of the matrix A.  AFAC contains the block
 *>          diagonal matrix D and the multipliers used to obtain the
 *>          factor L or U from the block L*D*L' or U*D*U' factorization
-*>          as computed by CHETRF.
+*>          as computed by CSYTRF.
 *> \endverbatim
 *>
 *> \param[in] LDAFAC
@@ -82,12 +82,12 @@
 *> \param[in] IPIV
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
-*>          The pivot indices from CHETRF.
+*>          The pivot indices from CSYTRF.
 *> \endverbatim
 *>
 *> \param[out] C
 *> \verbatim
-*>          C is COMPLEX array, dimension (LDC,N)
+*>          C is REAL array, dimension (LDC,N)
 *> \endverbatim
 *>
 *> \param[in] LDC
@@ -98,12 +98,12 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is COMPLEX array, dimension (N)
+*>          RWORK is REAL array, dimension (N)
 *> \endverbatim
 *>
 *> \param[out] RESID
 *> \verbatim
-*>          RESID is COMPLEX
+*>          RESID is REAL
 *>          If UPLO = 'L', norm(L*D*L' - A) / ( N * norm(A) * EPS )
 *>          If UPLO = 'U', norm(U*D*U' - A) / ( N * norm(A) * EPS )
 *> \endverbatim
@@ -118,14 +118,15 @@
 *
 *> \date November 2016
 *
+*  @generated from LIN/dsyt01_aa.f, fortran d -> c, Thu Nov 17 13:01:50 2016
 *
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
+      SUBROUTINE CSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
      $                      LDC, RWORK, RESID )
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016
@@ -137,18 +138,17 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      REAL               RWORK( * )
       COMPLEX            A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * )
+      REAL               RWORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX         CZERO, CONE
-      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ),
-     $                     CONE  = ( 1.0E+0, 0.0E+0 ) )
       REAL               ZERO, ONE
-      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
+      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      COMPLEX            CZERO, CONE
+      PARAMETER          ( CZERO = 0.0E+0, CONE = 1.0E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
@@ -156,11 +156,11 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, CLANHE
-      EXTERNAL           LSAME, SLAMCH, CLANHE
+      REAL               SLAMCH, CLANSY
+      EXTERNAL           LSAME, SLAMCH, CLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASET, CLAVHE
+      EXTERNAL           CLASET, CLAVSY
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
@@ -177,7 +177,7 @@
 *     Determine EPS and the norm of A.
 *
       EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
+      ANORM = CLANSY( '1', UPLO, N, A, LDA, RWORK )
 *
 *     Initialize C to the tridiagonal matrix T.
 *
@@ -189,21 +189,18 @@
      $                   LDC+1 )
             CALL CLACPY( 'F', 1, N-1, AFAC( 1, 2 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
-            CALL CLACGV( N-1, C( 2, 1 ), LDC+1 )
          ELSE
             CALL CLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 1, 2 ),
      $                   LDC+1 )
             CALL CLACPY( 'F', 1, N-1, AFAC( 2, 1 ), LDAFAC+1, C( 2, 1 ),
      $                   LDC+1 )
-            CALL CLACGV( N-1, C( 1, 2 ), LDC+1 )
          ENDIF
 *
 *        Call CTRMM to form the product U' * D (or L * D ).
 *
          IF( LSAME( UPLO, 'U' ) ) THEN
-            CALL CTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit',
-     $                  N-1, N, CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ),
-     $                  LDC )
+            CALL CTRMM( 'Left', UPLO, 'Transpose', 'Unit', N-1, N,
+     $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
          ELSE
             CALL CTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
      $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
@@ -215,13 +212,12 @@
             CALL CTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
      $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
          ELSE
-            CALL CTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit', N,
-     $                  N-1, CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ),
-     $                  LDC )
+            CALL CTRMM( 'Right', UPLO, 'Transpose', 'Unit', N, N-1,
+     $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
          END IF
       ENDIF
 *
-*     Apply hermitian pivots
+*     Apply symmetric pivots
 *
       DO J = N, 1, -1
          I = IPIV( J )
@@ -253,7 +249,7 @@
 *
 *     Compute norm( C - A ) / ( N * norm(A) * EPS )
 *
-      RESID = CLANHE( '1', UPLO, N, C, LDC, RWORK )
+      RESID = CLANSY( '1', UPLO, N, C, LDC, RWORK )
 *
       IF( ANORM.LE.ZERO ) THEN
          IF( RESID.NE.ZERO )
@@ -264,6 +260,6 @@
 *
       RETURN
 *
-*     End of CHET01_AA
+*     End of CSYT01
 *
       END

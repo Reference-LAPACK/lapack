@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE ZHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
-*                               LWORK, INFO )
+*                            LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -126,9 +126,9 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK.  LWORK >= 1, and for best performance
-*>          LWORK >= max(1,N*NB), where NB is the optimal blocksize for
-*>          ZHETRF.
+*>          The length of WORK.  LWORK >= MAX(1,2*N,3*N-2), and for best 
+*>          performance LWORK >= max(1,N*NB), where NB is the optimal
+*>          blocksize for ZHETRF.
 *>          for LWORK < N, TRS will be done with Level BLAS 2
 *>          for LWORK >= N, TRS will be done with Level BLAS 3
 *>
@@ -162,7 +162,7 @@
 *
 *  =====================================================================
       SUBROUTINE ZHESV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
-     $                        LWORK, INFO )
+     $                     LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

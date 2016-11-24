@@ -549,6 +549,50 @@
          INFOT = 5
          CALL ZSPCON( 'U', 1, A, IP, -ANRM, RCOND, W, INFO )
          CALL CHKXER( 'ZSPCON', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with Aasen's algorithm.
+*
+*        ZSYTRF_AA
+*
+         SRNAMT = 'ZSYTRF_AA'
+         INFOT = 1
+         CALL ZSYTRF_AA( '/', 0, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTRF_AA( 'U', -1, A, 1, IP, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZSYTRF_AA( 'U', 2, A, 1, IP, W, 4, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL ZSYTRF_AA( 'U', 0, A, 1, IP, W, 0, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL ZSYTRF_AA( 'U', 0, A, 1, IP, W, -2, INFO )
+         CALL CHKXER( 'ZSYTRF_AA', INFOT, NOUT, LERR, OK )
+*
+*        ZSYTRS_AA
+*
+         SRNAMT = 'ZSYTRS_AA'
+         INFOT = 1
+         CALL ZSYTRS_AA( '/', 0, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTRS_AA( 'U', -1, 0, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZSYTRS_AA( 'U', 0, -1, A, 1, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZSYTRS_AA( 'U', 2, 1, A, 1, IP, B, 2, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+         INFOT = 8
+         CALL ZSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
+*
       END IF
 *
 *     Print a summary line.

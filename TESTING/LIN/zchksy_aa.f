@@ -1,4 +1,4 @@
-*> \brief \b ZCHKHE_AA
+*> \brief \b ZCHKSY_AA
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,21 +8,20 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+*       SUBROUTINE ZCHKSY_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
 *                             THRESH, TSTERR, NMAX, A, AFAC, AINV, B, X,
 *                             XACT, WORK, RWORK, IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
-*       INTEGER            NN, NNB, NNS, NOUT
-*       DOUBLE PRECISION   THRESH
+*       INTEGER            NMAX, NN, NNB, NNS, NOUT
+*       COMPLEX*16         THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-*       DOUBLE PRECISION   RWORK( * )
 *       COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   WORK( * ), X( * ), XACT( * )
+*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -31,7 +30,7 @@
 *>
 *> \verbatim
 *>
-*> ZCHKHE_AA tests ZHETRF_AA, -TRS_AA.
+*> ZCHKSY_AA tests ZSYTRF_AA, -TRS_AA.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +82,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is DOUBLE PRECISION
+*>          THRESH is COMPLEX*16
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -140,12 +139,12 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension (max(NMAX,2*NSMAX))
+*>          RWORK is COMPLEX*16 array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (NMAX)
+*>          IWORK is INTEGER array, dimension (2*NMAX)
 *> \endverbatim
 *>
 *> \param[in] NOUT
@@ -164,11 +163,12 @@
 *
 *> \date November 2016
 *
+*  @generated from LIN/dchksy_aa.f, fortran d -> z, Wed Nov 16 21:34:18 2016
 *
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZCHKHE_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
+      SUBROUTINE ZCHKSY_AA( DOTYPE, NN, NVAL, NNB, NBVAL, NNS, NSVAL,
      $                      THRESH, TSTERR, NMAX, A, AFAC, AINV, B,
      $                      X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -181,7 +181,7 @@
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
-      INTEGER            NMAX, NN, NNB, NNS, NOUT
+      INTEGER            NN, NNB, NNS, NMAX, NOUT
       DOUBLE PRECISION   THRESH
 *     ..
 *     .. Array Arguments ..
@@ -198,7 +198,7 @@
       DOUBLE PRECISION   ZERO
       PARAMETER          ( ZERO = 0.0D+0 )
       COMPLEX*16         CZERO
-      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
+      PARAMETER          ( CZERO = 0.0E+0 )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
@@ -219,14 +219,14 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, ZLANHE
-      EXTERNAL           DGET06, ZLANHE
+      DOUBLE PRECISION   DGET06, ZLANSY
+      EXTERNAL           DGET06, ZLANSY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, XLAENV, ZERRHE, ZGET04,
-     $                   ZHECON, ZHERFS, ZHET01_AA, ZHETRF_AA, ZHETRI2,
-     $                   ZHETRS_AA, ZLACPY, ZLAIPD, ZLARHS, ZLATB4,
-     $                   ZLATMS, ZPOT02, ZPOT03, ZPOT05
+      EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRSY, ZGET04, ZLACPY,
+     $                   ZLARHS, ZLATB4, ZLATMS, ZSYT02, DSYT03, DSYT05,
+     $                   DSYCON, ZSYRFS, ZSYT01_AA, ZSYTRF_AA,
+     $                   DSYTRI2, ZSYTRS_AA, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -251,12 +251,12 @@
 *     Test path
 *
       PATH( 1: 1 ) = 'Zomplex precision'
-      PATH( 2: 3 ) = 'HA'
+      PATH( 2: 3 ) = 'SA'
 *
 *     Path to generate matrices
 *
       MATPATH( 1: 1 ) = 'Zomplex precision'
-      MATPATH( 2: 3 ) = 'HE'
+      MATPATH( 2: 3 ) = 'SY'
       NRUN = 0
       NFAIL = 0
       NERRS = 0
@@ -267,7 +267,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL ZERRHE( PATH, NOUT )
+     $   CALL ZERRSY( PATH, NOUT )
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
@@ -291,6 +291,9 @@
      $      NIMAT = 1
 *
          IZERO = 0
+*
+*        Do for each value of matrix type IMAT
+*
          DO 170 IMAT = 1, NIMAT
 *
 *           Do the tests only if DOTYPE( IMAT ) is true.
@@ -309,11 +312,14 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
+*              Begin generate the test matrix A.
+*
+*
 *              Set up parameters with ZLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
                CALL ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU,
-     $                       ANORM, MODE, CNDNUM, DIST )
+     $                      ANORM, MODE, CNDNUM, DIST )
 *
 *              Generate a matrix with ZLATMS.
 *
@@ -328,13 +334,14 @@
                   CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N, -1,
      $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
 *
-*                 Skip all tests for this generated matrix
+*                    Skip all tests for this generated matrix
 *
                   GO TO 160
                END IF
 *
-*              For types 3-6, zero one or more rows and columns of
-*              the matrix to test that INFO is returned correctly.
+*              For matrix types 3-6, zero one or more rows and
+*              columns of the matrix to test that INFO is returned
+*              correctly.
 *
                IF( ZEROT ) THEN
                   IF( IMAT.EQ.3 ) THEN
@@ -402,12 +409,7 @@
                   IZERO = 0
                END IF
 *
-*              End generate test matrix A.
-*
-*
-*              Set the imaginary part of the diagonals.
-*
-               CALL ZLAIPD( N, A, LDA+1, 0 )
+*              End generate the test matrix A.
 *
 *              Do for each value of NB in NBVAL
 *
@@ -430,9 +432,9 @@
 *                 the block structure of D. AINV is a work array for
 *                 block factorization, LWORK is the length of AINV.
 *
-                  LWORK = MAX( 1, ( NB+1 )*LDA )
-                  SRNAMT = 'ZHETRF_AA'
-                  CALL ZHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
+                  SRNAMT = 'ZSYTRF_AA'
+                  LWORK = MAX( 1, N*NB + N )
+                  CALL ZSYTRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
      $                            LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
@@ -455,10 +457,10 @@
                      K = 0
                   END IF
 *
-*                 Check error code from ZHETRF and handle error.
+*                 Check error code from ZSYTRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'ZHETRF_AA', INFO, K, UPLO,
+                     CALL ALAERH( PATH, 'ZSYTRF_AA', INFO, K, UPLO,
      $                            N, N, -1, -1, NB, IMAT, NFAIL, NERRS,
      $                            NOUT )
                   END IF
@@ -466,7 +468,7 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+                  CALL ZSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
      $                            AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
@@ -504,29 +506,31 @@
 *
                      SRNAMT = 'ZLARHS'
                      CALL ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N,
-     $                             KL, KU, NRHS, A, LDA, XACT, LDA,
+     $                            KL, KU, NRHS, A, LDA, XACT, LDA,
      $                            B, LDA, ISEED, INFO )
                      CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'ZHETRS_AA'
+                     SRNAMT = 'ZSYTRS_AA'
                      LWORK = MAX( 1, 3*N-2 )
-                     CALL ZHETRS_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
-     $                               X, LDA, WORK, LWORK, INFO )
+                     CALL ZSYTRS_AA( UPLO, N, NRHS, AFAC, LDA,
+     $                                  IWORK, X, LDA, WORK, LWORK,
+     $                                  INFO )
 *
-*                    Check error code from ZHETRS and handle error.
+*                    Check error code from ZSYTRS and handle error.
 *
                      IF( INFO.NE.0 ) THEN
-                        CALL ALAERH( PATH, 'ZHETRS', INFO, 0, UPLO, N,
-     $                                N, -1, -1, NRHS, IMAT, NFAIL,
-     $                                NERRS, NOUT )
+                        CALL ALAERH( PATH, 'ZSYTRS_AA', INFO, 0,
+     $                               UPLO, N, N, -1, -1, NRHS, IMAT,
+     $                               NFAIL, NERRS, NOUT )
                      END IF
 *
                      CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
 *
 *                    Compute the residual for the solution
 *
-                     CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL ZSYT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
+*
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -559,12 +563,10 @@
      $      I2, ', test ', I2, ', ratio =', G12.5 )
  9998 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ', NRHS=', I3, ', type ',
      $      I2, ', test(', I2, ') =', G12.5 )
-c 9997 FORMAT( ' UPLO = ''', A1, ''', N =', I5, ',', 10X, ' type ', I2,
-c     $      ', test(', I2, ') =', G12.5 )
  9995 FORMAT( ' Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
       RETURN
 *
-*     End of ZCHKHE_AA
+*     End of ZCHKSY_AA
 *
       END
