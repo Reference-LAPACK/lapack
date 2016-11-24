@@ -188,31 +188,31 @@ dstest.out: dstest.in xlintstds
 # ======== COMPLEX-COMPLEX16 LIN TESTS ========================
 
 zctest.out: zctest.in xlintstzc
-	@echo Testing COMPLEX-COMPLEX16 LAPACK protoype linear equation routines
+	@echo Testing COMPLEX-COMPLEX16 LAPACK prototype linear equation routines
 	./xlintstzc < zctest.in > $@ 2>&1
 #
 # ======== SINGLE RFP LIN TESTS ========================
 
 stest_rfp.out: stest_rfp.in xlintstrfs
-	@echo Testing REAL LAPACK RFP protoype linear equation routines
+	@echo Testing REAL LAPACK RFP prototype linear equation routines
 	./xlintstrfs < stest_rfp.in > $@ 2>&1
 #
 # ======== COMPLEX16 RFP LIN TESTS ========================
 
 dtest_rfp.out: dtest_rfp.in xlintstrfd
-	@echo Testing DOUBLE PRECISION LAPACK RFP protoype linear equation routines
+	@echo Testing DOUBLE PRECISION LAPACK RFP prototype linear equation routines
 	./xlintstrfd < dtest_rfp.in > $@ 2>&1
 #
 # ======== COMPLEX16 RFP LIN TESTS ========================
 
 ctest_rfp.out: ctest_rfp.in xlintstrfc
-	@echo Testing COMPLEX LAPACK RFP protoype linear equation routines
+	@echo Testing COMPLEX LAPACK RFP prototype linear equation routines
 	./xlintstrfc < ctest_rfp.in > $@ 2>&1
 #
 # ======== COMPLEX16 RFP LIN TESTS ========================
 
 ztest_rfp.out: ztest_rfp.in xlintstrfz
-	@echo Testing COMPLEX16 LAPACK RFP protoype linear equation routines
+	@echo Testing COMPLEX16 LAPACK RFP prototype linear equation routines
 	./xlintstrfz < ztest_rfp.in > $@ 2>&1
 #
 #
