@@ -123,7 +123,7 @@
  9999 FORMAT( ' *** XERBLA was called from ', A, ' with INFO = ', I6,
      $      ' instead of ', I2, ' ***' )
  9998 FORMAT( ' *** XERBLA was called with SRNAME = ', A,
-     $      ' instead of ', A6, ' ***' )
+     $      ' instead of ', A9, ' ***' )
  9997 FORMAT( ' *** On entry to ', A, ' parameter number ', I6,
      $      ' had an illegal value ***' )
 *
