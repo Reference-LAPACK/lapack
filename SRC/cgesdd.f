@@ -330,8 +330,10 @@
 *       real workspace. NB refers to the optimal block size for the
 *       immediately following subroutine, as returned by ILAENV.)
 *
-      IF( INFO.EQ.0 .AND. M.GT.0 .AND. N.GT.0 ) THEN
-         IF( M.GE.N ) THEN
+      IF( INFO.EQ.0 ) THEN
+         MINWRK = 1
+         MAXWRK = 1
+         IF( M.GE.N .AND. MINMN.GT.0 ) THEN
 *
 *           There is no complex work space needed for bidiagonal SVD
 *           The real work space needed for bidiagonal SVD (sbdsdc) is
@@ -472,7 +474,7 @@
                   MAXWRK = MAX( MAXWRK, 2*N + LWORK_CUNMBR_PRC_NN )
                END IF
             END IF
-         ELSE
+         ELSE IF( MINMN.GT.0 ) THEN
 *
 *           There is no complex work space needed for bidiagonal SVD
 *           The real work space needed for bidiagonal SVD (sbdsdc) is
