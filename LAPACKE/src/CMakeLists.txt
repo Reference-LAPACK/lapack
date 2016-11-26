@@ -1,6 +1,6 @@
 #aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_OBJ)
 
-set (SRC_OBJ
+set(SRC_OBJ
 lapacke_cbbcsd.c
 lapacke_cbbcsd_work.c
 lapacke_cbdsqr.c
@@ -2153,7 +2153,7 @@ lapacke_chesvxx_work.c  lapacke_dgbsvxx_work.c  lapacke_dsysvxx_work.c  lapacke_
 )
 
 # FILE PARTS OF TMGLIB
-set (MATGEN_OBJ
+set(MATGEN_OBJ
 lapacke_clatms.c
 lapacke_clatms_work.c
 lapacke_dlatms.c

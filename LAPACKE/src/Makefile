@@ -2223,16 +2223,14 @@ ifdef BUILD_DEPRECATED
 DEPRECATED = $(DEPRECSRC)
 endif
 
-OBJ_FILES := $(C_FILES:.o=.o)
-
 all: ../../$(LAPACKELIB)
 
 ../../$(LAPACKELIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
-	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
-	$(RANLIB) ../../$(LAPACKELIB)
+	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+	$(RANLIB) $@
 
 .c.o:
-	$(CC) -c $(CFLAGS) -I ../include -o $@ $<
+	$(CC) $(CFLAGS) -I../include -c -o $@ $<
 
 clean:
 	rm -f *.o

@@ -69,7 +69,7 @@ set(DBLAS1 idamax.f dasum.f daxpy.f dcopy.f ddot.f dnrm2.f
 set(ZBLAS1 dcabs1.f dzasum.f dznrm2.f izamax.f zaxpy.f zcopy.f
 	zdotc.f zdotu.f zdscal.f zrotg.f zscal.f zswap.f zdrot.f)
 
-set(CB1AUX  isamax.f sasum.f saxpy.f scopy.f snrm2.f sscal.f)
+set(CB1AUX isamax.f sasum.f saxpy.f scopy.f snrm2.f sscal.f)
 
 set(ZB1AUX idamax.f dasum.f daxpy.f dcopy.f dnrm2.f dscal.f)
 
@@ -78,7 +78,7 @@ set(ZB1AUX idamax.f dasum.f daxpy.f dcopy.f dnrm2.f dscal.f)
 #  Level 2 and Level 3 BLAS.  Comment it out only if you already have
 #  both the Level 2 and 3 BLAS.
 #---------------------------------------------------------------------
-set(ALLBLAS  lsame.f xerbla.f xerbla_array.f)
+set(ALLBLAS lsame.f xerbla.f xerbla_array.f)
 
 #---------------------------------------------------------
 #  Comment out the next 4 definitions if you already have
@@ -104,7 +104,7 @@ set(ZBLAS2 zgemv.f zgbmv.f zhemv.f zhbmv.f zhpmv.f
 #  Comment out the next 4 definitions if you already have
 #  the Level 3 BLAS.
 #---------------------------------------------------------
-set(SBLAS3 sgemm.f ssymm.f ssyrk.f ssyr2k.f strmm.f strsm.f )
+set(SBLAS3 sgemm.f ssymm.f ssyrk.f ssyr2k.f strmm.f strsm.f)
 
 set(CBLAS3 cgemm.f csymm.f csyrk.f csyr2k.f ctrmm.f ctrsm.f
 	chemm.f cherk.f cher2k.f)
@@ -127,11 +127,11 @@ if(BLAS_DOUBLE)
 	${DBLAS2} ${DBLAS3})
 endif()
 if(BLAS_COMPLEX)
-  set(ALLOBJ  ${BLASLIB} ${CBLAS1} ${CB1AUX}
+  set(ALLOBJ ${BLASLIB} ${CBLAS1} ${CB1AUX}
 	${ALLBLAS} ${CBLAS2})
 endif()
 if(BLAS_COMPLEX16)
-  set(ALLOBJ  ${BLASLIB} ${ZBLAS1} ${ZB1AUX}
+  set(ALLOBJ ${BLASLIB} ${ZBLAS1} ${ZB1AUX}
 	${ALLBLAS} ${ZBLAS2} ${ZBLAS3})
 endif()
 

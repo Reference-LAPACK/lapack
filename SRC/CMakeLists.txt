@@ -1,24 +1,32 @@
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
-#       ALLAUX -- Auxiliary routines called from all precisions
-#       ALLXAUX -- Auxiliary routines called from all precisions but
-#                  only from routines using extra precision.
-#       SCLAUX -- Auxiliary routines called from both REAL and COMPLEX
-#       DZLAUX -- Auxiliary routines called from both DOUBLE PRECISION
-#                 and COMPLEX*16
-#       SLASRC -- Single precision real LAPACK routines
+#       ALLAUX  -- Auxiliary routines called from all precisions
+#
+#       SCLAUX  -- Auxiliary routines called from both REAL and COMPLEX.
+#       DZLAUX  -- Auxiliary routines called from both DOUBLE and COMPLEX*16.
+#
+#       DSLASRC -- Double-single mixed precision real routines called from
+#                  single, single-extra and double precision real LAPACK
+#                  routines (i.e. from SLASRC, SXLASRC, DLASRC).
+#       ZCLASRC -- Double-single mixed precision complex routines called from
+#                  single, single-extra and double precision complex LAPACK
+#                  routines (i.e. from CLASRC, CXLASRC, ZLASRC).
+#
+#       SLASRC  -- Single precision real LAPACK routines
 #       SXLASRC -- Single precision real LAPACK routines using extra
 #                  precision.
-#       CLASRC -- Single precision complex LAPACK routines
+#       CLASRC  -- Single precision complex LAPACK routines
 #       CXLASRC -- Single precision complex LAPACK routines using extra
 #                  precision.
-#       DLASRC -- Double precision real LAPACK routines
+#       DLASRC  -- Double precision real LAPACK routines
 #       DXLASRC -- Double precision real LAPACK routines using extra
 #                  precision.
-#       ZLASRC -- Double precision complex LAPACK routines
+#       ZLASRC  -- Double precision complex LAPACK routines
 #       ZXLASRC -- Double precision complex LAPACK routines using extra
 #                  precision.
+#
+#    DEPRECATED -- Deprecated routines in all precisions
 #
 #  The library can be set up to include routines for any combination
 #  of the four precisions.  To create or add to the library, enter make
@@ -46,12 +54,10 @@
 #
 #######################################################################
 
-set(ALLAUX  ilaenv.f ieeeck.f lsamen.f  iparmq.f iparam2stage.F
-    ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
-    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
-    ../INSTALL/slamch.f)
-
-set(ALLXAUX )
+set(ALLAUX ilaenv.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
+   ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
+   ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
+   ../INSTALL/slamch.f)
 
 set(SCLAUX
    sbdsdc.f
@@ -151,7 +157,7 @@ set(SLASRC
    strti2.f strtri.f strtrs.f stzrzf.f sstemr.f
    slansf.f spftrf.f spftri.f spftrs.f ssfrk.f stfsm.f stftri.f stfttp.f
    stfttr.f stpttf.f stpttr.f strttf.f strttp.f
-   sgejsv.f  sgesvj.f  sgsvj0.f  sgsvj1.f
+   sgejsv.f sgesvj.f sgsvj0.f sgsvj1.f
    sgeequb.f ssyequb.f spoequb.f sgbequb.f
    sbbcsd.f slapmr.f sorbdb.f sorbdb1.f sorbdb2.f sorbdb3.f sorbdb4.f
    sorbdb5.f sorbdb6.f sorcsd.f sorcsd2by1.f
@@ -167,7 +173,7 @@ set(SLASRC
 
 set(DSLASRC spotrs.f sgetrs.f spotrf.f sgetrf.f)
 
-set(SXLASRC  sgesvxx.f sgerfsx.f sla_gerfsx_extended.f sla_geamv.f
+set(SXLASRC sgesvxx.f sgerfsx.f sla_gerfsx_extended.f sla_geamv.f
    sla_gercond.f sla_gerpvgrw.f ssysvxx.f ssyrfsx.f
    sla_syrfsx_extended.f sla_syamv.f sla_syrcond.f sla_syrpvgrw.f
    sposvxx.f sporfsx.f sla_porfsx_extended.f sla_porcond.f
@@ -262,7 +268,7 @@ set(CLASRC
    cheevd_2stage.f cheev_2stage.f cheevx_2stage.f cheevr_2stage.f
    chbev_2stage.f chbevx_2stage.f chbevd_2stage.f chegv_2stage.f)
 
-set(CXLASRC     cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f
+set(CXLASRC cgesvxx.f cgerfsx.f cla_gerfsx_extended.f cla_geamv.f
    cla_gercond_c.f cla_gercond_x.f cla_gerpvgrw.f
    csysvxx.f csyrfsx.f cla_syrfsx_extended.f cla_syamv.f
    cla_syrcond_c.f cla_syrcond_x.f cla_syrpvgrw.f
@@ -316,7 +322,7 @@ set(DLASRC
    dpprfs.f dppsv.f  dppsvx.f dpptrf.f dpptri.f dpptrs.f dptcon.f
    dpteqr.f dptrfs.f dptsv.f  dptsvx.f dpttrs.f dptts2.f drscl.f
    dsbev.f  dsbevd.f dsbevx.f dsbgst.f dsbgv.f  dsbgvd.f dsbgvx.f
-   dsbtrd.f  dspcon.f dspev.f  dspevd.f dspevx.f dspgst.f
+   dsbtrd.f dspcon.f dspev.f  dspevd.f dspevx.f dspgst.f
    dspgv.f  dspgvd.f dspgvx.f dsprfs.f dspsv.f  dspsvx.f dsptrd.f
    dsptrf.f dsptri.f dsptrs.f dstegr.f dstein.f dstev.f  dstevd.f dstevr.f
    dstevx.f dsycon.f dsyev.f  dsyevd.f dsyevr.f
@@ -339,7 +345,7 @@ set(DLASRC
    dsgesv.f dsposv.f dlag2s.f slag2d.f dlat2s.f
    dlansf.f dpftrf.f dpftri.f dpftrs.f dsfrk.f dtfsm.f dtftri.f dtfttp.f
    dtfttr.f dtpttf.f dtpttr.f dtrttf.f dtrttp.f
-   dgejsv.f  dgesvj.f  dgsvj0.f  dgsvj1.f
+   dgejsv.f dgesvj.f dgsvj0.f dgsvj1.f
    dgeequb.f dsyequb.f dpoequb.f dgbequb.f
    dbbcsd.f dlapmr.f dorbdb.f dorbdb1.f dorbdb2.f dorbdb3.f dorbdb4.f
    dorbdb5.f dorbdb6.f dorcsd.f dorcsd2by1.f
@@ -453,7 +459,7 @@ set(ZLASRC
    zheevd_2stage.f zheev_2stage.f zheevx_2stage.f zheevr_2stage.f
    zhbev_2stage.f zhbevx_2stage.f zhbevd_2stage.f zhegv_2stage.f)
 
-set(ZXLASRC  zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
+set(ZXLASRC zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_gercond_c.f zla_gercond_x.f zla_gerpvgrw.f zsysvxx.f zsyrfsx.f
    zla_syrfsx_extended.f zla_syamv.f zla_syrcond_c.f zla_syrcond_x.f
    zla_syrpvgrw.f zposvxx.f zporfsx.f zla_porfsx_extended.f
@@ -464,45 +470,45 @@ set(ZXLASRC  zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_lin_berr.f zlarscl2.f zlascl2.f zla_wwaddw.f)
 
 
-if( USE_XBLAS)
-  set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC} ${ALLXAUX})
+if(USE_XBLAS)
+  set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC})
 endif()
 
 if(BUILD_DEPRECATED)
-	list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
+  list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
     DEPRECATED/sgeqpf.f DEPRECATED/sgelsx.f DEPRECATED/sggsvd.f
     DEPRECATED/sggsvp.f DEPRECATED/slahrd.f DEPRECATED/slatzm.f DEPRECATED/stzrqf.f)
-	list(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f
+  list(APPEND DLASRC DEPRECATED/dgegs.f DEPRECATED/dgegv.f
     DEPRECATED/dgeqpf.f DEPRECATED/dgelsx.f DEPRECATED/dggsvd.f
-    DEPRECATED/dggsvp.f DEPRECATED/dlahrd.f DEPRECATED/dlatzm.f DEPRECATED/dtzrqf.f )
+    DEPRECATED/dggsvp.f DEPRECATED/dlahrd.f DEPRECATED/dlatzm.f DEPRECATED/dtzrqf.f)
   list(APPEND CLASRC DEPRECATED/cgegs.f DEPRECATED/cgegv.f
     DEPRECATED/cgeqpf.f DEPRECATED/cgelsx.f DEPRECATED/cggsvd.f
     DEPRECATED/cggsvp.f DEPRECATED/clahrd.f DEPRECATED/clatzm.f DEPRECATED/ctzrqf.f)
   list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
     DEPRECATED/zgeqpf.f DEPRECATED/zgelsx.f DEPRECATED/zggsvd.f
     DEPRECATED/zggsvp.f DEPRECATED/zlahrd.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
-	message(STATUS "Building deprecated routines")
+  message(STATUS "Building deprecated routines")
 endif()
 
 if(BUILD_SINGLE)
-set(ALLOBJ  ${SLASRC} ${ALLAUX}	${SCLAUX} )
-message(STATUS "Building Single Precision")
+  set(ALLOBJ ${SLASRC} ${ALLAUX} ${SCLAUX})
+  message(STATUS "Building Single Precision")
 endif()
 if(BUILD_DOUBLE)
   set(ALLOBJ ${ALLOBJ} ${DLASRC} ${ALLAUX} ${DZLAUX} ${DSLASRC})
-message(STATUS "Building Double Precision")
+  message(STATUS "Building Double Precision")
 endif()
 if(BUILD_COMPLEX)
-  set(ALLOBJ ${ALLOBJ} ${CLASRC} ${ALLAUX} ${SCLAUX} )
-message(STATUS "Building Complex Precision")
+  set(ALLOBJ ${ALLOBJ} ${CLASRC} ${ALLAUX} ${SCLAUX})
+  message(STATUS "Building Complex Precision")
 endif()
 if(BUILD_COMPLEX16)
-  set(ALLOBJ  ${ALLOBJ} ${ZLASRC} ${ALLAUX} ${DZLAUX} ${ZCLASRC})
-message(STATUS "Building Double Complex Precision")
+  set(ALLOBJ ${ALLOBJ} ${ZLASRC} ${ALLAUX} ${DZLAUX} ${ZCLASRC})
+  message(STATUS "Building Double Complex Precision")
 endif()
 
-if (NOT ALLOBJ)
-    message(FATAL_ERROR "-->LAPACK SRC BUILD: NOTHING TO BUILD, NO PRECISION SELECTED:
+if(NOT ALLOBJ)
+  message(FATAL_ERROR "-->LAPACK SRC BUILD: NOTHING TO BUILD, NO PRECISION SELECTED:
      PLEASE ENABLE AT LEAST ONE OF THOSE: BUILD_SINGLE, BUILD_COMPLEX, BUILD_DOUBLE, BUILD_COMPLEX16.")
 endif()
 
