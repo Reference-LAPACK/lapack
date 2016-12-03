@@ -1,6 +1,4 @@
-*> \brief \b ZHBTRD
-*
-*  @precisions fortran z -> s d c
+*> \brief \b ZHETRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric tridiagonal form T
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,12 +6,12 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download ZHBTRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhbtrd.f">
+*> Download ZHETRD_HB2ST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhbtrd_hb2st.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhbtrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhbtrd_hb2st.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbtrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhbtrd_hb2st.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
@@ -22,8 +20,6 @@
 *
 *       SUBROUTINE ZHETRD_HB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
 *                               D, E, HOUS, LHOUS, WORK, LWORK, INFO )
-*
-*       #define PRECISION_COMPLEX
 *
 *       #if defined(_OPENMP)
 *       use omp_lib
@@ -46,7 +42,7 @@
 *>
 *> \verbatim
 *>
-*> ZHBTRD reduces a complex Hermitian band matrix A to real symmetric
+*> ZHETRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric
 *> tridiagonal form T by a unitary similarity transformation:
 *> Q**H * A * Q = T.
 *> \endverbatim
@@ -234,7 +230,6 @@
       SUBROUTINE ZHETRD_HB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
      $                         D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
-#define PRECISION_COMPLEX
 *
 #if defined(_OPENMP)
       use omp_lib
@@ -242,7 +237,7 @@
 *
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016
@@ -274,10 +269,8 @@
      $                   ABDPOS, ABOFDPOS, DPOS, OFDPOS, AWPOS, 
      $                   INDA, INDW, APOS, SIZEA, LDA, INDV, INDTAU,
      $                   SIZEV, SIZETAU, LDV, LHMIN, LWMIN
-#if defined (PRECISION_COMPLEX)
       DOUBLE PRECISION   ABSTMP
       COMPLEX*16         TMP
-#endif
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZHB2ST_KERNELS, ZLACPY, ZLASET
@@ -389,7 +382,7 @@
           DO 40 I = 1, N-1
               E( I ) = RZERO
    40     CONTINUE
-         GOTO 200
+         RETURN
       END IF
 *      
 *     Case KD=1: 
@@ -402,12 +395,10 @@
 *     updating the Q matrix will be required and based if Q is generated
 *     or not this might complicate the story. 
 *      
-C      IF( KD.EQ.1 .AND. N.GT.(KD+1) .AND. AFTERS1 ) THEN
       IF( KD.EQ.1 ) THEN
           DO 50 I = 1, N
               D( I ) = DBLE( AB( ABDPOS, I ) )
    50     CONTINUE
-#if defined (PRECISION_COMPLEX)
 *
 *         make off-diagonal elements real and copy them to E
 *
@@ -446,18 +437,7 @@ C                    CALL ZSCAL( N, TMP, Q( 1, I+1 ), 1 )
 C                 END IF
    70         CONTINUE
           ENDIF
-#else
-          IF( UPPER ) THEN
-              DO 60 I = 1, N-1
-                 E( I ) = DBLE( AB( ABOFDPOS, I+1 ) )
-   60         CONTINUE
-          ELSE
-              DO 70 I = 1, N-1
-                 E( I ) = DBLE( AB( ABOFDPOS, I ) )
-   70         CONTINUE
-          ENDIF
-#endif
-          GOTO 200
+          RETURN
       END IF
 *
 *     Main code start here. 
@@ -590,8 +570,6 @@ C                 END IF
   170     CONTINUE
       ENDIF
 *
-  200 CONTINUE  
-*
       HOUS( 1 ) = LHMIN
       WORK( 1 ) = LWMIN
       RETURN
@@ -599,5 +577,4 @@ C                 END IF
 *     End of ZHETRD_HB2ST
 *
       END
-#undef PRECISION_COMPLEX
       
