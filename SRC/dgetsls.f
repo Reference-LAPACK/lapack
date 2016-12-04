@@ -331,8 +331,8 @@
 *
 *        compute QR factorization of A
 *
-        CALL DGEQR( M, N, A, LDA, WORK(LW2+1), LW1
-     $    , WORK(1), LW2, INFO )
+        CALL DGEQR( M, N, A, LDA, WORK(LW2+1), LW1,
+     $              WORK(1), LW2, INFO )
         IF (.NOT.TRAN) THEN
 *
 *           Least-Squares Problem min || A * X - B ||
@@ -385,8 +385,8 @@
 *
 *        Compute LQ factorization of A
 *
-        CALL DGELQ( M, N, A, LDA, WORK(LW2+1), LW1
-     $    , WORK(1), LW2, INFO )
+        CALL DGELQ( M, N, A, LDA, WORK(LW2+1), LW1,
+     $              WORK(1), LW2, INFO )
 *
 *        workspace at least M, optimally M*NB.
 *
