@@ -1,6 +1,4 @@
-*> \brief \b DSBTRD
-*
-*  @generated from zhetrd_hb2st.F, fortran z -> d, Sun Nov  6 19:34:06 2016
+*> \brief \b DSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric tridiagonal form T
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,12 +6,12 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DSBTRD + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsbtrd.f">
+*> Download DSYTRD_SB2ST + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dsytrd_sb2st.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsbtrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dsytrd_sb2st.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsbtrd.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dsytrd_sb2st.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
@@ -22,8 +20,6 @@
 *
 *       SUBROUTINE DSYTRD_SB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
 *                               D, E, HOUS, LHOUS, WORK, LWORK, INFO )
-*
-*       #define PRECISION_REAL
 *
 *       #if defined(_OPENMP)
 *       use omp_lib
@@ -46,7 +42,7 @@
 *>
 *> \verbatim
 *>
-*> DSBTRD reduces a real symmetric band matrix A to real symmetric
+*> DSYTRD_SB2ST reduces a real symmetric band matrix A to real symmetric
 *> tridiagonal form T by a orthogonal similarity transformation:
 *> Q**T * A * Q = T.
 *> \endverbatim
@@ -234,15 +230,13 @@
       SUBROUTINE DSYTRD_SB2ST( STAGE1, VECT, UPLO, N, KD, AB, LDAB, 
      $                         D, E, HOUS, LHOUS, WORK, LWORK, INFO )
 *
-#define PRECISION_REAL
-*
 #if defined(_OPENMP)
       use omp_lib
 #endif
 *
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016
@@ -274,10 +268,6 @@
      $                   ABDPOS, ABOFDPOS, DPOS, OFDPOS, AWPOS, 
      $                   INDA, INDW, APOS, SIZEA, LDA, INDV, INDTAU,
      $                   SIDEV, SIZETAU, LDV, LHMIN, LWMIN
-#if defined (PRECISION_COMPLEX)
-      DOUBLE PRECISION   ABSTMP
-      DOUBLE PRECISION   TMP
-#endif
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSB2ST_KERNELS, DLACPY, DLASET
@@ -389,7 +379,7 @@
           DO 40 I = 1, N-1
               E( I ) = RZERO
    40     CONTINUE
-         GOTO 200
+         RETURN
       END IF
 *      
 *     Case KD=1: 
@@ -402,51 +392,11 @@
 *     updating the Q matrix will be required and based if Q is generated
 *     or not this might complicate the story. 
 *      
-C      IF( KD.EQ.1 .AND. N.GT.(KD+1) .AND. AFTERS1 ) THEN
       IF( KD.EQ.1 ) THEN
           DO 50 I = 1, N
               D( I ) = ( AB( ABDPOS, I ) )
    50     CONTINUE
-#if defined (PRECISION_COMPLEX)
 *
-*         make off-diagonal elements real and copy them to E
-*
-          IF( UPPER ) THEN
-              DO 60 I = 1, N - 1
-                  TMP = AB( ABOFDPOS, I+1 )
-                  ABSTMP = ABS( TMP )
-                  AB( ABOFDPOS, I+1 ) = ABSTMP
-                  E( I ) = ABSTMP
-                  IF( ABSTMP.NE.RZERO ) THEN
-                     TMP = TMP / ABSTMP
-                  ELSE
-                     TMP = ONE
-                  END IF
-                  IF( I.LT.N-1 )
-     $               AB( ABOFDPOS, I+2 ) = AB( ABOFDPOS, I+2 )*TMP
-C                  IF( WANTZ ) THEN
-C                     CALL DSCAL( N, ( TMP ), Q( 1, I+1 ), 1 )
-C                  END IF
-   60         CONTINUE
-          ELSE
-              DO 70 I = 1, N - 1
-                 TMP = AB( ABOFDPOS, I )
-                 ABSTMP = ABS( TMP )
-                 AB( ABOFDPOS, I ) = ABSTMP
-                 E( I ) = ABSTMP
-                 IF( ABSTMP.NE.RZERO ) THEN
-                    TMP = TMP / ABSTMP
-                 ELSE
-                    TMP = ONE
-                 END IF
-                 IF( I.LT.N-1 )
-     $              AB( ABOFDPOS, I+1 ) = AB( ABOFDPOS, I+1 )*TMP
-C                 IF( WANTQ ) THEN
-C                    CALL DSCAL( N, TMP, Q( 1, I+1 ), 1 )
-C                 END IF
-   70         CONTINUE
-          ENDIF
-#else
           IF( UPPER ) THEN
               DO 60 I = 1, N-1
                  E( I ) = ( AB( ABOFDPOS, I+1 ) )
@@ -456,8 +406,7 @@ C                 END IF
                  E( I ) = ( AB( ABOFDPOS, I ) )
    70         CONTINUE
           ENDIF
-#endif
-          GOTO 200
+          RETURN
       END IF
 *
 *     Main code start here. 
@@ -590,8 +539,6 @@ C                 END IF
   170     CONTINUE
       ENDIF
 *
-  200 CONTINUE  
-*
       HOUS( 1 ) = LHMIN
       WORK( 1 ) = LWMIN
       RETURN
@@ -599,5 +546,4 @@ C                 END IF
 *     End of DSYTRD_SB2ST
 *
       END
-#undef PRECISION_REAL
       
