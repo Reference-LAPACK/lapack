@@ -21,7 +21,7 @@
 *>
 *> \verbatim
 *>
-*>      SGEMQR overwrites the general real M-by-N matrix C with
+*>      DGEMQR overwrites the general real M-by-N matrix C with
 *>
 *>
 *>                      SIDE = 'L'     SIDE = 'R'
