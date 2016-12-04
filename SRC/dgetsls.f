@@ -111,7 +111,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(6,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK,
 *>          and WORK(2) returns the minimum LWORK.
 *> \endverbatim
