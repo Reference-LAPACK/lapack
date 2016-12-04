@@ -1,8 +1,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
-*     $                   , WORK, LWORK, INFO )
+*       SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+*     $                     WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
