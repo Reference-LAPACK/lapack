@@ -159,7 +159,7 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
-      INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS, MB
+      INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( * )
@@ -176,7 +176,7 @@
       LOGICAL            LQUERY, TRAN
       INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW, LW,
      $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2,
-     $                   INFO2, NB
+     $                   INFO2
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, SMLNUM
 *     ..
 *     .. External Functions ..
@@ -225,21 +225,17 @@
        IF ( M.GE.N ) THEN
         CALL DGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
      $   INFO2)
-        MB = INT(WORK(4))
-        NB = INT(WORK(5))
         LW = INT(WORK(6))
         CALL DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WORK(1),
-     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
+     $               -1, B, LDB, WORK(6), -1 , INFO2 )
         WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
         WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
        ELSE
         CALL DGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
      $   INFO2)
-        MB = INT(WORK(4))
-        NB = INT(WORK(5))
         LW = INT(WORK(6))
         CALL DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WORK(1),
-     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
+     $               -1, B, LDB, WORK(6), -1 , INFO2 )
         WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
         WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
        END IF
