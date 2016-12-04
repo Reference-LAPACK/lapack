@@ -149,8 +149,8 @@
 *> \ingroup doubleGEsolve
 *
 *  =====================================================================
-      SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
-     $                   , WORK, LWORK, INFO )
+      SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+     $                     WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
