@@ -227,7 +227,7 @@
      $   INFO2)
         LW = INT(WORK(6))
         CALL DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WORK(1),
-     $               -1, B, LDB, WORK(6), -1 , INFO2 )
+     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
         WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
         WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
        ELSE
@@ -235,7 +235,7 @@
      $   INFO2)
         LW = INT(WORK(6))
         CALL DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WORK(1),
-     $               -1, B, LDB, WORK(6), -1 , INFO2 )
+     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
         WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
         WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
        END IF
