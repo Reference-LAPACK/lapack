@@ -437,6 +437,8 @@ lapacke_csysv.o \
 lapacke_csysv_rook.o \
 lapacke_csysv_rook_work.o \
 lapacke_csysv_work.o \
+lapacke_csysv_aa.o \
+lapacke_csysv_aa_work.o \
 lapacke_csysvx.o \
 lapacke_csysvx_work.o \
 lapacke_csyswapr.o \
@@ -445,6 +447,8 @@ lapacke_csytrf.o \
 lapacke_csytrf_work.o \
 lapacke_csytrf_rook.o \
 lapacke_csytrf_rook_work.o \
+lapacke_csytrf_aa.o \
+lapacke_csytrf_aa_work.o \
 lapacke_csytri.o \
 lapacke_csytri2.o \
 lapacke_csytri2_work.o \
@@ -457,6 +461,8 @@ lapacke_csytrs2.o \
 lapacke_csytrs2_work.o \
 lapacke_csytrs_work.o \
 lapacke_csytrs_rook_work.o \
+lapacke_csytrs_aa.o \
+lapacke_csytrs_aa_work.o \
 lapacke_ctbcon.o \
 lapacke_ctbcon_work.o \
 lapacke_ctbrfs.o \
@@ -2005,6 +2011,8 @@ lapacke_zsysv.o \
 lapacke_zsysv_rook.o \
 lapacke_zsysv_rook_work.o \
 lapacke_zsysv_work.o \
+lapacke_zsysv_aa.o \
+lapacke_zsysv_aa_work.o \
 lapacke_zsysvx.o \
 lapacke_zsysvx_work.o \
 lapacke_zsyswapr.o \
@@ -2013,6 +2021,8 @@ lapacke_zsytrf.o \
 lapacke_zsytrf_work.o \
 lapacke_zsytrf_rook.o \
 lapacke_zsytrf_rook_work.o \
+lapacke_zsytrf_aa.o \
+lapacke_zsytrf_aa_work.o \
 lapacke_zsytri.o \
 lapacke_zsytri2.o \
 lapacke_zsytri2_work.o \
@@ -2025,6 +2035,8 @@ lapacke_zsytrs2.o \
 lapacke_zsytrs2_work.o \
 lapacke_zsytrs_work.o \
 lapacke_zsytrs_rook_work.o \
+lapacke_zsytrs_aa.o \
+lapacke_zsytrs_aa_work.o \
 lapacke_ztbcon.o \
 lapacke_ztbcon_work.o \
 lapacke_ztbrfs.o \
