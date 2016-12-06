@@ -12679,9 +12679,9 @@ lapack_int LAPACKE_zhetrs_aa_work( int matrix_layout, char uplo, lapack_int n,
 // LAPACK 3.7.0
 #define LAPACK_ssysv_aa LAPACK_GLOBAL(ssysv_aa,SSYSV_AA)
 #define LAPACK_dsysv_aa LAPACK_GLOBAL(dsysv_aa,DSYSV_AA)
-#define LAPACK_csysv_aa LAPACK_GLOBAL(chesv_aa,CHESV_AA)
+#define LAPACK_chesv_aa LAPACK_GLOBAL(chesv_aa,CHESV_AA)
 #define LAPACK_zsysv_aa LAPACK_GLOBAL(zsysv_aa,ZSYSV_AA)
-#define LAPACK_chesv_aa LAPACK_GLOBAL(csysv_aa,CSYSV_AA)
+#define LAPACK_csysv_aa LAPACK_GLOBAL(csysv_aa,CSYSV_AA)
 #define LAPACK_zhesv_aa LAPACK_GLOBAL(zhesv_aa,ZHESV_AA)
 #define LAPACK_ssytrs_aa LAPACK_GLOBAL(ssytrs_aa,SSYTRS_AA)
 #define LAPACK_dsytrs_aa LAPACK_GLOBAL(dsytrs_aa,DSYTRS_AA)
