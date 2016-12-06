@@ -1,6 +1,6 @@
 #aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_OBJ)
 
-set (SRC_OBJ
+set(SRC_OBJ
 lapacke_cbbcsd.c
 lapacke_cbbcsd_work.c
 lapacke_cbdsqr.c
@@ -403,6 +403,8 @@ lapacke_csysv.c
 lapacke_csysv_rook.c
 lapacke_csysv_rook_work.c
 lapacke_csysv_work.c
+lapacke_csysv_aa.c
+lapacke_csysv_aa_work.c
 lapacke_csysvx.c
 lapacke_csysvx_work.c
 lapacke_csyswapr.c
@@ -411,6 +413,8 @@ lapacke_csytrf.c
 lapacke_csytrf_work.c
 lapacke_csytrf_rook.c
 lapacke_csytrf_rook_work.c
+lapacke_csytrf_aa.c
+lapacke_csytrf_aa_work.c
 lapacke_csytri.c
 lapacke_csytri2.c
 lapacke_csytri2_work.c
@@ -423,6 +427,8 @@ lapacke_csytrs2.c
 lapacke_csytrs2_work.c
 lapacke_csytrs_work.c
 lapacke_csytrs_rook_work.c
+lapacke_csytrs_aa.c
+lapacke_csytrs_aa_work.c
 lapacke_ctbcon.c
 lapacke_ctbcon_work.c
 lapacke_ctbrfs.c
@@ -1971,6 +1977,8 @@ lapacke_zsysv.c
 lapacke_zsysv_rook.c
 lapacke_zsysv_rook_work.c
 lapacke_zsysv_work.c
+lapacke_zsysv_aa.c
+lapacke_zsysv_aa_work.c
 lapacke_zsysvx.c
 lapacke_zsysvx_work.c
 lapacke_zsyswapr.c
@@ -1979,6 +1987,8 @@ lapacke_zsytrf.c
 lapacke_zsytrf_work.c
 lapacke_zsytrf_rook.c
 lapacke_zsytrf_rook_work.c
+lapacke_zsytrf_aa.c
+lapacke_zsytrf_aa_work.c
 lapacke_zsytri.c
 lapacke_zsytri2.c
 lapacke_zsytri2_work.c
@@ -1991,6 +2001,8 @@ lapacke_zsytrs2.c
 lapacke_zsytrs2_work.c
 lapacke_zsytrs_work.c
 lapacke_zsytrs_rook_work.c
+lapacke_zsytrs_aa.c
+lapacke_zsytrs_aa_work.c
 lapacke_ztbcon.c
 lapacke_ztbcon_work.c
 lapacke_ztbrfs.c
@@ -2153,7 +2165,7 @@ lapacke_chesvxx_work.c  lapacke_dgbsvxx_work.c  lapacke_dsysvxx_work.c  lapacke_
 )
 
 # FILE PARTS OF TMGLIB
-set (MATGEN_OBJ
+set(MATGEN_OBJ
 lapacke_clatms.c
 lapacke_clatms_work.c
 lapacke_dlatms.c

@@ -9,8 +9,8 @@
 *  ===========
 *
 *       SUBROUTINE CDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
-*                                A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
-*                                NOUT )
+*                             A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
+*                             NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -186,9 +186,9 @@
       CHARACTER          DIST, FACT, TYPE, UPLO, XTYPE
       CHARACTER*3        MATPATH, PATH
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
-     $                   IZERO, J, K, K1, KL, KU, LDA, LWORK, MODE, N,
+     $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      REAL               AINVNM, ANORM, CNDNUM, RCOND, RCONDC
+      REAL               ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
@@ -385,45 +385,6 @@
 *
                   FACT = FACTS( IFACT )
 *
-*                 Compute the condition number for comparison with
-*                 the value returned by CHESVX.
-*
-                  IF( ZEROT ) THEN
-                     IF( IFACT.EQ.1 )
-     $                  GO TO 150
-                     RCONDC = ZERO
-*
-                  ELSE IF( IFACT.EQ.1 ) THEN
-*
-*                    Compute the 1-norm of A.
-*
-                     ANORM = CLANHE( '1', UPLO, N, A, LDA, RWORK )
-*
-*                    Factor the matrix A.
-*
-c                     CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-c                     SRNAMT = 'CHETRF_AA'
-c                     CALL CHETRF_AA( UPLO, N, AFAC, LDA, IWORK,
-c     $                            WORK, LWORK, INFO )
-*
-*                    Compute inv(A) and take its norm.
-*
-c                     CALL CLACPY( UPLO, N, N, AFAC, LDA, AINV, LDA )
-c                     LWORK = (N+NB+1)*(NB+3)
-c                     SRNAMT = 'CHETRI2'
-c                     CALL CHETRI2( UPLO, N, AINV, LDA, IWORK, WORK,
-c     $                            LWORK, INFO )
-c                     AINVNM = CLANHE( '1', UPLO, N, AINV, LDA, RWORK )
-*
-*                    Compute the 1-norm condition number of A.
-*
-c                     IF( ANORM.LE.ZERO .OR. AINVNM.LE.ZERO ) THEN
-c                        RCONDC = ONE
-c                     ELSE
-c                        RCONDC = ( ONE / ANORM ) / AINVNM
-c                     END IF
-                  END IF
-*
 *                 Form an exact solution and set the right hand side.
 *
                   SRNAMT = 'CLARHS'
@@ -487,12 +448,7 @@ c                     END IF
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
                      CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 2 ) )
-*
-*                    Check solution from generated exact solution.
-*
-                     CALL CGET04( N, NRHS, X, LDA, XACT, LDA, RCONDC,
-     $                            RESULT( 3 ) )
-                     NT = 3
+                     NT = 2
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.

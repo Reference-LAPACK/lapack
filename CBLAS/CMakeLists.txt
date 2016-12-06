@@ -7,16 +7,16 @@ set(LAPACK_INSTALL_EXPORT_NAME cblas-targets)
 include(FortranCInterface)
 ## Ensure that the fortran compiler and c compiler specified are compatible
 FortranCInterface_VERIFY()
-FortranCInterface_HEADER( ${LAPACK_BINARY_DIR}/include/cblas_mangling.h
-                          MACRO_NAMESPACE "F77_"
-                          SYMBOL_NAMESPACE "F77_" )
-if( NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
+FortranCInterface_HEADER(${LAPACK_BINARY_DIR}/include/cblas_mangling.h
+                         MACRO_NAMESPACE "F77_"
+                         SYMBOL_NAMESPACE "F77_")
+if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
   message(WARNING "Reverting to pre-defined include/lapacke_mangling.h")
-  configure_file( include/lapacke_mangling_with_flags.h.in
-                  ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h )
-endif ()
+  configure_file(include/lapacke_mangling_with_flags.h.in
+                 ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h)
+endif()
 
-include_directories( include ${LAPACK_BINARY_DIR}/include )
+include_directories(include ${LAPACK_BINARY_DIR}/include)
 add_subdirectory(include)
 add_subdirectory(src)
 
@@ -28,12 +28,12 @@ endforeach()
 endmacro()
 
 append_subdir_files(CBLAS_INCLUDE "include")
-install( FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h DESTINATION include )
+install(FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h DESTINATION include)
 
 # --------------------------------------------------
 if(BUILD_TESTING)
-   add_subdirectory(testing)
-   add_subdirectory(examples)
+  add_subdirectory(testing)
+  add_subdirectory(examples)
 endif()
 
 if(NOT BLAS_FOUND)
@@ -71,7 +71,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cblas.pc.in ${CMAKE_CURRENT_BINARY_DI
   install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/cblas.pc
   DESTINATION ${PKG_CONFIG_DIR}
-   )
+  )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-install.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/cblas-config.cmake @ONLY)
@@ -83,4 +83,3 @@ install(FILES
 
 #install(EXPORT cblas-targets
 #  DESTINATION ${LIBRARY_DIR}/cmake/cblas-${LAPACK_VERSION})
-

@@ -163,6 +163,7 @@
 *
 *> \date November 2016
 *
+*  @precisions fortran d -> z c
 *
 *> \ingroup double_lin
 *
@@ -201,13 +202,13 @@
       PARAMETER          ( NTESTS = 9 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            TRFCON, ZEROT
+      LOGICAL            ZEROT
       CHARACTER          DIST, TYPE, UPLO, XTYPE
       CHARACTER*3        PATH, MATPATH
       INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
      $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      DOUBLE PRECISION   ANORM, CNDNUM, RCONDC
+      DOUBLE PRECISION   ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -221,7 +222,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DGET04, DLACPY,
      $                   DLARHS, DLATB4, DLATMS, DPOT02, DPOT03, DPOT05,
-     $                   DSYCON, DSYRFS, DSYT01, DSYTRF_AA,
+     $                   DSYCON, DSYRFS, DSYT01_AA, DSYTRF_AA,
      $                   DSYTRI2, DSYTRS_AA, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
@@ -429,9 +430,9 @@
 *                 block factorization, LWORK is the length of AINV.
 *
                   SRNAMT = 'DSYTRF_AA'
-                  LWORK = N*NB + N
+                  LWORK = MAX( 1, N*NB + N )
                   CALL DSYTRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV,
-     $                               LWORK, INFO )
+     $                            LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
 *                 pivoting.
@@ -461,19 +462,11 @@
      $                            NOUT )
                   END IF
 *
-*                 Set the condition estimate flag if the INFO is not 0.
-*
-                  IF( INFO.NE.0 ) THEN
-                     TRFCON = .TRUE.
-                  ELSE
-                     TRFCON = .FALSE.
-                  END IF
-*
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
                   CALL DSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
-     $                               AINV, LDA, RWORK, RESULT( 1 ) )
+     $                            AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
 *
@@ -491,10 +484,9 @@
   110             CONTINUE
                   NRUN = NRUN + NT
 *
-*                 Do only the condition estimate if INFO is not 0.
+*                 Skip solver test if INFO is not 0.
 *
-                  IF( TRFCON ) THEN
-                     RCONDC = ZERO
+                  IF( INFO.NE.0 ) THEN
                      GO TO 140
                   END IF
 *
@@ -503,7 +495,7 @@
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
-*+    TEST 3 ( Using TRS)
+*+    TEST 2 (Using TRS)
 *                 Solve and compute residual for  A * X = B.
 *
 *                    Choose a set of NRHS random solution vectors
@@ -516,10 +508,10 @@
                      CALL DLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'DSYTRS_AA'
-                     LWORK = 3*N-2
+                     LWORK = MAX( 1, 3*N-2 )
                      CALL DSYTRS_AA( UPLO, N, NRHS, AFAC, LDA,
-     $                                  IWORK, X, LDA, WORK, LWORK,
-     $                                  INFO )
+     $                               IWORK, X, LDA, WORK, LWORK,
+     $                               INFO )
 *
 *                    Check error code from DSYTRS and handle error.
 *

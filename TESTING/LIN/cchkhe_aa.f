@@ -205,13 +205,13 @@
       PARAMETER    ( NTESTS = 9 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL      TRFCON, ZEROT
+      LOGICAL      ZEROT
       CHARACTER    DIST, TYPE, UPLO, XTYPE
       CHARACTER*3  PATH, MATPATH
       INTEGER      I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
      $             IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $             N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      REAL         ANORM, CNDNUM, RCOND, RCONDC
+      REAL         ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
       CHARACTER    UPLOS( 2 )
@@ -224,7 +224,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL     ALAERH, ALAHD, ALASUM, XLAENV, CERRHE, CGET04,
-     $             ZHECON, CHERFS, CHET01, CHETRF_AA, ZHETRI2,
+     $             ZHECON, CHERFS, CHET01_AA, CHETRF_AA, ZHETRI2,
      $             CHETRS_AA, CLACPY, CLAIPD, CLARHS, CLATB4, 
      $             CLATMS, CPOT02, ZPOT03, ZPOT05
 *     ..
@@ -431,10 +431,10 @@
 *                 the block structure of D. AINV is a work array for
 *                 block factorization, LWORK is the length of AINV.
 *
-                  LWORK = ( NB+1 )*LDA
+                  LWORK = MAX( 1, ( NB+1 )*LDA )
                   SRNAMT = 'CHETRF_AA'
                   CALL CHETRF_AA( UPLO, N, AFAC, LDA, IWORK, AINV, 
-     $                               LWORK, INFO )
+     $                            LWORK, INFO )
 *
 *                 Adjust the expected value of INFO to account for
 *                 pivoting.
@@ -464,19 +464,11 @@
      $                            NOUT )
                   END IF
 *
-*                 Set the condition estimate flag if the INFO is not 0.
-*
-                  IF( INFO.NE.0 ) THEN
-                     TRFCON = .TRUE.
-                  ELSE
-                     TRFCON = .FALSE.
-                  END IF
-*
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
                   CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
-     $                               AINV, LDA, RWORK, RESULT( 1 ) )
+     $                            AINV, LDA, RWORK, RESULT( 1 ) )
                   NT = 1
 *
 *
@@ -494,10 +486,9 @@
   110             CONTINUE
                   NRUN = NRUN + NT
 *
-*                 Do only the condition estimate if INFO is not 0.
+*                 Skip solver test if INFO is not 0.
 *
-                  IF( TRFCON ) THEN
-                     RCONDC = ZERO
+                  IF( INFO.NE.0 ) THEN
                      GO TO 140
                   END IF
 *
@@ -506,7 +497,7 @@
                   DO 130 IRHS = 1, NNS
                      NRHS = NSVAL( IRHS )
 *
-*+    TEST 3 (Using TRS)
+*+    TEST 2 (Using TRS)
 *                 Solve and compute residual for  A * X = B.
 *
 *                    Choose a set of NRHS random solution vectors
@@ -519,9 +510,9 @@
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
                      SRNAMT = 'CHETRS_AA'
-                     LWORK = 3*N-2
+                     LWORK = MAX( 1, 3*N-2 )
                      CALL CHETRS_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
-     $                                  X, LDA, WORK, LWORK, INFO )
+     $                               X, LDA, WORK, LWORK, INFO )
 *
 *                    Check error code from CHETRS and handle error.
 *

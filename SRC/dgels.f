@@ -49,7 +49,7 @@
 *>    an underdetermined system A * X = B.
 *>
 *> 3. If TRANS = 'T' and m >= n:  find the minimum norm solution of
-*>    an undetermined system A**T * X = B.
+*>    an underdetermined system A**T * X = B.
 *>
 *> 4. If TRANS = 'T' and m < n:  find the least squares solution of
 *>    an overdetermined system, i.e., solve the least squares problem
@@ -379,7 +379,7 @@
 *
          ELSE
 *
-*           Overdetermined system of equations A**T * X = B
+*           Underdetermined system of equations A**T * X = B
 *
 *           B(1:N,1:NRHS) := inv(R**T) * B(1:N,1:NRHS)
 *

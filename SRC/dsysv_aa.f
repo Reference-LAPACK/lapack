@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE DSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
-*                               LWORK, INFO )
+*                            LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -126,8 +126,8 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The length of WORK.  LWORK >= MAX(2*N, 3*N-2), and for
-*>          the best performance, LWORK >= max(1,N*NB), where NB is
+*>          The length of WORK.  LWORK >= MAX(1,2*N,3*N-2), and for
+*>          the best performance, LWORK >= MAX(1,N*NB), where NB is
 *>          the optimal blocksize for DSYTRF_AA.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -156,11 +156,13 @@
 *
 *> \date November 2016
 *
+*  @precisions fortran d -> z c
+*
 *> \ingroup doubleSYsolve
 *
 *  =====================================================================
       SUBROUTINE DSYSV_AA( UPLO, N, NRHS, A, LDA, IPIV, B, LDB, WORK,
-     $                        LWORK, INFO )
+     $                     LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

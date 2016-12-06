@@ -51,6 +51,8 @@
 *> SPT   12               List types on next line if 0 < NTYPES < 12
 *> SSY   10               List types on next line if 0 < NTYPES < 10
 *> SSR   10               List types on next line if 0 < NTYPES < 10
+*> SSK   10               List types on next line if 0 < NTYPES < 10
+*> SSA   10               List types on next line if 0 < NTYPES < 10
 *> SSP   10               List types on next line if 0 < NTYPES < 10
 *> STR   18               List types on next line if 0 < NTYPES < 18
 *> STP   18               List types on next line if 0 < NTYPES < 18
@@ -146,8 +148,8 @@
      $                   NSVAL( MAXIN ), NVAL( MAXIN ), NXVAL( MAXIN ),
      $                   RANKVAL( MAXIN ), PIV( NMAX )
       REAL               A( ( KDMAX+1 )*NMAX, 7 ), B( NMAX*MAXRHS, 4 ),
-     $                   RWORK( 5*NMAX+2*MAXRHS ), S( 2*NMAX ),
-     $                   WORK( NMAX, NMAX+MAXRHS+30 )
+     $                   E( NMAX ), RWORK( 5*NMAX+2*MAXRHS ),
+     $                   S( 2*NMAX ), WORK( NMAX, NMAX+MAXRHS+30 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
@@ -158,11 +160,11 @@
       EXTERNAL           ALAREQ, SCHKEQ, SCHKGB, SCHKGE, SCHKGT, SCHKLQ,
      $                   SCHKPB, SCHKPO, SCHKPS, SCHKPP, SCHKPT, SCHKQ3,
      $                   SCHKQL, SCHKQR, SCHKRQ, SCHKSP, SCHKSY,
-     $                   SCHKSY_ROOK, SCHKSY_AA, SCHKTB, SCHKTP, SCHKTR,
-     $                   SCHKTZ, SDRVGB, SDRVGE, SDRVGT, SDRVLS, SDRVPB,
-     $                   SDRVPO, SDRVPP, SDRVPT, SDRVSP, SDRVSY,
-     $                   SDRVSY_ROOK, SDRVSY_AA, ILAVER, SCHKLQTP,
-     $                   SCHKQRT, SCHKQRTP
+     $                   SCHKSY_ROOK, SCHKSY_RK, SCHKSY_AA, SCHKTB,
+     $                   SCHKTP, SCHKTR, SCHKTZ, SDRVGB, SDRVGE, SDRVGT,
+     $                   SDRVLS, SDRVPB, SDRVPO, SDRVPP, SDRVPT, SDRVSP,
+     $                   SDRVSY, SDRVSY_ROOK, SDRVSY_RK, SDRVSY_AA,
+     $                   ILAVER, SCHKLQTP, SCHKQRT, SCHKQRTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -641,8 +643,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
-*        SR:  symmetric indefinite matrices with Rook pivoting,
-*             with rook (bounded Bunch-Kaufman) pivoting algorithm
+*        SR:  symmetric indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -665,9 +667,36 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
+      ELSE IF( LSAMEN( 2, C2, 'SK' ) ) THEN
+*
+*        SK:  symmetric indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
+*             differnet matrix storage format than SR path version.
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL SCHKSY_RK( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL SDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                      WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
       ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
 *
-*        SY:  symmetric indefinite matrices,
+*        SA:  symmetric indefinite matrices,
 *             with partial (Aasen's) pivoting algorithm
 *
          NTYPES = 10

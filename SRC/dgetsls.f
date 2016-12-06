@@ -1,8 +1,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
-*     $                   , WORK, LWORK, INFO )
+*       SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+*     $                     WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
@@ -111,7 +111,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          WORK is DOUBLE PRECISION array, dimension (MAX(12,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK,
 *>          and WORK(2) returns the minimum LWORK.
 *> \endverbatim
@@ -149,8 +149,8 @@
 *> \ingroup doubleGEsolve
 *
 *  =====================================================================
-      SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
-     $                   , WORK, LWORK, INFO )
+      SUBROUTINE DGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+     $                     WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -159,7 +159,7 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
-      INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS, MB
+      INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
 *     ..
 *     .. Array Arguments ..
       DOUBLE PRECISION   A( LDA, * ), B( LDB, * ), WORK( * )
@@ -176,7 +176,7 @@
       LOGICAL            LQUERY, TRAN
       INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW, LW,
      $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2,
-     $                   INFO2, NB
+     $                   INFO2
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, SMLNUM
 *     ..
 *     .. External Functions ..
@@ -225,8 +225,6 @@
        IF ( M.GE.N ) THEN
         CALL DGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
      $   INFO2)
-        MB = INT(WORK(4))
-        NB = INT(WORK(5))
         LW = INT(WORK(6))
         CALL DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WORK(1),
      $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
@@ -235,8 +233,6 @@
        ELSE
         CALL DGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
      $   INFO2)
-        MB = INT(WORK(4))
-        NB = INT(WORK(5))
         LW = INT(WORK(6))
         CALL DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WORK(1),
      $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
@@ -331,8 +327,8 @@
 *
 *        compute QR factorization of A
 *
-        CALL DGEQR( M, N, A, LDA, WORK(LW2+1), LW1
-     $    , WORK(1), LW2, INFO )
+        CALL DGEQR( M, N, A, LDA, WORK(LW2+1), LW1,
+     $              WORK(1), LW2, INFO )
         IF (.NOT.TRAN) THEN
 *
 *           Least-Squares Problem min || A * X - B ||
@@ -385,8 +381,8 @@
 *
 *        Compute LQ factorization of A
 *
-        CALL DGELQ( M, N, A, LDA, WORK(LW2+1), LW1
-     $    , WORK(1), LW2, INFO )
+        CALL DGELQ( M, N, A, LDA, WORK(LW2+1), LW1,
+     $              WORK(1), LW2, INFO )
 *
 *        workspace at least M, optimally M*NB.
 *

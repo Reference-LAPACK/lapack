@@ -51,9 +51,11 @@
 *> CPT   12               List types on next line if 0 < NTYPES < 12
 *> CHE   10               List types on next line if 0 < NTYPES < 10
 *> CHR   10               List types on next line if 0 < NTYPES < 10
+*> CHK   10               List types on next line if 0 < NTYPES < 10
 *> CHA   10               List types on next line if 0 < NTYPES < 10
 *> CHP   10               List types on next line if 0 < NTYPES < 10
 *> CSY   11               List types on next line if 0 < NTYPES < 11
+*> CSK   11               List types on next line if 0 < NTYPES < 11
 *> CSR   11               List types on next line if 0 < NTYPES < 11
 *> CSP   11               List types on next line if 0 < NTYPES < 11
 *> CTR   18               List types on next line if 0 < NTYPES < 18
@@ -151,7 +153,7 @@
      $                   RANKVAL( MAXIN ), PIV( NMAX )
       REAL               RWORK( 150*NMAX+2*MAXRHS ), S( 2*NMAX )
       COMPLEX            A( ( KDMAX+1 )*NMAX, 7 ), B( NMAX*MAXRHS, 4 ),
-     $                   WORK( NMAX, NMAX+MAXRHS+10 )
+     $                   E( NMAX ), WORK( NMAX, NMAX+MAXRHS+10 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
@@ -160,14 +162,15 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, CCHKEQ, CCHKGB, CCHKGE, CCHKGT, CCHKHE,
-     $                   CCHKHE_ROOK, CCHKHE_AA, CCHKHP, CCHKLQ, CCHKPB,
-     $                   CCHKPO, CCHKPS, CCHKPP, CCHKPT, CCHKQ3, CCHKQL,
-     $                   CCHKQR, CCHKRQ, CCHKSP, CCHKSY, CCHKSY_ROOK,
-     $                   CCHKTB, CCHKTP, CCHKTR, CCHKTZ, CDRVGB, CDRVGE,
-     $                   CDRVGT, CDRVHE, CDRVHE_ROOK, CDRVHE_AA, CDRVHP,
-     $                   CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT, CDRVSP,
-     $                   CDRVSY, CDRVSY_ROOK, ILAVER, CCHKQRT, CCHKQRTP
-
+     $                   CCHKHE_ROOK, CCHKHE_RK, CCHKHE_AA, CCHKLQ,
+     $                   CCHKPB,CCHKPO, CCHKPS, CCHKPP, CCHKPT, CCHKQ3,
+     $                   CCHKQL, CCHKQR, CCHKRQ, CCHKSP, CCHKSY,
+     $                   CCHKSY_ROOK, CCHKSY_RK, CCHKSY_AA, CCHKTB, 
+     $                   CCHKTP, CCHKTR, CCHKTZ, CDRVGB, CDRVGE, CDRVGT,
+     $                   CDRVHE, CDRVHE_ROOK, CDRVHE_RK, CDRVHE_AA, 
+     $                   CDRVHP, CDRVLS, CDRVPB, CDRVPO, CDRVPP, CDRVPT,
+     $                   CDRVSP, CDRVSY, CDRVSY_ROOK, CDRVSY_RK,
+     $                   CDRVSY_AA, ILAVER, CCHKQRT, CCHKQRTP
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -642,37 +645,10 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
-*
-*        HA:  Hermitian matrices,
-*             Aasen Algorithm
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL CCHKHE_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
-     $                         NSVAL, THRESH, TSTERR, LDA, 
-     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                         WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL CDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, 
-     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ), 
-     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), 
-     $                         WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
       ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
 *
 *        HR:  Hermitian indefinite matrices,
-*             with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -691,6 +667,60 @@
      $                        LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
      $                        RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'HK' ) ) THEN
+*
+*        HK:  Hermitian indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
+*             differnet matrix storage format than HR path version.
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKHE_RK( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL CDRVHE_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
+     $                      RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
+*
+*        HA:  Hermitian matrices,
+*             Aasen Algorithm
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKHE_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
+     $                         NSVAL, THRESH, TSTERR, LDA,
+     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL CDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
@@ -750,7 +780,7 @@
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        SR:  symmetric indefinite matrices,
-*             with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm
 *
          NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -769,6 +799,58 @@
      $                        LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
      $                        RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'SK' ) ) THEN
+*
+*        SK:  symmetric indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
+*             differnet matrix storage format than SR path version.
+*
+         NTYPES = 11
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKSY_RK( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL CDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
+     $                      RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        SA:  symmetric indefinite matrices with Aasen's algorithm,
+*
+         NTYPES = 11
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL CCHKSY_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                      A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL CDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
+     $                      RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF

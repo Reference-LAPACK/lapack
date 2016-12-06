@@ -9,17 +9,17 @@
 *  ===========
 *
 *       SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV,
-*                          C, LDC, RWORK, RESID )
+*                             C, LDC, RWORK, RESID )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
 *       INTEGER            LDA, LDAFAC, LDC, N
-*       COMPLEX            RESID
+*       REAL               RESID
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * )
-*       COMPLEX            A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * ),
-*      $                   RWORK( * )
+*       REAL               RWORK( * )
+*       COMPLEX            A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * )
 *       ..
 *
 *
@@ -123,7 +123,7 @@
 *
 *  =====================================================================
       SUBROUTINE CHET01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
-     $                         LDC, RWORK, RESID )
+     $                      LDC, RWORK, RESID )
 *
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -137,8 +137,8 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * )
-      COMPLEX            A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * ),
-     $                   RWORK( * )
+      REAL               RWORK( * )
+      COMPLEX            A( LDA, * ), AFAC( LDAFAC, * ), C( LDC, * )
 *     ..
 *
 *  =====================================================================
@@ -197,27 +197,29 @@
      $                   LDC+1 )
             CALL CLACGV( N-1, C( 1, 2 ), LDC+1 )
          ENDIF
+*
+*        Call CTRMM to form the product U' * D (or L * D ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL CTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit',
+     $                  N-1, N, CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ),
+     $                  LDC )
+         ELSE
+            CALL CTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
+     $                  CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
+         END IF
+*
+*        Call CTRMM again to multiply by U (or L ).
+*
+         IF( LSAME( UPLO, 'U' ) ) THEN
+            CALL CTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
+     $                  CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
+         ELSE
+            CALL CTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit', N,
+     $                  N-1, CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ),
+     $                  LDC )
+         END IF
       ENDIF
-*
-*     Call CTRMM to form the product U' * D (or L * D ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL CTRMM( 'Left', UPLO, 'Conjugate transpose', 'Unit', N-1,
-     $               N, CONE, AFAC( 1, 2 ), LDAFAC, C( 2, 1 ), LDC )
-      ELSE
-         CALL CTRMM( 'Left', UPLO, 'No transpose', 'Unit', N-1, N,
-     $               CONE, AFAC( 2, 1 ), LDAFAC, C( 2, 1 ), LDC )
-      END IF
-*
-*     Call CTRMM again to multiply by U (or L ).
-*
-      IF( LSAME( UPLO, 'U' ) ) THEN
-         CALL CTRMM( 'Right', UPLO, 'No transpose', 'Unit', N, N-1,
-     $               CONE, AFAC( 1, 2 ), LDAFAC, C( 1, 2 ), LDC )
-      ELSE
-         CALL CTRMM( 'Right', UPLO, 'Conjugate transpose', 'Unit', N,
-     $               N-1, CONE, AFAC( 2, 1 ), LDAFAC, C( 1, 2 ), LDC )
-      END IF
 *
 *     Apply hermitian pivots
 *

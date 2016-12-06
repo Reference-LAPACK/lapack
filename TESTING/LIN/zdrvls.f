@@ -487,7 +487,7 @@
                                  CALL ZLACPY( 'Full', NROWS, NRHS,
      $                                        COPYB, LDB, B, LDB )
                               END IF
-                              SRNAMT = 'DGETSLS '
+                              SRNAMT = 'ZGETSLS '
                               CALL ZGETSLS( TRANS, M, N, NRHS, A,
      $                                 LDA, B, LDB, WORK, LWORK, INFO )
                               IF( INFO.NE.0 )
