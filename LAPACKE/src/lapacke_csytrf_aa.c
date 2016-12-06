@@ -33,7 +33,7 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_csytrf( int matrix_layout, char uplo, lapack_int n,
+lapack_int LAPACKE_csytrf_aa( int matrix_layout, char uplo, lapack_int n,
                            lapack_complex_float* a, lapack_int lda,
                            lapack_int* ipiv )
 {
@@ -42,7 +42,7 @@ lapack_int LAPACKE_csytrf( int matrix_layout, char uplo, lapack_int n,
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_csytrf", -1 );
+        LAPACKE_xerbla( "LAPACKE_csytrf_aa", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -72,7 +72,7 @@ lapack_int LAPACKE_csytrf( int matrix_layout, char uplo, lapack_int n,
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_csytrf", info );
+        LAPACKE_xerbla( "LAPACKE_csytrf_aa", info );
     }
     return info;
 }
