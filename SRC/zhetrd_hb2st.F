@@ -334,8 +334,9 @@
 *     Quick return if possible
 *
       IF( N.EQ.0 ) THEN
-         WORK( 1 ) = 1
-         RETURN
+          HOUS( 1 ) = 1
+          WORK( 1 ) = 1
+          RETURN
       END IF
 *
 *     Determine pointer position
@@ -383,8 +384,8 @@
               E( I ) = RZERO
    40     CONTINUE
 *
-          HOUS( 1 ) = LHMIN
-          WORK( 1 ) = LWMIN
+          HOUS( 1 ) = 1
+          WORK( 1 ) = 1
           RETURN
       END IF
 *      
@@ -440,20 +441,9 @@ C                    CALL ZSCAL( N, TMP, Q( 1, I+1 ), 1 )
 C                 END IF
    70         CONTINUE
           ENDIF
-#else
-          IF( UPPER ) THEN
-              DO 60 I = 1, N-1
-                 E( I ) = DBLE( AB( ABOFDPOS, I+1 ) )
-   60         CONTINUE
-          ELSE
-              DO 70 I = 1, N-1
-                 E( I ) = DBLE( AB( ABOFDPOS, I ) )
-   70         CONTINUE
-          ENDIF
-#endif
 *
-          HOUS( 1 ) = LHMIN
-          WORK( 1 ) = LWMIN
+          HOUS( 1 ) = 1
+          WORK( 1 ) = 1
           RETURN
       END IF
 *
