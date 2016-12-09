@@ -334,8 +334,9 @@
 *     Quick return if possible
 *
       IF( N.EQ.0 ) THEN
-         WORK( 1 ) = 1
-         RETURN
+          HOUS( 1 ) = 1
+          WORK( 1 ) = 1
+          RETURN
       END IF
 *
 *     Determine pointer position
@@ -382,7 +383,10 @@
           DO 40 I = 1, N-1
               E( I ) = RZERO
    40     CONTINUE
-         RETURN
+*
+          HOUS( 1 ) = 1
+          WORK( 1 ) = 1
+          RETURN
       END IF
 *      
 *     Case KD=1: 
@@ -437,6 +441,9 @@ C                    CALL ZSCAL( N, TMP, Q( 1, I+1 ), 1 )
 C                 END IF
    70         CONTINUE
           ENDIF
+*
+          HOUS( 1 ) = 1
+          WORK( 1 ) = 1
           RETURN
       END IF
 *
@@ -473,7 +480,7 @@ C                 END IF
           THED = MIN( (STT + THGRSIZ -1), (N-1))
           DO 110 I = STT, N-1
               ED = MIN( I, THED )
-              IF( STT.GT.ED ) GOTO 100
+              IF( STT.GT.ED ) EXIT
               DO 120 M = 1, STEPERCOL
                   ST = STT
                   DO 130 SWEEPID = ST, ED
@@ -537,7 +544,7 @@ C                 END IF
 #endif 
                           IF ( BLKLASTIND.GE.(N-1) ) THEN
                               STT = STT + 1
-                              GOTO 130
+                              EXIT
                           ENDIF
   140                 CONTINUE
   130             CONTINUE
