@@ -11620,6 +11620,49 @@ lapack_int LAPACKE_zhesv_rk_work( int matrix_layout, char uplo, lapack_int n,
                                lapack_complex_double* b, lapack_int ldb,
                                lapack_complex_double* work, lapack_int lwork );
                                
+lapack_int LAPACKE_ssytrf_rk( int matrix_layout, char uplo, lapack_int n, float* a,
+                           lapack_int lda, float* e, lapack_int* ipiv );
+lapack_int LAPACKE_dsytrf_rk( int matrix_layout, char uplo, lapack_int n, double* a,
+                           lapack_int lda, double* e, lapack_int* ipiv );
+lapack_int LAPACKE_csytrf_rk( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_float* a, lapack_int lda,
+                           lapack_complex_float* e, lapack_int* ipiv );
+lapack_int LAPACKE_zsytrf_rk( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_double* a, lapack_int lda,
+                           lapack_complex_double* e, lapack_int* ipiv );
+lapack_int LAPACKE_chetrf_rk( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_float* a, lapack_int lda,
+                           lapack_complex_float* e, lapack_int* ipiv );
+lapack_int LAPACKE_zhetrf_rk( int matrix_layout, char uplo, lapack_int n,
+                           lapack_complex_double* a, lapack_int lda,
+                           lapack_complex_double* e, lapack_int* ipiv );
+lapack_int LAPACKE_ssytrf_rk_work( int matrix_layout, char uplo, lapack_int n,
+                                float* a, lapack_int lda, float* e, lapack_int* ipiv,
+                                float* work, lapack_int lwork );
+lapack_int LAPACKE_dsytrf_rk_work( int matrix_layout, char uplo, lapack_int n,
+                                double* a, lapack_int lda, double* e, lapack_int* ipiv,
+                                double* work, lapack_int lwork );
+lapack_int LAPACKE_csytrf_rk_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_complex_float* a, lapack_int lda,
+                                lapack_complex_float* e,
+                                lapack_int* ipiv, lapack_complex_float* work,
+                                lapack_int lwork );
+lapack_int LAPACKE_zsytrf_rk_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_complex_double* a, lapack_int lda,
+                                lapack_complex_double* e,
+                                lapack_int* ipiv, lapack_complex_double* work,
+                                lapack_int lwork );
+lapack_int LAPACKE_chetrf_rk_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_complex_float* a, lapack_int lda,
+                                lapack_complex_float* e,
+                                lapack_int* ipiv, lapack_complex_float* work,
+                                lapack_int lwork );
+lapack_int LAPACKE_zhetrf_rk_work( int matrix_layout, char uplo, lapack_int n,
+                                lapack_complex_double* a, lapack_int lda,
+                                lapack_complex_double* e,
+                                lapack_int* ipiv, lapack_complex_double* work,
+                                lapack_int lwork );
+
 lapack_int LAPACKE_csytrs_3( int matrix_layout, char uplo, lapack_int n,
                             lapack_int nrhs, const lapack_complex_float* a,
                             lapack_int lda, const lapack_complex_float* e,
@@ -12812,6 +12855,12 @@ lapack_int LAPACKE_zhetrs_3_work( int matrix_layout, char uplo, lapack_int n,
 #define LAPACK_zsysv_rk LAPACK_GLOBAL(zsysv_rk,ZSYSV_RK)
 #define LAPACK_csysv_rk LAPACK_GLOBAL(csysv_rk,CSYSV_RK)
 #define LAPACK_zhesv_rk LAPACK_GLOBAL(zhesv_rk,ZHESV_RK)
+#define LAPACK_ssytrf_rk LAPACK_GLOBAL(ssytrf_rk,SSYTRF_RK)
+#define LAPACK_dsytrf_rk LAPACK_GLOBAL(dsytrf_rk,DSYTRF_RK)
+#define LAPACK_csytrf_rk LAPACK_GLOBAL(csytrf_rk,CSYTRF_RK)
+#define LAPACK_zsytrf_rk LAPACK_GLOBAL(zsytrf_rk,ZSYTRF_RK)
+#define LAPACK_chetrf_rk LAPACK_GLOBAL(chetrf_rk,CHETRF_RK)
+#define LAPACK_zhetrf_rk LAPACK_GLOBAL(zhetrf_rk,ZHETRF_RK)
 #define LAPACK_ssytrs_3 LAPACK_GLOBAL(ssytrs_3,SSYTRS_3)
 #define LAPACK_dsytrs_3 LAPACK_GLOBAL(dsytrs_3,DSYTRS_3)
 #define LAPACK_csytrs_3 LAPACK_GLOBAL(csytrs_3,CSYTRS_3)
@@ -17947,6 +17996,29 @@ void LAPACK_zhesv_rk( char* uplo, lapack_int* n, lapack_int* nrhs,
                    lapack_complex_double* b, lapack_int* ldb,
                    lapack_complex_double* work, lapack_int* lwork,
                    lapack_int *info );
+
+void LAPACK_ssytrf_rk( char* uplo, lapack_int* n, float* a, lapack_int* lda,
+                    float* e, lapack_int* ipiv, float* work, lapack_int* lwork,
+                    lapack_int *info );
+void LAPACK_dsytrf_rk( char* uplo, lapack_int* n, double* a, lapack_int* lda,
+                    double* e, lapack_int* ipiv, double* work, lapack_int* lwork,
+                    lapack_int *info );
+void LAPACK_csytrf_rk( char* uplo, lapack_int* n, lapack_complex_float* a,
+                    lapack_int* lda, lapack_complex_float* e, lapack_int* ipiv,
+                    lapack_complex_float* work, lapack_int* lwork,
+                    lapack_int *info );
+void LAPACK_zsytrf_rk( char* uplo, lapack_int* n, lapack_complex_double* a,
+                    lapack_int* lda, lapack_complex_double* e, lapack_int* ipiv,
+                    lapack_complex_double* work, lapack_int* lwork,
+                    lapack_int *info );
+void LAPACK_chetrf_rk( char* uplo, lapack_int* n, lapack_complex_float* a,
+                    lapack_int* lda, lapack_complex_float* e, lapack_int* ipiv,
+                    lapack_complex_float* work, lapack_int* lwork,
+                    lapack_int *info );
+void LAPACK_zhetrf_rk( char* uplo, lapack_int* n, lapack_complex_double* a,
+                    lapack_int* lda, lapack_complex_double* e, lapack_int* ipiv,
+                    lapack_complex_double* work, lapack_int* lwork,
+                    lapack_int *info );
 
 void LAPACK_ssytrs_3( char* uplo, lapack_int* n,
                      lapack_int* nrhs, const float* a,
