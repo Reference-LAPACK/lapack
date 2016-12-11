@@ -223,6 +223,8 @@ lapacke_chesv.o \
 lapacke_chesv_work.o \
 lapacke_chesv_aa.o \
 lapacke_chesv_aa_work.o \
+lapacke_chesv_rk.o \
+lapacke_chesv_rk_work.o \
 lapacke_chesvx.o \
 lapacke_chesvx_work.o \
 lapacke_cheswapr.o \
@@ -441,6 +443,8 @@ lapacke_csysv_rook_work.o \
 lapacke_csysv_work.o \
 lapacke_csysv_aa.o \
 lapacke_csysv_aa_work.o \
+lapacke_csysv_rk.o \
+lapacke_csysv_rk_work.o \
 lapacke_csysvx.o \
 lapacke_csysvx_work.o \
 lapacke_csyswapr.o \
@@ -999,6 +1003,8 @@ lapacke_dsysv_rook_work.o \
 lapacke_dsysv_work.o \
 lapacke_dsysv_aa.o \
 lapacke_dsysv_aa_work.o \
+lapacke_dsysv_rk.o \
+lapacke_dsysv_rk_work.o \
 lapacke_dsysvx.o \
 lapacke_dsysvx_work.o \
 lapacke_dsyswapr.o \
@@ -1515,6 +1521,8 @@ lapacke_ssysv_rook_work.o \
 lapacke_ssysv_work.o \
 lapacke_ssysv_aa.o \
 lapacke_ssysv_aa_work.o \
+lapacke_ssysv_rk.o \
+lapacke_ssysv_rk_work.o \
 lapacke_ssysvx.o \
 lapacke_ssysvx_work.o \
 lapacke_ssyswapr.o \
@@ -1805,6 +1813,8 @@ lapacke_zhesv.o \
 lapacke_zhesv_work.o \
 lapacke_zhesv_aa.o \
 lapacke_zhesv_aa_work.o \
+lapacke_zhesv_rk.o \
+lapacke_zhesv_rk_work.o \
 lapacke_zhesvx.o \
 lapacke_zhesvx_work.o \
 lapacke_zheswapr.o \
@@ -2023,6 +2033,8 @@ lapacke_zsysv_rook_work.o \
 lapacke_zsysv_work.o \
 lapacke_zsysv_aa.o \
 lapacke_zsysv_aa_work.o \
+lapacke_zsysv_rk.o \
+lapacke_zsysv_rk_work.o \
 lapacke_zsysvx.o \
 lapacke_zsysvx_work.o \
 lapacke_zsyswapr.o \
