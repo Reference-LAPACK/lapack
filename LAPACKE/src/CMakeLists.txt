@@ -165,6 +165,8 @@ lapacke_chbtrd.c
 lapacke_chbtrd_work.c
 lapacke_checon.c
 lapacke_checon_work.c
+lapacke_checon_3.c
+lapacke_checon_3_work.c
 lapacke_cheequb.c
 lapacke_cheequb_work.c
 lapacke_cheev.c
@@ -401,6 +403,8 @@ lapacke_csteqr.c
 lapacke_csteqr_work.c
 lapacke_csycon.c
 lapacke_csycon_work.c
+lapacke_csycon_3.c
+lapacke_csycon_3_work.c
 lapacke_csyconv.c
 lapacke_csyconv_work.c
 lapacke_csyequb.c
@@ -949,6 +953,8 @@ lapacke_dstevx.c
 lapacke_dstevx_work.c
 lapacke_dsycon.c
 lapacke_dsycon_work.c
+lapacke_dsycon_3.c
+lapacke_dsycon_3_work.c
 lapacke_dsyconv.c
 lapacke_dsyconv_work.c
 lapacke_dsyequb.c
@@ -1471,6 +1477,8 @@ lapacke_sstevx.c
 lapacke_sstevx_work.c
 lapacke_ssycon.c
 lapacke_ssycon_work.c
+lapacke_ssycon_3.c
+lapacke_ssycon_3_work.c
 lapacke_ssyconv.c
 lapacke_ssyconv_work.c
 lapacke_ssyequb.c
@@ -1771,6 +1779,8 @@ lapacke_zhbtrd.c
 lapacke_zhbtrd_work.c
 lapacke_zhecon.c
 lapacke_zhecon_work.c
+lapacke_zhecon_3.c
+lapacke_zhecon_3_work.c
 lapacke_zheequb.c
 lapacke_zheequb_work.c
 lapacke_zheev.c
@@ -2007,6 +2017,8 @@ lapacke_zsteqr.c
 lapacke_zsteqr_work.c
 lapacke_zsycon.c
 lapacke_zsycon_work.c
+lapacke_zsycon_3.c
+lapacke_zsycon_3_work.c
 lapacke_zsyconv.c
 lapacke_zsyconv_work.c
 lapacke_zsyequb.c

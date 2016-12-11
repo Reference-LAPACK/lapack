@@ -199,6 +199,8 @@ lapacke_chbtrd.o \
 lapacke_chbtrd_work.o \
 lapacke_checon.o \
 lapacke_checon_work.o \
+lapacke_checon_3.o \
+lapacke_checon_3_work.o \
 lapacke_cheequb.o \
 lapacke_cheequb_work.o \
 lapacke_cheev.o \
@@ -435,6 +437,8 @@ lapacke_csteqr.o \
 lapacke_csteqr_work.o \
 lapacke_csycon.o \
 lapacke_csycon_work.o \
+lapacke_csycon_3.o \
+lapacke_csycon_3_work.o \
 lapacke_csyconv.o \
 lapacke_csyconv_work.o \
 lapacke_csyequb.o \
@@ -983,6 +987,8 @@ lapacke_dstevx.o \
 lapacke_dstevx_work.o \
 lapacke_dsycon.o \
 lapacke_dsycon_work.o \
+lapacke_dsycon_3.o \
+lapacke_dsycon_3_work.o \
 lapacke_dsyconv.o \
 lapacke_dsyconv_work.o \
 lapacke_dsyequb.o \
@@ -1505,6 +1511,8 @@ lapacke_sstevx.o \
 lapacke_sstevx_work.o \
 lapacke_ssycon.o \
 lapacke_ssycon_work.o \
+lapacke_ssycon_3.o \
+lapacke_ssycon_3_work.o \
 lapacke_ssyconv.o \
 lapacke_ssyconv_work.o \
 lapacke_ssyequb.o \
@@ -1805,6 +1813,8 @@ lapacke_zhbtrd.o \
 lapacke_zhbtrd_work.o \
 lapacke_zhecon.o \
 lapacke_zhecon_work.o \
+lapacke_zhecon_3.o \
+lapacke_zhecon_3_work.o \
 lapacke_zheequb.o \
 lapacke_zheequb_work.o \
 lapacke_zheev.o \
@@ -2041,6 +2051,8 @@ lapacke_zsteqr.o \
 lapacke_zsteqr_work.o \
 lapacke_zsycon.o \
 lapacke_zsycon_work.o \
+lapacke_zsycon_3.o \
+lapacke_zsycon_3_work.o \
 lapacke_zsyconv.o \
 lapacke_zsyconv_work.o \
 lapacke_zsyequb.o \
