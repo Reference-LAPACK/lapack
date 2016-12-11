@@ -208,6 +208,8 @@ lapacke_chetrf_rk_work.c
 lapacke_chetri.c
 lapacke_chetri2.c
 lapacke_chetri2_work.c
+lapacke_chetri_3.c
+lapacke_chetri_3_work.c
 lapacke_chetri2x.c
 lapacke_chetri2x_work.c
 lapacke_chetri_work.c
@@ -428,6 +430,8 @@ lapacke_csytrf_rk_work.c
 lapacke_csytri.c
 lapacke_csytri2.c
 lapacke_csytri2_work.c
+lapacke_csytri_3.c
+lapacke_csytri_3_work.c
 lapacke_csytri2x.c
 lapacke_csytri2x_work.c
 lapacke_csytri_work.c
@@ -992,6 +996,8 @@ lapacke_dsytrf_rk_work.c
 lapacke_dsytri.c
 lapacke_dsytri2.c
 lapacke_dsytri2_work.c
+lapacke_dsytri_3.c
+lapacke_dsytri_3_work.c
 lapacke_dsytri2x.c
 lapacke_dsytri2x_work.c
 lapacke_dsytri_work.c
@@ -1512,6 +1518,8 @@ lapacke_ssytrf_rk_work.c
 lapacke_ssytri.c
 lapacke_ssytri2.c
 lapacke_ssytri2_work.c
+lapacke_ssytri_3.c
+lapacke_ssytri_3_work.c
 lapacke_ssytri2x.c
 lapacke_ssytri2x_work.c
 lapacke_ssytri_work.c
@@ -1806,6 +1814,8 @@ lapacke_zhetrf_rk_work.c
 lapacke_zhetri.c
 lapacke_zhetri2.c
 lapacke_zhetri2_work.c
+lapacke_zhetri_3.c
+lapacke_zhetri_3_work.c
 lapacke_zhetri2x.c
 lapacke_zhetri2x_work.c
 lapacke_zhetri_work.c
@@ -2026,6 +2036,8 @@ lapacke_zsytrf_rk_work.c
 lapacke_zsytri.c
 lapacke_zsytri2.c
 lapacke_zsytri2_work.c
+lapacke_zsytri_3.c
+lapacke_zsytri_3_work.c
 lapacke_zsytri2x.c
 lapacke_zsytri2x_work.c
 lapacke_zsytri_work.c
