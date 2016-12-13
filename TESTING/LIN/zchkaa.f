@@ -1049,8 +1049,7 @@
             CALL ZDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
-     $                   S( 1 ), S( NMAX+1 ), WORK, RWORK, IWORK,
-     $                   NOUT )
+     $                   S( 1 ), S( NMAX+1 ), NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF
