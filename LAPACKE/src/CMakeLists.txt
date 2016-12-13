@@ -165,6 +165,8 @@ lapacke_chbtrd.c
 lapacke_chbtrd_work.c
 lapacke_checon.c
 lapacke_checon_work.c
+lapacke_checon_3.c
+lapacke_checon_3_work.c
 lapacke_cheequb.c
 lapacke_cheequb_work.c
 lapacke_cheev.c
@@ -189,6 +191,8 @@ lapacke_chesv.c
 lapacke_chesv_work.c
 lapacke_chesv_aa.c
 lapacke_chesv_aa_work.c
+lapacke_chesv_rk.c
+lapacke_chesv_rk_work.c
 lapacke_chesvx.c
 lapacke_chesvx_work.c
 lapacke_cheswapr.c
@@ -201,9 +205,13 @@ lapacke_chetrf_work.c
 lapacke_chetrf_rook_work.c
 lapacke_chetrf_aa.c
 lapacke_chetrf_aa_work.c
+lapacke_chetrf_rk.c
+lapacke_chetrf_rk_work.c
 lapacke_chetri.c
 lapacke_chetri2.c
 lapacke_chetri2_work.c
+lapacke_chetri_3.c
+lapacke_chetri_3_work.c
 lapacke_chetri2x.c
 lapacke_chetri2x_work.c
 lapacke_chetri_work.c
@@ -215,6 +223,8 @@ lapacke_chetrs_work.c
 lapacke_chetrs_rook_work.c
 lapacke_chetrs_aa.c
 lapacke_chetrs_aa_work.c
+lapacke_chetrs_3.c
+lapacke_chetrs_3_work.c
 lapacke_chfrk.c
 lapacke_chfrk_work.c
 lapacke_chgeqz.c
@@ -393,6 +403,8 @@ lapacke_csteqr.c
 lapacke_csteqr_work.c
 lapacke_csycon.c
 lapacke_csycon_work.c
+lapacke_csycon_3.c
+lapacke_csycon_3_work.c
 lapacke_csyconv.c
 lapacke_csyconv_work.c
 lapacke_csyequb.c
@@ -405,6 +417,8 @@ lapacke_csysv_rook_work.c
 lapacke_csysv_work.c
 lapacke_csysv_aa.c
 lapacke_csysv_aa_work.c
+lapacke_csysv_rk.c
+lapacke_csysv_rk_work.c
 lapacke_csysvx.c
 lapacke_csysvx_work.c
 lapacke_csyswapr.c
@@ -415,9 +429,13 @@ lapacke_csytrf_rook.c
 lapacke_csytrf_rook_work.c
 lapacke_csytrf_aa.c
 lapacke_csytrf_aa_work.c
+lapacke_csytrf_rk.c
+lapacke_csytrf_rk_work.c
 lapacke_csytri.c
 lapacke_csytri2.c
 lapacke_csytri2_work.c
+lapacke_csytri_3.c
+lapacke_csytri_3_work.c
 lapacke_csytri2x.c
 lapacke_csytri2x_work.c
 lapacke_csytri_work.c
@@ -429,6 +447,8 @@ lapacke_csytrs_work.c
 lapacke_csytrs_rook_work.c
 lapacke_csytrs_aa.c
 lapacke_csytrs_aa_work.c
+lapacke_csytrs_3.c
+lapacke_csytrs_3_work.c
 lapacke_ctbcon.c
 lapacke_ctbcon_work.c
 lapacke_ctbrfs.c
@@ -933,6 +953,8 @@ lapacke_dstevx.c
 lapacke_dstevx_work.c
 lapacke_dsycon.c
 lapacke_dsycon_work.c
+lapacke_dsycon_3.c
+lapacke_dsycon_3_work.c
 lapacke_dsyconv.c
 lapacke_dsyconv_work.c
 lapacke_dsyequb.c
@@ -961,6 +983,8 @@ lapacke_dsysv_rook_work.c
 lapacke_dsysv_work.c
 lapacke_dsysv_aa.c
 lapacke_dsysv_aa_work.c
+lapacke_dsysv_rk.c
+lapacke_dsysv_rk_work.c
 lapacke_dsysvx.c
 lapacke_dsysvx_work.c
 lapacke_dsyswapr.c
@@ -973,9 +997,13 @@ lapacke_dsytrf_rook.c
 lapacke_dsytrf_rook_work.c
 lapacke_dsytrf_aa.c
 lapacke_dsytrf_aa_work.c
+lapacke_dsytrf_rk.c
+lapacke_dsytrf_rk_work.c
 lapacke_dsytri.c
 lapacke_dsytri2.c
 lapacke_dsytri2_work.c
+lapacke_dsytri_3.c
+lapacke_dsytri_3_work.c
 lapacke_dsytri2x.c
 lapacke_dsytri2x_work.c
 lapacke_dsytri_work.c
@@ -985,6 +1013,8 @@ lapacke_dsytrs2.c
 lapacke_dsytrs2_work.c
 lapacke_dsytrs_aa.c
 lapacke_dsytrs_aa_work.c
+lapacke_dsytrs_3.c
+lapacke_dsytrs_3_work.c
 lapacke_dsytrs_work.c
 lapacke_dsytrs_rook_work.c
 lapacke_dtbcon.c
@@ -1447,6 +1477,8 @@ lapacke_sstevx.c
 lapacke_sstevx_work.c
 lapacke_ssycon.c
 lapacke_ssycon_work.c
+lapacke_ssycon_3.c
+lapacke_ssycon_3_work.c
 lapacke_ssyconv.c
 lapacke_ssyconv_work.c
 lapacke_ssyequb.c
@@ -1475,6 +1507,8 @@ lapacke_ssysv_rook_work.c
 lapacke_ssysv_work.c
 lapacke_ssysv_aa.c
 lapacke_ssysv_aa_work.c
+lapacke_ssysv_rk.c
+lapacke_ssysv_rk_work.c
 lapacke_ssysvx.c
 lapacke_ssysvx_work.c
 lapacke_ssyswapr.c
@@ -1487,9 +1521,13 @@ lapacke_ssytrf_rook.c
 lapacke_ssytrf_rook_work.c
 lapacke_ssytrf_aa.c
 lapacke_ssytrf_aa_work.c
+lapacke_ssytrf_rk.c
+lapacke_ssytrf_rk_work.c
 lapacke_ssytri.c
 lapacke_ssytri2.c
 lapacke_ssytri2_work.c
+lapacke_ssytri_3.c
+lapacke_ssytri_3_work.c
 lapacke_ssytri2x.c
 lapacke_ssytri2x_work.c
 lapacke_ssytri_work.c
@@ -1499,6 +1537,8 @@ lapacke_ssytrs2.c
 lapacke_ssytrs2_work.c
 lapacke_ssytrs_aa.c
 lapacke_ssytrs_aa_work.c
+lapacke_ssytrs_3.c
+lapacke_ssytrs_3_work.c
 lapacke_ssytrs_work.c
 lapacke_ssytrs_rook_work.c
 lapacke_stbcon.c
@@ -1739,6 +1779,8 @@ lapacke_zhbtrd.c
 lapacke_zhbtrd_work.c
 lapacke_zhecon.c
 lapacke_zhecon_work.c
+lapacke_zhecon_3.c
+lapacke_zhecon_3_work.c
 lapacke_zheequb.c
 lapacke_zheequb_work.c
 lapacke_zheev.c
@@ -1763,6 +1805,8 @@ lapacke_zhesv.c
 lapacke_zhesv_work.c
 lapacke_zhesv_aa.c
 lapacke_zhesv_aa_work.c
+lapacke_zhesv_rk.c
+lapacke_zhesv_rk_work.c
 lapacke_zhesvx.c
 lapacke_zhesvx_work.c
 lapacke_zheswapr.c
@@ -1775,9 +1819,13 @@ lapacke_zhetrf_work.c
 lapacke_zhetrf_rook_work.c
 lapacke_zhetrf_aa.c
 lapacke_zhetrf_aa_work.c
+lapacke_zhetrf_rk.c
+lapacke_zhetrf_rk_work.c
 lapacke_zhetri.c
 lapacke_zhetri2.c
 lapacke_zhetri2_work.c
+lapacke_zhetri_3.c
+lapacke_zhetri_3_work.c
 lapacke_zhetri2x.c
 lapacke_zhetri2x_work.c
 lapacke_zhetri_work.c
@@ -1788,6 +1836,8 @@ lapacke_zhetrs2_work.c
 lapacke_zhetrs_work.c
 lapacke_zhetrs_aa.c
 lapacke_zhetrs_aa_work.c
+lapacke_zhetrs_3.c
+lapacke_zhetrs_3_work.c
 lapacke_zhetrs_rook_work.c
 lapacke_zhfrk.c
 lapacke_zhfrk_work.c
@@ -1967,6 +2017,8 @@ lapacke_zsteqr.c
 lapacke_zsteqr_work.c
 lapacke_zsycon.c
 lapacke_zsycon_work.c
+lapacke_zsycon_3.c
+lapacke_zsycon_3_work.c
 lapacke_zsyconv.c
 lapacke_zsyconv_work.c
 lapacke_zsyequb.c
@@ -1979,6 +2031,8 @@ lapacke_zsysv_rook_work.c
 lapacke_zsysv_work.c
 lapacke_zsysv_aa.c
 lapacke_zsysv_aa_work.c
+lapacke_zsysv_rk.c
+lapacke_zsysv_rk_work.c
 lapacke_zsysvx.c
 lapacke_zsysvx_work.c
 lapacke_zsyswapr.c
@@ -1989,9 +2043,13 @@ lapacke_zsytrf_rook.c
 lapacke_zsytrf_rook_work.c
 lapacke_zsytrf_aa.c
 lapacke_zsytrf_aa_work.c
+lapacke_zsytrf_rk.c
+lapacke_zsytrf_rk_work.c
 lapacke_zsytri.c
 lapacke_zsytri2.c
 lapacke_zsytri2_work.c
+lapacke_zsytri_3.c
+lapacke_zsytri_3_work.c
 lapacke_zsytri2x.c
 lapacke_zsytri2x_work.c
 lapacke_zsytri_work.c
@@ -2003,6 +2061,8 @@ lapacke_zsytrs_work.c
 lapacke_zsytrs_rook_work.c
 lapacke_zsytrs_aa.c
 lapacke_zsytrs_aa_work.c
+lapacke_zsytrs_3.c
+lapacke_zsytrs_3_work.c
 lapacke_ztbcon.c
 lapacke_ztbcon_work.c
 lapacke_ztbrfs.c
