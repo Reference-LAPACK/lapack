@@ -105,6 +105,8 @@ lapacke_cgetri.c
 lapacke_cgetri_work.c
 lapacke_cgetrs.c
 lapacke_cgetrs_work.c
+lapacke_cgetsls.c
+lapacke_cgetsls_work.c
 lapacke_cggbak.c
 lapacke_cggbak_work.c
 lapacke_cggbal.c
@@ -671,6 +673,8 @@ lapacke_dgetri.c
 lapacke_dgetri_work.c
 lapacke_dgetrs.c
 lapacke_dgetrs_work.c
+lapacke_dgetsls.c
+lapacke_dgetsls_work.c
 lapacke_dggbak.c
 lapacke_dggbak_work.c
 lapacke_dggbal.c
@@ -1201,6 +1205,8 @@ lapacke_sgetri.c
 lapacke_sgetri_work.c
 lapacke_sgetrs.c
 lapacke_sgetrs_work.c
+lapacke_sgetsls.c
+lapacke_sgetsls_work.c
 lapacke_sggbak.c
 lapacke_sggbak_work.c
 lapacke_sggbal.c
@@ -1725,6 +1731,8 @@ lapacke_zgetri.c
 lapacke_zgetri_work.c
 lapacke_zgetrs.c
 lapacke_zgetrs_work.c
+lapacke_zgetsls.c
+lapacke_zgetsls_work.c
 lapacke_zggbak.c
 lapacke_zggbak_work.c
 lapacke_zggbal.c
