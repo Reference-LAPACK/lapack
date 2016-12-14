@@ -907,7 +907,7 @@
             CALL DDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A( 1, 1 ),
      $                   A( 1, 2 ), B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                   RWORK, RWORK( NMAX+1 ), WORK, IWORK, NOUT )
+     $                   RWORK, RWORK( NMAX+1 ), NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF

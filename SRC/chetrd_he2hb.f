@@ -1,6 +1,6 @@
 *> \brief \b CHETRD_HE2HB
 *
-*  @generated from zhetrd_he2hb.f, fortran z -> c, Sun Nov  6 19:34:06 2016
+*  @generated from zhetrd_he2hb.f, fortran z -> c, Wed Dec  7 08:22:40 2016
 *      
 *  =========== DOCUMENTATION ===========
 *
@@ -245,7 +245,7 @@
 *
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2016

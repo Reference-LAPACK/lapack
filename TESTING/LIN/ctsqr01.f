@@ -109,11 +109,12 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL TESTZEROS, TS
-      INTEGER INFO, J, K, L, LWORK, LT ,MNB
+      INTEGER INFO, J, K, L, LWORK, TSIZE, MNB
       REAL    ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
+      COMPLEX            TQUERY( 5 ), WORKQUERY
 *     ..
 *     .. External Functions ..
       REAL     SLAMCH, CLANGE, CLANSY
@@ -145,17 +146,11 @@
       L = MAX(M,N,1)
       MNB = MAX ( MB, NB)
       LWORK = MAX(3,L)*MNB
-      IF((K.GE.MNB).OR.(MNB.GE.L))THEN
-         LT=MAX(1,L)*MNB+5
-      ELSE
-         LT=MAX(1,(L-K)/(MNB-K)+1)*L*MNB+5
-      END IF
-
 *
 *     Dynamically allocate local arrays
 *
       ALLOCATE ( A(M,N), AF(M,N), Q(L,L), R(M,L), RWORK(L),
-     $           WORK(LWORK), T(LT), C(M,N), CF(M,N),
+     $           C(M,N), CF(M,N),
      $           D(N,M), DF(N,M), LQ(L,N) )
 *
 *     Put random numbers into A and copy to AF
@@ -176,14 +171,34 @@
 *
 *     Factor the matrix A in the array AF.
 *
+      CALL CGEQR( M, N, AF, M, TQUERY, -1, WORKQUERY, -1, INFO )
+      TSIZE = INT( TQUERY( 1 ) )
+      LWORK = INT( WORKQUERY )
+      CALL CGEMQR( 'L', 'N', M, M, K, AF, M, TQUERY, TSIZE, CF, M,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      CALL CGEMQR( 'L', 'N', M, N, K, AF, M, TQUERY, TSIZE, CF, M,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY )
+      CALL CGEMQR( 'L', 'C', M, N, K, AF, M, TQUERY, TSIZE, CF, M,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      CALL CGEMQR( 'R', 'N', N, M, K, AF, M, TQUERY, TSIZE, DF, N,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      CALL CGEMQR( 'R', 'C', N, M, K, AF, M, TQUERY, TSIZE, DF, N,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      ALLOCATE ( T( TSIZE ) )
+      ALLOCATE ( WORK( LWORK ) )
       srnamt = 'CGEQR'
-      CALL CGEQR( M, N, AF, M, T, LT, WORK, LWORK, INFO )
+      CALL CGEQR( M, N, AF, M, T, TSIZE, WORK, LWORK, INFO )
 *
 *     Generate the m-by-m matrix Q
 *
       CALL CLASET( 'Full', M, M, CZERO, ONE, Q, M )
       srnamt = 'CGEMQR'
-      CALL CGEMQR( 'L', 'N', M, M, K, AF, M, T, LT, Q, M,
+      CALL CGEMQR( 'L', 'N', M, M, K, AF, M, T, TSIZE, Q, M,
      $              WORK, LWORK, INFO )
 *
 *     Copy R
@@ -220,7 +235,7 @@
 *     Apply Q to C as Q*C
 *
       srnamt = 'CGEMQR'
-      CALL CGEMQR( 'L', 'N', M, N, K, AF, M, T, LT, CF, M,
+      CALL CGEMQR( 'L', 'N', M, N, K, AF, M, T, TSIZE, CF, M,
      $             WORK, LWORK, INFO)
 *
 *     Compute |Q*C - Q*C| / |C|
@@ -240,7 +255,7 @@
 *     Apply Q to C as QT*C
 *
       srnamt = 'CGEMQR'
-      CALL CGEMQR( 'L', 'C', M, N, K, AF, M, T, LT, CF, M,
+      CALL CGEMQR( 'L', 'C', M, N, K, AF, M, T, TSIZE, CF, M,
      $             WORK, LWORK, INFO)
 *
 *     Compute |QT*C - QT*C| / |C|
@@ -264,7 +279,7 @@
 *     Apply Q to D as D*Q
 *
       srnamt = 'CGEMQR'
-      CALL CGEMQR( 'R', 'N', N, M, K, AF, M, T, LT, DF, N,
+      CALL CGEMQR( 'R', 'N', N, M, K, AF, M, T, TSIZE, DF, N,
      $             WORK, LWORK, INFO)
 *
 *     Compute |D*Q - D*Q| / |D|
@@ -283,7 +298,7 @@
 *
 *     Apply Q to D as D*QT
 *
-      CALL CGEMQR( 'R', 'C', N, M, K, AF, M, T, LT, DF, N,
+      CALL CGEMQR( 'R', 'C', N, M, K, AF, M, T, TSIZE, DF, N,
      $             WORK, LWORK, INFO)
 *
 *     Compute |D*QT - D*QT| / |D|
@@ -299,15 +314,35 @@
 *     Short and wide
 *
       ELSE
+      CALL CGELQ( M, N, AF, M, TQUERY, -1, WORKQUERY, -1, INFO )
+      TSIZE = INT( TQUERY( 1 ) )
+      LWORK = INT( WORKQUERY )
+      CALL CGEMLQ( 'R', 'N', N, N, K, AF, M, TQUERY, TSIZE, Q, N,
+     $              WORKQUERY, -1, INFO )
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      CALL CGEMLQ( 'L', 'N', N, M, K, AF, M, TQUERY, TSIZE, DF, N,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      CALL CGEMLQ( 'L', 'C', N, M, K, AF, M, TQUERY, TSIZE, DF, N,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      CALL CGEMLQ( 'R', 'N', M, N, K, AF, M, TQUERY, TSIZE, CF, M,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      CALL CGEMLQ( 'R', 'C', M, N, K, AF, M, TQUERY, TSIZE, CF, M,
+     $             WORKQUERY, -1, INFO)
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      ALLOCATE ( T( TSIZE ) )
+      ALLOCATE ( WORK( LWORK ) )
       srnamt = 'CGELQ'
-      CALL CGELQ( M, N, AF, M, T, LT, WORK, LWORK, INFO )
+      CALL CGELQ( M, N, AF, M, T, TSIZE, WORK, LWORK, INFO )
 *
 *
 *     Generate the n-by-n matrix Q
 *
       CALL CLASET( 'Full', N, N, CZERO, ONE, Q, N )
       srnamt = 'CGEMLQ'
-      CALL CGEMLQ( 'R', 'N', N, N, K, AF, M, T, LT, Q, N,
+      CALL CGEMLQ( 'R', 'N', N, N, K, AF, M, T, TSIZE, Q, N,
      $              WORK, LWORK, INFO )
 *
 *     Copy R
@@ -343,7 +378,7 @@
 *
 *     Apply Q to C as Q*C
 *
-      CALL CGEMLQ( 'L', 'N', N, M, K, AF, M, T, LT, DF, N,
+      CALL CGEMLQ( 'L', 'N', N, M, K, AF, M, T, TSIZE, DF, N,
      $             WORK, LWORK, INFO)
 *
 *     Compute |Q*D - Q*D| / |D|
@@ -362,7 +397,7 @@
 *
 *     Apply Q to D as QT*D
 *
-      CALL CGEMLQ( 'L', 'C', N, M, K, AF, M, T, LT, DF, N,
+      CALL CGEMLQ( 'L', 'C', N, M, K, AF, M, T, TSIZE, DF, N,
      $             WORK, LWORK, INFO)
 *
 *     Compute |QT*D - QT*D| / |D|
@@ -385,7 +420,7 @@
 *
 *     Apply Q to C as C*Q
 *
-      CALL CGEMLQ( 'R', 'N', M, N, K, AF, M, T, LT, CF, M,
+      CALL CGEMLQ( 'R', 'N', M, N, K, AF, M, T, TSIZE, CF, M,
      $             WORK, LWORK, INFO)
 *
 *     Compute |C*Q - C*Q| / |C|
@@ -404,7 +439,7 @@
 *
 *     Apply Q to D as D*QT
 *
-      CALL CGEMLQ( 'R', 'C', M, N, K, AF, M, T, LT, CF, M,
+      CALL CGEMLQ( 'R', 'C', M, N, K, AF, M, T, TSIZE, CF, M,
      $             WORK, LWORK, INFO)
 *
 *     Compute |C*QT - C*QT| / |C|

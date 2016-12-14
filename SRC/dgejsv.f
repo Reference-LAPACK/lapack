@@ -562,7 +562,7 @@
       ELSE IF ( LSVEC .AND. ( LDU .LT. M ) ) THEN
          INFO = - 13
       ELSE IF ( RSVEC .AND. ( LDV .LT. N ) ) THEN
-         INFO = - 14
+         INFO = - 15
       ELSE IF ( (.NOT.(LSVEC .OR. RSVEC .OR. ERREST).AND.
      &                           (LWORK .LT. MAX(7,4*N+1,2*M+N))) .OR.
      & (.NOT.(LSVEC .OR. RSVEC) .AND. ERREST .AND.
