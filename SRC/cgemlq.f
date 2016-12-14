@@ -2,17 +2,16 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE CGEMLQ( SIDE, TRANS, M, N, K, A, LDA, WORK1,
-*     $                LWORK1, C, LDC, WORK2, LWORK2, INFO )
+*      SUBROUTINE CGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T,
+*     $                     TSIZE, C, LDC, WORK, LWORK, INFO )
 *
 *
 *     .. Scalar Arguments ..
 *      CHARACTER         SIDE, TRANS
-*      INTEGER           INFO, LDA, M, N, K, MB, NB, LWORK1, LWORK2, LDC
+*      INTEGER           INFO, LDA, M, N, K, LDT, TSIZE, LWORK, LDC
 *     ..
 *     .. Array Arguments ..
-*      COMPLEX        A( LDA, * ), WORK1( * ), C(LDC, * ),
-*     $                  WORK2( * )
+*      COMPLEX           A( LDA, * ), T( * ), C(LDC, * ), WORK( * )
 *> \par Purpose:
 *  =============
 *>
@@ -21,12 +20,12 @@
 *>     CGEMLQ overwrites the general real M-by-N matrix C with
 *>
 *>
-*>                    SIDE = 'L'     SIDE = 'R'
-*>    TRANS = 'N':      Q * C          C * Q
-*>    TRANS = 'T':      Q**T * C       C * Q**T
-*>    where Q is a complex orthogonal matrix defined as the product
-*>    of blocked elementary reflectors computed by short wide LQ
-*>    factorization (DGELQ)
+*>                      SIDE = 'L'     SIDE = 'R'
+*>      TRANS = 'N':      Q * C          C * Q
+*>      TRANS = 'C':      Q**H * C       C * Q**H
+*>      where Q is a complex unitary matrix defined as the product
+*>      of blocked elementary reflectors computed by short wide
+*>      LQ factorization (CGELQ)
 *> \endverbatim
 *
 *  Arguments:
@@ -62,12 +61,10 @@
 *>
 *> \endverbatim
 *>
-*> \param[in,out] A
+*> \param[in] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,K)
-*>          The i-th row must contain the vector which defines the blocked
-*>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DLASWLQ in the first k rows of its array argument A.
+*>          Part of the data structure to represent Q as returned by ZGELQ.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -78,41 +75,42 @@
 *>          if SIDE = 'R', LDA >= max(1,N).
 *> \endverbatim
 *>
-*> \param[in] WORK1
+*> \param[in] T
 *> \verbatim
-*>          WORK1 is COMPLEX array, dimension (MAX(1,LWORK1)) is
-*>          returned by GEQR.
+*>          T is COMPLEX array, dimension (MAX(5,TSIZE)).
+*>          Part of the data structure to represent Q as returned by ZGELQ.
 *> \endverbatim
 *>
-*> \param[in] LWORK1
+*> \param[in] TSIZE
 *> \verbatim
-*>          LWORK1 is INTEGER
-*>          The dimension of the array WORK1.
+*>          TSIZE is INTEGER
+*>          The dimension of the array T. TSIZE >= 5.
 *> \endverbatim
 *>
 *> \param[in,out] C
 *>          C is COMPLEX array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
 *>          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
+*>
 *> \param[in] LDC
 *>          LDC is INTEGER
 *>          The leading dimension of the array C. LDC >= max(1,M).
 *>
-*> \param[out] WORK2
+*> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK2))
+*>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
 *>
 *> \endverbatim
-*> \param[in] LWORK2
+*> \param[in] LWORK
 *> \verbatim
-*>          LWORK2 is INTEGER
-*>          The dimension of the array WORK2.
-*>          If LWORK2 = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK2 array, returns
-*>          this value as the third entry of the WORK2 array (WORK2(1)),
-*>          and no error message related to LWORK2 is issued by XERBLA.
-*>
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>          If LWORK = -1, then a workspace query is assumed. The routine
+*>          only calculates the size of the WORK array, returns this
+*>          value as WORK(1), and no error message related to WORK 
+*>          is issued by XERBLA.
 *> \endverbatim
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
@@ -128,27 +126,35 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \par Further Details:
-*  =====================
+*> \par Further Details
+*  ====================
 *>
 *> \verbatim
+*>
+*> These details are particular for this LAPACK implementation. Users should not 
+*> take them for granted. These details may change in the future, and are unlikely not
+*> true for another LAPACK implementation. These details are relevant if one wants
+*> to try to understand the code. They are not part of the interface.
+*>
+*> In this version,
+*>
+*>          T(2): row block size (MB)
+*>          T(3): column block size (NB)
+*>          T(4:TSIZE): data structure needed for Q, computed by
+*>                           LASWQR or GELQT
+*>
 *>  Depending on the matrix dimensions M and N, and row and column
 *>  block sizes MB and NB returned by ILAENV, GELQ will use either
-*>  LASWLQ(if the matrix is short-and-wide) or GELQT to compute
-*>  the LQ decomposition.
-*>  The output of LASWLQ or GELQT representing Q is stored in A and in
-*>  array WORK1(6:LWORK1) for later use.
-*>  WORK1(2:5) contains the matrix dimensions M,N and block sizes MB, NB
-*>  which are needed to interpret A and WORK1(6:LWORK1) for later use.
-*>  WORK1(1)=1 indicates that the code needed to take WORK1(2:5) and
-*>  decide whether LASWLQ or GELQT was used is the same as used below in
-*>  GELQ. For a detailed description of A and WORK1(6:LWORK1), see
-*>  Further Details in LASWLQ or GELQT.
+*>  LASWLQ (if the matrix is wide-and-short) or GELQT to compute
+*>  the LQ factorization.
+*>  This version of GEMLQ will use either LAMSWLQ or GEMLQT to 
+*>  multiply matrix Q by another matrix.
+*>  Further Details in LAMSWLQ or GEMLQT.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE CGEMLQ( SIDE, TRANS, M, N, K, A, LDA, WORK1, LWORK1,
-     $      C, LDC, WORK2, LWORK2, INFO )
+      SUBROUTINE CGEMLQ( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,
+     $        C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -157,10 +163,10 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER         SIDE, TRANS
-      INTEGER           INFO, LDA, M, N, K, LWORK1, LWORK2, LDC
+      INTEGER           INFO, LDA, M, N, K, TSIZE, LWORK, LDC
 *     ..
 *     .. Array Arguments ..
-      COMPLEX           A( LDA, * ), C( LDC, * ), WORK1( * ), WORK2( * )
+      COMPLEX           A( LDA, * ), T( * ), C(LDC, * ), WORK( * )
 *     ..
 *
 * =====================================================================
@@ -174,7 +180,7 @@
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     .. External Subroutines ..
-      EXTERNAL           CLAMSWLQ, CGEMLQT, XERBLA
+      EXTERNAL           ZLAMSWLQ, ZGEMLQT, XERBLA
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, MOD
 *     ..
@@ -182,26 +188,27 @@
 *
 *     Test the input arguments
 *
-      LQUERY  = LWORK2.LT.0
+      LQUERY  = LWORK.LT.0
       NOTRAN  = LSAME( TRANS, 'N' )
       TRAN    = LSAME( TRANS, 'C' )
       LEFT    = LSAME( SIDE, 'L' )
       RIGHT   = LSAME( SIDE, 'R' )
 *
-      MB = INT(WORK1(4))
-      NB = INT(WORK1(5))
-      IF (LEFT) THEN
+      MB = INT(T(2))
+      NB = INT(T(3))
+      IF ( LEFT ) THEN
         LW = N * MB
         MN = M
       ELSE
         LW = M * MB
         MN = N
       END IF
-      IF ((NB.GT.K).AND.(MN.GT.K)) THEN
-        IF(MOD(MN-K, NB-K).EQ.0) THEN
-          NBLCKS = (MN-K)/(NB-K)
+*
+      IF ( ( NB.GT.K ) .AND. ( MN.GT.K ) ) THEN
+        IF( MOD( MN - K, NB - K ) .EQ. 0 ) THEN
+          NBLCKS = ( MN - K ) / ( NB - K )
         ELSE
-          NBLCKS = (MN-K)/(NB-K) + 1
+          NBLCKS = ( MN - K ) / ( NB - K ) + 1
         END IF
       ELSE
         NBLCKS = 1
@@ -220,40 +227,43 @@
         INFO = -5
       ELSE IF( LDA.LT.MAX( 1, K ) ) THEN
         INFO = -7
-      ELSE IF( LWORK1.LT.MAX( 1, MB*K*NBLCKS+5 )) THEN
+      ELSE IF( TSIZE.LT.MAX( 1, MB*K*NBLCKS + 5 )
+     $         .AND. ( .NOT.LQUERY ) ) THEN
         INFO = -9
       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
-         INFO = -11
-      ELSE IF(( LWORK2.LT.MAX(1,LW)).AND.(.NOT.LQUERY)) THEN
+        INFO = -11
+      ELSE IF((  LWORK.LT.MAX( 1, LW ) ) .AND. ( .NOT.LQUERY ) ) THEN
         INFO = -13
       END IF
 *
-      IF( INFO.EQ.0)  THEN
-        WORK2(1) = LW
+      IF( INFO.EQ.0 )  THEN
+        WORK(1) = REAL( LW )
       END IF
+*
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CGEMLQ', -INFO )
         RETURN
-      ELSE IF (LQUERY) THEN
+      ELSE IF ( LQUERY ) THEN
         RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( MIN(M,N,K).EQ.0 ) THEN
+      IF( MIN( M, N, K ).EQ.0 ) THEN
         RETURN
       END IF
 *
-      IF((LEFT.AND.M.LE.K).OR.(RIGHT.AND.N.LE.K).OR.(NB.LE.K).OR.
-     $   (NB.GE.MAX(M,N,K))) THEN
+      IF( ( LEFT .AND. M.LE.K ) .OR. ( RIGHT .AND. N.LE.K )
+     $     .OR. ( NB.LE.K ) .OR. ( NB.GE.MAX( M, N, K ) ) ) THEN
         CALL CGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
-     $        WORK1(6), MB, C, LDC, WORK2, INFO)
+     $        T(4), MB, C, LDC, WORK, INFO)
       ELSE
-        CALL CLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, WORK1(6),
-     $        MB, C, LDC, WORK2, LWORK2, INFO )
+        CALL CLAMSWLQ( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T(4),
+     $    MB, C, LDC, WORK, LWORK, INFO )
       END IF
 *
-      WORK2(1) = LW
+      WORK(1) = REAL ( LW )
+*
       RETURN
 *
 *     End of CGEMLQ

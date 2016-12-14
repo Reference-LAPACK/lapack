@@ -29,16 +29,21 @@
 *> 1. If TRANS = 'N' and m >= n:  find the least squares solution of
 *>    an overdetermined system, i.e., solve the least squares problem
 *>                 minimize || B - A*X ||.
-
+*>
 *> 2. If TRANS = 'N' and m < n:  find the minimum norm solution of
 *>    an underdetermined system A * X = B.
-
+*>
 *> 3. If TRANS = 'T' and m >= n:  find the minimum norm solution of
 *>    an undetermined system A**T * X = B.
-
+*>
 *> 4. If TRANS = 'T' and m < n:  find the least squares solution of
 *>    an overdetermined system, i.e., solve the least squares problem
 *>                 minimize || B - A**T * X ||.
+*>
+*> Several right hand side vectors b and solution vectors x can be
+*> handled in a single call; they are stored as the columns of the
+*> M-by-NRHS right hand side matrix B and the N-by-NRHS solution
+*> matrix X.
 *> \endverbatim
 *
 *  Arguments:
@@ -76,7 +81,7 @@
 *>          On entry, the M-by-N matrix A.
 *>          On exit,
 *>          A is overwritten by details of its QR or LQ
-*>          factorization as returned by DGETSQR.
+*>          factorization as returned by DGEQR or DGEQL.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -111,18 +116,21 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (MAX(12,LWORK))
-*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK,
-*>          and WORK(2) returns the minimum LWORK.
+*>          (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) contains optimal (or either minimal
+*>          or optimal, if query was assumed) LWORK.
+*>          See LWORK for details.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          IF LWORK=-1, workspace query is assumed, and
-*>          WORK(1) returns the optimal LWORK,
-*>          and WORK(2) returns the minimum LWORK.
+*>          If LWORK = -1 or -2, then a workspace query is assumed.
+*>          If LWORK = -1, the routine calculates optimal size of WORK for the
+*>          optimal performance and returns this value in WORK(1).
+*>          If LWORK = -2, the routine calculates minimal size of WORK and 
+*>          returns this value in WORK(1).
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -174,10 +182,10 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, TRAN
-      INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW, LW,
-     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2,
+      INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW,
+     $                   SCLLEN, MNK, TSZ, TSZM, LW, LWM, LW1, LW2
      $                   INFO2
-      DOUBLE PRECISION   ANRM, BIGNUM, BNRM, SMLNUM
+      DOUBLE PRECISION   ANRM, BIGNUM, BNRM, SMLNUM, WRK1(5), WRK2
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -190,7 +198,7 @@
      $                   DTRTRS, XERBLA, DGELQ, DGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, MAX, MIN
+      INTRINSIC          DBLE, MAX, MIN, INT
 *     ..
 *     .. Executable Statements ..
 *
@@ -199,10 +207,10 @@
       INFO=0
       MINMN = MIN( M, N )
       MAXMN = MAX( M, N )
-      MNK   = MAX(MINMN,NRHS)
+      MNK   = MAX( MINMN, NRHS )
       TRAN  = LSAME( TRANS, 'T' )
 *
-      LQUERY = ( LWORK.EQ.-1 )
+      LQUERY = ( LWORK.EQ.-1 .OR. LWORK.EQ.-2 )
       IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
      $    LSAME( TRANS, 'T' ) ) ) THEN
          INFO = -1
@@ -218,49 +226,58 @@
          INFO = -8
       END IF
 *
-      IF( INFO.EQ.0)  THEN
+      IF( INFO.EQ.0 )  THEN
 *
 *     Determine the block size and minimum LWORK
 *
        IF ( M.GE.N ) THEN
-        CALL DGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
-     $   INFO2)
-        LW = INT(WORK(6))
-        CALL DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WORK(1),
-     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
-        WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
-        WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
+         CALL DGEQR( M, N, A, LDA, WRK1(1), -1, WRK2, -1, INFO2 )
+         TSZ = INT( WRK1(1) )
+         LW  = INT( WRK2 )
+         CALL DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WRK1(1),
+     $        TSZ, B, LDB, WRK2, -1 , INFO2 )
+         LW  = MAX( LW, INT(WRK2) )
+         CALL DGEQR( M, N, A, LDA, WRK1(1), -2, WRK2, -2, INFO2 )
+         TSZM = INT( WRK1(1) )
+         LWM  = INT( WRK2 )
+         CALL DGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WRK1(1),
+     $        TSZM, B, LDB, WRK2, -2, INFO2 )
+         LWM = MAX( LWM, INT(WRK2) )
        ELSE
-        CALL DGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
-     $   INFO2)
-        LW = INT(WORK(6))
-        CALL DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WORK(1),
-     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
-        WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
-        WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
+         CALL DGELQ( M, N, A, LDA, WRK1(1), -1, WRK2, -1, INFO2 )
+         TSZ = INT( WRK1(1) )
+         LW  = INT( WRK2 )
+         CALL DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WRK1(1),
+     $        TSZ, B, LDB, WRK2, -1, INFO2 )
+         LW  = MAX( LW, INT(WRK2) )
+         CALL DGELQ( M, N, A, LDA, WRK1(1), -2, WRK2, -2, INFO2 )
+         TSZM = INT( WRK1(1) )
+         LWM  = INT( WRK2 )
+         CALL DGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WRK1(1),
+     $        TSZ, B, LDB, WRK2, -2, INFO2 )
+         LWM  = MAX( LWM, INT(WRK2) )
        END IF
 *
-       IF((LWORK.LT.WSIZEO).AND.(.NOT.LQUERY)) THEN
+       IF( ( LWORK.LT.( TSZM + LWM ) ) .AND. (.NOT.LQUERY)) THEN
           INFO=-10
        END IF
       END IF
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'DGETSLS', -INFO )
-        WORK( 1 ) = DBLE( WSIZEO )
-        WORK( 2 ) = DBLE( WSIZEM )
-        RETURN
-      ELSE IF (LQUERY) THEN
-        WORK( 1 ) = DBLE( WSIZEO )
-        WORK( 2 ) = DBLE( WSIZEM )
+        WORK( 1 ) = DBLE( TSZ + LW )
         RETURN
       END IF
-      IF(LWORK.LT.WSIZEO) THEN
-        LW1=INT(WORK(3))
-        LW2=MAX(LW,INT(WORK(6)))
+      IF ( LQUERY ) THEN
+        WORK( 1 ) = DBLE( TSZ + LW )
+        RETURN
+      END IF
+      IF( LWORK.LT.( TSZ + LW ) ) THEN
+        LW1 = TSZM
+        LW2 = LWM
       ELSE
-        LW1=INT(WORK(2))
-        LW2=MAX(LW,INT(WORK(6)))
+        LW1 = TSZ
+        LW2 = LW
       END IF
 *
 *     Quick return if possible
@@ -323,13 +340,13 @@
          IBSCL = 2
       END IF
 *
-      IF ( M.GE.N) THEN
+      IF ( M.GE.N ) THEN
 *
 *        compute QR factorization of A
 *
         CALL DGEQR( M, N, A, LDA, WORK(LW2+1), LW1,
      $              WORK(1), LW2, INFO )
-        IF (.NOT.TRAN) THEN
+        IF ( .NOT.TRAN ) THEN
 *
 *           Least-Squares Problem min || A * X - B ||
 *
@@ -381,7 +398,7 @@
 *
 *        Compute LQ factorization of A
 *
-        CALL DGELQ( M, N, A, LDA, WORK(LW2+1), LW1,
+         CALL DGELQ( M, N, A, LDA, WORK(LW2+1), LW1,
      $              WORK(1), LW2, INFO )
 *
 *        workspace at least M, optimally M*NB.
@@ -454,16 +471,15 @@
      $                INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL DLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
+        CALL DLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
+        CALL DLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
      $                INFO )
       END IF
 *
    50 CONTINUE
-       WORK( 1 ) = DBLE( WSIZEO )
-       WORK( 2 ) = DBLE( WSIZEM )
+      WORK( 1 ) = DBLE( TSZ + LW )
       RETURN
 *
 *     End of DGETSLS

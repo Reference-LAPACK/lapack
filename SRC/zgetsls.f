@@ -1,16 +1,15 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
-*     $                   , WORK, LWORK, INFO )
-
+*       SUBROUTINE ZGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+*     $                     WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
 *       INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX*16   A( LDA, * ), B( LDB, * ), WORK( * )
+*       COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *
 *
@@ -19,10 +18,11 @@
 *>
 *> \verbatim
 *>
-*> ZGETSLS solves overdetermined or underdetermined real linear systems
-*> involving an M-by-N matrix A, or its transpose, using a tall skinny
-*> QR or short wide LQfactorization of A.  It is assumed that A has
-*> full rank.
+*> ZGETSLS solves overdetermined or underdetermined complex linear systems
+*> involving an M-by-N matrix A, using a tall skinny QR or short wide LQ
+*> factorization of A.  It is assumed that A has full rank.
+*>
+*>
 *>
 *> The following options are provided:
 *>
@@ -80,10 +80,8 @@
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
 *>          On exit,
-*>            if M >= N, A is overwritten by details of its QR
-*>                       factorization as returned by DGEQRF;
-*>            if M <  N, A is overwritten by details of its LQ
-*>                       factorization as returned by DGELQF.
+*>          A is overwritten by details of its QR or LQ
+*>          factorization as returned by ZGEQR or ZGEQL.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -97,21 +95,17 @@
 *>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, the matrix B of right hand side vectors, stored
 *>          columnwise; B is M-by-NRHS if TRANS = 'N', or N-by-NRHS
-*>          if TRANS = 'T'.
+*>          if TRANS = 'C'.
 *>          On exit, if INFO = 0, B is overwritten by the solution
 *>          vectors, stored columnwise:
 *>          if TRANS = 'N' and m >= n, rows 1 to n of B contain the least
-*>          squares solution vectors; the residual sum of squares for the
-*>          solution in each column is given by the sum of squares of
-*>          elements N+1 to M in that column;
+*>          squares solution vectors.
 *>          if TRANS = 'N' and m < n, rows 1 to N of B contain the
 *>          minimum norm solution vectors;
-*>          if TRANS = 'T' and m >= n, rows 1 to M of B contain the
+*>          if TRANS = 'C' and m >= n, rows 1 to M of B contain the
 *>          minimum norm solution vectors;
-*>          if TRANS = 'T' and m < n, rows 1 to M of B contain the
-*>          least squares solution vectors; the residual sum of squares
-*>          for the solution in each column is given by the sum of
-*>          squares of elements M+1 to N in that column.
+*>          if TRANS = 'C' and m < n, rows 1 to M of B contain the
+*>          least squares solution vectors.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -122,23 +116,21 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
-*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*>          (workspace) COMPLEX*16 array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) contains optimal (or either minimal
+*>          or optimal, if query was assumed) LWORK.
+*>          See LWORK for details.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          LWORK >= max( 1, MN + max( MN, NRHS ) ).
-*>          For optimal performance,
-*>          LWORK >= max( 1, MN + max( MN, NRHS )*NB ).
-*>          where MN = min(M,N) and NB is the optimum block size.
-*>
-*>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
-*>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          If LWORK = -1 or -2, then a workspace query is assumed.
+*>          If LWORK = -1, the routine calculates optimal size of WORK for the
+*>          optimal performance and returns this value in WORK(1).
+*>          If LWORK = -2, the routine calculates minimal size of WORK and 
+*>          returns this value in WORK(1).
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -162,9 +154,11 @@
 *
 *> \date November 2011
 *
+*> \ingroup complex16GEsolve
+*
 *  =====================================================================
-      SUBROUTINE ZGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
-     $                   , WORK, LWORK, INFO )
+      SUBROUTINE ZGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+     $                     WORK, LWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.4.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -173,10 +167,10 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
-      INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS, MB, NB
+      INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16   A( LDA, * ), B( LDB, * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), B( LDB, * ), WORK( * )
 *
 *     ..
 *
@@ -190,9 +184,11 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, TRAN
-      INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW, LW,
-     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2, INFO2
+      INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW,
+     $                   SCLLEN, MNK, TSZ, TSZM, LW, LWM, LW1, LW2
+     $                   INFO2
       DOUBLE PRECISION   ANRM, BIGNUM, BNRM, SMLNUM
+      COMPLEX*16         WRK1(5), WRK2
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -205,7 +201,7 @@
      $                   ZTRTRS, XERBLA, ZGELQ, ZGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, MAX, MIN
+      INTRINSIC          DBLE, MAX, MIN, INT
 *     ..
 *     .. Executable Statements ..
 *
@@ -217,7 +213,7 @@
       MNK   = MAX(MINMN,NRHS)
       TRAN  = LSAME( TRANS, 'C' )
 *
-      LQUERY = ( LWORK.EQ.-1 )
+      LQUERY = ( LWORK.EQ.-1 .OR. LWORK.EQ.-2 )
       IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
      $    LSAME( TRANS, 'C' ) ) ) THEN
          INFO = -1
@@ -233,53 +229,58 @@
          INFO = -8
       END IF
 *
-      IF( INFO.EQ.0)  THEN
+      IF( INFO.EQ.0 )  THEN
 *
 *     Determine the block size and minimum LWORK
 *
-      IF ( M.GE.N ) THEN
-        CALL ZGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
-     $   INFO2)
-        MB = INT(WORK(4))
-        NB = INT(WORK(5))
-        LW = INT(WORK(6))
-        CALL ZGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WORK(1),
-     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
-        WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
-        WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
-      ELSE
-        CALL ZGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
-     $   INFO2)
-        MB = INT(WORK(4))
-        NB = INT(WORK(5))
-        LW = INT(WORK(6))
-        CALL ZGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WORK(1),
-     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
-        WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
-        WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
-      END IF
+       IF ( M.GE.N ) THEN
+         CALL ZGEQR( M, N, A, LDA, WRK1, -1, WRK2, -1, INFO2 )
+         TSZ = INT( WRK1(1) )
+         LW  = INT( WRK2 )
+         CALL ZGEQR( M, N, A, LDA, WRK1(1), -2, WRK2, -2, INFO2 )
+         TSZM = INT( WRK1(1) )
+         LWM  = INT( WRK2 )
+         CALL ZGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WRK1(1),
+     $        TSZ, B, LDB, WRK2, -1 , INFO2 )
+         LW  = MAX( LW, INT(WRK2) )
+         CALL ZGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WRK1(1),
+     $        TSZM, B, LDB, WRK2, -2, INFO2 )
+         LWM = MAX( LWM, INT(WRK2) )
+       ELSE
+         CALL ZGELQ( M, N, A, LDA, WRK1(1), -1, WRK2, -1, INFO2 )
+         TSZ = INT( WRK1(1) )
+         LW  = INT( WRK2 )
+         CALL ZGELQ( M, N, A, LDA, WRK1(1), -2, WRK2, -2, INFO2 )
+         TSZM = INT( WRK1(1) )
+         LWM  = INT( WRK2 )
+         CALL ZGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WRK1(1),
+     $        TSZ, B, LDB, WRK2, -1, INFO2 )
+         LW  = MAX( LW, INT(WRK2) )
+         CALL ZGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WRK1(1),
+     $        TSZ, B, LDB, WRK2, -2, INFO2 )
+         LWM  = MAX( LWM, INT(WRK2) )
+       END IF
 *
-       IF((LWORK.LT.WSIZEO).AND.(.NOT.LQUERY)) THEN
+       IF( ( LWORK.LT.( TSZM + LWM ) ) .AND. (.NOT.LQUERY)) THEN
           INFO=-10
        END IF
       END IF
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'ZGETSLS', -INFO )
-        WORK( 1 ) = DBLE( WSIZEO )
-        WORK( 2 ) = DBLE( WSIZEM )
-        RETURN
-      ELSE IF (LQUERY) THEN
-        WORK( 1 ) = DBLE( WSIZEO )
-        WORK( 2 ) = DBLE( WSIZEM )
+        WORK( 1 ) = DBLE( TSZ + LW )
         RETURN
       END IF
-      IF(LWORK.LT.WSIZEO) THEN
-        LW1=INT(WORK(3))
-        LW2=MAX(LW,INT(WORK(6)))
+      IF ( LQUERY ) THEN
+        WORK( 1 ) = DBLE( TSZ + LW )
+        RETURN
+      END IF
+      IF( LWORK.LT.( TSZ + LW ) ) THEN
+        LW1 = TSZM
+        LW2 = LWM
       ELSE
-        LW1=INT(WORK(2))
-        LW2=MAX(LW,INT(WORK(6)))
+        LW1 = TSZ
+        LW2 = LW
       END IF
 *
 *     Quick return if possible
@@ -346,9 +347,9 @@
 *
 *        compute QR factorization of A
 *
-        CALL ZGEQR( M, N, A, LDA, WORK(LW2+1), LW1
-     $    , WORK(1), LW2, INFO )
-        IF (.NOT.TRAN) THEN
+        CALL ZGEQR( M, N, A, LDA, WORK(LW2+1), LW1,
+     $              WORK(1), LW2, INFO )
+        IF ( .NOT.TRAN ) THEN
 *
 *           Least-Squares Problem min || A * X - B ||
 *
@@ -400,8 +401,8 @@
 *
 *        Compute LQ factorization of A
 *
-        CALL ZGELQ( M, N, A, LDA, WORK(LW2+1), LW1
-     $    , WORK(1), LW2, INFO )
+         CALL ZGELQ( M, N, A, LDA, WORK(LW2+1), LW1,
+     $              WORK(1), LW2, INFO )
 *
 *        workspace at least M, optimally M*NB.
 *
@@ -481,8 +482,7 @@
       END IF
 *
    50 CONTINUE
-       WORK( 1 ) = DBLE( WSIZEO )
-       WORK( 2 ) = DBLE( WSIZEM )
+      WORK( 1 ) = DBLE( TSZ + LW )
       RETURN
 *
 *     End of ZGETSLS

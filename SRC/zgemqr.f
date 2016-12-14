@@ -2,17 +2,16 @@
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE ZGEMQR( SIDE, TRANS, M, N, K, A, LDA, WORK1,
-*     $                     LWORK1, C, LDC, WORK2, LWORK2, INFO )
+*      SUBROUTINE ZGEMQR( SIDE, TRANS, M, N, K, A, LDA, T,
+*     $                     TSIZE, C, LDC, WORK, LWORK, INFO )
 *
 *
 *     .. Scalar Arguments ..
 *      CHARACTER         SIDE, TRANS
-*      INTEGER           INFO, LDA, M, N, K, LDT, LWORK1, LWORK2, LDC
+*      INTEGER           INFO, LDA, M, N, K, LDT, TSIZE, LWORK, LDC
 *     ..
 *     .. Array Arguments ..
-*      COMPLEX*16        A( LDA, * ), WORK1( * ), C(LDC, * ),
-*     $                  WORK2( * )
+*      COMPLEX*16        A( LDA, * ), T( * ), C(LDC, * ), WORK( * )
 *> \par Purpose:
 *  =============
 *>
@@ -23,8 +22,8 @@
 *>
 *>                      SIDE = 'L'     SIDE = 'R'
 *>      TRANS = 'N':      Q * C          C * Q
-*>      TRANS = 'T':      Q**T * C       C * Q**T
-*>      where Q is a complex orthogonal matrix defined as the product
+*>      TRANS = 'T':      Q**H * C       C * Q**H
+*>      where Q is a complex unitary matrix defined as the product
 *>      of blocked elementary reflectors computed by tall skinny
 *>      QR factorization (ZGEQR)
 *> \endverbatim
@@ -62,13 +61,10 @@
 *>
 *> \endverbatim
 *>
-*> \param[in,out] A
+*> \param[in] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,K)
-*>          The i-th column must contain the vector which defines the
-*>          blockedelementary reflector H(i), for i = 1,2,...,k, as
-*>          returned by DGETSQR in the first k columns of
-*>          its array argument A.
+*>          Part of the data structure to represent Q as returned by SGEQR.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -79,16 +75,16 @@
 *>          if SIDE = 'R', LDA >= max(1,N).
 *> \endverbatim
 *>
-*> \param[in] WORK1
+*> \param[in] T
 *> \verbatim
-*>          WORK1 is COMPLEX*16 array, dimension (MAX(1,LWORK1)) as
-*>          it is returned by GEQR.
+*>          T is COMPLEX*16 array, dimension (MAX(5,TSIZE)).
+*>          Part of the data structure to represent Q as returned by SGEQR.
 *> \endverbatim
 *>
-*> \param[in] LWORK1
+*> \param[in] TSIZE
 *> \verbatim
-*>          LWORK1 is INTEGER
-*>          The dimension of the array WORK1.
+*>          TSIZE is INTEGER
+*>          The dimension of the array T. TSIZE >= 5.
 *> \endverbatim
 *>
 *> \param[in,out] C
@@ -100,21 +96,21 @@
 *>          LDC is INTEGER
 *>          The leading dimension of the array C. LDC >= max(1,M).
 *>
-*> \param[out] WORK2
+*> \param[out] WORK
 *> \verbatim
-*>         (workspace) COMPLEX*16 array, dimension (MAX(1,LWORK2))
+*>         (workspace) COMPLEX*16 array, dimension (MAX(1,LWORK))
 *>
 *> \endverbatim
-*> \param[in] LWORK2
+*> \param[in] LWORK
 *> \verbatim
-*>          LWORK2 is INTEGER
-*>          The dimension of the array WORK2.
-*>          If LWORK2 = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK2 array, returns
-*>          this value as the third entry of the WORK2 array (WORK2(1)),
-*>          and no error message related to LWORK2 is issued by XERBLA.
-*>
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK.
+*>          If LWORK = -1, then a workspace query is assumed. The routine
+*>          only calculates the size of the WORK array, returns this
+*>          value as WORK(1), and no error message related to WORK 
+*>          is issued by XERBLA.
 *> \endverbatim
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
@@ -130,27 +126,35 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \par Further Details:
-*  =====================
+*> \par Further Details
+*  ====================
 *>
 *> \verbatim
+*>
+*> These details are particular for this LAPACK implementation. Users should not 
+*> take them for granted. These details may change in the future, and are unlikely not
+*> true for another LAPACK implementation. These details are relevant if one wants
+*> to try to understand the code. They are not part of the interface.
+*>
+*> In this version,
+*>
+*>          T(2): row block size (MB)
+*>          T(3): column block size (NB)
+*>          T(4:TSIZE): data structure needed for Q, computed by
+*>                           LATSQR or GEQRT
+*>
 *>  Depending on the matrix dimensions M and N, and row and column
 *>  block sizes MB and NB returned by ILAENV, GEQR will use either
 *>  LATSQR (if the matrix is tall-and-skinny) or GEQRT to compute
-*>  the QR decomposition.
-*>  The output of LATSQR or GEQRT representing Q is stored in A and in
-*>  array WORK1(6:LWORK1) for later use.
-*>  WORK1(2:5) contains the matrix dimensions M,N and block sizes MB,NB
-*>  which are needed to interpret A and WORK1(6:LWORK1) for later use.
-*>  WORK1(1)=1 indicates that the code needed to take WORK1(2:5) and
-*>  decide whether LATSQR or GEQRT was used is the same as used below in
-*>  GEQR. For a detailed description of A and WORK1(6:LWORK1), see
-*>  Further Details in LATSQR or GEQRT.
+*>  the QR factorization.
+*>  This version of GEMQR will use either LAMTSQR or GEMQRT to 
+*>  multiply matrix Q by another matrix.
+*>  Further Details in LATMSQR or GEMQRT.
 *> \endverbatim
 *>
 *  =====================================================================
-      SUBROUTINE ZGEMQR( SIDE, TRANS, M, N, K, A, LDA, WORK1, LWORK1,
-     $        C, LDC, WORK2, LWORK2, INFO )
+      SUBROUTINE ZGEMQR( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,
+     $        C, LDC, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.5.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -159,11 +163,10 @@
 *
 *     .. Scalar Arguments ..
       CHARACTER         SIDE, TRANS
-      INTEGER           INFO, LDA, M, N, K, LWORK1, LWORK2, LDC
+      INTEGER           INFO, LDA, M, N, K, TSIZE, LWORK, LDC
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16        A( LDA, * ), WORK1( * ), C(LDC, * ),
-     $               WORK2( * )
+      COMPLEX*16        A( LDA, * ), T( * ), C(LDC, * ), WORK( * )
 *     ..
 *
 * =====================================================================
@@ -185,14 +188,14 @@
 *
 *     Test the input arguments
 *
-      LQUERY  = LWORK2.LT.0
+      LQUERY  = LWORK.LT.0
       NOTRAN  = LSAME( TRANS, 'N' )
       TRAN    = LSAME( TRANS, 'C' )
       LEFT    = LSAME( SIDE, 'L' )
       RIGHT   = LSAME( SIDE, 'R' )
 *
-      MB = INT(WORK1(4))
-      NB = INT(WORK1(5))
+      MB = INT(T(2))
+      NB = INT(T(3))
       IF(LEFT) THEN
         LW = N * NB
         MN = M
@@ -201,11 +204,11 @@
         MN = N
       END IF
 *
-      IF ((MB.GT.K).AND.(MN.GT.K)) THEN
-          IF(MOD(MN-K, MB-K).EQ.0) THEN
-             NBLCKS = (MN-K)/(MB-K)
+      IF ( ( MB.GT.K ) .AND. ( MN.GT.K ) ) THEN
+          IF( MOD( MN - K, MB - K ) .EQ. 0 ) THEN
+             NBLCKS = ( MN - K ) / ( MB - K )
           ELSE
-             NBLCKS = (MN-K)/(MB-K) + 1
+             NBLCKS = ( MN - K ) / ( MB - K ) + 1
           END IF
       ELSE
         NBLCKS = 1
@@ -224,45 +227,47 @@
         INFO = -5
       ELSE IF( LDA.LT.MAX( 1, K ) ) THEN
         INFO = -7
-      ELSE IF( LWORK1.LT.MAX( 1, NB*K*NBLCKS+5 )) THEN
+      ELSE IF( TSIZE.LT.MAX( 1, NB*K*NBLCKS + 5 )
+     $        .AND. ( .NOT.LQUERY ) ) THEN
         INFO = -9
-      ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
+      ELSE IF( LDC.LT.MAX( 1, M ) .AND. MIN( M, N, K ).NE.0 ) THEN
          INFO = -11
-      ELSE IF(( LWORK2.LT.MAX(1,LW)).AND.(.NOT.LQUERY)) THEN
+      ELSE IF( ( LWORK.LT.MAX( 1, LW ) ) .AND. ( .NOT.LQUERY ) ) THEN
         INFO = -13
       END IF
 *
 *     Determine the block size if it is tall skinny or short and wide
 *
-      IF( INFO.EQ.0)  THEN
-         WORK2(1) = LW
+      IF( INFO.EQ.0 )  THEN
+        WORK(1) = LW
       END IF
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'ZGEMQR', -INFO )
         RETURN
-      ELSE IF (LQUERY) THEN
+      ELSE IF ( LQUERY ) THEN
        RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( MIN(M,N,K).EQ.0 ) THEN
+      IF( MIN( M, N, K ).EQ.0 ) THEN
         RETURN
       END IF
 *
-      IF((LEFT.AND.M.LE.K).OR.(RIGHT.AND.N.LE.K).OR.(MB.LE.K).OR.
-     $   (MB.GE.MAX(M,N,K))) THEN
+      IF( ( LEFT .AND. M.LE.K ) .OR. ( RIGHT .AND. N.LE.K )
+     $     .OR. ( MB.LE.K ) .OR. ( MB.GE.MAX( M, N, K ) ) ) THEN
         CALL ZGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA,
-     $        WORK1(6), NB, C, LDC, WORK2, INFO)
+     $        T(4), NB, C, LDC, WORK, INFO )
       ELSE
-        CALL ZLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, WORK1(6),
-     $      NB, C, LDC, WORK2, LWORK2, INFO )
+        CALL ZLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T(4),
+     $      NB, C, LDC, WORK, LWORK, INFO )
       END IF
 *
-      WORK2(1) = LW
+      WORK(1) = LW
+*
       RETURN
 *
-*     End of DGEMQR
+*     End of ZGEMQR
 *
       END
