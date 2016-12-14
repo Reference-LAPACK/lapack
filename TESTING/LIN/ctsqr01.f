@@ -179,7 +179,7 @@
       LWORK = MAX( LWORK, INT( WORKQUERY ) )
       CALL CGEMQR( 'L', 'N', M, N, K, AF, M, TQUERY, TSIZE, CF, M,
      $             WORKQUERY, -1, INFO)
-      LWORK = MAX( LWORK, INT( WORKQUERY )
+      LWORK = MAX( LWORK, INT( WORKQUERY ) )
       CALL CGEMQR( 'L', 'C', M, N, K, AF, M, TQUERY, TSIZE, CF, M,
      $             WORKQUERY, -1, INFO)
       LWORK = MAX( LWORK, INT( WORKQUERY ) )
