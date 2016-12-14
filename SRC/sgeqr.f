@@ -3,7 +3,7 @@
 *  ===========
 *
 *       SUBROUTINE SGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
-*                        INFO)
+*                         INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           INFO, LDA, M, N, TSIZE, LWORK
@@ -146,74 +146,74 @@
 *>
 *>          T(2): row block size (MB)
 *>          T(3): column block size (NB)
-*>          T(4:TSIZE): data structure needed for Q, computed by
-*>                           DLATSQR or DGEQRT
+*>          T(6:TSIZE): data structure needed for Q, computed by
+*>                           SLATSQR or SGEQRT
 *>
 *>  Depending on the matrix dimensions M and N, and row and column
-*>  block sizes MB and NB returned by ILAENV, GEQR will use either
-*>  LATSQR (if the matrix is tall-and-skinny) or GEQRT to compute
+*>  block sizes MB and NB returned by ILAENV, SGEQR will use either
+*>  SLATSQR (if the matrix is tall-and-skinny) or SGEQRT to compute
 *>  the QR factorization.
+*>
 *> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SGEQR( M, N, A, LDA, T, TSIZE, WORK, LWORK,
-     $   INFO)
+     $                  INFO )
 *
-*  -- LAPACK computational routine (version 3.5.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
-*     November 2013
+*     November 2016
 *
 *     .. Scalar Arguments ..
-      INTEGER           INFO, LDA, M, N, TSIZE, LWORK
+      INTEGER            INFO, LDA, M, N, TSIZE, LWORK
 *     ..
 *     .. Array Arguments ..
-      REAL              A( LDA, * ), T( * ), WORK( * )
+      REAL               A( LDA, * ), T( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     ..
 *     .. Local Scalars ..
-      LOGICAL    LQUERY, LMINWS, MINT, MINW
-      INTEGER    MB, NB, I, II, KK, MINTSZ, NBLCKS
+      LOGICAL            LQUERY, LMINWS, MINT, MINW
+      INTEGER            MB, NB, MINTSZ, NBLCKS
 *     ..
-*     .. EXTERNAL FUNCTIONS ..
+*     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
-*     .. EXTERNAL SUBROUTINES ..
+*     ..
+*     .. External Subroutines ..
       EXTERNAL           SLATSQR, SGEQRT, XERBLA
-*     .. INTRINSIC FUNCTIONS ..
+*     ..
+*     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
-*     .. EXTERNAL FUNCTIONS ..
+*     .. External Functions ..
       INTEGER            ILAENV
       EXTERNAL           ILAENV
 *     ..
-*     .. EXECUTABLE STATEMENTS ..
+*     .. Executable statements ..
 *
-*     TEST THE INPUT ARGUMENTS
+*     Test the input arguments
 *
       INFO = 0
 *
-      LQUERY = ( TSIZE.EQ.-1 .OR. TSIZE.EQ.-2 .OR. 
+      LQUERY = ( TSIZE.EQ.-1 .OR. TSIZE.EQ.-2 .OR.
      $           LWORK.EQ.-1 .OR. LWORK.EQ.-2 )
 *
       MINT = .FALSE.
-      IF ( TSIZE.NE.-1 .AND. ( TSIZE.EQ.-2 .OR. LWORK.EQ.-2 ) ) THEN
-        MINT = .TRUE.
-      ENDIF
-*
       MINW = .FALSE.
-      IF ( LWORK.NE.-1 .AND. ( TSIZE.EQ.-2 .OR. LWORK.EQ.-2 ) ) THEN
-        MINW = .TRUE.
-      ENDIF
+      IF( TSIZE.EQ.-2 .OR. LWORK.EQ.-2 ) THEN
+        IF( TSIZE.NE.-1 ) MINT = .TRUE.
+        IF( LWORK.NE.-1 ) MINW = .TRUE.
+      END IF
 *
 *     Determine the block size
 *
-      IF ( MIN(M,N).GT.0 ) THEN
-        MB = ILAENV( 1, 'SGEQR ', ' ', M, N, 1, -1)
-        NB = ILAENV( 1, 'SGEQR ', ' ', M, N, 2, -1)
+      IF( MIN( M, N ).GT.0 ) THEN
+        MB = ILAENV( 1, 'SGEQR ', ' ', M, N, 1, -1 )
+        NB = ILAENV( 1, 'SGEQR ', ' ', M, N, 2, -1 )
       ELSE
         MB = M
         NB = 1
@@ -235,16 +235,16 @@
 *
       LMINWS = .FALSE.
       IF( ( TSIZE.LT.MAX( 1, NB*N*NBLCKS + 5 ) .OR. LWORK.LT.NB*N )
-     $    .AND. ( LWORK.GE.N ) .AND. ( TSIZE.GE.N + 5 )
+     $    .AND. ( LWORK.GE.N ) .AND. ( TSIZE.GE.MINTSZ )
      $    .AND. ( .NOT.LQUERY ) ) THEN
-        IF ( TSIZE.LT.MAX( 1, NB*N*NBLCKS + 5 ) ) THEN
-            LMINWS = .TRUE.
-            NB = 1
-            MB = M
+        IF( TSIZE.LT.MAX( 1, NB*N*NBLCKS + 5 ) ) THEN
+          LMINWS = .TRUE.
+          NB = 1
+          MB = M
         END IF
-        IF ( LWORK.LT.NB*N ) THEN
-            LMINWS = .TRUE.
-            NB = 1
+        IF( LWORK.LT.NB*N ) THEN
+          LMINWS = .TRUE.
+          NB = 1
         END IF
       END IF
 *
@@ -262,42 +262,44 @@
         INFO = -8
       END IF
 *
-      IF( INFO.EQ.0 )  THEN
-        IF ( MINT ) THEN
-          T(1) = MINTSZ
+      IF( INFO.EQ.0 ) THEN
+        IF( MINT ) THEN
+          T( 1 ) = MINTSZ
         ELSE
-          T(1) = NB*N*NBLCKS + 5
-        ENDIF
-        T(2) = MB
-        T(3) = NB
-        IF ( MINW ) THEN
-          WORK(1) = MAX( 1, N )
+          T( 1 ) = NB*N*NBLCKS + 5
+        END IF
+        T( 2 ) = MB
+        T( 3 ) = NB
+        IF( MINW ) THEN
+          WORK( 1 ) = MAX( 1, N )
         ELSE
-          WORK(1) = MAX( 1, NB*N )
-        ENDIF
+          WORK( 1 ) = MAX( 1, NB*N )
+        END IF
       END IF
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'SGEQR', -INFO )
         RETURN
-      ELSE IF (LQUERY) THEN
+      ELSE IF( LQUERY ) THEN
         RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( MIN(M,N).EQ.0 ) THEN
+      IF( MIN( M, N ).EQ.0 ) THEN
         RETURN
       END IF
 *
 *     The QR Decomposition
 *
       IF( ( M.LE.N ) .OR. ( MB.LE.N ) .OR. ( MB.GE.M ) ) THEN
-        CALL SGEQRT( M, N, NB, A, LDA, T(4), NB, WORK, INFO )
+        CALL SGEQRT( M, N, NB, A, LDA, T( 6 ), NB, WORK, INFO )
       ELSE
-        CALL SLATSQR( M, N, MB, NB, A, LDA, T(4), NB, WORK,
-     $                    LWORK, INFO )
+        CALL SLATSQR( M, N, MB, NB, A, LDA, T( 6 ), NB, WORK,
+     $                LWORK, INFO )
       END IF
-      WORK(1) = MAX( 1, NB*N )
+*
+      WORK( 1 ) = MAX( 1, NB*N )
+*
       RETURN
 *
 *     End of SGEQR

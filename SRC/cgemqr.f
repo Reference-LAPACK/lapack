@@ -3,43 +3,51 @@
 *  ===========
 *
 *      SUBROUTINE CGEMQR( SIDE, TRANS, M, N, K, A, LDA, T,
-*     $                     TSIZE, C, LDC, WORK, LWORK, INFO )
+*     $                   TSIZE, C, LDC, WORK, LWORK, INFO )
 *
 *
 *     .. Scalar Arguments ..
-*      CHARACTER         SIDE, TRANS
-*      INTEGER           INFO, LDA, M, N, K, LDT, TSIZE, LWORK, LDC
+*     CHARACTER         SIDE, TRANS
+*     INTEGER           INFO, LDA, M, N, K, LDT, TSIZE, LWORK, LDC
 *     ..
 *     .. Array Arguments ..
-*      COMPLEX           A( LDA, * ), T( * ), C(LDC, * ), WORK( * )
+*     COMPLEX           A( LDA, * ), T( * ), C( LDC, * ), WORK( * )
+*     ..
+*
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*>      CGEMQR overwrites the general real M-by-N matrix C with
-*>
+*> CGEMQR overwrites the general real M-by-N matrix C with
 *>
 *>                      SIDE = 'L'     SIDE = 'R'
 *>      TRANS = 'N':      Q * C          C * Q
 *>      TRANS = 'T':      Q**H * C       C * Q**H
-*>      where Q is a complex unitary matrix defined as the product
-*>      of blocked elementary reflectors computed by tall skinny
-*>      QR factorization (CGEQR)
+*>
+*> where Q is a complex unitary matrix defined as the product
+*> of blocked elementary reflectors computed by tall skinny
+*> QR factorization (CGEQR)
+*>
 *> \endverbatim
 *
 *  Arguments:
 *  ==========
 *
 *> \param[in] SIDE
+*> \verbatim
 *>          SIDE is CHARACTER*1
 *>          = 'L': apply Q or Q**T from the Left;
 *>          = 'R': apply Q or Q**T from the Right.
+*> \endverbatim
 *>
 *> \param[in] TRANS
+*> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
 *>          = 'T':  Transpose, apply Q**T.
+*> \endverbatim
+*>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
@@ -49,7 +57,7 @@
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The number of columns of the matrix C. M >= N >= 0.
+*>          The number of columns of the matrix C. N >= 0.
 *> \endverbatim
 *>
 *> \param[in] K
@@ -57,14 +65,14 @@
 *>          K is INTEGER
 *>          The number of elementary reflectors whose product defines
 *>          the matrix Q.
-*>          N >= K >= 0;
-*>
+*>          If SIDE = 'L', M >= K >= 0;
+*>          if SIDE = 'R', N >= K >= 0.
 *> \endverbatim
 *>
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,K)
-*>          Part of the data structure to represent Q as returned by SGEQR.
+*>          Part of the data structure to represent Q as returned by CGEQR.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -78,7 +86,7 @@
 *> \param[in] T
 *> \verbatim
 *>          T is COMPLEX array, dimension (MAX(5,TSIZE)).
-*>          Part of the data structure to represent Q as returned by SGEQR.
+*>          Part of the data structure to represent Q as returned by CGEQR.
 *> \endverbatim
 *>
 *> \param[in] TSIZE
@@ -88,19 +96,23 @@
 *> \endverbatim
 *>
 *> \param[in,out] C
+*> \verbatim
 *>          C is COMPLEX array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
 *>          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
+*> \endverbatim
 *>
 *> \param[in] LDC
+*> \verbatim
 *>          LDC is INTEGER
 *>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
 *>         (workspace) COMPLEX array, dimension (MAX(1,LWORK))
-*>
 *> \endverbatim
+*>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
@@ -140,47 +152,50 @@
 *>
 *>          T(2): row block size (MB)
 *>          T(3): column block size (NB)
-*>          T(4:TSIZE): data structure needed for Q, computed by
-*>                           LATSQR or GEQRT
+*>          T(6:TSIZE): data structure needed for Q, computed by
+*>                           CLATSQR or CGEQRT
 *>
 *>  Depending on the matrix dimensions M and N, and row and column
-*>  block sizes MB and NB returned by ILAENV, GEQR will use either
-*>  LATSQR (if the matrix is tall-and-skinny) or GEQRT to compute
+*>  block sizes MB and NB returned by ILAENV, CGEQR will use either
+*>  CLATSQR (if the matrix is tall-and-skinny) or CGEQRT to compute
 *>  the QR factorization.
-*>  This version of GEMQR will use either LAMTSQR or GEMQRT to 
+*>  This version of CGEMQR will use either CLAMTSQR or CGEMQRT to
 *>  multiply matrix Q by another matrix.
-*>  Further Details in LATMSQR or GEMQRT.
+*>  Further Details in CLAMTSQR or CGEMQRT.
+*>
 *> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE CGEMQR( SIDE, TRANS, M, N, K, A, LDA, T, TSIZE,
-     $        C, LDC, WORK, LWORK, INFO )
+     $                   C, LDC, WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.5.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2013
+*     November 2016
 *
 *     .. Scalar Arguments ..
-      CHARACTER         SIDE, TRANS
-      INTEGER           INFO, LDA, M, N, K, TSIZE, LWORK, LDC
+      CHARACTER          SIDE, TRANS
+      INTEGER            INFO, LDA, M, N, K, TSIZE, LWORK, LDC
 *     ..
 *     .. Array Arguments ..
-      COMPLEX        A( LDA, * ), T( * ), C(LDC, * ), WORK( * )
+      COMPLEX            A( LDA, * ), T( * ), C( LDC, * ), WORK( * )
 *     ..
 *
 * =====================================================================
 *
 *     ..
 *     .. Local Scalars ..
-      LOGICAL    LEFT, RIGHT, TRAN, NOTRAN, LQUERY
-      INTEGER    MB, NB, I, II, KK, LW, NBLCKS, MN
+      LOGICAL            LEFT, RIGHT, TRAN, NOTRAN, LQUERY
+      INTEGER            MB, NB, LW, NBLCKS, MN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEMQRT, CLAMTSQR, XERBLA
+*     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, MAX, MIN, MOD
 *     ..
@@ -188,27 +203,27 @@
 *
 *     Test the input arguments
 *
-      LQUERY  = LWORK.LT.0
+      LQUERY  = LWORK.EQ.-1
       NOTRAN  = LSAME( TRANS, 'N' )
       TRAN    = LSAME( TRANS, 'C' )
       LEFT    = LSAME( SIDE, 'L' )
       RIGHT   = LSAME( SIDE, 'R' )
 *
-      MB = INT(T(2))
-      NB = INT(T(3))
-      IF(LEFT) THEN
+      MB = INT( T( 2 ) )
+      NB = INT( T( 3 ) )
+      IF( LEFT ) THEN
         LW = N * NB
         MN = M
-      ELSE IF(RIGHT) THEN
+      ELSE
         LW = MB * NB
         MN = N
       END IF
 *
-      IF ( ( MB.GT.K ) .AND. ( MN.GT.K ) ) THEN
-        IF( MOD( MN - K, MB - K ) .EQ. 0 ) THEN
-           NBLCKS = ( MN - K ) / ( MB - K )
+      IF( ( MB.GT.K ) .AND. ( MN.GT.K ) ) THEN
+        IF( MOD( MN - K, MB - K ).EQ.0 ) THEN
+          NBLCKS = ( MN - K ) / ( MB - K )
         ELSE
-           NBLCKS = ( MN - K ) / ( MB - K ) + 1
+          NBLCKS = ( MN - K ) / ( MB - K ) + 1
         END IF
       ELSE
         NBLCKS = 1
@@ -216,55 +231,52 @@
 *
       INFO = 0
       IF( .NOT.LEFT .AND. .NOT.RIGHT ) THEN
-         INFO = -1
+        INFO = -1
       ELSE IF( .NOT.TRAN .AND. .NOT.NOTRAN ) THEN
-         INFO = -2
+        INFO = -2
       ELSE IF( M.LT.0 ) THEN
         INFO = -3
       ELSE IF( N.LT.0 ) THEN
         INFO = -4
-      ELSE IF( K.LT.0 ) THEN
+      ELSE IF( K.LT.0 .OR. K.GT.MN ) THEN
         INFO = -5
-      ELSE IF( LDA.LT.MAX( 1, K ) ) THEN
+      ELSE IF( LDA.LT.MAX( 1, MN ) ) THEN
         INFO = -7
-      ELSE IF( TSIZE.LT.MAX( 1, NB*K*NBLCKS + 5 )
-     $        .AND. ( .NOT.LQUERY ) ) THEN
+      ELSE IF( TSIZE.LT.5 ) THEN
         INFO = -9
-      ELSE IF( LDC.LT.MAX( 1, M ) .AND. MIN( M, N, K ).NE.0 ) THEN
-         INFO = -11
+      ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
+        INFO = -11
       ELSE IF( ( LWORK.LT.MAX( 1, LW ) ) .AND. ( .NOT.LQUERY ) ) THEN
         INFO = -13
       END IF
 *
-*     Determine the block size if it is tall skinny or short and wide
-*
-      IF( INFO.EQ.0 )  THEN
-        WORK(1) = LW
+      IF( INFO.EQ.0 ) THEN
+        WORK( 1 ) = LW
       END IF
 *
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CGEMQR', -INFO )
         RETURN
-      ELSE IF ( LQUERY ) THEN
-       RETURN
+      ELSE IF( LQUERY ) THEN
+        RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( MIN(M,N,K).EQ.0 ) THEN
+      IF( MIN( M, N, K ).EQ.0 ) THEN
         RETURN
       END IF
 *
       IF( ( LEFT .AND. M.LE.K ) .OR. ( RIGHT .AND. N.LE.K )
      $     .OR. ( MB.LE.K ) .OR. ( MB.GE.MAX( M, N, K ) ) ) THEN
-        CALL CGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA,
-     $        T(4), NB, C, LDC, WORK, INFO )
+        CALL CGEMQRT( SIDE, TRANS, M, N, K, NB, A, LDA, T( 6 ),
+     $                NB, C, LDC, WORK, INFO )
       ELSE
-        CALL CLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T(4),
-     $      NB, C, LDC, WORK, LWORK, INFO )
+        CALL CLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T( 6 ),
+     $                 NB, C, LDC, WORK, LWORK, INFO )
       END IF
 *
-      WORK(1) = LW
+      WORK( 1 ) = LW
 *
       RETURN
 *
