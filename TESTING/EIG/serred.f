@@ -415,7 +415,7 @@
      $                 2, 2, A, 2, S, U, 1, VT, 2,
      $                 W, 1, IW, INFO)
          CALL CHKXER( 'SGEJSV', INFOT, NOUT, LERR, OK )
-         INFOT = 14
+         INFOT = 15
          CALL SGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
      $                 2, 2, A, 2, S, U, 2, VT, 1,
      $                 W, 1, IW, INFO)
