@@ -33,14 +33,19 @@
 *  ==========
 *
 *> \param[in] SIDE
+*> \verbatim
 *>          SIDE is CHARACTER*1
 *>          = 'L': apply Q or Q**T from the Left;
 *>          = 'R': apply Q or Q**T from the Right.
+*> \endverbatim
 *>
 *> \param[in] TRANS
+*> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
 *>          = 'T':  Transpose, apply Q**T.
+*> \endverbatim
+*>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
@@ -115,18 +120,23 @@
 *> \endverbatim
 *>
 *> \param[in,out] C
+*> \verbatim
 *>          C is REAL array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
 *>          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
+*> \endverbatim
+*>
 *> \param[in] LDC
+*> \verbatim
 *>          LDC is INTEGER
 *>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
 *>         (workspace) REAL array, dimension (MAX(1,LWORK))
-*>
 *> \endverbatim
+*>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
@@ -137,8 +147,8 @@
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
-*>
 *> \endverbatim
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
