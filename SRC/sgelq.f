@@ -3,13 +3,13 @@
 *  ===========
 *
 *       SUBROUTINE SGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
-*                        INFO)
+*                         INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           INFO, LDA, M, N, TSIZE, LWORK
 *       ..
 *       .. Array Arguments ..
-*       REAL  A( LDA, * ), T( * ), WORK( * )
+*       REAL              A( LDA, * ), T( * ), WORK( * )
 *       ..
 *
 *
@@ -120,7 +120,7 @@
 *>
 *> The goal of the interface is to give maximum freedom to the developers for
 *> creating any LQ factorization algorithm they wish. The triangular 
-*> (trapezoidal) R has to be stored in the upper part of A. The upper part of A
+*> (trapezoidal) L has to be stored in the lower part of A. The lower part of A
 *> and the array T can be used to store any relevant information for applying or
 *> constructing the Q factor. The WORK array can safely be discarded after exit.
 *>
@@ -146,74 +146,73 @@
 *>
 *>          T(2): row block size (MB)
 *>          T(3): column block size (NB)
-*>          T(4:TSIZE): data structure needed for Q, computed by
-*>                           DLASWLQ or DGELQT
+*>          T(6:TSIZE): data structure needed for Q, computed by
+*>                           SLASWLQ or SGELQT
 *>
 *>  Depending on the matrix dimensions M and N, and row and column
-*>  block sizes MB and NB returned by ILAENV, GELQ will use either
-*>  LASWLQ (if the matrix is short-and-wide) or GELQT to compute
+*>  block sizes MB and NB returned by ILAENV, SGELQ will use either
+*>  SLASWLQ (if the matrix is short-and-wide) or SGELQT to compute
 *>  the LQ factorization.
 *> \endverbatim
 *>
 *  =====================================================================
       SUBROUTINE SGELQ( M, N, A, LDA, T, TSIZE, WORK, LWORK,
-     $   INFO)
+     $                  INFO )
 *
-*  -- LAPACK computational routine (version 3.5.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. --
-*     November 2013
+*     November 2016
 *
 *     .. Scalar Arguments ..
-      INTEGER           INFO, LDA, M, N, TSIZE, LWORK
+      INTEGER            INFO, LDA, M, N, TSIZE, LWORK
 *     ..
 *     .. Array Arguments ..
-      REAL              A( LDA, * ), T( * ), WORK( * )
+      REAL               A( LDA, * ), T( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     ..
 *     .. Local Scalars ..
-      LOGICAL    LQUERY, LMINWS, MINT, MINW
-      INTEGER    MB, NB, I, II, KK, MINTSZ, NBLCKS
+      LOGICAL            LQUERY, LMINWS, MINT, MINW
+      INTEGER            MB, NB, MINTSZ, NBLCKS
 *     ..
-*     .. EXTERNAL FUNCTIONS ..
+*     .. External Functions ..
       LOGICAL            LSAME
       EXTERNAL           LSAME
-*     .. EXTERNAL SUBROUTINES ..
+*     ..
+*     .. External Subroutines ..
       EXTERNAL           SGELQT, SLASWLQ, XERBLA
-*     .. INTRINSIC FUNCTIONS ..
+*     ..
+*     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN, MOD
 *     ..
-*     .. EXTERNAL FUNCTIONS ..
+*     .. External Functions ..
       INTEGER            ILAENV
       EXTERNAL           ILAENV
 *     ..
-*     .. EXECUTABLE STATEMENTS ..
+*     .. Executable statements ..
 *
-*     TEST THE INPUT ARGUMENTS
+*     Test the input arguments
 *
       INFO = 0
 *
-      LQUERY = ( TSIZE.EQ.-1 .OR. TSIZE.EQ.-2 .OR. 
+      LQUERY = ( TSIZE.EQ.-1 .OR. TSIZE.EQ.-2 .OR.
      $           LWORK.EQ.-1 .OR. LWORK.EQ.-2 )
 *
       MINT = .FALSE.
-      IF ( TSIZE.NE.-1 .AND. ( TSIZE.EQ.-2 .OR. LWORK.EQ.-2 ) ) THEN
-        MINT = .TRUE.
-      ENDIF
-*
       MINW = .FALSE.
-      IF ( LWORK.NE.-1 .AND. ( TSIZE.EQ.-2 .OR. LWORK.EQ.-2 ) ) THEN
-        MINW = .TRUE.
-      ENDIF
+      IF( TSIZE.EQ.-2 .OR. LWORK.EQ.-2 ) THEN
+        IF( TSIZE.NE.-1 ) MINT = .TRUE.
+        IF( LWORK.NE.-1 ) MINW = .TRUE.
+      END IF
 *
 *     Determine the block size
 *
-      IF ( MIN(M,N).GT.0 ) THEN
-        MB = ILAENV( 1, 'SGELQ ', ' ', M, N, 1, -1)
-        NB = ILAENV( 1, 'SGELQ ', ' ', M, N, 2, -1)
+      IF( MIN( M, N ).GT.0 ) THEN
+        MB = ILAENV( 1, 'SGELQ ', ' ', M, N, 1, -1 )
+        NB = ILAENV( 1, 'SGELQ ', ' ', M, N, 2, -1 )
       ELSE
         MB = 1
         NB = N
@@ -235,16 +234,16 @@
 *
       LMINWS = .FALSE.
       IF( ( TSIZE.LT.MAX( 1, MB*M*NBLCKS + 5 ) .OR. LWORK.LT.MB*M )
-     $    .AND. ( LWORK.GE.M ) .AND. ( TSIZE.GE.M + 5 )
-     $    .AND. ( .NOT.LQUERY) ) THEN
-        IF ( TSIZE.LT.MAX( 1, MB*M*NBLCKS + 5 ) ) THEN
-            LMINWS = .TRUE.
-            MB = 1
-            NB = N
+     $    .AND. ( LWORK.GE.M ) .AND. ( TSIZE.GE.MINTSZ )
+     $    .AND. ( .NOT.LQUERY ) ) THEN
+        IF( TSIZE.LT.MAX( 1, MB*M*NBLCKS + 5 ) ) THEN
+          LMINWS = .TRUE.
+          MB = 1
+          NB = N
         END IF
-        IF ( LWORK.LT.MB*M ) THEN
-            LMINWS = .TRUE.
-            MB = 1
+        IF( LWORK.LT.MB*M ) THEN
+          LMINWS = .TRUE.
+          MB = 1
         END IF
       END IF
 *
@@ -262,42 +261,43 @@
         INFO = -8
       END IF
 *
-      IF( INFO.EQ.0 )  THEN
-        IF ( MINT ) THEN
-          T(1) = MINTSZ
+      IF( INFO.EQ.0 ) THEN
+        IF( MINT ) THEN
+          T( 1 ) = MINTSZ
         ELSE
-          T(1) = MB*M*NBLCKS + 5
-        ENDIF
-        T(2) = MB
-        T(3) = NB
-        IF ( MINW ) THEN
-          WORK(1) = MAX( 1, N )
+          T( 1 ) = MB*M*NBLCKS + 5
+        END IF
+        T( 2 ) = MB
+        T( 3 ) = NB
+        IF( MINW ) THEN
+          WORK( 1 ) = MAX( 1, N )
         ELSE
-          WORK(1) = MAX( 1, MB*M )
-        ENDIF
+          WORK( 1 ) = MAX( 1, MB*M )
+        END IF
       END IF
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'SGELQ', -INFO )
         RETURN
-      ELSE IF (LQUERY) THEN
+      ELSE IF( LQUERY ) THEN
         RETURN
       END IF
 *
 *     Quick return if possible
 *
-      IF( MIN(M,N).EQ.0 ) THEN
+      IF( MIN( M, N ).EQ.0 ) THEN
         RETURN
       END IF
 *
 *     The LQ Decomposition
 *
       IF( ( N.LE.M ) .OR. ( NB.LE.M ) .OR. ( NB.GE.N ) ) THEN
-        CALL SGELQT( M, N, MB, A, LDA, T(4), MB, WORK, INFO)
+        CALL SGELQT( M, N, MB, A, LDA, T( 6 ), MB, WORK, INFO )
       ELSE
-        CALL SLASWLQ( M, N, MB, NB, A, LDA, T(4), MB, WORK,
-     $                    LWORK, INFO)
+        CALL SLASWLQ( M, N, MB, NB, A, LDA, T( 6 ), MB, WORK,
+     $                LWORK, INFO )
       END IF
-      WORK(1) = MAX( 1, MB*M )
+*
+      WORK( 1 ) = MAX( 1, MB*M )
       RETURN
 *
 *     End of SGELQ
