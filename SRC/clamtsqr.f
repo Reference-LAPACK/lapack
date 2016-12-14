@@ -33,14 +33,19 @@
 *  ==========
 *
 *> \param[in] SIDE
+*> \verbatim
 *>          SIDE is CHARACTER*1
 *>          = 'L': apply Q or Q**T from the Left;
 *>          = 'R': apply Q or Q**T from the Right.
+*> \endverbatim
 *>
 *> \param[in] TRANS
+*> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
 *>          = 'C':  Conjugate Transpose, apply Q**C.
+*> \endverbatim
+*>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
@@ -109,12 +114,17 @@
 *> \endverbatim
 *>
 *> \param[in,out] C
+*> \verbatim
 *>          C is COMPLEX array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
 *>          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
+*> \endverbatim
+*>
 *> \param[in] LDC
+*> \verbatim
 *>          LDC is INTEGER
 *>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
@@ -247,14 +257,13 @@
       ELSE IF(( LWORK.LT.MAX(1,LW)).AND.(.NOT.LQUERY)) THEN
         INFO = -15
       END IF
-      IF( INFO.EQ.0)  THEN
 *
 *     Determine the block size if it is tall skinny or short and wide
 *
       IF( INFO.EQ.0)  THEN
           WORK(1) = LW
       END IF
-      END IF
+*
       IF( INFO.NE.0 ) THEN
         CALL XERBLA( 'CLAMTSQR', -INFO )
         RETURN
@@ -354,10 +363,10 @@
 *
 *         Multiply Q to the current block of C (1:M,I:I+MB)
 *
-              CTR = CTR - 1
-              CALL CTPMQRT('R','C',M , MB-K, K, 0,NB, A(I,1), LDA,
-     $               T(1,CTR*K+1), LDT, C(1,1), LDC,
-     $               C(1,I), LDC, WORK, INFO )
+            CTR = CTR - 1
+            CALL CTPMQRT('R','C',M , MB-K, K, 0,NB, A(I,1), LDA,
+     $          T(1,CTR*K+1), LDT, C(1,1), LDC,
+     $          C(1,I), LDC, WORK, INFO )
           END DO
 *
 *         Multiply Q to the first block of C (1:M,1:MB)
@@ -397,11 +406,7 @@
 *
       END IF
 *
-      IF(LEFT) THEN
-        WORK(1)= N * NB
-      ELSE IF(RIGHT) THEN
-        WORK(1)= MB * NB
-      END IF
+      WORK(1) = LW
       RETURN
 *
 *     End of CLAMTSQR
