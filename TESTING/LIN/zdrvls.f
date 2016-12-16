@@ -10,7 +10,7 @@
 *
 *       SUBROUTINE ZDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
 *                          NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
-*                          COPYB, C, S, COPYS, WORK, RWORK, IWORK, NOUT )
+*                          COPYB, C, S, COPYS, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -19,11 +19,10 @@
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
-*       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+*       INTEGER            MVAL( * ), NBVAL( * ), NSVAL( * ),
 *      $                   NVAL( * ), NXVAL( * )
-*       DOUBLE PRECISION   COPYS( * ), RWORK( * ), S( * )
-*       COMPLEX*16         A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
-*      $                   WORK( * )
+*       DOUBLE PRECISION   COPYS( * ), S( * )
+*       COMPLEX*16         A( * ), B( * ), C( * ), COPYA( * ), COPYB( * )
 *       ..
 *
 *
@@ -32,8 +31,8 @@
 *>
 *> \verbatim
 *>
-*> ZDRVLS tests the least squares driver routines ZGELS, CGELSS, ZGELSY
-*> and CGELSD.
+*> ZDRVLS tests the least squares driver routines ZGELS, ZGETSLS, ZGELSS, ZGELSY
+*> and ZGELSD.
 *> \endverbatim
 *
 *  Arguments:
@@ -170,22 +169,6 @@
 *>                      (min(MMAX,NMAX))
 *> \endverbatim
 *>
-*> \param[out] WORK
-*> \verbatim
-*>          WORK is COMPLEX*16 array, dimension
-*>                      (MMAX*NMAX + 4*NMAX + MMAX).
-*> \endverbatim
-*>
-*> \param[out] RWORK
-*> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension (5*NMAX-1)
-*> \endverbatim
-*>
-*> \param[out] IWORK
-*> \verbatim
-*>          IWORK is INTEGER array, dimension (15*NMAX)
-*> \endverbatim
-*>
 *> \param[in] NOUT
 *> \verbatim
 *>          NOUT is INTEGER
@@ -207,7 +190,7 @@
 *  =====================================================================
       SUBROUTINE ZDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
-     $                   COPYB, C, S, COPYS, WORK, RWORK, IWORK, NOUT )
+     $                   COPYB, C, S, COPYS, NOUT )
 *
 *  -- LAPACK test routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -221,11 +204,10 @@
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
-      INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+      INTEGER            MVAL( * ), NBVAL( * ), NSVAL( * ),
      $                   NVAL( * ), NXVAL( * )
-      DOUBLE PRECISION   COPYS( * ), RWORK( * ), S( * )
-      COMPLEX*16         A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
-     $                   WORK( * )
+      DOUBLE PRECISION   COPYS( * ), S( * )
+      COMPLEX*16         A( * ), B( * ), C( * ), COPYA( * ), COPYB( * )
 *     ..
 *
 *  =====================================================================
@@ -247,12 +229,22 @@
       INTEGER            CRANK, I, IM, IMB, IN, INB, INFO, INS, IRANK,
      $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK,
      $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
-     $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB, LWTS
+     $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB,
+     $                   MMAX, NMAX, NSMAX, LIWORK, LRWORK,
+     $                   LWORK_ZGELS, LWORK_ZGETSLS, LWORK_ZGELSS,
+     $                   LWORK_ZGELSY, LWORK_ZGELSD,
+     $                   LRWORK_ZGELSY, LRWORK_ZGELSS, LRWORK_ZGELSD
       DOUBLE PRECISION   EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
-      INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      DOUBLE PRECISION   RESULT( NTESTS )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IWORKQUERY
+      DOUBLE PRECISION   RESULT( NTESTS ), RWORKQUERY
+      COMPLEX*16         WORKQUERY
+*     ..
+*     .. Allocatable Arrays ..
+      COMPLEX*16, ALLOCATABLE :: WORK (:)
+      DOUBLE PRECISION, ALLOCATABLE :: RWORK (:)
+      INTEGER, ALLOCATABLE :: IWORK (:)
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DASUM, DLAMCH, ZQRT12, ZQRT14, ZQRT17
@@ -265,7 +257,7 @@
      $                   ZQRT16, ZGETSLS
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, MAX, MIN, SQRT
+      INTRINSIC          DBLE, MAX, MIN, INT, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -309,6 +301,77 @@
      $   CALL ALAHD( NOUT, PATH )
       INFOT = 0
 *
+*     Compute maximal workspace needed for all routines
+*
+      NMAX = 0
+      MMAX = 0
+      NSMAX = 0
+      DO I = 1, NM
+         IF ( MVAL( I ).GT.MMAX ) THEN
+            MMAX = MVAL( I )
+         END IF
+      ENDDO
+      DO I = 1, NN
+         IF ( NVAL( I ).GT.NMAX ) THEN
+            NMAX = NVAL( I )
+         END IF
+      ENDDO
+      DO I = 1, NNS
+         IF ( NSVAL( I ).GT.NSMAX ) THEN
+            NSMAX = NSVAL( I )
+         END IF
+      ENDDO
+      M = MMAX
+      N = NMAX
+      NRHS = NSMAX
+      LDA = MAX( 1, M )
+      LDB = MAX( 1, M, N )
+      MNMIN = MAX( MIN( M, N ), 1 )
+*
+*     Compute workspace needed for routines
+*     ZQRT14, ZQRT17 (two side cases), ZQRT15 and ZQRT12
+*
+      LWORK = MAX( ( M+N )*NRHS,
+     $      ( N+NRHS )*( M+2 ), ( M+NRHS )*( N+2 ),
+     $      MAX( M+MNMIN, NRHS*MNMIN,2*N+M ),
+     $      MAX( M*N+4*MNMIN+MAX(M,N), M*N+2*MNMIN+4*N ) )
+*
+*     Compute workspace needed for ZGELS
+      CALL ZGELS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $            WORKQUERY, -1, INFO )
+      LWORK_ZGELS = INT ( WORKQUERY )
+*     Compute workspace needed for ZGETSLS
+      CALL ZGETSLS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $              WORKQUERY, -1, INFO )
+      LWORK_ZGETSLS = INT( WORKQUERY )
+*     Compute workspace needed for ZGELSY
+      CALL ZGELSY( M, N, NRHS, A, LDA, B, LDB, IWORKQUERY,
+     $             RCOND, CRANK, WORKQUERY, -1, RWORK, INFO )
+      LWORK_ZGELSY = INT( WORKQUERY )
+      LRWORK_ZGELSY = 2*N
+*     Compute workspace needed for ZGELSS
+      CALL ZGELSS( M, N, NRHS, A, LDA, B, LDB, S,
+     $             RCOND, CRANK, WORKQUERY, -1 , RWORK, INFO )
+      LWORK_ZGELSS = INT( WORKQUERY )
+      LRWORK_ZGELSS = 5*MNMIN
+*     Compute workspace needed for ZGELSD
+      CALL ZGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND, CRANK,
+     $             WORKQUERY, -1, RWORKQUERY, IWORKQUERY, INFO )
+      LWORK_ZGELSD = INT( WORKQUERY )
+      LRWORK_ZGELSD = INT( RWORKQUERY )
+*     Compute LIWORK workspace needed for ZGELSY and ZGELSD
+      LIWORK = MAX( 1, N, IWORKQUERY )
+*     Compute LRWORK workspace needed for ZGELSY, ZGELSS and ZGELSD
+      LRWORK = MAX( 1, LRWORK_ZGELSY, LRWORK_ZGELSS, LRWORK_ZGELSD )
+*     Compute LWORK workspace needed for all functions
+      LWORK = MAX( 1, LWORK, LWORK_ZGELS, LWORK_ZGETSLS, LWORK_ZGELSY,
+     $             LWORK_ZGELSS, LWORK_ZGELSD )
+      LWLSY = LWORK
+*
+      ALLOCATE( WORK( LWORK ) )
+      ALLOCATE( IWORK( LIWORK ) )
+      ALLOCATE( RWORK( LRWORK ) )
+*
       DO 140 IM = 1, NM
          M = MVAL( IM )
          LDA = MAX( 1, M )
@@ -318,16 +381,9 @@
             MNMIN = MAX(MIN( M, N ),1)
             LDB = MAX( 1, M, N )
             MB = (MNMIN+1)
-            IF(MNMIN.NE.MB) THEN
-              LWTS = (((LDB-MB)/(MB-MNMIN))*MNMIN+LDB*2)*MB+5
-            ELSE
-              LWTS = 2*MNMIN+5
-            END IF
 *
             DO 120 INS = 1, NNS
                NRHS = NSVAL( INS )
-               LWORK = MAX( 1, ( M+NRHS )*( N+2 ), ( N+NRHS )*( M+2 ),
-     $                 M*N+4*MNMIN+MAX( M, N ), 2*N+M, LWTS )
 *
                DO 110 IRANK = 1, 2
                   DO 100 ISCALE = 1, 3
@@ -578,12 +634,6 @@
                            IWORK( J ) = 0
    70                   CONTINUE
 *
-*                       Set LWLSY to the adequate value.
-*
-                        LWLSY = MNMIN + MAX( 2*MNMIN, NB*( N+1 ),
-     $                          MNMIN+NB*NRHS )
-                        LWLSY = MAX( 1, LWLSY )
-*
                         SRNAMT = 'ZGELSY'
                         CALL ZGELSY( M, N, NRHS, A, LDA, B, LDB, IWORK,
      $                               RCOND, CRANK, WORK, LWLSY, RWORK,
@@ -774,6 +824,10 @@
  9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,
      $      ', MB=', I4,', NB=', I4,', type', I2,
      $      ', test(', I2, ')=', G12.5 )
+*
+      DEALLOCATE( WORK )
+      DEALLOCATE( IWORK )
+      DEALLOCATE( RWORK )
       RETURN
 *
 *     End of ZDRVLS

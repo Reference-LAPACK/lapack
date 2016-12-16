@@ -161,13 +161,13 @@
       CALL CGEMQR( 'L', 'N', 2, 1, 0, A, 0, TAU, 1, C, 1, W, 1,INFO)
       CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL CGEMQR( 'R', 'N', 2, 2, 1, A, 1, TAU, 0, C, 1, W, 1,INFO)
+      CALL CGEMQR( 'R', 'N', 2, 2, 1, A, 2, TAU, 0, C, 1, W, 1,INFO)
       CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL CGEMQR( 'L', 'N', 2, 2, 1, A, 1, TAU, 0, C, 1, W, 1,INFO)
+      CALL CGEMQR( 'L', 'N', 2, 2, 1, A, 2, TAU, 0, C, 1, W, 1,INFO)
       CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL CGEMQR( 'L', 'N', 2, 1, 1, A, 1, TAU, 6, C, 0, W, 1,INFO)
+      CALL CGEMQR( 'L', 'N', 2, 1, 1, A, 2, TAU, 6, C, 0, W, 1,INFO)
       CALL CHKXER( 'CGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 13
       CALL CGEMQR( 'L', 'N', 2, 2, 1, A, 2, TAU, 6, C, 2, W, 0,INFO)

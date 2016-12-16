@@ -10,8 +10,7 @@
 *
 *       SUBROUTINE CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
 *                          NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
-*                          COPYB, C, S, COPYS, WORK, RWORK, IWORK,
-*                          NOUT )
+*                          COPYB, C, S, COPYS, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -20,11 +19,10 @@
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
-*       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+*       INTEGER            MVAL( * ), NBVAL( * ), NSVAL( * ),
 *      $                   NVAL( * ), NXVAL( * )
-*       REAL               COPYS( * ), RWORK( * ), S( * )
-*       COMPLEX            A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
-*      $                   WORK( * )
+*       REAL               COPYS( * ), S( * )
+*       COMPLEX            A( * ), B( * ), C( * ), COPYA( * ), COPYB( * )
 *       ..
 *
 *
@@ -33,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> CDRVLS tests the least squares driver routines CGELS, CGELSS, CGELSY
+*> CDRVLS tests the least squares driver routines CGELS, CGETSLS, CGELSS, CGELSY
 *> and CGELSD.
 *> \endverbatim
 *
@@ -171,22 +169,6 @@
 *>                      (min(MMAX,NMAX))
 *> \endverbatim
 *>
-*> \param[out] WORK
-*> \verbatim
-*>          WORK is COMPLEX array, dimension
-*>                      (MMAX*NMAX + 4*NMAX + MMAX).
-*> \endverbatim
-*>
-*> \param[out] RWORK
-*> \verbatim
-*>          RWORK is REAL array, dimension (5*NMAX-1)
-*> \endverbatim
-*>
-*> \param[out] IWORK
-*> \verbatim
-*>          IWORK is INTEGER array, dimension (15*NMAX)
-*> \endverbatim
-*>
 *> \param[in] NOUT
 *> \verbatim
 *>          NOUT is INTEGER
@@ -208,8 +190,7 @@
 *  =====================================================================
       SUBROUTINE CDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
-     $                   COPYB, C, S, COPYS, WORK, RWORK, IWORK,
-     $                   NOUT )
+     $                   COPYB, C, S, COPYS, NOUT )
 *
 *  -- LAPACK test routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -223,11 +204,10 @@
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
-      INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+      INTEGER            MVAL( * ), NBVAL( * ), NSVAL( * ),
      $                   NVAL( * ), NXVAL( * )
-      REAL               COPYS( * ), RWORK( * ), S( * )
-      COMPLEX            A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
-     $                   WORK( * )
+      REAL               COPYS( * ), S( * )
+      COMPLEX            A( * ), B( * ), C( * ), COPYA( * ), COPYB( * )
 *     ..
 *
 *  =====================================================================
@@ -249,12 +229,22 @@
       INTEGER            CRANK, I, IM, IMB, IN, INB, INFO, INS, IRANK,
      $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK,
      $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
-     $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB, LWTS
+     $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB,
+     $                   MMAX, NMAX, NSMAX, LIWORK, LRWORK,
+     $                   LWORK_CGELS, LWORK_CGETSLS, LWORK_CGELSS,
+     $                   LWORK_CGELSY, LWORK_CGELSD,
+     $                   LRWORK_CGELSY, LRWORK_CGELSS, LRWORK_CGELSD
       REAL               EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
-      INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      REAL               RESULT( NTESTS )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IWORKQUERY
+      REAL               RESULT( NTESTS ), RWORKQUERY
+      COMPLEX            WORKQUERY
+*     ..
+*     .. Allocatable Arrays ..
+      COMPLEX, ALLOCATABLE :: WORK (:)
+      REAL, ALLOCATABLE :: RWORK (:)
+      INTEGER, ALLOCATABLE :: IWORK (:)
 *     ..
 *     .. External Functions ..
       REAL               CQRT12, CQRT14, CQRT17, SASUM, SLAMCH
@@ -267,7 +257,7 @@
      $                   SAXPY, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN, REAL, SQRT
+      INTRINSIC          MAX, MIN, INT, REAL, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -311,6 +301,77 @@
      $   CALL ALAHD( NOUT, PATH )
       INFOT = 0
 *
+*     Compute maximal workspace needed for all routines
+*
+      NMAX = 0
+      MMAX = 0
+      NSMAX = 0
+      DO I = 1, NM
+         IF ( MVAL( I ).GT.MMAX ) THEN
+            MMAX = MVAL( I )
+         END IF
+      ENDDO
+      DO I = 1, NN
+         IF ( NVAL( I ).GT.NMAX ) THEN
+            NMAX = NVAL( I )
+         END IF
+      ENDDO
+      DO I = 1, NNS
+         IF ( NSVAL( I ).GT.NSMAX ) THEN
+            NSMAX = NSVAL( I )
+         END IF
+      ENDDO
+      M = MMAX
+      N = NMAX
+      NRHS = NSMAX
+      LDA = MAX( 1, M )
+      LDB = MAX( 1, M, N )
+      MNMIN = MAX( MIN( M, N ), 1 )
+*
+*     Compute workspace needed for routines
+*     CQRT14, CQRT17 (two side cases), CQRT15 and CQRT12
+*
+      LWORK = MAX( ( M+N )*NRHS,
+     $      ( N+NRHS )*( M+2 ), ( M+NRHS )*( N+2 ),
+     $      MAX( M+MNMIN, NRHS*MNMIN,2*N+M ),
+     $      MAX( M*N+4*MNMIN+MAX(M,N), M*N+2*MNMIN+4*N ) )
+*
+*     Compute workspace needed for CGELS
+      CALL CGELS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $            WORKQUERY, -1, INFO )
+      LWORK_CGELS = INT( WORKQUERY )
+*     Compute workspace needed for CGETSLS
+      CALL CGETSLS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $              WORKQUERY, -1, INFO )
+      LWORK_CGETSLS = INT( WORKQUERY )
+*     Compute workspace needed for CGELSY
+      CALL CGELSY( M, N, NRHS, A, LDA, B, LDB, IWORKQUERY,
+     $             RCOND, CRANK, WORKQUERY, -1, RWORK, INFO )
+      LWORK_CGELSY = INT( WORKQUERY )
+      LRWORK_CGELSY = 2*N
+*     Compute workspace needed for CGELSS
+      CALL CGELSS( M, N, NRHS, A, LDA, B, LDB, S,
+     $             RCOND, CRANK, WORKQUERY, -1, RWORK, INFO )
+      LWORK_CGELSS = INT( WORKQUERY )
+      LRWORK_CGELSS = 5*MNMIN
+*     Compute workspace needed for CGELSD
+      CALL CGELSD( M, N, NRHS, A, LDA, B, LDB, S, RCOND, CRANK,
+     $             WORKQUERY, -1, RWORKQUERY, IWORKQUERY, INFO )
+      LWORK_CGELSD = INT( WORKQUERY )
+      LRWORK_CGELSD = INT( RWORKQUERY )
+*     Compute LIWORK workspace needed for CGELSY and CGELSD
+      LIWORK = MAX( 1, N, IWORKQUERY )
+*     Compute LRWORK workspace needed for CGELSY, CGELSS and CGELSD
+      LRWORK = MAX( 1, LRWORK_CGELSY, LRWORK_CGELSS, LRWORK_CGELSD )
+*     Compute LWORK workspace needed for all functions
+      LWORK = MAX( 1, LWORK, LWORK_CGELS, LWORK_CGETSLS, LWORK_CGELSY,
+     $             LWORK_CGELSS, LWORK_CGELSD )
+      LWLSY = LWORK
+*
+      ALLOCATE( WORK( LWORK ) )
+      ALLOCATE( IWORK( LIWORK ) )
+      ALLOCATE( RWORK( LRWORK ) )
+*
       DO 140 IM = 1, NM
          M = MVAL( IM )
          LDA = MAX( 1, M )
@@ -320,16 +381,9 @@
             MNMIN = MAX(MIN( M, N ),1)
             LDB = MAX( 1, M, N )
             MB = (MNMIN+1)
-            IF(MNMIN.NE.MB) THEN
-              LWTS = (((LDB-MB)/(MB-MNMIN))*MNMIN+MNMIN*2)*MB+5
-            ELSE
-              LWTS = 2*MNMIN+5
-            END IF
 *
             DO 120 INS = 1, NNS
                NRHS = NSVAL( INS )
-               LWORK = MAX( 1, ( M+NRHS )*( N+2 ), ( N+NRHS )*( M+2 ),
-     $                 M*N+4*MNMIN+MAX( M, N ), 2*N+M, LWTS )
 *
                DO 110 IRANK = 1, 2
                   DO 100 ISCALE = 1, 3
@@ -580,12 +634,6 @@
                            IWORK( J ) = 0
    70                   CONTINUE
 *
-*                       Set LWLSY to the adequate value.
-*
-                        LWLSY = MNMIN + MAX( 2*MNMIN, NB*( N+1 ),
-     $                          MNMIN+NB*NRHS )
-                        LWLSY = MAX( 1, LWLSY )
-*
                         SRNAMT = 'CGELSY'
                         CALL CGELSY( M, N, NRHS, A, LDA, B, LDB, IWORK,
      $                               RCOND, CRANK, WORK, LWLSY, RWORK,
@@ -776,6 +824,10 @@
  9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,
      $      ', MB=', I4,', NB=', I4,', type', I2,
      $      ', test(', I2, ')=', G12.5 )
+*
+      DEALLOCATE( WORK )
+      DEALLOCATE( RWORK )
+      DEALLOCATE( IWORK )
       RETURN
 *
 *     End of CDRVLS

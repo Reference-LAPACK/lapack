@@ -10,7 +10,7 @@
 *
 *       SUBROUTINE SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
 *                          NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
-*                          COPYB, C, S, COPYS, WORK, IWORK, NOUT )
+*                          COPYB, C, S, COPYS, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -19,10 +19,10 @@
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
-*       INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+*       INTEGER            MVAL( * ), NBVAL( * ), NSVAL( * ),
 *      $                   NVAL( * ), NXVAL( * )
 *       REAL               A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
-*      $                   COPYS( * ), S( * ), WORK( * )
+*      $                   COPYS( * ), S( * )
 *       ..
 *
 *
@@ -169,17 +169,6 @@
 *>                      (min(MMAX,NMAX))
 *> \endverbatim
 *>
-*> \param[out] WORK
-*> \verbatim
-*>          WORK is REAL array,
-*>                      dimension (MMAX*NMAX + 4*NMAX + MMAX).
-*> \endverbatim
-*>
-*> \param[out] IWORK
-*> \verbatim
-*>          IWORK is INTEGER array, dimension (15*NMAX)
-*> \endverbatim
-*>
 *> \param[in] NOUT
 *> \verbatim
 *>          NOUT is INTEGER
@@ -201,7 +190,7 @@
 *  =====================================================================
       SUBROUTINE SDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A, COPYA, B,
-     $                   COPYB, C, S, COPYS, WORK, IWORK, NOUT )
+     $                   COPYB, C, S, COPYS, NOUT )
 *
 *  -- LAPACK test routine (version 3.6.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -215,10 +204,10 @@
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
-      INTEGER            IWORK( * ), MVAL( * ), NBVAL( * ), NSVAL( * ),
+      INTEGER            MVAL( * ), NBVAL( * ), NSVAL( * ),
      $                   NVAL( * ), NXVAL( * )
       REAL               A( * ), B( * ), C( * ), COPYA( * ), COPYB( * ),
-     $                   COPYS( * ), S( * ), WORK( * )
+     $                   COPYS( * ), S( * )
 *     ..
 *
 *  =====================================================================
@@ -237,12 +226,19 @@
       INTEGER            CRANK, I, IM, IMB, IN, INB, INFO, INS, IRANK,
      $                   ISCALE, ITRAN, ITYPE, J, K, LDA, LDB, LDWORK,
      $                   LWLSY, LWORK, M, MNMIN, N, NB, NCOLS, NERRS,
-     $                   NFAIL, NLVL, NRHS, NROWS, NRUN, RANK, MB, LWTS
+     $                   NFAIL, NRHS, NROWS, NRUN, RANK, MB,
+     $                   MMAX, NMAX, NSMAX, LIWORK,
+     $                   LWORK_SGELS, LWORK_SGETSLS, LWORK_SGELSS,
+     $                   LWORK_SGELSY, LWORK_SGELSD
       REAL               EPS, NORMA, NORMB, RCOND
 *     ..
 *     .. Local Arrays ..
-      INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      REAL               RESULT( NTESTS )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 ), IWORKQUERY
+      REAL               RESULT( NTESTS ), WORKQUERY
+*     ..
+*     .. Allocatable Arrays ..
+      REAL, ALLOCATABLE :: WORK (:)
+      INTEGER, ALLOCATABLE :: IWORK (:)
 *     ..
 *     .. External Functions ..
       REAL               SASUM, SLAMCH, SQRT12, SQRT14, SQRT17
@@ -302,6 +298,71 @@
       CALL XLAENV( 2, 2 )
       CALL XLAENV( 9, SMLSIZ )
 *
+*     Compute maximal workspace needed for all routines
+*
+      NMAX = 0
+      MMAX = 0
+      NSMAX = 0
+      DO I = 1, NM
+         IF ( MVAL( I ).GT.MMAX ) THEN
+            MMAX = MVAL( I )
+         END IF
+      ENDDO
+      DO I = 1, NN
+         IF ( NVAL( I ).GT.NMAX ) THEN
+            NMAX = NVAL( I )
+         END IF
+      ENDDO
+      DO I = 1, NNS
+         IF ( NSVAL( I ).GT.NSMAX ) THEN
+            NSMAX = NSVAL( I )
+         END IF
+      ENDDO
+      M = MMAX
+      N = NMAX
+      NRHS = NSMAX
+      LDA = MAX( 1, M )
+      LDB = MAX( 1, M, N )
+      MNMIN = MAX( MIN( M, N ), 1 )
+*
+*     Compute workspace needed for routines
+*     SQRT14, SQRT17 (two side cases), SQRT15 and SQRT12
+*
+      LWORK = MAX( ( M+N )*NRHS,
+     $      ( N+NRHS )*( M+2 ), ( M+NRHS )*( N+2 ),
+     $      MAX( M+MNMIN, NRHS*MNMIN,2*N+M ),
+     $      MAX( M*N+4*MNMIN+MAX(M,N), M*N+2*MNMIN+4*N ) )
+*
+*     Compute workspace needed for SGELS
+      CALL SGELS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $            WORKQUERY, -1, INFO )
+      LWORK_SGELS = INT ( WORKQUERY )
+*     Compute workspace needed for SGETSLS
+      CALL SGETSLS( 'N', M, N, NRHS, A, LDA, B, LDB,
+     $              WORKQUERY, -1, INFO )
+      LWORK_SGETSLS = INT( WORKQUERY )
+*     Compute workspace needed for SGELSY
+      CALL SGELSY( M, N, NRHS, A, LDA, B, LDB, IWORKQUERY,
+     $             RCOND, CRANK, WORKQUERY, -1, INFO )
+      LWORK_SGELSY = INT( WORKQUERY )
+*     Compute workspace needed for SGELSS
+      CALL SGELSS( M, N, NRHS, A, LDA, B, LDB, S,
+     $             RCOND, CRANK, WORKQUERY, -1 , INFO )
+      LWORK_SGELSS = INT( WORKQUERY )
+*     Compute workspace needed for SGELSD
+      CALL SGELSD( M, N, NRHS, A, LDA, B, LDB, S,
+     $             RCOND, CRANK, WORKQUERY, -1, IWORKQUERY, INFO )
+      LWORK_SGELSD = INT( WORKQUERY )
+*     Compute LIWORK workspace needed for SGELSY and SGELSD
+      LIWORK = MAX( 1, N, IWORKQUERY )
+*     Compute LWORK workspace needed for all functions
+      LWORK = MAX( 1, LWORK, LWORK_SGELS, LWORK_SGETSLS, LWORK_SGELSY,
+     $             LWORK_SGELSS, LWORK_SGELSD )
+      LWLSY = LWORK
+*
+      ALLOCATE( WORK( LWORK ) )
+      ALLOCATE( IWORK( LIWORK ) )
+*
       DO 150 IM = 1, NM
          M = MVAL( IM )
          LDA = MAX( 1, M )
@@ -311,20 +372,9 @@
             MNMIN = MAX(MIN( M, N ),1)
             LDB = MAX( 1, M, N )
             MB = (MNMIN+1)
-            IF(MNMIN.NE.MB) THEN
-              LWTS = (((LDB-MB)/(MB-MNMIN))*MNMIN+MNMIN*2)*MB+5
-            ELSE
-              LWTS = 2*MNMIN+5
-            END IF
 *
             DO 130 INS = 1, NNS
                NRHS = NSVAL( INS )
-               NLVL = MAX( INT( LOG( MAX( ONE, REAL( MNMIN ) ) /
-     $                REAL( SMLSIZ+1 ) ) / LOG( TWO ) ) + 1, 0 )
-               LWORK = MAX( 1, ( M+NRHS )*( N+2 ), ( N+NRHS )*( M+2 ),
-     $                 M*N+4*MNMIN+MAX( M, N ), 12*MNMIN+2*MNMIN*SMLSIZ+
-     $                 8*MNMIN*NLVL+MNMIN*NRHS+(SMLSIZ+1)**2,LWTS)
-     $
 *
                DO 120 IRANK = 1, 2
                   DO 110 ISCALE = 1, 3
@@ -570,11 +620,6 @@
                            IWORK( J ) = 0
    70                   CONTINUE
 *
-*                       Set LWLSY to the adequate value.
-*
-                        LWLSY = MAX( 1, MNMIN+2*N+NB*( N+1 ),
-     $                          2*MNMIN+NB*NRHS )
-*
                         CALL SLACPY( 'Full', M, N, COPYA, LDA, A, LDA )
                         CALL SLACPY( 'Full', M, NRHS, COPYB, LDB, B,
      $                               LDB )
@@ -768,6 +813,9 @@
  9997 FORMAT( ' TRANS=''', A1,' M=', I5, ', N=', I5, ', NRHS=', I4,
      $      ', MB=', I4,', NB=', I4,', type', I2,
      $      ', test(', I2, ')=', G12.5 )
+*
+      DEALLOCATE( WORK )
+      DEALLOCATE( IWORK )
       RETURN
 *
 *     End of SDRVLS
