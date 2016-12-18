@@ -13,8 +13,9 @@ os:
   - linux
   - osx
 
-before_install:
-  - brew install gcc49
+#Not working
+#before_install:
+#  - brew install gcc49
   
 script:
   - export PR=https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST
