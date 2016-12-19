@@ -287,7 +287,8 @@
       EXTERNAL           LSAME, ILAENV, ICAMAX, SLAMCH, SCASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CCOPY, CSSCAL, CGEMV, CLATRS
+      EXTERNAL           XERBLA, CCOPY, CLASET, CSSCAL, CGEMM, CGEMV,
+     $                   CLATRS, SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, CMPLX, CONJG, AIMAG, MAX
