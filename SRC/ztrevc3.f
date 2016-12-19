@@ -288,6 +288,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZCOPY, ZDSCAL, ZGEMV, ZLATRS
+     $                   ZGEMM, DLABAD, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, CONJG, AIMAG, MAX
