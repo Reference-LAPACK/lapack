@@ -8679,16 +8679,16 @@ lapack_int LAPACKE_ssbevx_work( int matrix_layout, char jobz, char range,
                                 lapack_int ldq, float vl, float vu,
                                 lapack_int il, lapack_int iu, float abstol,
                                 lapack_int* m, float* w, float* z,
-                                lapack_int ldz, float* work, lapack_int* iwork,
-                                lapack_int* ifail );
+                                lapack_int ldz, float* work,
+                                lapack_int* iwork, lapack_int* ifail );
 lapack_int LAPACKE_dsbevx_work( int matrix_layout, char jobz, char range,
                                 char uplo, lapack_int n, lapack_int kd,
                                 double* ab, lapack_int ldab, double* q,
                                 lapack_int ldq, double vl, double vu,
                                 lapack_int il, lapack_int iu, double abstol,
                                 lapack_int* m, double* w, double* z,
-                                lapack_int ldz, double* work, lapack_int* iwork,
-                                lapack_int* ifail );
+                                lapack_int ldz, double* work,
+                                lapack_int* iwork, lapack_int* ifail );
 
 lapack_int LAPACKE_ssbgst_work( int matrix_layout, char vect, char uplo,
                                 lapack_int n, lapack_int ka, lapack_int kb,
@@ -12001,6 +12001,372 @@ lapack_int LAPACKE_zgetsls_work( int matrix_layout, char trans, lapack_int m,
                                  lapack_complex_double* b, lapack_int ldb,
                                  lapack_complex_double* work, lapack_int lwork );
 
+lapack_int LAPACKE_ssyev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                          float* a, lapack_int lda, float* w );
+lapack_int LAPACKE_dsyev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                          double* a, lapack_int lda, double* w );
+
+lapack_int LAPACKE_ssyevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                           float* a, lapack_int lda, float* w );
+lapack_int LAPACKE_dsyevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                           double* a, lapack_int lda, double* w );
+
+lapack_int LAPACKE_ssyevr_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, float* a, lapack_int lda, float vl,
+                           float vu, lapack_int il, lapack_int iu, float abstol,
+                           lapack_int* m, float* w, float* z, lapack_int ldz,
+                           lapack_int* isuppz );
+lapack_int LAPACKE_dsyevr_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, double* a, lapack_int lda, double vl,
+                           double vu, lapack_int il, lapack_int iu,
+                           double abstol, lapack_int* m, double* w, double* z,
+                           lapack_int ldz, lapack_int* isuppz );
+
+lapack_int LAPACKE_ssyevx_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, float* a, lapack_int lda, float vl,
+                           float vu, lapack_int il, lapack_int iu, float abstol,
+                           lapack_int* m, float* w, float* z, lapack_int ldz,
+                           lapack_int* ifail );
+lapack_int LAPACKE_dsyevx_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, double* a, lapack_int lda, double vl,
+                           double vu, lapack_int il, lapack_int iu,
+                           double abstol, lapack_int* m, double* w, double* z,
+                           lapack_int ldz, lapack_int* ifail );
+
+lapack_int LAPACKE_ssyev_2stage_work( int matrix_layout, char jobz, char uplo,
+                               lapack_int n, float* a, lapack_int lda, float* w,
+                               float* work, lapack_int lwork );
+lapack_int LAPACKE_dsyev_2stage_work( int matrix_layout, char jobz, char uplo,
+                               lapack_int n, double* a, lapack_int lda,
+                               double* w, double* work, lapack_int lwork );
+
+lapack_int LAPACKE_ssyevd_2stage_work( int matrix_layout, char jobz, char uplo,
+                                lapack_int n, float* a, lapack_int lda,
+                                float* w, float* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int liwork );
+lapack_int LAPACKE_dsyevd_2stage_work( int matrix_layout, char jobz, char uplo,
+                                lapack_int n, double* a, lapack_int lda,
+                                double* w, double* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int liwork );
+
+lapack_int LAPACKE_ssyevr_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n, float* a,
+                                lapack_int lda, float vl, float vu,
+                                lapack_int il, lapack_int iu, float abstol,
+                                lapack_int* m, float* w, float* z,
+                                lapack_int ldz, lapack_int* isuppz, float* work,
+                                lapack_int lwork, lapack_int* iwork,
+                                lapack_int liwork );
+lapack_int LAPACKE_dsyevr_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n, double* a,
+                                lapack_int lda, double vl, double vu,
+                                lapack_int il, lapack_int iu, double abstol,
+                                lapack_int* m, double* w, double* z,
+                                lapack_int ldz, lapack_int* isuppz,
+                                double* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int liwork );
+
+lapack_int LAPACKE_ssyevx_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n, float* a,
+                                lapack_int lda, float vl, float vu,
+                                lapack_int il, lapack_int iu, float abstol,
+                                lapack_int* m, float* w, float* z,
+                                lapack_int ldz, float* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int* ifail );
+lapack_int LAPACKE_dsyevx_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n, double* a,
+                                lapack_int lda, double vl, double vu,
+                                lapack_int il, lapack_int iu, double abstol,
+                                lapack_int* m, double* w, double* z,
+                                lapack_int ldz, double* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int* ifail );
+
+lapack_int LAPACKE_cheev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                          lapack_complex_float* a, lapack_int lda, float* w );
+lapack_int LAPACKE_zheev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                          lapack_complex_double* a, lapack_int lda, double* w );
+
+lapack_int LAPACKE_cheevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                           lapack_complex_float* a, lapack_int lda, float* w );
+lapack_int LAPACKE_zheevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                           lapack_complex_double* a, lapack_int lda,
+                           double* w );
+
+lapack_int LAPACKE_cheevr_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, lapack_complex_float* a,
+                           lapack_int lda, float vl, float vu, lapack_int il,
+                           lapack_int iu, float abstol, lapack_int* m, float* w,
+                           lapack_complex_float* z, lapack_int ldz,
+                           lapack_int* isuppz );
+lapack_int LAPACKE_zheevr_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, lapack_complex_double* a,
+                           lapack_int lda, double vl, double vu, lapack_int il,
+                           lapack_int iu, double abstol, lapack_int* m,
+                           double* w, lapack_complex_double* z, lapack_int ldz,
+                           lapack_int* isuppz );
+
+lapack_int LAPACKE_cheevx_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, lapack_complex_float* a,
+                           lapack_int lda, float vl, float vu, lapack_int il,
+                           lapack_int iu, float abstol, lapack_int* m, float* w,
+                           lapack_complex_float* z, lapack_int ldz,
+                           lapack_int* ifail );
+lapack_int LAPACKE_zheevx_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, lapack_complex_double* a,
+                           lapack_int lda, double vl, double vu, lapack_int il,
+                           lapack_int iu, double abstol, lapack_int* m,
+                           double* w, lapack_complex_double* z, lapack_int ldz,
+                           lapack_int* ifail );
+
+lapack_int LAPACKE_cheev_2stage_work( int matrix_layout, char jobz, char uplo,
+                               lapack_int n, lapack_complex_float* a,
+                               lapack_int lda, float* w,
+                               lapack_complex_float* work, lapack_int lwork,
+                               float* rwork );
+lapack_int LAPACKE_zheev_2stage_work( int matrix_layout, char jobz, char uplo,
+                               lapack_int n, lapack_complex_double* a,
+                               lapack_int lda, double* w,
+                               lapack_complex_double* work, lapack_int lwork,
+                               double* rwork );
+
+lapack_int LAPACKE_cheevd_2stage_work( int matrix_layout, char jobz, char uplo,
+                                lapack_int n, lapack_complex_float* a,
+                                lapack_int lda, float* w,
+                                lapack_complex_float* work, lapack_int lwork,
+                                float* rwork, lapack_int lrwork,
+                                lapack_int* iwork, lapack_int liwork );
+lapack_int LAPACKE_zheevd_2stage_work( int matrix_layout, char jobz, char uplo,
+                                lapack_int n, lapack_complex_double* a,
+                                lapack_int lda, double* w,
+                                lapack_complex_double* work, lapack_int lwork,
+                                double* rwork, lapack_int lrwork,
+                                lapack_int* iwork, lapack_int liwork );
+
+lapack_int LAPACKE_cheevr_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n,
+                                lapack_complex_float* a, lapack_int lda,
+                                float vl, float vu, lapack_int il,
+                                lapack_int iu, float abstol, lapack_int* m,
+                                float* w, lapack_complex_float* z,
+                                lapack_int ldz, lapack_int* isuppz,
+                                lapack_complex_float* work, lapack_int lwork,
+                                float* rwork, lapack_int lrwork,
+                                lapack_int* iwork, lapack_int liwork );
+lapack_int LAPACKE_zheevr_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n,
+                                lapack_complex_double* a, lapack_int lda,
+                                double vl, double vu, lapack_int il,
+                                lapack_int iu, double abstol, lapack_int* m,
+                                double* w, lapack_complex_double* z,
+                                lapack_int ldz, lapack_int* isuppz,
+                                lapack_complex_double* work, lapack_int lwork,
+                                double* rwork, lapack_int lrwork,
+                                lapack_int* iwork, lapack_int liwork );
+
+lapack_int LAPACKE_cheevx_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n,
+                                lapack_complex_float* a, lapack_int lda,
+                                float vl, float vu, lapack_int il,
+                                lapack_int iu, float abstol, lapack_int* m,
+                                float* w, lapack_complex_float* z,
+                                lapack_int ldz, lapack_complex_float* work,
+                                lapack_int lwork, float* rwork,
+                                lapack_int* iwork, lapack_int* ifail );
+lapack_int LAPACKE_zheevx_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n,
+                                lapack_complex_double* a, lapack_int lda,
+                                double vl, double vu, lapack_int il,
+                                lapack_int iu, double abstol, lapack_int* m,
+                                double* w, lapack_complex_double* z,
+                                lapack_int ldz, lapack_complex_double* work,
+                                lapack_int lwork, double* rwork,
+                                lapack_int* iwork, lapack_int* ifail );
+
+lapack_int LAPACKE_ssbev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                          lapack_int kd, float* ab, lapack_int ldab, float* w,
+                          float* z, lapack_int ldz );
+lapack_int LAPACKE_dsbev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                          lapack_int kd, double* ab, lapack_int ldab, double* w,
+                          double* z, lapack_int ldz );
+
+lapack_int LAPACKE_ssbevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                           lapack_int kd, float* ab, lapack_int ldab, float* w,
+                           float* z, lapack_int ldz );
+lapack_int LAPACKE_dsbevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                           lapack_int kd, double* ab, lapack_int ldab,
+                           double* w, double* z, lapack_int ldz );
+
+lapack_int LAPACKE_ssbevx_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, lapack_int kd, float* ab,
+                           lapack_int ldab, float* q, lapack_int ldq, float vl,
+                           float vu, lapack_int il, lapack_int iu, float abstol,
+                           lapack_int* m, float* w, float* z, lapack_int ldz,
+                           lapack_int* ifail );
+lapack_int LAPACKE_dsbevx_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, lapack_int kd, double* ab,
+                           lapack_int ldab, double* q, lapack_int ldq,
+                           double vl, double vu, lapack_int il, lapack_int iu,
+                           double abstol, lapack_int* m, double* w, double* z,
+                           lapack_int ldz, lapack_int* ifail );
+
+lapack_int LAPACKE_ssbev_2stage_work( int matrix_layout, char jobz, char uplo,
+                               lapack_int n, lapack_int kd, float* ab,
+                               lapack_int ldab, float* w, float* z,
+                               lapack_int ldz, float* work, lapack_int lwork );
+lapack_int LAPACKE_dsbev_2stage_work( int matrix_layout, char jobz, char uplo,
+                               lapack_int n, lapack_int kd, double* ab,
+                               lapack_int ldab, double* w, double* z,
+                               lapack_int ldz, double* work, lapack_int lwork );
+
+lapack_int LAPACKE_ssbevd_2stage_work( int matrix_layout, char jobz, char uplo,
+                                lapack_int n, lapack_int kd, float* ab,
+                                lapack_int ldab, float* w, float* z,
+                                lapack_int ldz, float* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int liwork );
+lapack_int LAPACKE_dsbevd_2stage_work( int matrix_layout, char jobz, char uplo,
+                                lapack_int n, lapack_int kd, double* ab,
+                                lapack_int ldab, double* w, double* z,
+                                lapack_int ldz, double* work, lapack_int lwork,
+                                lapack_int* iwork, lapack_int liwork );
+
+lapack_int LAPACKE_ssbevx_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n, lapack_int kd,
+                                float* ab, lapack_int ldab, float* q,
+                                lapack_int ldq, float vl, float vu,
+                                lapack_int il, lapack_int iu, float abstol,
+                                lapack_int* m, float* w, float* z,
+                                lapack_int ldz, float* work, lapack_int lwork, lapack_int* iwork,
+                                lapack_int* ifail );
+lapack_int LAPACKE_dsbevx_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n, lapack_int kd,
+                                double* ab, lapack_int ldab, double* q,
+                                lapack_int ldq, double vl, double vu,
+                                lapack_int il, lapack_int iu, double abstol,
+                                lapack_int* m, double* w, double* z,
+                                lapack_int ldz, double* work, lapack_int lwork, lapack_int* iwork,
+                                lapack_int* ifail );
+
+lapack_int LAPACKE_chbev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                          lapack_int kd, lapack_complex_float* ab,
+                          lapack_int ldab, float* w, lapack_complex_float* z,
+                          lapack_int ldz );
+lapack_int LAPACKE_zhbev_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                          lapack_int kd, lapack_complex_double* ab,
+                          lapack_int ldab, double* w, lapack_complex_double* z,
+                          lapack_int ldz );
+
+lapack_int LAPACKE_chbevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                           lapack_int kd, lapack_complex_float* ab,
+                           lapack_int ldab, float* w, lapack_complex_float* z,
+                           lapack_int ldz );
+lapack_int LAPACKE_zhbevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
+                           lapack_int kd, lapack_complex_double* ab,
+                           lapack_int ldab, double* w, lapack_complex_double* z,
+                           lapack_int ldz );
+
+lapack_int LAPACKE_chbevx_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, lapack_int kd,
+                           lapack_complex_float* ab, lapack_int ldab,
+                           lapack_complex_float* q, lapack_int ldq, float vl,
+                           float vu, lapack_int il, lapack_int iu, float abstol,
+                           lapack_int* m, float* w, lapack_complex_float* z,
+                           lapack_int ldz, lapack_int* ifail );
+lapack_int LAPACKE_zhbevx_2stage( int matrix_layout, char jobz, char range, char uplo,
+                           lapack_int n, lapack_int kd,
+                           lapack_complex_double* ab, lapack_int ldab,
+                           lapack_complex_double* q, lapack_int ldq, double vl,
+                           double vu, lapack_int il, lapack_int iu,
+                           double abstol, lapack_int* m, double* w,
+                           lapack_complex_double* z, lapack_int ldz,
+                           lapack_int* ifail );
+
+lapack_int LAPACKE_chbev_2stage_work( int matrix_layout, char jobz, char uplo,
+                               lapack_int n, lapack_int kd,
+                               lapack_complex_float* ab, lapack_int ldab,
+                               float* w, lapack_complex_float* z,
+                               lapack_int ldz, lapack_complex_float* work,
+                               lapack_int lwork, float* rwork );
+lapack_int LAPACKE_zhbev_2stage_work( int matrix_layout, char jobz, char uplo,
+                               lapack_int n, lapack_int kd,
+                               lapack_complex_double* ab, lapack_int ldab,
+                               double* w, lapack_complex_double* z,
+                               lapack_int ldz, lapack_complex_double* work,
+                               lapack_int lwork, double* rwork );
+
+lapack_int LAPACKE_chbevd_2stage_work( int matrix_layout, char jobz, char uplo,
+                                lapack_int n, lapack_int kd,
+                                lapack_complex_float* ab, lapack_int ldab,
+                                float* w, lapack_complex_float* z,
+                                lapack_int ldz, lapack_complex_float* work,
+                                lapack_int lwork, float* rwork,
+                                lapack_int lrwork, lapack_int* iwork,
+                                lapack_int liwork );
+lapack_int LAPACKE_zhbevd_2stage_work( int matrix_layout, char jobz, char uplo,
+                                lapack_int n, lapack_int kd,
+                                lapack_complex_double* ab, lapack_int ldab,
+                                double* w, lapack_complex_double* z,
+                                lapack_int ldz, lapack_complex_double* work,
+                                lapack_int lwork, double* rwork,
+                                lapack_int lrwork, lapack_int* iwork,
+                                lapack_int liwork );
+
+lapack_int LAPACKE_chbevx_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n, lapack_int kd,
+                                lapack_complex_float* ab, lapack_int ldab,
+                                lapack_complex_float* q, lapack_int ldq,
+                                float vl, float vu, lapack_int il,
+                                lapack_int iu, float abstol, lapack_int* m,
+                                float* w, lapack_complex_float* z,
+                                lapack_int ldz, lapack_complex_float* work,
+                                lapack_int lwork, float* rwork, lapack_int* iwork,
+                                lapack_int* ifail );
+lapack_int LAPACKE_zhbevx_2stage_work( int matrix_layout, char jobz, char range,
+                                char uplo, lapack_int n, lapack_int kd,
+                                lapack_complex_double* ab, lapack_int ldab,
+                                lapack_complex_double* q, lapack_int ldq,
+                                double vl, double vu, lapack_int il,
+                                lapack_int iu, double abstol, lapack_int* m,
+                                double* w, lapack_complex_double* z,
+                                lapack_int ldz, lapack_complex_double* work,
+                                lapack_int lwork, double* rwork, lapack_int* iwork,
+                                lapack_int* ifail );
+
+lapack_int LAPACKE_ssygv_2stage( int matrix_layout, lapack_int itype, char jobz,
+                          char uplo, lapack_int n, float* a, lapack_int lda,
+                          float* b, lapack_int ldb, float* w );
+lapack_int LAPACKE_dsygv_2stage( int matrix_layout, lapack_int itype, char jobz,
+                          char uplo, lapack_int n, double* a, lapack_int lda,
+                          double* b, lapack_int ldb, double* w );
+lapack_int LAPACKE_ssygv_2stage_work( int matrix_layout, lapack_int itype, char jobz,
+                               char uplo, lapack_int n, float* a,
+                               lapack_int lda, float* b, lapack_int ldb,
+                               float* w, float* work, lapack_int lwork );
+lapack_int LAPACKE_dsygv_2stage_work( int matrix_layout, lapack_int itype, char jobz,
+                               char uplo, lapack_int n, double* a,
+                               lapack_int lda, double* b, lapack_int ldb,
+                               double* w, double* work, lapack_int lwork );
+
+lapack_int LAPACKE_chegv_2stage( int matrix_layout, lapack_int itype, char jobz,
+                          char uplo, lapack_int n, lapack_complex_float* a,
+                          lapack_int lda, lapack_complex_float* b,
+                          lapack_int ldb, float* w );
+lapack_int LAPACKE_zhegv_2stage( int matrix_layout, lapack_int itype, char jobz,
+                          char uplo, lapack_int n, lapack_complex_double* a,
+                          lapack_int lda, lapack_complex_double* b,
+                          lapack_int ldb, double* w );
+lapack_int LAPACKE_chegv_2stage_work( int matrix_layout, lapack_int itype, char jobz,
+                               char uplo, lapack_int n, lapack_complex_float* a,
+                               lapack_int lda, lapack_complex_float* b,
+                               lapack_int ldb, float* w,
+                               lapack_complex_float* work, lapack_int lwork,
+                               float* rwork );
+lapack_int LAPACKE_zhegv_2stage_work( int matrix_layout, lapack_int itype, char jobz,
+                               char uplo, lapack_int n,
+                               lapack_complex_double* a, lapack_int lda,
+                               lapack_complex_double* b, lapack_int ldb,
+                               double* w, lapack_complex_double* work,
+                               lapack_int lwork, double* rwork );
+
 #define LAPACK_sgetrf LAPACK_GLOBAL(sgetrf,SGETRF)
 #define LAPACK_dgetrf LAPACK_GLOBAL(dgetrf,DGETRF)
 #define LAPACK_cgetrf LAPACK_GLOBAL(cgetrf,CGETRF)
@@ -12725,18 +13091,34 @@ lapack_int LAPACKE_zgetsls_work( int matrix_layout, char trans, lapack_int m,
 #define LAPACK_dsyev LAPACK_GLOBAL(dsyev,DSYEV)
 #define LAPACK_cheev LAPACK_GLOBAL(cheev,CHEEV)
 #define LAPACK_zheev LAPACK_GLOBAL(zheev,ZHEEV)
+#define LAPACK_ssyev_2stage LAPACK_GLOBAL(ssyev_2stage,SSYEV_2STAGE)
+#define LAPACK_dsyev_2stage LAPACK_GLOBAL(dsyev_2stage,DSYEV_2STAGE)
+#define LAPACK_cheev_2stage LAPACK_GLOBAL(cheev_2stage,CHEEV_2STAGE)
+#define LAPACK_zheev_2stage LAPACK_GLOBAL(zheev_2stage,ZHEEV_2STAGE)
 #define LAPACK_ssyevd LAPACK_GLOBAL(ssyevd,SSYEVD)
 #define LAPACK_dsyevd LAPACK_GLOBAL(dsyevd,DSYEVD)
 #define LAPACK_cheevd LAPACK_GLOBAL(cheevd,CHEEVD)
 #define LAPACK_zheevd LAPACK_GLOBAL(zheevd,ZHEEVD)
+#define LAPACK_ssyevd_2stage LAPACK_GLOBAL(ssyevd_2stage,SSYEVD_2STAGE)
+#define LAPACK_dsyevd_2stage LAPACK_GLOBAL(dsyevd_2stage,DSYEVD_2STAGE)
+#define LAPACK_cheevd_2stage LAPACK_GLOBAL(cheevd_2stage,CHEEVD_2STAGE)
+#define LAPACK_zheevd_2stage LAPACK_GLOBAL(zheevd_2stage,ZHEEVD_2STAGE)
 #define LAPACK_ssyevx LAPACK_GLOBAL(ssyevx,SSYEVX)
 #define LAPACK_dsyevx LAPACK_GLOBAL(dsyevx,DSYEVX)
 #define LAPACK_cheevx LAPACK_GLOBAL(cheevx,CHEEVX)
 #define LAPACK_zheevx LAPACK_GLOBAL(zheevx,ZHEEVX)
+#define LAPACK_ssyevx_2stage LAPACK_GLOBAL(ssyevx_2stage,SSYEVX_2STAGE)
+#define LAPACK_dsyevx_2stage LAPACK_GLOBAL(dsyevx_2stage,DSYEVX_2STAGE)
+#define LAPACK_cheevx_2stage LAPACK_GLOBAL(cheevx_2stage,CHEEVX_2STAGE)
+#define LAPACK_zheevx_2stage LAPACK_GLOBAL(zheevx_2stage,ZHEEVX_2STAGE)
 #define LAPACK_ssyevr LAPACK_GLOBAL(ssyevr,SSYEVR)
 #define LAPACK_dsyevr LAPACK_GLOBAL(dsyevr,DSYEVR)
 #define LAPACK_cheevr LAPACK_GLOBAL(cheevr,CHEEVR)
 #define LAPACK_zheevr LAPACK_GLOBAL(zheevr,ZHEEVR)
+#define LAPACK_ssyevr_2stage LAPACK_GLOBAL(ssyevr_2stage,SSYEVR_2STAGE)
+#define LAPACK_dsyevr_2stage LAPACK_GLOBAL(dsyevr_2stage,DSYEVR_2STAGE)
+#define LAPACK_cheevr_2stage LAPACK_GLOBAL(cheevr_2stage,CHEEVR_2STAGE)
+#define LAPACK_zheevr_2stage LAPACK_GLOBAL(zheevr_2stage,ZHEEVR_2STAGE)
 #define LAPACK_sspev LAPACK_GLOBAL(sspev,SSPEV)
 #define LAPACK_dspev LAPACK_GLOBAL(dspev,DSPEV)
 #define LAPACK_chpev LAPACK_GLOBAL(chpev,CHPEV)
@@ -12753,14 +13135,26 @@ lapack_int LAPACKE_zgetsls_work( int matrix_layout, char trans, lapack_int m,
 #define LAPACK_dsbev LAPACK_GLOBAL(dsbev,DSBEV)
 #define LAPACK_chbev LAPACK_GLOBAL(chbev,CHBEV)
 #define LAPACK_zhbev LAPACK_GLOBAL(zhbev,ZHBEV)
+#define LAPACK_ssbev_2stage LAPACK_GLOBAL(ssbev_2stage,SSBEV_2STAGE)
+#define LAPACK_dsbev_2stage LAPACK_GLOBAL(dsbev_2stage,DSBEV_2STAGE)
+#define LAPACK_chbev_2stage LAPACK_GLOBAL(chbev_2stage,CHBEV_2STAGE)
+#define LAPACK_zhbev_2stage LAPACK_GLOBAL(zhbev_2stage,ZHBEV_2STAGE)
 #define LAPACK_ssbevd LAPACK_GLOBAL(ssbevd,SSBEVD)
 #define LAPACK_dsbevd LAPACK_GLOBAL(dsbevd,DSBEVD)
 #define LAPACK_chbevd LAPACK_GLOBAL(chbevd,CHBEVD)
 #define LAPACK_zhbevd LAPACK_GLOBAL(zhbevd,ZHBEVD)
+#define LAPACK_ssbevd_2stage LAPACK_GLOBAL(ssbevd_2stage,SSBEVD_2STAGE)
+#define LAPACK_dsbevd_2stage LAPACK_GLOBAL(dsbevd_2stage,DSBEVD_2STAGE)
+#define LAPACK_chbevd_2stage LAPACK_GLOBAL(chbevd_2stage,CHBEVD_2STAGE)
+#define LAPACK_zhbevd_2stage LAPACK_GLOBAL(zhbevd_2stage,ZHBEVD_2STAGE)
 #define LAPACK_ssbevx LAPACK_GLOBAL(ssbevx,SSBEVX)
 #define LAPACK_dsbevx LAPACK_GLOBAL(dsbevx,DSBEVX)
 #define LAPACK_chbevx LAPACK_GLOBAL(chbevx,CHBEVX)
 #define LAPACK_zhbevx LAPACK_GLOBAL(zhbevx,ZHBEVX)
+#define LAPACK_ssbevx_2stage LAPACK_GLOBAL(ssbevx_2stage,SSBEVX_2STAGE)
+#define LAPACK_dsbevx_2stage LAPACK_GLOBAL(dsbevx_2stage,DSBEVX_2STAGE)
+#define LAPACK_chbevx_2stage LAPACK_GLOBAL(chbevx_2stage,CHBEVX_2STAGE)
+#define LAPACK_zhbevx_2stage LAPACK_GLOBAL(zhbevx_2stage,ZHBEVX_2STAGE)
 #define LAPACK_sstev LAPACK_GLOBAL(sstev,SSTEV)
 #define LAPACK_dstev LAPACK_GLOBAL(dstev,DSTEV)
 #define LAPACK_sstevd LAPACK_GLOBAL(sstevd,SSTEVD)
@@ -12813,6 +13207,10 @@ lapack_int LAPACKE_zgetsls_work( int matrix_layout, char trans, lapack_int m,
 #define LAPACK_dsygv LAPACK_GLOBAL(dsygv,DSYGV)
 #define LAPACK_chegv LAPACK_GLOBAL(chegv,CHEGV)
 #define LAPACK_zhegv LAPACK_GLOBAL(zhegv,ZHEGV)
+#define LAPACK_ssygv_2stage LAPACK_GLOBAL(ssygv_2stage,SSYGV_2STAGE)
+#define LAPACK_dsygv_2stage LAPACK_GLOBAL(dsygv_2stage,DSYGV_2STAGE)
+#define LAPACK_chegv_2stage LAPACK_GLOBAL(chegv_2stage,CHEGV_2STAGE)
+#define LAPACK_zhegv_2stage LAPACK_GLOBAL(zhegv_2stage,ZHEGV_2STAGE)
 #define LAPACK_ssygvd LAPACK_GLOBAL(ssygvd,SSYGVD)
 #define LAPACK_dsygvd LAPACK_GLOBAL(dsygvd,DSYGVD)
 #define LAPACK_chegvd LAPACK_GLOBAL(chegvd,CHEGVD)
@@ -16589,28 +16987,28 @@ void LAPACK_ssbevx( char* jobz, char* range, char* uplo, lapack_int* n,
                     lapack_int* kd, float* ab, lapack_int* ldab, float* q,
                     lapack_int* ldq, float* vl, float* vu, lapack_int* il,
                     lapack_int* iu, float* abstol, lapack_int* m, float* w,
-                    float* z, lapack_int* ldz, float* work, lapack_int* iwork,
-                    lapack_int* ifail, lapack_int *info );
+                    float* z, lapack_int* ldz, float* work,
+                    lapack_int* iwork, lapack_int* ifail, lapack_int *info );
 void LAPACK_dsbevx( char* jobz, char* range, char* uplo, lapack_int* n,
                     lapack_int* kd, double* ab, lapack_int* ldab, double* q,
                     lapack_int* ldq, double* vl, double* vu, lapack_int* il,
                     lapack_int* iu, double* abstol, lapack_int* m, double* w,
-                    double* z, lapack_int* ldz, double* work, lapack_int* iwork,
-                    lapack_int* ifail, lapack_int *info );
+                    double* z, lapack_int* ldz, double* work,
+                    lapack_int* iwork, lapack_int* ifail, lapack_int *info );
 void LAPACK_chbevx( char* jobz, char* range, char* uplo, lapack_int* n,
                     lapack_int* kd, lapack_complex_float* ab, lapack_int* ldab,
                     lapack_complex_float* q, lapack_int* ldq, float* vl,
                     float* vu, lapack_int* il, lapack_int* iu, float* abstol,
                     lapack_int* m, float* w, lapack_complex_float* z,
-                    lapack_int* ldz, lapack_complex_float* work, float* rwork,
-                    lapack_int* iwork, lapack_int* ifail, lapack_int *info );
+                    lapack_int* ldz, lapack_complex_float* work,
+                    float* rwork, lapack_int* iwork, lapack_int* ifail, lapack_int *info );
 void LAPACK_zhbevx( char* jobz, char* range, char* uplo, lapack_int* n,
                     lapack_int* kd, lapack_complex_double* ab, lapack_int* ldab,
                     lapack_complex_double* q, lapack_int* ldq, double* vl,
                     double* vu, lapack_int* il, lapack_int* iu, double* abstol,
                     lapack_int* m, double* w, lapack_complex_double* z,
-                    lapack_int* ldz, lapack_complex_double* work, double* rwork,
-                    lapack_int* iwork, lapack_int* ifail, lapack_int *info );
+                    lapack_int* ldz, lapack_complex_double* work,
+                    double* rwork, lapack_int* iwork, lapack_int* ifail, lapack_int *info );
 void LAPACK_sstev( char* jobz, lapack_int* n, float* d, float* e, float* z,
                    lapack_int* ldz, float* work, lapack_int *info );
 void LAPACK_dstev( char* jobz, lapack_int* n, double* d, double* e, double* z,
@@ -18492,6 +18890,169 @@ void LAPACK_zgetsls( char* trans, lapack_int* m, lapack_int* n, lapack_int* nrhs
                      lapack_complex_double* b, lapack_int* ldb,
                      lapack_complex_double* work, lapack_int* lwork,
                      lapack_int *info );
+
+void LAPACK_ssyev_2stage( char* jobz, char* uplo, lapack_int* n, float* a,
+                   lapack_int* lda, float* w, float* work, lapack_int* lwork,
+                   lapack_int *info );
+void LAPACK_dsyev_2stage( char* jobz, char* uplo, lapack_int* n, double* a,
+                   lapack_int* lda, double* w, double* work, lapack_int* lwork,
+                   lapack_int *info );
+void LAPACK_cheev_2stage( char* jobz, char* uplo, lapack_int* n,
+                   lapack_complex_float* a, lapack_int* lda, float* w,
+                   lapack_complex_float* work, lapack_int* lwork, float* rwork,
+                   lapack_int *info );
+void LAPACK_zheev_2stage( char* jobz, char* uplo, lapack_int* n,
+                   lapack_complex_double* a, lapack_int* lda, double* w,
+                   lapack_complex_double* work, lapack_int* lwork,
+                   double* rwork, lapack_int *info );
+void LAPACK_ssyevd_2stage( char* jobz, char* uplo, lapack_int* n, float* a,
+                    lapack_int* lda, float* w, float* work, lapack_int* lwork,
+                    lapack_int* iwork, lapack_int* liwork, lapack_int *info );
+void LAPACK_dsyevd_2stage( char* jobz, char* uplo, lapack_int* n, double* a,
+                    lapack_int* lda, double* w, double* work, lapack_int* lwork,
+                    lapack_int* iwork, lapack_int* liwork, lapack_int *info );
+void LAPACK_cheevd_2stage( char* jobz, char* uplo, lapack_int* n,
+                    lapack_complex_float* a, lapack_int* lda, float* w,
+                    lapack_complex_float* work, lapack_int* lwork, float* rwork,
+                    lapack_int* lrwork, lapack_int* iwork, lapack_int* liwork,
+                    lapack_int *info );
+void LAPACK_zheevd_2stage( char* jobz, char* uplo, lapack_int* n,
+                    lapack_complex_double* a, lapack_int* lda, double* w,
+                    lapack_complex_double* work, lapack_int* lwork,
+                    double* rwork, lapack_int* lrwork, lapack_int* iwork,
+                    lapack_int* liwork, lapack_int *info );
+void LAPACK_ssyevx_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    float* a, lapack_int* lda, float* vl, float* vu,
+                    lapack_int* il, lapack_int* iu, float* abstol,
+                    lapack_int* m, float* w, float* z, lapack_int* ldz,
+                    float* work, lapack_int* lwork, lapack_int* iwork,
+                    lapack_int* ifail, lapack_int *info );
+void LAPACK_dsyevx_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    double* a, lapack_int* lda, double* vl, double* vu,
+                    lapack_int* il, lapack_int* iu, double* abstol,
+                    lapack_int* m, double* w, double* z, lapack_int* ldz,
+                    double* work, lapack_int* lwork, lapack_int* iwork,
+                    lapack_int* ifail, lapack_int *info );
+void LAPACK_cheevx_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    lapack_complex_float* a, lapack_int* lda, float* vl,
+                    float* vu, lapack_int* il, lapack_int* iu, float* abstol,
+                    lapack_int* m, float* w, lapack_complex_float* z,
+                    lapack_int* ldz, lapack_complex_float* work,
+                    lapack_int* lwork, float* rwork, lapack_int* iwork,
+                    lapack_int* ifail, lapack_int *info );
+void LAPACK_zheevx_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    lapack_complex_double* a, lapack_int* lda, double* vl,
+                    double* vu, lapack_int* il, lapack_int* iu, double* abstol,
+                    lapack_int* m, double* w, lapack_complex_double* z,
+                    lapack_int* ldz, lapack_complex_double* work,
+                    lapack_int* lwork, double* rwork, lapack_int* iwork,
+                    lapack_int* ifail, lapack_int *info );
+void LAPACK_ssyevr_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    float* a, lapack_int* lda, float* vl, float* vu,
+                    lapack_int* il, lapack_int* iu, float* abstol,
+                    lapack_int* m, float* w, float* z, lapack_int* ldz,
+                    lapack_int* isuppz, float* work, lapack_int* lwork,
+                    lapack_int* iwork, lapack_int* liwork, lapack_int *info );
+void LAPACK_dsyevr_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    double* a, lapack_int* lda, double* vl, double* vu,
+                    lapack_int* il, lapack_int* iu, double* abstol,
+                    lapack_int* m, double* w, double* z, lapack_int* ldz,
+                    lapack_int* isuppz, double* work, lapack_int* lwork,
+                    lapack_int* iwork, lapack_int* liwork, lapack_int *info );
+void LAPACK_cheevr_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    lapack_complex_float* a, lapack_int* lda, float* vl,
+                    float* vu, lapack_int* il, lapack_int* iu, float* abstol,
+                    lapack_int* m, float* w, lapack_complex_float* z,
+                    lapack_int* ldz, lapack_int* isuppz,
+                    lapack_complex_float* work, lapack_int* lwork, float* rwork,
+                    lapack_int* lrwork, lapack_int* iwork, lapack_int* liwork,
+                    lapack_int *info );
+void LAPACK_zheevr_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    lapack_complex_double* a, lapack_int* lda, double* vl,
+                    double* vu, lapack_int* il, lapack_int* iu, double* abstol,
+                    lapack_int* m, double* w, lapack_complex_double* z,
+                    lapack_int* ldz, lapack_int* isuppz,
+                    lapack_complex_double* work, lapack_int* lwork,
+                    double* rwork, lapack_int* lrwork, lapack_int* iwork,
+                    lapack_int* liwork, lapack_int *info );
+void LAPACK_ssbev_2stage( char* jobz, char* uplo, lapack_int* n, lapack_int* kd,
+                   float* ab, lapack_int* ldab, float* w, float* z,
+                   lapack_int* ldz, float* work, lapack_int* lwork, lapack_int *info );
+void LAPACK_dsbev_2stage( char* jobz, char* uplo, lapack_int* n, lapack_int* kd,
+                   double* ab, lapack_int* ldab, double* w, double* z,
+                   lapack_int* ldz, double* work, lapack_int* lwork, lapack_int *info );
+void LAPACK_chbev_2stage( char* jobz, char* uplo, lapack_int* n, lapack_int* kd,
+                   lapack_complex_float* ab, lapack_int* ldab, float* w,
+                   lapack_complex_float* z, lapack_int* ldz,
+                   lapack_complex_float* work, lapack_int* lwork, float* rwork, lapack_int *info );
+void LAPACK_zhbev_2stage( char* jobz, char* uplo, lapack_int* n, lapack_int* kd,
+                   lapack_complex_double* ab, lapack_int* ldab, double* w,
+                   lapack_complex_double* z, lapack_int* ldz,
+                   lapack_complex_double* work, lapack_int* lwork, double* rwork,
+                   lapack_int *info );
+void LAPACK_ssbevd_2stage( char* jobz, char* uplo, lapack_int* n, lapack_int* kd,
+                    float* ab, lapack_int* ldab, float* w, float* z,
+                    lapack_int* ldz, float* work, lapack_int* lwork,
+                    lapack_int* iwork, lapack_int* liwork, lapack_int *info );
+void LAPACK_dsbevd_2stage( char* jobz, char* uplo, lapack_int* n, lapack_int* kd,
+                    double* ab, lapack_int* ldab, double* w, double* z,
+                    lapack_int* ldz, double* work, lapack_int* lwork,
+                    lapack_int* iwork, lapack_int* liwork, lapack_int *info );
+void LAPACK_chbevd_2stage( char* jobz, char* uplo, lapack_int* n, lapack_int* kd,
+                    lapack_complex_float* ab, lapack_int* ldab, float* w,
+                    lapack_complex_float* z, lapack_int* ldz,
+                    lapack_complex_float* work, lapack_int* lwork, float* rwork,
+                    lapack_int* lrwork, lapack_int* iwork, lapack_int* liwork,
+                    lapack_int *info );
+void LAPACK_zhbevd_2stage( char* jobz, char* uplo, lapack_int* n, lapack_int* kd,
+                    lapack_complex_double* ab, lapack_int* ldab, double* w,
+                    lapack_complex_double* z, lapack_int* ldz,
+                    lapack_complex_double* work, lapack_int* lwork,
+                    double* rwork, lapack_int* lrwork, lapack_int* iwork,
+                    lapack_int* liwork, lapack_int *info );
+void LAPACK_ssbevx_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    lapack_int* kd, float* ab, lapack_int* ldab, float* q,
+                    lapack_int* ldq, float* vl, float* vu, lapack_int* il,
+                    lapack_int* iu, float* abstol, lapack_int* m, float* w,
+                    float* z, lapack_int* ldz, float* work, lapack_int* lwork, lapack_int* iwork,
+                    lapack_int* ifail, lapack_int *info );
+void LAPACK_dsbevx_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    lapack_int* kd, double* ab, lapack_int* ldab, double* q,
+                    lapack_int* ldq, double* vl, double* vu, lapack_int* il,
+                    lapack_int* iu, double* abstol, lapack_int* m, double* w,
+                    double* z, lapack_int* ldz, double* work, lapack_int* lwork, lapack_int* iwork,
+                    lapack_int* ifail, lapack_int *info );
+void LAPACK_chbevx_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    lapack_int* kd, lapack_complex_float* ab, lapack_int* ldab,
+                    lapack_complex_float* q, lapack_int* ldq, float* vl,
+                    float* vu, lapack_int* il, lapack_int* iu, float* abstol,
+                    lapack_int* m, float* w, lapack_complex_float* z,
+                    lapack_int* ldz, lapack_complex_float* work, lapack_int* lwork, float* rwork,
+                    lapack_int* iwork, lapack_int* ifail, lapack_int *info );
+void LAPACK_zhbevx_2stage( char* jobz, char* range, char* uplo, lapack_int* n,
+                    lapack_int* kd, lapack_complex_double* ab, lapack_int* ldab,
+                    lapack_complex_double* q, lapack_int* ldq, double* vl,
+                    double* vu, lapack_int* il, lapack_int* iu, double* abstol,
+                    lapack_int* m, double* w, lapack_complex_double* z,
+                    lapack_int* ldz, lapack_complex_double* work, lapack_int* lwork, double* rwork,
+                    lapack_int* iwork, lapack_int* ifail, lapack_int *info );
+void LAPACK_ssygv_2stage( lapack_int* itype, char* jobz, char* uplo, lapack_int* n,
+                   float* a, lapack_int* lda, float* b, lapack_int* ldb,
+                   float* w, float* work, lapack_int* lwork, lapack_int *info );
+void LAPACK_dsygv_2stage( lapack_int* itype, char* jobz, char* uplo, lapack_int* n,
+                   double* a, lapack_int* lda, double* b, lapack_int* ldb,
+                   double* w, double* work, lapack_int* lwork,
+                   lapack_int *info );
+void LAPACK_chegv_2stage( lapack_int* itype, char* jobz, char* uplo, lapack_int* n,
+                   lapack_complex_float* a, lapack_int* lda,
+                   lapack_complex_float* b, lapack_int* ldb, float* w,
+                   lapack_complex_float* work, lapack_int* lwork, float* rwork,
+                   lapack_int *info );
+void LAPACK_zhegv_2stage( lapack_int* itype, char* jobz, char* uplo, lapack_int* n,
+                   lapack_complex_double* a, lapack_int* lda,
+                   lapack_complex_double* b, lapack_int* ldb, double* w,
+                   lapack_complex_double* work, lapack_int* lwork,
+                   double* rwork, lapack_int *info );
 
 #ifdef __cplusplus
 }
