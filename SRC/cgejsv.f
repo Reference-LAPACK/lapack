@@ -270,7 +270,7 @@
 *>
 *> \param[out] CWORK
 *> \verbatim
-*>          CWORK is COMPLEX array, dimension at least LWORK.
+*>          CWORK is COMPLEX array, dimension (MAX(2,LWORK))
 *>          If the call to CGEJSV is a workspace query (indicated by LWORK=-1 or
 *>          LRWORK=-1), then on exit CWORK(1) contains the required length of 
 *>          CWORK for the job parameters used in the call.
@@ -350,7 +350,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension at least LRWORK.
+*>          RWORK is REAL array, dimension (MAX(7,LWORK))
 *>          On exit,
 *>          RWORK(1) = Determines the scaling factor SCALE = RWORK(2) / RWORK(1)
 *>                    such that SCALE*SVA(1:N) are the computed singular values
@@ -959,7 +959,7 @@
 *     Quick return for void matrix (Y3K safe)
 * #:)
       IF ( ( M .EQ. 0 ) .OR. ( N .EQ. 0 ) ) THEN
-         IWORK(1:3) = 0
+         IWORK(1:4) = 0
          RWORK(1:7) = 0
          RETURN
       ENDIF
