@@ -23,6 +23,7 @@ VERSION 3.4.2 : September 2012
 VERSION 3.5.0 : November 2013
 VERSION 3.6.0 : November 2015
 VERSION 3.6.1 : June 2016
+VERSION 3.7.0 : December 2016
 
 
 LAPACK is a library of Fortran 90 with subroutines for solving
