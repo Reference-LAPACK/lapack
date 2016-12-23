@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native high-level C interface to LAPACK function ssygv
+* Contents: Native high-level C interface to LAPACK function ssygv_2stage
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssygv( int matrix_layout, lapack_int itype, char jobz,
+lapack_int LAPACKE_ssygv_2stage( int matrix_layout, lapack_int itype, char jobz,
                           char uplo, lapack_int n, float* a, lapack_int lda,
                           float* b, lapack_int ldb, float* w )
 {
@@ -42,7 +42,7 @@ lapack_int LAPACKE_ssygv( int matrix_layout, lapack_int itype, char jobz,
     float* work = NULL;
     float work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_ssygv", -1 );
+        LAPACKE_xerbla( "LAPACKE_ssygv_2stage", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -55,7 +55,7 @@ lapack_int LAPACKE_ssygv( int matrix_layout, lapack_int itype, char jobz,
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_ssygv_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
+    info = LAPACKE_ssygv_2stage_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
                                ldb, w, &work_query, lwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -68,13 +68,13 @@ lapack_int LAPACKE_ssygv( int matrix_layout, lapack_int itype, char jobz,
         goto exit_level_0;
     }
     /* Call middle-level interface */
-    info = LAPACKE_ssygv_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
+    info = LAPACKE_ssygv_2stage_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
                                ldb, w, work, lwork );
     /* Release memory and exit */
     LAPACKE_free( work );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_ssygv", info );
+        LAPACKE_xerbla( "LAPACKE_ssygv_2stage", info );
     }
     return info;
 }

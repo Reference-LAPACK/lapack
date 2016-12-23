@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native middle-level C interface to LAPACK function cheevx
+* Contents: Native middle-level C interface to LAPACK function cheevx_2stage
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_cheevx_work( int matrix_layout, char jobz, char range,
+lapack_int LAPACKE_cheevx_2stage_work( int matrix_layout, char jobz, char range,
                                 char uplo, lapack_int n,
                                 lapack_complex_float* a, lapack_int lda,
                                 float vl, float vu, lapack_int il,
@@ -46,7 +46,7 @@ lapack_int LAPACKE_cheevx_work( int matrix_layout, char jobz, char range,
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_cheevx( &jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu,
+        LAPACK_cheevx_2stage( &jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu,
                        &abstol, m, w, z, &ldz, work, &lwork, rwork, iwork,
                        ifail, &info );
         if( info < 0 ) {
@@ -63,17 +63,17 @@ lapack_int LAPACKE_cheevx_work( int matrix_layout, char jobz, char range,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_cheevx_work", info );
+            LAPACKE_xerbla( "LAPACKE_cheevx_2stage_work", info );
             return info;
         }
         if( ldz < ncols_z ) {
             info = -16;
-            LAPACKE_xerbla( "LAPACKE_cheevx_work", info );
+            LAPACKE_xerbla( "LAPACKE_cheevx_2stage_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
         if( lwork == -1 ) {
-            LAPACK_cheevx( &jobz, &range, &uplo, &n, a, &lda_t, &vl, &vu, &il,
+            LAPACK_cheevx_2stage( &jobz, &range, &uplo, &n, a, &lda_t, &vl, &vu, &il,
                            &iu, &abstol, m, w, z, &ldz_t, work, &lwork, rwork,
                            iwork, ifail, &info );
             return (info < 0) ? (info - 1) : info;
@@ -97,7 +97,7 @@ lapack_int LAPACKE_cheevx_work( int matrix_layout, char jobz, char range,
         /* Transpose input matrices */
         LAPACKE_che_trans( matrix_layout, uplo, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_cheevx( &jobz, &range, &uplo, &n, a_t, &lda_t, &vl, &vu, &il,
+        LAPACK_cheevx_2stage( &jobz, &range, &uplo, &n, a_t, &lda_t, &vl, &vu, &il,
                        &iu, &abstol, m, w, z_t, &ldz_t, work, &lwork, rwork,
                        iwork, ifail, &info );
         if( info < 0 ) {
@@ -117,11 +117,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_cheevx_work", info );
+            LAPACKE_xerbla( "LAPACKE_cheevx_2stage_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_cheevx_work", info );
+        LAPACKE_xerbla( "LAPACKE_cheevx_2stage_work", info );
     }
     return info;
 }

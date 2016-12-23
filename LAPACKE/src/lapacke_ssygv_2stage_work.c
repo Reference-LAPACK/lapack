@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native middle-level C interface to LAPACK function ssygv
+* Contents: Native middle-level C interface to LAPACK function ssygv_2stage
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssygv_work( int matrix_layout, lapack_int itype, char jobz,
+lapack_int LAPACKE_ssygv_2stage_work( int matrix_layout, lapack_int itype, char jobz,
                                char uplo, lapack_int n, float* a,
                                lapack_int lda, float* b, lapack_int ldb,
                                float* w, float* work, lapack_int lwork )
@@ -41,7 +41,7 @@ lapack_int LAPACKE_ssygv_work( int matrix_layout, lapack_int itype, char jobz,
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_ssygv( &itype, &jobz, &uplo, &n, a, &lda, b, &ldb, w, work,
+        LAPACK_ssygv_2stage( &itype, &jobz, &uplo, &n, a, &lda, b, &ldb, w, work,
                       &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
@@ -54,17 +54,17 @@ lapack_int LAPACKE_ssygv_work( int matrix_layout, lapack_int itype, char jobz,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -7;
-            LAPACKE_xerbla( "LAPACKE_ssygv_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssygv_2stage_work", info );
             return info;
         }
         if( ldb < n ) {
             info = -9;
-            LAPACKE_xerbla( "LAPACKE_ssygv_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssygv_2stage_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
         if( lwork == -1 ) {
-            LAPACK_ssygv( &itype, &jobz, &uplo, &n, a, &lda_t, b, &ldb_t, w,
+            LAPACK_ssygv_2stage( &itype, &jobz, &uplo, &n, a, &lda_t, b, &ldb_t, w,
                           work, &lwork, &info );
             return (info < 0) ? (info - 1) : info;
         }
@@ -83,7 +83,7 @@ lapack_int LAPACKE_ssygv_work( int matrix_layout, lapack_int itype, char jobz,
         LAPACKE_sge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
         LAPACKE_sge_trans( matrix_layout, n, n, b, ldb, b_t, ldb_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_ssygv( &itype, &jobz, &uplo, &n, a_t, &lda_t, b_t, &ldb_t, w,
+        LAPACK_ssygv_2stage( &itype, &jobz, &uplo, &n, a_t, &lda_t, b_t, &ldb_t, w,
                       work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
@@ -97,11 +97,11 @@ exit_level_1:
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ssygv_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssygv_2stage_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ssygv_work", info );
+        LAPACKE_xerbla( "LAPACKE_ssygv_2stage_work", info );
     }
     return info;
 }

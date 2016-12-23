@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native middle-level C interface to LAPACK function zheevd
+* Contents: Native middle-level C interface to LAPACK function zheevd_2stage
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zheevd_work( int matrix_layout, char jobz, char uplo,
+lapack_int LAPACKE_zheevd_2stage_work( int matrix_layout, char jobz, char uplo,
                                 lapack_int n, lapack_complex_double* a,
                                 lapack_int lda, double* w,
                                 lapack_complex_double* work, lapack_int lwork,
@@ -43,7 +43,7 @@ lapack_int LAPACKE_zheevd_work( int matrix_layout, char jobz, char uplo,
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_zheevd( &jobz, &uplo, &n, a, &lda, w, work, &lwork, rwork,
+        LAPACK_zheevd_2stage( &jobz, &uplo, &n, a, &lda, w, work, &lwork, rwork,
                        &lrwork, iwork, &liwork, &info );
         if( info < 0 ) {
             info = info - 1;
@@ -54,12 +54,12 @@ lapack_int LAPACKE_zheevd_work( int matrix_layout, char jobz, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_zheevd_work", info );
+            LAPACKE_xerbla( "LAPACKE_zheevd_2stage_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
         if( liwork == -1 || lrwork == -1 || lwork == -1 ) {
-            LAPACK_zheevd( &jobz, &uplo, &n, a, &lda_t, w, work, &lwork, rwork,
+            LAPACK_zheevd_2stage( &jobz, &uplo, &n, a, &lda_t, w, work, &lwork, rwork,
                            &lrwork, iwork, &liwork, &info );
             return (info < 0) ? (info - 1) : info;
         }
@@ -73,7 +73,7 @@ lapack_int LAPACKE_zheevd_work( int matrix_layout, char jobz, char uplo,
         /* Transpose input matrices */
         LAPACKE_zge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_zheevd( &jobz, &uplo, &n, a_t, &lda_t, w, work, &lwork, rwork,
+        LAPACK_zheevd_2stage( &jobz, &uplo, &n, a_t, &lda_t, w, work, &lwork, rwork,
                        &lrwork, iwork, &liwork, &info );
         if( info < 0 ) {
             info = info - 1;
@@ -84,11 +84,11 @@ lapack_int LAPACKE_zheevd_work( int matrix_layout, char jobz, char uplo,
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_zheevd_work", info );
+            LAPACKE_xerbla( "LAPACKE_zheevd_2stage_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_zheevd_work", info );
+        LAPACKE_xerbla( "LAPACKE_zheevd_2stage_work", info );
     }
     return info;
 }

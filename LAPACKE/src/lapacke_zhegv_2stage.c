@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native high-level C interface to LAPACK function zhegv
+* Contents: Native high-level C interface to LAPACK function zhegv_2stage
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zhegv( int matrix_layout, lapack_int itype, char jobz,
+lapack_int LAPACKE_zhegv_2stage( int matrix_layout, lapack_int itype, char jobz,
                           char uplo, lapack_int n, lapack_complex_double* a,
                           lapack_int lda, lapack_complex_double* b,
                           lapack_int ldb, double* w )
@@ -44,7 +44,7 @@ lapack_int LAPACKE_zhegv( int matrix_layout, lapack_int itype, char jobz,
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zhegv", -1 );
+        LAPACKE_xerbla( "LAPACKE_zhegv_2stage", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -63,7 +63,7 @@ lapack_int LAPACKE_zhegv( int matrix_layout, lapack_int itype, char jobz,
         goto exit_level_0;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_zhegv_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
+    info = LAPACKE_zhegv_2stage_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
                                ldb, w, &work_query, lwork, rwork );
     if( info != 0 ) {
         goto exit_level_1;
@@ -77,7 +77,7 @@ lapack_int LAPACKE_zhegv( int matrix_layout, lapack_int itype, char jobz,
         goto exit_level_1;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zhegv_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
+    info = LAPACKE_zhegv_2stage_work( matrix_layout, itype, jobz, uplo, n, a, lda, b,
                                ldb, w, work, lwork, rwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -85,7 +85,7 @@ exit_level_1:
     LAPACKE_free( rwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zhegv", info );
+        LAPACKE_xerbla( "LAPACKE_zhegv_2stage", info );
     }
     return info;
 }

@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native high-level C interface to LAPACK function zheevd
+* Contents: Native high-level C interface to LAPACK function zheevd_2stage
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zheevd( int matrix_layout, char jobz, char uplo, lapack_int n,
+lapack_int LAPACKE_zheevd_2stage( int matrix_layout, char jobz, char uplo, lapack_int n,
                            lapack_complex_double* a, lapack_int lda, double* w )
 {
     lapack_int info = 0;
@@ -47,7 +47,7 @@ lapack_int LAPACKE_zheevd( int matrix_layout, char jobz, char uplo, lapack_int n
     double rwork_query;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zheevd", -1 );
+        LAPACKE_xerbla( "LAPACKE_zheevd_2stage", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -57,7 +57,7 @@ lapack_int LAPACKE_zheevd( int matrix_layout, char jobz, char uplo, lapack_int n
     }
 #endif
     /* Query optimal working array(s) size */
-    info = LAPACKE_zheevd_work( matrix_layout, jobz, uplo, n, a, lda, w,
+    info = LAPACKE_zheevd_2stage_work( matrix_layout, jobz, uplo, n, a, lda, w,
                                 &work_query, lwork, &rwork_query, lrwork,
                                 &iwork_query, liwork );
     if( info != 0 ) {
@@ -84,7 +84,7 @@ lapack_int LAPACKE_zheevd( int matrix_layout, char jobz, char uplo, lapack_int n
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zheevd_work( matrix_layout, jobz, uplo, n, a, lda, w, work,
+    info = LAPACKE_zheevd_2stage_work( matrix_layout, jobz, uplo, n, a, lda, w, work,
                                 lwork, rwork, lrwork, iwork, liwork );
     /* Release memory and exit */
     LAPACKE_free( work );
@@ -94,7 +94,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zheevd", info );
+        LAPACKE_xerbla( "LAPACKE_zheevd_2stage", info );
     }
     return info;
 }

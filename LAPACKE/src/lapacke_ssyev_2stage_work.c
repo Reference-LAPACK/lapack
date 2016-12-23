@@ -26,21 +26,21 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native middle-level C interface to LAPACK function ssyev
+* Contents: Native middle-level C interface to LAPACK function ssyev_2stage
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_ssyev_work( int matrix_layout, char jobz, char uplo,
+lapack_int LAPACKE_ssyev_2stage_work( int matrix_layout, char jobz, char uplo,
                                lapack_int n, float* a, lapack_int lda, float* w,
                                float* work, lapack_int lwork )
 {
     lapack_int info = 0;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
-        LAPACK_ssyev( &jobz, &uplo, &n, a, &lda, w, work, &lwork, &info );
+        LAPACK_ssyev_2stage( &jobz, &uplo, &n, a, &lda, w, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
@@ -50,12 +50,12 @@ lapack_int LAPACKE_ssyev_work( int matrix_layout, char jobz, char uplo,
         /* Check leading dimension(s) */
         if( lda < n ) {
             info = -6;
-            LAPACKE_xerbla( "LAPACKE_ssyev_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssyev_2stage_work", info );
             return info;
         }
         /* Query optimal working array(s) size if requested */
         if( lwork == -1 ) {
-            LAPACK_ssyev( &jobz, &uplo, &n, a, &lda_t, w, work, &lwork, &info );
+            LAPACK_ssyev_2stage( &jobz, &uplo, &n, a, &lda_t, w, work, &lwork, &info );
             return (info < 0) ? (info - 1) : info;
         }
         /* Allocate memory for temporary array(s) */
@@ -67,7 +67,7 @@ lapack_int LAPACKE_ssyev_work( int matrix_layout, char jobz, char uplo,
         /* Transpose input matrices */
         LAPACKE_sge_trans( matrix_layout, n, n, a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
-        LAPACK_ssyev( &jobz, &uplo, &n, a_t, &lda_t, w, work, &lwork, &info );
+        LAPACK_ssyev_2stage( &jobz, &uplo, &n, a_t, &lda_t, w, work, &lwork, &info );
         if( info < 0 ) {
             info = info - 1;
         }
@@ -77,11 +77,11 @@ lapack_int LAPACKE_ssyev_work( int matrix_layout, char jobz, char uplo,
         LAPACKE_free( a_t );
 exit_level_0:
         if( info == LAPACK_TRANSPOSE_MEMORY_ERROR ) {
-            LAPACKE_xerbla( "LAPACKE_ssyev_work", info );
+            LAPACKE_xerbla( "LAPACKE_ssyev_2stage_work", info );
         }
     } else {
         info = -1;
-        LAPACKE_xerbla( "LAPACKE_ssyev_work", info );
+        LAPACKE_xerbla( "LAPACKE_ssyev_2stage_work", info );
     }
     return info;
 }

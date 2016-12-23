@@ -194,7 +194,7 @@ lapacke_cheevd_2stage_work.c
 lapacke_cheevr_2stage.c
 lapacke_cheevr_2stage_work.c
 lapacke_cheevx_2stage.c
-lapacke_cheevx_work.c
+lapacke_cheevx_2stage_work.c
 lapacke_chegst.c
 lapacke_chegst_work.c
 lapacke_chegv.c

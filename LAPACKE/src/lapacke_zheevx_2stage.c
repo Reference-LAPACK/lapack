@@ -26,14 +26,14 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native high-level C interface to LAPACK function zheevx
+* Contents: Native high-level C interface to LAPACK function zheevx_2stage
 * Author: Intel Corporation
 * Generated November 2015
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zheevx( int matrix_layout, char jobz, char range, char uplo,
+lapack_int LAPACKE_zheevx_2stage( int matrix_layout, char jobz, char range, char uplo,
                            lapack_int n, lapack_complex_double* a,
                            lapack_int lda, double vl, double vu, lapack_int il,
                            lapack_int iu, double abstol, lapack_int* m,
@@ -47,7 +47,7 @@ lapack_int LAPACKE_zheevx( int matrix_layout, char jobz, char range, char uplo,
     lapack_complex_double* work = NULL;
     lapack_complex_double work_query;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
-        LAPACKE_xerbla( "LAPACKE_zheevx", -1 );
+        LAPACKE_xerbla( "LAPACKE_zheevx_2stage", -1 );
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
@@ -81,7 +81,7 @@ lapack_int LAPACKE_zheevx( int matrix_layout, char jobz, char range, char uplo,
         goto exit_level_1;
     }
     /* Query optimal working array(s) size */
-    info = LAPACKE_zheevx_work( matrix_layout, jobz, range, uplo, n, a, lda, vl,
+    info = LAPACKE_zheevx_2stage_work( matrix_layout, jobz, range, uplo, n, a, lda, vl,
                                 vu, il, iu, abstol, m, w, z, ldz, &work_query,
                                 lwork, rwork, iwork, ifail );
     if( info != 0 ) {
@@ -96,7 +96,7 @@ lapack_int LAPACKE_zheevx( int matrix_layout, char jobz, char range, char uplo,
         goto exit_level_2;
     }
     /* Call middle-level interface */
-    info = LAPACKE_zheevx_work( matrix_layout, jobz, range, uplo, n, a, lda, vl,
+    info = LAPACKE_zheevx_2stage_work( matrix_layout, jobz, range, uplo, n, a, lda, vl,
                                 vu, il, iu, abstol, m, w, z, ldz, work, lwork,
                                 rwork, iwork, ifail );
     /* Release memory and exit */
@@ -107,7 +107,7 @@ exit_level_1:
     LAPACKE_free( iwork );
 exit_level_0:
     if( info == LAPACK_WORK_MEMORY_ERROR ) {
-        LAPACKE_xerbla( "LAPACKE_zheevx", info );
+        LAPACKE_xerbla( "LAPACKE_zheevx_2stage", info );
     }
     return info;
 }
