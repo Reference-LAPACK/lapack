@@ -144,7 +144,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2016
+*> \date December 2016
 *
 *  @generated from LIN/ddrvsy_aa.f, fortran d -> c, Thu Nov 17 12:14:51 2016
 *
@@ -158,7 +158,7 @@
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2016
+*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR

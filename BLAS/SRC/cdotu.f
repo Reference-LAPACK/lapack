@@ -36,7 +36,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2015
+*> \date December 2016
 *
 *> \ingroup complex_blas_level1
 *
@@ -52,10 +52,10 @@
 *  =====================================================================
       COMPLEX FUNCTION CDOTU(N,CX,INCX,CY,INCY)
 *
-*  -- Reference BLAS level1 routine (version 3.6.0) --
+*  -- Reference BLAS level1 routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2015
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER INCX,INCY,N

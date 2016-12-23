@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function csysv_aa
 * Author: Intel Corporation
-* Generated November 2016
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"

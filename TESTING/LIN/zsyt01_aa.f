@@ -116,7 +116,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2016
+*> \date December 2016
 *
 *  @generated from LIN/dsyt01_aa.f, fortran d -> z, Thu Nov 17 13:01:50 2016
 *
@@ -126,10 +126,10 @@
       SUBROUTINE ZSYT01_AA( UPLO, N, A, LDA, AFAC, LDAFAC, IPIV, C,
      $                      LDC, RWORK, RESID )
 *
-*  -- LAPACK test routine (version 3.5.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2016
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO

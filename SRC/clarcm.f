@@ -114,7 +114,7 @@
 *  =====================================================================
       SUBROUTINE CLARCM( M, N, A, LDA, B, LDB, C, LDC, RWORK )
 *
-*  -- LAPACK auxiliary routine (version 3.6.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016

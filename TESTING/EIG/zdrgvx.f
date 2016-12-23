@@ -297,7 +297,7 @@
      $                   S, DTRU, DIF, DIFTRU, WORK, LWORK, RWORK,
      $                   IWORK, LIWORK, RESULT, BWORK, INFO )
 *
-*  -- LAPACK test routine (version 3.6.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
