@@ -44,7 +44,7 @@
 *> If parameter WAY = 'R':
 *> DSYCONVF_ROOK performs the conversion in reverse direction, i.e.
 *> converts the factorization output format used in DSYTRF_RK
-*> (or DSYTRF_BK) provided on entry in parametes A and E into
+*> (or DSYTRF_BK) provided on entry in parameters A and E into
 *> the factorization output format used in DSYTRF_ROOK that is stored
 *> on exit in parameter A. IPIV format for DSYTRF_ROOK and
 *> DSYTRF_RK (or DSYTRF_BK) is the same and is not converted.

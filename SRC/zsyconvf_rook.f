@@ -44,7 +44,7 @@
 *> If parameter WAY = 'R':
 *> ZSYCONVF_ROOK performs the conversion in reverse direction, i.e.
 *> converts the factorization output format used in ZSYTRF_RK
-*> (or ZSYTRF_BK) provided on entry in parametes A and E into
+*> (or ZSYTRF_BK) provided on entry in parameters A and E into
 *> the factorization output format used in ZSYTRF_ROOK that is stored
 *> on exit in parameter A. IPIV format for ZSYTRF_ROOK and
 *> ZSYTRF_RK (or ZSYTRF_BK) is the same and is not converted.
