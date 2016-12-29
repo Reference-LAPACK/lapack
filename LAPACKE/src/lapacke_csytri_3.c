@@ -60,7 +60,7 @@ lapack_int LAPACKE_csytri_3( int matrix_layout, char uplo, lapack_int n,
     if( info != 0 ) {
         goto exit_level_0;
     }
-    lwork = (lapack_int)work_query;
+    lwork = LAPACK_C2INT( work_query );
     /* Allocate memory for working array(s) */
     work = (lapack_complex_float*)
         LAPACKE_malloc( sizeof(lapack_complex_float) * lwork );
