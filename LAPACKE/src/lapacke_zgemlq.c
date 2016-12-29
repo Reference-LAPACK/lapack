@@ -65,7 +65,7 @@ lapack_int LAPACKE_zgemlq( int matrix_layout, char side, char trans,
     if( info != 0 ) {
         goto exit_level_0;
     }
-    lwork = (lapack_int)work_query;
+    lwork = LAPACK_Z2INT( work_query );
     /* Allocate memory for work arrays */
     work = (lapack_complex_double*)LAPACKE_malloc( sizeof(lapack_complex_double) * lwork );
     if( work == NULL ) {
