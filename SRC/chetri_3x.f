@@ -99,7 +99,7 @@
 *>          On entry, contains the superdiagonal (or subdiagonal)
 *>          elements of the Hermitian block diagonal matrix D
 *>          with 1-by-1 or 2-by-2 diagonal blocks, where
-*>          If UPLO = 'U': E(i) = D(i-1,i), i=2:N, E(1) not refernced;
+*>          If UPLO = 'U': E(i) = D(i-1,i), i=2:N, E(1) not referenced;
 *>          If UPLO = 'L': E(i) = D(i+1,i), i=1:N-1, E(N) not referenced.
 *>
 *>          NOTE: For 1-by-1 diagonal block D(k), where

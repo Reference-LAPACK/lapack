@@ -197,16 +197,16 @@ else:
     range_prec=list(range(4))
 
 if test=='lin':
-    range_test=[15]
-elif test=='mixed':
     range_test=[16]
+elif test=='mixed':
+    range_test=[17]
     range_prec=[1,3]
 elif test=='rfp':
-    range_test=[17]
+    range_test=[18]
 elif test=='eig':
-    range_test=list(range(15))
+    range_test=list(range(16))
 else:
-    range_test=list(range(18))
+    range_test=list(range(19))
 
 list_results = [
 [0, 0, 0, 0, 0],
@@ -250,18 +250,18 @@ for dtype in range_prec:
     for dtest in range_test:
         nb_of_test=0
         # NEED TO SKIP SOME PRECISION (namely s and c) FOR PROTO MIXED PRECISION TESTING
-        if dtest==16 and (letter=="s" or letter=="c"):
+        if dtest==17 and (letter=="s" or letter=="c"):
             continue
         if (with_file==1):
             cmdbase=dtests[2][dtest]+".out"
         else:
-            if dtest==15:
+            if dtest==16:
                 # LIN TESTS
                 cmdbase="xlintst"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
-            elif dtest==16:
+            elif dtest==17:
                 # PROTO LIN TESTS
                 cmdbase="xlintst"+letter+dtypes[0][dtype-1]+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
-            elif dtest==17:
+            elif dtest==18:
                 # PROTO LIN TESTS
                 cmdbase="xlintstrf"+letter+" < "+dtests[0][dtest]+".in > "+dtests[2][dtest]+".out"
             else:

@@ -45,7 +45,7 @@
 *> If parameter WAY = 'R':
 *> CSYCONVF performs the conversion in reverse direction, i.e.
 *> converts the factorization output format used in CSYTRF_RK
-*> (or CSYTRF_BK) provided on entry in parametes A and E into
+*> (or CSYTRF_BK) provided on entry in parameters A and E into
 *> the factorization output format used in CSYTRF that is stored
 *> on exit in parameter A. It also coverts in place details of
 *> the intechanges stored in IPIV from the format used in CSYTRF_RK

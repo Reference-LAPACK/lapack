@@ -107,7 +107,7 @@
 *> \verbatim
 *>          W is DOUBLE PRECISION array, dimension (N)
 *>          On input, W( IFIRST-OFFSET ) through W( ILAST-OFFSET ) are
-*>          estimates of the eigenvalues of L D L^T indexed IFIRST throug
+*>          estimates of the eigenvalues of L D L^T indexed IFIRST through
 *>          ILAST.
 *>          On output, these estimates are refined.
 *> \endverbatim

@@ -424,7 +424,7 @@
 *>          then LRWORK = max( 7, 2 * M ).
 *>          4.2. Otherwise, LRWORK  = max( 7, N ).
 *> 
-*>          If, on entry, LRWORK = -1 ot LWORK=-1, a workspace query is assumed and 
+*>          If, on entry, LRWORK = -1 or LWORK=-1, a workspace query is assumed and 
 *>          the length of RWORK is returned in RWORK(1). 
 *> \endverbatim
 *>

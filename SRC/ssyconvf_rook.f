@@ -44,7 +44,7 @@
 *> If parameter WAY = 'R':
 *> SSYCONVF_ROOK performs the conversion in reverse direction, i.e.
 *> converts the factorization output format used in SSYTRF_RK
-*> (or SSYTRF_BK) provided on entry in parametes A and E into
+*> (or SSYTRF_BK) provided on entry in parameters A and E into
 *> the factorization output format used in SSYTRF_ROOK that is stored
 *> on exit in parameter A. IPIV format for SSYTRF_ROOK and
 *> SSYTRF_RK (or SSYTRF_BK) is the same and is not converted.

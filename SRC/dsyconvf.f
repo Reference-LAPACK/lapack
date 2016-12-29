@@ -45,7 +45,7 @@
 *> If parameter WAY = 'R':
 *> DSYCONVF performs the conversion in reverse direction, i.e.
 *> converts the factorization output format used in DSYTRF_RK
-*> (or DSYTRF_BK) provided on entry in parametes A and E into
+*> (or DSYTRF_BK) provided on entry in parameters A and E into
 *> the factorization output format used in DSYTRF that is stored
 *> on exit in parameter A. It also coverts in place details of
 *> the intechanges stored in IPIV from the format used in DSYTRF_RK

@@ -339,7 +339,7 @@
 *>               the minimal requirement is LWORK >= 5*N+2*N*N. 
 *>            4.2. if JOBV.EQ.'J' the minimal requirement is 
 *>               LWORK >= 4*N+N*N.
-*>            In both cases, the allocated CWORK can accomodate blocked runs
+*>            In both cases, the allocated CWORK can accommodate blocked runs
 *>            of ZGEQP3, ZGEQRF, ZGELQF, SUNMQR, ZUNMLQ.
 *>
 *>          If the call to ZGEJSV is a workspace query (indicated by LWORK=-1 or
@@ -423,7 +423,7 @@
 *>          then LRWORK = max( 7, 2 * M ).
 *>          4.2. Otherwise, LRWORK  = max( 7, N ).
 *>
-*>          If, on entry, LRWORK = -1 ot LWORK=-1, a workspace query is assumed and 
+*>          If, on entry, LRWORK = -1 or LWORK=-1, a workspace query is assumed and 
 *>          the length of RWORK is returned in RWORK(1). 
 *> \endverbatim
 *>
