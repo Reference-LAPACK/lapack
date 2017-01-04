@@ -25,7 +25,6 @@
 * VERSION 3.6.1 : June 2016
 * VERSION 3.7.0 : December 2016
 
-
 LAPACK is a library of Fortran 90 with subroutines for solving
 the most commonly occurring problems in numerical linear algebra.
 It is freely-available software, and is copyrighted.
@@ -45,15 +44,15 @@ very much on the efficiency of the BLAS.
 
 ## Installation
 
- - LAPACK can be installed with make. Configuration have to be set in the
-   make.inc file. A make.inc.example for a Linux machine running GNU compilers
-   is given in the main directory. Some specific make.inc are also available in
-   the INSTALL directory
- - LAPACK includes also the CMAKE build. You will need to have CMAKE installed
-   on your machine (CMAKE is available at http://www.cmake.org/). CMAKE will
-   allow an easy installation on a Windows Machine
+ - LAPACK can be installed with `make`. Configuration have to be set in the
+   `make.inc` file. A `make.inc.example` for a Linux machine running GNU compilers
+   is given in the main directory. Some specific `make.inc` are also available in
+   the `INSTALL` directory.
+ - LAPACK includes also the CMake build. You will need to have CMake installed
+   on your machine (CMake is available at http://www.cmake.org/). CMake will
+   allow an easy installation on a Windows Machine.
  - Specific information to run LAPACK under Windows are available at
-   http://icl.cs.utk.edu/lapack-for-windows/lapack/
+   http://icl.cs.utk.edu/lapack-for-windows/lapack/.
 
  For further information on LAPACK please read our FAQ at
  http://www.netlib.org/lapack/#_faq
@@ -72,7 +71,7 @@ electronic mail to lapack@cs.utk.edu.
 
 A list of known problems, bugs, and compiler errors for LAPACK is
 maintained on netlib.
-  http://www.netlib.org/lapack/release_notes.html
+ * http://www.netlib.org/lapack/release_notes.html
 
 A User forum is also available to help you with the LAPACK library at
  http://icl.cs.utk.edu/lapack-forum/.
@@ -91,8 +90,8 @@ types, including the object files, is approximately 80 Mbytes.
 
 A README file containing the information in this letter is located
 in the LAPACK directory. Postscript and LaTeX versions of the Quick
-Installation Guide are in the LAPACK/INSTALL directory, in the files
-lawn81.tex, psfig.tex, lawn81.ps, and org2.ps.  Consult the Installation
+Installation Guide are in the `LAPACK/INSTALL` directory, in the files
+`lawn81.tex`, `psfig.tex`, `lawn81.ps`, and `org2.ps`.  Consult the Installation
 Guide for further details on installing the package and on what is contained
 in each subdirectory.  For complete information on the LAPACK Testing
 please consult LAPACK Working Note 41 "Installation
@@ -149,15 +148,9 @@ LAPACK and published as LAPACK Working Notes, initially by Argonne
 National Laboratory and later by the University of Tennessee.  Many of
 these reports later appeared as journal articles.  Most of these working
 notes are available in pdf and postscript form from netlib.
-  http://www.netlib.org/lapack/lawns/
-  http://www.netlib.org/lapack/lawnspdf/
+  * http://www.netlib.org/lapack/lawns/
+  * http://www.netlib.org/lapack/lawnspdf/
 Otherwise, requests for copies of these working notes can be sent to
 the following address.
 
-LAPACK Project
-c/o J.J. Dongarra
-Computer Science Department
-University of Tennessee
-Knoxville, Tennessee 37996-1301
-USA
-Email: lapack@cs.utk.edu
+LAPACK Project, c/o J.J. Dongarra, Computer Science Department, University of Tennessee, Knoxville, Tennessee 37996-1301, USA, Email: lapack@cs.utk.edu.
