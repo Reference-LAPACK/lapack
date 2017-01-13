@@ -70,13 +70,13 @@ of interesting applications, and other comments should be sent by
 electronic mail to lapack@cs.utk.edu.
 
 For further information on LAPACK please read our FAQ at
-http://www.netlib.org/lapack/#_faq
+http://www.netlib.org/lapack/#_faq.
 
 A list of known problems, bugs, and compiler errors for LAPACK is
-maintained on netlib.
-http://www.netlib.org/lapack/release_notes.html
+maintained on netlib
+http://www.netlib.org/lapack/release_notes.html.
 Please see as well
-https://github.com/Reference-LAPACK/lapack/issues
+https://github.com/Reference-LAPACK/lapack/issues.
 
 A User forum is also available to help you with the LAPACK library at
  http://icl.cs.utk.edu/lapack-forum/.
@@ -100,6 +100,7 @@ To view an HTML version of the Users' Guide please refer to the URL
 ## LAPACKE
 
 LAPACK now includes the LAPACKE package.
-LAPACKE is a Standard C language APIs for LAPACK.
-http://www.netlib.org/lapack/#_standard_c_language_apis_for_lapack
+LAPACKE is a Standard C language APIs for LAPACK
 This was born from a collaboration of LAPACK and INTEL Math Kernel Library teams.
+See: http://www.netlib.org/lapack/#_standard_c_language_apis_for_lapack.
+
