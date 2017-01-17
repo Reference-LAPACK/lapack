@@ -25,13 +25,13 @@
 * VERSION 3.6.1 : June 2016
 * VERSION 3.7.0 : December 2016
 
-LAPACK is a library of Fortran subroutines for solving
-the most commonly occurring problems in numerical linear algebra.
+LAPACK is a library of Fortran subroutines for solving the most commonly
+occurring problems in numerical linear algebra.
 
 LAPACK is a freely-available software package. It can be included in commercial
-software packages (and has been).  We only ask that that proper credit be given
-to the authors, for example by citing the LAPACK Users' Guide. The license
-used for the software is the modified BSD license, see:
+software packages (and has been). We only ask that that proper credit be given
+to the authors, for example by citing the LAPACK Users' Guide. The license used
+for the software is the modified BSD license, see:
 https://github.com/Reference-LAPACK/lapack/blob/master/LICENSE
 
 Like all software, it is copyrighted. It is not trademarked, but we do ask the
@@ -48,15 +48,13 @@ https://github.com/reference-lapack/lapack
 LAPACK releases are also available on netlib at:
 http://www.netlib.org/lapack/
 
-The distribution contains (1) the Fortran source for LAPACK, and (2) its 
-testing programs.  It also contains (3) the Fortran
-reference implementation of the Basic Linear Algebra Subprograms
-(the Level 1, 2, and 3 BLAS) needed by LAPACK.  However this code is
-intended for use only if there is no other implementation of the BLAS
-already available on your machine; the efficiency of LAPACK depends
-very much on the efficiency of the BLAS.
-It also contains (4) CBLAS, a C interface to the BLAS, and (5) LAPACKE,
-a C interface to LAPACK.
+The distribution contains (1) the Fortran source for LAPACK, and (2) its
+testing programs.  It also contains (3) the Fortran reference implementation of
+the Basic Linear Algebra Subprograms (the Level 1, 2, and 3 BLAS) needed by
+LAPACK.  However this code is intended for use only if there is no other
+implementation of the BLAS already available on your machine; the efficiency of
+LAPACK depends very much on the efficiency of the BLAS.  It also contains (4)
+CBLAS, a C interface to the BLAS, and (5) LAPACKE, a C interface to LAPACK.
 
 ## Installation
 
@@ -73,11 +71,10 @@ a C interface to LAPACK.
 
 ## User Support
 
-LAPACK has been thoroughly tested, on many different
-types of computers.  The LAPACK project supports the package in the
-sense that reports of errors or poor performance will gain immediate
-attention from the developers. Such reports, descriptions
-of interesting applications, and other comments should be sent by
+LAPACK has been thoroughly tested, on many different types of computers. The
+LAPACK project supports the package in the sense that reports of errors or poor
+performance will gain immediate attention from the developers. Such reports,
+descriptions of interesting applications, and other comments should be sent by
 electronic mail to lapack@cs.utk.edu.
 
 For further information on LAPACK please read our FAQ at
@@ -90,7 +87,7 @@ Please see as well
 https://github.com/Reference-LAPACK/lapack/issues.
 
 A User forum is also available to help you with the LAPACK library at
- http://icl.cs.utk.edu/lapack-forum/.
+http://icl.cs.utk.edu/lapack-forum/.
 You can also contact directly the LAPACK team at lapack@cs.utk.edu.
 
 
@@ -99,9 +96,8 @@ You can also contact directly the LAPACK team at lapack@cs.utk.edu.
 LAPACK includes a thorough test suite. We recommend that, after compilation,
 you run the test suite. 
 
-For complete information on the LAPACK Testing
-please consult LAPACK Working Note 41 "Installation
-Guide for LAPACK".
+For complete information on the LAPACK Testing please consult LAPACK Working
+Note 41 "Installation Guide for LAPACK".
 
 ## User Guide
 
@@ -110,8 +106,8 @@ To view an HTML version of the Users' Guide please refer to the URL
 
 ## LAPACKE
 
-LAPACK now includes the LAPACKE package.
-LAPACKE is a Standard C language API for LAPACK
-This was born from a collaboration of the LAPACK and INTEL Math Kernel Library teams.
-See: http://www.netlib.org/lapack/#_standard_c_language_apis_for_lapack.
+LAPACK now includes the LAPACKE package.  LAPACKE is a Standard C language API
+for LAPACK This was born from a collaboration of the LAPACK and INTEL Math
+Kernel Library teams. See:
+http://www.netlib.org/lapack/#_standard_c_language_apis_for_lapack.
 
