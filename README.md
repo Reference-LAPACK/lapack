@@ -29,15 +29,13 @@ LAPACK is a library of Fortran subroutines for solving
 the most commonly occurring problems in numerical linear algebra.
 It is freely-available software, and is copyrighted.
 
-
-
 LAPACK is available from GitHub at:
 https://github.com/Reference-LAPACK/lapack
 
 LAPACK releases are also available on netlib at:
 http://www.netlib.org/lapack/
 
-The distribution contains (1) the Fortran source for LAPACK, (2) its 
+The distribution contains (1) the Fortran source for LAPACK, and (2) its 
 testing programs.  It also contains (3) the Fortran
 reference implementation of the Basic Linear Algebra Subprograms
 (the Level 1, 2, and 3 BLAS) needed by LAPACK.  However this code is
@@ -49,14 +47,14 @@ a C interface to LAPACK.
 
 ## Installation
 
- - LAPACK can be installed with `make`. Configuration have to be set in the
+ - LAPACK can be installed with `make`. The configuration have to be set in the
    `make.inc` file. A `make.inc.example` for a Linux machine running GNU compilers
    is given in the main directory. Some specific `make.inc` are also available in
    the `INSTALL` directory.
  - LAPACK includes also the CMake build. You will need to have CMake installed
    on your machine (CMake is available at http://www.cmake.org/). CMake will
    allow an easy installation on a Windows Machine.
- - Specific information to run LAPACK under Windows are available at
+ - Specific information to run LAPACK under Windows is available at
    http://icl.cs.utk.edu/lapack-for-windows/lapack/.
 
 
@@ -100,7 +98,7 @@ To view an HTML version of the Users' Guide please refer to the URL
 ## LAPACKE
 
 LAPACK now includes the LAPACKE package.
-LAPACKE is a Standard C language APIs for LAPACK
-This was born from a collaboration of LAPACK and INTEL Math Kernel Library teams.
+LAPACKE is a Standard C language API for LAPACK
+This was born from a collaboration of the LAPACK and INTEL Math Kernel Library teams.
 See: http://www.netlib.org/lapack/#_standard_c_language_apis_for_lapack.
 
