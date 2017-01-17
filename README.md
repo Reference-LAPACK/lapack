@@ -34,11 +34,11 @@ to the authors, for example by citing the LAPACK Users' Guide. The license
 used for the software is the modified BSD license, see:
 https://github.com/Reference-LAPACK/lapack/blob/master/LICENSE
 
-like all software, it is copyrighted. it is not trademarked, but we do ask the
+Like all software, it is copyrighted. It is not trademarked, but we do ask the
 following: if you modify the source for these routines we ask that you change
 the name of the routine and comment the changes made to the original.
 
-we will gladly answer any questions regarding the software. if a modification
+We will gladly answer any questions regarding the software. If a modification
 is done, however, it is the responsibility of the person who modified the
 routine to provide support.
 
