@@ -27,10 +27,22 @@
 
 LAPACK is a library of Fortran subroutines for solving
 the most commonly occurring problems in numerical linear algebra.
-It is freely-available software, and is copyrighted.
 
-LAPACK is available from GitHub at:
-https://github.com/Reference-LAPACK/lapack
+LAPACK is a freely-available software package. It can be included in commercial
+software packages (and has been).  We only ask that proper credit be given to
+the authors.  The license used for the software is the modified BSD license,
+see: https://github.com/reference-lapack/lapack/blob/master/license
+
+like all software, it is copyrighted. it is not trademarked, but we do ask the
+following: if you modify the source for these routines we ask that you change
+the name of the routine and comment the changes made to the original.
+
+we will gladly answer any questions regarding the software. if a modification
+is done, however, it is the responsibility of the person who modified the
+routine to provide support.
+
+LAPACK is available from github at:
+https://github.com/reference-lapack/lapack
 
 LAPACK releases are also available on netlib at:
 http://www.netlib.org/lapack/
