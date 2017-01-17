@@ -31,7 +31,7 @@ the most commonly occurring problems in numerical linear algebra.
 LAPACK is a freely-available software package. It can be included in commercial
 software packages (and has been).  We only ask that proper credit be given to
 the authors.  The license used for the software is the modified BSD license,
-see: https://github.com/reference-lapack/lapack/blob/master/license
+see: https://github.com/Reference-LAPACK/lapack/blob/master/LICENSE
 
 like all software, it is copyrighted. it is not trademarked, but we do ask the
 following: if you modify the source for these routines we ask that you change
