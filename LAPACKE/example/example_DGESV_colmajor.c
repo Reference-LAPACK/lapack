@@ -25,10 +25,10 @@
 
    LAPACKE_dgesv (col-major, high-level) Example Program Results
 
-  -- LAPACKE Example routine (version 3.6.0) --
+  -- LAPACKE Example routine (version 3.7.0) --
   -- LAPACK is a software package provided by Univ. of Tennessee,    --
   -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-     November 2015
+     December 2016
 
 */
 /* Includes */

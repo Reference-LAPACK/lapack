@@ -93,7 +93,7 @@ C> \author Univ. of California Berkeley
 C> \author Univ. of Colorado Denver
 C> \author NAG Ltd.
 *
-C> \date November 2011
+C> \date December 2016
 *
 C> \ingroup variantsGEcomputational
 *
@@ -103,7 +103,7 @@ C> \ingroup variantsGEcomputational
 *  -- LAPACK computational routine (version 3.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N

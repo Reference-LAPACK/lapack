@@ -33,14 +33,19 @@
 *  ==========
 *
 *> \param[in] SIDE
+*> \verbatim
 *>          SIDE is CHARACTER*1
 *>          = 'L': apply Q or Q**T from the Left;
 *>          = 'R': apply Q or Q**T from the Right.
+*> \endverbatim
 *>
 *> \param[in] TRANS
+*> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
 *>          = 'C':  Conjugate Transpose, apply Q**C.
+*> \endverbatim
+*>
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
@@ -109,12 +114,17 @@
 *> \endverbatim
 *>
 *> \param[in,out] C
+*> \verbatim
 *>          C is COMPLEX*16 array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
 *>          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
+*> \endverbatim
+*>
 *> \param[in] LDC
+*> \verbatim
 *>          LDC is INTEGER
 *>          The leading dimension of the array C. LDC >= max(1,M).
+*> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
@@ -185,10 +195,10 @@
       SUBROUTINE ZLAMTSQR( SIDE, TRANS, M, N, K, MB, NB, A, LDA, T,
      $        LDT, C, LDC, WORK, LWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.5.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2013
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER         SIDE, TRANS
@@ -310,9 +320,9 @@
 *
          KK = MOD((M-K),(MB-K))
          II=M-KK+1
+         CTR = 1
          CALL ZGEMQRT('L','C',MB , N, K, NB, A(1,1), LDA, T
      $            ,LDT ,C(1,1), LDC, WORK, INFO )
-         CTR = 1
 *
          DO I=MB+1,II-MB+K,(MB-K)
 *
@@ -350,11 +360,11 @@
           END IF
 *
           DO I=II-(MB-K),MB+1,-(MB-K)
-            CTR = CTR - 1
 *
 *         Multiply Q to the current block of C (1:M,I:I+MB)
 *
-          CALL ZTPMQRT('R','C',M , MB-K, K, 0,NB, A(I,1), LDA,
+            CTR = CTR - 1
+            CALL ZTPMQRT('R','C',M , MB-K, K, 0,NB, A(I,1), LDA,
      $          T(1, CTR * K + 1), LDT, C(1,1), LDC,
      $          C(1,I), LDC, WORK, INFO )
 
@@ -371,9 +381,9 @@
 *
          KK = MOD((N-K),(MB-K))
          II=N-KK+1
+         CTR = 1
          CALL ZGEMQRT('R','N', M, MB , K, NB, A(1,1), LDA, T
      $              ,LDT ,C(1,1), LDC, WORK, INFO )
-         CTR = 1
 *
          DO I=MB+1,II-MB+K,(MB-K)
 *

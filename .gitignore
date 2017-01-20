@@ -18,3 +18,7 @@ TESTING/*.txt
 
 # LAPACKE example
 LAPACKE/example/xexample*
+
+# SED
+SRC/*-e
+LAPACKE/src/*-e

@@ -48,7 +48,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date December 2016
 *
 *> \ingroup double_lin
 *
@@ -56,10 +56,10 @@
       SUBROUTINE SERRTSQR( PATH, NUNIT )
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.4.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER*3        PATH
@@ -161,13 +161,13 @@
       CALL SGEMQR( 'L', 'N', 2, 1, 0, A, 0, TAU, 1, C, 1, W, 1,INFO)
       CALL CHKXER( 'SGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL SGEMQR( 'R', 'N', 2, 2, 1, A, 1, TAU, 0, C, 1, W, 1,INFO)
+      CALL SGEMQR( 'R', 'N', 2, 2, 1, A, 2, TAU, 0, C, 1, W, 1,INFO)
       CALL CHKXER( 'SGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 9
-      CALL SGEMQR( 'L', 'N', 2, 2, 1, A, 1, TAU, 0, C, 1, W, 1,INFO)
+      CALL SGEMQR( 'L', 'N', 2, 2, 1, A, 2, TAU, 0, C, 1, W, 1,INFO)
       CALL CHKXER( 'SGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 11
-      CALL SGEMQR( 'L', 'N', 2, 1, 1, A, 1, TAU, 6, C, 0, W, 1,INFO)
+      CALL SGEMQR( 'L', 'N', 2, 1, 1, A, 2, TAU, 6, C, 0, W, 1,INFO)
       CALL CHKXER( 'SGEMQR', INFOT, NOUT, LERR, OK )
       INFOT = 13
       CALL SGEMQR( 'L', 'N', 2, 2, 1, A, 2, TAU, 6, C, 2, W, 0,INFO)

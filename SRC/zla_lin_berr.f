@@ -101,7 +101,7 @@
 *  =====================================================================
       SUBROUTINE ZLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
 *
-*  -- LAPACK computational routine (version 3.6.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016

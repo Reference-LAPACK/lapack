@@ -122,7 +122,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date December 2016
 *
 *> \ingroup OTHERauxiliary
 *
@@ -153,10 +153,10 @@
       INTEGER          FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3,
      $                 N4 )
 *
-*  -- LAPACK test routine (version 3.4.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER*( * )    NAME, OPTS
@@ -169,8 +169,8 @@
       INTRINSIC          INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            IEEECK
-      EXTERNAL           IEEECK
+      INTEGER            IEEECK, IPARAM2STAGE
+      EXTERNAL           IEEECK, IPARAM2STAGE
 *     ..
 *     .. Arrays in Common ..
       INTEGER            IPARMS( 100 )
@@ -228,6 +228,16 @@ C        ILAENV = 0
          ILAENV = IPARMS( ISPEC )
 *         WRITE(*,*) 'ISPEC = ',ISPEC,' ILAENV =',ILAENV
 *         ILAENV = IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+*
+      ELSE IF(( ISPEC.GE.17 ) .AND. (ISPEC.LE.21)) THEN
+*
+*     17 <= ISPEC <= 21: 2stage eigenvalues SVD routines. 
+*
+         IF( ISPEC.EQ.17 ) THEN
+             ILAENV = IPARMS( 1 )
+         ELSE
+             ILAENV = IPARAM2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N4 ) 
+         ENDIF
 *
       ELSE
 *

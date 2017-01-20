@@ -227,7 +227,7 @@
      $                   WORK, LWORK, RWORK, IWORK, INFO )
       implicit none
 *
-*  -- LAPACK driver routine (version 3.6.1) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -330,8 +330,10 @@
 *       real workspace. NB refers to the optimal block size for the
 *       immediately following subroutine, as returned by ILAENV.)
 *
-      IF( INFO.EQ.0 .AND. M.GT.0 .AND. N.GT.0 ) THEN
-         IF( M.GE.N ) THEN
+      IF( INFO.EQ.0 ) THEN
+         MINWRK = 1
+         MAXWRK = 1
+         IF( M.GE.N .AND. MINMN.GT.0 ) THEN
 *
 *           There is no complex work space needed for bidiagonal SVD
 *           The real work space needed for bidiagonal SVD (dbdsdc) is
@@ -472,7 +474,7 @@
                   MAXWRK = MAX( MAXWRK, 2*N + LWORK_ZUNMBR_PRC_NN )
                END IF
             END IF
-         ELSE
+         ELSE IF( MINMN.GT.0 ) THEN
 *
 *           There is no complex work space needed for bidiagonal SVD
 *           The real work space needed for bidiagonal SVD (dbdsdc) is

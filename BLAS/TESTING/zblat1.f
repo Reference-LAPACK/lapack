@@ -37,7 +37,7 @@
 *  =====================================================================
       PROGRAM ZBLAT1
 *
-*  -- Reference BLAS test routine (version 3.4.1) --
+*  -- Reference BLAS test routine (version 3.7.0) --
 *  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     April 2012

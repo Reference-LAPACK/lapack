@@ -46,6 +46,7 @@ all: single complex double complex16 singleproto doubleproto complexproto comple
 
 SEIGTST= snep.out \
          ssep.out \
+         sse2.out \
          ssvd.out \
          sec.out \
          sed.out \
@@ -66,6 +67,7 @@ SEIGTST= snep.out \
 
 CEIGTST= cnep.out \
          csep.out \
+         cse2.out \
          csvd.out \
          cec.out \
          ced.out \
@@ -86,6 +88,7 @@ CEIGTST= cnep.out \
 
 DEIGTST= dnep.out \
          dsep.out \
+         dse2.out \
          dsvd.out \
          dec.out \
          ded.out \
@@ -106,6 +109,7 @@ DEIGTST= dnep.out \
 
 ZEIGTST= znep.out \
          zsep.out \
+         zse2.out \
          zsvd.out \
          zec.out \
          zed.out \
@@ -184,31 +188,31 @@ dstest.out: dstest.in xlintstds
 # ======== COMPLEX-COMPLEX16 LIN TESTS ========================
 
 zctest.out: zctest.in xlintstzc
-	@echo Testing COMPLEX-COMPLEX16 LAPACK protoype linear equation routines
+	@echo Testing COMPLEX-COMPLEX16 LAPACK prototype linear equation routines
 	./xlintstzc < zctest.in > $@ 2>&1
 #
 # ======== SINGLE RFP LIN TESTS ========================
 
 stest_rfp.out: stest_rfp.in xlintstrfs
-	@echo Testing REAL LAPACK RFP protoype linear equation routines
+	@echo Testing REAL LAPACK RFP prototype linear equation routines
 	./xlintstrfs < stest_rfp.in > $@ 2>&1
 #
 # ======== COMPLEX16 RFP LIN TESTS ========================
 
 dtest_rfp.out: dtest_rfp.in xlintstrfd
-	@echo Testing DOUBLE PRECISION LAPACK RFP protoype linear equation routines
+	@echo Testing DOUBLE PRECISION LAPACK RFP prototype linear equation routines
 	./xlintstrfd < dtest_rfp.in > $@ 2>&1
 #
 # ======== COMPLEX16 RFP LIN TESTS ========================
 
 ctest_rfp.out: ctest_rfp.in xlintstrfc
-	@echo Testing COMPLEX LAPACK RFP protoype linear equation routines
+	@echo Testing COMPLEX LAPACK RFP prototype linear equation routines
 	./xlintstrfc < ctest_rfp.in > $@ 2>&1
 #
 # ======== COMPLEX16 RFP LIN TESTS ========================
 
 ztest_rfp.out: ztest_rfp.in xlintstrfz
-	@echo Testing COMPLEX16 LAPACK RFP protoype linear equation routines
+	@echo Testing COMPLEX16 LAPACK RFP prototype linear equation routines
 	./xlintstrfz < ztest_rfp.in > $@ 2>&1
 #
 #
@@ -222,6 +226,10 @@ snep.out: nep.in xeigtsts
 ssep.out: sep.in xeigtsts
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./xeigtsts < sep.in > $@ 2>&1
+
+sse2.out: se2.in xeigtsts
+	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+	./xeigtsts < se2.in > $@ 2>&1
 
 ssvd.out: svd.in xeigtsts
 	@echo SVD: Testing Singular Value Decomposition routines
@@ -301,6 +309,10 @@ csep.out: sep.in xeigtstc
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./xeigtstc < sep.in > $@ 2>&1
 
+cse2.out: se2.in xeigtstc
+	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+	./xeigtstc < se2.in > $@ 2>&1
+
 csvd.out: svd.in xeigtstc
 	@echo SVD: Testing Singular Value Decomposition routines
 	./xeigtstc < svd.in > $@ 2>&1
@@ -379,6 +391,10 @@ dsep.out: sep.in xeigtstd
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./xeigtstd < sep.in > $@ 2>&1
 
+dse2.out: se2.in xeigtstd
+	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+	./xeigtstd < se2.in > $@ 2>&1
+
 dsvd.out: svd.in xeigtstd
 	@echo SVD: Testing Singular Value Decomposition routines
 	./xeigtstd < svd.in > $@ 2>&1
@@ -456,6 +472,10 @@ znep.out: nep.in xeigtstz
 zsep.out: sep.in xeigtstz
 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
 	./xeigtstz < sep.in > $@ 2>&1
+
+zse2.out: se2.in xeigtstz
+	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+	./xeigtstz < se2.in > $@ 2>&1
 
 zsvd.out: svd.in xeigtstz
 	@echo SVD: Testing Singular Value Decomposition routines

@@ -68,7 +68,7 @@
 *  =====================================================================
       SUBROUTINE DERRED( PATH, NUNIT )
 *
-*  -- LAPACK test routine (version 3.6.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -415,7 +415,7 @@
      $                 2, 2, A, 2, S, U, 1, VT, 2,
      $                 W, 1, IW, INFO)
          CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
-         INFOT = 14
+         INFOT = 15
          CALL DGEJSV( 'G', 'U', 'V', 'R', 'N', 'N',
      $                 2, 2, A, 2, S, U, 2, VT, 1,
      $                 W, 1, IW, INFO)

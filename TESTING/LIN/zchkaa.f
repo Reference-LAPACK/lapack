@@ -50,11 +50,13 @@
 *> ZPB    8               List types on next line if 0 < NTYPES <  8
 *> ZPT   12               List types on next line if 0 < NTYPES < 12
 *> ZHE   10               List types on next line if 0 < NTYPES < 10
-*> ZHA   10               List types on next line if 0 < NTYPES < 10
 *> ZHR   10               List types on next line if 0 < NTYPES < 10
+*> ZHK   10               List types on next line if 0 < NTYPES < 10
+*> ZHA   10               List types on next line if 0 < NTYPES < 10
 *> ZHP   10               List types on next line if 0 < NTYPES < 10
 *> ZSY   11               List types on next line if 0 < NTYPES < 11
 *> ZSR   11               List types on next line if 0 < NTYPES < 11
+*> ZSK   11               List types on next line if 0 < NTYPES < 11
 *> ZSP   11               List types on next line if 0 < NTYPES < 11
 *> ZTR   18               List types on next line if 0 < NTYPES < 18
 *> ZTP   18               List types on next line if 0 < NTYPES < 18
@@ -103,7 +105,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2016
+*> \date December 2016
 *
 *> \ingroup complex16_lin
 *
@@ -113,7 +115,7 @@
 *  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2016
+*     December 2016
 *
 *  =====================================================================
 *
@@ -151,7 +153,7 @@
      $                   RANKVAL( MAXIN ), PIV( NMAX )
       DOUBLE PRECISION   RWORK( 150*NMAX+2*MAXRHS ), S( 2*NMAX )
       COMPLEX*16         A( ( KDMAX+1 )*NMAX, 7 ), B( NMAX*MAXRHS, 4 ),
-     $                   WORK( NMAX, NMAX+MAXRHS+10 )
+     $                   E( NMAX ),  WORK( NMAX, NMAX+MAXRHS+10 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME, LSAMEN
@@ -160,14 +162,16 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
-     $                   ZCHKHE_ROOK, ZCHKHP, ZCHKLQ, ZCHKPB, ZCHKPO,
-     $                   ZCHKPS, ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQL,
-     $                   ZCHKQR, ZCHKRQ, ZCHKSP, ZCHKSY, ZCHKSY_ROOK,
-     $                   ZCHKTB, ZCHKTP, ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE,
-     $                   ZDRVGT, ZDRVHE, ZDRVHE_ROOK, ZDRVHP, ZDRVLS,
-     $                   ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
-     $                   ZDRVSY_ROOK, ILAVER, ZCHKQRT, ZCHKQRTP,
-     $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR
+     $                   ZCHKHE_ROOK, ZCHKHE_RK, ZCHKHE_AA, ZCHKHP,
+     $                   ZCHKLQ, ZCHKPB, ZCHKPO, ZCHKPS, ZCHKPP, ZCHKPT,
+     $                   ZCHKQ3, ZCHKQL, ZCHKQR, ZCHKRQ, ZCHKSP, ZCHKSY,
+     $                   ZCHKSY_ROOK, ZCHKSY_RK, ZCHKSY_AA, ZCHKTB,
+     $                   ZCHKTP, ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE, ZDRVGT,
+     $                   ZDRVHE, ZDRVHE_ROOK, ZDRVHE_RK, ZDRVHE_AA,
+     $                   ZDRVHP, ZDRVLS, ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT,
+     $                   ZDRVSP, ZDRVSY, ZDRVSY_ROOK, ZDRVSY_RK,
+     $                   ZDRVSY_AA, ILAVER, ZCHKQRT, ZCHKQRTP, ZCHKLQT,
+     $                   ZCHKLQTP, ZCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -640,38 +644,11 @@
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
-*
-      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
-*
-*        HA:  Hermitian indefinite matrices,
-*             with partial (Aasen's) pivoting algorithm
-*
-         NTYPES = 10
-         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
-*
-         IF( TSTCHK ) THEN
-            CALL ZCHKHE_AASEN( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
-     $                         NSVAL, THRESH, TSTERR, LDA,
-     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                         WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9989 )PATH
-         END IF
-*
-         IF( TSTDRV ) THEN
-            CALL ZDRVHE_AASEN( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
-     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
-     $                         WORK, RWORK, IWORK, NOUT )
-         ELSE
-            WRITE( NOUT, FMT = 9988 )PATH
-         END IF
-*
+
       ELSE IF( LSAMEN( 2, C2, 'HR' ) ) THEN
 *
 *        HR:  Hermitian indefinite matrices,
-*             with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -690,6 +667,60 @@
      $                        LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
      $                        RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'HK' ) ) THEN
+*
+*        HK:  Hermitian indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
+*             differnet matrix storage format than HR path version.
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKHE_RK ( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                       THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                       E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                       B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL ZDRVHE_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
+     $                      RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
+*
+*        HA:  Hermitian indefinite matrices,
+*             with partial (Aasen's) pivoting algorithm
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKHE_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS,
+     $                         NSVAL, THRESH, TSTERR, LDA,
+     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL ZDRVHE_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
@@ -748,7 +779,7 @@
       ELSE IF( LSAMEN( 2, C2, 'SR' ) ) THEN
 *
 *        SR:  symmetric indefinite matrices,
-*             with "rook" (bounded Bunch-Kaufman) pivoting algorithm
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm
 *
          NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -767,6 +798,60 @@
      $                        LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
      $                        B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
      $                        RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'SK' ) ) THEN
+*
+*        SK:  symmetric indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
+*             differnet matrix storage format than SR path version.
+*
+         NTYPES = 11
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKSY_RK( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                      E, A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL ZDRVSY_RK( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), E, A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
+     $                      RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'SA' ) ) THEN
+*
+*        SK:  symmetric indefinite matrices,
+*             with bounded Bunch-Kaufman (rook) pivoting algorithm,
+*             differnet matrix storage format than SR path version.
+*
+         NTYPES = 11
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKSY_AA( DOTYPE, NN, NVAL, NNB2, NBVAL2, NNS, NSVAL,
+     $                      THRESH, TSTERR, LDA, A( 1, 1 ), A( 1, 2 ),
+     $                      A( 1, 3 ), B( 1, 1 ), B( 1, 2 ),
+     $                      B( 1, 3 ), WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL ZDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                      LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                      B( 1, 1 ), B( 1, 2 ), B( 1, 3 ), WORK,
+     $                      RWORK, IWORK, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
@@ -964,8 +1049,7 @@
             CALL ZDRVLS( DOTYPE, NM, MVAL, NN, NVAL, NNS, NSVAL, NNB,
      $                   NBVAL, NXVAL, THRESH, TSTERR, A( 1, 1 ),
      $                   A( 1, 2 ), A( 1, 3 ), A( 1, 4 ), A( 1, 5 ),
-     $                   S( 1 ), S( NMAX+1 ), WORK, RWORK, IWORK,
-     $                   NOUT )
+     $                   S( 1 ), S( NMAX+1 ), NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
          END IF

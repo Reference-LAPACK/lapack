@@ -91,7 +91,7 @@
 *  =====================================================================
       SUBROUTINE SLADIV( A, B, C, D, P, Q )
 *
-*  -- LAPACK auxiliary routine (version 3.5.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     January 2013
@@ -178,7 +178,7 @@
 
       SUBROUTINE SLADIV1( A, B, C, D, P, Q )
 *
-*  -- LAPACK auxiliary routine (version 3.5.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     January 2013
@@ -218,7 +218,7 @@
 
       REAL FUNCTION SLADIV2( A, B, C, D, R, T )
 *
-*  -- LAPACK auxiliary routine (version 3.5.0) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     January 2013

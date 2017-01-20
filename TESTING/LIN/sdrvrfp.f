@@ -231,7 +231,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2013
+*> \date December 2016
 *
 *> \ingroup single_lin
 *
@@ -243,10 +243,10 @@
      +              S_TEMP_SPOT03, S_WORK_SLANSY,
      +              S_WORK_SPOT02, S_WORK_SPOT03 )
 *
-*  -- LAPACK test routine (version 3.5.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2013
+*     December 2016
 *
 *     .. Scalar Arguments ..
       INTEGER            NN, NNS, NNT, NOUT

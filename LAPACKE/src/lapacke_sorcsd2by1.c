@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function sorcsd2by1
 * Author: Intel Corporation
-* Generated November, 2011
+* Generated December 2016
 *****************************************************************************/
 
 #include "lapacke_utils.h"

@@ -132,7 +132,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2016
+*> \date December 2016
 *
 *> \ingroup OTHERauxiliary
 *
@@ -162,10 +162,10 @@
 *  =====================================================================
       INTEGER FUNCTION ILAENV( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
 *
-*  -- LAPACK auxiliary routine (version 3.6.1) --
+*  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2016
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER*( * )    NAME, OPTS
@@ -183,13 +183,14 @@
       INTRINSIC          CHAR, ICHAR, INT, MIN, REAL
 *     ..
 *     .. External Functions ..
-      INTEGER            IEEECK, IPARMQ
-      EXTERNAL           IEEECK, IPARMQ
+      INTEGER            IEEECK, IPARMQ, IPARAM2STAGE
+      EXTERNAL           IEEECK, IPARMQ, IPARAM2STAGE
 *     ..
 *     .. Executable Statements ..
 *
       GO TO ( 10, 10, 10, 80, 90, 100, 110, 120,
-     $        130, 140, 150, 160, 160, 160, 160, 160 )ISPEC
+     $        130, 140, 150, 160, 160, 160, 160, 160,
+     $        170, 170, 170, 170, 170 )ISPEC
 *
 *     Invalid value for ISPEC
 *
@@ -688,6 +689,13 @@
 *     12 <= ISPEC <= 16: xHSEQR or related subroutines.
 *
       ILAENV = IPARMQ( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
+      RETURN
+*
+  170 CONTINUE
+*
+*     17 <= ISPEC <= 21: 2stage eigenvalues and SVD or related subroutines.
+*
+      ILAENV = IPARAM2STAGE( ISPEC, NAME, OPTS, N1, N2, N3, N4 )
       RETURN
 *
 *     End of ILAENV

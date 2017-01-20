@@ -89,8 +89,8 @@
 /*
  * Level 2 BLAS
  */
-#define F77_ssymv 		F77_GLOBAL(ssymv,SSYMY)
-#define F77_ssbmv 		F77_GLOBAL(ssbmv,SSMBV)
+#define F77_ssymv 		F77_GLOBAL(ssymv,SSYMV)
+#define F77_ssbmv 		F77_GLOBAL(ssbmv,SSBMV)
 #define F77_sspmv 		F77_GLOBAL(sspmv,SSPMV)
 #define F77_sger 		F77_GLOBAL(sger,SGER)
 #define F77_ssyr 		F77_GLOBAL(ssyr,SSYR)
@@ -135,7 +135,7 @@
 #define F77_dgbmv 		F77_GLOBAL(dgbmv,DGBMV)
 #define F77_dtrmv 		F77_GLOBAL(dtrmv,DTRMV)
 #define F77_dtbmv 		F77_GLOBAL(dtbmv,DTBMV)
-#define F77_dtpmv 		F77_GLOBAL(dtpmv,DTRMV)
+#define F77_dtpmv 		F77_GLOBAL(dtpmv,DTPMV)
 #define F77_dtrsv 		F77_GLOBAL(dtrsv,DTRSV)
 #define F77_dtbsv 		F77_GLOBAL(dtbsv,DTBSV)
 #define F77_dtpsv 		F77_GLOBAL(dtpsv,DTPSV)

@@ -56,7 +56,7 @@ include ../make.inc
 #
 #######################################################################
 
-ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o iparmq.o \
+ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o iparmq.o iparam2stage.o\
    ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
@@ -120,9 +120,10 @@ SLASRC = \
    slaqgb.o slaqge.o slaqp2.o slaqps.o slaqsb.o slaqsp.o slaqsy.o \
    slaqr0.o slaqr1.o slaqr2.o slaqr3.o slaqr4.o slaqr5.o \
    slaqtr.o slar1v.o slar2v.o ilaslr.o ilaslc.o \
-   slarf.o  slarfb.o slarfg.o slarfgp.o slarft.o slarfx.o slargv.o \
+   slarf.o  slarfb.o slarfg.o slarfgp.o slarft.o slarfx.o slarfy.o slargv.o \
    slarrv.o slartv.o \
    slarz.o  slarzb.o slarzt.o slaswp.o slasy2.o slasyf.o slasyf_rook.o \
+   slasyf_rk.o \
    slatbs.o slatdf.o slatps.o slatrd.o slatrs.o slatrz.o \
    slauu2.o slauum.o sopgtr.o sopmtr.o sorg2l.o sorg2r.o \
    sorgbr.o sorghr.o sorgl2.o sorglq.o sorgql.o sorgqr.o sorgr2.o \
@@ -143,10 +144,12 @@ SLASRC = \
    ssycon.o ssyev.o  ssyevd.o ssyevr.o ssyevx.o ssygs2.o \
    ssygst.o ssygv.o  ssygvd.o ssygvx.o ssyrfs.o ssysv.o  ssysvx.o \
    ssytd2.o ssytf2.o ssytrd.o ssytrf.o ssytri.o ssytri2.o ssytri2x.o \
-   ssyswapr.o ssytrs.o ssytrs2.o ssyconv.o \
+   ssyswapr.o ssytrs.o ssytrs2.o ssyconv.o ssyconvf_rook.o \
    ssytf2_rook.o ssytrf_rook.o ssytrs_rook.o \
-   slasyf_aasen.o ssysv_aasen.o ssytrf_aasen.o ssytrs_aasen.o \
    ssytri_rook.o ssycon_rook.o ssysv_rook.o \
+   ssytf2_rk.o ssytrf_rk.o ssytrs_3.o \
+   ssytri_3.o ssytri_3x.o ssycon_3.o ssysv_rk.o \
+   slasyf_aa.o ssysv_aa.o ssytrf_aa.o ssytrs_aa.o \
    stbcon.o \
    stbrfs.o stbtrs.o stgevc.o stgex2.o stgexc.o stgsen.o \
    stgsja.o stgsna.o stgsy2.o stgsyl.o stpcon.o stprfs.o stptri.o \
@@ -164,7 +167,10 @@ SLASRC = \
    sgelqt.o sgelqt3.o sgemlqt.o \
    sgetsls.o sgeqr.o slatsqr.o slamtsqr.o sgemqr.o \
    sgelq.o slaswlq.o slamswlq.o sgemlq.o \
-   stplqt.o stplqt2.o stpmlqt.o
+   stplqt.o stplqt2.o stpmlqt.o \
+   ssytrd_2stage.o ssytrd_sy2sb.o ssytrd_sb2st.o ssb2st_kernels.o \
+   ssyevd_2stage.o ssyev_2stage.o ssyevx_2stage.o ssyevr_2stage.o \
+   ssbev_2stage.o ssbevx_2stage.o ssbevd_2stage.o ssygv_2stage.o
 
 DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o
 
@@ -200,8 +206,11 @@ CLASRC = \
    chetf2.o chetrd.o \
    chetrf.o chetri.o chetri2.o chetri2x.o cheswapr.o \
    chetrs.o chetrs2.o \
-   chetf2_rook.o chetrf_rook.o chetri_rook.o chetrs_rook.o checon_rook.o chesv_rook.o \
-   chesv_aasen.o chetrf_aasen.o chetrs_aasen.o clahef_aasen.o \
+   chetf2_rook.o chetrf_rook.o chetri_rook.o \
+   chetrs_rook.o checon_rook.o chesv_rook.o \
+   chetf2_rk.o chetrf_rk.o chetri_3.o chetri_3x.o \
+   chetrs_3.o checon_3.o chesv_rk.o \
+   chesv_aa.o chetrf_aa.o chetrs_aa.o clahef_aa.o\
    chgeqz.o chpcon.o chpev.o  chpevd.o \
    chpevx.o chpgst.o chpgv.o  chpgvd.o chpgvx.o chprfs.o chpsv.o \
    chpsvx.o \
@@ -209,7 +218,7 @@ CLASRC = \
    clacgv.o clacon.o clacn2.o clacp2.o clacpy.o clacrm.o clacrt.o cladiv.o \
    claed0.o claed7.o claed8.o \
    claein.o claesy.o claev2.o clags2.o clagtm.o \
-   clahef.o clahef_rook.o clahqr.o \
+   clahef.o clahef_rook.o clahef_rk.o clahqr.o \
    clahr2.o claic1.o clals0.o clalsa.o clalsd.o clangb.o clange.o clangt.o \
    clanhb.o clanhe.o \
    clanhp.o clanhs.o clanht.o clansb.o clansp.o clansy.o clantb.o \
@@ -218,9 +227,10 @@ CLASRC = \
    claqr0.o claqr1.o claqr2.o claqr3.o claqr4.o claqr5.o \
    claqsp.o claqsy.o clar1v.o clar2v.o ilaclr.o ilaclc.o \
    clarf.o  clarfb.o clarfg.o clarft.o clarfgp.o \
-   clarfx.o clargv.o clarnv.o clarrv.o clartg.o clartv.o \
+   clarfx.o clarfy.o clargv.o clarnv.o clarrv.o clartg.o clartv.o \
    clarz.o  clarzb.o clarzt.o clascl.o claset.o clasr.o  classq.o \
-   claswp.o clasyf.o clasyf_rook.o clatbs.o clatdf.o clatps.o clatrd.o clatrs.o clatrz.o \
+   claswp.o clasyf.o clasyf_rook.o clasyf_rk.o clasyf_aa.o \
+   clatbs.o clatdf.o clatps.o clatrd.o clatrs.o clatrz.o \
    clauu2.o clauum.o cpbcon.o cpbequ.o cpbrfs.o cpbstf.o cpbsv.o \
    cpbsvx.o cpbtf2.o cpbtrf.o cpbtrs.o cpocon.o cpoequ.o cporfs.o \
    cposv.o  cposvx.o cpotf2.o cpotri.o cpstrf.o cpstf2.o \
@@ -231,9 +241,12 @@ CLASRC = \
    cstegr.o cstein.o csteqr.o \
    csycon.o csymv.o \
    csyr.o csyrfs.o csysv.o csysvx.o csytf2.o csytrf.o csytri.o csytri2.o csytri2x.o \
-   csyswapr.o csytrs.o csytrs2.o csyconv.o \
+   csyswapr.o csytrs.o csytrs2.o \
+   csyconv.o csyconvf.o csyconvf_rook.o \
    csytf2_rook.o csytrf_rook.o csytrs_rook.o \
    csytri_rook.o csycon_rook.o csysv_rook.o \
+   csytf2_rk.o csytrf_rk.o csytrf_aa.o csytrs_3.o csytrs_aa.o \
+   csytri_3.o csytri_3x.o csycon_3.o csysv_rk.o csysv_aa.o \
    ctbcon.o ctbrfs.o ctbtrs.o ctgevc.o ctgex2.o \
    ctgexc.o ctgsen.o ctgsja.o ctgsna.o ctgsy2.o ctgsyl.o ctpcon.o \
    ctprfs.o ctptri.o \
@@ -253,7 +266,10 @@ CLASRC = \
    cgelqt.o cgelqt3.o cgemlqt.o \
    cgetsls.o cgeqr.o clatsqr.o clamtsqr.o cgemqr.o \
    cgelq.o claswlq.o clamswlq.o cgemlq.o \
-   ctplqt.o ctplqt2.o ctpmlqt.o
+   ctplqt.o ctplqt2.o ctpmlqt.o \
+   chetrd_2stage.o chetrd_he2hb.o chetrd_hb2st.o chb2st_kernels.o \
+   cheevd_2stage.o cheev_2stage.o cheevx_2stage.o cheevr_2stage.o \
+   chbev_2stage.o chbevx_2stage.o chbevd_2stage.o chegv_2stage.o
 
 ifdef USEXBLAS
 CXLASRC = cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
@@ -296,9 +312,10 @@ DLASRC = \
    dlaqgb.o dlaqge.o dlaqp2.o dlaqps.o dlaqsb.o dlaqsp.o dlaqsy.o \
    dlaqr0.o dlaqr1.o dlaqr2.o dlaqr3.o dlaqr4.o dlaqr5.o \
    dlaqtr.o dlar1v.o dlar2v.o iladlr.o iladlc.o \
-   dlarf.o  dlarfb.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o \
+   dlarf.o  dlarfb.o dlarfg.o dlarfgp.o dlarft.o dlarfx.o dlarfy.o \
    dlargv.o dlarrv.o dlartv.o \
-   dlarz.o  dlarzb.o dlarzt.o dlaswp.o dlasy2.o dlasyf.o dlasyf_rook.o \
+   dlarz.o  dlarzb.o dlarzt.o dlaswp.o dlasy2.o \
+   dlasyf.o dlasyf_rook.o dlasyf_rk.o \
    dlatbs.o dlatdf.o dlatps.o dlatrd.o dlatrs.o dlatrz.o dlauu2.o \
    dlauum.o dopgtr.o dopmtr.o dorg2l.o dorg2r.o \
    dorgbr.o dorghr.o dorgl2.o dorglq.o dorgql.o dorgqr.o dorgr2.o \
@@ -320,10 +337,13 @@ DLASRC = \
    dsyevx.o dsygs2.o dsygst.o dsygv.o  dsygvd.o dsygvx.o dsyrfs.o \
    dsysv.o  dsysvx.o \
    dsytd2.o dsytf2.o dsytrd.o dsytrf.o dsytri.o dsytri2.o dsytri2x.o \
-   dsyswapr.o dsytrs.o dsytrs2.o dsyconv.o \
+   dsyswapr.o dsytrs.o dsytrs2.o \
+   dsyconv.o dsyconvf.o dsyconvf_rook.o \
    dsytf2_rook.o dsytrf_rook.o dsytrs_rook.o \
-   dlasyf_aasen.o dsysv_aasen.o dsytrf_aasen.o dsytrs_aasen.o \
    dsytri_rook.o dsycon_rook.o dsysv_rook.o \
+   dsytf2_rk.o dsytrf_rk.o dsytrs_3.o \
+   dsytri_3.o dsytri_3x.o dsycon_3.o dsysv_rk.o \
+   dlasyf_aa.o dsysv_aa.o dsytrf_aa.o dsytrs_aa.o \
    dtbcon.o dtbrfs.o dtbtrs.o dtgevc.o dtgex2.o dtgexc.o dtgsen.o \
    dtgsja.o dtgsna.o dtgsy2.o dtgsyl.o dtpcon.o dtprfs.o dtptri.o \
    dtptrs.o \
@@ -341,7 +361,10 @@ DLASRC = \
    dgelqt.o dgelqt3.o dgemlqt.o \
    dgetsls.o dgeqr.o dlatsqr.o dlamtsqr.o dgemqr.o \
    dgelq.o dlaswlq.o dlamswlq.o dgemlq.o \
-   dtplqt.o dtplqt2.o dtpmlqt.o
+   dtplqt.o dtplqt2.o dtpmlqt.o \
+   dsytrd_2stage.o dsytrd_sy2sb.o dsytrd_sb2st.o dsb2st_kernels.o \
+   dsyevd_2stage.o dsyev_2stage.o dsyevx_2stage.o dsyevr_2stage.o \
+   dsbev_2stage.o dsbevx_2stage.o dsbevd_2stage.o dsygv_2stage.o
 
 ifdef USEXBLAS
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o \
@@ -376,8 +399,11 @@ ZLASRC = \
    zhetf2.o zhetrd.o \
    zhetrf.o zhetri.o zhetri2.o zhetri2x.o zheswapr.o \
    zhetrs.o zhetrs2.o \
-   zhetf2_rook.o zhetrf_rook.o zhetri_rook.o zhetrs_rook.o zhecon_rook.o zhesv_rook.o \
-   zhesv_aasen.o zhetrf_aasen.o zhetrs_aasen.o zlahef_aasen.o \
+   zhetf2_rook.o zhetrf_rook.o zhetri_rook.o \
+   zhetrs_rook.o zhecon_rook.o zhesv_rook.o \
+   zhetf2_rk.o zhetrf_rk.o zhetri_3.o zhetri_3x.o \
+   zhetrs_3.o zhecon_3.o zhesv_rk.o \
+   zhesv_aa.o zhetrf_aa.o zhetrs_aa.o zlahef_aa.o \
    zhgeqz.o zhpcon.o zhpev.o  zhpevd.o \
    zhpevx.o zhpgst.o zhpgv.o  zhpgvd.o zhpgvx.o zhprfs.o zhpsv.o \
    zhpsvx.o \
@@ -385,7 +411,7 @@ ZLASRC = \
    zlacgv.o zlacon.o zlacn2.o zlacp2.o zlacpy.o zlacrm.o zlacrt.o zladiv.o \
    zlaed0.o zlaed7.o zlaed8.o \
    zlaein.o zlaesy.o zlaev2.o zlags2.o zlagtm.o \
-   zlahef.o zlahef_rook.o zlahqr.o \
+   zlahef.o zlahef_rook.o zlahef_rk.o zlahqr.o \
    zlahr2.o zlaic1.o zlals0.o zlalsa.o zlalsd.o zlangb.o zlange.o \
    zlangt.o zlanhb.o \
    zlanhe.o \
@@ -396,9 +422,9 @@ ZLASRC = \
    zlaqsp.o zlaqsy.o zlar1v.o zlar2v.o ilazlr.o ilazlc.o \
    zlarcm.o zlarf.o  zlarfb.o \
    zlarfg.o zlarft.o zlarfgp.o \
-   zlarfx.o zlargv.o zlarnv.o zlarrv.o zlartg.o zlartv.o \
+   zlarfx.o zlarfy.o zlargv.o zlarnv.o zlarrv.o zlartg.o zlartv.o \
    zlarz.o  zlarzb.o zlarzt.o zlascl.o zlaset.o zlasr.o \
-   zlassq.o zlaswp.o zlasyf.o zlasyf_rook.o \
+   zlassq.o zlaswp.o zlasyf.o zlasyf_rook.o zlasyf_rk.o zlasyf_aa.o \
    zlatbs.o zlatdf.o zlatps.o zlatrd.o zlatrs.o zlatrz.o zlauu2.o \
    zlauum.o zpbcon.o zpbequ.o zpbrfs.o zpbstf.o zpbsv.o \
    zpbsvx.o zpbtf2.o zpbtrf.o zpbtrs.o zpocon.o zpoequ.o zporfs.o \
@@ -410,9 +436,12 @@ ZLASRC = \
    zstegr.o zstein.o zsteqr.o \
    zsycon.o zsymv.o \
    zsyr.o zsyrfs.o zsysv.o zsysvx.o zsytf2.o zsytrf.o zsytri.o zsytri2.o zsytri2x.o \
-   zsyswapr.o zsytrs.o zsytrs2.o zsyconv.o \
-   zsytf2_rook.o zsytrf_rook.o zsytrs_rook.o \
+   zsyswapr.o zsytrs.o zsytrs2.o \
+   zsyconv.o zsyconvf.o zsyconvf_rook.o \
+   zsytf2_rook.o zsytrf_rook.o zsytrs_rook.o zsytrs_aa.o \
    zsytri_rook.o zsycon_rook.o zsysv_rook.o \
+   zsytf2_rk.o zsytrf_rk.o zsytrf_aa.o zsytrs_3.o \
+   zsytri_3.o zsytri_3x.o zsycon_3.o zsysv_rk.o zsysv_aa.o \
    ztbcon.o ztbrfs.o ztbtrs.o ztgevc.o ztgex2.o \
    ztgexc.o ztgsen.o ztgsja.o ztgsna.o ztgsy2.o ztgsyl.o ztpcon.o \
    ztprfs.o ztptri.o \
@@ -435,7 +464,10 @@ ZLASRC = \
    zgelqt.o zgelqt3.o zgemlqt.o \
    zgetsls.o zgeqr.o zlatsqr.o zlamtsqr.o zgemqr.o \
    zgelq.o zlaswlq.o zlamswlq.o zgemlq.o \
-   ztplqt.o ztplqt2.o ztpmlqt.o
+   ztplqt.o ztplqt2.o ztpmlqt.o \
+   zhetrd_2stage.o zhetrd_he2hb.o zhetrd_hb2st.o zhb2st_kernels.o \
+   zheevd_2stage.o zheev_2stage.o zheevx_2stage.o zheevr_2stage.o \
+   zhbev_2stage.o zhbevx_2stage.o zhbevd_2stage.o zhegv_2stage.o
 
 ifdef USEXBLAS
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o \
@@ -524,6 +556,9 @@ clean:
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
 
+.F.o:
+	$(FORTRAN) $(OPTS) -c $< -o $@
+	
 slaruv.o: slaruv.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
 dlaruv.o: dlaruv.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
 sla_wwaddw.o: sla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<

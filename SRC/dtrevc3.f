@@ -215,7 +215,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date December 2016
 *
 *  @precisions fortran d -> s
 *
@@ -240,10 +240,10 @@
      $                    VR, LDVR, MM, M, WORK, LWORK, INFO )
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          HOWMNY, SIDE
@@ -279,7 +279,8 @@
       EXTERNAL           LSAME, IDAMAX, ILAENV, DDOT, DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DCOPY, DGEMV, DLALN2, DSCAL, XERBLA
+      EXTERNAL           DAXPY, DCOPY, DGEMV, DLALN2, DSCAL, XERBLA,
+     $                   DGEMM, DLASET, DLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT

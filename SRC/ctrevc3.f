@@ -222,7 +222,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date December 2016
 *
 *  @generated from ztrevc3.f, fortran z -> c, Tue Apr 19 01:47:44 2016
 *
@@ -247,10 +247,10 @@
      $                    LDVR, MM, M, WORK, LWORK, RWORK, LRWORK, INFO)
       IMPLICIT NONE
 *
-*  -- LAPACK computational routine (version 3.4.0) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          HOWMNY, SIDE
@@ -287,7 +287,8 @@
       EXTERNAL           LSAME, ILAENV, ICAMAX, SLAMCH, SCASUM
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CCOPY, CSSCAL, CGEMV, CLATRS
+      EXTERNAL           XERBLA, CCOPY, CLASET, CSSCAL, CGEMM, CGEMV,
+     $                   CLATRS, SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, CMPLX, CONJG, AIMAG, MAX

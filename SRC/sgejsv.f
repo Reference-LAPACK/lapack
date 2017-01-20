@@ -87,7 +87,7 @@
 *>              rows, then using this condition number gives too pessimistic
 *>              error bound.
 *>       = 'A': Small singular values are the noise and the matrix is treated
-*>              as numerically rank defficient. The error in the computed
+*>              as numerically rank deficient. The error in the computed
 *>              singular values is bounded by f(m,n)*epsilon*||A||.
 *>              The computed SVD A = U * S * V^t restores A up to
 *>              f(m,n)*epsilon*||A||.
@@ -428,7 +428,7 @@
 *>     The rank revealing QR factorization (in this code: SGEQP3) should be
 *>  implemented as in [3]. We have a new version of SGEQP3 under development
 *>  that is more robust than the current one in LAPACK, with a cleaner cut in
-*>  rank defficient cases. It will be available in the SIGMA library [4].
+*>  rank deficient cases. It will be available in the SIGMA library [4].
 *>  If M is much larger than N, it is obvious that the initial QRF with
 *>  column pivoting can be preprocessed by the QRF without pivoting. That
 *>  well known trick is not used in SGEJSV because in some cases heavy row
@@ -476,7 +476,7 @@
      $                   M, N, A, LDA, SVA, U, LDU, V, LDV,
      $                   WORK, LWORK, IWORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.6.1) --
+*  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2016
@@ -562,7 +562,7 @@
       ELSE IF ( LSVEC .AND. ( LDU .LT. M ) ) THEN
          INFO = - 13
       ELSE IF ( RSVEC .AND. ( LDV .LT. N ) ) THEN
-         INFO = - 14
+         INFO = - 15
       ELSE IF ( (.NOT.(LSVEC .OR. RSVEC .OR. ERREST).AND.
      $                           (LWORK .LT. MAX(7,4*N+1,2*M+N))) .OR.
      $ (.NOT.(LSVEC .OR. RSVEC) .AND. ERREST .AND.
@@ -967,7 +967,7 @@
       ELSE IF ( L2RANK ) THEN
 *        .. similarly as above, only slightly more gentle (less agressive).
 *        Sudden drop on the diagonal of R1 is used as the criterion for
-*        close-to-rank-defficient.
+*        close-to-rank-deficient.
          TEMP1 = SQRT(SFMIN)
          DO 3401 p = 2, N
             IF ( ( ABS(A(p,p)) .LT. (EPSLN*ABS(A(p-1,p-1))) ) .OR.

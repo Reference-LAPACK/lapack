@@ -1,16 +1,15 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
-*     $                   , WORK, LWORK, INFO )
-
+*       SUBROUTINE CGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+*     $                     WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
 *       INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
 *       ..
 *       .. Array Arguments ..
-*       COMPLEX   A( LDA, * ), B( LDB, * ), WORK( * )
+*       COMPLEX            A( LDA, * ), B( LDB, * ), WORK( * )
 *       ..
 *
 *
@@ -19,10 +18,11 @@
 *>
 *> \verbatim
 *>
-*> CGETSLS solves overdetermined or underdetermined real linear systems
-*> involving an M-by-N matrix A, or its transpose, using a tall skinny
-*> QR or short wide LQfactorization of A.  It is assumed that A has
-*> full rank.
+*> CGETSLS solves overdetermined or underdetermined complex linear systems
+*> involving an M-by-N matrix A, using a tall skinny QR or short wide LQ
+*> factorization of A.  It is assumed that A has full rank.
+*>
+*>
 *>
 *> The following options are provided:
 *>
@@ -80,10 +80,8 @@
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
 *>          On exit,
-*>            if M >= N, A is overwritten by details of its QR
-*>                       factorization as returned by DGEQRF;
-*>            if M <  N, A is overwritten by details of its LQ
-*>                       factorization as returned by DGELQF.
+*>          A is overwritten by details of its QR or LQ
+*>          factorization as returned by CGEQR or CGELQ.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -97,21 +95,17 @@
 *>          B is COMPLEX array, dimension (LDB,NRHS)
 *>          On entry, the matrix B of right hand side vectors, stored
 *>          columnwise; B is M-by-NRHS if TRANS = 'N', or N-by-NRHS
-*>          if TRANS = 'T'.
+*>          if TRANS = 'C'.
 *>          On exit, if INFO = 0, B is overwritten by the solution
 *>          vectors, stored columnwise:
 *>          if TRANS = 'N' and m >= n, rows 1 to n of B contain the least
-*>          squares solution vectors; the residual sum of squares for the
-*>          solution in each column is given by the sum of squares of
-*>          elements N+1 to M in that column;
+*>          squares solution vectors.
 *>          if TRANS = 'N' and m < n, rows 1 to N of B contain the
 *>          minimum norm solution vectors;
-*>          if TRANS = 'T' and m >= n, rows 1 to M of B contain the
+*>          if TRANS = 'C' and m >= n, rows 1 to M of B contain the
 *>          minimum norm solution vectors;
-*>          if TRANS = 'T' and m < n, rows 1 to M of B contain the
-*>          least squares solution vectors; the residual sum of squares
-*>          for the solution in each column is given by the sum of
-*>          squares of elements M+1 to N in that column.
+*>          if TRANS = 'C' and m < n, rows 1 to M of B contain the
+*>          least squares solution vectors.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -122,23 +116,21 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
-*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+*>          (workspace) COMPLEX array, dimension (MAX(1,LWORK))
+*>          On exit, if INFO = 0, WORK(1) contains optimal (or either minimal
+*>          or optimal, if query was assumed) LWORK.
+*>          See LWORK for details.
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          LWORK >= max( 1, MN + max( MN, NRHS ) ).
-*>          For optimal performance,
-*>          LWORK >= max( 1, MN + max( MN, NRHS )*NB ).
-*>          where MN = min(M,N) and NB is the optimum block size.
-*>
-*>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
-*>          this value as the first entry of the WORK array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          If LWORK = -1 or -2, then a workspace query is assumed.
+*>          If LWORK = -1, the routine calculates optimal size of WORK for the
+*>          optimal performance and returns this value in WORK(1).
+*>          If LWORK = -2, the routine calculates minimal size of WORK and 
+*>          returns this value in WORK(1).
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -160,20 +152,22 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2011
+*> \date December 2016
+*
+*> \ingroup complexGEsolve
 *
 *  =====================================================================
-      SUBROUTINE CGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB
-     $                   , WORK, LWORK, INFO )
+      SUBROUTINE CGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
+     $                    WORK, LWORK, INFO )
 *
-*  -- LAPACK driver routine (version 3.4.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2011
+*     December 2016
 *
 *     .. Scalar Arguments ..
       CHARACTER          TRANS
-      INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS, MB
+      INTEGER            INFO, LDA, LDB, LWORK, M, N, NRHS
 *     ..
 *     .. Array Arguments ..
       COMPLEX            A( LDA, * ), B( LDB, * ), WORK( * )
@@ -183,17 +177,18 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL              ZERO, ONE
+      REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
-      COMPLEX           CZERO
+      COMPLEX            CZERO
       PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY, TRAN
-      INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW, LW,
-     $                   SCLLEN, MNK, WSIZEO, WSIZEM, LW1, LW2,
-     $                   INFO2, NB
+      INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW,
+     $                   SCLLEN, MNK, TSZO, TSZM, LWO, LWM, LW1, LW2,
+     $                   WSIZEO, WSIZEM, INFO2
       REAL               ANRM, BIGNUM, BNRM, SMLNUM
+      COMPLEX            TQ( 5 ), WORKQ
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -206,19 +201,19 @@
      $                   CTRTRS, XERBLA, CGELQ, CGEMLQ
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL, MAX, MIN
+      INTRINSIC          REAL, MAX, MIN, INT
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input arguments.
 *
-      INFO=0
+      INFO = 0
       MINMN = MIN( M, N )
       MAXMN = MAX( M, N )
-      MNK   = MAX(MINMN,NRHS)
+      MNK   = MAX( MINMN, NRHS )
       TRAN  = LSAME( TRANS, 'C' )
 *
-      LQUERY = ( LWORK.EQ.-1 )
+      LQUERY = ( LWORK.EQ.-1 .OR. LWORK.EQ.-2 )
       IF( .NOT.( LSAME( TRANS, 'N' ) .OR.
      $    LSAME( TRANS, 'C' ) ) ) THEN
          INFO = -1
@@ -234,60 +229,71 @@
          INFO = -8
       END IF
 *
-      IF( INFO.EQ.0)  THEN
+      IF( INFO.EQ.0 ) THEN
 *
 *     Determine the block size and minimum LWORK
 *
-      IF ( M.GE.N ) THEN
-        CALL CGEQR( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
-     $   INFO2)
-        MB = INT(WORK(4))
-        NB = INT(WORK(5))
-        LW = INT(WORK(6))
-        CALL CGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, WORK(1),
-     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
-        WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
-        WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
-      ELSE
-        CALL CGELQ( M, N, A, LDA, WORK(1), -1, WORK(6), -1,
-     $   INFO2)
-        MB = INT(WORK(4))
-        NB = INT(WORK(5))
-        LW = INT(WORK(6))
-        CALL CGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, WORK(1),
-     $        INT(WORK(2)), B, LDB, WORK(6), -1 , INFO2 )
-        WSIZEO = INT(WORK(2))+MAX(LW,INT(WORK(6)))
-        WSIZEM = INT(WORK(3))+MAX(LW,INT(WORK(6)))
-      END IF
-*
-       IF((LWORK.LT.WSIZEO).AND.(.NOT.LQUERY)) THEN
-          INFO=-10
+       IF( M.GE.N ) THEN
+         CALL CGEQR( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
+         TSZO = INT( TQ( 1 ) )
+         LWO  = INT( WORKQ )
+         CALL CGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
+     $                TSZO, B, LDB, WORKQ, -1, INFO2 )
+         LWO  = MAX( LWO, INT( WORKQ ) )
+         CALL CGEQR( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
+         TSZM = INT( TQ( 1 ) )
+         LWM  = INT( WORKQ )
+         CALL CGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
+     $                TSZM, B, LDB, WORKQ, -1, INFO2 )
+         LWM = MAX( LWM, INT( WORKQ ) )
+         WSIZEO = TSZO + LWO
+         WSIZEM = TSZM + LWM
+       ELSE
+         CALL CGELQ( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
+         TSZO = INT( TQ( 1 ) )
+         LWO  = INT( WORKQ )
+         CALL CGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
+     $                TSZO, B, LDB, WORKQ, -1, INFO2 )
+         LWO  = MAX( LWO, INT( WORKQ ) )
+         CALL CGELQ( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
+         TSZM = INT( TQ( 1 ) )
+         LWM  = INT( WORKQ )
+         CALL CGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
+     $                TSZO, B, LDB, WORKQ, -1, INFO2 )
+         LWM  = MAX( LWM, INT( WORKQ ) )
+         WSIZEO = TSZO + LWO
+         WSIZEM = TSZM + LWM
        END IF
+*
+       IF( ( LWORK.LT.WSIZEM ).AND.( .NOT.LQUERY ) ) THEN
+          INFO = -10
+       END IF
+*
       END IF
 *
       IF( INFO.NE.0 ) THEN
-        CALL XERBLA( 'DGETSLS', -INFO )
+        CALL XERBLA( 'CGETSLS', -INFO )
         WORK( 1 ) = REAL( WSIZEO )
-        WORK( 2 ) = REAL( WSIZEM )
-        RETURN
-      ELSE IF (LQUERY) THEN
-        WORK( 1 ) = REAL( WSIZEO )
-        WORK( 2 ) = REAL( WSIZEM )
         RETURN
       END IF
-      IF(LWORK.LT.WSIZEO) THEN
-        LW1=INT(WORK(3))
-        LW2=MAX(LW,INT(WORK(6)))
+      IF( LQUERY ) THEN
+        IF( LWORK.EQ.-1 ) WORK( 1 ) = REAL( WSIZEO )
+        IF( LWORK.EQ.-2 ) WORK( 1 ) = REAL( WSIZEM )
+        RETURN
+      END IF
+      IF( LWORK.LT.WSIZEO ) THEN
+        LW1 = TSZM
+        LW2 = LWM
       ELSE
-        LW1=INT(WORK(2))
-        LW2=MAX(LW,INT(WORK(6)))
+        LW1 = TSZO
+        LW2 = LWO
       END IF
 *
 *     Quick return if possible
 *
       IF( MIN( M, N, NRHS ).EQ.0 ) THEN
            CALL CLASET( 'FULL', MAX( M, N ), NRHS, CZERO, CZERO,
-     $       B, LDB )
+     $                  B, LDB )
            RETURN
       END IF
 *
@@ -343,26 +349,27 @@
          IBSCL = 2
       END IF
 *
-      IF ( M.GE.N) THEN
+      IF ( M.GE.N ) THEN
 *
 *        compute QR factorization of A
 *
-        CALL CGEQR( M, N, A, LDA, WORK(LW2+1), LW1
-     $    , WORK(1), LW2, INFO )
-        IF (.NOT.TRAN) THEN
+        CALL CGEQR( M, N, A, LDA, WORK( LW2+1 ), LW1,
+     $              WORK( 1 ), LW2, INFO )
+        IF ( .NOT.TRAN ) THEN
 *
 *           Least-Squares Problem min || A * X - B ||
 *
 *           B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS)
 *
           CALL CGEMQR( 'L' , 'C', M, NRHS, N, A, LDA,
-     $         WORK(LW2+1), LW1, B, LDB, WORK(1), LW2, INFO )
+     $                 WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
+     $                 INFO )
 *
 *           B(1:N,1:NRHS) := inv(R) * B(1:N,1:NRHS)
 *
           CALL CTRTRS( 'U', 'N', 'N', N, NRHS,
-     $                   A, LDA, B, LDB, INFO )
-          IF(INFO.GT.0) THEN
+     $                  A, LDA, B, LDB, INFO )
+          IF( INFO.GT.0 ) THEN
             RETURN
           END IF
           SCLLEN = N
@@ -390,7 +397,7 @@
 *           B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS)
 *
             CALL CGEMQR( 'L', 'N', M, NRHS, N, A, LDA,
-     $                   WORK( LW2+1), LW1, B, LDB, WORK( 1 ), LW2,
+     $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
             SCLLEN = M
@@ -401,8 +408,8 @@
 *
 *        Compute LQ factorization of A
 *
-        CALL CGELQ( M, N, A, LDA, WORK(LW2+1), LW1
-     $    , WORK(1), LW2, INFO )
+         CALL CGELQ( M, N, A, LDA, WORK( LW2+1 ), LW1,
+     $               WORK( 1 ), LW2, INFO )
 *
 *        workspace at least M, optimally M*NB.
 *
@@ -430,7 +437,7 @@
 *           B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS)
 *
             CALL CGEMLQ( 'L', 'C', N, NRHS, M, A, LDA,
-     $                   WORK( LW2+1), LW1, B, LDB, WORK( 1 ), LW2,
+     $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
 *           workspace at least NRHS, optimally NRHS*NB
@@ -444,7 +451,7 @@
 *           B(1:N,1:NRHS) := Q * B(1:N,1:NRHS)
 *
             CALL CGEMLQ( 'L', 'N', N, NRHS, M, A, LDA,
-     $                   WORK( LW2+1), LW1, B, LDB, WORK( 1 ), LW2,
+     $                   WORK( LW2+1 ), LW1, B, LDB, WORK( 1 ), LW2,
      $                   INFO )
 *
 *           workspace at least NRHS, optimally NRHS*NB
@@ -468,24 +475,23 @@
 *
       IF( IASCL.EQ.1 ) THEN
         CALL CLASCL( 'G', 0, 0, ANRM, SMLNUM, SCLLEN, NRHS, B, LDB,
-     $                INFO )
+     $               INFO )
       ELSE IF( IASCL.EQ.2 ) THEN
         CALL CLASCL( 'G', 0, 0, ANRM, BIGNUM, SCLLEN, NRHS, B, LDB,
-     $                INFO )
+     $               INFO )
       END IF
       IF( IBSCL.EQ.1 ) THEN
-         CALL CLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
-     $                INFO )
+        CALL CLASCL( 'G', 0, 0, SMLNUM, BNRM, SCLLEN, NRHS, B, LDB,
+     $               INFO )
       ELSE IF( IBSCL.EQ.2 ) THEN
-         CALL CLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
-     $                INFO )
+        CALL CLASCL( 'G', 0, 0, BIGNUM, BNRM, SCLLEN, NRHS, B, LDB,
+     $               INFO )
       END IF
 *
    50 CONTINUE
-       WORK( 1 ) = REAL( WSIZEO )
-       WORK( 2 ) = REAL( WSIZEM )
+      WORK( 1 ) = REAL( TSZO + LWO )
       RETURN
 *
-*     End of CGETSLS
+*     End of ZGETSLS
 *
       END
