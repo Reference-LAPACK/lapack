@@ -56,7 +56,7 @@ include ../make.inc
 #
 #######################################################################
 
-ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o iparmq.o iparam2stage.o\
+ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o iparmq.o iparam2stage.o \
    ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o
 
@@ -210,7 +210,7 @@ CLASRC = \
    chetrs_rook.o checon_rook.o chesv_rook.o \
    chetf2_rk.o chetrf_rk.o chetri_3.o chetri_3x.o \
    chetrs_3.o checon_3.o chesv_rk.o \
-   chesv_aa.o chetrf_aa.o chetrs_aa.o clahef_aa.o\
+   chesv_aa.o chetrf_aa.o chetrs_aa.o clahef_aa.o \
    chgeqz.o chpcon.o chpev.o  chpevd.o \
    chpevx.o chpgst.o chpgv.o  chpgvd.o chpgvx.o chprfs.o chpsv.o \
    chpsvx.o \
@@ -557,8 +557,8 @@ clean:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
 
 .F.o:
-	$(FORTRAN) $(OPTS) -c $< -o $@
-	
+	$(FORTRAN) $(OPTS) -c -o $@ $<
+
 slaruv.o: slaruv.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
 dlaruv.o: dlaruv.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
 sla_wwaddw.o: sla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<

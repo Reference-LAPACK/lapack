@@ -54,7 +54,7 @@ SLINTST = schkaa.o \
    schksp.o schksy.o schksy_rook.o schksy_rk.o schksy_aa.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
-   sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy_rook.o sdrvsy_rk.o  sdrvsy_aa.o \
+   sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy_rook.o sdrvsy_rk.o sdrvsy_aa.o \
    serrgt.o serrlq.o serrls.o \
    serrps.o serrql.o serrqp.o serrqr.o \
    serrrq.o serrtr.o serrtz.o \
