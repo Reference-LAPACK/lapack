@@ -144,7 +144,8 @@ SLASRC = \
    ssycon.o ssyev.o  ssyevd.o ssyevr.o ssyevx.o ssygs2.o \
    ssygst.o ssygv.o  ssygvd.o ssygvx.o ssyrfs.o ssysv.o  ssysvx.o \
    ssytd2.o ssytf2.o ssytrd.o ssytrf.o ssytri.o ssytri2.o ssytri2x.o \
-   ssyswapr.o ssytrs.o ssytrs2.o ssyconv.o ssyconvf_rook.o \
+   ssyswapr.o ssytrs.o ssytrs2.o \
+   ssyconv.o ssyconvf.o ssyconvf_rook.o \
    ssytf2_rook.o ssytrf_rook.o ssytrs_rook.o \
    ssytri_rook.o ssycon_rook.o ssysv_rook.o \
    ssytf2_rk.o ssytrf_rk.o ssytrs_3.o \
