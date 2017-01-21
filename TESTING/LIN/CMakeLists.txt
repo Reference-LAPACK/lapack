@@ -13,10 +13,10 @@ set(SLINTST schkaa.f
    schksp.f schksy.f schksy_rook.f schksy_rk.f schksy_aa.f schktb.f schktp.f schktr.f
    schktz.f
    sdrvgt.f sdrvls.f sdrvpb.f
-   sdrvpp.f sdrvpt.f sdrvsp.f sdrvsy.f sdrvsy_rook.f sdrvsy_rk.f sdrvsy_aa.f
+   sdrvpp.f sdrvpt.f sdrvsp.f sdrvsy_rook.f sdrvsy_rk.f sdrvsy_aa.f
    serrgt.f serrlq.f serrls.f
-   serrpo.f serrps.f serrql.f serrqp.f serrqr.f
-   serrrq.f serrsy.f serrtr.f serrtz.f serrvx.f
+   serrps.f serrql.f serrqp.f serrqr.f
+   serrrq.f serrtr.f serrtz.f
    sgbt01.f sgbt02.f sgbt05.f sgelqs.f sgeqls.f sgeqrs.f
    sgerqs.f sget01.f sget02.f
    sget03.f sget04.f sget06.f sget07.f sgtt01.f sgtt02.f
@@ -33,15 +33,17 @@ set(SLINTST schkaa.f
    stbt02.f stbt03.f stbt05.f stbt06.f stpt01.f
    stpt02.f stpt03.f stpt05.f stpt06.f strt01.f
    strt02.f strt03.f strt05.f strt06.f
-   sgennd.f
-   sqrt04.f sqrt05.f schkqrt.f serrqrt.f schkqrtp.f serrqrtp.f
+   sgennd.f sqrt04.f sqrt05.f schkqrt.f serrqrt.f schkqrtp.f serrqrtp.f
    schklqt.f schklqtp.f schktsqr.f
    serrlqt.f serrlqtp.f serrtsqr.f stsqr01.f slqt04.f slqt05.f)
 
-if(USEXBLAS)
-  list(APPEND SLINTST sdrvgex.f serrgex.f sdrvgbx.f sdrvpox.f sebchvxx.f)
+if(USE_XBLAS)
+  list(APPEND SLINTST sdrvgbx.f sdrvgex.f sdrvsyx.f sdrvpox.f
+                      serrvxx.f serrgex.f serrsyx.f serrpox.f
+                      sebchvxx.f)
 else()
-  list(APPEND SLINTST sdrvge.f serrge.f sdrvgb.f sdrvpo.f)
+  list(APPEND SLINTST sdrvgb.f sdrvge.f sdrvsy.f sdrvpo.f
+                      serrvx.f serrge.f serrsy.f serrpo.f)
 endif()
 
 set(CLINTST cchkaa.f
@@ -50,13 +52,12 @@ set(CLINTST cchkaa.f
    cchkpo.f cchkps.f cchkpp.f cchkpt.f cchkq3.f cchkql.f
    cchkqr.f cchkrq.f cchksp.f cchksy.f cchksy_rook.f cchksy_rk.f cchksy_aa.f cchktb.f
    cchktp.f cchktr.f cchktz.f
-   cdrvgt.f cdrvhe.f cdrvhe_rook.f cdrvhe_rk.f cdrvhe_aa.f cdrvhp.f
+   cdrvgt.f cdrvhe_rook.f cdrvhe_rk.f cdrvhe_aa.f cdrvhp.f
    cdrvls.f cdrvpb.f cdrvpp.f cdrvpt.f
-   cdrvsp.f cdrvsy.f cdrvsy_rook.f cdrvsy_rk.f cdrvsy_aa.f
-   cerrgt.f cerrhe.f cerrlq.f
+   cdrvsp.f cdrvsy_rook.f cdrvsy_rk.f cdrvsy_aa.f
+   cerrgt.f cerrlq.f
    cerrls.f cerrps.f cerrql.f cerrqp.f
-   cerrqr.f cerrrq.f cerrsy.f cerrtr.f cerrtz.f
-   cerrvx.f
+   cerrqr.f cerrrq.f cerrtr.f cerrtz.f
    cgbt01.f cgbt02.f cgbt05.f cgelqs.f cgeqls.f cgeqrs.f
    cgerqs.f cget01.f cget02.f
    cget03.f cget04.f cget07.f cgtt01.f cgtt02.f
@@ -81,11 +82,13 @@ set(CLINTST cchkaa.f
    cchklqt.f cchklqtp.f cchktsqr.f
    cerrlqt.f cerrlqtp.f cerrtsqr.f ctsqr01.f clqt04.f clqt05.f)
 
-if(USEXBLAS)
-  list(APPEND
-    CLINTST cdrvgex.f cdrvgbx.f cerrgex.f cdrvpox.f cerrpox.f cebchvxx.f)
+if(USE_XBLAS)
+  list(APPEND CLINTST cdrvgbx.f cdrvgex.f cdrvhex.f cdrvsyx.f cdrvpox.f
+                      cerrvxx.f cerrgex.f cerrhex.f cerrsyx.f cerrpox.f
+                      cebchvxx.f)
 else()
-  list(APPEND CLINTST cdrvge.f cdrvgb.f cerrge.f cdrvpo.f cerrpo.f)
+  list(APPEND CLINTST cdrvgb.f cdrvge.f cdrvhe.f cdrvsy.f cdrvpo.f
+                      cerrvx.f cerrge.f cerrhe.f cerrsy.f cerrpo.f)
 endif()
 
 set(DLINTST dchkaa.f
@@ -95,10 +98,10 @@ set(DLINTST dchkaa.f
    dchksp.f dchksy.f dchksy_rook.f dchksy_rk.f dchksy_aa.f dchktb.f dchktp.f dchktr.f
    dchktz.f
    ddrvgt.f ddrvls.f ddrvpb.f
-   ddrvpp.f ddrvpt.f ddrvsp.f ddrvsy.f ddrvsy_rook.f ddrvsy_rk.f ddrvsy_aa.f
+   ddrvpp.f ddrvpt.f ddrvsp.f ddrvsy_rook.f ddrvsy_rk.f ddrvsy_aa.f
    derrgt.f derrlq.f derrls.f
    derrps.f derrql.f derrqp.f derrqr.f
-   derrrq.f derrsy.f derrtr.f derrtz.f derrvx.f
+   derrrq.f derrtr.f derrtz.f
    dgbt01.f dgbt02.f dgbt05.f dgelqs.f dgeqls.f dgeqrs.f
    dgerqs.f dget01.f dget02.f
    dget03.f dget04.f dget06.f dget07.f dgtt01.f dgtt02.f
@@ -120,12 +123,13 @@ set(DLINTST dchkaa.f
    dchklq.f dchklqt.f dchklqtp.f dchktsqr.f
    derrlqt.f derrlqtp.f derrtsqr.f dtsqr01.f dlqt04.f dlqt05.f)
 
-if(USEXBLAS)
-  list(APPEND
-    DLINTST ddrvgex.f ddrvgbx.f derrgex.f ddrvpox.f derrpox.f debchvxx.f)
+if(USE_XBLAS)
+  list(APPEND DLINTST ddrvgbx.f ddrvgex.f ddrvsyx.f ddrvpox.f
+                      derrvxx.f derrgex.f derrsyx.f derrpox.f
+                      debchvxx.f)
 else()
-  list(APPEND
-    DLINTST ddrvge.f ddrvgb.f derrge.f ddrvpo.f derrpo.f)
+  list(APPEND DLINTST ddrvgb.f ddrvge.f ddrvsy.f ddrvpo.f
+                      derrvx.f derrge.f derrsy.f derrpo.f)
 endif()
 
 set(ZLINTST zchkaa.f
@@ -134,13 +138,12 @@ set(ZLINTST zchkaa.f
    zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkql.f
    zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchksy_rk.f zchksy_aa.f zchktb.f
    zchktp.f zchktr.f zchktz.f
-   zdrvgt.f zdrvhe.f zdrvhe_rook.f zdrvhe_rk.f zdrvhe_aa.f zdrvhp.f
+   zdrvgt.f zdrvhe_rook.f zdrvhe_rk.f zdrvhe_aa.f zdrvhp.f
    zdrvls.f zdrvpb.f zdrvpp.f zdrvpt.f
-   zdrvsp.f zdrvsy.f zdrvsy_rook.f zdrvsy_rk.f zdrvsy_aa.f
-   zerrgt.f zerrhe.f zerrlq.f
+   zdrvsp.f zdrvsy_rook.f zdrvsy_rk.f zdrvsy_aa.f
+   zerrgt.f zerrlq.f
    zerrls.f zerrps.f zerrql.f zerrqp.f
-   zerrqr.f zerrrq.f zerrsy.f zerrtr.f zerrtz.f
-   zerrvx.f
+   zerrqr.f zerrrq.f zerrtr.f zerrtz.f
    zgbt01.f zgbt02.f zgbt05.f zgelqs.f zgeqls.f zgeqrs.f
    zgerqs.f zget01.f zget02.f
    zget03.f zget04.f zget07.f zgtt01.f zgtt02.f
@@ -165,12 +168,13 @@ set(ZLINTST zchkaa.f
    zchklqt.f zchklqtp.f zchktsqr.f
    zerrlqt.f zerrlqtp.f zerrtsqr.f ztsqr01.f zlqt04.f zlqt05.f)
 
-if(USEXBLAS)
-  list(APPEND
-    ZLINTST zdrvgex.f zdrvgbx.f zerrgex.f zdrvpox.f zerrpox.f zebchvxx.f)
+if(USE_XBLAS)
+  list(APPEND ZLINTST zdrvgbx.f zdrvgex.f zdrvhex.f zdrvsyx.f zdrvpox.f
+                      zerrvxx.f zerrgex.f zerrhex.f zerrsyx.f zerrpox.f
+                      zebchvxx.f)
 else()
-  list(APPEND
-    ZLINTST zdrvge.f zdrvgb.f zerrge.f zdrvpo.f zerrpo.f)
+  list(APPEND ZLINTST zdrvgb.f zdrvge.f zdrvhe.f zdrvsy.f zdrvpo.f
+                      zerrvx.f zerrge.f zerrhe.f zerrsy.f zerrpo.f)
 endif()
 
 set(DSLINTST dchkab.f

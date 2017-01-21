@@ -103,8 +103,8 @@ set(SLASRC
    sgels.f  sgelsd.f sgelss.f sgelsy.f sgeql2.f sgeqlf.f
    sgeqp3.f sgeqr2.f sgeqr2p.f sgeqrf.f sgeqrfp.f sgerfs.f sgerq2.f sgerqf.f
    sgesc2.f sgesdd.f sgesv.f  sgesvd.f sgesvdx.f sgesvx.f sgetc2.f sgetf2.f
-   sgetrf.f sgetrf2.f sgetri.f
-   sgetrs.f sggbak.f sggbal.f
+   sgetrf2.f sgetri.f
+   sggbak.f sggbal.f
    sgges.f  sgges3.f sggesx.f sggev.f  sggev3.f sggevx.f
    sggglm.f sgghrd.f sgghd3.f sgglse.f sggqrf.f
    sggrqf.f sggsvd3.f sggsvp3.f sgtcon.f sgtrfs.f sgtsv.f
@@ -130,7 +130,7 @@ set(SLASRC
    sormr3.f sormrq.f sormrz.f sormtr.f spbcon.f spbequ.f spbrfs.f
    spbstf.f spbsv.f  spbsvx.f
    spbtf2.f spbtrf.f spbtrs.f spocon.f spoequ.f sporfs.f sposv.f
-   sposvx.f spotf2.f spotrf.f spotrf2.f spotri.f spotrs.f spstrf.f spstf2.f
+   sposvx.f spotf2.f spotrf2.f spotri.f spstrf.f spstf2.f
    sppcon.f sppequ.f
    spprfs.f sppsv.f  sppsvx.f spptrf.f spptri.f spptrs.f sptcon.f
    spteqr.f sptrfs.f sptsv.f  sptsvx.f spttrs.f sptts2.f srscl.f
@@ -143,7 +143,6 @@ set(SLASRC
    ssytd2.f ssytf2.f ssytrd.f ssytrf.f ssytri.f ssytri2.f ssytri2x.f
    ssyswapr.f ssytrs.f ssytrs2.f
    ssyconv.f ssyconvf.f ssyconvf_rook.f
-   ssysv_aa.f ssytrf_aa.f ssytrs_aa.f
    ssytf2_rook.f ssytrf_rook.f ssytrs_rook.f
    ssytri_rook.f ssycon_rook.f ssysv_rook.f
    ssytf2_rk.f ssytrf_rk.f ssytrs_3.f
@@ -190,8 +189,8 @@ set(CLASRC
    cgeqr2.f cgeqr2p.f cgeqrf.f cgeqrfp.f cgerfs.f cgerq2.f cgerqf.f
    cgesc2.f cgesdd.f cgesv.f  cgesvd.f cgesvdx.f
    cgesvj.f cgejsv.f cgsvj0.f cgsvj1.f
-   cgesvx.f cgetc2.f cgetf2.f cgetrf.f cgetrf2.f
-   cgetri.f cgetrs.f
+   cgesvx.f cgetc2.f cgetf2.f cgetrf2.f
+   cgetri.f
    cggbak.f cggbal.f
    cgges.f  cgges3.f cggesx.f cggev.f  cggev3.f cggevx.f
    cggglm.f cgghrd.f cgghd3.f cgglse.f cggqrf.f cggrqf.f
@@ -230,7 +229,7 @@ set(CLASRC
    clatbs.f clatdf.f clatps.f clatrd.f clatrs.f clatrz.f
    clauu2.f clauum.f cpbcon.f cpbequ.f cpbrfs.f cpbstf.f cpbsv.f
    cpbsvx.f cpbtf2.f cpbtrf.f cpbtrs.f cpocon.f cpoequ.f cporfs.f
-   cposv.f  cposvx.f cpotf2.f cpotrf.f cpotrf2.f cpotri.f cpotrs.f cpstrf.f cpstf2.f
+   cposv.f  cposvx.f cpotf2.f cpotrf2.f cpotri.f cpstrf.f cpstf2.f
    cppcon.f cppequ.f cpprfs.f cppsv.f  cppsvx.f cpptrf.f cpptri.f cpptrs.f
    cptcon.f cpteqr.f cptrfs.f cptsv.f  cptsvx.f cpttrf.f cpttrs.f cptts2.f
    crot.f   cspcon.f cspmv.f  cspr.f   csprfs.f cspsv.f
@@ -489,29 +488,30 @@ if(BUILD_DEPRECATED)
   message(STATUS "Building deprecated routines")
 endif()
 
+set(ALLOBJ)
 if(BUILD_SINGLE)
-  set(ALLOBJ ${SLASRC} ${ALLAUX} ${SCLAUX})
-  message(STATUS "Building Single Precision")
+  list(APPEND ALLOBJ ${SLASRC} ${DSLASRC} ${SCLAUX} ${ALLAUX})
+  message(STATUS "Building single precision real")
 endif()
 if(BUILD_DOUBLE)
-  set(ALLOBJ ${ALLOBJ} ${DLASRC} ${ALLAUX} ${DZLAUX} ${DSLASRC})
-  message(STATUS "Building Double Precision")
+  list(APPEND ALLOBJ ${DLASRC} ${DSLASRC} ${DZLAUX} ${ALLAUX})
+  message(STATUS "Building double precision real")
 endif()
 if(BUILD_COMPLEX)
-  set(ALLOBJ ${ALLOBJ} ${CLASRC} ${ALLAUX} ${SCLAUX})
-  message(STATUS "Building Complex Precision")
+  list(APPEND ALLOBJ ${CLASRC} ${ZCLASRC} ${SCLAUX} ${ALLAUX})
+  message(STATUS "Building single precision complex")
 endif()
 if(BUILD_COMPLEX16)
-  set(ALLOBJ ${ALLOBJ} ${ZLASRC} ${ALLAUX} ${DZLAUX} ${ZCLASRC})
-  message(STATUS "Building Double Complex Precision")
+  list(APPEND ALLOBJ ${ZLASRC} ${ZCLASRC} ${DZLAUX} ${ALLAUX})
+  message(STATUS "Building double precision complex")
 endif()
+list(REMOVE_DUPLICATES ALLOBJ)
 
 if(NOT ALLOBJ)
   message(FATAL_ERROR "-->LAPACK SRC BUILD: NOTHING TO BUILD, NO PRECISION SELECTED:
      PLEASE ENABLE AT LEAST ONE OF THOSE: BUILD_SINGLE, BUILD_COMPLEX, BUILD_DOUBLE, BUILD_COMPLEX16.")
 endif()
 
-list(REMOVE_DUPLICATES ALLOBJ)
 
 add_library(lapack ${ALLOBJ} ${ALLXOBJ})
 target_link_libraries(lapack ${BLAS_LIBRARIES} ${XBLAS_LIBRARY})
