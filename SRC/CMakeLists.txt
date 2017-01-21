@@ -143,7 +143,6 @@ set(SLASRC
    ssytd2.f ssytf2.f ssytrd.f ssytrf.f ssytri.f ssytri2.f ssytri2x.f
    ssyswapr.f ssytrs.f ssytrs2.f
    ssyconv.f ssyconvf.f ssyconvf_rook.f
-   ssysv_aa.f ssytrf_aa.f ssytrs_aa.f
    ssytf2_rook.f ssytrf_rook.f ssytrs_rook.f
    ssytri_rook.f ssycon_rook.f ssysv_rook.f
    ssytf2_rk.f ssytrf_rk.f ssytrs_3.f
