@@ -37,7 +37,7 @@ set(SLINTST schkaa.f
    schklqt.f schklqtp.f schktsqr.f
    serrlqt.f serrlqtp.f serrtsqr.f stsqr01.f slqt04.f slqt05.f)
 
-if(USEXBLAS)
+if(USE_XBLAS)
   list(APPEND SLINTST sdrvgbx.f sdrvgex.f sdrvsyx.f sdrvpox.f
                       serrvxx.f serrgex.f serrsyx.f serrpox.f
                       sebchvxx.f)
@@ -82,7 +82,7 @@ set(CLINTST cchkaa.f
    cchklqt.f cchklqtp.f cchktsqr.f
    cerrlqt.f cerrlqtp.f cerrtsqr.f ctsqr01.f clqt04.f clqt05.f)
 
-if(USEXBLAS)
+if(USE_XBLAS)
   list(APPEND CLINTST cdrvgbx.f cdrvgex.f cdrvhex.f cdrvsyx.f cdrvpox.f
                       cerrvxx.f cerrgex.f cerrhex.f cerrsyx.f cerrpox.f
                       cebchvxx.f)
@@ -123,7 +123,7 @@ set(DLINTST dchkaa.f
    dchklq.f dchklqt.f dchklqtp.f dchktsqr.f
    derrlqt.f derrlqtp.f derrtsqr.f dtsqr01.f dlqt04.f dlqt05.f)
 
-if(USEXBLAS)
+if(USE_XBLAS)
   list(APPEND DLINTST ddrvgbx.f ddrvgex.f ddrvsyx.f ddrvpox.f
                       derrvxx.f derrgex.f derrsyx.f derrpox.f
                       debchvxx.f)
@@ -168,7 +168,7 @@ set(ZLINTST zchkaa.f
    zchklqt.f zchklqtp.f zchktsqr.f
    zerrlqt.f zerrlqtp.f zerrtsqr.f ztsqr01.f zlqt04.f zlqt05.f)
 
-if(USEXBLAS)
+if(USE_XBLAS)
   list(APPEND ZLINTST zdrvgbx.f zdrvgex.f zdrvhex.f zdrvsyx.f zdrvpox.f
                       zerrvxx.f zerrgex.f zerrhex.f zerrsyx.f zerrpox.f
                       zebchvxx.f)
