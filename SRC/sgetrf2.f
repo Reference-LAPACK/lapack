@@ -38,7 +38,7 @@
 *>
 *>        [  A11 | A12  ]  where A11 is n1 by n1 and A22 is n2 by n2
 *>    A = [ -----|----- ]  with n1 = min(m,n)/2
-*         [  A21 | A22  ]       n2 = n-n1
+*>        [  A21 | A22  ]       n2 = n-n1
 *>
 *>                                       [ A11 ]
 *> The subroutine calls itself to factor [ --- ],

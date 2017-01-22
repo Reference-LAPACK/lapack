@@ -318,6 +318,8 @@
 *> \par References:
 *  ================
 *>
+*> \verbatim
+*>
 *> [1] P. P. M. De Rijk: A one-sided Jacobi algorithm for computing the
 *>    singular value decomposition on a vector computer.
 *>    SIAM J. Sci. Stat. Comp., Vol. 10 (1998), pp. 359-371.

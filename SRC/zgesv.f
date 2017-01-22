@@ -1,4 +1,4 @@
-*> \brief <b> ZGESV computes the solution to system of linear equations A * X = B for GE matrices</b> (simple driver) </b>
+*> \brief <b> ZGESV computes the solution to system of linear equations A * X = B for GE matrices (simple driver) </b>
 *
 *  =========== DOCUMENTATION ===========
 *

@@ -46,7 +46,7 @@
 *> positive definite.
 *> This routine use the 2stage technique for the reduction to tridiagonal
 *> which showed higher performance on recent architecture and for large
-*  sizes N>2000.
+*> sizes N>2000.
 *> \endverbatim
 *
 *  Arguments:
