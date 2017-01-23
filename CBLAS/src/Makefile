@@ -2,10 +2,7 @@
 
 include ../../make.inc
 
-all: cblaslib
-
-clean:
-	rm -f *.o a.out core
+all: $(CBLASLIB)
 
 # Error handling routines for level 2 & 3
 errhand = cblas_globals.o cblas_xerbla.o xerbla.o
@@ -185,12 +182,17 @@ all3: $(alev3) $(errhand)
 	$(RANLIB) $(CBLASLIB)
 
 # All levels and precisions
-cblaslib: $(alev1) $(alev2) $(alev3) $(errhand)
-	$(ARCH) $(ARCHFLAGS) $(CBLASLIB) $(alev1) $(alev2) $(alev3) $(errhand)
-	$(RANLIB) $(CBLASLIB)
+$(CBLASLIB): $(alev1) $(alev2) $(alev3) $(errhand)
+	$(ARCH) $(ARCHFLAGS) $@ $(alev1) $(alev2) $(alev3) $(errhand)
+	$(RANLIB) $@
 
 FRC:
 	@FRC=$(FRC)
+
+clean:
+	rm -f *.o a.out core
+cleanall:
+	rm -f $(CBLASLIB)
 
 .c.o:
 	$(CC) $(CFLAGS) -I../include -c -o $@ $<

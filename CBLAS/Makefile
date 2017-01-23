@@ -14,8 +14,8 @@ cleanexe:
 	cd testing && $(MAKE) cleanexe
 
 cleanall: clean cleanexe
-	rm -f $(CBLASLIB)
-	cd examples && rm -f *.o cblas_ex1 cblas_ex2
+	cd src && $(MAKE) cleanall
+	cd examples && $(MAKE) cleanall
 
 cblas_testing:
 	cd testing && $(MAKE) all
