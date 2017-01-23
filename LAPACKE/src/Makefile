@@ -32,7 +32,7 @@
 ##############################################################################
 # makefile for LAPACKE, used to build lapacke binary.
 #
-# Note: we use multiple SRC_OBJA, SRC_OBJB, etc, instead of a single SRC_OBJ 
+# Note: we use multiple SRC_OBJA, SRC_OBJB, etc, instead of a single SRC_OBJ
 # to allow build with mingw (argument list too long for the msys ar)
 #
 include ../../make.inc
@@ -1083,7 +1083,7 @@ lapacke_dsytri_3.o \
 lapacke_dsytri_3_work.o \
 lapacke_dsytri2x.o \
 lapacke_dsytri2x_work.o \
-lapacke_dsytri_work.o 
+lapacke_dsytri_work.o
 
 SRC_OBJB = \
 lapacke_dsytrs.o \
@@ -2370,11 +2370,8 @@ lapacke_slagsy_work.o \
 lapacke_zlagsy.o \
 lapacke_zlagsy_work.o
 
-ALLOBJA = $(SRC_OBJA)
-ALLOBJB = $(SRC_OBJB) $(MATGEN_OBJ)
-
 ifdef USEXBLAS
-ALLXOBJ = $(SXLASRC) $(DXLASRC) $(CXLASRC) $(ZXLASRC)
+ALLXOBJ = $(SRCX_OBJ)
 endif
 
 ifdef BUILD_DEPRECATED
@@ -2383,9 +2380,12 @@ endif
 
 all: ../../$(LAPACKELIB)
 
-../../$(LAPACKELIB): $(ALLOBJA) $(ALLOBJB) $(ALLXOBJ) $(DEPRECATED)
-	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJA) 
-	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJB) $(ALLXOBJ) $(DEPRECATED)
+../../$(LAPACKELIB): $(SRC_OBJA) $(SRC_OBJB) $(MATGEN_OBJ) $(ALLXOBJ) $(DEPRECATED)
+	$(ARCH) $(ARCHFLAGS) $@ $(SRC_OBJA)
+	$(ARCH) $(ARCHFLAGS) $@ $(SRC_OBJB)
+	$(ARCH) $(ARCHFLAGS) $@ $(MATGEN_OBJ)
+	$(ARCH) $(ARCHFLAGS) $@ $(ALLXOBJ)
+	$(ARCH) $(ARCHFLAGS) $@ $(DEPRECATED)
 	$(RANLIB) $@
 
 .c.o:

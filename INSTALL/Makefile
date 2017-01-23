@@ -1,7 +1,11 @@
 include ../make.inc
 
-.SUFFIXES: .o .f
 all: testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
+
+clean:
+	rm -f *.o
+cleanall:
+	rm -f test*
 
 testlsame: lsame.o lsametst.o
 	$(LOADER) $(LOADOPTS) -o $@ lsame.o lsametst.o
@@ -26,8 +30,16 @@ testieee: tstiee.o
 testversion: ilaver.o LAPACK_version.o
 	$(LOADER) $(LOADOPTS) -o $@ ilaver.o LAPACK_version.o
 
-clean:
-	rm -f *.o
+run: all
+	./testlsame
+	./testslamch
+	./testdlamch
+	./testsecond
+	./testdsecnd
+	./testieee
+	./testversion
+
+.SUFFIXES: .o .f
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
 

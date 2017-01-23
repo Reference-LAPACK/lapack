@@ -8,8 +8,19 @@ INSTALL/test*
 make.inc
 
 # BLAS testing
-BLAS/*.out
-BLAS/x*
+BLAS/TESTING/*.out
+BLAS/TESTING/x*
+
+# CBLAS
+CBLAS/include/cblas_mangling.h
+
+# CBLAS testing
+CBLAS/testing/*.out
+CBLAS/testing/x*
+
+# CBLAS examples
+CBLAS/examples/cblas_ex1
+CBLAS/examples/cblas_ex2
 
 # LAPACK testing
 TESTING/x*

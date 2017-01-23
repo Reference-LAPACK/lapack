@@ -132,7 +132,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK which should be calculated
-*           by a workspace query. LWORK = MAX(1, LWORK_QUERY)
+*>          by a workspace query. LWORK = MAX(1, LWORK_QUERY)
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
 *>          this value as the first entry of the WORK array, and no error
@@ -222,7 +222,7 @@
 *>
 *>  where tau is a real scalar, and v is a real vector with
 *>  v(kd+1:i) = 0 and v(i+kd+1) = 1; v(i+kd+2:n) is stored on exit in
-*   A(i+kd+2:n,i), and tau in TAU(i).
+*>  A(i+kd+2:n,i), and tau in TAU(i).
 *>
 *>  The contents of A on exit are illustrated by the following examples
 *>  with n = 5:
