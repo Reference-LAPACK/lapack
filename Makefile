@@ -14,8 +14,7 @@ lib: lapacklib tmglib
 clean: cleanlib cleantesting cleanblas_testing cleancblas_testing
 
 lapack_install:
-	( cd INSTALL; $(MAKE); ./testlsame; ./testslamch; ./testdlamch; \
-	./testsecond; ./testdsecnd; ./testieee; ./testversion )
+	( cd INSTALL; $(MAKE) run )
 
 blaslib:
 	( cd BLAS/SRC; $(MAKE) )
@@ -125,4 +124,5 @@ cleantesting:
 	( cd TESTING; rm -f xlin* xeig* )
 
 cleanall: cleanlib cleanblas_testing cleancblas_testing cleantesting
-	rm -f *.a TESTING/*.out INSTALL/test* BLAS/*.out
+	( cd INSTALL; $(MAKE) cleanall )
+	rm -f *.a TESTING/*.out BLAS/*.out
