@@ -58,22 +58,8 @@ variants_testing: lib variants
 	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/LIB/qrll.a'; \
 	mv stest.out stest_qrll.out; mv dtest.out dtest_qrll.out; mv ctest.out ctest_qrll.out; mv ztest.out ztest_qrll.out )
 
-blas_testing:
-	( cd BLAS/TESTING; $(MAKE) -f Makeblat1 )
-	( cd BLAS; ./xblat1s > sblat1.out    ; \
-	           ./xblat1d > dblat1.out    ; \
-	           ./xblat1c > cblat1.out    ; \
-	           ./xblat1z > zblat1.out    )
-	( cd BLAS/TESTING; $(MAKE) -f Makeblat2 )
-	( cd BLAS; ./xblat2s < sblat2.in     ; \
-	           ./xblat2d < dblat2.in     ; \
-	           ./xblat2c < cblat2.in     ; \
-	           ./xblat2z < zblat2.in     )
-	( cd BLAS/TESTING; $(MAKE) -f Makeblat3 )
-	( cd BLAS; ./xblat3s < sblat3.in     ; \
-	           ./xblat3d < dblat3.in     ; \
-	           ./xblat3c < cblat3.in     ; \
-	           ./xblat3z < zblat3.in     )
+blas_testing: blaslib
+	( cd BLAS/TESTING; $(MAKE) run )
 
 cblas_testing: blaslib
 	( cd CBLAS; $(MAKE) cblas_testing )
@@ -110,10 +96,7 @@ cleanlib:
 
 
 cleanblas_testing:
-	( cd BLAS/TESTING; $(MAKE) -f Makeblat1 clean )
-	( cd BLAS/TESTING; $(MAKE) -f Makeblat2 clean )
-	( cd BLAS/TESTING; $(MAKE) -f Makeblat3 clean )
-	( cd BLAS; rm -f xblat* )
+	( cd BLAS/TESTING; $(MAKE) clean )
 
 cleancblas_testing:
 	( cd CBLAS/testing; $(MAKE) clean )
@@ -125,4 +108,4 @@ cleantesting:
 
 cleanall: cleanlib cleanblas_testing cleancblas_testing cleantesting
 	( cd INSTALL; $(MAKE) cleanall )
-	rm -f *.a TESTING/*.out BLAS/*.out
+	rm -f *.a TESTING/*.out

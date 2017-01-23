@@ -8,8 +8,8 @@ INSTALL/test*
 make.inc
 
 # BLAS testing
-BLAS/*.out
-BLAS/x*
+BLAS/TESTING/*.out
+BLAS/TESTING/x*
 
 # LAPACK testing
 TESTING/x*
