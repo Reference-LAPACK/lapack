@@ -33,9 +33,9 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_sgelq_work( int matrix_layout, lapack_int m, lapack_int n,
-                               float* a, lapack_int lda,
-                               float* t, lapack_int tsize )
+lapack_int LAPACKE_sgelq( int matrix_layout, lapack_int m, lapack_int n,
+                          float* a, lapack_int lda,
+                          float* t, lapack_int tsize )
 {
     lapack_int info = 0;
     lapack_int lwork = -1;
