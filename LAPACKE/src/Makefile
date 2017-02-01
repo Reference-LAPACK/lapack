@@ -32,12 +32,12 @@
 ##############################################################################
 # makefile for LAPACKE, used to build lapacke binary.
 #
-# Note: we use multiple SRC_OBJA, SRC_OBJB, etc, instead of a single SRC_OBJ
+# Note: we use multiple OBJ_A, OBJ_B, etc, instead of a single OBJ
 # to allow build with mingw (argument list too long for the msys ar)
 #
 include ../../make.inc
 
-SRC_OBJA = \
+OBJ_A = \
 lapacke_cbbcsd.o \
 lapacke_cbbcsd_work.o \
 lapacke_cbdsqr.o \
@@ -1085,7 +1085,7 @@ lapacke_dsytri2x.o \
 lapacke_dsytri2x_work.o \
 lapacke_dsytri_work.o
 
-SRC_OBJB = \
+OBJ_B = \
 lapacke_dsytrs.o \
 lapacke_dsytrs_rook.o \
 lapacke_dsytrs2.o \
@@ -2298,7 +2298,8 @@ lapacke_zsyr_work.o \
 lapacke_csyr_work.o \
 lapacke_ilaver.o
 
-DEPRECSRC = \
+ifdef BUILD_DEPRECATED
+DEPRECATED = \
 lapacke_cggsvp.o \
 lapacke_cggsvp_work.o \
 lapacke_dggsvp.o \
@@ -2323,8 +2324,10 @@ lapacke_sgeqpf.o \
 lapacke_sgeqpf_work.o \
 lapacke_zgeqpf.o \
 lapacke_zgeqpf_work.o
+endif
 
-SRCX_OBJ = \
+ifdef USEXBLAS
+EXTENDED = \
 lapacke_cgbrfsx.o       lapacke_cporfsx.o       lapacke_dgerfsx.o       lapacke_sgbrfsx.o       lapacke_ssyrfsx.o       lapacke_zherfsx.o \
 lapacke_cgbrfsx_work.o  lapacke_cporfsx_work.o  lapacke_dgerfsx_work.o  lapacke_sgbrfsx_work.o  lapacke_ssyrfsx_work.o  lapacke_zherfsx_work.o \
 lapacke_cgerfsx.o       lapacke_csyrfsx.o       lapacke_dporfsx.o       lapacke_sgerfsx.o       lapacke_zgbrfsx.o       lapacke_zporfsx.o \
@@ -2337,10 +2340,11 @@ lapacke_cgesvxx.o       lapacke_csysvxx.o       lapacke_dposvxx.o       lapacke_
 lapacke_cgesvxx_work.o  lapacke_csysvxx_work.o  lapacke_dposvxx_work.o  lapacke_sgesvxx_work.o  lapacke_zgbsvxx_work.o  lapacke_zposvxx_work.o \
 lapacke_chesvxx.o       lapacke_dgbsvxx.o       lapacke_dsysvxx.o       lapacke_sposvxx.o       lapacke_zgesvxx.o       lapacke_zsysvxx.o \
 lapacke_chesvxx_work.o  lapacke_dgbsvxx_work.o  lapacke_dsysvxx_work.o  lapacke_sposvxx_work.o  lapacke_zgesvxx_work.o  lapacke_zsysvxx_work.o
+endif
 
-
+ifdef LAPACKE_WITH_TMG
 # FILE PARTS OF TMGLIB
-MATGEN_OBJ = \
+MATGEN = \
 lapacke_clatms.o \
 lapacke_clatms_work.o \
 lapacke_dlatms.o \
@@ -2369,23 +2373,16 @@ lapacke_slagsy.o \
 lapacke_slagsy_work.o \
 lapacke_zlagsy.o \
 lapacke_zlagsy_work.o
-
-ifdef USEXBLAS
-ALLXOBJ = $(SRCX_OBJ)
-endif
-
-ifdef BUILD_DEPRECATED
-DEPRECATED = $(DEPRECSRC)
 endif
 
 all: ../../$(LAPACKELIB)
 
-../../$(LAPACKELIB): $(SRC_OBJA) $(SRC_OBJB) $(MATGEN_OBJ) $(ALLXOBJ) $(DEPRECATED)
-	$(ARCH) $(ARCHFLAGS) $@ $(SRC_OBJA)
-	$(ARCH) $(ARCHFLAGS) $@ $(SRC_OBJB)
-	$(ARCH) $(ARCHFLAGS) $@ $(MATGEN_OBJ)
-	$(ARCH) $(ARCHFLAGS) $@ $(ALLXOBJ)
+../../$(LAPACKELIB): $(OBJ_A) $(OBJ_B) $(DEPRECATED) $(EXTENDED) $(MATGEN)
+	$(ARCH) $(ARCHFLAGS) $@ $(OBJ_A)
+	$(ARCH) $(ARCHFLAGS) $@ $(OBJ_B)
 	$(ARCH) $(ARCHFLAGS) $@ $(DEPRECATED)
+	$(ARCH) $(ARCHFLAGS) $@ $(EXTENDED)
+	$(ARCH) $(ARCHFLAGS) $@ $(MATGEN)
 	$(RANLIB) $@
 
 .c.o:
