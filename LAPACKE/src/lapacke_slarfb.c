@@ -40,7 +40,7 @@ lapack_int LAPACKE_slarfb( int matrix_layout, char side, char trans, char direct
                            lapack_int ldc )
 {
     lapack_int info = 0;
-    lapack_int ldwork = ( side=='l')?n:(( side=='r')?m:1);
+    lapack_int ldwork;
     float* work = NULL;
     lapack_int ncols_v, nrows_v;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
@@ -99,6 +99,13 @@ lapack_int LAPACKE_slarfb( int matrix_layout, char side, char trans, char direct
             return -9;
     }
 #endif
+    if( LAPACKE_lsame( side, 'l' ) ) {
+        ldwork = n;
+    } else if( LAPACKE_lsame( side, 'r' ) ) {
+        ldwork = m;
+    } else {
+        ldwork = 1;
+    }
     /* Allocate memory for working array(s) */
     work = (float*)LAPACKE_malloc( sizeof(float) * ldwork * MAX(1,k) );
     if( work == NULL ) {
