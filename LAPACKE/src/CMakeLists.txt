@@ -47,6 +47,8 @@ lapacke_cgehrd.c
 lapacke_cgehrd_work.c
 lapacke_cgejsv.c
 lapacke_cgejsv_work.c
+lapacke_cgelq.c
+lapacke_cgelq_work.c
 lapacke_cgelq2.c
 lapacke_cgelq2_work.c
 lapacke_cgelqf.c
@@ -59,6 +61,8 @@ lapacke_cgelss.c
 lapacke_cgelss_work.c
 lapacke_cgelsy.c
 lapacke_cgelsy_work.c
+lapacke_cgemlq.c
+lapacke_cgemlq_work.c
 lapacke_cgemqr.c
 lapacke_cgemqr_work.c
 lapacke_cgemqrt.c
@@ -67,6 +71,8 @@ lapacke_cgeqlf.c
 lapacke_cgeqlf_work.c
 lapacke_cgeqp3.c
 lapacke_cgeqp3_work.c
+lapacke_cgeqr.c
+lapacke_cgeqr_work.c
 lapacke_cgeqr2.c
 lapacke_cgeqr2_work.c
 lapacke_cgeqrf.c
@@ -631,6 +637,8 @@ lapacke_dgehrd.c
 lapacke_dgehrd_work.c
 lapacke_dgejsv.c
 lapacke_dgejsv_work.c
+lapacke_dgelq.c
+lapacke_dgelq_work.c
 lapacke_dgelq2.c
 lapacke_dgelq2_work.c
 lapacke_dgelqf.c
@@ -643,6 +651,8 @@ lapacke_dgelss.c
 lapacke_dgelss_work.c
 lapacke_dgelsy.c
 lapacke_dgelsy_work.c
+lapacke_dgemlq.c
+lapacke_dgemlq_work.c
 lapacke_dgemqr.c
 lapacke_dgemqr_work.c
 lapacke_dgemqrt.c
@@ -651,6 +661,8 @@ lapacke_dgeqlf.c
 lapacke_dgeqlf_work.c
 lapacke_dgeqp3.c
 lapacke_dgeqp3_work.c
+lapacke_dgeqr.c
+lapacke_dgeqr_work.c
 lapacke_dgeqr2.c
 lapacke_dgeqr2_work.c
 lapacke_dgeqrf.c
@@ -1179,6 +1191,8 @@ lapacke_sgehrd.c
 lapacke_sgehrd_work.c
 lapacke_sgejsv.c
 lapacke_sgejsv_work.c
+lapacke_sgelq.c
+lapacke_sgelq_work.c
 lapacke_sgelq2.c
 lapacke_sgelq2_work.c
 lapacke_sgelqf.c
@@ -1191,6 +1205,8 @@ lapacke_sgelss.c
 lapacke_sgelss_work.c
 lapacke_sgelsy.c
 lapacke_sgelsy_work.c
+lapacke_sgemlq.c
+lapacke_sgemlq_work.c
 lapacke_sgemqr.c
 lapacke_sgemqr_work.c
 lapacke_sgemqrt.c
@@ -1199,6 +1215,8 @@ lapacke_sgeqlf.c
 lapacke_sgeqlf_work.c
 lapacke_sgeqp3.c
 lapacke_sgeqp3_work.c
+lapacke_sgeqr.c
+lapacke_sgeqr_work.c
 lapacke_sgeqr2.c
 lapacke_sgeqr2_work.c
 lapacke_sgeqrf.c
@@ -1721,6 +1739,8 @@ lapacke_zgehrd.c
 lapacke_zgehrd_work.c
 lapacke_zgejsv.c
 lapacke_zgejsv_work.c
+lapacke_zgelq.c
+lapacke_zgelq_work.c
 lapacke_zgelq2.c
 lapacke_zgelq2_work.c
 lapacke_zgelqf.c
@@ -1733,6 +1753,8 @@ lapacke_zgelss.c
 lapacke_zgelss_work.c
 lapacke_zgelsy.c
 lapacke_zgelsy_work.c
+lapacke_zgemlq.c
+lapacke_zgemlq_work.c
 lapacke_zgemqr.c
 lapacke_zgemqr_work.c
 lapacke_zgemqrt.c
@@ -1741,6 +1763,8 @@ lapacke_zgeqlf.c
 lapacke_zgeqlf_work.c
 lapacke_zgeqp3.c
 lapacke_zgeqp3_work.c
+lapacke_zgeqr.c
+lapacke_zgeqr_work.c
 lapacke_zgeqr2.c
 lapacke_zgeqr2_work.c
 lapacke_zgeqrf.c
