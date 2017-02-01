@@ -45,27 +45,28 @@ lapack_int LAPACKE_dorbdb( int matrix_layout, char trans, char signs,
     lapack_int lwork = -1;
     double* work = NULL;
     double work_query;
-    lapack_int nrows_x11, nrows_x12, nrows_x21, nrows_x22;
+    int lapack_layout;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dorbdb", -1 );
         return -1;
     }
+    if( LAPACKE_lsame( trans, 'n' ) && matrix_layout == LAPACK_COL_MAJOR ) {
+        lapack_layout = LAPACK_COL_MAJOR;
+    } else {
+        lapack_layout = LAPACK_ROW_MAJOR;
+    }
 #ifndef LAPACK_DISABLE_NAN_CHECK
     /* Optionally check input matrices for NaNs */
-    nrows_x11 = ( LAPACKE_lsame( trans, 'n' ) ? p : q);
-    nrows_x12 = ( LAPACKE_lsame( trans, 'n' ) ? p : m-q);
-    nrows_x21 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : q);
-    nrows_x22 = ( LAPACKE_lsame( trans, 'n' ) ? m-p : m-q);
-    if( LAPACKE_dge_nancheck( matrix_layout, nrows_x11, q, x11, ldx11 ) ) {
+    if( LAPACKE_dge_nancheck( lapack_layout, p, q, x11, ldx11 ) ) {
         return -7;
     }
-    if( LAPACKE_dge_nancheck( matrix_layout, nrows_x12, m-q, x12, ldx12 ) ) {
+    if( LAPACKE_dge_nancheck( lapack_layout, p, m-q, x12, ldx12 ) ) {
         return -9;
     }
-    if( LAPACKE_dge_nancheck( matrix_layout, nrows_x21, q, x21, ldx21 ) ) {
+    if( LAPACKE_dge_nancheck( lapack_layout, m-p, q, x21, ldx21 ) ) {
         return -11;
     }
-    if( LAPACKE_dge_nancheck( matrix_layout, nrows_x22, m-q, x22, ldx22 ) ) {
+    if( LAPACKE_dge_nancheck( lapack_layout, m-p, m-q, x22, ldx22 ) ) {
         return -13;
     }
 #endif
