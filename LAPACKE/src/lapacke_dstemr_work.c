@@ -55,7 +55,7 @@ lapack_int LAPACKE_dstemr_work( int matrix_layout, char jobz, char range,
         lapack_int ldz_t = MAX(1,n);
         double* z_t = NULL;
         /* Check leading dimension(s) */
-        if( ldz < n ) {
+        if( ldz < 1 || ( LAPACKE_lsame( jobz, 'v' ) && ldz < n ) ) {
             info = -14;
             LAPACKE_xerbla( "LAPACKE_dstemr_work", info );
             return info;
