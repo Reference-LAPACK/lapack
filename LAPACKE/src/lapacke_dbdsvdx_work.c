@@ -64,7 +64,7 @@ lapack_int LAPACKE_dbdsvdx_work( int matrix_layout, char uplo, char jobz, char r
         /* Allocate memory for temporary array(s) */
         if( LAPACKE_lsame( jobz, 'v' ) ) {
            z_t = (double*)
-              LAPACKE_malloc( sizeof(double) * ldz_t * MAX(2*n,1) );
+              LAPACKE_malloc( sizeof(double) * ldz_t * MAX(ncols_z,1) );
            if( z_t == NULL ) {
               info = LAPACK_TRANSPOSE_MEMORY_ERROR;
               goto exit_level_0;
