@@ -227,7 +227,7 @@
 *
                               IF ( IALPHA.EQ. 1) THEN
                                  ALPHA = ZERO
-                              ELSE IF ( IALPHA.EQ. 1) THEN
+                              ELSE IF ( IALPHA.EQ. 2) THEN
                                  ALPHA = ONE
                               ELSE
                                  ALPHA = CLARND( 4, ISEED )
