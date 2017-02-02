@@ -124,5 +124,5 @@ if(CBLAS_COMPLEX16)
 endif()
 
 add_library(cblas ${ALLOBJ})
-target_link_libraries(cblas ${BLAS_LIBRARIES})
+target_link_libraries(cblas PRIVATE ${BLAS_LIBRARIES})
 lapack_install_library(cblas)
