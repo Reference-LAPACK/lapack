@@ -523,8 +523,8 @@ set_target_properties(
   )
 
 if(USE_XBLAS)
-  target_link_libraries(lapack ${XBLAS_LIBRARY})
+  target_link_libraries(lapack PRIVATE ${XBLAS_LIBRARY})
 endif()
-target_link_libraries(lapack ${BLAS_LIBRARIES})
+target_link_libraries(lapack PRIVATE ${BLAS_LIBRARIES})
 
 lapack_install_library(lapack)

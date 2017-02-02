@@ -119,7 +119,7 @@ set(ZEIGTST zchkee.f
 
 macro(add_eig_executable name)
   add_executable(${name} ${ARGN})
-  target_link_libraries(${name} tmglib ${LAPACK_LIBRARIES})
+  target_link_libraries(${name} tmglib ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 endmacro()
 
 if(BUILD_SINGLE)
