@@ -467,11 +467,6 @@ set(ZXLASRC zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_heamv.f zla_hercond_c.f zla_hercond_x.f zla_herpvgrw.f
    zla_lin_berr.f zlarscl2.f zlascl2.f zla_wwaddw.f)
 
-
-if(USE_XBLAS)
-  set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC})
-endif()
-
 if(BUILD_DEPRECATED)
   list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
     DEPRECATED/sgeqpf.f DEPRECATED/sgelsx.f DEPRECATED/sggsvd.f
@@ -485,7 +480,14 @@ if(BUILD_DEPRECATED)
   list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
     DEPRECATED/zgeqpf.f DEPRECATED/zgelsx.f DEPRECATED/zggsvd.f
     DEPRECATED/zggsvp.f DEPRECATED/zlahrd.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
-  message(STATUS "Building deprecated routines")
+  message(STATUS "Building LAPACK deprecated routines")
+endif()
+
+if(USE_XBLAS)
+  list(APPEND SLASRC ${SXLASRC})
+  list(APPEND DLASRC ${DXLASRC})
+  list(APPEND CLASRC ${CXLASRC})
+  list(APPEND ZLASRC ${ZXLASRC})
 endif()
 
 set(ALLOBJ)
@@ -513,13 +515,16 @@ if(NOT ALLOBJ)
 endif()
 
 
-add_library(lapack ${ALLOBJ} ${ALLXOBJ})
-target_link_libraries(lapack ${BLAS_LIBRARIES} ${XBLAS_LIBRARY})
-
+add_library(lapack ${ALLOBJ})
 set_target_properties(
   lapack PROPERTIES
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
+
+if(USE_XBLAS)
+  target_link_libraries(lapack ${XBLAS_LIBRARY})
+endif()
+target_link_libraries(lapack ${BLAS_LIBRARIES})
 
 lapack_install_library(lapack)
