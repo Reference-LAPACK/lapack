@@ -123,21 +123,17 @@ macro(add_eig_executable name)
 endmacro()
 
 if(BUILD_SINGLE)
-add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST}
-  ${SECOND_SRC})
+add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST})
 endif()
 
 if(BUILD_COMPLEX)
-add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST}
-  ${SECOND_SRC})
+add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST})
 endif()
 
 if(BUILD_DOUBLE)
-add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST}
-  ${DSECOND_SRC})
+add_eig_executable(xeigtstd ${DEIGTST} ${DZIGTST} ${AEIGTST})
 endif()
 
 if(BUILD_COMPLEX16)
-add_eig_executable(xeigtstz ${ZEIGTST} ${DZIGTST} ${AEIGTST}
-  ${DSECOND_SRC})
+add_eig_executable(xeigtstz ${ZEIGTST} ${DZIGTST} ${AEIGTST})
 endif()
