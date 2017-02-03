@@ -71,8 +71,8 @@ lapack_int LAPACKE_sbdsvdx( int matrix_layout, char uplo, char jobz, char range,
     }
     /* Call middle-level interface */
     info = LAPACKE_sbdsvdx_work( matrix_layout, uplo, jobz,  range,
-    				n, d, e, vl, vu, il, iu, ns, s, z,
-                                ldz, work, iwork);
+                                 n, d, e, vl, vu, il, iu, ns, s, z,
+                                 ldz, work, iwork);
     /* Backup significant data from working array(s) */
     for( i=0; i<12*n-1; i++ ) {
         superb[i] = iwork[i+1];

@@ -38,7 +38,7 @@ double LAPACKE_zlanhe_work( int matrix_layout, char norm, char uplo,
                                 lapack_int lda, double* work )
 {
     lapack_int info = 0;
-	double res = 0.;
+    double res = 0.;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         res = LAPACK_zlanhe( &norm, &uplo, &n, a, &lda, work );

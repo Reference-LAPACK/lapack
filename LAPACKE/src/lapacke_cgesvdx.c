@@ -61,7 +61,7 @@ lapack_int LAPACKE_cgesvdx( int matrix_layout, char jobu, char jobvt, char range
 #endif
     /* Query optimal working array(s) size */
     info = LAPACKE_cgesvdx_work( matrix_layout, jobu, jobvt, range,
-    							 m, n, a, lda, vl, vu, il, iu, ns, s, u,
+                                 m, n, a, lda, vl, vu, il, iu, ns, s, u,
                                  ldu, vt, ldvt, &work_query, lwork, rwork, iwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -69,7 +69,7 @@ lapack_int LAPACKE_cgesvdx( int matrix_layout, char jobu, char jobvt, char range
     lwork = LAPACK_C2INT (work_query);
     /* Allocate memory for work arrays */
     work = (lapack_complex_float*)
-    	LAPACKE_malloc( sizeof(lapack_complex_float) * lwork );
+        LAPACKE_malloc( sizeof(lapack_complex_float) * lwork );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_1;
@@ -86,8 +86,8 @@ lapack_int LAPACKE_cgesvdx( int matrix_layout, char jobu, char jobvt, char range
     }
     /* Call middle-level interface */
     info = LAPACKE_cgesvdx_work( matrix_layout, jobu, jobvt,  range,
-    							 m, n, a, lda, vl, vu, il, iu, ns, s, u,
-                                ldu, vt, ldvt, work, lwork, rwork, iwork );
+                                 m, n, a, lda, vl, vu, il, iu, ns, s, u,
+                                 ldu, vt, ldvt, work, lwork, rwork, iwork );
     /* Backup significant data from working array(s) */
     for( i=0; i<12*MIN(m,n)-1; i++ ) {
         superb[i] = iwork[i+1];

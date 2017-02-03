@@ -56,5 +56,5 @@ lapack_int LAPACKE_chetrs_3( int matrix_layout, char uplo, lapack_int n,
     }
 #endif
     return LAPACKE_chetrs_3_work( matrix_layout, uplo, n, nrhs, a, lda,
-    							  e, ipiv, b, ldb );
+                                  e, ipiv, b, ldb );
 }

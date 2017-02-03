@@ -59,7 +59,7 @@ lapack_int LAPACKE_sgesvdx( int matrix_layout, char jobu, char jobvt, char range
 #endif
     /* Query optimal working array(s) size */
     info = LAPACKE_sgesvdx_work( matrix_layout, jobu, jobvt, range,
-    							 m, n, a, lda, vl, vu, il, iu, ns, s, u,
+                                 m, n, a, lda, vl, vu, il, iu, ns, s, u,
                                  ldu, vt, ldvt, &work_query, lwork, iwork );
     if( info != 0 ) {
         goto exit_level_0;
@@ -78,8 +78,8 @@ lapack_int LAPACKE_sgesvdx( int matrix_layout, char jobu, char jobvt, char range
     }
     /* Call middle-level interface */
     info = LAPACKE_sgesvdx_work( matrix_layout, jobu, jobvt,  range,
-    							 m, n, a, lda, vl, vu, il, iu, ns, s, u,
-                                ldu, vt, ldvt, work, lwork, iwork );
+                                 m, n, a, lda, vl, vu, il, iu, ns, s, u,
+                                 ldu, vt, ldvt, work, lwork, iwork );
     /* Backup significant data from working array(s) */
     for( i=0; i<12*MIN(m,n)-1; i++ ) {
         superb[i] = iwork[i+1];

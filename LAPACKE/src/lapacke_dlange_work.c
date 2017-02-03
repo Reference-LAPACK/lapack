@@ -38,7 +38,7 @@ double LAPACKE_dlange_work( int matrix_layout, char norm, lapack_int m,
                                 double* work )
 {
     lapack_int info = 0;
-	double res = 0.;
+    double res = 0.;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         res = LAPACK_dlange( &norm, &m, &n, a, &lda, work );

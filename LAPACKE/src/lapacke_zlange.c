@@ -38,7 +38,7 @@ double LAPACKE_zlange( int matrix_layout, char norm, lapack_int m,
                            lapack_int lda )
 {
     lapack_int info = 0;
-	double res = 0.;
+    double res = 0.;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_zlange", -1 );

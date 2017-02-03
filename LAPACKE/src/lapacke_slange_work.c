@@ -38,7 +38,7 @@ float LAPACKE_slange_work( int matrix_layout, char norm, lapack_int m,
                                 float* work )
 {
     lapack_int info = 0;
-	float res = 0.;
+    float res = 0.;
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         res = LAPACK_slange( &norm, &m, &n, a, &lda, work );
