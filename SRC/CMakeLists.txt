@@ -490,32 +490,32 @@ if(USE_XBLAS)
   list(APPEND ZLASRC ${ZXLASRC})
 endif()
 
-set(ALLOBJ)
+
+set(SOURCES)
 if(BUILD_SINGLE)
-  list(APPEND ALLOBJ ${SLASRC} ${DSLASRC} ${SCLAUX} ${ALLAUX})
+  list(APPEND SOURCES ${SLASRC} ${DSLASRC} ${SCLAUX} ${ALLAUX})
   message(STATUS "Building single precision real")
 endif()
 if(BUILD_DOUBLE)
-  list(APPEND ALLOBJ ${DLASRC} ${DSLASRC} ${DZLAUX} ${ALLAUX})
+  list(APPEND SOURCES ${DLASRC} ${DSLASRC} ${DZLAUX} ${ALLAUX})
   message(STATUS "Building double precision real")
 endif()
 if(BUILD_COMPLEX)
-  list(APPEND ALLOBJ ${CLASRC} ${ZCLASRC} ${SCLAUX} ${ALLAUX})
+  list(APPEND SOURCES ${CLASRC} ${ZCLASRC} ${SCLAUX} ${ALLAUX})
   message(STATUS "Building single precision complex")
 endif()
 if(BUILD_COMPLEX16)
-  list(APPEND ALLOBJ ${ZLASRC} ${ZCLASRC} ${DZLAUX} ${ALLAUX})
+  list(APPEND SOURCES ${ZLASRC} ${ZCLASRC} ${DZLAUX} ${ALLAUX})
   message(STATUS "Building double precision complex")
 endif()
-list(REMOVE_DUPLICATES ALLOBJ)
+list(REMOVE_DUPLICATES SOURCES)
 
-if(NOT ALLOBJ)
+if(NOT SOURCES)
   message(FATAL_ERROR "-->LAPACK SRC BUILD: NOTHING TO BUILD, NO PRECISION SELECTED:
      PLEASE ENABLE AT LEAST ONE OF THOSE: BUILD_SINGLE, BUILD_COMPLEX, BUILD_DOUBLE, BUILD_COMPLEX16.")
 endif()
 
-
-add_library(lapack ${ALLOBJ})
+add_library(lapack ${SOURCES})
 set_target_properties(
   lapack PROPERTIES
   VERSION ${LAPACK_VERSION}

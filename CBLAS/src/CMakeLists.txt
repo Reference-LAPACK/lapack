@@ -97,32 +97,22 @@ set(ZLEV3 cblas_zgemm.c cblas_zsymm.c cblas_zhemm.c cblas_zherk.c
         cblas_zher2k.c cblas_ztrmm.c cblas_ztrsm.c cblas_zsyrk.c
         cblas_zsyr2k.c)
 
-# default build all of it
-set(ALLOBJ ${SCLEV1} ${SLEV1} ${SLEV2} ${SLEV3} ${ERRHAND}
-           ${DLEV1} ${DLEV2} ${DLEV3}
-           ${CLEV1} ${CLEV2} ${CLEV3}
-           ${ZLEV1} ${ZLEV2} ${ZLEV3})
 
-# Single precision real
+set(SOURCES)
 if(CBLAS_SINGLE)
-  set(ALLOBJ ${SCLEV1} ${SLEV1} ${SLEV2} ${SLEV3} ${ERRHAND})
+  list(APPEND SOURCES ${SLEV1} ${SCLEV1} ${SLEV2} ${SLEV3} ${ERRHAND})
 endif()
-
-# Double precision real
 if(CBLAS_DOUBLE)
-  set(ALLOBJ ${DLEV1} ${DLEV2} ${DLEV3} ${ERRHAND})
+  list(APPEND SOURCES ${DLEV1} ${DLEV2} ${DLEV3} ${ERRHAND})
 endif()
-
-# Single precision complex
 if(CBLAS_COMPLEX)
-  set(ALLOBJ ${CLEV1} ${SCLEV1} ${CLEV2} ${CLEV3} ${ERRHAND})
+  list(APPEND SOURCES ${CLEV1} ${SCLEV1} ${CLEV2} ${CLEV3} ${ERRHAND})
 endif()
-
-# Double precision complex
 if(CBLAS_COMPLEX16)
-  set(ALLOBJ ${ZLEV1} ${ZLEV2} ${ZLEV3} ${ERRHAND})
+  list(APPEND SOURCES ${ZLEV1} ${ZLEV2} ${ZLEV3} ${ERRHAND})
 endif()
+list(REMOVE_DUPLICATES SOURCES)
 
-add_library(cblas ${ALLOBJ})
+add_library(cblas ${SOURCES})
 target_link_libraries(cblas PRIVATE ${BLAS_LIBRARIES})
 lapack_install_library(cblas)

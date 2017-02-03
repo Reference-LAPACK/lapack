@@ -113,30 +113,24 @@ set(DBLAS3 dgemm.f dsymm.f dsyrk.f dsyr2k.f dtrmm.f dtrsm.f)
 
 set(ZBLAS3 zgemm.f zsymm.f zsyrk.f zsyr2k.f ztrmm.f ztrsm.f
 	zhemm.f zherk.f zher2k.f)
-# default build all of it
-set(ALLOBJ ${SBLAS1} ${SBLAS2} ${SBLAS3} ${DBLAS1} ${DBLAS2} ${DBLAS3}
-	${CBLAS1} ${CBLAS2} ${CBLAS3} ${ZBLAS1}
-	${ZBLAS2} ${ZBLAS3} ${ALLBLAS})
 
+
+set(SOURCES)
 if(BLAS_SINGLE)
-  set(ALLOBJ ${SBLAS1} ${ALLBLAS}
-	${SBLAS2} ${SBLAS3})
+  list(APPEND SOURCES ${SBLAS1} ${ALLBLAS} ${SBLAS2} ${SBLAS3})
 endif()
 if(BLAS_DOUBLE)
-  set(ALLOBJ ${DBLAS1} ${ALLBLAS}
-	${DBLAS2} ${DBLAS3})
+  list(APPEND SOURCES ${DBLAS1} ${ALLBLAS} ${DBLAS2} ${DBLAS3})
 endif()
 if(BLAS_COMPLEX)
-  set(ALLOBJ ${BLASLIB} ${CBLAS1} ${CB1AUX}
-	${ALLBLAS} ${CBLAS2})
+  list(APPEND SOURCES ${CBLAS1} ${CB1AUX} ${ALLBLAS} ${CBLAS2} ${CBLAS3})
 endif()
 if(BLAS_COMPLEX16)
-  set(ALLOBJ ${BLASLIB} ${ZBLAS1} ${ZB1AUX}
-	${ALLBLAS} ${ZBLAS2} ${ZBLAS3})
+  list(APPEND SOURCES ${ZBLAS1} ${ZB1AUX} ${ALLBLAS} ${ZBLAS2} ${ZBLAS3})
 endif()
+list(REMOVE_DUPLICATES SOURCES)
 
-
-add_library(blas ${ALLOBJ})
+add_library(blas ${SOURCES})
 set_target_properties(
   blas PROPERTIES
   VERSION ${LAPACK_VERSION}

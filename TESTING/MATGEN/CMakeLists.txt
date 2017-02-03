@@ -51,25 +51,22 @@ set(ZMATGEN zlatms.f zlatme.f zlatmr.f zlatmt.f
   zlagge.f zlaghe.f zlagsy.f zlakf2.f zlarge.f zlaror.f zlarot.f
   zlatm1.f zlarnd.f zlatm2.f zlatm3.f zlatm5.f zlatm6.f zlahilb.f)
 
+
+set(SOURCES)
 if(BUILD_SINGLE)
-  set(ALLOBJ ${SMATGEN} ${SCATGEN})
+  list(APPEND SOURCES ${SMATGEN} ${SCATGEN})
 endif()
 if(BUILD_DOUBLE)
-  set(ALLOBJ ${ALLOBJ} ${DMATGEN} ${DZATGEN})
+  list(APPEND SOURCES ${DMATGEN} ${DZATGEN})
 endif()
 if(BUILD_COMPLEX)
-  set(ALLOBJ ${ALLOBJ} ${CMATGEN} ${SCATGEN})
+  list(APPEND SOURCES ${CMATGEN} ${SCATGEN})
 endif()
 if(BUILD_COMPLEX16)
-  set(ALLOBJ ${ALLOBJ} ${ZMATGEN} ${DZATGEN})
+  list(APPEND SOURCES ${ZMATGEN} ${DZATGEN})
 endif()
+list(REMOVE_DUPLICATES SOURCES)
 
-if(NOT ALLOBJ)
-  set(ALLOBJ ${SMATGEN} ${CMATGEN} ${SCATGEN} ${DMATGEN} ${ZMATGEN}
-    ${DZATGEN})
-else()
-  list(REMOVE_DUPLICATES ALLOBJ)
-endif()
-add_library(tmglib ${ALLOBJ})
+add_library(tmglib ${SOURCES})
 target_link_libraries(tmglib ${LAPACK_LIBRARIES})
 lapack_install_library(tmglib)
