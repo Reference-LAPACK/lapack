@@ -480,7 +480,6 @@ if(BUILD_DEPRECATED)
   list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
     DEPRECATED/zgeqpf.f DEPRECATED/zgelsx.f DEPRECATED/zggsvd.f
     DEPRECATED/zggsvp.f DEPRECATED/zlahrd.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
-  message(STATUS "Building LAPACK deprecated routines")
 endif()
 
 if(USE_XBLAS)
@@ -494,26 +493,17 @@ endif()
 set(SOURCES)
 if(BUILD_SINGLE)
   list(APPEND SOURCES ${SLASRC} ${DSLASRC} ${SCLAUX} ${ALLAUX})
-  message(STATUS "Building single precision real")
 endif()
 if(BUILD_DOUBLE)
   list(APPEND SOURCES ${DLASRC} ${DSLASRC} ${DZLAUX} ${ALLAUX})
-  message(STATUS "Building double precision real")
 endif()
 if(BUILD_COMPLEX)
   list(APPEND SOURCES ${CLASRC} ${ZCLASRC} ${SCLAUX} ${ALLAUX})
-  message(STATUS "Building single precision complex")
 endif()
 if(BUILD_COMPLEX16)
   list(APPEND SOURCES ${ZLASRC} ${ZCLASRC} ${DZLAUX} ${ALLAUX})
-  message(STATUS "Building double precision complex")
 endif()
 list(REMOVE_DUPLICATES SOURCES)
-
-if(NOT SOURCES)
-  message(FATAL_ERROR "-->LAPACK SRC BUILD: NOTHING TO BUILD, NO PRECISION SELECTED:
-     PLEASE ENABLE AT LEAST ONE OF THOSE: BUILD_SINGLE, BUILD_COMPLEX, BUILD_DOUBLE, BUILD_COMPLEX16.")
-endif()
 
 add_library(lapack ${SOURCES})
 set_target_properties(

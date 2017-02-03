@@ -44,7 +44,6 @@ append_subdir_files(UTILS "utils")
 
 if(BUILD_DEPRECATED)
   list(APPEND SOURCES ${DEPRECATED})
-  message(STATUS "Building LAPACKE deprecated routines")
 endif()
 if(USE_XBLAS)
   list(APPEND SOURCES ${EXTENDED})

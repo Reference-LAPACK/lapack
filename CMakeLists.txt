@@ -153,17 +153,29 @@ set(DSECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 option(BUILD_TESTING "Build tests" OFF)
+message(STATUS "Build tests: ${BUILD_TESTING}")
 
-# deprecated LAPACK routines
+# deprecated LAPACK and LAPACKE routines
 option(BUILD_DEPRECATED "Build deprecated routines" OFF)
+message(STATUS "Build deprecated routines: ${BUILD_DEPRECATED}")
 
 # --------------------------------------------------
 # Precision to build
 # By default all precisions are generated
-option(BUILD_SINGLE "Build LAPACK Single Precision" ON)
-option(BUILD_DOUBLE "Build LAPACK Double Precision" ON)
-option(BUILD_COMPLEX "Build LAPACK Complex Precision" ON)
-option(BUILD_COMPLEX16 "Build LAPACK Double Complex Precision" ON)
+option(BUILD_SINGLE "Build single precision real" ON)
+option(BUILD_DOUBLE "Build double precision real" ON)
+option(BUILD_COMPLEX "Build single precision complex" ON)
+option(BUILD_COMPLEX16 "Build double precision complex" ON)
+message(STATUS "Build single precision real: ${BUILD_SINGLE}")
+message(STATUS "Build double precision real: ${BUILD_DOUBLE}")
+message(STATUS "Build single precision complex: ${BUILD_COMPLEX}")
+message(STATUS "Build double precision complex: ${BUILD_COMPLEX16}")
+
+if(NOT (BUILD_SINGLE OR BUILD_DOUBLE OR BUILD_COMPLEX OR BUILD_COMPLEX16))
+  message(FATAL_ERROR "Nothing to build, no precision selected.
+  Please enable at least one of these:
+  BUILD_SINGLE, BUILD_DOUBLE, BUILD_COMPLEX, BUILD_COMPLEX16.")
+endif()
 
 # --------------------------------------------------
 # Subdirectories that need to be processed
@@ -266,7 +278,6 @@ else()
     CACHE STRING "Linker flags for shared libs" FORCE)
 endif()
 
-message(STATUS "BUILD TESTING : ${BUILD_TESTING}")
 if(BUILD_TESTING)
   add_subdirectory(TESTING)
 endif()
