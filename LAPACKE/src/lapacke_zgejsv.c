@@ -51,7 +51,7 @@ lapack_int LAPACKE_zgejsv( int matrix_layout, char joba, char jobu, char jobv,
 
                 //2.1
     (   (      ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) )  &&
-             (!( LAPACKE_lsame( jobu, 'u') ||  LAPACKE_lsame( jobu, 'f' ) )&&
+              !( LAPACKE_lsame( jobu, 'u') ||  LAPACKE_lsame( jobu, 'f' ) )&&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? 3*n :
 
 
@@ -79,7 +79,7 @@ lapack_int LAPACKE_zgejsv( int matrix_layout, char joba, char jobu, char jobv,
      (  (       ( LAPACKE_lsame( jobu, 'u' ) ||  LAPACKE_lsame( jobu, 'f' ) ) &&
                ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) ) &&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? 4*n*n:
-                       1) ) ) ) ) ) ) ) );
+                       1) ) ) ) ) ) ) );
     lapack_int lrwork = (
                 // 1.1
         (        LAPACKE_lsame( jobu, 'n' ) &&  LAPACKE_lsame( jobv, 'n' ) &&
@@ -91,7 +91,7 @@ lapack_int LAPACKE_zgejsv( int matrix_layout, char joba, char jobu, char jobv,
 
                 //2.1
     (   (      ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) )  &&
-             (!( LAPACKE_lsame( jobu, 'u') ||  LAPACKE_lsame( jobu, 'f' ) ) &&
+              !( LAPACKE_lsame( jobu, 'u') ||  LAPACKE_lsame( jobu, 'f' ) ) &&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? MAX( 7, n+ 2*m ) :
 
 
@@ -119,7 +119,7 @@ lapack_int LAPACKE_zgejsv( int matrix_layout, char joba, char jobu, char jobv,
      (  (       ( LAPACKE_lsame( jobu, 'u' ) ||  LAPACKE_lsame( jobu, 'f' ) ) &&
                ( LAPACKE_lsame( jobv, 'v' ) ||  LAPACKE_lsame( jobv, 'j' ) ) &&
                ( LAPACKE_lsame( jobt, 't' ) ||  LAPACKE_lsame( joba, 'f' ) || LAPACKE_lsame( joba, 'g' ) ))? MAX(7,2*n) :
-                       7) ) ) ) ) ) ) ) );
+                       7) ) ) ) ) ) ) );
     lapack_int* iwork = NULL;
     double* rwork = NULL;
     lapack_complex_double* cwork = NULL;
