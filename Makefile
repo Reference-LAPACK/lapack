@@ -68,19 +68,19 @@ cblas_testing: blaslib
 
 
 html:
-	@echo "LAPACK HTML PAGES GENRATION with Doxygen"
+	@echo "LAPACK HTML PAGES GENERATION with Doxygen"
 	doxygen DOCS/Doxyfile
 	@echo "=================="
-	@echo "LAPACK HTML PAGES GENRATED in DOCS/explore-html"
+	@echo "LAPACK HTML PAGES GENERATED in DOCS/explore-html"
 	@echo "Usage: open DOCS/explore-html/index.html"
 	@echo "Online version available at http://www.netlib.org/lapack/explore-html/"
 	@echo "=================="
 
 man:
-	@echo "LAPACK MAN PAGES GENRATION with Doxygen"
+	@echo "LAPACK MAN PAGES GENERATION with Doxygen"
 	doxygen DOCS/Doxyfile_man
 	@echo "=================="
-	@echo "LAPACK MAN PAGES GENRATED in DOCS/MAN"
+	@echo "LAPACK MAN PAGES GENERATED in DOCS/MAN"
 	@echo "Set your MANPATH env variable accordingly"
 	@echo "Usage: man dgetrf.f"
 	@echo "=================="
