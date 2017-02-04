@@ -1,10 +1,10 @@
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
+
 #       ALLAUX  -- Auxiliary routines called from all precisions
-#
-#       SCLAUX  -- Auxiliary routines called from both REAL and COMPLEX.
-#       DZLAUX  -- Auxiliary routines called from both DOUBLE and COMPLEX*16.
+#       SCLAUX  -- Auxiliary routines called from single precision
+#       DZLAUX  -- Auxiliary routines called from double precision
 #
 #       DSLASRC -- Double-single mixed precision real routines called from
 #                  single, single-extra and double precision real LAPACK
@@ -27,25 +27,6 @@
 #                  precision.
 #
 #    DEPRECATED -- Deprecated routines in all precisions
-#
-#  The library can be set up to include routines for any combination
-#  of the four precisions.  To create or add to the library, enter make
-#  followed by one or more of the precisions desired.  Some examples:
-#       make single
-#       make single complex
-#       make single double complex complex16
-#  Alternatively, the command
-#       make
-#  without any arguments creates a library of all four precisions.
-#  The library is called
-#       lapack.a
-#  and is created at the next higher directory level.
-#
-#  To remove the object files after the library is created, enter
-#       make clean
-#  On some systems, you can force the source files to be recompiled by
-#  entering (for example)
-#       make single FRC=FRC
 #
 #  ***Note***
 #  The functions lsame, second, dsecnd, slamch, and dlamch may have
@@ -467,11 +448,6 @@ set(ZXLASRC zgesvxx.f zgerfsx.f zla_gerfsx_extended.f zla_geamv.f
    zla_heamv.f zla_hercond_c.f zla_hercond_x.f zla_herpvgrw.f
    zla_lin_berr.f zlarscl2.f zlascl2.f zla_wwaddw.f)
 
-
-if(USE_XBLAS)
-  set(ALLXOBJ ${SXLASRC} ${DXLASRC} ${CXLASRC} ${ZXLASRC})
-endif()
-
 if(BUILD_DEPRECATED)
   list(APPEND SLASRC DEPRECATED/sgegs.f DEPRECATED/sgegv.f
     DEPRECATED/sgeqpf.f DEPRECATED/sgelsx.f DEPRECATED/sggsvd.f
@@ -485,41 +461,41 @@ if(BUILD_DEPRECATED)
   list(APPEND ZLASRC DEPRECATED/zgegs.f DEPRECATED/zgegv.f
     DEPRECATED/zgeqpf.f DEPRECATED/zgelsx.f DEPRECATED/zggsvd.f
     DEPRECATED/zggsvp.f DEPRECATED/zlahrd.f DEPRECATED/zlatzm.f DEPRECATED/ztzrqf.f)
-  message(STATUS "Building deprecated routines")
 endif()
 
-set(ALLOBJ)
+if(USE_XBLAS)
+  list(APPEND SLASRC ${SXLASRC})
+  list(APPEND DLASRC ${DXLASRC})
+  list(APPEND CLASRC ${CXLASRC})
+  list(APPEND ZLASRC ${ZXLASRC})
+endif()
+
+
+set(SOURCES)
 if(BUILD_SINGLE)
-  list(APPEND ALLOBJ ${SLASRC} ${DSLASRC} ${SCLAUX} ${ALLAUX})
-  message(STATUS "Building single precision real")
+  list(APPEND SOURCES ${SLASRC} ${DSLASRC} ${SCLAUX} ${ALLAUX})
 endif()
 if(BUILD_DOUBLE)
-  list(APPEND ALLOBJ ${DLASRC} ${DSLASRC} ${DZLAUX} ${ALLAUX})
-  message(STATUS "Building double precision real")
+  list(APPEND SOURCES ${DLASRC} ${DSLASRC} ${DZLAUX} ${ALLAUX})
 endif()
 if(BUILD_COMPLEX)
-  list(APPEND ALLOBJ ${CLASRC} ${ZCLASRC} ${SCLAUX} ${ALLAUX})
-  message(STATUS "Building single precision complex")
+  list(APPEND SOURCES ${CLASRC} ${ZCLASRC} ${SCLAUX} ${ALLAUX})
 endif()
 if(BUILD_COMPLEX16)
-  list(APPEND ALLOBJ ${ZLASRC} ${ZCLASRC} ${DZLAUX} ${ALLAUX})
-  message(STATUS "Building double precision complex")
+  list(APPEND SOURCES ${ZLASRC} ${ZCLASRC} ${DZLAUX} ${ALLAUX})
 endif()
-list(REMOVE_DUPLICATES ALLOBJ)
+list(REMOVE_DUPLICATES SOURCES)
 
-if(NOT ALLOBJ)
-  message(FATAL_ERROR "-->LAPACK SRC BUILD: NOTHING TO BUILD, NO PRECISION SELECTED:
-     PLEASE ENABLE AT LEAST ONE OF THOSE: BUILD_SINGLE, BUILD_COMPLEX, BUILD_DOUBLE, BUILD_COMPLEX16.")
-endif()
-
-
-add_library(lapack ${ALLOBJ} ${ALLXOBJ})
-target_link_libraries(lapack ${BLAS_LIBRARIES} ${XBLAS_LIBRARY})
-
+add_library(lapack ${SOURCES})
 set_target_properties(
   lapack PROPERTIES
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
+
+if(USE_XBLAS)
+  target_link_libraries(lapack PRIVATE ${XBLAS_LIBRARY})
+endif()
+target_link_libraries(lapack PRIVATE ${BLAS_LIBRARIES})
 
 lapack_install_library(lapack)

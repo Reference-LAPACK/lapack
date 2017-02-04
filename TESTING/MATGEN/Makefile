@@ -4,9 +4,8 @@ include ../../make.inc
 #  This is the makefile to create a library of the test matrix
 #  generators used in LAPACK.  The files are organized as follows:
 #
-#     SCATGEN  -- Auxiliary routines called from both REAL and COMPLEX
-#     DZATGEN  -- Auxiliary routines called from both DOUBLE PRECISION
-#                 and COMPLEX*16
+#     SCATGEN  -- Auxiliary routines called from single precision
+#     DZATGEN  -- Auxiliary routines called from double precision
 #     SMATGEN  -- Single precision real matrix generation routines
 #     CMATGEN  -- Single precision complex matrix generation routines
 #     DMATGEN  -- Double precision real matrix generation routines

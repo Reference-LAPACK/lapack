@@ -1,6 +1,4 @@
-#aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_OBJ)
-
-set(SRC_OBJ
+set(SOURCES
 lapacke_cbbcsd.c
 lapacke_cbbcsd_work.c
 lapacke_cbdsqr.c
@@ -2278,36 +2276,34 @@ lapacke_csyr_work.c
 lapacke_ilaver.c
 )
 
-if(BUILD_DEPRECATED)
-	list(APPEND SRC_OBJ
-	lapacke_cggsvp.c
-	lapacke_cggsvp_work.c
-	lapacke_dggsvp.c
-	lapacke_dggsvp_work.c
-	lapacke_sggsvp.c
-	lapacke_sggsvp_work.c
-	lapacke_zggsvp.c
-	lapacke_zggsvp_work.c
-	lapacke_cggsvd.c
-	lapacke_cggsvd_work.c
-	lapacke_dggsvd.c
-	lapacke_dggsvd_work.c
-	lapacke_sggsvd.c
-	lapacke_sggsvd_work.c
-	lapacke_zggsvd.c
-	lapacke_zggsvd_work.c
-	lapacke_cgeqpf.c
-	lapacke_cgeqpf_work.c
-	lapacke_dgeqpf.c
-	lapacke_dgeqpf_work.c
-	lapacke_sgeqpf.c
-	lapacke_sgeqpf_work.c
-	lapacke_zgeqpf.c
-	lapacke_zgeqpf_work.c)
-	message(STATUS "Building LAPACKE deprecated routines")
-endif()
+set(DEPRECATED
+lapacke_cggsvp.c
+lapacke_cggsvp_work.c
+lapacke_dggsvp.c
+lapacke_dggsvp_work.c
+lapacke_sggsvp.c
+lapacke_sggsvp_work.c
+lapacke_zggsvp.c
+lapacke_zggsvp_work.c
+lapacke_cggsvd.c
+lapacke_cggsvd_work.c
+lapacke_dggsvd.c
+lapacke_dggsvd_work.c
+lapacke_sggsvd.c
+lapacke_sggsvd_work.c
+lapacke_zggsvd.c
+lapacke_zggsvd_work.c
+lapacke_cgeqpf.c
+lapacke_cgeqpf_work.c
+lapacke_dgeqpf.c
+lapacke_dgeqpf_work.c
+lapacke_sgeqpf.c
+lapacke_sgeqpf_work.c
+lapacke_zgeqpf.c
+lapacke_zgeqpf_work.c
+)
 
-set(SRCX_OBJ
+set(EXTENDED
 lapacke_cgbrfsx.c       lapacke_cporfsx.c       lapacke_dgerfsx.c       lapacke_sgbrfsx.c       lapacke_ssyrfsx.c       lapacke_zherfsx.c
 lapacke_cgbrfsx_work.c  lapacke_cporfsx_work.c  lapacke_dgerfsx_work.c  lapacke_sgbrfsx_work.c  lapacke_ssyrfsx_work.c  lapacke_zherfsx_work.c
 lapacke_cgerfsx.c       lapacke_csyrfsx.c       lapacke_dporfsx.c       lapacke_sgerfsx.c       lapacke_zgbrfsx.c       lapacke_zporfsx.c
@@ -2323,7 +2319,7 @@ lapacke_chesvxx_work.c  lapacke_dgbsvxx_work.c  lapacke_dsysvxx_work.c  lapacke_
 )
 
 # FILE PARTS OF TMGLIB
-set(MATGEN_OBJ
+set(MATGEN
 lapacke_clatms.c
 lapacke_clatms_work.c
 lapacke_dlatms.c
