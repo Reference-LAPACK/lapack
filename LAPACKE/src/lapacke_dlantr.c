@@ -38,7 +38,7 @@ double LAPACKE_dlantr( int matrix_layout, char norm, char uplo, char diag,
                            lapack_int lda )
 {
     lapack_int info = 0;
-	double res = 0.;
+    double res = 0.;
     double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_dlantr", -1 );

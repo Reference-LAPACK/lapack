@@ -61,7 +61,7 @@ lapack_int LAPACKE_zgesdd( int matrix_layout, char jobz, lapack_int m,
     if( LAPACKE_lsame( jobz, 'n' ) ) {
         lrwork = MAX(1,7*MIN(m,n));
     } else {
-        lrwork = (size_t)MIN(m,n)*MAX(5*MIN(m,n)+7,2*MAX(m,n)+2*MIN(m,n)+1);
+        lrwork = (size_t)MAX(1,MIN(m,n)*MAX(5*MIN(m,n)+7,2*MAX(m,n)+2*MIN(m,n)+1));
     }
     /* Allocate memory for working array(s) */
     iwork = (lapack_int*)

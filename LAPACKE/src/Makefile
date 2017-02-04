@@ -82,6 +82,8 @@ lapacke_cgeevx.o \
 lapacke_cgeevx_work.o \
 lapacke_cgehrd.o \
 lapacke_cgehrd_work.o \
+lapacke_cgelq.o \
+lapacke_cgelq_work.o \
 lapacke_cgelq2.o \
 lapacke_cgelq2_work.o \
 lapacke_cgejsv.o \
@@ -96,6 +98,8 @@ lapacke_cgelss.o \
 lapacke_cgelss_work.o \
 lapacke_cgelsy.o \
 lapacke_cgelsy_work.o \
+lapacke_cgemlq.o \
+lapacke_cgemlq_work.o \
 lapacke_cgemqr.o \
 lapacke_cgemqr_work.o \
 lapacke_cgemqrt.o \
@@ -104,6 +108,8 @@ lapacke_cgeqlf.o \
 lapacke_cgeqlf_work.o \
 lapacke_cgeqp3.o \
 lapacke_cgeqp3_work.o \
+lapacke_cgeqr.o \
+lapacke_cgeqr_work.o \
 lapacke_cgeqr2.o \
 lapacke_cgeqr2_work.o \
 lapacke_cgeqrf.o \
@@ -668,6 +674,8 @@ lapacke_dgehrd.o \
 lapacke_dgehrd_work.o \
 lapacke_dgejsv.o \
 lapacke_dgejsv_work.o \
+lapacke_dgelq.o \
+lapacke_dgelq_work.o \
 lapacke_dgelq2.o \
 lapacke_dgelq2_work.o \
 lapacke_dgelqf.o \
@@ -680,6 +688,8 @@ lapacke_dgelss.o \
 lapacke_dgelss_work.o \
 lapacke_dgelsy.o \
 lapacke_dgelsy_work.o \
+lapacke_dgemlq.o \
+lapacke_dgemlq_work.o \
 lapacke_dgemqr.o \
 lapacke_dgemqr_work.o \
 lapacke_dgemqrt.o \
@@ -688,6 +698,8 @@ lapacke_dgeqlf.o \
 lapacke_dgeqlf_work.o \
 lapacke_dgeqp3.o \
 lapacke_dgeqp3_work.o \
+lapacke_dgeqr.o \
+lapacke_dgeqr_work.o \
 lapacke_dgeqr2.o \
 lapacke_dgeqr2_work.o \
 lapacke_dgeqrf.o \
@@ -1218,6 +1230,8 @@ lapacke_sgehrd.o \
 lapacke_sgehrd_work.o \
 lapacke_sgejsv.o \
 lapacke_sgejsv_work.o \
+lapacke_sgelq.o \
+lapacke_sgelq_work.o \
 lapacke_sgelq2.o \
 lapacke_sgelq2_work.o \
 lapacke_sgelqf.o \
@@ -1230,6 +1244,8 @@ lapacke_sgelss.o \
 lapacke_sgelss_work.o \
 lapacke_sgelsy.o \
 lapacke_sgelsy_work.o \
+lapacke_sgemlq.o \
+lapacke_sgemlq_work.o \
 lapacke_sgemqr.o \
 lapacke_sgemqr_work.o \
 lapacke_sgemqrt.o \
@@ -1238,6 +1254,8 @@ lapacke_sgeqlf.o \
 lapacke_sgeqlf_work.o \
 lapacke_sgeqp3.o \
 lapacke_sgeqp3_work.o \
+lapacke_sgeqr.o \
+lapacke_sgeqr_work.o \
 lapacke_sgeqr2.o \
 lapacke_sgeqr2_work.o \
 lapacke_sgeqrf.o \
@@ -1760,6 +1778,8 @@ lapacke_zgehrd.o \
 lapacke_zgehrd_work.o \
 lapacke_zgejsv.o \
 lapacke_zgejsv_work.o \
+lapacke_zgelq.o \
+lapacke_zgelq_work.o \
 lapacke_zgelq2.o \
 lapacke_zgelq2_work.o \
 lapacke_zgelqf.o \
@@ -1772,6 +1792,8 @@ lapacke_zgelss.o \
 lapacke_zgelss_work.o \
 lapacke_zgelsy.o \
 lapacke_zgelsy_work.o \
+lapacke_zgemlq.o \
+lapacke_zgemlq_work.o \
 lapacke_zgemqr.o \
 lapacke_zgemqr_work.o \
 lapacke_zgemqrt.o \
@@ -1780,6 +1802,8 @@ lapacke_zgeqlf.o \
 lapacke_zgeqlf_work.o \
 lapacke_zgeqp3.o \
 lapacke_zgeqp3_work.o \
+lapacke_zgeqr.o \
+lapacke_zgeqr_work.o \
 lapacke_zgeqr2.o \
 lapacke_zgeqr2_work.o \
 lapacke_zgeqrf.o \

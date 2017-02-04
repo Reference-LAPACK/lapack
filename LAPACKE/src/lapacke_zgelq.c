@@ -33,9 +33,9 @@
 
 #include "lapacke_utils.h"
 
-lapack_int LAPACKE_zgelq_work( int matrix_layout, lapack_int m, lapack_int n,
-                               lapack_complex_double* a, lapack_int lda,
-                               lapack_complex_double* t, lapack_int tsize )
+lapack_int LAPACKE_zgelq( int matrix_layout, lapack_int m, lapack_int n,
+                          lapack_complex_double* a, lapack_int lda,
+                          lapack_complex_double* t, lapack_int tsize )
 {
     lapack_int info = 0;
     lapack_int lwork = -1;

@@ -37,7 +37,7 @@ float LAPACKE_slansy( int matrix_layout, char norm, char uplo, lapack_int n,
                            const float* a, lapack_int lda )
 {
     lapack_int info = 0;
-	float res = 0.;
+    float res = 0.;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_slansy", -1 );

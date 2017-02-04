@@ -60,7 +60,7 @@ lapack_int LAPACKE_ssytrs_aa( int matrix_layout, char uplo, lapack_int n,
     if( info != 0 ) {
         goto exit_level_0;
     }
-	lwork = (lapack_int)work_query;
+    lwork = (lapack_int)work_query;
     /* Allocate memory for work arrays */
     work = (float*)
         LAPACKE_malloc( sizeof(float) * lwork );

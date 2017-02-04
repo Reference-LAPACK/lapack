@@ -37,7 +37,7 @@ float LAPACKE_slange( int matrix_layout, char norm, lapack_int m,
                            lapack_int n, const float* a, lapack_int lda )
 {
     lapack_int info = 0;
-	float res = 0.;
+    float res = 0.;
     float* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_slange", -1 );
