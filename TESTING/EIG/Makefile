@@ -5,9 +5,8 @@ include ../../make.inc
 #  The test files are organized as follows:
 #
 #     AEIGTST -- Auxiliary test routines used in all precisions
-#     SCIGTST -- Auxiliary test routines used in REAL and COMPLEX
-#     DZIGTST -- Auxiliary test routines used in DOUBLE PRECISION and
-#                COMPLEX*16
+#     SCIGTST -- Auxiliary test routines used in single precision
+#     DZIGTST -- Auxiliary test routines used in double precision
 #     SEIGTST -- Single precision real test routines
 #     CEIGTST -- Single precision complex test routines
 #     DEIGTST -- Double precision real test routines

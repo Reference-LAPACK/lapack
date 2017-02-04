@@ -3,10 +3,10 @@ include ../make.inc
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
-#       ALLAUX  -- Auxiliary routines called from all precisions
 #
-#       SCLAUX  -- Auxiliary routines called from both REAL and COMPLEX.
-#       DZLAUX  -- Auxiliary routines called from both DOUBLE and COMPLEX*16.
+#       ALLAUX  -- Auxiliary routines called from all precisions
+#       SCLAUX  -- Auxiliary routines called from single precision
+#       DZLAUX  -- Auxiliary routines called from double precision
 #
 #       DSLASRC -- Double-single mixed precision real routines called from
 #                  single, single-extra and double precision real LAPACK

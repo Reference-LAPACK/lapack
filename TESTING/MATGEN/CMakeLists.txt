@@ -2,32 +2,12 @@
 #  This is the makefile to create a library of the test matrix
 #  generators used in LAPACK.  The files are organized as follows:
 #
-#     SCATGEN  -- Auxiliary routines called from both REAL and COMPLEX
-#     DZATGEN  -- Auxiliary routines called from both DOUBLE PRECISION
-#                 and COMPLEX*16
+#     SCATGEN  -- Auxiliary routines called from single precision
+#     DZATGEN  -- Auxiliary routines called from double precision
 #     SMATGEN  -- Single precision real matrix generation routines
 #     CMATGEN  -- Single precision complex matrix generation routines
 #     DMATGEN  -- Double precision real matrix generation routines
 #     ZMATGEN  -- Double precision complex matrix generation routines
-#
-#  The library can be set up to include routines for any combination
-#  of the four precisions.  To create or add to the library, enter make
-#  followed by one or more of the precisions desired.  Some examples:
-#       make single
-#       make single complex
-#       make single double complex complex16
-#  Alternatively, the command
-#       make
-#  without any arguments creates a library of all four precisions.
-#  The library is called
-#       tmglib.a
-#  and is created at the LAPACK directory level.
-#
-#  To remove the object files after the library is created, enter
-#       make clean
-#  On some systems, you can force the source files to be recompiled by
-#  entering (for example)
-#       make single FRC=FRC
 #
 #######################################################################
 

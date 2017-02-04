@@ -1,10 +1,10 @@
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
+
 #       ALLAUX  -- Auxiliary routines called from all precisions
-#
-#       SCLAUX  -- Auxiliary routines called from both REAL and COMPLEX.
-#       DZLAUX  -- Auxiliary routines called from both DOUBLE and COMPLEX*16.
+#       SCLAUX  -- Auxiliary routines called from single precision
+#       DZLAUX  -- Auxiliary routines called from double precision
 #
 #       DSLASRC -- Double-single mixed precision real routines called from
 #                  single, single-extra and double precision real LAPACK
@@ -27,25 +27,6 @@
 #                  precision.
 #
 #    DEPRECATED -- Deprecated routines in all precisions
-#
-#  The library can be set up to include routines for any combination
-#  of the four precisions.  To create or add to the library, enter make
-#  followed by one or more of the precisions desired.  Some examples:
-#       make single
-#       make single complex
-#       make single double complex complex16
-#  Alternatively, the command
-#       make
-#  without any arguments creates a library of all four precisions.
-#  The library is called
-#       lapack.a
-#  and is created at the next higher directory level.
-#
-#  To remove the object files after the library is created, enter
-#       make clean
-#  On some systems, you can force the source files to be recompiled by
-#  entering (for example)
-#       make single FRC=FRC
 #
 #  ***Note***
 #  The functions lsame, second, dsecnd, slamch, and dlamch may have
