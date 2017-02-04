@@ -114,5 +114,11 @@ endif()
 list(REMOVE_DUPLICATES SOURCES)
 
 add_library(cblas ${SOURCES})
+set_target_properties(
+  cblas PROPERTIES
+  LINKER_LANGUAGE C
+  VERSION ${LAPACK_VERSION}
+  SOVERSION ${LAPACK_MAJOR_VERSION}
+  )
 target_link_libraries(cblas PRIVATE ${BLAS_LIBRARIES})
 lapack_install_library(cblas)

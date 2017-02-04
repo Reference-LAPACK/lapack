@@ -54,6 +54,12 @@ endif()
 list(APPEND SOURCES ${UTILS})
 
 add_library(lapacke ${SOURCES})
+set_target_properties(
+  lapacke PROPERTIES
+  LINKER_LANGUAGE C
+  VERSION ${LAPACK_VERSION}
+  SOVERSION ${LAPACK_MAJOR_VERSION}
+  )
 
 if(LAPACKE_WITH_TMG)
   target_link_libraries(lapacke PRIVATE tmglib)
