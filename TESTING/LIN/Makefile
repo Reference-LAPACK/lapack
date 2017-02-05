@@ -22,8 +22,7 @@ include ../../make.inc
 #       make
 #  without any arguments creates all four test programs.
 #  The executable files are called
-#       xlintims, xlintimd, xlintimc, and xlintimz
-#  and are created in the next higher directory level.
+#       xlintsts, xlintstd, xlintstc, and xlintstz
 #
 #  To remove the object files after the executable files have been
 #  created, enter
@@ -248,44 +247,44 @@ ZLINTSTRFP = zchkrfp.o zdrvrfp.o zdrvrf1.o zdrvrf2.o zdrvrf3.o zdrvrf4.o zerrrfp
 
 all: single double complex complex16 proto-single proto-double proto-complex proto-complex16
 
-single: ../xlintsts
-double: ../xlintstd
-complex: ../xlintstc
-complex16: ../xlintstz
+single: xlintsts
+double: xlintstd
+complex: xlintstc
+complex16: xlintstz
 
-proto-single: ../xlintstrfs
-proto-double: ../xlintstds ../xlintstrfd
-proto-complex: ../xlintstrfc
-proto-complex16: ../xlintstzc ../xlintstrfz
+proto-single: xlintstrfs
+proto-double: xlintstds xlintstrfd
+proto-complex: xlintstrfc
+proto-complex16: xlintstzc xlintstrfz
 
-../xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstds: $(DSLINTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstds: $(DSLINTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstzc: $(ZCLINTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstzc: $(ZCLINTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstrfs: $(SLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstrfs: $(SLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstrfd: $(DLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstrfd: $(DLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstrfc: $(CLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstrfc: $(CLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xlintstrfz: $(ZLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstrfz: $(ZLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
 $(ALINTST): $(FRC)
@@ -300,7 +299,7 @@ FRC:
 	@FRC=$(FRC)
 
 clean:
-	rm -f *.o
+	rm -f *.o xlintst*
 
 schkaa.o: schkaa.f
 	$(FORTRAN) $(DRVOPTS) -c -o $@ $<

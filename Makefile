@@ -13,59 +13,75 @@ lib: lapacklib tmglib
 
 clean: cleanlib cleantesting cleanblas_testing cleancblas_testing
 
-lapack_install:
-	( cd INSTALL; $(MAKE) run )
-
 blaslib:
 	( cd BLAS/SRC; $(MAKE) )
 
 cblaslib:
 	( cd CBLAS; $(MAKE) )
 
-lapacklib: lapack_install
+lapacklib:
 	( cd SRC; $(MAKE) )
 
-lapackelib: lapacklib
+lapackelib:
 	( cd LAPACKE; $(MAKE) )
-
-cblas_example: cblaslib blaslib
-	( cd CBLAS/examples; $(MAKE) )
-
-lapacke_example: lapackelib
-	( cd LAPACKE/example; $(MAKE) )
-
-variants:
-	( cd SRC/VARIANTS; $(MAKE) )
 
 tmglib:
 	( cd TESTING/MATGEN; $(MAKE) )
 
-lapack_testing: lib
-	( cd TESTING; $(MAKE) )
-	./lapack_testing.py
+variants:
+	( cd SRC/VARIANTS; $(MAKE) )
 
-variants_testing: lib variants
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/cholrl.a'; \
-	mv stest.out stest_cholrl.out; mv dtest.out dtest_cholrl.out; mv ctest.out ctest_cholrl.out; mv ztest.out ztest_cholrl.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/choltop.a'; \
-	mv stest.out stest_choltop.out; mv dtest.out dtest_choltop.out; mv ctest.out ctest_choltop.out; mv ztest.out ztest_choltop.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/lucr.a'; \
-	mv stest.out stest_lucr.out; mv dtest.out dtest_lucr.out; mv ctest.out ctest_lucr.out; mv ztest.out ztest_lucr.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/lull.a'; \
-	mv stest.out stest_lull.out; mv dtest.out dtest_lull.out; mv ctest.out ctest_lull.out; mv ztest.out ztest_lull.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/lurec.a'; \
-	mv stest.out stest_lurec.out; mv dtest.out dtest_lurec.out; mv ctest.out ctest_lurec.out; mv ztest.out ztest_lurec.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/qrll.a'; \
-	mv stest.out stest_qrll.out; mv dtest.out dtest_qrll.out; mv ctest.out ctest_qrll.out; mv ztest.out ztest_qrll.out )
+lapack_install:
+	( cd INSTALL; $(MAKE) run )
 
 blas_testing: blaslib
 	( cd BLAS/TESTING; $(MAKE) run )
 
-cblas_testing: blaslib
+cblas_testing: cblaslib blaslib
 	( cd CBLAS; $(MAKE) cblas_testing )
-	( cd CBLAS; $(MAKE) runtst )
 
+lapack_testing: tmglib lapacklib blaslib
+	( cd TESTING/LIN && rm -f xlintst* )
+	( cd TESTING && $(MAKE) )
+	./lapack_testing.py
 
+variants_testing: tmglib variants lapacklib blaslib
+	( cd TESTING/LIN && rm -f xlintst* && $(MAKE) VARLIB='SRC/VARIANTS/cholrl.a' )
+	( cd TESTING && $(MAKE) stest.out && mv stest.out stest_cholrl.out )
+	( cd TESTING && $(MAKE) dtest.out && mv dtest.out dtest_cholrl.out )
+	( cd TESTING && $(MAKE) ctest.out && mv ctest.out ctest_cholrl.out )
+	( cd TESTING && $(MAKE) ztest.out && mv ztest.out ztest_cholrl.out )
+	( cd TESTING/LIN; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/choltop.a' )
+	( cd TESTING && $(MAKE) stest.out && mv stest.out stest_choltop.out )
+	( cd TESTING && $(MAKE) dtest.out && mv dtest.out dtest_choltop.out )
+	( cd TESTING && $(MAKE) ctest.out && mv ctest.out ctest_choltop.out )
+	( cd TESTING && $(MAKE) ztest.out && mv ztest.out ztest_choltop.out )
+	( cd TESTING/LIN; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/lucr.a' )
+	( cd TESTING && $(MAKE) stest.out && mv stest.out stest_lucr.out )
+	( cd TESTING && $(MAKE) dtest.out && mv dtest.out dtest_lucr.out )
+	( cd TESTING && $(MAKE) ctest.out && mv ctest.out ctest_lucr.out )
+	( cd TESTING && $(MAKE) ztest.out && mv ztest.out ztest_lucr.out )
+	( cd TESTING/LIN; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/lull.a' )
+	( cd TESTING && $(MAKE) stest.out && mv stest.out stest_lull.out )
+	( cd TESTING && $(MAKE) dtest.out && mv dtest.out dtest_lull.out )
+	( cd TESTING && $(MAKE) ctest.out && mv ctest.out ctest_lull.out )
+	( cd TESTING && $(MAKE) ztest.out && mv ztest.out ztest_lull.out )
+	( cd TESTING/LIN; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/lurec.a' )
+	( cd TESTING && $(MAKE) stest.out && mv stest.out stest_lurec.out )
+	( cd TESTING && $(MAKE) dtest.out && mv dtest.out dtest_lurec.out )
+	( cd TESTING && $(MAKE) ctest.out && mv ctest.out ctest_lurec.out )
+	( cd TESTING && $(MAKE) ztest.out && mv ztest.out ztest_lurec.out )
+	( cd TESTING/LIN; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/qrll.a' )
+	( cd TESTING && $(MAKE) stest.out && mv stest.out stest_qrll.out )
+	( cd TESTING && $(MAKE) dtest.out && mv dtest.out dtest_qrll.out )
+	( cd TESTING && $(MAKE) ctest.out && mv ctest.out ctest_qrll.out )
+	( cd TESTING && $(MAKE) ztest.out && mv ztest.out ztest_qrll.out )
+
+cblas_example: cblaslib blaslib
+	( cd CBLAS; $(MAKE) cblas_example )
+
+lapacke_example: lapackelib lapacklib blaslib
+	( cd LAPACKE; $(MAKE) lapacke_example )
 
 html:
 	@echo "LAPACK HTML PAGES GENERATION with Doxygen"
@@ -104,7 +120,6 @@ cleancblas_testing:
 cleantesting:
 	( cd TESTING/LIN; $(MAKE) clean )
 	( cd TESTING/EIG; $(MAKE) clean )
-	( cd TESTING; rm -f xlin* xeig* )
 
 cleanall: cleanlib cleanblas_testing cleancblas_testing cleantesting
 	( cd INSTALL; $(MAKE) cleanall )

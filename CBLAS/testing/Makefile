@@ -28,9 +28,9 @@ ztestl2o = c_zblas2.o c_z2chke.o auxiliary.o c_xerbla.o
 ztestl3o = c_zblas3.o c_z3chke.o auxiliary.o c_xerbla.o
 
 all: all1 all2 all3
-all1: stest1 dtest1 ctest1 ztest1
-all2: stest2 dtest2 ctest2 ztest2
-all3: stest3 dtest3 ctest3 ztest3
+all1: xscblat1 xdcblat1 xccblat1 xzcblat1
+all2: xscblat2 xdcblat2 xccblat2 xzcblat2
+all3: xscblat3 xdcblat3 xccblat3 xzcblat3
 
 clean:
 	rm -f core *.o *.out x*
@@ -38,21 +38,6 @@ cleanobj:
 	rm -f core *.o a.out
 cleanexe:
 	rm -f x*
-
-stest1: xscblat1
-dtest1: xdcblat1
-ctest1: xccblat1
-ztest1: xzcblat1
-
-stest2: xscblat2
-dtest2: xdcblat2
-ctest2: xccblat2
-ztest2: xzcblat2
-
-stest3: xscblat3
-dtest3: xdcblat3
-ctest3: xccblat3
-ztest3: xzcblat3
 
 #
 # Compile each precision
@@ -91,7 +76,7 @@ xzcblat3: c_zblat3.o $(ztestl3o) $(LIB)
 
 
 # RUN TESTS
-run:
+run: all
 	@echo "--> TESTING CBLAS 1 - SINGLE PRECISION REAL <--"
 	@./xscblat1 > stest1.out
 	@echo "--> TESTING CBLAS 1 - DOUBLE PRECISION REAL <--"
