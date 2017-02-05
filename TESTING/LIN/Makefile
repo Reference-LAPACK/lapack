@@ -7,10 +7,10 @@ include ../../make.inc
 #       ALINTST -- Auxiliary test routines
 #       SLINTST -- Single precision real test routines
 #       CLINTST -- Single precision complex test routines
-#       SCLNTST -- Single and Complex routines in common
+#       SCLNTST -- Single precision real and complex routines in common
 #       DLINTST -- Double precision real test routines
 #       ZLINTST -- Double precision complex test routines
-#       DZLNTST -- Double and Double Complex routines in common
+#       DZLNTST -- Double precision real and complex routines in common
 #
 #  Test programs can be generated for all or some of the four different
 #  precisions.  Enter make followed by one or more of the data types
