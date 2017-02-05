@@ -35,27 +35,27 @@ QRLL = qr/LL/cgeqrf.o qr/LL/dgeqrf.o qr/LL/sgeqrf.o qr/LL/zgeqrf.o qr/LL/sceil.o
 all: cholrl choltop lucr lull lurec qrll
 
 cholrl: $(CHOLRL)
-	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/cholrl.a $(CHOLRL)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/cholrl.a $^
 	$(RANLIB) $(VARIANTSDIR)/cholrl.a
 
 choltop: $(CHOLTOP)
-	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/choltop.a $(CHOLTOP)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/choltop.a $^
 	$(RANLIB) $(VARIANTSDIR)/choltop.a
 
 lucr: $(LUCR)
-	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lucr.a $(LUCR)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lucr.a $^
 	$(RANLIB) $(VARIANTSDIR)/lucr.a
 
 lull: $(LULL)
-	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lull.a $(LULL)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lull.a $^
 	$(RANLIB) $(VARIANTSDIR)/lull.a
 
 lurec: $(LUREC)
-	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lurec.a $(LUREC)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/lurec.a $^
 	$(RANLIB) $(VARIANTSDIR)/lurec.a
 
 qrll: $(QRLL)
-	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/qrll.a $(QRLL)
+	$(ARCH) $(ARCHFLAGS) $(VARIANTSDIR)/qrll.a $^
 	$(RANLIB) $(VARIANTSDIR)/qrll.a
 
 
