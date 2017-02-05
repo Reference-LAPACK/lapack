@@ -541,46 +541,46 @@ zlse.out: lse.in EIG/xeigtstz
 # ==============================================================================
 
 LIN/xlintsts: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintsts
+	$(MAKE) -C LIN xlintsts
 
 LIN/xlintstc: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstc
+	$(MAKE) -C LIN xlintstc
 
 LIN/xlintstd: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstd
+	$(MAKE) -C LIN xlintstd
 
 LIN/xlintstz: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstz
+	$(MAKE) -C LIN xlintstz
 
 LIN/xlintstrfs: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstrfs
+	$(MAKE) -C LIN xlintstrfs
 
 LIN/xlintstrfc: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstrfc
+	$(MAKE) -C LIN xlintstrfc
 
 LIN/xlintstrfd: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstrfd
+	$(MAKE) -C LIN xlintstrfd
 
 LIN/xlintstrfz: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstrfz
+	$(MAKE) -C LIN xlintstrfz
 
 LIN/xlintstds: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstds
+	$(MAKE) -C LIN xlintstds
 
 LIN/xlintstzc: $(FRCLIN) $(FRC)
-	cd LIN ; $(MAKE) xlintstzc
+	$(MAKE) -C LIN xlintstzc
 
 EIG/xeigtsts: $(FRCEIG) $(FRC)
-	cd EIG ; $(MAKE) xeigtsts
+	$(MAKE) -C EIG xeigtsts
 
 EIG/xeigtstc: $(FRCEIG) $(FRC)
-	cd EIG ; $(MAKE) xeigtstc
+	$(MAKE) -C EIG xeigtstc
 
 EIG/xeigtstd: $(FRCEIG) $(FRC)
-	cd EIG ; $(MAKE) xeigtstd
+	$(MAKE) -C EIG xeigtstd
 
 EIG/xeigtstz: $(FRCEIG) $(FRC)
-	cd EIG ; $(MAKE) xeigtstz
+	$(MAKE) -C EIG xeigtstz
 
 clean:
 	rm -f *.out core

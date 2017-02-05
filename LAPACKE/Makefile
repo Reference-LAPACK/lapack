@@ -45,21 +45,21 @@ include ../make.inc
 all: lapacke
 
 lapacke: include/lapacke_mangling.h
-	cd src && $(MAKE)
-	cd utils && $(MAKE)
+	$(MAKE) -C src
+	$(MAKE) -C utils
 
 include/lapacke_mangling.h: include/lapacke_mangling_with_flags.h.in
 	cp $< $@
 
 lapacke_example: lapacke
-	cd example && $(MAKE)
+	$(MAKE) -C example
 
 clean: cleanlib
 
 cleanlib:
-	cd src && $(MAKE) clean
-	cd utils && $(MAKE) clean
+	$(MAKE) -C src clean
+	$(MAKE) -C utils clean
 
 cleanall: clean
 	rm -f $(LAPACKE)
-	cd example && $(MAKE) clean
+	$(MAKE) -C example clean
