@@ -56,9 +56,11 @@ qrll.a: $(QRLL)
 	$(ARCH) $(ARCHFLAGS) $@ $^
 	$(RANLIB) $@
 
+clean: cleanobj cleanlib
+cleanobj:
+	rm -f $(CHOLRL) $(CHOLTOP) $(LUCR) $(LULL) $(LUREC) $(QRLL)
+cleanlib:
+	rm -f *.a
 
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
-
-clean:
-	rm -f $(CHOLRL) $(CHOLTOP) $(LUCR) $(LULL) $(LUREC) $(QRLL) *.a

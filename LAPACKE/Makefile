@@ -35,7 +35,7 @@
 # To generate lapacke library type 'make lapacke'
 # To make both just type 'make'
 #
-# To remove lapacke object files type 'make cleanlib'
+# To remove lapacke object files type 'make cleanobj'
 # To clean all above type 'make clean'
 # To clean everything including lapacke library type
 # 'make cleanall'
@@ -55,11 +55,14 @@ lapacke_example: lapacke
 	$(MAKE) -C example
 
 clean: cleanlib
-
-cleanlib:
 	$(MAKE) -C src clean
 	$(MAKE) -C utils clean
-
-cleanall: clean
-	rm -f $(LAPACKE)
 	$(MAKE) -C example clean
+cleanobj:
+	$(MAKE) -C src cleanobj
+	$(MAKE) -C utils cleanobj
+	$(MAKE) -C example cleanobj
+cleanlib:
+	rm -f ../$(LAPACKELIB)
+cleanexe:
+	$(MAKE) -C example cleanexe

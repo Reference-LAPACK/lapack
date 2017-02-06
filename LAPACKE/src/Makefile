@@ -2409,8 +2409,9 @@ all: ../../$(LAPACKELIB)
 	$(ARCH) $(ARCHFLAGS) $@ $(MATGEN)
 	$(RANLIB) $@
 
+clean: cleanobj
+cleanobj:
+	rm -f *.o
+
 .c.o:
 	$(CC) $(CFLAGS) -I../include -c -o $@ $<
-
-clean:
-	rm -f *.o

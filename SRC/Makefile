@@ -44,7 +44,7 @@ include ../make.inc
 #  and is created at the next higher directory level.
 #
 #  To remove the object files after the library is created, enter
-#       make clean
+#       make cleanobj
 #  On some systems, you can force the source files to be recompiled by
 #  entering (for example)
 #       make single FRC=FRC
@@ -546,12 +546,14 @@ endif
 FRC:
 	@FRC=$(FRC)
 
-clean:
+clean: cleanobj cleanlib
+cleanobj:
 	rm -f *.o DEPRECATED/*.o
+cleanlib:
+	rm -f ../$(LAPACKLIB)
 
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
-
 .F.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
 

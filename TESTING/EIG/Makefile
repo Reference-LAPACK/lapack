@@ -26,7 +26,7 @@ include ../../make.inc
 #
 #  To remove the object files after the executable files have been
 #  created, enter
-#       make clean
+#       make cleanobj
 #  On some systems, you can force the source files to be recompiled by
 #  entering (for example)
 #       make single FRC=FRC
@@ -147,8 +147,11 @@ $(ZEIGTST): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
-clean:
-	rm -f *.o xeigtst*
+clean: cleanobj cleanexe
+cleanobj:
+	rm -f *.o
+cleanexe:
+	rm -f xeigtst*
 
 schkee.o: schkee.f
 	$(FORTRAN) $(DRVOPTS) -c -o $@ $<

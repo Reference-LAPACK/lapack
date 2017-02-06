@@ -23,7 +23,7 @@
 #       xeigtsts, xeigtstd, xeigtstc, and xeigtstz for EIG
 #
 #  To remove the output files after the tests have been run, enter
-#       make clean
+#       make cleantest
 #
 #  To re-run specific tests after a make, enter (for example):
 #       'rm ssvd.out; make'  or:
@@ -582,7 +582,8 @@ EIG/xeigtstd: $(FRCEIG) $(FRC)
 EIG/xeigtstz: $(FRCEIG) $(FRC)
 	$(MAKE) -C EIG xeigtstz
 
-clean:
+clean: cleantest
+cleantest:
 	rm -f *.out core
 
 FRCLIN:

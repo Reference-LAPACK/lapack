@@ -2,11 +2,6 @@ include ../make.inc
 
 all: testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
 
-clean:
-	rm -f *.o
-cleanall:
-	rm -f test*
-
 testlsame: lsame.o lsametst.o
 	$(LOADER) $(LOADOPTS) -o $@ $^
 
@@ -38,6 +33,14 @@ run: all
 	./testdsecnd
 	./testieee
 	./testversion
+
+clean: cleanobj cleanexe cleantest
+cleanobj:
+	rm -f *.o
+cleanexe:
+	rm -f test*
+cleantest:
+	rm -f core
 
 .SUFFIXES: .o .f
 .f.o:

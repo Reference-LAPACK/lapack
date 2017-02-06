@@ -24,8 +24,11 @@ xexample_DGELS_colmajor: example_DGELS_colmajor.o lapacke_example_aux.o $(LIBRAR
 	$(LOADER) $(LOADOPTS) -o $@ $^
 	./$@
 
+clean: cleanobj cleanexe
+cleanobj:
+	rm -f *.o
+cleanexe:
+	rm -f x*
+
 .c.o:
 	$(CC) $(CFLAGS) -I. -I../include -c -o $@ $<
-
-clean:
-	rm -f *.o x*

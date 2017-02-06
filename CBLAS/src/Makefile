@@ -189,13 +189,13 @@ $(CBLASLIB): $(alev1) $(alev2) $(alev3) $(errhand)
 FRC:
 	@FRC=$(FRC)
 
-clean:
-	rm -f *.o a.out core
-cleanall:
+clean: cleanobj cleanlib
+cleanobj:
+	rm -f *.o
+cleanlib:
 	rm -f $(CBLASLIB)
 
 .c.o:
 	$(CC) $(CFLAGS) -I../include -c -o $@ $<
-
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<

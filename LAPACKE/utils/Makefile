@@ -189,8 +189,9 @@ lib: $(OBJ)
 	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $^
 	$(RANLIB) ../../$(LAPACKELIB)
 
+clean: cleanobj
+cleanobj:
+	rm -f *.o
+
 .c.o:
 	$(CC) $(CFLAGS) -I../include -c -o $@ $<
-
-clean:
-	rm -f *.o

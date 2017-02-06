@@ -47,8 +47,13 @@ run: all
 	./xblat3c < cblat3.in
 	./xblat3z < zblat3.in
 
-clean:
-	rm -f *.o xblat* *.out
+clean: cleanobj cleanexe cleantest
+cleanobj:
+	rm -f *.o
+cleanexe:
+	rm -f xblat*
+cleantest:
+	rm -f *.out core
 
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<

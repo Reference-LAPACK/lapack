@@ -14,14 +14,18 @@ cblas_testing: cblas
 cblas_example: cblas
 	$(MAKE) -C examples
 
-clean: cleanlib
-
-cleanlib:
+clean:
 	$(MAKE) -C src clean
-
+	$(MAKE) -C testing clean
+	$(MAKE) -C examples clean
+cleanobj:
+	$(MAKE) -C src cleanobj
+	$(MAKE) -C testing cleanobj
+	$(MAKE) -C examples cleanobj
+cleanlib:
+	$(MAKE) -C src cleanlib
 cleanexe:
 	$(MAKE) -C testing cleanexe
-
-cleanall: clean cleanexe
-	$(MAKE) -C src cleanall
-	$(MAKE) -C examples cleanall
+	$(MAKE) -C examples cleanexe
+cleantest:
+	$(MAKE) -C testing cleantest

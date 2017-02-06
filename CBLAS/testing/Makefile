@@ -32,13 +32,6 @@ all1: xscblat1 xdcblat1 xccblat1 xzcblat1
 all2: xscblat2 xdcblat2 xccblat2 xzcblat2
 all3: xscblat3 xdcblat3 xccblat3 xzcblat3
 
-clean:
-	rm -f core *.o *.out x*
-cleanobj:
-	rm -f core *.o a.out
-cleanexe:
-	rm -f x*
-
 #
 # Compile each precision
 #
@@ -102,10 +95,16 @@ run: all
 	@echo "--> TESTING CBLAS 3 - DOUBLE PRECISION COMPLEX <--"
 	@./xzcblat3 < zin3 > ztest3.out
 
-.SUFFIXES: .o .f .c
+clean: cleanobj cleanexe cleantest
+cleanobj:
+	rm -f *.o
+cleanexe:
+	rm -f x*
+cleantest:
+	rm -f *.out core
 
+.SUFFIXES: .o .f .c
 .c.o:
 	$(CC) $(CFLAGS) -I../include -c -o $@ $<
-
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
