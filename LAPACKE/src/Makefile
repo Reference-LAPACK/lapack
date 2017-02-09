@@ -362,6 +362,8 @@ lapacke_clascl.o \
 lapacke_clascl_work.o \
 lapacke_claset.o \
 lapacke_claset_work.o \
+lapacke_classq.o \
+lapacke_classq_work.o \
 lapacke_claswp.o \
 lapacke_claswp_work.o \
 lapacke_clauum.o \
@@ -832,6 +834,8 @@ lapacke_dlaset.o \
 lapacke_dlaset_work.o \
 lapacke_dlasrt.o \
 lapacke_dlasrt_work.o \
+lapacke_dlassq.o \
+lapacke_dlassq_work.o \
 lapacke_dlaswp.o \
 lapacke_dlaswp_work.o \
 lapacke_dlauum.o \
@@ -1388,6 +1392,8 @@ lapacke_slaset.o \
 lapacke_slaset_work.o \
 lapacke_slasrt.o \
 lapacke_slasrt_work.o \
+lapacke_slassq.o \
+lapacke_slassq_work.o \
 lapacke_slaswp.o \
 lapacke_slaswp_work.o \
 lapacke_slauum.o \
@@ -2056,6 +2062,8 @@ lapacke_zlascl.o \
 lapacke_zlascl_work.o \
 lapacke_zlaset.o \
 lapacke_zlaset_work.o \
+lapacke_zlassq.o \
+lapacke_zlassq_work.o \
 lapacke_zlaswp.o \
 lapacke_zlaswp_work.o \
 lapacke_zlauum.o \

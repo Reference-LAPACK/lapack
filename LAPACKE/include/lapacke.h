@@ -2533,6 +2533,11 @@ lapack_int LAPACKE_zlaset( int matrix_layout, char uplo, lapack_int m,
 lapack_int LAPACKE_slasrt( char id, lapack_int n, float* d );
 lapack_int LAPACKE_dlasrt( char id, lapack_int n, double* d );
 
+lapack_int LAPACKE_slassq( lapack_int n,                 float* x, lapack_int incx,  float* scale,  float* sumsq );
+lapack_int LAPACKE_dlassq( lapack_int n,                double* x, lapack_int incx, double* scale, double* sumsq );
+lapack_int LAPACKE_classq( lapack_int n,  lapack_complex_float* x, lapack_int incx,  float* scale,  float* sumsq );
+lapack_int LAPACKE_zlassq( lapack_int n, lapack_complex_double* x, lapack_int incx, double* scale, double* sumsq );
+
 lapack_int LAPACKE_slaswp( int matrix_layout, lapack_int n, float* a,
                            lapack_int lda, lapack_int k1, lapack_int k2,
                            const lapack_int* ipiv, lapack_int incx );
@@ -7728,6 +7733,11 @@ lapack_int LAPACKE_zlaset_work( int matrix_layout, char uplo, lapack_int m,
 
 lapack_int LAPACKE_slasrt_work( char id, lapack_int n, float* d );
 lapack_int LAPACKE_dlasrt_work( char id, lapack_int n, double* d );
+
+lapack_int LAPACKE_slassq_work( lapack_int n,                 float* x, lapack_int incx,  float* scale,  float* sumsq );
+lapack_int LAPACKE_dlassq_work( lapack_int n,                double* x, lapack_int incx, double* scale, double* sumsq );
+lapack_int LAPACKE_classq_work( lapack_int n,  lapack_complex_float* x, lapack_int incx,  float* scale,  float* sumsq );
+lapack_int LAPACKE_zlassq_work( lapack_int n, lapack_complex_double* x, lapack_int incx, double* scale, double* sumsq );
 
 lapack_int LAPACKE_slaswp_work( int matrix_layout, lapack_int n, float* a,
                                 lapack_int lda, lapack_int k1, lapack_int k2,
@@ -13359,6 +13369,10 @@ lapack_int LAPACKE_zhegv_2stage_work( int matrix_layout, lapack_int itype, char 
 #define LAPACK_dlarfg LAPACK_GLOBAL(dlarfg,DLARFG)
 #define LAPACK_clarfg LAPACK_GLOBAL(clarfg,CLARFG)
 #define LAPACK_zlarfg LAPACK_GLOBAL(zlarfg,ZLARFG)
+#define LAPACK_slassq LAPACK_GLOBAL(slassq,SLASSQ)
+#define LAPACK_dlassq LAPACK_GLOBAL(dlassq,DLASSQ)
+#define LAPACK_classq LAPACK_GLOBAL(classq,CLASSQ)
+#define LAPACK_zlassq LAPACK_GLOBAL(zlassq,ZLASSQ)
 #define LAPACK_slarft LAPACK_GLOBAL(slarft,SLARFT)
 #define LAPACK_dlarft LAPACK_GLOBAL(dlarft,DLARFT)
 #define LAPACK_clarft LAPACK_GLOBAL(clarft,CLARFT)
@@ -17943,6 +17957,10 @@ void LAPACK_clarfg( lapack_int* n, lapack_complex_float* alpha,
 void LAPACK_zlarfg( lapack_int* n, lapack_complex_double* alpha,
                     lapack_complex_double* x, lapack_int* incx,
                     lapack_complex_double* tau );
+void LAPACK_slassq( lapack_int *n,                 float* x, lapack_int *incx,  float* scale,  float* sumsq );
+void LAPACK_dlassq( lapack_int *n,                double* x, lapack_int *incx, double* scale, double* sumsq );
+void LAPACK_classq( lapack_int *n,  lapack_complex_float* x, lapack_int *incx,  float* scale,  float* sumsq );
+void LAPACK_zlassq( lapack_int *n, lapack_complex_double* x, lapack_int *incx, double* scale, double* sumsq );
 void LAPACK_slarft( char* direct, char* storev, lapack_int* n, lapack_int* k,
                     const float* v, lapack_int* ldv, const float* tau, float* t,
                     lapack_int* ldt );
