@@ -88,7 +88,7 @@
 *>
 *> Note 1 : DSYEVR calls DSTEMR when the full spectrum is requested
 *> on machines which conform to the ieee-754 floating point standard.
-*> DSYEVR calls DSTEBZ and SSTEIN on non-ieee machines and
+*> DSYEVR calls DSTEBZ and DSTEIN on non-ieee machines and
 *> when partial spectrum requests are made.
 *>
 *> Normal execution of DSTEMR may create NaNs and infinities and
