@@ -57,7 +57,7 @@ test_script:
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalConfigure
   - ctest -D ExperimentalBuild -j%NUMBER_OF_PROCESSORS%
-  - ctest -D ExperimentalTest --schedule-random -j%NUMBER_OF_PROCESSORS% --output-on-failure --timeout 100
+  - ctest -D ExperimentalTest --schedule-random -j%NUMBER_OF_PROCESSORS% --output-on-failure --timeout 100 -E "CBLAS\-.*cblat1"
   - ctest -D ExperimentalSubmit
 
 after_test:
