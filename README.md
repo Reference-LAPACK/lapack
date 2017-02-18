@@ -1,6 +1,7 @@
 # LAPACK
 
 [![Build Status](https://travis-ci.org/Reference-LAPACK/lapack.svg?branch=master)](https://travis-ci.org/Reference-LAPACK/lapack)
+[![Appveyor](https://ci.appveyor.com/api/projects/status/bh38iin398msrbtr?svg=true)](https://ci.appveyor.com/project/Gjacquenot/lapack/branch/master)
 
 * VERSION 1.0   :  February 29, 1992
 * VERSION 1.0a  :  June 30, 1992
