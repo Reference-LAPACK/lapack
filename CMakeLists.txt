@@ -5,7 +5,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to 'Release' as none was specified.")
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
   # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
 endif()
 
 project(LAPACK Fortran C)
@@ -133,6 +133,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
 # Check for any necessary platform specific compiler flags
 include(CheckLAPACKCompilerFlags)
 CheckLAPACKCompilerFlags()
+
+string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_UPPER)
+if(${CMAKE_BUILD_TYPE_UPPER} STREQUAL "COVERAGE")
+  message(STATUS "Adding coverage")
+  find_package(codecov)
+endif()
 
 # --------------------------------------------------
 # Check second function

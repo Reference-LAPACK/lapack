@@ -498,4 +498,9 @@ if(USE_XBLAS)
 endif()
 target_link_libraries(lapack PRIVATE ${BLAS_LIBRARIES})
 
+if (${CMAKE_BUILD_TYPE_UPPER} STREQUAL "COVERAGE")
+  target_link_libraries(lapack PRIVATE gcov)
+  add_coverage(lapack)
+endif()
+
 lapack_install_library(lapack)
