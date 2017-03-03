@@ -11,61 +11,81 @@ all: lapack_install lib blas_testing lapack_testing
 lib: lapacklib tmglib
 #lib: blaslib variants lapacklib tmglib
 
-clean: cleanlib cleantesting cleanblas_testing cleancblas_testing
-
-lapack_install:
-	( cd INSTALL; $(MAKE) run )
-
 blaslib:
-	( cd BLAS/SRC; $(MAKE) )
+	$(MAKE) -C BLAS
 
 cblaslib:
-	( cd CBLAS; $(MAKE) )
+	$(MAKE) -C CBLAS
 
-lapacklib: lapack_install
-	( cd SRC; $(MAKE) )
+lapacklib:
+	$(MAKE) -C SRC
 
-lapackelib: lapacklib
-	( cd LAPACKE; $(MAKE) )
-
-cblas_example: cblaslib blaslib
-	( cd CBLAS/examples; $(MAKE) )
-
-lapacke_example: lapackelib
-	( cd LAPACKE/example; $(MAKE) )
-
-variants:
-	( cd SRC/VARIANTS; $(MAKE) )
+lapackelib:
+	$(MAKE) -C LAPACKE
 
 tmglib:
-	( cd TESTING/MATGEN; $(MAKE) )
+	$(MAKE) -C TESTING/MATGEN
 
-lapack_testing: lib
-	( cd TESTING; $(MAKE) )
-	./lapack_testing.py
+variants:
+	$(MAKE) -C SRC/VARIANTS
 
-variants_testing: lib variants
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/LIB/cholrl.a'; \
-	mv stest.out stest_cholrl.out; mv dtest.out dtest_cholrl.out; mv ctest.out ctest_cholrl.out; mv ztest.out ztest_cholrl.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/LIB/choltop.a'; \
-	mv stest.out stest_choltop.out; mv dtest.out dtest_choltop.out; mv ctest.out ctest_choltop.out; mv ztest.out ztest_choltop.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/LIB/lucr.a'; \
-	mv stest.out stest_lucr.out; mv dtest.out dtest_lucr.out; mv ctest.out ctest_lucr.out; mv ztest.out ztest_lucr.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/LIB/lull.a'; \
-	mv stest.out stest_lull.out; mv dtest.out dtest_lull.out; mv ctest.out ctest_lull.out; mv ztest.out ztest_lull.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/LIB/lurec.a'; \
-	mv stest.out stest_lurec.out; mv dtest.out dtest_lurec.out; mv ctest.out ctest_lurec.out; mv ztest.out ztest_lurec.out )
-	( cd TESTING; rm -f xlintst*; $(MAKE) VARLIB='SRC/VARIANTS/LIB/qrll.a'; \
-	mv stest.out stest_qrll.out; mv dtest.out dtest_qrll.out; mv ctest.out ctest_qrll.out; mv ztest.out ztest_qrll.out )
+lapack_install:
+	$(MAKE) -C INSTALL run
 
 blas_testing: blaslib
-	( cd BLAS/TESTING; $(MAKE) run )
+	$(MAKE) -C BLAS blas_testing
 
-cblas_testing: blaslib
-	( cd CBLAS; $(MAKE) cblas_testing )
-	( cd CBLAS; $(MAKE) runtst )
+cblas_testing: cblaslib blaslib
+	$(MAKE) -C CBLAS cblas_testing
 
+lapack_testing: tmglib lapacklib blaslib
+	$(MAKE) -C TESTING/LIN cleanexe
+	$(MAKE) -C TESTING
+	./lapack_testing.py
 
+variants_testing: tmglib variants lapacklib blaslib
+	$(MAKE) -C TESTING/LIN cleanexe
+	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/cholrl.a'
+	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_cholrl.out
+	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_cholrl.out
+	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_cholrl.out
+	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_cholrl.out
+	$(MAKE) -C TESTING/LIN cleanexe
+	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/choltop.a'
+	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_choltop.out
+	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_choltop.out
+	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_choltop.out
+	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_choltop.out
+	$(MAKE) -C TESTING/LIN cleanexe
+	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/lucr.a'
+	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_lucr.out
+	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_lucr.out
+	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_lucr.out
+	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_lucr.out
+	$(MAKE) -C TESTING/LIN cleanexe
+	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/lull.a'
+	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_lull.out
+	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_lull.out
+	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_lull.out
+	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_lull.out
+	$(MAKE) -C TESTING/LIN cleanexe
+	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/lurec.a'
+	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_lurec.out
+	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_lurec.out
+	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_lurec.out
+	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_lurec.out
+	$(MAKE) -C TESTING/LIN cleanexe
+	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/qrll.a'
+	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_qrll.out
+	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_qrll.out
+	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_qrll.out
+	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_qrll.out
+
+cblas_example: cblaslib blaslib
+	$(MAKE) -C CBLAS cblas_example
+
+lapacke_example: lapackelib lapacklib blaslib
+	$(MAKE) -C LAPACKE lapacke_example
 
 html:
 	@echo "LAPACK HTML PAGES GENERATION with Doxygen"
@@ -85,27 +105,45 @@ man:
 	@echo "Usage: man dgetrf.f"
 	@echo "=================="
 
+clean:
+	$(MAKE) -C INSTALL clean
+	$(MAKE) -C BLAS clean
+	$(MAKE) -C CBLAS clean
+	$(MAKE) -C SRC clean
+	$(MAKE) -C SRC/VARIANTS clean
+	$(MAKE) -C TESTING clean
+	$(MAKE) -C TESTING/MATGEN clean
+	$(MAKE) -C TESTING/LIN clean
+	$(MAKE) -C TESTING/EIG clean
+	$(MAKE) -C LAPACKE clean
+	rm -f *.a
+cleanobj:
+	$(MAKE) -C INSTALL cleanobj
+	$(MAKE) -C BLAS cleanobj
+	$(MAKE) -C CBLAS cleanobj
+	$(MAKE) -C SRC cleanobj
+	$(MAKE) -C SRC/VARIANTS cleanobj
+	$(MAKE) -C TESTING/MATGEN cleanobj
+	$(MAKE) -C TESTING/LIN cleanobj
+	$(MAKE) -C TESTING/EIG cleanobj
+	$(MAKE) -C LAPACKE cleanobj
 cleanlib:
-	( cd INSTALL; $(MAKE) clean )
-	( cd BLAS/SRC; $(MAKE) clean )
-	( cd CBLAS; $(MAKE) clean )
-	( cd SRC; $(MAKE) clean )
-	( cd SRC/VARIANTS; $(MAKE) clean )
-	( cd TESTING/MATGEN; $(MAKE) clean )
-	( cd LAPACKE; $(MAKE) clean )
-
-
-cleanblas_testing:
-	( cd BLAS/TESTING; $(MAKE) clean )
-
-cleancblas_testing:
-	( cd CBLAS/testing; $(MAKE) clean )
-
-cleantesting:
-	( cd TESTING/LIN; $(MAKE) clean )
-	( cd TESTING/EIG; $(MAKE) clean )
-	( cd TESTING; rm -f xlin* xeig* )
-
-cleanall: cleanlib cleanblas_testing cleancblas_testing cleantesting
-	( cd INSTALL; $(MAKE) cleanall )
-	rm -f *.a TESTING/*.out
+	$(MAKE) -C BLAS cleanlib
+	$(MAKE) -C CBLAS cleanlib
+	$(MAKE) -C SRC cleanlib
+	$(MAKE) -C SRC/VARIANTS cleanlib
+	$(MAKE) -C TESTING/MATGEN cleanlib
+	$(MAKE) -C LAPACKE cleanlib
+	rm -f *.a
+cleanexe:
+	$(MAKE) -C INSTALL cleanexe
+	$(MAKE) -C BLAS cleanexe
+	$(MAKE) -C CBLAS cleanexe
+	$(MAKE) -C TESTING/LIN cleanexe
+	$(MAKE) -C TESTING/EIG cleanexe
+	$(MAKE) -C LAPACKE cleanexe
+cleantest:
+	$(MAKE) -C INSTALL cleantest
+	$(MAKE) -C BLAS cleantest
+	$(MAKE) -C CBLAS cleantest
+	$(MAKE) -C TESTING cleantest

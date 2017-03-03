@@ -44,7 +44,7 @@ include ../make.inc
 #  and is created at the next higher directory level.
 #
 #  To remove the object files after the library is created, enter
-#       make clean
+#       make cleanobj
 #  On some systems, you can force the source files to be recompiled by
 #  entering (for example)
 #       make single FRC=FRC
@@ -508,27 +508,23 @@ endif
 all: ../$(LAPACKLIB)
 
 ../$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
-	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+	$(ARCH) $(ARCHFLAGS) $@ $^
 	$(RANLIB) $@
 
 single: $(SLASRC) $(DSLASRC) $(SXLASRC) $(SCLAUX) $(ALLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(SLASRC) $(DSLASRC) \
-	$(SXLASRC) $(SCLAUX) $(ALLAUX)
+	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $^
 	$(RANLIB) ../$(LAPACKLIB)
 
 complex: $(CLASRC) $(ZCLASRC) $(CXLASRC) $(SCLAUX) $(ALLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(CLASRC) $(ZCLASRC) \
-	$(CXLASRC) $(SCLAUX) $(ALLAUX)
+	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $^
 	$(RANLIB) ../$(LAPACKLIB)
 
 double: $(DLASRC) $(DSLASRC) $(DXLASRC) $(DZLAUX) $(ALLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(DLASRC) $(DSLASRC) \
-	$(DXLASRC) $(DZLAUX) $(ALLAUX)
+	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $^
 	$(RANLIB) ../$(LAPACKLIB)
 
 complex16: $(ZLASRC) $(ZCLASRC) $(ZXLASRC) $(DZLAUX) $(ALLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $(ZLASRC) $(ZCLASRC) \
-	$(ZXLASRC) $(DZLAUX) $(ALLAUX)
+	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $^
 	$(RANLIB) ../$(LAPACKLIB)
 
 $(ALLAUX): $(FRC)
@@ -550,12 +546,14 @@ endif
 FRC:
 	@FRC=$(FRC)
 
-clean:
+clean: cleanobj cleanlib
+cleanobj:
 	rm -f *.o DEPRECATED/*.o
+cleanlib:
+	rm -f ../$(LAPACKLIB)
 
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
-
 .F.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<
 
