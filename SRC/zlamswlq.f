@@ -49,7 +49,7 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of rows of the matrix A.  M >=0.
+*>          The number of rows of the matrix C.  M >=0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -88,12 +88,14 @@
 *>
 *> \endverbatim
 *>
-*> \param[in,out] A
+*> \param[in] A
 *> \verbatim
-*>          A is COMPLEX*16 array, dimension (LDA,K)
+*>          A is COMPLEX*16 array, dimension
+*>                               (LDA,M) if SIDE = 'L',
+*>                               (LDA,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the blocked
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
-*>          DLASWLQ in the first k rows of its array argument A.
+*>          ZLASWLQ in the first k rows of its array argument A.
 *> \endverbatim
 *>
 *> \param[in] LDA

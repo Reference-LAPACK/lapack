@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEMQRT + dependencies
+*> Download DGEMLQT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgemlqt.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgemlqt.f">
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGEMQRT overwrites the general real M-by-N matrix C with
+*> DGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
@@ -109,8 +109,8 @@
 *> \verbatim
 *>          LDV is INTEGER
 *>          The leading dimension of the array V.
-*>          If SIDE = 'L', LDA >= max(1,M);
-*>          if SIDE = 'R', LDA >= max(1,N).
+*>          If SIDE = 'L', LDV >= max(1,M);
+*>          if SIDE = 'R', LDV >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in] T

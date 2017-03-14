@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*> DGEMQRT overwrites the general real M-by-N matrix C with
+*> DGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
@@ -92,8 +92,8 @@
 *> \verbatim
 *>          LDV is INTEGER
 *>          The leading dimension of the array V.
-*>          If SIDE = 'L', LDA >= max(1,M);
-*>          if SIDE = 'R', LDA >= max(1,N).
+*>          If SIDE = 'L', LDV >= max(1,M);
+*>          if SIDE = 'R', LDV >= max(1,N).
 *> \endverbatim
 *>
 *> \param[in] T

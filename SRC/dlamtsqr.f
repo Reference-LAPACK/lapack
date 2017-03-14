@@ -81,7 +81,7 @@
 *>          N >= NB >= 1.
 *> \endverbatim
 *>
-*> \param[in,out] A
+*> \param[in] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,K)
 *>          The i-th column must contain the vector which defines the
