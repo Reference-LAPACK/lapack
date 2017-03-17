@@ -23,7 +23,7 @@
 *>
 *>                    SIDE = 'L'     SIDE = 'R'
 *>    TRANS = 'N':      Q * C          C * Q
-*>    TRANS = 'T':      Q**T * C       C * Q**T
+*>    TRANS = 'T':      Q**H * C       C * Q**H
 *>    where Q is a real orthogonal matrix defined as the product of blocked
 *>    elementary reflectors computed by short wide LQ
 *>    factorization (CLASWLQ)
@@ -35,15 +35,15 @@
 *> \param[in] SIDE
 *> \verbatim
 *>          SIDE is CHARACTER*1
-*>          = 'L': apply Q or Q**T from the Left;
-*>          = 'R': apply Q or Q**T from the Right.
+*>          = 'L': apply Q or Q**H from the Left;
+*>          = 'R': apply Q or Q**H from the Right.
 *> \endverbatim
 *>
 *> \param[in] TRANS
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
-*>          = 'T':  Transpose, apply Q**T.
+*>          = 'C':  Transpose, apply Q**H.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -125,7 +125,7 @@
 *> \verbatim
 *>          C is COMPLEX array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
-*>          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
+*>          On exit, C is overwritten by Q*C or Q**H*C or C*Q**H or C*Q.
 *> \endverbatim
 *>
 *> \param[in] LDC
@@ -221,7 +221,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL    LEFT, RIGHT, TRAN, NOTRAN, LQUERY
-      INTEGER    I, II, KK, LW , CTR
+      INTEGER    I, II, KK, LW, CTR
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
