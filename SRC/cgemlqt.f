@@ -22,12 +22,12 @@
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
-*> TRANS = 'C':   Q**C C            C Q**C
+*> TRANS = 'C':   Q**H C            C Q**H
 *>
 *> where Q is a complex orthogonal matrix defined as the product of K
 *> elementary reflectors:
 *>
-*>       Q = H(1) H(2) . . . H(K) = I - V C V**C
+*>       Q = H(1) H(2) . . . H(K) = I - V T V**H
 *>
 *> generated using the compact WY representation as returned by CGELQT.
 *>
@@ -40,15 +40,15 @@
 *> \param[in] SIDE
 *> \verbatim
 *>          SIDE is CHARACTER*1
-*>          = 'L': apply Q or Q**C from the Left;
-*>          = 'R': apply Q or Q**C from the Right.
+*>          = 'L': apply Q or Q**H from the Left;
+*>          = 'R': apply Q or Q**H from the Right.
 *> \endverbatim
 *>
 *> \param[in] TRANS
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
-*>          = 'C':  Transpose, apply Q**C.
+*>          = 'C':  Transpose, apply Q**H.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -100,7 +100,7 @@
 *> \verbatim
 *>          T is COMPLEX array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DGELQT, stored as a MB-by-M matrix.
+*>          as returned by DGELQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -113,7 +113,7 @@
 *> \verbatim
 *>          C is COMPLEX array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
-*>          On exit, C is overwritten by Q C, Q**C C, C Q**C or C Q.
+*>          On exit, C is overwritten by Q C, Q**H C, C Q**H or C Q.
 *> \endverbatim
 *>
 *> \param[in] LDC
