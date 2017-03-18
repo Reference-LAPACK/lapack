@@ -100,8 +100,8 @@
 *>
 *> \verbatim
 *>
-*>  The matrix V stores the elementary reflectors H(i) in the i-th column
-*>  below the diagonal. For example, if M=5 and N=3, the matrix V is
+*>  The matrix V stores the elementary reflectors H(i) in the i-th row
+*>  above the diagonal. For example, if M=5 and N=3, the matrix V is
 *>
 *>               V = (  1  v1 v1 v1 v1 )
 *>                   (     1  v2 v2 v2 )
@@ -110,11 +110,11 @@
 *>
 *>  where the vi's represent the vectors which define H(i), which are returned
 *>  in the matrix A.  The 1's along the diagonal of V are not stored in A.
-*>  Let K=MIN(M,N).  The number of blocks is B = ceiling(K/NB), where each
-*>  block is of order NB except for the last block, which is of order
-*>  IB = K - (B-1)*NB.  For each of the B blocks, a upper triangular block
-*>  reflector factor is computed: T1, T2, ..., TB.  The NB-by-NB (and IB-by-IB
-*>  for the last block) T's are stored in the NB-by-N matrix T as
+*>  Let K=MIN(M,N).  The number of blocks is B = ceiling(K/MB), where each
+*>  block is of order MB except for the last block, which is of order
+*>  IB = K - (B-1)*MB.  For each of the B blocks, a upper triangular block
+*>  reflector factor is computed: T1, T2, ..., TB.  The MB-by-MB (and IB-by-IB
+*>  for the last block) T's are stored in the MB-by-K matrix T as
 *>
 *>               T = (T1 T2 ... TB).
 *> \endverbatim

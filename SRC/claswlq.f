@@ -55,7 +55,7 @@
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
-*>          On exit, the elements on and bleow the diagonal
+*>          On exit, the elements on and below the diagonal
 *>          of the array contain the N-by-N lower triangular matrix L;
 *>          the elements above the diagonal represent Q by the rows
 *>          of blocked V (see Further Details).

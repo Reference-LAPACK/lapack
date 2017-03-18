@@ -133,7 +133,7 @@
 *>  block is of order NB except for the last block, which is of order
 *>  IB = K - (B-1)*NB.  For each of the B blocks, a upper triangular block
 *>  reflector factor is computed: T1, T2, ..., TB.  The NB-by-NB (and IB-by-IB
-*>  for the last block) T's are stored in the NB-by-N matrix T as
+*>  for the last block) T's are stored in the NB-by-K matrix T as
 *>
 *>               T = (T1 T2 ... TB).
 *> \endverbatim
