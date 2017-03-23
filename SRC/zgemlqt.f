@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEMQRT + dependencies
+*> Download DGEMLQT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zgemlqt.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zgemlqt.f">
@@ -35,16 +35,16 @@
 *>
 *> \verbatim
 *>
-*> ZGEMQRT overwrites the general real M-by-N matrix C with
+*> ZGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
-*> TRANS = 'C':   Q**C C            C Q**C
+*> TRANS = 'C':   Q**H C            C Q**H
 *>
 *> where Q is a complex orthogonal matrix defined as the product of K
 *> elementary reflectors:
 *>
-*>       Q = H(1) H(2) . . . H(K) = I - V C V**C
+*>       Q = H(1) H(2) . . . H(K) = I - V T V**H
 *>
 *> generated using the compact WY representation as returned by ZGELQT.
 *>
@@ -57,15 +57,15 @@
 *> \param[in] SIDE
 *> \verbatim
 *>          SIDE is CHARACTER*1
-*>          = 'L': apply Q or Q**C from the Left;
-*>          = 'R': apply Q or Q**C from the Right.
+*>          = 'L': apply Q or Q**H from the Left;
+*>          = 'R': apply Q or Q**H from the Right.
 *> \endverbatim
 *>
 *> \param[in] TRANS
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
-*>          = 'C':  Transpose, apply Q**C.
+*>          = 'C':  Transpose, apply Q**H.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -99,7 +99,9 @@
 *>
 *> \param[in] V
 *> \verbatim
-*>          V is COMPLEX*16 array, dimension (LDV,K)
+*>          V is COMPLEX*16 array, dimension
+*>                               (LDV,M) if SIDE = 'L',
+*>                               (LDV,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
 *>          DGELQT in the first K rows of its array argument A.
@@ -108,16 +110,14 @@
 *> \param[in] LDV
 *> \verbatim
 *>          LDV is INTEGER
-*>          The leading dimension of the array V.
-*>          If SIDE = 'L', LDA >= max(1,M);
-*>          if SIDE = 'R', LDA >= max(1,N).
+*>          The leading dimension of the array V. LDV >= max(1,K).
 *> \endverbatim
 *>
 *> \param[in] T
 *> \verbatim
 *>          T is COMPLEX*16 array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DGELQT, stored as a MB-by-M matrix.
+*>          as returned by DGELQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -130,7 +130,7 @@
 *> \verbatim
 *>          C is COMPLEX*16 array, dimension (LDC,N)
 *>          On entry, the M-by-N matrix C.
-*>          On exit, C is overwritten by Q C, Q**C C, C Q**C or C Q.
+*>          On exit, C is overwritten by Q C, Q**H C, C Q**H or C Q.
 *> \endverbatim
 *>
 *> \param[in] LDC

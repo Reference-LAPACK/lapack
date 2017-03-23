@@ -92,8 +92,8 @@
 *>
 *> \verbatim
 *>
-*>  The matrix V stores the elementary reflectors H(i) in the i-th column
-*>  below the diagonal. For example, if M=5 and N=3, the matrix V is
+*>  The matrix V stores the elementary reflectors H(i) in the i-th row
+*>  above the diagonal. For example, if M=5 and N=3, the matrix V is
 *>
 *>               V = (  1  v1 v1 v1 v1 )
 *>                   (     1  v2 v2 v2 )

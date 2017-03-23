@@ -23,11 +23,10 @@ include ../../make.inc
 #  without any arguments creates all four test programs.
 #  The executable files are called
 #       xeigtsts, xeigtstd, xeigtstc, and xeigtstz
-#  and are created in the next higher directory level.
 #
 #  To remove the object files after the executable files have been
 #  created, enter
-#       make clean
+#       make cleanobj
 #  On some systems, you can force the source files to be recompiled by
 #  entering (for example)
 #       make single FRC=FRC
@@ -120,30 +119,22 @@ ZEIGTST = zchkee.o \
 
 all: single complex double complex16
 
-single: ../xeigtsts
-complex: ../xeigtstc
-double: ../xeigtstd
-complex16: ../xeigtstz
+single: xeigtsts
+complex: xeigtstc
+double: xeigtstd
+complex16: xeigtstz
 
-../xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) -o $@ \
-	$(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) \
-	../../$(LAPACKLIB) $(BLASLIB)
+xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xeigtstc: $(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) -o $@ \
-	$(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) \
-	../../$(LAPACKLIB) $(BLASLIB)
+xeigtstc: $(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) -o $@ \
-	$(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) \
-	../../$(LAPACKLIB) $(BLASLIB)
+xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+	$(LOADER) $(LOADOPTS) -o $@ $^
 
-../xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(LAPACKLIB)
-	$(LOADER) $(LOADOPTS) -o $@ \
-	$(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) \
-	../../$(LAPACKLIB) $(BLASLIB)
+xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+	$(LOADER) $(LOADOPTS) -o $@ $^
 
 $(AEIGTST): $(FRC)
 $(SCIGTST): $(FRC)
@@ -156,8 +147,11 @@ $(ZEIGTST): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
-clean:
+clean: cleanobj cleanexe
+cleanobj:
 	rm -f *.o
+cleanexe:
+	rm -f xeigtst*
 
 schkee.o: schkee.f
 	$(FORTRAN) $(DRVOPTS) -c -o $@ $<

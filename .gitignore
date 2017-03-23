@@ -23,7 +23,8 @@ CBLAS/examples/cblas_ex1
 CBLAS/examples/cblas_ex2
 
 # LAPACK testing
-TESTING/x*
+TESTING/LIN/xlintst*
+TESTING/EIG/xeigtst*
 TESTING/*.out
 TESTING/*.txt
 

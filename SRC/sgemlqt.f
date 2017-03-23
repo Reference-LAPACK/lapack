@@ -18,7 +18,7 @@
 *>
 *> \verbatim
 *>
-*> DGEMQRT overwrites the general real M-by-N matrix C with
+*> DGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
@@ -82,7 +82,9 @@
 *>
 *> \param[in] V
 *> \verbatim
-*>          V is REAL array, dimension (LDV,K)
+*>          V is REAL array, dimension
+*>                               (LDV,M) if SIDE = 'L',
+*>                               (LDV,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
 *>          DGELQT in the first K rows of its array argument A.
@@ -91,16 +93,14 @@
 *> \param[in] LDV
 *> \verbatim
 *>          LDV is INTEGER
-*>          The leading dimension of the array V.
-*>          If SIDE = 'L', LDA >= max(1,M);
-*>          if SIDE = 'R', LDA >= max(1,N).
+*>          The leading dimension of the array V. LDV >= max(1,K).
 *> \endverbatim
 *>
 *> \param[in] T
 *> \verbatim
 *>          T is REAL array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DGELQT, stored as a MB-by-M matrix.
+*>          as returned by DGELQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT

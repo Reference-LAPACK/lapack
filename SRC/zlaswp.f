@@ -79,14 +79,15 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (K1+(K2-K1)*abs(INCX))
 *>          The vector of pivot indices. Only the elements in positions
-*>          K1 through K1+(K2-K1)*INCX of IPIV are accessed.
-*>          IPIV(K) = L implies rows K and L are to be interchanged.
+*>          K1 through K1+(K2-K1)*abs(INCX) of IPIV are accessed.
+*>          IPIV(K1+(K-K1)*abs(INCX)) = L implies rows K and L are to be
+*>          interchanged.
 *> \endverbatim
 *>
 *> \param[in] INCX
 *> \verbatim
 *>          INCX is INTEGER
-*>          The increment between successive values of IPIV.  If IPIV
+*>          The increment between successive values of IPIV. If INCX
 *>          is negative, the pivots are applied in reverse order.
 *> \endverbatim
 *
@@ -135,7 +136,8 @@
 *     ..
 *     .. Executable Statements ..
 *
-*     Interchange row I with row IPIV(I) for each of rows K1 through K2.
+*     Interchange row I with row IPIV(K1+(I-K1)*abs(INCX)) for each of rows
+*     K1 through K2.
 *
       IF( INCX.GT.0 ) THEN
          IX0 = K1

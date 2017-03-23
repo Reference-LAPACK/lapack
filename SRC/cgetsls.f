@@ -53,7 +53,7 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N': the linear system involves A;
-*>          = 'C': the linear system involves A**C.
+*>          = 'C': the linear system involves A**H.
 *> \endverbatim
 *>
 *> \param[in] M

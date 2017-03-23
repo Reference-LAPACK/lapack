@@ -25,7 +25,7 @@ include ../../make.inc
 #  and is created at the LAPACK directory level.
 #
 #  To remove the object files after the library is created, enter
-#       make clean
+#       make cleanobj
 #  On some systems, you can force the source files to be recompiled by
 #  entering (for example)
 #       make single FRC=FRC
@@ -58,23 +58,23 @@ ALLOBJ = $(SMATGEN) $(CMATGEN) $(SCATGEN) $(DMATGEN) $(ZMATGEN) \
 	$(DZATGEN)
 
 ../../$(TMGLIB): $(ALLOBJ)
-	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
+	$(ARCH) $(ARCHFLAGS) $@ $^
 	$(RANLIB) $@
 
 single: $(SMATGEN) $(SCATGEN)
-	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $(SMATGEN) $(SCATGEN)
+	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $^
 	$(RANLIB) ../../$(TMGLIB)
 
 complex: $(CMATGEN) $(SCATGEN)
-	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $(CMATGEN) $(SCATGEN)
+	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $^
 	$(RANLIB) ../../$(TMGLIB)
 
 double: $(DMATGEN) $(DZATGEN)
-	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $(DMATGEN) $(DZATGEN)
+	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $^
 	$(RANLIB) ../../$(TMGLIB)
 
 complex16: $(ZMATGEN) $(DZATGEN)
-	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $(ZMATGEN) $(DZATGEN)
+	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $^
 	$(RANLIB) ../../$(TMGLIB)
 
 $(SCATGEN): $(FRC)
@@ -87,8 +87,11 @@ $(ZMATGEN): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
-clean:
+clean: cleanobj cleanlib
+cleanobj:
 	rm -f *.o
+cleanlib:
+	rm -f ../../$(TMGLIB)
 
 .f.o:
 	$(FORTRAN) $(OPTS) -c -o $@ $<

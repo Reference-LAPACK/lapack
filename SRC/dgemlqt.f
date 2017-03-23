@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DGEMQRT + dependencies
+*> Download DGEMLQT + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dgemlqt.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dgemlqt.f">
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> DGEMQRT overwrites the general real M-by-N matrix C with
+*> DGEMLQT overwrites the general real M-by-N matrix C with
 *>
 *>                 SIDE = 'L'     SIDE = 'R'
 *> TRANS = 'N':      Q C            C Q
@@ -99,7 +99,9 @@
 *>
 *> \param[in] V
 *> \verbatim
-*>          V is DOUBLE PRECISION array, dimension (LDV,K)
+*>          V is DOUBLE PRECISION array, dimension
+*>                               (LDV,M) if SIDE = 'L',
+*>                               (LDV,N) if SIDE = 'R'
 *>          The i-th row must contain the vector which defines the
 *>          elementary reflector H(i), for i = 1,2,...,k, as returned by
 *>          DGELQT in the first K rows of its array argument A.
@@ -108,16 +110,14 @@
 *> \param[in] LDV
 *> \verbatim
 *>          LDV is INTEGER
-*>          The leading dimension of the array V.
-*>          If SIDE = 'L', LDA >= max(1,M);
-*>          if SIDE = 'R', LDA >= max(1,N).
+*>          The leading dimension of the array V. LDV >= max(1,K).
 *> \endverbatim
 *>
 *> \param[in] T
 *> \verbatim
 *>          T is DOUBLE PRECISION array, dimension (LDT,K)
 *>          The upper triangular factors of the block reflectors
-*>          as returned by DGELQT, stored as a MB-by-M matrix.
+*>          as returned by DGELQT, stored as a MB-by-K matrix.
 *> \endverbatim
 *>
 *> \param[in] LDT

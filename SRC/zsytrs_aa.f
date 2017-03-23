@@ -66,7 +66,7 @@
 *>          of the matrix B.  NRHS >= 0.
 *> \endverbatim
 *>
-*> \param[in,out] A
+*> \param[in] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          Details of factors computed by ZSYTRF_AA.

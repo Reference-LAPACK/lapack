@@ -78,7 +78,7 @@ LAPACK has been thoroughly tested, on many different types of computers. The
 LAPACK project supports the package in the sense that reports of errors or poor
 performance will gain immediate attention from the developers. Such reports,
 descriptions of interesting applications, and other comments should be sent by
-electronic mail to lapack@cs.utk.edu.
+electronic mail to lapack@icl.utk.edu.
 
 For further information on LAPACK please read our FAQ at
 http://www.netlib.org/lapack/#_faq.
@@ -91,7 +91,7 @@ https://github.com/Reference-LAPACK/lapack/issues.
 
 A User forum is also available to help you with the LAPACK library at
 http://icl.cs.utk.edu/lapack-forum/.
-You can also contact directly the LAPACK team at lapack@cs.utk.edu.
+You can also contact directly the LAPACK team at lapack@icl.utk.edu.
 
 
 ## Testing
