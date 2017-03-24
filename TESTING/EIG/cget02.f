@@ -154,7 +154,7 @@
       REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
       COMPLEX            CONE
-      PARAMETER          ( CONE = 1.0E+0 )
+      PARAMETER          ( CONE = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
       INTEGER            J, N1, N2
@@ -191,7 +191,7 @@
 *     Exit with RESID = 1/EPS if ANORM = 0.
 *
       EPS = SLAMCH( 'Epsilon' )
-      ANORM = CLANGE( '1', N1, N2, A, LDA, RWORK )
+      ANORM = CLANGE( '1', M, N, A, LDA, RWORK )
       IF( ANORM.LE.ZERO ) THEN
          RESID = ONE / EPS
          RETURN
