@@ -154,7 +154,7 @@
       INTEGER I, J
       COMPLEX*16 TMP
       CHARACTER*2 C2
-
+*     ..
 *     .. Parameters ..
 *     NMAX_EXACT   the largest dimension where the generated data is
 *                  exact.
@@ -163,7 +163,7 @@
 *     ??? complex uses how many bits ???
       INTEGER NMAX_EXACT, NMAX_APPROX, SIZE_D
       PARAMETER (NMAX_EXACT = 6, NMAX_APPROX = 11, SIZE_D = 8)
-
+*
 *     d's are generated from random permuation of those eight elements.
       COMPLEX*16 d1(8), d2(8), invd1(8), invd2(8)
       DATA D1 /(-1,0),(0,1),(-1,-1),(0,-1),(1,0),(-1,1),(1,1),(1,-1)/
@@ -203,7 +203,7 @@
       IF (N .GT. NMAX_EXACT) THEN
          INFO = 1
       END IF
-
+*
 *     Compute M = the LCM of the integers [1, 2*N-1].  The largest
 *     reasonable N is small enough that integers suffice (up to N = 11).
       M = 1
@@ -218,7 +218,7 @@
          END DO
          M = (M / TI) * I
       END DO
-
+*
 *     Generate the scaled Hilbert matrix in A
 *     If we are testing SY routines,
 *        take D1_i = D2_i, else, D1_i = D2_i*
@@ -237,12 +237,12 @@
             END DO
          END DO
       END IF
-
+*
 *     Generate matrix B as simply the first NRHS columns of M * the
 *     identity.
       TMP = DBLE(M)
       CALL ZLASET('Full', N, NRHS, (0.0D+0,0.0D+0), TMP, B, LDB)
-
+*
 *     Generate the true solutions in X.  Because B = the first NRHS
 *     columns of M*I, the true solutions are just the first NRHS columns
 *     of the inverse Hilbert matrix.
