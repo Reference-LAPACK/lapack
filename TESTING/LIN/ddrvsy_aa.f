@@ -201,7 +201,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGET04, DLACPY,
-     $                   DLARHS, DLASET, DLATB4, DLATMS, DPOT02, DPOT05,
+     $                   DLARHS, DLASET, DLATB4, DLATMS, DPOT02,
      $                   DSYSV_AA, DSYT01_AA, DSYTRF_AA, XLAENV
 *     ..
 *     .. Scalars in Common ..

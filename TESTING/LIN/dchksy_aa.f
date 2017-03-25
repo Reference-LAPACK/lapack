@@ -215,15 +215,10 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
-*     .. External Functions ..
-      DOUBLE PRECISION   DGET06, DLANSY
-      EXTERNAL           DGET06, DLANSY
-*     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DGET04, DLACPY,
-     $                   DLARHS, DLATB4, DLATMS, DPOT02, DPOT03, DPOT05,
-     $                   DSYCON, DSYRFS, DSYT01_AA, DSYTRF_AA,
-     $                   DSYTRI2, DSYTRS_AA, XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DLACPY, DLARHS,
+     $                   DLATB4, DLATMS, DPOT02, DSYT01_AA, DSYTRF_AA,
+     $                   DSYTRS_AA, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

@@ -27,8 +27,8 @@
 *> CHPEV, CHPEVX, CHPEVD, and CSTEDC.
 *> CHEEVD_2STAGE, CHEEVR_2STAGE, CHEEVX_2STAGE,
 *> CHEEV_2STAGE, CHBEV_2STAGE, CHBEVD_2STAGE,
-*> CHBEVX_2STAGE, CHETRD_2STAGE, CHETRD_SY2SB,
-*> CHETRD_SB2ST
+*> CHBEVX_2STAGE, CHETRD_2STAGE, CHETRD_HE2HB,
+*> CHETRD_HB2ST
 *> \endverbatim
 *
 *  Arguments:
@@ -100,8 +100,8 @@
      $                   CUNGTR, CUNMTR, CUPGTR, CUPMTR,
      $                   CHEEVD_2STAGE, CHEEVR_2STAGE, CHEEVX_2STAGE,
      $                   CHEEV_2STAGE, CHBEV_2STAGE, CHBEVD_2STAGE,
-     $                   CHBEVX_2STAGE, CHETRD_2STAGE, CHETRD_SY2SB,
-     $                   CHETRD_SB2ST
+     $                   CHBEVX_2STAGE, CHETRD_2STAGE, CHETRD_HE2HB,
+     $                   CHETRD_HB2ST
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

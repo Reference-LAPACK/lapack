@@ -132,7 +132,7 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRLQTP, DLQT04
+      EXTERNAL           ALAERH, ALAHD, ALASUM, DERRLQTP, DLQT05
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

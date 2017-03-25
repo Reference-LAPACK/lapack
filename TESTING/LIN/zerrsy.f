@@ -91,7 +91,7 @@
      $                   ZSPTRS, ZSYCON, ZSYCON_3, ZSYCON_ROOK, ZSYRFS,
      $                   ZSYTF2, ZSYTF2_RK, ZSYTF2_ROOK, ZSYTRF,
      $                   ZSYTRF_RK, ZSYTRF_ROOK, ZSYTRI, ZSYTRI_3,
-     $                   ZSYTRI_3X, ZSYTRI_ROOK, ZSYTRI2, ZSYTRI2Z,
+     $                   ZSYTRI_3X, ZSYTRI_ROOK, ZSYTRI2, ZSYTRI2X,
      $                   ZSYTRS, ZSYTRS_3, ZSYTRS_ROOK
 *     ..
 *     .. Scalars in Common ..
