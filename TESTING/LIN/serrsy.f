@@ -92,7 +92,7 @@
      $                   SSYTF2_RK, SSYTF2_ROOK, SSYTRF, SSYTRF_RK,
      $                   SSYTRF_ROOK, SSYTRI, SSYTF2, SSYTRI_3,
      $                   SSYTRI_3X, SSYTRI_ROOK, SSYTRF_AA, SSYTRI2, 
-     $                   SYTRI2X, SSYTRS, SSYTRS_3, SSYTRS_ROOK,
+     $                   SSYTRI2X, SSYTRS, SSYTRS_3, SSYTRS_ROOK,
      $                   SSYTRS_AA
 *     ..
 *     .. Scalars in Common ..

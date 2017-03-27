@@ -399,8 +399,7 @@
      $                   CHET22, CHPEV, CHPEVD, CHPEVX, CLACPY, CLASET,
      $                   CHEEVD_2STAGE, CHEEVR_2STAGE, CHEEVX_2STAGE,
      $                   CHEEV_2STAGE, CHBEV_2STAGE, CHBEVD_2STAGE,
-     $                   CHBEVX_2STAGE, CHETRD_2STAGE, CHETRD_SY2SB, 
-     $                   CHETRD_SB2ST, CLATMR, CLATMS
+     $                   CHBEVX_2STAGE, CLATMR, CLATMS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, INT, LOG, MAX, MIN, SQRT

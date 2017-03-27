@@ -218,15 +218,10 @@
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       REAL               RESULT( NTESTS )
 *     ..
-*     .. External Functions ..
-      REAL               DGET06, CLANSY
-      EXTERNAL           DGET06, CLANSY
-*     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRSY, CGET04, CLACPY,
-     $                   CLARHS, CLATB4, CLATMS, CSYT02, DSYT03, DSYT05,
-     $                   DSYCON, CSYRFS, CSYT01_AA, CSYTRF_AA,
-     $                   DSYTRI2, CSYTRS_AA, XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRSY, CLACPY, CLARHS,
+     $                   CLATB4, CLATMS, CSYT02, CSYT01_AA, CSYTRF_AA,
+     $                   CSYTRS_AA, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

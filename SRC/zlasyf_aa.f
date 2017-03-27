@@ -99,12 +99,12 @@
 *> \param[in] LDA
 *> \verbatim
 *>          LDA is INTEGER
-*>          The leading dimension of the array A.  LDA >= max(1,N).
+*>          The leading dimension of the array A.  LDA >= max(1,M).
 *> \endverbatim
 *>
 *> \param[out] IPIV
 *> \verbatim
-*>          IPIV is INTEGER array, dimension (N)
+*>          IPIV is INTEGER array, dimension (M)
 *>          Details of the row and column interchanges,
 *>          the row and column k were interchanged with the row and
 *>          column IPIV(k).
@@ -217,8 +217,8 @@
 *
          K = J1+J-1
 *
-*        H(J:N, J) := A(J, J:N) - H(J:N, 1:(J-1)) * L(J1:(J-1), J),
-*         where H(J:N, J) has been initialized to be A(J, J:N)
+*        H(J:M, J) := A(J, J:M) - H(J:M, 1:(J-1)) * L(J1:(J-1), J),
+*         where H(J:M, J) has been initialized to be A(J, J:M)
 *
          IF( K.GT.2 ) THEN
 *
@@ -234,14 +234,14 @@
      $                  ONE, H( J, J ), 1 )
          END IF
 *
-*        Copy H(i:n, i) into WORK
+*        Copy H(i:M, i) into WORK
 *
          CALL ZCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
-*           Compute WORK := WORK - L(J-1, J:N) * T(J-1,J),
-*            where A(J-1, J) stores T(J-1, J) and A(J-2, J:N) stores U(J-1, J:N)
+*           Compute WORK := WORK - L(J-1, J:M) * T(J-1,J),
+*            where A(J-1, J) stores T(J-1, J) and A(J-2, J:M) stores U(J-1, J:M)
 *
             ALPHA = -A( K-1, J )
             CALL ZAXPY( M-J+1, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
@@ -253,8 +253,8 @@
 *
          IF( J.LT.M ) THEN
 *
-*           Compute WORK(2:N) = T(J, J) L(J, (J+1):N)
-*            where A(J, J) stores T(J, J) and A(J-1, (J+1):N) stores U(J, (J+1):N)
+*           Compute WORK(2:M) = T(J, J) L(J, (J+1):M)
+*            where A(J, J) stores T(J, J) and A(J-1, (J+1):M) stores U(J, (J+1):M)
 *
             IF( K.GT.1 ) THEN
                ALPHA = -A( K, J )
@@ -262,7 +262,7 @@
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
-*           Find max(|WORK(2:n)|)
+*           Find max(|WORK(2:M)|)
 *
             I2 = IZAMAX( M-J, WORK( 2 ), 1 ) + 1
             PIV = WORK( I2 )
@@ -277,14 +277,14 @@
                WORK( I2 ) = WORK( I1 )
                WORK( I1 ) = PIV
 *
-*              Swap A(I1, I1+1:N) with A(I1+1:N, I2)
+*              Swap A(I1, I1+1:M) with A(I1+1:M, I2)
 *
                I1 = I1+J-1
                I2 = I2+J-1
                CALL ZSWAP( I2-I1-1, A( J1+I1-1, I1+1 ), LDA,
      $                              A( J1+I1, I2 ), 1 )
 *
-*              Swap A(I1, I2+1:N) with A(I2, I2+1:N)
+*              Swap A(I1, I2+1:M) with A(I2, I2+1:M)
 *
                CALL ZSWAP( M-I2, A( J1+I1-1, I2+1 ), LDA,
      $                           A( J1+I2-1, I2+1 ), LDA )
@@ -324,14 +324,14 @@
 *
             IF( J.LT.NB ) THEN
 *
-*              Copy A(J+1:N, J+1) into H(J:N, J),
+*              Copy A(J+1:M, J+1) into H(J:M, J),
 *
                CALL ZCOPY( M-J, A( K+1, J+1 ), LDA,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
-*           Compute L(J+2, J+1) = WORK( 3:N ) / T(J, J+1),
-*            where A(J, J+1) = T(J, J+1) and A(J+2:N, J) = L(J+2:N, J+1)
+*           Compute L(J+2, J+1) = WORK( 3:M ) / T(J, J+1),
+*            where A(J, J+1) = T(J, J+1) and A(J+2:M, J) = L(J+2:M, J+1)
 *
             IF( A( K, J+1 ).NE.ZERO ) THEN
                ALPHA = ONE / A( K, J+1 )
@@ -367,8 +367,8 @@
 *
          K = J1+J-1
 *
-*        H(J:N, J) := A(J:N, J) - H(J:N, 1:(J-1)) * L(J, J1:(J-1))^T,
-*         where H(J:N, J) has been initialized to be A(J:N, J)
+*        H(J:M, J) := A(J:M, J) - H(J:M, 1:(J-1)) * L(J, J1:(J-1))^T,
+*         where H(J:M, J) has been initialized to be A(J:M, J)
 *
          IF( K.GT.2 ) THEN
 *
@@ -384,13 +384,13 @@
      $                  ONE, H( J, J ), 1 )
          END IF
 *
-*        Copy H(J:N, J) into WORK
+*        Copy H(J:M, J) into WORK
 *
          CALL ZCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
-*           Compute WORK := WORK - L(J:N, J-1) * T(J-1,J),
+*           Compute WORK := WORK - L(J:M, J-1) * T(J-1,J),
 *            where A(J-1, J) = T(J-1, J) and A(J, J-2) = L(J, J-1)
 *
             ALPHA = -A( J, K-1 )
@@ -403,8 +403,8 @@
 *
          IF( J.LT.M ) THEN
 *
-*           Compute WORK(2:N) = T(J, J) L((J+1):N, J)
-*            where A(J, J) = T(J, J) and A((J+1):N, J-1) = L((J+1):N, J)
+*           Compute WORK(2:M) = T(J, J) L((J+1):M, J)
+*            where A(J, J) = T(J, J) and A((J+1):M, J-1) = L((J+1):M, J)
 *
             IF( K.GT.1 ) THEN
                ALPHA = -A( J, K )
@@ -412,7 +412,7 @@
      $                                 WORK( 2 ), 1 )
             ENDIF
 *
-*           Find max(|WORK(2:n)|)
+*           Find max(|WORK(2:M)|)
 *
             I2 = IZAMAX( M-J, WORK( 2 ), 1 ) + 1
             PIV = WORK( I2 )
@@ -427,14 +427,14 @@
                WORK( I2 ) = WORK( I1 )
                WORK( I1 ) = PIV
 *
-*              Swap A(I1+1:N, I1) with A(I2, I1+1:N)
+*              Swap A(I1+1:M, I1) with A(I2, I1+1:M)
 *
                I1 = I1+J-1
                I2 = I2+J-1
                CALL ZSWAP( I2-I1-1, A( I1+1, J1+I1-1 ), 1,
      $                              A( I2, J1+I1 ), LDA )
 *
-*              Swap A(I2+1:N, I1) with A(I2+1:N, I2)
+*              Swap A(I2+1:M, I1) with A(I2+1:M, I2)
 *
                CALL ZSWAP( M-I2, A( I2+1, J1+I1-1 ), 1,
      $                           A( I2+1, J1+I2-1 ), 1 )
@@ -473,14 +473,14 @@
 *
             IF( J.LT.NB ) THEN
 *
-*              Copy A(J+1:N, J+1) into H(J+1:N, J),
+*              Copy A(J+1:M, J+1) into H(J+1:M, J),
 *
                CALL ZCOPY( M-J, A( J+1, K+1 ), 1,
      $                          H( J+1, J+1 ), 1 )
             END IF
 *
-*           Compute L(J+2, J+1) = WORK( 3:N ) / T(J, J+1),
-*            where A(J, J+1) = T(J, J+1) and A(J+2:N, J) = L(J+2:N, J+1)
+*           Compute L(J+2, J+1) = WORK( 3:M ) / T(J, J+1),
+*            where A(J, J+1) = T(J, J+1) and A(J+2:M, J) = L(J+2:M, J+1)
 *
             IF( A( J+1, K ).NE.ZERO ) THEN
                ALPHA = ONE / A( J+1, K )

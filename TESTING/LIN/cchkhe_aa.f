@@ -218,18 +218,13 @@
       INTEGER      ISEED( 4 ), ISEEDY( 4 )
       REAL         RESULT( NTESTS )
 *     ..
-*     .. External Functions ..
-      REAL         DGET06, CLANHE
-      EXTERNAL     DGET06, CLANHE
-*     ..
 *     .. External Subroutines ..
-      EXTERNAL     ALAERH, ALAHD, ALASUM, XLAENV, CERRHE, CGET04,
-     $             ZHECON, CHERFS, CHET01_AA, CHETRF_AA, ZHETRI2,
-     $             CHETRS_AA, CLACPY, CLAIPD, CLARHS, CLATB4, 
-     $             CLATMS, CPOT02, ZPOT03, ZPOT05
+      EXTERNAL     ALAERH, ALAHD, ALASUM, XLAENV, CERRHE, CHET01_AA,
+     $             CHETRF_AA, CHETRS_AA, CLACPY, CLAIPD, CLARHS,
+     $             CLATB4, CLATMS, CPOT02
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC    REAL, IMAG, MAX, MIN
+      INTRINSIC    MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL      LERR, OK

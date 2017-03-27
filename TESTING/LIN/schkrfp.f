@@ -216,11 +216,6 @@
          STOP
       END IF
 *
-      IF( FATAL ) THEN
-         WRITE( NOUT, FMT = 9999 )
-         STOP
-      END IF
-*
 *     Calculate and print the machine dependent constants.
 *
       EPS = SLAMCH( 'Underflow threshold' )
