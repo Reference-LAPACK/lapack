@@ -316,7 +316,7 @@
       END IF
       IF( IUPLO.EQ.2 ) THEN
          QSTART = 5
-         WSTART = 2*N - 1
+         IF( ICOMPQ .EQ. 2 ) WSTART = 2*N - 1
          DO 10 I = 1, N - 1
             CALL DLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
