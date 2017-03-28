@@ -311,7 +311,7 @@
       WSTART = 1
       QSTART = 3
       IF( ICOMPQ.EQ.1 ) THEN
-         CALL DCOPY( N,   D, 1, Q( 1 ),   1 )
+         CALL DCOPY( N, D, 1, Q( 1 ), 1 )
          CALL DCOPY( N-1, E, 1, Q( N+1 ), 1 )
       END IF
       IF( IUPLO.EQ.2 ) THEN
