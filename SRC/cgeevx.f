@@ -25,12 +25,12 @@
 *       .. Scalar Arguments ..
 *       CHARACTER          BALANC, JOBVL, JOBVR, SENSE
 *       INTEGER            IHI, ILO, INFO, LDA, LDVL, LDVR, LWORK, N
-*       REAL   ABNRM
+*       REAL               ABNRM
 *       ..
 *       .. Array Arguments ..
-*       REAL   RCONDE( * ), RCONDV( * ), RWORK( * ),
+*       REAL               RCONDE( * ), RCONDV( * ), RWORK( * ),
 *      $                   SCALE( * )
-*       COMPLEX         A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
+*       COMPLEX            A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
 *      $                   W( * ), WORK( * )
 *       ..
 *
@@ -296,19 +296,19 @@
 *     .. Scalar Arguments ..
       CHARACTER          BALANC, JOBVL, JOBVR, SENSE
       INTEGER            IHI, ILO, INFO, LDA, LDVL, LDVR, LWORK, N
-      REAL   ABNRM
+      REAL               ABNRM
 *     ..
 *     .. Array Arguments ..
-      REAL   RCONDE( * ), RCONDV( * ), RWORK( * ),
+      REAL               RCONDE( * ), RCONDV( * ), RWORK( * ),
      $                   SCALE( * )
-      COMPLEX         A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
+      COMPLEX            A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
      $                   W( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL   ZERO, ONE
+      REAL               ZERO, ONE
       PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E0 )
 *     ..
 *     .. Local Scalars ..
@@ -317,8 +317,8 @@
       CHARACTER          JOB, SIDE
       INTEGER            HSWORK, I, ICOND, IERR, ITAU, IWRK, K,
      $                   LWORK_TREVC, MAXWRK, MINWRK, NOUT
-      REAL   ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
-      COMPLEX         TMP
+      REAL               ANRM, BIGNUM, CSCALE, EPS, SCL, SMLNUM
+      COMPLEX            TMP
 *     ..
 *     .. Local Arrays ..
       LOGICAL            SELECT( 1 )
