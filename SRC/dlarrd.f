@@ -385,6 +385,12 @@
 *
       INFO = 0
 *
+*     Quick return if possible
+*
+      IF( N.LE.0 ) THEN
+         RETURN
+      END IF
+*
 *     Decode RANGE
 *
       IF( LSAME( RANGE, 'A' ) ) THEN

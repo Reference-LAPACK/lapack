@@ -237,6 +237,12 @@
 *
       INFO = 0
 *
+*     Quick return if possible
+*
+      IF( N.LE.0 ) THEN
+         RETURN
+      END IF
+*
       MAXITR = INT( ( LOG( SPDIAM+PIVMIN )-LOG( PIVMIN ) ) /
      $           LOG( TWO ) ) + 2
       MNWDTH = TWO * PIVMIN

@@ -179,6 +179,13 @@
 *     ..
 *     .. Executable Statements ..
 *
+*     Quick return if possible
+*
+      IF( N.LE.0 ) THEN
+         INFO = 0
+         RETURN
+      END IF
+*
 *     Get machine constants
       EPS = DLAMCH( 'P' )
 

@@ -239,6 +239,13 @@
 *     .. Executable Statements ..
 *
       INFO = 0
+*
+*     Quick return if possible
+*
+      IF( N.LE.0 ) THEN
+         RETURN
+      END IF
+*
       FACT = DBLE(2**KTRYMAX)
       EPS = DLAMCH( 'Precision' )
       SHIFT = 0
