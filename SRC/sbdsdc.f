@@ -311,12 +311,12 @@
       WSTART = 1
       QSTART = 3
       IF( ICOMPQ.EQ.1 ) THEN
-         CALL SCOPY( N,   D, 1, Q( 1   ), 1 )
+         CALL SCOPY( N, D, 1, Q( 1 ), 1 )
          CALL SCOPY( N-1, E, 1, Q( N+1 ), 1 )
       END IF
       IF( IUPLO.EQ.2 ) THEN
          QSTART = 5
-         WSTART = 2*N - 1
+         IF( ICOMPQ .EQ. 2 ) WSTART = 2*N - 1
          DO 10 I = 1, N - 1
             CALL SLARTG( D( I ), E( I ), CS, SN, R )
             D( I ) = R
