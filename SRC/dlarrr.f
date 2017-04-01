@@ -130,6 +130,13 @@
 *     ..
 *     .. Executable Statements ..
 *
+*     Quick return if possible
+*
+      IF( N.LE.0 ) THEN
+         INFO = 0
+         RETURN
+      END IF
+*
 *     As a default, do NOT go for relative-accuracy preserving computations.
       INFO = 1
 

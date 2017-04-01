@@ -167,7 +167,13 @@
 *     .. Executable Statements ..
 *
       INFO = 0
-
+*
+*     Quick return if possible
+*
+      IF( N.LE.0 ) THEN
+         RETURN
+      END IF
+*
 *     Compute splitting points
       NSPLIT = 1
       IF(SPLTOL.LT.ZERO) THEN
