@@ -1,5 +1,5 @@
-prefix=@prefix@
-libdir=@libdir@
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
 
 Name: BLAS
 Description: FORTRAN reference implementation of BLAS Basic Linear Algebra Subprograms

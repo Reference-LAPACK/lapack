@@ -67,7 +67,7 @@ endif()
 target_link_libraries(lapacke PRIVATE ${LAPACK_LIBRARIES})
 
 lapack_install_library(lapacke)
-install(FILES ${LAPACKE_INCLUDE} ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h DESTINATION include)
+install(FILES ${LAPACKE_INCLUDE} ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if(BUILD_TESTING)
   add_subdirectory(example)
