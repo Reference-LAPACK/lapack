@@ -319,8 +319,8 @@
 *           Set A(J, J+1) = T(J, J+1)
 *
             A( K, J+1 ) = WORK( 2 )
-            IF( (A( K, J ).EQ.ZERO ) .AND.
-     $        ( (J.EQ.M) .OR. (A( K, J+1 ).EQ.ZERO))) THEN
+            IF( (A( K, J ).EQ.ZERO ) .AND. (A( K, J+1 ).EQ.ZERO) .AND.
+     $          ((K.EQ.1) .OR. (A( K-1, J ).EQ.ZERO)) ) THEN
                 IF(INFO .EQ. 0) THEN
                     INFO = J
                 END IF
@@ -346,8 +346,11 @@
      $                      A( K, J+2 ), LDA)
             END IF
          ELSE
-            IF( (A( K, J ).EQ.ZERO) .AND. (INFO.EQ.0) ) THEN
-               INFO = J
+            IF( (A( K, J ).EQ.ZERO) .AND.
+     $          ((K.EQ.1) .OR. (A( J-1, J ).EQ.ZERO)) ) THEN
+               IF (INFO.EQ.0) THEN
+                  INFO = J
+               END IF
             END IF
          END IF
          J = J + 1
@@ -473,8 +476,8 @@
 *           Set A(J+1, J) = T(J+1, J)
 *
             A( J+1, K ) = WORK( 2 )
-            IF( (A( J, K ).EQ.ZERO) .AND.
-     $        ( (J.EQ.M) .OR. (A( J+1, K ).EQ.ZERO)) ) THEN
+            IF( (A( J, K ).EQ.ZERO) .AND. (A( J+1, K ).EQ.ZERO) .AND.
+     $          ((K.EQ.1) .OR. (A( J, K-1 ).EQ.ZERO)) ) THEN
                 IF (INFO .EQ. 0)
      $              INFO = J
             END IF
@@ -499,8 +502,12 @@
      $                      A( J+2, K ), LDA )
             END IF
          ELSE
-            IF( (A( J, K ).EQ.ZERO) .AND. (J.EQ.M)
-     $          .AND. (INFO.EQ.0) ) INFO = J
+            IF( (A( J, K ).EQ.ZERO) .AND.
+     $          ((K.EQ.1) .OR. (A( J, K-1 ).EQ.ZERO)) ) THEN
+               IF (INFO.EQ.0) THEN
+                  INFO = J
+               END IF
+            END IF
          END IF
          J = J + 1
          GO TO 30
