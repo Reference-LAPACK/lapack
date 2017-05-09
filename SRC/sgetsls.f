@@ -185,7 +185,7 @@
       INTEGER            I, IASCL, IBSCL, J, MINMN, MAXMN, BROW,
      $                   SCLLEN, MNK, TSZO, TSZM, LWO, LWM, LW1, LW2,
      $                   WSIZEO, WSIZEM, INFO2
-      REAL               ANRM, BIGNUM, BNRM, SMLNUM, TQ( 5 ), WORKQ
+      REAL               ANRM, BIGNUM, BNRM, SMLNUM, TQ( 5 ), WORKQ( 1 )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -233,31 +233,31 @@
        IF( M.GE.N ) THEN
          CALL SGEQR( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
          TSZO = INT( TQ( 1 ) )
-         LWO  = INT( WORKQ )
+         LWO  = INT( WORKQ( 1 ) )
          CALL SGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
-         LWO  = MAX( LWO, INT( WORKQ ) )
+         LWO  = MAX( LWO, INT( WORKQ( 1 ) ) )
          CALL SGEQR( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
          TSZM = INT( TQ( 1 ) )
-         LWM  = INT( WORKQ )
+         LWM  = INT( WORKQ( 1 ) )
          CALL SGEMQR( 'L', TRANS, M, NRHS, N, A, LDA, TQ,
      $                TSZM, B, LDB, WORKQ, -1, INFO2 )
-         LWM = MAX( LWM, INT( WORKQ ) )
+         LWM = MAX( LWM, INT( WORKQ( 1 ) ) )
          WSIZEO = TSZO + LWO
          WSIZEM = TSZM + LWM
        ELSE
          CALL SGELQ( M, N, A, LDA, TQ, -1, WORKQ, -1, INFO2 )
          TSZO = INT( TQ( 1 ) )
-         LWO  = INT( WORKQ )
+         LWO  = INT( WORKQ( 1 ) )
          CALL SGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
-         LWO  = MAX( LWO, INT( WORKQ ) )
+         LWO  = MAX( LWO, INT( WORKQ( 1 ) ) )
          CALL SGELQ( M, N, A, LDA, TQ, -2, WORKQ, -2, INFO2 )
          TSZM = INT( TQ( 1 ) )
-         LWM  = INT( WORKQ )
+         LWM  = INT( WORKQ( 1 ) )
          CALL SGEMLQ( 'L', TRANS, N, NRHS, M, A, LDA, TQ,
      $                TSZO, B, LDB, WORKQ, -1, INFO2 )
-         LWM  = MAX( LWM, INT( WORKQ ) )
+         LWM  = MAX( LWM, INT( WORKQ( 1 ) ) )
          WSIZEO = TSZO + LWO
          WSIZEM = TSZM + LWM
        END IF

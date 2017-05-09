@@ -172,7 +172,7 @@
       INTEGER            I, IC, IZ, KD, IB, LHOUS, LWORK, NTHREADS,
      $                   FACTOPTNB, QROPTNB, LQOPTNB
       LOGICAL            RPREC, CPREC
-      CHARACTER          PREC*1, ALGO*3, STAG*5, SUBNAM*12, VECT*3
+      CHARACTER          PREC*1, ALGO*3, STAG*5, SUBNAM*12, VECT*1
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CHAR, ICHAR, MAX

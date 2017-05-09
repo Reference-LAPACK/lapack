@@ -189,7 +189,7 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ONE, ZERO
+      DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..

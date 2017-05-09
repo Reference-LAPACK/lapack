@@ -281,7 +281,7 @@
       END IF
 *
       IF((NB.LE.K).OR.(NB.GE.MAX(M,N,K))) THEN
-        CALL DGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
+        CALL SGEMLQT( SIDE, TRANS, M, N, K, MB, A, LDA,
      $        T, LDT, C, LDC, WORK, INFO)
         RETURN
       END IF
