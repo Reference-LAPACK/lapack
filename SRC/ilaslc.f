@@ -94,7 +94,7 @@
 *
 *     .. Parameters ..
       REAL             ZERO
-      PARAMETER ( ZERO = 0.0D+0 )
+      PARAMETER ( ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
       INTEGER I

@@ -130,7 +130,7 @@
 *
 *     .. Parameters ..
       REAL   ONE
-      PARAMETER ( ONE = 1.0D+00 )
+      PARAMETER ( ONE = 1.0E+00 )
 *     ..
 *     .. Local Scalars ..
       INTEGER   I, I1, J, J1, M1, M2, N1, N2, IINFO
