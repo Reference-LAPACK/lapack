@@ -190,7 +190,7 @@
 *>
 *> \param[in,out] V2T
 *> \verbatim
-*>          V2T is DOUBLE PRECISION array, dimenison (LDV2T,M-Q)
+*>          V2T is DOUBLE PRECISION array, dimension (LDV2T,M-Q)
 *>          On entry, an (M-Q)-by-(M-Q) matrix. On exit, V2T is
 *>          premultiplied by the transpose of the right
 *>          singular vector matrix common to [ B12 0 0 ; 0 -I 0 ] and
