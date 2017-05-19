@@ -65,7 +65,7 @@
 *     December 2016
 *
 *     .. Scalar Arguments ..
-      DOUBLE PRECISION   DIN
+      DOUBLE PRECISION, INTENT(IN) :: DIN
 *     ..
 *
 *  =====================================================================
