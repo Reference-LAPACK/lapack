@@ -21,7 +21,7 @@
 *       LOGICAL FUNCTION SISNAN( SIN )
 *
 *       .. Scalar Arguments ..
-*       REAL               SIN
+*       REAL, INTENT(IN) :: SIN
 *       ..
 *
 *
@@ -65,7 +65,7 @@
 *     December 2016
 *
 *     .. Scalar Arguments ..
-      REAL               SIN
+      REAL, INTENT(IN) :: SIN
 *     ..
 *
 *  =====================================================================

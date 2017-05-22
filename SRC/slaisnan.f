@@ -21,7 +21,7 @@
 *       LOGICAL FUNCTION SLAISNAN( SIN1, SIN2 )
 *
 *       .. Scalar Arguments ..
-*       REAL               SIN1, SIN2
+*       REAL, INTENT(IN) :: SIN1, SIN2
 *       ..
 *
 *
@@ -80,7 +80,7 @@
 *     December 2016
 *
 *     .. Scalar Arguments ..
-      REAL               SIN1, SIN2
+      REAL, INTENT(IN) :: SIN1, SIN2
 *     ..
 *
 *  =====================================================================
