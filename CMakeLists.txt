@@ -108,12 +108,6 @@ macro(lapack_install_library lib)
 endmacro()
 
 set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-set(prefix ${CMAKE_INSTALL_PREFIX})
-if(NOT IS_ABSOLUTE ${CMAKE_INSTALL_LIBDIR})
-  set(libdir "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
-else()
-  set(libdir "${CMAKE_INSTALL_LIBDIR}")
-endif()
 
 # --------------------------------------------------
 # Testing
