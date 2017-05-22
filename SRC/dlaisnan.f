@@ -21,7 +21,7 @@
 *       LOGICAL FUNCTION DLAISNAN( DIN1, DIN2 )
 *
 *       .. Scalar Arguments ..
-*       DOUBLE PRECISION   DIN1, DIN2
+*       DOUBLE PRECISION, INTENT(IN) :: DIN1, DIN2
 *       ..
 *
 *
