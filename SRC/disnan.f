@@ -21,7 +21,7 @@
 *       LOGICAL FUNCTION DISNAN( DIN )
 *
 *       .. Scalar Arguments ..
-*       DOUBLE PRECISION   DIN
+*       DOUBLE PRECISION, INTENT(IN) :: DIN
 *       ..
 *
 *
