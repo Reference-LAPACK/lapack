@@ -50,9 +50,6 @@ lapack_int LAPACKE_ssysv_rk( int matrix_layout, char uplo, lapack_int n,
     if( LAPACKE_ssy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -5;
     }
-    if( LAPACKE_s_nancheck( n, e, 1) ) {
-        return -7;
-    }
     if( LAPACKE_sge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -9;
     }
