@@ -50,7 +50,7 @@ lapack_int LAPACKE_sstein( int matrix_layout, lapack_int n, const float* d,
     if( LAPACKE_s_nancheck( n, d, 1 ) ) {
         return -3;
     }
-    if( LAPACKE_s_nancheck( n, e, 1 ) ) {
+    if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
         return -4;
     }
     if( LAPACKE_s_nancheck( n, w, 1 ) ) {

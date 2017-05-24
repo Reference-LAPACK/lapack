@@ -47,7 +47,7 @@ lapack_int LAPACKE_sstev( int matrix_layout, char jobz, lapack_int n, float* d,
     if( LAPACKE_s_nancheck( n, d, 1 ) ) {
         return -4;
     }
-    if( LAPACKE_s_nancheck( n, e, 1 ) ) {
+    if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
         return -5;
     }
 #endif

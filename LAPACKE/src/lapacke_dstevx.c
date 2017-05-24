@@ -54,7 +54,7 @@ lapack_int LAPACKE_dstevx( int matrix_layout, char jobz, char range,
     if( LAPACKE_d_nancheck( n, d, 1 ) ) {
         return -5;
     }
-    if( LAPACKE_d_nancheck( n, e, 1 ) ) {
+    if( LAPACKE_d_nancheck( n-1, e, 1 ) ) {
         return -6;
     }
     if( LAPACKE_lsame( range, 'v' ) ) {
