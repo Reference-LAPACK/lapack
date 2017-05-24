@@ -40,6 +40,7 @@ lapack_int LAPACKE_ssytri_3( int matrix_layout, char uplo, lapack_int n, float* 
     lapack_int lwork = -1;
     float* work = NULL;
     float work_query;
+    lapack_int e_start = LAPACKE_lsame( uplo, 'U' ) ? 1 : 0;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_ssytri_3", -1 );
         return -1;
@@ -49,7 +50,7 @@ lapack_int LAPACKE_ssytri_3( int matrix_layout, char uplo, lapack_int n, float* 
     if( LAPACKE_ssy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -4;
     }
-    if( LAPACKE_s_nancheck( n, e, 1 ) ) {
+    if( LAPACKE_s_nancheck( n-1, e + e_start, 1 ) ) {
         return -6;
     }
 #endif

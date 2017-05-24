@@ -51,7 +51,7 @@ lapack_int LAPACKE_zstein( int matrix_layout, lapack_int n, const double* d,
     if( LAPACKE_d_nancheck( n, d, 1 ) ) {
         return -3;
     }
-    if( LAPACKE_d_nancheck( n, e, 1 ) ) {
+    if( LAPACKE_d_nancheck( n-1, e, 1 ) ) {
         return -4;
     }
     if( LAPACKE_d_nancheck( n, w, 1 ) ) {

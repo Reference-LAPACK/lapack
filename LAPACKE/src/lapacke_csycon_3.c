@@ -40,6 +40,7 @@ lapack_int LAPACKE_csycon_3( int matrix_layout, char uplo, lapack_int n,
 {
     lapack_int info = 0;
     lapack_complex_float* work = NULL;
+    lapack_int e_start = LAPACKE_lsame( uplo, 'U' ) ? 1 : 0;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
         LAPACKE_xerbla( "LAPACKE_csycon_3", -1 );
         return -1;
@@ -49,7 +50,7 @@ lapack_int LAPACKE_csycon_3( int matrix_layout, char uplo, lapack_int n,
     if( LAPACKE_csy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -4;
     }
-    if( LAPACKE_c_nancheck( n, e, 1 ) ) {
+    if( LAPACKE_c_nancheck( n-1, e + e_start, 1 ) ) {
         return -6;
     }
     if( LAPACKE_s_nancheck( 1, &anorm, 1 ) ) {

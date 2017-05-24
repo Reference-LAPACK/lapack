@@ -50,9 +50,6 @@ lapack_int LAPACKE_zhetrf_rk( int matrix_layout, char uplo, lapack_int n,
     if( LAPACKE_zhe_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -4;
     }
-    if( LAPACKE_z_nancheck( n, e, 1 ) ) {
-        return -6;
-    }
 #endif
     /* Query optimal working array(s) size */
     info = LAPACKE_zhetrf_rk_work( matrix_layout, uplo, n, a, lda, e, ipiv,

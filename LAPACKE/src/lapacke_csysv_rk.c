@@ -52,9 +52,6 @@ lapack_int LAPACKE_csysv_rk( int matrix_layout, char uplo, lapack_int n,
     if( LAPACKE_csy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -5;
     }
-    if( LAPACKE_c_nancheck( n, e, 1) ) {
-        return -7;
-    }
     if( LAPACKE_cge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
         return -9;
     }

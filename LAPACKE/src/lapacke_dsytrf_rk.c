@@ -49,9 +49,6 @@ lapack_int LAPACKE_dsytrf_rk( int matrix_layout, char uplo, lapack_int n, double
     if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
         return -4;
     }
-    if( LAPACKE_d_nancheck( n, e, 1 ) ) {
-        return -6;
-    }
 #endif
     /* Query optimal working array(s) size */
     info = LAPACKE_dsytrf_rk_work( matrix_layout, uplo, n, a, lda, e, ipiv,
