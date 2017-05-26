@@ -169,12 +169,12 @@
 *>
 *> \param[out] SR
 *> \verbatim
-*>          SR is REAL array, dimension KBOT
+*>          SR is REAL array, dimension (KBOT)
 *> \endverbatim
 *>
 *> \param[out] SI
 *> \verbatim
-*>          SI is REAL array, dimension KBOT
+*>          SI is REAL array, dimension (KBOT)
 *>          On output, the real and imaginary parts of approximate
 *>          eigenvalues that may be used for shifts are stored in
 *>          SR(KBOT-ND-NS+1) through SR(KBOT-ND) and

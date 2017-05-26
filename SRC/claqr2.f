@@ -168,7 +168,7 @@
 *>
 *> \param[out] SH
 *> \verbatim
-*>          SH is COMPLEX array, dimension KBOT
+*>          SH is COMPLEX array, dimension (KBOT)
 *>          On output, approximate eigenvalues that may
 *>          be used for shifts are stored in SH(KBOT-ND-NS+1)
 *>          through SR(KBOT-ND).  Converged eigenvalues are
