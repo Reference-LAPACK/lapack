@@ -72,7 +72,7 @@
 *
 *> \param[in] IJOB
 *> \verbatim
-*>          IJOB is integer
+*>          IJOB is INTEGER
 *>          Specifies whether condition numbers are required for the
 *>          cluster of eigenvalues (PL and PR) or the deflating subspaces
 *>          (Difu and Difl):
