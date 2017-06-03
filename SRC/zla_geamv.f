@@ -96,7 +96,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX*16 array of DIMENSION ( LDA, n )
+*>          A is COMPLEX*16 array, dimension ( LDA, n )
 *>           Before entry, the leading m by n part of the array A must
 *>           contain the matrix of coefficients.
 *>           Unchanged on exit.
@@ -113,7 +113,7 @@
 *>
 *> \param[in] X
 *> \verbatim
-*>          X is COMPLEX*16 array of DIMENSION at least
+*>          X is COMPLEX*16 array, dimension at least
 *>           ( 1 + ( n - 1 )*abs( INCX ) ) when TRANS = 'N' or 'n'
 *>           and at least
 *>           ( 1 + ( m - 1 )*abs( INCX ) ) otherwise.

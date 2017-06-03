@@ -117,7 +117,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX*16 array of DIMENSION (LDA,ka)
+*>          A is COMPLEX*16 array, dimension (LDA,ka)
 *>           where KA
 *>           is K  when TRANS = 'N' or 'n', and is N otherwise. Before
 *>           entry with TRANS = 'N' or 'n', the leading N--by--K part of

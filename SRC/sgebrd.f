@@ -101,7 +101,7 @@
 *>
 *> \param[out] TAUQ
 *> \verbatim
-*>          TAUQ is REAL array dimension (min(M,N))
+*>          TAUQ is REAL array, dimension (min(M,N))
 *>          The scalar factors of the elementary reflectors which
 *>          represent the orthogonal matrix Q. See Further Details.
 *> \endverbatim

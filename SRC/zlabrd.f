@@ -111,7 +111,7 @@
 *>
 *> \param[out] TAUQ
 *> \verbatim
-*>          TAUQ is COMPLEX*16 array dimension (NB)
+*>          TAUQ is COMPLEX*16 array, dimension (NB)
 *>          The scalar factors of the elementary reflectors which
 *>          represent the unitary matrix Q. See Further Details.
 *> \endverbatim

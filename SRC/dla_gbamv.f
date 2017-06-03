@@ -106,7 +106,7 @@
 *>
 *> \param[in] AB
 *> \verbatim
-*>          AB is DOUBLE PRECISION array of DIMENSION ( LDAB, n )
+*>          AB is DOUBLE PRECISION array, dimension ( LDAB, n )
 *>           Before entry, the leading m by n part of the array AB must
 *>           contain the matrix of coefficients.
 *>           Unchanged on exit.

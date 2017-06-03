@@ -94,7 +94,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array of DIMENSION ( LDA, n )
+*>          A is DOUBLE PRECISION array, dimension ( LDA, n )
 *>           Before entry, the leading m by n part of the array A must
 *>           contain the matrix of coefficients.
 *>           Unchanged on exit.

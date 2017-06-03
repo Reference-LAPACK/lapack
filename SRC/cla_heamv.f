@@ -89,7 +89,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX array of DIMENSION ( LDA, n ).
+*>          A is COMPLEX array, dimension ( LDA, n ).
 *>           Before entry, the leading m by n part of the array A must
 *>           contain the matrix of coefficients.
 *>           Unchanged on exit.

@@ -107,7 +107,7 @@
 *>
 *> \param[in] AB
 *> \verbatim
-*>          AB is COMPLEX*16 array of DIMENSION ( LDAB, n )
+*>          AB is COMPLEX*16 array, dimension ( LDAB, n )
 *>           Before entry, the leading m by n part of the array AB must
 *>           contain the matrix of coefficients.
 *>           Unchanged on exit.

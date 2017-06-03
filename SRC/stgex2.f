@@ -77,7 +77,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is REAL arrays, dimensions (LDA,N)
+*>          A is REAL array, dimension (LDA,N)
 *>          On entry, the matrix A in the pair (A, B).
 *>          On exit, the updated matrix A.
 *> \endverbatim
@@ -90,7 +90,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL arrays, dimensions (LDB,N)
+*>          B is REAL array, dimension (LDB,N)
 *>          On entry, the matrix B in the pair (A, B).
 *>          On exit, the updated matrix B.
 *> \endverbatim

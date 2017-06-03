@@ -107,14 +107,14 @@
 *>
 *> \param[in,out] S
 *> \verbatim
-*>          S is COMPLEX array of size (NSHFTS)
+*>          S is COMPLEX array, dimension (NSHFTS)
 *>             S contains the shifts of origin that define the multi-
 *>             shift QR sweep.  On output S may be reordered.
 *> \endverbatim
 *>
 *> \param[in,out] H
 *> \verbatim
-*>          H is COMPLEX array of size (LDH,N)
+*>          H is COMPLEX array, dimension (LDH,N)
 *>             On input H contains a Hessenberg matrix.  On output a
 *>             multi-shift QR sweep with shifts SR(J)+i*SI(J) is applied
 *>             to the isolated diagonal block in rows and columns KTOP
@@ -142,7 +142,7 @@
 *>
 *> \param[in,out] Z
 *> \verbatim
-*>          Z is COMPLEX array of size (LDZ,IHIZ)
+*>          Z is COMPLEX array, dimension (LDZ,IHIZ)
 *>             If WANTZ = .TRUE., then the QR Sweep unitary
 *>             similarity transformation is accumulated into
 *>             Z(ILOZ:IHIZ,ILOZ:IHIZ) from the right.
@@ -158,7 +158,7 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is COMPLEX array of size (LDV,NSHFTS/2)
+*>          V is COMPLEX array, dimension (LDV,NSHFTS/2)
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -170,8 +170,7 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is COMPLEX array of size
-*>             (LDU,3*NSHFTS-3)
+*>          U is COMPLEX array, dimension (LDU,3*NSHFTS-3)
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -190,7 +189,7 @@
 *>
 *> \param[out] WH
 *> \verbatim
-*>          WH is COMPLEX array of size (LDWH,NH)
+*>          WH is COMPLEX array, dimension (LDWH,NH)
 *> \endverbatim
 *>
 *> \param[in] LDWH
@@ -209,8 +208,7 @@
 *>
 *> \param[out] WV
 *> \verbatim
-*>          WV is COMPLEX array of size
-*>             (LDWV,3*NSHFTS-3)
+*>          WV is COMPLEX array, dimension (LDWV,3*NSHFTS-3)
 *> \endverbatim
 *>
 *> \param[in] LDWV
