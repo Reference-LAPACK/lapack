@@ -48,14 +48,14 @@
 *
 *> \param[in] WANTT
 *> \verbatim
-*>          WANTT is logical scalar
+*>          WANTT is LOGICAL
 *>             WANTT = .true. if the quasi-triangular Schur factor
 *>             is being computed.  WANTT is set to .false. otherwise.
 *> \endverbatim
 *>
 *> \param[in] WANTZ
 *> \verbatim
-*>          WANTZ is logical scalar
+*>          WANTZ is LOGICAL
 *>             WANTZ = .true. if the orthogonal Schur factor is being
 *>             computed.  WANTZ is set to .false. otherwise.
 *> \endverbatim
