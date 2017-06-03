@@ -121,7 +121,7 @@
 *>          IEEE is LOGICAL
 *>        Flag for IEEE or non IEEE arithmetic.
 *> \endverbatim
-*
+*>
 *> \param[in] EPS
 *> \verbatim
 *>          EPS is DOUBLE PRECISION
