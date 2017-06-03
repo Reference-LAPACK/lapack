@@ -53,8 +53,8 @@
 *>  N2-by-N2 upper triangular matrix.
 *> \endverbatim
 *
-*  Arguments
-*  =========
+*  Arguments:
+*  ==========
 *
 *> \param[in] SIDE
 *> \verbatim
