@@ -186,7 +186,7 @@
 *>
 *> \param[out] U1
 *> \verbatim
-*>          U1 is REAL array, dimension (P)
+*>          U1 is REAL array, dimension (P,P)
 *>          If JOBU1 = 'Y', U1 contains the P-by-P orthogonal matrix U1.
 *> \endverbatim
 *>
@@ -199,7 +199,7 @@
 *>
 *> \param[out] U2
 *> \verbatim
-*>          U2 is REAL array, dimension (M-P)
+*>          U2 is REAL array, dimension (M-P,M-P)
 *>          If JOBU2 = 'Y', U2 contains the (M-P)-by-(M-P) orthogonal
 *>          matrix U2.
 *> \endverbatim
@@ -213,7 +213,7 @@
 *>
 *> \param[out] V1T
 *> \verbatim
-*>          V1T is REAL array, dimension (Q)
+*>          V1T is REAL array, dimension (Q,Q)
 *>          If JOBV1T = 'Y', V1T contains the Q-by-Q matrix orthogonal
 *>          matrix V1**T.
 *> \endverbatim
@@ -227,7 +227,7 @@
 *>
 *> \param[out] V2T
 *> \verbatim
-*>          V2T is REAL array, dimension (M-Q)
+*>          V2T is REAL array, dimension (M-Q,M-Q)
 *>          If JOBV2T = 'Y', V2T contains the (M-Q)-by-(M-Q) orthogonal
 *>          matrix V2**T.
 *> \endverbatim

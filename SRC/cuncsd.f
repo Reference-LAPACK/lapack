@@ -188,7 +188,7 @@
 *>
 *> \param[out] U1
 *> \verbatim
-*>          U1 is COMPLEX array, dimension (P)
+*>          U1 is COMPLEX array, dimension (P,P)
 *>          If JOBU1 = 'Y', U1 contains the P-by-P unitary matrix U1.
 *> \endverbatim
 *>
@@ -201,7 +201,7 @@
 *>
 *> \param[out] U2
 *> \verbatim
-*>          U2 is COMPLEX array, dimension (M-P)
+*>          U2 is COMPLEX array, dimension (M-P,M-P)
 *>          If JOBU2 = 'Y', U2 contains the (M-P)-by-(M-P) unitary
 *>          matrix U2.
 *> \endverbatim
@@ -215,7 +215,7 @@
 *>
 *> \param[out] V1T
 *> \verbatim
-*>          V1T is COMPLEX array, dimension (Q)
+*>          V1T is COMPLEX array, dimension (Q,Q)
 *>          If JOBV1T = 'Y', V1T contains the Q-by-Q matrix unitary
 *>          matrix V1**H.
 *> \endverbatim
@@ -229,7 +229,7 @@
 *>
 *> \param[out] V2T
 *> \verbatim
-*>          V2T is COMPLEX array, dimension (M-Q)
+*>          V2T is COMPLEX array, dimension (M-Q,M-Q)
 *>          If JOBV2T = 'Y', V2T contains the (M-Q)-by-(M-Q) unitary
 *>          matrix V2**H.
 *> \endverbatim
