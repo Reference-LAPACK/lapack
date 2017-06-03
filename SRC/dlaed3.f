@@ -116,7 +116,7 @@
 *>
 *> \param[in] Q2
 *> \verbatim
-*>          Q2 is DOUBLE PRECISION array, dimension (LDQ2, N)
+*>          Q2 is DOUBLE PRECISION array, dimension (LDQ2*N)
 *>          The first K columns of this matrix contain the non-deflated
 *>          eigenvectors for the split problem.
 *> \endverbatim
