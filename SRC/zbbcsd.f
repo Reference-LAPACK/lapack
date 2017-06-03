@@ -190,7 +190,7 @@
 *>
 *> \param[in,out] V2T
 *> \verbatim
-*>          V2T is COMPLEX*16 array, dimenison (LDV2T,M-Q)
+*>          V2T is COMPLEX*16 array, dimension (LDV2T,M-Q)
 *>          On entry, an (M-Q)-by-(M-Q) matrix. On exit, V2T is
 *>          premultiplied by the conjugate transpose of the right
 *>          singular vector matrix common to [ B12 0 0 ; 0 -I 0 ] and

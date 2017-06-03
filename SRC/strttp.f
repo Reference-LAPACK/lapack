@@ -74,7 +74,7 @@
 *>
 *> \param[out] AP
 *> \verbatim
-*>          AP is REAL array, dimension (N*(N+1)/2
+*>          AP is REAL array, dimension (N*(N+1)/2)
 *>          On exit, the upper or lower triangular matrix A, packed
 *>          columnwise in a linear array. The j-th column of A is stored
 *>          in the array AP as follows:

@@ -241,12 +241,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (7N)
+*>          WORK is REAL array, dimension (7*N)
 *> \endverbatim
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (5N)
+*>          IWORK is INTEGER array, dimension (5*N)
 *> \endverbatim
 *>
 *> \param[out] IFAIL

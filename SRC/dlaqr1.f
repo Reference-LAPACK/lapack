@@ -55,7 +55,7 @@
 *
 *> \param[in] N
 *> \verbatim
-*>          N is integer
+*>          N is INTEGER
 *>              Order of the matrix H. N must be either 2 or 3.
 *> \endverbatim
 *>
@@ -67,7 +67,7 @@
 *>
 *> \param[in] LDH
 *> \verbatim
-*>          LDH is integer
+*>          LDH is INTEGER
 *>              The leading dimension of H as declared in
 *>              the calling procedure.  LDH.GE.N
 *> \endverbatim

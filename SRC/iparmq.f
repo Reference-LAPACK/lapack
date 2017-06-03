@@ -41,7 +41,7 @@
 *
 *> \param[in] ISPEC
 *> \verbatim
-*>          ISPEC is integer scalar
+*>          ISPEC is INTEGER
 *>              ISPEC specifies which tunable parameter IPARMQ should
 *>              return.
 *>
@@ -117,7 +117,7 @@
 *>
 *> \param[in] N
 *> \verbatim
-*>          N is integer scalar
+*>          N is INTEGER
 *>               N is the order of the Hessenberg matrix H.
 *> \endverbatim
 *>
@@ -135,7 +135,7 @@
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is integer scalar
+*>          LWORK is INTEGER
 *>               The amount of workspace available.
 *> \endverbatim
 *

@@ -362,7 +362,7 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension M+3*N.
+*>          IWORK is INTEGER array, dimension (M+3*N).
 *>          On exit,
 *>          IWORK(1) = the numerical rank determined after the initial
 *>                     QR factorization with pivoting. See the descriptions

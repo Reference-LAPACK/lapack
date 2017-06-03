@@ -62,7 +62,7 @@
 *>
 *> \param[in] KACC22
 *> \verbatim
-*>          KACC22 is integer with value 0, 1, or 2.
+*>          KACC22 is INTEGER with value 0, 1, or 2.
 *>             Specifies the computation mode of far-from-diagonal
 *>             orthogonal updates.
 *>        = 0: DLAQR5 does not accumulate reflections and does not
@@ -78,19 +78,19 @@
 *>
 *> \param[in] N
 *> \verbatim
-*>          N is integer scalar
+*>          N is INTEGER
 *>             N is the order of the Hessenberg matrix H upon which this
 *>             subroutine operates.
 *> \endverbatim
 *>
 *> \param[in] KTOP
 *> \verbatim
-*>          KTOP is integer scalar
+*>          KTOP is INTEGER
 *> \endverbatim
 *>
 *> \param[in] KBOT
 *> \verbatim
-*>          KBOT is integer scalar
+*>          KBOT is INTEGER
 *>             These are the first and last rows and columns of an
 *>             isolated diagonal block upon which the QR sweep is to be
 *>             applied. It is assumed without a check that
@@ -101,7 +101,7 @@
 *>
 *> \param[in] NSHFTS
 *> \verbatim
-*>          NSHFTS is integer scalar
+*>          NSHFTS is INTEGER
 *>             NSHFTS gives the number of simultaneous shifts.  NSHFTS
 *>             must be positive and even.
 *> \endverbatim
@@ -131,7 +131,7 @@
 *>
 *> \param[in] LDH
 *> \verbatim
-*>          LDH is integer scalar
+*>          LDH is INTEGER
 *>             LDH is the leading dimension of H just as declared in the
 *>             calling procedure.  LDH.GE.MAX(1,N).
 *> \endverbatim
@@ -159,7 +159,7 @@
 *>
 *> \param[in] LDZ
 *> \verbatim
-*>          LDZ is integer scalar
+*>          LDZ is INTEGER
 *>             LDA is the leading dimension of Z just as declared in
 *>             the calling procedure. LDZ.GE.N.
 *> \endverbatim
@@ -171,7 +171,7 @@
 *>
 *> \param[in] LDV
 *> \verbatim
-*>          LDV is integer scalar
+*>          LDV is INTEGER
 *>             LDV is the leading dimension of V as declared in the
 *>             calling procedure.  LDV.GE.3.
 *> \endverbatim
@@ -184,14 +184,14 @@
 *>
 *> \param[in] LDU
 *> \verbatim
-*>          LDU is integer scalar
+*>          LDU is INTEGER
 *>             LDU is the leading dimension of U just as declared in the
 *>             in the calling subroutine.  LDU.GE.3*NSHFTS-3.
 *> \endverbatim
 *>
 *> \param[in] NH
 *> \verbatim
-*>          NH is integer scalar
+*>          NH is INTEGER
 *>             NH is the number of columns in array WH available for
 *>             workspace. NH.GE.1.
 *> \endverbatim
@@ -203,14 +203,14 @@
 *>
 *> \param[in] LDWH
 *> \verbatim
-*>          LDWH is integer scalar
+*>          LDWH is INTEGER
 *>             Leading dimension of WH just as declared in the
 *>             calling procedure.  LDWH.GE.3*NSHFTS-3.
 *> \endverbatim
 *>
 *> \param[in] NV
 *> \verbatim
-*>          NV is integer scalar
+*>          NV is INTEGER
 *>             NV is the number of rows in WV agailable for workspace.
 *>             NV.GE.1.
 *> \endverbatim
@@ -223,7 +223,7 @@
 *>
 *> \param[in] LDWV
 *> \verbatim
-*>          LDWV is integer scalar
+*>          LDWV is INTEGER
 *>             LDWV is the leading dimension of WV as declared in the
 *>             in the calling subroutine.  LDWV.GE.NV.
 *> \endverbatim
