@@ -112,14 +112,12 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER work array.
-*>         Dimension must be at least (8 * N)
+*>          IWORK is INTEGER array, dimension (8*N)
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION work array.
-*>         Dimension must be at least (3 * M**2 + 2 * M)
+*>          WORK is DOUBLE PRECISION array, dimension (3*M**2+2*M)
 *> \endverbatim
 *>
 *> \param[out] INFO
