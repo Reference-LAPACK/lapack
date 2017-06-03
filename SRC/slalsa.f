@@ -227,14 +227,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array.
-*>         The dimension must be at least N.
+*>          WORK is REAL array, dimension (N)
 *> \endverbatim
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array.
-*>         The dimension must be at least 3 * N
+*>          IWORK is INTEGER array, dimension (3*N)
 *> \endverbatim
 *>
 *> \param[out] INFO

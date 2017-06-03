@@ -142,7 +142,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension (N*NRHS)
+*>          WORK is COMPLEX*16 array, dimension (N,NRHS)
 *>          This array is used to hold the residual vectors.
 *> \endverbatim
 *>

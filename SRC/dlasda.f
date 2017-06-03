@@ -239,8 +239,7 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array.
-*>         Dimension must be at least (7 * N).
+*>          IWORK is INTEGER array, dimension (7*N)
 *> \endverbatim
 *>
 *> \param[out] INFO
