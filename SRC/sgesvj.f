@@ -54,7 +54,7 @@
 *
 *> \param[in] JOBA
 *> \verbatim
-*>          JOBA is CHARACTER* 1
+*>          JOBA is CHARACTER*1
 *>          Specifies the structure of A.
 *>          = 'L': The input matrix A is lower triangular;
 *>          = 'U': The input matrix A is upper triangular;
