@@ -181,7 +181,6 @@
 *>
 *> \param[out] INFO
 *> \verbatim
-*> \verbatim
 *>          INFO is INTEGER
 *>             =  0:  successful exit
 *>           .GT. 0:  if INFO = i, CLAQR4 failed to compute all of
