@@ -52,7 +52,7 @@
 *
 *> \param[in] JOBA
 *> \verbatim
-*>          JOBA is CHARACTER* 1
+*>          JOBA is CHARACTER*1
 *>          Specifies the structure of A.
 *>          = 'L': The input matrix A is lower triangular;
 *>          = 'U': The input matrix A is upper triangular;
@@ -206,7 +206,7 @@
 *>
 *> \param[in,out] CWORK
 *> \verbatim
-*>          CWORK is COMPLEX*16 array, dimension max(1,LWORK).
+*>          CWORK is COMPLEX*16 array, dimension (max(1,LWORK))
 *>          Used as workspace.
 *>          If on entry LWORK .EQ. -1, then a workspace query is assumed and
 *>          no computation is done; CWORK(1) is set to the minial (and optimal)
@@ -221,7 +221,7 @@
 *>
 *> \param[in,out] RWORK
 *> \verbatim
-*>          RWORK is DOUBLE PRECISION array, dimension max(6,LRWORK).
+*>          RWORK is DOUBLE PRECISION array, dimension (max(6,LRWORK))
 *>          On entry,
 *>          If JOBU .EQ. 'C' :
 *>          RWORK(1) = CTOL, where CTOL defines the threshold for convergence.

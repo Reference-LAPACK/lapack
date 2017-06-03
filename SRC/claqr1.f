@@ -56,7 +56,7 @@
 *>
 *> \param[in] H
 *> \verbatim
-*>          H is COMPLEX array of dimension (LDH,N)
+*>          H is COMPLEX array, dimension (LDH,N)
 *>              The 2-by-2 or 3-by-3 matrix H in (*).
 *> \endverbatim
 *>
@@ -81,7 +81,7 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is COMPLEX array of dimension N
+*>          V is COMPLEX array, dimension (N)
 *>              A scalar multiple of the first column of the
 *>              matrix K in (*).
 *> \endverbatim

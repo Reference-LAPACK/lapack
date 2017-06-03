@@ -190,7 +190,7 @@
 *>
 *> \param[out] IDXP
 *> \verbatim
-*>          IDXP is INTEGER array dimension(N)
+*>          IDXP is INTEGER array, dimension(N)
 *>         This will contain the permutation used to place deflated
 *>         values of D at the end of the array. On output IDXP(2:K)
 *>         points to the nondeflated D-values and IDXP(K+1:N)
@@ -199,14 +199,14 @@
 *>
 *> \param[out] IDX
 *> \verbatim
-*>          IDX is INTEGER array dimension(N)
+*>          IDX is INTEGER array, dimension(N)
 *>         This will contain the permutation used to sort the contents of
 *>         D into ascending order.
 *> \endverbatim
 *>
 *> \param[out] IDXC
 *> \verbatim
-*>          IDXC is INTEGER array dimension(N)
+*>          IDXC is INTEGER array, dimension(N)
 *>         This will contain the permutation used to arrange the columns
 *>         of the deflated U matrix into three groups:  the first group
 *>         contains non-zero entries only at and above NL, the second
@@ -216,7 +216,7 @@
 *>
 *> \param[in,out] IDXQ
 *> \verbatim
-*>          IDXQ is INTEGER array dimension(N)
+*>          IDXQ is INTEGER array, dimension(N)
 *>         This contains the permutation which separately sorts the two
 *>         sub-problems in D into ascending order.  Note that entries in
 *>         the first hlaf of this permutation must first be moved one
@@ -226,7 +226,7 @@
 *>
 *> \param[out] COLTYP
 *> \verbatim
-*>          COLTYP is INTEGER array dimension(N)
+*>          COLTYP is INTEGER array, dimension(N)
 *>         As workspace, this will contain a label which will indicate
 *>         which of the following types a column in the U2 matrix or a
 *>         row in the VT2 matrix is:

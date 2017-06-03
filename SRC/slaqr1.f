@@ -61,7 +61,7 @@
 *>
 *> \param[in] H
 *> \verbatim
-*>          H is REAL array of dimension (LDH,N)
+*>          H is REAL array, dimension (LDH,N)
 *>              The 2-by-2 or 3-by-3 matrix H in (*).
 *> \endverbatim
 *>
@@ -95,7 +95,7 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is REAL array of dimension N
+*>          V is REAL array, dimension (N)
 *>              A scalar multiple of the first column of the
 *>              matrix K in (*).
 *> \endverbatim

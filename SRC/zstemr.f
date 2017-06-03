@@ -239,7 +239,7 @@
 *>
 *> \param[out] ISUPPZ
 *> \verbatim
-*>          ISUPPZ is INTEGER ARRAY, dimension ( 2*max(1,M) )
+*>          ISUPPZ is INTEGER array, dimension ( 2*max(1,M) )
 *>          The support of the eigenvectors in Z, i.e., the indices
 *>          indicating the nonzero elements in Z. The i-th computed eigenvector
 *>          is nonzero only in elements ISUPPZ( 2*i-1 ) through

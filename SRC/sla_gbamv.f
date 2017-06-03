@@ -106,7 +106,7 @@
 *>
 *> \param[in] AB
 *> \verbatim
-*>          AB is REAL array of DIMENSION ( LDAB, n )
+*>          AB is REAL array, dimension ( LDAB, n )
 *>           Before entry, the leading m by n part of the array AB must
 *>           contain the matrix of coefficients.
 *>           Unchanged on exit.

@@ -199,7 +199,7 @@
 *>
 *> \param[out] Z
 *> \verbatim
-*>          Z is array, dimension (LDZ, max(1,M) )
+*>          Z is COMPLEX array, dimension (LDZ, max(1,M) )
 *>          If INFO = 0, the first M columns of Z contain the
 *>          orthonormal eigenvectors of the matrix T
 *>          corresponding to the input eigenvalues, with the i-th

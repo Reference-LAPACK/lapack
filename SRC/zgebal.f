@@ -83,10 +83,12 @@
 *>
 *> \param[out] ILO
 *> \verbatim
+*>          ILO is INTEGER
 *> \endverbatim
 *>
 *> \param[out] IHI
 *> \verbatim
+*>          IHI is INTEGER
 *>          ILO and IHI are set to INTEGER such that on exit
 *>          A(i,j) = 0 if i > j and j = 1,...,ILO-1 or I = IHI+1,...,N.
 *>          If JOB = 'N' or 'S', ILO = 1 and IHI = N.

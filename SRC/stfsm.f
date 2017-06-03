@@ -159,7 +159,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, DIMENSION (LDB,N)
+*>          B is REAL array, dimension (LDB,N)
 *>           Before entry,  the leading  m by n part of the array  B must
 *>           contain  the  right-hand  side  matrix  B,  and  on exit  is
 *>           overwritten by the solution matrix  X.

@@ -102,7 +102,7 @@
 *>
 *> \param[out] TAUQ
 *> \verbatim
-*>          TAUQ is COMPLEX array dimension (min(M,N))
+*>          TAUQ is COMPLEX array, dimension (min(M,N))
 *>          The scalar factors of the elementary reflectors which
 *>          represent the unitary matrix Q. See Further Details.
 *> \endverbatim

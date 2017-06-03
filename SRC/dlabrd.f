@@ -110,7 +110,7 @@
 *>
 *> \param[out] TAUQ
 *> \verbatim
-*>          TAUQ is DOUBLE PRECISION array dimension (NB)
+*>          TAUQ is DOUBLE PRECISION array, dimension (NB)
 *>          The scalar factors of the elementary reflectors which
 *>          represent the orthogonal matrix Q. See Further Details.
 *> \endverbatim

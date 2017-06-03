@@ -76,7 +76,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX arrays, dimensions (LDA,N)
+*>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the matrix A in the pair (A, B).
 *>          On exit, the updated matrix A.
 *> \endverbatim
@@ -89,7 +89,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is COMPLEX arrays, dimensions (LDB,N)
+*>          B is COMPLEX array, dimension (LDB,N)
 *>          On entry, the matrix B in the pair (A, B).
 *>          On exit, the updated matrix B.
 *> \endverbatim

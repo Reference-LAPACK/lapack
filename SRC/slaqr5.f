@@ -48,14 +48,14 @@
 *
 *> \param[in] WANTT
 *> \verbatim
-*>          WANTT is logical scalar
+*>          WANTT is LOGICAL
 *>             WANTT = .true. if the quasi-triangular Schur factor
 *>             is being computed.  WANTT is set to .false. otherwise.
 *> \endverbatim
 *>
 *> \param[in] WANTZ
 *> \verbatim
-*>          WANTZ is logical scalar
+*>          WANTZ is LOGICAL
 *>             WANTZ = .true. if the orthogonal Schur factor is being
 *>             computed.  WANTZ is set to .false. otherwise.
 *> \endverbatim
@@ -108,12 +108,12 @@
 *>
 *> \param[in,out] SR
 *> \verbatim
-*>          SR is REAL array of size (NSHFTS)
+*>          SR is REAL array, dimension (NSHFTS)
 *> \endverbatim
 *>
 *> \param[in,out] SI
 *> \verbatim
-*>          SI is REAL array of size (NSHFTS)
+*>          SI is REAL array, dimension (NSHFTS)
 *>             SR contains the real parts and SI contains the imaginary
 *>             parts of the NSHFTS shifts of origin that define the
 *>             multi-shift QR sweep.  On output SR and SI may be
@@ -122,7 +122,7 @@
 *>
 *> \param[in,out] H
 *> \verbatim
-*>          H is REAL array of size (LDH,N)
+*>          H is REAL array, dimension (LDH,N)
 *>             On input H contains a Hessenberg matrix.  On output a
 *>             multi-shift QR sweep with shifts SR(J)+i*SI(J) is applied
 *>             to the isolated diagonal block in rows and columns KTOP
@@ -150,7 +150,7 @@
 *>
 *> \param[in,out] Z
 *> \verbatim
-*>          Z is REAL array of size (LDZ,IHIZ)
+*>          Z is REAL array, dimension (LDZ,IHIZ)
 *>             If WANTZ = .TRUE., then the QR Sweep orthogonal
 *>             similarity transformation is accumulated into
 *>             Z(ILOZ:IHIZ,ILOZ:IHIZ) from the right.
@@ -166,7 +166,7 @@
 *>
 *> \param[out] V
 *> \verbatim
-*>          V is REAL array of size (LDV,NSHFTS/2)
+*>          V is REAL array, dimension (LDV,NSHFTS/2)
 *> \endverbatim
 *>
 *> \param[in] LDV
@@ -178,8 +178,7 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is REAL array of size
-*>             (LDU,3*NSHFTS-3)
+*>          U is REAL array, dimension (LDU,3*NSHFTS-3)
 *> \endverbatim
 *>
 *> \param[in] LDU
@@ -198,7 +197,7 @@
 *>
 *> \param[out] WH
 *> \verbatim
-*>          WH is REAL array of size (LDWH,NH)
+*>          WH is REAL array, dimension (LDWH,NH)
 *> \endverbatim
 *>
 *> \param[in] LDWH
@@ -217,8 +216,7 @@
 *>
 *> \param[out] WV
 *> \verbatim
-*>          WV is REAL array of size
-*>             (LDWV,3*NSHFTS-3)
+*>          WV is REAL array, dimension (LDWV,3*NSHFTS-3)
 *> \endverbatim
 *>
 *> \param[in] LDWV

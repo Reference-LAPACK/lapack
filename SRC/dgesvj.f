@@ -54,7 +54,7 @@
 *
 *> \param[in] JOBA
 *> \verbatim
-*>          JOBA is CHARACTER* 1
+*>          JOBA is CHARACTER*1
 *>          Specifies the structure of A.
 *>          = 'L': The input matrix A is lower triangular;
 *>          = 'U': The input matrix A is upper triangular;
@@ -208,7 +208,7 @@
 *>
 *> \param[in,out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension MAX(6,M+N).
+*>          WORK is DOUBLE PRECISION array, dimension (max(6,M+N))
 *>          On entry :
 *>          If JOBU .EQ. 'C' :
 *>          WORK(1) = CTOL, where CTOL defines the threshold for convergence.
