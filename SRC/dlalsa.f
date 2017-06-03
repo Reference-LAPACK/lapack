@@ -227,14 +227,12 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array.
-*>         The dimension must be at least N.
+*>          WORK is DOUBLE PRECISION array, dimension (N)
 *> \endverbatim
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array.
-*>         The dimension must be at least 3 * N
+*>          IWORK is INTEGER array, dimension (3*N)
 *> \endverbatim
 *>
 *> \param[out] INFO
