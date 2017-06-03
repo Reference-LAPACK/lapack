@@ -67,7 +67,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE array, dimension (LDA,N)
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>          On entry, the input matrix A.
 *>          On exit,  A is overwritten by the balanced matrix.
 *>          If JOB = 'N', A is not referenced.
@@ -94,7 +94,7 @@
 *>
 *> \param[out] SCALE
 *> \verbatim
-*>          SCALE is DOUBLE array, dimension (N)
+*>          SCALE is DOUBLE PRECISION array, dimension (N)
 *>          Details of the permutations and scaling factors applied to
 *>          A.  If P(j) is the index of the row and column interchanged
 *>          with row and column j and D(j) is the scaling factor

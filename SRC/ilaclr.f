@@ -53,7 +53,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is array, dimension (LDA,N)
+*>          A is COMPLEX array, dimension (LDA,N)
 *>          The m by n matrix A.
 *> \endverbatim
 *>
