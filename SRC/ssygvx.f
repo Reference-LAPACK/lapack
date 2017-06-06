@@ -110,7 +110,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, dimension (LDA, N)
+*>          B is REAL array, dimension (LDB, N)
 *>          On entry, the symmetric matrix B.  If UPLO = 'U', the
 *>          leading N-by-N upper triangular part of B contains the
 *>          upper triangular part of the matrix B.  If UPLO = 'L',

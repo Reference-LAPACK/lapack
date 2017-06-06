@@ -87,7 +87,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (N+NNB+1,NNB+3)
+*>          WORK is DOUBLE PRECISION array, dimension (N+NB+1,NB+3)
 *> \endverbatim
 *>
 *> \param[in] NB
