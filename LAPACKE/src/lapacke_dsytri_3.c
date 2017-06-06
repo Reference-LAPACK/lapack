@@ -46,12 +46,14 @@ lapack_int LAPACKE_dsytri_3( int matrix_layout, char uplo, lapack_int n, double*
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    /* Optionally check input matrices for NaNs */
-    if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
-        return -4;
-    }
-    if( LAPACKE_d_nancheck( n-1, e + e_start, 1 ) ) {
-        return -6;
+    if( LAPACKE_get_nancheck_flag() ) {
+        /* Optionally check input matrices for NaNs */
+        if( LAPACKE_dsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
+            return -4;
+        }
+        if( LAPACKE_d_nancheck( n-1, e + e_start, 1 ) ) {
+            return -6;
+        }
     }
 #endif
     /* Query optimal working array(s) size */

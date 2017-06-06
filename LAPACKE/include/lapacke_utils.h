@@ -63,6 +63,10 @@ extern "C" {
 #define IS_Z_NONZERO(x) ( IS_D_NONZERO(*((double*)&x)) || \
                           IS_D_NONZERO(*(((double*)&x)+1)) )
 
+/* Utility methods to switch on/off nancheck */
+void LAPACKE_set_nancheck_flag(lapack_int flag);
+lapack_int LAPACKE_get_nancheck_flag();
+
 /* Error handler */
 void LAPACKE_xerbla( const char *name, lapack_int info );
 

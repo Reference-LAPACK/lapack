@@ -37,15 +37,17 @@ lapack_int LAPACKE_classq( lapack_int n, lapack_complex_float* x,
                            lapack_int incx, float* scale, float* sumsq )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    /* Optionally check input vector `x` and in/out scalars `scale` and `sumsq` for NaNs */
-    if( LAPACKE_c_nancheck( 1+(n-2)*ABS(incx), x, incx ) ) {
-        return -2;
-    }
-    if( LAPACKE_s_nancheck( 1, scale, 1 ) ) {
-        return -4;
-    }
-    if( LAPACKE_s_nancheck( 1, sumsq, 1 ) ) {
-        return -5;
+    if( LAPACKE_get_nancheck_flag() ) {
+        /* Optionally check input vector `x` and in/out scalars `scale` and `sumsq` for NaNs */
+        if( LAPACKE_c_nancheck( 1+(n-2)*ABS(incx), x, incx ) ) {
+            return -2;
+        }
+        if( LAPACKE_s_nancheck( 1, scale, 1 ) ) {
+            return -4;
+        }
+        if( LAPACKE_s_nancheck( 1, sumsq, 1 ) ) {
+            return -5;
+        }
     }
 #endif
     return LAPACKE_classq_work( n, x, incx, scale, sumsq );

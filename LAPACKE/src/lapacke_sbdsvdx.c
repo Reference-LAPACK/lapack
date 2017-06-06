@@ -50,12 +50,14 @@ lapack_int LAPACKE_sbdsvdx( int matrix_layout, char uplo, char jobz, char range,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    /* Optionally check input matrices for NaNs */
-    if( LAPACKE_s_nancheck( n, d, 1 ) ) {
-        return -6;
-    }
-    if( LAPACKE_s_nancheck( n - 1, e, 1 ) ) {
-        return -7;
+    if( LAPACKE_get_nancheck_flag() ) {
+        /* Optionally check input matrices for NaNs */
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
+            return -6;
+        }
+        if( LAPACKE_s_nancheck( n - 1, e, 1 ) ) {
+            return -7;
+        }
     }
 #endif
     /* Allocate memory for work arrays */
