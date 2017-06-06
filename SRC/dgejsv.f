@@ -271,7 +271,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension at least LWORK.
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
 *>          On exit, if N.GT.0 .AND. M.GT.0 (else not referenced),
 *>          WORK(1) = SCALE = WORK(2) / WORK(1) is the scaling factor such
 *>                    that SCALE*SVA(1:N) are the computed singular values

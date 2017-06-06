@@ -271,7 +271,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension at least LWORK.
+*>          WORK is REAL array, dimension (LWORK)
 *>          On exit,
 *>          WORK(1) = SCALE = WORK(2) / WORK(1) is the scaling factor such
 *>                    that SCALE*SVA(1:N) are the computed singular values
