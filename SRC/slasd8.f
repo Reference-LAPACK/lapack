@@ -133,7 +133,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension at least 3 * K
+*>          WORK is REAL array, dimension (3*K)
 *> \endverbatim
 *>
 *> \param[out] INFO

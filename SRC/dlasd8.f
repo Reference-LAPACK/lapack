@@ -133,7 +133,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension at least 3 * K
+*>          WORK is DOUBLE PRECISION array, dimension (3*K)
 *> \endverbatim
 *>
 *> \param[out] INFO
