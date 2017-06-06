@@ -81,7 +81,7 @@
 *>
 *> \param[out] U
 *> \verbatim
-*>          U is DOUBLE PRECISION array, dimension at least (LDQ, N)
+*>          U is DOUBLE PRECISION array, dimension (LDU, N)
 *>         On exit, U contains the left singular vectors.
 *> \endverbatim
 *>
@@ -93,7 +93,7 @@
 *>
 *> \param[out] VT
 *> \verbatim
-*>          VT is DOUBLE PRECISION array, dimension at least (LDVT, M)
+*>          VT is DOUBLE PRECISION array, dimension (LDVT, M)
 *>         On exit, VT**T contains the right singular vectors.
 *> \endverbatim
 *>

@@ -94,8 +94,7 @@
 *>
 *> \param[out] Q
 *> \verbatim
-*>          Q is DOUBLE PRECISION array,
-*>                     dimension at least (LDQ,K).
+*>          Q is DOUBLE PRECISION array, dimension (LDQ,K)
 *> \endverbatim
 *>
 *> \param[in] LDQ

@@ -102,7 +102,7 @@
 *>
 *> \param[in,out] Q
 *> \verbatim
-*>          Q is COMPLEX array, dimension (LDZ,N)
+*>          Q is COMPLEX array, dimension (LDQ,N)
 *>          If WANTQ = .TRUE, on entry, the unitary matrix Q. On exit,
 *>          the updated matrix Q.
 *>          Not referenced if WANTQ = .FALSE..

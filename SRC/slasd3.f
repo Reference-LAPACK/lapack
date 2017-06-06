@@ -94,8 +94,7 @@
 *>
 *> \param[out] Q
 *> \verbatim
-*>          Q is REAL array,
-*>                     dimension at least (LDQ,K).
+*>          Q is REAL array, dimension (LDQ,K)
 *> \endverbatim
 *>
 *> \param[in] LDQ

@@ -103,7 +103,7 @@
 *>
 *> \param[in,out] Q
 *> \verbatim
-*>          Q is REAL array, dimension (LDZ,N)
+*>          Q is REAL array, dimension (LDQ,N)
 *>          On entry, if WANTQ = .TRUE., the orthogonal matrix Q.
 *>          On exit, the updated matrix Q.
 *>          Not referenced if WANTQ = .FALSE..
