@@ -240,7 +240,6 @@
                   NP = NN - 9
                ELSE
                   NP = NN - 2*PP
-                  B2 = Z( NP-2 )
                   GAM = DN1
                   IF( Z( NP-4 ) .GT. Z( NP-2 ) )
      $               RETURN
