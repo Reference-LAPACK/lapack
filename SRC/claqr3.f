@@ -224,7 +224,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension LWORK.
+*>          WORK is COMPLEX array, dimension (LWORK)
 *>          On exit, WORK(1) is set to an estimate of the optimal value
 *>          of LWORK for the given values of N, NW, KTOP and KBOT.
 *> \endverbatim

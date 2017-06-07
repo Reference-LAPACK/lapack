@@ -169,7 +169,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX*16 array, dimension LWORK.
+*>          WORK is COMPLEX*16 array, dimension (LWORK)
 *> \endverbatim
 *>
 *> \param[in] LWORK
