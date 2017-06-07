@@ -49,7 +49,7 @@ lapack_int LAPACKE_zsyrfs( int matrix_layout, char uplo, lapack_int n,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_zsy_nancheck( matrix_layout, uplo, n, a, lda ) ) {
             return -5;

@@ -43,7 +43,7 @@ lapack_int LAPACKE_zlascl( int matrix_layout, char type, lapack_int kl,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         switch (type) {
         case 'G':

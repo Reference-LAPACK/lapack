@@ -49,7 +49,7 @@ lapack_int LAPACKE_zlarfb( int matrix_layout, char side, char trans, char direct
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
                              ( ( LAPACKE_lsame( storev, 'r' ) &&

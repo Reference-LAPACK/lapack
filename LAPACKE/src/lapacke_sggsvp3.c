@@ -51,7 +51,7 @@ lapack_int LAPACKE_sggsvp3( int matrix_layout, char jobu, char jobv, char jobq,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
             return -8;

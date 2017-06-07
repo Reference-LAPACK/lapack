@@ -36,7 +36,7 @@
 lapack_int LAPACKE_cpttrf( lapack_int n, float* d, lapack_complex_float* e )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_s_nancheck( n, d, 1 ) ) {
             return -2;

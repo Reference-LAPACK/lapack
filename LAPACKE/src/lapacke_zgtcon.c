@@ -43,7 +43,7 @@ lapack_int LAPACKE_zgtcon( char norm, lapack_int n,
     lapack_int info = 0;
     lapack_complex_double* work = NULL;
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_d_nancheck( 1, &anorm, 1 ) ) {
             return -8;

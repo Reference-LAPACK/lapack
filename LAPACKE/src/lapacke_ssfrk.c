@@ -43,7 +43,7 @@ lapack_int LAPACKE_ssfrk( int matrix_layout, char transr, char uplo, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         ka = LAPACKE_lsame( trans, 'n' ) ? k : n;
         na = LAPACKE_lsame( trans, 'n' ) ? n : k;

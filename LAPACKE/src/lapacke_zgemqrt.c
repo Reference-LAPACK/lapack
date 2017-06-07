@@ -48,7 +48,7 @@ lapack_int LAPACKE_zgemqrt( int matrix_layout, char side, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         nrows_v = LAPACKE_lsame( side, 'L' ) ? m :
                              ( LAPACKE_lsame( side, 'R' ) ? n : 0 );

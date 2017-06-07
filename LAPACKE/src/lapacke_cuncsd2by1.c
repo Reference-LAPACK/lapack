@@ -55,7 +55,7 @@ lapack_int LAPACKE_cuncsd2by1( int matrix_layout, char jobu1, char jobu2,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         nrows_x11 =  p ;
         nrows_x21 =  m-p ;

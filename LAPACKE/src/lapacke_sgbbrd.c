@@ -46,7 +46,7 @@ lapack_int LAPACKE_sgbbrd( int matrix_layout, char vect, lapack_int m,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_sgb_nancheck( matrix_layout, m, n, kl, ku, ab, ldab ) ) {
             return -8;

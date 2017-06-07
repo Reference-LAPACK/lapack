@@ -58,7 +58,7 @@ lapack_int LAPACKE_cbbcsd( int matrix_layout, char jobu1, char jobu2,
         lapack_layout = LAPACK_ROW_MAJOR;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_s_nancheck( q-1, phi, 1 ) ) {
             return -11;

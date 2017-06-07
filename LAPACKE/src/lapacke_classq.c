@@ -37,7 +37,7 @@ lapack_int LAPACKE_classq( lapack_int n, lapack_complex_float* x,
                            lapack_int incx, float* scale, float* sumsq )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input vector `x` and in/out scalars `scale` and `sumsq` for NaNs */
         if( LAPACKE_c_nancheck( 1+(n-2)*ABS(incx), x, incx ) ) {
             return -2;

@@ -59,7 +59,7 @@ lapack_int LAPACKE_sorcsd( int matrix_layout, char jobu1, char jobu2,
         lapack_layout = LAPACK_ROW_MAJOR;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_sge_nancheck( lapack_layout, p, q, x11, ldx11 ) ) {
             return -11;

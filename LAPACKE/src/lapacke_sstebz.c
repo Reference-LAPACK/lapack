@@ -43,7 +43,7 @@ lapack_int LAPACKE_sstebz( char range, char order, lapack_int n, float vl,
     lapack_int* iwork = NULL;
     float* work = NULL;
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_s_nancheck( 1, &abstol, 1 ) ) {
             return -8;

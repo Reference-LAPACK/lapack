@@ -49,7 +49,7 @@ lapack_int LAPACKE_dlaset( int matrix_layout, char uplo, lapack_int m,
 *****************************************************************************/
 
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         if( LAPACKE_d_nancheck( 1, &alpha, 1 ) ) {
             return -5;
         }

@@ -43,7 +43,7 @@ lapack_int LAPACKE_dtfsm( int matrix_layout, char transr, char side, char uplo,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( IS_D_NONZERO(alpha) ) {
             if( LAPACKE_dtf_nancheck( matrix_layout, transr, uplo, diag, n, a ) ) {

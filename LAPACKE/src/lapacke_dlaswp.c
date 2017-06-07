@@ -42,7 +42,7 @@ lapack_int LAPACKE_dlaswp( int matrix_layout, lapack_int n, double* a,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
     /*****************************************************************************
     *      Disable the check as is below, the check below was checking for NaN

@@ -39,7 +39,7 @@ lapack_int LAPACKE_sptcon( lapack_int n, const float* d, const float* e,
     lapack_int info = 0;
     float* work = NULL;
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_s_nancheck( 1, &anorm, 1 ) ) {
             return -4;

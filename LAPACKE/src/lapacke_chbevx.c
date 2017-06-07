@@ -50,7 +50,7 @@ lapack_int LAPACKE_chbevx( int matrix_layout, char jobz, char range, char uplo,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_chb_nancheck( matrix_layout, uplo, n, kd, ab, ldab ) ) {
             return -7;

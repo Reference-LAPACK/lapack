@@ -38,7 +38,7 @@ lapack_int LAPACKE_clarfg( lapack_int n, lapack_complex_float* alpha,
                            lapack_complex_float* tau )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_c_nancheck( 1, alpha, 1 ) ) {
             return -2;

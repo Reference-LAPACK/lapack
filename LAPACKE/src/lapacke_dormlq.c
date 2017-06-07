@@ -47,7 +47,7 @@ lapack_int LAPACKE_dormlq( int matrix_layout, char side, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         lapack_int r = LAPACKE_lsame( side, 'l' ) ? m : n;
         if( LAPACKE_dge_nancheck( matrix_layout, k, r, a, lda ) ) {

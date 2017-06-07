@@ -36,7 +36,7 @@
 lapack_int LAPACKE_dlasrt( char id, lapack_int n, double* d )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_d_nancheck( n, d, 1 ) ) {
             return -3;

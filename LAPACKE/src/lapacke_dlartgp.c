@@ -37,7 +37,7 @@ lapack_int LAPACKE_dlartgp( double f, double g, double* cs, double* sn,
                             double* r )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_d_nancheck( 1, &f, 1 ) ) {
             return -1;

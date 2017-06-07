@@ -44,7 +44,7 @@ lapack_int LAPACKE_zgbequ( int matrix_layout, lapack_int m, lapack_int n,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_zgb_nancheck( matrix_layout, m, n, kl, ku, ab, ldab ) ) {
             return -6;

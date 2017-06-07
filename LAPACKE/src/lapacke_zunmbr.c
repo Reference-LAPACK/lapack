@@ -49,7 +49,7 @@ lapack_int LAPACKE_zunmbr( int matrix_layout, char vect, char side, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         nq = LAPACKE_lsame( side, 'l' ) ? m : n;
         r = LAPACKE_lsame( vect, 'q' ) ? nq : MIN(nq,k);

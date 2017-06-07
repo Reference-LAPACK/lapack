@@ -38,7 +38,7 @@ lapack_int LAPACKE_cgttrf( lapack_int n, lapack_complex_float* dl,
                            lapack_complex_float* du2, lapack_int* ipiv )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_c_nancheck( n, d, 1 ) ) {
             return -3;

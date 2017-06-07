@@ -32,17 +32,16 @@
 * Generated June, 2017
 *****************************************************************************/
 
-#include <stdio.h>
 #include "lapacke_utils.h"
 
 static lapack_int nancheck_flag = 1;
 
-void LAPACKE_set_nancheck_flag(lapack_int flag ) 
+void LAPACKE_set_nancheck( lapack_int flag ) 
 {
     nancheck_flag = flag;
 }
 
-lapack_int LAPACKE_get_nancheck_flag( ) 
+lapack_int LAPACKE_get_nancheck( ) 
 {
     return nancheck_flag;
 }

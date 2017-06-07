@@ -36,7 +36,7 @@
 lapack_int LAPACKE_slartgp( float f, float g, float* cs, float* sn, float* r )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_s_nancheck( 1, &f, 1 ) ) {
             return -1;

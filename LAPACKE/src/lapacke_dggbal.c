@@ -47,7 +47,7 @@ lapack_int LAPACKE_dggbal( int matrix_layout, char job, lapack_int n, double* a,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_lsame( job, 'p' ) || LAPACKE_lsame( job, 's' ) ||
             LAPACKE_lsame( job, 'b' ) ) {

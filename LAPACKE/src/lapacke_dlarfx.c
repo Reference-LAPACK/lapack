@@ -42,7 +42,7 @@ lapack_int LAPACKE_dlarfx( int matrix_layout, char side, lapack_int m,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_dge_nancheck( matrix_layout, m, n, c, ldc ) ) {
             return -7;

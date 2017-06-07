@@ -37,7 +37,7 @@ lapack_int LAPACKE_slacn2( lapack_int n, float* v, float* x, lapack_int* isgn,
                            float* est, lapack_int* kase, lapack_int* isave )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_s_nancheck( 1, est, 1 ) ) {
             return -5;

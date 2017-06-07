@@ -50,7 +50,7 @@ lapack_int LAPACKE_dbdsvdx( int matrix_layout, char uplo, char jobz, char range,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_d_nancheck( n, d, 1 ) ) {
             return -6;

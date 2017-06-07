@@ -36,7 +36,7 @@
 double LAPACKE_dlapy3( double x, double y, double z )
 {
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_d_nancheck( 1, &x, 1 ) ) {
             return -1;

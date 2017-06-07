@@ -54,7 +54,7 @@ lapack_int LAPACKE_zgtsvx( int matrix_layout, char fact, char trans,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_zge_nancheck( matrix_layout, n, nrhs, b, ldb ) ) {
             return -14;

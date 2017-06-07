@@ -44,7 +44,7 @@ lapack_int LAPACKE_strexc( int matrix_layout, char compq, lapack_int n, float* t
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( LAPACKE_lsame( compq, 'v' ) ) {
             if( LAPACKE_sge_nancheck( matrix_layout, n, n, q, ldq ) ) {

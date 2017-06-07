@@ -44,7 +44,7 @@ lapack_int LAPACKE_ztfsm( int matrix_layout, char transr, char side, char uplo,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    if( LAPACKE_get_nancheck_flag() ) {
+    if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
         if( IS_Z_NONZERO(alpha) ) {
             if( LAPACKE_ztf_nancheck( matrix_layout, transr, uplo, diag, n, a ) ) {
