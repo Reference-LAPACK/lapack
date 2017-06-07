@@ -34,14 +34,30 @@
 
 #include "lapacke_utils.h"
 
-static lapack_int nancheck_flag = 1;
+static lapack_int nancheck_flag = -1;
+
+
+/* App can set this flag with API call */
+/* This flag is based on environment variable LAPACK_NANCHECK */
 
 void LAPACKE_set_nancheck( lapack_int flag ) 
 {
-    nancheck_flag = flag;
+    nancheck_flag = ( flag ) ? 1 : 0; 
 }
 
 lapack_int LAPACKE_get_nancheck( ) 
 {
+    if ( nancheck_flag != -1 ) 
+	return nancheck_flag;
+
+    /* Check environment variable, once and only once */ 
+    char* env = getenv("LAPACKE_NANCHECK");
+    if ( !env ) {
+	nancheck_flag = 1;
+    } else {
+        int envval = (int)atoi(env);
+	nancheck_flag = ( envval ) ? 1 : 0; 
+    } 
+
     return nancheck_flag;
 }
