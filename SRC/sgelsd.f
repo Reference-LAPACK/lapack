@@ -89,7 +89,7 @@
 *>          of the matrices B and X. NRHS >= 0.
 *> \endverbatim
 *>
-*> \param[in] A
+*> \param[in,out] A
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.

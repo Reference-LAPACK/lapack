@@ -144,7 +144,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension LWORK.
+*>          WORK is DOUBLE PRECISION array, dimension (LWORK)
 *> \endverbatim
 *>
 *> \param[in] LWORK

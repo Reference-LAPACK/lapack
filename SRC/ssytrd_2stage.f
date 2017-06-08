@@ -144,7 +144,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension LWORK.
+*>          WORK is REAL array, dimension (LWORK)
 *> \endverbatim
 *>
 *> \param[in] LWORK

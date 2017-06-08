@@ -103,7 +103,7 @@
 *>         The leading dimension of the array Q.  LDQ >= K.
 *> \endverbatim
 *>
-*> \param[in] DSIGMA
+*> \param[in,out] DSIGMA
 *> \verbatim
 *>          DSIGMA is DOUBLE PRECISION array, dimension(K)
 *>         The first K elements of this array contain the old roots
@@ -124,7 +124,7 @@
 *>         The leading dimension of the array U.  LDU >= N.
 *> \endverbatim
 *>
-*> \param[in,out] U2
+*> \param[in] U2
 *> \verbatim
 *>          U2 is DOUBLE PRECISION array, dimension (LDU2, N)
 *>         The first K columns of this matrix contain the non-deflated
@@ -186,7 +186,7 @@
 *>         type is any column which has been deflated.
 *> \endverbatim
 *>
-*> \param[in] Z
+*> \param[in,out] Z
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension (K)
 *>         The first K elements of this array contain the components

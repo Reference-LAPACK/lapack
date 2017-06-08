@@ -123,7 +123,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension LWORK.
+*>          WORK is REAL array, dimension (LWORK)
 *>          On exit, if INFO = 0, or if LWORK=-1, 
 *>          WORK(1) returns the size of LWORK.
 *> \endverbatim
