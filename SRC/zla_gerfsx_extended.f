@@ -195,8 +195,7 @@
 *>
 *> \param[in,out] ERRS_N
 *> \verbatim
-*>          ERRS_N is DOUBLE PRECISION array, dimension
-*>                    (NRHS, N_ERR_BNDS)
+*>          ERRS_N is DOUBLE PRECISION array, dimension (NRHS, N_ERR_BNDS)
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     normwise relative error, which is defined as follows:
@@ -242,8 +241,7 @@
 *>
 *> \param[in,out] ERRS_C
 *> \verbatim
-*>          ERRS_C is DOUBLE PRECISION array, dimension
-*>                    (NRHS, N_ERR_BNDS)
+*>          ERRS_C is DOUBLE PRECISION array, dimension (NRHS, N_ERR_BNDS)
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     componentwise relative error, which is defined as follows:
