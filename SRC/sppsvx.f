@@ -147,8 +147,7 @@
 *>
 *> \param[in,out] AFP
 *> \verbatim
-*>          AFP is REAL array, dimension
-*>                            (N*(N+1)/2)
+*>          AFP is REAL array, dimension (N*(N+1)/2)
 *>          If FACT = 'F', then AFP is an input argument and on entry
 *>          contains the triangular factor U or L from the Cholesky
 *>          factorization A = U**T*U or A = L*L**T, in the same storage

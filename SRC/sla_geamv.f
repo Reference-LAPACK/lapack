@@ -138,8 +138,8 @@
 *>
 *> \param[in,out] Y
 *> \verbatim
-*>          Y is REAL
-*>           Array of DIMENSION at least
+*>          Y is REAL array,
+*>           dimension at least
 *>           ( 1 + ( m - 1 )*abs( INCY ) ) when TRANS = 'N' or 'n'
 *>           and at least
 *>           ( 1 + ( n - 1 )*abs( INCY ) ) otherwise.

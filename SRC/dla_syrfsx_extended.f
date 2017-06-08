@@ -162,8 +162,7 @@
 *>
 *> \param[in,out] Y
 *> \verbatim
-*>          Y is DOUBLE PRECISION array, dimension
-*>                    (LDY,NRHS)
+*>          Y is DOUBLE PRECISION array, dimension (LDY,NRHS)
 *>     On entry, the solution matrix X, as computed by DSYTRS.
 *>     On exit, the improved solution matrix Y.
 *> \endverbatim
@@ -195,8 +194,7 @@
 *>
 *> \param[in,out] ERR_BNDS_NORM
 *> \verbatim
-*>          ERR_BNDS_NORM is DOUBLE PRECISION array, dimension
-*>                    (NRHS, N_ERR_BNDS)
+*>          ERR_BNDS_NORM is DOUBLE PRECISION array, dimension (NRHS, N_ERR_BNDS)
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     normwise relative error, which is defined as follows:
@@ -242,8 +240,7 @@
 *>
 *> \param[in,out] ERR_BNDS_COMP
 *> \verbatim
-*>          ERR_BNDS_COMP is DOUBLE PRECISION array, dimension
-*>                    (NRHS, N_ERR_BNDS)
+*>          ERR_BNDS_COMP is DOUBLE PRECISION array, dimension (NRHS, N_ERR_BNDS)
 *>     For each right-hand side, this array contains information about
 *>     various error bounds and condition numbers corresponding to the
 *>     componentwise relative error, which is defined as follows:

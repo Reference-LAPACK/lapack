@@ -123,8 +123,7 @@
 *>
 *> \param[in,out] AFP
 *> \verbatim
-*>          AFP is REAL array, dimension
-*>                            (N*(N+1)/2)
+*>          AFP is REAL array, dimension (N*(N+1)/2)
 *>          If FACT = 'F', then AFP is an input argument and on entry
 *>          contains the block diagonal matrix D and the multipliers used
 *>          to obtain the factor U or L from the factorization
