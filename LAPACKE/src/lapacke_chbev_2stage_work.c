@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native middle-level C interface to LAPACK function chbev_2stage
 * Author: Intel Corporation
-* Generated December 2016
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"

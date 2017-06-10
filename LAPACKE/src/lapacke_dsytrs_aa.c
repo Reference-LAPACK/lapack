@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function dsytrs_aa
 * Author: Intel Corporation
-* Generated December 2016
+* Generated June 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
