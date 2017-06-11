@@ -48,5 +48,5 @@ endif()
 list(REMOVE_DUPLICATES SOURCES)
 
 add_library(tmglib ${SOURCES})
-target_link_libraries(tmglib ${LAPACK_LIBRARIES})
+target_link_libraries(tmglib ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
 lapack_install_library(tmglib)
