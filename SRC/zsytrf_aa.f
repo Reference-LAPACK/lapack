@@ -159,7 +159,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            LQUERY, UPPER
-      INTEGER            J, LWKOPT, IINFO
+      INTEGER            J, LWKOPT
       INTEGER            NB, MJ, NJ, K1, K2, J1, J2, J3, JB
       COMPLEX*16         ALPHA
 *     ..
@@ -214,9 +214,6 @@
       ENDIF
       IPIV( 1 ) = 1
       IF ( N.EQ.1 ) THEN
-         IF ( A( 1, 1 ).EQ.ZERO ) THEN
-            INFO = 1
-         END IF
          RETURN
       END IF
 *
@@ -260,11 +257,7 @@
 *
          CALL ZLASYF_AA( UPLO, 2-K1, N-J, JB,
      $                   A( MAX(1, J), J+1 ), LDA,
-     $                   IPIV( J+1 ), WORK, N, WORK( N*NB+1 ),
-     $                      IINFO )
-         IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
-             INFO = IINFO+J
-         ENDIF
+     $                   IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
 *
 *        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
@@ -383,10 +376,7 @@
 *
          CALL ZLASYF_AA( UPLO, 2-K1, N-J, JB,
      $                   A( J+1, MAX(1, J) ), LDA,
-     $                   IPIV( J+1 ), WORK, N, WORK( N*NB+1 ), IINFO)
-         IF( (IINFO.GT.0) .AND. (INFO.EQ.0) ) THEN
-            INFO = IINFO+J
-         ENDIF
+     $                   IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
 *
 *        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
