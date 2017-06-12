@@ -71,7 +71,7 @@
 *>         storage spacing between elements of DY
 *> \endverbatim
 *>
-*> \param[in,out] DPARAM
+*> \param[in] DPARAM
 *> \verbatim
 *>          DPARAM is DOUBLE PRECISION array, dimension (5)
 *>     DPARAM(1)=DFLAG

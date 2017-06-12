@@ -72,7 +72,7 @@
 *>         storage spacing between elements of SY
 *> \endverbatim
 *>
-*> \param[in,out] SPARAM
+*> \param[in] SPARAM
 *> \verbatim
 *>          SPARAM is REAL array, dimension (5)
 *>     SPARAM(1)=SFLAG
