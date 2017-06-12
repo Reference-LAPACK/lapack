@@ -51,8 +51,7 @@
 *>
 *> \param[in,out] DX
 *> \verbatim
-*>          DX is DOUBLE PRECISION array, dimension N
-*>         double precision vector with N elements
+*>          DX is DOUBLE PRECISION array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 *> \endverbatim
 *>
 *> \param[in] INCX
@@ -63,8 +62,7 @@
 *>
 *> \param[in,out] DY
 *> \verbatim
-*>          DY is DOUBLE PRECISION array, dimension N
-*>         double precision vector with N elements
+*>          DY is DOUBLE PRECISION array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
 *> \endverbatim
 *>
 *> \param[in] INCY

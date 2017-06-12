@@ -52,8 +52,7 @@
 *>
 *> \param[in,out] SX
 *> \verbatim
-*>          SX is REAL array, dimension N
-*>         double precision vector with N elements
+*>          SX is REAL array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 *> \endverbatim
 *>
 *> \param[in] INCX
@@ -64,8 +63,7 @@
 *>
 *> \param[in,out] SY
 *> \verbatim
-*>          SY is REAL array, dimension N
-*>         double precision vector with N elements
+*>          SY is REAL array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
 *> \endverbatim
 *>
 *> \param[in] INCY
