@@ -23,6 +23,29 @@
 *>    DROTG construct givens plane rotation.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] DA
+*> \verbatim
+*>          DA is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[in] DB
+*> \verbatim
+*>          DB is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is DOUBLE PRECISION
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

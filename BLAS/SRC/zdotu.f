@@ -28,6 +28,37 @@
 *>
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in] ZX
+*> \verbatim
+*>          ZX is REAL array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of ZX
+*> \endverbatim
+*>
+*> \param[in] ZY
+*> \verbatim
+*>          ZY is REAL array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>         storage spacing between elements of ZY
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

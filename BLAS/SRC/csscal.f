@@ -27,6 +27,32 @@
 *>    CSSCAL scales a complex vector by a real constant.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in] SA
+*> \verbatim
+*>          SA is REAL
+*>           On entry, SA specifies the scalar alpha.
+*> \endverbatim
+*>
+*> \param[in,out] CX
+*> \verbatim
+*>          CX is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of CX
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

@@ -26,6 +26,26 @@
 *>    ISAMAX finds the index of the first element having maximum absolute value.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in] SX
+*> \verbatim
+*>          SX is REAL array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of SX
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

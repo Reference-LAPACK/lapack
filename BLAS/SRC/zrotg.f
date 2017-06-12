@@ -24,6 +24,29 @@
 *>    ZROTG determines a double complex Givens rotation.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] CA
+*> \verbatim
+*>          CA is COMPLEX*16
+*> \endverbatim
+*>
+*> \param[in] CB
+*> \verbatim
+*>          CB is COMPLEX*16
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is DOUBLE PRECISION
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is COMPLEX*16
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

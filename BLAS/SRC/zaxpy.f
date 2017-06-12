@@ -27,6 +27,43 @@
 *>    ZAXPY constant times a vector plus a vector.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in] ZA
+*> \verbatim
+*>          ZA is COMPLEX*16
+*>           On entry, ZA specifies the scalar alpha.
+*> \endverbatim
+*>
+*> \param[in] ZX
+*> \verbatim
+*>          ZX is COMPLEX*16 array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of ZX
+*> \endverbatim
+*>
+*> \param[in,out] ZY
+*> \verbatim
+*>          ZY is COMPLEX*16 array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>         storage spacing between elements of ZY
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

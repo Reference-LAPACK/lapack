@@ -23,8 +23,39 @@
 *>
 *> \verbatim
 *>
-*>    interchanges two vectors.
-*>    uses unrolled loops for increments equal one.
+*>    DSWAP interchanges two vectors.
+*>    uses unrolled loops for increments equal to 1.
+*> \endverbatim
+*
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in,out] DX
+*> \verbatim
+*>          DX is DOUBLE PRECISION array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of DX
+*> \endverbatim
+*>
+*> \param[in,out] DY
+*> \verbatim
+*>          DY is DOUBLE PRECISION array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>         storage spacing between elements of DY
 *> \endverbatim
 *
 *  Authors:

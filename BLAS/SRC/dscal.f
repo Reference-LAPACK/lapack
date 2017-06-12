@@ -25,7 +25,33 @@
 *> \verbatim
 *>
 *>    DSCAL scales a vector by a constant.
-*>    uses unrolled loops for increment equal to one.
+*>    uses unrolled loops for increment equal to 1.
+*> \endverbatim
+*
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in] DA
+*> \verbatim
+*>          DA is DOUBLE PRECISION
+*>           On entry, DA specifies the scalar alpha.
+*> \endverbatim
+*>
+*> \param[in,out] DX
+*> \verbatim
+*>          DX is DOUBLE PRECISION array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of DX
 *> \endverbatim
 *
 *  Authors:
