@@ -214,7 +214,7 @@
          RETURN
       END IF
 *
-*     Adjubst block size based on the workspace size
+*     Adjust block size based on the workspace size
 *
       IF( LWORK.LT.((1+NB)*N) ) THEN
          NB = ( LWORK-N ) / N
