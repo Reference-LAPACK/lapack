@@ -108,7 +108,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
+*> \date June 2017
 *
 *> \ingroup doubleOTHERauxiliary
 *
@@ -121,10 +121,10 @@
 *  =====================================================================
       SUBROUTINE DLAQR1( N, H, LDH, SR1, SI1, SR2, SI2, V )
 *
-*  -- LAPACK auxiliary routine (version 3.7.0) --
+*  -- LAPACK auxiliary routine (version 3.7.1) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
+*     June 2017
 *
 *     .. Scalar Arguments ..
       DOUBLE PRECISION   SI1, SI2, SR1, SR2
