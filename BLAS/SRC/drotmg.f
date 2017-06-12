@@ -65,9 +65,9 @@
 *>          DY1 is DOUBLE PRECISION
 *> \endverbatim
 *>
-*> \param[in,out] DPARAM
+*> \param[out] DPARAM
 *> \verbatim
-*>          DPARAM is DOUBLE PRECISION array, dimension 5
+*>          DPARAM is DOUBLE PRECISION array, dimension (5)
 *>     DPARAM(1)=DFLAG
 *>     DPARAM(2)=DH11
 *>     DPARAM(3)=DH21

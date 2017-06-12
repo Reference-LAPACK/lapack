@@ -27,6 +27,26 @@
 *>    uses unrolled loops for increment equal to one.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in] SX
+*> \verbatim
+*>          SX is REAL array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of SX
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

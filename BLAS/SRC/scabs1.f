@@ -23,6 +23,14 @@
 *> SCABS1 computes |Re(.)| + |Im(.)| of a complex number
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] Z
+*> \verbatim
+*>          Z is COMPLEX
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

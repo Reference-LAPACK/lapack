@@ -29,6 +29,27 @@
 *>    DZNRM2 := sqrt( x**H*x )
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in] X
+*> \verbatim
+*>          X is COMPLEX*16 array, dimension (N)
+*>         complex vector with N elements
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of X
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

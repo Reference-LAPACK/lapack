@@ -26,6 +26,37 @@
 *>    CCOPY copies a vector x to a vector y.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] N
+*> \verbatim
+*>          N is INTEGER
+*>         number of elements in input vector(s)
+*> \endverbatim
+*>
+*> \param[in] CX
+*> \verbatim
+*>          CX is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*> \endverbatim
+*>
+*> \param[in] INCX
+*> \verbatim
+*>          INCX is INTEGER
+*>         storage spacing between elements of CX
+*> \endverbatim
+*>
+*> \param[out] CY
+*> \verbatim
+*>          CY is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
+*> \endverbatim
+*>
+*> \param[in] INCY
+*> \verbatim
+*>          INCY is INTEGER
+*>         storage spacing between elements of CY
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

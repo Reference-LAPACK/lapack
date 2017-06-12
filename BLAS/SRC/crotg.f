@@ -24,6 +24,29 @@
 *> CROTG determines a complex Givens rotation.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] CA
+*> \verbatim
+*>          CA is COMPLEX
+*> \endverbatim
+*>
+*> \param[in] CB
+*> \verbatim
+*>          CB is COMPLEX
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is REAL
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is COMPLEX
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

@@ -65,9 +65,9 @@
 *>          SY1 is REAL
 *> \endverbatim
 *>
-*> \param[in,out] SPARAM
+*> \param[out] SPARAM
 *> \verbatim
-*>          SPARAM is REAL array, dimension 5
+*>          SPARAM is REAL array, dimension (5)
 *>     SPARAM(1)=SFLAG
 *>     SPARAM(2)=SH11
 *>     SPARAM(3)=SH21

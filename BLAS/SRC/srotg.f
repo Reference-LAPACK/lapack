@@ -23,6 +23,29 @@
 *>    SROTG construct givens plane rotation.
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] SA
+*> \verbatim
+*>          SA is REAL
+*> \endverbatim
+*>
+*> \param[in] SB
+*> \verbatim
+*>          SB is REAL
+*> \endverbatim
+*>
+*> \param[out] C
+*> \verbatim
+*>          C is REAL
+*> \endverbatim
+*>
+*> \param[out] S
+*> \verbatim
+*>          S is REAL
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *

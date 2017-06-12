@@ -24,6 +24,14 @@
 *> DCABS1 computes |Re(.)| + |Im(.)| of a double complex number
 *> \endverbatim
 *
+*  Arguments:
+*  ==========
+*
+*> \param[in] Z
+*> \verbatim
+*>          Z is COMPLEX*16
+*> \endverbatim
+*
 *  Authors:
 *  ========
 *
