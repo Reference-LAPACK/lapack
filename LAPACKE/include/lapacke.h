@@ -2398,6 +2398,28 @@ float LAPACKE_clanhe( int matrix_layout, char norm, char uplo, lapack_int n,
 double LAPACKE_zlanhe( int matrix_layout, char norm, char uplo, lapack_int n,
                            const lapack_complex_double* a, lapack_int lda );
 
+lapack_int LAPACKE_clacrm( int matrix_layout, lapack_int m, lapack_int n,
+                          const lapack_complex_float* a,
+                          lapack_int lda, const float* b,
+                          lapack_int ldb, lapack_complex_float* c,
+                          lapack_int ldc );
+lapack_int LAPACKE_zlacrm( int matrix_layout, lapack_int m, lapack_int n,
+                           const lapack_complex_double* a,
+                           lapack_int lda, const double* b,
+                           lapack_int ldb, lapack_complex_double* c,
+                           lapack_int ldc );
+
+lapack_int LAPACKE_clarcm( int matrix_layout, lapack_int m, lapack_int n,
+                          const float* a, lapack_int lda,
+                          const lapack_complex_float* b,
+                          lapack_int ldb, lapack_complex_float* c,
+                          lapack_int ldc );
+lapack_int LAPACKE_zlarcm( int matrix_layout, lapack_int m, lapack_int n,
+                           const double* a, lapack_int lda,
+                           const lapack_complex_double* b,
+                           lapack_int ldb, lapack_complex_double* c,
+                           lapack_int ldc );
+
 float LAPACKE_slansy( int matrix_layout, char norm, char uplo, lapack_int n,
                            const float* a, lapack_int lda );
 double LAPACKE_dlansy( int matrix_layout, char norm, char uplo, lapack_int n,
@@ -7585,6 +7607,28 @@ float LAPACKE_clanhe_work( int matrix_layout, char norm, char uplo,
 double LAPACKE_zlanhe_work( int matrix_layout, char norm, char uplo,
                                 lapack_int n, const lapack_complex_double* a,
                                 lapack_int lda, double* work );
+
+lapack_int LAPACKE_clacrm_work( int matrix_layout, lapack_int m, lapack_int n,
+                                const lapack_complex_float* a,
+                                lapack_int lda, const float* b,
+                                lapack_int ldb, lapack_complex_float* c,
+                                lapack_int ldc, float* work );
+lapack_int LAPACKE_zlacrm_work( int matrix_layout, lapack_int m, lapack_int n,
+                                const lapack_complex_double* a,
+                                lapack_int lda, const double* b,
+                                lapack_int ldb, lapack_complex_double* c,
+                                lapack_int ldc, double* work );
+
+lapack_int LAPACKE_clarcm_work( int matrix_layout, lapack_int m, lapack_int n,
+                                const float* a, lapack_int lda,
+                                const lapack_complex_float* b,
+                                lapack_int ldb, lapack_complex_float* c,
+                                lapack_int ldc, float* work );
+lapack_int LAPACKE_zlarcm_work( int matrix_layout, lapack_int m, lapack_int n,
+                                const double* a, lapack_int lda,
+                                const lapack_complex_double* b,
+                                lapack_int ldb, lapack_complex_double* c,
+                                lapack_int ldc, double* work );
 
 float LAPACKE_slansy_work( int matrix_layout, char norm, char uplo,
                                 lapack_int n, const float* a, lapack_int lda,
@@ -13347,6 +13391,10 @@ lapack_int LAPACKE_zhegv_2stage_work( int matrix_layout, lapack_int itype, char 
 #define LAPACK_zlange LAPACK_GLOBAL(zlange,ZLANGE)
 #define LAPACK_clanhe LAPACK_GLOBAL(clanhe,CLANHE)
 #define LAPACK_zlanhe LAPACK_GLOBAL(zlanhe,ZLANHE)
+#define LAPACK_clarcm LAPACK_GLOBAL(clarcm,CLARCM)
+#define LAPACK_zlarcm LAPACK_GLOBAL(zlarcm,ZLARCM)
+#define LAPACK_clacrm LAPACK_GLOBAL(clacrm,CLACRM)
+#define LAPACK_zlacrm LAPACK_GLOBAL(zlacrm,ZLACRM)
 #define LAPACK_slansy LAPACK_GLOBAL(slansy,SLANSY)
 #define LAPACK_dlansy LAPACK_GLOBAL(dlansy,DLANSY)
 #define LAPACK_clansy LAPACK_GLOBAL(clansy,CLANSY)
@@ -17896,6 +17944,22 @@ float LAPACK_clanhe( char* norm, char* uplo, lapack_int* n,
                     const lapack_complex_float* a, lapack_int* lda, float* work );
 double LAPACK_zlanhe( char* norm, char* uplo, lapack_int* n,
                     const lapack_complex_double* a, lapack_int* lda, double* work );
+void LAPACK_clarcm( lapack_int* m, lapack_int* n, const float* a,
+                    lapack_int* lda, const lapack_complex_float* b,
+                    lapack_int* ldb, lapack_complex_float* c,
+                    lapack_int* ldc, float* work );
+void LAPACK_zlarcm( lapack_int* m, lapack_int* n, const double* a,
+                    lapack_int* lda, const lapack_complex_double* b,
+                    lapack_int* ldb, lapack_complex_double* c,
+                    lapack_int* ldc, double* work );
+void LAPACK_clacrm( lapack_int* m, lapack_int* n, const lapack_complex_float* a,
+                    lapack_int* lda, const float* b,
+                    lapack_int* ldb, lapack_complex_float* c,
+                    lapack_int* ldc, float* work );
+void LAPACK_zlacrm( lapack_int* m, lapack_int* n, const lapack_complex_double* a,
+                    lapack_int* lda, const double* b,
+                    lapack_int* ldb, lapack_complex_double* c,
+                    lapack_int* ldc, double* work );
 float LAPACK_slansy( char* norm, char* uplo, lapack_int* n, const float* a,
                     lapack_int* lda, float* work );
 double LAPACK_dlansy( char* norm, char* uplo, lapack_int* n, const double* a,
