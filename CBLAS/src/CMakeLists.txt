@@ -120,5 +120,9 @@ set_target_properties(
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
+target_include_directories(cblas PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+  $<INSTALL_INTERFACE:include>
+)
 target_link_libraries(cblas PRIVATE ${BLAS_LIBRARIES})
 lapack_install_library(cblas)
