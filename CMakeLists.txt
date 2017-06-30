@@ -8,6 +8,15 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
 endif()
 
+string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_UPPER)
+if(${CMAKE_BUILD_TYPE_UPPER} STREQUAL "COVERAGE")
+  message(STATUS "Adding coverage")
+  find_package(codecov)
+endif()
+
+# By default static library
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
 project(LAPACK Fortran C)
 
 set(LAPACK_MAJOR_VERSION 3)
@@ -111,12 +120,13 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # --------------------------------------------------
 # Testing
-
+option(BUILD_TESTING "Build tests" OFF)
 enable_testing()
 include(CTest)
 enable_testing()
-# --------------------------------------------------
+message(STATUS "Build tests: ${BUILD_TESTING}")
 
+# --------------------------------------------------
 # Organize output files.  On Windows this also keeps .dll files next
 # to the .exe files that need them, making tests easy to run.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/bin)
@@ -127,12 +137,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LAPACK_BINARY_DIR}/lib)
 # Check for any necessary platform specific compiler flags
 include(CheckLAPACKCompilerFlags)
 CheckLAPACKCompilerFlags()
-
-string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_UPPER)
-if(${CMAKE_BUILD_TYPE_UPPER} STREQUAL "COVERAGE")
-  message(STATUS "Adding coverage")
-  find_package(codecov)
-endif()
 
 # --------------------------------------------------
 # Check second function
@@ -148,12 +152,6 @@ message(STATUS "--> Will use second_${TIME_FUNC}.f and dsecnd_${TIME_FUNC}.f as 
 
 set(SECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/second_${TIME_FUNC}.f)
 set(DSECOND_SRC ${LAPACK_SOURCE_DIR}/INSTALL/dsecnd_${TIME_FUNC}.f)
-
-# By default static library
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-
-option(BUILD_TESTING "Build tests" OFF)
-message(STATUS "Build tests: ${BUILD_TESTING}")
 
 # deprecated LAPACK and LAPACKE routines
 option(BUILD_DEPRECATED "Build deprecated routines" OFF)
