@@ -1,5 +1,18 @@
 cmake_minimum_required(VERSION 2.8.10)
 
+project(LAPACK Fortran C)
+
+set(LAPACK_MAJOR_VERSION 3)
+set(LAPACK_MINOR_VERSION 7)
+set(LAPACK_PATCH_VERSION 1)
+set(
+  LAPACK_VERSION
+  ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
+  )
+
+# Add the CMake directory for custon CMake modules
+set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
+
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to 'Release' as none was specified.")
@@ -16,16 +29,6 @@ endif()
 
 # By default static library
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-
-project(LAPACK Fortran C)
-
-set(LAPACK_MAJOR_VERSION 3)
-set(LAPACK_MINOR_VERSION 7)
-set(LAPACK_PATCH_VERSION 1)
-set(
-  LAPACK_VERSION
-  ${LAPACK_MAJOR_VERSION}.${LAPACK_MINOR_VERSION}.${LAPACK_PATCH_VERSION}
-  )
 
 include(GNUInstallDirs)
 
@@ -51,8 +54,6 @@ configure_file(
   @ONLY
 )
 
-# Add the CMake directory for custon CMake modules
-set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 
