@@ -493,6 +493,11 @@ set_target_properties(
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
 
+if(NOT BUILD_SHARED_LIBS)
+  # relocatable static libraries
+  target_compile_options(lapack PRIVATE "-fPIC")
+endif()
+
 if(USE_XBLAS)
   target_link_libraries(lapack PRIVATE ${XBLAS_LIBRARY})
 endif()

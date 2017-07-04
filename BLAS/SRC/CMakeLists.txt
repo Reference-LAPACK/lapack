@@ -103,4 +103,8 @@ set_target_properties(
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
   )
+if(NOT BUILD_SHARED_LIBS)
+  # relocatable static libraries
+  target_compile_options(blas PRIVATE "-fPIC")
+endif()
 lapack_install_library(blas)
