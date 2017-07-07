@@ -69,7 +69,7 @@
 *>          VU is REAL
 *>          Upper bound of the interval that contains the desired
 *>          eigenvalues. VL < VU. 
-*>          Note: VU is currently not used by this implmentation of SLARRV, VU is
+*>          Note: VU is currently not used by this implementation of SLARRV, VU is
 *>          passed to SLARRV because it could be used compute gaps on the right end
 *>          of the extremal eigenvalues. However, with not much initial accuracy in
 *>          LAMBDA and VU, the formula can lead to an overestimation of the right gap
