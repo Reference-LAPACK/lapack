@@ -57,16 +57,15 @@ lapack_int LAPACKE_zuncsd2by1( int matrix_layout, char jobu1, char jobu2,
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        nrows_x11 =  p ;
-        nrows_x21 =  m-p ;
+        nrows_x11 = p;
+        nrows_x21 = m-p;
         if( LAPACKE_zge_nancheck( matrix_layout, nrows_x11, q, x11, ldx11 ) ) {
             return -8;
         }
-    
+ 
         if( LAPACKE_zge_nancheck( matrix_layout, nrows_x21, q, x21, ldx21 ) ) {
             return -9;
         }
-    
     }
 #endif
     /* Allocate memory for working array(s) */

@@ -26,36 +26,35 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
   THE POSSIBILITY OF SUCH DAMAGE.
 *****************************************************************************
-* Contents: Native high-level C interface to LAPACK function set/get nancheck  
-*           flag
+* Contents: Native C interface to control NaN checking
 * Author: Intel Corporation
-* Generated June, 2017
+* Generated July, 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
 
 static int nancheck_flag = -1;
 
-
-void LAPACKE_set_nancheck( int flag ) 
+void LAPACKE_set_nancheck( int flag )
 {
-    nancheck_flag = ( flag ) ? 1 : 0; 
+    nancheck_flag = ( flag ) ? 1 : 0;
 }
 
-
-int LAPACKE_get_nancheck( ) 
+int LAPACKE_get_nancheck( )
 {
-    if ( nancheck_flag != -1 ) 
-	return nancheck_flag;
+    char* env;
+    if ( nancheck_flag != -1 ) {
+        return nancheck_flag;
+    }
 
-    /* Check environment variable, once and only once */ 
-    char* env = getenv("LAPACKE_NANCHECK");
+    /* Check environment variable, once and only once */
+    env = getenv( "LAPACKE_NANCHECK" );
     if ( !env ) {
-	nancheck_flag = 1;
+        /* By default, NaN checking is enabled */
+        nancheck_flag = 1;
     } else {
-        int envval = (int)atoi(env);
-	nancheck_flag = ( envval ) ? 1 : 0; 
-    } 
+        nancheck_flag = atoi( env ) ? 1 : 0;
+    }
 
     return nancheck_flag;
 }
