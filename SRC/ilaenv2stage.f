@@ -152,22 +152,24 @@
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
+*     July 2017
 *
 *     .. Scalar Arguments ..
       CHARACTER*( * )    NAME, OPTS
-      INTEGER            ISPEC, IISPEC, N1, N2, N3, N4
+      INTEGER            ISPEC, N1, N2, N3, N4
 *     ..
 *
 *  =====================================================================
-*
+*     ..
+*     .. Local Scalars ..
+      INTEGER            IISPEC
+*     ..
 *     .. External Functions ..
       INTEGER            IPARAM2STAGE
       EXTERNAL           IPARAM2STAGE
 *     ..
 *     .. Executable Statements ..
 *
-      IISPEC = 16 + ISPEC
       GO TO ( 10, 10, 10, 10, 10 )ISPEC
 *
 *     Invalid value for ISPEC
@@ -179,6 +181,7 @@
 *
 *     2stage eigenvalues and SVD or related subroutines.
 *
+      IISPEC = 16 + ISPEC
       ILAENV2STAGE = IPARAM2STAGE( IISPEC, NAME, OPTS,
      $                             N1, N2, N3, N4 )
       RETURN
