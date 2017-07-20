@@ -84,6 +84,9 @@
 *>          12 <= ISPEC <= 16:
 *>               xHSEQR or related subroutines,
 *>               see IPARMQ for detailed explanation
+*>          17 <= ISPEC <= 21:
+*>               *_2STAGE or related subroutines,
+*>               see IPARAM2STAGE for detailed explanation
 *> \endverbatim
 *>
 *> \param[in] NAME

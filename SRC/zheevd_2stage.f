@@ -291,9 +291,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
+      INTEGER            ILAENV2STAGE
       DOUBLE PRECISION   DLAMCH, ZLANHE
-      EXTERNAL           LSAME, ILAENV, DLAMCH, ZLANHE
+      EXTERNAL           LSAME, DLAMCH, ZLANHE, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL, DSTERF, XERBLA, ZLACPY, ZLASCL,
@@ -327,10 +327,14 @@
             LRWMIN = 1
             LIWMIN = 1
          ELSE
-            KD    = ILAENV( 17, 'ZHETRD_2STAGE', JOBZ, N, -1, -1, -1 )
-            IB    = ILAENV( 18, 'ZHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
-            LHTRD = ILAENV( 19, 'ZHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-            LWTRD = ILAENV( 20, 'ZHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
+            KD    = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', JOBZ,
+     $                            N, -1, -1, -1 )
+            IB    = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', JOBZ,
+     $                            N, KD, -1, -1 )
+            LHTRD = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', JOBZ,
+     $                            N, KD, IB, -1 )
+            LWTRD = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', JOBZ,
+     $                            N, KD, IB, -1 )
             IF( WANTZ ) THEN
                LWMIN = 2*N + N*N
                LRWMIN = 1 + 5*N + 2*N**2

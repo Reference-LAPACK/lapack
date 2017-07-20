@@ -242,9 +242,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
+      INTEGER            ILAENV2STAGE
       DOUBLE PRECISION   DLAMCH, ZLANHB
-      EXTERNAL           LSAME, DLAMCH, ZLANHB, ILAENV
+      EXTERNAL           LSAME, DLAMCH, ZLANHB, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL, DSTERF, XERBLA, ZLASCL, ZSTEQR,
@@ -281,9 +281,12 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            IB    = ILAENV( 18, 'ZHETRD_HB2ST', JOBZ, N, KD, -1, -1 )
-            LHTRD = ILAENV( 19, 'ZHETRD_HB2ST', JOBZ, N, KD, IB, -1 )
-            LWTRD = ILAENV( 20, 'ZHETRD_HB2ST', JOBZ, N, KD, IB, -1 )
+            IB    = ILAENV2STAGE( 2, 'ZHETRD_HB2ST', JOBZ,
+     $                            N, KD, -1, -1 )
+            LHTRD = ILAENV2STAGE( 3, 'ZHETRD_HB2ST', JOBZ,
+     $                            N, KD, IB, -1 )
+            LWTRD = ILAENV2STAGE( 4, 'ZHETRD_HB2ST', JOBZ,
+     $                            N, KD, IB, -1 )
             LWMIN = LHTRD + LWTRD
             WORK( 1 )  = LWMIN
          ENDIF

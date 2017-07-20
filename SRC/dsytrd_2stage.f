@@ -253,8 +253,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
-      EXTERNAL           LSAME, ILAENV
+      INTEGER            ILAENV2STAGE
+      EXTERNAL           LSAME, ILAENV2STAGE
 *     ..
 *     .. Executable Statements ..
 *
@@ -267,10 +267,10 @@
 *
 *     Determine the block size, the workspace size and the hous size.
 *
-      KD     = ILAENV( 17, 'DSYTRD_2STAGE', VECT, N, -1, -1, -1 )
-      IB     = ILAENV( 18, 'DSYTRD_2STAGE', VECT, N, KD, -1, -1 )
-      LHMIN  = ILAENV( 19, 'DSYTRD_2STAGE', VECT, N, KD, IB, -1 )
-      LWMIN  = ILAENV( 20, 'DSYTRD_2STAGE', VECT, N, KD, IB, -1 )
+      KD     = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', VECT, N, -1, -1, -1 )
+      IB     = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', VECT, N, KD, -1, -1 )
+      LHMIN  = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', VECT, N, KD, IB, -1 )
+      LWMIN  = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', VECT, N, KD, IB, -1 )
 *      WRITE(*,*),'DSYTRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO,
 *     $            LHMIN, LWMIN
 *
