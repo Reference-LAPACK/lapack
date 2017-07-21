@@ -43,12 +43,14 @@ lapack_int LAPACKE_sstev( int matrix_layout, char jobz, lapack_int n, float* d,
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    /* Optionally check input matrices for NaNs */
-    if( LAPACKE_s_nancheck( n, d, 1 ) ) {
-        return -4;
-    }
-    if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
-        return -5;
+    if( LAPACKE_get_nancheck() ) {
+        /* Optionally check input matrices for NaNs */
+        if( LAPACKE_s_nancheck( n, d, 1 ) ) {
+            return -4;
+        }
+        if( LAPACKE_s_nancheck( n-1, e, 1 ) ) {
+            return -5;
+        }
     }
 #endif
     /* Allocate memory for working array(s) */

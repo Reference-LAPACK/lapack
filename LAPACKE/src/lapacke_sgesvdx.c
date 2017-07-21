@@ -52,9 +52,11 @@ lapack_int LAPACKE_sgesvdx( int matrix_layout, char jobu, char jobvt, char range
         return -1;
     }
 #ifndef LAPACK_DISABLE_NAN_CHECK
-    /* Optionally check input matrices for NaNs */
-    if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
-        return -6;
+    if( LAPACKE_get_nancheck() ) {
+        /* Optionally check input matrices for NaNs */
+        if( LAPACKE_sge_nancheck( matrix_layout, m, n, a, lda ) ) {
+            return -6;
+        }
     }
 #endif
     /* Query optimal working array(s) size */
