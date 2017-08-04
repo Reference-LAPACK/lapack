@@ -65,6 +65,11 @@ target_include_directories(lapacke PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 
+if(NOT BUILD_SHARED_LIBS)
+  # relocatable static libraries
+  target_compile_options(lapacke PRIVATE "-fPIC")
+endif()
+
 if(LAPACKE_WITH_TMG)
   target_link_libraries(lapacke PRIVATE tmglib)
 endif()

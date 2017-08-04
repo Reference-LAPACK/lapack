@@ -124,5 +124,9 @@ target_include_directories(cblas PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
   $<INSTALL_INTERFACE:include>
 )
+if(NOT BUILD_SHARED_LIBS)
+  # relocatable static libraries
+  target_compile_options(cblas PRIVATE "-fPIC")
+endif()
 target_link_libraries(cblas PRIVATE ${BLAS_LIBRARIES})
 lapack_install_library(cblas)
