@@ -1186,6 +1186,7 @@ lapacke_dtrttp.o \
 lapacke_dtrttp_work.o \
 lapacke_dtzrzf.o \
 lapacke_dtzrzf_work.o \
+lapacke_nancheck.o  \
 lapacke_sbbcsd.o \
 lapacke_sbbcsd_work.o \
 lapacke_sbdsdc.o \

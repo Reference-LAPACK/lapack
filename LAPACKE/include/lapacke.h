@@ -19136,6 +19136,10 @@ void LAPACK_zhegv_2stage( lapack_int* itype, char* jobz, char* uplo, lapack_int*
                    lapack_complex_double* work, lapack_int* lwork,
                    double* rwork, lapack_int *info );
 
+/* APIs for set/get nancheck flags */
+void LAPACKE_set_nancheck( int flag );
+int LAPACKE_get_nancheck( );
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

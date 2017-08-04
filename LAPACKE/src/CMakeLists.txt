@@ -1145,6 +1145,7 @@ lapacke_dtrttp.c
 lapacke_dtrttp_work.c
 lapacke_dtzrzf.c
 lapacke_dtzrzf_work.c
+lapacke_nancheck.c
 lapacke_sbbcsd.c
 lapacke_sbbcsd_work.c
 lapacke_sbdsdc.c
