@@ -227,8 +227,7 @@
 *     .. Local Scalars ..
       LOGICAL            LQUERY
       INTEGER            I, IINFO, J, LDWRKX, LDWRKY, LWKOPT, MINMN, NB,
-     $                   NBMIN, NX
-      REAL               WS
+     $                   NBMIN, NX, WS
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEBD2, SGEMM, SLABRD, XERBLA
