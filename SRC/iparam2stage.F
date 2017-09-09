@@ -38,7 +38,9 @@
 *>      useful for xHETRD_2STAGE, xHETRD_H@2HB, xHETRD_HB2ST,
 *>      xGEBRD_2STAGE, xGEBRD_GE2GB, xGEBRD_GB2BD 
 *>      and related subroutines for eigenvalue problems. 
-*>      It is called whenever ILAENV is called with 17 <= ISPEC <= 21
+*>      It is called whenever ILAENV is called with 17 <= ISPEC <= 21.
+*>      It is called whenever ILAENV2STAGE is called with 1 <= ISPEC <= 5
+*>      with a direct conversion ISPEC + 16.
 *> \endverbatim
 *
 *  Arguments:

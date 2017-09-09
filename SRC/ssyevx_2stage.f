@@ -336,9 +336,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV
+      INTEGER            ILAENV2STAGE
       REAL               SLAMCH, SLANSY
-      EXTERNAL           LSAME, ILAENV, SLAMCH, SLANSY
+      EXTERNAL           LSAME, SLAMCH, SLANSY, ILAENV2STAGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLACPY, SORGTR, SORMTR, SSCAL, SSTEBZ,
@@ -393,10 +393,14 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            KD    = ILAENV( 17, 'SSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-            IB    = ILAENV( 18, 'SSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-            LHTRD = ILAENV( 19, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-            LWTRD = ILAENV( 20, 'SSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+            KD    = ILAENV2STAGE( 1, 'SSYTRD_2STAGE', JOBZ,
+     $                            N, -1, -1, -1 )
+            IB    = ILAENV2STAGE( 2, 'SSYTRD_2STAGE', JOBZ,
+     $                            N, KD, -1, -1 )
+            LHTRD = ILAENV2STAGE( 3, 'SSYTRD_2STAGE', JOBZ,
+     $                            N, KD, IB, -1 )
+            LWTRD = ILAENV2STAGE( 4, 'SSYTRD_2STAGE', JOBZ,
+     $                            N, KD, IB, -1 )
             LWMIN = MAX( 8*N, 3*N + LHTRD + LWTRD )
             WORK( 1 )  = LWMIN
          END IF

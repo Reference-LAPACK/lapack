@@ -19,10 +19,10 @@ CFLAGS = -g
 #  and handle these quantities appropriately. As a consequence, one
 #  should not compile LAPACK with flags such as -ffpe-trap=overflow.
 #
-FORTRAN = gfortran -fimplicit-none -g -frecursive
+FORTRAN = gfortran -fimplicit-none -g
 OPTS    =
 DRVOPTS = $(OPTS)
-NOOPT   = -g -O0 -frecursive
+NOOPT   = -g -O0
 
 #  Define LOADER and LOADOPTS to refer to the loader and desired
 #  load options for your machine.
