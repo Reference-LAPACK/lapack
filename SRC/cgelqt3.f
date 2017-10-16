@@ -134,7 +134,7 @@
       PARAMETER ( ZERO = (0.0E+00,0.0E+00))
 *     ..
 *     .. Local Scalars ..
-      INTEGER   I, I1, J, J1, M1, M2, N1, N2, IINFO
+      INTEGER   I, I1, J, J1, M1, M2, IINFO
 *     ..
 *     .. External Subroutines ..
       EXTERNAL  CLARFG, CTRMM, CGEMM, XERBLA

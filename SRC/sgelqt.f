@@ -141,7 +141,7 @@
       INTEGER    I, IB, IINFO, K
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL   SGEQRT2, SGEQRT3, SLARFB, XERBLA
+      EXTERNAL   SGEQRT2, SGEQRT3, SGELQT3, SLARFB, XERBLA
 *     ..
 *     .. Executable Statements ..
 *

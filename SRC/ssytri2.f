@@ -153,7 +153,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSYTRI, SSYTRI2X
+      EXTERNAL           SSYTRI, SSYTRI2X, XERBLA
 *     ..
 *     .. Executable Statements ..
 *

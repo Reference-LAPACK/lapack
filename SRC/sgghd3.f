@@ -266,7 +266,8 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGGHRD, SLARTG, SLASET, SORM22, SROT, XERBLA
+      EXTERNAL           SGGHRD, SLARTG, SLASET, SORM22, SROT, SGEMM,
+     $                   SGEMV, STRMV, SLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, MAX

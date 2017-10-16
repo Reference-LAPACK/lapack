@@ -409,7 +409,7 @@
 *     .. External Subroutines ..
 *     ..
 *     from BLAS
-      EXTERNAL           CCOPY, CROT, CSSCAL, CSWAP
+      EXTERNAL           CCOPY, CROT, CSSCAL, CSWAP, CAXPY
 *     from LAPACK
       EXTERNAL           CLASCL, CLASET, CLASSQ, SLASCL, XERBLA
       EXTERNAL           CGSVJ0, CGSVJ1

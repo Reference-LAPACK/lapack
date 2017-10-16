@@ -273,7 +273,7 @@
       COMPLEX            TMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHB2ST_KERNELS, CLACPY, CLASET
+      EXTERNAL           CHB2ST_KERNELS, CLACPY, CLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX, CEILING, REAL

@@ -235,7 +235,7 @@
 *
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DSYMM, DLACPY, DLAT2S, DLAG2S, SLAG2D,
-     $                   SPOTRF, SPOTRS, XERBLA
+     $                   SPOTRF, SPOTRS, DPOTRF, DPOTRS, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX

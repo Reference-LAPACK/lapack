@@ -277,7 +277,7 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, DSYR2K, DSYMM, DGEMM,
+      EXTERNAL           XERBLA, DSYR2K, DSYMM, DGEMM, DCOPY,
      $                   DLARFT, DGELQF, DGEQRF, DLASET
 *     ..
 *     .. Intrinsic Functions ..

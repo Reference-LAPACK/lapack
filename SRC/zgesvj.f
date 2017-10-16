@@ -409,7 +409,7 @@
 *     .. External Subroutines ..
 *     ..
 *     from BLAS
-      EXTERNAL           ZCOPY, ZROT, ZDSCAL, ZSWAP
+      EXTERNAL           ZCOPY, ZROT, ZDSCAL, ZSWAP, ZAXPY
 *     from LAPACK
       EXTERNAL           DLASCL, ZLASCL, ZLASET, ZLASSQ, XERBLA
       EXTERNAL           ZGSVJ0, ZGSVJ1

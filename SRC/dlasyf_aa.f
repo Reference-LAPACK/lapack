@@ -175,7 +175,8 @@
       EXTERNAL           LSAME, ILAENV, IDAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           DGEMV, DAXPY, DCOPY, DSWAP, DSCAL, DLASET,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

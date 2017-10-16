@@ -48,6 +48,9 @@
       DOUBLE PRECISION   DSECND
       EXTERNAL           DSECND
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL           MYSUB
+*     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE
 *     ..

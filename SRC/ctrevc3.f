@@ -288,7 +288,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, CCOPY, CLASET, CSSCAL, CGEMM, CGEMV,
-     $                   CLATRS, SLABAD
+     $                   CLATRS, CLACPY, SLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, REAL, CMPLX, CONJG, AIMAG, MAX

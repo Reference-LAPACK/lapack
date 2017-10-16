@@ -108,6 +108,9 @@
 *     .. Local Scalars ..
       DOUBLE PRECISION        R, S, THRESH, W, Z
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL           DLARTGP
+*     ..
 *     .. External Functions ..
       DOUBLE PRECISION        DLAMCH
       EXTERNAL           DLAMCH

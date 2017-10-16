@@ -248,7 +248,7 @@
       EXTERNAL           ALAERH, ALAHD, ALASVM, SAXPY, SERRLS, SGELS,
      $                   SGELSD, SGELSS, SGELSY, SGEMM, SLACPY,
      $                   SLARNV, SQRT13, SQRT15, SQRT16, SSCAL,
-     $                   XLAENV
+     $                   XLAENV, SGETSLS
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          INT, LOG, MAX, MIN, REAL, SQRT

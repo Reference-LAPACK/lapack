@@ -139,7 +139,7 @@
       DOUBLE PRECISION   BIGNUM, EPS, SMLNUM, TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLASWP, DSCAL
+      EXTERNAL           DLASWP, DSCAL, DLABAD
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX

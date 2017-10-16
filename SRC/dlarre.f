@@ -360,7 +360,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DLARNV, DLARRA, DLARRB, DLARRC, DLARRD,
-     $                   DLASQ2
+     $                   DLASQ2, DLARRK
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN

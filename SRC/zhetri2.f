@@ -153,7 +153,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHETRI2X
+      EXTERNAL           ZHETRI2X, ZHETRI, XERBLA
 *     ..
 *     .. Executable Statements ..
 *

@@ -174,6 +174,9 @@
       DATA INVD2 /(-1,0),(0,1),(-.5,-.5),(0,-1),(1,0),
      $     (-.5,.5),(.5,.5),(.5,-.5)/
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL XERBLA
+*     ..
 *     .. External Functions
       EXTERNAL CLASET, LSAMEN
       INTRINSIC REAL
