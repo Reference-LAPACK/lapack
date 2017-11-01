@@ -11,27 +11,33 @@ cache:
   - i686-4.9.2-release-win32-dwarf-rt_v4-rev4.7z
 
 environment:
-  CTEST_OUTPUT_ON_FAILURE: 1
+  global:
+      APPVEYOR_SAVE_CACHE_ON_ERROR: true
+      APPVEYOR_SKIP_FINALIZE_ON_EXIT: true
+      TEST_TIMEOUT: 1000
+      CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
+      CTEST_OUTPUT_ON_FAILURE: 1
   matrix:
-  - MINGW_DIR: mingw64
-    MINGW_URL: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/4.9.2/threads-win32/seh/x86_64-4.9.2-release-win32-seh-rt_v4-rev4.7z/download
-    MINGW_ARCHIVE: x86_64-4.9.2-release-win32-seh-rt_v4-rev4.7z
-  - MINGW_DIR: mingw32
-    MINGW_URL: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/4.9.2/threads-win32/dwarf/i686-4.9.2-release-win32-dwarf-rt_v4-rev4.7z/download
-    MINGW_ARCHIVE: i686-4.9.2-release-win32-dwarf-rt_v4-rev4.7z
+    - ARCH: x86_64
+    - ARCH: i386
 
 install:
-  - if not exist "%MINGW_ARCHIVE%" appveyor DownloadFile "%MINGW_URL%" -FileName "%MINGW_ARCHIVE%"
-  - 7z x -y "%MINGW_ARCHIVE%" > nul
-  # CMake refuses to generate MinGW Makefiles if sh.exe is in the Path
-  - ps: Get-Command sh.exe -All | Remove-Item
+  # Add path, activate `conda` and update conda.
+  - cmd: call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
+  - cmd: conda update --yes --quiet conda
+  
+  # Add our channels.
+  - cmd: conda config --add channels defaults
+  - cmd: conda config --add channels conda-forge
+  - cmd: conda config --add channels isuruf/label/flang
+  - cmd: conda install --yes --quiet clangdev flangdev
 
 build_script:
   - echo "NUMBER_OF_PROCESSORS=%NUMBER_OF_PROCESSORS%"
   - set PATH=%CD%\%MINGW_DIR%\bin;%PATH%
-  - g++ --version
-  - mingw32-make --version
-  - cmake --version
+  - flang --version
+  - clang --version --target %ARCH%-pc-windows-msvc
+  - cmake --version --target %ARCH%-pc-windows-msvc
   - if "%APPVEYOR_REPO_TAG%"=="true" (set CMAKE_BUILD_TYPE=Release) else (set CMAKE_BUILD_TYPE=Debug)
   - set SRC_DIR=%CD%
   - echo %SRC_DIR%
@@ -42,7 +48,12 @@ build_script:
     # See issue #17 on github dashboard.  Once resolved, use -DCBLAS=ON
     #  - cmake -DCMAKE_INSTALL_PREFIX=${INST_DIR} -DLAPACKE=ON ${SRC_DIR}
   - cmake
-    -G "MinGW Makefiles"
+    -G "NMake Makefiles" 
+    -DCMAKE_C_COMPILER=clang-cl
+    -DCMAKE_CXX_COMPILER=clang-cl
+    -DCMAKE_Fortran_COMPILER=flang
+    -DCMAKE_VERBOSE_MAKEFILE=ON
+    -DCMAKE_BUILD_TYPE=Release
     -DBUILDNAME:STRING="appveyor-%MINGW_DIR%-%APPVEYOR_REPO_BRANCH%"
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
     -DCMAKE_INSTALL_PREFIX=%INST_DIR%
@@ -51,7 +62,7 @@ build_script:
     -DBUILD_TESTING=ON
     -DLAPACKE_WITH_TMG:BOOL=ON
     %SRC_DIR%
-  - mingw32-make -j%NUMBER_OF_PROCESSORS%
+  - cmake --build .
 
 test_script:
   - ctest -D ExperimentalStart
