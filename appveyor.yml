@@ -18,8 +18,8 @@ environment:
       CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
       CTEST_OUTPUT_ON_FAILURE: 1
   matrix:
-    - ARCH: 64
-    - ARCH: 32
+    - ARCH: x86_64
+    - ARCH: i386
 
 install:
   # Add path, activate `conda` and update conda.
@@ -36,8 +36,8 @@ build_script:
   - echo "NUMBER_OF_PROCESSORS=%NUMBER_OF_PROCESSORS%"
   - set PATH=%CD%\%MINGW_DIR%\bin;%PATH%
   - flang --version
-  - clang --version
-  - cmake --version
+  - clang --version --target %ARCH%-pc-windows-msvc
+  - cmake --version --target %ARCH%-pc-windows-msvc
   - if "%APPVEYOR_REPO_TAG%"=="true" (set CMAKE_BUILD_TYPE=Release) else (set CMAKE_BUILD_TYPE=Debug)
   - set SRC_DIR=%CD%
   - echo %SRC_DIR%
