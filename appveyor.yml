@@ -18,8 +18,8 @@ environment:
       CONDA_INSTALL_LOCN: C:\\Miniconda36-x64
       CTEST_OUTPUT_ON_FAILURE: 1
   matrix:
-    - ARCH=64
-    - ARCH=32
+    - ARCH: 64
+    - ARCH: 32
 
 install:
   # Add path, activate `conda` and update conda.
