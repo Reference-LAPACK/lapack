@@ -174,7 +174,7 @@
 *
 *     Determine the block size
 *
-      NB = ILAENV( 1, 'DSYTRF', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'DSYTRF_AA', UPLO, N, -1, -1, -1 )
 *
 *     Test the input parameters.
 *
