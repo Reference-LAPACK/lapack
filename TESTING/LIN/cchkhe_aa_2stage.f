@@ -244,7 +244,7 @@
 *     Test path
 *
       PATH( 1: 1 ) = 'Complex precision'
-      PATH( 2: 3 ) = 'HA'
+      PATH( 2: 3 ) = 'H2'
 *
 *     Path to generate matrices
 *

@@ -725,7 +725,7 @@
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
 *
-      ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
+      ELSE IF( LSAMEN( 2, C2, 'H2' ) ) THEN
 *
 *        SA:  symmetric indefinite matrices,
 *             with partial (Aasen's) pivoting algorithm

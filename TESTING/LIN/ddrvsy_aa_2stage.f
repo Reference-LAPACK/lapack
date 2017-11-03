@@ -232,7 +232,7 @@
 *     Test path
 *
       PATH( 1: 1 ) = 'Double precision'
-      PATH( 2: 3 ) = 'SY'
+      PATH( 2: 3 ) = 'S2'
 *
 *     Path to generate matrices
 *

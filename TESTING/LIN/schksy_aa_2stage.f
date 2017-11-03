@@ -245,7 +245,7 @@
 *     Test path
 *
       PATH( 1: 1 ) = 'Single precision'
-      PATH( 2: 3 ) = 'SA'
+      PATH( 2: 3 ) = 'S2'
 *
 *     Path to generate matrices
 *

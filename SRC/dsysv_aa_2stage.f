@@ -249,11 +249,10 @@
          CALL DSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
          LWKOPT = INT( WORK(1) )
-         IF( LWORK.LT.LWKOPT .AND. .NOT.WQUERY ) THEN
-            INFO = -13
-         END IF
          IF( LTB.LT.INT( TB(1) ) .AND. .NOT.TQUERY ) THEN
             INFO = -7
+         ELSE IF( LWORK.LT.LWKOPT .AND. .NOT.WQUERY ) THEN
+            INFO = -13
          END IF
       END IF
 *
