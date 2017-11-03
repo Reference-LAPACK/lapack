@@ -166,7 +166,7 @@
       PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
 *
 *     .. Local Scalars ..
-      INTEGER            J, K, K1, I1, I2
+      INTEGER            J, K, K1, I1, I2, MJ
       COMPLEX            PIV, ALPHA
 *     ..
 *     .. External Functions ..
@@ -205,6 +205,14 @@
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
          K = J1+J-1
+         IF( J.EQ.M ) THEN
+*
+*            Only need to compute T(J, J)
+*
+             MJ = 1
+         ELSE
+             MJ = M-J+1
+         END IF
 *
 *        H(J:M, J) := A(J, J:M) - H(J:M, 1:(J-1)) * L(J1:(J-1), J),
 *         where H(J:M, J) has been initialized to be A(J, J:M)
@@ -217,7 +225,7 @@
 *         > for the rest of the columns, K is J+1, skipping only the
 *           first column
 *
-            CALL CGEMV( 'No transpose', M-J+1, J-K1,
+            CALL CGEMV( 'No transpose', MJ, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( 1, J ), 1,
      $                  ONE, H( J, J ), 1 )
@@ -225,7 +233,7 @@
 *
 *        Copy H(i:M, i) into WORK
 *
-         CALL CCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL CCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -233,7 +241,7 @@
 *            where A(J-1, J) stores T(J-1, J) and A(J-2, J:M) stores U(J-1, J:M)
 *
             ALPHA = -A( K-1, J )
-            CALL CAXPY( M-J+1, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
+            CALL CAXPY( MJ, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
@@ -345,6 +353,14 @@
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
          K = J1+J-1
+         IF( J.EQ.M ) THEN
+*
+*            Only need to compute T(J, J)
+*
+             MJ = 1
+         ELSE
+             MJ = M-J+1
+         END IF
 *
 *        H(J:M, J) := A(J:M, J) - H(J:M, 1:(J-1)) * L(J, J1:(J-1))^T,
 *         where H(J:M, J) has been initialized to be A(J:M, J)
@@ -357,7 +373,7 @@
 *         > for the rest of the columns, K is J+1, skipping only the
 *           first column
 *
-            CALL CGEMV( 'No transpose', M-J+1, J-K1,
+            CALL CGEMV( 'No transpose', MJ, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( J, 1 ), LDA,
      $                  ONE, H( J, J ), 1 )
@@ -365,7 +381,7 @@
 *
 *        Copy H(J:M, J) into WORK
 *
-         CALL CCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL CCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -373,7 +389,7 @@
 *            where A(J-1, J) = T(J-1, J) and A(J, J-2) = L(J, J-1)
 *
             ALPHA = -A( J, K-1 )
-            CALL CAXPY( M-J+1, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
+            CALL CAXPY( MJ, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)

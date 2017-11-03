@@ -166,7 +166,7 @@
       PARAMETER    ( ZERO = (0.0E+0, 0.0E+0), ONE = (1.0E+0, 0.0E+0) )
 *
 *     .. Local Scalars ..
-      INTEGER      J, K, K1, I1, I2
+      INTEGER      J, K, K1, I1, I2, MJ
       COMPLEX      PIV, ALPHA
 *     ..
 *     .. External Functions ..
@@ -205,6 +205,14 @@
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
          K = J1+J-1
+         IF( J.EQ.M ) THEN
+*
+*            Only need to compute T(J, J)
+*
+             MJ = 1
+         ELSE
+             MJ = M-J+1
+         END IF
 *
 *        H(J:N, J) := A(J, J:N) - H(J:N, 1:(J-1)) * L(J1:(J-1), J),
 *         where H(J:N, J) has been initialized to be A(J, J:N)
@@ -218,7 +226,7 @@
 *           first column
 *
             CALL CLACGV( J-K1, A( 1, J ), 1 )
-            CALL CGEMV( 'No transpose', M-J+1, J-K1,
+            CALL CGEMV( 'No transpose', MJ, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( 1, J ), 1,
      $                  ONE, H( J, J ), 1 )
@@ -227,7 +235,7 @@
 *
 *        Copy H(i:n, i) into WORK
 *
-         CALL CCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL CCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -235,7 +243,7 @@
 *            where A(J-1, J) stores T(J-1, J) and A(J-2, J:N) stores U(J-1, J:N)
 *
             ALPHA = -CONJG( A( K-1, J ) )
-            CALL CAXPY( M-J+1, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
+            CALL CAXPY( MJ, ALPHA, A( K-2, J ), LDA, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
@@ -349,6 +357,14 @@
 *         > for the rest of the columns, J1 is 2, and J1+J-1 is J+1,
 *
          K = J1+J-1
+         IF( J.EQ.M ) THEN
+*
+*            Only need to compute T(J, J)
+*
+             MJ = 1
+         ELSE
+             MJ = M-J+1
+         END IF
 *
 *        H(J:N, J) := A(J:N, J) - H(J:N, 1:(J-1)) * L(J, J1:(J-1))^T,
 *         where H(J:N, J) has been initialized to be A(J:N, J)
@@ -362,7 +378,7 @@
 *           first column
 *
             CALL CLACGV( J-K1, A( J, 1 ), LDA )
-            CALL CGEMV( 'No transpose', M-J+1, J-K1,
+            CALL CGEMV( 'No transpose', MJ, J-K1,
      $                 -ONE, H( J, K1 ), LDH,
      $                       A( J, 1 ), LDA,
      $                  ONE, H( J, J ), 1 )
@@ -371,7 +387,7 @@
 *
 *        Copy H(J:N, J) into WORK
 *
-         CALL CCOPY( M-J+1, H( J, J ), 1, WORK( 1 ), 1 )
+         CALL CCOPY( MJ, H( J, J ), 1, WORK( 1 ), 1 )
 *
          IF( J.GT.K1 ) THEN
 *
@@ -379,7 +395,7 @@
 *            where A(J-1, J) = T(J-1, J) and A(J, J-2) = L(J, J-1)
 *
             ALPHA = -CONJG( A( J, K-1 ) )
-            CALL CAXPY( M-J+1, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
+            CALL CAXPY( MJ, ALPHA, A( J, K-2 ), 1, WORK( 1 ), 1 )
          END IF
 *
 *        Set A(J, J) = T(J, J)
