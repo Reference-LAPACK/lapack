@@ -230,8 +230,8 @@
       DOUBLE PRECISION   ANRM, CTE, EPS, RNRM, XNRM
 *
 *     .. External Subroutines ..
-      EXTERNAL           DAXPY, DGEMM, DLACPY, DLAG2S, SLAG2D, SGETRF,
-     $                   SGETRS, XERBLA
+      EXTERNAL           DAXPY, DGEMM, DLACPY, DLAG2S, DGETRF, DGETRS,
+     $                   SGETRF, SGETRS, SLAG2D, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX

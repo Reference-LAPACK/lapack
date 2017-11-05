@@ -240,7 +240,7 @@
 *
 *     .. External Subroutines ..
       EXTERNAL           CGETRS, CGETRF, CLAG2Z, XERBLA, ZAXPY, ZGEMM,
-     $                   ZLACPY, ZLAG2C
+     $                   ZLACPY, ZLAG2C, ZGETRF, ZGETRS
 *     ..
 *     .. External Functions ..
       INTEGER            IZAMAX

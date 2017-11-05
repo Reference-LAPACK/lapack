@@ -273,7 +273,7 @@
       COMPLEX*16         TMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZHB2ST_KERNELS, ZLACPY, ZLASET
+      EXTERNAL           ZHB2ST_KERNELS, ZLACPY, ZLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX, CEILING, DBLE, REAL

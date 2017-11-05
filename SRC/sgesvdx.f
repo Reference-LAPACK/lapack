@@ -299,7 +299,7 @@
 *     .. External Subroutines ..
       EXTERNAL           SBDSVDX, SGEBRD, SGELQF, SGEQRF, SLACPY,
      $                   SLASCL, SLASET, SORMBR, SORMLQ, SORMQR,
-     $                   XERBLA
+     $                   SCOPY, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

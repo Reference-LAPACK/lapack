@@ -186,7 +186,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LEFT, RIGHT, TRAN, NOTRAN
-      INTEGER            I, IB, LDWORK, KF, Q
+      INTEGER            I, IB, LDWORK, KF
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

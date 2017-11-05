@@ -187,7 +187,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, SSYTRF, SSYTRS, SSYTRS2
+      EXTERNAL           XERBLA, SSYTRS_AA, SSYTRF_AA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

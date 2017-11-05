@@ -210,7 +210,7 @@
       CHARACTER          DIST, TYPE, UPLO, XTYPE
       CHARACTER*3        PATH, MATPATH
       INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
-     $                   ITEMP, IUPLO, IZERO, J, K, KL, KU, LDA, LWORK,
+     $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK,
      $                   MODE, N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN,
      $                   NT
       REAL               ALPHA, ANORM, CNDNUM, CONST, STEMP, SING_MAX,
@@ -218,7 +218,7 @@
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
-      INTEGER            IDUMMY( 1 ), ISEED( 4 ), ISEEDY( 4 )
+      INTEGER            ISEED( 4 ), ISEEDY( 4 )
       REAL               BLOCK( 2, 2 ), SDUMMY( 1 ), RESULT( NTESTS )
 *     ..
 *     .. External Functions ..

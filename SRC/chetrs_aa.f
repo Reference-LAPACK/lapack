@@ -159,7 +159,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGTSV, CSWAP, CTRSM, XERBLA
+      EXTERNAL           CLACPY, CLACGV, CGTSV, CSWAP, CTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

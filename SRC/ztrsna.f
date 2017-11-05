@@ -291,7 +291,8 @@
       EXTERNAL           LSAME, IZAMAX, DLAMCH, DZNRM2, ZDOTC
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLACPY, ZLATRS, ZTREXC
+      EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLACPY, ZLATRS, ZTREXC,
+     $                   DLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, MAX

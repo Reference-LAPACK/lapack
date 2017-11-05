@@ -270,7 +270,7 @@
      $                   SIDEV, SIZETAU, LDV, LHMIN, LWMIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSB2ST_KERNELS, DLACPY, DLASET
+      EXTERNAL           DSB2ST_KERNELS, DLACPY, DLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MIN, MAX, CEILING, REAL

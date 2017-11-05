@@ -230,7 +230,8 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, CSCAL, XERBLA
+      EXTERNAL           CLARF, CLARFGP, CUNBDB5, CSROT, CSCAL, CLACGV,
+     $                   XERBLA
 *     ..
 *     .. External Functions ..
       REAL               SCNRM2

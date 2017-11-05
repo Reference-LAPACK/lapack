@@ -248,7 +248,7 @@
 *
 *     .. External Subroutines ..
       EXTERNAL           ZAXPY, ZHEMM, ZLACPY, ZLAT2C, ZLAG2C, CLAG2Z,
-     $                   CPOTRF, CPOTRS, XERBLA
+     $                   CPOTRF, CPOTRS, XERBLA, ZPOTRF, ZPOTRS
 *     ..
 *     .. External Functions ..
       INTEGER            IZAMAX

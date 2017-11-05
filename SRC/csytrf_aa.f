@@ -165,7 +165,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           CLASYF_AA, CGEMM, CGEMV, CSCAL, CSWAP, CCOPY,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

@@ -271,7 +271,8 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGGHRD, CLARTG, CLASET, CUNM22, CROT, XERBLA
+      EXTERNAL           CGGHRD, CLARTG, CLASET, CUNM22, CROT, CGEMM,
+     $                   CGEMV, CTRMV, CLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL, CMPLX, CONJG, MAX

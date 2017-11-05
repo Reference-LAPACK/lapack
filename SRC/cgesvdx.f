@@ -309,7 +309,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGEBRD, CGELQF, CGEQRF, CLASCL, CLASET,
-     $                   SLASCL, XERBLA
+     $                   CUNMBR, CUNMQR, CUNMLQ, CLACPY, 
+     $                   SBDSVDX, SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

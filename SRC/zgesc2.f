@@ -141,7 +141,7 @@
       COMPLEX*16         TEMP
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASWP, ZSCAL
+      EXTERNAL           ZLASWP, ZSCAL, DLABAD
 *     ..
 *     .. External Functions ..
       INTEGER            IZAMAX

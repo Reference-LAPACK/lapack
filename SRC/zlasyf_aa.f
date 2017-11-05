@@ -175,7 +175,8 @@
       EXTERNAL           LSAME, ILAENV, IZAMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           ZGEMV, ZAXPY, ZSCAL, ZCOPY, ZSWAP, ZLASET,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

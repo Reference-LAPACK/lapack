@@ -188,7 +188,7 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZSYTRF, ZSYTRS, ZSYTRS2
+      EXTERNAL           XERBLA, ZSYTRF_AA, ZSYTRS_AA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

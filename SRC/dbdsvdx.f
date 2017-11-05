@@ -269,7 +269,7 @@
       EXTERNAL           IDAMAX, LSAME, DAXPY, DDOT, DLAMCH, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLASET, DSCAL, DSWAP
+      EXTERNAL           DSTEVX, DCOPY, DLASET, DSCAL, DSWAP, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, SIGN, SQRT

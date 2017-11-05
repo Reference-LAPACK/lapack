@@ -248,7 +248,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DSCAL, DSTERF, XERBLA, ZLASCL, ZSTEQR,
-     $                   ZHETRD_2STAGE
+     $                   ZHETRD_2STAGE, ZHETRD_HB2ST
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, SQRT

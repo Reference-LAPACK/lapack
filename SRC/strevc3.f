@@ -280,7 +280,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SAXPY, SCOPY, SGEMV, SLALN2, SSCAL, XERBLA,
-     $                   SGEMM, SLABAD, SLASET
+     $                   SLACPY, SGEMM, SLABAD, SLASET
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT

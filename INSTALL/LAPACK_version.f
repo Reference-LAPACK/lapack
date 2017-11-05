@@ -22,7 +22,8 @@
 *
 *> \ingroup auxOTHERauxiliary
 *
-*  =====================================================================      PROGRAM LAPACK_VERSION
+*  =====================================================================
+      PROGRAM LAPACK_VERSION
 *
 *  -- LAPACK auxiliary routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -30,8 +31,11 @@
 *     December 2016
 *
       INTEGER MAJOR, MINOR, PATCH
+*     ..
+*     .. External Subroutines ..
+      EXTERNAL ILAVER
 *
-      CALL ILAVER ( MAJOR,MINOR, PATCH )
+      CALL ILAVER ( MAJOR, MINOR, PATCH )
       WRITE(*,*) "LAPACK ",MAJOR,".",MINOR,".",PATCH
 *
       END

@@ -159,7 +159,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGTSV, DSWAP, DTRSM, XERBLA
+      EXTERNAL           DLACPY, DGTSV, DSWAP, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX

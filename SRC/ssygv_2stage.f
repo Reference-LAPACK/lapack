@@ -250,8 +250,7 @@
 *     .. Local Scalars ..
       LOGICAL            LQUERY, UPPER, WANTZ
       CHARACTER          TRANS
-      INTEGER            NEIG,
-     $                   LLWORK, LWMIN, LHTRD, LWTRD, KD, IB, INDHOUS
+      INTEGER            NEIG, LWMIN, LHTRD, LWTRD, KD, IB
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME

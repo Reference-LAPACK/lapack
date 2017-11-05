@@ -281,7 +281,7 @@
      $                   ZDOTU, ZLADIV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL, XERBLA, ZAXPY, ZDSCAL, ZTBSV
+      EXTERNAL           DSCAL, XERBLA, ZAXPY, ZDSCAL, ZTBSV, DLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DCMPLX, DCONJG, DIMAG, MAX, MIN

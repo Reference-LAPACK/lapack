@@ -149,6 +149,9 @@
       INTEGER NMAX_EXACT, NMAX_APPROX
       PARAMETER (NMAX_EXACT = 6, NMAX_APPROX = 11)
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL XERBLA
+*     ..
 *     .. External Functions
       EXTERNAL SLASET
       INTRINSIC REAL

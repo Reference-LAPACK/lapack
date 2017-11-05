@@ -168,7 +168,7 @@
       EXTERNAL           DLAMCH, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLASSQ
+      EXTERNAL           ZLASSQ, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, DIMAG, INT, LOG, MAX, MIN, SQRT

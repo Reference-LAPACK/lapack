@@ -103,6 +103,9 @@
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
 *     ..
+*     .. External Subroutine ..
+      EXTERNAL SGEMM, SLACPY, SLARNV, SGEMQRT, SLASET, SGEQRT, SSYRK
+*     ..
 *     .. External Functions ..
       REAL SLAMCH
       REAL SLANGE, SLANSY
