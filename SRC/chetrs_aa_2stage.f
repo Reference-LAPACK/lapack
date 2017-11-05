@@ -204,7 +204,7 @@
 *
 *     Read NB and compute LDTB
 *
-      NB = TB( 1 )
+      NB = INT( TB( 1 ) )
       LDTB = LTB/N
 *
       IF( UPPER ) THEN

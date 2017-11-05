@@ -1,7 +1,5 @@
 *> \brief \b SDRVSY_AA_2STAGE
 *
-* @generated from chetrf.f, fortran c -> s, Tue Oct 31 11:25:04 2017
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at

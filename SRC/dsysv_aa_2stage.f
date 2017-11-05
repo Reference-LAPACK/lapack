@@ -203,16 +203,10 @@
 *     ..
 *
 *  =====================================================================
-*     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ),
-     $                     ONE  = ( 1.0D+0, 0.0D+0 ) )
 *
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
-      INTEGER            I, J, K, I1, I2, TD
-      INTEGER            LDTB, LWKOPT, NB, KB, NT, IINFO
-      DOUBLE PRECISION            PIV
+      INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -223,7 +217,7 @@
       EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CONJG, MIN, MAX
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *

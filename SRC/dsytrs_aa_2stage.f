@@ -1,7 +1,5 @@
 *> \brief \b DSYTRS_AA_2STAGE
 *
-* @precisions fortran d -> s c
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -204,7 +202,7 @@
 *
 *     Read NB and compute LDTB
 *
-      NB = TB( 1 )
+      NB = INT( TB( 1 ) )
       LDTB = LTB/N
 *
       IF( UPPER ) THEN

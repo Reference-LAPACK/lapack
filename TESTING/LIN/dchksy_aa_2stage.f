@@ -1,7 +1,5 @@
 *> \brief \b DCHKSY_AA_2STAGE
 *
-* @precisions fortran d -> s c
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at

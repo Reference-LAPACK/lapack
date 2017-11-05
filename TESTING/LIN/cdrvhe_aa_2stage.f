@@ -1,7 +1,5 @@
 *> \brief \b CDRVHE_AA_2STAGE
 *
-* @precisions fortran c -> s d
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at

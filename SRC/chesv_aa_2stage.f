@@ -1,7 +1,5 @@
 *> \brief <b> CHESV_AA_2STAGE computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
-* @precisions fortran c -> s d
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -203,16 +201,10 @@
 *     ..
 *
 *  =====================================================================
-*     .. Parameters ..
-      COMPLEX            ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ),
-     $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
 *
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
-      INTEGER            I, J, K, I1, I2, TD
-      INTEGER            LDTB, LWKOPT, NB, KB, NT, IINFO
-      COMPLEX            PIV
+      INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -223,7 +215,7 @@
       EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CONJG, MIN, MAX
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *

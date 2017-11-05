@@ -1,7 +1,5 @@
 *> \brief \b SSYTRF_AA_2STAGE
 *
-* @generated from SRC/dsytrf_aa_2stage.f, fortran d -> s, Mon Oct 30 11:57:50 2017
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -29,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * ), IPIV2( * )
-*       REAL   A( LDA, * ), TB( * ), WORK( * )
+*       REAL               A( LDA, * ), TB( * ), WORK( * )
 *       ..
 *
 *> \par Purpose:

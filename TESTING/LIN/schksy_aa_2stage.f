@@ -218,7 +218,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRSY, SLACPY, SLARHS,
-     $                   SLATB4, SLATMS, SPOT02, DSYT01, 
+     $                   SLATB4, SLATMS, SPOT02, SSYT01, 
      $                   SSYTRF_AA_2STAGE, SSYTRS_AA_2STAGE,
      $                   XLAENV
 *     ..
@@ -465,7 +465,7 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-c                  CALL DSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+c                  CALL SSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
 c     $                            AINV, LDA, RWORK, RESULT( 1 ) )
 c                  NT = 1
                   NT = 0
