@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYCONVF( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
+*       SUBROUTINE DSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY

@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZSYCONVF( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
+*       SUBROUTINE ZSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY

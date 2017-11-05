@@ -1864,6 +1864,12 @@ lapacke_zhbevd.c
 lapacke_zhbevd_work.c
 lapacke_zhbevx.c
 lapacke_zhbevx_work.c
+lapacke_zhbev_2stage.c
+lapacke_zhbev_2stage_work.c
+lapacke_zhbevd_2stage.c
+lapacke_zhbevd_2stage_work.c
+lapacke_zhbevx_2stage.c
+lapacke_zhbevx_2stage_work.c
 lapacke_zhbgst.c
 lapacke_zhbgst_work.c
 lapacke_zhbgv.c

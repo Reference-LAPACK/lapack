@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DSYCONVF_ROOK( UPLO, WAY, N, A, LDA, IPIV, E, INFO )
+*       SUBROUTINE DSYCONVF_ROOK( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO, WAY
