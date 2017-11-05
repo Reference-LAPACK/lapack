@@ -129,8 +129,6 @@
 *>          The length of WORK.  LWORK >= MAX(1,2*N,3*N-2), and for best 
 *>          performance LWORK >= MAX(1,N*NB), where NB is the optimal
 *>          blocksize for CHETRF.
-*>          for LWORK < N, TRS will be done with Level BLAS 2
-*>          for LWORK >= N, TRS will be done with Level BLAS 3
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
