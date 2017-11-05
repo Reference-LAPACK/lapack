@@ -203,16 +203,10 @@
 *     ..
 *
 *  =====================================================================
-*     .. Parameters ..
-      COMPLEX            ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ),
-     $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
 *
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
-      INTEGER            I, J, K, I1, I2, TD
-      INTEGER            LDTB, LWKOPT, NB, KB, NT, IINFO
-      COMPLEX            PIV
+      INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -223,7 +217,7 @@
       EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CONJG, MIN, MAX
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *

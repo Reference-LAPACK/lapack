@@ -1,6 +1,6 @@
 *> \brief <b> SSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
-* @generated from SRC/chesv_aasen_2stage.f, fortran c -> s, Tue Oct 31 11:22:31 2017
+*  @precisions fortran s -> c
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -21,8 +21,8 @@
 *  ===========
 *
 *      SUBROUTINE SSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
-*                                     IPIV, IPIV2, B, LDB, WORK, LWORK,
-*                                     INFO )
+*                                  IPIV, IPIV2, B, LDB, WORK, LWORK,
+*                                  INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -203,16 +203,10 @@
 *     ..
 *
 *  =====================================================================
-*     .. Parameters ..
-      REAL               ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ),
-     $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
-*
+*     ..
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
-      INTEGER            I, J, K, I1, I2, TD
-      INTEGER            LDTB, LWKOPT, NB, KB, NT, IINFO
-      REAL               PIV
+      INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -223,7 +217,7 @@
       EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CONJG, MIN, MAX
+      INTRINSIC          MAX
 *     ..
 *     .. Executable Statements ..
 *

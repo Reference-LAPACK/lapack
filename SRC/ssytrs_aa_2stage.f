@@ -1,6 +1,6 @@
 *> \brief \b SSYTRS_AA_2STAGE
 *
-* @generated from SRC/dsytrs_aa_2stage.f, fortran d -> s, Mon Oct 30 11:59:02 2017
+*  @precisions fortran s -> c
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -204,7 +204,7 @@
 *
 *     Read NB and compute LDTB
 *
-      NB = TB( 1 )
+      NB = INT( TB( 1 ) )
       LDTB = LTB/N
 *
       IF( UPPER ) THEN
