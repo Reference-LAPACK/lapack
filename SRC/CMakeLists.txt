@@ -129,6 +129,7 @@ set(SLASRC
    ssytf2_rk.f ssytrf_rk.f ssytrs_3.f
    ssytri_3.f ssytri_3x.f ssycon_3.f ssysv_rk.f
    ssysv_aa.f ssytrf_aa.f ssytrs_aa.f
+   ssysv_aa_2stage.f ssytrf_aa_2stage.f ssytrs_aa_2stage.f
    stbcon.f
    stbrfs.f stbtrs.f stgevc.f stgex2.f stgexc.f stgsen.f
    stgsja.f stgsna.f stgsy2.f stgsyl.f stpcon.f stprfs.f stptri.f
@@ -188,6 +189,7 @@ set(CLASRC
    chetf2_rk.f chetrf_rk.f chetri_3.f chetri_3x.f
    chetrs_3.f checon_3.f chesv_rk.f
    chesv_aa.f chetrf_aa.f chetrs_aa.f
+   chesv_aa_2stage.f chetrf_aa_2stage.f chetrs_aa_2stage.f
    chgeqz.f chpcon.f chpev.f  chpevd.f
    chpevx.f chpgst.f chpgv.f  chpgvd.f chpgvx.f chprfs.f chpsv.f
    chpsvx.f
@@ -316,6 +318,7 @@ set(DLASRC
    dsytf2_rk.f dsytrf_rk.f dsytrs_3.f
    dsytri_3.f dsytri_3x.f dsycon_3.f dsysv_rk.f
    dsysv_aa.f dsytrf_aa.f dsytrs_aa.f
+   dsysv_aa_2stage.f dsytrf_aa_2stage.f dsytrs_aa_2stage.f
    dtbcon.f
    dtbrfs.f dtbtrs.f dtgevc.f dtgex2.f dtgexc.f dtgsen.f
    dtgsja.f dtgsna.f dtgsy2.f dtgsyl.f dtpcon.f dtprfs.f dtptri.f
