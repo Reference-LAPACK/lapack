@@ -244,7 +244,6 @@
       DO 10 I = 1, 4
          ISEED( I ) = ISEEDY( I )
    10 CONTINUE
-      LWORK = MAX( 2*NMAX, NMAX*NRHS )
 *
 *     Test the error exits
 *
@@ -263,6 +262,8 @@
 *
       DO 180 IN = 1, NN
          N = NVAL( IN )
+         LWORK = MAX( 3*N-2, N*(1+NB) )
+         LWORK = MAX( LWORK, 1 )
          LDA = MAX( N, 1 )
          XTYPE = 'N'
          NIMAT = NTYPES

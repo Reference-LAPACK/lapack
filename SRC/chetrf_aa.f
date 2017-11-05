@@ -174,7 +174,7 @@
 *
 *     Determine the block size
 *
-      NB = ILAENV( 1, 'CHETRF', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'CHETRF_AA', UPLO, N, -1, -1, -1 )
 *
 *     Test the input parameters.
 *

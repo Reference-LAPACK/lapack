@@ -1,4 +1,6 @@
-*> \brief \b DDRVSY_AA
+*> \brief \b DDRVSY_AA_2STAGE
+*
+* @generated from cdrvhe_aa_2stage.f, fortran c -> d, Tue Oct 31 11:25:04 2017
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +10,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
+*       SUBROUTINE DDRVSY_AA_2STAGE(
+*                             DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                             A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                             NOUT )
 *
@@ -20,8 +23,9 @@
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NVAL( * )
+*       DOUBLE PRECISION   RWORK( * )
 *       DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*      $                   WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -30,7 +34,7 @@
 *>
 *> \verbatim
 *>
-*> DDRVSY_AA tests the driver routine DSYSV_AA.
+*> DDRVSY_AA_2STAGE tests the driver routine DSYSV_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -126,7 +130,7 @@
 *>
 *> \param[out] IWORK
 *> \verbatim
-*>          IWORK is INTEGER array, dimension (2*NMAX)
+*>          IWORK is INTEGER array, dimension (NMAX)
 *> \endverbatim
 *>
 *> \param[in] NOUT
@@ -143,32 +147,32 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
-*
-*  @precisions fortran d -> z c
+*> \date December 2016
 *
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DDRVSY_AA( DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
-     $                      NMAX, A, AFAC, AINV, B, X, XACT, WORK,
-     $                      RWORK, IWORK, NOUT )
+      SUBROUTINE DDRVSY_AA_2STAGE(
+     $                         DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
+     $                         RWORK, IWORK, NOUT )
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
       INTEGER            NMAX, NN, NOUT, NRHS
-      DOUBLE PRECISION   THRESH
+      DOUBLE PRECISION               THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), NVAL( * )
+      DOUBLE PRECISION   RWORK( * )
       DOUBLE PRECISION   A( * ), AFAC( * ), AINV( * ), B( * ),
-     $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+     $                   WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
@@ -196,13 +200,14 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DGET06, DLANSY
-      EXTERNAL           DGET06, DLANSY
+      DOUBLE PRECISION   DLANSY, SGET06
+      EXTERNAL           DLANSY, SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, DERRVX, DGET04, DLACPY,
-     $                   DLARHS, DLASET, DLATB4, DLATMS, DPOT02,
-     $                   DSYSV_AA, DSYT01_AA, DSYTRF_AA, XLAENV
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, DERRVX,
+     $                   DGET04, DLACPY, DLARHS, DLATB4, DLATMS,
+     $                   DSYSV_AA_2STAGE, CHET01_AA, DPOT02,
+     $                   DSYTRF_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -214,7 +219,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          CMPLX, MAX, MIN
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /
@@ -227,7 +232,7 @@
 *     Test path
 *
       PATH( 1: 1 ) = 'Double precision'
-      PATH( 2: 3 ) = 'SA'
+      PATH( 2: 3 ) = 'S2'
 *
 *     Path to generate matrices
 *
@@ -258,8 +263,6 @@
 *
       DO 180 IN = 1, NN
          N = NVAL( IN )
-         LWORK = MAX( 3*N-2, N*(1+NB) )
-         LWORK = MAX( LWORK, 1 )
          LDA = MAX( N, 1 )
          XTYPE = 'N'
          NIMAT = NTYPES
@@ -284,92 +287,100 @@
             DO 160 IUPLO = 1, 2
                UPLO = UPLOS( IUPLO )
 *
-*              Set up parameters with DLATB4 and generate a test matrix
-*              with DLATMS.
+*              Begin generate the test matrix A.
 *
-               CALL DLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
-     $                      MODE, CNDNUM, DIST )
+*              Set up parameters with DLATB4 for the matrix generator
+*              based on the type of matrix to be generated.
 *
-               SRNAMT = 'DLATMS'
-               CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
-     $                      CNDNUM, ANORM, KL, KU, UPLO, A, LDA, WORK,
-     $                      INFO )
+              CALL DLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+     $                         MODE, CNDNUM, DIST )
 *
-*              Check error code from DLATMS.
+*              Generate a matrix with DLATMS.
 *
-               IF( INFO.NE.0 ) THEN
-                  CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N, -1,
-     $                         -1, -1, IMAT, NFAIL, NERRS, NOUT )
-                  GO TO 160
-               END IF
+                  SRNAMT = 'DLATMS'
+                  CALL DLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+     $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
+     $                         WORK, INFO )
 *
-*              For types 3-6, zero one or more rows and columns of the
-*              matrix to test that INFO is returned correctly.
+*                 Check error code from DLATMS and handle error.
 *
-               IF( ZEROT ) THEN
-                  IF( IMAT.EQ.3 ) THEN
-                     IZERO = 1
-                  ELSE IF( IMAT.EQ.4 ) THEN
-                     IZERO = N
-                  ELSE
-                     IZERO = N / 2 + 1
+                  IF( INFO.NE.0 ) THEN
+                     CALL ALAERH( PATH, 'DLATMS', INFO, 0, UPLO, N, N,
+     $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
+                     GO TO 160
                   END IF
 *
-                  IF( IMAT.LT.6 ) THEN
+*                 For types 3-6, zero one or more rows and columns of
+*                 the matrix to test that INFO is returned correctly.
 *
-*                    Set row and column IZERO to zero.
-*
-                     IF( IUPLO.EQ.1 ) THEN
-                        IOFF = ( IZERO-1 )*LDA
-                        DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = ZERO
-   20                   CONTINUE
-                        IOFF = IOFF + IZERO
-                        DO 30 I = IZERO, N
-                           A( IOFF ) = ZERO
-                           IOFF = IOFF + LDA
-   30                   CONTINUE
+                  IF( ZEROT ) THEN
+                     IF( IMAT.EQ.3 ) THEN
+                        IZERO = 1
+                     ELSE IF( IMAT.EQ.4 ) THEN
+                        IZERO = N
                      ELSE
-                        IOFF = IZERO
-                        DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = ZERO
-                           IOFF = IOFF + LDA
-   40                   CONTINUE
-                        IOFF = IOFF - IZERO
-                        DO 50 I = IZERO, N
-                           A( IOFF+I ) = ZERO
-   50                   CONTINUE
+                        IZERO = N / 2 + 1
                      END IF
-                  ELSE
-                     IOFF = 0
-                     IF( IUPLO.EQ.1 ) THEN
+*
+                     IF( IMAT.LT.6 ) THEN
+*
+*                       Set row and column IZERO to zero.
+*
+                        IF( IUPLO.EQ.1 ) THEN
+                           IOFF = ( IZERO-1 )*LDA
+                           DO 20 I = 1, IZERO - 1
+                              A( IOFF+I ) = ZERO
+   20                      CONTINUE
+                           IOFF = IOFF + IZERO
+                           DO 30 I = IZERO, N
+                              A( IOFF ) = ZERO
+                              IOFF = IOFF + LDA
+   30                      CONTINUE
+                        ELSE
+                           IOFF = IZERO
+                           DO 40 I = 1, IZERO - 1
+                              A( IOFF ) = ZERO
+                              IOFF = IOFF + LDA
+   40                      CONTINUE
+                           IOFF = IOFF - IZERO
+                           DO 50 I = IZERO, N
+                              A( IOFF+I ) = ZERO
+   50                      CONTINUE
+                        END IF
+                     ELSE
+                        IOFF = 0
+                        IF( IUPLO.EQ.1 ) THEN
 *
 *                       Set the first IZERO rows and columns to zero.
 *
-                        DO 70 J = 1, N
-                           I2 = MIN( J, IZERO )
-                           DO 60 I = 1, I2
-                              A( IOFF+I ) = ZERO
-   60                      CONTINUE
-                           IOFF = IOFF + LDA
-   70                   CONTINUE
-                        IZERO = 1
-                     ELSE
+                           DO 70 J = 1, N
+                              I2 = MIN( J, IZERO )
+                              DO 60 I = 1, I2
+                                 A( IOFF+I ) = ZERO
+   60                         CONTINUE
+                              IOFF = IOFF + LDA
+   70                      CONTINUE
+                           IZERO = 1
+                        ELSE
 *
-*                       Set the last IZERO rows and columns to zero.
+*                       Set the first IZERO rows and columns to zero.
 *
-                        DO 90 J = 1, N
-                           I1 = MAX( J, IZERO )
-                           DO 80 I = I1, N
-                              A( IOFF+I ) = ZERO
-   80                      CONTINUE
-                           IOFF = IOFF + LDA
-   90                   CONTINUE
+                           IOFF = 0
+                           DO 90 J = 1, N
+                              I1 = MAX( J, IZERO )
+                              DO 80 I = I1, N
+                                 A( IOFF+I ) = ZERO
+   80                         CONTINUE
+                              IOFF = IOFF + LDA
+   90                      CONTINUE
+                        END IF
                      END IF
+                  ELSE
+                     IZERO = 0
                   END IF
-               ELSE
-                  IZERO = 0
-               END IF
+*
+*                 End generate the test matrix A.
+*
 *
                DO 150 IFACT = 1, NFACT
 *
@@ -385,7 +396,7 @@
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test DSYSV_AA  ---
+*                 --- Test DSYSV_AA_2STAGE  ---
 *
                   IF( IFACT.EQ.2 ) THEN
                      CALL DLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
@@ -393,8 +404,11 @@
 *
 *                    Factor the matrix and solve the system using DSYSV_AA.
 *
-                     SRNAMT = 'DSYSV_AA'
-                     CALL DSYSV_AA( UPLO, N, NRHS, AFAC, LDA, IWORK,
+                     SRNAMT = 'DSYSV_AA_2STAGE '
+                     LWORK = MIN(N*NB, 3*NMAX*NMAX)
+                     CALL DSYSV_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
+     $                                 AINV, (3*NB+1)*N, 
+     $                                 IWORK, IWORK( 1+N ),
      $                                 X, LDA, WORK, LWORK, INFO )
 *
 *                    Adjust the expected value of INFO to account for
@@ -420,7 +434,7 @@
 *                    Check error code from DSYSV_AA .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'DSYSV_AA ', INFO, K,
+                        CALL ALAERH( PATH, 'DSYSV_AA', INFO, K,
      $                               UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 120
@@ -428,19 +442,20 @@
                         GO TO 120
                      END IF
 *
-*                    Reconstruct matrix from factors and compute
-*                    residual.
-*
-                     CALL DSYT01_AA( UPLO, N, A, LDA, AFAC, LDA,
-     $                                  IWORK, AINV, LDA, RWORK,
-     $                                  RESULT( 1 ) )
-*
 *                    Compute residual of the computed solution.
 *
                      CALL DLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
                      CALL DPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
-     $                            LDA, RWORK, RESULT( 2 ) )
-                     NT = 2
+     $                            LDA, RWORK, RESULT( 1 ) )
+*
+*                    Reconstruct matrix from factors and compute
+*                    residual.
+*
+c                     CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
+c     $                                  IWORK, AINV, LDA, RWORK,
+c     $                                  RESULT( 2 ) )
+c                     NT = 2
+                     NT = 1
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -450,7 +465,7 @@
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALADHD( NOUT, PATH )
                            WRITE( NOUT, FMT = 9999 )'DSYSV_AA ',
-     $                        UPLO, N, IMAT, K, RESULT( K )
+     $                         UPLO, N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
   110                CONTINUE
@@ -472,6 +487,6 @@
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of DDRVSY_AA
+*     End of DDRVSY_AA_2STAGE
 *
       END

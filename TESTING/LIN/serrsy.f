@@ -93,7 +93,7 @@
      $                   SSYTRF_ROOK, SSYTRI, SSYTF2, SSYTRI_3,
      $                   SSYTRI_3X, SSYTRI_ROOK, SSYTRF_AA, SSYTRI2, 
      $                   SSYTRI2X, SSYTRS, SSYTRS_3, SSYTRS_ROOK,
-     $                   SSYTRS_AA
+     $                   SSYTRS_AA, SSYTRF_AA_2STAGE, SSYTRS_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -524,6 +524,62 @@
          INFOT = 10
          CALL SSYTRS_AA( 'U', 0, 1, A, 2, IP, B, 1, W, -2, INFO )
          CALL CHKXER( 'SSYTRS_AA', INFOT, NOUT, LERR, OK )
+      ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with Aasen's algorithm.
+*
+*        SSYTRF_AA_2STAGE
+*
+         SRNAMT = 'SSYTRF_AA_2STAGE'
+         INFOT = 1
+         CALL SSYTRF_AA_2STAGE( '/', 0, A, 1, A, 1, IP, IP, W, 1,
+     $                          INFO )
+         CALL CHKXER( 'SSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SSYTRF_AA_2STAGE( 'U', -1, A, 1, A, 1, IP, IP, W, 1,
+     $                           INFO )
+         CALL CHKXER( 'SSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL SSYTRF_AA_2STAGE( 'U', 2, A, 1, A, 2, IP, IP, W, 1,
+     $                           INFO )
+         CALL CHKXER( 'SSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL SSYTRF_AA_2STAGE( 'U', 2, A, 2, A, 1, IP, IP, W, 1,
+     $                           INFO )
+         CALL CHKXER( 'SSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL SSYTRF_AA_2STAGE( 'U', 2, A, 2, A, 8, IP, IP, W, 0,
+     $                           INFO )
+         CALL CHKXER( 'SSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+*
+*        SSYTRS_AA_2STAGE
+*
+         SRNAMT = 'SSYTRS_AA_2STAGE'
+         INFOT = 1
+         CALL SSYTRS_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL SSYTRS_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL SSYTRS_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL SSYTRS_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL SSYTRS_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL SSYTRS_AA_2STAGE( 'U', 2, 1, A, 2, A, 8, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'SSYTRS_AA_STAGE', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'SP' ) ) THEN
 *

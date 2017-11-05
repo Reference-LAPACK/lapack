@@ -50,10 +50,12 @@ SLINTST = schkaa.o \
    schkeq.o schkgb.o schkge.o schkgt.o \
    schklq.o schkpb.o schkpo.o schkps.o schkpp.o \
    schkpt.o schkq3.o schkql.o schkqr.o schkrq.o \
-   schksp.o schksy.o schksy_rook.o schksy_rk.o schksy_aa.o schktb.o schktp.o schktr.o \
+   schksp.o schksy.o schksy_rook.o schksy_rk.o  \
+   schksy_aa.o schksy_aa_2stage.o schktb.o schktp.o schktr.o \
    schktz.o \
    sdrvgt.o sdrvls.o sdrvpb.o \
-   sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy_rook.o sdrvsy_rk.o sdrvsy_aa.o \
+   sdrvpp.o sdrvpt.o sdrvsp.o sdrvsy_rook.o sdrvsy_rk.o \
+   sdrvsy_aa.o sdrvsy_aa_2stage.o \
    serrgt.o serrlq.o serrls.o \
    serrps.o serrql.o serrqp.o serrqr.o \
    serrrq.o serrtr.o serrtz.o \
@@ -88,9 +90,11 @@ endif
 
 CLINTST = cchkaa.o \
    cchkeq.o cchkgb.o cchkge.o cchkgt.o \
-   cchkhe.o cchkhe_rook.o cchkhe_rk.o cchkhe_aa.o cchkhp.o cchklq.o cchkpb.o \
+   cchkhe.o cchkhe_rook.o cchkhe_rk.o  \
+   cchkhe_aa.o cchkhe_aa_2stage.o cchkhp.o cchklq.o cchkpb.o \
    cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o \
-   cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchksy_rk.o cchksy_aa.o cchktb.o \
+   cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchksy_rk.o \
+   cchksy_aa.o cdrvhe_aa_2stage.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
    cdrvgt.o cdrvhe_rook.o cdrvhe_rk.o cdrvhe_aa.o cdrvhp.o \
    cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o \
@@ -135,10 +139,12 @@ DLINTST = dchkaa.o \
    dchkeq.o dchkgb.o dchkge.o dchkgt.o \
    dchklq.o dchkpb.o dchkpo.o dchkps.o dchkpp.o \
    dchkpt.o dchkq3.o dchkql.o dchkqr.o dchkrq.o \
-   dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o dchksy_aa.o dchktb.o dchktp.o dchktr.o \
+   dchksp.o dchksy.o dchksy_rook.o dchksy_rk.o  \
+   dchksy_aa.o dchksy_aa_2stage.o dchktb.o dchktp.o dchktr.o \
    dchktz.o \
    ddrvgt.o ddrvls.o ddrvpb.o \
-   ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o ddrvsy_rk.o ddrvsy_aa.o \
+   ddrvpp.o ddrvpt.o ddrvsp.o ddrvsy_rook.o ddrvsy_rk.o \
+   ddrvsy_aa.o ddrvsy_aa_2stage.o \
    derrgt.o derrlq.o derrls.o \
    derrps.o derrql.o derrqp.o derrqr.o \
    derrrq.o derrtr.o derrtz.o \
