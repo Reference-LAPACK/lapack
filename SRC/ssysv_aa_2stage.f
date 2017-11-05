@@ -1,7 +1,5 @@
 *> \brief <b> SSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
-*  @precisions fortran s -> c
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at

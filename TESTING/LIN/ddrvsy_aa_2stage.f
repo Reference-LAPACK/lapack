@@ -1,7 +1,5 @@
 *> \brief \b DDRVSY_AA_2STAGE
 *
-* @generated from cdrvhe_aa_2stage.f, fortran c -> d, Tue Oct 31 11:25:04 2017
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at

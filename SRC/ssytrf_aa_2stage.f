@@ -1,7 +1,5 @@
 *> \brief \b SSYTRF_AA_2STAGE
 *
-*  @precisions fortran s -> c
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at

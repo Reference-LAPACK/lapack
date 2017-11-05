@@ -1,7 +1,5 @@
 *> \brief <b> CHESV_AA_2STAGE computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
-* @precisions fortran c -> s d
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
