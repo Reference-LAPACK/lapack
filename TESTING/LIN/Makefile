@@ -94,11 +94,12 @@ CLINTST = cchkaa.o \
    cchkhe_aa.o cchkhe_aa_2stage.o cchkhp.o cchklq.o cchkpb.o \
    cchkpo.o cchkps.o cchkpp.o cchkpt.o cchkq3.o cchkql.o \
    cchkqr.o cchkrq.o cchksp.o cchksy.o cchksy_rook.o cchksy_rk.o \
-   cchksy_aa.o cdrvhe_aa_2stage.o cchktb.o \
+   cchksy_aa.o cchksy_aa_2stage.o cchktb.o \
    cchktp.o cchktr.o cchktz.o \
    cdrvgt.o cdrvhe_rook.o cdrvhe_rk.o cdrvhe_aa.o cdrvhp.o \
+   cdrvhe_aa_2stage.o \
    cdrvls.o cdrvpb.o cdrvpp.o cdrvpt.o \
-   cdrvsp.o cdrvsy_rook.o cdrvsy_rk.o cdrvsy_aa.o \
+   cdrvsp.o cdrvsy_rook.o cdrvsy_rk.o cdrvsy_aa.o cdrvsy_aa_2stage.o \
    cerrgt.o cerrlq.o \
    cerrls.o cerrps.o cerrql.o cerrqp.o \
    cerrqr.o cerrrq.o cerrtr.o cerrtz.o \

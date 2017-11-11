@@ -57,11 +57,11 @@ set(CLINTST cchkaa.f
    cchkhp.f cchklq.f cchkpb.f
    cchkpo.f cchkps.f cchkpp.f cchkpt.f cchkq3.f cchkql.f
    cchkqr.f cchkrq.f cchksp.f cchksy.f cchksy_rook.f cchksy_rk.f
-   cchksy_aa.f 
+   cchksy_aa.f cchksy_aa_2stage.f
    cchktb.f
    cchktp.f cchktr.f cchktz.f
    cdrvgt.f cdrvhe_rook.f cdrvhe_rk.f 
-   cdrvhe_aa.f cdrvhe_aa_2stage.f
+   cdrvhe_aa.f cdrvhe_aa_2stage.f cdrvsy_aa_2stage.f
    cdrvhp.f
    cdrvls.f cdrvpb.f cdrvpp.f cdrvpt.f
    cdrvsp.f cdrvsy_rook.f cdrvsy_rk.f 
