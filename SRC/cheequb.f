@@ -168,7 +168,7 @@
       EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLASSQ
+      EXTERNAL           CLASSQ, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, INT, LOG, MAX, MIN, REAL, SQRT

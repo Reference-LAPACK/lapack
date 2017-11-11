@@ -135,7 +135,7 @@
       DOUBLE PRECISION   BIGNUM, EPS, SMIN, SMLNUM, XMAX
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGER, DSWAP
+      EXTERNAL           DGER, DSWAP, DLABAD
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH

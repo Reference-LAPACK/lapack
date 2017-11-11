@@ -228,7 +228,7 @@
       LOGICAL            LQUERY
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, XERBLA
+      EXTERNAL           ZLARF, ZLARFGP, ZUNBDB5, ZDROT, ZLACGV, XERBLA
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DZNRM2

@@ -303,7 +303,7 @@
       EXTERNAL           LSAME, DDOT, DLAMCH, DLAPY2, DNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACN2, DLACPY, DLAQTR, DTREXC, XERBLA
+      EXTERNAL           DLABAD, DLACN2, DLACPY, DLAQTR, DTREXC, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, SQRT

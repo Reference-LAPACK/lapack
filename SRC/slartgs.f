@@ -108,6 +108,9 @@
 *     .. Local Scalars ..
       REAL                    R, S, THRESH, W, Z
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL           SLARTGP
+*     ..
 *     .. External Functions ..
       REAL                    SLAMCH
       EXTERNAL           SLAMCH

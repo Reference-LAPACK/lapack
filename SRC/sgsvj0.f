@@ -262,7 +262,8 @@
       EXTERNAL           ISAMAX, LSAME, SDOT, SNRM2
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SAXPY, SCOPY, SLASCL, SLASSQ, SROTM, SSWAP
+      EXTERNAL           SAXPY, SCOPY, SLASCL, SLASSQ, SROTM, SSWAP,
+     $                   XERBLA
 *     ..
 *     .. Executable Statements ..
 *

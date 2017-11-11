@@ -173,7 +173,7 @@
       LOGICAL            LSAME
       EXTERNAL           LSAME
 *     .. EXTERNAL SUBROUTINES ..
-      EXTERNAL           SGEQRT, STPQRT, XERBLA
+      EXTERNAL           SGELQT, SGEQRT, STPLQT, STPQRT, XERBLA
 *     .. INTRINSIC FUNCTIONS ..
       INTRINSIC          MAX, MIN, MOD
 *     ..

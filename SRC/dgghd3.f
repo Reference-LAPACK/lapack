@@ -266,7 +266,8 @@
       EXTERNAL           ILAENV, LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGGHRD, DLARTG, DLASET, DORM22, DROT, XERBLA
+      EXTERNAL           DGGHRD, DLARTG, DLASET, DORM22, DROT, DGEMM,
+     $                   DGEMV, DTRMV, DLACPY, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX

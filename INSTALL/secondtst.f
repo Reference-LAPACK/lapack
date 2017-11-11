@@ -44,6 +44,9 @@
       REAL               SECOND
       EXTERNAL           SECOND
 *     ..
+*     .. External Subroutines ..
+      EXTERNAL           MYSUB
+*     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          REAL
 *     ..

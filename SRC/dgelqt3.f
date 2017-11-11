@@ -150,7 +150,7 @@
       PARAMETER ( ONE = 1.0D+00 )
 *     ..
 *     .. Local Scalars ..
-      INTEGER   I, I1, J, J1, M1, M2, N1, N2, IINFO
+      INTEGER   I, I1, J, J1, M1, M2, IINFO
 *     ..
 *     .. External Subroutines ..
       EXTERNAL  DLARFG, DTRMM, DGEMM, XERBLA

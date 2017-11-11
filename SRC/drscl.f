@@ -112,7 +112,7 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DSCAL
+      EXTERNAL           DSCAL, DLABAD
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS

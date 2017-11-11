@@ -134,7 +134,7 @@
       EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSYRK, XERBLA
+      EXTERNAL           SSYRK, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, SQRT

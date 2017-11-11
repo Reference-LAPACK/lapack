@@ -277,7 +277,7 @@
      $                   TPOS, WPOS, S2POS, S1POS
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CHER2K, CHEMM, CGEMM,
+      EXTERNAL           XERBLA, CHER2K, CHEMM, CGEMM, CCOPY,
      $                   CLARFT, CGELQF, CGEQRF, CLASET
 *     ..
 *     .. Intrinsic Functions ..
