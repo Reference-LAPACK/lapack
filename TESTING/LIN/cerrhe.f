@@ -520,7 +520,8 @@
          INFOT = 10
          CALL CHETRS_AA( 'U', 2, 1, A, 2, IP, B, 2, W, -2, INFO )
          CALL CHKXER( 'CHETRS_AA', INFOT, NOUT, LERR, OK )
-      ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
+*
+      ELSE IF( LSAMEN( 2, C2, 'H2' ) ) THEN
 *
 *        Test error exits of the routines that use factorization
 *        of a symmetric indefinite matrix with Aasen's algorithm.
