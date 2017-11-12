@@ -337,7 +337,7 @@
                         ELSE
                            IOFF = IZERO
                            DO 40 I = 1, IZERO - 1
-                              A( IOFF ) = ZERO
+                              A( IOFF ) = CZERO
                               IOFF = IOFF + LDA
    40                      CONTINUE
                            IOFF = IOFF - IZERO
