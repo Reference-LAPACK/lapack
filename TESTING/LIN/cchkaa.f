@@ -54,6 +54,8 @@
 *> CHK   10               List types on next line if 0 < NTYPES < 10
 *> CHA   10               List types on next line if 0 < NTYPES < 10
 *> CH2   10               List types on next line if 0 < NTYPES < 10
+*> CSA   11               List types on next line if 0 < NTYPES < 10
+*> CS2   11               List types on next line if 0 < NTYPES < 10
 *> CHP   10               List types on next line if 0 < NTYPES < 10
 *> CSY   11               List types on next line if 0 < NTYPES < 11
 *> CSK   11               List types on next line if 0 < NTYPES < 11
@@ -728,7 +730,7 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'H2' ) ) THEN
 *
-*        SA:  symmetric indefinite matrices,
+*        H2:  Hermitian matrices,
 *             with partial (Aasen's) pivoting algorithm
 *
          NTYPES = 10
@@ -886,7 +888,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
 *
-*        SA:  symmetric indefinite matrices with Aasen's algorithm,
+*        S2:  symmetric indefinite matrices with Aasen's algorithm
+*             2 stage
 *
          NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )

@@ -1,4 +1,4 @@
-*> \brief \b SCHKSY_AA_2STAGE
+*> \brief \b CCHKSY_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -16,13 +16,14 @@
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NMAX, NN, NNB, NNS, NOUT
-*       COMPLEX   THRESH
+*       REAL               THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+*       REAL               RWORK( * )
 *       COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*      $                   WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -31,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> SCHKSY_AA_2STAGE tests CSYTRF_AA_2STAGE, -TRS_AA_2STAGE.
+*> CCHKSY_AA_2STAGE tests CSYTRF_AA_2STAGE, -TRS_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +84,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is COMPLEX
+*>          THRESH is REAL
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -164,8 +165,6 @@
 *
 *> \date June 2017
 *
-*  @generated from dsytrf_aasen_2stage.f, fortran d -> s, Mon Oct 30 12:03:46 2017
-*
 *> \ingroup complex_lin
 *
 *  =====================================================================
@@ -196,9 +195,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX            ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ),
-     $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
+      COMPLEX            CZERO
+      PARAMETER          ( CZERO = ( 0.0E+0, 0.0E+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
@@ -355,22 +353,22 @@
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDA
                         DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    20                   CONTINUE
                         IOFF = IOFF + IZERO
                         DO 30 I = IZERO, N
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    30                   CONTINUE
                      ELSE
                         IOFF = IZERO
                         DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    40                   CONTINUE
                         IOFF = IOFF - IZERO
                         DO 50 I = IZERO, N
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    50                   CONTINUE
                      END IF
                   ELSE
@@ -382,7 +380,7 @@
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    60                      CONTINUE
                            IOFF = IOFF + LDA
    70                   CONTINUE
@@ -395,7 +393,7 @@
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    80                      CONTINUE
                            IOFF = IOFF + LDA
    90                   CONTINUE

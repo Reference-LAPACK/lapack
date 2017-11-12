@@ -146,8 +146,6 @@
 *
 *> \date June 2017
 *
-*  @generated from LIN/ddrvsy_aa.f, fortran d -> z, Thu Nov 17 12:14:51 2016
-*
 *> \ingroup complex16_lin
 *
 *  =====================================================================

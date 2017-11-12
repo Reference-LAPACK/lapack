@@ -1,4 +1,4 @@
-*> \brief <b> CSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> ZSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CSYSV_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csysv_aasen_2stage.f">
+*> Download ZSYSV_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsysv_aasen_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csysv_aasen_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsysv_aasen_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysv_aasen_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsysv_aasen_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE CSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+*      SUBROUTINE ZSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
 *                                  IPIV, IPIV2, B, LDB, WORK, LWORK,
 *                                  INFO )
 *
@@ -28,7 +28,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * ), IPIV2( * )
-*       COMPLEX            A( LDA, * ), TB( * ), B( LDB, *), WORK( * )
+*       COMPLEX*16         A( LDA, * ), TB( * ), B( LDB, *), WORK( * )
 *       ..
 *
 *> \par Purpose:
@@ -36,7 +36,7 @@
 *>
 *> \verbatim
 *>
-*> CSYSV_AA_2STAGE computes the solution to a complex system of
+*> ZSYSV_AA_2STAGE computes the solution to a complex system of
 *> linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
@@ -78,7 +78,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (LDA,N)
+*>          A is COMPLEX*16 array, dimension (LDA,N)
 *>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
@@ -99,7 +99,7 @@
 *>
 *> \param[out] TB
 *> \verbatim
-*>          TB is COMPLEX array, dimension (LTB)
+*>          TB is COMPLEX*16 array, dimension (LTB)
 *>          On exit, details of the LU factorization of the band matrix.
 *> \endverbatim
 *>
@@ -132,7 +132,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, the right hand side matrix B.
 *>          On exit, the solution matrix X.
 *> \endverbatim
@@ -145,7 +145,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX workspace of size LWORK
+*>          WORK is COMPLEX*16 workspace of size LWORK
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -175,12 +175,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
+*> \date November 2017
 *
-*> \ingroup complexSYcomputational
+*> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      SUBROUTINE CSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+      SUBROUTINE ZSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                            IPIV, IPIV2, B, LDB, WORK, LWORK,
      $                            INFO )
 *
@@ -197,7 +197,7 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * ), IPIV2( * )
-      COMPLEX            A( LDA, * ), B( LDB, * ), TB( * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), B( LDB, * ), TB( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
@@ -211,8 +211,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CSYTRF_AA_2STAGE, 
-     $                   CSYTRS_AA_2STAGE, XERBLA
+      EXTERNAL           XERBLA, ZSYTRF_AA_2STAGE,
+     $                   ZSYTRS_AA_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -238,7 +238,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL CSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
+         CALL ZSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
          LWKOPT = INT( WORK(1) )
          IF( LTB.LT.INT( TB(1) ) .AND. .NOT.TQUERY ) THEN
@@ -249,7 +249,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CSYSV_AA_2STAGE', -INFO )
+         CALL XERBLA( 'ZSYSV_AA_2STAGE', -INFO )
          RETURN
       ELSE IF( WQUERY .OR. TQUERY ) THEN
          RETURN
@@ -258,19 +258,19 @@
 *
 *     Compute the factorization A = U*T*U**H or A = L*T*L**H.
 *
-      CALL CSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
+      CALL ZSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
      $                       WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL CSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
+         CALL ZSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
      $                          IPIV2, B, LDB, INFO )
 *
       END IF
 *
       WORK( 1 ) = LWKOPT
 *
-*     End of CSYSV_AA_2STAGE
+*     End of ZSYSV_AA_2STAGE
 *
       END
