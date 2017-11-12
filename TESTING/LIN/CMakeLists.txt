@@ -157,7 +157,7 @@ set(ZLINTST zchkaa.f
    zchkhp.f zchklq.f zchkpb.f
    zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkql.f
    zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchksy_rk.f
-   zchksy_aa.f  
+   zchksy_aa.f  zchksy_aa_2stage.f
    zchktb.f
    zchktp.f zchktr.f zchktz.f
    zdrvgt.f zdrvhe_rook.f zdrvhe_rk.f 
@@ -165,7 +165,7 @@ set(ZLINTST zchkaa.f
    zdrvhp.f
    zdrvls.f zdrvpb.f zdrvpp.f zdrvpt.f
    zdrvsp.f zdrvsy_rook.f zdrvsy_rk.f 
-   zdrvsy_aa.f 
+   zdrvsy_aa.f zdrvsy_aa_2stage.f 
    zerrgt.f zerrlq.f
    zerrls.f zerrps.f zerrql.f zerrqp.f
    zerrqr.f zerrrq.f zerrtr.f zerrtz.f

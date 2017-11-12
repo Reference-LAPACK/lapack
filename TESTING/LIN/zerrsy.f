@@ -593,6 +593,63 @@
          CALL ZSYTRS_AA( 'U', 2, 1, A, 2, IP, B, 1, W, 1, INFO )
          CALL CHKXER( 'ZSYTRS_AA', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
+*
+*        Test error exits of the routines that use factorization
+*        of a symmetric indefinite matrix with Aasen's algorithm.
+*
+*        ZSYTRF_AA_2STAGE
+*
+         SRNAMT = 'ZSYTRF_AA_2STAGE'
+         INFOT = 1
+         CALL ZSYTRF_AA_2STAGE( '/', 0, A, 1, A, 1, IP, IP, W, 1,
+     $                          INFO )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTRF_AA_2STAGE( 'U', -1, A, 1, A, 1, IP, IP, W, 1,
+     $                           INFO )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 4
+         CALL ZSYTRF_AA_2STAGE( 'U', 2, A, 1, A, 2, IP, IP, W, 1,
+     $                           INFO )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 6
+         CALL ZSYTRF_AA_2STAGE( 'U', 2, A, 2, A, 1, IP, IP, W, 1,
+     $                           INFO )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 10
+         CALL ZSYTRF_AA_2STAGE( 'U', 2, A, 2, A, 8, IP, IP, W, 0,
+     $                           INFO )
+         CALL CHKXER( 'ZSYTRF_AA_2STAGE', INFOT, NOUT, LERR, OK )
+*
+*        CHETRS_AA_2STAGE
+*
+         SRNAMT = 'ZSYTRS_AA_2STAGE'
+         INFOT = 1
+         CALL ZSYTRS_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZSYTRS_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZSYTRS_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL ZSYTRS_AA_2STAGE( 'U', 2, 1, A, 2, A, 8, IP, IP,
+     $                          B, 1, INFO )
+         CALL CHKXER( 'ZSYTRS_AA_STAGE', INFOT, NOUT, LERR, OK )
+*
       END IF
 *
 *     Print a summary line.

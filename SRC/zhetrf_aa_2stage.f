@@ -150,9 +150,9 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
+*> \date November 2017
 *
-*> \ingroup complexSYcomputational
+*> \ingroup complex16SYcomputational
 *
 *  =====================================================================
       SUBROUTINE ZHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
@@ -194,10 +194,10 @@
 *     .. External Subroutines ..
       EXTERNAL           XERBLA, ZCOPY, ZLACGV, ZLACPY,
      $                   ZLASET, ZGBTRF, ZGEMM,  ZGETRF, 
-     $                   CHEGST, ZSWAP, ZTRSM 
+     $                   ZHEGST, ZSWAP, ZTRSM 
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CONJG, MIN, MAX
+      INTRINSIC          DCONJG, MIN, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -333,7 +333,7 @@
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
             END IF
             IF( J.GT.0 ) THEN 
-               CALL CHEGST( 1, 'Upper', KB, 
+               CALL ZHEGST( 1, 'Upper', KB, 
      $                      TB( TD+1 + (J*NB)*LDTB ), LDTB-1, 
      $                      A( (J-1)*NB+1, J*NB+1 ), LDA, IINFO )
             END IF
@@ -345,7 +345,7 @@
      $            = REAL( TB( TD+1 + (J*NB+I-1)*LDTB ) )
                DO K = I+1, KB
                   TB( TD+(K-I)+1 + (J*NB+I-1)*LDTB )
-     $               = CONJG( TB( TD-(K-(I+1)) + (J*NB+K-1)*LDTB ) )
+     $               = DCONJG( TB( TD-(K-(I+1)) + (J*NB+K-1)*LDTB ) )
                END DO
             END DO
 *
@@ -430,7 +430,7 @@ c               END IF
                DO K = 1, NB
                   DO I = 1, KB
                      TB( TD-NB+K-I+1 + (J*NB+NB+I-1)*LDTB )
-     $                  = CONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
+     $                  = DCONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
                   END DO
                END DO
                CALL ZLASET( 'Lower', KB, NB, ZERO, ONE, 
@@ -531,7 +531,7 @@ c               END IF
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
             END IF
             IF( J.GT.0 ) THEN 
-               CALL CHEGST( 1, 'Lower', KB, 
+               CALL ZHEGST( 1, 'Lower', KB, 
      $                      TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                      A( J*NB+1, (J-1)*NB+1 ), LDA, IINFO )
             END IF
@@ -543,7 +543,7 @@ c               END IF
      $            = REAL( TB( TD+1 + (J*NB+I-1)*LDTB ) )
                DO K = I+1, KB
                   TB( TD-(K-(I+1)) + (J*NB+K-1)*LDTB )
-     $               = CONJG( TB( TD+(K-I)+1 + (J*NB+I-1)*LDTB ) )
+     $               = DCONJG( TB( TD+(K-I)+1 + (J*NB+I-1)*LDTB ) )
                END DO
             END DO
 *
@@ -605,7 +605,7 @@ c               END IF
                DO K = 1, NB
                   DO I = 1, KB
                      TB( TD-NB+K-I+1 + (J*NB+NB+I-1)*LDTB )
-     $                  = CONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
+     $                  = DCONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
                   END DO
                END DO
                CALL ZLASET( 'Upper', KB, NB, ZERO, ONE, 
@@ -645,7 +645,7 @@ c               END IF
 *         
 *              Apply pivots to previous columns of L
 *         
-c               CALL CLASWP( J*NB, A( 1, 1 ), LDA, 
+c               CALL ZLASWP( J*NB, A( 1, 1 ), LDA, 
 c     $                     (J+1)*NB+1, (J+1)*NB+KB, IPIV, 1 )
             END IF
          END DO

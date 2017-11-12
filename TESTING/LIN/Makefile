@@ -185,11 +185,11 @@ ZLINTST = zchkaa.o \
    zchkhp.o zchklq.o zchkpb.o \
    zchkpo.o zchkps.o zchkpp.o zchkpt.o zchkq3.o zchkql.o \
    zchkqr.o zchkrq.o zchksp.o zchksy.o zchksy_rook.o zchksy_rk.o \
-   zchksy_aa.o zchktb.o \
+   zchksy_aa.o zchksy_aa_2stage.o zchktb.o \
    zchktp.o zchktr.o zchktz.o \
    zdrvgt.o zdrvhe_rook.o zdrvhe_rk.o zdrvhe_aa.o zdrvhe_aa_2stage.o zdrvhp.o \
    zdrvls.o zdrvpb.o zdrvpp.o zdrvpt.o \
-   zdrvsp.o zdrvsy_rook.o zdrvsy_rk.o zdrvsy_aa.o \
+   zdrvsp.o zdrvsy_rook.o zdrvsy_rk.o zdrvsy_aa.o zdrvsy_aa_2stage.o \
    zerrgt.o zerrlq.o \
    zerrls.o zerrps.o zerrql.o zerrqp.o \
    zerrqr.o zerrrq.o zerrtr.o zerrtz.o \
