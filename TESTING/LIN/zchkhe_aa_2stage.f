@@ -404,7 +404,12 @@
                   IZERO = 0
                END IF
 *
-*              End generate the test matrix A.
+*              End generate test matrix A.
+*
+*
+*              Set the imaginary part of the diagonals.
+*
+               CALL ZLAIPD( N, A, LDA+1, 0 )
 *
 *              Do for each value of NB in NBVAL
 *

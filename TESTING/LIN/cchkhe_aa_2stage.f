@@ -196,13 +196,14 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX            ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ), 
-     $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
-      INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 10 )
-      INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 9 )
+      REAL         ZERO
+      PARAMETER    ( ZERO = 0.0E+0 )
+      COMPLEX      CZERO
+      PARAMETER    ( CZERO = ( 0.0E+0, 0.0E+0 ) )
+      INTEGER      NTYPES
+      PARAMETER    ( NTYPES = 10 )
+      INTEGER      NTESTS
+      PARAMETER    ( NTESTS = 9 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            ZEROT
@@ -356,22 +357,22 @@
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDA
                         DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    20                   CONTINUE
                         IOFF = IOFF + IZERO
                         DO 30 I = IZERO, N
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    30                   CONTINUE
                      ELSE
                         IOFF = IZERO
                         DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    40                   CONTINUE
                         IOFF = IOFF - IZERO
                         DO 50 I = IZERO, N
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    50                   CONTINUE
                      END IF
                   ELSE
@@ -383,7 +384,7 @@
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    60                      CONTINUE
                            IOFF = IOFF + LDA
    70                   CONTINUE
@@ -396,7 +397,7 @@
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    80                      CONTINUE
                            IOFF = IOFF + LDA
    90                   CONTINUE
@@ -406,7 +407,12 @@
                   IZERO = 0
                END IF
 *
-*              End generate the test matrix A.
+*              End generate test matrix A.
+*
+*
+*              Set the imaginary part of the diagonals.
+*
+               CALL CLAIPD( N, A, LDA+1, 0 )
 *
 *              Do for each value of NB in NBVAL
 *

@@ -14,15 +14,15 @@
 *                             IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
-*       LOGICAL            TSTERR
-*       INTEGER            NMAX, NN, NNB, NNS, NOUT
-*       REAL   THRESH
+*       LOGICAL    TSTERR
+*       INTEGER    NMAX, NN, NNB, NNS, NOUT
+*       REAL       THRESH
 *       ..
 *       .. Array Arguments ..
-*       LOGICAL            DOTYPE( * )
-*       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-*       REAL               A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*       LOGICAL    DOTYPE( * )
+*       INTEGER    IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+*       REAL       A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $           RWORK( * ), WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -164,8 +164,6 @@
 *
 *> \date June 2017
 *
-*  @generated from dsytrf_aasen_2stage.f, fortran d -> s, Mon Oct 30 12:03:46 2017
-*
 *> \ingroup real_lin
 *
 *  =====================================================================
@@ -181,40 +179,40 @@
       IMPLICIT NONE
 *
 *     .. Scalar Arguments ..
-      LOGICAL            TSTERR
-      INTEGER            NN, NNB, NNS, NMAX, NOUT
-      REAL   THRESH
+      LOGICAL      TSTERR
+      INTEGER      NN, NNB, NNS, NMAX, NOUT
+      REAL         THRESH
 *     ..
 *     .. Array Arguments ..
-      LOGICAL            DOTYPE( * )
-      INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-      REAL   A( * ), AFAC( * ), AINV( * ), B( * ),
-     $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+      LOGICAL      DOTYPE( * )
+      INTEGER      IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+      REAL         A( * ), AFAC( * ), AINV( * ), B( * ),
+     $             RWORK( * ), WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO, ONE
-      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
-      INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 10 )
-      INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 9 )
+      REAL         ZERO
+      PARAMETER    ( ZERO = 0.0E+0 )
+      INTEGER      NTYPES
+      PARAMETER    ( NTYPES = 10 )
+      INTEGER      NTESTS
+      PARAMETER    ( NTESTS = 9 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            ZEROT
-      CHARACTER          DIST, TYPE, UPLO, XTYPE
-      CHARACTER*3        PATH, MATPATH
-      INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
-     $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
-     $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      REAL               ANORM, CNDNUM
+      LOGICAL      ZEROT
+      CHARACTER    DIST, TYPE, UPLO, XTYPE
+      CHARACTER*3  PATH, MATPATH
+      INTEGER      I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
+     $             IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
+     $             N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
+      REAL         ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
-      CHARACTER          UPLOS( 2 )
-      INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      REAL               RESULT( NTESTS )
+      CHARACTER    UPLOS( 2 )
+      INTEGER      ISEED( 4 ), ISEEDY( 4 )
+      REAL         RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, SERRSY, SLACPY, SLARHS,
@@ -223,24 +221,25 @@
      $                   XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC    MAX, MIN
 *     ..
 *     .. Scalars in Common ..
-      LOGICAL            LERR, OK
-      CHARACTER*32       SRNAMT
-      INTEGER            INFOT, NUNIT
+      LOGICAL      LERR, OK
+      CHARACTER*32 SRNAMT
+      INTEGER      INFOT, NUNIT
 *     ..
 *     .. Common blocks ..
-      COMMON             / INFOC / INFOT, NUNIT, OK, LERR
-      COMMON             / SRNAMC / SRNAMT
+      COMMON       / INFOC / INFOT, NUNIT, OK, LERR
+      COMMON       / SRNAMC / SRNAMT
 *     ..
 *     .. Data statements ..
-      DATA               ISEEDY / 1988, 1989, 1990, 1991 /
-      DATA               UPLOS / 'U', 'L' /
+      DATA         ISEEDY / 1988, 1989, 1990, 1991 /
+      DATA         UPLOS / 'U', 'L' /
 *     ..
 *     .. Executable Statements ..
 *
 *     Initialize constants and the random number seed.
+*
 *
 *     Test path
 *
@@ -524,7 +523,7 @@
                         END IF
                      ELSE
                         CALL SLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA
-     $                               )
+     $                              )
 *
 *                       Compute the residual for the solution
 *
@@ -532,8 +531,8 @@
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
 *
 *
-*                       Print information about the tests that did not pass
-*                       the threshold.
+*                    Print information about the tests that did not pass
+*                    the threshold.
 *
                         DO 120 K = 2, 2
                            IF( RESULT( K ).GE.THRESH ) THEN

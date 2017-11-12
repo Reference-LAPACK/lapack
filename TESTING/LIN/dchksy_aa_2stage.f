@@ -218,8 +218,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DERRSY, DLACPY, DLARHS,
-     $                   DLATB4, DLATMS, DPOT02, DSYT01, 
-     $                   DSYTRF_AA_2STAGE, DSYTRS_AA_2STAGE, XLAENV
+     $                   DLATB4, DLATMS, DPOT02, DSYTRF_AA_2STAGE
+     $                   DSYTRS_AA_2STAGE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
