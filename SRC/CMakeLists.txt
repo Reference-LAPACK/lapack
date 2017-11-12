@@ -226,6 +226,7 @@ set(CLASRC
    csytri_rook.f csycon_rook.f csysv_rook.f
    csytf2_rk.f csytrf_rk.f csytrf_aa.f csytrs_3.f csytrs_aa.f
    csytri_3.f csytri_3x.f csycon_3.f csysv_rk.f csysv_aa.f
+   csysv_aa_2stage.f csytrf_aa_2stage.f csytrs_aa_2stage.f
    ctbcon.f ctbrfs.f ctbtrs.f ctgevc.f ctgex2.f
    ctgexc.f ctgsen.f ctgsja.f ctgsna.f ctgsy2.f ctgsyl.f ctpcon.f
    ctprfs.f ctptri.f
