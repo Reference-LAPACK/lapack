@@ -53,6 +53,7 @@
 *> ZHR   10               List types on next line if 0 < NTYPES < 10
 *> ZHK   10               List types on next line if 0 < NTYPES < 10
 *> ZHA   10               List types on next line if 0 < NTYPES < 10
+*> ZH2   10               List types on next line if 0 < NTYPES < 10
 *> ZHP   10               List types on next line if 0 < NTYPES < 10
 *> ZSY   11               List types on next line if 0 < NTYPES < 11
 *> ZSR   11               List types on next line if 0 < NTYPES < 11
@@ -168,10 +169,11 @@
      $                   ZCHKSY_ROOK, ZCHKSY_RK, ZCHKSY_AA, ZCHKTB,
      $                   ZCHKTP, ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE, ZDRVGT,
      $                   ZDRVHE, ZDRVHE_ROOK, ZDRVHE_RK, ZDRVHE_AA,
-     $                   ZDRVHP, ZDRVLS, ZDRVPB, ZDRVPO, ZDRVPP, ZDRVPT,
-     $                   ZDRVSP, ZDRVSY, ZDRVSY_ROOK, ZDRVSY_RK,
-     $                   ZDRVSY_AA, ILAVER, ZCHKQRT, ZCHKQRTP, ZCHKLQT,
-     $                   ZCHKLQTP, ZCHKTSQR
+     $                   ZDRVHE_AA_2STAGE, ZDRVHP, ZDRVLS, ZDRVPB, 
+     $                   ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
+     $                   ZDRVSY_ROOK, ZDRVSY_RK, ZDRVSY_AA,
+     $                   ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT, ZCHKQRTP,
+     $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -700,8 +702,8 @@
 *
       ELSE IF( LSAMEN( 2, C2, 'HA' ) ) THEN
 *
-*        HA:  Hermitian indefinite matrices,
-*             with partial (Aasen's) pivoting algorithm
+*        HA:  Hermitian matrices,
+*             Aasen Algorithm
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -724,6 +726,35 @@
          ELSE
             WRITE( NOUT, FMT = 9988 )PATH
          END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'H2' ) ) THEN
+*
+*        H2:  Hermitian matrices,
+*             with partial (Aasen's) pivoting algorithm
+*
+         NTYPES = 10
+         CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKHE_AA_2STAGE( DOTYPE, NN, NVAL, NNB2, NBVAL2,
+     $                         NNS, NSVAL, THRESH, TSTERR, LDA,
+     $                         A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                         B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+         IF( TSTDRV ) THEN
+            CALL ZDRVHE_AA_2STAGE(
+     $                         DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
+     $                         LDA, A( 1, 1 ), A( 1, 2 ), A( 1, 3 ),
+     $                              B( 1, 1 ), B( 1, 2 ), B( 1, 3 ),
+     $                         WORK, RWORK, IWORK, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9988 )PATH
+         END IF
+*
 *
       ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
 *

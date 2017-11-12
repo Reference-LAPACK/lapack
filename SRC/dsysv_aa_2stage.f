@@ -38,15 +38,15 @@
 *>
 *> \verbatim
 *>
-*> DSYSV_AA_2STAGE computes the solution to a complex system of
+*> DSYSV_AA_2STAGE computes the solution to a real system of
 *> linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *> matrices.
 *>
 *> Aasen's 2-stage algorithm is used to factor A as
-*>    A = U * T * U**H,  if UPLO = 'U', or
-*>    A = L * T * L**H,  if UPLO = 'L',
+*>    A = U * T * U**T,  if UPLO = 'U', or
+*>    A = L * T * L**T,  if UPLO = 'L',
 *> where U (or L) is a product of permutation and unit upper (lower)
 *> triangular matrices, and T is symmetric and band. The matrix T is
 *> then LU-factored with partial pivoting. The factored form of A
@@ -177,9 +177,9 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
+*> \date November 2017
 *
-*> \ingroup doubleSYcomputational
+*> \ingroup doubleSYsolve
 *
 *  =====================================================================
       SUBROUTINE DSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
@@ -214,7 +214,8 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           DSYTRF_AA_2STAGE, DSYTRS_AA_2STAGE,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -258,7 +259,7 @@
       END IF
 *
 *
-*     Compute the factorization A = U*T*U**H or A = L*T*L**H.
+*     Compute the factorization A = U*T*U**T or A = L*T*L**T.
 *
       CALL DSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
      $                       WORK, LWORK, INFO )
@@ -272,6 +273,8 @@
       END IF
 *
       WORK( 1 ) = LWKOPT
+*
+      RETURN
 *
 *     End of DSYSV_AA_2STAGE
 *

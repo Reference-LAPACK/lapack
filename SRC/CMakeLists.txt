@@ -377,6 +377,7 @@ set(ZLASRC
    zhetf2_rk.f zhetrf_rk.f zhetri_3.f zhetri_3x.f
    zhetrs_3.f zhecon_3.f zhesv_rk.f
    zhesv_aa.f zhetrf_aa.f zhetrs_aa.f
+   zhesv_aa_2stage.f zhetrf_aa_2stage.f zhetrs_aa_2stage.f
    zhgeqz.f zhpcon.f zhpev.f  zhpevd.f
    zhpevx.f zhpgst.f zhpgv.f  zhpgvd.f zhpgvx.f zhprfs.f zhpsv.f
    zhpsvx.f

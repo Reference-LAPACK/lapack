@@ -1,4 +1,4 @@
-*> \brief \b CHETRF_AA_2STAGE
+*> \brief \b ZHETRF_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHETRF_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chetrf_aa_2stage.f">
+*> Download ZHETRF_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhetrf_aa_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chetrf_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhetrf_aa_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chetrf_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhetrf_aa_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
+*      SUBROUTINE ZHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
 *                                   IPIV2, WORK, LWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * ), IPIV2( * )
-*       COMPLEX            A( LDA, * ), TB( * ), WORK( * )
+*       COMPLEX*16         A( LDA, * ), TB( * ), WORK( * )
 *       ..
 *
 *> \par Purpose:
@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> CHETRF_AA_2STAGE computes the factorization of a real hermitian matrix A
+*> ZHETRF_AA_2STAGE computes the factorization of a double hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**T  or  A = L*T*L**T
@@ -150,12 +150,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
+      SUBROUTINE ZHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
      $                             IPIV2, WORK, LWORK, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
@@ -171,12 +171,12 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * ), IPIV2( * )
-      COMPLEX            A( LDA, * ), TB( * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), TB( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *     .. Parameters ..
-      COMPLEX            ZERO, ONE
+      COMPLEX*16         ZERO, ONE
       PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ),
      $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
 *
@@ -184,18 +184,15 @@
       LOGICAL            UPPER, TQUERY, WQUERY
       INTEGER            I, J, K, I1, I2, TD
       INTEGER            LDTB, NB, KB, NT, IINFO
-      COMPLEX            PIV
+      COMPLEX*16         PIV
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       INTEGER            ILAENV
       EXTERNAL           LSAME, ILAENV
-      
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, CCOPY, CLACGV, CLACPY,
-     $                   CLASET, CGBTRF, CGEMM,  CGETRF, 
-     $                   CHEGST, CSWAP, CTRSM 
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MIN, MAX
@@ -221,13 +218,13 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHETRF_AA_2STAGE', -INFO )
+         CALL XERBLA( 'ZHETRF_AA_2STAGE', -INFO )
          RETURN
       END IF
 *
 *     Answer the query
 *
-      NB = ILAENV( 1, 'CHETRF_AA_2STAGE', UPLO, N, -1, -1, -1 )
+      NB = ILAENV( 1, 'ZHETRF_AA_2STAGE', UPLO, N, -1, -1, -1 )
       IF( INFO.EQ.0 ) THEN
          IF( TQUERY ) THEN
             TB( 1 ) = (3*NB+1)*N
@@ -655,6 +652,6 @@ c     $                     (J+1)*NB+1, (J+1)*NB+KB, IPIV, 1 )
 *     Factor the band matrix
       CALL CGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
 *
-*     End of CHETRF_AA_2STAGE
+*     End of ZHETRF_AA_2STAGE
 *
       END

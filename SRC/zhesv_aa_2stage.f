@@ -1,4 +1,4 @@
-*> \brief <b> SSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
+*> \brief <b> ZHESV_AA_2STAGE computes the solution to system of linear equations A * X = B for HE matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download SSYSV_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssysv_aa_2stage.f">
+*> Download ZHESV_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zhesv_aa_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssysv_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zhesv_aa_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysv_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zhesv_aa_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE SSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+*      SUBROUTINE ZHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
 *                                  IPIV, IPIV2, B, LDB, WORK, LWORK,
 *                                  INFO )
 *
@@ -28,7 +28,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * ), IPIV2( * )
-*       REAL               A( LDA, * ), TB( * ), B( LDB, *), WORK( * )
+*       COMPLEX*16         A( LDA, * ), TB( * ), B( LDB, *), WORK( * )
 *       ..
 *
 *
@@ -37,17 +37,17 @@
 *>
 *> \verbatim
 *>
-*> SSYSV_AA_2STAGE computes the solution to a real system of
+*> ZHESV_AA_2STAGE computes the solution to a complex system of 
 *> linear equations
 *>    A * X = B,
-*> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
+*> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
 *> matrices.
 *>
 *> Aasen's 2-stage algorithm is used to factor A as
-*>    A = U * T * U**T,  if UPLO = 'U', or
-*>    A = L * T * L**T,  if UPLO = 'L',
+*>    A = U * T * U**H,  if UPLO = 'U', or
+*>    A = L * T * L**H,  if UPLO = 'L',
 *> where U (or L) is a product of permutation and unit upper (lower)
-*> triangular matrices, and T is symmetric and band. The matrix T is
+*> triangular matrices, and T is Hermitian and band. The matrix T is
 *> then LU-factored with partial pivoting. The factored form of A
 *> is then used to solve the system of equations A * X = B.
 *>
@@ -79,8 +79,8 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is REAL array, dimension (LDA,N)
-*>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          On entry, the hermitian matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
 *>          triangular part of A is not referenced.  If UPLO = 'L', the
@@ -100,7 +100,7 @@
 *>
 *> \param[out] TB
 *> \verbatim
-*>          TB is REAL array, dimension (LTB)
+*>          TB is COMPLEX*16 array, dimension (LTB)
 *>          On exit, details of the LU factorization of the band matrix.
 *> \endverbatim
 *>
@@ -133,7 +133,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, the right hand side matrix B.
 *>          On exit, the solution matrix X.
 *> \endverbatim
@@ -146,7 +146,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL workspace of size LWORK
+*>          WORK is COMPLEX*16 workspace of size LWORK
 *> \endverbatim
 *>
 *> \param[in] LWORK
@@ -178,10 +178,10 @@
 *
 *> \date November 2017
 *
-*> \ingroup realSYsolve
+*> \ingroup complex16HEsolve
 *
 *  =====================================================================
-      SUBROUTINE SSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+      SUBROUTINE ZHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                            IPIV, IPIV2, B, LDB, WORK, LWORK,
      $                            INFO )
 *
@@ -198,14 +198,20 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * ), IPIV2( * )
-      REAL               A( LDA, * ), B( LDB, * ), TB( * ), WORK( * )
+      COMPLEX*16         A( LDA, * ), B( LDB, * ), TB( * ), WORK( * )
 *     ..
 *
 *  =====================================================================
-*     ..
+*     .. Parameters ..
+      COMPLEX*16         ZERO, ONE
+      PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ),
+     $                     ONE  = ( 1.0D+0, 0.0D+0 ) )
+*
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
-      INTEGER            LWKOPT
+      INTEGER            I, J, K, I1, I2, TD
+      INTEGER            LDTB, LWKOPT, NB, KB, NT, IINFO
+      COMPLEX            PIV
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -213,8 +219,7 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SSYTRF_AA_2STAGE, SSYTRS_AA_2STAGE,
-     $                   XERBLA
+      EXTERNAL           XERBLA, ZHETRF_AA_2STAGE, ZHETRS_AA_2STAGE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -240,7 +245,7 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         CALL SSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
+         CALL ZHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
          LWKOPT = INT( WORK(1) )
          IF( LTB.LT.INT( TB(1) ) .AND. .NOT.TQUERY ) THEN
@@ -251,22 +256,21 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SSYSV_AA_2STAGE', -INFO )
+         CALL XERBLA( 'ZHESV_AA_2STAGE', -INFO )
          RETURN
       ELSE IF( WQUERY .OR. TQUERY ) THEN
          RETURN
       END IF
 *
+*     Compute the factorization A = U*T*U**H or A = L*T*L**H.
 *
-*     Compute the factorization A = U*T*U**T or A = L*T*L**T.
-*
-      CALL SSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
+      CALL ZHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
      $                       WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL SSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
+         CALL ZHETRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
      $                          IPIV2, B, LDB, INFO )
 *
       END IF
@@ -275,6 +279,6 @@
 *
       RETURN
 *
-*     End of SSYSV_AA_2STAGE
+*     End of ZHESV_AA_2STAGE
 *
       END

@@ -53,6 +53,7 @@
 *> CHR   10               List types on next line if 0 < NTYPES < 10
 *> CHK   10               List types on next line if 0 < NTYPES < 10
 *> CHA   10               List types on next line if 0 < NTYPES < 10
+*> CH2   10               List types on next line if 0 < NTYPES < 10
 *> CHP   10               List types on next line if 0 < NTYPES < 10
 *> CSY   11               List types on next line if 0 < NTYPES < 11
 *> CSK   11               List types on next line if 0 < NTYPES < 11

@@ -156,8 +156,6 @@
 *
 *> \date December 2016
 *
-*  @precisions fortran d -> z c
-*
 *> \ingroup doubleSYsolve
 *
 *  =====================================================================
