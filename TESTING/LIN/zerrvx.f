@@ -94,7 +94,7 @@
      $                   ZHPSV, ZHPSVX, ZPBSV, ZPBSVX, ZPOSV, ZPOSVX,
      $                   ZPPSV, ZPPSVX, ZPTSV, ZPTSVX, ZSPSV, ZSPSVX,
      $                   ZSYSV, ZSYSV_AA, ZSYSV_RK, ZSYSV_ROOK,
-     $                   ZSYSVX
+     $                   ZSYSVX, ZSYSV_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -718,6 +718,36 @@
         INFOT = 8
         CALL ZHESV_AA( 'U', 2, 0, A, 2, IP, B, 1, W, 1, INFO )
         CALL CHKXER( 'ZHESV_AA', INFOT, NOUT, LERR, OK )
+*
+      ELSE IF( LSAMEN( 2, C2, 'H2' ) ) THEN
+*
+*        CHESV_AASEN_2STAGE
+*
+         SRNAMT = 'ZHESV_AA_2STAGE'
+         INFOT = 1
+         CALL ZHESV_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'ZHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL ZHESV_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'ZHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL ZHESV_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'ZHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL ZHESV_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'ZHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL ZHESV_AA_2STAGE( 'U', 2, 1, A, 2, A, 2, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'ZHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL ZHESV_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP, B, 2,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'ZHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
 *
       ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
 *

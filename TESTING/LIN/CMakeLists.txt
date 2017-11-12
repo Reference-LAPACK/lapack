@@ -153,7 +153,7 @@ endif()
 set(ZLINTST zchkaa.f
    zchkeq.f zchkgb.f zchkge.f zchkgt.f
    zchkhe.f zchkhe_rook.f zchkhe_rk.f 
-   zchkhe_aa.f 
+   zchkhe_aa.f zchkhe_aa_2stage.f
    zchkhp.f zchklq.f zchkpb.f
    zchkpo.f zchkps.f zchkpp.f zchkpt.f zchkq3.f zchkql.f
    zchkqr.f zchkrq.f zchksp.f zchksy.f zchksy_rook.f zchksy_rk.f
@@ -161,7 +161,7 @@ set(ZLINTST zchkaa.f
    zchktb.f
    zchktp.f zchktr.f zchktz.f
    zdrvgt.f zdrvhe_rook.f zdrvhe_rk.f 
-   zdrvhe_aa.f  
+   zdrvhe_aa.f  zdrvhe_aa_2stage.f
    zdrvhp.f
    zdrvls.f zdrvpb.f zdrvpp.f zdrvpt.f
    zdrvsp.f zdrvsy_rook.f zdrvsy_rk.f 

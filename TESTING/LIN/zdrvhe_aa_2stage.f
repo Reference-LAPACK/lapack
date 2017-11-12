@@ -16,12 +16,12 @@
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NMAX, NN, NOUT, NRHS
-*       REAL               THRESH
+*       DOUBLE PRECISION   THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NVAL( * )
-*       REAL               RWORK( * )
+*       DOUBLE PRECISION   RWORK( * )
 *       COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
 *      $                   WORK( * ), X( * ), XACT( * )
 *       ..
@@ -67,7 +67,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is REAL
+*>          THRESH is DOUBLE PRECISION
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -123,7 +123,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (NMAX+2*NRHS)
+*>          RWORK is DOUBLE PRECISION array, dimension (NMAX+2*NRHS)
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -163,12 +163,12 @@
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
       INTEGER            NMAX, NN, NOUT, NRHS
-      REAL               THRESH
+      DOUBLE PRECISION   THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), NVAL( * )
-      REAL               RWORK( * )
+      DOUBLE PRECISION   RWORK( * )
       COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
      $                   WORK( * ), X( * ), XACT( * )
 *     ..
@@ -176,7 +176,7 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ONE, ZERO
+      DOUBLE PRECISION   ONE, ZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES, NTESTS
       PARAMETER          ( NTYPES = 10, NTESTS = 3 )
@@ -190,16 +190,16 @@
       INTEGER            I, I1, I2, IFACT, IMAT, IN, INFO, IOFF, IUPLO,
      $                   IZERO, J, K, KL, KU, LDA, LWORK, MODE, N,
      $                   NB, NBMIN, NERRS, NFAIL, NIMAT, NRUN, NT
-      REAL               ANORM, CNDNUM
+      DOUBLE PRECISION   ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          FACTS( NFACT ), UPLOS( 2 )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      REAL               RESULT( NTESTS )
+      DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Functions ..
-      REAL               CLANHE, SGET06
-      EXTERNAL           CLANHE, SGET06
+      DOUBLE PRECISION   DGET06, ZLANHE
+      EXTERNAL           DGET06, ZLANHE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX,
@@ -449,11 +449,12 @@
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-                     CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
-     $                                  IWORK, AINV, LDA, RWORK,
-     $                                  RESULT( 2 ) )
-                     NT = 2
-                     
+*                    NEED TO CREATE ZHET01_AA_2STAGE
+*                     CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
+*     $                                  IWORK, AINV, LDA, RWORK,
+*     $                                  RESULT( 2 ) )
+*                     NT = 2
+                     NT = 1
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -462,7 +463,7 @@
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'ZHESV_AA ',
+                           WRITE( NOUT, FMT = 9999 )'ZHESV_AA_2STAGE',
      $                         UPLO, N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -485,6 +486,6 @@
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of ZDRVHE_AA
+*     End of ZDRVHE_AA_2STAGE
 *
       END

@@ -465,9 +465,10 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL SSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
-     $                            AINV, LDA, RWORK, RESULT( 1 ) )
-                  NT = 1
+*                  CALL SSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+*     $                            AINV, LDA, RWORK, RESULT( 1 ) )
+*                  NT = 1
+                   NT = 0
 *
 *
 *                 Print information about the tests that did not pass

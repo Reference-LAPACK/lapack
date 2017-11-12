@@ -16,13 +16,14 @@
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NMAX, NN, NNB, NNS, NOUT
-*       COMPLEX*16         THRESH
+*       DOUBLE PRECISION   THRESH
 *       ..
 *       .. Array Arguments ..
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+*       DOUBLE PRECISION   RWORK( * )
 *       COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*      $                   WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -83,7 +84,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is COMPLEX*16
+*>          THRESH is DOUBLE PRECISION
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -140,7 +141,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is COMPLEX*16 array, dimension (max(NMAX,2*NSMAX))
+*>          RWORK is DOUBLE PRECISION array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -181,7 +182,7 @@
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
       INTEGER            NN, NNB, NNS, NMAX, NOUT
-      REAL               THRESH
+      DOUBLE PRECISION   THRESH
 *     ..
 *     .. Array Arguments ..
       LOGICAL            DOTYPE( * )
@@ -193,9 +194,10 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX*16         ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ), 
-     $                     ONE  = ( 1.0D+0, 0.0D+0 ) )
+      DOUBLE PRECISION   ZERO
+      PARAMETER          ( ZERO = 0.0D+0 )
+      COMPLEX*16         CZERO
+      PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 10 )
       INTEGER            NTESTS
@@ -208,16 +210,16 @@
       INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
      $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      COMPLEX*16         ANORM, CNDNUM
+      DOUBLE PRECISION   ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
-      REAL               RESULT( NTESTS )
+      DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRHE, ZLACPY, ZLARHS,
-     $                   ZLATB4, ZLATMS, ZPOT02, ZHET01, 
+      EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRHE, ZLACPY, 
+     $                   ZLARHS, ZLATB4, ZLATMS, ZPOT02, 
      $                   ZHETRF_AA_2STAGE, ZHETRS_AA_2STAGE,
      $                   XLAENV
 *     ..
@@ -352,22 +354,22 @@
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDA
                         DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    20                   CONTINUE
                         IOFF = IOFF + IZERO
                         DO 30 I = IZERO, N
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    30                   CONTINUE
                      ELSE
                         IOFF = IZERO
                         DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    40                   CONTINUE
                         IOFF = IOFF - IZERO
                         DO 50 I = IZERO, N
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    50                   CONTINUE
                      END IF
                   ELSE
@@ -379,7 +381,7 @@
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    60                      CONTINUE
                            IOFF = IOFF + LDA
    70                   CONTINUE
@@ -392,7 +394,7 @@
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    80                      CONTINUE
                            IOFF = IOFF + LDA
    90                   CONTINUE
@@ -464,10 +466,11 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-                  CALL DSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
-     $                            AINV, LDA, RWORK, RESULT( 1 ) )
-                  NT = 1
-*                  NT = 0
+*                 NEED TO CREATE ZHET01_AA_2STAGE
+*                  CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+*     $                            AINV, LDA, RWORK, RESULT( 1 ) )
+*                  NT = 1
+                  NT = 0
 *
 *
 *                 Print information about the tests that did not pass
@@ -513,7 +516,7 @@
      $                            AINV, (3*NB+1)*N, IWORK, IWORK( 1+N ),
      $                            X, LDA, INFO )
 *
-*                    Check error code from CHETRS and handle error.
+*                    Check error code from ZHETRS and handle error.
 *
                      IF( INFO.NE.0 ) THEN
                         IF( IZERO.EQ.0 ) THEN
@@ -522,6 +525,7 @@
      $                                  NRHS, IMAT, NFAIL, NERRS, NOUT )
                         END IF
                      ELSE
+*
                         CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA
      $                               )
 *
@@ -529,7 +533,6 @@
 *
                         CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
-*
 *
 *                       Print information about the tests that did not pass
 *                       the threshold.
