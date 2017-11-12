@@ -14,15 +14,16 @@
 *                             IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
-*       LOGICAL            TSTERR
-*       INTEGER            NMAX, NN, NNB, NNS, NOUT
-*       COMPLEX            THRESH
+*       LOGICAL    TSTERR
+*       INTEGER    NN, NNB, NNS, NOUT
+*       REAL       THRESH
 *       ..
 *       .. Array Arguments ..
-*       LOGICAL            DOTYPE( * )
-*       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-*       COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*       LOGICAL    DOTYPE( * )
+*       INTEGER    IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+*       REAL       RWORK( * )
+*       COMPLEX    A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $           WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -31,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> DCHKSY_AA_2STAGE tests CHETRF_AA_2STAGE, -TRS_AA_2STAGE.
+*> CCHKSY_AA_2STAGE tests CHETRF_AA_2STAGE, -TRS_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +84,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is COMPLEX
+*>          THRESH is REAL
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -140,7 +141,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is COMPLEX array, dimension (max(NMAX,2*NSMAX))
+*>          RWORK is REAL array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -162,7 +163,8 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date November 2017
+*
 *
 *> \ingroup complex_lin
 *
@@ -184,10 +186,11 @@
       REAL               THRESH
 *     ..
 *     .. Array Arguments ..
-      LOGICAL            DOTYPE( * )
-      INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-      COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
-     $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+      LOGICAL      DOTYPE( * )
+      INTEGER      IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+      REAL         RWORK( * )
+      COMPLEX      A( * ), AFAC( * ), AINV( * ), B( * ),
+     $             WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
@@ -208,7 +211,7 @@
       INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
      $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      COMPLEX            ANORM, CNDNUM
+      REAL               ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -216,10 +219,10 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRHE, CLACPY, CLARHS,
-     $                   CLATB4, CLATMS, CPOT02, DSYT01, 
-     $                   CHETRF_AA_2STAGE, CHETRS_AA_2STAGE,
-     $                   XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRHE, CLACPY, 
+     $                   CLARHS, CLATB4, CLATMS, CPOT02, 
+     $                   CHETRF_AA_2STAGE, 
+     $                   CHETRS_AA_2STAGE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -240,6 +243,7 @@
 *     .. Executable Statements ..
 *
 *     Initialize constants and the random number seed.
+*
 *
 *     Test path
 *
@@ -464,10 +468,12 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-c                  CALL DSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+*                   
+c                 NEED TO WRITE CHET01_AA_2STAGE
+c                  CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
 c     $                            AINV, LDA, RWORK, RESULT( 1 ) )
 c                  NT = 1
-                  NT = 0
+                   NT = 0
 *
 *
 *                 Print information about the tests that did not pass
@@ -530,7 +536,6 @@ c                  NT = 1
                         CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
 *
-*
 *                       Print information about the tests that did not pass
 *                       the threshold.
 *
@@ -567,6 +572,6 @@ c                  NT = 1
      $      I6 )
       RETURN
 *
-*     End of DCHKSY_AA_2STAGE
+*     End of CCHKSY_AA_2STAGE
 *
       END

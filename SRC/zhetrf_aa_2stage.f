@@ -35,7 +35,7 @@
 *>
 *> \verbatim
 *>
-*> ZHETRF_AA_2STAGE computes the factorization of a hermitian matrix A
+*> ZHETRF_AA_2STAGE computes the factorization of a double hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
 *>    A = U*T*U**T  or  A = L*T*L**T
@@ -66,7 +66,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          A is COMPLEX array, dimension (LDA,N)
 *>          On entry, the hermitian matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
@@ -87,7 +87,7 @@
 *>
 *> \param[out] TB
 *> \verbatim
-*>          TB is COMPLEX*16 array, dimension (LTB)
+*>          TB is COMPLEX array, dimension (LTB)
 *>          On exit, details of the LU factorization of the band matrix.
 *> \endverbatim
 *>
@@ -150,9 +150,9 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date December 2016
 *
-*> \ingroup complex16SYcomputational
+*> \ingroup complexSYcomputational
 *
 *  =====================================================================
       SUBROUTINE ZHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV,
@@ -161,7 +161,7 @@
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     December 2016
 *
       IMPLICIT NONE
 *
@@ -177,8 +177,8 @@
 *  =====================================================================
 *     .. Parameters ..
       COMPLEX*16         ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0D+0, 0.0D+0 ),
-     $                     ONE  = ( 1.0D+0, 0.0D+0 ) )
+      PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ),
+     $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
 *
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
@@ -192,12 +192,10 @@
       EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA, ZCOPY, ZLACGV, ZLACPY,
-     $                   ZLASET, ZGBTRF, ZGEMM,  ZGETRF, 
-     $                   ZHEGST, ZSWAP, ZTRSM 
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, DCONJG, MIN, MAX
+      INTRINSIC          CONJG, MIN, MAX
 *     ..
 *     .. Executable Statements ..
 *
@@ -285,14 +283,14 @@
             DO I = 1, J-1
                IF( I.EQ.1 ) THEN
 *                  H(I,J) = T(I,I)*U(I,J) + T(I+1,I)*U(I+1,J)
-                   CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+                   CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                     NB, KB, 2*NB,
      $                     ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
      $                          A( (I-1)*NB+1, J*NB+1 ), LDA,
      $                     ZERO, WORK( I*NB+1 ), N )
                ELSE IF( I .EQ. J-1) THEN
 *                 H(I,J) = T(I,I-1)*U(I-1,J) + T(I,I)*U(I,J) + T(I,I+1)*U(I+1,J)
-                  CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                    NB, KB, 2*NB+KB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
@@ -300,7 +298,7 @@
      $                    ZERO, WORK( I*NB+1 ), N )
                ELSE
 *                 H(I,J) = T(I,I-1)*U(I-1,J) + T(I,I)*U(I,J) + T(I,I+1)*U(I+1,J)
-                  CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                    NB, KB, 3*NB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
@@ -311,29 +309,29 @@
 *         
 *           Compute T(J,J)
 *     
-            CALL ZLACPY( 'Upper', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
+            CALL CLACPY( 'Upper', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
      $                   TB( TD+1 + (J*NB)*LDTB ), LDTB-1 ) 
             IF( J.GT.1 ) THEN
 *              T(J,J) = U(1:J,J)'*H(1:J)             
-               CALL ZGEMM( 'Conjugate transpose', 'NoTranspose',
+               CALL CGEMM( 'Conjugate transpose', 'NoTranspose',
      $                 KB, KB, (J-1)*NB,
      $                -ONE, A( 1, J*NB+1 ), LDA,
      $                      WORK( NB+1 ), N,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
 *              T(J,J) += U(J,J)'*T(J,J-1)*U(J-1,J)
-               CALL ZGEMM( 'Conjugate transpose', 'NoTranspose',
+               CALL CGEMM( 'Conjugate transpose', 'NoTranspose',
      $                 KB, NB, KB,
      $                 ONE,  A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                       TB( TD+NB+1 + ((J-1)*NB)*LDTB ), LDTB-1,
      $                 ZERO, WORK( 1 ), N )
-               CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+               CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, KB, NB,
      $                -ONE, WORK( 1 ), N,
      $                      A( (J-2)*NB+1, J*NB+1 ), LDA,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
             END IF
             IF( J.GT.0 ) THEN 
-               CALL ZHEGST( 1, 'Upper', KB, 
+               CALL CHEGST( 1, 'Upper', KB, 
      $                      TB( TD+1 + (J*NB)*LDTB ), LDTB-1, 
      $                      A( (J-1)*NB+1, J*NB+1 ), LDA, IINFO )
             END IF
@@ -342,10 +340,10 @@
 *
             DO I = 1, KB
                TB( TD+1 + (J*NB+I-1)*LDTB )
-     $            = DBLE( TB( TD+1 + (J*NB+I-1)*LDTB ) )
+     $            = REAL( TB( TD+1 + (J*NB+I-1)*LDTB ) )
                DO K = I+1, KB
                   TB( TD+(K-I)+1 + (J*NB+I-1)*LDTB )
-     $               = DCONJG( TB( TD-(K-(I+1)) + (J*NB+K-1)*LDTB ) )
+     $               = CONJG( TB( TD-(K-(I+1)) + (J*NB+K-1)*LDTB ) )
                END DO
             END DO
 *
@@ -355,13 +353,13 @@
 *                 Compute H(J,J)
 *
                   IF( J.EQ.1 ) THEN
-                     CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+                     CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                       KB, KB, KB,
      $                       ONE,  TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                             A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                       ZERO, WORK( J*NB+1 ), N )
                   ELSE
-                     CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+                     CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                      KB, KB, NB+KB,
      $                      ONE, TB( TD+NB+1 + ((J-1)*NB)*LDTB ),
      $                         LDTB-1,
@@ -371,24 +369,24 @@
 *
 *                 Update with the previous column
 *
-                  CALL ZGEMM( 'Conjugate transpose', 'NoTranspose',
+                  CALL CGEMM( 'Conjugate transpose', 'NoTranspose',
      $                    NB, N-(J+1)*NB, J*NB,
      $                    -ONE, WORK( NB+1 ), N,
      $                          A( 1, (J+1)*NB+1 ), LDA,
      $                     ONE, A( J*NB+1, (J+1)*NB+1 ), LDA )
                END IF
 *
-*              Copy panel to workspace to call ZGETRF
+*              Copy panel to workspace to call CGETRF
 *
                DO K = 1, NB
-                   CALL ZCOPY( N-(J+1)*NB,
+                   CALL CCOPY( N-(J+1)*NB,
      $                         A( J*NB+K, (J+1)*NB+1 ), LDA,
      $                         WORK( 1+(K-1)*N ), 1 )
                END DO
 *
 *              Factorize panel
 *
-               CALL ZGETRF( N-(J+1)*NB, NB, 
+               CALL CGETRF( N-(J+1)*NB, NB, 
      $                      WORK, N,
      $                      IPIV( (J+1)*NB+1 ), IINFO )
 c               IF (IINFO.NE.0 .AND. INFO.EQ.0) THEN
@@ -401,25 +399,25 @@ c               END IF
 *
 *                  Copy only L-factor
 *
-                   CALL ZCOPY( N-K-(J+1)*NB,
+                   CALL CCOPY( N-K-(J+1)*NB,
      $                         WORK( K+1+(K-1)*N ), 1,
      $                         A( J*NB+K, (J+1)*NB+K+1 ), LDA )
 *
 *                  Transpose U-factor to be copied back into T(J+1, J)
 *
-                   CALL ZLACGV( K, WORK( 1+(K-1)*N ), 1 )
+                   CALL CLACGV( K, WORK( 1+(K-1)*N ), 1 )
                END DO
 *         
 *              Compute T(J+1, J), zero out for GEMM update
 *     
                KB = MIN(NB, N-(J+1)*NB)
-               CALL ZLASET( 'Full', KB, NB, ZERO, ZERO, 
+               CALL CLASET( 'Full', KB, NB, ZERO, ZERO, 
      $                      TB( TD+NB+1 + (J*NB)*LDTB) , LDTB-1 )
-               CALL ZLACPY( 'Upper', KB, NB,
+               CALL CLACPY( 'Upper', KB, NB,
      $                      WORK, N,
      $                      TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                IF( J.GT.0 ) THEN 
-                  CALL ZTRSM( 'R', 'U', 'N', 'U', KB, NB, ONE,
+                  CALL CTRSM( 'R', 'U', 'N', 'U', KB, NB, ONE,
      $                        A( (J-1)*NB+1, J*NB+1 ), LDA,
      $                        TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                END IF
@@ -430,10 +428,10 @@ c               END IF
                DO K = 1, NB
                   DO I = 1, KB
                      TB( TD-NB+K-I+1 + (J*NB+NB+I-1)*LDTB )
-     $                  = DCONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
+     $                  = CONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
                   END DO
                END DO
-               CALL ZLASET( 'Lower', KB, NB, ZERO, ONE, 
+               CALL CLASET( 'Lower', KB, NB, ZERO, ONE, 
      $                      A( J*NB+1, (J+1)*NB+1), LDA )
 *              
 *              Apply pivots to trailing submatrix of A
@@ -446,15 +444,15 @@ c               END IF
                   I2 = IPIV( (J+1)*NB+K )
                   IF( I1.NE.I2 ) THEN 
 *                    > Apply pivots to previous columns of L
-                     CALL ZSWAP( K-1, A( (J+1)*NB+1, I1 ), 1, 
+                     CALL CSWAP( K-1, A( (J+1)*NB+1, I1 ), 1, 
      $                                A( (J+1)*NB+1, I2 ), 1 )
 *                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)               
-                     CALL ZSWAP( I2-I1-1, A( I1, I1+1 ), LDA,
+                     CALL CSWAP( I2-I1-1, A( I1, I1+1 ), LDA,
      $                                    A( I1+1, I2 ), 1 )
-                     CALL ZLACGV( I2-I1, A( I1, I1+1 ), LDA )
-                     CALL ZLACGV( I2-I1-1, A( I1+1, I2 ), 1 )
+                     CALL CLACGV( I2-I1, A( I1, I1+1 ), LDA )
+                     CALL CLACGV( I2-I1-1, A( I1+1, I2 ), 1 )
 *                    > Swap A(I2+1:M, I1) with A(I2+1:M, I2)
-                     CALL ZSWAP( N-I2, A( I1, I2+1 ), LDA,
+                     CALL CSWAP( N-I2, A( I1, I2+1 ), LDA,
      $                                 A( I2, I2+1 ), LDA ) 
 *                    > Swap A(I1, I1) with A(I2, I2)
                      PIV = A( I1, I1 )
@@ -462,7 +460,7 @@ c               END IF
                      A( I2, I2 ) = PIV
 *                    > Apply pivots to previous columns of L
                      IF( J.GT.0 ) THEN
-                        CALL ZSWAP( J*NB, A( 1, I1 ), 1,
+                        CALL CSWAP( J*NB, A( 1, I1 ), 1,
      $                                    A( 1, I2 ), 1 )
                      END IF
                   ENDIF   
@@ -483,14 +481,14 @@ c               END IF
             DO I = 1, J-1
                IF( I.EQ.1 ) THEN
 *                  H(I,J) = T(I,I)*L(J,I)' + T(I+1,I)'*L(J,I+1)'
-                   CALL ZGEMM( 'NoTranspose', 'Conjugate transpose',
+                   CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                     NB, KB, 2*NB,
      $                     ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
      $                          A( J*NB+1, (I-1)*NB+1 ), LDA,
      $                     ZERO, WORK( I*NB+1 ), N )
                ELSE IF( I .EQ. J-1) THEN
 *                 H(I,J) = T(I,I-1)*L(J,I-1)' + T(I,I)*L(J,I)' + T(I,I+1)*L(J,I+1)'
-                  CALL ZGEMM( 'NoTranspose', 'Conjugate transpose',
+                  CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                    NB, KB, 2*NB+KB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
@@ -498,7 +496,7 @@ c               END IF
      $                    ZERO, WORK( I*NB+1 ), N )
                ELSE
 *                 H(I,J) = T(I,I-1)*L(J,I-1)' + T(I,I)*L(J,I)' + T(I,I+1)*L(J,I+1)'
-                  CALL ZGEMM( 'NoTranspose', 'Conjugate transpose',
+                  CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                    NB, KB, 3*NB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
@@ -509,29 +507,29 @@ c               END IF
 *         
 *           Compute T(J,J)
 *     
-            CALL ZLACPY( 'Lower', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
+            CALL CLACPY( 'Lower', KB, KB, A( J*NB+1, J*NB+1 ), LDA,
      $                   TB( TD+1 + (J*NB)*LDTB ), LDTB-1 ) 
             IF( J.GT.1 ) THEN
 *              T(J,J) = L(J,1:J)*H(1:J)             
-               CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+               CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, KB, (J-1)*NB,
      $                -ONE, A( J*NB+1, 1 ), LDA,
      $                      WORK( NB+1 ), N,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
 *              T(J,J) += L(J,J)*T(J,J-1)*L(J,J-1)'
-               CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+               CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                 KB, NB, KB,
      $                 ONE,  A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                       TB( TD+NB+1 + ((J-1)*NB)*LDTB ), LDTB-1,
      $                 ZERO, WORK( 1 ), N )
-               CALL ZGEMM( 'NoTranspose', 'Conjugate transpose',
+               CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                 KB, KB, NB,
      $                -ONE, WORK( 1 ), N,
      $                      A( J*NB+1, (J-2)*NB+1 ), LDA,
      $                 ONE, TB( TD+1 + (J*NB)*LDTB ), LDTB-1 )
             END IF
             IF( J.GT.0 ) THEN 
-               CALL ZHEGST( 1, 'Lower', KB, 
+               CALL CHEGST( 1, 'Lower', KB, 
      $                      TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                      A( J*NB+1, (J-1)*NB+1 ), LDA, IINFO )
             END IF
@@ -540,10 +538,10 @@ c               END IF
 *
             DO I = 1, KB
                TB( TD+1 + (J*NB+I-1)*LDTB ) 
-     $            = DBLE( TB( TD+1 + (J*NB+I-1)*LDTB ) )
+     $            = REAL( TB( TD+1 + (J*NB+I-1)*LDTB ) )
                DO K = I+1, KB
                   TB( TD-(K-(I+1)) + (J*NB+K-1)*LDTB )
-     $               = DCONJG( TB( TD+(K-I)+1 + (J*NB+I-1)*LDTB ) )
+     $               = CONJG( TB( TD+(K-I)+1 + (J*NB+I-1)*LDTB ) )
                END DO
             END DO
 *
@@ -553,13 +551,13 @@ c               END IF
 *                 Compute H(J,J)
 *
                   IF( J.EQ.1 ) THEN
-                     CALL ZGEMM( 'NoTranspose', 'Conjugate transpose',
+                     CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                       KB, KB, KB,
      $                       ONE,  TB( TD+1 + (J*NB)*LDTB ), LDTB-1,
      $                             A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                       ZERO, WORK( J*NB+1 ), N )
                   ELSE
-                     CALL ZGEMM( 'NoTranspose', 'Conjugate transpose',
+                     CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
      $                      KB, KB, NB+KB,
      $                      ONE, TB( TD+NB+1 + ((J-1)*NB)*LDTB ),
      $                         LDTB-1,
@@ -569,7 +567,7 @@ c               END IF
 *
 *                 Update with the previous column
 *
-                  CALL ZGEMM( 'NoTranspose', 'NoTranspose',
+                  CALL CGEMM( 'NoTranspose', 'NoTranspose',
      $                    N-(J+1)*NB, NB, J*NB,
      $                    -ONE, A( (J+1)*NB+1, 1 ), LDA,
      $                          WORK( NB+1 ), N,
@@ -578,7 +576,7 @@ c               END IF
 *
 *              Factorize panel
 *
-               CALL ZGETRF( N-(J+1)*NB, NB, 
+               CALL CGETRF( N-(J+1)*NB, NB, 
      $                      A( (J+1)*NB+1, J*NB+1 ), LDA,
      $                      IPIV( (J+1)*NB+1 ), IINFO )
 c               IF (IINFO.NE.0 .AND. INFO.EQ.0) THEN
@@ -588,13 +586,13 @@ c               END IF
 *              Compute T(J+1, J), zero out for GEMM update
 *     
                KB = MIN(NB, N-(J+1)*NB)
-               CALL ZLASET( 'Full', KB, NB, ZERO, ZERO, 
+               CALL CLASET( 'Full', KB, NB, ZERO, ZERO, 
      $                      TB( TD+NB+1 + (J*NB)*LDTB) , LDTB-1 )
-               CALL ZLACPY( 'Upper', KB, NB,
+               CALL CLACPY( 'Upper', KB, NB,
      $                      A( (J+1)*NB+1, J*NB+1 ), LDA,
      $                      TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                IF( J.GT.0 ) THEN 
-                  CALL ZTRSM( 'R', 'L', 'C', 'U', KB, NB, ONE,
+                  CALL CTRSM( 'R', 'L', 'C', 'U', KB, NB, ONE,
      $                        A( J*NB+1, (J-1)*NB+1 ), LDA,
      $                        TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
                END IF
@@ -605,10 +603,10 @@ c               END IF
                DO K = 1, NB
                   DO I = 1, KB
                      TB( TD-NB+K-I+1 + (J*NB+NB+I-1)*LDTB )
-     $                  = DCONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
+     $                  = CONJG( TB( TD+NB+I-K+1 + (J*NB+K-1)*LDTB ) )
                   END DO
                END DO
-               CALL ZLASET( 'Upper', KB, NB, ZERO, ONE, 
+               CALL CLASET( 'Upper', KB, NB, ZERO, ONE, 
      $                      A( (J+1)*NB+1, J*NB+1), LDA )
 *              
 *              Apply pivots to trailing submatrix of A
@@ -621,15 +619,15 @@ c               END IF
                   I2 = IPIV( (J+1)*NB+K )
                   IF( I1.NE.I2 ) THEN 
 *                    > Apply pivots to previous columns of L
-                     CALL ZSWAP( K-1, A( I1, (J+1)*NB+1 ), LDA, 
+                     CALL CSWAP( K-1, A( I1, (J+1)*NB+1 ), LDA, 
      $                                A( I2, (J+1)*NB+1 ), LDA )
 *                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)               
-                     CALL ZSWAP( I2-I1-1, A( I1+1, I1 ), 1,
+                     CALL CSWAP( I2-I1-1, A( I1+1, I1 ), 1,
      $                                    A( I2, I1+1 ), LDA )
-                     CALL ZLACGV( I2-I1, A( I1+1, I1 ), 1 )
-                     CALL ZLACGV( I2-I1-1, A( I2, I1+1 ), LDA )
+                     CALL CLACGV( I2-I1, A( I1+1, I1 ), 1 )
+                     CALL CLACGV( I2-I1-1, A( I2, I1+1 ), LDA )
 *                    > Swap A(I2+1:M, I1) with A(I2+1:M, I2)
-                     CALL ZSWAP( N-I2, A( I2+1, I1 ), 1,
+                     CALL CSWAP( N-I2, A( I2+1, I1 ), 1,
      $                                 A( I2+1, I2 ), 1 ) 
 *                    > Swap A(I1, I1) with A(I2, I2)
                      PIV = A( I1, I1 )
@@ -637,7 +635,7 @@ c               END IF
                      A( I2, I2 ) = PIV
 *                    > Apply pivots to previous columns of L
                      IF( J.GT.0 ) THEN
-                        CALL ZSWAP( J*NB, A( I1, 1 ), LDA,
+                        CALL CSWAP( J*NB, A( I1, 1 ), LDA,
      $                                    A( I2, 1 ), LDA )
                      END IF
                   ENDIF   
@@ -652,7 +650,7 @@ c     $                     (J+1)*NB+1, (J+1)*NB+KB, IPIV, 1 )
       END IF
 *
 *     Factor the band matrix
-      CALL ZGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
+      CALL CGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
 *
 *     End of ZHETRF_AA_2STAGE
 *

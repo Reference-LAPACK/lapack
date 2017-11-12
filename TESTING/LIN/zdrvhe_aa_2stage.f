@@ -1,4 +1,4 @@
-*> \brief \b CDRVHE_AA_2STAGE
+*> \brief \b ZDRVHE_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CDRVHE_AA_2STAGE(
+*       SUBROUTINE ZDRVHE_AA_2STAGE(
 *                             DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR, NMAX,
 *                             A, AFAC, AINV, B, X, XACT, WORK, RWORK, IWORK,
 *                             NOUT )
@@ -22,7 +22,7 @@
 *       LOGICAL            DOTYPE( * )
 *       INTEGER            IWORK( * ), NVAL( * )
 *       REAL               RWORK( * )
-*       COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
+*       COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
 *      $                   WORK( * ), X( * ), XACT( * )
 *       ..
 *
@@ -32,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> CDRVHE_AA_2STAGE tests the driver routine CHESV_AA_2STAGE.
+*> ZDRVHE_AA_2STAGE tests the driver routine ZHESV_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -88,37 +88,37 @@
 *>
 *> \param[out] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (NMAX*NMAX)
+*>          A is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AFAC
 *> \verbatim
-*>          AFAC is COMPLEX array, dimension (NMAX*NMAX)
+*>          AFAC is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] AINV
 *> \verbatim
-*>          AINV is COMPLEX array, dimension (NMAX*NMAX)
+*>          AINV is COMPLEX*16 array, dimension (NMAX*NMAX)
 *> \endverbatim
 *>
 *> \param[out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (NMAX*NRHS)
+*>          B is COMPLEX*16 array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] X
 *> \verbatim
-*>          X is COMPLEX array, dimension (NMAX*NRHS)
+*>          X is COMPLEX*16 array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] XACT
 *> \verbatim
-*>          XACT is COMPLEX array, dimension (NMAX*NRHS)
+*>          XACT is COMPLEX*16 array, dimension (NMAX*NRHS)
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is COMPLEX array, dimension (NMAX*max(2,NRHS))
+*>          WORK is COMPLEX*16 array, dimension (NMAX*max(2,NRHS))
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -145,12 +145,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
+*> \date November 2017
 *
-*> \ingroup complex_lin
+*> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE CDRVHE_AA_2STAGE(
+      SUBROUTINE ZDRVHE_AA_2STAGE(
      $                         DOTYPE, NN, NVAL, NRHS, THRESH, TSTERR,
      $                         NMAX, A, AFAC, AINV, B, X, XACT, WORK,
      $                         RWORK, IWORK, NOUT )
@@ -169,7 +169,7 @@
       LOGICAL            DOTYPE( * )
       INTEGER            IWORK( * ), NVAL( * )
       REAL               RWORK( * )
-      COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
+      COMPLEX*16         A( * ), AFAC( * ), AINV( * ), B( * ),
      $                   WORK( * ), X( * ), XACT( * )
 *     ..
 *
@@ -177,7 +177,7 @@
 *
 *     .. Parameters ..
       REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
+      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
       INTEGER            NTYPES, NTESTS
       PARAMETER          ( NTYPES = 10, NTESTS = 3 )
       INTEGER            NFACT
@@ -202,10 +202,10 @@
       EXTERNAL           CLANHE, SGET06
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, CERRVX,
-     $                   CGET04, CLACPY, CLARHS, CLATB4, CLATMS,
-     $                   CHESV_AA_2STAGE, CPOT02,
-     $                   CHETRF_AA_2STAGE
+      EXTERNAL           ALADHD, ALAERH, ALASVM, XLAENV, ZERRVX,
+     $                   ZGET04, ZLACPY, ZLARHS, ZLATB4, ZLATMS,
+     $                   ZHESV_AA_2STAGE, ZHET01_AA, ZPOT02,
+     $                   ZHETRF_AA_2STAGE
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -217,7 +217,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CMPLX, MAX, MIN
+      INTRINSIC          DCMPLX, MAX, MIN
 *     ..
 *     .. Data statements ..
       DATA               ISEEDY / 1988, 1989, 1990, 1991 /
@@ -229,12 +229,12 @@
 *
 *     Test path
 *
-      PATH( 1: 1 ) = 'Complex precision'
+      PATH( 1: 1 ) = 'Zomplex precision'
       PATH( 2: 3 ) = 'H2'
 *
 *     Path to generate matrices
 *
-      MATPATH( 1: 1 ) = 'Complex precision'
+      MATPATH( 1: 1 ) = 'Zomplex precision'
       MATPATH( 2: 3 ) = 'HE'
 *
       NRUN = 0
@@ -247,7 +247,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRVX( PATH, NOUT )
+     $   CALL ZERRVX( PATH, NOUT )
       INFOT = 0
 *
 *     Set the block size and minimum block size for testing.
@@ -287,23 +287,23 @@
 *
 *              Begin generate the test matrix A.
 *
-*              Set up parameters with CLATB4 for the matrix generator
+*              Set up parameters with ZLATB4 for the matrix generator
 *              based on the type of matrix to be generated.
 *
-              CALL CLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
+              CALL ZLATB4( MATPATH, IMAT, N, N, TYPE, KL, KU, ANORM,
      $                         MODE, CNDNUM, DIST )
 *
-*              Generate a matrix with CLATMS.
+*              Generate a matrix with ZLATMS.
 *
-                  SRNAMT = 'CLATMS'
-                  CALL CLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
+                  SRNAMT = 'ZLATMS'
+                  CALL ZLATMS( N, N, DIST, ISEED, TYPE, RWORK, MODE,
      $                         CNDNUM, ANORM, KL, KU, UPLO, A, LDA,
      $                         WORK, INFO )
 *
-*                 Check error code from CLATMS and handle error.
+*                 Check error code from ZLATMS and handle error.
 *
                   IF( INFO.NE.0 ) THEN
-                     CALL ALAERH( PATH, 'CLATMS', INFO, 0, UPLO, N, N,
+                     CALL ALAERH( PATH, 'ZLATMS', INFO, 0, UPLO, N, N,
      $                            -1, -1, -1, IMAT, NFAIL, NERRS, NOUT )
                      GO TO 160
                   END IF
@@ -388,23 +388,23 @@
 *
 *                 Form an exact solution and set the right hand side.
 *
-                  SRNAMT = 'CLARHS'
-                  CALL CLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
+                  SRNAMT = 'ZLARHS'
+                  CALL ZLARHS( MATPATH, XTYPE, UPLO, ' ', N, N, KL, KU,
      $                         NRHS, A, LDA, XACT, LDA, B, LDA, ISEED,
      $                         INFO )
                   XTYPE = 'C'
 *
-*                 --- Test CHESV_AA_2STAGE  ---
+*                 --- Test ZHESV_AA_2STAGE  ---
 *
                   IF( IFACT.EQ.2 ) THEN
-                     CALL CLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
+                     CALL ZLACPY( UPLO, N, N, A, LDA, AFAC, LDA )
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-*                    Factor the matrix and solve the system using CHESV_AA.
+*                    Factor the matrix and solve the system using ZHESV_AA.
 *
-                     SRNAMT = 'CHESV_AA_2STAGE '
+                     SRNAMT = 'ZHESV_AA_2STAGE '
                      LWORK = MIN(N*NB, 3*NMAX*NMAX)
-                     CALL CHESV_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
+                     CALL ZHESV_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
      $                                 AINV, (3*NB+1)*N, 
      $                                 IWORK, IWORK( 1+N ),
      $                                 X, LDA, WORK, LWORK, INFO )
@@ -429,10 +429,10 @@
                         K = 0
                      END IF
 *
-*                    Check error code from CHESV_AA .
+*                    Check error code from ZHESV_AA .
 *
                      IF( INFO.NE.K ) THEN
-                        CALL ALAERH( PATH, 'CHESV_AA', INFO, K,
+                        CALL ALAERH( PATH, 'ZHESV_AA', INFO, K,
      $                               UPLO, N, N, -1, -1, NRHS,
      $                               IMAT, NFAIL, NERRS, NOUT )
                         GO TO 120
@@ -442,18 +442,18 @@
 *
 *                    Compute residual of the computed solution.
 *
-                     CALL CLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
-                     CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
+                     CALL ZLACPY( 'Full', N, NRHS, B, LDA, WORK, LDA )
+                     CALL ZPOT02( UPLO, N, NRHS, A, LDA, X, LDA, WORK,
      $                            LDA, RWORK, RESULT( 1 ) )
 *
 *                    Reconstruct matrix from factors and compute
 *                    residual.
 *
-c                     CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
-c     $                                  IWORK, AINV, LDA, RWORK,
-c     $                                  RESULT( 2 ) )
-c                     NT = 2
-					  NT = 1
+                     CALL ZHET01_AA( UPLO, N, A, LDA, AFAC, LDA,
+     $                                  IWORK, AINV, LDA, RWORK,
+     $                                  RESULT( 2 ) )
+                     NT = 2
+                     
 *
 *                    Print information about the tests that did not pass
 *                    the threshold.
@@ -462,7 +462,7 @@ c                     NT = 2
                         IF( RESULT( K ).GE.THRESH ) THEN
                            IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                        CALL ALADHD( NOUT, PATH )
-                           WRITE( NOUT, FMT = 9999 )'CHESV_AA ',
+                           WRITE( NOUT, FMT = 9999 )'ZHESV_AA ',
      $                         UPLO, N, IMAT, K, RESULT( K )
                            NFAIL = NFAIL + 1
                         END IF
@@ -485,6 +485,6 @@ c                     NT = 2
      $      ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of CDRVHE_AA_2STAGE
+*     End of ZDRVHE_AA
 *
       END
