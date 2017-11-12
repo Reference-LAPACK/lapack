@@ -7,11 +7,11 @@
 *
 *> \htmlonly
 *> Download SSYSV_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssysv_aasen_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/ssysv_aa_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssysv_aasen_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/ssysv_aa_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysv_aasen_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/ssysv_aa_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
@@ -31,20 +31,21 @@
 *       REAL               A( LDA, * ), TB( * ), B( LDB, *), WORK( * )
 *       ..
 *
+*
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> SSYSV_AA_2STAGE computes the solution to a complex system of
+*> SSYSV_AA_2STAGE computes the solution to a real system of
 *> linear equations
 *>    A * X = B,
 *> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *> matrices.
 *>
 *> Aasen's 2-stage algorithm is used to factor A as
-*>    A = U * T * U**H,  if UPLO = 'U', or
-*>    A = L * T * L**H,  if UPLO = 'L',
+*>    A = U * T * U**T,  if UPLO = 'U', or
+*>    A = L * T * L**T,  if UPLO = 'L',
 *> where U (or L) is a product of permutation and unit upper (lower)
 *> triangular matrices, and T is symmetric and band. The matrix T is
 *> then LU-factored with partial pivoting. The factored form of A
@@ -175,16 +176,16 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
+*> \date November 2017
 *
-*> \ingroup realSYcomputational
+*> \ingroup realSYsolve
 *
 *  =====================================================================
       SUBROUTINE SSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                            IPIV, IPIV2, B, LDB, WORK, LWORK,
      $                            INFO )
 *
-*  -- LAPACK computational routine (version 3.7.0) --
+*  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     December 2016
@@ -211,7 +212,8 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           SSYTRF_AA_2STAGE, SSYTRS_AA_2STAGE,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -255,7 +257,7 @@
       END IF
 *
 *
-*     Compute the factorization A = U*T*U**H or A = L*T*L**H.
+*     Compute the factorization A = U*T*U**T or A = L*T*L**T.
 *
       CALL SSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
      $                       WORK, LWORK, INFO )
@@ -269,6 +271,8 @@
       END IF
 *
       WORK( 1 ) = LWKOPT
+*
+      RETURN
 *
 *     End of SSYSV_AA_2STAGE
 *

@@ -1,7 +1,5 @@
 *> \brief \b CHETRF_AA_2STAGE
 *
-* @generated from SRC/dsytrf_aa_2stage.f, fortran d -> c, Mon Oct 30 11:57:50 2017
-*
 *  =========== DOCUMENTATION ===========
 *
 * Online html documentation available at
@@ -152,7 +150,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
+*> \date November 2017
 *
 *> \ingroup complexSYcomputational
 *
@@ -192,9 +190,12 @@
       LOGICAL            LSAME
       INTEGER            ILAENV
       EXTERNAL           LSAME, ILAENV
+      
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           XERBLA, CCOPY, CLACGV, CLACPY,
+     $                   CLASET, CGBTRF, CGEMM,  CGETRF, 
+     $                   CHEGST, CSWAP, CTRSM 
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          CONJG, MIN, MAX

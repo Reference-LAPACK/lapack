@@ -410,6 +410,7 @@ ZLASRC = \
    zhetf2_rk.o zhetrf_rk.o zhetri_3.o zhetri_3x.o \
    zhetrs_3.o zhecon_3.o zhesv_rk.o \
    zhesv_aa.o zhetrf_aa.o zhetrs_aa.o zlahef_aa.o \
+   zhesv_aa_2stage.o zhetrf_aa_2stage.o zhetrs_aa_2stage.o \
    zhgeqz.o zhpcon.o zhpev.o  zhpevd.o \
    zhpevx.o zhpgst.o zhpgv.o  zhpgvd.o zhpgvx.o zhprfs.o zhpsv.o \
    zhpsvx.o \

@@ -14,15 +14,16 @@
 *                             IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
-*       LOGICAL            TSTERR
-*       INTEGER            NMAX, NN, NNB, NNS, NOUT
-*       COMPLEX            THRESH
+*       LOGICAL    TSTERR
+*       INTEGER    NN, NNB, NNS, NOUT
+*       REAL       THRESH
 *       ..
 *       .. Array Arguments ..
-*       LOGICAL            DOTYPE( * )
-*       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-*       COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
+*       LOGICAL    DOTYPE( * )
+*       INTEGER    IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+*       REAL       RWORK( * )
+*       COMPLEX    A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $           WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -31,7 +32,7 @@
 *>
 *> \verbatim
 *>
-*> DCHKSY_AA_2STAGE tests CHETRF_AA_2STAGE, -TRS_AA_2STAGE.
+*> CCHKSY_AA_2STAGE tests CHETRF_AA_2STAGE, -TRS_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -83,7 +84,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is COMPLEX
+*>          THRESH is REAL
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -140,7 +141,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is COMPLEX array, dimension (max(NMAX,2*NSMAX))
+*>          RWORK is REAL array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -162,7 +163,8 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date November 2017
+*
 *
 *> \ingroup complex_lin
 *
@@ -184,23 +186,25 @@
       REAL               THRESH
 *     ..
 *     .. Array Arguments ..
-      LOGICAL            DOTYPE( * )
-      INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-      COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
-     $                   WORK( * ), X( * ), XACT( * )
-       REAL              RWORK( * )
+*
+      LOGICAL      DOTYPE( * )
+      INTEGER      IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+      REAL         RWORK( * )
+      COMPLEX      A( * ), AFAC( * ), AINV( * ), B( * ),
+     $             WORK( * ), X( * ), XACT( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      COMPLEX            ZERO, ONE
-      PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ), 
-     $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
-      INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 10 )
-      INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 9 )
+      REAL         ZERO
+      PARAMETER    ( ZERO = 0.0E+0 )
+      COMPLEX      CZERO
+      PARAMETER    ( CZERO = ( 0.0E+0, 0.0E+0 ) )
+      INTEGER      NTYPES
+      PARAMETER    ( NTYPES = 10 )
+      INTEGER      NTESTS
+      PARAMETER    ( NTESTS = 9 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            ZEROT
@@ -209,7 +213,7 @@
       INTEGER            I, I1, I2, IMAT, IN, INB, INFO, IOFF, IRHS,
      $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
-      COMPLEX            ANORM, CNDNUM
+      REAL               ANORM, CNDNUM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -217,10 +221,10 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRHE, CLACPY, CLARHS,
-     $                   CLATB4, CLATMS, CPOT02, DSYT01, 
-     $                   CHETRF_AA_2STAGE, CHETRS_AA_2STAGE,
-     $                   XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRHE, CLACPY, 
+     $                   CLARHS, CLATB4, CLATMS, CPOT02, 
+     $                   CHETRF_AA_2STAGE, 
+     $                   CHETRS_AA_2STAGE, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -241,6 +245,7 @@
 *     .. Executable Statements ..
 *
 *     Initialize constants and the random number seed.
+*
 *
 *     Test path
 *
@@ -353,22 +358,22 @@
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDA
                         DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    20                   CONTINUE
                         IOFF = IOFF + IZERO
                         DO 30 I = IZERO, N
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    30                   CONTINUE
                      ELSE
                         IOFF = IZERO
                         DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = ZERO
+                           A( IOFF ) = CZERO
                            IOFF = IOFF + LDA
    40                   CONTINUE
                         IOFF = IOFF - IZERO
                         DO 50 I = IZERO, N
-                           A( IOFF+I ) = ZERO
+                           A( IOFF+I ) = CZERO
    50                   CONTINUE
                      END IF
                   ELSE
@@ -380,7 +385,7 @@
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    60                      CONTINUE
                            IOFF = IOFF + LDA
    70                   CONTINUE
@@ -393,7 +398,7 @@
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
-                              A( IOFF+I ) = ZERO
+                              A( IOFF+I ) = CZERO
    80                      CONTINUE
                            IOFF = IOFF + LDA
    90                   CONTINUE
@@ -403,7 +408,12 @@
                   IZERO = 0
                END IF
 *
-*              End generate the test matrix A.
+*              End generate test matrix A.
+*
+*
+*              Set the imaginary part of the diagonals.
+*
+               CALL CLAIPD( N, A, LDA+1, 0 )
 *
 *              Do for each value of NB in NBVAL
 *
@@ -465,10 +475,12 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-c                  CALL DSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+*                   
+c                 NEED TO WRITE CHET01_AA_2STAGE
+c                  CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
 c     $                            AINV, LDA, RWORK, RESULT( 1 ) )
 c                  NT = 1
-                  NT = 0
+                   NT = 0
 *
 *
 *                 Print information about the tests that did not pass
@@ -531,7 +543,6 @@ c                  NT = 1
                         CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
 *
-*
 *                       Print information about the tests that did not pass
 *                       the threshold.
 *
@@ -568,6 +579,6 @@ c                  NT = 1
      $      I6 )
       RETURN
 *
-*     End of DCHKSY_AA_2STAGE
+*     End of CCHKSY_AA_2STAGE
 *
       END
