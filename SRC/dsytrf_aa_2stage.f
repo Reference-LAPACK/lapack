@@ -402,7 +402,7 @@ c               END IF
 *     
                KB = MIN(NB, N-(J+1)*NB)
                CALL DLASET( 'Full', KB, NB, ZERO, ZERO, 
-     $                      TB( TD+NB+1 + (J*NB)*LDTB) , LDTB-1 )
+     $                      TB( TD+NB+1 + (J*NB)*LDTB), LDTB-1 )
                CALL DLACPY( 'Upper', KB, NB,
      $                      WORK, N,
      $                      TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
@@ -573,7 +573,7 @@ c               END IF
 *     
                KB = MIN(NB, N-(J+1)*NB)
                CALL DLASET( 'Full', KB, NB, ZERO, ZERO, 
-     $                      TB( TD+NB+1 + (J*NB)*LDTB) , LDTB-1 )
+     $                      TB( TD+NB+1 + (J*NB)*LDTB), LDTB-1 )
                CALL DLACPY( 'Upper', KB, NB,
      $                      A( (J+1)*NB+1, J*NB+1 ), LDA,
      $                      TB( TD+NB+1 + (J*NB)*LDTB ), LDTB-1 )
