@@ -1,4 +1,4 @@
-*> \brief <b> CHESV_AA_2STAGE computes the solution to system of linear equations A * X = B for HE matrices</b>
+*> \brief <b> CSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY matrices</b>
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CHESV_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/chesv_aa_2stage.f">
+*> Download CSYSV_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csysv_aasen_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/chesv_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csysv_aasen_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/chesv_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csysv_aasen_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE CHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+*      SUBROUTINE CSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
 *                                  IPIV, IPIV2, B, LDB, WORK, LWORK,
 *                                  INFO )
 *
@@ -36,17 +36,17 @@
 *>
 *> \verbatim
 *>
-*> CHESV_AA_2STAGE computes the solution to a complex system of 
+*> CSYSV_AA_2STAGE computes the solution to a complex system of
 *> linear equations
 *>    A * X = B,
-*> where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
+*> where A is an N-by-N symmetric matrix and X and B are N-by-NRHS
 *> matrices.
 *>
 *> Aasen's 2-stage algorithm is used to factor A as
 *>    A = U * T * U**H,  if UPLO = 'U', or
 *>    A = L * T * L**H,  if UPLO = 'L',
 *> where U (or L) is a product of permutation and unit upper (lower)
-*> triangular matrices, and T is Hermitian and band. The matrix T is
+*> triangular matrices, and T is symmetric and band. The matrix T is
 *> then LU-factored with partial pivoting. The factored form of A
 *> is then used to solve the system of equations A * X = B.
 *>
@@ -79,7 +79,7 @@
 *> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
-*>          On entry, the hermitian matrix A.  If UPLO = 'U', the leading
+*>          On entry, the symmetric matrix A.  If UPLO = 'U', the leading
 *>          N-by-N upper triangular part of A contains the upper
 *>          triangular part of the matrix A, and the strictly lower
 *>          triangular part of A is not referenced.  If UPLO = 'L', the
@@ -180,7 +180,7 @@
 *> \ingroup complexSYcomputational
 *
 *  =====================================================================
-      SUBROUTINE CHESV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+      SUBROUTINE CSYSV_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                            IPIV, IPIV2, B, LDB, WORK, LWORK,
      $                            INFO )
 *
@@ -211,8 +211,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CHETRF_AA_2STAGE, CHETRS_AA_2STAGE,
-     $                   XERBLA
+      EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -249,7 +248,7 @@
       END IF
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CHESV_AA_2STAGE', -INFO )
+         CALL XERBLA( 'CSYSV_AA_2STAGE', -INFO )
          RETURN
       ELSE IF( WQUERY .OR. TQUERY ) THEN
          RETURN
@@ -258,19 +257,19 @@
 *
 *     Compute the factorization A = U*T*U**H or A = L*T*L**H.
 *
-      CALL CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
+      CALL CSYTRF_AA_2STAGE( UPLO, N, A, LDA, TB, LTB, IPIV, IPIV2,
      $                       WORK, LWORK, INFO )
       IF( INFO.EQ.0 ) THEN
 *
 *        Solve the system A*X = B, overwriting B with X.
 *
-         CALL CHETRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
+         CALL CSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV,
      $                          IPIV2, B, LDB, INFO )
 *
       END IF
 *
       WORK( 1 ) = LWKOPT
 *
-*     End of CHESV_AA_2STAGE
+*     End of CSYSV_AA_2STAGE
 *
       END

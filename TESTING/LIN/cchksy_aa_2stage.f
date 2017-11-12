@@ -1,4 +1,4 @@
-*> \brief \b CCHKHE_AA_2STAGE
+*> \brief \b SCHKSY_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,22 +8,21 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKHE_AA_2STAGE( DOTYPE, NN, NVAL, NNB, NBVAL, 
+*       SUBROUTINE CCHKSY_AA_2STAGE( DOTYPE, NN, NVAL, NNB, NBVAL, 
 *                             NNS, NSVAL, THRESH, TSTERR, NMAX, A,
 *                             AFAC, AINV, B, X, XACT, WORK, RWORK,
 *                             IWORK, NOUT )
 *
 *       .. Scalar Arguments ..
-*       LOGICAL    TSTERR
-*       INTEGER    NN, NNB, NNS, NOUT
-*       REAL       THRESH
+*       LOGICAL            TSTERR
+*       INTEGER            NMAX, NN, NNB, NNS, NOUT
+*       COMPLEX   THRESH
 *       ..
 *       .. Array Arguments ..
-*       LOGICAL    DOTYPE( * )
-*       INTEGER    IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-*       REAL       RWORK( * )
-*       COMPLEX    A( * ), AFAC( * ), AINV( * ), B( * ),
-*      $           WORK( * ), X( * ), XACT( * )
+*       LOGICAL            DOTYPE( * )
+*       INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+*       COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
+*      $                   RWORK( * ), WORK( * ), X( * ), XACT( * )
 *       ..
 *
 *
@@ -32,7 +31,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKSY_AA_2STAGE tests CHETRF_AA_2STAGE, -TRS_AA_2STAGE.
+*> SCHKSY_AA_2STAGE tests CSYTRF_AA_2STAGE, -TRS_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -84,7 +83,7 @@
 *>
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is REAL
+*>          THRESH is COMPLEX
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -141,7 +140,7 @@
 *>
 *> \param[out] RWORK
 *> \verbatim
-*>          RWORK is REAL array, dimension (max(NMAX,2*NSMAX))
+*>          RWORK is COMPLEX array, dimension (max(NMAX,2*NSMAX))
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -163,13 +162,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date June 2017
 *
+*  @generated from dsytrf_aasen_2stage.f, fortran d -> s, Mon Oct 30 12:03:46 2017
 *
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKHE_AA_2STAGE( DOTYPE, NN, NVAL, NNB, NBVAL, NNS,
+      SUBROUTINE CCHKSY_AA_2STAGE( DOTYPE, NN, NVAL, NNB, NBVAL, NNS,
      $                      NSVAL, THRESH, TSTERR, NMAX, A, AFAC, AINV,
      $                      B, X, XACT, WORK, RWORK, IWORK, NOUT )
 *
@@ -186,25 +186,23 @@
       REAL               THRESH
 *     ..
 *     .. Array Arguments ..
-*
-      LOGICAL      DOTYPE( * )
-      INTEGER      IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
-      REAL         RWORK( * )
-      COMPLEX      A( * ), AFAC( * ), AINV( * ), B( * ),
-     $             WORK( * ), X( * ), XACT( * )
+      LOGICAL            DOTYPE( * )
+      INTEGER            IWORK( * ), NBVAL( * ), NSVAL( * ), NVAL( * )
+      COMPLEX            A( * ), AFAC( * ), AINV( * ), B( * ),
+     $                   WORK( * ), X( * ), XACT( * )
+      REAL               RWORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL         ZERO
-      PARAMETER    ( ZERO = 0.0E+0 )
-      COMPLEX      CZERO
-      PARAMETER    ( CZERO = ( 0.0E+0, 0.0E+0 ) )
-      INTEGER      NTYPES
-      PARAMETER    ( NTYPES = 10 )
-      INTEGER      NTESTS
-      PARAMETER    ( NTESTS = 9 )
+      COMPLEX            ZERO, ONE
+      PARAMETER          ( ZERO = ( 0.0E+0, 0.0E+0 ),
+     $                     ONE  = ( 1.0E+0, 0.0E+0 ) )
+      INTEGER            NTYPES
+      PARAMETER          ( NTYPES = 10 )
+      INTEGER            NTESTS
+      PARAMETER          ( NTESTS = 9 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            ZEROT
@@ -221,10 +219,10 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRHE, CLACPY, 
-     $                   CLARHS, CLATB4, CLATMS, CPOT02, 
-     $                   CHETRF_AA_2STAGE, 
-     $                   CHETRS_AA_2STAGE, XLAENV
+      EXTERNAL           ALAERH, ALAHD, ALASUM, CERRSY, CLACPY, CLARHS,
+     $                   CLATB4, CLATMS, CSYT02, CSYT01, 
+     $                   CSYTRF_AA_2STAGE, CSYTRS_AA_2STAGE,
+     $                   XLAENV
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -246,16 +244,15 @@
 *
 *     Initialize constants and the random number seed.
 *
-*
 *     Test path
 *
       PATH( 1: 1 ) = 'Complex precision'
-      PATH( 2: 3 ) = 'H2'
+      PATH( 2: 3 ) = 'S2'
 *
 *     Path to generate matrices
 *
       MATPATH( 1: 1 ) = 'Complex precision'
-      MATPATH( 2: 3 ) = 'HE'
+      MATPATH( 2: 3 ) = 'SY'
       NRUN = 0
       NFAIL = 0
       NERRS = 0
@@ -266,7 +263,7 @@
 *     Test the error exits
 *
       IF( TSTERR )
-     $   CALL CERRHE( PATH, NOUT )
+     $   CALL CERRSY( PATH, NOUT )
       INFOT = 0
 *
 *     Set the minimum block size for which the block routine should
@@ -358,22 +355,22 @@
                      IF( IUPLO.EQ.1 ) THEN
                         IOFF = ( IZERO-1 )*LDA
                         DO 20 I = 1, IZERO - 1
-                           A( IOFF+I ) = CZERO
+                           A( IOFF+I ) = ZERO
    20                   CONTINUE
                         IOFF = IOFF + IZERO
                         DO 30 I = IZERO, N
-                           A( IOFF ) = CZERO
+                           A( IOFF ) = ZERO
                            IOFF = IOFF + LDA
    30                   CONTINUE
                      ELSE
                         IOFF = IZERO
                         DO 40 I = 1, IZERO - 1
-                           A( IOFF ) = CZERO
+                           A( IOFF ) = ZERO
                            IOFF = IOFF + LDA
    40                   CONTINUE
                         IOFF = IOFF - IZERO
                         DO 50 I = IZERO, N
-                           A( IOFF+I ) = CZERO
+                           A( IOFF+I ) = ZERO
    50                   CONTINUE
                      END IF
                   ELSE
@@ -385,7 +382,7 @@
                         DO 70 J = 1, N
                            I2 = MIN( J, IZERO )
                            DO 60 I = 1, I2
-                              A( IOFF+I ) = CZERO
+                              A( IOFF+I ) = ZERO
    60                      CONTINUE
                            IOFF = IOFF + LDA
    70                   CONTINUE
@@ -398,7 +395,7 @@
                         DO 90 J = 1, N
                            I1 = MAX( J, IZERO )
                            DO 80 I = I1, N
-                              A( IOFF+I ) = CZERO
+                              A( IOFF+I ) = ZERO
    80                      CONTINUE
                            IOFF = IOFF + LDA
    90                   CONTINUE
@@ -408,12 +405,7 @@
                   IZERO = 0
                END IF
 *
-*              End generate test matrix A.
-*
-*
-*              Set the imaginary part of the diagonals.
-*
-               CALL CLAIPD( N, A, LDA+1, 0 )
+*              End generate the test matrix A.
 *
 *              Do for each value of NB in NBVAL
 *
@@ -436,9 +428,9 @@
 *                 the block structure of D. AINV is a work array for
 *                 block factorization, LWORK is the length of AINV.
 *
-                  SRNAMT = 'CHETRF_AA_2STAGE'
+                  SRNAMT = 'CSYTRF_AA_2STAGE'
                   LWORK = MIN(N*NB, 3*NMAX*NMAX)
-                  CALL CHETRF_AA_2STAGE( UPLO, N, AFAC, LDA, 
+                  CALL CSYTRF_AA_2STAGE( UPLO, N, AFAC, LDA, 
      $                                   AINV, (3*NB+1)*N, 
      $                                   IWORK, IWORK( 1+N ),
      $                                   WORK, LWORK,
@@ -464,10 +456,10 @@
                      K = 0
                   END IF
 *
-*                 Check error code from CHETRF and handle error.
+*                 Check error code from CSYTRF and handle error.
 *
                   IF( INFO.NE.K ) THEN
-                     CALL ALAERH( PATH, 'CHETRF_AA_2STAGE', INFO, K,
+                     CALL ALAERH( PATH, 'CSYTRF_AA_2STAGE', INFO, K,
      $                            UPLO, N, N, -1, -1, NB, IMAT, NFAIL,
      $                            NERRS, NOUT )
                   END IF
@@ -475,12 +467,10 @@
 *+    TEST 1
 *                 Reconstruct matrix from factors and compute residual.
 *
-*                   
-c                 NEED TO WRITE CHET01_AA_2STAGE
-c                  CALL CHET01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
+c                  CALL CSYT01_AA( UPLO, N, A, LDA, AFAC, LDA, IWORK,
 c     $                            AINV, LDA, RWORK, RESULT( 1 ) )
 c                  NT = 1
-                   NT = 0
+                  NT = 0
 *
 *
 *                 Print information about the tests that did not pass
@@ -520,17 +510,17 @@ c                  NT = 1
      $                            B, LDA, ISEED, INFO )
                      CALL CLACPY( 'Full', N, NRHS, B, LDA, X, LDA )
 *
-                     SRNAMT = 'CHETRS_AA_2STAGE'
+                     SRNAMT = 'CSYTRS_AA_2STAGE'
                      LWORK = MAX( 1, 3*N-2 )
-                     CALL CHETRS_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
+                     CALL CSYTRS_AA_2STAGE( UPLO, N, NRHS, AFAC, LDA,
      $                            AINV, (3*NB+1)*N, IWORK, IWORK( 1+N ),
      $                            X, LDA, INFO )
 *
-*                    Check error code from CHETRS and handle error.
+*                    Check error code from CSYTRS and handle error.
 *
                      IF( INFO.NE.0 ) THEN
                         IF( IZERO.EQ.0 ) THEN
-                           CALL ALAERH( PATH, 'CHETRS_AA_2STAGE',
+                           CALL ALAERH( PATH, 'CSYTRS_AA_2STAGE',
      $                                  INFO, 0, UPLO, N, N, -1, -1,
      $                                  NRHS, IMAT, NFAIL, NERRS, NOUT )
                         END IF
@@ -540,8 +530,9 @@ c                  NT = 1
 *
 *                       Compute the residual for the solution
 *
-                        CALL CPOT02( UPLO, N, NRHS, A, LDA, X, LDA,
+                        CALL CSYT02( UPLO, N, NRHS, A, LDA, X, LDA,
      $                               WORK, LDA, RWORK, RESULT( 2 ) )
+*
 *
 *                       Print information about the tests that did not pass
 *                       the threshold.

@@ -747,6 +747,36 @@
      $                         W, 1, INFO )
          CALL CHKXER( 'CHESV_AA_2STAGE', INFOT, NOUT, LERR, OK )
 *
+      ELSE IF( LSAMEN( 2, C2, 'S2' ) ) THEN
+*
+*        CSYSV_AASEN_2STAGE
+*
+         SRNAMT = 'CSYSV_AA_2STAGE'
+         INFOT = 1
+         CALL CSYSV_AA_2STAGE( '/', 0, 0, A, 1, A, 1, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 2
+         CALL CSYSV_AA_2STAGE( 'U', -1, 0, A, 1, A, 1, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 3
+         CALL CSYSV_AA_2STAGE( 'U', 0, -1, A, 1, A, 1, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 5
+         CALL CSYSV_AA_2STAGE( 'U', 2, 1, A, 1, A, 1, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 11
+         CALL CSYSV_AA_2STAGE( 'U', 2, 1, A, 2, A, 2, IP, IP, B, 1,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+         INFOT = 7
+         CALL CSYSV_AA_2STAGE( 'U', 2, 1, A, 2, A, 1, IP, IP, B, 2,
+     $                         W, 1, INFO )
+         CALL CHKXER( 'CSYSV_AA_2STAGE', INFOT, NOUT, LERR, OK )
+*
       ELSE IF( LSAMEN( 2, C2, 'HP' ) ) THEN
 *
 *        CHPSV

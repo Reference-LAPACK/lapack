@@ -251,6 +251,7 @@ CLASRC = \
    csytri_rook.o csycon_rook.o csysv_rook.o \
    csytf2_rk.o csytrf_rk.o csytrf_aa.o csytrs_3.o csytrs_aa.o \
    csytri_3.o csytri_3x.o csycon_3.o csysv_rk.o csysv_aa.o \
+   csysv_aa_2stage.o csytrf_aa_2stage.o csytrs_aa_2stage.o \
    ctbcon.o ctbrfs.o ctbtrs.o ctgevc.o ctgex2.o \
    ctgexc.o ctgsen.o ctgsja.o ctgsna.o ctgsy2.o ctgsyl.o ctpcon.o \
    ctprfs.o ctptri.o \
