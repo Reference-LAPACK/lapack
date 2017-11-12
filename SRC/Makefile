@@ -447,6 +447,7 @@ ZLASRC = \
    zsyconv.o zsyconvf.o zsyconvf_rook.o \
    zsytf2_rook.o zsytrf_rook.o zsytrs_rook.o zsytrs_aa.o \
    zsytri_rook.o zsycon_rook.o zsysv_rook.o \
+   zsysv_aa_2stage.o zsytrf_aa_2stage.o zsytrs_aa_2stage.o \
    zsytf2_rk.o zsytrf_rk.o zsytrf_aa.o zsytrs_3.o \
    zsytri_3.o zsytri_3x.o zsycon_3.o zsysv_rk.o zsysv_aa.o \
    ztbcon.o ztbrfs.o ztbtrs.o ztgevc.o ztgex2.o \

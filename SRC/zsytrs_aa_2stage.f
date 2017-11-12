@@ -1,4 +1,4 @@
-*> \brief \b CSYTRS_AA_2STAGE
+*> \brief \b ZSYTRS_AA_2STAGE
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download CSYTRS_AA_2STAGE + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/csytrs_aa_2stage.f">
+*> Download ZSYTRS_AA_2STAGE + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zsytrs_aa_2stage.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/csytrs_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zsytrs_aa_2stage.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/csytrs_aa_2stage.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zsytrs_aa_2stage.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*      SUBROUTINE CSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV, 
+*      SUBROUTINE ZSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB, IPIV, 
 *                                   IPIV2, B, LDB, INFO )
 *
 *       .. Scalar Arguments ..
@@ -27,7 +27,7 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IPIV( * ), IPIV2( * )
-*       COMPLEX            A( LDA, * ), TB( * ), B( LDB, * )
+*       COMPLEX*16         A( LDA, * ), TB( * ), B( LDB, * )
 *       ..
 *
 *> \par Purpose:
@@ -35,9 +35,9 @@
 *>
 *> \verbatim
 *>
-*> CSYTRS_AA_2STAGE solves a system of linear equations A*X = B with a complex
+*> ZSYTRS_AA_2STAGE solves a system of linear equations A*X = B with a complex
 *> symmetric matrix A using the factorization A = U*T*U**T or
-*> A = L*T*L**T computed by CSYTRF_AA_2STAGE.
+*> A = L*T*L**T computed by ZSYTRF_AA_2STAGE.
 *> \endverbatim
 *
 *  Arguments:
@@ -67,8 +67,8 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is COMPLEX array, dimension (LDA,N)
-*>          Details of factors computed by CSYTRF_AA_2STAGE.
+*>          A is COMPLEX*16 array, dimension (LDA,N)
+*>          Details of factors computed by ZSYTRF_AA_2STAGE.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -79,8 +79,8 @@
 *>
 *> \param[out] TB
 *> \verbatim
-*>          TB is COMPLEX array, dimension (LTB)
-*>          Details of factors computed by CSYTRF_AA_2STAGE.
+*>          TB is COMPLEX*16 array, dimension (LTB)
+*>          Details of factors computed by ZSYTRF_AA_2STAGE.
 *> \endverbatim
 *>
 *> \param[in] LTB
@@ -92,19 +92,19 @@
 *> \verbatim
 *>          IPIV is INTEGER array, dimension (N)
 *>          Details of the interchanges as computed by
-*>          CSYTRF_AA_2STAGE.
+*>          ZSYTRF_AA_2STAGE.
 *> \endverbatim
 *>
 *> \param[in] IPIV2
 *> \verbatim
 *>          IPIV2 is INTEGER array, dimension (N)
 *>          Details of the interchanges as computed by
-*>          CSYTRF_AA_2STAGE.
+*>          ZSYTRF_AA_2STAGE.
 *> \endverbatim
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is COMPLEX array, dimension (LDB,NRHS)
+*>          B is COMPLEX*16 array, dimension (LDB,NRHS)
 *>          On entry, the right hand side matrix B.
 *>          On exit, the solution matrix X.
 *> \endverbatim
@@ -130,12 +130,12 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date November 2017
 *
-*> \ingroup complexSYcomputational
+*> \ingroup complex16SYcomputational
 *
 *  =====================================================================
-      SUBROUTINE CSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
+      SUBROUTINE ZSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                             IPIV, IPIV2, B, LDB, INFO )
 *
 *  -- LAPACK computational routine (version 3.7.1) --
@@ -151,12 +151,12 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IPIV( * ), IPIV2( * )
-      COMPLEX            A( LDA, * ), TB( * ), B( LDB, * )
+      COMPLEX*16         A( LDA, * ), TB( * ), B( LDB, * )
 *     ..
 *
 *  =====================================================================
 *
-      COMPLEX            ONE
+      COMPLEX*16         ONE
       PARAMETER          ( ONE  = ( 1.0E+0, 0.0E+0 ) )
 *     ..
 *     .. Local Scalars ..
@@ -168,7 +168,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGBTRS, CLASWP, CTRSM, XERBLA
+      EXTERNAL           ZGBTRS, ZLASWP, ZTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX
@@ -191,7 +191,7 @@
          INFO = -11
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CSYTRS_AA_2STAGE', -INFO )
+         CALL XERBLA( 'ZSYTRS_AA_2STAGE', -INFO )
          RETURN
       END IF
 *
@@ -213,29 +213,29 @@
 *
 *           Pivot, P**T * B
 *
-            CALL CLASWP( NRHS, B, LDB, NB+1, N, IPIV, 1 )
+            CALL ZLASWP( NRHS, B, LDB, NB+1, N, IPIV, 1 )
 *
 *           Compute (U**T \P**T * B) -> B    [ (U**T \P**T * B) ]
 *
-            CALL CTRSM( 'L', 'U', 'T', 'U', N-NB, NRHS, ONE, A(1, NB+1),
+            CALL ZTRSM( 'L', 'U', 'T', 'U', N-NB, NRHS, ONE, A(1, NB+1),
      $                 LDA, B(NB+1, 1), LDB)
 *
          END IF
 *
 *        Compute T \ B -> B   [ T \ (U**T \P**T * B) ]
 *
-         CALL CGBTRS( 'N', N, NB, NB, NRHS, TB, LDTB, IPIV2, B, LDB,
+         CALL ZGBTRS( 'N', N, NB, NB, NRHS, TB, LDTB, IPIV2, B, LDB,
      $               INFO)
          IF( N.GT.NB ) THEN
 *
 *           Compute (U \ B) -> B   [ U \ (T \ (U**T \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'U', 'N', 'U', N-NB, NRHS, ONE, A(1, NB+1),
+            CALL ZTRSM( 'L', 'U', 'N', 'U', N-NB, NRHS, ONE, A(1, NB+1),
      $                  LDA, B(NB+1, 1), LDB)
 *
 *           Pivot, P * B  [ P * (U \ (T \ (U**T \P**T * B) )) ]
 *
-            CALL CLASWP( NRHS, B, LDB, NB+1, N, IPIV, -1 )
+            CALL ZLASWP( NRHS, B, LDB, NB+1, N, IPIV, -1 )
 *
          END IF
 *
@@ -247,35 +247,35 @@
 *
 *           Pivot, P**T * B
 *
-            CALL CLASWP( NRHS, B, LDB, NB+1, N, IPIV, 1 )
+            CALL ZLASWP( NRHS, B, LDB, NB+1, N, IPIV, 1 )
 *
 *           Compute (L \P**T * B) -> B    [ (L \P**T * B) ]
 *
-            CALL CTRSM( 'L', 'L', 'N', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
+            CALL ZTRSM( 'L', 'L', 'N', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
      $                 LDA, B(NB+1, 1), LDB)
 *
          END IF
 *
 *        Compute T \ B -> B   [ T \ (L \P**T * B) ]
 *
-         CALL CGBTRS( 'N', N, NB, NB, NRHS, TB, LDTB, IPIV2, B, LDB,
+         CALL ZGBTRS( 'N', N, NB, NB, NRHS, TB, LDTB, IPIV2, B, LDB,
      $               INFO)
          IF( N.GT.NB ) THEN
 *
 *           Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
 *
-            CALL CTRSM( 'L', 'L', 'T', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
+            CALL ZTRSM( 'L', 'L', 'T', 'U', N-NB, NRHS, ONE, A(NB+1, 1),
      $                  LDA, B(NB+1, 1), LDB)
 *
 *           Pivot, P * B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
 *
-            CALL CLASWP( NRHS, B, LDB, NB+1, N, IPIV, -1 )
+            CALL ZLASWP( NRHS, B, LDB, NB+1, N, IPIV, -1 )
 *
          END IF
       END IF
 *
       RETURN
 *
-*     End of CSYTRS_AA_2STAGE
+*     End of ZSYTRS_AA_2STAGE
 *
       END
