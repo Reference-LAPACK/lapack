@@ -183,7 +183,7 @@
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
       INTEGER            I, J, K, I1, I2, TD
-      INTEGER            LDTB, NB, KB, NT, IINFO
+      INTEGER            LDTB, NB, KB, JB, NT, IINFO
       COMPLEX            PIV
 *     ..
 *     .. External Functions ..
@@ -286,23 +286,25 @@
             DO I = 1, J-1
                IF( I.EQ.1 ) THEN
 *                  H(I,J) = T(I,I)*U(I,J) + T(I+1,I)*U(I+1,J)
-                   CALL CGEMM( 'NoTranspose', 'NoTranspose',
-     $                     NB, KB, 2*NB,
-     $                     ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
-     $                          A( (I-1)*NB+1, J*NB+1 ), LDA,
-     $                     ZERO, WORK( I*NB+1 ), N )
-               ELSE IF( I .EQ. J-1) THEN
-*                 H(I,J) = T(I,I-1)*U(I-1,J) + T(I,I)*U(I,J) + T(I,I+1)*U(I+1,J)
+                  IF( I .EQ. (J-1) ) THEN
+                     JB = NB+KB
+                  ELSE
+                     JB = 2*NB
+                  END IF
                   CALL CGEMM( 'NoTranspose', 'NoTranspose',
-     $                    NB, KB, 2*NB+KB,
-     $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
-     $                       LDTB-1,
-     $                          A( (I-2)*NB+1, J*NB+1 ), LDA,
+     $                    NB, KB, JB,
+     $                    ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
+     $                         A( (I-1)*NB+1, J*NB+1 ), LDA,
      $                    ZERO, WORK( I*NB+1 ), N )
                ELSE
 *                 H(I,J) = T(I,I-1)*U(I-1,J) + T(I,I)*U(I,J) + T(I,I+1)*U(I+1,J)
+                  IF( I .EQ. (J-1) ) THEN
+                     JB = 2*NB+KB
+                  ELSE
+                     JB = 3*NB
+                  END IF
                   CALL CGEMM( 'NoTranspose', 'NoTranspose',
-     $                    NB, KB, 3*NB,
+     $                    NB, KB, JB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
      $                          A( (I-2)*NB+1, J*NB+1 ), LDA,
@@ -484,23 +486,25 @@ c               END IF
             DO I = 1, J-1
                IF( I.EQ.1 ) THEN
 *                  H(I,J) = T(I,I)*L(J,I)' + T(I+1,I)'*L(J,I+1)'
-                   CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
-     $                     NB, KB, 2*NB,
-     $                     ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
-     $                          A( J*NB+1, (I-1)*NB+1 ), LDA,
-     $                     ZERO, WORK( I*NB+1 ), N )
-               ELSE IF( I .EQ. J-1) THEN
-*                 H(I,J) = T(I,I-1)*L(J,I-1)' + T(I,I)*L(J,I)' + T(I,I+1)*L(J,I+1)'
+                  IF( I .EQ. (J-1) ) THEN
+                     JB = NB+KB
+                  ELSE
+                     JB = 2*NB
+                  END IF
                   CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
-     $                    NB, KB, 2*NB+KB,
-     $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
-     $                       LDTB-1,
-     $                          A( J*NB+1, (I-2)*NB+1 ), LDA,
+     $                    NB, KB, JB,
+     $                    ONE, TB( TD+1 + (I*NB)*LDTB ), LDTB-1,
+     $                         A( J*NB+1, (I-1)*NB+1 ), LDA,
      $                    ZERO, WORK( I*NB+1 ), N )
                ELSE
 *                 H(I,J) = T(I,I-1)*L(J,I-1)' + T(I,I)*L(J,I)' + T(I,I+1)*L(J,I+1)'
+                  IF( I .EQ. (J-1) ) THEN
+                     JB = 2*NB+KB
+                  ELSE
+                     JB = 3*NB
+                  END IF
                   CALL CGEMM( 'NoTranspose', 'Conjugate transpose',
-     $                    NB, KB, 3*NB,
+     $                    NB, KB, JB,
      $                    ONE,  TB( TD+NB+1 + ((I-1)*NB)*LDTB ),
      $                       LDTB-1,
      $                          A( J*NB+1, (I-2)*NB+1 ), LDA,
