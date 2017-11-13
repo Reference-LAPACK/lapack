@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function clacrm
 * Author: Intel Corporation
-* Generated June 2017
+* Generated November 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"

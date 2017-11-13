@@ -192,7 +192,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date November 2017
 *
 *> \ingroup complexSYcomputational
 *
@@ -201,7 +201,7 @@
 *>
 *> \verbatim
 *>
-*>  June 2017,  Igor Kozachenko,
+*>  November 2017,  Igor Kozachenko,
 *>                  Computer Science Division,
 *>                  University of California, Berkeley
 *>
@@ -209,10 +209,10 @@
 *  =====================================================================
       SUBROUTINE CSYCONVF( UPLO, WAY, N, A, LDA, E, IPIV, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     November 2017
 *
 *     .. Scalar Arguments ..
       CHARACTER          UPLO, WAY
