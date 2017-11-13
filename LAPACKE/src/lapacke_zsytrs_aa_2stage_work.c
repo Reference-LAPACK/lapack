@@ -95,7 +95,7 @@ lapack_int LAPACKE_zsytrs_aa_2stage_work( int matrix_layout, char uplo, lapack_i
         }
         /* Transpose output matrices */
         LAPACKE_zsy_trans( LAPACK_COL_MAJOR, uplo, n, a_t, lda_t, a, lda );
-        LAPACKE_sge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
+        LAPACKE_zge_trans( LAPACK_COL_MAJOR, n, nrhs, b_t, ldb_t, b, ldb );
         /* Release memory and exit */
         LAPACKE_free( b_t );
 exit_level_2:
