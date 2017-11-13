@@ -136,7 +136,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date November 2017
 *
 *> \ingroup complex16SYcomputational
 *
@@ -144,10 +144,10 @@
       SUBROUTINE ZLASYF_AA( UPLO, J1, M, NB, A, LDA, IPIV,
      $                         H, LDH, WORK )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     November 2017
 *
       IMPLICIT NONE
 *

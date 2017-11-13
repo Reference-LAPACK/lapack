@@ -138,10 +138,10 @@
       SUBROUTINE ZSYTRS_AA_2STAGE( UPLO, N, NRHS, A, LDA, TB, LTB,
      $                             IPIV, IPIV2, B, LDB, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.1) --
+*  -- LAPACK computational routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     November 2017
 *
       IMPLICIT NONE
 *

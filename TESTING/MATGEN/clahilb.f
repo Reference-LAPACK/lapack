@@ -126,7 +126,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2017
+*> \date November 2017
 *
 *> \ingroup complex_matgen
 *
@@ -134,10 +134,10 @@
       SUBROUTINE CLAHILB( N, NRHS, A, LDA, X, LDX, B, LDB, WORK,
      $     INFO, PATH)
 *
-*  -- LAPACK test routine (version 3.7.1) --
+*  -- LAPACK test routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2017
+*     November 2017
 *
 *     .. Scalar Arguments ..
       INTEGER N, NRHS, LDA, LDX, LDB, INFO

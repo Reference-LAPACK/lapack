@@ -28,7 +28,7 @@
 *****************************************************************************
 * Contents: Native high-level C interface to LAPACK function zhetrf_aa_2stage
 * Author: Intel Corporation
-* Generated December 2016
+* Generated November 2017
 *****************************************************************************/
 
 #include "lapacke_utils.h"
