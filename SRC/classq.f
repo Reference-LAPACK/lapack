@@ -65,7 +65,7 @@
 *>
 *> \param[in] X
 *> \verbatim
-*>          X is COMPLEX array, dimension (N)
+*>          X is COMPLEX array, dimension (1+(N-1)*INCX)
 *>          The vector x as described above.
 *>             x( i )  = X( 1 + ( i - 1 )*INCX ), 1 <= i <= n.
 *> \endverbatim
