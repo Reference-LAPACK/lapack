@@ -1338,7 +1338,7 @@
       IF ( L2ABER ) THEN
 *        Standard absolute error bound suffices. All sigma_i with
 *        sigma_i < N*EPSLN*||A|| are flushed to zero. This is an
-*        agressive enforcement of lower numerical rank by introducing a
+*        aggressive enforcement of lower numerical rank by introducing a
 *        backward error of the order of N*EPSLN*||A||.
          TEMP1 = SQRT(DBLE(N))*EPSLN
          DO 3001 p = 2, N
@@ -1350,7 +1350,7 @@
  3001    CONTINUE
  3002    CONTINUE
       ELSE IF ( L2RANK ) THEN
-*        .. similarly as above, only slightly more gentle (less agressive).
+*        .. similarly as above, only slightly more gentle (less aggressive).
 *        Sudden drop on the diagonal of R1 is used as the criterion for
 *        close-to-rank-deficient.
          TEMP1 = SQRT(SFMIN)
@@ -1720,7 +1720,7 @@
             CALL ZPOCON('L',NR,CWORK(2*N+1),NR,ONE,TEMP1,
      $                   CWORK(2*N+NR*NR+1),RWORK,IERR)
             CONDR1 = ONE / SQRT(TEMP1)
-*           .. here need a second oppinion on the condition number
+*           .. here need a second opinion on the condition number
 *           .. then assume worst case scenario
 *           R1 is OK for inverse <=> CONDR1 .LT. DBLE(N)
 *           more conservative    <=> CONDR1 .LT. SQRT(DBLE(N))

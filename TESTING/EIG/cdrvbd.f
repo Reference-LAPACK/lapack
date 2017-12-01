@@ -861,7 +861,7 @@
      &                        0, A, LDVT, WORK, LWORK, RWORK,
      &                        LRWORK, IINFO )
 *
-*                 CGESVJ retuns V not VT, so we transpose to use the same
+*                 CGESVJ returns V not VT, so we transpose to use the same
 *                 test suite.
 *
                   DO J=1,N
@@ -923,7 +923,7 @@
      &                   WORK, LWORK, RWORK,
      &                   LRWORK, IWORK, IINFO )
 *
-*                 CGEJSV retuns V not VT, so we transpose to use the same
+*                 CGEJSV returns V not VT, so we transpose to use the same
 *                 test suite.
 *
                   DO 133 J=1,N
