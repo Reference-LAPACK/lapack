@@ -673,7 +673,7 @@
 *
 *        SK:  symmetric indefinite matrices,
 *             with bounded Bunch-Kaufman (rook) pivoting algorithm,
-*             differnet matrix storage format than SR path version.
+*             different matrix storage format than SR path version.
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )

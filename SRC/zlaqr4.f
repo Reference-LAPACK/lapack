@@ -152,7 +152,7 @@
 *> \verbatim
 *>          LDZ is INTEGER
 *>           The leading dimension of the array Z.  if WANTZ is .TRUE.
-*>           then LDZ.GE.MAX(1,IHIZ).  Otherwize, LDZ.GE.1.
+*>           then LDZ.GE.MAX(1,IHIZ).  Otherwise, LDZ.GE.1.
 *> \endverbatim
 *>
 *> \param[out] WORK

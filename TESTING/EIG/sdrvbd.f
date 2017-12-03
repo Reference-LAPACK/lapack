@@ -802,7 +802,7 @@
                   CALL SGESVJ( 'G', 'U', 'V', M, N, USAV, LDA, SSAV,
      &                        0, A, LDVT, WORK, LWORK, INFO )
 *
-*                 SGESVJ retuns V not VT, so we transpose to use the same
+*                 SGESVJ returns V not VT, so we transpose to use the same
 *                 test suite.
 *
                   DO J=1,N
@@ -862,7 +862,7 @@
      &                   M, N, VTSAV, LDA, SSAV, USAV, LDU, A, LDVT,
      &                   WORK, LWORK, IWORK, INFO )
 *
-*                 SGEJSV retuns V not VT, so we transpose to use the same
+*                 SGEJSV returns V not VT, so we transpose to use the same
 *                 test suite.
 *
                   DO 140 J=1,N

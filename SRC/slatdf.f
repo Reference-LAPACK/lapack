@@ -260,7 +260,7 @@
 *
 *        Solve for U-part, look-ahead for RHS(N) = +-1. This is not done
 *        in BSOLVE and will hopefully give us a better estimate because
-*        any ill-conditioning of the original matrix is transfered to U
+*        any ill-conditioning of the original matrix is transferred to U
 *        and not to L. U(N, N) is an approximation to sigma_min(LU).
 *
          CALL SCOPY( N-1, RHS, 1, XP, 1 )

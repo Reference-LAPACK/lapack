@@ -64,7 +64,7 @@ You should then see the following files in the TESTING directory:
 = LINKING YOUR PROGRAM =
 ========================
 
-You just need to add the variants methods library in your linking sequence before your lapack libary.
+You just need to add the variants methods library in your linking sequence before your lapack library.
 Here is a quick example for LU
 
 Default using LU Right Looking version:

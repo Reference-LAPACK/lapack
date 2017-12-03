@@ -156,7 +156,7 @@
 *> \verbatim
 *>          LDZ is INTEGER
 *>           The leading dimension of the array Z.  if COMPZ = 'I' or
-*>           COMPZ = 'V', then LDZ.GE.MAX(1,N).  Otherwize, LDZ.GE.1.
+*>           COMPZ = 'V', then LDZ.GE.MAX(1,N).  Otherwise, LDZ.GE.1.
 *> \endverbatim
 *>
 *> \param[out] WORK
