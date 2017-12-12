@@ -154,7 +154,7 @@
 *
 *> \date June 2017
 *
-*> \ingroup doubleGEsolve
+*> \ingroup realGEsolve
 *
 *  =====================================================================
       SUBROUTINE SGETSLS( TRANS, M, N, NRHS, A, LDA, B, LDB,
