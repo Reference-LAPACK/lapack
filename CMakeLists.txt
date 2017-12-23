@@ -105,8 +105,20 @@ else()
   message(STATUS "No suitable Python version found, so skipping summary tests.")
 endif()
 # --------------------------------------------------
+# Can be defined during CMake-configure step.
+if(NOT LIBRARY_NAME_SUFFIX)
+  set(LIBRARY_NAME_SUFFIX "")
+endif()
+if(NOT CONF_FILE_SUFFIX)
+  set(CONF_FILE_SUFFIX "")
+endif()
+if(LIBRARY_NAME_SUFFIX AND NOT CONF_FILE_SUFFIX)
+  set(CONF_FILE_SUFFIX ${LIBRARY_NAME_SUFFIX})
+endif()
 
-set(LAPACK_INSTALL_EXPORT_NAME lapack-targets)
+# --------------------------------------------------
+
+set(LAPACK_INSTALL_EXPORT_NAME lapack${CONF_FILE_SUFFIX}-targets)
 
 macro(lapack_install_library lib)
   install(TARGETS ${lib}
@@ -217,7 +229,6 @@ else()
     CACHE STRING "Linker flags for shared libs" FORCE)
 endif()
 
-
 # --------------------------------------------------
 # CBLAS
 option(CBLAS "Build CBLAS" OFF)
@@ -327,7 +338,6 @@ else()
 endif()
 include(CPack)
 
-
 # --------------------------------------------------
 
 if(NOT BLAS_FOUND)
@@ -346,7 +356,7 @@ endif()
 # install tree, if any.
 set(_lapack_config_install_guard_target "")
 if(ALL_TARGETS)
-  install(EXPORT lapack-targets
+  install(EXPORT lapack${CONF_FILE_SUFFIX}-targets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION})
 
   # Choose one of the lapack targets to use as a guard for
@@ -367,25 +377,29 @@ endif()
 # Export lapack and lapacke targets from the build tree, if any.
 set(_lapack_config_build_guard_target "")
 if(ALL_TARGETS)
-  export(TARGETS ${ALL_TARGETS} FILE lapack-targets.cmake)
+  export(TARGETS ${ALL_TARGETS} FILE lapack${CONF_FILE_SUFFIX}-targets.cmake)
 
   # Choose one of the lapack or lapacke targets to use as a guard
   # for lapack-config.cmake to load targets from the build tree.
   list(GET ALL_TARGETS 0 _lapack_config_build_guard_target)
 endif()
 
+# --------------------------------------------------
+
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-build.cmake.in
-  ${LAPACK_BINARY_DIR}/lapack-config.cmake @ONLY)
+  ${LAPACK_BINARY_DIR}/lapack${CONF_FILE_SUFFIX}-config.cmake @ONLY)
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc @ONLY)
-  install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/lapack${CONF_FILE_SUFFIX}.pc @ONLY)
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/lapack${CONF_FILE_SUFFIX}.pc
   DESTINATION ${PKG_CONFIG_DIR}
   )
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
-  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake @ONLY)
+  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack${CONF_FILE_SUFFIX}-config.cmake @ONLY)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
@@ -395,7 +409,7 @@ write_basic_package_version_file(
   )
 
 install(FILES
-  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake
+  ${LAPACK_BINARY_DIR}/CMakeFiles/lapack${CONF_FILE_SUFFIX}-config.cmake
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION}
   )

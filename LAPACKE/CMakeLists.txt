@@ -1,7 +1,7 @@
 message(STATUS "LAPACKE enable")
 enable_language(C)
 
-set(LAPACK_INSTALL_EXPORT_NAME lapacke-targets)
+set(LAPACK_INSTALL_EXPORT_NAME lapacke${CONF_FILE_SUFFIX}-targets)
 
 # Create a header file lapacke_mangling.h for the routines called in my C programs
 include(FortranCInterface)
@@ -59,6 +59,7 @@ set_target_properties(
   LINKER_LANGUAGE C
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
+  OUTPUT_NAME lapacke${LIBRARY_NAME_SUFFIX}
   )
 target_include_directories(lapacke PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
@@ -78,24 +79,25 @@ if(BUILD_TESTING)
 endif()
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapacke.pc.in ${CMAKE_CURRENT_BINARY_DIR}/lapacke.pc @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapacke.pc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/lapacke${CONF_FILE_SUFFIX}.pc @ONLY)
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/lapacke.pc
+  ${CMAKE_CURRENT_BINARY_DIR}/lapacke${CONF_FILE_SUFFIX}.pc
   DESTINATION ${PKG_CONFIG_DIR}
   )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/lapacke-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/lapacke-config-version.cmake @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/lapacke-config-build.cmake.in
-  ${LAPACK_BINARY_DIR}/lapacke-config.cmake @ONLY)
+  ${LAPACK_BINARY_DIR}/lapacke${CONF_FILE_SUFFIX}-config.cmake @ONLY)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/lapacke-config-install.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/lapacke-config.cmake @ONLY)
+  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/lapacke${CONF_FILE_SUFFIX}-config.cmake @ONLY)
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/lapacke-config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/lapacke${CONF_FILE_SUFFIX}-config.cmake
   ${LAPACK_BINARY_DIR}/lapacke-config-version.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapacke-${LAPACK_VERSION}
   )
 
-install(EXPORT lapacke-targets
+install(EXPORT lapacke${CONF_FILE_SUFFIX}-targets
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapacke-${LAPACK_VERSION})

@@ -6,18 +6,18 @@ get_filename_component(_LAPACKE_PREFIX "${_LAPACKE_PREFIX}" PATH)
 
 # Load the LAPACK package with which we were built.
 set(LAPACK_DIR "${_LAPACKE_PREFIX}/@CMAKE_INSTALL_LIBDIR@/cmake/lapack-@LAPACK_VERSION@")
-find_package(LAPACK NO_MODULE)
+find_package(LAPACK@CONF_FILE_SUFFIX@ NO_MODULE)
 
 # Load lapacke targets from the install tree.
 if(NOT TARGET lapacke)
-  include(${_LAPACKE_SELF_DIR}/lapacke-targets.cmake)
+  include(${_LAPACKE_SELF_DIR}/lapacke@CONF_FILE_SUFFIX@-targets.cmake)
 endif()
 
 # Report lapacke header search locations.
 set(LAPACKE_INCLUDE_DIRS ${_LAPACKE_PREFIX}/include)
 
 # Report lapacke libraries.
-set(LAPACKE_LIBRARIES lapacke)
+set(LAPACKE_LIBRARIES lapacke@LIBRARY_NAME_SUFFIX@)
 
 unset(_LAPACKE_PREFIX)
 unset(_LAPACKE_SELF_DIR)

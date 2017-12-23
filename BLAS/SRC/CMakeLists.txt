@@ -102,5 +102,6 @@ set_target_properties(
   blas PROPERTIES
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
+  OUTPUT_NAME blas${LIBRARY_NAME_SUFFIX}
   )
 lapack_install_library(blas)

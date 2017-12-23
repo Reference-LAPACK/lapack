@@ -119,6 +119,7 @@ set_target_properties(
   LINKER_LANGUAGE C
   VERSION ${LAPACK_VERSION}
   SOVERSION ${LAPACK_MAJOR_VERSION}
+  OUTPUT_NAME cblas${LIBRARY_NAME_SUFFIX}
   )
 target_include_directories(cblas PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>

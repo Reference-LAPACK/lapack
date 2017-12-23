@@ -6,18 +6,18 @@ get_filename_component(_CBLAS_PREFIX "${_CBLAS_PREFIX}" PATH)
 
 # Load the LAPACK package with which we were built.
 set(LAPACK_DIR "${_CBLAS_PREFIX}/@CMAKE_INSTALL_LIBDIR@/cmake/lapack-@LAPACK_VERSION@")
-find_package(LAPACK NO_MODULE)
+find_package(LAPACK@CONF_FILE_SUFFIX@ NO_MODULE)
 
 # Load lapacke targets from the install tree.
 if(NOT TARGET cblas)
-  include(${_CBLAS_SELF_DIR}/cblas-targets.cmake)
+  include(${_CBLAS_SELF_DIR}/cblas@CONF_FILE_SUFFIX@-targets.cmake)
 endif()
 
 # Report lapacke header search locations.
 set(CBLAS_INCLUDE_DIRS ${_CBLAS_PREFIX}/include)
 
 # Report lapacke libraries.
-set(CBLAS_LIBRARIES cblas)
+set(CBLAS_LIBRARIES cblas@LIBRARY_NAME_SUFFIX@)
 
 unset(_CBLAS_PREFIX)
 unset(_CBLAS_SELF_DIR)

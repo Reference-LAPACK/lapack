@@ -2,8 +2,9 @@ add_subdirectory(SRC)
 if(BUILD_TESTING)
   add_subdirectory(TESTING)
 endif()
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/blas.pc.in ${CMAKE_CURRENT_BINARY_DIR}/blas.pc @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/blas.pc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/blas${CONF_FILE_SUFFIX}.pc @ONLY)
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/blas.pc
+  ${CMAKE_CURRENT_BINARY_DIR}/blas${CONF_FILE_SUFFIX}.pc
   DESTINATION ${PKG_CONFIG_DIR}
   )
