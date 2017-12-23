@@ -17,7 +17,7 @@
    #define F77_STRLEN(a) (_fcdlen)
 #endif
 
-#ifdef WeirdNEC
+#if defined(WeirdNEC) && !defined(F77_INT)
    #define F77_INT long
 #endif
 
