@@ -112,7 +112,7 @@
 *           Use SMALL plus a bit, to avoid the possibility of rounding
 *           causing overflow when computing  1/sfmin.
 *
-            SFMIN = SMALL*( ONE+EPS )
+            SFMIN = SMALL*( ONE+EPSILON(ZERO) )
          END IF
          RMACH = SFMIN
       ELSE IF( LSAME( CMACH, 'B' ) ) THEN
