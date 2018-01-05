@@ -125,7 +125,7 @@
 *>          then IN(k) = 1, otherwise IN(k) = 0. The element IN(n)
 *>          returns the smallest positive integer j such that
 *>
-*>             abs( u(j,j) ).le. norm( (T - lambda*I)(j) )*TOL,
+*>             abs( u(j,j) ) <= norm( (T - lambda*I)(j) )*TOL,
 *>
 *>          where norm( A(j) ) denotes the sum of the absolute values of
 *>          the jth row of the matrix A. If no such j exists then IN(n)

@@ -106,9 +106,9 @@
 *>          triangular part of the matrix A, and the strictly upper
 *>          triangular part of A is not referenced.
 *>          On exit, if iterative refinement has been successfully used
-*>          (INFO.EQ.0 and ITER.GE.0, see description below), then A is
+*>          (INFO = 0 and ITER >= 0, see description below), then A is
 *>          unchanged, if double precision factorization has been used
-*>          (INFO.EQ.0 and ITER.LT.0, see description below), then the
+*>          (INFO = 0 and ITER < 0, see description below), then the
 *>          array A contains the factor U or L from the Cholesky
 *>          factorization A = U**T*U or A = L*L**T.
 *> \endverbatim

@@ -122,12 +122,12 @@
 *> \param[in,out] TOL
 *> \verbatim
 *>          TOL is REAL
-*>          On entry, with  JOB .lt. 0, TOL should be the minimum
+*>          On entry, with  JOB < 0, TOL should be the minimum
 *>          perturbation to be made to very small diagonal elements of U.
 *>          TOL should normally be chosen as about eps*norm(U), where eps
 *>          is the relative machine precision, but if TOL is supplied as
 *>          non-positive, then it is reset to eps*max( abs( u(i,j) ) ).
-*>          If  JOB .gt. 0  then TOL is not referenced.
+*>          If  JOB > 0  then TOL is not referenced.
 *>
 *>          On exit, TOL is changed as described above, only if TOL is
 *>          non-positive on entry. Otherwise TOL is unchanged.

@@ -118,8 +118,8 @@
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
 *>          On exit,
-*>          If JOBU .EQ. 'U' .OR. JOBU .EQ. 'C':
-*>                 If INFO .EQ. 0 :
+*>          If JOBU = 'U' .OR. JOBU = 'C':
+*>                 If INFO = 0:
 *>                 RANKA orthonormal columns of U are returned in the
 *>                 leading RANKA columns of the array A. Here RANKA <= N
 *>                 is the number of computed singular values of A that are
@@ -129,9 +129,9 @@
 *>                 in the array WORK as RANKA=NINT(WORK(2)). Also see the
 *>                 descriptions of SVA and WORK. The computed columns of U
 *>                 are mutually numerically orthogonal up to approximately
-*>                 TOL=SQRT(M)*EPS (default); or TOL=CTOL*EPS (JOBU.EQ.'C'),
+*>                 TOL=SQRT(M)*EPS (default); or TOL=CTOL*EPS (JOBU = 'C'),
 *>                 see the description of JOBU.
-*>                 If INFO .GT. 0,
+*>                 If INFO > 0,
 *>                 the procedure SGESVJ did not converge in the given number
 *>                 of iterations (sweeps). In that case, the computed
 *>                 columns of U may not be orthogonal up to TOL. The output
@@ -139,8 +139,8 @@
 *>                 values in SVA(1:N)) and V is still a decomposition of the
 *>                 input matrix A in the sense that the residual
 *>                 ||A-SCALE*U*SIGMA*V^T||_2 / ||A||_2 is small.
-*>          If JOBU .EQ. 'N':
-*>                 If INFO .EQ. 0 :
+*>          If JOBU = 'N':
+*>                 If INFO = 0:
 *>                 Note that the left singular vectors are 'for free' in the
 *>                 one-sided Jacobi SVD algorithm. However, if only the
 *>                 singular values are needed, the level of numerical
@@ -149,7 +149,7 @@
 *>                 numerically orthogonal up to approximately M*EPS. Thus,
 *>                 on exit, A contains the columns of U scaled with the
 *>                 corresponding singular values.
-*>                 If INFO .GT. 0 :
+*>                 If INFO > 0:
 *>                 the procedure SGESVJ did not converge in the given number
 *>                 of iterations (sweeps).
 *> \endverbatim
@@ -164,9 +164,9 @@
 *> \verbatim
 *>          SVA is REAL array, dimension (N)
 *>          On exit,
-*>          If INFO .EQ. 0 :
+*>          If INFO = 0 :
 *>          depending on the value SCALE = WORK(1), we have:
-*>                 If SCALE .EQ. ONE:
+*>                 If SCALE = ONE:
 *>                 SVA(1:N) contains the computed singular values of A.
 *>                 During the computation SVA contains the Euclidean column
 *>                 norms of the iterated matrices in the array A.
@@ -175,7 +175,7 @@
 *>                 factored representation is due to the fact that some of the
 *>                 singular values of A might underflow or overflow.
 *>
-*>          If INFO .GT. 0 :
+*>          If INFO > 0 :
 *>          the procedure SGESVJ did not converge in the given number of
 *>          iterations (sweeps) and SCALE*SVA(1:N) may not be accurate.
 *> \endverbatim
@@ -183,7 +183,7 @@
 *> \param[in] MV
 *> \verbatim
 *>          MV is INTEGER
-*>          If JOBV .EQ. 'A', then the product of Jacobi rotations in SGESVJ
+*>          If JOBV = 'A', then the product of Jacobi rotations in SGESVJ
 *>          is applied to the first MV rows of V. See the description of JOBV.
 *> \endverbatim
 *>
@@ -201,16 +201,16 @@
 *> \param[in] LDV
 *> \verbatim
 *>          LDV is INTEGER
-*>          The leading dimension of the array V, LDV .GE. 1.
-*>          If JOBV .EQ. 'V', then LDV .GE. max(1,N).
-*>          If JOBV .EQ. 'A', then LDV .GE. max(1,MV) .
+*>          The leading dimension of the array V, LDV >= 1.
+*>          If JOBV = 'V', then LDV >= max(1,N).
+*>          If JOBV = 'A', then LDV >= max(1,MV) .
 *> \endverbatim
 *>
 *> \param[in,out] WORK
 *> \verbatim
 *>          WORK is REAL array, dimension (LWORK)
 *>          On entry,
-*>          If JOBU .EQ. 'C' :
+*>          If JOBU = 'C' :
 *>          WORK(1) = CTOL, where CTOL defines the threshold for convergence.
 *>                    The process stops if all columns of A are mutually
 *>                    orthogonal up to CTOL*EPS, EPS=SLAMCH('E').

@@ -111,9 +111,9 @@
 *>          elements need not be set and are assumed to be zero.
 *>
 *>          On exit, if iterative refinement has been successfully used
-*>          (INFO.EQ.0 and ITER.GE.0, see description below), then A is
+*>          (INFO = 0 and ITER >= 0, see description below), then A is
 *>          unchanged, if double precision factorization has been used
-*>          (INFO.EQ.0 and ITER.LT.0, see description below), then the
+*>          (INFO = 0 and ITER < 0, see description below), then the
 *>          array A contains the factor U or L from the Cholesky
 *>          factorization A = U**H*U or A = L*L**H.
 *> \endverbatim
