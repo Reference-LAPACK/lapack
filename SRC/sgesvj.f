@@ -90,13 +90,13 @@
 *>          JOBV is CHARACTER*1
 *>          Specifies whether to compute the right singular vectors, that
 *>          is, the matrix V:
-*>          = 'V' : the matrix V is computed and returned in the array V
-*>          = 'A' : the Jacobi rotations are applied to the MV-by-N
+*>          = 'V':  the matrix V is computed and returned in the array V
+*>          = 'A':  the Jacobi rotations are applied to the MV-by-N
 *>                  array V. In other words, the right singular vector
 *>                  matrix V is not computed explicitly; instead it is
 *>                  applied to an MV-by-N matrix initially stored in the
 *>                  first MV rows of V.
-*>          = 'N' : the matrix V is not computed and the array V is not
+*>          = 'N':  the matrix V is not computed and the array V is not
 *>                  referenced
 *> \endverbatim
 *>
@@ -245,9 +245,9 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0 : successful exit.
-*>          < 0 : if INFO = -i, then the i-th argument had an illegal value
-*>          > 0 : SGESVJ did not converge in the maximal allowed number (30)
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, then the i-th argument had an illegal value
+*>          > 0:  SGESVJ did not converge in the maximal allowed number (30)
 *>                of sweeps. The output may still be useful. See the
 *>                description of WORK.
 *> \endverbatim

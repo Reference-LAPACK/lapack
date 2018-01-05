@@ -417,9 +417,9 @@
 *>       PARAMS(LA_LINRX_ITREF_I = 1) : Whether to perform iterative
 *>            refinement or not.
 *>         Default: 1.0D+0
-*>            = 0.0 : No refinement is performed, and no error bounds are
+*>            = 0.0:  No refinement is performed, and no error bounds are
 *>                    computed.
-*>            = 1.0 : Use the extra-precise refinement algorithm.
+*>            = 1.0:  Use the extra-precise refinement algorithm.
 *>              (other values are reserved for future use)
 *>
 *>       PARAMS(LA_LINRX_ITHRESH_I = 2) : Maximum number of residual

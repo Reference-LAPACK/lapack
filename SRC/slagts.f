@@ -136,14 +136,14 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0   : successful exit
-*>          .lt. 0: if INFO = -i, the i-th argument had an illegal value
-*>          .gt. 0: overflow would occur when computing the INFO(th)
-*>                  element of the solution vector x. This can only occur
-*>                  when JOB is supplied as positive and either means
-*>                  that a diagonal element of U is very small, or that
-*>                  the elements of the right-hand side vector y are very
-*>                  large.
+*>          = 0: successful exit
+*>          < 0: if INFO = -i, the i-th argument had an illegal value
+*>          > 0: overflow would occur when computing the INFO(th)
+*>               element of the solution vector x. This can only occur
+*>               when JOB is supplied as positive and either means
+*>               that a diagonal element of U is very small, or that
+*>               the elements of the right-hand side vector y are very
+*>               large.
 *> \endverbatim
 *
 *  Authors:

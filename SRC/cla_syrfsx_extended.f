@@ -66,11 +66,11 @@
 *> \verbatim
 *>          PREC_TYPE is INTEGER
 *>     Specifies the intermediate precision to be used in refinement.
-*>     The value is defined by ILAPREC(P) where P is a CHARACTER and
-*>     P    = 'S':  Single
+*>     The value is defined by ILAPREC(P) where P is a CHARACTER and P
+*>          = 'S':  Single
 *>          = 'D':  Double
 *>          = 'I':  Indigenous
-*>          = 'X', 'E':  Extra
+*>          = 'X' or 'E':  Extra
 *> \endverbatim
 *>
 *> \param[in] UPLO

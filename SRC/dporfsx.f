@@ -314,9 +314,9 @@
 *>       PARAMS(LA_LINRX_ITREF_I = 1) : Whether to perform iterative
 *>            refinement or not.
 *>         Default: 1.0D+0
-*>            = 0.0 : No refinement is performed, and no error bounds are
+*>            = 0.0:  No refinement is performed, and no error bounds are
 *>                    computed.
-*>            = 1.0 : Use the double-precision refinement algorithm,
+*>            = 1.0:  Use the double-precision refinement algorithm,
 *>                    possibly with doubled-single computations if the
 *>                    compilation environment does not support DOUBLE
 *>                    PRECISION.

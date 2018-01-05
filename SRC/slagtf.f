@@ -137,8 +137,8 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0   : successful exit
-*>          .lt. 0: if INFO = -k, the kth argument had an illegal value
+*>          = 0: successful exit
+*>          < 0: if INFO = -k, the kth argument had an illegal value
 *> \endverbatim
 *
 *  Authors:

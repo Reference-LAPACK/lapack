@@ -82,7 +82,7 @@
 *>              desirable, then this option is advisable. The input matrix A
 *>              is preprocessed with QR factorization with FULL (row and
 *>              column) pivoting.
-*>       = 'G'  Computation as with 'F' with an additional estimate of the
+*>       = 'G': Computation as with 'F' with an additional estimate of the
 *>              condition number of B, where A=D*B. If A has heavily weighted
 *>              rows, then using this condition number gives too pessimistic
 *>              error bound.
@@ -377,10 +377,10 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>           < 0  : if INFO = -i, then the i-th argument had an illegal value.
-*>           = 0 :  successful exit;
-*>           > 0 :  SGEJSV  did not converge in the maximal allowed number
-*>                  of sweeps. The computed values may be inaccurate.
+*>           < 0:  if INFO = -i, then the i-th argument had an illegal value.
+*>           = 0:  successful exit;
+*>           > 0:  SGEJSV  did not converge in the maximal allowed number
+*>                 of sweeps. The computed values may be inaccurate.
 *> \endverbatim
 *
 *  Authors:

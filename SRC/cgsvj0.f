@@ -181,8 +181,8 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>          = 0 : successful exit.
-*>          < 0 : if INFO = -i, then the i-th argument had an illegal value
+*>          = 0:  successful exit.
+*>          < 0:  if INFO = -i, then the i-th argument had an illegal value
 *> \endverbatim
 *
 *  Authors:
