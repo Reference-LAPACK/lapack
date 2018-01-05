@@ -35,7 +35,7 @@
 *> \verbatim
 *>
 *>      This program sets problem and machine dependent parameters
-*>      useful for xHETRD_2STAGE, xHETRD_H@2HB, xHETRD_HB2ST,
+*>      useful for xHETRD_2STAGE, xHETRD_HE2HB, xHETRD_HB2ST,
 *>      xGEBRD_2STAGE, xGEBRD_GE2GB, xGEBRD_GB2BD 
 *>      and related subroutines for eigenvalue problems. 
 *>      It is called whenever ILAENV is called with 17 <= ISPEC <= 21.
