@@ -50,16 +50,13 @@ lapack_int LAPACKE_slarfb( int matrix_layout, char side, char trans, char direct
 #ifndef LAPACK_DISABLE_NAN_CHECK
     if( LAPACKE_get_nancheck() ) {
         /* Optionally check input matrices for NaNs */
-        ncols_v = LAPACKE_lsame( storev, 'c' ) ? k :
-                             ( ( LAPACKE_lsame( storev, 'r' ) &&
-                             LAPACKE_lsame( side, 'l' ) ) ? m :
-                             ( ( LAPACKE_lsame( storev, 'r' ) &&
-                             LAPACKE_lsame( side, 'r' ) ) ? n : 1) );
-        nrows_v = ( LAPACKE_lsame( storev, 'c' ) &&
-                             LAPACKE_lsame( side, 'l' ) ) ? m :
-                             ( ( LAPACKE_lsame( storev, 'c' ) &&
-                             LAPACKE_lsame( side, 'r' ) ) ? n :
-                             ( LAPACKE_lsame( storev, 'r' ) ? k : 1) );
+        ncols_v =     LAPACKE_lsame( storev, 'c' ) ? k :
+                  ( ( LAPACKE_lsame( storev, 'r' ) && LAPACKE_lsame( side, 'l' ) ) ? m :
+                  ( ( LAPACKE_lsame( storev, 'r' ) && LAPACKE_lsame( side, 'r' ) ) ? n : 1) );
+
+        nrows_v =   ( LAPACKE_lsame( storev, 'c' ) && LAPACKE_lsame( side, 'l' ) ) ? m :
+                  ( ( LAPACKE_lsame( storev, 'c' ) && LAPACKE_lsame( side, 'r' ) ) ? n :
+                    ( LAPACKE_lsame( storev, 'r' ) ? k : 1) );
         if( LAPACKE_sge_nancheck( matrix_layout, m, n, c, ldc ) ) {
             return -13;
         }
