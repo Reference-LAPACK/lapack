@@ -1,3 +1,4 @@
+*> \brief \b CGEQR
 *
 *  Definition:
 *  ===========

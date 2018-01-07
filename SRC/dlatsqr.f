@@ -1,3 +1,4 @@
+*> \brief \b DLATSQR
 *
 *  Definition:
 *  ===========
