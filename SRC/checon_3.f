@@ -19,7 +19,7 @@
 *  ===========
 *
 *       SUBROUTINE CHECON_3( UPLO, N, A, LDA, E, IPIV, ANORM, RCOND,
-*                            WORK, IWORK, INFO )
+*                            WORK, INFO )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          UPLO
@@ -27,7 +27,7 @@
 *       REAL               ANORM, RCOND
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            IPIV( * ), IWORK( * )
+*       INTEGER            IPIV( * )
 *       COMPLEX            A( LDA, * ), E ( * ), WORK( * )
 *       ..
 *
