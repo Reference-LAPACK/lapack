@@ -20,6 +20,7 @@ env:
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]];
     then
+      brew cask uninstall oclint
       for pkg in gcc cmake; do
         if brew list -1 | grep -q "^${pkg}\$"; then
           brew outdated $pkg || brew upgrade $pkg;
