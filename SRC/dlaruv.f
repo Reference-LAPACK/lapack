@@ -386,6 +386,12 @@
 *     ..
 *     .. Executable Statements ..
 *
+
+*     Quick return for N < 1
+      IF ( N < 1 ) THEN
+         RETURN
+      END IF
+
       I1 = ISEED( 1 )
       I2 = ISEED( 2 )
       I3 = ISEED( 3 )
