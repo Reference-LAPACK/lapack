@@ -641,7 +641,7 @@
                   END IF
                END IF
 *
-*              ==== Use up to NS of the the smallest magnatiude
+*              ==== Use up to NS of the the smallest magnitude
 *              .    shifts.  If there aren't NS shifts available,
 *              .    then use them all, possibly dropping one to
 *              .    make the number of shifts even. ====

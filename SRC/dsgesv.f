@@ -406,7 +406,7 @@
    30 CONTINUE
 *
 *     If we are at this place of the code, this is because we have
-*     performed ITER=ITERMAX iterations and never satisified the
+*     performed ITER=ITERMAX iterations and never satisfied the
 *     stopping criterion, set up the ITER flag accordingly and follow up
 *     on double precision routine.
 *

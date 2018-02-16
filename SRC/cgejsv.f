@@ -2077,7 +2077,7 @@
 *
 *        This branch deploys a preconditioned Jacobi SVD with explicitly
 *        accumulated rotations. It is included as optional, mainly for
-*        experimental purposes. It does perfom well, and can also be used.
+*        experimental purposes. It does perform well, and can also be used.
 *        In this implementation, this branch will be automatically activated
 *        if the  condition number sigma_max(A) / sigma_min(A) is predicted
 *        to be greater than the overflow threshold. This is because the

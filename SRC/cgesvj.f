@@ -243,7 +243,7 @@
 *>          RWORK(5) = max_{i.NE.j} |COS(A(:,i),A(:,j))| in the last sweep.
 *>                    This is useful information in cases when CGESVJ did
 *>                    not converge, as it can be used to estimate whether
-*>                    the output is stil useful and for post festum analysis.
+*>                    the output is still useful and for post festum analysis.
 *>          RWORK(6) = the largest absolute value over all sines of the
 *>                    Jacobi rotation angles in the last sweep. It can be
 *>                    useful for a post festum analysis.
