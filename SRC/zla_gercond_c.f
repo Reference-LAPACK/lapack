@@ -22,7 +22,7 @@
 *                                                LDAF, IPIV, C, CAPPLY,
 *                                                INFO, WORK, RWORK )
 *
-*       .. Scalar Aguments ..
+*       .. Scalar Arguments ..
 *       CHARACTER          TRANS
 *       LOGICAL            CAPPLY
 *       INTEGER            N, LDA, LDAF, INFO
@@ -148,7 +148,7 @@
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     December 2016
 *
-*     .. Scalar Aguments ..
+*     .. Scalar Arguments ..
       CHARACTER          TRANS
       LOGICAL            CAPPLY
       INTEGER            N, LDA, LDAF, INFO
