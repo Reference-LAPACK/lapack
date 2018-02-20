@@ -23,13 +23,13 @@
 *>
 *> \verbatim
 *>
-*    Compute the inner product of two vectors with extended
-*    precision accumulation.
-*
-*    Returns S.P. result with dot product accumulated in D.P.
-*    SDSDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
-*    where LX = 1 if INCX .GE. 0, else LX = 1+(1-N)*INCX, and LY is
-*    defined in a similar way using INCY.
+*>   Compute the inner product of two vectors with extended
+*>   precision accumulation.
+*>
+*>   Returns S.P. result with dot product accumulated in D.P.
+*>   SDSDOT = SB + sum for I = 0 to N-1 of SX(LX+I*INCX)*SY(LY+I*INCY),
+*>   where LX = 1 if INCX .GE. 0, else LX = 1+(1-N)*INCX, and LY is
+*>   defined in a similar way using INCY.
 *> \endverbatim
 *
 *  Arguments:
