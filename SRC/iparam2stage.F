@@ -53,7 +53,7 @@
 *>              return.
 *>
 *>              ISPEC=17: the optimal blocksize nb for the reduction to
-*                         BAND
+*>                        BAND
 *>
 *>              ISPEC=18: the optimal blocksize ib for the eigenvectors
 *>                        singular vectors update routine
@@ -90,14 +90,14 @@
 *> \param[in] NBI
 *> \verbatim
 *>          NBI is INTEGER which is the used in the reduciton, 
-*           (e.g., the size of the band), needed to compute workspace
-*           and LHOUS2.
+*>          (e.g., the size of the band), needed to compute workspace
+*>          and LHOUS2.
 *> \endverbatim
 *>
 *> \param[in] IBI
 *> \verbatim
 *>          IBI is INTEGER which represent the IB of the reduciton,
-*           needed to compute workspace and LHOUS2.
+*>          needed to compute workspace and LHOUS2.
 *> \endverbatim
 *>
 *> \param[in] NXI
