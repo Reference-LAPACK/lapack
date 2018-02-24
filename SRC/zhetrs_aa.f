@@ -106,6 +106,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER, LWORK >= MAX(1,3*N-2).
+*> \endverbatim
 *>
 *> \param[out] INFO
 *> \verbatim
