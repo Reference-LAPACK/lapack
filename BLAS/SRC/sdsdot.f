@@ -77,8 +77,6 @@
 *> \author Lawson, C. L., (JPL), Hanson, R. J., (SNLA),
 *> \author Kincaid, D. R., (U. of Texas), Krogh, F. T., (JPL)
 *
-*> \ingroup complex_blas_level1
-*
 *> \par Further Details:
 *  =====================
 *>
