@@ -129,11 +129,6 @@
 *>          WORK is COMPLEX array, dimension (2*N)
 *> \endverbatim
 *>
-*> \param[out] IWORK
-*> \verbatim
-*>          IWORK is INTEGER array, dimension (N)
-*> \endverbatim
-*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
