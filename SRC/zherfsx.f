@@ -102,7 +102,7 @@
 *> \param[in] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
-*>     The symmetric matrix A.  If UPLO = 'U', the leading N-by-N
+*>     The Hermitian matrix A.  If UPLO = 'U', the leading N-by-N
 *>     upper triangular part of A contains the upper triangular
 *>     part of the matrix A, and the strictly lower triangular
 *>     part of A is not referenced.  If UPLO = 'L', the leading

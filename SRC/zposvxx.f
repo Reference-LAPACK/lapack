@@ -45,7 +45,7 @@
 *>
 *>    ZPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T
 *>    to compute the solution to a complex*16 system of linear equations
-*>    A * X = B, where A is an N-by-N symmetric positive definite matrix
+*>    A * X = B, where A is an N-by-N Hermitian positive definite matrix
 *>    and X and B are N-by-NRHS matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
@@ -157,7 +157,7 @@
 *> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX*16 array, dimension (LDA,N)
-*>     On entry, the symmetric matrix A, except if FACT = 'F' and EQUED =
+*>     On entry, the Hermitian matrix A, except if FACT = 'F' and EQUED =
 *>     'Y', then A must contain the equilibrated matrix
 *>     diag(S)*A*diag(S).  If UPLO = 'U', the leading N-by-N upper
 *>     triangular part of A contains the upper triangular part of the

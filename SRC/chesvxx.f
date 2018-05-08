@@ -46,7 +46,7 @@
 *>
 *>    CHESVXX uses the diagonal pivoting factorization to compute the
 *>    solution to a complex system of linear equations A * X = B, where
-*>    A is an N-by-N symmetric matrix and X and B are N-by-NRHS
+*>    A is an N-by-N Hermitian matrix and X and B are N-by-NRHS
 *>    matrices.
 *>
 *>    If requested, both normwise and maximum componentwise error bounds
@@ -88,7 +88,7 @@
 *>       A = L * D * L**T,  if UPLO = 'L',
 *>
 *>    where U (or L) is a product of permutation and unit upper (lower)
-*>    triangular matrices, and D is symmetric and block diagonal with
+*>    triangular matrices, and D is Hermitian and block diagonal with
 *>    1-by-1 and 2-by-2 diagonal blocks.
 *>
 *>    3. If some D(i,i)=0, so that D is exactly singular, then the
@@ -161,7 +161,7 @@
 *> \param[in,out] A
 *> \verbatim
 *>          A is COMPLEX array, dimension (LDA,N)
-*>     The symmetric matrix A.  If UPLO = 'U', the leading N-by-N
+*>     The Hermitian matrix A.  If UPLO = 'U', the leading N-by-N
 *>     upper triangular part of A contains the upper triangular
 *>     part of the matrix A, and the strictly lower triangular
 *>     part of A is not referenced.  If UPLO = 'L', the leading
