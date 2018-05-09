@@ -97,14 +97,15 @@
 *>          The leading dimension of the array B.  LDB >= max(1,N).
 *> \endverbatim
 *>
-*> \param[in] WORK
+*> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE array, dimension (MAX(1,LWORK))
+*>          WORK is COMPLEX*16 array, dimension (MAX(1,LWORK))
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER, LWORK >= MAX(1,3*N-2).
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK. LWORK >= max(1,3*N-2).
 *> \endverbatim
 *>
 *> \param[out] INFO

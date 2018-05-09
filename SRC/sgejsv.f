@@ -82,7 +82,7 @@
 *>              desirable, then this option is advisable. The input matrix A
 *>              is preprocessed with QR factorization with FULL (row and
 *>              column) pivoting.
-*>       = 'G'  Computation as with 'F' with an additional estimate of the
+*>       = 'G': Computation as with 'F' with an additional estimate of the
 *>              condition number of B, where A=D*B. If A has heavily weighted
 *>              rows, then using this condition number gives too pessimistic
 *>              error bound.
@@ -133,7 +133,7 @@
 *>         specified range. If A .NE. 0 is scaled so that the largest singular
 *>         value of c*A is around SQRT(BIG), BIG=SLAMCH('O'), then JOBR issues
 *>         the licence to kill columns of A whose norm in c*A is less than
-*>         SQRT(SFMIN) (for JOBR.EQ.'R'), or less than SMALL=SFMIN/EPSLN,
+*>         SQRT(SFMIN) (for JOBR = 'R'), or less than SMALL=SFMIN/EPSLN,
 *>         where SFMIN=SLAMCH('S'), EPSLN=SLAMCH('E').
 *>       = 'N': Do not kill small columns of c*A. This option assumes that
 *>              BLAS and QR factorizations and triangular solvers are
@@ -230,7 +230,7 @@
 *>          If JOBU = 'F', then U contains on exit the M-by-M matrix of
 *>                         the left singular vectors, including an ONB
 *>                         of the orthogonal complement of the Range(A).
-*>          If JOBU = 'W'  .AND. (JOBV.EQ.'V' .AND. JOBT.EQ.'T' .AND. M.EQ.N),
+*>          If JOBU = 'W'  .AND. (JOBV = 'V' .AND. JOBT = 'T' .AND. M = N),
 *>                         then U is used as workspace if the procedure
 *>                         replaces A with A^t. In that case, [V] is computed
 *>                         in U as left singular vectors of A^t and then
@@ -252,7 +252,7 @@
 *>          V is REAL array, dimension ( LDV, N )
 *>          If JOBV = 'V', 'J' then V contains on exit the N-by-N matrix of
 *>                         the right singular vectors;
-*>          If JOBV = 'W', AND (JOBU.EQ.'U' AND JOBT.EQ.'T' AND M.EQ.N),
+*>          If JOBV = 'W', AND (JOBU = 'U' AND JOBT = 'T' AND M = N),
 *>                         then V is used as workspace if the pprocedure
 *>                         replaces A with A^t. In that case, [U] is computed
 *>                         in V as right singular vectors of A^t and then
@@ -278,7 +278,7 @@
 *>                    of A. (See the description of SVA().)
 *>          WORK(2) = See the description of WORK(1).
 *>          WORK(3) = SCONDA is an estimate for the condition number of
-*>                    column equilibrated A. (If JOBA .EQ. 'E' or 'G')
+*>                    column equilibrated A. (If JOBA = 'E' or 'G')
 *>                    SCONDA is an estimate of SQRT(||(R^t * R)^(-1)||_1).
 *>                    It is computed using SPOCON. It holds
 *>                    N^(-1/4) * SCONDA <= ||R^(-1)||_2 <= N^(1/4) * SCONDA
@@ -297,7 +297,7 @@
 *>                    triangular factor in the first QR factorization.
 *>          WORK(5) = an estimate of the scaled condition number of the
 *>                    triangular factor in the second QR factorization.
-*>          The following two parameters are computed if JOBT .EQ. 'T'.
+*>          The following two parameters are computed if JOBT = 'T'.
 *>          They are provided for a developer/implementer who is familiar
 *>          with the details of the method.
 *>
@@ -313,8 +313,8 @@
 *>          Length of WORK to confirm proper allocation of work space.
 *>          LWORK depends on the job:
 *>
-*>          If only SIGMA is needed ( JOBU.EQ.'N', JOBV.EQ.'N' ) and
-*>            -> .. no scaled condition estimate required (JOBE.EQ.'N'):
+*>          If only SIGMA is needed ( JOBU = 'N', JOBV = 'N' ) and
+*>            -> .. no scaled condition estimate required (JOBE = 'N'):
 *>               LWORK >= max(2*M+N,4*N+1,7). This is the minimal requirement.
 *>               ->> For optimal performance (blocked code) the optimal value
 *>               is LWORK >= max(2*M+N,3*N+(N+1)*NB,7). Here NB is the optimal
@@ -330,7 +330,7 @@
 *>               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DGEQRF),
 *>                                                     N+N*N+LWORK(DPOCON),7).
 *>
-*>          If SIGMA and the right singular vectors are needed (JOBV.EQ.'V'),
+*>          If SIGMA and the right singular vectors are needed (JOBV = 'V'),
 *>            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
 *>            -> For optimal performance, LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
 *>               where NB is the optimal block size for DGEQP3, DGEQRF, DGELQ,
@@ -341,19 +341,19 @@
 *>          If SIGMA and the left singular vectors are needed
 *>            -> the minimal requirement is LWORK >= max(2*M+N,4*N+1,7).
 *>            -> For optimal performance:
-*>               if JOBU.EQ.'U' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
-*>               if JOBU.EQ.'F' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,N+M*NB,7),
+*>               if JOBU = 'U' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,7),
+*>               if JOBU = 'F' :: LWORK >= max(2*M+N,3*N+(N+1)*NB,N+M*NB,7),
 *>               where NB is the optimal block size for DGEQP3, DGEQRF, DORMQR.
 *>               In general, the optimal length LWORK is computed as
 *>               LWORK >= max(2*M+N,N+LWORK(DGEQP3),N+LWORK(DPOCON),
 *>                        2*N+LWORK(DGEQRF), N+LWORK(DORMQR)).
-*>               Here LWORK(DORMQR) equals N*NB (for JOBU.EQ.'U') or
-*>               M*NB (for JOBU.EQ.'F').
+*>               Here LWORK(DORMQR) equals N*NB (for JOBU = 'U') or
+*>               M*NB (for JOBU = 'F').
 *>
-*>          If the full SVD is needed: (JOBU.EQ.'U' or JOBU.EQ.'F') and
-*>            -> if JOBV.EQ.'V'
+*>          If the full SVD is needed: (JOBU = 'U' or JOBU = 'F') and
+*>            -> if JOBV = 'V'
 *>               the minimal requirement is LWORK >= max(2*M+N,6*N+2*N*N).
-*>            -> if JOBV.EQ.'J' the minimal requirement is
+*>            -> if JOBV = 'J' the minimal requirement is
 *>               LWORK >= max(2*M+N, 4*N+N*N,2*N+N*N+6).
 *>            -> For optimal performance, LWORK should be additionally
 *>               larger than N+M*NB, where NB is the optimal block size
@@ -369,7 +369,7 @@
 *>                     of JOBA and JOBR.
 *>          IWORK(2) = the number of the computed nonzero singular values
 *>          IWORK(3) = if nonzero, a warning message:
-*>                     If IWORK(3).EQ.1 then some of the column norms of A
+*>                     If IWORK(3) = 1 then some of the column norms of A
 *>                     were denormalized floats. The requested high accuracy
 *>                     is not warranted by the data.
 *> \endverbatim
@@ -377,10 +377,10 @@
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER
-*>           < 0  : if INFO = -i, then the i-th argument had an illegal value.
-*>           = 0 :  successful exit;
-*>           > 0 :  SGEJSV  did not converge in the maximal allowed number
-*>                  of sweeps. The computed values may be inaccurate.
+*>           < 0:  if INFO = -i, then the i-th argument had an illegal value.
+*>           = 0:  successful exit;
+*>           > 0:  SGEJSV  did not converge in the maximal allowed number
+*>                 of sweeps. The computed values may be inaccurate.
 *> \endverbatim
 *
 *  Authors:

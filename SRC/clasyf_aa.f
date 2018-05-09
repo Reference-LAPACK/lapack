@@ -84,7 +84,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is REAL array, dimension (LDA,M) for
+*>          A is COMPLEX array, dimension (LDA,M) for
 *>          the first panel, while dimension (LDA,M+1) for the
 *>          remaining panels.
 *>
@@ -112,7 +112,7 @@
 *>
 *> \param[in,out] H
 *> \verbatim
-*>          H is REAL workspace, dimension (LDH,NB).
+*>          H is COMPLEX workspace, dimension (LDH,NB).
 *>
 *> \endverbatim
 *>
@@ -124,7 +124,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL workspace, dimension (M).
+*>          WORK is COMPLEX workspace, dimension (M).
 *> \endverbatim
 *>
 *

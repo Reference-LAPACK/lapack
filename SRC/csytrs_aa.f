@@ -68,7 +68,7 @@
 *>
 *> \param[in] A
 *> \verbatim
-*>          A is REAL array, dimension (LDA,N)
+*>          A is COMPLEX array, dimension (LDA,N)
 *>          Details of factors computed by CSYTRF_AA.
 *> \endverbatim
 *>
@@ -86,7 +86,7 @@
 *>
 *> \param[in,out] B
 *> \verbatim
-*>          B is REAL array, dimension (LDB,NRHS)
+*>          B is COMPLEX array, dimension (LDB,NRHS)
 *>          On entry, the right hand side matrix B.
 *>          On exit, the solution matrix X.
 *> \endverbatim
@@ -97,14 +97,15 @@
 *>          The leading dimension of the array B.  LDB >= max(1,N).
 *> \endverbatim
 *>
-*> \param[in] WORK
+*> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE array, dimension (MAX(1,LWORK))
+*>          WORK is COMPLEX array, dimension (MAX(1,LWORK))
 *> \endverbatim
 *>
 *> \param[in] LWORK
 *> \verbatim
-*>          LWORK is INTEGER, LWORK >= MAX(1,3*N-2).
+*>          LWORK is INTEGER
+*>          The dimension of the array WORK. LWORK >= max(1,3*N-2).
 *> \endverbatim
 *>
 *> \param[out] INFO
