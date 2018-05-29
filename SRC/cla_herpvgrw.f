@@ -102,7 +102,7 @@
 *>     as determined by CHETRF.
 *> \endverbatim
 *>
-*> \param[in] WORK
+*> \param[out] WORK
 *> \verbatim
 *>          WORK is REAL array, dimension (2*N)
 *> \endverbatim

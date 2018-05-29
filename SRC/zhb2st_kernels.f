@@ -124,7 +124,7 @@
 *>          LDVT is INTEGER.
 *> \endverbatim
 *>
-*> \param[in] WORK
+*> \param[out] WORK
 *> \verbatim
 *>          WORK is COMPLEX*16 array. Workspace of size nb.
 *> \endverbatim
