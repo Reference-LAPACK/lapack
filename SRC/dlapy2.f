@@ -89,7 +89,7 @@
       EXTERNAL           DISNAN
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, DSQRT
+      INTRINSIC          ABS, MAX, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -106,7 +106,7 @@
          IF( Z.EQ.ZERO ) THEN
             DLAPY2 = W
          ELSE
-            DLAPY2 = W*DSQRT( ONE+( Z / W )**2 )
+            DLAPY2 = W*SQRT( ONE+( Z / W )**2 )
          END IF
       END IF
       RETURN
