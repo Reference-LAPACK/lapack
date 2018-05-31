@@ -665,6 +665,8 @@ c     $                     (J+1)*NB+1, (J+1)*NB+KB, IPIV, 1 )
 *     Factor the band matrix
       CALL ZGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
 *
+      RETURN
+*
 *     End of ZSYTRF_AA_2STAGE
 *
       END

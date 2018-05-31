@@ -237,17 +237,16 @@
          INFO = -5
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -11
+      ELSE IF( LTB.LT.( 4*N ) .AND. .NOT.TQUERY ) THEN
+         INFO = -7
+      ELSE IF( LWORK.LT.N .AND. .NOT.WQUERY ) THEN
+         INFO = -13
       END IF
 *
       IF( INFO.EQ.0 ) THEN
          CALL CHETRF_AA_2STAGE( UPLO, N, A, LDA, TB, -1, IPIV,
      $                          IPIV2, WORK, -1, INFO )
          LWKOPT = INT( WORK(1) )
-         IF( LTB.LT.INT( TB(1) ) .AND. .NOT.TQUERY ) THEN
-            INFO = -7
-         ELSE IF( LWORK.LT.LWKOPT .AND. .NOT.WQUERY ) THEN
-            INFO = -13
-         END IF
       END IF
 *
       IF( INFO.NE.0 ) THEN
@@ -272,6 +271,8 @@
       END IF
 *
       WORK( 1 ) = LWKOPT
+*
+      RETURN
 *
 *     End of CHESV_AA_2STAGE
 *

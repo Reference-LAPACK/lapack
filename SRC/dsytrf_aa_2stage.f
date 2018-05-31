@@ -133,7 +133,7 @@
 *>          IPIV2 is INTEGER array, dimension (N)
 *>          On exit, it contains the details of the interchanges, i.e.,
 *>          the row and column k of T were interchanged with the
-*>          row and column IPIV(k).
+*>          row and column IPIV2(k).
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -643,6 +643,8 @@ c     $                     (J+1)*NB+1, (J+1)*NB+KB, IPIV, 1 )
 *
 *     Factor the band matrix
       CALL DGBTRF( N, N, NB, NB, TB, LDTB, IPIV2, INFO )
+*
+      RETURN
 *
 *     End of DSYTRF_AA_2STAGE
 *
