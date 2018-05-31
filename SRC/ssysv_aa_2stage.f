@@ -236,12 +236,12 @@
          INFO = -3
       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
          INFO = -5
+      ELSE IF( LTB.LT.( 4*N ) .AND. .NOT.TQUERY ) THEN
+         INFO = -7
       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN
          INFO = -11
       ELSE IF( LWORK.LT.N .AND. .NOT.WQUERY ) THEN
          INFO = -13
-      ELSE IF( LTB.LT.(4*N) .AND. .NOT.TQUERY ) THEN
-         INFO = -7
       END IF
 *
       IF( INFO.EQ.0 ) THEN
