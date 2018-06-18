@@ -79,7 +79,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (MAX(1,LWORK))
+*>          WORK is REAL array, dimension (LWORK)
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
