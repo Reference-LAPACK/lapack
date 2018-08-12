@@ -56,7 +56,7 @@ include ../make.inc
 #
 #######################################################################
 
-ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
+ALLAUX = ilaenv.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
    iparmq.o iparam2stage.o \
    ilaprec.o ilatrans.o ilauplo.o iladiag.o chla_transtype.o \
    ../INSTALL/ilaver.o ../INSTALL/lsame.o ../INSTALL/slamch.o

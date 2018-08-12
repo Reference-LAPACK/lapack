@@ -254,8 +254,8 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
-      EXTERNAL           LSAME, ILAENV2STAGE
+      INTEGER            ILAENV
+      EXTERNAL           LSAME, ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DPOTRF, DSYGST, DTRMM, DTRSM, XERBLA,
@@ -288,10 +288,10 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'DSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
-         IB    = ILAENV2STAGE( 2, 'DSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
-         LHTRD = ILAENV2STAGE( 3, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
-         LWTRD = ILAENV2STAGE( 4, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         KD    = ILAENV( 17, 'DSYTRD_2STAGE', JOBZ, N, -1, -1, -1 )
+         IB    = ILAENV( 18, 'DSYTRD_2STAGE', JOBZ, N, KD, -1, -1 )
+         LHTRD = ILAENV( 19, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
+         LWTRD = ILAENV( 20, 'DSYTRD_2STAGE', JOBZ, N, KD, IB, -1 )
          LWMIN = 2*N + LHTRD + LWTRD
          WORK( 1 )  = LWMIN
 *

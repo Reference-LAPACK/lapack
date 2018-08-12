@@ -445,9 +445,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV, ILAENV2STAGE
+      INTEGER            ILAENV
       REAL               SLAMCH, CLANSY
-      EXTERNAL           LSAME, SLAMCH, CLANSY, ILAENV, ILAENV2STAGE
+      EXTERNAL           LSAME, SLAMCH, CLANSY, ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
@@ -471,10 +471,10 @@
       LQUERY = ( ( LWORK.EQ.-1 ) .OR. ( LRWORK.EQ.-1 ) .OR.
      $         ( LIWORK.EQ.-1 ) )
 *
-      KD     = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ, N, -1, -1, -1 )
-      IB     = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
-      LHTRD  = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
-      LWTRD  = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
+      KD     = ILAENV( 17, 'CHETRD_2STAGE', JOBZ, N, -1, -1, -1 )
+      IB     = ILAENV( 18, 'CHETRD_2STAGE', JOBZ, N, KD, -1, -1 )
+      LHTRD  = ILAENV( 19, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
+      LWTRD  = ILAENV( 20, 'CHETRD_2STAGE', JOBZ, N, KD, IB, -1 )
       LWMIN  = N + LHTRD + LWTRD
       LRWMIN = MAX( 1, 24*N )
       LIWMIN = MAX( 1, 10*N )
