@@ -345,9 +345,9 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      INTEGER            ILAENV2STAGE
+      INTEGER            ILAENV
       REAL               SLAMCH, CLANHE
-      EXTERNAL           LSAME, SLAMCH, CLANHE, ILAENV2STAGE
+      EXTERNAL           LSAME, SLAMCH, CLANHE, ILAENV
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SSCAL, SSTEBZ, SSTERF, XERBLA, CSSCAL,
@@ -402,13 +402,13 @@
             LWMIN = 1
             WORK( 1 ) = LWMIN
          ELSE
-            KD    = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ,
+            KD    = ILAENV( 17, 'CHETRD_2STAGE', JOBZ,
      $                            N, -1, -1, -1 )
-            IB    = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ,
+            IB    = ILAENV( 18, 'CHETRD_2STAGE', JOBZ,
      $                            N, KD, -1, -1 )
-            LHTRD = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ,
+            LHTRD = ILAENV( 19, 'CHETRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
-            LWTRD = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ,
+            LWTRD = ILAENV( 20, 'CHETRD_2STAGE', JOBZ,
      $                            N, KD, IB, -1 )
             LWMIN = N + LHTRD + LWTRD
             WORK( 1 )  = LWMIN
