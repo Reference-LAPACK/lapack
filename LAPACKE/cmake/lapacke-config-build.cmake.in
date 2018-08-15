@@ -11,4 +11,4 @@ endif()
 set(LAPACKE_INCLUDE_DIRS "@LAPACK_BINARY_DIR@/include")
 
 # Report lapacke libraries.
-set(LAPACKE_LIBRARIES lapacke)
+set(LAPACKE_LIBRARIES lapacke ${LAPACK_LIBRARIES})
