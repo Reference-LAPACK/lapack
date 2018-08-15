@@ -71,7 +71,11 @@ endif()
 target_link_libraries(lapacke PRIVATE ${LAPACK_LIBRARIES})
 
 lapack_install_library(lapacke)
-install(FILES ${LAPACKE_INCLUDE} ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(
+  FILES ${LAPACKE_INCLUDE} ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  COMPONENT Development
+  )
 
 if(BUILD_TESTING)
   add_subdirectory(example)
@@ -82,6 +86,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapacke.pc.in ${CMAKE_CURRENT_BINARY_
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/lapacke.pc
   DESTINATION ${PKG_CONFIG_DIR}
+  COMPONENT Development
   )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/lapacke-config-version.cmake.in
@@ -95,7 +100,10 @@ install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/lapacke-config.cmake
   ${LAPACK_BINARY_DIR}/lapacke-config-version.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapacke-${LAPACK_VERSION}
+  COMPONENT Development
   )
 
 install(EXPORT lapacke-targets
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapacke-${LAPACK_VERSION})
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapacke-${LAPACK_VERSION}
+  COMPONENT Development
+  )
