@@ -123,9 +123,9 @@ set(LAPACK_INSTALL_EXPORT_NAME lapack-targets)
 macro(lapack_install_library lib)
   install(TARGETS ${lib}
     EXPORT ${LAPACK_INSTALL_EXPORT_NAME}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT RuntimeLibraries
   )
 endmacro()
 
@@ -321,6 +321,7 @@ set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 5)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_MONOLITHIC_INSTALL ON)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "LAPACK")
 if(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
@@ -359,7 +360,9 @@ endif()
 set(_lapack_config_install_guard_target "")
 if(ALL_TARGETS)
   install(EXPORT lapack-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION})
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION}
+    COMPONENT Development
+    )
 
   # Choose one of the lapack targets to use as a guard for
   # lapack-config.cmake to load targets from the install tree.
@@ -394,6 +397,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lapack.pc.in ${CMAKE_CURRENT_BINARY_D
   install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/lapack.pc
   DESTINATION ${PKG_CONFIG_DIR}
+  COMPONENT Development
   )
 
 configure_file(${LAPACK_SOURCE_DIR}/CMAKE/lapack-config-install.cmake.in
@@ -410,4 +414,5 @@ install(FILES
   ${LAPACK_BINARY_DIR}/CMakeFiles/lapack-config.cmake
   ${LAPACK_BINARY_DIR}/lapack-config-version.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION}
+  COMPONENT Development
   )
