@@ -16,13 +16,6 @@ if(NOT FortranCInterface_GLOBAL_FOUND OR NOT FortranCInterface_MODULE_FOUND)
                  ${LAPACK_BINARY_DIR}/include/lapacke_mangling.h)
 endif()
 
-if(WIN32 AND NOT UNIX)
-  add_definitions(-DHAVE_LAPACK_CONFIG_H -DLAPACK_COMPLEX_STRUCTURE)
-  message(STATUS "Windows BUILD")
-endif()
-
-get_directory_property(DirDefs COMPILE_DEFINITIONS)
-
 include_directories(include ${LAPACK_BINARY_DIR}/include)
 add_subdirectory(include)
 add_subdirectory(src)
@@ -64,6 +57,10 @@ target_include_directories(lapacke PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
+if(WIN32 AND NOT UNIX)
+  target_compile_definitions(lapacke PUBLIC HAVE_LAPACK_CONFIG_H LAPACK_COMPLEX_STRUCTURE)
+  message(STATUS "Windows BUILD")
+endif()
 
 if(LAPACKE_WITH_TMG)
   target_link_libraries(lapacke PRIVATE tmglib)
