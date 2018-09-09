@@ -134,9 +134,7 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 # --------------------------------------------------
 # Testing
 option(BUILD_TESTING "Build tests" OFF)
-enable_testing()
 include(CTest)
-enable_testing()
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
 # --------------------------------------------------
