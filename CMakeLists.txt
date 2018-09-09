@@ -24,6 +24,8 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
 endif()
 
+# Coverage
+set(_is_coverage_build 0)
 set(_msg "Checking if build type is 'Coverage'")
 message(STATUS "${_msg}")
 if(NOT CMAKE_CONFIGURATION_TYPES)
@@ -133,7 +135,7 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # --------------------------------------------------
 # Testing
-option(BUILD_TESTING "Build tests" OFF)
+option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
 message(STATUS "Build tests: ${BUILD_TESTING}")
 
