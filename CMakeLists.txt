@@ -24,6 +24,8 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
 endif()
 
+# Coverage
+set(_is_coverage_build 0)
 set(_msg "Checking if build type is 'Coverage'")
 message(STATUS "${_msg}")
 if(NOT CMAKE_CONFIGURATION_TYPES)
@@ -108,16 +110,8 @@ if(CMAKE_Fortran_COMPILER_ID STREQUAL "Compaq")
   endif()
 endif()
 
-# Get Python
-message(STATUS "Looking for Python greater than 2.6 - ${PYTHONINTERP_FOUND}")
-find_package(PythonInterp 2.7) # lapack_testing.py uses features from python 2.7 and greater
-if(PYTHONINTERP_FOUND)
-  message(STATUS "Using Python version ${PYTHON_VERSION_STRING}")
-else()
-  message(STATUS "No suitable Python version found, so skipping summary tests.")
-endif()
-# --------------------------------------------------
 
+# --------------------------------------------------
 set(LAPACK_INSTALL_EXPORT_NAME lapack-targets)
 
 macro(lapack_install_library lib)
@@ -133,11 +127,21 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # --------------------------------------------------
 # Testing
-option(BUILD_TESTING "Build tests" OFF)
-enable_testing()
+option(BUILD_TESTING "Build tests" ${_is_coverage_build})
 include(CTest)
-enable_testing()
 message(STATUS "Build tests: ${BUILD_TESTING}")
+
+# lapack_testing.py uses features from python 2.7 and greater
+if(BUILD_TESTING)
+  set(_msg "Looking for Python >= 2.7 needed for summary tests")
+  message(STATUS "${_msg}")
+  find_package(PythonInterp 2.7 QUIET)
+  if(PYTHONINTERP_FOUND)
+    message(STATUS "${_msg} - found (${PYTHON_VERSION_STRING})")
+  else()
+    message(STATUS "${_msg} - not found (skipping summary tests)")
+  endif()
+endif()
 
 # --------------------------------------------------
 # Organize output files.  On Windows this also keeps .dll files next
