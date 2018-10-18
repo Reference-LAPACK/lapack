@@ -86,7 +86,7 @@
 *>              error bound.
 *>       = 'A': Small singular values are not well determined by the data 
 *>              and are considered as noisy; the matrix is treated as
-*>              numerically rank defficient. The error in the computed
+*>              numerically rank deficient. The error in the computed
 *>              singular values is bounded by f(m,n)*epsilon*||A||.
 *>              The computed SVD A = U * S * V^* restores A up to
 *>              f(m,n)*epsilon*||A||.

@@ -86,7 +86,7 @@
 *>              error bound.
 *>       = 'A': Small singular values are not well determined by the data 
 *>              and are considered as noisy; the matrix is treated as
-*>              numerically rank defficient. The error in the computed
+*>              numerically rank deficient. The error in the computed
 *>              singular values is bounded by f(m,n)*epsilon*||A||.
 *>              The computed SVD A = U * S * V^* restores A up to
 *>              f(m,n)*epsilon*||A||.
@@ -1350,7 +1350,7 @@
       ELSE IF ( L2RANK ) THEN
 *        .. similarly as above, only slightly more gentle (less aggressive).
 *        Sudden drop on the diagonal of R1 is used as the criterion for
-*        close-to-rank-defficient.
+*        close-to-rank-deficient.
          TEMP1 = SQRT(SFMIN)
          DO 3401 p = 2, N
             IF ( ( ABS(A(p,p)) .LT. (EPSLN*ABS(A(p-1,p-1))) ) .OR.
