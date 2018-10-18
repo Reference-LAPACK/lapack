@@ -173,7 +173,8 @@ SLASRC = \
    stplqt.o stplqt2.o stpmlqt.o \
    ssytrd_2stage.o ssytrd_sy2sb.o ssytrd_sb2st.o ssb2st_kernels.o \
    ssyevd_2stage.o ssyev_2stage.o ssyevx_2stage.o ssyevr_2stage.o \
-   ssbev_2stage.o ssbevx_2stage.o ssbevd_2stage.o ssygv_2stage.o
+   ssbev_2stage.o ssbevx_2stage.o ssbevd_2stage.o ssygv_2stage.o \
+   sgesvdq.o
 
 DSLASRC = spotrs.o sgetrs.o spotrf.o sgetrf.o
 
@@ -274,7 +275,8 @@ CLASRC = \
    ctplqt.o ctplqt2.o ctpmlqt.o \
    chetrd_2stage.o chetrd_he2hb.o chetrd_hb2st.o chb2st_kernels.o \
    cheevd_2stage.o cheev_2stage.o cheevx_2stage.o cheevr_2stage.o \
-   chbev_2stage.o chbevx_2stage.o chbevd_2stage.o chegv_2stage.o
+   chbev_2stage.o chbevx_2stage.o chbevd_2stage.o chegv_2stage.o \
+   cgesvdq.o
 
 ifdef USEXBLAS
 CXLASRC = cgesvxx.o cgerfsx.o cla_gerfsx_extended.o cla_geamv.o \
@@ -370,7 +372,8 @@ DLASRC = \
    dtplqt.o dtplqt2.o dtpmlqt.o \
    dsytrd_2stage.o dsytrd_sy2sb.o dsytrd_sb2st.o dsb2st_kernels.o \
    dsyevd_2stage.o dsyev_2stage.o dsyevx_2stage.o dsyevr_2stage.o \
-   dsbev_2stage.o dsbevx_2stage.o dsbevd_2stage.o dsygv_2stage.o
+   dsbev_2stage.o dsbevx_2stage.o dsbevd_2stage.o dsygv_2stage.o \
+   dgesvdq.o
 
 ifdef USEXBLAS
 DXLASRC = dgesvxx.o dgerfsx.o dla_gerfsx_extended.o dla_geamv.o \
@@ -474,7 +477,8 @@ ZLASRC = \
    zgelq.o zlaswlq.o zlamswlq.o zgemlq.o \
    zhetrd_2stage.o zhetrd_he2hb.o zhetrd_hb2st.o zhb2st_kernels.o \
    zheevd_2stage.o zheev_2stage.o zheevx_2stage.o zheevr_2stage.o \
-   zhbev_2stage.o zhbevx_2stage.o zhbevd_2stage.o zhegv_2stage.o
+   zhbev_2stage.o zhbevx_2stage.o zhbevd_2stage.o zhegv_2stage.o \
+   zgesvdq.o
 
 ifdef USEXBLAS
 ZXLASRC = zgesvxx.o zgerfsx.o zla_gerfsx_extended.o zla_geamv.o \
