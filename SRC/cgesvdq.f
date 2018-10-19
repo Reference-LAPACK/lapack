@@ -1,4 +1,3 @@
-*{SIGMA/xGESVDQ/cgesvdq.f}
 *
 *  Definition:
 *  ===========
@@ -68,7 +67,7 @@
 *  JOBR (input)
 *  JOBR is CHARACTER*1
 *  = 'T' After the initial pivoted QR factorization, CGESVD is applied to
-*        the adjoint R**H of the computed trinagular factor R. This involves
+*        the adjoint R**H of the computed triangular factor R. This involves
 *        some extra data movement (matrix transpositions). Useful for
 *        experiments, research and development.
 *  = 'N' The triangular factor R is given as input to CGESVD. This may be
@@ -109,8 +108,8 @@
 *  A (input/workspace/output)
 *  A is COMPLEX array of dimensions LDA x N
 *  On entry, the input matrix A.
-*  On exit, if JOBU .NE. 'N' o JOBV .NE. 'N', the lower triangle of A contains 
-*  the Householder vectorsas stored by CGEQP3. If JOBU = 'F', these Househlder 
+*  On exit, if JOBU .NE. 'N' or JOBV .NE. 'N', the lower triangle of A contains 
+*  the Householder vectors as stored by CGEQP3. If JOBU = 'F', these Householder 
 *  vectors together with CWORK(1:N) can be used to restore the Q factors from
 *  the initial pivoted QR factorization of A. See the description of U.
 *..............................................................................
@@ -231,7 +230,7 @@
 *                         if the full SVD is requested with JOBV='A', 'V' and 
 *                         JOBR ='T', and also a scaled condition number estimate 
 *                         requested.
-*  Finally, LCWORK must be at lest two: LCWORK = MAX( 2, LCWORK ).
+*  Finally, LCWORK must be at least two: LCWORK = MAX( 2, LCWORK ).
 *  If, on entry, LCWORK = -1, (workspace query) then the optimal and the 
 *  minimal length of CWORK are computed and returned in the first two entries 
 *  of CWORK. See the description of CWORK. 
@@ -270,7 +269,7 @@
 *   DO-loops because BLAS and LAPACK do not provide corresponding subroutines. 
 *   Those DO-loops are easily identified in this source code - by the CONTINUE 
 *   statements labeled wit 11**. In an optimized version of this code, the 
-*   nested DO loops should be replaced with calls to an optimized subrotine.   
+*   nested DO loops should be replaced with calls to an optimized subroutine.   
 *   2. This code scales A by 1/SQRT(M) if the largest ABS(A(i,j)) could cause
 *   column norm overflow. This is the minial precaution and it is left to the
 *   SVD routine (CGESVD) to do its own preemptive scaling if potential over-
@@ -318,7 +317,7 @@
       REAL        ZERO,         ONE
       PARAMETER ( ZERO = 0.0E0, ONE = 1.0E0 )
       COMPLEX     CZERO,                    CONE
-      PARAMETER ( CZERO = ( 0.0E0, 0.0E0 ), CONE = ( 1.0E0, 0.0E0 ) )	
+      PARAMETER ( CZERO = ( 0.0E0, 0.0E0 ), CONE = ( 1.0E0, 0.0E0 ) )
 *     .. Local Scalars ..
       INTEGER     IERR, NR, N1, OPTRATIO, p, q
       INTEGER     LWCON, LWQP3, LWRK_CGELQF, LWRK_CGESVD, LWRK_CGESVD2, 
@@ -404,7 +403,7 @@
 *        [[The expressions for computing the minimal and the optimal
 *        values of LCWORK are written with a lot of redundancy and
 *        can be simplified. However, this detailed form is easier for
-*        maintenace and modififactions of the code.]]
+*        maintenance and modifications of the code.]]
 *
 *        .. minimal workspace length for CGEQP3 of an M x N matrix
          LWQP3 = N+1
@@ -526,7 +525,7 @@
                  IF ( CONDA ) MINWRK = MAX( MINWRK, LWCON )
                  MINWRK = MINWRK + N
                  IF ( WNTVA ) THEN
-*                   .. minimal workspace  length for N/2 x N CGELQF
+*                   .. minimal workspace length for N/2 x N CGELQF
                     LWLQF  = MAX( N/2, 1 )
                     LWSVD2 = MAX( 3 * (N/2), 1 )
                     LWUNLQ = MAX( N , 1 )
@@ -675,9 +674,9 @@
             CALL CLASWP( N, A, LDA, 1, M-1, IWORK(N+1), 1 )
       END IF
 *
-*     .. At this stage, preemptive scaling is done only to avoid column
-*     norms overflows during the QR factorization. The SVD procedure should
-*    have its own scaling to save the singular values from overlows and 
+*    .. At this stage, preemptive scaling is done only to avoid column
+*    norms overflows during the QR factorization. The SVD procedure should
+*    have its own scaling to save the singular values from overflows and 
 *    underflows. That depends on the SVD procedure.
 *
       IF ( .NOT.ROWPRM ) THEN 
@@ -714,7 +713,7 @@
 *
       EPSLN = SLAMCH('E')
       SFMIN = SLAMCH('S')
-*      SMALL = SFMIN / EPSLN
+*     SMALL = SFMIN / EPSLN
       NR = N
 *      
       IF ( ACCLA ) THEN 
@@ -734,7 +733,7 @@
       ELSEIF ( ACCLM ) THEN 
 *        .. similarly as above, only slightly more gentle (less agressive).
 *        Sudden drop on the diagonal of R is used as the criterion for being
-*        close-to-rank-defficient. The threshold is set to EPSLN=SLAMCH('E').
+*        close-to-rank-deficient. The threshold is set to EPSLN=SLAMCH('E').
 *        [[This can be made more flexible by replacing this hard-coded value
 *        with a user specified threshold.]] Also, the values that underflow
 *        will be truncated.
@@ -759,7 +758,7 @@
  3502    CONTINUE        
 *         
          IF ( CONDA ) THEN 
-*           Estimate the scled condition number of A. Use the fact that it is 
+*           Estimate the scaled condition number of A. Use the fact that it is 
 *           the same as the scaled condition number of R. 
 *              .. V is used as workspace
                CALL CLACPY( 'U', N, N, A, LDA, V, LDV )
@@ -782,7 +781,7 @@
                SCONDA = ONE / SQRT(RTMP)            
 *           For NR=N, SCONDA is an estimate of SQRT(||(R^* * R)^(-1)||_1),
 *           N^(-1/4) * SCONDA <= ||R^(-1)||_2 <= N^(1/4) * SCONDA    
-*           See the references [1], [2] fo more details.
+*           See the references [1], [2] for more details.
          END IF
 *         
       ENDIF
@@ -930,7 +929,7 @@
                CALL CLAPMT( .FALSE., NR, N, V, LDV, IWORK )
             ELSE
 *               .. need all N right singular vectors and NR < N   
-*               [!] This is simple implemetation that augments [V](1:N,1:NR)
+*               [!] This is simple implementation that augments [V](1:N,1:NR)
 *               by padding a zero block. In the case NR << N, a more efficient 
 *               way is to first use the QR factorization. For more details
 *               how to implement this, see the " FULL SVD " branch.
@@ -964,7 +963,7 @@
 *               .. now [V](1:NR,1:N) contains V(1:N,1:NR)**H                
              ELSE
 *               .. need all N right singular vectors and NR < N 
-*               [!] This is simple implemetation that augments [V](1:NR,1:N)
+*               [!] This is simple implementation that augments [V](1:NR,1:N)
 *               by padding a zero block. In the case NR << N, a more efficient 
 *               way is to first use the LQ factorization. For more details
 *               how to implement this, see the " FULL SVD " branch.                 
@@ -1240,7 +1239,7 @@
  4001 CONTINUE
  4002 CONTINUE     
 *      
-*     .. if numerical rank defficiency is detected, the truncated 
+*     .. if numerical rank deficiency is detected, the truncated 
 *     singular values are set to zero. 
       IF ( NR .LT. N ) CALL SLASET( 'G', N-NR,1, ZERO,ZERO, S(NR+1), N )
 *     .. undo scaling; this may cause overflow in the largest singular 
@@ -1250,12 +1249,10 @@
       IF ( CONDA ) RWORK(1) = SCONDA
       RWORK(2) = p - NR 
 *     .. p-NR is the number of singular values that are computed as 
-*     exact zeros in CGESVD() aplied to the (possibly truncated) 
+*     exact zeros in CGESVD() applied to the (possibly truncated) 
 *     full row rank triangular (trapezoidal) factor of A.
       NUMRANK = NR 
 *
       RETURN
       END
 * .. end of CGESVDQ       
-	
-	
