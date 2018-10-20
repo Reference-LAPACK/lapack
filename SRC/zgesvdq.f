@@ -9,7 +9,9 @@
 * SIGMA library, xGESVDQ section updated February 2016. 
 * Developed and coded by Zlatko Drmac, Department of Mathematics
 * University of Zagreb, Croatia, drmac@math.hr
-* Submitted to ACM TOMS
+*
+* Zlatko Drmac, Algorithm 977: A QR-Preconditioned QR SVD Method for Computing
+* the SVD with High Accuracy. ACM Trans. Math. Softw. 44(1): 11:1-11:30 (2017)
 *
 *     .. Scalar Arguments ..
 *      IMPLICIT    NONE
