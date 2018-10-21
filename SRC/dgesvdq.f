@@ -291,14 +291,9 @@
 *..............................................................................
 *  References
 *  ==========
-*  [1] Z. Drmac: A QR-preconditioned QR SVD method for computing the SVD
-*            with high accuracy, TR-2016-HRZZ-9345-1, 
-*            Department of Mathematics, University of Zagreb. 
-*            Submitted to ACM TOMS.
-*  [2] Z. Drmac: xGESVDQ: A software implementation of the QR-preconditioned 
-*            QR SVD method for computing the singular value decomposition
-*            TR-2016-HRZZ-9345-2, Department of Mathematics,
-*            University of Zagreb. Submitted to ACM TOMS.
+*  [1] Zlatko Drmac, Algorithm 977: A QR-Preconditioned QR SVD Method for
+*      Computing the SVD with High Accuracy. ACM Trans. Math. Softw.
+*      44(1): 11:1-11:30 (2017)
 *.......................................................................
 *"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 *
@@ -783,7 +778,7 @@
                SCONDA = ONE / SQRT(RTMP)            
 *           For NR=N, SCONDA is an estimate of SQRT(||(R^* * R)^(-1)||_1),
 *           N^(-1/4) * SCONDA <= ||R^(-1)||_2 <= N^(1/4) * SCONDA    
-*           See the references [1], [2] for more details.
+*           See the reference [1] for more details.
          END IF
 *         
       ENDIF
