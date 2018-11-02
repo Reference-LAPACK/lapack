@@ -25,12 +25,15 @@
 *  ==========
 *
 *>  \param[out] VERS_MAJOR
+*>      VERS_MAJOR is INTEGER
 *>      return the lapack major version
 *>
 *>  \param[out] VERS_MINOR
+*>      VERS_MINOR is INTEGER
 *>      return the lapack minor version from the major version
 *>
 *>  \param[out] VERS_PATCH
+*>      VERS_PATCH is INTEGER
 *>      return the lapack patch version from the minor version
 *
 *  Authors:
