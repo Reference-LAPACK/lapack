@@ -452,15 +452,15 @@
          IF ( LQUERY ) THEN
              CALL ZGEQP3( M, N, A, LDA, IWORK, CDUMMY, CDUMMY, -1,
      $            RDUMMY, IERR )
-             LWRK_ZGEQP3 = CDUMMY(1)
+             LWRK_ZGEQP3 = INT( CDUMMY(1) )
              IF ( WNTUS .OR. WNTUR ) THEN
                  CALL ZUNMQR( 'L', 'N', M, N, N, A, LDA, CDUMMY, U,
      $                LDU, CDUMMY, -1, IERR )
-                 LWRK_ZUNMQR = CDUMMY(1)
+                 LWRK_ZUNMQR = INT( CDUMMY(1) )
              ELSE IF ( WNTUA ) THEN
                  CALL ZUNMQR( 'L', 'N', M, M, N, A, LDA, CDUMMY, U,
      $                LDU, CDUMMY, -1, IERR )
-                 LWRK_ZUNMQR = CDUMMY(1)
+                 LWRK_ZUNMQR = INT( CDUMMY(1) )
              ELSE
                  LWRK_ZUNMQR = 0
              END IF
@@ -478,7 +478,7 @@
              IF ( LQUERY ) THEN
                  CALL ZGESVD( 'N', 'N', N, N, A, LDA, S, U, LDU,
      $                V, LDV, CDUMMY, -1, RDUMMY, IERR )
-                 LWRK_ZGESVD = CDUMMY(1)
+                 LWRK_ZGESVD = INT( CDUMMY(1) )
                  IF ( CONDA ) THEN
                     OPTWRK = MAX( N+LWRK_ZGEQP3, N+LWCON, LWRK_ZGESVD )
                  ELSE
@@ -501,7 +501,7 @@
                    CALL ZGESVD( 'O', 'N', N, N, A, LDA, S, U, LDU,
      $                  V, LDV, CDUMMY, -1, RDUMMY, IERR )
                 END IF
-                LWRK_ZGESVD = CDUMMY(1)
+                LWRK_ZGESVD = INT( CDUMMY(1) )
                 IF ( CONDA ) THEN
                     OPTWRK = N + MAX( LWRK_ZGEQP3, LWCON, LWRK_ZGESVD,
      $                               LWRK_ZUNMQR )
@@ -526,7 +526,7 @@
                      CALL ZGESVD( 'N', 'O', N, N, A, LDA, S, U, LDU,
      $                    V, LDV, CDUMMY, -1, RDUMMY, IERR )
                  END IF
-                 LWRK_ZGESVD = CDUMMY(1)
+                 LWRK_ZGESVD = INT( CDUMMY(1) )
                  IF ( CONDA ) THEN
                      OPTWRK = N + MAX( LWRK_ZGEQP3, LWCON, LWRK_ZGESVD )
                  ELSE
@@ -572,19 +572,19 @@
                 IF ( RTRANS ) THEN
                    CALL ZGESVD( 'O', 'A', N, N, A, LDA, S, U, LDU,
      $                  V, LDV, CDUMMY, -1, RDUMMY, IERR )
-                   LWRK_ZGESVD = CDUMMY(1)
+                   LWRK_ZGESVD = INT( CDUMMY(1) )
                    OPTWRK = MAX(LWRK_ZGEQP3,LWRK_ZGESVD,LWRK_ZUNMQR)
                    IF ( CONDA ) OPTWRK = MAX( OPTWRK, LWCON )
                    OPTWRK = N + OPTWRK
                    IF ( WNTVA ) THEN
                        CALL ZGEQRF(N,N/2,U,LDU,CDUMMY,CDUMMY,-1,IERR)
-                       LWRK_ZGEQRF = CDUMMY(1)
+                       LWRK_ZGEQRF = INT( CDUMMY(1) )
                        CALL ZGESVD( 'S', 'O', N/2,N/2, V,LDV, S, U,LDU,
      $                      V, LDV, CDUMMY, -1, RDUMMY, IERR )
-                       LWRK_ZGESVD2 = CDUMMY(1)
+                       LWRK_ZGESVD2 = INT( CDUMMY(1) )
                        CALL ZUNMQR( 'R', 'C', N, N, N/2, U, LDU, CDUMMY,
      $                      V, LDV, CDUMMY, -1, IERR )
-                       LWRK_ZUNMQR2 = CDUMMY(1)
+                       LWRK_ZUNMQR2 = INT( CDUMMY(1) )
                        OPTWRK2 = MAX( LWRK_ZGEQP3, N/2+LWRK_ZGEQRF,
      $                           N/2+LWRK_ZGESVD2, N/2+LWRK_ZUNMQR2 )
                        IF ( CONDA ) OPTWRK2 = MAX( OPTWRK2, LWCON )
@@ -594,19 +594,19 @@
                 ELSE
                    CALL ZGESVD( 'S', 'O', N, N, A, LDA, S, U, LDU,
      $                  V, LDV, CDUMMY, -1, RDUMMY, IERR )
-                   LWRK_ZGESVD = CDUMMY(1)
+                   LWRK_ZGESVD = INT( CDUMMY(1) )
                    OPTWRK = MAX(LWRK_ZGEQP3,LWRK_ZGESVD,LWRK_ZUNMQR)
                    IF ( CONDA ) OPTWRK = MAX( OPTWRK, LWCON )
                    OPTWRK = N + OPTWRK
                    IF ( WNTVA ) THEN
                       CALL ZGELQF(N/2,N,U,LDU,CDUMMY,CDUMMY,-1,IERR)
-                      LWRK_ZGELQF = CDUMMY(1)
+                      LWRK_ZGELQF = INT( CDUMMY(1) )
                       CALL ZGESVD( 'S','O', N/2,N/2, V, LDV, S, U, LDU,
      $                     V, LDV, CDUMMY, -1, RDUMMY, IERR )
-                      LWRK_ZGESVD2 = CDUMMY(1)
+                      LWRK_ZGESVD2 = INT( CDUMMY(1) )
                       CALL ZUNMLQ( 'R', 'N', N, N, N/2, U, LDU, CDUMMY,
      $                     V, LDV, CDUMMY,-1,IERR )
-                      LWRK_ZUNMLQ = CDUMMY(1)
+                      LWRK_ZUNMLQ = INT( CDUMMY(1) )
                       OPTWRK2 = MAX( LWRK_ZGEQP3, N/2+LWRK_ZGELQF,
      $                           N/2+LWRK_ZGESVD2, N/2+LWRK_ZUNMLQ )
                        IF ( CONDA ) OPTWRK2 = MAX( OPTWRK2, LWCON )

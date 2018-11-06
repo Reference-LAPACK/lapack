@@ -458,15 +458,15 @@
          IF ( LQUERY ) THEN
              CALL SGEQP3( M, N, A, LDA, IWORK, RDUMMY, RDUMMY, -1,
      $           IERR )
-             LWRK_SGEQP3 = RDUMMY(1)
+             LWRK_SGEQP3 = INT( RDUMMY(1) )
              IF ( WNTUS .OR. WNTUR ) THEN
                  CALL SORMQR( 'L', 'N', M, N, N, A, LDA, RDUMMY, U,
      $                LDU, RDUMMY, -1, IERR )
-                 LWRK_SORMQR = RDUMMY(1)
+                 LWRK_SORMQR = INT( RDUMMY(1) )
              ELSE IF ( WNTUA ) THEN
                  CALL SORMQR( 'L', 'N', M, M, N, A, LDA, RDUMMY, U,
      $                LDU, RDUMMY, -1, IERR )
-                 LWRK_SORMQR = RDUMMY(1)
+                 LWRK_SORMQR = INT( RDUMMY(1) )
              ELSE
                  LWRK_SORMQR = 0
              END IF
@@ -484,7 +484,7 @@
              IF ( LQUERY ) THEN
                  CALL SGESVD( 'N', 'N', N, N, A, LDA, S, U, LDU,
      $                V, LDV, RDUMMY, -1, IERR )
-                 LWRK_SGESVD = RDUMMY(1)
+                 LWRK_SGESVD = INT( RDUMMY(1) )
                  IF ( CONDA ) THEN
                     OPTWRK = MAX( N+LWRK_SGEQP3, N+LWCON, LWRK_SGESVD )
                  ELSE
@@ -507,7 +507,7 @@
                    CALL SGESVD( 'O', 'N', N, N, A, LDA, S, U, LDU,
      $                  V, LDV, RDUMMY, -1, IERR )
                 END IF
-                LWRK_SGESVD = RDUMMY(1)
+                LWRK_SGESVD = INT( RDUMMY(1) )
                 IF ( CONDA ) THEN
                     OPTWRK = N + MAX( LWRK_SGEQP3, LWCON, LWRK_SGESVD,
      $                               LWRK_SORMQR )
@@ -532,7 +532,7 @@
                      CALL SGESVD( 'N', 'O', N, N, A, LDA, S, U, LDU,
      $                    V, LDV, RDUMMY, -1, IERR )
                  END IF
-                 LWRK_SGESVD = RDUMMY(1)
+                 LWRK_SGESVD = INT( RDUMMY(1) )
                  IF ( CONDA ) THEN
                      OPTWRK = N + MAX( LWRK_SGEQP3, LWCON, LWRK_SGESVD )
                  ELSE
@@ -578,19 +578,19 @@
                 IF ( RTRANS ) THEN
                    CALL SGESVD( 'O', 'A', N, N, A, LDA, S, U, LDU,
      $                  V, LDV, RDUMMY, -1, IERR )
-                   LWRK_SGESVD = RDUMMY(1)
+                   LWRK_SGESVD = INT( RDUMMY(1) )
                    OPTWRK = MAX(LWRK_SGEQP3,LWRK_SGESVD,LWRK_SORMQR)
                    IF ( CONDA ) OPTWRK = MAX( OPTWRK, LWCON )
                    OPTWRK = N + OPTWRK
                    IF ( WNTVA ) THEN
                        CALL SGEQRF(N,N/2,U,LDU,RDUMMY,RDUMMY,-1,IERR)
-                       LWRK_SGEQRF = RDUMMY(1)
+                       LWRK_SGEQRF = INT( RDUMMY(1) )
                        CALL SGESVD( 'S', 'O', N/2,N/2, V,LDV, S, U,LDU,
      $                      V, LDV, RDUMMY, -1, IERR )
-                       LWRK_SGESVD2 = RDUMMY(1)
+                       LWRK_SGESVD2 = INT( RDUMMY(1) )
                        CALL SORMQR( 'R', 'C', N, N, N/2, U, LDU, RDUMMY,
      $                      V, LDV, RDUMMY, -1, IERR )
-                       LWRK_SORMQR2 = RDUMMY(1)
+                       LWRK_SORMQR2 = INT( RDUMMY(1) )
                        OPTWRK2 = MAX( LWRK_SGEQP3, N/2+LWRK_SGEQRF,
      $                           N/2+LWRK_SGESVD2, N/2+LWRK_SORMQR2 )
                        IF ( CONDA ) OPTWRK2 = MAX( OPTWRK2, LWCON )
@@ -600,19 +600,19 @@
                 ELSE
                    CALL SGESVD( 'S', 'O', N, N, A, LDA, S, U, LDU,
      $                  V, LDV, RDUMMY, -1, IERR )
-                   LWRK_SGESVD = RDUMMY(1)
+                   LWRK_SGESVD = INT( RDUMMY(1) )
                    OPTWRK = MAX(LWRK_SGEQP3,LWRK_SGESVD,LWRK_SORMQR)
                    IF ( CONDA ) OPTWRK = MAX( OPTWRK, LWCON )
                    OPTWRK = N + OPTWRK
                    IF ( WNTVA ) THEN
                       CALL SGELQF(N/2,N,U,LDU,RDUMMY,RDUMMY,-1,IERR)
-                      LWRK_SGELQF = RDUMMY(1)
+                      LWRK_SGELQF = INT( RDUMMY(1) )
                       CALL SGESVD( 'S','O', N/2,N/2, V, LDV, S, U, LDU,
      $                     V, LDV, RDUMMY, -1, IERR )
-                      LWRK_SGESVD2 = RDUMMY(1)
+                      LWRK_SGESVD2 = INT( RDUMMY(1) )
                       CALL SORMLQ( 'R', 'N', N, N, N/2, U, LDU, RDUMMY,
      $                     V, LDV, RDUMMY,-1,IERR )
-                      LWRK_SORMLQ = RDUMMY(1)
+                      LWRK_SORMLQ = INT( RDUMMY(1) )
                       OPTWRK2 = MAX( LWRK_SGEQP3, N/2+LWRK_SGELQF,
      $                           N/2+LWRK_SGESVD2, N/2+LWRK_SORMLQ )
                        IF ( CONDA ) OPTWRK2 = MAX( OPTWRK2, LWCON )
