@@ -19,7 +19,7 @@
 *      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LCWORK, LRWORK,  INFO
 *     ..
 *     .. Array Arguments ..
-*      COMPLEX*16       A( LDA,* ), U( LDU,* ), V( LDV,* ), CWORK( * )
+*      COMPLEX*16       A( LDA, * ), U( LDU, * ), V( LDV, * ), CWORK( * )
 *      DOUBLE PRECISION S( * ), RWORK( * )
 *      INTEGER          IWORK( * )
 *
@@ -79,7 +79,7 @@
 *  JOBU is CHARACTER*1
 *  = 'A' All M left singular vectors are computed and returned in the
 *        matrix U. See the description of U.
-*  = 'S' or 'U' N=min(M,N) left singular vectors are computed and returned
+*  = 'S' or 'U' N = min(M,N) left singular vectors are computed and returned
 *        in the matrix U. See the description of U.
 *  = 'R' Numerical rank NUMRANK is determined and only NUMRANK left singular
 *        vectors are computed and returned in the matrix U.
@@ -94,9 +94,9 @@
 *  JOBV is CHARACTER*1
 *  = 'A', 'V' All N right singular vectors are computed and returned in
 *        the matrix V.
-*  = 'R' Numerical rank NUMRANK is determined and only NUMARNK right singular
+*  = 'R' Numerical rank NUMRANK is determined and only NUMRANK right singular
 *        vectors are computed and returned in the matrix V. This option is
-*        allowed only if JOBU='R' or JOBU='N'; otherwise it is illegal.
+*        allowed only if JOBU = 'R' or JOBU = 'N'; otherwise it is illegal.
 *  = 'N' The right singular vectors are not computed.
 *..............................................................................
 *  M (input)
@@ -105,7 +105,7 @@
 *..............................................................................
 *  N (input)
 *  N is INTEGER
-*  The number of columns of the input matrix A.  M >= N>=0.
+*  The number of columns of the input matrix A.  M >= N >= 0.
 *..............................................................................
 *  A (input/workspace/output)
 *  A is COMPLEX array of dimensions LDA x N
@@ -160,7 +160,7 @@
 *  NUMRANK is INTEGER
 *  NUMRANK is the numerical rank first determined after the rank
 *  revealing QR factorization, following the strategy specified by the
-*  value of JOBA. If JOBV='R' and JOBU='R', only NUMRANK
+*  value of JOBA. If JOBV = 'R' and JOBU = 'R', only NUMRANK
 *  leading singular values and vectors are then requested in the call
 *  of ZGESVD. The final value of NUMRANK might be further reduced if
 *  some singular values are computed as zeros.
@@ -173,7 +173,7 @@
 *  rank revealing QR factorization.
 *  If JOBP = 'P', IWORK(N+1:N+M-1) contains the indices of the sequence
 *  of row swaps used in row pivoting. These can be used to restore the
-*  left singular vectors in the case JOBU='F'.
+*  left singular vectors in the case JOBU = 'F'.
 *..............................................................................
 *  CWORK (workspace/output)
 *  CWORK is COMPLEX array of size LCWORK, used as a workspace.
@@ -190,9 +190,9 @@
 *  Let  LWQP3 = N+1,  LWCON = 2*N, and let
 *  LWUNQ = { MAX( N, 1 ),  if JOBU = 'R', 'S', or 'U'
 *          { MAX( M, 1 ),  if JOBU = 'A'
-*  LWSVD = MAX(3*N, 1 )
+*  LWSVD = MAX( 3*N, 1 )
 *  LWLQF = MAX( N/2, 1 ), LWSVD2 = MAX( 3*(N/2), 1 ), LWUNLQ = MAX( N, 1 ),
-*  LWQRF = MAX(N/2,1), LWUNQ2 = MAX(N,1)
+*  LWQRF = MAX( N/2, 1 ), LWUNQ2 = MAX( N, 1 )
 *  Then the minimal value of LCWORK is:
 *  = MAX( N + LWQP3, LWSVD )        if only the singular values are needed;
 *  = MAX( N + LWQP3, LWCON, LWSVD ) if only the singular values are needed,
@@ -206,30 +206,30 @@
 *
 *  = N + MAX( LWQP3, LWSVD )        if the singular values and the right
 *                                   singular vectors are requested;
-*  = N + MAX( LWQP3, LWCON,LWSVD )  if the singular values and the right
+*  = N + MAX( LWQP3, LWCON, LWSVD ) if the singular values and the right
 *                                   singular vectors are requested, and also
 *                                   a scaled condition etimate requested;
 *
-*  = N + MAX( LWQP3, LWSVD, LWUNQ ) if the full SVD is requested with JOBV='R';
+*  = N + MAX( LWQP3, LWSVD, LWUNQ ) if the full SVD is requested with JOBV = 'R';
 *                                   independent of JOBR;
 *  = N + MAX( LWQP3, LWCON, LWSVD, LWUNQ ) if the full SVD is requested,
-*                                   JOBV='R' and, also a scaled condition
+*                                   JOBV = 'R' and, also a scaled condition
 *                                   estimate requested; independent of JOBR;
 *  = MAX( N + MAX( LWQP3, LWSVD, LWUNQ ),
 *         N + MAX( LWQP3, N/2+LWLQF, N/2+LWSVD2, N/2+LWUNLQ, LWUNQ) ) if the
-*                         full SVD is requested with JOBV='A' or 'V', and
+*                         full SVD is requested with JOBV = 'A' or 'V', and
 *                         JOBR ='N'
 *  = MAX( N + MAX( LWQP3, LWCON, LWSVD, LWUNQ ),
 *         N + MAX( LWQP3, LWCON, N/2+LWLQF, N/2+LWSVD2, N/2+LWUNLQ, LWUNQ ) )
-*                         if the full SVD is requested with JOBV='A' or 'V', and
+*                         if the full SVD is requested with JOBV = 'A' or 'V', and
 *                         JOBR ='N', and also a scaled condition number estimate
 *                         requested.
 *  = MAX( N + MAX( LWQP3, LWSVD, LWUNQ ),
 *         N + MAX( LWQP3, N/2+LWQRF, N/2+LWSVD2, N/2+LWUNQ2, LWUNQ ) ) if the
-*                         full SVD is requested with JOBV='A', 'V', and JOBR ='T'
+*                         full SVD is requested with JOBV = 'A', 'V', and JOBR ='T'
 *  = MAX( N + MAX( LWQP3, LWCON, LWSVD, LWUNQ ),
 *         N + MAX( LWQP3, LWCON, N/2+LWQRF, N/2+LWSVD2, N/2+LWUNQ2, LWUNQ ) )
-*                         if the full SVD is requested with JOBV='A', 'V' and
+*                         if the full SVD is requested with JOBV = 'A', 'V' and
 *                         JOBR ='T', and also a scaled condition number estimate
 *                         requested.
 *  Finally, LCWORK must be at least two: LCWORK = MAX( 2, LCWORK ).
@@ -244,17 +244,17 @@
 *  number of column scaled A. If A = C * D where D is diagonal and C
 *  has unit columns in the Euclidean norm, then, assuming full column rank,
 *  N^(-1/4) * RWORK(1) <= ||pinv(C)||_2 <= N^(1/4) * RWORK(1).
-*  Otherwise, RWORK(1)=-1.
+*  Otherwise, RWORK(1) = -1.
 *  2. RWORK(2) contains the number of singular values computed as
 *  exact zeros in ZGESVD applied to the upper triangular or trapeziodal
 *  R (from the initial QR factorization). In case of early exit (no call to
-*  ZGESVD, such as in the case of zero matrix) RWORK(2)=-1.
+*  ZGESVD, such as in the case of zero matrix) RWORK(2) = -1.
 *..............................................................................
 *  LRWORK (input)
 *  LRWORK is INTEGER.
 *  The dimension of the array RWORK.
-*  If JOBP ='P', then LRWORK >= MAX(2, M, 5*N).
-*  Otherwise, LRWORK >= MAX(2,5*N)
+*  If JOBP ='P', then LRWORK >= MAX(2, M, 5*N);
+*  Otherwise, LRWORK >= MAX(2, 5*N).
 *..............................................................................
 *  INFO
 *  INFO is INTEGER
@@ -304,7 +304,7 @@
       INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LCWORK, LRWORK,  INFO
 *     ..
 *     .. Array Arguments ..
-      COMPLEX*16       A( LDA,* ), U( LDU,* ), V( LDV,* ), CWORK( * )
+      COMPLEX*16       A( LDA, * ), U( LDU, * ), V( LDV, * ), CWORK( * )
       DOUBLE PRECISION S( * ), RWORK( * )
       INTEGER          IWORK( * )
 *
