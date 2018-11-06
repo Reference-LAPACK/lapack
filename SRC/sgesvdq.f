@@ -3,7 +3,7 @@
 *  ===========
 *
 *      SUBROUTINE SGESVDQ( JOBA, JOBP, JOBR, JOBU, JOBV, M, N, A, LDA,
-*     $                    S, U, LDU, V, LDV, NUMRANK, IWORK,
+*     $                    S, U, LDU, V, LDV, NUMRANK, IWORK, LIWORK,
 *     $                    WORK, LWORK, RWORK, LRWORK, INFO )
 *
 * SIGMA library, xGESVDQ section updated February 2016.
@@ -16,7 +16,8 @@
 *     .. Scalar Arguments ..
 *      IMPLICIT    NONE
 *      CHARACTER   JOBA, JOBP, JOBR, JOBU, JOBV
-*      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LWORK, LRWORK,  INFO
+*      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LIWORK, LWORK, LRWORK,
+*                  INFO
 *     ..
 *     .. Array Arguments ..
 *      REAL        A( LDA, * ), U( LDU, * ), V( LDV, * ), WORK( * )
@@ -166,25 +167,38 @@
 *  some singular values are computed as zeros.
 *..............................................................................
 *  IWORK (workspace/output)
-*  IWORK is INTEGER array of length
-*  N + M - 1,  if JOBP = 'P', JOBA .NE. 'E'
-*  N           if JOBP = 'N', JOBA .NE. 'E'
-*  N + M - 1 + N, if JOBP = 'P', JOBA = 'E'
-*  N + N          if JOBP = 'N', JOBA = 'E'
+*  IWORK is INTEGER array, dimension (max(1, LIWORK)).
 *  On exit, IWORK(1:N) contains column pivoting permutation of the
 *  rank revealing QR factorization.
 *  If JOBP = 'P', IWORK(N+1:N+M-1) contains the indices of the sequence
 *  of row swaps used in row pivoting. These can be used to restore the
 *  left singular vectors in the case JOBU = 'F'.
+*
+*  If LIWORK, LWORK, or LRWORK = -1, then on exit, if INFO = 0,
+*  LIWORK(1) returns the minimal LIWORK.
+*..............................................................................
+*  LIWORK (input)
+*  LIWORK is INTEGER
+*  The dimension of the array IWORK.
+*  LIWORK >= N + M - 1,     if JOBP = 'P' and JOBA .NE. 'E';
+*  LIWORK >= N              if JOBP = 'N' and JOBA .NE. 'E';
+*  LIWORK >= N + M - 1 + N, if JOBP = 'P' and JOBA = 'E';
+*  LIWORK >= N + N          if JOBP = 'N' and JOBA = 'E'.
+*
+*  If LIWORK = -1, then a workspace query is assumed; the routine
+*  only calculates and returns the optimal and minimal sizes
+*  for the WORK, IWORK, and RWORK arrays, and no error
+*  message related to LWORK is issued by XERBLA.
 *..............................................................................
 *  WORK (workspace/output)
-*  WORK is REAL array of size LWORK, used as a workspace.
+*  WORK is REAL array, dimension (max(2, LWORK)), used as a workspace.
 *  On exit, if, on entry, LWORK.NE.-1, WORK(1:N) contains parameters
 *  needed to recover the Q factor from the QR factorization computed by
-*  SGEQP3. If, on entry, LWORK = -1, then then a workspace query is
-*  assumed and WORK must be of length at least two. On exit WORK(1)
-*  contains the optimal length of WORK and  WORK(2) contains the
-*  minimal length.
+*  SGEQP3.
+*
+*  If LIWORK, LWORK, or LRWORK = -1, then on exit, if INFO = 0,
+*  WORK(1) returns the optimal LWORK, and
+*  WORK(2) returns the minimal LWORK.
 *..............................................................................
 *  LWORK (input/output)
 *  LWORK is INTEGER
@@ -235,12 +249,14 @@
 *                         JOBR ='T', and also a scaled condition number estimate
 *                         requested.
 *  Finally, LWORK must be at least two: LWORK = MAX( 2, LWORK ).
-*  If, on entry, LWORK = -1, (workspace query) then the optimal and the
-*  minimal length of WORK are computed and returned in the first two entries
-*  of WORK. See the description of WORK.
+*
+*  If LWORK = -1, then a workspace query is assumed; the routine
+*  only calculates and returns the optimal and minimal sizes
+*  for the WORK, IWORK, and RWORK arrays, and no error
+*  message related to LWORK is issued by XERBLA.
 *..............................................................................
 *  RWORK (workspace/output)
-*  RWORK is REAL array of size LRWORK
+*  RWORK is REAL array, dimension (max(1, LRWORK)).
 *  On exit,
 *  1. If JOBA = 'E', RWORK(1) contains an estimate of the condition
 *  number of column scaled A. If A = C * D where D is diagonal and C
@@ -251,12 +267,20 @@
 *  exact zeros in SGESVD applied to the upper triangular or trapeziodal
 *  R (from the initial QR factorization). In case of early exit (no call to
 *  SGESVD, such as in the case of zero matrix) RWORK(2) = -1.
+*
+*  If LIWORK, LWORK, or LRWORK = -1, then on exit, if INFO = 0,
+*  RWORK(1) returns the minimal LRWORK.
 *..............................................................................
 *  LRWORK (input)
 *  LRWORK is INTEGER.
 *  The dimension of the array RWORK.
 *  If JOBP ='P', then LRWORK >= MAX(2, M).
 *  Otherwise, LRWORK >= 2
+*
+*  If LRWORK = -1, then a workspace query is assumed; the routine
+*  only calculates and returns the optimal and minimal sizes
+*  for the WORK, IWORK, and RWORK arrays, and no error
+*  message related to LWORK is issued by XERBLA.
 *..............................................................................
 *  INFO
 *  INFO is INTEGER
@@ -298,12 +322,13 @@
 *"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 *
       SUBROUTINE SGESVDQ( JOBA, JOBP, JOBR, JOBU, JOBV, M, N, A, LDA,
-     $                    S, U, LDU, V, LDV, NUMRANK, IWORK,
+     $                    S, U, LDU, V, LDV, NUMRANK, IWORK, LIWORK,
      $                    WORK, LWORK, RWORK, LRWORK, INFO )
 *     .. Scalar Arguments ..
       IMPLICIT    NONE
       CHARACTER   JOBA, JOBP, JOBR, JOBU, JOBV
-      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LWORK, LRWORK,  INFO
+      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LIWORK, LWORK, LRWORK,
+     $            INFO
 *     ..
 *     .. Array Arguments ..
       REAL        A( LDA, * ), U( LDU, * ), V( LDV, * ), WORK( * )
@@ -320,7 +345,8 @@
       INTEGER     LWCON, LWQP3, LWRK_SGELQF, LWRK_SGESVD, LWRK_SGESVD2,
      $            LWRK_SGEQP3,  LWRK_SGEQRF, LWRK_SORMLQ, LWRK_SORMQR,
      $            LWRK_SORMQR2, LWLQF, LWQRF, LWSVD, LWSVD2, LWORQ,
-     $            LWORQ2, LWUNLQ, MINWRK, MINWRK2, OPTWRK, OPTWRK2
+     $            LWORQ2, LWUNLQ, MINWRK, MINWRK2, OPTWRK, OPTWRK2,
+     $            IMINWRK, RMINWRK
       LOGICAL     ACCLA,  ACCLM, ACCLH, ASCALED, CONDA, DNTWU,  DNTWV,
      $            LQUERY, LSVC0, LSVEC, ROWPRM,  RSVEC, RTRANS, WNTUA,
      $            WNTUF,  WNTUR, WNTUS, WNTVA,   WNTVR
@@ -364,7 +390,22 @@
       ROWPRM = LSAME( JOBP, 'P' )
       RTRANS = LSAME( JOBR, 'T' )
 *
-      LQUERY = ( LWORK .EQ. -1 )
+      IF ( ROWPRM ) THEN
+         IF ( CONDA ) THEN
+            IMINWRK = MAX( 1, N + M - 1 + N )
+         ELSE
+            IMINWRK = MAX( 1, N + M - 1 )
+         END IF
+         RMINWRK = MAX( 2, M )
+      ELSE
+         IF ( CONDA ) THEN
+            IMINWRK = MAX( 1, N + N )
+         ELSE
+            IMINWRK = MAX( 1, N )
+         END IF
+         RMINWRK = 2
+      END IF
+      LQUERY = (LIWORK .EQ. -1 .OR. LWORK .EQ. -1 .OR. LRWORK .EQ. -1)
       INFO  = 0
       IF ( .NOT. ( ACCLA .OR. ACCLM .OR. ACCLH ) ) THEN
          INFO = -1
@@ -390,6 +431,8 @@
       ELSE IF ( LDV.LT.1 .OR. ( RSVEC .AND. LDV.LT.N ) .OR.
      $          ( CONDA .AND. LDV.LT.N ) ) THEN
          INFO = -14
+      ELSE IF ( LIWORK .LT. IMINWRK .AND. .NOT. LQUERY ) THEN
+         INFO = -17
       END IF
 *
 *
@@ -520,7 +563,7 @@
                  IF ( CONDA ) MINWRK = MAX( MINWRK, LWCON )
                  MINWRK = MINWRK + N
                  IF ( WNTVA ) THEN
-*                   .. minimal workspace  length for N/2 x N SGELQF
+*                   .. minimal workspace length for N/2 x N SGELQF
                     LWLQF  = MAX( N/2, 1 )
                     LWSVD2 = MAX( 5 * (N/2), 1 )
                     LWUNLQ = MAX( N , 1 )
@@ -582,22 +625,21 @@
 *
          MINWRK = MAX( 2, MINWRK )
          OPTWRK = MAX( 2, OPTWRK )
-         IF ( LWORK .LT. MINWRK .AND. (.NOT.LQUERY) ) INFO = - 18
+         IF ( LWORK .LT. MINWRK .AND. (.NOT.LQUERY) ) INFO = -19
 *
       END IF
 *
+      IF (INFO .EQ. 0 .AND. LRWORK .LT. RMINWRK .AND. .NOT. LQUERY) THEN
+         INFO = -21
+      END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'SGESVDQ', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
+          IWORK(1) = IMINWRK
           WORK(1) = OPTWRK
           WORK(2) = MINWRK
-          RETURN
-      END IF
-      IF ( (ROWPRM .AND. (LRWORK .LT. MAX( 2, M ))) .OR.
-     $     ((.NOT.ROWPRM) .AND. (LRWORK .LT. 2))) THEN
-          INFO = -20
-          CALL XERBLA( 'SGESVDQ', -INFO )
+          RWORK(1) = RMINWRK
           RETURN
       END IF
 *
@@ -623,7 +665,7 @@
 *               .. check for NaN's and Inf's
                 IF ( ( RWORK(p) .NE. RWORK(p) ) .OR.
      $               ( (RWORK(p)*ZERO) .NE. ZERO ) ) THEN
-                    INFO = - 8
+                    INFO = -8
                     CALL XERBLA( 'SGESVDQ', -INFO )
                     RETURN
                 END IF
@@ -680,7 +722,7 @@
           RTMP = SLANGE( 'M', M, N, A, LDA, RDUMMY )
           IF ( ( RTMP .NE. RTMP ) .OR.
      $         ( (RTMP*ZERO) .NE. ZERO ) ) THEN
-               INFO = - 8
+               INFO = -8
                CALL XERBLA( 'SGESVDQ', -INFO )
                RETURN
           END IF

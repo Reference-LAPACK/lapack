@@ -3,7 +3,7 @@
 *  ===========
 *
 *      SUBROUTINE CGESVDQ( JOBA, JOBP, JOBR, JOBU, JOBV, M, N, A, LDA,
-*     $                    S, U, LDU, V, LDV, NUMRANK, IWORK,
+*     $                    S, U, LDU, V, LDV, NUMRANK, IWORK, LIWORK,
 *     $                    CWORK, LCWORK, RWORK, LRWORK, INFO )
 *
 * SIGMA library, xGESVDQ section updated February 2016.
@@ -16,7 +16,8 @@
 *     .. Scalar Arguments ..
 *      IMPLICIT    NONE
 *      CHARACTER   JOBA, JOBP, JOBR, JOBU, JOBV
-*      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LCWORK, LRWORK,  INFO
+*      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LIWORK, LCWORK, LRWORK,
+*                  INFO
 *     ..
 *     .. Array Arguments ..
 *      COMPLEX     A( LDA, * ), U( LDU, * ), V( LDV, * ), CWORK( * )
@@ -166,23 +167,36 @@
 *  some singular values are computed as zeros.
 *..............................................................................
 *  IWORK (workspace/output)
-*  IWORK is INTEGER array of length
-*  N + M - 1,  if JOBP = 'P',
-*  N           if JOBP = 'N'
+*  IWORK is INTEGER array, dimension (max(1, LIWORK)).
 *  On exit, IWORK(1:N) contains column pivoting permutation of the
 *  rank revealing QR factorization.
 *  If JOBP = 'P', IWORK(N+1:N+M-1) contains the indices of the sequence
 *  of row swaps used in row pivoting. These can be used to restore the
 *  left singular vectors in the case JOBU = 'F'.
+*
+*  If LIWORK, LCWORK, or LRWORK = -1, then on exit, if INFO = 0,
+*  LIWORK(1) returns the minimal LIWORK.
+*..............................................................................
+*  LIWORK (input)
+*  LIWORK is INTEGER
+*  The dimension of the array IWORK.
+*  LIWORK >= N + M - 1,  if JOBP = 'P';
+*  LIWORK >= N           if JOBP = 'N'.
+*
+*  If LIWORK = -1, then a workspace query is assumed; the routine
+*  only calculates and returns the optimal and minimal sizes
+*  for the CWORK, IWORK, and RWORK arrays, and no error
+*  message related to LCWORK is issued by XERBLA.
 *..............................................................................
 *  CWORK (workspace/output)
-*  CWORK is COMPLEX array of size LCWORK, used as a workspace.
+*  CWORK is COMPLEX array, dimension (max(2, LCWORK)), used as a workspace.
 *  On exit, if, on entry, LCWORK.NE.-1, CWORK(1:N) contains parameters
 *  needed to recover the Q factor from the QR factorization computed by
-*  CGEQP3. If, on entry, LCWORK = -1, then then a workspace query is
-*  assumed and CWORK must be of length at least two. On exit CWORK(1)
-*  contains the optimal length of CWORK and  CWORK(2) contains the
-*  minimal length.
+*  CGEQP3.
+*
+*  If LIWORK, LCWORK, or LRWORK = -1, then on exit, if INFO = 0,
+*  CWORK(1) returns the optimal LCWORK, and
+*  CWORK(2) returns the minimal LCWORK.
 *..............................................................................
 *  LCWORK (input/output)
 *  LCWORK is INTEGER
@@ -233,12 +247,14 @@
 *                         JOBR ='T', and also a scaled condition number estimate
 *                         requested.
 *  Finally, LCWORK must be at least two: LCWORK = MAX( 2, LCWORK ).
-*  If, on entry, LCWORK = -1, (workspace query) then the optimal and the
-*  minimal length of CWORK are computed and returned in the first two entries
-*  of CWORK. See the description of CWORK.
+*
+*  If LCWORK = -1, then a workspace query is assumed; the routine
+*  only calculates and returns the optimal and minimal sizes
+*  for the CWORK, IWORK, and RWORK arrays, and no error
+*  message related to LCWORK is issued by XERBLA.
 *..............................................................................
 *  RWORK (workspace/output)
-*  RWORK is REAL array of size LRWORK
+*  RWORK is REAL array, dimension (max(1, LRWORK)).
 *  On exit,
 *  1. If JOBA = 'E', RWORK(1) contains an estimate of the condition
 *  number of column scaled A. If A = C * D where D is diagonal and C
@@ -249,12 +265,20 @@
 *  exact zeros in CGESVD applied to the upper triangular or trapeziodal
 *  R (from the initial QR factorization). In case of early exit (no call to
 *  CGESVD, such as in the case of zero matrix) RWORK(2) = -1.
+*
+*  If LIWORK, LCWORK, or LRWORK = -1, then on exit, if INFO = 0,
+*  RWORK(1) returns the minimal LRWORK.
 *..............................................................................
 *  LRWORK (input)
 *  LRWORK is INTEGER.
 *  The dimension of the array RWORK.
 *  If JOBP ='P', then LRWORK >= MAX(2, M, 5*N);
 *  Otherwise, LRWORK >= MAX(2, 5*N).
+*
+*  If LRWORK = -1, then a workspace query is assumed; the routine
+*  only calculates and returns the optimal and minimal sizes
+*  for the CWORK, IWORK, and RWORK arrays, and no error
+*  message related to LCWORK is issued by XERBLA.
 *..............................................................................
 *  INFO
 *  INFO is INTEGER
@@ -296,12 +320,13 @@
 *"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 *
       SUBROUTINE CGESVDQ( JOBA, JOBP, JOBR, JOBU, JOBV, M, N, A, LDA,
-     $                    S, U, LDU, V, LDV, NUMRANK, IWORK,
+     $                    S, U, LDU, V, LDV, NUMRANK, IWORK, LIWORK,
      $                    CWORK, LCWORK, RWORK, LRWORK, INFO )
 *     .. Scalar Arguments ..
       IMPLICIT    NONE
       CHARACTER   JOBA, JOBP, JOBR, JOBU, JOBV
-      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LCWORK, LRWORK,  INFO
+      INTEGER     M, N, LDA, LDU, LDV, NUMRANK, LIWORK, LCWORK, LRWORK,
+     $            INFO
 *     ..
 *     .. Array Arguments ..
       COMPLEX     A( LDA, * ), U( LDU, * ), V( LDV, * ), CWORK( * )
@@ -320,7 +345,8 @@
       INTEGER     LWCON, LWQP3, LWRK_CGELQF, LWRK_CGESVD, LWRK_CGESVD2,
      $            LWRK_CGEQP3, LWRK_CGEQRF, LWRK_CUNMLQ, LWRK_CUNMQR,
      $            LWRK_CUNMQR2, LWLQF, LWQRF, LWSVD, LWSVD2, LWUNQ,
-     $            LWUNQ2, LWUNLQ, MINWRK, MINWRK2, OPTWRK, OPTWRK2
+     $            LWUNQ2, LWUNLQ, MINWRK, MINWRK2, OPTWRK, OPTWRK2,
+     $            IMINWRK, RMINWRK
       LOGICAL     ACCLA,  ACCLM, ACCLH, ASCALED, CONDA, DNTWU,  DNTWV,
      $            LQUERY, LSVC0, LSVEC, ROWPRM,  RSVEC, RTRANS, WNTUA,
      $            WNTUF,  WNTUR, WNTUS, WNTVA,   WNTVR
@@ -366,7 +392,14 @@
       ROWPRM = LSAME( JOBP, 'P' )
       RTRANS = LSAME( JOBR, 'T' )
 *
-      LQUERY = ( LCWORK .EQ. -1 )
+      IF ( ROWPRM ) THEN
+         IMINWRK = MAX( 1, N + M - 1 )
+         RMINWRK = MAX( 2, M, 5*N )
+      ELSE
+         IMINWRK = MAX( 1, N )
+         RMINWRK = MAX( 2, 5*N )
+      END IF
+      LQUERY = (LIWORK .EQ. -1 .OR. LCWORK .EQ. -1 .OR. LRWORK .EQ. -1)
       INFO  = 0
       IF ( .NOT. ( ACCLA .OR. ACCLM .OR. ACCLH ) ) THEN
          INFO = -1
@@ -392,6 +425,8 @@
       ELSE IF ( LDV.LT.1 .OR. ( RSVEC .AND. LDV.LT.N ) .OR.
      $          ( CONDA .AND. LDV.LT.N ) ) THEN
          INFO = -14
+      ELSE IF ( LIWORK .LT. IMINWRK .AND. .NOT. LQUERY ) THEN
+         INFO = -17
       END IF
 *
 *
@@ -584,22 +619,21 @@
 *
          MINWRK = MAX( 2, MINWRK )
          OPTWRK = MAX( 2, OPTWRK )
-         IF ( LCWORK .LT. MINWRK .AND. (.NOT.LQUERY) ) INFO = - 18
+         IF ( LCWORK .LT. MINWRK .AND. (.NOT.LQUERY) ) INFO = -19
 *
       END IF
 *
+      IF (INFO .EQ. 0 .AND. LRWORK .LT. RMINWRK .AND. .NOT. LQUERY) THEN
+         INFO = -21
+      END IF
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'CGESVDQ', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
+          IWORK(1) = IMINWRK
           CWORK(1) = OPTWRK
           CWORK(2) = MINWRK
-          RETURN
-      END IF
-      IF ( (ROWPRM .AND. (LRWORK .LT. MAX( 2, M, 5*N ))) .OR.
-     $     ((.NOT.ROWPRM) .AND. (LRWORK .LT. MAX( 2, 5*N )))) THEN
-          INFO = -20
-          CALL XERBLA( 'CGESVDQ', -INFO )
+          RWORK(1) = RMINWRK
           RETURN
       END IF
 *
