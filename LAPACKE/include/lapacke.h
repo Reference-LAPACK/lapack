@@ -1935,11 +1935,11 @@ lapack_int LAPACKE_zheevx( int matrix_layout, char jobz, char range, char uplo,
 
 lapack_int LAPACKE_chegst( int matrix_layout, lapack_int itype, char uplo,
                            lapack_int n, lapack_complex_float* a,
-                           lapack_int lda, const lapack_complex_float* b,
+                           lapack_int lda, lapack_complex_float* b,
                            lapack_int ldb );
 lapack_int LAPACKE_zhegst( int matrix_layout, lapack_int itype, char uplo,
                            lapack_int n, lapack_complex_double* a,
-                           lapack_int lda, const lapack_complex_double* b,
+                           lapack_int lda, lapack_complex_double* b,
                            lapack_int ldb );
 
 lapack_int LAPACKE_chegv( int matrix_layout, lapack_int itype, char jobz,
@@ -6961,11 +6961,11 @@ lapack_int LAPACKE_zheevx_work( int matrix_layout, char jobz, char range,
 
 lapack_int LAPACKE_chegst_work( int matrix_layout, lapack_int itype, char uplo,
                                 lapack_int n, lapack_complex_float* a,
-                                lapack_int lda, const lapack_complex_float* b,
+                                lapack_int lda, lapack_complex_float* b,
                                 lapack_int ldb );
 lapack_int LAPACKE_zhegst_work( int matrix_layout, lapack_int itype, char uplo,
                                 lapack_int n, lapack_complex_double* a,
-                                lapack_int lda, const lapack_complex_double* b,
+                                lapack_int lda, lapack_complex_double* b,
                                 lapack_int ldb );
 
 lapack_int LAPACKE_chegv_work( int matrix_layout, lapack_int itype, char jobz,
