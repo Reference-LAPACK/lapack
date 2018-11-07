@@ -34,7 +34,7 @@ References:For a more detailed description please refer to
 =========
 
 These variants are compiled by default in the build process but they are not tested by default.
-The build process creates one new library per variants in the four arithmetics (single real/double real/single complex/double complex).
+The build process creates one new library per variants in the four arithmetic (single real/double real/single complex/double complex).
 The libraries are in the SRC/VARIANTS directory.
 
 Corresponding libraries created in SRC/VARIANTS:

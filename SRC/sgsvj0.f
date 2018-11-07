@@ -1045,7 +1045,7 @@
 
  1993 CONTINUE
 *     end i=1:NSWEEP loop
-* #:) Reaching this point means that the procedure has comleted the given
+* #:) Reaching this point means that the procedure has completed the given
 *     number of iterations.
       INFO = NSWEEP - 1
       GO TO 1995
