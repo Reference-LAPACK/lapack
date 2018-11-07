@@ -103,6 +103,22 @@
 *>          no error message related to LTB is issued by XERBLA.
 *> \endverbatim
 *>
+*> \param[out] IPIV
+*> \verbatim
+*>          IPIV is INTEGER array, dimension (N)
+*>          On exit, it contains the details of the interchanges, i.e.,
+*>          the row and column k of A were interchanged with the
+*>          row and column IPIV(k).
+*> \endverbatim
+*>
+*> \param[out] IPIV2
+*> \verbatim
+*>          IPIV2 is INTEGER array, dimension (N)
+*>          On exit, it contains the details of the interchanges, i.e.,
+*>          the row and column k of T were interchanged with the
+*>          row and column IPIV2(k).
+*> \endverbatim
+*>
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is DOUBLE PRECISION workspace of size LWORK
@@ -118,22 +134,6 @@
 *>          routine only calculates the optimal size of the WORK array,
 *>          returns this value as the first entry of the WORK array, and
 *>          no error message related to LWORK is issued by XERBLA.
-*> \endverbatim
-*>
-*> \param[out] IPIV
-*> \verbatim
-*>          IPIV is INTEGER array, dimension (N)
-*>          On exit, it contains the details of the interchanges, i.e.,
-*>          the row and column k of A were interchanged with the
-*>          row and column IPIV(k).
-*> \endverbatim
-*>
-*> \param[out] IPIV2
-*> \verbatim
-*>          IPIV2 is INTEGER array, dimension (N)
-*>          On exit, it contains the details of the interchanges, i.e.,
-*>          the row and column k of T were interchanged with the
-*>          row and column IPIV2(k).
 *> \endverbatim
 *>
 *> \param[out] INFO
