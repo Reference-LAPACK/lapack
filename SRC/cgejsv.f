@@ -1763,7 +1763,7 @@
             ELSE
 *
 *              .. ill-conditioned case: second QRF with pivoting
-*              Note that windowed pivoting would be equaly good
+*              Note that windowed pivoting would be equally good
 *              numerically, and more run-time efficient. So, in
 *              an optimal implementation, the next call to CGEQP3
 *              should be replaced with eg. CALL CGEQPX (ACM TOMS #782)
@@ -1821,7 +1821,7 @@
 *
                IF ( CONDR2 .GE. COND_OK ) THEN
 *                 .. save the Householder vectors used for Q3
-*                 (this overwrittes the copy of R2, as it will not be
+*                 (this overwrites the copy of R2, as it will not be
 *                 needed in this branch, but it does not overwritte the
 *                 Huseholder vectors of Q2.).
                   CALL CLACPY( 'U', NR, NR, V, LDV, CWORK(2*N+1), N )

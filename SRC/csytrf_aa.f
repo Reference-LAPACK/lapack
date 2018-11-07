@@ -256,7 +256,7 @@
      $                   A( MAX(1, J), J+1 ), LDA,
      $                   IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
 *
-*        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
+*        Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J
@@ -375,7 +375,7 @@
      $                   A( J+1, MAX(1, J) ), LDA,
      $                   IPIV( J+1 ), WORK, N, WORK( N*NB+1 ) )
 *
-*        Ajust IPIV and apply it back (J-th step picks (J+1)-th pivot)
+*        Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot)
 *
          DO J2 = J+2, MIN(N, J+JB+1)
             IPIV( J2 ) = IPIV( J2 ) + J

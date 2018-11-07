@@ -717,7 +717,7 @@
 *
 *        Standard absolute error bound suffices. All sigma_i with
 *        sigma_i < N*EPS*||A||_F are flushed to zero. This is an
-*        agressive enforcement of lower numerical rank by introducing a
+*        aggressive enforcement of lower numerical rank by introducing a
 *        backward error of the order of N*EPS*||A||_F.
          NR = 1  
          RTMP = SQRT(DBLE(N))*EPSLN
@@ -728,7 +728,7 @@
  3002    CONTINUE          
 *
       ELSEIF ( ACCLM ) THEN 
-*        .. similarly as above, only slightly more gentle (less agressive).
+*        .. similarly as above, only slightly more gentle (less aggressive).
 *        Sudden drop on the diagonal of R is used as the criterion for being
 *        close-to-rank-deficient. The threshold is set to EPSLN=DLAMCH('E').
 *        [[This can be made more flexible by replacing this hard-coded value
@@ -1039,7 +1039,7 @@
 *            vectors of R**H  
 *               [[The optimal ratio N/NR for using QRF instead of padding 
 *                 with zeros. Here hard coded to 2; it must be at least 
-*                 two due to work space contraints.]]
+*                 two due to work space constraints.]]
 *               OPTRATIO = ILAENV(6, 'ZGESVD', 'S' // 'O', NR,N,0,0)
 *               OPTRATIO = MAX( OPTRATIO, 2 ) 
                 OPTRATIO = 2 
@@ -1156,7 +1156,7 @@
 *               is then N1 (N or M)
 *               [[The optimal ratio N/NR for using LQ instead of padding 
 *                 with zeros. Here hard coded to 2; it must be at least 
-*                 two due to work space contraints.]]
+*                 two due to work space constraints.]]
 *               OPTRATIO = ILAENV(6, 'ZGESVD', 'S' // 'O', NR,N,0,0)
 *               OPTRATIO = MAX( OPTRATIO, 2 ) 
                OPTRATIO = 2 

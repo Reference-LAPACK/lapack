@@ -160,7 +160,7 @@
 *>                  If INFO > 0 and WANTT is .FALSE., then on exit,
 *>                  the remaining unconverged eigenvalues are the
 *>                  eigenvalues of the upper Hessenberg matrix rows
-*>                  and columns ILO thorugh INFO of the final, output
+*>                  and columns ILO through INFO of the final, output
 *>                  value of H.
 *>
 *>                  If INFO > 0 and WANTT is .TRUE., then on exit
