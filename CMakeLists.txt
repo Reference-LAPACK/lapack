@@ -316,6 +316,31 @@ if(LAPACKE)
 endif()
 
 # --------------------------------------------------
+# BLAS++ / LAPACK++
+option(BLAS++ "Build BLAS++" OFF)
+option(LAPACK++ "Build LAPACK++" OFF)
+
+if (BLAS++)
+  message(STATUS "BLAS++ enable")
+  message(STATUS "----------------")
+  message(STATUS "Thank you for your interest in BLAS++, a newly developed C++ API for BLAS library")
+  message(STATUS "The objective of BLAS++ is to provide a convenient, performance oriented API for development in the C++ language, that, for the most part, preserves established conventions, while, at the same time, takes advantages of modern C++ features, such as: namespaces, templates, exceptions, etc.")
+  message(STATUS "We are still working on integrating BLAS++ in our library. For the moment, you can download directly blas++ from https://bitbucket.org/icl/blaspp")
+  message(STATUS "For support BLAS++ related question, please email: slate-user@icl.utk.edu")
+  message(STATUS "----------------")
+endif()
+
+if (LAPACK++ )
+  message(STATUS "LAPACK++ enable")
+  message(STATUS "----------------")
+  message(STATUS "Thank you for your interest in LAPACK++ , a newly developed C++ API for LAPACK library")
+  message(STATUS "The objective of LAPACK++ is to provide a convenient, performance oriented API for development in the C++ language, that, for the most part, preserves established conventions, while, at the same time, takes advantages of modern C++ features, such as: namespaces, templates, exceptions, etc.")
+  message(STATUS "We are still working on integrating LAPACK++ in our library. For the moment, you can download directly blas++ from https://bitbucket.org/icl/lapackpp")
+  message(STATUS "For support LAPACK++ related question, please email: slate-user@icl.utk.edu")
+  message(STATUS "----------------")
+endif()
+
+# --------------------------------------------------
 # CPACK Packaging
 
 set(CPACK_PACKAGE_NAME "LAPACK")
