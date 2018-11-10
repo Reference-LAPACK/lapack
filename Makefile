@@ -23,6 +23,18 @@ lapacklib:
 lapackelib:
 	$(MAKE) -C LAPACKE
 
+blaspplib:
+	@echo "Thank you for your interest in BLAS++, a newly developed C++ API for BLAS library"
+	@echo "The objective of BLAS++ is to provide a convenient, performance oriented API for development in the C++ language, that, for the most part, preserves established conventions, while, at the same time, takes advantages of modern C++ features, such as: namespaces, templates, exceptions, etc."
+	@echo "We are still working on integrating BLAS++ in our library. For the moment, you can download directly blas++ from https://bitbucket.org/icl/blaspp"
+	@echo "For support BLAS++ related question, please email: slate-user@icl.utk.edu"
+
+lapackpplib:
+	@echo "Thank you for your interest in LAPACK++, a newly developed C++ API for LAPACK library"
+	@echo "The objective of LAPACK++ is to provide a convenient, performance oriented API for development in the C++ language, that, for the most part, preserves established conventions, while, at the same time, takes advantages of modern C++ features, such as: namespaces, templates, exceptions, etc."
+	@echo "We are still working on integrating LAPACK++ in our library. For the moment, you can download directly blas++ from https://bitbucket.org/icl/lapackpp"
+	@echo "For support LAPACK++ related question, please email: slate-user@icl.utk.edu"
+ 	
 tmglib:
 	$(MAKE) -C TESTING/MATGEN
 
