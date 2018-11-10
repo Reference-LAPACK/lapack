@@ -315,6 +315,29 @@ if(LAPACKE)
   add_subdirectory(LAPACKE)
 endif()
 
+#-------------------------------------
+# BLAS++ / LAPACK++
+option(BLAS++ "Build BLAS++" OFF)
+option(LAPACK++ "Build LAPACK++" OFF)
+ 
+ 
+function(_display_cpp_implementation_msg name)
+  string(TOLOWER ${name} name_lc)
+  message(STATUS "${name}++ enable")
+  message(STATUS "----------------")
+  message(STATUS "Thank you for your interest in ${name}++, a newly developed C++ API for ${name} library")
+  message(STATUS "The objective of ${name}++ is to provide a convenient, performance oriented API for development in the C++ language, that, for the most part, preserves established conventions, while, at the same time, takes advantages of modern C++ features, such as: namespaces, templates, exceptions, etc.")
+  message(STATUS "We are still working on integrating ${name}++ in our library. For the moment, you can download directly ${name_lc}++ from https://bitbucket.org/icl/${name_lc}pp")
+  message(STATUS "For support ${name}++ related question, please email: slate-user@icl.utk.edu")
+  message(STATUS "----------------")
+endfunction()
+if(BLAS++)
+  _display_cpp_implementation_msg("BLAS")
+endif()
+if(LAPACK++)
+  _display_cpp_implementation_msg("LAPACK")
+endif()
+
 # --------------------------------------------------
 # CPACK Packaging
 
