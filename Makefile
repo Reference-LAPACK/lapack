@@ -32,7 +32,7 @@ blaspplib:
 lapackpplib:
 	@echo "Thank you for your interest in LAPACK++, a newly developed C++ API for LAPACK library"
 	@echo "The objective of LAPACK++ is to provide a convenient, performance oriented API for development in the C++ language, that, for the most part, preserves established conventions, while, at the same time, takes advantages of modern C++ features, such as: namespaces, templates, exceptions, etc."
-	@echo "We are still working on integrating LAPACK++ in our library. For the moment, you can download directly blas++ from https://bitbucket.org/icl/lapackpp"
+	@echo "We are still working on integrating LAPACK++ in our library. For the moment, you can download directly lapack++ from https://bitbucket.org/icl/lapackpp"
 	@echo "For support LAPACK++ related question, please email: slate-user@icl.utk.edu"
  	
 tmglib:
