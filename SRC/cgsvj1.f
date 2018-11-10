@@ -61,7 +61,7 @@
 *> In terms of the columns of A, the first N1 columns are rotated 'against'
 *> the remaining N-N1 columns, trying to increase the angle between the
 *> corresponding subspaces. The off-diagonal block is N1-by(N-N1) and it is
-*> tiled using quadratic tiles of side KBL. Here, KBL is a tunning parmeter.
+*> tiled using quadratic tiles of side KBL. Here, KBL is a tunning parameter.
 *> The number of sweeps is given in NSWEEP and the orthogonality threshold
 *> is given in TOL.
 *> \endverbatim
