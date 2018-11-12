@@ -2433,6 +2433,58 @@ void LAPACK_zgesvd(
     double* rwork,
     lapack_int* info );
 
+#define LAPACK_cgesvdq LAPACK_GLOBAL(cgesvdq,CGESVDQ)
+void LAPACK_cgesvdq(
+    char const* joba, char const* jobp, char const* jobr, char const* jobu, char const* jobv,
+    lapack_int const* m, lapack_int const* n,
+    lapack_complex_float* A, lapack_int const* lda,
+    float* S,
+    lapack_complex_float* U, lapack_int const* ldu,
+    lapack_complex_float* V, lapack_int const* ldv, lapack_int* numrank,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_complex_float* cwork, lapack_int* lcwork,
+    float* rwork, lapack_int const* lrwork,
+    lapack_int* info );
+
+#define LAPACK_dgesvdq LAPACK_GLOBAL(dgesvdq,DGESVDQ)
+void LAPACK_dgesvdq(
+    char const* joba, char const* jobp, char const* jobr, char const* jobu, char const* jobv,
+    lapack_int const* m, lapack_int const* n,
+    double* A, lapack_int const* lda,
+    double* S,
+    double* U, lapack_int const* ldu,
+    double* V, lapack_int const* ldv, lapack_int* numrank,
+    lapack_int* iwork, lapack_int const* liwork,
+    double* work, lapack_int* lwork,
+    double* rwork, lapack_int const* lrwork,
+    lapack_int* info );
+
+#define LAPACK_sgesvdq LAPACK_GLOBAL(sgesvdq,SGESVDQ)
+void LAPACK_sgesvdq(
+    char const* joba, char const* jobp, char const* jobr, char const* jobu, char const* jobv,
+    lapack_int const* m, lapack_int const* n,
+    float* A, lapack_int const* lda,
+    float* S,
+    float* U, lapack_int const* ldu,
+    float* V, lapack_int const* ldv, lapack_int* numrank,
+    lapack_int* iwork, lapack_int const* liwork,
+    float* work, lapack_int* lwork,
+    float* rwork, lapack_int const* lrwork,
+    lapack_int* info );
+
+#define LAPACK_zgesvdq LAPACK_GLOBAL(zgesvdq,ZGESVDQ)
+void LAPACK_zgesvdq(
+    char const* joba, char const* jobp, char const* jobr, char const* jobu, char const* jobv,
+    lapack_int const* m, lapack_int const* n,
+    lapack_complex_double* A, lapack_int const* lda,
+    double* S,
+    lapack_complex_double* U, lapack_int const* ldu,
+    lapack_complex_double* V, lapack_int const* ldv, lapack_int* numrank,
+    lapack_int* iwork, lapack_int const* liwork,
+    lapack_complex_float* cwork, lapack_int* lcwork,
+    double* rwork, lapack_int const* lrwork,
+    lapack_int* info );
+
 #define LAPACK_cgesvdx LAPACK_GLOBAL(cgesvdx,CGESVDX)
 void LAPACK_cgesvdx(
     char const* jobu, char const* jobvt, char const* range,
