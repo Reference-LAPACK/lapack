@@ -939,6 +939,25 @@ lapack_int LAPACKE_zgesvdx( int matrix_layout, char jobu, char jobvt, char range
                            lapack_complex_double* vt, lapack_int ldvt,
                            lapack_int* superb );
 
+lapack_int LAPACKE_sgesvdq( int matrix_layout, char joba, char jobp, char jobr, char jobu, char jobv,
+                           lapack_int m, lapack_int n, float* a, lapack_int lda,
+                           float* s, float* u, lapack_int ldu, float* v,
+                           lapack_int ldv, lapack_int* numrank );
+lapack_int LAPACKE_dgesvdq( int matrix_layout, char joba, char jobp, char jobr, char jobu, char jobv,
+                           lapack_int m, lapack_int n, double* a,
+                           lapack_int lda, double* s, double* u, lapack_int ldu,
+                           double* v, lapack_int ldv, lapack_int* numrank);
+lapack_int LAPACKE_cgesvdq( int matrix_layout, char joba, char jobp, char jobr, char jobu, char jobv,
+                           lapack_int m, lapack_int n, lapack_complex_float* a,
+                           lapack_int lda, float* s, lapack_complex_float* u,
+                           lapack_int ldu, lapack_complex_float* v,
+                           lapack_int ldv, lapack_int* numrank );
+lapack_int LAPACKE_zgesvdq( int matrix_layout, char joba, char jobp, char jobr, char jobu, char jobv,
+                           lapack_int m, lapack_int n, lapack_complex_double* a,
+                           lapack_int lda, double* s, lapack_complex_double* u,
+                           lapack_int ldu, lapack_complex_double* v,
+                           lapack_int ldv, lapack_int* numrank );
+                           
 lapack_int LAPACKE_sgesvj( int matrix_layout, char joba, char jobu, char jobv,
                            lapack_int m, lapack_int n, float* a, lapack_int lda,
                            float* sva, lapack_int mv, float* v, lapack_int ldv,
@@ -5729,6 +5748,45 @@ lapack_int LAPACKE_zgesvdx_work( int matrix_layout, char jobu, char jobvt, char 
                                  lapack_complex_double* work, lapack_int lwork,
                                  double* rwork, lapack_int* iwork );
 
+lapack_int LAPACKE_sgesvdq_work( int matrix_layout, char joba, char jobp,
+                                char jobr, char jobu, char jobv,
+                                lapack_int m, lapack_int n, float* a,
+                                lapack_int lda, float* s, float* u,
+                                lapack_int ldu, float* v, lapack_int ldv,
+                                lapack_int* numrank,
+                                lapack_int* iwork, lapack_int liwork,
+                                float* work, lapack_int lwork,
+                                float* rwork, lapack_int lrwork);
+lapack_int LAPACKE_dgesvdq_work( int matrix_layout, char joba, char jobp,
+                                char jobr, char jobu, char jobv,
+                                lapack_int m, lapack_int n, double* a,
+                                lapack_int lda, double* s, double* u,
+                                lapack_int ldu, double* v, lapack_int ldv,
+                                lapack_int* numrank,
+                                lapack_int* iwork, lapack_int liwork,
+                                double* work, lapack_int lwork,
+                                double* rwork, lapack_int lrwork);
+lapack_int LAPACKE_cgesvdq_work( int matrix_layout, char joba, char jobp,
+                                char jobr, char jobu, char jobv,
+                                lapack_int m, lapack_int n,
+                                lapack_complex_float* a, lapack_int lda,
+                                float* s, lapack_complex_float* u,
+                                lapack_int ldu, lapack_complex_float* v,
+                                lapack_int ldv, lapack_int* numrank,
+                                lapack_int* iwork, lapack_int liwork,
+                                lapack_complex_float* cwork, lapack_int lcwork,
+                                float* rwork, lapack_int lrwork);
+lapack_int LAPACKE_zgesvdq_work( int matrix_layout, char joba, char jobp,
+                                char jobr, char jobu, char jobv,
+                                lapack_int m, lapack_int n,
+                                lapack_complex_double* a, lapack_int lda,
+                                double* s, lapack_complex_double* u,
+                                lapack_int ldu, lapack_complex_double* v,
+                                lapack_int ldv, lapack_int* numrank,
+                                lapack_int* iwork, lapack_int liwork,
+                                lapack_complex_double* cwork, lapack_int lcwork,
+                                double* rwork, lapack_int lrwork);
+                                
 lapack_int LAPACKE_sgesvj_work( int matrix_layout, char joba, char jobu,
                                 char jobv, lapack_int m, lapack_int n, float* a,
                                 lapack_int lda, float* sva, lapack_int mv,
