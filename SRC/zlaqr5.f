@@ -180,25 +180,6 @@
 *>             in the calling subroutine.  LDU >= 3*NSHFTS-3.
 *> \endverbatim
 *>
-*> \param[in] NH
-*> \verbatim
-*>          NH is INTEGER
-*>             NH is the number of columns in array WH available for
-*>             workspace. NH >= 1.
-*> \endverbatim
-*>
-*> \param[out] WH
-*> \verbatim
-*>          WH is COMPLEX*16 array, dimension (LDWH,NH)
-*> \endverbatim
-*>
-*> \param[in] LDWH
-*> \verbatim
-*>          LDWH is INTEGER
-*>             Leading dimension of WH just as declared in the
-*>             calling procedure.  LDWH >= 3*NSHFTS-3.
-*> \endverbatim
-*>
 *> \param[in] NV
 *> \verbatim
 *>          NV is INTEGER
@@ -218,6 +199,25 @@
 *>             in the calling subroutine.  LDWV >= NV.
 *> \endverbatim
 *
+*> \param[in] NH
+*> \verbatim
+*>          NH is INTEGER
+*>             NH is the number of columns in array WH available for
+*>             workspace. NH >= 1.
+*> \endverbatim
+*>
+*> \param[out] WH
+*> \verbatim
+*>          WH is COMPLEX*16 array, dimension (LDWH,NH)
+*> \endverbatim
+*>
+*> \param[in] LDWH
+*> \verbatim
+*>          LDWH is INTEGER
+*>             Leading dimension of WH just as declared in the
+*>             calling procedure.  LDWH >= 3*NSHFTS-3.
+*> \endverbatim
+*>
 *  Authors:
 *  ========
 *
