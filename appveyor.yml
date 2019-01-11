@@ -1,6 +1,6 @@
 os: Visual Studio 2017
 configuration: Release
-clone_depth: 50
+clone_depth: 3
 
 matrix:
   fast_finish: false
@@ -19,7 +19,7 @@ environment:
 install:
   - call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
   - conda config --add channels conda-forge --force
-  - conda install --yes --quiet cmake flang jom
+  - conda install --yes --quiet flang jom
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - set "LIB=%CONDA_INSTALL_LOCN%\Library\lib;%LIB%"
   - set "CPATH=%CONDA_INSTALL_LOCN%\Library\include;%CPATH%"
