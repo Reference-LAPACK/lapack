@@ -2,6 +2,10 @@ language: c
 dist: xenial
 group: travis_latest
 
+git:
+  depth: 3
+  quiet: true
+
 addons:
   apt:
     packages:
@@ -16,6 +20,7 @@ matrix:
   - os: linux
   - os: osx
     before_install:
+    - brew update > /dev/null
     - brew install gcc > /dev/null
 
 script:
