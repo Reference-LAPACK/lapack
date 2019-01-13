@@ -11,14 +11,19 @@ addons:
     packages:
     - gfortran
 
-env:
-  - CMAKE_BUILD_TYPE=Release
-  - CMAKE_BUILD_TYPE=Coverage
-
 matrix:
   include:
   - os: linux
+    env: CMAKE_BUILD_TYPE=Release
+  - os: linux
+    env: CMAKE_BUILD_TYPE=Coverage
   - os: osx
+    env: CMAKE_BUILD_TYPE=Release
+    before_install:
+    - brew update > /dev/null
+    - brew install gcc > /dev/null
+  - os: osx
+    env: CMAKE_BUILD_TYPE=Coverage
     before_install:
     - brew update > /dev/null
     - brew install gcc > /dev/null
