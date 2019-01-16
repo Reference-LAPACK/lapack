@@ -1,6 +1,7 @@
 # cd build
-# meson --buildtype release ..
+# meson --buildtype release --prefix=$HOME/.local/lapack ..
 # ninja
+# ninja install
 
 project('LAPACK', 'fortran',
   default_options : ['default_library=static', 'libdir=lib/'],
@@ -20,6 +21,8 @@ elif prec == 's'
   lsrc = SCLAUX + SLASRC
 endif
 
-blas = library('blas', bsrc)
+blas = library('blas', bsrc,
+  install : true)
 
-lapack = library('lapack', lsrc, ALLAUX)
+lapack = library('lapack', lsrc, ALLAUX,
+  install : true)
