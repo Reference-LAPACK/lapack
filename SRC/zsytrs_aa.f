@@ -37,7 +37,7 @@
 *> \verbatim
 *>
 *> ZSYTRS_AA solves a system of linear equations A*X = B with a complex
-*> symmetric matrix A using the factorization A = U*T*U**T or
+*> symmetric matrix A using the factorization A = U**T*T*U or
 *> A = L*T*L**T computed by ZSYTRF_AA.
 *> \endverbatim
 *
@@ -49,7 +49,7 @@
 *>          UPLO is CHARACTER*1
 *>          Specifies whether the details of the factorization are stored
 *>          as an upper or lower triangular matrix.
-*>          = 'U':  Upper triangular, form is A = U*T*U**T;
+*>          = 'U':  Upper triangular, form is A = U**T*T*U;
 *>          = 'L':  Lower triangular, form is A = L*T*L**T.
 *> \endverbatim
 *>

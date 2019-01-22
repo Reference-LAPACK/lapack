@@ -37,7 +37,7 @@
 *> \verbatim
 *>
 *> CHETRS_AA solves a system of linear equations A*X = B with a complex
-*> hermitian matrix A using the factorization A = U*T*U**H or
+*> hermitian matrix A using the factorization A = U**H*T*U or
 *> A = L*T*L**H computed by CHETRF_AA.
 *> \endverbatim
 *
@@ -49,7 +49,7 @@
 *>          UPLO is CHARACTER*1
 *>          Specifies whether the details of the factorization are stored
 *>          as an upper or lower triangular matrix.
-*>          = 'U':  Upper triangular, form is A = U*T*U**H;
+*>          = 'U':  Upper triangular, form is A = U**H*T*U;
 *>          = 'L':  Lower triangular, form is A = L*T*L**H.
 *> \endverbatim
 *>
@@ -200,9 +200,9 @@
 *
       IF( UPPER ) THEN
 *
-*        Solve A*X = B, where A = U**T*T*U.
+*        Solve A*X = B, where A = U**H*T*U.
 *
-*        1) Forward substitution with U**T
+*        1) Forward substitution with U**H
 *
          IF( N.GT.1 ) THEN
 *
@@ -216,7 +216,7 @@
                K = K + 1
             END DO
 *
-*           Compute U**T \ B -> B    [ (U**T \P**T * B) ]
+*           Compute U**H \ B -> B    [ (U**H \P**T * B) ]
 *
             CALL CTRSM( 'L', 'U', 'C', 'U', N-1, NRHS, ONE, A( 1, 2 ),
      $                  LDA, B( 2, 1 ), LDB)
@@ -224,7 +224,7 @@
 *
 *        2) Solve with triangular matrix T
 *
-*        Compute T \ B -> B   [ T \ (U**T \P**T * B) ]
+*        Compute T \ B -> B   [ T \ (U**H \P**T * B) ]
 *
          CALL CLACPY( 'F', 1, N, A(1, 1), LDA+1, WORK(N), 1)
          IF( N.GT.1 ) THEN
@@ -239,12 +239,12 @@
 *
          IF( N.GT.1 ) THEN
 *
-*           Compute U \ B -> B   [ U \ (T \ (U**T \P**T * B) ) ]
+*           Compute U \ B -> B   [ U \ (T \ (U**H \P**T * B) ) ]
 *
             CALL CTRSM( 'L', 'U', 'N', 'U', N-1, NRHS, ONE, A( 1, 2 ),
      $                  LDA, B(2, 1), LDB)
 *
-*           Pivot, P * B  -> B [ P * (U \ (T \ (U**T \P**T * B) )) ]
+*           Pivot, P * B  -> B [ P * (U \ (T \ (U**H \P**T * B) )) ]
 *
             K = N
             DO WHILE ( K.GE.1 )
@@ -257,7 +257,7 @@
 *
       ELSE
 *
-*        Solve A*X = B, where A = L*T*L**T.
+*        Solve A*X = B, where A = L*T*L**H.
 *
 *        1) Forward substitution with L
 *
@@ -292,16 +292,16 @@
          CALL CGTSV(N, NRHS, WORK(1), WORK(N), WORK(2*N), B, LDB,
      $              INFO)
 *
-*        3) Backward substitution with L**T
+*        3) Backward substitution with L**H
 *
          IF( N.GT.1 ) THEN
 *
-*           Compute (L**T \ B) -> B   [ L**T \ (T \ (L \P**T * B) ) ]
+*           Compute (L**H \ B) -> B   [ L**H \ (T \ (L \P**T * B) ) ]
 *
             CALL CTRSM( 'L', 'L', 'C', 'U', N-1, NRHS, ONE, A( 2, 1 ),
      $                  LDA, B( 2, 1 ), LDB )
 *
-*           Pivot, P * B -> B  [ P * (L**T \ (T \ (L \P**T * B) )) ]
+*           Pivot, P * B -> B  [ P * (L**H \ (T \ (L \P**T * B) )) ]
 *
             K = N
             DO WHILE ( K.GE.1 )

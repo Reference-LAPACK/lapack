@@ -38,7 +38,7 @@
 *> ZHETRF_AA_2STAGE computes the factorization of a double hermitian matrix A
 *> using the Aasen's algorithm.  The form of the factorization is
 *>
-*>    A = U*T*U**T  or  A = L*T*L**T
+*>    A = U**H*T*U  or  A = L*T*L**H
 *>
 *> where U (or L) is a product of permutation and unit upper (lower)
 *> triangular matrices, and T is a hermitian band matrix with the
@@ -276,7 +276,7 @@
       IF( UPPER ) THEN
 *
 *        .....................................................
-*        Factorize A as L*D*L**T using the upper triangle of A
+*        Factorize A as U**H*D*U using the upper triangle of A
 *        .....................................................
 *
          DO J = 0, NT-1
@@ -476,7 +476,7 @@ c               END IF
       ELSE
 *
 *        .....................................................
-*        Factorize A as L*D*L**T using the lower triangle of A
+*        Factorize A as L*D*L**H using the lower triangle of A
 *        .....................................................
 *
          DO J = 0, NT-1
