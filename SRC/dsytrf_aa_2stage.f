@@ -442,12 +442,14 @@ c               END IF
 *                    > Apply pivots to previous columns of L
                      CALL DSWAP( K-1, A( (J+1)*NB+1, I1 ), 1, 
      $                                A( (J+1)*NB+1, I2 ), 1 )
-*                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)               
-                     CALL DSWAP( I2-I1-1, A( I1, I1+1 ), LDA,
-     $                                    A( I1+1, I2 ), 1 )
+*                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)
+                     IF( I2.GT.(I1+1) )
+     $                  CALL DSWAP( I2-I1-1, A( I1, I1+1 ), LDA,
+     $                                       A( I1+1, I2 ), 1 )
 *                    > Swap A(I2+1:M, I1) with A(I2+1:M, I2)
-                     CALL DSWAP( N-I2, A( I1, I2+1 ), LDA,
-     $                                 A( I2, I2+1 ), LDA ) 
+                     IF( I2.LT.N )
+     $                  CALL DSWAP( N-I2, A( I1, I2+1 ), LDA,
+     $                                    A( I2, I2+1 ), LDA ) 
 *                    > Swap A(I1, I1) with A(I2, I2)
                      PIV = A( I1, I1 )
                      A( I1, I1 ) = A( I2, I2 )
@@ -616,11 +618,13 @@ c               END IF
                      CALL DSWAP( K-1, A( I1, (J+1)*NB+1 ), LDA, 
      $                                A( I2, (J+1)*NB+1 ), LDA )
 *                    > Swap A(I1+1:M, I1) with A(I2, I1+1:M)               
-                     CALL DSWAP( I2-I1-1, A( I1+1, I1 ), 1,
-     $                                    A( I2, I1+1 ), LDA )
+                     IF( I2.GT.(I1+1) )
+     $                  CALL DSWAP( I2-I1-1, A( I1+1, I1 ), 1,
+     $                                       A( I2, I1+1 ), LDA )
 *                    > Swap A(I2+1:M, I1) with A(I2+1:M, I2)
-                     CALL DSWAP( N-I2, A( I2+1, I1 ), 1,
-     $                                 A( I2+1, I2 ), 1 ) 
+                     IF( I2.LT.N )
+     $                  CALL DSWAP( N-I2, A( I2+1, I1 ), 1,
+     $                                    A( I2+1, I2 ), 1 ) 
 *                    > Swap A(I1, I1) with A(I2, I2)
                      PIV = A( I1, I1 )
                      A( I1, I1 ) = A( I2, I2 )
