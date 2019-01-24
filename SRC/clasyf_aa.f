@@ -326,13 +326,15 @@
 *           Compute L(J+2, J+1) = WORK( 3:M ) / T(J, J+1),
 *            where A(J, J+1) = T(J, J+1) and A(J+2:M, J) = L(J+2:M, J+1)
 *
-            IF( A( K, J+1 ).NE.ZERO ) THEN
-               ALPHA = ONE / A( K, J+1 )
-               CALL CCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
-               CALL CSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
-            ELSE
-               CALL CLASET( 'Full', 1, M-J-1, ZERO, ZERO,
-     $                      A( K, J+2 ), LDA)
+            IF( J.LT.(M-1) ) THEN
+               IF( A( K, J+1 ).NE.ZERO ) THEN
+                  ALPHA = ONE / A( K, J+1 )
+                  CALL CCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
+                  CALL CSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+               ELSE
+                  CALL CLASET( 'Full', 1, M-J-1, ZERO, ZERO,
+     $                         A( K, J+2 ), LDA)
+               END IF
             END IF
          END IF
          J = J + 1
