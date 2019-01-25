@@ -69,7 +69,15 @@ CBLAS, a C interface to the BLAS, and (5) LAPACKE, a C interface to LAPACK.
    the `INSTALL` directory.
  - LAPACK includes also the CMake build. You will need to have CMake installed
    on your machine (CMake is available at http://www.cmake.org/). CMake will
-   allow an easy installation on a Windows Machine.
+   allow an easy installation on a Windows Machine. 
+   An example CMake build is:
+   ```sh
+   mkdir build
+   cd build
+   cmake -DCMAKE_INSTALL_LIBDIR=$HOME/.local/lapack ..
+   cmake --build -j . --target install
+   ```
+   That installs the LAPACK library under $HOME/.local/lapack/
  - Specific information to run LAPACK under Windows is available at
    http://icl.cs.utk.edu/lapack-for-windows/lapack/.
 
