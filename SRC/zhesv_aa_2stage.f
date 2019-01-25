@@ -211,9 +211,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            UPPER, TQUERY, WQUERY
-      INTEGER            I, J, K, I1, I2, TD
-      INTEGER            LDTB, LWKOPT, NB, KB, NT, IINFO
-      COMPLEX            PIV
+      INTEGER            LWKOPT
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
