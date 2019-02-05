@@ -354,7 +354,7 @@
 *>   1. The data movement (matrix transpose) is coded using simple nested
 *>   DO-loops because BLAS and LAPACK do not provide corresponding subroutines.
 *>   Those DO-loops are easily identified in this source code - by the CONTINUE
-*>   statements labeled wit 11**. In an optimized version of this code, the
+*>   statements labeled with 11**. In an optimized version of this code, the
 *>   nested DO loops should be replaced with calls to an optimized subroutine.
 *>   2. This code scales A by 1/SQRT(M) if the largest ABS(A(i,j)) could cause
 *>   column norm overflow. This is the minial precaution and it is left to the
@@ -390,7 +390,7 @@
 *
 *> \par Contributors:
 *  ==================
-*> 
+*>
 *> \verbatim
 *> Developed and coded by Zlatko Drmac, Department of Mathematics
 *>  University of Zagreb, Croatia, drmac@math.hr
@@ -951,7 +951,7 @@
      $          CALL ZLASET( 'L', NR-1,NR-1, CZERO,CZERO, A(2,1), LDA )
             CALL ZGESVD( 'N', 'N', NR, N, A, LDA, S, U, LDU,
      $           V, LDV, CWORK, LCWORK, RWORK, INFO )
-*	
+*
          END IF
 *
       ELSE IF ( LSVEC .AND. ( .NOT. RSVEC) ) THEN

@@ -169,7 +169,7 @@ endif()
 # dashboard then set this variable to the directory
 # the dashboard should be in
 make_directory("${CTEST_DASHBOARD_ROOT}")
-# these are the the name of the source and binary directory on disk.
+# these are the names of the source and binary directory on disk.
 # They will be appended to DASHBOARD_ROOT
 set(CTEST_SOURCE_DIRECTORY  "${CTEST_DASHBOARD_ROOT}/${CTEST_DIR_NAME}")
 set(CTEST_BINARY_DIRECTORY  "${CTEST_SOURCE_DIRECTORY}-${CTEST_BUILD_NAME}")
