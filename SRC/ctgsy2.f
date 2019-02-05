@@ -67,7 +67,7 @@
 *>             R  * B**H + L  * E**H  = scale * -F
 *>
 *> This case is used to compute an estimate of Dif[(A, D), (B, E)] =
-*> = sigma_min(Z) using reverse communicaton with CLACON.
+*> = sigma_min(Z) using reverse communication with CLACON.
 *>
 *> CTGSY2 also (IJOB >= 1) contributes to the computation in CTGSYL
 *> of an upper bound on the separation between to matrix pairs. Then

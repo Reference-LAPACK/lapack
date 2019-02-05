@@ -71,7 +71,7 @@
 *>             R  * B**T + L  * E**T  = scale * -F
 *>
 *> This case is used to compute an estimate of Dif[(A, D), (B, E)] =
-*> sigma_min(Z) using reverse communicaton with DLACON.
+*> sigma_min(Z) using reverse communication with DLACON.
 *>
 *> DTGSY2 also (IJOB >= 1) contributes to the computation in DTGSYL
 *> of an upper bound on the separation between to matrix pairs. Then

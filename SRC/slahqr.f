@@ -165,7 +165,7 @@
 *>
 *>                  If INFO > 0 and WANTT is .TRUE., then on exit
 *>          (*)       (initial value of H)*U  = U*(final value of H)
-*>                  where U is an orthognal matrix.    The final
+*>                  where U is an orthogonal matrix.    The final
 *>                  value of H is upper Hessenberg and triangular in
 *>                  rows and columns INFO+1 through IHI.
 *>
