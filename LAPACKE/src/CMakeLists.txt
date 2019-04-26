@@ -1,4 +1,4 @@
-set(SOURCES
+set(SOURCES_COMPLEX
 lapacke_cbbcsd.c
 lapacke_cbbcsd_work.c
 lapacke_cbdsqr.c
@@ -603,6 +603,8 @@ lapacke_cupgtr.c
 lapacke_cupgtr_work.c
 lapacke_cupmtr.c
 lapacke_cupmtr_work.c
+)
+set(SOURCES_DOUBLE
 lapacke_dbbcsd.c
 lapacke_dbbcsd_work.c
 lapacke_dbdsdc.c
@@ -1167,7 +1169,11 @@ lapacke_dtrttp.c
 lapacke_dtrttp_work.c
 lapacke_dtzrzf.c
 lapacke_dtzrzf_work.c
+)
+set(SOURCES
 lapacke_nancheck.c
+)
+set(SOURCES_SINGLE
 lapacke_sbbcsd.c
 lapacke_sbbcsd_work.c
 lapacke_sbdsdc.c
@@ -1728,6 +1734,8 @@ lapacke_strttp.c
 lapacke_strttp_work.c
 lapacke_stzrzf.c
 lapacke_stzrzf_work.c
+)
+set(SOURCES_COMPLEX16
 lapacke_zbbcsd.c
 lapacke_zbbcsd_work.c
 lapacke_zbdsqr.c
