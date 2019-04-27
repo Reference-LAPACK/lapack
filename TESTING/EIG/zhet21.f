@@ -29,9 +29,8 @@
 *>
 *> ZHET21 generally checks a decomposition of the form
 *>
-*>    A = U S U**H
-*>
-*> where **H means conjugate transpose, A is hermitian, U is unitary, and
+*>    A = U S UC>
+*> where * means conjugate transpose, A is hermitian, U is unitary, and
 *> S is diagonal (if KBAND=0) or (real) symmetric tridiagonal (if
 *> KBAND=1).
 *>
@@ -43,19 +42,18 @@
 *>
 *> Specifically, if ITYPE=1, then:
 *>
-*>    RESULT(1) = | A - U S U**H | / ( |A| n ulp ) and
-*>    RESULT(2) = | I - U U**H | / ( n ulp )
+*>    RESULT(1) = | A - U S U* | / ( |A| n ulp ) *andC>    RESULT(2) = | I - UU* | / ( n ulp )
 *>
 *> If ITYPE=2, then:
 *>
-*>    RESULT(1) = | A - V S V**H | / ( |A| n ulp )
+*>    RESULT(1) = | A - V S V* | / ( |A| n ulp )
 *>
 *> If ITYPE=3, then:
 *>
-*>    RESULT(1) = | I - U V**H | / ( n ulp )
+*>    RESULT(1) = | I - UV* | / ( n ulp )
 *>
 *> For ITYPE > 1, the transformation U is expressed as a product
-*> V = H(1)...H(n-2),  where H(j) = I  -  tau(j) v(j) v(j)**H and each
+*> V = H(1)...H(n-2),  where H(j) = I  -  tau(j) v(j) v(j)C> and each
 *> vector v(j) has its first j elements 0 and the remaining n-j elements
 *> stored in V(j+1:n,j).
 *> \endverbatim
@@ -68,15 +66,14 @@
 *>          ITYPE is INTEGER
 *>          Specifies the type of tests to be performed.
 *>          1: U expressed as a dense unitary matrix:
-*>             RESULT(1) = | A - U S U**H | / ( |A| n ulp ) and
-*>             RESULT(2) = | I - U U**H | / ( n ulp )
+*>             RESULT(1) = | A - U S U* | / ( |A| n ulp )   *andC>             RESULT(2) = | I - UU* | / ( n ulp )
 *>
 *>          2: U expressed as a product V of Housholder transformations:
-*>             RESULT(1) = | A - V S V**H | / ( |A| n ulp )
+*>             RESULT(1) = | A - V S V* | / ( |A| n ulp )
 *>
 *>          3: U expressed both as a dense unitary matrix and
 *>             as a product of Housholder transformations:
-*>             RESULT(1) = | I - U V**H | / ( n ulp )
+*>             RESULT(1) = | I - UV* | / ( n ulp )
 *> \endverbatim
 *>
 *> \param[in] UPLO
@@ -174,7 +171,7 @@
 *> \verbatim
 *>          TAU is COMPLEX*16 array, dimension (N)
 *>          If ITYPE >= 2, then TAU(j) is the scalar factor of
-*>          v(j) v(j)**H in the Householder transformation H(j) of
+*>          v(j) v(j)* in the Householder transformation H(j) of
 *>          the product  U = H(1)...H(n-2)
 *>          If ITYPE < 2, then TAU is not referenced.
 *> \endverbatim
@@ -297,7 +294,7 @@
 *
       IF( ITYPE.EQ.1 ) THEN
 *
-*        ITYPE=1: error = A - U S U**H
+*        ITYPE=1: error = A - U S U*
 *
          CALL ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
          CALL ZLACPY( CUPLO, N, N, A, LDA, WORK, N )
@@ -307,7 +304,8 @@
    10    CONTINUE
 *
          IF( N.GT.1 .AND. KBAND.EQ.1 ) THEN
-            DO 20 J = 1, N - 1
+CMK            DO 20 J = 1, N - 1
+            DO 20 J = 2, N - 1
                CALL ZHER2( CUPLO, N, -DCMPLX( E( J ) ), U( 1, J ), 1,
      $                     U( 1, J-1 ), 1, WORK, N )
    20       CONTINUE
@@ -316,7 +314,7 @@
 *
       ELSE IF( ITYPE.EQ.2 ) THEN
 *
-*        ITYPE=2: error = V S V**H - A
+*        ITYPE=2: error = V S V* - A
 *
          CALL ZLASET( 'Full', N, N, CZERO, CZERO, WORK, N )
 *
@@ -373,7 +371,7 @@
 *
       ELSE IF( ITYPE.EQ.3 ) THEN
 *
-*        ITYPE=3: error = U V**H - I
+*        ITYPE=3: error = U V* - I
 *
          IF( N.LT.2 )
      $      RETURN
@@ -409,7 +407,7 @@
 *
 *     Do Test 2
 *
-*     Compute  U U**H - I
+*     Compute  UU* - I
 *
       IF( ITYPE.EQ.1 ) THEN
          CALL ZGEMM( 'N', 'C', N, N, N, CONE, U, LDU, U, LDU, CZERO,
