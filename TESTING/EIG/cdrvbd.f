@@ -92,7 +92,7 @@
 *> (14)  | S - Spartial | / ( MNMIN ulp |S| ) where Spartial is the
 *>       vector of singular values from the partial SVD
 *>
-*> Test for CGESVJ:
+*> Test for CGESVDQ:
 *>
 *> (36)  | A - U diag(S) VT | / ( |A| max(M,N) ulp )
 *>
