@@ -77,7 +77,8 @@ SLINTST = schkaa.o \
    strt02.o strt03.o strt05.o strt06.o \
    sgennd.o sqrt04.o sqrt05.o schkqrt.o serrqrt.o schkqrtp.o serrqrtp.o \
    schklqt.o schklqtp.o schktsqr.o \
-   serrlqt.o serrlqtp.o serrtsqr.o stsqr01.o slqt04.o slqt05.o
+   serrlqt.o serrlqtp.o serrtsqr.o stsqr01.o slqt04.o slqt05.o \
+   schkorhr.o serrorhr.o sorhr01.o
 
 ifdef USEXBLAS
 SLINTST += sdrvgbx.o sdrvgex.o sdrvsyx.o sdrvpox.o \

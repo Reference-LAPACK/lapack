@@ -39,7 +39,8 @@ set(SLINTST schkaa.f
    strt02.f strt03.f strt05.f strt06.f
    sgennd.f sqrt04.f sqrt05.f schkqrt.f serrqrt.f schkqrtp.f serrqrtp.f
    schklqt.f schklqtp.f schktsqr.f
-   serrlqt.f serrlqtp.f serrtsqr.f stsqr01.f slqt04.f slqt05.f)
+   serrlqt.f serrlqtp.f serrtsqr.f stsqr01.f slqt04.f slqt05.f
+   schkorhr.f serrorhr.f sorhr01.f)
 
 if(USE_XBLAS)
   list(APPEND SLINTST sdrvgbx.f sdrvgex.f sdrvsyx.f sdrvpox.f
