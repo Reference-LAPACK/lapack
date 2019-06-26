@@ -124,7 +124,7 @@
       EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, MAX, MIN
+      INTRINSIC          CEILING, INT, MAX, MIN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SGEMQRT, SLACPY, SLARNV, SLASET,
