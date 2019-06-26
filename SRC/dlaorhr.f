@@ -86,7 +86,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N).
+*>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>
 *>          The elements on and above the diagonal:
 *>
@@ -163,7 +163,7 @@
 *>
 *> \param[out] T2
 *> \verbatim
-*>          T2 is DOUBLE PRECISION array, dimension (LDT2, N).
+*>          T2 is DOUBLE PRECISION array, dimension (LDT2, N)
 *>
 *>          Let NOCB = Number_of_output_col_blocks
 *>                   = CEIL(N/NB2)
@@ -185,7 +185,7 @@
 *>
 *> \param[out] D
 *> \verbatim
-*>          D is DOUBLE PRECISION array, dimension min(M,N).
+*>          D is DOUBLE PRECISION array, dimension min(M,N)
 *>          The elements can be only plus or minus one.
 *>
 *>          D(i) is constructed as D(i)=-SIGN(Q1_in_i(i,i)), where
@@ -199,7 +199,7 @@
 *> \param[out] W
 *> \verbatim
 *>          W is DOUBLE PRECISION
-*>          W is (workspace) DOUBLE PRECISION array, dimension (LDW, N).
+*>          W is (workspace) DOUBLE PRECISION array, dimension (LDW, N)
 *>          This workspace is used to store array C in the call to
 *>          the DLAMTSQR routine.
 *> \endverbatim
@@ -213,7 +213,7 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is (workspace) DOUBLE PRECISION array,
-*>          dimension (max(1,LWORK)).
+*>          dimension (max(1,LWORK))
 *>          This workspace is used as the workspace W in the call to
 *>          the DLAMTSQR routine.
 *>          See the documentation of DLAMTSQR.
