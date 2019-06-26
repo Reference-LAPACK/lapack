@@ -24,7 +24,9 @@
 *>
 *> \verbatim
 *>
-*> DCHKORHR tests DORHR using DLATSQR and DGEMQRT.
+*> DCHKORHR tests DORHR using DLATSQR and DGEMQRT. Therefore, DLATSQR
+*> (used in DGEQR) and DGEMQRT (used in DGEMQR) have to be tested
+*> before this test.
 *>
 *> \endverbatim
 *
@@ -104,7 +106,7 @@
      $                     NBVAL, NOUT )
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2019
@@ -133,11 +135,10 @@
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHD, ALASUM, DERRORHR,
-     $                   DORHR01, XLAENV
+      EXTERNAL           ALAHD, ALASUM, DERRORHR, DORHR01
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC  MAX, MIN
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

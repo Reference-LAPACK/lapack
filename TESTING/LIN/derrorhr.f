@@ -57,7 +57,7 @@
       SUBROUTINE DERRORHR( PATH, NUNIT )
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.7.0) --
+*  -- LAPACK test routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     June 2019
@@ -105,21 +105,19 @@
 *
       DO J = 1, NMAX
          DO I = 1, NMAX
-            A( I, J ) = 1.D0 / DBLE( I+J )
-            C( I, J ) = 1.D0 / DBLE( I+J )
-            T1( I, J ) = 1.D0 / DBLE( I+J )
-            T2( I, J ) = 1.D0 / DBLE( I+J )
+            A( I, J ) = 1.D+0 / DBLE( I+J )
+            C( I, J ) = 1.D+0 / DBLE( I+J )
+            T1( I, J ) = 1.D+0 / DBLE( I+J )
+            T2( I, J ) = 1.D+0 / DBLE( I+J )
          END DO
-         W( J ) = 0.D0
-         D( J ) = 0.D0
+         W( J ) = 0.D+0
+         D( J ) = 0.D+0
       END DO
       OK = .TRUE.
 *
 *     Error exits for Householder reconstruction
 *
 *     DORHR
-*
-      LWMIN = 2
 *
       SRNAMT = 'DORHR'
 *
