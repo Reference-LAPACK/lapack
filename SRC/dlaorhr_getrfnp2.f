@@ -192,14 +192,13 @@
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
-      INTEGER            IDAMAX
-      EXTERNAL           DLAMCH, IDAMAX
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DSCAL, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DSIGN, MAX, MIN
+      INTRINSIC          ABS, DSIGN, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -257,7 +256,7 @@
 *
 *        Construct the subdiagonal elements of L
 *
-         IF( ABS(A( 1, 1 )) .GE. SFMIN ) THEN
+         IF( ABS( A( 1, 1 ) ) .GE. SFMIN ) THEN
             CALL DSCAL( M-1, ONE / A( 1, 1 ), A( 2, 1 ), 1 )
          ELSE
             DO I = 2, M

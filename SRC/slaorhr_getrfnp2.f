@@ -192,14 +192,13 @@
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH
-      INTEGER            IDAMAX
-      EXTERNAL           SLAMCH, IDAMAX
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SSCAL, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          SIGN, MAX, MIN
+      INTRINSIC          ABS, SIGN, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -257,7 +256,7 @@
 *
 *        Construct the subdiagonal elements of L
 *
-         IF( ABS(A( 1, 1 )) .GE. SFMIN ) THEN
+         IF( ABS( A( 1, 1 ) ) .GE. SFMIN ) THEN
             CALL SSCAL( M-1, ONE / A( 1, 1 ), A( 2, 1 ), 1 )
          ELSE
             DO I = 2, M
