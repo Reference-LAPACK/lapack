@@ -86,7 +86,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is DOUBLE PRECISION array, dimension (LDA,N).
 *>
 *>          The elements on and above the diagonal:
 *>
@@ -127,10 +127,10 @@
 *>
 *> \param[in] T1
 *> \verbatim
-*>          T1 is DOUBLE PRECISION array,
-*>          dimension (LDT1, N * NIRB)
+*>          T1 is DOUBLE PRECISION array, dimension (LDT1, N * NIRB),
+*>
 *>          where NIRB = Number_of_input_row_blocks
-*>                     = MAX( 1, CEIL((M-N)/(MB1-N)) )
+*>                     = max( 1, CEIL((M-N)/(MB1-N)) )
 *>          Let NICB = Number_of_input_col_blocks
 *>                   = CEIL(N/NB1)
 *>
@@ -163,8 +163,7 @@
 *>
 *> \param[out] T2
 *> \verbatim
-*>          T2 is DOUBLE PRECISION array,
-*>          dimension (LDT2, N)
+*>          T2 is DOUBLE PRECISION array, dimension (LDT2, N).
 *>
 *>          Let NOCB = Number_of_output_col_blocks
 *>                   = CEIL(N/NB2)
@@ -200,7 +199,7 @@
 *> \param[out] W
 *> \verbatim
 *>          W is DOUBLE PRECISION
-*>          (workspace) DOUBLE PRECISION array, dimension (LDW, N)
+*>          W is (workspace) DOUBLE PRECISION array, dimension (LDW, N).
 *>          This workspace is used to store array C in the call to
 *>          the DLAMTSQR routine.
 *> \endverbatim
@@ -208,12 +207,13 @@
 *> \param[in] LDW
 *> \verbatim
 *>          LDW is INTEGER
-*>          The leading dimension of the work array W.  LDW >= M
+*>          The leading dimension of the work array W.  LDW >= M.
 *> \endverbatim
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          (workspace) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+*>          WORK is (workspace) DOUBLE PRECISION array,
+*>          dimension (max(1,LWORK)).
 *>          This workspace is used as the workspace W in the call to
 *>          the DLAMTSQR routine.
 *>          See the documentation of DLAMTSQR.
@@ -249,7 +249,7 @@
 *> upper-triangular N-by-N matrix R_in computed by DLATSQR.
 *>
 *>          Let NIRB = Number_of_input_row_blocks
-*>                   = MAX( 1, CEIL((M-N)/(MB1-N)) )
+*>                   = max( 1, CEIL((M-N)/(MB1-N)) )
 *>              NICB = Number_of_input_col_blocks
 *>                   = CEIL(N/NB1)
 *>
@@ -426,10 +426,10 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DLAORHR_GETRFNP, DLAMTSQR, DLASET,
-     $                   DSCAL, DTRSM, XERBLA
+     $                   DSCAL, DTRSM
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MIN
 *     ..
 *     .. Executable Statements ..
 *

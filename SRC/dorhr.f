@@ -86,7 +86,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is DOUBLE PRECISION array, dimension (LDA,N).
 *>
 *>          The elements on and above the diagonal:
 *>
@@ -127,10 +127,10 @@
 *>
 *> \param[in] T1
 *> \verbatim
-*>          T1 is DOUBLE PRECISION array,
-*>          dimension (LDT1, N * NIRB)
+*>          T1 is DOUBLE PRECISION array, dimension (LDT1, N * NIRB),
+*>
 *>          where NIRB = Number_of_input_row_blocks
-*>                     = MAX( 1, CEIL((M-N)/(MB1-N)) )
+*>                     = max( 1, CEIL((M-N)/(MB1-N)) )
 *>          Let NICB = Number_of_input_col_blocks
 *>                   = CEIL(N/NB1)
 *>
@@ -163,8 +163,7 @@
 *>
 *> \param[out] T2
 *> \verbatim
-*>          T2 is DOUBLE PRECISION array,
-*>          dimension (LDT2, N)
+*>          T2 is DOUBLE PRECISION array, dimension (LDT2, N).
 *>
 *>          Let NOCB = Number_of_output_col_blocks
 *>                   = CEIL(N/NB2)
@@ -199,7 +198,8 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          (workspace) DOUBLE PRECISION array, dimension (MAX(2,LWORK))
+*>          WORK is (workspace) DOUBLE PRECISION array,
+*>          dimension (max(2,LWORK)).
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>

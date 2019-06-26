@@ -93,7 +93,7 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is DOUBLE PRECISION array, dimension (LDA,N).
 *>          On entry, the M-by-N matrix to be factored.
 *>          On exit, the factors L and U from the factorization
 *>          A-S=L*U; the unit diagonal elements of L are not stored.
@@ -107,7 +107,7 @@
 *>
 *> \param[out] D
 *> \verbatim
-*>          D is DOUBLE PRECISION array, dimension min(M,N)
+*>          D is DOUBLE PRECISION array, dimension min(M,N).
 *>          The diagonal elements of the diagonal M-by-N sign matrix S,
 *>          D(i) = S(i,i), where 1 <= i <= min(M,N). The elements can
 *>          be only plus or minus one.
