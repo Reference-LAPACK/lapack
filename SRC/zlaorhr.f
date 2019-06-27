@@ -338,7 +338,7 @@
 *> where each matrix Q_out(i) is given by the WY-representation
 *> using corresponding blocks from the matrices Y and T2:
 *>
-*>     Q_out(i) = I - YB(i) * TB2(i) * (YB(i))**T,
+*>     Q_out(i) = I - YB(i) * TB2(i) * (YB(i))**H,
 *>
 *> where I is the identity matrix. Here is the formula with matrix
 *> dimensions:
@@ -532,9 +532,9 @@
 *        (4-3) Perform the triangular solve for the current block
 *        matrix X(JB):
 *
-*               X(JB) * (A(JB)**T) = B(JB), where:
+*               X(JB) * (A(JB)**H) = B(JB), where:
 *
-*               A(JB)**T  is a JNB-by-JNB unit upper-triangular
+*               A(JB)**H  is a JNB-by-JNB unit upper-triangular
 *                         coefficient block, and A(JB)=L1(JB), which
 *                         is a JNB-by-JNB unit lower-triangular block
 *                         stored in W(JB:JB+JNB-1,JB:JB+JNB-1).
