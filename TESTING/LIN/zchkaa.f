@@ -74,6 +74,8 @@
 *> ZEQ
 *> ZQT
 *> ZQX
+*> ZTS
+*> ZHH
 *> \endverbatim
 *
 *  Parameters:
@@ -1200,6 +1202,17 @@
      $                     NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 )PATH
+         END IF
+*
+      ELSE IF( LSAMEN( 2, C2, 'HH' ) ) THEN
+*
+*        HH:  Householder reconstruction for tall-skinny matrices
+*
+         IF( TSTCHK ) THEN
+            CALL ZCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                     NBVAL, NOUT )
+         ELSE
+            WRITE( NOUT, FMT = 9989 ) PATH
          END IF
 *
       ELSE
