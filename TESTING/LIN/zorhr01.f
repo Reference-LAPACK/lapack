@@ -60,7 +60,7 @@
 *>
 *> \param[out] RESULT
 *> \verbatim
-*>          RESULT is COMPLEX*16 array, dimension (6)
+*>          RESULT is DOUBLE PRECISION array, dimension (6)
 *>          Results of each of the six tests below.
 *>          ( C is a M-by-N random matrix, D is a N-by-M random matrix )
 *>

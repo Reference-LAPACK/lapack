@@ -99,7 +99,7 @@
 *
 *> \date June 2019
 *
-*> \ingroup double_lin
+*> \ingroup complex16_lin
 *
 *  =====================================================================
       SUBROUTINE ZCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,

@@ -168,16 +168,16 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
      $                   ZCHKHE_ROOK, ZCHKHE_RK, ZCHKHE_AA, ZCHKHP,
-     $                   ZCHKLQ, ZCHKPB, ZCHKPO, ZCHKPS, ZCHKPP, ZCHKPT,
-     $                   ZCHKQ3, ZCHKQL, ZCHKQR, ZCHKRQ, ZCHKSP, ZCHKSY,
-     $                   ZCHKSY_ROOK, ZCHKSY_RK, ZCHKSY_AA, ZCHKTB,
-     $                   ZCHKTP, ZCHKTR, ZCHKTZ, ZDRVGB, ZDRVGE, ZDRVGT,
-     $                   ZDRVHE, ZDRVHE_ROOK, ZDRVHE_RK, ZDRVHE_AA,
-     $                   ZDRVHE_AA_2STAGE, ZDRVHP, ZDRVLS, ZDRVPB, 
-     $                   ZDRVPO, ZDRVPP, ZDRVPT, ZDRVSP, ZDRVSY,
-     $                   ZDRVSY_ROOK, ZDRVSY_RK, ZDRVSY_AA,
-     $                   ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT, ZCHKQRTP,
-     $                   ZCHKLQT, ZCHKLQTP, ZCHKTSQR
+     $                   ZCHKLQ, ZCHKORHR, ZCHKPB, ZCHKPO, ZCHKPS,
+     $                   ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQL, ZCHKQR, ZCHKRQ,
+     $                   ZCHKSP, ZCHKSY, ZCHKSY_ROOK, ZCHKSY_RK,
+     $                   ZCHKSY_AA, ZCHKTB, ZCHKTP, ZCHKTR, ZCHKTZ,
+     $                   ZDRVGB, ZDRVGE, ZDRVGT, ZDRVHE, ZDRVHE_ROOK,
+     $                   ZDRVHE_RK, ZDRVHE_AA, ZDRVHE_AA_2STAGE, ZDRVHP,
+     $                   ZDRVLS, ZDRVPB,  ZDRVPO, ZDRVPP, ZDRVPT,
+     $                   ZDRVSP, ZDRVSY, ZDRVSY_ROOK, ZDRVSY_RK,
+     $                   ZDRVSY_AA, ZDRVSY_AA_2STAGE, ILAVER, ZCHKQRT,
+     $                   ZCHKQRTP, ZCHKLQT, ZCHKLQTP, ZCHKTSQR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK

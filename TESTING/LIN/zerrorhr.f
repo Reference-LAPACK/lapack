@@ -51,7 +51,7 @@
 *
 *> \date June 2019
 *
-*> \ingroup double_lin
+*> \ingroup complex16_lin
 *
 *  =====================================================================
       SUBROUTINE ZERRORHR( PATH, NUNIT )
