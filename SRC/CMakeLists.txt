@@ -249,6 +249,7 @@ set(CLASRC
    cgetsls.f cgeqr.f clatsqr.f clamtsqr.f cgemqr.f
    cgelq.f claswlq.f clamswlq.f cgemlq.f
    ctplqt.f ctplqt2.f ctpmlqt.f
+   corhr.f claorhr.f claorhr_getrfnp.f claorhr_getrfnp2.f
    chetrd_2stage.f chetrd_he2hb.f chetrd_hb2st.F chb2st_kernels.f
    cheevd_2stage.f cheev_2stage.f cheevx_2stage.f cheevr_2stage.f
    chbev_2stage.f chbevx_2stage.f chbevd_2stage.f chegv_2stage.f

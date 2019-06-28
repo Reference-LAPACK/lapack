@@ -95,7 +95,8 @@ set(CLINTST cchkaa.f
    sget06.f cgennd.f
    cqrt04.f cqrt05.f cchkqrt.f cerrqrt.f cchkqrtp.f cerrqrtp.f
    cchklqt.f cchklqtp.f cchktsqr.f
-   cerrlqt.f cerrlqtp.f cerrtsqr.f ctsqr01.f clqt04.f clqt05.f)
+   cerrlqt.f cerrlqtp.f cerrtsqr.f ctsqr01.f clqt04.f clqt05.f
+   cchkorhr.f cerrorhr.f corhr01.f)
 
 if(USE_XBLAS)
   list(APPEND CLINTST cdrvgbx.f cdrvgex.f cdrvhex.f cdrvsyx.f cdrvpox.f
