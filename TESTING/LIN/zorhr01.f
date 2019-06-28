@@ -129,7 +129,7 @@
 
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, INT, MAX, MIN
+      INTRINSIC          CEILING, DBLE, INT, MAX, MIN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMM, ZGEMQRT, ZLACPY, ZLARNV, ZLASET,

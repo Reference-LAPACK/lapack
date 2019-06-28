@@ -124,7 +124,7 @@
       EXTERNAL           SLAMCH, SLANGE, SLANSY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, INT, MAX, MIN
+      INTRINSIC          CEILING, INT, MAX, MIN, REAL
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SGEMQRT, SLACPY, SLARNV, SLASET,
@@ -171,7 +171,7 @@
 *
 *     Number of row blocks in SLATSQR
 *
-      NRB = MAX( 1, CEILING( DBLE( M - N ) / DBLE( MB1 - N ) ) )
+      NRB = MAX( 1, CEILING( REAL( M - N ) / REAL( MB1 - N ) ) )
 *
       ALLOCATE ( T1( NB1, N * NRB ) )
       ALLOCATE ( T2( NB2, N ) )

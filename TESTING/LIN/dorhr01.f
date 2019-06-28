@@ -124,7 +124,7 @@
       EXTERNAL           DLAMCH, DLANGE, DLANSY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, INT, MAX, MIN
+      INTRINSIC          CEILING, DBLE, INT, MAX, MIN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMM, DGEMQRT, DLACPY, DLARNV, DLASET,
