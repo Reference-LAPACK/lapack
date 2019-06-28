@@ -198,7 +198,6 @@
 *>
 *> \param[out] W
 *> \verbatim
-*>          W is DOUBLE PRECISION
 *>          W is (workspace) DOUBLE PRECISION array, dimension (LDW, N)
 *>          This workspace is used to store array C in the call to
 *>          the DLAMTSQR routine.

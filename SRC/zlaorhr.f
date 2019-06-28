@@ -198,8 +198,7 @@
 *>
 *> \param[out] W
 *> \verbatim
-*>          W is COMPLEX*16
-*>          W is (workspace) DOUBLE PRECISION array, dimension (LDW, N)
+*>          W is (workspace) COMPLEX*16 array, dimension (LDW, N)
 *>          This workspace is used to store array C in the call to
 *>          the ZLAMTSQR routine.
 *> \endverbatim
