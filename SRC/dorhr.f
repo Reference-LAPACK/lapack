@@ -280,10 +280,10 @@
       INTEGER            IINFO, LDW, LW, LW1, LW2, NB1LOCAL, NB2LOCAL
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAMTSQR, DLAORHR, XERBLA
+      EXTERNAL           DLAORHR, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, INT, MAX, MIN
+      INTRINSIC          DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -309,8 +309,8 @@
          INFO = -11
       ELSE
 *
-*        Test the input LWORK for the dimension of the array WORK
-*        and determine allocation space for work arrays in DLAORHR.
+*        Test the input LWORK, the dimension of the array WORK,
+*        and set the optimal size LW for LWORK.
 *
          IF( LWORK.LT.2 .AND. (.NOT.LQUERY) ) THEN
             INFO = -14
@@ -321,19 +321,15 @@
             NB1LOCAL = MIN( NB1, N )
             NB2LOCAL = MIN( NB2, N )
 *
-*           LWORK = -1, then set the size for the work array W(LDW,N)
-*           in DLAORHR, and query the optimal size of the work array
-*           WORK(LWORK) in DLAORHR, WORK in DLAORHR is only used
-*           to call DLAMTSQR from DLAORHR.
+*           LW1 and LW2 are the optimal sizes of the work array
+*           arguments W and WORK respectively in the call to DLAORHR.
+*           WORK in DLAORHR is only used as a work array in the
+*           call to DLAMTSQR.
 *
             LDW = M
-            LW1 = LDW*N
-            CALL DLAMTSQR( 'L', 'N', M, N, N, MB1, NB1LOCAL,
-     $                      A, LDA, T1, LDT1, WORK, LDW,
-     $                      WORK(2), -1, IINFO )
-            LW2 = INT( WORK( 2 ) )
-*
-            LW = LW1+LW2
+            LW1 = LDW * N
+            LW2 = N * NB1LOCAL
+            LW = LW1 + LW2
 *
             IF( ( LWORK.LT.MAX( 1, LW ) ) .AND. (.NOT.LQUERY) ) THEN
                INFO = -14
