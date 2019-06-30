@@ -312,28 +312,24 @@
 *        Test the input LWORK, the dimension of the array WORK,
 *        and set the optimal size LW for LWORK.
 *
-         IF( LWORK.LT.2 .AND. (.NOT.LQUERY) ) THEN
+*        Set the block size for the input column blocks.
+*
+         NB1LOCAL = MIN( NB1, N )
+*
+*        LW1 and LW2 are the optimal sizes of the work array
+*        arguments W and WORK respectively in the call to SLAORHR.
+*        WORK in SLAORHR is only used as a work array in the
+*        call to SLAMTSQR. Therefore, the optimal size LW2 for
+*        WORK in SLAORHR is the same asthe optimal size for WORK
+*        in SLAMTSQR.
+*
+         LDW = M
+         LW1 = LDW * N
+         LW2 = N * NB1LOCAL
+         LW = LW1 + LW2
+*
+         IF( ( LWORK.LT.MAX( 2, LW ) ) .AND. (.NOT.LQUERY) ) THEN
             INFO = -14
-         ELSE
-*
-*           Set block sizes for column blocks
-*
-            NB1LOCAL = MIN( NB1, N )
-            NB2LOCAL = MIN( NB2, N )
-*
-*           LW1 and LW2 are the optimal sizes of the work array
-*           arguments W and WORK respectively in the call to SLAORHR.
-*           WORK in SLAORHR is only used as a work array in the
-*           call to SLAMTSQR.
-*
-            LDW = M
-            LW1 = LDW * N
-            LW2 = N * NB1LOCAL
-            LW = LW1 + LW2
-*
-            IF( ( LWORK.LT.MAX( 1, LW ) ) .AND. (.NOT.LQUERY) ) THEN
-               INFO = -14
-            END IF
          END IF
 *
       END IF
@@ -354,6 +350,10 @@
          WORK( 1 ) = REAL( LW )
          RETURN
       END IF
+*
+*     Set the block size for the output column blocks.
+*
+      NB2LOCAL = MIN( NB2, N )
 *
       CALL SLAORHR( M, N, MB1, NB1LOCAL, A, LDA, T1, LDT1,
      $              NB2LOCAL, T2, LDT2, D, WORK, LDW,
