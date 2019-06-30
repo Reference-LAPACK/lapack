@@ -21,8 +21,9 @@
 *>
 *> \verbatim
 *>
-*> DERRORHR tests the error exits for DORHR that does Householder
-*> reconstruction from the ouput of tall-skinny factorization DLATSQR.
+*> DERRORHR tests the error exits for high-level DORHR and
+*> low-level DLAORHR that does Householder reconstruction from
+*> the ouput of tall-skinny factorization DLATSQR.
 *>
 *> \endverbatim
 *
@@ -79,10 +80,10 @@
 *     .. Local Arrays ..
       DOUBLE PRECISION   A( NMAX, NMAX ), T1( NMAX, NMAX ),
      $                   T2( NMAX, NMAX ), W( NMAX ), D(NMAX),
-     $                   C( NMAX, NMAX )
+     $                   W2(NMAX, NMAX), C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, DORHR
+      EXTERNAL           ALAESM, CHKXER, DLAORHR, DORHR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -109,6 +110,7 @@
             C( I, J ) = 1.D+0 / DBLE( I+J )
             T1( I, J ) = 1.D+0 / DBLE( I+J )
             T2( I, J ) = 1.D+0 / DBLE( I+J )
+            W2( I, J ) = 1.D+0 / DBLE( I+J )
          END DO
          W( J ) = 0.D+0
          D( J ) = 0.D+0
@@ -213,6 +215,110 @@
       CALL DORHR( 8, 2, 4, 3, A, 8, T1, 3, 2, T2, 2, D,
      $            W, LWMIN-1, INFO )
       CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+*
+*     DLAORHR
+*
+      SRNAMT = 'DLAORHR'
+*
+      INFOT = 1
+      CALL DLAORHR( -1, 0, 2, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 2
+      CALL DLAORHR( 0, -1, 3, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 1, 2, 3, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 3
+      CALL DLAORHR( 2, 2, 2, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 2, 2, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 1, 1, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 4
+      CALL DLAORHR( 0, 0, 1, 0, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 0, 0, 1, -1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 6
+      CALL DLAORHR( 0, 0, 1, 1, A, -1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 0, 0, 1, 1, A, 0, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 2, 2, 3, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 8
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, -1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 0, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 2, 2, 3, 2, A, 2, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 9
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 1, -1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 0, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 11
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, -1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 0, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 2, 2, 3, 1, A, 2, T1, 1, 2, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 14
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, -1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 0, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 2, 2, 3, 1, A, 2, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 16
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, -2, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      CALL DLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 0, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      LWMIN = 4
+      CALL DLAORHR( 2, 2, 3, 2, A, 2, T1, 2, 1, T2, 1, D,
+     $              W2, 2, W, LWMIN-1, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
+      LWMIN = 4
+      CALL DLAORHR( 8, 2, 4, 3, A, 8, T1, 3, 2, T2, 2, D,
+     $              W2, 8, W, LWMIN-1, INFO )
+      CALL CHKXER( 'DLAORHR', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *

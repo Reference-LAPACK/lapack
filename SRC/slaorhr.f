@@ -221,7 +221,11 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          The dimension of the array WORK.  LWORK >= NB1*N.
-*>          See the documentation of SLAMTSQR.
+*>          If LWORK = -1, then a workspace query is assumed.
+*>          The routine only calculates the optimal size of the WORK
+*>          array, returns this value as the first entry of the WORK
+*>          array, and no error message related to LWORK is issued
+*>          by XERBLA. See the documentation of SLAMTSQR.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -420,17 +424,82 @@
       PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
+      LOGICAL            LQUERY
       INTEGER            I, IINFO, J, JB, JBTEMP1, JBTEMP2, JNB,
-     $                   NPLUSONE
+     $                   LW,  NB1LOCAL, NB2LOCAL, NPLUSONE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SCOPY, SLAORHR_GETRFNP, SLAMTSQR, SLASET,
-     $                   SSCAL, STRSM
+     $                   SSCAL, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MIN
+      INTRINSIC          MIN, REAL
 *     ..
 *     .. Executable Statements ..
+*
+*     Test the input parameters
+*
+      LQUERY  = LWORK.EQ.-1
+      INFO = 0
+      IF( M.LT.0 ) THEN
+         INFO = -1
+      ELSE IF( N.LT.0 .OR. M.LT.N ) THEN
+         INFO = -2
+      ELSE IF( MB1.LE.N ) THEN
+         INFO = -3
+      ELSE IF( NB1.LT.1 ) THEN
+         INFO = -4
+      ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
+         INFO = -6
+      ELSE IF( LDT1.LT.MAX( 1, MIN( NB1, N ) ) ) THEN
+         INFO = -8
+      ELSE IF( NB2.LT.1 ) THEN
+         INFO = -9
+      ELSE IF( LDT2.LT.MAX( 1, MIN( NB2, N ) ) ) THEN
+         INFO = -11
+      ELSE IF( LDW.LT.MAX( 1, M ) ) THEN
+         INFO = -14
+      ELSE
+*
+*        Test the input LWORK, the dimension of the array WORK,
+*        and set the optimal size LW for LWORK.
+*
+*        Set the block size for the input column blocks.
+*
+         NB1LOCAL = MIN( NB1, N )
+*
+*        WORK in SLAORHR is only used as a work array in
+*        the call to SLAMTSQR, therefore the optimal size LW for WORK
+*        is the same as the optimal size for WORK in SLAMTSQR.
+*
+         LW = N * NB1LOCAL
+*
+         IF( ( LWORK.LT.MAX( 1, LW ) ) .AND. (.NOT.LQUERY) ) THEN
+            INFO = -16
+         END IF
+*
+      END IF
+*
+*     Handle error in the input parameters and return workspace query.
+*
+      IF( INFO.NE.0 ) THEN
+         CALL XERBLA( 'SLAORHR', -INFO )
+         RETURN
+      ELSE IF ( LQUERY ) THEN
+         WORK( 1 ) = REAL( LW )
+         RETURN
+      END IF
+*
+*     Quick return if possible
+*
+      IF( MIN( M, N ).EQ.0 ) THEN
+         WORK( 1 ) = REAL( LW )
+         RETURN
+      END IF
+*
+*     Set the block size for the output column blocks.
+*
+      NB2LOCAL = MIN( NB2, N )
 *
 *     (1) Form explicitly the tall-skinny M-by-N left submatrix Q1_in
 *     of M-by-M orthogonal matrix Q_in, which is implicitly stored in
@@ -448,7 +517,7 @@
 *     (1b)  On input, W stores ( I ); on output, W stores Q1_in.
 *                              ( 0 )
 *
-      CALL SLAMTSQR( 'L', 'N', M, N, N, MB1, NB1, A, LDA, T1, LDT1,
+      CALL SLAMTSQR( 'L', 'N', M, N, N, MB1, NB1LOCAL, A, LDA, T1, LDT1,
      $               W, LDW, WORK, LWORK, IINFO )
 *
 *     (2) Perform the modified LU-decomposition C1 = Q1_in - S1 = L1*U
@@ -489,11 +558,11 @@
 *     block, JNB is the column block size at each step JB.
 *
       NPLUSONE = N + 1
-      DO JB = 1, N, NB2
+      DO JB = 1, N, NB2LOCAL
 *
 *        (4-0) Determine the column block size JNB.
 *
-         JNB = MIN( NPLUSONE-JB, NB2 )
+         JNB = MIN( NPLUSONE-JB, NB2LOCAL )
 *
 *        (4-1) Copy the upper-triangular part of the current JNB-by-JNB
 *        diagonal block U(JB) (of the N-by-N matrix U) stored
@@ -524,8 +593,6 @@
                CALL SSCAL( J-JBTEMP1, -ONE, T2( 1, J ), 1 )
             END IF
          END DO
-
-
 *
 *        (4-3) Perform the triangular solve for the current block
 *        matrix X(JB):
@@ -565,7 +632,7 @@
 *
          JBTEMP2 = JB - 2
          DO J = JB, JB+JNB-2
-            DO I = J-JBTEMP2, NB2
+            DO I = J-JBTEMP2, NB2LOCAL
                T2( I, J ) = ZERO
             END DO
          END DO
@@ -590,6 +657,7 @@
          END IF
       END DO
 *
+      WORK( 1 ) = DCMPLX( LW )
       RETURN
 *
 *     End of SLAORHR

@@ -21,8 +21,9 @@
 *>
 *> \verbatim
 *>
-*> CERRORHR tests the error exits for CORHR that does Householder
-*> reconstruction from the ouput of tall-skinny factorization CLATSQR.
+*> CERRORHR tests the error exits for high-level CORHR and
+*> low-level CLAORHR that does Householder reconstruction from
+*> the ouput of tall-skinny factorization CLATSQR.
 *>
 *> \endverbatim
 *
@@ -79,10 +80,10 @@
 *     .. Local Arrays ..
       COMPLEX            A( NMAX, NMAX ), T1( NMAX, NMAX ),
      $                   T2( NMAX, NMAX ), W( NMAX ), D(NMAX),
-     $                   C( NMAX, NMAX )
+     $                   W2(NMAX, NMAX), C( NMAX, NMAX )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, CORHR
+      EXTERNAL           ALAESM, CHKXER, CLAORHR, CORHR
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -109,6 +110,7 @@
             C( I, J ) = CMPLX( 1.E+0 / REAL( I+J ) )
             T1( I, J ) = CMPLX( 1.E+0 / REAL( I+J ) )
             T2( I, J ) = CMPLX( 1.E+0 / REAL( I+J ) )
+            W2( I, J ) = CMPLX( 1.E+0 / DBLE( I+J ) )
          END DO
          W( J ) = ( 0.E+0, 0.E+0 )
          D( J ) = ( 0.E+0, 0.E+0 )
@@ -213,6 +215,110 @@
       CALL CORHR( 8, 2, 4, 3, A, 8, T1, 3, 2, T2, 2, D,
      $            W, LWMIN-1, INFO )
       CALL CHKXER( 'CORHR', INFOT, NOUT, LERR, OK )
+*
+*     CLAORHR
+*
+      SRNAMT = 'CLAORHR'
+*
+      INFOT = 1
+      CALL CLAORHR( -1, 0, 2, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 2
+      CALL CLAORHR( 0, -1, 3, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 1, 2, 3, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 3
+      CALL CLAORHR( 2, 2, 2, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 2, 2, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 1, 1, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 4
+      CALL CLAORHR( 0, 0, 1, 0, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 0, 0, 1, -1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 6
+      CALL CLAORHR( 0, 0, 1, 1, A, -1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 0, 0, 1, 1, A, 0, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 2, 2, 3, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 8
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, -1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 0, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 2, 2, 3, 2, A, 2, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 9
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 1, -1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 0, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 11
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, -1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 0, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 2, 2, 3, 1, A, 2, T1, 1, 2, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 14
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, -1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 0, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 2, 2, 3, 1, A, 2, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 10, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+*
+      INFOT = 16
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, -2, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      CALL CLAORHR( 0, 0, 1, 1, A, 1, T1, 1, 1, T2, 1, D,
+     $              W2, 1, W, 0, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      LWMIN = 4
+      CALL CLAORHR( 2, 2, 3, 2, A, 2, T1, 2, 1, T2, 1, D,
+     $              W2, 2, W, LWMIN-1, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
+      LWMIN = 4
+      CALL CLAORHR( 8, 2, 4, 3, A, 8, T1, 3, 2, T2, 2, D,
+     $              W2, 8, W, LWMIN-1, INFO )
+      CALL CHKXER( 'CLAORHR', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
