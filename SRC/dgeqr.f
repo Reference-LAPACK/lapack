@@ -18,7 +18,18 @@
 *  =============
 *>
 *> \verbatim
-*> DGEQR computes a QR factorization of an M-by-N matrix A.
+*>
+*> DGEQR computes a QR factorization of a real M-by-N matrix A:
+*>
+*>    A = Q * ( R ),
+*>            ( 0 )
+*>
+*> where:
+*>
+*>    Q is a M-by-M orthogonal matrix;
+*>    R is an upper-triangular N-by-N matrix;
+*>    0 is a (M-N)-by-N zero matrix, if M > N.
+*>
 *> \endverbatim
 *
 *  Arguments:

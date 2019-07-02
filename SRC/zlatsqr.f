@@ -19,9 +19,23 @@
 *>
 *> \verbatim
 *>
-*> SLATSQR computes a blocked Tall-Skinny QR factorization of
-*> an M-by-N matrix A, where M >= N:
-*> A = Q * R .
+*> ZLATSQR computes a blocked Tall-Skinny QR factorization of
+*> a complex M-by-N matrix A for M >= N:
+*>
+*>    A = Q * ( R ),
+*>            ( 0 )
+*>
+*> where:
+*>
+*>    Q is a M-by-M orthogonal matrix, stored on exit in an implicit
+*>    form in the elements below the digonal of the array A and in
+*>    the elemenst of the array T;
+*>
+*>    R is an upper-triangular N-by-N matrix, stored on exit in
+*>    the elements on and above the diagonal of the array A.
+*>
+*>    0 is a (M-N)-by-N zero matrix, and is not stored.
+*>
 *> \endverbatim
 *
 *  Arguments:
