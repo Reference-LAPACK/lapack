@@ -33,8 +33,16 @@
 *>
 *> \verbatim
 *>
-*> SGELQ2 computes an LQ factorization of a real m by n matrix A:
-*> A = L * Q.
+*> SGELQ2 computes an LQ factorization of a real m-by-n matrix A:
+*>
+*>    A = ( L 0 ) *  Q
+*>
+*> where:
+*>
+*>    Q is a n-by-n orthogonal matrix;
+*>    L is an lower-triangular m-by-m matrix;
+*>    0 is a m-by-(n-m) zero matrix, if m < n.
+*>
 *> \endverbatim
 *
 *  Arguments:

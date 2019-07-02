@@ -19,9 +19,20 @@
 *>
 *> \verbatim
 *>
-*>          SLASWLQ computes a blocked Short-Wide LQ factorization of a
-*>          M-by-N matrix A, where N >= M:
-*>          A = L * Q
+*> SLASWLQ computes a blocked Tall-Skinny LQ factorization of
+*> a real M-by-N matrix A for M <= N:
+*>
+*>    A = ( L 0 ) *  Q,
+*>
+*> where:
+*>
+*>    Q is a n-by-N orthogonal matrix, stored on exit in an implicit
+*>    form in the elements above the digonal of the array A and in
+*>    the elemenst of the array T;
+*>    L is an lower-triangular M-by-M matrix stored on exit in
+*>    the elements on and below the diagonal of the array A.
+*>    0 is a M-by-(N-M) zero matrix, if M < N, and is not stored.
+*>
 *> \endverbatim
 *
 *  Arguments:
