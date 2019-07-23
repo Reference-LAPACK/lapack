@@ -4,6 +4,10 @@
 
 include ../../make.inc
 
+.SUFFIXES: .c .o
+.c.o:
+	$(CC) $(CFLAGS) -I../include -c -o $@ $<
+
 # Archive files necessary to compile
 LIB = $(CBLASLIB) $(BLASLIB)
 
@@ -38,34 +42,34 @@ all3: xscblat3 xdcblat3 xccblat3 xzcblat3
 
 # Single real
 xscblat1: c_sblat1.o $(stestl1o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xscblat2: c_sblat2.o $(stestl2o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xscblat3: c_sblat3.o $(stestl3o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 # Double real
 xdcblat1: c_dblat1.o $(dtestl1o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xdcblat2: c_dblat2.o $(dtestl2o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xdcblat3: c_dblat3.o $(dtestl3o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 # Single complex
 xccblat1: c_cblat1.o $(ctestl1o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xccblat2: c_cblat2.o $(ctestl2o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xccblat3: c_cblat3.o $(ctestl3o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 # Double complex
 xzcblat1: c_zblat1.o $(ztestl1o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xzcblat2: c_zblat2.o $(ztestl2o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xzcblat3: c_zblat3.o $(ztestl3o) $(LIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 
 # RUN TESTS
@@ -102,9 +106,3 @@ cleanexe:
 	rm -f x*
 cleantest:
 	rm -f *.out core
-
-.SUFFIXES: .o .f .c
-.c.o:
-	$(CC) $(CFLAGS) -I../include -c -o $@ $<
-.f.o:
-	$(FORTRAN) $(OPTS) -c -o $@ $<

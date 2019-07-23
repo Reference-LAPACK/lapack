@@ -7,31 +7,31 @@ complex:   xblat1c xblat2c xblat3c
 complex16: xblat1z xblat2z xblat3z
 
 xblat1s: sblat1.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat1d: dblat1.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat1c: cblat1.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat1z: zblat1.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xblat2s: sblat2.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat2d: dblat2.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat2c: cblat2.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat2z: zblat2.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xblat3s: sblat3.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat3d: dblat3.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat3c: cblat3.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat3z: zblat3.o $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 run: all
 	./xblat1s > sblat1.out
@@ -54,6 +54,3 @@ cleanexe:
 	rm -f xblat*
 cleantest:
 	rm -f *.out core
-
-.f.o:
-	$(FORTRAN) $(OPTS) -c -o $@ $<

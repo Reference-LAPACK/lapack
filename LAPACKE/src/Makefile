@@ -37,6 +37,10 @@
 #
 include ../../make.inc
 
+.SUFFIXES: .c .o
+.c.o:
+	$(CC) $(CFLAGS) -I../include -c -o $@ $<
+
 OBJ = \
 lapacke_ilaver.o \
 lapacke_nancheck.o
@@ -2469,25 +2473,22 @@ endif
 all: ../../$(LAPACKELIB)
 
 ../../$(LAPACKELIB): $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_D) $(OBJ_Z) $(DEPRECATED) $(EXTENDED) $(MATGEN)
-	$(ARCH) $(ARCHFLAGS) $@ $(OBJ)
-	$(ARCH) $(ARCHFLAGS) $@ $(OBJ_S)
-	$(ARCH) $(ARCHFLAGS) $@ $(OBJ_C)
-	$(ARCH) $(ARCHFLAGS) $@ $(OBJ_D)
-	$(ARCH) $(ARCHFLAGS) $@ $(OBJ_Z)
+	$(AR) $(ARFLAGS) $@ $(OBJ)
+	$(AR) $(ARFLAGS) $@ $(OBJ_S)
+	$(AR) $(ARFLAGS) $@ $(OBJ_C)
+	$(AR) $(ARFLAGS) $@ $(OBJ_D)
+	$(AR) $(ARFLAGS) $@ $(OBJ_Z)
 ifdef BUILD_DEPRECATED
-	$(ARCH) $(ARCHFLAGS) $@ $(DEPRECATED)
+	$(AR) $(ARFLAGS) $@ $(DEPRECATED)
 endif
 ifdef (USEXBLAS)
-	$(ARCH) $(ARCHFLAGS) $@ $(EXTENDED)
+	$(AR) $(ARFLAGS) $@ $(EXTENDED)
 endif
 ifdef LAPACKE_WITH_TMG
-	$(ARCH) $(ARCHFLAGS) $@ $(MATGEN)
+	$(AR) $(ARFLAGS) $@ $(MATGEN)
 endif
 	$(RANLIB) $@
 
 clean: cleanobj
 cleanobj:
 	rm -f *.o
-
-.c.o:
-	$(CC) $(CFLAGS) -I../include -c -o $@ $<

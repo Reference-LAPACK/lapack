@@ -34,6 +34,10 @@
 #
 include ../../make.inc
 
+.SUFFIXES: .c .o
+.c.o:
+	$(CC) $(CFLAGS) -I../include -c -o $@ $<
+
 OBJ = lapacke_cgb_nancheck.o \
       lapacke_cgb_trans.o \
       lapacke_cge_nancheck.o \
@@ -186,12 +190,9 @@ OBJ = lapacke_cgb_nancheck.o \
 all: lib
 
 lib: $(OBJ)
-	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $^
+	$(AR) $(ARFLAGS) ../../$(LAPACKELIB) $^
 	$(RANLIB) ../../$(LAPACKELIB)
 
 clean: cleanobj
 cleanobj:
 	rm -f *.o
-
-.c.o:
-	$(CC) $(CFLAGS) -I../include -c -o $@ $<

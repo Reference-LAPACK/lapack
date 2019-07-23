@@ -58,23 +58,23 @@ ALLOBJ = $(SMATGEN) $(CMATGEN) $(SCATGEN) $(DMATGEN) $(ZMATGEN) \
 	$(DZATGEN)
 
 ../../$(TMGLIB): $(ALLOBJ)
-	$(ARCH) $(ARCHFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
 single: $(SMATGEN) $(SCATGEN)
-	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $^
+	$(AR) $(ARFLAGS) ../../$(TMGLIB) $^
 	$(RANLIB) ../../$(TMGLIB)
 
 complex: $(CMATGEN) $(SCATGEN)
-	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $^
+	$(AR) $(ARFLAGS) ../../$(TMGLIB) $^
 	$(RANLIB) ../../$(TMGLIB)
 
 double: $(DMATGEN) $(DZATGEN)
-	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $^
+	$(AR) $(ARFLAGS) ../../$(TMGLIB) $^
 	$(RANLIB) ../../$(TMGLIB)
 
 complex16: $(ZMATGEN) $(DZATGEN)
-	$(ARCH) $(ARCHFLAGS) ../../$(TMGLIB) $^
+	$(AR) $(ARFLAGS) ../../$(TMGLIB) $^
 	$(RANLIB) ../../$(TMGLIB)
 
 $(SCATGEN): $(FRC)
@@ -93,8 +93,5 @@ cleanobj:
 cleanlib:
 	rm -f ../../$(TMGLIB)
 
-.f.o:
-	$(FORTRAN) $(OPTS) -c -o $@ $<
-
-slaran.o: slaran.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
-dlaran.o: dlaran.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
+slaran.o: slaran.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+dlaran.o: dlaran.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<

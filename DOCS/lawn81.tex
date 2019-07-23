@@ -444,10 +444,10 @@ need to modify the \texttt{PLAT} definition, which is appended to all
 library names, to specify the architecture to which you are installing
 LAPACK.  This features avoids confusion in library names when you are
 installing LAPACK on more than one architecture.  Next, you will need
-to modify \texttt{FORTRAN}, \texttt{OPTS}, \texttt{DRVOPTS}, \texttt{NOOPT}, \texttt{LOADER},
-and \texttt{LOADOPTS} to specify
+to modify \texttt{FC}, \texttt{FFLAGS}, \texttt{FFLAGS\_DRV}, \texttt{FFLAGS\_NOOPT},
+and \texttt{LDFLAGS} to specify
 the compiler, compiler options, compiler options for the testing and
-timing\footnotemark[\value{footnote}] main programs, loader, loader options.
+timing\footnotemark[\value{footnote}] main programs, and linker options.
 Next you will have to choose which function you will use to time in the \texttt{SECOND} and \texttt{DSECND} routines.
 \begin{verbatim}
 #The Default : SECOND and DSECND will use a call to the EXTERNAL FUNCTION ETIME
@@ -466,7 +466,7 @@ TIMER    = EXT_ETIME
 Refer to the section~\ref{second} to get more information.
 
 
-Next, you will need to modify \texttt{ARCH}, \texttt{ARCHFLAGS}, and \texttt{RANLIB} to specify archiver,
+Next, you will need to modify \texttt{AR}, \texttt{ARFLAGS}, and \texttt{RANLIB} to specify archiver,
 archiver options, and ranlib for your machine.  If your architecture
 does not require \texttt{ranlib} to be run after each archive command (as
 is the case with CRAY computers running UNICOS, Hewlett Packard
@@ -723,7 +723,7 @@ The version that will be used depends on the value of the TIMER variable in the 
 \item If ETIME is available as an external function, set the value of the TIMER variable in your
 make.inc to \texttt{EXT\_ETIME}:\texttt{second\_EXT\_ETIME.f} and \texttt{dsecnd\_EXT\_ETIME.f} will be used.
 Usually on HPPA architectures,
-the compiler and loader flag \texttt{+U77} should be included to access
+the compiler and linker flag \texttt{+U77} should be included to access
 the function \texttt{ETIME}.
 
 \item If ETIME\_ is available as an external function, set the value of the TIMER variable in your make.inc
@@ -1389,7 +1389,7 @@ installing LAPACK on an SGI architecture.
 \section{ETIME}
 
 On HPPA architectures,
-the compiler and loader flag \texttt{+U77} should be included to access
+the compiler and linker flag \texttt{+U77} should be included to access
 the function \texttt{ETIME}.
 
 \section{ILAENV and IEEE-754 compliance}
@@ -1494,13 +1494,13 @@ has two options:  increase your stack size, or force all local variables
 to be allocated statically.
 
 On HPPA architectures, the
-compiler and loader flag \texttt{-K} should be used when compiling these testing
+compiler and linker flag \texttt{-K} should be used when compiling these testing
 and timing main programs to avoid such a stack overflow.  I.e., set
-\texttt{DRVOPTS = -K} in the \texttt{LAPACK/make.inc} file.
+\texttt{FFLAGS\_DRV = -K} in the \texttt{LAPACK/make.inc} file.
 
 For similar reasons,
-on SGI architectures, the compiler and loader flag \texttt{-static} should be
-used.  I.e., set \texttt{DRVOPTS = -static} in the \texttt{LAPACK/make.inc} file.
+on SGI architectures, the compiler and linker flag \texttt{-static} should be
+used.  I.e., set \texttt{FFLAGS\_DRV = -static} in the \texttt{LAPACK/make.inc} file.
 
 \section{IEEE arithmetic}
 

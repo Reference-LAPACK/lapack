@@ -125,16 +125,16 @@ double: xeigtstd
 complex16: xeigtstz
 
 xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xeigtstc: $(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 $(AEIGTST): $(FRC)
 $(SCIGTST): $(FRC)
@@ -154,13 +154,10 @@ cleanexe:
 	rm -f xeigtst*
 
 schkee.o: schkee.f
-	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 dchkee.o: dchkee.f
-	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 cchkee.o: cchkee.f
-	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 zchkee.o: zchkee.f
-	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
-
-.f.o:
-	$(FORTRAN) $(OPTS) -c -o $@ $<
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
