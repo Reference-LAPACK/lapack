@@ -57,37 +57,37 @@ lapack_testing: tmglib lapacklib blaslib
 
 variants_testing: tmglib variants lapacklib blaslib
 	$(MAKE) -C TESTING/LIN cleanexe
-	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/cholrl.a'
+	$(MAKE) -C TESTING/LIN VARLIB='../../SRC/VARIANTS/cholrl.a'
 	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_cholrl.out
 	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_cholrl.out
 	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_cholrl.out
 	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_cholrl.out
 	$(MAKE) -C TESTING/LIN cleanexe
-	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/choltop.a'
+	$(MAKE) -C TESTING/LIN VARLIB='../../SRC/VARIANTS/choltop.a'
 	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_choltop.out
 	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_choltop.out
 	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_choltop.out
 	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_choltop.out
 	$(MAKE) -C TESTING/LIN cleanexe
-	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/lucr.a'
+	$(MAKE) -C TESTING/LIN VARLIB='../../SRC/VARIANTS/lucr.a'
 	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_lucr.out
 	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_lucr.out
 	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_lucr.out
 	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_lucr.out
 	$(MAKE) -C TESTING/LIN cleanexe
-	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/lull.a'
+	$(MAKE) -C TESTING/LIN VARLIB='../../SRC/VARIANTS/lull.a'
 	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_lull.out
 	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_lull.out
 	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_lull.out
 	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_lull.out
 	$(MAKE) -C TESTING/LIN cleanexe
-	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/lurec.a'
+	$(MAKE) -C TESTING/LIN VARLIB='../../SRC/VARIANTS/lurec.a'
 	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_lurec.out
 	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_lurec.out
 	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_lurec.out
 	$(MAKE) -C TESTING ztest.out && mv TESTING/ztest.out TESTING/ztest_lurec.out
 	$(MAKE) -C TESTING/LIN cleanexe
-	$(MAKE) -C TESTING/LIN VARLIB='SRC/VARIANTS/qrll.a'
+	$(MAKE) -C TESTING/LIN VARLIB='../../SRC/VARIANTS/qrll.a'
 	$(MAKE) -C TESTING stest.out && mv TESTING/stest.out TESTING/stest_qrll.out
 	$(MAKE) -C TESTING dtest.out && mv TESTING/dtest.out TESTING/dtest_qrll.out
 	$(MAKE) -C TESTING ctest.out && mv TESTING/ctest.out TESTING/ctest_qrll.out
