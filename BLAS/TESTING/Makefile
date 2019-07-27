@@ -1,4 +1,5 @@
-include ../../make.inc
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 all: single double complex complex16
 single:    xblat1s xblat2s xblat3s

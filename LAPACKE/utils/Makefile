@@ -32,7 +32,8 @@
 ##############################################################################
 # makefile for LAPACKE, used to build lapacke binary.
 #
-include ../../make.inc
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .c .o
 .c.o:
@@ -190,8 +191,8 @@ OBJ = lapacke_cgb_nancheck.o \
 all: lib
 
 lib: $(OBJ)
-	$(AR) $(ARFLAGS) ../../$(LAPACKELIB) $^
-	$(RANLIB) ../../$(LAPACKELIB)
+	$(AR) $(ARFLAGS) $(LAPACKELIB) $^
+	$(RANLIB) $(LAPACKELIB)
 
 clean: cleanobj
 cleanobj:

@@ -73,8 +73,8 @@ TIMER = EXT_ETIME
 #  possible.)
 #
 #BLASLIB      = -lblas
-BLASLIB      = ../../librefblas.a
-CBLASLIB     = ../../libcblas.a
-LAPACKLIB    = liblapack.a
-TMGLIB       = libtmglib.a
-LAPACKELIB   = liblapacke.a
+BLASLIB      = $(TOPSRCDIR)/librefblas.a
+CBLASLIB     = $(TOPSRCDIR)/libcblas.a
+LAPACKLIB    = $(TOPSRCDIR)/liblapack.a
+TMGLIB       = $(TOPSRCDIR)/libtmglib.a
+LAPACKELIB   = $(TOPSRCDIR)/liblapacke.a

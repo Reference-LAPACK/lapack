@@ -1,4 +1,5 @@
-include ../make.inc
+TOPSRCDIR = ..
+include $(TOPSRCDIR)/make.inc
 
 all: cblas
 

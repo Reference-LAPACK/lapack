@@ -34,7 +34,8 @@
 #
 #######################################################################
 
-include ../make.inc
+TOPSRCDIR = ..
+include $(TOPSRCDIR)/make.inc
 
 all: single complex double complex16 singleproto doubleproto complexproto complex16proto
 

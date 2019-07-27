@@ -35,7 +35,8 @@
 # Note: we use multiple OBJ_S, OBJ_C, etc, instead of a single OBJ
 # to allow build with mingw (argument list too long for the msys ar)
 #
-include ../../make.inc
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .c .o
 .c.o:
@@ -2470,9 +2471,9 @@ lapacke_zlagsy.o \
 lapacke_zlagsy_work.o
 endif
 
-all: ../../$(LAPACKELIB)
+all: $(LAPACKELIB)
 
-../../$(LAPACKELIB): $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_D) $(OBJ_Z) $(DEPRECATED) $(EXTENDED) $(MATGEN)
+$(LAPACKELIB): $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_D) $(OBJ_Z) $(DEPRECATED) $(EXTENDED) $(MATGEN)
 	$(AR) $(ARFLAGS) $@ $(OBJ)
 	$(AR) $(ARFLAGS) $@ $(OBJ_S)
 	$(AR) $(ARFLAGS) $@ $(OBJ_C)
@@ -2489,6 +2490,8 @@ ifdef LAPACKE_WITH_TMG
 endif
 	$(RANLIB) $@
 
-clean: cleanobj
+clean: cleanobj cleanlib
 cleanobj:
 	rm -f *.o
+cleanlib:
+	rm -f $(LAPACKELIB)

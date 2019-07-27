@@ -1,5 +1,3 @@
-include ../../make.inc
-
 ########################################################################
 #  This is the makefile for the eigenvalue test program from LAPACK.
 #  The test files are organized as follows:
@@ -32,6 +30,9 @@ include ../../make.inc
 #       make single FRC=FRC
 #
 ########################################################################
+
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 AEIGTST = \
    alahdg.o \
@@ -124,16 +125,16 @@ complex: xeigtstc
 double: xeigtstd
 complex16: xeigtstz
 
-xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xeigtsts: $(SEIGTST) $(SCIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xeigtstc: $(CEIGTST) $(SCIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xeigtstc: $(CEIGTST) $(SCIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xeigtstd: $(DEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xeigtstz: $(ZEIGTST) $(DZIGTST) $(AEIGTST) $(TMGLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 $(AEIGTST): $(FRC)

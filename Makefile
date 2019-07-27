@@ -4,7 +4,8 @@
 #  April 2012
 #
 
-include make.inc
+TOPSRCDIR = .
+include $(TOPSRCDIR)/make.inc
 
 all: lapack_install lib blas_testing lapack_testing
 

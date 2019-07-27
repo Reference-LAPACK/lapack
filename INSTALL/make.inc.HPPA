@@ -72,9 +72,9 @@ TIMER = EXT_ETIME
 #  machine-specific, optimized BLAS library should be used whenever
 #  possible.)
 #
-#BLASLIB      = ../../librefblas.a
+#BLASLIB      = $(TOPSRCDIR)/librefblas.a
 BLASLIB      = -lblas
-CBLASLIB     = ../../libcblas.a
-LAPACKLIB    = liblapack.a
-TMGLIB       = libtmglib.a
-LAPACKELIB   = liblapacke.a
+CBLASLIB     = $(TOPSRCDIR)/libcblas.a
+LAPACKLIB    = $(TOPSRCDIR)/liblapack.a
+TMGLIB       = $(TOPSRCDIR)/libtmglib.a
+LAPACKELIB   = $(TOPSRCDIR)/liblapacke.a

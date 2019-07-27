@@ -1,5 +1,3 @@
-include ../../make.inc
-
 #######################################################################
 #  This makefile creates the test programs for the linear equation
 #  routines in LAPACK.  The test files are grouped as follows:
@@ -32,6 +30,9 @@ include ../../make.inc
 #       make single FRC=FRC
 #
 #######################################################################
+
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 ALINTST = \
    aladhd.o alaerh.o alaesm.o alahd.o alareq.o \
@@ -265,34 +266,34 @@ proto-double: xlintstds xlintstrfd
 proto-complex: xlintstrfc
 proto-complex16: xlintstzc xlintstrfz
 
-xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstds: $(DSLINTST) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstds: $(DSLINTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstzc: $(ZCLINTST) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstzc: $(ZCLINTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstrfs: $(SLINTSTRFP) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstrfs: $(SLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstrfd: $(DLINTSTRFP) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstrfd: $(DLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstrfc: $(CLINTSTRFP) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstrfc: $(CLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstrfz: $(ZLINTSTRFP) ../../$(TMGLIB) $(VARLIB) ../../$(LAPACKLIB) $(BLASLIB)
+xlintstrfz: $(ZLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 $(ALINTST): $(FRC)

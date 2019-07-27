@@ -1,4 +1,5 @@
-include ../../make.inc
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .c .o
 .c.o:
@@ -9,7 +10,7 @@ all: xexample_DGESV_rowmajor \
      xexample_DGELS_rowmajor \
      xexample_DGELS_colmajor
 
-LIBRARIES = ../../$(LAPACKELIB) ../../$(LAPACKLIB) $(BLASLIB)
+LIBRARIES = $(LAPACKELIB) $(LAPACKLIB) $(BLASLIB)
 
 # Double Precision Examples
 xexample_DGESV_rowmajor: example_DGESV_rowmajor.o lapacke_example_aux.o $(LIBRARIES)

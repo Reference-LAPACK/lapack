@@ -1,5 +1,3 @@
-include ../../make.inc
-
 #######################################################################
 #  This is the makefile to create a library for the BLAS.
 #  The files are grouped as follows:
@@ -54,6 +52,9 @@ include ../../make.inc
 #  ejr, May 2006.
 #
 #######################################################################
+
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 all: $(BLASLIB)
 

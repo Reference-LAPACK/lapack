@@ -1,5 +1,3 @@
-include ../../make.inc
-
 #######################################################################
 #  This is the makefile to create a the variants libraries for LAPACK.
 #  The files are organized as follows:
@@ -16,6 +14,9 @@ include ../../make.inc
 #  Partial Pivoting. SIAM J. Matrix Anal. Appl. 18, 4 (Oct. 1997),
 #  1065-1081. http://dx.doi.org/10.1137/S0895479896297744
 #######################################################################
+
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 CHOLRL = cholesky/RL/cpotrf.o cholesky/RL/dpotrf.o cholesky/RL/spotrf.o cholesky/RL/zpotrf.o
 

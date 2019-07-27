@@ -1,5 +1,3 @@
-include ../make.inc
-
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
@@ -55,6 +53,9 @@ include ../make.inc
 #  installation guide, LAPACK Working Note 41, for instructions.
 #
 #######################################################################
+
+TOPSRCDIR = ..
+include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .F .o
 .F.o:
@@ -524,27 +525,27 @@ ifdef BUILD_DEPRECATED
 DEPRECATED = $(DEPRECSRC)
 endif
 
-all: ../$(LAPACKLIB)
+all: $(LAPACKLIB)
 
-../$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
 single: $(SLASRC) $(DSLASRC) $(SXLASRC) $(SCLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) ../$(LAPACKLIB) $^
-	$(RANLIB) ../$(LAPACKLIB)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
 
 complex: $(CLASRC) $(ZCLASRC) $(CXLASRC) $(SCLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) ../$(LAPACKLIB) $^
-	$(RANLIB) ../$(LAPACKLIB)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
 
 double: $(DLASRC) $(DSLASRC) $(DXLASRC) $(DZLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) ../$(LAPACKLIB) $^
-	$(RANLIB) ../$(LAPACKLIB)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
 
 complex16: $(ZLASRC) $(ZCLASRC) $(ZXLASRC) $(DZLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) ../$(LAPACKLIB) $^
-	$(RANLIB) ../$(LAPACKLIB)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
 
 $(ALLAUX): $(FRC)
 $(SCLAUX): $(FRC)
@@ -569,7 +570,7 @@ clean: cleanobj cleanlib
 cleanobj:
 	rm -f *.o DEPRECATED/*.o
 cleanlib:
-	rm -f ../$(LAPACKLIB)
+	rm -f $(LAPACKLIB)
 
 slaruv.o: slaruv.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
 dlaruv.o: dlaruv.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<

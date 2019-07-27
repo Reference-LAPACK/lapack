@@ -1,4 +1,5 @@
-include ../../make.inc
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 .SUFFIXES: .c .o
 .c.o:

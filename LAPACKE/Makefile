@@ -40,7 +40,8 @@
 # To clean everything including lapacke library type
 # 'make cleanall'
 #
-include ../make.inc
+TOPSRCDIR = ..
+include $(TOPSRCDIR)/make.inc
 
 all: lapacke
 
@@ -54,7 +55,7 @@ include/lapacke_mangling.h: include/lapacke_mangling_with_flags.h.in
 lapacke_example: lapacke
 	$(MAKE) -C example
 
-clean: cleanlib
+clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C utils clean
 	$(MAKE) -C example clean
@@ -63,6 +64,6 @@ cleanobj:
 	$(MAKE) -C utils cleanobj
 	$(MAKE) -C example cleanobj
 cleanlib:
-	rm -f ../$(LAPACKELIB)
+	$(MAKE) -C src cleanlib
 cleanexe:
 	$(MAKE) -C example cleanexe
