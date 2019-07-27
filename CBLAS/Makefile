@@ -7,7 +7,7 @@ cblas: include/cblas_mangling.h
 	$(MAKE) -C src
 
 include/cblas_mangling.h: include/cblas_mangling_with_flags.h.in
-	cp $< $@
+	cp include/cblas_mangling_with_flags.h.in $@
 
 cblas_testing: cblas
 	$(MAKE) -C testing run

@@ -50,7 +50,7 @@ lapacke: include/lapacke_mangling.h
 	$(MAKE) -C utils
 
 include/lapacke_mangling.h: include/lapacke_mangling_with_flags.h.in
-	cp $< $@
+	cp include/lapacke_mangling_with_flags.h.in $@
 
 lapacke_example: lapacke
 	$(MAKE) -C example
