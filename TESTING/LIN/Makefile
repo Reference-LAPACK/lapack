@@ -254,13 +254,16 @@ ZLINTSTRFP = zchkrfp.o zdrvrfp.o zdrvrf1.o zdrvrf2.o zdrvrf3.o zdrvrf4.o zerrrfp
 	zlatb4.o zlaipd.o zlarhs.o zsbmv.o zget04.o zpot01.o zpot03.o zpot02.o \
 	chkxer.o xerbla.o alaerh.o aladhd.o alahd.o alasvm.o
 
+.PHONY: all
 all: single double complex complex16 proto-single proto-double proto-complex proto-complex16
 
+.PHONY: single double complex complex16
 single: xlintsts
 double: xlintstd
 complex: xlintstc
 complex16: xlintstz
 
+.PHONY: proto-single proto-double proto-complex proto-complex16
 proto-single: xlintstrfs
 proto-double: xlintstds xlintstrfd
 proto-complex: xlintstrfc
@@ -307,6 +310,7 @@ $(ZLINTST): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
+.PHONY: clean cleanobj cleanexe
 clean: cleanobj cleanexe
 cleanobj:
 	rm -f *.o

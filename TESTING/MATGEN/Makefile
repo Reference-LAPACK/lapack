@@ -53,6 +53,7 @@ ZMATGEN = zlatms.o zlatme.o zlatmr.o zlatmt.o \
    zlagge.o zlaghe.o zlagsy.o zlakf2.o zlarge.o zlaror.o zlarot.o \
    zlatm1.o zlarnd.o zlatm2.o zlatm3.o zlatm5.o zlatm6.o zlahilb.o
 
+.PHONY: all
 all: $(TMGLIB)
 
 ALLOBJ = $(SMATGEN) $(CMATGEN) $(SCATGEN) $(DMATGEN) $(ZMATGEN) \
@@ -62,6 +63,7 @@ $(TMGLIB): $(ALLOBJ)
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
+.PHONY: single complex double complex16
 single: $(SMATGEN) $(SCATGEN)
 	$(AR) $(ARFLAGS) $(TMGLIB) $^
 	$(RANLIB) $(TMGLIB)
@@ -88,6 +90,7 @@ $(ZMATGEN): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
+.PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
 	rm -f *.o

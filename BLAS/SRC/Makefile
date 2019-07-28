@@ -56,6 +56,7 @@
 TOPSRCDIR = ../..
 include $(TOPSRCDIR)/make.inc
 
+.PHONY: all
 all: $(BLASLIB)
 
 #---------------------------------------------------------
@@ -142,6 +143,7 @@ $(BLASLIB): $(ALLOBJ)
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
+.PHONY: single double complex complex16
 single: $(SBLAS1) $(ALLBLAS) $(SBLAS2) $(SBLAS3)
 	$(AR) $(ARFLAGS) $(BLASLIB) $^
 	$(RANLIB) $(BLASLIB)
@@ -161,6 +163,7 @@ complex16: $(ZBLAS1) $(ZB1AUX) $(ALLBLAS) $(ZBLAS2) $(ZBLAS3)
 FRC:
 	@FRC=$(FRC)
 
+.PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
 	rm -f *.o

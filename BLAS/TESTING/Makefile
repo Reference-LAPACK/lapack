@@ -1,6 +1,7 @@
 TOPSRCDIR = ../..
 include $(TOPSRCDIR)/make.inc
 
+.PHONY: all single double complex complex16
 all: single double complex complex16
 single:    xblat1s xblat2s xblat3s
 double:    xblat1d xblat2d xblat3d
@@ -34,6 +35,7 @@ xblat3c: cblat3.o $(BLASLIB)
 xblat3z: zblat3.o $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
+.PHONY: run
 run: all
 	./xblat1s > sblat1.out
 	./xblat1d > dblat1.out
@@ -48,6 +50,7 @@ run: all
 	./xblat3c < cblat3.in
 	./xblat3z < zblat3.in
 
+.PHONY: clean cleanobj cleanexe cleantest
 clean: cleanobj cleanexe cleantest
 cleanobj:
 	rm -f *.o

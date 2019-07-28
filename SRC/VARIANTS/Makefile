@@ -31,6 +31,7 @@ LUREC = lu/REC/cgetrf.o lu/REC/dgetrf.o lu/REC/sgetrf.o lu/REC/zgetrf.o
 QRLL = qr/LL/cgeqrf.o qr/LL/dgeqrf.o qr/LL/sgeqrf.o qr/LL/zgeqrf.o qr/LL/sceil.o
 
 
+.PHONY: all
 all: cholrl.a choltop.a lucr.a lull.a lurec.a qrll.a
 
 cholrl.a: $(CHOLRL)
@@ -57,6 +58,7 @@ qrll.a: $(QRLL)
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
+.PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
 	rm -f $(CHOLRL) $(CHOLTOP) $(LUCR) $(LULL) $(LUREC) $(QRLL)

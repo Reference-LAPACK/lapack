@@ -1,6 +1,7 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
+.PHONY: all testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
 all: testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
 
 testlsame: lsame.o lsametst.o
@@ -26,6 +27,7 @@ testieee: tstiee.o
 testversion: ilaver.o LAPACK_version.o
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
+.PHONY: run
 run: all
 	./testlsame
 	./testslamch
@@ -35,6 +37,7 @@ run: all
 	./testieee
 	./testversion
 
+.PHONY: clean cleanobj cleanexe cleantest
 clean: cleanobj cleanexe cleantest
 cleanobj:
 	rm -f *.o

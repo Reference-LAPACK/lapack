@@ -5,6 +5,7 @@ include $(TOPSRCDIR)/make.inc
 .c.o:
 	$(CC) $(CFLAGS) -I. -I../include -c -o $@ $<
 
+.PHONY: all
 all: xexample_DGESV_rowmajor \
      xexample_DGESV_colmajor \
      xexample_DGELS_rowmajor \
@@ -29,6 +30,7 @@ xexample_DGELS_colmajor: example_DGELS_colmajor.o lapacke_example_aux.o $(LIBRAR
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 	./$@
 
+.PHONY: clean cleanobj cleanexe
 clean: cleanobj cleanexe
 cleanobj:
 	rm -f *.o

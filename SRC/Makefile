@@ -525,12 +525,14 @@ ifdef BUILD_DEPRECATED
 DEPRECATED = $(DEPRECSRC)
 endif
 
+.PHONY: all
 all: $(LAPACKLIB)
 
 $(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
+.PHONY: single complex double complex16
 single: $(SLASRC) $(DSLASRC) $(SXLASRC) $(SCLAUX) $(ALLAUX)
 	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
 	$(RANLIB) $(LAPACKLIB)
@@ -566,6 +568,7 @@ endif
 FRC:
 	@FRC=$(FRC)
 
+.PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
 	rm -f *.o DEPRECATED/*.o

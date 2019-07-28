@@ -32,6 +32,7 @@ ztestl1o = c_zblas1.o
 ztestl2o = c_zblas2.o c_z2chke.o auxiliary.o c_xerbla.o
 ztestl3o = c_zblas3.o c_z3chke.o auxiliary.o c_xerbla.o
 
+.PHONY: all all1 all2 all3
 all: all1 all2 all3
 all1: xscblat1 xdcblat1 xccblat1 xzcblat1
 all2: xscblat2 xdcblat2 xccblat2 xzcblat2
@@ -74,6 +75,7 @@ xzcblat3: c_zblat3.o $(ztestl3o) $(LIB)
 
 
 # RUN TESTS
+.PHONY: run
 run: all
 	@echo "--> TESTING CBLAS 1 - SINGLE PRECISION REAL <--"
 	@./xscblat1 > stest1.out
@@ -100,6 +102,7 @@ run: all
 	@echo "--> TESTING CBLAS 3 - DOUBLE PRECISION COMPLEX <--"
 	@./xzcblat3 < zin3 > ztest3.out
 
+.PHONY: clean cleanobj cleanexe cleantest
 clean: cleanobj cleanexe cleantest
 cleanobj:
 	rm -f *.o

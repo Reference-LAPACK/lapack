@@ -37,6 +37,7 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
+.PHONY: all
 all: single complex double complex16 singleproto doubleproto complexproto complex16proto
 
 SEIGTST= snep.out \
@@ -140,10 +141,13 @@ ZLINTST= ztest.out
 
 ZLINTSTPROTO= zctest.out ztest_rfp.out
 
+.PHONY: single complex double complex16
 single:         $(SLINTST) $(SEIGTST)
 complex:        $(CLINTST) $(CEIGTST)
 double:         $(DLINTST) $(DEIGTST)
 complex16:      $(ZLINTST) $(ZEIGTST)
+
+.PHONY: singleproto complexproto doubleproto complex16proto
 singleproto:    $(SLINTSTPROTO)
 complexproto:   $(CLINTSTPROTO)
 doubleproto:    $(DLINTSTPROTO)
@@ -583,6 +587,7 @@ EIG/xeigtstd: $(FRCEIG) $(FRC)
 EIG/xeigtstz: $(FRCEIG) $(FRC)
 	$(MAKE) -C EIG xeigtstz
 
+.PHONY: clean cleantest
 clean: cleantest
 cleantest:
 	rm -f *.out core

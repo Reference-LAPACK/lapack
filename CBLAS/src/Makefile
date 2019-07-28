@@ -7,6 +7,7 @@ include $(TOPSRCDIR)/make.inc
 .c.o:
 	$(CC) $(CFLAGS) -I../include -c -o $@ $<
 
+.PHONY: all
 all: $(CBLASLIB)
 
 # Error handling routines for level 2 & 3
@@ -48,6 +49,7 @@ zlev1 = cblas_zswap.o cblas_zscal.o cblas_zdscal.o cblas_zcopy.o \
 # Common files for level 1 single precision
 sclev1 = cblas_scasum.o scasumsub.o cblas_scnrm2.o scnrm2sub.o
 
+.PHONY: slib1 dlib1 clib1 zlib1
 # Single precision real
 slib1: $(slev1) $(sclev1)
 	$(AR) $(ARFLAGS) $(CBLASLIB) $^
@@ -100,6 +102,7 @@ zlev2 = cblas_zgemv.o cblas_zgbmv.o cblas_zhemv.o cblas_zhbmv.o cblas_zhpmv.o \
         cblas_ztpsv.o cblas_zgeru.o cblas_zgerc.o cblas_zher.o  cblas_zher2.o \
         cblas_zhpr.o  cblas_zhpr2.o
 
+.PHONY: slib2 dlib2 clib2 zlib2
 # Single precision real
 slib2: $(slev2) $(errhand)
 	$(AR) $(ARFLAGS) $(CBLASLIB) $^
@@ -146,6 +149,7 @@ zlev3 = cblas_zgemm.o cblas_zsymm.o cblas_zhemm.o cblas_zherk.o \
         cblas_zher2k.o cblas_ztrmm.o cblas_ztrsm.o cblas_zsyrk.o \
         cblas_zsyr2k.o
 
+.PHONY: slib3 dlib3 clib3 zlib3
 # Single precision real
 slib3: $(slev3) $(errhand)
 	$(AR) $(ARFLAGS) $(CBLASLIB) $^
@@ -171,6 +175,7 @@ alev1 = $(slev1) $(dlev1) $(clev1) $(zlev1) $(sclev1)
 alev2 = $(slev2) $(dlev2) $(clev2) $(zlev2)
 alev3 = $(slev3) $(dlev3) $(clev3) $(zlev3)
 
+.PHONY: all1 all2 all3
 # All level 1
 all1: $(alev1)
 	$(AR) $(ARFLAGS) $(CBLASLIB) $^
@@ -194,6 +199,7 @@ $(CBLASLIB): $(alev1) $(alev2) $(alev3) $(errhand)
 FRC:
 	@FRC=$(FRC)
 
+.PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
 	rm -f *.o

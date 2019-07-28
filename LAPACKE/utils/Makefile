@@ -188,12 +188,15 @@ OBJ = lapacke_cgb_nancheck.o \
       lapacke_make_complex_float.o \
       lapacke_make_complex_double.o
 
+.PHONY: all
 all: lib
 
+.PHONY: lib
 lib: $(OBJ)
 	$(AR) $(ARFLAGS) $(LAPACKELIB) $^
 	$(RANLIB) $(LAPACKELIB)
 
+.PHONY: clean cleanobj
 clean: cleanobj
 cleanobj:
 	rm -f *.o

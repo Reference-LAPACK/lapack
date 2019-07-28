@@ -118,8 +118,10 @@ ZEIGTST = zchkee.o \
    zsgt01.o zslect.o \
    zstt21.o zstt22.o zunt01.o zunt03.o
 
+.PHONY: all
 all: single complex double complex16
 
+.PHONY: single complex double complex16
 single: xeigtsts
 complex: xeigtstc
 double: xeigtstd
@@ -148,6 +150,7 @@ $(ZEIGTST): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
+.PHONY: clean cleanobj cleanexe
 clean: cleanobj cleanexe
 cleanobj:
 	rm -f *.o

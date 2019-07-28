@@ -43,8 +43,10 @@
 TOPSRCDIR = ..
 include $(TOPSRCDIR)/make.inc
 
+.PHONY: all
 all: lapacke
 
+.PHONY: lapacke
 lapacke: include/lapacke_mangling.h
 	$(MAKE) -C src
 	$(MAKE) -C utils
@@ -52,9 +54,11 @@ lapacke: include/lapacke_mangling.h
 include/lapacke_mangling.h: include/lapacke_mangling_with_flags.h.in
 	cp include/lapacke_mangling_with_flags.h.in $@
 
+.PHONY: lapacke_example
 lapacke_example: lapacke
 	$(MAKE) -C example
 
+.PHONY: clean cleanobj cleanlib cleanexe
 clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C utils clean
