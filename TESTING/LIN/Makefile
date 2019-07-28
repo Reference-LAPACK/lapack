@@ -1,5 +1,3 @@
-include ../../make.inc
-
 #######################################################################
 #  This makefile creates the test programs for the linear equation
 #  routines in LAPACK.  The test files are grouped as follows:
@@ -33,10 +31,8 @@ include ../../make.inc
 #
 #######################################################################
 
-ifneq ($(strip $(VARLIB)),)
-    LAPACKLIB := $(VARLIB) ../../$(LAPACKLIB)
-endif
-
+TOPSRCDIR = ../..
+include $(TOPSRCDIR)/make.inc
 
 ALINTST = \
    aladhd.o alaerh.o alaesm.o alahd.o alareq.o \
@@ -258,47 +254,50 @@ ZLINTSTRFP = zchkrfp.o zdrvrfp.o zdrvrf1.o zdrvrf2.o zdrvrf3.o zdrvrf4.o zerrrfp
 	zlatb4.o zlaipd.o zlarhs.o zsbmv.o zget04.o zpot01.o zpot03.o zpot02.o \
 	chkxer.o xerbla.o alaerh.o aladhd.o alahd.o alasvm.o
 
+.PHONY: all
 all: single double complex complex16 proto-single proto-double proto-complex proto-complex16
 
+.PHONY: single double complex complex16
 single: xlintsts
 double: xlintstd
 complex: xlintstc
 complex16: xlintstz
 
+.PHONY: proto-single proto-double proto-complex proto-complex16
 proto-single: xlintstrfs
 proto-double: xlintstds xlintstrfd
 proto-complex: xlintstrfc
 proto-complex16: xlintstzc xlintstrfz
 
-xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintsts: $(ALINTST) $(SLINTST) $(SCLNTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstc: $(ALINTST) $(CLINTST) $(SCLNTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstd: $(ALINTST) $(DLINTST) $(DZLNTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstz: $(ALINTST) $(ZLINTST) $(DZLNTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(XBLASLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstds: $(DSLINTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstds: $(DSLINTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstzc: $(ZCLINTST) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstzc: $(ZCLINTST) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstrfs: $(SLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstrfs: $(SLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstrfd: $(DLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstrfd: $(DLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstrfc: $(CLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstrfc: $(CLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
-xlintstrfz: $(ZLINTSTRFP) ../../$(TMGLIB) ../../$(LAPACKLIB) $(BLASLIB)
-	$(LOADER) $(LOADOPTS) -o $@ $^
+xlintstrfz: $(ZLINTSTRFP) $(TMGLIB) $(VARLIB) $(LAPACKLIB) $(BLASLIB)
+	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 
 $(ALINTST): $(FRC)
 $(SCLNTST): $(FRC)
@@ -311,6 +310,7 @@ $(ZLINTST): $(FRC)
 FRC:
 	@FRC=$(FRC)
 
+.PHONY: clean cleanobj cleanexe
 clean: cleanobj cleanexe
 cleanobj:
 	rm -f *.o
@@ -318,15 +318,12 @@ cleanexe:
 	rm -f xlintst*
 
 schkaa.o: schkaa.f
-	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 dchkaa.o: dchkaa.f
-	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 cchkaa.o: cchkaa.f
-	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 zchkaa.o: zchkaa.f
-	$(FORTRAN) $(DRVOPTS) -c -o $@ $<
-
-.f.o:
-	$(FORTRAN) $(OPTS) -c -o $@ $<
+	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 
 .NOTPARALLEL:
