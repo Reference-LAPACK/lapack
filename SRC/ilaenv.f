@@ -132,7 +132,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date June 2019
 *
 *> \ingroup OTHERauxiliary
 *
@@ -165,7 +165,7 @@
 *  -- LAPACK auxiliary routine (version 3.8.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     June 2019
 *
 *     .. Scalar Arguments ..
       CHARACTER*( * )    NAME, OPTS
@@ -271,7 +271,16 @@
 *
       NB = 1
 *
-      IF( C2.EQ.'GE' ) THEN
+      IF( SUBNAM(2:6).EQ.'LAORH' ) THEN
+*
+*        This is for *LAORHR_GETRFNP routine
+*
+         IF( SNAME ) THEN
+             NB = 32
+         ELSE
+             NB = 32
+         END IF
+      ELSE IF( C2.EQ.'GE' ) THEN
          IF( C3.EQ.'TRF' ) THEN
             IF( SNAME ) THEN
                NB = 64

@@ -68,12 +68,12 @@ You just need to add the variants methods library in your linking sequence befor
 Here is a quick example for LU
 
 Default using LU Right Looking version:
- $(FORTRAN) -c myprog.f
- $(FORTRAN) -o myexe myprog.o $(LAPACKLIB) $(BLASLIB)
+ $(FC) $(FFLAGS) -c myprog.f
+ $(FC) $(FFLAGS) $(LDFLAGS) -o myexe myprog.o $(LAPACKLIB) $(BLASLIB)
 
 Using LU Left Looking version:
- $(FORTRAN) -c myprog.f
- $(FORTRAN) -o myexe myprog.o $(PATH TO LAPACK/SRC/VARIANTS)/lull.a $(LAPACKLIB) $(BLASLIB)
+ $(FC) $(FFLAGS) -c myprog.f
+ $(FC) $(FFLAGS) $(LDFLAGS) -o myexe myprog.o $(PATH TO LAPACK/SRC/VARIANTS)/lull.a $(LAPACKLIB) $(BLASLIB)
 
 ===========
 = SUPPORT =

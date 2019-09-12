@@ -1,5 +1,3 @@
-include ../make.inc
-
 #######################################################################
 #  This is the makefile to create a library for LAPACK.
 #  The files are organized as follows:
@@ -55,6 +53,13 @@ include ../make.inc
 #  installation guide, LAPACK Working Note 41, for instructions.
 #
 #######################################################################
+
+TOPSRCDIR = ..
+include $(TOPSRCDIR)/make.inc
+
+.SUFFIXES: .F .o
+.F.o:
+	$(FC) $(FFLAGS) -c -o $@ $<
 
 ALLAUX = ilaenv.o ilaenv2stage.o ieeeck.o lsamen.o xerbla.o xerbla_array.o \
    iparmq.o iparam2stage.o \
@@ -171,6 +176,7 @@ SLASRC = \
    sgetsls.o sgeqr.o slatsqr.o slamtsqr.o sgemqr.o \
    sgelq.o slaswlq.o slamswlq.o sgemlq.o \
    stplqt.o stplqt2.o stpmlqt.o \
+   sorhr.o slaorhr.o slaorhr_getrfnp.o slaorhr_getrfnp2.o \
    ssytrd_2stage.o ssytrd_sy2sb.o ssytrd_sb2st.o ssb2st_kernels.o \
    ssyevd_2stage.o ssyev_2stage.o ssyevx_2stage.o ssyevr_2stage.o \
    ssbev_2stage.o ssbevx_2stage.o ssbevd_2stage.o ssygv_2stage.o \
@@ -273,6 +279,7 @@ CLASRC = \
    cgetsls.o cgeqr.o clatsqr.o clamtsqr.o cgemqr.o \
    cgelq.o claswlq.o clamswlq.o cgemlq.o \
    ctplqt.o ctplqt2.o ctpmlqt.o \
+   corhr.o claorhr.o claorhr_getrfnp.o claorhr_getrfnp2.o \
    chetrd_2stage.o chetrd_he2hb.o chetrd_hb2st.o chb2st_kernels.o \
    cheevd_2stage.o cheev_2stage.o cheevx_2stage.o cheevr_2stage.o \
    chbev_2stage.o chbevx_2stage.o chbevd_2stage.o chegv_2stage.o \
@@ -370,6 +377,7 @@ DLASRC = \
    dgetsls.o dgeqr.o dlatsqr.o dlamtsqr.o dgemqr.o \
    dgelq.o dlaswlq.o dlamswlq.o dgemlq.o \
    dtplqt.o dtplqt2.o dtpmlqt.o \
+   dorhr.o dlaorhr.o dlaorhr_getrfnp.o dlaorhr_getrfnp2.o \
    dsytrd_2stage.o dsytrd_sy2sb.o dsytrd_sb2st.o dsb2st_kernels.o \
    dsyevd_2stage.o dsyev_2stage.o dsyevx_2stage.o dsyevr_2stage.o \
    dsbev_2stage.o dsbevx_2stage.o dsbevd_2stage.o dsygv_2stage.o \
@@ -475,6 +483,7 @@ ZLASRC = \
    zgelqt.o zgelqt3.o zgemlqt.o \
    zgetsls.o zgeqr.o zlatsqr.o zlamtsqr.o zgemqr.o \
    zgelq.o zlaswlq.o zlamswlq.o zgemlq.o \
+   zorhr.o zlaorhr.o zlaorhr_getrfnp.o zlaorhr_getrfnp2.o \
    zhetrd_2stage.o zhetrd_he2hb.o zhetrd_hb2st.o zhb2st_kernels.o \
    zheevd_2stage.o zheev_2stage.o zheevx_2stage.o zheevr_2stage.o \
    zhbev_2stage.o zhbevx_2stage.o zhbevd_2stage.o zhegv_2stage.o \
@@ -516,27 +525,29 @@ ifdef BUILD_DEPRECATED
 DEPRECATED = $(DEPRECSRC)
 endif
 
-all: ../$(LAPACKLIB)
+.PHONY: all
+all: $(LAPACKLIB)
 
-../$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
-	$(ARCH) $(ARCHFLAGS) $@ $^
+$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
+.PHONY: single complex double complex16
 single: $(SLASRC) $(DSLASRC) $(SXLASRC) $(SCLAUX) $(ALLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $^
-	$(RANLIB) ../$(LAPACKLIB)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
 
 complex: $(CLASRC) $(ZCLASRC) $(CXLASRC) $(SCLAUX) $(ALLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $^
-	$(RANLIB) ../$(LAPACKLIB)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
 
 double: $(DLASRC) $(DSLASRC) $(DXLASRC) $(DZLAUX) $(ALLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $^
-	$(RANLIB) ../$(LAPACKLIB)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
 
 complex16: $(ZLASRC) $(ZCLASRC) $(ZXLASRC) $(DZLAUX) $(ALLAUX)
-	$(ARCH) $(ARCHFLAGS) ../$(LAPACKLIB) $^
-	$(RANLIB) ../$(LAPACKLIB)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
 
 $(ALLAUX): $(FRC)
 $(SCLAUX): $(FRC)
@@ -557,20 +568,16 @@ endif
 FRC:
 	@FRC=$(FRC)
 
+.PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
 cleanobj:
 	rm -f *.o DEPRECATED/*.o
 cleanlib:
-	rm -f ../$(LAPACKLIB)
+	rm -f $(LAPACKLIB)
 
-.f.o:
-	$(FORTRAN) $(OPTS) -c -o $@ $<
-.F.o:
-	$(FORTRAN) $(OPTS) -c -o $@ $<
-
-slaruv.o: slaruv.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
-dlaruv.o: dlaruv.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
-sla_wwaddw.o: sla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
-dla_wwaddw.o: dla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
-cla_wwaddw.o: cla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
-zla_wwaddw.o: zla_wwaddw.f ; $(FORTRAN) $(NOOPT) -c -o $@ $<
+slaruv.o: slaruv.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+dlaruv.o: dlaruv.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+sla_wwaddw.o: sla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+dla_wwaddw.o: dla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+cla_wwaddw.o: cla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<
+zla_wwaddw.o: zla_wwaddw.f ; $(FC) $(FFLAGS_NOOPT) -c -o $@ $<

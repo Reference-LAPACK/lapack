@@ -18,7 +18,17 @@
 *  =============
 *>
 *> \verbatim
-*> ZGELQ computes a LQ factorization of an M-by-N matrix A.
+*>
+*> ZGELQ computes an LQ factorization of a complex M-by-N matrix A:
+*>
+*>    A = ( L 0 ) *  Q
+*>
+*> where:
+*>
+*>    Q is a N-by-N orthogonal matrix;
+*>    L is an lower-triangular M-by-M matrix;
+*>    0 is a M-by-(N-M) zero matrix, if M < N.
+*>
 *> \endverbatim
 *
 *  Arguments:

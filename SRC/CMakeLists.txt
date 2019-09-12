@@ -148,6 +148,7 @@ set(SLASRC
    sgetsls.f sgeqr.f slatsqr.f slamtsqr.f sgemqr.f
    sgelq.f slaswlq.f slamswlq.f sgemlq.f
    stplqt.f stplqt2.f stpmlqt.f
+   sorhr.f slaorhr.f slaorhr_getrfnp.f slaorhr_getrfnp2.f
    ssytrd_2stage.f ssytrd_sy2sb.f ssytrd_sb2st.F ssb2st_kernels.f
    ssyevd_2stage.f ssyev_2stage.f ssyevx_2stage.f ssyevr_2stage.f
    ssbev_2stage.f ssbevx_2stage.f ssbevd_2stage.f ssygv_2stage.f
@@ -248,6 +249,7 @@ set(CLASRC
    cgetsls.f cgeqr.f clatsqr.f clamtsqr.f cgemqr.f
    cgelq.f claswlq.f clamswlq.f cgemlq.f
    ctplqt.f ctplqt2.f ctpmlqt.f
+   corhr.f claorhr.f claorhr_getrfnp.f claorhr_getrfnp2.f
    chetrd_2stage.f chetrd_he2hb.f chetrd_hb2st.F chb2st_kernels.f
    cheevd_2stage.f cheev_2stage.f cheevx_2stage.f cheevr_2stage.f
    chbev_2stage.f chbevx_2stage.f chbevd_2stage.f chegv_2stage.f
@@ -341,6 +343,7 @@ set(DLASRC
    dgetsls.f dgeqr.f dlatsqr.f dlamtsqr.f dgemqr.f
    dgelq.f dlaswlq.f dlamswlq.f dgemlq.f
    dtplqt.f dtplqt2.f dtpmlqt.f
+   dorhr.f dlaorhr.f dlaorhr_getrfnp.f dlaorhr_getrfnp2.f
    dsytrd_2stage.f dsytrd_sy2sb.f dsytrd_sb2st.F dsb2st_kernels.f
    dsyevd_2stage.f dsyev_2stage.f dsyevx_2stage.f dsyevr_2stage.f
    dsbev_2stage.f dsbevx_2stage.f dsbevd_2stage.f dsygv_2stage.f
@@ -443,6 +446,7 @@ set(ZLASRC
    zgelqt.f zgelqt3.f zgemlqt.f
    zgetsls.f zgeqr.f zlatsqr.f zlamtsqr.f zgemqr.f
    zgelq.f zlaswlq.f zlamswlq.f zgemlq.f
+   zorhr.f zlaorhr.f zlaorhr_getrfnp.f zlaorhr_getrfnp2.f
    zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.F zhb2st_kernels.f
    zheevd_2stage.f zheev_2stage.f zheevx_2stage.f zheevr_2stage.f
    zhbev_2stage.f zhbevx_2stage.f zhbevd_2stage.f zhegv_2stage.f

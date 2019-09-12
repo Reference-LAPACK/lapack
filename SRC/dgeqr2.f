@@ -33,8 +33,17 @@
 *>
 *> \verbatim
 *>
-*> DGEQR2 computes a QR factorization of a real m by n matrix A:
-*> A = Q * R.
+*> DGEQR2 computes a QR factorization of a real m-by-n matrix A:
+*>
+*>    A = Q * ( R ),
+*>            ( 0 )
+*>
+*> where:
+*>
+*>    Q is a m-by-m orthogonal matrix;
+*>    R is an upper-triangular n-by-n matrix;
+*>    0 is a (m-n)-by-n zero matrix, if m > n.
+*>
 *> \endverbatim
 *
 *  Arguments:
