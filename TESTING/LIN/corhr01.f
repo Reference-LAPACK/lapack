@@ -121,7 +121,7 @@
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
-      COMPLEX            WORKQUERY
+      COMPLEX            WORKQUERY ( 1 )
 *     ..
 *     .. External Functions ..
       REAL               SLAMCH, CLANGE, CLANSY
@@ -194,10 +194,10 @@
 *
       CALL CLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1,
      $              WORKQUERY, -1, INFO )
-      LWORK = INT( WORKQUERY )
+      LWORK = INT( WORKQUERY( 1 ) )
       CALL CORHR( M, N, MB1, NB1, AF, M, T1, NB1, NB2, T2, NB2, DIAG,
      $            WORKQUERY, -1, INFO)
-      LWORK = MAX( LWORK, INT( WORKQUERY ) )
+      LWORK = MAX( LWORK, INT( WORKQUERY( 1 ) ) )
 *
 *     In CGEMQRT, WORK is N*NB2_UB if SIDE = 'L',
 *                or  M*NB2_UB if SIDE = 'R'.
