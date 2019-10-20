@@ -180,7 +180,7 @@ set(CLASRC
    cgetri.f
    cggbak.f cggbal.f
    cgges.f  cgges3.f cggesx.f cggev.f  cggev3.f cggevx.f
-   cggglm.f cgghrd.f cgghd3.f cgglse.f cggqrf.f cggrqf.f
+   cggglm.f cgghrd.f cgghd3.f cgglse.f cggqrf.f cggrqf.f cggqrcs.f
    cggsvd3.f cggsvp3.f
    cgtcon.f cgtrfs.f cgtsv.f  cgtsvx.f cgttrf.f cgttrs.f cgtts2.f chbev.f
    chbevd.f chbevx.f chbgst.f chbgv.f  chbgvd.f chbgvx.f chbtrd.f
