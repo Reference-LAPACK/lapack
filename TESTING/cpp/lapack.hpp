@@ -42,6 +42,7 @@
 
 #include <cctype>
 #include <cassert>
+#include <complex>
 
 
 extern "C"
@@ -66,6 +67,21 @@ extern "C"
 		double* U1, lapack_int* ldu1, double* U2, lapack_int* ldu2,
 		double* Qt, lapack_int* ldqt,
 		double* work, lapack_int* lwork, lapack_int* iwork,
+		lapack_int* info);
+
+	void cggqrcs_(
+		char* jobu1, char* jobu2, char* jobqt,
+		lapack_int* m, lapack_int* n, lapack_int* p,
+		float* w, lapack_int* l,
+		std::complex<float>* A, lapack_int* lda,
+        std::complex<float>* B, lapack_int* ldb,
+		float* theta,
+		std::complex<float>* U1, lapack_int* ldu1,
+        std::complex<float>* U2, lapack_int* ldu2,
+		std::complex<float>* Qt, lapack_int* ldqt,
+		std::complex<float>* work, lapack_int* lwork,
+        float* rwork, lapack_int* lrwork,
+        lapack_int* iwork,
 		lapack_int* info);
 }
 
@@ -215,6 +231,37 @@ inline integer_t ggqrcs(
 		work, &lwork, iwork, &info);
 	return info;
 }
+
+inline integer_t ggqrcs(
+	char jobu1, char jobu2, char jobqt,
+	integer_t m, integer_t n, integer_t p, float* w, integer_t* l,
+	std::complex<float>* A, integer_t lda,
+    std::complex<float>* B, integer_t ldb,
+	float* theta,
+	std::complex<float>* U1, integer_t ldu1,
+    std::complex<float>* U2, integer_t ldu2,
+	std::complex<float>* Qt, integer_t ldqt,
+	std::complex<float>* work, integer_t lwork,
+    float* rwork, integer_t lrwork,
+    integer_t* iwork)
+{
+	assert( w );
+	assert( l );
+	assert( work );
+	assert( rwork );
+
+	integer_t info = -1;
+	cggqrcs_(
+		&jobu1, &jobu2, &jobqt,
+		&m, &n, &p, w, l,
+		A, &lda, B, &ldb,
+		theta,
+		U1, &ldu1, U2, &ldu2, Qt, &ldqt,
+		work, &lwork, rwork, &lrwork, iwork, &info);
+	return info;
+}
+
+
 
 inline integer_t ggqrcs(
 	char jobu1, char jobu2, char jobqt,
