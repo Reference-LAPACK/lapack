@@ -89,7 +89,7 @@ set(SLASRC
    sgetrf2.f sgetri.f
    sggbak.f sggbal.f
    sgges.f  sgges3.f sggesx.f sggev.f  sggev3.f sggevx.f
-   sggglm.f sgghrd.f sgghd3.f sgglse.f sggqrf.f
+   sggglm.f sgghrd.f sgghd3.f sgglse.f sggqrf.f sggqrcs.f
    sggrqf.f sggsvd3.f sggsvp3.f sgtcon.f sgtrfs.f sgtsv.f
    sgtsvx.f sgttrf.f sgttrs.f sgtts2.f shgeqz.f
    slaqz0.f slaqz1.f slaqz2.f slaqz3.f slaqz4.f
