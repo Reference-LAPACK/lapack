@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Christoph Conrads (https://christoph-conrads.name)
+ * Copyright (c) 2016, 2019, Christoph Conrads (https://christoph-conrads.name)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,6 +46,17 @@
 
 extern "C"
 {
+	void sggqrcs_(
+		char* jobu1, char* jobu2, char* jobqt,
+		lapack_int* m, lapack_int* n, lapack_int* p,
+		float* w, lapack_int* l,
+		float* A, lapack_int* lda, float* B, lapack_int* ldb,
+		float* theta,
+		float* U1, lapack_int* ldu1, float* U2, lapack_int* ldu2,
+		float* Qt, lapack_int* ldqt,
+		float* work, lapack_int* lwork, lapack_int* iwork,
+		lapack_int* info);
+
 	void dggqrcs_(
 		char* jobu1, char* jobu2, char* jobqt,
 		lapack_int* m, lapack_int* n, lapack_int* p,
@@ -180,6 +191,30 @@ inline integer_t gesvd(
 }
 
 
+
+inline integer_t ggqrcs(
+	char jobu1, char jobu2, char jobqt,
+	integer_t m, integer_t n, integer_t p, float* w, integer_t* l,
+	float* A, integer_t lda, float* B, integer_t ldb,
+	float* theta,
+	float* U1, integer_t ldu1, float* U2, integer_t ldu2,
+	float* Qt, integer_t ldqt,
+	float* work, integer_t lwork, integer_t* iwork)
+{
+	assert( w );
+	assert( l );
+	assert( work );
+
+	integer_t info = -1;
+	sggqrcs_(
+		&jobu1, &jobu2, &jobqt,
+		&m, &n, &p, w, l,
+		A, &lda, B, &ldb,
+		theta,
+		U1, &ldu1, U2, &ldu2, Qt, &ldqt,
+		work, &lwork, iwork, &info);
+	return info;
+}
 
 inline integer_t ggqrcs(
 	char jobu1, char jobu2, char jobqt,

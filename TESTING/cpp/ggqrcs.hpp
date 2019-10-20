@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Christoph Conrads (https://christoph-conrads.name)
+ * Copyright (c) 2016, 2019, Christoph Conrads (https://christoph-conrads.name)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -369,7 +369,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 	auto& iwork = fixture.iwork;
 
 	const Integer lwork = work.size();
-	double w = -1;
+	T w = -1;
 	Integer l = -1;
 
 	Integer ret = lapack::ggqrcs(
@@ -407,7 +407,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 	auto& iwork = fixture.iwork;
 
 	const Integer lwork = work.size();
-	double w = -1;
+	T w = -1;
 	Integer l = -1;
 
 	Integer ret = lapack::ggqrcs(
@@ -455,7 +455,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 				auto& iwork = fixture.iwork;
 
 				const Integer lwork = work.size();
-				double w = -1;
+				T w = -1;
 				Integer l = -1;
 
 				Integer ret = lapack::ggqrcs(
@@ -520,7 +520,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 					auto& iwork = fixture.iwork;
 
 					const Integer lwork = work.size();
-					double w = -1;
+					T w = -1;
 					Integer l = -1;
 
 					Integer ret = lapack::ggqrcs(

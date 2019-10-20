@@ -10,7 +10,28 @@ endif(NOT Boost_FOUND)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra -Wall -std=c++14 -pedantic")
 
 add_definitions(-DBOOST_TEST_DYN_LINK)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${Boost_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${Boost_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/LAPACKE/include)
+
+
+if(BUILD_SINGLE)
+	add_executable(cpp_tests_single
+		main.cpp
+		sggqrcs.cpp)
+	target_link_libraries(cpp_tests_single
+		tmglib
+		${LAPACK_LIBRARIES}
+		${Boost_LIBRARIES})
+
+
+	add_test(NAME cpp_tests_single COMMAND cpp_tests_single)
+
+
+	add_executable(sggsvd_vs_sggqrcs ggsvd_vs_ggqrcs.cpp)
+	target_link_libraries(
+		sggsvd_vs_sggqrcs ${LAPACK_LIBRARIES} ${Boost_LIBRARIES})
+endif()
 
 
 if(BUILD_DOUBLE)
@@ -26,7 +47,7 @@ if(BUILD_DOUBLE)
 	add_test(NAME cpp_tests_double COMMAND cpp_tests_double)
 
 
-	add_executable(ggsvd_vs_ggqrcs ggsvd_vs_ggqrcs.cpp)
+	add_executable(dggsvd_vs_dggqrcs ggsvd_vs_ggqrcs.cpp)
 	target_link_libraries(
-		ggsvd_vs_ggqrcs ${LAPACK_LIBRARIES} ${Boost_LIBRARIES})
+		dggsvd_vs_dggqrcs ${LAPACK_LIBRARIES} ${Boost_LIBRARIES})
 endif()
