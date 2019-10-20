@@ -145,7 +145,7 @@
 *>
 *> \param[out] W
 *> \verbatim
-*>          W in DOUBLE PRECISION
+*>          W is DOUBLE PRECISION
 *>
 *>          On exit, W is a radix power chosen such that the Frobenius
 *>          norm of A and W*B are within sqrt(radix) and 1/sqrt(radix)
@@ -544,7 +544,7 @@
 *
 *     DEBUG
 *
-      THETA(1:N) = NAN
+      THETA(1:L) = NAN
 *
 *     Compute the CS decomposition of Q1( :, 1:R )
 *
