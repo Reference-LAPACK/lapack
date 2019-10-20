@@ -88,7 +88,7 @@ void compute_gsvd(
 			&alpha(0), &beta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Q(0, 0), n,
 			&lwork_opt_f, -1, &iwork(0) );
-		assert( ret == 0 );
+		assert( ret == 0 ); (void) ret;
 
 		assert( !std::isnan(lwork_opt_f) );
 		assert( std::isfinite(lwork_opt_f) );
@@ -121,7 +121,7 @@ void compute_gsvd(
 			&theta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
 			&lwork_opt_f, -1, &iwork(0) );
-		assert( ret == 0 );
+		assert( ret == 0 ); (void) ret;
 
 		assert( !std::isnan(lwork_opt_f) );
 		assert( std::isfinite(lwork_opt_f) );
