@@ -55,7 +55,7 @@ ublas::matrix<T, Storage> build_R(
 	std::size_t r,
 	const ublas::matrix<T, Storage>& X, const ublas::matrix<T, Storage>& Y)
 {
-	assert( X.size2() == Y.size2() );
+	BOOST_ASSERT( X.size2() == Y.size2() );
 
 	typedef ublas::matrix<T, Storage> Matrix;
 	typedef ublas::matrix_range<Matrix> MatrixRange;
@@ -172,10 +172,10 @@ void check_results(
 	const ublas::matrix<T, Storage>& Qt,
 	const ublas::matrix<T, Storage>& X, const ublas::matrix<T, Storage>& Y)
 {
-	assert( A.size2() == B.size2() );
-	assert( A.size1() == U1.size1() );
-	assert( B.size1() == U2.size1() );
-	assert( A.size2() == Qt.size1() );
+	BOOST_ASSERT( A.size2() == B.size2() );
+	BOOST_ASSERT( A.size1() == U1.size1() );
+	BOOST_ASSERT( B.size1() == U2.size1() );
+	BOOST_ASSERT( A.size2() == Qt.size1() );
 
 
 	typedef ublas::matrix<T, Storage> Matrix;
@@ -237,7 +237,7 @@ void check_results(
 	// Note that only Qt is the orthogonal factor of a QR decomposition.
 	auto measure_unity = [] (const auto& U) -> double
 	{
-		assert( U.size1() == U.size2() );
+		BOOST_ASSERT( U.size1() == U.size2() );
 
 		const std::size_t n = U.size1();
 		const ublas::identity_matrix<T> id(n);
@@ -258,7 +258,7 @@ void check_results(
 	for(std::size_t i = 0; i < k; ++i)
 	{
 		BOOST_CHECK_GE( theta[i], 0 );
-		BOOST_CHECK_LE( theta[i], M_PI/2 );
+		BOOST_CHECK_LE( theta[i], T(M_PI/2) );
 
 		if( i > 0 )
 			BOOST_CHECK_LE( theta[i-1], theta[i] );
@@ -305,9 +305,9 @@ struct Fixture
 		theta(n, NaN),
 		iwork(m + n + p, -1)
 	{
-		assert( m > 0 );
-		assert( n > 0 );
-		assert( p > 0 );
+		BOOST_ASSERT( m > 0 );
+		BOOST_ASSERT( n > 0 );
+		BOOST_ASSERT( p > 0 );
 
 		// query workspace size
 		T lwork_opt_f = NaN;
@@ -320,7 +320,7 @@ struct Fixture
 			&theta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
 			&lwork_opt_f, -1, &iwork(0) );
-		assert( ret == 0 );
+		BOOST_ASSERT( ret == 0 );
 
 		// resize work accordingly
 		std::size_t lwork_opt = lwork_opt_f;
