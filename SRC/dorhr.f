@@ -1,4 +1,4 @@
-*> \brief \b DORHR
+*> \brief \b DLAORHR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,47 +6,40 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORHR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorhr.f">
+*> Download DLAORHR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaorhr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorhr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaorhr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorhr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaorhr.f">
 *> [TXT]</a>
 *>
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORHR( M, N, MB1, NB1, A, LDA, T1, LDT1, NB2, T2,
-*      $                  LDT2, D, WORK, LWORK, INFO )
+*       SUBROUTINE DORHR( M, N, A, LDA, NB, T, LDT, D, INFO )
 *
 *       .. Scalar Arguments ..
-*       INTEGER           INFO, LDA, LDT1, LDT2, LWORK, M, N, MB1,
-*      $                  NB1, NB2
+*       INTEGER           INFO, LDA, LDT, M, N, NB
 *       ..
 *       .. Array Arguments ..
-*       DOUBLE PRECISION  A( LDA, * ), D( * ), T1( LDT1, * ),
-*      $                  T2( LDT2, * ), WORK( * )
+*       DOUBLE PRECISION  A( LDA, * ), D( * ), T( LDT, * )
 *       ..
-*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> DORHR performs Householder reconstruction from the orthogonal
-*> M-by-M matrix Q_in stored in an implicit form in the matrices
-*> A and T1 computed by the tall-skinny QR factorization routine
-*> DLATSQR. The reconstructed orthogonal M-by-M matrix Q_out is
-*> stored in a different implicit form in the matrices A and T2.
-*> This implicit output format in A and T2 is the same as the output
-*> in A and T from the QR factorization routine DGEQRT. DORHR is
-*> a high-level routine that uses a single one-dimensional work array
-*> WORK of dimension LWORK. DORHR tests the input parameters, allocates
-*> workspace and calls the auxiliary low-level routine DLAORHR to do
-*> the computation. See Further Details section.
-*>
+*>  DORHR takes an M-by-N matrix Q_in with orthonormal columns as input,
+*>  stored in A, and performs Householder Reconstruction (HR),
+*>  i.e. reconstructs Householder vectors V implicitly representing
+*>  another M-by-N matrix Q_out, with the property that Q_in = Q_out*S,
+*>  where S is an N-by-N diagonal matrix with diagonal entries
+*>  equal to +1 or -1. The Householder vectors (columns of V) are stored
+*>  in column blocks in A on output, and the diagonal entries of S are
+*>  stored in D. Block reflectors are also returned in T
+*>  (same output format as DGEQRT).
 *> \endverbatim
 *
 *  Arguments:
@@ -55,7 +48,7 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of rows of the matrix A.  M >= 0.
+*>          The number of rows of the matrix A. M >= 0.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -64,59 +57,34 @@
 *>          The number of columns of the matrix A. M >= N >= 0.
 *> \endverbatim
 *>
-*> \param[in] MB1
-*> \verbatim
-*>          MB1 is INTEGER
-*>          The row block size used by DLATSQR to compute the input
-*>          arrays A and T1 (MB1 is called MB in DLATSQR,
-*>          see Further Details). MB1 > N.
-*>          (Note that if MB1 > M, then M is used instead of MB1
-*>          as the row block size).
-*> \endverbatim
-*>
-*> \param[in] NB1
-*> \verbatim
-*>          NB1 is INTEGER
-*>          The column block size used by DLATSQR to compute the input
-*>          arrays A and T1 (NB1 is called NB in DLATSQR,
-*>          see Further Details). NB1 >= 1.
-*>          (Note that if NB1 > N, then N is used instead of NB1
-*>          as the column block size).
-*> \endverbatim
 *>
 *> \param[in,out] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA,N)
 *>
-*>          The elements on and above the diagonal:
+*>          On entry:
 *>
-*>             On entry, the elements on and above the diagonal
-*>             contain the N-by-N upper-triangular matrix R_in
-*>             computed by DLATSQR. See Further Details.
+*>             The array A contains an M-by-N orthonormal matrix Q_in,
+*>             i.e the columns of A are orthogonal unit vectors.
 *>
-*>             On exit, the elements on and above the diagonal
-*>             contain the N-by-N upper-triangular matrix R_out
-*>             reconstructed by this routine. See Further Details.
+*>          On exit:
 *>
-*>             NOTE: In general R_in is not equal to R_out element-wise.
+*>             Let NOCB = Number_of_output_col_blocks
+*>                      = CEIL(N/NB)
 *>
+*>             The elements below the diagonal of A represent the unit
+*>             lower-trapezoidal matrix Y of Householder column vectors
+*>             V stored in NOCB NB-size column blocks Y(k).
+*>             The unit diagonal entries of Y are not stored.
+*>             (same format as the output A in DGEQRT).
+*>             The matrix T and the matrix Y stored on output in A
+*>             implicitly define Q_out.
 *>
-*>          The elements below the diagonal:
-*>
-*>             On entry, the elements below the diagonal represent
-*>             the M-by-M matrix Q_in in implicit form by the columns
-*>             of blocked matrix V computed by DLATSQR
-*>             (same format as the output A in DLATSQR).
-*>             See Further Details.
-*>
-*>             On exit, the elements below the diagonal represent
-*>             the unit lower-trapezoidal M-by-N NB2-size column-blocked
-*>             matrix Y, where the subdiagonal elements are the column
-*>             vectors Y(i). The unit entries along the diagonal of Y
-*>             are not stored in A. The matrix Y along with the matrix
-*>             T2 defines Q_out. The vectors Y(i) define the elementary
-*>             reflectors (same format as the output A in DGEQRT).
-*>             See Further Details.
+*>             The elements above the diagonal cointain the factor U
+*>             of the "modified" LU-decomposition:
+*>                Q_in - ( S ) = L * U  ( = Y * U, since Y = L ),
+*>                       ( 0 )
+*>             where 0 is a (M-N)-by-(M-N) zero matrix.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -125,92 +93,49 @@
 *>          The leading dimension of the array A.  LDA >= max(1,M).
 *> \endverbatim
 *>
-*> \param[in] T1
+*> \param[in] NB
 *> \verbatim
-*>          T1 is DOUBLE PRECISION array, dimension (LDT1, N * NIRB),
-*>
-*>          where NIRB = Number_of_input_row_blocks
-*>                     = max( 1, CEIL((M-N)/(MB1-N)) )
-*>          Let NICB = Number_of_input_col_blocks
-*>                   = CEIL(N/NB1)
-*>
-*>          The upper-triangular block reflectors used to define
-*>          Q_in stored in compact form in NIRB block reflector
-*>          sequences. Each of NIRB block reflector sequences is stored
-*>          in a larger NB1-by-N column block of T1 and consists of NICB
-*>          smaller NB1-by-NB1 upper-triangular column blocks.
-*>          (same format as the output T in DLATSQR).
-*>          The matrix T1 and the matrix V stored in A define Q_in.
-*>          See Further Details.
-*> \endverbatim
-*>
-*> \param[in] LDT1
-*> \verbatim
-*>          LDT1 is INTEGER
-*>          The leading dimension of the array T1.
-*>          LDT1 >= max(1,min(NB1,N)).
-*> \endverbatim
-*>
-*> \param[in] NB2
-*> \verbatim
-*>          NB2 is INTEGER
-*>          The column block size to be used in the blocked Householder
-*>          QR output of this routine in the array A and array T2.
-*>          NB2 can be chosen independently of NB1. NB2 >= 1.
-*>          (Note that if NB2 > N, then N is used instead of NB2
+*>          NB is INTEGER
+*>          The column block size to be used in the reconstruction
+*>          of Householder column vector blocks in the array A and
+*>          corresponding block reflectors in the array T. NB >= 1.
+*>          (Note that if NB > N, then N is used instead of NB
 *>          as the column block size.)
 *> \endverbatim
 *>
-*> \param[out] T2
+*> \param[out] T
 *> \verbatim
-*>          T2 is DOUBLE PRECISION array, dimension (LDT2, N)
+*>          T is DOUBLE PRECISION array,
+*>          dimension (LDT, N)
 *>
 *>          Let NOCB = Number_of_output_col_blocks
-*>                   = CEIL(N/NB2)
+*>                   = CEIL(N/NB)
 *>
-*>          On exit, T2(1:NB2, 1:N) contains NOCB upper-triangular
+*>          On exit, T(1:NB, 1:N) contains NOCB upper-triangular
 *>          block reflectors used to define Q_out stored in compact
-*>          form as a sequence of upper-triangular NB2-by-NB2 column
+*>          form as a sequence of upper-triangular NB-by-NB column
 *>          blocks (same format as the output T in DGEQRT).
-*>          The matrix T2 and the matrix Y stored in A define Q_out.
+*>          The matrix T and the matrix Y stored on output in A
+*>          implicitly define Q_out.
 *>          See Further Details.
 *> \endverbatim
 *>
-*> \param[in] LDT2
+*> \param[in] LDT
 *> \verbatim
-*>          LDT2 is INTEGER
-*>          The leading dimension of the array T2.
-*>          LDT2 >= max(1,min(NB2,N)).
+*>          LDT is INTEGER
+*>          The leading dimension of the array T.
+*>          LDT >= max(1,min(NB,N)).
 *> \endverbatim
 *>
 *> \param[out] D
 *> \verbatim
-*>          D is DOUBLE PRECISION array, dimension min(M,N)
+*>          D is DOUBLE PRECISION array, dimension min(M,N).
 *>          The elements can be only plus or minus one.
 *>
-*>          D(i) is constructed as D(i)=-SIGN(Q1_in_i(i,i)), where
-*>          1 <= i <= min(M,N), Q1_in is the left M-by-N
-*>          submatrix of the input orthogonal M-by-M matrix Q_in
-*>          implicitly defined by the matrix A and the matrix T1 on
-*>          entry. Q1_in_i is the value after performing i-1 steps
-*>          of "modified" Gaussian elimination. See Further Details.
-*> \endverbatim
-*>
-*> \param[out] WORK
-*> \verbatim
-*>          WORK is (workspace) DOUBLE PRECISION array,
-*>          dimension (max(2,LWORK))
-*>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
-*> \endverbatim
-*>
-*> \param[in] LWORK
-*> \verbatim
-*>          The dimension of the array WORK.  LWORK >= (M+NB1)*N.
-*>          If LWORK = -1, then a workspace query is assumed.
-*>          The routine only calculates the optimal size of the WORK
-*>          array, returns this value as the first entry of the WORK
-*>          array, and no error message related to LWORK is issued
-*>          by XERBLA.
+*>          D(i) is constructed as D(i) = -SIGN(Q_in_i(i,i)), where
+*>          1 <= i <= min(M,N), and Q_in_i is Q_in after performing
+*>          i-1 steps of “modified” Gaussian elimination.
+*>          See Further Details.
 *> \endverbatim
 *>
 *> \param[out] INFO
@@ -224,10 +149,94 @@
 *  =====================
 *>
 *> \verbatim
+*> VARIANT 1:
+*> For the output format of Q_out see the documnetation of DGEQRT.
 *>
-*> For Further Details see Further Details in the documentation
-*> for DLAORHR.
+*> OR
 *>
+*> VARIANT 2:
+*> ==========================================================================
+*> The computed M-by-M orthogonal factor Q_out is defined implicitly as
+*> a product of orthogonal matrices Q_out(i). Each Q_out(i) is stored in
+*> the compact WY-representation format in the corresponding blocks of
+*> matrices Y (stored in A) and T.
+*>
+*> The M-by-N unit lower-trapezoidal matrix Y stored in the M-by-N
+*> matrix A contains the column vectors Y(i) in NB-size column
+*> blocks YB(j). For example, YB(1) contains the columns
+*> Y(1), Y(2), ... Y(NB2). NOTE: The unit entries on
+*> the diagonal of Y are not stored in A.
+*>
+*> The number of column blocks is
+*>
+*>     NOCB = Number_of_output_col_blocks = CEIL(N/NB)
+*>
+*> where each block is of order NB except for the last block, which
+*> is of order LAST_NB = N - (NOCB-1)*NB.
+*>
+*> For example, if M=6,  N=5 and NB=2, the matrix Y is
+*>
+*>
+*>     Y = (    YB(1),   YB(2), YB(3) ) =
+*>
+*>       = (   1                      )
+*>         ( y21    1                 )
+*>         ( y31  y32    1            )
+*>         ( y41  y42  y43   1        )
+*>         ( y51  y52  y53  y54    1  )
+*>         ( y61  y62  y63  y54   y65 )
+*>
+*>
+*> For each of the column blocks YB(i), an upper-triangular block
+*> reflector TB(i) is computed. These blocks are stored as
+*> a sequence of upper-triangular column blocks in the NB-by-N
+*> matrix T. The size of each TB(i) block is NB-by-NB, except
+*> for the last block, whose size is LAST_NB-by-LAST_NB.
+*>
+*> For example, if M=6,  N=5 and NB=2, the matrix T is
+*>
+*>     T  = (      TB(1),      TB(2), TB(3) ) =
+*>
+*>        = ( t_11  t_12  t_13  t_14   t_15  )
+*>          (       t_22        t_24         )
+*>
+*>
+*> The M-by-M factor Q_out is given as a product of NOCB
+*> orthogonal M-by-M matrices Q_out(i).
+*>
+*>     Q_out = Q_out(1) * Q_out(2) * ... * Q_out(NOCB),
+*>
+*> where each matrix Q_out(i) is given by the WY-representation
+*> using corresponding blocks from the matrices Y and T:
+*>
+*>     Q_out(i) = I - YB(i) * TB(i) * (YB(i))**T,
+*>
+*> where I is the identity matrix. Here is the formula with matrix
+*> dimensions:
+*>
+*>  Q(i){M-by-M} = I{M-by-M} -
+*>    YB(i){M-by-INB} * TB(i){INB-by-INB} * (YB(i))**T {INB-by-M},
+*>
+*> where INB = NB, except for the last block NOCB
+*> for which INB=LAST_NB.
+*> ==========================================================================
+*>
+*> NOTE: If Q_in is the result of doing a QR factorization
+*> B = Q_in * R_in, then:
+*>
+*> B = (Q_out*S) * R_in = Q_out * (S * R_in) = O_out * R_out.
+*>
+*> So if one wants to interpret Q_out as the result
+*> of the QR factorization of B, then corresponding R_out
+*> should be obtained by R_out = S * R_in, i.e. some rows of R_in
+*> should be multiplied by -1.
+*>
+*> For the details of the algorithm, see [1].
+*>
+*> [1] "Reconstructing Householder vectors from tall-skinny QR",
+*>     G. Ballard, J. Demmel, L. Grigori, M. Jacquelin, H.D. Nguyen,
+*>     E. Solomonik, J. Parallel Distrib. Comput.,
+*>     vol. 85, pp. 3-31, 2015.
 *> \endverbatim
 *>
 *  Authors:
@@ -238,128 +247,202 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
-*> \ingroup doubleGEcomputational
+*> \ingroup doubleOTHERcomputational
 *
 *> \par Contributors:
 *  ==================
 *>
 *> \verbatim
 *>
-*> June 2019, Igor Kozachenko,
+*> November   2019, Igor Kozachenko,
 *>            Computer Science Division,
 *>            University of California, Berkeley
 *>
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DORHR( M, N, MB1, NB1, A, LDA, T1, LDT1, NB2, T2,
-     $                  LDT2, D, WORK, LWORK, INFO )
+      SUBROUTINE DORHR( M, N, A, LDA, NB, T, LDT, D, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
+*     November 2019
 *
 *     .. Scalar Arguments ..
-      INTEGER           INFO, LDA, LDT1, LDT2, LWORK, M, N, MB1,
-     $                  NB1, NB2
+      INTEGER           INFO, LDA, LDT, M, N, NB
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  A( LDA, * ), D( * ), T1( LDT1, * ),
-     $                  T2( LDT2, * ), WORK( * )
+      DOUBLE PRECISION  A( LDA, * ), D( * ), T( LDT, * )
 *     ..
 *
 *  =====================================================================
 *
+*     .. Parameters ..
+      DOUBLE PRECISION   ONE, ZERO
+      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            LQUERY
-      INTEGER            IINFO, LDW, LW, LW1, LW2, NB1LOCAL, NB2LOCAL
+      INTEGER            I, IINFO, J, JB, JBTEMP1, JBTEMP2, JNB,
+     $                   NPLUSONE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAORHR, XERBLA
+      EXTERNAL           DCOPY, DLAORHR_GETRFNP, DSCAL, DTRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, MAX, MIN
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
 *     Test the input parameters
 *
-      LQUERY  = LWORK.EQ.-1
       INFO = 0
       IF( M.LT.0 ) THEN
          INFO = -1
-      ELSE IF( N.LT.0 .OR. M.LT.N ) THEN
+      ELSE IF( N.LT.0 .OR. N.GT.M ) THEN
          INFO = -2
-      ELSE IF( MB1.LE.N ) THEN
-         INFO = -3
-      ELSE IF( NB1.LT.1 ) THEN
-         INFO = -4
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -6
-      ELSE IF( LDT1.LT.MAX( 1, MIN( NB1, N ) ) ) THEN
-         INFO = -8
-      ELSE IF( NB2.LT.1 ) THEN
-         INFO = -9
-      ELSE IF( LDT2.LT.MAX( 1, MIN( NB2, N ) ) ) THEN
-         INFO = -11
-      ELSE
-*
-*        Test the input LWORK, the dimension of the array WORK,
-*        and set the optimal size LW for LWORK.
-*
-*        Set the block size for the input column blocks.
-*
-         NB1LOCAL = MIN( NB1, N )
-*
-*        LW1 and LW2 are the optimal sizes of the work array
-*        arguments W and WORK respectively in the call to DLAORHR.
-*        WORK in DLAORHR is only used as a work array in the
-*        call to DLAMTSQR. Therefore, the optimal size LW2 for
-*        WORK in DLAORHR is the same asthe optimal size for WORK
-*        in DLAMTSQR.
-*
-         LDW = M
-         LW1 = LDW * N
-         LW2 = N * NB1LOCAL
-         LW = LW1 + LW2
-*
-         IF( ( LWORK.LT.MAX( 2, LW ) ) .AND. (.NOT.LQUERY) ) THEN
-            INFO = -14
-         END IF
-*
+         INFO = -4
+      ELSE IF( NB.LT.1 ) THEN
+         INFO = -5
+      ELSE IF( LDT.LT.MAX( 1, MIN( NB, N ) ) ) THEN
+         INFO = -7
       END IF
 *
-*     Handle error in the input parameters and return workspace query.
+*     Handle error in the input parameters.
 *
       IF( INFO.NE.0 ) THEN
          CALL XERBLA( 'DORHR', -INFO )
-         RETURN
-      ELSE IF ( LQUERY ) THEN
-         WORK( 1 ) = DBLE( LW )
          RETURN
       END IF
 *
 *     Quick return if possible
 *
       IF( MIN( M, N ).EQ.0 ) THEN
-         WORK( 1 ) = DBLE( LW )
          RETURN
       END IF
 *
-*     Set the block size for the output column blocks.
+*     On input, the M-by-N matrix A contains the orthogonal
+*     M-by-N matrix Q_in.
 *
-      NB2LOCAL = MIN( NB2, N )
+*     (1) Compute the unit lower-trapezoidal Y (ones on the diagonal
+*     are not stored).
 *
-      CALL DLAORHR( M, N, MB1, NB1LOCAL, A, LDA, T1, LDT1,
-     $              NB2LOCAL, T2, LDT2, D, WORK, LDW,
-     $              WORK(LW1+1), LW2, IINFO )
+*     Since Y = L, perform the "modified" LU-decomposition
+*
+*     Q_in - ( S ) = L * U = ( L1 ) * U,
+*            ( 0 )           ( L2 )
+*
+*     where 0 is an (M-N)-by-N zero matrix.
+*
+*     (1-1) Factor L1 and U.
 
-      WORK( 1 ) = DBLE( LW )
+      CALL DLAORHR_GETRFNP( N, N, A, LDA, D, IINFO )
+*
+*     (1-2) Solve for L2.
+*
+      IF( M.GT.N ) THEN
+         CALL DTRSM( 'R', 'U', 'N', 'N', M-N, N, ONE, A, LDA,
+     $               A( N+1, 1 ), LDA )
+      END IF
+*
+*     (2) Reconstruct the block reflector T stored in T(1:NB, 1:N)
+*     as a sequence of upper-triangular blocks with NB-size column
+*     blocking.
+*
+*     Loop over the column blocks of size NB of the array A(1:M,1:N)
+*     and the array T(1:NB,1:N), JB is the column index of a column
+*     block, JNB is the column block size at each step JB.
+*
+      NPLUSONE = N + 1
+      DO JB = 1, N, NB
+*
+*        (2-0) Determine the column block size JNB.
+*
+         JNB = MIN( NPLUSONE-JB, NB )
+*
+*        (2-1) Copy the upper-triangular part of the current JNB-by-JNB
+*        diagonal block U(JB) (of the N-by-N matrix U) stored
+*        in A(JB:JB+JNB-1,JB:JB+JNB-1) into the upper-triangular part
+*        of the current JNB-by-JNB block T(1:JNB,JB:JB+JNB-1)
+*        column-by-column, total JNB*(JNB+1)/2 elements.
+*
+         JBTEMP1 = JB - 1
+         DO J = JB, JB+JNB-1
+            CALL DCOPY( J-JBTEMP1, A( JB, J ), 1, T( 1, J ), 1 )
+         END DO
+*
+*        (2-2) Perform on the upper-triangular part of the current
+*        JNB-by-JNB diagonal block U(JB) (of the N-by-N matrix U) stored
+*        in T(1:JNB,JB:JB+JNB-1) the following operation in place:
+*        (-1)*U(JB)*S(JB), i.e the result will be stored in the upper-
+*        triangular part of T(1:JNB,JB:JB+JNB-1). This multiplication
+*        of the JNB-by-JNB diagonal block U(JB) by the JNB-by-JNB
+*        diagonal block S(JB) of the N-by-N sign matrix S from the
+*        right means changing the sign of each J-th column of the block
+*        U(JB) according to the sign of the diagonal element of the block
+*        S(JB), i.e. S(J,J) that is stored in the array element D(J).
+*        (NOTE: The N-by-N sign matrix S is the upper submatrix of the
+*        M-by-N sign matrix S1, mentioned above).
+*
+         DO J = JB, JB+JNB-1
+            IF( D( J ).EQ.ONE ) THEN
+               CALL DSCAL( J-JBTEMP1, -ONE, T( 1, J ), 1 )
+            END IF
+         END DO
+*
+*        (2-3) Perform the triangular solve for the current block
+*        matrix X(JB):
+*
+*               X(JB) * (A(JB)**T) = B(JB), where:
+*
+*               A(JB)**T  is a JNB-by-JNB unit upper-triangular
+*                         coefficient block, and A(JB)=L1(JB), which
+*                         is a JNB-by-JNB unit lower-triangular block
+*                         stored in W(JB:JB+JNB-1,JB:JB+JNB-1).
+*                         The N-by-N matrix L is the upper part
+*                         of the M-by-N lower-trapezoidal matrix L1
+*                         stored in A(1:M,1:N);
+*
+*               B(JB)     is a JNB-by-JNB  upper-triangular right-hand
+*                         side block, B(JB) = (-1)*U(JB)*S(JB), and
+*                         B(JB) is stored in T(1:JNB,JB:JB+JNB-1);
+*
+*               X(JB)     is a JNB-by-JNB upper-triangular solution
+*                         block, X(JB) is the upper-triangular block
+*                         reflector T(JB), and X(JB) is stored
+*                         in T(1:JNB,JB:JB+JNB-1).
+*
+*             In other words, we perform the triangular solve for the
+*             upper-triangular block T(JB):
+*
+*               T(JB) * (L1(JB)**T) = (-1)*U(JB)*S(JB).
+*
+*             Even though the blocks X(JB) and B(JB) are upper-
+*             triangular, the routine DTRSM will access all JNB**2
+*             elements of the square T(1:JNB,JB:JB+JNB-1). Therefore,
+*             we need to set to zero the elements of the block
+*             T(1:JNB,JB:JB+JNB-1) below the diagonal before the call
+*             to DTRSM.
+*
+*        (2-3a) Set the elements to zero.
+*
+         JBTEMP2 = JB - 2
+         DO J = JB, JB+JNB-2
+            DO I = J-JBTEMP2, NB
+               T( I, J ) = ZERO
+            END DO
+         END DO
+*
+*        (2-3b) Perform the triangular solve.
+*
+         CALL DTRSM( 'R', 'L', 'T', 'U', JNB, JNB, ONE,
+     $               A( JB, JB ), LDA, T( 1, JB ), LDT )
+*
+      END DO
+*
       RETURN
 *
 *     End of DORHR

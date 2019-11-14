@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORHR01( M, N, MB1, NB1, NB2, RESULT )
+*       SUBROUTINE DORHR01( M, N, MB1, NB1, NB2, RESULT)
 *
 *       .. Scalar Arguments ..
 *       INTEGER           M, N, MB1, NB1, NB2
@@ -21,9 +21,9 @@
 *>
 *> \verbatim
 *>
-*> DORHR01 tests DORHR using DLATSQR and DGEMQRT. Therefore, DLATSQR
-*> (used in DGEQR) and DGEMQRT (used in DGEMQR) have to be tested
-*> before this test.
+*> DORHR01 tests DORHR using DLATSQR, DGEMQRT and DORGTSQR. Therefore,
+*> DLATSQR (part of DGEQR), DGEMQRT (part DGEMQR), DORGTSQR have to be
+*> tested before this test.
 *>
 *> \endverbatim
 *
@@ -80,18 +80,18 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
 *> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE DORHR01( M, N, MB1, NB1, NB2, RESULT )
+      SUBROUTINE DORHR01( M, N, MB1, NB1, NB2, RESULT)
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.9.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
+*     April 2012
 *
 *     .. Scalar Arguments ..
       INTEGER           M, N, MB1, NB1, NB2
@@ -102,17 +102,17 @@
 *
 *     ..
 *     .. Local allocatable arrays
-      DOUBLE PRECISION, ALLOCATABLE ::  A(:,:), AF(:,:), Q(:,:), R(:,:),
-     $                   RWORK(:), WORK( : ), T1(:,:), T2(:,:), DIAG(:),
-     $                   C(:,:), CF(:,:), D(:,:), DF(:,:)
+      DOUBLE PRECISION, ALLOCATABLE :: AF(:,:), Q(:,:),
+     $  R(:,:), RWORK(:), WORK( : ), T1(:,:), T2(:,:), DIAG(:),
+     $  CF(:,:), DF(:,:), A(:,:), C(:,:), D(:,:), RF(:,:)
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      DOUBLE PRECISION ONE, ZERO
+      PARAMETER( ZERO = 0.0, ONE = 1.0 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            TESTZEROS
-      INTEGER            INFO, J, K, L, LWORK, NB1_UB, NB2_UB, NRB
+      LOGICAL TESTZEROS
+      INTEGER INFO, I, J, K, L, LWORK, NB1_UB, NB2_UB, NRB
       DOUBLE PRECISION   ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
@@ -120,26 +120,21 @@
       DOUBLE PRECISION   WORKQUERY( 1 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
-      EXTERNAL           DLAMCH, DLANGE, DLANSY
+      DOUBLE PRECISION DLAMCH, DLANGE, DLANSY
+      LOGICAL  LSAME
+      INTEGER ILAENV
+      EXTERNAL DLAMCH, DLANGE, DLANSY, LSAME, ILAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, DBLE, INT, MAX, MIN
-*     ..
-*     .. External Subroutines ..
-      EXTERNAL           DGEMM, DGEMQRT, DLACPY, DLARNV, DLASET,
-     $                   DLATSQR, DORHR, DSYRK
-*     ..
+      INTRINSIC   CEILING, MAX, MIN
 *     .. Scalars in Common ..
-      CHARACTER(LEN=32)  SRNAMT
+      CHARACTER(LEN=32)       srnamt
 *     ..
 *     .. Common blocks ..
-      COMMON             / SRNAMC / SRNAMT
+      COMMON             / srnamc / srnamt
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
-*     ..
-*     .. Executable Statements ..
 *
 *     TEST MATRICES WITH HALF OF MATRIX BEING ZEROS
 *
@@ -153,7 +148,7 @@
 *
       ALLOCATE ( A(M,N), AF(M,N), Q(L,L), R(M,L), RWORK(L),
      $           C(M,N), CF(M,N),
-     $           D(N,M), DF(N,M) )
+     $           D(N,M), DF(N,M), RF(N,N) )
 *
 *     Put random numbers into A and copy to AF
 *
@@ -190,8 +185,9 @@
       CALL DLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1,
      $              WORKQUERY, -1, INFO )
       LWORK = INT( WORKQUERY( 1 ) )
-      CALL DORHR( M, N, MB1, NB1, AF, M, T1, NB1, NB2, T2, NB2, DIAG,
-     $            WORKQUERY, -1, INFO)
+      CALL DORGTSQR( M, N, MB1, NB1, AF, M, T1, NB1, WORKQUERY, -1,
+     $               INFO )
+
       LWORK = MAX( LWORK, INT( WORKQUERY( 1 ) ) )
 *
 *     In DGEMQRT, WORK is N*NB2_UB if SIDE = 'L',
@@ -203,19 +199,49 @@
 *
 *     Factor the matrix A in the array AF.
 *
-      SRNAMT = 'DLATSQR'
+      srnamt = 'DLATSQR'
       CALL DLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1, WORK, LWORK,
      $              INFO )
 *
-      SRNAMT = 'DORHR'
-      CALL DORHR( M, N, MB1, NB1, AF, M, T1, NB1, NB2, T2, NB2, DIAG,
-     $            WORK, LWORK, INFO )
+*     Copy the factor R into the array RF.
+*
+      srnamt = 'DORGTSQR'
+      CALL DLACPY( 'U', N, N, AF, M, RF, N )
+*
+*     Reconstruct the orthogonal matrix Q.
+*
+      srnamt = 'DORGTSQR'
+      CALL DORGTSQR( M, N, MB1, NB1, AF, M, T1, NB1, WORK, LWORK,
+     $               INFO )
+*
+*     Perform the Householder reconstruction, the result is stored
+*     the arrays AF and T2.
+*
+      srnamt = 'DORHR'
+      CALL DORHR( M, N, AF, M, NB2, T2, NB2, DIAG, INFO )
+*
+*     Compute the factor R_hr corresponding to the Householder
+*     reconstructed Q_hr and place it in the upper triangle of AF to
+*     match the Q storage format in DGEQRT. R_hr = R_tsqr * S,
+*     this means changing the sign of I-th row of the matrix R_tsqr
+*     according to sign of of I-th diagonal element DIAG(I) of the
+*     matrix S.
+*
+      DO J = 1, N
+         CALL DCOPY( J, RF( 1, J ), 1, AF( 1, J ), 1 )
+      END DO
+*
+      DO I = 1, N
+         IF( DIAG( I ).EQ.-ONE ) THEN
+            CALL DSCAL( N+1-I, -ONE, AF( I, I ), M )
+         END IF
+      END DO
 *
 *     Generate the m-by-m matrix Q
 *
       CALL DLASET( 'Full', M, M, ZERO, ONE, Q, M )
 *
-      SRNAMT = 'DGEMQRT'
+      srnamt = 'DGEMQRT'
       CALL DGEMQRT( 'L', 'N', M, M, K, NB2_UB, AF, M, T2, NB2, Q, M,
      $              WORK, INFO )
 *
@@ -256,7 +282,7 @@
 *
 *     Apply Q to C as Q*C = CF
 *
-      SRNAMT = 'DGEMQRT'
+      srnamt = 'DGEMQRT'
       CALL DGEMQRT( 'L', 'N', M, N, K, NB2_UB, AF, M, T2, NB2, CF, M,
      $               WORK, INFO )
 *
@@ -277,7 +303,7 @@
 *
 *     Apply Q to C as (Q**T)*C = CF
 *
-      SRNAMT = 'DGEMQRT'
+      srnamt = 'DGEMQRT'
       CALL DGEMQRT( 'L', 'T', M, N, K, NB2_UB, AF, M, T2, NB2, CF, M,
      $               WORK, INFO )
 *
@@ -302,7 +328,7 @@
 *
 *     Apply Q to D as D*Q = DF
 *
-      SRNAMT = 'DGEMQRT'
+      srnamt = 'DGEMQRT'
       CALL DGEMQRT( 'R', 'N', N, M, K, NB2_UB, AF, M, T2, NB2, DF, N,
      $               WORK, INFO )
 *
@@ -321,14 +347,14 @@
 *
       CALL DLACPY( 'Full', N, M, D, N, DF, N )
 *
-*     Apply Q to D as D*(Q**T) = DF
+*     Apply Q to D as D*QT = DF
 *
-      SRNAMT = 'DGEMQRT'
+      srnamt = 'DGEMQRT'
       CALL DGEMQRT( 'R', 'T', N, M, K, NB2_UB, AF, M, T2, NB2, DF, N,
      $               WORK, INFO )
 *
 *     TEST 6
-*     Compute |DF - D*(Q**T)| / ( eps * m * |D| )
+*     Compute |D*QT - D*(Q**T)| / ( eps * m * |D| )
 *
       CALL DGEMM( 'N', 'T', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
       RESID = DLANGE( '1', N, M, DF, N, RWORK )
@@ -341,7 +367,7 @@
 *     Deallocate all arrays
 *
       DEALLOCATE ( A, AF, Q, R, RWORK, WORK, T1, T2, DIAG,
-     $             C, D, CF, DF )
+     $             C, D, CF, DF)
 *
       RETURN
 *
