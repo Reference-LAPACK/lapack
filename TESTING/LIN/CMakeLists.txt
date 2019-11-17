@@ -40,7 +40,7 @@ set(SLINTST schkaa.f
    sgennd.f sqrt04.f sqrt05.f schkqrt.f serrqrt.f schkqrtp.f serrqrtp.f
    schklqt.f schklqtp.f schktsqr.f
    serrlqt.f serrlqtp.f serrtsqr.f stsqr01.f slqt04.f slqt05.f
-   schkorhr.f serrorhr.f sorhr01.f)
+   schkorhr_col.f serrorhr_col.f sorhr_col01.f)
 
 if(USE_XBLAS)
   list(APPEND SLINTST sdrvgbx.f sdrvgex.f sdrvsyx.f sdrvpox.f
@@ -142,7 +142,7 @@ set(DLINTST dchkaa.f
    dqrt04.f dqrt05.f dchkqrt.f derrqrt.f dchkqrtp.f derrqrtp.f
    dchklq.f dchklqt.f dchklqtp.f dchktsqr.f
    derrlqt.f derrlqtp.f derrtsqr.f dtsqr01.f dlqt04.f dlqt05.f
-   dchkorhr.f derrorhr.f dorhr01.f)
+   dchkorhr_col.f derrorhr_col.f dorhr_col01.f)
 
 if(USE_XBLAS)
   list(APPEND DLINTST ddrvgbx.f ddrvgex.f ddrvsyx.f ddrvpox.f

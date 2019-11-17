@@ -133,7 +133,7 @@ SLASRC = \
    slatbs.o slatdf.o slatps.o slatrd.o slatrs.o slatrz.o \
    slauu2.o slauum.o sopgtr.o sopmtr.o sorg2l.o sorg2r.o \
    sorgbr.o sorghr.o sorgl2.o sorglq.o sorgql.o sorgqr.o sorgr2.o \
-   sorgrq.o sorgtr.o sorm2l.o sorm2r.o sorm22.o \
+   sorgrq.o sorgtr.o sorgtsqr.o sorm2l.o sorm2r.o sorm22.o \
    sormbr.o sormhr.o sorml2.o sormlq.o sormql.o sormqr.o sormr2.o \
    sormr3.o sormrq.o sormrz.o sormtr.o spbcon.o spbequ.o spbrfs.o \
    spbstf.o spbsv.o  spbsvx.o \
@@ -176,7 +176,7 @@ SLASRC = \
    sgetsls.o sgeqr.o slatsqr.o slamtsqr.o sgemqr.o \
    sgelq.o slaswlq.o slamswlq.o sgemlq.o \
    stplqt.o stplqt2.o stpmlqt.o \
-   sorhr.o slaorhr.o slaorhr_getrfnp.o slaorhr_getrfnp2.o \
+   sorhr_col.o slaorhr_getrfnp.o slaorhr_getrfnp2.o \
    ssytrd_2stage.o ssytrd_sy2sb.o ssytrd_sb2st.o ssb2st_kernels.o \
    ssyevd_2stage.o ssyev_2stage.o ssyevx_2stage.o ssyevr_2stage.o \
    ssbev_2stage.o ssbevx_2stage.o ssbevd_2stage.o ssygv_2stage.o \
@@ -377,7 +377,7 @@ DLASRC = \
    dgetsls.o dgeqr.o dlatsqr.o dlamtsqr.o dgemqr.o \
    dgelq.o dlaswlq.o dlamswlq.o dgemlq.o \
    dtplqt.o dtplqt2.o dtpmlqt.o \
-   dorhr.o dlaorhr_getrfnp.o dlaorhr_getrfnp2.o \
+   dorhr_col.o dlaorhr_getrfnp.o dlaorhr_getrfnp2.o \
    dsytrd_2stage.o dsytrd_sy2sb.o dsytrd_sb2st.o dsb2st_kernels.o \
    dsyevd_2stage.o dsyev_2stage.o dsyevx_2stage.o dsyevr_2stage.o \
    dsbev_2stage.o dsbevx_2stage.o dsbevd_2stage.o dsygv_2stage.o \

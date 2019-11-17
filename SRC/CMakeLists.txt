@@ -106,7 +106,7 @@ set(SLASRC
    slatbs.f slatdf.f slatps.f slatrd.f slatrs.f slatrz.f
    slauu2.f slauum.f sopgtr.f sopmtr.f sorg2l.f sorg2r.f
    sorgbr.f sorghr.f sorgl2.f sorglq.f sorgql.f sorgqr.f sorgr2.f
-   sorgrq.f sorgtr.f sorm2l.f sorm2r.f sorm22.f
+   sorgrq.f sorgtr.f sorgtsqr.f sorm2l.f sorm2r.f sorm22.f
    sormbr.f sormhr.f sorml2.f sormlq.f sormql.f sormqr.f sormr2.f
    sormr3.f sormrq.f sormrz.f sormtr.f spbcon.f spbequ.f spbrfs.f
    spbstf.f spbsv.f  spbsvx.f
@@ -148,7 +148,7 @@ set(SLASRC
    sgetsls.f sgeqr.f slatsqr.f slamtsqr.f sgemqr.f
    sgelq.f slaswlq.f slamswlq.f sgemlq.f
    stplqt.f stplqt2.f stpmlqt.f
-   sorhr.f slaorhr.f slaorhr_getrfnp.f slaorhr_getrfnp2.f
+   sorhr_col.f slaorhr_getrfnp.f slaorhr_getrfnp2.f
    ssytrd_2stage.f ssytrd_sy2sb.f ssytrd_sb2st.F ssb2st_kernels.f
    ssyevd_2stage.f ssyev_2stage.f ssyevx_2stage.f ssyevr_2stage.f
    ssbev_2stage.f ssbevx_2stage.f ssbevd_2stage.f ssygv_2stage.f
@@ -343,7 +343,7 @@ set(DLASRC
    dgetsls.f dgeqr.f dlatsqr.f dlamtsqr.f dgemqr.f
    dgelq.f dlaswlq.f dlamswlq.f dgemlq.f
    dtplqt.f dtplqt2.f dtpmlqt.f
-   dorhr.f dlaorhr_getrfnp.f dlaorhr_getrfnp2.f
+   dorhr_col.f dlaorhr_getrfnp.f dlaorhr_getrfnp2.f
    dsytrd_2stage.f dsytrd_sy2sb.f dsytrd_sb2st.F dsb2st_kernels.f
    dsyevd_2stage.f dsyev_2stage.f dsyevx_2stage.f dsyevr_2stage.f
    dsbev_2stage.f dsbevx_2stage.f dsbevd_2stage.f dsygv_2stage.f
@@ -446,7 +446,7 @@ set(ZLASRC
    zgelqt.f zgelqt3.f zgemlqt.f
    zgetsls.f zgeqr.f zlatsqr.f zlamtsqr.f zgemqr.f
    zgelq.f zlaswlq.f zlamswlq.f zgemlq.f
-   zorhr.f zlaorhr.f zlaorhr_getrfnp.f zlaorhr_getrfnp2.f
+   zorhr.f zlaorhr.o zlaorhr_getrfnp.f zlaorhr_getrfnp2.f
    zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.F zhb2st_kernels.f
    zheevd_2stage.f zheev_2stage.f zheevx_2stage.f zheevr_2stage.f
    zhbev_2stage.f zhbevx_2stage.f zhbevd_2stage.f zhegv_2stage.f

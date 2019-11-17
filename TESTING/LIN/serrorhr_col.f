@@ -1,4 +1,4 @@
-*> \brief \b DERRORHR
+*> \brief \b SERRORHR_COL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DERRORHR( PATH, NUNIT )
+*       SUBROUTINE SERRORHR_COL( PATH, NUNIT )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER*3        PATH
@@ -21,8 +21,8 @@
 *>
 *> \verbatim
 *>
-*> DERRORHR tests the error exits for DORHR that does Householder
-*> reconstruction from the ouput of tall-skinny factorization DLATSQR.
+*> SERRORHR_COL tests the error exits for DORHR that does Householder
+*> reconstruction from the ouput of tall-skinny factorization SLATSQR.
 *>
 *> \endverbatim
 *
@@ -51,10 +51,10 @@
 *
 *> \date November 2019
 *
-*> \ingroup double_lin
+*> \ingroup singlr_lin
 *
 *  =====================================================================
-      SUBROUTINE DERRORHR( PATH, NUNIT )
+      SUBROUTINE SERRORHR_COL( PATH, NUNIT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.9.0) --
@@ -77,11 +77,11 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. Local Arrays ..
-      DOUBLE PRECISION   A( NMAX, NMAX ), T( NMAX, NMAX ),
+      REAL               A( NMAX, NMAX ), T( NMAX, NMAX ),
      $                   R( NMAX, NMAX ), D(NMAX)
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAESM, CHKXER, DORHR
+      EXTERNAL           ALAESM, CHKXER, SORHR_COL
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -93,7 +93,7 @@
       COMMON             / SRNAMC / SRNAMT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE
+      INTRINSIC          REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -104,56 +104,56 @@
 *
       DO J = 1, NMAX
          DO I = 1, NMAX
-            A( I, J ) = 1.D0 / DBLE( I+J )
-            R( I, J ) = 1.D0 / DBLE( I+J )
-            T( I, J ) = 1.D0 / DBLE( I+J )
+            A( I, J ) = 1.E0 / REAL( I+J )
+            R( I, J ) = 1.E0 / REAL( I+J )
+            T( I, J ) = 1.E0 / REAL( I+J )
          END DO
-         D( J ) = 0.D0
+         D( J ) = 0.E0
       END DO
       OK = .TRUE.
 *
 *     Error exits for Householder reconstruction
 *
-*     DORHR
+*     SORHR_COL
 *
-      SRNAMT = 'DORHR'
+      SRNAMT = 'SORHR_COL'
 *
       INFOT = 1
-      CALL DORHR( -1, 0, A, 1, 1, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( -1, 0, 1, A, 1, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
       INFOT = 2
-      CALL DORHR( 0, -1, A, 1, 1, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
-      CALL DORHR( 1, 2, A, 1, 1, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( 0, -1, 1, A, 1, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( 1, 2, 1, A, 1, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
-      INFOT = 4
-      CALL DORHR( 0, 0, A, -1, 1, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      INFOT = 3
+      CALL SORHR_COL( 0, 0, -1, A, 1, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
-      CALL DORHR( 0, 0, A, 0, 1, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
-*
-      CALL DORHR( 2, 0, A, 1, 1, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( 0, 0, 0, A, 1, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
       INFOT = 5
-      CALL DORHR( 0, 0, A, 1, -1, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( 0, 0, 1, A, -1, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
-      CALL DORHR( 0, 0, A, 1, 0, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( 0, 0, 1, A, 0, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
+*
+      CALL SORHR_COL( 2, 0, 1, A, 1, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
       INFOT = 7
-      CALL DORHR( 0, 0, A, 1, 1, T, -1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( 0, 0, 1, A, 1, T, -1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
-      CALL DORHR( 0, 0, A, 1, 1, T, 0, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( 0, 0, 1, A, 1, T, 0, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
-      CALL DORHR( 4, 3, A, 4, 2, T, 1, D, INFO )
-      CALL CHKXER( 'DORHR', INFOT, NOUT, LERR, OK )
+      CALL SORHR_COL( 4, 3, 2, A, 4, T, 1, D, INFO )
+      CALL CHKXER( 'SORHR_COL', INFOT, NOUT, LERR, OK )
 *
 *     Print a summary line.
 *
@@ -161,6 +161,6 @@
 *
       RETURN
 *
-*     End of DERRORHR
+*     End of SERRORHR_COL
 *
       END

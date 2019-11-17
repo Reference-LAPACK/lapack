@@ -104,7 +104,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
 *> \ingroup single_lin
 *
@@ -161,7 +161,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, SCHKEQ, SCHKGB, SCHKGE, SCHKGT, SCHKLQ,
-     $                   SCHKORHR, SCHKPB, SCHKPO, SCHKPS, SCHKPP,
+     $                   SCHKORHR_COL, SCHKPB, SCHKPO, SCHKPS, SCHKPP,
      $                   SCHKPT, SCHKQ3, SCHKQL, SCHKQR, SCHKRQ, SCHKSP,
      $                   SCHKSY, SCHKSY_ROOK, SCHKSY_RK, SCHKSY_AA,
      $                   SCHKTB, SCHKTP, SCHKTR, SCHKTZ, SDRVGB, SDRVGE,
@@ -1012,8 +1012,8 @@
 *        HH:  Householder reconstruction for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL SCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-     $                     NBVAL, NOUT )
+            CALL SCHKORHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                         NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 ) PATH
          END IF

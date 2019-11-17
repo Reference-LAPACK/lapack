@@ -1,4 +1,4 @@
-*> \brief \b DCHKORHR
+*> \brief \b SCHKORHR_COL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,13 +8,13 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-*                            NBVAL, NOUT )
+*       SUBROUTINE SCHKORHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+*                                NBVAL, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NM, NN, NNB, NOUT
-*       DOUBLE PRECISION   THRESH
+*       REAL               THRESH
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            MVAL( * ), NBVAL( * ), NVAL( * )
@@ -24,9 +24,9 @@
 *>
 *> \verbatim
 *>
-*> DCHKORHR tests DORHR using DLATSQR and DGEMQRT. Therefore, DLATSQR
-*> (used in DGEQR) and DGEMQRT (used in DGEMQR) have to be tested
-*> before this test.
+*> SCHKORHR_COL tests SORHR_COL using SLATSQR, SGEMQRT and SORGTSQR.
+*> Therefore, SLATSQR (part of SGEQR), SGEMQRT (part SGEMQR), SORGTSQR
+*> have to be tested before this test.
 *>
 *> \endverbatim
 *
@@ -35,7 +35,7 @@
 *
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is DOUBLE PRECISION
+*>          THRESH is REAL
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -97,13 +97,13 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
-*> \ingroup double_lin
+*> \ingroup sigle_lin
 *
 *  =====================================================================
-      SUBROUTINE DCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-     $                     NBVAL, NOUT )
+      SUBROUTINE SCHKORHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                         NBVAL, NOUT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.9.0) --
@@ -114,7 +114,7 @@
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
       INTEGER            NM, NN, NNB, NOUT
-      DOUBLE PRECISION   THRESH
+      REAL               THRESH
 *     ..
 *     .. Array Arguments ..
       INTEGER            MVAL( * ), NBVAL( * ), NVAL( * )
@@ -132,10 +132,10 @@
      $                   NB2, NFAIL, NERRS, NRUN
 *
 *     .. Local Arrays ..
-      DOUBLE PRECISION   RESULT( NTESTS )
+      REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHD, ALASUM, DERRORHR, DORHR01
+      EXTERNAL           ALAHD, ALASUM, SERRORHR_COL, SORHR_COL01
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -153,7 +153,7 @@
 *
 *     Initialize constants
 *
-      PATH( 1: 1 ) = 'D'
+      PATH( 1: 1 ) = 'S'
       PATH( 2: 3 ) = 'HH'
       NRUN = 0
       NFAIL = 0
@@ -161,7 +161,7 @@
 *
 *     Test the error exits
 *
-      IF( TSTERR ) CALL DERRORHR( PATH, NOUT )
+      IF( TSTERR ) CALL SERRORHR_COL( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of M in MVAL.
@@ -199,10 +199,10 @@
 *
                            IF( NB1.GT.0 .AND. NB2.GT.0 ) THEN
 *
-*                             Test DORHR
+*                             Test SORHR_COL
 *
-                              CALL DORHR01( M, N, MB1, NB1, NB2,
-     $                                      RESULT )
+                              CALL SORHR_COL01( M, N, MB1, NB1, NB2,
+     $                                          RESULT )
 *
 *                             Print information about the tests that did
 *                             not pass the threshold.
@@ -234,6 +234,6 @@
      $        ', NB1=', I5, ', NB2=', I5,' test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of DCHKORHR
+*     End of SCHKORHR_COL
 *
       END

@@ -1,4 +1,4 @@
-*> \brief \b SCHKORHR
+*> \brief \b DCHKORHR_COL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,13 +8,13 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-*                            NBVAL, NOUT )
+*       SUBROUTINE DCHKORHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+*                                NBVAL, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
 *       INTEGER            NM, NN, NNB, NOUT
-*       REAL               THRESH
+*       DOUBLE PRECISION   THRESH
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            MVAL( * ), NBVAL( * ), NVAL( * )
@@ -24,8 +24,8 @@
 *>
 *> \verbatim
 *>
-*> SCHKORHR tests SORHR using SLATSQR and DGEMQRT. Therefore, SLATSQR
-*> (used in SGEQR) and SGEMQRT (used in SGEMQR) have to be tested
+*> DCHKORHR_COL tests DORHR_COL using DLATSQR and DGEMQRT. Therefore, DLATSQR
+*> (used in DGEQR) and DGEMQRT (used in DGEMQR) have to be tested
 *> before this test.
 *>
 *> \endverbatim
@@ -35,7 +35,7 @@
 *
 *> \param[in] THRESH
 *> \verbatim
-*>          THRESH is REAL
+*>          THRESH is DOUBLE PRECISION
 *>          The threshold value for the test ratios.  A result is
 *>          included in the output file if RESULT >= THRESH.  To have
 *>          every test ratio printed, use THRESH = 0.
@@ -97,24 +97,24 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
-*> \ingroup sigle_lin
+*> \ingroup double_lin
 *
 *  =====================================================================
-      SUBROUTINE SCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-     $                     NBVAL, NOUT )
+      SUBROUTINE DCHKORHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                         NBVAL, NOUT )
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.9.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
+*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
       INTEGER            NM, NN, NNB, NOUT
-      REAL               THRESH
+      DOUBLE PRECISION   THRESH
 *     ..
 *     .. Array Arguments ..
       INTEGER            MVAL( * ), NBVAL( * ), NVAL( * )
@@ -132,13 +132,14 @@
      $                   NB2, NFAIL, NERRS, NRUN
 *
 *     .. Local Arrays ..
-      REAL               RESULT( NTESTS )
+      DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHD, ALASUM, SERRORHR, SORHR01
+      EXTERNAL           ALAHD, ALASUM, DERRORHR_COL,
+     $                   DORHR_COL01, XLAENV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC  MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -153,7 +154,7 @@
 *
 *     Initialize constants
 *
-      PATH( 1: 1 ) = 'S'
+      PATH( 1: 1 ) = 'D'
       PATH( 2: 3 ) = 'HH'
       NRUN = 0
       NFAIL = 0
@@ -161,7 +162,7 @@
 *
 *     Test the error exits
 *
-      IF( TSTERR ) CALL SERRORHR( PATH, NOUT )
+      IF( TSTERR ) CALL DERRORHR_COL( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of M in MVAL.
@@ -199,10 +200,10 @@
 *
                            IF( NB1.GT.0 .AND. NB2.GT.0 ) THEN
 *
-*                             Test SORHR
+*                             Test DORHR_COL
 *
-                              CALL SORHR01( M, N, MB1, NB1, NB2,
-     $                                      RESULT )
+                              CALL DORHR_COL01( M, N, MB1, NB1, NB2,
+     $                                          RESULT )
 *
 *                             Print information about the tests that did
 *                             not pass the threshold.
@@ -234,6 +235,6 @@
      $        ', NB1=', I5, ', NB2=', I5,' test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of SCHKORHR
+*     End of DCHKORHR_COL
 *
       END

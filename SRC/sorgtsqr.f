@@ -1,4 +1,4 @@
-*> \brief \b DORGTSQR
+*> \brief \b SORGTSQR
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,25 +6,25 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORGTSQR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorgtsqr.f">
+*> Download SORGTSQR + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorgtsqr.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorgtsqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorgtsqr.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorgtsqr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorgtsqr.f">
 *> [TXT]</a>
 *>
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORGTSQR( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
+*       SUBROUTINE SORGTSQR( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
 *      $                     INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           INFO, LDA, LDT, LWORK, M, N, MB, NB
 *       ..
 *       .. Array Arguments ..
-*       DOUBLE PRECISION  A( LDA, * ), T( LDT, * ), WORK( * )
+*       REAL              A( LDA, * ), T( LDT, * ), WORK( * )
 *       ..
 *
 *> \par Purpose:
@@ -32,13 +32,13 @@
 *>
 *> \verbatim
 *>
-*> DORGTSQR generates an M-by-N matrix Q_out with orthonormal columns,
+*> SORGTSQR generates an M-by-N matrix Q_out with orthonormal columns,
 *> which are the first N columns of a product of orthogonal
-*> matrices of order M which are returned by DLATSQR
+*> matrices of order M which are returned by SLATSQR
 *>
 *>      Q_out = first_N_columns_of( Q(1)_in * Q(2)_in * . . .  Q(k)_in ).
 *>
-*> See the documentation for DLATSQR.
+*> See the documentation for SLATSQR.
 *> \endverbatim
 *
 *  Arguments:
@@ -59,7 +59,7 @@
 *> \param[in] MB
 *> \verbatim
 *>          MB is INTEGER
-*>          The row block size used by DLATSQR to return
+*>          The row block size used by SLATSQR to return
 *>          arrays A and T. MB > N.
 *>          (Note that if MB > M, then M is used instead of MB
 *>          as the row block size).
@@ -68,7 +68,7 @@
 *> \param[in] NB
 *> \verbatim
 *>          NB is INTEGER
-*>          The column block size used by DLATSQR to return
+*>          The column block size used by SLATSQR to return
 *>          arrays A and T. NB >= 1.
 *>          (Note that if NB > N, then N is used instead of NB
 *>          as the column block size).
@@ -76,16 +76,16 @@
 *>
 *> \param[in,out] A
 *> \verbatim
-*>          A is DOUBLE PRECISION array, dimension (LDA,N)
+*>          A is REAL array, dimension (LDA,N)
 *>
 *>          On entry:
 *>
 *>             The elements on and above the diagonal are not accessed.
 *>             The elements below the diagonal represent the unit
-*>             lower-trapezoidal blocked matrix V computed by DLATSQR
+*>             lower-trapezoidal blocked matrix V computed by SLATSQR
 *>             that defines the input matrices Q_in(k) (ones on the
 *>             diagonal are not stored) (same format as the output A
-*>             below the diagonal in DLATSQR).
+*>             below the diagonal in SLATSQR).
 *>
 *>          On exit:
 *>
@@ -101,7 +101,7 @@
 *>
 *> \param[in] T
 *> \verbatim
-*>          T is DOUBLE PRECISION array,
+*>          T is REAL array,
 *>          dimension (LDT, N * NIRB)
 *>          where NIRB = Number_of_input_row_blocks
 *>                     = MAX( 1, CEIL((M-N)/(MB-N)) )
@@ -114,7 +114,7 @@
 *>          reflector sequences. Each of NIRB block reflector sequences
 *>          is stored in a larger NB-by-N column block of T and consists
 *>          of NICB smaller NB-by-NB upper-triangular column blocks.
-*>          (same format as the output T in DLATSQR).
+*>          (same format as the output T in SLATSQR).
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -126,7 +126,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          (workspace) DOUBLE PRECISION array, dimension (MAX(2,LWORK))
+*>          (workspace) REAL array, dimension (MAX(2,LWORK))
 *>          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
@@ -157,7 +157,7 @@
 *
 *> \date November 2019
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup singleOTHERcomputational
 *
 *> \par Contributors:
 *  ==================
@@ -171,7 +171,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DORGTSQR( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
+      SUBROUTINE SORGTSQR( M, N, MB, NB, A, LDA, T, LDT, WORK, LWORK,
      $                     INFO )
       IMPLICIT NONE
 *
@@ -184,24 +184,24 @@
       INTEGER           INFO, LDA, LDT, LWORK, M, N, MB, NB
 *     ..
 *     .. Array Arguments ..
-      DOUBLE PRECISION  A( LDA, * ), T( LDT, * ), WORK( * )
+      REAL              A( LDA, * ), T( LDT, * ), WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0 )
+      REAL               ONE, ZERO
+      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            LQUERY
       INTEGER            IINFO, LDC, LWORKOPT, LC, LW, NBLOCAL, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAMTSQR, DLASET, XERBLA
+      EXTERNAL           SLAMTSQR, SLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, MAX, MIN
+      INTRINSIC          REAL, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -255,17 +255,17 @@
 *     Handle error in the input parameters and return workspace query.
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORGTSQR', -INFO )
+         CALL XERBLA( 'SORGTSQR', -INFO )
          RETURN
       ELSE IF ( LQUERY ) THEN
-         WORK( 1 ) = DBLE( LWORKOPT )
+         WORK( 1 ) = REAL( LWORKOPT )
          RETURN
       END IF
 *
 *     Quick return if possible
 *
       IF( MIN( M, N ).EQ.0 ) THEN
-         WORK( 1 ) = DBLE( LWORKOPT )
+         WORK( 1 ) = REAL( LWORKOPT )
          RETURN
       END IF
 *
@@ -280,14 +280,14 @@
 *     (1a) Form M-by-N matrix in the array WORK(1:LDC*N) with ones
 *     on the diagonal and zeros elsewhere.
 *
-      CALL DLASET( 'F', M, N, ZERO, ONE, WORK, LDC )
+      CALL SLASET( 'F', M, N, ZERO, ONE, WORK, LDC )
 *
 *     (1b)  On input, WORK(1:LDC*N) stores ( I );
 *                                          ( 0 )
 *
 *           On output, WORK(1:LDC*N) stores Q1_in.
 *
-      CALL DLAMTSQR( 'L', 'N', M, N, N, MB, NBLOCAL, A, LDA, T, LDT,
+      CALL SLAMTSQR( 'L', 'N', M, N, N, MB, NBLOCAL, A, LDA, T, LDT,
      $               WORK, LDC, WORK( LC+1 ), LW, IINFO )
 *
 *     (2) Copy the result from the work array WORK(1:LDC*N) into
@@ -297,9 +297,9 @@
          CALL DCOPY( M, WORK( (J-1)*LDC + 1 ), 1, A( 1, J ), 1 )
       END DO
 *
-      WORK( 1 ) = DBLE( LWORKOPT )
+      WORK( 1 ) = REAL( LWORKOPT )
       RETURN
 *
-*     End of DORGTSQR
+*     End of SORGTSQR
 *
       END

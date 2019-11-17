@@ -1,4 +1,4 @@
-*> \brief \b DORHR
+*> \brief \b DORHR_COL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,18 +6,18 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DORHR + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorhr.f">
+*> Download DORHR_COL + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dorhr_col.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorhr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dorhr_col.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorhr.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dorhr_col.f">
 *> [TXT]</a>
 *>
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORHR( M, N, A, LDA, NB, T, LDT, D, INFO )
+*       SUBROUTINE DORHR_COL( M, N, NB, A, LDA, T, LDT, D, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           INFO, LDA, LDT, M, N, NB
@@ -31,14 +31,14 @@
 *>
 *> \verbatim
 *>
-*>  DORHR takes an M-by-N matrix Q_in with orthonormal columns as input,
+*>  DORHR_COL takes an M-by-N matrix Q_in with orthonormal columns as input,
 *>  stored in A, and performs Householder Reconstruction (HR),
-*>  i.e. reconstructs Householder vectors V implicitly representing
+*>  i.e. reconstructs Householder vectors V(i) implicitly representing
 *>  another M-by-N matrix Q_out, with the property that Q_in = Q_out*S,
 *>  where S is an N-by-N diagonal matrix with diagonal entries
-*>  equal to +1 or -1. The Householder vectors (columns of V) are stored
-*>  in column blocks in A on output, and the diagonal entries of S are
-*>  stored in D. Block reflectors are also returned in T
+*>  equal to +1 or -1. The Householder vectors (columns V(i) of V) are stored
+*>  in A on output, and the diagonal entries of S are stored in D.
+*>  Block reflectors are also returned in T
 *>  (same output format as DGEQRT).
 *> \endverbatim
 *
@@ -57,6 +57,15 @@
 *>          The number of columns of the matrix A. M >= N >= 0.
 *> \endverbatim
 *>
+*> \param[in] NB
+*> \verbatim
+*>          NB is INTEGER
+*>          The column block size to be used in the reconstruction
+*>          of Householder column vector blocks in the array A and
+*>          corresponding block reflectors in the array T. NB >= 1.
+*>          (Note that if NB > N, then N is used instead of NB
+*>          as the column block size.)
+*> \endverbatim
 *>
 *> \param[in,out] A
 *> \verbatim
@@ -69,20 +78,16 @@
 *>
 *>          On exit:
 *>
-*>             Let NOCB = Number_of_output_col_blocks
-*>                      = CEIL(N/NB)
-*>
 *>             The elements below the diagonal of A represent the unit
-*>             lower-trapezoidal matrix Y of Householder column vectors
-*>             V stored in NOCB NB-size column blocks Y(k).
-*>             The unit diagonal entries of Y are not stored.
-*>             (same format as the output A in DGEQRT).
-*>             The matrix T and the matrix Y stored on output in A
-*>             implicitly define Q_out.
+*>             lower-trapezoidal matrix V of Householder column vectors
+*>             V(i). The unit diagonal entries of V are not stored
+*>             (same format as the output below the diagonal in A from
+*>             DGEQRT). The matrix T and the matrix V stored on output
+*>             in A implicitly define Q_out.
 *>
-*>             The elements above the diagonal cointain the factor U
+*>             The elements above the diagonal contain the factor U
 *>             of the "modified" LU-decomposition:
-*>                Q_in - ( S ) = L * U  ( = Y * U, since Y = L ),
+*>                Q_in - ( S ) = V * U
 *>                       ( 0 )
 *>             where 0 is a (M-N)-by-(M-N) zero matrix.
 *> \endverbatim
@@ -91,16 +96,6 @@
 *> \verbatim
 *>          LDA is INTEGER
 *>          The leading dimension of the array A.  LDA >= max(1,M).
-*> \endverbatim
-*>
-*> \param[in] NB
-*> \verbatim
-*>          NB is INTEGER
-*>          The column block size to be used in the reconstruction
-*>          of Householder column vector blocks in the array A and
-*>          corresponding block reflectors in the array T. NB >= 1.
-*>          (Note that if NB > N, then N is used instead of NB
-*>          as the column block size.)
 *> \endverbatim
 *>
 *> \param[out] T
@@ -115,9 +110,10 @@
 *>          block reflectors used to define Q_out stored in compact
 *>          form as a sequence of upper-triangular NB-by-NB column
 *>          blocks (same format as the output T in DGEQRT).
-*>          The matrix T and the matrix Y stored on output in A
-*>          implicitly define Q_out.
-*>          See Further Details.
+*>          The matrix T and the matrix V stored on output in A
+*>          implicitly define Q_out. NOTE: The lower triangles
+*>          below the upper-triangular blcoks will be filled with
+*>          zeros. See Further Details.
 *> \endverbatim
 *>
 *> \param[in] LDT
@@ -149,22 +145,16 @@
 *  =====================
 *>
 *> \verbatim
-*> VARIANT 1:
-*> For the output format of Q_out see the documnetation of DGEQRT.
 *>
-*> OR
-*>
-*> VARIANT 2:
-*> ==========================================================================
 *> The computed M-by-M orthogonal factor Q_out is defined implicitly as
 *> a product of orthogonal matrices Q_out(i). Each Q_out(i) is stored in
 *> the compact WY-representation format in the corresponding blocks of
-*> matrices Y (stored in A) and T.
+*> matrices V (stored in A) and T.
 *>
-*> The M-by-N unit lower-trapezoidal matrix Y stored in the M-by-N
-*> matrix A contains the column vectors Y(i) in NB-size column
-*> blocks YB(j). For example, YB(1) contains the columns
-*> Y(1), Y(2), ... Y(NB2). NOTE: The unit entries on
+*> The M-by-N unit lower-trapezoidal matrix V stored in the M-by-N
+*> matrix A contains the column vectors V(i) in NB-size column
+*> blocks VB(j). For example, VB(1) contains the columns
+*> V(1), V(2), ... V(NB). NOTE: The unit entries on
 *> the diagonal of Y are not stored in A.
 *>
 *> The number of column blocks is
@@ -174,20 +164,20 @@
 *> where each block is of order NB except for the last block, which
 *> is of order LAST_NB = N - (NOCB-1)*NB.
 *>
-*> For example, if M=6,  N=5 and NB=2, the matrix Y is
+*> For example, if M=6,  N=5 and NB=2, the matrix V is
 *>
 *>
-*>     Y = (    YB(1),   YB(2), YB(3) ) =
+*>     V = (    VB(1),   VB(2), VB(3) ) =
 *>
 *>       = (   1                      )
-*>         ( y21    1                 )
-*>         ( y31  y32    1            )
-*>         ( y41  y42  y43   1        )
-*>         ( y51  y52  y53  y54    1  )
-*>         ( y61  y62  y63  y54   y65 )
+*>         ( v21    1                 )
+*>         ( v31  v32    1            )
+*>         ( v41  v42  v43   1        )
+*>         ( v51  v52  v53  v54    1  )
+*>         ( v61  v62  v63  v54   v65 )
 *>
 *>
-*> For each of the column blocks YB(i), an upper-triangular block
+*> For each of the column blocks VB(i), an upper-triangular block
 *> reflector TB(i) is computed. These blocks are stored as
 *> a sequence of upper-triangular column blocks in the NB-by-N
 *> matrix T. The size of each TB(i) block is NB-by-NB, except
@@ -195,10 +185,10 @@
 *>
 *> For example, if M=6,  N=5 and NB=2, the matrix T is
 *>
-*>     T  = (      TB(1),      TB(2), TB(3) ) =
+*>     T  = (    TB(1),    TB(2), TB(3) ) =
 *>
-*>        = ( t_11  t_12  t_13  t_14   t_15  )
-*>          (       t_22        t_24         )
+*>        = ( t11  t12  t13  t14   t15  )
+*>          (      t22       t24        )
 *>
 *>
 *> The M-by-M factor Q_out is given as a product of NOCB
@@ -207,21 +197,24 @@
 *>     Q_out = Q_out(1) * Q_out(2) * ... * Q_out(NOCB),
 *>
 *> where each matrix Q_out(i) is given by the WY-representation
-*> using corresponding blocks from the matrices Y and T:
+*> using corresponding blocks from the matrices V and T:
 *>
-*>     Q_out(i) = I - YB(i) * TB(i) * (YB(i))**T,
+*>     Q_out(i) = I - VB(i) * TB(i) * (VB(i))**T,
 *>
 *> where I is the identity matrix. Here is the formula with matrix
 *> dimensions:
 *>
 *>  Q(i){M-by-M} = I{M-by-M} -
-*>    YB(i){M-by-INB} * TB(i){INB-by-INB} * (YB(i))**T {INB-by-M},
+*>    VB(i){M-by-INB} * TB(i){INB-by-INB} * (VB(i))**T {INB-by-M},
 *>
 *> where INB = NB, except for the last block NOCB
 *> for which INB=LAST_NB.
-*> ==========================================================================
 *>
-*> NOTE: If Q_in is the result of doing a QR factorization
+*> =====
+*> NOTE:
+*> =====
+*>
+*> If Q_in is the result of doing a QR factorization
 *> B = Q_in * R_in, then:
 *>
 *> B = (Q_out*S) * R_in = Q_out * (S * R_in) = O_out * R_out.
@@ -263,7 +256,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DORHR( M, N, A, LDA, NB, T, LDT, D, INFO )
+      SUBROUTINE DORHR_COL( M, N, NB, A, LDA, T, LDT, D, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine (version 3.9.0) --
@@ -303,9 +296,9 @@
          INFO = -1
       ELSE IF( N.LT.0 .OR. N.GT.M ) THEN
          INFO = -2
-      ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -4
       ELSE IF( NB.LT.1 ) THEN
+         INFO = -3
+      ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -5
       ELSE IF( LDT.LT.MAX( 1, MIN( NB, N ) ) ) THEN
          INFO = -7
@@ -314,7 +307,7 @@
 *     Handle error in the input parameters.
 *
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DORHR', -INFO )
+         CALL XERBLA( 'DORHR_COL', -INFO )
          RETURN
       END IF
 *
@@ -327,21 +320,19 @@
 *     On input, the M-by-N matrix A contains the orthogonal
 *     M-by-N matrix Q_in.
 *
-*     (1) Compute the unit lower-trapezoidal Y (ones on the diagonal
-*     are not stored).
+*     (1) Compute the unit lower-trapezoidal V (ones on the diagonal
+*     are not stored) by performing the "modified" LU-decomposition.
 *
-*     Since Y = L, perform the "modified" LU-decomposition
-*
-*     Q_in - ( S ) = L * U = ( L1 ) * U,
-*            ( 0 )           ( L2 )
+*     Q_in - ( S ) = V * U = ( V1 ) * U,
+*            ( 0 )           ( V2 )
 *
 *     where 0 is an (M-N)-by-N zero matrix.
 *
-*     (1-1) Factor L1 and U.
+*     (1-1) Factor V1 and U.
 
       CALL DLAORHR_GETRFNP( N, N, A, LDA, D, IINFO )
 *
-*     (1-2) Solve for L2.
+*     (1-2) Solve for V2.
 *
       IF( M.GT.N ) THEN
          CALL DTRSM( 'R', 'U', 'N', 'N', M-N, N, ONE, A, LDA,
@@ -384,8 +375,6 @@
 *        right means changing the sign of each J-th column of the block
 *        U(JB) according to the sign of the diagonal element of the block
 *        S(JB), i.e. S(J,J) that is stored in the array element D(J).
-*        (NOTE: The N-by-N sign matrix S is the upper submatrix of the
-*        M-by-N sign matrix S1, mentioned above).
 *
          DO J = JB, JB+JNB-1
             IF( D( J ).EQ.ONE ) THEN
@@ -399,11 +388,11 @@
 *               X(JB) * (A(JB)**T) = B(JB), where:
 *
 *               A(JB)**T  is a JNB-by-JNB unit upper-triangular
-*                         coefficient block, and A(JB)=L1(JB), which
+*                         coefficient block, and A(JB)=V1(JB), which
 *                         is a JNB-by-JNB unit lower-triangular block
-*                         stored in W(JB:JB+JNB-1,JB:JB+JNB-1).
-*                         The N-by-N matrix L is the upper part
-*                         of the M-by-N lower-trapezoidal matrix L1
+*                         stored in A(JB:JB+JNB-1,JB:JB+JNB-1).
+*                         The N-by-N matrix V1 is the upper part
+*                         of the M-by-N lower-trapezoidal matrix V
 *                         stored in A(1:M,1:N);
 *
 *               B(JB)     is a JNB-by-JNB  upper-triangular right-hand
@@ -418,7 +407,7 @@
 *             In other words, we perform the triangular solve for the
 *             upper-triangular block T(JB):
 *
-*               T(JB) * (L1(JB)**T) = (-1)*U(JB)*S(JB).
+*               T(JB) * (V1(JB)**T) = (-1)*U(JB)*S(JB).
 *
 *             Even though the blocks X(JB) and B(JB) are upper-
 *             triangular, the routine DTRSM will access all JNB**2
@@ -445,6 +434,6 @@
 *
       RETURN
 *
-*     End of DORHR
+*     End of DORHR_COL
 *
       END

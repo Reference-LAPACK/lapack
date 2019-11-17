@@ -106,7 +106,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
 *> \ingroup double_lin
 *
@@ -163,7 +163,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, DCHKEQ, DCHKGB, DCHKGE, DCHKGT, DCHKLQ,
-     $                   DCHKORHR, DCHKPB, DCHKPO, DCHKPS, DCHKPP,
+     $                   DCHKORHR_COL, DCHKPB, DCHKPO, DCHKPS, DCHKPP,
      $                   DCHKPT, DCHKQ3, DCHKQL, DCHKQR, DCHKRQ, DCHKSP,
      $                   DCHKSY, DCHKSY_ROOK, DCHKSY_RK, DCHKSY_AA,
      $                   DCHKTB, DCHKTP, DCHKTR, DCHKTZ, DDRVGB, DDRVGE,
@@ -1016,8 +1016,8 @@
 *        HH:  Householder reconstruction for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL DCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-     $                     NBVAL, NOUT )
+            CALL DCHKORHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                         NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 ) PATH
          END IF
