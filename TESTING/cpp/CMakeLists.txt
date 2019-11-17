@@ -26,11 +26,6 @@ if(BUILD_SINGLE)
 
 
 	add_test(NAME cpp_tests_single COMMAND cpp_tests_single)
-
-
-	add_executable(sggsvd_vs_sggqrcs ggsvd_vs_ggqrcs.cpp)
-	target_link_libraries(
-		sggsvd_vs_sggqrcs ${LAPACK_LIBRARIES} ${Boost_LIBRARIES})
 endif()
 
 
