@@ -13,7 +13,7 @@
 *       .. Scalar Arguments ..
 *       INTEGER           M, N, MB1, NB1, NB2
 *       .. Return values ..
-*       DREAL             RESULT(6)
+*       REAL             RESULT(6)
 *
 *
 *> \par Purpose:
@@ -113,7 +113,7 @@
 *     .. Local Scalars ..
       LOGICAL            TESTZEROS
       INTEGER            INFO, I, J, K, L, LWORK, NB1_UB, NB2_UB, NRB
-      REAL               ANORM, EPS, RESID, CNORM, DNORM
+      REAL               ANORM, EPS, RESID, CNORM, SNORM
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
@@ -324,7 +324,7 @@
       DO J = 1, M
          CALL SLARNV( 2, ISEED, N, D( 1, J ) )
       END DO
-      DNORM = SLANGE( '1', N, M, D, N, RWORK )
+      SNORM = SLANGE( '1', N, M, D, N, RWORK )
       CALL SLACPY( 'Full', N, M, D, N, DF, N )
 *
 *     Apply Q to D as D*Q = DF
@@ -338,8 +338,8 @@
 *
       CALL SGEMM( 'N', 'N', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
       RESID = SLANGE( '1', N, M, DF, N, RWORK )
-      IF( DNORM.GT.ZERO ) THEN
-         RESULT( 5 ) = RESID / ( EPS * MAX( 1, M ) * DNORM )
+      IF( SNORM.GT.ZERO ) THEN
+         RESULT( 5 ) = RESID / ( EPS * MAX( 1, M ) * SNORM )
       ELSE
          RESULT( 5 ) = ZERO
       END IF
@@ -359,8 +359,8 @@
 *
       CALL SGEMM( 'N', 'T', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
       RESID = SLANGE( '1', N, M, DF, N, RWORK )
-      IF( DNORM.GT.ZERO ) THEN
-         RESULT( 6 ) = RESID / ( EPS * MAX( 1, M ) * DNORM )
+      IF( SNORM.GT.ZERO ) THEN
+         RESULT( 6 ) = RESID / ( EPS * MAX( 1, M ) * SNORM )
       ELSE
          RESULT( 6 ) = ZERO
       END IF

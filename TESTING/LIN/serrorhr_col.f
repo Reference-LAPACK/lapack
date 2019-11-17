@@ -51,7 +51,7 @@
 *
 *> \date November 2019
 *
-*> \ingroup singlr_lin
+*> \ingroup single_lin
 *
 *  =====================================================================
       SUBROUTINE SERRORHR_COL( PATH, NUNIT )

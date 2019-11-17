@@ -136,6 +136,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAHD, ALASUM, SERRORHR_COL, SORHR_COL01
+     $                   XLAENV  
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
