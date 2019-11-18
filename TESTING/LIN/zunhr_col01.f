@@ -121,7 +121,7 @@
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
-      DOUBLE PRECISION   WORKQUERY( 1 )
+      COMPLEX*16         WORKQUERY( 1 )
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSY

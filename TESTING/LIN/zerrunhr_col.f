@@ -77,7 +77,7 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. Local Arrays ..
-      DOUBLE PRECISION   A( NMAX, NMAX ), T( NMAX, NMAX ), D(NMAX)
+      COMPLEX*16         A( NMAX, NMAX ), T( NMAX, NMAX ), D(NMAX)
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, ZUNHR_COL

@@ -25,7 +25,7 @@
 *> \verbatim
 *>
 *> ZCHKUNHR_COL tests ZUNHR_COL using ZLATSQR and ZGEMQRT. Therefore, ZLATSQR
-*> (used in DGEQR) and ZGEMQRT (used in DGEMQR) have to be tested
+*> (used in ZGEQR) and ZGEMQRT (used in ZGEMQR) have to be tested
 *> before this test.
 *>
 *> \endverbatim
