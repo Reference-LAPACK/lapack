@@ -6,7 +6,7 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAORHR_GETRF2NP + dependencies
+*> Download ZLAUNHR_COL_GETRFNP2 + dependencies
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaunhr_col_getrfnp2.f">
 *> [TGZ]</a>
 *> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaunhr_col_getrfnp2.f">
@@ -34,7 +34,7 @@
 *> \verbatim
 *>
 *> ZLAUNHR_COL_GETRFNP2 computes the modified LU factorization without
-*> pivoting of a general M-by-N matrix A. The factorization has
+*> pivoting of a complex general M-by-N matrix A. The factorization has
 *> the form:
 *>
 *>     A - S = L * U,

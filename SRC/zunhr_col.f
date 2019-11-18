@@ -242,7 +242,7 @@
 *
 *> \date November 2019
 *
-*> \ingroup doubleOTHERcomputational
+*> \ingroup complex16OTHERcomputational
 *
 *> \par Contributors:
 *  ==================

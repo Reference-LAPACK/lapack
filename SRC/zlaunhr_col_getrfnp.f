@@ -34,7 +34,7 @@
 *> \verbatim
 *>
 *> ZLAUNHR_COL_GETRFNP computes the modified LU factorization without
-*> pivoting of a general M-by-N matrix A. The factorization has
+*> pivoting of a complex general M-by-N matrix A. The factorization has
 *> the form:
 *>
 *>     A - S = L * U,
