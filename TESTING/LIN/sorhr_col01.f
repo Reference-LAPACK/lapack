@@ -278,7 +278,7 @@
 *     Compute |I - (Q**T)*Q| / ( eps * m ) and store in RESULT(2)
 *
       CALL SLASET( 'Full', M, M, ZERO, ONE, R, M )
-      CALL SSYRK( 'U', 'C', M, M, -ONE, Q, M, ONE, R, M )
+      CALL SSYRK( 'U', 'T', M, M, -ONE, Q, M, ONE, R, M )
       RESID = SLANSY( '1', 'Upper', M, R, M, RWORK )
       RESULT( 2 ) = RESID / ( EPS * MAX( 1, M ) )
 *

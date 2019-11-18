@@ -282,7 +282,7 @@
      $                   NPLUSONE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAORHR_GETRFNP, SSCAL, STRSM, XERBLA
+      EXTERNAL           SCOPY, SLAORHR_COL_GETRFNP, SSCAL, STRSM, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -330,7 +330,7 @@
 *
 *     (1-1) Factor V1 and U.
 
-      CALL SLAORHR_GETRFNP( N, N, A, LDA, D, IINFO )
+      CALL SLAORHR_COL_GETRFNP( N, N, A, LDA, D, IINFO )
 *
 *     (1-2) Solve for V2.
 *

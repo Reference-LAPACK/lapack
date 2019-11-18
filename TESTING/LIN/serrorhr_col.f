@@ -21,9 +21,9 @@
 *>
 *> \verbatim
 *>
-*> SERRORHR_COL tests the error exits for DORHR that does Householder
-*> reconstruction from the ouput of tall-skinny factorization SLATSQR.
-*>
+*> SERRORHR_COL tests the error exits for SORHR_COL that does
+*> Householder reconstruction from the ouput of tall-skinny
+*> factorization SLATSQR.
 *> \endverbatim
 *
 *  Arguments:
@@ -77,8 +77,7 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. Local Arrays ..
-      REAL               A( NMAX, NMAX ), T( NMAX, NMAX ),
-     $                   R( NMAX, NMAX ), D(NMAX)
+      REAL               A( NMAX, NMAX ), T( NMAX, NMAX ), D(NMAX)
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, SORHR_COL
@@ -105,7 +104,6 @@
       DO J = 1, NMAX
          DO I = 1, NMAX
             A( I, J ) = 1.E+0 / REAL( I+J )
-            R( I, J ) = 1.E+0 / REAL( I+J )
             T( I, J ) = 1.E+0 / REAL( I+J )
          END DO
          D( J ) = 0.E+0
