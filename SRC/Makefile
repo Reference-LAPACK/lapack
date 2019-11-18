@@ -467,7 +467,7 @@ ZLASRC = \
    ztptrs.o ztrcon.o ztrevc.o ztrevc3.o ztrexc.o ztrrfs.o ztrsen.o ztrsna.o \
    ztrsyl.o ztrti2.o ztrtri.o ztrtrs.o ztzrzf.o zung2l.o \
    zung2r.o zungbr.o zunghr.o zungl2.o zunglq.o zungql.o zungqr.o zungr2.o \
-   zungrq.o zungtr.o zunm2l.o zunm2r.o zunmbr.o zunmhr.o zunml2.o zunm22.o \
+   zungrq.o zungtr.o zungtsqr.o zunm2l.o zunm2r.o zunmbr.o zunmhr.o zunml2.o zunm22.o \
    zunmlq.o zunmql.o zunmqr.o zunmr2.o zunmr3.o zunmrq.o zunmrz.o \
    zunmtr.o zupgtr.o \
    zupmtr.o izmax1.o dzsum1.o zstemr.o \
@@ -483,7 +483,7 @@ ZLASRC = \
    zgelqt.o zgelqt3.o zgemlqt.o \
    zgetsls.o zgeqr.o zlatsqr.o zlamtsqr.o zgemqr.o \
    zgelq.o zlaswlq.o zlamswlq.o zgemlq.o \
-   zorhr.o zlaorhr.o zlaorhr_getrfnp.o zlaorhr_getrfnp2.o \
+   zunhr_col.o zlaunhr_col_getrfnp.o zlaunhr_col_getrfnp2.o \
    zhetrd_2stage.o zhetrd_he2hb.o zhetrd_hb2st.o zhb2st_kernels.o \
    zheevd_2stage.o zheev_2stage.o zheevx_2stage.o zheevr_2stage.o \
    zhbev_2stage.o zhbevx_2stage.o zhbevd_2stage.o zhegv_2stage.o \

@@ -1,4 +1,4 @@
-*> \brief \b ZLAORHR_GETRFNP2
+*> \brief \b ZLAUNHR_COL_GETRFNP2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -7,18 +7,18 @@
 *
 *> \htmlonly
 *> Download DLAORHR_GETRF2NP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaorhr_getrfnp2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/zlaunhr_col_getrfnp2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaorhr_getrfnp2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/zlaunhr_col_getrfnp2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaorhr_getrfnp2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/zlaunhr_col_getrfnp2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE ZLAORHR_GETRFNP2( M, N, A, LDA, D, INFO )
+*       RECURSIVE SUBROUTINE ZLAUNHR_COL_GETRFNP2( M, N, A, LDA, D, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,7 +33,7 @@
 *>
 *> \verbatim
 *>
-*> ZLAORHR_GETRFNP2 computes the modified LU factorization without
+*> ZLAUNHR_COL_GETRFNP2 computes the modified LU factorization without
 *> pivoting of a general M-by-N matrix A. The factorization has
 *> the form:
 *>
@@ -48,20 +48,20 @@
 *>    least one in absolute value (so that division-by-zero not
 *>    possible during the division by the diagonal element);
 *>
-*>    L is a m-by-n lower triangular matrix with unit diagonal elements
-*>    (lower trapezoidal if m > n);
+*>    L is a M-by-N lower triangular matrix with unit diagonal elements
+*>    (lower trapezoidal if M > N);
 *>
-*>    and U is a m-by-n upper triangular matrix
-*>    (upper trapezoidal if m < n).
+*>    and U is a M-by-N upper triangular matrix
+*>    (upper trapezoidal if M < N).
 *>
 *> This routine is an auxiliary routine used in the Householder
-*> reconstruction routine ZORHR. In ZORHR, this routine is applied
-*> to an orthonormal M-by-N matrix A, where each element is bounded
-*> by one in absolute value. With the choice of the matrix S above,
-*> one can show that the diagonal element at each step of Gaussian
-*> elimination is the largest (in absolute value) in the column
-*> on or below the diagonal, so that no pivoting is required for
-*> numerical stability [1].
+*> reconstruction routine ZUNHR_COL. In ZUNHR_COL, this routine is
+*> applied to an M-by-N matrix A with orthonormal columns, where each
+*> element is bounded by one in absolute value. With the choice of
+*> the matrix S above, one can show that the diagonal element at each
+*> step of Gaussian elimination is the largest (in absolute value) in
+*> the column on or below the diagonal, so that no pivoting is required
+*> for numerical stability [1].
 *>
 *> For more details on the Householder reconstruction algorithm,
 *> including the modified LU factorization, see [1].
@@ -82,10 +82,10 @@
 *>
 *> For more details on the recursive LU algorithm, see [2].
 *>
-*> ZLAORHR_GETRFNP2 is called to factorize a block by the blocked
-*> routine ZLAORHR_GETRFNP, which uses blocked code calling
-*. Level 3 BLAS to update the submatrix. However, ZLAORHR_GETRFNP2
-*> is self-sufficient and can be used without ZLAORHR_GETRFNP.
+*> ZLAUNHR_COL_GETRFNP2 is called to factorize a block by the blocked
+*> routine ZLAUNHR_COL_GETRFNP, which uses blocked code calling
+*. Level 3 BLAS to update the submatrix. However, ZLAUNHR_COL_GETRFNP2
+*> is self-sufficient and can be used without ZLAUNHR_COL_GETRFNP.
 *>
 *> [1] "Reconstructing Householder vectors from tall-skinny QR",
 *>     G. Ballard, J. Demmel, L. Grigori, M. Jacquelin, H.D. Nguyen,
@@ -165,7 +165,7 @@
 *> \endverbatim
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE ZLAORHR_GETRFNP2( M, N, A, LDA, D, INFO )
+      RECURSIVE SUBROUTINE ZLAUNHR_COL_GETRFNP2( M, N, A, LDA, D, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine (version 3.9.0) --
@@ -222,7 +222,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'ZLAORHR_GETRFNP2', -INFO )
+         CALL XERBLA( 'ZLAUNHR_COL_GETRFNP2', -INFO )
          RETURN
       END IF
 *
@@ -283,7 +283,7 @@
 *
 *        Factor B11, recursive call
 *
-         CALL ZLAORHR_GETRFNP2( N1, N1, A, LDA, D, IINFO )
+         CALL ZLAUNHR_COL_GETRFNP2( N1, N1, A, LDA, D, IINFO )
 *
 *        Solve for B21
 *
@@ -303,12 +303,12 @@
 *
 *        Factor B22, recursive call
 *
-         CALL ZLAORHR_GETRFNP2( M-N1, N2, A( N1+1, N1+1 ), LDA,
-     $                          D( N1+1 ), IINFO )
+         CALL ZLAUNHR_COL_GETRFNP2( M-N1, N2, A( N1+1, N1+1 ), LDA,
+     $                              D( N1+1 ), IINFO )
 *
       END IF
       RETURN
 *
-*     End of ZLAORHR_GETRFNP2
+*     End of ZLAUNHR_COL_GETRFNP2
 *
       END

@@ -110,17 +110,17 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date November 2019
 *
 *> \ingroup complex16_lin
 *
 *  =====================================================================
       PROGRAM ZCHKAA
 *
-*  -- LAPACK test routine (version 3.8.0) --
+*  -- LAPACK test routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     November 2017
+*     November 2019
 *
 *  =====================================================================
 *
@@ -168,7 +168,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, ZCHKEQ, ZCHKGB, ZCHKGE, ZCHKGT, ZCHKHE,
      $                   ZCHKHE_ROOK, ZCHKHE_RK, ZCHKHE_AA, ZCHKHP,
-     $                   ZCHKLQ, ZCHKORHR, ZCHKPB, ZCHKPO, ZCHKPS,
+     $                   ZCHKLQ, ZCHKUNHR_COL, ZCHKPB, ZCHKPO, ZCHKPS,
      $                   ZCHKPP, ZCHKPT, ZCHKQ3, ZCHKQL, ZCHKQR, ZCHKRQ,
      $                   ZCHKSP, ZCHKSY, ZCHKSY_ROOK, ZCHKSY_RK,
      $                   ZCHKSY_AA, ZCHKTB, ZCHKTP, ZCHKTR, ZCHKTZ,
@@ -1209,8 +1209,8 @@
 *        HH:  Householder reconstruction for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL ZCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-     $                     NBVAL, NOUT )
+            CALL ZCHKUNHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                         NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 ) PATH
          END IF

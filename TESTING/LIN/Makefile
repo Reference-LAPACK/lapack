@@ -215,7 +215,7 @@ ZLINTST = zchkaa.o \
    zqrt04.o zqrt05.o zchkqrt.o zerrqrt.o zchkqrtp.o zerrqrtp.o \
    zchklqt.o zchklqtp.o zchktsqr.o \
    zerrlqt.o zerrlqtp.o zerrtsqr.o ztsqr01.o zlqt04.o zlqt05.o \
-   zchkorhr.o zerrorhr.o zorhr01.o
+   zchkunhr_col.o zerrunhr_col.o zunhr_col01.o
 
 ifdef USEXBLAS
 ZLINTST += zdrvgbx.o zdrvgex.o zdrvhex.o zdrvsyx.o zdrvpox.o \

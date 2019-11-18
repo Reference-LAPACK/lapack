@@ -430,7 +430,7 @@ set(ZLASRC
    ztptrs.f ztrcon.f ztrevc.f ztrevc3.f ztrexc.f ztrrfs.f ztrsen.f ztrsna.f
    ztrsyl.f ztrti2.f ztrtri.f ztrtrs.f ztzrzf.f zung2l.f
    zung2r.f zungbr.f zunghr.f zungl2.f zunglq.f zungql.f zungqr.f zungr2.f
-   zungrq.f zungtr.f zunm2l.f zunm2r.f zunmbr.f zunmhr.f zunml2.f zunm22.f
+   zungrq.f zungtr.f zungtsqr.f bzunm2l.f zunm2r.f zunmbr.f zunmhr.f zunml2.f zunm22.f
    zunmlq.f zunmql.f zunmqr.f zunmr2.f zunmr3.f zunmrq.f zunmrz.f
    zunmtr.f zupgtr.f
    zupmtr.f izmax1.f dzsum1.f zstemr.f
@@ -446,7 +446,7 @@ set(ZLASRC
    zgelqt.f zgelqt3.f zgemlqt.f
    zgetsls.f zgeqr.f zlatsqr.f zlamtsqr.f zgemqr.f
    zgelq.f zlaswlq.f zlamswlq.f zgemlq.f
-   zorhr.f zlaorhr.f zlaorhr_getrfnp.f zlaorhr_getrfnp2.f
+   zunhr_col.f zlaunhr_col_getrfnp.f zlaunhr_col_getrfnp2.f
    zhetrd_2stage.f zhetrd_he2hb.f zhetrd_hb2st.F zhb2st_kernels.f
    zheevd_2stage.f zheev_2stage.f zheevx_2stage.f zheevr_2stage.f
    zhbev_2stage.f zhbevx_2stage.f zhbevd_2stage.f zhegv_2stage.f

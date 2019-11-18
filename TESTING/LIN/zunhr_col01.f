@@ -1,4 +1,4 @@
-*> \brief \b ZORHR01
+*> \brief \b ZUNHR_COL01
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZORHR01( M, N, MB1, NB1, NB2, RESULT )
+*       SUBROUTINE ZUNHR_COL01( M, N, MB1, NB1, NB2, RESULT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           M, N, MB1, NB1, NB2
@@ -21,9 +21,9 @@
 *>
 *> \verbatim
 *>
-*> ZORHR01 tests ZORHR using ZLATSQR and ZGEMQRT. Therefore, ZLATSQR
-*> (used in ZGEQR) and ZGEMQRT (used in ZGEMQR) have to be tested
-*> before this test.
+*> ZUNHR_COL01 tests ZUNHR_COL using ZLATSQR, ZGEMQRT and ZUNGTSQR.
+*> Therefore, ZLATSQR (part of ZGEQR), ZGEMQRT (part ZGEMQR), ZUNGTSQR
+*> have to be tested before this test.
 *>
 *> \endverbatim
 *
@@ -80,18 +80,18 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
 *> \ingroup complex16_lin
 *
 *  =====================================================================
-      SUBROUTINE ZORHR01( M, N, MB1, NB1, NB2, RESULT )
+      SUBROUTINE ZUNHR_COL01( M, N, MB1, NB1, NB2, RESULT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
+*     November 2019
 *
 *     .. Scalar Arguments ..
       INTEGER           M, N, MB1, NB1, NB2
@@ -116,35 +116,32 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            TESTZEROS
-      INTEGER            INFO, J, K, L, LWORK, NB1_UB, NB2_UB, NRB
+      INTEGER            INFO, I, J, K, L, LWORK, NB1_UB, NB2_UB, NRB
       DOUBLE PRECISION   ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
-      COMPLEX*16         WORKQUERY( 1 )
+      DOUBLE PRECISION   WORKQUERY( 1 )
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, ZLANGE, ZLANSY
       EXTERNAL           DLAMCH, ZLANGE, ZLANSY
-
-*     ..
-*     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, DBLE, INT, MAX, MIN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGEMM, ZGEMQRT, ZLACPY, ZLARNV, ZLASET,
-     $                   ZLATSQR, ZORHR, ZHERK
+      EXTERNAL           ZLACPY, ZLARNV, ZLASET, ZLATSQR, ZUNHR_COL,
+     $                   ZUNGTSQR, ZSCAL, ZGEMM, ZGEMQRT, ZHERK
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          CEILING, DBLE, MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       CHARACTER(LEN=32)  SRNAMT
 *     ..
 *     .. Common blocks ..
-      COMMON             / SRNAMC / SRNAMT
+      COMMON             / SRMNAMC / SRNAMT
 *     ..
 *     .. Data statements ..
       DATA ISEED / 1988, 1989, 1990, 1991 /
-*     ..
-*     .. Executable Statements ..
 *
 *     TEST MATRICES WITH HALF OF MATRIX BEING ZEROS
 *
@@ -182,7 +179,7 @@
       ALLOCATE ( T2( NB2, N ) )
       ALLOCATE ( DIAG( N ) )
 *
-*     Determine LWORK for the array WORK
+*     Begin determine LWORK for the array WORK and allocate memory.
 *
 *     ZLATSQR requires NB1 to be bounded by N.
 *
@@ -195,8 +192,9 @@
       CALL ZLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1,
      $              WORKQUERY, -1, INFO )
       LWORK = INT( WORKQUERY( 1 ) )
-      CALL ZORHR( M, N, MB1, NB1, AF, M, T1, NB1, NB2, T2, NB2, DIAG,
-     $            WORKQUERY, -1, INFO)
+      CALL ZUNGTSQR( M, N, MB1, NB1, AF, M, T1, NB1, WORKQUERY, -1,
+     $               INFO )
+
       LWORK = MAX( LWORK, INT( WORKQUERY( 1 ) ) )
 *
 *     In ZGEMQRT, WORK is N*NB2_UB if SIDE = 'L',
@@ -206,15 +204,52 @@
 *
       ALLOCATE ( WORK( LWORK ) )
 *
+*     End allocate memory for WORK.
+*
+*
+*     Begin Householder reconstruction routines
+*
 *     Factor the matrix A in the array AF.
 *
       SRNAMT = 'ZLATSQR'
       CALL ZLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1, WORK, LWORK,
      $              INFO )
 *
-      SRNAMT = 'ZORHR'
-      CALL ZORHR( M, N, MB1, NB1, AF, M, T1, NB1, NB2, T2, NB2, DIAG,
-     $            WORK, LWORK, INFO )
+*     Copy the factor R into the array R.
+*
+      SRNAMT = 'ZLACPY'
+      CALL ZLACPY( 'U', M, N, AF, M, R, M )
+*
+*     Reconstruct the orthogonal matrix Q.
+*
+      SRNAMT = 'ZUNGTSQR'
+      CALL ZUNGTSQR( M, N, MB1, NB1, AF, M, T1, NB1, WORK, LWORK,
+     $               INFO )
+*
+*     Perform the Householder reconstruction, the result is stored
+*     the arrays AF and T2.
+*
+      SRNAMT = 'ZUNHR_COL'
+      CALL ZUNHR_COL( M, N, NB2, AF, M, T2, NB2, DIAG, INFO )
+*
+*     Compute the factor R_hr corresponding to the Householder
+*     reconstructed Q_hr and place it in the upper triangle of AF to
+*     match the Q storage format in ZGEQRT. R_hr = R_tsqr * S,
+*     this means changing the sign of I-th row of the matrix R_tsqr
+*     according to sign of of I-th diagonal element DIAG(I) of the
+*     matrix S.
+*
+      SRNAMT = 'ZLACPY'
+      CALL ZLACPY( 'U', M, N, R, M, AF, M )
+*
+      DO I = 1, N
+         IF( DIAG( I ).EQ.-CONE ) THEN
+            CALL ZSCAL( N+1-I, -CONE, AF( I, I ), M )
+         END IF
+      END DO
+*
+*     End Householder reconstruction routines.
+*
 *
 *     Generate the m-by-m matrix Q
 *
@@ -326,7 +361,7 @@
 *
       CALL ZLACPY( 'Full', N, M, D, N, DF, N )
 *
-*     Apply Q to D as D*(Q**H) = DF
+*     Apply Q to D as D*QT = DF
 *
       SRNAMT = 'ZGEMQRT'
       CALL ZGEMQRT( 'R', 'C', N, M, K, NB2_UB, AF, M, T2, NB2, DF, N,
@@ -350,6 +385,6 @@
 *
       RETURN
 *
-*     End of ZORHR01
+*     End of ZUNHR_COL01
 *
       END
