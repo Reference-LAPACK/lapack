@@ -110,14 +110,14 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date November 2017
+*> \date November 2019
 *
 *> \ingroup complex_lin
 *
 *  =====================================================================
       PROGRAM CCHKAA
 *
-*  -- LAPACK test routine (version 3.8.0) --
+*  -- LAPACK test routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *     November 2017
@@ -168,7 +168,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALAREQ, CCHKEQ, CCHKGB, CCHKGE, CCHKGT, CCHKHE,
      $                   CCHKHE_ROOK, CCHKHE_RK, CCHKHE_AA, CCHKHP,
-     $                   CCHKLQ, CCHKORHR, CCHKPB, CCHKPO, CCHKPS,
+     $                   CCHKLQ, CCHKUNHR_COL, CCHKPB, CCHKPO, CCHKPS,
      $                   CCHKPP, CCHKPT, CCHKQ3, CCHKQL, CCHKQR, CCHKRQ,
      $                   CCHKSP, CCHKSY, CCHKSY_ROOK, CCHKSY_RK,
      $                   CCHKSY_AA, CCHKTB,  CCHKTP, CCHKTR, CCHKTZ,
@@ -1174,8 +1174,8 @@
 *        HH:  Householder reconstruction for tall-skinny matrices
 *
          IF( TSTCHK ) THEN
-            CALL CCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-     $                     NBVAL, NOUT )
+            CALL CCHKUNHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                         NBVAL, NOUT )
          ELSE
             WRITE( NOUT, FMT = 9989 ) PATH
          END IF

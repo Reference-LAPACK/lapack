@@ -1,4 +1,4 @@
-*> \brief \b CLAORHR_GETRFNP2
+*> \brief \b CLAUNHR_COL_GETRFNP2
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAORHR_GETRF2NP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claorhr_getrfnp2.f">
+*> Download CLAUNHR_COL_GETRFNP2 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/claunhr_col_getrfnp2.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claorhr_getrfnp2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/claunhr_col_getrfnp2.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claorhr_getrfnp2.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/claunhr_col_getrfnp2.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       RECURSIVE SUBROUTINE CLAORHR_GETRFNP2( M, N, A, LDA, D, INFO )
+*       RECURSIVE SUBROUTINE CLAUNHR_COL_GETRFNP2( M, N, A, LDA, D, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,8 +33,8 @@
 *>
 *> \verbatim
 *>
-*> CLAORHR_GETRFNP2 computes the modified LU factorization without
-*> pivoting of a general M-by-N matrix A. The factorization has
+*> CLAUNHR_COL_GETRFNP2 computes the modified LU factorization without
+*> pivoting of a complex general M-by-N matrix A. The factorization has
 *> the form:
 *>
 *>     A - S = L * U,
@@ -48,20 +48,20 @@
 *>    least one in absolute value (so that division-by-zero not
 *>    possible during the division by the diagonal element);
 *>
-*>    L is a m-by-n lower triangular matrix with unit diagonal elements
-*>    (lower trapezoidal if m > n);
+*>    L is a M-by-N lower triangular matrix with unit diagonal elements
+*>    (lower trapezoidal if M > N);
 *>
-*>    and U is a m-by-n upper triangular matrix
-*>    (upper trapezoidal if m < n).
+*>    and U is a M-by-N upper triangular matrix
+*>    (upper trapezoidal if M < N).
 *>
 *> This routine is an auxiliary routine used in the Householder
-*> reconstruction routine CORHR. In CORHR, this routine is applied
-*> to an orthonormal M-by-N matrix A, where each element is bounded
-*> by one in absolute value. With the choice of the matrix S above,
-*> one can show that the diagonal element at each step of Gaussian
-*> elimination is the largest (in absolute value) in the column
-*> on or below the diagonal, so that no pivoting is required for
-*> numerical stability [1].
+*> reconstruction routine CUNHR_COL. In CUNHR_COL, this routine is
+*> applied to an M-by-N matrix A with orthonormal columns, where each
+*> element is bounded by one in absolute value. With the choice of
+*> the matrix S above, one can show that the diagonal element at each
+*> step of Gaussian elimination is the largest (in absolute value) in
+*> the column on or below the diagonal, so that no pivoting is required
+*> for numerical stability [1].
 *>
 *> For more details on the Householder reconstruction algorithm,
 *> including the modified LU factorization, see [1].
@@ -82,10 +82,10 @@
 *>
 *> For more details on the recursive LU algorithm, see [2].
 *>
-*> CLAORHR_GETRFNP2 is called to factorize a block by the blocked
-*> routine CLAORHR_GETRFNP, which uses blocked code calling
-*. Level 3 BLAS to update the submatrix. However, CLAORHR_GETRFNP2
-*> is self-sufficient and can be used without CLAORHR_GETRFNP.
+*> CLAUNHR_COL_GETRFNP2 is called to factorize a block by the blocked
+*> routine CLAUNHR_COL_GETRFNP, which uses blocked code calling
+*. Level 3 BLAS to update the submatrix. However, CLAUNHR_COL_GETRFNP2
+*> is self-sufficient and can be used without CLAUNHR_COL_GETRFNP.
 *>
 *> [1] "Reconstructing Householder vectors from tall-skinny QR",
 *>     G. Ballard, J. Demmel, L. Grigori, M. Jacquelin, H.D. Nguyen,
@@ -149,7 +149,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
 *> \ingroup complexGEcomputational
 *
@@ -158,26 +158,26 @@
 *>
 *> \verbatim
 *>
-*> June 2019, Igor Kozachenko,
-*>            Computer Science Division,
-*>            University of California, Berkeley
+*> November 2019, Igor Kozachenko,
+*>                Computer Science Division,
+*>                University of California, Berkeley
 *>
 *> \endverbatim
 *
 *  =====================================================================
-      RECURSIVE SUBROUTINE CLAORHR_GETRFNP2( M, N, A, LDA, D, INFO )
+      RECURSIVE SUBROUTINE CLAUNHR_COL_GETRFNP2( M, N, A, LDA, D, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
+*     November 2019
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N
 *     ..
 *     .. Array Arguments ..
-      COMPLEX            A( LDA, * ), D( * )
+      COMPLEX         A( LDA, * ), D( * )
 *     ..
 *
 *  =====================================================================
@@ -204,7 +204,7 @@
       INTRINSIC          ABS, REAL, CMPLX, AIMAG, SIGN, MAX, MIN
 *     ..
 *     .. Statement Functions ..
-      REAL               CABS1
+      DOUBLE PRECISION   CABS1
 *     ..
 *     .. Statement Function definitions ..
       CABS1( Z ) = ABS( REAL( Z ) ) + ABS( AIMAG( Z ) )
@@ -222,7 +222,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAORHR_GETRFNP2', -INFO )
+         CALL XERBLA( 'CLAUNHR_COL_GETRFNP2', -INFO )
          RETURN
       END IF
 *
@@ -283,7 +283,7 @@
 *
 *        Factor B11, recursive call
 *
-         CALL CLAORHR_GETRFNP2( N1, N1, A, LDA, D, IINFO )
+         CALL CLAUNHR_COL_GETRFNP2( N1, N1, A, LDA, D, IINFO )
 *
 *        Solve for B21
 *
@@ -303,12 +303,12 @@
 *
 *        Factor B22, recursive call
 *
-         CALL CLAORHR_GETRFNP2( M-N1, N2, A( N1+1, N1+1 ), LDA,
-     $                          D( N1+1 ), IINFO )
+         CALL CLAUNHR_COL_GETRFNP2( M-N1, N2, A( N1+1, N1+1 ), LDA,
+     $                              D( N1+1 ), IINFO )
 *
       END IF
       RETURN
 *
-*     End of CLAORHR_GETRFNP2
+*     End of CLAUNHR_COL_GETRFNP2
 *
       END

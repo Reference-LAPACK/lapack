@@ -123,7 +123,7 @@ CLINTST = cchkaa.o \
    cqrt04.o cqrt05.o cchkqrt.o cerrqrt.o cchkqrtp.o cerrqrtp.o \
    cchklqt.o cchklqtp.o cchktsqr.o \
    cerrlqt.o cerrlqtp.o cerrtsqr.o ctsqr01.o clqt04.o clqt05.o \
-   cchkorhr.o cerrorhr.o corhr01.o
+   cchkunhr_col.o cerrunhr_col.o cunhr_col01.o
 
 ifdef USEXBLAS
 CLINTST += cdrvgbx.o cdrvgex.o cdrvhex.o cdrvsyx.o cdrvpox.o \

@@ -1,4 +1,4 @@
-*> \brief \b CCHKORHR
+*> \brief \b CCHKUNHR_COL
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -8,8 +8,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE CCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-*                            NBVAL, NOUT )
+*       SUBROUTINE CCHKUNHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+*                                NBVAL, NOUT )
 *
 *       .. Scalar Arguments ..
 *       LOGICAL            TSTERR
@@ -24,7 +24,7 @@
 *>
 *> \verbatim
 *>
-*> CCHKORHR tests CORHR using CLATSQR and CGEMQRT. Therefore, CLATSQR
+*> CCHKUNHR_COL tests CUNHR_COL using CLATSQR and CGEMQRT. Therefore, CLATSQR
 *> (used in CGEQR) and CGEMQRT (used in CGEMQR) have to be tested
 *> before this test.
 *>
@@ -97,19 +97,19 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
 *> \ingroup complex_lin
 *
 *  =====================================================================
-      SUBROUTINE CCHKORHR( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
-     $                     NBVAL, NOUT )
+      SUBROUTINE CCHKUNHR_COL( THRESH, TSTERR, NM, MVAL, NN, NVAL, NNB,
+     $                         NBVAL, NOUT )
       IMPLICIT NONE
 *
-*  -- LAPACK test routine (version 3.9.0) --
+*  -- LAPACK test routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
+*     December 2016
 *
 *     .. Scalar Arguments ..
       LOGICAL            TSTERR
@@ -135,10 +135,10 @@
       REAL               RESULT( NTESTS )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ALAHD, ALASUM, CERRORHR, CORHR01
+      EXTERNAL           ALAHD, ALASUM, CERRUNHR_COL, CUNHR_COL01
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC  MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -161,7 +161,7 @@
 *
 *     Test the error exits
 *
-      IF( TSTERR ) CALL CERRORHR( PATH, NOUT )
+      IF( TSTERR ) CALL CERRUNHR_COL( PATH, NOUT )
       INFOT = 0
 *
 *     Do for each value of M in MVAL.
@@ -199,10 +199,10 @@
 *
                            IF( NB1.GT.0 .AND. NB2.GT.0 ) THEN
 *
-*                             Test DORHR
+*                             Test CUNHR_COL
 *
-                              CALL CORHR01( M, N, MB1, NB1, NB2,
-     $                                      RESULT )
+                              CALL CUNHR_COL01( M, N, MB1, NB1, NB2,
+     $                                          RESULT )
 *
 *                             Print information about the tests that did
 *                             not pass the threshold.
@@ -234,6 +234,6 @@
      $        ', NB1=', I5, ', NB2=', I5,' test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of CCHKORHR
+*     End of CCHKUNHR_COL
 *
       END
