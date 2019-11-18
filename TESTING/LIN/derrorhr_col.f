@@ -21,9 +21,9 @@
 *>
 *> \verbatim
 *>
-*> DERRORHR_COL tests the error exits for DORHR that does Householder
-*> reconstruction from the ouput of tall-skinny factorization DLATSQR.
-*>
+*> DERRORHR_COL tests the error exits for DORHR_COL that does
+*> Householder reconstruction from the ouput of tall-skinny
+*> factorization DLATSQR.
 *> \endverbatim
 *
 *  Arguments:
@@ -77,8 +77,7 @@
       INTEGER            I, INFO, J
 *     ..
 *     .. Local Arrays ..
-      DOUBLE PRECISION   A( NMAX, NMAX ), T( NMAX, NMAX ),
-     $                   R( NMAX, NMAX ), D(NMAX)
+      DOUBLE PRECISION   A( NMAX, NMAX ), T( NMAX, NMAX ), D(NMAX)
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAESM, CHKXER, DORHR_COL
@@ -105,7 +104,6 @@
       DO J = 1, NMAX
          DO I = 1, NMAX
             A( I, J ) = 1.D+0 / DBLE( I+J )
-            R( I, J ) = 1.D+0 / DBLE( I+J )
             T( I, J ) = 1.D+0 / DBLE( I+J )
          END DO
          D( J ) = 0.D+0

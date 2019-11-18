@@ -8,7 +8,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DORHR_COL01( M, N, MB1, NB1, NB2, RESULT)
+*       SUBROUTINE DORHR_COL01( M, N, MB1, NB1, NB2, RESULT )
 *
 *       .. Scalar Arguments ..
 *       INTEGER           M, N, MB1, NB1, NB2
@@ -278,7 +278,7 @@
 *     Compute |I - (Q**T)*Q| / ( eps * m ) and store in RESULT(2)
 *
       CALL DLASET( 'Full', M, M, ZERO, ONE, R, M )
-      CALL DSYRK( 'U', 'C', M, M, -ONE, Q, M, ONE, R, M )
+      CALL DSYRK( 'U', 'T', M, M, -ONE, Q, M, ONE, R, M )
       RESID = DLANSY( '1', 'Upper', M, R, M, RWORK )
       RESULT( 2 ) = RESID / ( EPS * MAX( 1, M ) )
 *

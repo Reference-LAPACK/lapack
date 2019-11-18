@@ -377,7 +377,7 @@ DLASRC = \
    dgetsls.o dgeqr.o dlatsqr.o dlamtsqr.o dgemqr.o \
    dgelq.o dlaswlq.o dlamswlq.o dgemlq.o \
    dtplqt.o dtplqt2.o dtpmlqt.o \
-   dorhr_col.o dlaorhr_getrfnp.o dlaorhr_getrfnp2.o \
+   dorhr_col.o dlaorhr_col_getrfnp.o dlaorhr_col_getrfnp2.o \
    dsytrd_2stage.o dsytrd_sy2sb.o dsytrd_sb2st.o dsb2st_kernels.o \
    dsyevd_2stage.o dsyev_2stage.o dsyevx_2stage.o dsyevr_2stage.o \
    dsbev_2stage.o dsbevx_2stage.o dsbevd_2stage.o dsygv_2stage.o \

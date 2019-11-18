@@ -1,4 +1,4 @@
-*> \brief \b DLAORHR_GETRFNP
+*> \brief \b DLAORHR_COL_GETRFNP
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,19 +6,19 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAORHR_GETRFNP + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaorhr_getrfnp.f">
+*> Download DLAORHR_COL_GETRFNP + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaorhr_col_getrfnp.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaorhr_getrfnp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaorhr_col_getrfnp.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaorhr_getrfnp.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaorhr_col_getrfnp.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAORHR_GETRFNP( M, N, A, LDA, D, INFO )
+*       SUBROUTINE DLAORHR_COL_GETRFNP( M, N, A, LDA, D, INFO )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            INFO, LDA, M, N
@@ -33,8 +33,8 @@
 *>
 *> \verbatim
 *>
-*> DLAORHR_GETRFNP computes the modified LU factorization without
-*> pivoting of a general M-by-N matrix A. The factorization has
+*> DLAORHR_COL_GETRFNP computes the modified LU factorization without
+*> pivoting of a real general M-by-N matrix A. The factorization has
 *> the form:
 *>
 *>     A - S = L * U,
@@ -48,27 +48,27 @@
 *>    at least one in absolute value (so that division-by-zero not
 *>    not possible during the division by the diagonal element);
 *>
-*>    L is a m-by-n lower triangular matrix with unit diagonal elements
-*>    (lower trapezoidal if m > n);
+*>    L is a M-by-N lower triangular matrix with unit diagonal elements
+*>    (lower trapezoidal if M > N);
 *>
-*>    and U is a m-by-n upper triangular matrix
-*>    (upper trapezoidal if m < n).
+*>    and U is a M-by-N upper triangular matrix
+*>    (upper trapezoidal if M < N).
 *>
 *> This routine is an auxiliary routine used in the Householder
-*> reconstruction routine DORHR. In DORHR, this routine is applied
-*> to an orthonormal M-by-N matrix A, where each element is bounded
-*> by one in absolute value. With the choice of the matrix S above,
-*> one can show that the diagonal element at each step of Gaussian
-*> elimination is the largest (in absolute value) in the column
-*> on or below the diagonal, so that no pivoting is required for
-*> numerical stability [1].
+*> reconstruction routine DORHR_COL. In DORHR_COL, this routine is
+*> applied to an M-by-N matrix A with orthonormal columns, where each
+*> element is bounded by one in absolute value. With the choice of
+*> the matrix S above, one can show that the diagonal element at each
+*> step of Gaussian elimination is the largest (in absolute value) in
+*> the column on or below the diagonal, so that no pivoting is required
+*> for numerical stability [1].
 *>
 *> For more details on the Householder reconstruction algorithm,
 *> including the modified LU factorization, see [1].
 *>
 *> This is the blocked right-looking version of the algorithm,
 *> calling Level 3 BLAS to update the submatrix. To factorize a block,
-*> this routine calls the recursive routine DLAORHR_GETRFNP2.
+*> this routine calls the recursive routine DLAORHR_COL_GETRFNP2.
 *>
 *> [1] "Reconstructing Householder vectors from tall-skinny QR",
 *>     G. Ballard, J. Demmel, L. Grigori, M. Jacquelin, H.D. Nguyen,
@@ -128,7 +128,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date June 2019
+*> \date November 2019
 *
 *> \ingroup doubleGEcomputational
 *
@@ -137,20 +137,20 @@
 *>
 *> \verbatim
 *>
-*> June 2019, Igor Kozachenko,
-*>            Computer Science Division,
-*>            University of California, Berkeley
+*> November 2019, Igor Kozachenko,
+*>                Computer Science Division,
+*>                University of California, Berkeley
 *>
 *> \endverbatim
 *
 *  =====================================================================
-      SUBROUTINE DLAORHR_GETRFNP( M, N, A, LDA, D, INFO )
+      SUBROUTINE DLAORHR_COL_GETRFNP( M, N, A, LDA, D, INFO )
       IMPLICIT NONE
 *
 *  -- LAPACK computational routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
+*     November 2019
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N
@@ -169,7 +169,7 @@
       INTEGER            IINFO, J, JB, NB
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEMM, DLAORHR_GETRFNP2, DTRSM, XERBLA
+      EXTERNAL           DGEMM, DLAORHR_COL_GETRFNP2, DTRSM, XERBLA
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -191,7 +191,7 @@
          INFO = -4
       END IF
       IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'DLAORHR_GETRFNP', -INFO )
+         CALL XERBLA( 'DLAORHR_COL_GETRFNP', -INFO )
          RETURN
       END IF
 *
@@ -203,13 +203,13 @@
 *     Determine the block size for this environment.
 *
 
-      NB = ILAENV( 1, 'DLAORHR_GETRFNP', ' ', M, N, -1, -1 )
+      NB = ILAENV( 1, 'DLAORHR_COL_GETRFNP', ' ', M, N, -1, -1 )
 
       IF( NB.LE.1 .OR. NB.GE.MIN( M, N ) ) THEN
 *
 *        Use unblocked code.
 *
-         CALL DLAORHR_GETRFNP2( M, N, A, LDA, D, INFO )
+         CALL DLAORHR_COL_GETRFNP2( M, N, A, LDA, D, INFO )
       ELSE
 *
 *        Use blocked code.
@@ -219,8 +219,8 @@
 *
 *           Factor diagonal and subdiagonal blocks.
 *
-            CALL DLAORHR_GETRFNP2( M-J+1, JB, A( J, J ), LDA, D( J ),
-     $                             IINFO )
+            CALL DLAORHR_COL_GETRFNP2( M-J+1, JB, A( J, J ), LDA,
+     $                                 D( J ), IINFO )
 *
             IF( J+JB.LE.N ) THEN
 *
@@ -243,6 +243,6 @@
       END IF
       RETURN
 *
-*     End of DLAORHR_GETRFNP
+*     End of DLAORHR_COL_GETRFNP
 *
       END

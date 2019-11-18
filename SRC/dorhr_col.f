@@ -282,7 +282,8 @@
      $                   NPLUSONE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DCOPY, DLAORHR_GETRFNP, DSCAL, DTRSM, XERBLA
+      EXTERNAL           DCOPY, DLAORHR_COL_GETRFNP, DSCAL, DTRSM,
+     $                   XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -330,7 +331,7 @@
 *
 *     (1-1) Factor V1 and U.
 
-      CALL DLAORHR_GETRFNP( N, N, A, LDA, D, IINFO )
+      CALL DLAORHR_COL_GETRFNP( N, N, A, LDA, D, IINFO )
 *
 *     (1-2) Solve for V2.
 *

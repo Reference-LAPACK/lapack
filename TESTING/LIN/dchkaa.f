@@ -116,7 +116,7 @@
 *  -- LAPACK test routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     June 2019
+*     Novemebr 2019
 *
 *  =====================================================================
 *
@@ -677,7 +677,7 @@
 *
 *        SK:  symmetric indefinite matrices,
 *             with bounded Bunch-Kaufman (rook) pivoting algorithm,
-*             different matrix storage format than SR path version.
+*             differnet matrix storage format than SR path version.
 *
          NTYPES = 10
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
@@ -1023,6 +1023,7 @@
          END IF
 *
       ELSE
+
 *
          WRITE( NOUT, FMT = 9990 )PATH
       END IF
