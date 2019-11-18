@@ -31,13 +31,13 @@
 *>
 *> \verbatim
 *>
-*>  DORHR_COL takes an M-by-N matrix Q_in with orthonormal columns as input,
-*>  stored in A, and performs Householder Reconstruction (HR),
+*>  DORHR_COL takes an M-by-N real matrix Q_in with orthonormal columns
+*>  as input, stored in A, and performs Householder Reconstruction (HR),
 *>  i.e. reconstructs Householder vectors V(i) implicitly representing
 *>  another M-by-N matrix Q_out, with the property that Q_in = Q_out*S,
 *>  where S is an N-by-N diagonal matrix with diagonal entries
-*>  equal to +1 or -1. The Householder vectors (columns V(i) of V) are stored
-*>  in A on output, and the diagonal entries of S are stored in D.
+*>  equal to +1 or -1. The Householder vectors (columns V(i) of V) are
+*>  stored in A on output, and the diagonal entries of S are stored in D.
 *>  Block reflectors are also returned in T
 *>  (same output format as DGEQRT).
 *> \endverbatim

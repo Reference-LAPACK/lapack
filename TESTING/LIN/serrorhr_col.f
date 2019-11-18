@@ -51,7 +51,7 @@
 *
 *> \date November 2019
 *
-*> \ingroup single_lin
+*> \ingroup singlr_lin
 *
 *  =====================================================================
       SUBROUTINE SERRORHR_COL( PATH, NUNIT )
@@ -104,11 +104,11 @@
 *
       DO J = 1, NMAX
          DO I = 1, NMAX
-            A( I, J ) = 1.E0 / REAL( I+J )
-            R( I, J ) = 1.E0 / REAL( I+J )
-            T( I, J ) = 1.E0 / REAL( I+J )
+            A( I, J ) = 1.E+0 / REAL( I+J )
+            R( I, J ) = 1.E+0 / REAL( I+J )
+            T( I, J ) = 1.E+0 / REAL( I+J )
          END DO
-         D( J ) = 0.E0
+         D( J ) = 0.E+0
       END DO
       OK = .TRUE.
 *

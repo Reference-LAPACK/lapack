@@ -32,11 +32,11 @@
 *>
 *> \verbatim
 *>
-*> DORGTSQR generates an M-by-N matrix Q_out with orthonormal columns,
-*> which are the first N columns of a product of orthogonal
+*> DORGTSQR generates an M-by-N real matrix Q_out with orthonormal columns,
+*> which are the first N columns of a product of real orthogonal
 *> matrices of order M which are returned by DLATSQR
 *>
-*>      Q_out = first_N_columns_of( Q(1)_in * Q(2)_in * . . .  Q(k)_in ).
+*>      Q_out = first_N_columns_of( Q(1)_in * Q(2)_in * ... * Q(k)_in ).
 *>
 *> See the documentation for DLATSQR.
 *> \endverbatim
@@ -198,7 +198,7 @@
       INTEGER            IINFO, LDC, LWORKOPT, LC, LW, NBLOCAL, J
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLAMTSQR, DLASET, XERBLA
+      EXTERNAL           DCOPY, DLAMTSQR, DLASET, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          DBLE, MAX, MIN
@@ -290,8 +290,9 @@
       CALL DLAMTSQR( 'L', 'N', M, N, N, MB, NBLOCAL, A, LDA, T, LDT,
      $               WORK, LDC, WORK( LC+1 ), LW, IINFO )
 *
-*     (2) Copy the result from the work array WORK(1:LDC*N) into
-*     the output array A column-by-column.
+*     (2) Copy the result from the part of the work array (1:M,1:N)
+*     with the leading dimension LDC that starts at WORK(1) into
+*     the output array A(1:M,1:N) column-by-column.
 *
       DO J = 1, N
          CALL DCOPY( M, WORK( (J-1)*LDC + 1 ), 1, A( 1, J ), 1 )

@@ -82,10 +82,10 @@
 *
 *> \date November 2019
 *
-*> \ingroup double_lin
+*> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE DORHR_COL01( M, N, MB1, NB1, NB2, RESULT)
+      SUBROUTINE DORHR_COL01( M, N, MB1, NB1, NB2, RESULT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.9.0) --
@@ -102,13 +102,13 @@
 *
 *     ..
 *     .. Local allocatable arrays
-      DOUBLE PRECISION, ALLOCATABLE :: AF(:,:), Q(:,:),
-     $  R(:,:), RWORK(:), WORK( : ), T1(:,:), T2(:,:), DIAG(:),
-     $  CF(:,:), DF(:,:), A(:,:), C(:,:), D(:,:), RF(:,:)
+      DOUBLE PRECISION, ALLOCATABLE ::  A(:,:), AF(:,:), Q(:,:), R(:,:),
+     $                   RWORK(:), WORK( : ), T1(:,:), T2(:,:), DIAG(:),
+     $                   C(:,:), CF(:,:), D(:,:), DF(:,:)
 *
 *     .. Parameters ..
       DOUBLE PRECISION   ONE, ZERO
-      PARAMETER          ( ZERO = 0.0, ONE = 1.0 )
+      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       LOGICAL            TESTZEROS
@@ -128,7 +128,7 @@
      $                   DORGTSQR, DSCAL, DGEMM, DGEMQRT, DSYRK
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, MAX, MIN
+      INTRINSIC          CEILING, DBLE, MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       CHARACTER(LEN=32)  SRNAMT
@@ -151,7 +151,7 @@
 *
       ALLOCATE ( A(M,N), AF(M,N), Q(L,L), R(M,L), RWORK(L),
      $           C(M,N), CF(M,N),
-     $           D(N,M), DF(N,M), RF(N,N) )
+     $           D(N,M), DF(N,M) )
 *
 *     Put random numbers into A and copy to AF
 *
@@ -175,7 +175,7 @@
       ALLOCATE ( T2( NB2, N ) )
       ALLOCATE ( DIAG( N ) )
 *
-*     Determine LWORK for the array WORK
+*     Begin determine LWORK for the array WORK and allocate memory.
 *
 *     DLATSQR requires NB1 to be bounded by N.
 *
@@ -200,16 +200,21 @@
 *
       ALLOCATE ( WORK( LWORK ) )
 *
+*     End allocate memory for WORK.
+*
+*
+*     Begin Householder reconstruction routines
+*
 *     Factor the matrix A in the array AF.
 *
       SRNAMT = 'DLATSQR'
       CALL DLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1, WORK, LWORK,
      $              INFO )
 *
-*     Copy the factor R into the array RF.
+*     Copy the factor R into the array R.
 *
       SRNAMT = 'DLACPY'
-      CALL DLACPY( 'U', N, N, AF, M, RF, N )
+      CALL DLACPY( 'U', N, N, AF, M, R, M )
 *
 *     Reconstruct the orthogonal matrix Q.
 *
@@ -230,13 +235,17 @@
 *     according to sign of of I-th diagonal element DIAG(I) of the
 *     matrix S.
 *
-      CALL DLACPY( 'U', N, N, RF, N, AF, M )
+      SRNAMT = 'DLACPY'
+      CALL DLACPY( 'U', N, N, R, M, AF, M )
 *
       DO I = 1, N
          IF( DIAG( I ).EQ.-ONE ) THEN
             CALL DSCAL( N+1-I, -ONE, AF( I, I ), M )
          END IF
       END DO
+*
+*     End Householder reconstruction routines.
+*
 *
 *     Generate the m-by-m matrix Q
 *
@@ -368,7 +377,7 @@
 *     Deallocate all arrays
 *
       DEALLOCATE ( A, AF, Q, R, RWORK, WORK, T1, T2, DIAG,
-     $             C, D, CF, DF, RF )
+     $             C, D, CF, DF )
 *
       RETURN
 *

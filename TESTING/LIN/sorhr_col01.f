@@ -85,7 +85,7 @@
 *> \ingroup single_lin
 *
 *  =====================================================================
-      SUBROUTINE SORHR_COL01( M, N, MB1, NB1, NB2, RESULT)
+      SUBROUTINE SORHR_COL01( M, N, MB1, NB1, NB2, RESULT )
       IMPLICIT NONE
 *
 *  -- LAPACK test routine (version 3.9.0) --
@@ -102,9 +102,9 @@
 *
 *     ..
 *     .. Local allocatable arrays
-      REAL, ALLOCATABLE :: AF(:,:), Q(:,:),
-     $  R(:,:), RWORK(:), WORK( : ), T1(:,:), T2(:,:), DIAG(:),
-     $  CF(:,:), DF(:,:), A(:,:), C(:,:), D(:,:), RF(:,:)
+      REAL, ALLOCATABLE ::  A(:,:), AF(:,:), Q(:,:), R(:,:),
+     $                   RWORK(:), WORK( : ), T1(:,:), T2(:,:), DIAG(:),
+     $                   C(:,:), CF(:,:), D(:,:), DF(:,:)
 *
 *     .. Parameters ..
       REAL               ONE, ZERO
@@ -113,7 +113,7 @@
 *     .. Local Scalars ..
       LOGICAL            TESTZEROS
       INTEGER            INFO, I, J, K, L, LWORK, NB1_UB, NB2_UB, NRB
-      REAL               ANORM, EPS, RESID, CNORM, SNORM
+      REAL               ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
@@ -128,7 +128,7 @@
      $                   SORGTSQR, SSCAL, SGEMM, SGEMQRT, SSYRK
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CEILING, MAX, MIN
+      INTRINSIC          CEILING, MAX, MIN, REAL
 *     ..
 *     .. Scalars in Common ..
       CHARACTER(LEN=32)  SRNAMT
@@ -151,7 +151,7 @@
 *
       ALLOCATE ( A(M,N), AF(M,N), Q(L,L), R(M,L), RWORK(L),
      $           C(M,N), CF(M,N),
-     $           D(N,M), DF(N,M), RF(N,N) )
+     $           D(N,M), DF(N,M) )
 *
 *     Put random numbers into A and copy to AF
 *
@@ -169,13 +169,13 @@
 *
 *     Number of row blocks in SLATSQR
 *
-      NRB = MAX( 1, CEILING( DBLE( M - N ) / DBLE( MB1 - N ) ) )
+      NRB = MAX( 1, CEILING( REAL( M - N ) / REAL( MB1 - N ) ) )
 *
       ALLOCATE ( T1( NB1, N * NRB ) )
       ALLOCATE ( T2( NB2, N ) )
       ALLOCATE ( DIAG( N ) )
 *
-*     Determine LWORK for the array WORK
+*     Begin determine LWORK for the array WORK and allocate memory.
 *
 *     SLATSQR requires NB1 to be bounded by N.
 *
@@ -200,16 +200,21 @@
 *
       ALLOCATE ( WORK( LWORK ) )
 *
+*     End allocate memory for WORK.
+*
+*
+*     Begin Householder reconstruction routines
+*
 *     Factor the matrix A in the array AF.
 *
       SRNAMT = 'SLATSQR'
       CALL SLATSQR( M, N, MB1, NB1_UB, AF, M, T1, NB1, WORK, LWORK,
      $              INFO )
 *
-*     Copy the factor R into the array RF.
+*     Copy the factor R into the array R.
 *
       SRNAMT = 'SLACPY'
-      CALL SLACPY( 'U', N, N, AF, M, RF, N )
+      CALL SLACPY( 'U', N, N, AF, M, R, M )
 *
 *     Reconstruct the orthogonal matrix Q.
 *
@@ -230,13 +235,17 @@
 *     according to sign of of I-th diagonal element DIAG(I) of the
 *     matrix S.
 *
-      CALL SLACPY( 'U', N, N, RF, N, AF, M )
+      SRNAMT = 'SLACPY'
+      CALL SLACPY( 'U', N, N, R, M, AF, M )
 *
       DO I = 1, N
          IF( DIAG( I ).EQ.-ONE ) THEN
             CALL SSCAL( N+1-I, -ONE, AF( I, I ), M )
          END IF
       END DO
+*
+*     End Householder reconstruction routines.
+*
 *
 *     Generate the m-by-m matrix Q
 *
@@ -324,7 +333,7 @@
       DO J = 1, M
          CALL SLARNV( 2, ISEED, N, D( 1, J ) )
       END DO
-      SNORM = SLANGE( '1', N, M, D, N, RWORK )
+      DNORM = SLANGE( '1', N, M, D, N, RWORK )
       CALL SLACPY( 'Full', N, M, D, N, DF, N )
 *
 *     Apply Q to D as D*Q = DF
@@ -338,8 +347,8 @@
 *
       CALL SGEMM( 'N', 'N', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
       RESID = SLANGE( '1', N, M, DF, N, RWORK )
-      IF( SNORM.GT.ZERO ) THEN
-         RESULT( 5 ) = RESID / ( EPS * MAX( 1, M ) * SNORM )
+      IF( DNORM.GT.ZERO ) THEN
+         RESULT( 5 ) = RESID / ( EPS * MAX( 1, M ) * DNORM )
       ELSE
          RESULT( 5 ) = ZERO
       END IF
@@ -359,8 +368,8 @@
 *
       CALL SGEMM( 'N', 'T', N, M, M, -ONE, D, N, Q, M, ONE, DF, N )
       RESID = SLANGE( '1', N, M, DF, N, RWORK )
-      IF( SNORM.GT.ZERO ) THEN
-         RESULT( 6 ) = RESID / ( EPS * MAX( 1, M ) * SNORM )
+      IF( DNORM.GT.ZERO ) THEN
+         RESULT( 6 ) = RESID / ( EPS * MAX( 1, M ) * DNORM )
       ELSE
          RESULT( 6 ) = ZERO
       END IF
@@ -368,7 +377,7 @@
 *     Deallocate all arrays
 *
       DEALLOCATE ( A, AF, Q, R, RWORK, WORK, T1, T2, DIAG,
-     $             C, D, CF, DF, RF )
+     $             C, D, CF, DF )
 *
       RETURN
 *

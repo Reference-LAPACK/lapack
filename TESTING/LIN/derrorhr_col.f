@@ -104,11 +104,11 @@
 *
       DO J = 1, NMAX
          DO I = 1, NMAX
-            A( I, J ) = 1.D0 / DBLE( I+J )
-            R( I, J ) = 1.D0 / DBLE( I+J )
-            T( I, J ) = 1.D0 / DBLE( I+J )
+            A( I, J ) = 1.D+0 / DBLE( I+J )
+            R( I, J ) = 1.D+0 / DBLE( I+J )
+            T( I, J ) = 1.D+0 / DBLE( I+J )
          END DO
-         D( J ) = 0.D0
+         D( J ) = 0.D+0
       END DO
       OK = .TRUE.
 *
