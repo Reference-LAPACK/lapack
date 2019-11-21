@@ -107,7 +107,7 @@
 *> \author Univ. of Colorado Denver
 *> \author NAG Ltd.
 *
-*> \date December 2016
+*> \date November 2019
 *
 *> \ingroup complex16GEcomputational
 *
@@ -134,10 +134,10 @@
 *  =====================================================================
       SUBROUTINE ZGEQR2P( M, N, A, LDA, TAU, WORK, INFO )
 *
-*  -- LAPACK computational routine (version 3.7.0) --
+*  -- LAPACK computational routine (version 3.9.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-*     December 2016
+*     November 2019
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, M, N
