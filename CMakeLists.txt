@@ -73,10 +73,10 @@ include(PreventInBuildInstalls)
 
 if(UNIX)
   if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
-    list(APPEND CMAKE_Fortran_FLAGS -fp-model strict)
+    list(APPEND CMAKE_Fortran_FLAGS "-fp-model strict")
   endif()
   if(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
-    list(APPEND CMAKE_Fortran_FLAGS -qnosave -qstrict=none)
+    list(APPEND CMAKE_Fortran_FLAGS "-qnosave -qstrict=none")
   endif()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
