@@ -70,8 +70,8 @@ lapack_int LAPACKE_cgesvdq( int matrix_layout, char joba, char jobp,
     if( info != 0 ) {
         goto exit_level_0;
     }
-    liwork = (lapack_int)iwork_query;
-    lcwork = (lapack_int)cwork_query;
+    liwork = iwork_query;
+    lcwork = LAPACK_C2INT(cwork_query);
     lrwork = (lapack_int)rwork_query;
     /* Allocate memory for work arrays */
     iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * liwork );
