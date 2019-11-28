@@ -42,9 +42,6 @@ double LAPACKE_dlantr_work( int matrix_layout, char norm, char uplo,
     if( matrix_layout == LAPACK_COL_MAJOR ) {
         /* Call LAPACK function and adjust info */
         res = LAPACK_dlantr( &norm, &uplo, &diag, &m, &n, a, &lda, work );
-        if( info < 0 ) {
-            info = info - 1;
-        }
     } else if( matrix_layout == LAPACK_ROW_MAJOR ) {
         lapack_int lda_t = MAX(1,m);
         double* a_t = NULL;
@@ -73,7 +70,6 @@ double LAPACKE_dlantr_work( int matrix_layout, char norm, char uplo,
         LAPACKE_dtr_trans( matrix_layout, uplo, diag, MAX(m,n), a, lda, a_t, lda_t );
         /* Call LAPACK function and adjust info */
         res = LAPACK_dlantr( &norm, &uplo, &diag, &m, &n, a_t, &lda_t, work_lapack );
-        info = 0;  /* LAPACK call is ok! */
         /* Release memory and exit */
         if( work_lapack ) {
             LAPACKE_free( work_lapack );
