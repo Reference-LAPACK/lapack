@@ -66,6 +66,23 @@ bool nan_p(std::complex<Real> z)
 	return std::isnan(z.real()) or std::isnan(z.imag());
 }
 
+
+template<
+	typename Real,
+	std::enable_if<std::is_fundamental<Real>::value>* = nullptr
+>
+bool inf_p(Real x)
+{
+	return std::isinf(x);
+}
+
+template<typename Real>
+bool inf_p(std::complex<Real> z)
+{
+	return std::isinf(z.abs());
+}
+
+
 template<
 	typename Real,
 	std::enable_if<std::is_fundamental<Real>::value>* = nullptr
@@ -257,7 +274,7 @@ void check_results(
 
 
 	// check for infinity
-	bool(*is_inf)(T) = &finite_p;
+	bool(*is_inf)(T) = &inf_p;
 	BOOST_REQUIRE( std::none_of( A.data().begin(), A.data().end(), is_inf) );
 	BOOST_REQUIRE( std::none_of( B.data().begin(), B.data().end(), is_inf) );
 	BOOST_REQUIRE( std::none_of( R.data().begin(), R.data().end(), is_inf) );
@@ -266,7 +283,7 @@ void check_results(
 	BOOST_REQUIRE( std::none_of( Qt.data().begin(), Qt.data().end(), is_inf) );
 	if( k > 0 )
 	{
-		bool(*is_inf)(Real) = &finite_p;
+		bool(*is_inf)(Real) = &inf_p;
 		BOOST_REQUIRE( std::none_of( &theta(0), &theta(0)+k, is_inf) );
 	}
 
