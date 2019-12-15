@@ -525,7 +525,9 @@
 *
       IF( R.LE.M ) THEN
           CALL SLACPY( 'U', R, N, G, LDG, A, LDA )
-          CALL SLASET( 'L', R - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
+          IF( M.GT.2 ) THEN
+             CALL SLASET( 'L', R - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
+          END IF
       ELSE
           CALL SLACPY( 'U', M, N, G, LDG, A, LDA )
           CALL SLACPY( 'U', R - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
