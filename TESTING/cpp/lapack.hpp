@@ -56,7 +56,9 @@ extern "C"
 		float* U1, lapack_int* ldu1, float* U2, lapack_int* ldu2,
 		float* Qt, lapack_int* ldqt,
 		float* work, lapack_int* lwork, lapack_int* iwork,
-		lapack_int* info);
+		lapack_int* info,
+		std::size_t jobu1_len, std::size_t jobu2_len, std::size_t jobqt_len
+	);
 
 	void dggqrcs_(
 		char* jobu1, char* jobu2, char* jobqt,
@@ -67,7 +69,9 @@ extern "C"
 		double* U1, lapack_int* ldu1, double* U2, lapack_int* ldu2,
 		double* Qt, lapack_int* ldqt,
 		double* work, lapack_int* lwork, lapack_int* iwork,
-		lapack_int* info);
+		lapack_int* info,
+		std::size_t jobu1_len, std::size_t jobu2_len, std::size_t jobqt_len
+	);
 
 	void cggqrcs_(
 		char* jobu1, char* jobu2, char* jobqt,
@@ -82,7 +86,9 @@ extern "C"
 		std::complex<float>* work, lapack_int* lwork,
         float* rwork, lapack_int* lrwork,
         lapack_int* iwork,
-		lapack_int* info);
+		lapack_int* info,
+		std::size_t jobu1_len, std::size_t jobu2_len, std::size_t jobqt_len
+	);
 }
 
 
@@ -228,7 +234,8 @@ inline integer_t ggqrcs(
 		A, &lda, B, &ldb,
 		theta,
 		U1, &ldu1, U2, &ldu2, Qt, &ldqt,
-		work, &lwork, iwork, &info);
+		work, &lwork, iwork, &info,
+		1, 1, 1);
 	return info;
 }
 
@@ -257,7 +264,8 @@ inline integer_t ggqrcs(
 		A, &lda, B, &ldb,
 		theta,
 		U1, &ldu1, U2, &ldu2, Qt, &ldqt,
-		work, &lwork, rwork, &lrwork, iwork, &info);
+		work, &lwork, rwork, &lrwork, iwork, &info,
+		1, 1, 1);
 	return info;
 }
 
@@ -283,7 +291,8 @@ inline integer_t ggqrcs(
 		A, &lda, B, &ldb,
 		theta,
 		U1, &ldu1, U2, &ldu2, Qt, &ldqt,
-		work, &lwork, iwork, &info);
+		work, &lwork, iwork, &info,
+		1, 1, 1);
 	return info;
 }
 
