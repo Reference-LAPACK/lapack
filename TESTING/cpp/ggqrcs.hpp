@@ -253,9 +253,14 @@ void check_results(
 	const std::size_t r = l;
 	const std::size_t k = std::min( {m, p, r, m + p - r} );
 
+	BOOST_REQUIRE_GE(theta.size(), k);
+
 
 	// construct R
 	const Matrix R = build_R(r, X, Y);
+
+	BOOST_REQUIRE_EQUAL(R.size1(), r);
+	BOOST_REQUIRE_EQUAL(R.size2(), n);
 
 
 	// check for NaN
