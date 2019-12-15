@@ -206,10 +206,10 @@ void check_results(
 	const ublas::matrix<T, Storage>& Qt,
 	const ublas::matrix<T, Storage>& X, const ublas::matrix<T, Storage>& Y)
 {
-	BOOST_ASSERT( A.size2() == B.size2() );
-	BOOST_ASSERT( A.size1() == U1.size1() );
-	BOOST_ASSERT( B.size1() == U2.size1() );
-	BOOST_ASSERT( A.size2() == Qt.size1() );
+	BOOST_REQUIRE( A.size2() == B.size2() );
+	BOOST_REQUIRE( A.size1() == U1.size1() );
+	BOOST_REQUIRE( B.size1() == U2.size1() );
+	BOOST_REQUIRE( A.size2() == Qt.size1() );
 
 
 	typedef ublas::matrix<T, Storage> Matrix;
