@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12)
 project(LAPACK Fortran C)
 
 set(LAPACK_MAJOR_VERSION 3)
-set(LAPACK_MINOR_VERSION 8)
+set(LAPACK_MINOR_VERSION 9)
 set(LAPACK_PATCH_VERSION 0)
 set(
   LAPACK_VERSION
@@ -73,10 +73,10 @@ include(PreventInBuildInstalls)
 
 if(UNIX)
   if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
-    list(APPEND CMAKE_Fortran_FLAGS -fp-model strict)
+    list(APPEND CMAKE_Fortran_FLAGS "-fp-model strict")
   endif()
   if(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
-    list(APPEND CMAKE_Fortran_FLAGS -qnosave -qstrict=none)
+    list(APPEND CMAKE_Fortran_FLAGS "-qnosave -qstrict=none")
   endif()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
@@ -443,3 +443,4 @@ install(FILES
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lapack-${LAPACK_VERSION}
   COMPONENT Development
   )
+  
