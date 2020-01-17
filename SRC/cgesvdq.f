@@ -220,7 +220,7 @@
 *>          left singular vectors in the case JOBU = 'F'.
 *>
 *>          If LIWORK, LCWORK, or LRWORK = -1, then on exit, if INFO = 0,
-*>          LIWORK(1) returns the minimal LIWORK.
+*>          IWORK(1) returns the minimal LIWORK.
 *> \endverbatim
 *>
 *> \param[in] LIWORK
