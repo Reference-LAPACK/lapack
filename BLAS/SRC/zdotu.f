@@ -39,7 +39,7 @@
 *>
 *> \param[in] ZX
 *> \verbatim
-*>          ZX is REAL array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*>          ZX is COMPLEX*16 array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 *> \endverbatim
 *>
 *> \param[in] INCX
@@ -50,7 +50,7 @@
 *>
 *> \param[in] ZY
 *> \verbatim
-*>          ZY is REAL array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
+*>          ZY is COMPLEX*16 array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
 *> \endverbatim
 *>
 *> \param[in] INCY

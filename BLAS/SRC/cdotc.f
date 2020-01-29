@@ -39,7 +39,7 @@
 *>
 *> \param[in] CX
 *> \verbatim
-*>          CX is REAL array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
+*>          CX is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCX ) )
 *> \endverbatim
 *>
 *> \param[in] INCX
@@ -50,7 +50,7 @@
 *>
 *> \param[in] CY
 *> \verbatim
-*>          CY is REAL array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
+*>          CY is COMPLEX array, dimension ( 1 + ( N - 1 )*abs( INCY ) )
 *> \endverbatim
 *>
 *> \param[in] INCY
