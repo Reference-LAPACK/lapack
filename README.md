@@ -77,7 +77,7 @@ CBLAS, a C interface to the BLAS, and (5) LAPACKE, a C interface to LAPACK.
    mkdir build
    cd build
    cmake -DCMAKE_INSTALL_LIBDIR=$HOME/.local/lapack ..
-   cmake --build -j . --target install
+   cmake --build . -j --target install
    ```
    That installs the LAPACK library under $HOME/.local/lapack/
  - Specific information to run LAPACK under Windows is available at
