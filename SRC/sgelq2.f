@@ -40,7 +40,7 @@
 *> where:
 *>
 *>    Q is a n-by-n orthogonal matrix;
-*>    L is an lower-triangular m-by-m matrix;
+*>    L is a lower-triangular m-by-m matrix;
 *>    0 is a m-by-(n-m) zero matrix, if m < n.
 *>
 *> \endverbatim

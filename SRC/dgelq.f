@@ -26,7 +26,7 @@
 *> where:
 *>
 *>    Q is a N-by-N orthogonal matrix;
-*>    L is an lower-triangular M-by-M matrix;
+*>    L is a lower-triangular M-by-M matrix;
 *>    0 is a M-by-(N-M) zero matrix, if M < N.
 *>
 *> \endverbatim
