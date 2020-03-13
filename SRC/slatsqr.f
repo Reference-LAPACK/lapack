@@ -28,8 +28,8 @@
 *> where:
 *>
 *>    Q is a M-by-M orthogonal matrix, stored on exit in an implicit
-*>    form in the elements below the digonal of the array A and in
-*>    the elemenst of the array T;
+*>    form in the elements below the diagonal of the array A and in
+*>    the elements of the array T;
 *>
 *>    R is an upper-triangular N-by-N matrix, stored on exit in
 *>    the elements on and above the diagonal of the array A.
