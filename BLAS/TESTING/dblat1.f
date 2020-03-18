@@ -253,7 +253,7 @@
 *     .. Local Arrays ..
       DOUBLE PRECISION  DTRUE1(5), DTRUE3(5), DTRUE5(8,5,2), DV(8,5,2),
      +                  SA(10), STEMP(1), STRUE(8), SX(8)
-      INTEGER           ITRUE2(5)
+      INTEGER           ITRUE2(5), ITRUEC(5)
 *     .. External Functions ..
       DOUBLE PRECISION  DASUM, DNRM2
       INTEGER           IDAMAX
@@ -297,6 +297,7 @@
      +                  0.03D0, 4.0D0, -0.09D0, 6.0D0, -0.15D0, 7.0D0,
      +                  -0.03D0, 3.0D0/
       DATA              ITRUE2/0, 1, 2, 2, 3/
+      DATA              ITRUEC/0, 1, 1, 1, 1/
 *     .. Executable Statements ..
       DO 80 INCX = 1, 2
          DO 60 NP1 = 1, 5
@@ -325,6 +326,10 @@
             ELSE IF (ICASE.EQ.10) THEN
 *              .. IDAMAX ..
                CALL ITEST1(IDAMAX(N,SX,INCX),ITRUE2(NP1))
+               DO 100 I = 1, LEN
+                  SX(I) = 42.0D0
+  100          CONTINUE
+               CALL ITEST1(IDAMAX(N,SX,INCX),ITRUEC(NP1))
             ELSE
                WRITE (NOUT,*) ' Shouldn''t be here in CHECK1'
                STOP
@@ -354,7 +359,8 @@
      $                  DPAR(5,4), DT19X(7,4,16),DT19XA(7,4,4),
      $                  DT19XB(7,4,4), DT19XC(7,4,4),DT19XD(7,4,4),
      $                  DT19Y(7,4,16), DT19YA(7,4,4),DT19YB(7,4,4),
-     $                  DT19YC(7,4,4), DT19YD(7,4,4), DTEMP(5)
+     $                  DT19YC(7,4,4), DT19YD(7,4,4), DTEMP(5),
+     $                  STY0(1), SX0(1), SY0(1)
       INTEGER           INCXS(4), INCYS(4), LENS(4,2), NS(4)
 *     .. External Functions ..
       DOUBLE PRECISION  DDOT, DSDOT
@@ -628,6 +634,15 @@
    60          CONTINUE
                CALL DCOPY(N,SX,INCX,SY,INCY)
                CALL STEST(LENY,SY,STY,SSIZE2(1,1),1.0D0)
+               SX0(1) = 42.0D0
+               SY0(1) = 43.0D0
+               IF (N.EQ.0) THEN
+                  STY0(1) = SY0(1)
+               ELSE
+                  STY0(1) = SX0(1)
+               END IF
+               CALL DCOPY(N,SX0,0,SY0,0)
+               CALL STEST(1,SY0,STY0,SSIZE2(1,1),1.0D0)
             ELSE IF (ICASE.EQ.6) THEN
 *              .. DSWAP ..
                CALL DSWAP(N,SX,INCX,SY,INCY)
