@@ -44,12 +44,6 @@ elseif( (CMAKE_Fortran_COMPILER_ID STREQUAL "VisualAge" ) OR  # CMake 2.6
     set( FPE_EXIT TRUE )
   endif()
 
-  if( NOT ("${CMAKE_Fortran_FLAGS}" MATCHES "-qfixed") )
-    message( STATUS "Enabling fixed format F90/F95 with -qfixed" )
-    set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qfixed"
-         CACHE STRING "Flags for Fortran compiler." FORCE )
-  endif()
-
 # HP Fortran
 elseif( CMAKE_Fortran_COMPILER_ID STREQUAL "HP" )
   if( "${CMAKE_Fortran_FLAGS}" MATCHES "\\+fp_exception" )
