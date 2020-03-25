@@ -127,10 +127,10 @@
 *     .. Local Scalars ..
       COMPLEX           CA
       REAL              SA
-      INTEGER           I, J, LEN, NP1
+      INTEGER           I, IX, J, LEN, NP1
 *     .. Local Arrays ..
-      COMPLEX           CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CX(8),
-     +                  MWPCS(5), MWPCT(5)
+      COMPLEX           CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CVR(8),
+     +                  CX(8), CXR(15), MWPCS(5), MWPCT(5)
       REAL              STRUE2(5), STRUE4(5)
       INTEGER           ITRUE3(5), ITRUEC(5)
 *     .. External Functions ..
@@ -173,6 +173,9 @@
      +                  (7.0E0,2.0E0), (0.3E0,0.1E0), (5.0E0,8.0E0),
      +                  (0.5E0,0.0E0), (6.0E0,9.0E0), (0.0E0,0.5E0),
      +                  (8.0E0,3.0E0), (0.0E0,0.2E0), (9.0E0,4.0E0)/
+      DATA              CVR/(8.0E0,8.0E0), (-7.0E0,-7.0E0),
+     +                  (9.0E0,9.0E0), (5.0E0,5.0E0), (9.0E0,9.0E0),
+     +                  (8.0E0,8.0E0), (7.0E0,7.0E0), (7.0E0,7.0E0)/
       DATA              STRUE2/0.0E0, 0.5E0, 0.6E0, 0.7E0, 0.8E0/
       DATA              STRUE4/0.0E0, 0.7E0, 1.0E0, 1.3E0, 1.6E0/
       DATA              ((CTRUE5(I,J,1),I=1,8),J=1,5)/(0.1E0,0.1E0),
@@ -279,6 +282,15 @@
             END IF
 *
    40    CONTINUE
+         IF (ICASE.EQ.10) THEN
+            N = 8
+            IX = 1
+            DO 180 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  180       CONTINUE
+            CALL ITEST1(ICAMAX(N,CXR,INCX),3)
+         END IF
    60 CONTINUE
 *
       INCX = 1

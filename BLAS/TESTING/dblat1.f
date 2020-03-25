@@ -249,10 +249,11 @@
       INTEGER           ICASE, INCX, INCY, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      INTEGER           I, LEN, NP1
+      INTEGER           I, IX, LEN, NP1
 *     .. Local Arrays ..
       DOUBLE PRECISION  DTRUE1(5), DTRUE3(5), DTRUE5(8,5,2), DV(8,5,2),
-     +                  SA(10), STEMP(1), STRUE(8), SX(8)
+     +                  DVR(8), SA(10), STEMP(1), STRUE(8), SX(8),
+     +                  SXR(15)
       INTEGER           ITRUE2(5), ITRUEC(5)
 *     .. External Functions ..
       DOUBLE PRECISION  DASUM, DNRM2
@@ -280,6 +281,8 @@
      +                  0.2D0, 3.0D0, -0.6D0, 5.0D0, 0.3D0, 2.0D0,
      +                  2.0D0, 2.0D0, 0.1D0, 4.0D0, -0.3D0, 6.0D0,
      +                  -0.5D0, 7.0D0, -0.1D0, 3.0D0/
+      DATA              DVR/8.0D0, -7.0D0, 9.0D0, 5.0D0, 9.0D0, 8.0D0,
+     +                  7.0D0, 7.0D0/
       DATA              DTRUE1/0.0D0, 0.3D0, 0.5D0, 0.7D0, 0.6D0/
       DATA              DTRUE3/0.0D0, 0.3D0, 0.7D0, 1.1D0, 1.0D0/
       DATA              DTRUE5/0.10D0, 2.0D0, 2.0D0, 2.0D0, 2.0D0,
@@ -335,6 +338,15 @@
                STOP
             END IF
    60    CONTINUE
+         IF (ICASE.EQ.10) THEN
+            N = 8
+            IX = 1
+            DO 120 I = 1, N
+               SXR(IX) = DVR(I)
+               IX = IX + INCX
+  120       CONTINUE
+            CALL ITEST1(IDAMAX(N,SXR,INCX),3)
+         END IF
    80 CONTINUE
       RETURN
       END
