@@ -129,7 +129,7 @@
       REAL              SA
       INTEGER           I, IX, J, LEN, NP1
 *     .. Local Arrays ..
-      COMPLEX           CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CVR(8), 
+      COMPLEX           CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CVR(8),
      +                  CX(8), CXR(15), MWPCS(5), MWPCT(5)
       REAL              STRUE2(5), STRUE4(5)
       INTEGER           ITRUE3(5), ITRUEC(5)
