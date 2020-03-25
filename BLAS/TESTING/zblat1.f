@@ -127,10 +127,10 @@
 *     .. Local Scalars ..
       COMPLEX*16        CA
       DOUBLE PRECISION  SA
-      INTEGER           I, J, LEN, NP1
+      INTEGER           I, IX, J, LEN, NP1
 *     .. Local Arrays ..
-      COMPLEX*16        CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CX(8),
-     +                  MWPCS(5), MWPCT(5)
+      COMPLEX*16        CTRUE5(8,5,2), CTRUE6(8,5,2), CV(8,5,2), CVR(8),
+     +                  CX(8), CXR(15), MWPCS(5), MWPCT(5)
       DOUBLE PRECISION  STRUE2(5), STRUE4(5)
       INTEGER           ITRUE3(5), ITRUEC(5)
 *     .. External Functions ..
@@ -173,6 +173,9 @@
      +                  (7.0D0,2.0D0), (0.3D0,0.1D0), (5.0D0,8.0D0),
      +                  (0.5D0,0.0D0), (6.0D0,9.0D0), (0.0D0,0.5D0),
      +                  (8.0D0,3.0D0), (0.0D0,0.2D0), (9.0D0,4.0D0)/
+      DATA              CVR/(8.0D0,8.0D0), (-7.0D0,-7.0D0),
+     +                  (9.0D0,9.0D0), (5.0D0,5.0D0), (9.0D0,9.0D0),
+     +                  (8.0D0,8.0D0), (7.0D0,7.0D0), (7.0D0,7.0D0)/
       DATA              STRUE2/0.0D0, 0.5D0, 0.6D0, 0.7D0, 0.8D0/
       DATA              STRUE4/0.0D0, 0.7D0, 1.0D0, 1.3D0, 1.6D0/
       DATA              ((CTRUE5(I,J,1),I=1,8),J=1,5)/(0.1D0,0.1D0),
@@ -279,6 +282,15 @@
             END IF
 *
    40    CONTINUE
+         IF (ICASE.EQ.10) THEN
+            N = 8
+            IX = 1
+            DO 180 I = 1, N
+               CXR(IX) = CVR(I)
+               IX = IX + INCX
+  180       CONTINUE
+            CALL ITEST1(IZAMAX(N,CXR,INCX),3)
+         END IF
    60 CONTINUE
 *
       INCX = 1

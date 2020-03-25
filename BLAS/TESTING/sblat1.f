@@ -249,10 +249,11 @@
       INTEGER           ICASE, INCX, INCY, N
       LOGICAL           PASS
 *     .. Local Scalars ..
-      INTEGER           I, LEN, NP1
+      INTEGER           I, IX, LEN, NP1
 *     .. Local Arrays ..
       REAL              DTRUE1(5), DTRUE3(5), DTRUE5(8,5,2), DV(8,5,2),
-     +                  SA(10), STEMP(1), STRUE(8), SX(8)
+     +                  DVR(8), SA(10), STEMP(1), STRUE(8), SX(8),
+     +                  SXR(15)
       INTEGER           ITRUE2(5), ITRUEC(5)
 *     .. External Functions ..
       REAL              SASUM, SNRM2
@@ -280,6 +281,8 @@
      +                  0.2E0, 3.0E0, -0.6E0, 5.0E0, 0.3E0, 2.0E0,
      +                  2.0E0, 2.0E0, 0.1E0, 4.0E0, -0.3E0, 6.0E0,
      +                  -0.5E0, 7.0E0, -0.1E0, 3.0E0/
+      DATA              DVR/8.0E0, -7.0E0, 9.0E0, 5.0E0, 9.0E0, 8.0E0,
+     +                  7.0E0, 7.0E0/
       DATA              DTRUE1/0.0E0, 0.3E0, 0.5E0, 0.7E0, 0.6E0/
       DATA              DTRUE3/0.0E0, 0.3E0, 0.7E0, 1.1E0, 1.0E0/
       DATA              DTRUE5/0.10E0, 2.0E0, 2.0E0, 2.0E0, 2.0E0,
@@ -335,6 +338,15 @@
                STOP
             END IF
    60    CONTINUE
+         IF (ICASE.EQ.10) THEN
+            N = 8
+            IX = 1
+            DO 120 I = 1, N
+               SXR(IX) = DVR(I)
+               IX = IX + INCX
+  120       CONTINUE
+            CALL ITEST1(ISAMAX(N,SXR,INCX),3)
+         END IF
    80 CONTINUE
       RETURN
       END
