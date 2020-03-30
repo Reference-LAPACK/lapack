@@ -362,7 +362,7 @@
 *     .. Local Scalars ..
       REAL              SA
       INTEGER           I, J, KI, KN, KNI, KPAR, KSIZE, LENX, LENY,
-     $                  MX, MY
+     $                  LINCX, LINCY, MX, MY
 *     .. Local Arrays ..
       REAL              DT10X(7,4,4), DT10Y(7,4,4), DT7(4,4),
      $                  DT8(7,4,4), DX1(7),
@@ -648,15 +648,23 @@
    60          CONTINUE
                CALL SCOPY(N,SX,INCX,SY,INCY)
                CALL STEST(LENY,SY,STY,SSIZE2(1,1),1.0E0)
-               SX0(1) = 42.0E0
-               SY0(1) = 43.0E0
-               IF (N.EQ.0) THEN
-                  STY0(1) = SY0(1)
-               ELSE
-                  STY0(1) = SX0(1)
+               IF (KI.EQ.1) THEN
+                  SX0(1) = 42.0E0
+                  SY0(1) = 43.0E0
+                  IF (N.EQ.0) THEN
+                     STY0(1) = SY0(1)
+                  ELSE
+                     STY0(1) = SX0(1)
+                  END IF
+                  LINCX = INCX
+                  INCX = 0
+                  LINCY = INCY
+                  INCY = 0
+                  CALL SCOPY(N,SX0,INCX,SY0,INCY)
+                  CALL STEST(1,SY0,STY0,SSIZE2(1,1),1.0E0)
+                  INCX = LINCX
+                  INCY = LINCY
                END IF
-               CALL SCOPY(N,SX0,0,SY0,0)
-               CALL STEST(1,SY0,STY0,SSIZE2(1,1),1.0E0)
             ELSE IF (ICASE.EQ.6) THEN
 *              .. SSWAP ..
                CALL SSWAP(N,SX,INCX,SY,INCY)
