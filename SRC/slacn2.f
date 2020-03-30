@@ -160,7 +160,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, JLAST
-      REAL               ALTSGN, ESTOLD, TEMP
+      REAL               ALTSGN, ESTOLD, TEMP, XS
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
@@ -171,7 +171,7 @@
       EXTERNAL           SCOPY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, NINT, REAL, SIGN
+      INTRINSIC          ABS, NINT, REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -199,7 +199,11 @@
       EST = SASUM( N, X, 1 )
 *
       DO 30 I = 1, N
-         X( I ) = SIGN( ONE, X( I ) )
+         IF( X(I).GE.ZERO ) THEN
+            X(I) = ONE
+         ELSE
+            X(I) = -ONE
+         END IF
          ISGN( I ) = NINT( X( I ) )
    30 CONTINUE
       KASE = 2
@@ -232,7 +236,12 @@
       ESTOLD = EST
       EST = SASUM( N, V, 1 )
       DO 80 I = 1, N
-         IF( NINT( SIGN( ONE, X( I ) ) ).NE.ISGN( I ) )
+         IF( X(I).GE.ZERO ) THEN
+            XS = ONE
+         ELSE
+            XS = -ONE
+         END IF
+         IF( NINT( XS ).NE.ISGN( I ) )
      $      GO TO 90
    80 CONTINUE
 *     REPEATED SIGN VECTOR DETECTED, HENCE ALGORITHM HAS CONVERGED.
@@ -244,7 +253,11 @@
      $   GO TO 120
 *
       DO 100 I = 1, N
-         X( I ) = SIGN( ONE, X( I ) )
+         IF( X(I).GE.ZERO ) THEN
+            X(I) = ONE
+         ELSE
+            X(I) = -ONE
+         END IF
          ISGN( I ) = NINT( X( I ) )
   100 CONTINUE
       KASE = 2
