@@ -344,7 +344,8 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       COMPLEX*16        CA
-      INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, MX, MY
+      INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, LINCX, LINCY,
+     +                  MX, MY
 *     .. Local Arrays ..
       COMPLEX*16        CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
@@ -564,15 +565,23 @@
 *              .. ZCOPY ..
                CALL ZCOPY(N,CX,INCX,CY,INCY)
                CALL CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0D0)
-               CX0(1) = (42.0D0,43.0D0)
-               CY0(1) = (44.0D0,45.0D0)
-               IF (N.EQ.0) THEN
-                  CTY0(1) = CY0(1)
-               ELSE
-                  CTY0(1) = CX0(1)
+               IF (KI.EQ.1) THEN
+                  CX0(1) = (42.0D0,43.0D0)
+                  CY0(1) = (44.0D0,45.0D0)
+                  IF (N.EQ.0) THEN
+                     CTY0(1) = CY0(1)
+                  ELSE
+                     CTY0(1) = CX0(1)
+                  END IF
+                  LINCX = INCX
+                  INCX = 0
+                  LINCY = INCY
+                  INCY = 0
+                  CALL ZCOPY(N,CX0,INCX,CY0,INCY)
+                  CALL CTEST(1,CY0,CTY0,CSIZE3,1.0D0)
+                  INCX = LINCX
+                  INCY = LINCY
                END IF
-               CALL ZCOPY(N,CX0,0,CY0,0)
-               CALL CTEST(1,CY0,CTY0,CSIZE3,1.0D0)
             ELSE IF (ICASE.EQ.5) THEN
 *              .. ZSWAP ..
                CALL ZSWAP(N,CX,INCX,CY,INCY)

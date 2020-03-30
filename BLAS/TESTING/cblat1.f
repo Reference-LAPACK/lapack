@@ -344,7 +344,8 @@
       LOGICAL           PASS
 *     .. Local Scalars ..
       COMPLEX           CA
-      INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, MX, MY
+      INTEGER           I, J, KI, KN, KSIZE, LENX, LENY, LINCX, LINCY,
+     +                  MX, MY
 *     .. Local Arrays ..
       COMPLEX           CDOT(1), CSIZE1(4), CSIZE2(7,2), CSIZE3(14),
      +                  CT10X(7,4,4), CT10Y(7,4,4), CT6(4,4), CT7(4,4),
@@ -564,15 +565,23 @@
 *              .. CCOPY ..
                CALL CCOPY(N,CX,INCX,CY,INCY)
                CALL CTEST(LENY,CY,CT10Y(1,KN,KI),CSIZE3,1.0E0)
-               CX0(1) = (42.0E0,43.0E0)
-               CY0(1) = (44.0E0,45.0E0)
-               IF (N.EQ.0) THEN
-                  CTY0(1) = CY0(1)
-               ELSE
-                  CTY0(1) = CX0(1)
+               IF (KI.EQ.1) THEN
+                  CX0(1) = (42.0E0,43.0E0)
+                  CY0(1) = (44.0E0,45.0E0)
+                  IF (N.EQ.0) THEN
+                     CTY0(1) = CY0(1)
+                  ELSE
+                     CTY0(1) = CX0(1)
+                  END IF
+                  LINCX = INCX
+                  INCX = 0
+                  LINCY = INCY
+                  INCY = 0
+                  CALL CCOPY(N,CX0,INCX,CY0,INCY)
+                  CALL CTEST(1,CY0,CTY0,CSIZE3,1.0E0)
+                  INCX = LINCX
+                  INCY = LINCY
                END IF
-               CALL CCOPY(N,CX0,0,CY0,0)
-               CALL CTEST(1,CY0,CTY0,CSIZE3,1.0E0)
             ELSE IF (ICASE.EQ.5) THEN
 *              .. CSWAP ..
                CALL CSWAP(N,CX,INCX,CY,INCY)
