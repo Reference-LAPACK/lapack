@@ -171,7 +171,7 @@
       EXTERNAL           DCOPY
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, NINT, SIGN
+      INTRINSIC          ABS, DBLE, NINT
 *     ..
 *     .. Executable Statements ..
 *
