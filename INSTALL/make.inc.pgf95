@@ -16,9 +16,9 @@ CFLAGS =
 #  the compiler options desired when NO OPTIMIZATION is selected.
 #
 FC = pgf95
-FFLAGS = -O3
+FFLAGS = -O3 -Mrecursive
 FFLAGS_DRV = $(FFLAGS)
-FFLAGS_NOOPT = -O0
+FFLAGS_NOOPT = -O0 -Mrecursive
 
 #  Define LDFLAGS to the desired linker options for your machine.
 #
