@@ -542,6 +542,20 @@ struct QrCsCaller<std::complex<Real>>
 		rwork.resize( lrwork_opt );
 		std::fill( rwork.begin(), rwork.end(), real_nan );
 	}
+
+
+	Integer operator() ()
+	{
+		return lapack::ggqrcs(
+			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			&X(0, 0), m, &Y(0, 0), p,
+			&theta(0),
+			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&work(0), work.size(),
+			&rwork(0), rwork.size(),
+			&iwork(0)
+		);
+	}
 };
 
 
