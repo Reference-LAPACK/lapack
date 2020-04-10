@@ -37,13 +37,12 @@
 
 #include <lapack.hpp>
 
-#include <utility>
-
 #include <algorithm>
 #include <limits>
 #include <cmath>
 #include <random>
 #include <type_traits>
+#include <utility>
 
 
 
@@ -51,53 +50,103 @@ namespace ublas = boost::numeric::ublas;
 typedef lapack::integer_t Integer;
 
 
-template<
-	typename Real,
-	std::enable_if<std::is_fundamental<Real>::value>* = nullptr
->
-bool nan_p(Real x)
+template<typename Number>
+bool nan_p(Number x)
 {
-	return std::isnan(x);
+	return std::isnan(std::real(x)) or std::isnan(std::imag(x));
 }
+
+
+template<typename Number>
+bool inf_p(Number x)
+{
+	return std::isinf(std::real(x)) or std::isinf(std::imag(x));
+}
+
+
+template<typename Number>
+bool finite_p(Number x)
+{
+	return std::isfinite(std::real(x)) and std::isfinite(std::imag(x));
+}
+
+
+
+/**
+ * Given a type `T`, `real_from<T>::type` is `T` if `T` is a built-in type,
+ * otherwise is returns the numeric type used to implement `T`.
+ *
+ * Examples:
+ * * `real_from<float>::type == float`
+ * * `real_from<std::complex<float>>::type == float`
+ */
+template<typename T>
+struct real_from
+{
+	using type = typename std::conditional<
+		std::is_fundamental<T>::value, T, typename T::value_type
+	>::type;
+};
+
+
 
 template<typename Real>
-bool nan_p(std::complex<Real> z)
+struct not_a_number
 {
-	return std::isnan(z.real()) or std::isnan(z.imag());
-}
-
-
-template<
-	typename Real,
-	std::enable_if<std::is_fundamental<Real>::value>* = nullptr
->
-bool inf_p(Real x)
-{
-	return std::isinf(x);
-}
+	static constexpr Real value = std::numeric_limits<Real>::quiet_NaN();
+};
 
 template<typename Real>
-bool inf_p(std::complex<Real> z)
-{
-	return std::isinf(z.abs());
-}
+constexpr Real not_a_number<Real>::value;
 
-
-template<
-	typename Real,
-	std::enable_if<std::is_fundamental<Real>::value>* = nullptr
->
-bool finite_p(Real x)
-{
-	return std::isfinite(x);
-}
 
 template<typename Real>
-bool finite_p(std::complex<Real> z)
+struct not_a_number<std::complex<Real>>
 {
-	return std::isfinite(z.real()) and std::isfinite(z.imag());
-}
+	using type = std::complex<Real>;
 
+	static constexpr Real nan = std::numeric_limits<Real>::quiet_NaN();
+	static constexpr type value = type{nan, nan};
+};
+
+template<typename Real>
+constexpr std::complex<Real> not_a_number<std::complex<Real>>::value;
+
+
+
+template<typename Real>
+struct UniformDistribution
+{
+	UniformDistribution() : dist_(-1, +1) {}
+
+	template<typename Engine>
+	Real operator() (Engine& gen)
+	{
+		return dist_(gen);
+	}
+
+	std::uniform_real_distribution<Real> dist_;
+};
+
+template<typename Real>
+struct UniformDistribution<std::complex<Real>>
+{
+	using result_type = std::complex<Real>;
+
+	UniformDistribution() : dist_(-1, +1) {}
+
+	template<typename Engine>
+	result_type operator() (Engine& gen)
+	{
+		constexpr auto pi = Real{M_PI};
+		auto radius = dist_(gen);
+		auto angle = 2 * pi * dist_(gen);
+
+		return std::polar(radius, angle);
+	}
+
+	std::uniform_real_distribution<Real> dist_;
+};
 
 
 
@@ -106,17 +155,16 @@ ublas::matrix<T, Storage> build_R(
 	std::size_t r,
 	const ublas::matrix<T, Storage>& X, const ublas::matrix<T, Storage>& Y)
 {
-	BOOST_ASSERT( X.size2() == Y.size2() );
+	BOOST_VERIFY( X.size2() == Y.size2() );
 
-	typedef ublas::matrix<T, Storage> Matrix;
-	typedef ublas::matrix_range<Matrix> MatrixRange;
-	typedef ublas::matrix_range<const Matrix> ConstMatrixRange;
-	typedef ublas::banded_adaptor<ConstMatrixRange> BandedAdaptor;
+	using Matrix = ublas::matrix<T, Storage>;
+	using MatrixRange = ublas::matrix_range<Matrix>;
+	using ConstMatrixRange = ublas::matrix_range<const Matrix>;
+	using BandedAdaptor = ublas::banded_adaptor<ConstMatrixRange>;
 
-	const std::size_t m = X.size1();
-	const std::size_t n = X.size2();
-
-	Matrix R(r, n, 0);
+	auto m = X.size1();
+	auto n = X.size2();
+	auto R = Matrix(r, n, 0);
 
 	if(r <= m)
 	{
@@ -146,22 +194,27 @@ ublas::matrix<T, Storage> build_R(
 
 
 
-template<typename Real, typename T, class Storage>
-std::pair< ublas::matrix<T, Storage>, ublas::matrix<T, Storage> >
+template<
+	typename Number,
+	class Storage,
+	typename Real = typename real_from<Number>::type
+>
+std::pair< ublas::matrix<Number, Storage>, ublas::matrix<Number, Storage> >
 build_diagonals(
 	std::size_t r,
-	const ublas::matrix<T, Storage>& A, const ublas::matrix<T, Storage>& B,
+	const ublas::matrix<Number, Storage>& A,
+	const ublas::matrix<Number, Storage>& B,
 	const ublas::vector<Real>& theta)
 {
-	typedef ublas::matrix<T, Storage> Matrix;
-	typedef ublas::identity_matrix<T> IdentityMatrix;
-	typedef ublas::matrix_range<Matrix> MatrixRange;
+	using Matrix = ublas::matrix<Number, Storage>;
+	using IdentityMatrix = ublas::identity_matrix<Number>;
+	using MatrixRange = ublas::matrix_range<Matrix>;
 
-	const std::size_t m = A.size1();
-	const std::size_t p = B.size1();
-	const std::size_t k = std::min( {m, p, r, m + p - r} );
-	const std::size_t k1 = (p < r) ? r - p : 0;
-	const std::size_t k2 = (m < r) ? r - m : 0;
+	auto m = A.size1();
+	auto p = B.size1();
+	auto k = std::min( {m, p, r, m + p - r} );
+	auto k1 = (p < r) ? r - p : std::size_t{0};
+	auto k2 = (m < r) ? r - m : std::size_t{0};
 
 	Matrix D1(m, r, 0);
 	Matrix D2(p, r, 0);
@@ -195,54 +248,55 @@ build_diagonals(
 
 
 
-template<typename T, class Storage>
-ublas::matrix<T, Storage> reconstruct_matrix(
-	const ublas::matrix<T, Storage>& U,
-	const ublas::matrix<T, Storage>& D,
-	const ublas::matrix<T, Storage>& R,
-	const ublas::matrix<T, Storage>& Qt)
+template<typename Number, class Storage>
+ublas::matrix<Number, Storage> reconstruct_matrix(
+	const ublas::matrix<Number, Storage>& U,
+	const ublas::matrix<Number, Storage>& D,
+	const ublas::matrix<Number, Storage>& R,
+	const ublas::matrix<Number, Storage>& Qt)
 {
-	typedef ublas::matrix<T, Storage> Matrix;
+	using Matrix = ublas::matrix<Number, Storage>;
 
-	const Matrix D_R = ublas::prod(D, R);
-	const Matrix U_D_R = ublas::prod(U, D_R);
-	const Matrix A = ublas::prod(U_D_R, Qt);
+	auto D_R = Matrix(ublas::prod(D, R));
+	auto U_D_R = Matrix(ublas::prod(U, D_R));
+	auto A = Matrix(ublas::prod(U_D_R, Qt));
 
 	return A;
 }
 
 
 
-template<typename Real, typename T, class Storage>
+template<
+	typename Number,
+	class Storage,
+	typename Real = typename real_from<Number>::type
+>
 void check_results(
-	Integer ret, Real lwkopt,
-	const ublas::matrix<T, Storage>& A, const ublas::matrix<T, Storage>& B,
-	Real w, Integer l,
+	Integer ret,
+	const ublas::matrix<Number, Storage>& A,
+	const ublas::matrix<Number, Storage>& B,
+	Number w, Integer l,
 	const ublas::vector<Real> theta,
-	const ublas::matrix<T, Storage>& U1, const ublas::matrix<T, Storage>& U2,
-	const ublas::matrix<T, Storage>& Qt,
-	const ublas::matrix<T, Storage>& X, const ublas::matrix<T, Storage>& Y)
+	const ublas::matrix<Number, Storage>& U1,
+	const ublas::matrix<Number, Storage>& U2,
+	const ublas::matrix<Number, Storage>& Qt,
+	const ublas::matrix<Number, Storage>& X,
+	const ublas::matrix<Number, Storage>& Y)
 {
 	BOOST_REQUIRE( A.size2() == B.size2() );
 	BOOST_REQUIRE( A.size1() == U1.size1() );
 	BOOST_REQUIRE( B.size1() == U2.size1() );
 	BOOST_REQUIRE( A.size2() == Qt.size1() );
 
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
 
-	typedef ublas::matrix<T, Storage> Matrix;
-
-
-	const std::size_t m = A.size1();
-	const std::size_t n = A.size2();
-	const std::size_t p = B.size1();
-	const auto eps = std::numeric_limits<Real>::epsilon();
-
+	auto m = A.size1();
+	auto n = A.size2();
+	auto p = B.size1();
+	auto eps = std::numeric_limits<Real>::epsilon();
 
 	// check scalars
 	BOOST_CHECK_EQUAL( ret, 0 );
-	BOOST_REQUIRE( !nan_p(lwkopt) );
-	BOOST_REQUIRE( std::isfinite(lwkopt) );
-	BOOST_CHECK_GT( lwkopt, (m+p) * n );
 
 	BOOST_REQUIRE( !nan_p(w) );
 	BOOST_REQUIRE( std::isfinite(w) );
@@ -250,21 +304,22 @@ void check_results(
 
 	BOOST_CHECK_GE( l, 0 );
 	BOOST_CHECK_LE( l, std::min(m+p, n) );
-	const std::size_t r = l;
-	const std::size_t k = std::min( {m, p, r, m + p - r} );
+
+	auto r = static_cast<std::size_t>(l);
+	auto k = std::min( {m, p, r, m + p - r} );
 
 	BOOST_REQUIRE_GE(theta.size(), k);
 
 
 	// construct R
-	const Matrix R = build_R(r, X, Y);
+	auto R = build_R(r, X, Y);
 
 	BOOST_REQUIRE_EQUAL(R.size1(), r);
 	BOOST_REQUIRE_EQUAL(R.size2(), n);
 
 
 	// check for NaN
-	bool(*isnan)(T) = &nan_p;
+	bool(*isnan)(Number) = &nan_p;
 	BOOST_REQUIRE( std::none_of( A.data().begin(), A.data().end(), isnan) );
 	BOOST_REQUIRE( std::none_of( B.data().begin(), B.data().end(), isnan) );
 	BOOST_REQUIRE( std::none_of( R.data().begin(), R.data().end(), isnan) );
@@ -279,7 +334,7 @@ void check_results(
 
 
 	// check for infinity
-	bool(*is_inf)(T) = &inf_p;
+	bool(*is_inf)(Number) = &inf_p;
 	BOOST_REQUIRE( std::none_of( A.data().begin(), A.data().end(), is_inf) );
 	BOOST_REQUIRE( std::none_of( B.data().begin(), B.data().end(), is_inf) );
 	BOOST_REQUIRE( std::none_of( R.data().begin(), R.data().end(), is_inf) );
@@ -299,14 +354,12 @@ void check_results(
 	// Note that only Qt is the orthogonal factor of a QR decomposition.
 	auto measure_unity = [] (const auto& U) -> double
 	{
-		BOOST_ASSERT( U.size1() == U.size2() );
+		BOOST_VERIFY( U.size1() == U.size2() );
 
-		const std::size_t n = U.size1();
-		const ublas::identity_matrix<T> id(n);
-
-		double ret =
-			ublas::norm_frobenius( ublas::prod( ublas::herm(U), U ) - id );
-		return ret;
+		auto n = U.size1();
+		auto id = ublas::identity_matrix<Number>(n);
+		auto delta = ublas::norm_frobenius(ublas::prod(ublas::herm(U), U) - id);
+		return delta;
 	};
 
 	BOOST_CHECK_LE( measure_unity(U1), 2 * std::sqrt(m) * (m+p) * r * eps );
@@ -317,7 +370,7 @@ void check_results(
 	// check the "singular values"
 	BOOST_CHECK_GE( theta.size(), k );
 
-	for(std::size_t i = 0; i < k; ++i)
+	for(auto i = std::size_t{0}; i < k; ++i)
 	{
 		BOOST_CHECK_GE( theta[i], 0 );
 		BOOST_CHECK_LE( theta[i], Real(M_PI/2) );
@@ -328,167 +381,226 @@ void check_results(
 
 
 	// reconstruct A, B from GSVD
-	const auto ds = build_diagonals(r, A, B, theta);
-	const Matrix& D1 = ds.first;
-	const Matrix& D2 = ds.second;
+	auto ds = build_diagonals(r, A, B, theta);
+	auto& D1 = ds.first;
+	auto& D2 = ds.second;
 
-	const Matrix almost_A = reconstruct_matrix(U1, D1, R, Qt);
-	const Matrix almost_B = reconstruct_matrix(U2, D2, R, Qt);
+	Matrix almost_A = reconstruct_matrix(U1, D1, R, Qt);
+	Matrix almost_B = reconstruct_matrix(U2, D2, R, Qt);
 
-	const Real frob_A = ublas::norm_frobenius(A);
-	const Real frob_B = ublas::norm_frobenius(B);
+	auto frob_A = ublas::norm_frobenius(A);
+	auto frob_B = ublas::norm_frobenius(B);
 
 	// The tolerance here is based on the backward error bounds for the QR
 	// factorization given in Theorem 19.4, Equation (3.8) in
 	// Higham: "Accuracy and Stability of Numerical Algorithms".
 	BOOST_CHECK_LE(
-		ublas::norm_frobenius(A - almost_A), 2 * (m+p) * n * frob_A * eps );
+		ublas::norm_frobenius(A - almost_A), 4 * (m+p) * n * frob_A * eps );
 	BOOST_CHECK_LE(
-		ublas::norm_frobenius(w*B - almost_B), 3*w * (m+p) * n * frob_B * eps );
+		ublas::norm_frobenius(w*B - almost_B), 8*w * (m+p) * n * frob_B * eps );
 }
 
 
-
-template<typename T>
-struct Fixture
+/**
+ * This structure hides the differences between real and complex implementations
+ * of xGGQRCS.
+ */
+template<typename Real>
+struct QrCsCaller
 {
-	typedef ublas::matrix<T, ublas::column_major> Matrix;
+	using Number = Real;
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
 	template<typename U> using Vector = ublas::vector<U>;
 
-	static constexpr T NaN = std::numeric_limits<T>::quiet_NaN();
+	Real w = not_a_number<Real>::value;
+	Integer l = -1;
+	std::size_t m, n, p;
+	Matrix X, Y;
+	Matrix U1, U2, Qt;
+	Vector<Number> theta;
+	Vector<Number> work;
+	Vector<Integer> iwork;
 
-
-	Fixture(std::size_t m, std::size_t n, std::size_t p) :
-		A(m, n, 0),
-		B(p, n, 0),
-		U1(m, m, NaN),
-		U2(p, p, NaN),
-		Qt(n, n, NaN),
-		theta(n, NaN),
+	QrCsCaller(std::size_t m_, std::size_t n_, std::size_t p_) :
+		m(m_),
+		n(n_),
+		p(p_),
+		X(m, n, 0),
+		Y(p, n, 0),
+		U1(m, m, not_a_number<Number>::value),
+		U2(p, p, not_a_number<Number>::value),
+		Qt(n, n, not_a_number<Number>::value),
+		theta(n, not_a_number<Real>::value),
 		iwork(m + n + p, -1)
 	{
-		BOOST_ASSERT( m > 0 );
-		BOOST_ASSERT( n > 0 );
-		BOOST_ASSERT( p > 0 );
+		BOOST_VERIFY( m > 0 );
+		BOOST_VERIFY( n > 0 );
+		BOOST_VERIFY( p > 0 );
+
+		auto nan = not_a_number<Number>::value;
 
 		// query workspace size
-		T lwork_opt_f = NaN;
-		T w = NaN;
-		Integer l = -1;
-
-		Integer ret = lapack::ggqrcs(
+		auto lwork_opt_f = nan;
+		auto w = nan;
+		auto l = Integer{-1};
+		auto ret = lapack::ggqrcs(
 			'Y', 'Y', 'Y', m, n, p, &w, &l,
-			&A(0, 0), m, &B(0, 0), p,
+			&X(0, 0), m, &Y(0, 0), p,
 			&theta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
 			&lwork_opt_f, -1, &iwork(0) );
-		BOOST_ASSERT( ret == 0 );
+		BOOST_REQUIRE_EQUAL( ret, 0 );
 
-		// resize work accordingly
-		std::size_t lwork_opt = lwork_opt_f;
-		work.resize( lwork_opt );
-
-		std::fill( work.begin(), work.end(), NaN );
+		// resize workspace accordingly
+		auto lwork_opt =
+			static_cast<std::size_t>(std::real(lwork_opt_f));
+		work.resize( lwork_opt, nan );
 	}
 
-	Matrix A, B;
-	Matrix U1, U2, Qt;
-	Vector<T> theta;
-	Vector<T> work;
-	Vector<Integer> iwork;
+
+	Integer operator() ()
+	{
+		return lapack::ggqrcs(
+			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			&X(0, 0), m, &Y(0, 0), p,
+			&theta(0),
+			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&work(0), work.size(), &iwork(0)
+		);
+	}
 };
 
 
-template<typename T> constexpr T Fixture<T>::NaN;
+template<typename Real>
+struct QrCsCaller<std::complex<Real>>
+{
+	using Number = std::complex<Real>;
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
+	template<typename U> using Vector = ublas::vector<U>;
+
+	Number w = not_a_number<Number>::value;
+	Integer l = -1;
+	std::size_t m, n, p;
+	Matrix X, Y;
+	Matrix U1, U2, Qt;
+	Vector<Real> theta;
+	Vector<Number> work;
+	Vector<Real> rwork;
+	Vector<Integer> iwork;
+
+	QrCsCaller(std::size_t m_, std::size_t n_, std::size_t p_) :
+		m(m_),
+		n(n_),
+		p(p_),
+		X(m, n, 0),
+		Y(p, n, 0),
+		U1(m, m, not_a_number<Number>::value),
+		U2(p, p, not_a_number<Number>::value),
+		Qt(n, n, not_a_number<Number>::value),
+		theta(n, not_a_number<Real>::value),
+		iwork(m + n + p, -1)
+	{
+		BOOST_VERIFY( m > 0 );
+		BOOST_VERIFY( n > 0 );
+		BOOST_VERIFY( p > 0 );
+
+		auto nan = not_a_number<Number>::value;
+		auto real_nan = not_a_number<Real>::value;
+
+		// query workspace sizes
+		auto lwork_opt_f = nan;
+		auto lrwork_opt_f = nan;
+		auto w = nan;
+		auto l = Integer{-1};
+		auto ret = lapack::ggqrcs(
+			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			&X(0, 0), m, &Y(0, 0), p,
+			&theta(0),
+			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&lwork_opt_f, -1, &lrwork_opt_f, 1, &iwork(0) );
+		BOOST_REQUIRE_EQUAL( ret, 0 );
+
+		auto lwork_opt =
+			static_cast<std::size_t>(std::real(lwork_opt_f));
+		work.resize( lwork_opt, nan );
+
+		ret = lapack::ggqrcs(
+			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			&X(0, 0), m, &Y(0, 0), p,
+			&theta(0),
+			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&work(0), lwork_opt, &lrwork_opt_f, -1, &iwork(0) );
+		BOOST_REQUIRE_EQUAL( ret, 0 );
+
+		auto lrwork_opt =
+			static_cast<std::size_t>(std::real(lrwork_opt_f));
+
+		rwork.resize( lrwork_opt, real_nan );
+	}
+};
+
+
+template<typename Number, class Matrix>
+void check_results(
+	Integer ret,
+	const Matrix& A, const Matrix& B,
+	const QrCsCaller<Number> caller)
+{
+	check_results(
+		ret,
+		A, B,
+		caller.w, caller.l,
+		caller.theta,
+		caller.U1, caller.U2, caller.Qt,
+		caller.X, caller.Y
+	);
+}
 
 
 
 BOOST_AUTO_TEST_SUITE(LAPACK_TEST_SUITE_NAME)
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(
-	ggqrcs_simple_test, T, test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_simple_test, Number, test_types)
 {
-	const std::size_t m = 2;
-	const std::size_t n = 2;
-	const std::size_t p = 2;
-
-	Fixture<T> fixture(m, n, p);
-
-	auto A = fixture.A;
-	auto B = fixture.B;
+	auto m = std::size_t{2};
+	auto n = std::size_t{2};
+	auto p = std::size_t{2};
+	auto caller = QrCsCaller<Number>(m, n, p);
+	auto A = caller.X;
+	auto B = caller.Y;
 
 	A(0,0) = 1;
 	B(1,1) = 1;
 
-	fixture.A = A;
-	fixture.B = B;
+	caller.X = A;
+	caller.Y = B;
 
-	auto& theta = fixture.theta;
-	auto& U1 = fixture.U1;
-	auto& U2 = fixture.U2;
-	auto& Qt = fixture.Qt;
-	auto& work = fixture.work;
-	auto& iwork = fixture.iwork;
+	auto ret = caller();
+	check_results(ret, A, B, caller);
 
-	const Integer lwork = work.size();
-	T w = -1;
-	Integer l = -1;
-
-	Integer ret = lapack::ggqrcs(
-		'Y', 'Y', 'Y', m, n, p, &w, &l,
-		&A(0, 0), m, &B(0, 0), p,
-		&theta(0),
-		&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
-		&work(0), lwork, &iwork(0) );
-
-	check_results(
-		ret, work(0), fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
-
-	BOOST_CHECK_EQUAL( w, 1 );
-	BOOST_CHECK_EQUAL( l, 2 );
+	BOOST_CHECK_EQUAL( caller.w, 1 );
+	BOOST_CHECK_EQUAL( caller.l, 2 );
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(
-	ggqrcs_zero_test, T, test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_zero_test, Number, test_types)
 {
-	const std::size_t m = 4;
-	const std::size_t n = 3;
-	const std::size_t p = 2;
+	auto m = std::size_t{4};
+	auto n = std::size_t{3};
+	auto p = std::size_t{2};
+	auto caller = QrCsCaller<Number>(m, n, p);
+	auto A = caller.X;
+	auto B = caller.Y;
 
-	Fixture<T> fixture(m, n, p);
+	auto ret = caller();
+	check_results(ret, A, B, caller);
 
-	auto A = fixture.A;
-	auto B = fixture.B;
-
-	auto& theta = fixture.theta;
-	auto& U1 = fixture.U1;
-	auto& U2 = fixture.U2;
-	auto& Qt = fixture.Qt;
-	auto& work = fixture.work;
-	auto& iwork = fixture.iwork;
-
-	const Integer lwork = work.size();
-	T w = -1;
-	Integer l = -1;
-
-	Integer ret = lapack::ggqrcs(
-		'Y', 'Y', 'Y', m, n, p, &w, &l,
-		&A(0, 0), m, &B(0, 0), p,
-		&theta(0),
-		&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
-		&work(0), lwork, &iwork(0) );
-
-	check_results(
-		ret, work(0), fixture.A, fixture.B, w, l, theta, U1, U2, Qt, A, B);
-
-	BOOST_CHECK_EQUAL( w, 1 );
-	BOOST_CHECK_EQUAL( l, 0 );
+	BOOST_CHECK_EQUAL( caller.w, 1 );
+	BOOST_CHECK_EQUAL( caller.l, 0 );
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(
-	ggqrcs_rectangular_test, T, test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_rectangular_test, Number, test_types)
 {
 	for(std::size_t m : { 2, 13, 41 })
 	{
@@ -496,238 +608,65 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 		{
 			for(std::size_t p : {5, 11, 17})
 			{
-				Fixture<T> fixture(m, n, p);
-
-				auto A = fixture.A;
-				auto B = fixture.B;
+				auto caller = QrCsCaller<Number>(m, n, p);
+				auto A = caller.X;
+				auto B = caller.Y;
 
 				A(0,0) = 1;
 				A(1,0) = 1;
 				B(0,1) = 1;
 				B(1,1) = 1;
 
-				fixture.A = A;
-				fixture.B = B;
+				caller.X = A;
+				caller.Y = B;
 
-				auto& theta = fixture.theta;
-				auto& U1 = fixture.U1;
-				auto& U2 = fixture.U2;
-				auto& Qt = fixture.Qt;
-				auto& work = fixture.work;
-				auto& iwork = fixture.iwork;
+				auto ret = caller();
+				check_results(ret, A, B, caller);
 
-				const Integer lwork = work.size();
-				T w = -1;
-				Integer l = -1;
-
-				Integer ret = lapack::ggqrcs(
-					'Y', 'Y', 'Y', m, n, p, &w, &l,
-					&A(0, 0), m, &B(0, 0), p,
-					&theta(0),
-					&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
-					&work(0), lwork, &iwork(0) );
-
-				check_results(
-					ret, work(0), fixture.A, fixture.B,
-					w, l, theta, U1, U2, Qt, A, B);
-
-				BOOST_CHECK_EQUAL( w, 1 );
+				BOOST_CHECK_EQUAL( caller.w, 1 );
 			}
 		}
 	}
 }
 
 
-
-BOOST_AUTO_TEST_CASE_TEMPLATE(
-	ggqrcs_random_test, T, test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_random_test, Number, test_types)
 {
 	const std::size_t dimensions[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+	auto gen = std::mt19937();
 
-	for(std::size_t m : dimensions)
+	gen.discard(1u<<13);
+
+	for(auto m : dimensions)
 	{
-		for(std::size_t n : dimensions)
+		for(auto n : dimensions)
 		{
-			for(std::size_t p : dimensions)
+			for(auto p : dimensions)
 			{
-				std::mt19937_64 gen( 1u );
-				std::uniform_real_distribution<T> dist(-1, +1);
-				auto make_rand = [&gen, &dist] (T s)
+				auto dist = UniformDistribution<Number>();
+				auto make_rand = [&gen, &dist] (Number s)
 				{
 					auto rand = [&gen, &dist, s] () { return s*dist(gen); };
 					return rand;
 				};
 
 
-				for(std::size_t iter = 0; iter < 100; ++iter)
+				for(auto iter = std::size_t{0}; iter < 100; ++iter)
 				{
-					Fixture<T> fixture(m, n, p);
-
-					auto& A = fixture.A;
-					auto& B = fixture.B;
+					auto caller = QrCsCaller<Number>(m, n, p);
+					auto A = caller.X;
+					auto B = caller.Y;
 
 					std::generate(
 						A.data().begin(), A.data().end(), make_rand(1000) );
 					std::generate(
 						B.data().begin(), B.data().end(), make_rand(1) );
 
-					auto& theta = fixture.theta;
-					auto& U1 = fixture.U1;
-					auto& U2 = fixture.U2;
-					auto& Qt = fixture.Qt;
-					auto& work = fixture.work;
-					auto& iwork = fixture.iwork;
+					caller.X = A;
+					caller.Y = B;
 
-					const Integer lwork = work.size();
-					auto w = T{-1};
-					auto l = Integer{-1};
-
-					Integer ret = lapack::ggqrcs(
-						'Y', 'Y', 'Y', m, n, p, &w, &l,
-						&A(0, 0), m, &B(0, 0), p,
-						&theta(0),
-						&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
-						&work(0), lwork, &iwork(0) );
-
-					check_results(
-						ret, work(0), fixture.A, fixture.B,
-						w, l, theta, U1, U2, Qt, A, B);
-				}
-			}
-		}
-	}
-}
-
-
-
-template<typename Real>
-struct ComplexFixture
-{
-	using T = std::complex<Real>;
-
-	using Matrix = ublas::matrix<T, ublas::column_major>;
-	template<typename U> using Vector = ublas::vector<U>;
-
-	static constexpr Real NaN = std::numeric_limits<Real>::quiet_NaN();
-
-	Matrix A, B;
-	Matrix U1, U2, Qt;
-	Vector<Real> theta;
-	Vector<T> work;
-	Vector<Real> rwork;
-	Vector<Integer> iwork;
-
-
-	ComplexFixture(std::size_t m, std::size_t n, std::size_t p) :
-		A(m, n, 0),
-		B(p, n, 0),
-		U1(m, m, NaN),
-		U2(p, p, NaN),
-		Qt(n, n, NaN),
-		theta(n, NaN),
-		rwork(2*n, NaN),
-		iwork(m + n + p, -1)
-	{
-		BOOST_ASSERT( m > 0 );
-		BOOST_ASSERT( n > 0 );
-		BOOST_ASSERT( p > 0 );
-
-		// query workspace size
-		auto lwork_opt_f = T(NaN, NaN);
-		auto lrwork_opt_f = NaN;
-		auto w = NaN;
-		auto l = Integer{-1};
-		auto lwork = Integer{-1};
-		auto lrwork = Integer(2*n);
-
-		Integer ret = lapack::ggqrcs(
-			'Y', 'Y', 'Y', m, n, p, &w, &l,
-			&A(0, 0), m, &B(0, 0), p,
-			&theta(0),
-			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
-			&lwork_opt_f, lwork, &lrwork_opt_f, lrwork, &iwork(0) );
-		BOOST_ASSERT( ret == 0 );
-		BOOST_ASSERT( lwork_opt_f.real() >= 0 );
-		BOOST_ASSERT( lrwork_opt_f >= 2*n );
-
-		// resize work accordingly
-		std::size_t lwork_opt = lwork_opt_f.real();
-		work.resize( lwork_opt );
-
-		std::size_t lrwork_opt = lrwork_opt_f;
-		rwork.resize( lrwork_opt );
-
-		std::fill( work.begin(), work.end(), NaN );
-		std::fill( rwork.begin(), rwork.end(), NaN );
-	}
-};
-
-template<typename Real> constexpr Real ComplexFixture<Real>::NaN;
-
-
-BOOST_AUTO_TEST_CASE_TEMPLATE(
-	complex_ggqrcs_random_test, Real, test_types)
-{
-	using T = std::complex<Real>;
-
-	const std::size_t dimensions[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-
-	for(std::size_t m : dimensions)
-	{
-		for(std::size_t n : dimensions)
-		{
-			for(std::size_t p : dimensions)
-			{
-				using distribution_t = std::uniform_real_distribution<Real>;
-				auto gen = std::mt19937_64( 1u );
-				auto dist = distribution_t(-M_SQRT1_2, +M_SQRT1_2);
-				auto make_rand = [&gen, &dist] (T s)
-				{
-					auto rand = [&gen, &dist, s] () {
-						return s*T(dist(gen), dist(gen));
-					};
-					return rand;
-				};
-
-
-				for(std::size_t iter = 0; iter < 100; ++iter)
-				{
-					auto fixture = ComplexFixture<Real>(m, n, p);
-					auto A = fixture.A;
-					auto B = fixture.B;
-
-					std::generate(
-						A.data().begin(), A.data().end(), make_rand(1000) );
-					std::generate(
-						B.data().begin(), B.data().end(), make_rand(1) );
-
-					fixture.A = A;
-					fixture.B = B;
-
-					auto& theta = fixture.theta;
-					auto& U1 = fixture.U1;
-					auto& U2 = fixture.U2;
-					auto& Qt = fixture.Qt;
-					auto& work = fixture.work;
-					auto& rwork = fixture.rwork;
-					auto& iwork = fixture.iwork;
-
-					const Integer lwork = work.size();
-					const Integer lrwork = rwork.size();
-					auto w = Real{-1};
-					auto l = Integer{-1};
-
-					Integer ret = lapack::ggqrcs(
-						'Y', 'Y', 'Y', m, n, p, &w, &l,
-						&A(0, 0), m, &B(0, 0), p,
-						&theta(0),
-						&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
-						&work(0), lwork,
-						&rwork(0), lrwork, &iwork(0) );
-
-					check_results(
-						ret, work(0).real(), fixture.A, fixture.B,
-						w, l, theta, U1, U2, Qt, A, B);
+					auto ret = caller();
+					check_results(ret, A, B, caller);
 				}
 			}
 		}
