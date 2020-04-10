@@ -275,7 +275,7 @@ void check_results(
 	Integer ret,
 	const ublas::matrix<Number, Storage>& A,
 	const ublas::matrix<Number, Storage>& B,
-	Number w, Integer l,
+	Real w, Integer l,
 	const ublas::vector<Real> theta,
 	const ublas::matrix<Number, Storage>& U1,
 	const ublas::matrix<Number, Storage>& U2,
@@ -478,7 +478,7 @@ struct QrCsCaller<std::complex<Real>>
 	using Matrix = ublas::matrix<Number, ublas::column_major>;
 	template<typename U> using Vector = ublas::vector<U>;
 
-	Number w = not_a_number<Number>::value;
+	Real w = not_a_number<Real>::value;
 	Integer l = -1;
 	std::size_t m, n, p;
 	Matrix X, Y;
@@ -509,8 +509,8 @@ struct QrCsCaller<std::complex<Real>>
 
 		// query workspace sizes
 		auto lwork_opt_f = nan;
-		auto lrwork_opt_f = nan;
-		auto w = nan;
+		auto lrwork_opt_f = real_nan;
+		auto w = real_nan;
 		auto l = Integer{-1};
 		auto ret = lapack::ggqrcs(
 			'Y', 'Y', 'Y', m, n, p, &w, &l,

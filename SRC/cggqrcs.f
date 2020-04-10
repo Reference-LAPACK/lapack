@@ -337,7 +337,7 @@
       CHARACTER          JOBU1, JOBU2, JOBQT
       INTEGER            INFO, LDA, LDB, LDU1, LDU2, LDQT,
      $                   L, M, N, P, LWORK, LRWORK
-      COMPLEX            W
+      REAL               W
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
