@@ -360,7 +360,7 @@
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               SLAMCH, CLANGE
-      EXTERNAL           LSAME, SLAMCH, SLANGE
+      EXTERNAL           LSAME, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CLACPY, CLASCL, CGEQP3, CUNGQR, CGERQF, CUNGRQ,
