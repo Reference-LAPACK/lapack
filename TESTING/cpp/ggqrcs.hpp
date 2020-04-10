@@ -454,7 +454,9 @@ struct QrCsCaller
 		// resize workspace accordingly
 		auto lwork_opt =
 			static_cast<std::size_t>(std::real(lwork_opt_f));
-		work.resize( lwork_opt, nan );
+
+		work.resize( lwork_opt );
+		std::fill( work.begin(), work.end(), nan );
 	}
 
 
@@ -522,7 +524,9 @@ struct QrCsCaller<std::complex<Real>>
 
 		auto lwork_opt =
 			static_cast<std::size_t>(std::real(lwork_opt_f));
-		work.resize( lwork_opt, nan );
+
+		work.resize( lwork_opt );
+		std::fill( work.begin(), work.end(), nan );
 
 		ret = lapack::ggqrcs(
 			'Y', 'Y', 'Y', m, n, p, &w, &l,
@@ -535,7 +539,8 @@ struct QrCsCaller<std::complex<Real>>
 		auto lrwork_opt =
 			static_cast<std::size_t>(std::real(lrwork_opt_f));
 
-		rwork.resize( lrwork_opt, real_nan );
+		rwork.resize( lrwork_opt );
+		std::fill( rwork.begin(), rwork.end(), real_nan );
 	}
 };
 
