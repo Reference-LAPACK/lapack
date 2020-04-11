@@ -299,7 +299,7 @@
 *> \par Further Details:
 *  =====================
 *>
-*>  SGGQRCS should be significantly faster than DGGSVD and DGGSVD3 for
+*>  SGGQRCS should be significantly faster than SGGSVD and SGGSVD3 for
 *>  large matrices because the matrices A and B are reduced to a pair of
 *>  well-conditioned bidiagonal matrices instead of pairs of upper
 *>  triangular matrices. On the downside, SGGQRCS requires a much larger
@@ -418,9 +418,10 @@
      $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
      $                    WORK, -1, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
+*        The matrix (A, B) must be stored sequentially for SORCSD2BY1
          LWKOPT = Z + LWKOPT
 
-*        DGERQF stores L scalar factors for the elementary reflectors
+*        SGERQF stores L scalar factors for the elementary reflectors
          CALL SGERQF( L, N, QT, LDQT, WORK, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
 
@@ -476,7 +477,7 @@
       UNFL = SLAMCH( 'Safe Minimum' )
       TOL = MAX( M + P, N ) * MAX( GNORM, UNFL ) * ULP
 *
-*     IWORK stores the column permutations computed by DGEQP3.
+*     IWORK stores the column permutations computed by SGEQP3.
 *     Columns J where IWORK( J ) is non-zero are permuted to the front
 *     so we set the all entries to zero here.
 *
