@@ -30,8 +30,9 @@
 *       REAL               W
 *       ..
 *       .. Array Arguments ..
-*       INTEGER            IWORK( * ), RWORK( * )
-*       COMPLEX            A( LDA, * ), B( LDB, * ), THETA( * ),
+*       INTEGER            IWORK( * )
+*       REAL               THETA( * ), RWORK( * )
+*       COMPLEX            A( LDA, * ), B( LDB, * ),
 *      $                   U1( LDU1, * ), U2( LDU2, * ), QT( LDQ, * ),
 *      $                   WORK( * )
 *       ..
@@ -304,7 +305,7 @@
 *
 *> \date October 2019
 *
-*> \ingroup realGEsing
+*> \ingroup complexOTHERcomputational
 *
 *> \par Contributors:
 *  ==================
@@ -341,8 +342,8 @@
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
-      REAL               RWORK( * )
-      COMPLEX            A( LDA, * ), B( LDB, * ), THETA( * ),
+      REAL               THETA( * ), RWORK( * )
+      COMPLEX            A( LDA, * ), B( LDB, * ),
      $                   U1( LDU1, * ), U2( LDU2, * ), QT( LDQT, * ),
      $                   WORK( * )
 *     ..
@@ -355,7 +356,7 @@
       REAL               GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
       COMPLEX            ZERO, ONE, CNAN
 *     .. Local Arrays ..
-      COMPLEX            G( M + P, N ), TAU( MIN( M + P, N ) )
+      COMPLEX            G( M + P, N )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -389,7 +390,6 @@
       ELSE
          G = RESHAPE( WORK(1:Z), (/ M + P, N /) )
       END IF
-      TAU = WORK( Z + 1 )
       LDG = M + P
       ZERO = (0.0E0, 0.0E0)
       ONE = (1.0E0, 0.0E0)
@@ -429,30 +429,31 @@
          INFO = -25
       END IF
 *
-*     Compute workspace
+*     Compute optimal workspace size
 *
       IF( INFO.EQ.0 ) THEN
-         CALL CGEQP3( M+P, N, G, LDG, IWORK, TAU,
+*        CGEQP3, CUNGQR read/store L scalar factors
+         CALL CGEQP3( M+P, N, G, LDG, IWORK, WORK,
      $                WORK, -1, RWORK, INFO )
-         LWKOPT = INT( WORK( 1 ) )
+         LWKOPT = INT( WORK( 1 ) ) + L
 
-         CALL CUNGQR( M + P, L, L, G, LDG, TAU, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
+         CALL CUNGQR( M + P, L, L, G, LDG, WORK, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
 
          CALL CUNCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
      $                    G, LDG, G, LDG,
      $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
      $                    WORK, -1, RWORK, LRWORK, IWORK, INFO )
-*        Add L to LWKOPT for xGEQP3, xUNGQR because of array TAU
-         LWKOPT = MAX( LWKOPT + L, INT( WORK( 1 ) ) )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
+*        The matrix (A, B) must be stored sequentially for xUNCSD2BY1
          LWKOPT = Z + LWKOPT
          LRWKOPT = MAX( 2*N, INT( RWORK( 1 ) ) )
 
-*        DGERQF stores L scalar factors for the elementary reflectors
-         CALL CGERQF( L, N, QT, LDQT, TAU, WORK, -1, INFO )
+*        CGERQF, CUNGRQ read/store L scalar factors
+         CALL CGERQF( L, N, QT, LDQT, WORK, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
 
-         CALL CUNGRQ( N, N, L, QT, LDQT, TAU, WORK, -1, INFO )
+         CALL CUNGRQ( N, N, L, QT, LDQT, WORK, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
 
          WORK( 1 ) = CMPLX( REAL( LWKOPT ), 0.0E0 )
@@ -466,6 +467,10 @@
       IF( LQUERY ) THEN
          RETURN
       ENDIF
+*
+*     DEBUG
+*
+      IWORK( 1:M+N+P ) = -1
 *
 *     Scale matrix B such that norm(A) \approx norm(B)
 *
@@ -515,8 +520,8 @@
 *
 *     Compute the QR factorization with column pivoting GΠ = Q1 R1
 *
-      CALL CGEQP3( M + P, N, G, LDG, IWORK, TAU,
-     $             WORK( Z + 1 ), LWORK - Z, RWORK, INFO )
+      CALL CGEQP3( M + P, N, G, LDG, IWORK, WORK( Z + 1 ),
+     $             WORK( Z + L + 1 ), LWORK - Z - L, RWORK, INFO )
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF
@@ -524,24 +529,26 @@
 *     Determine the rank of G
 *
       R = 0
-      DO 20 I = 1, MIN( M + P, N )
+      DO 20 I = 1, L
          IF( ABS( G( I, I ) ).LE.TOL ) THEN
             EXIT
          END IF
          R = R + 1
    20 CONTINUE
 *
+      L = R
+*
 *     Handle rank=0 case
 *
       IF( R.EQ.0 ) THEN
          IF( WANTU1 ) THEN
-            CALL SLASET( 'A', M, M, ZERO, ONE, U1, LDU1 )
+            CALL CLASET( 'A', M, M, ZERO, ONE, U1, LDU1 )
          END IF
          IF( WANTU2 ) THEN
-            CALL SLASET( 'A', P, P, ZERO, ONE, U2, LDU2 )
+            CALL CLASET( 'A', P, P, ZERO, ONE, U2, LDU2 )
          END IF
          IF( WANTQT ) THEN
-            CALL SLASET( 'A', N, N, ZERO, ONE, QT, LDQT )
+            CALL CLASET( 'A', N, N, ZERO, ONE, QT, LDQT )
          END IF
 *
          WORK( 1 ) = CMPLX( REAL(LWKOPT), 0.0E0 )
@@ -564,15 +571,16 @@
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
 *
-      CALL CUNGQR( M + P, R, R, G, LDG, TAU,
-     $             WORK( Z + 1 ), LWORK - Z, INFO )
+      CALL CUNGQR( M + P, R, R, G, LDG, WORK( Z + 1 ),
+     $             WORK( Z + L + 1 ), LWORK - Z - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
 *     DEBUG
 *
-      TAU(:) = CNAN
+      RWORK( 1:LRWORK ) = NAN
+      WORK( Z+1:LWORK ) = CNAN
 *
 *     Compute the CS decomposition of Q1( :, 1:R )
 *
@@ -587,8 +595,8 @@
 *
 *     DEBUG
 *
-      WORK(1:LWORK) = CNAN
-      RWORK(1:LRWORK) = NAN
+      WORK( 1:LWORK ) = CNAN
+      RWORK( 1:LRWORK ) = NAN
 *
 *     Copy V^T from QT to G
 *
@@ -619,8 +627,7 @@
 *
 *     Compute the RQ decomposition of V^T R1( 1:R, : )
 *
-      TAU = WORK(1:L)
-      CALL CGERQF( R, N, QT( N-R+1, 1 ), LDQT, TAU,
+      CALL CGERQF( R, N, QT( N-R+1, 1 ), LDQT, WORK( 1 ),
      $             WORK( L + 1 ), LWORK - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
@@ -644,7 +651,7 @@
 *     Explicitly form Q^T
 *
       IF( WANTQT ) THEN
-         CALL CUNGRQ( N, N, R, QT, LDQT, TAU,
+         CALL CUNGRQ( N, N, R, QT, LDQT, WORK,
      $                WORK( L + 1 ), LWORK - L, INFO )
          IF ( INFO.NE.0 ) THEN
             RETURN
