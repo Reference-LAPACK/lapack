@@ -352,7 +352,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
-      INTEGER            I, J, Z, R, LDG, LWKOPT, LRWKOPT
+      INTEGER            I, J, LMAX, Z, LDG, LWKOPT, LRWKOPT
       REAL               GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
       COMPLEX            ZERO, ONE, CNAN
 *     .. Local Arrays ..
@@ -383,7 +383,8 @@
 *
 *     Initialize variables
 *
-      L = MIN( M + P, N )
+      L = 0
+      LMAX = MIN( M + P, N )
       Z = ( M + P ) * N
       IF ( LQUERY ) THEN
          G = 0
@@ -432,15 +433,15 @@
 *     Compute optimal workspace size
 *
       IF( INFO.EQ.0 ) THEN
-*        CGEQP3, CUNGQR read/store L scalar factors
+*        CGEQP3, CUNGQR read/store LMAX scalar factors
          CALL CGEQP3( M+P, N, G, LDG, IWORK, WORK,
      $                WORK, -1, RWORK, INFO )
-         LWKOPT = INT( WORK( 1 ) ) + L
+         LWKOPT = INT( WORK( 1 ) ) + LMAX
 
-         CALL CUNGQR( M + P, L, L, G, LDG, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
+         CALL CUNGQR( M + P, LMAX, LMAX, G, LDG, WORK, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
 
-         CALL CUNCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
+         CALL CUNCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, LMAX,
      $                    G, LDG, G, LDG,
      $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
      $                    WORK, -1, RWORK, LRWORK, IWORK, INFO )
@@ -449,12 +450,12 @@
          LWKOPT = Z + LWKOPT
          LRWKOPT = MAX( 2*N, INT( RWORK( 1 ) ) )
 
-*        CGERQF, CUNGRQ read/store L scalar factors
-         CALL CGERQF( L, N, QT, LDQT, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
+*        CGERQF, CUNGRQ read/store up to LMAX scalar factors
+         CALL CGERQF( LMAX, N, QT, LDQT, WORK, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
 
-         CALL CUNGRQ( N, N, L, QT, LDQT, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
+         CALL CUNGRQ( N, N, LMAX, QT, LDQT, WORK, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
 
          WORK( 1 ) = CMPLX( REAL( LWKOPT ), 0.0E0 )
          RWORK( 1 ) = REAL( LRWKOPT )
@@ -519,26 +520,23 @@
 *     Compute the QR factorization with column pivoting GΠ = Q1 R1
 *
       CALL CGEQP3( M + P, N, G, LDG, IWORK, WORK( Z + 1 ),
-     $             WORK( Z + L + 1 ), LWORK - Z - L, RWORK, INFO )
+     $             WORK( Z + LMAX + 1 ), LWORK - Z - LMAX, RWORK, INFO )
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
 *     Determine the rank of G
 *
-      R = 0
-      DO 20 I = 1, L
+      DO 20 I = 1, LMAX
          IF( ABS( G( I, I ) ).LE.TOL ) THEN
             EXIT
          END IF
-         R = R + 1
+         L = L + 1
    20 CONTINUE
-*
-      L = R
 *
 *     Handle rank=0 case
 *
-      IF( R.EQ.0 ) THEN
+      IF( L.EQ.0 ) THEN
          IF( WANTU1 ) THEN
             CALL CLASET( 'A', M, M, ZERO, ONE, U1, LDU1 )
          END IF
@@ -554,22 +552,22 @@
          RETURN
       END IF
 *
-*     Copy R1( 1:R, : ) into A, B and set lower triangular part to zero
+*     Copy R1( 1:L, : ) into A, B and set lower triangular part to zero
 *
-      IF( R.LE.M ) THEN
-          CALL CLACPY( 'U', R, N, G, LDG, A, LDA )
-          CALL CLASET( 'L', R - 1, N, ZERO, ZERO, A( 2, 1 ), LDA )
+      IF( L.LE.M ) THEN
+          CALL CLACPY( 'U', L, N, G, LDG, A, LDA )
+          CALL CLASET( 'L', L - 1, N, ZERO, ZERO, A( 2, 1 ), LDA )
       ELSE
           CALL CLACPY( 'U', M, N, G, LDG, A, LDA )
-          CALL CLACPY( 'U', R - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
+          CALL CLACPY( 'U', L - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
 *
           CALL CLASET( 'L', M - 1, N, ZERO, ZERO, A( 2, 1 ), LDA )
-          CALL CLASET( 'L', R-M-1, N, ZERO, ZERO, B( 2, 1 ), LDB )
+          CALL CLASET( 'L', L-M-1, N, ZERO, ZERO, B( 2, 1 ), LDB )
       END IF
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
 *
-      CALL CUNGQR( M + P, R, R, G, LDG, WORK( Z + 1 ),
+      CALL CUNGQR( M + P, L, L, G, LDG, WORK( Z + 1 ),
      $             WORK( Z + L + 1 ), LWORK - Z - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
@@ -580,9 +578,9 @@
       RWORK( 1:LRWORK ) = NAN
       WORK( Z+1:LWORK ) = CNAN
 *
-*     Compute the CS decomposition of Q1( :, 1:R )
+*     Compute the CS decomposition of Q1( :, 1:L )
 *
-      CALL CUNCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, R,
+      CALL CUNCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
      $                 G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
      $                 U2, LDU2, U1, LDU1, QT, LDQT,
      $                 WORK( Z + 1 ), LWORK - Z,
@@ -598,23 +596,23 @@
 *
 *     Copy V^T from QT to G
 *
-      CALL CLACPY( 'A', R, R, QT, LDQT, G, LDG )
+      CALL CLACPY( 'A', L, L, QT, LDQT, G, LDG )
 *
 *     DEBUG
 *
       CALL CLASET( 'A', N, N, CNAN, CNAN, QT, LDQT )
 *
-*     Compute V^T R1( 1:R, : ) in the last R rows of QT
+*     Compute V^T R1( 1:L, : ) in the last L rows of QT
 *
-      IF ( R.LE.M ) THEN
-         CALL CGEMM( 'N', 'N', R, N, R, ONE, G, LDG,
-     $               A, LDA, ZERO, QT( N-R+1, 1 ), LDQT )
+      IF ( L.LE.M ) THEN
+         CALL CGEMM( 'N', 'N', L, N, L, ONE, G, LDG,
+     $               A, LDA, ZERO, QT( N-L+1, 1 ), LDQT )
       ELSE
-         CALL CGEMM( 'N', 'N', R, N, M, ONE, G( 1, 1 ), LDG,
-     $               A, LDA, ZERO, QT( N-R+1, 1 ), LDQT )
-         CALL CGEMM( 'N', 'N', R, N - M, R - M, ONE,
+         CALL CGEMM( 'N', 'N', L, N, M, ONE, G( 1, 1 ), LDG,
+     $               A, LDA, ZERO, QT( N-L+1, 1 ), LDQT )
+         CALL CGEMM( 'N', 'N', L, N - M, L - M, ONE,
      $               G( 1, M + 1 ), LDG, B, LDB,
-     $               ONE, QT( N-R+1, M+1 ), LDQT )
+     $               ONE, QT( N-L+1, M+1 ), LDQT )
       END IF
 *
 *     DEBUG
@@ -623,33 +621,33 @@
       CALL CLASET( 'A', P, N, CNAN, CNAN, B, LDB )
       WORK(1:LWORK) = CNAN
 *
-*     Compute the RQ decomposition of V^T R1( 1:R, : )
+*     Compute the RQ decomposition of V^T R1( 1:L, : )
 *
-      CALL CGERQF( R, N, QT( N-R+1, 1 ), LDQT, WORK( 1 ),
+      CALL CGERQF( L, N, QT( N-L+1, 1 ), LDQT, WORK( 1 ),
      $             WORK( L + 1 ), LWORK - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
-*     Copy matrix R from QT( N-R+1:N, N-R+1:N ) to A, B
+*     Copy matrix L from QT( N-L+1:N, N-L+1:N ) to A, B
 *
-      IF ( R.LE.M ) THEN
-         CALL CLACPY( 'U', R, R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
+      IF ( L.LE.M ) THEN
+         CALL CLACPY( 'U', L, L, QT( N-L+1, N-L+1 ), LDQT, A, LDA )
       ELSE
-         CALL CLACPY( 'U', M,     R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
-         CALL CLACPY( 'U', R - M, R - M, QT( N-R+M+1, N-R+M+1 ), LDQT,
+         CALL CLACPY( 'U', M,     L, QT( N-L+1, N-L+1 ), LDQT, A, LDA )
+         CALL CLACPY( 'U', L - M, L - M, QT( N-L+M+1, N-L+M+1 ), LDQT,
      $                B, LDB )
       END IF
 *
 *     DEBUG
 *
-      CALL CLASET( 'U', R, R, CNAN, CNAN, QT( 1, N-R+1 ), LDQT )
+      CALL CLASET( 'U', L, L, CNAN, CNAN, QT( 1, N-L+1 ), LDQT )
       WORK( L+1:LWORK ) = CNAN
 *
 *     Explicitly form Q^T
 *
       IF( WANTQT ) THEN
-         CALL CUNGRQ( N, N, R, QT, LDQT, WORK,
+         CALL CUNGRQ( N, N, L, QT, LDQT, WORK,
      $                WORK( L + 1 ), LWORK - L, INFO )
          IF ( INFO.NE.0 ) THEN
             RETURN
