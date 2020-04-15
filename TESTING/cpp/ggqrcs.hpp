@@ -275,7 +275,7 @@ void check_results(
 	Integer ret,
 	const ublas::matrix<Number, Storage>& A,
 	const ublas::matrix<Number, Storage>& B,
-	Real w, Integer l,
+	Real w, Integer rank,
 	const ublas::vector<Real> theta,
 	const ublas::matrix<Number, Storage>& U1,
 	const ublas::matrix<Number, Storage>& U2,
@@ -302,10 +302,10 @@ void check_results(
 	BOOST_REQUIRE( std::isfinite(w) );
 	BOOST_REQUIRE_GT( w, 0 );
 
-	BOOST_CHECK_GE( l, 0 );
-	BOOST_CHECK_LE( l, std::min(m+p, n) );
+	BOOST_CHECK_GE( rank, 0 );
+	BOOST_CHECK_LE( rank, std::min(m+p, n) );
 
-	auto r = static_cast<std::size_t>(l);
+	auto r = static_cast<std::size_t>(rank);
 	auto k = std::min( {m, p, r, m + p - r} );
 
 	BOOST_REQUIRE_GE(theta.size(), k);
@@ -413,7 +413,7 @@ struct QrCsCaller
 	template<typename U> using Vector = ublas::vector<U>;
 
 	Real w = not_a_number<Real>::value;
-	Integer l = -1;
+	Integer rank = -1;
 	std::size_t m, n, p;
 	Matrix X, Y;
 	Matrix U1, U2, Qt;
@@ -442,9 +442,9 @@ struct QrCsCaller
 		// query workspace size
 		auto lwork_opt_f = nan;
 		auto w = nan;
-		auto l = Integer{-1};
+		auto rank = Integer{-1};
 		auto ret = lapack::ggqrcs(
-			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			'Y', 'Y', 'Y', m, n, p, &w, &rank,
 			&X(0, 0), m, &Y(0, 0), p,
 			&theta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
@@ -463,7 +463,7 @@ struct QrCsCaller
 	Integer operator() ()
 	{
 		return lapack::ggqrcs(
-			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			'Y', 'Y', 'Y', m, n, p, &w, &rank,
 			&X(0, 0), m, &Y(0, 0), p,
 			&theta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
@@ -481,7 +481,7 @@ struct QrCsCaller<std::complex<Real>>
 	template<typename U> using Vector = ublas::vector<U>;
 
 	Real w = not_a_number<Real>::value;
-	Integer l = -1;
+	Integer rank = -1;
 	std::size_t m, n, p;
 	Matrix X, Y;
 	Matrix U1, U2, Qt;
@@ -513,9 +513,9 @@ struct QrCsCaller<std::complex<Real>>
 		auto lwork_opt_f = nan;
 		auto lrwork_opt_f = real_nan;
 		auto w = real_nan;
-		auto l = Integer{-1};
+		auto rank = Integer{-1};
 		auto ret = lapack::ggqrcs(
-			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			'Y', 'Y', 'Y', m, n, p, &w, &rank,
 			&X(0, 0), m, &Y(0, 0), p,
 			&theta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
@@ -529,7 +529,7 @@ struct QrCsCaller<std::complex<Real>>
 		std::fill( work.begin(), work.end(), nan );
 
 		ret = lapack::ggqrcs(
-			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			'Y', 'Y', 'Y', m, n, p, &w, &rank,
 			&X(0, 0), m, &Y(0, 0), p,
 			&theta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
@@ -547,7 +547,7 @@ struct QrCsCaller<std::complex<Real>>
 	Integer operator() ()
 	{
 		return lapack::ggqrcs(
-			'Y', 'Y', 'Y', m, n, p, &w, &l,
+			'Y', 'Y', 'Y', m, n, p, &w, &rank,
 			&X(0, 0), m, &Y(0, 0), p,
 			&theta(0),
 			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
@@ -568,7 +568,7 @@ void check_results(
 	check_results(
 		ret,
 		A, B,
-		caller.w, caller.l,
+		caller.w, caller.rank,
 		caller.theta,
 		caller.U1, caller.U2, caller.Qt,
 		caller.X, caller.Y
@@ -598,7 +598,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_simple_test, Number, test_types)
 	check_results(ret, A, B, caller);
 
 	BOOST_CHECK_EQUAL( caller.w, 1 );
-	BOOST_CHECK_EQUAL( caller.l, 2 );
+	BOOST_CHECK_EQUAL( caller.rank, 2 );
 }
 
 
@@ -615,7 +615,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_zero_test, Number, test_types)
 	check_results(ret, A, B, caller);
 
 	BOOST_CHECK_EQUAL( caller.w, 1 );
-	BOOST_CHECK_EQUAL( caller.l, 0 );
+	BOOST_CHECK_EQUAL( caller.rank, 0 );
 }
 
 
