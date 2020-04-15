@@ -334,7 +334,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
-      INTEGER            I, J, Z, R, LDG, LWKOPT
+      INTEGER            I, J, LMAX, Z, LDG, LWKOPT
       DOUBLE PRECISION   GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
 *     .. Local Arrays ..
       DOUBLE PRECISION   G( M + P, N )
@@ -363,7 +363,8 @@
 *
 *     Initialize variables
 *
-      L = MIN( M + P, N )
+      L = 0
+      LMAX = MIN( M + P, N )
       Z = ( M + P ) * N
       IF ( LQUERY ) THEN
          G = 0
@@ -410,22 +411,22 @@
          CALL DGEQP3( M+P, N, G, LDG, IWORK, THETA, WORK, -1, INFO )
          LWKOPT = INT( WORK( 1 ) )
 
-         CALL DORGQR( M + P, L, L, G, LDG, THETA, WORK, -1, INFO )
+         CALL DORGQR( M + P, LMAX, LMAX, G, LDG, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
-         CALL DORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
+         CALL DORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, LMAX,
      $                    G, LDG, G, LDG,
      $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
      $                    WORK, -1, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
          LWKOPT = Z + LWKOPT
 
-*        DGERQF stores L scalar factors for the elementary reflectors
-         CALL DGERQF( L, N, QT, LDQT, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
+*        DGERQF stores LMAX scalar factors for the elementary reflectors
+         CALL DGERQF( LMAX, N, QT, LDQT, WORK, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
 
-         CALL DORGRQ( N, N, L, QT, LDQT, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
+         CALL DORGRQ( N, N, LMAX, QT, LDQT, WORK, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
 
          WORK( 1 ) = DBLE( LWKOPT )
       END IF
@@ -492,15 +493,12 @@
 *
 *     Determine the rank of G
 *
-      R = 0
       DO 20 I = 1, MIN( M + P, N )
          IF( ABS( G( I, I ) ).LE.TOL ) THEN
             EXIT
          END IF
-         R = R + 1
+         L = L + 1
    20 CONTINUE
-*
-      L = R
 *
 *     Handle rank=0 case
 *
@@ -519,22 +517,22 @@
          RETURN
       END IF
 *
-*     Copy R1( 1:R, : ) into A, B and set lower triangular part to zero
+*     Copy R1( 1:L, : ) into A, B and set lower triangular part to zero
 *
-      IF( R.LE.M ) THEN
-          CALL DLACPY( 'U', R, N, G, LDG, A, LDA )
-          CALL DLASET( 'L', R - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
+      IF( L.LE.M ) THEN
+          CALL DLACPY( 'U', L, N, G, LDG, A, LDA )
+          CALL DLASET( 'L', L - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
       ELSE
           CALL DLACPY( 'U', M, N, G, LDG, A, LDA )
-          CALL DLACPY( 'U', R - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
+          CALL DLACPY( 'U', L - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
 *
           CALL DLASET( 'L', M - 1, N, 0.0D0, 0.0D0, A( 2, 1 ), LDA )
-          CALL DLASET( 'L', R-M-1, N, 0.0D0, 0.0D0, B( 2, 1 ), LDB )
+          CALL DLASET( 'L', L-M-1, N, 0.0D0, 0.0D0, B( 2, 1 ), LDB )
       END IF
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
 *
-      CALL DORGQR( M + P, R, R, G, LDG, THETA,
+      CALL DORGQR( M + P, L, L, G, LDG, THETA,
      $             WORK( Z + 1 ), LWORK - Z, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
@@ -544,9 +542,9 @@
 *
       THETA(1:L) = NAN
 *
-*     Compute the CS decomposition of Q1( :, 1:R )
+*     Compute the CS decomposition of Q1( :, 1:L )
 *
-      CALL DORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, R,
+      CALL DORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
      $                 G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
      $                 U2, LDU2, U1, LDU1, QT, LDQT,
      $                 WORK( Z + 1 ), LWORK - Z, IWORK( N + 1 ), INFO )
@@ -560,23 +558,23 @@
 *
 *     Copy V^T from QT to G
 *
-      CALL DLACPY( 'A', R, R, QT, LDQT, G, LDG )
+      CALL DLACPY( 'A', L, L, QT, LDQT, G, LDG )
 *
 *     DEBUG
 *
       CALL DLASET( 'A', N, N, NAN, NAN, QT, LDQT )
 *
-*     Compute V^T R1( 1:R, : ) in the last R rows of QT
+*     Compute V^T R1( 1:L, : ) in the last L rows of QT
 *
-      IF ( R.LE.M ) THEN
-         CALL DGEMM( 'N', 'N', R, N, R, 1.0D0, G, LDG,
-     $               A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
+      IF ( L.LE.M ) THEN
+         CALL DGEMM( 'N', 'N', L, N, L, 1.0D0, G, LDG,
+     $               A, LDA, 0.0D0, QT( N-L+1, 1 ), LDQT )
       ELSE
-         CALL DGEMM( 'N', 'N', R, N, M, 1.0D0, G( 1, 1 ), LDG,
-     $               A, LDA, 0.0D0, QT( N-R+1, 1 ), LDQT )
-         CALL DGEMM( 'N', 'N', R, N - M, R - M, 1.0D0,
+         CALL DGEMM( 'N', 'N', L, N, M, 1.0D0, G( 1, 1 ), LDG,
+     $               A, LDA, 0.0D0, QT( N-L+1, 1 ), LDQT )
+         CALL DGEMM( 'N', 'N', L, N - M, L - M, 1.0D0,
      $               G( 1, M + 1 ), LDG, B, LDB,
-     $               1.0D0, QT( N-R+1, M+1 ), LDQT )
+     $               1.0D0, QT( N-L+1, M+1 ), LDQT )
       END IF
 *
 *     DEBUG
@@ -585,33 +583,33 @@
       CALL DLASET( 'A', P, N, NAN, NAN, B, LDB )
       WORK(1:LWORK) = NAN
 *
-*     Compute the RQ decomposition of V^T R1( 1:R, : )
+*     Compute the RQ decomposition of V^T R1( 1:L, : )
 *
-      CALL DGERQF( R, N, QT( N-R+1, 1 ), LDQT, WORK,
+      CALL DGERQF( L, N, QT( N-L+1, 1 ), LDQT, WORK,
      $             WORK( L + 1 ), LWORK - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
-*     Copy matrix R from QT( N-R+1:N, N-R+1:N ) to A, B
+*     Copy matrix L from QT( N-L+1:N, N-L+1:N ) to A, B
 *
-      IF ( R.LE.M ) THEN
-         CALL DLACPY( 'U', R, R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
+      IF ( L.LE.M ) THEN
+         CALL DLACPY( 'U', L, L, QT( N-L+1, N-L+1 ), LDQT, A, LDA )
       ELSE
-         CALL DLACPY( 'U', M,     R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
-         CALL DLACPY( 'U', R - M, R - M, QT( N-R+M+1, N-R+M+1 ), LDQT,
+         CALL DLACPY( 'U', M,     L, QT( N-L+1, N-L+1 ), LDQT, A, LDA )
+         CALL DLACPY( 'U', L - M, L - M, QT( N-L+M+1, N-L+M+1 ), LDQT,
      $                B, LDB )
       END IF
 *
 *     DEBUG
 *
-      CALL DLASET( 'U', R, R, NAN, NAN, QT( 1, N-R+1 ), LDQT )
+      CALL DLASET( 'U', L, L, NAN, NAN, QT( 1, N-L+1 ), LDQT )
       WORK( L+1:LWORK ) = NAN
 *
 *     Explicitly form Q^T
 *
       IF( WANTQT ) THEN
-         CALL DORGRQ( N, N, R, QT, LDQT, WORK,
+         CALL DORGRQ( N, N, L, QT, LDQT, WORK,
      $                WORK( L + 1 ), LWORK - L, INFO )
          IF ( INFO.NE.0 ) THEN
             RETURN

@@ -334,7 +334,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
-      INTEGER            I, J, Z, R, LDG, LWKOPT
+      INTEGER            I, J, LMAX, Z, LDG, LWKOPT
       REAL               GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
 *     .. Local Arrays ..
       REAL               G( M + P, N )
@@ -363,7 +363,8 @@
 *
 *     Initialize variables
 *
-      L = MIN( M + P, N )
+      L = 0
+      LMAX = MIN( M + P, N )
       Z = ( M + P ) * N
       IF ( LQUERY ) THEN
          G = 0
@@ -410,10 +411,10 @@
          CALL SGEQP3( M+P, N, G, LDG, IWORK, THETA, WORK, -1, INFO )
          LWKOPT = INT( WORK( 1 ) )
 
-         CALL SORGQR( M + P, L, L, G, LDG, THETA, WORK, -1, INFO )
+         CALL SORGQR( M + P, LMAX, LMAX, G, LDG, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
-         CALL SORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
+         CALL SORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, LMAX,
      $                    G, LDG, G, LDG,
      $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
      $                    WORK, -1, IWORK, INFO )
@@ -421,12 +422,12 @@
 *        The matrix (A, B) must be stored sequentially for SORCSD2BY1
          LWKOPT = Z + LWKOPT
 
-*        SGERQF stores L scalar factors for the elementary reflectors
-         CALL SGERQF( L, N, QT, LDQT, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
+*        SGERQF stores LMAX scalar factors for the elementary reflectors
+         CALL SGERQF( LMAX, N, QT, LDQT, WORK, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
 
-         CALL SORGRQ( N, N, L, QT, LDQT, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + L )
+         CALL SORGRQ( N, N, LMAX, QT, LDQT, WORK, WORK, -1, INFO )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
 
          WORK( 1 ) = REAL( LWKOPT )
       END IF
@@ -493,15 +494,12 @@
 *
 *     Determine the rank of G
 *
-      R = 0
       DO 20 I = 1, MIN( M + P, N )
          IF( ABS( G( I, I ) ).LE.TOL ) THEN
             EXIT
          END IF
-         R = R + 1
+         L = L + 1
    20 CONTINUE
-*
-      L = R
 *
 *     Handle rank=0 case
 *
@@ -520,24 +518,28 @@
          RETURN
       END IF
 *
-*     Copy R1( 1:R, : ) into A, B and set lower triangular part to zero
+*     Copy R1( 1:L, : ) into A, B and set lower triangular part to zero
 *
-      IF( R.LE.M ) THEN
-          CALL SLACPY( 'U', R, N, G, LDG, A, LDA )
+      IF( L.LE.M ) THEN
+          CALL SLACPY( 'U', L, N, G, LDG, A, LDA )
           IF( M.GT.1 ) THEN
-             CALL SLASET( 'L', R - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
+             CALL SLASET( 'L', L - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
           END IF
       ELSE
           CALL SLACPY( 'U', M, N, G, LDG, A, LDA )
-          CALL SLACPY( 'U', R - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
+          CALL SLACPY( 'U', L - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
 *
-          CALL SLASET( 'L', M - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
-          CALL SLASET( 'L', R-M-1, N, 0.0E0, 0.0E0, B( 2, 1 ), LDB )
+          IF( M.GT.1 ) THEN
+              CALL SLASET( 'L', M - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
+          END IF
+          IF( P.GT.1 ) THEN
+              CALL SLASET( 'L', L-M-1, N, 0.0E0, 0.0E0, B( 2, 1 ), LDB )
+          END IF
       END IF
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
 *
-      CALL SORGQR( M + P, R, R, G, LDG, THETA,
+      CALL SORGQR( M + P, L, L, G, LDG, THETA,
      $             WORK( Z + 1 ), LWORK - Z, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
@@ -547,9 +549,9 @@
 *
       THETA(1:N) = NAN
 *
-*     Compute the CS decomposition of Q1( :, 1:R )
+*     Compute the CS decomposition of Q1( :, 1:L )
 *
-      CALL SORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, R,
+      CALL SORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
      $                 G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
      $                 U2, LDU2, U1, LDU1, QT, LDQT,
      $                 WORK( Z + 1 ), LWORK - Z, IWORK( N + 1 ), INFO )
@@ -563,23 +565,23 @@
 *
 *     Copy V^T from QT to G
 *
-      CALL SLACPY( 'A', R, R, QT, LDQT, G, LDG )
+      CALL SLACPY( 'A', L, L, QT, LDQT, G, LDG )
 *
 *     DEBUG
 *
       CALL SLASET( 'A', N, N, NAN, NAN, QT, LDQT )
 *
-*     Compute V^T R1( 1:R, : ) in the last R rows of QT
+*     Compute V^T R1( 1:L, : ) in the last L rows of QT
 *
-      IF ( R.LE.M ) THEN
-         CALL SGEMM( 'N', 'N', R, N, R, 1.0E0, G, LDG,
-     $               A, LDA, 0.0E0, QT( N-R+1, 1 ), LDQT )
+      IF ( L.LE.M ) THEN
+         CALL SGEMM( 'N', 'N', L, N, L, 1.0E0, G, LDG,
+     $               A, LDA, 0.0E0, QT( N-L+1, 1 ), LDQT )
       ELSE
-         CALL SGEMM( 'N', 'N', R, N, M, 1.0E0, G( 1, 1 ), LDG,
-     $               A, LDA, 0.0E0, QT( N-R+1, 1 ), LDQT )
-         CALL SGEMM( 'N', 'N', R, N - M, R - M, 1.0E0,
+         CALL SGEMM( 'N', 'N', L, N, M, 1.0E0, G( 1, 1 ), LDG,
+     $               A, LDA, 0.0E0, QT( N-L+1, 1 ), LDQT )
+         CALL SGEMM( 'N', 'N', L, N - M, L - M, 1.0E0,
      $               G( 1, M + 1 ), LDG, B, LDB,
-     $               1.0E0, QT( N-R+1, M+1 ), LDQT )
+     $               1.0E0, QT( N-L+1, M+1 ), LDQT )
       END IF
 *
 *     DEBUG
@@ -588,33 +590,33 @@
       CALL SLASET( 'A', P, N, NAN, NAN, B, LDB )
       WORK(1:LWORK) = NAN
 *
-*     Compute the RQ decomposition of V^T R1( 1:R, : )
+*     Compute the RQ decomposition of V^T R1( 1:L, : )
 *
-      CALL SGERQF( R, N, QT( N-R+1, 1 ), LDQT, WORK,
+      CALL SGERQF( L, N, QT( N-L+1, 1 ), LDQT, WORK,
      $             WORK( L + 1 ), LWORK - L, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
-*     Copy matrix R from QT( N-R+1:N, N-R+1:N ) to A, B
+*     Copy matrix L from QT( N-L+1:N, N-L+1:N ) to A, B
 *
-      IF ( R.LE.M ) THEN
-         CALL SLACPY( 'U', R, R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
+      IF ( L.LE.M ) THEN
+         CALL SLACPY( 'U', L, L, QT( N-L+1, N-L+1 ), LDQT, A, LDA )
       ELSE
-         CALL SLACPY( 'U', M,     R, QT( N-R+1, N-R+1 ), LDQT, A, LDA )
-         CALL SLACPY( 'U', R - M, R - M, QT( N-R+M+1, N-R+M+1 ), LDQT,
+         CALL SLACPY( 'U', M,     L, QT( N-L+1, N-L+1 ), LDQT, A, LDA )
+         CALL SLACPY( 'U', L - M, L - M, QT( N-L+M+1, N-L+M+1 ), LDQT,
      $                B, LDB )
       END IF
 *
 *     DEBUG
 *
-      CALL SLASET( 'U', R, R, NAN, NAN, QT( 1, N-R+1 ), LDQT )
+      CALL SLASET( 'U', L, L, NAN, NAN, QT( 1, N-L+1 ), LDQT )
       WORK( L+1:LWORK ) = NAN
 *
 *     Explicitly form Q^T
 *
       IF( WANTQT ) THEN
-         CALL SORGRQ( N, N, R, QT, LDQT, WORK,
+         CALL SORGRQ( N, N, L, QT, LDQT, WORK,
      $                WORK( L + 1 ), LWORK - L, INFO )
          IF ( INFO.NE.0 ) THEN
             RETURN
