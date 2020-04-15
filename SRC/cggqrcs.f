@@ -352,7 +352,8 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
-      INTEGER            I, J, LMAX, Z, LDG, LWKOPT, LRWKOPT
+      INTEGER            I, J, LMAX, Z, LDG, LWKOPT, LRWKOPT,
+     $                   LRWORK2BY1, K2BY1
       REAL               GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
       COMPLEX            ZERO, ONE, CNAN
 *     .. Local Arrays ..
@@ -448,7 +449,11 @@
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *        The matrix (A, B) must be stored sequentially for xUNCSD2BY1
          LWKOPT = Z + LWKOPT
-         LRWKOPT = MAX( 2*N, INT( RWORK( 1 ) ) )
+*        Adjust CUNCSD2BY1 LRWORK for case with maximum memory
+*        consumption
+         K2BY1 = MIN( m, p, n, MAX( 0, M+P-N) )
+         LRWORK2BY1 = INT( RWORK(1) ) - 16 * K2BY1 + 16 * MIN( M,P,N )
+         LRWKOPT = MAX( 2*N, LRWORK2BY1 )
 
 *        CGERQF, CUNGRQ read/store up to LMAX scalar factors
          CALL CGERQF( LMAX, N, QT, LDQT, WORK, WORK, -1, INFO )
