@@ -514,9 +514,7 @@
 *     Columns J where IWORK( J ) is non-zero are permuted to the front
 *     so we set the all entries to zero here.
 *
-      DO 10 J = 1, N
-         IWORK( J ) = 0
-   10 CONTINUE
+      IWORK( 1:N ) = 0
 *
 *     Compute the QR factorization with column pivoting GΠ = Q1 R1
 *
