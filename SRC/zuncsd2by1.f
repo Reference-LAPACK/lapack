@@ -511,6 +511,9 @@
          IF( LWORK .LT. LWORKMIN .AND. .NOT.LQUERY ) THEN
             INFO = -19
          END IF
+         IF( LRWORK .LT. LRWORKMIN .AND. .NOT.LQUERY ) THEN
+            INFO = -21
+         END IF
       END IF
       IF( INFO .NE. 0 ) THEN
          CALL XERBLA( 'ZUNCSD2BY1', -INFO )
@@ -564,8 +567,8 @@
      $                RWORK(IPHI), U1, LDU1, U2, LDU2, V1T, LDV1T, CDUM,
      $                1, RWORK(IB11D), RWORK(IB11E), RWORK(IB12D),
      $                RWORK(IB12E), RWORK(IB21D), RWORK(IB21E),
-     $                RWORK(IB22D), RWORK(IB22E), RWORK(IBBCSD), LBBCSD,
-     $                CHILDINFO )
+     $                RWORK(IB22D), RWORK(IB22E), RWORK(IBBCSD),
+     $                LRWORK-IBBCSD+1, CHILDINFO )
 *
 *        Permute rows and columns to place zero submatrices in
 *        preferred positions
