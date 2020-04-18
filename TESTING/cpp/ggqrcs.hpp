@@ -28,12 +28,13 @@
 #ifndef LAPACK_TESTS_GGQRCS_HPP
 #define LAPACK_TESTS_GGQRCS_HPP
 
+#include <boost/numeric/ublas/banded.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+#include <boost/numeric/ublas/triangular.hpp>
+#include <boost/numeric/ublas/vector.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/banded.hpp>
-#include <boost/numeric/ublas/matrix_proxy.hpp>
-#include <boost/numeric/ublas/vector.hpp>
 
 #include <lapack.hpp>
 
@@ -47,7 +48,8 @@
 
 
 namespace ublas = boost::numeric::ublas;
-typedef lapack::integer_t Integer;
+
+using Integer = lapack::integer_t;
 
 
 template<typename Number>
@@ -80,13 +82,18 @@ bool finite_p(Number x)
  * * `real_from<float>::type == float`
  * * `real_from<std::complex<float>>::type == float`
  */
-template<typename T>
-struct real_from
-{
-	using type = typename std::conditional<
-		std::is_fundamental<T>::value, T, typename T::value_type
-	>::type;
-};
+template<typename T> struct real_from {};
+
+template<> struct real_from<float> { using type = float; };
+template<> struct real_from<double> { using type = double; };
+template<typename Real>
+struct real_from<std::complex<Real>> { using type = Real; };
+
+static_assert(std::is_same<typename real_from<float>::type, float>::value, "");
+static_assert(std::is_same<typename real_from<double>::type,double>::value, "");
+static_assert(
+	std::is_same<typename real_from<std::complex<float>>::type,float>::value, ""
+);
 
 
 
@@ -196,22 +203,19 @@ ublas::matrix<T, Storage> build_R(
 
 template<
 	typename Number,
-	class Storage,
+	class Storage = ublas::column_major,
 	typename Real = typename real_from<Number>::type
 >
 std::pair< ublas::matrix<Number, Storage>, ublas::matrix<Number, Storage> >
-build_diagonals(
-	std::size_t r,
-	const ublas::matrix<Number, Storage>& A,
-	const ublas::matrix<Number, Storage>& B,
+build_diagonals_like(
+	Number,
+	std::size_t m, std::size_t p, std::size_t r,
 	const ublas::vector<Real>& theta)
 {
 	using Matrix = ublas::matrix<Number, Storage>;
 	using IdentityMatrix = ublas::identity_matrix<Number>;
 	using MatrixRange = ublas::matrix_range<Matrix>;
 
-	auto m = A.size1();
-	auto p = B.size1();
 	auto k = std::min( {m, p, r, m + p - r} );
 	auto k1 = (p < r) ? r - p : std::size_t{0};
 	auto k2 = (m < r) ? r - m : std::size_t{0};
@@ -262,6 +266,102 @@ ublas::matrix<Number, Storage> reconstruct_matrix(
 	auto A = Matrix(ublas::prod(U_D_R, Qt));
 
 	return A;
+}
+
+
+
+/**
+ * @return The Frobenius norm of U* U - I
+ */
+template<
+	typename Number,
+	class Storage,
+	typename Real = typename real_from<Number>::type
+>
+Real measure_unity(const ublas::matrix<Number, Storage>& U)
+{
+	BOOST_VERIFY( U.size1() >= U.size2() );
+
+	auto n = U.size2();
+	auto id = ublas::identity_matrix<Number>(n);
+	auto delta = ublas::norm_frobenius(ublas::prod(ublas::herm(U), U) - id);
+	return delta;
+}
+
+
+using real_test_types = boost::mpl::list<float,double>;
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(
+	test_measure_unity_simple_real, Real, real_test_types)
+{
+	for(auto m = std::size_t{0}; m < 5; ++m)
+	{
+		for(auto n = std::size_t{0}; n < m; ++n)
+		{
+			auto A = ublas::matrix<Real>(m, n);
+
+			std::fill( A.data().begin(), A.data().end(), Real{0} );
+
+			for(auto i = std::size_t{0}; i < n; ++i)
+			{
+				A(i,i) = std::pow(Real{-1}, Real(i));
+			}
+
+			BOOST_CHECK_EQUAL( 0, measure_unity(A) );
+		}
+	}
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(
+	test_measure_unity_real, Real, real_test_types)
+{
+	auto A = ublas::matrix<Real, ublas::column_major>(4, 2);
+
+	// column-major order is required for this statement to work
+	std::iota( A.data().begin(), A.data().end(), 1u );
+
+	auto I = ublas::identity_matrix<Real>(2);
+	auto AT_A = ublas::matrix<Real>(2, 2);
+
+	AT_A(0,0) = 30; AT_A(0,1) = 70;
+	AT_A(1,0) = 70; AT_A(1,1) =174;
+
+	auto expected_result = ublas::norm_frobenius(AT_A - I);
+
+	BOOST_CHECK_EQUAL( expected_result, measure_unity(A) );
+}
+
+
+/**
+ * This function checks if a matrix A might be considered orthogonal or unitary,
+ * respectively, by comparing the Frobenius norm of `A*A - I` to a cut-off
+ * value.
+ *
+ * The cut-off value is based on Inequality (19.13), Equation (3.8) in Higham:
+ * "Accuracy and Stability of Numerical Algorithms".
+ */
+template<
+	typename Number,
+	class Storage,
+	typename Real = typename real_from<Number>::type
+>
+bool is_almost_unitary(
+	const ublas::matrix<Number, Storage>& U, Real multiplier = 2)
+{
+	BOOST_VERIFY( multiplier >= 1 );
+
+	constexpr auto eps = std::numeric_limits<Real>::epsilon();
+	auto m = U.size1();
+	auto n = U.size2();
+	auto p = std::min(m, n);
+
+	if(p == 0)
+		return true;
+
+	auto r = measure_unity(U);
+	auto tol = std::sqrt(p) * m * n * eps;
+
+	return r <= multiplier * tol;
 }
 
 
@@ -351,17 +451,6 @@ void check_results(
 	// check that unitary matrices are indeed unitary
 	// The bound is based on Inequality (19.13), Equation (3.8) in
 	// Higham: "Accuracy and Stability of Numerical Algorithms".
-	// Note that only Qt is the orthogonal factor of a QR decomposition.
-	auto measure_unity = [] (const auto& U) -> double
-	{
-		BOOST_VERIFY( U.size1() == U.size2() );
-
-		auto n = U.size1();
-		auto id = ublas::identity_matrix<Number>(n);
-		auto delta = ublas::norm_frobenius(ublas::prod(ublas::herm(U), U) - id);
-		return delta;
-	};
-
 	BOOST_CHECK_LE( measure_unity(U1), 2 * std::sqrt(m) * (m+p) * r * eps );
 	BOOST_CHECK_LE( measure_unity(U2), 2 * std::sqrt(p) * (m+p) * r * eps );
 	BOOST_CHECK_LE( measure_unity(Qt), 2 * std::sqrt(n) * n * r * eps );
@@ -381,7 +470,7 @@ void check_results(
 
 
 	// reconstruct A, B from GSVD
-	auto ds = build_diagonals(r, A, B, theta);
+	auto ds = build_diagonals_like(Number{}, m, p, r, theta);
 	auto& D1 = ds.first;
 	auto& D2 = ds.second;
 
@@ -395,9 +484,9 @@ void check_results(
 	// factorization given in Theorem 19.4, Equation (3.8) in
 	// Higham: "Accuracy and Stability of Numerical Algorithms".
 	BOOST_CHECK_LE(
-		ublas::norm_frobenius(A - almost_A), 4 * (m+p) * n * frob_A * eps );
+		ublas::norm_frobenius(A - almost_A), 10 * (m+p) * n * frob_A * eps );
 	BOOST_CHECK_LE(
-		ublas::norm_frobenius(w*B - almost_B), 8*w * (m+p) * n * frob_B * eps );
+		ublas::norm_frobenius(w*B - almost_B), 10*w * (m+p) * n * frob_B * eps );
 }
 
 
@@ -577,8 +666,6 @@ void check_results(
 
 
 
-BOOST_AUTO_TEST_SUITE(LAPACK_TEST_SUITE_NAME)
-
 BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_simple_test, Number, test_types)
 {
 	auto m = std::size_t{2};
@@ -651,7 +738,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_rectangular_test, Number, test_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_random_test, Number, test_types)
 {
-	const std::size_t dimensions[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+	const std::size_t dimensions[] = { 1, 2, 3, 4, 10, 20 };
 	auto gen = std::mt19937();
 
 	gen.discard(1u<<13);
@@ -692,6 +779,304 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_random_test, Number, test_types)
 	}
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+
+
+template<class Matrix>
+void print_matrix(int fd, const Matrix& A)
+{
+	using Real = typename Matrix::value_type;
+
+	static_assert(std::is_same<Real, float>::value, "");
+	static_assert(std::numeric_limits<Real>::digits10 == 6, "");
+	static_assert(std::numeric_limits<Real>::max_digits10 == 9, "");
+
+	for(auto i = std::size_t{0}; i < A.size1(); ++i)
+	{
+		for(auto j = std::size_t{0}; j < A.size2(); ++j)
+		{
+			auto whitespace = (j+1) < A.size2() ? " " : "\n";
+			auto ret = dprintf(fd, "%+16.9e%s", A(i,j), whitespace);
+
+			BOOST_VERIFY( ret >= 0 );
+		}
+	}
+}
+
+template<class Matrix>
+void print_matrix(const char* filename, const Matrix& A)
+{
+	auto file = std::fopen(filename, "w");
+	auto fd = fileno(file);
+
+	print_matrix(fd, A);
+
+	std::fclose(file);
+}
+
+
+
+template<
+	typename Number,
+	class Engine,
+	class Storage = ublas::column_major,
+	typename Real = typename real_from<Number>::type
+>
+ublas::matrix<Number, Storage> make_isometric_matrix_like(
+	Number, std::size_t m, std::size_t n, Engine* gen)
+{
+	BOOST_VERIFY( m >= n );
+
+	using Matrix = ublas::matrix<Number, Storage>;
+
+	auto p = std::min(m, n);
+
+	if(p == 1)
+		ublas::identity_matrix<Number, Storage>(m, n);
+
+	auto dist = UniformDistribution<Number>();
+	auto rand = [gen, &dist] () { return dist(*gen); };
+	auto A = Matrix(m, n);
+
+	std::generate( A.data().begin(), A.data().end(), rand );
+
+	constexpr auto nan = not_a_number<Number>::value;
+	auto tau = ublas::vector<Real>(n, 0);
+	auto k = std::max(m, n);
+	auto lwork = static_cast<Integer>(2 * k * k);
+	auto work = ublas::vector<Real>(lwork, nan);
+	auto ret = lapack::geqrf(
+		m, n, &A(0,0), m, &tau(0), &work(0), lwork
+	);
+
+	BOOST_VERIFY( ret == 0 );
+
+	ret = lapack::ungqr(m, n, n, &A(0,0), m, &tau(0), &work(0), lwork);
+
+	BOOST_VERIFY( ret == 0 );
+
+	return A;
+}
+
+/**
+ * @return A random m x n matrix with spectral condition number cond2.
+ */
+template<
+	typename Number,
+	class Engine,
+	class Storage = ublas::column_major,
+	typename Real = typename real_from<Number>::type
+>
+ublas::matrix<Number, Storage> make_matrix_like(
+	Number dummy, std::size_t m, std::size_t n, Real cond2, Engine* gen)
+{
+	using Matrix = ublas::matrix<Number, Storage>;
+	using BandedMatrix = ublas::banded_matrix<Number>;
+
+	auto p = std::min(m, n);
+
+	if(p == 1)
+		ublas::identity_matrix<Number, Storage>(m, n);
+
+	auto S = BandedMatrix(p, p);
+	// do not sort singular values
+	S(0,0) = 1;
+	S(1,1) = cond2;
+	auto sv_dist = std::uniform_real_distribution<Real>(1, cond2);
+
+	for(auto i = std::size_t{2}; i < p; ++i)
+		S(i,i) = sv_dist(*gen);
+
+	auto U = make_isometric_matrix_like(dummy, m, p, gen);
+	auto V = make_isometric_matrix_like(dummy, n, p, gen);
+
+	auto US = Matrix(ublas::prod(U, S));
+	auto A = Matrix(ublas::prod(US, ublas::trans(V)));
+
+	return A;
+}
+
+
+template<
+	typename Real,
+	std::enable_if<std::is_fundamental<Real>::value, int>* = nullptr
+>
+std::pair<
+	ublas::matrix<Real, ublas::column_major>,
+	ublas::matrix<Real, ublas::column_major>
+> compute_rq_decomposition(ublas::matrix<Real, ublas::column_major> A)
+{
+	using Storage = ublas::column_major;
+	using Matrix = ublas::matrix<Real, Storage>;
+	using Eye = ublas::identity_matrix<Real>;
+
+	auto m = A.size1();
+	auto n = A.size2();
+
+	BOOST_VERIFY( m <= n );
+
+	if(m == 0 || n == 0)
+	{
+		return std::make_pair(Matrix(m,n), Eye(n,n));
+	}
+
+	auto k = std::max(m, n);
+	auto p = std::min(m, n);
+	auto real_nan = not_a_number<Real>::value;
+	auto tau = ublas::vector<Real>(p, real_nan);
+	auto lwork = static_cast<Integer>(10 * k*k);
+	auto work = ublas::vector<Real>(lwork, real_nan);
+	auto ret = lapack::gerqf(m, n, &A(0,0), m, &tau(0), &work(0), lwork);
+
+	BOOST_VERIFY( ret == 0 );
+
+	// construct orthogonal matrix Qt from elementary reflectors
+	auto Qt = Matrix(n, n);
+
+	std::fill( Qt.data().begin(), Qt.data().end(), real_nan );
+	ublas::subrange(Qt, n-m, n, 0, n) = A;
+
+	ret = lapack::ungrq(n, n, p, &Qt(0,0), n, &tau(0), &work(0), lwork);
+
+	BOOST_VERIFY( ret == 0 );
+
+
+	// clean matrix R: set anything but the upper triangular part to zero
+	ublas::subrange(A, 0, m, 0, n-m) = ublas::zero_matrix<Real>(m, n-m);
+
+	if(m > 1)
+	{
+		auto A_mn = ublas::subrange(A, 1, m, n-m, n);
+		auto A_l = ublas::triangular_adaptor<decltype(A_mn), ublas::lower>(A_mn);
+
+		A_l = ublas::triangular_matrix<Real, ublas::lower>(m-1, m);
+	}
+
+	return std::make_pair(A, Qt);
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(compute_rq_decomposition_test, Number, test_types)
+{
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
+
+	auto gen = std::mt19937();
+	auto dist = UniformDistribution<Number>();
+	auto rand = [&gen, &dist] () { return dist(gen); };
+
+	for(auto n = std::size_t{0}; n <= 10; ++n)
+	{
+		for(auto m = std::size_t{0}; m <= n; ++m)
+		{
+			auto A = Matrix(m, n);
+
+			std::generate( A.data().begin(), A.data().end(), rand );
+
+			auto RQ_pair = compute_rq_decomposition(A);
+			auto& R = RQ_pair.first;
+			auto& Q = RQ_pair.second;
+
+			BOOST_REQUIRE_EQUAL( A.size1(), m );
+			BOOST_REQUIRE_EQUAL( A.size2(), n );
+
+			BOOST_REQUIRE_EQUAL( R.size1(), A.size1() );
+			BOOST_REQUIRE_EQUAL( R.size2(), A.size2() );
+
+			BOOST_REQUIRE_EQUAL( Q.size1(), A.size2() );
+			BOOST_REQUIRE_EQUAL( Q.size2(), A.size2() );
+			BOOST_CHECK( is_almost_unitary(Q) );
+		}
+	}
+}
+
+
+BOOST_AUTO_TEST_CASE(ggqrcs_gen_test)
+{
+	using Number = float;
+	using Real = typename real_from<Number>::type;
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
+
+	auto m = std::size_t{2};
+	auto n = std::size_t{4};
+	auto p = std::size_t{3};
+	auto gen = std::mt19937();
+
+	auto min_rank = std::size_t{0};
+	auto max_rank = std::min( m+p, n );
+	auto rank_dist =
+		std::uniform_int_distribution<std::size_t>(min_rank, max_rank);
+	auto r = rank_dist(gen);
+	auto k = std::min( {m, p, r, m + p - r} );
+
+	constexpr auto real_nan = not_a_number<Real>::value;
+	auto theta_dist =
+		std::uniform_real_distribution<Real>(0, M_PI/2);
+	auto theta = ublas::vector<Real>(k, real_nan);
+
+	std::generate(
+		theta.begin(), theta.end(),
+		[&gen, &theta_dist](){ return theta_dist(gen); }
+	);
+
+	constexpr auto dummy = Number{0};
+	auto min_log_cond_R = Real{0};
+	auto max_log_cond_R = static_cast<Real>(std::numeric_limits<Real>::digits);
+	auto log_cond_dist =
+		std::uniform_real_distribution<Real>(min_log_cond_R, max_log_cond_R);
+	auto log_cond_R = log_cond_dist(gen);
+	auto cond_R = std::pow(Real{2}, log_cond_R);
+	auto R_Qt = make_matrix_like(dummy, r, n, cond_R, &gen);
+	auto U1 = make_isometric_matrix_like(dummy, m, m, &gen);
+	auto U2 = make_isometric_matrix_like(dummy, p, p, &gen);
+	auto ds = build_diagonals_like(dummy, m, p, r, theta);
+	auto D1 = ds.first;
+	auto D2 = ds.second;
+	auto A = Matrix(ublas::prod(Matrix(ublas::prod(U1, D1)), R_Qt));
+	auto B = Matrix(ublas::prod(Matrix(ublas::prod(U2, D2)), R_Qt));
+	auto caller = QrCsCaller<Number>(m, n, p);
+
+	caller.X = A;
+	caller.Y = B;
+
+	auto ret = caller();
+	check_results(ret, A, B, caller);
+
+	BOOST_CHECK_LE( caller.rank, r );
+
+	//auto& X = caller.X;
+	//auto& Y = caller.Y;
+	//auto& U1 = caller.U1;
+	//auto& U2 = caller.U2;
+	//auto& Qt = caller.Qt;
+	//auto rank = static_cast<std::size_t>(caller.rank);
+	//auto R = build_R(rank, X, Y);
+	//auto ds = build_diagonals_like(dummy, m, p, rank, caller.theta);
+	//auto& D1 = ds.first;
+	//auto& D2 = ds.second;
+
+	//Matrix almost_A = reconstruct_matrix(U1, D1, R, Qt);
+	//Matrix almost_B = reconstruct_matrix(U2, D2, R, Qt);
+
+	//std::printf("m=%zu n=%zu p=%zu\n", m, n, p);
+
+	//print_matrix("A.txt", A);
+	//print_matrix("B.txt", B);
+	//print_matrix("X.txt", X);
+	//print_matrix("Y.txt", Y);
+	//print_matrix("R.txt", R);
+	//print_matrix("U1.txt", U1);
+	//print_matrix("U2.txt", U2);
+	//print_matrix("D1.txt", D1);
+	//print_matrix("D2.txt", D2);
+	//print_matrix("Qt.txt", Qt);
+
+
+	//for(auto k = 0; k < caller.rank; ++k)
+	//{
+	//	auto x = caller.theta(k);
+	//	auto s = std::sin(x);
+	//	auto c = std::cos(x);
+	//	std::printf("theta(%d) %8.2e %+8.2e %+8.2e\n", k, x/M_PI, s, c);
+	//}
+}
 
 #endif

@@ -28,7 +28,6 @@
 #include <boost/mpl/list.hpp>
 
 
-#define LAPACK_TEST_SUITE_NAME single_precision_tests
 typedef boost::mpl::list<float> test_types;
 
 #include <ggqrcs.hpp>

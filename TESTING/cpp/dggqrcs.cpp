@@ -28,7 +28,6 @@
 #include <boost/mpl/list.hpp>
 
 
-#define LAPACK_TEST_SUITE_NAME double_precision_tests
 typedef boost::mpl::list<double> test_types;
 
 #include <ggqrcs.hpp>
