@@ -42,6 +42,7 @@
 #include <limits>
 #include <cmath>
 #include <cstdint>
+#include <ctime>
 #include <random>
 #include <type_traits>
 #include <utility>
@@ -944,9 +945,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 {
 	constexpr std::size_t dimensions[] = { 1, 2, 3, 4, 10, 20 };
 
-	auto rng = std::mt19937();
+	auto seed = std::uintmax_t(std::time(nullptr));
 
-	rng.discard(1u << 13);
+	std::printf("infinite_ggqrcs_random_test seed=%ju\n", seed);
+
+	auto rng = std::mt19937(seed);
+
+	rng.discard(1u << 17);
 
 	for(auto iteration = std::uint64_t{0}; true; ++iteration)
 	{
