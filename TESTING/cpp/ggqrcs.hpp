@@ -41,6 +41,7 @@
 #include <algorithm>
 #include <limits>
 #include <cmath>
+#include <cstdint>
 #include <random>
 #include <type_traits>
 #include <utility>
@@ -736,51 +737,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_rectangular_test, Number, test_types)
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_random_test, Number, test_types)
-{
-	const std::size_t dimensions[] = { 1, 2, 3, 4, 10, 20 };
-	auto gen = std::mt19937();
-
-	gen.discard(1u<<13);
-
-	for(auto m : dimensions)
-	{
-		for(auto n : dimensions)
-		{
-			for(auto p : dimensions)
-			{
-				auto dist = UniformDistribution<Number>();
-				auto make_rand = [&gen, &dist] (Number s)
-				{
-					auto rand = [&gen, &dist, s] () { return s*dist(gen); };
-					return rand;
-				};
-
-
-				for(auto iter = std::size_t{0}; iter < 100; ++iter)
-				{
-					auto caller = QrCsCaller<Number>(m, n, p);
-					auto A = caller.X;
-					auto B = caller.Y;
-
-					std::generate(
-						A.data().begin(), A.data().end(), make_rand(1000) );
-					std::generate(
-						B.data().begin(), B.data().end(), make_rand(1) );
-
-					caller.X = A;
-					caller.Y = B;
-
-					auto ret = caller();
-					check_results(ret, A, B, caller);
-				}
-			}
-		}
-	}
-}
-
-
-
 template<class Matrix>
 void print_matrix(int fd, const Matrix& A)
 {
@@ -815,6 +771,9 @@ void print_matrix(const char* filename, const Matrix& A)
 
 
 
+/**
+ * @return Matrix A with m rows, n columns, and A^* A = I.
+ */
 template<
 	typename Number,
 	class Engine,
@@ -830,8 +789,8 @@ ublas::matrix<Number, Storage> make_isometric_matrix_like(
 
 	auto p = std::min(m, n);
 
-	if(p == 1)
-		ublas::identity_matrix<Number, Storage>(m, n);
+	if(p <= 1)
+		return ublas::identity_matrix<Number, Storage>(m, n);
 
 	auto dist = UniformDistribution<Number>();
 	auto rand = [gen, &dist] () { return dist(*gen); };
@@ -874,8 +833,8 @@ ublas::matrix<Number, Storage> make_matrix_like(
 
 	auto p = std::min(m, n);
 
-	if(p == 1)
-		ublas::identity_matrix<Number, Storage>(m, n);
+	if(p <= 1)
+		return ublas::identity_matrix<Number, Storage>(m, n);
 
 	auto S = BandedMatrix(p, p);
 	// do not sort singular values
@@ -989,22 +948,24 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(compute_rq_decomposition_test, Number, test_types)
 }
 
 
-BOOST_AUTO_TEST_CASE(ggqrcs_gen_test)
+template<typename Number, class Engine>
+void ggqrcs_random_test_impl(
+	Number dummy,
+	std::size_t m, std::size_t n, std::size_t p, std::size_t r,
+	Engine* p_gen)
 {
-	using Number = float;
+	BOOST_VERIFY( p_gen != nullptr );
+
 	using Real = typename real_from<Number>::type;
 	using Matrix = ublas::matrix<Number, ublas::column_major>;
 
-	auto m = std::size_t{2};
-	auto n = std::size_t{4};
-	auto p = std::size_t{3};
-	auto gen = std::mt19937();
+	auto& gen = *p_gen;
 
-	auto min_rank = std::size_t{0};
-	auto max_rank = std::min( m+p, n );
-	auto rank_dist =
-		std::uniform_int_distribution<std::size_t>(min_rank, max_rank);
-	auto r = rank_dist(gen);
+	//auto min_rank = std::size_t{0};
+	//auto max_rank = std::min( m+p, n );
+	//auto rank_dist =
+	//	std::uniform_int_distribution<std::size_t>(min_rank, max_rank);
+	//auto r = rank_dist(gen);
 	auto k = std::min( {m, p, r, m + p - r} );
 
 	constexpr auto real_nan = not_a_number<Real>::value;
@@ -1017,7 +978,6 @@ BOOST_AUTO_TEST_CASE(ggqrcs_gen_test)
 		[&gen, &theta_dist](){ return theta_dist(gen); }
 	);
 
-	constexpr auto dummy = Number{0};
 	auto min_log_cond_R = Real{0};
 	auto max_log_cond_R = static_cast<Real>(std::numeric_limits<Real>::digits);
 	auto log_cond_dist =
@@ -1041,42 +1001,70 @@ BOOST_AUTO_TEST_CASE(ggqrcs_gen_test)
 	check_results(ret, A, B, caller);
 
 	BOOST_CHECK_LE( caller.rank, r );
-
-	//auto& X = caller.X;
-	//auto& Y = caller.Y;
-	//auto& U1 = caller.U1;
-	//auto& U2 = caller.U2;
-	//auto& Qt = caller.Qt;
-	//auto rank = static_cast<std::size_t>(caller.rank);
-	//auto R = build_R(rank, X, Y);
-	//auto ds = build_diagonals_like(dummy, m, p, rank, caller.theta);
-	//auto& D1 = ds.first;
-	//auto& D2 = ds.second;
-
-	//Matrix almost_A = reconstruct_matrix(U1, D1, R, Qt);
-	//Matrix almost_B = reconstruct_matrix(U2, D2, R, Qt);
-
-	//std::printf("m=%zu n=%zu p=%zu\n", m, n, p);
-
-	//print_matrix("A.txt", A);
-	//print_matrix("B.txt", B);
-	//print_matrix("X.txt", X);
-	//print_matrix("Y.txt", Y);
-	//print_matrix("R.txt", R);
-	//print_matrix("U1.txt", U1);
-	//print_matrix("U2.txt", U2);
-	//print_matrix("D1.txt", D1);
-	//print_matrix("D2.txt", D2);
-	//print_matrix("Qt.txt", Qt);
-
-
-	//for(auto k = 0; k < caller.rank; ++k)
-	//{
-	//	auto x = caller.theta(k);
-	//	auto s = std::sin(x);
-	//	auto c = std::cos(x);
-	//	std::printf("theta(%d) %8.2e %+8.2e %+8.2e\n", k, x/M_PI, s, c);
-	//}
 }
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_random_test, Number, test_types)
+{
+	constexpr std::size_t dimensions[] = { 1, 2, 3, 4, 10, 20 };
+
+	auto rng = std::mt19937();
+
+	rng.discard(1u << 13);
+
+	for(auto m : dimensions)
+	{
+		for(auto n : dimensions)
+		{
+			for(auto p : dimensions)
+			{
+				for(auto rank = std::size_t{0}; rank <= std::min(m+p, n); ++rank)
+				{
+					for(auto iteration = 0u; iteration < 10u; ++iteration)
+					{
+						ggqrcs_random_test_impl(Number{0}, m, n, p, rank, &rng);
+					}
+				}
+			}
+		}
+	}
+}
+
+BOOST_TEST_DECORATOR(* boost::unit_test::disabled())
+BOOST_AUTO_TEST_CASE_TEMPLATE(
+	infinite_ggqrcs_random_test, Number, test_types)
+{
+	constexpr std::size_t dimensions[] = { 1, 2, 3, 4, 10, 20 };
+
+	auto rng = std::mt19937();
+
+	rng.discard(1u << 13);
+
+	for(auto iteration = std::uint64_t{0}; true; ++iteration)
+	{
+		std::printf("Current iteration: %zu\n", iteration+1);
+
+		for(auto m : dimensions)
+		{
+			for(auto n : dimensions)
+			{
+				for(auto p : dimensions)
+				{
+					auto max_rank = std::min(m+p, n);
+					for(auto rank = std::size_t{0}; rank <= max_rank; ++rank)
+					{
+						for(auto i = 0u; i < 1u * (m*n + p*n); ++i)
+						{
+							ggqrcs_random_test_impl(
+								Number{0}, m, n, p, rank, &rng);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
 
 #endif
