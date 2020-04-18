@@ -738,39 +738,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_rectangular_test, Number, test_types)
 }
 
 
-template<class Matrix>
-void print_matrix(int fd, const Matrix& A)
-{
-	using Real = typename Matrix::value_type;
-
-	static_assert(std::is_same<Real, float>::value, "");
-	static_assert(std::numeric_limits<Real>::digits10 == 6, "");
-	static_assert(std::numeric_limits<Real>::max_digits10 == 9, "");
-
-	for(auto i = std::size_t{0}; i < A.size1(); ++i)
-	{
-		for(auto j = std::size_t{0}; j < A.size2(); ++j)
-		{
-			auto whitespace = (j+1) < A.size2() ? " " : "\n";
-			auto ret = dprintf(fd, "%+16.9e%s", A(i,j), whitespace);
-
-			BOOST_VERIFY( ret >= 0 );
-		}
-	}
-}
-
-template<class Matrix>
-void print_matrix(const char* filename, const Matrix& A)
-{
-	auto file = std::fopen(filename, "w");
-	auto fd = fileno(file);
-
-	print_matrix(fd, A);
-
-	std::fclose(file);
-}
-
-
 
 /**
  * @return Matrix A with m rows, n columns, and A^* A = I.
