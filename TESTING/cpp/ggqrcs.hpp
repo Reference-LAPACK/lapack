@@ -347,7 +347,7 @@ template<
 	typename Real = typename real_from<Number>::type
 >
 bool is_almost_unitary(
-	const ublas::matrix<Number, Storage>& U, Real multiplier = 2)
+	const ublas::matrix<Number, Storage>& U, Real multiplier = 4)
 {
 	BOOST_VERIFY( multiplier >= 1 );
 
@@ -452,9 +452,9 @@ void check_results(
 	// check that unitary matrices are indeed unitary
 	// The bound is based on Inequality (19.13), Equation (3.8) in
 	// Higham: "Accuracy and Stability of Numerical Algorithms".
-	BOOST_CHECK_LE( measure_unity(U1), 2 * std::sqrt(m) * (m+p) * r * eps );
-	BOOST_CHECK_LE( measure_unity(U2), 2 * std::sqrt(p) * (m+p) * r * eps );
-	BOOST_CHECK_LE( measure_unity(Qt), 2 * std::sqrt(n) * n * r * eps );
+	BOOST_CHECK_LE( measure_unity(U1), 4 * std::sqrt(m) * (m+p) * r * eps );
+	BOOST_CHECK_LE( measure_unity(U2), 4 * std::sqrt(p) * (m+p) * r * eps );
+	BOOST_CHECK_LE( measure_unity(Qt), 4 * std::sqrt(n) * n * r * eps );
 
 
 	// check the "singular values"
