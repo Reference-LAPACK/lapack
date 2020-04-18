@@ -158,6 +158,21 @@ inline integer_t geqrf(
 	return info;
 }
 
+inline integer_t geqrf(
+	integer_t m, integer_t n, std::complex<float>* A, integer_t lda,
+	std::complex<float>* p_tau, std::complex<float>* p_work, integer_t lwork)
+{
+	integer_t info = -1;
+	cgeqrf_(
+		&m, &n,
+		reinterpret_cast<float _Complex*>(A), &lda,
+		reinterpret_cast<float _Complex*>(p_tau),
+		reinterpret_cast<float _Complex*>(p_work), &lwork,
+		&info
+	);
+	return info;
+}
+
 
 
 inline integer_t gerqf(
@@ -662,6 +677,23 @@ inline integer_t ungqr(
 
 	integer_t info = -1;
 	dorgqr_(&m, &n, &k, A, &lda, p_tau, p_work, &lwork, &info);
+	return info;
+}
+
+inline integer_t ungqr(
+	integer_t m, integer_t n, integer_t k,
+	std::complex<float>* A, integer_t lda, const std::complex<float>* p_tau,
+	std::complex<float>* p_work, integer_t lwork)
+{
+	integer_t info = -1;
+	cungqr_(
+		&m, &n, &k,
+		reinterpret_cast<float _Complex*>(A), &lda,
+		reinterpret_cast<const float _Complex*>(p_tau),
+		reinterpret_cast<float _Complex*>(p_work), &lwork,
+		&info
+	);
+
 	return info;
 }
 

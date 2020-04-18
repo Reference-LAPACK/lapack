@@ -745,8 +745,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_rectangular_test, Number, test_types)
 template<
 	typename Number,
 	class Engine,
-	class Storage = ublas::column_major,
-	typename Real = typename real_from<Number>::type
+	class Storage = ublas::column_major
 >
 ublas::matrix<Number, Storage> make_isometric_matrix_like(
 	Number, std::size_t m, std::size_t n, Engine* gen)
@@ -767,13 +766,11 @@ ublas::matrix<Number, Storage> make_isometric_matrix_like(
 	std::generate( A.data().begin(), A.data().end(), rand );
 
 	constexpr auto nan = not_a_number<Number>::value;
-	auto tau = ublas::vector<Real>(n, 0);
+	auto tau = ublas::vector<Number>(n, nan);
 	auto k = std::max(m, n);
 	auto lwork = static_cast<Integer>(2 * k * k);
-	auto work = ublas::vector<Real>(lwork, nan);
-	auto ret = lapack::geqrf(
-		m, n, &A(0,0), m, &tau(0), &work(0), lwork
-	);
+	auto work = ublas::vector<Number>(lwork, nan);
+	auto ret = lapack::geqrf(m, n, &A(0,0), m, &tau(0), &work(0), lwork);
 
 	BOOST_VERIFY( ret == 0 );
 
