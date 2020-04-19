@@ -742,15 +742,28 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_simple_test, Number, test_types)
 
 
 /**
- * This dummy LAPACK xerbla implementation does not do anything thereby allowing
- * the calling LAPACK function to return to its caller.
+ * This LAPACK xerbla implementation prints an error message but does not
+ * terminate the program thereby allowing the calling LAPACK function to return
+ * to its caller.
  *
- * @param[in] f_caller A string WITHOUT ZERO TERMINATOR
- * @param[in] f_caller_len The length of the string referenced by f_caller
+ * @param[in] caller A string WITHOUT ZERO TERMINATOR
+ * @param[in] caller_len The length of the string referenced by f_caller
  */
 extern "C" void xerbla_(
-	const char* /*f_caller*/, int* /*p_info*/, std::size_t /*f_caller_len*/)
+	const char* caller, int* p_info, std::size_t caller_len)
 {
+	BOOST_VERIFY( caller != nullptr );
+	BOOST_VERIFY( p_info != nullptr );
+
+	// "sz" prefix taken from hungarian notation (zero-terminated string)
+	char szCaller[80];
+	auto num_bytes_to_copy = std::min(sizeof(szCaller)-1, caller_len);
+
+	std::memset(szCaller, 0, sizeof(szCaller));
+	std::strncpy(szCaller, caller, num_bytes_to_copy);
+	std::fprintf(
+		stderr, "%s: parameter %d has illegal value\n", szCaller, *p_info
+	);
 }
 
 
