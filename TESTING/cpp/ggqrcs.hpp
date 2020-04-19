@@ -691,6 +691,104 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_simple_test, Number, test_types)
 }
 
 
+/**
+ * This dummy LAPACK xerbla implementation does not do anything thereby allowing
+ * the calling LAPACK function to return to its caller.
+ *
+ * @param[in] f_caller A string WITHOUT ZERO TERMINATOR
+ * @param[in] f_caller_len The length of the string referenced by f_caller
+ */
+extern "C" void xerbla_(
+	const char* /*f_caller*/, int* /*p_info*/, std::size_t /*f_caller_len*/)
+{
+}
+
+
+template<
+	typename Number,
+	typename std::enable_if<
+		std::is_fundamental<Number>::value, int
+	>::type* = nullptr
+>
+void ggqrcs_zero_dimensions_test_impl(Number)
+{
+	using Real = typename real_from<Number>::type;
+
+	constexpr auto nan = not_a_number<Number>::value;
+	constexpr auto real_nan = not_a_number<Real>::value;
+
+	auto w = real_nan;
+	auto rank = Integer{-1};
+	auto lda = 1;
+	auto A = std::vector<Number>(lda*1, nan);
+	auto ldb = 1;
+	auto B = std::vector<Number>(ldb*1, nan);
+	auto theta = std::vector<Real>(1, real_nan);
+	auto lwork = 1;
+	auto work = std::vector<Number>(lwork, nan);
+	auto iwork = std::vector<Integer>(1, -1);
+	auto f = [&] (std::size_t m, std::size_t n, std::size_t p) {
+		return lapack::ggqrcs(
+			'N', 'N', 'N', m, n, p, &w, &rank,
+			&A[0], lda, &B[0], ldb,
+			&theta[0],
+			nullptr, 1, nullptr, 1, nullptr, 1,
+			&work[0], lwork, &iwork[0]
+		);
+	};
+
+	BOOST_CHECK_EQUAL( f(0, 1, 1), -4 );
+	BOOST_CHECK_EQUAL( f(1, 0, 1), -5 );
+	BOOST_CHECK_EQUAL( f(1, 1, 0), -6 );
+}
+
+template<
+	typename Number,
+	typename std::enable_if<
+		!std::is_fundamental<Number>::value, int
+	>::type* = nullptr
+>
+void ggqrcs_zero_dimensions_test_impl(Number)
+{
+	using Real = typename real_from<Number>::type;
+
+	constexpr auto nan = not_a_number<Number>::value;
+	constexpr auto real_nan = not_a_number<Real>::value;
+
+	auto w = real_nan;
+	auto rank = Integer{-1};
+	auto lda = 1;
+	auto A = std::vector<Number>(lda*1, nan);
+	auto ldb = 1;
+	auto B = std::vector<Number>(ldb*1, nan);
+	auto theta = std::vector<Real>(1, real_nan);
+	auto lwork = 1;
+	auto work = std::vector<Number>(lwork, nan);
+	auto lrwork = 1;
+	auto rwork = std::vector<Real>(lrwork, real_nan);
+	auto iwork = std::vector<Integer>(1, -1);
+	auto f = [&] (std::size_t m, std::size_t n, std::size_t p) {
+		return lapack::ggqrcs(
+			'N', 'N', 'N', m, n, p, &w, &rank,
+			&A[0], lda, &B[0], ldb,
+			&theta[0],
+			nullptr, 1, nullptr, 1, nullptr, 1,
+			&work[0], lwork, &rwork[0], lrwork, &iwork[0]
+		);
+	};
+
+	BOOST_CHECK_EQUAL( f(0, 1, 1), -4 );
+	BOOST_CHECK_EQUAL( f(1, 0, 1), -5 );
+	BOOST_CHECK_EQUAL( f(1, 1, 0), -6 );
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_zero_dimensions_test, Number, test_types)
+{
+	ggqrcs_zero_dimensions_test_impl(Number{0});
+}
+
+
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_zero_test, Number, test_types)
 {
 	auto m = std::size_t{4};
