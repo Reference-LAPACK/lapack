@@ -128,19 +128,19 @@
 *> \param[in] M
 *> \verbatim
 *>          M is INTEGER
-*>          The number of rows of the matrix A.  M >= 0.
+*>          The number of rows of the matrix A.  M >= 1.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The number of columns of the matrices A and B.  N >= 0.
+*>          The number of columns of the matrices A and B.  N >= 1.
 *> \endverbatim
 *>
 *> \param[in] P
 *> \verbatim
 *>          P is INTEGER
-*>          The number of rows of the matrix B.  P >= 0.
+*>          The number of rows of the matrix B.  P >= 1.
 *> \endverbatim
 *>
 *> \param[out] W
@@ -369,7 +369,7 @@
       IF ( LQUERY ) THEN
          G = 0
       ELSE
-         G = RESHAPE( WORK(1:Z), (/ M + P, N /) )
+         G = WORK( 1 )
       END IF
       LDG = M + P
 *     Computing 0.0 / 0.0 directly causes compiler errors
@@ -385,11 +385,11 @@
          INFO = -2
       ELSE IF( .NOT.( WANTQT .OR. LSAME( JOBQT, 'N' ) ) ) THEN
          INFO = -3
-      ELSE IF( M.LT.0 ) THEN
+      ELSE IF( M.LT.1 ) THEN
          INFO = -4
-      ELSE IF( N.LT.0 ) THEN
+      ELSE IF( N.LT.1 ) THEN
          INFO = -5
-      ELSE IF( P.LT.0 ) THEN
+      ELSE IF( P.LT.1 ) THEN
          INFO = -6
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
          INFO = -10
