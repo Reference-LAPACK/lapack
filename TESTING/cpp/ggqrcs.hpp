@@ -1104,8 +1104,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 	auto last_time_sec = std::time_t{0};
 	auto iteration = std::uintmax_t{0};
 
-	constexpr char FMT[] =
-		"%ju iterations in %jd seconds (m=%zu n=%zu p=%zu r=%zu seed=%ju)\n";
+	constexpr char FMT[] = "%7jd %13ju  %3zu %3zu %3zu %4zu  %20zu\n";
+	std::printf(
+		"%7s %13s  %3s %3s %3s %4s  %20s\n",
+		"time(s)", "iteration", "m", "n", "p", "rank", "seed"
+	);
 
 	while(true)
 	{
@@ -1125,7 +1128,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 				auto time_passed_sec = std::intmax_t{now_sec - start_time_sec};
 
 				std::printf(
-					FMT, iteration, time_passed_sec, m, n, p, rank, seed
+					FMT, time_passed_sec, iteration, m, n, p, rank, seed
 				);
 
 				last_time_sec = now_sec;
