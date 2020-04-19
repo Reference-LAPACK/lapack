@@ -1091,7 +1091,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 
 	auto master_seed = std::uintmax_t(std::time(nullptr));
 
-	std::printf("infinite_ggqrcs_random_test master-seed=%ju\n", master_seed);
+	std::printf("infinite_ggqrcs_random_test master_seed=%ju\n", master_seed);
 
 	auto gen = std::mt19937(master_seed);
 	auto dim_dist =
@@ -1100,8 +1100,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 
 	gen.discard(1u << 17);
 
-	while(true)
+	auto start_time_sec = std::time(nullptr);
+	auto last_time_sec = start_time_sec;
+
+	for(auto iteration = std::uintmax_t{0}; true; ++iteration)
 	{
+		auto now_sec = std::time(nullptr);
+		auto second = std::time_t{1};
+
+		if(last_time_sec + 60*second < now_sec)
+		{
+			auto time_passed_sec = std::intmax_t{now_sec - start_time_sec};
+
+			std::printf(
+				"infinite_ggqrcs_random_test %ju iterations in %jd seconds\n",
+				iteration+1, time_passed_sec
+			);
+
+			last_time_sec = now_sec;
+		}
+
 		auto m = dim_dist(gen);
 		auto n = dim_dist(gen);
 		auto p = dim_dist(gen);
