@@ -822,29 +822,29 @@ ublas::matrix<Number, Storage> make_matrix_like(
 
 
 
-template<typename Number, class Engine>
+template<typename Number>
 void ggqrcs_random_test_impl(
 	Number dummy,
 	std::size_t m, std::size_t n, std::size_t p, std::size_t r,
-	Engine* p_gen)
+	std::uint64_t seed)
 {
-	BOOST_VERIFY( p_gen != nullptr );
-
 	using Real = typename real_from<Number>::type;
 	using Matrix = ublas::matrix<Number, ublas::column_major>;
 
-	auto& gen = *p_gen;
-
-	//auto min_rank = std::size_t{0};
-	//auto max_rank = std::min( m+p, n );
-	//auto rank_dist =
-	//	std::uniform_int_distribution<std::size_t>(min_rank, max_rank);
-	//auto r = rank_dist(gen);
-	auto k = std::min( {m, p, r, m + p - r} );
-
 	constexpr auto real_nan = not_a_number<Real>::value;
-	auto theta_dist =
-		std::uniform_real_distribution<Real>(0, M_PI/2);
+
+	BOOST_TEST_CONTEXT("m=" << m) {
+	BOOST_TEST_CONTEXT("n=" << n) {
+	BOOST_TEST_CONTEXT("p=" << p) {
+	BOOST_TEST_CONTEXT("rank=" << r) {
+	BOOST_TEST_CONTEXT("seed=" << seed) {
+
+	auto gen = std::mt19937(seed);
+
+	gen.discard(1u << 17);
+
+	auto k = std::min( {m, p, r, m + p - r} );
+	auto theta_dist = std::uniform_real_distribution<Real>(0, M_PI/2);
 	auto theta = ublas::vector<Real>(k, real_nan);
 
 	std::generate(
@@ -876,15 +876,21 @@ void ggqrcs_random_test_impl(
 
 	BOOST_CHECK_LE( caller.rank, r );
 }
+}
+}
+}
+}
+}
 
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_random_test, Number, test_types)
 {
 	constexpr std::size_t dimensions[] = { 1, 2, 3, 4, 10, 20 };
 
-	auto rng = std::mt19937();
+	auto gen = std::mt19937();
+	auto seed_dist = std::uniform_int_distribution<std::uint64_t>(0);
 
-	rng.discard(1u << 13);
+	gen.discard(1u << 17);
 
 	for(auto m : dimensions)
 	{
@@ -892,11 +898,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ggqrcs_random_test, Number, test_types)
 		{
 			for(auto p : dimensions)
 			{
-				for(auto rank = std::size_t{0}; rank <= std::min(m+p, n); ++rank)
+				auto max_rank = std::min(m+p, n);
+				for(auto rank = std::size_t{0}; rank <= max_rank; ++rank)
 				{
 					for(auto iteration = 0u; iteration < 10u; ++iteration)
 					{
-						ggqrcs_random_test_impl(Number{0}, m, n, p, rank, &rng);
+						auto seed = seed_dist(gen);
+
+						ggqrcs_random_test_impl(Number{0}, m, n, p, rank, seed);
 					}
 				}
 			}
@@ -908,41 +917,33 @@ BOOST_TEST_DECORATOR(* boost::unit_test::disabled())
 BOOST_AUTO_TEST_CASE_TEMPLATE(
 	infinite_ggqrcs_random_test, Number, test_types)
 {
-	constexpr std::size_t dimensions[] = { 1, 2, 3, 4, 10, 20 };
+	constexpr auto min_dimension = std::size_t{1};
+	constexpr auto max_dimension = std::size_t{1000};
 
-	auto seed = std::uintmax_t(std::time(nullptr));
+	auto master_seed = std::uintmax_t(std::time(nullptr));
 
-	std::printf("infinite_ggqrcs_random_test seed=%ju\n", seed);
+	std::printf("infinite_ggqrcs_random_test master-seed=%ju\n", master_seed);
 
-	auto rng = std::mt19937(seed);
+	auto gen = std::mt19937(master_seed);
+	auto dim_dist =
+		std::uniform_int_distribution<std::size_t>(min_dimension,max_dimension);
+	auto seed_dist = std::uniform_int_distribution<std::uint64_t>(0);
 
-	rng.discard(1u << 17);
+	gen.discard(1u << 17);
 
-	for(auto iteration = std::uint64_t{0}; true; ++iteration)
+	while(true)
 	{
-		std::printf("Current iteration: %zu\n", iteration+1);
+		auto m = dim_dist(gen);
+		auto n = dim_dist(gen);
+		auto p = dim_dist(gen);
+		auto max_rank = std::min(m+p, n);
 
-		for(auto m : dimensions)
+		for(auto rank = std::size_t{0}; rank <= max_rank; ++rank)
 		{
-			for(auto n : dimensions)
-			{
-				for(auto p : dimensions)
-				{
-					auto max_rank = std::min(m+p, n);
-					for(auto rank = std::size_t{0}; rank <= max_rank; ++rank)
-					{
-						for(auto i = 0u; i < 1u * (m*n + p*n); ++i)
-						{
-							ggqrcs_random_test_impl(
-								Number{0}, m, n, p, rank, &rng);
-						}
-					}
-				}
-			}
+			auto seed = seed_dist(gen);
+			ggqrcs_random_test_impl(Number{0}, m, n, p, rank, seed);
 		}
 	}
 }
-
-
 
 #endif
