@@ -1112,7 +1112,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 		auto m = dim_dist(gen);
 		auto n = dim_dist(gen);
 		auto p = dim_dist(gen);
-		auto max_rank = std::min(m+p, n);
+		auto max_rank = (m + p <= n) ? m + p : n;
 
 		for(auto rank = std::size_t{0}; rank <= max_rank; ++rank, ++iteration)
 		{
