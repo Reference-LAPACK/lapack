@@ -938,7 +938,7 @@ ublas::matrix<Number, Storage> make_isometric_matrix_like(
 	ret = lapack::ungqr(m, n, n, &A(0,0), m, &tau(0), &work(0), lwork);
 
 	BOOST_VERIFY( ret == 0 );
-	BOOST_ASSERT( is_almost_isometric(A) );
+	BOOST_VERIFY( is_almost_isometric(A) );
 
 	return A;
 }
@@ -1101,33 +1101,36 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 	gen.discard(1u << 17);
 
 	auto start_time_sec = std::time(nullptr);
-	auto last_time_sec = start_time_sec;
+	auto last_time_sec = std::time_t{0};
+	auto iteration = std::uintmax_t{0};
 
-	for(auto iteration = std::uintmax_t{0}; true; ++iteration)
+	constexpr char FMT[] =
+		"%ju iterations in %jd seconds (m=%zu n=%zu p=%zu r=%zu seed=%ju)\n";
+
+	while(true)
 	{
-		auto now_sec = std::time(nullptr);
-		auto second = std::time_t{1};
-
-		if(last_time_sec + 60*second < now_sec)
-		{
-			auto time_passed_sec = std::intmax_t{now_sec - start_time_sec};
-
-			std::printf(
-				"infinite_ggqrcs_random_test %ju iterations in %jd seconds\n",
-				iteration+1, time_passed_sec
-			);
-
-			last_time_sec = now_sec;
-		}
-
 		auto m = dim_dist(gen);
 		auto n = dim_dist(gen);
 		auto p = dim_dist(gen);
 		auto max_rank = std::min(m+p, n);
 
-		for(auto rank = std::size_t{0}; rank <= max_rank; ++rank)
+		for(auto rank = std::size_t{0}; rank <= max_rank; ++rank, ++iteration)
 		{
 			auto seed = seed_dist(gen);
+			auto now_sec = std::time(nullptr);
+			auto second = std::time_t{1};
+
+			if(last_time_sec + 60*second < now_sec)
+			{
+				auto time_passed_sec = std::intmax_t{now_sec - start_time_sec};
+
+				std::printf(
+					FMT, iteration, time_passed_sec, m, n, p, rank, seed
+				);
+
+				last_time_sec = now_sec;
+			}
+
 			ggqrcs_random_test_impl(Number{0}, m, n, p, rank, seed);
 		}
 	}
