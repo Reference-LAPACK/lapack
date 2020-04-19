@@ -280,7 +280,7 @@ template<
 	class Storage,
 	typename Real = typename real_from<Number>::type
 >
-Real measure_unity(const ublas::matrix<Number, Storage>& U)
+Real measure_isometry(const ublas::matrix<Number, Storage>& U)
 {
 	BOOST_VERIFY( U.size1() >= U.size2() );
 
@@ -294,7 +294,7 @@ Real measure_unity(const ublas::matrix<Number, Storage>& U)
 using real_test_types = boost::mpl::list<float,double>;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(
-	test_measure_unity_simple_real, Real, real_test_types)
+	test_measure_isometry_simple_real, Real, real_test_types)
 {
 	for(auto m = std::size_t{0}; m < 5; ++m)
 	{
@@ -309,13 +309,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 				A(i,i) = std::pow(Real{-1}, Real(i));
 			}
 
-			BOOST_CHECK_EQUAL( 0, measure_unity(A) );
+			BOOST_CHECK_EQUAL( 0, measure_isometry(A) );
 		}
 	}
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(
-	test_measure_unity_real, Real, real_test_types)
+	test_measure_isometry_real, Real, real_test_types)
 {
 	auto A = ublas::matrix<Real, ublas::column_major>(4, 2);
 
@@ -330,7 +330,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 
 	auto expected_result = ublas::norm_frobenius(AT_A - I);
 
-	BOOST_CHECK_EQUAL( expected_result, measure_unity(A) );
+	BOOST_CHECK_EQUAL( expected_result, measure_isometry(A) );
 }
 
 
@@ -347,7 +347,7 @@ template<
 	class Storage,
 	typename Real = typename real_from<Number>::type
 >
-bool is_almost_unitary(
+bool is_almost_isometric(
 	const ublas::matrix<Number, Storage>& U, Real multiplier = 4)
 {
 	BOOST_VERIFY( multiplier >= 1 );
@@ -360,7 +360,7 @@ bool is_almost_unitary(
 	if(p == 0)
 		return true;
 
-	auto r = measure_unity(U);
+	auto r = measure_isometry(U);
 	auto tol = std::sqrt(p) * m * n * eps;
 
 	return r <= multiplier * tol;
@@ -453,9 +453,9 @@ void check_results(
 	// check that unitary matrices are indeed unitary
 	// The bound is based on Inequality (19.13), Equation (3.8) in
 	// Higham: "Accuracy and Stability of Numerical Algorithms".
-	BOOST_CHECK_LE( measure_unity(U1), 4 * std::sqrt(m) * (m+p) * r * eps );
-	BOOST_CHECK_LE( measure_unity(U2), 4 * std::sqrt(p) * (m+p) * r * eps );
-	BOOST_CHECK_LE( measure_unity(Qt), 4 * std::sqrt(n) * n * r * eps );
+	BOOST_CHECK_LE( measure_isometry(U1), 4 * std::sqrt(m) * (m+p) * r * eps );
+	BOOST_CHECK_LE( measure_isometry(U2), 4 * std::sqrt(p) * (m+p) * r * eps );
+	BOOST_CHECK_LE( measure_isometry(Qt), 4 * std::sqrt(n) * n * r * eps );
 
 
 	// check the "singular values"
@@ -777,6 +777,7 @@ ublas::matrix<Number, Storage> make_isometric_matrix_like(
 	ret = lapack::ungqr(m, n, n, &A(0,0), m, &tau(0), &work(0), lwork);
 
 	BOOST_VERIFY( ret == 0 );
+	BOOST_ASSERT( is_almost_isometric(A) );
 
 	return A;
 }
