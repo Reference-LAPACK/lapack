@@ -540,7 +540,7 @@
 *
 *     DEBUG
 *
-      THETA(1:L) = NAN
+      THETA(1:N) = NAN
 *
 *     Compute the CS decomposition of Q1( :, 1:L )
 *
