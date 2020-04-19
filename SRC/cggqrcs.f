@@ -44,7 +44,7 @@
 *> \verbatim
 *>
 *> CGGQRCS computes the generalized singular value decomposition (GSVD)
-*> of an M-by-N real matrix A and P-by-N real matrix B:
+*> of an M-by-N complex matrix A and P-by-N complex matrix B:
 *>
 *>       U1**T*A*Q = D1*( 0 R ),    U2**T*B*Q = D2*( 0 R )
 *>
@@ -53,7 +53,7 @@
 *> compute the GSVD.
 *>
 *> Let L be the effective numerical rank of the matrix (A**T,B**T)**T,
-*> then R is a L-by-L nonsingular upper triangular matrix, D1 and
+*> then R is an L-by-L nonsingular upper triangular matrix, D1 and
 *> D2 are M-by-L and P-by-L "diagonal" matrices and of the
 *> following structures, respectively:
 *>
