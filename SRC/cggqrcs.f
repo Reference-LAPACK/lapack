@@ -353,7 +353,7 @@
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
       INTEGER            I, J, LMAX, Z, LDG, LWKOPT, LRWKOPT,
-     $                   LRWORK2BY1, K2BY1
+     $                   LRWORK2BY1
       REAL               GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
       COMPLEX            ZERO, ONE, CNAN
 *     .. Local Arrays ..
@@ -451,8 +451,13 @@
          LWKOPT = Z + LWKOPT
 *        Adjust CUNCSD2BY1 LRWORK for case with maximum memory
 *        consumption
-         K2BY1 = MIN( m, p, n, MAX( 0, M+P-N) )
-         LRWORK2BY1 = INT( RWORK(1) ) - 16 * K2BY1 + 16 * MIN( M,P,N )
+         LRWORK2BY1 = INT( RWORK(1) )
+*        Select safe xUNCSD2BY1 IBBCSD value
+     $                - 9 * MAX( 0, MIN( M, P, N, M+P-N-1 ) )
+     $                + 9 * MAX( 1, MIN( M, P, N ) )
+*        Select safe xUNCSD2BY1 LBBCSD value
+     $                - 8 * MAX( 0, MIN( M, P, N, M+P-N ) )
+     $                + 8 * MIN( M, P, N )
          LRWKOPT = MAX( 2*N, LRWORK2BY1 )
 
 *        CGERQF, CUNGRQ read/store up to LMAX scalar factors
