@@ -506,27 +506,45 @@ struct QrCsCaller
 	Real w = not_a_number<Real>::value;
 	Integer rank = -1;
 	std::size_t m, n, p;
+	std::size_t ldx, ldy, ldu1, ldu2, ldqt;
 	Matrix X, Y;
 	Matrix U1, U2, Qt;
 	Vector<Number> theta;
 	Vector<Number> work;
 	Vector<Integer> iwork;
 
-	QrCsCaller(std::size_t m_, std::size_t n_, std::size_t p_) :
+
+	QrCsCaller(std::size_t m_, std::size_t n_, std::size_t p_)
+		: QrCsCaller(m_, n_, p_, m_, p_, m_, p_, n_)
+	{}
+
+
+	QrCsCaller(
+		std::size_t m_, std::size_t n_, std::size_t p_,
+		std::size_t ldx_, std::size_t ldy_,
+		std::size_t ldu1_, std::size_t ldu2_, std::size_t ldqt_
+	) :
 		m(m_),
 		n(n_),
 		p(p_),
-		X(m, n, 0),
-		Y(p, n, 0),
-		U1(m, m, not_a_number<Number>::value),
-		U2(p, p, not_a_number<Number>::value),
-		Qt(n, n, not_a_number<Number>::value),
+		ldx(ldx_), ldy(ldy_),
+		ldu1(ldu1_), ldu2(ldu2_), ldqt(ldqt_),
+		X(ldx, n, 0),
+		Y(ldy, n, 0),
+		U1(ldu1, m, not_a_number<Number>::value),
+		U2(ldu2, p, not_a_number<Number>::value),
+		Qt(ldqt, n, not_a_number<Number>::value),
 		theta(n, not_a_number<Real>::value),
 		iwork(m + n + p, -1)
 	{
 		BOOST_VERIFY( m > 0 );
 		BOOST_VERIFY( n > 0 );
 		BOOST_VERIFY( p > 0 );
+		BOOST_VERIFY( ldx >= m );
+		BOOST_VERIFY( ldy >= p );
+		BOOST_VERIFY( ldu1 >= m );
+		BOOST_VERIFY( ldu2 >= p );
+		BOOST_VERIFY( ldqt >= n );
 
 		auto nan = not_a_number<Number>::value;
 
@@ -536,9 +554,9 @@ struct QrCsCaller
 		auto rank = Integer{-1};
 		auto ret = lapack::ggqrcs(
 			'Y', 'Y', 'Y', m, n, p, &w, &rank,
-			&X(0, 0), m, &Y(0, 0), p,
+			&X(0, 0), ldx, &Y(0, 0), ldy,
 			&theta(0),
-			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&U1(0, 0), ldu1, &U2(0, 0), ldu2, &Qt(0, 0), ldqt,
 			&lwork_opt_f, -1, &iwork(0) );
 		BOOST_REQUIRE_EQUAL( ret, 0 );
 
@@ -555,9 +573,9 @@ struct QrCsCaller
 	{
 		return lapack::ggqrcs(
 			'Y', 'Y', 'Y', m, n, p, &w, &rank,
-			&X(0, 0), m, &Y(0, 0), p,
+			&X(0, 0), ldx, &Y(0, 0), ldy,
 			&theta(0),
-			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&U1(0, 0), ldu1, &U2(0, 0), ldu2, &Qt(0, 0), ldqt,
 			&work(0), work.size(), &iwork(0)
 		);
 	}
@@ -574,6 +592,7 @@ struct QrCsCaller<std::complex<Real>>
 	Real w = not_a_number<Real>::value;
 	Integer rank = -1;
 	std::size_t m, n, p;
+	std::size_t ldx, ldy, ldu1, ldu2, ldqt;
 	Matrix X, Y;
 	Matrix U1, U2, Qt;
 	Vector<Real> theta;
@@ -581,21 +600,37 @@ struct QrCsCaller<std::complex<Real>>
 	Vector<Real> rwork;
 	Vector<Integer> iwork;
 
-	QrCsCaller(std::size_t m_, std::size_t n_, std::size_t p_) :
+
+	QrCsCaller(std::size_t m_, std::size_t n_, std::size_t p_)
+		: QrCsCaller(m_, n_, p_, m_, p_, m_, p_, n_)
+	{}
+
+	QrCsCaller(
+		std::size_t m_, std::size_t n_, std::size_t p_,
+		std::size_t ldx_, std::size_t ldy_,
+		std::size_t ldu1_, std::size_t ldu2_, std::size_t ldqt_
+	) :
 		m(m_),
 		n(n_),
 		p(p_),
-		X(m, n, 0),
-		Y(p, n, 0),
-		U1(m, m, not_a_number<Number>::value),
-		U2(p, p, not_a_number<Number>::value),
-		Qt(n, n, not_a_number<Number>::value),
+		ldx(ldx_), ldy(ldy_),
+		ldu1(ldu1_), ldu2(ldu2_), ldqt(ldqt_),
+		X(ldx, n, 0),
+		Y(ldy, n, 0),
+		U1(ldu1, m, not_a_number<Number>::value),
+		U2(ldu2, p, not_a_number<Number>::value),
+		Qt(ldqt, n, not_a_number<Number>::value),
 		theta(n, not_a_number<Real>::value),
 		iwork(m + n + p, -1)
 	{
 		BOOST_VERIFY( m > 0 );
 		BOOST_VERIFY( n > 0 );
 		BOOST_VERIFY( p > 0 );
+		BOOST_VERIFY( ldx >= m );
+		BOOST_VERIFY( ldy >= p );
+		BOOST_VERIFY( ldu1 >= m );
+		BOOST_VERIFY( ldu2 >= p );
+		BOOST_VERIFY( ldqt >= n );
 
 		auto nan = not_a_number<Number>::value;
 		auto real_nan = not_a_number<Real>::value;
@@ -607,9 +642,9 @@ struct QrCsCaller<std::complex<Real>>
 		auto rank = Integer{-1};
 		auto ret = lapack::ggqrcs(
 			'Y', 'Y', 'Y', m, n, p, &w, &rank,
-			&X(0, 0), m, &Y(0, 0), p,
+			&X(0, 0), ldx, &Y(0, 0), ldy,
 			&theta(0),
-			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&U1(0, 0), ldu1, &U2(0, 0), ldu2, &Qt(0, 0), ldqt,
 			&lwork_opt_f, -1, &lrwork_opt_f, 1, &iwork(0) );
 		BOOST_REQUIRE_EQUAL( ret, 0 );
 
@@ -621,9 +656,9 @@ struct QrCsCaller<std::complex<Real>>
 
 		ret = lapack::ggqrcs(
 			'Y', 'Y', 'Y', m, n, p, &w, &rank,
-			&X(0, 0), m, &Y(0, 0), p,
+			&X(0, 0), ldx, &Y(0, 0), ldy,
 			&theta(0),
-			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&U1(0, 0), ldu1, &U2(0, 0), ldu2, &Qt(0, 0), ldqt,
 			&work(0), lwork_opt, &lrwork_opt_f, -1, &iwork(0) );
 		BOOST_REQUIRE_EQUAL( ret, 0 );
 
@@ -639,9 +674,9 @@ struct QrCsCaller<std::complex<Real>>
 	{
 		return lapack::ggqrcs(
 			'Y', 'Y', 'Y', m, n, p, &w, &rank,
-			&X(0, 0), m, &Y(0, 0), p,
+			&X(0, 0), ldx, &Y(0, 0), ldy,
 			&theta(0),
-			&U1(0, 0), m, &U2(0, 0), p, &Qt(0, 0), n,
+			&U1(0, 0), ldu1, &U2(0, 0), ldu2, &Qt(0, 0), ldqt,
 			&work(0), work.size(),
 			&rwork(0), rwork.size(),
 			&iwork(0)
@@ -656,13 +691,28 @@ void check_results(
 	const Matrix& A, const Matrix& B,
 	const QrCsCaller<Number> caller)
 {
+	auto f = [] (const Matrix& A, std::size_t m, std::size_t n) {
+		BOOST_VERIFY( A.size1() >= m );
+		BOOST_VERIFY( A.size2() == n );
+		return Matrix(ublas::subrange(A, 0, m, 0, n));
+	};
+
+	auto m = caller.m;
+	auto n = caller.n;
+	auto p = caller.p;
+	auto X = f(caller.X, m, n);
+	auto Y = f(caller.Y, p, n);
+	auto U1 = f(caller.U1, m, m);
+	auto U2 = f(caller.U2, p, p);
+	auto Qt = f(caller.Qt, n, n);
+
 	check_results(
 		ret,
 		A, B,
 		caller.w, caller.rank,
 		caller.theta,
-		caller.U1, caller.U2, caller.Qt,
-		caller.X, caller.Y
+		U1, U2, Qt,
+		X, Y
 	);
 }
 
@@ -964,12 +1014,20 @@ void ggqrcs_random_test_impl(
 	auto D2 = ds.second;
 	auto A = Matrix(ublas::prod(Matrix(ublas::prod(U1, D1)), R_Qt));
 	auto B = Matrix(ublas::prod(Matrix(ublas::prod(U2, D2)), R_Qt));
-	auto caller = QrCsCaller<Number>(m, n, p);
 
-	caller.X = A;
-	caller.Y = B;
+	// initialize caller
+	auto ldx = m + 11;
+	auto ldy = p + 5;
+	auto ldu1 = m + 13;
+	auto ldu2 = p + 7;
+	auto ldqt = n + 17;
+	auto caller = QrCsCaller<Number>(m, n, p, ldx, ldy, ldu1, ldu2, ldqt);
+
+	ublas::subrange(caller.X, 0, m, 0, n) = A;
+	ublas::subrange(caller.Y, 0, p, 0, n) = B;
 
 	auto ret = caller();
+
 	check_results(ret, A, B, caller);
 
 	BOOST_CHECK_LE( caller.rank, r );
