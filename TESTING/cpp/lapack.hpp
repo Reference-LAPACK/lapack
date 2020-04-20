@@ -47,6 +47,41 @@
 
 extern "C"
 {
+	lapack_int sgemm_(
+		char* transa, char* transb,
+		lapack_int* m, lapack_int* n, lapack_int* k,
+		float* alpha,
+		const float* A, lapack_int* lda,
+		const float* B, lapack_int* ldb,
+		float* beta,
+		const float* C, lapack_int* ldc,
+		std::size_t transa_len, std::size_t transb_len
+	);
+
+	lapack_int dgemm_(
+		char* transa, char* transb,
+		lapack_int* m, lapack_int* n, lapack_int* k,
+		double* alpha,
+		const double* A, lapack_int* lda,
+		const double* B, lapack_int* ldb,
+		double* beta,
+		const double* C, lapack_int* ldc,
+		std::size_t transa_len, std::size_t transb_len
+	);
+
+	lapack_int cgemm_(
+		char* transa, char* transb,
+		lapack_int* m, lapack_int* n, lapack_int* k,
+		std::complex<float>* alpha,
+		const std::complex<float>* A, lapack_int* lda,
+		const std::complex<float>* B, lapack_int* ldb,
+		std::complex<float>* beta,
+		const std::complex<float>* C, lapack_int* ldc,
+		std::size_t transa_len, std::size_t transb_len
+	);
+
+
+
 	void sggqrcs_(
 		char* jobu1, char* jobu2, char* jobqt,
 		lapack_int* m, lapack_int* n, lapack_int* p,
@@ -109,6 +144,64 @@ namespace lapack
 	}
 
 typedef lapack_int integer_t;
+
+
+inline integer_t gemm(
+	char transa, char transb, integer_t m, integer_t n, integer_t k,
+	float alpha,
+	const float* A, integer_t lda,
+	const float* B, integer_t ldb,
+	float beta,
+	const float* C, integer_t ldc)
+{
+	return sgemm_(
+		&transa, &transb, &m, &n, &k,
+		&alpha,
+		A, &lda,
+		B, &ldb,
+		&beta,
+		C, &ldc,
+		1, 1
+	);
+}
+
+inline integer_t gemm(
+	char transa, char transb, integer_t m, integer_t n, integer_t k,
+	double alpha,
+	const double* A, integer_t lda,
+	const double* B, integer_t ldb,
+	double beta,
+	const double* C, integer_t ldc)
+{
+	return dgemm_(
+		&transa, &transb, &m, &n, &k,
+		&alpha,
+		A, &lda,
+		B, &ldb,
+		&beta,
+		C, &ldc,
+		1, 1
+	);
+}
+
+inline integer_t gemm(
+	char transa, char transb, integer_t m, integer_t n, integer_t k,
+	std::complex<float> alpha,
+	const std::complex<float>* A, integer_t lda,
+	const std::complex<float>* B, integer_t ldb,
+	std::complex<float> beta,
+	const std::complex<float>* C, integer_t ldc)
+{
+	return cgemm_(
+		&transa, &transb, &m, &n, &k,
+		&alpha,
+		A, &lda,
+		B, &ldb,
+		&beta,
+		C, &ldc,
+		1, 1
+	);
+}
 
 
 

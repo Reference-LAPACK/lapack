@@ -277,17 +277,30 @@ ublas::matrix<Number, Storage> reconstruct_matrix(
  */
 template<
 	typename Number,
-	class Storage,
 	typename Real = typename real_from<Number>::type
 >
-Real measure_isometry(const ublas::matrix<Number, Storage>& U)
+Real measure_isometry(const ublas::matrix<Number, ublas::column_major>& U)
 {
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
+
 	BOOST_VERIFY( U.size1() >= U.size2() );
 
+	if(U.size2() == 0)
+		return 0;
+
+	auto m = U.size1();
 	auto n = U.size2();
-	auto id = ublas::identity_matrix<Number>(n);
-	auto delta = ublas::norm_frobenius(ublas::prod(ublas::herm(U), U) - id);
-	return delta;
+	auto J = Matrix(n, n);
+	auto I = ublas::identity_matrix<Number>(n);
+	auto alpha = Number{1};
+	auto beta = Number{0};
+	auto ret = lapack::gemm(
+		'C', 'N', n, n, m, alpha, &U(0,0), m, &U(0,0), m, beta, &J(0,0), n
+	);
+
+	BOOST_VERIFY( ret == 0 );
+
+	return ublas::norm_frobenius(J - I);
 }
 
 
@@ -298,9 +311,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 {
 	for(auto m = std::size_t{0}; m < 5; ++m)
 	{
-		for(auto n = std::size_t{0}; n < m; ++n)
+		for(auto n = std::size_t{0}; n <= m; ++n)
 		{
-			auto A = ublas::matrix<Real>(m, n);
+			auto A = ublas::matrix<Real, ublas::column_major>(m, n);
 
 			std::fill( A.data().begin(), A.data().end(), Real{0} );
 
