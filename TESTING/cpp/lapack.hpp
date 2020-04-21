@@ -80,6 +80,17 @@ extern "C"
 		std::size_t transa_len, std::size_t transb_len
 	);
 
+	lapack_int zgemm_(
+		char* transa, char* transb,
+		lapack_int* m, lapack_int* n, lapack_int* k,
+		std::complex<double>* alpha,
+		const std::complex<double>* A, lapack_int* lda,
+		const std::complex<double>* B, lapack_int* ldb,
+		std::complex<double>* beta,
+		const std::complex<double>* C, lapack_int* ldc,
+		std::size_t transa_len, std::size_t transb_len
+	);
+
 
 
 	void sggqrcs_(
@@ -203,6 +214,25 @@ inline integer_t gemm(
 	);
 }
 
+inline integer_t gemm(
+	char transa, char transb, integer_t m, integer_t n, integer_t k,
+	std::complex<double> alpha,
+	const std::complex<double>* A, integer_t lda,
+	const std::complex<double>* B, integer_t ldb,
+	std::complex<double> beta,
+	const std::complex<double>* C, integer_t ldc)
+{
+	return zgemm_(
+		&transa, &transb, &m, &n, &k,
+		&alpha,
+		A, &lda,
+		B, &ldb,
+		&beta,
+		C, &ldc,
+		1, 1
+	);
+}
+
 
 
 inline integer_t geqp3(
@@ -265,6 +295,22 @@ inline integer_t geqrf(
 	);
 	return info;
 }
+
+inline integer_t geqrf(
+	integer_t m, integer_t n, std::complex<double>* A, integer_t lda,
+	std::complex<double>* p_tau, std::complex<double>* p_work, integer_t lwork)
+{
+	integer_t info = -1;
+	zgeqrf_(
+		&m, &n,
+		reinterpret_cast<double _Complex*>(A), &lda,
+		reinterpret_cast<double _Complex*>(p_tau),
+		reinterpret_cast<double _Complex*>(p_work), &lwork,
+		&info
+	);
+	return info;
+}
+
 
 
 
@@ -748,6 +794,63 @@ inline integer_t uncsd2by1(
 	return info;
 }
 
+inline integer_t uncsd2by1(
+	char jobu1, char jobu2, char jobv1t,
+	integer_t m, integer_t p, integer_t q,
+	std::complex<float>* X11, integer_t ldx11,
+	std::complex<float>* X21, integer_t ldx21,
+	float* theta,
+	std::complex<float>* U1, integer_t ldu1,
+	std::complex<float>* U2, integer_t ldu2,
+	std::complex<float>* V1t, integer_t ldv1t,
+	std::complex<float>* work, integer_t lwork,
+	float* rwork, integer_t lrwork,
+	integer_t* iwork)
+{
+	integer_t info = -1;
+	cuncsd2by1_(
+		&jobu1, &jobu2, &jobv1t,
+		&m, &p, &q,
+		reinterpret_cast<float _Complex*>(X11), &ldx11,
+		reinterpret_cast<float _Complex*>(X21), &ldx21,
+		theta,
+		reinterpret_cast<float _Complex*>(U1), &ldu1,
+		reinterpret_cast<float _Complex*>(U2), &ldu2,
+		reinterpret_cast<float _Complex*>(V1t), &ldv1t,
+		reinterpret_cast<float _Complex*>(work), &lwork,
+		rwork, &lrwork, iwork, &info);
+	return info;
+}
+
+inline integer_t uncsd2by1(
+	char jobu1, char jobu2, char jobv1t,
+	integer_t m, integer_t p, integer_t q,
+	std::complex<double>* X11, integer_t ldx11,
+	std::complex<double>* X21, integer_t ldx21,
+	double* theta,
+	std::complex<double>* U1, integer_t ldu1,
+	std::complex<double>* U2, integer_t ldu2,
+	std::complex<double>* V1t, integer_t ldv1t,
+	std::complex<double>* work, integer_t lwork,
+	double* rwork, integer_t lrwork,
+	integer_t* iwork)
+{
+	integer_t info = -1;
+	zuncsd2by1_(
+		&jobu1, &jobu2, &jobv1t,
+		&m, &p, &q,
+		reinterpret_cast<double _Complex*>(X11), &ldx11,
+		reinterpret_cast<double _Complex*>(X21), &ldx21,
+		theta,
+		reinterpret_cast<double _Complex*>(U1), &ldu1,
+		reinterpret_cast<double _Complex*>(U2), &ldu2,
+		reinterpret_cast<double _Complex*>(V1t), &ldv1t,
+		reinterpret_cast<double _Complex*>(work), &lwork,
+		rwork, &lrwork, iwork, &info
+	);
+	return info;
+}
+
 
 
 inline integer_t ungqr(
@@ -784,6 +887,23 @@ inline integer_t ungqr(
 		reinterpret_cast<float _Complex*>(A), &lda,
 		reinterpret_cast<const float _Complex*>(p_tau),
 		reinterpret_cast<float _Complex*>(p_work), &lwork,
+		&info
+	);
+
+	return info;
+}
+
+inline integer_t ungqr(
+	integer_t m, integer_t n, integer_t k,
+	std::complex<double>* A, integer_t lda, const std::complex<double>* p_tau,
+	std::complex<double>* p_work, integer_t lwork)
+{
+	integer_t info = -1;
+	zungqr_(
+		&m, &n, &k,
+		reinterpret_cast<double _Complex*>(A), &lda,
+		reinterpret_cast<const double _Complex*>(p_tau),
+		reinterpret_cast<double _Complex*>(p_work), &lwork,
 		&info
 	);
 
