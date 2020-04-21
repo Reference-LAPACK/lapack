@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2019, Christoph Conrads (https://christoph-conrads.name)
+ * Copyright (c) 2016, 2019, 2020 Christoph Conrads (https://christoph-conrads.name)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
