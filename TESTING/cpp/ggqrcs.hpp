@@ -1152,4 +1152,99 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(
 	}
 }
 
+
+
+template<
+	typename Number,
+	typename std::enable_if<
+		std::is_fundamental<Number>::value, int
+	>::type* = nullptr
+>
+void uncsd2by1_regression_20200420_impl(Number)
+{
+	using Real = typename real_from<Number>::type;
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
+
+	auto m = std::size_t{130}; // 160
+	auto n = std::size_t{131}; // 179
+	auto p = std::size_t{130}; // 150
+	auto ldq = m + p;
+	auto gen = std::minstd_rand();
+	auto Q = make_isometric_matrix_like(Real{0}, ldq, n, &gen);
+
+	BOOST_VERIFY( is_almost_isometric(Q) );
+
+	auto nan = not_a_number<Number>::value;
+	auto real_nan = not_a_number<Real>::value;
+	auto theta = ublas::vector<Real>(n, real_nan);
+	auto U1 = Matrix(m, m, nan);
+	auto U2 = Matrix(p, p, nan);
+	auto Qt = Matrix(n, n, nan);
+	auto lwork = 32 * ldq;
+	auto work = ublas::vector<Number>(lwork, nan);
+	auto iwork = ublas::vector<Integer>(m+p, -1);
+	auto ret = lapack::uncsd2by1(
+		'Y', 'Y', 'N',
+		m + p, m, n,
+		&Q(0, 0), ldq, &Q(m, 0), ldq,
+		&theta(0),
+		&U1(0,0), m, &U2(0,0), p, &Qt(0,0), n,
+		&work(0), lwork, &iwork(0)
+	);
+
+	BOOST_REQUIRE_EQUAL( ret, 0 );
+	BOOST_CHECK( is_almost_isometric(U1) );
+	BOOST_CHECK( is_almost_isometric(U2) );
+}
+
+template<
+	typename Number,
+	typename std::enable_if<
+		!std::is_fundamental<Number>::value, int
+	>::type* = nullptr
+>
+void uncsd2by1_regression_20200420_impl(Number)
+{
+	using Real = typename real_from<Number>::type;
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
+
+	auto m = std::size_t{130}; // 160
+	auto n = std::size_t{131}; // 179
+	auto p = std::size_t{130}; // 150
+	auto ldq = m + p;
+	auto gen = std::minstd_rand();
+	auto Q = make_isometric_matrix_like(Number{0}, ldq, n, &gen);
+
+	BOOST_VERIFY( is_almost_isometric(Q) );
+
+	auto nan = not_a_number<Number>::value;
+	auto real_nan = not_a_number<Real>::value;
+	auto theta = ublas::vector<Real>(n, real_nan);
+	auto U1 = Matrix(m, m, nan);
+	auto U2 = Matrix(p, p, nan);
+	auto Qt = Matrix(n, n, nan);
+	auto lwork = 32 * ldq;
+	auto work = ublas::vector<Number>(lwork, nan);
+	auto lrwork = 32 * ldq;
+	auto rwork = ublas::vector<Real>(lrwork, real_nan);
+	auto iwork = ublas::vector<Integer>(m+p, -1);
+	auto ret = lapack::uncsd2by1(
+		'Y', 'Y', 'N',
+		m + p, m, n,
+		&Q(0, 0), ldq, &Q(m, 0), ldq,
+		&theta(0),
+		&U1(0,0), m, &U2(0,0), p, &Qt(0,0), n,
+		&work(0), lwork, &rwork(0), lrwork, &iwork(0)
+	);
+
+	BOOST_REQUIRE_EQUAL( ret, 0 );
+	BOOST_CHECK( is_almost_isometric(U1) );
+	BOOST_CHECK( is_almost_isometric(U2) );
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(uncsd2by1_regression_20200420, Number, test_types)
+{
+	uncsd2by1_regression_20200420_impl(Number{});
+}
+
 #endif
