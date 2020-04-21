@@ -254,18 +254,33 @@ build_diagonals_like(
 
 
 
-template<typename Number, class Storage>
-ublas::matrix<Number, Storage> reconstruct_matrix(
-	const ublas::matrix<Number, Storage>& U,
-	const ublas::matrix<Number, Storage>& D,
-	const ublas::matrix<Number, Storage>& R,
-	const ublas::matrix<Number, Storage>& Qt)
+template<typename Number>
+ublas::matrix<Number, ublas::column_major> reconstruct_matrix(
+	const ublas::matrix<Number, ublas::column_major>& U,
+	const ublas::matrix<Number, ublas::column_major>& D,
+	const ublas::matrix<Number, ublas::column_major>& R,
+	const ublas::matrix<Number, ublas::column_major>& Qt)
 {
-	using Matrix = ublas::matrix<Number, Storage>;
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
 
-	auto D_R = Matrix(ublas::prod(D, R));
-	auto U_D_R = Matrix(ublas::prod(U, D_R));
-	auto A = Matrix(ublas::prod(U_D_R, Qt));
+	auto m = U.size1();
+	auto n = Qt.size1();
+	auto DR = Matrix(ublas::prod(D, R));
+	auto UDR = Matrix(m, n);
+	auto alpha = Number{1};
+	auto beta = Number{0};
+	auto ret = lapack::gemm(
+		'N', 'N', m, n, m, alpha, &U(0,0), m, &DR(0,0), m, beta, &UDR(0,0), m
+	);
+
+	BOOST_VERIFY( ret == 0 );
+
+	auto A = Matrix(m, n);
+	ret = lapack::gemm(
+		'N', 'N', m, n, n, alpha, &UDR(0,0), m, &Qt(0,0), n, beta, &A(0,0), m
+	);
+
+	BOOST_VERIFY( ret == 0 );
 
 	return A;
 }
@@ -290,8 +305,8 @@ Real measure_isometry(const ublas::matrix<Number, ublas::column_major>& U)
 
 	auto m = U.size1();
 	auto n = U.size2();
-	auto J = Matrix(n, n);
 	auto I = ublas::identity_matrix<Number>(n);
+	auto J = Matrix(n, n);
 	auto alpha = Number{1};
 	auto beta = Number{0};
 	auto ret = lapack::gemm(
@@ -962,19 +977,18 @@ ublas::matrix<Number, Storage> make_isometric_matrix_like(
 template<
 	typename Number,
 	class Engine,
-	class Storage = ublas::column_major,
 	typename Real = typename real_from<Number>::type
 >
-ublas::matrix<Number, Storage> make_matrix_like(
+ublas::matrix<Number, ublas::column_major> make_matrix_like(
 	Number dummy, std::size_t m, std::size_t n, Real cond2, Engine* gen)
 {
-	using Matrix = ublas::matrix<Number, Storage>;
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
 	using BandedMatrix = ublas::banded_matrix<Number>;
 
 	auto p = std::min(m, n);
 
 	if(p <= 1)
-		return ublas::identity_matrix<Number, Storage>(m, n);
+		return ublas::identity_matrix<Number, ublas::column_major>(m, n);
 
 	auto S = BandedMatrix(p, p);
 	// do not sort singular values
@@ -987,9 +1001,52 @@ ublas::matrix<Number, Storage> make_matrix_like(
 
 	auto U = make_isometric_matrix_like(dummy, m, p, gen);
 	auto V = make_isometric_matrix_like(dummy, n, p, gen);
-
 	auto US = Matrix(ublas::prod(U, S));
-	auto A = Matrix(ublas::prod(US, ublas::trans(V)));
+	auto alpha = Number{1};
+	auto beta = Number{0};
+	auto A = Matrix(m, n);
+	auto ret = lapack::gemm(
+		'N', 'C', m, n, p, alpha, &US(0,0), m, &V(0,0), n, beta, &A(0,0), m
+	);
+
+	BOOST_VERIFY( ret == 0 );
+
+	return A;
+}
+
+
+
+template<typename Number>
+ublas::matrix<Number, ublas::column_major> assemble_matrix(
+	const ublas::matrix<Number, ublas::column_major>& U,
+	const ublas::matrix<Number, ublas::column_major>& D,
+	const ublas::matrix<Number, ublas::column_major>& RQt)
+{
+	BOOST_VERIFY( U.size1() == U.size2() );
+	BOOST_VERIFY( U.size2() == D.size1() );
+	BOOST_VERIFY( D.size2() == RQt.size1() );
+
+	using Matrix = ublas::matrix<Number, ublas::column_major>;
+
+	auto m = U.size1();
+	auto r = RQt.size1();
+	auto n = RQt.size2();
+	auto nan = not_a_number<Number>::value;
+	auto alpha = Number{1};
+	auto beta = Number{0};
+	auto DRQt = Matrix(m, n, nan);
+	auto ret = lapack::gemm(
+		'N', 'N', m, n, r, alpha, &D(0,0), m, &RQt(0,0), r, beta, &DRQt(0,0), m
+	);
+
+	BOOST_VERIFY( ret == 0 );
+
+	auto A = Matrix(m, n);
+	ret = lapack::gemm(
+		'N', 'N', m, n, m, alpha, &U(0,0), m, &DRQt(0,0), m, beta, &A(0,0), m
+	);
+
+	BOOST_VERIFY( ret == 0 );
 
 	return A;
 }
@@ -1003,7 +1060,6 @@ void ggqrcs_random_test_impl(
 	std::uint64_t seed)
 {
 	using Real = typename real_from<Number>::type;
-	using Matrix = ublas::matrix<Number, ublas::column_major>;
 
 	constexpr auto real_nan = not_a_number<Real>::value;
 
@@ -1038,8 +1094,8 @@ void ggqrcs_random_test_impl(
 	auto ds = build_diagonals_like(dummy, m, p, r, theta);
 	auto D1 = ds.first;
 	auto D2 = ds.second;
-	auto A = Matrix(ublas::prod(Matrix(ublas::prod(U1, D1)), R_Qt));
-	auto B = Matrix(ublas::prod(Matrix(ublas::prod(U2, D2)), R_Qt));
+	auto A = assemble_matrix(U1, D1, R_Qt);
+	auto B = assemble_matrix(U2, D2, R_Qt);
 
 	// initialize caller
 	auto ldx = m + 11;
@@ -1245,6 +1301,39 @@ void uncsd2by1_regression_20200420_impl(Number)
 BOOST_AUTO_TEST_CASE_TEMPLATE(uncsd2by1_regression_20200420, Number, test_types)
 {
 	uncsd2by1_regression_20200420_impl(Number{});
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_gemm, Real, real_test_types)
+{
+	using Matrix = ublas::matrix<Real, ublas::column_major>;
+
+	auto gen = std::minstd_rand();
+
+	for(auto m = std::size_t{2}; m < 100; m += 10)
+	{
+		for(auto n = std::size_t{1}; n <= 2*m; n += 10)
+		{
+			auto k = std::size_t{m/2};
+			auto cond = Real{1e3};
+			auto A = make_matrix_like(Real{0}, m, k, cond, &gen);
+			auto B = make_matrix_like(Real{0}, k, n, cond, &gen);
+			auto C = ublas::prod(A, B);
+			auto D = Matrix(m, n);
+			auto alpha = Real{1};
+			auto beta = Real{0};
+			auto ret = lapack::gemm(
+				'N', 'N', m, n, k,
+				alpha, &A(0,0), m, &B(0,0), k, beta, &D(0,0), m
+			);
+
+			BOOST_VERIFY( ret == 0 );
+
+			auto eps = std::numeric_limits<Real>::epsilon();
+			auto norm_C = ublas::norm_frobenius(C);
+			BOOST_CHECK_LE( ublas::norm_frobenius(C-D), m*n*norm_C * eps );
+		}
+	}
 }
 
 #endif
