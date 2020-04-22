@@ -1020,6 +1020,10 @@ ublas::matrix<Number, ublas::column_major> assemble_matrix(
 	auto m = U.size1();
 	auto r = RQt.size1();
 	auto n = RQt.size2();
+
+	if(r == 0)
+		return Matrix(m, n, 0);
+
 	auto nan = not_a_number<Number>::value;
 	auto alpha = Number{1};
 	auto beta = Number{0};
