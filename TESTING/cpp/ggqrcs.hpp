@@ -676,22 +676,11 @@ struct QrCsCaller<std::complex<Real>>
 			&lwork_opt_f, -1, &lrwork_opt_f, 1, &iwork(0) );
 		BOOST_REQUIRE_EQUAL( ret, 0 );
 
-		auto lwork_opt =
-			static_cast<std::size_t>(std::real(lwork_opt_f));
+		auto lwork_opt = static_cast<std::size_t>(std::real(lwork_opt_f));
+		auto lrwork_opt = static_cast<std::size_t>(std::real(lrwork_opt_f));
 
 		work.resize( lwork_opt );
 		std::fill( work.begin(), work.end(), nan );
-
-		ret = lapack::ggqrcs(
-			'Y', 'Y', 'Y', m, n, p, &w, &rank,
-			&X(0, 0), ldx, &Y(0, 0), ldy,
-			&theta(0),
-			&U1(0, 0), ldu1, &U2(0, 0), ldu2, &Qt(0, 0), ldqt,
-			&work(0), lwork_opt, &lrwork_opt_f, -1, &iwork(0) );
-		BOOST_REQUIRE_EQUAL( ret, 0 );
-
-		auto lrwork_opt =
-			static_cast<std::size_t>(std::real(lrwork_opt_f));
 
 		rwork.resize( lrwork_opt );
 		std::fill( rwork.begin(), rwork.end(), real_nan );
