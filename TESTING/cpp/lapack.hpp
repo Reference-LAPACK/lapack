@@ -135,6 +135,24 @@ extern "C"
 		lapack_int* info,
 		std::size_t jobu1_len, std::size_t jobu2_len, std::size_t jobqt_len
 	);
+
+	void zggqrcs_(
+		char* jobu1, char* jobu2, char* jobqt,
+		lapack_int* m, lapack_int* n, lapack_int* p,
+		double* w, lapack_int* l,
+		std::complex<double>* A, lapack_int* lda,
+        std::complex<double>* B, lapack_int* ldb,
+		double* theta,
+		std::complex<double>* U1, lapack_int* ldu1,
+        std::complex<double>* U2, lapack_int* ldu2,
+		std::complex<double>* Qt, lapack_int* ldqt,
+		std::complex<double>* work, lapack_int* lwork,
+        double* rwork, lapack_int* lrwork,
+        lapack_int* iwork,
+		lapack_int* info,
+		std::size_t jobu1_len, std::size_t jobu2_len, std::size_t jobqt_len
+	);
+
 }
 
 
@@ -446,6 +464,36 @@ inline integer_t ggqrcs(
 		theta,
 		U1, &ldu1, U2, &ldu2, Qt, &ldqt,
 		work, &lwork, iwork, &info,
+		1, 1, 1);
+	return info;
+}
+
+inline integer_t ggqrcs(
+	char jobu1, char jobu2, char jobqt,
+	integer_t m, integer_t n, integer_t p, double* w, integer_t* l,
+	std::complex<double>* A, integer_t lda,
+    std::complex<double>* B, integer_t ldb,
+	double* theta,
+	std::complex<double>* U1, integer_t ldu1,
+    std::complex<double>* U2, integer_t ldu2,
+	std::complex<double>* Qt, integer_t ldqt,
+	std::complex<double>* work, integer_t lwork,
+    double* rwork, integer_t lrwork,
+    integer_t* iwork)
+{
+	assert( w );
+	assert( l );
+	assert( work );
+	assert( rwork );
+
+	integer_t info = -1;
+	zggqrcs_(
+		&jobu1, &jobu2, &jobqt,
+		&m, &n, &p, w, l,
+		A, &lda, B, &ldb,
+		theta,
+		U1, &ldu1, U2, &ldu2, Qt, &ldqt,
+		work, &lwork, rwork, &lrwork, iwork, &info,
 		1, 1, 1);
 	return info;
 }

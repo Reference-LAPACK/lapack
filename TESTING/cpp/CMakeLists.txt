@@ -60,3 +60,16 @@ if(BUILD_COMPLEX)
 
 	add_test(NAME cpp_tests_complex COMMAND cpp_tests_complex)
 endif()
+
+
+if(BUILD_COMPLEX16)
+	add_executable(cpp_tests_complex16
+		main.cpp
+		zggqrcs.cpp)
+	target_link_libraries(cpp_tests_complex16
+		tmglib
+		${LAPACK_LIBRARIES}
+		${Boost_LIBRARIES})
+
+	add_test(NAME cpp_tests_complex16 COMMAND cpp_tests_complex16)
+endif()
