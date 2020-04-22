@@ -365,8 +365,8 @@
       EXTERNAL           LSAME, SLAMCH, CLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CLACPY, CLASCL, CGEQP3, CUNGQR, CGERQF, CUNGRQ,
-     $                   CUNCSD2BY1, XERBLA
+      EXTERNAL           CGEMM, CGEQP3, CGERQF, CLACPY, CLAPMT, CLASCL,
+     $                   CLASET, CUNGQR, CUNGRQ, CUNCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN

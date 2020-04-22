@@ -345,8 +345,8 @@
       EXTERNAL           LSAME, DLAMCH, DLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DLACPY, DLASCL, DGEQP3, DORGQR, DGERQF, QORGRQ,
-     $                   DORCSD2BY1, XERBLA
+      EXTERNAL           DGEMM, DGEQP3, DGERQF, DLACPY, DLAPMT, DLASCL,
+     $                   DLASET, DORGQR, DORGRQ, DORCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
