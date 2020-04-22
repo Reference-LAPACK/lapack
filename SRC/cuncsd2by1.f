@@ -190,9 +190,10 @@
 *>          The dimension of the array WORK.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the WORK array, returns
-*>          this value as the first entry of the work array, and no error
-*>          message related to LWORK is issued by XERBLA.
+*>          only calculates the optimal size of the WORK and RWORK
+*>          arrays, returns this value as the first entry of the WORK
+*>          and RWORK array, respectively, and no error message related
+*>          to LWORK or LRWORK is issued by XERBLA.
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -211,10 +212,11 @@
 *>          LRWORK is INTEGER
 *>          The dimension of the array RWORK.
 *>
-*>          If LRWORK = -1, then a workspace query is assumed; the routine
-*>          only calculates the optimal size of the RWORK array, returns
-*>          this value as the first entry of the work array, and no error
-*>          message related to LRWORK is issued by XERBLA.
+*>          If LRWORK=-1, then a workspace query is assumed; the routine
+*>          only calculates the optimal size of the WORK and RWORK
+*>          arrays, returns this value as the first entry of the WORK
+*>          and RWORK array, respectively, and no error message related
+*>          to LWORK or LRWORK is issued by XERBLA.
 *> \endverbatim
 *
 *> \param[out] IWORK
@@ -313,7 +315,7 @@
       WANTU1 = LSAME( JOBU1, 'Y' )
       WANTU2 = LSAME( JOBU2, 'Y' )
       WANTV1T = LSAME( JOBV1T, 'Y' )
-      LQUERY = LWORK .EQ. -1
+      LQUERY = ( LWORK.EQ.-1 ) .OR. ( LRWORK.EQ.-1 )
 *
       IF( M .LT. 0 ) THEN
          INFO = -4
