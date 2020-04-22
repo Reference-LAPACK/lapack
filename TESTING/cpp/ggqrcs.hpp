@@ -1304,6 +1304,72 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(uncsd2by1_regression_20200420, Number, test_types)
 }
 
 
+
+template<
+	typename Number,
+	typename std::enable_if<
+		std::is_fundamental<Number>::value, int
+	>::type* = nullptr
+>
+void uncsd2by1_workspace_query_with_lrwork_impl(Number)
+{
+	// there is no lrwork parameter for real-valued 2-by-1 CSD
+}
+
+template<
+	typename Number,
+	typename std::enable_if<
+		!std::is_fundamental<Number>::value, int
+	>::type* = nullptr
+>
+void uncsd2by1_workspace_query_with_lrwork_impl(Number)
+{
+	using Real = typename real_from<Number>::type;
+
+	// The workspace sizes are returned as floating-point values. Thus,
+	// the dimensions should not be too large if you want to check the
+	// workspace query result.
+	auto m = std::size_t{(1u<<8)+1};
+	auto n = std::size_t{(1u<<16)+1};
+	auto p = std::size_t{(1u<<19)-1};
+	auto nan = not_a_number<Number>::value;
+	auto real_nan = not_a_number<Real>::value;
+	auto dummy = nan;
+	auto real_dummy = real_nan;
+	auto ldq = 2 * (m + p) + 1;
+	auto ldu1 = 4 * m + 7;
+	auto ldu2 = 3 * p + 5;
+	auto ldqt = 2 * n + 13;
+	auto work = nan;
+	auto lwork = 1;
+	auto rwork = real_nan;
+	auto lrwork = -1;
+	auto iwork = Integer{-128};
+	auto ret = lapack::uncsd2by1(
+		'Y', 'Y', 'Y',
+		m + p, m, n,
+		&dummy, ldq, &dummy, ldq,
+		&real_dummy,
+		&dummy, ldu1, &dummy, ldu2, &dummy, ldqt,
+		&work, lwork, &rwork, lrwork, &iwork
+	);
+
+	auto k = std::min({ m, n, p, m+p-n });
+
+	BOOST_REQUIRE_EQUAL( ret, 0 );
+	BOOST_CHECK_GE( std::real(work), 8*k );
+	BOOST_CHECK_GE( rwork, 8*k );
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(
+	uncsd2by1_workspace_query_with_lrwork, Number, test_types)
+{
+	uncsd2by1_workspace_query_with_lrwork_impl(Number{});
+}
+
+
+
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_gemm, Real, real_test_types)
 {
 	using Matrix = ublas::matrix<Real, ublas::column_major>;
