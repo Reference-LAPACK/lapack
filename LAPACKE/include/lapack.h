@@ -2503,7 +2503,7 @@ void LAPACK_zgesvdq(
     lapack_complex_double* U, lapack_int const* ldu,
     lapack_complex_double* V, lapack_int const* ldv, lapack_int* numrank,
     lapack_int* iwork, lapack_int const* liwork,
-    lapack_complex_float* cwork, lapack_int* lcwork,
+    lapack_complex_double* cwork, lapack_int* lcwork,
     double* rwork, lapack_int const* lrwork,
     lapack_int* info );
 
