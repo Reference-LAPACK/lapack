@@ -35,8 +35,8 @@
 *>
 *> \verbatim
 *>
-*> Sort the numbers in X in increasing order (if ID = 'I') or
-*> in decreasing order (if ID = 'X' ).
+*> Sort the numbers in X indirectly in increasing order (if ID = 'I') or
+*> in decreasing order (if ID = 'X' ) using the array of INDICES.
 *>
 *> Use Quick Sort, reverting to Insertion sort on arrays of
 *> size <= 20. Dimension of STACK limits N to about 2**32.
@@ -49,22 +49,31 @@
 *> \verbatim
 *>          ID is CHARACTER*1
 *>          = 'I': sort X in increasing order;
-*>          = 'X': sort X in decreasing order.
+*>          = 'D': sort X in decreasing order.
 *> \endverbatim
 *>
 *> \param[in] N
 *> \verbatim
 *>          N is INTEGER
-*>          The length of the array X.
+*>          The length of the array X and INDICES.
 *> \endverbatim
 *>
-*> \param[in,out] X
+*> \param[in] X
 *> \verbatim
 *>          X is REAL array, dimension (N)
-*>          On entry, the array to be sorted.
-*>          On exit, X has been sorted into increasing order
-*>          (X(1) <= ... <= X(N) ) or into decreasing order
-*>          (X(1) >= ... >= X(N) ), depending on ID.
+*>          The values to be sorted.
+*> \endverbatim
+*>
+*> \param[in,out] INDICES
+*> \verbatim
+*>          X is INTEGER array, dimension (N)
+*>          On entry, the indices of values in X to be sorted.
+*>          On exit, X has been sorted into
+*>          increasing order such that
+*>          X( INDICES(1) ) <= ... <= X( INDICES(N) )
+*>          or decreasing order such that
+*>          X( INDICES(1) ) >= ... >= X( INDICES(N) )
+*>          depending on ID.
 *> \endverbatim
 *>
 *> \param[out] INFO
