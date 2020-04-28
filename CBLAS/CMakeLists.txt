@@ -49,6 +49,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cblas.pc.in
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}.pc
   DESTINATION ${PKG_CONFIG_DIR}
+  COMPONENT Development
   )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-version.cmake.in
@@ -62,6 +63,7 @@ install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CBLASLIB}-config.cmake
   ${LAPACK_BINARY_DIR}/${CBLASLIB}-config-version.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
+  COMPONENT Development
   )
 
 install(EXPORT ${CBLASLIB}-targets
