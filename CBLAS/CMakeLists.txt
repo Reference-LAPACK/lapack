@@ -44,28 +44,11 @@ if(BUILD_TESTING)
   add_subdirectory(examples)
 endif()
 
-# Export cblas targets from the
-# install tree, if any.
-set(_cblas_config_install_guard_target "")
-if(ALL_TARGETS)
-  install(EXPORT ${CBLASLIB}-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
-    COMPONENT Development
-    )
-  # Choose one of the cblas targets to use as a guard for
-  # cblas-config.cmake to load targets from the install tree.
-  list(GET ALL_TARGETS 0 _cblas_config_install_guard_target)
-endif()
+install(EXPORT ${CBLASLIB}-targets
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
+  COMPONENT Development
+  )
 
-# Export cblas targets from the build tree, if any.
-set(_cblas_config_build_guard_target "")
-if(ALL_TARGETS)
-  export(TARGETS ${ALL_TARGETS} FILE ${CBLASLIB}-targets.cmake)
-
-  # Choose one of the cblas targets to use as a guard
-  # for cblas-config.cmake to load targets from the build tree.
-  list(GET ALL_TARGETS 0 _cblas_config_build_guard_target)
-endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/cblas-config-version.cmake.in
   ${LAPACK_BINARY_DIR}/${CBLASLIB}-config-version.cmake @ONLY)
