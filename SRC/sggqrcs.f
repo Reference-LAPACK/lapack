@@ -341,7 +341,7 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      REAL               SLAMCH, SLANGE
+      REAL               SLAMCH, SLANGE, TAN, ATAN
       EXTERNAL           LSAME, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
@@ -626,6 +626,16 @@
 *
          CALL SLAPMT( .FALSE., N, N, QT, LDQT, IWORK )
       END IF
+*
+*     Adjust generalized singular values for matrix scaling
+*
+      DO I = 1, MIN( M, P, L, M + P - L )
+*        Do not adjust singular value if THETA(i) is greater than pi/2
+*        (i.e. TAN(THETA(I)) < 0)
+         IF ( TAN( THETA(I) ) >= 0 ) THEN
+            THETA(I) = ATAN( W * TAN( THETA(I) ) )
+         END IF
+      END DO
 *
       WORK( 1 ) = REAL( LWKOPT )
       RETURN
