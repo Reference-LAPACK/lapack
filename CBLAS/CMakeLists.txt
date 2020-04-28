@@ -44,12 +44,6 @@ if(BUILD_TESTING)
   add_subdirectory(examples)
 endif()
 
-install(EXPORT ${CBLASLIB}-targets
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
-  COMPONENT Development
-  )
-
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cblas.pc.in
   ${CMAKE_CURRENT_BINARY_DIR}/${CBLASLIB}.pc @ONLY)
 install(FILES
@@ -70,7 +64,7 @@ install(FILES
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
   )
 
-#install(EXPORT ${CBLASLIB}-targets
-#  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
-#  COMPONENT Development
-#  )
+install(EXPORT ${CBLASLIB}-targets
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CBLASLIB}-${LAPACK_VERSION}
+  COMPONENT Development
+  )
