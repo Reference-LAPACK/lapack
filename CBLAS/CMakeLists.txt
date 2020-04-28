@@ -39,14 +39,9 @@ install(FILES ${CBLAS_INCLUDE} ${LAPACK_BINARY_DIR}/include/cblas_mangling.h
   COMPONENT Development
   )
 
-# --------------------------------------------------
 if(BUILD_TESTING)
   add_subdirectory(testing)
   add_subdirectory(examples)
-endif()
-
-if(NOT BLAS_FOUND)
-  set(ALL_TARGETS ${ALL_TARGETS} ${BLASLIB})
 endif()
 
 # Export cblas targets from the
