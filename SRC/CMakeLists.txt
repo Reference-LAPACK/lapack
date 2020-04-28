@@ -54,7 +54,7 @@ set(SCLAUX
    slasd0.f slasd1.f slasd2.f slasd3.f slasd4.f slasd5.f slasd6.f
    slasd7.f slasd8.f slasda.f slasdq.f slasdt.f
    slaset.f slasq1.f slasq2.f slasq3.f slasq4.f slasq5.f slasq6.f
-   slasr.f  slasrt.f slassq.f90 slasv2.f spttrf.f sstebz.f sstedc.f
+   slasr.f  slasrt.f slasrti.f slassq.f90 slasv2.f spttrf.f sstebz.f sstedc.f
    ssteqr.f ssterf.f slaisnan.f sisnan.f
    slartgp.f slartgs.f
    ${SECOND_SRC})
