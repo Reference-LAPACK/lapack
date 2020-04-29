@@ -213,7 +213,7 @@ set(CLASRC
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
    clarf.f  clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f
    clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f90 clartv.f
-   clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f90
+   clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f clasrtr.f classq.f90
    claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clasyf_aa.f
    clatbs.f clatdf.f clatps.f clatrd.f clatrs.f clatrz.f
    clauu2.f clauum.f cpbcon.f cpbequ.f cpbrfs.f cpbstf.f cpbsv.f
