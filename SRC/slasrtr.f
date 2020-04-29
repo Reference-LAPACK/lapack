@@ -131,7 +131,7 @@
       EXTERNAL           LSAME
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           XERBLA
+      EXTERNAL           XERBLA, SLAPMR, SLASRTI
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
