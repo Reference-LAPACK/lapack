@@ -528,45 +528,82 @@ endif
 .PHONY: all
 all: $(LAPACKLIB)
 
-$(LAPACKLIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+LAPACKLIB_DEPS := $(ALLOBJ)
+
+ifdef USEXBLAS
+  LAPACKLIB_DEPS += $(ALLXOBJ)
+endif
+
+ifdef BUILD_DEPRECATED
+  LAPACKLIB_DEPS += $(DEPRECATED)
+endif
+
+$(LAPACKLIB): $(LAPACKLIB_DEPS)
 	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
 .PHONY: single complex double complex16
-single: $(SLASRC) $(DSLASRC) $(SXLASRC) $(SCLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
-	$(RANLIB) $(LAPACKLIB)
 
-complex: $(CLASRC) $(ZCLASRC) $(CXLASRC) $(SCLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
-	$(RANLIB) $(LAPACKLIB)
-
-double: $(DLASRC) $(DSLASRC) $(DXLASRC) $(DZLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
-	$(RANLIB) $(LAPACKLIB)
-
-complex16: $(ZLASRC) $(ZCLASRC) $(ZXLASRC) $(DZLAUX) $(ALLAUX)
-	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
-	$(RANLIB) $(LAPACKLIB)
-
-$(ALLAUX): $(FRC)
-$(SCLAUX): $(FRC)
-$(DZLAUX): $(FRC)
-$(SLASRC): $(FRC)
-$(CLASRC): $(FRC)
-$(DLASRC): $(FRC)
-$(ZLASRC): $(FRC)
-$(ZCLASRC): $(FRC)
-$(DSLASRC): $(FRC)
+SINGLE_DEPS := $(SLASRC) $(DSLASRC)
 ifdef USEXBLAS
-$(SXLASRC): $(FRC)
-$(CXLASRC): $(FRC)
-$(DXLASRC): $(FRC)
-$(ZXLASRC): $(FRC)
+  SINGLE_DEPS += $(SXLASRC)
 endif
+SINGLE_DEPS += $(SCLAUX) $(ALLAUX)
 
-FRC:
+single: $(SINGLE_DEPS)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
+
+COMPLEX_DEPS := $(CLASRC) $(ZCLASRC)
+ifdef USEXBLAS
+  COMPLEX_DEPS += $(CXLASRC)
+endif
+COMPLEX_DEPS += $(SCLAUX) $(ALLAUX)
+
+complex: $(COMPLEX_DEPS)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
+
+DOUBLE_DEPS := $(DLASRC) $(DSLASRC)
+ifdef USEXBLAS
+  DOUBLE_DEPS += $(DXLASRC)
+endif
+DOUBLE_DEPS += $(DZLAUX) $(ALLAUX)
+
+double: $(DOUBLE_DEPS)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
+
+COMPLEX16_DEPS := $(ZLASRC) $(ZCLASRC)
+ifdef USEXBLAS
+  COMPLEX16_DEPS += $(ZXLASRC)
+endif
+COMPLEX16_DEPS += $(DZLAUX) $(ALLAUX)
+
+complex16: $(COMPLEX16_DEPS)
+	$(AR) $(ARFLAGS) $(LAPACKLIB) $^
+	$(RANLIB) $(LAPACKLIB)
+
+ifdef FRC
+  $(ALLAUX): $(FRC)
+  $(SCLAUX): $(FRC)
+  $(DZLAUX): $(FRC)
+  $(SLASRC): $(FRC)
+  $(CLASRC): $(FRC)
+  $(DLASRC): $(FRC)
+  $(ZLASRC): $(FRC)
+  $(ZCLASRC): $(FRC)
+  $(DSLASRC): $(FRC)
+  ifdef USEXBLAS
+  $(SXLASRC): $(FRC)
+  $(CXLASRC): $(FRC)
+  $(DXLASRC): $(FRC)
+  $(ZXLASRC): $(FRC)
+  endif
+
+  FRC:
 	@FRC=$(FRC)
+endif
 
 .PHONY: clean cleanobj cleanlib
 clean: cleanobj cleanlib
