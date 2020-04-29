@@ -36,7 +36,7 @@
 *> \verbatim
 *>
 *> Sort the numbers in X indirectly in increasing order (if ID = 'I') or
-*> in decreasing order (if ID = 'X' ) using the array of INDICES.
+*> in decreasing order (if ID = 'D' ) using the array of INDICES.
 *>
 *> Use Quick Sort, reverting to Insertion sort on arrays of
 *> size <= 20. Dimension of STACK limits N to about 2**32.
