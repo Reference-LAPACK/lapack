@@ -75,7 +75,7 @@
 *>   C^2 + S^2 = I.
 *>
 *> The routine computes C, S and optionally the matrices U1, U2, and X.
-*> On exit, X is stored in WORK( 2:L*N ).
+*> On exit, X is stored in WORK( 2:L*N+1 ).
 *>
 *> In particular, if B is an N-by-N nonsingular matrix, then the GSVD of
 *> A and B implicitly gives the SVD of A*inv(B):
