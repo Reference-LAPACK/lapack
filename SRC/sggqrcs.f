@@ -18,21 +18,20 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBQT, M, N, P, W, L,
+*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, W, L,
 *                           A, LDA, B, LDB,
-*                           THETA, U1, LDU1, U2, LDU2, QT, LDQT,
+*                           THETA, U1, LDU1, U2, LDU2
 *                           WORK, LWORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
-*       CHARACTER          JOBU1, JOB2, JOBQT
-*       INTEGER            INFO, LDA, LDB, LDU1, LDU2, LDQT,
-*      $                   M, N, P, L, LWORK
+*       CHARACTER          JOBU1, JOB2, JOBX
+*       INTEGER            INFO, LDA, LDB, LDU1, LDU2, M, N, P, L, LWORK
 *       REAL               W
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
 *       REAL               A( LDA, * ), B( LDB, * ), THETA( * ),
-*      $                   U1( LDU1, * ), U2( LDU2, * ), QT( LDQ, * ),
+*      $                   U1( LDU1, * ), U2( LDU2, * ),
 *      $                   WORK( * )
 *       ..
 *
@@ -45,14 +44,14 @@
 *> SGGQRCS computes the generalized singular value decomposition (GSVD)
 *> of an M-by-N real matrix A and P-by-N real matrix B:
 *>
-*>       U1**T*A*Q = D1*( 0 R ),    U2**T*B*Q = D2*( 0 R )
+*>       A = U1 * D1 * X,           B = U2 * D2 * X
 *>
-*> where U1, U2, and Q are orthogonal matrices. SGGQRCS uses the QR
+*> where U1 and U2 are orthogonal matrices. SGGQRCS uses the QR
 *> factorization with column pivoting and the 2-by-1 CS decomposition to
 *> compute the GSVD.
 *>
 *> Let L be the effective numerical rank of the matrix (A**T,B**T)**T,
-*> then R is a L-by-L nonsingular upper triangular matrix, D1 and
+*> then X is a L-by-N nonsingular upper triangular matrix, D1 and
 *> D2 are M-by-L and P-by-L "diagonal" matrices and of the
 *> following structures, respectively:
 *>
@@ -66,9 +65,6 @@
 *>              K  (  0   C   0 )
 *>                 (  0   0   0 )
 *>
-*>                 N-L  L
-*>   ( 0 R ) = L (  0   R )
-*>
 *> where
 *>
 *>   K  = MIN(M, P, L, M + P - L),
@@ -78,27 +74,29 @@
 *>   S  = diag( SIN(THETA(1)), ..., SIN(THETA(K)) ), and
 *>   C^2 + S^2 = I.
 *>
-*> The routine computes C, S, R, and optionally the orthogonal
-*> transformation matrices U, V and Q. If L <= M, then R is stored in
-*> A(1:L, 1:L) on exit. Otherwise, the first M rows of R are stored in
-*> A(:, 1:L) and R( M+1:, M+1: ) is stored in B(1:L-M, 1:L-M). In both
-*> cases, only the upper triangular part is stored.
+*> The routine computes C, S and optionally the matrices U1, U2, and X.
+*> On exit, X is stored in WORK( 2:L*N ).
 *>
 *> In particular, if B is an N-by-N nonsingular matrix, then the GSVD of
 *> A and B implicitly gives the SVD of A*inv(B):
-*>                      A*inv(B) = U1*(D1*inv(D2))*U2**T.
+*>
+*>       A*inv(B) = U1*(D1*inv(D2))*U2**T.
+*>
 *> If (A**T,B**T)**T  has orthonormal columns, then the GSVD of A and B
 *> is also equal to the CS decomposition of A and B. Furthermore, the
 *> GSVD can be used to derive the solution of the eigenvalue problem:
-*>                      A**T*A x = lambda * B**T*B x.
-*> In some literature, the GSVD of A and B is presented in the form
-*>                  U1**T*A*X = ( 0 D1 ),   U2**T*B*X = ( 0 D2 )
-*> where U1 and U2 are orthogonal and X is nonsingular, D1 and D2 are
-*> ``diagonal''.  The former GSVD form can be converted to the latter
-*> form by taking the nonsingular matrix X as
 *>
-*>                      X = Q*( I   0    )
-*>                            ( 0 inv(R) ).
+*>       A**T*A x = lambda * B**T*B x.
+*>
+*> In some literature, the GSVD of A and B is presented in the form
+*>
+*>       U1**T*A*Q = D1*( 0 R ),    U2**T*B*Q = D2*( 0 R )
+*>
+*> where U1, U2, and Q are orthogonal matrices. The former GSVD form can
+*> be converted to the latter by computing the LQ decomposition of X. Be
+*> advised that the LQ decomposition may not be backward stable if,
+*> e.g., A and B differ significantly in norm; consider using xGGSVD3 if
+*> you need X factorized in this case.
 *> \endverbatim
 *
 *  Arguments:
@@ -118,11 +116,11 @@
 *>          = 'N':  U2 is not computed.
 *> \endverbatim
 *>
-*> \param[in] JOBQT
+*> \param[in] JOBX
 *> \verbatim
-*>          JOBQT is CHARACTER*1
-*>          = 'Y':  Orthogonal matrix Q is computed;
-*>          = 'N':  Q is not computed.
+*>          JOBX is CHARACTER*1
+*>          = 'Y':  Matrix X is computed;
+*>          = 'N':  X is not computed.
 *> \endverbatim
 *>
 *> \param[in] M
@@ -163,8 +161,6 @@
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
 *>          On entry, the M-by-N matrix A.
-*>          On exit, A contains the triangular matrix R or the first M
-*>          rows of R, respectively. See Purpose for details.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -177,8 +173,6 @@
 *> \verbatim
 *>          B is REAL array, dimension (LDB,N)
 *>          On entry, the P-by-N matrix B.
-*>          On exit, if L > M, then B contains the last L - M rows of
-*>          the triangular matrix R. See Purpose for details.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -221,20 +215,6 @@
 *>          LDU2 is INTEGER
 *>          The leading dimension of the array U2. LDU2 >= max(1,P) if
 *>          JOBU2 = 'Y'; LDU2 >= 1 otherwise.
-*> \endverbatim
-*>
-*> \param[out] QT
-*> \verbatim
-*>          QT is REAL array, dimension (LDQT,N)
-*>          If JOBQT = 'Y', QT contains the N-by-N orthogonal matrix
-*>          Q**T.
-*> \endverbatim
-*>
-*> \param[in] LDQT
-*> \verbatim
-*>          LDQT is INTEGER
-*>          The leading dimension of the array QT. LDQT >= max(1,N) if
-*>          JOBQT = 'Y'; LDQT >= 1 otherwise.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -306,9 +286,9 @@
 *>  workspace whose dimension must be queried at run-time.
 *>
 *  =====================================================================
-      SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBQT, M, N, P, W, L,
+      SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, W, L,
      $                    A, LDA, B, LDB,
-     $                    THETA, U1, LDU1, U2, LDU2, QT, LDQT,
+     $                    THETA, U1, LDU1, U2, LDU2,
      $                    WORK, LWORK, IWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
@@ -318,26 +298,25 @@
 *
       IMPLICIT NONE
 *     .. Scalar Arguments ..
-      CHARACTER          JOBU1, JOBU2, JOBQT
-      INTEGER            INFO, LDA, LDB, LDU1, LDU2, LDQT,
-     $                   L, M, N, P, LWORK
+      CHARACTER          JOBU1, JOBU2, JOBX
+      INTEGER            INFO, LDA, LDB, LDU1, LDU2, L, M, N, P, LWORK
       REAL               W
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
       REAL               A( LDA, * ), B( LDB, * ), THETA( * ),
-     $                   U1( LDU1, * ), U2( LDU2, * ), QT( LDQT, * ),
+     $                   U1( LDU1, * ), U2( LDU2, * ),
      $                   WORK( * )
 *     ..
 *
 *  =====================================================================
 *
 *     .. Local Scalars ..
-      LOGICAL            WANTU1, WANTU2, WANTQT, LQUERY
-      INTEGER            I, J, LMAX, Z, LDG, LWKOPT
+      LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
+      INTEGER            I, J, LMAX, Z, LDG, LDVT, LWKOPT
       REAL               GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
 *     .. Local Arrays ..
-      REAL               G( M + P, N )
+      REAL               G( M + P, N ), VT( N, N )
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -357,7 +336,7 @@
 *
       WANTU1 = LSAME( JOBU1, 'Y' )
       WANTU2 = LSAME( JOBU2, 'Y' )
-      WANTQT = LSAME( JOBQT, 'Y' )
+      WANTX = LSAME( JOBX, 'Y' )
       LQUERY = ( LWORK.EQ.-1 )
       LWKOPT = 1
 *
@@ -371,6 +350,12 @@
       ELSE
          G = WORK( 1 )
       END IF
+      IF( WANTX .AND. .NOT.LQUERY ) THEN
+         VT = WORK( Z + 1 )
+      ELSE
+         VT = 0
+      END IF
+      LDVT = N
       LDG = M + P
 *     Computing 0.0 / 0.0 directly causes compiler errors
       NAN = 1.0E0
@@ -383,7 +368,7 @@
          INFO = -1
       ELSE IF( .NOT.( WANTU2 .OR. LSAME( JOBU2, 'N' ) ) ) THEN
          INFO = -2
-      ELSE IF( .NOT.( WANTQT .OR. LSAME( JOBQT, 'N' ) ) ) THEN
+      ELSE IF( .NOT.( WANTX .OR. LSAME( JOBX, 'N' ) ) ) THEN
          INFO = -3
       ELSE IF( M.LT.1 ) THEN
          INFO = -4
@@ -399,10 +384,8 @@
          INFO = -15
       ELSE IF( LDU2.LT.1 .OR. ( WANTU2 .AND. LDU2.LT.P ) ) THEN
          INFO = -17
-      ELSE IF( LDQT.LT.1 .OR. ( WANTQT .AND. LDQT.LT.N ) ) THEN
-         INFO = -19
       ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
-         INFO = -23
+         INFO = -21
       END IF
 *
 *     Compute workspace
@@ -414,20 +397,17 @@
          CALL SORGQR( M + P, LMAX, LMAX, G, LDG, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
-         CALL SORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, LMAX,
+         CALL SORCSD2BY1( JOBU2, JOBU1, JOBX, M + P, P, LMAX,
      $                    G, LDG, G, LDG,
-     $                    THETA, U2, LDU2, U1, LDU1, QT, LDQT,
+     $                    THETA, U2, LDU2, U1, LDU1, VT, LDVT,
      $                    WORK, -1, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *        The matrix (A, B) must be stored sequentially for SORCSD2BY1
-         LWKOPT = Z + LWKOPT
-
-*        SGERQF stores LMAX scalar factors for the elementary reflectors
-         CALL SGERQF( LMAX, N, QT, LDQT, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
-
-         CALL SORGRQ( N, N, LMAX, QT, LDQT, WORK, WORK, -1, INFO )
-         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) + LMAX )
+         LWKOPT = LWKOPT + Z
+*        2-by-1 CSD matrix V1 must be stored
+         IF( WANTX ) THEN
+            LWKOPT = LWKOPT + LDVT*N
+         END IF
 
          WORK( 1 ) = REAL( LWKOPT )
       END IF
@@ -457,7 +437,7 @@
          END IF
       END IF
 *
-*     Copy matrices A, B into the (M+P) x n matrix G
+*     Copy matrices A, B into the (M+P) x N matrix G
 *
       CALL SLACPY( 'A', M, N, A, LDA, G( P + 1, 1 ), LDG )
       CALL SLACPY( 'A', P, N, B, LDB, G( 1, 1 ), LDG )
@@ -510,9 +490,6 @@
          IF( WANTU2 ) THEN
             CALL SLASET( 'A', P, P, 0.0E0, 1.0E0, U2, LDU2 )
          END IF
-         IF( WANTQT ) THEN
-            CALL SLASET( 'A', N, N, 0.0E0, 1.0E0, QT, LDQT )
-         END IF
 *
          WORK( 1 ) = REAL( LWKOPT )
          RETURN
@@ -520,21 +497,17 @@
 *
 *     Copy R1( 1:L, : ) into A, B and set lower triangular part to zero
 *
-      IF( L.LE.M ) THEN
-          CALL SLACPY( 'U', L, N, G, LDG, A, LDA )
-          IF( M.GT.1 ) THEN
+      IF( WANTX ) THEN
+         IF( L.LE.M ) THEN
+             CALL SLACPY( 'U', L, N, G, LDG, A, LDA )
              CALL SLASET( 'L', L - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
-          END IF
-      ELSE
-          CALL SLACPY( 'U', M, N, G, LDG, A, LDA )
-          CALL SLACPY( 'U', L - M, N - M, G( M+1, M+1 ), LDG, B, LDB )
+         ELSE
+             CALL SLACPY( 'U', M, N, G, LDG, A, LDA )
+             CALL SLACPY( 'U', L - M, N - M, G( M+1,M+1 ), LDG, B, LDB )
 *
-          IF( M.GT.1 ) THEN
-              CALL SLASET( 'L', M - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
-          END IF
-          IF( P.GT.1 ) THEN
-              CALL SLASET( 'L', L-M-1, N, 0.0E0, 0.0E0, B( 2, 1 ), LDB )
-          END IF
+             CALL SLASET( 'L', M - 1, N, 0.0E0, 0.0E0, A( 2, 1 ), LDA )
+             CALL SLASET( 'L', L-M-1, N, 0.0E0, 0.0E0, B( 2, 1 ), LDB )
+         END IF
       END IF
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
@@ -547,84 +520,50 @@
 *
 *     DEBUG
 *
-      THETA(1:N) = NAN
+      THETA( 1:N ) = NAN
 *
 *     Compute the CS decomposition of Q1( :, 1:L )
 *
-      CALL SORCSD2BY1( JOBU2, JOBU1, 'Y', M + P, P, L,
-     $                 G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
-     $                 U2, LDU2, U1, LDU1, QT, LDQT,
-     $                 WORK( Z + 1 ), LWORK - Z, IWORK( N + 1 ), INFO )
+      IF( WANTX ) THEN
+         CALL SORCSD2BY1( JOBU2, JOBU1, JOBX, M + P, P, L,
+     $                    G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
+     $                    U2, LDU2, U1, LDU1, VT, LDVT,
+     $                    WORK( Z + LDVT*N + 1 ), LWORK - Z - LDVT*N,
+     $                    IWORK( N + 1 ), INFO )
+      ELSE
+         CALL SORCSD2BY1( JOBU2, JOBU1, JOBX, M + P, P, L,
+     $                    G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
+     $                    U2, LDU2, U1, LDU1, VT, LDVT,
+     $                    WORK( Z + 1 ), LWORK - Z,
+     $                    IWORK, INFO )
+      END IF
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF
 *
 *     DEBUG
 *
-      WORK(1:LWORK) = NAN
+      WORK( 1:LDG*N ) = NAN
 *
-*     Copy V^T from QT to G
+*     Compute V^T R1( 1:L, : )
 *
-      CALL SLACPY( 'A', L, L, QT, LDQT, G, LDG )
-*
-*     DEBUG
-*
-      CALL SLASET( 'A', N, N, NAN, NAN, QT, LDQT )
-*
-*     Compute V^T R1( 1:L, : ) in the last L rows of QT
-*
-      IF ( L.LE.M ) THEN
-         CALL SGEMM( 'N', 'N', L, N, L, 1.0E0, G, LDG,
-     $               A, LDA, 0.0E0, QT( N-L+1, 1 ), LDQT )
-      ELSE
-         CALL SGEMM( 'N', 'N', L, N, M, 1.0E0, G( 1, 1 ), LDG,
-     $               A, LDA, 0.0E0, QT( N-L+1, 1 ), LDQT )
-         CALL SGEMM( 'N', 'N', L, N - M, L - M, 1.0E0,
-     $               G( 1, M + 1 ), LDG, B, LDB,
-     $               1.0E0, QT( N-L+1, M+1 ), LDQT )
-      END IF
-*
-*     DEBUG
-*
-      CALL SLASET( 'A', M, N, NAN, NAN, A, LDA )
-      CALL SLASET( 'A', P, N, NAN, NAN, B, LDB )
-      WORK(1:LWORK) = NAN
-*
-*     Compute the RQ decomposition of V^T R1( 1:L, : )
-*
-      CALL SGERQF( L, N, QT( N-L+1, 1 ), LDQT, WORK,
-     $             WORK( L + 1 ), LWORK - L, INFO )
-      IF ( INFO.NE.0 ) THEN
-         RETURN
-      END IF
-*
-*     Copy matrix L from QT( N-L+1:N, N-L+1:N ) to A, B
-*
-      IF ( L.LE.M ) THEN
-         CALL SLACPY( 'U', L, L, QT( N-L+1, N-L+1 ), LDQT, A, LDA )
-      ELSE
-         CALL SLACPY( 'U', M,     L, QT( N-L+1, N-L+1 ), LDQT, A, LDA )
-         CALL SLACPY( 'U', L - M, L - M, QT( N-L+M+1, N-L+M+1 ), LDQT,
-     $                B, LDB )
-      END IF
-*
-*     DEBUG
-*
-      CALL SLASET( 'U', L, L, NAN, NAN, QT( 1, N-L+1 ), LDQT )
-      WORK( L+1:LWORK ) = NAN
-*
-*     Explicitly form Q^T
-*
-      IF( WANTQT ) THEN
-         CALL SORGRQ( N, N, L, QT, LDQT, WORK,
-     $                WORK( L + 1 ), LWORK - L, INFO )
-         IF ( INFO.NE.0 ) THEN
-            RETURN
+      IF( WANTX ) THEN
+         IF ( L.LE.M ) THEN
+            CALL SGEMM( 'N', 'N', L, N, L,
+     $                  1.0E0, VT, LDVT, A, LDA,
+     $                  0.0E0, WORK( 2 ), L )
+         ELSE
+            CALL SGEMM( 'N', 'N', L, N, M,
+     $                  1.0E0, VT( 1, 1 ), LDVT, A, LDA,
+     $                  0.0E0, WORK( 2 ), L )
+            CALL SGEMM( 'N', 'N', L, N - M, L - M,
+     $                  1.0E0, VT( 1, M + 1 ), LDVT, B, LDB,
+     $                  1.0E0, WORK( L*M + 2 ), L )
          END IF
 *
-*     Revert column permutation Π by permuting the rows of Q^T
+*     Revert column permutation Π by permuting the columns of X
 *
-         CALL SLAPMT( .FALSE., N, N, QT, LDQT, IWORK )
+         CALL SLAPMT( .FALSE., L, N, WORK( 2 ), L, IWORK )
       END IF
 *
       WORK( 1 ) = REAL( LWKOPT )
