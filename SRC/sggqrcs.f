@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, W, L,
+*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
 *                           A, LDA, B, LDB,
 *                           THETA, U1, LDU1, U2, LDU2
 *                           WORK, LWORK, IWORK, INFO )
@@ -26,7 +26,6 @@
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBU1, JOB2, JOBX
 *       INTEGER            INFO, LDA, LDB, LDU1, LDU2, M, N, P, L, LWORK
-*       REAL               W
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
@@ -139,15 +138,6 @@
 *> \verbatim
 *>          P is INTEGER
 *>          The number of rows of the matrix B.  P >= 1.
-*> \endverbatim
-*>
-*> \param[out] W
-*> \verbatim
-*>          W in REAL
-*>
-*>          On exit, W is a radix power chosen such that the Frobenius
-*>          norm of A and W*B are within sqrt(radix) and 1/sqrt(radix)
-*>          of each other.
 *> \endverbatim
 *>
 *> \param[out] L
@@ -286,7 +276,7 @@
 *>  workspace whose dimension must be queried at run-time.
 *>
 *  =====================================================================
-      SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, W, L,
+      SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
      $                    A, LDA, B, LDB,
      $                    THETA, U1, LDU1, U2, LDU2,
      $                    WORK, LWORK, IWORK, INFO )
@@ -300,7 +290,6 @@
 *     .. Scalar Arguments ..
       CHARACTER          JOBU1, JOBU2, JOBX
       INTEGER            INFO, LDA, LDB, LDU1, LDU2, L, M, N, P, LWORK
-      REAL               W
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
@@ -314,7 +303,7 @@
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
       INTEGER            I, J, LMAX, Z, LDG, LDVT, LWKOPT
-      REAL               GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
+      REAL               BASE, NAN, NORMG, TOL, ULP, UNFL
 *     .. Local Arrays ..
       REAL               G( M + P, N ), VT( N, N )
 *     ..
@@ -324,8 +313,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SGEQP3, SLACPY, SLAPMT, SLASCL,
-     $                   SLASET, SORGQR, SORCSD2BY1, XERBLA
+      EXTERNAL           SGEMM, SGEQP3, SLACPY, SLAPMR, SLAPMT,
+     $                   SLASET, SLASRTR, SORGQR, SORCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -377,22 +366,25 @@
       ELSE IF( P.LT.1 ) THEN
          INFO = -6
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -10
+         INFO = -9
       ELSE IF( LDB.LT.MAX( 1, P ) ) THEN
-         INFO = -12
+         INFO = -11
       ELSE IF( LDU1.LT.1 .OR. ( WANTU1 .AND. LDU1.LT.M ) ) THEN
-         INFO = -15
+         INFO = -14
       ELSE IF( LDU2.LT.1 .OR. ( WANTU2 .AND. LDU2.LT.P ) ) THEN
-         INFO = -17
+         INFO = -16
       ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
-         INFO = -21
+         INFO = -18
       END IF
 *
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
+*        SLASRTR workspace
+         LWKOPT = M + P
+
          CALL SGEQP3( M+P, N, G, LDG, IWORK, THETA, WORK, -1, INFO )
-         LWKOPT = INT( WORK( 1 ) )
+         LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
          CALL SORGQR( M + P, LMAX, LMAX, G, LDG, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
@@ -420,23 +412,6 @@
          RETURN
       ENDIF
 *
-*     Scale matrix B such that norm(A) \approx norm(B)
-*
-      NORMA = SLANGE( 'F', M, N, A, LDA, WORK )
-      NORMB = SLANGE( 'F', P, N, B, LDB, WORK )
-*
-      IF ( NORMB.EQ.0 ) THEN
-         W = 1.0E0
-      ELSE
-         BASE = SLAMCH( 'B' )
-         W = BASE ** INT( LOG( NORMA / NORMB ) / LOG( BASE ) )
-*
-         CALL SLASCL( 'G', -1, -1, 1.0E0, W, P, N, B, LDB, INFO )
-         IF ( INFO.NE.0 ) THEN
-            RETURN
-         END IF
-      END IF
-*
 *     Copy matrices A, B into the (M+P) x N matrix G
 *
       CALL SLACPY( 'A', M, N, A, LDA, G( P + 1, 1 ), LDG )
@@ -449,14 +424,25 @@
 *
 *     Compute the Frobenius norm of matrix G
 *
-      GNORM = SLANGE( 'F', M + P, N, G, LDG, WORK( Z + 1 ) )
+      NORMG = SLANGE( 'F', M + P, N, G, LDG, WORK( Z + 1 ) )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrix G.
 *
       ULP = SLAMCH( 'Precision' )
       UNFL = SLAMCH( 'Safe Minimum' )
-      TOL = MAX( M + P, N ) * MAX( GNORM, UNFL ) * ULP
+      TOL = MAX( M + P, N ) * MAX( NORMG, UNFL ) * ULP
+*
+*     Apply row sorting for QR decomposition
+*     Row sorting is _necessary_ because the norms of A, B might differ
+*     significantly. Row sorting _combined_ with column pivoting leads
+*     to a small row-wise error, cf. §19.4 in N. J. Higham: "Accuracy
+*     and Stability of Numerical Algorithms". 2002.
+      CALL SLASRTR( 'D', M + P, N, G, LDG,
+     $              IWORK( N + 1 ), WORK( Z + 1 ), INFO )
+      IF( INFO.NE.0 ) THEN
+         RETURN
+      ENDIF
 *
 *     IWORK stores the column permutations computed by SGEQP3.
 *     Columns J where IWORK( J ) is non-zero are permuted to the front
@@ -517,6 +503,8 @@
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
+*     Revert row sorting
+      CALL SLAPMR( .FALSE., M + P, L, G, LDG, IWORK( N + 1 ) )
 *
 *     DEBUG
 *
