@@ -324,8 +324,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SGEQP3, SGERQF, SLACPY, SLAPMT, SLASCL,
-     $                   SLASET, SORGQR, SORGRQ, SORCSD2BY1, XERBLA
+      EXTERNAL           SGEMM, SGEQP3, SLACPY, SLAPMT, SLASCL,
+     $                   SLASET, SORGQR, SORCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
