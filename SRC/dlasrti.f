@@ -212,7 +212,7 @@
 *
          P1 = X( INDICES(START) )
          P2 = X( INDICES(ENDD) )
-         I = INDICES( ( START+ENDD ) / 2 )
+         I = ( START+ENDD ) / 2
          P3 = X( INDICES(I) )
          IF( P1.LT.P2 ) THEN
             IF( P3.LT.P1 ) THEN
