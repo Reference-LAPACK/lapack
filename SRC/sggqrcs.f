@@ -367,15 +367,15 @@
       ELSE IF( P.LT.1 ) THEN
          INFO = -6
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -10
+         INFO = -9
       ELSE IF( LDB.LT.MAX( 1, P ) ) THEN
-         INFO = -12
+         INFO = -11
       ELSE IF( LDU1.LT.1 .OR. ( WANTU1 .AND. LDU1.LT.M ) ) THEN
-         INFO = -15
+         INFO = -14
       ELSE IF( LDU2.LT.1 .OR. ( WANTU2 .AND. LDU2.LT.P ) ) THEN
-         INFO = -17
+         INFO = -16
       ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
-         INFO = -21
+         INFO = -18
       END IF
 *
 *     Compute workspace
