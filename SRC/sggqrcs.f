@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, W, L,
+*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
 *                           A, LDA, B, LDB,
 *                           THETA, U1, LDU1, U2, LDU2
 *                           WORK, LWORK, IWORK, INFO )
@@ -26,7 +26,6 @@
 *       .. Scalar Arguments ..
 *       CHARACTER          JOBU1, JOB2, JOBX
 *       INTEGER            INFO, LDA, LDB, LDU1, LDU2, M, N, P, L, LWORK
-*       REAL               W
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
@@ -139,15 +138,6 @@
 *> \verbatim
 *>          P is INTEGER
 *>          The number of rows of the matrix B.  P >= 1.
-*> \endverbatim
-*>
-*> \param[out] W
-*> \verbatim
-*>          W in REAL
-*>
-*>          On exit, W is a radix power chosen such that the Frobenius
-*>          norm of A and W*B are within sqrt(radix) and 1/sqrt(radix)
-*>          of each other.
 *> \endverbatim
 *>
 *> \param[out] L
@@ -286,7 +276,7 @@
 *>  workspace whose dimension must be queried at run-time.
 *>
 *  =====================================================================
-      SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, W, L,
+      SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
      $                    A, LDA, B, LDB,
      $                    THETA, U1, LDU1, U2, LDU2,
      $                    WORK, LWORK, IWORK, INFO )
@@ -300,7 +290,6 @@
 *     .. Scalar Arguments ..
       CHARACTER          JOBU1, JOBU2, JOBX
       INTEGER            INFO, LDA, LDB, LDU1, LDU2, L, M, N, P, LWORK
-      REAL               W
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
@@ -313,8 +302,9 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
-      INTEGER            I, J, LMAX, Z, LDG, LDVT, LWKOPT
-      REAL               GNORM, TOL, ULP, UNFL, NORMA, NORMB, BASE, NAN
+      INTEGER            I, J, K, K2, LMAX, Z, LDG, LDX, LDVT, LWKOPT
+      REAL               BASE, NAN, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
+     $                   T, W
 *     .. Local Arrays ..
       REAL               G( M + P, N ), VT( N, N )
 *     ..
@@ -449,14 +439,14 @@
 *
 *     Compute the Frobenius norm of matrix G
 *
-      GNORM = SLANGE( 'F', M + P, N, G, LDG, WORK( Z + 1 ) )
+      NORMG = SLANGE( 'F', M + P, N, G, LDG, WORK( Z + 1 ) )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrix G.
 *
       ULP = SLAMCH( 'Precision' )
       UNFL = SLAMCH( 'Safe Minimum' )
-      TOL = MAX( M + P, N ) * MAX( GNORM, UNFL ) * ULP
+      TOL = MAX( M + P, N ) * MAX( NORMG, UNFL ) * ULP
 *
 *     IWORK stores the column permutations computed by SGEQP3.
 *     Columns J where IWORK( J ) is non-zero are permuted to the front
@@ -545,25 +535,66 @@
 *
       WORK( 1:LDG*N ) = NAN
 *
-*     Compute V^T R1( 1:L, : )
+*     Compute X = V^T R1( 1:L, : ) and adjust for matrix scaling
 *
       IF( WANTX ) THEN
+         LDX = L
          IF ( L.LE.M ) THEN
             CALL SGEMM( 'N', 'N', L, N, L,
      $                  1.0E0, VT, LDVT, A, LDA,
-     $                  0.0E0, WORK( 2 ), L )
+     $                  0.0E0, WORK( 2 ), LDX )
          ELSE
             CALL SGEMM( 'N', 'N', L, N, M,
      $                  1.0E0, VT( 1, 1 ), LDVT, A, LDA,
-     $                  0.0E0, WORK( 2 ), L )
+     $                  0.0E0, WORK( 2 ), LDX )
             CALL SGEMM( 'N', 'N', L, N - M, L - M,
      $                  1.0E0, VT( 1, M + 1 ), LDVT, B, LDB,
-     $                  1.0E0, WORK( L*M + 2 ), L )
+     $                  1.0E0, WORK( L*M + 2 ), LDX )
          END IF
+*        Revert column permutation Π by permuting the columns of X
+         CALL SLAPMT( .FALSE., L, N, WORK( 2 ), LDX, IWORK )
+*        Adjust generalized singular values for matrix scaling
+*        Prepare row scaling of X
+         IF( .NOT. W.EQ.1.0E0 ) THEN
+            K = MIN( M, P, L, M + P - L )
+            K2 = MAX( L - M, 0 )
+            DO I = 1, K
+               T = THETA( I )
+*              Do not adjust singular value if
+*              * THETA(I) is greater than pi/2
+*              * W=1 (otherwise we might compute sin(0) / sin(0) = 0/0)
+               IF( TAN( T ) < 0 ) THEN
+                  WORK( Z + I + 1 ) = 1.0E0
+*              ensure divisor is far away from zero
+               ELSE IF( W >= 1 ) THEN
+                  THETA( I ) = ATAN( W * TAN( T ) )
+                  WORK( Z + I + 1 ) = SIN( T ) / SIN( THETA( I ) )
+               ELSE
+                  THETA( I ) = ATAN( W * TAN( T ) )
+                  WORK( Z + I + 1 ) = COS( T ) / COS( THETA( I ) ) / W
+               END IF
+            END DO
+*           Adjust rows of X for matrix scaling
+            DO J = 0, N-1
+               DO I = 1, K2
+                  WORK( LDX*J + I + 1 ) = WORK( LDX*J + I + 1 ) / W
+               END DO
+               DO I = 1, K
+                  WORK( LDX*J + I + K2 + 1 ) =
+     $            WORK( LDX*J + I + K2 + 1 ) * WORK( Z + I + 1 )
+               END DO
+            END DO
+         END IF
+      ELSE IF( .NOT. W.EQ.1.0E0 ) THEN
 *
-*     Revert column permutation Π by permuting the columns of X
+*        Adjust only generalized singular values for matrix scaling
 *
-         CALL SLAPMT( .FALSE., L, N, WORK( 2 ), L, IWORK )
+         DO I = 1, MIN( M, P, L, M + P - L )
+*           Do not adjust singular value if THETA(I) is greater than pi/2
+            IF( TAN( THETA(I) ) >= 0 ) THEN
+               THETA(I) = ATAN( W * TAN( THETA(I) ) )
+            END IF
+         END DO
       END IF
 *
       WORK( 1 ) = REAL( LWKOPT )
