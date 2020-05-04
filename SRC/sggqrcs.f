@@ -577,10 +577,9 @@
             K2 = MAX( L - M, 0 )
             DO I = 1, K
                T = THETA( I )
-*              Do not adjust singular value if
-*              * THETA(I) is greater than pi/2 (infinite singular value)
-*              * THETA(I) equals zero (singular value won't change)
-               IF( TAN( T ) <= 0 ) THEN
+*              Do not adjust singular value if THETA(I) is greater
+*              than pi/2 (infinite singular values won't change)
+               IF( TAN( T ) < 0 ) THEN
                   WORK( Z + I + 1 ) = 1.0E0
                ELSE
 *              ensure sine, cosine divisor is far away from zero
