@@ -353,9 +353,27 @@ option(LAPACKE_WITH_TMG "Build LAPACKE with tmglib routines" OFF)
 if(LAPACKE_WITH_TMG)
   set(LAPACKE ON)
 endif()
-if(BUILD_TESTING OR LAPACKE_WITH_TMG) #already included, avoid double inclusion
+
+# TMGLIB
+# Cache export target
+set(LAPACK_INSTALL_EXPORT_NAME_CACHE ${LAPACK_INSTALL_EXPORT_NAME})
+if(BUILD_TESTING OR LAPACKE_WITH_TMG)
+  if(LATESTLAPACK_FOUND AND LAPACKE_WITH_TMG)
+    set(CMAKE_REQUIRED_LIBRARIES ${LAPACK_LIBRARIES})
+    # Check if dlatms (part of tmg) is found
+    CHECK_FORTRAN_FUNCTION_EXISTS("dlatms" LAPACK_WITH_TMGLIB_FOUND)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    if(NOT LAPACK_WITH_TMGLIB_FOUND)
+      # Build and install TMG as part of LAPACKE targets (as opposed to LAPACK
+      # targets)
+      set(LAPACK_INSTALL_EXPORT_NAME ${LAPACKELIB}-targets)
+    endif()
+  endif()
   add_subdirectory(TESTING/MATGEN)
 endif()
+# Reset export target
+set(LAPACK_INSTALL_EXPORT_NAME ${LAPACK_INSTALL_EXPORT_NAME_CACHE})
+unset(LAPACK_INSTALL_EXPORT_NAME_CACHE)
 
 if(LAPACKE)
   add_subdirectory(LAPACKE)
@@ -451,7 +469,7 @@ if(NOT LATESTLAPACK_FOUND)
   set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKLIB})
 endif()
 
-if(BUILD_TESTING OR LAPACKE_WITH_TMG)
+if(BUILD_TESTING)
   set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
 endif()
 
@@ -477,6 +495,10 @@ endif()
 # Include lapacke in targets exported from the build tree.
 if(LAPACKE)
   set(ALL_TARGETS ${ALL_TARGETS} ${LAPACKELIB})
+endif()
+
+if(NOT LAPACK_WITH_TMGLIB_FOUND AND LAPACKE_WITH_TMG)
+  set(ALL_TARGETS ${ALL_TARGETS} ${TMGLIB})
 endif()
 
 # Export lapack and lapacke targets from the build tree, if any.
