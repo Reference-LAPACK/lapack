@@ -578,17 +578,19 @@
             DO I = 1, K
                T = THETA( I )
 *              Do not adjust singular value if
-*              * THETA(I) is greater than pi/2
-*              * W=1 (otherwise we might compute sin(0) / sin(0) = 0/0)
-               IF( TAN( T ) < 0 ) THEN
+*              * THETA(I) is greater than pi/2 (infinite singular value)
+*              * THETA(I) equals zero (singular value won't change)
+               IF( TAN( T ) <= 0 ) THEN
                   WORK( Z + I + 1 ) = 1.0E0
-*              ensure divisor is far away from zero
-               ELSE IF( W >= 1 ) THEN
-                  THETA( I ) = ATAN( W * TAN( T ) )
-                  WORK( Z + I + 1 ) = SIN( T ) / SIN( THETA( I ) )
                ELSE
+*              ensure sine, cosine divisor is far away from zero
+*              w is a power of two and will cause no trouble
                   THETA( I ) = ATAN( W * TAN( T ) )
-                  WORK( Z + I + 1 ) = COS( T ) / COS( THETA( I ) ) / W
+                  IF( SIN( THETA( I ) ) .GE. COS( THETA( I ) ) ) THEN
+                     WORK( Z + I + 1 ) = SIN( T ) / SIN( THETA( I ) )
+                  ELSE
+                     WORK( Z + I + 1 ) = COS( T ) / COS( THETA( I ) ) /W
+                  END IF
                END IF
             END DO
 *           Adjust rows of X for matrix scaling
