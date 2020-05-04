@@ -608,7 +608,7 @@
 *
          DO I = 1, MIN( M, P, L, M + P - L )
 *           Do not adjust singular value if THETA(I) is greater than pi/2
-            IF( TAN( THETA(I) ) >= 0 ) THEN
+            IF( TAN( THETA(I) ) > 0 ) THEN
                THETA(I) = ATAN( W * TAN( THETA(I) ) )
             END IF
          END DO
