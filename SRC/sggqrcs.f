@@ -419,7 +419,7 @@
       NORMA = SLANGE( 'F', M, N, A, LDA, WORK )
       NORMB = SLANGE( 'F', P, N, B, LDB, WORK )
 *
-      IF ( NORMB.EQ.0 ) THEN
+      IF( NORMB.EQ.0 .OR. NORMA.EQ.0 ) THEN
          W = 1.0E0
       ELSE
          BASE = SLAMCH( 'B' )
