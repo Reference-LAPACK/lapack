@@ -92,8 +92,8 @@
 *>       U1**T*A*Q = D1*( 0 R ),    U2**T*B*Q = D2*( 0 R )
 *>
 *> where U1, U2, and Q are orthogonal matrices. The former GSVD form can
-*> be converted to the latter by computing the LQ decomposition of X. Be
-*> advised that the LQ decomposition may not be backward stable if,
+*> be converted to the latter by computing the RQ decomposition of X. Be
+*> advised that the RQ decomposition may not be backward stable if,
 *> e.g., A and B differ significantly in norm; consider using xGGSVD3 if
 *> you need X factorized in this case.
 *> \endverbatim
