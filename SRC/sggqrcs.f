@@ -326,8 +326,8 @@
       EXTERNAL           LSAME, SLAMCH, SLANGE
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEMM, SGEQP3, SLACPY, SLAPMR, SLAPMT, SLASCL,
-     $                   SLASET, SLASRTR, SORGQR, SORCSD2BY1, XERBLA
+      EXTERNAL           SGEMM, SGEQP3, SLACPY, SLAPMT, SLASCL,
+     $                   SLASET, SORGQR, SORCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          MAX, MIN
@@ -464,17 +464,6 @@
       UNFL = SLAMCH( 'Safe Minimum' )
       TOL = MAX( M + P, N ) * MAX( NORMG, UNFL ) * ULP
 *
-*     Apply row sorting for QR decomposition
-*     Row sorting is _necessary_ because the norms of A, B might differ
-*     significantly. Row sorting _combined_ with column pivoting leads
-*     to a small row-wise error, cf. §19.4 in N. J. Higham: "Accuracy
-*     and Stability of Numerical Algorithms". 2002.
-      CALL SLASRTR( 'D', M + P, N, G, LDG,
-     $              IWORK( N + 1 ), WORK( Z + 1 ), INFO )
-      IF( INFO.NE.0 ) THEN
-         RETURN
-      ENDIF
-*
 *     IWORK stores the column permutations computed by SGEQP3.
 *     Columns J where IWORK( J ) is non-zero are permuted to the front
 *     so we set the all entries to zero here.
@@ -534,8 +523,6 @@
       IF ( INFO.NE.0 ) THEN
          RETURN
       END IF
-*     Revert row sorting
-      CALL SLAPMR( .FALSE., M + P, L, G, LDG, IWORK( N + 1 ) )
 *
 *     DEBUG
 *
