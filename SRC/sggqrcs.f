@@ -49,6 +49,14 @@
 *> factorization with column pivoting and the 2-by-1 CS decomposition to
 *> compute the GSVD.
 *>
+*> SGGQRCS is only conditionally backward stable when the computation of
+*> X is required. If
+*> * you do not know what this means, or if
+*> * the matrices A and B differ significantly in norm, or if
+*> * X is required in factorized form (see below),
+*>
+*> then it is strongly advised to use SGGSVD3 instead.
+*>
 *> Let L be the effective numerical rank of the matrix (A**T,B**T)**T,
 *> then X is a L-by-N nonsingular upper triangular matrix, D1 and
 *> D2 are M-by-L and P-by-L "diagonal" matrices and of the
@@ -89,13 +97,13 @@
 *>
 *> In some literature, the GSVD of A and B is presented in the form
 *>
-*>       U1**T*A*Q = D1*( 0 R ),    U2**T*B*Q = D2*( 0 R )
+*>       A = U1*D1*( 0 R )*Q**T,    B = U2*D2*( 0 R )*Q**T
 *>
-*> where U1, U2, and Q are orthogonal matrices. The former GSVD form can
-*> be converted to the latter by computing the RQ decomposition of X. Be
-*> advised that the RQ decomposition may not be backward stable if,
-*> e.g., A and B differ significantly in norm; consider using xGGSVD3 if
-*> you need X factorized in this case.
+*> where U1, U2, and Q are orthogonal matrices. This latter GSVD form is
+*> computed directly by SGGSVD3. It is possible to convert between the
+*> two representations by calculating the RQ decomposition of X but this
+*> is not recommended for numerical reasons.
+*>
 *> \endverbatim
 *
 *  Arguments:
@@ -269,11 +277,15 @@
 *> \par Further Details:
 *  =====================
 *>
-*>  SGGQRCS should be significantly faster than SGGSVD and SGGSVD3 for
-*>  large matrices because the matrices A and B are reduced to a pair of
+*>  SGGQRCS can compute the singular values with high relative accuracy
+*>  and should be significantly faster than SGGSVD3 for large matrices
+*>  because the matrices A and B are reduced to a pair of
 *>  well-conditioned bidiagonal matrices instead of pairs of upper
 *>  triangular matrices. On the downside, SGGQRCS requires a much larger
-*>  workspace whose dimension must be queried at run-time.
+*>  workspace whose dimension must be queried at run-time and the
+*>  computation of the right-hand side matrix X is only conditionally
+*>  backward stable; A and B must be similar in norm for backward
+*>  stability.
 *>
 *  =====================================================================
       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
