@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
+*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L, W,
 *                           A, LDA, B, LDB,
 *                           THETA, U1, LDU1, U2, LDU2
 *                           WORK, LWORK, IWORK, INFO )
@@ -155,6 +155,14 @@
 *>          (A**T, B**T)**T.
 *> \endverbatim
 *>
+*> \param[out] W
+*> \verbatim
+*>          W is REAL
+*>          On exit, W is a radix power chosen such that the Frobenius
+*>          norm of A and W*B are with SQRT(RADIX) and 1/SQRT(RADIX) of
+*>          each other.
+*> \endverbatim
+*>
 *> \param[in,out] A
 *> \verbatim
 *>          A is REAL array, dimension (LDA,N)
@@ -288,7 +296,7 @@
 *>  stability.
 *>
 *  =====================================================================
-      SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
+      RECURSIVE SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L, W,
      $                    A, LDA, B, LDB,
      $                    THETA, U1, LDU1, U2, LDU2,
      $                    WORK, LWORK, IWORK, INFO )
@@ -302,6 +310,7 @@
 *     .. Scalar Arguments ..
       CHARACTER          JOBU1, JOBU2, JOBX
       INTEGER            INFO, LDA, LDB, LDU1, LDU2, L, M, N, P, LWORK
+      REAL               W
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
@@ -314,9 +323,9 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
-      INTEGER            I, J, K, K2, LMAX, Z, LDG, LDX, LDVT, LWKOPT
+      INTEGER            I, J, K, K1, LMAX, Z, LDG, LDX, LDVT, LWKOPT
       REAL               BASE, NAN, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
-     $                   T, W
+     $                   T
 *     .. Local Arrays ..
       REAL               G( M + P, N ), VT( N, N )
 *     ..
@@ -330,7 +339,7 @@
      $                   SLASET, SORGQR, SORCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          MAX, MIN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -341,27 +350,6 @@
       WANTX = LSAME( JOBX, 'Y' )
       LQUERY = ( LWORK.EQ.-1 )
       LWKOPT = 1
-*
-*     Initialize variables
-*
-      L = 0
-      LMAX = MIN( M + P, N )
-      Z = ( M + P ) * N
-      IF ( LQUERY ) THEN
-         G = 0
-      ELSE
-         G = WORK( 1 )
-      END IF
-      IF( WANTX .AND. .NOT.LQUERY ) THEN
-         VT = WORK( Z + 1 )
-      ELSE
-         VT = 0
-      END IF
-      LDVT = N
-      LDG = M + P
-*     Computing 0.0 / 0.0 directly causes compiler errors
-      NAN = 1.0E0
-      NAN = 0.0 / (NAN - 1.0E0)
 *
 *     Test the input arguments
 *
@@ -379,22 +367,53 @@
       ELSE IF( P.LT.1 ) THEN
          INFO = -6
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -9
+         INFO = -10
       ELSE IF( LDB.LT.MAX( 1, P ) ) THEN
-         INFO = -11
+         INFO = -12
       ELSE IF( LDU1.LT.1 .OR. ( WANTU1 .AND. LDU1.LT.M ) ) THEN
-         INFO = -14
+         INFO = -15
       ELSE IF( LDU2.LT.1 .OR. ( WANTU2 .AND. LDU2.LT.P ) ) THEN
-         INFO = -16
+         INFO = -17
       ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
-         INFO = -18
+         INFO = -19
       END IF
+*
+*     Make sure A is the matrix smaller in norm
+*
+      IF( INFO.EQ.0 ) THEN
+         NORMA = SLANGE( 'F', M, N, A, LDA, WORK )
+         NORMB = SLANGE( 'F', P, N, B, LDB, WORK )
+*
+         IF( NORMA.GT.SQRT( 2.0E0 ) * NORMB ) THEN
+            CALL SGGQRCS( JOBU2, JOBU1, JOBX, P, N, M, L, W,
+     $                    B, LDB, A, LDA,
+     $                    THETA,
+     $                    U2, LDU2, U1, LDU1,
+     $                    WORK, LWORK, IWORK, INFO )
+            W = -W
+            RETURN
+         ENDIF
+      END IF
+*
+*     Initialize variables
+*
+*     Computing 0.0 / 0.0 directly causes compiler errors
+      NAN = 1.0E0
+      NAN = 0.0 / (NAN - 1.0E0)
+*
+      L = 0
+      LMAX = MIN( M + P, N )
+      Z = ( M + P ) * N
+      G = WORK( 1 )
+      LDG = M + P
+      VT = 0
+      LDVT = N
+      W = NAN
 *
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
-*        SLASRTR workspace
-         LWKOPT = M + P
+         LWKOPT = 0
 
          CALL SGEQP3( M+P, N, G, LDG, IWORK, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
@@ -403,12 +422,12 @@
          CALL SORGQR( M + P, LMAX, LMAX, G, LDG, THETA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 
-         CALL SORCSD2BY1( JOBU2, JOBU1, JOBX, M + P, P, LMAX,
+         CALL SORCSD2BY1( JOBU2, JOBU1, JOBX, M + P, M, LMAX,
      $                    G, LDG, G, LDG,
-     $                    THETA, U2, LDU2, U1, LDU1, VT, LDVT,
+     $                    THETA, U1, LDU1, U2, LDU2, VT, LDVT,
      $                    WORK, -1, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-*        The matrix (A, B) must be stored sequentially for SORCSD2BY1
+*        The matrix (A, B) must be stored sequentially for SORGQR
          LWKOPT = LWKOPT + Z
 *        2-by-1 CSD matrix V1 must be stored
          IF( WANTX ) THEN
@@ -425,19 +444,20 @@
       IF( LQUERY ) THEN
          RETURN
       ENDIF
+*     Finish initialization
+      IF( WANTX ) THEN
+         VT = WORK( Z + 1 )
+      END IF
 *
-*     Scale matrix B such that norm(A) \approx norm(B)
+*     Scale matrix A such that norm(A) \approx norm(B)
 *
-      NORMA = SLANGE( 'F', M, N, A, LDA, WORK )
-      NORMB = SLANGE( 'F', P, N, B, LDB, WORK )
-*
-      IF( NORMB.EQ.0 .OR. NORMA.EQ.0 ) THEN
+      IF( NORMA.EQ.0.0E0 ) THEN
          W = 1.0E0
       ELSE
          BASE = SLAMCH( 'B' )
-         W = BASE ** INT( LOG( NORMA / NORMB ) / LOG( BASE ) )
+         W = BASE ** INT( LOG( NORMB / NORMA ) / LOG( BASE ) )
 *
-         CALL SLASCL( 'G', -1, -1, 1.0E0, W, P, N, B, LDB, INFO )
+         CALL SLASCL( 'G', -1, -1, 1.0E0, W, M, N, A, LDA, INFO )
          IF ( INFO.NE.0 ) THEN
             RETURN
          END IF
@@ -445,8 +465,8 @@
 *
 *     Copy matrices A, B into the (M+P) x N matrix G
 *
-      CALL SLACPY( 'A', M, N, A, LDA, G( P + 1, 1 ), LDG )
-      CALL SLACPY( 'A', P, N, B, LDB, G( 1, 1 ), LDG )
+      CALL SLACPY( 'A', M, N, A, LDA, G( 1, 1 ), LDG )
+      CALL SLACPY( 'A', P, N, B, LDB, G( M + 1, 1 ), LDG )
 *
 *     DEBUG
 *
@@ -480,12 +500,12 @@
 *
 *     Determine the rank of G
 *
-      DO 20 I = 1, MIN( M + P, N )
+      DO I = 1, MIN( M + P, N )
          IF( ABS( G( I, I ) ).LE.TOL ) THEN
             EXIT
          END IF
          L = L + 1
-   20 CONTINUE
+      END DO
 *
 *     Handle rank=0 case
 *
@@ -530,19 +550,11 @@
 *
 *     Compute the CS decomposition of Q1( :, 1:L )
 *
-      IF( WANTX ) THEN
-         CALL SORCSD2BY1( JOBU2, JOBU1, JOBX, M + P, P, L,
-     $                    G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
-     $                    U2, LDU2, U1, LDU1, VT, LDVT,
-     $                    WORK( Z + LDVT*N + 1 ), LWORK - Z - LDVT*N,
-     $                    IWORK( N + 1 ), INFO )
-      ELSE
-         CALL SORCSD2BY1( JOBU2, JOBU1, JOBX, M + P, P, L,
-     $                    G( 1, 1 ), LDG, G( P + 1, 1 ), LDG, THETA,
-     $                    U2, LDU2, U1, LDU1, VT, LDVT,
-     $                    WORK( Z + 1 ), LWORK - Z,
-     $                    IWORK, INFO )
-      END IF
+      CALL SORCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, L,
+     $                 G( 1, 1 ), LDG, G( M + 1, 1 ), LDG, THETA,
+     $                 U1, LDU1, U2, LDU2, VT, LDVT,
+     $                 WORK( Z + LDVT*N + 1 ), LWORK - Z - LDVT*N,
+     $                 IWORK( N + 1 ), INFO )
       IF( INFO.NE.0 ) THEN
          RETURN
       END IF
@@ -573,7 +585,7 @@
 *        Prepare row scaling of X
          IF( .NOT. W.EQ.1.0E0 ) THEN
             K = MIN( M, P, L, M + P - L )
-            K2 = MAX( L - M, 0 )
+            K1 = MAX( L - P, 0 )
             DO I = 1, K
                T = THETA( I )
 *              Do not adjust singular value if THETA(I) is greater
@@ -593,12 +605,12 @@
             END DO
 *           Adjust rows of X for matrix scaling
             DO J = 0, N-1
-               DO I = 1, K2
+               DO I = 1, K1
                   WORK( LDX*J + I + 1 ) = WORK( LDX*J + I + 1 ) / W
                END DO
                DO I = 1, K
-                  WORK( LDX*J + I + K2 + 1 ) =
-     $            WORK( LDX*J + I + K2 + 1 ) * WORK( Z + I + 1 )
+                  WORK( LDX*J + I + K1 + 1 ) =
+     $            WORK( LDX*J + I + K1 + 1 ) * WORK( Z + I + 1 )
                END DO
             END DO
          END IF
