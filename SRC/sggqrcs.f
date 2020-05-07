@@ -287,7 +287,7 @@
 *>  TOL     REAL
 *>          Let G = (A**T,B**T)**T. TOL is the threshold to determine
 *>          the effective rank of G. Generally, it is set to
-*>                   TOL = MAX(M,P,N) * norm(G) * MACHEPS,
+*>                   TOL = MAX( M + P, N ) * norm(G) * MACHEPS,
 *>          where norm(G) is the Frobenius norm of G.
 *>          The size of TOL may affect the size of backward error of the
 *>          decomposition.
