@@ -414,6 +414,13 @@
             SWAPPED = .TRUE.
             RETURN
          ENDIF
+*
+*     Past this point, we know that
+*     * NORMA <= NORMB (almost)
+*     * W >= 1
+*     * ALPHA will contain cosine values at the end
+*     * BETA will contain sine values at the end
+*
       END IF
 *
 *     Initialize variables
@@ -500,7 +507,7 @@
 *
 *     Compute the Frobenius norm of matrix G
 *
-      NORMG = SLANGE( 'F', M + P, N, G, LDG, WORK( Z + 1 ) )
+      NORMG = NORMB * SQRT( 1.0E0 + ( ( W * NORMA ) / NORMB )**2 )
 *
 *     Get machine precision and set up threshold for determining
 *     the effective numerical rank of the matrix G.
