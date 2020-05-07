@@ -51,34 +51,45 @@
 *> factorization with column pivoting and the 2-by-1 CS decomposition to
 *> compute the GSVD.
 *>
-*> SGGQRCS is only conditionally backward stable when the computation of
-*> X is required. If
-*> * you do not know what this means, or if
-*> * the matrices A and B differ significantly in norm, or if
-*> * X is required in factorized form (see below),
-*>
-*> then it is strongly advised to use SGGSVD3 instead.
-*>
 *> Let L be the effective numerical rank of the matrix (A**T,B**T)**T,
-*> then X is a L-by-N nonsingular upper triangular matrix, D1 and
-*> D2 are M-by-L and P-by-L "diagonal" matrices and of the
-*> following structures, respectively:
+*> then X is a L-by-N nonsingular matrix, D1 and D2 are M-by-L and
+*> P-by-L "diagonal" matrices. If SWAPPED is false, then D1 and D2 are
+*> of the of the following structures, respectively:
 *>
-*>                        K   K1
-*>        D1 =     (  0   0   0 )
-*>              K  (  0   S   0 )
-*>              K1 (  0   0   I )
+*>                 K1  K
+*>            K1 [ I   0   0 ]
+*>       D1 = K  [ 0   C   0 ]
+*>               [ 0   0   0 ]
 *>
-*>                    K2  K
-*>        D2 =  K2 (  I   0   0 )
-*>              K  (  0   C   0 )
-*>                 (  0   0   0 )
+*>                     K   K2
+*>               [ 0   0   0 ]
+*>       D2 = K  [ 0   S   0 ]
+*>            K2 [ 0   0   I ]
 *>
 *> where
 *>
 *>   K  = MIN(M, P, L, M + P - L),
 *>   K1 = MAX(L - P, 0),
 *>   K2 = MAX(L - M, 0),
+*>   C  = diag( ALPHA(1), ..., ALPHA(K) ),
+*>   S  = diag( BETA(1), ..., BETA(K) ), and
+*>   C^2 + S^2 = I.
+*>
+*> If SWAPPED is true, then D1 and D2 are of the of the following
+*> structures, respectively:
+*>
+*>                     K   K1
+*>               [ 0   0   0 ]
+*>       D1 = K  [ 0   S   0 ]
+*>            K1 [ 0   0   I ]
+*>
+*>                 K2  K
+*>            K2 [ I   0   0 ]
+*>       D2 = K  [ 0   C   0 ]
+*>               [ 0   0   0 ]
+*>
+*> where
+*>
 *>   S  = diag( ALPHA(1), ..., ALPHA(K) ),
 *>   C  = diag( BETA(1), ..., BETA(K) ), and
 *>   C^2 + S^2 = I.
@@ -86,8 +97,8 @@
 *> The routine computes C, S and optionally the matrices U1, U2, and X.
 *> On exit, X is stored in WORK( 2:L*N+1 ).
 *>
-*> In particular, if B is an N-by-N nonsingular matrix, then the GSVD of
-*> A and B implicitly gives the SVD of A*inv(B):
+*> If B is an N-by-N nonsingular matrix, then the GSVD of the matrix
+*> pair (A, B) implicitly gives the SVD of A*inv(B):
 *>
 *>       A*inv(B) = U1*(D1*inv(D2))*U2**T.
 *>
@@ -102,9 +113,9 @@
 *>       A = U1*D1*( 0 R )*Q**T,    B = U2*D2*( 0 R )*Q**T
 *>
 *> where U1, U2, and Q are orthogonal matrices. This latter GSVD form is
-*> computed directly by SGGSVD3. It is possible to convert between the
+*> computed directly by DGGSVD3. It is possible to convert between the
 *> two representations by calculating the RQ decomposition of X but this
-*> is not recommended for numerical reasons.
+*> is not recommended for reasons of numerical stability.
 *>
 *> \endverbatim
 *
@@ -199,9 +210,7 @@
 *>          BETA is REAL array, dimension (N)
 *>
 *>          On exit, ALPHA and BETA contain the K generalized singular
-*>          value pairs of A and B, where
-*>            ALPHA(1:K) = S,
-*>            BETA(1:K)  = C.
+*>          value pairs of A and B.
 *> \endverbatim
 *>
 *> \param[out] U1
@@ -302,15 +311,13 @@
 *> \par Further Details:
 *  =====================
 *>
-*>  SGGQRCS can compute the singular values with high relative accuracy
-*>  and should be significantly faster than SGGSVD3 for large matrices
-*>  because the matrices A and B are reduced to a pair of
+*>  SGGQRCS should be significantly faster than DGGSVD3 for large
+*>  matrices because the matrices A and B are reduced to a pair of
 *>  well-conditioned bidiagonal matrices instead of pairs of upper
 *>  triangular matrices. On the downside, SGGQRCS requires a much larger
-*>  workspace whose dimension must be queried at run-time and the
-*>  computation of the right-hand side matrix X is only conditionally
-*>  backward stable; A and B must be similar in norm for backward
-*>  stability.
+*>  workspace whose dimension must be queried at run-time. SGGQRCS also
+*>  offers no guarantees which of the two possible diagonal matrices
+*>  is used for the matrix factorization.
 *>
 *  =====================================================================
       RECURSIVE SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
