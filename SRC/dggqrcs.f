@@ -411,7 +411,7 @@
          NORMA = DLANGE( 'F', M, N, A, LDA, WORK )
          NORMB = DLANGE( 'F', P, N, B, LDB, WORK )
 *
-         IF( NORMA.GT.SQRT( 2.0E0 ) * NORMB ) THEN
+         IF( NORMA.GT.SQRT( 2.0D0 ) * NORMB ) THEN
             CALL DGGQRCS( JOBU2, JOBU1, JOBX, P, N, M, L,
      $                    SWAPPED,
      $                    B, LDB, A, LDA,
