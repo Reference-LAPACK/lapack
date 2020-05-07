@@ -18,9 +18,10 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L, W,
+*       SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L, SWAPPED,
 *                           A, LDA, B, LDB,
-*                           THETA, U1, LDU1, U2, LDU2
+*                           ALPHA, BETA,
+*                           U1, LDU1, U2, LDU2
 *                           WORK, LWORK, IWORK, INFO )
 *
 *       .. Scalar Arguments ..
@@ -29,7 +30,8 @@
 *       ..
 *       .. Array Arguments ..
 *       INTEGER            IWORK( * )
-*       REAL               A( LDA, * ), B( LDB, * ), THETA( * ),
+*       REAL               A( LDA, * ), B( LDB, * ),
+*      $                   ALPHA( N ), BETA( N ),
 *      $                   U1( LDU1, * ), U2( LDU2, * ),
 *      $                   WORK( * )
 *       ..
@@ -77,8 +79,8 @@
 *>   K  = MIN(M, P, L, M + P - L),
 *>   K1 = MAX(L - P, 0),
 *>   K2 = MAX(L - M, 0),
-*>   C  = diag( COS(THETA(1)), ..., COS(THETA(K)) ),
-*>   S  = diag( SIN(THETA(1)), ..., SIN(THETA(K)) ), and
+*>   S  = diag( ALPHA(1), ..., ALPHA(K) ),
+*>   C  = diag( BETA(1), ..., BETA(K) ), and
 *>   C^2 + S^2 = I.
 *>
 *> The routine computes C, S and optionally the matrices U1, U2, and X.
@@ -155,12 +157,12 @@
 *>          (A**T, B**T)**T.
 *> \endverbatim
 *>
-*> \param[out] W
+*> \param[out] SWAPPED
 *> \verbatim
-*>          W is REAL
-*>          On exit, W is a radix power chosen such that the Frobenius
-*>          norm of A and W*B are with SQRT(RADIX) and 1/SQRT(RADIX) of
-*>          each other.
+*>          L is LOGICAL
+*>          On exit, SWAPPED is true if SGGQRCS swapped the input
+*>          matrices A, B and computed the GSVD of (B, A); false
+*>          otherwise.
 *> \endverbatim
 *>
 *> \param[in,out] A
@@ -187,12 +189,19 @@
 *>          The leading dimension of the array B. LDB >= max(1,P).
 *> \endverbatim
 *>
-*> \param[out] THETA
+*> \param[out] ALPHA
 *> \verbatim
-*>          THETA is REAL array, dimension (N)
+*>          ALPHA is REAL array, dimension (N)
+*> \endverbatim
 *>
-*>          On exit, THETA contains K = MIN(M, P, L, M + P - L) values
-*>          in radians in ascending order.
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is REAL array, dimension (N)
+*>
+*>          On exit, ALPHA and BETA contain the K generalized singular
+*>          value pairs of A and B, where
+*>            ALPHA(1:K) = S,
+*>            BETA(1:K)  = C.
 *> \endverbatim
 *>
 *> \param[out] U1
@@ -257,6 +266,14 @@
 *> \par Internal Parameters:
 *  =========================
 *>
+*> \param[out] W
+*> \verbatim
+*>          W is REAL
+*>          W is a radix power chosen such that the Frobenius norm of A
+*>          and W*B are with SQRT(RADIX) and 1/SQRT(RADIX) of each
+*>          other.
+*> \endverbatim
+*>
 *> \verbatim
 *>  TOL     REAL
 *>          Let G = (A**T,B**T)**T. TOL is the threshold to determine
@@ -272,7 +289,7 @@
 *
 *> \author Christoph Conrads (https://christoph-conrads.name)
 *
-*> \date October 2019
+*> \date October 2019, May 2020
 *
 *> \ingroup realGEsing
 *
@@ -296,10 +313,12 @@
 *>  stability.
 *>
 *  =====================================================================
-      RECURSIVE SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L, W,
-     $                    A, LDA, B, LDB,
-     $                    THETA, U1, LDU1, U2, LDU2,
-     $                    WORK, LWORK, IWORK, INFO )
+      RECURSIVE SUBROUTINE SGGQRCS( JOBU1, JOBU2, JOBX, M, N, P, L,
+     $                              SWAPPED,
+     $                              A, LDA, B, LDB,
+     $                              ALPHA, BETA,
+     $                              U1, LDU1, U2, LDU2,
+     $                              WORK, LWORK, IWORK, INFO )
 *
 *  -- LAPACK driver routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -308,13 +327,14 @@
 *
       IMPLICIT NONE
 *     .. Scalar Arguments ..
+      LOGICAL            SWAPPED
       CHARACTER          JOBU1, JOBU2, JOBX
       INTEGER            INFO, LDA, LDB, LDU1, LDU2, L, M, N, P, LWORK
-      REAL               W
 *     ..
 *     .. Array Arguments ..
       INTEGER            IWORK( * )
-      REAL               A( LDA, * ), B( LDB, * ), THETA( * ),
+      REAL               A( LDA, * ), B( LDB, * ),
+     $                   ALPHA( N ), BETA( N ),
      $                   U1( LDU1, * ), U2( LDU2, * ),
      $                   WORK( * )
 *     ..
@@ -325,7 +345,7 @@
       LOGICAL            WANTU1, WANTU2, WANTX, LQUERY
       INTEGER            I, J, K, K1, LMAX, Z, LDG, LDX, LDVT, LWKOPT
       REAL               BASE, NAN, NORMA, NORMB, NORMG, TOL, ULP, UNFL,
-     $                   T
+     $                   THETA, IOTA, W
 *     .. Local Arrays ..
       REAL               G( M + P, N ), VT( N, N )
 *     ..
@@ -339,7 +359,7 @@
      $                   SLASET, SORGQR, SORCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN, SQRT
+      INTRINSIC          COS, MAX, MIN, SIN, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -367,9 +387,9 @@
       ELSE IF( P.LT.1 ) THEN
          INFO = -6
       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN
-         INFO = -10
+         INFO = -9
       ELSE IF( LDB.LT.MAX( 1, P ) ) THEN
-         INFO = -12
+         INFO = -11
       ELSE IF( LDU1.LT.1 .OR. ( WANTU1 .AND. LDU1.LT.M ) ) THEN
          INFO = -15
       ELSE IF( LDU2.LT.1 .OR. ( WANTU2 .AND. LDU2.LT.P ) ) THEN
@@ -385,12 +405,13 @@
          NORMB = SLANGE( 'F', P, N, B, LDB, WORK )
 *
          IF( NORMA.GT.SQRT( 2.0E0 ) * NORMB ) THEN
-            CALL SGGQRCS( JOBU2, JOBU1, JOBX, P, N, M, L, W,
+            CALL SGGQRCS( JOBU2, JOBU1, JOBX, P, N, M, L,
+     $                    SWAPPED,
      $                    B, LDB, A, LDA,
-     $                    THETA,
+     $                    BETA, ALPHA,
      $                    U2, LDU2, U1, LDU1,
      $                    WORK, LWORK, IWORK, INFO )
-            W = -W
+            SWAPPED = .TRUE.
             RETURN
          ENDIF
       END IF
@@ -401,6 +422,7 @@
       NAN = 1.0E0
       NAN = 0.0 / (NAN - 1.0E0)
 *
+      SWAPPED = .FALSE.
       L = 0
       LMAX = MIN( M + P, N )
       Z = ( M + P ) * N
@@ -408,23 +430,26 @@
       LDG = M + P
       VT = 0
       LDVT = N
+      THETA = NAN
+      IOTA = NAN
       W = NAN
 *
 *     Compute workspace
 *
       IF( INFO.EQ.0 ) THEN
          LWKOPT = 0
-
-         CALL SGEQP3( M+P, N, G, LDG, IWORK, THETA, WORK, -1, INFO )
+*
+         CALL SGEQP3( M+P, N, G, LDG, IWORK, ALPHA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
          LWKOPT = INT( WORK( 1 ) )
-
-         CALL SORGQR( M + P, LMAX, LMAX, G, LDG, THETA, WORK, -1, INFO )
+*
+         CALL SORGQR( M + P, LMAX, LMAX, G, LDG, ALPHA, WORK, -1, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
-
-         CALL SORCSD2BY1( JOBU2, JOBU1, JOBX, M + P, M, LMAX,
+*
+         CALL SORCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, LMAX,
      $                    G, LDG, G, LDG,
-     $                    THETA, U1, LDU1, U2, LDU2, VT, LDVT,
+     $                    ALPHA,
+     $                    U1, LDU1, U2, LDU2, VT, LDVT,
      $                    WORK, -1, IWORK, INFO )
          LWKOPT = MAX( LWKOPT, INT( WORK( 1 ) ) )
 *        The matrix (A, B) must be stored sequentially for SORGQR
@@ -433,7 +458,7 @@
          IF( WANTX ) THEN
             LWKOPT = LWKOPT + LDVT*N
          END IF
-
+*
          WORK( 1 ) = REAL( LWKOPT )
       END IF
 *
@@ -492,7 +517,7 @@
 *
 *     Compute the QR factorization with column pivoting GΠ = Q1 R1
 *
-      CALL SGEQP3( M + P, N, G, LDG, IWORK, THETA,
+      CALL SGEQP3( M + P, N, G, LDG, IWORK, ALPHA,
      $             WORK( Z + 1 ), LWORK - Z, INFO )
       IF( INFO.NE.0 ) THEN
          RETURN
@@ -538,7 +563,7 @@
 *
 *     Explicitly form Q1 so that we can compute the CS decomposition
 *
-      CALL SORGQR( M + P, L, L, G, LDG, THETA,
+      CALL SORGQR( M + P, L, L, G, LDG, ALPHA,
      $             WORK( Z + 1 ), LWORK - Z, INFO )
       IF ( INFO.NE.0 ) THEN
          RETURN
@@ -546,12 +571,16 @@
 *
 *     DEBUG
 *
-      THETA( 1:N ) = NAN
+      ALPHA( 1:N ) = NAN
+      BETA( 1:N ) = NAN
 *
 *     Compute the CS decomposition of Q1( :, 1:L )
 *
+      K = MIN( M, P, L, M + P - L )
+      K1 = MAX( L - P, 0 )
       CALL SORCSD2BY1( JOBU1, JOBU2, JOBX, M + P, M, L,
-     $                 G( 1, 1 ), LDG, G( M + 1, 1 ), LDG, THETA,
+     $                 G( 1, 1 ), LDG, G( M + 1, 1 ), LDG,
+     $                 ALPHA,
      $                 U1, LDU1, U2, LDU2, VT, LDVT,
      $                 WORK( Z + LDVT*N + 1 ), LWORK - Z - LDVT*N,
      $                 IWORK( N + 1 ), INFO )
@@ -581,48 +610,52 @@
          END IF
 *        Revert column permutation Π by permuting the columns of X
          CALL SLAPMT( .FALSE., L, N, WORK( 2 ), LDX, IWORK )
-*        Adjust generalized singular values for matrix scaling
-*        Prepare row scaling of X
-         IF( .NOT. W.EQ.1.0E0 ) THEN
-            K = MIN( M, P, L, M + P - L )
-            K1 = MAX( L - P, 0 )
-            DO I = 1, K
-               T = THETA( I )
-*              Do not adjust singular value if THETA(I) is greater
-*              than pi/2 (infinite singular values won't change)
-               IF( TAN( T ) < 0 ) THEN
-                  WORK( Z + I + 1 ) = 1.0E0
-               ELSE
-*              ensure sine, cosine divisor is far away from zero
-*              w is a power of two and will cause no trouble
-                  THETA( I ) = ATAN( W * TAN( T ) )
-                  IF( SIN( THETA( I ) ) .GE. COS( THETA( I ) ) ) THEN
-                     WORK( Z + I + 1 ) = SIN( T ) / SIN( THETA( I ) )
-                  ELSE
-                     WORK( Z + I + 1 ) = COS( T ) / COS( THETA( I ) ) /W
-                  END IF
-               END IF
-            END DO
-*           Adjust rows of X for matrix scaling
-            DO J = 0, N-1
-               DO I = 1, K1
-                  WORK( LDX*J + I + 1 ) = WORK( LDX*J + I + 1 ) / W
-               END DO
-               DO I = 1, K
-                  WORK( LDX*J + I + K1 + 1 ) =
-     $            WORK( LDX*J + I + K1 + 1 ) * WORK( Z + I + 1 )
-               END DO
-            END DO
-         END IF
-      ELSE IF( .NOT. W.EQ.1.0E0 ) THEN
+      END IF
 *
-*        Adjust only generalized singular values for matrix scaling
+*     Adjust generalized singular values for matrix scaling
+*     Compute sine, cosine values
+*     Prepare row scaling of X
 *
-         DO I = 1, MIN( M, P, L, M + P - L )
-*           Do not adjust singular value if THETA(I) is greater than pi/2
-            IF( TAN( THETA(I) ) > 0 ) THEN
-               THETA(I) = ATAN( W * TAN( THETA(I) ) )
+      DO I = 1, K
+         THETA = ALPHA( I )
+*        Do not adjust singular value if THETA is greater
+*        than pi/2 (infinite singular values won't change)
+         IF( COS( THETA ).LE.0.0E0 ) THEN
+            ALPHA( I ) = 0.0E0
+            BETA( I ) = 1.0E0
+            IF( WANTX ) THEN
+               WORK( Z + I + 1 ) = 1.0E0
             END IF
+         ELSE
+*           iota comes in the greek alphabet after theta
+            IOTA = ATAN( W * TAN( THETA ) )
+*           ensure sine, cosine divisor is far away from zero
+*           w is a power of two and will cause no trouble
+            IF( SIN( IOTA ) .GE. COS( IOTA ) ) THEN
+               ALPHA( I ) =  ( SIN( IOTA ) / TAN( THETA ) ) / W
+               BETA( I ) = SIN( IOTA )
+               IF( WANTX ) THEN
+                  WORK( Z + I + 1 ) = SIN( THETA ) / SIN( IOTA )
+               END IF
+            ELSE
+               ALPHA( I ) = COS( IOTA )
+               BETA( I ) = SIN( IOTA )
+               IF( WANTX ) THEN
+                  WORK( Z + I + 1 ) = COS( THETA ) / COS( IOTA ) / W
+               END IF
+            END IF
+         END IF
+      END DO
+*     Adjust rows of X for matrix scaling
+      IF( WANTX ) THEN
+         DO J = 0, N-1
+            DO I = 1, K1
+               WORK( LDX*J + I + 1 ) = WORK( LDX*J + I + 1 ) / W
+            END DO
+            DO I = 1, K
+               WORK( LDX*J + I + K1 + 1 ) =
+     $         WORK( LDX*J + I + K1 + 1 ) * WORK( Z + I + 1 )
+            END DO
          END DO
       END IF
 *
