@@ -363,7 +363,7 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           SGEMM, SGEQP3, SLACPY, SLAPMT, SLASCL,
-     $                   SLASET, SORGQR, SORCSD2BY1, XERBLA
+     $                   SLASET, STRMM, SORGQR, SORCSD2BY1, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          COS, MAX, MIN, SIN, SQRT
@@ -611,9 +611,13 @@
       IF( WANTX ) THEN
          LDX = L
          IF ( L.LE.M ) THEN
-            CALL SGEMM( 'N', 'N', L, N, L,
-     $                  1.0E0, VT, LDVT, A, LDA,
-     $                  0.0E0, WORK( 2 ), LDX )
+      CALL SLACPY( 'A', M, N, A, LDA, G( 1, 1 ), LDG )
+            CALL SLACPY( 'A', L, L, VT, LDVT, WORK( 2 ), LDX )
+            CALL STRMM( 'R', 'U', 'N', 'N', L, L,
+     $                  1.0E0, A, LDA, WORK( 2 ), LDX )
+            CALL SGEMM( 'N', 'N', L, N - L, L,
+     $                  1.0E0, VT, LDVT, A( 1, L + 1 ), LDA,
+     $                  0.0E0, WORK( LDX*L + 2 ), LDX )
          ELSE
             CALL SGEMM( 'N', 'N', L, N, M,
      $                  1.0E0, VT( 1, 1 ), LDVT, A, LDA,
