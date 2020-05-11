@@ -486,6 +486,8 @@
 *     Finish initialization
       IF( WANTX ) THEN
          VT = WORK( Z + 1 )
+      ELSE
+         LDVT = 0
       END IF
 *
 *     Scale matrix A such that norm(A) \approx norm(B)
