@@ -301,8 +301,8 @@
 *        Chase the shift down
          do j = 1,ns-1-i
 
-            call dlaqz2(.true.,.true.,j,1,ns,A(ilo,ilo),ldA,B(ilo,ilo),
-     $         ldB,ns+1,1,Qc,ldQc,ns,1,Zc,ldZc)
+            call dlaqz2(.true.,.true.,j,1,ns,ihi-ilo+1,A(ilo,ilo),ldA,
+     $         B(ilo,ilo),ldB,ns+1,1,Qc,ldQc,ns,1,Zc,ldZc)
 
          end do
 
@@ -373,8 +373,8 @@
 *              Move down the block with index k+i+j-1, updating
 *              the (ns+np x ns+np) block:
 *              (k:k+ns+np,k:k+ns+np-1)
-               call dlaqz2(.true.,.true.,k+i+j-1,istartb,istopb,A,ldA,B,
-     $            ldB,nblock,k+1,Qc,ldQc,nblock,k,Zc,ldZc)
+               call dlaqz2(.true.,.true.,k+i+j-1,istartb,istopb,ihi,A,
+     $            ldA,B,ldB,nblock,k+1,Qc,ldQc,nblock,k,Zc,ldZc)
             end do
          end do
 
@@ -438,59 +438,11 @@
 
       do i = 1,ns,2
 *        Chase the shift down to the bottom right corner
-         do ishift = ihi-i-1,ihi-3
-            call dlaqz2(.true.,.true.,ishift,istartb,istopb,A,ldA,B,ldB,
-     $         ns,ihi-ns+1,Qc,ldQc,ns+1,ihi-ns,Zc,ldZc)
+         do ishift = ihi-i-1,ihi-2
+            call dlaqz2(.true.,.true.,ishift,istartb,istopb,ihi,A,ldA,B,
+     $         ldB,ns,ihi-ns+1,Qc,ldQc,ns+1,ihi-ns,Zc,ldZc)
          end do
-
-*        Remove the shift
-
-*        Calculate Z1 and Z2 to make the first column of
-*        B(ihi-1:ihi,ihi-2:ihi) zero
-         H = B(ihi-1:ihi,ihi-2:ihi)
-         call dlartg(H(1,1),H(2,1),c1,s1,temp)
-         H(2,1) = zero
-         H(1,1) = temp
-         call drot(2,H(1,2),2,H(2,2),2,c1,s1)
-         call dlartg(H(2,3),H(2,2),c1,s1,temp)
-         call drot(1,H(1,3),1,H(1,2),1,c1,s1)
-         call dlartg(H(1,2),H(1,1),c2,s2,temp)
-
-*        Apply Z1 and Z2 from the right
-         call drot(ihi-istartb+1,B(istartb,ihi),1,B(istartb,ihi-1),1,c1,
-     $      s1)
-         call drot(ihi-istartb+1,B(istartb,ihi-1),1,B(istartb,ihi-2),1,
-     $      c2,s2)
-         B(ihi-1,ihi-2) = zero
-         B(ihi,ihi-2) = zero
-         call drot(ihi-istartb+1,A(istartb,ihi),1,A(istartb,ihi-1),1,c1,
-     $      s1)
-         call drot(ihi-istartb+1,A(istartb,ihi-1),1,A(istartb,ihi-2),1,
-     $      c2,s2)
-         call drot(ns+1,Zc(1,ns+1),1,Zc(1,ns),1,c1,s1)
-         call drot(ns+1,Zc(1,ns),1,Zc(1,ns-1),1,c2,s2)
-
-*        Make A(ihi,ihi-2) zero from the left
-*        This won't alter the zeros already created in B
-         call dlartg(A(ihi-1,ihi-2),A(ihi,ihi-2),c1,s1,temp)
-         A(ihi-1,ihi-2) = temp
-         A(ihi,ihi-2) = zero
-         call drot(istopb-ihi+2,A(ihi-1,ihi-1),ldA,A(ihi,ihi-1),ldA,c1,
-     $      s1)
-         call drot(istopb-ihi+2,B(ihi-1,ihi-1),ldB,B(ihi,ihi-1),ldB,c1,
-     $      s1)
-         call drot(ns,Qc(1,ns-1),1,Qc(1,ns),1,c1,s1)
-
-*        Final rotation to make B(ihi,ihi-1) zero
-         call dlartg(B(ihi,ihi),B(ihi,ihi-1),c1,s1,temp)
-         B(ihi,ihi) = temp
-         B(ihi,ihi-1) = zero
-         call drot(ihi-istartb,B(istartb,ihi),1,B(istartb,ihi-1),1,c1,
-     $      s1)
-         call drot(ihi-istartb+1,A(istartb,ihi),1,A(istartb,ihi-1),1,c1,
-     $      s1)
-         call drot(ns+1,Zc(1,ns+1),1,Zc(1,ns),1,c1,s1)
-
+         
       end do
 
 *     Update rest of the pencil

@@ -503,16 +503,12 @@
          end if
 
 *        The actual QZ sweep
-         do k = istart2,istop-3
+         do k = istart2,istop-2
 
-            call dlaqz2(wantQ,wantZ,k,istartm,istopm,A,ldA,B,ldB,n,1,Q,
-     $         ldQ,n,1,Z,ldZ)
+            call dlaqz2(wantQ,wantZ,k,istartm,istopm,istop,A,ldA,B,ldB,
+     $         n,1,Q,ldQ,n,1,Z,ldZ)
 
          end do
-
-*        Remove double shift
-         call d_remove_double_shift(wantQ,wantZ,n,istop,A,ldA,B,ldB,Q,
-     $      ldQ,Z,ldZ,istartm,istopm)
 
          n_shifts = n_shifts+2
 

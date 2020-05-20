@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> DLAQZ4 normalizes a generalized Schur decomposition and calculates the eigenvalues of the pencil.
+*> DLAQZ4 performs AED
 *> \endverbatim
 *
 *  Arguments:
@@ -393,34 +393,57 @@
          end do
 
 *        Chase bulges down
+         istartm = kwtop
+         istopm = ihi
          k = kwbot-1
          do while (k .ge. kwtop)
             if ((k .ge. kwtop+1) .and. A(k+1,k-1) .ne. zero) then
 
-*              Move double pole block down
-               do k2 = k-1,kwbot-3
-                  call dlaqz2(.true.,.true.,k2,kwtop,kwtop+jw-1,A,ldA,B,
-     $               ldB,jw,kwtop,Qc,ldQc,jw,kwtop,Zc,ldZc)
-   !                call d_swap_21_inf(.true.,.true.,k2-kwtop+1,A(kwtop,
-   !   $               kwtop),ldA,B(kwtop,kwtop),ldB,jw,Qc,ldQc,jw,Zc,
-   !   $               ldZc,1,jw)
+*              Move double pole block down and remove it
+               do k2 = k-1,kwbot-2
+                  call dlaqz2(.true.,.true.,k2,kwtop,kwtop+jw-1,kwbot,A,
+     $               ldA,B,ldB,jw,kwtop,Qc,ldQc,jw,kwtop,Zc,ldZc)
                end do
-*              Remove double pole block
-               call d_remove_double_shift(.true.,.true.,jw,kwbot-kwtop+
-     $            1,A(kwtop,kwtop),ldA,B(kwtop,kwtop),ldB,Qc,ldQc,Zc,
-     $            ldZc,1,jw)
 
                k = k-2
             else
 
 *              k points to single shift
                do k2 = k,kwbot-2
-                call d_swap_11_inf(.true.,.true.,jw,k2-kwtop+1,A(kwtop,
-     $             kwtop),ldA,B(kwtop,kwtop),ldB,Qc,ldQc,Zc,ldZc,1,jw)
+
+*                 Move shift down
+                  call dlartg(B(k2+1,k2+1),B(k2+1,k2),c1,s1,temp)
+                  B(k2+1,k2+1) = temp
+                  B(k2+1,k2) = zero
+                  call drot(k2+2-istartm+1,A(istartm,k2+1),1,A(istartm,
+     $               k2),1,c1,s1)
+                  call drot(k2-istartm+1,B(istartm,k2+1),1,B(istartm,
+     $               k2),1,c1,s1)
+                  call drot(jw,Zc(1,k2+1-kwtop+1),1,Zc(1,k2-kwtop+1),1,
+     $               c1,s1)
+            
+                  call dlartg(A(k2+1,k2),A(k2+2,k2),c1,s1,temp)
+                  A(k2+1,k2) = temp
+                  A(k2+2,k2) = zero
+                  call drot(istopm-k2,A(k2+1,k2+1),ldA,A(k2+2,k2+1),ldA,
+     $               c1,s1)
+                  call drot(istopm-k2,B(k2+1,k2+1),ldB,B(k2+2,k2+1),ldB,
+     $               c1,s1)
+                  call drot(jw,Qc(1,k2+1-kwtop+1),1,Qc(1,k2+2-kwtop+1),
+     $               1,c1,s1)
+
                end do
 
-             call d_remove_single_shift(.true.,jw,kwbot-kwtop+1,A(kwtop,
-     $          kwtop),ldA,B(kwtop,kwtop),ldB,Zc,ldZc,1)
+*              Remove the shift
+               call dlartg(B(kwbot,kwbot),B(kwbot,kwbot-1),c1,s1,temp)
+               B(kwbot,kwbot) = temp
+               B(kwbot,kwbot-1) = zero
+               call drot(kwbot-istartm,B(istartm,kwbot),1,B(istartm,
+     $            kwbot-1),1,c1,s1)
+               call drot(kwbot-istartm+1,A(istartm,kwbot),1,A(istartm,
+     $            kwbot-1),1,c1,s1)
+               call drot(jw,Zc(1,kwbot-kwtop+1),1,Zc(1,kwbot-1-kwtop+1),
+     $            1,c1,s1)
 
                k = k-1
             end if
