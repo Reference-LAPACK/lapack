@@ -34,7 +34,7 @@
 *>      This is useful for starting double implicit shift bulges
 *>      in the QZ algorithm.
 *> \endverbatim
-
+*
 *
 *  Arguments:
 *  ==========

@@ -302,12 +302,15 @@
       double precision :: smlnum,ulp,eshift,safmin,safmax,c1,s1,temp
       integer :: istart,istop,iiter,maxit,istart2,k,ld,nshifts,nblock,
      $   nw,nmin,nibble,n_undeflated,n_deflated,ns,sweep_info,shiftpos,
-     $   lworkreq,k2,istartm,istopm,iwants,iwantq,iwantz,norm_info
+     $   lworkreq,k2,istartm,istopm,iwants,iwantq,iwantz,norm_info,
+     $   aed_info,nwr,nbr,nsr,itemp1,itemp2
       logical :: ilschur,ilq,ilz,lquery
+      character :: jbcmpz*3
 
 *     External Functions
       double precision,external :: dlamch
       logical,external :: lsame
+      integer,external :: ilaenv
 
 *
 *     Decode wantS,wantQ,wantZ
@@ -373,7 +376,7 @@
          info =-17
       end if
       if( info.NE.0 ) then
-         CALL xerbla( 'DLAQZ0',-info )
+         call xerbla( 'DLAQZ0',-info )
          return
       end if
    
@@ -385,10 +388,49 @@
          return
       end if
 
-*     Get the parameters to find out required workspace
-      call getparameters(n,nshifts,nblock,nw,nmin,nibble)
-      nw = max(nw,nmin)
-      lworkreq = max(n*nblock+2*nblock**2,max(n*nw,4*nw+16)+2*nw**2)
+*
+*     Get the parameters
+*
+      jbcmpz(1:1)=wantS
+      jbcmpz(2:2)=wantQ
+      jbcmpz(3:3)=wantZ
+
+      nwr = ilaenv( 13,'DLAQR0',jbcmpz,n,ilo,ihi,lwork )
+      nwr = max( 2,nwr )
+      nwr = min( ihi-ilo+1,( n-1 ) / 3,nwr )
+      
+      nsr = ilaenv( 15,'DLAQR0',jbcmpz,n,ilo,ihi,lwork )
+      nsr = min( nsr,( n+6 ) / 9,ihi-ilo )
+      nsr = max( 2,nsr-mod( nsr,2 ) )
+
+*     
+*     I don't really know how to change ilaenv, the above code
+*     doesn't contain all the parameters and the parameters
+*     it does set are overwritten in the following line.
+*  
+      call getparameters(n,nsr,nbr,nwr,nmin,nibble)
+
+      if( n .lt. nmin ) then
+         call dhgeqz(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
+     $      alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
+      end if
+
+*
+*     Find out required workspace
+*
+
+*     Workspace query to dlaqz4
+      nw = max(nwr,nmin)
+      call dlaqz4(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
+     $   n_undeflated,n_deflated,alphar,alphai,beta,work,nw,work,nw,
+     $   work,-1,aed_info)
+      itemp1 = int(work(1))
+*     Workspace query to dlaqz5
+      call dlaqz5(ilschur,ilq,ilz,n,ilo,ihi,nsr,nbr,alphar,alphai,beta,
+     $   A,ldA,B,ldB,Q,ldQ,Z,ldZ,work,nbr,work,nbr,work,-1,sweep_info)
+      itemp2 = int(work(1))
+
+      lworkreq = max(itemp1+2*nw**2,itemp2+2*nbr**2)
       if (lwork .eq.-1) then
          work(1) = dble(lworkreq)
          return
@@ -396,7 +438,7 @@
          info =-19
       end if
       if( info.NE.0 ) then
-         CALL xerbla( 'DHGEQZ',-info )
+         call xerbla( 'DLAQZ0',-info )
          return
       end if
 *
@@ -554,10 +596,9 @@
             cycle
          end if
 
-*        Get the parameters, we do this for each iteration because
-*        The blocks might get smaller leading to a better choice
-*        of parameter being available
-         call getparameters(n,nshifts,nblock,nw,nmin,nibble)
+         nw = nwr
+         nshifts = nsr
+         nblock = nbr
 
          if (istop-istart2+1 .lt. nmin) then
 *           Setting nw to the size of the subblock will make AED deflate
@@ -571,10 +612,12 @@
             end if
          end if
 
-*        Time for aed
+*
+*        Time for AED
+*
          call dlaqz4(ilschur,ilq,ilz,n,istart2,istop,nw,A,ldA,B,ldB,Q,
      $      ldQ,Z,ldZ,n_undeflated,n_deflated,alphar,alphai,beta,work,
-     $      nw,work(nw**2+1),nw,work(2*nw**2+1),lwork-2*nw**2)
+     $      nw,work(nw**2+1),nw,work(2*nw**2+1),lwork-2*nw**2,aed_info)
 
          if (n_deflated > 0) then
             istop = istop-n_deflated
@@ -596,13 +639,27 @@
          shiftpos = istop-n_deflated-n_undeflated+1
 
          if (mod(ld,6) .eq. 0) then
-            call dlag2(A(istop-1,istop-1),ldA,B(istop-1,istop-1),ldB,
-     $         safmin,beta(shiftpos),beta(shiftpos+1),alphar(shiftpos),
-     $         alphar(shiftpos+1),alphai(shiftpos))
-            alphai(shiftpos+1) =-alphai(shiftpos)
+* 
+*           Exceptional shift.  Chosen for no particularly good reason.
+*
+            if((dble(maxit)*safmin)*abs(A(istop,
+     $         istop-1)).lt.abs(A(istop-1,istop-1))) then
+               eshift = A(istop,istop-1)/B(istop-1,istop-1)
+            else
+               eshift = eshift+one/(safmin*dble(maxit))
+            end if
+            alphar(shiftpos) = one
+            alphar(shiftpos+1) = zero
+            alphai(shiftpos) = zero
+            alphai(shiftpos+1) = zero
+            beta(shiftpos) = eshift
+            beta(shiftpos+1) = eshift
             ns = 2
          end if
 
+*
+*        Time for a QZ sweep
+*
          call dlaqz5(ilschur,ilq,ilz,n,istart2,istop,ns,nblock,
      $      alphar(shiftpos),alphai(shiftpos),beta(shiftpos),A,ldA,B,
      $      ldB,Q,ldQ,Z,ldZ,work,nblock,work(nblock**2+1),nblock,
