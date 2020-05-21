@@ -205,7 +205,8 @@
 *>
 *  =====================================================================
       subroutine dlaqz4(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,
-     $   Z,ldZ,ns,nd,alphar,alphai,beta,Qc,ldQc,Zc,ldZc,work,lwork)
+     $   Z,ldZ,ns,nd,alphar,alphai,beta,Qc,ldQc,Zc,ldZc,work,lwork,
+     $   info)
       implicit none
 
 *     Arguments
@@ -215,8 +216,8 @@
 
       double precision,intent(inout) :: A(ldA,*),B(ldB,*),Q(ldQ,*),
      $   Z(ldZ,*),alphar(*),alphai(*),beta(*)
-      integer,intent(out) :: ns,nd
-      double precision :: Qc(ldQc,*),Zc(ldZc,*),work(lwork)
+      integer,intent(out) :: ns,nd,info
+      double precision :: Qc(ldQc,*),Zc(ldZc,*),work(*)
 
 *     Parameters
       double precision :: zero,one,half
@@ -225,29 +226,13 @@
 *     Local Scalars
       logical :: bulge
       integer :: jw,kwtop,kwbot,istopm,istartm,k,k2,dtgexc_info,ifst,
-     $   ilst,lworkreq,n_shifts,qz_small_info
+     $   ilst,lworkreq,n_shifts,qz_small_info,itemp
       double precision :: s,smlnum,ulp,safmin,safmax,c1,s1,temp
 
 *     External Functions
       double precision,external :: dlamch
 
-      lworkreq = max(4*nw+16,n*nw,2*nw**2+n)
-      if (lwork .eq.-1) then
-*        workspace query, quick return
-         work(1) = lworkreq
-         return
-      else if (lwork .lt. lworkreq) then
-         write (*,*) "workspace provided to aed is too small",lworkreq,
-     $      lwork,nw
-         return
-      end if
-
-*     Get machine constants
-      safmin = dlamch('SAFE MINIMUM')
-      safmax = one/safmin
-      call dlabad(safmin,safmax)
-      ulp = dlamch('precision')
-      smlnum = safmin*(dble(n)/ulp)
+      info = 0
 
 *     Set up deflation window
       jw = min(nw,ihi-ilo+1)
@@ -257,6 +242,33 @@
       else
          s = A(kwtop,kwtop-1)
       end if
+
+*     Determine required workspace
+      ifst = 1
+      ilst = jw
+      call dtgexc(.true.,.true.,jw,A,ldA,B,ldB,Qc,ldQc,Zc,ldZc,ifst,
+     $   ilst,work,-1,dtgexc_info)
+      itemp = int(work(1))
+      lworkreq = max(itemp,n*nw,2*nw**2+n)
+      if (lwork .eq.-1) then
+*        workspace query, quick return
+         work(1) = lworkreq
+         return
+      else if (lwork .lt. lworkreq) then
+         info =-26
+      end if
+
+      if( info.NE.0 ) then
+         CALL xerbla( 'DLAQZ4',-info )
+         return
+      end if
+
+*     Get machine constants
+      safmin = dlamch('SAFE MINIMUM')
+      safmax = one/safmin
+      call dlabad(safmin,safmax)
+      ulp = dlamch('precision')
+      smlnum = safmin*(dble(n)/ulp)
 
       if (ihi .eq. kwtop) then
 *        1 by 1 deflation window, just try a regular deflation
@@ -282,9 +294,9 @@
 *     Transform window to real schur form
       call dlaset('Full',jw,jw,zero,one,Qc,ldQc)
       call dlaset('Full',jw,jw,zero,one,Zc,ldZc)
-      call dlaqz6(.true.,.true.,.true.,jw,1,jw,A(kwtop,kwtop),ldA,
-     $   B(kwtop,kwtop),ldB,Qc,ldQc,Zc,ldZc,alphar,alphai,beta,
-     $   qz_small_info,n_shifts)
+      call dhgeqz('S','V','V',jw,1,jw,A(kwtop,kwtop),ldA,B(kwtop,kwtop),
+     $   ldB,alphar,alphai,beta,Qc,ldQc,Zc,ldZc,work(2*jw**2+1),
+     $   lwork-2*jw**2,qz_small_info)
 
       if(qz_small_info .ne. 0) then
 *        Convergence failure, restore the window and exit
@@ -318,9 +330,9 @@
 *                 Not deflatable, move out of the way
                   ifst = kwbot-kwtop+1
                   ilst = k2
-                 call dtgexc(.true.,.true.,jw,A(kwtop,kwtop),ldA,
-     $              B(kwtop,kwtop),ldB,Qc,ldQc,Zc,ldZc,ifst,ilst,work,
-     $              lwork,dtgexc_info)
+                  call dtgexc(.true.,.true.,jw,A(kwtop,kwtop),ldA,
+     $               B(kwtop,kwtop),ldB,Qc,ldQc,Zc,ldZc,ifst,ilst,work,
+     $               lwork,dtgexc_info)
                   if (dtgexc_info .ne. 0) then
 *                    write(*,*) "swap warning", dtgexc_info
                   end if
