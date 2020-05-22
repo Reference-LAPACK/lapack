@@ -281,8 +281,8 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      subroutine dlaqz0(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,Q,ldQ,Z,
-     $   ldZ,alphar,alphai,beta,work,lwork,info)
+      subroutine dlaqz0(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
+     $   alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
       implicit none
 
 *     Arguments

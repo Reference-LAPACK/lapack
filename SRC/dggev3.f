@@ -205,7 +205,7 @@
 *>                The QZ iteration failed.  No eigenvectors have been
 *>                calculated, but ALPHAR(j), ALPHAI(j), and BETA(j)
 *>                should be correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other than QZ iteration failed in DHGEQZ.
+*>          > N:  =N+1: other than QZ iteration failed in DLAQZ0.
 *>                =N+2: error return from DTGEVC.
 *> \endverbatim
 *
@@ -259,7 +259,7 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DHGEQZ, DLABAD,
+      EXTERNAL           DGEQRF, DGGBAK, DGGBAL, DGGHD3, DLAQZ0, DLABAD,
      $                   DLACPY, DLASCL, DLASET, DORGQR, DORMQR, DTGEVC,
      $                   XERBLA
 *     ..
@@ -336,7 +336,7 @@
             CALL DGGHD3( JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB, VL,
      $                   LDVL, VR, LDVR, WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
-            CALL DHGEQZ( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
+            CALL DLAQZ0( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $                   WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, 2*N+INT( WORK ( 1 ) ) )
@@ -344,7 +344,7 @@
             CALL DGGHD3( 'N', 'N', N, 1, N, A, LDA, B, LDB, VL, LDVL,
      $                   VR, LDVR, WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, 3*N+INT( WORK ( 1 ) ) )
-            CALL DHGEQZ( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
+            CALL DLAQZ0( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $                   WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, 2*N+INT( WORK ( 1 ) ) )
@@ -469,7 +469,7 @@
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL DHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL DLAQZ0( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $             WORK( IWRK ), LWORK+1-IWRK, IERR )
       IF( IERR.NE.0 ) THEN
