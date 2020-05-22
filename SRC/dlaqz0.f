@@ -413,6 +413,7 @@
       if( n .lt. nmin ) then
          call dhgeqz(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
      $      alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
+         return
       end if
 
 *
@@ -709,7 +710,7 @@
 
       integer :: k
 
-      nmin = 80
+      nmin = 20
       nibble = 8
 
       if (n .lt. 30) then

@@ -1,31 +1,31 @@
-DGS                   Data for the Real Nonsymmetric Schur Form Driver
-7                     Number of matrix dimensions
-2 6 10 12 20 30 200   Matrix dimensions
-1 1 1 2 1             Parameters NB, NBMIN, NXOVER, NS, NBCOL
-10                    Threshold for test ratios
-.TRUE.                Put T to test the error exits
-0                     Code to interpret the seed
-DGS 26                Test all 26 matrix types
-DGV                   Data for the Real Nonsymmetric Eigenvalue Problem Driver
-6                     Number of matrix dimensions
-2 6 8 10 15 20        Matrix dimensions
-1 1 1 2 1             Parameters NB, NBMIN, NXOVER, NS, NBCOL
-10                    Threshold value
-.TRUE.                Put T to test the error exits
-0                     Code to interpret the seed
-DGV 26                Test all 26 matrix types
-DGX                   Data for the Real Nonsymmetric Schur Form Expert Driver
-2                     Largest matrix dimension (0 <= NSIZE <= 5)
-1 1 1 2 1             Parameters NB, NBMIN, NXOVER, NS, NBCOL
-10                    Threshold for test ratios
-.TRUE.                Put T to test the error exits
-0                     Code to interpret the seed
-DGX                   Data for the Real Nonsymmetric Schur Form Expert Driver
-0                     Largest matrix dimension
-1 1 1 2 1             Parameters NB, NBMIN, NXOVER, NS, NBCOL
-10                    Threshold for test ratios
-.TRUE.                Put T to test the error exits
-0                     Code to interpret the seed
+DGS               Data for the Real Nonsymmetric Schur Form Driver
+5                 Number of matrix dimensions
+2 6 10 12 20 30   Matrix dimensions
+1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
+10                Threshold for test ratios
+.TRUE.            Put T to test the error exits
+0                 Code to interpret the seed
+DGS 26            Test all 26 matrix types
+DGV               Data for the Real Nonsymmetric Eigenvalue Problem Driver
+6                 Number of matrix dimensions
+2 6 8 10 15 20    Matrix dimensions
+1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
+10                Threshold value
+.TRUE.            Put T to test the error exits
+0                 Code to interpret the seed
+DGV 26            Test all 26 matrix types
+DGX               Data for the Real Nonsymmetric Schur Form Expert Driver
+2                 Largest matrix dimension (0 <= NSIZE <= 5)
+1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
+10                Threshold for test ratios
+.TRUE.            Put T to test the error exits
+0                 Code to interpret the seed
+DGX               Data for the Real Nonsymmetric Schur Form Expert Driver
+0                 Largest matrix dimension
+1 1 1 2 1         Parameters NB, NBMIN, NXOVER, NS, NBCOL
+10                Threshold for test ratios
+.TRUE.            Put T to test the error exits
+0                 Code to interpret the seed
    4
    2
    8.0000D+00   4.0000D+00  -1.3000D+01   4.0000D+00   Input matrix A
