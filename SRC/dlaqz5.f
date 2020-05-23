@@ -209,17 +209,20 @@
      $   istopb,ishift,nblock,npos
       double precision :: temp,v(3),c1,s1,c2,s2,H(2,3),swap
 
-      if (nblock_desired < nshifts+1) then
-         info =-1
-         return
+      info = 0
+      if (nblock_desired .lt. nshifts+1) then
+         info =-8
       end if
       if (lwork .eq.-1) then
 *        workspace query, quick return
          work(1) = n*nblock_desired
-         info = 0
          return
       else if (lwork .lt. n*nblock_desired) then
-         info =-1
+         info =-25
+      end if
+
+      if( info.NE.0 ) then
+         call xerbla( 'DLAQZ5',-info )
          return
       end if
 
@@ -486,7 +489,5 @@
      $   work,n)
          call dlacpy('ALL',n,ns+1,work,n,Z(1,ihi-ns),ldZ)
       end if
-
-      info = 0
 
       end subroutine

@@ -1,4 +1,4 @@
-*> \brief \b DLAQZ0
+*> \brief \b DLAQZ6
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
+*       SUBROUTINE DLAQZ6( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
 *                          ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
 *                          LWORK, INFO )
 *
@@ -38,60 +38,8 @@
 *>
 *> \verbatim
 *>
-*> DLAQZ0 computes the eigenvalues of a real matrix pair (H,T),
-*> where H is an upper Hessenberg matrix and T is upper triangular,
-*> using the double-shift QZ method.
-*> Matrix pairs of this type are produced by the reduction to
-*> generalized upper Hessenberg form of a real matrix pair (A,B):
+*> DLAQZ6 is identical to DLAQZ0 except that it calls DLAQZ7 instead of DLAQZ4
 *>
-*>    A = Q1*H*Z1**T,  B = Q1*T*Z1**T,
-*>
-*> as computed by DGGHRD.
-*>
-*> If JOB='S', then the Hessenberg-triangular pair (H,T) is
-*> also reduced to generalized Schur form,
-*>
-*>    H = Q*S*Z**T,  T = Q*P*Z**T,
-*>
-*> where Q and Z are orthogonal matrices, P is an upper triangular
-*> matrix, and S is a quasi-triangular matrix with 1-by-1 and 2-by-2
-*> diagonal blocks.
-*>
-*> The 1-by-1 blocks correspond to real eigenvalues of the matrix pair
-*> (H,T) and the 2-by-2 blocks correspond to complex conjugate pairs of
-*> eigenvalues.
-*>
-*> Additionally, the 2-by-2 upper triangular diagonal blocks of P
-*> corresponding to 2-by-2 blocks of S are reduced to positive diagonal
-*> form, i.e., if S(j+1,j) is non-zero, then P(j+1,j) = P(j,j+1) = 0,
-*> P(j,j) > 0, and P(j+1,j+1) > 0.
-*>
-*> Optionally, the orthogonal matrix Q from the generalized Schur
-*> factorization may be postmultiplied into an input matrix Q1, and the
-*> orthogonal matrix Z may be postmultiplied into an input matrix Z1.
-*> If Q1 and Z1 are the orthogonal matrices from DGGHRD that reduced
-*> the matrix pair (A,B) to generalized upper Hessenberg form, then the
-*> output matrices Q1*Q and Z1*Z are the orthogonal factors from the
-*> generalized Schur factorization of (A,B):
-*>
-*>    A = (Q1*Q)*S*(Z1*Z)**T,  B = (Q1*Q)*P*(Z1*Z)**T.
-*>
-*> To avoid overflow, eigenvalues of the matrix pair (H,T) (equivalently,
-*> of (A,B)) are computed as a pair of values (alpha,beta), where alpha is
-*> complex and beta real.
-*> If beta is nonzero, lambda = alpha / beta is an eigenvalue of the
-*> generalized nonsymmetric eigenvalue problem (GNEP)
-*>    A*x = lambda*B*x
-*> and if alpha is nonzero, mu = beta / alpha is an eigenvalue of the
-*> alternate form of the GNEP
-*>    mu*A*y = B*y.
-*> Real eigenvalues can be read directly from the generalized Schur
-*> form:
-*>   alpha = S(i,i), beta = P(i,i).
-*>
-*> Ref: C.B. Moler & G.W. Stewart, "An Algorithm for Generalized Matrix
-*>      Eigenvalue Problems", SIAM J. Numer. Anal., 10(1973),
-*>      pp. 241--256.
 *> \endverbatim
 *
 *  Arguments:
@@ -281,7 +229,7 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      subroutine dlaqz0(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
+      subroutine dlaqz6(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
      $   alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
       implicit none
 
@@ -422,9 +370,9 @@
 *     Find out required workspace
 *
 
-*     Workspace query to dlaqz4
+*     Workspace query to dlaqz7
       nw = max(nwr,nmin)
-      call dlaqz4(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
+      call dlaqz7(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
      $   n_undeflated,n_deflated,alphar,alphai,beta,work,nw,work,nw,
      $   work,-1,aed_info)
       itemp1 = int(work(1))
@@ -618,7 +566,7 @@
 *
 *        Time for AED
 *
-         call dlaqz4(ilschur,ilq,ilz,n,istart2,istop,nw,A,ldA,B,ldB,Q,
+         call dlaqz7(ilschur,ilq,ilz,n,istart2,istop,nw,A,ldA,B,ldB,Q,
      $      ldQ,Z,ldZ,n_undeflated,n_deflated,alphar,alphai,beta,work,
      $      nw,work(nw**2+1),nw,work(2*nw**2+1),lwork-2*nw**2,aed_info)
 
