@@ -283,7 +283,7 @@ set(DLASRC
    dggglm.f dgghrd.f dgghd3.f dgglse.f dggqrf.f
    dggrqf.f dggsvd3.f dggsvp3.f dgtcon.f dgtrfs.f dgtsv.f
    dgtsvx.f dgttrf.f dgttrs.f dgtts2.f dhgeqz.f
-   dlaqz0.f dlaqz1.f dlaqz2.f dlaqz3.f dlaqz4.f dlaqz5.f
+   dlaqz0.f dlaqz1.f dlaqz2.f dlaqz3.f dlaqz4.f dlaqz5.f dlaqz6.f dlaqz7.f
    dhsein.f dhseqr.f dlabrd.f dlacon.f dlacn2.f
    dlaein.f dlaexc.f dlag2.f  dlags2.f dlagtm.f dlagv2.f dlahqr.f
    dlahr2.f dlaic1.f dlaln2.f dlals0.f dlalsa.f dlalsd.f
