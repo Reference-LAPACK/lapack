@@ -416,6 +416,7 @@
       if( n .lt. nmin ) then
          call dhgeqz(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
      $      alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
+         return
       end if
 
 *
