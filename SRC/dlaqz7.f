@@ -1,4 +1,4 @@
-*> \brief \b DLAQZ4
+*> \brief \b DLAQZ7
 *
 *  =========== DOCUMENTATION ===========
 *
@@ -6,12 +6,12 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAQZ4 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqz4.f">
+*> Download DLAQZ7 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqz7.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqz4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqz7.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqz4.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqz7.f">
 *> [TXT]</a>
 *> \endhtmlonly
 *
@@ -20,7 +20,7 @@
 *>
 *> \verbatim
 *>
-*> DLAQZ4 performs AED
+*> DLAQZ7 is identical to DLAQZ4 except that it calls DHGEQZ instead of DLAQZ0
 *> \endverbatim
 *
 *  Arguments:
@@ -204,7 +204,7 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      subroutine dlaqz4(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,
+      subroutine dlaqz7(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,
      $   Z,ldZ,ns,nd,alphar,alphai,beta,Qc,ldQc,Zc,ldZc,work,lwork,
      $   info)
       implicit none
@@ -226,7 +226,7 @@
 *     Local Scalars
       logical :: bulge
       integer :: jw,kwtop,kwbot,istopm,istartm,k,k2,dtgexc_info,ifst,
-     $   ilst,lworkreq,n_shifts,qz_small_info
+     $   ilst,lworkreq,n_shifts,qz_small_info,itemp
       double precision :: s,smlnum,ulp,safmin,safmax,c1,s1,temp
 
 *     External Functions
@@ -248,11 +248,8 @@
       ilst = jw
       call dtgexc(.true.,.true.,jw,A,ldA,B,ldB,Qc,ldQc,Zc,ldZc,ifst,
      $   ilst,work,-1,dtgexc_info)
-      lworkreq = int(work(1))
-      call dlaqz6('S','V','V',jw,1,jw,A(kwtop,kwtop),ldA,B(kwtop,kwtop),
-     $   ldB,alphar,alphai,beta,Qc,ldQc,Zc,ldZc,work,-1,qz_small_info)
-      lworkreq = max(lworkreq,int(work(1))+2*jw**2)
-      lworkreq = max(lworkreq,n*nw,2*nw**2+n)
+      itemp = int(work(1))
+      lworkreq = max(itemp,n*nw,2*nw**2+n)
       if (lwork .eq.-1) then
 *        workspace query, quick return
          work(1) = lworkreq
@@ -297,7 +294,7 @@
 *     Transform window to real schur form
       call dlaset('Full',jw,jw,zero,one,Qc,ldQc)
       call dlaset('Full',jw,jw,zero,one,Zc,ldZc)
-      call dlaqz6('S','V','V',jw,1,jw,A(kwtop,kwtop),ldA,B(kwtop,kwtop),
+      call dhgeqz('S','V','V',jw,1,jw,A(kwtop,kwtop),ldA,B(kwtop,kwtop),
      $   ldB,alphar,alphai,beta,Qc,ldQc,Zc,ldZc,work(2*jw**2+1),
      $   lwork-2*jw**2,qz_small_info)
 
