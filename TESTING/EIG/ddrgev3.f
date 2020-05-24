@@ -734,6 +734,14 @@
                RESULT( I ) = -ONE
   110       CONTINUE
 *
+*           Call XLAENV to set the parameters used in DLAQZ0
+*
+            CALL XLAENV( 12, 20 )
+            CALL XLAENV( 13, 4 )
+            CALL XLAENV( 14, 13 )
+            CALL XLAENV( 15, 2 )
+            CALL XLAENV( 17, 10 )
+*
 *           Call DGGEV3 to compute eigenvalues and eigenvectors.
 *
             CALL DLACPY( ' ', N, N, A, LDA, S, LDA )
