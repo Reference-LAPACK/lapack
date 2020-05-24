@@ -872,6 +872,11 @@
 *
 *        DGGEV3
 *
+         CALL XLAENV( 12, 20 )
+         CALL XLAENV( 13, 4 )
+         CALL XLAENV( 14, 13 )
+         CALL XLAENV( 15, 2 )
+         CALL XLAENV( 17, 10 )
          SRNAMT = 'DGGEV3 '
          INFOT = 1
          CALL DGGEV3( '/', 'N', 1, A, 1, B, 1, R1, R2, R3, Q, 1, U, 1,
