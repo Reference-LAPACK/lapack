@@ -325,8 +325,13 @@
             if (bulge) then
 
 *              Try to deflate complex conjugate eigenvalue pair
-               if ((abs(s*Qc(1,kwbot-kwtop))) .le. ulp*(abs(A(kwbot-1,
-     $            kwbot-1))+abs(A(kwbot-2,kwbot-2))) ) then
+               temp = abs(A(kwbot,kwbot))+sqrt( abs(A(kwbot,kwbot-1)) )*
+     $            sqrt( abs(A(kwbot-1,kwbot)) )
+               if(temp .eq. zero)then
+                  temp = abs(s)
+               end if
+               if (max(abs(s*Qc(1,kwbot-kwtop)),abs(s*Qc(1,kwbot-kwtop+
+     $            1))) .le. max(smlnum,ulp*temp) ) then
 *                 Deflatable
                   kwbot = kwbot-2
                else
@@ -345,8 +350,12 @@
             else
 
 *              Try to deflate real eigenvalue
-               if ((abs(s*Qc(1,kwbot-kwtop+1))) .le. ulp*(abs(A(kwbot,
-     $            kwbot))+abs(A(kwbot-1,kwbot-1))) ) then
+               temp = abs(A(kwbot,kwbot))
+               if(temp .eq. zero) then
+                  temp = abs(s)
+               end if
+               if ((abs(s*Qc(1,kwbot-kwtop+1))) .le. max(ulp*temp,
+     $            smlnum)) then
 *                 Deflatable
                   kwbot = kwbot-1
                else
