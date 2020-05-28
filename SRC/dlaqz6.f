@@ -324,7 +324,7 @@
          info =-17
       end if
       if( info.NE.0 ) then
-         call xerbla( 'DLAQZ0',-info )
+         call xerbla( 'DLAQZ6',-info )
          return
       end if
    
@@ -343,22 +343,22 @@
       jbcmpz(2:2)=wantQ
       jbcmpz(3:3)=wantZ
 
-      nmin = ilaenv( 12,'DLAQZ0',jbcmpz,n,ilo,ihi,lwork )
+      nmin = ilaenv( 12,'DLAQZ6',jbcmpz,n,ilo,ihi,lwork )
 
-      nwr = ilaenv( 13,'DLAQZ0',jbcmpz,n,ilo,ihi,lwork )
+      nwr = ilaenv( 13,'DLAQZ6',jbcmpz,n,ilo,ihi,lwork )
       nwr = max( 2,nwr )
       nwr = min( ihi-ilo+1,( n-1 ) / 3,nwr )
 
-      nibble = ilaenv( 14,'DLAQZ0',jbcmpz,n,ilo,ihi,lwork )
+      nibble = ilaenv( 14,'DLAQZ6',jbcmpz,n,ilo,ihi,lwork )
       
-      nsr = ilaenv( 15,'DLAQZ0',jbcmpz,n,ilo,ihi,lwork )
+      nsr = ilaenv( 15,'DLAQZ6',jbcmpz,n,ilo,ihi,lwork )
       nsr = min( nsr,( n+6 ) / 9,ihi-ilo )
       nsr = max( 2,nsr-mod( nsr,2 ) )
 
 *     rcost = ilaenv( 17,'DLAQZ0',jbcmpz,n,ilo,ihi,lwork )
       rcost = 10
-      itemp1 = int(nshifts/sqrt( 1+2*nshifts/(dble(rcost)/100*n) ))
-      itemp1 = ((k-1)/4)*4+4
+      itemp1 = int(nsr/sqrt( 1+2*nsr/(dble(rcost)/100*n) ))
+      itemp1 = ((itemp1-1)/4)*4+4
       nbr = nsr+itemp1
 
       if( n .lt. nmin ) then
@@ -390,7 +390,7 @@
          info =-19
       end if
       if( info.NE.0 ) then
-         call xerbla( 'DLAQZ0',-info )
+         call xerbla( 'DLAQZ6',info )
          return
       end if
 *

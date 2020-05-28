@@ -119,7 +119,13 @@
          parameter(zero=0.0d0,one=1.0d0,half=0.5d0)
 
 *        Local scalars
-         double precision :: w(2)
+         double precision :: w(2),safmin,safmax
+
+*        External Functions
+         double precision,external :: dlamch
+
+         safmin = dlamch('SAFE MINIMUM')
+         safmax = one/safmin
 
 *        Calculate first shifted vector
          w(1) = beta1*A(1,1)-sr1*B(1,1)
@@ -139,5 +145,13 @@
 
 *        Account for imaginary part
          v(1) = v(1)+si*si*B(1,1)
+
+         if( abs(v(1)).gt.safmax .or. abs(v(2)) .gt. safmax .or. abs(v(3
+     $      )).gt.safmax .or. isnan(v(1)) .or. isnan(v(2)) .or. isnan(v(
+     $      3)) ) then
+            v(1) = zero
+            v(2) = zero
+            v(3) = zero
+         end if
 
       end subroutine
