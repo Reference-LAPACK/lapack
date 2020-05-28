@@ -409,8 +409,8 @@
 
 *     rcost = ilaenv( 17,'DLAQZ0',jbcmpz,n,ilo,ihi,lwork )
       rcost = 10
-      itemp1 = int(nshifts/sqrt( 1+2*nshifts/(dble(rcost)/100*n) ))
-      itemp1 = ((k-1)/4)*4+4
+      itemp1 = int(nsr/sqrt( 1+2*nsr/(dble(rcost)/100*n) ))
+      itemp1 = ((itemp1-1)/4)*4+4
       nbr = nsr+itemp1
 
       if( n .lt. nmin ) then
@@ -442,7 +442,7 @@
          info =-19
       end if
       if( info.NE.0 ) then
-         call xerbla( 'DLAQZ0',-info )
+         call xerbla( 'DLAQZ0',info )
          return
       end if
 *
@@ -462,7 +462,7 @@
       istop = ihi
       maxit = 3*(ihi-ilo+1)
       ld = 0
-
+ 
       do iiter = 1,maxit
          if(iiter .ge. maxit) then
             info = istop
@@ -473,28 +473,30 @@
          end if
 
 *        Check deflations at the end
-         if (abs(A(istop-1,istop-2)) .le. ulp*(abs(A(istop-1,
-     $      istop-1))+abs(A(istop-2,istop-2)))) then
+         if (abs(A(istop-1,istop-2)) .le. max(smlnum,ulp*(abs(A(istop-1,
+     $      istop-1))+abs(A(istop-2,istop-2))))) then
             A(istop-1,istop-2) = zero
             istop = istop-2
             ld = 0
             eshift = zero
-         else if (abs(A(istop,istop-1)) .le. ulp*(abs(A(istop,
-     $      istop))+abs(A(istop-1,istop-1)))) then
+         else if (abs(A(istop,istop-1)) .le. max(smlnum,
+     $      ulp*(abs(A(istop,istop))+abs(A(istop-1,istop-1))))) then
             A(istop,istop-1) = zero
             istop = istop-1
             ld = 0
             eshift = zero
          end if
 *        Check deflations at the start
-         if (abs(A(istart+2,istart+1)) .le. ulp*(abs(A(istart+1,
-     $      istart+1))+abs(A(istart+2,istart+2)))) then
+         if (abs(A(istart+2,istart+1)) .le. max(smlnum,
+     $      ulp*(abs(A(istart+1,istart+1))+abs(A(istart+2,
+     $      istart+2))))) then
             A(istart+2,istart+1) = zero
             istart = istart+2
             ld = 0
             eshift = zero
-         else if (abs(A(istart+1,istart)) .le. ulp*(abs(A(istart,
-     $      istart))+abs(A(istart+1,istart+1)))) then
+         else if (abs(A(istart+1,istart)) .le. max(smlnum,
+     $      ulp*(abs(A(istart,istart))+abs(A(istart+1,
+     $      istart+1))))) then
             A(istart+1,istart) = zero
             istart = istart+1
             ld = 0
@@ -508,8 +510,8 @@
 *        Check interior deflations
          istart2 = istart
          do k = istop,istart+1,-1
-            if (abs(A(k,k-1)) .le. ulp*(abs(A(k,k))+abs(A(k-1,
-     $         k-1)))) then
+            if (abs(A(k,k-1)) .le. max(smlnum,ulp*(abs(A(k,k))+abs(A(k-
+     $         1,k-1))))) then
                A(k,k-1) = zero
                istart2 = k
                exit
@@ -671,7 +673,7 @@
 
       end do
 
-   80 call dlaqz3(ilschur,ilq,ilz,n,ilo,ihi,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
+   80 call dlaqz3(ilschur,ilq,ilz,n,1,n,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
      $alphar,alphai,beta,norm_info)
 
       end subroutine
