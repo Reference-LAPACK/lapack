@@ -763,8 +763,8 @@
 *
 *           Call XLAENV to set the parameters used in DLAQZ0
 *
-            CALL XLAENV( 12, 20 )
-            CALL XLAENV( 13, 4 )
+            CALL XLAENV( 12, 10 )
+            CALL XLAENV( 13, 12 )
             CALL XLAENV( 14, 13 )
             CALL XLAENV( 15, 2 )
             CALL XLAENV( 17, 10 )
