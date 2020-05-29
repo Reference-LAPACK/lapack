@@ -127,6 +127,13 @@
          safmin = dlamch('SAFE MINIMUM')
          safmax = one/safmin
 
+         if(abs(B(1,1)).lt.safmin .or. abs(B(2,2)).lt.safmin) then
+            v(1) = zero
+            v(2) = zero
+            v(3) = zero
+            return
+         end if
+
 *        Calculate first shifted vector
          w(1) = beta1*A(1,1)-sr1*B(1,1)
          w(2) = beta1*A(2,1)-sr1*B(2,1)
@@ -147,8 +154,8 @@
          v(1) = v(1)+si*si*B(1,1)
 
          if( abs(v(1)).gt.safmax .or. abs(v(2)) .gt. safmax .or. abs(v(3
-     $      )).gt.safmax .or. isnan(v(1)) .or. isnan(v(2)) .or. isnan(v(
-     $      3)) ) then
+     $      )).gt.safmax .or. v(1).ne.v(1) .or. v(2).ne.v(2) .or. v(3).n
+     $      e.v(3) ) then
             v(1) = zero
             v(2) = zero
             v(3) = zero

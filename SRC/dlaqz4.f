@@ -407,11 +407,11 @@
 *        Reflect spike back, this will create optimally packed bulges
          A(kwtop:kwbot,kwtop-1) = A(kwtop,kwtop-1)*Qc(1,1:jw-nd)
          do k = kwbot-1,kwtop,-1
-         call dlartg(A(k,kwtop-1),A(k+1,kwtop-1),c1,s1,temp)
+            call dlartg(A(k,kwtop-1),A(k+1,kwtop-1),c1,s1,temp)
             A(k,kwtop-1) = temp
             A(k+1,kwtop-1) = zero
             k2 = max(kwtop,k-1)
-         call drot(ihi-k2+1,A(k,k2),ldA,A(k+1,k2),ldA,c1,s1)
+            call drot(ihi-k2+1,A(k,k2),ldA,A(k+1,k2),ldA,c1,s1)
             call drot(ihi-(k-1)+1,B(k,k-1),ldB,B(k+1,k-1),ldB,c1,s1)
             call drot(jw,Qc(1,k-kwtop+1),1,Qc(1,k+1-kwtop+1),1,c1,s1)
          end do
