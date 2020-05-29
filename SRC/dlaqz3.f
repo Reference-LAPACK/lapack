@@ -253,6 +253,7 @@
                         end if
                      end if
                      info = 1
+                     k = k+2
                      exit
 
                   end if
@@ -363,9 +364,9 @@
                   end if
                   b22 =-b22
                end if
+               k = k+2
 
             end if
-            k = k+2
          end if
       end do
 
