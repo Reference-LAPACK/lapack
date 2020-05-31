@@ -465,10 +465,11 @@
  
       do iiter = 1,maxit
          if(iiter .ge. maxit) then
-            info = istop
+            info = istop+1
             goto 80
          end if
          if (istart+1 .ge. istop) then
+            istop = istart
             exit
          end if
 
@@ -673,7 +674,15 @@
 
       end do
 
-   80 call dlaqz3(ilschur,ilq,ilz,n,1,n,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
-     $alphar,alphai,beta,norm_info)
+*
+*     Call DHGEQZ to normalize the eigenvalue blocks and set the eigenvalues
+*     If all the eigenvalues have been found, DHGEQZ will not do any iterations
+*     and only normalize the blocks. In case of a rare convergence failure,
+*     the single shift might perform better.
+*
+   80 call dhgeqz(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,alphai,
+     $   beta,Q,ldQ,Z,ldZ,work,lwork,norm_info)
+      
+      info = norm_info
 
       end subroutine

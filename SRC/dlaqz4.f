@@ -341,9 +341,6 @@
                   call dtgexc(.true.,.true.,jw,A(kwtop,kwtop),ldA,
      $               B(kwtop,kwtop),ldB,Qc,ldQc,Zc,ldZc,ifst,ilst,work,
      $               lwork,dtgexc_info)
-                  if (dtgexc_info .ne. 0) then
-*                    write(*,*) "swap warning", dtgexc_info
-                  end if
                   k2 = k2+2
                end if
                k = k+2
@@ -362,12 +359,9 @@
 *                 Not deflatable, move out of the way
                   ifst = kwbot-kwtop+1
                   ilst = k2
-                 call dtgexc(.true.,.true.,jw,A(kwtop,kwtop),ldA,
+                  call dtgexc(.true.,.true.,jw,A(kwtop,kwtop),ldA,
      $              B(kwtop,kwtop),ldB,Qc,ldQc,Zc,ldZc,ifst,ilst,work,
      $              lwork,dtgexc_info)
-                  if (dtgexc_info .ne. 0) then
-*                    write(*,*) "swap warning", dtgexc_info
-                  end if
                   k2 = k2+1
                end if
 
@@ -487,10 +481,10 @@
       if (istopm-ihi > 0) then
          call dgemm('T','N',jw,istopm-ihi,jw,one,Qc,ldQc,A(kwtop,ihi+1),
      $      ldA,zero,work,jw)
-      call dlacpy('ALL',jw,istopm-ihi,work,jw,A(kwtop,ihi+1),ldA)
+         call dlacpy('ALL',jw,istopm-ihi,work,jw,A(kwtop,ihi+1),ldA)
          call dgemm('T','N',jw,istopm-ihi,jw,one,Qc,ldQc,B(kwtop,ihi+1),
      $      ldB,zero,work,jw)
-      call dlacpy('ALL',jw,istopm-ihi,work,jw,B(kwtop,ihi+1),ldB)
+         call dlacpy('ALL',jw,istopm-ihi,work,jw,B(kwtop,ihi+1),ldB)
       end if
       if (ilq) then
          call dgemm('N','N',n,jw,jw,one,Q(1,kwtop),ldQ,Qc,ldQc,zero,
