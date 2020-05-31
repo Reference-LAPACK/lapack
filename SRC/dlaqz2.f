@@ -234,15 +234,14 @@
 *     Apply transformations from the right
       call drot(k+3-istartm+1,A(istartm,k+2),1,A(istartm,k+1),1,c1,s1)
       call drot(k+3-istartm+1,A(istartm,k+1),1,A(istartm,k),1,c2,s2)
-      call drot(k+3-istartm+1,B(istartm,k+2),1,B(istartm,k+1),1,c1,s1)
-      call drot(k+3-istartm+1,B(istartm,k+1),1,B(istartm,k),1,c2,s2)
+      call drot(k+2-istartm+1,B(istartm,k+2),1,B(istartm,k+1),1,c1,s1)
+      call drot(k+2-istartm+1,B(istartm,k+1),1,B(istartm,k),1,c2,s2)
       if (ilz) then
          call drot(nZ,Z(1,k+2-zStart+1),1,Z(1,k+1-zStart+1),1,c1,s1)
          call drot(nZ,Z(1,k+1-zStart+1),1,Z(1,k-zStart+1),1,c2,s2)
       end if
       B(k+1,k) = zero
       B(k+2,k) = zero
-      B(k+3,k) = zero
 
 *     Calculate Q1 and Q2
       call dlartg(A(k+2,k),A(k+3,k),c1,s1,temp)
