@@ -18,8 +18,8 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE ZLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
-*                              Y, INCY )
+*       SUBROUTINE ZLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+*                             Y, INCY )
 *
 *       .. Scalar Arguments ..
 *       DOUBLE PRECISION   ALPHA, BETA
@@ -170,8 +170,8 @@
 *> \ingroup complex16GEcomputational
 *
 *  =====================================================================
-      SUBROUTINE ZLA_GEAMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
-     $                       Y, INCY )
+      SUBROUTINE ZLA_GEAMV( TRANS, M, N, ALPHA, A, LDA, X, INCX, BETA,
+     $                      Y, INCY )
 *
 *  -- LAPACK computational routine --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
