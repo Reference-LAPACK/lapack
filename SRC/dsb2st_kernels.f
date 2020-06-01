@@ -371,6 +371,6 @@
 *
       RETURN
 *
-*     END OF DSB2ST_KERNELS
+*     End of DSB2ST_KERNELS
 *
       END

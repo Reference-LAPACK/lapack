@@ -371,6 +371,6 @@
 *
       RETURN
 *
-*     END OF ZHB2ST_KERNELS
+*     End of ZHB2ST_KERNELS
 *
       END
