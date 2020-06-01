@@ -2063,6 +2063,7 @@
      $      ', test(', I2, ')=', G10.3 )
 *
  9988 FORMAT( / 'Test performed:  see DCHKST2STG for details.', / )
+*
 *     End of DCHKST2STG
 *
       END
