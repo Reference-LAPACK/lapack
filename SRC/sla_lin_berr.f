@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE SLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
+*       SUBROUTINE SLA_LIN_BERR( N, NZ, NRHS, RES, AYB, BERR )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NZ, NRHS
@@ -99,7 +99,7 @@
 *> \ingroup realOTHERcomputational
 *
 *  =====================================================================
-      SUBROUTINE SLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
+      SUBROUTINE SLA_LIN_BERR( N, NZ, NRHS, RES, AYB, BERR )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

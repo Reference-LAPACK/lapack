@@ -19,7 +19,7 @@
 *  ===========
 *
 *       DOUBLE PRECISION FUNCTION ZLA_GERPVGRW( N, NCOLS, A, LDA, AF,
-*                LDAF )
+*                                               LDAF )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NCOLS, LDA, LDAF
@@ -98,7 +98,7 @@
 *
 *  =====================================================================
       DOUBLE PRECISION FUNCTION ZLA_GERPVGRW( N, NCOLS, A, LDA, AF,
-     $         LDAF )
+     $                                        LDAF )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

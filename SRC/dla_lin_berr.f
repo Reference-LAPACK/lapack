@@ -18,7 +18,7 @@
 *  Definition:
 *  ===========
 *
-*       SUBROUTINE DLA_LIN_BERR ( N, NZ, NRHS, RES, AYB, BERR )
+*       SUBROUTINE DLA_LIN_BERR( N, NZ, NRHS, RES, AYB, BERR )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NZ, NRHS

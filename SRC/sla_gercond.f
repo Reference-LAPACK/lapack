@@ -18,8 +18,8 @@
 *  Definition:
 *  ===========
 *
-*       REAL FUNCTION SLA_GERCOND ( TRANS, N, A, LDA, AF, LDAF, IPIV,
-*                                   CMODE, C, INFO, WORK, IWORK )
+*       REAL FUNCTION SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,
+*                                  CMODE, C, INFO, WORK, IWORK )
 *
 *       .. Scalar Arguments ..
 *       CHARACTER          TRANS
@@ -147,8 +147,8 @@
 *> \ingroup realGEcomputational
 *
 *  =====================================================================
-      REAL FUNCTION SLA_GERCOND ( TRANS, N, A, LDA, AF, LDAF, IPIV,
-     $                            CMODE, C, INFO, WORK, IWORK )
+      REAL FUNCTION SLA_GERCOND( TRANS, N, A, LDA, AF, LDAF, IPIV,
+     $                           CMODE, C, INFO, WORK, IWORK )
 *
 *  -- LAPACK computational routine (version 3.7.0) --
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --

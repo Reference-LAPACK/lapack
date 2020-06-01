@@ -19,7 +19,7 @@
 *  ===========
 *
 *       DOUBLE PRECISION FUNCTION DLA_GERPVGRW( N, NCOLS, A, LDA, AF,
-*                LDAF )
+*                                               LDAF )
 *
 *       .. Scalar Arguments ..
 *       INTEGER            N, NCOLS, LDA, LDAF
