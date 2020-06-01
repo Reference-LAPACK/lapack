@@ -244,6 +244,9 @@
 
       DPARAM(1) = DFLAG
       RETURN
+*
+*     End of DROTMG
+*
       END
 
 

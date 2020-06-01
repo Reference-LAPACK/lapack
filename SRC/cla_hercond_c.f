@@ -324,4 +324,6 @@
 *
       RETURN
 *
+*     End of CLA_HERCOND_C
+*
       END

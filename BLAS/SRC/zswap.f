@@ -126,4 +126,7 @@
          END DO
       END IF
       RETURN
+*
+*     End of ZSWAP
+*
       END

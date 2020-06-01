@@ -682,4 +682,7 @@
       END DO
 *
       RETURN
+*
+*     End of DLA_GERFSX_EXTENDED
+*
       END

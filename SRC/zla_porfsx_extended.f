@@ -685,4 +685,7 @@
       END DO
 *
       RETURN
+*
+*     End of ZLA_PORFSX_EXTENDED
+*
       END

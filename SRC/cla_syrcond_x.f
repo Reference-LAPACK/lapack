@@ -295,4 +295,6 @@
 *
       RETURN
 *
+*     End of CLA_SYRCOND_X
+*
       END

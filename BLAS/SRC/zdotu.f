@@ -128,4 +128,7 @@
       END IF
       ZDOTU = ZTEMP
       RETURN
+*
+*     End of ZDOTU
+*
       END

@@ -150,4 +150,7 @@
          END DO
       END IF
       RETURN
+*
+*     End of SSWAP
+*
       END

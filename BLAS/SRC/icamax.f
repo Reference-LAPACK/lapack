@@ -124,4 +124,7 @@
          END DO
       END IF
       RETURN
+*
+*     End of ICAMAX
+*
       END

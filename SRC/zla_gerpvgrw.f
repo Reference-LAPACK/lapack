@@ -146,4 +146,7 @@
          END IF
       END DO
       ZLA_GERPVGRW = RPVGRW
+*
+*     End of ZLA_GERPVGRW
+*
       END

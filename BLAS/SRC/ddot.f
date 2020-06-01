@@ -145,4 +145,7 @@
       END IF
       DDOT = DTEMP
       RETURN
+*
+*     End of DDOT
+*
       END

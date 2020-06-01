@@ -133,4 +133,7 @@
          END DO
       END IF
       RETURN
+*
+*     End of DSCAL
+*
       END

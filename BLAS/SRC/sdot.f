@@ -145,4 +145,7 @@
       END IF
       SDOT = STEMP
       RETURN
+*
+*     End of SDOT
+*
       END

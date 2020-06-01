@@ -106,4 +106,7 @@
       DA = R
       DB = Z
       RETURN
+*
+*     End of DROTG
+*
       END

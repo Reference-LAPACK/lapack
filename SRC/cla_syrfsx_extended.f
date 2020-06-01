@@ -713,4 +713,7 @@
       END DO
 *
       RETURN
+*
+*     End of CLA_SYRFSX_EXTENDED
+*
       END
