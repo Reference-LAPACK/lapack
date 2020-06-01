@@ -249,6 +249,6 @@
      $      ', NB=', I5,' test(', I2, ')=', G12.5 )
       RETURN
 *
-*     End of SCHKQRT
+*     End of SCHKTSQR
 *
       END

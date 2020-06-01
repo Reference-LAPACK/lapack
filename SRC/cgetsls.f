@@ -491,6 +491,6 @@
       WORK( 1 ) = REAL( TSZO + LWO )
       RETURN
 *
-*     End of ZGETSLS
+*     End of CGETSLS
 *
       END

@@ -1027,6 +1027,6 @@ c                     write(*,*) 'begin zgbsvxx testing'
 *
       RETURN
 *
-*     End of ZDRVGB
+*     End of ZDRVGBX
 *
       END

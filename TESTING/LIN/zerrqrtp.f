@@ -221,6 +221,6 @@
 *
       RETURN
 *
-*     End of ZERRQRT
+*     End of ZERRQRTP
 *
       END

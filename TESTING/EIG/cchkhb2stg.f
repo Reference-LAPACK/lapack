@@ -888,6 +888,6 @@
  9993 FORMAT( ' N=', I5, ', K=', I4, ', seed=', 4( I4, ',' ), ' type ',
      $      I2, ', test(', I2, ')=', G10.3 )
 *
-*     End of CCHKHBSTG
+*     End of CCHKHB2STG
 *
       END

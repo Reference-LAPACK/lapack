@@ -728,6 +728,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of DDRVPO
+*     End of DDRVPOX
 *
       END

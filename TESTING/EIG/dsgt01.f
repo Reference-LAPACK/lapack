@@ -237,6 +237,6 @@
 *
       RETURN
 *
-*     End of DDGT01
+*     End of DSGT01
 *
       END

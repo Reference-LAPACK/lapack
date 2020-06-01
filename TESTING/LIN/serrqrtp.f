@@ -221,6 +221,6 @@
 *
       RETURN
 *
-*     End of SERRQRT
+*     End of SERRQRTP
 *
       END

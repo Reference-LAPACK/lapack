@@ -194,6 +194,6 @@
       END IF
       RETURN
 *
-*     End of SLARTG
+*     End of SLARTGP
 *
       END

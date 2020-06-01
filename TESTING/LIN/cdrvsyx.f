@@ -721,6 +721,6 @@
      $      ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of CDRVSY
+*     End of CDRVSYX
 *
       END

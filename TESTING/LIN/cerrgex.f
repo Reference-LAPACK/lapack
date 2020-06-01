@@ -557,6 +557,6 @@
 *
       RETURN
 *
-*     End of CERRGE
+*     End of CERRGEX
 *
       END

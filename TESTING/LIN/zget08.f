@@ -223,6 +223,6 @@
 *
       RETURN
 *
-*     End of ZGET02
+*     End of ZGET08
 *
       END

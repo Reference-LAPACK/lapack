@@ -715,6 +715,6 @@
      $      ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of CDRVHE
+*     End of CDRVHEX
 *
       END

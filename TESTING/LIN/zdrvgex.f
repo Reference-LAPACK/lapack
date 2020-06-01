@@ -888,6 +888,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of ZDRVGE
+*     End of ZDRVGEX
 *
       END
