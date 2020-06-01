@@ -50,7 +50,7 @@
 *> \verbatim
 *>          TRANS is CHARACTER*1
 *>          = 'N':  No transpose, apply Q;
-*>          = 'C':  Transpose, apply Q**H.
+*>          = 'C':  Conjugate transpose, apply Q**H.
 *> \endverbatim
 *>
 *> \param[in] M
