@@ -313,6 +313,6 @@
 *
       RETURN
 *
-*     End of CHPR2 .
+*     End of CHPR2
 *
       END

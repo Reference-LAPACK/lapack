@@ -328,6 +328,6 @@
 *
       RETURN
 *
-*     End of SSYMV .
+*     End of SSYMV
 *
       END

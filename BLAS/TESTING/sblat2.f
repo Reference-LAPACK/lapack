@@ -424,7 +424,7 @@
  9981 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9980 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
 *
-*     End of SBLAT2.
+*     End of SBLAT2
 *
       END
       SUBROUTINE SCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -765,7 +765,7 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of SCHK1.
+*     End of SCHK1
 *
       END
       SUBROUTINE SCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1108,7 +1108,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of SCHK2.
+*     End of SCHK2
 *
       END
       SUBROUTINE SCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1465,7 +1465,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of SCHK3.
+*     End of SCHK3
 *
       END
       SUBROUTINE SCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1726,7 +1726,7 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of SCHK4.
+*     End of SCHK4
 *
       END
       SUBROUTINE SCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -2004,7 +2004,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of SCHK5.
+*     End of SCHK5
 *
       END
       SUBROUTINE SCHK6( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -2319,7 +2319,7 @@
  9992 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of SCHK6.
+*     End of SCHK6
 *
       END
       SUBROUTINE SCHKE( ISNUM, SRNAMT, NOUT )
@@ -2645,7 +2645,7 @@
  9998 FORMAT( ' ******* ', A6, ' FAILED THE TESTS OF ERROR-EXITS *****',
      $      '**' )
 *
-*     End of SCHKE.
+*     End of SCHKE
 *
       END
       SUBROUTINE SMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, KL,
@@ -2821,7 +2821,7 @@
       END IF
       RETURN
 *
-*     End of SMAKE.
+*     End of SMAKE
 *
       END
       SUBROUTINE SMVCH( TRANS, M, N, ALPHA, A, NMAX, X, INCX, BETA, Y,
@@ -2938,7 +2938,7 @@
      $      'TED RESULT' )
  9998 FORMAT( 1X, I7, 2G18.6 )
 *
-*     End of SMVCH.
+*     End of SMVCH
 *
       END
       LOGICAL FUNCTION LSE( RI, RJ, LR )
@@ -2968,7 +2968,7 @@
       LSE = .FALSE.
    30 RETURN
 *
-*     End of LSE.
+*     End of LSE
 *
       END
       LOGICAL FUNCTION LSERES( TYPE, UPLO, M, N, AA, AS, LDA )
@@ -3027,7 +3027,7 @@
       LSERES = .FALSE.
    80 RETURN
 *
-*     End of LSERES.
+*     End of LSERES
 *
       END
       REAL FUNCTION SBEG( RESET )
@@ -3073,7 +3073,7 @@
       SBEG = REAL( I - 500 )/1001.0
       RETURN
 *
-*     End of SBEG.
+*     End of SBEG
 *
       END
       REAL FUNCTION SDIFF( X, Y )
@@ -3089,7 +3089,7 @@
       SDIFF = X - Y
       RETURN
 *
-*     End of SDIFF.
+*     End of SDIFF
 *
       END
       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -3117,7 +3117,7 @@
  9999 FORMAT( ' ***** ILLEGAL VALUE OF PARAMETER NUMBER ', I2, ' NOT D',
      $      'ETECTED BY ', A6, ' *****' )
 *
-*     End of CHKXER.
+*     End of CHKXER
 *
       END
       SUBROUTINE XERBLA( SRNAME, INFO )

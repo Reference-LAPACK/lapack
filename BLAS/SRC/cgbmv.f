@@ -385,6 +385,6 @@
 *
       RETURN
 *
-*     End of CGBMV .
+*     End of CGBMV
 *
       END

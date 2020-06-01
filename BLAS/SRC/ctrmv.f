@@ -368,6 +368,6 @@
 *
       RETURN
 *
-*     End of CTRMV .
+*     End of CTRMV
 *
       END

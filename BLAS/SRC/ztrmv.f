@@ -368,6 +368,6 @@
 *
       RETURN
 *
-*     End of ZTRMV .
+*     End of ZTRMV
 *
       END

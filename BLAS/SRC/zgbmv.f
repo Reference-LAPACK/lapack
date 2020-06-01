@@ -385,6 +385,6 @@
 *
       RETURN
 *
-*     End of ZGBMV .
+*     End of ZGBMV
 *
       END

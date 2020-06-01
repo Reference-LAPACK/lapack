@@ -383,6 +383,6 @@
 *
       RETURN
 *
-*     End of CTPMV .
+*     End of CTPMV
 *
       END

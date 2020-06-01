@@ -391,6 +391,6 @@
 *
       RETURN
 *
-*     End of ZHERK .
+*     End of ZHERK
 *
       END

@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of ZGERC .
+*     End of ZGERC
 *
       END

@@ -410,6 +410,6 @@
 *
       RETURN
 *
-*     End of DTRMM .
+*     End of DTRMM
 *
       END

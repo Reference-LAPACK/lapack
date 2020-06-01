@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of CGERC .
+*     End of CGERC
 *
       END

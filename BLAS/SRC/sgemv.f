@@ -325,6 +325,6 @@
 *
       RETURN
 *
-*     End of SGEMV .
+*     End of SGEMV
 *
       END

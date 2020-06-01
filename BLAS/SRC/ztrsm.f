@@ -472,6 +472,6 @@
 *
       RETURN
 *
-*     End of ZTRSM .
+*     End of ZTRSM
 *
       END

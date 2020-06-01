@@ -393,6 +393,6 @@
 *
       RETURN
 *
-*     End of STBMV .
+*     End of STBMV
 *
       END

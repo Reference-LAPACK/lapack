@@ -333,6 +333,6 @@
 *
       RETURN
 *
-*     End of ZHPMV .
+*     End of ZHPMV
 *
       END

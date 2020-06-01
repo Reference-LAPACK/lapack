@@ -394,6 +394,6 @@
 *
       RETURN
 *
-*     End of DSYR2K.
+*     End of DSYR2K
 *
       END

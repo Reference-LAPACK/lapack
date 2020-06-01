@@ -389,7 +389,7 @@
  9985 FORMAT( /' ******* FATAL ERROR - TESTS ABANDONED *******' )
  9984 FORMAT( ' ERROR-EXITS WILL NOT BE TESTED' )
 *
-*     End of DBLAT3.
+*     End of DBLAT3
 *
       END
       SUBROUTINE DCHK1( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -670,7 +670,7 @@
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of DCHK1.
+*     End of DCHK1
 *
       END
       SUBROUTINE DCHK2( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -940,7 +940,7 @@
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of DCHK2.
+*     End of DCHK2
 *
       END
       SUBROUTINE DCHK3( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1245,7 +1245,7 @@
  9994 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of DCHK3.
+*     End of DCHK3
 *
       END
       SUBROUTINE DCHK4( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1520,7 +1520,7 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of DCHK4.
+*     End of DCHK4
 *
       END
       SUBROUTINE DCHK5( SNAME, EPS, THRESH, NOUT, NTRA, TRACE, REWI,
@@ -1834,7 +1834,7 @@
  9993 FORMAT( ' ******* FATAL ERROR - ERROR-EXIT TAKEN ON VALID CALL *',
      $      '******' )
 *
-*     End of DCHK5.
+*     End of DCHK5
 *
       END
       SUBROUTINE DCHKE( ISNUM, SRNAMT, NOUT )
@@ -2389,7 +2389,7 @@
  9998 FORMAT( ' ******* ', A6, ' FAILED THE TESTS OF ERROR-EXITS *****',
      $      '**' )
 *
-*     End of DCHKE.
+*     End of DCHKE
 *
       END
       SUBROUTINE DMAKE( TYPE, UPLO, DIAG, M, N, A, NMAX, AA, LDA, RESET,
@@ -2502,7 +2502,7 @@
       END IF
       RETURN
 *
-*     End of DMAKE.
+*     End of DMAKE
 *
       END
       SUBROUTINE DMMCH( TRANSA, TRANSB, M, N, KK, ALPHA, A, LDA, B, LDB,
@@ -2624,7 +2624,7 @@
  9998 FORMAT( 1X, I7, 2G18.6 )
  9997 FORMAT( '      THESE ARE THE RESULTS FOR COLUMN ', I3 )
 *
-*     End of DMMCH.
+*     End of DMMCH
 *
       END
       LOGICAL FUNCTION LDE( RI, RJ, LR )
@@ -2656,7 +2656,7 @@
       LDE = .FALSE.
    30 RETURN
 *
-*     End of LDE.
+*     End of LDE
 *
       END
       LOGICAL FUNCTION LDERES( TYPE, UPLO, M, N, AA, AS, LDA )
@@ -2717,7 +2717,7 @@
       LDERES = .FALSE.
    80 RETURN
 *
-*     End of LDERES.
+*     End of LDERES
 *
       END
       DOUBLE PRECISION FUNCTION DBEG( RESET )
@@ -2763,7 +2763,7 @@
       DBEG = ( I - 500 )/1001.0D0
       RETURN
 *
-*     End of DBEG.
+*     End of DBEG
 *
       END
       DOUBLE PRECISION FUNCTION DDIFF( X, Y )
@@ -2782,7 +2782,7 @@
       DDIFF = X - Y
       RETURN
 *
-*     End of DDIFF.
+*     End of DDIFF
 *
       END
       SUBROUTINE CHKXER( SRNAMT, INFOT, NOUT, LERR, OK )
@@ -2812,7 +2812,7 @@
  9999 FORMAT( ' ***** ILLEGAL VALUE OF PARAMETER NUMBER ', I2, ' NOT D',
      $      'ETECTED BY ', A6, ' *****' )
 *
-*     End of CHKXER.
+*     End of CHKXER
 *
       END
       SUBROUTINE XERBLA( SRNAME, INFO )

@@ -337,6 +337,6 @@
 *
       RETURN
 *
-*     End of STRMV .
+*     End of STRMV
 *
       END

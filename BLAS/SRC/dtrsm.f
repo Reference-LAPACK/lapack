@@ -438,6 +438,6 @@
 *
       RETURN
 *
-*     End of DTRSM .
+*     End of DTRSM
 *
       END

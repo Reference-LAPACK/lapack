@@ -370,6 +370,6 @@
 *
       RETURN
 *
-*     End of ZTRSV .
+*     End of ZTRSV
 *
       END

@@ -291,6 +291,6 @@
 *
       RETURN
 *
-*     End of DSPR2 .
+*     End of DSPR2
 *
       END

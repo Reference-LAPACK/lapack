@@ -273,6 +273,6 @@
 *
       RETURN
 *
-*     End of ZHER  .
+*     End of ZHER
 *
       END

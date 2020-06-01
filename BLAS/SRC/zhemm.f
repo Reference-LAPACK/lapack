@@ -366,6 +366,6 @@
 *
       RETURN
 *
-*     End of ZHEMM .
+*     End of ZHEMM
 *
       END

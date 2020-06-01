@@ -452,6 +452,6 @@
 *
       RETURN
 *
-*     End of ZCPOSV.
+*     End of ZCPOSV
 *
       END

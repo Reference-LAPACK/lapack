@@ -135,6 +135,6 @@
       SCNRM2 = NORM
       RETURN
 *
-*     End of SCNRM2.
+*     End of SCNRM2
 *
       END

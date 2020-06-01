@@ -339,6 +339,6 @@
 *
       RETURN
 *
-*     End of STRSV .
+*     End of STRSV
 *
       END

@@ -135,6 +135,6 @@
       DZNRM2 = NORM
       RETURN
 *
-*     End of DZNRM2.
+*     End of DZNRM2
 *
       END

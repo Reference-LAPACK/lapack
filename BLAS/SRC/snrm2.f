@@ -127,6 +127,6 @@
       SNRM2 = NORM
       RETURN
 *
-*     End of SNRM2.
+*     End of SNRM2
 *
       END

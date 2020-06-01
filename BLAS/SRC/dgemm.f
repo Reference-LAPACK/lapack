@@ -379,6 +379,6 @@
 *
       RETURN
 *
-*     End of DGEMM .
+*     End of DGEMM
 *
       END

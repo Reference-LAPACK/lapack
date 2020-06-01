@@ -375,6 +375,6 @@
 *
       RETURN
 *
-*     End of ZHBMV .
+*     End of ZHBMV
 *
       END

@@ -391,6 +391,6 @@
 *
       RETURN
 *
-*     End of CSYR2K.
+*     End of CSYR2K
 *
       END

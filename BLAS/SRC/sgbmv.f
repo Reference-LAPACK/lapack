@@ -365,6 +365,6 @@
 *
       RETURN
 *
-*     End of SGBMV .
+*     End of SGBMV
 *
       END

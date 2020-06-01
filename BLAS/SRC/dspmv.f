@@ -326,6 +326,6 @@
 *
       RETURN
 *
-*     End of DSPMV .
+*     End of DSPMV
 *
       END

@@ -375,6 +375,6 @@
 *
       RETURN
 *
-*     End of CHBMV .
+*     End of CHBMV
 *
       END

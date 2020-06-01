@@ -385,6 +385,6 @@
 *
       RETURN
 *
-*     End of CTPSV .
+*     End of CTPSV
 *
       END

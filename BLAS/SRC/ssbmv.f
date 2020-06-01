@@ -370,6 +370,6 @@
 *
       RETURN
 *
-*     End of SSBMV .
+*     End of SSBMV
 *
       END

@@ -349,6 +349,6 @@
 *
       RETURN
 *
-*     End of STPSV .
+*     End of STPSV
 *
       END

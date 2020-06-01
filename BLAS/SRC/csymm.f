@@ -364,6 +364,6 @@
 *
       RETURN
 *
-*     End of CSYMM .
+*     End of CSYMM
 *
       END

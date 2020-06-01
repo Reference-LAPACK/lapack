@@ -347,6 +347,6 @@
 *
       RETURN
 *
-*     End of DTPMV .
+*     End of DTPMV
 *
       END

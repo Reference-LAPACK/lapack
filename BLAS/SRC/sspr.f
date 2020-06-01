@@ -256,6 +256,6 @@
 *
       RETURN
 *
-*     End of SSPR  .
+*     End of SSPR
 *
       END

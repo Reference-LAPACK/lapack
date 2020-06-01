@@ -337,6 +337,6 @@
 *
       RETURN
 *
-*     End of DTRMV .
+*     End of DTRMV
 *
       END

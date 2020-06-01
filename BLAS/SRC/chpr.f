@@ -274,6 +274,6 @@
 *
       RETURN
 *
-*     End of CHPR  .
+*     End of CHPR
 *
       END

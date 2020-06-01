@@ -478,6 +478,6 @@
 *
       RETURN
 *
-*     End of CGEMM .
+*     End of CGEMM
 *
       END

@@ -127,6 +127,6 @@
       DNRM2 = NORM
       RETURN
 *
-*     End of DNRM2.
+*     End of DNRM2
 *
       END

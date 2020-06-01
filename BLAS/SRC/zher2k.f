@@ -438,6 +438,6 @@
 *
       RETURN
 *
-*     End of ZHER2K.
+*     End of ZHER2K
 *
       END

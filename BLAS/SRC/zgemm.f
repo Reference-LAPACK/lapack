@@ -478,6 +478,6 @@
 *
       RETURN
 *
-*     End of ZGEMM .
+*     End of ZGEMM
 *
       END

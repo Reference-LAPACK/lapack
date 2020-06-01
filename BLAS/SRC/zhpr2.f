@@ -313,6 +313,6 @@
 *
       RETURN
 *
-*     End of ZHPR2 .
+*     End of ZHPR2
 *
       END

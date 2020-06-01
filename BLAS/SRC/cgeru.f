@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of CGERU .
+*     End of CGERU
 *
       END

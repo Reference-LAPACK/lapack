@@ -428,6 +428,6 @@
 *
       RETURN
 *
-*     End of DSGESV.
+*     End of DSGESV
 *
       END

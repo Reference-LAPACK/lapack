@@ -333,6 +333,6 @@
 *
       RETURN
 *
-*     End of DTRSV .
+*     End of DTRSV
 *
       END

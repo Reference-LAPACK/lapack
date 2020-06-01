@@ -437,6 +437,6 @@
 *
       RETURN
 *
-*     End of CHER2K.
+*     End of CHER2K
 *
       END

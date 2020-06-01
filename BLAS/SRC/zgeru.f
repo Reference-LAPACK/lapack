@@ -222,6 +222,6 @@
 *
       RETURN
 *
-*     End of ZGERU .
+*     End of ZGERU
 *
       END

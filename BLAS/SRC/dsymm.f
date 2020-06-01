@@ -362,6 +362,6 @@
 *
       RETURN
 *
-*     End of DSYMM .
+*     End of DSYMM
 *
       END

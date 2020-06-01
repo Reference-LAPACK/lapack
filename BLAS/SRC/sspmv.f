@@ -326,6 +326,6 @@
 *
       RETURN
 *
-*     End of SSPMV .
+*     End of SSPMV
 *
       END
