@@ -2085,6 +2085,7 @@
      $      4( I4, ',' ), ' result ', I3, ' is', 1P, E10.3 )
 *
  9987 FORMAT( / 'Test performed:  see CCHKST2STG for details.', / )
+*
 *     End of CCHKST2STG
 *
       END
