@@ -237,7 +237,7 @@
       BETMAX = SAFMAX / MAX( ONE, ANORM )
 *
 *     Compute error matrix.
-*     Column i = ( b(i) A - a(i) B ) E(i) / max( |a(i) B| |b(i) A| )
+*     Column i = ( b(i) A - a(i) B ) E(i) / max( |a(i) B|, |b(i) A| )
 *
       DO 10 JVEC = 1, N
          ALPHAI = ALPHA( JVEC )
