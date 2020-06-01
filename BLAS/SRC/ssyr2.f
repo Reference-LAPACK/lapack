@@ -290,6 +290,6 @@
 *
       RETURN
 *
-*     End of SSYR2 .
+*     End of SSYR2
 *
       END

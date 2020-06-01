@@ -63,6 +63,6 @@
  9999 FORMAT( ' *** Illegal value of parameter number ', I2,
      $      ' not detected by ', A6, ' ***' )
 *
-*     End of CHKXER.
+*     End of CHKXER
 *
       END

@@ -391,6 +391,6 @@
 *
       RETURN
 *
-*     End of SSYR2K.
+*     End of SSYR2K
 *
       END

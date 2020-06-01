@@ -421,6 +421,6 @@
 *
       RETURN
 *
-*     End of CTBMV .
+*     End of CTBMV
 *
       END

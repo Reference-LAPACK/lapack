@@ -424,6 +424,6 @@
 *
       RETURN
 *
-*     End of ZTBSV .
+*     End of ZTBSV
 *
       END

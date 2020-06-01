@@ -355,6 +355,6 @@
 *
       RETURN
 *
-*     End of CSYRK .
+*     End of CSYRK
 *
       END

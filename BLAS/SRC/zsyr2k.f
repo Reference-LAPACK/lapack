@@ -388,6 +388,6 @@
 *
       RETURN
 *
-*     End of ZSYR2K.
+*     End of ZSYR2K
 *
       END

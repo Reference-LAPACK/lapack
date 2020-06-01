@@ -342,6 +342,6 @@
 *
       RETURN
 *
-*     End of ZGEMV .
+*     End of ZGEMV
 *
       END

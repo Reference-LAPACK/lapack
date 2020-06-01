@@ -329,6 +329,6 @@
 *
       RETURN
 *
-*     End of CHEMV .
+*     End of CHEMV
 *
       END

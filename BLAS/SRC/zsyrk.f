@@ -355,6 +355,6 @@
 *
       RETURN
 *
-*     End of ZSYRK .
+*     End of ZSYRK
 *
       END

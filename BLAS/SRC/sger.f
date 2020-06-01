@@ -219,6 +219,6 @@
 *
       RETURN
 *
-*     End of SGER  .
+*     End of SGER
 *
       END

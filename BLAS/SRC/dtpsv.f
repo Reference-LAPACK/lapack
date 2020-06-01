@@ -346,6 +346,6 @@
 *
       RETURN
 *
-*     End of DTPSV .
+*     End of DTPSV
 *
       END

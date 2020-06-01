@@ -435,6 +435,6 @@
 *
       RETURN
 *
-*     End of STRSM .
+*     End of STRSM
 *
       END

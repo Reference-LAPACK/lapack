@@ -421,6 +421,6 @@
 *
       RETURN
 *
-*     End of ZTBMV .
+*     End of ZTBMV
 *
       END

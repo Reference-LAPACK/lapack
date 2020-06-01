@@ -330,6 +330,6 @@
 *
       RETURN
 *
-*     End of CHPMV .
+*     End of CHPMV
 *
       END

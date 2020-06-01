@@ -288,6 +288,6 @@
 *
       RETURN
 *
-*     End of SSPR2 .
+*     End of SSPR2
 *
       END

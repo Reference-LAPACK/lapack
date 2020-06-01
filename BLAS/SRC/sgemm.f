@@ -374,6 +374,6 @@
 *
       RETURN
 *
-*     End of SGEMM .
+*     End of SGEMM
 *
       END

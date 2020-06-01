@@ -393,6 +393,6 @@
 *
       RETURN
 *
-*     End of STBSV .
+*     End of STBSV
 *
       END

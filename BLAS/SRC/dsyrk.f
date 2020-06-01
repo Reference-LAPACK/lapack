@@ -356,6 +356,6 @@
 *
       RETURN
 *
-*     End of DSYRK .
+*     End of DSYRK
 *
       END

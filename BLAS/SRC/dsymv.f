@@ -325,6 +325,6 @@
 *
       RETURN
 *
-*     End of DSYMV .
+*     End of DSYMV
 *
       END

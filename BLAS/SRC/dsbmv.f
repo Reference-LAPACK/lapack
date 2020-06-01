@@ -367,6 +367,6 @@
 *
       RETURN
 *
-*     End of DSBMV .
+*     End of DSBMV
 *
       END

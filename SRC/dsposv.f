@@ -431,6 +431,6 @@
 *
       RETURN
 *
-*     End of DSPOSV.
+*     End of DSPOSV
 *
       END

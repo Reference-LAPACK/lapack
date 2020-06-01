@@ -380,6 +380,6 @@
 *
       RETURN
 *
-*     End of ZTPMV .
+*     End of ZTPMV
 *
       END
