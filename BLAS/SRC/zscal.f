@@ -111,4 +111,7 @@
          END DO
       END IF
       RETURN
+*
+*     End of ZSCAL
+*
       END

@@ -154,4 +154,7 @@
 *
          END DO
       END DO
+*
+*     End of ZLA_LIN_BERR
+*
       END

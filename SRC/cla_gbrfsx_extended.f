@@ -707,4 +707,7 @@
       END DO
 *
       RETURN
+*
+*     End of CLA_GBRFSX_EXTENDED
+*
       END

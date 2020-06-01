@@ -83,6 +83,9 @@
 *
 99999 FORMAT (' Complex BLAS Test Program Results',/1X)
 99998 FORMAT ('                                    ----- PASS -----')
+*
+*     End of ZBLAT1
+*
       END
       SUBROUTINE HEADER
 *     .. Parameters ..
@@ -111,6 +114,9 @@
       RETURN
 *
 99999 FORMAT (/' Test of subprogram number',I3,12X,A6)
+*
+*     End of HEADER
+*
       END
       SUBROUTINE CHECK1(SFAC)
 *     .. Parameters ..
@@ -329,6 +335,9 @@
          CALL CTEST(5,CX,MWPCT,MWPCS,SFAC)
       END IF
       RETURN
+*
+*     End of CHECK1
+*
       END
       SUBROUTINE CHECK2(SFAC)
 *     .. Parameters ..
@@ -592,6 +601,9 @@
    40    CONTINUE
    60 CONTINUE
       RETURN
+*
+*     End of CHECK2
+*
       END
       SUBROUTINE STEST(LEN,SCOMP,STRUE,SSIZE,SFAC)
 *     ********************************* STEST **************************
@@ -648,6 +660,9 @@
      +       ' COMP(I)                             TRUE(I)  DIFFERENCE',
      +       '     SIZE(I)',/1X)
 99997 FORMAT (1X,I4,I3,3I5,I3,2D36.8,2D12.4)
+*
+*     End of STEST
+*
       END
       SUBROUTINE STEST1(SCOMP1,STRUE1,SSIZE,SFAC)
 *     ************************* STEST1 *****************************
@@ -673,6 +688,9 @@
       CALL STEST(1,SCOMP,STRUE,SSIZE,SFAC)
 *
       RETURN
+*
+*     End of STEST1
+*
       END
       DOUBLE PRECISION FUNCTION SDIFF(SA,SB)
 *     ********************************* SDIFF **************************
@@ -683,6 +701,9 @@
 *     .. Executable Statements ..
       SDIFF = SA - SB
       RETURN
+*
+*     End of SDIFF
+*
       END
       SUBROUTINE CTEST(LEN,CCOMP,CTRUE,CSIZE,SFAC)
 *     **************************** CTEST *****************************
@@ -714,6 +735,9 @@
 *
       CALL STEST(2*LEN,SCOMP,STRUE,SSIZE,SFAC)
       RETURN
+*
+*     End of CTEST
+*
       END
       SUBROUTINE ITEST1(ICOMP,ITRUE)
 *     ********************************* ITEST1 *************************
@@ -754,4 +778,7 @@
      +       ' COMP                                TRUE     DIFFERENCE',
      +       /1X)
 99997 FORMAT (1X,I4,I3,3I5,2I36,I12)
+*
+*     End of ITEST1
+*
       END

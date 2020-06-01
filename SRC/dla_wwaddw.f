@@ -105,4 +105,7 @@
         X(I) = S
  10   CONTINUE
       RETURN
+*
+*     End of DLA_WWADDW
+*
       END

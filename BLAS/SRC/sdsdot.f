@@ -157,4 +157,7 @@
       END IF
       SDSDOT = DSDOT
       RETURN
+*
+*     End of SDSDOT
+*
       END

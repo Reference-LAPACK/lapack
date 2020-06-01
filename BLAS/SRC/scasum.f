@@ -111,4 +111,7 @@
       END IF
       SCASUM = STEMP
       RETURN
+*
+*     End of SCASUM
+*
       END

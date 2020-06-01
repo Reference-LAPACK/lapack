@@ -311,4 +311,6 @@
 *
       RETURN
 *
+*     End of CLA_GERCOND_C
+*
       END

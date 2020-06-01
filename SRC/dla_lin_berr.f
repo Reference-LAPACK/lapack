@@ -147,4 +147,7 @@
 *
          END DO
       END DO
+*
+*     End of DLA_LIN_BERR
+*
       END

@@ -154,4 +154,7 @@
 *
          END DO
       END DO
+*
+*     End of CLA_LIN_BERR
+*
       END

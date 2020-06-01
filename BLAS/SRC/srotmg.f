@@ -254,8 +254,7 @@
 
       SPARAM(1) = SFLAG
       RETURN
+*
+*     End of SROTMG
+*
       END
-
-
-
-

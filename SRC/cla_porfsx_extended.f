@@ -681,4 +681,7 @@
       END DO
 *
       RETURN
+*
+*     End of CLA_PORFSX_EXTENDED
+*
       END

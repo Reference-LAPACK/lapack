@@ -324,4 +324,7 @@
       END IF
 
       CLA_HERPVGRW = RPVGRW
+*
+*     End of CLA_HERPVGRW
+*
       END

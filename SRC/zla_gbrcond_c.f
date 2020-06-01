@@ -338,4 +338,6 @@
 *
       RETURN
 *
+*     End of ZLA_GBRCOND_C
+*
       END

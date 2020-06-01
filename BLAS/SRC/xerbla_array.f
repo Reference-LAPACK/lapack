@@ -113,4 +113,7 @@
       CALL XERBLA( SRNAME, INFO )
 
       RETURN
+*
+*     End of XERBLA_ARRAY
+*
       END

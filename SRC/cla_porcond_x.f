@@ -282,4 +282,6 @@
 *
       RETURN
 *
+*     End of CLA_PORCOND_X
+*
       END

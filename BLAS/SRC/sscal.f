@@ -130,4 +130,7 @@
          END DO
       END IF
       RETURN
+*
+*     End of SSCAL
+*
       END

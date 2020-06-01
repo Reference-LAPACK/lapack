@@ -336,4 +336,6 @@
 *
       RETURN
 *
+*     End of CLA_GBRCOND_C
+*
       END

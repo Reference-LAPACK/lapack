@@ -128,4 +128,7 @@
       END IF
       CDOTC = CTEMP
       RETURN
+*
+*     End of CDOTC
+*
       END
