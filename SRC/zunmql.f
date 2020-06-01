@@ -136,7 +136,7 @@
 *>          The dimension of the array WORK.
 *>          If SIDE = 'L', LWORK >= max(1,N);
 *>          if SIDE = 'R', LWORK >= max(1,M).
-*>          For good performance, LWORK should genreally be larger.
+*>          For good performance, LWORK should generally be larger.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
