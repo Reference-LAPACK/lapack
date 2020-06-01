@@ -251,6 +251,6 @@
 *
       RETURN
 *
-*     End of DLADIV12
+*     End of DLADIV2
 *
       END

@@ -891,6 +891,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of CDRVGE
+*     End of CDRVGEX
 *
       END

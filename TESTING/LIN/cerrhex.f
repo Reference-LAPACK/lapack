@@ -609,6 +609,6 @@
 *
       RETURN
 *
-*     End of CERRHE
+*     End of CERRHEX
 *
       END

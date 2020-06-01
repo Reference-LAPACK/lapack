@@ -217,6 +217,6 @@
 *
       RETURN
 *
-*     End of DGET02
+*     End of DGET08
 *
       END

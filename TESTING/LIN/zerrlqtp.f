@@ -220,6 +220,6 @@
 *
       RETURN
 *
-*     End of ZERRLQT
+*     End of ZERRLQTP
 *
       END

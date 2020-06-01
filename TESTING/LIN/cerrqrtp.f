@@ -224,6 +224,6 @@
 *
       RETURN
 *
-*     End of CERRQRT
+*     End of CERRQRTP
 *
       END

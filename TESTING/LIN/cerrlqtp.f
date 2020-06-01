@@ -220,6 +220,6 @@
 *
       RETURN
 *
-*     End of CERRLQT
+*     End of CERRLQTP
 *
       END

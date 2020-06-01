@@ -1027,6 +1027,6 @@
 *
       RETURN
 *
-*     End of SDRVGB
+*     End of SDRVGBX
 *
       END

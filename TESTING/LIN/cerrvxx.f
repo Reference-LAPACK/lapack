@@ -1267,6 +1267,6 @@
 *
       RETURN
 *
-*     End of CERRVX
+*     End of CERRVXX
 *
       END

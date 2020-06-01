@@ -718,6 +718,6 @@
      $      ', type ', I2, ', test ', I2, ', ratio =', G12.5 )
       RETURN
 *
-*     End of ZDRVHE
+*     End of ZDRVHEX
 *
       END

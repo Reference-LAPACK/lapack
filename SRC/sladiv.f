@@ -251,6 +251,6 @@
 *
       RETURN
 *
-*     End of SLADIV
+*     End of SLADIV2
 *
       END

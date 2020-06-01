@@ -575,6 +575,6 @@
      $      I6 )
       RETURN
 *
-*     End of ZCHKSY_AA_2STAGE
+*     End of ZCHKHE_AA_2STAGE
 *
       END

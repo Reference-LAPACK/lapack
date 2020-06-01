@@ -532,6 +532,6 @@
 *
       RETURN
 *
-*     End of CERRPO
+*     End of CERRPOX
 *
       END

@@ -224,6 +224,6 @@
 *
       RETURN
 *
-*     End of DERRQRT
+*     End of DERRQRTP
 *
       END

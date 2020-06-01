@@ -611,6 +611,6 @@
 *
       RETURN
 *
-*     End of ZERRSY
+*     End of ZERRSYX
 *
       END

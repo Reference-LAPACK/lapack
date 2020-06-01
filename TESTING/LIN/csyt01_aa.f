@@ -260,6 +260,6 @@
 *
       RETURN
 *
-*     End of CSYT01
+*     End of CSYT01_AA
 *
       END

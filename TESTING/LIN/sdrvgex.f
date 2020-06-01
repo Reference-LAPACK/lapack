@@ -889,6 +889,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of SDRVGE
+*     End of SDRVGEX
 *
       END

@@ -734,6 +734,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of ZDRVPO
+*     End of ZDRVPOX
 *
       END

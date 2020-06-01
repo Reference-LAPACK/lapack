@@ -198,7 +198,7 @@
 *
       RETURN
 *
-*     End of ZLAPMT
+*     End of DLAPMR
 *
       END
 

@@ -612,6 +612,6 @@
 *
       RETURN
 *
-*     End of ZERRHE
+*     End of ZERRHEX
 *
       END

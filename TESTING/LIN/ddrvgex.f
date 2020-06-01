@@ -889,6 +889,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of DDRVGE
+*     End of DDRVGEX
 *
       END

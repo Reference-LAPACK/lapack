@@ -1024,6 +1024,6 @@
 *
       RETURN
 *
-*     End of DDRVGB
+*     End of DDRVGBX
 *
       END

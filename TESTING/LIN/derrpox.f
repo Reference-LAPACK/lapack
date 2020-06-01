@@ -526,6 +526,6 @@
 *
       RETURN
 *
-*     End of DERRPO
+*     End of DERRPOX
 *
       END

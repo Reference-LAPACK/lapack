@@ -1042,6 +1042,6 @@
 *
       RETURN
 *
-*     End of DERRVX
+*     End of DERRVXX
 *
       END

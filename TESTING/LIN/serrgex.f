@@ -560,6 +560,6 @@
 *
       RETURN
 *
-*     End of SERRGE
+*     End of SERRGEX
 *
       END

@@ -1297,6 +1297,6 @@
 *
       RETURN
 *
-*     End of ZERRVX
+*     End of ZERRVXX
 *
       END

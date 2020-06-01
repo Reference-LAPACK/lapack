@@ -258,6 +258,6 @@
 *
       RETURN
 *
-*     End of DSYT01
+*     End of DSYT01_AA
 *
       END

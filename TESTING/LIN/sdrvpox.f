@@ -731,6 +731,6 @@
      $      G12.5 )
       RETURN
 *
-*     End of SDRVPO
+*     End of SDRVPOX
 *
       END

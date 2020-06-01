@@ -567,6 +567,6 @@
      $      I6 )
       RETURN
 *
-*     End of DCHKSY_AA_2STAGE
+*     End of SCHKSY_AA_2STAGE
 *
       END

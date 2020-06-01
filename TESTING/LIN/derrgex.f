@@ -560,6 +560,6 @@
 *
       RETURN
 *
-*     End of DERRGE
+*     End of DERRGEX
 *
       END

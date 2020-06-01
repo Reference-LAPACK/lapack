@@ -526,6 +526,6 @@
 *
       RETURN
 *
-*     End of SERRPO
+*     End of SERRPOX
 *
       END
