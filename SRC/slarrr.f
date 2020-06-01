@@ -206,6 +206,6 @@
 *
       RETURN
 *
-*     END OF SLARRR
+*     End of SLARRR
 *
       END

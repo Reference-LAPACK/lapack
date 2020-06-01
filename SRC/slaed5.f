@@ -184,6 +184,6 @@
       END IF
       RETURN
 *
-*     End OF SLAED5
+*     End of SLAED5
 *
       END

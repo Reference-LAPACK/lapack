@@ -375,6 +375,6 @@
 *
       RETURN
 *
-*     END OF SSB2ST_KERNELS
+*     End of SSB2ST_KERNELS
 *
       END

@@ -184,6 +184,6 @@
       END IF
       RETURN
 *
-*     End OF DLAED5
+*     End of DLAED5
 *
       END

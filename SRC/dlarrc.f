@@ -246,6 +246,6 @@
 
       RETURN
 *
-*     end of DLARRC
+*     End of DLARRC
 *
       END

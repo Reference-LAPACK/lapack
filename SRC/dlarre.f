@@ -899,6 +899,6 @@
 
       RETURN
 *
-*     end of DLARRE
+*     End of DLARRE
 *
       END

@@ -372,6 +372,6 @@
 *
       RETURN
 *
-*     END OF CHB2ST_KERNELS
+*     End of CHB2ST_KERNELS
 *
       END
