@@ -125,6 +125,7 @@
 *>          RESULT is DOUBLE PRECISION array, dimension (2)
 *>          RESULT(1) = | A E  -  E W | / ( |A| |E| ulp )
 *>          RESULT(2) = max | m-norm(E(j)) - 1 | / ( n ulp )
+*>                       j
 *> \endverbatim
 *
 *  Authors:
@@ -296,7 +297,7 @@
          RESULT( 1 ) = ( ERRNRM / ANORM ) / ULP
       ELSE
          IF( ANORM.LT.ONE ) THEN
-            RESULT( 1 ) = ( MIN( ERRNRM, ANORM ) / ANORM ) / ULP
+            RESULT( 1 ) = ONE / ULP
          ELSE
             RESULT( 1 ) = MIN( ERRNRM / ANORM, ONE ) / ULP
          END IF
