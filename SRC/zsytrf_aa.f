@@ -460,6 +460,7 @@
       END IF
 *
    20 CONTINUE
+      WORK( 1 ) = LWKOPT
       RETURN
 *
 *     End of ZSYTRF_AA
