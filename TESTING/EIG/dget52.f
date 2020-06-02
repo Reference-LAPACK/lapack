@@ -360,14 +360,14 @@
                DO 20 J = 1, N
                   TEMP1 = MAX( TEMP1, ABS( E( J, JVEC ) ) )
    20          CONTINUE
-               ENRMER = MAX( ENRMER, TEMP1-ONE )
+               ENRMER = MAX( ENRMER, ABS( TEMP1-ONE ) )
             ELSE
                ILCPLX = .TRUE.
                DO 30 J = 1, N
                   TEMP1 = MAX( TEMP1, ABS( E( J, JVEC ) )+
      $                    ABS( E( J, JVEC+1 ) ) )
    30          CONTINUE
-               ENRMER = MAX( ENRMER, TEMP1-ONE )
+               ENRMER = MAX( ENRMER, ABS( TEMP1-ONE ) )
             END IF
          END IF
    40 CONTINUE
