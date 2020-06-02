@@ -213,10 +213,10 @@
 *
       IF( LEFT ) THEN
          NQ = M
-         NW = N
+         NW = MAX( 1, N )
       ELSE
          NQ = N
-         NW = M
+         NW = MAX( 1, M )
       END IF
       IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN
          INFO = -1
@@ -233,7 +233,7 @@
          INFO = -7
       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN
          INFO = -10
-      ELSE IF( LWORK.LT.MAX( 1, NW ) .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.NW .AND. .NOT.LQUERY ) THEN
          INFO = -12
       END IF
 *
@@ -255,7 +255,7 @@
      $                      -1 )
             END IF
          END IF
-         LWKOPT = MAX( 1, NW )*NB
+         LWKOPT = NW*NB
          WORK( 1 ) = LWKOPT
       END IF
 *
