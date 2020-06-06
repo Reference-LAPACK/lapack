@@ -155,7 +155,7 @@
       FS = F
       GS = G
       COUNT = 0
-      IF( SCALE.GE.SAFMX2 ) THEN
+      IF( SCALE.GE.SAFMX2 .AND. COUNT .LT. 20) THEN
    10    CONTINUE
          COUNT = COUNT + 1
          FS = FS*SAFMN2
