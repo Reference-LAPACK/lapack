@@ -27,9 +27,9 @@
 *> where:
 *>
 *>    Q is a n-by-N orthogonal matrix, stored on exit in an implicit
-*>    form in the elements above the digonal of the array A and in
-*>    the elemenst of the array T;
-*>    L is an lower-triangular M-by-M matrix stored on exit in
+*>    form in the elements above the diagonal of the array A and in
+*>    the elements of the array T;
+*>    L is a lower-triangular M-by-M matrix stored on exit in
 *>    the elements on and below the diagonal of the array A.
 *>    0 is a M-by-(N-M) zero matrix, if M < N, and is not stored.
 *>

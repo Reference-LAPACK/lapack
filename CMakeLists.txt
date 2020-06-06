@@ -16,6 +16,9 @@ set(CMAKE_MODULE_PATH "${LAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 # Export all symbols on Windows when building shared libraries
 SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
+# Tell CMake that our Fortran sources are written in fixed format.
+set(CMAKE_Fortran_FORMAT FIXED)
+
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to 'Release' as none was specified.")
@@ -73,10 +76,10 @@ include(PreventInBuildInstalls)
 
 if(UNIX)
   if(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
-    list(APPEND CMAKE_Fortran_FLAGS "-fp-model strict")
+    string(APPEND CMAKE_Fortran_FLAGS "-fp-model strict")
   endif()
   if(CMAKE_Fortran_COMPILER_ID STREQUAL XL)
-    list(APPEND CMAKE_Fortran_FLAGS "-qnosave -qstrict=none")
+    string(APPEND CMAKE_Fortran_FLAGS "-qnosave -qstrict=none")
   endif()
 # Delete libmtsk in linking sequence for Sun/Oracle Fortran Compiler.
 # This library is not present in the Sun package SolarisStudio12.3-linux-x86-bin
