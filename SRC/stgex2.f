@@ -333,8 +333,8 @@
 *
          F = S( 2, 2 )*T( 1, 1 ) - T( 2, 2 )*S( 1, 1 )
          G = S( 2, 2 )*T( 1, 2 ) - T( 2, 2 )*S( 1, 2 )
-         SA = ABS( S( 1, 1 ) ) * ABS( T( 2, 2 ) )
-         SB = ABS( S( 2, 2 ) ) * ABS( T( 1, 1 ) )
+         SA = ABS( S( 2, 2 ) ) * ABS( T( 1, 1 ) )
+         SB = ABS( S( 1, 1 ) ) * ABS( T( 2, 2 ) )
          CALL SLARTG( F, G, IR( 1, 2 ), IR( 1, 1 ), DDUM )
          IR( 2, 1 ) = -IR( 1, 2 )
          IR( 2, 2 ) = IR( 1, 1 )
