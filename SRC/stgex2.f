@@ -252,8 +252,9 @@
 *     .. Local Scalars ..
       LOGICAL            STRONG, WEAK
       INTEGER            I, IDUM, LINFO, M
-      REAL               BQRA21, BRQA21, DDUM, DNORM, DSCALE, DSUM, EPS,
-     $                   F, G, SA, SB, SCALE, SMLNUM, SS, THRESH, WS
+      REAL               BQRA21, BRQA21, DDUM, DNORM, DSCALEA, DSCALEB,
+     $                   DSUM, EPS, F, G, SA, SB, SCALE, SMLNUM, SS,
+     $                   THRESHA, THRESHB, WS
 *     ..
 *     .. Local Arrays ..
       INTEGER            IWORK( LDST )
@@ -310,9 +311,12 @@
       DSUM = ONE
       CALL SLACPY( 'Full', M, M, S, LDST, WORK, M )
       CALL SLASSQ( M*M, WORK, 1, DSCALE, DSUM )
+      DNORMA = DSCALE*SQRT( DSUM )
+      DSCALE = ZERO
+      DSUM = ONE
       CALL SLACPY( 'Full', M, M, T, LDST, WORK, M )
       CALL SLASSQ( M*M, WORK, 1, DSCALE, DSUM )
-      DNORM = DSCALE*SQRT( DSUM )
+      DNORMB = DSCALE*SQRT( DSUM )
 *
 *     THRES has been changed from
 *        THRESH = MAX( TEN*EPS*SA, SMLNUM )
@@ -322,7 +326,8 @@
 *     "Bug" reported by Ondra Kamenik, confirmed by Julie Langou, fixed by
 *     Jim Demmel and Guillaume Revy. See forum post 1783.
 *
-      THRESH = MAX( TWENTY*EPS*DNORM, SMLNUM )
+      THRESHA = MAX( TWENTY*EPS*DNORMA, SMLNUM )
+      THRESHB = MAX( TWENTY*EPS*DNORMB, SMLNUM )
 *
       IF( M.EQ.2 ) THEN
 *
@@ -356,18 +361,20 @@
          LI( 2, 2 ) = LI( 1, 1 )
          LI( 1, 2 ) = -LI( 2, 1 )
 *
-*        Weak stability test:
-*           |S21| + |T21| <= O(EPS * F-norm((S, T)))
+*        Weak stability test: |S21| <= O(EPS F-norm((A)))
+*                           and  |T21| <= O(EPS F-norm((B)))
 *
-         WS = ABS( S( 2, 1 ) ) + ABS( T( 2, 1 ) )
-         WEAK = WS.LE.THRESH
+         WEAK = ABS( S( 2, 1 ) ) .LE. THRESHA .AND.
+     $      ABS( T( 2, 1 ) ) .LE. THRESHB
          IF( .NOT.WEAK )
      $      GO TO 70
 *
          IF( WANDS ) THEN
 *
 *           Strong stability test:
-*           F-norm((A-QL**T*S*QR, B-QL**T*T*QR)) <= O(EPS*F-norm((A, B)))
+*               F-norm((A-QL**H*S*QR)) <= O(EPS*F-norm((A)))
+*               and
+*               F-norm((B-QL**H*T*QR)) <= O(EPS*F-norm((B)))
 *
             CALL SLACPY( 'Full', M, M, A( J1, J1 ), LDA, WORK( M*M+1 ),
      $                   M )
@@ -378,6 +385,7 @@
             DSCALE = ZERO
             DSUM = ONE
             CALL SLASSQ( M*M, WORK( M*M+1 ), 1, DSCALE, DSUM )
+            SA = DSCALE*SQRT( DSUM )
 *
             CALL SLACPY( 'Full', M, M, B( J1, J1 ), LDB, WORK( M*M+1 ),
      $                   M )
@@ -385,9 +393,11 @@
      $                  WORK, M )
             CALL SGEMM( 'N', 'T', M, M, M, -ONE, WORK, M, IR, LDST, ONE,
      $                  WORK( M*M+1 ), M )
+            DSCALE = ZERO
+            DSUM = ONE
             CALL SLASSQ( M*M, WORK( M*M+1 ), 1, DSCALE, DSUM )
-            SS = DSCALE*SQRT( DSUM )
-            STRONG = SS.LE.THRESH
+            SB = DSCALE*SQRT( DSUM )
+            STRONG = SA.LE.THRESHA .AND. SB.LE.THRESHB
             IF( .NOT.STRONG )
      $         GO TO 70
          END IF
@@ -538,14 +548,14 @@
 *
 *        Decide which method to use.
 *          Weak stability test:
-*             F-norm(S21) <= O(EPS * F-norm((S, T)))
+*             F-norm(S21) <= O(EPS * F-norm((S)))
 *
-         IF( BQRA21.LE.BRQA21 .AND. BQRA21.LE.THRESH ) THEN
+         IF( BQRA21.LE.BRQA21 .AND. BQRA21.LE.THRESHA ) THEN
             CALL SLACPY( 'F', M, M, SCPY, LDST, S, LDST )
             CALL SLACPY( 'F', M, M, TCPY, LDST, T, LDST )
             CALL SLACPY( 'F', M, M, IRCOP, LDST, IR, LDST )
             CALL SLACPY( 'F', M, M, LICOP, LDST, LI, LDST )
-         ELSE IF( BRQA21.GE.THRESH ) THEN
+         ELSE IF( BRQA21.GE.THRESHA ) THEN
             GO TO 70
          END IF
 *
@@ -556,7 +566,9 @@
          IF( WANDS ) THEN
 *
 *           Strong stability test:
-*              F-norm((A-QL*S*QR**T, B-QL*T*QR**T)) <= O(EPS*F-norm((A,B)))
+*               F-norm((A-QL**H*S*QR)) <= O(EPS*F-norm((A)))
+*               and
+*               F-norm((B-QL**H*T*QR)) <= O(EPS*F-norm((B)))
 *
             CALL SLACPY( 'Full', M, M, A( J1, J1 ), LDA, WORK( M*M+1 ),
      $                   M )
@@ -567,6 +579,7 @@
             DSCALE = ZERO
             DSUM = ONE
             CALL SLASSQ( M*M, WORK( M*M+1 ), 1, DSCALE, DSUM )
+            SA = DSCALE*SQRT( DSUM )
 *
             CALL SLACPY( 'Full', M, M, B( J1, J1 ), LDB, WORK( M*M+1 ),
      $                   M )
@@ -574,9 +587,11 @@
      $                  WORK, M )
             CALL SGEMM( 'N', 'N', M, M, M, -ONE, WORK, M, IR, LDST, ONE,
      $                  WORK( M*M+1 ), M )
+            DSCALE = ZERO
+            DSUM = ONE
             CALL SLASSQ( M*M, WORK( M*M+1 ), 1, DSCALE, DSUM )
-            SS = DSCALE*SQRT( DSUM )
-            STRONG = ( SS.LE.THRESH )
+            SB = DSCALE*SQRT( DSUM )
+            STRONG = SA.LE.THRESHA .AND. SB.LE.THRESHB
             IF( .NOT.STRONG )
      $         GO TO 70
 *
