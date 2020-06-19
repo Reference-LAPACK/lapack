@@ -251,7 +251,7 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            STRONG, WEAK
-      INTEGER            I, IDUM, LINFO, M
+      INTEGER            I, IDUM, LINFO, M, COUNT
       DOUBLE PRECISION   BQRA21, BRQA21, DDUM, DNORMA, DNORMB, DSCALE,
      $                   DSUM, EPS, F, G, SA, SB, SCALE, SMLNUM, SS,
      $                   THRESHA, THRESHB, THRESH, WS
@@ -262,7 +262,8 @@
      $                   IRCOP( LDST, LDST ), LI( LDST, LDST ),
      $                   LICOP( LDST, LDST ), S( LDST, LDST ),
      $                   SCPY( LDST, LDST ), T( LDST, LDST ),
-     $                   TAUL( LDST ), TAUR( LDST ), TCPY( LDST, LDST )
+     $                   TAUL( LDST ), TAUR( LDST ), TCPY( LDST, LDST ),
+     $                   IRREF( LDST, LDST ), LIREF( LDST, LDST )
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -328,7 +329,8 @@
 *
       THRESHA = MAX( TWENTY*EPS*DNORMA, SMLNUM )
       THRESHB = MAX( TWENTY*EPS*DNORMB, SMLNUM )
-      THRESH = MAX( TWENTY*EPS*(DNORMA+DNORMB), SMLNUM )
+*
+      COUNT = 0
 *
       IF( M.EQ.2 ) THEN
 *
@@ -368,7 +370,7 @@
          WEAK = ABS( S( 2, 1 ) ) .LE. THRESHA .AND.
      $      ABS( T( 2, 1 ) ) .LE. THRESHB
          IF( .NOT.WEAK )
-     $      GO TO 70
+     $      GO TO 80
 *
          IF( WANDS ) THEN
 *
@@ -400,7 +402,7 @@
             SB = DSCALE*SQRT( DSUM )
             STRONG = SA.LE.THRESHA .AND. SB.LE.THRESHB
             IF( .NOT.STRONG )
-     $         GO TO 70
+     $         GO TO 80
          END IF
 *
 *        Update (A(J1:J1+M-1, M+J1:N), B(J1:J1+M-1, M+J1:N)) and
@@ -465,10 +467,10 @@
    10    CONTINUE
          CALL DGEQR2( M, N2, LI, LDST, TAUL, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
          CALL DORG2R( M, M, N2, LI, LDST, TAUL, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
 *
 *        Compute orthogonal matrix RQ:
 *
@@ -481,10 +483,10 @@
    20    CONTINUE
          CALL DGERQ2( N1, M, IR( N2+1, 1 ), LDST, TAUR, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
          CALL DORGR2( M, M, N1, IR, LDST, TAUR, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
 *
 *        Perform the swapping tentatively:
 *
@@ -496,6 +498,9 @@
      $               WORK, M )
          CALL DGEMM( 'N', 'T', M, M, M, ONE, WORK, M, IR, LDST, ZERO, T,
      $               LDST )
+*
+   50     CONTINUE
+*
          CALL DLACPY( 'F', M, M, S, LDST, SCPY, LDST )
          CALL DLACPY( 'F', M, M, T, LDST, TCPY, LDST )
          CALL DLACPY( 'F', M, M, IR, LDST, IRCOP, LDST )
@@ -506,15 +511,15 @@
 *
          CALL DGERQ2( M, M, T, LDST, TAUR, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
          CALL DORMR2( 'R', 'T', M, M, M, T, LDST, TAUR, S, LDST, WORK,
      $                LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
          CALL DORMR2( 'L', 'N', M, M, M, T, LDST, TAUR, IR, LDST, WORK,
      $                LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
 *
 *        Compute F-norm(S21) in BRQA21. (T21 is 0.)
 *
@@ -530,13 +535,13 @@
 *
          CALL DGEQR2( M, M, TCPY, LDST, TAUL, WORK, LINFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
          CALL DORM2R( 'L', 'T', M, M, M, TCPY, LDST, TAUL, SCPY, LDST,
      $                WORK, INFO )
          CALL DORM2R( 'R', 'N', M, M, M, TCPY, LDST, TAUL, LICOP, LDST,
      $                WORK, INFO )
          IF( LINFO.NE.0 )
-     $      GO TO 70
+     $      GO TO 80
 *
 *        Compute F-norm(S21) in BQRA21. (T21 is 0.)
 *
@@ -601,6 +606,95 @@
 *        If the swap is accepted ("weakly" and "strongly"), apply the
 *        transformations and set N1-by-N2 (2,1)-block to zero.
 *
+         GO TO 70 
+*
+*        The swap wasn't accepted, try to refine the transformation
+*        and test acceptance again
+*
+         COUNT = COUNT + 1
+         IF ( COUNT .GT. 0 )
+     $      GO TO 80    
+*
+*        Solve the generalized Sylvester equation
+*                 S22 * R - L * S11 = SCALE * S21
+*                 T22 * R - L * T11 = SCALE * T21
+*        for R and L. Solutions in LIREF and IRREF.
+*
+         CALL DLACPY( 'Full', N2, N1, T( N1+1, 1 ), LDST,
+     $                LIREF( N1+1, 1 ), LDST )
+         CALL DLACPY( 'Full', N2, N1, S( N1+1, 1 ), LDST,
+     $                IRREF( N1+1, 1 ), LDST )
+         CALL DTGSY2( 'N', 0, N2, N1, S( N1+1, N1+1 ), LDST, S, LDST,
+     $                IRREF( N1+1, 1 ), LDST, T( N1+1, N1+1 ), LDST, T,
+     $                LDST, LIREF( N1+1, 1 ), LDST, SCALE, DSUM,
+     $                DSCALE, IWORK, IDUM, LINFO )
+*
+*        Compute orthogonal matrix QL:
+*
+*                    QL**T * LI = [ TL ]
+*                                 [ 0  ]
+*        where
+*                    LI =  [ SCALE * identity(N1) ]
+*                          [      -L              ]
+*
+         DO 15 I = 1, N1
+            LIREF( I, I ) = SCALE
+            CALL DSCAL( N2, -ONE, LIREF( N1+1, I ), 1 )
+   15    CONTINUE
+         CALL DGEQR2( M, N1, LIREF, LDST, TAUL, WORK, LINFO )
+         IF( LINFO.NE.0 )
+     $      GO TO 80
+         CALL DORG2R( M, M, N1, LIREF, LDST, TAUL, WORK, LINFO )
+         IF( LINFO.NE.0 )
+     $      GO TO 80
+*
+*        Compute orthogonal matrix RQ:
+*
+*                    RQ * IR = [ TL ]
+*                              [ 0  ]
+*        where
+*                    IR =  [ SCALE * identity(N2) ]
+*                          [      -R              ]
+*
+         DO 25 I = 1, N1
+            IRREF( I, I ) = SCALE
+            CALL DSCAL( N2, -ONE, IRREF( N1+1, I ), 1 )
+   25    CONTINUE
+         CALL DGEQR2( M, N1, IRREF, LDST, TAUL, WORK, LINFO )
+         IF( LINFO.NE.0 )
+     $      GO TO 80
+         CALL DORG2R( M, M, N1, IRREF, LDST, TAUL, WORK, LINFO )
+         IF( LINFO.NE.0 )
+     $      GO TO 80
+*
+*        Locally apply the refinement:
+*
+         CALL DGEMM( 'T', 'N', M, M, M, ONE, LIREF, LDST, S, LDST, ZERO,
+     $               WORK, M )
+         CALL DGEMM( 'N', 'N', M, M, M, ONE, WORK, M, IRREF, LDST, ZERO,
+     $               S, LDST )
+         CALL DGEMM( 'T', 'N', M, M, M, ONE, LIREF, LDST, T, LDST, ZERO,
+     $               WORK, M )
+         CALL DGEMM( 'N', 'N', M, M, M, ONE, WORK, M, IRREF, LDST, ZERO,
+     $               T, LDST )
+         CALL DGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, LIREF, LDST,
+     $               ZERO, WORK, M )
+         CALL DLACPY( 'F', M, M, WORK, M, LI, LDST )
+         CALL DGEMM( 'T', 'N', M, M, M, ONE, IRREF, LDST, IR, LDST,
+     $               ZERO, WORK, M )
+         CALL DLACPY( 'F', M, M, WORK, M, IR, LDST )
+*
+   60    CONTINUE
+
+*
+*        Check the swap again
+*
+         GO TO 50
+*
+*        The swap is accepted ("weakly" and "strongly"), apply the
+*        transformations and set N1-by-N2 (2,1)-block to zero.
+*
+   70    CONTINUE
          CALL DLASET( 'Full', N1, N2, ZERO, ZERO, S(N2+1,1), LDST )
 *
 *        copy back M-by-M diagonal block starting at index J1 of (A, B)
@@ -703,7 +797,7 @@
 *
 *     Exit with INFO = 1 if swap was rejected.
 *
-   70 CONTINUE
+   80 CONTINUE
 *
       INFO = 1
       RETURN
