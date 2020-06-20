@@ -562,7 +562,7 @@
             CALL DLACPY( 'F', M, M, IRCOP, LDST, IR, LDST )
             CALL DLACPY( 'F', M, M, LICOP, LDST, LI, LDST )
          ELSE IF( BRQA21.GE.THRESHA ) THEN
-            GO TO 70
+            GO TO 60
          END IF
 *
 *        Set lower triangle of B-part to zero
@@ -599,7 +599,7 @@
             SB = DSCALE*SQRT( DSUM )
             STRONG = SA.LE.THRESHA .AND. SB.LE.THRESHB
             IF( .NOT.STRONG )
-     $         GO TO 70
+     $         GO TO 60
 *
          END IF
 *
@@ -611,8 +611,9 @@
 *        The swap wasn't accepted, try to refine the transformation
 *        and test acceptance again
 *
+   60    CONTINUE
          COUNT = COUNT + 1
-         IF ( COUNT .GT. 0 )
+         IF ( COUNT .GT. 2 )
      $      GO TO 80    
 *
 *        Solve the generalized Sylvester equation
@@ -683,9 +684,6 @@
          CALL DGEMM( 'T', 'N', M, M, M, ONE, IRREF, LDST, IR, LDST,
      $               ZERO, WORK, M )
          CALL DLACPY( 'F', M, M, WORK, M, IR, LDST )
-*
-   60    CONTINUE
-
 *
 *        Check the swap again
 *
