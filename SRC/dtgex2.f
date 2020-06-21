@@ -621,6 +621,8 @@
 *                 T22 * R - L * T11 = SCALE * T21
 *        for R and L. Solutions in LIREF and IRREF.
 *
+         CALL DLASET( 'Full', LDST, LDST, ZERO, ZERO, LIREF, LDST )
+         CALL DLASET( 'Full', LDST, LDST, ZERO, ZERO, IRREF, LDST )
          CALL DLACPY( 'Full', N2, N1, T( N1+1, 1 ), LDST,
      $                LIREF( N1+1, 1 ), LDST )
          CALL DLACPY( 'Full', N2, N1, S( N1+1, 1 ), LDST,
