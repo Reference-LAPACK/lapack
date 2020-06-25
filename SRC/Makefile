@@ -318,7 +318,7 @@ DLASRC = \
    dggrqf.o dggsvd3.o dggsvp3.o dgtcon.o dgtrfs.o dgtsv.o \
    dgtsvx.o dgttrf.o dgttrs.o dgtts2.o dhgeqz.o \
    dlaqz0.o dlaqz1.o dlaqz2.o dlaqz3.o dlaqz4.o dlaqz5.o \
-   dlaqz6.o dlaqz7.o \
+   dlaqz6.o \
    dhsein.o dhseqr.o dlabrd.o dlacon.o dlacn2.o \
    dlaein.o dlaexc.o dlag2.o  dlags2.o dlagtm.o dlagv2.o dlahqr.o \
    dlahr2.o dlaic1.o dlaln2.o dlals0.o dlalsa.o dlalsd.o \

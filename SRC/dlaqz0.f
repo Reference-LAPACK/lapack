@@ -423,14 +423,14 @@
 *     Find out required workspace
 *
 
-*     Workspace query to dlaqz4
+*     Workspace query to dlaqz3
       nw = max(nwr,nmin)
-      call dlaqz4(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
+      call dlaqz3(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
      $   n_undeflated,n_deflated,alphar,alphai,beta,work,nw,work,nw,
      $   work,-1,aed_info)
       itemp1 = int(work(1))
-*     Workspace query to dlaqz5
-      call dlaqz5(ilschur,ilq,ilz,n,ilo,ihi,nsr,nbr,alphar,alphai,beta,
+*     Workspace query to dlaqz4
+      call dlaqz4(ilschur,ilq,ilz,n,ilo,ihi,nsr,nbr,alphar,alphai,beta,
      $   A,ldA,B,ldB,Q,ldQ,Z,ldZ,work,nbr,work,nbr,work,-1,sweep_info)
       itemp2 = int(work(1))
 
@@ -622,7 +622,7 @@
 *
 *        Time for AED
 *
-         call dlaqz4(ilschur,ilq,ilz,n,istart2,istop,nw,A,ldA,B,ldB,Q,
+         call dlaqz3(ilschur,ilq,ilz,n,istart2,istop,nw,A,ldA,B,ldB,Q,
      $      ldQ,Z,ldZ,n_undeflated,n_deflated,alphar,alphai,beta,work,
      $      nw,work(nw**2+1),nw,work(2*nw**2+1),lwork-2*nw**2,aed_info)
 
@@ -667,7 +667,7 @@
 *
 *        Time for a QZ sweep
 *
-         call dlaqz5(ilschur,ilq,ilz,n,istart2,istop,ns,nblock,
+         call dlaqz4(ilschur,ilq,ilz,n,istart2,istop,ns,nblock,
      $      alphar(shiftpos),alphai(shiftpos),beta(shiftpos),A,ldA,B,
      $      ldB,Q,ldQ,Z,ldZ,work,nblock,work(nblock**2+1),nblock,
      $      work(2*nblock**2+1),lwork-2*nblock**2,sweep_info)

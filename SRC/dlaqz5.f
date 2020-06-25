@@ -6,41 +6,70 @@
 *            http://www.netlib.org/lapack/explore-html/
 *
 *> \htmlonly
-*> Download DLAQZ5 + dependencies
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqz5.f">
+*> Download DLAQZ0 + dependencies
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dlaqz0.f">
 *> [TGZ]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqz5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dlaqz0.f">
 *> [ZIP]</a>
-*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqz5.f">
+*> <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dlaqz0.f">
 *> [TXT]</a>
 *> \endhtmlonly
+*
+*  Definition:
+*  ===========
+*
+*       SUBROUTINE DLAQZ5( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
+*                          ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
+*                          LWORK, INFO )
+*
+*       .. Scalar Arguments ..
+*       CHARACTER          WANTS, WANTQ, WANTZ
+*       INTEGER            IHI, ILO, INFO, LDA, LDQ, LDB, LDZ, LWORK, N
+*       ..
+*       .. Array Arguments ..
+*       DOUBLE PRECISION   ALPHAI( * ), ALPHAR( * ), BETA( * ),
+*      $                   A( LDA, * ), Q( LDQ, * ), B( LDB, * ),
+*      $                   WORK( * ), Z( LDZ, * )
+*       ..
+*
 *
 *> \par Purpose:
 *  =============
 *>
 *> \verbatim
 *>
-*> DLAQZ5 Executes a single multishift QZ sweep
+*> DLAQZ5 is identical to DLAQZ0 except that it calls DLAQZ6 instead of DLAQZ3
+*>
 *> \endverbatim
 *
 *  Arguments:
 *  ==========
 *
-*> \param[in] ILSCHUR
+*> \param[in] WANTS
 *> \verbatim
-*>          ILSCHUR is LOGICAL
-*>              Determines whether or not to update the full Schur form
-*> \endverbatim
-*> \param[in] ILQ
-*> \verbatim
-*>          ILQ is LOGICAL
-*>              Determines whether or not to update the matrix Q
+*>          WANTS is CHARACTER*1
+*>          = 'E': Compute eigenvalues only;
+*>          = 'S': Compute eigenvalues and the Schur form.
 *> \endverbatim
 *>
-*> \param[in] ILZ
+*> \param[in] WANTQ
 *> \verbatim
-*>          ILZ is LOGICAL
-*>              Determines whether or not to update the matrix Z
+*>          WANTQ is CHARACTER*1
+*>          = 'N': Left Schur vectors (Q) are not computed;
+*>          = 'I': Q is initialized to the unit matrix and the matrix Q
+*>                 of left Schur vectors of (A,B) is returned;
+*>          = 'V': Q must contain an orthogonal matrix Q1 on entry and
+*>                 the product Q1*Q is returned.
+*> \endverbatim
+*>
+*> \param[in] WANTZ
+*> \verbatim
+*>          WANTZ is CHARACTER*1
+*>          = 'N': Right Schur vectors (Z) are not computed;
+*>          = 'I': Z is initialized to the unit matrix and the matrix Z
+*>                 of right Schur vectors of (A,B) is returned;
+*>          = 'V': Z must contain an orthogonal matrix Z1 on entry and
+*>                 the product Z1*Z is returned.
 *> \endverbatim
 *>
 *> \param[in] N
@@ -57,41 +86,20 @@
 *> \param[in] IHI
 *> \verbatim
 *>          IHI is INTEGER
-*> \endverbatim
-*>
-*> \param[in] NSHIFTS
-*> \verbatim
-*>          NSHIFTS is INTEGER
-*>          The desired number of shifts to use
-*> \endverbatim
-*>
-*> \param[in] NBLOCK_DESIRED
-*> \verbatim
-*>          NBLOCK_DESIRED is INTEGER
-*>          The desired size of the computational windows
-*> \endverbatim
-*>
-*> \param[in] SR
-*> \verbatim
-*>          SR is DOUBLE PRECISION array. SR contains
-*>          the real parts of the shifts to use.
-*> \endverbatim
-*>
-*> \param[in] SI
-*> \verbatim
-*>          SI is DOUBLE PRECISION array. SI contains
-*>          the imaginary parts of the shifts to use.
-*> \endverbatim
-*>
-*> \param[in] SS
-*> \verbatim
-*>          SS is DOUBLE PRECISION array. SS contains
-*>          the scale of the shifts to use.
+*>          ILO and IHI mark the rows and columns of A which are in
+*>          Hessenberg form.  It is assumed that A is already upper
+*>          triangular in rows and columns 1:ILO-1 and IHI+1:N.
+*>          If N > 0, 1 <= ILO <= IHI <= N; if N = 0, ILO=1 and IHI=0.
 *> \endverbatim
 *>
 *> \param[in,out] A
 *> \verbatim
 *>          A is DOUBLE PRECISION array, dimension (LDA, N)
+*>          On entry, the N-by-N upper Hessenberg matrix A.
+*>          On exit, if JOB = 'S', A contains the upper quasi-triangular
+*>          matrix S from the generalized Schur factorization.
+*>          If JOB = 'E', the diagonal blocks of A match those of S, but
+*>          the rest of A is unspecified.
 *> \endverbatim
 *>
 *> \param[in] LDA
@@ -103,6 +111,15 @@
 *> \param[in,out] B
 *> \verbatim
 *>          B is DOUBLE PRECISION array, dimension (LDB, N)
+*>          On entry, the N-by-N upper triangular matrix B.
+*>          On exit, if JOB = 'S', B contains the upper triangular
+*>          matrix P from the generalized Schur factorization;
+*>          2-by-2 diagonal blocks of P corresponding to 2-by-2 blocks of S
+*>          are reduced to positive diagonal form, i.e., if A(j+1,j) is
+*>          non-zero, then B(j+1,j) = B(j,j+1) = 0, B(j,j) > 0, and
+*>          B(j+1,j+1) > 0.
+*>          If JOB = 'E', the diagonal blocks of B match those of P, but
+*>          the rest of B is unspecified.
 *> \endverbatim
 *>
 *> \param[in] LDB
@@ -111,44 +128,68 @@
 *>          The leading dimension of the array B.  LDB >= max( 1, N ).
 *> \endverbatim
 *>
+*> \param[out] ALPHAR
+*> \verbatim
+*>          ALPHAR is DOUBLE PRECISION array, dimension (N)
+*>          The real parts of each scalar alpha defining an eigenvalue
+*>          of GNEP.
+*> \endverbatim
+*>
+*> \param[out] ALPHAI
+*> \verbatim
+*>          ALPHAI is DOUBLE PRECISION array, dimension (N)
+*>          The imaginary parts of each scalar alpha defining an
+*>          eigenvalue of GNEP.
+*>          If ALPHAI(j) is zero, then the j-th eigenvalue is real; if
+*>          positive, then the j-th and (j+1)-st eigenvalues are a
+*>          complex conjugate pair, with ALPHAI(j+1) = -ALPHAI(j).
+*> \endverbatim
+*>
+*> \param[out] BETA
+*> \verbatim
+*>          BETA is DOUBLE PRECISION array, dimension (N)
+*>          The scalars beta that define the eigenvalues of GNEP.
+*>          Together, the quantities alpha = (ALPHAR(j),ALPHAI(j)) and
+*>          beta = BETA(j) represent the j-th eigenvalue of the matrix
+*>          pair (A,B), in one of the forms lambda = alpha/beta or
+*>          mu = beta/alpha.  Since either lambda or mu may overflow,
+*>          they should not, in general, be computed.
+*> \endverbatim
+*>
 *> \param[in,out] Q
 *> \verbatim
 *>          Q is DOUBLE PRECISION array, dimension (LDQ, N)
+*>          On entry, if COMPQ = 'V', the orthogonal matrix Q1 used in
+*>          the reduction of (A,B) to generalized Hessenberg form.
+*>          On exit, if COMPQ = 'I', the orthogonal matrix of left Schur
+*>          vectors of (A,B), and if COMPQ = 'V', the orthogonal matrix
+*>          of left Schur vectors of (A,B).
+*>          Not referenced if COMPQ = 'N'.
 *> \endverbatim
 *>
 *> \param[in] LDQ
 *> \verbatim
 *>          LDQ is INTEGER
+*>          The leading dimension of the array Q.  LDQ >= 1.
+*>          If COMPQ='V' or 'I', then LDQ >= N.
 *> \endverbatim
 *>
 *> \param[in,out] Z
 *> \verbatim
 *>          Z is DOUBLE PRECISION array, dimension (LDZ, N)
+*>          On entry, if COMPZ = 'V', the orthogonal matrix Z1 used in
+*>          the reduction of (A,B) to generalized Hessenberg form.
+*>          On exit, if COMPZ = 'I', the orthogonal matrix of
+*>          right Schur vectors of (H,T), and if COMPZ = 'V', the
+*>          orthogonal matrix of right Schur vectors of (A,B).
+*>          Not referenced if COMPZ = 'N'.
 *> \endverbatim
 *>
 *> \param[in] LDZ
 *> \verbatim
 *>          LDZ is INTEGER
-*> \endverbatim
-*>
-*> \param[in,out] QC
-*> \verbatim
-*>          QC is DOUBLE PRECISION array, dimension (LDQC, NBLOCK_DESIRED)
-*> \endverbatim
-*>
-*> \param[in] LDQC
-*> \verbatim
-*>          LDQC is INTEGER
-*> \endverbatim
-*>
-*> \param[in,out] ZC
-*> \verbatim
-*>          ZC is DOUBLE PRECISION array, dimension (LDZC, NBLOCK_DESIRED)
-*> \endverbatim
-*>
-*> \param[in] LDZC
-*> \verbatim
-*>          LDZ is INTEGER
+*>          The leading dimension of the array Z.  LDZ >= 1.
+*>          If COMPZ='V' or 'I', then LDZ >= N.
 *> \endverbatim
 *>
 *> \param[out] WORK
@@ -173,6 +214,9 @@
 *>          INFO is INTEGER
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value
+*>          = 1,...,N: the QZ iteration did not converge.  (A,B) is not
+*>                     in Schur form, but ALPHAR(i), ALPHAI(i), and
+*>                     BETA(i), i=INFO+1,...,N should be correct.
 *> \endverbatim
 *
 *  Authors:
@@ -185,309 +229,405 @@
 *> \ingroup doubleGEcomputational
 *>
 *  =====================================================================
-      subroutine dlaqz5(ilschur,ilq,ilz,n,ilo,ihi,nshifts,
-     $   nblock_desired,sr,si,ss,A,ldA,B,ldB,Q,ldQ,Z,ldZ,Qc,ldQc,Zc,
-     $   ldZc,work,lwork,info)
+      subroutine dlaqz5(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
+     $   alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
       implicit none
 
-*     Function arguments
-      logical,intent(in) :: ilschur,ilq,ilz
-      integer,intent(in) :: n,ilo,ihi,ldA,ldB,ldQ,ldZ,lwork,nshifts,
-     $   nblock_desired,ldQc,ldZc
-
-      double precision,intent(inout) :: A(ldA,*),B(ldB,*),Q(ldQ,*),
-     $   Z(ldZ,*),Qc(ldQc,*),Zc(ldZc,*),work(*),sr(*),si(*),ss(*)
+*     Arguments
+      character,intent(in) :: wantS,wantQ,wantZ
+      integer,intent(in) :: n,ilo,ihi,ldA,ldB,ldQ,ldZ,lwork
 
       integer,intent(out) :: info
+
+      double precision,intent(inout) :: A(ldA,*),B(ldB,*),Q(ldQ,*),
+     $   Z(ldZ,*),alphar(*),alphai(*),beta(*),work(*)
 
 *     Parameters
       double precision :: zero,one,half
       parameter(zero=0.0d0,one=1.0d0,half=0.5d0)
 
 *     Local scalars
-      integer :: i,j,ns,istartm,istopm,sheight,swidth,k,np,istartb,
-     $   istopb,ishift,nblock,npos
-      double precision :: temp,v(3),c1,s1,c2,s2,H(2,3),swap
+      double precision :: smlnum,ulp,eshift,safmin,safmax,c1,s1,temp
+      integer :: istart,istop,iiter,maxit,istart2,k,ld,nshifts,nblock,
+     $   nw,nmin,nibble,n_undeflated,n_deflated,ns,sweep_info,shiftpos,
+     $   lworkreq,k2,istartm,istopm,iwants,iwantq,iwantz,norm_info,
+     $   aed_info,nwr,nbr,nsr,itemp1,itemp2,rcost
+      logical :: ilschur,ilq,ilz,lquery
+      character :: jbcmpz*3
 
+*     External Functions
+      double precision,external :: dlamch
+      logical,external :: lsame
+      integer,external :: ilaenv
+
+*
+*     Decode wantS,wantQ,wantZ
+*      
+      if(lsame(wantS,'E')) then
+         ilschur = .false.
+         iwants = 1
+      else if(lsame(wantS,'S')) then
+         ilschur = .true.
+         iwants = 2
+      else
+         iwants = 0
+      end if
+
+      if(lsame(wantQ,'N')) then
+         ilq = .false.
+         iwantq = 1
+      else if(lsame(wantQ,'V')) then
+         ilq = .true.
+         iwantq = 2
+      else if(lsame(wantQ,'I')) then
+         ilq = .true.
+         iwantq = 3
+      else
+         iwantq = 0
+      end if
+
+      if(lsame(wantZ,'N')) then
+         ilz = .false.
+         iwantz = 1
+      else if(lsame(wantZ,'V')) then
+         ilz = .true.
+         iwantz = 2
+      else if(lsame(wantZ,'I')) then
+         ilz = .true.
+         iwantz = 3
+      else
+         iwantz = 0
+      end if
+*
+*     Check Argument Values
+*
       info = 0
-      if (nblock_desired .lt. nshifts+1) then
+      if( iwants.EQ.0 ) then
+         info =-1
+      else if( iwantq.EQ.0 ) then
+         info =-2
+      else if( iwantz.EQ.0 ) then
+         info =-3
+      else if( n.lt.0 ) then
+         info =-4
+      else if( ilo.lt.1 ) then
+         info =-5
+      else if( ihi.GT.n .OR. ihi.lt.ilo-1 ) then
+         info =-6
+      else if( lda.lt.n ) then
          info =-8
+      else if( ldb.lt.n ) then
+         info =-10
+      else if( ldq.lt.1 .OR. ( ilq .and. ldq.lt.n ) ) then
+         info =-15
+      else if( ldz.lt.1 .OR. ( ilz .and. ldz.lt.n ) ) then
+         info =-17
       end if
-      if (lwork .eq.-1) then
-*        workspace query, quick return
-         work(1) = n*nblock_desired
-         return
-      else if (lwork .lt. n*nblock_desired) then
-         info =-25
-      end if
-
       if( info.NE.0 ) then
          call xerbla( 'DLAQZ5',-info )
          return
       end if
-
-*     Executable statements
-
-      if (nshifts .lt. 2) then
-         return
-      end if
-
-      if (ilo .ge. ihi) then
-         return
-      end if
-
-      if (ilschur) then
-         istartm = 1
-         istopm = n
-      else
-         istartm = ilo
-         istopm = ihi
-      end if
-
-*     Shuffle shifts into pairs of real shifts and pairs
-*     of complex conjugate shifts assuming complex
-*     conjugate shifts are already adjacent to one
-*     another
-
-      do i = 1,nshifts-2,2
-         if( si( i ).NE.-si( i+1 ) ) then
+   
 *
-            swap = sr( i )
-            sr( i ) = sr( i+1 )
-            sr( i+1 ) = sr( i+2 )
-            sr( i+2 ) = swap
+*     Quick return if possible
+*
+      if( n.le.0 ) then
+         work( 1 ) = dble( 1 )
+         return
+      end if
 
-            swap = si( i )
-            si( i ) = si( i+1 )
-            si( i+1 ) = si( i+2 )
-            si( i+2 ) = swap
-            
-            swap = ss( i )
-            ss( i ) = ss( i+1 )
-            ss( i+1 ) = ss( i+2 )
-            ss( i+2 ) = swap
+*
+*     Get the parameters
+*
+      jbcmpz(1:1)=wantS
+      jbcmpz(2:2)=wantQ
+      jbcmpz(3:3)=wantZ
+
+      nmin = ilaenv( 12,'DLAQZ5',jbcmpz,n,ilo,ihi,lwork )
+
+      nwr = ilaenv( 13,'DLAQZ5',jbcmpz,n,ilo,ihi,lwork )
+      nwr = max( 2,nwr )
+      nwr = min( ihi-ilo+1,( n-1 ) / 3,nwr )
+
+      nibble = ilaenv( 14,'DLAQZ5',jbcmpz,n,ilo,ihi,lwork )
+      
+      nsr = ilaenv( 15,'DLAQZ5',jbcmpz,n,ilo,ihi,lwork )
+      nsr = min( nsr,( n+6 ) / 9,ihi-ilo )
+      nsr = max( 2,nsr-mod( nsr,2 ) )
+
+*     rcost = ilaenv( 17,'DLAQZ0',jbcmpz,n,ilo,ihi,lwork )
+      rcost = 10
+      itemp1 = int(nsr/sqrt( 1+2*nsr/(dble(rcost)/100*n) ))
+      itemp1 = ((itemp1-1)/4)*4+4
+      nbr = nsr+itemp1
+
+      if( n .lt. nmin ) then
+         call dhgeqz(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,
+     $      alphai,beta,Q,ldQ,Z,ldZ,work,lwork,info)
+         return
+      end if
+
+*
+*     Find out required workspace
+*
+
+*     Workspace query to dlaqz6
+      nw = max(nwr,nmin)
+      call dlaqz6(ilschur,ilq,ilz,n,ilo,ihi,nw,A,ldA,B,ldB,Q,ldQ,Z,ldZ,
+     $   n_undeflated,n_deflated,alphar,alphai,beta,work,nw,work,nw,
+     $   work,-1,aed_info)
+      itemp1 = int(work(1))
+*     Workspace query to dlaqz4
+      call dlaqz4(ilschur,ilq,ilz,n,ilo,ihi,nsr,nbr,alphar,alphai,beta,
+     $   A,ldA,B,ldB,Q,ldQ,Z,ldZ,work,nbr,work,nbr,work,-1,sweep_info)
+      itemp2 = int(work(1))
+
+      lworkreq = max(itemp1+2*nw**2,itemp2+2*nbr**2)
+      if (lwork .eq.-1) then
+         work(1) = dble(lworkreq)
+         return
+      else if (lwork .lt. lworkreq) then
+         info =-19
+      end if
+      if( info.NE.0 ) then
+         call xerbla( 'DLAQZ5',info )
+         return
+      end if
+*
+*     Initialize Q and Z
+*
+      if( iwantq.eq.3 ) call dlaset( 'Full',n,n,zero,one,Q,ldq )
+      if( iwantz.eq.3 ) call dlaset( 'Full',n,n,zero,one,Z,ldz )
+
+*     Get machine constants
+      safmin = dlamch('SAFE MINIMUM')
+      safmax = one/safmin
+      call dlabad(safmin,safmax)
+      ulp = dlamch('precision')
+      smlnum = safmin*(dble(n)/ulp)
+
+      istart = ilo
+      istop = ihi
+      maxit = 3*(ihi-ilo+1)
+      ld = 0
+
+      do iiter = 1,maxit
+         if(iiter .ge. maxit) then
+            info = istop
+            goto 80
          end if
-      end do
+         if (istart+1 .ge. istop) then
+            exit
+         end if
 
-*     NSHFTS is supposed to be even, but if it is odd,
-*     then simply reduce it by one.  The shuffle above
-*     ensures that the dropped shift is real and that
-*     the remaining shifts are paired.
+*        Check deflations at the end
+         if (abs(A(istop-1,istop-2)) .le. ulp*(abs(A(istop-1,
+     $      istop-1))+abs(A(istop-2,istop-2)))) then
+            A(istop-1,istop-2) = zero
+            istop = istop-2
+            ld = 0
+            eshift = zero
+         else if (abs(A(istop,istop-1)) .le. ulp*(abs(A(istop,
+     $      istop))+abs(A(istop-1,istop-1)))) then
+            A(istop,istop-1) = zero
+            istop = istop-1
+            ld = 0
+            eshift = zero
+         end if
+*        Check deflations at the start
+         if (abs(A(istart+2,istart+1)) .le. ulp*(abs(A(istart+1,
+     $      istart+1))+abs(A(istart+2,istart+2)))) then
+            A(istart+2,istart+1) = zero
+            istart = istart+2
+            ld = 0
+            eshift = zero
+         else if (abs(A(istart+1,istart)) .le. ulp*(abs(A(istart,
+     $      istart))+abs(A(istart+1,istart+1)))) then
+            A(istart+1,istart) = zero
+            istart = istart+1
+            ld = 0
+            eshift = zero
+         end if
 
-      ns = nshifts-mod(nshifts,2)
-      npos = max(nblock_desired-ns,1)
+         if (istart+1 .ge. istop) then
+            exit
+         end if
 
-*     The following block introduces the shifts and chases
-*     them down one by one just enough to make space for
-*     the other shifts. The near-the-diagonal block is
-*     of size (ns+1) x ns.
-
-      call dlaset('Full',ns+1,ns+1,zero,one,Qc,ldQc)
-      call dlaset('Full',ns,ns,zero,one,Zc,ldZc)
-
-      do i = 1,ns,2
-*        Introduce the shift
-         call dlaqz1(A(ilo,ilo),ldA,B(ilo,ilo),ldB,sr(i),sr(i+1),si(i),
-     $      ss(i),ss(i+1),v)
-
-         temp = v(2)
-         call dlartg(temp,v(3),c1,s1,v(2))
-         call dlartg(v(1),v(2),c2,s2,temp)
-
-         call drot(ns,A(ilo+1,ilo),ldA,A(ilo+2,ilo),ldA,c1,s1)
-         call drot(ns,A(ilo,ilo),ldA,A(ilo+1,ilo),ldA,c2,s2)
-         call drot(ns,B(ilo+1,ilo),ldB,B(ilo+2,ilo),ldB,c1,s1)
-         call drot(ns,B(ilo,ilo),ldB,B(ilo+1,ilo),ldB,c2,s2)
-         call drot(ns+1,Qc(1,2),1,Qc(1,3),1,c1,s1)
-         call drot(ns+1,Qc(1,1),1,Qc(1,2),1,c2,s2)
-
-*        Chase the shift down
-         do j = 1,ns-1-i
-
-            call dlaqz2(.true.,.true.,j,1,ns,ihi-ilo+1,A(ilo,ilo),ldA,
-     $         B(ilo,ilo),ldB,ns+1,1,Qc,ldQc,ns,1,Zc,ldZc)
-
+*        Check interior deflations
+         istart2 = istart
+         do k = istop,istart+1,-1
+            if (abs(A(k,k-1)) .le. ulp*(abs(A(k,k))+abs(A(k-1,
+     $         k-1)))) then
+               A(k,k-1) = zero
+               istart2 = k
+               exit
+            end if
          end do
 
-      end do
+*        Get range to apply rotations to
+         if (ilschur) then
+            istartm = 1
+            istopm = n
+         else
+            istartm = istart2
+            istopm = istop
+         end if
 
-*     Update the rest of the pencil
+*        Check infinite eigenvalues, this is done without blocking so might
+*        slow down the method when many infinite eigenvalues are present
+         k = istop
+         do while (k.ge.istart2)
+            temp = zero
+            if(k .lt. istop) then
+               temp = temp+abs(B(k,k+1))
+            end if
+            if(k .gt. istart2) then
+               temp = temp+abs(B(k-1,k))
+            end if
 
-*     Update A(ilo:ilo+ns,ilo+ns:istopm) and B(ilo:ilo+ns,ilo+ns:istopm)
-*     from the left with Qc(1:ns+1,1:ns+1)'
-      sheight = ns+1
-      swidth = istopm-(ilo+ns)+1
-      if (swidth > 0) then
-         call dgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,A(ilo,
-     $      ilo+ns),ldA,zero,work,sheight)
-         call dlacpy('ALL',sheight,swidth,work,sheight,A(ilo,ilo+ns),
-     $      ldA)
-         call dgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,B(ilo,
-     $      ilo+ns),ldB,zero,work,sheight)
-         call dlacpy('ALL',sheight,swidth,work,sheight,B(ilo,ilo+ns),
-     $      ldB)
-      end if
-      if (ilq) then
-        call dgemm('N','N',n,sheight,sheight,one,Q(1,ilo),ldQ,Qc,ldQc,
-     $     zero,work,n)
-         call dlacpy('ALL',n,sheight,work,n,Q(1,ilo),ldQ)
-      end if
+            if(abs(B(k,k)) .lt. max(smlnum,ulp*temp)) then
+*              A diagonal element of B is negligable, move it
+*              to the top and deflate it
+               
+               do k2 = k,istart2+1,-1
+                  call dlartg(B(k2-1,k2),B(k2-1,k2-1),c1,s1,temp)
+                  B(k2-1,k2) = temp
+                  B(k2-1,k2-1) = zero
 
-*     Update A(istartm:ilo-1,ilo:ilo+ns-1) and B(istartm:ilo-1,ilo:ilo+ns-1)
-*     from the right with Zc(1:ns,1:ns)
-      sheight = ilo-1-istartm+1
-      swidth = ns
-      if (sheight > 0) then
-         call dgemm('N','N',sheight,swidth,swidth,one,A(istartm,ilo),
-     $      ldA,Zc,ldZc,zero,work,sheight)
-         call dlacpy('ALL',sheight,swidth,work,sheight,A(istartm,ilo),
-     $      ldA)
-         call dgemm('N','N',sheight,swidth,swidth,one,B(istartm,ilo),
-     $      ldB,Zc,ldZc,zero,work,sheight)
-         call dlacpy('ALL',sheight,swidth,work,sheight,B(istartm,ilo),
-     $      ldB)
-      end if
-      if (ilz) then
-         call dgemm('N','N',n,swidth,swidth,one,Z(1,ilo),ldZ,Zc,ldZc,
-     $      zero,work,n)
-         call dlacpy('ALL',n,swidth,work,n,Z(1,ilo),ldZ)
-      end if
+                  call drot(k2-2-istartm+1,B(istartm,k2),1,B(istartm,
+     $               k2-1),1,c1,s1)
+                  call drot(min(k2+1,istop)-istartm+1,A(istartm,k2),1,
+     $               A(istartm,k2-1),1,c1,s1)
+                  if (ilz) then
+                     call drot(n,Z(1,k2),1,Z(1,k2-1),1,c1,s1)
+                  end if
 
-*     The following block chases the shifts down to the bottom
-*     right block. If possible, a shift is moved down npos
-*     positions at a time
+                  if(k2.lt.istop) then
+                     call dlartg(A(k2,k2-1),A(k2+1,k2-1),c1,s1,temp)
+                     A(k2,k2-1) = temp
+                     A(k2+1,k2-1) = zero
 
-      k = ilo
-      do while (k < ihi-ns)
-         np = min(ihi-ns-k,npos)
-*        Size of the near-the-diagonal block
-         nblock = ns+np
-*        istartb points to the first row we will be updating
-         istartb = k+1
-*        istopb points to the last column we will be updating
-         istopb = k+nblock-1
+                     call drot(istopm-k2+1,A(k2,k2),ldA,A(k2+1,k2),ldA,
+     $                  c1,s1)
+                     call drot(istopm-k2+1,B(k2,k2),ldB,B(k2+1,k2),ldB,
+     $                  c1,s1)
+                     if(ilq) then
+                        call drot(n,Q(1,k2),1,Q(1,k2+1),1,c1,s1)
+                     end if
+                  end if
 
-         call dlaset('Full',ns+np,ns+np,zero,one,Qc,ldQc)
-         call dlaset('Full',ns+np,ns+np,zero,one,Zc,ldZc)
+               end do
 
-*        Near the diagonal shift chase
-         do i = ns-1,1,-2
-            do j = 0,np-1
-*              Move down the block with index k+i+j-1, updating
-*              the (ns+np x ns+np) block:
-*              (k:k+ns+np,k:k+ns+np-1)
-               call dlaqz2(.true.,.true.,k+i+j-1,istartb,istopb,ihi,A,
-     $            ldA,B,ldB,nblock,k+1,Qc,ldQc,nblock,k,Zc,ldZc)
-            end do
+               if(istart2.lt.istop)then
+                  call dlartg(A(istart2,istart2),A(istart2+1,istart2),
+     $               c1,s1,temp)
+                  A(istart2,istart2) = temp
+                  A(istart2+1,istart2) = zero
+
+                  call drot(istopm-(istart2+1)+1,A(istart2,istart2+1),
+     $               ldA,A(istart2+1,istart2+1),ldA,c1,s1)
+                  call drot(istopm-(istart2+1)+1,B(istart2,istart2+1),
+     $               ldB,B(istart2+1,istart2+1),ldB,c1,s1)
+                  if(ilq) then
+                     call drot(n,Q(1,istart2),1,Q(1,istart2+1),1,c1,s1)
+                  end if
+               end if
+
+               istart2 = istart2+1
+   
+            end if
+            k = k-1
          end do
 
-*        Update rest of the pencil
-
-*        Update A(k+1:k+ns+np, k+ns+np:istopm) and
-*        B(k+1:k+ns+np, k+ns+np:istopm)
-*        from the left with Qc(1:ns+np,1:ns+np)'
-         sheight = ns+np
-         swidth = istopm-(k+ns+np)+1
-         if (swidth > 0) then
-         call dgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,A(k+1,
-     $      k+ns+np),ldA,zero,work,sheight)
-            call dlacpy('ALL',sheight,swidth,work,sheight,A(k+1,
-     $         k+ns+np),ldA)
-         call dgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,B(k+1,
-     $      k+ns+np),ldB,zero,work,sheight)
-            call dlacpy('ALL',sheight,swidth,work,sheight,B(k+1,
-     $         k+ns+np),ldB)
-         end if
-         if (ilq) then
-        call dgemm('N','N',n,nblock,nblock,one,Q(1,k+1),ldQ,Qc,ldQc,
-     $     zero,work,n)
-            call dlacpy('ALL',n,nblock,work,n,Q(1,k+1),ldQ)
+*        istart2 now points to the top of the bottom right
+*        unreduced Hessenberg block
+         if (istart2 .ge. istop) then
+            istop = istart2-1
+            ld = 0
+            eshift = zero
+            cycle
          end if
 
-*        Update A(istartm:k,k:k+ns+npos-1) and B(istartm:k,k:k+ns+npos-1)
-*        from the right with Zc(1:ns+np,1:ns+np)
-         sheight = k-istartm+1
-         swidth = nblock
-         if (sheight > 0) then
-            call dgemm('N','N',sheight,swidth,swidth,one,A(istartm,k),
-     $         ldA,Zc,ldZc,zero,work,sheight)
-            call dlacpy('ALL',sheight,swidth,work,sheight,A(istartm,k),
-     $         ldA)
-            call dgemm('N','N',sheight,swidth,swidth,one,B(istartm,k),
-     $         ldB,Zc,ldZc,zero,work,sheight)
-            call dlacpy('ALL',sheight,swidth,work,sheight,B(istartm,k),
-     $         ldB)
-         end if
-         if (ilz) then
-            call dgemm('N','N',n,nblock,nblock,one,Z(1,k),ldZ,Zc,ldZc,
-     $         zero,work,n)
-            call dlacpy('ALL',n,nblock,work,n,Z(1,k),ldZ)
+         nw = nwr
+         nshifts = nsr
+         nblock = nbr
+
+         if (istop-istart2+1 .lt. nmin) then
+*           Setting nw to the size of the subblock will make AED deflate
+*           all the eigenvalues. This is slightly more efficient than just
+*           using qz_small because the off diagonal part gets updated via BLAS.
+            if (istop-istart+1 .lt. nmin) then
+               nw = istop-istart+1
+               istart2 = istart
+            else
+               nw = istop-istart2+1
+            end if
          end if
 
-         k = k+np
+*
+*        Time for AED
+*
+         call dlaqz6(ilschur,ilq,ilz,n,istart2,istop,nw,A,ldA,B,ldB,Q,
+     $      ldQ,Z,ldZ,n_undeflated,n_deflated,alphar,alphai,beta,work,
+     $      nw,work(nw**2+1),nw,work(2*nw**2+1),lwork-2*nw**2,aed_info)
+
+         if (n_deflated > 0) then
+            istop = istop-n_deflated
+            ld = 0
+            eshift = zero
+         end if
+
+         if (100*n_deflated > nibble*(n_deflated+
+     $      n_undeflated) .or.istop-istart2+1 .lt. nmin) then
+*           AED has uncovered many eigenvalues. Skip a QZ sweep and run
+*           AED again.
+            cycle
+         end if
+
+         ld = ld+1
+
+         ns = min(nshifts,istop-istart2)
+         ns = min(ns,n_undeflated)
+         shiftpos = istop-n_deflated-n_undeflated+1
+
+         if (mod(ld,6) .eq. 0) then
+* 
+*           Exceptional shift.  Chosen for no particularly good reason.
+*
+            if((dble(maxit)*safmin)*abs(A(istop,
+     $         istop-1)).lt.abs(A(istop-1,istop-1))) then
+               eshift = A(istop,istop-1)/B(istop-1,istop-1)
+            else
+               eshift = eshift+one/(safmin*dble(maxit))
+            end if
+            alphar(shiftpos) = one
+            alphar(shiftpos+1) = zero
+            alphai(shiftpos) = zero
+            alphai(shiftpos+1) = zero
+            beta(shiftpos) = eshift
+            beta(shiftpos+1) = eshift
+            ns = 2
+         end if
+
+*
+*        Time for a QZ sweep
+*
+         call dlaqz4(ilschur,ilq,ilz,n,istart2,istop,ns,nblock,
+     $      alphar(shiftpos),alphai(shiftpos),beta(shiftpos),A,ldA,B,
+     $      ldB,Q,ldQ,Z,ldZ,work,nblock,work(nblock**2+1),nblock,
+     $      work(2*nblock**2+1),lwork-2*nblock**2,sweep_info)
 
       end do
 
-*     The following block removes the shifts from the bottom right corner
-*     one by one. Updates are initially applied to A(ihi-ns+1:ihi,ihi-ns:ihi).
-
-      call dlaset('Full',ns,ns,zero,one,Qc,ldQc)
-      call dlaset('Full',ns+1,ns+1,zero,one,Zc,ldZc)
-
-*     istartb points to the first row we will be updating
-      istartb = ihi-ns+1
-*     istopb points to the last column we will be updating
-      istopb = ihi
-
-      do i = 1,ns,2
-*        Chase the shift down to the bottom right corner
-         do ishift = ihi-i-1,ihi-2
-            call dlaqz2(.true.,.true.,ishift,istartb,istopb,ihi,A,ldA,B,
-     $         ldB,ns,ihi-ns+1,Qc,ldQc,ns+1,ihi-ns,Zc,ldZc)
-         end do
-         
-      end do
-
-*     Update rest of the pencil
-
-*     Update A(ihi-ns+1:ihi, ihi+1:istopm)
-*     from the left with Qc(1:ns,1:ns)'
-      sheight = ns
-      swidth = istopm-(ihi+1)+1
-      if (swidth > 0) then
-         call dgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,
-     $      A(ihi-ns+1,ihi+1),ldA,zero,work,sheight)
-         call dlacpy('ALL',sheight,swidth,work,sheight,A(ihi-ns+1,
-     $      ihi+1),ldA)
-         call dgemm('T','N',sheight,swidth,sheight,one,Qc,ldQc,
-     $      B(ihi-ns+1,ihi+1),ldB,zero,work,sheight)
-         call dlacpy('ALL',sheight,swidth,work,sheight,B(ihi-ns+1,
-     $      ihi+1),ldB)
-      end if
-      if (ilq) then
-         call dgemm('N','N',n,ns,ns,one,Q(1,ihi-ns+1),ldQ,Qc,ldQc,zero,
-     $      work,n)
-         call dlacpy('ALL',n,ns,work,n,Q(1,ihi-ns+1),ldQ)
-      end if
-
-*     Update A(istartm:ihi-ns,ihi-ns:ihi)
-*     from the right with Zc(1:ns+1,1:ns+1)
-      sheight = ihi-ns-istartm+1
-      swidth = ns+1
-      if (sheight > 0) then
-         call dgemm('N','N',sheight,swidth,swidth,one,A(istartm,ihi-ns),
-     $      ldA,Zc,ldZc,zero,work,sheight)
-         call dlacpy('ALL',sheight,swidth,work,sheight,A(istartm,
-     $      ihi-ns),ldA)
-         call dgemm('N','N',sheight,swidth,swidth,one,B(istartm,ihi-ns),
-     $      ldB,Zc,ldZc,zero,work,sheight)
-         call dlacpy('ALL',sheight,swidth,work,sheight,B(istartm,
-     $      ihi-ns),ldB)
-      end if
-      if (ilz) then
-      call dgemm('N','N',n,ns+1,ns+1,one,Z(1,ihi-ns),ldZ,Zc,ldZc,zero,
-     $   work,n)
-         call dlacpy('ALL',n,ns+1,work,n,Z(1,ihi-ns),ldZ)
-      end if
+*
+*     Call DHGEQZ to normalize the eigenvalue blocks and set the eigenvalues
+*     If all the eigenvalues have been found, DHGEQZ will not do any iterations
+*     and only normalize the blocks. In case of a rare convergence failure,
+*     the single shift might perform better.
+*
+   80 call dhgeqz(wantS,wantQ,wantZ,n,ilo,ihi,A,ldA,B,ldB,alphar,alphai,
+     $   beta,Q,ldQ,Z,ldZ,work,lwork,norm_info)
+      
+      info = norm_info
 
       end subroutine
