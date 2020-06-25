@@ -108,57 +108,69 @@
 *>
 *  =====================================================================
       subroutine dlaqz1(A,ldA,B,ldB,sr1,sr2,si,beta1,beta2,v)
-         implicit none
-*        Arguments
-         integer,intent(in) :: ldA,ldB
-         double precision,intent(in) :: A(ldA,*),B(ldB,*)
-         double precision,intent(out) :: sr1,sr2,si,beta1,beta2,v(*)
-
-*        Parameters
-         double precision :: zero,one,half
-         parameter(zero=0.0d0,one=1.0d0,half=0.5d0)
-
-*        Local scalars
-         double precision :: w(2),safmin,safmax
-
-*        External Functions
-         double precision,external :: dlamch
-
-         safmin = dlamch('SAFE MINIMUM')
-         safmax = one/safmin
-
-         if(abs(B(1,1)).lt.safmin .or. abs(B(2,2)).lt.safmin) then
-            v(1) = zero
-            v(2) = zero
-            v(3) = zero
-            return
-         end if
-
-*        Calculate first shifted vector
-         w(1) = beta1*A(1,1)-sr1*B(1,1)
-         w(2) = beta1*A(2,1)-sr1*B(2,1)
-
-*        Solve linear system
-         w(2) = w(2)/B(2,2)
-         w(1) = (w(1)-B(1,2)*w(2))/B(1,1)
-
-*        Apply second shift
-         v(1) = beta2*(A(1,1)*w(1)+A(1,2)*w(2))-sr2*(B(1,1)*w(1)+B(1,
-     $      2)*w(2))
-         v(2) = beta2*(A(2,1)*w(1)+A(2,2)*w(2))-sr2*(B(2,1)*w(1)+B(2,
-     $      2)*w(2))
-         v(3) = beta2*(A(3,1)*w(1)+A(3,2)*w(2))-sr2*(B(3,1)*w(1)+B(3,
-     $      2)*w(2))
-
-*        Account for imaginary part
-         v(1) = v(1)+si*si*B(1,1)
-
-         if( abs(v(1)).gt.safmax .or. abs(v(2)) .gt. safmax .or. abs(v(3
-     $      )).gt.safmax .or. v(1).ne.v(1) .or. v(2).ne.v(2) .or. v(3).n
-     $      e.v(3) ) then
-            v(1) = zero
-            v(2) = zero
-            v(3) = zero
-         end if
-
+      implicit none
+*
+*     Arguments
+      integer,intent(in) :: ldA,ldB
+      double precision,intent(in) :: A(ldA,*),B(ldB,*)
+      double precision,intent(out) :: sr1,sr2,si,beta1,beta2,v(*)
+*
+*     Parameters
+      double precision :: zero,one,half
+      parameter(zero=0.0d0,one=1.0d0,half=0.5d0)
+*
+*     Local scalars
+      double precision :: w(2),safmin,safmax,scale
+*
+*     External Functions
+      double precision,external :: dlamch
+*
+      safmin = dlamch('SAFE MINIMUM')
+      safmax = one/safmin
+*
+*     Calculate first shifted vector
+*
+      w(1) = beta1*A(1,1)-sr1*B(1,1)
+      w(2) = beta1*A(2,1)-sr1*B(2,1)
+      scale = sqrt( abs(w(1)) ) * sqrt( abs(w(2)) )
+      if(scale .ge. safmin .and. scale .le. safmax) then
+         w(1) = w(1)/scale
+         w(2) = w(2)/scale
+      end if
+*
+*     Solve linear system
+*
+      w(2) = w(2)/B(2,2)
+      w(1) = (w(1)-B(1,2)*w(2))/B(1,1)
+      scale = sqrt( abs(w(1)) ) * sqrt( abs(w(2)) )
+      if(scale .ge. safmin .and. scale .le. safmax) then
+         w(1) = w(1)/scale
+         w(2) = w(2)/scale
+      end if
+*
+*     Apply second shift
+*
+      v(1) = beta2*(A(1,1)*w(1)+A(1,2)*w(2))-sr2*(B(1,1)*w(1)+B(1,
+     $   2)*w(2))
+      v(2) = beta2*(A(2,1)*w(1)+A(2,2)*w(2))-sr2*(B(2,1)*w(1)+B(2,
+     $   2)*w(2))
+      v(3) = beta2*(A(3,1)*w(1)+A(3,2)*w(2))-sr2*(B(3,1)*w(1)+B(3,
+     $   2)*w(2))
+*
+*     Account for imaginary part
+*
+      v(1) = v(1)+si*si*B(1,1)
+*
+*     Check for overflow
+*
+      if( abs(v(1)).gt.safmax .or. abs(v(2)) .gt. safmax .or. abs(v(3)).
+     $   gt.safmax .or. v(1).ne.v(1) .or. v(2).ne.v(2) .or. v(3).ne.v(3)
+     $    ) then
+         v(1) = zero
+         v(2) = zero
+         v(3) = zero
+      end if
+*
+*     End of DLAQZ1
+*
       end subroutine
