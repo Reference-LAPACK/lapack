@@ -451,6 +451,8 @@
      $                IR( N2+1, N1+1 ), LDST, T, LDST, T( N1+1, N1+1 ),
      $                LDST, LI, LDST, SCALE, DSUM, DSCALE, IWORK, IDUM,
      $                LINFO )
+         IF( LINFO.NE.0 )
+     $      GO TO 80
 *
 *        Compute orthogonal matrix QL:
 *
@@ -497,9 +499,6 @@
      $               WORK, M )
          CALL SGEMM( 'N', 'T', M, M, M, ONE, WORK, M, IR, LDST, ZERO, T,
      $               LDST )
-*
-   50     CONTINUE
-*
          CALL SLACPY( 'F', M, M, S, LDST, SCPY, LDST )
          CALL SLACPY( 'F', M, M, T, LDST, TCPY, LDST )
          CALL SLACPY( 'F', M, M, IR, LDST, IRCOP, LDST )
@@ -605,95 +604,6 @@
 *        If the swap is accepted ("weakly" and "strongly"), apply the
 *        transformations and set N1-by-N2 (2,1)-block to zero.
 *
-         GO TO 70 
-*
-*        The swap wasn't accepted, try to refine the transformation
-*        and test acceptance again
-*
-   60    CONTINUE
-         COUNT = COUNT + 1
-         IF ( COUNT .GT. 2 )
-     $      GO TO 80    
-*
-*        Solve the generalized Sylvester equation
-*                 S22 * R - L * S11 = SCALE * S21
-*                 T22 * R - L * T11 = SCALE * T21
-*        for R and L. Solutions in LIREF and IRREF.
-*
-         CALL SLASET( 'Full', LDST, LDST, ZERO, ZERO, LIREF, LDST )
-         CALL SLASET( 'Full', LDST, LDST, ZERO, ZERO, IRREF, LDST )
-         CALL SLACPY( 'Full', N2, N1, T( N1+1, 1 ), LDST,
-     $                LIREF( N1+1, 1 ), LDST )
-         CALL SLACPY( 'Full', N2, N1, S( N1+1, 1 ), LDST,
-     $                IRREF( N1+1, 1 ), LDST )
-         CALL STGSY2( 'N', 0, N2, N1, S( N1+1, N1+1 ), LDST, S, LDST,
-     $                IRREF( N1+1, 1 ), LDST, T( N1+1, N1+1 ), LDST, T,
-     $                LDST, LIREF( N1+1, 1 ), LDST, SCALE, DSUM,
-     $                DSCALE, IWORK, IDUM, LINFO )
-*
-*        Compute orthogonal matrix QL:
-*
-*                    QL**T * LI = [ TL ]
-*                                 [ 0  ]
-*        where
-*                    LI =  [ SCALE * identity(N1) ]
-*                          [      -L              ]
-*
-         DO 15 I = 1, N1
-            LIREF( I, I ) = SCALE
-            CALL SSCAL( N2, -ONE, LIREF( N1+1, I ), 1 )
-   15    CONTINUE
-         CALL SGEQR2( M, N1, LIREF, LDST, TAUL, WORK, LINFO )
-         IF( LINFO.NE.0 )
-     $      GO TO 80
-         CALL SORG2R( M, M, N1, LIREF, LDST, TAUL, WORK, LINFO )
-         IF( LINFO.NE.0 )
-     $      GO TO 80
-*
-*        Compute orthogonal matrix RQ:
-*
-*                    RQ * IR = [ TL ]
-*                              [ 0  ]
-*        where
-*                    IR =  [ SCALE * identity(N2) ]
-*                          [      -R              ]
-*
-         DO 25 I = 1, N1
-            IRREF( I, I ) = SCALE
-            CALL SSCAL( N2, -ONE, IRREF( N1+1, I ), 1 )
-   25    CONTINUE
-         CALL SGEQR2( M, N1, IRREF, LDST, TAUL, WORK, LINFO )
-         IF( LINFO.NE.0 )
-     $      GO TO 80
-         CALL SORG2R( M, M, N1, IRREF, LDST, TAUL, WORK, LINFO )
-         IF( LINFO.NE.0 )
-     $      GO TO 80
-*
-*        Locally apply the refinement:
-*
-         CALL SGEMM( 'T', 'N', M, M, M, ONE, LIREF, LDST, S, LDST, ZERO,
-     $               WORK, M )
-         CALL SGEMM( 'N', 'N', M, M, M, ONE, WORK, M, IRREF, LDST, ZERO,
-     $               S, LDST )
-         CALL SGEMM( 'T', 'N', M, M, M, ONE, LIREF, LDST, T, LDST, ZERO,
-     $               WORK, M )
-         CALL SGEMM( 'N', 'N', M, M, M, ONE, WORK, M, IRREF, LDST, ZERO,
-     $               T, LDST )
-         CALL SGEMM( 'N', 'N', M, M, M, ONE, LI, LDST, LIREF, LDST,
-     $               ZERO, WORK, M )
-         CALL SLACPY( 'F', M, M, WORK, M, LI, LDST )
-         CALL SGEMM( 'T', 'N', M, M, M, ONE, IRREF, LDST, IR, LDST,
-     $               ZERO, WORK, M )
-         CALL SLACPY( 'F', M, M, WORK, M, IR, LDST )
-*
-*        Check the swap again
-*
-         GO TO 50
-*
-*        The swap is accepted ("weakly" and "strongly"), apply the
-*        transformations and set N1-by-N2 (2,1)-block to zero.
-*
-   70    CONTINUE
          CALL SLASET( 'Full', N1, N2, ZERO, ZERO, S(N2+1,1), LDST )
 *
 *        copy back M-by-M diagonal block starting at index J1 of (A, B)
