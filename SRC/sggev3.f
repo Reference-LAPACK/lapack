@@ -205,7 +205,7 @@
 *>                The QZ iteration failed.  No eigenvectors have been
 *>                calculated, but ALPHAR(j), ALPHAI(j), and BETA(j)
 *>                should be correct for j=INFO+1,...,N.
-*>          > N:  =N+1: other than QZ iteration failed in SHGEQZ.
+*>          > N:  =N+1: other than QZ iteration failed in SLAQZ0.
 *>                =N+2: error return from STGEVC.
 *> \endverbatim
 *
@@ -259,7 +259,7 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHD3, SHGEQZ, SLABAD,
+      EXTERNAL           SGEQRF, SGGBAK, SGGBAL, SGGHD3, SLAQZ0, SLABAD,
      $                   SLACPY, SLASCL, SLASET, SORGQR, SORMQR, STGEVC,
      $                   XERBLA
 *     ..
@@ -334,12 +334,12 @@
          IF( ILVL ) THEN
             CALL SORGQR( N, N, N, VL, LDVL, WORK, WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, 3*N+INT ( WORK( 1 ) ) )
-            CALL SHGEQZ( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
+            CALL SLAQZ0( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $                   WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, 2*N+INT ( WORK( 1 ) ) )
          ELSE
-            CALL SHGEQZ( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
+            CALL SLAQZ0( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $                   WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, 2*N+INT ( WORK( 1 ) ) )
@@ -464,7 +464,7 @@
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL SHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL SLAQZ0( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
      $             WORK( IWRK ), LWORK+1-IWRK, IERR )
       IF( IERR.NE.0 ) THEN
