@@ -117,6 +117,8 @@ SLASRC = \
    sggglm.o sgghrd.o sgghd3.o sgglse.o sggqrf.o \
    sggrqf.o sggsvd3.o sggsvp3.o sgtcon.o sgtrfs.o sgtsv.o \
    sgtsvx.o sgttrf.o sgttrs.o sgtts2.o shgeqz.o \
+   dlaqz0.o dlaqz1.o dlaqz2.o dlaqz3.o dlaqz4.o dlaqz5.o \
+   dlaqz6.o \
    shsein.o shseqr.o slabrd.o slacon.o slacn2.o \
    slaein.o slaexc.o slag2.o  slags2.o slagtm.o slagv2.o slahqr.o \
    slahr2.o slaic1.o slaln2.o slals0.o slalsa.o slalsd.o \
