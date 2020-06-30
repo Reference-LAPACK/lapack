@@ -251,6 +251,11 @@
 *>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
 *>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is REAL array, dimension (N)
+*> \endverbatim
+*>
 *> \param[out] INFO
 *> \verbatim
 *>          INFO is INTEGER

@@ -240,6 +240,11 @@
 *>          On exit, if INFO >= 0, WORK(1) returns the optimal LWORK.
 *> \endverbatim
 *>
+*> \param[out] RWORK
+*> \verbatim
+*>          RWORK is DOUBLE PRECISION array, dimension (N)
+*> \endverbatim
+*>
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
@@ -250,6 +255,12 @@
 *>          this value as the first entry of the WORK array, and no error
 *>          message related to LWORK is issued by XERBLA.
 *> \endverbatim
+*>
+*> \param[in] REC
+*> \verbatim
+*>          REC is INTEGER
+*>             REC indicates the current recursion level. Should be set
+*>             to 0 on first call.
 *>
 *> \param[out] INFO
 *> \verbatim
@@ -272,12 +283,14 @@
 *>
 *  =====================================================================
       SUBROUTINE ZLAQZ0( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
-     $    LDB, ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, INFO )
+     $    LDB, ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, REC,
+     $    INFO )
       IMPLICIT NONE
 
 *     Arguments
       CHARACTER, INTENT( IN ) :: WANTS, WANTQ, WANTZ
-      INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK
+      INTEGER, INTENT( IN ) :: N, ILO, IHI, LDA, LDB, LDQ, LDZ, LWORK,
+     $    REC
       INTEGER, INTENT( OUT ) :: INFO
       COMPLEX*16, INTENT( INOUT ) :: A( LDA, * ), B( LDB, * ), Q( LDQ,
      $    * ), Z( LDZ, * ), ALPHA( * ), BETA( * ), WORK( * )
@@ -406,7 +419,7 @@
       ITEMP1 = ( ( ITEMP1 - 1 )/4 )*4 + 4
       NBR = NSR + ITEMP1
 
-      IF( N .LT. NMIN ) THEN
+      IF( N .LT. NMIN .OR. REC .GE. 1 ) THEN
          CALL ZHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B, LDB,
      $       ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK, INFO )
          RETURN
@@ -420,7 +433,7 @@
       NW = MAX( NWR, NMIN )
       CALL ZLAQZ2( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NW, A, LDA, B, LDB,
      $    Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHA, BETA, WORK,
-     $    NW, WORK, NW, WORK, - 1, RWORK, AED_INFO )
+     $    NW, WORK, NW, WORK, - 1, RWORK, REC, AED_INFO )
       ITEMP1 = INT( WORK( 1 ) )
 *     Workspace query to ZLAQZ3
       CALL ZLAQZ3( ILSCHUR, ILQ, ILZ, N, ILO, IHI, NSR, NBR, ALPHA,
@@ -617,7 +630,7 @@
          CALL ZLAQZ2( ILSCHUR, ILQ, ILZ, N, ISTART2, ISTOP, NW, A, LDA,
      $       B, LDB, Q, LDQ, Z, LDZ, N_UNDEFLATED, N_DEFLATED, ALPHA,
      $       BETA, WORK, NW, WORK( NW**2 + 1 ), NW, WORK( 2*NW**2 + 1 ),
-     $       LWORK - 2*NW**2, RWORK, AED_INFO )
+     $       LWORK - 2*NW**2, RWORK, REC, AED_INFO )
 
          IF ( N_DEFLATED > 0 ) THEN
             ISTOP = ISTOP - N_DEFLATED
