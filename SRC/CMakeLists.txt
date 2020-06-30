@@ -194,6 +194,7 @@ set(CLASRC
    chesv_aa.f chetrf_aa.f chetrs_aa.f
    chesv_aa_2stage.f chetrf_aa_2stage.f chetrs_aa_2stage.f
    chgeqz.f chpcon.f chpev.f  chpevd.f
+   claqz0.f claqz1.f claqz2.f claqz3.f
    chpevx.f chpgst.f chpgv.f  chpgvd.f chpgvx.f chprfs.f chpsv.f
    chpsvx.f
    chptrd.f chptrf.f chptri.f chptrs.f chsein.f chseqr.f clabrd.f

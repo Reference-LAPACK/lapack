@@ -736,7 +736,7 @@
                RESULT( I ) = -ONE
   110       CONTINUE
 *
-*           Call XLAENV to set the parameters used in DLAQZ0
+*           Call XLAENV to set the parameters used in ZLAQZ0
 *
             CALL XLAENV( 12, 10 )
             CALL XLAENV( 13, 12 )

@@ -255,7 +255,7 @@
       LOGICAL            LDUMMA( 1 )
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CHGEQZ, CLACPY,
+      EXTERNAL           CGEQRF, CGGBAK, CGGBAL, CGGHD3, CLAQZ0, CLACPY,
      $                   CLASCL, CLASET, CTGEVC, CUNGQR, CUNMQR, SLABAD,
      $                   XERBLA
 *     ..
@@ -338,7 +338,7 @@
             CALL CGGHD3( JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB, VL,
      $                   LDVL, VR, LDVR, WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, N+INT( WORK( 1 ) ) )
-            CALL CHGEQZ( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
+            CALL CLAQZ0( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHA, BETA, VL, LDVL, VR, LDVR, WORK, -1,
      $                   RWORK, IERR )
             LWKOPT = MAX( LWKOPT, N+INT( WORK( 1 ) ) )
@@ -346,7 +346,7 @@
             CALL CGGHD3( 'N', 'N', N, 1, N, A, LDA, B, LDB, VL, LDVL,
      $                   VR, LDVR, WORK, -1, IERR )
             LWKOPT = MAX( LWKOPT, N+INT( WORK( 1 ) ) )
-            CALL CHGEQZ( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
+            CALL CLAQZ0( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHA, BETA, VL, LDVL, VR, LDVR, WORK, -1,
      $                   RWORK, IERR )
             LWKOPT = MAX( LWKOPT, N+INT( WORK( 1 ) ) )
@@ -471,7 +471,7 @@
       ELSE
          CHTEMP = 'E'
       END IF
-      CALL CHGEQZ( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
+      CALL CLAQZ0( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VL, LDVL, VR, LDVR, WORK( IWRK ),
      $             LWORK+1-IWRK, RWORK( IRWRK ), IERR )
       IF( IERR.NE.0 ) THEN
