@@ -257,7 +257,7 @@
       LWORKREQ = INT( WORK( 1 ) )
       CALL DLAQZ0( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
      $    B( KWTOP, KWTOP ), LDB, ALPHAR, ALPHAI, BETA, QC, LDQC, ZC,
-     $    LDZC, WORK, - 1, REC, QZ_SMALL_INFO )
+     $    LDZC, WORK, - 1, REC + 1, QZ_SMALL_INFO )
       LWORKREQ = MAX( LWORKREQ, INT( WORK( 1 ) ) + 2*JW**2 )
       LWORKREQ = MAX( LWORKREQ, N*NW, 2*NW**2 + N )
       IF ( LWORK .EQ. - 1 ) THEN

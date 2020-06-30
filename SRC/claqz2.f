@@ -250,9 +250,9 @@
 *     Determine required workspace
       IFST = 1
       ILST = JW
-      CALL CLAQZ2( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
+      CALL CLAQZ0( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
      $    B( KWTOP, KWTOP ), LDB, ALPHA, BETA, QC, LDQC, ZC, LDZC, WORK,
-     $    - 1, RWORK, REC, QZ_SMALL_INFO )
+     $    - 1, RWORK, REC + 1, QZ_SMALL_INFO )
       LWORKREQ = INT( WORK( 1 ) ) + 2*JW**2
       LWORKREQ = MAX( LWORKREQ, N*NW, 2*NW**2 + N )
       IF ( LWORK .EQ. - 1 ) THEN
@@ -300,7 +300,7 @@
 *     Transform window to real schur form
       CALL CLASET( 'FULL', JW, JW, CZERO, CONE, QC, LDQC )
       CALL CLASET( 'FULL', JW, JW, CZERO, CONE, ZC, LDZC )
-      CALL CLAQZ2( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
+      CALL CLAQZ0( 'S', 'V', 'V', JW, 1, JW, A( KWTOP, KWTOP ), LDA,
      $    B( KWTOP, KWTOP ), LDB, ALPHA, BETA, QC, LDQC, ZC, LDZC,
      $    WORK( 2*JW**2 + 1 ), LWORK - 2*JW**2, RWORK, REC + 1,
      $    QZ_SMALL_INFO )

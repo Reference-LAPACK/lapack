@@ -336,12 +336,12 @@
             LWKOPT = MAX( LWKOPT, 3*N+INT ( WORK( 1 ) ) )
             CALL SLAQZ0( 'S', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
-     $                   WORK, -1, IERR )
+     $                   WORK, -1, 0, IERR )
             LWKOPT = MAX( LWKOPT, 2*N+INT ( WORK( 1 ) ) )
          ELSE
             CALL SLAQZ0( 'E', JOBVL, JOBVR, N, 1, N, A, LDA, B, LDB,
      $                   ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
-     $                   WORK, -1, IERR )
+     $                   WORK, -1, 0, IERR )
             LWKOPT = MAX( LWKOPT, 2*N+INT ( WORK( 1 ) ) )
          END IF
          WORK( 1 ) = REAL( LWKOPT )
@@ -466,7 +466,7 @@
       END IF
       CALL SLAQZ0( CHTEMP, JOBVL, JOBVR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VL, LDVL, VR, LDVR,
-     $             WORK( IWRK ), LWORK+1-IWRK, IERR )
+     $             WORK( IWRK ), LWORK+1-IWRK, 0, IERR )
       IF( IERR.NE.0 ) THEN
          IF( IERR.GT.0 .AND. IERR.LE.N ) THEN
             INFO = IERR
